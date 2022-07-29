@@ -1,0 +1,4 @@
+usr/lib/*/libwx_base*.so
+usr/lib/*/libwx_gtk*.so
+usr/lib/*/wx/config/gtk3*
+usr/lib/*/wx/include/gtk3*

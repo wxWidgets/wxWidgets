@@ -1,0 +1,2 @@
+usr/lib/*/libwx_gtk*webview*.so.*
+usr/lib/*/wx/*/web-extensions

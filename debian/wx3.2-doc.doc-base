@@ -1,0 +1,9 @@
+Document: wx3.2-manual
+Title: wxWidgets 3.2 Programming Manual
+Author: The wxWidgets Developers
+Abstract: This manual describes the wxWidgets 3.2 cross-platform GUI toolkit.
+Section: Programming
+
+Format: HTML
+Index: /usr/share/doc/wx3.2-doc/html/index.html
+Files: /usr/share/doc/wx3.2-doc/html/*

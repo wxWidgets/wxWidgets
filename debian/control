@@ -1,0 +1,225 @@
+Source: wxwidgets3.2
+Section: libs
+Priority: optional
+Build-Depends-Indep: doxygen,
+                     graphviz,
+Build-Depends: dpkg-dev (>= 1.16.1~),
+               g++ (>= 4:5.2),
+               gettext,
+               libexpat1-dev,
+               libgl1-mesa-dev | libgl-dev,
+               libglu1-mesa-dev | libglu-dev,
+               libgstreamer-plugins-bad1.0-dev,
+               libgtk-3-dev,
+               libjpeg-dev,
+               libnotify-dev,
+               libpng-dev,
+               libsm-dev,
+               libtiff5-dev,
+               libwebkit2gtk-4.0-dev,
+               libxt-dev,
+               zlib1g-dev,
+Maintainer: wxWidgets Maintainers <team+wx@tracker.debian.org>
+Uploaders: Olly Betts <olly@survex.com>,
+           Scott Talbert <swt@techie.net>,
+Standards-Version: 4.6.1
+Vcs-Git: https://salsa.debian.org/freewx-team/wxwidgets3.2.git
+Vcs-Browser: https://salsa.debian.org/freewx-team/wxwidgets3.2
+Homepage: https://www.wxwidgets.org/
+Rules-Requires-Root: no
+
+Package: libwxbase3.2-0
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends},
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Multi-Arch: same
+Description: wxBase library (runtime) - non-GUI support classes of wxWidgets toolkit
+ wxBase is a collection of C++ classes providing basic data structures
+ (strings, lists, arrays), powerful wxDateTime class for date manipulations,
+ portable wrappers around many OS-specific functions allowing the same
+ program to work for all supported platforms, wxThread class for writing
+ multithreaded programs, and much more.
+ .
+ wxBase currently supports the following platforms: Generic Unix (Linux,
+ FreeBSD, Solaris, HP-UX, ...), Microsoft Windows, and Mac OS X.
+ .
+ This package is only useful for non-GUI apps.  It offers a subset of the
+ classes in libwx_gtk3.2 for use in console apps and daemons.  You do not need
+ this package to build or use wxWidgets GUI apps.
+
+Package: libwxgtk3.2-0
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends},
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Multi-Arch: same
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK 3 runtime)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides the shared libraries needed to run programs linked
+ against wxWidgets.  To use the (optional) glcanvas library you will need
+ to have Mesa or OpenGL installed.
+
+Package: libwxgtk3.2-dev
+Architecture: any
+Section: libdevel
+Depends: libgl1-mesa-dev | libgl-dev,
+         libwxbase3.2-0 (= ${binary:Version}),
+         libwxgtk3.2-0 (= ${binary:Version}),
+         wx-common,
+         wx3.2-headers (= ${source:Version}),
+         xlibmesa-glu-dev | libglu-dev,
+         ${misc:Depends},
+Multi-Arch: same
+Suggests: gettext,
+          wx3.2-doc,
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK 3 development)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides files needed to compile wxWidgets programs.  If you
+ want to compile apps using the (optional) glcanvas library you will need
+ to have Mesa or OpenGL installed too.
+ .
+ This package also provides the wx-config script.
+
+Package: libwxgtk-media3.2-0
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends},
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Multi-Arch: same
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK 3 media library runtime)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides the media shared libraries needed to run programs linked
+ against libwx_gtk3u_media.
+
+Package: libwxgtk-media3.2-dev
+Architecture: any
+Section: libdevel
+Depends: libwxgtk-media3.2-0 (= ${binary:Version}),
+         libwxgtk3.2-dev (= ${binary:Version}),
+         wx-common,
+         wx3.2-headers (= ${source:Version}),
+         ${misc:Depends},
+Multi-Arch: same
+Suggests: gettext,
+          wx3.2-doc,
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK 3 media library development)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides files needed to compile wxWidgets programs using the
+ wxMediaCtrl class.
+
+Package: libwxgtk-webview3.2-0
+Architecture: any
+Pre-Depends: ${misc:Pre-Depends},
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Multi-Arch: same
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK 3 webview library runtime)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides the media shared libraries needed to run programs linked
+ against libwx_gtk3u_webview.
+
+Package: libwxgtk-webview3.2-dev
+Architecture: any
+Section: libdevel
+Depends: libwxgtk-webview3.2-0 (= ${binary:Version}),
+         libwxgtk3.2-dev (= ${binary:Version}),
+         wx-common,
+         wx3.2-headers (= ${source:Version}),
+         ${misc:Depends},
+Multi-Arch: same
+Suggests: gettext,
+          wx3.2-doc,
+Description: wxWidgets Cross-platform C++ GUI toolkit (GTK 3 webview library development)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides files needed to compile wxWidgets programs using the
+ wxWebView class.
+
+Package: wx-common
+Architecture: any
+Multi-Arch: foreign
+Section: devel
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Recommends: zip,
+Description: wxWidgets Cross-platform C++ GUI toolkit (common support files)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides common support files not bound to any
+ particular wxWidgets release, such as font metrics required by some
+ ports, and miscellaneous developer aids and binary utilities.
+
+Package: wx3.2-headers
+Architecture: all
+Multi-Arch: foreign
+Section: devel
+Depends: ${misc:Depends},
+Description: wxWidgets Cross-platform C++ GUI toolkit (header files)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides the common header files required to build applications
+ using the wxWidgets toolkit.
+
+Package: wx3.2-i18n
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends},
+Provides: wx-i18n,
+Section: localization
+Description: wxWidgets Cross-platform C++ GUI toolkit (i18n support)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides the i18n message catalogs for wxWidgets.
+
+Package: wx3.2-examples
+Architecture: all
+Multi-Arch: foreign
+Section: devel
+Depends: ${misc:Depends},
+Suggests: libwxgtk3.2-dev,
+          wx3.2-doc,
+Description: wxWidgets Cross-platform C++ GUI toolkit (examples)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package contains examples of using the wxWidgets toolkit in
+ C++.
+
+Package: wx3.2-doc
+Architecture: all
+Multi-Arch: foreign
+Section: doc
+Depends: ${misc:Depends},
+Suggests: doc-base,
+          www-browser,
+Description: wxWidgets Cross-platform C++ GUI toolkit (documentation)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).
+ .
+ This package provides a HTML version of the wxWidgets reference manual.

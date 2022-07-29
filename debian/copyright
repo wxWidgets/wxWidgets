@@ -1,0 +1,7284 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Files-Excluded:
+ samples/help/doc.chm
+ samples/help/doc
+ src/expat
+ src/jpeg
+ src/png
+ src/tiff
+ src/zlib
+
+Files: *
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: 3rdparty/catch/*
+Copyright: 2010-2015, 2017, Two Blue Cubes Ltd.
+License: BSL-1.0
+
+Files: 3rdparty/catch/include/reporters/catch_reporter_automake.hpp
+Copyright: 2017, Justin R. Wilson.
+License: BSL-1.0
+
+Files: 3rdparty/catch/include/reporters/catch_reporter_compact.hpp
+  3rdparty/catch/include/reporters/catch_reporter_tap.hpp
+Copyright: 2012, 2015, Martin Moene.
+License: BSL-1.0
+
+Files: 3rdparty/nanosvg/*
+Copyright: 2013, 2014, Mikko Mononen memon@inside.org
+  2002-2004 Maxim Shemanarev (McSeem)
+License: Zlib
+
+Files: 3rdparty/pcre/*
+Copyright: 1997-2021, University of Cambridge
+  2009-2021 Zoltan Herczeg
+License: PCRE2
+
+Files: 3rdparty/pcre/INSTALL
+Copyright: 1994-1996, 1999-2002, 2004-2016, Free Software
+License: FSFAP
+
+Files: 3rdparty/pcre/Makefile.in
+Copyright: 1994-2018, Free Software Foundation, Inc.
+License: FSFAP
+
+Files: 3rdparty/pcre/aclocal.m4
+Copyright: 1996-2018, Free Software Foundation, Inc.
+License: FSFULLR
+
+Files: 3rdparty/pcre/compile
+  3rdparty/pcre/depcomp
+  3rdparty/pcre/missing
+Copyright: 1996-2018, Free Software Foundation, Inc.
+License: GPL-2+ with Autoconf-data exception
+
+Files: 3rdparty/pcre/configure
+Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc.
+License: FSFUL
+
+Files: 3rdparty/pcre/ltmain.sh
+Copyright: 1996-2015, Free Software Foundation, Inc.
+License: (GPL-2+ and/or GPL-3+) with Libtool exception
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ .
+ GNU Libtool is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ As a special exception to the GNU General Public License,
+ if you distribute this file as part of a program or library that
+ is built using GNU Libtool, you may include this file under the
+ same distribution terms that you use for the rest of that program.
+ .
+ GNU Libtool is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Files: 3rdparty/pcre/m4/*
+Copyright: 2004, 2005, 2007-2009, 2011-2015, Free Software
+License: FSFULLR
+
+Files: 3rdparty/pcre/m4/ax_pthread.m4
+Copyright: 2011, Daniel Richard G. <skunk@iSKUNK.ORG>
+ 2008, Steven G. Johnson <stevenj@alum.mit.edu>
+License: GPL-3+ with Autoconf-2.0~Archive exception
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or (at your
+ option) any later version.
+ .
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program. If not, see <http://www.gnu.org/licenses/>.
+ .
+ As a special exception, the respective Autoconf Macro's copyright owner
+ gives unlimited permission to copy, distribute and modify the configure
+ scripts that are the output of Autoconf when processing the Macro. You
+ need not follow the terms of the GNU General Public License when using
+ or distributing such scripts, even though portions of the text of the
+ Macro appear in them. The GNU General Public License (GPL) does govern
+ all other use of the material that constitutes the Autoconf Macro.
+ .
+ This special exception to the GPL applies to versions of the Autoconf
+ Macro released by the Autoconf Archive. When you make and distribute a
+ modified version of the Autoconf Macro, you may extend this special
+ exception to the GPL to apply to your modified version as well.
+
+Files: 3rdparty/pcre/m4/libtool.m4
+Copyright: 1996-2001, 2003-2015, Free Software Foundation, Inc.
+License: FSFULLR
+
+Files: 3rdparty/pcre/m4/ltversion.m4
+  3rdparty/pcre/m4/pcre2_visibility.m4
+Copyright: 1996-2017, Free Software Foundation, Inc.
+License: FSFULLR
+
+Files: 3rdparty/pcre/maint/MultiStage2.py
+Copyright: 2008, Peter Kankowski
+License: PCRE2
+
+Files: 3rdparty/pcre/src/sljit/*
+Copyright: Zoltan Herczeg (hzmester@freemail.hu).
+License: BSD-2-clause
+ Copyright Zoltan Herczeg (hzmester@freemail.hu). All rights reserved.
+ .
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ .
+ 1. Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer.
+ .
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER(S) AND CONTRIBUTORS
+ ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER(S) OR
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+
+Files: aclocal.m4
+Copyright: 1996-2017, Free Software Foundation, Inc.
+License: FSFULLR
+
+Files: build/aclocal/ax_cflags_gcc_option.m4
+Copyright: 2008, Guido U. Draheim <guidod@gmx.de>
+License: GPL-2+ with Autoconf-2.0~Archive exception
+
+Files: build/aclocal/ax_cxx_compile_stdcxx.m4
+Copyright: 2021, JÃ¶rn Heusipp <osmanx@problemloesungsmaschine.de>
+ 2020, Jason Merrill <jason@redhat.com>
+ 2019, Enji Cooper <yaneurabeya@gmail.com>
+ 2016, 2018, Krzesimir Nowak <qdlacz@gmail.com>
+ 2015, Paul Norman <penorman@mac.com>
+ 2015, Moritz Klammler <moritz@klammler.eu>
+ 2014, 2015, Google Inc.; contributedAlexey Sokolov <sokolov@google.com>
+ 2013, Roy Stogner <roystgnr@ices.utexas.edu>
+ 2012, Zack Weinberg <zackw@panix.com>
+ 2008, Benjamin Kosnik <bkoz@redhat.com>
+License: FSFAP
+
+Files: build/aclocal/ax_func_which_gethostbyname_r.m4
+Copyright: 2008, Daniel Richard G. <skunk@iskunk.org>
+ 2008, Caolan McNamara <caolan@skynet.ie>
+License: GPL-2+ with Autoconf-2.0~Archive exception
+
+Files: build/aclocal/ax_gcc_option.m4
+Copyright: 2008, Francesco Salvestrini <salvestrini@users.sourceforge.net>
+ 2008, Bogdan Drozdowski <bogdandr@op.pl>
+License: GPL-2+ with Autoconf-2.0~Archive exception
+
+Files: build/aclocal/ax_gxx_version.m4
+Copyright: 2008, Francesco Salvestrini <salvestrini@users.sourceforge.net>
+License: GPL-2+ with Autoconf-2.0~Archive exception
+
+Files: build/aclocal/ax_subdirs_configure.m4
+Copyright: 2017, Harenome Ranaivoarivony-Razanajato <ranaivoarivony-razanajato@hareno.me>
+License: GPL-3+
+
+Files: build/aclocal/bakefile-lang.m4
+Copyright: 2003-2007, Vaclav Slavik, David Elliott and others
+License: Expat
+
+Files: build/aclocal/bakefile.m4
+Copyright: 2003-2007, Vaclav Slavik and others
+License: Expat
+
+Files: build/aclocal/pkg.m4
+Copyright: 2004, Scott James Remnant <scott@netsplit.com>.
+License: GPL-2+ with Autoconf-data exception
+
+Files: build/aclocal/visibility.m4
+Copyright: 1996-2017, Free Software Foundation, Inc.
+License: FSFULLR
+
+Files: build/autoconf_prepend-include/autoconf/*
+Copyright: 1992-1996, 1998-2006, Free Software Foundation, Inc.
+License: GPL-2+ with Autoconf-2.0.AND_Autoconf-2.0~g10 exception
+
+Files: build/autoconf_prepend-include/autoconf/c.m4
+  build/autoconf_prepend-include/autoconf/functions.m4
+Copyright: 2000-2006, Free Software
+License: GPL-2+ with Autoconf-2.0.AND_Autoconf-2.0~g10 exception
+
+Files: build/bakefiles/wxpresets/libsample/libsample.cpp
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: build/bakefiles/wxpresets/sample/minimal.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: build/cmake/modules/cotire_test/*
+Copyright: 2012-2018, Sascha Kratky
+License: Expat
+
+Files: build/cmake/uninstall.cmake.in
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: build/osx/fix_xcode_ids.py
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: configure
+Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc.
+License: FSFUL
+
+Files: debian/*
+Copyright: 2022, Scott Talbert
+License: wxWindows
+
+Files: demos/bombs/*
+Copyright: 1996, P. Foggia
+License: wxWindows
+
+Files: demos/bombs/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: demos/forty/*
+Copyright: 1993-1998, Chris Breeze
+License: wxWindows
+
+Files: demos/forty/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: demos/fractal/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: demos/fractal/fractal.cpp
+Copyright: 1994, Andrew Davison
+License: wxWindows
+
+Files: demos/life/*
+Copyright: 2000, Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: demos/life/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: demos/poem/*
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: demos/poem/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: distrib/autopackage/sample/minimal.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: docs/doxygen/doxygen-awesome-css/*
+Copyright: 2021, 2022, jothepro
+License: Expat
+
+Files: docs/doxygen/mainpages/copyright.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: docs/doxygen/overviews/debugging.h
+  docs/doxygen/overviews/persistence.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: docs/doxygen/regen.sh
+Copyright: 1992-2022, wxWidgets team, Portions 1996, Artificial Intelligence Applications Institute"
+License: wxWindows
+
+Files: include/*
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/msvc/*
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/aboutdlg.h
+  include/wx/cpp.h
+  include/wx/power.h
+  include/wx/wupdlock.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/accel.h
+  include/wx/affinematrix2d.h
+  include/wx/affinematrix2dbase.h
+  include/wx/any.h
+  include/wx/bitmap.h
+  include/wx/caret.h
+  include/wx/checkbox.h
+  include/wx/choice.h
+  include/wx/clntdata.h
+  include/wx/cmdproc.h
+  include/wx/colordlg.h
+  include/wx/control.h
+  include/wx/ctrlsub.h
+  include/wx/dc.h
+  include/wx/event.h
+  include/wx/font.h
+  include/wx/fontutil.h
+  include/wx/frame.h
+  include/wx/iosfwrap.h
+  include/wx/listbase.h
+  include/wx/listbox.h
+  include/wx/listctrl.h
+  include/wx/menu.h
+  include/wx/metafile.h
+  include/wx/overlay.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/activityindicator.h
+  include/wx/addremovectrl.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/afterstd.h
+  include/wx/arrimpl.cpp
+  include/wx/arrstr.h
+  include/wx/beforestd.h
+  include/wx/buffer.h
+  include/wx/calctrl.h
+  include/wx/cmdline.h
+  include/wx/containr.h
+  include/wx/datetime.h
+  include/wx/dir.h
+  include/wx/dynarray.h
+  include/wx/evtloop.h
+  include/wx/ffile.h
+  include/wx/file.h
+  include/wx/intl.h
+  include/wx/ioswrap.h
+  include/wx/language.h
+  include/wx/log.h
+  include/wx/longlong.h
+  include/wx/memconf.h
+  include/wx/menuitem.h
+  include/wx/mimetype.h
+  include/wx/ownerdrw.h
+  include/wx/popupwin.h
+  include/wx/scrolwin.h
+  include/wx/snglinst.h
+  include/wx/string.h
+  include/wx/stringimpl.h
+  include/wx/textfile.h
+  include/wx/tipwin.h
+  include/wx/toplevel.h
+  include/wx/wizard.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/android/*
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/android/setup.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/wx/anidecod.h
+  include/wx/animdecod.h
+  include/wx/platinfo.h
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/animate.h
+Copyright: Julian Smart and Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: include/wx/anybutton.h
+  include/wx/button.h
+  include/wx/checklst.h
+  include/wx/dialog.h
+  include/wx/dialup.h
+  include/wx/fontenc.h
+  include/wx/fontmap.h
+  include/wx/radiobox.h
+  include/wx/radiobut.h
+  include/wx/setup_inc.h
+  include/wx/setup_redirect.h
+  include/wx/spinctrl.h
+  include/wx/statusbr.h
+  include/wx/textctrl.h
+  include/wx/tipdlg.h
+  include/wx/toolbar.h
+  include/wx/window.h
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/anystr.h
+  include/wx/headercol.h
+  include/wx/headerctrl.h
+  include/wx/kbdstate.h
+  include/wx/mousestate.h
+  include/wx/nativewin.h
+  include/wx/rearrangectrl.h
+  include/wx/tls.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/appprogress.h
+  include/wx/collheaderctrl.h
+  include/wx/creddlg.h
+  include/wx/systhemectrl.h
+  include/wx/taskbarbutton.h
+  include/wx/webrequest.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/apptrait.h
+  include/wx/bookctrl.h
+  include/wx/dcmirror.h
+  include/wx/dlimpexp.h
+  include/wx/encinfo.h
+  include/wx/except.h
+  include/wx/htmllbox.h
+  include/wx/iconloc.h
+  include/wx/init.h
+  include/wx/listbook.h
+  include/wx/recguard.h
+  include/wx/renderer.h
+  include/wx/scopeguard.h
+  include/wx/vidmode.h
+  include/wx/vlbox.h
+  include/wx/vscroll.h
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/archive.h
+  include/wx/tarstrm.h
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: include/wx/artprov.h
+  include/wx/editlbox.h
+  include/wx/imagjpeg.h
+  include/wx/link.h
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/atomic.h
+Copyright: Armel Asselin
+License: wxWindows
+
+Files: include/wx/aui/*
+Copyright: 2005, 2006, Kirix Corporation
+License: wxWindows
+
+Files: include/wx/aui/barartmsw.h
+  include/wx/aui/tabartmsw.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/aui/tabartgtk.h
+Copyright: 2012, Jens Lody <jens@codeblocks.org>
+License: wxWindows
+
+Files: include/wx/aui/tabmdi.h
+Copyright: Hans Van Leemputten
+License: wxWindows
+
+Files: include/wx/bannerwindow.h
+  include/wx/compositewin.h
+  include/wx/custombgwin.h
+  include/wx/datetimectrl.h
+  include/wx/eventfilter.h
+  include/wx/itemid.h
+  include/wx/richtooltip.h
+  include/wx/textcompleter.h
+  include/wx/time.h
+  include/wx/timectrl.h
+  include/wx/treelist.h
+  include/wx/withimages.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/base64.h
+  include/wx/vms_x_fix.h
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: include/wx/bmpbndl.h
+  include/wx/localedefs.h
+  include/wx/uilocale.h
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/bmpbuttn.h
+  include/wx/statbmp.h
+Copyright: 2000, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/bmpcbox.h
+  include/wx/combo.h
+  include/wx/odcombo.h
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: include/wx/build.h
+  include/wx/features.h
+  include/wx/rawbmp.h
+Copyright: 2002, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/busyinfo.h
+  include/wx/encconv.h
+  include/wx/filesys.h
+  include/wx/fs_inet.h
+  include/wx/wxhtml.h
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/catch_cppunit.h
+  include/wx/peninfobase.h
+Copyright: 2017, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/chartype.h
+  include/wx/checkeddelete.h
+  include/wx/crt.h
+  include/wx/types.h
+  include/wx/wxchar.h
+  include/wx/wxcrt.h
+  include/wx/wxcrtbase.h
+Copyright: 1997-2018, wxWidgets dev team
+License: wxWindows
+
+Files: include/wx/chkconf.h
+Copyright: 2000, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/choicebk.h
+Copyright: Vadim Zeitlin, Wlodzimierz Skiba
+License: wxWindows
+
+Files: include/wx/clipbrd.h
+  include/wx/dataobj.h
+  include/wx/dnd.h
+  include/wx/joystick.h
+  include/wx/typeinfo.h
+Copyright: wxWidgets Team
+License: wxWindows
+
+Files: include/wx/clrpicker.h
+  include/wx/pickerbase.h
+Copyright: Vadim Zeitlin, Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/cmdargs.h
+  include/wx/notifmsg.h
+  include/wx/textentry.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/cmndata.h
+  include/wx/sckstrm.h
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: include/wx/collpane.h
+  include/wx/filepicker.h
+  include/wx/fontpicker.h
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/combobox.h
+Copyright: 1996-2000, wxWidgets team
+License: wxWindows
+
+Files: include/wx/commandlinkbutton.h
+  include/wx/numformatter.h
+  include/wx/richmsgdlg.h
+  include/wx/versioninfo.h
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: include/wx/compiler.h
+Copyright: 1997-2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/confbase.h
+Copyright: 1997, Karsten Ballueder Ballueder@usa.net
+License: wxWindows
+
+Files: include/wx/convauto.h
+Copyright: 2006, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/cshelp.h
+Copyright: 2000, Julian Smart, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/cursor.h
+Copyright: Julian Smart
+ 2014, Vadim Zeitlin (wxCursorBase)
+License: wxWindows
+
+Files: include/wx/dataview.h
+  include/wx/dirdlg.h
+  include/wx/filedlg.h
+  include/wx/image.h
+  include/wx/imagpng.h
+  include/wx/imagtiff.h
+  include/wx/sharedptr.h
+  include/wx/tooltip.h
+  include/wx/ustring.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/datectrl.h
+  include/wx/dateevt.h
+  include/wx/debugrpt.h
+  include/wx/treebook.h
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/datstrm.h
+  include/wx/mstream.h
+  include/wx/socket.h
+  include/wx/stream.h
+  include/wx/thread.h
+  include/wx/tokenzr.h
+  include/wx/txtstrm.h
+  include/wx/wfstream.h
+  include/wx/zstream.h
+Copyright: Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/dcbuffer.h
+Copyright: Ron Lee
+License: wxWindows
+
+Files: include/wx/dcgraph.h
+  include/wx/graphics.h
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: include/wx/dcsvg.h
+Copyright: Chris Elliott
+License: wxWindows
+
+Files: include/wx/debug.h
+Copyright: 1998-2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/dfb/*
+Copyright: 2006, 2007, REA Elektronik GmbH
+License: wxWindows
+
+Files: include/wx/dfb/nonownedwnd.h
+  include/wx/dfb/popupwin.h
+Copyright: 2003, 2006, TT-Solutions
+License: wxWindows
+
+Files: include/wx/dfb/private/*
+Copyright: 2006, REA Elektronik GmbH
+ 2001, 2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: include/wx/dfb/private/overlay.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/display.h
+Copyright: 2002-2006, wxWidgets team
+License: wxWindows
+
+Files: include/wx/dlist.h
+Copyright: 2008, wxWidgets team
+License: wxWindows
+
+Files: include/wx/docmdi.h
+  include/wx/mdi.h
+Copyright: 2008-2010, Vadim Zeitlin
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: include/wx/dvrenderers.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2006, Robert Roebling
+License: wxWindows
+
+Files: include/wx/dynlib.h
+  include/wx/process.h
+Copyright: 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/dynload.h
+Copyright: 2001, Ron Lee <ron@debian.org>
+ 1998, Guilhem Lavaux)
+License: wxWindows
+
+Files: include/wx/evtloopsrc.h
+  include/wx/infobar.h
+  include/wx/mousemanager.h
+  include/wx/persist.h
+  include/wx/ptr_scpd.h
+  include/wx/ptr_shrd.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/fdrepdlg.h
+Copyright: Markus Greither
+License: wxWindows
+
+Files: include/wx/fileconf.h
+Copyright: 1997, Karsten Ballueder & Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/filectrl.h
+Copyright: Diaa M. Sami
+License: wxWindows
+
+Files: include/wx/filedlgcustomize.h
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/filefn.h
+  include/wx/layout.h
+  include/wx/list.h
+  include/wx/memory.h
+  include/wx/utils.h
+  include/wx/validate.h
+  include/wx/valtext.h
+  include/wx/version.h
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: include/wx/filehistory.h
+Copyright: Julian Smart, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/filename.h
+Copyright: 2000, Robert Roebling
+License: wxWindows
+
+Files: include/wx/flags.h
+  include/wx/xtistrm.h
+  include/wx/xtixml.h
+Copyright: 2003, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/fmappriv.h
+Copyright: 1999-2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/fontdlg.h
+Copyright: 1997-2002, wxWidgets team
+License: wxWindows
+
+Files: include/wx/fontenum.h
+Copyright: Julian Smart, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/fs_arc.h
+Copyright: 1999, Vaclav Slavik, 2006, Mike Wetherell
+License: wxWindows
+
+Files: include/wx/fs_filter.h
+  include/wx/fs_zip.h
+Copyright: 2006, Mike Wetherell
+License: wxWindows
+
+Files: include/wx/fs_mem.h
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/fswatcher.h
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: include/wx/gauge.h
+Copyright: 1996-2001, wxWidgets team
+License: wxWindows
+
+Files: include/wx/gbsizer.h
+Copyright: Robin Dunn
+License: wxWindows
+
+Files: include/wx/generic/aboutdlgg.h
+  include/wx/generic/mask.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/accel.h
+  include/wx/generic/filedlgg.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/generic/activityindicator.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/animate.h
+Copyright: Julian Smart and Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: include/wx/generic/bmpcbox.h
+  include/wx/generic/combo.h
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: include/wx/generic/busyinfo.h
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/generic/buttonbar.h
+Copyright: Julian Smart, Robert Roebling, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/generic/calctrlg.h
+  include/wx/generic/logg.h
+  include/wx/generic/wizard.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/generic/caret.h
+  include/wx/generic/choicdgg.h
+  include/wx/generic/fdrepdlg.h
+  include/wx/generic/numdlgg.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/generic/clrpickerg.h
+Copyright: Vadim Zeitlin, Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/generic/collheaderctrl.h
+  include/wx/generic/creddlgg.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/generic/collpaneg.h
+  include/wx/generic/filepickerg.h
+  include/wx/generic/fontpickerg.h
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/generic/ctrlsub.h
+  include/wx/generic/notifmsg.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/custombgwin.h
+  include/wx/generic/timectrl.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/dataview.h
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/generic/datectrl.h
+Copyright: 2005, Andreas Pflug <pgadmin@pse-consulting.de>
+License: wxWindows
+
+Files: include/wx/generic/dcpsg.h
+Copyright: Julian Smart and Robert Roebling
+License: wxWindows
+
+Files: include/wx/generic/dirctrlg.h
+  include/wx/generic/dirdlgg.h
+Copyright: Robert Roebling, Harm van der Heijden, Julian Smart
+License: wxWindows
+
+Files: include/wx/generic/dvrenderer.h
+  include/wx/generic/dvrenderers.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2006, Robert Roebling
+License: wxWindows
+
+Files: include/wx/generic/filectrlg.h
+Copyright: Diaa M. Sami
+License: wxWindows
+
+Files: include/wx/generic/fswatcher.h
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: include/wx/generic/grid.h
+  include/wx/generic/grideditors.h
+Copyright: Michael Bedward
+License: wxWindows
+
+Files: include/wx/generic/gridctrl.h
+Copyright: The Computer Surgery (paul@compsurg.co.uk)
+License: wxWindows
+
+Files: include/wx/generic/gridsel.h
+Copyright: Stefan Neis
+License: wxWindows
+
+Files: include/wx/generic/headerctrlg.h
+  include/wx/generic/scrolwin.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/helpext.h
+Copyright: 1998, Karsten Ballueder
+License: wxWindows
+
+Files: include/wx/generic/hyperlink.h
+Copyright: 2005, David Norris
+License: wxWindows
+
+Files: include/wx/generic/imaglist.h
+  include/wx/generic/listctrl.h
+  include/wx/generic/paletteg.h
+Copyright: 1998, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: include/wx/generic/infobar.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/mdig.h
+Copyright: 2008, Vadim Zeitlin
+ 2002, Hans Van Leemputten
+License: wxWindows
+
+Files: include/wx/generic/private/*
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/private/addremovectrl.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/generic/private/animate.h
+Copyright: Julian Smart and Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: include/wx/generic/private/grid.h
+Copyright: Michael Bedward
+License: wxWindows
+
+Files: include/wx/generic/private/listctrl.h
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/generic/private/notifmsg.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/generic/private/rowheightcache.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/generic/private/textmeasure.h
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: include/wx/generic/private/timer.h
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/generic/private/widthcalc.h
+Copyright: 2015, wxWidgets team
+License: wxWindows
+
+Files: include/wx/generic/progdlgg.h
+Copyright: Karsten Ballueder
+License: wxWindows
+
+Files: include/wx/generic/region.h
+Copyright: 2004, 2007, David Elliott
+License: wxWindows
+
+Files: include/wx/generic/richmsgdlgg.h
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: include/wx/generic/spinctlg.h
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/generic/srchctlg.h
+Copyright: Vince Harron
+License: wxWindows
+
+Files: include/wx/generic/statbmpg.h
+Copyright: wxWidgets developers
+License: wxWindows
+
+Files: include/wx/generic/statline.h
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/generic/stattextg.h
+Copyright: Marcin Wojdyr
+License: wxWindows
+
+Files: include/wx/generic/treectlg.h
+Copyright: 1997, 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/geometry.h
+Copyright: 1999, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/gifdecod.h
+  include/wx/imagpcx.h
+Copyright: 1999, Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: include/wx/gtk/*
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/accel.h
+  include/wx/gtk/setup.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/wx/gtk/activityindicator.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/animate.h
+Copyright: Julian Smart and Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: include/wx/gtk/app.h
+  include/wx/gtk/control.h
+  include/wx/gtk/frame.h
+  include/wx/gtk/menu.h
+  include/wx/gtk/toplevel.h
+Copyright: 1998, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: include/wx/gtk/assertdlg_gtk.h
+  include/wx/gtk/dirdlg.h
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/gtk/bmpcbox.h
+Copyright: 2008, Jaakko Salli
+License: wxWindows
+
+Files: include/wx/gtk/calctrl.h
+Copyright: 2008, Marcin Wojdyr
+License: wxWindows
+
+Files: include/wx/gtk/chkconf.h
+Copyright: 2000-2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/clipbrd.h
+  include/wx/gtk/mdi.h
+Copyright: 2005-2009, Vadim Zeitlin
+ 1998-2005, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/clrpicker.h
+  include/wx/gtk/collpane.h
+  include/wx/gtk/filepicker.h
+  include/wx/gtk/fontpicker.h
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/gtk/colordlg.h
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/gtk/dataform.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/gtk/dataobj.h
+  include/wx/gtk/dataobj2.h
+  include/wx/gtk/dnd.h
+Copyright: 1998, 1999, Vadim Zeitlin, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/dvrenderer.h
+  include/wx/gtk/dvrenderers.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2006, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/evtloop.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/evtloopsrc.h
+  include/wx/gtk/infobar.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/filectrl.h
+Copyright: Diaa M. Sami
+License: wxWindows
+
+Files: include/wx/gtk/filehistory.h
+Copyright: 2010, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/gtk/fontdlg.h
+  include/wx/gtk/glcanvas.h
+  include/wx/gtk/minifram.h
+  include/wx/gtk/scrolwin.h
+  include/wx/gtk/spinbutt.h
+  include/wx/gtk/spinctrl.h
+  include/wx/gtk/toolbar.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/gnome/*
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/hyperlink.h
+Copyright: 2007, Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/gtk/mimetype.h
+Copyright: 2016, Hans Mackowiak <hanmac@gmx.de>
+License: wxWindows
+
+Files: include/wx/gtk/msgdlg.h
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/gtk/nonownedwnd.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/notebook.h
+Copyright: Julian Smart and Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/popupwin.h
+Copyright: 2001, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/print.h
+Copyright: Anthony Bretaudeau
+License: wxWindows
+
+Files: include/wx/gtk/private.h
+Copyright: 2002, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/*
+Copyright: 2007, 2009, 2014, 2015, 2018, 2020, 2022, Paul Cornett
+License: wxWindows
+
+Files: include/wx/gtk/private/addremovectrl.h
+  include/wx/gtk/private/value.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/animate.h
+Copyright: Julian Smart and Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: include/wx/gtk/private/dialogcount.h
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/error.h
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/event.h
+Copyright: 2011, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/gtk/private/eventsdisabler.h
+  include/wx/gtk/private/treeview.h
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/gdkconv.h
+  include/wx/gtk/private/messagetype.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/gtk2-compat.h
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: include/wx/gtk/private/list.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/log.h
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/mediactrl.h
+Copyright: 2021, Pierluigi Passaro <pierluigi.p@variscite.com>
+License: wxWindows
+
+Files: include/wx/gtk/private/mnemonics.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/object.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/string.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/textmeasure.h
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: include/wx/gtk/private/timer.h
+  include/wx/gtk/private/win_gtk.h
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/private/tlwgeom.h
+  include/wx/gtk/private/wrapgtk.h
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/private/treeentry_gtk.h
+Copyright: 2006, Ryan Norton
+License: wxWindows
+
+Files: include/wx/gtk/private/webkit.h
+Copyright: 2017, Jose Lorenzo <josee.loren@gmail.com>
+License: wxWindows
+
+Files: include/wx/gtk/private/webview_webkit2_extension.h
+Copyright: 2017, Scott Talbert
+License: wxWindows
+
+Files: include/wx/gtk/srchctrl.h
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: include/wx/gtk/taskbar.h
+Copyright: 2007, 2009, 2014, 2015, 2018, 2020, 2022, Paul Cornett
+License: wxWindows
+
+Files: include/wx/gtk/textentry.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk/tglbtn.h
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: include/wx/gtk/webview_webkit.h
+Copyright: 2010, Marianne Gagnon, 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk/webviewhistoryitem_webkit.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/gtk1/*
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk1/accel.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/wx/gtk1/app.h
+  include/wx/gtk1/control.h
+  include/wx/gtk1/frame.h
+  include/wx/gtk1/menu.h
+  include/wx/gtk1/toplevel.h
+Copyright: 1998, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: include/wx/gtk1/colordlg.h
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/gtk1/dataform.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/gtk1/dataobj.h
+  include/wx/gtk1/dataobj2.h
+  include/wx/gtk1/dnd.h
+Copyright: 1998, 1999, Vadim Zeitlin, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk1/fontdlg.h
+  include/wx/gtk1/glcanvas.h
+  include/wx/gtk1/minifram.h
+  include/wx/gtk1/scrolwin.h
+  include/wx/gtk1/spinbutt.h
+  include/wx/gtk1/spinctrl.h
+  include/wx/gtk1/toolbar.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk1/mdi.h
+Copyright: 2005-2009, Vadim Zeitlin
+ 1998-2005, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk1/msgdlg.h
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/gtk1/notebook.h
+Copyright: Julian Smart and Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk1/popupwin.h
+Copyright: 2001, Robert Roebling
+License: wxWindows
+
+Files: include/wx/gtk1/private.h
+Copyright: 2002, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk1/private/addremovectrl.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk1/private/mnemonics.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/gtk1/tglbtn.h
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: include/wx/gtk1/treectrl.h
+Copyright: Denis Pershin
+License: wxWindows
+
+Files: include/wx/hashmap.h
+  include/wx/hashset.h
+  include/wx/iconbndl.h
+  include/wx/msgout.h
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: include/wx/html/*
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/html/forcelnk.h
+  include/wx/html/htmprint.h
+  include/wx/html/m_templ.h
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/html/helpctrl.h
+  include/wx/html/helpdata.h
+  include/wx/html/helpfrm.h
+  include/wx/html/helpwnd.h
+Copyright: Harm van der Heijden and Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/html/helpdlg.h
+Copyright: Harm van der Heijden, Vaclav Slavik, Julian Smart
+License: wxWindows
+
+Files: include/wx/html/htmlcell.h
+Copyright: 1999-2003, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/html/htmlproc.h
+Copyright: 2001, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/html/styleparams.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/hyperlink.h
+Copyright: 2005, David Norris
+License: wxWindows
+
+Files: include/wx/imagbmp.h
+Copyright: Robert Roebling, Chris Elliott
+License: wxWindows
+
+Files: include/wx/imaggif.h
+Copyright: 1999-2011, Vaclav Slavik, Guillermo Rodriguez Garcia, Gershon Elber, Troels K
+License: wxWindows
+
+Files: include/wx/imagiff.h
+Copyright: 2002, Steffen Gutmann
+License: wxWindows
+
+Files: include/wx/imagpnm.h
+Copyright: Sylvain Bougnoux
+License: wxWindows
+
+Files: include/wx/imagtga.h
+Copyright: 2005, Seth Jackson
+License: wxWindows
+
+Files: include/wx/imagxpm.h
+  include/wx/xpmdecod.h
+Copyright: 2001, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/ipc.h
+Copyright: 2002, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/itemattr.h
+  include/wx/secretstore.h
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/listimpl.cpp
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/lzmastream.h
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/math.h
+  include/wx/numdlg.h
+Copyright: John Labenski
+License: wxWindows
+
+Files: include/wx/matrix.h
+Copyright: Julian Smart, Chris Breeze
+License: wxWindows
+
+Files: include/wx/mediactrl.h
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: include/wx/memtext.h
+Copyright: 2001, Morten Hanssen
+License: wxWindows
+
+Files: include/wx/meta/*
+Copyright: 2008, Arne Steinarson
+License: wxWindows
+
+Files: include/wx/meta/if.h
+  include/wx/meta/movable.h
+Copyright: 2008, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/meta/implicitconversion.h
+Copyright: 2010, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/meta/pod.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/meta/removeref.h
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/minifram.h
+Copyright: Julian Smart
+ 2014, wxWidgets dev team
+License: wxWindows
+
+Files: include/wx/modalhook.h
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/module.h
+Copyright: Wolfram Gloger and Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/motif/chkconf.h
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/motif/ctrlsub.h
+  include/wx/motif/textentry.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/motif/dataform.h
+Copyright: 1999, Robert Roebling
+License: wxWindows
+
+Files: include/wx/motif/dataobj.h
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: include/wx/motif/dataobj2.h
+  include/wx/motif/popupwin.h
+  include/wx/motif/tglbtn.h
+Copyright: 2003, Mattia Barbon
+License: wxWindows
+
+Files: include/wx/motif/dnd.h
+Copyright: 1998, Vadim Zeitlin, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: include/wx/motif/menuitem.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/motif/toplevel.h
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: include/wx/msgqueue.h
+Copyright: 2007, 2019, 2021, TT-Solutions SARL
+License: wxWindows
+
+Files: include/wx/msw/appprogress.h
+  include/wx/msw/taskbarbutton.h
+  include/wx/msw/webview_edge.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/msw/apptbase.h
+  include/wx/msw/apptrait.h
+  include/wx/msw/crashrpt.h
+  include/wx/msw/wrapcctl.h
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/bmpcbox.h
+Copyright: 2008, Jaakko Salli
+License: wxWindows
+
+Files: include/wx/msw/calctrl.h
+  include/wx/msw/headerctrl.h
+  include/wx/msw/tls.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/caret.h
+  include/wx/msw/winundef.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/checklst.h
+  include/wx/msw/enhmeta.h
+  include/wx/msw/gdiimage.h
+  include/wx/msw/iniconf.h
+  include/wx/msw/menuitem.h
+  include/wx/msw/mimetype.h
+  include/wx/msw/popupwin.h
+  include/wx/msw/regconf.h
+  include/wx/msw/registry.h
+  include/wx/msw/statusbar.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/msw/combo.h
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: include/wx/msw/commandlinkbutton.h
+  include/wx/msw/hyperlink.h
+  include/wx/msw/progdlg.h
+  include/wx/msw/richmsgdlg.h
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/ctrlsub.h
+  include/wx/msw/setup_inc.h
+  include/wx/msw/textentry.h
+  include/wx/msw/wrapgdip.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/custombgwin.h
+  include/wx/msw/nonownedwnd.h
+  include/wx/msw/panel.h
+  include/wx/msw/timectrl.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/datectrl.h
+  include/wx/msw/stackwalk.h
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/datetimectrl.h
+Copyright: 2005-2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/debughlp.h
+Copyright: 2003-2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/dib.h
+Copyright: 1997-2003, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/evtloop.h
+  include/wx/msw/evtloopconsole.h
+Copyright: 2003, 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/fdrepdlg.h
+Copyright: Markus Greither
+License: wxWindows
+
+Files: include/wx/msw/fswatcher.h
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: include/wx/msw/gccpriv.h
+  include/wx/msw/msvcrt.h
+  include/wx/msw/spinctrl.h
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/msw/genrcdefs.h
+  include/wx/msw/rcdefs.h
+Copyright: 2005, Mike Wetherell
+License: wxWindows
+
+Files: include/wx/msw/helpbest.h
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: include/wx/msw/htmlhelp.h
+Copyright: 2004, Jacek Caban
+License: wxWindows
+
+Files: include/wx/msw/libraries.h
+Copyright: 2005, Michael Wetherell
+License: wxWindows
+
+Files: include/wx/msw/mdi.h
+Copyright: 2008-2010, Vadim Zeitlin
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: include/wx/msw/mfc.h
+  include/wx/msw/winver.h
+Copyright: 2017, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/missing.h
+Copyright: 2002, Mattia Barbon
+License: wxWindows
+
+Files: include/wx/msw/ole/*
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/msw/ole/access.h
+Copyright: 2003, Julian Smart
+License: wxWindows
+
+Files: include/wx/msw/ole/activex.h
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: include/wx/msw/ole/automtn.h
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: include/wx/msw/ole/safearray.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/msw/ownerdrawnbutton.h
+Copyright: 2014, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/ownerdrw.h
+Copyright: 2008, 2009, Marcin Malich <me@malcom.pl>
+License: wxWindows
+
+Files: include/wx/msw/private/*
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/msw/private/button.h
+  include/wx/msw/private/datecontrols.h
+  include/wx/msw/private/metrics.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/comptr.h
+Copyright: 2012, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/private/cotaskmemptr.h
+Copyright: 2020, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/private/customdraw.h
+  include/wx/msw/private/dcdynwrap.h
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/dc.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/dpiaware.h
+Copyright: Maarten Bent
+License: wxWindows
+
+Files: include/wx/msw/private/event.h
+Copyright: 2014, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/private/filedialog.h
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/fswatcher.h
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: include/wx/msw/private/hiddenwin.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/keyboard.h
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/msgdlg.h
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/private/paint.h
+Copyright: 2020, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/pipestream.h
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/sockmsw.h
+Copyright: 2008, Vadim Zeitlin
+ 1999, 2000, Guillermo Rodriguez Garcia
+ 1997-1999, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/msw/private/textmeasure.h
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/private/timer.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/wx/msw/private/tlwgeom.h
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/uilocale.h
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/private/webview_ie.h
+Copyright: 2010, Marianne Gagnon, 2011, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/msw/private/webview_missing.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/msw/private/winstyle.h
+Copyright: 2017, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/region.h
+Copyright: 1997-2002, wxWidgets team
+License: wxWindows
+
+Files: include/wx/msw/rt/*
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/msw/seh.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/statline.h
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/msw/stdpaths.h
+  include/wx/msw/subwin.h
+  include/wx/msw/wrapshl.h
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/msw/tglbtn.h
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: include/wx/msw/tooltip.h
+Copyright: 1998, 1999, Robert Roebling, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/msw/toplevel.h
+Copyright: 2000-2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: include/wx/msw/uxtheme.h
+Copyright: 2003, John Platts, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/msw/webview_ie.h
+Copyright: 2010, Marianne Gagnon, 2011, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/msw/webviewhistoryitem_ie.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/msw/wrapcdlg.h
+Copyright: 2005, Wlodzimierz Skiba
+License: wxWindows
+
+Files: include/wx/msw/wrapwin.h
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/msw/wrl/*
+Copyright: 2021, wxWidgets team
+License: wxWindows
+
+Files: include/wx/nonownedwnd.h
+Copyright: 2003, 2006, TT-Solutions
+License: wxWindows
+
+Files: include/wx/notebook.h
+Copyright: 1996-2000, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/object.h
+  include/wx/rtti.h
+Copyright: 2001, Ron Lee <ron@debian.org>
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: include/wx/osx/*
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/activityindicator.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/appprogress.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/osx/chkconf.h
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/cocoa/dataview.h
+Copyright: 2009, Licence: wxWindows licence
+License: wxWindows
+
+Files: include/wx/osx/cocoa/evtloop.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/cocoa/private/*
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/cocoa/private/textimpl.h
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/cocoa/stdpaths.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/osx/colour.h
+  include/wx/osx/mimetype.h
+  include/wx/osx/private.h
+  include/wx/osx/region.h
+  include/wx/osx/statbmp.h
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: include/wx/osx/config_xcode.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/osx/core/*
+Copyright: 2018, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/core/cfdataref.h
+Copyright: 2007, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/core/cfref.h
+Copyright: 2007, David Elliott <dfe@cox.net>, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/core/cfstring.h
+  include/wx/osx/core/colour.h
+  include/wx/osx/core/private.h
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/core/dataview.h
+Copyright: 2009, Licence: wxWindows licence
+License: wxWindows
+
+Files: include/wx/osx/core/evtloop.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/core/hid.h
+  include/wx/osx/core/joystick.h
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: include/wx/osx/core/mimetype.h
+Copyright: 2010, Neil Perkins
+License: wxWindows
+
+Files: include/wx/osx/core/objcid.h
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/core/private/*
+Copyright: 2007, David Elliott
+ 2004, Ryan Norton
+License: wxWindows
+
+Files: include/wx/osx/core/private/datetimectrl.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/core/private/timer.h
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/dataform.h
+Copyright: 1999, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/dataobj.h
+  include/wx/osx/dataobj2.h
+Copyright: 1998, 1999, Vadim Zeitlin, Robert Roebling
+License: wxWindows
+
+Files: include/wx/osx/dataview.h
+Copyright: 2009, Licence: wxWindows licence
+License: wxWindows
+
+Files: include/wx/osx/datectrl.h
+  include/wx/osx/datetimectrl.h
+  include/wx/osx/timectrl.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/dnd.h
+Copyright: 1998, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/dvrenderer.h
+  include/wx/osx/dvrenderers.h
+  include/wx/osx/evtloopsrc.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/evtloop.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/font.h
+  include/wx/osx/printmac.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/wx/osx/fontdlg.h
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: include/wx/osx/fswatcher_fsevents.h
+Copyright: 2015, Roberto Perpuly <robertop2004@gmail.com>
+License: wxWindows
+
+Files: include/wx/osx/mdi.h
+Copyright: Stefan Csomor
+ 2008, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/osx/menuitem.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/osx/nonownedwnd.h
+Copyright: 2008, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/popupwin.h
+Copyright: 2006, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/private/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: include/wx/osx/private/addremovectrl.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/private/available.h
+Copyright: 2019, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/private/datatransfer.h
+Copyright: 2019, Stefan Csomor <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/osx/private/webrequest_urlsession.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/osx/sound.h
+Copyright: Ryan Norton, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/srchctrl.h
+Copyright: Vince Harron
+License: wxWindows
+
+Files: include/wx/osx/statline.h
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/osx/taskbarosx.h
+Copyright: 2003, Ryan Norton
+License: wxWindows
+
+Files: include/wx/osx/tglbtn.h
+Copyright: 2004, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/tooltip.h
+Copyright: 1999, Robert Roebling, Vadim Zeitlin, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/toplevel.h
+Copyright: 2001, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/osx/webview_webkit.h
+Copyright: Marianne Gagnon
+ Kevin Ollivier
+ Jethro Grassie
+License: wxWindows
+
+Files: include/wx/osx/webviewhistoryitem_webkit.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/panel.h
+Copyright: Julian Smart
+ 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/persist/*
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/persist/combobox.h
+Copyright: 2020, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/persist/dataview.h
+Copyright: 2017, wxWidgets.org
+License: wxWindows
+
+Files: include/wx/persist/splitter.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/platform.h
+Copyright: 1997-2001, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/position.h
+Copyright: 2007, The wxWidgets Team
+License: wxWindows
+
+Files: include/wx/preferences.h
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: include/wx/private/*
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/addremovectrl.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/animate.h
+  include/wx/private/json.h
+  include/wx/private/notifmsg.h
+  include/wx/private/webrequest_curl.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/private/display.h
+Copyright: 2002-2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/eventloopsourcesmanager.h
+Copyright: 2013, Rob Bresalier
+License: wxWindows
+
+Files: include/wx/private/extfield.h
+Copyright: 2017, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/fd.h
+  include/wx/private/sckaddr.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/fdiodispatcher.h
+  include/wx/private/selectdispatcher.h
+Copyright: Lukasz Michalski
+License: wxWindows
+
+Files: include/wx/private/fdioeventloopsourcehandler.h
+  include/wx/private/pipestream.h
+Copyright: 2013, Rob Bresalier
+ 2003, 2006, 2009, 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/fdiohandler.h
+  include/wx/private/fdiomanager.h
+  include/wx/private/threadinfo.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/fileback.h
+  include/wx/private/filename.h
+Copyright: 2006, Mike Wetherell
+License: wxWindows
+
+Files: include/wx/private/filedlgcustomize.h
+  include/wx/private/glibc.h
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/flagscheck.h
+Copyright: 2008, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/private/fontmgr.h
+Copyright: 2006, REA Elektronik GmbH
+ 2001, 2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: include/wx/private/fswatcher.h
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: include/wx/private/graphics.h
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: include/wx/private/icondir.h
+Copyright: 2017, wxWidgets team
+License: wxWindows
+
+Files: include/wx/private/jsscriptwrapper.h
+Copyright: 2017, Jose Lorenzo <josee.loren@gmail.com>
+License: wxWindows
+
+Files: include/wx/private/launchbrowser.h
+  include/wx/private/secretstore.h
+  include/wx/private/uiaction.h
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/markupparser.h
+  include/wx/private/markupparserattr.h
+  include/wx/private/richtooltip.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/menuradio.h
+Copyright: 2011, Vadim Zeitlin et al
+License: wxWindows
+
+Files: include/wx/private/overlay.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/private/preferences.h
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: include/wx/private/socket.h
+Copyright: 2008, 2009, Vadim Zeitlin
+ 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/private/spinctrl.h
+Copyright: 2019, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/streamtempinput.h
+Copyright: 2002, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/textmeasure.h
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: include/wx/private/timer.h
+Copyright: 1997-2018, wxWidgets dev team
+License: wxWindows
+
+Files: include/wx/private/tlwgeom.h
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/unicode.h
+Copyright: 2020, Pavel Tyunin
+License: wxWindows
+
+Files: include/wx/private/webrequest.h
+Copyright: 2020, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/private/window.h
+Copyright: 2010, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/private/wxprintf.h
+Copyright: wxWidgets copyright
+License: wxWindows
+
+Files: include/wx/propgrid/*
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: include/wx/protocol/*
+Copyright: 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/protocol/log.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/qt/*
+Copyright: 1997-2018, wxWidgets dev team
+License: wxWindows
+
+Files: include/wx/qt/bmpbuttn.h
+  include/wx/qt/clrpicker.h
+  include/wx/qt/ctrlsub.h
+  include/wx/qt/dataobj.h
+  include/wx/qt/dataobj2.h
+  include/wx/qt/dataview.h
+  include/wx/qt/dcprint.h
+  include/wx/qt/defs.h
+  include/wx/qt/dnd.h
+  include/wx/qt/dvrenderer.h
+  include/wx/qt/dvrenderers.h
+  include/wx/qt/fontdlg.h
+  include/wx/qt/frame.h
+  include/wx/qt/palette.h
+  include/wx/qt/popupwin.h
+  include/wx/qt/printdlg.h
+  include/wx/qt/printqt.h
+  include/wx/qt/radiobut.h
+  include/wx/qt/statline.h
+  include/wx/qt/taskbar.h
+  include/wx/qt/treectrl.h
+Copyright: Peter Most
+License: wxWindows
+
+Files: include/wx/qt/calctrl.h
+  include/wx/qt/colour.h
+Copyright: 2010, Kolya Kosenko
+License: wxWindows
+
+Files: include/wx/qt/clipbrd.h
+  include/wx/qt/colordlg.h
+  include/wx/qt/cursor.h
+  include/wx/qt/dataform.h
+  include/wx/qt/dirdlg.h
+  include/wx/qt/filedlg.h
+  include/wx/qt/glcanvas.h
+Copyright: 2014, Sean DEpagnier
+License: wxWindows
+
+Files: include/wx/qt/dcscreen.h
+Copyright: Sean DEpagnier
+License: wxWindows
+
+Files: include/wx/qt/msgdlg.h
+  include/wx/qt/pen.h
+  include/wx/qt/region.h
+Copyright: Peter Most, Javier Torres
+License: wxWindows
+
+Files: include/wx/qt/private/*
+Copyright: Javier Torres
+License: wxWindows
+
+Files: include/wx/qt/private/converter.h
+Copyright: Peter Most
+ 2010, Kolya Kosenko
+License: wxWindows
+
+Files: include/wx/qt/private/pointer.h
+Copyright: Peter Most
+License: wxWindows
+
+Files: include/wx/qt/private/treeitemdelegate.h
+Copyright: Matthew Griffin
+License: wxWindows
+
+Files: include/wx/qt/private/treeitemfactory.h
+Copyright: Graham Dawes
+License: wxWindows
+
+Files: include/wx/qt/private/utils.h
+Copyright: Peter Most, Javier Torres
+License: wxWindows
+
+Files: include/wx/range.h
+Copyright: 2011, Stefan Csomor
+License: wxWindows
+
+Files: include/wx/regex.h
+Copyright: 2000, Karsten Ballueder <ballueder@gmx.net>
+License: wxWindows
+
+Files: include/wx/ribbon/*
+Copyright: Peter Cawley
+License: wxWindows
+
+Files: include/wx/richtext/richtextimagedlg.h
+Copyright: Mingquan Yang, Julian Smart
+License: wxWindows
+
+Files: include/wx/sckaddr.h
+Copyright: 2008, 2009, Vadim Zeitlin
+ 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/sckipc.h
+Copyright: 2000, Guillermo Rodriguez <guille@iies.es>
+ 1997, 1998, Guilhem Lavaux
+ 1993, Julian Smart
+License: wxWindows
+
+Files: include/wx/scopedarray.h
+Copyright: Jesse Lovelace and original Boost authors (see below)
+ 2009, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/scopedptr.h
+Copyright: Jesse Lovelace and original Boost authors (see below)
+ 2009, Vadim Zeitlin
+License: wxWindows and NTP
+
+Files: include/wx/selstore.h
+Copyright: 2000-2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/simplebook.h
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/sizer.h
+Copyright: Robin Dunn, Robert Roebling
+License: wxWindows
+
+Files: include/wx/slider.h
+Copyright: 1996-2001, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/sound.h
+  include/wx/stockitem.h
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/srchctrl.h
+Copyright: Vince Harron
+License: wxWindows
+
+Files: include/wx/sstream.h
+  include/wx/stackwalk.h
+  include/wx/stdpaths.h
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/stack.h
+Copyright: 2001, Lindsay Mathieson <lindsay@mathieson.org> (WX_DECLARE_STACK)
+License: wxWindows
+
+Files: include/wx/statline.h
+Copyright: 1999, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/stc/*
+Copyright: 2000, Total Control Software
+License: wxWindows
+
+Files: include/wx/stdstream.h
+Copyright: 2009, Jonathan Liu
+License: wxWindows
+
+Files: include/wx/stopwatch.h
+Copyright: 2011, Vadim Zeitlin
+ 1998-2003, Julian Smart, Sylvain Bougnoux
+License: wxWindows
+
+Files: include/wx/strconv.h
+Copyright: 1998-2006, Vadim Zeitlin
+ 1998, Ove Kaaven, Robert Roebling
+License: wxWindows
+
+Files: include/wx/stringops.h
+  include/wx/strvararg.h
+  include/wx/unichar.h
+  include/wx/wxcrtvararg.h
+Copyright: 2006, 2007, REA Elektronik GmbH
+License: wxWindows
+
+Files: include/wx/testing.h
+Copyright: 2012, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/textbuf.h
+Copyright: 1998-2001, Morten Hanssen, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/textwrapper.h
+Copyright: 1999, 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/tglbtn.h
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: include/wx/thrimpl.cpp
+Copyright: Vadim Zeitlin (2002)
+License: wxWindows
+
+Files: include/wx/toolbook.h
+Copyright: 2006, Julian Smart
+License: wxWindows
+
+Files: include/wx/tracker.h
+  include/wx/weakref.h
+Copyright: 2007, Arne Steinarson
+License: wxWindows
+
+Files: include/wx/translation.h
+Copyright: 2010, Vaclav Slavik <vslavik@fastmail.fm>
+ 1998, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/treebase.h
+Copyright: 1997, 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/treectrl.h
+Copyright: Karsten Ballueder
+License: wxWindows
+
+Files: include/wx/uiaction.h
+Copyright: 2010-2016, Vadim Zeitlin
+ 2010, Steven Lamerton
+ 2010, Kevin Ollivier
+License: wxWindows
+
+Files: include/wx/univ/*
+Copyright: 2000-2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: include/wx/univ/bmpbuttn.h
+  include/wx/univ/checklst.h
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/univ/chkconf.h
+  include/wx/univ/stdrend.h
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/univ/custombgwin.h
+  include/wx/univ/panel.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/univ/listbox.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/univ/setup.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: include/wx/univ/setup_inc.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/univ/statline.h
+Copyright: 1999, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/univ/toolbar.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/unix/*
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: include/wx/unix/app.h
+Copyright: Lukasz Michalski
+License: wxWindows
+
+Files: include/wx/unix/apptbase.h
+  include/wx/unix/apptrait.h
+  include/wx/unix/pipe.h
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/chkconf.h
+  include/wx/unix/glx11.h
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/evtloop.h
+Copyright: 2007, Lukasz Michalski
+License: wxWindows
+
+Files: include/wx/unix/evtloopsrc.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/fontutil.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: include/wx/unix/glegl.h
+Copyright: 2017, Scott Talbert <swt@techie.net>
+License: wxWindows
+
+Files: include/wx/unix/joystick.h
+Copyright: Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/unix/mimetype.h
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: include/wx/unix/private.h
+  include/wx/unix/stackwalk.h
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/private/displayx11.h
+Copyright: 2002-2018, wxWindows team
+License: wxWindows
+
+Files: include/wx/unix/private/epolldispatcher.h
+  include/wx/unix/private/timer.h
+Copyright: Lukasz Michalski
+License: wxWindows
+
+Files: include/wx/unix/private/execute.h
+Copyright: 2013, Vadim Zeitlin
+ 1998, Robert Roebling, Julian Smart, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/unix/private/executeiohandler.h
+Copyright: 2013, Rob Bresalier, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/unix/private/fdiounix.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/private/pipestream.h
+  include/wx/unix/private/wakeuppipe.h
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/private/sockunix.h
+Copyright: 2008, 2009, Vadim Zeitlin
+ 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/unix/private/uilocale.h
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/sound.h
+Copyright: Julian Smart, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/unix/stdpaths.h
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/taskbarx11.h
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/unix/tls.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/unix/utilsx11.h
+Copyright: wxWidgets team
+ 2010, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/uri.h
+Copyright: 2004, Ryan Norton
+License: wxWindows
+
+Files: include/wx/url.h
+Copyright: 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: include/wx/valgen.h
+Copyright: 1999, Julian Smart (assigned from Kevin)
+License: wxWindows
+
+Files: include/wx/valnum.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2010, wxWidgets team
+License: wxWindows
+
+Files: include/wx/vector.h
+Copyright: 2001, Lindsay Mathieson <lindsay@mathieson.org>
+License: wxWindows
+
+Files: include/wx/volume.h
+Copyright: 2002, George Policello
+License: wxWindows
+
+Files: include/wx/webview.h
+Copyright: 2010, Marianne Gagnon, 2011, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/webviewarchivehandler.h
+  include/wx/webviewfshandler.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/windowid.h
+  include/wx/xlocale.h
+Copyright: 2007, 2008, Brian Vanderburg II
+License: wxWindows
+
+Files: include/wx/windowptr.h
+Copyright: 2013, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/wrapsizer.h
+Copyright: Arne Steinarson
+License: wxWindows
+
+Files: include/wx/x11/bitmap.h
+  include/wx/x11/brush.h
+  include/wx/x11/colour.h
+  include/wx/x11/region.h
+Copyright: Julian Smart, Robert Roebling
+License: wxWindows
+
+Files: include/wx/x11/clipbrd.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: include/wx/x11/dataform.h
+Copyright: 1999, Robert Roebling
+License: wxWindows
+
+Files: include/wx/x11/dataobj.h
+  include/wx/x11/textctrl.h
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: include/wx/x11/dataobj2.h
+Copyright: 1998, 1999, Vadim Zeitlin, Robert Roebling
+License: wxWindows
+
+Files: include/wx/x11/dnd.h
+Copyright: 1998, Vadim Zeitlin, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: include/wx/x11/glcanvas.h
+Copyright: Julian Smart, Wolfram Gloger
+License: wxWindows
+
+Files: include/wx/x11/nanox/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: include/wx/x11/popupwin.h
+Copyright: 2001, Robert Roebling
+License: wxWindows
+
+Files: include/wx/x11/private/*
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/x11/toplevel.h
+Copyright: 2002, Julian Smart
+License: wxWindows
+
+Files: include/wx/xml/*
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/xrc/*
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/xrc/xh_activityindicator.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/xrc/xh_animatctrl.h
+  include/wx/xrc/xh_clrpicker.h
+  include/wx/xrc/xh_collpane.h
+  include/wx/xrc/xh_dirpicker.h
+  include/wx/xrc/xh_filepicker.h
+  include/wx/xrc/xh_fontpicker.h
+  include/wx/xrc/xh_htmllbox.h
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: include/wx/xrc/xh_aui.h
+Copyright: 2011, wxWidgets Team
+License: wxWindows
+
+Files: include/wx/xrc/xh_auitoolb.h
+Copyright: 2013, Rodolphe Suescun
+License: wxWindows
+
+Files: include/wx/xrc/xh_bannerwindow.h
+  include/wx/xrc/xh_timectrl.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/xrc/xh_bmpbt.h
+  include/wx/xrc/xh_cald.h
+  include/wx/xrc/xh_listc.h
+  include/wx/xrc/xh_scrol.h
+  include/wx/xrc/xh_stbox.h
+  include/wx/xrc/xh_tree.h
+Copyright: 2000, Brian Gavin
+License: wxWindows
+
+Files: include/wx/xrc/xh_bmpcbox.h
+Copyright: 2006, Jaakko Salli
+License: wxWindows
+
+Files: include/wx/xrc/xh_bookctrlbase.h
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/xrc/xh_chckb.h
+  include/wx/xrc/xh_chckl.h
+  include/wx/xrc/xh_choic.h
+  include/wx/xrc/xh_combo.h
+  include/wx/xrc/xh_gauge.h
+  include/wx/xrc/xh_html.h
+  include/wx/xrc/xh_radbt.h
+  include/wx/xrc/xh_radbx.h
+  include/wx/xrc/xh_slidr.h
+  include/wx/xrc/xh_spin.h
+Copyright: 2000, Bob Mitchell and Verant Interactive
+License: wxWindows
+
+Files: include/wx/xrc/xh_cmdlinkbn.h
+  include/wx/xrc/xh_filectrl.h
+  include/wx/xrc/xh_toolbk.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: include/wx/xrc/xh_comboctrl.h
+Copyright: 2009, Jaakko Salli
+License: wxWindows
+
+Files: include/wx/xrc/xh_dataview.h
+Copyright: 2019, Anton Triest, Bricsys
+License: wxWindows
+
+Files: include/wx/xrc/xh_datectrl.h
+  include/wx/xrc/xh_mdi.h
+Copyright: 2005, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/xrc/xh_editlbox.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: include/wx/xrc/xh_gdctl.h
+Copyright: 2002, Markus Greither
+License: wxWindows
+
+Files: include/wx/xrc/xh_grid.h
+Copyright: 2005, Agron Selimaj, Freepour Controls Inc.
+License: wxWindows
+
+Files: include/wx/xrc/xh_hyperlink.h
+Copyright: 2005, David Norris
+License: wxWindows
+
+Files: include/wx/xrc/xh_infobar.h
+  include/wx/xrc/xh_styledtextctrl.h
+Copyright: 2007, 2019, 2021, TT-Solutions SARL
+License: wxWindows
+
+Files: include/wx/xrc/xh_listb.h
+Copyright: 2000, Bob Mitchell & Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/xrc/xh_odcombo.h
+Copyright: 2006, Alex Bligh
+License: wxWindows
+
+Files: include/wx/xrc/xh_propdlg.h
+  include/wx/xrc/xh_srchctrl.h
+Copyright: 2007, Sander Berents
+License: wxWindows
+
+Files: include/wx/xrc/xh_ribbon.h
+Copyright: 2010, Armel Asselin
+License: wxWindows
+
+Files: include/wx/xrc/xh_richtext.h
+Copyright: 2006, Julian Smart
+License: wxWindows
+
+Files: include/wx/xrc/xh_scwin.h
+Copyright: 2002, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/xrc/xh_simplebook.h
+Copyright: 2014, Vadim Zeitlin
+License: wxWindows
+
+Files: include/wx/xrc/xh_split.h
+Copyright: 2003, panga@freemail.hu, Vaclav Slavik
+License: wxWindows
+
+Files: include/wx/xrc/xh_statbar.h
+Copyright: 2004, Brian Ravnsgaard Riis
+License: wxWindows
+
+Files: include/wx/xrc/xh_sttxt.h
+Copyright: 2000, Bob Mitchell
+License: wxWindows
+
+Files: include/wx/xrc/xh_text.h
+Copyright: 2000, Aleksandras Gluchovas
+License: wxWindows
+
+Files: include/wx/xrc/xh_tglbtn.h
+Copyright: 2004, Julian Smart
+License: wxWindows
+
+Files: include/wx/xrc/xh_treebk.h
+Copyright: 2005, TT-Solutions <vadim@tt-solutions.com>
+License: wxWindows
+
+Files: include/wx/xrc/xmlreshandler.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: include/wx/xti.h
+  include/wx/xti2.h
+  include/wx/xtictor.h
+  include/wx/xtihandler.h
+  include/wx/xtiprop.h
+  include/wx/xtitypes.h
+Copyright: 2003, Stefan Csomor
+ 1997, Julian Smart
+License: wxWindows
+
+Files: include/wx/zipstrm.h
+Copyright: Mike Wetherell
+License: wxWindows
+
+Files: interface/wx/aboutdlg.h
+Copyright: will be replacedthe
+ (const wxString& copyright);
+License: wxWindows
+
+Files: interface/wx/activityindicator.h
+  interface/wx/addremovectrl.h
+  interface/wx/nativewin.h
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/anidecod.h
+  interface/wx/animdecod.h
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: interface/wx/aui/auibar.h
+  interface/wx/aui/tabmdi.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: interface/wx/aui/floatpane.h
+Copyright: 2005, 2006, Kirix Corporation
+License: wxWindows
+
+Files: interface/wx/bannerwindow.h
+  interface/wx/containr.h
+  interface/wx/custombgwin.h
+  interface/wx/eventfilter.h
+  interface/wx/nonownedwnd.h
+  interface/wx/richtooltip.h
+  interface/wx/stack.h
+  interface/wx/textcompleter.h
+  interface/wx/time.h
+  interface/wx/timectrl.h
+  interface/wx/treelist.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/bmpbndl.h
+  interface/wx/uilocale.h
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/collheaderctrl.h
+  interface/wx/creddlg.h
+  interface/wx/systhemectrl.h
+  interface/wx/webrequest.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: interface/wx/evtloop.h
+Copyright: 2008, Vadim Zeitlin
+License: wxWindows
+
+Files: interface/wx/filedlgcustomize.h
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/fs_arc.h
+Copyright: 1999, Vaclav Slavik, 2006, Mike Wetherell
+License: wxWindows
+
+Files: interface/wx/fs_filter.h
+Copyright: 2006, Mike Wetherell
+License: wxWindows
+
+Files: interface/wx/fs_inet.h
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: interface/wx/fswatcher.h
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: interface/wx/generic/aboutdlgg.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: interface/wx/gifdecod.h
+Copyright: 1999, Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: interface/wx/headercol.h
+  interface/wx/headerctrl.h
+  interface/wx/rearrangectrl.h
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/infobar.h
+  interface/wx/mousemanager.h
+  interface/wx/persist.h
+  interface/wx/textentry.h
+  interface/wx/textwrapper.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/itemattr.h
+  interface/wx/secretstore.h
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/lzmastream.h
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/modalhook.h
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/msgout.h
+Copyright: 2009, Vadim Zeitlin
+License: wxWindows
+
+Files: interface/wx/persist/*
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/persist/combobox.h
+Copyright: 2020, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/preferences.h
+  interface/wx/windowptr.h
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: interface/wx/protocol/log.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: interface/wx/richtext/richtextbuffer.h
+  interface/wx/richtext/richtextctrl.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: interface/wx/stdstream.h
+Copyright: 2009, Jonathan Liu
+License: wxWindows
+
+Files: interface/wx/ustring.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: interface/wx/valnum.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2010, wxWidgets team
+License: wxWindows
+
+Files: interface/wx/versioninfo.h
+Copyright: string, nonedefault.
+License: wxWindows
+
+Files: interface/wx/xrc/xh_sizer.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: misc/gdb/*
+Copyright: 2009, Vadim Zeitlin
+License: wxWindows
+
+Files: misc/scripts/check_unused_headers
+Copyright: 2007, Francesco Montorsi
+License: wxWindows
+
+Files: misc/scripts/inc_release
+  misc/scripts/makeunixtags.sh
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: misc/scripts/inc_year
+Copyright: 2019, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: misc/scripts/png2c.py
+Copyright: attribution so it is assumed it can be used under
+License: wxWindows
+
+Files: misc/scripts/run_sed_common.sh
+Copyright: 2007, 2019, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: misc/scripts/set_install_name
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: misc/unictabl/mk_encodings.sh
+Copyright: 1991-1999, Unicode, Inc.
+License: Unicode-strict
+
+Files: samples/*
+Copyright: Julian Smart
+License: wxWindows
+
+Files: samples/Makefile.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/access/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/animate/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/archive/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/archive/archive.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: samples/artprov/*
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: samples/artprov/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/aui/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/aui/auidemo.cpp
+Copyright: 2005, 2006, Kirix Corporation
+License: wxWindows
+
+Files: samples/calendar/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/calendar/calendar.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: samples/caret/*
+Copyright: wxWindows team
+License: wxWindows
+
+Files: samples/caret/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/clipboard/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/clipboard/clipboard.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: samples/collpane/*
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: samples/collpane/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/combo/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/combo/combo.cpp
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: samples/config/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/config/conftest.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: samples/console/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/console/console.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: samples/dataview/*
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: samples/dataview/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/debugrpt/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/debugrpt/debugrpt.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: samples/dialogs/*
+Copyright: Vadim Zeitlin
+ Julian Smart
+ 2004, ABX
+License: wxWindows
+
+Files: samples/dialogs/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/dialup/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/dialup/nettest.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: samples/display/*
+Copyright: Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/display/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/dll/*
+Copyright: 2009, Vaclav Slavik
+License: wxWindows
+
+Files: samples/dll/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/dll/sdk_exe.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/dnd/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/dnd/dnd.cpp
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: samples/docview/*
+Copyright: 2008-2010, Vadim Zeitlin
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: samples/docview/Info.plist.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/docview/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/dragimag/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/drawing/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/drawing/drawing.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: samples/erase/*
+Copyright: 2005-2009, Vadim Zeitlin
+ 1998-2005, Robert Roebling
+License: wxWindows
+
+Files: samples/erase/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/event/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/event/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/event/chessboard.cpp
+  samples/event/chessboard.h
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: samples/event/event.cpp
+Copyright: 2001-2009, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/except/*
+Copyright: 2003-2005, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/except/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/exec/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/exec/exec.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: samples/font/*
+Copyright: 1999, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/font/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/fswatcher/*
+Copyright: Bartosz Bekier
+License: wxWindows
+
+Files: samples/fswatcher/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/grid/*
+Copyright: Michael Bedward, Julian Smart, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/grid/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/grid/griddemo.h
+Copyright: Michael Bedward, Julian Smart
+License: wxWindows
+
+Files: samples/help/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/help/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/help/demo.cpp
+Copyright: Karsten Ballueder, Julian Smart
+License: wxWindows
+
+Files: samples/htlbox/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/htlbox/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/htlbox/htlbox.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/html/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/html/Makefile.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/html/about/about.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: samples/html/help/help.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: samples/html/helpview/helpview.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: samples/html/printing/*
+Copyright: 1998-2009, wxWidgets team
+License: wxWindows
+
+Files: samples/html/printing/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/html/test/test.cpp
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: samples/html/virtual/virtual.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: samples/html/widget/widget.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: samples/html/zip/zip.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: samples/image/*
+Copyright: 1998-2005, Robert Roebling
+License: wxWindows
+
+Files: samples/image/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/image/cursor_png.c
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/image/image.cpp
+Copyright: 2005-2009, Vadim Zeitlin
+ 1998-2005, Robert Roebling
+License: wxWindows
+
+Files: samples/internat/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/internat/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/internat/internat.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: samples/ipc/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/ipc/baseclient.cpp
+  samples/ipc/baseserver.cpp
+Copyright: Julian Smart, Jurgen Doornik
+ 2007, Anders Larsen
+License: wxWindows
+
+Files: samples/ipc/connection.h
+Copyright: 1999, Julian Smart
+License: wxWindows
+
+Files: samples/joytest/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/keyboard/*
+Copyright: 2002, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/keyboard/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/layout/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/layout/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/layout/layout.cpp
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: samples/layout/layout.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: samples/listctrl/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/mdi/*
+Copyright: 2008-2010, Vadim Zeitlin
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: samples/mdi/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/mdi/mdi.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: samples/mediaplayer/*
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: samples/mediaplayer/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/memcheck/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/menu/*
+Copyright: 1999, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/menu/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/mfc/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/mfc/mfctest.cpp
+  samples/mfc/mfctest.h
+Copyright: Julian Smart
+License: wxWindows
+
+Files: samples/minimal/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/nativdlg/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/nativdlg/resource.h
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/notebook/*
+Copyright: 1998-2002, wxWidgets team
+License: wxWindows
+
+Files: samples/notebook/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/oleauto/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/opengl/Makefile.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/opengl/cube/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/opengl/isosurf/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/opengl/penguin/*
+Copyright: Sandro Sigala
+License: wxWindows
+
+Files: samples/opengl/penguin/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/opengl/penguin/penguin.cpp
+  samples/opengl/penguin/penguin.h
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: samples/opengl/penguin/trackball.c
+  samples/opengl/penguin/trackball.h
+Copyright: 1993, 1994, Silicon Graphics, Inc.
+License: wxWindows
+
+Files: samples/opengl/pyramid/*
+Copyright: 2015, Manuel Martin
+License: wxWindows
+
+Files: samples/opengl/pyramid/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/opengl/pyramid/oglpfuncs.h
+Copyright: 2015, Manuel Martin
+License: Khronos
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and/or associated documentation files (the
+ "Materials"), to deal in the Materials without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Materials, and to
+ permit persons to whom the Materials are furnished to do so, subject to
+ the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included
+ in all copies or substantial portions of the Materials.
+ .
+ THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+
+Files: samples/ownerdrw/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/ownerdrw/ownerdrw.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: samples/popup/*
+Copyright: 2005, Robert Roebling
+License: wxWindows
+
+Files: samples/popup/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/power/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/power/power.cpp
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/preferences/*
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: samples/preferences/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/printing/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/propgrid/*
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: samples/propgrid/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/regtest/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/regtest/regtest.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: samples/render/*
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/render/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/ribbon/*
+Copyright: 2009, Peter Cawley
+License: wxWindows
+
+Files: samples/ribbon/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/richtext/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/sashtest/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/scroll/*
+Copyright: 2008, Vadim Zeitlin
+ 1998, Robert Roebling, 2002, Ron Lee, 2003, Matt Gregory
+License: wxWindows
+
+Files: samples/scroll/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/secretstore/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/secretstore/secretstore.cpp
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/shaped/*
+Copyright: Robin Dunn
+License: wxWindows
+
+Files: samples/shaped/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/sockets/*
+Copyright: 1999, Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: samples/sockets/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/sockets/baseclient.cpp
+Copyright: 2005, Lukasz Michalski <lmichalski@sf.net>
+License: wxWindows
+
+Files: samples/sockets/baseserver.cpp
+Copyright: 2005, Lukasz Michalski <lmichalski@user.sourceforge.net>
+License: wxWindows
+
+Files: samples/sockets/server.cpp
+Copyright: 2009, Vadim Zeitlin
+ 1999, Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: samples/sound/*
+Copyright: 2004, Vaclav Salvik
+License: wxWindows
+
+Files: samples/sound/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/splash/*
+Copyright: Wlodzimierz Skiba
+License: wxWindows
+
+Files: samples/splash/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/splitter/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/statbar/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/statbar/statbar.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: samples/stc/*
+Copyright: wxGuide
+License: wxWindows
+
+Files: samples/stc/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/svg/*
+Copyright: 2017, / 2002-2009
+License: wxWindows
+
+Files: samples/svg/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/taborder/*
+Copyright: 2007, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/taborder/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/taskbar/*
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: samples/taskbar/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/taskbarbutton/*
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: samples/taskbarbutton/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/text/*
+Copyright: Robert Roebling, Julian Smart, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/text/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/thread/*
+Copyright: 1998-2009, wxWidgets team
+License: wxWindows
+
+Files: samples/thread/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/toolbar/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/toolbar/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/toolbar/toolbar.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: samples/treectrl/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/treelist/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/treelist/treelist.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/typetest/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/uiaction/*
+Copyright: 2016, Vadim Zeitlin
+ 2010, Kevin Ollivier, Steven Lamerton
+License: wxWindows
+
+Files: samples/uiaction/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/validate/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/vscroll/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/vscroll/vstest.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: samples/webrequest/*
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: samples/webrequest/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/webview/*
+Copyright: 2010, Marianne Gagnon, Steven Lamerton
+License: wxWindows
+
+Files: samples/webview/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/widgets/*
+Copyright: 2001, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/widgets/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/widgets/activityindicator.cpp
+Copyright: 2015, wxWindows team
+License: wxWindows
+
+Files: samples/widgets/bmpcombobox.cpp
+  samples/widgets/odcombobox.cpp
+Copyright: 2006, Jaakko Salli
+License: wxWindows
+
+Files: samples/widgets/checkbox.cpp
+  samples/widgets/datepick.cpp
+  samples/widgets/hyperlnk.cpp
+Copyright: 2003, wxWindows team
+License: wxWindows
+
+Files: samples/widgets/choice.cpp
+  samples/widgets/itemcontainer.cpp
+  samples/widgets/itemcontainer.h
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: samples/widgets/clrpicker.cpp
+  samples/widgets/dirpicker.cpp
+  samples/widgets/filepicker.cpp
+  samples/widgets/fontpicker.cpp
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: samples/widgets/dirctrl.cpp
+Copyright: 2006, wxWindows team
+License: wxWindows
+
+Files: samples/widgets/editlbox.cpp
+Copyright: 2009, Francesco Montorsi
+License: wxWindows
+
+Files: samples/widgets/filectrl.cpp
+Copyright: 2007, Diaa M. Sami
+License: wxWindows
+
+Files: samples/widgets/headerctrl.cpp
+Copyright: 2016, wxWindows team
+License: wxWindows
+
+Files: samples/widgets/native.cpp
+Copyright: 2015, Vadim Zeitlin
+License: wxWindows
+
+Files: samples/widgets/notebook.cpp
+Copyright: 2001, Vadim Zeitlin, 2006, Wlodzimierz Skiba
+License: wxWindows
+
+Files: samples/widgets/searchctrl.cpp
+Copyright: 2006, Licence: wxWindows licence
+License: wxWindows
+
+Files: samples/widgets/statbmp.cpp
+Copyright: 2008, Marcin Wojdyr
+License: wxWindows
+
+Files: samples/widgets/timepick.cpp
+Copyright: 2011, wxWindows team
+License: wxWindows
+
+Files: samples/widgets/toggle.cpp
+Copyright: 2006, Wlodzmierz Skiba
+License: wxWindows
+
+Files: samples/wizard/*
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/wizard/wizard.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: samples/wrapsizer/*
+Copyright: Arne Steinarson
+License: wxWindows
+
+Files: samples/wrapsizer/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/xrc/*
+Copyright: Robert OConnor and Vaclav Slavik
+License: wxWindows
+
+Files: samples/xrc/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/xrc/objrefdlg.cpp
+  samples/xrc/objrefdlg.h
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: samples/xti/*
+Copyright: 2003, Stefan Csomor
+License: wxWindows
+
+Files: samples/xti/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: samples/xti/classlist.cpp
+  samples/xti/classlist.h
+Copyright: 2007, Francesco Montorsi
+License: wxWindows
+
+Files: samples/xti/xti.cpp
+Copyright: Stefan Csomor, Francesco Montorsi
+License: wxWindows
+
+Files: src/*
+Copyright: Julian Smart
+License: wxWindows
+
+Files: src/aui/*
+Copyright: 2005, 2006, Kirix Corporation
+License: wxWindows
+
+Files: src/aui/barartmsw.cpp
+  src/aui/tabartmsw.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/aui/tabartgtk.cpp
+Copyright: 2012, Jens Lody <jens@codeblocks.org>
+License: wxWindows
+
+Files: src/aui/tabmdi.cpp
+Copyright: Hans Van Leemputten
+License: wxWindows
+
+Files: src/common/accelcmn.cpp
+  src/common/btncmn.cpp
+  src/common/fdiodispatcher.cpp
+  src/common/glcmn.cpp
+  src/common/textentrycmn.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/addremovectrl.cpp
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/affinematrix2d.cpp
+  src/common/any.cpp
+  src/common/choiccmn.cpp
+  src/common/clntdata.cpp
+  src/common/cmdproc.cpp
+  src/common/ctrlcmn.cpp
+  src/common/ctrlsub.cpp
+  src/common/dcbase.cpp
+  src/common/dcbufcmn.cpp
+  src/common/fontcmn.cpp
+  src/common/lboxcmn.cpp
+  src/common/menucmn.cpp
+  src/common/overlaycmn.cpp
+  src/common/settcmn.cpp
+  src/common/srchcmn.cpp
+  src/common/textcmn.cpp
+  src/common/wincmn.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/common/anidecod.cpp
+  src/common/animatecmn.cpp
+  src/common/colourcmn.cpp
+  src/common/fontpickercmn.cpp
+  src/common/pickerbase.cpp
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: src/common/appbase.cpp
+  src/common/bookctrl.cpp
+  src/common/rendcmn.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/appcmn.cpp
+  src/common/dlgcmn.cpp
+  src/common/init.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: src/common/arcall.cpp
+  src/common/fileback.cpp
+  src/common/filtall.cpp
+  src/common/fs_filter.cpp
+Copyright: 2006, Mike Wetherell
+License: wxWindows
+
+Files: src/common/arcfind.cpp
+  src/common/archive.cpp
+  src/common/filtfind.cpp
+  src/common/zipstrm.cpp
+Copyright: Mike Wetherell
+License: wxWindows
+
+Files: src/common/arrstr.cpp
+  src/common/checklstcmn.cpp
+  src/common/cmdline.cpp
+  src/common/containr.cpp
+  src/common/debugrpt.cpp
+  src/common/dircmn.cpp
+  src/common/ffile.cpp
+  src/common/file.cpp
+  src/common/gaugecmn.cpp
+  src/common/intl.cpp
+  src/common/languageinfo.cpp
+  src/common/log.cpp
+  src/common/longlong.cpp
+  src/common/mimecmn.cpp
+  src/common/popupcmn.cpp
+  src/common/radiocmn.cpp
+  src/common/statbar.cpp
+  src/common/textfile.cpp
+  src/common/translation.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/common/artprov.cpp
+  src/common/artstd.cpp
+  src/common/imagjpeg.cpp
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: src/common/arttango.cpp
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/base64.cpp
+  src/common/dcsvg.cpp
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/common/bmpbase.cpp
+  src/common/imagxpm.cpp
+Copyright: 2001, Vaclav Slavik
+License: wxWindows
+
+Files: src/common/bmpbndl.cpp
+  src/common/uilocale.cpp
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/bmpcboxcmn.cpp
+Copyright: 2008, Jaakko Salli
+License: wxWindows
+
+Files: src/common/cairo.cpp
+Copyright: Anthony Bretaudeau
+License: wxWindows
+
+Files: src/common/calctrlcmn.cpp
+Copyright: Marcin Wojdyr
+License: wxWindows
+
+Files: src/common/clipcmn.cpp
+  src/common/fldlgcmn.cpp
+  src/common/image.cpp
+  src/common/imagpng.cpp
+  src/common/imagtiff.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/common/clrpickercmn.cpp
+  src/common/filepickercmn.cpp
+Copyright: Vadim Zeitlin, Francesco Montorsi
+License: wxWindows
+
+Files: src/common/combocmn.cpp
+  src/common/odcombocmn.cpp
+Copyright: 2005, Jaakko Salli
+License: wxWindows
+
+Files: src/common/config.cpp
+Copyright: 1997, Karsten Ballueder Ballueder@usa.net
+License: wxWindows
+
+Files: src/common/convauto.cpp
+  src/common/powercmn.cpp
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/cshelp.cpp
+Copyright: 2000, Julian Smart, Vadim Zeitlin
+License: wxWindows
+
+Files: src/common/datavcmn.cpp
+Copyright: 2006, Robert Roebling
+License: wxWindows
+
+Files: src/common/datetime.cpp
+  src/common/datetimefmt.cpp
+Copyright: 1999, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+ 1993-1995, Scott E. Lee
+License: wxWindows
+
+Files: src/common/datstrm.cpp
+  src/common/mstream.cpp
+  src/common/process.cpp
+  src/common/stream.cpp
+  src/common/tokenzr.cpp
+  src/common/txtstrm.cpp
+  src/common/wfstream.cpp
+  src/common/zstream.cpp
+Copyright: Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/dcgraph.cpp
+  src/common/graphcmn.cpp
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: src/common/dirctrlcmn.cpp
+Copyright: Harm van der Heijden, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: src/common/dndcmn.cpp
+  src/common/dobjcmn.cpp
+Copyright: wxWidgets Team
+License: wxWindows
+
+Files: src/common/docmdi.cpp
+Copyright: 2008-2010, Vadim Zeitlin
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: src/common/dpycmn.cpp
+Copyright: 2003-2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/dseldlg.cpp
+Copyright: 2001, wxWidgets team
+License: wxWindows
+
+Files: src/common/dummy.cpp
+Copyright: 1993, AIAI, University of Edinburgh
+License: wxWindows
+
+Files: src/common/dynlib.cpp
+Copyright: 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/dynload.cpp
+Copyright: 2001, Ron Lee <ron@debian.org>
+ 1998, Guilhem Lavaux)
+License: wxWindows
+
+Files: src/common/encconv.cpp
+  src/common/filesys.cpp
+  src/common/fs_inet.cpp
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: src/common/evtloopcmn.cpp
+Copyright: 2013, Rob Bresalier
+ 2003, 2006, 2009, 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/extended.c
+Copyright: 1989-1991, Ken Turkowski. <turk@computer.org>
+License: wxWindows
+
+Files: src/common/fddlgcmn.cpp
+  src/common/nbkbase.cpp
+Copyright: 2001, Vadim Zeitlin
+License: wxWindows
+
+Files: src/common/fileconf.cpp
+Copyright: 1997, Karsten Ballueder & Vadim Zeitlin
+License: wxWindows
+
+Files: src/common/filectrlcmn.cpp
+Copyright: Diaa M. Sami
+License: wxWindows
+
+Files: src/common/filefn.cpp
+  src/common/slidercmn.cpp
+  src/common/utilscmn.cpp
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: src/common/filename.cpp
+Copyright: 2000, Robert Roebling
+License: wxWindows
+
+Files: src/common/fmapbase.cpp
+  src/common/fontenumcmn.cpp
+  src/common/fontmap.cpp
+Copyright: 1999-2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/fontmgrcmn.cpp
+Copyright: 2006, REA Elektronik GmbH
+ 2001, 2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: src/common/fontutilcmn.cpp
+Copyright: Vadim Zeitlin, Vaclav Slavik
+License: wxWindows
+
+Files: src/common/framecmn.cpp
+  src/common/toplvcmn.cpp
+Copyright: 1998, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: src/common/fs_arc.cpp
+Copyright: 1999, Vaclav Slavik, 2006, Mike Wetherell
+License: wxWindows
+
+Files: src/common/fs_mem.cpp
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: src/common/fswatchercmn.cpp
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: src/common/ftp.cpp
+Copyright: 1998-2004, wxWidgets team
+ 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/gbsizer.cpp
+  src/common/rgncmn.cpp
+Copyright: Robin Dunn
+License: wxWindows
+
+Files: src/common/geometry.cpp
+Copyright: 1999, Stefan Csomor
+License: wxWindows
+
+Files: src/common/gifdecod.cpp
+Copyright: Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: src/common/gridcmn.cpp
+Copyright: Michael Bedward (mbedward@ozemail.com.au)
+License: wxWindows
+
+Files: src/common/hashmap.cpp
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: src/common/headercolcmn.cpp
+  src/common/headerctrlcmn.cpp
+  src/common/rearrangectrl.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/http.cpp
+  src/common/protocol.cpp
+  src/common/sckfile.cpp
+  src/common/url.cpp
+Copyright: 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/hyperlnkcmn.cpp
+Copyright: 2005, David Norris
+License: wxWindows
+
+Files: src/common/iconbndl.cpp
+Copyright: Mattia barbon
+License: wxWindows
+
+Files: src/common/imagall.cpp
+  src/common/imagpnm.cpp
+Copyright: Sylvain Bougnoux
+License: wxWindows
+
+Files: src/common/imagbmp.cpp
+Copyright: Robert Roebling, Chris Elliott
+License: wxWindows
+
+Files: src/common/imaggif.cpp
+Copyright: 1999-2011, Vaclav Slavik, Guillermo Rodriguez Garcia, Gershon Elber, Troels K
+License: wxWindows
+
+Files: src/common/imagiff.cpp
+Copyright: 2002, Steffen Gutmann
+License: wxWindows
+
+Files: src/common/imagpcx.cpp
+Copyright: 1999, Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: src/common/imagtga.cpp
+Copyright: 2005, Seth Jackson
+License: wxWindows
+
+Files: src/common/listctrlcmn.cpp
+Copyright: Kevin Ollivier
+License: wxWindows
+
+Files: src/common/lzmastream.cpp
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/markupparser.cpp
+  src/common/richtooltipcmn.cpp
+  src/common/time.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/mediactrlcmn.cpp
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: src/common/modalhook.cpp
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/module.cpp
+Copyright: Wolfram Gloger and Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/mousemanager.cpp
+  src/common/persist.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/msgout.cpp
+Copyright: the wxWidgets team
+License: wxWindows
+
+Files: src/common/notifmsgcmn.cpp
+  src/common/webrequest.cpp
+  src/common/webrequest_curl.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/common/numformatter.cpp
+  src/common/valnum.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: src/common/object.cpp
+Copyright: 2001, Ron Lee <ron@debian.org>
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: src/common/ownerdrwcmn.cpp
+Copyright: 2008, 2009, Marcin Malich <me@malcom.pl>
+License: wxWindows
+
+Files: src/common/platinfo.cpp
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: src/common/preferencescmn.cpp
+  src/common/threadinfo.cpp
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: src/common/quantize.cpp
+Copyright: Thomas G. Lane, Vaclav Slavik, Julian Smart
+License: wxWindows
+
+Files: src/common/regex.cpp
+Copyright: 2000, Karsten Ballueder <ballueder@gmx.net>
+License: wxWindows
+
+Files: src/common/sckaddr.cpp
+Copyright: 2008, 2009, Vadim Zeitlin
+ 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/sckipc.cpp
+Copyright: 2000, Guillermo Rodriguez <guille@iies.es>
+ 1997, 1998, Guilhem Lavaux
+ 1993, Julian Smart
+License: wxWindows
+
+Files: src/common/sckstrm.cpp
+  src/common/variant.cpp
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: src/common/secretstore.cpp
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/selectdispatcher.cpp
+Copyright: 2006, Lukasz Michalski
+License: wxWindows
+
+Files: src/common/sizer.cpp
+Copyright: Robin Dunn, Robert Roebling
+License: wxWindows
+
+Files: src/common/socket.cpp
+Copyright: 2008, Vadim Zeitlin
+ 1999, 2000, Guillermo Rodriguez Garcia
+ 1997-1999, Guilhem Lavaux
+License: wxWindows
+
+Files: src/common/socketiohandler.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2006, Angel vidal
+License: wxWindows
+
+Files: src/common/spinctrlcmn.cpp
+Copyright: 2008, 2009, wxWidgets team
+License: wxWindows
+
+Files: src/common/sstream.cpp
+  src/common/stdpbase.cpp
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/common/statlinecmn.cpp
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: src/common/stattextcmn.cpp
+Copyright: 2007, Francesco Montorsi
+ 1999-2006, Vadim Zeitlin
+License: wxWindows
+
+Files: src/common/stdstream.cpp
+Copyright: 2009, Jonathan Liu
+License: wxWindows
+
+Files: src/common/stockitem.cpp
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: src/common/stopwatch.cpp
+Copyright: 1998-2003, wxWidgets Team
+License: wxWindows
+
+Files: src/common/strconv.cpp
+Copyright: 2004, Ryan Norton, Fredrik Roubert
+ 2000-2003, Vadim Zeitlin
+ 1999, Ove Kaaven, Robert Roebling, Vaclav Slavik
+License: wxWindows
+
+Files: src/common/string.cpp
+  src/common/stringimpl.cpp
+Copyright: 2004, Ryan Norton <wxprojects@comcast.net>
+ 1998, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/common/stringops.cpp
+  src/common/strvararg.cpp
+  src/common/unichar.cpp
+Copyright: 2006, 2007, REA Elektronik GmbH
+License: wxWindows
+
+Files: src/common/tarstrm.cpp
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: src/common/taskbarcmn.cpp
+Copyright: 2003, Julian Smart
+License: wxWindows
+
+Files: src/common/textbuf.cpp
+Copyright: 1998-2001, wxWidgets team
+License: wxWindows
+
+Files: src/common/textmeasurecmn.cpp
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: src/common/timercmn.cpp
+  src/common/timerimpl.cpp
+Copyright: Julian Smart
+ 1999, Guillermo Rodriguez <guille@iies.es>
+License: wxWindows
+
+Files: src/common/treebase.cpp
+Copyright: 1998, Robert Roebling, Julian Smart et al
+License: wxWindows
+
+Files: src/common/uiactioncmn.cpp
+Copyright: 2010-2016, Vadim Zeitlin
+ 2010, Steven Lamerton
+ 2010, Kevin Ollivier
+License: wxWindows
+
+Files: src/common/unictabl.inc
+Copyright: 1991-1999, Unicode, Inc.
+License: Unicode-strict
+
+Files: src/common/uri.cpp
+Copyright: 2004, Ryan Norton
+License: wxWindows
+
+Files: src/common/ustring.cpp
+Copyright: 2008, Robert Roebling
+License: wxWindows
+
+Files: src/common/valgen.cpp
+Copyright: 1999, Kevin Smith
+License: wxWindows
+
+Files: src/common/webview.cpp
+Copyright: 2010, Marianne Gagnon, 2011, Steven Lamerton
+License: wxWindows
+
+Files: src/common/webviewarchivehandler.cpp
+  src/common/webviewfshandler.cpp
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: src/common/windowid.cpp
+  src/common/xlocale.cpp
+Copyright: 2007, 2008, Brian Vanderburg II
+License: wxWindows
+
+Files: src/common/wrapsizer.cpp
+Copyright: Arne Steinarson
+License: wxWindows
+
+Files: src/common/wxcrt.cpp
+  src/common/wxprintf.cpp
+Copyright: wxWidgets copyright
+License: wxWindows
+
+Files: src/common/xpmdecod.cpp
+Copyright: John Cristy, Vaclav Slavik
+License: Expat
+
+Files: src/common/xti.cpp
+Copyright: 2003, Stefan Csomor
+ 1997, Julian Smart
+License: wxWindows
+
+Files: src/common/xtistrm.cpp
+  src/common/xtixml.cpp
+Copyright: 2003, Stefan Csomor
+License: wxWindows
+
+Files: src/dfb/*
+Copyright: 2006, 2007, REA Elektronik GmbH
+License: wxWindows
+
+Files: src/dfb/fontmgr.cpp
+Copyright: 2006, REA Elektronik GmbH
+ 2001, 2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: src/dfb/overlay.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/generic/aboutdlgg.cpp
+  src/generic/mask.cpp
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/accel.cpp
+  src/generic/datavgen.cpp
+  src/generic/imaglist.cpp
+  src/generic/listctrl.cpp
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: src/generic/activityindicator.cpp
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/animateg.cpp
+Copyright: Julian Smart and Guillermo Rodriguez Garcia
+License: wxWindows
+
+Files: src/generic/bannerwindow.cpp
+  src/generic/markuptext.cpp
+  src/generic/richtooltipg.cpp
+  src/generic/timectrlg.cpp
+  src/generic/treelist.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/bmpcboxg.cpp
+  src/generic/combog.cpp
+  src/generic/odcombo.cpp
+Copyright: 2005, Jaakko Salli
+License: wxWindows
+
+Files: src/generic/bmpsvg.cpp
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2019, Gunter KÃ¶nigsmann <wxMaxima@physikbuch.de>
+License: wxWindows
+
+Files: src/generic/busyinfo.cpp
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: src/generic/buttonbar.cpp
+Copyright: Julian Smart, Robert Roebling, Vadim Zeitlin
+License: wxWindows
+
+Files: src/generic/calctrlg.cpp
+  src/generic/dbgrptg.cpp
+  src/generic/logg.cpp
+  src/generic/spinctlg.cpp
+  src/generic/tipwin.cpp
+  src/generic/wizard.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/generic/caret.cpp
+  src/generic/choicdgg.cpp
+  src/generic/fdrepdlg.cpp
+  src/generic/rowheightcache.cpp
+  src/generic/scrlwing.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/generic/choicbkg.cpp
+Copyright: Vadim Zeitlin, Wlodzimierz Skiba
+License: wxWindows
+
+Files: src/generic/clrpickerg.cpp
+Copyright: Vadim Zeitlin, Francesco Montorsi
+License: wxWindows
+
+Files: src/generic/collheaderctrlg.cpp
+  src/generic/creddlgg.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/generic/collpaneg.cpp
+  src/generic/filepickerg.cpp
+  src/generic/fontpickerg.cpp
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: src/generic/commandlinkbuttong.cpp
+  src/generic/richmsgdlgg.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: src/generic/datectlg.cpp
+Copyright: 2005, Andreas Pflug <pgadmin@pse-consulting.de>
+License: wxWindows
+
+Files: src/generic/dirctrlg.cpp
+Copyright: Harm van der Heijden, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: src/generic/dirdlgg.cpp
+Copyright: Harm van der Heijden, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: src/generic/editlbox.cpp
+  src/generic/timer.cpp
+Copyright: Vaclav Slavik
+License: wxWindows
+
+Files: src/generic/filectrlg.cpp
+Copyright: Diaa M. Sami
+License: wxWindows
+
+Files: src/generic/filedlgg.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/generic/fswatcherg.cpp
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: src/generic/graphicc.cpp
+Copyright: 2006, Stefan Csomor
+License: wxWindows
+
+Files: src/generic/grid.cpp
+  src/generic/grideditors.cpp
+Copyright: Michael Bedward (mbedward@ozemail.com.au)
+License: wxWindows
+
+Files: src/generic/gridctrl.cpp
+Copyright: The Computer Surgery (paul@compsurg.co.uk)
+License: wxWindows
+
+Files: src/generic/gridsel.cpp
+Copyright: Stefan Neis (Stefan.Neis@t-online.de)
+License: wxWindows
+
+Files: src/generic/headerctrlg.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/helpext.cpp
+  src/generic/progdlgg.cpp
+Copyright: Karsten Ballueder
+License: wxWindows
+
+Files: src/generic/htmllbox.cpp
+  src/generic/listbkg.cpp
+  src/generic/renderg.cpp
+  src/generic/vlbox.cpp
+  src/generic/vscroll.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/hyperlinkg.cpp
+Copyright: 2005, David Norris
+License: wxWindows
+
+Files: src/generic/infobar.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/mdig.cpp
+Copyright: 2008, Vadim Zeitlin
+ 2002, Hans Van Leemputten
+License: wxWindows
+
+Files: src/generic/msgdlgg.cpp
+Copyright: Julian Smart and Robert Roebling
+License: wxWindows
+
+Files: src/generic/notifmsgg.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/numdlgg.cpp
+  src/generic/tipdlg.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: src/generic/paletteg.cpp
+  src/generic/treectlg.cpp
+Copyright: 1998, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: src/generic/preferencesg.cpp
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: src/generic/regiong.cpp
+Copyright: 2004, 2007, David Elliott
+License: wxWindows
+
+Files: src/generic/selstore.cpp
+Copyright: 2000-2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/srchctlg.cpp
+Copyright: Vince Harron
+License: wxWindows
+
+Files: src/generic/statbmpg.cpp
+Copyright: wxWidgets developers
+License: wxWindows
+
+Files: src/generic/statline.cpp
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: src/generic/stattextg.cpp
+Copyright: Marcin Wojdyr
+License: wxWindows
+
+Files: src/generic/tabg.cpp
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: src/generic/textmeasure.cpp
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/generic/toolbkg.cpp
+Copyright: 2006, Julian Smart
+License: wxWindows
+
+Files: src/generic/treebkg.cpp
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/*
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: src/gtk/aboutdlg.cpp
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/activityindicator.cpp
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/animate.cpp
+  src/gtk/clrpicker.cpp
+  src/gtk/collpane.cpp
+  src/gtk/filepicker.cpp
+  src/gtk/fontpicker.cpp
+Copyright: Francesco Montorsi
+License: wxWindows
+
+Files: src/gtk/app.cpp
+  src/gtk/window.cpp
+Copyright: 1998, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: src/gtk/artgtk.cpp
+  src/gtk/colordlg.cpp
+  src/gtk/taskbar.cpp
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: src/gtk/assertdlg_gtk.cpp
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: src/gtk/bmpcbox.cpp
+Copyright: 2008, Jaakko Salli
+License: wxWindows
+
+Files: src/gtk/calctrl.cpp
+Copyright: 2008, Marcin Wojdyr
+License: wxWindows
+
+Files: src/gtk/clipbrd.cpp
+Copyright: 2005-2009, Vadim Zeitlin
+ 1998-2005, Robert Roebling
+License: wxWindows
+
+Files: src/gtk/control.cpp
+Copyright: 1998, Robert Roebling, Julian Smart and Vadim Zeitlin
+License: wxWindows
+
+Files: src/gtk/dcclient.cpp
+Copyright: 1998, Robert Roebling, Chris Breeze
+License: wxWindows
+
+Files: src/gtk/dirdlg.cpp
+  src/gtk/filedlg.cpp
+Copyright: 1998, Robert Roebling, 2004, Zbigniew Zagorski, 2005, Mart Raudsepp
+License: wxWindows
+
+Files: src/gtk/display.cpp
+  src/gtk/image_gtk.cpp
+  src/gtk/overlay.cpp
+  src/gtk/win_gtk.cpp
+Copyright: 2007, 2009, 2014, 2015, 2018, 2020, 2022, Paul Cornett
+License: wxWindows
+
+Files: src/gtk/eggtrayicon.c
+  src/gtk/eggtrayicon.h
+Copyright: 2002, Anders Carlsson <andersca@gnu.org>
+License: LGPL-2+
+
+Files: src/gtk/evtloop.cpp
+Copyright: 2013, Rob Bresalier, Vadim Zeitlin
+ 2001, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/gtk/filectrl.cpp
+Copyright: Diaa M. Sami
+License: wxWindows
+
+Files: src/gtk/filehistory.cpp
+Copyright: 2010, Vaclav Slavik
+License: wxWindows
+
+Files: src/gtk/font.cpp
+Copyright: 1998, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: src/gtk/glcanvas.cpp
+  src/gtk/scrolwin.cpp
+  src/gtk/spinbutt.cpp
+  src/gtk/spinctrl.cpp
+  src/gtk/toolbar.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/gtk/gnome/*
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/gtk/hyperlink.cpp
+Copyright: 2007, Francesco Montorsi
+License: wxWindows
+
+Files: src/gtk/infobar.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/mimetype.cpp
+Copyright: 2016, Hans Mackowiak <hanmac@gmx.de>
+License: wxWindows
+
+Files: src/gtk/mnemonics.cpp
+  src/gtk/textentry.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/msgdlg.cpp
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: src/gtk/nativewin.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/nonownedwnd.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/notebook.cpp
+Copyright: 1998, 1999, Robert Roebling, Vadim Zeitlin
+License: wxWindows
+
+Files: src/gtk/notifmsg.cpp
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/print.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/gtk/private.cpp
+Copyright: 2008, 2009, Marcin Malich <me@malcom.pl>
+License: wxWindows
+
+Files: src/gtk/renderer.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk/sockgtk.cpp
+Copyright: 2009, Vadim Zeitlin
+ 1999, 2007, wxWidgets dev team
+License: wxWindows
+
+Files: src/gtk/srchctrl.cpp
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/gtk/textctrl.cpp
+Copyright: 1998, Robert Roebling, Vadim Zeitlin, 2005, Mart Raudsepp
+License: wxWindows
+
+Files: src/gtk/textmeasure.cpp
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: src/gtk/tglbtn.cpp
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: src/gtk/treeentry_gtk.c
+Copyright: 2006, Ryan Norton
+License: wxWindows
+
+Files: src/gtk/webview_webkit.cpp
+Copyright: 2010, Marianne Gagnon, 1998, Robert Roebling
+License: wxWindows
+
+Files: src/gtk/webview_webkit2.cpp
+  src/gtk/webview_webkit2_extension.cpp
+Copyright: 2017, Scott Talbert
+License: wxWindows
+
+Files: src/gtk1/*
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: src/gtk1/app.cpp
+  src/gtk1/window.cpp
+Copyright: 1998, Robert Roebling, Julian Smart
+License: wxWindows
+
+Files: src/gtk1/artgtk.cpp
+  src/gtk1/taskbar.cpp
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: src/gtk1/control.cpp
+Copyright: 1998, Robert Roebling, Julian Smart and Vadim Zeitlin
+License: wxWindows
+
+Files: src/gtk1/dcclient.cpp
+Copyright: 1998, Robert Roebling, Chris Breeze
+License: wxWindows
+
+Files: src/gtk1/eggtrayicon.c
+  src/gtk1/eggtrayicon.h
+Copyright: 2002, Anders Carlsson <andersca@gnu.org>
+License: LGPL-2+
+
+Files: src/gtk1/evtloop.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/gtk1/filedlg.cpp
+Copyright: 1998, Robert Roebling, 2004, Zbigniew Zagorski, 2005, Mart Raudsepp
+License: wxWindows
+
+Files: src/gtk1/font.cpp
+Copyright: 1998, Robert Roebling and Julian Smart
+License: wxWindows
+
+Files: src/gtk1/glcanvas.cpp
+  src/gtk1/scrolwin.cpp
+  src/gtk1/spinbutt.cpp
+  src/gtk1/spinctrl.cpp
+  src/gtk1/toolbar.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/gtk1/main.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: src/gtk1/mnemonics.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk1/msgdlg.cpp
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: src/gtk1/notebook.cpp
+  src/gtk1/textctrl.cpp
+Copyright: 1998, 1999, Robert Roebling, Vadim Zeitlin
+License: wxWindows
+
+Files: src/gtk1/renderer.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/gtk1/sockgtk.cpp
+Copyright: 2009, Vadim Zeitlin
+ 1999, 2007, wxWidgets dev team
+License: wxWindows
+
+Files: src/gtk1/tglbtn.cpp
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: src/gtk1/threadno.cpp
+  src/gtk1/threadsgi.cpp
+Copyright: Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998)
+License: wxWindows
+
+Files: src/html/*
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: src/html/chm.cpp
+Copyright: 2003, Herd Software Development
+License: wxWindows
+
+Files: src/html/helpctrl.cpp
+  src/html/helpdata.cpp
+  src/html/helpfrm.cpp
+  src/html/helpwnd.cpp
+Copyright: Harm van der Heijden and Vaclav Slavik
+License: wxWindows
+
+Files: src/html/helpdlg.cpp
+Copyright: Harm van der Heijden, Vaclav Slavik and Julian Smart
+License: wxWindows
+
+Files: src/html/m_image.cpp
+Copyright: 1999, Vaclav Slavik, Joel Lucsy
+License: wxWindows
+
+Files: src/html/m_span.cpp
+  src/html/styleparams.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/html/m_style.cpp
+Copyright: 2002, Vaclav Slavik
+License: wxWindows
+
+Files: src/motif/dataobj.cpp
+  src/motif/dnd.cpp
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: src/motif/evtloop.cpp
+Copyright: 2002, Mattia Barbon
+License: wxWindows
+
+Files: src/motif/gauge.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: src/motif/mdi/*
+Copyright: file of the MDI distribution
+ 1996, Scott W. Sadler
+License: wxWindows
+
+Files: src/motif/mdi/COPYRIGHT
+Copyright: 1996, 1998, Scott W. Sadler
+License: wxWindows
+
+Files: src/motif/mdi/Imakefile
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/motif/mdi/lib/*
+Copyright: 1996, 1998, Scott W. Sadler
+License: wxWindows
+
+Files: src/motif/mdi/lib/Imakefile
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/motif/mdi/test/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/motif/popupwin.cpp
+Copyright: Mattia barbon
+License: wxWindows
+
+Files: src/motif/sockmot.cpp
+Copyright: 1997-2018, wxWidgets dev team
+License: wxWindows
+
+Files: src/motif/textentry.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/motif/toplevel.cpp
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: src/motif/xmcombo/*
+Copyright: 1993-1995, Harald Albrecht
+License: GPL-2+
+
+Files: src/msw/aboutdlg.cpp
+  src/msw/power.cpp
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/appprogress.cpp
+  src/msw/graphicsd2d.cpp
+  src/msw/systhemectrl.cpp
+  src/msw/taskbarbutton.cpp
+  src/msw/webrequest_winhttp.cpp
+  src/msw/webview_edge.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/msw/artmsw.cpp
+Copyright: 2008, Vaclav Slavik
+License: wxWindows
+
+Files: src/msw/basemsw.cpp
+  src/msw/crashrpt.cpp
+  src/msw/dib.cpp
+  src/msw/renderer.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/bmpbndl.cpp
+  src/msw/uilocale.cpp
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/bmpcbox.cpp
+Copyright: 2008, Jaakko Salli
+License: wxWindows
+
+Files: src/msw/calctrl.cpp
+  src/msw/datecontrols.cpp
+  src/msw/headerctrl.cpp
+  src/msw/nativewin.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/caret.cpp
+  src/msw/font.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/msw/checklst.cpp
+  src/msw/dir.cpp
+  src/msw/enhmeta.cpp
+  src/msw/evtloop.cpp
+  src/msw/evtloopconsole.cpp
+  src/msw/fontutil.cpp
+  src/msw/gdiimage.cpp
+  src/msw/iniconf.cpp
+  src/msw/menuitem.cpp
+  src/msw/mimetype.cpp
+  src/msw/notebook.cpp
+  src/msw/ownerdrw.cpp
+  src/msw/popupwin.cpp
+  src/msw/regconf.cpp
+  src/msw/registry.cpp
+  src/msw/snglinst.cpp
+  src/msw/statusbar.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/msw/combo.cpp
+Copyright: 2005, Jaakko Salli
+License: wxWindows
+
+Files: src/msw/commandlinkbutton.cpp
+  src/msw/hyperlink.cpp
+  src/msw/progdlg.cpp
+  src/msw/richmsgdlg.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: src/msw/cursor.cpp
+Copyright: 1997-2003, Julian Smart and Vadim Zeitlin
+License: wxWindows
+
+Files: src/msw/customdraw.cpp
+  src/msw/secretstore.cpp
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/datectrl.cpp
+  src/msw/timectrl.cpp
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/datetimectrl.cpp
+Copyright: 2005-2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/debughlp.cpp
+  src/msw/stackwalk.cpp
+Copyright: 2003-2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/dialup.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: src/msw/display.cpp
+Copyright: 2002-2006, wxWidgets team
+License: wxWindows
+
+Files: src/msw/dlmsw.cpp
+Copyright: 1998-2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/fdrepdlg.cpp
+Copyright: Markus Greither
+License: wxWindows
+
+Files: src/msw/fswatcher.cpp
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: src/msw/gdiplus.cpp
+  src/msw/notifmsg.cpp
+  src/msw/textentry.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/graphics.cpp
+Copyright: 2006, Stefan Csomor
+License: wxWindows
+
+Files: src/msw/helpbest.cpp
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: src/msw/mdi.cpp
+Copyright: 2008-2010, Vadim Zeitlin
+ 1997, 1998, Julian Smart
+License: wxWindows
+
+Files: src/msw/mediactrl_am.cpp
+  src/msw/mediactrl_qt.cpp
+  src/msw/mediactrl_wmp10.cpp
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: src/msw/nonownedwnd.cpp
+  src/msw/richtooltip.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/ole/*
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/msw/ole/access.cpp
+Copyright: 2003, Julian Smart
+License: wxWindows
+
+Files: src/msw/ole/activex.cpp
+Copyright: 2003, Lindsay Mathieson, 2005, Ryan Norton
+License: wxWindows
+
+Files: src/msw/ole/automtn.cpp
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: src/msw/ole/safearray.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/msw/region.cpp
+Copyright: 1997-2002, wxWidgets team
+License: wxWindows
+
+Files: src/msw/rt/*
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/msw/slider.cpp
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: src/msw/sockmsw.cpp
+Copyright: 2008, Vadim Zeitlin
+ 1999, 2000, Guillermo Rodriguez Garcia
+ 1997-1999, Guilhem Lavaux
+License: wxWindows
+
+Files: src/msw/spinctrl.cpp
+Copyright: 1999-2005, Vadim Zeitlin
+License: wxWindows
+
+Files: src/msw/statline.cpp
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: src/msw/stdpaths.cpp
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/msw/taskbar.cpp
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: src/msw/textmeasure.cpp
+Copyright: 1997-2012, wxWidgets team
+License: wxWindows
+
+Files: src/msw/tglbtn.cpp
+Copyright: 2000, Johnny C. Norris II
+License: wxWindows
+
+Files: src/msw/thread.cpp
+Copyright: Wolfram Gloger (1996, 1997), Guilhem Lavaux (1998);
+License: wxWindows
+
+Files: src/msw/tooltip.cpp
+Copyright: 1999, Vadim Zeitlin
+License: wxWindows
+
+Files: src/msw/toplevel.cpp
+Copyright: 2000-2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: src/msw/uiaction.cpp
+Copyright: Kevin Ollivier
+ 2010, Vadim Zeitlin
+ 2010, Steven Lamerton
+License: wxWindows
+
+Files: src/msw/urlmsw.cpp
+Copyright: 2003, Hajo Kirchhoff
+License: wxWindows
+
+Files: src/msw/utilsexc.cpp
+Copyright: 1997-2018, wxWidgets dev team
+License: wxWindows
+
+Files: src/msw/uxtheme.cpp
+Copyright: 2003, John Platts, Vadim Zeitlin
+License: wxWindows
+
+Files: src/msw/volume.cpp
+Copyright: 2002, George Policello
+License: wxWindows
+
+Files: src/msw/webview_ie.cpp
+Copyright: 2010, Marianne Gagnon, 2011, Steven Lamerton
+License: wxWindows
+
+Files: src/msw/winestub.c
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/osx/*
+Copyright: Stefan Csomor
+License: wxWindows
+
+Files: src/osx/artmac.cpp
+Copyright: wxWindows team
+License: wxWindows
+
+Files: src/osx/carbon/Info.plist.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/osx/carbon/dataobj.cpp
+Copyright: 1999, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/carbon/dcprint.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: src/osx/carbon/fontdlg.cpp
+  src/osx/carbon/sound.cpp
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: src/osx/carbon/popupwin.cpp
+Copyright: 2006, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/carbon/region.cpp
+Copyright: 1997, Stefan Csomor
+License: MIT-Open-Group
+ Copyright 1987, 1998  The Open Group
+ .
+ Permission to use, copy, modify, distribute, and sell this software and its
+ documentation for any purpose is hereby granted without fee, provided that
+ the above copyright notice appear in all copies and that both that
+ copyright notice and this permission notice appear in supporting
+ documentation.
+ .
+ The above copyright notice and this permission notice shall be included
+ in all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+ .
+ Except as contained in this notice, the name of The Open Group shall
+ not be used in advertising or otherwise to promote the sale, use or
+ other dealings in this Software without prior written authorization
+ from The Open Group.
+
+Files: src/osx/carbon/renderer.cpp
+Copyright: 2003, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/osx/carbon/statbrma.cpp
+Copyright: 1998, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/core/display.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/osx/core/evtloop_cf.cpp
+Copyright: 2013, Rob Bresalier
+ 2003, 2006, 2009, 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/osx/core/hid.cpp
+  src/osx/core/hidjoystick.cpp
+Copyright: Ryan Norton
+License: wxWindows
+
+Files: src/osx/core/mimetype.cpp
+Copyright: 2010, Neil Perkins
+License: wxWindows
+
+Files: src/osx/core/printmac.cpp
+Copyright: Julian Smart, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/core/secretstore.cpp
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/osx/core/sockosx.cpp
+Copyright: 2008, Vadim Zeitlin
+ 2002, Brian Victor
+License: wxWindows
+
+Files: src/osx/core/strconv_cf.cpp
+Copyright: 2004, 2007, David Elliott
+License: wxWindows
+
+Files: src/osx/core/utilsexc_cf.cpp
+Copyright: David Elliott, Ryan Norton
+ 2013, Rob Bresalier
+License: wxWindows
+
+Files: src/osx/dataview_osx.cpp
+Copyright: 2009, Licence: wxWindows licence
+License: wxWindows
+
+Files: src/osx/datectrl_osx.cpp
+  src/osx/datetimectrl_osx.cpp
+  src/osx/timectrl_osx.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/osx/dnd_osx.cpp
+Copyright: 1998, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/fontutil.cpp
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/osx/fswatcher_fsevents.cpp
+Copyright: 2015, Roberto Perpuly <robertop2004@gmail.com>
+License: wxWindows
+
+Files: src/osx/iphone/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/osx/nonownedwnd_osx.cpp
+Copyright: 2008, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/radiobut_osx.cpp
+Copyright: AUTHOR
+License: wxWindows
+
+Files: src/osx/srchctrl_osx.cpp
+Copyright: Vince Harron
+License: wxWindows
+
+Files: src/osx/statline_osx.cpp
+Copyright: 1998, Vadim Zeitlin
+License: wxWindows
+
+Files: src/osx/toplevel_osx.cpp
+Copyright: 2001-2004, Stefan Csomor
+License: wxWindows
+
+Files: src/osx/uiaction_osx.cpp
+Copyright: Kevin Ollivier
+ 2010, Vadim Zeitlin
+ 2010, Steven Lamerton
+License: wxWindows
+
+Files: src/propgrid/*
+Copyright: Jaakko Salli
+License: wxWindows
+
+Files: src/qt/*
+Copyright: 1997-2018, wxWidgets dev team
+License: wxWindows
+
+Files: src/qt/brush.cpp
+  src/qt/pen.cpp
+  src/qt/region.cpp
+Copyright: Peter Most, Javier Torres
+License: wxWindows
+
+Files: src/qt/calctrl.cpp
+  src/qt/colour.cpp
+Copyright: 2010, Kolya Kosenko
+License: wxWindows
+
+Files: src/qt/clipbrd.cpp
+  src/qt/colordlg.cpp
+  src/qt/cursor.cpp
+  src/qt/filedlg.cpp
+  src/qt/fontdlg.cpp
+  src/qt/glcanvas.cpp
+Copyright: 2014, Sean DEpagnier
+License: wxWindows
+
+Files: src/qt/clrpicker.cpp
+  src/qt/ctrlsub.cpp
+  src/qt/dataobj.cpp
+  src/qt/dataview.cpp
+  src/qt/dcprint.cpp
+  src/qt/defs.cpp
+  src/qt/display.cpp
+  src/qt/dnd.cpp
+  src/qt/dvrenderer.cpp
+  src/qt/dvrenderers.cpp
+  src/qt/fontenum.cpp
+  src/qt/fontutil.cpp
+  src/qt/mediactrl.cpp
+  src/qt/palette.cpp
+  src/qt/popupwin.cpp
+  src/qt/printdlg.cpp
+  src/qt/printqt.cpp
+  src/qt/radiobut.cpp
+  src/qt/statline.cpp
+  src/qt/taskbar.cpp
+  src/qt/tooltip.cpp
+  src/qt/treectrl.cpp
+  src/qt/uiaction.cpp
+Copyright: Peter Most
+License: wxWindows
+
+Files: src/qt/converter.cpp
+Copyright: 2010, wxWidgets dev team
+ 2010, Kolya Kosenko
+License: wxWindows
+
+Files: src/qt/dcscreen.cpp
+Copyright: Sean DEpagnier
+License: wxWindows
+
+Files: src/qt/graphics.cpp
+Copyright: Jay Nabonne
+License: wxWindows
+
+Files: src/qt/timer.cpp
+Copyright: Javier Torres
+License: wxWindows
+
+Files: src/regex/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/regex/COPYRIGHT
+  src/regex/regc_color.c
+  src/regex/regc_cvec.c
+  src/regex/regc_lex.c
+  src/regex/regc_nfa.c
+  src/regex/regcomp.c
+  src/regex/regcustom.h
+  src/regex/rege_dfa.c
+  src/regex/regerror.c
+  src/regex/regex.h
+  src/regex/regexec.c
+  src/regex/regfree.c
+  src/regex/regfronts.c
+  src/regex/regguts.h
+Copyright: 1998, 1999, Henry Spencer.
+License: wxWindows
+
+Files: src/regex/regc_locale.c
+  src/regex/tclUniData.c
+Copyright: 1998, Scriptics Corporation.
+License: wxWindows
+
+Files: src/regex/splice.sh
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: src/ribbon/*
+Copyright: Peter Cawley
+License: wxWindows
+
+Files: src/richtext/readme
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/richtext/richtextimagedlg.cpp
+Copyright: Mingquan Yang, Julian Smart
+License: wxWindows
+
+Files: src/stc/*
+Copyright: 2000, Total Control Software
+License: wxWindows
+
+Files: src/stc/PlatWX.cpp
+Copyright: 1998-2016, Neil Hodgson <neilh@scintilla.org>
+License: wxWindows
+
+Files: src/stc/PlatWX.h
+  src/stc/stc.interface.h.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/stc/PlatWXcocoa.h
+  src/stc/gen_docs.py
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/stc/scintilla/*
+Copyright: 1998-2016, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexA68k.cxx
+Copyright: 2010, Martial Demolins <mdemolins(a)gmail.com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexAVS.cxx
+Copyright: 2012, Bruno Barbieri <brunorex@gmail.com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexAda.cxx
+Copyright: 2002, Sergey Koshcheyev <sergey.k@seznam.cz>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexAsn1.cxx
+Copyright: 2004, Herr Pfarrer rpfarrer <at> yahoo <dot> de
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexBaan.cxx
+Copyright: 2001, Vamsi Potluru <vamsi@who.net> & Praveen Ambekar <ambekarpraveen@yahoo.com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexBibTeX.cxx
+Copyright: 2008-2010, Sergiu Dotenco. The License.txt file describes the
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexCLW.cxx
+Copyright: 2003, 2004, Ron Schofield <ron@schofieldcomputer.com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexCaml.cxx
+Copyright: 2005-2009, Robert Roessler <robertr@rftp.com>
+License: wxWindows
+
+Files: src/stc/scintilla/lexers/LexCmake.cxx
+Copyright: 2007, Cristian Adam <cristian [dot] adam [at] gmx [dot] net>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexD.cxx
+Copyright: 2006, Waldemar Augustyn <waldemar@wdmsys.com>
+ 1998-2005, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexDMIS.cxx
+Copyright: 2013, 2014, Andreas Tscharner <andy@vis.ethz.ch>
+ 1998-2005, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexEScript.cxx
+Copyright: 2003, Patrizio Bekerle (patrizio@bekerle.com)
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexFlagship.cxx
+Copyright: 2010, Xavi <jarabal/at/gmail.com> (Harbour)
+ 2005, Randy Butler
+ 1998-2003, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexGAP.cxx
+Copyright: 2007, Istvan Szollosi ( szteven <at> gmail <dot> com )
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexKVIrc.cxx
+Copyright: 2013, OmegaPhil <OmegaPhil+scintilla@gmail.com>, based in
+ 2007, Cristian Adam <cristian [dot] adam [at] gmx [dot] net>
+ 1998-2002, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexKix.cxx
+Copyright: 2004, Manfred Becker <manfred@becker-trdf.de>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexLout.cxx
+Copyright: 2003, Kein-Hong Man <mkh@pl.jaring.my>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexMPT.cxx
+Copyright: 2003, Marius Gheorghe <mgheorghe@cabletest.com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexNimrod.cxx
+Copyright: 2009, Andreas Rumpf
+ 1998-2002, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexNsis.cxx
+Copyright: 2003-2005, Angelo Mandato <angelo [at] spaceblue [dot] com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexPLM.cxx
+Copyright: 1990-2007, Scientific Toolworks, Inc.
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexPO.cxx
+Copyright: 2012, Colomban Wendling <ban@herbesfolles.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexPowerShell.cxx
+Copyright: 2008, Tim Gerundt <tim@gerundt.de>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexProgress.cxx
+Copyright: 2006-2016, Yuval Papish <Yuval@YuvCom.com>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexRebol.cxx
+Copyright: 2005, Pascal Hurni <pascal_hurni@fastmail.fm>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexRuby.cxx
+Copyright: 2001, Clemens Wyss <wys@helbling.ch>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexRust.cxx
+Copyright: 2013, SiegeLord <slabode@aim.com>
+ 1998-2005, Neil Hodgson <neilh@scintilla.org>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexSML.cxx
+Copyright: 2009, James Moffatt and Yuzhou Xin
+ 2005, The License.txt file describes the conditions under which this software may be distributed.
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexSpice.cxx
+Copyright: 2006, Fabien Proriol
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexTCL.cxx
+Copyright: 1998-2001, Andre Arpin <arpin@kingston.net>
+License: HPND
+
+Files: src/stc/scintilla/lexers/LexYAML.cxx
+Copyright: 2003, Sean ODell <sean@celsoft.com>
+License: HPND
+
+Files: src/stc/scintilla/lexlib/StyleContext.cxx
+  src/stc/scintilla/lexlib/StyleContext.h
+Copyright: 1998-2004, 2013, Neil Hodgson <neilh@scintilla.org>
+License: public-domain
+ This file is in the public domain.
+
+Files: src/stc/scintilla/src/ExternalLexer.cxx
+  src/stc/scintilla/src/ExternalLexer.h
+Copyright: 2001, Simon Steele <ss@pnotepad.org>, portions copyright Neil Hodgson.
+License: HPND
+
+Files: src/stc/scintilla/src/RESearch.cxx
+Copyright: 1997-2022, wxWidgets contributors
+License: HPND
+
+Files: src/stc/scintilla/src/RESearch.h
+Copyright: 1997-2022, wxWidgets contributors
+License: public-domain
+ This file is in the public domain.
+
+Files: src/stc/scintilla/src/UnicodeFromUTF8.h
+Copyright: 1998-2004, 2013, Neil Hodgson <neilh@scintilla.org>
+License: public-domain
+ This file is in the public domain.
+
+Files: src/stc/stc_i18n.cpp
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/univ/*
+Copyright: 2000-2002, SciTech Software, Inc. (www.scitechsoft.com)
+License: wxWindows
+
+Files: src/univ/anybutton.cpp
+Copyright: 2014, Licence: wxWindows licence
+License: wxWindows
+
+Files: src/univ/stdrend.cpp
+Copyright: 2006, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/univ/themes/mono.cpp
+Copyright: 2006, 2007, REA Elektronik GmbH
+License: wxWindows
+
+Files: src/univ/toolbar.cpp
+Copyright: 2002, SciTech Software, Inc. (www.scitechsoft.com)
+ 2001, Robert Roebling
+License: wxWindows
+
+Files: src/unix/*
+Copyright: 1997-2003, 2005, 2011, Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+License: wxWindows
+
+Files: src/unix/apptraits.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/appunix.cpp
+Copyright: Lukasz Michalski
+License: wxWindows
+
+Files: src/unix/dialup.cpp
+  src/unix/net.cpp
+Copyright: Karsten BallÃ¼der
+License: wxWindows
+
+Files: src/unix/displayx11.cpp
+  src/unix/utilsx11.cpp
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: src/unix/dlunix.cpp
+Copyright: 2000-2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/epolldispatcher.cpp
+  src/unix/timerunx.cpp
+Copyright: 2007, Lukasz Michalski
+License: wxWindows
+
+Files: src/unix/evtloopunix.cpp
+Copyright: 2013, Rob Bresalier
+ 2009, 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2006, Zork Lukasz Michalski
+License: wxWindows
+
+Files: src/unix/fdiounix.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/fontenum.cpp
+  src/unix/fontutil.cpp
+Copyright: Vadim Zeitlin
+License: wxWindows
+
+Files: src/unix/fswatcher_inotify.cpp
+  src/unix/fswatcher_kqueue.cpp
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: src/unix/glegl.cpp
+Copyright: 2017, Scott Talbert <swt@techie.net>
+License: wxWindows
+
+Files: src/unix/glx11.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/joystick.cpp
+Copyright: Guilhem Lavaux
+License: wxWindows
+
+Files: src/unix/mediactrl.cpp
+Copyright: 2004, 2005, Ryan Norton
+License: wxWindows
+
+Files: src/unix/mediactrl_gstplayer.cpp
+Copyright: 2016, Sebastian DrÃ¶ge <sebastian@centricular.com>
+ 2004, 2005, Ryan Norton
+License: wxWindows
+
+Files: src/unix/secretstore.cpp
+Copyright: 2016, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/sockunix.cpp
+Copyright: 2008, 2009, Vadim Zeitlin
+ 1997, 1998, Guilhem Lavaux
+License: wxWindows
+
+Files: src/unix/sound.cpp
+Copyright: Julian Smart, Open Source Applications Foundation
+License: wxWindows
+
+Files: src/unix/sound_sdl.cpp
+Copyright: 2004, Open Source Applications Foundation
+License: wxWindows
+
+Files: src/unix/stackwalk.cpp
+Copyright: 2005, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/stdpaths.cpp
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/taskbarx11.cpp
+Copyright: 2003, Vaclav Slavik
+License: wxWindows
+
+Files: src/unix/threadpsx.cpp
+Copyright: Wolfram Gloger (1996, 1997)
+License: wxWindows
+
+Files: src/unix/uiactionx11.cpp
+Copyright: 2010-2016, Vadim Zeitlin
+ 2010, Steven Lamerton
+ 2010, Kevin Ollivier
+License: wxWindows
+
+Files: src/unix/uilocale.cpp
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/unix/utilsunx.cpp
+Copyright: 2013, Rob Bresalier, Vadim Zeitlin
+ 1998, Robert Roebling, Vadim Zeitlin
+License: wxWindows
+
+Files: src/unix/wakeuppipe.cpp
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/x11/bitmap.cpp
+  src/x11/colour.cpp
+  src/x11/dcclient.cpp
+  src/x11/dcscreen.cpp
+Copyright: Julian Smart, Robert Roebling
+License: wxWindows
+
+Files: src/x11/clipbrd.cpp
+Copyright: Robert Roebling
+License: wxWindows
+
+Files: src/x11/dataobj.cpp
+  src/x11/dnd.cpp
+Copyright: 1998, Julian Smart
+License: wxWindows
+
+Files: src/x11/evtloop.cpp
+  src/x11/toplevel.cpp
+Copyright: 2002, Julian Smart
+License: wxWindows
+
+Files: src/x11/glcanvas.cpp
+Copyright: Julian Smart, Wolfram Gloger
+License: wxWindows
+
+Files: src/x11/nanox.c
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: src/x11/pango_x.cpp
+Copyright: Owen Taylor and Robert Roebling.
+License: wxWindows
+
+Files: src/x11/popupwin.cpp
+  src/x11/textctrl.cpp
+Copyright: 1998, Robert Roebling
+License: wxWindows
+
+Files: src/x11/region.cpp
+Copyright: 1997, Julian Smart, Robert Roebling
+License: wxWindows
+
+Files: src/x11/utils.cpp
+Copyright: Julian Smart
+ 2013, Rob Bresalier
+License: wxWindows
+
+Files: src/x11/utilsx.cpp
+Copyright: Mattia Barbon
+License: wxWindows
+
+Files: src/xml/*
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: src/xrc/*
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: src/xrc/xh_activityindicator.cpp
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/xrc/xh_animatctrl.cpp
+  src/xrc/xh_clrpicker.cpp
+  src/xrc/xh_collpane.cpp
+  src/xrc/xh_dirpicker.cpp
+  src/xrc/xh_filepicker.cpp
+  src/xrc/xh_fontpicker.cpp
+  src/xrc/xh_htmllbox.cpp
+Copyright: 2006, Francesco Montorsi
+License: wxWindows
+
+Files: src/xrc/xh_aui.cpp
+Copyright: 2011, wxWidgets Team
+License: wxWindows
+
+Files: src/xrc/xh_bannerwindow.cpp
+  src/xrc/xh_timectrl.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/xrc/xh_bmpbt.cpp
+  src/xrc/xh_cald.cpp
+  src/xrc/xh_scrol.cpp
+  src/xrc/xh_stbox.cpp
+  src/xrc/xh_stlin.cpp
+  src/xrc/xh_tree.cpp
+Copyright: 2000, Brian Gavin
+License: wxWindows
+
+Files: src/xrc/xh_bmpcbox.cpp
+Copyright: 2006, Jaakko Salli
+License: wxWindows
+
+Files: src/xrc/xh_bookctrlbase.cpp
+Copyright: 2022, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/xrc/xh_chckb.cpp
+  src/xrc/xh_chckl.cpp
+  src/xrc/xh_choic.cpp
+  src/xrc/xh_combo.cpp
+  src/xrc/xh_gauge.cpp
+  src/xrc/xh_html.cpp
+  src/xrc/xh_listb.cpp
+  src/xrc/xh_radbt.cpp
+  src/xrc/xh_radbx.cpp
+  src/xrc/xh_slidr.cpp
+  src/xrc/xh_spin.cpp
+  src/xrc/xh_sttxt.cpp
+  src/xrc/xh_tglbtn.cpp
+Copyright: 2000, Bob Mitchell and Verant Interactive
+License: wxWindows
+
+Files: src/xrc/xh_cmdlinkbn.cpp
+Copyright: Licence: wxWindows licence
+License: wxWindows
+
+Files: src/xrc/xh_comboctrl.cpp
+Copyright: 2009, Jaakko Salli
+License: wxWindows
+
+Files: src/xrc/xh_dataview.cpp
+Copyright: 2019, Anton Triest, Bricsys
+License: wxWindows
+
+Files: src/xrc/xh_datectrl.cpp
+  src/xrc/xh_mdi.cpp
+Copyright: 2005, Vaclav Slavik
+License: wxWindows
+
+Files: src/xrc/xh_editlbox.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: src/xrc/xh_filectrl.cpp
+  src/xrc/xh_toolbk.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: src/xrc/xh_gdctl.cpp
+Copyright: 2002, Markus Greither
+License: wxWindows
+
+Files: src/xrc/xh_grid.cpp
+Copyright: 2005, Agron Selimaj, Freepour Controls Inc.
+License: wxWindows
+
+Files: src/xrc/xh_hyperlink.cpp
+Copyright: 2005, David Norris
+License: wxWindows
+
+Files: src/xrc/xh_infobar.cpp
+  src/xrc/xh_styledtextctrl.cpp
+Copyright: 2007, 2019, 2021, TT-Solutions SARL
+License: wxWindows
+
+Files: src/xrc/xh_listc.cpp
+Copyright: 2009, Vadim Zeitlin
+ 2000, Brian Gavin
+License: wxWindows
+
+Files: src/xrc/xh_odcombo.cpp
+Copyright: 2006, Alex Bligh
+License: wxWindows
+
+Files: src/xrc/xh_propdlg.cpp
+  src/xrc/xh_srchctrl.cpp
+Copyright: 2007, Sander Berents
+License: wxWindows
+
+Files: src/xrc/xh_ribbon.cpp
+Copyright: 2010, Armel Asselin
+License: wxWindows
+
+Files: src/xrc/xh_richtext.cpp
+Copyright: 2006, Julian Smart
+License: wxWindows
+
+Files: src/xrc/xh_scwin.cpp
+Copyright: 2002, Vaclav Slavik
+License: wxWindows
+
+Files: src/xrc/xh_simplebook.cpp
+Copyright: 2014, Vadim Zeitlin
+License: wxWindows
+
+Files: src/xrc/xh_split.cpp
+Copyright: 2003, panga@freemail.hu, Vaclav Slavik
+License: wxWindows
+
+Files: src/xrc/xh_statbar.cpp
+Copyright: 2004, Brian Ravnsgaard Riis
+License: wxWindows
+
+Files: src/xrc/xh_text.cpp
+Copyright: 2000, Aleksandras Gluchovas
+License: wxWindows
+
+Files: src/xrc/xh_treebk.cpp
+Copyright: 2005, TT-Solutions <vadim@tt-solutions.com>
+License: wxWindows
+
+Files: src/xrc/xmlreshandler.cpp
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: tests/allheaders.cpp
+Copyright: 2010, 2020, Vadim Zeitlin, Wlodzimierz Skiba, Arrigo Marchiori
+License: wxWindows
+
+Files: tests/any/*
+Copyright: the wxWidgets team
+License: wxWindows
+
+Files: tests/archive/*
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: tests/arrays/*
+Copyright: 2004, Vadim Zeitlin, Wlodzimierz Skiba
+License: wxWindows
+
+Files: tests/asserthelper.cpp
+  tests/asserthelper.h
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/benchmarks/*
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/benchmarks/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: tests/benchmarks/datetime.cpp
+  tests/benchmarks/log.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/benchmarks/display.cpp
+  tests/benchmarks/regex.cpp
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/benchmarks/htmlparser/*
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: tests/benchmarks/htmlparser/htmlpars.cpp
+  tests/benchmarks/htmlparser/htmlpars.h
+  tests/benchmarks/htmlparser/htmltag.cpp
+  tests/benchmarks/htmlparser/htmltag.h
+Copyright: 1999, Vaclav Slavik
+License: wxWindows
+
+Files: tests/benchmarks/image.cpp
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/benchmarks/printfbench.cpp
+Copyright: 2006-2009, Francesco Montorsi
+License: wxWindows
+
+Files: tests/cmdline/*
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/config/*
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/config/config.cpp
+Copyright: 2007, Marcin Wojdyr
+License: wxWindows
+
+Files: tests/config/fileconf.cpp
+Copyright: 2004, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/controls/*
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: tests/controls/auitest.cpp
+Copyright: 2018, Sebastian Walderich
+License: wxWindows
+
+Files: tests/controls/comboboxtest.cpp
+  tests/controls/textctrltest.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/controls/dataviewctrltest.cpp
+Copyright: 2011, Vaclav Slavik <vslavik@gmail.com>
+License: wxWindows
+
+Files: tests/controls/datepickerctrltest.cpp
+  tests/controls/markuptest.cpp
+  tests/controls/treelistctrltest.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/controls/dialogtest.cpp
+Copyright: 2012, Vaclav Slavik
+License: wxWindows
+
+Files: tests/controls/headerctrltest.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/controls/htmllboxtest.cpp
+  tests/controls/virtlistctrltest.cpp
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/controls/label.cpp
+Copyright: 2010, Francesco Montorsi
+License: wxWindows
+
+Files: tests/controls/listbasetest.cpp
+  tests/controls/listbasetest.h
+  tests/controls/listctrltest.cpp
+  tests/controls/treectrltest.cpp
+Copyright: 2010, Steven Lamerton
+ 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/controls/ownerdrawncomboboxtest.cpp
+Copyright: 2010, Jaakko Salli
+License: wxWindows
+
+Files: tests/controls/searchctrltest.cpp
+  tests/controls/simplebooktest.cpp
+Copyright: 2013, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/controls/styledtextctrltest.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: tests/controls/textentrytest.cpp
+  tests/controls/textentrytest.h
+Copyright: 2007, 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/datetime/*
+Copyright: 2004, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/drawing/*
+Copyright: 2014, ElliÃ© Computing <opensource@elliecomputing.com>
+License: wxWindows
+
+Files: tests/drawing/plugin.h
+Copyright: 2014, Ell8iÃ© Computing <opensource@elliecomputing.com>
+License: wxWindows
+
+Files: tests/dummy.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: tests/events/*
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/events/evthandler.cpp
+Copyright: 2009, Peter Most
+License: wxWindows
+
+Files: tests/events/evtlooptest.cpp
+Copyright: 2013, Rob Bresalier
+License: wxWindows
+
+Files: tests/events/evtsource.cpp
+Copyright: 2009, Bartosz Bekier <bartosz.bekier@gmail.com>
+License: wxWindows
+
+Files: tests/events/keyboard.cpp
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/events/stopwatch.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/events/timertest.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/exec/*
+Copyright: 2013, Rob Bresalier, Vadim Zeitlin
+ 2009, Francesco Montorsi
+License: wxWindows
+
+Files: tests/file/*
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/file/filetest.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/filekind/*
+Copyright: 2005, Mike Wetherell
+License: wxWindows
+
+Files: tests/filename/*
+Copyright: 2004, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/filesys/*
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: tests/font/*
+Copyright: 2009, Francesco Montorsi
+License: wxWindows
+
+Files: tests/fontmap/*
+Copyright: 2003, 2006, TT-Solutions
+License: wxWindows
+
+Files: tests/formatconverter/*
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: tests/fswatcher/*
+Copyright: 2009, Bartosz Bekier
+License: wxWindows
+
+Files: tests/fuzz/*
+Copyright: 2017, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/fuzz/ossfuzz.sh
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: tests/geometry/*
+Copyright: 2004, wxWindows
+License: wxWindows
+
+Files: tests/geometry/region.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/graphics/*
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: tests/graphics/bitmap.cpp
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/graphics/bmpbundle.cpp
+Copyright: 2021, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/graphics/boundingbox.cpp
+Copyright: 2014, Toni RuÅ¾a <toni.ruza@gmail.com>
+ 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/graphics/colour.cpp
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/graphics/ellipsization.cpp
+Copyright: 2010, Francesco Montorsi
+License: wxWindows
+
+Files: tests/graphics/measuring.cpp
+Copyright: 2012, Vadim Zeitlin <vadim@wxwidgets.org>
+ 2008, Kevin Ollivier <kevino@theolliviers.com>
+License: wxWindows
+
+Files: tests/hashes/*
+Copyright: 2004, Vadim Zeitlin, Mattia Barbon, 2005, M. Wetherell
+License: wxWindows
+
+Files: tests/html/*
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: tests/html/htmlparser.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/html/htmprint.cpp
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/image/*
+Copyright: 2009, Francesco Montorsi
+License: wxWindows
+
+Files: tests/image/rawbmp.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/interactive/*
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/intl/*
+Copyright: 2007, Vaclav Slavik
+License: wxWindows
+
+Files: tests/lists/*
+Copyright: 2004, Vadim Zeitlin, Mattia Barbon
+License: wxWindows
+
+Files: tests/log/*
+Copyright: 2009, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/longlong/*
+Copyright: 2004, Vadim Zeitlin, Wlodzimierz Skiba
+License: wxWindows
+
+Files: tests/mbconv/*
+Copyright: 2003, TT-Solutions, 2005, Mike Wetherell, Vince Harron
+License: wxWindows
+
+Files: tests/mbconv/convautotest.cpp
+Copyright: 2006, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/menu/*
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/menu/accelentry.cpp
+Copyright: 2010, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/misc/*
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/misc/garbage.cpp
+  tests/misc/settings.cpp
+Copyright: 2009, Francesco Montorsi
+License: wxWindows
+
+Files: tests/misc/guifuncs.cpp
+  tests/misc/selstoretest.cpp
+Copyright: 2008, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/misc/metatest.cpp
+  tests/misc/safearrayconverttest.cpp
+  tests/misc/typeinfotest.cpp
+Copyright: the wxWidgets team
+License: wxWindows
+
+Files: tests/misc/misctests.cpp
+Copyright: 2009, Vadim Zeitlin
+ 2008, Peter Most
+License: wxWindows
+
+Files: tests/net/*
+Copyright: 2008, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/net/webrequest.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: tests/persistence/*
+Copyright: 2017, wxWidgets Team
+License: wxWindows
+
+Files: tests/regex/*
+Copyright: Mike Wetherell
+License: wxWindows
+
+Files: tests/regex/regex.inc
+Copyright: 2004, Mike Wetherell.
+ 1998, 1999, Henry Spencer.
+License: wxWindows
+
+Files: tests/regex/regextest.cpp
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: tests/regex/wxregextest.cpp
+Copyright: Vadim Zeitlin, Mike Wetherell
+License: wxWindows
+
+Files: tests/rowheightcache/*
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: tests/scopeguard/*
+Copyright: 2005, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/sizers/*
+Copyright: 2010, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/sizers/gridsizer.cpp
+Copyright: 2015, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/sizers/wrapsizer.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: tests/streams/*
+Copyright: 2004, Hans Van Leemputten
+License: wxWindows
+
+Files: tests/streams/datastreamtest.cpp
+Copyright: 2004, Ryan Norton
+License: wxWindows
+
+Files: tests/streams/fileback.cpp
+Copyright: 2006, Mike Wetherell
+License: wxWindows
+
+Files: tests/streams/iostreams.cpp
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: tests/streams/largefile.cpp
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: tests/streams/lzmastream.cpp
+Copyright: 2018, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/streams/socketstream.cpp
+Copyright: 2008, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/streams/sstream.cpp
+Copyright: 2004, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/streams/stdstream.cpp
+Copyright: 2009, Jonathan Liu
+License: wxWindows
+
+Files: tests/streams/tempfile.cpp
+Copyright: 2005, Mike Wetherell
+License: wxWindows
+
+Files: tests/streams/textstreamtest.cpp
+Copyright: 2004, Ryan Norton, 2006, Vince Harron
+License: wxWindows
+
+Files: tests/strings/*
+Copyright: 2004, Vadim Zeitlin, Wlodzimierz Skiba
+License: wxWindows
+
+Files: tests/strings/crt.cpp
+Copyright: 2004, Vaclav Slavik
+License: wxWindows
+
+Files: tests/strings/hexconv.cpp
+Copyright: 2007, 2009-2012, 2014-2021, wxWidgets development team
+License: wxWindows
+
+Files: tests/strings/iostream.cpp
+Copyright: 2007, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/strings/numformatter.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/strings/tokenizer.cpp
+Copyright: 2004, 2005, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/strings/unichar.cpp
+  tests/strings/vararg.cpp
+Copyright: 2006, 2007, REA Elektronik GmbH
+License: wxWindows
+
+Files: tests/strings/vsnprintf.cpp
+Copyright: 2006, Francesco Montorsi, Bjorn Reese and Daniel Stenberg
+License: wxWindows
+
+Files: tests/test.cpp
+Copyright: 2004, Mike Wetherell
+License: wxWindows
+
+Files: tests/testableframe.cpp
+  tests/testableframe.h
+Copyright: 2010-2012, Steven Lamerton
+License: wxWindows
+
+Files: tests/testdate.h
+  tests/testimage.h
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/testfile.h
+Copyright: 2005, Mike Wetherell
+License: wxWindows
+
+Files: tests/testwindow.h
+  tests/waitforpaint.h
+Copyright: 2019, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/textfile/*
+Copyright: 2006, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/thread/*
+Copyright: 2008, Vadim Zeitlin
+License: wxWindows
+
+Files: tests/thread/atomic.cpp
+Copyright: 2006, Armel Asselin
+License: wxWindows
+
+Files: tests/thread/misc.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/thread/queue.cpp
+Copyright: 2007, Evgeniy Tarassov
+License: wxWindows
+
+Files: tests/toplevel/*
+Copyright: 2009, Kevin Ollivier <kevino@theolliviers.com>
+License: wxWindows
+
+Files: tests/uris/*
+Copyright: 2004, Ryan Norton
+License: wxWindows
+
+Files: tests/uris/ftp.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: tests/uris/url.cpp
+Copyright: 2009, Francesco Montorsi
+License: wxWindows
+
+Files: tests/validators/valnum.cpp
+Copyright: 2011, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/vectors/*
+Copyright: 2007, Vaclav Slavik
+License: wxWindows
+
+Files: tests/weakref/*
+Copyright: 2007, Arne Steinarson
+License: wxWindows
+
+Files: tests/window/*
+Copyright: 2008, 2011, 2013, Vaclav Slavik <vslavik@fastmail.fm>
+License: wxWindows
+
+Files: tests/window/setsize.cpp
+Copyright: 2008, Vadim Zeitlin <vadim@wxwidgets.org>
+License: wxWindows
+
+Files: tests/xlocale/*
+Copyright: 2007, 2008, Brian Vanderburg II
+License: wxWindows
+
+Files: tests/xml/*
+Copyright: 2008, Vaclav Slavik
+License: wxWindows
+
+Files: tests/xml/xrctest.cpp
+Copyright: 2010, wxWidgets team
+License: wxWindows
+
+Files: utils/emulator/src/emulator.cpp
+Copyright: Julian Smart
+License: wxWindows
+
+Files: utils/emulator/src/emulator.h
+Copyright: wxWidgets team
+License: wxWindows
+
+Files: utils/execmon/execmon.cpp
+Copyright: 2009, Francesco Montorsi
+License: wxWindows
+
+Files: utils/helpview/src/*
+Copyright: Julian Smart
+License: wxWindows
+
+Files: utils/helpview/src/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: utils/helpview/src/helpview.cpp
+  utils/helpview/src/helpview.h
+Copyright: 2002, Vaclav Slavik, Julian Smart and others
+License: wxWindows
+
+Files: utils/ifacecheck/src/*
+Copyright: 2008, Francesco Montorsi
+License: wxWindows
+
+Files: utils/ifacecheck/src/Makefile.in
+Copyright: 1997-2022, wxWidgets contributors
+License: wxWindows
+
+Files: utils/screenshotgen/src/Makefile.in
+Copyright: 2002-2022, wxWidgets/"
+License: wxWindows
+
+Files: utils/screenshotgen/src/screenshot_main.cpp
+Copyright: (wxT("(C) 2008, Utensil Candel"));
+License: wxWindows
+
+Files: utils/wxrc/wxrc.cpp
+Copyright: 2000, Vaclav Slavik
+License: wxWindows
+
+Files: wx-config-inplace.in
+  wx-config.in
+Copyright: 2004, Ron <ron@debian.org>
+License: wxWindows
+
+License: BSL-1.0
+ Boost Software License - Version 1.0 - August 17th, 2003
+ .
+ Permission is hereby granted, free of charge, to any person or organization
+ obtaining a copy of the software and accompanying documentation covered by
+ this license (the "Software") to use, reproduce, display, distribute,
+ execute, and transmit the Software, and to prepare derivative works of the
+ Software, and to permit third-parties to whom the Software is furnished to
+ do so, all subject to the following:
+ .
+ The copyright notices in the Software and this entire statement, including
+ the above license grant, this restriction and the following disclaimer,
+ must be included in all copies of the Software, in whole or in part, and
+ all derivative works of the Software, unless such copies or derivative
+ works are solely in the form of machine-executable object code generated by
+ a source language processor.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+ SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+ FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ DEALINGS IN THE SOFTWARE.
+
+License: Expat
+ The MIT License
+ .
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated
+ documentation files (the "Software"), to deal in the Software
+ without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to
+ whom the Software is furnished to do so, subject to the
+ following conditions:
+ .
+ The above copyright notice and this permission notice shall
+ be included in all copies or substantial portions of the
+ Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
+ WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+
+License: FSFAP
+ Copying and distribution of this file, with or without modification, are
+ permitted in any medium without royalty provided the copyright notice
+ and this notice are preserved.  This file is offered as-is, without any
+ warranty.
+
+License: FSFUL
+ This configure script is free software; the Free Software Foundation
+ gives unlimited permission to copy, distribute and modify it.
+
+License: FSFULLR
+ This file is free software; the Free Software Foundation
+ gives unlimited permission to copy and/or distribute it,
+ with or without modifications, as long as this notice is preserved.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+ even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ PARTICULAR PURPOSE.
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 2 dated June, 1991, or (at
+ your option) any later version.
+ On Debian systems, the complete text of version 2 of the GNU General
+ Public License can be found in '/usr/share/common-licenses/GPL-2'.
+
+License: GPL-2+ with Autoconf-2.0.AND_Autoconf-2.0~g10 exception
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2, or (at your option)
+ any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ 02110-1301, USA.
+ .
+ As a special exception, the Free Software Foundation gives unlimited
+ permission to copy, distribute and modify the configure scripts that
+ are the output of Autoconf.  You need not follow the terms of the GNU
+ General Public License when using or distributing such scripts, even
+ though portions of the text of Autoconf appear in them.  The GNU
+ General Public License (GPL) does govern all other use of the material
+ that constitutes the Autoconf program.
+ .
+ Certain portions of the Autoconf source text are designed to be copied
+ (in certain cases, depending on the input) into the output of
+ Autoconf.  We call these the "data" portions.  The rest of the Autoconf
+ source text consists of comments plus executable code that decides which
+ of the data portions to output in any given case.  We call these
+ comments and executable code the "non-data" portions.  Autoconf never
+ copies any of the non-data portions into its output.
+ .
+ This special exception to the GPL applies to versions of Autoconf
+ released by the Free Software Foundation.  When you make and
+ distribute a modified version of Autoconf, you may extend this special
+ exception to the GPL to apply to your modified version as well, *unless*
+ your modified version has the potential to copy into its output some
+ of the text that was the non-data portion of the version that you started
+ with.  (In other words, unless your change moves or copies text from
+ the non-data portions to the data portions.)  If your modification has
+ such potential, you must delete any notice of this special exception
+ to the GPL from your modified version.
+
+License: GPL-2+ with Autoconf-2.0~Archive exception
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+ .
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program. If not, see <http://www.gnu.org/licenses/>.
+ .
+ As a special exception, the respective Autoconf Macro's copyright owner
+ gives unlimited permission to copy, distribute and modify the configure
+ scripts that are the output of Autoconf when processing the Macro. You
+ need not follow the terms of the GNU General Public License when using
+ or distributing such scripts, even though portions of the text of the
+ Macro appear in them. The GNU General Public License (GPL) does govern
+ all other use of the material that constitutes the Autoconf Macro.
+ .
+ This special exception to the GPL applies to versions of the Autoconf
+ Macro released by the Autoconf Macro Archive. When you make and
+ distribute a modified version of the Autoconf Macro, you may extend this
+ special exception to the GPL to apply to your modified version as well.
+
+License: GPL-2+ with Autoconf-data exception
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2, or (at your option)
+ any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ .
+ As a special exception to the GNU General Public License, if you
+ distribute this file as part of a program that contains a
+ configuration script generated by Autoconf, you may include it under
+ the same distribution terms that you use for the rest of that program.
+
+License: GPL-3+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 3 dated June, 2007, or (at
+ your option) any later version.
+ On Debian systems, the complete text of version 3 of the GNU General
+ Public License can be found in '/usr/share/common-licenses/GPL-3'.
+
+License: LGPL-2+
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Library General Public License as published by the
+ Free Software Foundation; version 2 of the License, or (at
+ your option) any later version.
+ On Debian systems, the complete text of version 2 of the GNU Library
+ General Public License can be found in '/usr/share/common-licenses/LGPL-2'.
+
+License: NTP
+ Permission to copy, use, modify, sell and distribute this software
+ is granted provided this copyright notice appears in all copies.
+ This software is provided "as is" without express or implied
+ warranty, and with no claim as to its suitability for any purpose.
+
+License: Unicode-strict
+ This file is provided as-is by Unicode, Inc. (The Unicode Consortium).
+ No claims are made as to fitness for any particular purpose.  No
+ warranties of any kind are expressed or implied.  The recipient
+ agrees to determine applicability of information provided.  If this
+ file has been provided on optical media by Unicode, Inc., the sole
+ remedy for any claim will be exchange of defective media within 90
+ days of receipt.
+ .
+ Unicode, Inc. hereby grants the right to freely use the information
+ supplied in this file in the creation of products supporting the
+ Unicode Standard, and to make copies of this file in any form for
+ internal or external distribution as long as this notice remains
+ attached.
+
+License: Zlib
+ The zlib License
+ .
+ This software is provided 'as-is', without any express or implied
+ warranty. In no event will the authors be held liable for any damages
+ arising from the use of this software.
+ .
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ .
+   1. The origin of this software must not be misrepresented; you must
+      not claim that you wrote the original software. If you use this
+      software in a product, an acknowledgment in the product
+      documentation would be appreciated but is not required.
+ .
+   2. Altered source versions must be plainly marked as such, and must
+      not be misrepresented as being the original software.
+ .
+   3. This notice may not be removed or altered from any source
+      distribution.
+
+License: wxWindows
+                wxWindows Library Licence, Version 3.1
+                ======================================
+ .
+  Copyright (c) 1998-2005 Julian Smart, Robert Roebling et al
+ .
+  Everyone is permitted to copy and distribute verbatim copies
+  of this licence document, but changing it is not allowed.
+ .
+                       WXWINDOWS LIBRARY LICENCE
+     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ .
+  This library is free software; you can redistribute it and/or modify it
+  under the terms of the GNU Library General Public Licence as published by
+  the Free Software Foundation; either version 2 of the Licence, or (at
+  your option) any later version.
+ .
+  This library is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+  General Public Licence for more details.
+ .
+  You should have received a copy of the GNU Library General Public Licence
+  along with this software, usually in a file named COPYING.LIB.  If not,
+  write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+  Boston, MA 02110-1301 USA.
+ .
+  EXCEPTION NOTICE
+ .
+  1. As a special exception, the copyright holders of this library give
+  permission for additional uses of the text contained in this release of
+  the library as licenced under the wxWindows Library Licence, applying
+  either version 3.1 of the Licence, or (at your option) any later version of
+  the Licence as published by the copyright holders of version
+  3.1 of the Licence document.
+ .
+  2. The exception is that you may use, copy, link, modify and distribute
+  under your own terms, binary object code versions of works based
+  on the Library.
+ .
+  3. If you copy code from files distributed under the terms of the GNU
+  General Public Licence or the GNU Library General Public Licence into a
+  copy of this library, as this licence permits, the exception does not
+  apply to the code that you add in this way.  To avoid misleading anyone as
+  to the status of such modified files, you must delete this exception
+  notice from such code and/or adjust the licensing conditions notice
+  accordingly.
+ .
+  4. If you write modifications of your own for this library, it is your
+  choice whether to permit this exception to apply to your modifications. 
+  If you do not wish that, you must delete the exception notice from such
+  code and/or adjust the licensing conditions notice accordingly.
+
+License: HPND
+ Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+ .
+ All Rights Reserved 
+ .
+ Permission to use, copy, modify, and distribute this software and its 
+ documentation for any purpose and without fee is hereby granted, 
+ provided that the above copyright notice appear in all copies and that 
+ both that copyright notice and this permission notice appear in 
+ supporting documentation. 
+ .
+ NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS 
+ SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY 
+ AND FITNESS, IN NO EVENT SHALL NEIL HODGSON BE LIABLE FOR ANY 
+ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, 
+ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER 
+ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE 
+ OR PERFORMANCE OF THIS SOFTWARE.
+
+License: PCRE2
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ .
+    * Redistributions of source code must retain the above copyright notices,
+      this list of conditions and the following disclaimer.
+ .
+    * Redistributions in binary form must reproduce the above copyright
+      notices, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+ .
+    * Neither the name of the University of Cambridge nor the names of any
+      contributors may be used to endorse or promote products derived from this
+      software without specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+ .
+ .
+ EXEMPTION FOR BINARY LIBRARY-LIKE PACKAGES
+ ------------------------------------------
+ .
+ The second condition in the BSD licence (covering binary redistributions) does
+ not apply all the way down a chain of software. If binary package A includes
+ PCRE2, it must respect the condition, but if package B is software that
+ includes package A, the condition is not imposed on package B unless it uses
+ PCRE2 independently.
