@@ -1,0 +1,62 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ -N wx-common
+
+override_dh_autoreconf:
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--enable-repro-build
+
+override_dh_auto_install:
+	dh_auto_install
+	sed "s/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g" debian/libwxgtk3.2-dev.alternatives.in > debian/libwxgtk3.2-dev.alternatives
+	mv debian/tmp/usr/bin/wxrc-3.2 debian/tmp/usr/bin/wxrc
+
+override_dh_install:
+	dh_install
+	rm -f debian/libwxgtk3.2-0/usr/lib/*/libwx_gtk*media*.so.*
+	rm -f debian/libwxgtk3.2-0/usr/lib/*/libwx_gtk*webview*.so.*
+	rm -f debian/libwxgtk3.2-dev/usr/lib/*/libwx_gtk*media*.so
+	rm -f debian/libwxgtk3.2-dev/usr/lib/*/libwx_gtk*webview*.so
+
+override_dh_installdocs:
+	WX_SKIP_DOXYGEN_VERSION_CHECK=1	docs/doxygen/regen.sh html
+	dh_installdocs
+	find debian/wx3.2-doc \( -name '*.dot' -o -name '*.md5' \) -delete
+
+override_dh_installexamples:
+	dh_installexamples
+
+	for f in `find debian/wx3.2-examples -name makefile.unx` ; do \
+		mv $$f `dirname $$f`/Makefile ; \
+	done
+
+	# don't install files from the examples which are only useful on other
+	# platforms (the "horse*" files are a special case, as the image sample
+	# uses various foreign image formats as data).
+	find debian/wx3.2-examples \( \
+		-name 'Makefile.in' -o \
+		-name 'Info*.plist*' -o \
+		-name 'makefile.*' -o \
+		-name '*.bat' -o \
+		-name '*.bdsproj' -o \
+		-name '*.cur' -o \
+		-name '*.dsp' -o \
+		-name '*.dsw' -o \
+		-name '*.icc' -o \
+		-name '*.icns' -o \
+		-name '*.ico' -o \
+		-name '*.mms' -o \
+		-name '*.pbxproj' -o \
+		-name '*.plc' -o \
+		-name '*.r' -o \
+		-name '*.rc' -o \
+		-name '*.rc?' -o \
+		-name '*.vcproj' \
+	    \) \! -name 'horse*' -delete
+
+	# We end up with some empty directories which only had OS X build stuff
+	# in, at least in 3.0.2.
+	find debian/wx3.2-examples -type d -empty -delete

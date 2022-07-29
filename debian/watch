@@ -1,0 +1,5 @@
+version=4
+opts=dversionmangle=s/\+dfsg.*$//,repacksuffix=+dfsg,compression=xz \
+  https://github.com/wxWidgets/wxWidgets/releases \
+  /wxWidgets/wxWidgets/releases/download/v([0-9]+\.[0-9]*[02468]\.[0-9.]+)/wxWidgets-[0-9]+\.[0-9]*[02468]\.[0-9.]+\.tar\.bz2
+

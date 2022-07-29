@@ -1,0 +1,2 @@
+libwxgtk3.2-0: package-name-doesnt-match-sonames
+libwxgtk3.2-0: shared-library-lacks-prerequisites

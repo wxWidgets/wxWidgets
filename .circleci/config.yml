@@ -1,26 +1,126 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
+---
 version: 2.1
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+orbs:
+  cloudsmith: cloudsmith/cloudsmith@1.0.4
+executors:
+  boot-linux:
+    machine:
+      resource_class: large
+      enabled: true
+      image: ubuntu-2004:202104-01
+  boot-linux-arm:
+    machine:
+      resource_class: arm.large
+      enabled: true
+      image: ubuntu-2004:202104-01
+commands:
+  git-checkout:
     steps:
-      - checkout
+      - run: mkdir work
+      - run: cd work && wget -nc -O - https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.0/wxWidgets-3.2.0.tar.bz2 > ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2
+      - run: cd work && bzip2 < ../wxwidgets3.2_3.2.0+dfsg.orig.tar.bz2 -cd | tar xvf -; shopt -s dotglob; mv wxWidgets-3.2.0/* .; rmdir wxWidgets-3.2.0
+      - run: cd work && wget -nc -O - https://github.com/bareboat-necessities/wxWidgets/archive/master.tar.gz | gzip -cd - | tar xvf - ; mv *-master/debian .; mv *-master/.circleci ..
+  build-n-publish-debian:
+    steps:
+      - run: sudo apt-get -y install debhelper-compat
+      - run: chmod a+x .circleci/*.sh
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+          command: |
+            .circleci/build-debian.sh
+          no_output_timeout: 30m
+      - cloudsmith/ensure-api-key
+      - cloudsmith/install-cli
+#      - run: .circleci/publish-cloudsmith.sh deb wxwidgets-projects/wxwidgets-repo ${PKG_DISTRO}/${PKG_RELEASE}
+  do-all:
+    steps:
+      - git-checkout
+      - build-n-publish-debian
+jobs:
+  build-debian-buster-arm64:
+    executor: boot-linux-arm
+    environment:
+      - DOCKER_IMAGE=arm64v8/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=debian
+      - EMU=off
+    steps:
+      - do-all
+  build-debian-buster-arm32:
+    executor: boot-linux-arm
+    environment:
+      - DOCKER_IMAGE=arm32v7/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=debian
+      - EMU=off
+    steps:
+      - do-all
+  build-debian-buster-amd64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=amd64/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=debian
+    steps:
+      - do-all
+  build-debian-bullseye-arm64:
+    executor: boot-linux-arm
+    environment:
+      - DOCKER_IMAGE=arm64v8/debian:bullseye
+      - CONTAINER_DISTRO=debian:bullseye
+      - PKG_RELEASE=bullseye
+      - PKG_DISTRO=debian
+      - EMU=off
+    steps:
+      - do-all
+  build-debian-bullseye-arm32:
+    executor: boot-linux-arm
+    environment:
+      - DOCKER_IMAGE=arm32v7/debian:bullseye
+      - CONTAINER_DISTRO=debian:bullseye
+      - PKG_RELEASE=bullseye
+      - PKG_DISTRO=debian
+      - EMU=off
+    steps:
+      - do-all
+  build-debian-bullseye-amd64:
+    executor: boot-linux
+    environment:
+      - DOCKER_IMAGE=amd64/debian:bullseye
+      - CONTAINER_DISTRO=debian:bullseye
+      - PKG_RELEASE=bullseye
+      - PKG_DISTRO=debian
+    steps:
+      - do-all
+  build-raspbian-buster-arm32:
+    executor: boot-linux-arm
+    environment:
+      - DOCKER_IMAGE=arm32v7/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=raspbian
+      - EMU=off
+    steps:
+      - do-all
+  build-raspbian-buster-arm64:
+    executor: boot-linux-arm
+    environment:
+      - DOCKER_IMAGE=arm64v8/debian:buster
+      - CONTAINER_DISTRO=debian:buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=raspbian
+      - EMU=off
+    steps:
+      - do-all
 workflows:
-  say-hello-workflow:
+  version: 2
+  build_all:
     jobs:
-      - say-hello
+      - build-debian-bullseye-arm32
+      - build-debian-bullseye-arm64
+      - build-debian-bullseye-amd64
+#      - build-debian-buster-arm32
+#      - build-debian-buster-arm64
+#      - build-debian-buster-amd64

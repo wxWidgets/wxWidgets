@@ -1,0 +1,16 @@
+Description: Make the build reproducible
+Author: Olly Betts <olly@survex.com>
+Forwarded: https://trac.wxwidgets.org/ticket/17000
+Last-Update: 2022-07-18
+
+--- a/docs/doxygen/Doxyfile
++++ b/docs/doxygen/Doxyfile
+@@ -346,7 +346,7 @@
+ HTML_COLORSTYLE_HUE    = 220 # Default: 220
+ HTML_COLORSTYLE_SAT    = 255 # Default: 100
+ HTML_COLORSTYLE_GAMMA  = 100 # Default: 80
+-HTML_TIMESTAMP         = YES
++HTML_TIMESTAMP         = NO
+ HTML_DYNAMIC_SECTIONS  = YES # Default: NO
+ HTML_INDEX_NUM_ENTRIES = 100
+ 
