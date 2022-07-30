@@ -337,7 +337,7 @@ public:
 
     /**
         The @e delete operator is defined for debugging versions of the library only,
-        when the identifier @c __WXDEBUG__ is defined.
+        when the identifier @c \__WXDEBUG__ is defined.
 
         It takes over memory deallocation, allowing wxDebugContext operations.
     */
@@ -345,7 +345,7 @@ public:
 
     /**
         The @e new operator is defined for debugging versions of the library only, when
-        the identifier @c __WXDEBUG__ is defined.
+        the identifier @c \__WXDEBUG__ is defined.
 
         It takes over memory allocation, allowing wxDebugContext operations.
     */

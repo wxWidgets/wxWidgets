@@ -158,7 +158,7 @@ library:
 @itemdef{wxUSE_LISTBOX, Use wxListBox class.}
 @itemdef{wxUSE_LISTCTRL, Use wxListCtrl class.}
 @itemdef{wxUSE_LOG, Use wxLog and related classes.}
-@itemdef{wxUSE_LOG_DEBUG, Enabled when wxLog used with __WXDEBUG__ defined.}
+@itemdef{wxUSE_LOG_DEBUG, Enabled when wxLog used with \__WXDEBUG__ defined.}
 @itemdef{wxUSE_LOG_DIALOG, Use wxLogDialog class.}
 @itemdef{wxUSE_LOGGUI, Use wxLogGui class.}
 @itemdef{wxUSE_LOGWINDOW, Use wxLogFrame class.}

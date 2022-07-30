@@ -1140,7 +1140,7 @@ wxString wxGetNativeCpuArchitectureName();
     case it's not available, then this function will return a ::wxLinuxDistributionInfo
     structure containing empty strings.
 
-    This function is Linux-specific and is only available when the @c __LINUX__
+    This function is Linux-specific and is only available when the @c \__LINUX__
     symbol is defined.
 */
 wxLinuxDistributionInfo wxGetLinuxDistributionInfo();

@@ -1519,7 +1519,7 @@ typedef double wxDouble;
 /**
     Returns @true if the compiler being used supports the given C++ version.
 
-    The @a stdver parameter uses the same values as the standard @c __cplusplus
+    The @a stdver parameter uses the same values as the standard @c \__cplusplus
     macro, i.e.
 
     - 201103L for C++11
@@ -1527,8 +1527,8 @@ typedef double wxDouble;
     - 201703L for C++17
     - 202002L for C++20
 
-    Using this macro also works with MSVC, even when @c /Zc:__cplusplus option
-    is not used, unlike checking for the value of @c __cplusplus directly.
+    Using this macro also works with MSVC, even when @c /Zc:\__cplusplus option
+    is not used, unlike checking for the value of @c \__cplusplus directly.
 
     @since 3.1.7
 
