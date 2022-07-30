@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2022-07-29 21:21+0200\n"
+"PO-Revision-Date: 2022-07-30 11:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <(nothing)>\n"
+"Language-Team: \n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5195,6 +5195,7 @@ msgstr "%s-ის %s-ში გაშლის პრობლემა."
 #: ../src/html/chm.cpp:806 ../src/html/chm.cpp:863
 msgid "CHM handler currently supports only local files!"
 msgstr ""
+"CHM ფაილების დამმუშავებელს ამჟამად მხოლოდ ლოკალური ფაილების აღქმა შეუძლია!"
 
 #: ../src/html/chm.cpp:827
 msgid "Link contained '//', converted to absolute link."
@@ -5231,7 +5232,7 @@ msgstr "HTML დახმარების წიგნის გახსნ�
 
 #: ../src/html/helpwnd.cpp:320
 msgid "Displays help as you browse the books on the left."
-msgstr ""
+msgstr "აჩვენებს დახმარებას მაშინ, როცა თქვენ მარცხნივ წიგნს ათვალიერებთ."
 
 #: ../src/html/helpwnd.cpp:416 ../src/html/helpwnd.cpp:1103
 #: ../src/html/helpwnd.cpp:1739
@@ -5439,7 +5440,7 @@ msgstr "დაკავშირება…"
 #: ../src/html/htmlwin.cpp:586
 #, c-format
 msgid "Unable to open requested HTML document: %s"
-msgstr ""
+msgstr "მოთხოვნილი HTML დოკუმენტის გახსნის შეცდომა: %s"
 
 #: ../src/html/htmlwin.cpp:600
 msgid "Loading : "
@@ -5501,7 +5502,7 @@ msgstr ""
 #: ../src/motif/app.cpp:242
 #, c-format
 msgid "wxWidgets could not open display for '%s': exiting."
-msgstr ""
+msgstr "wxWidgets -მა ვერ გახსნა ეკრანი '%s'-სთვის: გასვლა."
 
 #: ../src/motif/filedlg.cpp:218
 msgid "Filter"
@@ -5554,7 +5555,7 @@ msgstr "მიმოცვლის ბაფერის მხარდაჭ�
 #: ../src/msw/colordlg.cpp:229
 #, c-format
 msgid "Colour selection dialog failed with error %0lx."
-msgstr ""
+msgstr "ფერის არჩევის ფანჯრის ავარია შეცდომის კოდით %0lx."
 
 #: ../src/msw/cursor.cpp:205
 msgid "Failed to create cursor."
@@ -5749,7 +5750,7 @@ msgstr "შეერთების შეცდომა: აკლია მ�
 
 #: ../src/msw/dialup.cpp:821
 msgid "Cannot find the location of address book file"
-msgstr ""
+msgstr "მისამართების წიგნის ფაილის მდებარეობა ვერ ვიპოვე"
 
 #: ../src/msw/dialup.cpp:852
 #, c-format
@@ -5758,7 +5759,7 @@ msgstr "სატელეფონო კავშირის ინიცი�
 
 #: ../src/msw/dialup.cpp:922
 msgid "Cannot hang up - no active dialup connection."
-msgstr ""
+msgstr "გათიშვა შეუძლებელია. ტელეფონით შეერთება არ არსებობს."
 
 #: ../src/msw/dialup.cpp:932
 #, c-format
@@ -5768,7 +5769,7 @@ msgstr "სატელეფონო კავშირის გაუქმ�
 #: ../src/msw/dib.cpp:312
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr ""
+msgstr "ბიტური რუკის გამოსახულების ფაილში (%s) შენახვის შეცდომა."
 
 #: ../src/msw/dib.cpp:535
 #, c-format
@@ -5808,7 +5809,7 @@ msgstr ""
 #: ../src/msw/filedlg.cpp:412
 #, c-format
 msgid "File dialog failed with error code %0lx."
-msgstr ""
+msgstr "ფაილის არჩევის ფანჯრის ავარია კოდით %0lx."
 
 #: ../src/msw/font.cpp:1126
 #, c-format
@@ -5991,12 +5992,12 @@ msgstr "%s-ში OLE-ის ავტომატიზაციის შე�
 #: ../src/msw/ole/dataobj.cpp:385
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr ""
+msgstr "მიმოცვლის ბაფერის ფორმატის რეგისტრაციის შეცდომა: %s."
 
 #: ../src/msw/ole/dataobj.cpp:402
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
-msgstr ""
+msgstr "მიმოცვლის ბაფერის ფორმატი არ არსებობს: %d."
 
 #: ../src/msw/progdlg.cpp:1088
 msgid "Skip"
@@ -6050,7 +6051,7 @@ msgstr ""
 #: ../src/msw/registry.cpp:615
 #, c-format
 msgid "Registry key '%s' already exists."
-msgstr ""
+msgstr "რეესტრის გასაღები უკვე არსებობს: %s."
 
 #: ../src/msw/registry.cpp:623
 #, c-format
@@ -7423,7 +7424,7 @@ msgstr "ველის ჩასმა"
 
 #: ../src/richtext/richtextbuffer.cpp:8410
 msgid "Too many EndStyle calls!"
-msgstr ""
+msgstr "EndStyle -ის მეტისმეტად ბევრი გამოძახება!"
 
 #: ../src/richtext/richtextbuffer.cpp:8785
 msgid "files"
@@ -7516,7 +7517,7 @@ msgstr "_წერტილი"
 #: ../src/richtext/richtextliststylepage.cpp:224
 #: ../src/richtext/richtextliststylepage.cpp:226
 msgid "Check to add a period after the bullet."
-msgstr ""
+msgstr "წკაპი მარკერის შემდეგ წერტილის დასამატებლად."
 
 #: ../src/richtext/richtextbulletspage.cpp:166
 #: ../src/richtext/richtextliststylepage.cpp:229
@@ -7528,7 +7529,7 @@ msgstr "(*)"
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
 msgid "Check to enclose the bullet in parentheses."
-msgstr ""
+msgstr "წკაპი მარკერის ფრჩხილებში ჩასასმელად."
 
 #: ../src/richtext/richtextbulletspage.cpp:173
 #: ../src/richtext/richtextliststylepage.cpp:236
@@ -7540,7 +7541,7 @@ msgstr "*)"
 #: ../src/richtext/richtextliststylepage.cpp:238
 #: ../src/richtext/richtextliststylepage.cpp:240
 msgid "Check to add a right parenthesis."
-msgstr ""
+msgstr "წკაპი მარჯვენა ფრჩხილის დასამატებლად."
 
 #: ../src/richtext/richtextbulletspage.cpp:182
 #: ../src/richtext/richtextliststylepage.cpp:245
@@ -7796,7 +7797,7 @@ msgstr "წკაპი ტექსტის ფონის ფერის �
 #: ../src/richtext/richtextfontpage.cpp:277
 #: ../src/richtext/richtextfontpage.cpp:279
 msgid "Check to show a line through the text."
-msgstr ""
+msgstr "წკაპი ტექსტის მიღმა ხაზის საჩვენებლად."
 
 #: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
@@ -7805,7 +7806,7 @@ msgstr "დიდი &ასოებით"
 #: ../src/richtext/richtextfontpage.cpp:284
 #: ../src/richtext/richtextfontpage.cpp:286
 msgid "Check to show the text in capitals."
-msgstr ""
+msgstr "წკაპი ტექსტის დიდი ასოებით საჩვენებლად."
 
 #: ../src/richtext/richtextfontpage.cpp:289
 msgid "Small C&apitals"
@@ -7814,7 +7815,7 @@ msgstr "მცირე დიდი &ასოებით"
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
 msgid "Check to show the text in small capitals."
-msgstr ""
+msgstr "წკაპი ტექსტის პატარა ასოებით საჩვენებლად."
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
@@ -7823,7 +7824,7 @@ msgstr "&სუპერსკრიპტი"
 #: ../src/richtext/richtextfontpage.cpp:298
 #: ../src/richtext/richtextfontpage.cpp:300
 msgid "Check to show the text in superscript."
-msgstr ""
+msgstr "წკაპი ტექსტის სუპერსკრიპტით საჩვენებლად."
 
 #: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
@@ -7832,7 +7833,7 @@ msgstr "&საბსკრიპტი"
 #: ../src/richtext/richtextfontpage.cpp:305
 #: ../src/richtext/richtextfontpage.cpp:307
 msgid "Check to show the text in subscript."
-msgstr ""
+msgstr "წკაპი ტექსის ქვესკრიპრიტით საჩვენებლად."
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
@@ -9103,7 +9104,7 @@ msgstr ""
 #: ../src/x11/app.cpp:127
 #, c-format
 msgid "Invalid geometry specification '%s'"
-msgstr ""
+msgstr "მითითებულ გეომეტრია არასწორია: %s"
 
 #: ../src/x11/app.cpp:170
 msgid "wxWidgets could not open display. Exiting."
@@ -9112,12 +9113,12 @@ msgstr "wxWidgets -მა ეკრანი ვერ გახსნა. გ�
 #: ../src/x11/utils.cpp:170
 #, c-format
 msgid "Failed to close the display \"%s\""
-msgstr ""
+msgstr "ეკრანის დახურვის შეცდომა: %s"
 
 #: ../src/x11/utils.cpp:189
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr ""
+msgstr "ეკრანის გახსნის შეცდომა: %s."
 
 #: ../src/xml/xml.cpp:925
 #, c-format
@@ -9137,7 +9138,7 @@ msgstr "რესურსებს ფაილის გახსნის შ
 #: ../src/xrc/xmlres.cpp:774
 #, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr ""
+msgstr "'%s'-დან რესურსების ჩატვირთვის შეცდომა."
 
 #: ../src/xrc/xmlres.cpp:2744
 #, c-format
