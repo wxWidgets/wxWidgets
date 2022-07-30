@@ -364,20 +364,28 @@ enum wxPosixPermissions
     #define   wxClose      close
     #define   wxRead       ::read
     #define   wxWrite      ::write
-    #define   wxLseek      lseek
-    #define   wxSeek       lseek
+    #if defined(linux) || defined(__linux) || defined(__linux__)
+        #define wxHAS_LARGE_FILES
+        #define   wxLseek      lseek64
+        #define   wxSeek       lseek64
+        #define   wxTell(fd)   lseek64(fd, 0, SEEK_CUR)
+        #define   wxStructStat struct stat64
+        #define   wxCRT_Stat   stat64
+        #define   wxCRT_Lstat  lstat64
+    #else
+        #define   wxLseek      lseek
+        #define   wxSeek       lseek
+        #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
+        #define   wxStructStat struct stat
+        #define   wxCRT_Stat   stat
+        #define   wxCRT_Lstat  lstat
+    #endif
     #define   wxFsync      fsync
     #define   wxEof        eof
     #define   wxCRT_MkDir      mkdir
     #define   wxCRT_RmDir      rmdir
 
-    #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
-
-    #define   wxStructStat struct stat
-
     #define   wxCRT_Open       open
-    #define   wxCRT_Stat       stat
-    #define   wxCRT_Lstat      lstat
     #define   wxCRT_Access     access
     #define   wxCRT_Chmod      chmod
 
