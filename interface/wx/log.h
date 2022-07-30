@@ -49,7 +49,7 @@ public:
     /**
         The name of the function where the log record was generated.
 
-        This field may be @NULL if the compiler doesn't support @c __FUNCTION__
+        This field may be @NULL if the compiler doesn't support @c \__FUNCTION__
         (but most modern compilers do).
      */
     const char *func;
@@ -1492,7 +1492,7 @@ void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
 //@{
 /**
     The right functions for debug output. They only do something in debug mode
-    (when the preprocessor symbol @c __WXDEBUG__ is defined) and expand to
+    (when the preprocessor symbol @c \__WXDEBUG__ is defined) and expand to
     nothing in release mode (otherwise).
 
     @header{wx/log.h}

@@ -274,7 +274,7 @@ public:
         This function is called when an assert failure occurs, i.e.\ the condition
         specified in wxASSERT() macro evaluated to @false.
 
-        It is only called in debug mode (when @c __WXDEBUG__ is defined) as
+        It is only called in debug mode (when @c \__WXDEBUG__ is defined) as
         asserts are not left in the release code at all.
         The base class version shows the default assert failure dialog box proposing to
         the user to stop the program, continue or ignore all subsequent asserts.
@@ -285,7 +285,7 @@ public:
             the line number in this file where the assert occurred
         @param func
             the name of the function where the assert occurred, may be
-            empty if the compiler doesn't support C99 __FUNCTION__
+            empty if the compiler doesn't support C99 \__FUNCTION__
         @param cond
             the condition of the failed assert in text form
         @param msg
