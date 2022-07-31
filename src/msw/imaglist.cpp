@@ -448,7 +448,11 @@ wxBitmap wxImageList::GetBitmap(int index) const
     int bmp_width = 0, bmp_height = 0;
     GetSize(index, bmp_width, bmp_height);
 
-    wxBitmap bitmap(bmp_width, bmp_height);
+    // Specify the depth to force using a DIB for this bitmap as drawing on a
+    // DDB, that would be created by default, results in bitmaps that look
+    // correct, but are not drawn correctly by Windows itself, e.g. transparent
+    // areas appear as black in the menus (see #22669).
+    wxBitmap bitmap(bmp_width, bmp_height, 32);
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
     wxMemoryDC dc;
