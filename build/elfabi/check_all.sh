@@ -17,12 +17,21 @@ rc=0
 for l in $libraries; do
     name=$(basename $l .so)
     echo -n "Checking ${name}... "
-    if ! abidiff ${thisdir}/${name}.abi $l; then
-        echo "!!! ABI changes detected in ${name} !!!"
-        rc=1
-    else
-        echo 'ok'
-    fi
+    abidiff ${thisdir}/${name}.abi $l
+    case $? in
+        0)
+            echo 'ok'
+            ;;
+
+        4)
+            echo '*** ABI changes detected in ${name} ***'
+            ;;
+
+        *)
+            echo "!!! INCOMPATIBLE ABI changes detected in ${name} !!!"
+            rc=1
+            ;;
+    esac
 done
 
 exit $rc
