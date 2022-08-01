@@ -700,8 +700,8 @@ WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary=archs create
 WX_ARG_ENABLE_PARAM(macosx_arch,      [[  --enable-macosx_arch=ARCH  build for just the specified architecture]], wxUSE_MAC_ARCH)
 fi dnl USE_DARWIN
 
-WX_ARG_ENABLE(compat28,      [  --enable-compat28       enable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8)
-WX_ARG_DISABLE(compat30,     [  --disable-compat30      disable wxWidgets 3.0 compatibility], WXWIN_COMPATIBILITY_3_0)
+WX_ARG_ENABLE(compat30,      [  --enable-compat30       enable wxWidgets 3.0 compatibility], WXWIN_COMPATIBILITY_3_0)
+WX_ARG_DISABLE(compat32,     [  --disable-compat32      disable wxWidgets 3.2 compatibility], WXWIN_COMPATIBILITY_3_2)
 
 WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
@@ -5484,14 +5484,14 @@ dnl ---------------------------------------------------------------------------
 dnl compatibility level
 dnl ---------------------------------------------------------------------------
 
-if test "x$WXWIN_COMPATIBILITY_2_8" = "xyes"; then
-    AC_DEFINE(WXWIN_COMPATIBILITY_2_8)
+if test "x$WXWIN_COMPATIBILITY_3_0" = "xyes"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_3_0)
 
-    WXWIN_COMPATIBILITY_3_0="yes"
+    WXWIN_COMPATIBILITY_3_2="yes"
 fi
 
-if test "x$WXWIN_COMPATIBILITY_3_0" != "xno"; then
-    AC_DEFINE(WXWIN_COMPATIBILITY_3_0)
+if test "x$WXWIN_COMPATIBILITY_3_2" != "xno"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_3_2)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -8842,8 +8842,8 @@ else
 fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"
-echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-no}"
-echo "                                       wxWidgets 3.0      ${WXWIN_COMPATIBILITY_3_0:-yes}"
+echo "                                       wxWidgets 3.0      ${WXWIN_COMPATIBILITY_3_0:-no}"
+echo "                                       wxWidgets 3.2      ${WXWIN_COMPATIBILITY_3_2:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
 echo "                                       STL                ${wxUSE_STL}"

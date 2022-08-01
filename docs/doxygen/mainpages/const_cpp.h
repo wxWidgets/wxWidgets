@@ -315,20 +315,20 @@ And, finally, the symbol is completely removed from the library in the next
 stable version after this, i.e. @c x.y+4. @c WXWIN_COMPATIBILITY_x_y itself is
 removed as well at this time, as it is not useful any longer.
 
-According to this general rule, currently, i.e. in wxWidgets 3.2, the following
-two symbols are defined: @c WXWIN_COMPATIBILITY_2_8, as 0, and @c
-WXWIN_COMPATIBILITY_3_0, as 1. Please see @ref overview_backwardcompat for even
+According to this general rule, currently, i.e. in wxWidgets 3.4, the following
+two symbols are defined: @c WXWIN_COMPATIBILITY_3_0, as 0, and @c
+WXWIN_COMPATIBILITY_3_2, as 1. Please see @ref overview_backwardcompat for even
 more details.
 
 @beginDefList
-@itemdef{WXWIN_COMPATIBILITY_2_8,
-         defined as 0 by default meaning that symbols existing in wxWidgets 2.8
-         but deprecated in 3.0 release are not available by default. It can be
+@itemdef{WXWIN_COMPATIBILITY_3_0,
+         defined as 0 by default meaning that symbols existing in wxWidgets 3.0
+         but deprecated in 3.2 release are not available by default. It can be
          changed to 1 to make them available, but it is strongly recommended to
          update the code using them instead.}
-@itemdef{WXWIN_COMPATIBILITY_3_0,
-         defined as 1 by default meaning that symbols existing in wxWidgets 3.0
-         but deprecated since then are still available. It can be changed to 1
+@itemdef{WXWIN_COMPATIBILITY_3_2,
+         defined as 1 by default meaning that symbols existing in wxWidgets 3.2
+         but deprecated since then are still available. It can be changed to 0
          to ensure that no deprecated symbols are used accidentally.}
 @itemdef{wxDIALOG_UNIT_COMPATIBILITY,
          wxMSW-specific setting which can be set to 1 to make
