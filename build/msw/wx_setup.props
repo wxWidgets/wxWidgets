@@ -12,6 +12,8 @@
     <wxCfg>
     </wxCfg>
     <wxVendor>custom</wxVendor>
+    <wxReleaseRuntimeLibrary>MultiThreadedDLL</wxReleaseRuntimeLibrary>
+    <wxDebugRuntimeLibrary>MultiThreadedDebugDLL</wxDebugRuntimeLibrary>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
     <wxArchSuffix>
@@ -118,6 +120,15 @@
     </BuildMacro>
     <BuildMacro Include="wxIntRootDir">
       <Value>$(wxIntRootDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="wxIntRootDir">
+      <Value>$(wxIntRootDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="wxReleaseRuntimeLibrary">
+      <Value>$(wxReleaseRuntimeLibrary)</Value>
+    </BuildMacro>
+    <BuildMacro Include="wxDebugRuntimeLibrary">
+      <Value>$(wxDebugRuntimeLibrary)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
