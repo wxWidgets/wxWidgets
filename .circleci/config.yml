@@ -1,0 +1,37 @@
+# Config file for CI jobs on CircleCI (circleci.com).
+version: 2.1
+
+jobs:
+  build-fedora:
+    docker:
+      - image: fedora
+    steps:
+      - checkout
+
+      - run:
+          name: Checkout required submodules
+          # We need to get Git first as it's not part of the base image.
+          command: |
+            dnf -y install git
+            git submodule update --init 3rdparty/catch 3rdparty/nanosvg
+
+      - run:
+          name: Install dependencies
+          command: ./build/tools/before_install.sh
+
+      - run:
+          name: Configure
+          command: ./configure --disable-debug-info
+
+      # Do _not_ use total CPU count for building, it is too high (36 logical
+      # CPUs) and results in running out of memory, so limit ourselves to just
+      # 2 CPUs we're supposed to be using in Docker Medium resource class.
+      - run:
+          name: Build
+          command: |
+            make -k -j2 CXXFLAGS='-Werror -Wno-error=cpp'
+
+workflows:
+  build:
+    jobs:
+      - build-fedora
