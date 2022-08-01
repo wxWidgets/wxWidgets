@@ -12,8 +12,7 @@
     <wxCfg>
     </wxCfg>
     <wxVendor>custom</wxVendor>
-    <wxReleaseRuntimeLibrary>MultiThreadedDLL</wxReleaseRuntimeLibrary>
-    <wxDebugRuntimeLibrary>MultiThreadedDebugDLL</wxDebugRuntimeLibrary>
+    <wxRuntimeLibs>dynamic</wxRuntimeLibs>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
     <wxArchSuffix>
