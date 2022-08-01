@@ -1199,13 +1199,6 @@ void wxSizer::SetSizeHints( wxWindow *window )
                                           this);
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-void wxSizer::SetVirtualSizeHints( wxWindow *window )
-{
-    FitInside( window );
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // TODO on mac we need a function that determines how much free space this
 // min size contains, in order to make sure that we have 20 pixels of free
 // space around the controls

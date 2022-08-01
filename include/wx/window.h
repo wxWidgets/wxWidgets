@@ -409,20 +409,9 @@ public:
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
-    wxSize GetBestFittingSize() const;
-#endif // WXWIN_COMPATIBILITY_2_8
-
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
     void SetInitialSize(const wxSize& size=wxDefaultSize);
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_MSG("use SetInitialSize() instead")
-    void SetBestFittingSize(const wxSize& size=wxDefaultSize);
-#endif // WXWIN_COMPATIBILITY_2_8
-
 
         // the generic centre function - centers the window on parent by`
         // default or on screen if it doesn't have parent or
@@ -456,15 +445,6 @@ public:
                        const wxSize& maxSize=wxDefaultSize,
                        const wxSize& incSize=wxDefaultSize)
     { DoSetSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y, incSize.x, incSize.y); }
-
-
-#if WXWIN_COMPATIBILITY_2_8
-    // these are useless and do nothing since wxWidgets 2.9
-    wxDEPRECATED( virtual void SetVirtualSizeHints( int minW, int minH,
-                                      int maxW = wxDefaultCoord, int maxH = wxDefaultCoord ) );
-    wxDEPRECATED( void SetVirtualSizeHints( const wxSize& minSize,
-                                            const wxSize& maxSize=wxDefaultSize) );
-#endif // WXWIN_COMPATIBILITY_2_8
 
 
         // Call these to override what GetBestSize() returns. This
@@ -691,11 +671,6 @@ public:
     long GetExtraStyle() const { return m_exStyle; }
 
     bool HasExtraStyle(int exFlag) const { return (m_exStyle & exFlag) != 0; }
-
-#if WXWIN_COMPATIBILITY_2_8
-        // make the window modal (all other windows unresponsive)
-    wxDEPRECATED( virtual void MakeModal(bool modal = true) );
-#endif
 
     // (primitive) theming support
     // ---------------------------
@@ -1442,12 +1417,6 @@ public:
         // associate this help text with this window
     void SetHelpText(const wxString& text);
 
-#if WXWIN_COMPATIBILITY_2_8
-    // Associate this help text with all windows with the same id as this one.
-    // Don't use this, do wxHelpProvider::Get()->AddHelp(id, text);
-    wxDEPRECATED( void SetHelpTextForId(const wxString& text) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
         // get the help string associated with the given position in this window
         //
         // notice that pt may be invalid if event origin is keyboard or unknown
@@ -1880,15 +1849,6 @@ protected:
     // recalculated each time the value is needed.
     wxSize m_bestSizeCache;
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_MSG("use SetInitialSize() instead.")
-    void SetBestSize(const wxSize& size);
-    wxDEPRECATED_MSG("use SetInitialSize() instead.")
-    virtual void SetInitialBestSize(const wxSize& size);
-#endif // WXWIN_COMPATIBILITY_2_8
-
-
-
     // more pure virtual functions
     // ---------------------------
 
@@ -2030,30 +1990,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);
     wxDECLARE_EVENT_TABLE();
 };
-
-
-#if WXWIN_COMPATIBILITY_2_8
-// Inlines for some deprecated methods
-inline wxSize wxWindowBase::GetBestFittingSize() const
-{
-    return GetEffectiveMinSize();
-}
-
-inline void wxWindowBase::SetBestFittingSize(const wxSize& size)
-{
-    SetInitialSize(size);
-}
-
-inline void wxWindowBase::SetBestSize(const wxSize& size)
-{
-    SetInitialSize(size);
-}
-
-inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
-{
-    SetInitialSize(size);
-}
-#endif // WXWIN_COMPATIBILITY_2_8
 
 
 // ----------------------------------------------------------------------------

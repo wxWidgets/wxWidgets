@@ -90,11 +90,6 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 #define wxTE_WORDWRAP       0x0001  // wrap only at words boundaries
 #define wxTE_BESTWRAP       0x0000  // this is the default
 
-#if WXWIN_COMPATIBILITY_2_8
-    // this style is (or at least should be) on by default now, don't use it
-    #define wxTE_AUTO_SCROLL    0
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000

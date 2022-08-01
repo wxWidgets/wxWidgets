@@ -357,19 +357,6 @@ public:
                            const wxBitmapBundle& bmpHover = wxBitmapBundle(),
                            const wxBitmapBundle& bmpDisabled = wxBitmapBundle() );
 
-#if WXWIN_COMPATIBILITY_2_8
-    //
-    // This will set the space in pixels between left edge of the control and the
-    // text, regardless whether control is read-only (ie. no wxTextCtrl) or not.
-    // Platform-specific default can be set with value-1.
-    // Remarks
-    // * This method may do nothing on some native implementations.
-    wxDEPRECATED( void SetTextIndent( int indent ) );
-
-    // Returns actual indentation in pixels.
-    wxDEPRECATED( wxCoord GetTextIndent() const );
-#endif
-
     // Returns area covered by the text field.
     const wxRect& GetTextRect() const
     {

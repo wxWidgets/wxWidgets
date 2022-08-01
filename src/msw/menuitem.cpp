@@ -438,20 +438,6 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     Init();
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-wxMenuItem::wxMenuItem(wxMenu *parentMenu,
-                       int id,
-                       const wxString& text,
-                       const wxString& help,
-                       bool isCheckable,
-                       wxMenu *subMenu)
-          : wxMenuItemBase(parentMenu, id, text, help,
-                           isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
-{
-    Init();
-}
-#endif
-
 void wxMenuItem::Init()
 {
 #if  wxUSE_OWNER_DRAWN

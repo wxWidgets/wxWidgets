@@ -10833,13 +10833,6 @@ void wxGrid::SetFocus()
     m_gridWin->SetFocus();
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-wxPen& wxGrid::GetDividerPen() const
-{
-    return wxNullPen;
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // ----------------------------------------------------------------------------
 // cell value accessor functions
 // ----------------------------------------------------------------------------

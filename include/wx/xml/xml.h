@@ -83,13 +83,6 @@ private:
     wxXmlAttribute *m_next;
 };
 
-#if WXWIN_COMPATIBILITY_2_8
-    // NB: #define is used instead of typedef so that forward declarations
-    //     continue to work
-    #define wxXmlProperty wxXmlAttribute
-#endif
-
-
 // Represents node in XML document. Node has name and may have content and
 // attributes. Most common node types are wxXML_TEXT_NODE (name and attributes
 // are irrelevant) and wxXML_ELEMENT_NODE (e.g. in <title>hi</title> there is
@@ -175,38 +168,6 @@ public:
     bool GetNoConversion() const { return m_noConversion; }
     void SetNoConversion(bool noconversion) { m_noConversion = noconversion; }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( inline wxXmlAttribute *GetProperties() const );
-    wxDEPRECATED( inline bool GetPropVal(const wxString& propName,
-                                         wxString *value) const );
-    wxDEPRECATED( inline wxString GetPropVal(const wxString& propName,
-                                             const wxString& defaultVal) const );
-    wxDEPRECATED( inline bool HasProp(const wxString& propName) const );
-
-    wxDEPRECATED( inline void SetProperties(wxXmlAttribute *prop) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
-    // The following three functions are backward compatibility, but because
-    // they were virtual, we must make it possible to override them. This
-    // is done by calling e.g. AddProperty() from AddAttribute(), so we have
-    // to keep AddProperty() even if 2.8 compatibility is off. To prevent
-    // old code from compiling in that case, we make them private and
-    // non-virtual. (This can be removed when WXWIN_COMPATIBILITY_2_8 is
-    // removed, we'll have just *Attribute versions then.)
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_BUT_USED_INTERNALLY(
-        virtual void AddProperty(const wxString& name, const wxString& value) );
-    wxDEPRECATED_BUT_USED_INTERNALLY(
-        virtual bool DeleteProperty(const wxString& name) );
-    wxDEPRECATED_BUT_USED_INTERNALLY(
-        virtual void AddProperty(wxXmlAttribute *attr) );
-#else
-private:
-    void AddProperty(const wxString& name, const wxString& value);
-    bool DeleteProperty(const wxString& name);
-    void AddProperty(wxXmlAttribute *attr);
-#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
-
 private:
     wxXmlNodeType m_type;
     wxString m_name;
@@ -219,22 +180,6 @@ private:
     void DoFree();
     void DoCopy(const wxXmlNode& node);
 };
-
-#if WXWIN_COMPATIBILITY_2_8
-inline wxXmlAttribute *wxXmlNode::GetProperties() const
-    { return GetAttributes(); }
-inline bool wxXmlNode::GetPropVal(const wxString& propName,
-                                  wxString *value) const
-    { return GetAttribute(propName, value); }
-inline wxString wxXmlNode::GetPropVal(const wxString& propName,
-                                      const wxString& defaultVal) const
-    { return GetAttribute(propName, defaultVal); }
-inline bool wxXmlNode::HasProp(const wxString& propName) const
-    { return HasAttribute(propName); }
-inline void wxXmlNode::SetProperties(wxXmlAttribute *prop)
-    { SetAttributes(prop); }
-#endif // WXWIN_COMPATIBILITY_2_8
-
 
 
 class WXDLLIMPEXP_XML wxXmlDoctype

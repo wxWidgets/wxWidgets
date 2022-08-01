@@ -211,12 +211,6 @@ WXDLLIMPEXP_BASE unsigned int wxCTZ(wxUint32 x);
     WXDLLIMPEXP_BASE wxFloat64 wxConvertFromIeeeExtended(const wxInt8 *bytes);
     WXDLLIMPEXP_BASE void wxConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
 
-    /* use wxConvertFromIeeeExtended() and wxConvertToIeeeExtended() instead */
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( WXDLLIMPEXP_BASE wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes) );
-    wxDEPRECATED( WXDLLIMPEXP_BASE void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes) );
-#endif
-
 #ifdef __cplusplus
     }
 #endif

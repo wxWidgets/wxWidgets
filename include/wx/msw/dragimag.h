@@ -208,16 +208,6 @@ public:
     WXHIMAGELIST GetCursorHIMAGELIST() const { return m_hCursorImageList; }
 #endif
 
-    // don't use in new code, use versions without hot spot parameter
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_CONSTRUCTOR( wxDragImage(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED_CONSTRUCTOR( wxDragImage(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED_CONSTRUCTOR( wxDragImage(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED( bool Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED( bool Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED( bool Create(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
 protected:
     WXHIMAGELIST    m_hImageList;
 

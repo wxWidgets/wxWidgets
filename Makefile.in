@@ -3920,7 +3920,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/dnd.h \
 	wx/docmdi.h \
 	wx/docview.h \
-	wx/effects.h \
 	wx/fdrepdlg.h \
 	wx/filectrl.h \
 	wx/filehistory.h \
@@ -4565,7 +4564,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_docview.o \
 	monodll_dpycmn.o \
 	monodll_dseldlg.o \
-	monodll_effects.o \
 	monodll_fddlgcmn.o \
 	monodll_filectrlcmn.o \
 	monodll_filehistorycmn.o \
@@ -4829,7 +4827,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_docview.o \
 	monodll_dpycmn.o \
 	monodll_dseldlg.o \
-	monodll_effects.o \
 	monodll_fddlgcmn.o \
 	monodll_filectrlcmn.o \
 	monodll_filehistorycmn.o \
@@ -6576,7 +6573,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_docview.o \
 	monolib_dpycmn.o \
 	monolib_dseldlg.o \
-	monolib_effects.o \
 	monolib_fddlgcmn.o \
 	monolib_filectrlcmn.o \
 	monolib_filehistorycmn.o \
@@ -6840,7 +6836,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_docview.o \
 	monolib_dpycmn.o \
 	monolib_dseldlg.o \
-	monolib_effects.o \
 	monolib_fddlgcmn.o \
 	monolib_filectrlcmn.o \
 	monolib_filehistorycmn.o \
@@ -8741,7 +8736,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_docview.o \
 	coredll_dpycmn.o \
 	coredll_dseldlg.o \
-	coredll_effects.o \
 	coredll_fddlgcmn.o \
 	coredll_filectrlcmn.o \
 	coredll_filehistorycmn.o \
@@ -9005,7 +8999,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_docview.o \
 	coredll_dpycmn.o \
 	coredll_dseldlg.o \
-	coredll_effects.o \
 	coredll_fddlgcmn.o \
 	coredll_filectrlcmn.o \
 	coredll_filehistorycmn.o \
@@ -10479,7 +10472,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_docview.o \
 	corelib_dpycmn.o \
 	corelib_dseldlg.o \
-	corelib_effects.o \
 	corelib_fddlgcmn.o \
 	corelib_filectrlcmn.o \
 	corelib_filehistorycmn.o \
@@ -10743,7 +10735,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_docview.o \
 	corelib_dpycmn.o \
 	corelib_dseldlg.o \
-	corelib_effects.o \
 	corelib_fddlgcmn.o \
 	corelib_filectrlcmn.o \
 	corelib_filehistorycmn.o \
@@ -20642,9 +20633,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_dseldlg.o: $(srcdir)/src/common/dseldlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/dseldlg.cpp
 
-@COND_USE_GUI_1@monodll_effects.o: $(srcdir)/src/common/effects.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/effects.cpp
-
 @COND_USE_GUI_1@monodll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
@@ -25963,9 +25951,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_dseldlg.o: $(srcdir)/src/common/dseldlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/dseldlg.cpp
-
-@COND_USE_GUI_1@monolib_effects.o: $(srcdir)/src/common/effects.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/effects.cpp
 
 @COND_USE_GUI_1@monolib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
@@ -31391,9 +31376,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_dseldlg.o: $(srcdir)/src/common/dseldlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/dseldlg.cpp
 
-@COND_USE_GUI_1@coredll_effects.o: $(srcdir)/src/common/effects.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/effects.cpp
-
 @COND_USE_GUI_1@coredll_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp
 
@@ -35671,9 +35653,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_dseldlg.o: $(srcdir)/src/common/dseldlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/dseldlg.cpp
-
-@COND_USE_GUI_1@corelib_effects.o: $(srcdir)/src/common/effects.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/effects.cpp
 
 @COND_USE_GUI_1@corelib_fddlgcmn.o: $(srcdir)/src/common/fddlgcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fddlgcmn.cpp

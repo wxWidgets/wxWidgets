@@ -656,9 +656,6 @@ wxEND_EVENT_TABLE()
 
 void wxGLCanvas::Init()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    m_glContext = NULL;
-#endif
     m_hDC = NULL;
 }
 
@@ -1307,63 +1304,6 @@ void wxGLCanvas::OnPaletteChanged(wxPaletteChangedEvent& event)
 }
 
 #endif // wxUSE_PALETTE
-
-// ----------------------------------------------------------------------------
-// deprecated wxGLCanvas methods using implicit wxGLContext
-// ----------------------------------------------------------------------------
-
-// deprecated constructors creating an implicit m_glContext
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    Init();
-
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLContext *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    Init();
-
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLCanvas *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    Init();
-
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared ? shared->m_glContext : NULL);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
 
 // ----------------------------------------------------------------------------
 // wxGLApp

@@ -1328,16 +1328,16 @@
    Section 3a: check consistency of the non-GUI settings.
  */
 
-#if WXWIN_COMPATIBILITY_2_8
-#   if !WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
+#   if !WXWIN_COMPATIBILITY_3_2
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "2.8.X compatibility requires 3.0.X compatibility"
+#           error "3.0.X compatibility requires 3.2.X compatibility"
 #       else
-#           undef WXWIN_COMPATIBILITY_3_0
-#           define WXWIN_COMPATIBILITY_3_0 1
+#           undef WXWIN_COMPATIBILITY_3_2
+#           define WXWIN_COMPATIBILITY_3_2 1
 #       endif
 #   endif
-#endif /* WXWIN_COMPATIBILITY_2_8 */
+#endif /* WXWIN_COMPATIBILITY_3_0 */
 
 #if wxUSE_ARCHIVE_STREAMS
 #   if !wxUSE_DATETIME

@@ -258,15 +258,6 @@ public:
     // as a parameter
     wxGLContextAttrs& GetGLCTXAttrs() { return m_GLCTXAttrs; }
 
-    // deprecated methods using the implicit wxGLContext
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( wxGLContext* GetContext() const );
-
-    wxDEPRECATED( void SetCurrent() );
-
-    wxDEPRECATED( void OnSize(wxSizeEvent& event) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
 #ifdef __WXUNIVERSAL__
     // resolve the conflict with wxWindowUniv::SetCurrent()
     virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
@@ -298,10 +289,6 @@ protected:
 
     wxPalette m_palette;
 #endif // wxUSE_PALETTE
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxGLContext *m_glContext;
-#endif // WXWIN_COMPATIBILITY_2_8
 };
 
 // ----------------------------------------------------------------------------

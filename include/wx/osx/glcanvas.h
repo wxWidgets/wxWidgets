@@ -116,47 +116,6 @@ public:
     // update the view port of the current context to match this window
     void SetViewport();
 
-
-    // deprecated methods
-    // ------------------
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED(
-    wxGLCanvas(wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const int *attribList = NULL,
-               const wxPalette& palette = wxNullPalette)
-    );
-
-    wxDEPRECATED(
-    wxGLCanvas(wxWindow *parent,
-               const wxGLContext *shared,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const int *attribList = NULL,
-               const wxPalette& palette = wxNullPalette)
-    );
-
-    wxDEPRECATED(
-    wxGLCanvas(wxWindow *parent,
-               const wxGLCanvas *shared,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const int *attribList = NULL,
-               const wxPalette& palette = wxNullPalette)
-    );
-#endif // WXWIN_COMPATIBILITY_2_8
-
     // implementation-only from now on
 
 protected:

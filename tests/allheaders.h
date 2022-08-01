@@ -122,7 +122,6 @@
 #include <wx/dynlib.h>
 #include <wx/dynload.h>
 #include <wx/editlbox.h>
-#include <wx/effects.h>
 #include <wx/encconv.h>
 #include <wx/encinfo.h>
 #include <wx/eventfilter.h>

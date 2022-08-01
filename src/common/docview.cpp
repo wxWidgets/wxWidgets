@@ -465,29 +465,8 @@ bool wxDocument::Revert()
 
 
 // Get title, or filename if no title, else unnamed
-#if WXWIN_COMPATIBILITY_2_8
-bool wxDocument::GetPrintableName(wxString& buf) const
-{
-    // this function cannot only be overridden by the user code but also
-    // called by it so we need to ensure that we return the same thing as
-    // GetUserReadableName() but we can't call it because this would result in
-    // an infinite recursion, hence we use the helper DoGetUserReadableName()
-    buf = DoGetUserReadableName();
-
-    return true;
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 wxString wxDocument::GetUserReadableName() const
 {
-#if WXWIN_COMPATIBILITY_2_8
-    // we need to call the old virtual function to ensure that the overridden
-    // version of it is still called
-    wxString name;
-    if ( GetPrintableName(name) )
-        return name;
-#endif // WXWIN_COMPATIBILITY_2_8
-
     return DoGetUserReadableName();
 }
 
@@ -1597,27 +1576,12 @@ wxCommandProcessor *wxDocManager::GetCurrentCommandProcessor() const
 }
 
 // Make a default name for a new document
-#if WXWIN_COMPATIBILITY_2_8
-bool wxDocManager::MakeDefaultName(wxString& WXUNUSED(name))
-{
-    // we consider that this function can only be overridden by the user code,
-    // not called by it as it only makes sense to call it internally, so we
-    // don't bother to return anything from here
-    return false;
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 wxString wxDocManager::MakeNewDocumentName()
 {
     wxString name;
 
-#if WXWIN_COMPATIBILITY_2_8
-    if ( !MakeDefaultName(name) )
-#endif // WXWIN_COMPATIBILITY_2_8
-    {
-        name.Printf(_("unnamed%d"), m_defaultDocumentNameCounter);
-        m_defaultDocumentNameCounter++;
-    }
+    name.Printf(_("unnamed%d"), m_defaultDocumentNameCounter);
+    m_defaultDocumentNameCounter++;
 
     return name;
 }

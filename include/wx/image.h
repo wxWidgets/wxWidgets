@@ -146,12 +146,6 @@ public:
     wxBitmapType GetType() const { return m_type; }
     const wxString& GetMimeType() const { return m_mime; }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED(
-        void SetType(long type) { SetType((wxBitmapType)type); }
-    )
-#endif // WXWIN_COMPATIBILITY_2_8
-
 protected:
 #if wxUSE_STREAMS
     // NOTE: this function is allowed to change the current stream position
@@ -599,66 +593,6 @@ public:
 
     static HSVValue RGBtoHSV(const RGBValue& rgb);
     static RGBValue HSVtoRGB(const HSVValue& hsv);
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_CONSTRUCTOR(
-        wxImage(const wxString& name, long type, int index = -1)
-        {
-            LoadFile(name, (wxBitmapType)type, index);
-        }
-    )
-
-#if wxUSE_STREAMS
-    wxDEPRECATED_CONSTRUCTOR(
-        wxImage(wxInputStream& stream, long type, int index = -1)
-        {
-            LoadFile(stream, (wxBitmapType)type, index);
-        }
-    )
-
-    wxDEPRECATED(
-        bool LoadFile(wxInputStream& stream, long type, int index = -1)
-        {
-            return LoadFile(stream, (wxBitmapType)type, index);
-        }
-    )
-
-    wxDEPRECATED(
-        bool SaveFile(wxOutputStream& stream, long type) const
-        {
-            return SaveFile(stream, (wxBitmapType)type);
-        }
-    )
-#endif // wxUSE_STREAMS
-
-    wxDEPRECATED(
-        bool LoadFile(const wxString& name, long type, int index = -1)
-        {
-            return LoadFile(name, (wxBitmapType)type, index);
-        }
-    )
-
-    wxDEPRECATED(
-        bool SaveFile(const wxString& name, long type) const
-        {
-            return SaveFile(name, (wxBitmapType)type);
-        }
-    )
-
-    wxDEPRECATED(static
-        wxImageHandler *FindHandler(const wxString& ext, long type)
-        {
-            return FindHandler(ext, (wxBitmapType)type);
-        }
-    )
-
-    wxDEPRECATED(static
-        wxImageHandler *FindHandler(long imageType)
-        {
-            return FindHandler((wxBitmapType)imageType);
-        }
-    )
-#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     static wxList   sm_handlers;

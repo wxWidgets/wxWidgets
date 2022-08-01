@@ -209,9 +209,6 @@ public:
     bool                MacIsReallyEnabled() ;
     bool                MacIsReallyHilited() ;
 
-#if WXWIN_COMPATIBILITY_2_8
-    bool                MacIsUserPane();
-#endif
     bool                MacIsUserPane() const;
 
     virtual bool        MacSetupCursor( const wxPoint& pt ) ;

@@ -245,12 +245,6 @@ public:
 #endif // wxUSE_MOUSEWHEEL
     void HandleOnChildFocus(wxChildFocusEvent& event);
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED(
-        void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
-    )
-#endif // WXWIN_COMPATIBILITY_2_8
-
 protected:
     // get pointer to our scroll rect if we use it or NULL
     const wxRect *GetScrollRect() const

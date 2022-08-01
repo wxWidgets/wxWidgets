@@ -1050,10 +1050,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\common\effects.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\common\event.cpp"
 				>
 			</File>
@@ -3714,10 +3710,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\propgrid\editors.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\effects.h"
 				>
 			</File>
 			<File

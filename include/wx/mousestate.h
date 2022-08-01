@@ -121,16 +121,6 @@ public:
     // this mostly makes sense in the derived classes such as wxMouseEvent
     void SetState(const wxMouseState& state) { *this = state; }
 
-    // these functions are for compatibility only, they were used in 2.8
-    // version of wxMouseState but their names are confusing as wxMouseEvent
-    // has methods with the same names which do something quite different so
-    // don't use them any more
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE(bool LeftDown() const, return LeftIsDown(); )
-    wxDEPRECATED_INLINE(bool MiddleDown() const, return MiddleIsDown(); )
-    wxDEPRECATED_INLINE(bool RightDown() const, return RightIsDown(); )
-#endif // WXWIN_COMPATIBILITY_2_8
-
     // for compatibility reasons these variables are public as the code using
     // wxMouseEvent often uses them directly -- however they should not be
     // accessed directly in this class, use the accessors above instead

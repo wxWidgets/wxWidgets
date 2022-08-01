@@ -504,51 +504,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     return true;
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLContext *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLCanvas *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared ? shared->m_glContext : NULL);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
 /* static */
 bool wxGLCanvas::IsAGLMultiSampleAvailable()
 {

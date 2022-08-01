@@ -59,18 +59,6 @@ public:
     // Win32 API
     WXWPARAM GetMSWId() const;
 
-#if WXWIN_COMPATIBILITY_2_8
-    // compatibility only, don't use in new code
-    wxDEPRECATED(
-    wxMenuItem(wxMenu *parentMenu,
-               int id,
-               const wxString& text,
-               const wxString& help,
-               bool isCheckable,
-               wxMenu *subMenu = NULL)
-    );
-#endif
-
     void SetBitmaps(const wxBitmapBundle& bmpChecked,
                     const wxBitmapBundle& bmpUnchecked = wxNullBitmap)
     {

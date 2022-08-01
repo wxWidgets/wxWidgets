@@ -491,11 +491,6 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 // the actual displayed value is blank.
 #define wxPG_ATTR_HINT                      wxS("Hint")
 
-#if wxPG_COMPATIBILITY_1_4
-//  Ddeprecated. Use "Hint" (wxPG_ATTR_HINT) instead.
-#define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
-#endif
-
 // Universal, wxArrayString. Set to enable auto-completion in any
 // wxTextCtrl-based property editor.
 #define wxPG_ATTR_AUTOCOMPLETE              wxS("AutoComplete")
@@ -634,10 +629,6 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 #define wxPG_ATTR_UNITS                   wxPGGlobalVars->m_strUnits
 #undef wxPG_ATTR_HINT
 #define wxPG_ATTR_HINT                    wxPGGlobalVars->m_strHint
-#if wxPG_COMPATIBILITY_1_4
-#undef wxPG_ATTR_INLINE_HELP
-#define wxPG_ATTR_INLINE_HELP             wxPGGlobalVars->m_strInlineHelp
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -1352,11 +1343,6 @@ public:
     // will result in run-time assertion failure.
     virtual wxString GetValueAsString( int argFlags = 0 ) const;
 
-#if wxPG_COMPATIBILITY_1_4
-    // Synonymous to GetValueAsString().
-    wxDEPRECATED( wxString GetValueString( int argFlags = 0 ) const );
-#endif
-
     // Returns wxPGCell of given column.
     // Const version of this member function returns 'default'
     // wxPGCell object if the property itself didn't hold
@@ -1828,12 +1814,6 @@ public:
     // Adapts list variant into proper value using consecutive
     // ChildChanged-calls.
     void AdaptListToValue( wxVariant& list, wxVariant* value ) const;
-
-#if wxPG_COMPATIBILITY_1_4
-    // Adds a private child property.
-    // Use AddPrivateChild() instead.
-    wxDEPRECATED( void AddChild( wxPGProperty* prop ) );
-#endif
 
     // Adds a private child property. If you use this instead of
     // wxPropertyGridInterface::Insert() or

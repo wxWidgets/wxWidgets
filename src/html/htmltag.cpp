@@ -443,10 +443,6 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
     if (m_End1 > end_pos) m_End1 = end_pos;
     if (m_End2 > end_pos) m_End2 = end_pos;
 
-#if WXWIN_COMPATIBILITY_2_8
-    m_sourceStart = source->begin();
-#endif
-
     // Try to parse any style parameters that can be handled simply by
     // converting them to the equivalent HTML 3 attributes: this is a far cry
     // from perfect but better than nothing.

@@ -2480,29 +2480,6 @@ wxPoint wxComboCtrlBase::DoGetMargins() const
     return wxPoint(m_marginLeft, -1);
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-void wxComboCtrlBase::SetTextIndent( int indent )
-{
-    if ( indent < 0 )
-    {
-        m_marginLeft = GetNativeTextIndent();
-        m_iFlags &= ~(wxCC_IFLAG_LEFT_MARGIN_SET);
-    }
-    else
-    {
-        m_marginLeft = indent;
-        m_iFlags |= wxCC_IFLAG_LEFT_MARGIN_SET;
-    }
-
-    RecalcAndRefresh();
-}
-
-wxCoord wxComboCtrlBase::GetTextIndent() const
-{
-    return m_marginLeft;
-}
-#endif
-
 wxCoord wxComboCtrlBase::GetNativeTextIndent() const
 {
     return DEFAULT_TEXT_INDENT;

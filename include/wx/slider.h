@@ -99,10 +99,6 @@ public:
     virtual int GetSelStart() const { return GetMax(); }
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE( void SetTickFreq(int freq, int), DoSetTickFreq(freq); )
-#endif
-
 protected:
     // Platform-specific implementation of SetTickFreq
     virtual void DoSetTickFreq(int WXUNUSED(freq)) { /* unsupported by default */ }

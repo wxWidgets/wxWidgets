@@ -36,13 +36,6 @@
 
 #define PWC_CHILD_SUMMARY_CHAR_LIMIT    64 // Character limit of summary field when not editing
 
-#if wxPG_COMPATIBILITY_1_4
-
-// Used to establish backwards compatibility
-const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
-
-#endif
-
 // -----------------------------------------------------------------------
 
 static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
@@ -527,13 +520,6 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     }
 
     m_parentState = pageState;
-
-#if wxPG_COMPATIBILITY_1_4
-    // Make sure deprecated virtual functions are not implemented
-    wxString s = GetValueAsString( 0xFFFF );
-    wxASSERT_MSG( s == g_invalidStringContent,
-                  wxS("Implement ValueToString() instead of GetValueAsString()") );
-#endif
 
     if ( !parentIsRoot && !parent->IsCategory() )
     {
@@ -1027,16 +1013,6 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
 
 wxString wxPGProperty::GetValueAsString( int argFlags ) const
 {
-#if wxPG_COMPATIBILITY_1_4
-    // This is backwards compatibility test
-    // That is, to make sure this function is not overridden
-    // (instead, ValueToString() should be).
-    if ( argFlags == 0xFFFF )
-    {
-        // Do not override! (for backwards compliancy)
-        return g_invalidStringContent;
-    }
-#endif
     wxPropertyGrid* pg = GetGrid();
     wxCHECK_MSG( pg, wxEmptyString,
                  wxS("Cannot get valid value for detached property") );
@@ -1067,13 +1043,6 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
         return cv->GetLabel();
     }
 }
-
-#if wxPG_COMPATIBILITY_1_4
-wxString wxPGProperty::GetValueString( int argFlags ) const
-{
-    return GetValueAsString(argFlags);
-}
-#endif
 
 bool wxPGProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
 {
@@ -2328,13 +2297,6 @@ void wxPGProperty::AddPrivateChild( wxPGProperty* prop )
     DoPreAddChild( m_children.size(), prop );
 }
 
-#if wxPG_COMPATIBILITY_1_4
-void wxPGProperty::AddChild( wxPGProperty* prop )
-{
-    AddPrivateChild(prop);
-}
-#endif
-
 wxPGProperty* wxPGProperty::InsertChild( int index,
                                          wxPGProperty* childProperty )
 {
@@ -2766,12 +2728,6 @@ wxString wxPGProperty::GetHintText() const
 {
     wxVariant vHintText = GetAttribute(wxPG_ATTR_HINT);
 
-#if wxPG_COMPATIBILITY_1_4
-    // Try the old, deprecated "InlineHelp"
-    if ( vHintText.IsNull() )
-        vHintText = GetAttribute(wxPG_ATTR_INLINE_HELP);
-#endif
-
     if ( !vHintText.IsNull() )
         return vHintText.GetString();
 
@@ -2888,17 +2844,6 @@ wxString wxPropertyCategory::ValueToString( wxVariant& WXUNUSED(value),
 
 wxString wxPropertyCategory::GetValueAsString( int argFlags ) const
 {
-#if wxPG_COMPATIBILITY_1_4
-    // This is backwards compatibility test
-    // That is, to make sure this function is not overridden
-    // (instead, ValueToString() should be).
-    if ( argFlags == 0xFFFF )
-    {
-        // Do not override! (for backwards compliancy)
-        return g_invalidStringContent;
-    }
-#endif
-
     // Unspecified value is always empty string
     if ( IsValueUnspecified() )
         return wxEmptyString;

@@ -675,11 +675,6 @@ struct wxPixelDataOut<wxBitmap>
             // else: don't call UngetRawData() if GetRawData() failed
         }
 
-#if WXWIN_COMPATIBILITY_2_8
-        // not needed anymore, calls to it should be simply removed
-        wxDEPRECATED_INLINE( void UseAlpha(), wxEMPTY_PARAMETER_VALUE )
-#endif
-
     // private: -- see comment in the beginning of the file
 
         // the bitmap we're associated with

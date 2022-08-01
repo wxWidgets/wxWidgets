@@ -642,20 +642,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
     m_menuItem = NULL;
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-wxMenuItem::wxMenuItem(wxMenu *parentMenu,
-                       int id,
-                       const wxString& text,
-                       const wxString& help,
-                       bool isCheckable,
-                       wxMenu *subMenu)
-          : wxMenuItemBase(parentMenu, id, text, help,
-                           isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
-{
-    m_menuItem = NULL;
-}
-#endif
-
 wxMenuItem::~wxMenuItem()
 {
     if (m_menuItem)

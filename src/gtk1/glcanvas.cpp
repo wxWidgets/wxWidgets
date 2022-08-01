@@ -39,24 +39,6 @@ extern "C"
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
-#if WXWIN_COMPATIBILITY_2_8
-
-//-----------------------------------------------------------------------------
-// "realize" from m_wxwindow: used to create m_glContext implicitly
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gint
-gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
-{
-    win->GTKInitImplicitContext();
-
-    return FALSE;
-}
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
 //-----------------------------------------------------------------------------
 // "map" from m_wxwindow
 //-----------------------------------------------------------------------------
@@ -142,9 +124,6 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        long style,
                        const wxString& name,
                        const wxPalette& palette)
-#if WXWIN_COMPATIBILITY_2_8
-    : m_createImplicitContext(false)
-#endif
 {
     Create(parent, dispAttrs, id, pos, size, style, name, palette);
 }
@@ -157,59 +136,10 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        long style,
                        const wxString& name,
                        const wxPalette& palette)
-#if WXWIN_COMPATIBILITY_2_8
-    : m_createImplicitContext(false)
-#endif
 {
     Create(parent, id, pos, size, style, name, attribList, palette);
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-    : m_createImplicitContext(true)
-{
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLContext *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-    : m_createImplicitContext(true)
-{
-    m_sharedContext = const_cast<wxGLContext *>(shared);
-
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLCanvas *shared,
-                       wxWindowID id,
-                       const wxPoint& pos, const wxSize& size,
-                       long style, const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette )
-    : m_createImplicitContext(true)
-{
-    m_sharedContextOf = const_cast<wxGLCanvas *>(shared);
-
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 bool wxGLCanvas::Create(wxWindow *parent,
                         wxWindowID id,
@@ -256,11 +186,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
 
-#if WXWIN_COMPATIBILITY_2_8
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this);
-#endif // WXWIN_COMPATIBILITY_2_8
-
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "map",
                             GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this);
 
@@ -276,14 +201,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     gtk_widget_pop_visual();
 
     gtk_widget_pop_colormap();
-
-#if WXWIN_COMPATIBILITY_2_8
-    // if our parent window is already visible, we had been realized before we
-    // connected to the "realize" signal and hence our m_glContext hasn't been
-    // initialized yet and we have to do it now
-    if (GTK_WIDGET_REALIZED(m_wxwindow))
-        gtk_glwindow_realized_callback( m_wxwindow, this );
-#endif // WXWIN_COMPATIBILITY_2_8
 
     if (GTK_WIDGET_MAPPED(m_wxwindow))
         gtk_glwindow_map_callback( m_wxwindow, this );
@@ -309,21 +226,5 @@ void wxGLCanvas::OnInternalIdle()
 
     wxWindow::OnInternalIdle();
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-void wxGLCanvas::GTKInitImplicitContext()
-{
-    if ( !m_glContext && m_createImplicitContext )
-    {
-        wxGLContext *share = m_sharedContext;
-        if ( !share && m_sharedContextOf )
-            share = m_sharedContextOf->m_glContext;
-
-        m_glContext = new wxGLContext(this, share);
-    }
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // wxUSE_GLCANVAS

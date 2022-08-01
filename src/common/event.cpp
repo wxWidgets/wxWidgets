@@ -1462,13 +1462,8 @@ bool wxEvtHandler::DoTryApp(wxEvent& event)
 
 bool wxEvtHandler::TryBefore(wxEvent& event)
 {
-#if WXWIN_COMPATIBILITY_2_8
-    // call the old virtual function to keep the code overriding it working
-    return TryValidator(event);
-#else
     wxUnusedVar(event);
     return false;
-#endif
 }
 
 bool wxEvtHandler::TryAfter(wxEvent& event)
@@ -1491,12 +1486,7 @@ bool wxEvtHandler::TryAfter(wxEvent& event)
     if ( event.WillBeProcessedAgain() )
         return false;
 
-#if WXWIN_COMPATIBILITY_2_8
-    // as above, call the old virtual function for compatibility
-    return TryParent(event);
-#else
     return DoTryApp(event);
-#endif
 }
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)

@@ -49,10 +49,6 @@ enum wxLocaleInitFlags
 {
     wxLOCALE_DONT_LOAD_DEFAULT = 0x0000,     // don't load wxwin.mo
     wxLOCALE_LOAD_DEFAULT      = 0x0001      // load wxwin.mo?
-#if WXWIN_COMPATIBILITY_2_8
-   ,wxLOCALE_CONV_ENCODING     = 0x0002      // no longer used, simply remove
-                                             // it from the existing code
-#endif
 };
 
 // NOTE: This class is deprecated, use wxUILocale and wxTranslations instead.
@@ -71,18 +67,11 @@ public:
              const wxString& shortName = wxEmptyString,      // dir prefix (for msg files)
              const wxString& locale = wxEmptyString,     // locale (for setlocale)
              bool bLoadDefault = true                            // preload wxstd.mo?
-#if WXWIN_COMPATIBILITY_2_8
-             ,bool bConvertEncoding = true                      // convert Win<->Unix if necessary?
-#endif
              )
         {
             DoCommonInit();
 
-#if WXWIN_COMPATIBILITY_2_8
-            Init(name, shortName, locale, bLoadDefault, bConvertEncoding);
-#else
             Init(name, shortName, locale, bLoadDefault);
-#endif
         }
 
     wxLocale(int language, // wxLanguage id or custom language
@@ -98,9 +87,6 @@ public:
               const wxString& shortName = wxEmptyString,
               const wxString& locale = wxEmptyString,
               bool bLoadDefault = true
-#if WXWIN_COMPATIBILITY_2_8
-              ,bool bConvertEncoding = true
-#endif
               );
 
         // same as second ctor (returns true on success)

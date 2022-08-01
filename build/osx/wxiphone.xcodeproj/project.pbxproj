@@ -446,7 +446,6 @@
 		A93D0E6F0871368EA8FC9FF9 /* fswatchercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7D2BE094D90D3AFDAE49F589 /* fswatchercmn.cpp */; };
 		AEEE6BC41B6531898A61CB16 /* LexHTML.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D87406BCF3E833369E12D89A /* LexHTML.cxx */; };
 		23CECD8647C037E0B41DF0D4 /* LexA68k.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7020ADB5D3E0375E875B418B /* LexA68k.cxx */; };
-		447FEC72F3C234378CE28DE7 /* effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48D72D20DB1D3E1CA5ED112A /* effects.cpp */; };
 		135DFCE48FC03D8294D01A89 /* xmlrsall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29922DF1D0D63C33A186E783 /* xmlrsall.cpp */; };
 		7B372FEA276438C186F7E340 /* RunStyles.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 7E0DD59CA6F8337C9964F954 /* RunStyles.cxx */; };
 		65E8A5F333D7336C816F0D0C /* variant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31F4B9B03D52339B8F82C114 /* variant.cpp */; };
@@ -1063,7 +1062,6 @@
 		1F6E23CCDC1932BC985EFBD2 /* sckipc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sckipc.cpp; path = ../../src/common/sckipc.cpp; sourceTree = SOURCE_ROOT; };
 		68B81FBDA49D3C1991B6356A /* jdcolor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdcolor.c; path = ../../src/jpeg/jdcolor.c; sourceTree = SOURCE_ROOT; };
 		AECB45CEAC093CE4AB4B7E45 /* nonownedwnd.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = nonownedwnd.mm; path = ../../src/osx/iphone/nonownedwnd.mm; sourceTree = SOURCE_ROOT; };
-		48D72D20DB1D3E1CA5ED112A /* effects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effects.cpp; path = ../../src/common/effects.cpp; sourceTree = SOURCE_ROOT; };
 		8CF560E06F2A3B6088203D09 /* bmpcboxcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpcboxcmn.cpp; path = ../../src/common/bmpcboxcmn.cpp; sourceTree = SOURCE_ROOT; };
 		194ADD28300E329E80F7892E /* htmprint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmprint.cpp; path = ../../src/html/htmprint.cpp; sourceTree = SOURCE_ROOT; };
 		47FF6D792CA234C395692118 /* PlatWX.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PlatWX.cpp; path = ../../src/stc/PlatWX.cpp; sourceTree = SOURCE_ROOT; };
@@ -2386,7 +2384,6 @@
 				AB634FD597793A74B3B3AA7F /* docview.cpp */,
 				A37E3D1FB4FB31AFAE88665A /* dpycmn.cpp */,
 				1197B997B1D139C5AE4D198A /* dseldlg.cpp */,
-				48D72D20DB1D3E1CA5ED112A /* effects.cpp */,
 				EDC7345501033EC3AAD53D5F /* fddlgcmn.cpp */,
 				5A756B733D093B09BE2098A6 /* filectrlcmn.cpp */,
 				D7B3307E56B332769901E99F /* filehistorycmn.cpp */,
@@ -3265,7 +3262,6 @@
 				B1E30CF6CFA932F5A3DBA94F /* docview.cpp in Sources */,
 				F80C2290D67B345F9CF60085 /* dpycmn.cpp in Sources */,
 				6BF19C7CA9E93D989C210FE3 /* dseldlg.cpp in Sources */,
-				447FEC72F3C234378CE28DE7 /* effects.cpp in Sources */,
 				C2E37E798F743A4199C8658E /* fddlgcmn.cpp in Sources */,
 				37715483D08335B790FFE058 /* filectrlcmn.cpp in Sources */,
 				0730A107A2B935A9923C8EF2 /* filehistorycmn.cpp in Sources */,

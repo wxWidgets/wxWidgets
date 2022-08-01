@@ -86,15 +86,15 @@
 #endif
 
 // WXWIN_COMPATIBILITY macros affect presence of virtual functions
-#if WXWIN_COMPATIBILITY_2_8
-    #define __WX_BO_WXWIN_COMPAT_2_8 ",compatible with 2.8"
-#else
-    #define __WX_BO_WXWIN_COMPAT_2_8
-#endif
 #if WXWIN_COMPATIBILITY_3_0
     #define __WX_BO_WXWIN_COMPAT_3_0 ",compatible with 3.0"
 #else
     #define __WX_BO_WXWIN_COMPAT_3_0
+#endif
+#if WXWIN_COMPATIBILITY_3_2
+    #define __WX_BO_WXWIN_COMPAT_3_2 ",compatible with 3.2"
+#else
+    #define __WX_BO_WXWIN_COMPAT_3_2
 #endif
 
 // deriving wxWin containers from STL ones changes them completely:
@@ -110,7 +110,7 @@
     " (" __WX_BO_UNICODE \
      __WX_BO_COMPILER \
      __WX_BO_STL \
-     __WX_BO_WXWIN_COMPAT_2_8 __WX_BO_WXWIN_COMPAT_3_0 \
+     __WX_BO_WXWIN_COMPAT_3_0 __WX_BO_WXWIN_COMPAT_3_2 \
      ")"
 
 

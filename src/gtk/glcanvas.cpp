@@ -93,9 +93,6 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        long style,
                        const wxString& name,
                        const wxPalette& palette)
-#if WXWIN_COMPATIBILITY_2_8
-    : m_createImplicitContext(false)
-#endif
 {
     Create(parent, dispAttrs, id, pos, size, style, name, palette);
 }
@@ -108,63 +105,9 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        long style,
                        const wxString& name,
                        const wxPalette& palette)
-#if WXWIN_COMPATIBILITY_2_8
-    : m_createImplicitContext(false)
-#endif
 {
     Create(parent, id, pos, size, style, name, attribList, palette);
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-    : m_createImplicitContext(true)
-{
-    m_sharedContext = NULL;
-    m_sharedContextOf = NULL;
-
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLContext *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-    : m_createImplicitContext(true)
-{
-    m_sharedContext = const_cast<wxGLContext *>(shared);
-
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLCanvas *shared,
-                       wxWindowID id,
-                       const wxPoint& pos, const wxSize& size,
-                       long style, const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette )
-    : m_createImplicitContext(true)
-{
-    m_sharedContext = NULL;
-    m_sharedContextOf = const_cast<wxGLCanvas *>(shared);
-
-    Create(parent, id, pos, size, style, name, attribList, palette);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 static bool IsAvailable()
 {
@@ -281,29 +224,10 @@ void wxGLCanvas::GTKHandleRealized()
 {
     BaseType::GTKHandleRealized();
 
-#if WXWIN_COMPATIBILITY_2_8
-    GTKInitImplicitContext();
-#endif
 #if wxUSE_GLCANVAS_EGL
     CreateSurface();
 #endif
     SendSizeEvent();
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-void wxGLCanvas::GTKInitImplicitContext()
-{
-    if ( !m_glContext && m_createImplicitContext )
-    {
-        wxGLContext *share = m_sharedContext;
-        if ( !share && m_sharedContextOf )
-            share = m_sharedContextOf->m_glContext;
-
-        m_glContext = new wxGLContext(this, share);
-    }
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // wxUSE_GLCANVAS
