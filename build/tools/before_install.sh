@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# This script is used by GitHub to install the dependencies
+# This script is used by CI jobs to install the dependencies
 # before building wxWidgets but can also be run by hand if necessary (but
-# currently it only works for Ubuntu versions used by the CI builds).
+# currently it only works for the OS versions used by the CI builds).
 
 set -e
 
@@ -10,6 +10,7 @@ SUDO=sudo
 
 case $(uname -s) in
     Linux)
+        # Debian/Ubuntu
         if [ -f /etc/apt/sources.list ]; then
             # Show information about the repositories and priorities used.
             echo 'APT sources used:'
@@ -106,6 +107,10 @@ case $(uname -s) in
             else
                 touch wx_dbgsym_available
             fi
+        fi
+
+        if [ -f /etc/redhat-release ]; then
+            dnf install -y expat-devel findutils g++ git-core gstreamer1-plugins-base-devel gtk3-devel make libGLU-devel libjpeg-devel libpng-devel libSM-devel libtiff-devel SDL-devel webkit2gtk3-devel zlib-devel
         fi
         ;;
 
