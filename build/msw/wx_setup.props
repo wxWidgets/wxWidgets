@@ -121,9 +121,6 @@
     <BuildMacro Include="wxIntRootDir">
       <Value>$(wxIntRootDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="wxIntRootDir">
-      <Value>$(wxIntRootDir)</Value>
-    </BuildMacro>
     <BuildMacro Include="wxReleaseRuntimeLibrary">
       <Value>$(wxReleaseRuntimeLibrary)</Value>
     </BuildMacro>
