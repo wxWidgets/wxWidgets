@@ -113,7 +113,7 @@ case $(uname -s) in
         fi
 
         if [ -f /etc/redhat-release ]; then
-            dnf install -y ${WX_EXTRA_PACKAGES} expat-devel findutils g++ git-core gstreamer1-plugins-base-devel gtk3-devel make libGLU-devel libjpeg-devel libpng-devel libSM-devel libtiff-devel SDL-devel webkit2gtk3-devel zlib-devel
+            dnf install -y ${WX_EXTRA_PACKAGES} expat-devel findutils g++ git-core gspell-devel gstreamer1-plugins-base-devel gtk3-devel make libcurl-devel libGLU-devel libjpeg-devel libnotify-devel libpng-devel libSM-devel libsecret-devel libtiff-devel SDL-devel webkit2gtk3-devel zlib-devel
         fi
         ;;
 
