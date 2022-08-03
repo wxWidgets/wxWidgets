@@ -24,7 +24,9 @@ jobs:
             wxPROC_COUNT=2
             echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $BASH_ENV
 
-            WX_EXTRA_PACKAGES=ccache ./build/tools/before_install.sh
+            # Get langpacks to run the tests using the corresponding locales.
+            export WX_EXTRA_PACKAGES='ccache langpacks-core-de langpacks-core-en langpacks-core-fr langpacks-core-sv'
+            ./build/tools/before_install.sh
 
             echo "PATH=/usr/lib64/ccache:$PATH" >> $BASH_ENV
 
