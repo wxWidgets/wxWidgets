@@ -519,6 +519,15 @@ public:
         const size_t idx = it - begin();
         const size_t after = end() - it;
 
+        // Unfortunately gcc 12 still complains about use-after-free even
+        // though our code is correct because it actually optimizes it to be
+        // wrong, with -O2 or higher, by moving the assignment above below the
+        // call to reserve() below, so use this hack to avoid the warning with
+        // it by preventing it from rearranging the code.
+#if wxCHECK_GCC_VERSION(12, 1)
+        __asm__ __volatile__("":::"memory");
+#endif
+
         reserve(size() + count);
 
         // the place where the new element is going to be inserted
