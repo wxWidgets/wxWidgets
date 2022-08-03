@@ -1465,12 +1465,21 @@ enum wxBorder
     Elements of these enums can be combined with each other when using
     wxSizer::Add() overload not using wxSizerFlags.
  */
+wxALLOW_COMBINING_ENUMS(wxAlignment, wxBorder)
 wxALLOW_COMBINING_ENUMS(wxAlignment, wxDirection)
 wxALLOW_COMBINING_ENUMS(wxAlignment, wxGeometryCentre)
+wxALLOW_COMBINING_ENUMS(wxAlignment, wxSizerFlagBits)
 wxALLOW_COMBINING_ENUMS(wxAlignment, wxStretch)
-wxALLOW_COMBINING_ENUMS(wxAlignment, wxBorder)
-wxALLOW_COMBINING_ENUMS(wxDirection, wxStretch)
+wxALLOW_COMBINING_ENUMS(wxBorder, wxDirection)
+wxALLOW_COMBINING_ENUMS(wxBorder, wxGeometryCentre)
+wxALLOW_COMBINING_ENUMS(wxBorder, wxSizerFlagBits)
+wxALLOW_COMBINING_ENUMS(wxBorder, wxStretch)
 wxALLOW_COMBINING_ENUMS(wxDirection, wxGeometryCentre)
+wxALLOW_COMBINING_ENUMS(wxDirection, wxStretch)
+wxALLOW_COMBINING_ENUMS(wxDirection, wxSizerFlagBits)
+wxALLOW_COMBINING_ENUMS(wxGeometryCentre, wxSizerFlagBits)
+wxALLOW_COMBINING_ENUMS(wxGeometryCentre, wxStretch)
+wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 
 /*  ---------------------------------------------------------------------------- */
 /*  Window style flags */
