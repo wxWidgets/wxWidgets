@@ -989,6 +989,7 @@ public:
 
         See also the at() and the substr() STL-like functions.
     */
+    ///@{
 
     /**
         Returns a substring starting at @e first, with length @e count, or the rest of
