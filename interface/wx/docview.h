@@ -1720,7 +1720,7 @@ protected:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 
 /**
     Copies the given file to @a stream. Useful when converting an old
@@ -1742,5 +1742,5 @@ bool wxTransferFileToStream(const wxString& filename,
 bool wxTransferStreamToFile(istream& stream,
                              const wxString& filename);
 
-//@}
+///@}
 

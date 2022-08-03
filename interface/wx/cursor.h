@@ -250,10 +250,10 @@ public:
 
     @see wxStockCursor
 */
-//@{
+///@{
 wxCursor wxNullCursor;
 wxCursor* wxSTANDARD_CURSOR;
 wxCursor* wxHOURGLASS_CURSOR;
 wxCursor* wxCROSS_CURSOR;
-//@}
+///@}
 

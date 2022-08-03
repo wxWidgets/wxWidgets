@@ -138,7 +138,7 @@ wxEventType wxEVT_COLOUR_CHANGED;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Shows the colour selection dialog and returns the colour selected by user
@@ -163,5 +163,5 @@ wxColour wxGetColourFromUser(wxWindow* parent,
                              const wxString& caption = wxEmptyString,
                              wxColourData* data = NULL);
 
-//@}
+///@}
 

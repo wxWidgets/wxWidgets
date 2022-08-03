@@ -1357,7 +1357,7 @@ enum wxUpdateUI
     wxINTn_MAX and @c wxUINTc_MAX (@c wxUINTc_MIN is always 0 and so is not
     defined).
  */
-//@{
+///@{
 #define wxINT8_MIN CHAR_MIN
 #define wxINT8_MAX CHAR_MAX
 #define wxUINT8_MAX UCHAR_MAX
@@ -1373,7 +1373,7 @@ enum wxUpdateUI
 #define wxINT64_MIN LLONG_MIN
 #define wxINT64_MAX LLONG_MAX
 #define wxUINT64_MAX ULLONG_MAX
-//@}
+///@}
 
 // ----------------------------------------------------------------------------
 // types
@@ -1385,36 +1385,36 @@ typedef int wxCoord;
 /** A special value meaning "use default coordinate". */
 wxCoord wxDefaultCoord = -1;
 
-//@{
+///@{
 /** 8 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
 typedef signed char wxInt8;
 typedef unsigned char wxUint8;
 typedef wxUint8 wxByte;
-//@}
+///@}
 
-//@{
+///@{
 /** 16 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
 typedef signed short wxInt16;
 typedef unsigned short wxUint16;
 typedef wxUint16 wxWord;
 typedef wxUint16 wxChar16;
-//@}
+///@}
 
-//@{
+///@{
 /** 32 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
 typedef int wxInt32;
 typedef unsigned int wxUint32;
 typedef wxUint32 wxDword;
 typedef wxUint32 wxChar32;
-//@}
+///@}
 
-//@{
+///@{
 /** 64 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
 typedef wxLongLong_t wxInt64;
 typedef wxULongLong_t wxUint64;
-//@}
+///@}
 
-//@{
+///@{
 /**
     Signed and unsigned integral types big enough to contain all of @c long,
     @c size_t and @c void*.
@@ -1422,7 +1422,7 @@ typedef wxULongLong_t wxUint64;
 */
 typedef ssize_t wxIntPtr;
 typedef size_t wxUIntPtr;
-//@}
+///@}
 
 
 /**
@@ -1453,7 +1453,7 @@ typedef double wxDouble;
 
 
 /** @addtogroup group_funcmacro_byteorder */
-//@{
+///@{
 
 /**
     This macro will swap the bytes of the @a value variable from little endian
@@ -1467,10 +1467,10 @@ typedef double wxDouble;
 #define wxINT16_SWAP_ALWAYS( wxInt16_value )
 #define wxUINT16_SWAP_ALWAYS( wxUint16_value )
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_byteorder */
-//@{
+///@{
 
 /**
     This macro will swap the bytes of the @a value variable from little endian
@@ -1488,10 +1488,10 @@ typedef double wxDouble;
 #define wxINT16_SWAP_ON_BE( wxInt16_value )
 #define wxUINT16_SWAP_ON_BE( wxUint16_value )
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_byteorder */
-//@{
+///@{
 
 /**
     This macro will swap the bytes of the @a value variable from little endian
@@ -1509,12 +1509,12 @@ typedef double wxDouble;
 #define wxINT16_SWAP_ON_LE( wxInt16_value )
 #define wxUINT16_SWAP_ON_LE( wxUint16_value )
 
-//@}
+///@}
 
 
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Returns @true if the compiler being used supports the given C++ version.
@@ -1894,6 +1894,6 @@ template <typename T> void wxSwap(T& first, T& second);
 */
 void wxVaCopy(va_list argptrDst, va_list argptrSrc);
 
-//@}
+///@}
 
 

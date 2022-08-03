@@ -205,7 +205,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pop up a dialog box with title set to @e caption, @c message, and a
@@ -246,5 +246,5 @@ wxString wxGetPasswordFromUser(const wxString& message,
                                int y = wxDefaultCoord,
                                bool centre = true);
 
-//@}
+///@}
 

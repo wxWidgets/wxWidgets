@@ -672,7 +672,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_rtti */
-//@{
+///@{
 
 /**
     Returns a pointer to the wxClassInfo object associated with this class.
@@ -896,10 +896,10 @@ public:
 */
 wxObject *wxCreateDynamicObject(const wxString& className);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     This is defined in debug mode to be call the redefined new operator
@@ -915,5 +915,5 @@ wxObject *wxCreateDynamicObject(const wxString& className);
 */
 #define WXDEBUG_NEW( arg )
 
-//@}
+///@}
 

@@ -11,7 +11,7 @@
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Elements of this enum specify the possible behaviours of wxBase64Decode
@@ -187,5 +187,5 @@ wxMemoryBuffer wxBase64Decode(const wxString& src,
                               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
                               size_t *posErr = NULL);
 
-//@}
+///@}
 

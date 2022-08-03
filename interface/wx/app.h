@@ -1172,7 +1172,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_rtti */
-//@{
+///@{
 
 /**
     This is used in headers to create a forward declaration of the ::wxGetApp()
@@ -1277,7 +1277,7 @@ public:
  */
 #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 
-//@}
+///@}
 
 
 
@@ -1293,7 +1293,7 @@ wxApp *wxTheApp;
 
 
 /** @addtogroup group_funcmacro_appinitterm */
-//@{
+///@{
 
 /**
     This function doesn't exist in wxWidgets but it is created by using the
@@ -1426,12 +1426,12 @@ int wxEntry(HINSTANCE hInstance,
             char* pCmdLine = NULL,
             int nCmdShow = SW_SHOWNORMAL);
 
-//@}
+///@}
 
 
 
 /** @addtogroup group_funcmacro_procctrl */
-//@{
+///@{
 
 /**
     Exits application after calling wxApp::OnExit.
@@ -1444,10 +1444,10 @@ int wxEntry(HINSTANCE hInstance,
 */
 void wxExit();
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     @def wxDISABLE_DEBUG_SUPPORT()
@@ -1478,5 +1478,5 @@ void wxExit();
     wxDISABLE_ASSERTS_IN_RELEASE_BUILD(); \
     wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
-//@}
+///@}
 

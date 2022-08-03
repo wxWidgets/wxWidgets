@@ -1721,7 +1721,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_thread */
-//@{
+///@{
 
 /**
     This macro declares a (static) critical section object named @a cs if
@@ -1849,5 +1849,5 @@ void wxMutexGuiEnter();
 */
 void wxMutexGuiLeave();
 
-//@}
+///@}
 

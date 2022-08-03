@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_time */
-//@{
+///@{
 
 /**
     Returns the difference between UTC and local time in seconds.
@@ -69,4 +69,4 @@ wxLongLong wxGetUTCTimeMillis();
  */
 wxLongLong wxGetUTCTimeUSec();
 
-//@}
+///@}

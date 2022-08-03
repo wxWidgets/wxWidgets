@@ -4327,7 +4327,7 @@ protected:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Find the deepest window at the mouse pointer position, returning the window
@@ -4372,5 +4372,5 @@ wxWindow* wxGetTopLevelParent(wxWindow* window);
  */
 wxString wxDumpWindow(const wxWindow* window);
 
-//@}
+///@}
 

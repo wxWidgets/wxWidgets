@@ -7,7 +7,7 @@
 
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 /**
     This macro returns the concatenation of the arguments passed. Unlike when
     using the preprocessor operator, the arguments undergo macro expansion
@@ -19,10 +19,10 @@
 #define wxCONCAT3(x1, x2, x3)
 #define wxCONCAT4(x1, x2, x3, x4)
 #define wxCONCAT5(x1, x2, x3, x4, x5)
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Returns the string representation of the given symbol which can be either a
@@ -56,5 +56,5 @@
 */
 #define __WXFUNCTION__
 
-//@}
+///@}
 

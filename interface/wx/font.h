@@ -1416,7 +1416,7 @@ wxFontList* wxTheFontList;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Converts string to a wxFont best represented by the given string. Returns
@@ -1437,5 +1437,5 @@ bool wxFromString(const wxString& string, wxFont* font);
 */
 wxString wxToString(const wxFont& font);
 
-//@}
+///@}
 

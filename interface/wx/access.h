@@ -232,7 +232,7 @@ enum wxAccSelectionFlags
     wxACC_SEL_REMOVESELECTION = 16
 };
 
-//@{
+///@{
 /**
     Represents a status of the system.
 */
@@ -262,9 +262,9 @@ enum wxAccSelectionFlags
 #define wxACC_STATE_SYSTEM_SELECTED         0x00800000
 #define wxACC_STATE_SYSTEM_SELFVOICING      0x01000000
 #define wxACC_STATE_SYSTEM_UNAVAILABLE      0x02000000
-//@}
+///@}
 
-//@{
+///@{
 /**
     An event identifier that can be sent via wxAccessible::NotifyEvent.
 */
@@ -310,7 +310,7 @@ enum wxAccSelectionFlags
 #define wxACC_EVENT_OBJECT_HELPCHANGE             0x8010
 #define wxACC_EVENT_OBJECT_DEFACTIONCHANGE        0x8011
 #define wxACC_EVENT_OBJECT_ACCELERATORCHANGE      0x8012
-//@}
+///@}
 
 /**
     @class wxAccessible

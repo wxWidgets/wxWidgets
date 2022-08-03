@@ -81,7 +81,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Shows the font selection dialog and returns the font selected by user or
@@ -101,5 +101,5 @@ wxFont wxGetFontFromUser(wxWindow* parent,
                          const wxFont& fontInit,
                          const wxString& caption = wxEmptyString);
 
-//@}
+///@}
 

@@ -1921,7 +1921,7 @@ public:
 
 
 
-//@{
+///@{
 /**
     Comparison operator for string types.
 */
@@ -1943,9 +1943,9 @@ inline bool operator==(const wxString& s1, const wxCharBuffer& s2);
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2);
 inline bool operator!=(const wxString& s1, const wxCharBuffer& s2);
 inline bool operator!=(const wxCharBuffer& s1, const wxString& s2);
-//@}
+///@}
 
-//@{
+///@{
 /**
     Comparison operators char types.
 */
@@ -1967,7 +1967,7 @@ inline bool operator!=(const wxString& s, const wxUniChar& c);
 inline bool operator!=(const wxString& s, const wxUniCharRef& c);
 inline bool operator!=(const wxString& s, char c);
 inline bool operator!=(const wxString& s, wchar_t c);
-//@}
+///@}
 
 /**
     The global wxString instance of an empty string.
@@ -2099,7 +2099,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     Allows extending a function with the signature:
@@ -2131,4 +2131,4 @@ template<bool (T)(const wxUniChar& c)>
  */
 wxString wxASCII_STR(const char* s);
 
-//@}
+///@}

@@ -263,7 +263,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Same as wxGetSingleChoice() but returns the index representing the
@@ -310,10 +310,10 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int n, const wxString *choices,
                            int initialSelection,
                            wxWindow *parent = NULL);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pops up a dialog box containing a message, OK/Cancel buttons and a
@@ -370,10 +370,10 @@ wxString wxGetSingleChoice(const wxString& message,
                            int initialSelection,
                            wxWindow *parent = NULL);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Same as wxGetSingleChoice but takes an array of client data pointers
@@ -426,10 +426,10 @@ void* wxGetSingleChoiceData(const wxString& message,
                             int initialSelection,
                             wxWindow *parent = NULL);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pops up a dialog box containing a message, OK/Cancel buttons and a
@@ -477,5 +477,5 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int width = wxCHOICE_WIDTH,
                             int height = wxCHOICE_HEIGHT);
 
-//@}
+///@}
 

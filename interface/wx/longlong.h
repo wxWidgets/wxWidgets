@@ -329,7 +329,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     This macro is defined to contain the @c printf() format specifier using
@@ -381,5 +381,5 @@ wxLongLong_t wxLL(number);
 */
 wxLongLong_t wxULL(number);
 
-//@}
+///@}
 

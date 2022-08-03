@@ -65,7 +65,7 @@ enum wxStockLabelQueryFlag
 };
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Returns label that should be used for given @a id element.
@@ -79,5 +79,5 @@ enum wxStockLabelQueryFlag
 */
 wxString wxGetStockLabel(wxWindowID id, long flags = wxSTOCK_WITH_MNEMONIC);
 
-//@}
+///@}
 

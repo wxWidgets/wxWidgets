@@ -665,7 +665,7 @@ public:
 */
 #define WX_CLEAR_ARRAY(wxArray_arrayToBeCleared)
 
-//@{
+///@{
 /**
     This macro declares a new object array class named @a name and containing
     the elements of type @e T.
@@ -687,9 +687,9 @@ public:
 #define WX_DECLARE_OBJARRAY(T, name)
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)
 #define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode)
-//@}
+///@}
 
-//@{
+///@{
 /**
     This macro defines a new array class named @a name and containing the
     elements of type @a T.
@@ -714,9 +714,9 @@ public:
 #define WX_DEFINE_ARRAY(T, name)
 #define WX_DEFINE_EXPORTED_ARRAY(T, name)
 #define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, exportspec)
-//@}
+///@}
 
-//@{
+///@{
 /**
     This macro defines the methods of the array class @a name not defined by
     the WX_DECLARE_OBJARRAY() macro. You must include the file
@@ -752,9 +752,9 @@ public:
 #define WX_DEFINE_OBJARRAY(name)
 #define WX_DEFINE_EXPORTED_OBJARRAY(name)
 #define WX_DEFINE_USER_EXPORTED_OBJARRAY(name)
-//@}
+///@}
 
-//@{
+///@{
 /**
     This macro defines a new sorted array class named @a name and containing
     the elements of type @e T.
@@ -795,7 +795,7 @@ public:
 #define WX_DEFINE_SORTED_ARRAY(T, name)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, expmode)
-//@}
+///@}
 
 /**
     This macro may be used to prepend all elements of the @a wxArray_arrayToBePrepended
@@ -803,7 +803,7 @@ public:
 */
 #define WX_PREPEND_ARRAY(wxArray_arrayToModify, wxArray_arrayToBePrepended)
 
-//@{
+///@{
 /**
     Predefined specialization of wxArray<T> for standard types.
 */
@@ -812,4 +812,4 @@ typedef wxArray<long> wxArrayLong;
 typedef wxArray<short> wxArrayShort;
 typedef wxArray<double> wxArrayDouble;
 typedef wxArray<void*> wxArrayPtrVoid;
-//@}
+///@}

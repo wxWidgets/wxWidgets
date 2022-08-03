@@ -1115,7 +1115,7 @@ const wxSize wxDefaultSize;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 
 /**
     This macro loads a bitmap from either application resources (on the
@@ -1239,10 +1239,10 @@ int wxDisplayDepth();
 */
 void wxSetCursor(const wxCursor& cursor);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the dimensions of the work area on the display.
 
@@ -1257,10 +1257,10 @@ void wxSetCursor(const wxCursor& cursor);
     @header{wx/gdicmn.h}
 */
 void wxClientDisplayRect(int* x, int* y, int* width, int* height);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the dimensions of the work area on the display. On Windows this
     means the area not covered by the taskbar, etc. Other platforms are
@@ -1272,10 +1272,10 @@ void wxClientDisplayRect(int* x, int* y, int* width, int* height);
     @header{wx/gdicmn.h}
 */
 wxRect wxGetClientDisplayRect();
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display resolution in pixels per inch.
 
@@ -1293,10 +1293,10 @@ wxRect wxGetClientDisplayRect();
     @since 2.9.0
 */
 wxSize wxGetDisplayPPI();
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in pixels.
 
@@ -1312,10 +1312,10 @@ wxSize wxGetDisplayPPI();
     @header{wx/gdicmn.h}
 */
 void wxDisplaySize(int* width, int* height);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in pixels.
 
@@ -1328,10 +1328,10 @@ void wxDisplaySize(int* width, int* height);
     @header{wx/gdicmn.h}
 */
 wxSize wxGetDisplaySize();
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in millimeters.
 
@@ -1343,10 +1343,10 @@ wxSize wxGetDisplaySize();
     @header{wx/gdicmn.h}
 */
 void wxDisplaySizeMM(int* width, int* height);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in millimeters.
 
@@ -1355,4 +1355,4 @@ void wxDisplaySizeMM(int* width, int* height);
     @header{wx/gdicmn.h}
 */
 wxSize wxGetDisplaySizeMM();
-//@}
+///@}

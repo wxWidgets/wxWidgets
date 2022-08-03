@@ -11,7 +11,7 @@
 // ============================================================================
 
 /** @addtogroup group_funcmacro_atomic */
-//@{
+///@{
 
 /**
     This function increments @a value in an atomic manner.
@@ -44,5 +44,5 @@ wxInt32 wxAtomicInc(wxAtomicInt& value);
 */
 wxInt32 wxAtomicDec(wxAtomicInt& value);
 
-//@}
+///@}
 

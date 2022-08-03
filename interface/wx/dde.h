@@ -323,7 +323,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Called when wxWidgets exits, to clean up the DDE system. This no longer
@@ -347,5 +347,5 @@ void wxDDECleanUp();
 */
 void wxDDEInitialize();
 
-//@}
+///@}
 

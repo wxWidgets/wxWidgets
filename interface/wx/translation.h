@@ -444,7 +444,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     This macro is identical to _() but for the plural variant of
@@ -617,5 +617,5 @@ const wxString& wxGetTranslation(const wxString& string,
 */
 const wxString& _(const wxString& string);
 
-//@}
+///@}
 

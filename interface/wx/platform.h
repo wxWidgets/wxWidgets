@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_version */
-//@{
+///@{
 
 /**
     Returns @true if the compiler being used is GNU C++ and its version is
@@ -41,5 +41,5 @@
 */
 #define wxCHECK_W32API_VERSION( major, minor )
 
-//@}
+///@}
 

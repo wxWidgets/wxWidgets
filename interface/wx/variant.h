@@ -680,7 +680,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_rtti */
-//@{
+///@{
 
 /**
     This macro returns a pointer to the data stored in @a var (wxVariant) cast
@@ -693,5 +693,5 @@ public:
 */
 #define wxGetVariantCast(var, classname)
 
-//@}
+///@}
 

@@ -498,7 +498,7 @@ int wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
 // ============================================================================
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     Splits the given wxString object using the separator @a sep and returns the
@@ -543,5 +543,5 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
 wxString wxJoin(const wxArrayString& arr, const wxChar sep,
                 const wxChar escape = '\\');
 
-//@}
+///@}
 

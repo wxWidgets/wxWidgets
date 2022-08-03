@@ -484,7 +484,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pops up a file selector box. In Windows, this is the common file selector
@@ -575,5 +575,5 @@ wxString wxSaveFileSelector(const wxString& what,
                             const wxString& default_name = wxEmptyString,
                             wxWindow *parent = NULL);
 
-//@}
+///@}
 

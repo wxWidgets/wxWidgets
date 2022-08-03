@@ -167,7 +167,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 
 /**
     @deprecated Use one of the wxLogTrace() functions or one of the
@@ -219,5 +219,5 @@ void wxTrace(const wxString& format, ...);
 */
 void wxTraceLevel(int level, const wxString& format, ...);
 
-//@}
+///@}
 

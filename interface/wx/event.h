@@ -4919,7 +4919,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_events */
-//@{
+///@{
 
 #if wxUSE_BASE
 
@@ -5262,4 +5262,4 @@ wxEventType wxEVT_WINDOW_MODAL_DIALOG_CLOSED;
 
 #endif // wxUSE_GUI
 
-//@}
+///@}

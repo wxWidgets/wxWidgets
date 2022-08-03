@@ -101,7 +101,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 
 /**
     A special return value of many wxWidgets classes to indicate that
@@ -490,10 +490,10 @@ enum wxFileKind
     wxFILE_KIND_PIPE      ///< A pipe
 };
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 /**
     Returns the type of an open file. Possible return values are enumerations
     of ::wxFileKind.
@@ -502,10 +502,10 @@ enum wxFileKind
 */
 wxFileKind wxGetFileKind(int fd);
 wxFileKind wxGetFileKind(FILE* fp);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 /**
     @deprecated
         This function is obsolete, please use wxFileName::SplitPath() instead.
@@ -517,10 +517,10 @@ wxFileKind wxGetFileKind(FILE* fp);
 */
 wxString wxFileNameFromPath(const wxString& path);
 char* wxFileNameFromPath(char* path);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 /**
     @deprecated
         This function is obsolete, please use wxFileName::CreateTempFileName() instead.
@@ -529,5 +529,5 @@ char* wxFileNameFromPath(char* path);
 */
 char* wxGetTempFileName(const wxString& prefix, char* buf = NULL);
 bool wxGetTempFileName(const wxString& prefix, wxString& buf);
-//@}
+///@}
 

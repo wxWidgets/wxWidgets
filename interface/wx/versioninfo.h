@@ -145,4 +145,4 @@ public:
     const wxString& GetCopyright() const;
 };
 
-//@}
+///@}

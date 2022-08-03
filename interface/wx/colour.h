@@ -10,14 +10,14 @@
 /**
     Flags for wxColour -> wxString conversion (see wxColour::GetAsString).
 */
-//@{
+///@{
 enum {
     wxC2S_NAME             = 1,   // return colour name, when possible
     wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
     wxC2S_HTML_SYNTAX      = 4    // return colour in #rrggbb syntax
 };
 
-//@}
+///@}
 
 const unsigned char wxALPHA_TRANSPARENT = 0;
 const unsigned char wxALPHA_OPAQUE = 0xff;
@@ -356,7 +356,7 @@ public:
 
 
 /** @name Predefined colors. */
-//@{
+///@{
 wxColour wxNullColour;
 wxColour wxTransparentColour;
 wxColour* wxBLACK;
@@ -367,7 +367,7 @@ wxColour* wxYELLOW;
 wxColour* wxLIGHT_GREY;
 wxColour* wxRED;
 wxColour* wxWHITE;
-//@}
+///@}
 
 
 
@@ -376,7 +376,7 @@ wxColour* wxWHITE;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Converts string to a wxColour best represented by the given string. Returns
@@ -397,5 +397,5 @@ bool wxFromString(const wxString& string, wxColour* colour);
 */
 wxString wxToString(const wxColour& colour);
 
-//@}
+///@}
 

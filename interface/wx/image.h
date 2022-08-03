@@ -2134,7 +2134,7 @@ wxImage wxNullImage;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_appinitterm */
-//@{
+///@{
 
 /**
     Initializes all available image handlers.
@@ -2152,5 +2152,5 @@ wxImage wxNullImage;
 */
 void wxInitAllImageHandlers();
 
-//@}
+///@}
 

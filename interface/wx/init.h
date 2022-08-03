@@ -41,7 +41,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_appinitterm */
-//@{
+///@{
 
 /**
     This function can be used to perform the initialization of wxWidgets if you
@@ -106,5 +106,5 @@ bool wxInitialize(int argc = 0, wxChar **argv = NULL);
 */
 void wxUninitialize();
 
-//@}
+///@}
 
