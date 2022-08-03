@@ -114,7 +114,8 @@ void ListsTestCase::wxStdListTest()
     wxListInt list1;
     wxListInt::iterator it, en;
     wxListInt::reverse_iterator rit, ren;
-    int i;
+    int buf[4];
+    int& i = buf[0];
     for ( i = 0; i < 5; ++i )
         list1.push_back(i + &i);
 
