@@ -776,7 +776,6 @@ GUI_CMN_SRC =
     src/common/docview.cpp
     src/common/dpycmn.cpp
     src/common/dseldlg.cpp
-    src/common/effects.cpp
     src/common/fddlgcmn.cpp
     src/common/filectrlcmn.cpp
     src/common/filehistorycmn.cpp
@@ -1012,7 +1011,6 @@ GUI_CMN_HDR =
     wx/dragimag.h
     wx/dvrenderers.h
     wx/editlbox.h
-    wx/effects.h
     wx/encinfo.h
     wx/fdrepdlg.h
     wx/filectrl.h
