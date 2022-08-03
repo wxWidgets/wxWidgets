@@ -48,9 +48,20 @@ jobs:
           command: ./configure --disable-debug-info
 
       - run:
-          name: Build
+          name: Build libraries
           command: |
             make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp'
+
+      - run:
+          name: Build tests
+          command: |
+            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp' -C tests
+
+      - run:
+          name: Run tests
+          command: |
+            cd tests
+            WX_TEST_WEBREQUEST_URL="0" ./test
 
       - run:
           name: Show ccache statistics
