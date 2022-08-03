@@ -6,12 +6,16 @@ jobs:
     docker:
       - image: fedora
     steps:
+      - run:
+          name: Install Git
+          command: dnf install -y git
+
       - checkout
 
       - run:
           name: Install dependencies
           command: |
-            WX_EXTRA_PACKAGES='ccache git' ./build/tools/before_install.sh
+            WX_EXTRA_PACKAGES=ccache ./build/tools/before_install.sh
 
             echo "PATH=/usr/lib64/ccache:$PATH" >> $BASH_ENV
 
