@@ -11,8 +11,17 @@ INCOMPATIBLE CHANGES SINCE 3.2.x:
 Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
+- As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
+  used by wxThread::Delete() and Wait() by default, has changed from
+  wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.
+
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
+
+- Symbols deprecated in 3.0 are still available in this version but disabled by
+  default, you need to set WXWIN_COMPATIBILITY_3_0 to 1 to enable them. Symbols
+  deprecated in 2.8 are not available any longer.
 
 
 3.3.0: (released 2022-??-??)

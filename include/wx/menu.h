@@ -566,14 +566,6 @@ public:
     const wxMenuInfoHelperList& GetMenuInfos() const;
 #endif
 
-#if WXWIN_COMPATIBILITY_2_8
-    // get or change the label of the menu at given position
-    // Deprecated in favour of SetMenuLabel
-    wxDEPRECATED( void SetLabelTop(size_t pos, const wxString& label) );
-    // Deprecated in favour of GetMenuLabelText
-    wxDEPRECATED( wxString GetLabelTop(size_t pos) const );
-#endif
-
 protected:
     // the list of all our menus
     wxMenuList m_menus;

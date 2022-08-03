@@ -88,44 +88,6 @@ void wxDragImage::Init()
     m_fullScreen = false;
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-wxDragImage::wxDragImage(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-
-    Create(image, cursor);
-}
-
-wxDragImage::wxDragImage(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-
-    Create(image, cursor);
-}
-
-wxDragImage::wxDragImage(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-
-    Create(str, cursor);
-}
-
-bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(image, cursor);
-}
-
-bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(image, cursor);
-}
-
-bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(str, cursor);
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // Attributes
 ////////////////////////////////////////////////////////////////////////////
 

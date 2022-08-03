@@ -112,10 +112,6 @@ public:
     const wxString      m_strHint;
 #endif // WXWIN_COMPATIBILITY_3_0
 
-#if wxPG_COMPATIBILITY_1_4
-    wxPGCachedString    m_strInlineHelp;
-#endif
-
     // If true then some things are automatically translated
     bool                m_autoGetTranslation;
 
@@ -212,12 +208,6 @@ wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
                          wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER
 };
 
-#if wxPG_COMPATIBILITY_1_4
-    // In wxPG 1.4 this was used to enable now-default theme border support
-    // in wxPropertyGridManager.
-    #define wxPG_THEME_BORDER           0x00000000
-#endif
-
 
 // NOTE: wxPG_EX_xxx are extra window styles and must be set using
 // SetExtraStyle() member function.
@@ -311,10 +301,6 @@ wxPG_EX_WINDOW_PGMAN_STYLE_MASK = wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|w
 // A mask which can be used to filter (out) all extra styles.
 wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_WINDOW_PG_STYLE_MASK|wxPG_EX_WINDOW_PGMAN_STYLE_MASK
 };
-
-#if wxPG_COMPATIBILITY_1_4
-    #define wxPG_EX_DISABLE_TLP_TRACKING    0x00000000
-#endif
 
 // Combines various styles.
 #define wxPG_DEFAULT_STYLE          (0)

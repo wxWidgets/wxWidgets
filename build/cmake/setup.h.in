@@ -130,9 +130,9 @@
 #endif
 
 
-#cmakedefine01 WXWIN_COMPATIBILITY_2_8
-
 #cmakedefine01 WXWIN_COMPATIBILITY_3_0
+
+#cmakedefine01 WXWIN_COMPATIBILITY_3_2
 
 #cmakedefine01 wxDIALOG_UNIT_COMPATIBILITY
 

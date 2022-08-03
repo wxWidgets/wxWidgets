@@ -584,10 +584,6 @@ public:
         return begin() + idx;
     }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( size_type erase(size_type n) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
 private:
     static const size_type ALLOC_INITIAL_SIZE = 16;
 
@@ -648,16 +644,6 @@ private:
               m_capacity;
     value_type *m_values;
 };
-
-#if WXWIN_COMPATIBILITY_2_8
-template<typename T>
-inline typename wxVector<T>::size_type wxVector<T>::erase(size_type n)
-{
-    erase(begin() + n);
-    return n;
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 
 
 namespace wxPrivate
@@ -720,11 +706,5 @@ inline void wxShrinkToFit(wxVector<T>& v)
     v.swap(tmp);
 #endif
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-    #define WX_DECLARE_VECTORBASE(obj, cls) typedef wxVector<obj> cls
-    #define _WX_DECLARE_VECTOR(obj, cls, exp) WX_DECLARE_VECTORBASE(obj, cls)
-    #define WX_DECLARE_VECTOR(obj, cls) WX_DECLARE_VECTORBASE(obj, cls)
-#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // _WX_VECTOR_H_

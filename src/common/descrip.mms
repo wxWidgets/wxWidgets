@@ -232,7 +232,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
-	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
+        dynload.obj,fddlgcmn.obj,fs_mem.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
 	combocmn.obj,cairo.obj
@@ -411,7 +411,6 @@ SOURCES = \
 		dpycmn.cpp,\
 		dseldlg.cpp,\
 		dynload.cpp,\
-		effects.cpp,\
 		fddlgcmn.cpp,\
 		fs_mem.cpp,\
 		gbsizer.cpp,\
@@ -648,7 +647,6 @@ dndcmn.obj : dndcmn.cpp
 dpycmn.obj : dpycmn.cpp
 dseldlg.obj : dseldlg.cpp
 dynload.obj : dynload.cpp
-effects.obj : effects.cpp
 fddlgcmn.obj : fddlgcmn.cpp
 fs_mem.obj : fs_mem.cpp
 gbsizer.obj : gbsizer.cpp

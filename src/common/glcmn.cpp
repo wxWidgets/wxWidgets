@@ -67,10 +67,6 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
 
 wxGLCanvasBase::wxGLCanvasBase()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    m_glContext = NULL;
-#endif
-
     // we always paint background entirely ourselves so prevent wx from erasing
     // it to avoid flicker
     SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -121,29 +117,7 @@ bool wxGLCanvasBase::SetColour(const wxString& colour)
 
 wxGLCanvasBase::~wxGLCanvasBase()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    delete m_glContext;
-#endif // WXWIN_COMPATIBILITY_2_8
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLContext *wxGLCanvasBase::GetContext() const
-{
-    return m_glContext;
-}
-
-void wxGLCanvasBase::SetCurrent()
-{
-    if ( m_glContext )
-        SetCurrent(*m_glContext);
-}
-
-void wxGLCanvasBase::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 /* static */
 bool wxGLCanvasBase::IsExtensionInList(const char *list, const char *extension)

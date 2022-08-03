@@ -1100,15 +1100,6 @@ inline bool wxIsxdigit(const wxUniChar& c) { return wxCRT_IsxdigitW(c) != 0; }
 inline wxUniChar wxTolower(const wxUniChar& c) { return wxCRT_TolowerW(c); }
 inline wxUniChar wxToupper(const wxUniChar& c) { return wxCRT_ToupperW(c); }
 
-#if WXWIN_COMPATIBILITY_2_8
-// we had goofed and defined wxIsctrl() instead of (correct) wxIscntrl() in the
-// initial versions of this header -- now it is too late to remove it so
-// although we fixed the function/macro name above, still provide the
-// backwards-compatible synonym.
-wxDEPRECATED( inline int wxIsctrl(const wxUniChar& c) );
-inline int wxIsctrl(const wxUniChar& c) { return wxIscntrl(c); }
-#endif // WXWIN_COMPATIBILITY_2_8
-
 inline bool wxIsascii(const wxUniChar& c) { return c.IsAscii(); }
 
 #endif /* _WX_WXCRT_H_ */

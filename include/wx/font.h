@@ -476,12 +476,6 @@ public:
     // account as well.
     static int GetNumericWeightOf(wxFontWeight weight);
 
-    // this doesn't do anything and is kept for compatibility only
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no);)
-    wxDEPRECATED_INLINE(bool GetNoAntiAliasing() const, return false;)
-#endif // WXWIN_COMPATIBILITY_2_8
-
     wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants instead of raw values")
     void SetWeight(int weight)
         { SetWeight(static_cast<wxFontWeight>(weight)); }

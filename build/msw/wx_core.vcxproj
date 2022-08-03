@@ -500,7 +500,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\effects.cpp" />
     <ClCompile Include="..\..\src\common\event.cpp" />
     <ClCompile Include="..\..\src\common\fddlgcmn.cpp" />
     <ClCompile Include="..\..\src\common\filectrlcmn.cpp" />
@@ -1303,7 +1302,6 @@
     <ClInclude Include="..\..\include\wx\docmdi.h" />
     <ClInclude Include="..\..\include\wx\docview.h" />
     <ClInclude Include="..\..\include\wx\dragimag.h" />
-    <ClInclude Include="..\..\include\wx\effects.h" />
     <ClInclude Include="..\..\include\wx\encinfo.h" />
     <ClInclude Include="..\..\include\wx\fdrepdlg.h" />
     <ClInclude Include="..\..\include\wx\filectrl.h" />

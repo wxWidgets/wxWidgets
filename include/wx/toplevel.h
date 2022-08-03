@@ -75,13 +75,6 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxFrameNameStr[];
 #define wxTINY_CAPTION          0x0080  // clashes with wxNO_DEFAULT
 #define wxRESIZE_BORDER         0x0040  // == wxCLOSE
 
-#if WXWIN_COMPATIBILITY_2_8
-    // HORIZ and VERT styles are equivalent anyhow so don't use different names
-    // for them
-    #define wxTINY_CAPTION_HORIZ    wxTINY_CAPTION
-    #define wxTINY_CAPTION_VERT     wxTINY_CAPTION
-#endif
-
 // default style
 #define wxDEFAULT_FRAME_STYLE \
             (wxSYSTEM_MENU | \

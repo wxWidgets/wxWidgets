@@ -31,10 +31,6 @@ public:
     wxExtHelpController(wxWindow* parentWindow = NULL);
     virtual ~wxExtHelpController();
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED(void SetBrowser(const wxString& browsername = wxEmptyString, bool isNetscape = false) );
-#endif
-
     // Set viewer: new name for SetBrowser
     virtual void SetViewer(const wxString& viewer = wxEmptyString,
                             long flags = wxHELP_NETSCAPE) wxOVERRIDE;

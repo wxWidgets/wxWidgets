@@ -34,9 +34,6 @@ wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler()
     XRC_ADD_STYLE(wxTR_SINGLE);
     XRC_ADD_STYLE(wxTR_MULTIPLE);
     XRC_ADD_STYLE(wxTR_DEFAULT_STYLE);
-#if WXWIN_COMPATIBILITY_2_8
-    XRC_ADD_STYLE(wxTR_EXTENDED);
-#endif
     AddWindowStyles();
 }
 

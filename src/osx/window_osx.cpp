@@ -340,15 +340,6 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
     }
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-
-bool wxWindowMac::MacIsUserPane() 
-{ 
-    return GetPeer() == NULL || GetPeer()->IsUserPane(); 
-}
-
-#endif
-
 bool wxWindowMac::MacIsUserPane() const 
 { 
     return GetPeer() == NULL || GetPeer()->IsUserPane(); 

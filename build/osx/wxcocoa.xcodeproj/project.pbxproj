@@ -1652,7 +1652,6 @@
 		4156FDB73D0A397A870E4304 /* overlay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD8031E28A3C9CB7C45784 /* overlay.mm */; };
 		CD241361D4693785A0B8939E /* StyleContext.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 9720FFA4490D3AC38E53BE03 /* StyleContext.cxx */; };
 		6978D7A20DA93A329DDD1384 /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CE02524DD4385AB2C3DF95 /* socket.cpp */; };
-		447FEC72F3C234378CE28DE7 /* effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48D72D20DB1D3E1CA5ED112A /* effects.cpp */; };
 		BFD3BFBDC8DA3B1EAD141F97 /* LexErlang.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A1276C0E5D48337489DEE8DF /* LexErlang.cxx */; };
 		096BA201623034AD97218369 /* tif_version.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E6F40F4740C3ED29D83E107 /* tif_version.c */; };
 		2386B575BC3931D2AF86CB34 /* fontdlgosx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 38CEA4A3579331EF808B8363 /* fontdlgosx.mm */; };
@@ -2036,7 +2035,6 @@
 		55D893FDD00633FEA82ABD83 /* event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A34C5BBBA543DC0A50DE1B6 /* event.cpp */; };
 		45FE206BBAD13DDCA1EA41D1 /* treebase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BA6ADD758693BD180D3275B /* treebase.cpp */; };
 		4D0BA8B9F72C3C31BC170CE4 /* progdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA102FF0FFC33DEAEF2FE14 /* progdlgg.cpp */; };
-		447FEC72F3C234378CE28DE8 /* effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48D72D20DB1D3E1CA5ED112A /* effects.cpp */; };
 		6C46AF0370793AA0B74A5A4C /* tabmdi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0155E0C2F6131358D2DA5ED /* tabmdi.cpp */; };
 		3B7E035ECF3D3FFB9827AC1E /* xh_dlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06B4A895955B32258DCD62BF /* xh_dlg.cpp */; };
 		EC43AFB3670A3D459D9B388F /* LexMPT.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FE3B47058A723243A285594D /* LexMPT.cxx */; };
@@ -2290,7 +2288,6 @@
 		894D43C8F224394FB3171F27 /* jcapimin.c in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDEEEC981133E8BA6A3998 /* jcapimin.c */; };
 		BAA75384DA82370298672334 /* helpctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42E433D1700631A8907B8227 /* helpctrl.cpp */; };
 		1D7442C82B343F50A83B25B1 /* CharClassify.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB85719CBC3D60BA2EDC2E /* CharClassify.cxx */; };
-		447FEC72F3C234378CE28DE9 /* effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48D72D20DB1D3E1CA5ED112A /* effects.cpp */; };
 		46CE8B53D2663927AAE5DF9F /* xh_treebk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B912D2E3385E365CAB61A7FF /* xh_treebk.cpp */; };
 		98AD7D0478BA36249B03C625 /* time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9586328A1F3C4BA0390AA5 /* time.cpp */; };
 		6944AC98F6F83E3D983DABD5 /* tif_getimage.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D82E7D38BB43BB886E2BFA0 /* tif_getimage.c */; };
@@ -4071,7 +4068,6 @@
 		86884BC843F6337EABF744BB /* jdapimin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdapimin.c; path = ../../src/jpeg/jdapimin.c; sourceTree = SOURCE_ROOT; };
 		087B66573CD33DA99DA82B1C /* xmlres.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlres.cpp; path = ../../src/xrc/xmlres.cpp; sourceTree = SOURCE_ROOT; };
 		0903EE9B3793303285FF96E3 /* textfile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textfile.cpp; path = ../../src/common/textfile.cpp; sourceTree = SOURCE_ROOT; };
-		48D72D20DB1D3E1CA5ED112A /* effects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effects.cpp; path = ../../src/common/effects.cpp; sourceTree = SOURCE_ROOT; };
 		9DD609EC0591359C9A576A43 /* printdlg_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = printdlg_osx.cpp; path = ../../src/osx/printdlg_osx.cpp; sourceTree = SOURCE_ROOT; };
 		A57CF60203F53459A03951A9 /* arrstr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arrstr.cpp; path = ../../src/common/arrstr.cpp; sourceTree = SOURCE_ROOT; };
 		2A4D36DE66EC3EB09E883D6B /* taskbar.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = taskbar.mm; path = ../../src/osx/cocoa/taskbar.mm; sourceTree = SOURCE_ROOT; };
@@ -6006,7 +6002,6 @@
 				AB634FD597793A74B3B3AA7F /* docview.cpp */,
 				A37E3D1FB4FB31AFAE88665A /* dpycmn.cpp */,
 				1197B997B1D139C5AE4D198A /* dseldlg.cpp */,
-				48D72D20DB1D3E1CA5ED112A /* effects.cpp */,
 				EDC7345501033EC3AAD53D5F /* fddlgcmn.cpp */,
 				5A756B733D093B09BE2098A6 /* filectrlcmn.cpp */,
 				D7B3307E56B332769901E99F /* filehistorycmn.cpp */,
@@ -7918,7 +7913,6 @@
 				B1E30CF6CFA932F5A3DBA950 /* docview.cpp in Sources */,
 				F80C2290D67B345F9CF60086 /* dpycmn.cpp in Sources */,
 				6BF19C7CA9E93D989C210FE3 /* dseldlg.cpp in Sources */,
-				447FEC72F3C234378CE28DE7 /* effects.cpp in Sources */,
 				C2E37E798F743A4199C8658F /* fddlgcmn.cpp in Sources */,
 				37715483D08335B790FFE059 /* filectrlcmn.cpp in Sources */,
 				0730A107A2B935A9923C8EF4 /* filehistorycmn.cpp in Sources */,
@@ -8606,7 +8600,6 @@
 				B1E30CF6CFA932F5A3DBA94F /* docview.cpp in Sources */,
 				F80C2290D67B345F9CF60087 /* dpycmn.cpp in Sources */,
 				6BF19C7CA9E93D989C210FE4 /* dseldlg.cpp in Sources */,
-				447FEC72F3C234378CE28DE8 /* effects.cpp in Sources */,
 				C2E37E798F743A4199C86590 /* fddlgcmn.cpp in Sources */,
 				37715483D08335B790FFE05A /* filectrlcmn.cpp in Sources */,
 				0730A107A2B935A9923C8EF3 /* filehistorycmn.cpp in Sources */,
@@ -9903,7 +9896,6 @@
 				B1E30CF6CFA932F5A3DBA951 /* docview.cpp in Sources */,
 				F80C2290D67B345F9CF60085 /* dpycmn.cpp in Sources */,
 				6BF19C7CA9E93D989C210FE5 /* dseldlg.cpp in Sources */,
-				447FEC72F3C234378CE28DE9 /* effects.cpp in Sources */,
 				C2E37E798F743A4199C8658E /* fddlgcmn.cpp in Sources */,
 				37715483D08335B790FFE058 /* filectrlcmn.cpp in Sources */,
 				0730A107A2B935A9923C8EF2 /* filehistorycmn.cpp in Sources */,

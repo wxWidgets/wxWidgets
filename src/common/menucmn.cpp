@@ -337,13 +337,6 @@ wxString wxMenuItemBase::GetLabelText(const wxString& text)
     return wxStripMenuCodes(text, wxStrip_Menu);
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
-{
-    return GetLabelText(text);
-}
-#endif
-
 void wxMenuItemBase::SetBitmap(const wxBitmapBundle& bmp)
 {
     m_bitmap = bmp;
@@ -1151,19 +1144,6 @@ void wxMenuBarBase::UpdateMenus()
             menu->UpdateUI();
     }
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-// get or change the label of the menu at given position
-void wxMenuBarBase::SetLabelTop(size_t pos, const wxString& label)
-{
-    SetMenuLabel(pos, label);
-}
-
-wxString wxMenuBarBase::GetLabelTop(size_t pos) const
-{
-    return GetMenuLabelText(pos);
-}
-#endif
 
 #endif // wxUSE_MENUBAR
 

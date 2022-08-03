@@ -65,40 +65,6 @@ enum wxRasterOperationMode
     wxNAND,        // (NOT src) OR (NOT dst)
     wxOR,          // src OR dst
     wxSET          // 1
-#if WXWIN_COMPATIBILITY_2_8
-    ,wxROP_BLACK = wxCLEAR,
-    wxBLIT_BLACKNESS = wxCLEAR,
-    wxROP_XORPEN = wxXOR,
-    wxBLIT_SRCINVERT = wxXOR,
-    wxROP_NOT = wxINVERT,
-    wxBLIT_DSTINVERT = wxINVERT,
-    wxROP_MERGEPENNOT = wxOR_REVERSE,
-    wxBLIT_00DD0228 = wxOR_REVERSE,
-    wxROP_MASKPENNOT = wxAND_REVERSE,
-    wxBLIT_SRCERASE = wxAND_REVERSE,
-    wxROP_COPYPEN = wxCOPY,
-    wxBLIT_SRCCOPY = wxCOPY,
-    wxROP_MASKPEN = wxAND,
-    wxBLIT_SRCAND = wxAND,
-    wxROP_MASKNOTPEN = wxAND_INVERT,
-    wxBLIT_00220326 = wxAND_INVERT,
-    wxROP_NOP = wxNO_OP,
-    wxBLIT_00AA0029 = wxNO_OP,
-    wxROP_NOTMERGEPEN = wxNOR,
-    wxBLIT_NOTSRCERASE = wxNOR,
-    wxROP_NOTXORPEN = wxEQUIV,
-    wxBLIT_00990066 = wxEQUIV,
-    wxROP_NOTCOPYPEN = wxSRC_INVERT,
-    wxBLIT_NOTSCRCOPY = wxSRC_INVERT,
-    wxROP_MERGENOTPEN = wxOR_INVERT,
-    wxBLIT_MERGEPAINT = wxOR_INVERT,
-    wxROP_NOTMASKPEN = wxNAND,
-    wxBLIT_007700E6 = wxNAND,
-    wxROP_MERGEPEN = wxOR,
-    wxBLIT_SRCPAINT = wxOR,
-    wxROP_WHITE = wxSET,
-    wxBLIT_WHITENESS = wxSET
-#endif //WXWIN_COMPATIBILITY_2_8
 };
 
 //  Flood styles
@@ -138,70 +104,6 @@ struct wxFontMetrics
         externalLeading,    // Inter-line spacing.
         averageWidth;       // Average font width, a.k.a. "x-width".
 };
-
-#if WXWIN_COMPATIBILITY_2_8
-
-//-----------------------------------------------------------------------------
-// wxDrawObject helper class
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxDrawObject
-{
-public:
-    wxDEPRECATED_CONSTRUCTOR(wxDrawObject)()
-        : m_isBBoxValid(false)
-        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
-    { }
-
-    virtual ~wxDrawObject() { }
-
-    virtual void Draw(wxDC&) const { }
-
-    virtual void CalcBoundingBox(wxCoord x, wxCoord y)
-    {
-      if ( m_isBBoxValid )
-      {
-         if ( x < m_minX ) m_minX = x;
-         if ( y < m_minY ) m_minY = y;
-         if ( x > m_maxX ) m_maxX = x;
-         if ( y > m_maxY ) m_maxY = y;
-      }
-      else
-      {
-         m_isBBoxValid = true;
-
-         m_minX = x;
-         m_minY = y;
-         m_maxX = x;
-         m_maxY = y;
-      }
-    }
-
-    void ResetBoundingBox()
-    {
-        m_isBBoxValid = false;
-
-        m_minX = m_maxX = m_minY = m_maxY = 0;
-    }
-
-    // Get the final bounding box of the PostScript or Metafile picture.
-
-    wxCoord MinX() const { return m_minX; }
-    wxCoord MaxX() const { return m_maxX; }
-    wxCoord MinY() const { return m_minY; }
-    wxCoord MaxY() const { return m_maxY; }
-
-    //to define the type of object for derived objects
-    virtual int GetType()=0;
-
-protected:
-    //for boundingbox calculation
-    bool m_isBBoxValid:1;
-    //for boundingbox calculation
-    wxCoord m_minX, m_minY, m_maxX, m_maxY;
-};
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 
 //-----------------------------------------------------------------------------
@@ -1215,10 +1117,6 @@ public:
     void DrawLines(const wxPointList *list,
                    wxCoord xoffset = 0, wxCoord yoffset = 0)
         { m_pimpl->DrawLines( list, xoffset, yoffset ); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( void DrawLines(const wxList *list,
-                                 wxCoord xoffset = 0, wxCoord yoffset = 0) );
-#endif  // WXWIN_COMPATIBILITY_2_8
 
     void DrawPolygon(int n, const wxPoint points[],
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
@@ -1232,11 +1130,6 @@ public:
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( void DrawPolygon(const wxList *list,
-                     wxCoord xoffset = 0, wxCoord yoffset = 0,
-                     wxPolygonFillMode fillStyle = wxODDEVEN_RULE) );
-#endif  // WXWIN_COMPATIBILITY_2_8
 
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         { m_pimpl->DoDrawRectangle(x, y, width, height); }
@@ -1357,20 +1250,6 @@ public:
         { m_pimpl->DrawSpline(points); }
 #endif // wxUSE_SPLINES
 
-
-#if WXWIN_COMPATIBILITY_2_8
-    // for compatibility with the old code when wxCoord was long everywhere
-    wxDEPRECATED( void GetTextExtent(const wxString& string,
-                       long *x, long *y,
-                       long *descent = NULL,
-                       long *externalLeading = NULL,
-                       const wxFont *theFont = NULL) const );
-    wxDEPRECATED( void GetLogicalOrigin(long *x, long *y) const );
-    wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const );
-    wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const );
-
-    wxDEPRECATED( void DrawObject(wxDrawObject* drawobject) );
-#endif  // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WXMSW__
     // GetHDC() is the simplest way to retrieve an HDC From a wxDC but only

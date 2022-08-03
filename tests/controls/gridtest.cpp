@@ -1266,24 +1266,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellFormatting", "[grid]")
 
     CHECK(m_grid->GetCellTextColour(0, 0) == back);
 
-#if WXWIN_COMPATIBILITY_2_8
-    m_grid->SetCellAlignment(wxALIGN_CENTRE, 0, 0);
-    m_grid->GetCellAlignment(0, 0, &cellhoriz, &cellvert);
-
-    CHECK(cellhoriz == wxALIGN_CENTRE);
-    CHECK(cellvert == wxALIGN_CENTRE);
-#endif // WXWIN_COMPATIBILITY_2_8
-
     m_grid->SetCellAlignment(0, 0, wxALIGN_LEFT, wxALIGN_BOTTOM);
     m_grid->GetCellAlignment(0, 0, &cellhoriz, &cellvert);
 
     CHECK(cellhoriz == wxALIGN_LEFT);
     CHECK(cellvert == wxALIGN_BOTTOM);
-
-#if WXWIN_COMPATIBILITY_2_8
-    m_grid->SetCellTextColour(*wxRED, 0, 0);
-    CHECK(m_grid->GetCellTextColour(0, 0) == *wxRED);
-#endif // WXWIN_COMPATIBILITY_2_8
 
     m_grid->SetCellTextColour(0, 0, *wxGREEN);
     CHECK(m_grid->GetCellTextColour(0,0) == *wxGREEN);

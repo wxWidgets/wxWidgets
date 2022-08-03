@@ -104,12 +104,6 @@ public:
     // in wxAnyButtonBase to make it consistent.
     virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 
-    // wxUniv-compatible and deprecated equivalents to SetBitmapXXX()
-#if WXWIN_COMPATIBILITY_2_8
-    void SetImageLabel(const wxBitmap& bitmap) { SetBitmap(bitmap); }
-    void SetImageMargins(wxCoord x, wxCoord y) { SetBitmapMargins(x, y); }
-#endif // WXWIN_COMPATIBILITY_2_8
-
     // backwards compatible names for pressed/current bitmaps: they're not
     // deprecated as there is nothing really wrong with using them and no real
     // advantage to using the new names but the new names are still preferred

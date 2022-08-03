@@ -80,12 +80,6 @@ public:
     // this function is deprecated because it handled its parameter
     // unnaturally: it disabled the bell when it was true, not false as could
     // be expected; use SuppressBellOnError() instead
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE(static
-        void SetBellOnError(bool doIt = true),
-        ms_isSilent = doIt;
-    )
-#endif
 
 protected:
     wxWindow *m_validatorWindow;

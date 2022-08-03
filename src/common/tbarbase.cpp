@@ -28,9 +28,6 @@
     #include "wx/control.h"
     #include "wx/frame.h"
     #include "wx/settings.h"
-    #if WXWIN_COMPATIBILITY_2_8
-        #include "wx/image.h"
-    #endif // WXWIN_COMPATIBILITY_2_8
     #include "wx/menu.h"
     #include "wx/vector.h"
 #endif
@@ -828,19 +825,5 @@ bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
     return true;
 }
 #endif
-
-#if WXWIN_COMPATIBILITY_2_8
-
-bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
-{
-#if wxUSE_IMAGE
-    out = in.ConvertToGreyscale();
-    if ( out.IsOk() )
-        return true;
-#endif // wxUSE_IMAGE
-    return false;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // wxUSE_TOOLBAR

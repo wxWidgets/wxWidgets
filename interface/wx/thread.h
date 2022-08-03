@@ -648,7 +648,7 @@ enum wxThreadWait
     /**
         No events are processed while waiting.
 
-        This is the default under all platforms except for wxMSW.
+        This is the default value.
      */
     wxTHREAD_WAIT_BLOCK,
 
@@ -668,14 +668,8 @@ enum wxThreadWait
 
     /**
         Default wait mode for wxThread::Wait() and wxThread::Delete().
-
-        For compatibility reasons, the default wait mode is currently
-        wxTHREAD_WAIT_YIELD if WXWIN_COMPATIBILITY_2_8 is defined (and it is
-        by default). However, as mentioned above, you're strongly encouraged to
-        not use wxTHREAD_WAIT_YIELD and pass wxTHREAD_WAIT_BLOCK to wxThread
-        method explicitly.
      */
-    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_YIELD
+    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_BLOCK
 };
 
 /**

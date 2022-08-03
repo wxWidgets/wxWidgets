@@ -1075,19 +1075,6 @@ void wxWindowBase::DoSetSizeHints( int minW, int minH,
     m_maxHeight = maxH;
 }
 
-
-#if WXWIN_COMPATIBILITY_2_8
-void wxWindowBase::SetVirtualSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
-                                       int WXUNUSED(maxW), int WXUNUSED(maxH))
-{
-}
-
-void wxWindowBase::SetVirtualSizeHints(const wxSize& WXUNUSED(minsize),
-                                       const wxSize& WXUNUSED(maxsize))
-{
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 void wxWindowBase::DoSetVirtualSize( int x, int y )
 {
     m_virtualSize = wxSize(x, y);
@@ -2011,25 +1998,6 @@ wxWindowBase::FindWindowById( long id, const wxWindow* parent )
 // dialog oriented functions
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_8
-void wxWindowBase::MakeModal(bool modal)
-{
-    // Disable all other windows
-    if ( IsTopLevel() )
-    {
-        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-        while (node)
-        {
-            wxWindow *win = node->GetData();
-            if (win != this)
-                win->Enable(!modal);
-
-            node = node->GetNext();
-        }
-    }
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 #if wxUSE_VALIDATORS
 
 namespace
@@ -2214,19 +2182,6 @@ void wxWindowBase::SetHelpText(const wxString& text)
         helpProvider->AddHelp(this, text);
     }
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-// associate this help text with all windows with the same id as this
-// one
-void wxWindowBase::SetHelpTextForId(const wxString& text)
-{
-    wxHelpProvider *helpProvider = wxHelpProvider::Get();
-    if ( helpProvider )
-    {
-        helpProvider->AddHelp(GetId(), text);
-    }
-}
-#endif // WXWIN_COMPATIBILITY_2_8
 
 // get the help string associated with this window (may be empty)
 // default implementation forwards calls to the help provider

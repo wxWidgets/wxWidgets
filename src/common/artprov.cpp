@@ -634,17 +634,6 @@ bool wxArtProvider::HasNativeProvider()
 #endif
 }
 
-// ----------------------------------------------------------------------------
-// deprecated wxArtProvider methods
-// ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_8
-/* static */ void wxArtProvider::Insert(wxArtProvider *provider)
-{
-    PushBack(provider);
-}
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // ============================================================================
 // wxArtProviderModule
 // ============================================================================

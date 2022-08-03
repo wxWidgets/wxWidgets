@@ -28,14 +28,6 @@
     #include <errno.h>
 #endif
 
-#if WXWIN_COMPATIBILITY_2_8
-    // we override deprecated DoLog() and DoLogString() in this test, suppress
-    // warnings about it
-    #ifdef __VISUALC__
-        #pragma warning(disable: 4996)
-    #endif // VC++ 7+
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // all calls to wxLogXXX() functions from this file will use this log component
 #define wxLOG_COMPONENT "test"
 
@@ -95,60 +87,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(TestLog);
 };
 
-#if WXWIN_COMPATIBILITY_2_8
-
-// log sink overriding the old DoLogXXX() functions should still work too
-
-// this one overrides DoLog(char*)
-class CompatTestLog : public TestLogBase
-{
-public:
-    CompatTestLog() { }
-
-protected:
-    virtual void DoLog(wxLogLevel level, const char *str, time_t WXUNUSED(t))
-    {
-        m_logs[level] = str;
-    }
-
-    // get rid of the warning about hiding the other overload
-    virtual void DoLog(wxLogLevel WXUNUSED(level),
-                       const wchar_t *WXUNUSED(str),
-                       time_t WXUNUSED(t))
-    {
-    }
-
-private:
-    wxDECLARE_NO_COPY_CLASS(CompatTestLog);
-};
-
-// and this one overload DoLogString(wchar_t*)
-class CompatTestLog2 : public wxLog
-{
-public:
-    CompatTestLog2() { }
-
-    const wxString& Get() const { return m_msg; }
-
-protected:
-    virtual void DoLogString(const wchar_t *msg, time_t WXUNUSED(t))
-    {
-        m_msg = msg;
-    }
-
-    // get rid of the warning
-    virtual void DoLogString(const char *WXUNUSED(msg), time_t WXUNUSED(t))
-    {
-    }
-
-private:
-    wxString m_msg;
-
-    wxDECLARE_NO_COPY_CLASS(CompatTestLog2);
-};
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -169,10 +107,6 @@ private:
 #if wxDEBUG_LEVEL
         CPPUNIT_TEST( Trace );
 #endif // wxDEBUG_LEVEL
-#if WXWIN_COMPATIBILITY_2_8
-        CPPUNIT_TEST( CompatLogger );
-        CPPUNIT_TEST( CompatLogger2 );
-#endif // WXWIN_COMPATIBILITY_2_8
         CPPUNIT_TEST( SysError );
         CPPUNIT_TEST( NoWarnings );
     CPPUNIT_TEST_SUITE_END();
@@ -183,10 +117,6 @@ private:
 #if wxDEBUG_LEVEL
     void Trace();
 #endif // wxDEBUG_LEVEL
-#if WXWIN_COMPATIBILITY_2_8
-    void CompatLogger();
-    void CompatLogger2();
-#endif // WXWIN_COMPATIBILITY_2_8
     void SysError();
     void NoWarnings();
 
@@ -320,30 +250,6 @@ void LogTestCase::Trace()
 }
 
 #endif // wxDEBUG_LEVEL
-
-#if WXWIN_COMPATIBILITY_2_8
-
-void LogTestCase::CompatLogger()
-{
-    CompatTestLog log;
-    wxLog * const logOld = wxLog::SetActiveTarget(&log);
-    wxON_BLOCK_EXIT1( wxLog::SetActiveTarget, logOld );
-
-    wxLogError("Old error");
-    CPPUNIT_ASSERT_EQUAL( "Old error", log.GetLog(wxLOG_Error) );
-}
-
-void LogTestCase::CompatLogger2()
-{
-    CompatTestLog2 log;
-    wxLog * const logOld = wxLog::SetActiveTarget(&log);
-    wxON_BLOCK_EXIT1( wxLog::SetActiveTarget, logOld );
-
-    wxLogWarning("Old warning");
-    CPPUNIT_ASSERT_EQUAL( "Old warning", log.Get() );
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 void LogTestCase::SysError()
 {

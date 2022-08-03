@@ -1356,67 +1356,6 @@ void wxDC::DrawLabel(const wxString& text,
     m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-    // for compatibility with the old code when wxCoord was long everywhere
-void wxDC::GetTextExtent(const wxString& string,
-                       long *x, long *y,
-                       long *descent,
-                       long *externalLeading,
-                       const wxFont *theFont) const
-    {
-        wxCoord x2, y2, descent2, externalLeading2;
-        m_pimpl->DoGetTextExtent(string, &x2, &y2,
-                        &descent2, &externalLeading2,
-                        theFont);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-        if ( descent )
-            *descent = descent2;
-        if ( externalLeading )
-            *externalLeading = externalLeading2;
-    }
-
-void wxDC::GetLogicalOrigin(long *x, long *y) const
-    {
-        wxCoord x2, y2;
-        m_pimpl->DoGetLogicalOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxDC::GetDeviceOrigin(long *x, long *y) const
-    {
-        wxCoord x2, y2;
-        m_pimpl->DoGetDeviceOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
-    {
-        wxRect r;
-        m_pimpl->DoGetClippingRect(r);
-        if (x) *x = r.x;
-        if (y) *y = r.y;
-        if (w) *w = r.width;
-        if (h) *h = r.height;
-    }
-
-void wxDC::DrawObject(wxDrawObject* drawobject)
-{
-    drawobject->Draw(*this);
-    m_pimpl->CalcBoundingBox(drawobject->MinX(),drawobject->MinY(),
-                             drawobject->MaxX(),drawobject->MaxY());
-}
-
-#endif  // WXWIN_COMPATIBILITY_2_8
-
 /*
 Notes for wxWidgets DrawEllipticArcRot(...)
 

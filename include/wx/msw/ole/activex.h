@@ -140,12 +140,6 @@ protected:
     I *m_interface;
 };
 
-#if WXWIN_COMPATIBILITY_2_8
-// this macro is kept for compatibility with older wx versions
-#define WX_DECLARE_AUTOOLE(wxAutoOleInterfaceType, I) \
-    typedef wxAutoOleInterface<I> wxAutoOleInterfaceType;
-#endif // WXWIN_COMPATIBILITY_2_8
-
 typedef wxAutoOleInterface<IDispatch> wxAutoIDispatch;
 typedef wxAutoOleInterface<IOleClientSite> wxAutoIOleClientSite;
 typedef wxAutoOleInterface<IUnknown> wxAutoIUnknown;

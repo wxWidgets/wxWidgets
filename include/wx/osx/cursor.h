@@ -28,9 +28,6 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
 
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
-#endif
     virtual ~wxCursor();
 
     void MacInstall() const ;

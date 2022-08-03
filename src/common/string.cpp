@@ -558,25 +558,6 @@ bool wxString::Shrink()
   return true;
 }
 
-// deprecated compatibility code:
-#if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
-wxStringCharType *wxString::GetWriteBuf(size_t nLen)
-{
-    return DoGetWriteBuf(nLen);
-}
-
-void wxString::UngetWriteBuf()
-{
-    DoUngetWriteBuf();
-}
-
-void wxString::UngetWriteBuf(size_t nLen)
-{
-    DoUngetWriteBuf(nLen);
-}
-#endif // WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
-
-
 // ---------------------------------------------------------------------------
 // data access
 // ---------------------------------------------------------------------------

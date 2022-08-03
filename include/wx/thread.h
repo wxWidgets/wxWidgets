@@ -74,15 +74,7 @@ enum wxThreadWait
 {
     wxTHREAD_WAIT_BLOCK,
     wxTHREAD_WAIT_YIELD,       // process events while waiting; MSW only
-
-    // For compatibility reasons we use wxTHREAD_WAIT_YIELD by default as this
-    // was the default behaviour of wxMSW 2.8 but it should be avoided as it's
-    // dangerous and not portable.
-#if WXWIN_COMPATIBILITY_2_8
-    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_YIELD
-#else
     wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_BLOCK
-#endif
 };
 
 // Obsolete synonyms for wxPRIORITY_XXX for backwards compatibility-only
@@ -713,10 +705,6 @@ public:
     // destructor deletes m_thread
     virtual ~wxThreadHelper() { KillThread(); }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( wxThreadError Create(unsigned int stackSize = 0) );
-#endif
-
     // create a new thread (and optionally set the stack size on platforms that
     // support/need that), call Run() to start it
     wxThreadError CreateThread(wxThreadKind kind = wxTHREAD_JOINABLE,
@@ -751,11 +739,6 @@ protected:
 
     friend class wxThreadHelperThread;
 };
-
-#if WXWIN_COMPATIBILITY_2_8
-inline wxThreadError wxThreadHelper::Create(unsigned int stackSize)
-{ return CreateThread(m_kind, stackSize); }
-#endif
 
 // call Entry() in owner, put it down here to avoid circular declarations
 inline void *wxThreadHelperThread::Entry()

@@ -755,7 +755,6 @@ set(GUI_CMN_SRC
     src/common/docview.cpp
     src/common/dpycmn.cpp
     src/common/dseldlg.cpp
-    src/common/effects.cpp
     src/common/fddlgcmn.cpp
     src/common/filectrlcmn.cpp
     src/common/filehistorycmn.cpp
@@ -1074,7 +1073,6 @@ set(GUI_CMN_HDR
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
-    wx/effects.h
     wx/fdrepdlg.h
     wx/filectrl.h
     wx/filehistory.h

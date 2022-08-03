@@ -172,13 +172,6 @@ wxString wxNow()
     return wxString::FromAscii(date);
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-void wxUsleep(unsigned long milliseconds)
-{
-    wxMilliSleep(milliseconds);
-}
-#endif
-
 wxString wxGetInstallPrefix()
 {
     wxString prefix;

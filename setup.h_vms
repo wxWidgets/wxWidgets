@@ -172,9 +172,9 @@ typedef pid_t GPid;
     #define wxUSE_GUI            1
 #endif
 
-#define WXWIN_COMPATIBILITY_2_8 0
-
 #define WXWIN_COMPATIBILITY_3_0 0
+
+#define WXWIN_COMPATIBILITY_3_2 0
 
 #define wxEVENTS_COMPATIBILITY_2_8 0
 

@@ -495,65 +495,6 @@ public:
     wxToolBarToolBase *GetToolByPos(int pos) { return m_tools[pos]; }
     const wxToolBarToolBase *GetToolByPos(int pos) const { return m_tools[pos]; }
 
-#if WXWIN_COMPATIBILITY_2_8
-    // the old versions of the various methods kept for compatibility
-    // don't use in the new code!
-    // --------------------------------------------------------------
-    wxDEPRECATED_INLINE(
-    wxToolBarToolBase *AddTool(int toolid,
-                               const wxBitmap& bitmap,
-                               const wxBitmap& bmpDisabled,
-                               bool toggle = false,
-                               wxObject *clientData = NULL,
-                               const wxString& shortHelpString = wxEmptyString,
-                               const wxString& longHelpString = wxEmptyString)
-    ,
-        return AddTool(toolid, wxEmptyString,
-                       bitmap, bmpDisabled,
-                       toggle ? wxITEM_CHECK : wxITEM_NORMAL,
-                       shortHelpString, longHelpString, clientData);
-    )
-    wxDEPRECATED_INLINE(
-    wxToolBarToolBase *AddTool(int toolid,
-                               const wxBitmap& bitmap,
-                               const wxString& shortHelpString = wxEmptyString,
-                               const wxString& longHelpString = wxEmptyString)
-    ,
-        return AddTool(toolid, wxEmptyString,
-                       bitmap, wxBitmapBundle(), wxITEM_NORMAL,
-                       shortHelpString, longHelpString, NULL);
-    )
-    wxDEPRECATED_INLINE(
-    wxToolBarToolBase *AddTool(int toolid,
-                               const wxBitmap& bitmap,
-                               const wxBitmap& bmpDisabled,
-                               bool toggle,
-                               wxCoord xPos,
-                               wxCoord yPos = wxDefaultCoord,
-                               wxObject *clientData = NULL,
-                               const wxString& shortHelp = wxEmptyString,
-                               const wxString& longHelp = wxEmptyString)
-    ,
-        return DoAddTool(toolid, wxEmptyString, bitmap, bmpDisabled,
-                         toggle ? wxITEM_CHECK : wxITEM_NORMAL,
-                         shortHelp, longHelp, clientData, xPos, yPos);
-    )
-    wxDEPRECATED_INLINE(
-    wxToolBarToolBase *InsertTool(size_t pos,
-                                  int toolid,
-                                  const wxBitmap& bitmap,
-                                  const wxBitmap& bmpDisabled = wxNullBitmap,
-                                  bool toggle = false,
-                                  wxObject *clientData = NULL,
-                                  const wxString& shortHelp = wxEmptyString,
-                                  const wxString& longHelp = wxEmptyString)
-    ,
-        return InsertTool(pos, toolid, wxEmptyString, bitmap, bmpDisabled,
-                          toggle ? wxITEM_CHECK : wxITEM_NORMAL,
-                          shortHelp, longHelp, clientData);
-    )
-#endif // WXWIN_COMPATIBILITY_2_8
-
     // event handlers
     // --------------
 
@@ -717,15 +658,6 @@ private:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxToolBarBase);
 };
-
-// deprecated function for creating the image for disabled buttons, use
-// wxImage::ConvertToGreyscale() instead
-#if WXWIN_COMPATIBILITY_2_8
-
-wxDEPRECATED( bool wxCreateGreyedImage(const wxImage& in, wxImage& out) );
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
 
 #endif // wxUSE_TOOLBAR
 

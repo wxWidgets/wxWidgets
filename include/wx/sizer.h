@@ -447,15 +447,6 @@ public:
 
     void AssignSpacer(int w, int h) { AssignSpacer(wxSize(w, h)); }
 
-#if WXWIN_COMPATIBILITY_2_8
-    // these functions do not free the old sizer/spacer and so can easily
-    // provoke the memory leaks and so shouldn't be used, use Assign() instead
-    wxDEPRECATED( void SetWindow(wxWindow *window) );
-    wxDEPRECATED( void SetSizer(wxSizer *sizer) );
-    wxDEPRECATED( void SetSpacer(const wxSize& size) );
-    wxDEPRECATED( void SetSpacer(int width, int height) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
 protected:
     // common part of several ctors
     void Init() { m_userData = NULL; m_kind = Item_None; }
@@ -703,10 +694,6 @@ public:
     wxSize Fit( wxWindow *window );
     void FitInside( wxWindow *window );
     void SetSizeHints( wxWindow *window );
-#if WXWIN_COMPATIBILITY_2_8
-    // This only calls FitInside() since 2.9
-    wxDEPRECATED( void SetVirtualSizeHints( wxWindow *window ) );
-#endif
 
     wxSizerItemList& GetChildren()
         { return m_children; }
@@ -1150,30 +1137,6 @@ private:
 // ----------------------------------------------------------------------------
 // inline functions implementation
 // ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_8
-
-inline void wxSizerItem::SetWindow(wxWindow *window)
-{
-    DoSetWindow(window);
-}
-
-inline void wxSizerItem::SetSizer(wxSizer *sizer)
-{
-    DoSetSizer(sizer);
-}
-
-inline void wxSizerItem::SetSpacer(const wxSize& size)
-{
-    DoSetSpacer(size);
-}
-
-inline void wxSizerItem::SetSpacer(int width, int height)
-{
-    DoSetSpacer(wxSize(width, height));
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 inline wxSizerItem*
 wxSizer::Insert(size_t index, wxSizerItem *item)

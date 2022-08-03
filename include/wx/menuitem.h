@@ -145,24 +145,6 @@ public:
     virtual void ClearExtraAccels();
 #endif // wxUSE_ACCEL
 
-#if WXWIN_COMPATIBILITY_2_8
-    // compatibility only, use new functions in the new code
-    wxDEPRECATED( void SetName(const wxString& str) );
-    wxDEPRECATED( wxString GetName() const );
-
-    // Now use GetItemLabelText
-    wxDEPRECATED( wxString GetLabel() const ) ;
-
-    // Now use GetItemLabel
-    wxDEPRECATED( const wxString& GetText() const );
-
-    // Now use GetLabelText to strip the accelerators
-    wxDEPRECATED( static wxString GetLabelFromText(const wxString& text) );
-
-    // Now use SetItemLabel
-    wxDEPRECATED( virtual void SetText(const wxString& str) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
     static wxMenuItem *New(wxMenu *parentMenu,
                            int itemid,
                            const wxString& text,
@@ -207,17 +189,6 @@ private:
     wxMenuItemBase(const wxMenuItemBase& item);
     wxMenuItemBase& operator=(const wxMenuItemBase& item);
 };
-
-#if WXWIN_COMPATIBILITY_2_8
-inline void wxMenuItemBase::SetName(const wxString &str)
-    { SetItemLabel(str); }
-inline wxString wxMenuItemBase::GetName() const
-    { return GetItemLabel(); }
-inline wxString wxMenuItemBase::GetLabel() const
-    { return GetLabelText(m_text); }
-inline const wxString& wxMenuItemBase::GetText() const { return m_text; }
-inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); }
-#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // include the real class declaration

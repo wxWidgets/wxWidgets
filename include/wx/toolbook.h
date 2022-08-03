@@ -31,11 +31,6 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TOOLBOOK_PAGE_CHANGING, wxBook
 // Use wxTB_HORZ_LAYOUT style for the controlling toolbar
 #define wxTBK_HORZ_LAYOUT          0x8000
 
-// deprecated synonym, don't use
-#if WXWIN_COMPATIBILITY_2_8
-    #define wxBK_BUTTONBAR wxTBK_BUTTONBAR
-#endif
-
 // ----------------------------------------------------------------------------
 // wxToolbook
 // ----------------------------------------------------------------------------

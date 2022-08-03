@@ -573,15 +573,6 @@ struct WXDLLIMPEXP_BASE wxStringHash
     unsigned long operator()( const char* x ) const wxNOEXCEPT
         { return stringHash( x ); }
 
-#if WXWIN_COMPATIBILITY_2_8
-    static unsigned long wxCharStringHash( const wxChar* x )
-        { return stringHash(x); }
-    #if wxUSE_UNICODE
-    static unsigned long charStringHash( const char* x )
-        { return stringHash(x); }
-    #endif
-#endif // WXWIN_COMPATIBILITY_2_8
-
     static unsigned long stringHash( const wchar_t* );
     static unsigned long stringHash( const char* );
 };

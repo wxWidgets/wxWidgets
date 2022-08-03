@@ -296,25 +296,10 @@ bool wxXmlNode::RemoveChild(wxXmlNode *child)
 
 void wxXmlNode::AddAttribute(const wxString& name, const wxString& value)
 {
-    AddProperty(name, value);
+    AddAttribute(new wxXmlAttribute(name, value, NULL));
 }
 
 void wxXmlNode::AddAttribute(wxXmlAttribute *attr)
-{
-    AddProperty(attr);
-}
-
-bool wxXmlNode::DeleteAttribute(const wxString& name)
-{
-    return DeleteProperty(name);
-}
-
-void wxXmlNode::AddProperty(const wxString& name, const wxString& value)
-{
-    AddProperty(new wxXmlAttribute(name, value, NULL));
-}
-
-void wxXmlNode::AddProperty(wxXmlAttribute *attr)
 {
     if (m_attrs == NULL)
         m_attrs = attr;
@@ -326,7 +311,7 @@ void wxXmlNode::AddProperty(wxXmlAttribute *attr)
     }
 }
 
-bool wxXmlNode::DeleteProperty(const wxString& name)
+bool wxXmlNode::DeleteAttribute(const wxString& name)
 {
     wxXmlAttribute *attr;
 

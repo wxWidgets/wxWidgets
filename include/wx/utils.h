@@ -107,22 +107,6 @@ wxClip(T1 a, T2 b, T3 c)
 #endif
 
 // ----------------------------------------------------------------------------
-// String functions (deprecated, use wxString)
-// ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_8
-// A shorter way of using strcmp
-wxDEPRECATED_INLINE(inline bool wxStringEq(const char *s1, const char *s2),
-    return wxCRT_StrcmpA(s1, s2) == 0; )
-
-#if wxUSE_UNICODE
-wxDEPRECATED_INLINE(inline bool wxStringEq(const wchar_t *s1, const wchar_t *s2),
-    return wxCRT_StrcmpW(s1, s2) == 0; )
-#endif // wxUSE_UNICODE
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
-// ----------------------------------------------------------------------------
 // Miscellaneous functions
 // ----------------------------------------------------------------------------
 
@@ -508,11 +492,6 @@ WXDLLIMPEXP_BASE void wxMilliSleep(unsigned long milliseconds);
 // Sleep for a given amount of microseconds
 WXDLLIMPEXP_BASE void wxMicroSleep(unsigned long microseconds);
 
-#if WXWIN_COMPATIBILITY_2_8
-// Sleep for a given amount of milliseconds (old, bad name), use wxMilliSleep
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds) );
-#endif
-
 // Get the process id of the current process
 WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
 
@@ -539,29 +518,6 @@ WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxString& value);
 
 // remove the env var from environment
 WXDLLIMPEXP_BASE bool wxUnsetEnv(const wxString& var);
-
-#if WXWIN_COMPATIBILITY_2_8
-inline bool wxSetEnv(const wxString& var, const char *value)
-    { return wxSetEnv(var, wxString(value)); }
-inline bool wxSetEnv(const wxString& var, const wchar_t *value)
-    { return wxSetEnv(var, wxString(value)); }
-template<typename T>
-inline bool wxSetEnv(const wxString& var, const wxScopedCharTypeBuffer<T>& value)
-    { return wxSetEnv(var, wxString(value)); }
-inline bool wxSetEnv(const wxString& var, const wxCStrData& value)
-    { return wxSetEnv(var, wxString(value)); }
-
-// this one is for passing NULL directly - don't use it, use wxUnsetEnv instead
-wxDEPRECATED( inline bool wxSetEnv(const wxString& var, int value) );
-inline bool wxSetEnv(const wxString& var, int value)
-{
-    wxASSERT_MSG( value == 0, "using non-NULL integer as string?" );
-
-    wxUnusedVar(value); // fix unused parameter warning in release build
-
-    return wxUnsetEnv(var);
-}
-#endif // WXWIN_COMPATIBILITY_2_8
 
 // Retrieve the complete environment by filling specified map.
 // Returns true on success or false if an error occurred.

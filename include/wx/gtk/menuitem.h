@@ -45,18 +45,6 @@ public:
     void GTKSetExtraAccels();
 #endif // wxUSE_ACCEL
 
-#if WXWIN_COMPATIBILITY_2_8
-    // compatibility only, don't use in new code
-    wxDEPRECATED_CONSTRUCTOR(
-    wxMenuItem(wxMenu *parentMenu,
-               int id,
-               const wxString& text,
-               const wxString& help,
-               bool isCheckable,
-               wxMenu *subMenu = NULL)
-    );
-#endif
-
 private:
     GtkWidget *m_menuItem;  // GtkMenuItem
 

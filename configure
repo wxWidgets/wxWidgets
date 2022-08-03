@@ -1152,8 +1152,8 @@ enable_permissive
 enable_vararg_macros
 enable_universal_binary
 enable_macosx_arch
-enable_compat28
 enable_compat30
+enable_compat32
 enable_rpath
 enable_visibility
 enable_tls
@@ -2124,8 +2124,8 @@ Optional Features:
   --disable-vararg_macros don't use vararg macros, even if they are supported
   --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures
   --enable-macosx_arch=ARCH  build for just the specified architecture
-  --enable-compat28       enable wxWidgets 2.8 compatibility
-  --disable-compat30      disable wxWidgets 3.0 compatibility
+  --enable-compat30       enable wxWidgets 3.0 compatibility
+  --disable-compat32      disable wxWidgets 3.2 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
@@ -6315,35 +6315,6 @@ fi
               fi
           fi
 
-          # Check whether --enable-compat28 was given.
-if test "${enable_compat28+set}" = set; then :
-  enableval=$enable_compat28;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_compat28='WXWIN_COMPATIBILITY_2_8=yes'
-                          else
-                            wx_cv_use_compat28='WXWIN_COMPATIBILITY_2_8=no'
-                          fi
-
-else
-
-                          wx_cv_use_compat28='WXWIN_COMPATIBILITY_2_8=${'DEFAULT_WXWIN_COMPATIBILITY_2_8":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_compat28"
-
-
-          enablestring=disable
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           # Check whether --enable-compat30 was given.
 if test "${enable_compat30+set}" = set; then :
   enableval=$enable_compat30;
@@ -6361,6 +6332,35 @@ fi
 
 
           eval "$wx_cv_use_compat30"
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-compat32 was given.
+if test "${enable_compat32+set}" = set; then :
+  enableval=$enable_compat32;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_compat32='WXWIN_COMPATIBILITY_3_2=yes'
+                          else
+                            wx_cv_use_compat32='WXWIN_COMPATIBILITY_3_2=no'
+                          fi
+
+else
+
+                          wx_cv_use_compat32='WXWIN_COMPATIBILITY_3_2=${'DEFAULT_WXWIN_COMPATIBILITY_3_2":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_compat32"
 
 
 
@@ -37707,15 +37707,15 @@ if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
 fi
 
 
-if test "x$WXWIN_COMPATIBILITY_2_8" = "xyes"; then
-    $as_echo "#define WXWIN_COMPATIBILITY_2_8 1" >>confdefs.h
+if test "x$WXWIN_COMPATIBILITY_3_0" = "xyes"; then
+    $as_echo "#define WXWIN_COMPATIBILITY_3_0 1" >>confdefs.h
 
 
-    WXWIN_COMPATIBILITY_3_0="yes"
+    WXWIN_COMPATIBILITY_3_2="yes"
 fi
 
-if test "x$WXWIN_COMPATIBILITY_3_0" != "xno"; then
-    $as_echo "#define WXWIN_COMPATIBILITY_3_0 1" >>confdefs.h
+if test "x$WXWIN_COMPATIBILITY_3_2" != "xno"; then
+    $as_echo "#define WXWIN_COMPATIBILITY_3_2 1" >>confdefs.h
 
 fi
 
@@ -47362,8 +47362,8 @@ else
 fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"
-echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-no}"
-echo "                                       wxWidgets 3.0      ${WXWIN_COMPATIBILITY_3_0:-yes}"
+echo "                                       wxWidgets 3.0      ${WXWIN_COMPATIBILITY_3_0:-no}"
+echo "                                       wxWidgets 3.2      ${WXWIN_COMPATIBILITY_3_2:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
 echo "                                       STL                ${wxUSE_STL}"
