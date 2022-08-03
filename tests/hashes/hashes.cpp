@@ -115,11 +115,11 @@ void HashesTestCase::wxHashTableTest()
 
     {
         wxHashTable hash(wxKEY_INTEGER, 10), hash2(wxKEY_STRING);
-        wxObject o;
+        wxObject o[20];
         int i;
 
         for ( i = 0; i < COUNT; ++i )
-            hash.Put(i, &o + i);
+            hash.Put(i, o + i);
 
         hash.BeginFind();
         wxHashTable::compatibility_iterator it = hash.Next();
@@ -134,39 +134,39 @@ void HashesTestCase::wxHashTableTest()
         CPPUNIT_ASSERT( i == COUNT );
 
         for ( i = 99; i >= 0; --i )
-            CPPUNIT_ASSERT( hash.Get(i) == &o + i );
+            CPPUNIT_ASSERT( hash.Get(i) == o + i );
 
         for ( i = 0; i < COUNT; ++i )
-            hash.Put(i, &o + i + 20);
+            hash.Put(i, o + i + 20);
 
         for ( i = 99; i >= 0; --i )
-            CPPUNIT_ASSERT( hash.Get(i) == &o + i);
+            CPPUNIT_ASSERT( hash.Get(i) == o + i);
 
         for ( i = 0; i < COUNT/2; ++i )
-            CPPUNIT_ASSERT( hash.Delete(i) == &o + i);
+            CPPUNIT_ASSERT( hash.Delete(i) == o + i);
 
         for ( i = COUNT/2; i < COUNT; ++i )
-            CPPUNIT_ASSERT( hash.Get(i) == &o + i);
+            CPPUNIT_ASSERT( hash.Get(i) == o + i);
 
         for ( i = 0; i < COUNT/2; ++i )
-            CPPUNIT_ASSERT( hash.Get(i) == &o + i + 20);
+            CPPUNIT_ASSERT( hash.Get(i) == o + i + 20);
 
         for ( i = 0; i < COUNT/2; ++i )
-            CPPUNIT_ASSERT( hash.Delete(i) == &o + i + 20);
+            CPPUNIT_ASSERT( hash.Delete(i) == o + i + 20);
 
         for ( i = 0; i < COUNT/2; ++i )
             CPPUNIT_ASSERT( hash.Get(i) == NULL);
 
-        hash2.Put(wxT("foo"), &o + 1);
-        hash2.Put(wxT("bar"), &o + 2);
-        hash2.Put(wxT("baz"), &o + 3);
+        hash2.Put(wxT("foo"), o + 1);
+        hash2.Put(wxT("bar"), o + 2);
+        hash2.Put(wxT("baz"), o + 3);
 
         CPPUNIT_ASSERT(hash2.Get(wxT("moo")) == NULL);
-        CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == &o + 2);
+        CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == o + 2);
 
-        hash2.Put(wxT("bar"), &o + 0);
+        hash2.Put(wxT("bar"), o + 0);
 
-        CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == &o + 2);
+        CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == o + 2);
     }
 
     // and now some corner-case testing; 3 and 13 hash to the same bucket
@@ -204,13 +204,13 @@ void HashesTestCase::wxHashTableTest()
     // wrong key or wrong value returns NULL)
     {
         wxHashTable hash(wxKEY_INTEGER, 10);
-        wxObject dummy;
+        wxObject dummy[8];
 
-        hash.Put(3, 7, &dummy + 7);
-        hash.Put(4, 8, &dummy + 8);
+        hash.Put(3, 7, dummy + 7);
+        hash.Put(4, 8, dummy + 8);
 
         CPPUNIT_ASSERT(hash.Get(7) == NULL);
-        CPPUNIT_ASSERT(hash.Get(3, 7) == &dummy + 7);
+        CPPUNIT_ASSERT(hash.Get(3, 7) == dummy + 7);
         CPPUNIT_ASSERT(hash.Get(4) == NULL);
         CPPUNIT_ASSERT(hash.Get(3) == NULL);
         CPPUNIT_ASSERT(hash.Get(8) == NULL);
@@ -218,7 +218,7 @@ void HashesTestCase::wxHashTableTest()
 
         CPPUNIT_ASSERT(hash.Delete(7) == NULL);
         CPPUNIT_ASSERT(hash.Delete(3) == NULL);
-        CPPUNIT_ASSERT(hash.Delete(3, 7) == &dummy + 7);
+        CPPUNIT_ASSERT(hash.Delete(3, 7) == dummy + 7);
     }
 
 }
