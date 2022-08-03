@@ -13,6 +13,13 @@
     </wxCfg>
     <wxVendor>custom</wxVendor>
     <wxRuntimeLibs>dynamic</wxRuntimeLibs>
+    <wxReleaseRuntimeLibrary>MultiThreadedDLL</wxReleaseRuntimeLibrary>
+    <wxDebugRuntimeLibrary>MultiThreadedDebugDLL</wxDebugRuntimeLibrary>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(wxRuntimeLibs)'=='static'">
+	<!-- Only these need overriding in wx_local.props -->
+    <wxReleaseRuntimeLibrary>MultiThreaded</wxReleaseRuntimeLibrary>
+    <wxDebugRuntimeLibrary>MultiThreadedDebug</wxDebugRuntimeLibrary>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
     <wxArchSuffix>
