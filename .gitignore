@@ -157,7 +157,6 @@
 /distrib/release
 
 # /docs/doxygen/
-/docs/doxygen/doxygen.log
 /docs/doxygen/out
 
 # /include/

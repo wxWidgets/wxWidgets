@@ -45,7 +45,7 @@ jobs:
         run: |
           ./regen.sh php
           if [[ -s doxygen.log ]]; then
-            echo '*** There were warnings during docs generation: ***'
+            echo 'Contents of Doxygen log file follows:'
             echo '-----------------------------------------------------------'
             cat doxygen.log
             echo '-----------------------------------------------------------'

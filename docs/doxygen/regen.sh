@@ -239,5 +239,12 @@ fi
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
-topsrcdir=`cd ../.. && pwd`
-sed -i'' -e "s|$topsrcdir/||g" doxygen.log
+if [[ -s doxygen.log ]]; then
+    topsrcdir=`cd ../.. && pwd`
+    sed -i'' -e "s|$topsrcdir/||g" doxygen.log
+
+    echo '*** There were warnings during docs generation ***'
+else
+    # Don't leave empty file lying around.
+    rm doxygen.log
+fi
