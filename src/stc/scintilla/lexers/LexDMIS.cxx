@@ -244,10 +244,10 @@ void SCI_METHOD LexerDMIS::Lex(Sci_PositionU startPos, Sci_Position lengthDoc, i
 
 			case SCE_DMIS_KEYWORD:
 				if (!setDMISWord.Contains(scCTX.ch)) {
-					char tmpStr[MAX_STR_LEN];
-					memset(tmpStr, 0, MAX_STR_LEN*sizeof(char));
-					scCTX.GetCurrent(tmpStr, (MAX_STR_LEN-1));
-					strncpy(tmpStr, this->UpperCase(tmpStr), (MAX_STR_LEN-1));
+					char tmpBuf[MAX_STR_LEN];
+					memset(tmpBuf, 0, MAX_STR_LEN*sizeof(char));
+					scCTX.GetCurrent(tmpBuf, (MAX_STR_LEN-1));
+					char* const tmpStr = this->UpperCase(tmpBuf);
 
 					if (this->m_minorWords.InList(tmpStr)) {
 						scCTX.ChangeState(SCE_DMIS_MINORWORD);
