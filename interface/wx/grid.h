@@ -5812,6 +5812,28 @@ public:
     void RefreshAttr(int row, int col);
 
     /**
+        Redraw all the cells in the given block.
+
+        Refresh the block of cells with the given corners.
+
+        If the bottom right corner coordinates are invalid, i.e. set to `-1`,
+        the top left corner coordinates are used for it, i.e. just a single
+        cell is refreshed. If the top left corner coordinates are invalid as
+        well, the function simply returns without doing anything. Note,
+        however, that both coordinates need to be valid or invalid
+        simultaneously, i.e. setting the top row to `-1` but using a valid
+        value for the left column is unsupported and would result in an
+        assertion failure.
+
+        @since 3.1.3
+     */
+    void RefreshBlock(const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight);
+    /// @overload
+    void RefreshBlock(int topRow, int leftCol,
+                      int bottomRow, int rightCol);
+
+    /**
         Draws part or all of a wxGrid on a wxDC for printing or display.
 
         Pagination can be accomplished by using sequential Render() calls
