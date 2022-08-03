@@ -648,7 +648,7 @@ enum wxThreadWait
     /**
         No events are processed while waiting.
 
-        This is the default under all platforms except for wxMSW.
+        This is the default value.
      */
     wxTHREAD_WAIT_BLOCK,
 
