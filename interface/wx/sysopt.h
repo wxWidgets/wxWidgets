@@ -173,12 +173,12 @@ public:
     */
     static bool IsFalse(const wxString& name);
 
-    //@{
+    ///@{
     /**
         Sets an option. The function is case-insensitive to @a name.
     */
     static void SetOption(const wxString& name, const wxString& value);
     static void SetOption(const wxString& name, int value);
-    //@}
+    ///@}
 };
 

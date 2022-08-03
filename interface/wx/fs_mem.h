@@ -76,7 +76,7 @@ public:
     */
     wxMemoryFSHandler();
 
-    //@{
+    ///@{
     /**
         Adds a file to the list of the files stored in memory.
 
@@ -99,9 +99,9 @@ public:
     static void AddFile(const wxString& filename, const wxString& textdata);
     static void AddFile(const wxString& filename, const void *binarydata, size_t size);
 
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Like AddFile(), but lets you explicitly specify added file's MIME type.
 
@@ -119,7 +119,7 @@ public:
                                     const void* binarydata,
                                     size_t size,
                                     const wxString& mimetype);
-    //@}
+    ///@}
 
     /**
         Removes a file from memory FS and frees the occupied memory.

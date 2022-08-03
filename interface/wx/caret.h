@@ -31,23 +31,23 @@ public:
     */
     wxCaret();
 
-    //@{
+    ///@{
     /**
         Creates a caret with the given size (in pixels) and associates it with
         the @a window.
     */
     wxCaret(wxWindow* window, int width, int height);
     wxCaret(wxWindow* window, const wxSize& size);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Creates a caret with the given size (in pixels) and associates it with
         the @a window (same as the equivalent constructors).
     */
     bool Create(wxWindow* window, int width, int height);
     bool Create(wxWindow* window, const wxSize& size);
-    //@}
+    ///@}
 
     /**
         Returns the blink time which is measured in milliseconds and is the
@@ -56,7 +56,7 @@ public:
     */
     static int GetBlinkTime();
 
-    //@{
+    ///@{
     /**
         Get the caret position (in pixels).
 
@@ -69,9 +69,9 @@ public:
     */
     void GetPosition(int* x, int* y) const;
     wxPoint GetPosition() const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Get the caret size.
 
@@ -84,7 +84,7 @@ public:
     */
     void GetSize(int* width, int* height) const;
     wxSize GetSize() const;
-    //@}
+    ///@}
 
     /**
         Get the window the caret is associated with.
@@ -108,13 +108,13 @@ public:
     */
     bool IsVisible() const;
 
-    //@{
+    ///@{
     /**
         Move the caret to given position (in logical coordinates).
     */
     void Move(int x, int y);
     void Move(const wxPoint& pt);
-    //@}
+    ///@}
 
     /**
         Sets the blink time for all the carets.
@@ -127,13 +127,13 @@ public:
     */
     static void SetBlinkTime(int milliseconds);
 
-    //@{
+    ///@{
     /**
         Changes the size of the caret.
     */
     void SetSize(int width, int height);
     void SetSize(const wxSize& size);
-    //@}
+    ///@}
 
     /**
         Shows or hides the caret. Notice that if the caret was hidden N times,

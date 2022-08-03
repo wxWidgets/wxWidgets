@@ -688,7 +688,7 @@ public:
     */
     int Parse(bool giveUsage = true);
 
-    //@{
+    ///@{
     /**
         Set the command line to parse after using one of the constructors which
         don't do it.
@@ -696,7 +696,7 @@ public:
     void SetCmdLine(int argc, char** argv);
     void SetCmdLine(int argc, wchar_t** argv);
     void SetCmdLine(const wxString& cmdline);
-    //@}
+    ///@}
 
     /**
         Constructs the command line description.

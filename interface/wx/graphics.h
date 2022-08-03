@@ -41,13 +41,13 @@ public:
         If there is a current point set, an initial line segment will be added
         to the path to connect the current point to the beginning of the arc.
     */
-    //@{
+    ///@{
     virtual void AddArc(wxDouble x, wxDouble y, wxDouble r,
                         wxDouble startAngle, wxDouble endAngle,
                         bool clockwise);
     void AddArc(const wxPoint2DDouble& c, wxDouble r,
                 wxDouble startAngle, wxDouble endAngle, bool clockwise);
-    //@}
+    ///@}
 
     /**
         Adds an arc (of a circle with radius @a r) that is tangent
@@ -1301,10 +1301,10 @@ public:
     /**
         Add a new stop.
     */
-    //@{
+    ///@{
     void Add(const wxGraphicsGradientStop& stop);
     void Add(wxColour col, float pos);
-    //@}
+    ///@}
 
     /**
         Returns the stop at the given index.

@@ -126,10 +126,10 @@ public:
         unsupported by the native MSW implementation of this class so the use
         of a standard icon is preferred.
      */
-    //@{
+    ///@{
     void SetIcon(int icon = wxICON_INFORMATION);
     void SetIcon(const wxBitmapBundle& icon);
-    //@}
+    ///@}
 
     /**
         Set timeout after which the tooltip should disappear and

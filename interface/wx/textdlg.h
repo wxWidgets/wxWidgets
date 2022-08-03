@@ -154,10 +154,10 @@ public:
         custom class derived from wxTextValidator while the second one creates
         a wxTextValidator with the specified @a style.
      */
-    //@{
+    ///@{
     void SetTextValidator(const wxTextValidator& validator);
     void SetTextValidator(wxTextValidatorStyle style = wxFILTER_NONE);
-    //@}
+    ///@}
 
     /**
         This function sets the maximum number of characters the user can enter

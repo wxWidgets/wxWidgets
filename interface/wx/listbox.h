@@ -141,7 +141,7 @@ public:
     */
     virtual ~wxListBox();
 
-    //@{
+    ///@{
     /**
         Creates the listbox for two-step construction.
         See wxListBox() for further details.
@@ -160,7 +160,7 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
-    //@}
+    ///@}
 
     /**
         Deselects an item in the list box.

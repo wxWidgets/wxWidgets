@@ -81,7 +81,7 @@ public:
     */
     bool IsIdentity() const;
 
-    //@{
+    ///@{
     /**
         Check that this matrix is identical with @a t.
 
@@ -90,7 +90,7 @@ public:
     */
     void IsEqual(const wxAffineMatrix2DBase& t);
     bool operator==(const wxAffineMatrix2DBase& t) const;
-    //@}
+    ///@}
 
     /**
         Check that this matrix differs from @a t.

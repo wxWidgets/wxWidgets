@@ -363,7 +363,7 @@ public:
     */
     void SetConv(wxMBConv& conv);
 
-    //@{
+    ///@{
     /**
         GetFirst and GetNext can be used to enumerate the available factories.
         For example, to list them:
@@ -383,7 +383,7 @@ public:
     */
     static const wxArchiveClassFactory* GetFirst();
     const wxArchiveClassFactory* GetNext() const;
-    //@}
+    ///@}
 
     /**
         Calls the static GetInternalName() function for the archive entry type,
@@ -420,7 +420,7 @@ public:
     */
     wxArchiveEntry* NewEntry() const;
 
-    //@{
+    ///@{
     /**
         Create a new input or output stream to read or write an archive.
 
@@ -431,7 +431,7 @@ public:
     wxArchiveOutputStream* NewStream(wxOutputStream& stream) const;
     wxArchiveInputStream* NewStream(wxInputStream* stream) const;
     wxArchiveOutputStream* NewStream(wxOutputStream* stream) const;
-    //@}
+    ///@}
 
     /**
         Adds this class factory to the list returned by GetFirst() or GetNext().
@@ -610,12 +610,12 @@ public:
     */
     const T operator*() const;
 
-    //@{
+    ///@{
     /**
         Position the input iterator at the next entry in the archive input stream.
     */
     wxArchiveIterator operator++();
     wxArchiveIterator operator++(int);
-    //@}
+    ///@}
 };
 

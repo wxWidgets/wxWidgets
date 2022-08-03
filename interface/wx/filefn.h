@@ -353,7 +353,7 @@ bool wxRemoveFile(const wxString& file);
 enum wxPosixPermissions
 {
     /// Standard POSIX names for these permission flags with "wx" prefix.
-    //@{
+    ///@{
     wxS_IRUSR = 00400,
     wxS_IWUSR = 00200,
     wxS_IXUSR = 00100,
@@ -365,10 +365,10 @@ enum wxPosixPermissions
     wxS_IROTH = 00004,
     wxS_IWOTH = 00002,
     wxS_IXOTH = 00001,
-    //@}
+    ///@}
 
     /// Longer but more readable synonyms for the constants above.
-    //@{
+    ///@{
     wxPOSIX_USER_READ = wxS_IRUSR,
     wxPOSIX_USER_WRITE = wxS_IWUSR,
     wxPOSIX_USER_EXECUTE = wxS_IXUSR,
@@ -380,7 +380,7 @@ enum wxPosixPermissions
     wxPOSIX_OTHERS_READ = wxS_IROTH,
     wxPOSIX_OTHERS_WRITE = wxS_IWOTH,
     wxPOSIX_OTHERS_EXECUTE = wxS_IXOTH,
-    //@}
+    ///@}
 
     /// Default mode for the new files: allow reading/writing them to everybody but
     /// the effective file mode will be set after ANDing this value with umask and

@@ -120,13 +120,13 @@ public:
     */
     wxColour GetColour() const;
 
-    //@{
+    ///@{
     /**
         Sets the currently selected colour. See wxColour::Set().
     */
     void SetColour(const wxColour& col);
     void SetColour(const wxString& colname);
-    //@}
+    ///@}
 };
 
 

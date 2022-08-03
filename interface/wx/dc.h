@@ -202,7 +202,7 @@ public:
     /**
         @name Coordinate conversion functions
     */
-    //@{
+    ///@{
 
     /**
         Convert @e device X coordinate to logical coordinate, using the current
@@ -352,14 +352,14 @@ public:
     */
     wxSize LogicalToDeviceRel(const wxSize& dim) const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Drawing functions
     */
-    //@{
+    ///@{
 
     /**
         Clears the device context using the current background brush.
@@ -862,13 +862,13 @@ public:
     */
     void CrossHair(const wxPoint& pt);
 
-    //@}
+    ///@}
 
 
     /**
         @name Clipping region functions
     */
-    //@{
+    ///@{
 
     /**
         Destroys the current clipping region so that none of the DC is clipped.
@@ -952,13 +952,13 @@ public:
      */
     void SetDeviceClippingRegion(const wxRegion& region);
 
-    //@}
+    ///@}
 
 
     /**
         @name Text/character extent functions
     */
-    //@{
+    ///@{
 
     /**
         Gets the character height of the currently set font.
@@ -1092,13 +1092,13 @@ public:
     */
     wxSize GetTextExtent(const wxString& string) const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Text properties functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the current background mode: @c wxBRUSHSTYLE_SOLID or @c wxBRUSHSTYLE_TRANSPARENT.
@@ -1189,13 +1189,13 @@ public:
     */
     void SetLayoutDirection(wxLayoutDirection dir);
 
-    //@}
+    ///@}
 
 
     /**
         @name Bounding box functions
     */
-    //@{
+    ///@{
 
     /**
         Adds the specified point to the bounding box which can be retrieved
@@ -1233,13 +1233,13 @@ public:
     */
     void ResetBoundingBox();
 
-    //@}
+    ///@}
 
 
     /**
         @name Page and document start/end functions
     */
-    //@{
+    ///@{
 
     /**
         Starts a document (only relevant when outputting to a printer).
@@ -1262,13 +1262,13 @@ public:
     */
     void EndPage();
 
-    //@}
+    ///@}
 
 
     /**
         @name Bit-Block Transfer operations (blit)
     */
-    //@{
+    ///@{
 
     /**
         Copy from a source DC to this DC.
@@ -1430,13 +1430,13 @@ public:
                      bool useMask = false,
                      wxCoord xsrcMask = wxDefaultCoord,
                      wxCoord ysrcMask = wxDefaultCoord);
-    //@}
+    ///@}
 
 
     /**
         @name Background/foreground brush and pen
     */
-    //@{
+    ///@{
 
     /**
         Gets the brush used for painting the background.
@@ -1488,7 +1488,7 @@ public:
     */
     void SetPen(const wxPen& pen);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1754,7 +1754,7 @@ public:
         See the notes about the availability of these functions in the class
         documentation.
     */
-    //@{
+    ///@{
 
     /**
         Check if the use of transformation matrix is supported by the current
@@ -1795,13 +1795,13 @@ public:
     */
     void ResetTransformMatrix();
 
-    //@}
+    ///@}
 
 
     /**
         @name query capabilities
     */
-    //@{
+    ///@{
 
     /**
        Does the DC support drawing bitmaps?
@@ -1813,7 +1813,7 @@ public:
     */
     bool CanGetTextExtent() const;
 
-    //@}
+    ///@}
 
     /**
        Returns a value that can be used as a handle to the native drawing
@@ -1858,7 +1858,7 @@ public:
      */
     void SetLogicalOrigin(wxCoord x, wxCoord y);
 
-    //@{
+    ///@{
     /**
         Return the coordinates of the logical point (0, 0).
 
@@ -1866,7 +1866,7 @@ public:
      */
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
-    //@}
+    ///@}
 
     /**
        If supported by the platform and the @a wxDC implementation, this method
@@ -1925,7 +1925,7 @@ public:
 class wxDCClipper
 {
 public:
-    //@{
+    ///@{
     /**
         Sets the clipping region to the specified region/coordinates.
 
@@ -1934,7 +1934,7 @@ public:
     wxDCClipper(wxDC& dc, const wxRegion& region);
     wxDCClipper(wxDC& dc, const wxRect& rect);
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
-    //@}
+    ///@}
 
     /**
         Destroys the clipping region associated with the DC passed to the ctor.

@@ -61,7 +61,7 @@ public:
         Note that you should look at wxEvtLoopBase for more event-processing
         documentation.
     */
-    //@{
+    ///@{
 
     /**
         Called by wxWidgets on creation of the application. Override this if you wish
@@ -126,7 +126,7 @@ public:
      */
     virtual bool UsesEventLoop() const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -136,7 +136,7 @@ public:
         to allow queuing of events even when there's no event loop
         (e.g. in wxAppConsole::OnInit).
     */
-    //@{
+    ///@{
 
     /**
         Process all pending events; it is necessary to call this function to
@@ -185,7 +185,7 @@ public:
     */
     void ResumeProcessingOfPendingEvents();
 
-    //@}
+    ///@}
 
     /**
         Delayed objects destruction.
@@ -195,7 +195,7 @@ public:
         still pending for the same object. In this case the handler may call
         ScheduleForDestruction() instead.
      */
-    //@{
+    ///@{
 
     /**
         Schedule the object for destruction in the near future.
@@ -219,7 +219,7 @@ public:
      */
     bool IsScheduledForDestruction(wxObject *object) const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -268,7 +268,7 @@ public:
     /**
         @name Callbacks for application-wide "events"
     */
-    //@{
+    ///@{
 
     /**
         This function is called when an assert failure occurs, i.e.\ the condition
@@ -422,7 +422,7 @@ public:
     */
     virtual int OnRun();
 
-    //@}
+    ///@}
 
 
     /**
@@ -432,7 +432,7 @@ public:
 
         @see overview_exceptions
     */
-    //@{
+    ///@{
 
     /**
         This function is called if an unhandled exception occurs inside the main
@@ -614,13 +614,13 @@ public:
     */
     virtual void RethrowStoredException();
 
-    //@}
+    ///@}
 
 
     /**
         @name Application information
     */
-    //@{
+    ///@{
 
     /**
         Returns the user-readable application name.
@@ -732,7 +732,7 @@ public:
     */
     void SetVendorName(const wxString& name);
 
-    //@}
+    ///@}
 
     /**
         Sets the C locale to the default locale for the current environment.
@@ -1034,7 +1034,7 @@ public:
     /**
         @name GTK-specific functions
     */
-    //@{
+    ///@{
 
     /**
         Disables the printing of various GTK messages.
@@ -1061,12 +1061,12 @@ public:
     */
     static void GTKSuppressDiagnostics(int flags = -1);
 
-    //@}
+    ///@}
 
     /**
         @name Mac-specific functions
     */
-    //@{
+    ///@{
 
     /**
         Called in response of an "open-application" Apple event.
@@ -1160,7 +1160,7 @@ public:
     */
     void OSXEnableAutomaticTabbing(bool enable);
 
-    //@}
+    ///@}
 
 };
 

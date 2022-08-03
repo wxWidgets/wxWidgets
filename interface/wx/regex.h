@@ -269,7 +269,7 @@ public:
     */
     bool IsValid() const;
 
-    //@{
+    ///@{
     /**
         Matches the precompiled regular expression against the string @a text,
         returns @true if matches and @false otherwise.
@@ -291,7 +291,7 @@ public:
     */
     bool Matches(const wxChar* text, int flags = 0) const;
     bool Matches(const wxChar* text, int flags, size_t len) const;
-    //@}
+    ///@}
 
     /**
         Matches the precompiled regular expression against the string @a text,

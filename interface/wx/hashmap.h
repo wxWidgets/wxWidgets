@@ -174,14 +174,14 @@ public:
     */
     wxHashMap(const wxHashMap& map);
 
-    //@{
+    ///@{
     /**
         Returns an iterator pointing at the first element of the hash map.
         Please remember that hash maps do not guarantee ordering.
     */
     const_iterator begin() const;
     iterator begin();
-    //@}
+    ///@}
 
     /**
         Removes all elements from the hash map.
@@ -199,16 +199,16 @@ public:
     */
     bool empty() const;
 
-    //@{
+    ///@{
     /**
         Returns an iterator pointing at the one-after-the-last element of the hash map.
         Please remember that hash maps do not guarantee ordering.
     */
     const_iterator end() const;
     iterator end();
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Erases the element with the given key, and returns the number of elements
         erased (either 0 or 1).
@@ -221,9 +221,9 @@ public:
     */
     void erase(iterator it);
     void erase(const_iterator it);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         If an element with the given key is present, the functions returns an
         iterator pointing at that element, otherwise an invalid iterator is
@@ -235,7 +235,7 @@ public:
     */
     iterator find(const key_type& key) const;
     const_iterator find(const key_type& key) const;
-    //@}
+    ///@}
 
     /**
         Inserts the given value in the hash map.

@@ -151,7 +151,7 @@ public:
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
         Returns the background colour associated with the menu item.
@@ -298,14 +298,14 @@ public:
     */
     virtual wxAcceleratorEntry *GetAccel() const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Checkers
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if the item is a check item.
@@ -352,14 +352,14 @@ public:
     */
     bool IsSubMenu() const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Setters
     */
-    //@{
+    ///@{
 
     /**
         Sets the background colour associated with the menu item.
@@ -614,6 +614,6 @@ public:
     */
     void ClearExtraAccels();
 
-    //@}
+    ///@}
 };
 

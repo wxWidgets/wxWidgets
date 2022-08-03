@@ -732,7 +732,7 @@ public:
     /**
         @name Construction and Destruction
     */
-    //@{
+    ///@{
 
     /**
         Default constructor.
@@ -798,13 +798,13 @@ public:
      */
     static void Shutdown();
 
-    //@}
+    ///@}
 
 
     /**
         @name Socket State
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if an error occurred in the last IO operation.
@@ -941,7 +941,7 @@ public:
     */
     void SaveState();
 
-    //@}
+    ///@}
 
 
     /**
@@ -949,7 +949,7 @@ public:
 
         See also: wxSocketServer::WaitForAccept(), wxSocketClient::WaitOnConnect()
     */
-    //@{
+    ///@{
 
     /**
         Shut down the socket, disabling further transmission and reception of
@@ -1331,13 +1331,13 @@ public:
     */
     wxSocketBase& WriteMsg(const void* buffer, wxUint32 nbytes);
 
-    //@}
+    ///@}
 
 
     /**
         @name Handling Socket Events
     */
-    //@{
+    ///@{
 
     /**
         Returns a pointer of the client data for this socket, as set with
@@ -1421,7 +1421,7 @@ public:
     */
     wxSOCKET_T GetSocket() const;
 
-    //@}
+    ///@}
 };
 
 

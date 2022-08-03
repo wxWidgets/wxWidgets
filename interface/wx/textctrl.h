@@ -277,7 +277,7 @@ enum wxTextCtrlHitTestResult
 class wxTextAttr
 {
 public:
-    //@{
+    ///@{
     /**
         Constructors.
     */
@@ -287,7 +287,7 @@ public:
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
     wxTextAttr(const wxTextAttr& attr);
-    //@}
+    ///@}
 
     /**
         Applies the attributes in @a style to the original object, but not those
@@ -323,7 +323,7 @@ public:
         @name GetXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Returns the alignment flags.
@@ -532,7 +532,7 @@ public:
     */
     const wxString& GetURL() const;
 
-    //@}
+    ///@}
 
 
 
@@ -540,7 +540,7 @@ public:
         @name HasXXX and IsXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Returns @true if the attribute object specifies alignment.
@@ -720,14 +720,14 @@ public:
     */
     bool IsParagraphStyle() const;
 
-    //@}
+    ///@}
 
 
     /**
         @name SetXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
@@ -969,7 +969,7 @@ public:
     */
     void SetURL(const wxString& url);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1764,7 +1764,7 @@ public:
     /**
         @name Mac-specific functions
     */
-    //@{
+    ///@{
 
     /**
         Enable the automatic replacement of new lines characters in a
@@ -1788,9 +1788,9 @@ public:
     */
     void OSXEnableNewLineReplacement(bool enable);
 
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Operator definitions for appending to a text control.
 
@@ -1810,7 +1810,7 @@ public:
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(char c);
     wxTextCtrl& operator<<(wchar_t c);
-    //@}
+    ///@}
 };
 
 

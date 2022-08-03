@@ -37,7 +37,7 @@ public:
     */
     wxCheckListBox();
 
-    //@{
+    ///@{
     /**
         Constructor, creating and showing a list box.
 
@@ -106,7 +106,7 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = "listBox");
-    //@}
+    ///@}
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

@@ -44,7 +44,7 @@
 class wxMultiChoiceDialog : public wxDialog
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor taking an array of wxString choices.
 
@@ -108,7 +108,7 @@ public:
                         const wxArrayString& choices,
                         long style = wxCHOICEDLG_STYLE,
                         const wxPoint& pos = wxDefaultPosition);
-    //@}
+    ///@}
 
     /**
         Returns array with indexes of selected items.
@@ -152,7 +152,7 @@ public:
 class wxSingleChoiceDialog : public wxDialog
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor, taking an array of wxString choices and optional client
         data.
@@ -226,7 +226,7 @@ public:
                          void** clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
-    //@}
+    ///@}
 
     /**
         Returns the index of selected item.

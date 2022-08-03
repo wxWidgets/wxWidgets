@@ -215,7 +215,7 @@ public:
     bool IsTransparent() const;
 
 
-    //@{
+    ///@{
     /**
         Sets the brush colour using red, green and blue values.
 
@@ -223,7 +223,7 @@ public:
     */
     virtual void SetColour(const wxColour& colour);
     virtual void SetColour(unsigned char red, unsigned char green, unsigned char blue);
-    //@}
+    ///@}
 
     /**
         Sets the stipple bitmap.

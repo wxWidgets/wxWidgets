@@ -78,6 +78,6 @@ public:
     wxPosition operator -(const wxPosition& pos) const;
     wxPosition operator +(const wxSize& size) const;
     wxPosition operator -(const wxSize& size) const;
-    //@}
+    ///@}
 };
 

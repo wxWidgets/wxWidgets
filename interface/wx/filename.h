@@ -697,7 +697,7 @@ public:
     */
     static wxString GetHomeDir();
 
-    //@{
+    ///@{
     /**
         Returns the representation of the file size in a human-readable form.
 
@@ -731,7 +731,7 @@ public:
                          const wxString& nullsize = _("Not available"),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
-    //@}
+    ///@}
 
     /**
         Return the long form of the path (returns identity on non-Windows platforms).
@@ -1399,7 +1399,7 @@ public:
     */
     bool ShouldFollowLink() const;
 
-    //@{
+    ///@{
     /**
         This function splits a full file name into components: the volume (with the
         first version) path (including the volume in the second version), the base name
@@ -1436,7 +1436,7 @@ public:
                           wxString* name,
                           wxString* ext,
                           wxPathFormat format = wxPATH_NATIVE);
-    //@}
+    ///@}
 
     /**
         Splits the given @a fullpath into the volume part (which may be empty) and

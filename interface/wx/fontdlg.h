@@ -52,14 +52,14 @@ public:
     */
     bool Create(wxWindow* parent, const wxFontData& data);
 
-    //@{
+    ///@{
     /**
         Returns the @ref wxFontData "font data" associated with the
         font dialog.
     */
     const wxFontData& GetFontData() const;
     wxFontData& GetFontData();
-    //@}
+    ///@}
 
     /**
         Shows the dialog, returning @c wxID_OK if the user pressed Ok, and

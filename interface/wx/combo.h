@@ -792,7 +792,7 @@ public:
     */
     void SetMainControl(wxWindow* win);
 
-    //@{
+    ///@{
     /**
         Attempts to set the control margins. When margins are given as wxPoint,
         x indicates the left and y the top margin. Use -1 to indicate that
@@ -805,7 +805,7 @@ public:
     */
     bool SetMargins(const wxPoint& pt);
     bool SetMargins(wxCoord left, wxCoord top = -1);
-    //@}
+    ///@}
 
     /**
         Set side of the control to which the popup will align itself. Valid

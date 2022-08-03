@@ -539,25 +539,25 @@ public:
     */
     wxPosition GetVisibleEnd() const;
 
-    //@{
+    ///@{
     /**
         Returns @true if both the given row and column are currently visible
         (even if only partially visible) or @false otherwise.
     */
     bool IsVisible(size_t row, size_t column) const;
     bool IsVisible(const wxPosition& pos) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Triggers a refresh for just the area shared between the given row and
         column of the window if it is visible.
     */
     virtual void RefreshRowColumn(size_t row, size_t column);
     virtual void RefreshRowColumn(const wxPosition& pos);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Triggers a refresh for the visible area shared between all given rows
         and columns (inclusive) of the window. If the target window for both
@@ -569,9 +569,9 @@ public:
                                     size_t fromColumn, size_t toColumn);
     virtual void RefreshRowsColumns(const wxPosition& from,
                                     const wxPosition& to);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Scroll to the specified row and column. It will become the first
         visible row and column in the window. Returns @true if we scrolled the
@@ -579,7 +579,7 @@ public:
     */
     bool ScrollToRowColumn(size_t row, size_t column);
     bool ScrollToRowColumn(const wxPosition& pos);
-    //@}
+    ///@}
 
     /**
         Set the number of rows and columns the target window will contain. The
@@ -591,7 +591,7 @@ public:
     */
     void SetRowColumnCount(size_t rowCount, size_t columnCount);
 
-    //@{
+    ///@{
     /**
         Returns the virtual scroll unit under the device unit given accounting
         for scroll position or @c wxNOT_FOUND (for the row, column, or possibly
@@ -599,7 +599,7 @@ public:
     */
     wxPosition VirtualHitTest(wxCoord x, wxCoord y) const;
     wxPosition VirtualHitTest(const wxPoint& pos) const;
-    //@}
+    ///@}
 };
 
 

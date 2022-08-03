@@ -106,7 +106,7 @@ public:
         Each page may have an attached image.
         The functions of this group manipulate that image.
     */
-    //@{
+    ///@{
 
 
     /**
@@ -120,7 +120,7 @@ public:
     */
     virtual bool SetPageImage(size_t page, int image) = 0;
 
-    //@}
+    ///@}
 
 
 
@@ -130,7 +130,7 @@ public:
         Each page has a text string attached.
         The functions of this group manipulate that text.
     */
-    //@{
+    ///@{
 
     /**
         Returns the string for the given page.
@@ -141,7 +141,7 @@ public:
         Sets the text for the given page.
     */
     virtual bool SetPageText(size_t page, const wxString& text) = 0;
-    //@}
+    ///@}
 
 
 
@@ -150,7 +150,7 @@ public:
 
         The functions of this group manipulate the selection.
     */
-    //@{
+    ///@{
 
     /**
         Returns the currently selected page, or @c wxNOT_FOUND if none was selected.
@@ -205,7 +205,7 @@ public:
     */
     int FindPage(const wxWindow* page) const;
 
-    //@}
+    ///@}
 
 
 
@@ -241,7 +241,7 @@ public:
 
         Functions for adding/removing pages from this control.
     */
-    //@{
+    ///@{
 
     /**
         Adds a new page.
@@ -333,7 +333,7 @@ public:
     */
     wxWindow* GetPage(size_t page) const;
 
-    //@}
+    ///@}
 
 
 /*

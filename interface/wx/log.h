@@ -222,7 +222,7 @@ public:
     /**
         @name Trace mask functions
     */
-    //@{
+    ///@{
 
     /**
         Add the @a mask to the list of allowed masks for wxLogTrace().
@@ -260,14 +260,14 @@ public:
     */
     static void RemoveTraceMask(const wxString& mask);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Log target functions
     */
-    //@{
+    ///@{
 
     /**
         Instructs wxLog to not create new log targets on the fly if there is none
@@ -369,14 +369,14 @@ public:
     */
     static void Suspend();
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Log level functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the current log level limit.
@@ -431,14 +431,14 @@ public:
     */
     static void SetLogLevel(wxLogLevel logLevel);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Enable/disable features functions
     */
-    //@{
+    ///@{
 
     /**
         Globally enable or disable logging.
@@ -520,7 +520,7 @@ public:
     */
     static void SetVerbose(bool verbose = true);
 
-    //@}
+    ///@}
 
 
     /**
@@ -594,7 +594,7 @@ protected:
         messages formatting but want to handle log messages of different levels
         differently or, in the simplest case, DoLogText().
      */
-    //@{
+    ///@{
 
     /**
         Called to log a new record.
@@ -633,7 +633,7 @@ protected:
     */
     virtual void DoLogText(const wxString& msg);
 
-    //@}
+    ///@}
 };
 
 
