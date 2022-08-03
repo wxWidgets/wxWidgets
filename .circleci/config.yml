@@ -15,6 +15,15 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            echo LD_LIBRARY_PATH=`pwd`/lib >> $BASH_ENV
+
+            # Do _not_ use the CPU count returned by build/tools/proc_count.sh
+            # for building, it is too high (36 logical CPUs) and results in
+            # running out of memory, so limit ourselves to just 2 CPUs we're
+            # supposed to be using in Docker Medium resource class.
+            wxPROC_COUNT=2
+            echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $BASH_ENV
+
             WX_EXTRA_PACKAGES=ccache ./build/tools/before_install.sh
 
             echo "PATH=/usr/lib64/ccache:$PATH" >> $BASH_ENV
@@ -34,13 +43,10 @@ jobs:
           name: Configure
           command: ./configure --disable-debug-info
 
-      # Do _not_ use total CPU count for building, it is too high (36 logical
-      # CPUs) and results in running out of memory, so limit ourselves to just
-      # 2 CPUs we're supposed to be using in Docker Medium resource class.
       - run:
           name: Build
           command: |
-            make -k -j2 CXXFLAGS='-Werror -Wno-error=cpp'
+            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp'
 
       - run:
           name: Show ccache statistics
