@@ -3,6 +3,9 @@
 # This script is used by CI jobs to install the dependencies
 # before building wxWidgets but can also be run by hand if necessary (but
 # currently it only works for the OS versions used by the CI builds).
+#
+# WX_EXTRA_PACKAGES environment variable may be predefined to contain extra
+# packages to install (in an OS-specific way) in addition to the required ones.
 
 set -e
 
@@ -82,7 +85,7 @@ case $(uname -s) in
                             libglu1-mesa-dev"
             esac
 
-            pkg_install="$pkg_install $libtoolkit_dev gdb"
+            pkg_install="$pkg_install $libtoolkit_dev gdb ${WX_EXTRA_PACKAGES}"
 
             extra_deps="$extra_deps libcurl4-openssl-dev libsecret-1-dev libnotify-dev"
             for pkg in $extra_deps; do
@@ -110,12 +113,12 @@ case $(uname -s) in
         fi
 
         if [ -f /etc/redhat-release ]; then
-            dnf install -y expat-devel findutils g++ git-core gstreamer1-plugins-base-devel gtk3-devel make libGLU-devel libjpeg-devel libpng-devel libSM-devel libtiff-devel SDL-devel webkit2gtk3-devel zlib-devel
+            dnf install -y ${WX_EXTRA_PACKAGES} expat-devel findutils g++ git-core gstreamer1-plugins-base-devel gtk3-devel make libGLU-devel libjpeg-devel libpng-devel libSM-devel libtiff-devel SDL-devel webkit2gtk3-devel zlib-devel
         fi
         ;;
 
     FreeBSD)
-        pkg install -q -y gspell gstreamer1 gtk3 jpeg-turbo libnotify libsecret mesa-libs pkgconf png tiff webkit2-gtk3
+        pkg install -q -y ${WX_EXTRA_PACKAGES} gspell gstreamer1 gtk3 jpeg-turbo libnotify libsecret mesa-libs pkgconf png tiff webkit2-gtk3
         ;;
 
     Darwin)

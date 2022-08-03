@@ -9,15 +9,14 @@ jobs:
       - checkout
 
       - run:
-          name: Checkout required submodules
-          # We need to get Git first as it's not part of the base image.
+          name: Install dependencies
           command: |
-            dnf -y install git
-            git submodule update --init 3rdparty/catch 3rdparty/nanosvg
+            WX_EXTRA_PACKAGES=git ./build/tools/before_install.sh
 
       - run:
-          name: Install dependencies
-          command: ./build/tools/before_install.sh
+          name: Checkout required submodules
+          command: |
+            git submodule update --init 3rdparty/catch 3rdparty/nanosvg
 
       - run:
           name: Configure
