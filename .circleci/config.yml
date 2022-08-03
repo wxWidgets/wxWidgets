@@ -11,12 +11,20 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            WX_EXTRA_PACKAGES=git ./build/tools/before_install.sh
+            WX_EXTRA_PACKAGES='ccache git' ./build/tools/before_install.sh
+
+            echo "PATH=/usr/lib64/ccache:$PATH" >> $BASH_ENV
 
       - run:
           name: Checkout required submodules
           command: |
             git submodule update --init 3rdparty/catch 3rdparty/nanosvg
+
+      - restore_cache:
+          name: Restore ccache
+          keys:
+            - ccache-v1-{{ arch }}-{{ .Branch }}
+            - ccache-v1-{{ arch }}
 
       - run:
           name: Configure
@@ -29,6 +37,18 @@ jobs:
           name: Build
           command: |
             make -k -j2 CXXFLAGS='-Werror -Wno-error=cpp'
+
+      - run:
+          name: Show ccache statistics
+          when: always
+          command: ccache -vv -s
+
+      - save_cache:
+          name: Save ccache
+          when: always
+          key: ccache-v1-{{ arch }}-{{ .Branch }}-{{ .BuildNum }}
+          paths:
+            - ~/.cache/ccache
 
 workflows:
   build:
