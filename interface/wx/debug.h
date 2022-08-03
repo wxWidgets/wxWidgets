@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     Exits the program immediately.
@@ -410,5 +410,5 @@ void wxSetDefaultAssertHandler();
 */
 void wxTrap();
 
-//@}
+///@}
 

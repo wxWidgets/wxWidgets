@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     This macro can be used with character and string literals (in other words,
@@ -134,4 +134,4 @@ typedef wxUSE_UNICODE_dependent wxUChar;
 */
 typedef wxUSE_UNICODE_WCHAR_dependent wxStringCharType;
 
-//@}
+///@}

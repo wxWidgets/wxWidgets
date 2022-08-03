@@ -278,7 +278,7 @@ public:
 
         These getters allow for easy string-to-enumeration-value conversion.
     */
-    //@{
+    ///@{
 
     /**
         Converts the given string to a wxBitness enum value or to
@@ -314,7 +314,7 @@ public:
     */
     static wxPortId GetPortId(const wxString& portname);
 
-    //@}
+    ///@}
 
 
     /**
@@ -322,7 +322,7 @@ public:
 
         These getters allow for easy enumeration-value-to-string conversion.
     */
-    //@{
+    ///@{
 
     /**
         @deprecated Use GetBitnessName() instead.
@@ -382,13 +382,13 @@ public:
     */
     static wxString GetOperatingSystemDirectory();
 
-    //@}
+    ///@}
 
 
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
         @deprecated Use GetBitness() instead.
@@ -525,13 +525,13 @@ public:
     */
     int GetToolkitMicroVersion() const;
 
-    //@}
+    ///@}
 
 
     /**
         @name String-form getters
     */
-    //@{
+    ///@{
 
     /**
         @deprecated Use GetBitnessName() instead.
@@ -574,14 +574,14 @@ public:
     */
     wxString GetPortIdShortName() const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Setters
     */
-    //@{
+    ///@{
 
     /**
         @deprecated Use SetBitness() instead.
@@ -636,7 +636,7 @@ public:
     */
     void SetLinuxDistributionInfo(const wxLinuxDistributionInfo& di);
 
-    //@}
+    ///@}
 };
 
 /**

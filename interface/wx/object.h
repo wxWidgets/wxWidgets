@@ -585,7 +585,7 @@ public:
     */
     wxObjectDataPtr(T* ptr = NULL);
 
-    //@{
+    ///@{
     /**
         This copy constructor increases the count of the reference counted object to
         which @a tocopy points and then this class will point to, as well.
@@ -595,7 +595,7 @@ public:
     template <typename U>
     wxObjectDataPtr(const wxObjectDataPtr<U>& tocopy);
     wxObjectDataPtr(const wxObjectDataPtr<T>& tocopy);
-    //@}
+    ///@}
 
 
     /**
@@ -652,7 +652,7 @@ public:
     */
     T* operator->() const;
 
-    //@{
+    ///@{
     /**
         Assignment operator.
 
@@ -662,7 +662,7 @@ public:
     wxObjectDataPtr<T>& operator=(const wxObjectDataPtr<U>& tocopy);
     wxObjectDataPtr<T>& operator=(const wxObjectDataPtr<T>& tocopy);
     wxObjectDataPtr<T>& operator=(T* ptr);
-    //@}
+    ///@}
 };
 
 
@@ -672,7 +672,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_rtti */
-//@{
+///@{
 
 /**
     Returns a pointer to the wxClassInfo object associated with this class.
@@ -896,10 +896,10 @@ public:
 */
 wxObject *wxCreateDynamicObject(const wxString& className);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     This is defined in debug mode to be call the redefined new operator
@@ -915,5 +915,5 @@ wxObject *wxCreateDynamicObject(const wxString& className);
 */
 #define WXDEBUG_NEW( arg )
 
-//@}
+///@}
 

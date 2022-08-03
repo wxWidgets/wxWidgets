@@ -43,7 +43,7 @@ enum wxZLibFlags {
 class wxZlibOutputStream : public wxFilterOutputStream
 {
 public:
-    //@{
+    ///@{
     /**
         Creates a new write-only compressed stream.
 
@@ -69,14 +69,14 @@ public:
                        int flags = wxZLIB_ZLIB);
     wxZlibOutputStream(wxOutputStream* stream, int level = -1,
                        int flags = wxZLIB_ZLIB);
-    //@}
+    ///@}
 
     /**
         Returns @true if zlib library in use can handle gzip compressed data.
     */
     static bool CanHandleGZip();
 
-    //@{
+    ///@{
     /**
         Sets the dictionary to the specified chunk of data. This can improve
         compression rate but note that the dictionary has to be the same when
@@ -87,7 +87,7 @@ public:
     */
     bool SetDictionary(const char *data, size_t datalen);
     bool SetDictionary(const wxMemoryBuffer &buf);
-    //@}
+    ///@}
 };
 
 
@@ -110,7 +110,7 @@ public:
 class wxZlibInputStream : public wxFilterInputStream
 {
 public:
-    //@{
+    ///@{
     /**
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
@@ -128,14 +128,14 @@ public:
     */
     wxZlibInputStream(wxInputStream& stream, int flags = wxZLIB_AUTO);
     wxZlibInputStream(wxInputStream* stream, int flags = wxZLIB_AUTO);
-    //@}
+    ///@}
 
     /**
         Returns @true if zlib library in use can handle gzip compressed data.
     */
     static bool CanHandleGZip();
 
-    //@{
+    ///@{
     /**
         Sets the dictionary to the specified chunk of data. This can improve
         compression rate but note that the dictionary has to be the same when
@@ -146,6 +146,6 @@ public:
     */
     bool SetDictionary(const char *data, size_t datalen);
     bool SetDictionary(const wxMemoryBuffer &buf);
-    //@}
+    ///@}
 };
 

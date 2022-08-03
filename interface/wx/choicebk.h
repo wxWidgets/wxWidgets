@@ -65,7 +65,7 @@ wxEventType wxEVT_CHOICEBOOK_PAGE_CHANGING;
 class wxChoicebook : public wxBookCtrlBase
 {
 public:
-    //@{
+    ///@{
     /**
         Constructs a choicebook control.
     */
@@ -75,7 +75,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxEmptyString);
-    //@}
+    ///@}
 
     /**
        Create the choicebook control that has already been constructed with

@@ -268,7 +268,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     When loading a function from a DLL you always have to cast the returned
@@ -293,5 +293,5 @@ public:
 */
 #define wxDYNLIB_FUNCTION(type, name, dynlib)
 
-//@}
+///@}
 

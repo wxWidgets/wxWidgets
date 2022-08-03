@@ -79,7 +79,7 @@ public:
     */
     wxGridBagSizer(int vgap = 0, int hgap = 0);
 
-    //@{
+    ///@{
     /**
         Adds the given item to the given position.
 
@@ -105,14 +105,14 @@ public:
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0, int border = 0, wxObject* userData = NULL);
 
-    //@}
+    ///@}
     /**
         Called when the managed size of the sizer is needed or when layout
         needs done.
     */
     wxSize CalcMin();
 
-    //@{
+    ///@{
     /**
         Look at all items and see if any intersect (or would overlap) the given
         item. Returns @true if so, @false if there would be no overlap. If an
@@ -123,16 +123,16 @@ public:
                               wxGBSizerItem* excludeItem = NULL);
     bool CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span,
                               wxGBSizerItem* excludeItem = NULL);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Find the sizer item for the given window or subsizer, returns @NULL if
         not found. (non-recursive)
     */
     wxGBSizerItem* FindItem(wxWindow* window);
     wxGBSizerItem* FindItem(wxSizer* sizer);
-    //@}
+    ///@}
 
     /**
         Return the sizer item located at the point given in pt, or @NULL if
@@ -165,23 +165,23 @@ public:
     */
     wxSize GetEmptyCellSize() const;
 
-    //@{
+    ///@{
     /**
         Get the grid position of the specified item.
     */
     wxGBPosition GetItemPosition(wxWindow* window);
     wxGBPosition GetItemPosition(wxSizer* sizer);
     wxGBPosition GetItemPosition(size_t index);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Get the row/col spanning of the specified item.
     */
     wxGBSpan GetItemSpan(wxWindow* window);
     wxGBSpan GetItemSpan(wxSizer* sizer);
     wxGBSpan GetItemSpan(size_t index);
-    //@}
+    ///@}
 
     /**
         Called when the managed size of the sizer is needed or when layout
@@ -194,7 +194,7 @@ public:
     */
     void SetEmptyCellSize(const wxSize& sz);
 
-    //@{
+    ///@{
     /**
         Set the grid position of the specified item. Returns @true on success.
         If the move is not allowed (because an item is already there) then
@@ -203,9 +203,9 @@ public:
     bool SetItemPosition(wxWindow* window, const wxGBPosition& pos);
     bool SetItemPosition(wxSizer* sizer, const wxGBPosition& pos);
     bool SetItemPosition(size_t index, const wxGBPosition& pos);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Set the row/col spanning of the specified item. Returns @true on
         success. If the move is not allowed (because an item is already there)
@@ -214,7 +214,7 @@ public:
     bool SetItemSpan(wxWindow* window, const wxGBSpan& span);
     bool SetItemSpan(wxSizer* sizer, const wxGBSpan& span);
     bool SetItemSpan(size_t index, const wxGBSpan& span);
-    //@}
+    ///@}
 };
 
 
@@ -258,21 +258,21 @@ public:
     */
     void GetEndPos(int& row, int& col);
 
-    //@{
+    ///@{
     /**
         Get the grid position of the item.
     */
     wxGBPosition GetPos() const;
     void GetPos(int& row, int& col) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Get the row and column spanning of the item.
     */
     wxGBSpan GetSpan() const;
     void GetSpan(int& rowspan, int& colspan) const;
-    //@}
+    ///@}
 
     /**
         Returns @true if this item and the @a other item intersect.

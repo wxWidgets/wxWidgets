@@ -231,7 +231,7 @@ public:
      */
     wxWCharBuffer cMB2WC(const wxCharBuffer& buf) const;
 
-    //@{
+    ///@{
     /**
         Converts from multibyte encoding to the current wxChar type (which
         depends on whether wxUSE_UNICODE is set to 1).
@@ -242,7 +242,7 @@ public:
     */
     const char* cMB2WX(const char* psz) const;
     wxWCharBuffer cMB2WX(const char* psz) const;
-    //@}
+    ///@}
 
     /**
         Converts from Unicode to multibyte encoding by calling FromWChar() and
@@ -275,7 +275,7 @@ public:
      */
     wxCharBuffer cWC2MB(const wxWCharBuffer& buf) const;
 
-    //@{
+    ///@{
     /**
         Converts from Unicode to the current wxChar type.
 
@@ -285,9 +285,9 @@ public:
     */
     const wchar_t* cWC2WX(const wchar_t* psz) const;
     wxCharBuffer cWC2WX(const wchar_t* psz) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Converts from the current wxChar type to multibyte encoding.
 
@@ -297,9 +297,9 @@ public:
     */
     const char* cWX2MB(const wxChar* psz) const;
     wxCharBuffer cWX2MB(const wxChar* psz) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Converts from the current wxChar type to Unicode.
 
@@ -309,7 +309,7 @@ public:
     */
     const wchar_t* cWX2WC(const wxChar* psz) const;
     wxWCharBuffer cWX2WC(const wxChar* psz) const;
-    //@}
+    ///@}
 
     /**
         @deprecated This function is deprecated, please use ToWChar() instead.

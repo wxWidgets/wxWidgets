@@ -110,7 +110,7 @@ public:
     */
     void DestroyClippingRegion();
 
-    //@{
+    ///@{
     /**
         Function not implemented in this DC class.
     */
@@ -126,7 +126,7 @@ public:
     void EndDoc();
     void StartPage();
     void EndPage();
-    //@}
+    ///@}
 };
 
 /**

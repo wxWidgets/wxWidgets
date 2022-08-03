@@ -118,7 +118,7 @@ public:
     */
     virtual ~wxChoice();
 
-    //@{
+    ///@{
     /**
         Creates the choice for two-step construction. See wxChoice().
     */
@@ -136,7 +136,7 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
-    //@}
+    ///@}
 
     /**
         Gets the number of columns in this choice item.

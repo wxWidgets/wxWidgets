@@ -32,7 +32,7 @@ public:
     /// Constructor
     wxItemContainerImmutable();
 
-    //@{
+    ///@{
 
     /**
         Returns the number of items in the control.
@@ -90,10 +90,10 @@ public:
     */
     virtual int FindString(const wxString& string, bool caseSensitive = false) const;
 
-    //@}
+    ///@}
 
     /// @name Selection
-    //@{
+    ///@{
 
     /**
         Sets the selection to the given item @a n or removes the selection
@@ -151,7 +151,7 @@ public:
     */
     void Select(int n);
 
-    //@}
+    ///@}
 };
 
 
@@ -196,7 +196,7 @@ public:
 class wxItemContainer : public wxItemContainerImmutable
 {
 public:
-    //@{
+    ///@{
 
     /**
         Appends item into the control.
@@ -336,7 +336,7 @@ public:
     */
     int Append(unsigned int n, const wxString* items,
                 wxClientData** clientData);
-    //@}
+    ///@}
 
     /**
         Removes all items from the control.
@@ -411,7 +411,7 @@ public:
     bool HasClientUntypedData() const;
 
 
-    //@{
+    ///@{
 
     /**
         Returns a pointer to the client data associated with the given item (if
@@ -472,9 +472,9 @@ public:
     */
     void SetClientObject(unsigned int n, wxClientData* data);
 
-    //@}
+    ///@}
 
-    //@{
+    ///@{
 
     /**
         Inserts item into the control.
@@ -644,9 +644,9 @@ public:
     int Insert(unsigned int n, const wxString* items,
                 unsigned int pos,
                 wxClientData** clientData);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Replaces the current control contents with the given items.
 
@@ -740,7 +740,7 @@ public:
             new items.
     */
     void Set(unsigned int n, const wxString* items, wxClientData** clientData);
-    //@}
+    ///@}
 };
 
 

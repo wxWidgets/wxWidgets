@@ -806,14 +806,14 @@ public:
 class wxDataViewItem
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor.
     */
     wxDataViewItem();
     wxDataViewItem(const wxDataViewItem& item);
     explicit wxDataViewItem(void* id);
-    //@}
+    ///@}
 
     /**
         Returns the ID.
@@ -1080,7 +1080,7 @@ public:
     */
     virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* col);
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a bitmap. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1097,9 +1097,9 @@ public:
                                          int width = -1,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a bitmap. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1116,9 +1116,9 @@ public:
                                          int width = -1,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1138,9 +1138,9 @@ public:
                                        int width = -1,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1160,9 +1160,9 @@ public:
                                        int width = -1,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering text with an icon. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1183,9 +1183,9 @@ public:
                                            int width = -1,
                                            wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering text with an icon. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1206,9 +1206,9 @@ public:
                                            int width = -1,
                                            wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a progress indicator. Returns the
         wxDataViewColumn created in the function or @NULL on failure.
@@ -1228,9 +1228,9 @@ public:
                                            int width = 80,
                                            wxAlignment align = wxALIGN_CENTER,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a progress indicator. Returns the
         wxDataViewColumn created in the function or @NULL on failure.
@@ -1250,9 +1250,9 @@ public:
                                            int width = 80,
                                            wxAlignment align = wxALIGN_CENTER,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering text. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1272,9 +1272,9 @@ public:
                                        int width = -1,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering text. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1294,9 +1294,9 @@ public:
                                        int width = -1,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1316,9 +1316,9 @@ public:
                                          int width = 30,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1338,7 +1338,7 @@ public:
                                          int width = 30,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
     /**
         Associates a wxDataViewModel with the control.
@@ -2934,13 +2934,13 @@ public:
            const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
            const wxValidator& validator = wxDefaultValidator );
 
-    //@{
+    ///@{
     /**
         Returns the store.
     */
     wxDataViewListStore *GetStore();
     const wxDataViewListStore *GetStore() const;
-    //@}
+    ///@}
 
     /**
         Returns the position of given @e item or wxNOT_FOUND if it's
@@ -2957,7 +2957,7 @@ public:
      */
     wxDataViewItem RowToItem(int row) const;
 
-    //@{
+    ///@{
     /**
         @name Selection handling functions
      */
@@ -2998,12 +2998,12 @@ public:
      */
     bool IsRowSelected(unsigned row) const;
 
-    //@}
+    ///@}
 
     /**
         @name Column management functions
     */
-    //@{
+    ///@{
 
     /**
         Appends a column to the control and additionally appends a
@@ -3086,13 +3086,13 @@ public:
     */
     void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
 
-    //@}
+    ///@}
 
 
     /**
         @name Item management functions
     */
-    //@{
+    ///@{
 
     /**
         Appends an item (i.e.\ a row) to the control.
@@ -3202,7 +3202,7 @@ public:
     */
     void SetItemData(const wxDataViewItem& item, wxUIntPtr data);
 
-    //@}
+    ///@}
 };
 
 
@@ -3342,13 +3342,13 @@ public:
     wxDataViewItem GetNthChild(const wxDataViewItem& parent,
                                unsigned int pos) const;
 
-    //@{
+    ///@{
     /**
         Returns the store.
     */
     wxDataViewTreeStore* GetStore();
     const wxDataViewTreeStore* GetStore() const;
-    //@}
+    ///@}
 
     /**
         Calls the same method from wxDataViewTreeStore but uses
@@ -3726,14 +3726,14 @@ public:
 class wxDataViewIconText : public wxObject
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor.
     */
     wxDataViewIconText(const wxString& text = wxEmptyString,
                        const wxBitmapBundle& bitmap = wxBitmapBundle());
     wxDataViewIconText(const wxDataViewIconText& other);
-    //@}
+    ///@}
 
     /**
         Gets the associated image.

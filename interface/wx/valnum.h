@@ -459,7 +459,7 @@ public:
 
     @since 2.9.2
  */
-//@{
+///@{
 template <typename T>
 inline wxFloatingPointValidator<T>
 wxMakeFloatingPointValidator(T *value, int style = wxNUM_VAL_DEFAULT);
@@ -468,4 +468,4 @@ template <typename T>
 inline wxFloatingPointValidator<T>
 wxMakeFloatingPointValidator(int precision,
                              T *value, int style = wxNUM_VAL_DEFAULT);
-//@}
+///@}

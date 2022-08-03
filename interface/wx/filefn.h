@@ -101,7 +101,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 
 /**
     A special return value of many wxWidgets classes to indicate that
@@ -353,7 +353,7 @@ bool wxRemoveFile(const wxString& file);
 enum wxPosixPermissions
 {
     /// Standard POSIX names for these permission flags with "wx" prefix.
-    //@{
+    ///@{
     wxS_IRUSR = 00400,
     wxS_IWUSR = 00200,
     wxS_IXUSR = 00100,
@@ -365,10 +365,10 @@ enum wxPosixPermissions
     wxS_IROTH = 00004,
     wxS_IWOTH = 00002,
     wxS_IXOTH = 00001,
-    //@}
+    ///@}
 
     /// Longer but more readable synonyms for the constants above.
-    //@{
+    ///@{
     wxPOSIX_USER_READ = wxS_IRUSR,
     wxPOSIX_USER_WRITE = wxS_IWUSR,
     wxPOSIX_USER_EXECUTE = wxS_IXUSR,
@@ -380,7 +380,7 @@ enum wxPosixPermissions
     wxPOSIX_OTHERS_READ = wxS_IROTH,
     wxPOSIX_OTHERS_WRITE = wxS_IWOTH,
     wxPOSIX_OTHERS_EXECUTE = wxS_IXOTH,
-    //@}
+    ///@}
 
     /// Default mode for the new files: allow reading/writing them to everybody but
     /// the effective file mode will be set after ANDing this value with umask and
@@ -490,10 +490,10 @@ enum wxFileKind
     wxFILE_KIND_PIPE      ///< A pipe
 };
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 /**
     Returns the type of an open file. Possible return values are enumerations
     of ::wxFileKind.
@@ -502,10 +502,10 @@ enum wxFileKind
 */
 wxFileKind wxGetFileKind(int fd);
 wxFileKind wxGetFileKind(FILE* fp);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 /**
     @deprecated
         This function is obsolete, please use wxFileName::SplitPath() instead.
@@ -517,10 +517,10 @@ wxFileKind wxGetFileKind(FILE* fp);
 */
 wxString wxFileNameFromPath(const wxString& path);
 char* wxFileNameFromPath(char* path);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 /**
     @deprecated
         This function is obsolete, please use wxFileName::CreateTempFileName() instead.
@@ -529,5 +529,5 @@ char* wxFileNameFromPath(char* path);
 */
 char* wxGetTempFileName(const wxString& prefix, char* buf = NULL);
 bool wxGetTempFileName(const wxString& prefix, wxString& buf);
-//@}
+///@}
 

@@ -107,7 +107,7 @@ public:
     */
     virtual ~wxBufferedDC();
 
-    //@{
+    ///@{
     /**
         Initializes the object created using the default constructor. Please
         see the constructors for parameter details.
@@ -116,7 +116,7 @@ public:
               int style = wxBUFFER_CLIENT_AREA);
     void Init(wxDC* dc, wxBitmap& buffer = wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA);
-    //@}
+    ///@}
 
 
     /**
@@ -203,7 +203,7 @@ wxDC* wxAutoBufferedPaintDCFactory(wxWindow* window);
 class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
-    //@{
+    ///@{
     /**
         As with wxBufferedDC, you may either provide the bitmap to be used for
         buffering or let this object create one internally (in the latter case,
@@ -218,7 +218,7 @@ public:
                       int style = wxBUFFER_CLIENT_AREA);
     wxBufferedPaintDC(wxWindow* window,
                       int style = wxBUFFER_CLIENT_AREA);
-    //@}
+    ///@}
 
     /**
         Copies everything drawn on the DC so far to the window associated with

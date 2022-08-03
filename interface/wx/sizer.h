@@ -440,7 +440,7 @@ public:
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 
 
-    //@{
+    ///@{
     /**
         Returns the list of the items in this sizer.
 
@@ -449,7 +449,7 @@ public:
     */
     wxSizerItemList& GetChildren();
     const wxSizerItemList& GetChildren() const;
-    //@}
+    ///@}
 
     /**
         Returns the window this sizer is used in or @NULL if none.
@@ -867,7 +867,7 @@ public:
             @true if the minimal size was successfully set or @false if the
             item was not found.
     */
-    //@{
+    ///@{
     bool SetItemMinSize(wxWindow* window, int width, int height);
     bool SetItemMinSize(wxWindow* window, const wxSize& size);
 
@@ -876,7 +876,7 @@ public:
 
     bool SetItemMinSize(size_t index, int width, int height);
     bool SetItemMinSize(size_t index, const wxSize& size);
-    //@}
+    ///@}
 
     /**
         Call this to give the sizer a minimal size.
@@ -1093,7 +1093,7 @@ public:
     wxSizerItem(int width, int height, int proportion=0, int flag=0,
                 int border=0, wxObject* userData=NULL);
 
-    //@{
+    ///@{
     /**
         Construct a sizer item for tracking a window.
     */
@@ -1101,9 +1101,9 @@ public:
     wxSizerItem(wxWindow* window, int proportion=0, int flag=0,
                 int border=0,
                 wxObject* userData=NULL);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Construct a sizer item for tracking a subsizer.
     */
@@ -1111,7 +1111,7 @@ public:
     wxSizerItem(wxSizer* sizer, int proportion=0, int flag=0,
                 int border=0,
                 wxObject* userData=NULL);
-    //@}
+    ///@}
 
     /**
         Deletes the user data and subsizer, if any.
@@ -1144,7 +1144,7 @@ public:
     */
     void AssignSizer(wxSizer *sizer);
 
-    //@{
+    ///@{
     /**
         Set the size of the spacer tracked by this item.
 
@@ -1152,7 +1152,7 @@ public:
     */
     void AssignSpacer(const wxSize& size);
     void AssignSpacer(int w, int h);
-    //@}
+    ///@}
 
     /**
         Calculates the minimum desired size for the item, including any space
@@ -1315,14 +1315,14 @@ public:
     */
     void SetProportion(int proportion);
 
-    //@{
+    ///@{
     /**
         Set the ratio item attribute.
     */
     void SetRatio(int width, int height);
     void SetRatio(wxSize size);
     void SetRatio(float ratio);
-    //@}
+    ///@}
 
     /**
         Set the sizer tracked by this item.
@@ -1665,7 +1665,7 @@ enum wxFlexSizerGrowMode
 class wxFlexGridSizer : public wxGridSizer
 {
 public:
-    //@{
+    ///@{
     /**
         wxFlexGridSizer constructors.
 
@@ -1678,7 +1678,7 @@ public:
 
     wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
     wxFlexGridSizer( int rows, int cols, const wxSize& gap );
-    //@}
+    ///@}
 
     /**
         Specifies that column @a idx (starting from zero) should be grown if
@@ -1822,7 +1822,7 @@ public:
 class wxGridSizer : public wxSizer
 {
 public:
-    //@{
+    ///@{
     /**
         wxGridSizer constructors.
 
@@ -1854,7 +1854,7 @@ public:
 
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int rows, int cols, const wxSize& gap );
-    //@}
+    ///@}
 
     /**
         Returns the number of columns that has been specified for the

@@ -71,7 +71,7 @@ public:
     /**
         @name Dispatch and processing
     */
-    //@{
+    ///@{
 
     /**
         Start the event loop, return the exit code when it is finished.
@@ -178,13 +178,13 @@ public:
      */
     virtual void WakeUp() = 0;
 
-    //@}
+    ///@}
 
 
     /**
         @name Idle handling
     */
-    //@{
+    ///@{
 
     /**
         Makes sure that idle events are sent again.
@@ -199,13 +199,13 @@ public:
     */
     virtual bool ProcessIdle();
 
-    //@}
+    ///@}
 
 
     /**
         @name Yield-related hooks
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if called from inside Yield() or from inside YieldFor().
@@ -265,7 +265,7 @@ public:
     */
     virtual bool IsEventAllowedInsideYield(wxEventCategory cat) const;
 
-    //@}
+    ///@}
 
 
 protected:

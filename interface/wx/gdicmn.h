@@ -207,7 +207,7 @@ public:
         following functions are documented to take the wxPoint they
         operate on as an explicit argument.
     */
-    //@{
+    ///@{
     wxRealPoint& operator=(const wxRealPoint& pt);
 
     bool operator ==(const wxRealPoint& p1, const wxRealPoint& p2);
@@ -232,7 +232,7 @@ public:
     wxSize operator *(int factor, const wxSize& sz);
     wxSize& operator /=(int factor);
     wxSize& operator *=(int factor);
-    //@}
+    ///@}
 
     /**
         X coordinate of this point.
@@ -300,7 +300,7 @@ public:
     */
     wxRect(const wxSize& size);
 
-    //@{
+    ///@{
     /**
         Returns the rectangle having the same size as this one but centered
         relatively to the given rectangle @a r. By default, rectangle is
@@ -310,7 +310,7 @@ public:
     */
     wxRect CentreIn(const wxRect& r, int dir = wxBOTH) const;
     wxRect CenterIn(const wxRect& r, int dir = wxBOTH) const;
-    //@}
+    ///@}
 
     /**
         Returns @true if the given point is inside the rectangle (or on its
@@ -328,7 +328,7 @@ public:
     */
     bool Contains(const wxRect& rect) const;
 
-    //@{
+    ///@{
     /**
         Decrease the rectangle size.
 
@@ -339,7 +339,7 @@ public:
     wxRect& Deflate(const wxSize& diff);
     wxRect& Deflate(wxCoord diff);
     wxRect  Deflate(wxCoord dx, wxCoord dy) const;
-    //@}
+    ///@}
 
     /**
         Gets the bottom point of the rectangle.
@@ -414,7 +414,7 @@ public:
     */
     int GetY() const;
 
-    //@{
+    ///@{
     /**
         Increases the size of the rectangle.
 
@@ -447,7 +447,7 @@ public:
     wxRect& Inflate(const wxSize& diff);
     wxRect& Inflate(wxCoord diff);
     wxRect Inflate(wxCoord dx, wxCoord dy) const;
-    //@}
+    ///@}
 
     /**
         Modifies this rectangle to contain the overlapping portion of this rectangle
@@ -475,7 +475,7 @@ public:
     */
     bool IsEmpty() const;
 
-    //@{
+    ///@{
     /**
         Moves the rectangle by the specified offset. If @a dx is positive, the
         rectangle is moved to the right, if @a dy is positive, it is moved to the
@@ -483,7 +483,7 @@ public:
     */
     void Offset(wxCoord dx, wxCoord dy);
     void Offset(const wxPoint& pt);
-    //@}
+    ///@}
 
     /**
         Sets the height.
@@ -572,35 +572,35 @@ public:
     void SetBottomLeft(const wxPoint &p);
 
 
-    //@{
+    ///@{
     /**
         Modifies the rectangle to contain the bounding box of this rectangle
         and the one passed in as parameter.
     */
     wxRect Union(const wxRect& rect) const;
     wxRect& Union(const wxRect& rect);
-    //@}
+    ///@}
 
     /**
         Inequality operator.
     */
     bool operator !=(const wxRect& r1, const wxRect& r2);
 
-    //@{
+    ///@{
     /**
         Like Union(), but doesn't treat empty rectangles specially.
     */
     wxRect operator +(const wxRect& r1, const wxRect& r2);
     wxRect& operator +=(const wxRect& r);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Returns the intersection of two rectangles (which may be empty).
     */
     wxRect operator *(const wxRect& r1, const wxRect& r2);
     wxRect& operator *=(const wxRect& r);
-    //@}
+    ///@}
 
     /**
         Assignment operator.
@@ -695,7 +695,7 @@ public:
         following functions are documented to take the wxPoint they
         operate on as an explicit argument.
     */
-    //@{
+    ///@{
     wxPoint& operator=(const wxPoint& pt);
 
     bool operator ==(const wxPoint& p1, const wxPoint& p2);
@@ -720,7 +720,7 @@ public:
     wxSize operator *(int factor, const wxSize& sz);
     wxSize& operator /=(int factor);
     wxSize& operator *=(int factor);
-    //@}
+    ///@}
 
 
     /**
@@ -733,7 +733,7 @@ public:
         been initialized or specified. In particular, ::wxDefaultPosition is
         used in many places with this meaning.
      */
-    //@{
+    ///@{
 
     /**
         Returns @true if neither of the point components is equal to
@@ -763,7 +763,7 @@ public:
         @since 2.9.2
     */
     void SetDefaults(const wxPoint& pt);
-    //@}
+    ///@}
 
     /**
         x member.
@@ -949,7 +949,7 @@ public:
     */
     wxSize(int width, int height);
 
-    //@{
+    ///@{
     /**
         Decreases the size in both x and y directions.
 
@@ -959,7 +959,7 @@ public:
     void DecBy(const wxSize& size);
     void DecBy(int dx, int dy);
     void DecBy(int d);
-    //@}
+    ///@}
 
     /**
         Decrements this object so that both of its dimensions are not greater
@@ -991,7 +991,7 @@ public:
     */
     int GetWidth() const;
 
-    //@{
+    ///@{
     /**
         Increases the size in both x and y directions.
 
@@ -1001,7 +1001,7 @@ public:
     void IncBy(const wxSize& size);
     void IncBy(int dx, int dy);
     void IncBy(int d);
-    //@}
+    ///@}
 
     /**
         Increments this object so that both of its dimensions are not less than
@@ -1078,7 +1078,7 @@ public:
         as wxSize always stores @c int coordinates and the result is always
         rounded.
     */
-    //@{
+    ///@{
     wxSize& operator=(const wxSize& sz);
 
     bool operator ==(const wxSize& s1, const wxSize& s2);
@@ -1099,7 +1099,7 @@ public:
     wxSize& operator /=(double factor);
     wxSize& operator *=(int factor);
     wxSize& operator *=(double factor);
-    //@}
+    ///@}
 };
 
 /**
@@ -1115,7 +1115,7 @@ const wxSize wxDefaultSize;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 
 /**
     This macro loads a bitmap from either application resources (on the
@@ -1239,10 +1239,10 @@ int wxDisplayDepth();
 */
 void wxSetCursor(const wxCursor& cursor);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the dimensions of the work area on the display.
 
@@ -1257,10 +1257,10 @@ void wxSetCursor(const wxCursor& cursor);
     @header{wx/gdicmn.h}
 */
 void wxClientDisplayRect(int* x, int* y, int* width, int* height);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the dimensions of the work area on the display. On Windows this
     means the area not covered by the taskbar, etc. Other platforms are
@@ -1272,10 +1272,10 @@ void wxClientDisplayRect(int* x, int* y, int* width, int* height);
     @header{wx/gdicmn.h}
 */
 wxRect wxGetClientDisplayRect();
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display resolution in pixels per inch.
 
@@ -1293,10 +1293,10 @@ wxRect wxGetClientDisplayRect();
     @since 2.9.0
 */
 wxSize wxGetDisplayPPI();
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in pixels.
 
@@ -1312,10 +1312,10 @@ wxSize wxGetDisplayPPI();
     @header{wx/gdicmn.h}
 */
 void wxDisplaySize(int* width, int* height);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in pixels.
 
@@ -1328,10 +1328,10 @@ void wxDisplaySize(int* width, int* height);
     @header{wx/gdicmn.h}
 */
 wxSize wxGetDisplaySize();
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in millimeters.
 
@@ -1343,10 +1343,10 @@ wxSize wxGetDisplaySize();
     @header{wx/gdicmn.h}
 */
 void wxDisplaySizeMM(int* width, int* height);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 /**
     Returns the display size in millimeters.
 
@@ -1355,4 +1355,4 @@ void wxDisplaySizeMM(int* width, int* height);
     @header{wx/gdicmn.h}
 */
 wxSize wxGetDisplaySizeMM();
-//@}
+///@}

@@ -193,15 +193,15 @@ public:
     */
     wxZipEntry* Clone() const;
 
-    //@{
+    ///@{
     /**
         Gets and sets the short comment for this entry.
     */
     wxString GetComment() const;
     void SetComment(const wxString& comment);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The low 8 bits are always the DOS/Windows file attributes for this entry.
         The values of these attributes are given in the enumeration ::wxZipAttributes.
@@ -217,9 +217,9 @@ public:
     */
     wxUint32 GetExternalAttributes() const;
     void SetExternalAttributes(wxUint32 attr);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The extra field from the entry's central directory record.
 
@@ -229,9 +229,9 @@ public:
     const char* GetExtra() const;
     size_t GetExtraLen() const;
     void SetExtra(const char* extra, size_t len);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The extra field from the entry's local record.
 
@@ -241,9 +241,9 @@ public:
     const char* GetLocalExtra() const;
     size_t GetLocalExtraLen() const;
     void SetLocalExtra(const char* extra, size_t len);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The compression method.
         The enumeration ::wxZipMethod lists the possible values.
@@ -253,9 +253,9 @@ public:
     */
     int GetMethod() const;
     void SetMethod(int method);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         If IsMadeByUnix() is true then returns the unix permission bits stored
         in GetExternalAttributes(). Otherwise synthesises them from the DOS attributes.
@@ -272,9 +272,9 @@ public:
         permissions when creating zips, call SetSystemMadeBy(wxZIP_SYSTEM_UNIX).
     */
     void SetMode(int mode);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The originating file-system.
 
@@ -284,7 +284,7 @@ public:
     */
     int GetSystemMadeBy() const;
     void SetSystemMadeBy(int system);
-    //@}
+    ///@}
 
     /**
         The compressed size of this entry in bytes.
@@ -326,15 +326,15 @@ public:
     */
     bool IsMadeByUnix() const;
 
-    //@{
+    ///@{
     /**
         Indicates that this entry's data is text in an 8-bit encoding.
     */
     bool IsText() const;
     void SetIsText(bool isText = true);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Sets the notifier (see wxZipNotifier) for this entry.
         Whenever the wxZipInputStream updates this entry, it will then invoke
@@ -348,7 +348,7 @@ public:
     */
     void SetNotifier(wxZipNotifier& notifier);
     void UnsetNotifier();
-    //@}
+    ///@}
 
     /**
         Assignment operator.
@@ -381,7 +381,7 @@ class wxZipInputStream : public wxArchiveInputStream
 {
 public:
 
-    //@{
+    ///@{
     /**
         Constructor. In a Unicode build the second parameter @a conv is used to
         translate the filename and comment fields into Unicode.
@@ -393,7 +393,7 @@ public:
                      wxMBConv& conv = wxConvLocal);
     wxZipInputStream(wxInputStream* stream,
                      wxMBConv& conv = wxConvLocal);
-    //@}
+    ///@}
 
     /**
         Closes the current entry.
@@ -477,7 +477,7 @@ public:
 class wxZipOutputStream : public wxArchiveOutputStream
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor.
 
@@ -502,7 +502,7 @@ public:
                       wxMBConv& conv = wxConvUTF8);
     wxZipOutputStream(wxOutputStream* stream, int level = -1,
                       wxMBConv& conv = wxConvUTF8);
-    //@}
+    ///@}
 
     /**
         The destructor calls Close() to finish writing the zip if it has
@@ -544,7 +544,7 @@ public:
     */
     bool CopyEntry(wxZipEntry* entry, wxZipInputStream& inputStream);
 
-    //@{
+    ///@{
     /**
         Set the compression level that will be used the next time an entry is
         created.
@@ -554,7 +554,7 @@ public:
     */
     int GetLevel() const;
     void SetLevel(int level);
-    //@}
+    ///@}
 
     /**
         Create a new directory entry (see wxArchiveEntry::IsDir) with the given
@@ -566,7 +566,7 @@ public:
     bool PutNextDirEntry(const wxString& name,
                          const wxDateTime& dt = wxDateTime::Now());
 
-    //@{
+    ///@{
     /**
         Takes ownership of @a entry and uses it to create a new entry in the zip.
 
@@ -584,7 +584,7 @@ public:
     bool PutNextEntry(const wxString& name,
                       const wxDateTime& dt = wxDateTime::Now(),
                       wxFileOffset size = wxInvalidOffset);
-    //@}
+    ///@}
 
     /**
         Sets a comment for the zip as a whole.

@@ -497,7 +497,7 @@ public:
      */
     virtual wxString GetHint() const;
 
-    //@{
+    ///@{
     /**
         Attempts to set the control margins. When margins are given as wxPoint,
         x indicates the left and y the top margin. Use -1 to indicate that
@@ -510,7 +510,7 @@ public:
     */
     bool SetMargins(const wxPoint& pt);
     bool SetMargins(wxCoord left, wxCoord top = -1);
-    //@}
+    ///@}
 
     /**
         Returns the margins used by the control. The @c x field of the returned

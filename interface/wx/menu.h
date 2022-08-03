@@ -833,7 +833,7 @@ public:
     */
     size_t GetMenuItemCount() const;
 
-    //@{
+    ///@{
     /**
         Returns the list of items in the menu.
 
@@ -842,7 +842,7 @@ public:
     */
     wxMenuItemList& GetMenuItems();
     const wxMenuItemList& GetMenuItems() const;
-    //@}
+    ///@}
 
     /**
         Returns the title of the menu.

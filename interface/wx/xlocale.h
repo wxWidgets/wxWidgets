@@ -104,7 +104,7 @@ wxXLocale wxNullXLocale;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_locale */
-//@{
+///@{
 
 int wxIsalnum_l(wchar_t c, const wxXLocale& loc);
 int wxIsalpha_l(wchar_t c, const wxXLocale& loc);
@@ -124,5 +124,5 @@ double wxStrtod_l(const wchar_t *c, wchar_t **endptr, const wxXLocale& loc);
 long wxStrtol_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc);
 unsigned long wxStrtoul_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc);
 
-//@}
+///@}
 

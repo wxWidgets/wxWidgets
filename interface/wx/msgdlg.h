@@ -292,7 +292,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Show a general purpose message dialog.
@@ -340,5 +340,5 @@ int wxMessageBox(const wxString& message,
                  int x = wxDefaultCoord,
                  int y = wxDefaultCoord);
 
-//@}
+///@}
 

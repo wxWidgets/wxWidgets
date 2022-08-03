@@ -74,11 +74,11 @@ public:
             Combination of values from the Style enumeration (except for
             Style_NoTrailingZeroes which can't be used with this overload).
     */
-    //@{
+    ///@{
     static wxString ToString(long val, int flags = Style_WithThousandsSep);
     static wxString ToString(long long val, int flags = Style_WithThousandsSep);
     static wxString ToString(unsigned long long val, int flags = Style_WithThousandsSep);
-    //@}
+    ///@}
 
     /**
         Returns string representation of a floating point number.
@@ -120,12 +120,12 @@ public:
 
         @see wxString::ToLong(), wxString::ToDouble()
      */
-    //@{
+    ///@{
     static bool FromString(wxString s, long *val);
     static bool FromString(wxString s, long long *val);
     static bool FromString(wxString s, unsigned long long *val);
     static bool FromString(wxString s, double *val);
-    //@}
+    ///@}
 
     /**
         Get the decimal separator for the current UI locale.

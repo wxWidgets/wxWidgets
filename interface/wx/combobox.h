@@ -175,7 +175,7 @@ public:
     */
     virtual ~wxComboBox();
 
-    //@{
+    ///@{
     /**
         Creates the combobox for two-step construction. Derived classes should
         call or replace this function. See wxComboBox() for further details.
@@ -196,7 +196,7 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
-    //@}
+    ///@}
 
     /**
         Returns the item being selected right now.

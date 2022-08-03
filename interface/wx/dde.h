@@ -61,7 +61,7 @@ public:
     */
     wxDDEConnection(void* buffer, size_t size);
 
-    //@{
+    ///@{
     /**
         Called by the server application to advise the client of a change in
         the data associated with the given item. Causes the client connection's
@@ -74,7 +74,7 @@ public:
     bool Advise(const wxString& item, const char* data);
     bool Advise(const wxString& item, const wchar_t* data);
     bool Advise(const wxString& item, const wxString data);
-    //@}
+    ///@}
 
     /**
         Called by the client or server application to disconnect from the other
@@ -88,7 +88,7 @@ public:
     */
     bool Disconnect();
 
-    //@{
+    ///@{
     /**
         Called by the client application to execute a command on the server.
         Can also be used to transfer arbitrary data to the server (similar to
@@ -102,7 +102,7 @@ public:
     bool Execute(const char* data);
     bool Execute(const wchar_t* data);
     bool Execute(const wxString data);
-    //@}
+    ///@}
 
     /**
         Message sent to the client application when the server notifies it of a
@@ -157,7 +157,7 @@ public:
     */
     virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
 
-    //@{
+    ///@{
     /**
         Called by the client application to poke data into the server. Can be
         used to transfer arbitrary data to the server. Causes the server
@@ -170,7 +170,7 @@ public:
     bool Poke(const wxString& item, const char* data);
     bool Poke(const wxString& item, const wchar_t* data);
     bool Poke(const wxString& item, const wxString data);
-    //@}
+    ///@}
 
     /**
         Called by the client application to request data from the server.
@@ -323,7 +323,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Called when wxWidgets exits, to clean up the DDE system. This no longer
@@ -347,5 +347,5 @@ void wxDDECleanUp();
 */
 void wxDDEInitialize();
 
-//@}
+///@}
 

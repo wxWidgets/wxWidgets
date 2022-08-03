@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_math */
-//@{
+///@{
 
 /**
     Returns a non-zero value if @a x is neither infinite nor NaN (not a
@@ -125,5 +125,5 @@ bool wxIsNullDouble(double x);
  */
 int wxMulDivInt32(int n, int numerator, int denominator);
 
-//@}
+///@}
 

@@ -429,7 +429,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 
 /**
     This macro creates either a cursor (MSW) or an icon (elsewhere) with the
@@ -451,5 +451,5 @@ public:
 */
 bool wxIsDragResultOk(wxDragResult res);
 
-//@}
+///@}
 

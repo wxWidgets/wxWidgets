@@ -178,7 +178,7 @@ public:
     */
     void MakeNull();
 
-    //@{
+    ///@{
     /**
         @name Assignment operators
     */
@@ -186,9 +186,9 @@ public:
     wxAny& operator=(const T &value);
     wxAny& operator=(const wxAny &any);
     wxAny& operator=(const wxVariant &variant);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         @name Equality operators
 
@@ -220,9 +220,9 @@ public:
     bool operator==(const char* value) const;
     bool operator==(const wchar_t* value) const;
     bool operator==(const wxString& value) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         @name Inequality operators
     */
@@ -242,7 +242,7 @@ public:
     bool operator!=(const char* value) const;
     bool operator!=(const wchar_t* value) const;
     bool operator!=(const wxString& value) const;
-    //@}
+    ///@}
 };
 
 

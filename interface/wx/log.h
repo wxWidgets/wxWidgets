@@ -222,7 +222,7 @@ public:
     /**
         @name Trace mask functions
     */
-    //@{
+    ///@{
 
     /**
         Add the @a mask to the list of allowed masks for wxLogTrace().
@@ -260,14 +260,14 @@ public:
     */
     static void RemoveTraceMask(const wxString& mask);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Log target functions
     */
-    //@{
+    ///@{
 
     /**
         Instructs wxLog to not create new log targets on the fly if there is none
@@ -369,14 +369,14 @@ public:
     */
     static void Suspend();
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Log level functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the current log level limit.
@@ -431,14 +431,14 @@ public:
     */
     static void SetLogLevel(wxLogLevel logLevel);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Enable/disable features functions
     */
-    //@{
+    ///@{
 
     /**
         Globally enable or disable logging.
@@ -520,7 +520,7 @@ public:
     */
     static void SetVerbose(bool verbose = true);
 
-    //@}
+    ///@}
 
 
     /**
@@ -594,7 +594,7 @@ protected:
         messages formatting but want to handle log messages of different levels
         differently or, in the simplest case, DoLogText().
      */
-    //@{
+    ///@{
 
     /**
         Called to log a new record.
@@ -633,7 +633,7 @@ protected:
     */
     virtual void DoLogText(const wxString& msg);
 
-    //@}
+    ///@}
 };
 
 
@@ -1253,7 +1253,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 
 /**
     This function shows a message to the user in a safe way and should be safe
@@ -1320,10 +1320,10 @@ wxString wxSysErrorMsgStr(unsigned long errCode = 0);
 */
 const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Logs a message with the given wxLogLevel.
     E.g. using @c wxLOG_Message as first argument, this function behaves like wxLogMessage().
@@ -1332,10 +1332,10 @@ const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 */
 void wxLogGeneric(wxLogLevel level, const char* formatString, ... );
 void wxVLogGeneric(wxLogLevel level, const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For all normal, informational messages. They also appear in a message box
     by default (but it can be changed).
@@ -1344,10 +1344,10 @@ void wxVLogGeneric(wxLogLevel level, const char* formatString, va_list argPtr);
 */
 void wxLogMessage(const char* formatString, ... );
 void wxVLogMessage(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For low priority messages.
 
@@ -1358,10 +1358,10 @@ void wxVLogMessage(const char* formatString, va_list argPtr);
 */
 void wxLogInfo(const char* formatString, ... );
 void wxVLogInfo(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For verbose output.
 
@@ -1379,10 +1379,10 @@ void wxVLogInfo(const char* formatString, va_list argPtr);
 */
 void wxLogVerbose(const char* formatString, ... );
 void wxVLogVerbose(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For warnings - they are also normally shown to the user, but don't
     interrupt the program work.
@@ -1391,10 +1391,10 @@ void wxVLogVerbose(const char* formatString, va_list argPtr);
 */
 void wxLogWarning(const char* formatString, ... );
 void wxVLogWarning(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Like wxLogError(), but also terminates the program with the exit code 3.
     Using @e abort() standard function also terminates the program with this
@@ -1404,10 +1404,10 @@ void wxVLogWarning(const char* formatString, va_list argPtr);
 */
 void wxLogFatalError(const char* formatString, ... );
 void wxVLogFatalError(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     The functions to use for error messages, i.e. the messages that must be
     shown to the user. The default processing is to pop up a message box to
@@ -1417,10 +1417,10 @@ void wxVLogFatalError(const char* formatString, va_list argPtr);
 */
 void wxLogError(const char* formatString, ... );
 void wxVLogError(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Log a message at @c wxLOG_Trace log level (see ::wxLogLevelValues enum).
 
@@ -1454,10 +1454,10 @@ void wxVLogError(const char* formatString, va_list argPtr);
 */
 void wxLogTrace(const char* mask, const char* formatString, ... );
 void wxVLogTrace(const char* mask, const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Like wxLogDebug(), trace functions only do something in debug builds and
     expand to nothing in the release one. The reason for making it a separate
@@ -1486,10 +1486,10 @@ void wxVLogTrace(const char* mask, const char* formatString, va_list argPtr);
 */
 void wxLogTrace(wxTraceMask mask, const char* formatString, ... );
 void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     The right functions for debug output. They only do something in debug mode
     (when the preprocessor symbol @c \__WXDEBUG__ is defined) and expand to
@@ -1499,10 +1499,10 @@ void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
 */
 void wxLogDebug(const char* formatString, ... );
 void wxVLogDebug(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Messages logged by this function will appear in the statusbar of the
     @a frame or of the top level application window by default (i.e. when using
@@ -1516,10 +1516,10 @@ void wxLogStatus(wxFrame* frame, const char* formatString, ... );
 void wxVLogStatus(wxFrame* frame, const char* formatString, va_list argPtr);
 void wxLogStatus(const char* formatString, ... );
 void wxVLogStatus(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Mostly used by wxWidgets itself, but might be handy for logging errors
     after system call (API function) failure. It logs the specified message
@@ -1534,10 +1534,10 @@ void wxVLogStatus(const char* formatString, va_list argPtr);
 */
 void wxLogSysError(const char* formatString, ... );
 void wxVLogSysError(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     @def wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
@@ -1555,6 +1555,6 @@ void wxVLogSysError(const char* formatString, va_list argPtr);
  */
 #define wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
-//@}
+///@}
 
 #endif // wxUSE_BASE

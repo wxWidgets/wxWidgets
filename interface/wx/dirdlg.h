@@ -162,7 +162,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pops up a directory selector dialog. The arguments have the same meaning
@@ -188,5 +188,5 @@ wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow* parent = NULL);
 
-//@}
+///@}
 

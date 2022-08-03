@@ -74,10 +74,10 @@ public:
     /**
         Returns the physical mouse position.
     */
-    //@{
+    ///@{
     wxPoint GetPosition() const;
     void GetPosition(int *x, int *y) const;
-    //@}
+    ///@}
 
     /**
         Returns @true if the left mouse button is currently down.

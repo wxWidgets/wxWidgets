@@ -53,7 +53,7 @@ enum wxTarFormat
 class wxTarInputStream : public wxArchiveInputStream
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor. In a Unicode build the second parameter @a conv is
         used to translate fields from the standard tar header into Unicode.
@@ -68,7 +68,7 @@ public:
                      wxMBConv& conv = wxConvLocal);
     wxTarInputStream(wxInputStream* stream,
                      wxMBConv& conv = wxConvLocal);
-    //@}
+    ///@}
 
     /**
         Closes the current entry.
@@ -133,7 +133,7 @@ public:
 class wxTarOutputStream : public wxArchiveOutputStream
 {
 public:
-    //@{
+    ///@{
     /**
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
@@ -159,7 +159,7 @@ public:
     wxTarOutputStream(wxOutputStream* stream,
                       wxTarFormat format = wxTAR_PAX,
                       wxMBConv& conv = wxConvLocal);
-    //@}
+    ///@}
 
     /**
         The destructor calls Close() to finish writing the tar if it has
@@ -202,7 +202,7 @@ public:
     */
     bool CopyEntry(wxTarEntry* entry, wxTarInputStream& inputStream);
 
-    //@{
+    ///@{
     /**
         The tar is zero padded to round its size up to @e BlockingFactor * 512 bytes.
 
@@ -211,7 +211,7 @@ public:
     */
     int GetBlockingFactor() const;
     void SetBlockingFactor(int factor);
-    //@}
+    ///@}
 
     /**
         Create a new directory entry (see wxArchiveEntry::IsDir()) with the given
@@ -271,25 +271,25 @@ public:
     */
     wxTarEntry(const wxTarEntry& entry);
 
-    //@{
+    ///@{
     /**
         Gets/sets the entry's access time stamp.
         See also wxArchiveEntry::GetDateTime() and wxArchiveEntry::SetDateTime().
     */
     wxDateTime GetAccessTime() const;
     void SetAccessTime(const wxDateTime& dt);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The entry's creation time stamp.
         See also wxArchiveEntry::GetDateTime() and wxArchiveEntry::SetDateTime().
     */
     wxDateTime GetCreateTime() const;
     void SetCreateTime(const wxDateTime& dt);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         OS specific IDs defining a device; these are only meaningful when
         wxTarEntry::GetTypeFlag() is @e wxTAR_CHRTYPE or @e wxTAR_BLKTYPE.
@@ -298,9 +298,9 @@ public:
     int GetDevMinor() const;
     void SetDevMajor(int dev);
     void SetDevMinor(int dev);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The user ID and group ID that has permissions (see wxTarEntry::GetMode())
         over this entry.
@@ -313,9 +313,9 @@ public:
     int GetUserId() const;
     void SetGroupId(int id);
     void SetUserId(int id);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The names of the user and group that has permissions (see wxTarEntry::GetMode())
         over this entry. These are not present in very old tars.
@@ -324,9 +324,9 @@ public:
     wxString GetUserName() const;
     void SetGroupName(const wxString& group);
     void SetUserName(const wxString& user);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The filename of a previous entry in the tar that this entry is a link to.
         Only meaningful when wxTarEntry::GetTypeFlag() is set to @e wxTAR_LNKTYPE
@@ -334,9 +334,9 @@ public:
     */
     wxString GetLinkName() const;
     void SetLinkName(const wxString& link);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         UNIX permission bits for this entry.
         Giving read, write and execute permissions to the file's user and group
@@ -346,9 +346,9 @@ public:
     */
     int GetMode() const;
     void SetMode(int mode);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         The size of the entry's data in bytes.
 
@@ -362,9 +362,9 @@ public:
     */
     void SetSize(wxFileOffset size);
     wxFileOffset GetSize() const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Returns/Sets the type of the entry as a ::wxTarType value.
 
@@ -375,7 +375,7 @@ public:
     */
     int GetTypeFlag() const;
     void SetTypeFlag(int type);
-    //@}
+    ///@}
 
     /**
         Returns the entry's filename in the internal format used within the archive.

@@ -260,7 +260,7 @@ public:
     */
     wxBitmap ConvertToBitmap() const;
 
-    //@{
+    ///@{
     /**
         Returns the outer bounds of the region.
 
@@ -269,7 +269,7 @@ public:
     void GetBox(wxCoord& x, wxCoord& y, wxCoord& width,
                 wxCoord& height) const;
     wxRect GetBox() const;
-    //@}
+    ///@}
 
     /**
         Finds the intersection of this region and another, rectangular region,
@@ -329,7 +329,7 @@ public:
     */
     bool IsEqual(const wxRegion& region) const;
 
-    //@{
+    ///@{
     /**
         Moves the region by the specified offsets in horizontal and vertical
         directions.
@@ -343,7 +343,7 @@ public:
     */
     bool Offset(wxCoord x, wxCoord y);
     bool Offset(const wxPoint& pt);
-    //@}
+    ///@}
 
     /**
         Subtracts a rectangular region from this region.

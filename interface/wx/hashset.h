@@ -151,14 +151,14 @@ public:
     */
     wxHashSet(const wxHashSet& set);
 
-    //@{
+    ///@{
     /**
         Returns an iterator pointing at the first element of the hash set.
         Please remember that hash sets do not guarantee ordering.
     */
     const_iterator begin() const;
     iterator begin();
-    //@}
+    ///@}
 
     /**
         Removes all elements from the hash set.
@@ -176,14 +176,14 @@ public:
     */
     bool empty() const;
 
-    //@{
+    ///@{
     /**
         Returns an iterator pointing at the one-after-the-last element of the hash set.
         Please remember that hash sets do not guarantee ordering.
     */
     const_iterator end() const;
     iterator end();
-    //@}
+    ///@}
 
     /**
         Erases the element with the given key, and returns the number of elements
@@ -191,16 +191,16 @@ public:
     */
     size_type erase(const key_type& key);
 
-    //@{
+    ///@{
     /**
         Erases the element pointed to by the iterator. After the deletion
         the iterator is no longer valid and must not be used.
     */
     void erase(iterator it);
     void erase(const_iterator it);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         If an element with the given key is present, the functions returns
         an iterator pointing at that element, otherwise an invalid iterator
@@ -212,7 +212,7 @@ public:
     */
     iterator find(const key_type& key) const;
     const_iterator find(const key_type& key) const;
-    //@}
+    ///@}
 
     /**
         Inserts the given value in the hash set.

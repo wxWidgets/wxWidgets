@@ -710,7 +710,7 @@ public:
     /**
         @name Image creation, initialization and deletion functions
     */
-    //@{
+    ///@{
 
     /**
         Returns an identical copy of this image.
@@ -779,13 +779,13 @@ public:
     */
     void InitAlpha();
 
-    //@}
+    ///@}
 
 
     /**
         @name Image manipulation functions
     */
-    //@{
+    ///@{
 
     /**
         Blurs the image in both horizontal and vertical directions by the
@@ -1006,13 +1006,13 @@ public:
     wxImage Size(const wxSize& size, const wxPoint& pos, int red = -1,
                  int green = -1, int blue = -1) const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Conversion functions
     */
-    //@{
+    ///@{
 
     /**
         If the image has alpha channel, this method converts it to mask.
@@ -1108,13 +1108,13 @@ public:
     */
     wxImage ChangeLightness(int alpha) const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Miscellaneous functions
     */
-    //@{
+    ///@{
 
     /**
         Computes the histogram of the image. @a histogram is a reference to
@@ -1172,13 +1172,13 @@ public:
     */
     wxImage& operator=(const wxImage& image);
 
-    //@}
+    ///@}
 
 
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
         Returns pointer to the array storing the alpha values for this image.
@@ -1476,13 +1476,13 @@ public:
     bool IsTransparent(int x, int y,
                        unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD) const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Loading and saving functions
     */
-    //@{
+    ///@{
 
     /**
         Loads an image from an input stream.
@@ -1662,14 +1662,14 @@ public:
     */
     virtual bool SaveFile(wxOutputStream& stream, wxBitmapType type) const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Setters
     */
-    //@{
+    ///@{
 
     /**
        This function is similar to SetData() and has similar restrictions.
@@ -1867,14 +1867,14 @@ public:
     */
     void SetType(wxBitmapType type);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Handler management functions
     */
-    //@{
+    ///@{
 
     /**
         Register an image handler.
@@ -1994,7 +1994,7 @@ public:
     */
     static bool RemoveHandler(const wxString& name);
 
-    //@}
+    ///@}
 
 
     /**
@@ -2022,7 +2022,7 @@ public:
      */
     static int GetDefaultLoadFlags();
 
-    //@{
+    ///@{
     /**
         If the image file contains more than one image and the image handler is
         capable of retrieving these individually, this function will return the
@@ -2059,7 +2059,7 @@ public:
                              wxBitmapType type = wxBITMAP_TYPE_ANY);
     static int GetImageCount(wxInputStream& stream,
                              wxBitmapType type = wxBITMAP_TYPE_ANY);
-    //@}
+    ///@}
 
     /**
         Iterates all registered wxImageHandler objects, and returns a string containing
@@ -2134,7 +2134,7 @@ wxImage wxNullImage;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_appinitterm */
-//@{
+///@{
 
 /**
     Initializes all available image handlers.
@@ -2152,5 +2152,5 @@ wxImage wxNullImage;
 */
 void wxInitAllImageHandlers();
 
-//@}
+///@}
 

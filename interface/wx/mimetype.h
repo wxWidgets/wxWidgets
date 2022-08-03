@@ -348,7 +348,7 @@ public:
     */
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
 
-    //@{
+    ///@{
     /**
         With the first version of this method, if the @true is returned, the
         string pointed to by @a command is filled with the command which must be
@@ -364,7 +364,7 @@ public:
     */
     bool GetOpenCommand(wxString* command, const MessageParameters& params);
     wxString GetOpenCommand(const wxString& filename) const;
-    //@}
+    ///@}
 
     /**
         If the function returns @true, the string pointed to by @a command is filled

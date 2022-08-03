@@ -398,7 +398,7 @@ public:
     /**
         @name Event queuing and processing
     */
-    //@{
+    ///@{
 
     /**
         Queue event for a later processing.
@@ -695,13 +695,13 @@ public:
     */
     void DeletePendingEvents();
 
-    //@}
+    ///@}
 
 
     /**
         @name Connecting and disconnecting
     */
-    //@{
+    ///@{
 
     /**
         Connects the given function dynamically with the event handler, id and
@@ -871,13 +871,13 @@ public:
                     wxObjectEventFunction function = NULL,
                     wxObject* userData = NULL,
                     wxEvtHandler* eventSink = NULL);
-    //@}
+    ///@}
 
 
     /**
         @name Binding and Unbinding
     */
-    //@{
+    ///@{
 
     /**
         Binds the given function, functor or method dynamically with the event.
@@ -1032,11 +1032,11 @@ public:
                 int id = wxID_ANY,
                 int lastId = wxID_ANY,
                 wxObject *userData = NULL );
-    //@}
+    ///@}
     /**
         @name User-supplied data
     */
-    //@{
+    ///@{
 
     /**
         Returns user-supplied client data.
@@ -1078,7 +1078,7 @@ public:
     */
     void SetClientObject(wxClientData* data);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1087,7 +1087,7 @@ public:
         wxEvtHandler can be arranged in a double-linked list of handlers
         which is automatically iterated by ProcessEvent() if needed.
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if the event handler is enabled, @false otherwise.
@@ -1184,7 +1184,7 @@ public:
     */
     bool IsUnlinked() const;
 
-    //@}
+    ///@}
 
     /**
         @name Global event filters.
@@ -1194,7 +1194,7 @@ public:
         Event filters can be defined to pre-process all the events that happen
         in an application, see wxEventFilter documentation for more information.
      */
-    //@{
+    ///@{
 
     /**
         Add an event filter whose FilterEvent() method will be called for each
@@ -1218,7 +1218,7 @@ public:
      */
     static void RemoveFilter(wxEventFilter* filter);
 
-    //@}
+    ///@}
 
 protected:
     /**
@@ -1572,7 +1572,7 @@ public:
     */
     bool IsAutoRepeat() const;
 
-    //@{
+    ///@{
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
 
@@ -1585,7 +1585,7 @@ public:
     */
     wxPoint GetPosition() const;
     void GetPosition(wxCoord* x, wxCoord* y) const;
-    //@}
+    ///@}
 
     /**
         Returns the raw key code for this event.
@@ -4919,7 +4919,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_events */
-//@{
+///@{
 
 #if wxUSE_BASE
 
@@ -5262,4 +5262,4 @@ wxEventType wxEVT_WINDOW_MODAL_DIALOG_CLOSED;
 
 #endif // wxUSE_GUI
 
-//@}
+///@}

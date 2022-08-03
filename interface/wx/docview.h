@@ -200,10 +200,10 @@ public:
         Returns a reference to the wxPageSetupDialogData associated with the
         printing operations of this document manager.
     */
-    //@{
+    ///@{
     wxPageSetupDialogData& GetPageSetupDialogData();
     const wxPageSetupDialogData& GetPageSetupDialogData() const;
-    //@}
+    ///@}
 
     /**
         Returns the run-time class information that allows view instances
@@ -1399,7 +1399,7 @@ public:
     */
     wxViewVector GetViewsVector() const;
 
-    //@{
+    ///@{
     /**
         Returns the list whose elements are the views on the document.
 
@@ -1407,7 +1407,7 @@ public:
     */
     wxList& GetViews();
     const wxList& GetViews() const;
-    //@}
+    ///@}
 
     /**
         Returns true if this document is a child document corresponding to a
@@ -1430,7 +1430,7 @@ public:
     */
     virtual bool IsModified() const;
 
-    //@{
+    ///@{
     /**
         Override this function and call it from your own LoadObject() before
         streaming your own data. LoadObject() is called by the framework
@@ -1441,7 +1441,7 @@ public:
     */
     virtual istream& LoadObject(istream& stream);
     virtual wxInputStream& LoadObject(wxInputStream& stream);
-    //@}
+    ///@}
 
     /**
         Call with @true to mark the document as modified since the last save,
@@ -1572,7 +1572,7 @@ public:
     */
     virtual bool Revert();
 
-    //@{
+    ///@{
     /**
         Override this function and call it from your own SaveObject() before
         streaming your own data. SaveObject() is called by the framework
@@ -1583,7 +1583,7 @@ public:
     */
     virtual ostream& SaveObject(ostream& stream);
     virtual wxOutputStream& SaveObject(wxOutputStream& stream);
-    //@}
+    ///@}
 
     /**
         Sets the command processor to be used for this document. The document
@@ -1720,7 +1720,7 @@ protected:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_file */
-//@{
+///@{
 
 /**
     Copies the given file to @a stream. Useful when converting an old
@@ -1742,5 +1742,5 @@ bool wxTransferFileToStream(const wxString& filename,
 bool wxTransferStreamToFile(istream& stream,
                              const wxString& filename);
 
-//@}
+///@}
 

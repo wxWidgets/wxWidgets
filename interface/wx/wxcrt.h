@@ -7,7 +7,7 @@
 
 
 /** @addtogroup group_funcmacro_crt */
-//@{
+///@{
 
 bool wxIsEmpty(const char *s);
 bool wxIsEmpty(const wchar_t *s);
@@ -223,4 +223,4 @@ wxUniChar wxTolower(const wxUniChar& c);
 wxUniChar wxToupper(const wxUniChar& c);
 int wxIsctrl(const wxUniChar& c);
 
-//@}
+///@}

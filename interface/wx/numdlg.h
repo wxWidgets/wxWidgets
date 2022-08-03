@@ -83,7 +83,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Shows a dialog asking the user for numeric input. The dialogs title is set
@@ -114,4 +114,4 @@ long wxGetNumberFromUser(const wxString& message,
                          wxWindow* parent = NULL,
                          const wxPoint& pos = wxDefaultPosition);
 
-//@}
+///@}

@@ -325,7 +325,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     This function shows the standard about dialog containing the information
@@ -374,4 +374,4 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
 */
 void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
 
-//@}
+///@}

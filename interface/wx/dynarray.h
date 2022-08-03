@@ -232,7 +232,7 @@ public:
         use wxBaseArray anyhow it shouldn't be a problem) and that you should
         not derive your own classes from the array classes.
     */
-    //@{
+    ///@{
 
     /**
         Default constructor.
@@ -305,7 +305,7 @@ public:
     */
     ~wxObjArray();
 
-    //@}
+    ///@}
 
 
     /**
@@ -324,7 +324,7 @@ public:
         put in the array and will prevent the array code from reallocating the
         memory more times than needed.
     */
-    //@{
+    ///@{
 
     /**
         Preallocates memory for a given number of array elements. It is worth
@@ -344,7 +344,7 @@ public:
     */
     void Shrink();
 
-    //@}
+    ///@}
 
 
     /**
@@ -354,7 +354,7 @@ public:
         allow to retrieve them - possibly using just the C array indexing []
         operator which does exactly the same as the Item() method.
     */
-    //@{
+    ///@{
 
     /**
         Return the number of items in the array.
@@ -386,13 +386,13 @@ public:
     */
     T& Last() const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Adding Items
     */
-    //@{
+    ///@{
 
     /**
         Appends the given number of @a copies of the @a item to the array
@@ -507,13 +507,13 @@ public:
     */
     void SetCount(size_t count, T defval = T(0));
 
-    //@}
+    ///@}
 
 
     /**
         @name Removing Items
     */
-    //@{
+    ///@{
 
     /**
         This function does the same as Empty() and additionally frees the
@@ -580,13 +580,13 @@ public:
     */
     void RemoveAt(size_t index, size_t count = 1);
 
-    //@}
+    ///@}
 
 
     /**
         @name Searching and Sorting
     */
-    //@{
+    ///@{
 
     /**
         This version of Index() is for wxArray and wxObjArray only.
@@ -648,7 +648,7 @@ public:
     */
     void Sort(CMPFUNC<T> compareFunction);
 
-    //@}
+    ///@}
 };
 
 
@@ -665,7 +665,7 @@ public:
 */
 #define WX_CLEAR_ARRAY(wxArray_arrayToBeCleared)
 
-//@{
+///@{
 /**
     This macro declares a new object array class named @a name and containing
     the elements of type @e T.
@@ -687,9 +687,9 @@ public:
 #define WX_DECLARE_OBJARRAY(T, name)
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)
 #define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode)
-//@}
+///@}
 
-//@{
+///@{
 /**
     This macro defines a new array class named @a name and containing the
     elements of type @a T.
@@ -714,9 +714,9 @@ public:
 #define WX_DEFINE_ARRAY(T, name)
 #define WX_DEFINE_EXPORTED_ARRAY(T, name)
 #define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, exportspec)
-//@}
+///@}
 
-//@{
+///@{
 /**
     This macro defines the methods of the array class @a name not defined by
     the WX_DECLARE_OBJARRAY() macro. You must include the file
@@ -752,9 +752,9 @@ public:
 #define WX_DEFINE_OBJARRAY(name)
 #define WX_DEFINE_EXPORTED_OBJARRAY(name)
 #define WX_DEFINE_USER_EXPORTED_OBJARRAY(name)
-//@}
+///@}
 
-//@{
+///@{
 /**
     This macro defines a new sorted array class named @a name and containing
     the elements of type @e T.
@@ -795,7 +795,7 @@ public:
 #define WX_DEFINE_SORTED_ARRAY(T, name)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, expmode)
-//@}
+///@}
 
 /**
     This macro may be used to prepend all elements of the @a wxArray_arrayToBePrepended
@@ -803,7 +803,7 @@ public:
 */
 #define WX_PREPEND_ARRAY(wxArray_arrayToModify, wxArray_arrayToBePrepended)
 
-//@{
+///@{
 /**
     Predefined specialization of wxArray<T> for standard types.
 */
@@ -812,4 +812,4 @@ typedef wxArray<long> wxArrayLong;
 typedef wxArray<short> wxArrayShort;
 typedef wxArray<double> wxArrayDouble;
 typedef wxArray<void*> wxArrayPtrVoid;
-//@}
+///@}

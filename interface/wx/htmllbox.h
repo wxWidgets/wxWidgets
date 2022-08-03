@@ -64,7 +64,7 @@ public:
                 long style = 0,
                 const wxString& name = wxHtmlListBoxNameStr);
 
-    //@{
+    ///@{
     /**
         Returns the wxFileSystem used by the HTML parser of this object.
 
@@ -75,7 +75,7 @@ public:
     */
     wxFileSystem& GetFileSystem() const;
     const wxFileSystem& GetFileSystem() const;
-    //@}
+    ///@}
 
 protected:
 
@@ -278,7 +278,7 @@ public:
     */
     virtual ~wxSimpleHtmlListBox();
 
-    //@{
+    ///@{
     /**
         Creates the HTML listbox for two-step construction.
         See wxSimpleHtmlListBox() for further details.
@@ -297,6 +297,6 @@ public:
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSimpleHtmlListBoxNameStr);
-    //@}
+    ///@}
 };
 

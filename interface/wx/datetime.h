@@ -94,7 +94,7 @@ public:
         /// the time in the current time zone
         Local,
 
-        //@{
+        ///@{
         /// zones from GMT (= Greenwich Mean Time): they're guaranteed to be
         /// consequent numbers, so writing something like `GMT0 + offset' is
         /// safe if abs(offset) <= 12
@@ -107,7 +107,7 @@ public:
         GMT7, GMT8, GMT9, GMT10, GMT11, GMT12, GMT13,
         // Note that GMT12 and GMT_12 are not the same: there is a difference
         // of exactly one day between them
-        //@}
+        ///@}
 
         // some symbolic names for TZ
 
@@ -312,7 +312,7 @@ public:
         you should use IsValid() method to check that the values were correct
         as constructors cannot return an error code.
     */
-    //@{
+    ///@{
 
     /**
         Default constructor. Use one of the Set() functions to initialize the
@@ -479,7 +479,7 @@ public:
     */
     wxDateTime& operator=(const struct tm& tm);
 
-    //@}
+    ///@}
 
 
 
@@ -490,7 +490,7 @@ public:
         perform some more complicated calculations to find the answer are under
         the "Date Arithmetic" section.
     */
-    //@{
+    ///@{
 
     /**
         Returns the date and time in DOS format.
@@ -665,7 +665,7 @@ public:
     */
     bool IsWorkDay(Country country = Country_Default) const;
 
-    //@}
+    ///@}
 
 
 
@@ -682,7 +682,7 @@ public:
         using any other operators or IsEarlierThan() or IsLaterThan() functions
         would result in an assert because their result is not well-defined.
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if this date precedes the given one.
@@ -732,7 +732,7 @@ public:
     */
     bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
 
-    //@}
+    ///@}
 
 
 
@@ -751,7 +751,7 @@ public:
         the object to which it is applied. The operators "-=" and "+=" are
         defined to be equivalent to the second forms of these functions.
     */
-    //@{
+    ///@{
 
     /**
         Adds the given date span to this object.
@@ -839,7 +839,7 @@ public:
     */
     wxTimeSpan operator-(const wxDateTime& dt2) const;
 
-    //@}
+    ///@}
 
 
 
@@ -848,7 +848,7 @@ public:
 
         See @ref datetime_formatting
     */
-    //@{
+    ///@{
 
     /**
         This function does the same as the standard ANSI C @c strftime(3)
@@ -1060,7 +1060,7 @@ public:
     */
     bool ParseTime(const wxString& time, wxString::const_iterator *end);
 
-    //@}
+    ///@}
 
 
 
@@ -1075,7 +1075,7 @@ public:
         None of the functions in this section modify the time part of the
         wxDateTime, they only work with the date part of it.
     */
-    //@{
+    ///@{
 
     /**
         Returns the copy of this object to which SetToLastMonthDay() was
@@ -1194,7 +1194,7 @@ public:
     */
     wxDateTime& SetToYearDay(wxDateTime_t yday);
 
-    //@}
+    ///@}
 
 
 
@@ -1207,7 +1207,7 @@ public:
 
         Related functions in other groups: wxDateTime(double), Set(double)
     */
-    //@{
+    ///@{
 
     /**
         Synonym for GetJulianDayNumber().
@@ -1244,7 +1244,7 @@ public:
     */
     double GetRataDie() const;
 
-    //@}
+    ///@}
 
 
 
@@ -1261,7 +1261,7 @@ public:
 
         Related functions in other groups: GetBeginDST(), GetEndDST()
     */
-    //@{
+    ///@{
 
     /**
         Transform the date from the given time zone to the local one.
@@ -1317,7 +1317,7 @@ public:
     */
     wxDateTime ToUTC(bool noDST = false) const;
 
-    //@}
+    ///@}
 
 
 

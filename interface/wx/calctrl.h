@@ -523,7 +523,7 @@ public:
     /**
         @name Date Range Functions
      */
-    //@{
+    ///@{
 
     /**
         Restrict the dates that can be selected in the control to the specified
@@ -566,6 +566,6 @@ public:
     virtual bool GetDateRange(wxDateTime *lowerdate,
                                 wxDateTime *upperdate) const;
 
-    //@}
+    ///@}
 };
 

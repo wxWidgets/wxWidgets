@@ -231,7 +231,7 @@ public:
         wxMSW). The methods here allow to change the default effect used (or
         disable it entirely) and change its duration.
      */
-    //@{
+    ///@{
 
     /**
         Set the effects to use when showing and hiding the bar.
@@ -283,5 +283,5 @@ public:
      */
     virtual bool SetFont(const wxFont& font);
 
-    //@}
+    ///@}
 };
