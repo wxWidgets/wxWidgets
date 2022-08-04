@@ -449,6 +449,17 @@ public:
 
     @end
 
+    @interface wxNSSearchField : NSSearchField
+    {
+        wxNSTextFieldEditor* fieldEditor;
+        BOOL m_withinTextDidChange;
+    }
+
+    - (wxNSTextFieldEditor*) fieldEditor;
+    - (void) setFieldEditor:(wxNSTextFieldEditor*) fieldEditor;
+
+    @end
+
     @interface wxNSComboBox : NSComboBox
     {
         wxNSTextFieldEditor* fieldEditor;

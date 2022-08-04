@@ -24,14 +24,6 @@
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
 
-
-@interface wxNSSearchField : NSSearchField
-{
-    BOOL m_withinTextDidChange;
-}
-
-@end
-
 @implementation wxNSSearchField
 
 + (void)initialize
@@ -42,6 +34,21 @@
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
     }
+}
+
+- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
+{
+    if ( editor != fieldEditor )
+    {
+        [editor retain];
+        [fieldEditor release];
+        fieldEditor = editor;
+    }
+}
+
+- (wxNSTextFieldEditor*) fieldEditor
+{
+    return fieldEditor;
 }
 
 - (id)initWithFrame:(NSRect)frame
