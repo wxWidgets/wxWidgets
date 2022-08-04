@@ -583,49 +583,20 @@ extern int wxOSXGetIdFromSelector(SEL action );
 {
     wxUnusedVar(sender);
 
-    if ([anObject isKindOfClass:[wxNSTextField class]])
+    if ( [anObject respondsToSelector:@selector(WXFieldEditor)] )
     {
-        wxNSTextField* tf = (wxNSTextField*) anObject;
-        wxNSTextFieldEditor* editor = [tf fieldEditor];
+        wxNSTextFieldEditor* editor = [anObject WXFieldEditor];
         if ( editor == nil )
         {
             editor = [[wxNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
-            [editor setTextField:tf];
-            [tf setFieldEditor:editor];
-            [editor release];
-        }
-        return editor;
-    } 
-    else if ([anObject isKindOfClass:[wxNSSearchField class]])
-    {
-        wxNSSearchField* sf = (wxNSSearchField*) anObject;
-        wxNSTextFieldEditor* editor = [sf fieldEditor];
-        if ( editor == nil )
-        {
-            editor = [[wxNSTextFieldEditor alloc] init];
-            [editor setFieldEditor:YES];
-            [editor setTextField:sf];
-            [sf setFieldEditor:editor];
+            [editor setTextField:anObject];
+            [anObject setWXFieldEditor:editor];
             [editor release];
         }
         return editor;
     }
-    else if ([anObject isKindOfClass:[wxNSComboBox class]])
-    {
-        wxNSComboBox * cb = (wxNSComboBox*) anObject;
-        wxNSTextFieldEditor* editor = [cb fieldEditor];
-        if ( editor == nil )
-        {
-            editor = [[wxNSTextFieldEditor alloc] init];
-            [editor setFieldEditor:YES];
-            [editor setTextField:cb];
-            [cb setFieldEditor:editor];
-            [editor release];
-        }
-        return editor;
-    }    
- 
+
     return nil;
 }
 

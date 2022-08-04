@@ -36,21 +36,6 @@
     }
 }
 
-- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
-{
-    if ( editor != fieldEditor )
-    {
-        [editor retain];
-        [fieldEditor release];
-        fieldEditor = editor;
-    }
-}
-
-- (wxNSTextFieldEditor*) fieldEditor
-{
-    return fieldEditor;
-}
-
 - (id)initWithFrame:(NSRect)frame
 {
     if ( self = [super initWithFrame:frame] )

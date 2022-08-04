@@ -48,33 +48,6 @@
     }
 }
 
-- (void) dealloc
-{
-    [fieldEditor release];
-    [super dealloc];
-}
-
-// Over-riding NSComboBox onKeyDown method doesn't work for key events.
-// Ensure that we can use our own wxNSTextFieldEditor to catch key events.
-// See windowWillReturnFieldEditor in nonownedwnd.mm.
-// Key events will be caught and handled via wxNSTextFieldEditor onkey...
-// methods in textctrl.mm.
-
-- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
-{
-    if ( editor != fieldEditor )
-    {
-        [editor retain];
-        [fieldEditor release];
-        fieldEditor = editor;
-    }
-}
-
-- (wxNSTextFieldEditor*) fieldEditor
-{
-    return fieldEditor;
-}
-
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
@@ -99,7 +72,7 @@
     {
         wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
         if ( timpl )
-            timpl->UpdateInternalSelectionFromEditor(fieldEditor);
+            timpl->UpdateInternalSelectionFromEditor(self.WXFieldEditor);
         impl->DoNotifyFocusLost();
     }
 }
