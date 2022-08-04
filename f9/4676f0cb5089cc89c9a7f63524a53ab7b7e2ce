@@ -1,0 +1,1 @@
+wxMSW: Allow using static CRT in MSBuild projects (David Connet).
