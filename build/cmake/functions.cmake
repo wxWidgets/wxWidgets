@@ -111,25 +111,6 @@ function(wx_set_common_target_properties target_name)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     endif()
 
-    set(common_gcc_clang_compile_options
-        -Wall
-        -Wno-ctor-dtor-privacy
-        -Woverloaded-virtual
-        -Wundef
-        -Wunused-parameter
-    )
-
-    if(WXOSX_COCOA OR WXGTK3)
-        # when building using GTK+ 3 or Cocoa we currently get tons of deprecation
-        # warnings from the standard headers -- disable them as we already know
-        # that they're deprecated but we still have to use them to support older
-        # toolkit versions and leaving this warning enabled prevents seeing any
-        # other ones
-        list(APPEND common_gcc_clang_compile_options
-            -Wno-deprecated-declarations
-        )
-    endif()
-
     if(MSVC)
         if(wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
             set(MSVC_WARNING_LEVEL "/W3")
@@ -137,15 +118,38 @@ function(wx_set_common_target_properties target_name)
             set(MSVC_WARNING_LEVEL "/W4")
         endif()
         target_compile_options(${target_name} PRIVATE ${MSVC_WARNING_LEVEL})
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+    elseif(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        set(common_gcc_clang_compile_options
+            -Wall
+            -Wundef
+            -Wunused-parameter
+        )
+        set(common_gcc_clang_cpp_compile_options
+            -Wno-ctor-dtor-privacy
+            -Woverloaded-virtual
+        )
+
+        if(WXOSX_COCOA OR WXGTK3)
+            # when building using GTK+ 3 or Cocoa we currently get tons of deprecation
+            # warnings from the standard headers -- disable them as we already know
+            # that they're deprecated but we still have to use them to support older
+            # toolkit versions and leaving this warning enabled prevents seeing any
+            # other ones
+            list(APPEND common_gcc_clang_compile_options
+                -Wno-deprecated-declarations
+            )
+        endif()
+
+        if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+            list(APPEND common_gcc_clang_compile_options
+                -Wno-ignored-attributes
+            )
+        endif()
+
         target_compile_options(${target_name} PRIVATE
             ${common_gcc_clang_compile_options}
-            )
-    elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
-        target_compile_options(${target_name} PRIVATE
-            ${common_gcc_clang_compile_options}
-            -Wno-ignored-attributes
-            )
+            $<$<COMPILE_LANGUAGE:CXX>:${common_gcc_clang_cpp_compile_options}>
+        )
     endif()
 
     if(CMAKE_USE_PTHREADS_INIT)
