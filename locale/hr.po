@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2021-06-09 21:46+0200\n"
+"PO-Revision-Date: 2022-08-05 00:46+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -752,11 +752,11 @@ msgstr "stvori opširne log-poruke"
 
 #: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
-msgstr "odredi temu, koja će se koristiti"
+msgstr "odredi temu koja će se koristiti"
 
 #: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "odredi modus zaslona koji će se koristiti (npr. 640×480-16)"
+msgstr "odredi modus prikaza koji će se koristiti (npr. 640 × 480 - 16)"
 
 #: ../src/common/appcmn.cpp:279
 #, c-format
@@ -1138,7 +1138,7 @@ msgstr "Pregled ispisa"
 #: ../src/common/docview.cpp:1477
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
-msgstr "Format datoteke „%s” nije bilo moguće ustanoviti."
+msgstr "Nije bilo moguće ustanoviti format datoteke „%s”."
 
 #: ../src/common/docview.cpp:1618
 #, c-format
@@ -2141,7 +2141,7 @@ msgstr "BMP: Nije bilo moguće zapisati podatke."
 #: ../src/common/imagbmp.cpp:533
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgstr "BMP: zaglavlje ima biClrUsed=%d kad je biBitCount=%d."
 
 #: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
 #: ../src/common/imagbmp.cpp:589
@@ -3235,14 +3235,12 @@ msgid "&Cancel"
 msgstr "&Odustani"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
-msgstr "&CD-Rom"
+msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
-msgstr "CD-Rom"
+msgstr "CD-ROM"
 
 #: ../src/common/stockitem.cpp:153
 msgid "&Clear"
@@ -3901,7 +3899,7 @@ msgstr "libcurl nije bilo moguće inicijalizirati"
 
 #: ../src/common/webview.cpp:246
 msgid "RunScriptAsync not supported"
-msgstr ""
+msgstr "RunScriptAsync not supported nije podržano"
 
 #: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
 #, c-format
@@ -4287,8 +4285,7 @@ msgid "Column %u"
 msgstr "Stupac %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7087
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
@@ -4299,8 +4296,7 @@ msgid "Left"
 msgstr "Lijevo"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7090
-#: ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
@@ -5089,6 +5085,10 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Ovaj program nije kompiliran s EGL podrškom koja je potrebna u Waylandu.\n"
+"Instaliraj EGL biblioteke i ponovno ih izgradi ili pokreni ih u X11 pozadini "
+"postavljanjem\n"
+"varijable okruženja GDK_BACKEND=x11 prije pokretanja tvog programa."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5882,19 +5882,18 @@ msgid "Common dialog failed with error code %0lx."
 msgstr "Uobičajeni dijalog nije uspjeo, sa šifrom greške %0lx."
 
 #: ../src/msw/fswatcher.cpp:67
-#, fuzzy
 msgid "Ungraceful worker thread termination"
-msgstr "Neuredan prekid tijeka"
+msgstr "Neuredan prekid komponente procesa"
 
 #: ../src/msw/fswatcher.cpp:81
-#, fuzzy
 msgid "Unable to create IOCP worker thread"
-msgstr "Nije moguće stvoriti tijek završnog priključka ulaza/izlaza"
+msgstr ""
+"Nije moguće stvoriti komponentu procesa završnog priključka ulaza/izlaza"
 
 #: ../src/msw/fswatcher.cpp:88
-#, fuzzy
 msgid "Unable to start IOCP worker thread"
-msgstr "Nije moguće pokrenuti tijek završnog priključka ulaza/izlaza"
+msgstr ""
+"Nije moguće pokrenuti komponentu procesa završnog priključka ulaza/izlaza"
 
 #: ../src/msw/fswatcher.cpp:140
 msgid "Monitoring individual files for changes is not supported currently."
@@ -6232,57 +6231,50 @@ msgid "Cannot start thread: error writing TLS."
 msgstr "Nije moguće započeti tijek: greška prilikom pisanja TLS-a."
 
 #: ../src/msw/thread.cpp:621
-#, fuzzy
 msgid "Can't set thread priority"
-msgstr "Nije moguće postaviti prioritet tijeka"
+msgstr "Nije moguće postaviti prioritet komponente procesa"
 
 #: ../src/msw/thread.cpp:657
-#, fuzzy
 msgid "Can't create thread"
-msgstr "Nije moguće stvoriti tijek"
+msgstr "Nije moguće stvoriti komponentu procesa"
 
 #: ../src/msw/thread.cpp:676
-#, fuzzy
 msgid "Couldn't terminate thread"
-msgstr "Nije bilo moguće završiti tijek"
+msgstr "Nije bilo moguće prekinuti komponentu procesa"
 
 #: ../src/msw/thread.cpp:786
-#, fuzzy
 msgid "Cannot wait for thread termination"
-msgstr "Nije moguće čekati na prekid tijeka"
+msgstr "Nije moguće čekati na prekid komponente procesa"
 
 #: ../src/msw/thread.cpp:864
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "Nije moguće obustaviti tijek %lx"
+msgstr "Nije moguće odgoditi komponentu procesa %lx"
 
 #: ../src/msw/thread.cpp:894
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Nije moguće nastaviti tijek %lx"
+msgstr "Nije moguće nastaviti komponentu procesa %lx"
 
 #: ../src/msw/thread.cpp:923
-#, fuzzy
 msgid "Couldn't get the current thread pointer"
-msgstr "Nije bilo moguće dobiti trenutačni označivač tijeka"
+msgstr "Nije bilo moguće dobiti trenutačni označivač komponente procesa"
 
 #: ../src/msw/thread.cpp:1326
-#, fuzzy
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr ""
-"Inicijaliziranje modula tijeka nije uspjelo: nije moguće alocirati indeks u "
-"toku lokalnog spremišta"
+"Neuspjela inicijalizacija modula komponente procesa: nije moguće alocirati "
+"indeks u komponenti procesa lokalnog spremišta"
 
 #: ../src/msw/thread.cpp:1338
-#, fuzzy
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
-"Inicijaliziranje modula tijeka nije uspjelo: nije moguće spremiti vrijednost "
-"u tok lokalnog spremišta"
+"Neuspjela inicijalizacija modula komponente procesa: nije moguće spremiti "
+"vrijednost u komponenti procesa lokalnog spremišta"
 
 #: ../src/msw/timer.cpp:131
 msgid "Couldn't create a timer"
@@ -6332,7 +6324,7 @@ msgstr "Izvršenje naredbe %s"
 
 #: ../src/msw/volume.cpp:335
 msgid "Failed to load mpr.dll."
-msgstr "Neuspjelo učitavanje mpr.dll."
+msgstr "Neuspjelo učitavanje mpr.dll-a."
 
 #: ../src/msw/volume.cpp:515
 #, c-format
@@ -6346,15 +6338,15 @@ msgstr "Nije moguće učitati ikone iz „%s”."
 
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
-msgstr ""
+msgstr "Neuspjelo pronalaženje razine emulacije web prikaza u registru"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "Neuspjelo postavljanje web-prikaza na modernu razinu emulacije"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
-msgstr ""
+msgstr "Neuspjelo obnavljanje web-prikaza na standardnu razinu emulacije"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
@@ -6523,10 +6515,9 @@ msgid "Hide %s"
 msgstr "Sakrij %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Aplikacija"
+msgstr "Sakrij aplikaciju"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
@@ -6545,10 +6536,9 @@ msgid "Quit %s"
 msgstr "Zatvori %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Aplikacija"
+msgstr "Zatvori aplikaciju"
 
 #: ../src/osx/webview_webkit.mm:285
 msgid "Printing is not supported by the system web control"
@@ -6777,169 +6767,141 @@ msgid "White"
 msgstr "Bijela"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Zadano"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Strelica"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Strelica-Desno"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Prazno"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Meta"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
-msgstr "Slovni znak"
+msgstr "Znak"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Križić"
 
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Ruka"
 
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "Okomita crta"
 
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Lijevi gumb"
 
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Povećalo"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Srednji gumb"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
-msgstr "Zabranjen ulaz"
+msgstr "Bez unosa"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Kist za bojenje"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Olovka"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Ukaži na lijevo"
 
 #: ../src/propgrid/advprops.cpp:1670
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Ukaži na desno"
 
 #: ../src/propgrid/advprops.cpp:1671
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Strelica-Upitnik"
 
 #: ../src/propgrid/advprops.cpp:1672
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Desni gumb"
 
 #: ../src/propgrid/advprops.cpp:1673
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Skaliranje SI-JZ"
 
 #: ../src/propgrid/advprops.cpp:1674
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Skaliranje S-J"
 
 #: ../src/propgrid/advprops.cpp:1675
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Skaliranje SZ-JI"
 
 #: ../src/propgrid/advprops.cpp:1676
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Skaliranje Z-I"
 
 #: ../src/propgrid/advprops.cpp:1677
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Skaliranje"
 
 #: ../src/propgrid/advprops.cpp:1678
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Sprej-limenka"
 
 #: ../src/propgrid/advprops.cpp:1679
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "Čekaj"
 
 #: ../src/propgrid/advprops.cpp:1680
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Sat"
 
 #: ../src/propgrid/advprops.cpp:1681
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Strelica-Čekaj"
@@ -7319,7 +7281,7 @@ msgstr "%"
 #: ../src/richtext/richtextborderspage.cpp:230
 #: ../src/richtext/richtextborderspage.cpp:388
 msgid "Border"
-msgstr "Obrub"
+msgstr "Rub"
 
 #: ../src/richtext/richtextborderspage.cpp:243
 #: ../src/richtext/richtextborderspage.cpp:411
@@ -7335,7 +7297,7 @@ msgstr "&Lijevo:"
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:260
 msgid "Units for the left border width."
-msgstr "Jedinice za debljinu lijevog obruba."
+msgstr "Jedinice za debljinu lijevog ruba."
 
 #: ../src/richtext/richtextborderspage.cpp:267
 #: ../src/richtext/richtextborderspage.cpp:269
@@ -7370,7 +7332,7 @@ msgstr "&Desno:"
 #: ../src/richtext/richtextborderspage.cpp:292
 #: ../src/richtext/richtextborderspage.cpp:294
 msgid "Units for the right border width."
-msgstr "Jedinice za debljinu desnog obruba."
+msgstr "Jedinice za debljinu desnog ruba."
 
 #: ../src/richtext/richtextborderspage.cpp:311
 #: ../src/richtext/richtextborderspage.cpp:479
@@ -7384,7 +7346,7 @@ msgstr "&Gore:"
 #: ../src/richtext/richtextborderspage.cpp:326
 #: ../src/richtext/richtextborderspage.cpp:328
 msgid "Units for the top border width."
-msgstr "Jedinice za debljinu gornjeg obruba."
+msgstr "Jedinice za debljinu gornjeg ruba."
 
 #: ../src/richtext/richtextborderspage.cpp:345
 #: ../src/richtext/richtextborderspage.cpp:513
@@ -7398,7 +7360,7 @@ msgstr "&Dolje:"
 #: ../src/richtext/richtextborderspage.cpp:360
 #: ../src/richtext/richtextborderspage.cpp:362
 msgid "Units for the bottom border width."
-msgstr "Jedinice za debljinu donjeg obruba."
+msgstr "Jedinice za debljinu donjeg ruba."
 
 #: ../src/richtext/richtextborderspage.cpp:381
 #: ../src/richtext/richtextborderspage.cpp:549
@@ -7410,7 +7372,7 @@ msgstr "&Sinkroniziraj vrijednosti"
 #: ../src/richtext/richtextborderspage.cpp:551
 #: ../src/richtext/richtextborderspage.cpp:553
 msgid "Check to edit all borders simultaneously."
-msgstr "Aktiviraj za istovremeno dodavanje svih obruba."
+msgstr "Aktiviraj za istovremeno mijenjanje svih rubova."
 
 #: ../src/richtext/richtextborderspage.cpp:398
 #: ../src/richtext/richtextborderspage.cpp:556
@@ -7420,17 +7382,17 @@ msgstr "Kontura"
 #: ../src/richtext/richtextborderspage.cpp:426
 #: ../src/richtext/richtextborderspage.cpp:428
 msgid "Units for the left outline width."
-msgstr "Jedinice za debljinu lijevog obrisa."
+msgstr "Jedinice za debljinu lijeve konture."
 
 #: ../src/richtext/richtextborderspage.cpp:460
 #: ../src/richtext/richtextborderspage.cpp:462
 msgid "Units for the right outline width."
-msgstr "Jedinice za debljinu desnog obrisa."
+msgstr "Jedinice za debljinu desne konture."
 
 #: ../src/richtext/richtextborderspage.cpp:494
 #: ../src/richtext/richtextborderspage.cpp:496
 msgid "Units for the top outline width."
-msgstr "Jedinice za debljinu gornjeg obrisa."
+msgstr "Jedinice za debljinu gornje konture."
 
 #: ../src/richtext/richtextborderspage.cpp:528
 #: ../src/richtext/richtextborderspage.cpp:530
@@ -7554,7 +7516,7 @@ msgstr "standardno/krug"
 
 #: ../src/richtext/richtextbuffer.cpp:9387
 msgid "standard/circle-outline"
-msgstr "standardno/krug-obrisni"
+msgstr "standardno/krug-kontura"
 
 #: ../src/richtext/richtextbuffer.cpp:9388
 msgid "standard/square"
@@ -8172,47 +8134,47 @@ msgstr "Jedno"
 #: ../src/richtext/richtextindentspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:450
 msgid "1.1"
-msgstr "1.1"
+msgstr "1,1"
 
 #: ../src/richtext/richtextindentspage.cpp:277
 #: ../src/richtext/richtextliststylepage.cpp:451
 msgid "1.2"
-msgstr "1.2"
+msgstr "1,2"
 
 #: ../src/richtext/richtextindentspage.cpp:278
 #: ../src/richtext/richtextliststylepage.cpp:452
 msgid "1.3"
-msgstr "1.3"
+msgstr "1,3"
 
 #: ../src/richtext/richtextindentspage.cpp:279
 #: ../src/richtext/richtextliststylepage.cpp:453
 msgid "1.4"
-msgstr "1.4"
+msgstr "1,4"
 
 #: ../src/richtext/richtextindentspage.cpp:280
 #: ../src/richtext/richtextliststylepage.cpp:454
 msgid "1.5"
-msgstr "1.5"
+msgstr "1,5"
 
 #: ../src/richtext/richtextindentspage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:455
 msgid "1.6"
-msgstr "1.6"
+msgstr "1,6"
 
 #: ../src/richtext/richtextindentspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:456
 msgid "1.7"
-msgstr "1.7"
+msgstr "1,7"
 
 #: ../src/richtext/richtextindentspage.cpp:283
 #: ../src/richtext/richtextliststylepage.cpp:457
 msgid "1.8"
-msgstr "1.8"
+msgstr "1,8"
 
 #: ../src/richtext/richtextindentspage.cpp:284
 #: ../src/richtext/richtextliststylepage.cpp:458
 msgid "1.9"
-msgstr "1.9"
+msgstr "1,9"
 
 #: ../src/richtext/richtextindentspage.cpp:285
 #: ../src/richtext/richtextliststylepage.cpp:459
@@ -9134,9 +9096,8 @@ msgid "Couldn't open audio: %s"
 msgstr "Nije bilo moguće otvoriti audio: %s"
 
 #: ../src/unix/threadpsx.cpp:1028
-#, fuzzy
 msgid "Cannot retrieve thread scheduling policy."
-msgstr "Nije moguće pronaći pravila rasporeda tijeka."
+msgstr "Nije moguće pronaći pravila rasporeda komponente procesa."
 
 #: ../src/unix/threadpsx.cpp:1053
 #, c-format
@@ -9144,40 +9105,36 @@ msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Nije moguće dobiti raspon prioriteta za pravilo rasporeda %d."
 
 #: ../src/unix/threadpsx.cpp:1061
-#, fuzzy
 msgid "Thread priority setting is ignored."
-msgstr "Postavka prioriteta tijeka je zanemarena."
+msgstr "Postavka prioriteta komponente procesa je zanemarena."
 
 #: ../src/unix/threadpsx.cpp:1216
-#, fuzzy
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
 msgstr ""
-"Neuspjelo povezivanje tijeka, otkrivena ja moguća nedostatna memorija – "
-"ponovo pokreni program"
+"Neuspjelo povezivanje komponente procesa, otkrivena ja moguća nedostatna "
+"memorija – ponovo pokreni program"
 
 #: ../src/unix/threadpsx.cpp:1347
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "Neuspjelo postavljanje razine podudarnosti tijeka na% lu"
+msgstr "Neuspjelo postavljanje razine podudarnosti komponente procesa na %lu"
 
 #: ../src/unix/threadpsx.cpp:1473
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread priority %d."
-msgstr "Neuspjelo postavljanje prioriteta tijeka %d."
+msgstr "Neuspjelo postavljanje prioriteta komponente procesa %d."
 
 #: ../src/unix/threadpsx.cpp:1654
-#, fuzzy
 msgid "Failed to terminate a thread."
-msgstr "Neuspjelo prekidanje tijeka."
+msgstr "Neuspjelo prekidanje komponente procesa."
 
 #: ../src/unix/threadpsx.cpp:1875
-#, fuzzy
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
-"Inicijaliziranje modula tijeka nije uspjelo: izrada ključa tijeka nije "
-"uspjela"
+"Neuspjela inicijalizacija modula komponente procesa: neuspjela izrada ključa "
+"komponente procesa"
 
 #: ../src/unix/utilsunx.cpp:338
 msgid "Impossible to get child process input"
@@ -9251,7 +9208,7 @@ msgstr "Neuspjelo otvaranje ekrana „%s”."
 #: ../src/xml/xml.cpp:925
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "Greška u XML obradi: „%s” u retku br. %d"
+msgstr "Greška u XML obradi: „%s” u %d. retku"
 
 #: ../src/xrc/xmlres.cpp:418
 #, c-format
@@ -9272,81 +9229,3 @@ msgstr "Nije moguće učitati resurse iz datoteke „%s”."
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Stvaranje %s „%s” nije uspjelo."
-
-#~ msgid "conversion to 8-bit encoding failed"
-#~ msgstr "konverzija u 8-bitno kodiranje"
-
-#~ msgid "failed to retrieve execution result"
-#~ msgstr "neuspjelo dohvaćanje rezultata izvršavanja"
-
-#~ msgid " (while overwriting an existing item)"
-#~ msgstr " (prilikom prepisivanja preko postojeće stavke)"
-
-#~ msgid "&Save as"
-#~ msgstr "&Spremi pod"
-
-#~ msgid "'%s' doesn't consist only of valid characters"
-#~ msgstr "„%s” ne sadržava samo dozvoljene slovne znakove"
-
-#~ msgid "'%s' should be numeric."
-#~ msgstr "„%s” treba biti numerički."
-
-#~ msgid "'%s' should only contain ASCII characters."
-#~ msgstr "„%s” treba sadržavati samo ASCII slovne znakove."
-
-#~ msgid "'%s' should only contain alphabetic characters."
-#~ msgstr "„%s” treba sadržavati samo slovne znakove."
-
-#~ msgid "'%s' should only contain alphabetic or numeric characters."
-#~ msgstr "„%s” treba sadržavati samo alfanumeričke znakove."
-
-#~ msgid "'%s' should only contain digits."
-#~ msgstr "„%s” treba sadržavati samo brojke."
-
-#~ msgid "Can't create window of class %s"
-#~ msgstr "Nije moguće stvoriti prozor vrste %s"
-
-#~ msgid "Could not initalize libnotify."
-#~ msgstr "Nije bilo moguće inicijalizirati libnotify."
-
-#~ msgid "Couldn't create the overlay window"
-#~ msgstr "Nije bilo moguće stvoriti pokrivni prozor"
-
-#~ msgid "Couldn't init the context on the overlay window"
-#~ msgstr "Nije bilo moguće initijalizirati sadržaj pokrivnog prozora"
-
-#~ msgid "Failed to convert file \"%s\" to Unicode."
-#~ msgstr "Neuspjelo konvertiranje datoteke „%s” u Unicode."
-
-#~ msgid "Failed to set text in the text control."
-#~ msgstr "Neuspjelo postavljanje teksta u tekst kontrole."
-
-#~ msgid "Invalid GTK+ command line option, use \"%s --help\""
-#~ msgstr "Nevaljana GTK+ opcija naredbenog retka, koristi „%s --help”"
-
-#~ msgid "No unused colour in image."
-#~ msgstr "Nema nekorištenih boja u slici."
-
-#~ msgid "Not available"
-#~ msgstr "Nije dostupno"
-
-#~ msgid "Replace selection"
-#~ msgstr "Zamijeni odabir"
-
-#~ msgid "Save as"
-#~ msgstr "Spremi pod"
-
-#~ msgid "Style Organiser"
-#~ msgstr "Upravljač stilova"
-
-#~ msgid "The following standard GTK+ options are also supported:\n"
-#~ msgstr "Sljedeće standardne GTK+ opcije se također podržavaju:\n"
-
-#~ msgid "You cannot Clear an overlay that is not inited"
-#~ msgstr "Ne možeš ukloniti pokrivač, koji nije inicijaliziran"
-
-#~ msgid "You cannot Init an overlay twice"
-#~ msgstr "Ne možeš inicijirati jedan pokrivač dvaput"
-
-#~ msgid "locale '%s' cannot be set."
-#~ msgstr "lokalizaciju „%s” nije moguće postaviti."
