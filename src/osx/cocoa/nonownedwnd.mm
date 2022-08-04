@@ -597,6 +597,20 @@ extern int wxOSXGetIdFromSelector(SEL action );
         }
         return editor;
     } 
+    else if ([anObject isKindOfClass:[wxNSSearchField class]])
+    {
+        wxNSSearchField* sf = (wxNSSearchField*) anObject;
+        wxNSTextFieldEditor* editor = [sf fieldEditor];
+        if ( editor == nil )
+        {
+            editor = [[wxNSTextFieldEditor alloc] init];
+            [editor setFieldEditor:YES];
+            [editor setTextField:sf];
+            [sf setFieldEditor:editor];
+            [editor release];
+        }
+        return editor;
+    }
     else if ([anObject isKindOfClass:[wxNSComboBox class]])
     {
         wxNSComboBox * cb = (wxNSComboBox*) anObject;
