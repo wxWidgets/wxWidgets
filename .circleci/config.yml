@@ -24,8 +24,10 @@ jobs:
             wxPROC_COUNT=2
             echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $BASH_ENV
 
-            # Get langpacks to run the tests using the corresponding locales.
-            export WX_EXTRA_PACKAGES='ccache langpacks-core-de langpacks-core-en langpacks-core-fr langpacks-core-sv'
+            # Get extra conversions for iconv used by the tests and langpacks
+            # to run the tests using the corresponding locales that would be
+            # skipped otherwise.
+            export WX_EXTRA_PACKAGES='ccache glibc-gconv-extra langpacks-core-de langpacks-core-en langpacks-core-fr langpacks-core-sv'
             ./build/tools/before_install.sh
 
             echo "PATH=/usr/lib64/ccache:$PATH" >> $BASH_ENV
