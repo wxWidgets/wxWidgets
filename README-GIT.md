@@ -3,7 +3,9 @@ Building from Git Sources
 
 Please use `--recurse-submodules` option with the initial `git clone`. If you
 had already cloned the repository without this option, please run `git
-submodule update --init` to also get all 3rd party libraries code.
+submodule update --init` to also get all 3rd party libraries code. In the
+future you will also need to use `git submodule update` whenever any of the
+submodules change.
 
 Otherwise, building from Git checkout is not different from building
 from the sources include into the releases, so please follow the usual
