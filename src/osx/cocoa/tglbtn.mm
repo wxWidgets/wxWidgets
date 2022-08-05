@@ -27,8 +27,10 @@
 
 static
 void
-SetToggleButtonBezelStyle(NSButton *v, long style)
+SetToggleButtonStyle(NSButton *v, long style)
 {
+    NSButtonType type = NSOnOffButton;
+
     // This is the appropriate default bezel style for the toggle buttons.
     NSBezelStyle bezel = NSShadowlessSquareBezelStyle;
 
@@ -39,6 +41,7 @@ SetToggleButtonBezelStyle(NSButton *v, long style)
 
         case wxBORDER_NONE:
             [v setBordered:NO];
+            type = NSToggleButton;
             break;
 
         case wxBORDER_SIMPLE:
@@ -53,6 +56,7 @@ SetToggleButtonBezelStyle(NSButton *v, long style)
     }
 
     [v setBezelStyle:bezel];
+    [v setButtonType:type];
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
@@ -67,9 +71,8 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetToggleButtonBezelStyle(v, style);
+    SetToggleButtonStyle(v, style);
 
-    [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
 }
@@ -86,7 +89,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetToggleButtonBezelStyle(v, style);
+    SetToggleButtonStyle(v, style);
     
     if (label.IsOk())
         [v setImage: wxOSXGetImageFromBundle(label) ];
