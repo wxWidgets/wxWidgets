@@ -57,6 +57,8 @@ specialised tool. Examples of these include:
     can output C++, XRC or python.
 @li wxCrafter (free version) <http://www.codelite.org/wxcrafter/>, a C++-based
     form designer that can output C++ or XRC.
+@li wxUiEditor <https://github.com/KeyWorksRW/wxUiEditor>, a C++-based
+    form designer that can output C++ or XRC.
 
 There's a more complete list at <https://wiki.wxwidgets.org/Tools>
 
