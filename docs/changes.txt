@@ -253,6 +253,7 @@ wxOSX:
 
 - Fix missing key and kill focus events for wxSearchCtrl (#19321, #22702).
 - Fix wxrc installation with "make install" (Mark Harfouche, #22620).
+- Fix positioning windows on non-main screen (#22614).
 - Fix bezel style of borderless wxToggleButton (#22140).
 - Improve wxWebView full screen support (Tobias Taschner, #22637).
 
