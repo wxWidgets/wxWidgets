@@ -240,8 +240,12 @@ public:
         May only be called after successful call to Matches() and only if @c wxRE_NOSUB
         was @b not used in Compile().
 
-        Returns @false if no match or if an error occurred.
-
+        This function only returns @false if the regex didn't match at all or
+        one of the arguments is invalid (e.g. @a index is greater or equal than
+        the number of captures) and returns @true in all the other cases, even
+        if the corresponding capture group didn't match anything, which can be
+        the case when using captures in different alternation (@c "|"). In this
+        case the returned @a len is @c 0 and @a start is @c -1.
     */
     bool GetMatch(size_t* start, size_t* len, size_t index = 0) const;
 
