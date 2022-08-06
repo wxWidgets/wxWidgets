@@ -131,19 +131,6 @@ MyFrame::MyFrame(wxWindow *parent,
 #endif // wxUSE_FILEDLG
     file_menu->Append(wxID_EXIT);
 
-    wxMenu* edit_menu = new wxMenu;
-    edit_menu->Append(wxID_UNDO, "&Undo\tCtrl+Z");
-    edit_menu->Append(wxID_REDO, "&Redo\tCtrl+Y");
-    edit_menu->AppendSeparator();
-    edit_menu->Append(wxID_CUT, "Cu&t\tCtrl+X");
-    edit_menu->Append(wxID_COPY, "&Copy\tCtrl+C");
-    edit_menu->Append(wxID_PASTE, "&Paste\tCtrl+V");
-    edit_menu->Append(wxID_CLEAR, "&Delete");
-
-    edit_menu->AppendSeparator();
-    edit_menu->Append(wxID_SELECTALL, "Select All\tCtrl+A");
-
-
     wxMenu *play_menu = new wxMenu;
     play_menu->Append(ID_PLAY, "Play\tCtrl+P", "Play the animation");
     play_menu->Append(wxID_STOP, "Stop\tCtrl+S", "Stop the animation");
@@ -169,7 +156,6 @@ MyFrame::MyFrame(wxWindow *parent,
     wxMenuBar *menu_bar = new wxMenuBar;
 
     menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(edit_menu, "Edit");
     menu_bar->Append(play_menu, "&Animation");
     menu_bar->Append(help_menu, "&Help");
 
