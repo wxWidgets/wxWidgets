@@ -119,6 +119,8 @@ private:
 
     void OnPaintInputWin(wxPaintEvent& event);
 
+    void OnIdle(wxIdleEvent& event);
+
     void LogEvent(const wxString& name, wxKeyEvent& event);
 
     // Set m_inputWin to either a new window of the given kind:
@@ -279,8 +281,10 @@ MyFrame::MyFrame(const wxString& title)
     // the usual key events this one is propagated upwards
     Bind(wxEVT_CHAR_HOOK, &MyFrame::OnCharHook, this);
 
-    // status bar is useful for showing the menu items help strings
-    CreateStatusBar();
+    Bind(wxEVT_IDLE, &MyFrame::OnIdle, this);
+
+    // second status bar field is used by OnIdle() to show the modifiers state
+    CreateStatusBar(2);
 
     // and show itself (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -578,4 +582,15 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
     m_logText->AppendText(msg);
 }
 
+void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    wxString state;
+    if ( wxGetKeyState(WXK_CONTROL) )
+        state += "CTRL ";
+    if ( wxGetKeyState(WXK_ALT) )
+        state += "ALT ";
+    if ( wxGetKeyState(WXK_SHIFT) )
+        state += "SHIFT ";
 
+    SetStatusText(state, 1);
+}
