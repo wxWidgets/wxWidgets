@@ -421,3 +421,26 @@
 /utils/wxrc/wxrc_vc[789].sln
 
 /3rdparty/webview2
+
+# Eclipse project files
+.project
+.cproject
+
+# SublimeText project files
+*.sublime-project
+*.sublime-workspace
+
+# VSCode files
+.vscode/
+*.code-workspace
+*.code-search
+
+# Visual Studio User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache/options directory
+.vs/
