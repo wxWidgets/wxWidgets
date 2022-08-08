@@ -69,7 +69,7 @@ wxBUILD_TESTS             | STRING | OFF     | CONSOLE_ONLY, ALL or OFF
 wxBUILD_SAMPLES           | STRING | OFF     | SOME, ALL or OFF
 wxBUILD_DEMOS             | BOOL   | OFF     | Build demo applications
 wxUSE_GUI                 | BOOL   | ON      | Build the UI libraries
-wxBUILD_COMPATIBILITY     | STRING | 3.0     | 2.8, 3.0 or 3.1 API compatibility
+wxBUILD_COMPATIBILITY     | STRING | 3.2     | Enable API compatibility with 3.0, 3.2 or neither ("NONE")
 wxBUILD_PRECOMP           | BOOL   | ON      | Use precompiled headers
 wxBUILD_MONOLITHIC        | BOOL   | OFF     | Build a single library
 

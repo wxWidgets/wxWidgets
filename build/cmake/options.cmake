@@ -20,7 +20,7 @@ wx_option(wxBUILD_PRECOMP "Use precompiled headers" ON STRINGS ON OFF COTIRE)
 mark_as_advanced(wxBUILD_PRECOMP)
 wx_option(wxBUILD_INSTALL "Create install/uninstall target for wxWidgets")
 wx_option(wxBUILD_COMPATIBILITY
-    "enable compatibilty with earlier wxWidgets versions" 3.0 STRINGS 2.8 3.0 3.1)
+    "enable compatibilty with earlier wxWidgets versions" 3.2 STRINGS 3.0 3.2 NONE)
 mark_as_advanced(wxBUILD_COMPATIBILITY)
 # Allow user specified setup.h folder
 set(wxBUILD_CUSTOM_SETUP_HEADER_PATH "" CACHE PATH "Include path containing custom wx/setup.h")
