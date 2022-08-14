@@ -25,13 +25,39 @@
 #include "wx/osx/private.h"
 #include "wx/private/bmpbndl.h"
 
-// from button.mm
+static
+void
+SetToggleButtonStyle(NSButton *v, long style)
+{
+    NSButtonType type = NSOnOffButton;
 
-extern "C" void SetBezelStyleFromBorderFlags(NSButton *v,
-                                             long style,
-                                             wxWindowID winid = wxID_ANY,
-                                             const wxString& label = wxString(),
-                                             const wxBitmapBundle& bitmap = wxBitmapBundle());
+    // This is the appropriate default bezel style for the toggle buttons.
+    NSBezelStyle bezel = NSShadowlessSquareBezelStyle;
+
+    switch ( style & wxBORDER_MASK )
+    {
+        case 0:
+            break;
+
+        case wxBORDER_NONE:
+            [v setBordered:NO];
+            type = NSToggleButton;
+            break;
+
+        case wxBORDER_SIMPLE:
+            bezel = NSSmallSquareBezelStyle;
+            break;
+
+        case wxBORDER_STATIC:
+        case wxBORDER_RAISED:
+        case wxBORDER_THEME:
+        case wxBORDER_SUNKEN:
+            break;
+    }
+
+    [v setBezelStyle:bezel];
+    [v setButtonType:type];
+}
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
@@ -45,9 +71,8 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style, winid, label);
+    SetToggleButtonStyle(v, style);
 
-    [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
 }
@@ -64,7 +89,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    SetBezelStyleFromBorderFlags(v, style, winid, wxString(), label);
+    SetToggleButtonStyle(v, style);
     
     if (label.IsOk())
         [v setImage: wxOSXGetImageFromBundle(label) ];
