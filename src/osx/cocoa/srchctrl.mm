@@ -24,14 +24,6 @@
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
 
-
-@interface wxNSSearchField : NSSearchField
-{
-    BOOL m_withinTextDidChange;
-}
-
-@end
-
 @implementation wxNSSearchField
 
 + (void)initialize

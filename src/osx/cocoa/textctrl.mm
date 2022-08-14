@@ -584,36 +584,6 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     }
 }
 
-- (id) initWithFrame:(NSRect) frame
-{
-    if ( self = [super initWithFrame:frame] )
-    {
-        fieldEditor = nil;
-    }
-    return self;
-}
-
-- (void) dealloc
-{
-    [fieldEditor release];
-    [super dealloc];
-}
-
-- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
-{
-    if ( editor != fieldEditor )
-    {
-        [editor retain];
-        [fieldEditor release];
-        fieldEditor = editor;
-    }
-}
-
-- (wxNSTextFieldEditor*) fieldEditor
-{
-    return fieldEditor;
-}
-
 - (void) setEnabled:(BOOL) flag
 {
     [super setEnabled: flag];
@@ -736,7 +706,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     {
         wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
         if ( timpl )
-            timpl->UpdateInternalSelectionFromEditor(fieldEditor);
+            timpl->UpdateInternalSelectionFromEditor(self.WXFieldEditor);
         impl->DoNotifyFocusLost();
     }
 }
