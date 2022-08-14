@@ -19,9 +19,8 @@ task:
     wxPROC_COUNT=`./build/tools/proc_count.sh`
     echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $CIRRUS_ENV
 
-    ./build/tools/before_install.sh
+    WX_EXTRA_PACKAGES='ccache git' ./build/tools/before_install.sh
 
-    pkg install -q -y ccache git
     echo "PATH=/usr/local/libexec/ccache:$PATH" >> $CIRRUS_ENV
 
   # Rather than getting all submodules, get just the ones we need, as we can
