@@ -95,6 +95,10 @@ public:
     void OnAnnotationRemove(wxCommandEvent& event);
     void OnAnnotationClear(wxCommandEvent& event);
     void OnAnnotationStyle(wxCommandEvent& event);
+    // indicators
+    void OnIndicatorFill(wxCommandEvent& event);
+    void OnIndicatorClear(wxCommandEvent& event);
+    void OnIndicatorStyle(wxCommandEvent& event);
     //! extra
     void OnChangeCase (wxCommandEvent &event);
     void OnConvertEOL (wxCommandEvent &event);

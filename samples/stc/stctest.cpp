@@ -547,6 +547,34 @@ void AppFrame::CreateMenu ()
     menuAnnotationsStyle->AppendRadioItem(myID_ANNOTATION_STYLE_BOXED, _("&Boxed"));
     menuAnnotations->AppendSubMenu(menuAnnotationsStyle, "&Style");
 
+    // Indicators menu
+    wxMenu* menuIndicators = new wxMenu;
+    menuIndicators->Append(myID_INDICATOR_FILL, _("&Add indicator for selection"));
+    menuIndicators->Append(myID_INDICATOR_CLEAR, _("&Clear indicator for selection"));
+
+    wxMenu* menuIndicatorStyle = new wxMenu;
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_PLAIN, "Plain");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_SQUIGGLE, "Squiggle");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_TT, "TT");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DIAGONAL, "Diagonal");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_STRIKE, "Strike");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_HIDDEN, "Hidden");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_BOX, "Box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_ROUNDBOX, "Round box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_STRAIGHTBOX, "Straight box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DASH, "Dash");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DOTS, "Dots");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_SQUIGGLELOW, "Squiggle low");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DOTBOX, "Dot box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_SQUIGGLEPIXMAP, "Squiggle pixmap");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_COMPOSITIONTHICK, "Composition thick");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_COMPOSITIONTHIN, "Composition thin");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_FULLBOX, "Full box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_TEXTFORE, "Text fore");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_POINT, "Point");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_POINTCHARACTER, "Point character");
+    menuIndicators->AppendSubMenu(menuIndicatorStyle, "&Style");
+
     // change case submenu
     wxMenu *menuChangeCase = new wxMenu;
     menuChangeCase->Append (myID_CHANGEUPPER, _("&Upper case"));
@@ -591,6 +619,7 @@ void AppFrame::CreateMenu ()
     m_menuBar->Append (menuEdit, _("&Edit"));
     m_menuBar->Append (menuView, _("&View"));
     m_menuBar->Append (menuAnnotations, _("&Annotations"));
+    m_menuBar->Append (menuIndicators, _("&Indicators"));
     m_menuBar->Append (menuExtra, _("E&xtra"));
     m_menuBar->Append (menuWindow, _("&Window"));
     m_menuBar->Append (menuHelp, _("&Help"));
