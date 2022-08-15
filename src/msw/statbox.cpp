@@ -498,7 +498,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
 
 #if wxUSE_UXTHEME
     // when using XP themes, neither setting the text colour nor transparent
-    // background mode doesn't change anything: the static box def window proc
+    // background mode changes anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
     if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin )

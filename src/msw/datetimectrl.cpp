@@ -185,7 +185,7 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
         // DPI change, so we never use the vertical component of the value
         // returned by it.
         //
-        // Unfortunately, resetting this style doesn't work neither, so we have
+        // Unfortunately, resetting this style doesn't work either, so we have
         // to create a whole new window just for this, which is pretty wasteful
         // but seems unavoidable.
         HWND hwnd;

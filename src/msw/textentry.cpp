@@ -505,7 +505,7 @@ public:
                 // defined at wx level run first).
                 //
                 // Notice that we can't use wxEVT_TEXT here
-                // neither as, due to our use of ACO_AUTOAPPEND, we get
+                // either as, due to our use of ACO_AUTOAPPEND, we get
                 // EN_CHANGE notifications from the control every time
                 // IAutoComplete auto-appends something to it.
                 m_win->Bind(wxEVT_AFTER_CHAR,

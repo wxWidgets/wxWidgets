@@ -314,7 +314,7 @@ protected:
             return;
         }
 
-        // Also ignore frames which don't have neither the function name nor
+        // Also ignore frames which have neither the function name nor
         // the file name, showing them in the dialog wouldn't provide any
         // useful information.
         if ( name.empty() && frame.GetFileName().empty() )

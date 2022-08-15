@@ -480,7 +480,7 @@ private:
   // however notice that this approach does not work when compiler TLS is used,
   // at least not with g++ 4.1.2 under amd64 as it apparently compiles code
   // using this accessor incorrectly when optimizations are enabled (-O2 is
-  // enough) -- luckily we don't need it then neither as static __thread
+  // enough) -- luckily we don't need it then either as static __thread
   // variables are initialized by 0 anyhow then and so we can use the variable
   // directly
   WXEXPORT static Cache& GetCache()
@@ -4315,7 +4315,7 @@ inline const wchar_t* wxCStrData::AsWChar() const
         // if conversion fails, return empty string and not NULL to avoid
         // crashes in code written with either wxWidgets 2 wxString or
         // std::string behaviour in mind: neither of them ever returns NULL
-        // from its c_str() and so we shouldn't neither
+        // from its c_str() and so we shouldn't either
         //
         // notice that the same is done in AsChar() below and
         // wxString::wc_str() and mb_str() for the same reasons

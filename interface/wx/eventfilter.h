@@ -131,7 +131,7 @@ public:
             to suppress some events).
             - Event_Processed to not process this event normally but indicate
             that it was already processed by the event filter and so no default
-            processing should take place neither (this should only be used if
+            processing should take place either (this should only be used if
             the filter really did process the event).
      */
     virtual int FilterEvent(wxEvent& event) = 0;

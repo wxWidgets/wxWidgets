@@ -954,7 +954,7 @@ static wxString wxCreateTempImpl(
     if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
-        // already done it but it doesn't hurt neither...
+        // already done it but it doesn't hurt either...
         path.clear();
     }
     else // mkstemp() succeeded

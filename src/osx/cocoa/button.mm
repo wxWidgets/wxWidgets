@@ -194,7 +194,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
     }
     else
     {
-        // We can't use rounded bezel styles neither for multiline buttons nor
+        // We can't use rounded bezel styles either for multiline buttons or
         // for buttons containing (big) icons as they are only meant to be used
         // at certain sizes, so the style used depends on whether the label is
         // single or multi line.

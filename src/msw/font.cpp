@@ -543,7 +543,7 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
     lf.lfHeight = -abs(pixelSize.GetHeight());
     lf.lfWidth = pixelSize.GetWidth();
 
-    // We don't have the right DPI to use here neither, but we need to update
+    // We don't have the right DPI to use here either, but we need to update
     // the point size too, so fall back to the default.
     pointSize = GetPointSizeAtPPI(lf.lfHeight);
 }

@@ -161,7 +161,7 @@ wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
         case wxDIALOG_MODALITY_WINDOW_MODAL:
             if ( !parent->IsShownOnScreen() )
             {
-                // using hidden parent won't work correctly neither
+                // using hidden parent won't work correctly either
                 return NULL;
             }
             break;

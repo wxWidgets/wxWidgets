@@ -1337,7 +1337,7 @@ bool wxHandleFatalExceptions(bool doIt = true);
 
     If the function returns @false the initialization could not be performed,
     in this case the library cannot be used and wxUninitialize() shouldn't be
-    called neither.
+    called either.
 
     This function may be called several times but wxUninitialize() must be
     called for each successful call to this function.

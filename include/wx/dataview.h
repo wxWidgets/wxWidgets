@@ -952,7 +952,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDataViewEvent(*this); }
 
     // These methods shouldn't be used outside of wxWidgets and wxWidgets
-    // itself doesn't use them any longer neither as it constructs the events
+    // itself doesn't use them any longer either as it constructs the events
     // with the appropriate ctors directly.
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("Pass the argument to the ctor instead")

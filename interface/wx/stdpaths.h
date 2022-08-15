@@ -496,7 +496,7 @@ public:
         plugins directory on Unix, etc.
 
         Valid values for @a info are:
-            - @c AppInfo_None: don't use neither application nor vendor name in
+            - @c AppInfo_None: use neither application nor vendor name in
             the paths.
             - @c AppInfo_AppName: use the application name in the paths.
             - @c AppInfo_VendorName: use the vendor name in the paths, usually

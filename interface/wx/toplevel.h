@@ -304,7 +304,7 @@ public:
         Note that if you associate a sizer with this window, the sizer takes
         precedence and the only-child-resizing is only used as fallback.
 
-        @returns @false if nothing was done because the window doesn't have
+        @returns @false if nothing was done because the window has
                  neither a sizer nor a single child, @true otherwise.
     */
     virtual bool Layout();

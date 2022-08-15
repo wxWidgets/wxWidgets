@@ -189,7 +189,7 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     // there doesn't seem to be any way to get the text colour using themes
-    // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
+    // API: TMT_TEXTCOLOR doesn't work either for EDIT nor COMBOBOX
     attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
 
     // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)

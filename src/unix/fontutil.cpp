@@ -880,7 +880,7 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 
 void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
 {
-    // this is not supported by Pango fonts neither
+    // this is not supported by Pango fonts either
 }
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)

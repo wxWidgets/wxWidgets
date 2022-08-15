@@ -111,7 +111,7 @@ template<class T> class wxExpectModal;
     T must be a class derived from wxDialog and E is the derived class type,
     i.e. this is an example of using CRTP. The default value of E is fine in
     case you're using this class as a base for your wxExpectModal<>
-    specialization anyhow but also if you don't use neither Optional() nor
+    specialization anyhow but also if you don't use either Optional() or
     Describe() methods, as the derived class type is only needed for them.
  */
 template<class T, class E = wxExpectModal<T> >

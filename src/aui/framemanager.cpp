@@ -4851,7 +4851,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
 
             if (e.GetVeto())
             {
-                // If it can't be restored, it can't be floated neither.
+                // If it can't be restored, it can't be floated either.
                 return;
             }
 

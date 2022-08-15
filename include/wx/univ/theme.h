@@ -177,7 +177,7 @@ struct WXDLLIMPEXP_CORE wxThemeInfo
     #define wxUNIV_DEFAULT_THEME gtk
 #elif defined(__WXDFB__) && wxUSE_THEME_MONO
     // use mono theme for DirectFB port because it cannot correctly
-    // render neither win32 nor gtk themes yet:
+    // render either win32 or gtk themes yet:
     #define wxUNIV_DEFAULT_THEME mono
 #endif
 

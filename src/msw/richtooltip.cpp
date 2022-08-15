@@ -75,7 +75,7 @@ public:
     virtual void SetBackgroundColour(const wxColour& col,
                                      const wxColour& colEnd) wxOVERRIDE
     {
-        // Setting background colour is not supported neither.
+        // Setting background colour is not supported either.
         m_canUseNative = false;
 
         wxRichToolTipGenericImpl::SetBackgroundColour(col, colEnd);

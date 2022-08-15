@@ -1364,7 +1364,7 @@ wxString wxCmdLineParser::GetUsageString() const
                 }
                 else
                 {
-                    wxFAIL_MSG( wxT("option without neither short nor long name") );
+                    wxFAIL_MSG( wxT("option without either short or long name") );
                 }
             }
 

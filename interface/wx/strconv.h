@@ -115,7 +115,7 @@ public:
         which it output to @e dst. If the length of the resulting wide
         string is greater than @e dstLen, an error is returned. Note that if
         @a srcLen bytes don't include @c NUL characters, the resulting wide
-        string is not @c NUL-terminated neither.
+        string is not @c NUL-terminated either.
 
         If @a srcLen is @c wxNO_LEN, the function supposes that the string is
         properly (i.e. as necessary for the encoding handled by this

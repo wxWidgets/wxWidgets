@@ -270,7 +270,7 @@ wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
             maskToUse.MSWCreateFromImageMask(img);
         }
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
-        // We don't have neither mask nor alpha, only force creating the
+        // We don't have either mask nor alpha, only force creating the
         // mask from colour if requested to do it.
         else if ( m_useMask )
         {

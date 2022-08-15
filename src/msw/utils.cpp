@@ -995,7 +995,7 @@ wxLoadUserResource(const void **outData,
 
     *outLen = ::SizeofResource(instance, hResource);
 
-    // Notice that we do not need to call neither UnlockResource() (which is
+    // Notice that we need to call neither UnlockResource() (which is
     // obsolete in Win32) nor GlobalFree() (resources are freed on process
     // termination only)
 

@@ -48,7 +48,7 @@
 /*
    Including sys/types.h under Cygwin results in the warnings about "fd_set
    having been defined in sys/types.h" when winsock.h is included later and
-   doesn't seem to be necessary anyhow. It's not needed under Mac neither.
+   doesn't seem to be necessary anyhow. It's not needed under Mac either.
  */
 #if !defined(__WXMAC__) && !defined(__WXMSW__)
 #include <sys/types.h>

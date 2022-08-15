@@ -1694,7 +1694,7 @@ public:
 
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
-        If the previous default style didn't set them neither, the global font
+        If the previous default style didn't set them either, the global font
         or colours of the text control itself are used as fall back.
 
         However if the @a style parameter is the default wxTextAttr, then the default

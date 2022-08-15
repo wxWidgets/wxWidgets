@@ -72,7 +72,7 @@ wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 {
     wxBitmap bmp(bitmap);
 
-    // If we don't have neither mask nor alpha and were asked to use a mask,
+    // If we have neither mask nor alpha and were asked to use a mask,
     // create a default one.
     if ( m_useMask && !bmp.GetMask() && !bmp.HasAlpha() )
     {

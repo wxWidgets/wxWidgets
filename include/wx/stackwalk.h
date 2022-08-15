@@ -126,7 +126,7 @@ public:
     // ctor does nothing, use Walk() to walk the stack
     wxStackWalkerBase() { }
 
-    // dtor does nothing neither but should be virtual
+    // dtor does nothing either but should be virtual
     virtual ~wxStackWalkerBase() { }
 
     // enumerate stack frames from the current location, skipping the initial

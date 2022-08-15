@@ -115,7 +115,7 @@ private:
 wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
 {
     // We suppose that we don't have disabled bitmap if we don't have the
-    // normal one neither.
+    // normal one either.
     if ( !m_bitmap.IsOk() )
         return wxNullBitmap;
 

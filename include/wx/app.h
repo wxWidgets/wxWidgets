@@ -153,7 +153,7 @@ public:
         // used for paths, config, and other places the user doesn't see
         //
         // by default the display name is the same as app name or a capitalized
-        // version of the program if app name was not set neither but it's
+        // version of the program if app name was not set either but it's
         // usually better to set it explicitly to something nicer
     wxString GetAppDisplayName() const;
 

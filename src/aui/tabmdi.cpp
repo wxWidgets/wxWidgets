@@ -254,7 +254,7 @@ bool wxAuiMDIParentFrame::CloseAll()
     {
         if (!pActiveChild->Close())
         {
-            // it refused to close, don't close the remaining ones neither
+            // it refused to close, don't close the remaining ones either
             return false;
         }
     }

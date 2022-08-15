@@ -34,7 +34,7 @@ public:
 
         // Return the icon of the system icon size if exact size is not found.
         // May be combined with other non-NONE enum elements to determine what
-        // happens if the system icon size is not found neither.
+        // happens if the system icon size is not found either.
         FALLBACK_SYSTEM = 1,
 
         // Return the icon of closest larger size or, if there is no icon of

@@ -3225,7 +3225,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
     if ( style.HasFont() )
     {
         // VZ: CFM_CHARSET doesn't seem to do anything at all in RichEdit 2.0
-        //     but using it doesn't seem to hurt neither so leaving it for now
+        //     but using it doesn't seem to hurt either so leaving it for now
 
         cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET |
                      CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;

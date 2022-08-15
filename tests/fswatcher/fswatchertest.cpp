@@ -441,7 +441,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 }
 
 // kqueue-based implementation doesn't collapse create/delete pairs in
-// renames and doesn't detect neither modifications nor access to the
+// renames and detects neither modifications nor access to the
 // files reliably currently so disable these tests
 //
 // FIXME: fix the code and reenable them
