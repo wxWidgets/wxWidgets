@@ -475,7 +475,7 @@ private:
         wxYield();
 
         // Note that clicking it is still not enough to give it focus with
-        // wxGTK neither, so we still need to call SetFocus() nevertheless: but
+        // wxGTK either, so we still need to call SetFocus() nevertheless: but
         // now it works.
         m_control->SetFocus();
 

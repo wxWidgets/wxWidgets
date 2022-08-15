@@ -117,7 +117,7 @@ wxChoice::~wxChoice()
     // a Gtk-CRITICAL debug message when the assertion fails inside a signal
     // handler called from gtk_widget_unrealize(), which is annoying, so avoid
     // it by hiding the widget before destroying it -- this doesn't look right,
-    // but shouldn't do any harm neither.
+    // but shouldn't do any harm either.
     Hide();
  #endif // __WXGTK3__
 }

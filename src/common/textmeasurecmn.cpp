@@ -159,7 +159,7 @@ void wxTextMeasureBase::GetMultiLineTextExtent(const wxString& text,
                 if ( !heightLineDefault )
                     heightLineDefault = heightLine;
 
-                // and if we hadn't had any previous one neither, compute it now
+                // and if we hadn't had any previous one either, compute it now
                 if ( !heightLineDefault )
                     heightLineDefault = GetEmptyLineHeight();
 

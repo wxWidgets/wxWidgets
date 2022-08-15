@@ -1575,7 +1575,7 @@ wxWindowDisabler::~wxWindowDisabler()
         {
             winTop->Enable();
         }
-        //else: we didn't disable this window, so don't reenable it neither
+        //else: we didn't disable this window, so don't reenable it either
     }
 }
 

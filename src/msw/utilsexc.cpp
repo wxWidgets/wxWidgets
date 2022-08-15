@@ -485,7 +485,7 @@ wxPipeOutputStream::wxPipeOutputStream(HANDLE hOutput)
                 m_hOutput,
                 &mode,
                 NULL,       // collection count (we don't set it)
-                NULL        // timeout (we don't set it neither)
+                NULL        // timeout (we don't set it either)
             ) )
     {
         wxLogLastError(wxT("SetNamedPipeHandleState(PIPE_NOWAIT)"));
@@ -584,7 +584,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 #if wxUSE_THREADS
     // for many reasons, the code below breaks down if it's called from another
     // thread -- this could be fixed, but as Unix versions don't support this
-    // neither I don't want to waste time on this now
+    // either I don't want to waste time on this now
     wxASSERT_MSG( wxThread::IsMain(),
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS

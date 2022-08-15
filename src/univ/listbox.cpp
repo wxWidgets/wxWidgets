@@ -165,7 +165,7 @@ bool wxListBox::Create(wxWindow *parent,
     if ( style & wxLB_ALWAYS_SB )
         style |= wxALWAYS_SHOW_SB;
 
-    // if we don't have neither multiple nor extended flag, we must have the
+    // if we have neither multiple nor extended flag, we must have the
     // single selection listbox
     if ( !(style & (wxLB_MULTIPLE | wxLB_EXTENDED)) )
         style |= wxLB_SINGLE;

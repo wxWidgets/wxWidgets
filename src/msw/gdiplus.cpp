@@ -741,7 +741,7 @@ wxFOR_ALL_GDIPLUS_STATUS_FUNCS(wxDECL_GDIPLUS_FUNC_TYPE)
 // and load gdiplus.dll dynamically, it's not defined in our case resulting in
 // linking errors -- so just provide it ourselves, it doesn't matter where it
 // is and if Cygwin headers are modified to not use it in the future, it's not
-// a big deal neither, we'll just have an unused pointer.
+// a big deal either, we'll just have an unused pointer.
 #if defined(__CYGWIN__) || defined(__MINGW32__)
 void *_GdipStringFormatCachedGenericTypographic = NULL;
 #endif // __CYGWIN__ || __MINGW32__

@@ -280,7 +280,7 @@ wxDocManager *wxDocument::GetDocumentManager() const
 
 bool wxDocument::OnNewDocument()
 {
-    // notice that there is no need to neither reset nor even check the
+    // notice that there is no need to either reset nor even check the
     // modified flag here as the document itself is a new object (this is only
     // called from CreateDocument()) and so it shouldn't be saved anyhow even
     // if it is modified -- this could happen if the user code creates

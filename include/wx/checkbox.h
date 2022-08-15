@@ -137,7 +137,7 @@ protected:
             // For compatibility we use absence of style flags as wxCHK_2STATE
             // because wxCHK_2STATE used to have the value of 0 and some
             // existing code uses 0 instead of it. Moreover, some code even
-            // uses some non-0 style, e.g. wxBORDER_XXX, but doesn't specify
+            // uses some non-0 style, e.g. wxBORDER_XXX, but specifies
             // neither wxCHK_2STATE nor wxCHK_3STATE -- to avoid breaking it,
             // assume (much more common) 2 state checkbox by default.
             style |= wxCHK_2STATE;

@@ -194,7 +194,7 @@ void wxNumberFormatter::RemoveTrailingZeroes(wxString& s)
     // Find the last character to keep.
     size_t posLastNonZero = s.find_last_not_of("0");
 
-    // If it's the decimal separator itself, don't keep it neither.
+    // If it's the decimal separator itself, don't keep it either.
     if ( posLastNonZero == posDecSep )
         posLastNonZero--;
 

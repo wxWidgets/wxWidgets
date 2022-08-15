@@ -1581,7 +1581,7 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
     {
         // the combination of wxCONTROL_SELECTED and wxCONTROL_DISABLED
         // currently only can happen for a menu item and it seems that Windows
-        // doesn't draw the shadow in this case, so we don't do it neither
+        // doesn't draw the shadow in this case, so we don't do it either
         if ( flags & wxCONTROL_SELECTED )
         {
             // just make the label text greyed out

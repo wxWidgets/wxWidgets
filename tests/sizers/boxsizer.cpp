@@ -397,7 +397,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
     // Combining two vertical alignment flags doesn't make sense.
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_BOTTOM, wxALIGN_CENTRE_VERTICAL);
 
-    // Combining wxEXPAND with vertical alignment doesn't make sense neither.
+    // Combining wxEXPAND with vertical alignment doesn't make sense either.
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_VERTICAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_BOTTOM);
 

@@ -2822,7 +2822,7 @@ void wxCSConv::SetEncoding(wxFontEncoding encoding)
                 // It's ok to not have encoding value if we have a name for it.
                 m_encoding = wxFONTENCODING_SYSTEM;
             }
-            else // No name neither.
+            else // No name either.
             {
                 // Fall back to the system default encoding in this case (not
                 // sure how much sense does this make but this is how the old

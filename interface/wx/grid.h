@@ -2645,7 +2645,7 @@ public:
         Returns the attribute provider currently being used.
 
         This function may return @NULL if the attribute provider hasn't been
-        neither associated with this table by SetAttrProvider() nor created on
+        either associated with this table by SetAttrProvider() nor created on
         demand by any other methods.
      */
     wxGridCellAttrProvider *GetAttrProvider() const;

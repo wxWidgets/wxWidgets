@@ -208,7 +208,7 @@ void wxStaticTextBase::AutoResizeIfNecessary()
         return;
 
     // This method is only called if either the label or the font changed, i.e.
-    // if the label extent changed, so the best size is not the same neither
+    // if the label extent changed, so the best size is not the same either
     // any more.
     //
     // Note that we don't invalidate it when wxST_NO_AUTORESIZE is on because

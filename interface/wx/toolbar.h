@@ -591,7 +591,7 @@ public:
         you should use @c wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR) but
         in any case, as the bitmap size is deduced automatically from the size
         of the bitmaps associated with the tools added to the toolbar, it is
-        usually unnecessary to call neither this function nor
+        usually unnecessary to call either this function or
         SetToolBitmapSize() at all.
 
         @remarks Note that this is the size of the bitmap you pass to AddTool(),

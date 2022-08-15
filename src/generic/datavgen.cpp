@@ -2073,7 +2073,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
              (
                   wxT("wxDataView"),
                   -1, // no specific background brush
-                  0, // no special styles neither
+                  0, // no special styles either
                   wxApp::RegClass_OnlyNR
              ),
       parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name
@@ -4548,7 +4548,7 @@ void wxDataViewMainWindow::OnCharHook(wxKeyEvent& event)
                 return;
 
             case WXK_RETURN:
-                // Shift-Enter is not special neither.
+                // Shift-Enter is not special either.
                 if ( event.ShiftDown() )
                     break;
                 wxFALLTHROUGH;

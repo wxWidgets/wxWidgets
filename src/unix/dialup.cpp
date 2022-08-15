@@ -74,7 +74,7 @@ public:
    virtual ~wxDialUpManagerImpl();
 
    /** Could the dialup manager be initialized correctly? If this function
-       returns false, no other functions will work neither, so it's a good idea
+       returns false, no other functions will work either, so it's a good idea
        to call this function and check its result before calling any other
        wxDialUpManager methods.
    */
@@ -140,7 +140,7 @@ public:
    virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) wxOVERRIDE;
 
    // disable automatic check for connection status change - notice that the
-   // wxEVT_DIALUP_XXX events won't be sent any more neither.
+   // wxEVT_DIALUP_XXX events won't be sent any more either.
    virtual void DisableAutoCheckOnlineStatus() wxOVERRIDE;
 
    // under Unix, the value of well-known host is used to check whether we're

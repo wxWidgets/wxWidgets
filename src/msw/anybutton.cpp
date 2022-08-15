@@ -1574,7 +1574,7 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         {
             // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
             // systems but by happy coincidence ODS_NOACCEL is not used under
-            // them neither so DT_HIDEPREFIX should never be used there
+            // them either so DT_HIDEPREFIX should never be used there
             DrawButtonText(hdc, &rectBtn, this,
                            state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
         }

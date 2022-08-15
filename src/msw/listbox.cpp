@@ -642,7 +642,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     wListbox += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
     // don't make the listbox too tall (limit height to 10 items) but don't
-    // make it too small neither
+    // make it too small either
     int hListbox = SendMessage(GetHwnd(), LB_GETITEMHEIGHT, 0, 0)*
                     wxMin(wxMax(m_noItems, 3), 10);
 

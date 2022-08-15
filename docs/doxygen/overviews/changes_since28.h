@@ -35,7 +35,7 @@ of the information which was correct before doesn't apply any longer.
 For example, the notorious (due to the confusion they created) macros @c wxT()
 and @c _T() are not needed at all any longer. Basically, you can remove them
 from any code which used them. On the other hand, there is no particular harm
-in leaving them neither as the code will still compile and work correctly --
+in leaving them either as the code will still compile and work correctly --
 you only need to remove them if you think that your code looks tidier without
 them. You also don't need to use @c wxChar any longer but can directly use the
 standard @c wchar_t type even if, again, @c wxChar continues to work.

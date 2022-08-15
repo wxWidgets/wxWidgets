@@ -136,7 +136,7 @@ void ListCtrlTestCase::SubitemRect()
     m_list->GetSubItemRect(1, 1, rectLabel, wxLIST_RECT_LABEL);
 
     CHECK(rectIcon.IsEmpty());
-    // Here we can't check for exact equality neither as there can be a margin.
+    // Here we can't check for exact equality either as there can be a margin.
     CHECK(rectLabel.GetLeft() >= rectItem.GetLeft());
     CHECK(rectLabel.GetRight() == rectItem.GetRight());
 }

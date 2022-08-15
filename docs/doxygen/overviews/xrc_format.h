@@ -2038,9 +2038,9 @@ HTML markup. Note that the markup has to be escaped:
 @subsubsection xrc_wxsimplebook wxSimplebook
 
 wxSimplebook is similar to @ref xrc_wxnotebook "wxNotebook" but simpler: as it
-doesn't show any page headers, it doesn't use neither image list nor individual
+doesn't show any page headers, it uses neither image list nor individual
 page bitmaps and while it still accepts page labels, they are optional as they
-are not shown to the user neither.
+are not shown to the user either.
 
 So @c simplebookpage child elements, that must occur inside this object, only
 have the following properties:

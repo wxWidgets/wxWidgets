@@ -102,7 +102,7 @@ private:
             if ( type == wxClientData_None )
             {
                 // we didn't have the client data before and are not asked to
-                // store it now neither
+                // store it now either
                 return false;
             }
 

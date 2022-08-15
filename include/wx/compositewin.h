@@ -101,7 +101,7 @@ public:
         // wxGTK as the derived window is not fully created yet and calling its
         // SetSize() may be unexpected. This does mean that any future calls to
         // SetLayoutDirection(wxLayout_Default) wouldn't result in a re-layout
-        // neither, but then we're not supposed to be called with it at all.
+        // either, but then we're not supposed to be called with it at all.
         if ( dir != wxLayout_Default )
             this->SetSize(-1, -1, -1, -1, wxSIZE_FORCE);
     }

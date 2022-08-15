@@ -163,7 +163,7 @@
     or explicitly convert the return value:
         @code
             auto c = s[0].GetValue();
-            c = 'x';            // Doesn't modify the string neither.
+            c = 'x';            // Doesn't modify the string either.
             wxASSERT( s == "abc" );
         @endcode
 

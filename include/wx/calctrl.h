@@ -39,7 +39,7 @@ enum
     // deprecated
     wxCAL_NO_YEAR_CHANGE             = 0x0004,
 
-    // don't allow changing neither month nor year (implies
+    // don't allow changing either month or year (implies
     // wxCAL_NO_YEAR_CHANGE)
     wxCAL_NO_MONTH_CHANGE            = 0x000c,
 

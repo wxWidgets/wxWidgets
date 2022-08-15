@@ -765,9 +765,9 @@ bool wxTopLevelWindowMSW::Destroy()
     // Under Windows 10 iconized windows don't get any messages, so delayed
     // destruction doesn't work for them if we don't force a message dispatch
     // here (and it doesn't seem useful to test for MSWIsIconized() as doing
-    // this doesn't do any harm for non-iconized windows neither). For that
+    // this doesn't do any harm for non-iconized windows either). For that
     // matter, doing this shouldn't do any harm under previous OS versions
-    // neither, so checking for the OS version doesn't seem useful too.
+    // either, so checking for the OS version doesn't seem useful too.
     wxWakeUpIdle();
 
     return true;
@@ -867,7 +867,7 @@ wxTopLevelWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     else
     {
         // OTOH, if x is not set to CW_USEDEFAULT, y shouldn't be set to it
-        // neither because it is not handled as a special value by Windows then
+        // either because it is not handled as a special value by Windows then
         // and so we have to choose some default value for it, even if a
         // completely arbitrary one
         static const int DEFAULT_Y = 200;

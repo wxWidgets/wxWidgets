@@ -20,7 +20,7 @@ enum
     // deprecated
     wxCAL_NO_YEAR_CHANGE             = 0x0004,
 
-    // don't allow changing neither month nor year (implies
+    // don't allow changing either month or year (implies
     // wxCAL_NO_YEAR_CHANGE)
     wxCAL_NO_MONTH_CHANGE            = 0x000c,
 
@@ -350,7 +350,7 @@ public:
         This function should be used instead of changing
         @c wxCAL_NO_MONTH_CHANGE style bit. It allows or disallows the user to
         change the month interactively. Note that if the month cannot be
-        changed, the year cannot be changed neither.
+        changed, the year cannot be changed either.
 
         @return @true if the value of this option really changed or @false if
                 it was already set to the requested value.

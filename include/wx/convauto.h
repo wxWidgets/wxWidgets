@@ -40,7 +40,7 @@ public:
         m_encDefault = enc;
     }
 
-    // copy ctor doesn't initialize anything neither as conversion can only be
+    // copy ctor doesn't initialize anything either as conversion can only be
     // deduced on first use
     wxConvAuto(const wxConvAuto& other) : wxMBConv()
     {

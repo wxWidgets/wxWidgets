@@ -102,7 +102,7 @@ wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
     // which overwrites m_hIcon anyhow currently
     //
     // and if we're called from SetWidth/Height/Depth(), it doesn't make sense
-    // to copy it neither as the handle would be inconsistent with the new size
+    // to copy it either as the handle would be inconsistent with the new size
     return new wxIconRefData(*data);
 }
 

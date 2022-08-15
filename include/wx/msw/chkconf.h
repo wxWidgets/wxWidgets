@@ -430,7 +430,7 @@
         and explicitly disabling wxUSE_DBGHELP (which would ideally result in
         an error if wxUSE_STACKWALKER is not disabled too), but it's better to
         avoid giving a compiler error in the former case even if it means not
-        giving it neither in the latter one.
+        giving it either in the latter one.
      */
     #undef wxUSE_STACKWALKER
     #define wxUSE_STACKWALKER 0
