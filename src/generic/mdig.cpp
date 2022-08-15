@@ -99,7 +99,7 @@ bool wxGenericMDIParentFrame::Create(wxWindow *parent,
 #endif // wxUSE_MENUS
     }
 
-    // the scrolling styles don't make sense neither for us nor for our client
+    // the scrolling styles don't make sense either for us nor for our client
     // window (to which they're supposed to apply)
     style &= ~(wxHSCROLL | wxVSCROLL);
 
@@ -132,7 +132,7 @@ bool wxGenericMDIParentFrame::CloseAll()
         wxGenericMDIChildFrame * const child = client->GetChild(0);
         if ( !child->Close() )
         {
-            // it refused to close, don't close the remaining ones neither
+            // it refused to close, don't close the remaining ones either
             return false;
         }
     }
@@ -402,7 +402,7 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
     wxGenericMDIParentFrame * const parent = GetGenericMDIParent();
 
     // it could happen that we don't have a valid parent if we hadn't been ever
-    // really created -- but in this case there is nothing else to do neither
+    // really created -- but in this case there is nothing else to do either
     if ( parent )
         parent->WXRemoveChild(this);
 

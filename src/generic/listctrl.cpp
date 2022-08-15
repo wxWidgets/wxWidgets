@@ -1467,7 +1467,7 @@ void wxListTextCtrlWrapper::EndEdit(EndReason reason)
 
         case End_Destroy:
             // Don't generate any notifications for the control being destroyed
-            // and don't set focus to it neither.
+            // and don't set focus to it either.
             Finish(false);
             break;
     }

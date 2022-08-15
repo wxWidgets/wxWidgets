@@ -156,7 +156,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
         combo->HandleWindowEvent( event );
 
         // for consistency with the other ports, don't generate text update
-        // events while the user is browsing the combobox neither
+        // events while the user is browsing the combobox either
         wxCommandEvent event2( wxEVT_TEXT, combo->GetId() );
         event2.SetString( combo->GetValue() );
         event2.SetEventObject( combo );

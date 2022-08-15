@@ -1344,7 +1344,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
 
     // Convert forward slashes to backslashes (file selector doesn't like
     // forward slashes) and also squeeze multiple consecutive slashes into one
-    // as it doesn't like two backslashes in a row neither
+    // as it doesn't like two backslashes in a row either
 
     wxString  dir;
     size_t    i, len = m_dir.length();

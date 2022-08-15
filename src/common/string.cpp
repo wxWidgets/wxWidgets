@@ -1858,7 +1858,7 @@ wxString wxString::FromCDouble(double val, int precision)
     // imbue() stream method is called (for the record, the latest libstdc++
     // version included in OS X does it and so seem to do the versions
     // currently included in Android NDK and both FreeBSD and OpenBSD), so we
-    // can't do this neither and are reduced to this hack.
+    // can't do this either and are reduced to this hack.
 
     wxString s = FromDouble(val, precision);
 #if wxUSE_INTL

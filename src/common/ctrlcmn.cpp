@@ -326,8 +326,8 @@ struct EllipsizeCalculator
                     {
                         // This ampersand is removed by RemoveMnemonics() and
                         // won't be displayed when this string is drawn
-                        // neither, so we intentionally don't use it for our
-                        // calculations neither -- just account for this in the
+                        // either, so we intentionally don't use it for our
+                        // calculations either -- just account for this in the
                         // assert below.
                         expectedOffsetsCount--;
                     }

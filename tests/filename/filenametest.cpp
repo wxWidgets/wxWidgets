@@ -792,7 +792,7 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
 
 #if defined(__UNIX__)
     // We need to create a temporary directory and a temporary link.
-    // Unfortunately we can't use wxFileName::CreateTempFileName() for neither
+    // Unfortunately we can't use wxFileName::CreateTempFileName() for either
     // as it creates plain files, so use tempnam() explicitly instead.
     char* tn = tempnam(NULL, "wxfn1");
     const wxString tempdir1 = wxString::From8BitData(tn);

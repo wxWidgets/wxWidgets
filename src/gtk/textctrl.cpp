@@ -829,7 +829,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         // The call to SetInitialSize() from inside PostCreation() didn't take
         // the value into account because it hadn't been set yet when it was
-        // called (and setting it earlier wouldn't have been correct neither,
+        // called (and setting it earlier wouldn't have been correct either,
         // as the appropriate size depends on the presence of the borders,
         // which are configured in PostCreation()), so recompute the initial
         // size again now that we have set it.

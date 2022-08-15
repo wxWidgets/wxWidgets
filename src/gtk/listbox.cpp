@@ -929,7 +929,7 @@ wxSize wxListBox::DoGetBestSize() const
     // Add room for the scrollbar
     lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
-    // Don't make the listbox too tall but don't make it too small neither
+    // Don't make the listbox too tall but don't make it too small either
     lbHeight = (cy+4) * wxMin(wxMax(count, 3), 10);
 
     return wxSize(lbWidth, lbHeight);

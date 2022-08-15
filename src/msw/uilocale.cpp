@@ -842,7 +842,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
     {
         // We could try finding the LCID matching the name, but support for XP
         // will be dropped soon, so it just doesn't seem worth to do it (note
-        // that LocaleNameToLCID() itself is not available in XP neither, so we
+        // that LocaleNameToLCID() itself is not available in XP either, so we
         // can't just use it here).
         return NULL;
     }

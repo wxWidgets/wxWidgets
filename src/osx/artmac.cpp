@@ -130,7 +130,7 @@ wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& client)
     }
     else if ( client == wxART_BUTTON || client == wxART_MENU )
     {
-        // Mac UI doesn't use any images in neither buttons nor menus in
+        // Mac UI doesn't use any images in either buttons or menus in
         // general but the code using wxArtProvider can use wxART_BUTTON to
         // find the icons of a roughly appropriate size for the buttons and
         // 16x16 seems to be the best choice for this kind of use

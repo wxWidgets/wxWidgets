@@ -329,7 +329,7 @@ public:
     wxString ToString() const;
 
     // we also want to present the native font descriptions to the user in some
-    // human-readable form (it is not platform independent neither, but can
+    // human-readable form (it is not platform independent either, but can
     // hopefully be understood by the user)
     bool FromUserString(const wxString& s);
     wxString ToUserString() const;

@@ -168,7 +168,7 @@ bool RegExTestCase::parseFlags(const wxString& flags)
             // Also skip the (there is only one) test using POSIX-specified
             // handling of unmatched ')' as a non-special character -- PCRE
             // doesn't support this and it doesn't seem worth implementing
-            // support for this ourselves neither.
+            // support for this ourselves either.
             case 'U':
                 return false;
 

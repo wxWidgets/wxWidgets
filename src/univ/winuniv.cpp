@@ -504,7 +504,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rect)
         childrect.Offset(-child->GetPosition());
         // NB: We must call wxWindowNative version because we need to refresh
         //     the entire control, not just its client area, and this is why we
-        //     don't account for child client area origin here neither. Also
+        //     don't account for child client area origin here either. Also
         //     note that we don't pass eraseBackground to the child, but use
         //     true instead: this is because we can't be sure that
         //     eraseBackground=false is safe for children as well and not only

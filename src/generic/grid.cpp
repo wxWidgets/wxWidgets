@@ -725,7 +725,7 @@ wxGridCellRenderer* wxGridCellAttr::GetRenderer(const wxGrid* grid, int row, int
             if ( (m_defGridAttr != NULL) && (m_defGridAttr != this) )
             {
                 // if we still don't have one then use the grid default
-                // (no need for IncRef() here neither)
+                // (no need for IncRef() here either)
                 renderer = m_defGridAttr->GetRenderer(NULL, 0, 0);
             }
             else // default grid attr
@@ -769,7 +769,7 @@ wxGridCellEditor* wxGridCellAttr::GetEditor(const wxGrid* grid, int row, int col
             if ( (m_defGridAttr != NULL) && (m_defGridAttr != this) )
             {
                 // if we still don't have one then use the grid default
-                // (no need for IncRef() here neither)
+                // (no need for IncRef() here either)
                 editor = m_defGridAttr->GetEditor(NULL, 0, 0);
             }
             else // default grid attr
@@ -3094,7 +3094,7 @@ void wxGrid::Init()
     m_extraHeight = 0;
 
     // we can't call SetScrollRate() as the window isn't created yet but OTOH
-    // we don't need to call it neither as the scroll position is (0, 0) right
+    // we don't need to call it either as the scroll position is (0, 0) right
     // now anyhow, so just set the parameters directly
     m_xScrollPixelsPerLine = GRID_SCROLL_LINE_X;
     m_yScrollPixelsPerLine = GRID_SCROLL_LINE_Y;
@@ -5837,7 +5837,7 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
         wxASSERT( topRow == -1 && leftCol == -1 );
 
         // And specifying bottom right corner when the top left one is not
-        // specified doesn't make sense neither.
+        // specified doesn't make sense either.
         wxASSERT( noBottomRight );
 
         return;
@@ -10998,7 +10998,7 @@ DoGetRowOrColBlocks(wxGridBlocks blocks, const wxGridOperations& oper)
             if ( lastNew < firstThis )
             {
                 // Not only it doesn't overlap this block, but it won't overlap
-                // any subsequent ones neither, so insert it here and stop.
+                // any subsequent ones either, so insert it here and stop.
                 res.insert(res.begin() + n, *it);
                 break;
             }

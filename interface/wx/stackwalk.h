@@ -59,7 +59,7 @@ public:
     wxStackWalker(const char* argv0 = NULL);
 
     /**
-        Destructor does nothing neither but should be virtual as this class is used as
+        Destructor does nothing either but should be virtual as this class is used as
         a base one.
     */
     virtual ~wxStackWalker();

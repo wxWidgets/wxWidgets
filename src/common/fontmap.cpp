@@ -343,7 +343,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
     // this special value means that we don't know of fonts for this
     // encoding but, moreover, have already asked the user as well and he
-    // didn't specify any font neither
+    // didn't specify any font either
     if ( fontinfo == FONTMAPPER_FONT_DONT_ASK )
     {
         interactive = false;

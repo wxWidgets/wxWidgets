@@ -107,7 +107,7 @@ protected:
     // The second half of a surrogate character when using UTF-16 for wchar_t:
     // we can't return it immediately from GetChar() when we read a Unicode
     // code point outside of the BMP, but we can't keep it in m_lastBytes
-    // neither because it can't separately decoded, so we have a separate 1
+    // either because it can't separately decoded, so we have a separate 1
     // wchar_t buffer just for this case.
 #if SIZEOF_WCHAR_T == 2
     wchar_t m_lastWChar;

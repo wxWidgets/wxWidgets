@@ -1874,7 +1874,7 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
         //        client size of such window is 1538*1182). No idea how to fix
         //        it though, setting WS_MAXIMIZE in GWL_STYLE before calling
         //        WM_NCCALCSIZE doesn't help and AdjustWindowRectEx() doesn't
-        //        work in this direction neither. So we just have to live with
+        //        work in this direction either. So we just have to live with
         //        the slightly wrong results and relayout the window when it
         //        gets finally shown in its maximized state (see #11762).
         RECT rect;
@@ -2196,7 +2196,7 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
     // setting the client size is less obvious than it could have been
     // because in the result of changing the total size the window scrollbar
     // may [dis]appear and/or its menubar may [un]wrap (and AdjustWindowRect()
-    // doesn't take neither into account) and so the client size will not be
+    // doesn't take either into account) and so the client size will not be
     // correct as the difference between the total and client size changes --
     // so we keep changing it until we get it right
     //
@@ -3981,7 +3981,7 @@ void wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
 
     AdjustForParentClientOrigin(x, y);
 
-    // We don't have any clearly good choice for the size by default neither
+    // We don't have any clearly good choice for the size by default either
     // but we must use something non-zero.
     w = WidthDefault(size.x);
     h = HeightDefault(size.y);

@@ -2050,7 +2050,7 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
 
     // LVSCW_AUTOSIZE_USEHEADER is not supported when inserting new column,
     // we'll deal with it below instead. Plain LVSCW_AUTOSIZE is not supported
-    // neither but it doesn't need any special handling as we use fixed value
+    // either but it doesn't need any special handling as we use fixed value
     // for it here, both because we can't do anything else (there are no items
     // with values in this column to compute the size from yet) and for
     // compatibility as wxLIST_AUTOSIZE == -1 and -1 as InsertColumn() width
@@ -3144,7 +3144,7 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
             syscolFg = COLOR_WINDOWTEXT;
             syscolBg = COLOR_BTNFACE;
 
-            // don't grey out the icon in this case neither
+            // don't grey out the icon in this case either
             nmcd.uItemState &= ~CDIS_SELECTED;
         }
 

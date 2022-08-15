@@ -580,7 +580,7 @@ public:
 
         By default, this function uses Windows-like word splitting algorithm,
         i.e. single quotes have no special meaning and backslash can't be used
-        to escape spaces neither. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
+        to escape spaces either. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
         semantics is used, i.e. both single and double quotes can be used and
         backslash can be used to escape all the other special characters.
     */

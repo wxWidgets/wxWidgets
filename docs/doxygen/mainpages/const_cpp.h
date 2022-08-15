@@ -381,7 +381,7 @@ more details.
         if this macro is defined, the compilation options
         don't include compiler flags needed for multithreaded code generation. This
         implies that wxUSE_THREADS is 0 and also that other (non-wx-based) threading
-        packages cannot be used neither.}
+        packages cannot be used either.}
 @itemdef{wxNO_UNSAFE_WXSTRING_CONV,
         this symbol is not defined by wxWidgets itself, but can be defined by
         the applications using the library to disable unsafe implicit

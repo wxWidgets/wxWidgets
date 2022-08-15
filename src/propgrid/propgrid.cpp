@@ -1144,7 +1144,7 @@ wxSize wxPropertyGrid::DoGetBestSize() const
     int lineHeight = wxMax(FromDIP(15), m_lineHeight);
 
     // don't make the grid too tall (limit height to 10 items) but don't
-    // make it too small neither
+    // make it too small either
     int numLines = wxMin
                    (
                     wxMax(m_pState->DoGetRoot()->GetChildCount(), 3),
