@@ -903,6 +903,11 @@ public:
         colour is not found in the database.
     */
     wxString FindName(const wxColour& colour) const;
+
+    /**
+        List all known colours by name.
+    */
+    wxVector<wxString> GetAllNames() const;
 };
 
 
