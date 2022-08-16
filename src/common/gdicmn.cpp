@@ -455,6 +455,22 @@ wxString wxColourDatabase::FindName(const wxColour& colour) const
     return wxEmptyString;
 }
 
+wxVector<wxString> wxColourDatabase::GetAllNames() const
+{
+    wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
+    self->Initialize();
+
+    wxVector<wxString> names;
+    names.reserve(m_map->size());
+
+    typedef wxStringToColourHashMap::iterator iterator;
+
+    for ( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
+        names.push_back(it->first);
+
+    return names;
+}
+
 // ============================================================================
 // stock objects
 // ============================================================================

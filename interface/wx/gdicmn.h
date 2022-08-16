@@ -871,6 +871,9 @@ const wxPoint wxDefaultPosition;
     </td></tr>
     @endTable
 
+    See the "Database colours" page of the @ref page_samples_drawing to see how
+    all these colours look like.
+
     @library{wxcore}
     @category{gdi}
 
@@ -903,6 +906,13 @@ public:
         colour is not found in the database.
     */
     wxString FindName(const wxColour& colour) const;
+
+    /**
+        List all known colours by name.
+
+        @since 3.3.0
+    */
+    wxVector<wxString> GetAllNames() const;
 };
 
 

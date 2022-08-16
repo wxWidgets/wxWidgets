@@ -923,6 +923,9 @@ public:
     wxColour Find(const wxString& name) const;
     wxString FindName(const wxColour& colour) const;
 
+    // list all known colours by name
+    wxVector<wxString> GetAllNames() const;
+
     // add a new colour to the database
     void AddColour(const wxString& name, const wxColour& colour);
 
