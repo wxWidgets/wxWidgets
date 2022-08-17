@@ -142,6 +142,11 @@ jobs:
                 cmake --build . --target install
             fi
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
         working-directory: build_cmake
