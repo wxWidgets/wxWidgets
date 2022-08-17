@@ -155,6 +155,8 @@ protected:
     void DrawDefault(wxDC& dc);
     void DrawGradients(wxDC& dc);
     void DrawSystemColours(wxDC& dc);
+    void DrawDatabaseColours(wxDC& dc);
+    void DrawColour(wxDC& dc, const wxFont& mono, wxCoord x, const wxRect& r, const wxString& colourName, const wxColour& col);
 
     void DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime);
 
@@ -304,6 +306,7 @@ enum
     File_ShowGraphics,
 #endif
     File_ShowSystemColours,
+    File_ShowDatabaseColours,
     File_ShowGradients,
     MenuShow_Last = File_ShowGradients,
 
@@ -1733,21 +1736,48 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
 
     for (int i = 0; i < wxSYS_COLOUR_MAX; i++)
     {
-        wxString colourName(sysColours[i].name);
-        wxColour c(wxSystemSettings::GetColour(sysColours[i].index));
-
-        {
-            wxDCFontChanger setMono(dc, mono);
-            dc.DrawText(c.GetAsString(wxC2S_HTML_SYNTAX), x, r.y);
-        }
-
-        dc.SetBrush(wxBrush(c));
-        dc.DrawRectangle(r);
-
-        dc.DrawText(colourName, r.GetRight() + x, r.y);
-
+        DrawColour(dc, mono, x, r, sysColours[i].name, wxSystemSettings::GetColour(sysColours[i].index));
         r.y += lineHeight;
     }
+}
+
+void MyCanvas::DrawDatabaseColours(wxDC& dc)
+{
+    // initial setup to compute coordinates is same as DrawSystemColours
+    wxFont mono(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
+    wxSize textSize;
+    {
+        wxDCFontChanger setMono(dc, mono);
+        textSize = dc.GetTextExtent("#01234567");
+    }
+
+    int lineHeight = textSize.GetHeight();
+    wxCoord x(FromDIP(10));
+    wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
+
+    wxString title = "wxColourDatabase colours";
+    dc.DrawText(title, x, r.y);
+    r.y += 3*lineHeight;
+
+    const wxVector<wxString> names(wxTheColourDatabase->GetAllNames());
+    for (wxVector<wxString>::const_iterator p = names.begin(); p != names.end(); ++p)
+    {
+        DrawColour(dc, mono, x, r, *p, wxTheColourDatabase->Find(*p));
+        r.y += lineHeight;
+    }
+}
+
+void MyCanvas::DrawColour(wxDC& dc, const wxFont& mono, wxCoord x, const wxRect& r, const wxString& colourName, const wxColour& col)
+{
+    {
+        wxDCFontChanger setMono(dc, mono);
+        dc.DrawText(col.GetAsString(wxC2S_HTML_SYNTAX), x, r.y);
+    }
+
+    dc.SetBrush(wxBrush(col));
+    dc.DrawRectangle(r);
+
+    dc.DrawText(colourName, r.GetRight() + x, r.y);
 }
 
 void MyCanvas::DrawRegions(wxDC& dc)
@@ -1968,6 +1998,10 @@ void MyCanvas::Draw(wxDC& pdc)
 
         case File_ShowSystemColours:
             DrawSystemColours(dc);
+            break;
+
+        case File_ShowDatabaseColours:
+            DrawDatabaseColours(dc);
             break;
 
         default:
@@ -2253,6 +2287,7 @@ MyFrame::MyFrame(const wxString& title)
     menuScreen->Append(File_ShowGraphics, "&Graphics screen");
 #endif
     menuScreen->Append(File_ShowSystemColours, "System &colours");
+    menuScreen->Append(File_ShowDatabaseColours, "Databa&se colours");
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
