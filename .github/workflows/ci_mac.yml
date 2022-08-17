@@ -201,6 +201,13 @@ jobs:
         make -C tests $wxBUILD_ARGS failtest
         make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
+    - name: Setup Python
+      # actions/setup-python broken on self-hosted https://github.com/actions/setup-python/issues/108
+      if: matrix.runner != 'self-hosted'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
     - name: Testing
       if: matrix.skip_testing != true
       working-directory: tests
