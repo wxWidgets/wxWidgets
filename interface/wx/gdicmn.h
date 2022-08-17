@@ -906,6 +906,8 @@ public:
 
     /**
         List all known colours by name.
+
+        @since 3.3.0
     */
     wxVector<wxString> GetAllNames() const;
 };
