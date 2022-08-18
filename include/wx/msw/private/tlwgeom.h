@@ -115,8 +115,8 @@ public:
 
         if (m_placement.showCmd != SW_SHOWMAXIMIZED && m_placement.showCmd != SW_SHOWMINIMIZED)
         {
-            RECT rect;
-            ::GetWindowRect(tlw->GetHWND(), &rect);
+            RECT rcWindow;
+            ::GetWindowRect(tlw->GetHWND(), &rcWindow);
             // Height and width should be the same unless the user performed
             // an Aero Snap operation.
             const RECT rcNormal = m_placement.rcNormalPosition;
@@ -137,11 +137,11 @@ public:
                     mi.rcMonitor.left < mi.rcWork.left)
                 {
                     // Negative offset to eliminate the tray width/height.
-                    OffsetRect(&rect, (mi.rcMonitor.left - mi.rcWork.left),
+                    OffsetRect(&rcWindow, (mi.rcMonitor.left - mi.rcWork.left),
                          (mi.rcMonitor.top - mi.rcWork.top));
                 }
 
-                ::CopyRect(&m_placement.rcNormalPosition, &rect);
+                ::CopyRect(&m_placement.rcNormalPosition, &rcWindow);
             }
         }
 
