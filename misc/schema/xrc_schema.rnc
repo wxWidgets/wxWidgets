@@ -430,7 +430,7 @@ stdWindowProperties =
 
 platform =
         attribute platform {
-            xsd:string { pattern = "(win|mac|unix)( *\| *(win|mac|unix))*" }
+            xsd:string { pattern = "(win|mac|msw|unix)( *\| *(win|mac|msw|unix))*" }
         }?
 # shorthand alias for 'platform' for use in properties definitions and
 # elsewhere where 'platform' would be too verbose
