@@ -215,7 +215,7 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
         case 4:
             // Must be an ISO 15924 script.
-            locId.m_script = (*it).Left(1).Upper() + (*it).Mid(2).Lower();
+            locId.m_script = it->Capitalize();
             break;
 
         default:
@@ -299,7 +299,7 @@ wxLocaleIdent& wxLocaleIdent::Script(const wxString& script)
         script.find_first_not_of(validCharsAlpha) == wxString::npos)
     {
         // Capitalize first character
-        m_script = script.Left(1).Upper() + script.Mid(2).Lower();
+        m_script = script.Capitalize();
     }
     else if (!script.empty())
     {
