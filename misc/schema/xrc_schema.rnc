@@ -227,6 +227,7 @@ builtinWindowClasses =
     | wxStaticBox
     | wxStaticLine
     | wxStaticText
+    | wxStyledTextCtrl
     | wxTextCtrl
     | wxTimePickerCtrl
     | wxToggleButton
@@ -329,6 +330,7 @@ builtinClassesNames =
     | "wxStaticBox"
     | "wxStaticLine"
     | "wxStaticText"
+    | "wxStyledTextCtrl"
     | "wxTextCtrl"
     | "wxTimePickerCtrl"
     | "wxToggleButton"
@@ -1594,6 +1596,15 @@ wxStaticText =
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="o"] element wrap  {_, t_dimension }*
+    }
+
+
+wxStyledTextCtrl =
+    element object {
+        attribute class { "wxStyledTextCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element wrapmode {_, ("wxSTC_WRAP_NONE" | "wxSTC_WRAP_WORD" | "wxSTC_WRAP_CHAR" | "wxSTC_WRAP_WHITESPACE" ) }*
     }
 
 
