@@ -250,6 +250,10 @@ wxGTK:
 - Improve linking with OpenGL libraries in CMake build (Maarten Bent, #22649).
 - Fix new warnings from gcc 12.1.
 
+wxMSW:
+
+- Fix build with MSVC when using standard preprocessor (k3DW, #22654).
+
 wxOSX:
 
 - Fix missing key and kill focus events for wxSearchCtrl (#19321, #22702).
