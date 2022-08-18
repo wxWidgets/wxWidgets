@@ -242,6 +242,7 @@ All (GUI):
 - Avoid warnings with wxStaticText flags in C++20 (David Connet, #22656).
 - Fix AUI floating pane position when dragging (Konstantin S. Matveyev, #22533).
 - Add wxStyledTextCtrl support to XRC schema file.
+- Fix script parsing in wxLocaleIdent (Ulrich Telle).
 
 wxGTK:
 

@@ -415,6 +415,8 @@ TEST_CASE("wxUILocale::FindLanguageInfo", "[uilocale]")
     CheckFindLanguage("English", "en");
     CheckFindLanguage("English_United States", "en_US");
     CheckFindLanguage("English_United States.utf8", "en_US");
+    // Test tag that includes an explicit script
+    CheckFindLanguage("sr-Latn-RS", "sr_RS@latin");
 }
 
 // Test which can be used to check if the given locale tag is supported.
