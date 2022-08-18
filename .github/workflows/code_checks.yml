@@ -40,9 +40,9 @@ jobs:
 
       - name: Check for trailing whitespace and TABs
         run: |
-            git fetch --depth=1 origin master
+            git fetch --depth=1 origin 3.2
             git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol,tab-in-indent \
-                diff --check origin/master \
+                diff --check origin/3.2 \
                 ':!.gitmodules' \
                 ':!Makefile.in' \
                 ':!config.guess' \
