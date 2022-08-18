@@ -116,7 +116,8 @@ public:
     explicit wxGridCellNumberEditor(int min = -1, int max = -1)
         : wxGridCellTextEditor(),
           m_min(min),
-          m_max(max)
+          m_max(max),
+          m_value(0L)
     {
     }
 
@@ -213,6 +214,7 @@ public:
         : wxGridCellTextEditor(),
           m_width(width),
           m_precision(precision),
+          m_value(0.0),
           m_style(format)
     {
     }
