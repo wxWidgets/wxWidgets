@@ -119,14 +119,11 @@ public:
             ::GetWindowRect(tlw->GetHWND(), &rect);
             // Height and width should be the same unless the user performed
             // an Aero Snap operation.
-            if ((rect.bottom - rect.top) !=
-                (m_placement.rcNormalPosition.bottom - m_placement.rcNormalPosition.top)
-                ||
-                (rect.right - rect.left) !=
-                (m_placement.rcNormalPosition.right - m_placement.rcNormalPosition.left))
+            const RECT rcNormal = m_placement.rcNormalPosition;
+            if ((rcWindow.bottom - rcWindow.top) != (rcNormal.bottom - rcNormal.top) ||
+                (rcWindow.right - rcWindow.left) != (rcNormal.right - rcNormal.left))
             {
-                MONITORINFO mi;
-                mi.cbSize = sizeof(mi);
+                WinStruct<MONITORINFO> mi;
                 if (!::GetMonitorInfo(::MonitorFromWindow(tlw->GetHWND(),
                     MONITOR_DEFAULTTONEAREST), &mi))
                 {
