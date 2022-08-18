@@ -252,6 +252,7 @@ wxGTK:
 
 wxMSW:
 
+- Fix regression with background of menu bitmaps without alpha (#22669).
 - Fix build with MSVC when using standard preprocessor (k3DW, #22654).
 
 wxOSX:

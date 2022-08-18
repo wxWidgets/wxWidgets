@@ -692,12 +692,21 @@ wxBitmap wxMenuItem::GetBitmap(bool bChecked) const
 {
     wxBitmap bmp = GetBitmapFromBundle(bChecked ? m_bitmap : m_bmpUnchecked);
 #if wxUSE_IMAGE
-    if ( bmp.IsOk() && !bmp.HasAlpha() && wxGetWinVersion() >= wxWinVersion_Vista)
+    if ( bmp.IsOk() && wxGetWinVersion() >= wxWinVersion_Vista)
     {
         // we must use PARGB DIB for the menu bitmaps so ensure that we do
-        wxImage img(bmp.ConvertToImage());
-        img.InitAlpha();
-        bmp = wxBitmap(img);
+        if ( !bmp.HasAlpha() )
+        {
+            wxImage img(bmp.ConvertToImage());
+            img.InitAlpha();
+            bmp = wxBitmap(img);
+        }
+        else
+        {
+            // even if the bitmap already has alpha, it might be a DDB, while
+            // the menu code only handles alpha correctly for DIBs
+            bmp.ConvertToDIB();
+        }
     }
 #endif // wxUSE_IMAGE
     return bmp;
