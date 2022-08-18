@@ -253,6 +253,7 @@ wxGTK:
 
 wxMSW:
 
+- Save windows geometry correctly when using Aero Snap (Randalphwa, #22730).
 - Fix return value of wxZoomGestureEvent::GetZoomFactor() (s-murphree, #22818).
 
 

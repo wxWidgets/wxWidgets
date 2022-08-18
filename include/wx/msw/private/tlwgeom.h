@@ -113,6 +113,38 @@ public:
             return false;
         }
 
+        if (m_placement.showCmd != SW_SHOWMAXIMIZED && m_placement.showCmd != SW_SHOWMINIMIZED)
+        {
+            RECT rcWindow;
+            ::GetWindowRect(tlw->GetHWND(), &rcWindow);
+            // Height and width should be the same unless the user performed
+            // an Aero Snap operation.
+            const RECT rcNormal = m_placement.rcNormalPosition;
+            if ((rcWindow.bottom - rcWindow.top) != (rcNormal.bottom - rcNormal.top) ||
+                (rcWindow.right - rcWindow.left) != (rcNormal.right - rcNormal.left))
+            {
+                WinStruct<MONITORINFO> mi;
+                if (!::GetMonitorInfo(::MonitorFromWindow(tlw->GetHWND(),
+                    MONITOR_DEFAULTTONEAREST), &mi))
+                {
+                    wxLogLastError("GetMonitorInfo");
+                    return false;
+                }
+
+                // If the tray is on the top or the left, then the rectangle needs to
+                // be adjusted to match what ::SetWindowPlacement expects.
+                if (mi.rcMonitor.top < mi.rcWork.top ||
+                    mi.rcMonitor.left < mi.rcWork.left)
+                {
+                    // Negative offset to eliminate the tray width/height.
+                    OffsetRect(&rcWindow, (mi.rcMonitor.left - mi.rcWork.left),
+                         (mi.rcMonitor.top - mi.rcWork.top));
+                }
+
+                ::CopyRect(&m_placement.rcNormalPosition, &rcWindow);
+            }
+        }
+
         return true;
     }
 
