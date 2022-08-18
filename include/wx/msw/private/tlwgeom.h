@@ -127,7 +127,7 @@ public:
             {
                 MONITORINFO mi;
                 mi.cbSize = sizeof(mi);
-                if (!::GetMonitorInfo(::MonitorFromWindow(tlw->GetHWND(), 
+                if (!::GetMonitorInfo(::MonitorFromWindow(tlw->GetHWND(),
                     MONITOR_DEFAULTTONEAREST), &mi))
                 {
                     wxLogLastError("GetMonitorInfo");
@@ -136,7 +136,7 @@ public:
 
                 // If the tray is on the top or the left, then the rectangle needs to
                 // be adjusted to match what ::SetWindowPlacement expects.
-                if (mi.rcMonitor.top < mi.rcWork.top || 
+                if (mi.rcMonitor.top < mi.rcWork.top ||
                     mi.rcMonitor.left < mi.rcWork.left)
                 {
                     // Negative offset to eliminate the tray width/height.
