@@ -247,6 +247,7 @@ wxGTK:
 - Fix build with --disable-intl (#22626).
 - Fix build under MSW (Tim Stahlhut, #22633).
 - Fix CMake build under NetBSD (Thomas Klausner, #22643, #22644, #22645).
+- Improve linking with OpenGL libraries in CMake build (Maarten Bent, #22649).
 - Fix new warnings from gcc 12.1.
 
 wxOSX:
