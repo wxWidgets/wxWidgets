@@ -147,7 +147,9 @@ protected:
 class WXDLLIMPEXP_CORE wxFileDirPickerCtrlBase : public wxPickerBase
 {
 public:
-    wxFileDirPickerCtrlBase() {}
+    wxFileDirPickerCtrlBase()
+    : m_pickerIface(0) 
+    {}
 
 protected:
     // NB: no default values since this function will never be used
