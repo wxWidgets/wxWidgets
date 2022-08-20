@@ -271,7 +271,8 @@ class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
     wxGridCellBoolEditor()
-        : wxGridCellEditor()
+        : wxGridCellEditor(),
+          m_value(false)
     {
     }
 
