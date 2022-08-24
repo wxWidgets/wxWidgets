@@ -1552,7 +1552,7 @@ public:
     void AssignTable( wxGridTableBase *table,
                       wxGridSelectionModes selmode = wxGridSelectCells );
 
-    bool ProcessTableMessage(wxGridTableMessage&);
+    bool ProcessTableMessage(const wxGridTableMessage&);
 
     wxGridTableBase *GetTable() const { return m_table; }
 
@@ -2688,7 +2688,7 @@ protected:
     void CreateColumnWindow();
     void CalcDimensions();
     void CalcWindowSizes();
-    bool Redimension( wxGridTableMessage& );
+    bool Redimension( const wxGridTableMessage& );
 
 
     enum EventResult

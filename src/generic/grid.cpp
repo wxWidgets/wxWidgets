@@ -3310,7 +3310,7 @@ void wxGrid::CalcWindowSizes()
 // this is called when the grid table sends a message
 // to indicate that it has been redimensioned
 //
-bool wxGrid::Redimension( wxGridTableMessage& msg )
+bool wxGrid::Redimension( const wxGridTableMessage& msg )
 {
     int i;
     bool result = false;
@@ -5548,7 +5548,7 @@ void wxGrid::UpdateGridWindows() const
 //
 // ------ interaction with data model
 //
-bool wxGrid::ProcessTableMessage( wxGridTableMessage& msg )
+bool wxGrid::ProcessTableMessage( const wxGridTableMessage& msg )
 {
     switch ( msg.GetId() )
     {
