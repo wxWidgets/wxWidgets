@@ -8959,12 +8959,10 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
         m_rowLabelWin->SetBackgroundColour( colour );
         m_colLabelWin->SetBackgroundColour( colour );
         m_cornerLabelWin->SetBackgroundColour( colour );
-        if ( m_frozenRowGridWin )
-            m_frozenRowGridWin->SetBackgroundColour( colour );
-        if ( m_frozenColGridWin )
-            m_frozenColGridWin->SetBackgroundColour( colour );
-        if ( m_frozenCornerGridWin )
-            m_frozenCornerGridWin->SetBackgroundColour( colour );
+        if ( m_rowFrozenLabelWin )
+            m_rowFrozenLabelWin->SetBackgroundColour( colour );
+        if ( m_colFrozenLabelWin )
+            m_colFrozenLabelWin->SetBackgroundColour( colour );
 
         if ( ShouldRefresh() )
         {
@@ -8972,12 +8970,10 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
             m_colLabelWin->Refresh();
             m_cornerLabelWin->Refresh();
 
-            if ( m_frozenRowGridWin )
-                m_frozenRowGridWin->Refresh();
-            if ( m_frozenColGridWin )
-                m_frozenColGridWin->Refresh();
-            if ( m_frozenCornerGridWin )
-                m_frozenCornerGridWin->Refresh();
+            if ( m_rowFrozenLabelWin )
+                m_rowFrozenLabelWin->Refresh();
+            if ( m_colFrozenLabelWin )
+                m_colFrozenLabelWin->Refresh();
         }
     }
 }
