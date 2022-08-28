@@ -57,6 +57,10 @@ wxRadioBox::~wxRadioBox()
 {
     SendDestroyEvent();
 
+    // if we don't have a button cycle, we're done.
+    if (m_radioButtonCycle == nullptr) {
+        return;
+    }
     wxRadioButton *next, *current;
 
     current = m_radioButtonCycle->NextInCycle();
