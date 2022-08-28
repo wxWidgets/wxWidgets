@@ -3111,9 +3111,12 @@ public:
                       wxGridSelectionModes selmode = wxGridSelectCells);
 
     /**
-       Receive and handle a message from the table.
+        Reacts to a message notifying about a change to the grid shape.
+
+        This function should be called by the wxGridTableBase-derived class to
+        notify the grid about any changes to its rows or columns.
     */
-    bool ProcessTableMessage(wxGridTableMessage& msg);
+    bool ProcessTableMessage(const wxGridTableMessage& msg);
 
     ///@}
 
