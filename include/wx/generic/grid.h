@@ -1553,6 +1553,9 @@ public:
                       wxGridSelectionModes selmode = wxGridSelectCells );
 
     bool ProcessTableMessage(const wxGridTableMessage&);
+    bool ProcessTableMessage(wxGridTableBase *table, int id,
+                             int comInt1 = -1,
+                             int comInt2 = -1);
 
     wxGridTableBase *GetTable() const { return m_table; }
 

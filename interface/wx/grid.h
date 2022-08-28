@@ -3118,6 +3118,19 @@ public:
     */
     bool ProcessTableMessage(const wxGridTableMessage& msg);
 
+    /**
+        Convenient overload for notifying the grid about changes to its shape.
+
+        This is identical to the overload taking wxGridTableMessage and simply
+        constructs the message object from the function arguments and then
+        calls the other overload with this object.
+
+        @since 3.3.0
+     */
+    bool ProcessTableMessage(wxGridTableBase *table, int id,
+                             int comInt1 = -1,
+                             int comInt2 = -1);
+
     ///@}
 
 
