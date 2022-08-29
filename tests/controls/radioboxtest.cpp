@@ -18,49 +18,18 @@
 
 #include "wx/tooltip.h"
 
-class RadioBoxTestCase : public CppUnit::TestCase
+class RadioBoxTestCase
 {
-public:
-    RadioBoxTestCase() { }
-
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( RadioBoxTestCase );
-        CPPUNIT_TEST( FindString );
-        CPPUNIT_TEST( RowColCount );
-        CPPUNIT_TEST( Enable );
-        CPPUNIT_TEST( Show );
-        CPPUNIT_TEST( HelpText );
-        CPPUNIT_TEST( ToolTip );
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( Count );
-        CPPUNIT_TEST( SetString );
-    CPPUNIT_TEST_SUITE_END();
-
-    void FindString();
-    void RowColCount();
-    void Enable();
-    void Show();
-    void HelpText();
-    void ToolTip();
-    void Selection();
-    void Count();
-    void SetString();
+protected:
+    RadioBoxTestCase();
+    ~RadioBoxTestCase();
 
     wxRadioBox* m_radio;
 
     wxDECLARE_NO_COPY_CLASS(RadioBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RadioBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RadioBoxTestCase, "RadioBoxTestCase" );
-
-void RadioBoxTestCase::setUp()
+RadioBoxTestCase::RadioBoxTestCase()
 {
     wxArrayString choices;
     choices.push_back("item 0");
@@ -71,12 +40,12 @@ void RadioBoxTestCase::setUp()
                              wxDefaultPosition, wxDefaultSize, choices);
 }
 
-void RadioBoxTestCase::tearDown()
+RadioBoxTestCase::~RadioBoxTestCase()
 {
     wxTheApp->GetTopWindow()->DestroyChildren();
 }
 
-void RadioBoxTestCase::FindString()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::FindString", "[radiobox][find]")
 {
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, m_radio->FindString("not here"));
     CPPUNIT_ASSERT_EQUAL(1, m_radio->FindString("item 1"));
@@ -84,7 +53,7 @@ void RadioBoxTestCase::FindString()
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, m_radio->FindString("ITEM 2", true));
 }
 
-void RadioBoxTestCase::RowColCount()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::RowColCount", "[radiobox]")
 {
 #ifndef __WXGTK__
     wxArrayString choices;
@@ -107,7 +76,7 @@ void RadioBoxTestCase::RowColCount()
 #endif
 }
 
-void RadioBoxTestCase::Enable()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::Enable", "[radiobox][enable]")
 {
 #ifndef __WXOSX__
     m_radio->Enable(false);
@@ -134,7 +103,7 @@ void RadioBoxTestCase::Enable()
 #endif
 }
 
-void RadioBoxTestCase::Show()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::Show", "[radiobox][show]")
 {
     m_radio->Show(false);
 
@@ -159,7 +128,7 @@ void RadioBoxTestCase::Show()
     CPPUNIT_ASSERT(m_radio->IsItemShown(2));
 }
 
-void RadioBoxTestCase::HelpText()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::HelpText", "[radiobox][help]")
 {
     CPPUNIT_ASSERT_EQUAL(wxEmptyString, m_radio->GetItemHelpText(0));
 
@@ -172,7 +141,7 @@ void RadioBoxTestCase::HelpText()
     CPPUNIT_ASSERT_EQUAL(wxEmptyString, m_radio->GetItemHelpText(1));
 }
 
-void RadioBoxTestCase::ToolTip()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::ToolTip", "[radiobox][tooltip]")
 {
 #if defined (__WXMSW__) || defined(__WXGTK__)
     //GetItemToolTip returns null if there is no tooltip set
@@ -189,7 +158,7 @@ void RadioBoxTestCase::ToolTip()
 #endif
 }
 
-void RadioBoxTestCase::Selection()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::Selection", "[radiobox][selection]")
 {
     //Until other item containers the first item is selected by default
     CPPUNIT_ASSERT_EQUAL(0, m_radio->GetSelection());
@@ -206,7 +175,7 @@ void RadioBoxTestCase::Selection()
     CPPUNIT_ASSERT_EQUAL("item 2", m_radio->GetStringSelection());
 }
 
-void RadioBoxTestCase::Count()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::Count", "[radiobox]")
 {
     //A trivial test for the item count as items can neither
     //be added or removed
@@ -214,7 +183,7 @@ void RadioBoxTestCase::Count()
     CPPUNIT_ASSERT(!m_radio->IsEmpty());
 }
 
-void RadioBoxTestCase::SetString()
+TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::SetString", "[radiobox]")
 {
     m_radio->SetString(0, "new item 0");
     m_radio->SetString(2, "");
