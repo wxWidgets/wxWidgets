@@ -1061,6 +1061,25 @@ public:
     */
     static void GTKSuppressDiagnostics(int flags = -1);
 
+    /**
+        Allows wxWidgets to selectively suppress some GTK messages.
+
+        This function can be called to allow wxWidgets to control GTK message
+        logging. You must @e not call it if your application calls the @c
+        g_log_set_writer_func() function itself, as this function can be only
+        called once.
+
+        It is recommended to call this function in your overridden version of
+        wxApp::OnInit() to allow wxWidgets to suppress some spurious GTK error
+        messages, e.g. the ones that happen whenever wxNotebook pages are
+        removed with the current GTK versions.
+
+        @onlyfor{wxgtk}
+
+        @since 3.2.1
+     */
+    static void GTKAllowDiagnosticsControl();
+
     ///@}
 
     /**
