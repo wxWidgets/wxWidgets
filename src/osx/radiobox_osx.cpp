@@ -59,18 +59,21 @@ wxRadioBox::~wxRadioBox()
 
     wxRadioButton *next, *current;
 
-    current = m_radioButtonCycle->NextInCycle();
+    current = m_radioButtonCycle;
     if (current != NULL)
     {
-        while (current != m_radioButtonCycle)
+        // We need to start deleting the buttons from the second one because
+        // deleting the first one would change the pointers stored in them.
+        for (current = current->NextInCycle();;)
         {
             next = current->NextInCycle();
             delete current;
 
+            if (next == m_radioButtonCycle)
+                break;
+
             current = next;
         }
-
-        delete current;
     }
 }
 
@@ -339,6 +342,9 @@ void wxRadioBox::Command( wxCommandEvent& event )
 //
 void wxRadioBox::SetFocus()
 {
+    if (!m_radioButtonCycle)
+        return;
+
     wxRadioButton *current;
 
     current = m_radioButtonCycle;

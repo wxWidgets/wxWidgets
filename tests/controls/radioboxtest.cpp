@@ -16,6 +16,7 @@
     #include "wx/radiobox.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopedptr.h"
 #include "wx/tooltip.h"
 
 class RadioBoxTestCase : public CppUnit::TestCase
@@ -221,6 +222,20 @@ void RadioBoxTestCase::SetString()
 
     CPPUNIT_ASSERT_EQUAL("new item 0", m_radio->GetString(0));
     CPPUNIT_ASSERT_EQUAL("", m_radio->GetString(2));
+}
+
+TEST_CASE("RadioBox::NoItems", "[radiobox]")
+{
+    wxScopedPtr<wxRadioBox>
+        radio(new wxRadioBox(wxTheApp->GetTopWindow(), wxID_ANY, "Empty",
+                             wxDefaultPosition, wxDefaultSize,
+                             0, NULL,
+                             1, wxRA_SPECIFY_COLS));
+
+    CHECK( radio->GetCount() == 0 );
+    CHECK( radio->IsEmpty() );
+
+    CHECK_NOTHROW( radio->SetFocus() );
 }
 
 #endif // wxUSE_RADIOBOX
