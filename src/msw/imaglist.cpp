@@ -197,7 +197,7 @@ wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
             if ( !bmp.HasAlpha() )
                 bmp.SetMask(new wxMask(bmp, GetDefaultMaskColour()));
         }
-        else
+        else if ( !bmp.HasAlpha() )
         {
             // We actually don't have to do anything at all and can just use
             // the original bitmap as is.
