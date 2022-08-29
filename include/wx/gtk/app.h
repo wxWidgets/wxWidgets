@@ -59,7 +59,7 @@ public:
     static bool GTKIsUsingGlobalMenu();
 
     // Provide the ability to suppress GTK output. By default, all output
-    // will be suppressed, but the user can pass in a mask specifiyng the
+    // will be suppressed, but the user can pass in a mask specifying the
     // types of messages to suppress. Flags are defined by glib with the
     // GLogLevelFlags enum.
     static void GTKSuppressDiagnostics(int flags = -1);
