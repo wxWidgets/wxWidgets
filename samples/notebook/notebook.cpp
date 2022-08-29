@@ -329,7 +329,7 @@ MyFrame::MyFrame()
 #endif
     menuType->AppendRadioItem(ID_BOOK_SIMPLEBOOK, "&Simple book\tCtrl-7");
 
-    menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
+    menuType->Check(static_cast<int>(ID_BOOK_NOTEBOOK) + m_type, true);
 
     wxMenu *menuOrient = new wxMenu;
     menuOrient->AppendRadioItem(ID_ORIENT_DEFAULT, "&Default\tAlt-0");
