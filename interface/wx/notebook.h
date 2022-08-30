@@ -145,6 +145,10 @@ public:
 
     /**
         Destroys the wxNotebook object.
+
+        @note When using wxGTK, destroying notebook can result in spurious GTK
+        diagnostic messages, you may use wxApp::GTKAllowDiagnosticsControl() to
+        suppress them.
     */
     virtual ~wxNotebook();
 

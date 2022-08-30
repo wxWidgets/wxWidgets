@@ -37,6 +37,13 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#ifdef __WXGTK__
+    // Many version of wxGTK generate spurious diagnostic messages when
+    // destroying wxNotebook (or removing pages from it), allow wxWidgets to
+    // suppress them.
+    GTKAllowDiagnosticsControl();
+#endif // __WXGTK__
+
 #if wxUSE_HELP
     wxHelpProvider::Set( new wxSimpleHelpProvider );
 #endif
@@ -329,7 +336,7 @@ MyFrame::MyFrame()
 #endif
     menuType->AppendRadioItem(ID_BOOK_SIMPLEBOOK, "&Simple book\tCtrl-7");
 
-    menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
+    menuType->Check(static_cast<int>(ID_BOOK_NOTEBOOK) + m_type, true);
 
     wxMenu *menuOrient = new wxMenu;
     menuOrient->AppendRadioItem(ID_ORIENT_DEFAULT, "&Default\tAlt-0");
