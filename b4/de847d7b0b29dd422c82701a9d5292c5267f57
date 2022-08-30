@@ -1,0 +1,1 @@
+wxAll (GUI): Make wxGrid::ProcessTableMessage() more convenient to use (Joachim Wiesemann).
