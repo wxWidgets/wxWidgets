@@ -15,6 +15,11 @@ Changes in behaviour not resulting in compilation errors
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.
 
+- wxDocument::OnCloseDocument() was called twice in previous versions when
+  closing the document from the menu. Now it is only called once and after
+  destroying all the existing document views. If you overrode this function,
+  please check that you don't rely on any views existing when it's called.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

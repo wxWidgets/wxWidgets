@@ -71,6 +71,9 @@ private:
     void CreateMenuBarForFrame(wxFrame *frame, wxMenu *file, wxMenu *edit);
 
 
+    // force close all windows
+    void OnForceCloseAll(wxCommandEvent& event);
+
     // show the about box: as we can have different frames it's more
     // convenient, even if somewhat less usual, to handle this in the
     // application object itself

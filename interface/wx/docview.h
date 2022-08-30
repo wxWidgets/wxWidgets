@@ -1472,10 +1472,12 @@ public:
         case since wxWidgets 2.9.0.
 
         Returning @false from this function prevents the document from closing.
-        The default implementation does this if the document is modified and
-        the user didn't confirm discarding the modifications to it.
-
-        Return @true to allow the document to be closed.
+        Note that there is no need to ask the user if the changes to the
+        document should be saved, as this was already checked by
+        OnSaveModified() by the time this function is called, if necessary, and
+        so, typically, this function should always return @true to allow the
+        document to be closed, as leaving it open after asking the user about
+        saving the changes would be confusing.
     */
     virtual bool OnCloseDocument();
 
@@ -1541,6 +1543,19 @@ public:
         succeeds. If Cancel, the function fails.
     */
     virtual bool OnSaveModified();
+
+    /**
+        This function is called when a document is forced to close.
+
+        The default implementation asks the user whether to save the changes
+        but, unlike OnSaveModified(), does not allow to cancel closing.
+
+        The document is force closed when wxDocManager::CloseDocument() is
+        called with its @c force argument set to @true.
+
+        @since 3.3.0
+     */
+    virtual void OnSaveBeforeForceClose();
 
     /**
         Removes the view from the document's list of views.

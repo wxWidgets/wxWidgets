@@ -75,6 +75,7 @@ wxIMPLEMENT_APP(MyApp);
 
 wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(wxID_ABOUT, MyApp::OnAbout)
+    EVT_MENU(wxID_CLEAR, MyApp::OnForceCloseAll)
 wxEND_EVENT_TABLE()
 
 MyApp::MyApp()
@@ -315,6 +316,7 @@ void MyApp::AppendDocumentFileCommands(wxMenu *menu, bool supportsPrinting)
     menu->Append(wxID_SAVE);
     menu->Append(wxID_SAVEAS);
     menu->Append(wxID_REVERT, _("Re&vert..."));
+    menu->Append(wxID_CLEAR, "&Force close all");
 
     if ( supportsPrinting )
     {
@@ -435,6 +437,13 @@ wxFrame *MyApp::CreateChildFrame(wxView *view, bool isCanvas)
     subframe->SetIcon(isCanvas ? wxICON(chrt) : wxICON(notepad));
 
     return subframe;
+}
+
+void MyApp::OnForceCloseAll(wxCommandEvent& WXUNUSED(event))
+{
+    // Pass "true" here to force closing just for testing this functionality,
+    // there is no real reason to force the issue here.
+    wxDocManager::GetDocumentManager()->CloseDocuments(true);
 }
 
 void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
