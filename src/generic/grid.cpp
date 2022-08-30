@@ -1876,12 +1876,10 @@ bool wxGridStringTable::InsertRows( size_t pos, size_t numRows )
 
     if ( GetView() )
     {
-        wxGridTableMessage msg( this,
+        GetView()->ProcessTableMessage( this,
                                 wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
                                 pos,
                                 numRows );
-
-        GetView()->ProcessTableMessage( msg );
     }
 
     return true;
@@ -1900,11 +1898,9 @@ bool wxGridStringTable::AppendRows( size_t numRows )
 
     if ( GetView() )
     {
-        wxGridTableMessage msg( this,
+        GetView()->ProcessTableMessage( this,
                                 wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
                                 numRows );
-
-        GetView()->ProcessTableMessage( msg );
     }
 
     return true;
@@ -1943,12 +1939,10 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 
     if ( GetView() )
     {
-        wxGridTableMessage msg( this,
+        GetView()->ProcessTableMessage( this,
                                 wxGRIDTABLE_NOTIFY_ROWS_DELETED,
                                 pos,
                                 numRows );
-
-        GetView()->ProcessTableMessage( msg );
     }
 
     return true;
@@ -1981,12 +1975,10 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
 
     if ( GetView() )
     {
-        wxGridTableMessage msg( this,
+        GetView()->ProcessTableMessage( this,
                                 wxGRIDTABLE_NOTIFY_COLS_INSERTED,
                                 pos,
                                 numCols );
-
-        GetView()->ProcessTableMessage( msg );
     }
 
     return true;
@@ -2003,11 +1995,9 @@ bool wxGridStringTable::AppendCols( size_t numCols )
 
     if ( GetView() )
     {
-        wxGridTableMessage msg( this,
+        GetView()->ProcessTableMessage( this,
                                 wxGRIDTABLE_NOTIFY_COLS_APPENDED,
                                 numCols );
-
-        GetView()->ProcessTableMessage( msg );
     }
 
     return true;
@@ -2074,12 +2064,10 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
 
     if ( GetView() )
     {
-        wxGridTableMessage msg( this,
+        GetView()->ProcessTableMessage( this,
                                 wxGRIDTABLE_NOTIFY_COLS_DELETED,
                                 pos,
                                 numCols );
-
-        GetView()->ProcessTableMessage( msg );
     }
 
     return true;
@@ -3310,7 +3298,7 @@ void wxGrid::CalcWindowSizes()
 // this is called when the grid table sends a message
 // to indicate that it has been redimensioned
 //
-bool wxGrid::Redimension( wxGridTableMessage& msg )
+bool wxGrid::Redimension( const wxGridTableMessage& msg )
 {
     int i;
     bool result = false;
@@ -5548,7 +5536,7 @@ void wxGrid::UpdateGridWindows() const
 //
 // ------ interaction with data model
 //
-bool wxGrid::ProcessTableMessage( wxGridTableMessage& msg )
+bool wxGrid::ProcessTableMessage( const wxGridTableMessage& msg )
 {
     switch ( msg.GetId() )
     {
@@ -5563,6 +5551,13 @@ bool wxGrid::ProcessTableMessage( wxGridTableMessage& msg )
         default:
             return false;
     }
+}
+
+bool wxGrid::ProcessTableMessage(wxGridTableBase *table, int id,
+                                 int comInt1,
+                                 int comInt2)
+{
+    return ProcessTableMessage(wxGridTableMessage(table, id, comInt1, comInt2));
 }
 
 // The behaviour of this function depends on the grid table class
