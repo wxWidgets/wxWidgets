@@ -3,6 +3,7 @@
 // Purpose:     Bombs game
 // Author:      P. Foggia 1996
 // Modified by: Wlodzimierz Skiba (ABX) since 2003
+// Modified by: Night_Wisp in 2022
 // Created:     1996
 // Copyright:   (c) 1996 P. Foggia
 // Licence:     wxWindows licence
@@ -183,9 +184,9 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
     if(m_easyCorner)
-        msg = wxT("enable");
-    else
         msg = wxT("disable");
+    else
+        msg = wxT("enable");
 
     msg = wxT("Do you really want to ") + msg + wxT(" having\ntop left corner always empty for easier start?");
 
@@ -196,9 +197,11 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
                this
              );
 
-    if(ok!=wxYES)return;
+    if(ok!=wxYES)return GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
 
     m_easyCorner = !m_easyCorner;
+    
+    GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
 
     NewGame(m_lastLevel, true);
 }
