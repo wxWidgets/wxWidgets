@@ -183,9 +183,9 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
     if(m_easyCorner)
-        msg = wxT("enable");
-    else
         msg = wxT("disable");
+    else
+        msg = wxT("enable");
 
     msg = wxT("Do you really want to ") + msg + wxT(" having\ntop left corner always empty for easier start?");
 
@@ -196,7 +196,12 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
                this
              );
 
-    if(ok!=wxYES)return;
+    if(ok!=wxYES)
+    {
+        // Undo the automatic change to the menu bar, keeping it in sync with the actual option value.
+        GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
+        return;
+    }
 
     m_easyCorner = !m_easyCorner;
 
