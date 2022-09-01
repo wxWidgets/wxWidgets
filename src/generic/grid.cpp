@@ -5451,7 +5451,7 @@ bool wxGrid::FreezeTo(int row, int col)
     wxCHECK_MSG( row >= 0 && col >= 0, false,
                 "Number of rows or cols can't be negative!");
 
-    if ( row >= m_numRows || col >= m_numCols ||
+    if ( row > m_numRows || col > m_numCols ||
         !m_rowAt.empty() || m_canDragRowMove ||
         !m_colAt.empty() || m_canDragColMove || m_useNativeHeader )
         return false;
