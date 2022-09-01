@@ -198,7 +198,7 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
 
     if(ok!=wxYES)
     {
-        // Undo the automatic change to the menu bar, to keep it in sync with the actual option value.
+        // Undo the automatic change to the menu bar, keeping it in sync with the actual option value.
         GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
         return;
     }
