@@ -3,7 +3,6 @@
 // Purpose:     Bombs game
 // Author:      P. Foggia 1996
 // Modified by: Wlodzimierz Skiba (ABX) since 2003
-// Modified by: Night_Wisp in 2022
 // Created:     1996
 // Copyright:   (c) 1996 P. Foggia
 // Licence:     wxWindows licence
@@ -197,11 +196,14 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
                this
              );
 
-    if(ok!=wxYES)return GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
+    if(ok!=wxYES)
+    {
+        // Undo the automatic change to the menu bar, to keep it in sync with the actual option value.
+        GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
+        return;
+    }
 
     m_easyCorner = !m_easyCorner;
-    
-    GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
 
     NewGame(m_lastLevel, true);
 }
