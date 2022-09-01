@@ -648,3 +648,17 @@ void wxApp::RemoveIdleTag()
         g_isIdle = true;
     }
 }
+
+/* To implement GTKSuppressDiagnostics & GTKAllowDiagnosticsControl
+ * ../gtk/app.cpp uses wxHAS_GLIB_LOG_WRITER */
+/* static */
+void wxApp::GTKSuppressDiagnostics(int WXUNUSED(flags))
+{
+    // We can't do anything here.
+}
+
+/* static */
+void wxApp::GTKAllowDiagnosticsControl()
+{
+    // And don't need to do anything here.
+}
