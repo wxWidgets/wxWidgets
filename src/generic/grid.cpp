@@ -5459,17 +5459,6 @@ bool wxGrid::FreezeTo(int row, int col)
     // freeze
     if ( row > m_numFrozenRows || col > m_numFrozenCols )
     {
-        // check that it fits in client size
-        int cw, ch;
-        GetClientSize( &cw, &ch );
-
-        cw -= m_rowLabelWidth;
-        ch -= m_colLabelHeight;
-
-        if ((row > 0 && GetRowBottom(row - 1) >= ch) ||
-            (col > 0 && GetColRight(col - 1) >= cw))
-            return false;
-
         // check all involved cells for merged ones
         int cell_rows, cell_cols;
 

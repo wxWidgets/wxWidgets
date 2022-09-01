@@ -5644,7 +5644,6 @@ public:
         Note that this method doesn't do anything, and returns @false, if any
         of the following conditions are true:
         - Either @a row or @a col are out of range
-        - Size of the frozen area would be bigger than the current viewing area
         - There are any merged cells in the area to be frozen
         - Grid uses a native header control (see UseNativeColHeader())
 
