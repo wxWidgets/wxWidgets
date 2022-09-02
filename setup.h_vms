@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 16 March 2022                                                      *
+ * Date : 30 May 2022                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -658,6 +658,10 @@ typedef pid_t GPid;
 #define wxUSE_LIBJPEG       1
 
 #define wxUSE_LIBTIFF       1
+
+#define wxUSE_NANOSVG       1
+
+#define wxUSE_NANOSVG_EXTERNAL 0
 
 #define wxUSE_TGA           1
 
