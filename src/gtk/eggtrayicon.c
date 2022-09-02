@@ -346,6 +346,8 @@ egg_tray_icon_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+#else
+  wxUnusedVar(widget);
 #endif
 }
 
@@ -528,6 +530,8 @@ egg_tray_icon_realize (GtkWidget *widget)
   /* Add a root window filter so that we get changes on MANAGER */
   gdk_window_add_filter (root_window,
 			 egg_tray_icon_manager_filter, icon);
+#else
+  wxUnusedVar(widget);
 #endif
 }
 

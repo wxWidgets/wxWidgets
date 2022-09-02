@@ -77,9 +77,14 @@ endif()
 # Print configuration summary
 wx_print_thirdparty_library_summary()
 
+if(wxTOOLKIT_EXTRA)
+    string(REPLACE ";" ", " wxTOOLKIT_DESC "${wxTOOLKIT_EXTRA}")
+    set(wxTOOLKIT_DESC "with support for: ${wxTOOLKIT_DESC}")
+endif()
+
 message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM}
     Min OS Version required at runtime:                ${wxREQUIRED_OS_DESC}
-    Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION}
+    Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION} ${wxTOOLKIT_DESC}
     Should wxWidgets be compiled into single library?  ${wxBUILD_MONOLITHIC}
     Should wxWidgets be linked as a shared library?    ${wxBUILD_SHARED}
     Should wxWidgets support Unicode?                  ${wxUSE_UNICODE}
