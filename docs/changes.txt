@@ -260,6 +260,7 @@ wxMSW:
 - Fix regression with background of menu bitmaps without alpha (#22669).
 - Fix regression in bitmaps with alpha in image list without mask (#22754).
 - Fix build with MSVC when using standard preprocessor (k3DW, #22654).
+- Work around MSVS 2022 optimizer bug in wxImage::ResampleBox() (#22761).
 
 wxOSX:
 
