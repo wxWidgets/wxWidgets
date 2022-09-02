@@ -20,6 +20,11 @@ Changes in behaviour not resulting in compilation errors
   destroying all the existing document views. If you overrode this function,
   please check that you don't rely on any views existing when it's called.
 
+- wxGrid::FreezeTo() now asserts when passed invalid (out of range) number of
+  rows or columns to freeze. But it also does freeze the requested rows/columns
+  even if the grid is currently too small to show all of them or if there are
+  no unfrozen rows/columns remaining.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

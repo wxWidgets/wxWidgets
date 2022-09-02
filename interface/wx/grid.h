@@ -5643,16 +5643,20 @@ public:
 
         Note that this method doesn't do anything, and returns @false, if any
         of the following conditions are true:
-        - Either @a row or @a col are out of range
-        - Size of the frozen area would be bigger than the current viewing area
         - There are any merged cells in the area to be frozen
         - Grid uses a native header control (see UseNativeColHeader())
 
         (some of these limitations could be lifted in the future).
 
+        Additionally, the function also returns false if either @a row or @a
+        col are out of range, i.e. negative or strictly greater than the total
+        number of grid rows or columns and also generates an assert failure in
+        this case, as this indicates a programming error and not a limitation
+        of the current implementation, unlike the conditions above.
+
         @since 3.1.3
      */
-    bool FreezeTo(unsigned row, unsigned col);
+    bool FreezeTo(int row, int col);
 
     /// @overload
     bool FreezeTo(const wxGridCellCoords& coords);

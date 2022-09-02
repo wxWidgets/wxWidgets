@@ -5448,28 +5448,19 @@ void wxGrid::InitializeFrozenWindows()
 
 bool wxGrid::FreezeTo(int row, int col)
 {
-    wxCHECK_MSG( row >= 0 && col >= 0, false,
-                "Number of rows or cols can't be negative!");
+    wxCHECK_MSG( row >= 0 && row <= m_numRows, false,
+                 "Invalid number of rows to freeze" );
 
-    if ( row >= m_numRows || col >= m_numCols ||
-        !m_rowAt.empty() || m_canDragRowMove ||
-        !m_colAt.empty() || m_canDragColMove || m_useNativeHeader )
+    wxCHECK_MSG( col >= 0 && col <= m_numCols, false,
+                 "Invalid number of columns to freeze" );
+
+    if ( !m_rowAt.empty() || m_canDragRowMove ||
+         !m_colAt.empty() || m_canDragColMove || m_useNativeHeader )
         return false;
 
     // freeze
     if ( row > m_numFrozenRows || col > m_numFrozenCols )
     {
-        // check that it fits in client size
-        int cw, ch;
-        GetClientSize( &cw, &ch );
-
-        cw -= m_rowLabelWidth;
-        ch -= m_colLabelHeight;
-
-        if ((row > 0 && GetRowBottom(row - 1) >= ch) ||
-            (col > 0 && GetColRight(col - 1) >= cw))
-            return false;
-
         // check all involved cells for merged ones
         int cell_rows, cell_cols;
 
