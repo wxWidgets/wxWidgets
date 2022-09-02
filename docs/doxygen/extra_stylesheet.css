@@ -12,6 +12,7 @@ div.appearance table {
 }
 div.appearance img {
     margin: 0.5em;
+    filter: none !important;
 }
 div.appearance .caption {
     font-style: italic;
