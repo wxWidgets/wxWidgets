@@ -4656,6 +4656,17 @@ public:
     void DisableHidingColumns();
 
     /**
+        Enable interactively resizing a column if it was previously forbidden.
+
+        Calling this function only makes sense if the row resizing had been
+        previously forbidden using DisableColResize(), as it simply undoes its
+        effect.
+
+        @since 3.3.0
+     */
+    void EnableColResize(int col);
+
+    /**
         Enables or disables cell dragging with the mouse.
     */
     void EnableDragCell(bool enable = true);
@@ -4725,6 +4736,17 @@ public:
         @see DisableHidingColumns()
     */
     bool EnableHidingColumns(bool enable = true);
+
+    /**
+        Enable interactively resizing a row if it was previously forbidden.
+
+        Calling this function only makes sense if the row resizing had been
+        previously forbidden using DisableRowResize(), as it simply undoes its
+        effect.
+
+        @since 3.3.0
+     */
+    void EnableRowResize(int row)l
 
     /**
         Returns the column ID of the specified column position.

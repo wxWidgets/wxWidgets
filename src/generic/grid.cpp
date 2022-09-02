@@ -9913,6 +9913,12 @@ void wxGrid::DoDisableLineResize(int line, wxGridFixedIndicesSet *& setFixed)
     setFixed->insert(line);
 }
 
+void wxGrid::DoEnableLineResize(int line, wxGridFixedIndicesSet* setFixed)
+{
+    if ( setFixed )
+        setFixed->erase(line);
+}
+
 bool
 wxGrid::DoCanResizeLine(int line, const wxGridFixedIndicesSet *setFixed) const
 {

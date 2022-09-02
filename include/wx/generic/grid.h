@@ -1904,6 +1904,10 @@ public:
     void DisableRowResize(int row) { DoDisableLineResize(row, m_setFixedRows); }
     void DisableColResize(int col) { DoDisableLineResize(col, m_setFixedCols); }
 
+        // and then resizing them may be re-enabled again later
+    void EnableRowResize(int row) { DoEnableLineResize(row, m_setFixedRows); }
+    void EnableColResize(int col) { DoEnableLineResize(col, m_setFixedCols); }
+
         // These function return true if resizing rows/columns by dragging
         // their edges inside the grid is enabled. Note that this doesn't cover
         // dragging their separators in the label windows (which can be enabled
@@ -2963,8 +2967,9 @@ private:
     void DoSetSizes(const wxGridSizesInfo& sizeInfo,
                     const wxGridOperations& oper);
 
-    // common part of Disable{Row,Col}Resize and CanDrag{Row,Col}Size
+    // common part of {Disable,Enable}{Row,Col}Resize and CanDrag{Row,Col}Size
     void DoDisableLineResize(int line, wxGridFixedIndicesSet *& setFixed);
+    void DoEnableLineResize(int line, wxGridFixedIndicesSet* setFixed);
     bool DoCanResizeLine(int line, const wxGridFixedIndicesSet *setFixed) const;
 
     // Helper of Render(): get grid size, origin offset and fill cell arrays
