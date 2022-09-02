@@ -249,6 +249,8 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
         }
     }
 #else
+    wxUnusedVar(resourceName);
+    wxUnusedVar(module);
     wxLogError(wxS("Loading icons from resources isn't implemented in this toolkit port yet."));
 #endif
 }

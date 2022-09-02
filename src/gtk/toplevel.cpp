@@ -329,6 +329,9 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
         point.y = y - decorSize.top;
     }
     else
+#else
+    wxUnusedVar(x);
+    wxUnusedVar(y);
 #endif
     {
         gtk_window_get_position(GTK_WINDOW(m_widget), &point.x, &point.y);
@@ -541,6 +544,11 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
         XFree(data);
     return success;
 #else
+    wxUnusedVar(window);
+    wxUnusedVar(left);
+    wxUnusedVar(right);
+    wxUnusedVar(top);
+    wxUnusedVar(bottom);
     return false;
 #endif
 }

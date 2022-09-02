@@ -254,6 +254,11 @@ wxGTK:
 - Fix CMake build under NetBSD (Thomas Klausner, #22643, #22644, #22645).
 - Improve linking with OpenGL libraries in CMake build (Maarten Bent, #22649).
 - Fix new warnings from gcc 12.1.
+- Correctly GTK print support and libnotify in CMake builds.
+
+  NOTE: CMake builds of 3.2.1 may be not ABI-compatible with 3.2.0 if
+        libnotify is available, specify -DwxUSE_LIBNOTIFY=0 to preserve
+        ABI compatibility if needed (at the price of not using libnotify).
 
 wxMSW:
 
