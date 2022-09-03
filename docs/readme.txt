@@ -32,61 +32,31 @@ installation instructions.
 
 
 
-Changes since 3.0
------------------
+Changes since 3.2.0
+-------------------
 
-This release is a culmination of many years of development since the
-last stable 3.0 release. It contains more than 15,000 commits from more
-than 400 unique contributors (including more than 200 with multiple
-contributions) and has too many improvements to list them all here, but
-here is a maximally condensed summary of the most important ones:
+Coming soon after 3.2.0, this is mostly a bug fix release, with just one
+noteworthy new feature: the addition of wxFileDialog::AddShortcut() function.
+However it fixes some important regressions and other problems:
 
-- Build system improvements: support for new compilers (up to MSVS 2022,
-  g++ 12, clang 14) with an even simpler way of using wxWidgets from
-  MSVS, with wxwidgets.props file, as well as an entirely new CMake build
-  system.
-- Support for native dark mode under macOS 10.14 and later, support for
-  ARM hardware and macOS versions up to 13.
-- High DPI support with the new, but almost perfectly backwards-
-  compatible, API based on wxBitmapBundle, including per-monitor DPI and
-  dynamic DPI changes.
-- New features: HTTPS and HTTP/2 support with wxWebRequest and friends;
-  support for freezing rows/columns in wxGrid; mouse gesture events
-  (GSoC 2017 project); non-integer font sizes and arbitrary font weights
-  in wxFont; fractional pen widths in wxGraphicsContext; arbitrary label
-  windows in wxStaticBox; markup in wxDataViewCtrl items text; support
-  for ZIP 64 files; LZMA compression; much improved accessibility
-  support under MSW; new Edge-based wxWebView implementation; support for
-  using native spell-checking in wxTextCtrl; new PCRE-based wxRegEx.
-- New classes: wxActivityIndicator, wxAddRemoveCtrl, wxAppProgressIndicator,
-  wxBitmapBundle, wxNativeWindow, wxPersistentComboBox,
-  wxPowerResourceBlocker, wxSecretStore, wxTempFFile, wxUILocale and many new
-  features in the existing classes.
-- New XRC handlers for all the new and some of the existing classes.
-- Significant improvements to: wxBusyInfo, wxDataViewCtrl, wxDirDialog, wxGrid,
-  wxNotificationMessage, wxSpinCtrl, wxStaticBox, wxStyledTextCtrl,
-  wxUIActionSimulator.
-- Improvements to compile-time safety with the possibility to disable dangerous
-  implicit conversions between wxString and "char*" strings.
-- Latest versions of all bundled 3rd party libraries, including all the
-  security fixes and support for WebKit 2 and GStreamer 1.7 under Unix.
-- Better, even if still perfectible, Wayland support in wxGTK.
-- Revamped OpenGL support better suited to modern OpenGL (3.2+).
-- Further C++11 and later support improvements, wxWidgets can be built using
-  C++20 compilers.
-- New experimental wxQt port.
-- Many, many bug fixes.
+- Fix crash in applications calling g_log_set_writer_func() with recent glib.
+- Several fixes to alpha channel handling in wxMSW bitmaps.
+- Generate key and focus events for wxSearchCtrl in wxOSX.
+- Fix creating wxRadioBox without any items in wxOSX.
+- Fix regression with AUI floating pane positioning.
+- Avoid new warnings given by gcc 12.
+- Fix building with MSVS 2022 standard-conforming preprocessor.
+- Work around MSVS 2022 optimizer bug that broke wxImage resizing.
+- NetBSD build fixes.
 
-
-Note that in spite of all these changes, wxWidgets 3.2 is almost fully
-compatible with wxWidgets 3.0 and updating the existing applications to
-use it shouldn't require much effort. But please do read the (relatively
-short) section listing the incompatible changes in the beginning of the
-change log file available online at
+Please see the full change log for more details:
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.1/docs/changes.txt
 
-if you're upgrading from a previous wxWidgets version.
+This release is API and ABI-compatible with 3.2.0, so the existing
+applications don't even need to be rebuilt to profit from all the fixes
+above if they use shared/dynamic libraries. And if they do need to be
+recompiled, this can be done without any changes to the code.
 
 
 
@@ -181,4 +151,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, July 2022
+The wxWidgets Team, September 2022
