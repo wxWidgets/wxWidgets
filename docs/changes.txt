@@ -232,7 +232,7 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.1: (released 2022-??-??)
+3.2.1: (released 2022-09-09)
 ----------------------------
 
 All (GUI):
