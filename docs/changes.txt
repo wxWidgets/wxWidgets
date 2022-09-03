@@ -247,7 +247,7 @@ All (GUI):
 
 wxGTK:
 
-- Fix crash with wxNotebook and g_log_set_writer_func() in glibc 2.73+ (#22717).
+- Fix crash with wxNotebook and g_log_set_writer_func() in glib 2.73+ (#22717).
 - Fix editors not appearing in wxGrid in some rare circumstances (#22628).
 - Fix build with --disable-intl (#22626).
 - Fix build under MSW (Tim Stahlhut, #22633).
