@@ -4883,7 +4883,7 @@ if test "$TOOLKIT" != "MSW"; then
 
           *-*-irix* )
                 dnl gcc under IRIX doesn't seem to like -pthread, but it
-                dnl doesn't give an error for it neither, just a warning
+                dnl doesn't give an error for it either, just a warning
                 dnl message -- but this is still very annoying
                 if test "x$GCC" = "xyes"; then
                     THREAD_OPTS=""

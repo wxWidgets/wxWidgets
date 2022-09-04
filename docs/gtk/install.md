@@ -150,7 +150,7 @@ used to override this.
    typically will, still be used if found.
 
  * `--without-libpng` \n
-   Disables PNG image format code. Don't use neither the system nor the builtin
+   Disables PNG image format code. Use neither the system nor the builtin
    libpng (although GTK itself still uses it).
 
  * `--without-libjpeg` \n
