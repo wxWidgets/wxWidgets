@@ -45,7 +45,7 @@ have to do:
    "iconv -l" on your favourite Unix system. For the list of charsets
    supported under Win32, look under HKEY_CLASSES_ROOT\MIME\Database\Charset
    in regedit. Of course, being consistent with the existing encoding names
-   wouldn't hurt neither.
+   wouldn't hurt either.
 
 3. Normally you don't have to do anything else if you've got support for this
    encoding under both Win32 and Unix. If you haven't, you should modify

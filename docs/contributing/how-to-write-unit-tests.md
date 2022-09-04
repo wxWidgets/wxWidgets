@@ -74,7 +74,7 @@ Tests physical structure
 All (i.e. both GUI and non-GUI) unit tests are under `tests` subdirectory. When
 adding a new test, try to find an existing file to add it to. If there are no
 applicable files, try to add a new file to an existing directory. If there is
-no applicable directory neither, create a new one and put the new file there
+no applicable directory either, create a new one and put the new file there
 (i.e. do _not_ put new files directly under `tests`). If your test is small,
 consider adding it to `tests/misc/misctests.cpp`.
 
