@@ -43,7 +43,7 @@ jobs:
         # https://github.com/softprops/action-gh-release/pull/254 fixing
         # updating the body of the draft releases. We should replace the SHA-1
         # with a tag when an upstream release including this fix is made.
-        uses: vadz/action-gh-release@56aa1497d91821e0580731faa9772a88a54665c2
+        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -109,7 +109,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: vadz/action-gh-release@56aa1497d91821e0580731faa9772a88a54665c2
+        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
