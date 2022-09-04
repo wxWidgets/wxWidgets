@@ -39,11 +39,11 @@ jobs:
             sha1sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
-        # Note: use latest available (as of 2022-09-03) action version as v1
-        # doesn't include the "assets" output that we need to pass the
-        # download URL to the next job. Replace the SHA-1 with tag when a
-        # release including "assets" output support is made.
-        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        # Note: use a fork of softprops/action-gh-release which includes
+        # https://github.com/softprops/action-gh-release/pull/254 fixing
+        # updating the body of the draft releases. We should replace the SHA-1
+        # with a tag when an upstream release including this fix is made.
+        uses: vadz/action-gh-release@56aa1497d91821e0580731faa9772a88a54665c2
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -109,7 +109,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        uses: vadz/action-gh-release@56aa1497d91821e0580731faa9772a88a54665c2
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
