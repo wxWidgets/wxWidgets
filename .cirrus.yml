@@ -33,7 +33,7 @@ task:
 
   # We need to pass flags so that libraries under /usr/local are found, because
   # configure doesn't look for them there by default (it ought to always use
-  # pkg-config instead, but it currently doesn't do this neither).
+  # pkg-config instead, but it currently doesn't do this either).
   configure_script: |
     ./configure --disable-optimise --disable-debug_info CXXFLAGS=-Werror CPPFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib
 
