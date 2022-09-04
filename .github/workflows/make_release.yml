@@ -105,8 +105,8 @@ jobs:
         working-directory: distrib/release/${{ inputs.version }}
         shell: cmd
         run: |
-            sha1sum * > ../../../checksums
-            type ../../../checksums
+            sha1sum * > ..\..\..\checksums
+            type ..\..\..\checksums
 
       - name: Add Files to the Release
         uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
