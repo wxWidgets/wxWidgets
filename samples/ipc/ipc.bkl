@@ -30,6 +30,7 @@
     <exe id="baseipcclient" template="wx_sample_console" template_append="wx_append_base">
         <sources>baseclient.cpp</sources>
         <headers>connection.h ipcsetup.h</headers>
+        <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
@@ -37,6 +38,7 @@
     <exe id="baseipcserver" template="wx_sample_console" template_append="wx_append_base">
         <sources>baseserver.cpp</sources>
         <headers>connection.h ipcsetup.h</headers>
+        <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
