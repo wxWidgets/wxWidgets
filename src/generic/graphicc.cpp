@@ -1406,6 +1406,9 @@ void wxCairoPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
 
 void wxCairoPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
+    if (w <= 0 || h <= 0)
+        return;
+
     cairo_move_to(m_pathContext, x+w, y+h/2.0);
     w /= 2.0;
     h /= 2.0;
