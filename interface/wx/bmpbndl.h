@@ -22,9 +22,9 @@
     Currently bitmap bundles can be created from:
 
         - A vector of bitmaps, of any provenance.
+        - An SVG (as memory block, file, or resource) which will be rasterized at required resolutions.
+        - A custom bitmap source using wxBitmapBundleImpl.
         - A single wxBitmap or wxImage for backwards compatibility.
-
-    More functions for creating bitmap bundles will be added in the future.
 
     Objects of wxBitmapBundle class have value-like semantics, i.e. they can be
     copied around freely (and cheaply) and don't need to be allocated on the
