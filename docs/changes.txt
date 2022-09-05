@@ -249,6 +249,7 @@ wxGTK:
 
 - Fix crash with wxNotebook and g_log_set_writer_func() in glib 2.73+ (#22717).
 - Fix editors not appearing in wxGrid in some rare circumstances (#22628).
+- Ignore attempts to draw circles with zero radius again (#22775).
 - Fix build with --disable-intl (#22626).
 - Fix build under MSW (Tim Stahlhut, #22633).
 - Fix CMake build under NetBSD (Thomas Klausner, #22643, #22644, #22645).
