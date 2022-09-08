@@ -111,6 +111,11 @@ wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+void wxWebViewWebKit::Init()
+{
+    m_webViewConfiguration = [[WKWebViewConfiguration alloc] init];
+}
+
 bool wxWebViewWebKit::Create(wxWindow *parent,
                                  wxWindowID winID,
                                  const wxString& strURL,
@@ -122,7 +127,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
-    WKWebViewConfiguration* webViewConfig = [[WKWebViewConfiguration alloc] init];
+    WKWebViewConfiguration* webViewConfig = (WKWebViewConfiguration*) m_webViewConfiguration;
 
     if (!m_handlers.empty())
     {
@@ -145,6 +150,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     SetPeer(new wxWidgetCocoaImpl( this, m_webView ));
 
     MacPostControlCreate(pos, size);
+
+    // WKWebView configuration is only used during creation
+    [m_webViewConfiguration release];
+    m_webViewConfiguration = nil;
 
     if (!m_customUserAgent.empty())
         SetUserAgent(m_customUserAgent);

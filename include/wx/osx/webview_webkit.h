@@ -32,7 +32,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 public:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 
-    wxWebViewWebKit() {}
+    wxWebViewWebKit() { Init(); }
     wxWebViewWebKit(wxWindow *parent,
                     wxWindowID winID = wxID_ANY,
                     const wxString& strURL = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -40,6 +40,7 @@ public:
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxString& name = wxASCII_STR(wxWebViewNameStr))
     {
+        Init();
         Create(parent, winID, strURL, pos, size, style, name);
     }
     bool Create(wxWindow *parent,
@@ -105,6 +106,7 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
     virtual void* GetNativeBackend() const wxOVERRIDE { return m_webView; }
+    virtual void* GetNativeConfiguration() const wxOVERRIDE { return m_webViewConfiguration; }
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
@@ -112,12 +114,15 @@ protected:
     wxDECLARE_EVENT_TABLE();
 
 private:
+    WX_NSObject m_webViewConfiguration;
     OSXWebViewPtr m_webView;
     wxStringToWebHandlerMap m_handlers;
     wxString m_customUserAgent;
 
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
+
+    void Init();
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory
