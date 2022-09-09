@@ -458,9 +458,10 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame( bool stereoWindow )
        : wxFrame(NULL, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
-    int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
+    int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
+    int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, WX_GL_STEREO, 0 };
 
-    new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
+    new TestGLCanvas(this, stereoWindow ? stereoAttribList : attribList);
 
     SetIcon(wxICON(sample));
 
@@ -481,7 +482,7 @@ MyFrame::MyFrame( bool stereoWindow )
     Show();
 
     // test IsDisplaySupported() function:
-    static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
+    static const int attribs[] = { WX_GL_RGBA, WX_GL_DEPTH_SIZE, 16, WX_GL_DOUBLEBUFFER, 0 };
     wxLogStatus("Double-buffered display %s supported",
                 wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
 
