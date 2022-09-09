@@ -628,53 +628,6 @@ public:
     shifted so the first visible row always appears at the point (0, 0) in
     physical as well as logical coordinates.
 
-    @section vscrolledwindow_compat wxWidgets 2.8 Compatibility Functions
-
-    The following functions provide backwards compatibility for applications
-    originally built using wxVScrolledWindow in 2.6 or 2.8. Originally,
-    wxVScrolledWindow referred to scrolling "lines". We now use "units" in
-    wxVarScrollHelperBase to avoid implying any orientation (since the
-    functions are used for both horizontal and vertical scrolling in derived
-    classes). And in the new wxVScrolledWindow and wxHScrolledWindow classes,
-    we refer to them as "rows" and "columns", respectively. This is to help
-    clear some confusion in not only those classes, but also in
-    wxHVScrolledWindow where functions are inherited from both.
-
-    You are encouraged to update any existing code using these function to use
-    the new replacements mentioned below, and avoid using these functions for
-    any new code as they are deprecated.
-
-    @beginTable
-    @row2col{ <tt>size_t %GetFirstVisibleLine() const</tt>,
-        Deprecated for GetVisibleRowsBegin(). }
-    @row2col{ <tt>size_t %GetLastVisibleLine() const</tt>,
-        Deprecated for GetVisibleRowsEnd(). This function originally had a
-        slight design flaw in that it was possible to return
-        <tt>(size_t)-1</tt> (ie: a large positive number) if the scroll
-        position was 0 and the first line wasn't completely visible. }
-    @row2col{ <tt>size_t %GetLineCount() const</tt>,
-        Deprecated for GetRowCount(). }
-    @row2col{ <tt>int %HitTest(wxCoord x\, wxCoord y) const
-              @n  int %HitTest(const wxPoint& pt) const</tt>,
-        Deprecated for VirtualHitTest(). }
-    @row2col{ <tt>virtual wxCoord %OnGetLineHeight(size_t line) const</tt>,
-        Deprecated for OnGetRowHeight(). }
-    @row2col{ <tt>virtual void %OnGetLinesHint(size_t lineMin\, size_t lineMax) const</tt>,
-        Deprecated for OnGetRowsHeightHint(). }
-    @row2col{ <tt>virtual void %RefreshLine(size_t line)</tt>,
-        Deprecated for RefreshRow(). }
-    @row2col{ <tt>virtual void %RefreshLines(size_t from\, size_t to)</tt>,
-        Deprecated for RefreshRows(). }
-    @row2col{ <tt>virtual bool %ScrollLines(int lines)</tt>,
-        Deprecated for ScrollRows(). }
-    @row2col{ <tt>virtual bool %ScrollPages(int pages)</tt>,
-        Deprecated for ScrollRowPages(). }
-    @row2col{ <tt>bool %ScrollToLine(size_t line)</tt>,
-        Deprecated for ScrollToRow(). }
-    @row2col{ <tt>void %SetLineCount(size_t count)</tt>,
-        Deprecated for SetRowCount(). }
-    @endTable
-
     @library{wxcore}
     @category{miscwnd}
 
