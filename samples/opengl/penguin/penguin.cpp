@@ -92,7 +92,10 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 
     Show(true);
 
-    m_canvas = new TestGLCanvas(this, wxID_ANY, wxDefaultPosition,
+    // Create the OpenGL Canvas with default attributes
+    wxGLAttributes attribList;
+    attribList.Defaults().PlatformDefaults().EndList();
+    m_canvas = new TestGLCanvas(this, attribList, wxID_ANY, wxDefaultPosition,
         GetClientSize(), wxSUNKEN_BORDER);
 }
 
@@ -138,12 +141,13 @@ wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
 wxEND_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent,
+                           const wxGLAttributes& attribList,
                            wxWindowID id,
                            const wxPoint& pos,
                            const wxSize& size,
                            long style,
                            const wxString& name)
-    : wxGLCanvas(parent, id, NULL, pos, size,
+    : wxGLCanvas(parent, attribList, id, pos, size,
                  style | wxFULL_REPAINT_ON_RESIZE, name)
 {
     // Explicitly create a new rendering context instance for this canvas.
