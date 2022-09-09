@@ -14,6 +14,7 @@
 #include "wx/dynlib.h"
 #endif
 #include "wx/msw/private/comptr.h"
+#include "wx/hashmap.h"
 
 #include <WebView2.h>
 
@@ -40,6 +41,8 @@ __CRT_UUID_DECL(ICoreWebView2SourceChangedEventHandler, 0x3c067f9f, 0x5388, 0x47
 __CRT_UUID_DECL(ICoreWebView2WebMessageReceivedEventHandler, 0x57213f19, 0x00e6, 0x49fa, 0x8e,0x07, 0x89,0x8e,0xa0,0x1e,0xcb,0xd2);
 #endif
 
+WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
+
 class wxWebViewEdgeImpl
 {
 public:
@@ -65,6 +68,7 @@ public:
     wxVector<wxString> m_userScriptIds;
     wxString m_scriptMsgHandlerName;
     wxString m_customUserAgent;
+    wxStringToWebHandlerMap m_handlers;
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
@@ -75,6 +79,7 @@ public:
     EventRegistrationToken m_DOMContentLoadedToken = { };
     EventRegistrationToken m_containsFullScreenElementChangedToken = { };
     EventRegistrationToken m_webMessageReceivedToken = { };
+    EventRegistrationToken m_webResourceRequestedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
@@ -85,6 +90,7 @@ public:
     HRESULT OnDOMContentLoaded(ICoreWebView2* sender, ICoreWebView2DOMContentLoadedEventArgs* args);
     HRESULT OnContainsFullScreenElementChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
+    HRESULT OnWebResourceRequested(ICoreWebView2* sender, ICoreWebView2WebResourceRequestedEventArgs* args);
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);

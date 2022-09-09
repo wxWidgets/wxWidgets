@@ -16,15 +16,18 @@
 
 #include "wx/filename.h"
 #include "wx/module.h"
+#include "wx/mstream.h"
 #include "wx/log.h"
 #include "wx/stdpaths.h"
 #include "wx/thread.h"
 #include "wx/tokenzr.h"
+#include "wx/uri.h"
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/json.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/cotaskmemptr.h"
 #include "wx/msw/private/webview_edge.h"
+#include "wx/msw/private/comstream.h"
 
 #ifdef __VISUALC__
 #include <wrl/event.h>
@@ -64,6 +67,185 @@ GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2Browser
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
 #endif // wxUSE_WEBVIEW_EDGE_STATIC
 
+class wxWebViewEdgeHandlerRequest : public wxWebViewHandlerRequest
+{
+public:
+    wxWebViewEdgeHandlerRequest(ICoreWebView2WebResourceRequest* request):
+        m_request(request),
+        m_handler(NULL),
+        m_dataStream(NULL)
+    { }
+
+    ~wxWebViewEdgeHandlerRequest()
+    {
+        wxDELETE(m_dataStream);
+    }
+
+    void SetHandler(wxWebViewHandler* handler) { m_handler = handler; }
+
+    virtual wxString GetRawURI() const wxOVERRIDE
+    {
+        wxCoTaskMemPtr<wchar_t> uri;
+        if (SUCCEEDED(m_request->get_Uri(&uri)))
+            return wxString(uri);
+        else
+            return wxString();
+    }
+
+    virtual wxString GetURI() const wxOVERRIDE
+    {
+        wxURI rawURI(GetRawURI());
+        wxString path = rawURI.GetPath();
+        if (!path.empty()) // Remove / in front
+            path.erase(0, 1);
+        wxString uri = wxString::Format("%s:%s", m_handler->GetName(), path);
+        return uri;
+    }
+
+    virtual wxInputStream* GetData() const wxOVERRIDE
+    {
+        if (!m_dataStream)
+        {
+            wxCOMPtr<IStream> dataStream;
+            if (SUCCEEDED(m_request->get_Content(&dataStream)) && dataStream)
+            {
+                ULARGE_INTEGER size;
+                LARGE_INTEGER pos;
+                pos.QuadPart = 0;
+                HRESULT hr = dataStream->Seek(pos, STREAM_SEEK_END, &size);
+                if (FAILED(hr))
+                    return NULL;
+                hr = dataStream->Seek(pos, STREAM_SEEK_SET, NULL);
+                if (FAILED(hr))
+                    return NULL;
+                hr = dataStream->Read(m_data.GetWriteBuf(size.QuadPart), size.QuadPart, NULL);
+                if (FAILED(hr))
+                    return NULL;
+                m_dataStream = new wxMemoryInputStream(m_data.GetData(), size.QuadPart);
+            }
+        }
+
+        return m_dataStream;
+    }
+
+    virtual wxString GetMethod() const wxOVERRIDE
+    {
+        wxCoTaskMemPtr<wchar_t> method;
+        if (SUCCEEDED(m_request->get_Method(&method)))
+            return wxString(method);
+        else
+            return wxString();
+    }
+
+    virtual wxString GetHeader(const wxString& name) const wxOVERRIDE
+    {
+        wxCOMPtr<ICoreWebView2HttpRequestHeaders> headers;
+        if (SUCCEEDED(m_request->get_Headers(&headers)))
+        {
+            wxCoTaskMemPtr<wchar_t> value;
+            if (SUCCEEDED(headers->GetHeader(name.wc_str(), &value)))
+                return wxString(value);
+        }
+
+        return wxString();
+    }
+
+    wxCOMPtr<ICoreWebView2WebResourceRequest> m_request;
+    wxWebViewHandler* m_handler;
+    mutable wxInputStream* m_dataStream;
+    mutable wxMemoryBuffer m_data;
+};
+
+class wxWebViewEdgeHandlerResponseStream : public wxCOMInputStreamAdapter
+{
+public:
+    wxWebViewEdgeHandlerResponseStream(wxSharedPtr<wxWebViewHandlerResponseData> data):
+        m_data(data),
+        wxCOMInputStreamAdapter(data->GetStream())
+    { }
+
+    wxSharedPtr<wxWebViewHandlerResponseData> m_data;
+};
+
+class wxWebViewEdgeHandlerResponse : public wxWebViewHandlerResponse
+{
+public:
+    wxWebViewEdgeHandlerResponse(ICoreWebView2WebResourceRequestedEventArgs* args, ICoreWebView2Environment* env):
+        m_args(args),
+        m_env(env)
+    {
+        m_args->GetDeferral(&m_deferral);
+
+        // Create response
+        HRESULT hr = m_env->CreateWebResourceResponse(NULL, 200, NULL, NULL, &m_response);
+        if (FAILED(hr))
+            wxLogApiError("CreateWebResourceResponse", hr);
+    }
+
+    void SetReason(const wxString& reason)
+    { m_response->put_ReasonPhrase(reason.wc_str()); }
+
+    virtual void SetStatus(int status) wxOVERRIDE
+    { m_response->put_StatusCode(status); }
+
+    virtual void SetContentType(const wxString& contentType) wxOVERRIDE
+    { SetHeader("Content-Type", contentType); }
+
+    virtual void SetHeader(const wxString& name, const wxString& value) wxOVERRIDE
+    {
+        wxCOMPtr<ICoreWebView2HttpResponseHeaders> headers;
+        if (SUCCEEDED(m_response->get_Headers(&headers)))
+            headers->AppendHeader(name.wc_str(), value.wc_str());
+    }
+
+    bool SendResponse()
+    {
+        // put response
+        HRESULT hr = m_args->put_Response(m_response);
+        if (FAILED(hr))
+        {
+            wxLogApiError("put_Response", hr);
+            return false;
+        }
+        // Mark event as completed
+        hr = m_deferral->Complete();
+        if (FAILED(hr))
+        {
+            wxLogApiError("deferral->Complete()", hr);
+            return false;
+        }
+
+        return true;
+    }
+
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) wxOVERRIDE
+    {
+        SetReason("OK");
+        // put content
+        if (data)
+        {
+            IStream* stream = new wxWebViewEdgeHandlerResponseStream(data);
+            HRESULT hr = m_response->put_Content(stream);
+            if (FAILED(hr))
+                wxLogApiError("put_Content", hr);
+        }
+        SendResponse();
+    }
+
+    virtual void FinishWithError() wxOVERRIDE
+    {
+        SetStatus(500);
+        SetReason("Error");
+        SendResponse();
+    }
+
+    int m_status;
+    wxCOMPtr<ICoreWebView2WebResourceResponse> m_response;
+    wxCOMPtr<ICoreWebView2Deferral> m_deferral;
+    wxCOMPtr<ICoreWebView2Environment> m_env;
+    wxCOMPtr<ICoreWebView2WebResourceRequestedEventArgs> m_args;
+};
+
 wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
@@ -86,6 +268,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_DOMContentLoaded(m_DOMContentLoadedToken);
         m_webView->remove_ContainsFullScreenElementChanged(m_containsFullScreenElementChangedToken);
         m_webView->remove_WebMessageReceived(m_webMessageReceivedToken);
+        m_webView->remove_WebResourceRequested(m_webResourceRequestedToken);
     }
 }
 
@@ -370,6 +553,28 @@ wxWebViewEdgeImpl::OnWebMessageReceived(ICoreWebView2* WXUNUSED(sender),
     return S_OK;
 }
 
+HRESULT wxWebViewEdgeImpl::OnWebResourceRequested(ICoreWebView2* WXUNUSED(sender), ICoreWebView2WebResourceRequestedEventArgs* args)
+{
+    wxCOMPtr<ICoreWebView2WebResourceRequest> apiRequest;
+    HRESULT hr = args->get_Request(&apiRequest);
+    if (FAILED(hr))
+        return hr;
+    wxWebViewEdgeHandlerRequest request(apiRequest);
+
+    // Find handler
+    wxURI uri(request.GetRawURI());
+    if (!uri.HasServer())
+        return E_INVALIDARG;
+    wxSharedPtr<wxWebViewHandler> handler = m_handlers[uri.GetServer()];
+    if (!handler)
+        return E_INVALIDARG;
+    request.SetHandler(handler.get());
+
+    wxSharedPtr<wxWebViewHandlerResponse> resp(new wxWebViewEdgeHandlerResponse(args, m_webViewEnvironment));
+    handler->StartRequest(request, resp);
+    return S_OK;
+}
+
 HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController)
 {
     if (FAILED(result))
@@ -431,6 +636,17 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2WebMessageReceivedEventHandler>(
             this, &wxWebViewEdgeImpl::OnWebMessageReceived).Get(),
         &m_webMessageReceivedToken);
+    m_webView->add_WebResourceRequested(
+        Callback<ICoreWebView2WebResourceRequestedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnWebResourceRequested).Get(),
+        &m_webResourceRequestedToken);
+
+    // Register handlers
+    for (wxStringToWebHandlerMap::iterator it = m_handlers.begin(); it != m_handlers.end(); it++)
+    {
+        wxString filterURI = wxString::Format("*://%s/*", it->first);
+        m_webView->AddWebResourceRequestedFilter(filterURI.wc_str(), COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL);
+    }
 
     if (m_pendingContextMenuEnabled != -1)
     {
@@ -591,7 +807,23 @@ void wxWebViewEdge::LoadURL(const wxString& url)
         m_impl->m_pendingURL = url;
         return;
     }
-    HRESULT hr = m_impl->m_webView->Navigate(url.wc_str());
+    wxString navURL = url;
+    if (!m_impl->m_handlers.empty())
+    {
+        // Emulate custom protocol support for LoadURL()
+        for (wxStringToWebHandlerMap::iterator it = m_impl->m_handlers.begin();
+            it != m_impl->m_handlers.end(); it++)
+        {
+            wxString scheme = it->second->GetName() + ":";
+            if (navURL.StartsWith(scheme))
+            {
+                navURL.Remove(0, scheme.Length());
+                navURL.insert(0, "https://" + it->second->GetVirtualHost() + "/");
+                break;
+            }
+        }
+    }
+    HRESULT hr = m_impl->m_webView->Navigate(navURL.wc_str());
     if (FAILED(hr))
         wxLogApiError("WebView2::Navigate", hr);
 }
@@ -949,10 +1181,16 @@ void wxWebViewEdge::RemoveAllUserScripts()
     m_impl->m_userScriptIds.clear();
 }
 
-void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> WXUNUSED(handler))
+void wxWebViewEdge::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
-    // TODO: could maybe be implemented via IWebView2WebView5::add_WebResourceRequested
-    wxLogDebug("Registering handlers is not supported");
+    wxString handlerHost = handler->GetVirtualHost();
+    m_impl->m_handlers[handlerHost] = handler;
+
+    if (m_impl->m_webView)
+    {
+        wxString filterURI = wxString::Format("*://%s/*", handlerHost);
+        m_impl->m_webView->AddWebResourceRequestedFilter(filterURI.wc_str(), COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL);
+    }
 }
 
 void wxWebViewEdge::DoSetPage(const wxString& html, const wxString& WXUNUSED(baseUrl))
