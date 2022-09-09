@@ -232,6 +232,14 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.2: (released 202?-??-??)
+----------------------------
+
+All (GUI):
+
+- Improve wxWebView::RunScriptAsync() performance (Tobias Taschner, #22781).
+
+
 3.2.1: (released 2022-09-09)
 ----------------------------
 
