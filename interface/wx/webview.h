@@ -754,6 +754,27 @@ public:
     virtual void Stop() = 0;
 
     /**
+        Specify a custom user agent string for the web view.
+        Returns @true the user agent could be set.
+
+        If your first request should already use the custom user agent
+        please use two step creation and call SetUserAgent() before Create().
+
+        @note This is not implemented for IE. For Edge SetUserAgent()
+            MUST be called before Create().
+
+        @since 3.1.5
+    */
+    virtual bool SetUserAgent(const wxString& userAgent);
+
+    /**
+        Returns the current user agent string for the web view.
+
+        @since 3.1.5
+    */
+    virtual wxString GetUserAgent() const;
+
+    /**
         @name Scripting
     */
     /**
@@ -994,28 +1015,6 @@ public:
         @since 3.1.4
     */
     virtual bool IsAccessToDevToolsEnabled() const;
-
-    /**
-        Specify a custom user agent string for the web view.
-        Returns @true the user agent could be set.
-
-        If your first request should already use the custom user agent
-        please use two step creation and call SetUserAgent() before Create().
-
-        @note This is not implemented for IE. For Edge SetUserAgent()
-            MUST be called before Create().
-
-        @since 3.1.5
-    */
-    virtual bool SetUserAgent(const wxString& userAgent);
-
-    /**
-        Returns the current user agent string for the web view.
-
-        @since 3.1.5
-    */
-    virtual wxString GetUserAgent() const;
-
 
     /**
         @name History
