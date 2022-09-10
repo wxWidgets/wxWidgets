@@ -34,6 +34,10 @@
     #include "../../sample.xpm"
 #endif
 
+#ifndef WGL_STEREO_ARB
+    #define WGL_STEREO_ARB  0x2012
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -309,12 +313,12 @@ wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
 wxEND_EVENT_TABLE()
 
-TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
+TestGLCanvas::TestGLCanvas(wxWindow *parent, const wxGLAttributes& attribList)
     // With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
     // flag should always be set, because even making the canvas smaller should
     // be followed by a paint event that updates the entire canvas with new
     // viewport settings.
-    : wxGLCanvas(parent, wxID_ANY, attribList,
+    : wxGLCanvas(parent, attribList, wxID_ANY,
                  wxDefaultPosition, wxDefaultSize,
                  wxFULL_REPAINT_ON_RESIZE),
       m_xangle(30.0),
@@ -323,15 +327,13 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
       m_useStereo(false),
       m_stereoWarningAlreadyDisplayed(false)
 {
-    if ( attribList )
+    int i = 0;
+    const int* attributes = attribList.GetGLAttrs();
+    while ( attributes[i] != 0 )
     {
-        int i = 0;
-        while ( attribList[i] != 0 )
-        {
-            if ( attribList[i] == WX_GL_STEREO )
-                m_useStereo = true;
-            ++i;
-        }
+        if ( attributes[i] == WGL_STEREO_ARB )
+            m_useStereo = true;
+        ++i;
     }
 }
 
@@ -458,8 +460,10 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame( bool stereoWindow )
        : wxFrame(NULL, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
-    int attribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
-    int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, WX_GL_STEREO, 0 };
+    wxGLAttributes attribList;
+    wxGLAttributes stereoAttribList;
+    attribList.Defaults().PlatformDefaults().EndList();
+    stereoAttribList.Defaults().PlatformDefaults().Stereo().EndList();
 
     new TestGLCanvas(this, stereoWindow ? stereoAttribList : attribList);
 

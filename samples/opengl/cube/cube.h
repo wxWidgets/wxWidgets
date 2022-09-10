@@ -65,7 +65,7 @@ private:
 class TestGLCanvas : public wxGLCanvas
 {
 public:
-    TestGLCanvas(wxWindow *parent, int *attribList = NULL);
+    TestGLCanvas(wxWindow *parent, const wxGLAttributes& attribList);
 
 private:
     void OnPaint(wxPaintEvent& event);
