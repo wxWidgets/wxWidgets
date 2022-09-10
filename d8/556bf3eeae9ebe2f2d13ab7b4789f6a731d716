@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxWebView::GetNativeConfiguration() (Tobias Taschner, #22781).
