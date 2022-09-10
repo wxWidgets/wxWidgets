@@ -69,7 +69,9 @@ wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
     m_ctrl(webview)
 {
-
+#ifdef __VISUALC__
+    m_webViewEnvironmentOptions = Make<CoreWebView2EnvironmentOptions>().Get();
+#endif
 }
 
 wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
@@ -99,23 +101,15 @@ bool wxWebViewEdgeImpl::Create()
     m_historyPosition = -1;
 
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
-#ifdef __VISUALC__
-    auto options =
-        Make<CoreWebView2EnvironmentOptions>();
 
-    if (!m_customUserAgent.empty())
-        options->put_AdditionalBrowserArguments(
+    if (m_webViewEnvironmentOptions && !m_customUserAgent.empty())
+        m_webViewEnvironmentOptions->put_AdditionalBrowserArguments(
             wxString::Format("--user-agent=\"%s\"", m_customUserAgent).wc_str());
-#endif
 
     HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
         ms_browserExecutableDir.wc_str(),
         userDataPath.wc_str(),
-#ifdef __VISUALC__
-        options.Get(),
-#else
-        nullptr,
-#endif
+        m_webViewEnvironmentOptions,
         Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
             &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
     if (FAILED(hr))
@@ -842,6 +836,11 @@ bool wxWebViewEdge::SetUserAgent(const wxString& userAgent)
 void* wxWebViewEdge::GetNativeBackend() const
 {
     return m_impl->m_webView;
+}
+
+void* wxWebViewEdge::GetNativeConfiguration() const
+{
+    return m_impl->m_webViewEnvironmentOptions;
 }
 
 void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)

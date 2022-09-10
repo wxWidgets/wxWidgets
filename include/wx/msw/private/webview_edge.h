@@ -53,6 +53,7 @@ public:
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2_2> m_webView;
     wxCOMPtr<ICoreWebView2Controller> m_webViewController;
+    wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
 
     bool m_initialized;
     bool m_isBusy;

@@ -98,6 +98,7 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
 
     virtual void* GetNativeBackend() const wxOVERRIDE;
+    virtual void* GetNativeConfiguration() const wxOVERRIDE;
 
     static void MSWSetBrowserExecutableDir(const wxString& path);
 

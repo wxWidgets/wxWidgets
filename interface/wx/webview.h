@@ -624,6 +624,48 @@ public:
     virtual void* GetNativeBackend() const = 0;
 
     /**
+        Return the pointer to the native configuration used during creation of
+        this control.
+
+        When using two-step creation this method can be used to customize
+        configuration options not available via GetNativeBackend()
+        after using Create().
+
+        The return value needs to be down-casted to the appropriate type
+        depending on the platform: under macOS, it's a
+        <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
+        pointer, under Windows with Edge it's a pointer to
+        <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
+        With other backends/platforms it's not implemented.
+
+        The following pseudo code shows how to use this method with two-step
+        creation to set no user action requirement to play video in a
+        web view:
+        @code
+            #if defined(__WXMSW__)
+            #include "webview2.h"
+            #elif defined(__WXOSX__)
+            #import "WebKit/WebKit.h"
+            #endif
+
+            wxWebView* webView = wxWebView::New();
+            #if defined(__WXMSW__)
+            ICoreWebView2EnvironmentOptions* webViewOptions =
+                (ICoreWebView2EnvironmentOptions*) webView->GetNativeConfiguration();
+            webViewOptions->put_AdditionalBrowserArguments("--autoplay-policy=no-user-gesture-required");
+            #elif defined(__WXOSX__)
+            WKWebViewConfiguration* webViewConfiguration =
+                (WKWebViewConfiguration*) webView->GetNativeConfiguration();
+            webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+            #endif
+            webView->Create(this, wxID_ANY, "https://www.wxwidgets.org");
+        @endcode
+
+        @since 3.3.0
+    */
+   virtual void* GetNativeConfiguration() const;
+
+    /**
         Get the HTML source code of the currently displayed document.
         @return The HTML source code, or an empty string if no page is currently
                 shown.
@@ -710,6 +752,27 @@ public:
         TODO: make @c wxWEBVIEW_NAV_ERR_USER_CANCELLED errors uniform across ports.
     */
     virtual void Stop() = 0;
+
+    /**
+        Specify a custom user agent string for the web view.
+        Returns @true the user agent could be set.
+
+        If your first request should already use the custom user agent
+        please use two step creation and call SetUserAgent() before Create().
+
+        @note This is not implemented for IE. For Edge SetUserAgent()
+            MUST be called before Create().
+
+        @since 3.1.5
+    */
+    virtual bool SetUserAgent(const wxString& userAgent);
+
+    /**
+        Returns the current user agent string for the web view.
+
+        @since 3.1.5
+    */
+    virtual wxString GetUserAgent() const;
 
     /**
         @name Scripting
@@ -952,28 +1015,6 @@ public:
         @since 3.1.4
     */
     virtual bool IsAccessToDevToolsEnabled() const;
-
-    /**
-        Specify a custom user agent string for the web view.
-        Returns @true the user agent could be set.
-
-        If your first request should already use the custom user agent
-        please use two step creation and call SetUserAgent() before Create().
-
-        @note This is not implemented for IE. For Edge SetUserAgent()
-            MUST be called before Create().
-
-        @since 3.1.5
-    */
-    virtual bool SetUserAgent(const wxString& userAgent);
-
-    /**
-        Returns the current user agent string for the web view.
-
-        @since 3.1.5
-    */
-    virtual wxString GetUserAgent() const;
-
 
     /**
         @name History
