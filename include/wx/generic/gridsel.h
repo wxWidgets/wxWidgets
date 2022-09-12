@@ -108,7 +108,7 @@ public:
     wxArrayInt GetRowSelection() const;
     wxArrayInt GetColSelection() const;
 
-    wxGridBlockCoordsVector& GetBlocks() { return m_selection; }
+    const wxGridBlockCoordsVector& GetBlocks() const { return m_selection; }
 
     void EndSelecting();
     void CancelSelecting();
