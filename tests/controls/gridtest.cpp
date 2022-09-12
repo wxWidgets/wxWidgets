@@ -674,6 +674,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     sim.MouseDown();
     wxYield();
 
+    // Move the mouse a bit while staying inside the first cell of the range
+    // so that the range selection really starts off by the next move.
+    sim.MouseMove(pt.x + 5, pt.y + 5);
+    wxYield();
+
     sim.MouseMove(pt.x + 50, pt.y + 50);
     wxYield();
 
