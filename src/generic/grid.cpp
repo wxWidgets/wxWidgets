@@ -10948,7 +10948,7 @@ wxGridBlocks wxGrid::GetSelectedBlocks() const
     if ( !m_selection )
         return wxGridBlocks();
 
-    const wxVectorGridBlockCoords& blocks = m_selection->GetBlocks();
+    const wxGridBlockCoordsVector& blocks = m_selection->GetBlocks();
     return wxGridBlocks(blocks.begin(), blocks.end());
 }
 

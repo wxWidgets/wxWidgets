@@ -19,7 +19,6 @@
 
 #include "wx/vector.h"
 
-typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
 
 // Note: for all eventType arguments of the methods of this class wxEVT_NULL
 //       may be passed to forbid events generation completely.
@@ -109,7 +108,7 @@ public:
     wxArrayInt GetRowSelection() const;
     wxArrayInt GetColSelection() const;
 
-    wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
+    wxGridBlockCoordsVector& GetBlocks() { return m_selection; }
 
     void EndSelecting();
     void CancelSelecting();
@@ -136,7 +135,7 @@ private:
     // We don't currently check if the new block is contained by several
     // existing blocks, as this would be more difficult and doesn't seem to be
     // really needed in practice.
-    void MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
+    void MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                          const wxGridBlockCoords& block);
 
     // All currently selected blocks. We expect there to be a relatively small
@@ -146,7 +145,7 @@ private:
     // Selection may be empty, but if it isn't, the last block is special, as
     // it is the current block, which is affected by operations such as
     // extending the current selection from keyboard.
-    wxVectorGridBlockCoords             m_selection;
+    wxGridBlockCoordsVector             m_selection;
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
