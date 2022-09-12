@@ -119,7 +119,7 @@ private:
     {
         SelectBlock(block.GetTopRow(), block.GetLeftCol(),
                     block.GetBottomRow(), block.GetRightCol(),
-                    wxKeyboardState(), false);
+                    wxKeyboardState(), wxEVT_NULL);
     }
 
     // Really select the block and don't check for the current selection mode.
