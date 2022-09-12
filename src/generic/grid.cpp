@@ -11144,7 +11144,7 @@ wxArrayInt wxGrid::GetSelectedCols() const
 
 void wxGrid::ClearSelection()
 {
-    if ( m_selection )
+    if ( IsSelection() )
         m_selection->ClearSelection();
 }
 
