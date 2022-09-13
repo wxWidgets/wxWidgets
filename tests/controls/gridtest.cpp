@@ -659,6 +659,12 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     if ( !EnableUITests() )
         return;
 
+#ifdef __WXGTK20__
+    // Works locally, but not when run on Travis CI.
+    if ( IsAutomaticTest() )
+        return;
+#endif
+
     EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECTED);
 
     wxUIActionSimulator sim;
