@@ -19,6 +19,8 @@
 
 #include "wx/vector.h"
 
+wxDEPRECATED_MSG("use wxGridBlockCoordsVector instead")
+typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
 
 // Note: for all eventType arguments of the methods of this class wxEVT_NULL
 //       may be passed to forbid events generation completely.
