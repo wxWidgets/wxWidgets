@@ -556,15 +556,18 @@ void wxAppConsoleBase::ProcessPendingEvents()
         // from it when they don't have any more pending events
         while (!m_handlersWithPendingEvents.IsEmpty())
         {
-            // In ProcessPendingEvents(), new handlers might be added
-            // and we can safely leave the critical section here.
-            wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
-
             // NOTE: we always call ProcessPendingEvents() on the first event handler
             //       with pending events because handlers auto-remove themselves
             //       from this list (see RemovePendingEventHandler) if they have no
             //       more pending events.
-            m_handlersWithPendingEvents[0]->ProcessPendingEvents();
+            wxEvtHandler* const handler = m_handlersWithPendingEvents[0];
+
+            // In ProcessPendingEvents(), new handlers might be added
+            // and we can safely leave the critical section here as we're not
+            // accessing m_handlersWithPendingEvents while we don't hold it.
+            wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+            handler->ProcessPendingEvents();
 
             wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
         }
