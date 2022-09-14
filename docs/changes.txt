@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 All (GUI):
 
 - Improve wxWebView::RunScriptAsync() performance (Tobias Taschner, #22781).
+- Fix data race when processing events generated in a worker thread.
 
 
 3.2.1: (released 2022-09-09)
