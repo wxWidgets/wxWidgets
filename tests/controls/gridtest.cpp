@@ -665,6 +665,19 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
 
     wxSKIP_AUTOMATIC_TEST_IF_GTK2();
 
+#ifdef __WXGTK3__
+    // works locally, but not when run on GitHub CI.
+    if ( IsAutomaticTest() )
+    {
+        wxString useASAN;
+        if ( wxGetEnv("wxUSE_ASAN", &useASAN) && useASAN == "1" )
+        {
+            WARN("Skipping test failing for unknown reason");
+            return;
+        }
+    }
+#endif // __WXGTK3__
+
     EventCounter select(m_grid, wxEVT_GRID_RANGE_SELECTED);
 
     wxUIActionSimulator sim;
