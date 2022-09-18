@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Fix wx-config generation in CMake builds (Maarten Bent, #22806).
+- Fix compilation of code using wxTransformMatrix with recent gcc (#22790).
 
 All (GUI):
 

@@ -38,10 +38,8 @@
 //  At all times m_isIdentity is set if the matrix itself is an Identity matrix.
 //  It is used where possible to optimize calculations.
 class
-#ifndef WXBUILDING
-wxDEPRECATED_MSG("use wxAffineMatrix2D instead")
-#endif
-WXDLLIMPEXP_CORE wxTransformMatrix: public wxObject
+wxDEPRECATED_EXPORT_CORE("use wxAffineMatrix2D instead")
+wxTransformMatrix: public wxObject
 {
 public:
     wxTransformMatrix();
