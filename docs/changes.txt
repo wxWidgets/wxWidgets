@@ -235,6 +235,10 @@ Changes in behaviour which may result in build errors
 3.2.2: (released 202?-??-??)
 ----------------------------
 
+All:
+
+- Fix wx-config generation in CMake builds (Maarten Bent, #22806).
+
 All (GUI):
 
 - Improve wxWebView::RunScriptAsync() performance (Tobias Taschner, #22781).
