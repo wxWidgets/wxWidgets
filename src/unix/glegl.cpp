@@ -445,6 +445,9 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
     int scale = gtk_widget_get_scale_factor(widget);
     wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
                          win->m_height * scale, 0, 0);
+    int x, y;
+    gdk_window_get_origin(win->GTKGetDrawingWindow(), &x, &y);
+    wl_subsurface_set_position(win->m_wlSubsurface, x, y);
 }
 
 } // extern "C"
