@@ -21,7 +21,37 @@ public:
 
     virtual ~wxCOMBaseStreamAdapter() { }
 
-    DECLARE_IUNKNOWN_METHODS;
+    // IUnknown
+    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) wxOVERRIDE
+    {
+        if (riid == IID_IUnknown ||
+            riid == IID_ISequentialStream ||
+            riid == IID_IStream)
+        {
+            *ppv = this;
+            AddRef();
+            return S_OK;
+        }
+
+        *ppv = NULL;
+        return E_NOINTERFACE;
+    }
+
+    STDMETHODIMP_(ULONG) AddRef() wxOVERRIDE
+    {
+        return ++m_cRef;
+    }
+
+    STDMETHODIMP_(ULONG) Release() wxOVERRIDE
+    {
+        if (--m_cRef == wxAutoULong(0))
+        {
+                delete this;
+                return 0;
+        }
+        else
+            return m_cRef;
+    }
 
     // IStream
     virtual HRESULT STDMETHODCALLTYPE Seek(
@@ -110,6 +140,8 @@ protected:
 
         return wxFromStart;
     }
+private:
+    wxAutoULong m_cRef;
 };
 
 class wxCOMInputStreamAdapter : public wxCOMBaseStreamAdapter
@@ -167,13 +199,5 @@ public:
     }
 
 };
-
-BEGIN_IID_TABLE(wxCOMBaseStreamAdapter)
-ADD_IID(Unknown)
-ADD_IID(SequentialStream)
-ADD_IID(Stream)
-END_IID_TABLE;
-
-IMPLEMENT_IUNKNOWN_METHODS(wxCOMBaseStreamAdapter);
 
 #endif // WX_COMSTREAM_H
