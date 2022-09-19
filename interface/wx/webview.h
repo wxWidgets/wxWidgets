@@ -192,7 +192,8 @@ public:
     virtual wxInputStream* GetData() const = 0;
 
     /**
-        @return The body data of the request as a string.
+        @return The body data of the request as a string. The returned string
+            is empty if the supplied @c conv doesn't match the encoding.
     */
     virtual wxString GetDataString(const wxMBConv& conv = wxConvUTF8) const;
 
@@ -571,7 +572,8 @@ public:
     It is available for Windows 7 and newer.
 
     This backend does not support custom schemes. When using handlers see
-    wxWebViewHandler::SetVirtualHost() for more details on how to use handlers.
+    wxWebViewHandler::SetVirtualHost() for more details on how to access
+    handler provided URLs.
 
     This backend is not enabled by default, to build it follow these steps:
     - Visual Studio 2015 or newer, or GCC/Clang with c++11 is required
