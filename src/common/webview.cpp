@@ -64,7 +64,7 @@ wxString wxWebViewHandlerRequest::GetDataString(const wxMBConv& conv) const
     size_t length = data->GetLength();
     wxMemoryBuffer buffer;
     data->ReadAll(buffer.GetWriteBuf(length), length);
-    wxString dataStr((const char*) buffer.GetData(), conv, length);
+    wxString dataStr(static_cast<const char*>(buffer.GetData()), conv, length);
     return dataStr;
 }
 

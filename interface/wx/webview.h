@@ -278,6 +278,7 @@ public:
             String value of the header
     */
     virtual void SetHeader(const wxString& name, const wxString& value) = 0;
+
     /**
         Finishes the request with binary data.
 
@@ -454,7 +455,7 @@ public:
     /**
         When using the edge backend handler urls are https urls with a
         virtual host. As default @c name.wxsite is used as the virtual hostname.
-        If you customize this host use a non existing site (ideally a reserved
+        If you customize this host, use a non existing site (ideally a reserved
         subdomain of a domain you control). If @c localassests.domain.example is
         used the handlers content will be available under
         %https://localassets.domain.example/
