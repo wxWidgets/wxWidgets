@@ -76,9 +76,8 @@
     wxUnusedVar(index);
 
     NSMutableArray* matches = NULL;
-    NSString*       partialString;
-    
-    partialString = [[textView string] substringWithRange:charRange];
+    // NSString*       partialString;
+    // partialString = [[textView string] substringWithRange:charRange];
     matches       = [NSMutableArray array];
     
     // wxTextWidgetImpl* impl = (wxTextWidgetImpl* ) wxWidgetImpl::FindFromWXWidget( self );

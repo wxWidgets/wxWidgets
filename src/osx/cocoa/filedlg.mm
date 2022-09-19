@@ -494,14 +494,7 @@ int wxFileDialog::ShowModal()
     m_fileNames.Clear();
     m_paths.Clear();
 
-    wxNonOwnedWindow* parentWindow = NULL;
     int returnCode = -1;
-
-    if (GetParent())
-    {
-        parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
-    }
-
 
     NSArray* types = GetTypesFromFilter( m_wildCard, m_filterNames, m_filterExtensions, m_currentExtensions ) ;
 
