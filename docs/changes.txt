@@ -245,6 +245,10 @@ All (GUI):
 - Improve wxWebView::RunScriptAsync() performance (Tobias Taschner, #22781).
 - Fix data race when processing events generated in a worker thread.
 
+wxGTK:
+
+- Fix missing X11 libraries when linking with wxGTK2 statically (#22813).
+
 
 3.2.1: (released 2022-09-09)
 ----------------------------
