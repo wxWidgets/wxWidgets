@@ -132,3 +132,42 @@ add_subdirectory(libs/wxWidgets)
 add_executable(myapp myapp.cpp)
 target_link_libraries(myapp wx::net wx::core wx::base)
 ~~~
+
+Note that you can predefine the build options before using `add_subdirectory()`
+by either defining them on command line with e.g. `-DwxBUILD_SHARED=OFF`, or by
+adding
+~~~~
+set(wxBUILD_SHARED OFF)
+~~~~
+to your *CMakeLists.txt* if you want to always use static wxWidgets libraries.
+
+
+Using XRC
+---------
+
+To embed XRC resources into your application, you need to define a custom
+command to generate a source file using `wxrc`. When using an installed version
+of wxWidgets you can just use `wxrc` directly, but when using wxWidgets from a
+subdirectory you need to ensure that it is built first and use the correct path
+to it, e.g.:
+
+~~~~{.cmake}
+# One or more XRC files containing your resources.
+set(xrc_files ${CMAKE_CURRENT_SOURCE_DIR}/resource.xrc)
+
+# Generate this file somewhere under the build directory.
+set(resource_cpp ${CMAKE_CURRENT_BINARY_DIR}/resource.cpp)
+
+# Not needed with the installed version, just use "wxrc".
+set(wxrc $<TARGET_FILE:wxrc>)
+
+add_custom_command(
+    OUTPUT ${resource_cpp}
+    COMMAND ${wxrc} -c -o ${resource_cpp} ${xrc_files}
+    DEPENDS ${xrc_files}
+    DEPENDS wxrc                        # Not needed with the installed version.
+    COMMENT "Compiling XRC resources"
+)
+
+target_sources(myapp PRIVATE ${resource_cpp})
+~~~~
