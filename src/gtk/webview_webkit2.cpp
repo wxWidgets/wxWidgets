@@ -34,8 +34,12 @@
 // Helper function to get string from Webkit JS result
 bool wxGetStringFromJSResult(WebKitJavascriptResult* js_result, wxString* output)
 {
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     JSGlobalContextRef context = webkit_javascript_result_get_global_context(js_result);
     JSValueRef value = webkit_javascript_result_get_value(js_result);
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     JSValueRef exception = NULL;
     wxJSStringRef js_value

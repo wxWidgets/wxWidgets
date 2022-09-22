@@ -352,7 +352,11 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 
         GtkStyleContext* sc = gtk_widget_get_style_context(m_widget);
         gtk_style_context_save(sc);
+
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_style_context_add_region(sc, "tab", GtkRegionFlags(0));
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+
         gtk_style_context_add_class(sc, "top");
         gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &b);
         sizeTabMax.IncBy(b.left + b.right, b.top + b.bottom);

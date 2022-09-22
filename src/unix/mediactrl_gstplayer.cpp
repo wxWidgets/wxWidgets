@@ -362,7 +362,9 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // Turn off double-buffering so that
     // so it doesn't draw over the video and cause sporadic
     // disappearances of the video
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_widget_set_double_buffered(m_ctrl->m_wxwindow, FALSE);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 #endif
 
     // don't erase the background of our control window
