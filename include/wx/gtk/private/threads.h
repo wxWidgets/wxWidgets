@@ -11,6 +11,20 @@
 #define _WX_GTK_PRIVATE_THREADS_H_
 
 // ----------------------------------------------------------------------------
+// Redefine GDK functions to avoiding deprecation warnings
+// ----------------------------------------------------------------------------
+
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+static inline void wx_gdk_threads_enter() { gdk_threads_enter(); }
+#define gdk_threads_enter wx_gdk_threads_enter
+
+static inline void wx_gdk_threads_leave() { gdk_threads_leave(); }
+#define gdk_threads_leave wx_gdk_threads_leave
+
+wxGCC_WARNING_RESTORE(deprecated-declarations)
+
+// ----------------------------------------------------------------------------
 // RAII wrapper for acquiring/leaving GDK lock in ctor/dtor
 // ----------------------------------------------------------------------------
 
