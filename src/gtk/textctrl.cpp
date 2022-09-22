@@ -31,6 +31,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/threads.h"
 
 #if wxUSE_SPELLCHECK && defined(__WXGTK3__)
 extern "C" {
@@ -1208,12 +1209,11 @@ void wxTextCtrl::GTKAfterLayout()
 extern "C" {
 static gboolean afterLayout(void* data)
 {
-    gdk_threads_enter();
+    wxGDKThreadsLock threadsLock;
 
     wxTextCtrl* win = static_cast<wxTextCtrl*>(data);
     win->GTKAfterLayout();
 
-    gdk_threads_leave();
     return false;
 }
 }

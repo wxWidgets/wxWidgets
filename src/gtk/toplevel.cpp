@@ -39,6 +39,7 @@
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/backend.h"
+#include "wx/gtk/private/threads.h"
 
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
@@ -596,14 +597,14 @@ static gboolean request_frame_extents_timeout(void* data)
 {
     // WM support for _NET_REQUEST_FRAME_EXTENTS is broken
     gs_requestFrameExtentsStatus = RFE_STATUS_BROKEN;
-    gdk_threads_enter();
+
+    wxGDKThreadsLock threadsLock;
     wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
     win->m_netFrameExtentsTimerId = 0;
     wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
     wxGetFrameExtents(gtk_widget_get_window(win->m_widget),
         &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
     win->GTKUpdateDecorSize(decorSize);
-    gdk_threads_leave();
     return false;
 }
 }
