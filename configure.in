@@ -8183,12 +8183,12 @@ elif test "$GXX" = yes ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
     fi
 
-    dnl when building using GTK+ 3 or Cocoa we currently get tons of deprecation
+    dnl when building using Cocoa we currently get tons of deprecation
     dnl warnings from the standard headers -- disable them as we already know
     dnl that they're deprecated but we still have to use them to support older
     dnl toolkit versions and leaving this warning enabled prevents seeing any
     dnl other ones
-    if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
+    if test "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
 
         dnl CXXWARNINGS is not used for Objective-C++ code compilation, but we
