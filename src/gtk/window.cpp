@@ -1863,9 +1863,15 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 #else
             gdk_window_at_pointer(NULL, NULL);
 #endif
+        GdkDisplay* display = winUnderMouse
+            ? gdk_window_get_display(winUnderMouse)
+            : NULL;
+        if ( !display )
+            display = gdk_display_get_default();
+
         // This seems to be necessary and actually been added to
         // GDK itself in version 2.0.X
-        gdk_flush();
+        gdk_display_flush(display);
 
         bool hasMouse = winUnderMouse == gdk_event->window;
         if ( hasMouse != g_captureWindowHasMouse )
