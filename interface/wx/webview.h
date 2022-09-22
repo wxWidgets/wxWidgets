@@ -520,7 +520,7 @@ public:
         }
         @endcode
 
-        @note This is only usesd by macOS and the Edge backend.
+        @note This is only used by macOS and the Edge backend.
 
         @see GetFile()
         @since 3.3.0
@@ -671,8 +671,8 @@ public:
 
     wxWebView supports the registering of custom scheme handlers, for example
     @c file or @c http. To do this create a new class which inherits from
-    wxWebViewHandler, where wxWebHandler::GetFile() returns a pointer to a
-    wxFSFile which represents the given url or wxWebHandler::StartRequest() for
+    wxWebViewHandler, where wxWebViewHandler::GetFile() returns a pointer to a
+    wxFSFile which represents the given url or wxWebViewHandler::StartRequest() for
     more complex requests. You can then register your handler
     with RegisterHandler() it will be called for all pages and resources.
 
