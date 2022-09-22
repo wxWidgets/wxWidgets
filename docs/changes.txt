@@ -248,6 +248,7 @@ All (GUI):
 wxGTK:
 
 - Fix missing X11 libraries when linking with wxGTK2 statically (#22813).
+- Fix compilation with GTK 3.22.z and z < 25 (#22816).
 
 
 3.2.1: (released 2022-09-09)
