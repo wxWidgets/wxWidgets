@@ -11,6 +11,18 @@
 #define _WX_GTK_PRIVATE_CAIRO_H_
 
 // ----------------------------------------------------------------------------
+// Redefine GDK function to avoiding deprecation warnings
+// ----------------------------------------------------------------------------
+
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+static inline
+cairo_t* wx_gdk_cairo_create(GdkWindow* w) { return gdk_cairo_create(w); }
+#define gdk_cairo_create wx_gdk_cairo_create
+
+wxGCC_WARNING_RESTORE(deprecated-declarations)
+
+// ----------------------------------------------------------------------------
 // RAII helper creating a Cairo context in ctor and destroying it in dtor
 // ----------------------------------------------------------------------------
 
