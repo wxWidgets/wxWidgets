@@ -158,8 +158,7 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
 
     if ( !attribList )
     {
-        // Default visual attributes used in wx versions before wx3.1
-        dispAttrs.AddDefaultsForWXBefore31();
+        dispAttrs.Defaults();
         dispAttrs.EndList();
         if ( ctxAttrs )
             ctxAttrs->EndList();

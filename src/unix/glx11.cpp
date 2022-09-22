@@ -433,15 +433,6 @@ wxGLAttributes& wxGLAttributes::Defaults()
     return *this;
 }
 
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    // ParseAttribList() will add EndList(), don't do it now
-    DoubleBuffer();
-    if ( wxGLCanvasX11::GetGLXVersion() < 13 )
-        RGBA().Depth(1).MinRGBA(1, 1, 1, 0);
-    // For GLX >= 1.3 its defaults (GLX_RGBA_BIT and GLX_WINDOW_BIT) are OK
-}
-
 
 // ============================================================================
 // wxGLContext implementation

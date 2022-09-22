@@ -275,12 +275,6 @@ wxGLAttributes& wxGLAttributes::Defaults()
     return *this;
 }
 
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    // ParseAttribList() will add EndList(), don't do it now
-    DoubleBuffer();
-}
-
 
 // ============================================================================
 // wxGLContext implementation

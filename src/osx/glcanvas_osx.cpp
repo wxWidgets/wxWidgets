@@ -356,14 +356,6 @@ wxGLAttributes& wxGLAttributes::Defaults()
     return *this;
 }
 
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    // ParseAttribList() will add EndList(), don't do it now
-    DoubleBuffer();
-    // Negative value will keep its buffer untouched
-    BufferSize(8).Depth(8).MinRGBA(-1, -1, -1, 0);
-}
-
 
 // ----------------------------------------------------------------------------
 // wxGLContext
