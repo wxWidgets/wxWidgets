@@ -92,6 +92,37 @@ enum wxWebViewUserScriptInjectionTime
     wxWEBVIEW_INJECT_AT_DOCUMENT_END
 };
 
+class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerRequest
+{
+public:
+    virtual ~wxWebViewHandlerRequest() { }
+    virtual wxString GetRawURI() const = 0;
+    virtual wxString GetURI() const { return GetRawURI(); }
+    virtual wxInputStream* GetData() const = 0;
+    virtual wxString GetDataString(const wxMBConv& conv = wxConvUTF8) const;
+    virtual wxString GetMethod() const = 0;
+    virtual wxString GetHeader(const wxString& name) const = 0;
+};
+
+class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerResponseData
+{
+public:
+    virtual ~wxWebViewHandlerResponseData() { }
+    virtual wxInputStream* GetStream() = 0;
+};
+
+class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerResponse
+{
+public:
+    virtual ~wxWebViewHandlerResponse() { }
+    virtual void SetStatus(int status) = 0;
+    virtual void SetContentType(const wxString& contentType) = 0;
+    virtual void SetHeader(const wxString& name, const wxString& value) = 0;
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) = 0;
+    virtual void Finish(const wxString& text, const wxMBConv& conv = wxConvUTF8);
+    virtual void FinishWithError() = 0;
+};
+
 //Base class for custom scheme handlers
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 {
@@ -100,12 +131,17 @@ public:
         : m_scheme(scheme), m_securityURL() {}
     virtual ~wxWebViewHandler() {}
     virtual wxString GetName() const { return m_scheme; }
-    virtual wxFSFile* GetFile(const wxString &uri) = 0;
+    virtual wxFSFile* GetFile(const wxString &uri);
     virtual void SetSecurityURL(const wxString& url) { m_securityURL = url; }
     virtual wxString GetSecurityURL() const { return m_securityURL; }
+    virtual void SetVirtualHost(const wxString& host) { m_virtualHost = host; }
+    virtual wxString GetVirtualHost() const;
+    virtual void StartRequest(const wxWebViewHandlerRequest& request,
+                              wxSharedPtr<wxWebViewHandlerResponse> response);
 private:
     wxString m_scheme;
     wxString m_securityURL;
+    wxString m_virtualHost;
 };
 
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];

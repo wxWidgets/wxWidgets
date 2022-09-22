@@ -13,6 +13,8 @@
 
 
 #include "wx/webview.h"
+#include "wx/filesys.h"
+#include "wx/mstream.h"
 
 #if defined(__WXOSX__)
 #include "wx/osx/webview_webkit.h"
@@ -51,6 +53,92 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
+
+// wxWebViewHandlerRequest
+wxString wxWebViewHandlerRequest::GetDataString(const wxMBConv& conv) const
+{
+    wxInputStream* data = GetData();
+    if (!data)
+        return wxString();
+
+    size_t length = data->GetLength();
+    wxMemoryBuffer buffer;
+    data->ReadAll(buffer.GetWriteBuf(length), length);
+    wxString dataStr(static_cast<const char*>(buffer.GetData()), conv, length);
+    return dataStr;
+}
+
+// wxWebViewHandlerResponseDataStream
+class wxWebViewHandlerResponseDataString : public wxWebViewHandlerResponseData
+{
+public:
+    wxWebViewHandlerResponseDataString(const wxCharBuffer& data): m_data(data)
+    {
+        m_stream = new wxMemoryInputStream(m_data, m_data.length());
+    }
+
+    ~wxWebViewHandlerResponseDataString() { delete m_stream; }
+
+    virtual wxInputStream* GetStream() wxOVERRIDE
+    {
+        return m_stream;
+    }
+
+    wxCharBuffer m_data;
+    wxInputStream* m_stream;
+};
+
+// wxWebViewHandlerResponse
+void wxWebViewHandlerResponse::Finish(const wxString& text,
+    const wxMBConv& conv)
+{
+    Finish(wxSharedPtr<wxWebViewHandlerResponseData>(
+        new wxWebViewHandlerResponseDataString(text.mb_str(conv))));
+}
+
+// wxWebViewHandlerResponseDataFile
+class wxWebViewHandlerResponseDataFile : public wxWebViewHandlerResponseData
+{
+public:
+    wxWebViewHandlerResponseDataFile(wxFSFile* file): m_file(file) { }
+
+    ~wxWebViewHandlerResponseDataFile() { delete m_file; }
+
+    virtual wxInputStream* GetStream() wxOVERRIDE
+    { return m_file->GetStream(); }
+
+    wxFSFile* m_file;
+};
+
+// wxWebViewHandler
+wxString wxWebViewHandler::GetVirtualHost() const
+{
+    if (m_virtualHost.empty())
+        return GetName() + ".wxsite";
+    else
+        return m_virtualHost;
+}
+
+wxFSFile* wxWebViewHandler::GetFile(const wxString& WXUNUSED(uri))
+{
+    return NULL;
+}
+
+void wxWebViewHandler::StartRequest(const wxWebViewHandlerRequest& request,
+                                    wxSharedPtr<wxWebViewHandlerResponse> response)
+{
+    wxFSFile* file = GetFile(request.GetURI());
+    if (file)
+    {
+        response->SetContentType(file->GetMimeType());
+        response->Finish(wxSharedPtr<wxWebViewHandlerResponseData>(
+            new wxWebViewHandlerResponseDataFile(file)));
+    }
+    else
+        response->FinishWithError();
+}
+
+// wxWebView
 
 wxStringWebViewFactoryMap wxWebView::m_factoryMap;
 

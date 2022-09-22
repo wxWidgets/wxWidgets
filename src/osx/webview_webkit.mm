@@ -30,6 +30,7 @@
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
 #include "wx/msgdlg.h"
+#include "wx/mstream.h"
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
 
@@ -847,6 +848,107 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 @end
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
+
+class wxWebViewWebKitHandlerRequest: public wxWebViewHandlerRequest
+{
+public:
+    wxWebViewWebKitHandlerRequest(NSURLRequest* request):
+        m_data(NULL),
+        m_request(request)
+    { }
+
+    ~wxWebViewWebKitHandlerRequest()
+    { wxDELETE(m_data); }
+
+    virtual wxString GetRawURI() const wxOVERRIDE
+    { return wxCFStringRef::AsString(m_request.URL.absoluteString); }
+
+    virtual wxInputStream* GetData() const wxOVERRIDE
+    {
+        if (!m_data && m_request.HTTPBody)
+            m_data = new wxMemoryInputStream(m_request.HTTPBody.bytes, m_request.HTTPBody.length);
+
+        return m_data;
+    }
+
+    virtual wxString GetMethod() const wxOVERRIDE
+    { return wxCFStringRef::AsString(m_request.HTTPMethod); }
+
+    virtual wxString GetHeader(const wxString& name) const wxOVERRIDE
+    {
+        return wxCFStringRef::AsString(
+            [m_request valueForHTTPHeaderField:wxCFStringRef(name).AsNSString()]);
+    }
+
+    mutable wxInputStream* m_data;
+    NSURLRequest* m_request;
+};
+
+class API_AVAILABLE(macos(10.13)) wxWebViewWebkitHandlerResponse: public wxWebViewHandlerResponse
+{
+public:
+    wxWebViewWebkitHandlerResponse(id<WKURLSchemeTask> task):
+        m_status(200),
+        m_task([task retain])
+    {
+        m_headers = [[NSMutableDictionary alloc] init];
+    }
+
+    ~wxWebViewWebkitHandlerResponse()
+    {
+        [m_headers release];
+        [m_task release];
+    }
+
+    virtual void SetStatus(int status) wxOVERRIDE
+    { m_status = status; }
+
+    virtual void SetContentType(const wxString& contentType) wxOVERRIDE
+    { SetHeader("Content-Type", contentType); }
+
+    virtual void SetHeader(const wxString& name, const wxString& value) wxOVERRIDE
+    {
+        [m_headers setValue:wxCFStringRef(value).AsNSString()
+                     forKey:wxCFStringRef(name).AsNSString()];
+    }
+
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) wxOVERRIDE
+    {
+        m_data = data;
+        wxInputStream* stream = data->GetStream();
+        size_t length = stream->GetLength();
+        NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:m_task.request.URL
+                                                                  statusCode:m_status
+                                                                 HTTPVersion:nil
+                                                                headerFields:m_headers];
+        [m_task didReceiveResponse:response];
+        [response release];
+
+        //Load the data, we malloc it so it is tidied up properly
+        void* buffer = malloc(length);
+        stream->Read(buffer, length);
+        NSData *taskData = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
+        [m_task didReceiveData:taskData];
+        [taskData release];
+
+        [m_task didFinish];
+    }
+
+    virtual void FinishWithError() wxOVERRIDE
+    {
+        NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
+                            code:NSURLErrorFileDoesNotExist
+                            userInfo:nil];
+        [m_task didFailWithError:error];
+        [error release];
+    }
+
+    int m_status;
+    NSMutableDictionary* m_headers;
+    id<WKURLSchemeTask> m_task;
+    wxSharedPtr<wxWebViewHandlerResponseData> m_data;
+};
+
 @implementation WebViewCustomProtocol
 
 - (id)initWithHandler:(wxWebViewHandler *)handler
@@ -858,49 +960,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 - (void)webView:(WKWebView *)webView startURLSchemeTask:(id<WKURLSchemeTask>)urlSchemeTask
 WX_API_AVAILABLE_MACOS(10, 13)
 {
-    NSURLRequest *request = urlSchemeTask.request;
-    NSString* path = [[request URL] absoluteString];
-
-    wxString wxpath = wxCFStringRef::AsString(path);
-
-    wxFSFile* file = m_handler->GetFile(wxpath);
-
-    if (!file)
-    {
-        NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
-                            code:NSURLErrorFileDoesNotExist
-                            userInfo:nil];
-
-        [urlSchemeTask didFailWithError:error];
-
-        [error release];
-
-        return;
-    }
-
-    size_t length = file->GetStream()->GetLength();
-
-
-    NSURLResponse *response =  [[NSURLResponse alloc] initWithURL:[request URL]
-                               MIMEType:wxCFStringRef(file->GetMimeType()).AsNSString()
-                               expectedContentLength:length
-                               textEncodingName:nil];
-
-    //Load the data, we malloc it so it is tidied up properly
-    void* buffer = malloc(length);
-    file->GetStream()->Read(buffer, length);
-    NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
-
-    //Set the data
-    [urlSchemeTask didReceiveResponse:response];
-    [urlSchemeTask didReceiveData:data];
-
-    //Notify that we have finished
-    [urlSchemeTask didFinish];
-
-    [data release];
-
-    [response release];
+    wxWebViewWebKitHandlerRequest request(urlSchemeTask.request);
+    wxSharedPtr<wxWebViewHandlerResponse> response(new wxWebViewWebkitHandlerResponse(urlSchemeTask));
+    m_handler->StartRequest(request, response);
 }
 
 - (void)webView:(WKWebView *)webView stopURLSchemeTask:(id<WKURLSchemeTask>)urlSchemeTask

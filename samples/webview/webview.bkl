@@ -17,4 +17,10 @@
         </if>
     </exe>
 
+    <wx-data id="data">
+        <files>
+            handler_advanced.html
+        </files>
+    </wx-data>
+
 </makefile>
