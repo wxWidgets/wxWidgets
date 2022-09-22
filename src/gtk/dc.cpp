@@ -21,6 +21,7 @@
 #include "wx/gtk/dc.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/cairo.h"
 
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner)
     : wxGCDCImpl(owner)
@@ -419,11 +420,10 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
     }
     if (gdkWindow)
     {
-        cairo_t* cr = gdk_cairo_create(gdkWindow);
+        wxGTKImpl::CairoContext cr(gdkWindow);
         SetLayoutDirection(wxLayout_Default);
         AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-        cairo_destroy(cr);
         gc->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext(gc);
         GtkAllocation a;
@@ -468,11 +468,10 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     }
     if (gdkWindow)
     {
-        cairo_t* cr = gdk_cairo_create(gdkWindow);
+        wxGTKImpl::CairoContext cr(gdkWindow);
         SetLayoutDirection(wxLayout_Default);
         AdjustForRTL(cr);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-        cairo_destroy(cr);
         gc->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext(gc);
         if (!gtk_widget_get_has_window(widget))
@@ -524,9 +523,8 @@ wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
     GdkWindow* window = gdk_get_default_root_window();
     InitSize(window);
 
-    cairo_t* cr = gdk_cairo_create(window);
+    wxGTKImpl::CairoContext cr(window);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-    cairo_destroy(cr);
     gc->SetContentScaleFactor(m_contentScaleFactor);
     SetGraphicsContext(gc);
 }
