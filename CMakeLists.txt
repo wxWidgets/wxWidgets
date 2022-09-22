@@ -44,7 +44,7 @@ include(build/cmake/policies.cmake NO_POLICY_SCOPE)
 
 # Initialize variables for quick access to wx root dir in sub dirs
 set(wxSOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(wxBINARY_DIR ${CMAKE_BINARY_DIR})
+set(wxBINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
 
 # parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION

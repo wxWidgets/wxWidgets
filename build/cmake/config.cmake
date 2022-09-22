@@ -13,15 +13,15 @@ set(TOOLCHAIN_FULLNAME ${wxBUILD_FILE_ID})
 
 macro(wx_configure_script input output)
     # variables used in wx-config-inplace.in
-    set(abs_top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
-    set(abs_top_builddir ${CMAKE_CURRENT_BINARY_DIR})
+    set(abs_top_srcdir ${wxSOURCE_DIR})
+    set(abs_top_builddir ${wxBINARY_DIR})
 
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/${input}
-        ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
+        ${wxSOURCE_DIR}/${input}
+        ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         ESCAPE_QUOTES @ONLY NEWLINE_STYLE UNIX)
     file(COPY
-        ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
+        ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         DESTINATION ${wxCONFIG_DIR}
         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
             GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
@@ -80,8 +80,8 @@ function(wx_write_config_inplace)
     execute_process(
         COMMAND
         "${CMAKE_COMMAND}" -E ${COPY_CMD}
-        "${CMAKE_CURRENT_BINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
-        "${CMAKE_CURRENT_BINARY_DIR}/wx-config"
+        "${wxBINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
+        "${wxBINARY_DIR}/wx-config"
         )
 endfunction()
 
