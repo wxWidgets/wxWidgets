@@ -705,25 +705,32 @@ typedef short int WXTYPE;
 #ifdef __cplusplus
 
 /*
-    Special macro used for the classes that are exported and deprecated.
+    wxDEPRECATED_EXPORT_CORE is a special macro used for the classes that are
+    exported and deprecated (but not when building the library itself, as this
+    would trigger warnings about using this class when implementing it).
+
     It exists because standard [[deprecated]] attribute can't be combined with
     legacy __attribute__((visibility)), but we can't use [[visibility]] instead
     of the latter because it can't be use in the same place in the declarations
     where we use WXDLLIMPEXP_CORE. So we define this special macro which uses
     the standard visibility attribute just where we can't do otherwise.
  */
-#ifdef wxHAS_DEPRECATED_ATTR
-    #if __has_cpp_attribute(gnu::visibility)
-        #define wxDEPRECATED_EXPORT_CORE(msg) \
-            [[deprecated(msg), gnu::visibility("default")]]
+#ifdef WXBUILDING
+    #define wxDEPRECATED_EXPORT_CORE(msg) WXDLLIMPEXP_CORE
+#else /* !WXBUILDING */
+    #ifdef wxHAS_DEPRECATED_ATTR
+        #if __has_cpp_attribute(gnu::visibility)
+            #define wxDEPRECATED_EXPORT_CORE(msg) \
+                [[deprecated(msg), gnu::visibility("default")]]
+        #endif
     #endif
-#endif
 
-#ifndef wxDEPRECATED_EXPORT_CORE
-    /* Fall back when nothing special is needed or available. */
-    #define wxDEPRECATED_EXPORT_CORE(msg) \
-        wxDEPRECATED_MSG(msg) WXDLLIMPEXP_CORE
-#endif
+    #ifndef wxDEPRECATED_EXPORT_CORE
+        /* Fall back when nothing special is needed or available. */
+        #define wxDEPRECATED_EXPORT_CORE(msg) \
+            wxDEPRECATED_MSG(msg) WXDLLIMPEXP_CORE
+    #endif
+#endif /* WXBUILDING/!WXBUILDING */
 
 #endif /* __cplusplus */
 
