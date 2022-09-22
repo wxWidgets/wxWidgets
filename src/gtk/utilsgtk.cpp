@@ -67,7 +67,7 @@ GdkWindow* wxGetTopLevelGDK();
 
 void wxBell()
 {
-    gdk_beep();
+    gdk_display_beep(gdk_display_get_default());
 }
 
 // ----------------------------------------------------------------------------
