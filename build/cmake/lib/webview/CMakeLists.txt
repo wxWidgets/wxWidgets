@@ -50,7 +50,7 @@ elseif(WXMSW)
         set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
         set(WEBVIEW2_SHA256 "6a34bb553e18cfac7297b4031f3eac2558e439f8d16a45945c22945ac404105d")
 
-        set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
+        set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
 
         if(NOT EXISTS ${WEBVIEW2_PACKAGE_DIR})
             unset(WEBVIEW2_PACKAGE_DIR CACHE)
@@ -67,11 +67,11 @@ elseif(WXMSW)
             set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
             file(DOWNLOAD
                 ${WEBVIEW2_URL}
-                ${CMAKE_BINARY_DIR}/webview2.nuget
+                ${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget
                 EXPECTED_HASH SHA256=${WEBVIEW2_SHA256})
             file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
             execute_process(COMMAND
-                "${CMAKE_COMMAND}" -E tar x "${CMAKE_BINARY_DIR}/webview2.nuget"
+                "${CMAKE_COMMAND}" -E tar x "${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget"
                 WORKING_DIRECTORY "${WEBVIEW2_PACKAGE_DIR}"
             )
         endif()
