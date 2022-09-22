@@ -1858,11 +1858,8 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     {
         // synthesise a mouse enter or leave event if needed
         GdkWindow* winUnderMouse =
-#ifdef __WXGTK3__
-            gdk_device_get_window_at_position(gdk_event->device, NULL, NULL);
-#else
-            gdk_window_at_pointer(NULL, NULL);
-#endif
+            wx_gdk_device_get_window_at_position(gdk_event->device, NULL, NULL);
+
         GdkDisplay* display = winUnderMouse
             ? gdk_window_get_display(winUnderMouse)
             : NULL;
@@ -5101,15 +5098,7 @@ void wxWindowGTK::WarpPointer( int x, int y )
     GdkDisplay* display = gtk_widget_get_display(m_widget);
     GdkScreen* screen = gtk_widget_get_screen(m_widget);
 #ifdef __WXGTK3__
-#ifdef __WXGTK4__
-    GdkSeat* seat = gdk_display_get_default_seat(display);
-    GdkDevice* device = gdk_seat_get_pointer(seat);
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    wxGCC_WARNING_RESTORE()
-#endif
+    GdkDevice* const device = wx_get_gdk_device_from_display(display);
     gdk_device_warp(device, screen, x, y);
 #else
 #ifdef GDK_WINDOWING_X11

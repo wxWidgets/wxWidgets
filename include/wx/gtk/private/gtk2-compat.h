@@ -554,6 +554,9 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
 }
 #define gtk_widget_get_preferred_size wx_gtk_widget_get_preferred_size
 
+#define wx_gdk_device_get_window_at_position(unused, win_x, win_y) \
+    gdk_window_at_pointer(win_x, win_y)
+
 #include <gdk/gdkkeysyms.h>
 
 #if defined(GDK_Alt_L) && !defined(GDK_KEY_Alt_L)
@@ -672,6 +675,9 @@ inline bool wx_is_at_least_gtk2(int minor)
 }
 
 #else // __WXGTK3__
+
+#define wx_gdk_device_get_window_at_position(device, win_x, win_y) \
+    gdk_device_get_window_at_position(device, win_x, win_y)
 
 // With GTK+ 3 we don't need to check for GTK+ 2 version and
 // gtk_check_version() would fail due to major version mismatch.
