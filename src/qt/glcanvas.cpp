@@ -327,10 +327,7 @@ wxGLAttributes& wxGLAttributes::Defaults()
     return *this;
 }
 
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    Defaults();
-}
+
 
 //---------------------------------------------------------------------------
 // wxGlContext
