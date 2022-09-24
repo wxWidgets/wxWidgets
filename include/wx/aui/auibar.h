@@ -40,6 +40,7 @@ enum wxAuiToolBarStyle
     // to be horizontal
     wxAUI_TB_HORIZONTAL    = 1 << 7,
     wxAUI_TB_PLAIN_BACKGROUND = 1 << 8,
+    wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN  = 1 << 9,
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
     wxAUI_TB_DEFAULT_STYLE = 0
@@ -602,6 +603,9 @@ public:
     wxBitmap GetToolBitmap(int toolId) const;
     void SetToolBitmap(int toolId, const wxBitmapBundle& bitmap);
 
+    wxBitmap GetToolDisabledBitmap(int toolId) const;
+    void SetToolDisabledBitmap(int toolId, const wxBitmapBundle& bitmap);
+
     wxString GetToolShortHelp(int toolId) const;
     void SetToolShortHelp(int toolId, const wxString& helpString);
 
@@ -663,6 +667,7 @@ protected:
     wxAuiToolBarArt* m_art;             // art provider
     wxBoxSizer* m_sizer;                // main sizer for toolbar
     wxAuiToolBarItem* m_actionItem;    // item that's being acted upon (pressed)
+    wxAuiToolBarItem* m_droppedItem;    // item that triggered a dropdown
     wxAuiToolBarItem* m_tipItem;       // item that has its tooltip shown
     wxBitmap m_bitmap;                  // double-buffer bitmap
     wxSizerItem* m_gripperSizerItem;

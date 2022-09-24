@@ -65,6 +65,13 @@ enum wxAuiToolBarStyle
     wxAUI_TB_PLAIN_BACKGROUND = 1 << 8,
 
     /**
+      Allow clicks on a item's button to close a transient popup window used as a drop-down window.
+
+      @since 3.1.7
+    */
+    wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN  = 1 << 9,
+
+    /**
        Shows the text alongside the icons, not vertically stacked.
     */
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),

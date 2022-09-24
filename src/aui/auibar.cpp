@@ -852,6 +852,7 @@ void wxAuiToolBar::Init()
     m_sizerElementCount = 0;
     m_actionPos = wxDefaultPosition;
     m_actionItem = NULL;
+    m_droppedItem = NULL;
     m_tipItem = NULL;
     m_art = new wxAuiDefaultToolBarArt;
     m_toolTextOrientation = wxAUI_TBTOOL_TEXT_BOTTOM;
@@ -1657,6 +1658,25 @@ void wxAuiToolBar::SetToolBitmap(int tool_id, const wxBitmapBundle& bitmap)
     if (tool)
     {
         tool->m_bitmap = bitmap;
+    }
+}
+
+wxBitmap wxAuiToolBar::GetToolDisabledBitmap(int tool_id) const
+{
+    wxAuiToolBarItem* tool = FindTool(tool_id);
+    wxASSERT_MSG(tool, wxT("can't find tool in toolbar item array"));
+    if (!tool)
+        return wxNullBitmap;
+
+    return tool->m_disabledBitmap.GetBitmapFor(this);
+}
+
+void wxAuiToolBar::SetToolDisabledBitmap(int tool_id, const wxBitmapBundle& bitmap)
+{
+    wxAuiToolBarItem* tool = FindTool(tool_id);
+    if (tool)
+    {
+        tool->m_disabledBitmap = bitmap;
     }
 }
 
@@ -2594,6 +2614,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
     m_dragging = false;
     m_actionPos = wxPoint(evt.GetX(), evt.GetY());
     m_actionItem = FindToolByPosition(evt.GetX(), evt.GetY());
+    m_droppedItem = NULL;
 
     if (m_actionItem)
     {
@@ -2626,14 +2647,16 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         // and not just the drop-down
         SetPressedItem(dropDownHit ? 0 : m_actionItem);
 
+        if(!GetEventHandler()->ProcessEvent(e) || e.GetSkipped())
+            CaptureMouse();
+        else if (m_windowStyle & wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN)
+            m_droppedItem = m_actionItem;
+
         if(dropDownHit)
         {
             m_actionPos = wxPoint(-1,-1);
             m_actionItem = NULL;
         }
-
-        if(!GetEventHandler()->ProcessEvent(e) || e.GetSkipped())
-            CaptureMouse();
 
         // Ensure hovered item is really ok, as mouse may have moved during
         //  event processing
@@ -2647,7 +2670,10 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 {
     if (!HasCapture())
-        return;
+    {
+        if (m_droppedItem == NULL) return;
+        else m_actionItem = m_droppedItem;
+    }
 
     SetPressedItem(NULL);
 
@@ -2663,7 +2689,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
         // OnCaptureLost() will be called now and this will reset all our state
         // tracking variables
-        ReleaseMouse();
+        if (HasCapture()) ReleaseMouse();
     }
     else
     {
@@ -2673,6 +2699,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
             wxCommandEvent e(wxEVT_MENU, m_actionItem->m_toolId);
             e.SetEventObject(this);
+            e.SetExtraLong(m_droppedItem ? 1 : 0);
 
             if (hitItem->m_kind == wxITEM_CHECK || hitItem->m_kind == wxITEM_RADIO)
             {
@@ -2691,7 +2718,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
             // we don't know what a handler might do. It could open up a popup
             // menu for example and that would make us lose our capture anyway.
 
-            ReleaseMouse();
+            if (HasCapture()) ReleaseMouse();
 
             GetEventHandler()->ProcessEvent(e);
 
@@ -2703,8 +2730,13 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
             DoIdleUpdate();
         }
         else
-            ReleaseMouse();
+            if (HasCapture()) ReleaseMouse();
     }
+
+    // reset member variables
+    m_actionPos = wxPoint(-1,-1);
+    m_actionItem = NULL;
+    m_droppedItem = NULL;
 }
 
 void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)

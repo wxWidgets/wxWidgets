@@ -283,8 +283,8 @@ WXImage wxOSXGetImageFromBundle(const wxBitmapBundle& bundle)
 }
 
 #ifdef wxHAS_SVG
-wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSize &sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSize &sizeDef, unsigned post)
 {
-    return wxBitmapBundle::FromSVGFile(wxFileName(wxStandardPaths::Get().GetResourcesDir(), name, "svg").GetFullPath(), sizeDef);
+    return wxBitmapBundle::FromSVGFile(wxFileName(wxStandardPaths::Get().GetResourcesDir(), name, "svg").GetFullPath(), sizeDef, post);
 }
 #endif // #ifdef wxHAS_SVG

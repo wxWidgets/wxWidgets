@@ -335,7 +335,7 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
 #ifdef wxHAS_SVG
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSize& sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSize& sizeDef, unsigned post)
 {
     // Currently we hardcode RCDATA resource type as this is what is usually
     // used for the embedded images. We could allow specifying the type as part
@@ -353,7 +353,7 @@ wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSiz
         return wxBitmapBundle();
     }
 
-    return wxBitmapBundle::FromSVG(svgData.data(), sizeDef);
+    return wxBitmapBundle::FromSVG(svgData.data(), sizeDef, post);
 }
 
 #endif // wxHAS_SVG
