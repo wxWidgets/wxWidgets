@@ -395,6 +395,15 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
 }
 
 #ifdef GDK_WINDOWING_WAYLAND
+
+// Helper declared as friend in the header and so can access m_wlSubsurface.
+void wxEGLUpdatePosition(wxGLCanvasEGL* win)
+{
+    int x, y;
+    gdk_window_get_origin(win->GTKGetDrawingWindow(), &x, &y);
+    wl_subsurface_set_position(win->m_wlSubsurface, x, y);
+}
+
 extern "C"
 {
 
@@ -445,6 +454,8 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
     int scale = gtk_widget_get_scale_factor(widget);
     wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
                          win->m_height * scale, 0, 0);
+
+    wxEGLUpdatePosition(win);
 }
 
 } // extern "C"
@@ -472,8 +483,6 @@ bool wxGLCanvasEGL::CreateSurface()
 #ifdef GDK_WINDOWING_WAYLAND
     if (wxGTKImpl::IsWayland(window))
     {
-        int x, y;
-        gdk_window_get_origin(window, &x, &y);
         int w = gdk_window_get_width(window);
         int h = gdk_window_get_height(window);
         struct wl_display *display = gdk_wayland_display_get_wl_display(gdk_window_get_display(window));
@@ -493,7 +502,7 @@ bool wxGLCanvasEGL::CreateSurface()
                                                          surface);
         wl_surface_set_input_region(m_wlSurface, m_wlRegion);
         wl_subsurface_set_desync(m_wlSubsurface);
-        wl_subsurface_set_position(m_wlSubsurface, x, y);
+        wxEGLUpdatePosition(this);
         int scale = gdk_window_get_scale_factor(window);
         wl_surface_set_buffer_scale(m_wlSurface, scale);
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
