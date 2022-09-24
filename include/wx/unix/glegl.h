@@ -122,7 +122,6 @@ public:
     wl_subcompositor *m_wlSubcompositor;
     wl_callback *m_wlFrameCallbackHandler;
     wl_egl_window *m_wlEGLWindow;
-    wl_subsurface *m_wlSubsurface;
 
 private:
 
@@ -133,9 +132,12 @@ private:
     unsigned long m_xwindow;
     wl_surface *m_wlSurface;
     wl_region *m_wlRegion;
+    wl_subsurface *m_wlSubsurface;
 
     // the global/default versions of the above
     static EGLConfig *ms_glEGLConfig;
+
+    friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
 };
 
 // ----------------------------------------------------------------------------
