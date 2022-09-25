@@ -10800,11 +10800,8 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
         m_table->SetValue( row, col, s );
         if ( ShouldRefresh() )
         {
-            int dummy;
             wxRect rect( CellToRect( row, col ) );
-            rect.x = 0;
-            rect.width = m_gridWin->GetClientSize().GetWidth();
-            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+            CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
             m_gridWin->Refresh( false, &rect );
         }
 
