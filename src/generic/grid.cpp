@@ -10800,9 +10800,12 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
         m_table->SetValue( row, col, s );
         if ( ShouldRefresh() )
         {
+            wxGridWindow* const gridWindow = CellToGridWindow(row, col);
+
             wxRect rect( CellToRect( row, col ) );
-            CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
-            m_gridWin->Refresh( false, &rect );
+            CalcGridWindowScrolledPosition(rect.x, rect.y, &rect.x, &rect.y, gridWindow);
+            rect.Offset(-GetGridWindowOffset(gridWindow));
+            gridWindow->Refresh( false, &rect );
         }
 
         if ( m_currentCellCoords.GetRow() == row &&
