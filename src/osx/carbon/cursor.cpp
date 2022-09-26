@@ -17,7 +17,7 @@
     #include "wx/icon.h"
     #include "wx/image.h"
 #endif // WX_PRECOMP
-#include "wx/msgdlg.h"
+#include "wx/filename.h"
 #include "wx/xpmdecod.h"
 #include "wx/stdpaths.h"
 #include "wx/osx/private.h"
@@ -278,10 +278,8 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
 #if wxOSX_USE_COCOA
-        wxString fileName;
-        wxImage image;
-        fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png";
-        image.LoadFile( fileName, wxBITMAP_TYPE_PNG );
+        wxFileName fileName( wxStandardPaths::Get().GetResourcesDir(), cursor_file, ".png" );
+        wxImage image( fileName.GetFullPath(), wxBITMAP_TYPE_PNG );
         if( image.IsOk() )
         {
             image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX ) ;
@@ -289,8 +287,8 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
         }
         else
         {
-            fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".cur";
-            image.LoadFile( fileName, wxBITMAP_TYPE_CUR );
+            fileName = wxFileName( wxStandardPaths::Get().GetResourcesDir(), cursor_file, ".cur" );
+            image = wxImage( fileName.GetFullPath(), wxBITMAP_TYPE_CUR );
         }
         if( image.IsOk() )
         {
@@ -299,7 +297,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
             InitFromImage( image );
         }
         else
-            wxFAIL_MSG( "No PNG cursor image found in Resources" );
+            wxLogError( "Neither PNG, nor CUR cursor image found in Resources" );
 #endif
     }
     else
