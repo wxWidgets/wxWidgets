@@ -6322,9 +6322,13 @@ public:
         The user double-clicked a label with the right mouse button. Processes
         a @c wxEVT_GRID_LABEL_RIGHT_DCLICK event type.
     @event{EVT_GRID_SELECT_CELL(func)}
-        The given cell was made current, either by user or by the program via a
-        call to SetGridCursor() or GoToCell(). Processes a
-        @c wxEVT_GRID_SELECT_CELL event type.
+        The given cell is about to be made current, either by user or by the
+        program via a call to wxGrid::SetGridCursor() or wxGrid::GoToCell().
+        The event can be vetoed to prevent this from happening and
+        wxGrid::GetGridCursorCoords() still returns the previous current cell
+        coordinates during the event handler execution, while the new ones are
+        available via the event object GetRow() and GetCol() functions.
+        Processes a @c wxEVT_GRID_SELECT_CELL event type.
     @event{EVT_GRID_ROW_MOVE(func)}
         The user tries to change the order of the rows in the grid by
         dragging the row specified by GetRow(). This event can be vetoed to
