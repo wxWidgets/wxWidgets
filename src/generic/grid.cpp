@@ -5889,6 +5889,56 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
     }
 }
 
+void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
+{
+    if ( area == wxGridArea::All )
+    {
+        wxScrolledCanvas::Refresh(erasebg);
+        return;
+    }
+
+    int cw, ch;
+    GetClientSize(&cw, &ch);
+
+    // Corner area
+    if ( (area & wxGridArea::Corner) != 0 )
+        m_cornerLabelWin->Refresh(erasebg);
+
+    if ( rect )
+    {
+        rect->Offset(GetRowLabelSize(), GetColLabelSize());
+        rect->Inflate(1);
+    }
+
+    wxRect updateRect;
+
+    // Cells area
+    if ( (area & wxGridArea::Cells) != 0 )
+    {
+        updateRect = rect ? *rect : wxRect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
+
+        wxScrolledCanvas::Refresh(erasebg, &updateRect);
+    }
+
+    // RowLabels area
+    if ( (area & wxGridArea::RowLabels) != 0 && GetRowLabelSize() > 0 )
+    {
+        updateRect = rect ? wxRect(0, rect->y, GetRowLabelSize(), rect->height)
+                          : wxRect(0, GetColLabelSize(), GetRowLabelSize(), ch);
+
+        wxScrolledCanvas::Refresh(erasebg, &updateRect);
+    }
+
+    // ColLabels area
+    if ( (area & wxGridArea::ColLabels) != 0 && GetColLabelSize() > 0 )
+    {
+        updateRect = rect ? wxRect(rect->x, 0, rect->width, GetColLabelSize())
+                          : wxRect(GetRowLabelSize(), 0, cw, GetColLabelSize());
+
+        wxScrolledCanvas::Refresh(erasebg, &updateRect);
+    }
+}
+
 void wxGrid::OnSize(wxSizeEvent& event)
 {
     if (m_targetWindow != this) // check whether initialisation has been done

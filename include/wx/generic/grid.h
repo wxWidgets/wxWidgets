@@ -1482,6 +1482,22 @@ struct WXDLLIMPEXP_CORE wxGridSizesInfo
 };
 
 // ----------------------------------------------------------------------------
+// wxGridArea
+// ----------------------------------------------------------------------------
+enum wxGridArea
+{
+    Corner      = 0x001, // m_cornerLabelWin
+    RowLabels   = 0x002, // m_rowLabelWin, [m_rowFrozenLabelWin]
+    ColLabels   = 0x004, // m_colLabelWin, [m_colFrozenLabelWin]
+    Cells       = 0x008, // m_gridwin, [m_frozenCornerGridWin, m_frozenColGridWin,
+                         //             m_frozenRowGridWin]
+
+    Labels      = RowLabels | ColLabels,
+    Heading     = Corner | ColLabels,
+    All         = Corner | Cells | Labels
+};
+
+// ----------------------------------------------------------------------------
 // wxGrid
 // ----------------------------------------------------------------------------
 
@@ -1692,6 +1708,19 @@ public:
 
     void RefreshBlock(int topRow, int leftCol,
                       int bottomRow, int rightCol);
+
+    // Refresh the whole area if _rect_ is NULL or just that rectangle otherwise
+    // (the rectangle is calculated in device coordinates)
+    //
+    // This function is more convenient/useful (from performance point of view)
+    // to use if the rectangle is already known/calculated, because:
+    // - it transparently handles frozen grid windows for us
+    // - it can deduce the labels area to be refreshed (if we asked to) from _rect_ which
+    //   represents the cells area. e.g. RefreshArea(wxGridArea::Cells | wxGridArea::Labels, ...);
+    // - there is no need to iterate over the selected blocks one more time to know which part of
+    //   the grid needs to be refreshed (for instance: transparent selection rely on this function
+    //   for performance reason)
+    void RefreshArea(int area, wxRect* rect = NULL, bool erasebg = true);
 
     // ------
     // Code that does a lot of grid modification can be enclosed
