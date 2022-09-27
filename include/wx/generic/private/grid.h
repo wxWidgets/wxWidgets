@@ -36,15 +36,15 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellAttr*,
 // ----------------------------------------------------------------------------
 enum wxGridArea
 {
-    Corner      = 0x001, // m_cornerLabelWin
-    RowLabels   = 0x002, // m_rowLabelWin, [m_rowFrozenLabelWin]
-    ColLabels   = 0x004, // m_colLabelWin, [m_colFrozenLabelWin]
-    Cells       = 0x008, // m_gridwin, [m_frozenCornerGridWin, m_frozenColGridWin,
-                         //             m_frozenRowGridWin]
+    wxGA_Corner      = 0x001, // m_cornerLabelWin
+    wxGA_RowLabels   = 0x002, // m_rowLabelWin, [m_rowFrozenLabelWin]
+    wxGA_ColLabels   = 0x004, // m_colLabelWin, [m_colFrozenLabelWin]
+    wxGA_Cells       = 0x008, // m_gridwin, [m_frozenCornerGridWin, m_frozenColGridWin,
+                              //             m_frozenRowGridWin]
 
-    Labels      = RowLabels | ColLabels,
-    Heading     = Corner | ColLabels,
-    All         = Corner | Cells | Labels
+    wxGA_Labels      = wxGA_RowLabels | wxGA_ColLabels,
+    wxGA_Heading     = wxGA_Corner | wxGA_ColLabels,
+    wxGA_All         = wxGA_Corner | wxGA_Cells | wxGA_Labels
 };
 
 // ----------------------------------------------------------------------------

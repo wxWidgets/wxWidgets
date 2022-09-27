@@ -5197,7 +5197,7 @@ void wxGrid::RefreshAfterRowPosChange()
     }
 
     // and make the changes visible
-    RefreshArea(wxGridArea::Cells | wxGridArea::RowLabels);
+    RefreshArea(wxGA_Cells | wxGA_RowLabels);
 }
 
 void wxGrid::SetRowsOrder(const wxArrayInt& order)
@@ -5888,7 +5888,7 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
 
 void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
 {
-    if ( area == wxGridArea::All )
+    if ( area == wxGA_All )
     {
         wxScrolledCanvas::Refresh(erasebg);
         return;
@@ -5898,7 +5898,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
     GetClientSize(&cw, &ch);
 
     // Corner area
-    if ( (area & wxGridArea::Corner) != 0 )
+    if ( (area & wxGA_Corner) != 0 )
         m_cornerLabelWin->Refresh(erasebg);
 
     if ( rect )
@@ -5910,7 +5910,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
     wxRect updateRect;
 
     // Cells area
-    if ( (area & wxGridArea::Cells) != 0 )
+    if ( (area & wxGA_Cells) != 0 )
     {
         updateRect = rect ? *rect : wxRect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
 
@@ -5918,7 +5918,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
     }
 
     // RowLabels area
-    if ( (area & wxGridArea::RowLabels) != 0 && GetRowLabelSize() > 0 )
+    if ( (area & wxGA_RowLabels) != 0 && GetRowLabelSize() > 0 )
     {
         updateRect = rect ? wxRect(0, rect->y, GetRowLabelSize(), rect->height)
                           : wxRect(0, GetColLabelSize(), GetRowLabelSize(), ch);
@@ -5927,7 +5927,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
     }
 
     // ColLabels area
-    if ( (area & wxGridArea::ColLabels) != 0 && GetColLabelSize() > 0 )
+    if ( (area & wxGA_ColLabels) != 0 && GetColLabelSize() > 0 )
     {
         updateRect = rect ? wxRect(rect->x, 0, rect->width, GetColLabelSize())
                           : wxRect(GetRowLabelSize(), 0, cw, GetColLabelSize());
@@ -7198,7 +7198,7 @@ void wxGrid::SetUseNativeColLabels( bool native )
         SetColLabelSize( height );
     }
 
-    RefreshArea(wxGridArea::Heading);
+    RefreshArea(wxGA_Heading);
 }
 
 void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
@@ -8993,7 +8993,7 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
             m_colFrozenLabelWin->SetBackgroundColour( colour );
 
         if ( ShouldRefresh() )
-            RefreshArea(wxGridArea::Labels);
+            RefreshArea(wxGA_Labels);
     }
 }
 
@@ -9007,7 +9007,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
             GetGridColHeader()->SetForegroundColour( colour );
 
         if ( ShouldRefresh() )
-            RefreshArea(wxGridArea::Labels);
+            RefreshArea(wxGA_Labels);
     }
 }
 
@@ -9019,7 +9019,7 @@ void wxGrid::SetLabelFont( const wxFont& font )
         GetGridColHeader()->SetFont( font );
 
     if ( ShouldRefresh() )
-        RefreshArea(wxGridArea::Labels);
+        RefreshArea(wxGA_Labels);
 }
 
 void wxGrid::SetRowLabelAlignment( int horiz, int vert )
@@ -9051,7 +9051,7 @@ void wxGrid::SetRowLabelAlignment( int horiz, int vert )
 
     if ( ShouldRefresh() )
     {
-        RefreshArea(wxGridArea::RowLabels);
+        RefreshArea(wxGA_RowLabels);
     }
 }
 
@@ -9084,7 +9084,7 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
 
     if ( ShouldRefresh() )
     {
-        RefreshArea(wxGridArea::ColLabels);
+        RefreshArea(wxGA_ColLabels);
     }
 }
 
@@ -9134,7 +9134,7 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
         m_colLabelTextOrientation = textOrientation;
 
     if ( ShouldRefresh() )
-        RefreshArea(wxGridArea::ColLabels);
+        RefreshArea(wxGA_ColLabels);
 }
 
 void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
@@ -9157,7 +9157,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             if ( rect.height > 0 )
             {
                 CalcScrolledPosition(0, rect.y, &rect.x, &rect.y);
-                RefreshArea(wxGridArea::RowLabels, &rect, true);
+                RefreshArea(wxGA_RowLabels, &rect, true);
             }
         }
     }
@@ -9180,7 +9180,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                 if ( rect.width > 0 )
                 {
                     CalcScrolledPosition(rect.x, 0, &rect.x, &rect.y);
-                    RefreshArea(wxGridArea::ColLabels, &rect, true);
+                    RefreshArea(wxGA_ColLabels, &rect, true);
                 }
             }
         }
@@ -9296,7 +9296,7 @@ void wxGrid::RedrawGridLines()
 {
     // the lines will be redrawn when the window is thawed or shown
     if ( ShouldRefresh() )
-        RefreshArea(wxGridArea::Cells);
+        RefreshArea(wxGA_Cells);
 }
 
 void wxGrid::EnableGridLines( bool enable )
@@ -10823,7 +10823,7 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
             // Refresh the entire row to account for overflowing cells
             rect.x = 0;
             rect.width = GetClientSize().GetWidth() - GetRowLabelSize();
-            RefreshArea(wxGridArea::Cells, &rect, false);
+            RefreshArea(wxGA_Cells, &rect, false);
         }
 
         if ( m_currentCellCoords.GetRow() == row &&

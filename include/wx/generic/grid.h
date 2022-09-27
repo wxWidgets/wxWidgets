@@ -1700,7 +1700,7 @@ public:
     // to use if the rectangle is already known/calculated, because:
     // - it transparently handles frozen grid windows for us
     // - it can deduce the labels area to be refreshed (if we asked to) from _rect_ which
-    //   represents the cells area. e.g. RefreshArea(wxGridArea::Cells | wxGridArea::Labels, ...);
+    //   represents the cells area. e.g. RefreshArea(wxGA_Cells | wxGA_Labels, ...);
     // - there is no need to iterate over the selected blocks one more time to know which part of
     //   the grid needs to be refreshed (for instance: transparent selection rely on this function
     //   for performance reason)
