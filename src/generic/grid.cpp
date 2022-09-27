@@ -5886,7 +5886,7 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
     }
 }
 
-void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
+void wxGrid::RefreshArea(int area, wxRect* rect)
 {
     if ( area == wxGA_All )
     {
@@ -5894,7 +5894,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
         // Refresh() instead, but to make this function consistent
         // and correct, just forward to wxScrolledCanvas::Refresh()
         // if the argument is wxGA_All.
-        wxScrolledCanvas::Refresh(erasebg, rect);
+        wxScrolledCanvas::Refresh(true, rect);
         return;
     }
 
@@ -5903,7 +5903,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
 
     // Corner area
     if ( (area & wxGA_Corner) != 0 )
-        m_cornerLabelWin->Refresh(erasebg);
+        m_cornerLabelWin->Refresh();
 
     if ( rect )
     {
@@ -5918,7 +5918,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
     {
         updateRect = rect ? *rect : wxRect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
 
-        wxScrolledCanvas::Refresh(erasebg, &updateRect);
+        wxScrolledCanvas::Refresh(true, &updateRect);
     }
 
     // RowLabels area
@@ -5927,7 +5927,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
         updateRect = rect ? wxRect(0, rect->y, GetRowLabelSize(), rect->height)
                           : wxRect(0, GetColLabelSize(), GetRowLabelSize(), ch);
 
-        wxScrolledCanvas::Refresh(erasebg, &updateRect);
+        wxScrolledCanvas::Refresh(true, &updateRect);
     }
 
     // ColLabels area
@@ -5936,7 +5936,7 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
         updateRect = rect ? wxRect(rect->x, 0, rect->width, GetColLabelSize())
                           : wxRect(GetRowLabelSize(), 0, cw, GetColLabelSize());
 
-        wxScrolledCanvas::Refresh(erasebg, &updateRect);
+        wxScrolledCanvas::Refresh(true, &updateRect);
     }
 }
 
@@ -10827,7 +10827,7 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
             // Refresh the entire row to account for overflowing cells
             rect.x = 0;
             rect.width = GetClientSize().GetWidth() - GetRowLabelSize();
-            RefreshArea(wxGA_Cells, &rect, false);
+            RefreshArea(wxGA_Cells, &rect);
         }
 
         if ( m_currentCellCoords.GetRow() == row &&

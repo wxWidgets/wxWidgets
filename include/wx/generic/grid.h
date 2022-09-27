@@ -1704,7 +1704,7 @@ public:
     // - there is no need to iterate over the selected blocks one more time to know which part of
     //   the grid needs to be refreshed (for instance: transparent selection rely on this function
     //   for performance reason)
-    void RefreshArea(int area, wxRect* rect = NULL, bool erasebg = true);
+    void RefreshArea(int area, wxRect* rect = NULL);
 
     // ------
     // Code that does a lot of grid modification can be enclosed
