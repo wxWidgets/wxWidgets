@@ -60,7 +60,7 @@ For example:
 - wxWidgets version <!-- [e.g. 3.2.1] --> you use:
 - wxWidgets port <!-- [e.g. wxMSW, wxGTK, wxOSX] --> you use:
 - OS <!-- [e.g. Windows 10, Ubuntu 22.10, macOS 15] --> and its version:
- 
+
 <!-- For wxGTK only (**remove** this section if not using wxGTK) -->
 + GTK version: <!-- [e.g. 3.24.5] -->
 + Which GDK <!-- [X11 or Wayland] --> backend is used:
