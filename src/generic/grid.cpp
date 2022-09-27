@@ -10820,9 +10820,10 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
         {
             wxRect rect( CellToRect( row, col ) );
             CalcScrolledPosition(0, rect.y, NULL, &rect.y);
+            // Refresh the entire row to account for overflowing cells
             rect.x = 0;
-            rect.width = m_gridWin->GetClientSize().GetWidth();
-            m_gridWin->Refresh( false, &rect );
+            rect.width = GetClientSize().GetWidth() - GetRowLabelSize();
+            RefreshArea(wxGridArea::Cells, &rect, false);
         }
 
         if ( m_currentCellCoords.GetRow() == row &&
