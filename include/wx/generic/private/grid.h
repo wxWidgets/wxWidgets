@@ -31,6 +31,21 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellAttr*,
                               wxIntegerHash, wxIntegerEqual,
                               wxGridCoordsToAttrMap, class WXDLLIMPEXP_CORE);
 
+// ----------------------------------------------------------------------------
+// wxGridArea
+// ----------------------------------------------------------------------------
+enum wxGridArea
+{
+    Corner      = 0x001, // m_cornerLabelWin
+    RowLabels   = 0x002, // m_rowLabelWin, [m_rowFrozenLabelWin]
+    ColLabels   = 0x004, // m_colLabelWin, [m_colFrozenLabelWin]
+    Cells       = 0x008, // m_gridwin, [m_frozenCornerGridWin, m_frozenColGridWin,
+                         //             m_frozenRowGridWin]
+
+    Labels      = RowLabels | ColLabels,
+    Heading     = Corner | ColLabels,
+    All         = Corner | Cells | Labels
+};
 
 // ----------------------------------------------------------------------------
 // private classes
