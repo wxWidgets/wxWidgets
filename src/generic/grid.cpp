@@ -5890,7 +5890,11 @@ void wxGrid::RefreshArea(int area, wxRect* rect, bool erasebg)
 {
     if ( area == wxGA_All )
     {
-        wxScrolledCanvas::Refresh(erasebg);
+        // Normally if we want to refresh the entire grid we call
+        // Refresh() instead, but to make this function consistent
+        // and correct, just forward to wxScrolledCanvas::Refresh()
+        // if the argument is wxGA_All.
+        wxScrolledCanvas::Refresh(erasebg, rect);
         return;
     }
 
