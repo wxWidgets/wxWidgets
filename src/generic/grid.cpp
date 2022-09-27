@@ -5199,8 +5199,7 @@ void wxGrid::RefreshAfterRowPosChange()
     }
 
     // and make the changes visible
-    m_rowLabelWin->Refresh();
-    m_gridWin->Refresh();
+    RefreshArea(wxGridArea::Cells | wxGridArea::RowLabels);
 }
 
 void wxGrid::SetRowsOrder(const wxArrayInt& order)
@@ -7201,8 +7200,7 @@ void wxGrid::SetUseNativeColLabels( bool native )
         SetColLabelSize( height );
     }
 
-    GetColLabelWindow()->Refresh();
-    m_cornerLabelWin->Refresh();
+    RefreshArea(wxGridArea::Heading);
 }
 
 void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
@@ -8997,16 +8995,7 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
             m_colFrozenLabelWin->SetBackgroundColour( colour );
 
         if ( ShouldRefresh() )
-        {
-            m_rowLabelWin->Refresh();
-            m_colLabelWin->Refresh();
-            m_cornerLabelWin->Refresh();
-
-            if ( m_rowFrozenLabelWin )
-                m_rowFrozenLabelWin->Refresh();
-            if ( m_colFrozenLabelWin )
-                m_colFrozenLabelWin->Refresh();
-        }
+            RefreshArea(wxGridArea::Labels);
     }
 }
 
@@ -9020,10 +9009,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
             GetGridColHeader()->SetForegroundColour( colour );
 
         if ( ShouldRefresh() )
-        {
-            m_rowLabelWin->Refresh();
-            m_colLabelWin->Refresh();
-        }
+            RefreshArea(wxGridArea::Labels);
     }
 }
 
@@ -9035,10 +9021,7 @@ void wxGrid::SetLabelFont( const wxFont& font )
         GetGridColHeader()->SetFont( font );
 
     if ( ShouldRefresh() )
-    {
-        m_rowLabelWin->Refresh();
-        m_colLabelWin->Refresh();
-    }
+        RefreshArea(wxGridArea::Labels);
 }
 
 void wxGrid::SetRowLabelAlignment( int horiz, int vert )
@@ -9070,7 +9053,7 @@ void wxGrid::SetRowLabelAlignment( int horiz, int vert )
 
     if ( ShouldRefresh() )
     {
-        m_rowLabelWin->Refresh();
+        RefreshArea(wxGridArea::RowLabels);
     }
 }
 
@@ -9103,7 +9086,7 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
 
     if ( ShouldRefresh() )
     {
-        m_colLabelWin->Refresh();
+        RefreshArea(wxGridArea::ColLabels);
     }
 }
 
@@ -9153,7 +9136,7 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
         m_colLabelTextOrientation = textOrientation;
 
     if ( ShouldRefresh() )
-        m_colLabelWin->Refresh();
+        RefreshArea(wxGridArea::ColLabels);
 }
 
 void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
@@ -9176,9 +9159,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             if ( rect.height > 0 )
             {
                 CalcScrolledPosition(0, rect.y, &rect.x, &rect.y);
-                rect.x = 0;
-                rect.width = m_rowLabelWidth;
-                m_rowLabelWin->Refresh( true, &rect );
+                RefreshArea(wxGridArea::RowLabels, &rect, true);
             }
         }
     }
@@ -9201,9 +9182,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                 if ( rect.width > 0 )
                 {
                     CalcScrolledPosition(rect.x, 0, &rect.x, &rect.y);
-                    rect.y = 0;
-                    rect.height = m_colLabelHeight;
-                    GetColLabelWindow()->Refresh( true, &rect );
+                    RefreshArea(wxGridArea::ColLabels, &rect, true);
                 }
             }
         }
@@ -9318,17 +9297,8 @@ void wxGrid::SetGridFrozenBorderPenWidth(int width)
 void wxGrid::RedrawGridLines()
 {
     // the lines will be redrawn when the window is thawed or shown
-    if ( !ShouldRefresh() )
-        return;
-
-    m_gridWin->Refresh();
-
-    if ( m_frozenColGridWin )
-        m_frozenColGridWin->Refresh();
-    if ( m_frozenRowGridWin )
-        m_frozenRowGridWin->Refresh();
-    if ( m_frozenCornerGridWin )
-        m_frozenCornerGridWin->Refresh();
+    if ( ShouldRefresh() )
+        RefreshArea(wxGridArea::Cells);
 }
 
 void wxGrid::EnableGridLines( bool enable )
