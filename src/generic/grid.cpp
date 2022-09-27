@@ -9157,7 +9157,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             if ( rect.height > 0 )
             {
                 CalcScrolledPosition(0, rect.y, &rect.x, &rect.y);
-                RefreshArea(wxGA_RowLabels, &rect, true);
+                RefreshArea(wxGA_RowLabels, &rect);
             }
         }
     }
@@ -9180,7 +9180,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                 if ( rect.width > 0 )
                 {
                     CalcScrolledPosition(rect.x, 0, &rect.x, &rect.y);
-                    RefreshArea(wxGA_ColLabels, &rect, true);
+                    RefreshArea(wxGA_ColLabels, &rect);
                 }
             }
         }
