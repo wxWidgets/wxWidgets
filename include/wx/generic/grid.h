@@ -88,6 +88,20 @@ enum wxGridRenderStyle
                           wxGRID_DRAW_BOX_RECT
 };
 
+// Flags to pass to wxGrid::RefreshArea()
+enum wxGridArea
+{
+    wxGA_Corner      = 0x001, // m_cornerLabelWin
+    wxGA_RowLabels   = 0x002, // m_rowLabelWin, [m_rowFrozenLabelWin]
+    wxGA_ColLabels   = 0x004, // m_colLabelWin, [m_colFrozenLabelWin]
+    wxGA_Cells       = 0x008, // m_gridwin, [m_frozenCornerGridWin, m_frozenColGridWin,
+                              //             m_frozenRowGridWin]
+
+    wxGA_Labels      = wxGA_RowLabels | wxGA_ColLabels,
+    wxGA_Heading     = wxGA_Corner | wxGA_ColLabels,
+    wxGA_All         = wxGA_Corner | wxGA_Cells | wxGA_Labels
+};
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -1693,18 +1707,20 @@ public:
     void RefreshBlock(int topRow, int leftCol,
                       int bottomRow, int rightCol);
 
-    // Refresh the whole area if _rect_ is NULL or just that rectangle otherwise
-    // (the rectangle is calculated in device coordinates)
-    //
-    // This function is more convenient/useful (from performance point of view)
-    // to use if the rectangle is already known/calculated, because:
-    // - it transparently handles frozen grid windows for us
-    // - it can deduce the labels area to be refreshed (if we asked to) from _rect_ which
-    //   represents the cells area. e.g. RefreshArea(wxGA_Cells | wxGA_Labels, ...);
-    // - there is no need to iterate over the selected blocks one more time to know which part of
-    //   the grid needs to be refreshed (for instance: transparent selection rely on this function
-    //   for performance reason)
-    void RefreshArea(int area, wxRect* rect = NULL);
+    // It is more convenient / useful and less error prone to use one of the two
+    // following functions to refresh part or whole grid area because frozen grid
+    // windows are transparently handled for us by the underlying toolkit. So no need
+    // to explicitly test for them in the code. Also, for performance considerations,
+    // transparent selection relies on this to skip iterating over the selected blocks
+    // one more time (to know which part of the grid needs to be refreshed)
+
+    // Refresh one or more areas (a combination of wxGridArea enums) entirely.
+    void RefreshArea(int areas);
+
+    // Refresh part of one area. The rectangle is calculated in device coordinates
+    // and should be made relative to the parent window (i.e. the wxGrid itself) by
+    // applying the area's offset to it before passing it to the function.
+    void RefreshArea(wxGridArea area, const wxRect& rect);
 
     // ------
     // Code that does a lot of grid modification can be enclosed

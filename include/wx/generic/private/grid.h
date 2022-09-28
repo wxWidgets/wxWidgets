@@ -31,21 +31,6 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxLongLong_t, wxGridCellAttr*,
                               wxIntegerHash, wxIntegerEqual,
                               wxGridCoordsToAttrMap, class WXDLLIMPEXP_CORE);
 
-// ----------------------------------------------------------------------------
-// wxGridArea
-// ----------------------------------------------------------------------------
-enum wxGridArea
-{
-    wxGA_Corner      = 0x001, // m_cornerLabelWin
-    wxGA_RowLabels   = 0x002, // m_rowLabelWin, [m_rowFrozenLabelWin]
-    wxGA_ColLabels   = 0x004, // m_colLabelWin, [m_colFrozenLabelWin]
-    wxGA_Cells       = 0x008, // m_gridwin, [m_frozenCornerGridWin, m_frozenColGridWin,
-                              //             m_frozenRowGridWin]
-
-    wxGA_Labels      = wxGA_RowLabels | wxGA_ColLabels,
-    wxGA_Heading     = wxGA_Corner | wxGA_ColLabels,
-    wxGA_All         = wxGA_Corner | wxGA_Cells | wxGA_Labels
-};
 
 // ----------------------------------------------------------------------------
 // private classes
