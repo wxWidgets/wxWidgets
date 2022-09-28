@@ -9161,7 +9161,7 @@ void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
 
 void wxGrid::SetRowLabelValue( int row, const wxString& s )
 {
-    if ( m_table )
+    if ( m_table && m_rowLabelWidth > 0 )
     {
         m_table->SetRowLabelValue( row, s );
         if ( ShouldRefresh() )
@@ -9169,7 +9169,10 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             wxRect rect = CellToRect( row, 0 );
             if ( rect.height > 0 )
             {
-                CalcScrolledPosition(0, rect.y, &rect.x, &rect.y);
+                wxGridWindow* const gridWindow = CellToGridWindow(row, 0);
+                CalcGridWindowScrolledPosition(0, rect.y, &rect.x, &rect.y, gridWindow);
+                rect.x = 0;
+                rect.width = m_rowLabelWidth;
                 rect.Offset(0, GetColLabelSize());
                 RefreshArea(wxGA_RowLabels, rect);
             }
@@ -9179,7 +9182,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
 
 void wxGrid::SetColLabelValue( int col, const wxString& s )
 {
-    if ( m_table )
+    if ( m_table && m_colLabelHeight > 0 )
     {
         m_table->SetColLabelValue( col, s );
         if ( ShouldRefresh() )
@@ -9193,7 +9196,10 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                 wxRect rect = CellToRect( 0, col );
                 if ( rect.width > 0 )
                 {
-                    CalcScrolledPosition(rect.x, 0, &rect.x, &rect.y);
+                    wxGridWindow* const gridWindow = CellToGridWindow(0, col);
+                    CalcGridWindowScrolledPosition(rect.x, 0, &rect.x, &rect.y, gridWindow);
+                    rect.y = 0;
+                    rect.height = m_colLabelHeight;
                     rect.Offset(GetRowLabelSize(), 0);
                     RefreshArea(wxGA_ColLabels, rect);
                 }
