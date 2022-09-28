@@ -271,6 +271,7 @@ wxMSW:
 - Remove "Printing" from title when printing to PDF (Blake-Madden, #22836).
 - Fix sometimes missing overvwrite prompt in "Save" file dialog (#22898).
 - Set wxUSE_TASKBARBUTTON correctly when building using configure (#22900).
+- Queue wxWebViewEdge events to avoid hangs (Tobias Taschner, #23025).
 
 wxOSX:
 

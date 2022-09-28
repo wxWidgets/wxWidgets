@@ -17,6 +17,7 @@
 #include "wx/filename.h"
 #include "wx/module.h"
 #include "wx/log.h"
+#include "wx/scopeguard.h"
 #include "wx/stdpaths.h"
 #include "wx/thread.h"
 #include "wx/tokenzr.h"
@@ -64,6 +65,10 @@ GetAvailableCoreWebView2BrowserVersionString_t wxGetAvailableCoreWebView2Browser
 wxDynamicLibrary wxWebViewEdgeImpl::ms_loaderDll;
 #endif // wxUSE_WEBVIEW_EDGE_STATIC
 
+#define wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD \
+    m_inEventCallback = true; \
+    wxON_BLOCK_EXIT_SET(m_inEventCallback, false);
+
 wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview):
@@ -91,6 +96,7 @@ bool wxWebViewEdgeImpl::Create()
 {
     m_initialized = false;
     m_isBusy = false;
+    m_inEventCallback = false;
     m_pendingContextMenuEnabled = -1;
     m_pendingAccessToDevToolsEnabled = 0;
 
@@ -188,6 +194,7 @@ void wxWebViewEdgeImpl::UpdateBounds()
 
 HRESULT wxWebViewEdgeImpl::OnNavigationStarting(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NavigationStartingEventArgs* args)
 {
+    wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD
     m_isBusy = true;
     wxString evtURL;
     wxCoTaskMemPtr<wchar_t> uri;
@@ -212,7 +219,7 @@ HRESULT wxWebViewEdgeImpl::OnSourceChanged(ICoreWebView2 * WXUNUSED(sender), ICo
         // navigation within the current document, send apropriate events
         wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), m_ctrl->GetCurrentURL(), wxString());
         event.SetEventObject(m_ctrl);
-        m_ctrl->HandleWindowEvent(event);
+        m_ctrl->GetEventHandler()->AddPendingEvent(event);
         OnNavigationCompleted(NULL, NULL);
         OnDOMContentLoaded(NULL, NULL);
     }
@@ -264,7 +271,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
             }
         }
         if (!ignoreStatus)
-            m_ctrl->HandleWindowEvent(event);
+            m_ctrl->GetEventHandler()->AddPendingEvent(event);
     }
     else
     {
@@ -287,7 +294,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
         //Reset as we are done now
         m_historyLoadingFromList = false;
         wxWebViewEvent evt(wxEVT_WEBVIEW_NAVIGATED, m_ctrl->GetId(), uri, wxString());
-        m_ctrl->HandleWindowEvent(evt);
+        m_ctrl->GetEventHandler()->AddPendingEvent(evt);
     }
     return S_OK;
 }
@@ -305,7 +312,7 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender),
         navFlags = wxWEBVIEW_NAV_ACTION_USER;
 
     wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString(), navFlags);
-    m_ctrl->HandleWindowEvent(evt);
+    m_ctrl->GetEventHandler()->AddPendingEvent(evt);
     args->put_Handled(true);
     return S_OK;
 }
@@ -316,7 +323,7 @@ HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(ICoreWebView2* WXUNUSED(sender
         m_ctrl->GetId(), m_ctrl->GetCurrentURL(), "");
     event.SetString(m_ctrl->GetCurrentTitle());
     event.SetEventObject(m_ctrl);
-    m_ctrl->HandleWindowEvent(event);
+    m_ctrl->GetEventHandler()->AddPendingEvent(event);
     return S_OK;
 }
 
@@ -325,7 +332,7 @@ HRESULT wxWebViewEdgeImpl::OnDOMContentLoaded(ICoreWebView2* WXUNUSED(sender), I
     wxWebViewEvent event(wxEVT_WEBVIEW_LOADED, m_ctrl->GetId(),
         m_ctrl->GetCurrentURL(), "");
     event.SetEventObject(m_ctrl);
-    m_ctrl->HandleWindowEvent(event);
+    m_ctrl->GetEventHandler()->AddPendingEvent(event);
     return S_OK;
 }
 
@@ -340,7 +347,7 @@ HRESULT wxWebViewEdgeImpl::OnContainsFullScreenElementChanged(ICoreWebView2* WXU
         m_ctrl->GetCurrentURL(), wxString());
     event.SetEventObject(m_ctrl);
     event.SetInt(containsFullscreenEvent);
-    m_ctrl->HandleWindowEvent(event);
+    m_ctrl->GetEventHandler()->AddPendingEvent(event);
 
     return S_OK;
 }
@@ -371,7 +378,7 @@ wxWebViewEdgeImpl::OnWebMessageReceived(ICoreWebView2* WXUNUSED(sender),
         msgStr = msgJson;
     event.SetString(msgStr);
 
-    m_ctrl->HandleWindowEvent(event);
+    m_ctrl->GetEventHandler()->AddPendingEvent(event);
 
     return S_OK;
 }
@@ -847,6 +854,13 @@ void* wxWebViewEdge::GetNativeBackend() const
 void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
 {
     wxWebViewEdgeImpl::ms_browserExecutableDir = path;
+}
+
+bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) const
+{
+    wxCHECK_MSG(!m_impl->m_inEventCallback, false,
+        "RunScript() cannot be used during event callbacks. Consider using RunScriptAsync()");
+    return wxWebView::RunScript(javascript, output);
 }
 
 void wxWebViewEdge::RunScriptAsync(const wxString& javascript, void* clientData) const
