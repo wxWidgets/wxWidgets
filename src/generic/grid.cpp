@@ -5908,7 +5908,7 @@ void wxGrid::RefreshArea(int areas)
     // Cells area
     if ( (areas & wxGA_Cells) != 0 )
     {
-        const wxRect rect = wxRect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
+        const wxRect rect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
 
         wxScrolledCanvas::Refresh(true, &rect);
     }
@@ -5916,7 +5916,7 @@ void wxGrid::RefreshArea(int areas)
     // RowLabels area
     if ( (areas & wxGA_RowLabels) != 0 && GetRowLabelSize() > 0 )
     {
-        const wxRect rect = wxRect(0, GetColLabelSize(), GetRowLabelSize(), ch);
+        const wxRect rect(0, GetColLabelSize(), GetRowLabelSize(), ch);
 
         wxScrolledCanvas::Refresh(true, &rect);
     }
@@ -5924,7 +5924,7 @@ void wxGrid::RefreshArea(int areas)
     // ColLabels area
     if ( (areas & wxGA_ColLabels) != 0 && GetColLabelSize() > 0 )
     {
-        const wxRect rect = wxRect(GetRowLabelSize(), 0, cw, GetColLabelSize());
+        const wxRect rect(GetRowLabelSize(), 0, cw, GetColLabelSize());
 
         wxScrolledCanvas::Refresh(true, &rect);
     }
@@ -9166,7 +9166,7 @@ void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
 
 void wxGrid::SetRowLabelValue( int row, const wxString& s )
 {
-    if ( m_table && m_rowLabelWidth > 0 )
+    if ( m_table )
     {
         m_table->SetRowLabelValue( row, s );
         if ( ShouldRefresh() )
@@ -9184,7 +9184,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
 
 void wxGrid::SetColLabelValue( int col, const wxString& s )
 {
-    if ( m_table && m_colLabelHeight > 0 )
+    if ( m_table )
     {
         m_table->SetColLabelValue( col, s );
         if ( ShouldRefresh() )
