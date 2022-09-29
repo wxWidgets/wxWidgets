@@ -1705,9 +1705,8 @@ public:
     void RefreshArea(int areas);
 
     // Refresh part of one area. The rectangle is calculated in device coordinates
-    // and should be made relative to the parent window (i.e. the wxGrid itself) by
-    // applying the area's offset to it before passing it to the function.
-    void RefreshArea(wxGridArea area, const wxRect& rect);
+    // and is relative to the subject area.
+    void RefreshArea(int area, wxRect& rect);
 
     // ------
     // Code that does a lot of grid modification can be enclosed
