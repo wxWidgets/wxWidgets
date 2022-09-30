@@ -754,7 +754,10 @@ void wxMenuItem::SetupBitmaps(wxWindow *win)
         GtkWidget* image = wxGtkImage::New(win);
         WX_GTK_IMAGE(image)->Set(m_bitmap);
         gtk_widget_show(image);
+
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(m_menuItem), image);
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
     }
 #endif
 }

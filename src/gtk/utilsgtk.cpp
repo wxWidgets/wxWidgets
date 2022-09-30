@@ -42,6 +42,7 @@
     #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
     #endif // wxUSE_STACKWALKER
+    #include "wx/gtk/private/gtk3-compat.h"
 #endif // wxDEBUG_LEVEL
 
 #include <stdarg.h>
@@ -66,7 +67,7 @@ GdkWindow* wxGetTopLevelGDK();
 
 void wxBell()
 {
-    gdk_beep();
+    gdk_display_beep(gdk_display_get_default());
 }
 
 // ----------------------------------------------------------------------------
@@ -368,9 +369,9 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 #ifdef __WXGTK4__
         gdk_seat_ungrab(gdk_display_get_default_seat(display));
 #elif defined(__WXGTK3__)
+        GdkDevice* const device = wx_get_gdk_device_from_display(display);
+
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-        GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
         wxGCC_WARNING_RESTORE()
 #else

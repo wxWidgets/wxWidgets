@@ -32,6 +32,7 @@
 
 #ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/gtk3-compat.h"
 #include <gdk/gdkx.h>
 
 GtkWidget* wxGetTopLevelGTK();
@@ -435,9 +436,13 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
         return false;
 
 #ifdef  __WXGTK20__
-    GdkWindow* const gdkwin1 = gdk_window_at_pointer(NULL, NULL);
+#ifdef  __WXGTK3__
+    GdkDisplay* const display = gdk_window_get_display(wxGetTopLevelGDK());
+    GdkDevice* const device = wx_get_gdk_device_from_display(display);
+#endif
+    GdkWindow* const gdkwin1 = wx_gdk_device_get_window_at_position(device, NULL, NULL);
     const bool ret = DoX11MouseMove(x, y);
-    GdkWindow* const gdkwin2 = gdk_window_at_pointer(NULL, NULL);
+    GdkWindow* const gdkwin2 = wx_gdk_device_get_window_at_position(device, NULL, NULL);
 
     if ( gdkwin1 != gdkwin2 )
     {

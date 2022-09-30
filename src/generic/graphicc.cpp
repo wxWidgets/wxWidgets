@@ -84,6 +84,7 @@ using namespace std;
 #ifdef __WXGTK__
 #ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/cairo.h"
 #else // GTK+ 1.x
 #include <gtk/gtk.h>
 #endif

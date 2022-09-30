@@ -423,7 +423,11 @@ void wxListBox::Update()
     wxWindow::Update();
 
     if (m_treeview)
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gdk_window_process_updates(gtk_widget_get_window(GTK_WIDGET(m_treeview)), true);
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+    }
 }
 
 // ----------------------------------------------------------------------------

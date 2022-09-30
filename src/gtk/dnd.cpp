@@ -25,6 +25,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/cairo.h"
 
 //----------------------------------------------------------------------------
 // global data
@@ -791,11 +792,14 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
                       G_CALLBACK (gtk_dnd_window_configure_callback), this);
 
 #ifdef __WXGTK3__
-    cairo_t* cr = gdk_cairo_create(gtk_widget_get_window(m_iconWindow));
+    wxGTKImpl::CairoContext cr(gtk_widget_get_window(m_iconWindow));
     icon->SetSourceSurface(cr, 0, 0);
     cairo_pattern_t* pattern = cairo_get_source(cr);
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gdk_window_set_background_pattern(gtk_widget_get_window(m_iconWindow), pattern);
-    cairo_destroy(cr);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
     cairo_surface_t* mask = NULL;
     if (icon->GetMask())
         mask = *icon->GetMask();
@@ -862,11 +866,20 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     m_retValue = wxDragCancel;
 
+    // gtk_drag_begin() is deprecated and gtk_drag_begin_with_coordinates()
+    // should be used instead, but the former is exactly the same as calling
+    // the latter with (-1, -1) coordinates, meaning to use the current pointer
+    // position, and as this is exactly what we want to do here, just keep
+    // using the old function and suppress the warnings about doing it.
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     GdkDragContext *context = gtk_drag_begin( m_widget,
                 target_list,
                 (GdkDragAction)allowed_actions,
                 g_lastButtonNumber,  // number of mouse button which started drag
                 (GdkEvent*) g_lastMouseEvent );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     if ( !context )
     {

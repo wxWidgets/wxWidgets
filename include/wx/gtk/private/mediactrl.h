@@ -28,7 +28,8 @@
 extern "C" {
 inline gpointer wxGtkGetIdFromWidget(GtkWidget* widget)
 {
-    gdk_flush();
+    GdkDisplay* display = gtk_widget_get_display(widget);
+    gdk_display_flush(display);
 
     GdkWindow* window = gtk_widget_get_window(widget);
     wxASSERT(window);

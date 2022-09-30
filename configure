@@ -42928,7 +42928,7 @@ esac
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
     fi
 
-                        if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
+                        if test "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
 
                         OBJCXXFLAGS="$OBJCXXFLAGS -Wno-deprecated-declarations"

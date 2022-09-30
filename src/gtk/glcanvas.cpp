@@ -200,7 +200,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
     g_signal_connect(m_wxwindow, "draw", G_CALLBACK(draw), this);
 #endif
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_widget_set_double_buffered(m_wxwindow, false);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     return true;
 }

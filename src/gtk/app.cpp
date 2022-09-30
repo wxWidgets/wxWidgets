@@ -31,6 +31,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/log.h"
+#include "wx/gtk/private/threads.h"
 
 #include "wx/gtk/mimetype.h"
 //-----------------------------------------------------------------------------

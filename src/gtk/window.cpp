@@ -1858,14 +1858,17 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     {
         // synthesise a mouse enter or leave event if needed
         GdkWindow* winUnderMouse =
-#ifdef __WXGTK3__
-            gdk_device_get_window_at_position(gdk_event->device, NULL, NULL);
-#else
-            gdk_window_at_pointer(NULL, NULL);
-#endif
+            wx_gdk_device_get_window_at_position(gdk_event->device, NULL, NULL);
+
+        GdkDisplay* display = winUnderMouse
+            ? gdk_window_get_display(winUnderMouse)
+            : NULL;
+        if ( !display )
+            display = gdk_display_get_default();
+
         // This seems to be necessary and actually been added to
         // GDK itself in version 2.0.X
-        gdk_flush();
+        gdk_display_flush(display);
 
         bool hasMouse = winUnderMouse == gdk_event->window;
         if ( hasMouse != g_captureWindowHasMouse )
@@ -4978,12 +4981,17 @@ void wxWindowGTK::RealizeTabOrder()
 
             chain = g_list_reverse(chain);
 
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             gtk_container_set_focus_chain(GTK_CONTAINER(m_wxwindow), chain);
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
+
             g_list_free(chain);
         }
         else // no children
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             gtk_container_unset_focus_chain(GTK_CONTAINER(m_wxwindow));
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
         }
     }
 }
@@ -5095,15 +5103,7 @@ void wxWindowGTK::WarpPointer( int x, int y )
     GdkDisplay* display = gtk_widget_get_display(m_widget);
     GdkScreen* screen = gtk_widget_get_screen(m_widget);
 #ifdef __WXGTK3__
-#ifdef __WXGTK4__
-    GdkSeat* seat = gdk_display_get_default_seat(display);
-    GdkDevice* device = gdk_seat_get_pointer(seat);
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
-    wxGCC_WARNING_RESTORE()
-#endif
+    GdkDevice* const device = wx_get_gdk_device_from_display(display);
     gdk_device_warp(device, screen, x, y);
 #else
 #ifdef GDK_WINDOWING_X11
@@ -5204,7 +5204,10 @@ void wxWindowGTK::Update()
         GdkWindow* window = GTKGetDrawingWindow();
         if (window == NULL)
             window = gtk_widget_get_window(m_widget);
+
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gdk_window_process_updates(window, true);
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
 
         // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
@@ -5449,12 +5452,18 @@ void wxWindowGTK::SetDoubleBuffered( bool on )
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
     if ( m_wxwindow )
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_widget_set_double_buffered( m_wxwindow, on );
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+    }
 }
 
 bool wxWindowGTK::IsDoubleBuffered() const
 {
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return gtk_widget_get_double_buffered( m_wxwindow ) != 0;
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 void wxWindowGTK::ClearBackground()
@@ -5975,6 +5984,8 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     else
 #endif // GTK_CHECK_VERSION(3,22,0)
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
         gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
                   NULL,           // parent menu shell
@@ -5984,6 +5995,8 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
                   0,                            // button used to activate it
                   gtk_get_current_event_time()
                 );
+
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
     }
 
     // it is possible for gtk_menu_popup() to fail

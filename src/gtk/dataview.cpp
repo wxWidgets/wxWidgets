@@ -1238,14 +1238,22 @@ extern "C" {
     // are actually macros expanding into function calls, which shouldn't be
     // performed before the library is initialized, so we need to use either an
     // inline function or a define, which is simpler.
-    #define GtkWxCellEditorBinBaseType GTK_TYPE_BIN
+    #define GetGtkWxCellEditorBinBaseType() GTK_TYPE_BIN
 #else // GTK+ < 4
     // GtkHBox is deprecated since 3.2, so avoid warnings about using it.
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
     typedef GtkHBox GtkWxCellEditorBinBase;
     typedef GtkHBoxClass GtkWxCellEditorBinBaseClass;
-    #define GtkWxCellEditorBinBaseType GTK_TYPE_HBOX
+
+    // Here we use an inline function to avoid the deprecation warning about
+    // GTK_TYPE_HBOX.
+    inline GType GetGtkWxCellEditorBinBaseType()
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        return GTK_TYPE_HBOX;
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+    }
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 #endif // GTK+ version
@@ -1292,7 +1300,7 @@ gtk_wx_cell_editor_bin_get_type()
         };
 
         cell_editor_bin_type = g_type_register_static(
-            GtkWxCellEditorBinBaseType,
+            GetGtkWxCellEditorBinBaseType(),
             "GtkWxCellEditorBin", &cell_editor_bin_info, (GTypeFlags)0 );
 
 

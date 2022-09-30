@@ -129,8 +129,8 @@ function(wx_set_common_target_properties target_name)
             -Woverloaded-virtual
         )
 
-        if(WXOSX_COCOA OR WXGTK3)
-            # when building using GTK+ 3 or Cocoa we currently get tons of deprecation
+        if(WXOSX_COCOA)
+            # when building using Cocoa we currently get tons of deprecation
             # warnings from the standard headers -- disable them as we already know
             # that they're deprecated but we still have to use them to support older
             # toolkit versions and leaving this warning enabled prevents seeing any
