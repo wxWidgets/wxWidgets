@@ -5837,30 +5837,6 @@ void wxGrid::RefreshArea(int areas)
     }
 }
 
-void wxGrid::RefreshArea(int area, wxRect& rect)
-{
-    wxASSERT_MSG( !rect.IsEmpty(), "RefreshArea expects a valid rectangle to refresh" );
-
-    if ( area == wxGA_Cells )
-    {
-        rect.Offset(GetRowLabelSize(), GetColLabelSize());
-    }
-    else if ( area == wxGA_RowLabels && GetRowLabelSize() > 0 )
-    {
-        rect.x = 0;
-        rect.width = GetRowLabelSize();
-        rect.Offset(0, GetColLabelSize());
-    }
-    else if ( area == wxGA_ColLabels && GetColLabelSize() > 0 )
-    {
-        rect.y = 0;
-        rect.height = GetColLabelSize();
-        rect.Offset(GetRowLabelSize(), 0);
-    }
-
-    Refresh(true, &rect);
-}
-
 void wxGrid::OnSize(wxSizeEvent& event)
 {
     if (m_targetWindow != this) // check whether initialisation has been done
@@ -9083,7 +9059,10 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             {
                 wxGridWindow* const gridWindow = CellToGridWindow(row, 0);
                 CalcGridWindowScrolledPosition(0, rect.y, &rect.x, &rect.y, gridWindow);
-                RefreshArea(wxGA_RowLabels, rect);
+                rect.x = 0;
+                rect.width = GetRowLabelSize();
+                rect.Offset(0, GetColLabelSize());
+                Refresh(true, &rect);
             }
         }
     }
@@ -9107,7 +9086,10 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                 {
                     wxGridWindow* const gridWindow = CellToGridWindow(0, col);
                     CalcGridWindowScrolledPosition(rect.x, 0, &rect.x, &rect.y, gridWindow);
-                    RefreshArea(wxGA_ColLabels, rect);
+                    rect.y = 0;
+                    rect.height = GetColLabelSize();
+                    rect.Offset(GetRowLabelSize(), 0);
+                    Refresh(true, &rect);
                 }
             }
         }
@@ -10750,7 +10732,8 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
             // Refresh the entire row to account for overflowing cells
             rect.x = 0;
             rect.width = GetClientSize().GetWidth() - GetRowLabelSize();
-            RefreshArea(wxGA_Cells, rect);
+            rect.Offset(GetRowLabelSize(), GetColLabelSize());
+            Refresh(true, &rect);
         }
 
         if ( m_currentCellCoords.GetRow() == row &&
