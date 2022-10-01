@@ -5800,9 +5800,8 @@ void wxGrid::RefreshArea(int areas)
     {
         // Normally if we want to refresh the entire grid we call
         // Refresh() instead, but to make this function consistent
-        // and correct, just forward to wxScrolledCanvas::Refresh()
-        // if the argument is wxGA_All.
-        wxScrolledCanvas::Refresh();
+        // and correct, just forward to it if the argument is wxGA_All.
+        Refresh();
         return;
     }
 
@@ -5818,7 +5817,7 @@ void wxGrid::RefreshArea(int areas)
     {
         const wxRect rect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
 
-        wxScrolledCanvas::Refresh(true, &rect);
+        Refresh(true, &rect);
     }
 
     // RowLabels area
@@ -5826,7 +5825,7 @@ void wxGrid::RefreshArea(int areas)
     {
         const wxRect rect(0, GetColLabelSize(), GetRowLabelSize(), ch);
 
-        wxScrolledCanvas::Refresh(true, &rect);
+        Refresh(true, &rect);
     }
 
     // ColLabels area
@@ -5834,7 +5833,7 @@ void wxGrid::RefreshArea(int areas)
     {
         const wxRect rect(GetRowLabelSize(), 0, cw, GetColLabelSize());
 
-        wxScrolledCanvas::Refresh(true, &rect);
+        Refresh(true, &rect);
     }
 }
 
@@ -5859,7 +5858,7 @@ void wxGrid::RefreshArea(int area, wxRect& rect)
         rect.Offset(GetRowLabelSize(), 0);
     }
 
-    wxScrolledCanvas::Refresh(true, &rect);
+    Refresh(true, &rect);
 }
 
 void wxGrid::OnSize(wxSizeEvent& event)
@@ -8871,7 +8870,7 @@ void wxGrid::SetRowLabelSize( int width )
         m_rowLabelWidth = width;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledCanvas::Refresh( true );
+        Refresh();
     }
 }
 
@@ -8901,7 +8900,7 @@ void wxGrid::SetColLabelSize( int height )
         m_colLabelHeight = height;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledCanvas::Refresh( true );
+        Refresh();
     }
 }
 
