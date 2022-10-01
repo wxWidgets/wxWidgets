@@ -256,12 +256,13 @@ public:
 
         @param data This data may, or not, have the XML document preamble, i.e.
             it can start either with @c "<?xml" processing instruction or
-            directly with @c svg tag. Notice that two overloads of this
+            directly with @c svg tag. Notice that three overloads of this
             function, taking const and non-const data, are provided: as the
             current implementation modifies the data while parsing, using the
             non-const variant is more efficient, as it avoids making copy of
             the data, but the data is consumed by it and can't be reused any
-            more.
+            more. This data has to be null terminated. Use the variant
+            with the @c len parameter to use data that is not null terminated.
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle. As SVG images usually don't have any natural
             default size, it should be provided when creating the bundle.
@@ -270,6 +271,10 @@ public:
 
     /// @overload
     static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+
+    /// @overload
+    wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+
 
     /**
         Create a bundle from the SVG image loaded from the given file.
