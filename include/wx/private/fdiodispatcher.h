@@ -66,6 +66,8 @@ struct wxFDIOHandlerEntry
 {
     wxFDIOHandlerEntry()
     {
+        handler = NULL;
+        flags = 0;
     }
 
     wxFDIOHandlerEntry(wxFDIOHandler *handler_, int flags_)
