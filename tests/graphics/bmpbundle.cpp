@@ -491,3 +491,14 @@ TEST_CASE("BitmapBundle::GetConsensusSize", "[bmpbundle]")
     // Integer scaling factors should be preferred.
     CHECK( bundles.GetConsensusSize(1.5) == 16 );
 }
+
+// This can be used to test loading an arbitrary image file by setting the
+// environment variable WX_TEST_IMAGE_PATH to point to it.
+TEST_CASE("BitmapBundle::Load", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_SVG", &path) );
+
+    wxBitmapBundle bb = wxBitmapBundle::FromSVGFile(path, wxSize(32, 32));
+    REQUIRE( bb.IsOk() );
+}
