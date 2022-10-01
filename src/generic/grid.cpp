@@ -5561,7 +5561,7 @@ void wxGrid::ClearGrid()
 
         m_table->Clear();
         if ( ShouldRefresh() )
-            m_gridWin->Refresh();
+            RefreshArea(wxGA_Cells);
     }
 }
 
