@@ -606,7 +606,7 @@ wxPrintout::~wxPrintout()
 
 bool wxPrintout::OnBeginDocument(int WXUNUSED(startPage), int WXUNUSED(endPage))
 {
-    return GetDC()->StartDoc(_("Printing ") + m_printoutTitle);
+    return GetDC()->StartDoc(m_printoutTitle);
 }
 
 void wxPrintout::OnEndDocument()
