@@ -9985,62 +9985,15 @@ void wxGrid::DoSetRowSize( int row, int height )
             }
         }
 
-        // Helper object to refresh part of the window below the given position
-        // (in physical coordinates).
-        class LowerWindowPartRefresher
-        {
-        public:
-            explicit LowerWindowPartRefresher(int top)
-                : m_top(top)
-            {
-            }
-
-            void operator()(wxWindow* w) const
-            {
-                wxSize size = w->GetClientSize();
-                if ( size.y > m_top )
-                {
-                    size.y -= m_top;
-                    w->RefreshRect(wxRect(wxPoint(0, m_top), size));
-                }
-                //else: the area to refresh is not in view anyhow
-            }
-
-        private:
-            const int m_top;
-        };
-
         int y;
         CalcScrolledPosition(0, GetRowTop(topRow), NULL, &y);
 
-        if ( topRow < m_numFrozenRows )
-        {
-            // This row is frozen, refresh the frozen windows.
-            LowerWindowPartRefresher refreshLowerPart(y);
+        // Refresh the lower part of the window below the y position
+        int cw, ch;
+        GetClientSize(&cw, &ch);
 
-            refreshLowerPart(m_rowFrozenLabelWin);
-            refreshLowerPart(m_frozenRowGridWin);
-
-            // If there are any frozen columns as well, there is one more
-            // window to refresh.
-            if ( m_frozenCornerGridWin )
-                refreshLowerPart(m_frozenCornerGridWin);
-        }
-        else // This row is not frozen.
-        {
-            // If we have any frozen rows, all the windows we're refreshing
-            // here are offset by their height.
-            if ( m_rowFrozenLabelWin )
-                y -= m_rowFrozenLabelWin->GetSize().y;
-
-            LowerWindowPartRefresher refreshLowerPart(y);
-
-            refreshLowerPart(m_rowLabelWin);
-            refreshLowerPart(m_gridWin);
-
-            if ( m_frozenColGridWin )
-                refreshLowerPart(m_frozenColGridWin);
-        }
+        const wxRect updateRect(0, y, cw, ch - y);
+        Refresh(true, &updateRect);
     }
 }
 
@@ -10172,61 +10125,16 @@ void wxGrid::DoSetColSize( int col, int width )
             }
         }
 
-        // This is supposed to be the equivalent of LowerWindowPartRefresher
-        // for the rows, but there is no real counterpart to "lower" in
-        // horizontal direction, so use the clumsy "further" as the least bad
-        // alternative.
-        class FurtherWindowPartRefresher
-        {
-        public:
-            explicit FurtherWindowPartRefresher(int left)
-                : m_left(left)
-            {
-            }
-
-            void operator()(wxWindow* w) const
-            {
-                wxSize size = w->GetClientSize();
-                if ( size.x > m_left )
-                {
-                    size.x -= m_left;
-                    w->RefreshRect(wxRect(wxPoint(m_left, 0), size));
-                }
-            }
-
-        private:
-            const int m_left;
-        };
-
         int x;
         CalcScrolledPosition(GetColLeft(leftCol), 0, &x, NULL);
 
-        if ( leftCol < m_numFrozenCols )
-        {
-            FurtherWindowPartRefresher refreshFurtherPart(x);
+        // Refresh the further part of the window to the right (LTR)
+        // or to the left (RTL) of the x position
+        int cw, ch;
+        GetClientSize(&cw, &ch);
 
-            refreshFurtherPart(m_colFrozenLabelWin);
-            refreshFurtherPart(m_frozenColGridWin);
-
-            if ( m_frozenCornerGridWin )
-                refreshFurtherPart(m_frozenCornerGridWin);
-        }
-        else
-        {
-            if ( m_colFrozenLabelWin )
-                x -= m_colFrozenLabelWin->GetSize().x;
-
-            FurtherWindowPartRefresher refreshFurtherPart(x);
-
-            // Refreshing the native header is unnecessary, as it updates
-            // itself correctly anyhow, and just results in extra flicker.
-            if ( !IsUsingNativeHeader() )
-                refreshFurtherPart(m_colLabelWin);
-            refreshFurtherPart(m_gridWin);
-
-            if ( m_frozenRowGridWin )
-                refreshFurtherPart(m_frozenRowGridWin);
-        }
+        const wxRect updateRect(x, 0, cw - x, ch);
+        Refresh(true, &updateRect);
     }
 }
 
