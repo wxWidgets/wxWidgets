@@ -3301,7 +3301,7 @@ void wxGrid::CalcWindowSizes()
 bool wxGrid::Redimension( const wxGridTableMessage& msg )
 {
     int i;
-    bool result = false;
+    int labelArea = -1;
 
     // Clear the attribute cache as the attribute might refer to a different
     // cell than stored in the cache after adding/removing rows/columns.
@@ -3375,11 +3375,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                 attrProvider->UpdateAttrRows( pos, numRows );
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_rowLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_RowLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
@@ -3426,11 +3423,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_rowLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_RowLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_ROWS_DELETED:
@@ -3498,11 +3492,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             }
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_rowLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_RowLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_COLS_INSERTED:
@@ -3568,11 +3559,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                 attrProvider->UpdateAttrCols( pos, numCols );
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_colLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_ColLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
@@ -3625,11 +3613,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_colLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_ColLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_COLS_DELETED:
@@ -3702,20 +3687,19 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             }
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_colLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_ColLabels;
         break;
     }
 
     InvalidateBestSize();
 
-    if (result && ShouldRefresh() )
-        Refresh();
+    if ( labelArea != -1 && ShouldRefresh() )
+    {
+        RefreshArea(labelArea | wxGA_Cells);
+    }
 
-    return result;
+    return labelArea != -1;
 }
 
 wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *gridWindow ) const
