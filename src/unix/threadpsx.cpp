@@ -27,6 +27,8 @@
 
 #include "wx/thread.h"
 #include "wx/except.h"
+#include "wx/private/threadinfo.h"
+#include "wx/scopeguard.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -868,6 +870,11 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         return (void *)-1;
     }
+
+    // ThreadCleanUp() will be called in thread->CallEntry(),
+    // but there might be wxLog calls after that recreating the thread info.
+    // Make sure they get recleaned when leaving this function.
+    wxON_BLOCK_EXIT0(wxThreadSpecificInfo::ThreadCleanUp);
 
     // have to declare this before pthread_cleanup_push() which defines a
     // block!
