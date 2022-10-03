@@ -1767,6 +1767,19 @@ void MyFrame::OnSorted( wxDataViewEvent &event )
 
 void MyFrame::OnDataViewChar(wxKeyEvent& event)
 {
+    wxString key;
+#if wxUSE_UNICODE
+    if ( event.GetUnicodeKey() != WXK_NONE )
+        key.Printf("\"%c\"", event.GetUnicodeKey());
+    else
+#endif
+    if ( event.GetKeyCode() != WXK_NONE )
+        key.Printf("wxKeyCode(%d)", event.GetKeyCode());
+    else
+        key = "unknown key";
+
+    wxLogMessage("wxEVT_CHAR for %s", key);
+
     if ( event.GetKeyCode() == WXK_DELETE )
         DeleteSelectedItems();
     else
