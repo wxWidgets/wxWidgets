@@ -261,6 +261,7 @@ wxMSW:
 wxOSX:
 
 - Generate wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK (#22833).
+- Fix wxDataViewCtrl::HitTest() (Vojtěch Bubník, #22789).
 
 
 3.2.1: (released 2022-09-09)
