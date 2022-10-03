@@ -258,6 +258,10 @@ wxMSW:
 - Fix return value of wxZoomGestureEvent::GetZoomFactor() (s-murphree, #22818).
 - Update top level icon resolution on DPI change (#22807).
 
+wxOSX:
+
+- Generate wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK (#22833).
+
 
 3.2.1: (released 2022-09-09)
 ----------------------------

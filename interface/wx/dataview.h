@@ -977,8 +977,6 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK event.
-           Notice that currently this event is not generated in the native macOS
-           versions of the control.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
