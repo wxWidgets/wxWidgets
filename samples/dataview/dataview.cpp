@@ -81,6 +81,7 @@ private:
     void OnCustomHeaderHeight(wxCommandEvent& event);
 #endif // wxHAS_GENERIC_DATAVIEWCTRL
     void OnGetPageInfo(wxCommandEvent& event);
+    void OnHitTest(wxCommandEvent& event);
     void OnDisable(wxCommandEvent& event);
     void OnClearMyMusicTreeModel(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
@@ -398,6 +399,7 @@ enum
 {
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_GET_PAGE_INFO,
+    ID_HIT_TEST,
     ID_DISABLE,
     ID_CLEAR_MODEL,
     ID_BACKGROUND_COLOUR,
@@ -480,6 +482,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_CLEARLOG, MyFrame::OnClearLog )
 
     EVT_MENU( ID_GET_PAGE_INFO, MyFrame::OnGetPageInfo )
+    EVT_MENU( ID_HIT_TEST, MyFrame::OnHitTest )
     EVT_MENU( ID_DISABLE, MyFrame::OnDisable )
     EVT_MENU( ID_CLEAR_MODEL, MyFrame::OnClearMyMusicTreeModel )
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
@@ -599,6 +602,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_GET_PAGE_INFO, "Show current &page info");
+    file_menu->Append(ID_HIT_TEST, "Show item under mouse\tCtrl-M");
     file_menu->AppendCheckItem(ID_DISABLE, "&Disable\tCtrl-D");
     file_menu->Append(ID_CLEAR_MODEL, "&Clear MyMusicTreeModel\tCtrl-W");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
@@ -1141,6 +1145,28 @@ void MyFrame::OnGetPageInfo(wxCommandEvent& WXUNUSED(event))
     wxLogMessage("%s and there are %d items per page",
                  topDesc,
                  dvc->GetCountPerPage());
+}
+
+void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewCtrl* const dvc = m_ctrl[m_notebook->GetSelection()];
+
+    wxDataViewItem item;
+    wxDataViewColumn* column = NULL;
+    dvc->HitTest(dvc->ScreenToClient(wxGetMousePosition()), item, column);
+
+    if ( item.IsOk() )
+    {
+        unsigned colIdx = column ? column->GetModelColumn() : 0;
+
+        wxVariant value;
+        dvc->GetModel()->GetValue(value, item, colIdx);
+        wxLogMessage("Item under mouse is \"%s\"", value.GetString());
+    }
+    else
+    {
+        wxLogMessage("No item under mouse");
+    }
 }
 
 void MyFrame::OnDisable(wxCommandEvent& event)
