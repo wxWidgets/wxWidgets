@@ -10404,25 +10404,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         if ( !setAsMin )
             extentMax = wxMax(extentMax, GetColMinimalWidth(colOrRow));
 
-        SetColSize( colOrRow, extentMax );
-        if ( ShouldRefresh() )
-        {
-            if ( m_useNativeHeader )
-            {
-                GetGridColHeader()->UpdateColumn(colOrRow);
-            }
-            else
-            {
-                int cw, ch;
-                m_gridWin->GetClientSize( &cw, &ch );
-                wxRect rect ( CellToRect( 0, colOrRow ) );
-                CalcScrolledPosition(rect.x, 0, &rect.x, NULL);
-                rect.y = 0;
-                rect.width = cw - rect.x;
-                rect.height = m_colLabelHeight;
-                GetColLabelWindow()->Refresh( true, &rect );
-            }
-        }
+        SetColSize(colOrRow, extentMax);
     }
     else
     {
@@ -10433,17 +10415,6 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             extentMax = wxMax(extentMax, GetRowMinimalHeight(colOrRow));
 
         SetRowSize(colOrRow, extentMax);
-        if ( ShouldRefresh() )
-        {
-            int cw, ch;
-            m_gridWin->GetClientSize( &cw, &ch );
-            wxRect rect( CellToRect( colOrRow, 0 ) );
-            CalcScrolledPosition(0, rect.y, NULL, &rect.y);
-            rect.x = 0;
-            rect.width = m_rowLabelWidth;
-            rect.height = ch - rect.y;
-            m_rowLabelWin->Refresh( true, &rect );
-        }
     }
 
     if ( setAsMin )
