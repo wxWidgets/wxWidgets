@@ -27,8 +27,9 @@
 
 #include "wx/thread.h"
 #include "wx/except.h"
-#include "wx/private/threadinfo.h"
 #include "wx/scopeguard.h"
+
+#include "wx/private/threadinfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -857,6 +858,11 @@ void *wxPthreadStart(void *ptr)
 
 void *wxThreadInternal::PthreadStart(wxThread *thread)
 {
+    // Ensure that we clean up thread-specific data before exiting the thread
+    // and do it as late as possible as wxLog calls can recreate it and may
+    // happen until the very end.
+    wxON_BLOCK_EXIT0(wxThreadSpecificInfo::ThreadCleanUp);
+
     wxThreadInternal *pthread = thread->m_internal;
 
     wxLogTrace(TRACE_THREADS, wxT("Thread %p started."), THR_ID(pthread));
@@ -870,11 +876,6 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         return (void *)-1;
     }
-
-    // ThreadCleanUp() will be called in thread->CallEntry(),
-    // but there might be wxLog calls after that recreating the thread info.
-    // Make sure they get recleaned when leaving this function.
-    wxON_BLOCK_EXIT0(wxThreadSpecificInfo::ThreadCleanUp);
 
     // have to declare this before pthread_cleanup_push() which defines a
     // block!
@@ -907,7 +908,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         wxTRY
         {
-            pthread->m_exitcode = thread->CallEntry();
+            pthread->m_exitcode = thread->Entry();
 
             wxLogTrace(TRACE_THREADS,
                        wxT("Thread %p Entry() returned %lu."),
