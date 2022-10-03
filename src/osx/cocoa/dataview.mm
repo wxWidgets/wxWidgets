@@ -164,6 +164,46 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
 @end
 
 // ----------------------------------------------------------------------------
+// wxDVCNSHeaderView: exists only to override rightMouseDown:
+// ----------------------------------------------------------------------------
+
+@interface wxDVCNSHeaderView : NSTableHeaderView
+{
+    wxDataViewCtrl* dvc;
+}
+
+    -(id) initWithDVC:(wxDataViewCtrl*)ctrl;
+    -(void) rightMouseDown:(NSEvent *)theEvent;
+@end
+
+@implementation wxDVCNSHeaderView
+
+-(id) initWithDVC:(wxDataViewCtrl*)ctrl
+{
+    self = [super init];
+    if (self != nil)
+    {
+        dvc = ctrl;
+    }
+    return self;
+}
+
+-(void) rightMouseDown:(NSEvent *)theEvent
+{
+    NSPoint locInWindow = [theEvent locationInWindow];
+    NSPoint locInView = [self convertPoint:locInWindow fromView:nil];
+    NSInteger colIdx = [self columnAtPoint:locInView];
+    wxDataViewColumn* const
+        column = colIdx == -1 ? NULL : dvc->GetColumn(colIdx);
+    wxDataViewEvent
+        event(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dvc, column);
+    if ( !dvc->HandleWindowEvent(event) )
+        [super rightMouseDown:theEvent];
+}
+
+@end
+
+// ----------------------------------------------------------------------------
 // wxDVCNSTableColumn: exists only to override NSTableColumn:dataCellForRow:
 // ----------------------------------------------------------------------------
 
@@ -1985,8 +2025,13 @@ void wxCocoaDataViewControl::InitOutlineView(long style)
     [m_OutlineView setAllowsMultipleSelection:           (style & wxDV_MULTIPLE)  != 0];
     [m_OutlineView setUsesAlternatingRowBackgroundColors:(style & wxDV_ROW_LINES) != 0];
 
-    if ( style & wxDV_NO_HEADER )
-        [m_OutlineView setHeaderView:nil];
+    NSTableHeaderView* header = nil;
+    if ( !(style & wxDV_NO_HEADER) )
+    {
+        header = [[wxDVCNSHeaderView alloc] initWithDVC:GetDataViewCtrl()];
+    }
+
+    [m_OutlineView setHeaderView:header];
 }
 
 wxCocoaDataViewControl::~wxCocoaDataViewControl()
