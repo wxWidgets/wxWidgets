@@ -239,6 +239,7 @@ All:
 
 - Fix wx-config generation in CMake builds (Maarten Bent, #22806).
 - Fix compilation of code using wxTransformMatrix with recent gcc (#22790).
+- Fix memory leak when destroying wxThread (Antti Nietosvaara, #22840).
 
 All (GUI):
 

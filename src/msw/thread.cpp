@@ -32,6 +32,8 @@
 #include "wx/apptrait.h"
 #include "wx/scopeguard.h"
 
+#include "wx/private/threadinfo.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/seh.h"
@@ -532,7 +534,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
             return THREAD_ERROR_EXIT;
         }
 
-        rc = wxPtrToUInt(thread->CallEntry());
+        rc = wxPtrToUInt(thread->Entry());
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
@@ -582,6 +584,10 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     // the thread may delete itself now if it wants, we don't need it any more
     if ( isDetached )
         thread->m_internal->LetDie();
+
+    // Do this as the very last thing to ensure that thread-specific info is
+    // not recreated any longer.
+    wxThreadSpecificInfo::ThreadCleanUp();
 
     return rc;
 }

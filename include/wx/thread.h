@@ -610,7 +610,7 @@ protected:
     // of this thread.
     virtual void *Entry() = 0;
 
-    // use this to call the Entry() virtual method
+    // obsolete private function calling Entry(), do not use.
     void *CallEntry();
 
     // Callbacks which may be overridden by the derived class to perform some
