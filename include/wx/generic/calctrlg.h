@@ -14,6 +14,8 @@
 #include "wx/control.h"         // the base class
 #include "wx/dcclient.h"        // for wxPaintDC
 
+class WXDLLIMPEXP_FWD_CORE wxChoice;
+// Not used here any more, but still declared for backwards compatibility.
 class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
 class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
@@ -238,7 +240,8 @@ private:
     // show the correct controls
     void ShowCurrentControls();
 
-    // create the month combo and year spin controls
+    // create the month choice and year spin controls: the name is misleading
+    // (it should be called CreateMonthChoice()) but preserved for compatibility
     void CreateMonthComboBox();
     void CreateYearSpinCtrl();
 
@@ -268,7 +271,7 @@ private:
 
     // the subcontrols
     wxStaticText *m_staticMonth;
-    wxComboBox *m_comboMonth;
+    wxChoice *m_choiceMonth;
 
     wxStaticText *m_staticYear;
     wxSpinCtrl *m_spinYear;
