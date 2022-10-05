@@ -425,7 +425,9 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
         flags |= wxCB_SORT;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
-
+    else
+        flags |= wxTE_PROCESS_ENTER;
+    
     switch ( m_radioKind->GetSelection() )
     {
         default:
