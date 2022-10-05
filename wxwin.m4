@@ -5,6 +5,9 @@ dnl                  Bob McCown (Mac-testing)
 dnl Creation date:   24/11/2001
 dnl ---------------------------------------------------------------------------
 
+dnl Increment this when changing this file.
+# serial 42
+
 dnl ===========================================================================
 dnl Table of Contents of this macro file:
 dnl -------------------------------------
