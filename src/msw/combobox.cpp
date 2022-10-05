@@ -482,6 +482,14 @@ void wxComboBox::MSWRecreate()
     if ( !MSWCreateControl(wxT("COMBOBOX"), wxEmptyString, pos, size) )
         return;
 
+    if ( !HasFlag(wxCB_READONLY) )
+    {
+        // A new EDIT control was created as well, we need to subclass it just
+        // as when creating the combobox, see Create(). However we don't need
+        // to assign to gs_wndprocEdit as it must have been already set.
+        wxSetWindowProc((HWND)GetEditHWND(), wxComboEditWndProc);
+    }
+
     // initialize the controls contents
     for ( i = 0; i < numItems; i++ )
     {
