@@ -37,6 +37,9 @@
     #include <cxxabi.h>
 #endif // HAVE_CXA_DEMANGLE
 
+namespace
+{
+
 // ----------------------------------------------------------------------------
 // tiny helper wrapper around popen/pclose()
 // ----------------------------------------------------------------------------
@@ -65,6 +68,8 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxStdioPipe);
 };
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation
