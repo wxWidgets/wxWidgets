@@ -263,8 +263,15 @@ ReadSingleResult(FILE* fp, unsigned long i,
     const size_t posColon = filename.find(wxT(':'));
     if ( posColon != wxString::npos )
     {
-        // parse line number
-        if ( !wxString(filename, posColon + 1, wxString::npos).ToULong(&line) )
+        // parse line number: note that there can be more stuff following it in
+        // addr2line output, e.g. "(discriminator N)", see
+        // http://wiki.dwarfstd.org/index.php?title=Path_Discriminators
+        wxString afterColon(filename, posColon + 1, wxString::npos);
+        const size_t posSpace = afterColon.find(' ');
+        if ( posSpace != wxString::npos )
+            afterColon.erase(posSpace);
+
+        if ( !afterColon.ToULong(&line) )
             line = 0;
 
         // remove line number from 'filename'
