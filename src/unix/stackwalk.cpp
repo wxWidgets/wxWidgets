@@ -230,6 +230,47 @@ bool ReadLine(FILE* fp, unsigned long num, wxString* line)
     return true;
 }
 
+#ifndef __WXOSX__
+
+// Parse a single unit of addr2line output, which spans 2 lines.
+bool
+ReadSingleResult(FILE* fp, unsigned long i,
+                 wxString& name, wxString& filename, unsigned long& line)
+{
+    // 1st line has function name
+    if ( !ReadLine(fp, i, &name) )
+        return false;
+
+    if ( name == wxT("??") )
+        name.clear();
+
+    // 2nd one -- the file/line info
+    if ( !ReadLine(fp, i, &filename) )
+        return false;
+
+    const size_t posColon = filename.find(wxT(':'));
+    if ( posColon != wxString::npos )
+    {
+        // parse line number
+        if ( !wxString(filename, posColon + 1, wxString::npos).ToULong(&line) )
+            line = 0;
+
+        // remove line number from 'filename'
+        filename.erase(posColon);
+        if ( filename == wxT("??") )
+            filename.clear();
+    }
+    else
+    {
+        wxLogDebug("Unexpected addr2line format: \"%s\" - the colon is missing",
+                   filename);
+    }
+
+    return true;
+}
+
+#endif // !__WXOSX__
+
 } // anonymous namespace
 
 int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, char **syminfo)
@@ -308,34 +349,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
             }
         }
 #else // !__WXOSX__
-        // 1st line has function name
-        if ( !ReadLine(fp, i, &name) )
-            return false;
-
-        if ( name == wxT("??") )
-            name.clear();
-
-        // 2nd one -- the file/line info
-        if ( !ReadLine(fp, i, &filename) )
-            return false;
-
-        const size_t posColon = filename.find(wxT(':'));
-        if ( posColon != wxString::npos )
-        {
-            // parse line number
-            if ( !wxString(filename, posColon + 1, wxString::npos).ToULong(&line) )
-                line = 0;
-
-            // remove line number from 'filename'
-            filename.erase(posColon);
-            if ( filename == wxT("??") )
-                filename.clear();
-        }
-        else
-        {
-            wxLogDebug("Unexpected addr2line format: \"%s\" - the colon is missing",
-                       filename);
-        }
+        if ( !ReadSingleResult(fp, i, name, filename, line) )
+            return 0;
 #endif // __WXOSX__/!__WXOSX__
 
         // now we've got enough info to initialize curr-th stack frame
