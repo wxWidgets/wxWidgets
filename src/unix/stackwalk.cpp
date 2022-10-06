@@ -37,6 +37,18 @@
     #include <cxxabi.h>
 #endif // HAVE_CXA_DEMANGLE
 
+// We don't test for this function in configure because it's present in glibc
+// versions dating back to at least 2.3, i.e. in practice it's always available.
+#if defined(__LINUX__) && defined(__GLIBC__)
+    #include <dlfcn.h>
+    #include <link.h>
+
+    #include <unordered_map>
+    #include <vector>
+
+    #define HAVE_DLADDR1
+#endif
+
 namespace
 {
 
@@ -273,6 +285,116 @@ ReadSingleResult(FILE* fp, unsigned long i,
 
 } // anonymous namespace
 
+// When we have dladdr1() (which is always the case under Linux), we can do
+// better as we can find the correct path for addr2line, allowing it to find
+// the symbols in the shared libraries too.
+#ifdef HAVE_DLADDR1
+
+namespace
+{
+
+struct ModuleInfo
+{
+    explicit ModuleInfo(const char* name, ptrdiff_t diff)
+        : name(name),
+          diff(diff)
+    {
+    }
+
+    // Name of the file containing this address, may be NULL.
+    const char* name;
+
+    // Difference between the address in the file and in memory.
+    ptrdiff_t diff;
+};
+
+ModuleInfo GetModuleInfoFromAddr(void* addr)
+{
+    Dl_info info;
+    link_map* lm;
+    if ( !dladdr1(addr, &info, (void**)&lm, RTLD_DL_LINKMAP) )
+    {
+        // Probably not worth spamming the user with even debug errors.
+        return ModuleInfo(NULL, 0);
+    }
+
+    return ModuleInfo(info.dli_fname, lm->l_addr);
+}
+
+} // anonymous namespace
+
+int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, char **syminfo)
+{
+    // We want to optimize the number of addr2line invocations, but we have to
+    // run it separately for each file, so find all the files first.
+    //
+    // Note that we could avoid doing all this and still use a single command
+    // if we could rely on having eu-addr2line which has a "-p <PID>"
+    // parameter, but it's not usually available, unfortunately.
+
+    struct ModuleData
+    {
+        // The command we run to get information about the addresses, starting
+        // with addr2line and containing addresses at the end.
+        wxString command;
+
+        // Indices of addresses corresponding to the subsequent lines of output
+        // of the command above.
+        std::vector<size_t> indices;
+    };
+
+    // The key of this map is the path of the module.
+    std::unordered_map<const char*, ModuleData> modulesData;
+
+    // First pass: construct all commands to run.
+    for ( size_t i = 0; i < n; ++i )
+    {
+        void* const addr = addresses[i];
+
+        const ModuleInfo modInfo = GetModuleInfoFromAddr(addr);
+
+        // We can't do anything if we failed to find the file name.
+        if ( !modInfo.name )
+        {
+            arr[i].Set(wxString(), wxString(), syminfo[i], i, 0, addr);
+            continue;
+        }
+
+        ModuleData& modData = modulesData[modInfo.name];
+        if ( modData.command.empty() )
+            modData.command.Printf("addr2line -C -f -e \"%s\"", modInfo.name);
+
+        modData.command +=
+            wxString::Format(" %zx", wxPtrToUInt(addr) - modInfo.diff);
+        modData.indices.push_back(i);
+    }
+
+    // Second pass: do run them.
+    wxString name, filename;
+    unsigned long line = 0;
+
+    for ( const auto& it: modulesData )
+    {
+        const ModuleData& modData = it.second;
+
+        wxStdioPipe fp(modData.command.utf8_str(), "r");
+        if ( !fp )
+            return 0;
+
+        for ( const size_t i: modData.indices )
+        {
+            if ( !ReadSingleResult(fp, i, name, filename, line) )
+                return 0;
+
+            arr[i].Set(name, filename, syminfo[i], i, line, addresses[i]);
+        }
+    }
+
+    return n;
+}
+
+#else // !HAVE_DLADDR1
+
 int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, char **syminfo)
 {
     // we need to launch addr2line tool to get this information and we need to
@@ -361,6 +483,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
 
     return curr;
 }
+
+#endif // HAVE_DLADDR1/!HAVE_DLADDR1
 
 void wxStackWalker::Walk(size_t skip, size_t maxDepth)
 {
