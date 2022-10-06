@@ -322,9 +322,9 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
         const size_t posColon = filename.find(wxT(':'));
         if ( posColon != wxString::npos )
         {
-            // parse line number (it's ok if it fails, this will just leave
-            // line at its current, invalid, 0 value)
-            wxString(filename, posColon + 1, wxString::npos).ToULong(&line);
+            // parse line number
+            if ( !wxString(filename, posColon + 1, wxString::npos).ToULong(&line) )
+                line = 0;
 
             // remove line number from 'filename'
             filename.erase(posColon);
