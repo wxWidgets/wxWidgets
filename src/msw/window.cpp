@@ -544,6 +544,10 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
         msflags |= WS_VISIBLE;
     }
 
+    // If the class name is not specified, use the one for generic wxWindow.
+    if ( !classname )
+        classname = GetMSWClassName(style);
+
     if ( !MSWCreate(classname, NULL, pos, size, msflags, exstyle) )
         return false;
 
