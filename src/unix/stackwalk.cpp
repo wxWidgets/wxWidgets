@@ -225,7 +225,7 @@ bool ReadLine(FILE* fp, unsigned long num, wxString* line)
     }
 
     *line = wxString::FromAscii(g_buf);
-    line->RemoveLast();
+    line->RemoveLast(); // trailing newline
 
     return true;
 }
@@ -311,9 +311,6 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
         // 1st line has function name
         if ( !ReadLine(fp, i, &name) )
             return false;
-
-        name = wxString::FromAscii(g_buf);
-        name.RemoveLast(); // trailing newline
 
         if ( name == wxT("??") )
             name.clear();
