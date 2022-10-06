@@ -333,9 +333,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
         }
         else
         {
-            wxLogDebug(wxT("Unexpected addr2line format: \"%s\" - ")
-                       wxT("the semicolon is missing"),
-                       filename.c_str());
+            wxLogDebug("Unexpected addr2line format: \"%s\" - the colon is missing",
+                       filename);
         }
 #endif // __WXOSX__/!__WXOSX__
 
