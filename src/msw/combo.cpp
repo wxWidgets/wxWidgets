@@ -111,12 +111,6 @@ bool wxComboCtrl::Create(wxWindow *parent,
     if ( style & wxCC_STD_BUTTON )
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
 
-    // Prepare background for double-buffering or better background theme
-    // support, whichever is possible.
-    SetDoubleBuffered(true);
-    if ( !IsDoubleBuffered() )
-        SetBackgroundStyle( wxBG_STYLE_PAINT );
-
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
 
