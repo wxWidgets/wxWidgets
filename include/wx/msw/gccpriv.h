@@ -88,6 +88,12 @@
     #define __CYGWIN10__
 #endif
 
+/* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
+/* when using Windows sockets. */
+#if defined(__CYGWIN__)
+    #define __USE_W32_SOCKETS
+#endif
+
 /*
     Traditional MinGW (but not MinGW-w64 nor TDM-GCC) omits many POSIX
     functions from their headers when compiled with __STRICT_ANSI__ defined.

@@ -205,12 +205,6 @@
 #define __cplusplus
 #endif /* __DECCXX */
 
-/* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
-/* when using Windows sockets. */
-#if defined(__CYGWIN__) && defined(__WINDOWS__)
-#define __USE_W32_SOCKETS
-#endif
-
 #if defined(_MSVC_LANG)
 /*
    We want to always use the really supported C++ standard when using MSVC
