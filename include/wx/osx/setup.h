@@ -220,9 +220,10 @@
 
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
-// Default is 0
+// This feature is incomplete and experimental, please only enable it if
+// you want to participate in its development.
 //
-// Recommended setting: 0 (this is still work in progress...)
+// Recommended setting: 0 (unless you wish to try working on it).
 #define wxUSE_EXTENDED_RTTI 0
 
 // Support for message/error logging. This includes wxLogXXX() functions and
@@ -477,7 +478,7 @@
 // wxFileConfig
 #define wxUSE_TEXTFILE      1
 
-// i18n support: _() macro, wxLocale class. Requires wxTextFile.
+// i18n support: _() macro, wxLocale class.
 #define wxUSE_INTL          1
 
 // Provide wxFoo_l() functions similar to standard foo() functions but taking
@@ -537,9 +538,8 @@
 #define wxUSE_CONFIG        1
 
 // If wxUSE_CONFIG is 1, you may choose to use either the native config
-// classes under Windows (using .INI files under Win16 and the registry under
-// Win32) or the portable text file format used by the config classes under
-// Unix.
+// classes under Windows (using the registry) or the portable text file
+// format used by the config classes under Unix.
 //
 // Default is 1 to use native classes. Note that you may still use
 // wxFileConfig even if you set this to 1 - just the config object created by
@@ -718,14 +718,11 @@
 // or your compiler cannot for some reason cope with complexity of templates used.
 #define wxUSE_ANY 1
 
-// Support for regular expression matching via wxRegEx class: enable this to
-// use POSIX regular expressions in your code. You need to compile regex
-// library from src/regex to use it under Windows.
+// Support for regular expression matching via wxRegEx class.
 //
-// Default is 0
+// Default is 1.
 //
-// Recommended setting: 1 if your compiler supports it, if it doesn't please
-// contribute us a makefile for src/regex for it
+// Recommended setting: 1
 #define wxUSE_REGEX       1
 
 // wxSystemOptions class
@@ -748,8 +745,7 @@
 // Recommended setting: 1 (requires wxUSE_XML)
 #define wxUSE_XRC       1
 
-// XML parsing classes. Note that their API will change in the future, so
-// using wxXmlDocument and wxXmlNode in your app is not recommended.
+// XML parsing classes.
 //
 // Default is 1
 //
@@ -777,7 +773,7 @@
 // Recommended setting: 1
 #define wxUSE_PROPGRID  1
 
-// Use wxStyledTextCtrl, a wxWidgets implementation of Scintilla.
+// Use wxStyledTextCtrl, a wxWidgets Scintilla wrapper.
 //
 // Default is 1
 //
@@ -1130,8 +1126,8 @@
 #define wxUSE_ARTPROVIDER_STD 1
 
 // Use art provider providing Tango icons: this art provider has higher quality
-// icons than the default ones using smaller size XPM icons without
-// transparency but the embedded PNG icons add to the library size.
+// icons than the default one. It uses SVG format which allows much better scaling
+// then when bitmaps are used, at the expense of somewhat larger library size.
 //
 // Default is 1 under non-GTK ports. Under wxGTK the native art provider using
 // the GTK+ stock icons replaces it so it is normally not necessary.
@@ -1139,7 +1135,7 @@
 // Recommended setting: 1 but can be turned off to reduce the library size.
 #define wxUSE_ARTPROVIDER_TANGO 1
 
-// Hotkey support (currently Windows only)
+// Hotkey support (currently Windows and macOS only)
 #define wxUSE_HOTKEY 1
 
 // Use wxCaret: a class implementing a "cursor" in a text control (called caret
@@ -1274,13 +1270,12 @@
 // common dialogs
 // ----------------------------------------------------------------------------
 
-// On rare occasions (e.g. using DJGPP) may want to omit common dialogs (e.g.
-// file selector, printer dialog). Switching this off also switches off the
-// printing architecture and interactive wxPrinterDC.
+// Use common dialogs (e.g. file selector, printer dialog). Switching this off
+// also switches off the printing architecture and interactive wxPrinterDC.
 //
 // Default is 1
 //
-// Recommended setting: 1 (unless it really doesn't work)
+// Recommended setting: 1
 #define wxUSE_COMMON_DIALOGS 1
 
 // wxBusyInfo displays window with message when app is busy. Works in same way
@@ -1303,8 +1298,6 @@
 
 // wxDirDlg class for getting a directory name from user
 #define wxUSE_DIRDLG 1
-
-// TODO: setting to choose the generic or native one
 
 // Use file open/save dialogs.
 //
@@ -1418,20 +1411,18 @@
 // Set to 0 to disable print/preview architecture code
 #define wxUSE_PRINTING_ARCHITECTURE  1
 
-// wxHTML sublibrary allows to display HTML in wxWindow programs and much,
-// much more.
+// wxHTML allows displaying simple HTML.
 //
 // Default is 1.
 //
-// Recommended setting: 1 (wxHTML is great!), set to 0 if you want compile a
-// smaller library.
+// Recommended setting: 1
 #define wxUSE_HTML          1
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
 // set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
-// list of libraries used to link your application (although this is done
-// implicitly for Microsoft Visual C++ users).
+// list of libraries used to link your application when linking to wxWidgets
+// statically (although this is done implicitly for Microsoft Visual C++ users).
 //
 // Default is 1.
 //
@@ -1573,9 +1564,10 @@
 // disabled if you don't plan to use images in such format sometimes saving
 // substantial amount of code in the final library.
 //
-// Some formats require an extra library which is included in wxWin sources
-// which is mentioned if it is the case.
-
+// Some formats require an extra library (e.g. libpng) which is always included in
+// wxWidgets sources but some build systems (cmake, configure) can be configured to
+// to use the system or user-provided version.
+//
 // Set to 1 for wxImage support (recommended).
 #define wxUSE_IMAGE         1
 
