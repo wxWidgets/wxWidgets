@@ -205,11 +205,6 @@
 #define __cplusplus
 #endif /* __DECCXX */
 
-/*  Resolves linking problems under HP-UX when compiling with gcc/g++ */
-#if defined(__HPUX__) && defined(__GNUG__)
-#define va_list __gnuc_va_list
-#endif /*  HP-UX */
-
 /* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
 /* when using Windows sockets. */
 #if defined(__CYGWIN__) && defined(__WINDOWS__)
