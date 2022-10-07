@@ -52,29 +52,34 @@ jobs:
   build:
     runs-on: ${{ matrix.runner }}
     name: ${{ matrix.name }}
+    container: ${{ matrix.container }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: Ubuntu 18.04 wxGTK 2
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             gtk_version: 2
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 2 UTF-8
-            runner: ubuntu-18.04
-            gtk_version: 2
+          - name: Ubuntu 18.04 wxGTK UTF-8
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK3 static
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --disable-shared
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 STL
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --enable-stl --disable-compat30
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 with clang
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             compiler: clang
             configure_flags: --disable-sys-libs
             use_xvfb: true
@@ -93,20 +98,24 @@ jobs:
             configure_flags: --with-cxx=20
             skip_samples: true
           - name: Ubuntu 18.04 wxX11
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --with-x11 --enable-pch --disable-stc
             skip_samples: true
           - name: Ubuntu 18.04 wxDFB
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --with-directfb --enable-pch --disable-stc
             skip_samples: true
             allow_warnings: true
           - name: Ubuntu 18.04 wxMotif
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --with-motif --enable-pch --disable-stc
             skip_samples: true
           - name: Ubuntu 18.04 wxQt
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
+            container: ubuntu:18.04
             configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
 
@@ -117,6 +126,37 @@ jobs:
       wxUSE_XVFB: ${{ matrix.use_xvfb && 1 || 0 }}
 
     steps:
+      - name: Set up build system
+        run: |
+          case '${{ matrix.container }}' in
+            ubuntu:*)
+              export DEBIAN_FRONTEND=noninteractive
+
+              if [ '${{ matrix.container }}' = 'ubuntu:18.04' ]; then
+                # First get the package containing /usr/bin/apt-add-repository.
+                apt-get update -qq
+                apt-get install -qq software-properties-common
+
+                # Git 2.17 in the official repository is too old to checkout
+                # submodules using it, so get a newer version.
+                apt-add-repository ppa:git-core/ppa
+              fi
+
+              # Explanation for installing some less obvious packages:
+              #   - coreutils contains nproc used in proc_count.sh called below.
+              #   - locales contains locale-gen also used below.
+              apt-get update -qq
+              apt-get install -qq coreutils g++ git locales make pkg-config sudo
+              ;;
+
+            '')
+              ;;
+
+            *)
+              echo '::error ::Unknown container kind.'
+              exit 1
+          esac
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
