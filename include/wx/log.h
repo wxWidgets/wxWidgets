@@ -1336,12 +1336,7 @@ inline void wxLogNop() { }
     #define wxVLogDebug(format, argptr) wxDO_LOGV(Debug, format, argptr)
 #else // !wxUSE_LOG_DEBUG
     #define wxVLogDebug(fmt, valist) wxLogNop()
-
-    #ifdef HAVE_VARIADIC_MACROS
-        #define wxLogDebug(fmt, ...) wxLogNop()
-    #else // !HAVE_VARIADIC_MACROS
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, 1, (const wxFormatString&))
-    #endif
+    #define wxLogDebug(fmt, ...) wxLogNop()
 #endif // wxUSE_LOG_DEBUG/!wxUSE_LOG_DEBUG
 
 #if wxUSE_LOG_TRACE
@@ -1349,12 +1344,7 @@ inline void wxLogNop() { }
     #define wxVLogTrace wxDO_LOG_IF_ENABLED_WITH_FUNC(Trace, LogVTrace)
 #else  // !wxUSE_LOG_TRACE
     #define wxVLogTrace(mask, fmt, valist) wxLogNop()
-
-    #ifdef HAVE_VARIADIC_MACROS
-        #define wxLogTrace(mask, fmt, ...) wxLogNop()
-    #else // !HAVE_VARIADIC_MACROS
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wxString&, const wxFormatString&))
-    #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
+    #define wxLogTrace(mask, fmt, ...) wxLogNop()
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,

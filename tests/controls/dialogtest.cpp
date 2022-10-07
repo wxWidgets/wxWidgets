@@ -11,8 +11,6 @@
 
 #include "wx/testing.h"
 
-#ifdef HAVE_VARIADIC_MACROS
-
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
 
@@ -172,5 +170,3 @@ void ModalDialogsTestCase::InitDialog()
     dlg.ShowModal();
     CPPUNIT_ASSERT( dlg.WasModal() );
 }
-
-#endif // HAVE_VARIADIC_MACROS

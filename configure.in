@@ -1717,15 +1717,6 @@ else
     fi
 fi
 
-dnl TODO-C++11: remove this, as it won't make sense when C++11 is required
-dnl don't use vararg macros if they're explicitly disabled: this is
-dnl useful if the user code using the library wants to limit itself to standard
-dnl C++ only (e.g. is compiled with g++ -std=c++98)
-if test "$wxUSE_VARARG_MACROS" != "yes"; then
-    AC_DEFINE(wxNO_VARIADIC_MACROS)
-fi dnl wxUSE_VARARG_MACROS == yes
-
-
 dnl check for large file support
 LARGEFILE_CPPFLAGS=
 AC_SYS_LARGEFILE

@@ -24278,11 +24278,6 @@ $as_echo "$wx_cv_type_va_list_lvalue" >&6; }
     fi
 fi
 
-if test "$wxUSE_VARARG_MACROS" != "yes"; then
-    $as_echo "#define wxNO_VARIADIC_MACROS 1" >>confdefs.h
-
-fi
-
 LARGEFILE_CPPFLAGS=
 # Check whether --enable-largefile was given.
 if test "${enable_largefile+set}" = set; then :

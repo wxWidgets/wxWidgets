@@ -515,8 +515,6 @@ private:
           wxExpectModal<> for your dialog type and implement its OnInvoked()
           method.
  */
-#ifdef HAVE_VARIADIC_MACROS
-
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
     {                                                                          \
         wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __WXFUNCTION__);  \
@@ -524,7 +522,6 @@ private:
         codeToRun;                                                             \
         wx_hook.CheckUnmetExpectations();                                      \
     }
-#endif /* HAVE_VARIADIC_MACROS */
 
 #endif // !WXBUILDING
 
