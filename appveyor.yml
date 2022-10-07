@@ -3,7 +3,6 @@ version: '{build}'
 branches:
   only:
   - master
-  - WX_3_0_BRANCH
 
 skip_commits:
   files:
@@ -38,27 +37,24 @@ environment:
     CONFIGURATION: DLL Release
     ARCH: x64
     wxUSE_STL: 1
-  - TOOLSET: nmake
-    VS: '9.0'
-    BUILD: release
-    ARCH: x86
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
   - TOOLSET: nmake
     VS: '14.0'
     BUILD: debug
     ARCH: amd64
     wxUSE_STL: 1
     wxUSE_WEBVIEW_EDGE: 1
-  - TOOLSET: mingw
-  - TOOLSET: msys2
-    MSYSTEM: MINGW32
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
   - TOOLSET: cmake
-    GENERATOR: 'Visual Studio 12'
+    GENERATOR: 'Visual Studio 15 2017'
     SHARED: ON
     CONFIGURATION: Release
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
   - TOOLSET: cmake_qt
     GENERATOR: 'Visual Studio 14 2015 Win64'
     SHARED: ON
     CONFIGURATION: Release
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
 clone_depth: 50
 

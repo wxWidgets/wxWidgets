@@ -71,7 +71,7 @@ jobs:
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-18.04
-            configure_flags: --enable-cxx11 --enable-stl --disable-compat30
+            configure_flags: --enable-stl --disable-compat30
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 with clang
             runner: ubuntu-18.04
