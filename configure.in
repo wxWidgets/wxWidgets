@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.2.0], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.3.0], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
