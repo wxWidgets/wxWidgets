@@ -849,7 +849,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
     REQUIRE( sel.begin() != sel.end() );
     CHECK( *sel.begin() == wxGridBlockCoords(1, 0, 3, 1) );
 
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(11)
     m_grid->SelectBlock(4, 0, 7, 1, true);
     int index = 0;
     for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
@@ -868,7 +867,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
         }
         ++index;
     }
-#endif
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectEmptyGrid", "[grid]")

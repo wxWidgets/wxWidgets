@@ -202,12 +202,10 @@ TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
     wxString::Format("a string(%s,%s), ptr %p, int %i",
                      wxString(), "foo", "char* as pointer", 1);
 
-#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(10)
     // Unfortunately we can't check the result as different standard libraries
     // implementations format it in different ways, so just check that it
     // compiles.
     wxString::Format("null pointer is %p", nullptr);
-#endif
 
     // Microsoft has helpfully disabled support for "%n" in their CRT by
     // default starting from VC8 and somehow even calling

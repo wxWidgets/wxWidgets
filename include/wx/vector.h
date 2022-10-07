@@ -703,17 +703,12 @@ inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
 
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
-// Define vector::shrink_to_fit() equivalent which can be always used, even
-// when using pre-C++11 std::vector.
+// This is an obsolete function provided only for compatibility, just call
+// shrink_to_fit() directly in the new code.
 template<typename T>
 inline void wxShrinkToFit(wxVector<T>& v)
 {
-#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
     v.shrink_to_fit();
-#else
-    wxVector<T> tmp(v);
-    v.swap(tmp);
-#endif
 }
 
 #endif // _WX_VECTOR_H_

@@ -55,56 +55,8 @@
 
 #include <cmath>
 
-/*
-    Things are simple with C++11: we have everything we need in std.
-    Eventually we will only have this section and not the legacy stuff below.
- */
-#if wxCHECK_CXX_STD(201103)
-    #define wxFinite(x) std::isfinite(x)
-    #define wxIsNaN(x) std::isnan(x)
-#else /* C++98 */
-
-#if defined(__VISUALC__)
-    #include <float.h>
-    #define wxFinite(x) _finite(x)
-#elif defined(__MINGW64_TOOLCHAIN__) || defined(__clang__)
-    /*
-        add more compilers with C99 support here: using C99 isfinite() is
-        preferable to using BSD-ish finite()
-     */
-    #if defined(_GLIBCXX_CMATH) || defined(_LIBCPP_CMATH)
-        // these <cmath> headers #undef isfinite
-        #define wxFinite(x) std::isfinite(x)
-    #else
-        #define wxFinite(x) isfinite(x)
-    #endif
-#elif defined(wxNEEDS_STRICT_ANSI_WORKAROUNDS)
-    wxDECL_FOR_STRICT_MINGW32(int, _finite, (double))
-
-    #define wxFinite(x) _finite(x)
-#elif ( defined(__GNUG__)||defined(__GNUWIN32__)|| \
-      defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
-      defined(__HPUX__) ) && ( !defined(wxOSX_USE_IPHONE) || wxOSX_USE_IPHONE == 0 )
-#ifdef __SOLARIS__
-#include <ieeefp.h>
-#endif
-    #define wxFinite(x) finite(x)
-#else
-    #define wxFinite(x) ((x) == (x))
-#endif
-
-
-#if defined(__VISUALC__)
-    #define wxIsNaN(x) _isnan(x)
-#elif defined(__GNUG__)||defined(__GNUWIN32__)|| \
-      defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
-      defined(__HPUX__)
-    #define wxIsNaN(x) isnan(x)
-#else
-    #define wxIsNaN(x) ((x) != (x))
-#endif
-
-#endif /* C++11/C++98 */
+#define wxFinite(x) std::isfinite(x)
+#define wxIsNaN(x) std::isnan(x)
 
 #ifdef __INTELC__
 
@@ -139,13 +91,7 @@ inline int wxRound(double x)
     wxASSERT_MSG(x > double(INT_MIN) - 0.5 && x < double(INT_MAX) + 0.5,
         "argument out of supported range");
 
-    #if wxCHECK_CXX_STD(201103)
-        return int(std::lround(x));
-    #elif defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(12)
-        return int(lround(x));
-    #else
-        return int(x < 0 ? x - 0.5 : x + 0.5);
-    #endif
+    return int(std::lround(x));
 }
 
 inline int wxRound(float x)
@@ -153,13 +99,7 @@ inline int wxRound(float x)
     wxASSERT_MSG(x > float(INT_MIN) && x < float(INT_MAX),
         "argument out of supported range");
 
-    #if wxCHECK_CXX_STD(201103)
-        return int(std::lround(x));
-    #elif defined(HAVE_ROUND) || wxCHECK_VISUALC_VERSION(12)
-        return int(lroundf(x));
-    #else
-        return int(x < 0.0f ? x - 0.5f : x + 0.5f);
-    #endif
+    return int(std::lround(x));
 }
 
 inline int wxRound(long double x) { return wxRound(double(x)); }

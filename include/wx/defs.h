@@ -193,17 +193,8 @@
 /*  ============================================================================ */
 
 /*  ---------------------------------------------------------------------------- */
-/*  compiler defects workarounds */
+/*  C++ version check */
 /*  ---------------------------------------------------------------------------- */
-
-/*
-   Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
-   so define it ourselves (newer versions do it for all files, though, and
-   don't allow it to be redefined)
- */
-#if defined(__DECCXX) && !defined(__VMS) && !defined(__cplusplus)
-#define __cplusplus
-#endif /* __DECCXX */
 
 #if defined(_MSVC_LANG)
 /*
@@ -219,6 +210,10 @@
     #define wxCHECK_CXX_STD(ver) (_MSVC_LANG >= (ver))
 #elif defined(__cplusplus)
     #define wxCHECK_CXX_STD(ver) (__cplusplus >= (ver))
+
+    #if !wxCHECK_CXX_STD(201103L)
+        #error "C++11 compiler is required to build wxWidgets."
+    #endif
 #else
     #define wxCHECK_CXX_STD(ver) 0
 #endif
@@ -256,62 +251,24 @@ typedef short int WXTYPE;
 /*  wrap it in this guard, but such cases should still be relatively rare. */
 #define wxUSE_NESTED_CLASSES    1
 
-/* This macro is obsolete, use the 'explicit' keyword in the new code. */
-#define wxEXPLICIT explicit
-
-/* check for override keyword support */
-#ifndef HAVE_OVERRIDE
-    #if __cplusplus >= 201103L
-        /* All C++11 compilers should have it. */
-        #define HAVE_OVERRIDE
-    #elif wxCHECK_VISUALC_VERSION(11)
-        /*
-           VC++ supports override keyword since version 8 but doesn't define
-           __cplusplus as indicating C++11 support (at least up to and
-           including 12), so handle its case specially.
-
-           Also note that while the keyword is supported, using it with
-           versions 8, 9 and 10 results in C4481 compiler warning ("nonstandard
-           extension used") and so we avoid using it there, you could disable
-           this warning and predefine HAVE_OVERRIDE if you don't care about it.
-         */
-        #define HAVE_OVERRIDE
-    #elif WX_HAS_CLANG_FEATURE(cxx_override_control)
-        #define HAVE_OVERRIDE
-    #endif
-#endif /* !HAVE_OVERRIDE */
-
-#ifdef HAVE_OVERRIDE
-    #define wxOVERRIDE override
-#else /*  !HAVE_OVERRIDE */
-    #define wxOVERRIDE
-#endif /*  HAVE_OVERRIDE */
-
-/* same for more C++11 keywords which don't have such historic baggage as
-   override and so can be detected by just testing for C++11 support (which
-   still requires handling MSVS specially, unfortunately) */
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
-    #define wxHAS_MEMBER_DEFAULT
-
-    #define wxHAS_NOEXCEPT
-    #define wxNOEXCEPT noexcept
-#else
-    #define wxNOEXCEPT
-#endif
-
 /*
-    Support for nullptr is available since MSVS 2010, even though it doesn't
-    define __cplusplus as a C++11 compiler.
+    These macros are obsolete, use the corresponding C++ keywords directly in
+    the new code.
  */
-#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(10)
-    #define wxHAS_NULLPTR_T
-#endif
+#define wxEXPLICIT explicit
+#define wxOVERRIDE override
+#define wxNOEXCEPT noexcept
+
+/* More macros only remaining defined for compatibility */
+#define wxHAS_MEMBER_DEFAULT
+#define wxHAS_NOEXCEPT
+#define wxHAS_NULLPTR_T
 
 /* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
 
 #if wxCHECK_CXX_STD(201703L)
     #define wxFALLTHROUGH [[fallthrough]]
-#elif __cplusplus >= 201103L && defined(__has_warning) && WX_HAS_CLANG_FEATURE(cxx_attributes)
+#elif defined(__has_warning) && WX_HAS_CLANG_FEATURE(cxx_attributes)
     #define wxFALLTHROUGH [[clang::fallthrough]]
 #elif wxCHECK_GCC_VERSION(7, 0)
     #define wxFALLTHROUGH __attribute__ ((fallthrough))
@@ -377,73 +334,24 @@ typedef short int WXTYPE;
 #define wxConstCast(obj, className) const_cast<className *>(obj)
 
 #ifndef HAVE_STD_WSTRING
-    #if __cplusplus >= 201103L
-        #define HAVE_STD_WSTRING
-    #elif defined(__VISUALC__)
-        #define HAVE_STD_WSTRING
-    #elif defined(__MINGW32__)
-        #define HAVE_STD_WSTRING
-    #endif
+    #define HAVE_STD_WSTRING
 #endif
 
 #ifndef HAVE_STD_STRING_COMPARE
-    #if __cplusplus >= 201103L
-        #define HAVE_STD_STRING_COMPARE
-    #elif defined(__VISUALC__)
-        #define HAVE_STD_STRING_COMPARE
-    #elif defined(__MINGW32__) || defined(__CYGWIN32__)
-        #define HAVE_STD_STRING_COMPARE
-    #endif
+    #define HAVE_STD_STRING_COMPARE
 #endif
 
-#ifndef HAVE_TR1_TYPE_TRAITS
-    #if defined(__VISUALC__) && (_MSC_FULL_VER >= 150030729)
-        #define HAVE_TR1_TYPE_TRAITS
-    #endif
+#ifndef HAVE_TYPE_TRAITS
+    #define HAVE_TYPE_TRAITS
+#endif
+#ifndef HAVE_STD_UNORDERED_MAP
+    #define HAVE_STD_UNORDERED_MAP
+#endif
+#ifndef HAVE_STD_UNORDERED_SET
+    #define HAVE_STD_UNORDERED_SET
 #endif
 
-/*
-    If using configure, stick to the options detected by it even if different
-    compiler options could result in detecting something different here, as it
-    would cause ABI issues otherwise (see #18034).
-*/
-#ifndef __WX_SETUP_H__
-    /*
-        Check for C++11 compilers, it is important to do it before the
-        __has_include() checks because at least g++ 4.9.2+ __has_include() returns
-        true for C++11 headers which can't be compiled in non-C++11 mode.
-     */
-    #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
-        #ifndef HAVE_TYPE_TRAITS
-            #define HAVE_TYPE_TRAITS
-        #endif
-        #ifndef HAVE_STD_UNORDERED_MAP
-            #define HAVE_STD_UNORDERED_MAP
-        #endif
-        #ifndef HAVE_STD_UNORDERED_SET
-            #define HAVE_STD_UNORDERED_SET
-        #endif
-    #elif defined(__has_include)
-        /*
-            We're in non-C++11 mode here, so only test for pre-C++11 headers. As
-            mentioned above, using __has_include() to test for C++11 would wrongly
-            detect them even though they can't be used in this case, don't do it.
-         */
-        #if !defined(HAVE_TR1_TYPE_TRAITS) && __has_include(<tr1/type_traits>)
-            #define HAVE_TR1_TYPE_TRAITS
-        #endif
-
-        #if !defined(HAVE_TR1_UNORDERED_MAP) && __has_include(<tr1/unordered_map>)
-            #define HAVE_TR1_UNORDERED_MAP
-        #endif
-
-        #if !defined(HAVE_TR1_UNORDERED_SET) && __has_include(<tr1/unordered_set>)
-            #define HAVE_TR1_UNORDERED_SET
-        #endif
-    #endif /* defined(__has_include) */
-
-    #endif /* __cplusplus */
-#endif /* __WX_SETUP_H__ */
+#endif /* __cplusplus */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
@@ -3174,17 +3082,10 @@ typedef const void* WXWidget;
 /*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
-#if defined(__cplusplus) && (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14))
-    #define wxMEMBER_DELETE = delete
-    #define wxDECLARE_DEFAULT_COPY_CTOR(classname) \
-        public:                                    \
-            classname(const classname&) = default;
-#else
-    #define wxMEMBER_DELETE
-
-    // We can't do this without C++11 "= default".
-    #define wxDECLARE_DEFAULT_COPY_CTOR(classname)
-#endif
+#define wxMEMBER_DELETE = delete
+#define wxDECLARE_DEFAULT_COPY_CTOR(classname) \
+    public:                                    \
+        classname(const classname&) = default;
 
 #define wxDECLARE_NO_COPY_CLASS(classname)      \
     private:                                    \

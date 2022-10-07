@@ -389,14 +389,6 @@
     CLANG_TURN_ON(all)
     CLANG_TURN_ON(extra)
     CLANG_TURN_ON(pedantic)
-
-    // We use long long, variadic macros and empty macro arguments (which are a
-    // C99 extension) even in C++98 builds.
-    #if __cplusplus < 201103L
-        CLANG_TURN_OFF(c++11-long-long)
-        CLANG_TURN_OFF(variadic-macros)
-        CLANG_TURN_OFF(c99-extensions)
-    #endif
 #endif // clang
 
 

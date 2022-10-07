@@ -510,9 +510,6 @@ TEST_CASE("Event::UnbindFromHandler", "[event][bind][unbind]")
 // This is a compilation-time-only test: just check that a class inheriting
 // from wxEvtHandler non-publicly can use Bind() with its method, this used to
 // result in compilation errors.
-// Note that this test will work only on C++11 compilers, so we test this only
-// for such compilers.
-#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(14)
 class HandlerNonPublic : protected wxEvtHandler
 {
 public:
@@ -523,7 +520,6 @@ public:
 
     void OnIdle(wxIdleEvent&) { }
 };
-#endif // C++11
 
 // Another compilation-time-only test, but this one checking that these event
 // objects can't be created from outside of the library.

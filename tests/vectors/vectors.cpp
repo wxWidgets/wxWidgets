@@ -375,8 +375,6 @@ TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
     CHECK( v.capacity() >= 1 );
 #endif
 
-    // There is no shrink_to_fit() in STL build when not using C++11.
-#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
     v.shrink_to_fit();
     CHECK( v.capacity() == 1 );
 
@@ -385,5 +383,4 @@ TEST_CASE("wxVector::capacity", "[vector][capacity][shrink_to_fit]")
 
     v.shrink_to_fit();
     CHECK( v.capacity() == 0 );
-#endif
 }
