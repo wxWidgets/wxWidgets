@@ -154,6 +154,12 @@ protected:
         m_allowTextEvents = enable;
     }
 
+    // Recreate the native control entirely while preserving its initial
+    // contents and attributes: this is useful if the height of the items must
+    // be changed as the native control doesn't seem to support doing this once
+    // it had been already determined.
+    void MSWRecreate();
+
 private:
     // there are the overridden wxTextEntry methods which should only be called
     // when we do have an edit control so they assert if this is not the case
