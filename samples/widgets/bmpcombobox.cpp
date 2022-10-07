@@ -169,6 +169,7 @@ protected:
 
     // the checkboxes for styles
     wxCheckBox *m_chkSort,
+               *m_chkProcessEnter,
                *m_chkReadonly;
 
     // the combobox itself and the sizer it is in
@@ -250,6 +251,7 @@ BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
 {
     // init everything
     m_chkSort =
+    m_chkProcessEnter =
     m_chkReadonly = NULL;
 
     m_combobox = NULL;
@@ -314,6 +316,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     wxSizer *sizerStyle = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerStyle, "&Sort items");
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerStyle, "Process &Enter");
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerStyle, "&Read only");
 
     wxButton *btn = new wxButton(this, BitmapComboBoxPage_Reset, "&Reset");
@@ -385,7 +388,8 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     m_combobox->Create(this, BitmapComboBoxPage_Combo, wxEmptyString,
                        wxDefaultPosition, wxDefaultSize,
                        0, NULL,
-                       wxCB_READONLY);
+                       // Flags correspond to the checkboxes state in Reset().
+                       wxTE_PROCESS_ENTER);
 
 #if defined(wxGENERIC_BITMAPCOMBOBOX)
     // This will sure make the list look nicer when larger images are used.
@@ -414,7 +418,8 @@ void BitmapComboBoxWidgetsPage::CreateContent()
 void BitmapComboBoxWidgetsPage::Reset()
 {
     m_chkSort->SetValue(false);
-    m_chkReadonly->SetValue(true);
+    m_chkProcessEnter->SetValue(true);
+    m_chkReadonly->SetValue(false);
 }
 
 void BitmapComboBoxWidgetsPage::CreateCombo()
@@ -423,6 +428,8 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
 
     if ( m_chkSort->GetValue() )
         flags |= wxCB_SORT;
+    if ( m_chkProcessEnter->GetValue() )
+        flags |= wxTE_PROCESS_ENTER;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
 
@@ -752,7 +759,9 @@ void BitmapComboBoxWidgetsPage::OnButtonAddWidgetIcons(wxCommandEvent& WXUNUSED(
 void BitmapComboBoxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     if (m_combobox)
-        event.Enable( m_chkSort->GetValue() || m_chkReadonly->GetValue() );
+        event.Enable( m_chkSort->GetValue()
+                        || !m_chkProcessEnter->GetValue()
+                            || m_chkReadonly->GetValue() );
 }
 
 void BitmapComboBoxWidgetsPage::OnUpdateUIInsert(wxUpdateUIEvent& event)
