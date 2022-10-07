@@ -666,7 +666,7 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler if available], [wxWITH_CXX=11 wxWITH_CXX_IS_OPTIONAL=1])
+AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          obsolete option doing nothing])
 AC_ARG_WITH(cxx,           [  --with-cxx=11|14|17|20  use the given C++ dialect], [wxWITH_CXX="$withval"])
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
 if test "$wxUSE_STL" = "yes"; then
@@ -1120,60 +1120,32 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
-dnl Always use C++11 under macOS, there are no supported compilers not
-dnl supporting it there, but don't prevent a latest version of C++ from being
-dnl used.
-if test "$wxUSE_MAC" = 1 -a -z "$wxWITH_CXX"; then
-    wxWITH_CXX=11
-fi
+dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
+dnl autoconf, not run, time.
+case "${wxWITH_CXX-11}" in
+    11)
+        AX_CXX_COMPILE_STDCXX(11)
+        ;;
 
-if test -n "$wxWITH_CXX"; then
-    dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
-    dnl autoconf, not run, time.
-    case "$wxWITH_CXX" in
-        11)
-            AX_CXX_COMPILE_STDCXX(11,,optional)
-            if test -n "$wxWITH_CXX_IS_OPTIONAL"; then
-                if test "$HAVE_CXX11" != 1; then
-                    AC_MSG_FAILURE([C++11 support was requested but is not available])
-                fi
-            fi
-            ;;
+    14)
+        AX_CXX_COMPILE_STDCXX(14)
+        ;;
 
-        14)
-            dnl This check can't be optional because we have only --with-cxx=14
-            dnl and not --enable-cxx14 option.
-            AX_CXX_COMPILE_STDCXX(14)
+    17)
+        AX_CXX_COMPILE_STDCXX(17)
+        ;;
 
-            dnl Notice that because it's not optional, the macro doesn't define
-            dnl HAVE_CXX14. We don't use it anyhow so far, so it doesn't
-            dnl matter, but we could need to do it ourselves here in the future.
+    20)
+        AX_CXX_COMPILE_STDCXX(20)
+        ;;
 
-            dnl If we have C++14, we necessarily have C++11 too.
-            HAVE_CXX11=1
-            ;;
+    *)
+        AC_MSG_ERROR([Invalid --with-cxx=$wxWITH_CXX option value, only 11, 14, 17 or 20 supported])
+esac
 
-        17)
-            dnl This is similar to 14 above.
-            AX_CXX_COMPILE_STDCXX(17)
-            HAVE_CXX11=1
-            ;;
-
-        20)
-            AX_CXX_COMPILE_STDCXX(20)
-            HAVE_CXX11=1
-            ;;
-
-        *)
-            AC_MSG_ERROR([Invalid --with-cxx=$wxWITH_CXX option value, only 11, 14, 17 or 20 supported])
-    esac
-
-    if test "$HAVE_CXX11" = "1" ; then
-        dnl The standard macro above doesn't set Objective-C++ flags, but we do
-        dnl need them too.
-        OBJCXXFLAGS="$OBJCXXFLAGS $switch"
-    fi
-fi
+dnl The standard macro above doesn't set Objective-C++ flags, but we do
+dnl need them too.
+OBJCXXFLAGS="$OBJCXXFLAGS $switch"
 
 case "$wxWITH_DPI_MANIFEST" in
     none)
@@ -1917,219 +1889,14 @@ if test "x$COMPAQCXX" = "xyes"; then
     CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
 
-dnl The checks below are for ancient compilers and are unnecessary when using
-dnl C++11, but we still need to define the symbols that would have been defined
-dnl by them if we did run them.
-if test "$HAVE_CXX11" = "1" ; then
-
 AC_DEFINE(HAVE_STD_WSTRING)
 AC_DEFINE(HAVE_STD_STRING_COMPARE)
 AC_DEFINE(HAVE_STD_UNORDERED_MAP)
 AC_DEFINE(HAVE_STD_UNORDERED_SET)
 AC_DEFINE(HAVE_TYPE_TRAITS)
 
-else dnl Not using C++11, so we do need to run the checks.
-
-dnl the next few tests are all for C++ features and so need to be done using
-dnl C++ compiler
-AC_LANG_PUSH(C++)
-
-dnl check for std::string or std::wstring
-if test "$wxUSE_STD_STRING" = "yes" -o "$wxUSE_STL" = "yes"; then
-    if test "$wxUSE_UNICODE" = "yes"; then
-        std_string="std::wstring"
-        char_type="wchar_t"
-    else
-        std_string="std::string"
-        char_type="char"
-    fi
-
-    dnl check if <string> declares std::[w]string
-    AC_CACHE_CHECK([for $std_string in <string>],
-        wx_cv_class_stdstring,
-        [
-            AC_TRY_COMPILE([#include <string>],
-                [$std_string foo;],
-                wx_cv_class_stdstring=yes,
-                wx_cv_class_stdstring=no
-            )
-        ]
-    )
-
-    if test "$wx_cv_class_stdstring" = yes; then
-        if test "$wxUSE_UNICODE" = "yes"; then
-            AC_DEFINE(HAVE_STD_WSTRING)
-        fi
-        dnl we don't need HAVE_STD_STRING, we just suppose it's available if
-        dnl wxUSE_STD_STRING==yes
-    else
-        AC_CACHE_CHECK([if std::basic_string<$char_type> works],
-            wx_cv_class_stdbasicstring,
-            [
-                AC_TRY_COMPILE([
-                    #ifdef HAVE_WCHAR_H
-                    #  ifdef __CYGWIN__
-                    #    include <stddef.h>
-                    #  endif
-                    #  include <wchar.h>
-                    #endif
-                    #ifdef HAVE_STDLIB_H
-                    #  include <stdlib.h>
-                    #endif
-                    #include <stdio.h>
-                    #include <string>
-                    ],
-                    [std::basic_string<$char_type> foo;
-                     const $char_type* dummy = foo.c_str();],
-                    wx_cv_class_stdbasicstring=yes,
-                    wx_cv_class_stdbasicstring=no
-                )
-            ]
-        )
-
-        if test "$wx_cv_class_stdbasicstring" != yes; then
-            if test "$wxUSE_STL" = "yes"; then
-                AC_MSG_ERROR([Can't use --enable-stl without $std_string or std::basic_string<$char_type>])
-            elif test "$wxUSE_STD_STRING" = "yes"; then
-                AC_MSG_ERROR([Can't use --enable-std_string without $std_string or std::basic_string<$char_type>])
-            else
-                AC_MSG_WARN([No $std_string or std::basic_string<$char_type>, switching to --disable-std_string])
-                wxUSE_STD_STRING=no
-            fi
-        fi
-    fi
-fi
-
-if test "$wxUSE_STD_IOSTREAM" = "yes"; then
-    AC_CHECK_TYPES([std::istream, std::ostream],,
-                   [wxUSE_STD_IOSTREAM=no],
-                   [#include <iostream>])
-
-    if test "$wxUSE_STD_IOSTREAM" != "yes"; then
-        if test "$wxUSE_STD_IOSTREAM" = "yes"; then
-            AC_MSG_ERROR([Can't use --enable-std_iostreams without std::istream and std::ostream])
-        else
-            AC_MSG_WARN([No std::iostreams, switching to --disable-std_iostreams])
-        fi
-    fi
-fi
-
-if test "$wxUSE_STL" = "yes"; then
-    dnl check for compliant std::string::compare
-    AC_CACHE_CHECK([for compliant std::string::compare],
-        wx_cv_func_stdstring_compare,
-        [AC_TRY_COMPILE([#include <string>],
-            [std::string foo, bar;
-            foo.compare(bar);
-            foo.compare(1, 1, bar);
-            foo.compare(1, 1, bar, 1, 1);
-            foo.compare("");
-            foo.compare(1, 1, "");
-            foo.compare(1, 1, "", 2);],
-            wx_cv_func_stdstring_compare=yes,
-            wx_cv_func_stdstring_compare=no
-        )]
-    )
-
-    if test "$wx_cv_func_stdstring_compare" = yes; then
-        AC_DEFINE(HAVE_STD_STRING_COMPARE)
-    fi
-
-    if test "$wx_cv_class_gnuhashmapset" = yes; then
-         AC_DEFINE(HAVE_EXT_HASH_MAP)
-         AC_DEFINE(HAVE_GNU_CXX_HASH_MAP)
-    fi
-
-    AC_CHECK_HEADER([unordered_map],
-        [AC_CACHE_CHECK([for unordered_map and unordered_set in std],
-            wx_cv_class_stdunorderedmapset,
-            [AC_TRY_COMPILE([#include <unordered_map>
-                #include <unordered_set>],
-                [std::unordered_map<double*, char*> test1;
-                 std::unordered_set<char*> test2;],
-                wx_cv_class_stdunorderedmapset=yes,
-                wx_cv_class_stdunorderedmapset=no)
-            ]
-        )],
-        [],
-        [ ]
-    )
-
-    if test "$wx_cv_class_stdunorderedmapset" = yes; then
-         AC_DEFINE(HAVE_STD_UNORDERED_MAP)
-         AC_DEFINE(HAVE_STD_UNORDERED_SET)
-    else
-        AC_CHECK_HEADER([tr1/unordered_map],
-            [AC_CACHE_CHECK([for unordered_map and unordered_set in std::tr1],
-                wx_cv_class_tr1unorderedmapset,
-                [AC_TRY_COMPILE([#include <tr1/unordered_map>
-                    #include <tr1/unordered_set>],
-                    [std::tr1::unordered_map<double*, char*> test1;
-                     std::tr1::unordered_set<char*> test2;
-            #if defined(__GNUC__) && (__GNUC__==4) && (__GNUC_MINOR__<2)
-            #error can't use unordered_{map,set} with gcc-4.[01]: http://gcc.gnu.org/PR24389
-            #endif],
-                    wx_cv_class_tr1unorderedmapset=yes,
-                    wx_cv_class_tr1unorderedmapset=no)
-                ]
-            )],
-            [],
-            [ ]
-        )
-
-        if test "$wx_cv_class_tr1unorderedmapset" = yes; then
-            AC_DEFINE(HAVE_TR1_UNORDERED_MAP)
-            AC_DEFINE(HAVE_TR1_UNORDERED_SET)
-        else
-            dnl check for hash_map and hash_set headers
-            AC_CHECK_HEADER([hash_map],
-                [AC_CACHE_CHECK([for std::hash_map and hash_set],
-                    wx_cv_class_stdhashmapset,
-                    [AC_TRY_COMPILE([#include <hash_map>
-                        #include <hash_set>],
-                        [std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
-                         std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;],
-                        wx_cv_class_stdhashmapset=yes,
-                        wx_cv_class_stdhashmapset=no)
-                    ]
-                )],
-                [],
-                [ ]
-            )
-
-            if test "$wx_cv_class_stdhashmapset" = yes; then
-                AC_DEFINE(HAVE_HASH_MAP)
-                AC_DEFINE(HAVE_STD_HASH_MAP)
-            fi
-
-            AC_CHECK_HEADER([ext/hash_map],
-                [AC_CACHE_CHECK([for GNU hash_map and hash_set],
-                    wx_cv_class_gnuhashmapset,
-                    [AC_TRY_COMPILE([#include <ext/hash_map>
-                        #include <ext/hash_set>],
-                        [__gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
-                         __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;],
-                        wx_cv_class_gnuhashmapset=yes,
-                        wx_cv_class_gnuhashmapset=no)
-                    ]
-                )],
-                [],
-                [ ]
-            )
-
-        fi
-    fi
-fi
-
-AC_CHECK_HEADERS([type_traits tr1/type_traits], break, [], [AC_INCLUDES_DEFAULT()])
-
-fi dnl End of pre-C++11 only checks section
-
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
-
-dnl pop C++
-AC_LANG_POP()
 
 dnl ---------------------------------------------------------------------------
 dnl Define search path for includes and libraries: all headers and libs will be
@@ -2361,23 +2128,6 @@ else
         LIBS="$save_LIBS"
     fi
 fi
-
-if test "$HAVE_CXX11" != "1" ; then
-
-dnl check for C99 string to long long conversion functions, assume that if we
-dnl have the unsigned variants, then we have the signed ones as well
-dnl
-dnl at least under SGI these functions are only available in C99 code and not
-dnl in C++ so do these tests using C++ compiler
-AC_LANG_PUSH(C++)
-if test "wxUSE_UNICODE" = "yes"; then
-    WX_CHECK_FUNCS(wcstoull)
-else
-    WX_CHECK_FUNCS(strtoull)
-fi
-AC_LANG_POP()
-
-fi dnl End of pre-C++11 only checks section
 
 dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
 PKG_PROG_PKG_CONFIG
