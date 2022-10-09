@@ -2947,9 +2947,9 @@ typedef wxUint64           WXWPARAM;
 typedef wxInt64            WXLPARAM;
 typedef wxInt64            WXLRESULT;
 #else
-typedef wxW64 unsigned int WXWPARAM;
-typedef wxW64 long         WXLPARAM;
-typedef wxW64 long         WXLRESULT;
+typedef unsigned int       WXWPARAM;
+typedef long               WXLPARAM;
+typedef long               WXLRESULT;
 #endif
 
 /*
