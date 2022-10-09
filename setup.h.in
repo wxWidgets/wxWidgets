@@ -985,9 +985,6 @@
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 
-/* Define if you have strtoull() and strtoll() */
-#undef HAVE_STRTOULL
-
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
@@ -1028,9 +1025,6 @@
 
 /* Define if you have wcsnlen() function */
 #undef HAVE_WCSNLEN
-
-/* Define if you have wcstoull() and wcstoll() */
-#undef HAVE_WCSTOULL
 
 /* The number of bytes in a wchar_t.  */
 #undef SIZEOF_WCHAR_T

@@ -985,9 +985,6 @@
 /* define if you have statvfs function */
 #cmakedefine HAVE_STATVFS 1
 
-/* Define if you have strtoull() and strtoll() */
-#cmakedefine HAVE_STRTOULL 1
-
 /* Define if you have all functions to set thread priority */
 #cmakedefine HAVE_THREAD_PRIORITY_FUNCTIONS 1
 
@@ -1028,9 +1025,6 @@
 
 /* Define if you have wcsnlen() function */
 #cmakedefine HAVE_WCSNLEN 1
-
-/* Define if you have wcstoull() and wcstoll() */
-#cmakedefine HAVE_WCSTOULL 1
 
 /* The number of bytes in a wchar_t.  */
 @SIZEOF_WCHAR_T_CODE@

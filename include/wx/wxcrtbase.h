@@ -179,26 +179,13 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
     #define wxCRT_StrtollW   _wcstoi64
     #define wxCRT_StrtoullW  _wcstoui64
 #else
-    /* Both of these functions are implemented in C++11 compilers */
-    #ifndef HAVE_STRTOULL
-        #define HAVE_STRTOULL
-    #endif
-    #ifndef HAVE_WCSTOULL
-        #define HAVE_WCSTOULL
-    #endif
+    wxDECL_FOR_STRICT_MINGW32(long long, strtoll, (const char*, char**, int))
+    wxDECL_FOR_STRICT_MINGW32(unsigned long long, strtoull, (const char*, char**, int))
 
-    #ifdef HAVE_STRTOULL
-        wxDECL_FOR_STRICT_MINGW32(long long, strtoll, (const char*, char**, int))
-        wxDECL_FOR_STRICT_MINGW32(unsigned long long, strtoull, (const char*, char**, int))
-
-        #define wxCRT_StrtollA   strtoll
-        #define wxCRT_StrtoullA  strtoull
-    #endif /* HAVE_STRTOULL */
-    #ifdef HAVE_WCSTOULL
-        /* assume that we have wcstoull(), which is also C99, too */
-        #define wxCRT_StrtollW   wcstoll
-        #define wxCRT_StrtoullW  wcstoull
-    #endif /* HAVE_WCSTOULL */
+    #define wxCRT_StrtollA   strtoll
+    #define wxCRT_StrtoullA  strtoull
+    #define wxCRT_StrtollW   wcstoll
+    #define wxCRT_StrtoullW  wcstoull
 #endif
 
 /*
