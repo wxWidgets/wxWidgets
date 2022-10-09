@@ -190,7 +190,7 @@ jobs:
             clang++*)
               echo CC=`echo $compiler | sed s/++//` >> $GITHUB_ENV
               echo CXX="$compiler -stdlib=libc++" >> $GITHUB_ENV
-              echo LD=$compiler >> $GITHUB_ENV
+              echo LD="$compiler -stdlib=libc++" >> $GITHUB_ENV
 
               allow_warn_opt="-Wno-error=#warnings"
               ;;
