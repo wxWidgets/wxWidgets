@@ -78,9 +78,9 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --enable-stl --disable-compat30
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 with clang
-            runner: ubuntu-latest
-            compiler: clang
+          - name: Ubuntu 20.04 wxGTK 3 with clang
+            runner: ubuntu-20.04
+            compiler: clang++-10
             configure_flags: --disable-sys-libs
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK ANSI
@@ -188,10 +188,10 @@ jobs:
 
           compiler=${{ matrix.compiler }}
           case "$compiler" in
-            clang)
-              echo CC=clang >> $GITHUB_ENV
-              echo CXX='clang++ -stdlib=libc++' >> $GITHUB_ENV
-              echo LD=clang++ >> $GITHUB_ENV
+            clang++*)
+              echo CC=`echo $compiler | sed s/++//` >> $GITHUB_ENV
+              echo CXX="$compiler -stdlib=libc++" >> $GITHUB_ENV
+              echo LD=$compiler >> $GITHUB_ENV
 
               allow_warn_opt="-Wno-error=#warnings"
               ;;
