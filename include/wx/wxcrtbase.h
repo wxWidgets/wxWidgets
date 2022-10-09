@@ -126,7 +126,7 @@
 
 /* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
    And we need to declare it manually for MinGW in strict ANSI mode. */
-#if (defined(__VISUALC__) && __VISUALC__ >= 1400)
+#if defined(__VISUALC__)
     #define wxCRT_StrdupA _strdup
 #elif defined(__MINGW32__)
     wxDECL_FOR_STRICT_MINGW32(char*, _strdup, (const char *))
@@ -202,9 +202,9 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
 #endif
 
 /*
-    Only VC8 and later provide strnlen() and wcsnlen() functions under Windows.
+    Only MSVC provides strnlen() and wcsnlen() functions under Windows.
  */
-#if wxCHECK_VISUALC_VERSION(8)
+#ifdef __VISUALC__
     #ifndef HAVE_STRNLEN
         #define HAVE_STRNLEN
     #endif

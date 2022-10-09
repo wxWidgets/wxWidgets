@@ -462,7 +462,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) value
 #endif // clang || GCC
 
-#if wxCHECK_VISUALC_VERSION(10) && !defined(WXBUILDING)
+#if defined(__VISUALC__) && !defined(WXBUILDING)
 #define wxPG_MUST_DEPRECATE_MACRO_NAME
 #endif
 

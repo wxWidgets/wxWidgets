@@ -23,14 +23,12 @@
 
 // Enable support for Direct2D-based implementation of wxGraphicsContext.
 //
-// Default is 1 for compilers which support it, i.e. VC10+ currently. If you
-// use an earlier MSVC version or another compiler and installed the necessary
-// SDK components manually, you need to change this setting.
+// Default is 1 for compilers which support it, i.e. MSVS currently. If you
+// use another compiler and installed the necessary SDK components manually,
+// you need to change this setting.
 //
-// Recommended setting: 1 for faster and better quality graphics under Windows
-// 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
-// systems will fall back on using GDI+).
-#if defined(_MSC_VER) && _MSC_VER >= 1600
+// Recommended setting: 1 for faster and better quality graphics.
+#if defined(_MSC_VER)
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
@@ -77,12 +75,10 @@
 
 // Enable WinRT support
 //
-// Default is 1 for compilers which support it, i.e. VS2012+ currently. If you
-// use an earlier MSVC version or another compiler and installed the necessary
-// SDK components manually, you need to change this setting.
+// Default is 1 for compilers which support it, i.e. MSVS currently.
 //
 // Recommended setting: 1
-#if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
+#if defined(_MSC_VER)
     #define wxUSE_WINRT 1
 #else
     #define wxUSE_WINRT 0

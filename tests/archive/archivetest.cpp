@@ -1034,11 +1034,6 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartIterator(wxInputStream& in)
 template <class ClassFactoryT>
 void ArchiveTestCase<ClassFactoryT>::TestSmartPairIterator(wxInputStream& in)
 {
-#if defined _MSC_VER && defined _MSC_VER < 1200
-    // With VC++ 5.0 the '=' operator of std::pair breaks when the second
-    // type is Ptr<EntryT>, so this iterator can't be made to work.
-    (void)in;
-#else
     typedef std::map<wxString, Ptr<EntryT> > ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
     typedef wxArchiveIterator<InputStreamT,
@@ -1052,7 +1047,6 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartPairIterator(wxInputStream& in)
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it)
         CPPUNIT_ASSERT(m_testEntries.count(it->second->GetName(wxPATH_UNIX)));
-#endif
 }
 
 // try reading two entries at the same time

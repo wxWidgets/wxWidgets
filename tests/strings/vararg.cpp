@@ -211,7 +211,7 @@ TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
     // default starting from VC8 and somehow even calling
     // _set_printf_count_output() doesn't help here, so don't use "%n" at all
     // with it.
-#if wxCHECK_VISUALC_VERSION(8)
+#if defined(__VISUALC__)
     #define wxNO_PRINTF_PERCENT_N
 #endif // VC8+
 

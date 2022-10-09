@@ -98,7 +98,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
 }
 #endif // wxUSE_INTL
 
-#if wxCHECK_VISUALC_VERSION(8)
+#if defined(__VISUALC__)
 
 // ----------------------------------------------------------------------------
 // implementation using MSVC locale API

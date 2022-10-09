@@ -113,20 +113,6 @@
 #if wxUSE_STD_CONTAINERS
 #   pragma warning(disable:4275)
 #endif /* wxUSE_STD_CONTAINERS */
-
-#   ifdef __VISUALC5__
-    /* For VC++ 5.0 for release mode, the warning 'C4702: unreachable code */
-    /* is buggy, and occurs for code that does actually get executed */
-#   ifndef __WXDEBUG__
-#       pragma warning(disable:4702)    /* unreachable code */
-#   endif
-
-    /* The VC++ 5.0 warning 'C4003: not enough actual parameters for macro'
-     * is incompatible with the wxWidgets headers since it is given when
-     * parameters are empty but not missing. */
-#       pragma warning(disable:4003)    /* not enough actual parameters for macro */
-#   endif
-
     /*
        When compiling with VC++ 7 /Wp64 option we get thousands of warnings for
        conversion from size_t to int or long. Some precious few of them might
@@ -135,26 +121,22 @@
        everywhere this method is used though we are quite sure that using >4GB
        strings is a bad idea anyhow) so just disable it globally for now.
      */
-    #if wxCHECK_VISUALC_VERSION(7)
-        /* conversion from 'size_t' to 'unsigned long', possible loss of data */
-        #pragma warning(disable:4267)
-    #endif /* VC++ 7 or later */
+    /* conversion from 'size_t' to 'unsigned long', possible loss of data */
+    #pragma warning(disable:4267)
 
     /*
        VC++ 8 gives a warning when using standard functions such as sprintf,
        localtime, ... -- stop this madness, unless the user had already done it
      */
-    #if wxCHECK_VISUALC_VERSION(8)
-        #ifndef _CRT_SECURE_NO_DEPRECATE
-            #define _CRT_SECURE_NO_DEPRECATE 1
-        #endif
-        #ifndef _CRT_NON_CONFORMING_SWPRINTFS
-            #define _CRT_NON_CONFORMING_SWPRINTFS 1
-        #endif
-        #ifndef _SCL_SECURE_NO_WARNINGS
-            #define _SCL_SECURE_NO_WARNINGS 1
-        #endif
-    #endif /* VC++ 8 */
+    #ifndef _CRT_SECURE_NO_DEPRECATE
+        #define _CRT_SECURE_NO_DEPRECATE 1
+    #endif
+    #ifndef _CRT_NON_CONFORMING_SWPRINTFS
+        #define _CRT_NON_CONFORMING_SWPRINTFS 1
+    #endif
+    #ifndef _SCL_SECURE_NO_WARNINGS
+        #define _SCL_SECURE_NO_WARNINGS 1
+    #endif
 #endif /*  __VISUALC__ */
 
 /*
@@ -310,7 +292,7 @@ typedef short int WXTYPE;
 #elif defined(__clang__)
     #define wx_truncate_cast(t, x) static_cast<t>(x)
 
-#elif defined(__VISUALC__) && __VISUALC__ >= 1310
+#elif defined(__VISUALC__)
     template <typename T, typename X>
     inline T wx_truncate_cast_impl(X x)
     {
@@ -549,7 +531,7 @@ typedef short int WXTYPE;
     #endif
 #elif defined(__GNUC__)
     #define wxDEPRECATED_MSG(msg) __attribute__((deprecated(msg)))
-#elif wxCHECK_VISUALC_VERSION(8)
+#elif defined(__VISUALC__)
     #define wxDEPRECATED_MSG(msg) __declspec(deprecated("deprecated: " msg))
 #else
     #define wxDEPRECATED_MSG(msg) wxDEPRECATED_DECL

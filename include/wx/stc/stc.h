@@ -2479,7 +2479,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // The wxSTC_INDIC{0,1,2,S}_MASK values are no longer used in Scintilla
 
-#if wxCHECK_VISUALC_VERSION(10)
+#if defined(__VISUALC__)
     #pragma deprecated(wxSTC_INDIC0_MASK, wxSTC_INDIC1_MASK, \
                        wxSTC_INDIC2_MASK, wxSTC_INDICS_MASK)
 #endif
@@ -2496,7 +2496,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // The following entries have non-conformant prefixes.
 
-#if wxCHECK_VISUALC_VERSION(10)
+#if defined(__VISUALC__)
     #pragma deprecated(wxSTC_SCMOD_NORM, wxSTC_SCMOD_SHIFT, wxSTC_SCMOD_CTRL, \
                        wxSTC_SCMOD_ALT, wxSTC_SCMOD_SUPER, wxSTC_SCMOD_META, \
                        wxSTC_SCVS_NONE, wxSTC_SCVS_RECTANGULARSELECTION, \

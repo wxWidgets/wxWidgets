@@ -31,7 +31,7 @@
 // RTTI well enough, so we can use it and work around harmless memory
 // leaks reported by the static run-time libraries.
 //
-#if wxCHECK_VISUALC_VERSION(9)
+#ifdef __VISUALC__
     #define wxTRUST_CPP_RTTI    1
 #else
     #define wxTRUST_CPP_RTTI    0
