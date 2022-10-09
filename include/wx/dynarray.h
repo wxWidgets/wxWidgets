@@ -108,11 +108,7 @@ public:
     void Empty() { this->clear(); }
     void Clear() { this->clear(); }
     void Alloc(size_t uiSize) { this->reserve(uiSize); }
-
-    void Shrink()
-    {
-        wxShrinkToFit(*this);
-    }
+    void Shrink() { this->shrink_to_fit(); }
 
     size_t GetCount() const { return this->size(); }
     void SetCount(size_t n, T v = T()) { this->resize(n, v); }
