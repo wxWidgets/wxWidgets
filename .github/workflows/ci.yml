@@ -58,8 +58,8 @@ jobs:
       matrix:
         include:
           - name: Ubuntu 22.04 wxGTK 3 with clang
-            runner: ubuntu-22.04
-            compiler: clang++
+            runner: ubuntu-20.04
+            compiler: clang++-10
             use_xvfb: true
 
     env:
@@ -184,9 +184,6 @@ jobs:
           ccache --version
           echo
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Configuring
         run: |
           wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
@@ -283,6 +280,9 @@ jobs:
             fi
             exit $rc
           fi
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
 
       - name: Building samples
         if: matrix.skip_samples != true
