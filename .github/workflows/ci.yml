@@ -78,10 +78,9 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --enable-stl --disable-compat30
             use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK 3 with clang
-            runner: ubuntu-20.04
-            compiler: clang++-10
-            configure_flags: --disable-sys-libs
+          - name: Ubuntu 22.04 wxGTK 3 with clang
+            runner: ubuntu-22.04
+            compiler: clang++
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK ANSI
             runner: ubuntu-20.04
