@@ -218,7 +218,6 @@ public:
 
     /**
         Adds custom, user-defined language to the database of known languages.
-        This database is used in conjunction with the first form of Init().
     */
     static void AddLanguage(const wxLanguageInfo& info);
 
@@ -271,8 +270,8 @@ public:
     static wxString GetLanguageName(int lang);
 
     /**
-        Returns canonical name (see GetCanonicalName()) of the given language
-        or empty string if this language is unknown.
+        Returns canonical name of the given language or empty string if this
+        language is unknown.
 
         See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
     */
