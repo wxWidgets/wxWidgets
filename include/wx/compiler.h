@@ -81,6 +81,18 @@
     #define wxCHECK_GCC_VERSION( major, minor ) \
         ( ( __GNUC__ > (major) ) \
             || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) )
+
+    /*
+        clang predefines __GNUC__ and __GNUC_MINOR__ as 4 and 6, don't give an
+        error below for it.
+     */
+    #if defined(__clang__)
+        #if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 4)
+            #error "This clang version is not supported any longer (at least clang 3.4 required)."
+        #endif
+    #elif !wxCHECK_GCC_VERSION(4, 8)
+        #error "This gcc version is not supported any longer (at least gcc 4.8 required)."
+    #endif
 #else
     #define wxCHECK_GCC_VERSION( major, minor ) 0
 #endif
