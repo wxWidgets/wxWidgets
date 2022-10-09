@@ -300,7 +300,7 @@ void LogTestCase::NoWarnings()
 // The following two functions (v, macroCompilabilityTest) are not run by
 // any test, and their purpose is merely to guarantee that the wx(V)LogXXX
 // macros compile without 'dangling else' warnings.
-#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
+#if defined(__clang__) || defined(__GNUC__)
     // gcc 7 split -Wdangling-else from the much older -Wparentheses, so use
     // the new warning if it's available or the old one otherwise.
     #if wxCHECK_GCC_VERSION(7, 0)

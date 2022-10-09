@@ -578,7 +578,7 @@
 #       if !__has_feature(cxx_rtti)
 #           define wxNO_RTTI
 #       endif
-#   elif wxCHECK_GCC_VERSION(4, 3)
+#   elif defined(__GNUG__)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif

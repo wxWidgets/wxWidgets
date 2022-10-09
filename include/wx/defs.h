@@ -547,7 +547,7 @@ typedef short int WXTYPE;
     #else
         #define wxDEPRECATED_MSG(msg) __attribute__((deprecated))
     #endif
-#elif wxCHECK_GCC_VERSION(4, 5)
+#elif defined(__GNUC__)
     #define wxDEPRECATED_MSG(msg) __attribute__((deprecated(msg)))
 #elif wxCHECK_VISUALC_VERSION(8)
     #define wxDEPRECATED_MSG(msg) __declspec(deprecated("deprecated: " msg))
@@ -644,7 +644,7 @@ typedef short int WXTYPE;
    Note that these macros apply to both gcc and clang, even though they only
    have "GCC" in their names.
  */
-#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
+#if defined(__clang__) || defined(__GNUC__)
 #   define wxGCC_WARNING_SUPPRESS(x) \
         _Pragma (wxSTRINGIZE(GCC diagnostic push)) \
         _Pragma (wxSTRINGIZE(GCC diagnostic ignored wxSTRINGIZE(wxCONCAT(-W,x))))
