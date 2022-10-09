@@ -67,8 +67,9 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK3 static
+          - name: Ubuntu 18.04 wxGTK 3 static with gcc 4.8
             runner: ubuntu-latest
+            compiler: g++-4.8
             container: ubuntu:18.04
             configure_flags: --disable-shared
             use_xvfb: true
@@ -79,7 +80,6 @@ jobs:
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 with clang
             runner: ubuntu-latest
-            container: ubuntu:18.04
             compiler: clang
             configure_flags: --disable-sys-libs
             use_xvfb: true
@@ -142,6 +142,8 @@ jobs:
                 apt-add-repository ppa:git-core/ppa
               fi
 
+              compiler=${{ matrix.compiler }}
+
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
               #   - locales contains locale-gen also used below.
@@ -150,7 +152,7 @@ jobs:
               #     closed https://github.com/actions/setup-python/issues/370
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
-              apt-get install -qq coreutils g++ git locales make pkg-config python3 python3-pip sudo xvfb
+              apt-get install -qq coreutils ${compiler-g++} git locales make pkg-config python3 python3-pip sudo xvfb
               ;;
 
             '')
@@ -184,13 +186,21 @@ jobs:
           # messages from WebKit tests that we're not interested in.
           echo NO_AT_BRIDGE=1 >> $GITHUB_ENV
 
-          case "${{ matrix.compiler }}" in
+          compiler=${{ matrix.compiler }}
+          case "$compiler" in
             clang)
               echo CC=clang >> $GITHUB_ENV
               echo CXX='clang++ -stdlib=libc++' >> $GITHUB_ENV
               echo LD=clang++ >> $GITHUB_ENV
 
               allow_warn_opt="-Wno-error=#warnings"
+              ;;
+
+            g++*)
+              echo CC=`echo $compiler | sed s/++/cc/` >> $GITHUB_ENV
+              echo CXX=$compiler >> $GITHUB_ENV
+              echo LD=$compiler >> $GITHUB_ENV
+              allow_warn_opt="-Wno-error=cpp"
               ;;
 
             '')
