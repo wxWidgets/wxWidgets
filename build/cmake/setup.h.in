@@ -346,13 +346,7 @@
 #cmakedefine01 wxUSE_WEBVIEW_WEBKIT2
 #endif
 
-
-#if defined(_MSC_VER) || \
-    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
 #cmakedefine01 wxUSE_GRAPHICS_CONTEXT
-#else
-#cmakedefine01 wxUSE_GRAPHICS_CONTEXT
-#endif
 
 #cmakedefine01 wxUSE_CAIRO
 
