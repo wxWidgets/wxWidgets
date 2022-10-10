@@ -315,9 +315,6 @@ typedef short int WXTYPE;
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
 #define wxConstCast(obj, className) const_cast<className *>(obj)
 
-#ifndef HAVE_TYPE_TRAITS
-    #define HAVE_TYPE_TRAITS
-#endif
 #ifndef HAVE_STD_UNORDERED_MAP
     #define HAVE_STD_UNORDERED_MAP
 #endif

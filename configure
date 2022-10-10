@@ -24732,8 +24732,6 @@ $as_echo "#define HAVE_STD_UNORDERED_MAP 1" >>confdefs.h
 
 $as_echo "#define HAVE_STD_UNORDERED_SET 1" >>confdefs.h
 
-$as_echo "#define HAVE_TYPE_TRAITS 1" >>confdefs.h
-
 
 
 

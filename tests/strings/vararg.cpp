@@ -243,15 +243,6 @@ TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%n", ptr) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", 42, &swritten) );
 
-    // the following test (correctly) fails at compile-time with <type_traits>
-#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
-    wxObject obj;
-    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", obj) );
-
-    wxObject& ref = obj;
-    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", ref) );
-#endif
-
     // %c should accept integers too
     wxString::Format("%c", 80);
     wxString::Format("%c", wxChar(80) + wxChar(1));

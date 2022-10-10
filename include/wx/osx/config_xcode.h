@@ -26,7 +26,6 @@
   #if !defined(__has_include)
     #define HAVE_TR1_UNORDERED_MAP 1
     #define HAVE_TR1_UNORDERED_SET 1
-    #define HAVE_TR1_TYPE_TRAITS 1
   #endif
   #define HAVE_GCC_ATOMIC_BUILTINS 1
 #endif

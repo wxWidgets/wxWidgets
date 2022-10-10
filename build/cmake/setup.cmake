@@ -579,10 +579,6 @@ endif()
 check_cxx_symbol_exists(round math.h HAVE_ROUND)
 
 # Check includes
-if(NOT MSVC_VERSION LESS 1600)
-    check_include_file_cxx(tr1/type_traits HAVE_TR1_TYPE_TRAITS)
-    check_include_file_cxx(type_traits HAVE_TYPE_TRAITS)
-endif()
 check_include_file(fcntl.h HAVE_FCNTL_H)
 check_include_file(langinfo.h HAVE_LANGINFO_H)
 check_include_file(sched.h HAVE_SCHED_H)

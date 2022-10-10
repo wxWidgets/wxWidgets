@@ -1882,7 +1882,6 @@ fi
 
 AC_DEFINE(HAVE_STD_UNORDERED_MAP)
 AC_DEFINE(HAVE_STD_UNORDERED_SET)
-AC_DEFINE(HAVE_TYPE_TRAITS)
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS

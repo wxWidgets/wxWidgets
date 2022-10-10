@@ -779,16 +779,6 @@
 #cmakedefine HAVE_TR1_UNORDERED_SET 1
 
 /*
- * Define if your compiler has <tr1/type_traits>
- */
-#cmakedefine HAVE_TR1_TYPE_TRAITS 1
-
-/*
- * Define if your compiler has <type_traits>
- */
-#cmakedefine HAVE_TYPE_TRAITS 1
-
-/*
  * Define if the compiler supports simple visibility declarations.
  */
 #cmakedefine HAVE_VISIBILITY 1
