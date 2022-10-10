@@ -112,7 +112,6 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_ftp.o \
 	$(OBJS)\test_uris.o \
 	$(OBJS)\test_url.o \
-	$(OBJS)\test_vectors.o \
 	$(OBJS)\test_evtconnection.o \
 	$(OBJS)\test_weakref.o \
 	$(OBJS)\test_xlocale.o \
@@ -816,9 +815,6 @@ $(OBJS)\test_uris.o: ./uris/uris.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_url.o: ./uris/url.cpp
-	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\test_vectors.o: ./vectors/vectors.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_evtconnection.o: ./weakref/evtconnection.cpp

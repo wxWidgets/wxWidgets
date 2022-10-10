@@ -563,7 +563,6 @@
     <ClCompile Include="uris\ftp.cpp" />
     <ClCompile Include="uris\uris.cpp" />
     <ClCompile Include="uris\url.cpp" />
-    <ClCompile Include="vectors\vectors.cpp" />
     <ClCompile Include="weakref\evtconnection.cpp" />
     <ClCompile Include="weakref\weakref.cpp" />
     <ClCompile Include="xlocale\xlocale.cpp" />
