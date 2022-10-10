@@ -742,43 +742,6 @@
 #cmakedefine VA_LIST_IS_ARRAY 1
 
 /*
- * Define if your compiler has <hash_map>
- */
-#cmakedefine HAVE_HASH_MAP 1
-/*
- * Define if your compiler has <ext/hash_map>
- */
-#cmakedefine HAVE_EXT_HASH_MAP 1
-/*
- * Define if your compiler has std::hash_map/hash_set
- */
-#cmakedefine HAVE_STD_HASH_MAP 1
-/*
- * Define if your compiler has __gnu_cxx::hash_map/hash_set
- */
-#cmakedefine HAVE_GNU_CXX_HASH_MAP 1
-
-/*
- * Define if your compiler has std::unordered_map
- */
-#cmakedefine HAVE_STD_UNORDERED_MAP 1
-
-/*
- * Define if your compiler has std::unordered_set
- */
-#cmakedefine HAVE_STD_UNORDERED_SET 1
-
-/*
- * Define if your compiler has std::tr1::unordered_map
- */
-#cmakedefine HAVE_TR1_UNORDERED_MAP 1
-
-/*
- * Define if your compiler has std::tr1::unordered_set
- */
-#cmakedefine HAVE_TR1_UNORDERED_SET 1
-
-/*
  * Define if the compiler supports simple visibility declarations.
  */
 #cmakedefine HAVE_VISIBILITY 1

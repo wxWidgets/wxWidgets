@@ -14,51 +14,14 @@
 #include "wx/string.h"
 #include "wx/wxcrt.h"
 
-// In wxUSE_STD_CONTAINERS build we prefer to use the standard hash map class
-// but it can be either in non-standard hash_map header (old g++ and some other
-// STL implementations) or in C++0x standard unordered_map which can in turn be
-// available either in std::tr1 or std namespace itself
-//
-// To summarize: if std::unordered_map is available use it, otherwise use tr1
-// and finally fall back to non-standard hash_map
+#if wxUSE_STD_CONTAINERS
 
-#if (defined(HAVE_EXT_HASH_MAP) || defined(HAVE_HASH_MAP)) \
-    && (defined(HAVE_GNU_CXX_HASH_MAP) || defined(HAVE_STD_HASH_MAP))
-    #define HAVE_STL_HASH_MAP
-#endif
-
-#if wxUSE_STD_CONTAINERS && \
-    (defined(HAVE_STD_UNORDERED_MAP) || defined(HAVE_TR1_UNORDERED_MAP))
-
-#if defined(HAVE_STD_UNORDERED_MAP)
-    #include <unordered_map>
-    #define WX_HASH_MAP_NAMESPACE std
-#elif defined(HAVE_TR1_UNORDERED_MAP)
-    #include <tr1/unordered_map>
-    #define WX_HASH_MAP_NAMESPACE std::tr1
-#endif
+#include <unordered_map>
 
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
-    typedef WX_HASH_MAP_NAMESPACE::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
+    typedef std::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
 
-#elif wxUSE_STD_CONTAINERS && defined(HAVE_STL_HASH_MAP)
-
-#if defined(HAVE_EXT_HASH_MAP)
-    #include <ext/hash_map>
-#elif defined(HAVE_HASH_MAP)
-    #include <hash_map>
-#endif
-
-#if defined(HAVE_GNU_CXX_HASH_MAP)
-    #define WX_HASH_MAP_NAMESPACE __gnu_cxx
-#elif defined(HAVE_STD_HASH_MAP)
-    #define WX_HASH_MAP_NAMESPACE std
-#endif
-
-#define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
-    typedef WX_HASH_MAP_NAMESPACE::hash_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
-
-#else // !wxUSE_STD_CONTAINERS || no std::{hash,unordered}_map class available
+#else // !wxUSE_STD_CONTAINERS
 
 #define wxNEEDS_WX_HASH_MAP
 
@@ -472,12 +435,12 @@ inline bool grow_lf70( size_t buckets, size_t items )
 struct WXDLLIMPEXP_BASE wxIntegerHash
 {
 private:
-    WX_HASH_MAP_NAMESPACE::hash<long> longHash;
-    WX_HASH_MAP_NAMESPACE::hash<unsigned long> ulongHash;
-    WX_HASH_MAP_NAMESPACE::hash<int> intHash;
-    WX_HASH_MAP_NAMESPACE::hash<unsigned int> uintHash;
-    WX_HASH_MAP_NAMESPACE::hash<short> shortHash;
-    WX_HASH_MAP_NAMESPACE::hash<unsigned short> ushortHash;
+    std::hash<long> longHash;
+    std::hash<unsigned long> ulongHash;
+    std::hash<int> intHash;
+    std::hash<unsigned int> uintHash;
+    std::hash<short> shortHash;
+    std::hash<unsigned short> ushortHash;
 
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
     // hash<wxLongLong_t> ought to work but doesn't on some compilers
@@ -489,9 +452,9 @@ private:
                longHash( wx_truncate_cast(long, x >> (sizeof(long) * 8)) );
     }
     #elif defined SIZEOF_LONG_LONG && SIZEOF_LONG_LONG == SIZEOF_LONG
-    WX_HASH_MAP_NAMESPACE::hash<long> longlongHash;
+    std::hash<long> longlongHash;
     #else
-    WX_HASH_MAP_NAMESPACE::hash<wxLongLong_t> longlongHash;
+    std::hash<wxLongLong_t> longlongHash;
     #endif
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 

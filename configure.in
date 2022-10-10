@@ -1880,9 +1880,6 @@ if test "x$COMPAQCXX" = "xyes"; then
     CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
 
-AC_DEFINE(HAVE_STD_UNORDERED_MAP)
-AC_DEFINE(HAVE_STD_UNORDERED_SET)
-
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
 

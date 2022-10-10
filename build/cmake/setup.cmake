@@ -132,38 +132,6 @@ if(NOT MSVC)
     endif()
 endif()
 
-wx_check_cxx_source_compiles("
-    std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
-    std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;"
-    HAVE_HASH_MAP
-    hash_map hash_set
-    )
-set(HAVE_STD_HASH_MAP ${HAVE_HASH_MAP})
-
-wx_check_cxx_source_compiles("
-    __gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
-    __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;"
-    HAVE_EXT_HASH_MAP
-    ext/hash_map ext/hash_set
-    )
-set(HAVE_GNU_CXX_HASH_MAP ${HAVE_EXT_HASH_MAP})
-
-wx_check_cxx_source_compiles("
-    std::unordered_map<double*, char*> test1;
-    std::unordered_set<char*> test2;"
-    HAVE_STD_UNORDERED_MAP
-    unordered_map unordered_set
-    )
-set(HAVE_STD_UNORDERED_SET ${HAVE_STD_UNORDERED_MAP})
-
-wx_check_cxx_source_compiles("
-    std::tr1::unordered_map<double*, char*> test1;
-    std::tr1::unordered_set<char*> test2;"
-    HAVE_TR1_UNORDERED_MAP
-    tr1/unordered_map tr1/unordered_set
-    )
-set(HAVE_TR1_UNORDERED_SET ${HAVE_TR1_UNORDERED_MAP})
-
 # Check for availability of GCC's atomic operations builtins.
 wx_check_c_source_compiles("
     unsigned int value=0;

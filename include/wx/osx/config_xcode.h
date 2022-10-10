@@ -23,10 +23,6 @@
 
 #define HAVE_VA_COPY 1
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
-  #if !defined(__has_include)
-    #define HAVE_TR1_UNORDERED_MAP 1
-    #define HAVE_TR1_UNORDERED_SET 1
-  #endif
   #define HAVE_GCC_ATOMIC_BUILTINS 1
 #endif
 #define HAVE_VISIBILITY 1
