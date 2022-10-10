@@ -742,10 +742,6 @@
 #cmakedefine VA_LIST_IS_ARRAY 1
 
 /*
- * Define if your compiler has std::wstring
- */
-#cmakedefine HAVE_STD_WSTRING 1
-/*
  * Define if your compiler has compliant std::string::compare
  */
 #cmakedefine HAVE_STD_STRING_COMPARE 1

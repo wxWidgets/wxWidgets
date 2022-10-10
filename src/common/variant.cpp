@@ -976,7 +976,7 @@ wxVariant::wxVariant(const std::string& val, const wxString& name)
     m_name = name;
 }
 
-wxVariant::wxVariant(const wxStdWideString& val, const wxString& name)
+wxVariant::wxVariant(const std::wstring& val, const wxString& name)
 {
     m_refData = new wxVariantDataString(wxString(val));
     m_name = name;

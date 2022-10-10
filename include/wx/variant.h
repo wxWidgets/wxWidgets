@@ -243,14 +243,14 @@ public:
     operator std::string() const { return (operator wxString()).ToStdString(); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
-    wxVariant(const wxStdWideString& val, const wxString& name = wxEmptyString);
-    bool operator==(const wxStdWideString& value) const
+    wxVariant(const std::wstring& val, const wxString& name = wxEmptyString);
+    bool operator==(const std::wstring& value) const
         { return operator==(wxString(value)); }
-    bool operator!=(const wxStdWideString& value) const
+    bool operator!=(const std::wstring& value) const
         { return operator!=(wxString(value)); }
-    wxVariant& operator=(const wxStdWideString& value)
+    wxVariant& operator=(const std::wstring& value)
         { return operator=(wxString(value)); }
-    operator wxStdWideString() const { return (operator wxString()).ToStdWstring(); }
+    operator std::wstring() const { return (operator wxString()).ToStdWstring(); }
 #endif // wxUSE_STD_STRING
 
     // wxUniChar

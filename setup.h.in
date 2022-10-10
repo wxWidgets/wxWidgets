@@ -742,10 +742,6 @@
 #undef VA_LIST_IS_ARRAY
 
 /*
- * Define if your compiler has std::wstring
- */
-#undef HAVE_STD_WSTRING
-/*
  * Define if your compiler has compliant std::string::compare
  */
 #undef HAVE_STD_STRING_COMPARE

@@ -809,18 +809,10 @@ typedef pid_t GPid;
 
 #if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
 /*
- * Define if your compiler has std::wstring
- */
-#define HAVE_STD_WSTRING 1
-/*
  * Define if your compiler has compliant std::string::compare
  */
 #define HAVE_STD_STRING_COMPARE 1
 #else
-/*
- * Define if your compiler has std::wstring
- */
-/* #unfine HAVE_STD_WSTRING */
 /*
  * Define if your compiler has compliant std::string::compare
  */

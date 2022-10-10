@@ -1239,9 +1239,9 @@ public:
   // they need it
 #if wxUSE_STD_STRING
   #if wxUSE_UNICODE_WCHAR
-    wxString(const wxStdWideString& str) : m_impl(str) {}
+    wxString(const std::wstring& str) : m_impl(str) {}
   #else // UTF-8 or ANSI
-    wxString(const wxStdWideString& str)
+    wxString(const std::wstring& str)
         { assign(str.c_str(), str.length()); }
   #endif
 
@@ -1262,12 +1262,12 @@ public:
   // We can avoid a copy if we already use this string type internally,
   // otherwise we create a copy on the fly:
   #if wxUSE_UNICODE_WCHAR && wxUSE_STL_BASED_WXSTRING
-    #define wxStringToStdWstringRetType const wxStdWideString&
-    const wxStdWideString& ToStdWstring() const { return m_impl; }
+    #define wxStringToStdWstringRetType const std::wstring&
+    const std::wstring& ToStdWstring() const { return m_impl; }
   #else
     // wxStringImpl is either not std::string or needs conversion
-    #define wxStringToStdWstringRetType wxStdWideString
-    wxStdWideString ToStdWstring() const
+    #define wxStringToStdWstringRetType std::wstring
+    std::wstring ToStdWstring() const
     {
 #if wxUSE_UNICODE_WCHAR
         wxScopedWCharBuffer buf =
@@ -1276,7 +1276,7 @@ public:
         wxScopedWCharBuffer buf(wc_str());
 #endif
 
-        return wxStdWideString(buf.data(), buf.length());
+        return std::wstring(buf.data(), buf.length());
     }
   #endif
 

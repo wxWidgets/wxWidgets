@@ -816,10 +816,10 @@ struct wxArgNormalizerWchar<const std::string_view&>
 #endif // NO_IMPLICIT_WXSTRING_ENCODING
 
 template<>
-struct wxArgNormalizerWchar<const wxStdWideString&>
+struct wxArgNormalizerWchar<const std::wstring&>
     : public wxArgNormalizerWchar<const wchar_t*>
 {
-    wxArgNormalizerWchar(const wxStdWideString& s,
+    wxArgNormalizerWchar(const std::wstring& s,
                          const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerWchar<const wchar_t*>(s.c_str(), fmt, index) {}
 };
@@ -850,10 +850,10 @@ struct wxArgNormalizerUtf8<const std::string_view&>
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 template<>
-struct wxArgNormalizerUtf8<const wxStdWideString&>
+struct wxArgNormalizerUtf8<const std::wstring&>
     : public wxArgNormalizerUtf8<const wchar_t*>
 {
-    wxArgNormalizerUtf8(const wxStdWideString& s,
+    wxArgNormalizerUtf8(const std::wstring& s,
                         const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerUtf8<const wchar_t*>(s.c_str(), fmt, index) {}
 };
@@ -865,7 +865,7 @@ WX_ARG_NORMALIZER_FORWARD(std::string, const std::string&);
 WX_ARG_NORMALIZER_FORWARD(std::string_view, const std::string_view&);
 #endif // __cpp_lib_string_view
 #endif
-WX_ARG_NORMALIZER_FORWARD(wxStdWideString, const wxStdWideString&);
+WX_ARG_NORMALIZER_FORWARD(std::wstring, const std::wstring&);
 
 #endif // wxUSE_STD_STRING
 

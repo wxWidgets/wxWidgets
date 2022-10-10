@@ -144,12 +144,6 @@ wx_check_cxx_source_compiles("
     string
     )
 
-wx_check_cxx_source_compiles(
-    "std::wstring s;"
-    HAVE_STD_WSTRING
-    string
-    )
-
 wx_check_cxx_source_compiles("
     std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
     std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;"
