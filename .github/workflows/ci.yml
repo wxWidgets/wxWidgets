@@ -219,9 +219,6 @@ jobs:
           make $wxBUILD_ARGS failtest
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Testing GUI using Xvfb
         if: matrix.use_xvfb
         working-directory: tests
@@ -243,6 +240,15 @@ jobs:
             wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
           ulimit -c unlimited
+
+          # This is exceedingly weird, but for some reason the first test using
+          # wxWebView in the build using clang under Ubuntu 20.04 fails (even
+          # if the timeout in the test is increased), so run it before really
+          # running the tests -- then they will succeed.
+          if [ '${{ matrix.compiler }}' = 'clang++-10' ]; then
+            xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView || echo 'First wxWebView test failure ignored.'
+          fi
+
           /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
           if [ -n "$rc" ]; then
             if fgrep -q '(core dumped)' test_gui.out; then
