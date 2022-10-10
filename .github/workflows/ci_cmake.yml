@@ -63,7 +63,6 @@ jobs:
           - name: macOS 11 wxOSX
             runner: macos-11
             cmake_generator: Xcode
-            cmake_defines: -DCMAKE_CXX_STANDARD=11
           - name: macOS 11 wxIOS
             runner: macos-11
             cmake_generator: Xcode
