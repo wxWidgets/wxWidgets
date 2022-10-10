@@ -87,9 +87,6 @@ typedef std::wstring wxStdWideString;
     typedef wxStdString wxStringImpl;
 #else // if !wxUSE_STL_BASED_WXSTRING
 
-// in non-STL mode, compare() is implemented in wxString and not wxStringImpl
-#undef HAVE_STD_STRING_COMPARE
-
 // ---------------------------------------------------------------------------
 // string data prepended with some housekeeping info (used by wxString class),
 // is never used directly (but had to be put here to allow inlining)

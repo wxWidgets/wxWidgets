@@ -133,18 +133,6 @@ if(NOT MSVC)
 endif()
 
 wx_check_cxx_source_compiles("
-    std::string foo, bar;
-    foo.compare(bar);
-    foo.compare(1, 1, bar);
-    foo.compare(1, 1, bar, 1, 1);
-    foo.compare(\"\");
-    foo.compare(1, 1, \"\");
-    foo.compare(1, 1, \"\", 2);"
-    HAVE_STD_STRING_COMPARE
-    string
-    )
-
-wx_check_cxx_source_compiles("
     std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
     std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;"
     HAVE_HASH_MAP

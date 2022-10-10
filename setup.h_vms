@@ -807,18 +807,6 @@ typedef pid_t GPid;
  */
 #undef VA_LIST_IS_ARRAY
 
-#if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#define HAVE_STD_STRING_COMPARE 1
-#else
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#undef HAVE_STD_STRING_COMPARE
-#endif
-
 /*
  * Define if your compiler has <hash_map>
  */

@@ -742,10 +742,6 @@
 #undef VA_LIST_IS_ARRAY
 
 /*
- * Define if your compiler has compliant std::string::compare
- */
-#undef HAVE_STD_STRING_COMPARE
-/*
  * Define if your compiler has <hash_map>
  */
 #undef HAVE_HASH_MAP

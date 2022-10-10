@@ -742,10 +742,6 @@
 #cmakedefine VA_LIST_IS_ARRAY 1
 
 /*
- * Define if your compiler has compliant std::string::compare
- */
-#cmakedefine HAVE_STD_STRING_COMPARE 1
-/*
  * Define if your compiler has <hash_map>
  */
 #cmakedefine HAVE_HASH_MAP 1
