@@ -1697,11 +1697,6 @@ template <typename T> void wxDELETEA(T*& array);
     wxString wxGetSomething();
     @endcode
 
-    For compilers other than clang, g++ 4.5 or later and MSVC 8 (MSVS 2005) or
-    later, the message is ignored and a generic deprecation warning is given if
-    possible, i.e. if the compiler is g++ (any supported version) or MSVC 7
-    (MSVS 2003) or later.
-
     @since 3.0
 
     @header{wx/defs.h}
@@ -1714,9 +1709,6 @@ template <typename T> void wxDELETEA(T*& array);
     be removed in the future) when it is used.
 
     Notice that this macro itself is deprecated in favour of wxDEPRECATED_MSG()!
-
-    Only Visual C++ 7 and higher and g++ compilers currently support this
-    functionality.
 
     Example of use:
 

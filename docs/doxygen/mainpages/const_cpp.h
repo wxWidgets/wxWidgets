@@ -247,13 +247,12 @@ make linking work in this case, you must predefine @c wxMSVC_VERSION as @c
 vc140 <em>before</em> include @c wx/setup.h file, i.e. typically in the MSVS
 project options. Alternatively, you can predefine @c wxMSVC_VERSION_AUTO symbol
 (without any value), which means that the appropriate compiler version should
-be used automatically, e.g. "vc100" for VC 10 (MSVS 2010), "vc140" for VC 14
-(MSVS 2015) etc. Additionally, VC 14 is a special case as it has 3 minor
-versions: VC 14.0, 14.1 and 14.2, corresponding to MSVS 2015, 2017 and 2019;
-that are ABI-compatible with each other. Due to this, it can also be useful to
-reuse the single build of wxWidgets with all versions of the compiler and this
-is supported if @c wxMSVC_VERSION_ABI_COMPAT is defined: the compiler prefix
-"vc14x" is used in this case.
+be used automatically, e.g. "vc140" for VC 14 (MSVS 2015). Additionally,
+VC 14 is a special case as it has (so far) 4 minor versions: VC 14.0, 14.1, 14.2
+and 14.3, corresponding to MSVS 2015, 2017, 2019 and 2022; that are ABI-compatible
+with each other. Due to this, it can also be useful to reuse the single build
+of wxWidgets with all versions of the compiler and this is supported if
+@c wxMSVC_VERSION_ABI_COMPAT is defined: the compiler prefix "vc14x" is used in this case.
 
 If the makefiles have been used to build the libraries from source and the @c CFG
 variable has been set to specify a different output path for that particular
@@ -297,13 +296,12 @@ for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
 wxWidgets always tries to preserve source backwards compatibility, however
 sometimes existing symbols may need to be removed. Except in exceedingly rare
 cases, this happens in several steps: first, the symbol is marked as
-deprecated, so that using it results in a warning when using the common
-compilers (e.g. any non-ancient version of MSVC, gcc or clang) in some
-wxWidgets release @c x.y. It can still be used, however the warnings indicate
-all the places in your code which will need to be updated in the future. If
-your code doesn't use any deprecated symbols or you have already fixed all
-their occurrences, you may change @c WXWIN_COMPATIBILITY_x_y to 0 to ensure
-they can't be used -- however its default value is still 1 at this time.
+deprecated, so that using it results in a warning when using the supported
+compilers in some wxWidgets release @c x.y. It can still be used, however
+the warnings indicate all the places in your code which will need to be updated
+in the future. If your code doesn't use any deprecated symbols or you have already
+fixed all their occurrences, you may change @c WXWIN_COMPATIBILITY_x_y to 0
+to ensure they can't be used -- however its default value is still 1 at this time.
 
 At some point in the future, the next stable wxWidgets release @c x.y+2 changes
 the default @c WXWIN_COMPATIBILITY_x_y value to 0, meaning that now the symbol
