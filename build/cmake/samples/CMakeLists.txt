@@ -159,6 +159,7 @@ if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample wxstc)
 endif()
 wx_add_sample(webrequest LIBRARIES wxnet DEPENDS wxUSE_WEBREQUEST)
+wx_add_sample(logserver logctrl.cpp logctrl.h logserver.cpp logserver.h NAME logserver LIBRARIES wxnet DEPENDS wxUSE_IPC wxUSE_LOG)
 # widgets Sample
 set(SAMPLE_WIDGETS_SRC
     activityindicator.cpp

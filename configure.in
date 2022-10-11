@@ -6782,6 +6782,9 @@ if test "$wxUSE_IPC" = "yes"; then
     if test "$wxUSE_IPC" = "yes"; then
         AC_DEFINE(wxUSE_IPC)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ipc"
+        if test "$wxUSE_LOG" = "yes"; then
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS logserver"
+        fi
     fi
 fi
 
@@ -8114,6 +8117,9 @@ else
     fi
     if test "$wxUSE_IPC" = "yes" ; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ipc"
+        if test "$wxUSE_LOG" = "yes" ; then
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS logserver"
+        fi
     fi
 fi
 

@@ -689,6 +689,7 @@ set(NET_CMN_SRC
     src/common/url.cpp
     src/common/webrequest.cpp
     src/common/webrequest_curl.cpp
+    src/common/logclient.cpp
 )
 
 set(NET_CMN_HDR
@@ -704,6 +705,7 @@ set(NET_CMN_HDR
     wx/socket.h
     wx/url.h
     wx/webrequest.h
+    wx/logclient.h
 )
 
 set(QA_SRC

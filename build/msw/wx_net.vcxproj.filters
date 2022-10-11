@@ -30,6 +30,9 @@
     <ClCompile Include="..\..\src\common\http.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\logclient.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\protocol.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -74,6 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\wx\fs_inet.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\logclient.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\protocol\file.h">

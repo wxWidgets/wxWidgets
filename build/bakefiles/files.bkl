@@ -779,6 +779,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/url.cpp
     src/common/webrequest.cpp
     src/common/webrequest_curl.cpp
+    src/common/logclient.cpp
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
@@ -793,6 +794,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/socket.h
     wx/url.h
     wx/webrequest.h
+    wx/logclient.h
 </set>
 
 <!-- ====================================================================== -->
