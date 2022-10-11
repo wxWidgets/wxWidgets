@@ -452,7 +452,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
     }
     else
     {
-        wxFAIL_MSG(wxT("should have a top level parent!"));
+        //wxFAIL_MSG(wxT("should have a top level parent!"));
 
         iconized = false;
     }
