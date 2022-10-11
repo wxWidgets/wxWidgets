@@ -488,6 +488,15 @@ The sample also provides some timings for adding/deleting/sorting a lot of
 
 @sampledir{listctrl}
 
+@section page_samples_logserver LogServer Sample/Tool
+
+The logserver sample demonstrates logging into a separate log server, which is
+implemented in this sample. This method of logging has the advantage of working
+even if the app is running a loop without yielding to the main event loop, which
+would prevent GUI updates from happening.
+
+@sampledir{logserver}
+
 @section page_samples_mdi MDI Sample
 
 @sampleabout{MDI}
