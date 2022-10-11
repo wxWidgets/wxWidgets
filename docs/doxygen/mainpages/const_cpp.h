@@ -247,12 +247,15 @@ make linking work in this case, you must predefine @c wxMSVC_VERSION as @c
 vc140 <em>before</em> include @c wx/setup.h file, i.e. typically in the MSVS
 project options. Alternatively, you can predefine @c wxMSVC_VERSION_AUTO symbol
 (without any value), which means that the appropriate compiler version should
-be used automatically, e.g. "vc140" for VC 14 (MSVS 2015). Additionally,
-VC 14 is a special case as it has (so far) 4 minor versions: VC 14.0, 14.1, 14.2
-and 14.3, corresponding to MSVS 2015, 2017, 2019 and 2022; that are ABI-compatible
-with each other. Due to this, it can also be useful to reuse the single build
-of wxWidgets with all versions of the compiler and this is supported if
-@c wxMSVC_VERSION_ABI_COMPAT is defined: the compiler prefix "vc14x" is used in this case.
+be used automatically, e.g. "vc140" for MSVC 14.0 (MSVS 2015), "vc141" for MSVC
+14.1 (MSVS 2017), "vc142" for MSVC 14.2 (MSVS 2019) and "vc143" for MSVC 14.3
+(MSVS 2022).
+
+Finally, there is also @c wxMSVC_VERSION_ABI_COMPAT symbol which can be
+predefined to use the "vc14x" prefix ("x" is the literal letter "x" here and
+not just a placeholder). This allows building the libraries with any of MSVC
+14.x versions, that are ABI-compatible with each other, and using them when
+using any later version.
 
 If the makefiles have been used to build the libraries from source and the @c CFG
 variable has been set to specify a different output path for that particular
