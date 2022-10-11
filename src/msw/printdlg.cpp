@@ -966,6 +966,18 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     return true;
 }
 
+wxPrintData wxWindowsPrintDialog::GetDefaultPrintData(const wxString& printerName)
+{
+    wxPrintData defaultData;
+    defaultData.SetPrinterName(printerName);
+    WinPrinter printer;
+    wxWindowsPrintNativeData nativeData;
+    nativeData.InitializeDevMode(printerName, &printer);
+    nativeData.TransferTo(defaultData);
+    return defaultData;
+}
+
+
 // ---------------------------------------------------------------------------
 // wxWidnowsPageSetupDialog
 // ---------------------------------------------------------------------------

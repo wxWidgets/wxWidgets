@@ -71,6 +71,8 @@ public:
     wxPrintData& GetPrintData() wxOVERRIDE { return m_printDialogData.GetPrintData(); }
 
     virtual wxDC *GetPrintDC() wxOVERRIDE;
+    
+    static wxPrintData GetDefaultPrintData(const wxString& printerName = wxEmptyString);
 
 private:
     wxPrintDialogData m_printDialogData;
