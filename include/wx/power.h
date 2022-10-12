@@ -64,7 +64,7 @@ public:
 
     // default copy ctor, assignment operator and dtor are ok
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxPowerEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxPowerEvent(*this); }
 
 private:
     bool m_veto;

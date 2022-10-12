@@ -29,18 +29,18 @@ public:
 
     virtual ~SampleDrawingTestGCFactory() {
     }
-    virtual wxString GetIdForFileName () const wxOVERRIDE { return "sample-plg"; }
-    virtual wxString GetExtensionForFileName () const wxOVERRIDE { return "bmp"; }
+    virtual wxString GetIdForFileName () const override { return "sample-plg"; }
+    virtual wxString GetExtensionForFileName () const override { return "bmp"; }
 
     // Bitmaps are handled by wx code they should be binarily equal
-    virtual bool UseImageComparison() const wxOVERRIDE { return false; }
+    virtual bool UseImageComparison() const override { return false; }
 
     // We use wxGraphicsContext, its implementation is not platform independent
     // and returns may slightly vary
-    virtual bool PlatformIndependent() const wxOVERRIDE { return false; }
+    virtual bool PlatformIndependent() const override { return false; }
 
     virtual wxGraphicsContext *BuildNewContext (wxSize expectedSize,
-        double WXUNUSED(pointsPerInch), const wxFileName &targetFileName) wxOVERRIDE {
+        double WXUNUSED(pointsPerInch), const wxFileName &targetFileName) override {
         m_image = new wxImage (expectedSize);
         m_image->InitAlpha();
 
@@ -54,14 +54,14 @@ public:
     // Let's the opportunity to actually save the context and associated data
     // If saving requires deleting the wxGraphicsContext object the
     //  implementer is free to do it but @c gc must then be nulled
-    virtual void SaveBuiltContext (wxGraphicsContext *&gc) wxOVERRIDE {
+    virtual void SaveBuiltContext (wxGraphicsContext *&gc) override {
         wxDELETE(gc);
 
         m_image->SaveFile (m_targetFileName);
     }
 
     // Cleans @c gc and internal data if any
-    virtual void CleanUp (wxGraphicsContext *gc) wxOVERRIDE {
+    virtual void CleanUp (wxGraphicsContext *gc) override {
         delete gc;
         m_targetFileName.Empty();
         wxDELETE(m_image);

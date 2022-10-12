@@ -124,7 +124,7 @@ public:
 
 
     // implement some base class functions
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const wxOVERRIDE;
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const override;
 
     // On platforms that support it, get the theme page background colour, else invalid colour
     virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }

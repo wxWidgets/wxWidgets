@@ -707,7 +707,7 @@ public:
     void CenterSplitter( bool enableAutoResizing = false );
 
     // Deletes all properties.
-    virtual void Clear() wxOVERRIDE;
+    virtual void Clear() override;
 
     // Clears action triggers for given action.
     // action - Which action to trigger.
@@ -907,7 +907,7 @@ public:
     void OnTLPChanging( wxWindow* newTLP );
 
     // Redraws given property.
-    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
+    virtual void RefreshProperty( wxPGProperty* p ) override;
 
     // Registers a new editor class.
     // Returns pointer to the editor class instance that should be used.
@@ -1372,7 +1372,7 @@ public:
     // property.
     bool UnfocusEditor();
 
-    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
+    virtual void SetWindowStyleFlag( long style ) override;
 
     void DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 );
 
@@ -1426,24 +1426,24 @@ public:
     bool DoSelectProperty( wxPGProperty* p, unsigned int flags = 0 );
 
     // Overridden functions.
-    virtual bool Destroy() wxOVERRIDE;
+    virtual bool Destroy() override;
     // Returns property at given y coordinate (relative to grid's top left).
     wxPGProperty* GetItemAtY( int y ) const { return DoGetItemAtY(y); }
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
-    virtual bool SetFont( const wxFont& font ) wxOVERRIDE;
-    virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
-    virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
-    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) wxOVERRIDE;
+                          const wxRect *rect = (const wxRect *) NULL ) override;
+    virtual bool SetFont( const wxFont& font ) override;
+    virtual void SetExtraStyle( long exStyle ) override;
+    virtual bool Reparent( wxWindowBase *newParent ) override;
+    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) override;
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
-                               int xPos, int yPos, bool noRefresh) wxOVERRIDE;
+                               int xPos, int yPos, bool noRefresh) override;
 protected:
-    virtual void DoThaw() wxOVERRIDE;
+    virtual void DoThaw() override;
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual void DoEnable(bool enable) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual void DoEnable(bool enable) override;
 
 #ifndef wxPG_ICON_WIDTH
     wxBitmap            m_expandbmp, m_collbmp;
@@ -2015,7 +2015,7 @@ public:
     ~wxPropertyGridEvent();
 
     // Copyer.
-    virtual wxEvent* Clone() const wxOVERRIDE;
+    virtual wxEvent* Clone() const override;
 
     // Returns the column index associated with this event.
     // For the column dragging events, it is the column to the left

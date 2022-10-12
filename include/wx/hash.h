@@ -244,7 +244,7 @@ protected:
     // m_curr to it and m_currBucket to its bucket
     void GetNextNode( size_t bucketStart );
 private:
-    virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE;
+    virtual void DoDeleteContents( wxHashTableBase_Node* node ) override;
 
     // current node
     Node* m_curr;
@@ -275,7 +275,7 @@ private:
         eltype *Delete(long lhash, long key)                                  \
             { return (eltype*)DoDelete(key, lhash); }                         \
     private:                                                                  \
-        virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE\
+        virtual void DoDeleteContents( wxHashTableBase_Node* node ) override\
             { delete (eltype*)node->GetData(); }                              \
                                                                               \
         wxDECLARE_NO_COPY_CLASS(hashclass);                                   \

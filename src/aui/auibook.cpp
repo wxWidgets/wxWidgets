@@ -1538,20 +1538,20 @@ public:
 protected:
     void DoSetSize(int x, int y,
                    int width, int height,
-                   int WXUNUSED(sizeFlags = wxSIZE_AUTO)) wxOVERRIDE
+                   int WXUNUSED(sizeFlags = wxSIZE_AUTO)) override
     {
         m_rect = wxRect(x, y, width, height);
         DoSizing();
     }
 
-    void DoGetClientSize(int* x, int* y) const wxOVERRIDE
+    void DoGetClientSize(int* x, int* y) const override
     {
         *x = m_rect.width;
         *y = m_rect.height;
     }
 
 public:
-    bool Show( bool WXUNUSED(show = true) ) wxOVERRIDE { return false; }
+    bool Show( bool WXUNUSED(show = true) ) override { return false; }
 
     void DoSizing()
     {
@@ -1619,7 +1619,7 @@ public:
     }
 
 protected:
-    void DoGetSize(int* x, int* y) const wxOVERRIDE
+    void DoGetSize(int* x, int* y) const override
     {
         if (x)
             *x = m_rect.GetWidth();
@@ -1628,7 +1628,7 @@ protected:
     }
 
 public:
-    void Update() wxOVERRIDE
+    void Update() override
     {
         // does nothing
     }

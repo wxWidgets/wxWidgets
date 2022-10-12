@@ -79,7 +79,7 @@ public:
     static void UnloadBackend();
 
 protected:
-    bool DoPlay(unsigned flags) const wxOVERRIDE;
+    bool DoPlay(unsigned flags) const override;
 
     static void EnsureBackend();
     void Free();

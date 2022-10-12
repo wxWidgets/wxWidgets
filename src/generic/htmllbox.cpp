@@ -160,7 +160,7 @@ public:
         : wxDefaultHtmlRenderingStyle(&hlbox), m_hlbox(hlbox)
     { }
 
-    virtual wxColour GetSelectedTextColour(const wxColour& colFg) wxOVERRIDE
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg) override
     {
         // by default wxHtmlListBox doesn't implement GetSelectedTextColour()
         // and returns wxNullColour from it, so use the default HTML colour for
@@ -174,7 +174,7 @@ public:
         return col;
     }
 
-    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) wxOVERRIDE
+    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) override
     {
         wxColour col = m_hlbox.GetSelectedTextBgColour(colBg);
         if ( !col.IsOk() )

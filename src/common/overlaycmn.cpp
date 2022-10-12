@@ -147,13 +147,13 @@ class wxOverlayImpl: public wxOverlay::Impl
 public:
     wxOverlayImpl();
     ~wxOverlayImpl();
-    virtual bool IsNative() const wxOVERRIDE;
-    virtual bool IsOk() wxOVERRIDE;
-    virtual void Init(wxDC* dc, int x, int y, int width, int height) wxOVERRIDE;
-    virtual void BeginDrawing(wxDC* dc) wxOVERRIDE;
-    virtual void EndDrawing(wxDC* dc) wxOVERRIDE;
-    virtual void Clear(wxDC* dc) wxOVERRIDE;
-    virtual void Reset() wxOVERRIDE;
+    virtual bool IsNative() const override;
+    virtual bool IsOk() override;
+    virtual void Init(wxDC* dc, int x, int y, int width, int height) override;
+    virtual void BeginDrawing(wxDC* dc) override;
+    virtual void EndDrawing(wxDC* dc) override;
+    virtual void Clear(wxDC* dc) override;
+    virtual void Reset() override;
 
     wxBitmap m_bmpSaved;
     int m_x;

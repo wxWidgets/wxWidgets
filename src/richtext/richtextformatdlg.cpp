@@ -475,8 +475,8 @@ class wxRichTextFormattingDialogModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxRichTextFormattingDialogModule);
 public:
     wxRichTextFormattingDialogModule() {}
-    bool OnInit() wxOVERRIDE { wxRichTextFormattingDialog::SetFormattingDialogFactory(new wxRichTextFormattingDialogFactory); return true; }
-    void OnExit() wxOVERRIDE { wxRichTextFormattingDialog::SetFormattingDialogFactory(NULL); }
+    bool OnInit() override { wxRichTextFormattingDialog::SetFormattingDialogFactory(new wxRichTextFormattingDialogFactory); return true; }
+    void OnExit() override { wxRichTextFormattingDialog::SetFormattingDialogFactory(NULL); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextFormattingDialogModule, wxModule);

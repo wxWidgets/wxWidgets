@@ -39,18 +39,18 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
-    virtual bool IsPressed() const wxOVERRIDE { return m_isPressed || m_value; }
+    virtual bool IsPressed() const override { return m_isPressed || m_value; }
 
     // wxToggleButton actions
-    virtual void Toggle() wxOVERRIDE;
-    virtual void Click() wxOVERRIDE;
+    virtual void Toggle() override;
+    virtual void Click() override;
 
     // Get/set the value
     void SetValue(bool state);
     bool GetValue() const { return m_value; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // the current value
     bool m_value;

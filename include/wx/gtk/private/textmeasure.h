@@ -35,18 +35,18 @@ protected:
     // Common part of both ctors.
     void Init();
 
-    virtual void BeginMeasuring() wxOVERRIDE;
-    virtual void EndMeasuring() wxOVERRIDE;
+    virtual void BeginMeasuring() override;
+    virtual void EndMeasuring() override;
 
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *width,
                                  wxCoord *height,
                                  wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL) wxOVERRIDE;
+                                 wxCoord *externalLeading = NULL) override;
 
     virtual bool DoGetPartialTextExtents(const wxString& text,
                                          wxArrayInt& widths,
-                                         double scaleX) wxOVERRIDE;
+                                         double scaleX) override;
 
     // This class is only used for DC text measuring with GTK+ 2 as GTK+ 3 uses
     // Cairo and not Pango for this. However it's still used even with GTK+ 3

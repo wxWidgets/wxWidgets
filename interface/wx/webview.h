@@ -489,7 +489,7 @@ public:
         The following pseudo code demonstrates a typical implementation:
         @code
         void StartRequest(const wxWebViewHandlerRequest& request,
-                              wxSharedPtr<wxWebViewHandlerResponse> response) wxOVERRIDE
+                              wxSharedPtr<wxWebViewHandlerResponse> response) override
         {
             // Set common headers allowing access from XMLHTTPRequests()
             response->SetHeader("Access-Control-Allow-Origin", "*");

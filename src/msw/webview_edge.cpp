@@ -84,7 +84,7 @@ public:
 
     void SetHandler(wxWebViewHandler* handler) { m_handler = handler; }
 
-    virtual wxString GetRawURI() const wxOVERRIDE
+    virtual wxString GetRawURI() const override
     {
         wxCoTaskMemPtr<wchar_t> uri;
         if (SUCCEEDED(m_request->get_Uri(&uri)))
@@ -93,7 +93,7 @@ public:
             return wxString();
     }
 
-    virtual wxString GetURI() const wxOVERRIDE
+    virtual wxString GetURI() const override
     {
         wxURI rawURI(GetRawURI());
         wxString path = rawURI.GetPath();
@@ -103,7 +103,7 @@ public:
         return uri;
     }
 
-    virtual wxInputStream* GetData() const wxOVERRIDE
+    virtual wxInputStream* GetData() const override
     {
         if (!m_dataStream)
         {
@@ -129,7 +129,7 @@ public:
         return m_dataStream;
     }
 
-    virtual wxString GetMethod() const wxOVERRIDE
+    virtual wxString GetMethod() const override
     {
         wxCoTaskMemPtr<wchar_t> method;
         if (SUCCEEDED(m_request->get_Method(&method)))
@@ -138,7 +138,7 @@ public:
             return wxString();
     }
 
-    virtual wxString GetHeader(const wxString& name) const wxOVERRIDE
+    virtual wxString GetHeader(const wxString& name) const override
     {
         wxCOMPtr<ICoreWebView2HttpRequestHeaders> headers;
         if (SUCCEEDED(m_request->get_Headers(&headers)))
@@ -186,13 +186,13 @@ public:
     void SetReason(const wxString& reason)
     { m_response->put_ReasonPhrase(reason.wc_str()); }
 
-    virtual void SetStatus(int status) wxOVERRIDE
+    virtual void SetStatus(int status) override
     { m_response->put_StatusCode(status); }
 
-    virtual void SetContentType(const wxString& contentType) wxOVERRIDE
+    virtual void SetContentType(const wxString& contentType) override
     { SetHeader("Content-Type", contentType); }
 
-    virtual void SetHeader(const wxString& name, const wxString& value) wxOVERRIDE
+    virtual void SetHeader(const wxString& name, const wxString& value) override
     {
         wxCOMPtr<ICoreWebView2HttpResponseHeaders> headers;
         if (SUCCEEDED(m_response->get_Headers(&headers)))
@@ -219,7 +219,7 @@ public:
         return true;
     }
 
-    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) wxOVERRIDE
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) override
     {
         SetReason("OK");
         // put content
@@ -233,7 +233,7 @@ public:
         SendResponse();
     }
 
-    virtual void FinishWithError() wxOVERRIDE
+    virtual void FinishWithError() override
     {
         SetStatus(500);
         SetReason("Error");
@@ -1266,12 +1266,12 @@ public:
     {
     }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxWebViewEdgeImpl::Uninitialize();
     }

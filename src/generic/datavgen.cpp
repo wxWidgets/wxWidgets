@@ -326,7 +326,7 @@ public:
     }
 
 #if wxUSE_ACCESSIBILITY
-    virtual wxAccessible* CreateAccessible() wxOVERRIDE
+    virtual wxAccessible* CreateAccessible() override
     {
         // Under MSW wxHeadrCtrl is a native control
         // so we just need to pass all requests
@@ -338,12 +338,12 @@ public:
 protected:
     // implement/override wxHeaderCtrl functions by forwarding them to the main
     // control
-    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const override
     {
         return *(GetOwner()->GetColumn(idx));
     }
 
-    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) wxOVERRIDE
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) override
     {
         wxDataViewCtrl * const owner = GetOwner();
 
@@ -466,7 +466,7 @@ private:
 
 public:
     wxDataViewRenameTimer( wxDataViewMainWindow *owner );
-    void Notify() wxOVERRIDE;
+    void Notify() override;
 };
 
 //-----------------------------------------------------------------------------
@@ -802,11 +802,11 @@ public:
 
     void UpdateDisplay();
     void RecalculateDisplay();
-    void OnInternalIdle() wxOVERRIDE;
+    void OnInternalIdle() override;
 
     void OnRenameTimer();
 
-    void ScrollWindow( int dx, int dy, const wxRect *rect = NULL ) wxOVERRIDE;
+    void ScrollWindow( int dx, int dy, const wxRect *rect = NULL ) override;
     void ScrollTo( int rows, int column );
 
     unsigned GetCurrentRow() const { return m_currentRow; }
@@ -1076,17 +1076,17 @@ public:
     wxGenericDataViewModelNotifier( wxDataViewMainWindow *mainWindow )
         { m_mainWindow = mainWindow; }
 
-    virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item ) wxOVERRIDE
+    virtual bool ItemAdded( const wxDataViewItem & parent, const wxDataViewItem & item ) override
         { return m_mainWindow->ItemAdded( parent , item ); }
-    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) wxOVERRIDE
+    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) override
         { return m_mainWindow->ItemDeleted( parent, item ); }
-    virtual bool ItemChanged( const wxDataViewItem & item ) wxOVERRIDE
+    virtual bool ItemChanged( const wxDataViewItem & item ) override
         { return m_mainWindow->ItemChanged(item);  }
-    virtual bool ValueChanged( const wxDataViewItem & item , unsigned int col ) wxOVERRIDE
+    virtual bool ValueChanged( const wxDataViewItem & item , unsigned int col ) override
         { return m_mainWindow->ValueChanged( item, col ); }
-    virtual bool Cleared() wxOVERRIDE
+    virtual bool Cleared() override
         { return m_mainWindow->Cleared(); }
-    virtual void Resort() wxOVERRIDE
+    virtual void Resort() override
         { m_mainWindow->Resort(); }
 
     wxDataViewMainWindow    *m_mainWindow;
@@ -1686,7 +1686,7 @@ public:
         delete m_hint;
     }
 
-    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect) ) wxOVERRIDE
+    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect) ) override
     {
         wxPoint pos = wxGetMousePosition();
 
@@ -1740,7 +1740,7 @@ public:
 
     wxDataObjectComposite* GetCompositeDataObject() const { return m_obj; }
 
-    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) wxOVERRIDE
+    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def ) override
     {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
@@ -1748,7 +1748,7 @@ public:
         return m_win->OnDragOver( format, x, y, def);
     }
 
-    virtual bool OnDrop( wxCoord x, wxCoord y ) wxOVERRIDE
+    virtual bool OnDrop( wxCoord x, wxCoord y ) override
     {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
@@ -1756,7 +1756,7 @@ public:
         return m_win->OnDrop( format, x, y );
     }
 
-    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) wxOVERRIDE
+    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def ) override
     {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
@@ -1766,7 +1766,7 @@ public:
         return m_win->OnData( format, x, y, def );
     }
 
-    virtual void OnLeave() wxOVERRIDE
+    virtual void OnLeave() override
         { m_win->OnLeave(); }
 
 private:
@@ -3868,7 +3868,7 @@ public:
     {
     }
 
-    virtual int operator() ( wxDataViewTreeNode * node ) wxOVERRIDE
+    virtual int operator() ( wxDataViewTreeNode * node ) override
     {
         if( m_current == m_row)
         {
@@ -4330,7 +4330,7 @@ public:
     }
 
     // Maybe binary search will help to speed up this process
-    virtual int operator() ( wxDataViewTreeNode * node) wxOVERRIDE
+    virtual int operator() ( wxDataViewTreeNode * node) override
     {
         if( node->GetItem() == m_item )
         {
@@ -6070,7 +6070,7 @@ public:
              GetExpanderColumnOrFirstOne(const_cast<wxDataViewCtrl*>(dvc)) == column );
     }
 
-    virtual void UpdateWithRow(int row) wxOVERRIDE
+    virtual void UpdateWithRow(int row) override
     {
         int width = 0;
         wxDataViewItem item;

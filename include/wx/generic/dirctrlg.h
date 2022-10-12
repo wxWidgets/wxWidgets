@@ -176,7 +176,7 @@ public:
     virtual void CollapseTree();
 
     // overridden base class methods
-    virtual void SetFocus() wxOVERRIDE;
+    virtual void SetFocus() override;
 
 protected:
     virtual void ExpandRoot();

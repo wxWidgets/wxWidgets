@@ -48,19 +48,19 @@ public:
     virtual ~wxHeaderCtrl();
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
 
 private:
     // implement base class pure virtuals
-    virtual void DoSetCount(unsigned int count) wxOVERRIDE;
-    virtual unsigned int DoGetCount() const wxOVERRIDE;
-    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
+    virtual void DoSetCount(unsigned int count) override;
+    virtual unsigned int DoGetCount() const override;
+    virtual void DoUpdate(unsigned int idx) override;
 
-    virtual void DoScrollHorz(int dx) wxOVERRIDE;
+    virtual void DoScrollHorz(int dx) override;
 
-    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
-    virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
+    virtual void DoSetColumnsOrder(const wxArrayInt& order) override;
+    virtual wxArrayInt DoGetColumnsOrder() const override;
 
     // common part of all ctors
     void Init();

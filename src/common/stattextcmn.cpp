@@ -175,12 +175,12 @@ public:
     }
 
 protected:
-    virtual void OnOutputLine(const wxString& line) wxOVERRIDE
+    virtual void OnOutputLine(const wxString& line) override
     {
         m_text += line;
     }
 
-    virtual void OnNewLine() wxOVERRIDE
+    virtual void OnNewLine() override
     {
         m_text += wxT('\n');
     }

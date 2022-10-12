@@ -59,7 +59,7 @@ class wxQtScrollArea : public wxQtEventSignalHandler< QScrollArea, wxWindowQt >
 public:
     wxQtScrollArea(wxWindowQt *parent, wxWindowQt *handler);
 
-    bool event(QEvent *e) wxOVERRIDE;
+    bool event(QEvent *e) override;
 };
 
 wxQtScrollArea::wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler )

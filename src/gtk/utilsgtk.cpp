@@ -304,7 +304,7 @@ public:
     }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
+    virtual void OnStackFrame(const wxStackFrame& frame) override
     {
         const wxString name = frame.GetName();
         if ( name.StartsWith("wxOnAssert") )

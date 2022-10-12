@@ -160,9 +160,9 @@ class GridAttrMatcher : public Catch::MatcherBase<TestableGrid>
 public:
     GridAttrMatcher(const TestableGrid& grid);
 
-    bool match(const TestableGrid& other) const wxOVERRIDE;
+    bool match(const TestableGrid& other) const override;
 
-    std::string describe() const wxOVERRIDE;
+    std::string describe() const override;
 
 private:
     const TestableGrid* m_grid;
@@ -1417,31 +1417,31 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 
         void Create(wxWindow* parent,
                     wxWindowID id,
-                    wxEvtHandler* evtHandler) wxOVERRIDE
+                    wxEvtHandler* evtHandler) override
         {
             SetWindow(new wxWindow(parent, id));
             wxGridCellEditor::Create(parent, id, evtHandler);
         }
 
-        void BeginEdit(int, int, wxGrid*) wxOVERRIDE {}
+        void BeginEdit(int, int, wxGrid*) override {}
 
         bool EndEdit(int, int, wxGrid const*, wxString const&,
-                     wxString* newval) wxOVERRIDE
+                     wxString* newval) override
         {
             *newval = GetValue();
             return true;
         }
 
-        void ApplyEdit(int row, int col, wxGrid* grid) wxOVERRIDE
+        void ApplyEdit(int row, int col, wxGrid* grid) override
         {
             grid->GetTable()->SetValue(row, col, GetValue());
         }
 
-        void Reset() wxOVERRIDE {}
+        void Reset() override {}
 
-        wxGridCellEditor* Clone() const wxOVERRIDE { return new TestEditor(); }
+        wxGridCellEditor* Clone() const override { return new TestEditor(); }
 
-        wxString GetValue() const wxOVERRIDE { return "value"; }
+        wxString GetValue() const override { return "value"; }
     };
 
     wxGridCellAttr* attr = new wxGridCellAttr();

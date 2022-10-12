@@ -137,8 +137,8 @@ public:
     wxGraphicsRenderer* GetRenderer() const;
     wxGraphicsObjectRefData* GetGraphicsData() const;
 protected:
-    virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
+    virtual wxObjectRefData* CreateRefData() const override;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };

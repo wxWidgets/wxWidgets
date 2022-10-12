@@ -33,7 +33,7 @@ class WXDLLIMPEXP_CORE wxComboBoxBase : public wxItemContainer,
 {
 public:
     // override these methods to disambiguate between two base classes versions
-    virtual void Clear() wxOVERRIDE
+    virtual void Clear() override
     {
         wxItemContainer::Clear();
         wxTextEntry::Clear();
@@ -53,8 +53,8 @@ public:
     //     but still make it pure virtual because for some platforms it's not
     //     implemented there and also because the derived class has to override
     //     it anyhow to avoid ambiguity with the other GetSelection()
-    virtual int GetSelection() const wxOVERRIDE = 0;
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE = 0;
+    virtual int GetSelection() const override = 0;
+    virtual void GetSelection(long *from, long *to) const override = 0;
 
     virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
     virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }

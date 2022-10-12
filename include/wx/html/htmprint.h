@@ -159,11 +159,11 @@ public:
     void SetMargins(const wxPageSetupDialogData& pageSetupData);
 
     // wxPrintout stuff:
-    bool OnPrintPage(int page) wxOVERRIDE;
-    bool HasPage(int page) wxOVERRIDE;
-    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
-    bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
-    void OnPreparePrinting() wxOVERRIDE;
+    bool OnPrintPage(int page) override;
+    bool HasPage(int page) override;
+    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
+    bool OnBeginDocument(int startPage, int endPage) override;
+    void OnPreparePrinting() override;
 
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);

@@ -46,7 +46,7 @@ public:
     {
     }
 
-    virtual void Save() const wxOVERRIDE
+    virtual void Save() const override
     {
         wxDataViewCtrl* const control = Get();
 
@@ -92,7 +92,7 @@ public:
         }
     }
 
-    virtual bool Restore() wxOVERRIDE
+    virtual bool Restore() override
     {
         wxDataViewCtrl* const control = Get();
 
@@ -139,7 +139,7 @@ public:
         return true;
     }
 
-    virtual wxString GetKind() const wxOVERRIDE
+    virtual wxString GetKind() const override
     {
         return wxASCII_STR(wxPERSIST_DVC_KIND);
     }

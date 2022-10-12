@@ -38,7 +38,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Define a new html window type: this is a wrapper for handling wxHtmlWindow events
@@ -53,7 +53,7 @@ public:
 
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                              const wxString& WXUNUSED(url),
-                                             wxString *WXUNUSED(redirect)) const wxOVERRIDE;
+                                             wxString *WXUNUSED(redirect)) const override;
 
     // toggle drawing of custom background
     void DrawCustomBg(bool draw)
@@ -107,7 +107,7 @@ private:
 class BoldProcessor : public wxHtmlProcessor
 {
 public:
-    virtual wxString Process(const wxString& s) const wxOVERRIDE
+    virtual wxString Process(const wxString& s) const override
     {
         wxString r(s);
         r.Replace("<b>", wxEmptyString);

@@ -48,14 +48,14 @@ public:
     wxPluginLibraryModule() { }
 
     // TODO: create ms_classes on demand, why always preallocate it?
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         wxPluginLibrary::ms_classes = new wxDLImports;
         wxPluginManager::CreateManifest();
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxDELETE(wxPluginLibrary::ms_classes);
         wxPluginManager::ClearManifest();

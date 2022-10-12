@@ -84,7 +84,7 @@ public:
     bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     // Deprecated methods not doing anything since a long time.
     wxDEPRECATED_MSG("Remove calls to this method, it doesn't do anything")
@@ -100,7 +100,7 @@ public:
     int GetBezelFace() const { return 0; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // Initialize m_appProgressIndicator if necessary, i.e. if this object has
     // wxGA_PROGRESS style. This method is supposed to be called from the

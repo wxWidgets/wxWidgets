@@ -101,7 +101,7 @@ enum Positions
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame
@@ -529,19 +529,19 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                 {
                 }
 
-                wxSize GetDefaultSize() const wxOVERRIDE
+                wxSize GetDefaultSize() const override
                 {
                     return m_sizeDef;
                 }
 
-                wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+                wxSize GetPreferredBitmapSizeAtScale(double scale) const override
                 {
                     // We just scale the bitmap to fit the requested size, so
                     // we don't really have any preferences.
                     return m_sizeDef*scale;
                 }
 
-                wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+                wxBitmap GetBitmap(const wxSize& size) override
                 {
                     // In this simple implementation we don't bother caching
                     // anything.

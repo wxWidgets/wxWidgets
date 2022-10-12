@@ -331,7 +331,7 @@ public:
     wxBitmapRefData(int width, int height, int depth);
     virtual ~wxBitmapRefData();
 
-    virtual bool IsOk() const wxOVERRIDE;
+    virtual bool IsOk() const override;
 
 #ifdef __WXGTK3__
     GdkPixbuf* m_pixbufNoMask;

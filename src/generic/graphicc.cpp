@@ -127,33 +127,33 @@ public :
     wxCairoPathData(wxGraphicsRenderer* renderer, cairo_t* path = NULL);
     ~wxCairoPathData();
 
-    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE;
+    virtual wxGraphicsObjectRefData *Clone() const override;
 
     //
     // These are the path primitives from which everything else can be constructed
     //
 
     // begins a new subpath at (x,y)
-    virtual void MoveToPoint( wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void MoveToPoint( wxDouble x, wxDouble y ) override;
 
     // adds a straight line from the current point to (x,y)
-    virtual void AddLineToPoint( wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void AddLineToPoint( wxDouble x, wxDouble y ) override;
 
     // adds a cubic Bezier curve from the current point, using two control points and an end point
-    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y ) override;
 
 
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
-    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) wxOVERRIDE ;
+    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) override ;
 
     // gets the last point of the current path, (0,0) if not yet set
-    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const wxOVERRIDE;
+    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const override;
 
     // adds another path
-    virtual void AddPath( const wxGraphicsPathData* path ) wxOVERRIDE;
+    virtual void AddPath( const wxGraphicsPathData* path ) override;
 
     // closes the current sub-path
-    virtual void CloseSubpath() wxOVERRIDE;
+    virtual void CloseSubpath() override;
 
     //
     // These are convenience functions which - if not available natively will be assembled
@@ -161,13 +161,13 @@ public :
     //
 
     // appends a rectangle as a new closed subpath
-    virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
     // appends a circle as a new closed subpath
-    virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE;
+    virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) override;
 
     // appends an ellipse as a new closed subpath fitting the passed rectangle
-    virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
     /*
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
@@ -175,18 +175,18 @@ public :
     */
 
     // returns the native path
-    virtual void * GetNativePath() const wxOVERRIDE ;
+    virtual void * GetNativePath() const override ;
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    virtual void UnGetNativePath(void *p) const wxOVERRIDE;
+    virtual void UnGetNativePath(void *p) const override;
 
     // transforms each point of this path by the matrix
-    virtual void Transform( const wxGraphicsMatrixData* matrix ) wxOVERRIDE ;
+    virtual void Transform( const wxGraphicsMatrixData* matrix ) override ;
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const override;
 
-    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxWINDING_RULE) const wxOVERRIDE;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxWINDING_RULE) const override;
 
 private :
     cairo_t* m_pathContext;
@@ -198,53 +198,53 @@ public :
     wxCairoMatrixData(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix = NULL ) ;
     virtual ~wxCairoMatrixData() ;
 
-    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
+    virtual wxGraphicsObjectRefData *Clone() const override ;
 
     // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
+    virtual void Concat( const wxGraphicsMatrixData *t ) override;
 
     // sets the matrix to the respective values
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
+        wxDouble tx=0.0, wxDouble ty=0.0) override;
 
     // gets the component valuess of the matrix
     virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const override;
 
     // makes this the inverse matrix
-    virtual void Invert() wxOVERRIDE;
+    virtual void Invert() override;
 
     // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const override ;
 
     // return true if this is the identity matrix
-    virtual bool IsIdentity() const wxOVERRIDE;
+    virtual bool IsIdentity() const override;
 
     //
     // transformation
     //
 
     // add the translation to this matrix
-    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
+    virtual void Translate( wxDouble dx , wxDouble dy ) override;
 
     // add the scale to this matrix
-    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) override;
 
     // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
+    virtual void Rotate( wxDouble angle ) override;
 
     //
     // apply the transforms
     //
 
     // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const override;
 
     // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const override;
 
     // returns the native representation
-    virtual void * GetNativeMatrix() const wxOVERRIDE;
+    virtual void * GetNativeMatrix() const override;
 private:
     cairo_matrix_t m_matrix ;
 } ;
@@ -305,7 +305,7 @@ public:
 
     void Init();
 
-    virtual void Apply( wxGraphicsContext* context ) wxOVERRIDE;
+    virtual void Apply( wxGraphicsContext* context ) override;
     wxDouble GetWidth() { return m_width; }
 
 private :
@@ -393,7 +393,7 @@ public:
 
     cairo_surface_t* GetCairoSurface() { return m_surface; }
     cairo_pattern_t* GetCairoPattern() { return m_pattern; }
-    void* GetNativeBitmap() const wxOVERRIDE { return m_surface; }
+    void* GetNativeBitmap() const override { return m_surface; }
     wxSize GetSize() { return wxSize(m_width, m_height); }
 
 #if wxUSE_IMAGE
@@ -444,7 +444,7 @@ public:
 
     virtual ~wxCairoContext();
 
-    virtual bool ShouldOffset() const wxOVERRIDE
+    virtual bool ShouldOffset() const override
     {
         if (!m_enableOffset || m_pen.IsNull())
             return false;
@@ -465,67 +465,67 @@ public:
         return wxIsSameDouble(fmod(width, 2.0), 1.0);
     }
 
-    virtual void Clip( const wxRegion &region ) wxOVERRIDE;
+    virtual void Clip( const wxRegion &region ) override;
 
     // clips drawings to the rect
-    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
     // resets the clipping to original extent
-    virtual void ResetClip() wxOVERRIDE;
+    virtual void ResetClip() override;
 
     // returns bounding box of the clipping region
-    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) override;
 
-    virtual void * GetNativeContext() wxOVERRIDE;
+    virtual void * GetNativeContext() override;
 
-    virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias) override;
 
-    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) override;
 
-    virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
+    virtual bool SetCompositionMode(wxCompositionMode op) override;
 
-    virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
+    virtual void BeginLayer(wxDouble opacity) override;
 
-    virtual void EndLayer() wxOVERRIDE;
+    virtual void EndLayer() override;
 
-    virtual void StrokePath( const wxGraphicsPath& p ) wxOVERRIDE;
-    virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
-    virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
-    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    virtual void StrokePath( const wxGraphicsPath& p ) override;
+    virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) override;
+    virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
-    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
-    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
+    virtual void Translate( wxDouble dx , wxDouble dy ) override;
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) override;
+    virtual void Rotate( wxDouble angle ) override;
 
     // concatenates this transform with the current transform of this context
-    virtual void ConcatTransform( const wxGraphicsMatrix& matrix ) wxOVERRIDE;
+    virtual void ConcatTransform( const wxGraphicsMatrix& matrix ) override;
 
     // sets the transform of this context
-    virtual void SetTransform( const wxGraphicsMatrix& matrix ) wxOVERRIDE;
+    virtual void SetTransform( const wxGraphicsMatrix& matrix ) override;
 
     // gets the matrix of this context
-    virtual wxGraphicsMatrix GetTransform() const wxOVERRIDE;
+    virtual wxGraphicsMatrix GetTransform() const override;
 
-    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
-    virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
-    virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
-    virtual void PushState() wxOVERRIDE;
-    virtual void PopState() wxOVERRIDE;
-    virtual void Flush() wxOVERRIDE;
+    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
+    virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
+    virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
+    virtual void PushState() override;
+    virtual void PopState() override;
+    virtual void Flush() override;
 
-    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const override;
 
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
-                                wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
-    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
+                                wxDouble *descent, wxDouble *externalLeading ) const override;
+    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const override;
 
 #ifdef __WXMSW__
-    virtual WXHDC GetNativeHDC() wxOVERRIDE;
-    virtual void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE;
+    virtual WXHDC GetNativeHDC() override;
+    virtual void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) override;
 #endif
 
 protected:
-    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) override;
 
     void Init(cairo_t *context);
 
@@ -614,7 +614,7 @@ public:
         Flush();
     }
 
-    virtual void Flush() wxOVERRIDE
+    virtual void Flush() override
     {
         m_image = m_data.ConvertToImage();
     }
@@ -3148,27 +3148,27 @@ public :
 
     // Context
 
-    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) wxOVERRIDE;
-    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) override;
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) override;
 #if wxUSE_PRINTING_ARCHITECTURE
-    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) override;
 #endif
 
-    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) override;
 
-    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) override;
 
 #ifdef __WXMSW__
-    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) override;
 #endif
 
 #if wxUSE_IMAGE
-    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) override;
 #endif // wxUSE_IMAGE
 
-    virtual wxGraphicsContext * CreateContext( wxWindow* window ) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( wxWindow* window ) override;
 
-    virtual wxGraphicsContext * CreateMeasuringContext() wxOVERRIDE;
+    virtual wxGraphicsContext * CreateMeasuringContext() override;
 #ifdef __WXMSW__
 #if wxUSE_ENH_METAFILE
     virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
@@ -3176,56 +3176,56 @@ public :
 #endif
     // Path
 
-    virtual wxGraphicsPath CreatePath() wxOVERRIDE;
+    virtual wxGraphicsPath CreatePath() override;
 
     // Matrix
 
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
+        wxDouble tx=0.0, wxDouble ty=0.0) override;
 
 
-    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) override ;
 
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) override ;
 
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
 
     // sets the font
-    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) override ;
     virtual wxGraphicsFont CreateFont(double sizeInPixels,
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
-                                      const wxColour& col = *wxBLACK) wxOVERRIDE;
+                                      const wxColour& col = *wxBLACK) override;
     virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
                                            const wxRealPoint& dpi,
-                                           const wxColour& col) wxOVERRIDE;
+                                           const wxColour& col) override;
 
     // create a native bitmap representation
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE;
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) override;
 #if wxUSE_IMAGE
-    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) wxOVERRIDE;
-    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) wxOVERRIDE;
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) override;
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) override;
 #endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
-    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) wxOVERRIDE;
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) override;
 
     // create a subimage from a native image representation
-    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) wxOVERRIDE;
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) override;
 
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
+    virtual wxString GetName() const override;
+    virtual void GetVersion(int *major, int *minor, int *micro) const override;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer);
 } ;

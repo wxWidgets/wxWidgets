@@ -21,8 +21,8 @@ class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxBookCtrlXmlHandlerBase
 
 public:
     wxNotebookXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     wxNotebook *m_notebook;

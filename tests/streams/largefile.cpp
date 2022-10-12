@@ -67,7 +67,7 @@ public:
     virtual ~LargeFileTest() { }
 
 protected:
-    void runTest() wxOVERRIDE;
+    void runTest() override;
 
     virtual wxInputStream *MakeInStream(const wxString& name) const = 0;
     virtual wxOutputStream *MakeOutStream(const wxString& name) const = 0;
@@ -207,9 +207,9 @@ public:
     LargeFileTest_wxFile() : LargeFileTest("wxFile streams") { }
 
 protected:
-    wxInputStream *MakeInStream(const wxString& name) const wxOVERRIDE;
-    wxOutputStream *MakeOutStream(const wxString& name) const wxOVERRIDE;
-    bool HasLFS() const wxOVERRIDE { return (wxFileOffset)0xffffffff > 0; }
+    wxInputStream *MakeInStream(const wxString& name) const override;
+    wxOutputStream *MakeOutStream(const wxString& name) const override;
+    bool HasLFS() const override { return (wxFileOffset)0xffffffff > 0; }
 };
 
 wxInputStream *LargeFileTest_wxFile::MakeInStream(const wxString& name) const
@@ -239,9 +239,9 @@ public:
     LargeFileTest_wxFFile() : LargeFileTest("wxFFile streams") { }
 
 protected:
-    wxInputStream *MakeInStream(const wxString& name) const wxOVERRIDE;
-    wxOutputStream *MakeOutStream(const wxString& name) const wxOVERRIDE;
-    bool HasLFS() const wxOVERRIDE;
+    wxInputStream *MakeInStream(const wxString& name) const override;
+    wxOutputStream *MakeOutStream(const wxString& name) const override;
+    bool HasLFS() const override;
 };
 
 wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const

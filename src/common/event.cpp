@@ -142,8 +142,8 @@ class wxEventTableEntryModule: public wxModule
 {
 public:
     wxEventTableEntryModule() { }
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxEventHashTable::ClearAll(); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxEventHashTable::ClearAll(); }
 
     wxDECLARE_DYNAMIC_CLASS(wxEventTableEntryModule);
 };

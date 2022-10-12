@@ -223,20 +223,20 @@ public:
 
     // implement base class pure virtuals
     // ----------------------------------
-    virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction WXUNUSED(dir) = Get) const wxOVERRIDE
+    virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override
         { return m_format; }
-    virtual size_t GetFormatCount(wxDataObjectBase::Direction WXUNUSED(dir) = Get) const wxOVERRIDE
+    virtual size_t GetFormatCount(wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override
         { return 1; }
     virtual void GetAllFormats(wxDataFormat *formats,
-                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const wxOVERRIDE
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override
         { *formats = m_format; }
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const override
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const wxOVERRIDE
+                             void *buf) const override
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf) wxOVERRIDE
+                         size_t len, const void *buf) override
         { return SetData(len, buf); }
 
 private:
@@ -284,18 +284,18 @@ public:
 
     // implement base class pure virtuals
     // ----------------------------------
-    virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction dir = Get) const wxOVERRIDE;
-    virtual size_t GetFormatCount(wxDataObjectBase::Direction dir = Get) const wxOVERRIDE;
-    virtual void GetAllFormats(wxDataFormat *formats, wxDataObjectBase::Direction dir = Get) const wxOVERRIDE;
-    virtual size_t GetDataSize(const wxDataFormat& format) const wxOVERRIDE;
-    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const wxOVERRIDE;
-    virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf) wxOVERRIDE;
+    virtual wxDataFormat GetPreferredFormat(wxDataObjectBase::Direction dir = Get) const override;
+    virtual size_t GetFormatCount(wxDataObjectBase::Direction dir = Get) const override;
+    virtual void GetAllFormats(wxDataFormat *formats, wxDataObjectBase::Direction dir = Get) const override;
+    virtual size_t GetDataSize(const wxDataFormat& format) const override;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const override;
+    virtual bool SetData(const wxDataFormat& format, size_t len, const void *buf) override;
 #if defined(__WXMSW__)
     virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
-                                           const wxDataFormat& format ) wxOVERRIDE;
+                                           const wxDataFormat& format ) override;
     virtual void* SetSizeInBuffer( void* buffer, size_t size,
-                                   const wxDataFormat& format ) wxOVERRIDE;
-    virtual size_t GetBufferOffset( const wxDataFormat& format ) wxOVERRIDE;
+                                   const wxDataFormat& format ) override;
+    virtual size_t GetBufferOffset( const wxDataFormat& format ) override;
 #endif
 
 private:
@@ -348,20 +348,20 @@ public:
     virtual wxString GetHTML() const { return m_html; }
     virtual void SetHTML(const wxString& html) { m_html = html; }
 
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t len, const void *buf) override;
 
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat&) const override
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const override
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) override
     {
         return SetData(len, buf);
     }
@@ -398,31 +398,31 @@ public:
 
     // some platforms have 2 and not 1 format for text data
 #if defined(wxNEEDS_UTF8_FOR_TEXT_DATAOBJ) || defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
-    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const wxOVERRIDE { return 2; }
+    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const override { return 2; }
     virtual void GetAllFormats(wxDataFormat *formats,
-                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const wxOVERRIDE;
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override;
 
-    virtual size_t GetDataSize() const wxOVERRIDE { return GetDataSize(GetPreferredFormat()); }
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE { return GetDataHere(GetPreferredFormat(), buf); }
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE { return SetData(GetPreferredFormat(), len, buf); }
+    virtual size_t GetDataSize() const override { return GetDataSize(GetPreferredFormat()); }
+    virtual bool GetDataHere(void *buf) const override { return GetDataHere(GetPreferredFormat(), buf); }
+    virtual bool SetData(size_t len, const void *buf) override { return SetData(GetPreferredFormat(), len, buf); }
 
-    size_t GetDataSize(const wxDataFormat& format) const wxOVERRIDE;
-    bool GetDataHere(const wxDataFormat& format, void *pBuf) const wxOVERRIDE;
-    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf) wxOVERRIDE;
+    size_t GetDataSize(const wxDataFormat& format) const override;
+    bool GetDataHere(const wxDataFormat& format, void *pBuf) const override;
+    bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf) override;
 #else // !wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t len, const void *buf) override;
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat&) const override
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const override
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) override
     {
         return SetData(len, buf);
     }
@@ -431,7 +431,7 @@ public:
 private:
 #if defined(__WXQT__)
     // Overridden to set text directly instead of extracting byte array
-    void QtSetDataSingleFormat(const class QMimeData &mimeData, const wxDataFormat &format) wxOVERRIDE;
+    void QtSetDataSingleFormat(const class QMimeData &mimeData, const wxDataFormat &format) override;
 #endif
 
     wxString m_text;
@@ -523,19 +523,19 @@ public:
 
     // implement base class pure virtuals
     // ----------------------------------
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t size, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t size, const void *buf) override;
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat&) const override
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const override
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) override
     {
         return SetData(len, buf);
     }

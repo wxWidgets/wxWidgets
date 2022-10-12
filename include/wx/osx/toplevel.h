@@ -46,50 +46,50 @@ public:
 
     bool Create(wxWindow *parent, WXWindow nativeWindow);
 
-    virtual bool Destroy() wxOVERRIDE;
+    virtual bool Destroy() override;
 
-    virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
+    virtual wxPoint GetClientAreaOrigin() const override;
 
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
-    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO) wxOVERRIDE;
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO) override;
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = true) wxOVERRIDE;
-    virtual bool IsMaximized() const wxOVERRIDE;
-    virtual void Iconize(bool iconize = true) wxOVERRIDE;
-    virtual bool IsIconized() const wxOVERRIDE;
-    virtual void Restore() wxOVERRIDE;
+    virtual void Maximize(bool maximize = true) override;
+    virtual bool IsMaximized() const override;
+    virtual void Iconize(bool iconize = true) override;
+    virtual bool IsIconized() const override;
+    virtual void Restore() override;
 
-    virtual bool IsActive() wxOVERRIDE;
+    virtual bool IsActive() override;
 
-    virtual void ShowWithoutActivating() wxOVERRIDE;
-    bool EnableFullScreenView(bool enable = true, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
-    virtual bool IsFullScreen() const wxOVERRIDE;
+    virtual void ShowWithoutActivating() override;
+    bool EnableFullScreenView(bool enable = true, long style = wxFULLSCREEN_ALL) override;
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) override;
+    virtual bool IsFullScreen() const override;
 
-    virtual wxContentProtection GetContentProtection() const wxOVERRIDE;
-    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE;
+    virtual wxContentProtection GetContentProtection() const override;
+    virtual bool SetContentProtection(wxContentProtection contentProtection) override;
 
     // implementation from now on
     // --------------------------
 
-    virtual void SetTitle( const wxString& title) wxOVERRIDE;
-    virtual wxString GetTitle() const wxOVERRIDE;
+    virtual void SetTitle( const wxString& title) override;
+    virtual wxString GetTitle() const override;
 
     // EnableCloseButton(false) used to disable the "Close"
     // button on the title bar
-    virtual bool EnableCloseButton(bool enable = true) wxOVERRIDE;
-    virtual bool EnableMaximizeButton(bool enable = true) wxOVERRIDE;
-    virtual bool EnableMinimizeButton(bool enable = true) wxOVERRIDE;
+    virtual bool EnableCloseButton(bool enable = true) override;
+    virtual bool EnableMaximizeButton(bool enable = true) override;
+    virtual bool EnableMinimizeButton(bool enable = true) override;
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
-    virtual wxString GetLabel() const            wxOVERRIDE { return GetTitle(); }
+    virtual void SetLabel(const wxString& label) override { SetTitle( label ); }
+    virtual wxString GetLabel() const            override { return GetTitle(); }
 
-    virtual void OSXSetModified(bool modified) wxOVERRIDE;
-    virtual bool OSXIsModified() const wxOVERRIDE;
+    virtual void OSXSetModified(bool modified) override;
+    virtual bool OSXIsModified() const override;
 
-    virtual void SetRepresentedFilename(const wxString& filename) wxOVERRIDE;
+    virtual void SetRepresentedFilename(const wxString& filename) override;
 
     // do *not* call this to iconize the frame, this is a private function!
     void OSXSetIconizeState(bool iconic);

@@ -1516,24 +1516,24 @@ void MyFrame::AddRemove(wxCommandEvent& WXUNUSED(event))
         {
         }
 
-        wxWindow* GetItemsCtrl() const wxOVERRIDE
+        wxWindow* GetItemsCtrl() const override
         {
             return m_lbox;
         }
 
-        bool CanAdd() const wxOVERRIDE
+        bool CanAdd() const override
         {
             // Restrict the maximal number of items to 10 just for testing.
             return m_lbox->GetCount() <= 10;
         }
 
-        bool CanRemove() const wxOVERRIDE
+        bool CanRemove() const override
         {
             // We must have a selected item in order to be able to delete it.
             return m_lbox->GetSelection() != wxNOT_FOUND;
         }
 
-        void OnAdd() wxOVERRIDE
+        void OnAdd() override
         {
             // A real program would use a wxDataViewCtrl or wxListCtrl and
             // allow editing the newly edited item in place, here we just use a
@@ -1542,7 +1542,7 @@ void MyFrame::AddRemove(wxCommandEvent& WXUNUSED(event))
             m_lbox->Append(wxString::Format("new item #%d", ++s_item));
         }
 
-        void OnRemove() wxOVERRIDE
+        void OnRemove() override
         {
             // Notice that we don't need to check if we have a valid selection,
             // we can be only called if CanRemove(), which already checks for
@@ -1733,7 +1733,7 @@ public:
     }
 
     // Override pure virtual base class method to add our custom controls.
-    virtual void AddCustomControls(wxFileDialogCustomize& customizer) wxOVERRIDE
+    virtual void AddCustomControls(wxFileDialogCustomize& customizer) override
     {
         // Note: all the pointers created here cease to be valid once
         // ShowModal() returns, TransferDataFromCustomControls() is the latest
@@ -1751,7 +1751,7 @@ public:
     }
 
     // Override another method called whenever something changes in the dialog.
-    virtual void UpdateCustomControls() wxOVERRIDE
+    virtual void UpdateCustomControls() override
     {
         // Enable the button if and only if the checkbox is checked.
         m_btn->Enable(m_cb->GetValue());
@@ -1768,7 +1768,7 @@ public:
     }
 
     // And another one called when the dialog is accepted.
-    virtual void TransferDataFromCustomControls() wxOVERRIDE
+    virtual void TransferDataFromCustomControls() override
     {
         m_info.Printf("paper=%s (%s), enabled=%d, text=\"%s\"",
                       GetFileDialogPaperSize(m_choiceSize->GetSelection()),
@@ -2030,12 +2030,12 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
         {
         }
 
-        void AddCustomControls(wxFileDialogCustomize& customizer) wxOVERRIDE
+        void AddCustomControls(wxFileDialogCustomize& customizer) override
         {
             m_checkbox = customizer.AddCheckBox("Encrypt");
         }
 
-        void TransferDataFromCustomControls() wxOVERRIDE
+        void TransferDataFromCustomControls() override
         {
             m_encrypt = m_checkbox->GetValue();
         }
@@ -3195,14 +3195,14 @@ void MyFrame::OnModalHook(wxCommandEvent& event)
     class TestModalHook : public wxModalDialogHook
     {
     protected:
-        virtual int Enter(wxDialog* dialog) wxOVERRIDE
+        virtual int Enter(wxDialog* dialog) override
         {
             wxLogStatus("Showing %s modal dialog",
                         dialog->GetClassInfo()->GetClassName());
             return wxID_NONE;
         }
 
-        virtual void Exit(wxDialog* dialog) wxOVERRIDE
+        virtual void Exit(wxDialog* dialog) override
         {
             wxLogStatus("Leaving %s modal dialog",
                         dialog->GetClassInfo()->GetClassName());
@@ -3506,7 +3506,7 @@ public:
     }
 
     // add some custom controls
-    virtual void DoAddCustomControls() wxOVERRIDE
+    virtual void DoAddCustomControls() override
     {
         AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
         AddText("Some custom text");
@@ -4563,7 +4563,7 @@ class MyLogGui : public wxLogGui
 private:
     virtual void DoShowSingleLogMessage(const wxString& message,
                                         const wxString& title,
-                                        int style) wxOVERRIDE
+                                        int style) override
     {
         wxMessageDialog dlg(NULL, message, title,
                             wxOK | wxCANCEL | wxCANCEL_DEFAULT | style);

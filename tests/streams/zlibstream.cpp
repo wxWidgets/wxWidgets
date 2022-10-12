@@ -116,10 +116,10 @@ private:
 
 private:
     // Implement base class functions.
-    virtual wxZlibInputStream  *DoCreateInStream() wxOVERRIDE;
-    virtual wxZlibOutputStream *DoCreateOutStream() wxOVERRIDE;
-    virtual void DoDeleteInStream() wxOVERRIDE;
-    virtual void DoDeleteOutStream() wxOVERRIDE;
+    virtual wxZlibInputStream  *DoCreateInStream() override;
+    virtual wxZlibOutputStream *DoCreateOutStream() override;
+    virtual void DoDeleteInStream() override;
+    virtual void DoDeleteOutStream() override;
 
     // Helper that can be used to create new wx compatibility tests...
     // Otherwise not used by the tests.

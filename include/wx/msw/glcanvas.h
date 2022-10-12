@@ -29,7 +29,7 @@ public:
                 const wxGLContextAttrs *ctxAttrs = NULL);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
     HGLRC GetGLRC() const { return m_glContext; }
 
@@ -88,7 +88,7 @@ public:
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
 
     // MSW-specific helpers
@@ -109,7 +109,7 @@ public:
 #if wxUSE_PALETTE
     // palette stuff
     bool SetupPalette(const wxPalette& palette);
-    virtual wxPalette CreateDefaultPalette() wxOVERRIDE;
+    virtual wxPalette CreateDefaultPalette() override;
     void OnQueryNewPalette(wxQueryNewPaletteEvent& event);
     void OnPaletteChanged(wxPaletteChangedEvent& event);
 #endif // wxUSE_PALETTE

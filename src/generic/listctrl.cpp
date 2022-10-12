@@ -3445,7 +3445,7 @@ public:
     {
     }
 
-    virtual void UpdateWithRow(int row) wxOVERRIDE
+    virtual void UpdateWithRow(int row) override
     {
         wxListLineData *line = m_listmain->GetLine( row );
         wxListItemDataList::compatibility_iterator n = line->m_items.Item( GetColumn() );

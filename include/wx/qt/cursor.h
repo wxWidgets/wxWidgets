@@ -25,7 +25,7 @@ public:
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+    virtual wxPoint GetHotSpot() const override;
     QCursor &GetHandle() const;
 
 protected:
@@ -36,8 +36,8 @@ protected:
 
 private:
     void Init();
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };

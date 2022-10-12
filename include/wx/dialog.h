@@ -324,10 +324,10 @@ public:
 // Overrides
 
     // Indicate that adaptation should be done
-    virtual bool CanDoLayoutAdaptation(wxDialog* dialog) wxOVERRIDE;
+    virtual bool CanDoLayoutAdaptation(wxDialog* dialog) override;
 
     // Do layout adaptation
-    virtual bool DoLayoutAdaptation(wxDialog* dialog) wxOVERRIDE;
+    virtual bool DoLayoutAdaptation(wxDialog* dialog) override;
 
 // Implementation
 
@@ -394,7 +394,7 @@ public:
     int GetReturnCode() const
         { return GetDialog()->GetReturnCode(); }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxWindowModalDialogEvent (*this); }
+    virtual wxEvent *Clone() const override { return new wxWindowModalDialogEvent (*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWindowModalDialogEvent);

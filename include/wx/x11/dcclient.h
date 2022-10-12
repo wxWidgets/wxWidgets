@@ -108,7 +108,7 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 #if wxUSE_CAIRO
-    virtual void* GetCairoContext() const wxOVERRIDE;
+    virtual void* GetCairoContext() const override;
 #endif
 
 protected:

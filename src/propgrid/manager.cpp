@@ -419,7 +419,7 @@ public:
         }
     }
 
-    virtual void OnColumnCountChanging(unsigned int count) wxOVERRIDE
+    virtual void OnColumnCountChanging(unsigned int count) override
     {
         EnsureColumnCount(count);
     }
@@ -438,7 +438,7 @@ public:
         UpdateAllColumns();
     }
 
-    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const override
     {
         return *m_columns[idx];
     }
@@ -2372,7 +2372,7 @@ public:
         m_it.Init(manager->GetPage(0), flags);
     }
     virtual ~wxPGVIteratorBase_Manager() { }
-    virtual void Next() wxOVERRIDE
+    virtual void Next() override
     {
         m_it.Next();
 

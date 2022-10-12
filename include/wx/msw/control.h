@@ -36,13 +36,13 @@ public:
 
 
     // Simulates an event
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE { ProcessCommand(event); }
+    virtual void Command(wxCommandEvent& event) override { ProcessCommand(event); }
 
 
     // implementation from now on
     // --------------------------
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
+    virtual wxVisualAttributes GetDefaultAttributes() const override
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -54,7 +54,7 @@ public:
     bool ProcessCommand(wxCommandEvent& event);
 
     // MSW-specific
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
 
     // For ownerdraw items
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return false; }
@@ -67,7 +67,7 @@ public:
     virtual WXHBRUSH MSWControlColor(WXHDC pDC, WXHWND hWnd);
 
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
 protected:
     // Hook for common controls for which we don't want to set the default font
@@ -77,10 +77,10 @@ protected:
     virtual bool MSWShouldSetDefaultFont() const { return true; }
 
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE;
+    virtual wxBorder GetDefaultBorder() const override;
 
     // return default best size (doesn't really make any sense, override this)
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // create the control of the given Windows class: this is typically called
     // from Create() method of the derived class passing its label, pos and
@@ -122,7 +122,7 @@ protected:
     virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd);
 
     // Look in our GetSubcontrols() for the windows with the given ID.
-    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const wxOVERRIDE;
+    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const override;
 
 
     // for controls like radiobuttons which are really composite this array

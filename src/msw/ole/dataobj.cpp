@@ -173,10 +173,10 @@ public:
     virtual ~wxIEnumFORMATETC() { delete [] m_formats; }
 
     // IEnumFORMATETC
-    STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFetched) wxOVERRIDE;
-    STDMETHODIMP Skip(ULONG celt) wxOVERRIDE;
-    STDMETHODIMP Reset() wxOVERRIDE;
-    STDMETHODIMP Clone(IEnumFORMATETC **ppenum) wxOVERRIDE;
+    STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFetched) override;
+    STDMETHODIMP Skip(ULONG celt) override;
+    STDMETHODIMP Reset() override;
+    STDMETHODIMP Clone(IEnumFORMATETC **ppenum) override;
 
     DECLARE_IUNKNOWN_METHODS;
 
@@ -204,15 +204,15 @@ public:
     void SetDeleteFlag() { m_mustDelete = true; }
 
     // IDataObject
-    STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium) wxOVERRIDE;
-    STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium) wxOVERRIDE;
-    STDMETHODIMP QueryGetData(FORMATETC *pformatetc) wxOVERRIDE;
-    STDMETHODIMP GetCanonicalFormatEtc(FORMATETC *In, FORMATETC *pOut) wxOVERRIDE;
-    STDMETHODIMP SetData(FORMATETC *pfetc, STGMEDIUM *pmedium, BOOL fRelease) wxOVERRIDE;
-    STDMETHODIMP EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppenumFEtc) wxOVERRIDE;
-    STDMETHODIMP DAdvise(FORMATETC *pfetc, DWORD ad, IAdviseSink *p, DWORD *pdw) wxOVERRIDE;
-    STDMETHODIMP DUnadvise(DWORD dwConnection) wxOVERRIDE;
-    STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppenumAdvise) wxOVERRIDE;
+    STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium) override;
+    STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium) override;
+    STDMETHODIMP QueryGetData(FORMATETC *pformatetc) override;
+    STDMETHODIMP GetCanonicalFormatEtc(FORMATETC *In, FORMATETC *pOut) override;
+    STDMETHODIMP SetData(FORMATETC *pfetc, STGMEDIUM *pmedium, BOOL fRelease) override;
+    STDMETHODIMP EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppenumFEtc) override;
+    STDMETHODIMP DAdvise(FORMATETC *pfetc, DWORD ad, IAdviseSink *p, DWORD *pdw) override;
+    STDMETHODIMP DUnadvise(DWORD dwConnection) override;
+    STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppenumAdvise) override;
 
     DECLARE_IUNKNOWN_METHODS;
 
@@ -1385,13 +1385,13 @@ class CFSTR_SHELLURLDataObject : public wxCustomDataObject
 public:
     CFSTR_SHELLURLDataObject() : wxCustomDataObject(CFSTR_SHELLURL) {}
 
-    virtual size_t GetBufferOffset( const wxDataFormat& WXUNUSED(format) ) wxOVERRIDE
+    virtual size_t GetBufferOffset( const wxDataFormat& WXUNUSED(format) ) override
     {
         return 0;
     }
 
     virtual const void* GetSizeFromBuffer( const void* buffer, size_t* size,
-                                           const wxDataFormat& WXUNUSED(format) ) wxOVERRIDE
+                                           const wxDataFormat& WXUNUSED(format) ) override
     {
         // CFSTR_SHELLURL is _always_ ANSI text
         *size = strlen( (const char*)buffer );
@@ -1400,7 +1400,7 @@ public:
     }
 
     virtual void* SetSizeInBuffer( void* buffer, size_t WXUNUSED(size),
-                                   const wxDataFormat& WXUNUSED(format) ) wxOVERRIDE
+                                   const wxDataFormat& WXUNUSED(format) ) override
     {
         return buffer;
     }

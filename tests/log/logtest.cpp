@@ -77,7 +77,7 @@ public:
 protected:
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& info) wxOVERRIDE
+                             const wxLogRecordInfo& info) override
     {
         m_logs[level] = msg;
         m_logsInfo[level] = info;
@@ -96,8 +96,8 @@ class LogTestCase : public CppUnit::TestCase
 public:
     LogTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( LogTestCase );

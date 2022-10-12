@@ -47,16 +47,16 @@ public:
     // overridden base class methods
     // -----------------------------
 
-    virtual void SetURL(const wxString &url) wxOVERRIDE;
+    virtual void SetURL(const wxString &url) override;
 
-    virtual void SetLabel(const wxString &label) wxOVERRIDE;
+    virtual void SetLabel(const wxString &label) override;
 
 protected:
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
+    virtual wxSize DoGetBestClientSize() const override;
 
 private:
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
 
     wxDECLARE_DYNAMIC_CLASS( wxHyperlinkCtrl );
 };

@@ -291,8 +291,8 @@ public:
 
 
     // These are what make the sizer do size calculations and layout
-    virtual wxSize CalcMin() wxOVERRIDE;
-    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
+    virtual wxSize CalcMin() override;
+    virtual void RepositionChildren(const wxSize& minSize) override;
 
 
     // Look at all items and see if any intersect (or would overlap) the given
@@ -317,7 +317,7 @@ public:
     virtual wxSizerItem* Insert( size_t index, wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Insert( size_t index, wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Insert( size_t index, int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item ) wxOVERRIDE;
+    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item ) override;
     virtual wxSizerItem* Prepend( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Prepend( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Prepend( int width,  int height,  int proportion = 0,  int flag = 0,  int border = 0,  wxObject* userData = NULL );

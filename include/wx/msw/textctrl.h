@@ -38,69 +38,69 @@ public:
     // overridden wxTextEntry methods
     // ------------------------------
 
-    virtual wxString GetValue() const wxOVERRIDE;
-    virtual wxString GetRange(long from, long to) const wxOVERRIDE;
+    virtual wxString GetValue() const override;
+    virtual wxString GetRange(long from, long to) const override;
 
     virtual bool IsEmpty() const;
 
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
-    virtual void AppendText(const wxString& text) wxOVERRIDE;
-    virtual void Clear() wxOVERRIDE;
+    virtual void WriteText(const wxString& text) override;
+    virtual void AppendText(const wxString& text) override;
+    virtual void Clear() override;
 
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE;
-    virtual wxString GetLineText(long lineNo) const wxOVERRIDE;
-    virtual int GetNumberOfLines() const wxOVERRIDE;
+    virtual int GetLineLength(long lineNo) const override;
+    virtual wxString GetLineText(long lineNo) const override;
+    virtual int GetNumberOfLines() const override;
 
-    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
+    virtual void SetMaxLength(unsigned long len) override;
 
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual void Paste() wxOVERRIDE;
+    virtual void Paste() override;
 
-    virtual void Redo() wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
+    virtual void Redo() override;
+    virtual bool CanRedo() const override;
 #if wxUSE_RICHEDIT
-    virtual void EmptyUndoBuffer() wxOVERRIDE;
+    virtual void EmptyUndoBuffer() override;
 #endif // wxUSE_RICHEDIT
 
-    virtual void SetInsertionPointEnd() wxOVERRIDE;
-    virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual wxTextPos GetLastPosition() const wxOVERRIDE;
+    virtual void SetInsertionPointEnd() override;
+    virtual long GetInsertionPoint() const override;
+    virtual wxTextPos GetLastPosition() const override;
 
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual bool IsModified() const wxOVERRIDE;
-    virtual void MarkDirty() wxOVERRIDE;
-    virtual void DiscardEdits() wxOVERRIDE;
+    virtual bool IsModified() const override;
+    virtual void MarkDirty() override;
+    virtual void DiscardEdits() override;
 
-    virtual bool EmulateKeyPress(const wxKeyEvent& event) wxOVERRIDE;
+    virtual bool EmulateKeyPress(const wxKeyEvent& event) override;
 
 #if wxUSE_RICHEDIT
     // apply text attribute to the range of text (only works with richedit
     // controls)
-    virtual bool SetStyle(long start, long end, const wxTextAttr& style) wxOVERRIDE;
-    virtual bool SetDefaultStyle(const wxTextAttr& style) wxOVERRIDE;
-    virtual bool GetStyle(long position, wxTextAttr& style) wxOVERRIDE;
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style) override;
+    virtual bool SetDefaultStyle(const wxTextAttr& style) override;
+    virtual bool GetStyle(long position, wxTextAttr& style) override;
 #endif // wxUSE_RICHEDIT
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
-    virtual long XYToPosition(long x, long y) const wxOVERRIDE;
-    virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
+    virtual long XYToPosition(long x, long y) const override;
+    virtual bool PositionToXY(long pos, long *x, long *y) const override;
 
-    virtual void ShowPosition(long pos) wxOVERRIDE;
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const wxOVERRIDE;
+    virtual void ShowPosition(long pos) override;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
-                                            wxTextCoord *row) const wxOVERRIDE
+                                            wxTextCoord *row) const override
     {
         return wxTextCtrlBase::HitTest(pt, col, row);
     }
 
-    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
-    virtual wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
+    virtual wxLayoutDirection GetLayoutDirection() const override;
 
     // Caret handling (Windows only)
     bool ShowNativeCaret(bool show = true);
@@ -110,34 +110,34 @@ public:
     // Use native spelling and grammar checking functions.
     // This is only available in wxTE_RICH2 controls.
     virtual bool EnableProofCheck(const wxTextProofOptions& options
-                                    = wxTextProofOptions::Default()) wxOVERRIDE;
-    virtual wxTextProofOptions GetProofCheckOptions() const wxOVERRIDE;
+                                    = wxTextProofOptions::Default()) override;
+    virtual wxTextProofOptions GetProofCheckOptions() const override;
 #endif // wxUSE_RICHEDIT && wxUSE_SPELLCHECK
 
     // Implementation from now on
     // --------------------------
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
-    virtual void SetDropTarget(wxDropTarget *dropTarget) wxOVERRIDE;
+    virtual void SetDropTarget(wxDropTarget *dropTarget) override;
 #endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
-    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long style) override;
 
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
-    virtual WXHBRUSH MSWControlColor(WXHDC hDC, WXHWND hWnd) wxOVERRIDE;
+    virtual void Command(wxCommandEvent& event) override;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
+    virtual WXHBRUSH MSWControlColor(WXHDC hDC, WXHWND hWnd) override;
 
 #if wxUSE_RICHEDIT
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
 
     int GetRichVersion() const { return m_verRichEdit; }
     bool IsRich() const { return m_verRichEdit != 0; }
 
     // rich edit controls are not compatible with normal ones and we must set
     // the colours and font for them otherwise
-    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
-    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour& colour) override;
+    virtual bool SetForegroundColour(const wxColour& colour) override;
+    virtual bool SetFont(const wxFont& font) override;
 #else
     bool IsRich() const { return false; }
 #endif // wxUSE_RICHEDIT
@@ -148,12 +148,12 @@ public:
     bool IsInkEdit() const { return false; }
 #endif
 
-    virtual void AdoptAttributesFromHWND() wxOVERRIDE;
+    virtual void AdoptAttributesFromHWND() override;
 
-    virtual bool AcceptsFocusFromKeyboard() const wxOVERRIDE;
+    virtual bool AcceptsFocusFromKeyboard() const override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE;
+    virtual bool CanApplyThemeBorder() const override;
 
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);
@@ -194,10 +194,10 @@ public:
     virtual bool MSWHandleMessage(WXLRESULT *result,
                                   WXUINT message,
                                   WXWPARAM wParam,
-                                  WXLPARAM lParam) wxOVERRIDE;
+                                  WXLPARAM lParam) override;
 
-    virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg) wxOVERRIDE;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg) override;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
 protected:
     // common part of all ctors
@@ -212,9 +212,9 @@ protected:
                        const wxPoint& pos,
                        const wxSize& size);
 
-    virtual void DoSetValue(const wxString &value, int flags = 0) wxOVERRIDE;
+    virtual void DoSetValue(const wxString &value, int flags = 0) override;
 
-    virtual wxPoint DoPositionToCoords(long pos) const wxOVERRIDE;
+    virtual wxPoint DoPositionToCoords(long pos) const override;
 
     // return true if this control has a user-set limit on amount of text (i.e.
     // the limit is due to a previous call to SetMaxLength() and not built in)
@@ -235,7 +235,7 @@ protected:
                      int flags = SetValue_SendEvent | SetValue_SelectionOnly);
 
     // set the selection (possibly without scrolling the caret into view)
-    void DoSetSelection(long from, long to, int flags) wxOVERRIDE;
+    void DoSetSelection(long from, long to, int flags) override;
 
     // get the length of the line containing the character at the given
     // position
@@ -244,13 +244,13 @@ protected:
     // send TEXT_UPDATED event, return true if it was handled, false otherwise
     bool SendUpdateEvent();
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
 
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
 
 #if wxUSE_RICHEDIT
-    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
     // Apply m_richDPIscale zoom to rich control.
     void MSWSetRichZoom();
@@ -287,17 +287,17 @@ protected:
     int m_updatesCount;
 
 private:
-    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE
+    virtual void EnableTextChangedEvents(bool enable) override
     {
         m_updatesCount = enable ? -1 : -2;
     }
 
     // implement wxTextEntry pure virtual: it implements all the operations for
     // the simple EDIT controls
-    virtual WXHWND GetEditHWND() const wxOVERRIDE { return m_hWnd; }
+    virtual WXHWND GetEditHWND() const override { return m_hWnd; }
 
 #if wxUSE_OLE
-    virtual void MSWProcessSpecialKey(wxKeyEvent& event) wxOVERRIDE;
+    virtual void MSWProcessSpecialKey(wxKeyEvent& event) override;
 #endif // wxUSE_OLE
 
     // Do we need to handle Ctrl+Backspace ourselves?

@@ -45,7 +45,7 @@ public:
     void SetFileTo(char file)    { m_fileTo = file; }
     void SetRankTo(wxUint8 rank) { m_rankTo = rank; }
 
-    virtual wxEvent* Clone() const wxOVERRIDE { return new ChessBoardEvent(*this); }
+    virtual wxEvent* Clone() const override { return new ChessBoardEvent(*this); }
 private:
     char  m_file;
     wxUint8 m_rank;

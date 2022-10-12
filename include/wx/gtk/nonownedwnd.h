@@ -23,13 +23,13 @@ public:
     virtual ~wxNonOwnedWindow();
 
     // Overridden to actually set the shape when the window becomes realized.
-    virtual void GTKHandleRealized() wxOVERRIDE;
+    virtual void GTKHandleRealized() override;
 
 protected:
-    virtual bool DoClearShape() wxOVERRIDE;
-    virtual bool DoSetRegionShape(const wxRegion& region) wxOVERRIDE;
+    virtual bool DoClearShape() override;
+    virtual bool DoSetRegionShape(const wxRegion& region) override;
 #if wxUSE_GRAPHICS_CONTEXT
-    virtual bool DoSetPathShape(const wxGraphicsPath& path) wxOVERRIDE;
+    virtual bool DoSetPathShape(const wxGraphicsPath& path) override;
 #endif // wxUSE_GRAPHICS_CONTEXT
 
 

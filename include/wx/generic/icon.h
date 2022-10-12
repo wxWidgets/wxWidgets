@@ -44,7 +44,7 @@ public:
 
     // unhide the base class version
     virtual bool LoadFile(const wxString& name,
-                          wxBitmapType flags = wxICON_DEFAULT_TYPE) wxOVERRIDE
+                          wxBitmapType flags = wxICON_DEFAULT_TYPE) override
         { return wxBitmap::LoadFile(name, flags); }
 
     // create from bitmap (which should have a mask unless it's monochrome):

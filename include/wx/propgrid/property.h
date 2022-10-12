@@ -161,11 +161,11 @@ public:
                          wxPGProperty* property,
                          int column,
                          int item,
-                         int flags ) const wxOVERRIDE;
+                         int flags ) const override;
 
     virtual wxSize GetImageSize( const wxPGProperty* property,
                                  int column,
-                                 int item ) const wxOVERRIDE;
+                                 int item ) const override;
 
 protected:
 };
@@ -282,10 +282,10 @@ public:
     }
 
 private:
-    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE
+    virtual wxObjectRefData *CreateRefData() const override
         { return new wxPGCellData(); }
 
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
 };
 
 // -----------------------------------------------------------------------
@@ -2072,7 +2072,7 @@ private:
 //
 
 #define WX_PG_DECLARE_DOGETEDITORCLASS \
-    virtual const wxPGEditor* DoGetEditorClass() const wxOVERRIDE;
+    virtual const wxPGEditor* DoGetEditorClass() const override;
 
 #ifndef WX_PG_DECLARE_PROPERTY_CLASS
     #define WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME) \
@@ -2109,7 +2109,7 @@ public:
     wxPGRootProperty( const wxString& name = wxS("<Root>") );
     virtual ~wxPGRootProperty();
 
-    virtual bool StringToValue( wxVariant&, const wxString&, int ) const wxOVERRIDE
+    virtual bool StringToValue( wxVariant&, const wxString&, int ) const override
     {
         return false;
     }
@@ -2135,8 +2135,8 @@ public:
 
     int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags ) const wxOVERRIDE;
-    virtual wxString GetValueAsString( int argFlags = 0 ) const wxOVERRIDE;
+    virtual wxString ValueToString( wxVariant& value, int argFlags ) const override;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const override;
 
 protected:
     void SetTextColIndex( unsigned int colInd )

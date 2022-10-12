@@ -43,7 +43,7 @@ public:
     bool Play(wxDC *dc, wxRect *rectBound = NULL);
 
     // accessors
-    virtual bool IsOk() const wxOVERRIDE { return m_hMF != NULL; }
+    virtual bool IsOk() const override { return m_hMF != NULL; }
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }
@@ -75,8 +75,8 @@ protected:
 
     // we don't use these functions (but probably should) but have to implement
     // them as they're pure virtual in the base class
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxString m_filename;
@@ -137,13 +137,13 @@ public:
         { return m_metafile; }
 
     // implement base class pure virtuals
-    virtual wxDataFormat GetPreferredFormat(Direction dir) const wxOVERRIDE;
-    virtual size_t GetFormatCount(Direction dir) const wxOVERRIDE;
-    virtual void GetAllFormats(wxDataFormat *formats, Direction dir) const wxOVERRIDE;
-    virtual size_t GetDataSize(const wxDataFormat& format) const wxOVERRIDE;
-    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const wxOVERRIDE;
+    virtual wxDataFormat GetPreferredFormat(Direction dir) const override;
+    virtual size_t GetFormatCount(Direction dir) const override;
+    virtual void GetAllFormats(wxDataFormat *formats, Direction dir) const override;
+    virtual size_t GetDataSize(const wxDataFormat& format) const override;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const override;
     virtual bool SetData(const wxDataFormat& format, size_t len,
-                         const void *buf) wxOVERRIDE;
+                         const void *buf) override;
 
 protected:
     wxEnhMetaFile m_metafile;
@@ -175,17 +175,17 @@ public:
         { return m_metafile; }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t len, const void *buf) override;
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const override
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const wxOVERRIDE
+                             void *buf) const override
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf) wxOVERRIDE
+                         size_t len, const void *buf) override
         { return SetData(len, buf); }
 
 protected:

@@ -36,7 +36,7 @@ class wxSoundBackendSDLNotification : public wxEvent
 public:
     wxDECLARE_DYNAMIC_CLASS(wxSoundBackendSDLNotification);
     wxSoundBackendSDLNotification();
-    wxEvent *Clone() const wxOVERRIDE { return new wxSoundBackendSDLNotification(*this); }
+    wxEvent *Clone() const override { return new wxSoundBackendSDLNotification(*this); }
 };
 
 typedef void (wxEvtHandler::*wxSoundBackendSDLNotificationFunction)
@@ -69,18 +69,18 @@ public:
           m_data(NULL), m_evtHandler(NULL) {}
     virtual ~wxSoundBackendSDL();
 
-    wxString GetName() const wxOVERRIDE { return wxT("Simple DirectMedia Layer"); }
-    int GetPriority() const wxOVERRIDE { return 9; }
-    bool IsAvailable() const wxOVERRIDE;
-    bool HasNativeAsyncPlayback() const wxOVERRIDE { return true; }
+    wxString GetName() const override { return wxT("Simple DirectMedia Layer"); }
+    int GetPriority() const override { return 9; }
+    bool IsAvailable() const override;
+    bool HasNativeAsyncPlayback() const override { return true; }
     bool Play(wxSoundData *data, unsigned flags,
-              volatile wxSoundPlaybackStatus *status) wxOVERRIDE;
+              volatile wxSoundPlaybackStatus *status) override;
 
     void FillAudioBuffer(Uint8 *stream, int len);
     void FinishedPlayback();
 
-    void Stop() wxOVERRIDE;
-    bool IsPlaying() const wxOVERRIDE { return m_playing; }
+    void Stop() override;
+    bool IsPlaying() const override { return m_playing; }
 
 private:
     bool OpenAudio();

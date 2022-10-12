@@ -358,16 +358,16 @@ class wxPGDatePickerCtrlEditor : public wxPGEditor
 public:
     virtual ~wxPGDatePickerCtrlEditor();
 
-    wxString GetName() const wxOVERRIDE;
+    wxString GetName() const override;
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const wxOVERRIDE;
-    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const wxOVERRIDE;
+                                          const wxSize& size) const override;
+    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const override;
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
-        wxWindow* wnd, wxEvent& event ) const wxOVERRIDE;
-    virtual bool GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* wnd ) const wxOVERRIDE;
-    virtual void SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* wnd ) const wxOVERRIDE;
+        wxWindow* wnd, wxEvent& event ) const override;
+    virtual bool GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* wnd ) const override;
+    virtual void SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* wnd ) const override;
 };
 
 

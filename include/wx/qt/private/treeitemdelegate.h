@@ -27,7 +27,7 @@ public:
     {
     }
 
-    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const wxOVERRIDE
+    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const override
     {
         if ( m_textCtrl != NULL )
             destroyEditor(m_textCtrl->GetHandle(), m_currentModelIndex);
@@ -38,7 +38,7 @@ public:
         return m_textCtrl->GetHandle();
     }
 
-    void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
+    void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const override
     {
         if ( m_textCtrl != NULL )
         {
@@ -48,7 +48,7 @@ public:
         }
     }
 
-    void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
+    void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const override
     {
         // Don't set model data until wx has had a chance to send out events
     }

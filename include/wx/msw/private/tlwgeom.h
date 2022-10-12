@@ -27,7 +27,7 @@ public:
         m_placement.length = sizeof(m_placement);
     }
 
-    virtual bool Save(const Serializer& ser) const wxOVERRIDE
+    virtual bool Save(const Serializer& ser) const override
     {
         // For compatibility with the existing saved positions/sizes, use the
         // same keys as the generic version (which was previously used under
@@ -65,7 +65,7 @@ public:
         return true;
     }
 
-    virtual bool Restore(Serializer& ser) wxOVERRIDE
+    virtual bool Restore(Serializer& ser) override
     {
         // Normal position and size.
         wxRect r;
@@ -105,7 +105,7 @@ public:
         return true;
     }
 
-    virtual bool GetFrom(const wxTopLevelWindow* tlw) wxOVERRIDE
+    virtual bool GetFrom(const wxTopLevelWindow* tlw) override
     {
         if ( !::GetWindowPlacement(GetHwndOf(tlw), &m_placement) )
         {
@@ -148,7 +148,7 @@ public:
         return true;
     }
 
-    virtual bool ApplyTo(wxTopLevelWindow* tlw) wxOVERRIDE
+    virtual bool ApplyTo(wxTopLevelWindow* tlw) override
     {
         // There is a subtlety here: if the window is currently hidden,
         // restoring its geometry shouldn't show it, so we must use SW_HIDE as

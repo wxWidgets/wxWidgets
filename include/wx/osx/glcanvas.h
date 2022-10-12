@@ -46,7 +46,7 @@ public:
                 const wxGLContextAttrs *ctxAttrs = NULL);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
     // Mac-specific
     WXGLContext GetWXGLContext() const { return m_glContext; }
@@ -99,7 +99,7 @@ public:
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
     // Mac-specific functions
     // ----------------------

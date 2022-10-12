@@ -65,7 +65,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // these are regular event handlers used to highlight the events handling
     // order
@@ -74,7 +74,7 @@ public:
 
     // we override wxAppConsole::FilterEvent used to highlight the events
     // handling order
-    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
+    virtual int FilterEvent(wxEvent& event) override;
 
 private:
     wxDECLARE_EVENT_TABLE();

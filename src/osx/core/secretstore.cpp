@@ -80,7 +80,7 @@ public:
     virtual bool Save(const wxString& service,
                       const wxString& user,
                       const wxSecretValueImpl& secret,
-                      wxString& errmsg) wxOVERRIDE
+                      wxString& errmsg) override
     {
         const wxScopedCharBuffer serviceUTF8 = service.utf8_str();
         const wxScopedCharBuffer userUTF8 = user.utf8_str();
@@ -123,7 +123,7 @@ public:
     virtual bool Load(const wxString& service,
                       wxString* user,
                       wxSecretValueImpl** secret,
-                      wxString& errmsg) const wxOVERRIDE
+                      wxString& errmsg) const override
     {
         const wxScopedCharBuffer serviceUTF8 = service.utf8_str();
 
@@ -190,7 +190,7 @@ public:
     }
 
     virtual bool Delete(const wxString& service,
-                        wxString& errmsg) wxOVERRIDE
+                        wxString& errmsg) override
     {
         const wxScopedCharBuffer serviceUTF8 = service.utf8_str();
 

@@ -157,7 +157,7 @@ public:
     void addTest(Test* test) { m_tests.push_back(test); }
     size_t getChildTestCount() const { return m_tests.size(); }
 
-    void runTest() wxOVERRIDE
+    void runTest() override
     {
         for ( size_t n = 0; n < m_tests.size(); ++n )
         {
@@ -226,7 +226,7 @@ inline std::string wxGetCurrentTestName()
 // below and there just doesn't seem to be any way around it.
 #define CPPUNIT_TEST_SUITE(testclass)   \
     public:                             \
-    void runTest() wxOVERRIDE           \
+    void runTest() override           \
     {                                   \
         using namespace wxPrivate;      \
         TempStringAssign setClass(wxTheCurrentTestClass, #testclass)

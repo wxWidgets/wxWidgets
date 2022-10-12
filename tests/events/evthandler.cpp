@@ -29,7 +29,7 @@ class MyEvent : public wxEvent
 public:
     MyEvent() : wxEvent(0, MyEventType) { }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new MyEvent; }
+    virtual wxEvent *Clone() const override { return new MyEvent; }
 };
 
 typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);

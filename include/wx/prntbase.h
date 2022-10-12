@@ -122,34 +122,34 @@ private:
 class WXDLLIMPEXP_CORE wxNativePrintFactory: public wxPrintFactory
 {
 public:
-    virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data ) wxOVERRIDE;
+    virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data ) override;
 
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout = NULL,
-                                                    wxPrintDialogData *data = NULL ) wxOVERRIDE;
+                                                    wxPrintDialogData *data = NULL ) override;
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
-                                                    wxPrintData *data ) wxOVERRIDE;
+                                                    wxPrintData *data ) override;
 
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintDialogData *data = NULL ) wxOVERRIDE;
+                                                  wxPrintDialogData *data = NULL ) override;
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintData *data ) wxOVERRIDE;
+                                                  wxPrintData *data ) override;
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
-                                                          wxPageSetupDialogData * data = NULL ) wxOVERRIDE;
+                                                          wxPageSetupDialogData * data = NULL ) override;
 
-    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) wxOVERRIDE;
+    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) override;
 
-    virtual bool HasPrintSetupDialog() wxOVERRIDE;
-    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data ) wxOVERRIDE;
-    virtual bool HasOwnPrintToFile() wxOVERRIDE;
-    virtual bool HasPrinterLine() wxOVERRIDE;
-    virtual wxString CreatePrinterLine() wxOVERRIDE;
-    virtual bool HasStatusLine() wxOVERRIDE;
-    virtual wxString CreateStatusLine() wxOVERRIDE;
+    virtual bool HasPrintSetupDialog() override;
+    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data ) override;
+    virtual bool HasOwnPrintToFile() override;
+    virtual bool HasPrinterLine() override;
+    virtual wxString CreatePrinterLine() override;
+    virtual bool HasStatusLine() override;
+    virtual wxString CreateStatusLine() override;
 
-    virtual wxPrintNativeDataBase *CreatePrintNativeData() wxOVERRIDE;
+    virtual wxPrintNativeDataBase *CreatePrintNativeData() override;
 };
 
 //----------------------------------------------------------------------------
@@ -233,14 +233,14 @@ public:
     wxPrinter(wxPrintDialogData *data = NULL);
     virtual ~wxPrinter();
 
-    virtual wxPrintAbortDialog *CreateAbortWindow(wxWindow *parent, wxPrintout *printout) wxOVERRIDE;
-    virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message) wxOVERRIDE;
+    virtual wxPrintAbortDialog *CreateAbortWindow(wxWindow *parent, wxPrintout *printout) override;
+    virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message) override;
 
-    virtual bool Setup(wxWindow *parent) wxOVERRIDE;
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) wxOVERRIDE;
-    virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
+    virtual bool Setup(wxWindow *parent) override;
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) override;
+    virtual wxDC* PrintDialog(wxWindow *parent) override;
 
-    virtual wxPrintDialogData& GetPrintDialogData() const wxOVERRIDE;
+    virtual wxPrintDialogData& GetPrintDialogData() const override;
 
 protected:
     wxPrinterBase    *m_pimpl;
@@ -698,35 +698,35 @@ public:
                    wxPrintData *data);
     virtual ~wxPrintPreview();
 
-    virtual bool SetCurrentPage(int pageNum) wxOVERRIDE;
-    virtual int GetCurrentPage() const wxOVERRIDE;
-    virtual void SetPrintout(wxPrintout *printout) wxOVERRIDE;
-    virtual wxPrintout *GetPrintout() const wxOVERRIDE;
-    virtual wxPrintout *GetPrintoutForPrinting() const wxOVERRIDE;
-    virtual void SetFrame(wxFrame *frame) wxOVERRIDE;
-    virtual void SetCanvas(wxPreviewCanvas *canvas) wxOVERRIDE;
+    virtual bool SetCurrentPage(int pageNum) override;
+    virtual int GetCurrentPage() const override;
+    virtual void SetPrintout(wxPrintout *printout) override;
+    virtual wxPrintout *GetPrintout() const override;
+    virtual wxPrintout *GetPrintoutForPrinting() const override;
+    virtual void SetFrame(wxFrame *frame) override;
+    virtual void SetCanvas(wxPreviewCanvas *canvas) override;
 
-    virtual wxFrame *GetFrame() const wxOVERRIDE;
-    virtual wxPreviewCanvas *GetCanvas() const wxOVERRIDE;
-    virtual bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc) wxOVERRIDE;
-    virtual bool UpdatePageRendering() wxOVERRIDE;
-    virtual bool DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc) wxOVERRIDE;
-    virtual void AdjustScrollbars(wxPreviewCanvas *canvas) wxOVERRIDE;
-    virtual bool RenderPage(int pageNum) wxOVERRIDE;
-    virtual void SetZoom(int percent) wxOVERRIDE;
-    virtual int GetZoom() const wxOVERRIDE;
+    virtual wxFrame *GetFrame() const override;
+    virtual wxPreviewCanvas *GetCanvas() const override;
+    virtual bool PaintPage(wxPreviewCanvas *canvas, wxDC& dc) override;
+    virtual bool UpdatePageRendering() override;
+    virtual bool DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc) override;
+    virtual void AdjustScrollbars(wxPreviewCanvas *canvas) override;
+    virtual bool RenderPage(int pageNum) override;
+    virtual void SetZoom(int percent) override;
+    virtual int GetZoom() const override;
 
-    virtual bool Print(bool interactive) wxOVERRIDE;
-    virtual void DetermineScaling() wxOVERRIDE;
+    virtual bool Print(bool interactive) override;
+    virtual void DetermineScaling() override;
 
-    virtual wxPrintDialogData& GetPrintDialogData() wxOVERRIDE;
+    virtual wxPrintDialogData& GetPrintDialogData() override;
 
-    virtual int GetMaxPage() const wxOVERRIDE;
-    virtual int GetMinPage() const wxOVERRIDE;
+    virtual int GetMaxPage() const override;
+    virtual int GetMinPage() const override;
 
-    virtual bool Ok() const wxOVERRIDE { return IsOk(); }
-    virtual bool IsOk() const wxOVERRIDE;
-    virtual void SetOk(bool ok) wxOVERRIDE;
+    virtual bool Ok() const override { return IsOk(); }
+    virtual bool IsOk() const override;
+    virtual void SetOk(bool ok) override;
 
 private:
     wxPrintPreviewBase *m_pimpl;

@@ -65,7 +65,7 @@ public:
     bool TransferBitmap8(unsigned char *data, unsigned long size, void *dest, unsigned int bpp);
     unsigned long *GetXPixArray(WXDisplay* display, int *pix_array_n);
     void PutXColormap(WXDisplay* display, WXColormap cmap, bool destroyable);
-    virtual int GetColoursCount() const wxOVERRIDE;
+    virtual int GetColoursCount() const override;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

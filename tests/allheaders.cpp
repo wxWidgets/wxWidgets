@@ -395,7 +395,7 @@ struct DerivedWithoutOverride : Base
 
 struct DerivedWithOverride : Base
 {
-    virtual void Foo() wxOVERRIDE { }
+    virtual void Foo() override { }
 
     void OnIdle(wxIdleEvent&) { }
 

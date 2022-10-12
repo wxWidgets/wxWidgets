@@ -67,10 +67,10 @@ public:
     // NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool HasTransparentBackground() override { return true; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // checks for validity some of the ctor/Create() function parameters
     void CheckParams(const wxString& label, const wxString& url, long style);
@@ -113,7 +113,7 @@ public:
     void SetURL(const wxString &url) { m_url=url; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxHyperlinkEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxHyperlinkEvent(*this); }
 
 private:
 

@@ -19,21 +19,21 @@ public:
 
     virtual ~wxGenericNotificationMessageImpl();
 
-    virtual bool Show(int timeout) wxOVERRIDE;
+    virtual bool Show(int timeout) override;
 
-    virtual bool Close() wxOVERRIDE;
+    virtual bool Close() override;
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual void SetTitle(const wxString& title) override;
 
-    virtual void SetMessage(const wxString& message) wxOVERRIDE;
+    virtual void SetMessage(const wxString& message) override;
 
-    virtual void SetParent(wxWindow *parent) wxOVERRIDE;
+    virtual void SetParent(wxWindow *parent) override;
 
-    virtual void SetFlags(int flags) wxOVERRIDE;
+    virtual void SetFlags(int flags) override;
 
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE;
+    virtual void SetIcon(const wxIcon& icon) override;
 
-    virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE;
+    virtual bool AddAction(wxWindowID actionid, const wxString &label) override;
 
     // get/set the default timeout (used if Timeout_Auto is specified)
     static int GetDefaultTimeout() { return ms_timeout; }

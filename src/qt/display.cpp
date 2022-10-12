@@ -19,14 +19,14 @@ class wxDisplayImplQt : public wxDisplayImpl
 public:
     wxDisplayImplQt( unsigned n );
 
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
+    virtual wxRect GetGeometry() const override;
+    virtual wxRect GetClientArea() const override;
+    virtual int GetDepth() const override;
 
 #if wxUSE_DISPLAY
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
+    virtual wxVideoMode GetCurrentMode() const override;
+    virtual bool ChangeMode(const wxVideoMode& mode) override;
 #endif // wxUSE_DISPLAY
 };
 
@@ -79,9 +79,9 @@ bool wxDisplayImplQt::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 class wxDisplayFactoryQt : public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
+    virtual unsigned GetCount() override;
+    virtual int GetFromPoint(const wxPoint& pt) override;
 };
 
 wxDisplayImpl *wxDisplayFactoryQt::CreateDisplay(unsigned n)
@@ -111,7 +111,7 @@ int wxDisplayFactoryQt::GetFromPoint(const wxPoint& pt)
 class wxDisplayFactorySingleQt : public wxDisplayFactorySingleQt
 {
 protected:
-    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    virtual wxDisplayImpl *CreateSingleDisplay() override
     {
         return new wxDisplayImplQt(0);
     }

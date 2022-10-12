@@ -36,7 +36,7 @@ public:
             const wxString& name = wxASCII_STR(wxControlNameStr));
 
    // Simulates an event
-   virtual void Command(wxCommandEvent& event) wxOVERRIDE { ProcessCommand(event); }
+   virtual void Command(wxCommandEvent& event) override { ProcessCommand(event); }
 
    // implementation from now on
    // --------------------------

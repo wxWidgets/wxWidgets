@@ -66,10 +66,10 @@ public:
     DECLARE_IUNKNOWN_METHODS;
 
     // IEnumVARIANT
-    STDMETHODIMP Next(ULONG celt, VARIANT *rgelt, ULONG *pceltFetched) wxOVERRIDE;
-    STDMETHODIMP Skip(ULONG celt) wxOVERRIDE;
-    STDMETHODIMP Reset() wxOVERRIDE;
-    STDMETHODIMP Clone(IEnumVARIANT **ppenum) wxOVERRIDE;
+    STDMETHODIMP Next(ULONG celt, VARIANT *rgelt, ULONG *pceltFetched) override;
+    STDMETHODIMP Skip(ULONG celt) override;
+    STDMETHODIMP Reset() override;
+    STDMETHODIMP Clone(IEnumVARIANT **ppenum) override;
 
 private:
     wxVariant m_variant;  // List of further variants
@@ -188,86 +188,86 @@ public:
         // Retrieves the child element or child object at a given point on the screen.
         // All visual objects support this method; sound objects do not support it.
 
-    STDMETHODIMP accHitTest(LONG xLeft, LONG yLeft, VARIANT* pVarID) wxOVERRIDE;
+    STDMETHODIMP accHitTest(LONG xLeft, LONG yLeft, VARIANT* pVarID) override;
 
         // Retrieves the specified object's current screen location. All visual objects must
         // support this method; sound objects do not support it.
 
-    STDMETHODIMP accLocation ( LONG* pxLeft, LONG* pyTop, LONG* pcxWidth, LONG* pcyHeight, VARIANT varID) wxOVERRIDE;
+    STDMETHODIMP accLocation ( LONG* pxLeft, LONG* pyTop, LONG* pcxWidth, LONG* pcyHeight, VARIANT varID) override;
 
         // Traverses to another user interface element within a container and retrieves the object.
         // All visual objects must support this method.
 
-    STDMETHODIMP accNavigate ( LONG navDir, VARIANT varStart, VARIANT* pVarEnd) wxOVERRIDE;
+    STDMETHODIMP accNavigate ( LONG navDir, VARIANT varStart, VARIANT* pVarEnd) override;
 
         // Retrieves the address of an IDispatch interface for the specified child.
         // All objects must support this property.
 
-    STDMETHODIMP get_accChild ( VARIANT varChildID, IDispatch** ppDispChild) wxOVERRIDE;
+    STDMETHODIMP get_accChild ( VARIANT varChildID, IDispatch** ppDispChild) override;
 
         // Retrieves the number of children that belong to this object.
         // All objects must support this property.
 
-    STDMETHODIMP get_accChildCount ( LONG* pCountChildren) wxOVERRIDE;
+    STDMETHODIMP get_accChildCount ( LONG* pCountChildren) override;
 
         // Retrieves the IDispatch interface of the object's parent.
         // All objects support this property.
 
-    STDMETHODIMP get_accParent ( IDispatch** ppDispParent) wxOVERRIDE;
+    STDMETHODIMP get_accParent ( IDispatch** ppDispParent) override;
 
 // Descriptive Properties and Methods
 
         // Performs the object's default action. Not all objects have a default
         // action.
 
-    STDMETHODIMP accDoDefaultAction(VARIANT varID) wxOVERRIDE;
+    STDMETHODIMP accDoDefaultAction(VARIANT varID) override;
 
         // Retrieves a string that describes the object's default action.
         // Not all objects have a default action.
 
-    STDMETHODIMP get_accDefaultAction ( VARIANT varID, BSTR* pszDefaultAction) wxOVERRIDE;
+    STDMETHODIMP get_accDefaultAction ( VARIANT varID, BSTR* pszDefaultAction) override;
 
         // Retrieves a string that describes the visual appearance of the specified object.
         // Not all objects have a description.
 
-    STDMETHODIMP get_accDescription ( VARIANT varID, BSTR* pszDescription) wxOVERRIDE;
+    STDMETHODIMP get_accDescription ( VARIANT varID, BSTR* pszDescription) override;
 
         // Retrieves an object's Help property string.
         // Not all objects support this property.
 
-    STDMETHODIMP get_accHelp ( VARIANT varID, BSTR* pszHelp) wxOVERRIDE;
+    STDMETHODIMP get_accHelp ( VARIANT varID, BSTR* pszHelp) override;
 
         // Retrieves the full path of the WinHelp file associated with the specified
         // object and the identifier of the appropriate topic within that file.
         // Not all objects support this property.
 
-    STDMETHODIMP get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, LONG* pidTopic) wxOVERRIDE;
+    STDMETHODIMP get_accHelpTopic ( BSTR* pszHelpFile, VARIANT varChild, LONG* pidTopic) override;
 
         // Retrieves the specified object's shortcut key or access key, also known as
         // the mnemonic. All objects that have a shortcut key or access key support
         // this property.
 
-    STDMETHODIMP get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKeyboardShortcut) wxOVERRIDE;
+    STDMETHODIMP get_accKeyboardShortcut ( VARIANT varID, BSTR* pszKeyboardShortcut) override;
 
         // Retrieves the name of the specified object.
         // All objects support this property.
 
-    STDMETHODIMP get_accName ( VARIANT varID, BSTR* pszName) wxOVERRIDE;
+    STDMETHODIMP get_accName ( VARIANT varID, BSTR* pszName) override;
 
         // Retrieves information that describes the role of the specified object.
         // All objects support this property.
 
-    STDMETHODIMP get_accRole ( VARIANT varID, VARIANT* pVarRole) wxOVERRIDE;
+    STDMETHODIMP get_accRole ( VARIANT varID, VARIANT* pVarRole) override;
 
         // Retrieves the current state of the specified object.
         // All objects support this property.
 
-    STDMETHODIMP get_accState ( VARIANT varID, VARIANT* pVarState) wxOVERRIDE;
+    STDMETHODIMP get_accState ( VARIANT varID, VARIANT* pVarState) override;
 
         // Retrieves the value of the specified object.
         // Not all objects have a value.
 
-    STDMETHODIMP get_accValue ( VARIANT varID, BSTR* pszValue) wxOVERRIDE;
+    STDMETHODIMP get_accValue ( VARIANT varID, BSTR* pszValue) override;
 
 // Selection and Focus
 
@@ -275,44 +275,44 @@ public:
         // specified object. All objects that select or receive the
         // keyboard focus must support this method.
 
-    STDMETHODIMP accSelect ( LONG flagsSelect, VARIANT varID ) wxOVERRIDE;
+    STDMETHODIMP accSelect ( LONG flagsSelect, VARIANT varID ) override;
 
         // Retrieves the object that has the keyboard focus. All objects
         // that receive the keyboard focus must support this property.
 
-    STDMETHODIMP get_accFocus ( VARIANT* pVarID) wxOVERRIDE;
+    STDMETHODIMP get_accFocus ( VARIANT* pVarID) override;
 
         // Retrieves the selected children of this object. All objects
         // selected must support this property.
 
-    STDMETHODIMP get_accSelection ( VARIANT * pVarChildren) wxOVERRIDE;
+    STDMETHODIMP get_accSelection ( VARIANT * pVarChildren) override;
 
 // Obsolete
 
-    STDMETHODIMP put_accName(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) wxOVERRIDE { return E_FAIL; }
-    STDMETHODIMP put_accValue(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) wxOVERRIDE { return E_FAIL; }
+    STDMETHODIMP put_accName(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) override { return E_FAIL; }
+    STDMETHODIMP put_accValue(VARIANT WXUNUSED(varChild), BSTR WXUNUSED(szName)) override { return E_FAIL; }
 
 // IDispatch
 
         // Get type info
 
-    STDMETHODIMP GetTypeInfo(unsigned int typeInfo, LCID lcid, ITypeInfo** ppTypeInfo) wxOVERRIDE;
+    STDMETHODIMP GetTypeInfo(unsigned int typeInfo, LCID lcid, ITypeInfo** ppTypeInfo) override;
 
         // Get type info count
 
-    STDMETHODIMP GetTypeInfoCount(unsigned int* typeInfoCount) wxOVERRIDE;
+    STDMETHODIMP GetTypeInfoCount(unsigned int* typeInfoCount) override;
 
         // Get ids of names
 
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** names, unsigned int cNames,
-        LCID lcid, DISPID* dispId) wxOVERRIDE;
+        LCID lcid, DISPID* dispId) override;
 
         // Invoke
 
     STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
                         WORD wFlags, DISPPARAMS *pDispParams,
                         VARIANT *pVarResult, EXCEPINFO *pExcepInfo,
-                        unsigned int *puArgErr ) wxOVERRIDE;
+                        unsigned int *puArgErr ) override;
 
 // Helpers
 

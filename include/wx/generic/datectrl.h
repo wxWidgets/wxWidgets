@@ -52,11 +52,11 @@ public:
                 const wxString& name = wxDatePickerCtrlNameStr);
 
     // wxDatePickerCtrl methods
-    void SetValue(const wxDateTime& date) wxOVERRIDE;
-    wxDateTime GetValue() const wxOVERRIDE;
+    void SetValue(const wxDateTime& date) override;
+    wxDateTime GetValue() const override;
 
-    bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const wxOVERRIDE;
-    void SetRange(const wxDateTime &dt1, const wxDateTime &dt2) wxOVERRIDE;
+    bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const override;
+    void SetRange(const wxDateTime &dt1, const wxDateTime &dt2) override;
 
     bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
                       const wxDateTime& upperdate = wxDefaultDateTime);
@@ -69,16 +69,16 @@ public:
     // -------------------------------
 
     // overridden base class methods
-    virtual bool Destroy() wxOVERRIDE;
+    virtual bool Destroy() override;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
 private:
     void Init();
 
     // return the list of the windows composing this one
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+    virtual wxWindowList GetCompositeWindowParts() const override;
 
     void OnText(wxCommandEvent &event);
     void OnSize(wxSizeEvent& event);

@@ -22,7 +22,7 @@ class LexicalSortProxyModel : public QSortFilterProxyModel
 public:
     explicit LexicalSortProxyModel(QObject* owner) : QSortFilterProxyModel(owner) {}
 
-    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const wxOVERRIDE
+    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override
     {
         const QVariant leftData = sourceModel()->data( left );
         const QVariant rightData = sourceModel()->data( right );

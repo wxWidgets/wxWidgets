@@ -201,13 +201,13 @@ public:
     wxArrayInt GetSelections() const { return m_selections; }
 
     // implementation from now on
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
 
 protected:
 #if wxUSE_CHECKLISTBOX
     virtual wxListBoxBase *CreateList(int n,
                                       const wxString *choices,
-                                      long styleLbox) wxOVERRIDE;
+                                      long styleLbox) override;
 #endif // wxUSE_CHECKLISTBOX
 
     wxArrayInt m_selections;

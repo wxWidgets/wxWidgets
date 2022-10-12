@@ -121,15 +121,15 @@ public:
         return &s_impl;
     }
 
-    virtual bool MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
-    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseMove(long x, long y) override;
+    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseDragDrop(long x1, long y1, long x2, long y2,
-                               int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+                               int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
 private:
     // This class has no public ctors, use Get() instead.

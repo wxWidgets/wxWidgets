@@ -78,7 +78,7 @@ public:
 
     wxTreeRenameTimer( wxGenericTreeCtrl *owner );
 
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
 
 private:
     wxGenericTreeCtrl *m_owner;
@@ -124,7 +124,7 @@ public:
 
     wxTreeFindTimer( wxGenericTreeCtrl *owner ) { m_owner = owner; }
 
-    virtual void Notify() wxOVERRIDE { m_owner->ResetFindState(); }
+    virtual void Notify() override { m_owner->ResetFindState(); }
 
 private:
     wxGenericTreeCtrl *m_owner;

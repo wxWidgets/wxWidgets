@@ -106,7 +106,7 @@ typedef void (*wxTypeIdentifier)();
 // WX_DECLARE_TYPEINFO() or WX_DECLARE_TYPEINFO_INLINE() however.
 #define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC) \
 public: \
-    virtual wxTypeIdentifier GetWxTypeId() const wxOVERRIDE \
+    virtual wxTypeIdentifier GetWxTypeId() const override \
     { \
         return reinterpret_cast<wxTypeIdentifier> \
             (&IDENTFUNC); \

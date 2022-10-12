@@ -102,13 +102,13 @@ public:
 
     // register handler for the given descriptor with the dispatcher, return
     // true on success or false on error
-    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) wxOVERRIDE;
+    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) override;
 
     // modify descriptor flags or handler, return true on success
-    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags) wxOVERRIDE;
+    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags) override;
 
     // unregister descriptor previously registered with RegisterFD()
-    virtual bool UnregisterFD(int fd) wxOVERRIDE;
+    virtual bool UnregisterFD(int fd) override;
 
     virtual ~wxMappedFDIODispatcher() { }
 

@@ -20,7 +20,7 @@ public:
     wxScreenDCImpl( wxDC *owner );
     virtual ~wxScreenDCImpl();
 
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const wxOVERRIDE;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override;
 
 private:
     wxDECLARE_CLASS(wxScreenDCImpl);

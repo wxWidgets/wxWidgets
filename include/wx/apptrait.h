@@ -206,27 +206,27 @@ class WXDLLIMPEXP_BASE wxConsoleAppTraitsBase : public wxAppTraits
 {
 public:
 #if !wxUSE_CONSOLE_EVENTLOOP
-    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE { return NULL; }
+    virtual wxEventLoopBase *CreateEventLoop() override { return NULL; }
 #endif // !wxUSE_CONSOLE_EVENTLOOP
 
 #if wxUSE_LOG
-    virtual wxLog *CreateLogTarget() wxOVERRIDE;
+    virtual wxLog *CreateLogTarget() override;
 #endif // wxUSE_LOG
-    virtual wxMessageOutput *CreateMessageOutput() wxOVERRIDE;
+    virtual wxMessageOutput *CreateMessageOutput() override;
 #if wxUSE_FONTMAP
-    virtual wxFontMapper *CreateFontMapper() wxOVERRIDE;
+    virtual wxFontMapper *CreateFontMapper() override;
 #endif // wxUSE_FONTMAP
-    virtual wxRendererNative *CreateRenderer() wxOVERRIDE;
+    virtual wxRendererNative *CreateRenderer() override;
 
-    virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
-    virtual bool HasStderr() wxOVERRIDE;
+    virtual bool ShowAssertDialog(const wxString& msg) override;
+    virtual bool HasStderr() override;
     virtual bool SafeMessageBox(const wxString& text,
-                                const wxString& title) wxOVERRIDE;
+                                const wxString& title) override;
 
     // the GetToolkitVersion for console application is always the same
     wxPortId GetToolkitVersion(int *verMaj = NULL,
                                int *verMin = NULL,
-                               int *verMicro = NULL) const wxOVERRIDE
+                               int *verMicro = NULL) const override
     {
         // no toolkits (wxBase is for console applications without GUI support)
         // NB: zero means "no toolkit", -1 means "not initialized yet"
@@ -237,8 +237,8 @@ public:
         return wxPORT_BASE;
     }
 
-    virtual bool IsUsingUniversalWidgets() const wxOVERRIDE { return false; }
-    virtual wxString GetDesktopEnvironment() const wxOVERRIDE { return wxEmptyString; }
+    virtual bool IsUsingUniversalWidgets() const override { return false; }
+    virtual wxString GetDesktopEnvironment() const override { return wxEmptyString; }
 };
 
 // ----------------------------------------------------------------------------
@@ -251,25 +251,25 @@ class WXDLLIMPEXP_CORE wxGUIAppTraitsBase : public wxAppTraits
 {
 public:
 #if wxUSE_LOG
-    virtual wxLog *CreateLogTarget() wxOVERRIDE;
+    virtual wxLog *CreateLogTarget() override;
 #endif // wxUSE_LOG
-    virtual wxMessageOutput *CreateMessageOutput() wxOVERRIDE;
+    virtual wxMessageOutput *CreateMessageOutput() override;
 #if wxUSE_FONTMAP
-    virtual wxFontMapper *CreateFontMapper() wxOVERRIDE;
+    virtual wxFontMapper *CreateFontMapper() override;
 #endif // wxUSE_FONTMAP
-    virtual wxRendererNative *CreateRenderer() wxOVERRIDE;
+    virtual wxRendererNative *CreateRenderer() override;
 
-    virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
-    virtual bool HasStderr() wxOVERRIDE;
+    virtual bool ShowAssertDialog(const wxString& msg) override;
+    virtual bool HasStderr() override;
 
     // Win32 has its own implementation using native message box directly in
     // the base class, don't override it.
 #ifndef __WIN32__
     virtual bool SafeMessageBox(const wxString& text,
-                                const wxString& title) wxOVERRIDE;
+                                const wxString& title) override;
 #endif // !__WIN32__
 
-    virtual bool IsUsingUniversalWidgets() const wxOVERRIDE
+    virtual bool IsUsingUniversalWidgets() const override
     {
     #ifdef __WXUNIVERSAL__
         return true;
@@ -278,7 +278,7 @@ public:
     #endif
     }
 
-    virtual wxString GetDesktopEnvironment() const wxOVERRIDE { return wxEmptyString; }
+    virtual wxString GetDesktopEnvironment() const override { return wxEmptyString; }
 };
 
 #endif // wxUSE_GUI

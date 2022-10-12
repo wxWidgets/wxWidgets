@@ -366,24 +366,24 @@ public:
     // Implement the base class pure virtual methods.
     virtual void GetValue(wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned col) const wxOVERRIDE;
+                          unsigned col) const override;
     virtual bool SetValue(const wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned col) wxOVERRIDE;
-    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
-    virtual bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
-    virtual bool HasContainerColumns(const wxDataViewItem& item) const wxOVERRIDE;
+                          unsigned col) override;
+    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const override;
+    virtual bool IsContainer(const wxDataViewItem& item) const override;
+    virtual bool HasContainerColumns(const wxDataViewItem& item) const override;
     virtual unsigned GetChildren(const wxDataViewItem& item,
-                                 wxDataViewItemArray& children) const wxOVERRIDE;
-    virtual bool IsListModel() const wxOVERRIDE { return m_isFlat; }
+                                 wxDataViewItemArray& children) const override;
+    virtual bool IsListModel() const override { return m_isFlat; }
     virtual int Compare(const wxDataViewItem& item1,
                         const wxDataViewItem& item2,
                         unsigned col,
-                        bool ascending) const wxOVERRIDE;
+                        bool ascending) const override;
 
 protected:
     virtual int DoCompareValues(const wxVariant& value1,
-                                const wxVariant& value2) const wxOVERRIDE;
+                                const wxVariant& value2) const override;
 
 private:
     // The control we're associated with.

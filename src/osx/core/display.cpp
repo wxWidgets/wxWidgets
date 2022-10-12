@@ -101,16 +101,16 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
-    virtual double GetScaleFactor() const wxOVERRIDE;
+    virtual wxRect GetGeometry() const override;
+    virtual wxRect GetClientArea() const override;
+    virtual int GetDepth() const override;
+    virtual double GetScaleFactor() const override;
 
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
+    virtual wxVideoMode GetCurrentMode() const override;
+    virtual bool ChangeMode(const wxVideoMode& mode) override;
 
-    virtual bool IsPrimary() const wxOVERRIDE;
+    virtual bool IsPrimary() const override;
 
 private:
     CGDirectDisplayID m_id;
@@ -123,10 +123,10 @@ class wxDisplayFactoryMacOSX : public wxDisplayFactory
 public:
     wxDisplayFactoryMacOSX() {}
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
-    virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
+    virtual unsigned GetCount() override;
+    virtual int GetFromPoint(const wxPoint& pt) override;
+    virtual int GetFromWindow(const wxWindow *window) override;
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMacOSX);
@@ -411,17 +411,17 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
 class wxDisplayImplSingleMacOSX : public wxDisplayImplSingle
 {
 public:
-    virtual wxRect GetGeometry() const wxOVERRIDE
+    virtual wxRect GetGeometry() const override
     {
         return wxGetDisplayGeometry(CGMainDisplayID());
     }
 
-    virtual wxRect GetClientArea() const wxOVERRIDE
+    virtual wxRect GetClientArea() const override
     {
         return wxOSXGetMainDisplayClientArea();
     }
 
-    virtual int GetDepth() const wxOVERRIDE
+    virtual int GetDepth() const override
     {
         return wxGetDisplayDepth(CGMainDisplayID());
     }
@@ -430,7 +430,7 @@ public:
 class wxDisplayFactorySingleMacOSX : public wxDisplayFactorySingle
 {
 protected:
-    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    virtual wxDisplayImpl *CreateSingleDisplay() override
     {
         return new wxDisplayImplSingleMacOSX;
     }

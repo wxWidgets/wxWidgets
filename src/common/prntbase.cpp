@@ -301,8 +301,8 @@ class wxPrintFactoryModule: public wxModule
 {
 public:
     wxPrintFactoryModule() {}
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { wxPrintFactory::SetPrintFactory( NULL ); }
+    bool OnInit() override { return true; }
+    void OnExit() override { wxPrintFactory::SetPrintFactory( NULL ); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrintFactoryModule);

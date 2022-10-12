@@ -603,8 +603,8 @@ protected:
     // note that index must be multiplied by 3 when using it with RGB array
     long XYToIndex(int x, int y) const;
 
-    virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
+    virtual wxObjectRefData* CreateRefData() const override;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
     // Helper function used internally by wxImage class only.
     template <typename T>

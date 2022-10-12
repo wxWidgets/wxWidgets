@@ -86,10 +86,10 @@ class App: public wxApp {
 
 public:
     //! the main function called during application start
-    virtual bool OnInit () wxOVERRIDE;
+    virtual bool OnInit () override;
 
     //! application exit function
-    virtual int OnExit () wxOVERRIDE;
+    virtual int OnExit () override;
 
 private:
     //! frame window
@@ -781,7 +781,7 @@ public:
         SetWrapMode(wxSTC_WRAP_WORD);
         SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
     }
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE
+    virtual bool SetFont(const wxFont& font) override
     {
         StyleSetFont(wxSTC_STYLE_DEFAULT, font);
         return wxStyledTextCtrl::SetFont(font);

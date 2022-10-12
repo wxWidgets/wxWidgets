@@ -35,22 +35,22 @@ public:
     // wxSpinCtrl(Double) methods call DoXXX functions of the same name
 
     // accessors
-    virtual wxString GetTextValue() const wxOVERRIDE;
+    virtual wxString GetTextValue() const override;
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const
     // T GetIncrement() const
-    virtual bool GetSnapToTicks() const wxOVERRIDE;
+    virtual bool GetSnapToTicks() const override;
 
     // operations
-    virtual void SetValue(const wxString& value) wxOVERRIDE;
+    virtual void SetValue(const wxString& value) override;
     // void SetValue(T val)
     // void SetRange(T minVal, T maxVal)
     // void SetIncrement(T inc)
-    void SetSnapToTicks( bool snap_to_ticks ) wxOVERRIDE;
+    void SetSnapToTicks( bool snap_to_ticks ) override;
 
     // Select text in the textctrl
-    void SetSelection(long from, long to) wxOVERRIDE;
+    void SetSelection(long from, long to) override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -95,12 +95,12 @@ protected:
     // base or number of digits depending on the derived class).
     virtual void GtkSetEntryWidth() = 0;
 
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
-    virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
+    virtual bool UseGTKStyleBase() const override { return true; }
 
     // Set m_textOverride to use the given text instead of the numeric value.
     void GTKSetTextOverride(const wxString& text);
@@ -169,20 +169,20 @@ public:
     int GetIncrement() const { return int(DoGetIncrement()); }
 
     // operations
-    void SetValue(const wxString& value) wxOVERRIDE    { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
+    void SetValue(const wxString& value) override    { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
     void SetValue( int value )              { DoSetValue(value); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement(int inc) { DoSetIncrement(inc); }
 
-    virtual int GetBase() const wxOVERRIDE { return m_base; }
-    virtual bool SetBase(int base) wxOVERRIDE;
+    virtual int GetBase() const override { return m_base; }
+    virtual bool SetBase(int base) override;
 
-    virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
-    virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
-    virtual void GTKValueChanged() wxOVERRIDE;
+    virtual GTKInputResult GTKInput(double* value) const override;
+    virtual bool GTKOutput(wxString* text) const override;
+    virtual void GTKValueChanged() override;
 
 protected:
-    virtual void GtkSetEntryWidth() wxOVERRIDE;
+    virtual void GtkSetEntryWidth() override;
 
 private:
     // Common part of all ctors.
@@ -240,21 +240,21 @@ public:
     unsigned GetDigits() const;
 
     // operations
-    void SetValue(const wxString& value) wxOVERRIDE        { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
+    void SetValue(const wxString& value) override        { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
     void SetValue(double value)                 { DoSetValue(value); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
     void SetIncrement(double inc);
     void SetDigits(unsigned digits);
 
-    virtual int GetBase() const wxOVERRIDE { return 10; }
-    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+    virtual int GetBase() const override { return 10; }
+    virtual bool SetBase(int WXUNUSED(base)) override { return false; }
 
-    virtual GTKInputResult GTKInput(double* value) const wxOVERRIDE;
-    virtual bool GTKOutput(wxString* text) const wxOVERRIDE;
-    virtual void GTKValueChanged() wxOVERRIDE;
+    virtual GTKInputResult GTKInput(double* value) const override;
+    virtual bool GTKOutput(wxString* text) const override;
+    virtual void GTKValueChanged() override;
 
 protected:
-    virtual void GtkSetEntryWidth() wxOVERRIDE;
+    virtual void GtkSetEntryWidth() override;
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };

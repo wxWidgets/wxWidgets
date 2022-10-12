@@ -27,7 +27,7 @@ public:
     wxQtPushButton( wxWindow *parent, wxAnyButton *handler);
 
 private:
-    virtual bool event(QEvent* e) wxOVERRIDE;
+    virtual bool event(QEvent* e) override;
     void action(); // press, release
     void clicked(bool);
 };

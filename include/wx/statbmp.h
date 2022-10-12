@@ -47,14 +47,14 @@ public:
     virtual ScaleMode GetScaleMode() const { return Scale_None; }
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool AcceptsFocus() const override { return false; }
+    virtual bool HasTransparentBackground() override { return true; }
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // Bitmap bundle passed to ctor or SetBitmap().
     wxBitmapBundle m_bitmapBundle;

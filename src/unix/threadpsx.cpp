@@ -1864,8 +1864,8 @@ void wxOSXThreadModuleOnExit();
 class wxThreadModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxThreadModule);

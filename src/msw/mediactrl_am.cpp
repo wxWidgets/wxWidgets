@@ -821,44 +821,44 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name) wxOVERRIDE;
+                                     const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
-    virtual bool Load(const wxURI& location, const wxURI& proxy) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
+    virtual bool Load(const wxURI& location, const wxURI& proxy) override;
 
     bool DoLoad(const wxString& location);
     void FinishLoad();
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double) override;
 
-    virtual double GetVolume() wxOVERRIDE;
-    virtual bool SetVolume(double) wxOVERRIDE;
+    virtual double GetVolume() override;
+    virtual bool SetVolume(double) override;
 
-    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
+    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) override;
 
     void DoGetDownloadProgress(wxLongLong*, wxLongLong*);
-    virtual wxLongLong GetDownloadProgress() wxOVERRIDE
+    virtual wxLongLong GetDownloadProgress() override
     {
         wxLongLong progress, total;
         DoGetDownloadProgress(&progress, &total);
         return progress;
     }
-    virtual wxLongLong GetDownloadTotal() wxOVERRIDE
+    virtual wxLongLong GetDownloadTotal() override
     {
         wxLongLong progress, total;
         DoGetDownloadProgress(&progress, &total);

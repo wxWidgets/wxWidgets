@@ -64,7 +64,7 @@ public:
 
     // override ProcessEvent() to confirm that it is called for all event
     // handlers in the chain
-    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
+    virtual bool ProcessEvent(wxEvent& event) override
     {
         if ( event.GetEventType() == m_evtType )
             g_str += 'o'; // "o" == "overridden"
@@ -184,7 +184,7 @@ public:
         Update();
     }
 
-    virtual void OnDraw(wxDC& WXUNUSED(dc)) wxOVERRIDE
+    virtual void OnDraw(wxDC& WXUNUSED(dc)) override
     {
         g_str += 'D';   // draw
     }
@@ -228,8 +228,8 @@ class EventPropagationTestCase : public CppUnit::TestCase
 public:
     EventPropagationTestCase() {}
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( EventPropagationTestCase );
@@ -360,7 +360,7 @@ void EventPropagationTestCase::ForwardEvent()
     public:
         ForwardEvtHandler(wxEvtHandler& h) : m_h(&h) { }
 
-        virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
+        virtual bool ProcessEvent(wxEvent& event) override
         {
             g_str += 'f';
 
@@ -524,7 +524,7 @@ class EventTestView : public wxView
 public:
     EventTestView() { }
 
-    virtual void OnDraw(wxDC*) wxOVERRIDE { }
+    virtual void OnDraw(wxDC*) override { }
 
     wxDECLARE_DYNAMIC_CLASS(EventTestView);
 };

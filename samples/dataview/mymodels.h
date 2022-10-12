@@ -146,22 +146,22 @@ public:
     // override sorting to always sort branches ascendingly
 
     int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                 unsigned int column, bool ascending ) const wxOVERRIDE;
+                 unsigned int column, bool ascending ) const override;
 
     // implementation of base class virtuals to define model
 
     virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const wxOVERRIDE;
+                           const wxDataViewItem &item, unsigned int col ) const override;
     virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) wxOVERRIDE;
+                           const wxDataViewItem &item, unsigned int col ) override;
 
     virtual bool IsEnabled( const wxDataViewItem &item,
-                            unsigned int col ) const wxOVERRIDE;
+                            unsigned int col ) const override;
 
-    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const wxOVERRIDE;
-    virtual bool IsContainer( const wxDataViewItem &item ) const wxOVERRIDE;
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const override;
+    virtual bool IsContainer( const wxDataViewItem &item ) const override;
     virtual unsigned int GetChildren( const wxDataViewItem &parent,
-                                      wxDataViewItemArray &array ) const wxOVERRIDE;
+                                      wxDataViewItemArray &array ) const override;
 
 private:
     MyMusicTreeModelNode*   m_root;
@@ -216,11 +216,11 @@ public:
     // implementation of base class virtuals to define model
 
     virtual void GetValueByRow( wxVariant &variant,
-                                unsigned int row, unsigned int col ) const wxOVERRIDE;
+                                unsigned int row, unsigned int col ) const override;
     virtual bool GetAttrByRow( unsigned int row, unsigned int col,
-                               wxDataViewItemAttr &attr ) const wxOVERRIDE;
+                               wxDataViewItemAttr &attr ) const override;
     virtual bool SetValueByRow( const wxVariant &variant,
-                                unsigned int row, unsigned int col ) wxOVERRIDE;
+                                unsigned int row, unsigned int col ) override;
 
 private:
     wxVector<bool>   m_toggleColValues;
@@ -237,7 +237,7 @@ private:
 class MyListStoreDerivedModel : public wxDataViewListStore
 {
 public:
-    virtual bool IsEnabledByRow(unsigned int row, unsigned int col) const wxOVERRIDE;
+    virtual bool IsEnabledByRow(unsigned int row, unsigned int col) const override;
 };
 
 // ----------------------------------------------------------------------------
@@ -247,7 +247,7 @@ public:
 class MyListStoreHasValueModel : public MyListStoreDerivedModel
 {
 public:
-    virtual bool HasValue(const wxDataViewItem &item, unsigned int col) const wxOVERRIDE;
+    virtual bool HasValue(const wxDataViewItem &item, unsigned int col) const override;
 };
 
 // ----------------------------------------------------------------------------
@@ -267,12 +267,12 @@ public:
     }
 
     // Implement base class pure virtual methods.
-    unsigned GetCount() const wxOVERRIDE { return m_strings.size(); }
-    void GetValueByRow(wxVariant& val, unsigned row, unsigned) const wxOVERRIDE
+    unsigned GetCount() const override { return m_strings.size(); }
+    void GetValueByRow(wxVariant& val, unsigned row, unsigned) const override
     {
         val = m_strings[row];
     }
-    bool SetValueByRow(const wxVariant&, unsigned, unsigned) wxOVERRIDE
+    bool SetValueByRow(const wxVariant&, unsigned, unsigned) override
     {
         return false;
     }

@@ -89,7 +89,7 @@ SampleMFCWinApp theApp;
 class MyApp: public wxAppWithMFC
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     wxFrame *CreateFrame();
 };

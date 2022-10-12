@@ -28,30 +28,30 @@ public:
     virtual ~wxAnyButton();
 
     // overridden base class methods
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
-    virtual bool SetBackgroundColour(const wxColour &colour) wxOVERRIDE;
-    virtual bool SetForegroundColour(const wxColour &colour) wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
+    virtual bool SetBackgroundColour(const wxColour &colour) override;
+    virtual bool SetForegroundColour(const wxColour &colour) override;
 
     // implementation from now on
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) wxOVERRIDE;
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 protected:
     // usually overridden base class virtuals
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
-    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which) wxOVERRIDE;
-    virtual wxSize DoGetBitmapMargins() const wxOVERRIDE;
-    virtual void DoSetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE;
-    virtual void DoSetBitmapPosition(wxDirection dir) wxOVERRIDE;
+    virtual wxBitmap DoGetBitmap(State which) const override;
+    virtual void DoSetBitmap(const wxBitmapBundle& bitmap, State which) override;
+    virtual wxSize DoGetBitmapMargins() const override;
+    virtual void DoSetBitmapMargins(wxCoord x, wxCoord y) override;
+    virtual void DoSetBitmapPosition(wxDirection dir) override;
 
 #if wxUSE_MARKUP
-    virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
+    virtual bool DoSetLabelMarkup(const wxString& markup) override;
 #endif // wxUSE_MARKUP
 
     // Increases the passed in size to account for the button image.

@@ -987,7 +987,7 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
         const wxString& GetStackTrace() const { return m_stackTrace; }
 
     protected:
-        virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
+        virtual void OnStackFrame(const wxStackFrame& frame) override
         {
             // don't show more than maxLines or we could get a dialog too tall
             // to be shown on screen: 20 should be ok everywhere as even with

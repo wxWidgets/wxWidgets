@@ -46,24 +46,24 @@ public:
     virtual ~wxDialog();
 
     // return true if we're showing the dialog modally
-    virtual bool IsModal() const wxOVERRIDE { return m_modalData != NULL; }
+    virtual bool IsModal() const override { return m_modalData != NULL; }
 
     // show the dialog modally and return the value passed to EndModal()
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
     // may be called to terminate the dialog with the given return code
-    virtual void EndModal(int retCode) wxOVERRIDE;
+    virtual void EndModal(int retCode) override;
 
 
     // implementation only from now on
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
+    virtual void SetWindowStyleFlag(long style) override;
 
     // Windows callbacks
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) override;
 
 protected:
     // common part of all ctors

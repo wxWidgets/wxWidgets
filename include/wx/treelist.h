@@ -396,7 +396,7 @@ private:
     void Init();
 
     // Pure virtual method inherited from wxCompositeWindow.
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+    virtual wxWindowList GetCompositeWindowParts() const override;
 
     // Implementation of AppendColumn().
     int DoInsertColumn(const wxString& title,
@@ -471,7 +471,7 @@ public:
     // COLUMN_SORTED event.
     unsigned GetColumn() const { return m_column; }
 
-    virtual wxEvent* Clone() const wxOVERRIDE { return new wxTreeListEvent(*this); }
+    virtual wxEvent* Clone() const override { return new wxTreeListEvent(*this); }
 
 private:
     // Common part of all ctors.

@@ -67,12 +67,12 @@ class SearchCtrlWidgetsPage : public WidgetsPage
 public:
     SearchCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_srchCtrl; }
-    virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_srchCtrl; }
-    virtual void RecreateWidget() wxOVERRIDE;
+    virtual wxWindow *GetWidget() const override { return m_srchCtrl; }
+    virtual wxTextEntryBase *GetTextEntry() const override { return m_srchCtrl; }
+    virtual void RecreateWidget() override;
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
 

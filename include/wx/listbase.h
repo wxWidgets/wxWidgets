@@ -472,7 +472,7 @@ protected:
     virtual void DoUpdateImages(int which) = 0;
 
     // Overridden methods of the base class.
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
     // these functions are only used for virtual list view controls, i.e. the
     // ones with wxLC_VIRTUAL style
@@ -562,7 +562,7 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxListEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxListEvent(*this); }
 
 //protected: -- not for backwards compatibility
     int           m_code;

@@ -87,14 +87,14 @@ class ODComboboxWidgetsPage : public ItemContainerWidgetsPage
 public:
     ODComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_combobox; }
-    virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE
+    virtual wxWindow *GetWidget() const override { return m_combobox; }
+    virtual wxTextEntryBase *GetTextEntry() const override
         { return m_combobox ? m_combobox->GetTextCtrl() : NULL; }
-    virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_combobox; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateCombo(); }
+    virtual wxItemContainer* GetContainer() const override { return m_combobox; }
+    virtual void RecreateWidget() override { CreateCombo(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -239,7 +239,7 @@ public:
     virtual void OnDrawItem(wxDC& dc,
                             const wxRect& rect,
                             int item,
-                            int WXUNUSED(flags)) const wxOVERRIDE
+                            int WXUNUSED(flags)) const override
     {
         if ( item == wxNOT_FOUND )
             return;
@@ -265,7 +265,7 @@ public:
     }
 
     virtual void OnDrawBackground(wxDC& dc, const wxRect& rect,
-                                  int item, int flags ) const wxOVERRIDE
+                                  int item, int flags ) const override
     {
 
         // If item is selected or even, or we are painting the
@@ -284,12 +284,12 @@ public:
         dc.DrawRectangle(rect);
     }
 
-    virtual wxCoord OnMeasureItem(size_t WXUNUSED(item)) const wxOVERRIDE
+    virtual wxCoord OnMeasureItem(size_t WXUNUSED(item)) const override
     {
         return 48;
     }
 
-    virtual wxCoord OnMeasureItemWidth(size_t WXUNUSED(item)) const wxOVERRIDE
+    virtual wxCoord OnMeasureItemWidth(size_t WXUNUSED(item)) const override
     {
         return -1; // default - will be measured from text width
     }

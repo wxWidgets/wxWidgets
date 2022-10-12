@@ -186,12 +186,12 @@ private:
 class WXDLLIMPEXP_BASE wxMBConvLibc : public wxMBConv
 {
 public:
-    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const wxOVERRIDE;
-    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const wxOVERRIDE;
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const override;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const override;
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvLibc; }
+    virtual wxMBConv *Clone() const override { return new wxMBConvLibc; }
 
-    virtual bool IsUTF8() const wxOVERRIDE { return wxLocaleIsUtf8; }
+    virtual bool IsUTF8() const override { return wxLocaleIsUtf8; }
 };
 
 #ifdef __UNIX__
@@ -214,25 +214,25 @@ public:
     }
     virtual ~wxConvBrokenFileNames() { delete m_conv; }
 
-    virtual size_t MB2WC(wchar_t *out, const char *in, size_t outLen) const wxOVERRIDE
+    virtual size_t MB2WC(wchar_t *out, const char *in, size_t outLen) const override
     {
         return m_conv->MB2WC(out, in, outLen);
     }
 
-    virtual size_t WC2MB(char *out, const wchar_t *in, size_t outLen) const wxOVERRIDE
+    virtual size_t WC2MB(char *out, const wchar_t *in, size_t outLen) const override
     {
         return m_conv->WC2MB(out, in, outLen);
     }
 
-    virtual size_t GetMBNulLen() const wxOVERRIDE
+    virtual size_t GetMBNulLen() const override
     {
         // cast needed to call a private function
         return m_conv->GetMBNulLen();
     }
 
-    virtual bool IsUTF8() const wxOVERRIDE { return m_conv->IsUTF8(); }
+    virtual bool IsUTF8() const override { return m_conv->IsUTF8(); }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxConvBrokenFileNames(*this); }
+    virtual wxMBConv *Clone() const override { return new wxConvBrokenFileNames(*this); }
 
 private:
     // the conversion object we forward to
@@ -256,13 +256,13 @@ public:
     // (assuming it's ok to copy the shift state -- not really sure about it)
 
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
 
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
+    virtual size_t GetMaxCharLen() const override { return 4; }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF7; }
+    virtual wxMBConv *Clone() const override { return new wxMBConvUTF7; }
 
 private:
     // UTF-7 decoder/encoder may be in direct mode or in shifted mode after a
@@ -345,17 +345,17 @@ public:
     // compiler-generated default ctor and other methods are ok
 
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
 
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
+    virtual size_t GetMaxCharLen() const override { return 4; }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvStrictUTF8(); }
+    virtual wxMBConv *Clone() const override { return new wxMBConvStrictUTF8(); }
 
     // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
     //     take the shortcut in that case
-    virtual bool IsUTF8() const wxOVERRIDE { return true; }
+    virtual bool IsUTF8() const override { return true; }
 };
 
 class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConvStrictUTF8
@@ -371,17 +371,17 @@ public:
     wxMBConvUTF8(int options = MAP_INVALID_UTF8_NOT) : m_options(options) { }
 
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
 
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
+    virtual size_t GetMaxCharLen() const override { return 4; }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF8(m_options); }
+    virtual wxMBConv *Clone() const override { return new wxMBConvUTF8(m_options); }
 
     // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
     //     take the shortcut in that case
-    virtual bool IsUTF8() const wxOVERRIDE { return m_options == MAP_INVALID_UTF8_NOT; }
+    virtual bool IsUTF8() const override { return m_options == MAP_INVALID_UTF8_NOT; }
 
 private:
     int m_options;
@@ -396,7 +396,7 @@ class WXDLLIMPEXP_BASE wxMBConvUTF16Base : public wxMBConv
 public:
     enum { BYTES_PER_CHAR = 2 };
 
-    virtual size_t GetMBNulLen() const wxOVERRIDE { return BYTES_PER_CHAR; }
+    virtual size_t GetMBNulLen() const override { return BYTES_PER_CHAR; }
 
 protected:
     // return the length of the buffer using srcLen if it's not wxNO_LEN and
@@ -414,11 +414,11 @@ class WXDLLIMPEXP_BASE wxMBConvUTF16LE : public wxMBConvUTF16Base
 {
 public:
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF16LE; }
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
+    virtual size_t GetMaxCharLen() const override { return 4; }
+    virtual wxMBConv *Clone() const override { return new wxMBConvUTF16LE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -429,11 +429,11 @@ class WXDLLIMPEXP_BASE wxMBConvUTF16BE : public wxMBConvUTF16Base
 {
 public:
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF16BE; }
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
+    virtual size_t GetMaxCharLen() const override { return 4; }
+    virtual wxMBConv *Clone() const override { return new wxMBConvUTF16BE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -445,7 +445,7 @@ class WXDLLIMPEXP_BASE wxMBConvUTF32Base : public wxMBConv
 public:
     enum { BYTES_PER_CHAR = 4 };
 
-    virtual size_t GetMBNulLen() const wxOVERRIDE { return BYTES_PER_CHAR; }
+    virtual size_t GetMBNulLen() const override { return BYTES_PER_CHAR; }
 
 protected:
     // this is similar to wxMBConvUTF16Base method with the same name except
@@ -462,11 +462,11 @@ class WXDLLIMPEXP_BASE wxMBConvUTF32LE : public wxMBConvUTF32Base
 {
 public:
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF32LE; }
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
+    virtual size_t GetMaxCharLen() const override { return 4; }
+    virtual wxMBConv *Clone() const override { return new wxMBConvUTF32LE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -477,11 +477,11 @@ class WXDLLIMPEXP_BASE wxMBConvUTF32BE : public wxMBConvUTF32Base
 {
 public:
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF32BE; }
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
+    virtual size_t GetMaxCharLen() const override { return 4; }
+    virtual wxMBConv *Clone() const override { return new wxMBConvUTF32BE; }
 };
 
 // ----------------------------------------------------------------------------
@@ -504,14 +504,14 @@ public:
     wxCSConv& operator=(const wxCSConv& conv);
 
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t GetMBNulLen() const wxOVERRIDE;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
+    virtual size_t GetMBNulLen() const override;
 
-    virtual bool IsUTF8() const wxOVERRIDE;
+    virtual bool IsUTF8() const override;
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxCSConv(*this); }
+    virtual wxMBConv *Clone() const override { return new wxCSConv(*this); }
 
     void Clear();
 
@@ -572,7 +572,7 @@ public:
     // something on output).
     virtual size_t
     ToWChar(wchar_t *dst, size_t dstLen,
-            const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+            const char *src, size_t srcLen = wxNO_LEN) const override;
 
     // Try to encode the string using the current locale encoding (wxConvLibc)
     // and fall back to UTF-8 (which never fails) if it doesn't work. Note that
@@ -580,13 +580,13 @@ public:
     // even for the strings containing only code points representable in 8869-1.
     virtual size_t
     FromWChar(char *dst, size_t dstLen,
-              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+              const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
 
     // Use the value for UTF-8 here to make sure we try to decode up to 4 bytes
     // as UTF-8 before giving up.
-    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
+    virtual size_t GetMaxCharLen() const override { return 4; }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE
+    virtual wxMBConv *Clone() const override
     {
         return new wxWhateverWorksConv();
     }

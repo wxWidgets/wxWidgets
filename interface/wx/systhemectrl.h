@@ -38,7 +38,7 @@
                 EnableSystemTheme();
             }
 
-            void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const wxOVERRIDE
+            void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override
             {
                 wxRendererNative::GetDefault().DrawItemText(this, dc, "Item #x", rect);
             }

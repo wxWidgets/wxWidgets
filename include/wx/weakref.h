@@ -83,7 +83,7 @@ public:
         }
     }
 
-    virtual void OnObjectDestroy() wxOVERRIDE
+    virtual void OnObjectDestroy() override
     {
         // Tracked object itself removes us from list of trackers
         wxASSERT(m_pobj != NULL);
@@ -175,7 +175,7 @@ public:
         }
     }
 
-    virtual void OnObjectDestroy() wxOVERRIDE
+    virtual void OnObjectDestroy() override
     {
         wxASSERT_MSG(m_pobj, "tracked object should have removed us itself");
 

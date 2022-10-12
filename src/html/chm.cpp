@@ -363,19 +363,19 @@ public:
     virtual ~wxChmInputStream();
 
     /// Return the size of the accessed file in archive
-    virtual size_t GetSize() const wxOVERRIDE { return m_size; }
+    virtual size_t GetSize() const override { return m_size; }
     /// End of Stream?
-    virtual bool Eof() const wxOVERRIDE;
+    virtual bool Eof() const override;
     /// Set simulation-mode of HHP-File (if non is found)
     void SimulateHHP(bool sim) { m_simulateHHP = sim; }
 
 protected:
     /// See wxInputStream
-    virtual size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;
+    virtual size_t OnSysRead(void *buffer, size_t bufsize) override;
     /// See wxInputStream
-    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) wxOVERRIDE;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) override;
     /// See wxInputStream
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
 
 private:
     size_t m_size;
@@ -754,16 +754,16 @@ class wxChmFSHandler : public wxFileSystemHandler
 public:
     /// Constructor and Destructor
     wxChmFSHandler();
-    virtual ~wxChmFSHandler() wxOVERRIDE;
+    virtual ~wxChmFSHandler() override;
 
     /// Is able to open location?
-    virtual bool CanOpen(const wxString& location) wxOVERRIDE;
+    virtual bool CanOpen(const wxString& location) override;
     /// Open a file
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) override;
     /// Find first occurrence of spec
-    virtual wxString FindFirst(const wxString& spec, int flags = 0) wxOVERRIDE;
+    virtual wxString FindFirst(const wxString& spec, int flags = 0) override;
     /// Find next occurrence of spec
-    virtual wxString FindNext() wxOVERRIDE;
+    virtual wxString FindNext() override;
 
 private:
     int m_lasterror;
@@ -901,12 +901,12 @@ class wxChmSupportModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxChmSupportModule);
 
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         wxFileSystem::AddHandler(new wxChmFSHandler);
         return true;
     }
-    virtual void OnExit() wxOVERRIDE {}
+    virtual void OnExit() override {}
 }
 ;
 

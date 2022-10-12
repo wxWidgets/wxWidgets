@@ -453,7 +453,7 @@ class wxOSXSystemFontsCacheModule : public wxModule
 public:
     wxOSXSystemFontsCacheModule() { }
 
-    bool OnInit() wxOVERRIDE
+    bool OnInit() override
     {
         for ( auto& p: ms_systemFontsCache )
             p = nullptr;
@@ -461,7 +461,7 @@ public:
         return true;
     }
 
-    void OnExit() wxOVERRIDE
+    void OnExit() override
     {
         for ( auto& p: ms_systemFontsCache )
         {

@@ -33,11 +33,11 @@ public:
         m_filterClassFactory = NULL;
     }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
 
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
-    virtual int OnRun() wxOVERRIDE;
+    virtual int OnRun() override;
 
 private:
     enum ArchiveCommandType

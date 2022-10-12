@@ -173,7 +173,7 @@ public:
     int GetExitCode() const { return m_exitcode; }
 
     // implement the base class pure virtual
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxProcessEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxProcessEvent(*this); }
 
 public:
     int m_pid,

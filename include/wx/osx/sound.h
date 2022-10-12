@@ -64,7 +64,7 @@ public:
     static void SoundStopped(const wxSoundData* data);
 
 protected:
-    bool    DoPlay(unsigned flags) const wxOVERRIDE;
+    bool    DoPlay(unsigned flags) const override;
     void    Init();
 
 private:

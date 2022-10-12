@@ -32,7 +32,7 @@ public:
               const char maskBits[] = NULL,
               const wxColour* fg = NULL, const wxColour* bg = NULL);
 
-    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+    virtual wxPoint GetHotSpot() const override;
 
     virtual ~wxCursor();
 
@@ -46,8 +46,8 @@ protected:
     void InitFromImage(const wxImage& image);
 #endif
 
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxCursor);

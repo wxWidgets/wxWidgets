@@ -149,7 +149,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // real implementation of WidgetsPage method with the same name
     bool IsUsingLogWindow() const;
@@ -268,7 +268,7 @@ public:
 
 private:
     // implement sink functions
-    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) wxOVERRIDE
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) override
     {
         if ( level == wxLOG_Trace )
         {
@@ -1098,7 +1098,7 @@ void WidgetsFrame::DoUseCustomAutoComplete(size_t minLength)
         {
         }
 
-        virtual void GetCompletions(const wxString& prefix, wxArrayString& res) wxOVERRIDE
+        virtual void GetCompletions(const wxString& prefix, wxArrayString& res) override
         {
             // This is used for illustrative purposes only and shows how many
             // completions we return every time when we're called.

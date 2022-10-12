@@ -62,12 +62,12 @@ class wxHtmlPageBreakCell : public wxHtmlCell
 public:
     wxHtmlPageBreakCell() {}
 
-    bool AdjustPagebreak(int* pagebreak, int pageHeight) const wxOVERRIDE;
+    bool AdjustPagebreak(int* pagebreak, int pageHeight) const override;
 
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
               int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-              wxHtmlRenderingInfo& WXUNUSED(info)) wxOVERRIDE {}
+              wxHtmlRenderingInfo& WXUNUSED(info)) override {}
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell);

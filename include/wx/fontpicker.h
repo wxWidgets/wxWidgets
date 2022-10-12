@@ -162,8 +162,8 @@ public:         // public API
 
 public:        // internal functions
 
-    void UpdatePickerFromTextCtrl() wxOVERRIDE;
-    void UpdateTextCtrlFromPicker() wxOVERRIDE;
+    void UpdatePickerFromTextCtrl() override;
+    void UpdateTextCtrlFromPicker() override;
 
     // event handler for our picker
     void OnFontChange(wxFontPickerEvent &);
@@ -175,7 +175,7 @@ public:        // internal functions
 protected:
 
     // extracts the style for our picker from wxFontPickerCtrl's style
-    long GetPickerStyle(long style) const wxOVERRIDE
+    long GetPickerStyle(long style) const override
         { return (style & (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)); }
 
     // the minimum pointsize allowed to the user
@@ -213,7 +213,7 @@ public:
     void SetFont(const wxFont &c) { m_font = c; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFontPickerEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxFontPickerEvent(*this); }
 
 private:
     wxFont m_font;

@@ -524,8 +524,8 @@ class wxFcConfigDestroyModule : public wxModule
 public:
     wxFcConfigDestroyModule() { }
 
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE
+    bool OnInit() override { return true; }
+    void OnExit() override
     {
         if ( gs_fcConfig )
         {

@@ -52,7 +52,7 @@ private:
         {}
 
         // thread execution starts here
-        virtual void *Entry() wxOVERRIDE;
+        virtual void *Entry() override;
 
         // Thread message queue
         Queue& GetQueue()

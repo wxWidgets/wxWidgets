@@ -252,7 +252,7 @@ public:
     }
 
 protected:
-    SCMPFUNC GetCompareFunction() const wxNOEXCEPT { return m_fnCompare; }
+    SCMPFUNC GetCompareFunction() const noexcept { return m_fnCompare; }
 
 private:
     SCMPFUNC m_fnCompare;

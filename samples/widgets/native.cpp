@@ -122,7 +122,7 @@ protected:
     // shows how to handle a native event in MSW (for the specific case of
     // WM_NOTIFY, more generally MSWHandleMessage() could be overridden).
     virtual bool
-    MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE
+    MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override
     {
         const NMHDR* hdr = reinterpret_cast<NMHDR*>(lParam);
         if ( hdr->code != BCN_DROPDOWN )
@@ -250,11 +250,11 @@ class NativeWidgetsPage : public WidgetsPage
 public:
     NativeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_nativeWindow; }
-    virtual void RecreateWidget() wxOVERRIDE;
+    virtual wxWindow *GetWidget() const override { return m_nativeWindow; }
+    virtual void RecreateWidget() override;
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 private:
     void OnCheckExpand(wxCommandEvent& event);

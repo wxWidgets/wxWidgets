@@ -61,9 +61,9 @@ class MyApp: public wxApp
 public:
     MyApp() { m_setLocale = Locale_Ask; }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
+    virtual bool OnInit() override;
 
 protected:
     // Specifies whether we should use the current locale or not. By default we

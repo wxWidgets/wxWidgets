@@ -980,8 +980,8 @@ class wxDialogLayoutAdapterModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxDialogLayoutAdapterModule);
 public:
     wxDialogLayoutAdapterModule() {}
-    virtual void OnExit() wxOVERRIDE { delete wxDialogBase::SetLayoutAdapter(NULL); }
-    virtual bool OnInit() wxOVERRIDE { wxDialogBase::SetLayoutAdapter(new wxStandardDialogLayoutAdapter); return true; }
+    virtual void OnExit() override { delete wxDialogBase::SetLayoutAdapter(NULL); }
+    virtual bool OnInit() override { wxDialogBase::SetLayoutAdapter(new wxStandardDialogLayoutAdapter); return true; }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDialogLayoutAdapterModule, wxModule);

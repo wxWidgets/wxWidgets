@@ -184,9 +184,9 @@ public :
 
     virtual bool ShowFullScreen(bool show, long style);
 
-    virtual wxContentProtection GetContentProtection() const wxOVERRIDE
+    virtual wxContentProtection GetContentProtection() const override
         {  return wxCONTENT_PROTECTION_NONE; }
-    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE
+    virtual bool SetContentProtection(wxContentProtection contentProtection) override
         { return false; }
 
     virtual void RequestUserAttention(int flags);

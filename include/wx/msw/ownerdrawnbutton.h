@@ -110,7 +110,7 @@ public:
     {
     }
 
-    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE
+    virtual bool SetForegroundColour(const wxColour& colour) override
     {
         if ( !Base::SetForegroundColour(colour) )
             return false;
@@ -120,7 +120,7 @@ public:
         return true;
     }
 
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) wxOVERRIDE
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) override
     {
         return MSWDrawButton(item) || Base::MSWOnDraw(item);
     }

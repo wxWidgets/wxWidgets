@@ -56,8 +56,8 @@ public:
     virtual ~wxRegion();
 
     // wxRegionBase methods
-    virtual void Clear() wxOVERRIDE;
-    virtual bool IsEmpty() const wxOVERRIDE;
+    virtual void Clear() override;
+    virtual bool IsEmpty() const override;
 
 #ifdef __WXGTK3__
     cairo_region_t* GetRegion() const;
@@ -67,21 +67,21 @@ public:
 #endif
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     // wxRegionBase pure virtuals
-    virtual bool DoIsEqual(const wxRegion& region) const wxOVERRIDE;
-    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const wxOVERRIDE;
-    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const wxOVERRIDE;
-    virtual wxRegionContain DoContainsRect(const wxRect& rect) const wxOVERRIDE;
+    virtual bool DoIsEqual(const wxRegion& region) const override;
+    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const override;
+    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const override;
+    virtual wxRegionContain DoContainsRect(const wxRect& rect) const override;
 
-    virtual bool DoOffset(wxCoord x, wxCoord y) wxOVERRIDE;
-    virtual bool DoUnionWithRect(const wxRect& rect) wxOVERRIDE;
-    virtual bool DoUnionWithRegion(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoIntersect(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoSubtract(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoXor(const wxRegion& region) wxOVERRIDE;
+    virtual bool DoOffset(wxCoord x, wxCoord y) override;
+    virtual bool DoUnionWithRect(const wxRect& rect) override;
+    virtual bool DoUnionWithRegion(const wxRegion& region) override;
+    virtual bool DoIntersect(const wxRegion& region) override;
+    virtual bool DoSubtract(const wxRegion& region) override;
+    virtual bool DoXor(const wxRegion& region) override;
 
     // common part of ctors for a rectangle region
     void InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);

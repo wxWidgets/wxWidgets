@@ -29,7 +29,7 @@ public:
     virtual ~wxCustomBackgroundWindow() { delete m_backgroundBrush; }
 
 protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) wxOVERRIDE
+    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) override
     {
         delete m_backgroundBrush;
         m_backgroundBrush = bmp.IsOk() ? new wxBrush(bmp) : NULL;
@@ -41,7 +41,7 @@ protected:
                                             || BaseWindowClass::UseBgCol();
     }
 
-    virtual WXHBRUSH MSWGetCustomBgBrush() wxOVERRIDE
+    virtual WXHBRUSH MSWGetCustomBgBrush() override
     {
         if ( m_backgroundBrush )
             return (WXHBRUSH)m_backgroundBrush->GetResourceHandle();

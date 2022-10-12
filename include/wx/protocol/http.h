@@ -25,13 +25,13 @@ public:
     virtual ~wxHTTP();
 
     virtual bool Connect(const wxString& host, unsigned short port);
-    virtual bool Connect(const wxString& host) wxOVERRIDE { return Connect(host, 0); }
-    virtual bool Connect(const wxSockAddress& addr, bool wait = true) wxOVERRIDE;
-    bool Abort() wxOVERRIDE;
+    virtual bool Connect(const wxString& host) override { return Connect(host, 0); }
+    virtual bool Connect(const wxSockAddress& addr, bool wait = true) override;
+    bool Abort() override;
 
-    wxInputStream *GetInputStream(const wxString& path) wxOVERRIDE;
+    wxInputStream *GetInputStream(const wxString& path) override;
 
-    wxString GetContentType() const wxOVERRIDE;
+    wxString GetContentType() const override;
     wxString GetHeader(const wxString& header) const;
     int GetResponse() const { return m_http_response; }
 

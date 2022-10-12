@@ -858,8 +858,8 @@ bool wxGdiPlus::DoInit()
 class wxGdiPlusModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxGdiPlus::Terminate(); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxGdiPlus::Terminate(); }
 
     wxDECLARE_DYNAMIC_CLASS(wxGdiPlusModule);
 };

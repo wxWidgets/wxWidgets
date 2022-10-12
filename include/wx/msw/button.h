@@ -44,14 +44,14 @@ public:
 
     virtual ~wxButton();
 
-    virtual wxWindow *SetDefault() wxOVERRIDE;
+    virtual wxWindow *SetDefault() override;
 
     // implementation from now on
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
+    virtual void Command(wxCommandEvent& event) override;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
 protected:
     // send a notification event, return true if processed
@@ -64,8 +64,8 @@ protected:
     // set or unset BS_DEFPUSHBUTTON style
     static void SetDefaultStyle(wxButton *btn, bool on);
 
-    virtual bool DoGetAuthNeeded() const wxOVERRIDE;
-    virtual void DoSetAuthNeeded(bool show) wxOVERRIDE;
+    virtual bool DoGetAuthNeeded() const override;
+    virtual void DoSetAuthNeeded(bool show) override;
 
     // true if the UAC symbol is shown
     bool m_authNeeded;

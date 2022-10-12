@@ -21,8 +21,8 @@ class GaugeTestCase : public CppUnit::TestCase
 public:
     GaugeTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( GaugeTestCase );

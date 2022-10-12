@@ -661,10 +661,10 @@ public:
 
     // show the buffer contents to the user in the best possible way (this uses
     // wxMessageOutputMessageBox) and clear it
-    virtual void Flush() wxOVERRIDE;
+    virtual void Flush() override;
 
 protected:
-    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) wxOVERRIDE;
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) override;
 
 private:
     wxString m_str;
@@ -684,7 +684,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogText(const wxString& msg) wxOVERRIDE;
+    virtual void DoLogText(const wxString& msg) override;
 
     wxDECLARE_NO_COPY_CLASS(wxLogStderr);
 };
@@ -702,7 +702,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogText(const wxString& msg) wxOVERRIDE;
+    virtual void DoLogText(const wxString& msg) override;
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
@@ -771,7 +771,7 @@ public:
     wxLog *GetOldLog() const { return m_logOld; }
 
     // override base class version to flush the old logger as well
-    virtual void Flush() wxOVERRIDE;
+    virtual void Flush() override;
 
     // call to avoid destroying the old log target
     void DetachOldLog() { m_logOld = NULL; }
@@ -780,7 +780,7 @@ protected:
     // pass the record to the old logger if needed
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& info) wxOVERRIDE;
+                             const wxLogRecordInfo& info) override;
 
 private:
     // the current log target

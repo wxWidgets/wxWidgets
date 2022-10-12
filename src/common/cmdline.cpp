@@ -96,29 +96,29 @@ public:
     wxCmdLineParamType type;
 
     // from wxCmdLineArg
-    virtual wxCmdLineEntryType GetKind() const wxOVERRIDE { return kind; }
-    virtual wxString GetShortName() const wxOVERRIDE {
+    virtual wxCmdLineEntryType GetKind() const override { return kind; }
+    virtual wxString GetShortName() const override {
         wxASSERT_MSG( kind == wxCMD_LINE_OPTION || kind == wxCMD_LINE_SWITCH,
                       wxT("kind mismatch in wxCmdLineArg") );
         return shortName;
     }
-    virtual wxString GetLongName() const wxOVERRIDE {
+    virtual wxString GetLongName() const override {
         wxASSERT_MSG( kind == wxCMD_LINE_OPTION || kind == wxCMD_LINE_SWITCH,
                       wxT("kind mismatch in wxCmdLineArg") );
         return longName;
     }
-    virtual wxCmdLineParamType GetType() const wxOVERRIDE {
+    virtual wxCmdLineParamType GetType() const override {
         wxASSERT_MSG( kind == wxCMD_LINE_OPTION,
                       wxT("kind mismatch in wxCmdLineArg") );
         return type;
     }
-    double GetDoubleVal() const wxOVERRIDE;
-    long GetLongVal() const wxOVERRIDE;
-    const wxString& GetStrVal() const wxOVERRIDE;
+    double GetDoubleVal() const override;
+    long GetLongVal() const override;
+    const wxString& GetStrVal() const override;
 #if wxUSE_DATETIME
-    const wxDateTime& GetDateVal() const wxOVERRIDE;
+    const wxDateTime& GetDateVal() const override;
 #endif // wxUSE_DATETIME
-    bool IsNegated() const wxOVERRIDE {
+    bool IsNegated() const override {
         wxASSERT_MSG( kind == wxCMD_LINE_SWITCH,
                       wxT("kind mismatch in wxCmdLineArg") );
         return m_isNegated;
