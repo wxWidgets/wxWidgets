@@ -272,6 +272,7 @@ wxOSX:
 - Generate wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK (#22833).
 - Fix wxDataViewCtrl::HitTest() (Vojtěch Bubník, #22789).
 - Fix position of the controls in wxStaticBox after resizing it (#22837).
+- Ensure that "Window" menu is inserted before "Help" (#22871).
 
 
 3.2.1: (released 2022-09-09)
