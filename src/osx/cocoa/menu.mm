@@ -256,11 +256,29 @@ public :
 
         if ( windowMenu == nil )
         {
+            NSString* nsHelpMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macHelpMenuTitleName, wxStrip_Menu));
+            NSString* nsAlternateHelpTitle = wxNSStringWithWxString(wxStripMenuCodes(_("&Help"), wxStrip_Menu));
+
+            NSMenuItem* helpMenu = nil;
+            NSInteger numberOfMenus = [m_osxMenu numberOfItems];
+            if ( numberOfMenus > 0 )
+            {
+                NSMenuItem* lastMenu = [m_osxMenu itemAtIndex:numberOfMenus-1];
+                if ([[lastMenu title] isEqualToString:nsHelpMenuTitle] ||
+                    [[lastMenu title] isEqualToString:nsAlternateHelpTitle])
+                {
+                    helpMenu = lastMenu;
+                }
+            }
+
             windowMenu = [[NSMenu alloc] initWithTitle:nsWindowMenuTitle];
             NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:nsWindowMenuTitle action:nil keyEquivalent:@""];
             [windowMenuItem setSubmenu:windowMenu];
             [windowMenu release];
-            [m_osxMenu addItem:windowMenuItem];
+            if (helpMenu == nil )
+                [m_osxMenu addItem:windowMenuItem];
+            else
+                [m_osxMenu insertItem:windowMenuItem atIndex:numberOfMenus-1];
             [windowMenuItem release];
         }
         return windowMenu;
