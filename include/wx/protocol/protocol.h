@@ -98,15 +98,15 @@ public:
     // set the logger, deleting the old one and taking ownership of this one
     void SetLog(wxProtocolLog *log);
 
-    // return the current logger, may be NULL
+    // return the current logger, may be null
     wxProtocolLog *GetLog() const { return m_log; }
 
     // detach the existing logger without deleting it, the caller is
-    // responsible for deleting the returned pointer if it's non-NULL
+    // responsible for deleting the returned pointer if it's non-null
     wxProtocolLog *DetachLog()
     {
         wxProtocolLog * const log = m_log;
-        m_log = NULL;
+        m_log = nullptr;
         return log;
     }
 

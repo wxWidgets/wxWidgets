@@ -47,7 +47,7 @@ public:
     explicit wxIFileDialog(const CLSID& clsid);
 
     // If this returns false, the dialog can't be used at all.
-    bool IsOk() const { return m_fileDialog.Get() != NULL; }
+    bool IsOk() const { return m_fileDialog.Get() != nullptr; }
 
     // Set the dialog title.
     void SetTitle(const wxString& title);

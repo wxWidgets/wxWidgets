@@ -364,9 +364,9 @@ wxGLAttributes& wxGLAttributes::Defaults()
 wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContext *other,
                          const wxGLContextAttrs *ctxAttrs)
-    : m_glContext(NULL)
+    : m_glContext(nullptr)
 {
-    const int* contextAttribs = NULL;
+    const int* contextAttribs = nullptr;
     int ctxSize = 0;
 
     if ( ctxAttrs )
@@ -391,7 +391,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     if ( pf )
     {
-        m_glContext = WXGLCreateContext(pf, other ? other->m_glContext : NULL);
+        m_glContext = WXGLCreateContext(pf, other ? other->m_glContext : nullptr);
         if ( m_glContext )
         {
             m_isOk = true;
@@ -455,7 +455,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 {
     // Separate 'pixel format' attributes.
     // Also store context attributes for wxGLContext ctor
-    // If 'attribList' is NULL, ParseAttribList() will set defaults.
+    // If 'attribList' is null, ParseAttribList() will set defaults.
     wxGLAttributes dispAttrs;
     if ( ! ParseAttribList(attribList, dispAttrs, &m_GLCTXAttrs) )
         return false;
@@ -472,7 +472,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const wxString& name,
                         const wxPalette& WXUNUSED(palette))
 {
-    m_glFormat = NULL;
+    m_glFormat = nullptr;
     // Don't allow an empty list
     if ( !dispAttrs.GetGLAttrs() )
     {
@@ -534,9 +534,9 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
 {
     // We need a valid context to query for extensions. Use a default one.
     wxGLAttributes dispAttrs;
-    ParseAttribList(NULL, dispAttrs); // Sets defaults
+    ParseAttribList(nullptr, dispAttrs); // Sets defaults
     WXGLPixelFormat fmt = WXGLChoosePixelFormat(dispAttrs.GetGLAttrs(), dispAttrs.GetSize());
-    WXGLContext ctx = WXGLCreateContext(fmt, NULL);
+    WXGLContext ctx = WXGLCreateContext(fmt, nullptr);
     if ( !ctx )
         return false;
 

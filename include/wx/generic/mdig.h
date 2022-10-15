@@ -113,14 +113,14 @@ private:
 
     void OnClose(wxCloseEvent& event);
 
-    // return the client window, may be NULL if we hadn't been created yet
+    // return the client window, may be null if we hadn't been created yet
     wxGenericMDIClientWindow *GetGenericClientWindow() const;
 
     // close all children, return false if any of them vetoed it
     bool CloseAll();
 
 
-    // this pointer is non-NULL if we're currently inside our ProcessEvent()
+    // this pointer is non-null if we're currently inside our ProcessEvent()
     // and we forwarded the event to this child (as we do with menu events)
     wxMDIChildFrameBase *m_childHandler;
 

@@ -36,12 +36,12 @@ public:
 
     // make this button the default button in its top level window
     //
-    // returns the old default item (possibly NULL)
+    // returns the old default item (possibly null)
     virtual wxWindow *SetDefault();
 
     // returns the default button size for this platform, and optionally for a
     // specific window when the platform supports per-monitor DPI
-    static wxSize GetDefaultSize(wxWindow* win = NULL);
+    static wxSize GetDefaultSize(wxWindow* win = nullptr);
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxButtonBase);

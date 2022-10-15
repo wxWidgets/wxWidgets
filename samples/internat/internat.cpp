@@ -284,7 +284,7 @@ bool MyApp::OnInit()
 
 // main frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL,
+       : wxFrame(nullptr,
                  wxID_ANY,
                  _("International wxWidgets App"))
 {
@@ -359,7 +359,7 @@ MyFrame::MyFrame()
                         (
                          _("Current UI locale: %s; C locale: %s"),
                          wxUILocale::GetCurrent().GetName(),
-                         setlocale(LC_ALL, NULL)
+                         setlocale(LC_ALL, nullptr)
                         )
                       ),
                   wxSizerFlags().Center().Border());

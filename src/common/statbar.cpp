@@ -124,7 +124,7 @@ wxStatusBarBase::~wxStatusBarBase()
     // dangling pointers
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
     if ( frame && frame->GetStatusBar() == this )
-        frame->SetStatusBar(NULL);
+        frame->SetStatusBar(nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -159,7 +159,7 @@ void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
 {
     wxASSERT_MSG( (size_t)n == m_panes.GetCount(), wxT("field number mismatch") );
 
-    if (widths == NULL)
+    if (widths == nullptr)
     {
         // special value meaning: override explicit pane widths and make them all
         // of the same size
@@ -180,7 +180,7 @@ void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
 void wxStatusBarBase::SetStatusStyles(int WXUNUSED_UNLESS_DEBUG(n),
                                     const int styles[])
 {
-    wxCHECK_RET( styles, wxT("NULL pointer in SetStatusStyles") );
+    wxCHECK_RET( styles, wxT("null pointer in SetStatusStyles") );
 
     wxASSERT_MSG( (size_t)n == m_panes.GetCount(), wxT("field number mismatch") );
 

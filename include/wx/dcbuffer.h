@@ -40,8 +40,8 @@ class WXDLLIMPEXP_CORE wxBufferedDC : public wxMemoryDC
 public:
     // Default ctor, must subsequently call Init for two stage construction.
     wxBufferedDC()
-        : m_dc(NULL),
-          m_buffer(NULL),
+        : m_dc(nullptr),
+          m_buffer(nullptr),
           m_style(0)
     {
     }
@@ -50,7 +50,7 @@ public:
     wxBufferedDC(wxDC *dc,
                  wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL), m_buffer(NULL)
+        : m_dc(nullptr), m_buffer(nullptr)
     {
         Init(dc, buffer, style);
     }
@@ -59,7 +59,7 @@ public:
     // (where area is usually something like the size of the window
     // being buffered)
     wxBufferedDC(wxDC *dc, const wxSize& area, int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL), m_buffer(NULL)
+        : m_dc(nullptr), m_buffer(nullptr)
     {
         Init(dc, area, style);
     }

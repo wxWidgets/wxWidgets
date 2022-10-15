@@ -48,7 +48,7 @@ public:
 
     virtual void SetSizingInfo(const wxSize& tabCtrlSize,
                                size_t tabCount,
-                               wxWindow* wnd = NULL) = 0;
+                               wxWindow* wnd = nullptr) = 0;
 
     virtual void SetNormalFont(const wxFont& font) = 0;
     virtual void SetSelectedFont(const wxFont& font) = 0;
@@ -128,7 +128,7 @@ public:
     void SetFlags(unsigned int flags) override;
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
-                       wxWindow* wnd = NULL) override;
+                       wxWindow* wnd = nullptr) override;
 
     void SetNormalFont(const wxFont& font) override;
     void SetSelectedFont(const wxFont& font) override;
@@ -231,7 +231,7 @@ public:
 
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
-                       wxWindow* wnd = NULL) override;
+                       wxWindow* wnd = nullptr) override;
 
     void SetNormalFont(const wxFont& font) override;
     void SetSelectedFont(const wxFont& font) override;

@@ -26,7 +26,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridHitTestResult
     friend class wxPropertyGridPageState;
 public:
     wxPropertyGridHitTestResult()
-        : m_property(NULL)
+        : m_property(nullptr)
         , m_column(-1)
         , m_splitter(-1)
         , m_splitterHitOffset(0)
@@ -40,7 +40,7 @@ public:
     // Returns column hit. -1 for margin.
     int GetColumn() const { return m_column; }
 
-    // Returns property hit. NULL if empty space below
+    // Returns property hit. nullptr if empty space below
     // properties was hit instead.
     wxPGProperty* GetProperty() const
     {
@@ -55,7 +55,7 @@ public:
     int GetSplitterHitOffset() const { return m_splitterHitOffset; }
 
 private:
-    // Property. NULL if empty space below properties was hit.
+    // Property. nullptr if empty space below properties was hit.
     wxPGProperty*   m_property;
 
     // Column. -1 for margin.
@@ -169,7 +169,7 @@ public:
 
     void Assign( const wxPropertyGridIteratorBase& it );
 
-    bool AtEnd() const { return m_property == NULL; }
+    bool AtEnd() const { return m_property == nullptr; }
 
     // Get current property.
     wxPGProperty* GetProperty() const { return m_property; }
@@ -214,7 +214,7 @@ class wxPGIterator : public wxPropertyGridIteratorBase
 {
 public:
     wxPGIterator(STATE* state, int flags = wxPG_ITERATE_DEFAULT,
-                 PROPERTY* property = NULL, int dir = 1)
+                 PROPERTY* property = nullptr, int dir = 1)
         : wxPropertyGridIteratorBase()
     {
         Init(const_cast<wxPropertyGridPageState*>(state), flags, const_cast<wxPGProperty*>(property), dir);
@@ -227,7 +227,7 @@ public:
     wxPGIterator()
         : wxPropertyGridIteratorBase()
     {
-        m_property = NULL;
+        m_property = nullptr;
     }
     wxPGIterator(const wxPGIterator& it)
         : wxPropertyGridIteratorBase()
@@ -250,7 +250,7 @@ public:
     wxPGIterator operator--(int) { wxPGIterator it = *this; Prev(); return it; }
     PROPERTY* operator *() const { return const_cast<PROPERTY*>(m_property); }
     static PROPERTY* OneStep(STATE* state, int flags = wxPG_ITERATE_DEFAULT,
-                             PROPERTY* property = NULL, int dir = 1)
+                             PROPERTY* property = nullptr, int dir = 1)
     {
         wxPGIterator it(state, flags, property, dir);
         if ( property )
@@ -292,7 +292,7 @@ protected:
 class WXDLLIMPEXP_PROPGRID wxPGVIterator
 {
 public:
-    wxPGVIterator() { m_pIt = NULL; }
+    wxPGVIterator() { m_pIt = nullptr; }
     wxPGVIterator( wxPGVIteratorBase* obj ) { m_pIt = obj; }
     ~wxPGVIterator() { UnRef(); }
     void UnRef() { if (m_pIt) m_pIt->DecRef(); }
@@ -417,7 +417,7 @@ public:
     // Returns currently selected property.
     wxPGProperty* GetSelection() const
     {
-        return m_selection.empty()? NULL: m_selection[0];
+        return m_selection.empty()? nullptr: m_selection[0];
     }
 
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
@@ -425,7 +425,7 @@ public:
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("don't refer directly to wxPropertyGridPageState::GetPropertyByLabel")
     wxPGProperty* GetPropertyByLabel( const wxString& name,
-                                      wxPGProperty* parent = NULL ) const;
+                                      wxPGProperty* parent = nullptr ) const;
 #endif // WXWIN_COMPATIBILITY_3_0
 
     // Returns combined width of margin and all the columns
@@ -471,7 +471,7 @@ protected:
 
     bool DoClearSelection()
     {
-        return DoSelectProperty(NULL);
+        return DoSelectProperty(nullptr);
     }
 
     void DoRemoveFromSelection(wxPGProperty* prop);
@@ -527,7 +527,7 @@ protected:
 
     // Returns property by its label.
     wxPGProperty* BaseGetPropertyByLabel( const wxString& label,
-                                      const wxPGProperty* parent = NULL ) const;
+                                      const wxPGProperty* parent = nullptr ) const;
 
     // Unselect sub-properties.
     void DoRemoveChildrenFromSelection(wxPGProperty* p, bool recursive,
@@ -599,7 +599,7 @@ protected:
     void SetVirtualWidth(int width);
 
     // If visible, then this is pointer to wxPropertyGrid.
-    // This shall *never* be NULL to indicate that this state is not visible.
+    // This shall *never* be null to indicate that this state is not visible.
     wxPropertyGrid*             m_pPropGrid;
 
     // Pointer to currently used array.

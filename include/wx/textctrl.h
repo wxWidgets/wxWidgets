@@ -510,9 +510,9 @@ public:
     }
 
     // Merges the given attributes. If compareWith
-    // is non-NULL, then it will be used to mask out those attributes that are the same in style
+    // is non-null, then it will be used to mask out those attributes that are the same in style
     // and compareWith, for situations where we don't want to explicitly set inherited attributes.
-    bool Apply(const wxTextAttr& style, const wxTextAttr* compareWith = NULL);
+    bool Apply(const wxTextAttr& style, const wxTextAttr* compareWith = nullptr);
 
     // merges the attributes of the base and the overlay objects and returns
     // the result; the parameter attributes take precedence
@@ -520,7 +520,7 @@ public:
     // WARNING: the order of arguments is the opposite of Combine()
     static wxTextAttr Merge(const wxTextAttr& base, const wxTextAttr& overlay)
     {
-        return Combine(overlay, base, NULL);
+        return Combine(overlay, base, nullptr);
     }
 
     // merges the attributes of this object and overlay

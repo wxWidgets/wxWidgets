@@ -81,7 +81,7 @@ public:
                                 const wxColour& col,
                                 const wxRect& rect,
                                 int flags,
-                                wxWindow *window = NULL) = 0;
+                                wxWindow *window = nullptr) = 0;
 
     // draw the button surface
     virtual void DrawButtonSurface(wxDC& dc,
@@ -97,7 +97,7 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounds = NULL) = 0;
+                           wxRect *rectBounds = nullptr) = 0;
 
     // same but also draw a bitmap if it is valid
     virtual void DrawButtonLabel(wxDC& dc,
@@ -107,7 +107,7 @@ public:
                                  int flags = 0,
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
-                                 wxRect *rectBounds = NULL) = 0;
+                                 wxRect *rectBounds = nullptr) = 0;
 
 
     // draw the border and optionally return the rectangle containing the
@@ -116,7 +116,7 @@ public:
                             wxBorder border,
                             const wxRect& rect,
                             int flags = 0,
-                            wxRect *rectIn = NULL) = 0;
+                            wxRect *rectIn = nullptr) = 0;
 
     // draw text control border (I hate to have a separate method for this but
     // it is needed to accommodate GTK+)
@@ -124,13 +124,13 @@ public:
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = NULL) = 0;
+                                wxRect *rectIn = nullptr) = 0;
 
     // draw push button border and return the rectangle left for the label
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = NULL) = 0;
+                                  wxRect *rectIn = nullptr) = 0;
 
     // draw a horizontal line
     virtual void DrawHorizontalLine(wxDC& dc,
@@ -252,7 +252,7 @@ public:
                                  wxOrientation orient,
                                  int flags = 0,
                                  long style = 0,
-                                 wxRect *rectShaft = NULL) = 0;
+                                 wxRect *rectShaft = nullptr) = 0;
 
     // draw the slider thumb
     virtual void DrawSliderThumb(wxDC& dc,
@@ -501,7 +501,7 @@ public:
                                 const wxColour& col,
                                 const wxRect& rect,
                                 int flags,
-                                wxWindow *window = NULL ) override
+                                wxWindow *window = nullptr ) override
         { m_renderer->DrawBackground(dc, col, rect, flags, window ); }
     virtual void DrawButtonSurface(wxDC& dc,
                                    const wxColour& col,
@@ -516,7 +516,7 @@ public:
                            int flags = 0,
                            int align = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounds = NULL) override
+                           wxRect *rectBounds = nullptr) override
         { m_renderer->DrawLabel(dc, label, rect,
                                 flags, align, indexAccel, rectBounds); }
     virtual void DrawButtonLabel(wxDC& dc,
@@ -526,25 +526,25 @@ public:
                                  int flags = 0,
                                  int align = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
-                                 wxRect *rectBounds = NULL) override
+                                 wxRect *rectBounds = nullptr) override
         { m_renderer->DrawButtonLabel(dc, label, image, rect,
                                       flags, align, indexAccel, rectBounds); }
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
                             int flags = 0,
-                            wxRect *rectIn = NULL) override
+                            wxRect *rectIn = nullptr) override
         { m_renderer->DrawBorder(dc, border, rect, flags, rectIn); }
     virtual void DrawTextBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = NULL) override
+                                wxRect *rectIn = nullptr) override
         { m_renderer->DrawTextBorder(dc, border, rect, flags, rectIn); }
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = NULL) override
+                                  wxRect *rectIn = nullptr) override
         { m_renderer->DrawButtonBorder(dc, rect, flags, rectIn); }
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
@@ -653,7 +653,7 @@ public:
                                  wxOrientation orient,
                                  int flags = 0,
                                  long style = 0,
-                                 wxRect *rectShaft = NULL) override
+                                 wxRect *rectShaft = nullptr) override
         { m_renderer->DrawSliderShaft(dc, rect, lenThumb, orient, flags, style, rectShaft); }
     virtual void DrawSliderThumb(wxDC& dc,
                                  const wxRect& rect,
@@ -845,7 +845,7 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortIcon = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL) override
+                                  wxHeaderButtonParams* params = nullptr) override
         { return m_renderer->DrawHeaderButton(win, dc, rect, flags, sortIcon, params); }
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,

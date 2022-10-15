@@ -34,7 +34,7 @@ class TextFileTestCase : public CppUnit::TestCase
 public:
     TextFileTestCase()
     {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
     }
 
     virtual void tearDown() override { unlink(GetTestFileName()); }

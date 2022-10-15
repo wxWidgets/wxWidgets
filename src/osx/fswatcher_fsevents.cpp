@@ -345,9 +345,9 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
     );
     ctx.version = 0;
     ctx.info = watcherContext;
-    ctx.retain = NULL;
+    ctx.retain = nullptr;
     ctx.release = &wxDeleteContext;
-    ctx.copyDescription = NULL;
+    ctx.copyDescription = nullptr;
     CFTimeInterval latency = 0.2;
 
     wxMacUniCharBuffer pathChars(path.GetPath());
@@ -357,7 +357,7 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
         pathChars.GetChars()
     );
     CFArrayRef pathRefs = CFArrayCreate(
-        kCFAllocatorDefault, (const void**)&pathRef, 1, NULL
+        kCFAllocatorDefault, (const void**)&pathRef, 1, nullptr
     );
     FSEventStreamCreateFlags flags = kFSEventStreamCreateFlagWatchRoot
         | kFSEventStreamCreateFlagFileEvents;
@@ -504,7 +504,7 @@ int wxFsEventsFileSystemWatcher::GetWatchedPathsCount() const
 
 int wxFsEventsFileSystemWatcher::GetWatchedPaths(wxArrayString* paths) const
 {
-    wxCHECK_MSG( paths != NULL, -1, "Null array passed to retrieve paths");
+    wxCHECK_MSG( paths != nullptr, -1, "Null array passed to retrieve paths");
     if ( !paths )
     {
         return 0;

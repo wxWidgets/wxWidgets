@@ -875,7 +875,7 @@ void RichTextCtrlTestCase::Table()
     CPPUNIT_ASSERT_EQUAL(0, table->GetRowCount());
 
     m_rich->Clear();
-    m_rich->SetFocusObject(NULL);
+    m_rich->SetFocusObject(nullptr);
 }
 
 #endif //wxUSE_RICHTEXT

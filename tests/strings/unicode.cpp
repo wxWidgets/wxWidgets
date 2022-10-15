@@ -25,7 +25,7 @@
 
 struct StringConversionData
 {
-    // either str or wcs (but not both) may be NULL, this means that the conversion
+    // either str or wcs (but not both) may be null, this means that the conversion
     // to it should fail
     StringConversionData(const char *str_, const wchar_t *wcs_, int flags_ = 0)
         : str(str_), wcs(wcs_), flags(flags_)
@@ -253,10 +253,10 @@ void UnicodeTestCase::ConversionFixed()
 #if wxUSE_UNICODE
     // check that when we convert a fixed number of characters we obtain the
     // expected return value
-    CPPUNIT_ASSERT_EQUAL( 0, wxConvLibc.ToWChar(NULL, 0, "", 0) );
-    CPPUNIT_ASSERT_EQUAL( 1, wxConvLibc.ToWChar(NULL, 0, "x", 1) );
-    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(NULL, 0, "x", 2) );
-    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(NULL, 0, "xy", 2) );
+    CPPUNIT_ASSERT_EQUAL( 0, wxConvLibc.ToWChar(nullptr, 0, "", 0) );
+    CPPUNIT_ASSERT_EQUAL( 1, wxConvLibc.ToWChar(nullptr, 0, "x", 1) );
+    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(nullptr, 0, "x", 2) );
+    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(nullptr, 0, "xy", 2) );
 #endif // wxUSE_UNICODE
 }
 
@@ -311,10 +311,10 @@ void UnicodeTestCase::ConversionUTF7()
         StringConversionData("+--", L"+-"),
 
         // the following are invalid UTF-7 sequences
-        StringConversionData("\xa3", NULL),
-        StringConversionData("+", NULL),
-        StringConversionData("+~", NULL),
-        StringConversionData("a+", NULL),
+        StringConversionData("\xa3", nullptr),
+        StringConversionData("+", nullptr),
+        StringConversionData("+~", nullptr),
+        StringConversionData("a+", nullptr),
     };
 
     for ( size_t n = 0; n < WXSIZEOF(utf7data); n++ )
@@ -344,7 +344,7 @@ void UnicodeTestCase::ConversionUTF8()
 #ifdef wxHAVE_U_ESCAPE
         StringConversionData("\xc2\xa3", L"\u00a3"),
 #endif
-        StringConversionData("\xc2", NULL),
+        StringConversionData("\xc2", nullptr),
     };
 
     wxCSConv conv(wxT("utf-8"));
@@ -357,10 +357,10 @@ void UnicodeTestCase::ConversionUTF8()
 
     static const char* const u25a6 = "\xe2\x96\xa6";
     wxMBConvUTF8 c(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
-    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(NULL, 0, u25a6, wxNO_LEN) );
-    CPPUNIT_ASSERT_EQUAL( 0, c.ToWChar(NULL, 0, u25a6, 0) );
-    CPPUNIT_ASSERT_EQUAL( 1, c.ToWChar(NULL, 0, u25a6, 3) );
-    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(NULL, 0, u25a6, 4) );
+    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(nullptr, 0, u25a6, wxNO_LEN) );
+    CPPUNIT_ASSERT_EQUAL( 0, c.ToWChar(nullptr, 0, u25a6, 0) );
+    CPPUNIT_ASSERT_EQUAL( 1, c.ToWChar(nullptr, 0, u25a6, 3) );
+    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(nullptr, 0, u25a6, 4) );
 
     // Verify that converting a string with embedded NULs works.
     CPPUNIT_ASSERT_EQUAL( 5, wxString::FromUTF8("abc\0\x32", 5).length() );
@@ -419,7 +419,7 @@ void UnicodeTestCase::ConversionUTF16()
     wchar_t ws[2];
     ws[0] = 0xd83d;
     ws[1] = 0xdc31;
-    CPPUNIT_ASSERT_EQUAL( 4, wxMBConvUTF32BE().FromWChar(NULL, 0, ws, 2) );
+    CPPUNIT_ASSERT_EQUAL( 4, wxMBConvUTF32BE().FromWChar(nullptr, 0, ws, 2) );
 #endif // UTF-16 internal representation
 }
 

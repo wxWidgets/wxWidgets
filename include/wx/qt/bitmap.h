@@ -50,7 +50,7 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const override;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const override;
+                          const wxPalette *palette = nullptr) const override;
     virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) override;
 
 #if wxUSE_PALETTE

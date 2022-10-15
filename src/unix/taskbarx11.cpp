@@ -51,7 +51,7 @@
     {
     public:
         wxTaskBarIconAreaBase()
-            : wxFrame(NULL, wxID_ANY, wxT("systray icon"),
+            : wxFrame(nullptr, wxID_ANY, wxT("systray icon"),
                       wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR |
                       wxSIMPLE_BORDER | wxFRAME_SHAPED) {}
@@ -233,7 +233,7 @@ bool wxTaskBarIconBase::IsAvailable()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler);
 
-wxTaskBarIcon::wxTaskBarIcon() : m_iconWnd(NULL)
+wxTaskBarIcon::wxTaskBarIcon() : m_iconWnd(nullptr)
 {
 }
 
@@ -253,7 +253,7 @@ bool wxTaskBarIcon::IsOk() const
 
 bool wxTaskBarIcon::IsIconInstalled() const
 {
-    return m_iconWnd != NULL;
+    return m_iconWnd != nullptr;
 }
 
 // Destroy event from wxTaskBarIconArea
@@ -261,7 +261,7 @@ void wxTaskBarIcon::OnDestroy(wxWindowDestroyEvent&)
 {
     // prevent crash if wxTaskBarIconArea is destroyed by something else,
     // for example if panel/kicker is killed
-    m_iconWnd = NULL;
+    m_iconWnd = nullptr;
 }
 
 bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
@@ -277,7 +277,7 @@ bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
         else
         {
             m_iconWnd->Destroy();
-            m_iconWnd = NULL;
+            m_iconWnd = nullptr;
             return false;
         }
     }
@@ -290,7 +290,7 @@ bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
     if (!tooltip.empty())
         m_iconWnd->SetToolTip(tooltip);
     else
-        m_iconWnd->SetToolTip(NULL);
+        m_iconWnd->SetToolTip(nullptr);
 #else
     wxUnusedVar(tooltip);
 #endif
@@ -302,7 +302,7 @@ bool wxTaskBarIcon::RemoveIcon()
     if (!m_iconWnd)
         return false;
     m_iconWnd->Destroy();
-    m_iconWnd = NULL;
+    m_iconWnd = nullptr;
     return true;
 }
 

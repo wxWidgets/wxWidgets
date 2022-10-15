@@ -78,7 +78,7 @@ public:
     virtual int ChangeSelection(size_t n) override { return DoSetSelection(n); }
 
     virtual bool DeleteAllPages() override;
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const override;
+    virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
 
 
     // methods which are not part of base wxBookctrl API

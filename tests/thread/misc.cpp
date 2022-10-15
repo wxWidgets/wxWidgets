@@ -104,7 +104,7 @@ wxThread::ExitCode MyDetachedThread::Entry()
         wxMilliSleep(100);
     }
 
-    return 0;
+    return nullptr;
 }
 
 void MyDetachedThread::OnExit()
@@ -140,7 +140,7 @@ public:
 
         //wxPrintf(wxT("Thread %lu finished to wait, exiting.\n"), GetId());
 
-        return 0;
+        return nullptr;
     }
 
 private:
@@ -181,7 +181,7 @@ public:
 
         m_sem->Post();
 
-        return 0;
+        return nullptr;
     }
 
 private:

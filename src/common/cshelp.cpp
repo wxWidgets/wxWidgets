@@ -199,7 +199,7 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
 // Dispatch the help event to the relevant window
 bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
-    wxCHECK_MSG( win, false, wxT("win parameter can't be NULL") );
+    wxCHECK_MSG( win, false, wxT("win parameter can't be null") );
 
     wxHelpEvent helpEvent(wxEVT_HELP, win->GetId(), pt,
                           wxHelpEvent::Origin_HelpButton);
@@ -261,7 +261,7 @@ void wxContextHelpButton::OnContextHelp(wxCommandEvent& WXUNUSED(event))
 // wxHelpProvider
 // ----------------------------------------------------------------------------
 
-wxHelpProvider *wxHelpProvider::ms_helpProvider = NULL;
+wxHelpProvider *wxHelpProvider::ms_helpProvider = nullptr;
 
 // trivial implementation of some methods which we don't want to make pure
 // virtual for convenience
@@ -290,7 +290,7 @@ wxString wxHelpProvider::GetHelpTextMaybeAtPoint(wxWindowBase *window)
     if ( m_helptextAtPoint != wxDefaultPosition ||
             m_helptextOrigin != wxHelpEvent::Origin_Unknown )
     {
-        wxCHECK_MSG( window, wxEmptyString, wxT("window must not be NULL") );
+        wxCHECK_MSG( window, wxEmptyString, wxT("window must not be null") );
 
         wxPoint pt = m_helptextAtPoint;
         wxHelpEvent::Origin origin = m_helptextOrigin;
@@ -366,13 +366,13 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 #endif // wxUSE_MS_HTML_HELP
         {
 #if wxUSE_TIPWINDOW
-            static wxTipWindow* s_tipWindow = NULL;
+            static wxTipWindow* s_tipWindow = nullptr;
 
             if ( s_tipWindow )
             {
                 // Prevent s_tipWindow being nulled in OnIdle, thereby removing
                 // the chance for the window to be closed by ShowHelp
-                s_tipWindow->SetTipWindowPtr(NULL);
+                s_tipWindow->SetTipWindowPtr(nullptr);
                 s_tipWindow->Close();
             }
 
@@ -463,7 +463,7 @@ void wxHelpProviderModule::OnExit()
     if (wxHelpProvider::Get())
     {
         delete wxHelpProvider::Get();
-        wxHelpProvider::Set(NULL);
+        wxHelpProvider::Set(nullptr);
     }
 }
 

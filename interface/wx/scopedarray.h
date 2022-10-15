@@ -73,7 +73,7 @@ public:
         Creates the smart pointer with the given pointer or none if @NULL.  On
         compilers that support it, this uses the explicit keyword.
     */
-    wxScopedArray(type*  T = NULL);
+    wxScopedArray(type*  T = nullptr);
 
     /**
         This operator gets the pointer stored in the smart pointer or returns @NULL if
@@ -92,7 +92,7 @@ public:
         arguments are specified. This function does check to make sure that the
         pointer you are assigning is not the same pointer that is already stored.
     */
-    reset(T* p  = NULL);
+    reset(T* p  = nullptr);
 
     /**
         Swap the pointer inside the smart pointer with @a ot. The pointer being swapped
@@ -127,7 +127,7 @@ public:
         @param array
             An array allocated using @c new[] or @NULL.
      */
-    explicit wxScopedArray(T * array = NULL);
+    explicit wxScopedArray(T * array = nullptr);
 
     /**
         Constructor allocating a new array of the specified size.
@@ -159,7 +159,7 @@ public:
         @param array
             An array allocated using @c new[] or @NULL.
      */
-    void reset(T *array = NULL);
+    void reset(T *array = nullptr);
 
     /**
         Return the n-th element of the array.
@@ -172,7 +172,7 @@ public:
         Return the array pointer.
 
         The returned pointer may be @NULL. It must not be deleted by the
-        caller, call @c reset(NULL) instead.
+        caller, call @c reset(nullptr) instead.
      */
     T *get() const;
 

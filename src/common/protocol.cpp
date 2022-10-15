@@ -44,7 +44,7 @@ wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
     next = wxURL::ms_protocols;
     wxURL::ms_protocols = this;
 #else
-    next = NULL;
+    next = nullptr;
 #endif
 }
 
@@ -66,7 +66,7 @@ wxProtocol::wxProtocol()
 #endif
 {
     m_lastError = wxPROTO_NOERR;
-    m_log = NULL;
+    m_log = nullptr;
     SetDefaultTimeout(60);      // default timeout is 60 seconds
 }
 
@@ -145,7 +145,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
                 if ( result.empty() || result.Last() != wxT('\r') )
                 {
                     // ignore the stray '\n'
-                    eol = NULL;
+                    eol = nullptr;
                 }
                 //else: ok, got real EOL
 
@@ -160,7 +160,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
                 if ( eol[-1] != '\r' )
                 {
                     // as above, simply ignore stray '\n'
-                    eol = NULL;
+                    eol = nullptr;
                 }
             }
         }

@@ -91,7 +91,7 @@ public:
         if ( ms_instance )
         {
             delete ms_instance;
-            ms_instance = NULL;
+            ms_instance = nullptr;
         }
     }
 

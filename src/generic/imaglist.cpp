@@ -161,7 +161,7 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour 
 const wxBitmap *wxGenericImageList::DoGetPtr( int index ) const
 {
     if ( index < 0 || (size_t)index >= m_images.size() )
-        return NULL;
+        return nullptr;
 
     return &m_images[index];
 }

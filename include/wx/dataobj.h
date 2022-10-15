@@ -268,7 +268,7 @@ public:
     // out what kind of data object was received.
     wxDataFormat GetReceivedFormat() const;
 
-    // Returns the pointer to the object which supports this format or NULL.
+    // Returns the pointer to the object which supports this format or nullptr.
     // The returned pointer is owned by wxDataObjectComposite and must
     // therefore not be destroyed by the caller.
     wxDataObjectSimple *GetObject(const wxDataFormat& format,

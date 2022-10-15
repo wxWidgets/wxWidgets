@@ -335,7 +335,7 @@ public:
     m_peer = new wxMacControl( this );
     OSStatus err = CreateTabsControl(
         MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
-        tabsize, tabstyle, 0, NULL, GetPeer()->GetControlRefAddr() );
+        tabsize, tabstyle, 0, nullptr, GetPeer()->GetControlRefAddr() );
     verify_noerr( err );
 #endif
 */
@@ -347,7 +347,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                     long style,
                                     long WXUNUSED(extraStyle))
 {
-    static wxTabViewController* controller = NULL;
+    static wxTabViewController* controller = nullptr;
 
     if ( !controller )
         controller =[[wxTabViewController alloc] init];

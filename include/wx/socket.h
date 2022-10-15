@@ -129,7 +129,7 @@ public:
 
     // state
     bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_impl != NULL; }
+    bool IsOk() const { return m_impl != nullptr; }
     bool Error() const { return LastError() != wxSOCKET_NOERROR; }
     bool IsClosed() const { return m_closed; }
     bool IsConnected() const { return m_connected; }

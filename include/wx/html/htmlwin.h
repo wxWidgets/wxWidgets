@@ -81,7 +81,7 @@ public:
         @param url      URL the parser wants to open
         @param redirect If the return value is wxHTML_REDIRECT, then the
                         URL to redirect to will be stored in this variable
-                        (the pointer must never be NULL)
+                        (the pointer must never be null)
 
         @return indicator of how to treat the request
      */
@@ -96,7 +96,7 @@ public:
     virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
                                        const wxPoint& pos) const = 0;
 
-    /// Returns the window used for rendering (may be NULL).
+    /// Returns the window used for rendering (may be null).
     virtual wxWindow* GetHTMLWindow() = 0;
 
     /// Returns background colour to use by default.
@@ -302,7 +302,7 @@ public:
 
     // Sets fonts to be used when displaying HTML page.
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
-                  const int *sizes = NULL);
+                  const int *sizes = nullptr);
 
     // Sets font sizes to be relative to the given size or the system
     // default size; use either specified or default font
@@ -497,7 +497,7 @@ protected:
     // defaults to 10 pixels.
     int m_Borders;
 
-    // current text selection or NULL
+    // current text selection or nullptr
     wxHtmlSelection *m_selection;
 
     // true if the user is dragging mouse to select text

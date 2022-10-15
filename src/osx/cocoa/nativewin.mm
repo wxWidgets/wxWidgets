@@ -53,7 +53,7 @@ wxNativeWindow::Create(wxWindow* parent,
                        wxWindowID winid,
                        wxNativeWindowHandle view)
 {
-    wxCHECK_MSG( view, false, wxS("NULL NSView pointer") );
+    wxCHECK_MSG( view, false, wxS("null NSView pointer") );
 
     DontCreatePeer();
 

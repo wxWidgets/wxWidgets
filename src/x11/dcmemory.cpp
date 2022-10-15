@@ -79,7 +79,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     else
     {
         m_ok = false;
-        m_x11window = NULL;
+        m_x11window = nullptr;
     }
 }
 

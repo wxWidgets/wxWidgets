@@ -643,7 +643,7 @@ public:
         current locale (and so can fail).
 
         @param len
-            If non-@NULL, filled with the length of the returned buffer.
+            If non-null, filled with the length of the returned buffer.
 
         @return
             buffer containing the string contents in the specified type,
@@ -652,7 +652,7 @@ public:
             @c char).
      */
     template <typename T>
-    wxCharTypeBuffer<T> tchar_str(size_t *len = NULL) const;
+    wxCharTypeBuffer<T> tchar_str(size_t *len = nullptr) const;
 
     /**
         Returns a string representation suitable for passing to OS' functions
@@ -966,7 +966,7 @@ public:
         (i.e. after the prefix) into @a rest string if it is not @NULL.
         Otherwise, the function returns @false and doesn't modify the @a rest.
     */
-    bool StartsWith(const wxString& prefix, wxString *rest = NULL) const;
+    bool StartsWith(const wxString& prefix, wxString *rest = nullptr) const;
 
     /**
         This function can be used to test if the string ends with the specified
@@ -975,7 +975,7 @@ public:
         @NULL. Otherwise, the function returns @false and doesn't
         modify the @e rest.
     */
-    bool EndsWith(const wxString& suffix, wxString *rest = NULL) const;
+    bool EndsWith(const wxString& suffix, wxString *rest = nullptr) const;
 
     ///@}
 
@@ -1046,7 +1046,7 @@ public:
             available in wxWidgets version 2.9.2 and later only.
         @return Part of the string before the first occurrence of @a ch.
     */
-    wxString BeforeFirst(wxUniChar ch, wxString *rest = NULL) const;
+    wxString BeforeFirst(wxUniChar ch, wxString *rest = nullptr) const;
 
     /**
         Gets all characters before the last occurrence of @e ch.
@@ -1061,7 +1061,7 @@ public:
             parameter is available in wxWidgets version 2.9.2 and later only.
         @return Part of the string before the last occurrence of @a ch.
     */
-    wxString BeforeLast(wxUniChar ch, wxString *rest = NULL) const;
+    wxString BeforeLast(wxUniChar ch, wxString *rest = nullptr) const;
 
     ///@}
 
@@ -1456,7 +1456,7 @@ public:
 
                 for ( size_t n = 0; n < len; n++ )
                 {
-                    if ( strchr("aeuio", tolower(original[n])) == NULL )
+                    if ( strchr("aeuio", tolower(original[n])) == nullptr )
                         result += original[n];
                 }
 

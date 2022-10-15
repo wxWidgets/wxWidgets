@@ -50,7 +50,7 @@ public:
     // there is not enough space for everything, including the trailing NUL
     // character(s), in the output buffer, wxCONV_FAILED is returned.
     //
-    // In the special case when dst is NULL (the value of dstLen is ignored
+    // In the special case when dst is null (the value of dstLen is ignored
     // then) the return value is the length of the needed buffer but nothing
     // happens otherwise. If srcLen is wxNO_LEN, the entire string, up to and
     // including the trailing NUL(s), is converted, otherwise exactly srcLen
@@ -58,7 +58,7 @@ public:
     //
     // Typical usage:
     //
-    //          size_t dstLen = conv.ToWChar(NULL, 0, src);
+    //          size_t dstLen = conv.ToWChar(nullptr, 0, src);
     //          if ( dstLen == wxCONV_FAILED )
     //              ... handle error ...
     //          wchar_t *wbuf = new wchar_t[dstLen];
@@ -93,7 +93,7 @@ public:
     // inLen is the length of the buffer including trailing NUL if any or
     // wxNO_LEN if the input is NUL-terminated.
     //
-    // outLen receives, if not NULL, the length of the converted string or 0 if
+    // outLen receives, if not null, the length of the converted string or 0 if
     // the conversion failed (returning 0 and not -1 in this case makes it
     // difficult to distinguish between failed conversion and empty input but
     // this is done for backwards compatibility). Notice that the rules for
@@ -156,7 +156,7 @@ public:
     // On success, the return value is the length (i.e. the number of
     // characters, not bytes) not counting the trailing NUL(s) of the converted
     // string. On failure, (size_t)-1 is returned. In the special case when
-    // outputBuf is NULL the return value is the same one but nothing is
+    // outputBuf is null the return value is the same one but nothing is
     // written to the buffer.
     //
     // Note that outLen is the length of the output buffer, not the length of
@@ -209,7 +209,7 @@ public:
     wxConvBrokenFileNames(const wxString& charset);
     wxConvBrokenFileNames(const wxConvBrokenFileNames& conv)
         : wxMBConv(),
-          m_conv(conv.m_conv ? conv.m_conv->Clone() : NULL)
+          m_conv(conv.m_conv ? conv.m_conv->Clone() : nullptr)
     {
     }
     virtual ~wxConvBrokenFileNames() { delete m_conv; }
@@ -526,12 +526,12 @@ private:
     // m_convReal.
     wxMBConv *DoCreate() const;
 
-    // Set the name (may be only called when m_name == NULL), makes copy of
+    // Set the name (may be only called when m_name == nullptr), makes copy of
     // the charset string.
     void SetName(const char *charset);
 
     // Set m_encoding field respecting the rules below, i.e. making sure it has
-    // a valid value if m_name == NULL (thus this should be always called after
+    // a valid value if m_name == nullptr (thus this should be always called after
     // SetName()).
     //
     // Input encoding may be valid or not.
@@ -540,16 +540,16 @@ private:
 
     // The encoding we use is specified by the two fields below:
     //
-    //  1. If m_name != NULL, m_encoding corresponds to it if it's one of
+    //  1. If m_name != nullptr, m_encoding corresponds to it if it's one of
     //     encodings we know about (i.e. member of wxFontEncoding) or is
     //     wxFONTENCODING_SYSTEM otherwise.
     //
-    //  2. If m_name == NULL, m_encoding is always valid, i.e. not one of
+    //  2. If m_name == nullptr, m_encoding is always valid, i.e. not one of
     //     wxFONTENCODING_{SYSTEM,DEFAULT,MAX}.
     char *m_name;
     wxFontEncoding m_encoding;
 
-    // The conversion object for our encoding or NULL if we failed to create it
+    // The conversion object for our encoding or nullptr if we failed to create it
     // in which case we fall back to hard-coded ISO8859-1 conversion.
     wxMBConv *m_convReal;
 };
@@ -699,8 +699,8 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 
     // these functions should be used when the conversions really, really have
     // to succeed (usually because we pass their results to a standard C
-    // function which would crash if we passed NULL to it), so these functions
-    // always return a valid pointer if their argument is non-NULL
+    // function which would crash if we passed nullptr to it), so these functions
+    // always return a valid pointer if their argument is non-null
 
     inline wxWCharBuffer wxSafeConvertMB2WX(const char *s)
     {

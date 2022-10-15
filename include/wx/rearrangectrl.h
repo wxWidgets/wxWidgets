@@ -228,7 +228,7 @@ public:
 
 private:
     // common part of all ctors
-    void Init() { m_ctrl = NULL; }
+    void Init() { m_ctrl = nullptr; }
 
     wxRearrangeCtrl *m_ctrl;
 

@@ -143,8 +143,8 @@ static void wxCalcPrecAndShift( unsigned long mask, int *shift, int *prec )
 
 wxXVisualInfo::wxXVisualInfo()
 {
-    m_visualColormap = NULL;
-    m_colorCube = NULL;
+    m_visualColormap = nullptr;
+    m_colorCube = nullptr;
 }
 
 wxXVisualInfo::~wxXVisualInfo()

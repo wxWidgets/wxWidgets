@@ -134,7 +134,7 @@ WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
 static wxArrayThread gs_allThreads;
 
 // a mutex to protect gs_allThreads
-static wxMutex *gs_mutexAllThreads = NULL;
+static wxMutex *gs_mutexAllThreads = nullptr;
 
 // the id of the main thread
 //
@@ -151,17 +151,17 @@ static pthread_key_t gs_keySelf;
 static size_t gs_nThreadsBeingDeleted = 0;
 
 // a mutex to protect gs_nThreadsBeingDeleted
-static wxMutex *gs_mutexDeleteThread = NULL;
+static wxMutex *gs_mutexDeleteThread = nullptr;
 
 // and a condition variable which will be signaled when all
 // gs_nThreadsBeingDeleted will have been deleted
-static wxCondition *gs_condAllDeleted = NULL;
+static wxCondition *gs_condAllDeleted = nullptr;
 
 #ifndef __DARWIN__
 // this mutex must be acquired before any call to a GUI function
 // (it's not inside #if wxUSE_GUI because this file is compiled as part
 // of wxBase)
-static wxMutex *gs_mutexGui = NULL;
+static wxMutex *gs_mutexGui = nullptr;
 #endif
 
 // when we wait for a thread to exit, we're blocking on a condition which the
@@ -261,7 +261,7 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
             wxFALLTHROUGH;
 
         case wxMUTEX_DEFAULT:
-            err = pthread_mutex_init(&m_mutex, NULL);
+            err = pthread_mutex_init(&m_mutex, nullptr);
             break;
     }
 
@@ -323,7 +323,7 @@ wxMutexError wxMutexInternal::Lock(unsigned long ms)
 #endif
     else // fall back on system timer
     {
-        ts.tv_sec = time(NULL);
+        ts.tv_sec = time(nullptr);
     }
 
     ts.tv_sec += seconds;
@@ -462,7 +462,7 @@ private:
 wxConditionInternal::wxConditionInternal(wxMutex& mutex)
                    : m_mutex(mutex)
 {
-    int err = pthread_cond_init(&m_cond, NULL /* default attributes */);
+    int err = pthread_cond_init(&m_cond, nullptr /* default attributes */);
 
     m_isOk = err == 0;
 
@@ -955,7 +955,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         wxFAIL_MSG(wxT("wxThread::Exit() can't return."));
 
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -969,7 +969,7 @@ extern "C" void wxPthreadCleanup(void *ptr)
 
 void wxThreadInternal::Cleanup(wxThread *thread)
 {
-    if (pthread_getspecific(gs_keySelf) == 0)
+    if (pthread_getspecific(gs_keySelf) == nullptr)
         return;
 
     {
@@ -998,7 +998,7 @@ wxThreadInternal::wxThreadInternal()
     m_cancelled = false;
     m_prio = wxPRIORITY_DEFAULT;
     m_threadId = 0;
-    m_exitcode = 0;
+    m_exitcode = nullptr;
 
     // set to true only when the thread starts waiting on m_semSuspend
     m_isPaused = false;
@@ -1752,7 +1752,7 @@ void wxThread::Exit(ExitCode status)
         //       we make it a global object, but this would mean that we can
         //       only call one thread function at a time :-(
         DeleteThread(this);
-        pthread_setspecific(gs_keySelf, 0);
+        pthread_setspecific(gs_keySelf, nullptr);
     }
     else
     {
@@ -1875,7 +1875,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule);
 
 bool wxThreadModule::OnInit()
 {
-    int rc = pthread_key_create(&gs_keySelf, NULL /* dtor function */);
+    int rc = pthread_key_create(&gs_keySelf, nullptr /* dtor function */);
     if ( rc != 0 )
     {
         wxLogSysError(rc, _("Thread module initialization failed: failed to create thread key"));

@@ -199,7 +199,7 @@ bool wxDirExists(const wxString& dirname);
     separators under Windows, however it will not consider backslashes as path
     separators under Unix (where backslash is a valid character in a filename).
 
-    On entry, @a fullname should be non-@NULL (it may be empty though).
+    On entry, @a fullname should be non-null (it may be empty though).
 
     On return, @a path contains the file path (without the trailing separator),
     @a name contains the file name and @c ext contains the file extension
@@ -285,7 +285,7 @@ bool wxMatchWild(const wxString& pattern,
 
     @header{wx/filefn.h}
 */
-wxString wxGetWorkingDirectory(char* buf = NULL, int sz = 1000);
+wxString wxGetWorkingDirectory(char* buf = nullptr, int sz = 1000);
 
 /**
     Returns the directory part of the filename.
@@ -527,7 +527,7 @@ char* wxFileNameFromPath(char* path);
 
     @header{wx/filefn.h}
 */
-char* wxGetTempFileName(const wxString& prefix, char* buf = NULL);
+char* wxGetTempFileName(const wxString& prefix, char* buf = nullptr);
 bool wxGetTempFileName(const wxString& prefix, wxString& buf);
 ///@}
 

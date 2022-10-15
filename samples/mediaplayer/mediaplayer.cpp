@@ -500,7 +500,7 @@ void wxMediaPlayerApp::MacOpenFiles(const wxArrayString & fileNames )
 // ----------------------------------------------------------------------------
 
 wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(1366,768))
+       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(1366,768))
 {
     SetIcon(wxICON(sample));
 

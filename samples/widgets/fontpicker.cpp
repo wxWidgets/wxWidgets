@@ -148,7 +148,7 @@ void FontPickerWidgetsPage::CreateContent()
     Reset();    // set checkboxes state
 
     // create pickers
-    m_fontPicker = NULL;
+    m_fontPicker = nullptr;
     CreatePicker();
 
     // right pane

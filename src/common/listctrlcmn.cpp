@@ -246,7 +246,7 @@ wxItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
 {
     return (m_alternateRowColour.GetBackgroundColour().IsOk() && (item % 2))
         ? wxConstCast(&m_alternateRowColour, wxItemAttr)
-        : NULL; // no attributes by default
+        : nullptr; // no attributes by default
 }
 
 wxString wxListCtrlBase::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
@@ -320,7 +320,7 @@ wxWithImages* wxListCtrlBase::GetImages(int which)
     {
         return &m_imagesState;
     }
-    return NULL;
+    return nullptr;
 }
 
 const wxWithImages* wxListCtrlBase::GetImages(int which) const
@@ -331,13 +331,13 @@ const wxWithImages* wxListCtrlBase::GetImages(int which) const
 wxImageList* wxListCtrlBase::GetUpdatedImageList(int which)
 {
     wxWithImages* const images = GetImages(which);
-    return images ? images->GetUpdatedImageListFor(this) : NULL;
+    return images ? images->GetUpdatedImageListFor(this) : nullptr;
 }
 
 wxImageList *wxListCtrlBase::GetImageList(int which) const
 {
     const wxWithImages* const images = GetImages(which);
-    return images ? images->GetImageList() : NULL;
+    return images ? images->GetImageList() : nullptr;
 }
 
 void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)

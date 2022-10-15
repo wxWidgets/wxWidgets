@@ -395,7 +395,7 @@ public:
     */
     static wxString GetInternalName(const wxString& name,
                                     wxPathFormat format = wxPATH_NATIVE,
-                                    bool* pIsDir = NULL);
+                                    bool* pIsDir = nullptr);
 
     /**
         Assignment operator.

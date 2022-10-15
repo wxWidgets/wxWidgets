@@ -343,7 +343,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     m_oldLogger = wxLog::GetActiveTarget();
 
@@ -381,7 +381,7 @@ MyFrame::MyFrame(const wxString& title)
 
     m_nRunning = m_nCount = 0;
 
-    m_dlgProgress = NULL;
+    m_dlgProgress = nullptr;
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
@@ -592,7 +592,7 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
-    wxThread* toDelete = NULL;
+    wxThread* toDelete = nullptr;
     {
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
@@ -740,7 +740,7 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUpdateWorker(wxUpdateUIEvent& event)
 {
-    event.Enable( m_dlgProgress == NULL );
+    event.Enable( m_dlgProgress == nullptr );
 }
 
 void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
@@ -778,7 +778,7 @@ void MyFrame::OnWorkerEvent(wxThreadEvent& event)
     if ( n == -1 )
     {
         m_dlgProgress->Destroy();
-        m_dlgProgress = (wxProgressDialog *)NULL;
+        m_dlgProgress = nullptr;
 
         // the dialog is aborted because the event came from another thread, so
         // we may need to wake up the main event loop for the dialog to be
@@ -932,7 +932,7 @@ wxThread::ExitCode MyThread::Entry()
         {
             wxCriticalSectionLocker locker(wxGetApp().m_critsect);
             if ( wxGetApp().m_shuttingDown )
-                return NULL;
+                return nullptr;
         }
 
         // check if just this thread was asked to exit
@@ -947,7 +947,7 @@ wxThread::ExitCode MyThread::Entry()
 
     wxLogMessage("Thread finished.");
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -980,7 +980,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
 
 #if TEST_YIELD_RACE_CONDITION
     if ( TestDestroy() )
-        return NULL;
+        return nullptr;
 
     wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
 
@@ -1011,7 +1011,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
     wxQueueEvent( m_frame, event.Clone() );
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1072,7 +1072,7 @@ wxThread::ExitCode MyGUIThread::Entry()
     }
 
     // now remove the thread-specific thread target
-    wxLog::SetThreadActiveTarget(NULL);
+    wxLog::SetThreadActiveTarget(nullptr);
 
     // so that this goes to the main window again
     wxLogMessage("GUI thread finished.");

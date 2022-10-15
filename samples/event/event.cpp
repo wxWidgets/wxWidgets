@@ -48,7 +48,7 @@ wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent);
     DECLARE_EVENT_TABLE_ENTRY( \
         wxEVT_MY_CUSTOM_COMMAND, id, wxID_ANY, \
         wxCommandEventHandler(fn), \
-        (wxObject *) NULL \
+        nullptr \
     ),
 
 // ----------------------------------------------------------------------------
@@ -359,13 +359,13 @@ void MyApp::OnClickStaticHandlerApp(wxCommandEvent& event)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame(NULL, wxID_ANY, title, pos, size)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     SetIcon(wxICON(sample));
 
     // init members
     m_nPush = 0;
-    m_btnDynamic = NULL;
+    m_btnDynamic = nullptr;
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;

@@ -315,9 +315,9 @@ public:
     // wxTEST_DIALOG macro, otherwise it falls back to the location of this
     // line itself, which is not very useful, so normally you should provide
     // your own values.
-    wxTestingModalHook(const char* file = NULL,
+    wxTestingModalHook(const char* file = nullptr,
                        int line = 0,
-                       const char* func = NULL)
+                       const char* func = nullptr)
         : m_file(file), m_line(line), m_func(func)
     {
         Register();

@@ -42,7 +42,7 @@ private:
     // Return true if we need custom drawing at all.
     virtual bool HasCustomDrawnItems() const = 0;
 
-    // Return the attribute to use for the given item, can return NULL if this
+    // Return the attribute to use for the given item, can return nullptr if this
     // item doesn't need to be custom-drawn.
     virtual const wxItemAttr* GetItemAttr(DWORD_PTR dwItemSpec) const = 0;
 

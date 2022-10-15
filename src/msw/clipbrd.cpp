@@ -186,8 +186,8 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             {
                 wxBitmap *bitmap = (wxBitmap *)data;
 
-                HDC hdcMem = CreateCompatibleDC((HDC) NULL);
-                HDC hdcSrc = CreateCompatibleDC((HDC) NULL);
+                HDC hdcMem = CreateCompatibleDC(nullptr);
+                HDC hdcSrc = CreateCompatibleDC(nullptr);
                 HBITMAP old = (HBITMAP)
                     ::SelectObject(hdcSrc, (HBITMAP)bitmap->GetHBITMAP());
                 HBITMAP hBitmap = CreateCompatibleBitmap(hdcSrc,
@@ -296,7 +296,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                     mf->xExt = width;
                     mf->yExt = height;
                     mf->hMF = (HMETAFILE) wxMF->GetHMETAFILE();
-                    wxMF->SetHMETAFILE((WXHANDLE) NULL);
+                    wxMF->SetHMETAFILE(nullptr);
                 } // unlock data
 
                 handle = SetClipboardData(CF_METAFILEPICT, data);
@@ -474,7 +474,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject);
 
 wxClipboard::wxClipboard()
 {
-    m_lastDataObject = NULL;
+    m_lastDataObject = nullptr;
     m_isOpened = false;
 }
 
@@ -498,13 +498,13 @@ void wxClipboard::Clear()
         HRESULT hr = OleIsCurrentClipboard(m_lastDataObject);
         if (S_OK == hr)
         {
-            hr = OleSetClipboard(NULL);
+            hr = OleSetClipboard(nullptr);
             if ( FAILED(hr) )
             {
-                wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
+                wxLogApiError(wxT("OleSetClipboard(nullptr)"), hr);
             }
         }
-        m_lastDataObject = NULL;
+        m_lastDataObject = nullptr;
     }
 #endif // wxUSE_OLE_CLIPBOARD
 }
@@ -516,7 +516,7 @@ bool wxClipboard::Flush()
     {
         // don't touch data set by other applications
         HRESULT hr = OleIsCurrentClipboard(m_lastDataObject);
-        m_lastDataObject = NULL;
+        m_lastDataObject = nullptr;
         if (S_OK == hr)
         {
             hr = OleFlushClipboard();
@@ -614,9 +614,9 @@ bool wxClipboard::AddData( wxDataObject *data )
         return false;
     }
 
-    // we have to call either OleSetClipboard(NULL) or OleFlushClipboard() when
+    // we have to call either OleSetClipboard(nullptr) or OleFlushClipboard() when
     // using OLE clipboard when the app terminates - by default, we call
-    // OleSetClipboard(NULL) which won't waste RAM, but the app can call
+    // OleSetClipboard(nullptr) which won't waste RAM, but the app can call
     // wxClipboard::Flush() to change this
     m_lastDataObject = data->GetInterface();
 
@@ -724,7 +724,7 @@ bool wxClipboard::GetData( wxDataObject& data )
         return false;
 
 #if wxUSE_OLE_CLIPBOARD
-    IDataObject *pDataObject = NULL;
+    IDataObject *pDataObject = nullptr;
     HRESULT hr = OleGetClipboard(&pDataObject);
     if ( FAILED(hr) || !pDataObject )
     {
@@ -760,7 +760,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // converted) formats.
 #if wxDEBUG_LEVEL >= 2
     // get the format enumerator
-    IEnumFORMATETC *pEnumFormatEtc = NULL;
+    IEnumFORMATETC *pEnumFormatEtc = nullptr;
     hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pEnumFormatEtc);
     if ( FAILED(hr) || !pEnumFormatEtc )
     {
@@ -810,7 +810,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             continue;
 
         formatEtc.cfFormat = cf;
-        formatEtc.ptd      = NULL;
+        formatEtc.ptd      = nullptr;
         formatEtc.dwAspect = DVASPECT_CONTENT;
         formatEtc.lindex   = -1;
 

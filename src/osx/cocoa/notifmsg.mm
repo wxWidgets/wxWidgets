@@ -70,7 +70,7 @@ public:
 
     virtual ~wxUserNotificationMsgImpl()
     {
-        ms_activeNotifications[m_id] = NULL;
+        ms_activeNotifications[m_id] = nullptr;
         ReleaseHandler();
         [m_notif release];
     }

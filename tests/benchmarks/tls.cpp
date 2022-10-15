@@ -79,7 +79,7 @@ class PthreadKey
 public:
     PthreadKey()
     {
-        pthread_key_create(&m_key, NULL);
+        pthread_key_create(&m_key, nullptr);
     }
 
     ~PthreadKey()

@@ -56,7 +56,7 @@ bool MyApp::OnInit(void)
       return false;
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL);
+  MyFrame *frame = new MyFrame(nullptr);
 
   // Give it an icon
   frame->SetIcon(wxICON(sample));

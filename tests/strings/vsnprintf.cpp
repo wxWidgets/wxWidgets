@@ -109,7 +109,7 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::C", "[vsnprintf]")
     CMP("hi!", "%c%c%c", wxT('h'), wxT('i'), wxT('!'));
 
     // NOTE:
-    // the NULL characters _can_ be passed to %c to e.g. create strings
+    // the NUL characters _can_ be passed to %c to e.g. create strings
     // with embedded NULs (because strings are not always supposed to be
     // NUL-terminated).
 
@@ -151,24 +151,24 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::P", "[vsnprintf]")
         (!defined(__USE_MINGW_ANSI_STDIO) || !__USE_MINGW_ANSI_STDIO))
     #if SIZEOF_VOID_P == 4
         CMP("00ABCDEF", "%p", (void*)0xABCDEF);
-        CMP("00000000", "%p", (void*)NULL);
+        CMP("00000000", "%p", (void*)nullptr);
     #elif SIZEOF_VOID_P == 8
         CMP("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
-        CMP("0000000000000000", "%p", (void*)NULL);
+        CMP("0000000000000000", "%p", (void*)nullptr);
     #endif
 #elif defined(__MINGW32__)
     #if SIZEOF_VOID_P == 4
         CMP("00abcdef", "%p", (void*)0xABCDEF);
-        CMP("00000000", "%p", (void*)NULL);
+        CMP("00000000", "%p", (void*)nullptr);
     #elif SIZEOF_VOID_P == 8
         CMP("0000abcdefabcdef", "%p", (void*)0xABCDEFABCDEF);
-        CMP("0000000000000000", "%p", (void*)NULL);
+        CMP("0000000000000000", "%p", (void*)nullptr);
     #endif
 #elif defined(__GNUG__)
-    // glibc prints pointers as %#x except for NULL pointers which are printed
+    // glibc prints pointers as %#x except for null pointers which are printed
     // as '(nil)'.
     CMP("0xabcdef", "%p", (void*)0xABCDEF);
-    CMP("(nil)", "%p", (void*)NULL);
+    CMP("(nil)", "%p", (void*)nullptr);
 #endif
 }
 
@@ -282,7 +282,7 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::S", "[vsnprintf]")
     CMP_UTF8(ABCDE,        "%.5s", ABCDEFGHI);
 #endif // wxUSE_UNICODE
 
-    // test a string which has a NULL character after "ab";
+    // test a string which has a NUL character after "ab";
     // obviously it should be handled exactly like just as "ab"
     CMP("   ab", "%5s", wxT("ab\0cdefghi"));
 }

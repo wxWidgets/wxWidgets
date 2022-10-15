@@ -278,7 +278,7 @@ public:
     // Factory functions, only used by the library itself.
     static wxGridActivationSource FromProgram()
     {
-        return wxGridActivationSource(Program, NULL);
+        return wxGridActivationSource(Program, nullptr);
     }
 
     static wxGridActivationSource From(const wxKeyEvent& event)
@@ -391,14 +391,14 @@ class WXDLLIMPEXP_CORE wxGridCellEditor : public wxGridCellWorker
 public:
     wxGridCellEditor()
         : wxGridCellWorker(),
-          m_control(NULL),
-          m_attr(NULL)
+          m_control(nullptr),
+          m_attr(nullptr)
     {
     }
 
     wxGridCellEditor(const wxGridCellEditor& other);
 
-    bool IsCreated() const { return m_control != NULL; }
+    bool IsCreated() const { return m_control != nullptr; }
 
     wxWindow* GetWindow() const { return m_control; }
     void SetWindow(wxWindow* window) { m_control = window; }
@@ -416,7 +416,7 @@ public:
 
     // Show or hide the edit control, use the specified attributes to set
     // colours/fonts for it
-    virtual void Show(bool show, wxGridCellAttr *attr = NULL);
+    virtual void Show(bool show, wxGridCellAttr *attr = nullptr);
 
     // Draws the part of the cell not occupied by the control: the base class
     // version just fills it with background colour from the attribute
@@ -748,7 +748,7 @@ public:
     };
 
     // default ctor
-    explicit wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
+    explicit wxGridCellAttr(wxGridCellAttr *attrDefault = nullptr)
     {
         Init(attrDefault);
 
@@ -803,8 +803,8 @@ public:
     {
         return m_hAlign != wxALIGN_INVALID || m_vAlign != wxALIGN_INVALID;
     }
-    bool HasRenderer() const { return m_renderer != NULL; }
-    bool HasEditor() const { return m_editor != NULL; }
+    bool HasRenderer() const { return m_renderer != nullptr; }
+    bool HasEditor() const { return m_editor != nullptr; }
     bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
     bool HasOverflowMode() const { return m_fitMode.IsSpecified(); }
     bool HasSize() const { return m_sizeRows != 1 || m_sizeCols != 1; }
@@ -864,7 +864,7 @@ private:
     };
 
     // the common part of all ctors
-    void Init(wxGridCellAttr *attrDefault = NULL);
+    void Init(wxGridCellAttr *attrDefault = nullptr);
 
 
     wxColour m_colText,
@@ -939,7 +939,7 @@ public:
 
     // get renderers for the given row/column header label and the corner
     // window: unlike cell renderers, these objects are not reference counted
-    // and are never NULL so they are returned by reference
+    // and are never null so they are returned by reference
     virtual const wxGridColumnHeaderRenderer& GetColumnHeaderRenderer(int col);
     virtual const wxGridRowHeaderRenderer& GetRowHeaderRenderer(int row);
     virtual const wxGridCornerHeaderRenderer& GetCornerRenderer();
@@ -1286,7 +1286,7 @@ public:
     // give us the attr provider to use - we take ownership of the pointer
     void SetAttrProvider(wxGridCellAttrProvider *attrProvider);
 
-    // get the currently used attr provider (may be NULL)
+    // get the currently used attr provider (may be null)
     wxGridCellAttrProvider *GetAttrProvider() const { return m_attrProvider; }
 
     // Does this table allow attributes?  Default implementation creates
@@ -1574,11 +1574,11 @@ public:
     // ------ display update functions
     //
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
-                                     wxGridWindow *gridWindow = NULL) const;
+                                     wxGridWindow *gridWindow = nullptr) const;
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
-                                     wxGridWindow *gridWindow = NULL) const;
+                                     wxGridWindow *gridWindow = nullptr) const;
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
-                                            wxGridWindow *gridWindow = NULL) const;
+                                            wxGridWindow *gridWindow = nullptr) const;
 
     void PrepareDCFor(wxDC &dc, wxGridWindow *gridWindow);
 
@@ -1703,7 +1703,7 @@ public:
 
     int      GetBatchCount() const { return m_batchCount; }
 
-    virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL) override;
+    virtual void Refresh(bool eraseb = true, const wxRect* rect = nullptr) override;
 
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are
@@ -1738,14 +1738,14 @@ public:
     //  grid cells and labels so you will need to convert from device
     //  coordinates for mouse events etc.
     //
-    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = NULL) const;
+    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = nullptr) const;
     void XYToCell(int x, int y,
                   wxGridCellCoords& coords,
-                  wxGridWindow *gridWindow = NULL) const
+                  wxGridWindow *gridWindow = nullptr) const
         { coords = XYToCell(x, y, gridWindow); }
 
     wxGridCellCoords XYToCell(const wxPoint& pos,
-                              wxGridWindow *gridWindow = NULL) const
+                              wxGridWindow *gridWindow = nullptr) const
         { return XYToCell(pos.x, pos.y, gridWindow); }
 
     // these functions return the index of the row/columns corresponding to the
@@ -1754,8 +1754,8 @@ public:
     // if clipToMinMax is false (default, wxNOT_FOUND is returned if the
     // position is outside any row/column, otherwise the first/last element is
     // returned in this case
-    int  YToRow( int y, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL ) const;
-    int  XToCol( int x, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL ) const;
+    int  YToRow( int y, bool clipToMinMax = false, wxGridWindow *gridWindow = nullptr ) const;
+    int  XToCol( int x, bool clipToMinMax = false, wxGridWindow *gridWindow = nullptr ) const;
 
     int  YToEdgeOfRow( int y ) const;
     int  XToEdgeOfCol( int x ) const;
@@ -2303,7 +2303,7 @@ public:
     //
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight,
-                              const wxGridWindow *gridWindow = NULL) const;
+                              const wxGridWindow *gridWindow = nullptr) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
@@ -2611,7 +2611,7 @@ protected:
     // for this to work, you should always use it and not set m_cursorMode
     // directly!
     void ChangeCursorMode(CursorMode mode,
-                          wxWindow *win = NULL,
+                          wxWindow *win = nullptr,
                           bool captureMouse = true);
 
     wxWindow *m_winCapture;     // the window which captured the mouse
@@ -3048,7 +3048,7 @@ private:
     void DoSaveEditControlValue();
 
     // these sets contain the indices of fixed, i.e. non-resizable
-    // interactively, grid rows or columns and are NULL if there are no fixed
+    // interactively, grid rows or columns and are null if there are no fixed
     // elements (which is the default)
     wxGridFixedIndicesSet *m_setFixedRows,
                           *m_setFixedCols;
@@ -3065,13 +3065,13 @@ private:
 class WXDLLIMPEXP_CORE wxGridUpdateLocker
 {
 public:
-    // if the pointer is NULL, Create() can be called later
-    wxGridUpdateLocker(wxGrid *grid = NULL)
+    // if the pointer is null, Create() can be called later
+    wxGridUpdateLocker(wxGrid *grid = nullptr)
     {
         Init(grid);
     }
 
-    // can be called if ctor was used with a NULL pointer, must not be called
+    // can be called if ctor was used with a null pointer, must not be called
     // more than once
     void Create(wxGrid *grid)
     {
@@ -3296,7 +3296,7 @@ public:
         {
             m_row  = 0;
             m_col  = 0;
-            m_window = NULL;
+            m_window = nullptr;
         }
 
     wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
@@ -3455,9 +3455,9 @@ extern const int wxEVT_GRID_CREATE_CELL;
 extern const int wxEVT_GRID_CHANGE_LABELS;
 extern const int wxEVT_GRID_CHANGE_SEL_LABEL;
 
-#define EVT_GRID_CREATE_CELL(fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CREATE_CELL,      wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CHANGE_LABELS(fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_LABELS,    wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
-#define EVT_GRID_CHANGE_SEL_LABEL(fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_SEL_LABEL, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), NULL ),
+#define EVT_GRID_CREATE_CELL(fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CREATE_CELL,      wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), nullptr ),
+#define EVT_GRID_CHANGE_LABELS(fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_LABELS,    wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), nullptr ),
+#define EVT_GRID_CHANGE_SEL_LABEL(fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_SEL_LABEL, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), nullptr ),
 
 #endif
 

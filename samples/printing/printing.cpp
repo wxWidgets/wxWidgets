@@ -49,10 +49,10 @@
 #endif
 
 // Global print data, to remember settings during the session
-wxPrintData *g_printData = NULL;
+wxPrintData *g_printData = nullptr;
 
 // Global page setup data
-wxPageSetupDialogData* g_pageSetupData = NULL;
+wxPageSetupDialogData* g_pageSetupData = nullptr;
 
 
 
@@ -275,9 +275,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title)
-        : wxFrame(NULL, wxID_ANY, title)
+        : wxFrame(nullptr, wxID_ANY, title)
 {
-    m_canvas = NULL;
+    m_canvas = nullptr;
     m_previewModality = wxPreviewFrame_AppModal;
 
 #if wxUSE_STATUSBAR

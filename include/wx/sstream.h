@@ -62,7 +62,7 @@ public:
     //
     // Note that the conversion object should have the life time greater than
     // this stream.
-    explicit wxStringOutputStream(wxString *pString = NULL,
+    explicit wxStringOutputStream(wxString *pString = nullptr,
                                   wxMBConv& conv = wxConvUTF8);
 
     // get the string containing current output

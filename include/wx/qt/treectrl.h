@@ -86,7 +86,7 @@ public:
 
     virtual wxTreeItemId AddRoot(const wxString& text,
                                  int image = -1, int selImage = -1,
-                                 wxTreeItemData *data = NULL) override;
+                                 wxTreeItemData *data = nullptr) override;
 
     virtual void Delete(const wxTreeItemId& item) override;
     virtual void DeleteChildren(const wxTreeItemId& item) override;
@@ -131,7 +131,7 @@ protected:
                                        const wxTreeItemId& idPrevious,
                                        const wxString& text,
                                        int image = -1, int selImage = -1,
-                                       wxTreeItemData *data = NULL) override;
+                                       wxTreeItemData *data = nullptr) override;
 
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const override;
 

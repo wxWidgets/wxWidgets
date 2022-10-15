@@ -62,7 +62,7 @@ public:
     // -------------------------------
 
     // is the wizard running?
-    bool IsRunning() const { return m_page != NULL; }
+    bool IsRunning() const { return m_page != nullptr; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return false without changing the page if
@@ -102,7 +102,7 @@ protected:
     virtual bool ResizeBitmap(wxBitmap& bmp);
 
     // was the dialog really created?
-    bool WasCreated() const { return m_btnPrev != NULL; }
+    bool WasCreated() const { return m_btnPrev != nullptr; }
 
     // event handlers
     void OnCancel(wxCommandEvent& event);
@@ -126,8 +126,8 @@ protected:
     wxPoint m_posWizard;
 
     // wizard state
-    wxWizardPage  *m_page;       // the current page or NULL
-    wxWizardPage  *m_firstpage;  // the page RunWizard started on or NULL
+    wxWizardPage  *m_page;       // the current page or nullptr
+    wxWizardPage  *m_firstpage;  // the page RunWizard started on or nullptr
     wxBitmapBundle m_bitmap;     // the default bitmap to show
 
     // wizard controls

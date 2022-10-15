@@ -76,7 +76,7 @@ void MiscTestCase::Assert()
     WX_ASSERT_FAILS_WITH_ASSERT(AssertIfOdd(1));
 
     // doesn't fail any more
-    wxAssertHandler_t oldHandler = wxSetAssertHandler(NULL);
+    wxAssertHandler_t oldHandler = wxSetAssertHandler(nullptr);
     AssertIfOdd(17);
     wxSetAssertHandler(oldHandler);
 }
@@ -97,23 +97,23 @@ void MiscTestCase::Delete()
 {
     // Allocate some arbitrary memory to get a valid pointer:
     long *pointer = new long;
-    CPPUNIT_ASSERT( pointer != NULL );
+    CPPUNIT_ASSERT( pointer != nullptr );
 
-    // Check that wxDELETE sets the pointer to NULL:
+    // Check that wxDELETE sets the pointer to nullptr:
     wxDELETE( pointer );
-    CPPUNIT_ASSERT( pointer == NULL );
+    CPPUNIT_ASSERT( pointer == nullptr );
 
     // Allocate some arbitrary array to get a valid pointer:
     long *array = new long[ 3 ];
-    CPPUNIT_ASSERT( array != NULL );
+    CPPUNIT_ASSERT( array != nullptr );
 
-    // Check that wxDELETEA sets the pointer to NULL:
+    // Check that wxDELETEA sets the pointer to nullptr:
     wxDELETEA( array );
-    CPPUNIT_ASSERT( array == NULL );
+    CPPUNIT_ASSERT( array == nullptr );
 
     // this results in compilation error, as it should
 #if 0
-    struct SomeUnknownStruct *p = NULL;
+    struct SomeUnknownStruct *p = nullptr;
     wxDELETE(p);
 #endif
 }
@@ -127,7 +127,7 @@ namespace
 // used in WX_ASSERT_FAILS_WITH_ASSERT() in StaticCast() below
 bool IsNull(void *p)
 {
-    return p == NULL;
+    return p == nullptr;
 }
 
 #endif // __WXDEBUG__

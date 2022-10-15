@@ -81,7 +81,7 @@ public:
         the
         object is deleted.
     */
-    wxAutomationObject(WXIDISPATCH* dispatchPtr = NULL);
+    wxAutomationObject(WXIDISPATCH* dispatchPtr = nullptr);
 
     /**
         Destructor. If the internal @c IDispatch pointer is non-null, it will be released.
@@ -186,7 +186,7 @@ public:
     */
     bool GetObject(wxAutomationObject& obj, const wxString& property,
                    int noArgs = 0,
-                   wxVariant args[] = NULL) const;
+                   wxVariant args[] = nullptr) const;
 
     //@{
     /**

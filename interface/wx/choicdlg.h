@@ -187,7 +187,7 @@ public:
     wxSingleChoiceDialog(wxWindow* parent, const wxString& message,
                          const wxString& caption,
                          int n, const wxString* choices,
-                         void** clientData = NULL,
+                         void** clientData = nullptr,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
     /**
@@ -223,7 +223,7 @@ public:
                          const wxString& message,
                          const wxString& caption,
                          const wxArrayString& choices,
-                         void** clientData = NULL,
+                         void** clientData = nullptr,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
     ///@}
@@ -278,7 +278,7 @@ public:
 int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
-                           wxWindow* parent = NULL,
+                           wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
@@ -290,7 +290,7 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            int n,
                            const wxString& choices[],
-                           wxWindow* parent = NULL,
+                           wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
@@ -303,13 +303,13 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& choices,
                            int initialSelection,
-                           wxWindow *parent = NULL);
+                           wxWindow *parent = nullptr);
 
 int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            int n, const wxString *choices,
                            int initialSelection,
-                           wxWindow *parent = NULL);
+                           wxWindow *parent = nullptr);
 ///@}
 
 /** @addtogroup group_funcmacro_dialog */
@@ -338,7 +338,7 @@ int wxGetSingleChoiceIndex(const wxString& message,
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
-                           wxWindow* parent = NULL,
+                           wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
@@ -349,7 +349,7 @@ wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            int n,
                            const wxString& choices[],
-                           wxWindow* parent = NULL,
+                           wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true,
@@ -362,13 +362,13 @@ wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& choices,
                            int initialSelection,
-                           wxWindow *parent = NULL);
+                           wxWindow *parent = nullptr);
 
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            int n, const wxString *choices,
                            int initialSelection,
-                           wxWindow *parent = NULL);
+                           wxWindow *parent = nullptr);
 
 ///@}
 
@@ -391,7 +391,7 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                const wxString& caption,
                                const wxArrayString& aChoices,
                                const wxString& client_data[],
-                               wxWindow* parent = NULL,
+                               wxWindow* parent = nullptr,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true,
@@ -404,7 +404,7 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                int n,
                                const wxString& choices[],
                                const wxString& client_data[],
-                               wxWindow* parent = NULL,
+                               wxWindow* parent = nullptr,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true,
@@ -417,14 +417,14 @@ void* wxGetSingleChoiceData(const wxString& message,
                             const wxArrayString& choices,
                             void **client_data,
                             int initialSelection,
-                            wxWindow *parent = NULL);
+                            wxWindow *parent = nullptr);
 
 void* wxGetSingleChoiceData(const wxString& message,
                             const wxString& caption,
                             int n, const wxString *choices,
                             void **client_data,
                             int initialSelection,
-                            wxWindow *parent = NULL);
+                            wxWindow *parent = nullptr);
 
 ///@}
 
@@ -458,7 +458,7 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
                             const wxString& caption,
                             const wxArrayString& aChoices,
-                            wxWindow* parent = NULL,
+                            wxWindow* parent = nullptr,
                             int x = wxDefaultCoord,
                             int y = wxDefaultCoord,
                             bool centre = true,
@@ -470,7 +470,7 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& caption,
                             int n,
                             const wxString& choices[],
-                            wxWindow* parent = NULL,
+                            wxWindow* parent = nullptr,
                             int x = wxDefaultCoord,
                             int y = wxDefaultCoord,
                             bool centre = true,

@@ -58,7 +58,7 @@ public:
 
 private:
     // do we have the mouse capture?
-    bool HasCapture() const { return m_captureData != NULL; }
+    bool HasCapture() const { return m_captureData != nullptr; }
 
     // get the coord of this event in the direction we're interested in (y for
     // vertical shaft or x for horizontal ones)

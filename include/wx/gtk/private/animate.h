@@ -27,11 +27,11 @@ class WXDLLIMPEXP_ADV wxAnimationGTKImpl : public wxAnimationImpl
 {
 public:
     wxAnimationGTKImpl()
-        : m_pixbuf(NULL) {}
+        : m_pixbuf(nullptr) {}
     ~wxAnimationGTKImpl() { UnRef(); }
 
     virtual bool IsOk() const override
-        { return m_pixbuf != NULL; }
+        { return m_pixbuf != nullptr; }
     virtual bool IsCompatibleWith(wxClassInfo* ci) const override;
 
 

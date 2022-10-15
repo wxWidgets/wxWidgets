@@ -153,7 +153,7 @@ public:
 
     /**
         Gets a pointer to the stipple bitmap. If the brush does not have a @c wxBRUSHSTYLE_STIPPLE
-        style, this bitmap may be non-@NULL but uninitialised (i.e. wxBitmap:IsOk() returns @false).
+        style, this bitmap may be non-null but uninitialised (i.e. wxBitmap:IsOk() returns @false).
 
         @see SetStipple()
     */

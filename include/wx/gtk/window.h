@@ -84,7 +84,7 @@ public:
 #endif // __WXGTK3__
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) override;
+                          const wxRect *rect = (const wxRect *) nullptr ) override;
     virtual void Update() override;
     virtual void ClearBackground() override;
 
@@ -94,7 +94,7 @@ public:
     virtual bool SetFont( const wxFont &font ) override;
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) override ;
-    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const override;
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
 
     virtual int GetCharHeight() const override;
     virtual int GetCharWidth() const override;
@@ -108,7 +108,7 @@ public:
     virtual int GetScrollThumb( int orient ) const override;
     virtual int GetScrollRange( int orient ) const override;
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = NULL ) override;
+                               const wxRect* rect = nullptr ) override;
     virtual bool ScrollLines(int lines) override;
     virtual bool ScrollPages(int pages) override;
 
@@ -234,7 +234,7 @@ protected:
     // Get the GdkWindows making part of this window: usually there will be
     // only one of them in which case it should be returned directly by this
     // function. If there is more than one GdkWindow (can be the case for
-    // composite widgets), return NULL and fill in the provided array
+    // composite widgets), return nullptr and fill in the provided array
     //
     // This is not pure virtual for backwards compatibility but almost
     // certainly must be overridden in any wxControl-derived class!
@@ -284,7 +284,7 @@ public:
     wxString             m_gtkLabel;
 
     // return true if the window is of a standard (i.e. not wxWidgets') class
-    bool IsOfStandardClass() const { return m_wxwindow == NULL; }
+    bool IsOfStandardClass() const { return m_wxwindow == nullptr; }
 
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
@@ -301,10 +301,10 @@ public:
     // this window are really needed but currently we do it unconditionally.
     //
     // For native widgets (i.e. those for which IsOfStandardClass() returns
-    // true) it is NULL.
+    // true) it is null.
     GtkIMContext* m_imContext;
 
-    // Pointer to the event being currently processed by the IME or NULL if not
+    // Pointer to the event being currently processed by the IME or nullptr if not
     // inside key handling.
     GdkEventKey* m_imKeyEvent;
 
@@ -355,7 +355,7 @@ public:
     void GTKUpdateCursor(
         bool isBusyOrGlobalCursor = false,
         bool isRealize = false,
-        const wxCursor* overrideCursor = NULL);
+        const wxCursor* overrideCursor = nullptr);
 
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
@@ -374,9 +374,9 @@ protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *font = NULL) const override;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *font = nullptr) const override;
     virtual void DoClientToScreen( int *x, int *y ) const override;
     virtual void DoScreenToClient( int *x, int *y ) const override;
     virtual void DoGetPosition( int *x, int *y ) const override;
@@ -467,7 +467,7 @@ protected:
 private:
     void Init();
 
-    // return true if this window must have a non-NULL parent, false if it can
+    // return true if this window must have a non-null parent, false if it can
     // be created without parent (normally only top level windows but in wxGTK
     // there is also the exception of wxMenuBar)
     virtual bool GTKNeedsParent() const { return !IsTopLevel(); }

@@ -40,7 +40,7 @@ gtkcombobox_popupshown_callback(GObject *WXUNUSED(gobject),
                                 wxComboBox *combo)
 {
     gboolean isShown;
-    g_object_get( combo->m_widget, "popup-shown", &isShown, NULL );
+    g_object_get( combo->m_widget, "popup-shown", &isShown, nullptr );
     wxCommandEvent event( isShown ? wxEVT_COMBOBOX_DROPDOWN
                                   : wxEVT_COMBOBOX_CLOSEUP,
                           combo->GetId() );
@@ -97,7 +97,7 @@ wxComboBox::~wxComboBox()
 
 void wxComboBox::Init()
 {
-    m_entry = NULL;
+    m_entry = nullptr;
 }
 
 bool wxComboBox::Create( wxWindow *parent, wxWindowID id,
@@ -134,7 +134,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (HasFlag(wxBORDER_NONE))
     {
         // Doesn't seem to work
-        // g_object_set (m_widget, "has-frame", FALSE, NULL);
+        // g_object_set (m_widget, "has-frame", FALSE, nullptr);
     }
 
     GtkEntry * const entry = GetEntry();

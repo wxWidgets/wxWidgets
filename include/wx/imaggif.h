@@ -37,7 +37,7 @@ public:
         m_extension = wxT("gif");
         m_type = wxBITMAP_TYPE_GIF;
         m_mime = wxT("image/gif");
-        m_hashTable = NULL;
+        m_hashTable = nullptr;
     }
 
 #if wxUSE_STREAMS

@@ -86,7 +86,7 @@ void ListCtrlTestCase::setUp()
 void ListCtrlTestCase::tearDown()
 {
     DeleteTestWindow(m_list);
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 void ListCtrlTestCase::EditLabel()

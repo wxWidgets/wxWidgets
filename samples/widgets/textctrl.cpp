@@ -164,7 +164,7 @@ protected:
     wxSizer *CreateTextWithLabelSizer(const wxString& label,
                                       wxTextCtrl *text,
                                       const wxString& label2 = wxEmptyString,
-                                      wxTextCtrl *text2 = NULL);
+                                      wxTextCtrl *text2 = nullptr);
 
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
@@ -380,14 +380,14 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
 #endif // __WXMSW__
     m_radioWrap =
     m_radioAlign =
-    m_radioTextLines = (wxRadioBox *)NULL;
+    m_radioTextLines = nullptr;
 
     m_chkPassword =
     m_chkReadonly =
     m_chkProcessEnter =
     m_chkProcessTab =
     m_chkFilename =
-    m_chkNoVertScrollbar = (wxCheckBox *)NULL;
+    m_chkNoVertScrollbar = nullptr;
 
     m_text =
     m_textPosCur =
@@ -397,9 +397,9 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
     m_textLineLast =
     m_textSelFrom =
     m_textSelTo =
-    m_textRange = (wxTextCtrl *)NULL;
+    m_textRange = nullptr;
 
-    m_sizerText = (wxSizer *)NULL;
+    m_sizerText = nullptr;
 
     m_posCur =
     m_posLast =
@@ -628,7 +628,7 @@ wxTextCtrl *TextWidgetsPage::CreateInfoText()
     if ( !s_maxWidth )
     {
         // calc it once only
-        GetTextExtent("9999999", &s_maxWidth, NULL);
+        GetTextExtent("9999999", &s_maxWidth, nullptr);
     }
 
     wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,

@@ -28,7 +28,7 @@
 class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
 {
 public:
-    wxExtHelpController(wxWindow* parentWindow = NULL);
+    wxExtHelpController(wxWindow* parentWindow = nullptr);
     virtual ~wxExtHelpController();
 
     // Set viewer: new name for SetBrowser
@@ -60,11 +60,11 @@ public:
             // does nothing by default
         }
 
-    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = NULL,
-                                    wxPoint *WXUNUSED(pos) = NULL,
-                                    bool *WXUNUSED(newFrameEachTime) = NULL) override
+    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = nullptr,
+                                    wxPoint *WXUNUSED(pos) = nullptr,
+                                    bool *WXUNUSED(newFrameEachTime) = nullptr) override
         {
-            return NULL; // does nothing by default
+            return nullptr; // does nothing by default
         }
 
 protected:

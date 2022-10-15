@@ -97,7 +97,7 @@
                           const wxString& func,
                           const wxString& cond,
                           const wxString& msg,
-                          wxAppTraits *traits = NULL);
+                          wxAppTraits *traits = nullptr);
 #endif // wxDEBUG_LEVEL
 
 #ifdef __WXDEBUG__
@@ -109,11 +109,11 @@
 // global vars
 // ----------------------------------------------------------------------------
 
-wxAppConsole *wxAppConsoleBase::ms_appInstance = NULL;
+wxAppConsole *wxAppConsoleBase::ms_appInstance = nullptr;
 
-wxAppInitializerFunction wxAppConsoleBase::ms_appInitFn = NULL;
+wxAppInitializerFunction wxAppConsoleBase::ms_appInitFn = nullptr;
 
-wxSocketManager *wxAppTraitsBase::ms_manager = NULL;
+wxSocketManager *wxAppTraitsBase::ms_manager = nullptr;
 
 WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
 
@@ -134,8 +134,8 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopBase)
 
 wxAppConsoleBase::wxAppConsoleBase()
 {
-    m_traits = NULL;
-    m_mainLoop = NULL;
+    m_traits = nullptr;
+    m_mainLoop = nullptr;
     m_bDoPendingEventProcessing = true;
 
     ms_appInstance = reinterpret_cast<wxAppConsole *>(this);
@@ -159,7 +159,7 @@ wxAppConsoleBase::~wxAppConsoleBase()
 
     // we're being destroyed and using this object from now on may not work or
     // even crash so don't leave dangling pointers to it
-    ms_appInstance = NULL;
+    ms_appInstance = nullptr;
 
     delete m_traits;
 }
@@ -185,7 +185,7 @@ wxString wxAppConsoleBase::GetAppName() const
         if ( argv )
         {
             // the application name is, by default, the name of its executable file
-            wxFileName::SplitPath(argv[0], NULL, &name, NULL);
+            wxFileName::SplitPath(argv[0], nullptr, &name, nullptr);
         }
 #if wxUSE_STDPATHS
         else // fall back to the executable file name, if we can determine it
@@ -193,7 +193,7 @@ wxString wxAppConsoleBase::GetAppName() const
             const wxString pathExe = wxStandardPaths::Get().GetExecutablePath();
             if ( !pathExe.empty() )
             {
-                wxFileName::SplitPath(pathExe, NULL, &name, NULL);
+                wxFileName::SplitPath(pathExe, nullptr, &name, nullptr);
             }
         }
 #endif // wxUSE_STDPATHS
@@ -226,7 +226,7 @@ void wxAppConsoleBase::CleanUp()
 {
 #if wxUSE_CONFIG
     // Delete the global wxConfig object, if any, and reset it.
-    delete wxConfigBase::Set(NULL);
+    delete wxConfigBase::Set(nullptr);
 #endif // wxUSE_CONFIG
 
     wxDELETE(m_mainLoop);
@@ -291,7 +291,7 @@ int wxAppConsoleBase::OnExit()
 
 void wxAppConsoleBase::Exit()
 {
-    if (m_mainLoop != NULL)
+    if (m_mainLoop != nullptr)
         ExitMainLoop();
     else
         exit(-1);
@@ -323,7 +323,7 @@ wxAppTraits *wxAppConsoleBase::GetTraits()
 wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
 {
     wxAppConsole * const app = GetInstance();
-    return app ? app->GetTraits() : NULL;
+    return app ? app->GetTraits() : nullptr;
 }
 
 /* static */
@@ -418,7 +418,7 @@ bool wxAppConsoleBase::UsesEventLoop() const
 {
     // in console applications we don't know whether we're going to have an
     // event loop so assume we won't -- unless we already have one running
-    return wxEventLoopBase::GetActive() != NULL;
+    return wxEventLoopBase::GetActive() != nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -430,7 +430,7 @@ bool wxAppConsoleBase::IsMainLoopRunning()
 {
     const wxAppConsole * const app = GetInstance();
 
-    return app && app->m_mainLoop != NULL;
+    return app && app->m_mainLoop != nullptr;
 }
 
 int wxAppConsoleBase::FilterEvent(wxEvent& WXUNUSED(event))
@@ -740,7 +740,7 @@ void wxAppConsoleBase::OnInitCmdLine(wxCmdLineParser& parser)
 #if wxUSE_LOG
         {
             wxCMD_LINE_SWITCH,
-            NULL,
+            nullptr,
             OPTION_VERBOSE,
             gettext_noop("generate verbose log messages"),
             wxCMD_LINE_VAL_NONE,
@@ -839,7 +839,7 @@ void wxAppConsoleBase::OnAssert(const wxChar *file,
                                 const wxChar *cond,
                                 const wxChar *msg)
 {
-    OnAssertFailure(file, line, NULL, cond, msg);
+    OnAssertFailure(file, line, nullptr, cond, msg);
 }
 
 // ----------------------------------------------------------------------------
@@ -888,7 +888,7 @@ wxFontMapper *wxConsoleAppTraitsBase::CreateFontMapper()
 wxRendererNative *wxConsoleAppTraitsBase::CreateRenderer()
 {
     // console applications don't use renderers
-    return NULL;
+    return nullptr;
 }
 
 bool wxConsoleAppTraitsBase::ShowAssertDialog(const wxString& msg)
@@ -1175,7 +1175,7 @@ void wxOnAssert(const wxChar *file,
 {
     // this is the backwards-compatible version (unless we don't use Unicode)
     // so it could be called directly from the user code and this might happen
-    // even when wxTheAssertHandler is NULL
+    // even when wxTheAssertHandler is null
 #if wxUSE_UNICODE
     if ( wxTheAssertHandler )
 #endif // wxUSE_UNICODE
@@ -1269,7 +1269,7 @@ bool DoShowAssertDialog(const wxString& msg)
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");
 
-    switch ( ::MessageBox(NULL, msgDlg.t_str(), wxT("wxWidgets Debug Alert"),
+    switch ( ::MessageBox(nullptr, msgDlg.t_str(), wxT("wxWidgets Debug Alert"),
                           MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP ) )
     {
         case IDYES:

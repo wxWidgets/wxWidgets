@@ -108,8 +108,8 @@ WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 class WXDLLIMPEXP_CORE wxDataViewModelNotifier
 {
 public:
-    wxDataViewModelNotifier() { m_owner = NULL; }
-    virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
+    wxDataViewModelNotifier() { m_owner = nullptr; }
+    virtual ~wxDataViewModelNotifier() { m_owner = nullptr; }
 
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
@@ -723,10 +723,10 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(NULL); }
+    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(nullptr); }
     virtual int GetCountPerPage() const { return wxNOT_FOUND; }
 
-    // Currently focused column of the current item or NULL if no column has focus
+    // Currently focused column of the current item or nullptr if no column has focus
     virtual wxDataViewColumn *GetCurrentColumn() const = 0;
 
     // Selection: both GetSelection() and GetSelections() can be used for the
@@ -754,9 +754,9 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
 
     virtual void EnsureVisible( const wxDataViewItem & item,
-                                const wxDataViewColumn *column = NULL ) = 0;
+                                const wxDataViewColumn *column = nullptr ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = nullptr ) const = 0;
 
     virtual bool SetRowHeight( int WXUNUSED(rowHeight) ) { return false; }
 
@@ -857,7 +857,7 @@ public:
     wxDataViewEvent()
         : wxNotifyEvent()
     {
-        Init(NULL, NULL, wxDataViewItem());
+        Init(nullptr, nullptr, wxDataViewItem());
     }
 
     // Constructor for the events affecting columns (and possibly also items).
@@ -876,7 +876,7 @@ public:
                     const wxDataViewItem& item)
         : wxNotifyEvent(evtType, dvc->GetId())
     {
-        Init(dvc, NULL, item);
+        Init(dvc, nullptr, item);
     }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -1241,7 +1241,7 @@ public:
     wxDataViewTreeStoreNode( wxDataViewTreeStoreNode *parent,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     virtual ~wxDataViewTreeStoreNode();
 
     void SetText( const wxString &text )
@@ -1284,7 +1284,7 @@ public:
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
         const wxBitmapBundle &expanded = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     virtual ~wxDataViewTreeStoreContainerNode();
 
     const wxDataViewTreeStoreNodes &GetChildren() const
@@ -1328,31 +1328,31 @@ public:
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
         const wxBitmapBundle &expanded = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
         const wxBitmapBundle &expanded = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
         const wxString &text,
         const wxBitmapBundle &icon = wxBitmapBundle(),
         const wxBitmapBundle &expanded = wxBitmapBundle(),
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const;
     int GetChildCount( const wxDataViewItem& parent ) const;
@@ -1429,21 +1429,21 @@ public:
         { return GetStore()->IsContainer(item); }
 
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = nullptr );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = nullptr );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = nullptr );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
         const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
         const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
         const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const
         { return GetStore()->GetNthChild(parent, pos); }

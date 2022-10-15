@@ -142,7 +142,7 @@ public:
         Note that the instance doesn't own the help controller. The help
         controller should be deleted separately.
     */
-    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = NULL);
+    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = nullptr);
 
     /**
         Returns the help controller associated with this help provider.
@@ -199,7 +199,7 @@ public:
 
         If @a window is @NULL, the top window is used.
     */
-    wxContextHelp(wxWindow* window = NULL, bool doNow = true);
+    wxContextHelp(wxWindow* window = nullptr, bool doNow = true);
 
     /**
         Destroys the context help object.

@@ -265,12 +265,12 @@ SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
     m_chkMinMaxLabels =
     m_chkValueLabel =
     m_chkBothSides =
-    m_chkSelectRange =(wxCheckBox *)NULL;
+    m_chkSelectRange = nullptr;
 
-    m_radioSides = (wxRadioBox *)NULL;
+    m_radioSides = nullptr;
 
-    m_slider = (wxSlider *)NULL;
-    m_sizerSlider = (wxSizer *)NULL;
+    m_slider = nullptr;
+    m_sizerSlider = nullptr;
 }
 
 void SliderWidgetsPage::CreateContent()

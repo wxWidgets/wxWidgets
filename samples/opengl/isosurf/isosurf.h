@@ -46,7 +46,7 @@ class TestGLCanvas : public wxGLCanvas
 public:
     TestGLCanvas(wxWindow *parent,
                  wxWindowID id = wxID_ANY,
-                 int *gl_attrib = NULL);
+                 int *gl_attrib = nullptr);
 
     virtual ~TestGLCanvas();
 

@@ -70,7 +70,7 @@ TEST_CASE("wxRegEx::Compile", "[regex][compile]")
 static void
 CheckMatch(const char* pattern,
            const char* text,
-           const char* expected = NULL,
+           const char* expected = nullptr,
            int compileFlags = wxRE_DEFAULT,
            int matchFlags = 0)
 {
@@ -112,7 +112,7 @@ TEST_CASE("wxRegEx::Match", "[regex][match]")
 {
     // Match tests
     // pattern, text, expected results (match, followed by submatches
-    // tab separated, or NULL for no match expected)
+    // tab separated, or nullptr for no match expected)
 
     CheckMatch("foo", "bar");
     CheckMatch("foo", "foobar", "foo");
@@ -125,7 +125,7 @@ TEST_CASE("wxRegEx::Match", "[regex][match]")
     CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "AA", wxRE_NEWLINE);
     CheckMatch("^[a-z].*$", "AA\nbb\nCC", "bb", wxRE_NEWLINE);
     CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "CC", wxRE_NEWLINE, wxRE_NOTBOL);
-    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", NULL, wxRE_NEWLINE, wxRE_NOTBOL | wxRE_NOTEOL);
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", nullptr, wxRE_NEWLINE, wxRE_NOTBOL | wxRE_NOTEOL);
     CheckMatch("([[:alpha:]]+) ([[:alpha:]]+) ([[:digit:]]+).* ([[:digit:]]+)$",
         "Fri Jul 13 18:37:52 CEST 2001",
         "Fri Jul 13 18:37:52 CEST 2001\tFri\tJul\t13\t2001");

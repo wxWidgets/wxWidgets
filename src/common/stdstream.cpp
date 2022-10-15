@@ -72,7 +72,7 @@ std::streambuf *
 wxStdInputStreamBuffer::setbuf(char *WXUNUSED(s),
                                std::streamsize WXUNUSED(n))
 {
-    return NULL;
+    return nullptr;
 }
 
 std::streampos
@@ -192,7 +192,7 @@ std::streambuf *
 wxStdOutputStreamBuffer::setbuf(char *WXUNUSED(s),
                                 std::streamsize WXUNUSED(n))
 {
-    return NULL;
+    return nullptr;
 }
 
 std::streampos
@@ -250,13 +250,13 @@ wxStdOutputStreamBuffer::overflow(int c)
 // ==========================================================================
 
 wxStdInputStream::wxStdInputStream(wxInputStream& stream) :
-    std::istream(NULL), m_streamBuffer(stream)
+    std::istream(nullptr), m_streamBuffer(stream)
 {
     std::ios::init(&m_streamBuffer);
 }
 
 wxStdOutputStream::wxStdOutputStream(wxOutputStream& stream) :
-    std::ostream(NULL), m_streamBuffer(stream)
+    std::ostream(nullptr), m_streamBuffer(stream)
 {
     std::ios::init(&m_streamBuffer);
 }

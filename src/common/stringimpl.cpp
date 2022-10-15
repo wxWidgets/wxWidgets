@@ -217,7 +217,7 @@ bool wxStringImpl::AllocBuffer(size_t nLen)
   wxStringData* pData = (wxStringData*)
     malloc(sizeof(wxStringData) + (nLen + EXTRA_ALLOC + 1)*sizeof(wxStringCharType));
 
-  if ( pData == NULL ) {
+  if ( pData == nullptr ) {
     // allocation failures are handled by the caller
     return false;
   }
@@ -277,7 +277,7 @@ bool wxStringImpl::AllocBeforeWrite(size_t nLen)
           realloc(pData,
                   sizeof(wxStringData) + (nLen + 1)*sizeof(wxStringCharType));
 
-      if ( pData == NULL ) {
+      if ( pData == nullptr ) {
         // allocation failures are handled by the caller
         // keep previous data since reallocation failed
         return false;
@@ -341,7 +341,7 @@ bool wxStringImpl::Alloc(size_t nLen)
       pData = (wxStringData *)
              malloc(sizeof(wxStringData) + (nLen + 1)*sizeof(wxStringCharType));
 
-      if ( pData == NULL ) {
+      if ( pData == nullptr ) {
         // allocation failure handled by caller
         return false;
       }
@@ -369,7 +369,7 @@ bool wxStringImpl::Alloc(size_t nLen)
       pData = (wxStringData *)
         realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxStringCharType));
 
-      if ( pData == NULL ) {
+      if ( pData == nullptr ) {
         // allocation failure handled by caller
         // keep previous data since reallocation failed
         return false;
@@ -509,7 +509,7 @@ size_t wxStringImpl::find(wxStringCharType ch, size_t nStart) const
     const wxStringCharType *p = (const wxStringCharType*)
         wxStringMemchr(c_str() + nStart, ch, length() - nStart);
 
-    return p == NULL ? npos : p - c_str();
+    return p == nullptr ? npos : p - c_str();
 }
 
 size_t wxStringImpl::rfind(const wxStringImpl& str, size_t nStart) const
@@ -761,7 +761,7 @@ wxStringCharType *wxStringImpl::DoGetWriteBuf(size_t nLen)
 {
   if ( !AllocBeforeWrite(nLen) ) {
     // allocation failure handled by caller
-    return NULL;
+    return nullptr;
   }
 
   wxASSERT( GetStringData()->nRefs == 1 );

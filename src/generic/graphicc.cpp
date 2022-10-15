@@ -120,7 +120,7 @@ namespace
 class WXDLLIMPEXP_CORE wxCairoPathData : public wxGraphicsPathData
 {
 public :
-    wxCairoPathData(wxGraphicsRenderer* renderer, cairo_t* path = NULL);
+    wxCairoPathData(wxGraphicsRenderer* renderer, cairo_t* path = nullptr);
     ~wxCairoPathData();
 
     virtual wxGraphicsObjectRefData *Clone() const override;
@@ -191,7 +191,7 @@ private :
 class WXDLLIMPEXP_CORE wxCairoMatrixData : public wxGraphicsMatrixData
 {
 public :
-    wxCairoMatrixData(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix = NULL ) ;
+    wxCairoMatrixData(wxGraphicsRenderer* renderer, const cairo_matrix_t* matrix = nullptr ) ;
     virtual ~wxCairoMatrixData() ;
 
     virtual wxGraphicsObjectRefData *Clone() const override ;
@@ -204,8 +204,8 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) override;
 
     // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const override;
+    virtual void Get(wxDouble* a=nullptr, wxDouble* b=nullptr,  wxDouble* c=nullptr,
+                     wxDouble* d=nullptr, wxDouble* tx=nullptr, wxDouble* ty=nullptr) const override;
 
     // makes this the inverse matrix
     virtual void Invert() override;
@@ -628,13 +628,13 @@ class wxCairoMeasuringContext : public wxCairoContext
 {
 public:
     wxCairoMeasuringContext(wxGraphicsRenderer* renderer)
-        : wxCairoContext(renderer, m_hdc = ::GetDC(NULL))
+        : wxCairoContext(renderer, m_hdc = ::GetDC(nullptr))
     {
     }
 
     virtual ~wxCairoMeasuringContext()
     {
-        ::ReleaseDC(NULL, m_hdc);
+        ::ReleaseDC(nullptr, m_hdc);
     }
 
 private:
@@ -652,8 +652,8 @@ wxCairoPenBrushBaseData::wxCairoPenBrushBaseData(wxGraphicsRenderer* renderer,
     : wxGraphicsObjectRefData(renderer)
 {
     m_hatchStyle = wxHATCHSTYLE_INVALID;
-    m_pattern = NULL;
-    m_bmpdata = NULL;
+    m_pattern = nullptr;
+    m_bmpdata = nullptr;
 
     if ( isTransparent || !col.IsOk() )
     {
@@ -676,9 +676,9 @@ wxCairoPenBrushBaseData::~wxCairoPenBrushBaseData()
     if (m_bmpdata)
     {
         // Deleting the bitmap data also deletes the pattern referenced by
-        // m_pattern, so set it to NULL to avoid deleting it twice.
+        // m_pattern, so set it to nullptr to avoid deleting it twice.
         delete m_bmpdata;
-        m_pattern = NULL;
+        m_pattern = nullptr;
     }
     if (m_pattern)
         cairo_pattern_destroy(m_pattern);
@@ -846,9 +846,9 @@ wxCairoPenData::~wxCairoPenData()
 
 void wxCairoPenData::Init()
 {
-    m_pattern = NULL;
-    m_lengths = NULL;
-    m_userLengths = NULL;
+    m_pattern = nullptr;
+    m_lengths = nullptr;
+    m_userLengths = nullptr;
     m_width = 0;
     m_count = 0;
 }
@@ -965,7 +965,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         {
             wxDash *wxdashes ;
             m_count = info.GetDashes( &wxdashes ) ;
-            if ((wxdashes != NULL) && (m_count > 0))
+            if ((wxdashes != nullptr) && (m_count > 0))
             {
                 m_userLengths = new double[m_count] ;
                 for ( int i = 0 ; i < m_count ; ++i )
@@ -1100,8 +1100,8 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer,
 
 void wxCairoBrushData::Init()
 {
-    m_pattern = NULL;
-    m_bmpdata = NULL;
+    m_pattern = nullptr;
+    m_bmpdata = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -1182,11 +1182,11 @@ wxCairoFontData::wxCairoFontData(wxGraphicsRenderer* renderer,
     m_size = sizeInPixels;
 
 #if defined(__WXMAC__)
-    m_font = NULL;
+    m_font = nullptr;
 #endif
 
     // There is no need to set m_underlined under wxGTK in this case, it can
-    // only be used if m_font != NULL.
+    // only be used if m_font != nullptr.
 
     InitFontComponents
     (
@@ -1592,15 +1592,15 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
 
     m_width = cairo_image_surface_get_width(m_surface);
     m_height = cairo_image_surface_get_height(m_surface);
-    m_buffer = NULL;
+    m_buffer = nullptr;
 }
 
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp )
     : wxGraphicsBitmapData(renderer)
 {
-    m_surface = NULL;
-    m_pattern = NULL;
-    m_buffer = NULL;
+    m_surface = nullptr;
+    m_pattern = nullptr;
+    m_buffer = nullptr;
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
 #ifdef wxHAS_RAW_BITMAP
@@ -1617,9 +1617,9 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     cairo_format_t bufferFormat =
     // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
 #if defined(__WXMSW__) || defined(__WXOSX__)
-        (isSrcBpp32 && hasAlpha) || bmp.GetMask() != NULL
+        (isSrcBpp32 && hasAlpha) || bmp.GetMask() != nullptr
 #else
-        isSrcBpp32 || bmp.GetMask() != NULL
+        isSrcBpp32 || bmp.GetMask() != nullptr
 #endif
         ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24;
 
@@ -1708,7 +1708,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     // if there is a mask, set the alpha bytes in the target buffer to
     // fully transparent or retain original value
-    if (bmp.GetMask() != NULL)
+    if (bmp.GetMask() != nullptr)
     {
         wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
         data = (wxUint32*)m_buffer;
@@ -1991,7 +1991,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 #elif defined(__WXGTK__)
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* cr = static_cast<cairo_t*>(impl->GetCairoContext());
-    Init(cr ? cairo_reference(cr) : NULL);
+    Init(cr ? cairo_reference(cr) : nullptr);
 
     wxSize sz = dc.GetSize();
     m_width = sz.x;
@@ -2025,7 +2025,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
-    Init(cr ? cairo_reference(cr) : NULL);
+    Init(cr ? cairo_reference(cr) : nullptr);
 #elif defined __WXGTK__
     const wxGTKDCImpl* impldc = static_cast<const wxGTKDCImpl*>(dc.GetImpl());
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -2167,7 +2167,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
                 else
                 {
                     cairo_surface_destroy(m_mswSurface);
-                    m_mswSurface = NULL;
+                    m_mswSurface = nullptr;
                 }
             }
             else
@@ -2198,10 +2198,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
             dc.GetDeviceOrigin(&orgX, &orgY);
             if ( orgX > 0 || orgY > 0 )
             {
-                ::SetViewportOrgEx(hdc, 0, 0, NULL);
-                ::SetViewportExtEx(hdc, 1, 1, NULL);
-                ::SetWindowOrgEx(hdc, 0, 0, NULL);
-                ::SetWindowExtEx(hdc, 1, 1, NULL);
+                ::SetViewportOrgEx(hdc, 0, 0, nullptr);
+                ::SetViewportExtEx(hdc, 1, 1, nullptr);
+                ::SetWindowOrgEx(hdc, 0, 0, nullptr);
+                ::SetWindowExtEx(hdc, 1, 1, nullptr);
                 adjustTransformFromDC = true;
             }
         }
@@ -2238,7 +2238,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
-    Init(cr ? cairo_reference(cr) : NULL);
+    Init(cr ? cairo_reference(cr) : nullptr);
 #elif defined __WXGTK__
     const wxGTKDCImpl* impldc = static_cast<const wxGTKDCImpl*>(dc.GetImpl());
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -2353,10 +2353,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
             cairo_matrix_scale(&dcTransform, sx, sy);
             cairo_matrix_translate(&dcTransform, -logOrg.x, -logOrg.y);
 
-            ::SetViewportOrgEx(handle, 0, 0, NULL);
-            ::SetViewportExtEx(handle, 1, 1, NULL);
-            ::SetWindowOrgEx(handle, 0, 0, NULL);
-            ::SetWindowExtEx(handle, 1, 1, NULL);
+            ::SetViewportOrgEx(handle, 0, 0, nullptr);
+            ::SetViewportExtEx(handle, 1, 1, nullptr);
+            ::SetWindowOrgEx(handle, 0, 0, nullptr);
+            ::SetWindowExtEx(handle, 1, 1, nullptr);
 
             adjustTransformFromDC = true;
         }
@@ -2412,12 +2412,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXQT__
-    m_qtPainter = NULL;
-    m_qtImage = NULL;
-    m_qtSurface = NULL;
+    m_qtPainter = nullptr;
+    m_qtImage = nullptr;
+    m_qtSurface = nullptr;
 #endif
 #ifdef __WXMSW__
-    m_mswSurface = NULL;
+    m_mswSurface = nullptr;
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
     Init( cairo_reference(context) );
@@ -2438,7 +2438,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     // Some controls don't have m_wxwindow - like wxStaticBox, but the user
     // code should still be able to create wxClientDCs for them, so we will
     // use the parent window here then.
-    if (window->m_wxwindow == NULL)
+    if (window->m_wxwindow == nullptr)
     {
         window = window->GetParent();
     }
@@ -2471,15 +2471,15 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     wxGraphicsContext(renderer)
 {
 #ifdef __WXQT__
-    m_qtPainter = NULL;
-    m_qtImage = NULL;
-    m_qtSurface = NULL;
+    m_qtPainter = nullptr;
+    m_qtImage = nullptr;
+    m_qtSurface = nullptr;
 #endif
 #ifdef __WXMSW__
-    m_mswSurface = NULL;
+    m_mswSurface = nullptr;
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
-    Init(NULL);
+    Init(nullptr);
     m_width = 0;
     m_height = 0;
 }
@@ -2504,7 +2504,7 @@ wxCairoContext::~wxCairoContext()
     }
 #endif
 #ifdef __WXQT__
-    if ( m_qtPainter != NULL )
+    if ( m_qtPainter != nullptr )
     {
         // draw the internal buffered image to the widget
         cairo_surface_flush(m_qtSurface);
@@ -2974,7 +2974,7 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
         PangoLayoutIter* iter = pango_layout_get_iter(layout);
         PangoRectangle rect;
         do {
-            pango_layout_iter_get_cluster_extents(iter, NULL, &rect);
+            pango_layout_iter_get_cluster_extents(iter, nullptr, &rect);
             w += rect.width;
             widths.Add(PANGO_PIXELS(w));
         } while (pango_layout_iter_next_cluster(iter));
@@ -3119,7 +3119,7 @@ void wxCairoContext::EndLayer()
 #ifdef __WXMSW__
 WXHDC wxCairoContext::GetNativeHDC()
 {
-    wxCHECK_MSG(m_mswSurface, NULL, "Can't get HDC from Cairo context");
+    wxCHECK_MSG(m_mswSurface, nullptr, "Can't get HDC from Cairo context");
     cairo_surface_flush(m_mswSurface);
     return cairo_win32_surface_get_dc(m_mswSurface);
 };
@@ -3244,20 +3244,20 @@ static wxCairoRenderer gs_cairoGraphicsRenderer;
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxWindowDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoContext(this,dc);
 }
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoContext(this,dc);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoContext(this, dc);
 }
 #endif
@@ -3265,14 +3265,14 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 #if defined(__WXMSW__) && wxUSE_ENH_METAFILE
 wxGraphicsContext * wxCairoRenderer::CreateContext(const wxEnhMetaFileDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoContext(this, dc);
 }
 #endif // __WXMSW__ && wxUSE_ENH_METAFILE
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * context)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
 #ifdef __WXMSW__
     DWORD objType = ::GetObjectType((HGDIOBJ)context);
     if (objType == 0)
@@ -3281,7 +3281,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * conte
     if (objType == OBJ_DC || objType == OBJ_MEMDC)
         return new wxCairoContext(this, (HDC)context);
 
-    return NULL;
+    return nullptr;
 #else
     return new wxCairoContext(this,(cairo_t*)context);
 #endif
@@ -3290,21 +3290,21 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * conte
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * window )
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
 #ifdef __WXGTK__
     return new wxCairoContext(this, static_cast<GdkWindow*>(window));
 #elif defined(__WXMSW__)
     return new wxCairoContext(this, static_cast<HWND>(window));
 #else
     wxUnusedVar(window);
-    return NULL;
+    return nullptr;
 #endif
 }
 
 #ifdef __WXMSW__
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeHDC(WXHDC dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoContext(this, (HDC)dc);
 }
 #endif
@@ -3312,7 +3312,7 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeHDC(WXHDC dc)
 #if wxUSE_IMAGE
 wxGraphicsContext * wxCairoRenderer::CreateContextFromImage(wxImage& image)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoImageContext(this, image);
 }
 #endif // wxUSE_IMAGE
@@ -3322,17 +3322,17 @@ wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
 #ifdef __WXGTK__
     return CreateContextFromNativeWindow(gdk_get_default_root_window());
 #elif defined(__WXMSW__)
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoMeasuringContext(this);
 #else
-    return NULL;
+    return nullptr;
     // TODO
 #endif
 }
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( wxWindow* window )
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxCairoContext(this, window );
 }
 
@@ -3490,7 +3490,7 @@ wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 {
     wxGraphicsBitmap p;
     ENSURE_LOADED_OR_RETURN(p);
-    if ( bitmap != NULL )
+    if ( bitmap != nullptr )
     {
         p.SetRefData(new wxCairoBitmapData( this , (cairo_surface_t*) bitmap ));
     }
@@ -3572,7 +3572,7 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 
 wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 {
-    return NULL;
+    return nullptr;
 }
 
 #endif  // wxUSE_CAIRO/!wxUSE_CAIRO

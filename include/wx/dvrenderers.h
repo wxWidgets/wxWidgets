@@ -203,7 +203,7 @@ public:
     virtual wxWindow* CreateEditorCtrl(wxWindow * WXUNUSED(parent),
                                        wxRect WXUNUSED(labelRect),
                                        const wxVariant& WXUNUSED(value))
-        { return NULL; }
+        { return nullptr; }
     virtual bool GetValueFromEditorCtrl(wxWindow * WXUNUSED(editor),
                                         wxVariant& WXUNUSED(value))
         { return false; }

@@ -84,7 +84,7 @@ public:
         // with multiple display
         return m_visualInfo;
     }
-    virtual void* GetXVisualInfo() { return NULL; }
+    virtual void* GetXVisualInfo() { return nullptr; }
 
 public:
     static long           sm_lastMessageTime;

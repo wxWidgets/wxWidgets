@@ -21,9 +21,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiXmlHandler, wxXmlResourceHandler);
 
 wxAuiXmlHandler::wxAuiXmlHandler()
                 : wxXmlResourceHandler(),
-                  m_manager(NULL),
-                  m_window(NULL),
-                  m_notebook(NULL),
+                  m_manager(nullptr),
+                  m_window(nullptr),
+                  m_notebook(nullptr),
                   m_mgrInside(false),
                   m_anbInside(false)
 {
@@ -66,7 +66,7 @@ wxAuiManager *wxAuiXmlHandler::GetAuiManager( wxWindow *managed ) const
             return mgr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void wxAuiXmlHandler::OnManagedWindowClose( wxWindowDestroyEvent &event )
@@ -92,7 +92,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
 {
     if (m_class == wxS("wxAuiManager"))
     {
-        wxAuiManager *manager = NULL;
+        wxAuiManager *manager = nullptr;
 
         if (m_parentAsWindow)
         {
@@ -140,7 +140,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
     else if (m_class == "wxAuiPaneInfo")
     {
         wxXmlNode *node   = GetParamNode(wxS("object"));
-        wxWindow  *window = NULL;
+        wxWindow  *window = nullptr;
 
         if (!node)
             node = GetParamNode(wxS("object_ref"));
@@ -150,7 +150,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
             bool old_ins = m_mgrInside;
             m_mgrInside = false;
 
-            wxObject *object = CreateResFromNode(node, m_window, NULL);
+            wxObject *object = CreateResFromNode(node, m_window, nullptr);
 
             m_mgrInside = old_ins;
             window = wxDynamicCast( object, wxWindow );
@@ -233,7 +233,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
         {
             bool old_ins = m_anbInside;
             m_anbInside = false;
-            wxObject *item = CreateResFromNode(anb, m_notebook, NULL);
+            wxObject *item = CreateResFromNode(anb, m_notebook, nullptr);
             m_anbInside = old_ins;
             wxWindow *wnd = wxDynamicCast(item, wxWindow);
 
@@ -262,7 +262,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
         else
         {
             ReportError("notebookpage must have a window child");
-            return NULL;
+            return nullptr;
         }
     }
     else // if (m_class == wxS("wxAuiNotebook"))

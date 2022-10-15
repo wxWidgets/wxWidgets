@@ -213,7 +213,7 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
         wxHtmlImageMapAreaCell  *a = (wxHtmlImageMapAreaCell*)m_Next;
         return a->GetLink( x, y );
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -367,17 +367,17 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
     m_windowIface = windowIface;
     m_scale = scale;
     m_showFrame = false;
-    m_bitmap = NULL;
+    m_bitmap = nullptr;
     m_bmpW   = w;
     m_bmpH   = h;
     m_align  = align;
     m_bmpWpercent = wpercent;
     m_bmpHpresent = hpresent;
-    m_imageMap = NULL;
+    m_imageMap = nullptr;
     SetCanLiveOnPagebreak(false);
 #if wxUSE_GIF && wxUSE_TIMER
-    m_gifDecoder = NULL;
-    m_gifTimer = NULL;
+    m_gifDecoder = nullptr;
+    m_gifTimer = nullptr;
     m_physX = m_physY = wxDefaultCoord;
     m_nCurrFrame = 0;
 #endif
@@ -433,7 +433,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                 }
             }
         }
-        else // input==NULL, use "broken image" bitmap
+        else // input==nullptr, use "broken image" bitmap
         {
             if ( m_bmpW == wxDefaultCoord && m_bmpH == wxDefaultCoord )
             {
@@ -545,7 +545,7 @@ void wxHtmlImageCell::Layout(int w)
 
         m_Width = w*m_bmpW/100;
 
-        if (!m_bmpHpresent && m_bitmap != NULL)
+        if (!m_bmpHpresent && m_bitmap != nullptr)
             m_Height = m_bitmap->GetLogicalHeight()*m_Width/m_bitmap->GetLogicalWidth();
         else
             m_Height = static_cast<int>(m_scale*m_bmpH);
@@ -684,13 +684,13 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 bool wpercent = false;
                 bool hpresent = false;
                 int al;
-                wxFSFile *str = NULL;
+                wxFSFile *str = nullptr;
                 wxString mn;
                 double scaleHDPI = 1.0;
 
 #if defined(__WXOSX_COCOA__)
                 // Try to find a 2x resolution image with @2x appended before the file extension.
-                wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : NULL;
+                wxWindow* win = m_WParser->GetWindowInterface() ? m_WParser->GetWindowInterface()->GetHTMLWindow() : nullptr;
                 if (!win)
                     win = wxApp::GetMainTopWindow();
                 if (win && win->GetContentScaleFactor() > 1.0)
@@ -778,7 +778,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             {
                 wxString coords = tag.GetParam(wxT("COORDS"));
                 tmp.MakeUpper();
-                wxHtmlImageMapAreaCell *cel = NULL;
+                wxHtmlImageMapAreaCell *cel = nullptr;
                 if (tmp == wxT("POLY"))
                 {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords, m_WParser->GetPixelScale() );
@@ -792,9 +792,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser->GetPixelScale() );
                 }
                 wxString href;
-                if (cel != NULL && tag.GetParamAsString(wxT("HREF"), &href))
+                if (cel != nullptr && tag.GetParamAsString(wxT("HREF"), &href))
                     cel->SetLink(wxHtmlLinkInfo(href, tag.GetParam(wxT("TARGET"))));
-                if (cel != NULL)
+                if (cel != nullptr)
                     m_WParser->GetContainer()->InsertCell( cel );
             }
         }

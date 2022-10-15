@@ -245,7 +245,7 @@ GdkWindow *wxCollapsiblePane::GTKGetWindow(wxArrayGdkWindows& windows) const
     windows.Add(gtk_widget_get_window(label));
     windows.Add(gtk_widget_get_window(m_widget));
 
-    return NULL;
+    return nullptr;
 }
 
 #endif // wxUSE_COLLPANE && !defined(__WXUNIVERSAL__)

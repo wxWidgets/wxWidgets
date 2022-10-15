@@ -72,10 +72,10 @@ GType wxGtkImage::Type()
     {
         const GTypeInfo info = {
             sizeof(GtkImageClass),
-            NULL, NULL,
-            wxGtkImageClassInit, NULL, NULL,
-            sizeof(wxGtkImage), 0, NULL,
-            NULL
+            nullptr, nullptr,
+            wxGtkImageClassInit, nullptr, nullptr,
+            sizeof(wxGtkImage), 0, nullptr,
+            nullptr
         };
         type = g_type_register_static(
             GTK_TYPE_IMAGE, "wxGtkImage", &info, GTypeFlags(0));
@@ -85,7 +85,7 @@ GType wxGtkImage::Type()
 
 GtkWidget* wxGtkImage::New(BitmapProvider* provider)
 {
-    wxGtkImage* image = WX_GTK_IMAGE(g_object_new(Type(), NULL));
+    wxGtkImage* image = WX_GTK_IMAGE(g_object_new(Type(), nullptr));
     image->m_provider = provider;
     return GTK_WIDGET(image);
 }
@@ -103,7 +103,7 @@ void wxGtkImage::Set(const wxBitmapBundle& bitmapBundle)
     // different bitmap below.
     wxBitmap bitmap = bitmapBundle.GetBitmap(wxDefaultSize);
 
-    GdkPixbuf* pixbuf = NULL;
+    GdkPixbuf* pixbuf = nullptr;
     if (bitmap.IsOk())
     {
         pixbuf = bitmap.GetPixbuf();
@@ -165,7 +165,7 @@ static void wxGtkImageFinalize(GObject* object)
 {
     wxGtkImage* image = WX_GTK_IMAGE(object);
     delete image->m_provider;
-    image->m_provider = NULL;
+    image->m_provider = nullptr;
     G_OBJECT_CLASS(wxGtkImageParentClass)->finalize(object);
 }
 

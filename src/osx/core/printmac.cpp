@@ -65,7 +65,7 @@ static int ResolutionSorter(const void *e1, const void *e2)
 
 static PMResolution *GetSupportedResolutions(PMPrinter printer, UInt32 *count)
 {
-    PMResolution res, *resolutions = NULL;
+    PMResolution res, *resolutions = nullptr;
     OSStatus status = PMPrinterGetPrinterResolutionCount(printer, count);
     if (status == noErr)
     {
@@ -83,7 +83,7 @@ static PMResolution *GetSupportedResolutions(PMPrinter printer, UInt32 *count)
     if ((*count == 0) && (resolutions))
     {
         free(resolutions);
-        resolutions = NULL;
+        resolutions = nullptr;
     }
     return resolutions;
 }
@@ -124,7 +124,7 @@ void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
     if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr)
     {
         CFIndex index, count;
-        PMPrinter printer = NULL;
+        PMPrinter printer = nullptr;
         count = CFArrayGetCount(printerList);
         for (index = 0; index < count; index++)
         {
@@ -175,7 +175,7 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
             fabs( height - papersize.y ) >= 5 )
         {
             // we have to change the current paper
-            CFArrayRef paperlist = 0 ;
+            CFArrayRef paperlist = nullptr ;
             if ( PMPrinterGetPaperList( printer, &paperlist ) == noErr )
             {
                 PMPaper bestPaper = kPMNoData ;
@@ -523,7 +523,7 @@ wxPrintNativeDataBase* wxOSXCreatePrintData()
 #if wxOSX_USE_COCOA
     return new wxOSXCocoaPrintData();
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 
@@ -545,7 +545,7 @@ wxMacPrinter::~wxMacPrinter()
 bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
     sm_abortIt = false;
-    sm_abortWindow = NULL;
+    sm_abortWindow = nullptr;
 
     if (!printout)
     {
@@ -559,7 +559,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxPrinterDC *dc = NULL;
+    wxPrinterDC *dc = nullptr;
     if (prompt)
     {
         wxMacPrintDialog dialog(parent, & m_printDialogData);
@@ -681,7 +681,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
 wxDC* wxMacPrinter::PrintDialog(wxWindow *parent)
 {
-    wxDC* dc = NULL;
+    wxDC* dc = nullptr;
 
     wxPrintDialog dialog(parent, & m_printDialogData);
     int ret = dialog.ShowModal();

@@ -56,7 +56,7 @@ TestOutputStream::TestOutputStream(int options)
 
 void TestOutputStream::Init()
 {
-    m_data = NULL;
+    m_data = nullptr;
     m_size = 0;
     m_capacity = 0;
     m_pos = 0;
@@ -174,7 +174,7 @@ void TestInputStream::Rewind()
 
     if (m_wbacksize) {
         free(m_wback);
-        m_wback = NULL;
+        m_wback = nullptr;
         m_wbacksize = 0;
         m_wbackcur = 0;
     }
@@ -248,7 +248,7 @@ size_t TestInputStream::OnSysRead(void *buffer, size_t size)
 template <class T> class Ptr
 {
 public:
-    explicit Ptr(T* p = NULL) : m_p(p), m_count(new int) { *m_count = 1; }
+    explicit Ptr(T* p = nullptr) : m_p(p), m_count(new int) { *m_count = 1; }
     Ptr(const Ptr& sp) : m_p(sp.m_p), m_count(sp.m_count) { ++*m_count; }
     ~Ptr() { Free(); }
 
@@ -367,7 +367,7 @@ void TempDir::RemoveDir(wxString& path)
 #   define WXARC_pclose _pclose
 #else
 #   define WXARC_NO_POPEN
-#   define WXARC_popen(cmd, type) NULL
+#   define WXARC_popen(cmd, type) nullptr
 #   define WXARC_pclose(fp)
 #endif
 
@@ -417,7 +417,7 @@ ArchiveTestCase<ClassFactoryT>::ArchiveTestCase(
     m_archiver(archiver),
     m_unarchiver(unarchiver)
 {
-    wxASSERT(m_factory.get() != NULL);
+    wxASSERT(m_factory.get() != nullptr);
 }
 
 template <class ClassFactoryT>
@@ -515,7 +515,7 @@ TestEntry& ArchiveTestCase<ClassFactoryT>::Add(const char *name,
     if (len == -1)
         len = strlen(data);
     TestEntry*& entry = m_testEntries[wxString(name, *wxConvCurrent)];
-    wxASSERT(entry == NULL);
+    wxASSERT(entry == nullptr);
     entry = new TestEntry(m_timeStamp, len, data);
     m_timeStamp += wxTimeSpan(0, 1, 30);
     return *entry;
@@ -641,7 +641,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
             entry.SetDateTime(wxDateTime());
         else
 #endif
-            fn.SetTimes(NULL, &dt, NULL);
+            fn.SetTimes(nullptr, &dt, nullptr);
     }
 
     if ((m_options & PipeOut) == 0) {
@@ -693,7 +693,7 @@ void ArchiveTestCase<ClassFactoryT>::ModifyArchive(wxInputStream& in,
 
     arcOut->CopyArchiveMetaData(*arcIn);
 
-    while ((pEntry = arcIn->GetNextEntry()) != NULL) {
+    while ((pEntry = arcIn->GetNextEntry()) != nullptr) {
         wxScopedPtr<EntryT> entry(pEntry);
         OnSetNotifier(*entry);
         wxString name = entry->GetName(wxPATH_UNIX);
@@ -770,7 +770,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
     if ((m_options & PipeIn) == 0)
         OnArchiveExtracted(*arc, expectedTotal);
 
-    while (entry = EntryPtr(arc->GetNextEntry()), entry.get() != NULL) {
+    while (entry = EntryPtr(arc->GetNextEntry()), entry.get() != nullptr) {
         wxString name = entry->GetName(wxPATH_UNIX);
 
         // provide some context for the error message so that we know which
@@ -1199,7 +1199,7 @@ void CorruptionTestCase::ExtractArchive(wxInputStream& in)
     wxScopedPtr<wxArchiveInputStream> arc(m_factory->NewStream(in));
     wxScopedPtr<wxArchiveEntry> entry(arc->GetNextEntry());
 
-    while (entry.get() != NULL) {
+    while (entry.get() != nullptr) {
         char buf[1024];
 
         while (arc->IsOk())
@@ -1311,7 +1311,7 @@ CppUnit::Test *ArchiveTestSuite::makeTest(
     const wxString& WXUNUSED(archiver),
     const wxString& WXUNUSED(unarchiver))
 {
-    return NULL;
+    return nullptr;
 }
 
 // make a display string for the option bits

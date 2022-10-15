@@ -91,7 +91,7 @@ public:
                       wxSecretValueImpl** secret,
                       wxString& errmsg) const override
     {
-        CREDENTIAL* pcred = NULL;
+        CREDENTIAL* pcred = nullptr;
         if ( !::CredRead(service.t_str(), CRED_TYPE_GENERIC, 0, &pcred) || !pcred )
         {
             // Not having the password for this service/user combination is not

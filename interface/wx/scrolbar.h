@@ -120,7 +120,7 @@ public:
         Constructor, creating and showing a scrollbar.
 
         @param parent
-            Parent window. Must be non-@NULL.
+            Parent window. Must be non-null.
         @param id
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos

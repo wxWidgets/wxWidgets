@@ -81,7 +81,7 @@ wxComboEditWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
-static WNDPROC gs_wndprocEdit = (WNDPROC)NULL;
+static WNDPROC gs_wndprocEdit = nullptr;
 
 // ============================================================================
 // implementation
@@ -412,7 +412,7 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
     }
 
     // we assume that the only child of the combobox is the edit window
-    return (WXHWND)::FindWindowEx(GetHwnd(), NULL, wxT("EDIT"), NULL);
+    return (WXHWND)::FindWindowEx(GetHwnd(), nullptr, wxT("EDIT"), nullptr);
 }
 
 WXHWND wxComboBox::GetEditHWND() const
@@ -806,7 +806,7 @@ wxWindow *wxComboBox::MSWFindItem(long id, WXHWND hWnd) const
     if ( id == GetId() && hWnd && hWnd != GetHWND() )
     {
         // Must be the case described above.
-        return NULL;
+        return nullptr;
     }
 
     return wxChoice::MSWFindItem(id, hWnd);

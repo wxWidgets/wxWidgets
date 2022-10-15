@@ -53,8 +53,8 @@ public:
     HeaderCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
         : WidgetsPage(book, imaglist, header_xpm)
     {
-        m_header = NULL;
-        m_sizerHeader = NULL;
+        m_header = nullptr;
+        m_sizerHeader = nullptr;
     }
 
     virtual wxWindow *GetWidget() const override { return m_header; }

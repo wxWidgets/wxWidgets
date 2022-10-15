@@ -261,7 +261,7 @@ wxString wxFileNameFromPath (const wxString& path)
     return wxFileName(path).GetFullName();
 }
 
-// Return just the directory, or NULL if no directory
+// Return just the directory, or nullptr if no directory
 wxChar *
 wxPathOnly (wxChar *path)
 {
@@ -272,7 +272,7 @@ wxPathOnly (wxChar *path)
         int l = wxStrlen(path);
         int i = l - 1;
         if ( i >= _MAXPATHLEN )
-            return NULL;
+            return nullptr;
 
         // Local copy
         wxStrcpy (buf, path);
@@ -307,10 +307,10 @@ wxPathOnly (wxChar *path)
         }
 #endif
     }
-    return NULL;
+    return nullptr;
 }
 
-// Return just the directory, or NULL if no directory
+// Return just the directory, or nullptr if no directory
 wxString wxPathOnly (const wxString& path)
 {
     if (!path.empty())
@@ -370,7 +370,7 @@ wxString wxPathOnly (const wxString& path)
 
 CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path)
 {
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(path)));
+    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(nullptr, 0, wxCFStringRef(path)));
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
     return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false);
 }
@@ -674,7 +674,7 @@ static wxString gs_dirPath;
 
 wxString wxFindFirstFile(const wxString& spec, int flags)
 {
-    wxFileName::SplitPath(spec, &gs_dirPath, NULL, NULL);
+    wxFileName::SplitPath(spec, &gs_dirPath, nullptr, nullptr);
     if ( gs_dirPath.empty() )
         gs_dirPath = wxT(".");
     if ( !wxEndsWithPathSeparator(gs_dirPath ) )
@@ -717,7 +717,7 @@ wxString wxFindNextFile()
 
 
 // Get current working directory.
-// If buf is NULL, allocates space using new, else copies into buf.
+// If buf is null, allocates space using new, else copies into buf.
 // wxGetWorkingDirectory() is obsolete, use wxGetCwd()
 // wxDoGetCwd() is their common core to be moved
 // to wxGetCwd() once wxGetWorkingDirectory() will be removed.
@@ -744,9 +744,9 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     #endif
 
     #ifdef HAVE_WGETCWD
-            char *cbuf = NULL; // never really used because needsANSI will always be false
+            char *cbuf = nullptr; // never really used because needsANSI will always be false
             {
-                ok = _wgetcwd(buf, sz) != NULL;
+                ok = _wgetcwd(buf, sz) != nullptr;
                 needsANSI = false;
             }
     #endif
@@ -755,9 +755,9 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 #endif // wxUSE_UNICODE
     {
     #if defined(_MSC_VER) || defined(__MINGW32__)
-        ok = _getcwd(cbuf, sz) != NULL;
+        ok = _getcwd(cbuf, sz) != nullptr;
     #else // !Win32/VC++ !Mac
-        ok = getcwd(cbuf, sz) != NULL;
+        ok = getcwd(cbuf, sz) != nullptr;
     #endif // platform
 
     #if wxUSE_UNICODE
@@ -772,8 +772,8 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 
         // VZ: the old code used to return "." on error which didn't make any
         //     sense at all to me - empty string is a better error indicator
-        //     (NULL might be even better but I'm afraid this could lead to
-        //     problems with the old code assuming the return is never NULL)
+        //     (nullptr might be even better but I'm afraid this could lead to
+        //     problems with the old code assuming the return is never null)
         buf[0] = wxT('\0');
     }
     else // ok, but we might need to massage the path into the right format
@@ -891,7 +891,7 @@ bool wxFindFileInPath(wxString *pStr, const wxString& szPath, const wxString& sz
 time_t WXDLLIMPEXP_BASE wxFileModificationTime(const wxString& filename)
 {
     wxDateTime mtime;
-    if ( !wxFileName(filename).GetTimes(NULL, &mtime, NULL) )
+    if ( !wxFileName(filename).GetTimes(nullptr, &mtime, nullptr) )
         return (time_t)-1;
 
     return mtime.GetTicks();
@@ -981,12 +981,12 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
                     path.t_str(),
                     access,
                     FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                    NULL,
+                    nullptr,
                     OPEN_EXISTING,
                     dwAttr & FILE_ATTRIBUTE_DIRECTORY
                         ? FILE_FLAG_BACKUP_SEMANTICS
                         : 0,
-                    NULL
+                    nullptr
                  );
     if ( h != INVALID_HANDLE_VALUE )
         CloseHandle(h);
@@ -1150,8 +1150,8 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
     const wxChar *m = pat.c_str(),
     *n = text.c_str(),
-    *ma = NULL,
-    *na = NULL;
+    *ma = nullptr,
+    *na = nullptr;
     int just = 0,
     acount = 0,
     count = 0;
@@ -1202,11 +1202,11 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                 goto not_matched;
             }
             /*
-            * We could check for *n == NULL at this point, but
+            * We could check for *n == nullptr at this point, but
             * since it's more common to have a character there,
             * check to see if they match first (m and n) and
             * then if they don't match, THEN we can check for
-            * the NULL of n
+            * the NUL of n
             */
             just = 0;
             if (*m == *n)
@@ -1223,7 +1223,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
                 /*
                 * If there are no more characters in the
                 * string, but we still need to find another
-                * character (*m != NULL), then it will be
+                * character (*m != nullptr), then it will be
                 * impossible to match it
                 */
                 if (!*n)

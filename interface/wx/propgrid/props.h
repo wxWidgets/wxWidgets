@@ -349,7 +349,7 @@ public:
 
 
 // If set, then selection of choices is static and should not be
-// changed (i.e. returns NULL in GetPropertyChoices).
+// changed (i.e. returns @NULL in GetPropertyChoices).
 #define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
 
 /** @class wxEnumProperty
@@ -368,8 +368,8 @@ class wxEnumProperty : public wxPGProperty
 public:
     wxEnumProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
-                    const wxChar* const* labels = NULL,
-                    const long* values = NULL,
+                    const wxChar* const* labels = nullptr,
+                    const long* values = nullptr,
                     int value = 0 );
 
     wxEnumProperty( const wxString& label,
@@ -496,7 +496,7 @@ public:
     wxFlagsProperty( const wxString& label,
                      const wxString& name,
                      const wxChar* const* labels,
-                     const long* values = NULL,
+                     const long* values = nullptr,
                      long value = 0 );
 
     wxFlagsProperty( const wxString& label,

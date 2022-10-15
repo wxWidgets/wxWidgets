@@ -376,7 +376,7 @@ bool wxUIActionSimulatorXTestImpl::DoX11MouseMove(long x, long y)
     // "device pixels" for the X call below, so scale them if we have the
     // required support at both compile- and run-time.
 #if GTK_CHECK_VERSION(3,10,0)
-    if ( gtk_check_version(3, 10, 0) == NULL )
+    if ( gtk_check_version(3, 10, 0) == nullptr )
     {
         // For multi-monitor support we would need to determine to which
         // monitor the point (x, y) belongs, for now just use the scale
@@ -440,9 +440,9 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
     GdkDisplay* const display = gdk_window_get_display(wxGetTopLevelGDK());
     GdkDevice* const device = wx_get_gdk_device_from_display(display);
 #endif
-    GdkWindow* const gdkwin1 = wx_gdk_device_get_window_at_position(device, NULL, NULL);
+    GdkWindow* const gdkwin1 = wx_gdk_device_get_window_at_position(device, nullptr, nullptr);
     const bool ret = DoX11MouseMove(x, y);
-    GdkWindow* const gdkwin2 = wx_gdk_device_get_window_at_position(device, NULL, NULL);
+    GdkWindow* const gdkwin2 = wx_gdk_device_get_window_at_position(device, nullptr, nullptr);
 
     if ( gdkwin1 != gdkwin2 )
     {

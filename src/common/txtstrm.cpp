@@ -636,7 +636,7 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
 void wxTextOutputStream::Flush()
 {
 #if wxUSE_UNICODE
-    const size_t len = m_conv->FromWChar(NULL, 0, L"", 1);
+    const size_t len = m_conv->FromWChar(nullptr, 0, L"", 1);
     if ( len > m_conv->GetMBNulLen() )
     {
         wxCharBuffer buf(len);

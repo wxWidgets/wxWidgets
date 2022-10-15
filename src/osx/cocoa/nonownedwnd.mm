@@ -35,7 +35,7 @@ NSRect wxToNSRect( NSView* parent, const wxRect& r )
     NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int y = r.y;
     int x = r.x ;
-    if ( parent == NULL || ![ parent isFlipped ] )
+    if ( parent == nullptr || ![ parent isFlipped ] )
         y = (int)(frame.size.height - ( r.y + r.height ));
     return NSMakeRect(x, y, r.width , r.height);
 }
@@ -45,7 +45,7 @@ wxRect wxFromNSRect( NSView* parent, const NSRect& rect )
     NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int y = (int)rect.origin.y;
     int x = (int)rect.origin.x;
-    if ( parent == NULL || ![ parent isFlipped ] )
+    if ( parent == nullptr || ![ parent isFlipped ] )
         y = (int)(frame.size.height - (rect.origin.y + rect.size.height));
     return wxRect( x, y, (int)rect.size.width, (int)rect.size.height );
 }
@@ -55,7 +55,7 @@ NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
     NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int x = p.x ;
     int y = p.y;
-    if ( parent == NULL || ![ parent isFlipped ] )
+    if ( parent == nullptr || ![ parent isFlipped ] )
         y = (int)(frame.size.height - ( p.y ));
     return NSMakePoint(x, y);
 }
@@ -65,7 +65,7 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
     int x = (int)p.x;
     int y = (int)p.y;
-    if ( parent == NULL || ![ parent isFlipped ] )
+    if ( parent == nullptr || ![ parent isFlipped ] )
         y = (int)(frame.size.height - ( p.y ));
     return wxPoint( x, y);
 }
@@ -124,14 +124,14 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
     bool handled = false;
     if ( ([event type] >= NSLeftMouseDown) && ([event type] <= NSMouseExited) )
     {
-        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
-        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+        WXEVENTREF formerEvent = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEventHandlerCallRef();
 
         wxWindow* cw = wxWindow::GetCapture();
-        if ( cw != NULL )
+        if ( cw != nullptr )
         {
             if (wxTheApp)
-                wxTheApp->MacSetCurrentEvent(event, NULL);
+                wxTheApp->MacSetCurrentEvent(event, nullptr);
             ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
             handled = true;
         }
@@ -149,8 +149,8 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 // wx native implementation 
 //
 
-static NSResponder* s_nextFirstResponder = NULL;
-static NSResponder* s_formerFirstResponder = NULL;
+static NSResponder* s_nextFirstResponder = nullptr;
+static NSResponder* s_formerFirstResponder = nullptr;
 
 @interface wxNSWindow : NSWindow
 {
@@ -168,11 +168,11 @@ static NSResponder* s_formerFirstResponder = NULL;
 {
     if ( ![self WX_filterSendEvent: event] )
     {
-        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
-        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+        WXEVENTREF formerEvent = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEventHandlerCallRef();
 
         if (wxTheApp)
-            wxTheApp->MacSetCurrentEvent(event, NULL);
+            wxTheApp->MacSetCurrentEvent(event, nullptr);
 
         [super sendEvent: event];
 
@@ -273,11 +273,11 @@ static NSResponder* s_formerFirstResponder = NULL;
 {
     if ( ![self WX_filterSendEvent: event] )
     {
-        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
-        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+        WXEVENTREF formerEvent = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEventHandlerCallRef();
         
         if (wxTheApp)
-            wxTheApp->MacSetCurrentEvent(event, NULL);
+            wxTheApp->MacSetCurrentEvent(event, nullptr);
         
         [super sendEvent: event];
         
@@ -375,9 +375,9 @@ extern int wxOSXGetIdFromSelector(SEL action );
     wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
     if ( mbar )
     {
-        wxMenu* menu = NULL;
+        wxMenu* menu = nullptr;
         wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
-        if ( menu != NULL && menuitem != NULL)
+        if ( menu != nullptr && menuitem != nullptr)
             return menu->HandleCommandProcess(menuitem);
     }
     return NO;
@@ -390,9 +390,9 @@ extern int wxOSXGetIdFromSelector(SEL action );
     wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
     if ( mbar )
     {
-        wxMenu* menu = NULL;
+        wxMenu* menu = nullptr;
         wxMenuItem* menuitem = mbar->FindItem(wxOSXGetIdFromSelector(action), &menu);
-        if ( menu != NULL && menuitem != NULL)
+        if ( menu != nullptr && menuitem != nullptr)
         {
             menu->HandleCommandUpdateStatus(menuitem);
             return menuitem->IsEnabled();
@@ -481,7 +481,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
                     toSize:(NSSize)proposedFrameSize
 {
     NSRect frame = [window frame];
-    wxRect wxframe = wxFromNSRect( NULL, frame );
+    wxRect wxframe = wxFromNSRect( nullptr, frame );
     wxframe.SetWidth( (int)proposedFrameSize.width );
     wxframe.SetHeight( (int)proposedFrameSize.height );
 
@@ -535,7 +535,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
         NSResponder *firstResponder = [window firstResponder];
         wxWidgetCocoaImpl *focused = firstResponder
                 ? (wxWidgetCocoaImpl*)wxWidgetImpl::FindFromWXWidget(wxOSXGetViewFromResponder(firstResponder))
-                : NULL;
+                : nullptr;
         if ( focused )
             focused->DoNotifyFocusSet();
 
@@ -562,7 +562,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
             NSResponder *firstResponder = [window firstResponder];
             wxWidgetCocoaImpl *focused = firstResponder
                     ? (wxWidgetCocoaImpl*)wxWidgetImpl::FindFromWXWidget(wxOSXGetViewFromResponder(firstResponder))
-                    : NULL;
+                    : nullptr;
             if ( focused )
                 focused->DoNotifyFocusLost();
 
@@ -666,7 +666,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
 {
     NSWindow* theWindow = (NSWindow*)[notification object];
     wxNonOwnedWindowCocoaImpl* windowimpl = [theWindow WX_implementation];
-    wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : NULL;
+    wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : nullptr;
     if (wxpeer)
     {
         CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
@@ -715,7 +715,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
     if (context == EffectiveAppearanceContext)
     {
         wxNonOwnedWindowCocoaImpl* windowimpl = [(NSWindow*)object WX_implementation];
-        wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : NULL;
+        wxNonOwnedWindow* wxpeer = windowimpl ? windowimpl->GetWXPeer() : nullptr;
         if (wxpeer)
         {
             wxSysColourChangedEvent event;
@@ -732,14 +732,14 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxNonOwnedWindowCocoaImpl , wxNonOwnedWindowImpl);
 wxNonOwnedWindowCocoaImpl::wxNonOwnedWindowCocoaImpl( wxNonOwnedWindow* nonownedwnd) :
     wxNonOwnedWindowImpl(nonownedwnd)
 {
-    m_macWindow = NULL;
-    m_macFullScreenData = NULL;
+    m_macWindow = nullptr;
+    m_macFullScreenData = nullptr;
 }
 
 wxNonOwnedWindowCocoaImpl::wxNonOwnedWindowCocoaImpl()
 {
-    m_macWindow = NULL;
-    m_macFullScreenData = NULL;
+    m_macWindow = nullptr;
+    m_macFullScreenData = nullptr;
 }
 
 wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
@@ -751,7 +751,7 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
      
         // make sure we remove this first, otherwise the ref count will not lead to the 
         // native window's destruction
-        if ([m_macWindow parentWindow] != 0)
+        if ([m_macWindow parentWindow] != nullptr)
             [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
 
         [m_macWindow setReleasedWhenClosed:YES];
@@ -771,7 +771,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
-    static wxNonOwnedWindowController* controller = NULL;
+    static wxNonOwnedWindowController* controller = nullptr;
 
     if ( !controller )
         controller =[[wxNonOwnedWindowController alloc] init];
@@ -829,7 +829,7 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     if ( ( style & wxPOPUP_WINDOW ) )
         level = NSPopUpMenuWindowLevel;
 
-    NSRect frameRect = wxToNSRect( NULL, wxRect( pos, size) );
+    NSRect frameRect = wxToNSRect( nullptr, wxRect( pos, size) );
 
     NSRect contentRect = [NSWindow contentRectForFrameRect:frameRect styleMask:windowstyle];
 
@@ -974,7 +974,7 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
     else
     {
         // avoid propagation of orderOut to parent 
-        if ([m_macWindow parentWindow] != 0)
+        if ([m_macWindow parentWindow] != nullptr)
             [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
         [m_macWindow orderOut:nil];
     }
@@ -1062,14 +1062,14 @@ bool wxNonOwnedWindowCocoaImpl::CanSetTransparent()
 
 void wxNonOwnedWindowCocoaImpl::MoveWindow(int x, int y, int width, int height)
 {
-    NSRect r = wxToNSRect( NULL, wxRect(x,y,width, height) );
+    NSRect r = wxToNSRect( nullptr, wxRect(x,y,width, height) );
     // do not trigger refreshes upon invisible and possible partly created objects
     [m_macWindow setFrame:r display:GetWXPeer()->IsShownOnScreen()];
 }
 
 void wxNonOwnedWindowCocoaImpl::GetPosition( int &x, int &y ) const
 {
-    wxRect r = wxFromNSRect( NULL, [m_macWindow frame] );
+    wxRect r = wxFromNSRect( nullptr, [m_macWindow frame] );
     x = r.GetLeft();
     y = r.GetTop();
 }
@@ -1202,7 +1202,7 @@ bool wxNonOwnedWindowCocoaImpl::IsFullScreen() const
         return [m_macWindow styleMask] & NSFullScreenWindowMask;
     }
 
-    return m_macFullScreenData != NULL ;
+    return m_macFullScreenData != nullptr ;
 }
 
 bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable, long style)
@@ -1274,7 +1274,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
                                 | kUIOptionDisableForceQuit
                          */); 
     }
-    else if ( m_macFullScreenData != NULL )
+    else if ( m_macFullScreenData != nullptr )
     {
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
         
@@ -1282,7 +1282,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
         [m_macWindow setStyleMask:data->m_formerStyleMask];
 
         delete data ;
-        m_macFullScreenData = NULL ;
+        m_macFullScreenData = nullptr ;
 
         SetSystemUIMode(kUIModeNormal, 0); 
     }
@@ -1315,7 +1315,7 @@ void wxNonOwnedWindowCocoaImpl::ScreenToWindow( int *x, int *y )
 {
     wxPoint p((x ? *x : 0), (y ? *y : 0) );
     NSRect nsrect = NSZeroRect;
-    nsrect.origin = wxToNSPoint( NULL, p );
+    nsrect.origin = wxToNSPoint( nullptr, p );
     nsrect = [m_macWindow convertRectFromScreen:nsrect];
     NSPoint nspt = [[m_macWindow contentView] convertPoint:nsrect.origin fromView:nil];
     p = wxFromNSPoint([m_macWindow contentView], nspt);
@@ -1333,7 +1333,7 @@ void wxNonOwnedWindowCocoaImpl::WindowToScreen( int *x, int *y )
     NSRect nsrect = NSZeroRect;
     nsrect.origin = nspt;
     nsrect = [m_macWindow convertRectToScreen:nsrect];
-    p = wxFromNSPoint( NULL, nsrect.origin);
+    p = wxFromNSPoint( nullptr, nsrect.origin);
     if ( x )
         *x = p.x;
     if ( y )

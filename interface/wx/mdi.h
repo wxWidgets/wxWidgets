@@ -228,7 +228,7 @@ public:
     /**
         Returns a pointer to the active MDI child, if there is one.
 
-        If there are any children at all this function returns a non-@NULL
+        If there are any children at all this function returns a non-null
         pointer.
     */
     virtual wxMDIChildFrame* GetActiveChild() const;

@@ -150,7 +150,7 @@ void TreeCtrlTestCase::setUp()
 void TreeCtrlTestCase::tearDown()
 {
     delete m_tree;
-    m_tree = NULL;
+    m_tree = nullptr;
 
     m_root =
     m_child1 =

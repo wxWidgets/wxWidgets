@@ -56,7 +56,7 @@ public:
     /**
         Constructor. @a data is the data to be associated with the drop target.
     */
-    wxDropTarget(wxDataObject* data = NULL);
+    wxDropTarget(wxDataObject* data = nullptr);
 
     /**
         Destructor. Deletes the associated data object, if any.
@@ -194,7 +194,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxWindow* win = NULL,
+    wxDropSource(wxWindow* win = nullptr,
                  const wxCursor& iconCopy = wxNullCursor,
                  const wxCursor& iconMove = wxNullCursor,
                  const wxCursor& iconNone = wxNullCursor);
@@ -220,7 +220,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxDataObject& data, wxWindow* win = NULL,
+    wxDropSource(wxDataObject& data, wxWindow* win = nullptr,
                  const wxCursor& iconCopy = wxNullCursor,
                  const wxCursor& iconMove = wxNullCursor,
                  const wxCursor& iconNone = wxNullCursor);
@@ -242,7 +242,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxWindow* win = NULL,
+    wxDropSource(wxWindow* win = nullptr,
                  const wxIcon& iconCopy = wxNullIcon,
                  const wxIcon& iconMove = wxNullIcon,
                  const wxIcon& iconNone = wxNullIcon);
@@ -266,7 +266,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxDataObject& data, wxWindow* win = NULL,
+    wxDropSource(wxDataObject& data, wxWindow* win = nullptr,
                  const wxIcon& iconCopy = wxNullIcon,
                  const wxIcon& iconMove = wxNullIcon,
                  const wxIcon& iconNone = wxNullIcon);

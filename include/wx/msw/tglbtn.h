@@ -52,7 +52,7 @@ public:
 protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const override;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
 
     virtual bool MSWIsPushed() const override;
 

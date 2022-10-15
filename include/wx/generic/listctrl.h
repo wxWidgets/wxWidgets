@@ -147,7 +147,7 @@ public:
     long FindItem( long start, const wxString& str, bool partial = false );
     long FindItem( long start, wxUIntPtr data );
     long FindItem( long start, const wxPoint& pt, int direction ); // not supported in wxGLC
-    long HitTest( const wxPoint& point, int& flags, long *pSubItem = NULL ) const;
+    long HitTest( const wxPoint& point, int& flags, long *pSubItem = nullptr ) const;
     long InsertItem(wxListItem& info);
     long InsertItem( long index, const wxString& label );
     long InsertItem( long index, int imageIndex );
@@ -189,7 +189,7 @@ public:
 
     // We have to hand down a few functions
     virtual void Refresh(bool eraseBackground = true,
-                         const wxRect *rect = NULL) override;
+                         const wxRect *rect = nullptr) override;
 
     virtual bool SetBackgroundColour( const wxColour &colour ) override;
     virtual bool SetForegroundColour( const wxColour &colour ) override;

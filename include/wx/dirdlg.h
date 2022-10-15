@@ -136,7 +136,7 @@ wxDirSelector(const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
               const wxString& defaultPath = wxEmptyString,
               long style = wxDD_DEFAULT_STYLE,
               const wxPoint& pos = wxDefaultPosition,
-              wxWindow *parent = NULL);
+              wxWindow *parent = nullptr);
 
 #endif // wxUSE_DIRDLG
 

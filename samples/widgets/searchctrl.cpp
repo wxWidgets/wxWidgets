@@ -144,7 +144,7 @@ SearchCtrlWidgetsPage::SearchCtrlWidgetsPage(WidgetsBookCtrl *book,
 
 void SearchCtrlWidgetsPage::CreateContent()
 {
-    m_srchCtrl = NULL;
+    m_srchCtrl = nullptr;
 
     CreateControl();
 
@@ -225,7 +225,7 @@ void SearchCtrlWidgetsPage::OnToggleSearchMenu(wxCommandEvent&)
     if ( m_menuBtnCheck->GetValue() )
         m_srchCtrl->SetMenu( CreateTestMenu() );
     else
-        m_srchCtrl->SetMenu(NULL);
+        m_srchCtrl->SetMenu(nullptr);
 }
 
 void SearchCtrlWidgetsPage::OnText(wxCommandEvent& event)

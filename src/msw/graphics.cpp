@@ -89,7 +89,7 @@ inline Color wxColourToColor(const wxColour& col)
 
 // Do not use this pointer directly, it's only used by
 // GetDrawTextStringFormat() and the cleanup code in wxGDIPlusRendererModule.
-StringFormat* gs_drawTextStringFormat = NULL;
+StringFormat* gs_drawTextStringFormat = nullptr;
 
 // Get the string format used for the text drawing and measuring functions:
 // notice that it must be the same one for all of them, otherwise the drawn
@@ -135,7 +135,7 @@ class wxGDIPlusContext;
 class wxGDIPlusPathData : public wxGraphicsPathData
 {
 public :
-    wxGDIPlusPathData(wxGraphicsRenderer* renderer, GraphicsPath* path = NULL);
+    wxGDIPlusPathData(wxGraphicsRenderer* renderer, GraphicsPath* path = nullptr);
     ~wxGDIPlusPathData();
 
     virtual wxGraphicsObjectRefData *Clone() const override;
@@ -210,7 +210,7 @@ private :
 class wxGDIPlusMatrixData : public wxGraphicsMatrixData
 {
 public :
-    wxGDIPlusMatrixData(wxGraphicsRenderer* renderer, Matrix* matrix = NULL) ;
+    wxGDIPlusMatrixData(wxGraphicsRenderer* renderer, Matrix* matrix = nullptr) ;
     virtual ~wxGDIPlusMatrixData() ;
 
     virtual wxGraphicsObjectRefData* Clone() const override;
@@ -223,8 +223,8 @@ public :
         wxDouble tx=0.0, wxDouble ty=0.0) override;
 
     // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const override;
+    virtual void Get(wxDouble* a=nullptr, wxDouble* b=nullptr,  wxDouble* c=nullptr,
+                     wxDouble* d=nullptr, wxDouble* tx=nullptr, wxDouble* ty=nullptr) const override;
 
     // makes this the inverse matrix
     virtual void Invert() override;
@@ -376,7 +376,7 @@ public:
 #if wxUSE_PRIVATE_FONTS
         return m_privateFontFamily;
 #else
-        return NULL;
+        return nullptr;
 #endif // wxUSE_PRIVATE_FONTS
     }
 
@@ -409,7 +409,7 @@ class wxGDIPlusContext : public wxGraphicsContext
 public:
     wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height );
-    wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd, wxWindow* window = NULL);
+    wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd, wxWindow* window = nullptr);
     wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr);
     wxGDIPlusContext(wxGraphicsRenderer* renderer);
 
@@ -488,7 +488,7 @@ public:
 
 protected:
     // Used from ctors (including those in the derived classes) and takes
-    // ownership of the graphics pointer that must be non-NULL.
+    // ownership of the graphics pointer that must be non-null.
     void Init(Graphics* graphics, int width, int height);
 
 private:
@@ -542,13 +542,13 @@ private:
 class wxGDIPlusMeasuringContext : public wxGDIPlusContext
 {
 public:
-    wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(NULL), 1000, 1000 )
+    wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(nullptr), 1000, 1000 )
     {
     }
 
     virtual ~wxGDIPlusMeasuringContext()
     {
-        ReleaseDC( NULL, m_hdc );
+        ReleaseDC( nullptr, m_hdc );
     }
 
 private:
@@ -699,9 +699,9 @@ wxGDIPlusPenBrushBaseData::~wxGDIPlusPenBrushBaseData()
 
 void wxGDIPlusPenBrushBaseData::Init()
 {
-    m_brush = NULL;
-    m_brushPath = NULL;
-    m_image = NULL;
+    m_brush = nullptr;
+    m_brushPath = nullptr;
+    m_image = nullptr;
 }
 
 template <typename T>
@@ -821,7 +821,7 @@ wxGDIPlusPenData::~wxGDIPlusPenData()
 
 void wxGDIPlusPenData::Init()
 {
-    m_pen = NULL ;
+    m_pen = nullptr ;
 }
 
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
@@ -904,7 +904,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
             dashStyle = DashStyleCustom;
             wxDash *dashes;
             int count = info.GetDashes( &dashes );
-            if ((dashes != NULL) && (count > 0))
+            if ((dashes != nullptr) && (count > 0))
             {
                 REAL *userLengths = new REAL[count];
                 for ( int i = 0; i < count; ++i )
@@ -925,7 +925,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
 #if wxUSE_PALETTE
                     (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
-                    NULL
+                    nullptr
 #endif
                 );
                 m_brush = new TextureBrush(m_image);
@@ -1062,7 +1062,7 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
 #if wxUSE_PALETTE
                 (HPALETTE)bmp->GetPalette()->GetHPALETTE()
 #else
-                NULL
+                nullptr
 #endif
             );
             m_brush = new TextureBrush(m_image);
@@ -1084,8 +1084,8 @@ wxGDIPlusBrushData::~wxGDIPlusBrushData()
 namespace
 {
 
-Gdiplus::PrivateFontCollection* gs_privateFonts = NULL;
-Gdiplus::FontFamily* gs_pFontFamily = NULL;
+Gdiplus::PrivateFontCollection* gs_privateFonts = nullptr;
+Gdiplus::FontFamily* gs_pFontFamily = nullptr;
 
 } // anonymous namespace
 
@@ -1107,8 +1107,8 @@ wxGDIPlusFontData::Init(const wxString& name,
 #if wxUSE_PRIVATE_FONTS
     // If the user has registered any private fonts, they should be used in
     // preference to any system-wide ones.
-    m_font = NULL;
-    m_privateFontFamily = NULL;
+    m_font = nullptr;
+    m_privateFontFamily = nullptr;
     if ( gs_privateFonts )
     {
         const int count = gs_privateFonts->GetFamilyCount();
@@ -1204,23 +1204,23 @@ wxGDIPlusFontData::~wxGDIPlusFontData()
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* bitmap ) :
     wxGraphicsBitmapData( renderer ), m_bitmap( bitmap )
 {
-    m_helper = NULL;
+    m_helper = nullptr;
 }
 
 wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
                         const wxBitmap &bmp) : wxGraphicsBitmapData( renderer )
 {
-    m_bitmap = NULL;
-    m_helper = NULL;
+    m_bitmap = nullptr;
+    m_helper = nullptr;
 
-    Bitmap* image = NULL;
+    Bitmap* image = nullptr;
     if ( bmp.GetMask() )
     {
         Bitmap* interim = new Bitmap((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
             (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
-            NULL
+            nullptr
 #endif
         );
         size_t width = interim->GetWidth();
@@ -1243,7 +1243,7 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
 
         // If there is a mask, set the alpha bytes in the target buffer to
         // fully transparent or retain original value
-        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),NULL);
+        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),nullptr);
         wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
 
         BitmapData dataMask ;
@@ -1285,7 +1285,7 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
 #if wxUSE_PALETTE
             (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
-            NULL
+            nullptr
 #endif
         );
         if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
@@ -1296,7 +1296,7 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
             static BitmapData data ;
 
             m_helper = image ;
-            image = NULL ;
+            image = nullptr ;
             m_helper->LockBits(&bounds, ImageLockModeRead,
                 m_helper->GetPixelFormat(),&data);
 
@@ -1314,7 +1314,7 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
 wxGDIPlusBitmapData::wxGDIPlusBitmapData(wxGraphicsRenderer* renderer, const wxImage& img)
     : wxGraphicsBitmapData(renderer)
 {
-    m_helper = NULL;
+    m_helper = nullptr;
     m_bitmap = new Bitmap(img.GetWidth(), img.GetHeight(), img.HasAlpha() || img.HasMask() ? PixelFormat32bppPARGB : PixelFormat32bppRGB);
 
     UINT w = m_bitmap->GetWidth();
@@ -1690,7 +1690,7 @@ void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix )
 void wxGDIPlusPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const
 {
     RectF bounds;
-    m_path->GetBounds( &bounds, NULL, NULL) ;
+    m_path->GetBounds( &bounds, nullptr, nullptr) ;
     *x = bounds.X;
     *y = bounds.Y;
     *w = bounds.Width;
@@ -1884,7 +1884,7 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc
 
         ~TempSetViewportOrg()
         {
-            ::SetViewportOrgEx(m_hdc, m_originPrev.x, m_originPrev.y, NULL);
+            ::SetViewportOrgEx(m_hdc, m_originPrev.x, m_originPrev.y, nullptr);
         }
 
     private:
@@ -1914,9 +1914,9 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr  
 wxGDIPlusContext::wxGDIPlusContext(wxGraphicsRenderer* renderer)
     : wxGraphicsContext(renderer)
 {
-    // Derived class must call Init() later but just set m_context to NULL for
+    // Derived class must call Init() later but just set m_context to nullptr for
     // safety to avoid crashing in our dtor if Init() ends up not being called.
-    m_context = NULL;
+    m_context = nullptr;
 }
 
 void wxGDIPlusContext::Init(Graphics* graphics, int width, int height)
@@ -1988,8 +1988,8 @@ void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
         return;
 
     wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
-    Brush *brush = m_brush.IsNull() ? NULL : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
-    Pen *pen = m_pen.IsNull() ? NULL : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
+    Brush *brush = m_brush.IsNull() ? nullptr : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
+    Pen *pen = m_pen.IsNull() ? nullptr : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
 
     if ( w < 0 )
     {
@@ -2269,9 +2269,9 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     if (!iconInfo.GetFrom(hIcon))
         return;
 
-    Bitmap interim(iconInfo.hbmColor,NULL);
+    Bitmap interim(iconInfo.hbmColor,nullptr);
 
-    Bitmap* image = NULL ;
+    Bitmap* image = nullptr ;
 
     // if it's not 32 bit, it doesn't have an alpha channel, note that since the conversion doesn't
     // work correctly, asking IsAlphaPixelFormat at this point fails as well
@@ -2598,7 +2598,7 @@ bool wxGDIPlusRenderer::EnsureIsLoaded()
 {
     // load gdiplus.dll if not yet loaded, but don't bother doing it again
     // if we already tried and failed (we don't want to spend lot of time
-    // returning NULL from wxGraphicsContext::Create(), which may be called
+    // returning nullptr from wxGraphicsContext::Create(), which may be called
     // relatively frequently):
     if ( m_loaded == -1 )
     {
@@ -2655,10 +2655,10 @@ void wxGDIPlusRenderer::Unload()
         if ( gs_privateFonts )
         {
             delete gs_privateFonts;
-            gs_privateFonts = NULL;
+            gs_privateFonts = nullptr;
 
             delete[] gs_pFontFamily;
-            gs_pFontFamily = NULL;
+            gs_pFontFamily = nullptr;
         }
 #endif // wxUSE_PRIVATE_FONTS
 
@@ -2670,7 +2670,7 @@ void wxGDIPlusRenderer::Unload()
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     wxGDIPlusContext* context = new wxGDIPlusContext(this, dc);
     context->EnableOffset(true);
     return context;
@@ -2679,7 +2679,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 #if wxUSE_PRINTING_ARCHITECTURE
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     wxGDIPlusContext* context = new wxGDIPlusPrintingContext(this, dc);
     return context;
 }
@@ -2688,7 +2688,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 #if wxUSE_ENH_METAFILE
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     wxGDIPlusContext* context = new wxGDIPlusPrintingContext(this, dc);
     return context;
 }
@@ -2696,7 +2696,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
 #if wxUSE_WXDIB
     // It seems that GDI+ sets invalid values for alpha channel when used with
     // a compatible bitmap (DDB). So we need to convert the currently selected
@@ -2768,7 +2768,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 #if wxUSE_IMAGE
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromImage(wxImage& image)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     wxGDIPlusContext* context = new wxGDIPlusImageContext(this, image);
     context->EnableOffset(true);
     return context;
@@ -2778,32 +2778,32 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromImage(wxImage& image)
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxGDIPlusMeasuringContext(this);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeContext( void * context )
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxGDIPlusContext(this,(Graphics*) context);
 }
 
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeWindow( void * window )
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxGDIPlusContext(this,(HWND) window);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeHDC(WXHDC dc)
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxGDIPlusContext(this, new Graphics((HDC)dc));
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( wxWindow* window )
 {
-    ENSURE_LOADED_OR_RETURN(NULL);
+    ENSURE_LOADED_OR_RETURN(nullptr);
     return new wxGDIPlusContext(this, (HWND) window->GetHWND(), window );
 }
 
@@ -2979,7 +2979,7 @@ wxImage wxGDIPlusRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromNativeBitmap( void *bitmap )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
-    if ( bitmap != NULL )
+    if ( bitmap != nullptr )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxGDIPlusBitmapData( this , (Bitmap*) bitmap ));

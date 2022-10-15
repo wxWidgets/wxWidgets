@@ -25,7 +25,7 @@ wxArchiveClassFactory::Find(const wxString& protocol, wxStreamProtocolType type)
         if (f->CanHandle(protocol, type))
             return f;
 
-    return NULL;
+    return nullptr;
 }
 
 // static

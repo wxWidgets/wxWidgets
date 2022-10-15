@@ -33,7 +33,7 @@ private:
         { return const_cast<wxStackFrameBase *>(this); }
 
 public:
-    wxStackFrameBase(size_t level, void *address = NULL)
+    wxStackFrameBase(size_t level, void *address = nullptr)
     {
         m_level = level;
 
@@ -80,7 +80,7 @@ public:
 
     // get the name, type and value (in text form) of the given parameter
     //
-    // any pointer may be NULL
+    // any pointer may be null
     //
     // return true if at least some values could be retrieved
     virtual bool GetParam(size_t WXUNUSED(n),

@@ -31,7 +31,7 @@
 
         // store and retrieve values
         h1[1] = new MyClass( 1 );
-        h1[10000000] = NULL;
+        h1[10000000] = nullptr;
         h1[50000] = new MyClass( 2 );
         h2["Bill"] = "ABC";
         wxString tmp = h2["Bill"];

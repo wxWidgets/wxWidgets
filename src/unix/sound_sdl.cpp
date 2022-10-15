@@ -49,7 +49,7 @@ wxDECLARE_EVENT(wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotificat
                               -1,                       \
                               -1,                       \
                               wxEVENT_HANDLER_CAST( wxSoundBackendSDLNotificationFunction, func ), \
-                              NULL ),
+                              nullptr ),
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSoundBackendSDLNotification, wxEvtHandler);
 wxDEFINE_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotification );
@@ -66,7 +66,7 @@ class wxSoundBackendSDL : public wxSoundBackend
 public:
     wxSoundBackendSDL()
         : m_initialized(false), m_playing(false), m_audioOpen(false),
-          m_data(NULL), m_evtHandler(NULL) {}
+          m_data(nullptr), m_evtHandler(nullptr) {}
     virtual ~wxSoundBackendSDL();
 
     wxString GetName() const override { return wxT("Simple DirectMedia Layer"); }
@@ -205,7 +205,7 @@ bool wxSoundBackendSDL::OpenAudio()
         m_spec.userdata = (void*)this;
 
         wxLogTrace(wxT("sound"), wxT("opening SDL audio..."));
-        if (SDL_OpenAudio(&m_spec, NULL) >= 0)
+        if (SDL_OpenAudio(&m_spec, nullptr) >= 0)
         {
 #if wxUSE_LOG_DEBUG
             char driver[256];
@@ -320,7 +320,7 @@ void wxSoundBackendSDL::Stop()
     if (m_data)
     {
         m_data->DecRef();
-        m_data = NULL;
+        m_data = nullptr;
     }
     SDL_UnlockAudio();
 }

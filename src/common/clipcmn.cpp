@@ -64,7 +64,7 @@ void wxClipboardEvent::AddFormat(const wxDataFormat& format)
 // wxClipboardBase
 // ---------------------------------------------------------
 
-static wxClipboard *gs_clipboard = NULL;
+static wxClipboard *gs_clipboard = nullptr;
 
 /*static*/ wxClipboard *wxClipboardBase::Get()
 {

@@ -80,7 +80,7 @@ public:
     virtual bool HandleActivation(wxInputConsumer *consumer, bool activated) override;
 
 private:
-    // the window (button) which has capture or NULL and the flag telling if
+    // the window (button) which has capture or nullptr and the flag telling if
     // the mouse is inside the button which captured it or not
     wxWindow *m_winCapture;
     bool      m_winHasMouse;

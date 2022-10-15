@@ -41,7 +41,7 @@ public:
 
 private:
     wxWebRequestURLSession& m_request;
-    WX_NSURLCredential m_cred = NULL;
+    WX_NSURLCredential m_cred = nullptr;
 
     wxDECLARE_NO_COPY_CLASS(wxWebAuthChallengeURLSession);
 };

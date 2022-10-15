@@ -112,7 +112,7 @@ public :
     virtual void        GetSize( int &width, int &height ) const override;
     virtual void        SetControlSize( wxWindowVariant variant ) override;
     virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const override;
-    virtual void        SetNeedsDisplay( const wxRect* where = NULL ) override;
+    virtual void        SetNeedsDisplay( const wxRect* where = nullptr ) override;
     virtual bool        GetNeedsDisplay() const override;
 
     virtual void        EnableFocusRing(bool enabled) override;
@@ -159,7 +159,7 @@ public :
     void                SetFont(const wxFont & font) override;
     void                SetToolTip( wxToolTip* tooltip ) override;
 
-    void                InstallEventHandler( WXWidget control = NULL ) override;
+    void                InstallEventHandler( WXWidget control = nullptr ) override;
     bool                EnableTouchEvents(int eventsMask) override;
 
     virtual bool        ShouldHandleKeyNavigation(const wxKeyEvent &event) const;
@@ -171,7 +171,7 @@ public :
     virtual void        DoNotifyFocusLost();
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
-    virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = NULL);
+    virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = nullptr);
     virtual void        SetupMouseEvent(wxMouseEvent &wxevent, NSEvent * nsEvent);
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);

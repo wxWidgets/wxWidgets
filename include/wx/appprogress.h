@@ -37,7 +37,7 @@ private:
     class wxAppProgressIndicator : public wxAppProgressIndicatorBase
     {
     public:
-        wxAppProgressIndicator(wxWindow* WXUNUSED(parent) = NULL,
+        wxAppProgressIndicator(wxWindow* WXUNUSED(parent) = nullptr,
                                int WXUNUSED(maxValue) = 100)
         {
         }

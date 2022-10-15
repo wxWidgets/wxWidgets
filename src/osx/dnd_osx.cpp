@@ -37,7 +37,7 @@ wxDragResult wxDropTarget::OnDragOver(
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
     wxDataFormat supported;
-    if (m_dataObject != NULL)
+    if (m_dataObject != nullptr)
     {
         if ( wxDropSource* currentSource = wxDropSource::GetCurrentDropSource() )
         {
@@ -56,7 +56,7 @@ wxDataFormat wxDropTarget::GetMatchingPair()
 
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 {
-    if (m_dataObject == NULL)
+    if (m_dataObject == nullptr)
         return false;
 
     return CurrentDragHasSupportedFormat();
@@ -66,7 +66,7 @@ wxDragResult wxDropTarget::OnData(
     wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
     wxDragResult def )
 {
-    if (m_dataObject == NULL)
+    if (m_dataObject == nullptr)
         return wxDragNone;
 
     if (!CurrentDragHasSupportedFormat())
@@ -82,7 +82,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
 
 bool wxDropTarget::GetData()
 {
-    if (m_dataObject == NULL)
+    if (m_dataObject == nullptr)
         return false;
 
     if ( !CurrentDragHasSupportedFormat() )
@@ -93,7 +93,7 @@ bool wxDropTarget::GetData()
     {
         wxDataObject* data = currentSource->GetDataObject();
 
-        if (data != NULL)
+        if (data != nullptr)
             transferred = m_dataObject->ReadFromSource(data);
     }
 

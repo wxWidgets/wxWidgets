@@ -71,7 +71,7 @@ protected:
     }
 
     // Get the text entry of the associated control. Normally shouldn't ever
-    // return NULL (and will assert if it does return it) but the caller should
+    // return nullptr (and will assert if it does return it) but the caller should
     // still test the return value for safety.
     wxTextEntry *GetTextEntry() const;
 
@@ -340,7 +340,7 @@ public:
     //
     // Sets the range appropriately for the type, including setting 0 as the
     // minimal value for the unsigned types.
-    wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT)
+    wxIntegerValidator(ValueType *value = nullptr, int style = wxNUM_VAL_DEFAULT)
         : Base(value, style)
     {
         this->SetMin(std::numeric_limits<ValueType>::min());
@@ -458,7 +458,7 @@ public:
 
 
     // Ctor using implicit (maximal) precision for this type.
-    wxFloatingPointValidator(ValueType *value = NULL,
+    wxFloatingPointValidator(ValueType *value = nullptr,
                              int style = wxNUM_VAL_DEFAULT)
         : Base(value, style)
     {
@@ -469,7 +469,7 @@ public:
 
     // Ctor specifying an explicit precision.
     wxFloatingPointValidator(int precision,
-                      ValueType *value = NULL,
+                      ValueType *value = nullptr,
                       int style = wxNUM_VAL_DEFAULT)
         : Base(value, style)
     {

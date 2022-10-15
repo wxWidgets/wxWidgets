@@ -96,7 +96,7 @@ wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
     const wxIconRefData *
         data = static_cast<const wxIconRefData *>(dataOrig);
     if ( !data )
-        return NULL;
+        return nullptr;
 
     // we don't have to copy m_hIcon because we're only called from SetHICON()
     // which overwrites m_hIcon anyhow currently
@@ -158,7 +158,7 @@ bool wxIcon::CreateFromHICON(WXHICON icon)
 bool wxIcon::InitFromHICON(WXHICON icon, int width, int height, double scale)
 {
 #if wxDEBUG_LEVEL >= 2
-    if ( icon != NULL )
+    if ( icon != nullptr )
     {
         wxSize size = wxGetHiconSize(icon);
         wxASSERT_MSG(size.GetWidth() == width && size.GetHeight() == height,

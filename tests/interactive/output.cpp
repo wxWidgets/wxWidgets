@@ -105,7 +105,7 @@ void InteractiveOutputTestCase::TestDllListLoaded()
         const wxDynamicLibraryDetails& details = dlls[n];
         wxPrintf("%-45s", details.GetPath());
 
-        void *addr wxDUMMY_INITIALIZE(NULL);
+        void *addr wxDUMMY_INITIALIZE(nullptr);
         size_t len wxDUMMY_INITIALIZE(0);
         if ( details.GetAddress(&addr, &len) )
         {
@@ -154,7 +154,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
         filetype->GetDescription(&desc);
         filetype->GetExtensions(exts);
 
-        filetype->GetIcon(NULL);
+        filetype->GetIcon(nullptr);
 
         wxString extsAll;
         for ( size_t e = 0; e < exts.GetCount(); e++ )

@@ -111,7 +111,7 @@ public:
 
    // returns true if (async) dialing is in progress
    virtual bool IsDialing() const override
-      { return m_DialProcess != NULL; }
+      { return m_DialProcess != nullptr; }
 
    // cancel dialing the number initiated with Dial(async = true)
    // NB: this won't result in DISCONNECTED event being sent
@@ -264,12 +264,12 @@ public:
       {
          m_DupMan = dupman;
       }
-   void Disconnect() { m_DupMan = NULL; }
+   void Disconnect() { m_DupMan = nullptr; }
    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) override
       {
          if(m_DupMan)
          {
-            m_DupMan->m_DialProcess = NULL;
+            m_DupMan->m_DialProcess = nullptr;
             m_DupMan->CheckStatus(true);
          }
       }
@@ -290,8 +290,8 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
 {
    m_IsOnline =
    m_connCard = Net_Unknown;
-   m_DialProcess = NULL;
-   m_timer = NULL;
+   m_DialProcess = nullptr;
+   m_timer = nullptr;
    m_CanUseIfconfig = -1; // unknown
    m_CanUsePing = -1; // unknown
    m_BeaconPort = 80;
@@ -382,7 +382,7 @@ bool wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
 
 void wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
 {
-   if(m_timer != NULL)
+   if(m_timer != nullptr)
    {
       m_timer->Stop();
       wxDELETE(m_timer);
@@ -552,7 +552,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnect()
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
 
-   if((hp = gethostbyname(m_BeaconHost.mb_str())) == NULL)
+   if((hp = gethostbyname(m_BeaconHost.mb_str())) == nullptr)
       return Net_No; // no DNS no net
 
    serv_addr.sin_family = hp->h_addrtype;
@@ -596,14 +596,14 @@ wxDialUpManagerImpl::CheckProcNet()
         // cannot use wxFile::Length because file doesn't support seeking, so
         // use stdio directly
         FILE *f = fopen("/proc/net/route", "rt");
-        if (f != NULL)
+        if (f != nullptr)
         {
             // now we know that we will find all devices we may have
             netDevice = NetDevice_None;
 
             char output[256];
 
-            while (fgets(output, 256, f) != NULL)
+            while (fgets(output, 256, f) != nullptr)
             {
                 // Test for the known network interface names
                 if ( strstr(output, "eth")
@@ -718,17 +718,17 @@ wxDialUpManagerImpl::CheckIfconfig()
 
 #if defined(__SOLARIS__) || defined (__SUNOS__)
                     // dialup device under SunOS/Solaris
-                    hasModem = strstr(output.fn_str(),"ipdptp") != NULL;
-                    hasLAN = strstr(output.fn_str(), "hme") != NULL;
+                    hasModem = strstr(output.fn_str(),"ipdptp") != nullptr;
+                    hasLAN = strstr(output.fn_str(), "hme") != nullptr;
 #elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__) || \
       defined(__OPENBSD__) || defined(__DARWIN__)
                     hasModem = strstr(output.fn_str(),"ppp")    // ppp
                         || strstr(output.fn_str(),"sl")  // slip
                         || strstr(output.fn_str(),"pl"); // plip
-                    hasLAN = strstr(output.fn_str(), "eth") != NULL
-                        || strstr(output.fn_str(),"en") != NULL; // en0, en1 osx
+                    hasLAN = strstr(output.fn_str(), "eth") != nullptr
+                        || strstr(output.fn_str(),"en") != nullptr; // en0, en1 osx
 #elif defined(__SGI__)  // IRIX
-                    hasModem = strstr(output.fn_str(), "ppp") != NULL; // PPP
+                    hasModem = strstr(output.fn_str(), "ppp") != nullptr; // PPP
 #elif defined(__HPUX__)
                     // if could run ifconfig on interface, then it exists
                     hasModem = true;

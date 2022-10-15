@@ -82,7 +82,7 @@ wxEpollDispatcher *wxEpollDispatcher::Create()
     if ( epollDescriptor == -1 )
     {
         wxLogSysError(_("Failed to create epoll descriptor"));
-        return NULL;
+        return nullptr;
     }
     wxLogTrace(wxEpollDispatcher_Trace,
                    wxT("Epoll fd %d created"), epollDescriptor);
@@ -148,7 +148,7 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
 {
     epoll_event ev;
     ev.events = 0;
-    ev.data.ptr = NULL;
+    ev.data.ptr = nullptr;
 
     if ( epoll_ctl(m_epollDescriptor, EPOLL_CTL_DEL, fd, &ev) != 0 )
     {
@@ -221,7 +221,7 @@ int wxEpollDispatcher::Dispatch(int timeout)
         wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
         if ( !handler )
         {
-            wxFAIL_MSG( wxT("NULL handler in epoll_event?") );
+            wxFAIL_MSG( wxT("null handler in epoll_event?") );
             continue;
         }
 

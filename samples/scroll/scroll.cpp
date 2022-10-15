@@ -451,15 +451,15 @@ public:
                                wxBORDER_SUNKEN)
     {
         m_nLines = 50;
-        m_winSync = NULL;
+        m_winSync = nullptr;
         m_inDoSync = false;
 
         wxClientDC dc(this);
-        dc.GetTextExtent("Line 17", NULL, &m_hLine);
+        dc.GetTextExtent("Line 17", nullptr, &m_hLine);
     }
 
     // this scrolled window can be synchronized with another one: if this
-    // function is called with a non-NULL pointer, the given window will be
+    // function is called with a non-null pointer, the given window will be
     // scrolled to the same position as this one
     void SyncWith(MyScrolledWindowBase *win)
     {
@@ -468,7 +468,7 @@ public:
         DoSyncIfNecessary();
     }
 
-    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL) override
+    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = nullptr) override
     {
         wxScrolled<wxWindow>::ScrollWindow(dx, dy, rect);
 
@@ -497,7 +497,7 @@ private:
         }
     }
 
-    // the window to synchronize with this one or NULL
+    // the window to synchronize with this one or nullptr
     MyScrolledWindowBase *m_winSync;
 
     // the flag preventing infinite recursion which would otherwise happen if
@@ -851,7 +851,7 @@ wxBEGIN_EVENT_TABLE(MyFrame,wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets scroll sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets scroll sample")
 {
     SetIcon(wxICON(sample));
 
@@ -940,8 +940,8 @@ void MyFrame::OnToggleSync(wxCommandEvent& event)
     }
     else
     {
-        m_win1->SyncWith(NULL);
-        m_win2->SyncWith(NULL);
+        m_win1->SyncWith(nullptr);
+        m_win2->SyncWith(nullptr);
     }
 }
 
@@ -1000,7 +1000,7 @@ void MyScrolledWindowDumb::OnDraw(wxDC& dc)
     for ( size_t line = 0; line < m_nLines; line++ )
     {
         int yPhys;
-        CalcScrolledPosition(0, y, NULL, &yPhys);
+        CalcScrolledPosition(0, y, nullptr, &yPhys);
 
         dc.DrawText(wxString::Format("Line %u (logical %d, physical %d)",
                                      unsigned(line), y, yPhys), 0, y);
@@ -1029,7 +1029,7 @@ void MyScrolledWindowSmart::OnDraw(wxDC& dc)
     for ( size_t line = lineFrom; line <= lineTo; line++ )
     {
         int yPhys;
-        CalcScrolledPosition(0, y, NULL, &yPhys);
+        CalcScrolledPosition(0, y, nullptr, &yPhys);
 
         dc.DrawText(wxString::Format("Line %u (logical %d, physical %d)",
                                      unsigned(line), y, yPhys), 0, y);

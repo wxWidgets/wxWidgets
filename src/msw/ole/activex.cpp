@@ -70,7 +70,7 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
         {\
             return E_FAIL;\
         }\
-        const char *desc = NULL;\
+        const char *desc = nullptr;\
         cls::_GetInterface(this, iid, ppvObject, desc);\
         if (! *ppvObject)\
         {\
@@ -119,8 +119,8 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
 #define DEFINE_OLE_BASE(cls)\
     void cls::_GetInterface(cls *self, REFIID iid, void **_interface, const char *&desc)\
     {\
-        *_interface = NULL;\
-        desc = NULL;
+        *_interface = nullptr;\
+        desc = nullptr;
 
 #define OLE_INTERFACE(_iid, _type)\
     if (IsEqualIID(iid, _iid))\
@@ -205,7 +205,7 @@ public:
         m_bAmbientShowGrabHandles = true;
         m_bAmbientAppearance = true;
 
-        m_hDCBuffer = NULL;
+        m_hDCBuffer = nullptr;
         m_hWndParent = (HWND)win->GetHWND();
     }
     virtual ~FrameSite(){}
@@ -226,7 +226,7 @@ public:
         if (!(wFlags & DISPATCH_PROPERTYGET))
             return S_OK;
 
-        if (pVarResult == NULL)
+        if (pVarResult == nullptr)
             return E_INVALIDARG;
 
         //The most common case is boolean, use as an initial type
@@ -295,7 +295,7 @@ public:
     //**************************IOleWindow***************************
     HRESULT STDMETHODCALLTYPE GetWindow(HWND * phwnd) override
     {
-        if (phwnd == NULL)
+        if (phwnd == nullptr)
             return E_INVALIDARG;
         (*phwnd) = m_hWndParent;
         return S_OK;
@@ -305,13 +305,13 @@ public:
     //**************************IOleInPlaceUIWindow*****************
     HRESULT STDMETHODCALLTYPE GetBorder(LPRECT lprectBorder) override
     {
-        if (lprectBorder == NULL)
+        if (lprectBorder == nullptr)
             return E_INVALIDARG;
         return INPLACE_E_NOTOOLSPACE;
     }
     HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS pborderwidths) override
     {
-        if (pborderwidths == NULL)
+        if (pborderwidths == nullptr)
             return E_INVALIDARG;
         return INPLACE_E_NOTOOLSPACE;
     }
@@ -354,13 +354,13 @@ public:
                                         LPRECT lprcClipRect,
                                         LPOLEINPLACEFRAMEINFO lpFrameInfo) override
     {
-        if (ppFrame == NULL || ppDoc == NULL || lprcPosRect == NULL ||
-            lprcClipRect == NULL || lpFrameInfo == NULL)
+        if (ppFrame == nullptr || ppDoc == nullptr || lprcPosRect == nullptr ||
+            lprcClipRect == nullptr || lpFrameInfo == nullptr)
         {
-            if (ppFrame != NULL)
-                (*ppFrame) = NULL;
-            if (ppDoc != NULL)
-                (*ppDoc) = NULL;
+            if (ppFrame != nullptr)
+                (*ppFrame) = nullptr;
+            if (ppDoc != nullptr)
+                (*ppDoc) = nullptr;
             return E_INVALIDARG;
         }
 
@@ -374,7 +374,7 @@ public:
         if (! SUCCEEDED(hr))
         {
             (*ppFrame)->Release();
-            *ppFrame = NULL;
+            *ppFrame = nullptr;
             return E_UNEXPECTED;
         }
 
@@ -467,7 +467,7 @@ public:
     STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **) override {return E_FAIL;}
     HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer) override
     {
-        if (ppContainer == NULL)
+        if (ppContainer == nullptr)
             return E_INVALIDARG;
         HRESULT hr = QueryInterface(
             IID_IOleContainer, (void**)(ppContainer));
@@ -497,22 +497,22 @@ public:
     #endif
     (LPOLESTR pszItem, DWORD, IBindCtx *, REFIID, void ** ppvObject) override
     {
-        if (pszItem == NULL || ppvObject == NULL)
+        if (pszItem == nullptr || ppvObject == nullptr)
             return E_INVALIDARG;
-        *ppvObject = NULL;
+        *ppvObject = nullptr;
         return MK_E_NOOBJECT;
     }
     HRESULT STDMETHODCALLTYPE GetObjectStorage(
         LPOLESTR pszItem, IBindCtx * , REFIID, void ** ppvStorage) override
     {
-        if (pszItem == NULL || ppvStorage == NULL)
+        if (pszItem == nullptr || ppvStorage == nullptr)
             return E_INVALIDARG;
-        *ppvStorage = NULL;
+        *ppvStorage = nullptr;
         return MK_E_NOOBJECT;
     }
     HRESULT STDMETHODCALLTYPE IsRunning(LPOLESTR pszItem) override
     {
-        if (pszItem == NULL)
+        if (pszItem == nullptr)
             return E_INVALIDARG;
         return MK_E_NOOBJECT;
     }
@@ -529,7 +529,7 @@ public:
     HRESULT STDMETHODCALLTYPE TransformCoords(
         POINTL * pPtlHimetric, POINTF * pPtfContainer, DWORD) override
     {
-        if (pPtlHimetric == NULL || pPtfContainer == NULL)
+        if (pPtlHimetric == nullptr || pPtfContainer == nullptr)
             return E_INVALIDARG;
         return E_NOTIMPL;
     }
@@ -541,7 +541,7 @@ public:
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG cCmds,
                                 OLECMD prgCmds[], OLECMDTEXT *) override
     {
-        if (prgCmds == NULL) return E_INVALIDARG;
+        if (prgCmds == nullptr) return E_INVALIDARG;
         for (ULONG nCmd = 0; nCmd < cCmds; nCmd++)
         {
             // unsupported by default
@@ -582,7 +582,7 @@ public:
             if (! oleDoc.IsOk())
                 return E_FAIL;
 
-            HRESULT hr = oleDoc->CreateView(inPlaceSite, NULL,
+            HRESULT hr = oleDoc->CreateView(inPlaceSite, nullptr,
                                     0, m_window->m_docView.GetRef());
             if (hr != S_OK)
                 return E_FAIL;
@@ -856,9 +856,9 @@ wxActiveXContainer::~wxActiveXContainer()
             m_oleObject->Unadvise(m_docAdviseCookie);
 
         m_oleObject->DoVerb(
-            OLEIVERB_HIDE, NULL, m_clientSite, 0, (HWND) GetHWND(), NULL);
+            OLEIVERB_HIDE, nullptr, m_clientSite, 0, (HWND) GetHWND(), nullptr);
         m_oleObject->Close(OLECLOSE_NOSAVE);
-        m_oleObject->SetClientSite(NULL);
+        m_oleObject->SetClientSite(nullptr);
     }
 
     // m_clientSite uses m_frameSite so destroy it first
@@ -866,7 +866,7 @@ wxActiveXContainer::~wxActiveXContainer()
     delete m_frameSite;
 
     // our window doesn't belong to us, don't destroy it
-    m_hWnd = NULL;
+    m_hWnd = nullptr;
 }
 
 // VZ: we might want to really report an error instead of just asserting here
@@ -921,7 +921,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     wxASSERT(typeInfo.IsOk());
 
     // TYPEATTR
-    TYPEATTR *ta = NULL;
+    TYPEATTR *ta = nullptr;
     hret = typeInfo->GetTypeAttr(&ta);
     CHECK_HR(hret);
 
@@ -969,7 +969,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
         // wxAutoOleInterface<> assumes a ref has already been added
         // TYPEATTR
-        TYPEATTR *ta2 = NULL;
+        TYPEATTR *ta2 = nullptr;
         hret = ti->GetTypeAttr(&ta2);
         CHECK_HR(hret);
 
@@ -1034,7 +1034,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     // TODO:Needed?
 //    hret = m_viewObject->SetAdvise(DVASPECT_CONTENT, 0, adviseSink);
-    m_oleObject->SetHostNames(L"wxActiveXContainer", NULL);
+    m_oleObject->SetHostNames(L"wxActiveXContainer", nullptr);
     OleSetContainedObject(m_oleObject, TRUE);
     OleRun(m_oleObject);
 
@@ -1076,7 +1076,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         RECT posRect;
         wxCopyRectToRECT(m_realparent->GetClientSize(), posRect);
 
-        hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL,
+        hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, nullptr,
             m_clientSite, 0, (HWND)m_realparent->GetHWND(), &posRect);
         CHECK_HR(hret);
 
@@ -1181,11 +1181,11 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         posRect.right = w;
         posRect.bottom = h;
 
-        ::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
+        ::RedrawWindow(m_oleObjectHWND, nullptr, nullptr, RDW_INTERNALPAINT);
         RECTL *prcBounds = (RECTL *) &posRect;
         wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-        m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
-            (HDC)msw->GetHDC(), prcBounds, NULL, NULL, 0);
+        m_viewObject->Draw(DVASPECT_CONTENT, -1, nullptr, nullptr, nullptr,
+            (HDC)msw->GetHDC(), prcBounds, nullptr, nullptr, 0);
     }
 }
 

@@ -60,7 +60,7 @@ protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) override;
 
 private:
-    void Init() { m_impl = NULL; }
+    void Init() { m_impl = nullptr; }
 
     // add a button with the given id/label and return its widget
     GtkWidget *GTKAddButton(wxWindowID btnid,

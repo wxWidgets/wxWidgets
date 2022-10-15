@@ -117,7 +117,7 @@ wxGUIEventLoop::wxGUIEventLoop()
     m_modalSession = nil;
     m_dummyWindow = nil;
     m_modalNestedLevel = 0;
-    m_modalWindow = NULL;
+    m_modalWindow = nullptr;
     m_osxLowLevelWakeUp = false;
 }
 
@@ -168,11 +168,11 @@ bool wxGUIEventLoop::Dispatch()
                 inMode:NSDefaultRunLoopMode
                 dequeue: YES])
     {
-        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
-        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+        WXEVENTREF formerEvent = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEventHandlerCallRef();
 
         if (wxTheApp)
-            wxTheApp->MacSetCurrentEvent(event, NULL);
+            wxTheApp->MacSetCurrentEvent(event, nullptr);
         m_sleepTime = 0.0;
         [NSApp sendEvent: event];
 
@@ -352,7 +352,7 @@ void wxGUIEventLoop::OSXDoStop()
     // We should only stop the top level event loop.
     if ( gs_loopNestingLevel <= 1 )
     {
-        [NSApp stop:0];
+        [NSApp stop:nullptr];
     }
 
     // For the top level loop only calling stop: is not enough when called from
@@ -400,14 +400,14 @@ CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
     m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
-    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    wxASSERT_MSG( m_modalWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }
 
 wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 {
-    m_modalWindow = NULL;
-    wxASSERT_MSG( modalNativeWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalWindow = nullptr;
+    wxASSERT_MSG( modalNativeWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = modalNativeWindow;
 }
 
@@ -456,7 +456,7 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
     m_modalNestedLevel++;
     if ( m_modalNestedLevel > 1 )
     {
-        wxModalSessionStack* stack = NULL;
+        wxModalSessionStack* stack = nullptr;
         
         if ( m_modalNestedLevel == 2 )
         {
@@ -490,7 +490,7 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
             modalWindow->Show();
         
         wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
-        wxASSERT_MSG( now != NULL, "must pass in a toplevel window for modal event loop" );
+        wxASSERT_MSG( now != nullptr, "must pass in a toplevel window for modal event loop" );
         nsnow = now ? now->GetWXWindow() : nil;
     }
     else
@@ -506,12 +506,12 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
         [nsnow orderOut:nil];
     }
     m_modalSession = [NSApp beginModalSessionForWindow:nsnow];
-    wxASSERT_MSG(m_modalSession != NULL, "modal session couldn't be started");
+    wxASSERT_MSG(m_modalSession != nullptr, "modal session couldn't be started");
 }
 
 void wxGUIEventLoop::EndModalSession()
 {
-    wxASSERT_MSG(m_modalSession != NULL, "no modal session active");
+    wxASSERT_MSG(m_modalSession != nullptr, "no modal session active");
     
     wxASSERT_MSG(m_modalNestedLevel > 0, "incorrect modal nesting level");
     

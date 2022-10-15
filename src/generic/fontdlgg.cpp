@@ -261,7 +261,7 @@ static wxString wxColourDialogNames[NUM_COLS]={wxT("ORANGE"),
 void wxGenericFontDialog::Init()
 {
     m_useEvents = false;
-    m_previewer = NULL;
+    m_previewer = nullptr;
     Create( m_parent ) ;
 }
 
@@ -396,7 +396,7 @@ void wxGenericFontDialog::CreateWidgets()
 
     wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer14, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
-    m_colourChoice = NULL;
+    m_colourChoice = nullptr;
     if (m_fontData.GetEnableEffects())
     {
         wxStaticText* itemStaticText15 = new wxStaticText( this, wxID_STATIC, _("C&olour:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -432,7 +432,7 @@ void wxGenericFontDialog::CreateWidgets()
     itemBoxSizer17->Add(m_pointSizeChoice, 0, wxALIGN_LEFT|wxALL, 5);
 #endif
 
-    m_underLineCheckBox = NULL;
+    m_underLineCheckBox = nullptr;
     if (m_fontData.GetEnableEffects())
     {
         wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxVERTICAL);

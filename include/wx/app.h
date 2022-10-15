@@ -226,14 +226,14 @@ public:
     // wxTheApp->GetTraits() during startup or termination when the global
     // application object itself may be unavailable
     //
-    // of course, it still returns NULL in this case and the caller must check
+    // of course, it still returns nullptr in this case and the caller must check
     // for it
     static wxAppTraits *GetTraitsIfExists();
 
     // Return some valid traits object.
     //
     // This method checks if we have wxTheApp and returns its traits if it does
-    // exist and the traits are non-NULL, similarly to GetTraitsIfExists(), but
+    // exist and the traits are non-null, similarly to GetTraitsIfExists(), but
     // falls back to wxConsoleAppTraits to ensure that it always returns
     // something valid.
     static wxAppTraits& GetValidTraits();
@@ -241,8 +241,8 @@ public:
     // returns the main event loop instance, i.e. the event loop which is started
     // by OnRun() and which dispatches all events sent from the native toolkit
     // to the application (except when new event loops are temporarily set-up).
-    // The returned value maybe NULL. Put initialization code which needs a
-    // non-NULL main event loop into OnEventLoopEnter().
+    // The returned value maybe null. Put initialization code which needs a
+    // non-null main event loop into OnEventLoopEnter().
     wxEventLoopBase* GetMainLoop() const
         { return m_mainLoop; }
 
@@ -495,7 +495,7 @@ protected:
     // the one and only global application object
     static wxAppConsole *ms_appInstance;
 
-    // create main loop from AppTraits or return NULL if
+    // create main loop from AppTraits or return nullptr if
     // there is no main loop implementation
     wxEventLoopBase *CreateMainLoop();
 
@@ -506,11 +506,11 @@ protected:
              m_appDisplayName,    // app display name ("My Application")
              m_className;         // class name
 
-    // the class defining the application behaviour, NULL initially and created
+    // the class defining the application behaviour, nullptr initially and created
     // by GetTraits() when first needed
     wxAppTraits *m_traits;
 
-    // the main event loop of the application (may be NULL if the loop hasn't
+    // the main event loop of the application (may be null if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoopBase *m_mainLoop;
 
@@ -622,11 +622,11 @@ public:
 
         // return the "main" top level window (if it hadn't been set previously
         // with SetTopWindow(), will return just some top level window and, if
-        // there are none, will return NULL)
+        // there are none, will return nullptr)
     virtual wxWindow *GetTopWindow() const;
 
         // convenient helper which is safe to use even if there is no wxApp at
-        // all, it will just return NULL in this case
+        // all, it will just return nullptr in this case
     static wxWindow *GetMainTopWindow();
 
         // control the exit behaviour: by default, the program will exit the
@@ -697,7 +697,7 @@ public:
     {
         return ms_appInstance && ms_appInstance->IsGUI()
                 ? static_cast<wxAppBase*>(ms_appInstance)
-                : NULL;
+                : nullptr;
     }
 
 protected:
@@ -709,7 +709,7 @@ protected:
     void DeleteAllTLWs();
 
 
-    // the main top level window (may be NULL)
+    // the main top level window (may be null)
     wxWindow *m_topWindow;
 
     // if Yes, exit the main loop when the last top level window is deleted, if

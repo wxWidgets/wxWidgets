@@ -114,7 +114,7 @@ public:
     */
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
+             const char maskBits[] = nullptr);
 
     /**
         Constructs a cursor by passing a string resource name or filename.

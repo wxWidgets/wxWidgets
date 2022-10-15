@@ -87,9 +87,9 @@ int wxMessageDialog::ShowModal()
 
     if ( !wxIsMainThread() )
     {
-        CFStringRef defaultButtonTitle = NULL;
-        CFStringRef alternateButtonTitle = NULL;
-        CFStringRef otherButtonTitle = NULL;
+        CFStringRef defaultButtonTitle = nullptr;
+        CFStringRef alternateButtonTitle = nullptr;
+        CFStringRef otherButtonTitle = nullptr;
 
 #if wxUSE_UNICODE
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT;
@@ -148,7 +148,7 @@ int wxMessageDialog::ShowModal()
 
         CFOptionFlags exitButton;
         OSStatus err = CFUserNotificationDisplayAlert(
-            0, alertType, NULL, NULL, NULL, cfTitle, cfText,
+            0, alertType, nullptr, nullptr, nullptr, cfTitle, cfText,
             defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
         if (err == noErr)
             SetReturnCode( m_buttonId[exitButton] );
@@ -175,7 +175,7 @@ int wxMessageDialog::ShowModal()
 
 void wxMessageDialog::ShowWindowModal()
 {
-    wxNonOwnedWindow* parentWindow = NULL;
+    wxNonOwnedWindow* parentWindow = nullptr;
 
     m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
 

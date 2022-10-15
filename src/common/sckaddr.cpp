@@ -197,7 +197,7 @@ hostent *deepCopyHostent(hostent *h,
     if (len > size)
     {
         *err = ENOMEM;
-        return NULL;
+        return nullptr;
     }
     memcpy(buffer, h->h_name, len);
     buffer[len] = '\0';
@@ -226,7 +226,7 @@ hostent *deepCopyHostent(hostent *h,
         if (size < pos + len)
         {
             *err = ENOMEM;
-            return NULL;
+            return nullptr;
         }
         memcpy(buffer + pos, *p, len); /* copy content */
         *q = buffer + pos; /* set copied pointer to copied content */
@@ -253,7 +253,7 @@ hostent *deepCopyHostent(hostent *h,
         if (size <= pos + len)
         {
             *err = ENOMEM;
-            return NULL;
+            return nullptr;
         }
         memcpy(buffer + pos, *p, len); /* copy content */
         buffer[pos + len] = '\0';
@@ -342,7 +342,7 @@ servent *deepCopyServent(servent *s,
     int len = strlen(s->s_name);
     if (len >= size)
     {
-        return NULL;
+        return nullptr;
     }
     memcpy(buffer, s->s_name, len);
     buffer[len] = '\0';
@@ -355,7 +355,7 @@ servent *deepCopyServent(servent *s,
     len = strlen(s->s_proto);
     if (pos + len >= size)
     {
-        return NULL;
+        return nullptr;
     }
     memcpy(buffer + pos, s->s_proto, len);
     buffer[pos + len] = '\0';
@@ -380,7 +380,7 @@ servent *deepCopyServent(servent *s,
         len = strlen(*p);
         if (size <= pos + len)
         {
-            return NULL;
+            return nullptr;
         }
         memcpy(buffer + pos, *p, len); /* copy content */
         buffer[pos + len] = '\0';
@@ -407,7 +407,7 @@ servent *wxGetservbyname_r(const char *port,
 #elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
     wxUnusedVar(size);
     if ( getservbyname_r(port, protocol, serv, &buffer) != 0 )
-        return NULL;
+        return nullptr;
 #elif defined(HAVE_GETSERVBYNAME)
     wxLOCK_GETBY_MUTEX(serv);
 
@@ -610,8 +610,8 @@ bool wxSockAddressImpl::SetHostName6(const wxString& hostname)
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET6;
 
-    addrinfo *info = NULL;
-    int rc = getaddrinfo(hostname.utf8_str(), NULL, &hints, &info);
+    addrinfo *info = nullptr;
+    int rc = getaddrinfo(hostname.utf8_str(), nullptr, &hints, &info);
     if ( rc )
     {
         // use gai_strerror()?
@@ -686,7 +686,7 @@ bool wxSockAddressImpl::SetToAnyAddress6()
 // ----------------------------------------------------------------------------
 
 #ifndef UNIX_PATH_MAX
-    #define UNIX_PATH_MAX (WXSIZEOF(((sockaddr_un *)NULL)->sun_path))
+    #define UNIX_PATH_MAX (WXSIZEOF(((sockaddr_un *)nullptr)->sun_path))
 #endif
 
 void wxSockAddressImpl::CreateUnix()

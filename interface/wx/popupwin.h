@@ -99,14 +99,14 @@ public:
     /**
         Popup the window (this will show it too).
 
-        If @a focus is non-@NULL, it will be kept focused while this window
+        If @a focus is non-null, it will be kept focused while this window
         is shown if supported by the current platform, otherwise the popup
         itself will receive focus. In any case, the popup will disappear
         automatically if it loses focus because of a user action.
 
         @see Dismiss()
     */
-    virtual void Popup(wxWindow *focus = NULL);
+    virtual void Popup(wxWindow *focus = nullptr);
 
     /**
         Hide the window.

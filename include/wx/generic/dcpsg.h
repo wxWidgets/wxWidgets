@@ -99,7 +99,7 @@ public:
     virtual int GetResolution() const override;
     virtual wxRect GetPaperRect() const override;
 
-    virtual void* GetHandle() const override { return NULL; }
+    virtual void* GetHandle() const override { return nullptr; }
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
@@ -137,9 +137,9 @@ protected:
         wxFAIL_MSG( "not implemented" );
     }
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
-                         wxCoord *descent = NULL,
-                         wxCoord *externalLeading = NULL,
-                         const wxFont *theFont = NULL) const override;
+                         wxCoord *descent = nullptr,
+                         wxCoord *externalLeading = nullptr,
+                         const wxFont *theFont = nullptr) const override;
     void DoGetSize(int* width, int* height) const override;
     void DoGetSizeMM(int *width, int *height) const override;
 

@@ -35,7 +35,7 @@ public:
     wxHtmlSelection()
         : m_fromPos(wxDefaultPosition), m_toPos(wxDefaultPosition),
           m_fromCharacterPos(-1), m_toCharacterPos(-1),
-          m_fromCell(NULL), m_toCell(NULL),
+          m_fromCell(nullptr), m_toCell(nullptr),
           m_extBeforeSel(0), m_extBeforeSelEnd(0) {}
 
     // this version is used for the user selection defined with the mouse
@@ -127,7 +127,7 @@ public:
 class WXDLLIMPEXP_HTML wxDefaultHtmlRenderingStyle : public wxHtmlRenderingStyle
 {
 public:
-    explicit wxDefaultHtmlRenderingStyle(const wxWindowBase* wnd = NULL)
+    explicit wxDefaultHtmlRenderingStyle(const wxWindowBase* wnd = nullptr)
         : m_wnd(wnd)
     {}
 
@@ -148,8 +148,8 @@ class WXDLLIMPEXP_HTML wxHtmlRenderingInfo
 {
 public:
     wxHtmlRenderingInfo()
-        : m_selection(NULL),
-          m_style(NULL),
+        : m_selection(nullptr),
+          m_style(nullptr),
           m_prevUnderlined(false)
     {
     }
@@ -251,7 +251,7 @@ public:
     // return next cell among parent's cells
     wxHtmlCell *GetNext() const {return m_Next;}
     // returns first child cell (if there are any, i.e. if this is container):
-    virtual wxHtmlCell* GetFirstChild() const { return NULL; }
+    virtual wxHtmlCell* GetFirstChild() const { return nullptr; }
 
     // members writing methods
     virtual void SetPos(int x, int y) {m_PosX = x; m_PosY = y;}
@@ -331,7 +331,7 @@ public:
     virtual bool IsTerminalCell() const { return true; }
 
     // Find a cell inside this cell positioned at the given coordinates
-    // (relative to this's positions). Returns NULL if no such cell exists.
+    // (relative to this's positions). Returns nullptr if no such cell exists.
     // The flag can be used to specify whether to look for terminal or
     // nonterminal cells or both. In either case, returned cell is deepest
     // cell in cells tree that contains [x,y].
@@ -341,18 +341,18 @@ public:
     // Returns absolute position of the cell on HTML canvas.
     // If rootCell is provided, then it's considered to be the root of the
     // hierarchy and the returned value is relative to it.
-    wxPoint GetAbsPos(const wxHtmlCell *rootCell = NULL) const;
+    wxPoint GetAbsPos(const wxHtmlCell *rootCell = nullptr) const;
 
     // Returns minimum bounding rectangle of this cell in coordinates, relative
     // to the rootCell, if it is provided, or relative to the result of
-    // GetRootCell() if the rootCell is NULL.
-    wxRect GetRect(const wxHtmlCell *rootCell = NULL) const;
+    // GetRootCell() if the rootCell is null.
+    wxRect GetRect(const wxHtmlCell *rootCell = nullptr) const;
 
     // Returns root cell of the hierarchy (i.e. grand-grand-...-parent that
     // doesn't have a parent itself)
     wxHtmlCell *GetRootCell() const;
 
-    // Returns first (last) terminal cell inside this cell. It may return NULL,
+    // Returns first (last) terminal cell inside this cell. It may return nullptr,
     // but it is rare -- only if there are no terminals in the tree.
     virtual wxHtmlCell *GetFirstTerminal() const
         { return wxConstCast(this, wxHtmlCell); }
@@ -368,7 +368,7 @@ public:
     // then both A.IsBefore(B) and B.IsBefore(A) always return true.
     bool IsBefore(wxHtmlCell *cell) const;
 
-    // Converts the cell into text representation. If sel != NULL then
+    // Converts the cell into text representation. If sel != nullptr then
     // only part of the cell inside the selection is converted.
     virtual wxString ConvertToText(wxHtmlSelection *WXUNUSED(sel)) const
         { return wxEmptyString; }
@@ -396,7 +396,7 @@ protected:
     wxHtmlScriptMode m_ScriptMode;
     long m_ScriptBaseline;
 
-    // destination address if this fragment is hypertext link, NULL otherwise
+    // destination address if this fragment is hypertext link, nullptr otherwise
     wxHtmlLinkInfo *m_Link;
     // true if this cell can be placed on pagebreak, false otherwise
     bool m_CanLiveOnPagebreak;
@@ -699,11 +699,11 @@ class WXDLLIMPEXP_HTML wxHtmlLinkInfo : public wxObject
 {
 public:
     wxHtmlLinkInfo()
-        { m_Event = NULL; m_Cell = NULL; }
+        { m_Event = nullptr; m_Cell = nullptr; }
     wxHtmlLinkInfo(const wxString& href, const wxString& target = wxString())
         : m_Href(href)
         , m_Target(target)
-        { m_Event = NULL; m_Cell = NULL; }
+        { m_Event = nullptr; m_Cell = nullptr; }
 
     void SetEvent(const wxMouseEvent *e) { m_Event = e; }
     void SetHtmlCell(const wxHtmlCell *e) { m_Cell = e; }
@@ -731,7 +731,7 @@ public:
     wxHtmlTerminalCellsInterator(const wxHtmlCell *from, const wxHtmlCell *to)
         : m_to(to), m_pos(from) {}
 
-    operator bool() const { return m_pos != NULL; }
+    operator bool() const { return m_pos != nullptr; }
     const wxHtmlCell* operator++();
     const wxHtmlCell* operator->() const { return m_pos; }
     const wxHtmlCell* operator*() const { return m_pos; }

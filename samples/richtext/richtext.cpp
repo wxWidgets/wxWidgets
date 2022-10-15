@@ -755,9 +755,9 @@ void MyApp::CreateStyles()
 // frame constructor
 MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
-       : wxFrame(NULL, id, title, pos, size, style)
+       : wxFrame(nullptr, id, title, pos, size, style)
 {
-    m_richTextCtrl = NULL;
+    m_richTextCtrl = nullptr;
 
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
@@ -1204,7 +1204,7 @@ void MyFrame::WriteInitialText()
 
         r.WriteText("This is a text box. Just testing! Once more unto the breach, dear friends, once more...");
 
-        r.SetFocusObject(NULL); // Set the focus back to the main buffer
+        r.SetFocusObject(nullptr); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
     }
 #endif
@@ -1263,7 +1263,7 @@ void MyFrame::WriteInitialText()
         cell->Clear();
         r.WriteText("This cell spans 2 columns and 3 rows");
 
-        r.SetFocusObject(NULL); // Set the focus back to the main buffer
+        r.SetFocusObject(nullptr); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
     }
 #endif
@@ -1345,7 +1345,7 @@ bool MyFrame::ProcessEvent(wxEvent& event)
                 focusWin = m_richTextCtrl;
             if (focusWin && focusWin->GetEventHandler()->ProcessEvent(event))
             {
-                //s_command = NULL;
+                //s_command = nullptr;
                 s_eventType = 0;
                 s_id = 0;
                 return true;
@@ -1815,7 +1815,7 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
 {
-    static wxRichTextStyleSheet* gs_AlternateStyleSheet = NULL;
+    static wxRichTextStyleSheet* gs_AlternateStyleSheet = nullptr;
 
     wxRichTextStyleListCtrl *styleList = (wxRichTextStyleListCtrl*) FindWindow(ID_RICHTEXT_STYLE_LIST);
     wxRichTextStyleComboCtrl* styleCombo = (wxRichTextStyleComboCtrl*) FindWindow(ID_RICHTEXT_STYLE_COMBO);
@@ -1870,7 +1870,7 @@ void MyFrame::OnManageStyles(wxCommandEvent& WXUNUSED(event))
 
     int flags = wxRICHTEXT_ORGANISER_CREATE_STYLES|wxRICHTEXT_ORGANISER_EDIT_STYLES;
 
-    wxRichTextStyleOrganiserDialog dlg(flags, sheet, NULL, this, wxID_ANY, _("Style Manager"));
+    wxRichTextStyleOrganiserDialog dlg(flags, sheet, nullptr, this, wxID_ANY, _("Style Manager"));
     dlg.ShowModal();
 }
 
@@ -1946,7 +1946,7 @@ void MyFrame::OnRenumberList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->NumberList(range, NULL, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+        m_richTextCtrl->NumberList(range, nullptr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
     }
 }
 
@@ -1955,7 +1955,7 @@ void MyFrame::OnPromoteList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->PromoteList(1, range, NULL);
+        m_richTextCtrl->PromoteList(1, range, nullptr);
     }
 }
 
@@ -1964,7 +1964,7 @@ void MyFrame::OnDemoteList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->PromoteList(-1, range, NULL);
+        m_richTextCtrl->PromoteList(-1, range, nullptr);
     }
 }
 
@@ -2029,7 +2029,7 @@ void MyFrame::OnTableDeleteRow(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTableFocusedUpdateUI(wxUpdateUIEvent& event)
 {
-    event.Enable(m_richTextCtrl->FindTable() != NULL);
+    event.Enable(m_richTextCtrl->FindTable() != nullptr);
 }
 
 void MyFrame::OnTableHasCellsUpdateUI(wxUpdateUIEvent& event)
@@ -2323,5 +2323,5 @@ wxRichTextTable* MyRichTextCtrl::FindTable() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }

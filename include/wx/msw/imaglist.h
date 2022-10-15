@@ -119,7 +119,7 @@ public:
   bool SetDragCursorImage(int index, const wxPoint& hotSpot);
 
   // If successful, returns a pointer to the temporary image list that is used for dragging;
-  // otherwise, NULL.
+  // otherwise, nullptr.
   // dragPos: receives the current drag position.
   // hotSpot: receives the offset of the drag image relative to the drag position.
   static wxImageList *GetDragImageList(wxPoint& dragPos, wxPoint& hotSpot);
@@ -144,7 +144,7 @@ public:
   // The coordinates are relative to the window's upper left corner, so you must compensate
   // for the widths of window elements, such as the border, title bar, and menu bar, when
   // specifying the coordinates.
-  // If lockWindow is NULL, this function draws the image in the display context associated
+  // If lockWindow is null, this function draws the image in the display context associated
   // with the desktop window, and coordinates are relative to the upper left corner of the screen.
   // This function locks all other updates to the given window during the drag operation.
   // If you need to do any drawing during a drag operation, such as highlighting the target
@@ -178,7 +178,7 @@ public:
   // These two functions could possibly be combined into one, since DragEnter is
   // a bit obscure.
   wxImageList::DragMove(wxPoint(x, y));  // x, y are current cursor position
-  wxImageList::DragEnter(NULL, wxPoint(x, y)); // NULL assumes dragging across whole screen
+  wxImageList::DragEnter(nullptr, wxPoint(x, y)); // nullptr assumes dragging across whole screen
 
   3) Finishing dragging:
 
@@ -212,7 +212,7 @@ private:
 
   void Init()
   {
-    m_hImageList = NULL;
+    m_hImageList = nullptr;
     m_useMask = false;
   }
 

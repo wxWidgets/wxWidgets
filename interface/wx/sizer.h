@@ -187,7 +187,7 @@ public:
                      int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = NULL);
+                     wxObject* userData = nullptr);
 
     /**
         Appends a child to the sizer.
@@ -245,7 +245,7 @@ public:
                      int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = NULL);
+                     wxObject* userData = nullptr);
 
     /**
         Appends a spacer child to the sizer.
@@ -293,7 +293,7 @@ public:
                      int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = NULL);
+                     wxObject* userData = nullptr);
 
     /**
         Appends a spacer child to the sizer.
@@ -578,7 +578,7 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = NULL);
+                        wxObject* userData = nullptr);
 
     /**
         Insert a child into the sizer before any existing item at @a index.
@@ -597,7 +597,7 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = NULL);
+                        wxObject* userData = nullptr);
 
     /**
         Insert a child into the sizer before any existing item at @a index.
@@ -608,7 +608,7 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = NULL);
+                        wxObject* userData = nullptr);
     /**
         Insert a child into the sizer before any existing item at @a index.
 
@@ -681,7 +681,7 @@ public:
     wxSizerItem* Prepend(wxWindow* window, int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = NULL);
+                         wxObject* userData = nullptr);
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -697,7 +697,7 @@ public:
     wxSizerItem* Prepend(wxSizer* sizer, int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = NULL);
+                         wxObject* userData = nullptr);
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -707,7 +707,7 @@ public:
                          int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = NULL);
+                         wxObject* userData = nullptr);
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -1091,7 +1091,7 @@ public:
         Construct a sizer item for tracking a spacer.
     */
     wxSizerItem(int width, int height, int proportion=0, int flag=0,
-                int border=0, wxObject* userData=NULL);
+                int border=0, wxObject* userData=nullptr);
 
     ///@{
     /**
@@ -1100,7 +1100,7 @@ public:
     wxSizerItem(wxWindow* window, const wxSizerFlags& flags);
     wxSizerItem(wxWindow* window, int proportion=0, int flag=0,
                 int border=0,
-                wxObject* userData=NULL);
+                wxObject* userData=nullptr);
     ///@}
 
     ///@{
@@ -1110,7 +1110,7 @@ public:
     wxSizerItem(wxSizer* sizer, const wxSizerFlags& flags);
     wxSizerItem(wxSizer* sizer, int proportion=0, int flag=0,
                 int border=0,
-                wxObject* userData=NULL);
+                wxObject* userData=nullptr);
     ///@}
 
     /**

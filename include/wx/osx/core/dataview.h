@@ -29,7 +29,7 @@ wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wx
 // for the carbon and cocoa environment.
 // ATTENTION
 //  All methods assume that the passed column pointers are
-//  valid (unless a NULL pointer is explicitly allowed
+//  valid (unless a null pointer is explicitly allowed
 //  to be passed)!
 // ATTENTION
 // ---------------------------------------------------------
@@ -61,7 +61,7 @@ public:
   virtual bool         Add          (wxDataViewItem const& parent, wxDataViewItem const& item)       = 0; // adds an item to the native control
   virtual bool         Add          (wxDataViewItem const& parent, wxDataViewItemArray const& items) = 0; // adds items to the native control
   virtual void         Collapse     (wxDataViewItem const& item)                                     = 0; // collapses the passed item in the native control
-  virtual void         EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // ensures that the passed item's value in the passed column is visible (column pointer can be NULL)
+  virtual void         EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // ensures that the passed item's value in the passed column is visible (column pointer can be null)
   virtual unsigned int GetCount() const                                                              = 0; // returns the number of items in the native control
   virtual int          GetCountPerPage() const                                                       = 0; // get number of items that fit into a single page
   virtual wxRect       GetRectangle (wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // returns the rectangle that is used by the passed item and column in the native control

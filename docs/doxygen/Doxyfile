@@ -140,7 +140,7 @@ ALIASES += header{1}="Include file:^^ \verbatim #include <\1> \endverbatim"
 # some formatting aliases
 ALIASES += true="<span class='literal'>true</span>"
 ALIASES += false="<span class='literal'>false</span>"
-ALIASES += NULL="<span class='literal'>NULL</span>"
+ALIASES += NULL="<span class='literal'>nullptr</span>"
 ALIASES += NUL="<span class='literal'>NUL</span>"
 
 # NOTE: these are important as you can't write in the docs

@@ -504,7 +504,7 @@ int wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
     Splits the given wxString object using the separator @a sep and returns the
     result as a wxArrayString.
 
-    If the @a escape character is non-@NULL, then the occurrences of @a sep
+    If the @a escape character is non-null, then the occurrences of @a sep
     immediately prefixed with @a escape are not considered as separators.
     Note that empty tokens will be generated if there are two or more adjacent
     separators.
@@ -520,7 +520,7 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     Concatenate all lines of the given wxArrayString object using the separator
     @a sep and returns the result as a wxString.
 
-    If the @a escape character is non-@NULL, then it's used as prefix for each
+    If the @a escape character is non-null, then it's used as prefix for each
     occurrence of @a sep in the strings contained in @a arr before joining them
     which is necessary in order to be able to recover the original array
     contents from the string later using wxSplit(). The @a escape characters

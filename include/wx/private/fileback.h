@@ -34,13 +34,13 @@ public:
                   size_t bufsize = DefaultBufSize,
                   const wxString& prefix = wxT("wxbf"));
 
-    wxBackingFile() : m_impl(NULL) { }
+    wxBackingFile() : m_impl(nullptr) { }
     ~wxBackingFile();
 
     wxBackingFile(const wxBackingFile& backer);
     wxBackingFile& operator=(const wxBackingFile& backer);
 
-    operator bool() const { return m_impl != NULL; }
+    operator bool() const { return m_impl != nullptr; }
 
 private:
     class wxBackingFileImpl *m_impl;

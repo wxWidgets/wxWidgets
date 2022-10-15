@@ -74,7 +74,7 @@ public:
 
     // ctor takes the data from the output stream, which is then empty
     TestInputStream(TestOutputStream& out, int eoftype)
-        : m_data(NULL), m_eoftype(eoftype) { SetData(out); }
+        : m_data(nullptr), m_eoftype(eoftype) { SetData(out); }
     // this ctor 'dups'
     TestInputStream(const TestInputStream& in);
     ~TestInputStream() { delete [] m_data; }
@@ -212,11 +212,11 @@ protected:
 
     virtual void OnCreateEntry(     OutputStreamT& WXUNUSED(arc),
                                     TestEntry& WXUNUSED(testEntry),
-                                    EntryT *entry = NULL) { (void)entry; }
+                                    EntryT *entry = nullptr) { (void)entry; }
 
     virtual void OnEntryExtracted(  EntryT& WXUNUSED(entry),
                                     const TestEntry& WXUNUSED(testEntry),
-                                    InputStreamT *arc = NULL) { (void)arc; }
+                                    InputStreamT *arc = nullptr) { (void)arc; }
 
     typedef std::map<wxString, TestEntry*> TestEntries;
     TestEntries m_testEntries;              // test data

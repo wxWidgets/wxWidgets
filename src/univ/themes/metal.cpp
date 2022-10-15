@@ -142,7 +142,7 @@ private:
 class wxMetalTheme : public wxDelegateTheme
 {
 public:
-    wxMetalTheme() : wxDelegateTheme(wxT("win32")), m_renderer(NULL) {}
+    wxMetalTheme() : wxDelegateTheme(wxT("win32")), m_renderer(nullptr) {}
     ~wxMetalTheme() { delete m_renderer; }
 
 protected:

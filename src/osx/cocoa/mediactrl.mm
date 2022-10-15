@@ -390,7 +390,7 @@ bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
 
     WXRect r = wxOSXGetFrameForControl( mediactrl, pos , size ) ;
 
-    WXWidget view = NULL;
+    WXWidget view = nullptr;
 #if wxOSX_USE_AVKIT
     view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
     [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];

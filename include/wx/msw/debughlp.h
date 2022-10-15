@@ -391,7 +391,7 @@ private:
     // dereference the given symbol, i.e. return symbol which is not a
     // pointer/reference any more
     //
-    // if ppData != NULL, dereference the pointer as many times as we
+    // if ppData != nullptr, dereference the pointer as many times as we
     // dereferenced the symbol
     //
     // return the tag of the dereferenced symbol

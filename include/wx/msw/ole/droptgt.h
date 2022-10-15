@@ -35,7 +35,7 @@ class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
     // ctor & dtor
-    wxDropTarget(wxDataObject *dataObject = NULL);
+    wxDropTarget(wxDataObject *dataObject = nullptr);
     virtual ~wxDropTarget();
 
     // normally called by wxWindow on window creation/destruction, but might be

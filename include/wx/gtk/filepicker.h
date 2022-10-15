@@ -23,14 +23,14 @@
 //-----------------------------------------------------------------------------
 
 #define FILEDIRBTN_OVERRIDES                                                  \
-    /* NULL is because of a problem with destruction order which happens   */ \
+    /* nullptr is because of a problem with destruction order which happens*/ \
     /* if we pass GetParent(): in fact, this GTK native implementation     */ \
     /* needs to create the dialog in ::Create() and not for each user      */ \
     /* request in response to the user click as the generic implementation */ \
     /* does.                                                               */ \
-    virtual wxWindow *GetDialogParent() override                            \
+    virtual wxWindow *GetDialogParent() override                              \
     {                                                                         \
-        return NULL;                                                          \
+        return nullptr;                                                       \
     }                                                                         \
                                                                               \
     /* even if wx derive from wxGenericFileButton, i.e. from wxButton, our */ \
@@ -38,12 +38,12 @@
     /* GTK_BUTTON(m_widget) macro done by wxButton must be bypassed to     */ \
     /* avoid bunch of GTK+ warnings like:                                  */ \
     /*      invalid cast from `GtkFileChooserButton' to  `GtkButton'       */ \
-    /* so, override wxButton::GTKGetWindow and return NULL as GTK+ doesn't */ \
+    /* so, override wxButton::GTKGetWindow and return nullptr as GTK+ doesn't */ \
     /* give us access to the internal GdkWindow of a GtkFileChooserButton  */ \
 protected:                                                                    \
     virtual GdkWindow *                                                       \
-    GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const override       \
-        { return NULL; }
+    GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const override         \
+        { return nullptr; }
 
 
 //-----------------------------------------------------------------------------
@@ -105,7 +105,7 @@ protected:
 
 private:
     // common part of all ctors
-    void Init() { m_dialog = NULL; }
+    void Init() { m_dialog = nullptr; }
 
     wxDECLARE_DYNAMIC_CLASS(wxFileButton);
 };
@@ -183,7 +183,7 @@ public:    // used by the GTK callback only
 private:
     void Init()
     {
-        m_dialog = NULL;
+        m_dialog = nullptr;
         m_bIgnoreNextChange = false;
     }
 

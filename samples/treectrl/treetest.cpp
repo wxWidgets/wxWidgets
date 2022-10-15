@@ -205,10 +205,10 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
-         m_treeCtrl(NULL)
+       : wxFrame(nullptr, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
+         m_treeCtrl(nullptr)
 #if wxUSE_LOG
-         , m_textCtrl(NULL)
+         , m_textCtrl(nullptr)
 #endif // wxUSE_LOG
 {
     // This reduces flicker effects - even better would be to define
@@ -361,7 +361,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 MyFrame::~MyFrame()
 {
 #if wxUSE_LOG
-    delete wxLog::SetActiveTarget(NULL);
+    delete wxLog::SetActiveTarget(nullptr);
 #endif // wxUSE_LOG
 }
 
@@ -960,7 +960,7 @@ void MyTreeCtrl::CreateImages(int size)
 {
     if ( size == -1 )
     {
-        SetImageList(NULL);
+        SetImageList(nullptr);
         return;
     }
     if ( size == 0 )
@@ -1040,7 +1040,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
 {
     if ( del )
     {
-        SetStateImageList(NULL);
+        SetStateImageList(nullptr);
         return;
     }
 
@@ -1089,7 +1089,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
 #ifdef HAS_GENERIC_TREECTRL
     if ( size == -1 )
     {
-        SetButtonsImageList(NULL);
+        SetButtonsImageList(nullptr);
         return;
     }
 
@@ -1289,7 +1289,7 @@ void MyTreeCtrl::DoToggleState(const wxTreeItemId& item)
         int state = GetItemState(item);
         int nState;
 
-        srand (time(NULL));
+        srand (time(nullptr));
         do {
             nState = rand() % GetStateImageList()->GetImageCount();
         } while (nState == state);
@@ -1620,7 +1620,7 @@ void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
     wxTreeItemId itemId = event.GetItem();
     MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
 
-    if ( item != NULL )
+    if ( item != nullptr )
     {
         item->ShowInfo(this);
     }

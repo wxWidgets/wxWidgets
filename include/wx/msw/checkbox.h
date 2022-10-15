@@ -57,7 +57,7 @@ public:
     virtual bool CanApplyThemeBorder() const override { return false; }
 
     // implementation only from now on
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const override;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
 
 protected:
     virtual wxSize DoGetBestClientSize() const override;

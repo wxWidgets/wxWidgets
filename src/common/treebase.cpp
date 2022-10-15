@@ -141,7 +141,7 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType,
 wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)
 {
-    m_itemOld = 0l;
+    m_itemOld = nullptr;
     m_editCancelled = false;
 }
 

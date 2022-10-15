@@ -55,7 +55,7 @@ extern "C" {
 class WXDLLIMPEXP_CORE wxHIDDevice
 {
 public:
-    wxHIDDevice() : m_ppDevice(NULL), m_ppQueue(NULL), m_pCookies(NULL) {}
+    wxHIDDevice() : m_ppDevice(nullptr), m_ppQueue(nullptr), m_pCookies(nullptr) {}
 
     bool Create (int nClass = -1, int nType = -1, int nDev = 1);
 

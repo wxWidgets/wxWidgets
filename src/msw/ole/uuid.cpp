@@ -161,7 +161,7 @@ bool Uuid::Set(const wxChar *pc)
 //  6aadc650-67b0-11d0-bac8-0000c018ba27
 void Uuid::UuidToCForm()
 {
-  if ( m_pszCForm == NULL )
+  if ( m_pszCForm == nullptr )
     m_pszCForm = new wxChar[UUID_CSTRLEN];
 
   wsprintf(m_pszCForm, wxT("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X"),

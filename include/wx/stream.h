@@ -210,7 +210,7 @@ protected:
     // bytes read
     size_t GetWBack(void *buf, size_t size);
 
-    // write back buffer or NULL if none
+    // write back buffer or nullptr if none
     char *m_wback;
 
     // the size of the buffer
@@ -496,7 +496,7 @@ public:
     bool IsFixed() const { return m_fixed; }
     bool IsFlushable() const { return m_flushable; }
 
-    // only for input/output buffers respectively, returns NULL otherwise
+    // only for input/output buffers respectively, returns nullptr otherwise
     wxInputStream *GetInputStream() const;
     wxOutputStream *GetOutputStream() const;
 
@@ -553,10 +553,10 @@ class WXDLLIMPEXP_BASE wxBufferedInputStream : public wxFilterInputStream
 public:
     // create a buffered stream on top of the specified low-level stream
     //
-    // if a non NULL buffer is given to the stream, it will be deleted by it,
+    // if a non null buffer is given to the stream, it will be deleted by it,
     // otherwise a default 1KB buffer will be used
     wxBufferedInputStream(wxInputStream& stream,
-                          wxStreamBuffer *buffer = NULL);
+                          wxStreamBuffer *buffer = nullptr);
 
     // ctor allowing to specify the buffer size, it's just a more convenient
     // alternative to creating wxStreamBuffer, calling its SetBufferIO(bufsize)
@@ -597,10 +597,10 @@ class WXDLLIMPEXP_BASE wxBufferedOutputStream : public wxFilterOutputStream
 public:
     // create a buffered stream on top of the specified low-level stream
     //
-    // if a non NULL buffer is given to the stream, it will be deleted by it,
+    // if a non null buffer is given to the stream, it will be deleted by it,
     // otherwise a default 1KB buffer will be used
     wxBufferedOutputStream(wxOutputStream& stream,
-                           wxStreamBuffer *buffer = NULL);
+                           wxStreamBuffer *buffer = nullptr);
 
     // ctor allowing to specify the buffer size, it's just a more convenient
     // alternative to creating wxStreamBuffer, calling its SetBufferIO(bufsize)

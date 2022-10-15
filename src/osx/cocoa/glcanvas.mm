@@ -151,7 +151,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
 {
     // Prevent the NSOpenGLView from making it's own context
     // We want to force using wxGLContexts
-    return NULL;
+    return nullptr;
 }
 
 @end

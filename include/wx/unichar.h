@@ -69,7 +69,7 @@ public:
 
     // Returns true if the character is representable as a single byte in the
     // current locale encoding and return this byte in output argument c (which
-    // must be non-NULL)
+    // must be non-null)
     bool GetAsChar(char *c) const
     {
 #if wxUSE_UNICODE

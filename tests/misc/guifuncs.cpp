@@ -43,10 +43,10 @@ TEST_CASE("GUI::DisplaySize", "[guifuncs]")
     CHECK( sz.x == w );
     CHECK( sz.y == h );
 
-    // test that passing NULL works as expected, e.g. doesn't crash
-    wxDisplaySize(NULL, NULL);
-    wxDisplaySize(&w, NULL);
-    wxDisplaySize(NULL, &h);
+    // test that passing nullptr works as expected, e.g. doesn't crash
+    wxDisplaySize(nullptr, nullptr);
+    wxDisplaySize(&w, nullptr);
+    wxDisplaySize(nullptr, &h);
 
     CHECK( sz.x == w );
     CHECK( sz.y == h );
@@ -211,7 +211,7 @@ TEST_CASE("GUI::FindWindowAtPoint", "[guifuncs]")
 
 TEST_CASE("wxWindow::Dump", "[window]")
 {
-    CHECK_NOTHROW( wxDumpWindow(NULL) );
+    CHECK_NOTHROW( wxDumpWindow(nullptr) );
 
     wxScopedPtr<wxButton>
         button(new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "bloordyblop"));

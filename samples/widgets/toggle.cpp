@@ -188,10 +188,10 @@ ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
                       :WidgetsPage(book, imaglist, toggle_xpm)
 {
     m_chkFit =
-    m_chkDisable = (wxCheckBox *)NULL;
+    m_chkDisable = nullptr;
 
 #if wxUSE_MARKUP
-    m_chkUseMarkup = (wxCheckBox *)NULL;
+    m_chkUseMarkup = nullptr;
 #endif // wxUSE_MARKUP
 
 #ifdef wxHAS_BITMAPTOGGLEBUTTON
@@ -202,17 +202,17 @@ ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
-    m_chkUseDisabled = (wxCheckBox *)NULL;
+    m_chkUseDisabled = nullptr;
 
     m_radioImagePos =
     m_radioHAlign =
-    m_radioVAlign = (wxRadioBox *)NULL;
+    m_radioVAlign = nullptr;
 #endif // wxHAS_BITMAPTOGGLEBUTTON
 
-    m_textLabel = (wxTextCtrl *)NULL;
+    m_textLabel = nullptr;
 
-    m_toggle = (wxToggleButton *)NULL;
-    m_sizerToggle = (wxSizer *)NULL;
+    m_toggle = nullptr;
+    m_sizerToggle = nullptr;
 }
 
 void ToggleWidgetsPage::CreateContent()

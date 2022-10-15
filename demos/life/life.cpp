@@ -173,8 +173,8 @@ bool LifeApp::OnInit()
 
 // frame constructor
 LifeFrame::LifeFrame() :
-  wxFrame( (wxFrame *) NULL, wxID_ANY, _("Life!"), wxDefaultPosition ),
-  m_navigator(NULL)
+  wxFrame( nullptr, wxID_ANY, _("Life!"), wxDefaultPosition ),
+  m_navigator(nullptr)
 {
     // frame icon
     SetIcon(wxICON(mondrian));
@@ -1104,12 +1104,12 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
     if (orient == wxHORIZONTAL)
     {
         m_viewportX += scrollinc;
-        ScrollWindow( -m_cellsize * scrollinc, 0, (const wxRect *) NULL);
+        ScrollWindow( -m_cellsize * scrollinc, 0, nullptr);
     }
     else
     {
         m_viewportY += scrollinc;
-        ScrollWindow( 0, -m_cellsize * scrollinc, (const wxRect *) NULL);
+        ScrollWindow( 0, -m_cellsize * scrollinc, nullptr);
     }
 }
 

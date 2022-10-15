@@ -30,7 +30,7 @@ public:
 
     virtual int FindMenuItem(const wxString& menuString,
                              const wxString& itemString) const override;
-    virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const override;
+    virtual wxMenuItem* FindItem( int id, wxMenu **menu = nullptr ) const override;
 
     virtual void EnableTop( size_t pos, bool flag ) override;
     virtual bool IsEnabledTop(size_t pos) const override;

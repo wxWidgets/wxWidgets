@@ -58,9 +58,9 @@ public:
     virtual void MutexGuiLeave() override;
 #endif
 
-    wxPortId GetToolkitVersion(int *majVer = NULL,
-                               int *minVer = NULL,
-                               int *microVer = NULL) const override;
+    wxPortId GetToolkitVersion(int *majVer = nullptr,
+                               int *minVer = nullptr,
+                               int *microVer = nullptr) const override;
 
 #ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const override;

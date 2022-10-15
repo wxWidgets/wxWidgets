@@ -86,11 +86,11 @@ wxIMPLEMENT_CLASS(wxRemoteHtmlHelpController, wxHelpControllerBase);
 wxRemoteHtmlHelpController::wxRemoteHtmlHelpController(int style )
 {
     m_style = style;
-    m_connection = NULL;
-    m_client  = NULL;
+    m_connection = nullptr;
+    m_client  = nullptr;
     m_pid = 0;
     isconn_1 = false;
-    m_process = NULL;
+    m_process = nullptr;
 
     // defaults
     //
@@ -148,7 +148,7 @@ wxRemoteHtmlHelpController::~wxRemoteHtmlHelpController()
         delete m_connection;
 
         delete m_process;
-        m_process = NULL;
+        m_process = nullptr;
     }
     if( m_client )
         delete m_client; //should be automatic?
@@ -186,7 +186,7 @@ bool wxRemoteHtmlHelpController::DoConnection()
 
             cmd = m_appname + blank + m_service + blank + m_windowname + blank + m_book + blank + stylestr;
 
-            m_process = new wxProcess(NULL);
+            m_process = new wxProcess(nullptr);
             m_pid = wxExecute( cmd, false, m_process );
             // leaks - wxExecute itself (if not deleted) and in wxExecute at
             // wxExecuteData *data = new wxExecuteData;

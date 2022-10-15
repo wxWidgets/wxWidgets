@@ -3038,7 +3038,7 @@ public:
             than maxPos.
     */
     int FindText(int minPos, int maxPos, const wxString& text, int flags=0,
-                 int* findEnd=NULL);
+                 int* findEnd=nullptr);
 
     /**
         Sets the position that starts the target which is used for updating the
@@ -3368,7 +3368,7 @@ public:
         linePos can optionally be passed in to receive the index of the
         caret on the line.
     */
-    wxString GetCurLine(int* linePos=NULL);
+    wxString GetCurLine(int* linePos=nullptr);
 
     /**
         Retrieve the column number of a position, taking tab width into account.
@@ -7372,7 +7372,7 @@ public:
        Retrieve the text of the line containing the caret.
        Returns the index of the caret on the line.
     */
-    wxCharBuffer GetCurLineRaw(int* linePos=NULL);
+    wxCharBuffer GetCurLineRaw(int* linePos=nullptr);
 
     /**
        Retrieve the contents of a line.

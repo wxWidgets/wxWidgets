@@ -40,7 +40,7 @@
 {
     if ( self = [super initWithTitle:title] )
     {
-        impl = NULL;
+        impl = nullptr;
     }
     return self;
 }
@@ -157,8 +157,8 @@ class wxMenuCocoaImpl : public wxMenuImpl
 public :
     wxMenuCocoaImpl( wxMenu* peer , wxNSMenu* menu) : wxMenuImpl(peer), m_osxMenu(menu)
     {
-        static wxNSMenuController* controller = NULL;
-        if ( controller == NULL )
+        static wxNSMenuController* controller = nullptr;
+        if ( controller == nullptr )
         {
             controller = [[wxNSMenuController alloc] init];
         }
@@ -334,7 +334,7 @@ public :
             wxTopLevelWindow* tlw = static_cast<wxTopLevelWindow*>(wxGetTopLevelParent(win));
             NSWindow* nsWindow = tlw->GetWXWindow();
             NSRect nsrect = NSZeroRect;
-            nsrect.origin = wxToNSPoint( NULL, screenPoint );
+            nsrect.origin = wxToNSPoint( nullptr, screenPoint );
             nsrect = [nsWindow convertRectFromScreen:nsrect];
 
             NSEvent* rightClick = [NSEvent mouseEventWithType:NSRightMouseDown

@@ -98,7 +98,7 @@ class wxLibNotifyMsgImpl : public wxNotificationMessageImpl
 public:
     wxLibNotifyMsgImpl(wxNotificationMessageBase* notification) :
         wxNotificationMessageImpl(notification),
-        m_notification(NULL),
+        m_notification(nullptr),
         m_flags(wxICON_INFORMATION)
     {
         if ( !wxLibnotifyModule::Initialize() )
@@ -301,7 +301,7 @@ public:
                 labelStr.utf8_str(),
                 &wxLibNotifyMsgImplActionCallback,
                 this,
-                NULL
+                nullptr
             );
 
         return true;

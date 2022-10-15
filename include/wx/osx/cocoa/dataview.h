@@ -86,7 +86,7 @@ class wxCocoaDataViewControl;
 class wxDataViewColumnNativeData
 {
 public:
-    wxDataViewColumnNativeData() : m_NativeColumnPtr(NULL)
+    wxDataViewColumnNativeData() : m_NativeColumnPtr(nullptr)
     {
     }
 
@@ -118,19 +118,19 @@ class wxDataViewRendererNativeData
 {
 public:
     wxDataViewRendererNativeData()
-        : m_Object(NULL), m_ColumnCell(NULL), m_ItemCell(NULL)
+        : m_Object(nullptr), m_ColumnCell(nullptr), m_ItemCell(nullptr)
     {
         Init();
     }
 
     wxDataViewRendererNativeData(NSCell* initColumnCell)
-        : m_Object(NULL), m_ColumnCell([initColumnCell retain]), m_ItemCell(NULL)
+        : m_Object(nullptr), m_ColumnCell([initColumnCell retain]), m_ItemCell(nullptr)
     {
         Init();
     }
 
     wxDataViewRendererNativeData(NSCell* initColumnCell, id initObject)
-        : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain]), m_ItemCell(NULL)
+        : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain]), m_ItemCell(nullptr)
     {
         Init();
     }
@@ -176,7 +176,7 @@ public:
         m_Object = newObject;
     }
 
-    // The original cell font and text colour stored here are NULL by default
+    // The original cell font and text colour stored here are null by default
     // and are only initialized to the values retrieved from the cell when we
     // change them from wxCocoaOutlineView:willDisplayCell:forTableColumn:item:
     // which calls our SaveOriginalXXX() methods before changing the cell
@@ -230,7 +230,7 @@ private:
 
     NSTableColumn* m_TableColumnPtr; // column NOT owned by renderer
 
-    // we own those if they're non-NULL
+    // we own those if they're non-null
     NSFont *m_origFont;
     NSColor *m_origTextColour;
     NSColor *m_origBackgroundColour;

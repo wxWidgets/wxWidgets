@@ -111,7 +111,7 @@ public:
         : wxAddRemoveImplBase(adaptor, parent, ctrlItems)
     {
         m_btnAdd =
-        m_btnRemove = NULL;
+        m_btnRemove = nullptr;
     }
 
     virtual void SetButtonsToolTips(const wxString& addtip,

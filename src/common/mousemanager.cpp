@@ -43,7 +43,7 @@ wxEND_EVENT_TABLE()
 
 void wxMouseEventsManager::Init()
 {
-    m_win = NULL;
+    m_win = nullptr;
     m_state = State_Normal;
     m_item = wxNOT_FOUND;
 }

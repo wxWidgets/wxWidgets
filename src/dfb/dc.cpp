@@ -46,7 +46,7 @@ void wxDFBDCImpl::DFBInit(const wxIDirectFBSurfacePtr& surface)
 {
     m_surface = surface;
 
-    wxCHECK_RET( surface != NULL, "invalid surface" );
+    wxCHECK_RET( surface != nullptr, "invalid surface" );
 
     SetFont(DEFAULT_FONT);
     SetPen(DEFAULT_PEN);
@@ -105,7 +105,7 @@ void wxDFBDCImpl::DestroyClippingRegion()
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    m_surface->SetClip(NULL);
+    m_surface->SetClip(nullptr);
 
     wxDCImpl::DestroyClippingRegion();
 }
@@ -148,7 +148,7 @@ bool wxDFBDCImpl::DoFloodFill(wxCoord x, wxCoord y,
 
 bool wxDFBDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxCHECK_MSG( col, false, "NULL colour parameter in wxDFBDCImpl::GetPixel");
+    wxCHECK_MSG( col, false, "null colour parameter in wxDFBDCImpl::GetPixel");
 
     wxFAIL_MSG( "GetPixel not implemented" );
 
@@ -493,7 +493,7 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     wxCHECK_RET( !theFont || theFont->IsOk(), wxT("invalid font") );
 
     wxFont oldFont;
-    if ( theFont != NULL )
+    if ( theFont != nullptr )
     {
         oldFont = m_font;
         wxConstCast(this, wxDFBDCImpl)->SetFont(*theFont);
@@ -503,7 +503,7 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     DFBRectangle rect;
     wxIDirectFBFontPtr f = GetCurrentFont();
 
-    if ( f->GetStringExtents(string.utf8_str(), -1, &rect, NULL) )
+    if ( f->GetStringExtents(string.utf8_str(), -1, &rect, nullptr) )
     {
         // VS: YDEV is corrent, it should *not* be XDEV, because font's are
         //     only scaled according to m_scaleY
@@ -524,7 +524,7 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     if ( y ) *y = yy;
     if ( externalLeading ) *externalLeading = 0;
 
-    if ( theFont != NULL )
+    if ( theFont != nullptr )
         wxConstCast(this, wxDFBDCImpl)->SetFont(oldFont);
 }
 

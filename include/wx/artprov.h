@@ -195,12 +195,12 @@ public:
     // Gets native size for given 'client' or wxDefaultSize if it doesn't
     // have native equivalent. The first version returns the size in logical
     // pixels while the second one returns it in DIPs.
-    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
     static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
 
     // Get the size hint of an icon from a specific wxArtClient from the
     // topmost (i.e. first used) provider.
-    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
     static wxSize GetDIPSizeHint(const wxArtClient& client);
 
 #if WXWIN_COMPATIBILITY_3_0

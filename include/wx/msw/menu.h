@@ -53,7 +53,7 @@ public:
 
     // Detaches HMENU so that it isn't deleted when this object is destroyed.
     // Don't use this object after calling this method.
-    WXHMENU MSWDetachHMENU() { WXHMENU m = m_hMenu; m_hMenu = NULL; return m; }
+    WXHMENU MSWDetachHMENU() { WXHMENU m = m_hMenu; m_hMenu = nullptr; return m; }
 
     // Process WM_COMMAND.
     virtual bool MSWCommand(WXUINT param, WXWORD id);
@@ -136,7 +136,7 @@ private:
     // allows to find whether an item at the given position is part of the
     // group and also where its group starts and ends.
     //
-    // It is initially NULL and only allocated if we have any radio items.
+    // It is initially nullptr and only allocated if we have any radio items.
     wxMenuRadioItemsData *m_radioData;
 
     // if true, insert a break before appending the next item
@@ -205,12 +205,12 @@ public:
     WXHMENU GetHMenu() const { return m_hMenu; }
 
     // if the menubar is modified, the display is not updated automatically,
-    // call this function to update it (m_menuBarFrame should be !NULL)
+    // call this function to update it (m_menuBarFrame should be non-null)
     void Refresh();
 
     // To avoid compile warning
     void Refresh( bool eraseBackground,
-                          const wxRect *rect = (const wxRect *) NULL ) override { wxWindow::Refresh(eraseBackground, rect); }
+                  const wxRect *rect = nullptr ) override { wxWindow::Refresh(eraseBackground, rect); }
 
     // Get a top level menu position or wxNOT_FOUND from its handle.
     int MSWGetTopMenuPos(WXHMENU hMenu) const;

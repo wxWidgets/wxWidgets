@@ -150,13 +150,13 @@ public:
     // implementation from now on
 
         // returns TRUE if we're attached to a frame
-    bool IsAttached() const { return m_menuBarFrame != NULL; }
+    bool IsAttached() const { return m_menuBarFrame != nullptr; }
         // get the frame we live in
     wxFrame *GetFrame() const { return m_menuBarFrame; }
 
     // if the menubar is modified, the display is not updated automatically,
-    // call this function to update it (m_menuBarFrame should be !NULL)
-    void Refresh(bool eraseBackground = true, const wxRect *rect = NULL) override;
+    // call this function to update it (m_menuBarFrame should be non-null)
+    void Refresh(bool eraseBackground = true, const wxRect *rect = nullptr) override;
 
     wxMenu *OSXGetAppleMenu() const { return m_appleMenu; }
 

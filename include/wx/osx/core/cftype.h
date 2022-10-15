@@ -117,12 +117,12 @@ class wxCFNumberRef : public wxCFTypeRef
 {
 public:
     wxCFNumberRef(CGFloat v)
-        : wxCFTypeRef(CFNumberCreate(NULL, kCFNumberCGFloatType, &v))
+        : wxCFTypeRef(CFNumberCreate(nullptr, kCFNumberCGFloatType, &v))
     {
     }
 
     wxCFNumberRef(int v)
-        : wxCFTypeRef(CFNumberCreate(NULL, kCFNumberIntType, &v))
+        : wxCFTypeRef(CFNumberCreate(nullptr, kCFNumberIntType, &v))
     {
     }
 };

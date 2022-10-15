@@ -98,10 +98,10 @@ wxTarClassFactory::wxTarClassFactory()
 const wxChar * const *
 wxTarClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *protocols[] = { wxT("tar"), NULL };
-    static const wxChar *mimetypes[] = { wxT("application/x-tar"), NULL };
-    static const wxChar *fileexts[]  = { wxT(".tar"), NULL };
-    static const wxChar *empty[]     = { NULL };
+    static const wxChar *protocols[] = { wxT("tar"), nullptr };
+    static const wxChar *mimetypes[] = { wxT("application/x-tar"), nullptr };
+    static const wxChar *fileexts[]  = { wxT(".tar"), nullptr };
+    static const wxChar *empty[]     = { nullptr };
 
     switch (type) {
         case wxSTREAM_PROTOCOL: return protocols;
@@ -170,7 +170,7 @@ const wxTarField wxTarHeaderBlock::fields[] =
     { wxT("devminor"), 337 }, // 8
     { wxT("prefix"), 345 },   // 155
     { wxT("unused"), 500 },   // 12
-    { NULL, TAR_BLOCKSIZE }
+    { nullptr, TAR_BLOCKSIZE }
 };
 
 void wxTarHeaderBlock::check()
@@ -358,7 +358,7 @@ static wxString wxTarUserName(int uid)
     if (getpwuid_r(uid, &pw, buf.data(), bufsize, &ppw) == 0 && pw.pw_name)
         return wxString(pw.pw_name, wxConvLibc);
 #else
-    if ((ppw = getpwuid(uid)) != NULL)
+    if ((ppw = getpwuid(uid)) != nullptr)
         return wxString(ppw->pw_name, wxConvLibc);
 #endif
     return _("unknown");
@@ -381,7 +381,7 @@ static wxString wxTarGroupName(int gid)
     if (getgrgid_r(gid, &gr, buf.data(), bufsize, &pgr) == 0 && gr.gr_name)
         return wxString(gr.gr_name, wxConvLibc);
 #else
-    if ((pgr = getgrgid(gid)) != NULL)
+    if ((pgr = getgrgid(gid)) != nullptr)
         return wxString(pgr->gr_name, wxConvLibc);
 #endif
     return _("unknown");
@@ -569,7 +569,7 @@ void wxTarEntry::SetName(const wxString& name, wxPathFormat format)
 //
 wxString wxTarEntry::GetInternalName(const wxString& name,
                                      wxPathFormat format /*=wxPATH_NATIVE*/,
-                                     bool *pIsDir        /*=NULL*/)
+                                     bool *pIsDir        /*=nullptr*/)
 {
     wxString internal;
 
@@ -658,8 +658,8 @@ void wxTarInputStream::Init()
     m_sumType = SUM_UNKNOWN;
     m_tarType = TYPE_USTAR;
     m_hdr = new wxTarHeaderBlock;
-    m_HeaderRecs = NULL;
-    m_GlobalHeaderRecs = NULL;
+    m_HeaderRecs = nullptr;
+    m_GlobalHeaderRecs = nullptr;
     m_lasterror = m_parent_i_stream->GetLastError();
 }
 
@@ -675,7 +675,7 @@ wxTarEntry *wxTarInputStream::GetNextEntry()
     m_lasterror = ReadHeaders();
 
     if (!IsOk())
-        return NULL;
+        return nullptr;
 
     wxTarEntryPtr entry(new wxTarEntry);
 
@@ -1076,8 +1076,8 @@ void wxTarOutputStream::Init(wxTarFormat format)
     m_chksum = 0;
     m_large = false;
     m_hdr = new wxTarHeaderBlock;
-    m_hdr2 = NULL;
-    m_extendedHdr = NULL;
+    m_hdr2 = nullptr;
+    m_extendedHdr = nullptr;
     m_extendedSize = 0;
     m_lasterror = m_parent_o_stream->GetLastError();
     m_endrecWritten = false;
@@ -1122,7 +1122,7 @@ bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 
         // pax does now allow data for wxTAR_LNKTYPE
         if (!m_pax || typeflag != wxTAR_LNKTYPE)
-            if (strchr(nodata, typeflag) != NULL)
+            if (strchr(nodata, typeflag) != nullptr)
                 CloseEntry();
     }
 

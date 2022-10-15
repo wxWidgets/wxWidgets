@@ -75,7 +75,7 @@ public:
         Really create the window after using the default ctor to create the C++
         object.
 
-        @param parent A non-NULL parent window. For the platforms where the
+        @param parent A non-null parent window. For the platforms where the
             parent is used for creating the native window (e.g. MSW), this must
             be the wxWindow corresponding to the parent handle used when
             creating the native window.

@@ -176,7 +176,7 @@ wxSize wxStaticBox::DoGetBestSize() const
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     // If there is a sizer then the base best size is the sizer's minimum
-    if (GetSizer() != NULL)
+    if (GetSizer() != nullptr)
     {
         wxSize cm(GetSizer()->CalcMin());
         best = ClientToWindowSize(cm);
@@ -439,7 +439,7 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
                 // MSDN: "If you have changed certain window data using
                 // SetWindowLong, you must call SetWindowPos to have the
                 // changes take effect."
-                ::SetWindowPos(child, NULL, 0, 0, 0, 0,
+                ::SetWindowPos(child, nullptr, 0, 0, 0, 0,
                                SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
                                SWP_FRAMECHANGED);
             }

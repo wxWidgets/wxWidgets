@@ -118,14 +118,14 @@ void wxGUIEventLoop::WakeUp()
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
     m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
-    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    wxASSERT_MSG( m_modalWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }
 
 wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 {
-    m_modalWindow = NULL;
-    wxASSERT_MSG( modalNativeWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalWindow = nullptr;
+    wxASSERT_MSG( modalNativeWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = modalNativeWindow;
 }
 

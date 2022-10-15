@@ -338,9 +338,9 @@ public:
 
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL );
+                                        wxPGProperty* firstProp = nullptr );
     wxPropertyGridConstIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                             wxPGProperty* firstProp = NULL ) const;
+                                             wxPGProperty* firstProp = nullptr ) const;
     //@}
 
     //@{
@@ -558,7 +558,7 @@ public:
             @"@@@<propname@>@@attr.@"
     */
     wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-                                 wxPGProperty* baseparent = NULL, long flags = 0 ) const;
+                                 wxPGProperty* baseparent = nullptr, long flags = 0 ) const;
 
     /**
         Returns list of currently selected properties.
@@ -718,7 +718,7 @@ public:
     /**
         If state is shown in its grid, refresh it now.
     */
-    virtual void RefreshGrid( wxPropertyGridPageState* state = NULL );
+    virtual void RefreshGrid( wxPropertyGridPageState* state = nullptr );
 
     /**
         Initializes additional property editors (SpinCtrl etc.). Causes

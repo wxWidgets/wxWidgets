@@ -825,7 +825,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( coords_0[i].x, x );
         CPPUNIT_ASSERT_EQUAL( coords_0[i].y, y );
     }
-    ok = m_text->PositionToXY(WXSIZEOF(coords_0), NULL, NULL);
+    ok = m_text->PositionToXY(WXSIZEOF(coords_0), nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // one line
@@ -845,7 +845,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( coords_1[i].x, x );
         CPPUNIT_ASSERT_EQUAL( coords_1[i].y, y );
     }
-    ok = m_text->PositionToXY(WXSIZEOF(coords_1), NULL, NULL);
+    ok = m_text->PositionToXY(WXSIZEOF(coords_1), nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // few lines
@@ -893,7 +893,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( ref_coords_2[i].x, x );
         CPPUNIT_ASSERT_EQUAL( ref_coords_2[i].y, y );
     }
-    ok = m_text->PositionToXY(ref_numChars_2 + 1, NULL, NULL);
+    ok = m_text->PositionToXY(ref_numChars_2 + 1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // only empty lines
@@ -943,7 +943,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( ref_coords_3[i].x, x );
         CPPUNIT_ASSERT_EQUAL( ref_coords_3[i].y, y );
     }
-    ok = m_text->PositionToXY(ref_numChars_3 + 1, NULL, NULL);
+    ok = m_text->PositionToXY(ref_numChars_3 + 1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // mixed empty/non-empty lines
@@ -997,7 +997,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( ref_coords_4[i].x, x );
         CPPUNIT_ASSERT_EQUAL( ref_coords_4[i].y, y  );
     }
-    ok = m_text->PositionToXY(ref_numChars_4 + 1, NULL, NULL);
+    ok = m_text->PositionToXY(ref_numChars_4 + 1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 }
 
@@ -1194,7 +1194,7 @@ void TextCtrlTestCase::PositionToXYSingleLine()
         CPPUNIT_ASSERT_EQUAL( i, x0 );
         CPPUNIT_ASSERT_EQUAL( 0, y0 );
     }
-    ok = m_text->PositionToXY(numChars_0+1, NULL, NULL);
+    ok = m_text->PositionToXY(numChars_0+1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // pure one line
@@ -1210,7 +1210,7 @@ void TextCtrlTestCase::PositionToXYSingleLine()
         CPPUNIT_ASSERT_EQUAL( i, x1 );
         CPPUNIT_ASSERT_EQUAL( 0, y1 );
     }
-    ok = m_text->PositionToXY(numChars_1+1, NULL, NULL);
+    ok = m_text->PositionToXY(numChars_1+1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // with new line characters
@@ -1226,7 +1226,7 @@ void TextCtrlTestCase::PositionToXYSingleLine()
         CPPUNIT_ASSERT_EQUAL( i, x2 );
         CPPUNIT_ASSERT_EQUAL( 0, y2 );
     }
-    ok = m_text->PositionToXY(numChars_2+1, NULL, NULL);
+    ok = m_text->PositionToXY(numChars_2+1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 }
 

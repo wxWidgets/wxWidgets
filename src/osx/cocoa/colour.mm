@@ -90,7 +90,7 @@ CGFloat wxNSColorRefData::GetCGColorComponent(CGColorRef col, int rgbaIndex)
         {
             if ( WX_IS_MACOS_OR_IOS_AVAILABLE(10, 11, 9, 0) )
             {
-                rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
+                rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, nullptr);
                 noComp = CGColorGetNumberOfComponents(rgbacol);
                 components = CGColorGetComponents(rgbacol);
             }
@@ -173,7 +173,7 @@ WX_NSImage wxNSColorRefData::GetNSPatternImage() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 WX_NSColor wxColourRefData::GetNSColor() const
@@ -184,7 +184,7 @@ WX_NSColor wxColourRefData::GetNSColor() const
 
 WX_NSImage wxColourRefData::GetNSPatternImage() const
 {
-    return NULL;
+    return nullptr;
 }
 
 wxColour::wxColour(WX_NSColor col)

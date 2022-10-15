@@ -194,7 +194,7 @@ public:
 
     static wxString GetInternalName(const wxString& name,
                                     wxPathFormat format = wxPATH_NATIVE,
-                                    bool *pIsDir = NULL);
+                                    bool *pIsDir = nullptr);
 
     // set is accessors
     void SetIsDir(bool isDir = true) override;
@@ -422,11 +422,11 @@ private:
 
     bool AtHeader() const       { return m_headerSize == 0; }
     bool AfterHeader() const    { return m_headerSize > 0 && !m_decomp; }
-    bool IsOpened() const       { return m_decomp != NULL; }
+    bool IsOpened() const       { return m_decomp != nullptr; }
 
     wxZipStreamLink *MakeLink(wxZipOutputStream *out);
 
-    bool DoOpen(wxZipEntry *entry = NULL, bool raw = false);
+    bool DoOpen(wxZipEntry *entry = nullptr, bool raw = false);
     bool OpenDecompressor(bool raw = false);
 
     class wxStoredInputStream *m_store;

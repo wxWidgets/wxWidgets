@@ -273,7 +273,7 @@ public:
 
         @since 2.9.2
 
-        @param sizer The sizer to wrap, must be non-@NULL.
+        @param sizer The sizer to wrap, must be non-null.
         @return The sizer wrapping the input one or possibly the input sizer
             itself if no wrapping is necessary.
      */

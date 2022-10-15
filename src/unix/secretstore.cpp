@@ -104,7 +104,7 @@ public:
 
     virtual const void *GetData() const override
     {
-        return secret_value_get(m_value, NULL);
+        return secret_value_get(m_value, nullptr);
     }
 
     SecretValue* GetValue() const
@@ -176,13 +176,13 @@ public:
         SecretService* const service = secret_service_get_sync
                                        (
                                             SECRET_SERVICE_OPEN_SESSION,
-                                            NULL,   // No cancellation
+                                            nullptr,   // No cancellation
                                             error.Out()
                                        );
         if ( !service )
         {
             errmsg = error.GetMessage();
-            return NULL;
+            return nullptr;
         }
 
         // This passes ownership of service to the new object.
@@ -210,7 +210,7 @@ public:
                 SECRET_COLLECTION_DEFAULT,
                 service.utf8_str(),
                 static_cast<const wxSecretValueLibSecretImpl&>(secret).GetValue(),
-                NULL,                           // Can't be cancelled
+                nullptr,                           // Can't be cancelled
                 error.Out()
               ) )
         {
@@ -237,7 +237,7 @@ public:
                     SECRET_SEARCH_UNLOCK |
                     SECRET_SEARCH_LOAD_SECRETS
                 ),
-                NULL,                           // Can't be cancelled
+                nullptr,                           // Can't be cancelled
                 error.Out()
             );
 
@@ -276,7 +276,7 @@ public:
                 m_service,
                 GetSchema(),
                 BuildAttributes(service),
-                NULL,                           // Can't be cancelled
+                nullptr,                           // Can't be cancelled
                 error.Out()
               ) )
         {
@@ -310,7 +310,7 @@ private:
                 {
                     { FIELD_SERVICE,    SECRET_SCHEMA_ATTRIBUTE_STRING },
                     { FIELD_USER,       SECRET_SCHEMA_ATTRIBUTE_STRING },
-                    { NULL }
+                    { nullptr }
                 }
             };
 
@@ -326,7 +326,7 @@ private:
                             (
                                 GetSchema(),
                                 FIELD_SERVICE,  service.utf8_str().data(),
-                                NULL
+                                nullptr
                             ));
     }
 
@@ -338,7 +338,7 @@ private:
                                 GetSchema(),
                                 FIELD_SERVICE,  service.utf8_str().data(),
                                 FIELD_USER,     user.utf8_str().data(),
-                                NULL
+                                nullptr
                             ));
     }
 

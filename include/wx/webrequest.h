@@ -72,7 +72,7 @@ public:
     wxWebAuthChallenge& operator=(const wxWebAuthChallenge& other);
     ~wxWebAuthChallenge();
 
-    bool IsOk() const { return m_impl.get() != NULL; }
+    bool IsOk() const { return m_impl.get() != nullptr; }
 
     Source GetSource() const;
 
@@ -94,7 +94,7 @@ public:
     wxWebResponse& operator=(const wxWebResponse& other);
     ~wxWebResponse();
 
-    bool IsOk() const { return m_impl.get() != NULL; }
+    bool IsOk() const { return m_impl.get() != nullptr; }
 
     wxFileOffset GetContentLength() const;
 
@@ -150,7 +150,7 @@ public:
     wxWebRequest& operator=(const wxWebRequest& other);
     ~wxWebRequest();
 
-    bool IsOk() const { return m_impl.get() != NULL; }
+    bool IsOk() const { return m_impl.get() != nullptr; }
 
     void SetHeader(const wxString& name, const wxString& value);
 

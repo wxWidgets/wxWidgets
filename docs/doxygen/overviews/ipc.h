@@ -200,7 +200,7 @@ connection = (MyConnection *)client->MakeConnection(hostName, server, "IPC TEST"
 if (!connection)
 {
     wxMessageBox("Failed to make connection to server", "Client Demo Error");
-    return NULL;
+    return nullptr;
 }
 
 connection->StartAdvise("Item");

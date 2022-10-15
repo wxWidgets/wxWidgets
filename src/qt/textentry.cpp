@@ -108,6 +108,6 @@ void wxTextEntry::DoSetValue(const wxString &WXUNUSED(value), int WXUNUSED(flags
 
 wxWindow *wxTextEntry::GetEditableWindow()
 {
-    return NULL;
+    return nullptr;
 }
 

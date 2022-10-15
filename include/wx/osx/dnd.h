@@ -50,7 +50,7 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 {
   public:
 
-    wxDropTarget(wxDataObject *dataObject = NULL );
+    wxDropTarget(wxDataObject *dataObject = nullptr );
 
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override;
     virtual bool OnDrop(wxCoord x, wxCoord y) override;
@@ -77,7 +77,7 @@ public:
     //
     // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
     //     compatibility, as well as both icon parameters
-    wxDropSource( wxWindow *win = NULL,
+    wxDropSource( wxWindow *win = nullptr,
                  const wxCursor &cursorCopy = wxNullCursor,
                  const wxCursor &cursorMove = wxNullCursor,
                  const wxCursor &cursorStop = wxNullCursor);

@@ -57,8 +57,8 @@ public:
     ActivityIndicatorWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
         : WidgetsPage(book, imaglist, activityindicator_xpm)
     {
-        m_indicator = NULL;
-        m_sizerIndicator = NULL;
+        m_indicator = nullptr;
+        m_sizerIndicator = nullptr;
     }
 
     virtual wxWindow *GetWidget() const override { return m_indicator; }

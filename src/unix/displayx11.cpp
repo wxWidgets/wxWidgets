@@ -206,7 +206,7 @@ wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(unsigned n)
 {
     ScreensInfo screens;
 
-    return n < screens.GetCount() ? new wxDisplayImplX11(n, screens[n]) : NULL;
+    return n < screens.GetCount() ? new wxDisplayImplX11(n, screens[n]) : nullptr;
 }
 
 // ============================================================================

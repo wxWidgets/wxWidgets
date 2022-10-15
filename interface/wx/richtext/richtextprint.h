@@ -272,7 +272,7 @@ public:
         dialog, and also a parent window for these windows.
     */
     wxRichTextPrinting(const wxString& name = "Printing",
-                       wxWindow* parentWindow = NULL);
+                       wxWindow* parentWindow = nullptr);
 
     /**
         A convenience function to get the footer text.

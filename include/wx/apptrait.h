@@ -66,8 +66,8 @@ public:
 #endif // wxUSE_FONTMAP
 
     // get the renderer to use for drawing the generic controls (return value
-    // may be NULL in which case the default renderer for the current platform
-    // is used); this is used in GUI only and always returns NULL in console
+    // may be null in which case the default renderer for the current platform
+    // is used); this is used in GUI only and always returns nullptr in console
     //
     // NB: returned pointer will be deleted by the caller
     virtual wxRendererNative *CreateRenderer() = 0;
@@ -139,9 +139,9 @@ public:
     // runtime (not compile-time) version.
     // returns wxPORT_BASE for console applications and one of the remaining
     // wxPORT_* values for GUI applications.
-    virtual wxPortId GetToolkitVersion(int *majVer = NULL,
-                                       int *minVer = NULL,
-                                       int *microVer = NULL) const = 0;
+    virtual wxPortId GetToolkitVersion(int *majVer = nullptr,
+                                       int *minVer = nullptr,
+                                       int *microVer = nullptr) const = 0;
 
     // return true if the port is using wxUniversal for the GUI, false if not
     virtual bool IsUsingUniversalWidgets() const = 0;
@@ -206,7 +206,7 @@ class WXDLLIMPEXP_BASE wxConsoleAppTraitsBase : public wxAppTraits
 {
 public:
 #if !wxUSE_CONSOLE_EVENTLOOP
-    virtual wxEventLoopBase *CreateEventLoop() override { return NULL; }
+    virtual wxEventLoopBase *CreateEventLoop() override { return nullptr; }
 #endif // !wxUSE_CONSOLE_EVENTLOOP
 
 #if wxUSE_LOG
@@ -224,9 +224,9 @@ public:
                                 const wxString& title) override;
 
     // the GetToolkitVersion for console application is always the same
-    wxPortId GetToolkitVersion(int *verMaj = NULL,
-                               int *verMin = NULL,
-                               int *verMicro = NULL) const override
+    wxPortId GetToolkitVersion(int *verMaj = nullptr,
+                               int *verMin = nullptr,
+                               int *verMicro = nullptr) const override
     {
         // no toolkits (wxBase is for console applications without GUI support)
         // NB: zero means "no toolkit", -1 means "not initialized yet"

@@ -21,7 +21,7 @@ public:
 
     static bool StartDrawingOnTop(wxWindow * WXUNUSED(window))
         { return true; }
-    static bool StartDrawingOnTop(wxRect * WXUNUSED(rect) =  NULL)
+    static bool StartDrawingOnTop(wxRect * WXUNUSED(rect) =  nullptr)
         { return true; }
     static bool EndDrawingOnTop()
         { return true; }

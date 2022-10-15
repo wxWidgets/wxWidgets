@@ -47,7 +47,7 @@ public:
     // default ctor
     WinPrinter()
     {
-        m_hPrinter = (HANDLE)NULL;
+        m_hPrinter = nullptr;
     }
 
     WinPrinter( const wxString& printerName )
@@ -60,7 +60,7 @@ public:
         Close();
     }
 
-    BOOL Open( const wxString& printerName, LPPRINTER_DEFAULTS pDefault=(LPPRINTER_DEFAULTS)NULL )
+    BOOL Open( const wxString& printerName, LPPRINTER_DEFAULTS pDefault=nullptr )
     {
         Close();
         return OpenPrinter( wxMSW_CONV_LPTSTR(printerName), &m_hPrinter, pDefault );
@@ -72,7 +72,7 @@ public:
         if( m_hPrinter )
         {
             result = ClosePrinter( m_hPrinter );
-            m_hPrinter = (HANDLE)NULL;
+            m_hPrinter = nullptr;
         }
         return result;
     }
@@ -87,7 +87,7 @@ public:
             return false;
 
         DWORD bufSize = 0;
-        if ( !::GetPrinter(m_hPrinter, level, NULL, 0, &bufSize) || !bufSize )
+        if ( !::GetPrinter(m_hPrinter, level, nullptr, 0, &bufSize) || !bufSize )
             return false;
 
         if ( !::GetPrinter(m_hPrinter,
@@ -103,7 +103,7 @@ public:
     }
 
     operator HANDLE() { return m_hPrinter; }
-    operator bool() { return m_hPrinter != (HANDLE)NULL; }
+    operator bool() { return m_hPrinter != nullptr; }
 
 private:
     HANDLE m_hPrinter;
@@ -159,7 +159,7 @@ wxCreateDevNames(const wxString& driverName,
                  const wxString& printerName,
                  const wxString& portName)
 {
-    HGLOBAL hDev = NULL;
+    HGLOBAL hDev = nullptr;
     // if (!driverName.empty() && !printerName.empty() && !portName.empty())
     if (driverName.empty() && printerName.empty() && portName.empty())
     {
@@ -194,8 +194,8 @@ wxIMPLEMENT_CLASS(wxWindowsPrintNativeData, wxPrintNativeDataBase);
 
 wxWindowsPrintNativeData::wxWindowsPrintNativeData()
 {
-    m_devMode = NULL;
-    m_devNames = NULL;
+    m_devMode = nullptr;
+    m_devNames = nullptr;
     m_customWindowsPaperId = 0;
 }
 
@@ -210,7 +210,7 @@ wxWindowsPrintNativeData::~wxWindowsPrintNativeData()
 
 bool wxWindowsPrintNativeData::IsOk() const
 {
-    return (m_devMode != NULL) ;
+    return (m_devMode != nullptr) ;
 }
 
 bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
@@ -383,7 +383,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     if (devMode->dmDriverExtra > 0)
         data.SetPrivData( (char *)devMode+devMode->dmSize, devMode->dmDriverExtra );
     else
-        data.SetPrivData( NULL, 0 );
+        data.SetPrivData( nullptr, 0 );
 
     if ( m_devNames )
     {
@@ -429,11 +429,11 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
 
             // Step 1:
             // Allocate a buffer of the correct size.
-            dwNeeded = DocumentProperties( NULL,
+            dwNeeded = DocumentProperties( nullptr,
                 *printer,        // Handle to our printer.
                 szPrinterName,   // Name of the printer.
-                NULL,            // Asking for size, so
-                NULL,            // these are not used.
+                nullptr,         // Asking for size, so
+                nullptr,         // these are not used.
                 0 );             // Zero returns buffer size.
 
             // Some buggy printer drivers (see #16274 which claims that Kyocera
@@ -448,11 +448,11 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
 
             // Step 2:
             // Get the default DevMode for the printer
-            dwRet = DocumentProperties( NULL,
+            dwRet = DocumentProperties( nullptr,
                 *printer,
                 szPrinterName,
                 static_cast<LPDEVMODE>(hDevMode), // The buffer to fill.
-                NULL,            // Not using the input buffer.
+                nullptr,            // Not using the input buffer.
                 DM_OUT_BUFFER ); // Have the output buffer filled.
 
             if ( dwRet != IDOK )
@@ -475,9 +475,9 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         memset(&pd, 0, sizeof(PRINTDLG));
         pd.lStructSize    = sizeof(PRINTDLG);
 
-        pd.hwndOwner      = NULL;
-        pd.hDevMode       = NULL; // Will be created by PrintDlg
-        pd.hDevNames      = NULL; // Ditto
+        pd.hwndOwner      = nullptr;
+        pd.hDevMode       = nullptr; // Will be created by PrintDlg
+        pd.hDevNames      = nullptr; // Ditto
 
         pd.Flags          = PD_RETURNDEFAULT;
         pd.nCopies        = 1;
@@ -490,8 +490,8 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                 GlobalFree(pd.hDevMode);
             if ( pd.hDevNames )
                 GlobalFree(pd.hDevNames);
-            pd.hDevMode = NULL;
-            pd.hDevNames = NULL;
+            pd.hDevMode = nullptr;
+            pd.hDevNames = nullptr;
 
 #if wxDEBUG_LEVEL
             wxLogDebug(wxT("Printing error: ") + wxGetPrintDlgError());
@@ -500,16 +500,16 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         else
         {
             m_devMode = pd.hDevMode;
-            pd.hDevMode = NULL;
+            pd.hDevMode = nullptr;
 
             // We'll create a new DEVNAMEs structure below.
             if ( pd.hDevNames )
                 GlobalFree(pd.hDevNames);
-            pd.hDevNames = NULL;
+            pd.hDevNames = nullptr;
 
             // hDevNames = pd->hDevNames;
             // m_devNames = (void*)(long) hDevNames;
-            // pd->hDevnames = NULL;
+            // pd->hDevnames = nullptr;
 
         }
     }
@@ -524,7 +524,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             WinPrinter winPrinter;
             if (winPrinter.Open(tempDevMode->dmDeviceName))
             {
-                DEVMODE* pDevMode = NULL;
+                DEVMODE* pDevMode = nullptr;
 
                 wxMemoryBuffer buffer;
 
@@ -606,7 +606,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         // Paper id has priority over paper size. If id is specified, then size
         // is ignored (as it can be filled in even for standard paper sizes)
 
-        wxPrintPaperType *paperType = NULL;
+        wxPrintPaperType *paperType = nullptr;
 
         const wxPaperSize paperId = data.GetPaperId();
         if ( paperId != wxPAPER_NONE && wxThePrintPaperDatabase )
@@ -734,7 +734,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             // Merge the new settings with the old.
             // This gives the driver an opportunity to update any private
             // portions of the DevMode structure.
-            DocumentProperties( NULL,
+            DocumentProperties( nullptr,
                 printer,
                 szPrinterName,
                 (LPDEVMODE)hDevMode, // Reuse our buffer for output.
@@ -778,11 +778,11 @@ wxWindowsPrintDialog::wxWindowsPrintDialog(wxWindow *p, wxPrintData* data)
 bool wxWindowsPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 {
     m_dialogParent = p;
-    m_printerDC = NULL;
+    m_printerDC = nullptr;
     m_destroyDC = true;
 
     // MSW handle
-    m_printDlg = NULL;
+    m_printDlg = nullptr;
 
     if ( data )
         m_printDialogData = *data;
@@ -807,7 +807,7 @@ int wxWindowsPrintDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
-    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : nullptr;
 
     wxWindowDisabler disableOthers(this, parent);
 
@@ -842,7 +842,7 @@ wxDC *wxWindowsPrintDialog::GetPrintDC()
         return m_printerDC;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
@@ -862,16 +862,16 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     m_printDlg = (void*) pd;
 
     pd->hDevMode = static_cast<HGLOBAL>(native_data->GetDevMode());
-    native_data->SetDevMode(NULL);
+    native_data->SetDevMode(nullptr);
 
     // Shouldn't assert; we should be able to test Ok-ness at a higher level
-    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+    //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-null in ConvertToNative!"));
 
     pd->hDevNames = static_cast<HGLOBAL>(native_data->GetDevNames());
-    native_data->SetDevNames(NULL);
+    native_data->SetDevNames(nullptr);
 
 
-    pd->hDC = NULL;
+    pd->hDC = nullptr;
     pd->nFromPage = (WORD)data.GetFromPage();
     pd->nToPage = (WORD)data.GetToPage();
     pd->nMinPage = (WORD)data.GetMinPage();
@@ -881,15 +881,15 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd->Flags = PD_RETURNDC;
     pd->lStructSize = sizeof( PRINTDLG );
 
-    pd->hwndOwner = NULL;
-    pd->hInstance = NULL;
+    pd->hwndOwner = nullptr;
+    pd->hInstance = nullptr;
     pd->lCustData = 0;
-    pd->lpfnPrintHook = NULL;
-    pd->lpfnSetupHook = NULL;
-    pd->lpPrintTemplateName = NULL;
-    pd->lpSetupTemplateName = NULL;
-    pd->hPrintTemplate = NULL;
-    pd->hSetupTemplate = NULL;
+    pd->lpfnPrintHook = nullptr;
+    pd->lpfnSetupHook = nullptr;
+    pd->lpPrintTemplateName = nullptr;
+    pd->lpSetupTemplateName = nullptr;
+    pd->hPrintTemplate = nullptr;
+    pd->hSetupTemplate = nullptr;
 
     if ( data.GetAllPages() )
         pd->Flags |= PD_ALLPAGES;
@@ -916,7 +916,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
 bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 {
     PRINTDLG *pd = (PRINTDLG*) m_printDlg;
-    if ( pd == NULL )
+    if ( pd == nullptr )
         return false;
 
     wxWindowsPrintNativeData *native_data =
@@ -930,7 +930,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
             ::GlobalFree(static_cast<HGLOBAL>(native_data->GetDevMode()));
         }
         native_data->SetDevMode(pd->hDevMode);
-        pd->hDevMode = NULL;
+        pd->hDevMode = nullptr;
     }
 
     // Pass the devnames data back to the wxPrintData structure where it really belongs.
@@ -941,7 +941,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
             ::GlobalFree(static_cast<HGLOBAL>(native_data->GetDevNames()));
         }
         native_data->SetDevNames(pd->hDevNames);
-        pd->hDevNames = NULL;
+        pd->hDevNames = nullptr;
     }
 
     // Now convert the DEVMODE object, passed down from the PRINTDLG object,
@@ -974,8 +974,8 @@ wxIMPLEMENT_CLASS(wxWindowsPageSetupDialog, wxPageSetupDialogBase);
 
 wxWindowsPageSetupDialog::wxWindowsPageSetupDialog()
 {
-    m_dialogParent = NULL;
-    m_pageDlg = NULL;
+    m_dialogParent = nullptr;
+    m_pageDlg = nullptr;
 }
 
 wxWindowsPageSetupDialog::wxWindowsPageSetupDialog(wxWindow *p, wxPageSetupDialogData *data)
@@ -986,7 +986,7 @@ wxWindowsPageSetupDialog::wxWindowsPageSetupDialog(wxWindow *p, wxPageSetupDialo
 bool wxWindowsPageSetupDialog::Create(wxWindow *p, wxPageSetupDialogData *data)
 {
     m_dialogParent = p;
-    m_pageDlg = NULL;
+    m_pageDlg = nullptr;
 
     if (data)
         m_pageSetupData = (*data);
@@ -1048,8 +1048,8 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     // otherwise the call to PageSetupDlg() would fail.
     if ( data.GetDefaultInfo() )
     {
-        pd->hDevMode = NULL;
-        pd->hDevNames = NULL;
+        pd->hDevMode = nullptr;
+        pd->hDevNames = nullptr;
     }
     else
     {
@@ -1058,17 +1058,17 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
         // be needed when PrintDlg is called.
 
         pd->hDevMode = (HGLOBAL) native_data->GetDevMode();
-        native_data->SetDevMode(NULL);
+        native_data->SetDevMode(nullptr);
 
         // Shouldn't assert; we should be able to test Ok-ness at a higher level
-        //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+        //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-null in ConvertToNative!"));
 
         // Pass the devnames data (created in m_printData.ConvertToNative)
         // to the PRINTDLG structure, since it'll
         // be needed when PrintDlg is called.
 
         pd->hDevNames = (HGLOBAL) native_data->GetDevNames();
-        native_data->SetDevNames(NULL);
+        native_data->SetDevNames(nullptr);
     }
 
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
@@ -1092,8 +1092,8 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     pd->Flags |= PSD_INHUNDREDTHSOFMILLIMETERS;
 
     pd->lStructSize = sizeof( PAGESETUPDLG );
-    pd->hwndOwner = NULL;
-    pd->hInstance = NULL;
+    pd->hwndOwner = nullptr;
+    pd->hInstance = nullptr;
     //   PAGESETUPDLG is in hundreds of a mm
     pd->ptPaperSize.x = data.GetPaperSize().x * 100;
     pd->ptPaperSize.y = data.GetPaperSize().y * 100;
@@ -1109,10 +1109,10 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     pd->rtMargin.bottom = data.GetMarginBottomRight().y * 100;
 
     pd->lCustData = 0;
-    pd->lpfnPageSetupHook = NULL;
-    pd->lpfnPagePaintHook = NULL;
-    pd->hPageSetupTemplate = NULL;
-    pd->lpPageSetupTemplateName = NULL;
+    pd->lpfnPageSetupHook = nullptr;
+    pd->lpfnPagePaintHook = nullptr;
+    pd->hPageSetupTemplate = nullptr;
+    pd->lpPageSetupTemplateName = nullptr;
 
     return true;
 }
@@ -1135,7 +1135,7 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
             GlobalFree((HGLOBAL) native_data->GetDevMode());
         }
         native_data->SetDevMode( (void*) pd->hDevMode );
-        pd->hDevMode = NULL;
+        pd->hDevMode = nullptr;
     }
 
     // Isn't this superfluous? It's called again below.
@@ -1150,7 +1150,7 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
             GlobalFree((HGLOBAL) native_data->GetDevNames());
         }
         native_data->SetDevNames((void*) pd->hDevNames);
-        pd->hDevNames = NULL;
+        pd->hDevNames = nullptr;
     }
 
     data.GetPrintData().ConvertFromNative();

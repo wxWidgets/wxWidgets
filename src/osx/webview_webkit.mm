@@ -775,7 +775,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     wxString message = wxCFStringRef::AsString([error localizedDescription]);
     NSString* detail = [error localizedFailureReason];
-    if (detail != NULL)
+    if (detail != nullptr)
     {
         message = message + " (" + wxCFStringRef::AsString(detail) + ")";
     }
@@ -853,7 +853,7 @@ class wxWebViewWebKitHandlerRequest: public wxWebViewHandlerRequest
 {
 public:
     wxWebViewWebKitHandlerRequest(NSURLRequest* request):
-        m_data(NULL),
+        m_data(nullptr),
         m_request(request)
     { }
 

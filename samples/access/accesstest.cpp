@@ -249,12 +249,12 @@ public:
     virtual wxAccStatus GetChildCount(int* childCount) override;
 
         // Gets the specified child (starting from 1).
-        // If *child is NULL and return value is wxACC_OK,
+        // If *child is null and return value is wxACC_OK,
         // this means that the child is a simple element and
         // not an accessible object.
     virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
 
-        // Gets the parent, or NULL.
+        // Gets the parent, or nullptr.
     virtual wxAccStatus GetParent(wxAccessible** parent) override;
 
         // Performs the default action. childId is 0 (the action for this object)
@@ -295,7 +295,7 @@ public:
     virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags) override;
 
         // Gets the window with the keyboard focus.
-        // If childId is 0 and child is NULL, no object in
+        // If childId is 0 and child is null, no object in
         // this subhierarchy has the focus.
         // If this object has the focus, child should be 'this'.
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
@@ -318,9 +318,9 @@ public:
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size, style)
 {
-    m_textCtrl = NULL;
+    m_textCtrl = nullptr;
 
     SetAccessible(new FrameAccessible(this));
 
@@ -400,7 +400,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
 {
     m_textCtrl->Clear();
-    IAccessible* accessibleFrame = NULL;
+    IAccessible* accessibleFrame = nullptr;
     if (S_OK != AccessibleObjectFromWindow((HWND) GetHWND(), (DWORD)OBJID_CLIENT,
         IID_IAccessible, (void**) & accessibleFrame))
     {
@@ -442,7 +442,7 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
         {
             for (i = 0; i < childCount; i++)
             {
-                IAccessible* childAccessible = NULL;
+                IAccessible* childAccessible = nullptr;
                 if (var[i].pdispVal)
                 {
                     if (var[i].pdispVal->QueryInterface(IID_IAccessible, (LPVOID*) & childAccessible) == S_OK)
@@ -525,8 +525,8 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         VariantInit(& var);
         var.vt = VT_I4;
         var.lVal = i;
-        IDispatch* pDisp = NULL;
-        IAccessible* childObject = NULL;
+        IDispatch* pDisp = nullptr;
+        IAccessible* childObject = nullptr;
 
         if (S_OK == obj->get_accChild(var, & pDisp) && pDisp)
         {
@@ -689,7 +689,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     if (fromId == 1)
                     {
                         *toId = 2;
-                        *toObject = NULL;
+                        *toObject = nullptr;
                         return wxACC_OK;
                     }
                     else if (fromId == 2)
@@ -726,7 +726,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     if (fromId == 3)
                     {
                         *toId = 2;
-                        *toObject = NULL;
+                        *toObject = nullptr;
                         return wxACC_OK;
                     }
                     else if (fromId == 2)
@@ -748,7 +748,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                 if (fromId == 1)
                 {
                     *toId = 2;
-                    *toObject = NULL;
+                    *toObject = nullptr;
                     return wxACC_OK;
                 }
                 else if (fromId == 2)
@@ -769,7 +769,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                 if (fromId == 3)
                 {
                     *toId = 2;
-                    *toObject = NULL;
+                    *toObject = nullptr;
                     return wxACC_OK;
                 }
                 else if (fromId == 2)
@@ -792,7 +792,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     if (fromId == 1)
                     {
                         *toId = 2;
-                        *toObject = NULL;
+                        *toObject = nullptr;
                         return wxACC_OK;
                     }
                     else if (fromId == 2)
@@ -873,7 +873,7 @@ wxAccStatus SplitterWindowAccessible::GetChildCount(int* childCount)
 }
 
 // Gets the specified child (starting from 1).
-// If *child is NULL and return value is wxACC_OK,
+// If *child is null and return value is wxACC_OK,
 // this means that the child is a simple element and
 // not an accessible object.
 wxAccStatus SplitterWindowAccessible::GetChild(int childId, wxAccessible** child)
@@ -896,7 +896,7 @@ wxAccStatus SplitterWindowAccessible::GetChild(int childId, wxAccessible** child
             }
             else if (childId == 2)
             {
-                *child = NULL; // Sash
+                *child = nullptr; // Sash
             }
             else if (childId == 3)
             {
@@ -936,7 +936,7 @@ wxAccStatus SplitterWindowAccessible::GetChild(int childId, wxAccessible** child
     return wxACC_NOT_IMPLEMENTED;
 }
 
-// Gets the parent, or NULL.
+// Gets the parent, or nullptr.
 wxAccStatus SplitterWindowAccessible::GetParent(wxAccessible** WXUNUSED(parent))
 {
     return wxACC_NOT_IMPLEMENTED;
@@ -1086,7 +1086,7 @@ wxAccStatus SplitterWindowAccessible::Select(int childId, wxAccSelectionFlags WX
 }
 
 // Gets the window with the keyboard focus.
-// If childId is 0 and child is NULL, no object in
+// If childId is 0 and child is null, no object in
 // this subhierarchy has the focus.
 // If this object has the focus, child should be 'this'.
 wxAccStatus SplitterWindowAccessible::GetFocus(int* WXUNUSED(childId), wxAccessible** WXUNUSED(child))

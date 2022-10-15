@@ -113,7 +113,7 @@ private:
         long DoExecute(AsyncExecLoopExitEnum forceExitLoop_,
                      const wxString& command_,
                      int flags_ = wxEXEC_ASYNC,
-                     wxProcess* callback_ = NULL)
+                     wxProcess* callback_ = nullptr)
         {
             forceExitLoop = forceExitLoop_;
 
@@ -363,7 +363,7 @@ ExecTestCase::DoTestAsyncRedirect(const wxString& command,
                                // to trigger the exit of the event loop.
                        command, wxEXEC_ASYNC, &proc) != 0 );
 
-    wxInputStream *streamToCheck = NULL;
+    wxInputStream *streamToCheck = nullptr;
     switch ( check )
     {
         case Check_Stdout:
