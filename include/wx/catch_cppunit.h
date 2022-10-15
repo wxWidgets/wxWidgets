@@ -31,10 +31,16 @@
 // line but this can happen if they're used inside another macro, so wrap it
 // inside a scope.
 #define CPPUNIT_ASSERT_MESSAGE(msg, cond) \
-    do { INFO(msg); REQUIRE(cond); } while (Catch::alwaysFalse())
+    wxSTATEMENT_MACRO_BEGIN               \
+    INFO(msg);                            \
+    REQUIRE(cond);                        \
+    wxSTATEMENT_MACRO_END
 
 #define CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, x, y) \
-    do { INFO(msg); REQUIRE(x == y); } while (Catch::alwaysFalse())
+    wxSTATEMENT_MACRO_BEGIN                     \
+    INFO(msg);                                  \
+    REQUIRE(x == y);                            \
+    wxSTATEMENT_MACRO_END
 
 // CATCH Approx class uses the upper bound of "epsilon*(scale + max(|x|, |y|))"
 // for |x - y| which is not really compatible with our fixed delta, so we can't
