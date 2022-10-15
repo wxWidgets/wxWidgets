@@ -13,14 +13,11 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_BMPBUTTON
-#include "wx/bmpbndl.h"
-#endif
-
 #if wxUSE_PROPGRID
 
 #include "wx/window.h"
 
+class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
 class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
 class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;
 class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
