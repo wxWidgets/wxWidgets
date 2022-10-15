@@ -7,6 +7,9 @@
 // This needs to be included before catch.hpp to be taken into account.
 #include "testdate.h"
 
+// This needs to be defined before including catch.hpp for PCH support.
+#define CATCH_CONFIG_ALL_PARTS
+
 #include "wx/catch_cppunit.h"
 
 // Custom test macro that is only defined when wxUIActionSimulator is available

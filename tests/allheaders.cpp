@@ -52,7 +52,7 @@
     #define __USE_W32_SOCKETS
 #endif
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 #if defined(__WXQT__)
     // Include this one before enabling the warnings as doing it later, as it

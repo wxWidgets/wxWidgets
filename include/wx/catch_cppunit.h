@@ -9,7 +9,7 @@
 #ifndef _WX_CATCH_CPPUNIT_H_
 #define _WX_CATCH_CPPUNIT_H_
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 // CppUnit-compatible macros.
 

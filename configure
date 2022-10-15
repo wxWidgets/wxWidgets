@@ -43873,14 +43873,14 @@ fi
 if test "$wxUSE_TESTS_SUBDIR" != "no"; then
         SUBDIRS="$SUBDIRS tests"
 
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch.hpp file exists" >&5
-$as_echo_n "checking whether catch.hpp file exists... " >&6; }
-    if ! test -f "$srcdir/3rdparty/catch/include/catch.hpp" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch2/catch.hpp exists" >&5
+$as_echo_n "checking whether catch2/catch.hpp exists... " >&6; }
+    if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp" ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
         as_fn_error $? "
     CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $srcdir/3rdparty/catch/include/catch.hpp couldn't be found.
+    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp couldn't be found.
 
     You might need to run
 
