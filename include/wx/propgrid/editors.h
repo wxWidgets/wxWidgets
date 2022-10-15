@@ -13,6 +13,10 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_BMPBUTTON
+#include "wx/bmpbndl.h"
+#endif
+
 #if wxUSE_PROPGRID
 
 #include "wx/window.h"
