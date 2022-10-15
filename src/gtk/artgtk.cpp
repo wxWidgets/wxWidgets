@@ -32,9 +32,9 @@ class wxGTK2ArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
     virtual wxIconBundle CreateIconBundle(const wxArtID& id,
-                                          const wxArtClient& client) wxOVERRIDE;
+                                          const wxArtClient& client) override;
 };
 
 /*static*/ void wxArtProvider::InitNativeProvider()

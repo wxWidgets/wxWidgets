@@ -159,7 +159,7 @@ public:
     void OnPaint(wxPaintEvent&);
     void OnSetFocus(wxFocusEvent&);
     void OnKillFocus(wxFocusEvent&);
-    virtual bool MSWTranslateMessage(WXMSG* pMsg) wxOVERRIDE;
+    virtual bool MSWTranslateMessage(WXMSG* pMsg) override;
     virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc);
 
 protected:
@@ -214,7 +214,7 @@ private:
     DISPID m_dispid;
 
 public:
-    virtual wxEvent *Clone() const wxOVERRIDE
+    virtual wxEvent *Clone() const override
     { return new wxActiveXEvent(*this); }
 
     size_t ParamCount() const;

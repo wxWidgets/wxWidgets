@@ -147,14 +147,14 @@ class wxFileSystemInternetModule : public wxModule
         {
         }
 
-        virtual bool OnInit() wxOVERRIDE
+        virtual bool OnInit() override
         {
             m_handler = new wxInternetFSHandler;
             wxFileSystem::AddHandler(m_handler);
             return true;
         }
 
-        virtual void OnExit() wxOVERRIDE
+        virtual void OnExit() override
         {
             delete wxFileSystem::RemoveHandler(m_handler);
         }

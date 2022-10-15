@@ -102,15 +102,15 @@ public:
  //
  // inherited methods from wxDataViewModelNotifier
  //
-  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) wxOVERRIDE;
-  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ItemChanged (wxDataViewItem const& item) wxOVERRIDE;
-  virtual bool ItemsChanged(wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) wxOVERRIDE;
-  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) wxOVERRIDE;
-  virtual bool Cleared() wxOVERRIDE;
-  virtual void Resort() wxOVERRIDE;
+  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) override;
+  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) override;
+  virtual bool ItemChanged (wxDataViewItem const& item) override;
+  virtual bool ItemsChanged(wxDataViewItemArray const& items) override;
+  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) override;
+  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) override;
+  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) override;
+  virtual bool Cleared() override;
+  virtual void Resort() override;
 
   // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data, does nothing if the
   // control is frozen but remember it for later

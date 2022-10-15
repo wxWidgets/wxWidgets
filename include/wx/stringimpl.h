@@ -66,14 +66,11 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
 #include <string>
 #include "wx/afterstd.h"
 
-#ifdef HAVE_STD_WSTRING
-    typedef std::wstring wxStdWideString;
-#else
-    typedef std::basic_string<wchar_t> wxStdWideString;
-#endif
+// Define this for compatibility only, it is not used any longer.
+typedef std::wstring wxStdWideString;
 
 #if wxUSE_UNICODE_WCHAR
-    typedef wxStdWideString wxStdString;
+    typedef std::wstring wxStdString;
 #else
     typedef std::string wxStdString;
 #endif
@@ -89,9 +86,6 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
 
     typedef wxStdString wxStringImpl;
 #else // if !wxUSE_STL_BASED_WXSTRING
-
-// in non-STL mode, compare() is implemented in wxString and not wxStringImpl
-#undef HAVE_STD_STRING_COMPARE
 
 // ---------------------------------------------------------------------------
 // string data prepended with some housekeeping info (used by wxString class),

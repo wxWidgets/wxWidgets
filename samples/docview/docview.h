@@ -37,14 +37,14 @@ public:
     MyApp();
 
     // override some wxApp virtual methods
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
 #ifdef __WXMAC__
-    virtual void MacNewFile() wxOVERRIDE;
+    virtual void MacNewFile() override;
 #endif // __WXMAC__
 
     // our specific methods

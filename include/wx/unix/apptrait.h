@@ -19,10 +19,10 @@ class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
 #if wxUSE_CONSOLE_EVENTLOOP
-    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE;
+    virtual wxEventLoopBase *CreateEventLoop() override;
 #endif // wxUSE_CONSOLE_EVENTLOOP
 #if wxUSE_TIMER
-    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) override;
 #endif
 };
 
@@ -48,42 +48,42 @@ public:
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE;
-    virtual int WaitForChild(wxExecuteData& execData) wxOVERRIDE;
+    virtual wxEventLoopBase *CreateEventLoop() override;
+    virtual int WaitForChild(wxExecuteData& execData) override;
 #if wxUSE_TIMER
-    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) override;
 #endif
 #if wxUSE_THREADS && defined(__WXGTK20__)
-    virtual void MutexGuiEnter() wxOVERRIDE;
-    virtual void MutexGuiLeave() wxOVERRIDE;
+    virtual void MutexGuiEnter() override;
+    virtual void MutexGuiLeave() override;
 #endif
 
     wxPortId GetToolkitVersion(int *majVer = NULL,
                                int *minVer = NULL,
-                               int *microVer = NULL) const wxOVERRIDE;
+                               int *microVer = NULL) const override;
 
 #ifdef __WXGTK20__
-    virtual wxString GetDesktopEnvironment() const wxOVERRIDE;
+    virtual wxString GetDesktopEnvironment() const override;
 #endif // __WXGTK20____
 
 #if defined(__WXGTK20__)
-    virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
+    virtual bool ShowAssertDialog(const wxString& msg) override;
 #endif
 
 #if wxUSE_SOCKETS
 
 #ifdef wxHAS_GUI_SOCKET_MANAGER
-    virtual wxSocketManager *GetSocketManager() wxOVERRIDE;
+    virtual wxSocketManager *GetSocketManager() override;
 #endif
 
 #ifdef wxHAS_GUI_FDIOMANAGER
-    virtual wxFDIOManager *GetFDIOManager() wxOVERRIDE;
+    virtual wxFDIOManager *GetFDIOManager() override;
 #endif
 
 #endif // wxUSE_SOCKETS
 
 #if wxUSE_EVENTLOOP_SOURCE
-    virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager() wxOVERRIDE;
+    virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager() override;
 #endif
 };
 

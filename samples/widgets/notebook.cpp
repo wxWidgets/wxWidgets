@@ -85,11 +85,11 @@ public:
     BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[]);
     virtual ~BookWidgetsPage();
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_book; }
-    virtual void RecreateWidget() wxOVERRIDE { RecreateBook(); }
+    virtual wxWindow *GetWidget() const override { return m_book; }
+    virtual void RecreateWidget() override { RecreateBook(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -541,7 +541,7 @@ protected:
     void OnPageChanged(wxNotebookEvent& event);
 
     // (re)create book
-    virtual wxBookCtrlBase *CreateBook(long flags) wxOVERRIDE
+    virtual wxBookCtrlBase *CreateBook(long flags) override
     {
         return new wxNotebook(this, BookPage_Book,
                               wxDefaultPosition, wxDefaultSize,
@@ -622,7 +622,7 @@ protected:
     void OnPageChanged(wxListbookEvent& event);
 
     // (re)create book
-    virtual wxBookCtrlBase *CreateBook(long flags) wxOVERRIDE
+    virtual wxBookCtrlBase *CreateBook(long flags) override
     {
         return new wxListbook(this, BookPage_Book,
                               wxDefaultPosition, wxDefaultSize,
@@ -695,7 +695,7 @@ protected:
     void OnPageChanged(wxChoicebookEvent& event);
 
     // (re)create book
-    virtual wxBookCtrlBase *CreateBook(long flags) wxOVERRIDE
+    virtual wxBookCtrlBase *CreateBook(long flags) override
     {
         return new wxChoicebook(this, BookPage_Book,
                                 wxDefaultPosition, wxDefaultSize,

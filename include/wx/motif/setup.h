@@ -834,27 +834,10 @@
 
 // Enable wxGraphicsContext and related classes for a modern 2D drawing API.
 //
-// Default is 1 except if you're using a compiler without support for GDI+
-// under MSW, i.e. gdiplus.h and related headers (MSVC and MinGW >= 4.8 are
-// known to have them). For other compilers (e.g. older mingw32) you may need
-// to install the headers (and just the headers) yourself. If you do, change
-// the setting below manually.
+// Default is 1.
 //
-// Recommended setting: 1 if supported by the compilation environment
-
-// Notice that we can't use wxCHECK_VISUALC_VERSION() nor wxCHECK_GCC_VERSION()
-// here as this file is included from wx/platform.h before they're defined.
-#if defined(_MSC_VER) || \
-    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
+// Recommended setting: 1, setting it to 0 disables a lot of functionality.
 #define wxUSE_GRAPHICS_CONTEXT 1
-#else
-// Disable support for other Windows compilers, enable it if your compiler
-// comes with new enough SDK or you installed the headers manually.
-//
-// Notice that this will be set by configure under non-Windows platforms
-// anyhow so the value there is not important.
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
 
 // Enable wxGraphicsContext implementation using Cairo library.
 //

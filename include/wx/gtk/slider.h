@@ -41,24 +41,24 @@ public:
                 const wxString& name = wxASCII_STR(wxSliderNameStr));
 
     // implement the base class pure virtuals
-    virtual int GetValue() const wxOVERRIDE;
-    virtual void SetValue(int value) wxOVERRIDE;
+    virtual int GetValue() const override;
+    virtual void SetValue(int value) override;
 
-    virtual void SetRange(int minValue, int maxValue) wxOVERRIDE;
-    virtual int GetMin() const wxOVERRIDE;
-    virtual int GetMax() const wxOVERRIDE;
+    virtual void SetRange(int minValue, int maxValue) override;
+    virtual int GetMin() const override;
+    virtual int GetMax() const override;
 
-    virtual void SetLineSize(int lineSize) wxOVERRIDE;
-    virtual void SetPageSize(int pageSize) wxOVERRIDE;
-    virtual int GetLineSize() const wxOVERRIDE;
-    virtual int GetPageSize() const wxOVERRIDE;
+    virtual void SetLineSize(int lineSize) override;
+    virtual void SetPageSize(int pageSize) override;
+    virtual int GetLineSize() const override;
+    virtual int GetPageSize() const override;
 
-    virtual void SetThumbLength(int lenPixels) wxOVERRIDE;
-    virtual int GetThumbLength() const wxOVERRIDE;
+    virtual void SetThumbLength(int lenPixels) override;
+    virtual int GetThumbLength() const override;
 
-    virtual void ClearTicks() wxOVERRIDE;
-    virtual void SetTick(int tickPos) wxOVERRIDE;
-    int GetTickFreq() const wxOVERRIDE;
+    virtual void ClearTicks() override;
+    virtual void SetTick(int tickPos) override;
+    int GetTickFreq() const override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -74,7 +74,7 @@ public:
     GtkWidget *m_scale;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     GtkWidget *m_minLabel,*m_maxLabel;
     bool m_blockScrollEvent;
@@ -82,13 +82,13 @@ protected:
     // Note the following member is not used in GTK+2 < 2.16.
     int m_tickFreq;
 
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
     // set the slider value unconditionally
     void GTKSetValue(int value);
 
     // Platform-specific implementation of SetTickFreq
-    virtual void DoSetTickFreq(int freq) wxOVERRIDE;
+    virtual void DoSetTickFreq(int freq) override;
 
 private:
     void Init();

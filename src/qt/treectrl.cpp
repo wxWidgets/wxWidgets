@@ -157,7 +157,7 @@ public:
         QTreeWidget::paintEvent(event);
     }
 
-    virtual void mouseReleaseEvent(QMouseEvent * event) wxOVERRIDE
+    virtual void mouseReleaseEvent(QMouseEvent * event) override
     {
         const QPoint qPos = event->pos();
         QTreeWidgetItem *item = itemAt(qPos);
@@ -255,7 +255,7 @@ protected:
         const QStyleOptionViewItem &options,
         const QModelIndex &index
 
-    ) const wxOVERRIDE
+    ) const override
     {
         QTreeWidget::drawRow(painter, options, index);
 
@@ -272,7 +272,7 @@ protected:
         }
     }
 
-    bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) wxOVERRIDE
+    bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) override
     {
         // AllEditTriggers means that editor is about to open, not waiting for double click
         if (trigger == AllEditTriggers)
@@ -289,7 +289,7 @@ protected:
         return QTreeWidget::edit(index, trigger, event);
     }
 
-    void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) wxOVERRIDE
+    void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) override
     {
         // Close process can re-signal closeEditor so we need to guard against
         // reentrant calls.
@@ -485,12 +485,12 @@ private:
         EmitEvent(tree_event);
     }
 
-    virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const wxOVERRIDE
+    virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const override
     {
         return state() == DragSelectingState ? QItemSelectionModel::NoUpdate : QTreeWidget::selectionCommand(index, event);
     }
 
-    virtual void dropEvent(QDropEvent* event) wxOVERRIDE
+    virtual void dropEvent(QDropEvent* event) override
     {
         endDrag(event->pos());
 
@@ -498,7 +498,7 @@ private:
         event->ignore();
     }
 
-    virtual void mouseMoveEvent(QMouseEvent *event) wxOVERRIDE
+    virtual void mouseMoveEvent(QMouseEvent *event) override
     {
         const bool wasDragging = state() == DraggingState;
         wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>::mouseMoveEvent(event);

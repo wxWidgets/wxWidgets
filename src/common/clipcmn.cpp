@@ -96,8 +96,8 @@ bool wxClipboardBase::IsSupportedAsync( wxEvtHandler *sink )
 class wxClipboardModule : public wxModule
 {
 public:
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { wxDELETE(gs_clipboard); }
+    bool OnInit() override { return true; }
+    void OnExit() override { wxDELETE(gs_clipboard); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxClipboardModule);

@@ -257,7 +257,7 @@ void SocketTestCase::ReadAnotherThread()
         {
         }
 
-        virtual void* Entry() wxOVERRIDE
+        virtual void* Entry() override
         {
             wxSocketClientPtr sock(SocketTestCase::GetHTTPSocket(wxSOCKET_BLOCK));
             if ( !sock )

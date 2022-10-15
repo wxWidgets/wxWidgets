@@ -56,12 +56,12 @@ class TextCtrlTestCase : public TextEntryTestCase, public CppUnit::TestCase
 public:
     TextCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_text; }
-    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_text; }
+    virtual wxTextEntry *GetTestEntry() const override { return m_text; }
+    virtual wxWindow *GetTestWindow() const override { return m_text; }
 
     #define SINGLE_AND_MULTI_TESTS() \
         WXUISIM_TEST( ReadOnly ); \
@@ -1294,14 +1294,14 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
         {
         }
 
-        virtual wxControl* Create(wxWindow* parent, int style) const wxOVERRIDE
+        virtual wxControl* Create(wxWindow* parent, int style) const override
         {
             return new wxTextCtrl(parent, wxID_ANY, wxString(),
                                   wxDefaultPosition, wxDefaultSize,
                                   style | m_styleToAdd);
         }
 
-        virtual TextLikeControlCreator* CloneAsMultiLine() const wxOVERRIDE
+        virtual TextLikeControlCreator* CloneAsMultiLine() const override
         {
             return new TextCtrlCreator(wxTE_MULTILINE);
         }

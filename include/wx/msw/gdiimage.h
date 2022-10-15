@@ -54,7 +54,7 @@ public:
     }
 
     // accessors
-    virtual bool IsOk() const wxOVERRIDE { return m_handle != NULL; }
+    virtual bool IsOk() const override { return m_handle != NULL; }
 
     void SetSize(int w, int h) { m_width = w; m_height = h; }
 
@@ -148,19 +148,19 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_0
 
     // forward some of base class virtuals to wxGDIImageRefData
-    bool FreeResource(bool force = false) wxOVERRIDE;
-    virtual WXHANDLE GetResourceHandle() const wxOVERRIDE;
+    bool FreeResource(bool force = false) override;
+    virtual WXHANDLE GetResourceHandle() const override;
 
 protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData *CreateData() const = 0;
 
     // implement the wxGDIObject method in terms of our, more specific, one
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE { return CreateData(); }
+    virtual wxGDIRefData *CreateGDIRefData() const override { return CreateData(); }
 
     // we can't [efficiently] clone objects of this class
     virtual wxGDIRefData *
-    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const wxOVERRIDE
+    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const override
     {
         wxFAIL_MSG( wxT("must be implemented if used") );
 

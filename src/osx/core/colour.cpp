@@ -32,16 +32,16 @@ public:
 
     wxCGColorRefData(const wxCGColorRefData& other);
 
-    virtual bool IsOk() const  wxOVERRIDE{ return m_cgColour != NULL; }
+    virtual bool IsOk() const  override{ return m_cgColour != NULL; }
 
-    virtual CGFloat Red() const wxOVERRIDE { return m_red; }
-    virtual CGFloat Green() const wxOVERRIDE { return m_green; }
-    virtual CGFloat Blue() const wxOVERRIDE { return m_blue; }
-    virtual CGFloat Alpha() const wxOVERRIDE { return m_alpha; }
+    virtual CGFloat Red() const override { return m_red; }
+    virtual CGFloat Green() const override { return m_green; }
+    virtual CGFloat Blue() const override { return m_blue; }
+    virtual CGFloat Alpha() const override { return m_alpha; }
 
-    CGColorRef GetCGColor() const wxOVERRIDE { return m_cgColour; }
+    CGColorRef GetCGColor() const override { return m_cgColour; }
 
-    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxCGColorRefData(*this); }
+    virtual wxColourRefData* Clone() const override { return new wxCGColorRefData(*this); }
 
 private:
     void Init(CGFloat components[4]);

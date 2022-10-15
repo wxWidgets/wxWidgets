@@ -32,12 +32,12 @@ public:
     {
     }
 
-    bool match(const wxColour& c) const wxOVERRIDE
+    bool match(const wxColour& c) const override
     {
         return c.Red() == m_red && c.Green() == m_green && c.Blue() == m_blue;
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         return wxString::Format("!= RGB(%#02x, %#02x, %#02x)",
                                 m_red, m_green, m_blue).ToStdString();
@@ -57,12 +57,12 @@ public:
     {
     }
 
-    bool match(const wxColour& c) const wxOVERRIDE
+    bool match(const wxColour& c) const override
     {
         return ColourRGBMatcher::match(c) && c.Alpha() == m_alpha;
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         return wxString::Format("!= RGBA(%#02x, %#02x, %#02x, %#02x)",
                                 m_red, m_green, m_blue, m_alpha).ToStdString();

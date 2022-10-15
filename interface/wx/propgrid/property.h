@@ -585,7 +585,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     wxLongStringProperty and override DisplayEditorDialog, like this:
 
     @code
-        bool DisplayEditorDialog( wxPropertyGrid* propGrid, wxVariant& value ) wxOVERRIDE
+        bool DisplayEditorDialog( wxPropertyGrid* propGrid, wxVariant& value ) override
         {
             wxSize dialogSize(...size of your dialog...);
 

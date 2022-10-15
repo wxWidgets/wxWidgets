@@ -277,14 +277,14 @@ public:
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Destroy() wxOVERRIDE;
-    virtual bool IsTopLevel() const wxOVERRIDE { return true; }
-    virtual bool IsTopNavigationDomain(NavigationKind kind) const wxOVERRIDE;
+    virtual bool Destroy() override;
+    virtual bool IsTopLevel() const override { return true; }
+    virtual bool IsTopNavigationDomain(NavigationKind kind) const override;
     virtual bool IsVisible() const { return IsShown(); }
 
     // override to do TLW-specific layout: we resize our unique child to fill
     // the entire client area
-    virtual bool Layout() wxOVERRIDE;
+    virtual bool Layout() override;
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);
@@ -298,11 +298,11 @@ public:
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
     // do the window-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE ;
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) override ;
 
     // a different API for SetSizeHints
-    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
-    virtual void SetMaxSize(const wxSize& maxSize) wxOVERRIDE;
+    virtual void SetMinSize(const wxSize& minSize) override;
+    virtual void SetMaxSize(const wxSize& maxSize) override;
 
     virtual void OSXSetModified(bool modified) { m_modified = modified; }
     virtual bool OSXIsModified() const { return m_modified; }
@@ -312,15 +312,15 @@ public:
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
-    virtual void DoClientToScreen(int *x, int *y) const wxOVERRIDE;
-    virtual void DoScreenToClient(int *x, int *y) const wxOVERRIDE;
+    virtual void DoClientToScreen(int *x, int *y) const override;
+    virtual void DoScreenToClient(int *x, int *y) const override;
 
     // add support for wxCENTRE_ON_SCREEN
-    virtual void DoCentre(int dir) wxOVERRIDE;
+    virtual void DoCentre(int dir) override;
 
     // no need to do client to screen translation to get our position in screen
     // coordinates: this is already the case
-    virtual void DoGetScreenPosition(int *x, int *y) const wxOVERRIDE
+    virtual void DoGetScreenPosition(int *x, int *y) const override
     {
         DoGetPosition(x, y);
     }

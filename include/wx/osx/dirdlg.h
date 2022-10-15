@@ -45,15 +45,15 @@ public:
     ~wxDirDialog();
 #endif
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
     // MacOS 10.11 has removed the titlebar from the dialog, so this is provided
     // only for compatibility with older versions
-    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual void SetTitle(const wxString& title) override;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal() wxOVERRIDE;
-    virtual void ModalFinishedCallback(void* panel, int returnCode) wxOVERRIDE;
+    virtual void ShowWindowModal() override;
+    virtual void ModalFinishedCallback(void* panel, int returnCode) override;
 #endif
 
 private:

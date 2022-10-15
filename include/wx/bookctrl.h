@@ -224,10 +224,10 @@ public:
 
 
     // we do have multiple pages
-    virtual bool HasMultiplePages() const wxOVERRIDE { return true; }
+    virtual bool HasMultiplePages() const override { return true; }
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 
     // Implementation only from now on.
@@ -246,7 +246,7 @@ protected:
     };
 
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // After the insertion of the page in the method InsertPage, calling this
     // method sets the selection to the given page or the first one if there is
@@ -314,7 +314,7 @@ protected:
     virtual wxWindow *DoRemovePage(size_t page) = 0;
 
     // our best size is the size which fits all our pages
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // helper: get the next page wrapping if we reached the end
     int GetNextPage(bool forward) const;
@@ -325,7 +325,7 @@ protected:
     // It is better to make this control transparent so that by default the controls on
     // its pages are on the same colour background as the rest of the window. If the user
     // prefers a coloured background they can set the background colour on the page panel
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool HasTransparentBackground() override { return true; }
 
     // This method also invalidates the size of the controller and should be
     // called instead of just InvalidateBestSize() whenever pages are added or
@@ -402,7 +402,7 @@ public:
         m_nOldSel = event.m_nOldSel;
     }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxBookCtrlEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxBookCtrlEvent(*this); }
 
     // accessors
         // the currently selected page (wxNOT_FOUND if none)

@@ -117,8 +117,8 @@ class wxDDEModule : public wxModule
 {
 public:
     wxDDEModule() {}
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { wxDDECleanUp(); }
+    bool OnInit() override { return true; }
+    void OnExit() override { wxDDECleanUp(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDDEModule);

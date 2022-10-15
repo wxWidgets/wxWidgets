@@ -160,7 +160,7 @@ public:
     {
     }
 
-    bool match(const BitmapAtScale& bitmapAtScale) const wxOVERRIDE
+    bool match(const BitmapAtScale& bitmapAtScale) const override
     {
         const wxBitmap& bmp = bitmapAtScale.bitmap;
 
@@ -183,7 +183,7 @@ public:
         return m_diffDesc.empty();
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         return m_diffDesc.utf8_string();
     }

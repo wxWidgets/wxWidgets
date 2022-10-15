@@ -76,25 +76,25 @@ public:
 
     // Set/GetSelection() from wxTextEntry and wxChoice
 
-    virtual void SetSelection(int n) wxOVERRIDE { wxChoice::SetSelection(n); }
-    virtual void SetSelection(long from, long to) wxOVERRIDE
+    virtual void SetSelection(int n) override { wxChoice::SetSelection(n); }
+    virtual void SetSelection(long from, long to) override
                                { wxTextEntry::SetSelection(from, to); }
 
-    virtual int GetSelection() const wxOVERRIDE { return wxChoice::GetSelection(); }
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE
+    virtual int GetSelection() const override { return wxChoice::GetSelection(); }
+    virtual void GetSelection(long *from, long *to) const override
                                { return wxTextEntry::GetSelection(from, to); }
 
-    virtual wxString GetStringSelection() const wxOVERRIDE
+    virtual wxString GetStringSelection() const override
     {
         return wxItemContainer::GetStringSelection();
     }
 
-    virtual void SetString(unsigned int n, const wxString& string) wxOVERRIDE;
+    virtual void SetString(unsigned int n, const wxString& string) override;
 
     virtual void Popup();
     virtual void Dismiss();
 
-    virtual void Clear() wxOVERRIDE;
+    virtual void Clear() override;
 
     // See wxComboBoxBase discussion of IsEmpty().
     bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
@@ -102,7 +102,7 @@ public:
 
     void OnChar( wxKeyEvent &event );
 
-    virtual void SetValue(const wxString& value) wxOVERRIDE;
+    virtual void SetValue(const wxString& value) override;
 
     // Standard event handling
     void OnCut(wxCommandEvent& event);
@@ -121,33 +121,33 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    virtual void GTKDisableEvents() wxOVERRIDE;
-    virtual void GTKEnableEvents() wxOVERRIDE;
-    GtkWidget* GetConnectWidget() wxOVERRIDE;
+    virtual void GTKDisableEvents() override;
+    virtual void GTKEnableEvents() override;
+    GtkWidget* GetConnectWidget() override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+    virtual const wxTextEntry* WXGetTextEntry() const override { return this; }
 
 protected:
     // From wxWindowGTK:
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
-    virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
+    virtual bool UseGTKStyleBase() const override { return true; }
 
     // Override in derived classes to create combo box widgets with
     // custom list stores.
     virtual void GTKCreateComboBoxWidget();
 
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
 
-    virtual GtkEntry *GetEntry() const wxOVERRIDE
+    virtual GtkEntry *GetEntry() const override
         { return m_entry; }
 
-    virtual int GTKIMFilterKeypress(GdkEventKey* event) const wxOVERRIDE
+    virtual int GTKIMFilterKeypress(GdkEventKey* event) const override
         { return GTKEntryIMFilterKeypress(event); }
 
 
@@ -155,8 +155,8 @@ protected:
 
 private:
     // From wxTextEntry:
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
-    virtual GtkEditable *GetEditable() const wxOVERRIDE;
+    virtual wxWindow *GetEditableWindow() override { return this; }
+    virtual GtkEditable *GetEditable() const override;
 
     void Init();
 

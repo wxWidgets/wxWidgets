@@ -52,7 +52,7 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // a text ctrl which allows to call different wxTextCtrl functions

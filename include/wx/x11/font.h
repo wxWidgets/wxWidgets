@@ -85,7 +85,7 @@ public:
     virtual wxFontStyle GetStyle() const;
     virtual int GetNumericWeight() const;
     virtual bool GetUnderlined() const;
-    virtual bool GetStrikethrough() const wxOVERRIDE;
+    virtual bool GetStrikethrough() const override;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
@@ -98,7 +98,7 @@ public:
     virtual void SetNumericWeight(int weight);
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
-    virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
+    virtual void SetStrikethrough(bool strikethrough) override;
     virtual void SetEncoding(wxFontEncoding encoding);
 
     wxDECLARE_COMMON_FONT_METHODS();

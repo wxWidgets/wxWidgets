@@ -40,28 +40,28 @@ public:
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
 
 #if wxUSE_STATUSBAR
-    void SetStatusBar(wxStatusBar *statbar) wxOVERRIDE;
+    void SetStatusBar(wxStatusBar *statbar) override;
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
-    void SetToolBar(wxToolBar *toolbar) wxOVERRIDE;
+    void SetToolBar(wxToolBar *toolbar) override;
 #endif // wxUSE_TOOLBAR
 
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
-    wxPoint GetClientAreaOrigin() const wxOVERRIDE { return wxPoint(0, 0); }
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) override;
+    wxPoint GetClientAreaOrigin() const override { return wxPoint(0, 0); }
 
     // implementation from now on
     // --------------------------
 
-    virtual bool SendIdleEvents(wxIdleEvent& event) wxOVERRIDE;
+    virtual bool SendIdleEvents(wxIdleEvent& event) override;
 
 protected:
     // override wxWindow methods to take into account tool/menu/statusbars
-    virtual void DoGetClientSize( int *width, int *height ) const wxOVERRIDE;
+    virtual void DoGetClientSize( int *width, int *height ) const override;
 
 #if wxUSE_MENUS_NATIVE
-    virtual void DetachMenuBar() wxOVERRIDE;
-    virtual void AttachMenuBar(wxMenuBar *menubar) wxOVERRIDE;
+    virtual void DetachMenuBar() override;
+    virtual void AttachMenuBar(wxMenuBar *menubar) override;
 #endif // wxUSE_MENUS_NATIVE
 
 private:

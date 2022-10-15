@@ -53,7 +53,7 @@ public:
     // ctor both creates and starts the thread
     TLSTestThread() : wxThread(wxTHREAD_JOINABLE) { Create(); Run(); }
 
-    virtual void *Entry() wxOVERRIDE
+    virtual void *Entry() override
     {
         gs_threadInt = 17;
 

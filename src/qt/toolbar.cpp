@@ -43,8 +43,8 @@ public:
         m_qtToolButton = NULL;
     }
 
-    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
-    virtual void SetDropdownMenu(wxMenu* menu) wxOVERRIDE;
+    virtual void SetLabel( const wxString &label ) override;
+    virtual void SetDropdownMenu(wxMenu* menu) override;
 
     void SetIcon();
     void ClearToolTip();
@@ -64,9 +64,9 @@ public:
     }
 
 private:
-    void mouseReleaseEvent( QMouseEvent *event ) wxOVERRIDE;
-    void mousePressEvent( QMouseEvent *event ) wxOVERRIDE;
-    void enterEvent( QEvent *event ) wxOVERRIDE;
+    void mouseReleaseEvent( QMouseEvent *event ) override;
+    void mousePressEvent( QMouseEvent *event ) override;
+    void enterEvent( QEvent *event ) override;
 };
 
 void wxQtToolButton::mouseReleaseEvent( QMouseEvent *event )

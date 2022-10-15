@@ -27,12 +27,12 @@ public:
     // accessors
     // ---------
 
-    virtual bool IsOk() const wxOVERRIDE { return m_isInit; }
+    virtual bool IsOk() const override { return m_isInit; }
 
-    unsigned char Red() const wxOVERRIDE { return m_red; }
-    unsigned char Green() const wxOVERRIDE { return m_green; }
-    unsigned char Blue() const wxOVERRIDE { return m_blue; }
-    unsigned char Alpha() const wxOVERRIDE { return m_alpha ; }
+    unsigned char Red() const override { return m_red; }
+    unsigned char Green() const override { return m_green; }
+    unsigned char Blue() const override { return m_blue; }
+    unsigned char Alpha() const override { return m_alpha ; }
 
     // comparison
     bool operator==(const wxColour& colour) const
@@ -56,7 +56,7 @@ protected:
     void Init();
 
     virtual void
-    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) wxOVERRIDE;
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 
 private:
     bool          m_isInit;

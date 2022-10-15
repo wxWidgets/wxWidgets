@@ -2077,12 +2077,12 @@ bool wxWindowBase::Validate()
         {
         }
 
-        virtual bool OnDo(wxValidator* validator) wxOVERRIDE
+        virtual bool OnDo(wxValidator* validator) override
         {
             return validator->Validate(m_win);
         }
 
-        virtual bool OnRecurse(wxWindow* child) wxOVERRIDE
+        virtual bool OnRecurse(wxWindow* child) override
         {
             return child->Validate();
         }
@@ -2105,7 +2105,7 @@ bool wxWindowBase::TransferDataToWindow()
         {
         }
 
-        virtual bool OnDo(wxValidator* validator) wxOVERRIDE
+        virtual bool OnDo(wxValidator* validator) override
         {
             if ( !validator->TransferToWindow() )
             {
@@ -2120,7 +2120,7 @@ bool wxWindowBase::TransferDataToWindow()
             return true;
         }
 
-        virtual bool OnRecurse(wxWindow* child) wxOVERRIDE
+        virtual bool OnRecurse(wxWindow* child) override
         {
             return child->TransferDataToWindow();
         }
@@ -2143,12 +2143,12 @@ bool wxWindowBase::TransferDataFromWindow()
         {
         }
 
-        virtual bool OnDo(wxValidator* validator) wxOVERRIDE
+        virtual bool OnDo(wxValidator* validator) override
         {
             return validator->TransferFromWindow();
         }
 
-        virtual bool OnRecurse(wxWindow* child) wxOVERRIDE
+        virtual bool OnRecurse(wxWindow* child) override
         {
             return child->TransferDataFromWindow();
         }
@@ -3624,7 +3624,7 @@ public:
     DragAcceptFilesTarget(wxWindowBase *win) : m_win(win) {}
 
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames) wxOVERRIDE
+                             const wxArrayString& filenames) override
     {
         wxDropFilesEvent event(wxEVT_DROP_FILES,
                                filenames.size(),

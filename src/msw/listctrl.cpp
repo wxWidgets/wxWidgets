@@ -244,14 +244,14 @@ public:
     wxItemAttr m_attr;
 
 private:
-    virtual bool HasCustomDrawnItems() const wxOVERRIDE
+    virtual bool HasCustomDrawnItems() const override
     {
         // We only exist if the header does need to be custom drawn.
         return true;
     }
 
     virtual const wxItemAttr*
-    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const wxOVERRIDE
+    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
     {
         // We use the same attribute for all items for now.
         return &m_attr;

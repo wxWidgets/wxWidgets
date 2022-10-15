@@ -32,12 +32,12 @@ class wxMacArtProvider : public wxArtProvider
 protected:
 #if wxOSX_USE_COCOA_OR_CARBON
     virtual wxIconBundle CreateIconBundle(const wxArtID& id,
-                                          const wxArtClient& client) wxOVERRIDE;
+                                          const wxArtClient& client) override;
 #endif
 #if wxOSX_USE_COCOA_OR_IPHONE
     virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
                                   const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE
+                                  const wxSize& size) override
     {
         return wxOSXCreateSystemBitmapBundle(id, client, size);
     }

@@ -32,10 +32,10 @@ class wxDefaultArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
     virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
                                               const wxArtClient& client,
-                                              const wxSize& size) wxOVERRIDE;
+                                              const wxSize& size) override;
 };
 
 // ----------------------------------------------------------------------------

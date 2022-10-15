@@ -95,7 +95,7 @@ public:
 protected:
     bool Filter(GLogLevelFlags log_level,
                 const GLogField* WXUNUSED(fields),
-                gsize WXUNUSED(n_fields)) const wxOVERRIDE
+                gsize WXUNUSED(n_fields)) const override
     {
         return log_level & m_logLevelToIgnore;
     }
@@ -129,7 +129,7 @@ public:
 protected:
     bool Filter(GLogLevelFlags WXUNUSED(log_level),
                 const GLogField* fields,
-                gsize n_fields) const wxOVERRIDE;
+                gsize n_fields) const override;
 
 private:
     const char* const m_message;

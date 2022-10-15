@@ -66,7 +66,7 @@ public:
     wxMenu* GetWindowMenu() const { return m_pWindowMenu; }
     void SetWindowMenu(wxMenu* pMenu);
 
-    virtual void SetMenuBar(wxMenuBar *pMenuBar) wxOVERRIDE;
+    virtual void SetMenuBar(wxMenuBar *pMenuBar) override;
 #endif // wxUSE_MENUS
 
     void SetChildMenuBar(wxAuiMDIChildFrame *pChild);
@@ -103,9 +103,9 @@ protected:
     void DoHandleUpdateUI(wxUpdateUIEvent &event);
 #endif // wxUSE_MENUS
 
-    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
+    virtual bool ProcessEvent(wxEvent& event) override;
 
-    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetClientSize(int *width, int *height) const override;
 
 private:
     void OnClose(wxCloseEvent& event);
@@ -143,18 +143,18 @@ public:
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
 
 #if wxUSE_MENUS
-    virtual void SetMenuBar(wxMenuBar *menuBar) wxOVERRIDE;
-    virtual wxMenuBar *GetMenuBar() const wxOVERRIDE;
+    virtual void SetMenuBar(wxMenuBar *menuBar) override;
+    virtual wxMenuBar *GetMenuBar() const override;
 #endif // wxUSE_MENUS
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual void SetTitle(const wxString& title) override;
 
-    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
+    virtual void SetIcons(const wxIconBundle& icons) override;
 
-    virtual void Activate() wxOVERRIDE;
-    virtual bool Destroy() wxOVERRIDE;
+    virtual void Activate() override;
+    virtual bool Destroy() override;
 
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
 
     void OnMenuHighlight(wxMenuEvent& evt);
 

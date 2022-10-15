@@ -1578,12 +1578,12 @@ class wxLocaleModule: public wxModule
     public:
         wxLocaleModule() {}
 
-        bool OnInit() wxOVERRIDE
+        bool OnInit() override
         {
             return true;
         }
 
-        void OnExit() wxOVERRIDE
+        void OnExit() override
         {
             wxLocale::DestroyLanguagesDB();
         }

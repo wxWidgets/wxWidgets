@@ -2072,14 +2072,14 @@ public:
 
     // implement base class virtual methods
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+                           const char *src, size_t srcLen = wxNO_LEN) const override;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t GetMBNulLen() const wxOVERRIDE;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const override;
+    virtual size_t GetMBNulLen() const override;
 
-    virtual bool IsUTF8() const wxOVERRIDE;
+    virtual bool IsUTF8() const override;
 
-    virtual wxMBConv *Clone() const wxOVERRIDE
+    virtual wxMBConv *Clone() const override
     {
         wxMBConv_iconv *p = new wxMBConv_iconv(m_name);
         p->m_minMBCharWidth = m_minMBCharWidth;
@@ -2514,7 +2514,7 @@ public:
         m_minMBCharWidth = 0;
     }
 
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const wxOVERRIDE
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const override
     {
         // note that we have to use MB_ERR_INVALID_CHARS flag as it without it
         // the behaviour is not compatible with the Unix version (using iconv)
@@ -2553,7 +2553,7 @@ public:
         return len - 1;
     }
 
-    virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const wxOVERRIDE
+    virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const override
     {
         /*
             We need to WC_NO_BEST_FIT_CHARS to prevent WideCharToMultiByte()
@@ -2638,7 +2638,7 @@ public:
         return len - 1;
     }
 
-    virtual size_t GetMBNulLen() const wxOVERRIDE
+    virtual size_t GetMBNulLen() const override
     {
         if ( m_minMBCharWidth == 0 )
         {
@@ -2677,7 +2677,7 @@ public:
         return m_minMBCharWidth;
     }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConv_win32(*this); }
+    virtual wxMBConv *Clone() const override { return new wxMBConv_win32(*this); }
 
     bool IsOk() const { return m_CodePage != -1; }
 
@@ -2731,7 +2731,7 @@ public:
         Init();
     }
 
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n)) const wxOVERRIDE
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n)) const override
     {
         size_t inbuf = strlen(psz);
         if (buf)
@@ -2742,7 +2742,7 @@ public:
         return inbuf;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n)) const wxOVERRIDE
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n)) const override
     {
         const size_t inbuf = wxWcslen(psz);
         if (buf)
@@ -2754,7 +2754,7 @@ public:
         return inbuf;
     }
 
-    virtual size_t GetMBNulLen() const wxOVERRIDE
+    virtual size_t GetMBNulLen() const override
     {
         switch ( m_enc )
         {
@@ -2771,7 +2771,7 @@ public:
         }
     }
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConv_wxwin(m_enc); }
+    virtual wxMBConv *Clone() const override { return new wxMBConv_wxwin(m_enc); }
 
     bool IsOk() const { return m_ok; }
 

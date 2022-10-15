@@ -40,7 +40,7 @@ public:
                 const wxGLContextAttrs *ctxAttrs = NULL);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
 private:
     EGLContext m_glContext;
@@ -73,7 +73,7 @@ public:
     // implement wxGLCanvasBase methods
     // --------------------------------
 
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
 
     // X11-specific methods
@@ -88,7 +88,7 @@ public:
 
     // return true only if the window is realized: OpenGL context can't be
     // created until we are
-    virtual bool IsShownOnScreen() const wxOVERRIDE;
+    virtual bool IsShownOnScreen() const override;
 
 
     // implementation only from now on
@@ -153,7 +153,7 @@ public:
     wxGLApp() : wxGLAppBase() { }
 
     // implement wxGLAppBase method
-    virtual bool InitGLVisual(const int *attribList) wxOVERRIDE
+    virtual bool InitGLVisual(const int *attribList) override
     {
         return wxGLCanvasEGL::InitDefaultConfig(attribList);
     }
@@ -161,13 +161,13 @@ public:
     // This method is not currently used by the library itself, but remains for
     // backwards compatibility and also because wxGTK has it we could start
     // using it for the same purpose in wxX11 too some day.
-    virtual void* GetXVisualInfo() wxOVERRIDE
+    virtual void* GetXVisualInfo() override
     {
         return wxGLCanvasEGL::GetDefaultConfig();
     }
 
     // and override this wxApp method to clean up
-    virtual int OnExit() wxOVERRIDE
+    virtual int OnExit() override
     {
         wxGLCanvasEGL::FreeDefaultConfig();
 

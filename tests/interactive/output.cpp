@@ -318,7 +318,7 @@ public:
     {
     }
 
-    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE
+    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH) override
     {
         wxPuts(wxT("Stack dump:"));
 
@@ -326,7 +326,7 @@ public:
     }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
+    virtual void OnStackFrame(const wxStackFrame& frame) override
     {
         wxPrintf("[%2zu] ", frame.GetLevel());
 

@@ -204,7 +204,7 @@ public:
     void OnDPIChanged(wxDPIChangedEvent& event);
 
     // In live mode, resize child windows in idle time
-    void OnInternalIdle() wxOVERRIDE;
+    void OnInternalIdle() override;
 
     // Draws the sash
     virtual void DrawSash(wxDC& dc);
@@ -219,7 +219,7 @@ public:
     virtual void SizeWindows();
 
 #ifdef __WXMAC__
-    virtual bool MacClipGrandChildren() const wxOVERRIDE { return true ; }
+    virtual bool MacClipGrandChildren() const override { return true ; }
 #endif
 
     // Sets the sash size: this doesn't do anything and shouldn't be used at
@@ -272,7 +272,7 @@ protected:
 
     // return the best size of the splitter equal to best sizes of its
     // subwindows
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
 
     wxSplitMode m_splitMode;
@@ -396,7 +396,7 @@ public:
         return m_data.pt.y;
     }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSplitterEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxSplitterEvent(*this); }
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxSplitterWindow;

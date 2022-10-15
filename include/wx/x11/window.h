@@ -49,8 +49,8 @@ public:
     virtual void Lower();
 
     // SetLabel(), which does nothing in wxWindow
-    virtual void SetLabel(const wxString& label) wxOVERRIDE { m_Label = label; }
-    virtual wxString GetLabel() const wxOVERRIDE            { return m_Label; }
+    virtual void SetLabel(const wxString& label) override { m_Label = label; }
+    virtual wxString GetLabel() const override            { return m_Label; }
 
     virtual bool Show( bool show = true );
     virtual bool Enable( bool enable = true );

@@ -11,7 +11,7 @@ wxWidgets programs but is required for all Windows applications).
 
 wxWidgets now includes manifest resources in wx.rc, so it should be enough to
 include "wx/msw/wx.rc" in your application's resource file and you get
-XP look automatically. Notice that MSVC 2005 and later embed manifest in the
+XP look automatically. Notice that MSVC embeds manifest in the
 executables it produces and wxWidgets doesn't use its own manifest when using
 this compiler. And if you don't want to use wxWidgets manifest with another
 compiler you may define wxUSE_NO_MANIFEST as 1 prior to including wx/msw/wx.rc.

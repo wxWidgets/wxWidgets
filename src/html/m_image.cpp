@@ -60,11 +60,11 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
         int radius;
     public:
         wxHtmlImageMapAreaCell( celltype t, wxString &coords, double pixel_scale = 1.0);
-        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const wxOVERRIDE;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const override;
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                  wxHtmlRenderingInfo& WXUNUSED(info)) wxOVERRIDE {}
+                  wxHtmlRenderingInfo& WXUNUSED(info)) override {}
 
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageMapAreaCell);
@@ -238,12 +238,12 @@ class wxHtmlImageMapCell : public wxHtmlCell
     protected:
         wxString m_Name;
     public:
-        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const wxOVERRIDE;
-        virtual const wxHtmlCell *Find( int cond, const void *param ) const wxOVERRIDE;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const override;
+        virtual const wxHtmlCell *Find( int cond, const void *param ) const override;
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                  wxHtmlRenderingInfo& WXUNUSED(info)) wxOVERRIDE {}
+                  wxHtmlRenderingInfo& WXUNUSED(info)) override {}
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageMapCell);
 };
@@ -292,22 +292,22 @@ public:
                     const wxString& mapname = wxEmptyString);
     virtual ~wxHtmlImageCell();
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-              wxHtmlRenderingInfo& info) wxOVERRIDE;
-    virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const wxOVERRIDE;
+              wxHtmlRenderingInfo& info) override;
+    virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const override;
 
     void SetImage(const wxImage& img, double scaleHDPI = 1.0);
 
     // If "alt" text is set, it will be used when converting this cell to text.
     void SetAlt(const wxString& alt);
-    virtual wxString ConvertToText(wxHtmlSelection *sel) const wxOVERRIDE;
+    virtual wxString ConvertToText(wxHtmlSelection *sel) const override;
 
 #if wxUSE_GIF && wxUSE_TIMER
     void AdvanceAnimation(wxTimer *timer);
 #endif
 
-    virtual void Layout(int w) wxOVERRIDE;
+    virtual void Layout(int w) override;
 
-    virtual wxString GetDescription() const wxOVERRIDE
+    virtual wxString GetDescription() const override
     {
         return wxString::Format("wxHtmlImageCell with bitmap of size %d*%d",
                                 m_bmpW, m_bmpH);
@@ -340,7 +340,7 @@ class wxGIFTimer : public wxTimer
 {
     public:
         wxGIFTimer(wxHtmlImageCell *cell) : m_cell(cell) {}
-        virtual void Notify() wxOVERRIDE
+        virtual void Notify() override
         {
             m_cell->AdvanceAnimation(this);
         }

@@ -115,7 +115,7 @@ public:
         event.Skip();
     }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    virtual wxSize DoGetBestSize() const override
     {
         wxString minVal = m_spin->DoValueToText(m_spin->m_min);
         wxString maxVal = m_spin->DoValueToText(m_spin->m_max);

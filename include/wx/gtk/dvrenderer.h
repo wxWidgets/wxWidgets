@@ -25,16 +25,16 @@ public:
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                         int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual void SetMode( wxDataViewCellMode mode ) wxOVERRIDE;
-    virtual wxDataViewCellMode GetMode() const wxOVERRIDE;
+    virtual void SetMode( wxDataViewCellMode mode ) override;
+    virtual wxDataViewCellMode GetMode() const override;
 
-    virtual void SetAlignment( int align ) wxOVERRIDE;
-    virtual int GetAlignment() const wxOVERRIDE;
+    virtual void SetAlignment( int align ) override;
+    virtual int GetAlignment() const override;
 
-    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE) wxOVERRIDE;
-    virtual wxEllipsizeMode GetEllipsizeMode() const wxOVERRIDE;
+    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE) override;
+    virtual wxEllipsizeMode GetEllipsizeMode() const override;
 
-    virtual bool FinishEditing() wxOVERRIDE;
+    virtual bool FinishEditing() override;
 
     // GTK-specific implementation
     // ---------------------------
@@ -74,10 +74,10 @@ private:
     void GtkSetMode(wxDataViewCellMode mode);
 
 protected:
-    virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE;
-    virtual void SetEnabled(bool enabled) wxOVERRIDE;
+    virtual void SetAttr(const wxDataViewItemAttr& attr) override;
+    virtual void SetEnabled(bool enabled) override;
 
-    virtual bool IsHighlighted() const wxOVERRIDE;
+    virtual bool IsHighlighted() const override;
 
     // Apply our effective alignment (i.e. m_alignment if specified or the
     // associated column alignment by default) to the given renderer.

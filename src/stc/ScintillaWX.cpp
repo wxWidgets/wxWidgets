@@ -65,7 +65,7 @@ public:
         m_reason = reason;
     }
 
-    void Notify() wxOVERRIDE {
+    void Notify() override {
         m_swx->TickFor(m_reason);
     }
 
@@ -125,7 +125,7 @@ public:
         delete surfaceWindow;
     }
 
-    virtual void Refresh(bool eraseBg=true, const wxRect *rect=NULL) wxOVERRIDE
+    virtual void Refresh(bool eraseBg=true, const wxRect *rect=NULL) override
     {
         if ( rect == NULL )
             DrawBack(GetSize());
@@ -1436,7 +1436,7 @@ sptr_t ScintillaWX::DirectFunction(
 
 namespace {
 
-POINT POINTFromPoint(Point pt) wxNOEXCEPT {
+POINT POINTFromPoint(Point pt) noexcept {
     POINT ret;
     ret.x = static_cast<LONG>(pt.x);
     ret.y = static_cast<LONG>(pt.y);
@@ -1447,7 +1447,7 @@ class IMContext {
     HWND hwnd;
 public:
     HIMC hIMC;
-    IMContext(HWND hwnd_) wxNOEXCEPT :
+    IMContext(HWND hwnd_) noexcept :
         hwnd(hwnd_), hIMC(::ImmGetContext(hwnd_)) {
     }
     ~IMContext() {
@@ -1455,7 +1455,7 @@ public:
             ::ImmReleaseContext(hwnd, hIMC);
     }
 
-    unsigned int GetImeCaretPos() const wxNOEXCEPT {
+    unsigned int GetImeCaretPos() const noexcept {
         return ImmGetCompositionStringW(hIMC, GCS_CURSORPOS, wxNullPtr, 0);
     }
 
@@ -1480,7 +1480,7 @@ private:
 
 }
 
-HWND ScintillaWX::MainHWND() const wxNOEXCEPT {
+HWND ScintillaWX::MainHWND() const noexcept {
     return static_cast<HWND>(wMain.GetID());
 }
 

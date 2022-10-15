@@ -456,7 +456,7 @@ public:
 
     // usually the controls like list/combo boxes have their own background
     // colour
-    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
+    virtual bool ShouldInheritColours() const override { return false; }
 
 
     // Implementation only from now on.

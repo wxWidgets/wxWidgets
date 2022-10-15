@@ -134,27 +134,6 @@
 #endif  /* wxUSE_WINSOCK2 */
 
 /*
- * Unfortunately we can't use compiler TLS support if the library can be used
- * inside a dynamically loaded DLL under Windows XP, as this can result in hard
- * to diagnose crashes due to the bugs in Windows TLS support, see #13116.
- *
- * So we disable it unless we can be certain that the code will never run under
- * XP, as is the case if we're using a compiler which doesn't support XP such
- * as MSVC 11+, unless it's used with the special "_xp" toolset, in which case
- * _USING_V110_SDK71_ is defined.
- *
- * However defining wxUSE_COMPILER_TLS as 2 overrides this safety check, see
- * the comments in wx/setup.h.
- */
-#if wxUSE_COMPILER_TLS == 1
-    #if !wxCHECK_VISUALC_VERSION(11) || defined(_USING_V110_SDK71_)
-        #undef wxUSE_COMPILER_TLS
-        #define wxUSE_COMPILER_TLS 0
-    #endif
-#endif
-
-
-/*
  * disable the settings which don't work for some compilers
  */
 

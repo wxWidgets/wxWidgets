@@ -35,7 +35,7 @@
 // Define a new application type
 class MyApp: public wxApp
 { public:
-    bool OnInit(void) wxOVERRIDE;
+    bool OnInit(void) override;
 };
 
 // Define a new frame type

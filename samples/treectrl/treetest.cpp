@@ -1010,17 +1010,17 @@ void MyTreeCtrl::CreateImages(int size)
         {
         }
 
-        wxSize GetDefaultSize() const wxOVERRIDE
+        wxSize GetDefaultSize() const override
         {
             return m_sizeDef;
         }
 
-        wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+        wxSize GetPreferredBitmapSizeAtScale(double scale) const override
         {
             return m_sizeDef*scale;
         }
 
-        wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+        wxBitmap GetBitmap(const wxSize& size) override
         {
             wxBitmap bmp(m_icon);
             if ( size != bmp.GetSize() )

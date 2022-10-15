@@ -27,7 +27,7 @@ class wxQtIdleTimer : public QTimer, public wxRefCounter
 public:
     wxQtIdleTimer();
     ~wxQtIdleTimer();
-    virtual bool eventFilter( QObject * watched, QEvent * event  ) wxOVERRIDE;
+    virtual bool eventFilter( QObject * watched, QEvent * event  ) override;
 
 private:
     void idle();
@@ -239,7 +239,7 @@ class wxQtEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
 public:
     wxEventLoopSource*
-    AddSourceForFD(int fd, wxEventLoopSourceHandler* handler, int flags) wxOVERRIDE
+    AddSourceForFD(int fd, wxEventLoopSourceHandler* handler, int flags) override
     {
         return new wxQtEventLoopSource(fd, handler, flags);
     }

@@ -93,7 +93,7 @@ public:
     void Render(wxDC& dc, const wxRect& rect, int flags);
 
 protected:
-    virtual wxString GetMarkupForMeasuring() const wxOVERRIDE;
+    virtual wxString GetMarkupForMeasuring() const override;
 };
 
 
@@ -132,7 +132,7 @@ public:
                 wxEllipsizeMode ellipsizeMode);
 
 protected:
-    virtual wxString GetMarkupForMeasuring() const wxOVERRIDE { return m_markup; }
+    virtual wxString GetMarkupForMeasuring() const override { return m_markup; }
 };
 
 #endif // _WX_GENERIC_PRIVATE_MARKUPTEXT_H_

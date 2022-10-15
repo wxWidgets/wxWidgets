@@ -80,27 +80,27 @@ public:
 
     // resolve ambiguities among virtual functions inherited from both base
     // classes
-    virtual void Clear() wxOVERRIDE;
-    virtual wxString GetValue() const wxOVERRIDE;
-    virtual void SetValue(const wxString& value) wxOVERRIDE;
-    virtual wxString GetStringSelection() const wxOVERRIDE
+    virtual void Clear() override;
+    virtual wxString GetValue() const override;
+    virtual void SetValue(const wxString& value) override;
+    virtual wxString GetStringSelection() const override
         { return wxChoice::GetStringSelection(); }
     virtual void Popup() { MSWDoPopupOrDismiss(true); }
     virtual void Dismiss() { MSWDoPopupOrDismiss(false); }
-    virtual void SetSelection(int n) wxOVERRIDE { wxChoice::SetSelection(n); }
-    virtual void SetSelection(long from, long to) wxOVERRIDE
+    virtual void SetSelection(int n) override { wxChoice::SetSelection(n); }
+    virtual void SetSelection(long from, long to) override
         { wxTextEntry::SetSelection(from, to); }
-    virtual int GetSelection() const wxOVERRIDE { return wxChoice::GetSelection(); }
-    virtual bool ContainsHWND(WXHWND hWnd) const wxOVERRIDE;
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+    virtual int GetSelection() const override { return wxChoice::GetSelection(); }
+    virtual bool ContainsHWND(WXHWND hWnd) const override;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual bool IsEditable() const wxOVERRIDE;
+    virtual bool IsEditable() const override;
 
     // implementation only from now on
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
     bool MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
-    bool MSWShouldPreProcessMessage(WXMSG *pMsg) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+    bool MSWShouldPreProcessMessage(WXMSG *pMsg) override;
 
     // Standard event handling
     void OnCut(wxCommandEvent& event);
@@ -119,26 +119,26 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
 #if wxUSE_UXTHEME
     // override wxTextEntry method to work around Windows bug
-    virtual bool SetHint(const wxString& hint) wxOVERRIDE;
+    virtual bool SetHint(const wxString& hint) override;
 #endif // wxUSE_UXTHEME
 
-    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
 
-    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+    virtual const wxTextEntry* WXGetTextEntry() const override { return this; }
 
 protected:
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
+    virtual void DoSetToolTip(wxToolTip *tip) override;
 #endif
 
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
 
     // Override this one to avoid eating events from our popup listbox.
-    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const wxOVERRIDE;
+    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const override;
 
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then
@@ -149,7 +149,7 @@ protected:
     // just testing for IsEditable() and using GetEditHWND() should be enough
     WXHWND GetEditHWNDIfAvailable() const;
 
-    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE
+    virtual void EnableTextChangedEvents(bool enable) override
     {
         m_allowTextEvents = enable;
     }
@@ -163,15 +163,15 @@ protected:
 private:
     // there are the overridden wxTextEntry methods which should only be called
     // when we do have an edit control so they assert if this is not the case
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE;
-    virtual WXHWND GetEditHWND() const wxOVERRIDE;
+    virtual wxWindow *GetEditableWindow() override;
+    virtual WXHWND GetEditHWND() const override;
 
     // Common part of MSWProcessEditMsg() and MSWProcessSpecialKey(), return
     // true if the key was processed.
     bool MSWProcessEditSpecialKey(WXWPARAM vkey);
 
 #if wxUSE_OLE
-    virtual void MSWProcessSpecialKey(wxKeyEvent& event) wxOVERRIDE;
+    virtual void MSWProcessSpecialKey(wxKeyEvent& event) override;
 #endif // wxUSE_OLE
 
     // common part of all ctors

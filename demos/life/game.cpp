@@ -923,8 +923,8 @@ class LifeModule: public wxModule
 
 public:
     LifeModule() {}
-    bool OnInit() wxOVERRIDE;
-    void OnExit() wxOVERRIDE;
+    bool OnInit() override;
+    void OnExit() override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(LifeModule, wxModule);

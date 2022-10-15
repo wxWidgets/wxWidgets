@@ -91,7 +91,7 @@ void TimerEventTestCase::OneShot()
         }
 
     private:
-        virtual void Tick() wxOVERRIDE { m_loop.Exit(); }
+        virtual void Tick() override { m_loop.Exit(); }
 
         wxEventLoopBase& m_loop;
 

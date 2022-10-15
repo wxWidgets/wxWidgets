@@ -115,7 +115,7 @@ public:
     }
 
     virtual void SetButtonsToolTips(const wxString& addtip,
-                                    const wxString& removetip) wxOVERRIDE
+                                    const wxString& removetip) override
     {
         m_btnAdd->SetToolTip(addtip);
         m_btnRemove->SetToolTip(removetip);

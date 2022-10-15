@@ -86,11 +86,11 @@ public:
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propGrid,
                                            wxPGProperty* property,
                                            const wxPoint& pos,
-                                           const wxSize& sz ) const wxOVERRIDE;
+                                           const wxSize& sz ) const override;
     virtual bool OnEvent( wxPropertyGrid* propGrid,
                           wxPGProperty* property,
                           wxWindow* ctrl,
-                          wxEvent& event ) const wxOVERRIDE;
+                          wxEvent& event ) const override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSampleMultiButtonEditor, wxPGTextCtrlEditor);
@@ -170,12 +170,12 @@ public:
     {
     }
 
-    virtual wxObject* Clone() const wxOVERRIDE
+    virtual wxObject* Clone() const override
     {
         return new wxInvalidWordValidator(m_invalidWord);
     }
 
-    virtual bool Validate(wxWindow* WXUNUSED(parent)) wxOVERRIDE
+    virtual bool Validate(wxWindow* WXUNUSED(parent)) override
     {
         wxTextCtrl* tc = wxDynamicCast(GetWindow(), wxTextCtrl);
         wxCHECK_MSG(tc, true, "validator window must be wxTextCtrl");
@@ -314,7 +314,7 @@ public:
     }
 
     virtual bool DoShowDialog( wxPropertyGrid* WXUNUSED(propGrid),
-                               wxPGProperty* WXUNUSED(property) ) wxOVERRIDE
+                               wxPGProperty* WXUNUSED(property) ) override
     {
         wxString s = ::wxGetSingleChoice("Message",
                                          "Caption",
@@ -350,13 +350,13 @@ public:
     }
 
     // Set editor to have button
-    virtual const wxPGEditor* DoGetEditorClass() const wxOVERRIDE
+    virtual const wxPGEditor* DoGetEditorClass() const override
     {
         return wxPGEditor_TextCtrlAndButton;
     }
 
     // Set what happens on button click
-    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE
+    virtual wxPGEditorDialogAdapter* GetEditorDialog() const override
     {
         return new wxSingleChoiceDialogAdapter(m_choices);
     }
@@ -1760,13 +1760,13 @@ public:
 
     // Return false here to indicate unhandled events should be
     // propagated to manager's parent, as normal.
-    virtual bool IsHandlingAllEvents() const wxOVERRIDE { return false; }
+    virtual bool IsHandlingAllEvents() const override { return false; }
 
 protected:
 
     virtual wxPGProperty* DoInsert( wxPGProperty* parent,
                                     int index,
-                                    wxPGProperty* property ) wxOVERRIDE
+                                    wxPGProperty* property ) override
     {
         return wxPropertyGridPage::DoInsert(parent,index,property);
     }
@@ -3329,7 +3329,7 @@ struct PropertyGridPopup : wxPopupWindow
         Fit();
     }
 
-    void Fit() wxOVERRIDE
+    void Fit() override
     {
         ::SetMinSize(m_grid);
         m_sizer->Fit(m_panel);

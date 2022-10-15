@@ -500,9 +500,9 @@ class WinSock1SocketPoller: public SocketPollerImpl
 public:
     WinSock1SocketPoller(wxEvtHandler*);
     virtual ~WinSock1SocketPoller();
-    virtual bool StartPolling(wxSOCKET_T, int) wxOVERRIDE;
-    virtual void StopPolling(wxSOCKET_T) wxOVERRIDE;
-    virtual void ResumePolling(wxSOCKET_T) wxOVERRIDE;
+    virtual bool StartPolling(wxSOCKET_T, int) override;
+    virtual void StopPolling(wxSOCKET_T) override;
+    virtual void ResumePolling(wxSOCKET_T) override;
 
 private:
     static LRESULT CALLBACK MsgProc(HWND hwnd, WXUINT uMsg, WXWPARAM wParam,
@@ -690,9 +690,9 @@ class SocketPollerSourceHandler: public wxEventLoopSourceHandler
 public:
     SocketPollerSourceHandler(wxSOCKET_T, wxEvtHandler*);
 
-    void OnReadWaiting() wxOVERRIDE;
-    void OnWriteWaiting() wxOVERRIDE;
-    void OnExceptionWaiting() wxOVERRIDE;
+    void OnReadWaiting() override;
+    void OnWriteWaiting() override;
+    void OnExceptionWaiting() override;
     ~SocketPollerSourceHandler(){}
 private:
     void SendEvent(int);
@@ -737,9 +737,9 @@ class SourceSocketPoller: public SocketPollerImpl
 public:
     SourceSocketPoller(wxEvtHandler*);
     ~SourceSocketPoller();
-    bool StartPolling(wxSOCKET_T, int) wxOVERRIDE;
-    void StopPolling(wxSOCKET_T) wxOVERRIDE;
-    void ResumePolling(wxSOCKET_T) wxOVERRIDE;
+    bool StartPolling(wxSOCKET_T, int) override;
+    void StopPolling(wxSOCKET_T) override;
+    void ResumePolling(wxSOCKET_T) override;
 
 private:
     WX_DECLARE_HASH_MAP(wxSOCKET_T, wxEventLoopSource*, wxIntegerHash,\

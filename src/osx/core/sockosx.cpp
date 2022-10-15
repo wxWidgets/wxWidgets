@@ -61,7 +61,7 @@ public:
     }
 
 private:
-    virtual void DoClose() wxOVERRIDE
+    virtual void DoClose() override
     {
         // No need to do anything if we had never created the underlying
         // socket: this avoids creating it from Uninstall_Callback() completely
@@ -189,16 +189,16 @@ private:
 class wxSocketManagerMac : public wxSocketManager
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) wxOVERRIDE
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) override
     {
         return new wxSocketImplMac(wxsocket);
     }
 
-    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event) wxOVERRIDE;
-    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event) wxOVERRIDE;
+    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event) override;
+    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event) override;
 
 private:
     // return CFSocket callback mask corresponding to the given event (the

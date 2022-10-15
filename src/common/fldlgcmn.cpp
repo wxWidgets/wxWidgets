@@ -322,12 +322,12 @@ public:
     {
     }
 
-    virtual void Show(bool show) wxOVERRIDE
+    virtual void Show(bool show) override
     {
         m_win->Show(show);
     }
 
-    virtual void Enable(bool enable) wxOVERRIDE
+    virtual void Enable(bool enable) override
     {
         m_win->Enable(enable);
     }
@@ -362,7 +362,7 @@ public:
         m_handler = NULL;
     }
 
-    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    virtual bool DoBind(wxEvtHandler* handler) override
     {
         if ( !m_handler )
         {
@@ -404,17 +404,17 @@ public:
         m_handler = NULL;
     }
 
-    virtual bool GetValue() wxOVERRIDE
+    virtual bool GetValue() override
     {
         return GetCheckBox()->GetValue();
     }
 
-    virtual void SetValue(bool value) wxOVERRIDE
+    virtual void SetValue(bool value) override
     {
         GetCheckBox()->SetValue(value);
     }
 
-    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    virtual bool DoBind(wxEvtHandler* handler) override
     {
         if ( !m_handler )
         {
@@ -456,17 +456,17 @@ public:
         m_handler = NULL;
     }
 
-    virtual bool GetValue() wxOVERRIDE
+    virtual bool GetValue() override
     {
         return GetRadioButton()->GetValue();
     }
 
-    virtual void SetValue(bool value) wxOVERRIDE
+    virtual void SetValue(bool value) override
     {
         GetRadioButton()->SetValue(value);
     }
 
-    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    virtual bool DoBind(wxEvtHandler* handler) override
     {
         if ( !m_handler )
         {
@@ -510,17 +510,17 @@ public:
         m_handler = NULL;
     }
 
-    virtual int GetSelection() wxOVERRIDE
+    virtual int GetSelection() override
     {
         return GetChoice()->GetSelection();
     }
 
-    virtual void SetSelection(int selection) wxOVERRIDE
+    virtual void SetSelection(int selection) override
     {
         GetChoice()->SetSelection(selection);
     }
 
-    virtual bool DoBind(wxEvtHandler* handler) wxOVERRIDE
+    virtual bool DoBind(wxEvtHandler* handler) override
     {
         if ( !m_handler )
         {
@@ -563,12 +563,12 @@ public:
     {
     }
 
-    virtual wxString GetValue() wxOVERRIDE
+    virtual wxString GetValue() override
     {
         return GetText()->GetValue();
     }
 
-    virtual void SetValue(const wxString& value) wxOVERRIDE
+    virtual void SetValue(const wxString& value) override
     {
         // Don't use SetValue(), we don't need any extra events here.
         return GetText()->ChangeValue(value);
@@ -592,7 +592,7 @@ public:
     {
     }
 
-    virtual void SetLabelText(const wxString& text) wxOVERRIDE
+    virtual void SetLabelText(const wxString& text) override
     {
         GetStaticText()->SetLabelText(text);
 
@@ -636,21 +636,21 @@ public:
 
 
     // Implement wxFileDialogCustomizeImpl pure virtual methods.
-    wxFileDialogButtonImpl* AddButton(const wxString& label) wxOVERRIDE
+    wxFileDialogButtonImpl* AddButton(const wxString& label) override
     {
         m_lastWasRadio = false;
 
         return AddToLayoutAndReturn<ButtonImpl>(label);
     }
 
-    wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) wxOVERRIDE
+    wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) override
     {
         m_lastWasRadio = false;
 
         return AddToLayoutAndReturn<CheckBoxImpl>(label);
     }
 
-    wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) wxOVERRIDE
+    wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) override
     {
         RadioButtonImpl* const impl = AddToLayoutAndReturn<RadioButtonImpl>(label);
         if ( !m_lastWasRadio )
@@ -664,7 +664,7 @@ public:
         return impl;
     }
 
-    wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) wxOVERRIDE
+    wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) override
     {
         m_lastWasRadio = false;
 
@@ -678,7 +678,7 @@ public:
     }
 
 
-    wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) wxOVERRIDE
+    wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) override
     {
         m_lastWasRadio = false;
 
@@ -690,7 +690,7 @@ public:
         return AddToLayoutAndReturn<TextCtrlImpl>();
     }
 
-    wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) wxOVERRIDE
+    wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) override
     {
         m_lastWasRadio = false;
 

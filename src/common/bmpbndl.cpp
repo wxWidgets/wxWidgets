@@ -52,24 +52,24 @@ public:
     {
     }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE
+    virtual bool Eq(wxVariantData& data) const override
     {
         // We're only called with the objects of the same type, so the cast is
         // safe.
         return static_cast<wxBitmapBundleVariantData&>(data).m_value.IsSameAs(m_value);
     }
 
-    virtual wxString GetType() const wxOVERRIDE
+    virtual wxString GetType() const override
     {
         return wxASCII_STR("wxBitmapBundle");
     }
 
-    virtual wxClassInfo* GetValueClassInfo() wxOVERRIDE
+    virtual wxClassInfo* GetValueClassInfo() override
     {
         return NULL;
     }
 
-    virtual wxVariantData* Clone() const wxOVERRIDE
+    virtual wxVariantData* Clone() const override
     {
         return new wxBitmapBundleVariantData(m_value);
     }
@@ -129,12 +129,12 @@ public:
     {
     }
 
-    virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
+    virtual wxSize GetDefaultSize() const override;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override;
+    virtual wxBitmap GetBitmap(const wxSize& size) override;
 
 protected:
-    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE;
+    virtual double GetNextAvailableScale(size_t& i) const override;
 
 private:
     // Struct containing bitmap itself as well as a flag indicating whether we

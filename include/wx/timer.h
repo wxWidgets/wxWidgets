@@ -171,8 +171,8 @@ public:
     wxTimer& GetTimer() const { return *m_timer; }
 
     // implement the base class pure virtual
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTimerEvent(*this); }
-    virtual wxEventCategory GetEventCategory() const wxOVERRIDE { return wxEVT_CATEGORY_TIMER; }
+    virtual wxEvent *Clone() const override { return new wxTimerEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_TIMER; }
 
     // default ctor creates an unusable event object and should not be used (in
     // fact, no code outside wxWidgets is supposed to create event objects)

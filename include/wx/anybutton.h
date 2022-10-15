@@ -102,7 +102,7 @@ public:
     // Buttons on MSW can look bad if they are not native colours, because
     // then they become owner-drawn and not theme-drawn.  Disable it here
     // in wxAnyButtonBase to make it consistent.
-    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
+    virtual bool ShouldInheritColours() const override { return false; }
 
     // backwards compatible names for pressed/current bitmaps: they're not
     // deprecated as there is nothing really wrong with using them and no real
@@ -152,7 +152,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     virtual wxBitmap DoGetBitmap(State WXUNUSED(which)) const
         { return wxBitmap(); }

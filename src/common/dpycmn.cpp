@@ -55,8 +55,8 @@ static wxDisplayFactory *gs_factory = NULL;
 class wxDisplayModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
     {
         wxDELETE(gs_factory);
     }

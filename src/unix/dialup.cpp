@@ -78,7 +78,7 @@ public:
        to call this function and check its result before calling any other
        wxDialUpManager methods.
    */
-   virtual bool IsOk() const wxOVERRIDE
+   virtual bool IsOk() const override
       { return true; }
 
    /** The simplest way to initiate a dial up: this function dials the given
@@ -92,39 +92,39 @@ public:
    virtual bool Dial(const wxString& nameOfISP,
                      const wxString& WXUNUSED(username),
                      const wxString& WXUNUSED(password),
-                     bool async) wxOVERRIDE;
+                     bool async) override;
 
    // Hang up the currently active dial up connection.
-   virtual bool HangUp() wxOVERRIDE;
+   virtual bool HangUp() override;
 
    // returns true if the computer is connected to the network: under Windows,
    // this just means that a RAS connection exists, under Unix we check that
    // the "well-known host" (as specified by SetWellKnownHost) is reachable
-   virtual bool IsOnline() const wxOVERRIDE
+   virtual bool IsOnline() const override
       {
          CheckStatus();
          return m_IsOnline == Net_Connected;
       }
 
    // do we have a constant net connection?
-   virtual bool IsAlwaysOnline() const wxOVERRIDE;
+   virtual bool IsAlwaysOnline() const override;
 
    // returns true if (async) dialing is in progress
-   virtual bool IsDialing() const wxOVERRIDE
+   virtual bool IsDialing() const override
       { return m_DialProcess != NULL; }
 
    // cancel dialing the number initiated with Dial(async = true)
    // NB: this won't result in DISCONNECTED event being sent
-   virtual bool CancelDialing() wxOVERRIDE;
+   virtual bool CancelDialing() override;
 
-   size_t GetISPNames(class wxArrayString &) const wxOVERRIDE
+   size_t GetISPNames(class wxArrayString &) const override
       { return 0; }
 
    // sometimes the built-in logic for determining the online status may fail,
    // so, in general, the user should be allowed to override it. This function
    // allows to forcefully set the online status - whatever our internal
    // algorithm may think about it.
-   virtual void SetOnlineStatus(bool isOnline = true) wxOVERRIDE
+   virtual void SetOnlineStatus(bool isOnline = true) override
       { m_IsOnline = isOnline ? Net_Connected : Net_No; }
 
    // set misc wxDialUpManager options
@@ -137,21 +137,21 @@ public:
    // instantenous.
    //
    // Returns false if couldn't set up automatic check for online status.
-   virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) wxOVERRIDE;
+   virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) override;
 
    // disable automatic check for connection status change - notice that the
    // wxEVT_DIALUP_XXX events won't be sent any more either.
-   virtual void DisableAutoCheckOnlineStatus() wxOVERRIDE;
+   virtual void DisableAutoCheckOnlineStatus() override;
 
    // under Unix, the value of well-known host is used to check whether we're
    // connected to the internet. It's unused under Windows, but this function
    // is always safe to call. The default value is www.yahoo.com.
    virtual void SetWellKnownHost(const wxString& hostname,
-                                 int portno = 80) wxOVERRIDE;
+                                 int portno = 80) override;
    /** Sets the commands to start up the network and to hang up
        again. Used by the Unix implementations only.
    */
-   virtual void SetConnectCommand(const wxString &command, const wxString &hupcmd) wxOVERRIDE
+   virtual void SetConnectCommand(const wxString &command, const wxString &hupcmd) override
       { m_ConnectCommand = command; m_HangUpCommand = hupcmd; }
 
 //private: -- Sun CC 4.2 objects to using NetConnection enum as the return
@@ -246,7 +246,7 @@ public:
        m_dupman = dupman;
    }
 
-   virtual void Notify() wxOVERRIDE
+   virtual void Notify() override
    {
        wxLogTrace(wxT("dialup"), wxT("Checking dial up network status."));
 
@@ -265,7 +265,7 @@ public:
          m_DupMan = dupman;
       }
    void Disconnect() { m_DupMan = NULL; }
-   virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) wxOVERRIDE
+   virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) override
       {
          if(m_DupMan)
          {

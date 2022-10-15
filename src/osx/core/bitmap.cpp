@@ -65,7 +65,7 @@ public:
 
     virtual ~wxBitmapRefData();
 
-    bool IsOk() const wxOVERRIDE;
+    bool IsOk() const override;
 
     void Free();
 
@@ -1754,7 +1754,7 @@ public:
                           const wxString& name,
                           wxBitmapType type,
                           int desiredWidth,
-                          int desiredHeight) wxOVERRIDE;
+                          int desiredHeight) override;
 };
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxBundleResourceHandler, wxBitmapHandler);
@@ -1807,7 +1807,7 @@ public:
                           const wxString& name,
                           wxBitmapType type,
                           int desiredWidth,
-                          int desiredHeight) wxOVERRIDE
+                          int desiredHeight) override
     {
         wxCFRef<CFURLRef> iconURL;
         wxCFStringRef filePath(name);
@@ -1845,7 +1845,7 @@ public:
                           const wxString& name,
                           wxBitmapType type,
                           int desiredWidth,
-                          int desiredHeight) wxOVERRIDE;
+                          int desiredHeight) override;
 
 };
 

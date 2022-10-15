@@ -20,10 +20,10 @@ public:
     bool IsOpened() const { return m_hInput != INVALID_HANDLE_VALUE; }
 
     // returns true if there is any data to be read from the pipe
-    virtual bool CanRead() const wxOVERRIDE;
+    virtual bool CanRead() const override;
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t len) wxOVERRIDE;
+    virtual size_t OnSysRead(void *buffer, size_t len) override;
 
 protected:
     HANDLE m_hInput;
@@ -36,10 +36,10 @@ class wxPipeOutputStream: public wxOutputStream
 public:
     explicit wxPipeOutputStream(HANDLE hOutput);
     virtual ~wxPipeOutputStream() { Close(); }
-    bool Close() wxOVERRIDE;
+    bool Close() override;
 
 protected:
-    size_t OnSysWrite(const void *buffer, size_t len) wxOVERRIDE;
+    size_t OnSysWrite(const void *buffer, size_t len) override;
 
 protected:
     HANDLE m_hOutput;

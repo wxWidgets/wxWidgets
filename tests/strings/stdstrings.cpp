@@ -526,7 +526,7 @@ TEST_CASE("StdString::Substr", "[stdstring]")
 TEST_CASE("StdString::Conversion", "[stdstring]")
 {
     std::string strStd("std::string value");
-    wxStdWideString strStdWide(L"std::wstring value");
+    std::wstring strStdWide(L"std::wstring value");
 
     wxString s1(strStd);
     CHECK( s1 == "std::string value" );
@@ -553,9 +553,9 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
     CHECK( s5 == "hello" );
 
 #if wxUSE_STL
-    wxStdWideString s6 = s4;
+    std::wstring s6 = s4;
 #else
-    wxStdWideString s6 = s4.ToStdWstring();
+    std::wstring s6 = s4.ToStdWstring();
 #endif
     CHECK( s6 == "hello" );
 
@@ -564,7 +564,7 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
     CHECK( s7 == "hello" );
 #endif
 
-    wxStdWideString s8(s4);
+    std::wstring s8(s4);
     CHECK( s8 == "hello" );
 
 #if wxUSE_UNICODE

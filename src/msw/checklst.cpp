@@ -78,7 +78,7 @@ public:
     wxCheckListBoxItem(wxCheckListBox *parent);
 
     // drawing functions
-    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) wxOVERRIDE;
+    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) override;
 
     // simple accessors and operations
     wxCheckListBox *GetParent() const
@@ -87,7 +87,7 @@ public:
     int GetIndex() const
         { return m_parent->GetItemIndex(const_cast<wxCheckListBoxItem*>(this)); }
 
-    wxString GetName() const wxOVERRIDE
+    wxString GetName() const override
         { return m_parent->GetString(GetIndex()); }
 
 
@@ -101,7 +101,7 @@ public:
         { Check(!IsChecked()); }
 
 protected:
-    virtual int MSWGetTextType() const wxOVERRIDE
+    virtual int MSWGetTextType() const override
     {
         // Don't handle mnemonics in the label specially, they don't make sense
         // for the listbox items that can't be activated from keyboard using

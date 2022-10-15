@@ -40,9 +40,9 @@ public:
 
     virtual ~wxMenu();
 
-    virtual void Break() wxOVERRIDE;
+    virtual void Break() override;
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual void SetTitle(const wxString& title) override;
 
     // MSW-only methods
     // ----------------
@@ -113,9 +113,9 @@ private:
 #endif // wxUSE_OWNER_DRAWN
 
 protected:
-    virtual wxMenuItem* DoAppend(wxMenuItem *item) wxOVERRIDE;
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item) wxOVERRIDE;
-    virtual wxMenuItem* DoRemove(wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem* DoAppend(wxMenuItem *item) override;
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item) override;
+    virtual wxMenuItem* DoRemove(wxMenuItem *item) override;
 
 private:
     // This constructor is private, use MSWNewFromHMENU() to use it.
@@ -181,20 +181,20 @@ public:
     virtual ~wxMenuBar();
 
     // menubar construction
-    virtual bool Append( wxMenu *menu, const wxString &title ) wxOVERRIDE;
-    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
-    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
-    virtual wxMenu *Remove(size_t pos) wxOVERRIDE;
+    virtual bool Append( wxMenu *menu, const wxString &title ) override;
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) override;
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title) override;
+    virtual wxMenu *Remove(size_t pos) override;
 
-    virtual void EnableTop( size_t pos, bool flag ) wxOVERRIDE;
-    virtual bool IsEnabledTop(size_t pos) const wxOVERRIDE;
-    virtual void SetMenuLabel( size_t pos, const wxString& label ) wxOVERRIDE;
-    virtual wxString GetMenuLabel( size_t pos ) const wxOVERRIDE;
+    virtual void EnableTop( size_t pos, bool flag ) override;
+    virtual bool IsEnabledTop(size_t pos) const override;
+    virtual void SetMenuLabel( size_t pos, const wxString& label ) override;
+    virtual wxString GetMenuLabel( size_t pos ) const override;
 
     // implementation from now on
     WXHMENU Create();
-    virtual void Detach() wxOVERRIDE;
-    virtual void Attach(wxFrame *frame) wxOVERRIDE;
+    virtual void Detach() override;
+    virtual void Attach(wxFrame *frame) override;
 
 #if wxUSE_ACCEL
     // update the accel table (must be called after adding/deleting a menu)
@@ -210,7 +210,7 @@ public:
 
     // To avoid compile warning
     void Refresh( bool eraseBackground,
-                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE { wxWindow::Refresh(eraseBackground, rect); }
+                          const wxRect *rect = (const wxRect *) NULL ) override { wxWindow::Refresh(eraseBackground, rect); }
 
     // Get a top level menu position or wxNOT_FOUND from its handle.
     int MSWGetTopMenuPos(WXHMENU hMenu) const;

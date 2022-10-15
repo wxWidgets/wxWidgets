@@ -97,7 +97,7 @@ public:
         return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
     }
 
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool HasTransparentBackground() override { return true; }
 
     // This semi-private function is currently used to allow wxMSW checkbox to
     // blend in with its parent background colour without changing the
@@ -105,7 +105,7 @@ public:
     virtual void SetTransparentPartColour(const wxColour& WXUNUSED(col)) { }
 
     // wxCheckBox-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) override
     {
         wxControl::DoUpdateWindowUI(event);
 
@@ -115,7 +115,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
 

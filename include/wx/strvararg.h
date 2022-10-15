@@ -18,15 +18,7 @@
 #include "wx/buffer.h"
 #include "wx/unichar.h"
 
-#if defined(HAVE_TYPE_TRAITS)
-    #include <type_traits>
-#elif defined(HAVE_TR1_TYPE_TRAITS)
-    #ifdef __VISUALC__
-        #include <type_traits>
-    #else
-        #include <tr1/type_traits>
-    #endif
-#endif
+#include <type_traits>
 
 class WXDLLIMPEXP_FWD_BASE wxCStrData;
 class WXDLLIMPEXP_FWD_BASE wxString;
@@ -342,8 +334,6 @@ struct wxFormatStringArgumentFinder<wxWCharBuffer>
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
 
-#if defined(HAVE_TYPE_TRAITS) || defined(HAVE_TR1_TYPE_TRAITS)
-
 // Note: this type is misnamed, so that the error message is easier to
 // understand (no error happens for enums, because the IsEnum=true case is
 // specialized).
@@ -359,32 +349,9 @@ struct wxFormatStringSpecifierNonPodType<true>
 template<typename T>
 struct wxFormatStringSpecifier
 {
-#ifdef HAVE_TYPE_TRAITS
     typedef std::is_enum<T> is_enum;
-#elif defined HAVE_TR1_TYPE_TRAITS
-    typedef std::tr1::is_enum<T> is_enum;
-#endif
     enum { value = wxFormatStringSpecifierNonPodType<is_enum::value>::value };
 };
-
-#else // !HAVE_(TR1_)TYPE_TRAITS
-
-template<typename T>
-struct wxFormatStringSpecifier
-{
-    // We can't detect enums without is_enum, so the only thing we can
-    // do is to accept unknown types. However, the only acceptable unknown
-    // types still are enums, which are promoted to ints, so return Arg_Int
-    // here. This will at least catch passing of non-POD types through ... at
-    // runtime.
-    //
-    // Furthermore, if the compiler doesn't have partial template
-    // specialization, we didn't cover pointers either.
-    enum { value = wxFormatString::Arg_Int };
-};
-
-#endif // HAVE_TR1_TYPE_TRAITS/!HAVE_TR1_TYPE_TRAITS
-
 
 template<typename T>
 struct wxFormatStringSpecifier<T*>
@@ -816,10 +783,10 @@ struct wxArgNormalizerWchar<const std::string_view&>
 #endif // NO_IMPLICIT_WXSTRING_ENCODING
 
 template<>
-struct wxArgNormalizerWchar<const wxStdWideString&>
+struct wxArgNormalizerWchar<const std::wstring&>
     : public wxArgNormalizerWchar<const wchar_t*>
 {
-    wxArgNormalizerWchar(const wxStdWideString& s,
+    wxArgNormalizerWchar(const std::wstring& s,
                          const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerWchar<const wchar_t*>(s.c_str(), fmt, index) {}
 };
@@ -850,10 +817,10 @@ struct wxArgNormalizerUtf8<const std::string_view&>
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 template<>
-struct wxArgNormalizerUtf8<const wxStdWideString&>
+struct wxArgNormalizerUtf8<const std::wstring&>
     : public wxArgNormalizerUtf8<const wchar_t*>
 {
-    wxArgNormalizerUtf8(const wxStdWideString& s,
+    wxArgNormalizerUtf8(const std::wstring& s,
                         const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerUtf8<const wchar_t*>(s.c_str(), fmt, index) {}
 };
@@ -865,7 +832,7 @@ WX_ARG_NORMALIZER_FORWARD(std::string, const std::string&);
 WX_ARG_NORMALIZER_FORWARD(std::string_view, const std::string_view&);
 #endif // __cpp_lib_string_view
 #endif
-WX_ARG_NORMALIZER_FORWARD(wxStdWideString, const wxStdWideString&);
+WX_ARG_NORMALIZER_FORWARD(std::wstring, const std::wstring&);
 
 #endif // wxUSE_STD_STRING
 

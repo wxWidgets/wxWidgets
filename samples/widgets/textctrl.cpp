@@ -149,12 +149,12 @@ public:
     // ctor(s) and dtor
     TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_text; }
-    virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_text; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateText(); }
+    virtual wxWindow *GetWidget() const override { return m_text; }
+    virtual wxTextEntryBase *GetTextEntry() const override { return m_text; }
+    virtual void RecreateWidget() override { CreateText(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // create an info text contorl

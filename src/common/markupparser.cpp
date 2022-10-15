@@ -279,7 +279,7 @@ bool wxMarkupParser::Parse(const wxString& text)
                     // and doesn't need to be defined if they're not compiled
                     // at all (it actually would result in unused variable
                     // messages in this case).
-#if wxUSE_LOG_DEBUG || !defined(HAVE_VARIADIC_MACROS)
+#if wxUSE_LOG_DEBUG
                     // Remember the tag starting position for the error
                     // messages.
                     const size_t pos = it - text.begin();
@@ -434,31 +434,31 @@ wxString wxMarkupParser::Strip(const wxString& text)
 
         const wxString& GetText() const { return m_text; }
 
-        virtual void OnText(const wxString& string) wxOVERRIDE { m_text += string; }
+        virtual void OnText(const wxString& string) override { m_text += string; }
 
-        virtual void OnBoldStart() wxOVERRIDE { }
-        virtual void OnBoldEnd() wxOVERRIDE { }
+        virtual void OnBoldStart() override { }
+        virtual void OnBoldEnd() override { }
 
-        virtual void OnItalicStart() wxOVERRIDE { }
-        virtual void OnItalicEnd() wxOVERRIDE { }
+        virtual void OnItalicStart() override { }
+        virtual void OnItalicEnd() override { }
 
-        virtual void OnUnderlinedStart() wxOVERRIDE { }
-        virtual void OnUnderlinedEnd() wxOVERRIDE { }
+        virtual void OnUnderlinedStart() override { }
+        virtual void OnUnderlinedEnd() override { }
 
-        virtual void OnStrikethroughStart() wxOVERRIDE { }
-        virtual void OnStrikethroughEnd() wxOVERRIDE { }
+        virtual void OnStrikethroughStart() override { }
+        virtual void OnStrikethroughEnd() override { }
 
-        virtual void OnBigStart() wxOVERRIDE { }
-        virtual void OnBigEnd() wxOVERRIDE { }
+        virtual void OnBigStart() override { }
+        virtual void OnBigEnd() override { }
 
-        virtual void OnSmallStart() wxOVERRIDE { }
-        virtual void OnSmallEnd() wxOVERRIDE { }
+        virtual void OnSmallStart() override { }
+        virtual void OnSmallEnd() override { }
 
-        virtual void OnTeletypeStart() wxOVERRIDE { }
-        virtual void OnTeletypeEnd() wxOVERRIDE { }
+        virtual void OnTeletypeStart() override { }
+        virtual void OnTeletypeEnd() override { }
 
-        virtual void OnSpanStart(const wxMarkupSpanAttributes& WXUNUSED(a)) wxOVERRIDE { }
-        virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(a)) wxOVERRIDE { }
+        virtual void OnSpanStart(const wxMarkupSpanAttributes& WXUNUSED(a)) override { }
+        virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(a)) override { }
 
     private:
         wxString m_text;

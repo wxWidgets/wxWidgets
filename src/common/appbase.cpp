@@ -45,42 +45,10 @@
 #include "wx/stdpaths.h"
 
 #if wxUSE_EXCEPTIONS
-    // Do we have a C++ compiler with enough C++11 support for
-    // std::exception_ptr and functions working with it?
-    #if __cplusplus >= 201103L
-        // Any conforming C++11 compiler should have it, but g++ implementation
-        // of exception handling depends on the availability of the atomic int
-        // operations apparently, so all known version of g++ with C++11 support
-        // (4.7..4.9) fail to provide exception_ptr if the symbol below is not
-        // set to 2 (meaning "always available"), which is notably the case for
-        // MinGW-w64 without -march=486 switch, see #16634.
-        #ifdef __GNUC__
-            // This symbol is always defined in the known g++ version, so
-            // assume that if it isn't defined, things changed for the better
-            // and optimistically suppose that exception_ptr is available.
-            #if !defined(__GCC_ATOMIC_INT_LOCK_FREE) \
-                    || __GCC_ATOMIC_INT_LOCK_FREE > 1
-                #define HAS_EXCEPTION_PTR
-            #endif
-        #else
-            #define HAS_EXCEPTION_PTR
-        #endif
-    #elif wxCHECK_VISUALC_VERSION(11)
-        // VC++ supports it since version 10, even though it doesn't define
-        // __cplusplus to C++11 value, but MSVC 2010 doesn't have a way to test
-        // whether exception_ptr is valid, so we'd need to use a separate bool
-        // flag for it if we wanted to make it work. For now just settle for
-        // only using exception_ptr for VC11 and later.
-        #define HAS_EXCEPTION_PTR
-    #endif
-
-    #ifdef HAS_EXCEPTION_PTR
-        #include <exception>        // for std::current_exception()
-        #include <utility>          // for std::swap()
-    #endif
+    #include <exception>        // for std::current_exception()
+    #include <utility>          // for std::swap()
 
     #if wxUSE_STL
-        #include <exception>
         #include <typeinfo>
     #endif
 #endif // wxUSE_EXCEPTIONS
@@ -716,7 +684,6 @@ bool wxAppConsoleBase::OnExceptionInMainLoop()
     throw;
 }
 
-#ifdef HAS_EXCEPTION_PTR
 static std::exception_ptr gs_storedException;
 
 bool wxAppConsoleBase::StoreCurrentException()
@@ -745,19 +712,6 @@ void wxAppConsoleBase::RethrowStoredException()
         std::rethrow_exception(storedException);
     }
 }
-
-#else // !HAS_EXCEPTION_PTR
-
-bool wxAppConsoleBase::StoreCurrentException()
-{
-    return false;
-}
-
-void wxAppConsoleBase::RethrowStoredException()
-{
-}
-
-#endif // HAS_EXCEPTION_PTR/!HAS_EXCEPTION_PTR
 
 #endif // wxUSE_EXCEPTIONS
 
@@ -1033,7 +987,7 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
         const wxString& GetStackTrace() const { return m_stackTrace; }
 
     protected:
-        virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
+        virtual void OnStackFrame(const wxStackFrame& frame) override
         {
             // don't show more than maxLines or we could get a dialog too tall
             // to be shown on screen: 20 should be ok everywhere as even with

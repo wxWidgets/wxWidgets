@@ -32,7 +32,7 @@ public:
     }
 
 protected:
-    virtual void OnGetName() wxOVERRIDE;
+    virtual void OnGetName() override;
 
     // optimized for the 2 step initialization done by wxStackWalker
     void Set(const wxString &name, const wxString &filename, const char* syminfo,
@@ -72,9 +72,9 @@ public:
         FreeStack();
     }
 
-    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE;
+    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) override;
 #if wxUSE_ON_FATAL_EXCEPTION
-    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE { Walk(2, maxDepth); }
+    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) override { Walk(2, maxDepth); }
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
     static const wxString& GetExePath() { return ms_exepath; }

@@ -22,7 +22,7 @@ public:
                 const wxGLContextAttrs *ctxAttrs = NULL);
 ///    virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
     wxDECLARE_CLASS(wxGLContext);
 };
@@ -74,7 +74,7 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 

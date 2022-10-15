@@ -185,10 +185,10 @@ public:
    virtual bool Start( int millisecs = -1 )
       { m_started = true; return wxTimer::Start(millisecs, false); }
 
-   virtual void Notify() wxOVERRIDE
+   virtual void Notify() override
       { wxLogTrace("Checking dial up network status."); m_dupman->CheckStatus(); }
 
-   virtual void Stop() wxOVERRIDE
+   virtual void Stop() override
       { if ( m_started ) wxTimer::Stop(); }
 public:
    bool m_started;

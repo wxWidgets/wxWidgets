@@ -52,8 +52,8 @@ wxXLocale wxNullXLocale;
 class wxXLocaleModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxDELETE(gs_cLocale); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxDELETE(gs_cLocale); }
 
     wxDECLARE_DYNAMIC_CLASS(wxXLocaleModule);
 };
@@ -98,7 +98,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
 }
 #endif // wxUSE_INTL
 
-#if wxCHECK_VISUALC_VERSION(8)
+#if defined(__VISUALC__)
 
 // ----------------------------------------------------------------------------
 // implementation using MSVC locale API

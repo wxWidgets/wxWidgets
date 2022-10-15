@@ -392,7 +392,7 @@ public:
     }
 
     // IDWriteFontFileEnumerator methods
-    virtual wxSTDMETHODIMP MoveNext(BOOL* pHasCurrentFile) wxOVERRIDE
+    virtual wxSTDMETHODIMP MoveNext(BOOL* pHasCurrentFile) override
     {
         HRESULT hr = S_OK;
 
@@ -412,7 +412,7 @@ public:
         return hr;
     }
 
-    virtual wxSTDMETHODIMP GetCurrentFontFile(IDWriteFontFile** ppFontFile) wxOVERRIDE
+    virtual wxSTDMETHODIMP GetCurrentFontFile(IDWriteFontFile** ppFontFile) override
     {
         if ( m_currentFile )
         {
@@ -457,7 +457,7 @@ public:
     // IDWriteFontCollectionLoader methods
     virtual wxSTDMETHODIMP CreateEnumeratorFromKey(IDWriteFactory* pFactory,
                                         void const* pCollectionKey, UINT32 collectionKeySize,
-                                        IDWriteFontFileEnumerator** pFontFileEnumerator) wxOVERRIDE
+                                        IDWriteFontFileEnumerator** pFontFileEnumerator) override
     {
         if ( !pFontFileEnumerator )
             return E_INVALIDARG;
@@ -565,7 +565,7 @@ ID2D1Factory* wxD2D1Factory()
         // https://msdn.microsoft.com/en-us/library/windows/desktop/ee794287(v=vs.85).aspx
         // the Direct2D Debug Layer is only available starting with Windows 8
         // and Visual Studio 2012.
-#if defined(__WXDEBUG__) && defined(__VISUALC__) && wxCHECK_VISUALC_VERSION(11)
+#if defined(__WXDEBUG__) && defined(__VISUALC__)
         if ( wxTheAssertHandler && wxGetWinVersion() >= wxWinVersion_8 )
         {
             factoryOptions.debugLevel = D2D1_DEBUG_LEVEL_WARNING;
@@ -734,12 +734,12 @@ public:
         ReleaseResource();
     }
 
-    bool IsResourceAcquired() wxOVERRIDE
+    bool IsResourceAcquired() override
     {
         return m_nativeResource != NULL;
     }
 
-    void* GetResource() wxOVERRIDE
+    void* GetResource() override
     {
         return GetD2DResource();
     }
@@ -754,7 +754,7 @@ public:
         return m_nativeResource;
     }
 
-    void AcquireResource() wxOVERRIDE
+    void AcquireResource() override
     {
         wxCHECK_RESOURCE_HOLDER_PRE();
 
@@ -763,7 +763,7 @@ public:
         wxCHECK_RESOURCE_HOLDER_POST();
     }
 
-    void ReleaseResource() wxOVERRIDE
+    void ReleaseResource() override
     {
         m_nativeResource.reset();
     }
@@ -773,7 +773,7 @@ public:
         return m_resourceManager->GetContext();
     }
 
-    void Bind(wxD2DResourceManager* manager) wxOVERRIDE
+    void Bind(wxD2DResourceManager* manager) override
     {
         if (IsBound())
             return;
@@ -782,7 +782,7 @@ public:
         m_resourceManager->RegisterResourceHolder(this);
     }
 
-    void UnBind() wxOVERRIDE
+    void UnBind() override
     {
         if (!IsBound())
             return;
@@ -791,12 +791,12 @@ public:
         m_resourceManager = NULL;
     }
 
-    bool IsBound() wxOVERRIDE
+    bool IsBound() override
     {
         return m_resourceManager != NULL;
     }
 
-    wxD2DResourceManager* GetManager() wxOVERRIDE
+    wxD2DResourceManager* GetManager() override
     {
         return m_resourceManager;
     }
@@ -816,22 +816,22 @@ protected:
 class wxD2DManagedGraphicsData : public wxD2DManagedObject
 {
 public:
-    void Bind(wxD2DResourceManager* manager) wxOVERRIDE
+    void Bind(wxD2DResourceManager* manager) override
     {
         GetManagedObject()->Bind(manager);
     }
 
-    void UnBind() wxOVERRIDE
+    void UnBind() override
     {
         GetManagedObject()->UnBind();
     }
 
-    bool IsBound() wxOVERRIDE
+    bool IsBound() override
     {
         return GetManagedObject()->IsBound();
     }
 
-    wxD2DResourceManager* GetManager() wxOVERRIDE
+    wxD2DResourceManager* GetManager() override
     {
         return GetManagedObject()->GetManager();
     }
@@ -1152,33 +1152,33 @@ public:
     wxD2DMatrixData(wxGraphicsRenderer* renderer);
     wxD2DMatrixData(wxGraphicsRenderer* renderer, const D2D1::Matrix3x2F& matrix);
 
-    virtual wxGraphicsObjectRefData* Clone() const wxOVERRIDE;
+    virtual wxGraphicsObjectRefData* Clone() const override;
 
-    void Concat(const wxGraphicsMatrixData* t) wxOVERRIDE;
+    void Concat(const wxGraphicsMatrixData* t) override;
 
     void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
-        wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE;
+        wxDouble tx = 0.0, wxDouble ty = 0.0) override;
 
     void Get(wxDouble* a = NULL, wxDouble* b = NULL,  wxDouble* c = NULL,
-        wxDouble* d = NULL, wxDouble* tx = NULL, wxDouble* ty = NULL) const wxOVERRIDE;
+        wxDouble* d = NULL, wxDouble* tx = NULL, wxDouble* ty = NULL) const override;
 
-    void Invert() wxOVERRIDE;
+    void Invert() override;
 
-    bool IsEqual(const wxGraphicsMatrixData* t) const wxOVERRIDE;
+    bool IsEqual(const wxGraphicsMatrixData* t) const override;
 
-    bool IsIdentity() const wxOVERRIDE;
+    bool IsIdentity() const override;
 
-    void Translate(wxDouble dx, wxDouble dy) wxOVERRIDE;
+    void Translate(wxDouble dx, wxDouble dy) override;
 
-    void Scale(wxDouble xScale, wxDouble yScale) wxOVERRIDE;
+    void Scale(wxDouble xScale, wxDouble yScale) override;
 
-    void Rotate(wxDouble angle) wxOVERRIDE;
+    void Rotate(wxDouble angle) override;
 
-    void TransformPoint(wxDouble* x, wxDouble* y) const wxOVERRIDE;
+    void TransformPoint(wxDouble* x, wxDouble* y) const override;
 
-    void TransformDistance(wxDouble* dx, wxDouble* dy) const wxOVERRIDE;
+    void TransformDistance(wxDouble* dx, wxDouble* dy) const override;
 
-    void* GetNativeMatrix() const wxOVERRIDE;
+    void* GetNativeMatrix() const override;
 
     D2D1::Matrix3x2F GetMatrix3x2F() const;
 
@@ -1335,48 +1335,48 @@ public :
     // involving a path.
     void Flush();
 
-    wxGraphicsObjectRefData* Clone() const wxOVERRIDE;
+    wxGraphicsObjectRefData* Clone() const override;
 
     // begins a new subpath at (x,y)
-    void MoveToPoint(wxDouble x, wxDouble y) wxOVERRIDE;
+    void MoveToPoint(wxDouble x, wxDouble y) override;
 
     // adds a straight line from the current point to (x,y)
-    void AddLineToPoint(wxDouble x, wxDouble y) wxOVERRIDE;
+    void AddLineToPoint(wxDouble x, wxDouble y) override;
 
     // adds a cubic Bezier curve from the current point, using two control points and an end point
-    void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y) wxOVERRIDE;
+    void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y) override;
 
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
-    void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) wxOVERRIDE;
+    void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) override;
 
     // gets the last point of the current path, (0,0) if not yet set
-    void GetCurrentPoint(wxDouble* x, wxDouble* y) const wxOVERRIDE;
+    void GetCurrentPoint(wxDouble* x, wxDouble* y) const override;
 
     // adds another path
-    void AddPath(const wxGraphicsPathData* path) wxOVERRIDE;
+    void AddPath(const wxGraphicsPathData* path) override;
 
     // closes the current sub-path
-    void CloseSubpath() wxOVERRIDE;
+    void CloseSubpath() override;
 
     // returns the native path
-    void* GetNativePath() const wxOVERRIDE;
+    void* GetNativePath() const override;
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    void UnGetNativePath(void* WXUNUSED(p)) const wxOVERRIDE {}
+    void UnGetNativePath(void* WXUNUSED(p)) const override {}
 
     // transforms each point of this path by the matrix
-    void Transform(const wxGraphicsMatrixData* matrix) wxOVERRIDE;
+    void Transform(const wxGraphicsMatrixData* matrix) override;
 
     // gets the bounding box enclosing all points (possibly including control points)
-    void GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) const wxOVERRIDE;
+    void GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) const override;
 
-    bool Contains(wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const wxOVERRIDE;
+    bool Contains(wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const override;
 
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
-    void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE;
+    void AddCircle(wxDouble x, wxDouble y, wxDouble r) override;
 
     // appends an ellipse
-    void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
 private:
     void EnsureGeometryOpen();
@@ -2356,27 +2356,27 @@ public:
 
     virtual ~wxHatchBitmapSource() {}
 
-    HRESULT STDMETHODCALLTYPE GetSize(__RPC__out UINT *width, __RPC__out UINT *height) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetSize(__RPC__out UINT *width, __RPC__out UINT *height) override
     {
         if (width != NULL) *width = 8;
         if (height != NULL) *height = 8;
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE GetPixelFormat(__RPC__out WICPixelFormatGUID *pixelFormat) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetPixelFormat(__RPC__out WICPixelFormatGUID *pixelFormat) override
     {
         if (pixelFormat != NULL) *pixelFormat = GUID_WICPixelFormat32bppPBGRA;
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE GetResolution(__RPC__out double *dpiX, __RPC__out double *dpiY) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetResolution(__RPC__out double *dpiX, __RPC__out double *dpiY) override
     {
         if (dpiX != NULL) *dpiX = 96.0;
         if (dpiY != NULL) *dpiY = 96.0;
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE CopyPalette(__RPC__in_opt IWICPalette*  WXUNUSED(palette)) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE CopyPalette(__RPC__in_opt IWICPalette*  WXUNUSED(palette)) override
     {
         return WINCODEC_ERR_PALETTEUNAVAILABLE;
     }
@@ -2385,7 +2385,7 @@ public:
         const WICRect* WXUNUSED(prc),
         UINT WXUNUSED(stride),
         UINT WXUNUSED(bufferSize),
-        BYTE *buffer) wxOVERRIDE
+        BYTE *buffer) override
     {
         // patterns are encoded in a bit map of size 8 x 8
         static const unsigned char BDIAGONAL_PATTERN[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
@@ -2425,7 +2425,7 @@ public:
     // Implementations adapted from: "Implementing IUnknown in C++"
     // http://msdn.microsoft.com/en-us/library/office/cc839627%28v=office.15%29.aspx
 
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID referenceId, void** object) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID referenceId, void** object) override
     {
         if (!object)
         {
@@ -2444,13 +2444,13 @@ public:
         return E_NOINTERFACE;
     }
 
-    ULONG STDMETHODCALLTYPE AddRef(void) wxOVERRIDE
+    ULONG STDMETHODCALLTYPE AddRef(void) override
     {
         InterlockedIncrement(&m_refCount);
         return m_refCount;
     }
 
-    ULONG STDMETHODCALLTYPE Release(void) wxOVERRIDE
+    ULONG STDMETHODCALLTYPE Release(void) override
     {
         wxCHECK_MSG(m_refCount > 0, 0, "Unbalanced number of calls to Release");
 
@@ -2624,7 +2624,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         HRESULT hr = GetContext()->CreateBitmapFromWicBitmap(m_srcBitmap, 0, &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
@@ -2661,11 +2661,11 @@ public:
     ~wxD2DBitmapData();
 
     // returns the native representation
-    void* GetNativeBitmap() const wxOVERRIDE;
+    void* GetNativeBitmap() const override;
 
     wxCOMPtr<ID2D1Bitmap> GetD2DBitmap();
 
-    wxD2DManagedObject* GetManagedObject() wxOVERRIDE
+    wxD2DManagedObject* GetManagedObject() override
     {
         return m_bitmapHolder;
     }
@@ -2716,7 +2716,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxCHECK_RET(!m_gradientStops.empty(), "No gradient stops provided");
 
@@ -2745,7 +2745,7 @@ public:
     wxD2DSolidBrushResourceHolder(const wxBrush& brush) : wxD2DBrushResourceHolder(brush) {}
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxColour colour = m_sourceBrush.GetColour();
         HRESULT hr = GetContext()->CreateSolidColorBrush(wxD2DConvertColour(colour), &m_nativeResource);
@@ -2759,7 +2759,7 @@ public:
     wxD2DBitmapBrushResourceHolder(const wxBrush& brush) : wxD2DBrushResourceHolder(brush) {}
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         // TODO: cache this bitmap
         wxD2DBitmapResourceHolder bitmap(*(m_sourceBrush.GetStipple()));
@@ -2783,7 +2783,7 @@ public:
     wxD2DHatchBrushResourceHolder(const wxBrush& brush) : wxD2DBrushResourceHolder(brush) {}
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxCOMPtr<wxHatchBitmapSource> hatchBitmapSource(new wxHatchBitmapSource(m_sourceBrush.GetStyle(), m_sourceBrush.GetColour()));
 
@@ -2827,7 +2827,7 @@ public:
         : m_linearGradientInfo(x1, y1, x2, y2, stops, matrix) {}
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops);
         helper.Bind(GetManager());
@@ -2879,7 +2879,7 @@ public:
         : m_radialGradientInfo(x1, y1, x2, y2, r, stops, matrix) {}
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops);
         helper.Bind(GetManager());
@@ -2935,7 +2935,7 @@ public:
         return (ID2D1Brush*)(m_brushResourceHolder->GetResource());
     }
 
-    wxD2DManagedObject* GetManagedObject() wxOVERRIDE
+    wxD2DManagedObject* GetManagedObject() override
     {
         return m_brushResourceHolder.get();
     }
@@ -3045,7 +3045,7 @@ public:
 
     ID2D1StrokeStyle* GetStrokeStyle();
 
-    wxD2DManagedObject* GetManagedObject() wxOVERRIDE
+    wxD2DManagedObject* GetManagedObject() override
     {
         return m_stippleBrush->GetManagedObject();
     }
@@ -3459,7 +3459,7 @@ public:
     {
     }
 
-    HRESULT Flush() wxOVERRIDE
+    HRESULT Flush() override
     {
         HRESULT hr = m_nativeResource->Flush();
         FlushRenderTargetToImage();
@@ -3472,7 +3472,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         CreateWICBitmapFromImage(*m_resultImage, true, &m_wicBitmap);
 
@@ -3510,7 +3510,7 @@ public:
     {
     }
 
-    void Resize() wxOVERRIDE
+    void Resize() override
     {
         RECT clientRect = wxGetClientRect(m_hwnd);
 
@@ -3527,7 +3527,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxCOMPtr<ID2D1HwndRenderTarget> renderTarget;
 
@@ -3581,7 +3581,7 @@ public:
     void DrawBitmap(ID2D1Bitmap* bitmap,
         const D2D1_RECT_F& srcRect, const D2D1_RECT_F& destRect,
         wxInterpolationQuality interpolationQuality,
-        wxCompositionMode compositionMode) wxOVERRIDE
+        wxCompositionMode compositionMode) override
     {
         D2D1_POINT_2F offset = D2D1::Point2(destRect.left, destRect.top);
         m_context->DrawImage(bitmap,
@@ -3591,7 +3591,7 @@ public:
             wxD2DConvertCompositionMode(compositionMode));
     }
 
-    HRESULT Flush() wxOVERRIDE
+    HRESULT Flush() override
     {
         HRESULT hr = m_nativeResource->Flush();
         DXGI_PRESENT_PARAMETERS params = { 0 };
@@ -3602,7 +3602,7 @@ public:
 protected:
 
     // Adapted from http://msdn.microsoft.com/en-us/library/windows/desktop/hh780339%28v=vs.85%29.aspx
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         HRESULT hr;
 
@@ -3765,7 +3765,7 @@ public:
     }
 
 protected:
-    void DoAcquireResource() wxOVERRIDE
+    void DoAcquireResource() override
     {
         wxCOMPtr<ID2D1DCRenderTarget> renderTarget;
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(
@@ -3810,37 +3810,37 @@ class wxNullContext : public wxGraphicsContext
 {
 public:
     wxNullContext(wxGraphicsRenderer* renderer) : wxGraphicsContext(renderer) {}
-    void GetTextExtent(const wxString&, wxDouble*, wxDouble*, wxDouble*, wxDouble*) const wxOVERRIDE {}
-    void GetPartialTextExtents(const wxString&, wxArrayDouble&) const wxOVERRIDE {}
-    void Clip(const wxRegion&) wxOVERRIDE {}
-    void Clip(wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
-    void ResetClip() wxOVERRIDE {}
-    void GetClipBox(wxDouble*, wxDouble*, wxDouble*, wxDouble*) wxOVERRIDE {}
-    void* GetNativeContext() wxOVERRIDE { return NULL; }
-    bool SetAntialiasMode(wxAntialiasMode) wxOVERRIDE { return false; }
-    bool SetInterpolationQuality(wxInterpolationQuality) wxOVERRIDE { return false; }
-    bool SetCompositionMode(wxCompositionMode) wxOVERRIDE { return false; }
-    void BeginLayer(wxDouble) wxOVERRIDE {}
-    void EndLayer() wxOVERRIDE {}
-    void Translate(wxDouble, wxDouble) wxOVERRIDE {}
-    void Scale(wxDouble, wxDouble) wxOVERRIDE {}
-    void Rotate(wxDouble) wxOVERRIDE {}
-    void ConcatTransform(const wxGraphicsMatrix&) wxOVERRIDE {}
-    void SetTransform(const wxGraphicsMatrix&) wxOVERRIDE {}
-    wxGraphicsMatrix GetTransform() const wxOVERRIDE { return wxNullGraphicsMatrix; }
-    void StrokePath(const wxGraphicsPath&) wxOVERRIDE {}
-    void FillPath(const wxGraphicsPath&, wxPolygonFillMode) wxOVERRIDE {}
-    void DrawBitmap(const wxGraphicsBitmap&, wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
-    void DrawBitmap(const wxBitmap&, wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
-    void DrawIcon(const wxIcon&, wxDouble, wxDouble, wxDouble, wxDouble) wxOVERRIDE {}
-    void PushState() wxOVERRIDE {}
-    void PopState() wxOVERRIDE {}
-    void Flush() wxOVERRIDE {}
-    WXHDC GetNativeHDC() wxOVERRIDE { return NULL; };
-    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) wxOVERRIDE {};
+    void GetTextExtent(const wxString&, wxDouble*, wxDouble*, wxDouble*, wxDouble*) const override {}
+    void GetPartialTextExtents(const wxString&, wxArrayDouble&) const override {}
+    void Clip(const wxRegion&) override {}
+    void Clip(wxDouble, wxDouble, wxDouble, wxDouble) override {}
+    void ResetClip() override {}
+    void GetClipBox(wxDouble*, wxDouble*, wxDouble*, wxDouble*) override {}
+    void* GetNativeContext() override { return NULL; }
+    bool SetAntialiasMode(wxAntialiasMode) override { return false; }
+    bool SetInterpolationQuality(wxInterpolationQuality) override { return false; }
+    bool SetCompositionMode(wxCompositionMode) override { return false; }
+    void BeginLayer(wxDouble) override {}
+    void EndLayer() override {}
+    void Translate(wxDouble, wxDouble) override {}
+    void Scale(wxDouble, wxDouble) override {}
+    void Rotate(wxDouble) override {}
+    void ConcatTransform(const wxGraphicsMatrix&) override {}
+    void SetTransform(const wxGraphicsMatrix&) override {}
+    wxGraphicsMatrix GetTransform() const override { return wxNullGraphicsMatrix; }
+    void StrokePath(const wxGraphicsPath&) override {}
+    void FillPath(const wxGraphicsPath&, wxPolygonFillMode) override {}
+    void DrawBitmap(const wxGraphicsBitmap&, wxDouble, wxDouble, wxDouble, wxDouble) override {}
+    void DrawBitmap(const wxBitmap&, wxDouble, wxDouble, wxDouble, wxDouble) override {}
+    void DrawIcon(const wxIcon&, wxDouble, wxDouble, wxDouble, wxDouble) override {}
+    void PushState() override {}
+    void PopState() override {}
+    void Flush() override {}
+    WXHDC GetNativeHDC() override { return NULL; };
+    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) override {};
 
 protected:
-    void DoDrawText(const wxString&, wxDouble, wxDouble) wxOVERRIDE {}
+    void DoDrawText(const wxString&, wxDouble, wxDouble) override {}
 };
 
 class wxD2DMeasuringContext : public wxNullContext
@@ -3848,12 +3848,12 @@ class wxD2DMeasuringContext : public wxNullContext
 public:
     wxD2DMeasuringContext(wxGraphicsRenderer* renderer) : wxNullContext(renderer) {}
 
-    void GetTextExtent(const wxString& str, wxDouble* width, wxDouble* height, wxDouble* descent, wxDouble* externalLeading) const wxOVERRIDE
+    void GetTextExtent(const wxString& str, wxDouble* width, wxDouble* height, wxDouble* descent, wxDouble* externalLeading) const override
     {
         GetTextExtent(wxGetD2DFontData(m_font), str, width, height, descent, externalLeading);
     }
 
-    void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE
+    void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const override
     {
         GetPartialTextExtents(wxGetD2DFontData(m_font), text, widths);
     }
@@ -3919,88 +3919,88 @@ public:
 
     ~wxD2DContext();
 
-    void Clip(const wxRegion& region) wxOVERRIDE;
+    void Clip(const wxRegion& region) override;
 
-    void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    void ResetClip() wxOVERRIDE;
+    void ResetClip() override;
 
-    void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+    void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) override;
 
     // The native context used by wxD2DContext is a Direct2D render target.
-    void* GetNativeContext() wxOVERRIDE;
+    void* GetNativeContext() override;
 
-    bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
+    bool SetAntialiasMode(wxAntialiasMode antialias) override;
 
-    bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
+    bool SetInterpolationQuality(wxInterpolationQuality interpolation) override;
 
-    bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
+    bool SetCompositionMode(wxCompositionMode op) override;
 
-    void BeginLayer(wxDouble opacity) wxOVERRIDE;
+    void BeginLayer(wxDouble opacity) override;
 
-    void EndLayer() wxOVERRIDE;
+    void EndLayer() override;
 
-    void Translate(wxDouble dx, wxDouble dy) wxOVERRIDE;
+    void Translate(wxDouble dx, wxDouble dy) override;
 
-    void Scale(wxDouble xScale, wxDouble yScale) wxOVERRIDE;
+    void Scale(wxDouble xScale, wxDouble yScale) override;
 
-    void Rotate(wxDouble angle) wxOVERRIDE;
+    void Rotate(wxDouble angle) override;
 
-    void ConcatTransform(const wxGraphicsMatrix& matrix) wxOVERRIDE;
+    void ConcatTransform(const wxGraphicsMatrix& matrix) override;
 
-    void SetTransform(const wxGraphicsMatrix& matrix) wxOVERRIDE;
+    void SetTransform(const wxGraphicsMatrix& matrix) override;
 
-    wxGraphicsMatrix GetTransform() const wxOVERRIDE;
+    wxGraphicsMatrix GetTransform() const override;
 
-    void StrokePath(const wxGraphicsPath& p) wxOVERRIDE;
+    void StrokePath(const wxGraphicsPath& p) override;
 
-    void FillPath(const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxODDEVEN_RULE) wxOVERRIDE;
+    void FillPath(const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
 
-    void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius) wxOVERRIDE;
+    void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius) override;
 
-    void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    void DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void DrawBitmap(const wxGraphicsBitmap& bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    void DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    void DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    void PushState() wxOVERRIDE;
+    void PushState() override;
 
-    void PopState() wxOVERRIDE;
+    void PopState() override;
 
     void GetTextExtent(
         const wxString& str,
         wxDouble* width,
         wxDouble* height,
         wxDouble* descent,
-        wxDouble* externalLeading) const wxOVERRIDE;
+        wxDouble* externalLeading) const override;
 
-    void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
+    void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const override;
 
-    bool ShouldOffset() const wxOVERRIDE;
+    bool ShouldOffset() const override;
 
-    void SetPen(const wxGraphicsPen& pen) wxOVERRIDE;
+    void SetPen(const wxGraphicsPen& pen) override;
 
-    void Flush() wxOVERRIDE;
+    void Flush() override;
 
-    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const override;
 
-    wxD2DContextSupplier::ContextType GetContext() wxOVERRIDE
+    wxD2DContextSupplier::ContextType GetContext() override
     {
         return GetRenderTarget();
     }
 
-    WXHDC GetNativeHDC() wxOVERRIDE;
-    void ReleaseNativeHDC(WXHDC hdc) wxOVERRIDE;
+    WXHDC GetNativeHDC() override;
+    void ReleaseNativeHDC(WXHDC hdc) override;
 
 private:
     void Init();
 
-    void DoDrawText(const wxString& str, wxDouble x, wxDouble y) wxOVERRIDE;
+    void DoDrawText(const wxString& str, wxDouble x, wxDouble y) override;
 
     void EnsureInitialized();
 
@@ -5000,82 +5000,82 @@ public :
 
     virtual ~wxD2DRenderer();
 
-    wxGraphicsContext* CreateContext(const wxWindowDC& dc) wxOVERRIDE;
+    wxGraphicsContext* CreateContext(const wxWindowDC& dc) override;
 
-    wxGraphicsContext* CreateContext(const wxMemoryDC& dc) wxOVERRIDE;
+    wxGraphicsContext* CreateContext(const wxMemoryDC& dc) override;
 
 #if wxUSE_PRINTING_ARCHITECTURE
-    wxGraphicsContext* CreateContext(const wxPrinterDC& dc) wxOVERRIDE;
+    wxGraphicsContext* CreateContext(const wxPrinterDC& dc) override;
 #endif
 
 #if wxUSE_ENH_METAFILE
-    wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& dc) wxOVERRIDE;
+    wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& dc) override;
 #endif
 
-    wxGraphicsContext* CreateContextFromNativeContext(void* context) wxOVERRIDE;
+    wxGraphicsContext* CreateContextFromNativeContext(void* context) override;
 
-    wxGraphicsContext* CreateContextFromNativeWindow(void* window) wxOVERRIDE;
+    wxGraphicsContext* CreateContextFromNativeWindow(void* window) override;
 
-    wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) wxOVERRIDE;
+    wxGraphicsContext * CreateContextFromNativeHDC(WXHDC dc) override;
 
-    wxGraphicsContext* CreateContext(wxWindow* window) wxOVERRIDE;
+    wxGraphicsContext* CreateContext(wxWindow* window) override;
 
 #if wxUSE_IMAGE
-    wxGraphicsContext* CreateContextFromImage(wxImage& image) wxOVERRIDE;
+    wxGraphicsContext* CreateContextFromImage(wxImage& image) override;
 #endif // wxUSE_IMAGE
 
-    wxGraphicsContext* CreateMeasuringContext() wxOVERRIDE;
+    wxGraphicsContext* CreateMeasuringContext() override;
 
-    wxGraphicsPath CreatePath() wxOVERRIDE;
+    wxGraphicsPath CreatePath() override;
 
     wxGraphicsMatrix CreateMatrix(
         wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
-        wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE;
+        wxDouble tx = 0.0, wxDouble ty = 0.0) override;
 
-    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE;
+    wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) override;
 
-    wxGraphicsBrush CreateBrush(const wxBrush& brush) wxOVERRIDE;
+    wxGraphicsBrush CreateBrush(const wxBrush& brush) override;
 
     wxGraphicsBrush CreateLinearGradientBrush(
         wxDouble x1, wxDouble y1,
         wxDouble x2, wxDouble y2,
         const wxGraphicsGradientStops& stops,
-        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
+        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
 
     wxGraphicsBrush CreateRadialGradientBrush(
         wxDouble startX, wxDouble startY,
         wxDouble endX, wxDouble endY,
         wxDouble radius,
         const wxGraphicsGradientStops& stops,
-        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
+        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) override;
 
     // create a native bitmap representation
-    wxGraphicsBitmap CreateBitmap(const wxBitmap& bitmap) wxOVERRIDE;
+    wxGraphicsBitmap CreateBitmap(const wxBitmap& bitmap) override;
 
 #if wxUSE_IMAGE
-    wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) wxOVERRIDE;
-    wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) wxOVERRIDE;
+    wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) override;
+    wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) override;
 #endif
 
-    wxGraphicsFont CreateFont(const wxFont& font, const wxColour& col) wxOVERRIDE;
+    wxGraphicsFont CreateFont(const wxFont& font, const wxColour& col) override;
 
     wxGraphicsFont CreateFont(
         double sizeInPixels, const wxString& facename,
         int flags = wxFONTFLAG_DEFAULT,
-        const wxColour& col = *wxBLACK) wxOVERRIDE;
+        const wxColour& col = *wxBLACK) override;
 
     virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
                                            const wxRealPoint& dpi,
-                                           const wxColour& col) wxOVERRIDE;
+                                           const wxColour& col) override;
 
     // create a graphics bitmap from a native bitmap
-    wxGraphicsBitmap CreateBitmapFromNativeBitmap(void* bitmap) wxOVERRIDE;
+    wxGraphicsBitmap CreateBitmapFromNativeBitmap(void* bitmap) override;
 
     // create a sub-image from a native image representation
-    wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    wxString GetName() const wxOVERRIDE;
-    void GetVersion(int* major, int* minor, int* micro) const wxOVERRIDE;
+    wxString GetName() const override;
+    void GetVersion(int* major, int* minor, int* micro) const override;
 
     ID2D1Factory* GetD2DFactory();
 
@@ -5415,12 +5415,12 @@ public:
         AddDependency("wxOleInitModule");
     }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         if ( gs_WICImagingFactory )
         {

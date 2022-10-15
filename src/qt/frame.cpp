@@ -29,7 +29,7 @@ public:
     wxQtMainWindow( wxWindow *parent, wxFrame *handler );
 
 private:
-    virtual bool focusNextPrevChild(bool) wxOVERRIDE { return false; }
+    virtual bool focusNextPrevChild(bool) override { return false; }
 };
 
 // Central widget helper (container to show scroll bars and receive events):

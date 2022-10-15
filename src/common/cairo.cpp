@@ -440,8 +440,8 @@ class wxCairoModule : public wxModule
 {
 public:
     wxCairoModule() { }
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxCairoModule);

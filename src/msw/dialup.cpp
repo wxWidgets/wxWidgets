@@ -152,23 +152,23 @@ public:
     virtual ~wxDialUpManagerMSW();
 
     // implement base class pure virtuals
-    virtual bool IsOk() const wxOVERRIDE;
-    virtual size_t GetISPNames(wxArrayString& names) const wxOVERRIDE;
+    virtual bool IsOk() const override;
+    virtual size_t GetISPNames(wxArrayString& names) const override;
     virtual bool Dial(const wxString& nameOfISP,
                       const wxString& username,
                       const wxString& password,
-                      bool async) wxOVERRIDE;
-    virtual bool IsDialing() const wxOVERRIDE;
-    virtual bool CancelDialing() wxOVERRIDE;
-    virtual bool HangUp() wxOVERRIDE;
-    virtual bool IsAlwaysOnline() const wxOVERRIDE;
-    virtual bool IsOnline() const wxOVERRIDE;
-    virtual void SetOnlineStatus(bool isOnline = true) wxOVERRIDE;
-    virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) wxOVERRIDE;
-    virtual void DisableAutoCheckOnlineStatus() wxOVERRIDE;
-    virtual void SetWellKnownHost(const wxString& hostname, int port) wxOVERRIDE;
+                      bool async) override;
+    virtual bool IsDialing() const override;
+    virtual bool CancelDialing() override;
+    virtual bool HangUp() override;
+    virtual bool IsAlwaysOnline() const override;
+    virtual bool IsOnline() const override;
+    virtual void SetOnlineStatus(bool isOnline = true) override;
+    virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) override;
+    virtual void DisableAutoCheckOnlineStatus() override;
+    virtual void SetWellKnownHost(const wxString& hostname, int port) override;
     virtual void SetConnectCommand(const wxString& commandDial,
-                                   const wxString& commandHangup) wxOVERRIDE;
+                                   const wxString& commandHangup) override;
 
     // for RasTimer
     void CheckRasStatus();
@@ -206,7 +206,7 @@ private:
         RasTimer(wxDialUpManagerMSW *dialUpManager)
             { m_dialUpManager = dialUpManager; }
 
-        virtual void Notify() wxOVERRIDE { m_dialUpManager->CheckRasStatus(); }
+        virtual void Notify() override { m_dialUpManager->CheckRasStatus(); }
 
     private:
         wxDialUpManagerMSW *m_dialUpManager;
@@ -267,8 +267,8 @@ private:
 class wxDialUpManagerModule : public wxModule
 {
 public:
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE
+    bool OnInit() override { return true; }
+    void OnExit() override
     {
         HWND hwnd = wxDialUpManagerMSW::GetRasWindow();
         if ( hwnd )

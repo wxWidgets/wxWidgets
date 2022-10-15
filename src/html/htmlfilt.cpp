@@ -81,8 +81,8 @@ class wxHtmlFilterImage : public wxHtmlFilter
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterImage);
 
     public:
-        virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
-        virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
+        virtual bool CanRead(const wxFSFile& file) const override;
+        virtual wxString ReadFile(const wxFSFile& file) const override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterImage, wxHtmlFilter);
@@ -188,13 +188,13 @@ class wxHtmlFilterModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterModule);
 
     public:
-        virtual bool OnInit() wxOVERRIDE
+        virtual bool OnInit() override
         {
             wxHtmlWindow::AddFilter(new wxHtmlFilterHTML);
             wxHtmlWindow::AddFilter(new wxHtmlFilterImage);
             return true;
         }
-        virtual void OnExit() wxOVERRIDE {}
+        virtual void OnExit() override {}
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterModule, wxModule);

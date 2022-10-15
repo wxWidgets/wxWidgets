@@ -37,12 +37,12 @@ public:
     virtual bool GetValue() const = 0;
 
     // The current "normal" state for the toggle button depends upon its value.
-    virtual State GetNormalState() const wxOVERRIDE
+    virtual State GetNormalState() const override
     {
         return GetValue() ? State_Pressed : State_Normal;
     }
 
-    void UpdateWindowUI(long flags) wxOVERRIDE
+    void UpdateWindowUI(long flags) override
     {
         wxControl::UpdateWindowUI(flags);
 

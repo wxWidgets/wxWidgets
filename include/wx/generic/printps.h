@@ -26,9 +26,9 @@ public:
     wxPostScriptPrinter(wxPrintDialogData *data = NULL);
     virtual ~wxPostScriptPrinter();
 
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) wxOVERRIDE;
-    virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
-    virtual bool Setup(wxWindow *parent) wxOVERRIDE;
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) override;
+    virtual wxDC* PrintDialog(wxWindow *parent) override;
+    virtual bool Setup(wxWindow *parent) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPostScriptPrinter);
@@ -51,8 +51,8 @@ public:
 
     virtual ~wxPostScriptPrintPreview();
 
-    virtual bool Print(bool interactive) wxOVERRIDE;
-    virtual void DetermineScaling() wxOVERRIDE;
+    virtual bool Print(bool interactive) override;
+    virtual void DetermineScaling() override;
 
 private:
     void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);

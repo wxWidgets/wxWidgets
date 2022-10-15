@@ -874,8 +874,8 @@ public:
     bool HandleWindowEvent(wxEvent& event) const;
 
         // disable wxEvtHandler double-linked list mechanism:
-    virtual void SetNextHandler(wxEvtHandler *handler) wxOVERRIDE;
-    virtual void SetPreviousHandler(wxEvtHandler *handler) wxOVERRIDE;
+    virtual void SetNextHandler(wxEvtHandler *handler) override;
+    virtual void SetPreviousHandler(wxEvtHandler *handler) override;
 
 
 protected:
@@ -1685,8 +1685,8 @@ protected:
                     const wxString& name);
 
     // event handling specific to wxWindow
-    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
-    virtual bool TryAfter(wxEvent& event) wxOVERRIDE;
+    virtual bool TryBefore(wxEvent& event) override;
+    virtual bool TryAfter(wxEvent& event) override;
 
     enum WindowOrder
     {
@@ -2101,35 +2101,35 @@ public:
 
         // Can return either a child object, or an integer
         // representing the child element, starting from 1.
-    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject) wxOVERRIDE;
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject) override;
 
         // Returns the rectangle for this object (id = 0) or a child element (id > 0).
-    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) wxOVERRIDE;
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
 
         // Navigates from fromId to toId/toObject.
     virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
-                int* toId, wxAccessible** toObject) wxOVERRIDE;
+                int* toId, wxAccessible** toObject) override;
 
         // Gets the name of the specified object.
-    virtual wxAccStatus GetName(int childId, wxString* name) wxOVERRIDE;
+    virtual wxAccStatus GetName(int childId, wxString* name) override;
 
         // Gets the number of children.
-    virtual wxAccStatus GetChildCount(int* childCount) wxOVERRIDE;
+    virtual wxAccStatus GetChildCount(int* childCount) override;
 
         // Gets the specified child (starting from 1).
         // If *child is NULL and return value is wxACC_OK,
         // this means that the child is a simple element and
         // not an accessible object.
-    virtual wxAccStatus GetChild(int childId, wxAccessible** child) wxOVERRIDE;
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
 
         // Gets the parent, or NULL.
-    virtual wxAccStatus GetParent(wxAccessible** parent) wxOVERRIDE;
+    virtual wxAccStatus GetParent(wxAccessible** parent) override;
 
         // Performs the default action. childId is 0 (the action for this object)
         // or > 0 (the action for a child).
         // Return wxACC_NOT_SUPPORTED if there is no default action for this
         // window (e.g. an edit control).
-    virtual wxAccStatus DoDefaultAction(int childId) wxOVERRIDE;
+    virtual wxAccStatus DoDefaultAction(int childId) override;
 
         // Gets the default action for this object (0) or > 0 (the action for a child).
         // Return wxACC_OK even if there is no action. actionName is the action, or the empty
@@ -2137,36 +2137,36 @@ public:
         // The retrieved string describes the action that is performed on an object,
         // not what the object does as a result. For example, a toolbar button that prints
         // a document has a default action of "Press" rather than "Prints the current document."
-    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName) wxOVERRIDE;
+    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName) override;
 
         // Returns the description for this object or a child.
-    virtual wxAccStatus GetDescription(int childId, wxString* description) wxOVERRIDE;
+    virtual wxAccStatus GetDescription(int childId, wxString* description) override;
 
         // Returns help text for this object or a child, similar to tooltip text.
-    virtual wxAccStatus GetHelpText(int childId, wxString* helpText) wxOVERRIDE;
+    virtual wxAccStatus GetHelpText(int childId, wxString* helpText) override;
 
         // Returns the keyboard shortcut for this object or child.
         // Return e.g. ALT+K
-    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut) wxOVERRIDE;
+    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut) override;
 
         // Returns a role constant.
-    virtual wxAccStatus GetRole(int childId, wxAccRole* role) wxOVERRIDE;
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
 
         // Returns a state constant.
-    virtual wxAccStatus GetState(int childId, long* state) wxOVERRIDE;
+    virtual wxAccStatus GetState(int childId, long* state) override;
 
         // Returns a localized string representing the value for the object
         // or child.
-    virtual wxAccStatus GetValue(int childId, wxString* strValue) wxOVERRIDE;
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
 
         // Selects the object or child.
-    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags) wxOVERRIDE;
+    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags) override;
 
         // Gets the window with the keyboard focus.
         // If childId is 0 and child is NULL, no object in
         // this subhierarchy has the focus.
         // If this object has the focus, child should be 'this'.
-    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) wxOVERRIDE;
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
 
 #if wxUSE_VARIANT
         // Gets a variant representing the selected children
@@ -2177,7 +2177,7 @@ public:
         // - an integer representing the selected child element,
         //   or 0 if this object is selected (GetType() == wxT("long")
         // - a "void*" pointer to a wxAccessible child object
-    virtual wxAccStatus GetSelections(wxVariant* selections) wxOVERRIDE;
+    virtual wxAccStatus GetSelections(wxVariant* selections) override;
 #endif // wxUSE_VARIANT
 };
 

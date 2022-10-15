@@ -24,22 +24,6 @@
 using std::string;
 
 
-// Check whether member templates can be used
-//
-#if defined __GNUC__
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined _MSC_VER && _MSC_VER >= 1310 && !defined __WIN64__
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined __HP_aCC && __HP_aCC > 33300
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined __SUNPRO_CC && __SUNPRO_CC > 0x500
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // A class to hold a test entry
 
@@ -992,13 +976,7 @@ void ArchiveTestCase<ClassFactoryT>::TestIterator(wxInputStream& in)
     wxScopedPtr<InputStreamT> arc(m_factory->NewStream(in));
     size_t count = 0;
 
-#ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((IterT)*arc, IterT());
-#else
-    ArchiveCatalog cat;
-    for (IterT i(*arc); i != IterT(); ++i)
-        cat.push_back(*i);
-#endif
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it) {
         wxScopedPtr<EntryT> entry(*it);
@@ -1021,13 +999,7 @@ void ArchiveTestCase<ClassFactoryT>::TestPairIterator(wxInputStream& in)
     wxScopedPtr<InputStreamT> arc(m_factory->NewStream(in));
     size_t count = 0;
 
-#ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((PairIterT)*arc, PairIterT());
-#else
-    ArchiveCatalog cat;
-    for (PairIterT i(*arc); i != PairIterT(); ++i)
-        cat.insert(*i);
-#endif
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it) {
         wxScopedPtr<EntryT> entry(it->second);
@@ -1049,13 +1021,7 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartIterator(wxInputStream& in)
 
     wxScopedPtr<InputStreamT> arc(m_factory->NewStream(in));
 
-#ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((Iter)*arc, Iter());
-#else
-    ArchiveCatalog cat;
-    for (Iter i(*arc); i != Iter(); ++i)
-        cat.push_back(*i);
-#endif
 
     CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
 
@@ -1068,11 +1034,6 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartIterator(wxInputStream& in)
 template <class ClassFactoryT>
 void ArchiveTestCase<ClassFactoryT>::TestSmartPairIterator(wxInputStream& in)
 {
-#if defined _MSC_VER && defined _MSC_VER < 1200
-    // With VC++ 5.0 the '=' operator of std::pair breaks when the second
-    // type is Ptr<EntryT>, so this iterator can't be made to work.
-    (void)in;
-#else
     typedef std::map<wxString, Ptr<EntryT> > ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
     typedef wxArchiveIterator<InputStreamT,
@@ -1080,19 +1041,12 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartPairIterator(wxInputStream& in)
 
     wxScopedPtr<InputStreamT> arc(m_factory->NewStream(in));
 
-#ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((PairIter)*arc, PairIter());
-#else
-    ArchiveCatalog cat;
-    for (PairIter i(*arc); i != PairIter(); ++i)
-        cat.insert(*i);
-#endif
 
     CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it)
         CPPUNIT_ASSERT(m_testEntries.count(it->second->GetName(wxPATH_UNIX)));
-#endif
 }
 
 // try reading two entries at the same time
@@ -1110,13 +1064,7 @@ void ArchiveTestCase<ClassFactoryT>::ReadSimultaneous(TestInputStream& in)
     wxScopedPtr<InputStreamT> arc2(m_factory->NewStream(in2));
 
     // load the catalog
-#ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((PairIter)*arc, PairIter());
-#else
-    ArchiveCatalog cat;
-    for (PairIter i(*arc); i != PairIter(); ++i)
-        cat.insert(*i);
-#endif
 
     // the names of two entries to read
     const wxChar *name = wxT("text/small");
@@ -1167,7 +1115,7 @@ template <class NotifierT, class EntryT>
 class ArchiveNotifier : public NotifierT
 {
 public:
-    void OnEntryUpdated(EntryT& WXUNUSED(entry)) wxOVERRIDE { }
+    void OnEntryUpdated(EntryT& WXUNUSED(entry)) override { }
 };
 
 template <class ClassFactoryT>
@@ -1193,7 +1141,7 @@ public:
     { }
 
     // the entry point for the test
-    void runTest() wxOVERRIDE;
+    void runTest() override;
 
 protected:
     void CreateArchive(wxOutputStream& out);

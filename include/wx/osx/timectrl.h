@@ -41,7 +41,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxTimePickerCtrlNameStr);
 
-    virtual void OSXGenerateEvent(const wxDateTime& dt) wxOVERRIDE;
+    virtual void OSXGenerateEvent(const wxDateTime& dt) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTimePickerCtrl);

@@ -85,9 +85,9 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
-    virtual int OnExit() wxOVERRIDE { DeleteBitmaps(); return 0; }
+    virtual int OnExit() override { DeleteBitmaps(); return 0; }
 
 protected:
     void DeleteBitmaps();
@@ -248,7 +248,7 @@ public:
 #if wxUSE_COLOURDLG
     wxColour SelectColour();
 #endif // wxUSE_COLOURDLG
-    void PrepareDC(wxDC& dc) wxOVERRIDE;
+    void PrepareDC(wxDC& dc) override;
 
     int         m_backgroundMode;
     int         m_textureBackground;
@@ -2176,7 +2176,7 @@ public:
         SetSizerAndFit(sizer);
     }
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE
+    virtual bool TransferDataFromWindow() override
     {
         if ( !wxDialog::TransferDataFromWindow() )
             return false;

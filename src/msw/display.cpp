@@ -41,7 +41,7 @@ int wxGetHDCDepth(HDC hdc)
 class wxDisplayImplSingleMSW : public wxDisplayImplSingle
 {
 public:
-    virtual wxRect GetGeometry() const wxOVERRIDE
+    virtual wxRect GetGeometry() const override
     {
         ScreenHDC dc;
 
@@ -50,7 +50,7 @@ public:
                       ::GetDeviceCaps(dc, VERTRES));
     }
 
-    virtual wxRect GetClientArea() const wxOVERRIDE
+    virtual wxRect GetClientArea() const override
     {
         RECT rc;
         SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
@@ -60,7 +60,7 @@ public:
         return rectClient;
     }
 
-    virtual int GetDepth() const wxOVERRIDE
+    virtual int GetDepth() const override
     {
         return wxGetHDCDepth(ScreenHDC());
     }
@@ -69,7 +69,7 @@ public:
 class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
 {
 protected:
-    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    virtual wxDisplayImpl *CreateSingleDisplay() override
     {
         return new wxDisplayImplSingleMSW;
     }
@@ -127,18 +127,18 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
-    virtual wxSize GetPPI() const wxOVERRIDE;
-    virtual double GetScaleFactor() const wxOVERRIDE;
+    virtual wxRect GetGeometry() const override;
+    virtual wxRect GetClientArea() const override;
+    virtual int GetDepth() const override;
+    virtual wxSize GetPPI() const override;
+    virtual double GetScaleFactor() const override;
 
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual bool IsPrimary() const wxOVERRIDE;
+    virtual wxString GetName() const override;
+    virtual bool IsPrimary() const override;
 
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual wxVideoMode GetCurrentMode() const override;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
+    virtual bool ChangeMode(const wxVideoMode& mode) override;
 
 protected:
     // convert a DEVMODE to our wxVideoMode
@@ -177,12 +177,12 @@ public:
 
     bool IsOk() const { return !m_displays.empty(); }
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE { return unsigned(m_displays.size()); }
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
-    virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
+    virtual unsigned GetCount() override { return unsigned(m_displays.size()); }
+    virtual int GetFromPoint(const wxPoint& pt) override;
+    virtual int GetFromWindow(const wxWindow *window) override;
 
-    void InvalidateCache() wxOVERRIDE
+    void InvalidateCache() override
     {
         wxDisplayFactory::InvalidateCache();
         DoRefreshMonitors();

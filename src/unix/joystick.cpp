@@ -63,7 +63,7 @@ class wxJoystickThread : public wxThread
 {
 public:
     wxJoystickThread(int device, int joystick);
-    void* Entry() wxOVERRIDE;
+    void* Entry() override;
 
 private:
     void      SendEvent(wxEventType type, long ts, int change = 0);

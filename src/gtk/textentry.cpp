@@ -440,7 +440,7 @@ public:
         return new wxTextAutoCompleteFixed(entry);
     }
 
-    virtual bool ChangeStrings(const wxArrayString& strings) wxOVERRIDE
+    virtual bool ChangeStrings(const wxArrayString& strings) override
     {
         wxGtkObject<GtkListStore> store(gtk_list_store_new (1, G_TYPE_STRING));
 
@@ -456,7 +456,7 @@ public:
         return true;
     }
 
-    virtual bool ChangeCompleter(wxTextCompleter*) wxOVERRIDE
+    virtual bool ChangeCompleter(wxTextCompleter*) override
     {
         return false;
     }
@@ -494,13 +494,13 @@ public:
         m_win->Unbind(wxEVT_TEXT, &wxTextAutoCompleteDynamic::OnEntryChanged, this);
     }
 
-    virtual bool ChangeStrings(const wxArrayString&) wxOVERRIDE
+    virtual bool ChangeStrings(const wxArrayString&) override
     {
         return false;
     }
 
     // Takes ownership of the pointer which must be non-NULL.
-    virtual bool ChangeCompleter(wxTextCompleter *completer) wxOVERRIDE
+    virtual bool ChangeCompleter(wxTextCompleter *completer) override
     {
         delete m_completer;
         m_completer = completer;

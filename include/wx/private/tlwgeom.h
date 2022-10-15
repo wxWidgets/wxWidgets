@@ -71,7 +71,7 @@ public:
         m_maximized = false;
     }
 
-    virtual bool Save(const Serializer& ser) const wxOVERRIDE
+    virtual bool Save(const Serializer& ser) const override
     {
         if ( !ser.SaveField(wxPERSIST_TLW_X, m_rectScreen.x) ||
              !ser.SaveField(wxPERSIST_TLW_Y, m_rectScreen.y) )
@@ -90,7 +90,7 @@ public:
         return true;
     }
 
-    virtual bool Restore(Serializer& ser) wxOVERRIDE
+    virtual bool Restore(Serializer& ser) override
     {
         m_hasPos = ser.RestoreField(wxPERSIST_TLW_X, &m_rectScreen.x) &&
                    ser.RestoreField(wxPERSIST_TLW_Y, &m_rectScreen.y);
@@ -109,7 +109,7 @@ public:
         return m_hasPos || m_hasSize || m_maximized || m_iconized;
     }
 
-    virtual bool GetFrom(const wxTopLevelWindow* tlw) wxOVERRIDE
+    virtual bool GetFrom(const wxTopLevelWindow* tlw) override
     {
         m_rectScreen = tlw->GetScreenRect();
         m_hasPos =
@@ -120,7 +120,7 @@ public:
         return true;
     }
 
-    virtual bool ApplyTo(wxTopLevelWindow* tlw) wxOVERRIDE
+    virtual bool ApplyTo(wxTopLevelWindow* tlw) override
     {
         if ( m_hasPos )
         {

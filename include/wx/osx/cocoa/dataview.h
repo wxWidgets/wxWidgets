@@ -472,82 +472,82 @@ public:
     }
 
     // column related methods (inherited from wxDataViewWidgetImpl)
-    virtual bool ClearColumns() wxOVERRIDE;
-    virtual bool DeleteColumn(wxDataViewColumn* columnPtr) wxOVERRIDE;
-    virtual void DoSetExpanderColumn(wxDataViewColumn const* columnPtr) wxOVERRIDE;
-    virtual wxDataViewColumn* GetColumn(unsigned int pos) const wxOVERRIDE;
-    virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const wxOVERRIDE;
-    virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr) wxOVERRIDE;
-    virtual void FitColumnWidthToContent(unsigned int pos) wxOVERRIDE;
+    virtual bool ClearColumns() override;
+    virtual bool DeleteColumn(wxDataViewColumn* columnPtr) override;
+    virtual void DoSetExpanderColumn(wxDataViewColumn const* columnPtr) override;
+    virtual wxDataViewColumn* GetColumn(unsigned int pos) const override;
+    virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const override;
+    virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr) override;
+    virtual void FitColumnWidthToContent(unsigned int pos) override;
 
     // item related methods (inherited from wxDataViewWidgetImpl)
-    virtual bool Add(const wxDataViewItem& parent, const wxDataViewItem& item) wxOVERRIDE;
+    virtual bool Add(const wxDataViewItem& parent, const wxDataViewItem& item) override;
     virtual bool Add(const wxDataViewItem& parent,
-                     const wxDataViewItemArray& items) wxOVERRIDE;
-    virtual void Collapse(const wxDataViewItem& item) wxOVERRIDE;
+                     const wxDataViewItemArray& items) override;
+    virtual void Collapse(const wxDataViewItem& item) override;
     virtual void EnsureVisible(const wxDataViewItem& item,
-                               wxDataViewColumn const* columnPtr) wxOVERRIDE;
-    virtual unsigned int GetCount() const wxOVERRIDE;
-    virtual int GetCountPerPage() const wxOVERRIDE;
+                               wxDataViewColumn const* columnPtr) override;
+    virtual unsigned int GetCount() const override;
+    virtual int GetCountPerPage() const override;
     virtual wxRect GetRectangle(const wxDataViewItem& item,
-                                wxDataViewColumn const* columnPtr) wxOVERRIDE;
-    virtual wxDataViewItem GetTopItem() const wxOVERRIDE;
-    virtual bool IsExpanded(const wxDataViewItem& item) const wxOVERRIDE;
-    virtual bool Reload() wxOVERRIDE;
-    virtual bool Remove(const wxDataViewItem& parent) wxOVERRIDE;
-    virtual bool Update(const wxDataViewColumn* columnPtr) wxOVERRIDE;
+                                wxDataViewColumn const* columnPtr) override;
+    virtual wxDataViewItem GetTopItem() const override;
+    virtual bool IsExpanded(const wxDataViewItem& item) const override;
+    virtual bool Reload() override;
+    virtual bool Remove(const wxDataViewItem& parent) override;
+    virtual bool Update(const wxDataViewColumn* columnPtr) override;
     virtual bool Update(const wxDataViewItem& parent,
-                        const wxDataViewItem& item) wxOVERRIDE;
+                        const wxDataViewItem& item) override;
     virtual bool Update(const wxDataViewItem& parent,
-                        const wxDataViewItemArray& items) wxOVERRIDE;
+                        const wxDataViewItemArray& items) override;
 
     // model related methods
-    virtual bool AssociateModel(wxDataViewModel* model) wxOVERRIDE;
+    virtual bool AssociateModel(wxDataViewModel* model) override;
 
     //
     // selection related methods (inherited from wxDataViewWidgetImpl)
     //
-    virtual wxDataViewItem GetCurrentItem() const wxOVERRIDE;
-    virtual void SetCurrentItem(const wxDataViewItem& item) wxOVERRIDE;
-    virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
-    virtual int  GetSelectedItemsCount() const wxOVERRIDE;
-    virtual int  GetSelections(wxDataViewItemArray& sel)   const wxOVERRIDE;
-    virtual bool IsSelected(const wxDataViewItem& item) const wxOVERRIDE;
-    virtual void Select(const wxDataViewItem& item) wxOVERRIDE;
-    virtual void Select(const wxDataViewItemArray& items) wxOVERRIDE;
-    virtual void SelectAll() wxOVERRIDE;
-    virtual void Unselect(const wxDataViewItem& item) wxOVERRIDE;
-    virtual void UnselectAll() wxOVERRIDE;
+    virtual wxDataViewItem GetCurrentItem() const override;
+    virtual void SetCurrentItem(const wxDataViewItem& item) override;
+    virtual wxDataViewColumn *GetCurrentColumn() const override;
+    virtual int  GetSelectedItemsCount() const override;
+    virtual int  GetSelections(wxDataViewItemArray& sel)   const override;
+    virtual bool IsSelected(const wxDataViewItem& item) const override;
+    virtual void Select(const wxDataViewItem& item) override;
+    virtual void Select(const wxDataViewItemArray& items) override;
+    virtual void SelectAll() override;
+    virtual void Unselect(const wxDataViewItem& item) override;
+    virtual void UnselectAll() override;
 
     //
     // sorting related methods
     //
-    virtual wxDataViewColumn* GetSortingColumn () const wxOVERRIDE;
-    virtual void Resort() wxOVERRIDE;
+    virtual wxDataViewColumn* GetSortingColumn () const override;
+    virtual void Resort() override;
 
     //
     // other methods (inherited from wxDataViewWidgetImpl)
     //
-    virtual void DoSetIndent(int indent) wxOVERRIDE;
+    virtual void DoSetIndent(int indent) override;
 
-    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) wxOVERRIDE;
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) override;
 
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
-                         wxDataViewColumn*& columnPtr) const wxOVERRIDE;
-    virtual void SetRowHeight(int height) wxOVERRIDE;
-    virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height) wxOVERRIDE;
-    virtual void OnSize() wxOVERRIDE;
+                         wxDataViewColumn*& columnPtr) const override;
+    virtual void SetRowHeight(int height) override;
+    virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height) override;
+    virtual void OnSize() override;
 
-    virtual void StartEditor( const wxDataViewItem & item, unsigned int column ) wxOVERRIDE;
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column ) override;
 
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
 
-    virtual void SetFont(const wxFont& font) wxOVERRIDE;
+    virtual void SetFont(const wxFont& font) override;
 
-    virtual void keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd) wxOVERRIDE;
-    virtual bool doCommandBySelector(void* sel, WXWidget slf, void* _cmd) wxOVERRIDE;
+    virtual void keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd) override;
+    virtual bool doCommandBySelector(void* sel, WXWidget slf, void* _cmd) override;
 
 private:
     void InitOutlineView(long style);

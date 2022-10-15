@@ -54,20 +54,8 @@
 #ifdef wxMSVC_VERSION
     #define wxCOMPILER_PREFIX wxCONCAT(vc, wxMSVC_VERSION)
 #elif defined(wxMSVC_VERSION_AUTO) || defined(wxMSVC_VERSION_ABI_COMPAT)
-    #if _MSC_VER == 1300
-        #define wxCOMPILER_PREFIX vc70
-    #elif _MSC_VER == 1310
-        #define wxCOMPILER_PREFIX vc71
-    #elif _MSC_VER == 1400
-        #define wxCOMPILER_PREFIX vc80
-    #elif _MSC_VER == 1500
-        #define wxCOMPILER_PREFIX vc90
-    #elif _MSC_VER == 1600
-        #define wxCOMPILER_PREFIX vc100
-    #elif _MSC_VER == 1700
-        #define wxCOMPILER_PREFIX vc110
-    #elif _MSC_VER == 1800
-        #define wxCOMPILER_PREFIX vc120
+    #if _MSC_VER < 1900
+        #error "Unsupported MSVC compiler version, 2015 or later is required."
     #elif _MSC_VER >= 1900 && _MSC_VER < 2000
         #ifdef wxMSVC_VERSION_ABI_COMPAT
             #define wxCOMPILER_PREFIX vc14x

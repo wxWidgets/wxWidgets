@@ -42,20 +42,20 @@ public:
 #if wxUSE_MENUS
     // get/set search button menu
     // --------------------------
-    virtual void SetMenu( wxMenu* menu ) wxOVERRIDE;
-    virtual wxMenu* GetMenu() wxOVERRIDE;
+    virtual void SetMenu( wxMenu* menu ) override;
+    virtual wxMenu* GetMenu() override;
 #endif  // wxUSE_MENUS
 
     // get/set search options
     // ----------------------
-    virtual void ShowSearchButton( bool show ) wxOVERRIDE;
-    virtual bool IsSearchButtonVisible() const wxOVERRIDE;
+    virtual void ShowSearchButton( bool show ) override;
+    virtual bool IsSearchButtonVisible() const override;
 
-    virtual void ShowCancelButton( bool show ) wxOVERRIDE;
-    virtual bool IsCancelButtonVisible() const wxOVERRIDE;
+    virtual void ShowCancelButton( bool show ) override;
+    virtual bool IsCancelButtonVisible() const override;
 
-    virtual void SetDescriptiveText(const wxString& text) wxOVERRIDE;
-    virtual wxString GetDescriptiveText() const wxOVERRIDE;
+    virtual void SetDescriptiveText(const wxString& text) override;
+    virtual wxString GetDescriptiveText() const override;
 
     virtual bool    HandleSearchFieldSearchHit() ;
     virtual bool    HandleSearchFieldCancelHit() ;
@@ -63,12 +63,12 @@ public:
     wxSearchWidgetImpl * GetSearchPeer() const;
 
 #if wxUSE_MENUS
-    virtual void OSXAfterMenuEvent() wxOVERRIDE;
+    virtual void OSXAfterMenuEvent() override;
 #endif  // wxUSE_MENUS
 
 protected:
 
-    wxSize DoGetBestSize() const wxOVERRIDE;
+    wxSize DoGetBestSize() const override;
 
     void Init();
 

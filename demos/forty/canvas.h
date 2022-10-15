@@ -23,7 +23,7 @@ public:
     FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& size);
     virtual ~FortyCanvas();
 
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
     bool OnCloseCanvas();
     void OnMouseEvent(wxMouseEvent& event);
     void SetCursorStyle(int x, int y);

@@ -74,7 +74,7 @@ public:
     bool IsOk() const { return m_isOk; }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE;
+    virtual void OnStackFrame(const wxStackFrame& frame) override;
 
     wxXmlNode *m_nodeStack;
     bool m_isOk;

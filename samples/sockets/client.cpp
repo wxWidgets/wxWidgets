@@ -47,7 +47,7 @@
 class MyApp : public wxApp
 {
 public:
-  virtual bool OnInit() wxOVERRIDE;
+  virtual bool OnInit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -641,7 +641,7 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
             Run();
         }
 
-        virtual void* Entry() wxOVERRIDE
+        virtual void* Entry() override
         {
             DoDownload(m_url);
 

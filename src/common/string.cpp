@@ -44,7 +44,7 @@
     #include <sstream>
 #endif
 
-#ifndef HAVE_STD_STRING_COMPARE
+#if !wxUSE_STL_BASED_WXSTRING
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
     #define wxStringMemcmp   memcmp
@@ -686,9 +686,9 @@ bool wxString::IsSameAs(wxUniChar c, bool compareWithCase) const
                                : wxToupper(GetChar(0u)) == wxToupper(c));
 }
 
-#ifdef HAVE_STD_STRING_COMPARE
+#if wxUSE_STL_BASED_WXSTRING
 
-// NB: Comparison code (both if HAVE_STD_STRING_COMPARE and if not) works with
+// NB: Comparison code (both if wxUSE_STL_BASED_WXSTRING and if not) works with
 //     UTF-8 encoded strings too, thanks to UTF-8's design which allows us to
 //     sort strings in characters code point order by sorting the byte sequence
 //     in byte values order (i.e. what strcmp() and memcmp() do).
@@ -751,7 +751,7 @@ int wxString::compare(size_t nStart, size_t nLen,
     return m_impl.compare(pos, len, str.data, str.len);
 }
 
-#else // !HAVE_STD_STRING_COMPARE
+#else // !wxUSE_STL_BASED_WXSTRING
 
 static inline int wxDoCmp(const wxStringCharType* s1, size_t l1,
                           const wxStringCharType* s2, size_t l2)
@@ -860,7 +860,7 @@ int wxString::compare(size_t nStart, size_t nLen,
     return ::wxDoCmp(m_impl.data() + pos, len, str.data, str.len);
 }
 
-#endif // HAVE_STD_STRING_COMPARE/!HAVE_STD_STRING_COMPARE
+#endif // wxUSE_STL_BASED_WXSTRING/!wxUSE_STL_BASED_WXSTRING
 
 
 // ---------------------------------------------------------------------------

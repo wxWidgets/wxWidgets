@@ -228,8 +228,8 @@ public:
     wxGtkPrintModule()
     {
     }
-    bool OnInit() wxOVERRIDE;
-    void OnExit() wxOVERRIDE {}
+    bool OnInit() override;
+    void OnExit() override {}
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGtkPrintModule);

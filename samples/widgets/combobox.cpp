@@ -92,13 +92,13 @@ class ComboboxWidgetsPage : public ItemContainerWidgetsPage
 public:
     ComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_combobox; }
-    virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_combobox; }
-    virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_combobox; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateCombo(); }
+    virtual wxWindow *GetWidget() const override { return m_combobox; }
+    virtual wxTextEntryBase *GetTextEntry() const override { return m_combobox; }
+    virtual wxItemContainer* GetContainer() const override { return m_combobox; }
+    virtual void RecreateWidget() override { CreateCombo(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers

@@ -23,8 +23,8 @@ class WXDLLIMPEXP_XRC wxWizardXmlHandler : public wxXmlResourceHandler
 
 public:
     wxWizardXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     wxWizard *m_wizard;

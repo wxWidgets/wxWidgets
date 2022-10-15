@@ -34,7 +34,7 @@ public:
     // Create a DC corresponding to the whole window
     wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
 protected:
     // initialize the newly created DC
@@ -55,7 +55,7 @@ public:
 
     virtual ~wxClientDCImpl();
 
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
 protected:
     void InitDC();

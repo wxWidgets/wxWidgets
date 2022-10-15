@@ -33,20 +33,20 @@ public:
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxASCII_STR(wxFileDialogNameStr));
 
-    virtual wxString GetPath() const wxOVERRIDE;
-    virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
-    virtual wxString GetFilename() const wxOVERRIDE;
-    virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
-    virtual int GetFilterIndex() const wxOVERRIDE;
+    virtual wxString GetPath() const override;
+    virtual void GetPaths(wxArrayString& paths) const override;
+    virtual wxString GetFilename() const override;
+    virtual void GetFilenames(wxArrayString& files) const override;
+    virtual int GetFilterIndex() const override;
 
-    virtual void SetMessage(const wxString& message) wxOVERRIDE;
-    virtual void SetPath(const wxString& path) wxOVERRIDE;
-    virtual void SetDirectory(const wxString& dir) wxOVERRIDE;
-    virtual void SetFilename(const wxString& name) wxOVERRIDE;
-    virtual void SetWildcard(const wxString& wildCard) wxOVERRIDE;
-    virtual void SetFilterIndex(int filterIndex) wxOVERRIDE;
+    virtual void SetMessage(const wxString& message) override;
+    virtual void SetPath(const wxString& path) override;
+    virtual void SetDirectory(const wxString& dir) override;
+    virtual void SetFilename(const wxString& name) override;
+    virtual void SetWildcard(const wxString& wildCard) override;
+    virtual void SetFilterIndex(int filterIndex) override;
 
-    virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
+    virtual bool SupportsExtraControl() const override { return true; }
 
     virtual QFileDialog *GetQFileDialog() const;
 

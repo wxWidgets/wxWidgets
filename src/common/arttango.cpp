@@ -91,7 +91,7 @@ public:
 protected:
     virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
         const wxArtClient& client,
-        const wxSize& size) wxOVERRIDE;
+        const wxSize& size) override;
 
 private:
 

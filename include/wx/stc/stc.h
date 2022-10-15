@@ -2467,7 +2467,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 //----------------------------------------------------------------------
 
 
-#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)
+#if defined(__clang__) || defined(__GNUC__)
     #define wxSTC_STRINGIFY(X) #X
     #define wxSTC_DEPRECATED_MACRO_VALUE(value,msg) \
         _Pragma(wxSTC_STRINGIFY(GCC warning msg)) value
@@ -2479,7 +2479,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // The wxSTC_INDIC{0,1,2,S}_MASK values are no longer used in Scintilla
 
-#if wxCHECK_VISUALC_VERSION(10)
+#if defined(__VISUALC__)
     #pragma deprecated(wxSTC_INDIC0_MASK, wxSTC_INDIC1_MASK, \
                        wxSTC_INDIC2_MASK, wxSTC_INDICS_MASK)
 #endif
@@ -2496,7 +2496,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // The following entries have non-conformant prefixes.
 
-#if wxCHECK_VISUALC_VERSION(10)
+#if defined(__VISUALC__)
     #pragma deprecated(wxSTC_SCMOD_NORM, wxSTC_SCMOD_SHIFT, wxSTC_SCMOD_CTRL, \
                        wxSTC_SCMOD_ALT, wxSTC_SCMOD_SUPER, wxSTC_SCMOD_META, \
                        wxSTC_SCVS_NONE, wxSTC_SCVS_RECTANGULARSELECTION, \
@@ -2943,14 +2943,14 @@ public:
     int GetStyleAt(int pos) const;
 
     // Redoes the next action on the undo history.
-    void Redo() wxOVERRIDE;
+    void Redo() override;
 
     // Choose between collecting actions into the undo
     // history and discarding them.
     void SetUndoCollection(bool collectUndo);
 
     // Select all the text in the document.
-    void SelectAll() wxOVERRIDE;
+    void SelectAll() override;
 
     // Remember the current position in the undo history as the position
     // at which the document was saved.
@@ -2960,7 +2960,7 @@ public:
     wxMemoryBuffer GetStyledText(int startPos, int endPos);
 
     // Are there any redoable actions in the undo history?
-    bool CanRedo() const wxOVERRIDE;
+    bool CanRedo() const override;
 
     // Retrieve the line number at which a particular marker is located.
     int MarkerLineFromHandle(int markerHandle);
@@ -3636,28 +3636,28 @@ public:
     void SetReadOnly(bool readOnly);
 
     // Will a paste succeed?
-    bool CanPaste() const wxOVERRIDE;
+    bool CanPaste() const override;
 
     // Are there any undoable actions in the undo history?
-    bool CanUndo() const wxOVERRIDE;
+    bool CanUndo() const override;
 
     // Delete the undo history.
-    void EmptyUndoBuffer() wxOVERRIDE;
+    void EmptyUndoBuffer() override;
 
     // Undo one action in the undo history.
-    void Undo() wxOVERRIDE;
+    void Undo() override;
 
     // Cut the selection to the clipboard.
-    void Cut() wxOVERRIDE;
+    void Cut() override;
 
     // Copy the selection to the clipboard.
-    void Copy() wxOVERRIDE;
+    void Copy() override;
 
     // Paste the contents of the clipboard into the document replacing the selection.
-    void Paste() wxOVERRIDE;
+    void Paste() override;
 
     // Clear the selection.
-    void Clear() wxOVERRIDE;
+    void Clear() override;
 
     // Replace the contents of the document with the argument text.
     void SetText(const wxString& text);
@@ -3952,7 +3952,7 @@ public:
     bool GetUseVerticalScrollBar() const;
 
     // Append a string to the end of the document without changing the selection.
-    void AppendText(const wxString& text) wxOVERRIDE;
+    void AppendText(const wxString& text) override;
 
     // Is drawing done in two phases with backgrounds drawn before foregrounds?
     bool GetTwoPhaseDraw() const;
@@ -5254,16 +5254,16 @@ public:
     // implement wxTextEntryBase pure virtual methods
     // ----------------------------------------------
 
-    virtual void WriteText(const wxString& text) wxOVERRIDE
+    virtual void WriteText(const wxString& text) override
     {
         ReplaceSelection(text);
     }
 
-    virtual void Remove(long from, long to) wxOVERRIDE
+    virtual void Remove(long from, long to) override
     {
         Replace(from, to, wxString());
     }
-    virtual void Replace(long from, long to, const wxString& text) wxOVERRIDE
+    virtual void Replace(long from, long to, const wxString& text) override
     {
         SetTargetStart((int)from);
         SetTargetEnd((int)to);
@@ -5285,14 +5285,14 @@ public:
 
     */
 
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE
+    virtual void SetInsertionPoint(long pos) override
     {
         SetCurrentPos(int(pos == -1 ? GetLastPosition() : pos));
     }
-    virtual long GetInsertionPoint() const wxOVERRIDE { return GetCurrentPos(); }
-    virtual long GetLastPosition() const wxOVERRIDE { return GetTextLength(); }
+    virtual long GetInsertionPoint() const override { return GetCurrentPos(); }
+    virtual long GetLastPosition() const override { return GetTextLength(); }
 
-    virtual void SetSelection(long from, long to) wxOVERRIDE
+    virtual void SetSelection(long from, long to) override
     {
         if ( from == -1 && to == -1 )
         {
@@ -5305,7 +5305,7 @@ public:
         }
     }
 
-    virtual void SelectNone() wxOVERRIDE
+    virtual void SelectNone() override
     {
         ClearSelections();
     }
@@ -5313,7 +5313,7 @@ public:
 #ifdef SWIG
     void GetSelection(long* OUTPUT, long* OUTPUT) const;
 #else
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE
+    virtual void GetSelection(long *from, long *to) const override
     {
         if ( from )
             *from = GetSelectionStart();
@@ -5333,13 +5333,13 @@ public:
     }
 #endif
 
-    virtual bool IsEditable() const wxOVERRIDE { return !GetReadOnly(); }
-    virtual void SetEditable(bool editable) wxOVERRIDE { SetReadOnly(!editable); }
+    virtual bool IsEditable() const override { return !GetReadOnly(); }
+    virtual void SetEditable(bool editable) override { SetReadOnly(!editable); }
 
     // implement wxTextAreaBase pure virtual methods
     // ---------------------------------------------
 
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE
+    virtual int GetLineLength(long lineNo) const override
     {
         if ( lineNo < 0 || lineNo >= GetNumberOfLines() )
             return -1;
@@ -5347,7 +5347,7 @@ public:
         return static_cast<int>(GetLineText(lineNo).length());
     }
 
-    virtual wxString GetLineText(long lineNo) const wxOVERRIDE
+    virtual wxString GetLineText(long lineNo) const override
     {
         wxString text = GetLine(static_cast<int>(lineNo));
         size_t lastNewLine = text.find_last_not_of(wxS("\r\n"));
@@ -5358,35 +5358,35 @@ public:
             text.clear();
         return text;
     }
-    virtual int GetNumberOfLines() const wxOVERRIDE { return GetLineCount(); }
+    virtual int GetNumberOfLines() const override { return GetLineCount(); }
 
-    virtual bool IsModified() const wxOVERRIDE { return GetModify(); }
-    virtual void MarkDirty() wxOVERRIDE { wxFAIL_MSG("not implemented"); }
-    virtual void DiscardEdits() wxOVERRIDE { SetSavePoint(); }
+    virtual bool IsModified() const override { return GetModify(); }
+    virtual void MarkDirty() override { wxFAIL_MSG("not implemented"); }
+    virtual void DiscardEdits() override { SetSavePoint(); }
 
     virtual bool SetStyle(long WXUNUSED(start), long WXUNUSED(end),
-                          const wxTextAttr& WXUNUSED(style)) wxOVERRIDE
+                          const wxTextAttr& WXUNUSED(style)) override
     {
         wxFAIL_MSG("not implemented");
 
         return false;
     }
 
-    virtual bool GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style)) wxOVERRIDE
+    virtual bool GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style)) override
     {
         wxFAIL_MSG("not implemented");
 
         return false;
     }
 
-    virtual bool SetDefaultStyle(const wxTextAttr& WXUNUSED(style)) wxOVERRIDE
+    virtual bool SetDefaultStyle(const wxTextAttr& WXUNUSED(style)) override
     {
         wxFAIL_MSG("not implemented");
 
         return false;
     }
 
-    virtual long XYToPosition(long x, long y) const wxOVERRIDE
+    virtual long XYToPosition(long x, long y) const override
     {
         long pos = PositionFromLine((int)y);
         if ( pos == -1 )
@@ -5399,7 +5399,7 @@ public:
         return pos;
     }
 
-    virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE
+    virtual bool PositionToXY(long pos, long *x, long *y) const override
     {
         int l = LineFromPosition((int)pos);
         if ( l == -1 )
@@ -5418,11 +5418,11 @@ public:
         return true;
     }
 
-    virtual void ShowPosition(long pos) wxOVERRIDE { GotoPos((int)pos); }
+    virtual void ShowPosition(long pos) override { GotoPos((int)pos); }
 
     using wxWindow::HitTest;
 
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const wxOVERRIDE
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override
     {
         const long l = PositionFromPoint(pt);
         if ( l == -1 )
@@ -5437,7 +5437,7 @@ public:
     // just unhide it
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
-                                            wxTextCoord *row) const wxOVERRIDE
+                                            wxTextCoord *row) const override
     {
         return wxTextAreaBase::HitTest(pt, col, row);
     }
@@ -5455,13 +5455,13 @@ public:
     static wxVersionInfo GetLibraryVersionInfo();
 
 protected:
-    virtual void DoSetValue(const wxString& value, int flags) wxOVERRIDE;
-    virtual wxString DoGetValue() const wxOVERRIDE { return GetText(); }
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
+    virtual void DoSetValue(const wxString& value, int flags) override;
+    virtual wxString DoGetValue() const override { return GetText(); }
+    virtual wxWindow *GetEditableWindow() override { return this; }
 
 #ifndef SWIG
-    virtual bool DoLoadFile(const wxString& file, int fileType) wxOVERRIDE;
-    virtual bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE;
+    virtual bool DoLoadFile(const wxString& file, int fileType) override;
+    virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
@@ -5487,14 +5487,14 @@ protected:
     void OnIdle(wxIdleEvent& evt);
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& evt);
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
 #ifdef __WXMSW__
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 #endif // __WXMSW__
 
 private:
@@ -5600,7 +5600,7 @@ public:
     bool GetControl() const;
     bool GetAlt() const;
 
-    virtual wxEvent* Clone() const wxOVERRIDE { return new wxStyledTextEvent(*this); }
+    virtual wxEvent* Clone() const override { return new wxStyledTextEvent(*this); }
 
 #ifndef SWIG
 private:

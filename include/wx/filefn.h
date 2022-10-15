@@ -138,7 +138,7 @@ enum wxPosixPermissions
     #endif
 
     // detect compilers which have support for huge stdio files
-    #if wxCHECK_VISUALC_VERSION(8)
+    #if defined(__VISUALC__)
         #define wxHAS_HUGE_STDIO_FILES
         #define wxFseek _fseeki64
         #define wxFtell _ftelli64

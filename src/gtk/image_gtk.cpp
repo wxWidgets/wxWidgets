@@ -25,8 +25,8 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 {
     BitmapProviderDefault(wxWindow* win) : m_win(win) { }
 
-    virtual wxBitmap Get(int scale) const wxOVERRIDE;
-    virtual void Set(const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual wxBitmap Get(int scale) const override;
+    virtual void Set(const wxBitmapBundle& bitmap) override;
 
     wxWindow* const m_win;
 
@@ -54,7 +54,7 @@ void BitmapProviderDefault::Set(const wxBitmapBundle& bitmapBundle)
 struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 {
     BitmapProviderDefault(wxWindow*) { }
-    virtual wxBitmap Get(int /*scale*/) const wxOVERRIDE { return wxBitmap(); }
+    virtual wxBitmap Get(int /*scale*/) const override { return wxBitmap(); }
 };
 
 #endif // __WXGTK3__/!__WXGTK3__

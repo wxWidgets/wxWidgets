@@ -194,7 +194,7 @@ public:
     void RefreshSelected();
 
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
+    virtual wxVisualAttributes GetDefaultAttributes() const override
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -203,7 +203,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_THEME; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_THEME; }
 
     // the derived class must implement this function to actually draw the item
     // with the given index on the provided DC
@@ -233,7 +233,7 @@ protected:
     // allows us to add borders to the items easily
     //
     // this function is not supposed to be overridden by the derived classes
-    virtual wxCoord OnGetRowHeight(size_t line) const wxOVERRIDE;
+    virtual wxCoord OnGetRowHeight(size_t line) const override;
 
 
     // event handlers

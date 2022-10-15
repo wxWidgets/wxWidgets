@@ -72,7 +72,7 @@ public:
     }
 
     WXLRESULT MSWWindowProc(WXUINT msg,
-                            WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE
+                            WXWPARAM wParam, WXLPARAM lParam) override
     {
         if (msg == gs_msgRestartTaskbar || msg == gs_msgTaskbar)
         {

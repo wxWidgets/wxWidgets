@@ -65,17 +65,17 @@ static int firstAvailable;
 class wxSocketMSWManager : public wxSocketManager
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
-    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) wxOVERRIDE
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) override
     {
         return new wxSocketImplMSW(wxsocket);
     }
     virtual void Install_Callback(wxSocketImpl *socket,
-                                  wxSocketNotify event = wxSOCKET_LOST) wxOVERRIDE;
+                                  wxSocketNotify event = wxSOCKET_LOST) override;
     virtual void Uninstall_Callback(wxSocketImpl *socket,
-                                    wxSocketNotify event = wxSOCKET_LOST) wxOVERRIDE;
+                                    wxSocketNotify event = wxSOCKET_LOST) override;
 };
 
 bool wxSocketMSWManager::OnInit()

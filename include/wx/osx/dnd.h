@@ -52,10 +52,10 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 
     wxDropTarget(wxDataObject *dataObject = NULL );
 
-    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
-    virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
-    virtual bool GetData() wxOVERRIDE;
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override;
+    virtual bool OnDrop(wxCoord x, wxCoord y) override;
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) override;
+    virtual bool GetData() override;
     // NOTE: This is needed by the generic wxDataViewCtrl, not sure how to implement.
     virtual wxDataFormat GetMatchingPair();
 
@@ -93,7 +93,7 @@ public:
 
     // do it (call this in response to a mouse button press, for example)
     // params: if bAllowMove is false, data can be only copied
-    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) wxOVERRIDE;
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) override;
 
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDragPasteboard( void* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }

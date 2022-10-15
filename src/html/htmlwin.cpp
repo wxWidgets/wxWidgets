@@ -63,7 +63,7 @@ public:
         m_orient = orient;
     }
 
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
 
 private:
     wxScrolledWindow *m_win;
@@ -1918,8 +1918,8 @@ class wxHtmlWinModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxHtmlWinModule);
 public:
     wxHtmlWinModule() : wxModule() {}
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { wxHtmlWindow::CleanUpStatics(); }
+    bool OnInit() override { return true; }
+    void OnExit() override { wxHtmlWindow::CleanUpStatics(); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule);

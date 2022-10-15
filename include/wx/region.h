@@ -201,11 +201,11 @@ protected:
     virtual bool DoCombine(const wxRegion& region, wxRegionOp op) = 0;
 
     // implement some wxRegionBase pure virtuals in terms of Combine()
-    virtual bool DoUnionWithRect(const wxRect& rect) wxOVERRIDE;
-    virtual bool DoUnionWithRegion(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoIntersect(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoSubtract(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoXor(const wxRegion& region) wxOVERRIDE;
+    virtual bool DoUnionWithRect(const wxRect& rect) override;
+    virtual bool DoUnionWithRegion(const wxRegion& region) override;
+    virtual bool DoIntersect(const wxRegion& region) override;
+    virtual bool DoSubtract(const wxRegion& region) override;
+    virtual bool DoXor(const wxRegion& region) override;
 };
 
 #endif // ports with wxRegion::Combine()

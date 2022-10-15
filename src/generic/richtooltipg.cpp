@@ -267,7 +267,7 @@ public:
     }
 
 protected:
-    virtual void OnDismiss() wxOVERRIDE
+    virtual void OnDismiss() override
     {
         Destroy();
     }

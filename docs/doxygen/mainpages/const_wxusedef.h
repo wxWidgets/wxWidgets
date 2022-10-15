@@ -343,10 +343,8 @@ manifest from wxWidgets RC file. See also wxUSE_RC_MANIFEST.}
 @itemdef{wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW, Use PS printing in wxMSW.}
 @itemdef{wxUSE_PS_PRINTING, See src/msw/dcprint.cpp file.}
 @itemdef{wxUSE_RC_MANIFEST, Include manifest for common controls library v6
-from wxWidgets RC file. This may be needed to be defined explicitly for MSVC 7
-(a.k.a. MSVS 2003) only as later versions of MSVC generate this manifest
-themselves and the manifest generation is enabled by default for the other
-compilers. See also wxUSE_NO_MANIFEST.}
+from wxWidgets RC file. This is disabled by default for MSVC but enabled for
+the other compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_REGKEY, Use wxRegKey class.}
 @itemdef{wxUSE_RICHEDIT, Enable use of riched32.dll in wxTextCtrl}
 @itemdef{wxUSE_RICHEDIT2, Enable use of riched20.dll in wxTextCtrl}

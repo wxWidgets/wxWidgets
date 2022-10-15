@@ -54,7 +54,7 @@ class wxJoystickThread : public wxThread
 {
 public:
     explicit wxJoystickThread(int joystick);
-    void* Entry() wxOVERRIDE;
+    void* Entry() override;
     void SetPolling(wxWindow* win, int pollingFreq)
     {
         m_catchwin = win;

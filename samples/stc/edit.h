@@ -176,12 +176,12 @@ public:
     EditPrint (Edit *edit, const wxString& title = "");
 
     //! event handlers
-    bool OnPrintPage (int page) wxOVERRIDE;
-    bool OnBeginDocument (int startPage, int endPage) wxOVERRIDE;
+    bool OnPrintPage (int page) override;
+    bool OnBeginDocument (int startPage, int endPage) override;
 
     //! print functions
-    bool HasPage (int page) wxOVERRIDE;
-    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
+    bool HasPage (int page) override;
+    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
 
 private:
     Edit *m_edit;

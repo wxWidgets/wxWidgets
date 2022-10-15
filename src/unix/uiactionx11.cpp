@@ -130,11 +130,11 @@ public:
     // The returned pointer is owned by the caller.
     static wxUIActionSimulatorImpl* New();
 
-    virtual bool MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
-    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseMove(long x, long y) override;
+    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
 protected:
     // This ctor takes ownership of the display.
@@ -241,9 +241,9 @@ public:
     }
 
 private:
-    virtual bool DoX11Button(int xbutton, bool isDown) wxOVERRIDE;
-    virtual bool DoX11MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoX11Button(int xbutton, bool isDown) override;
+    virtual bool DoX11MouseMove(long x, long y) override;
+    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) override;
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorPlainX11Impl);
 };
@@ -355,9 +355,9 @@ public:
     }
 
 private:
-    virtual bool DoX11Button(int xbutton, bool isDown) wxOVERRIDE;
-    virtual bool DoX11MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoX11Button(int xbutton, bool isDown) override;
+    virtual bool DoX11MouseMove(long x, long y) override;
+    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) override;
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorXTestImpl);
 };

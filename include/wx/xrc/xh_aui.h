@@ -23,8 +23,8 @@ class WXDLLIMPEXP_AUI wxAuiXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxAuiXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
     // Returns the wxAuiManager for the specified window
     wxAuiManager *GetAuiManager(wxWindow *managed) const;

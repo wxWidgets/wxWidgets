@@ -95,7 +95,7 @@ wxIcon CreateRandomIcon()
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 class MyFrame : public wxFrame

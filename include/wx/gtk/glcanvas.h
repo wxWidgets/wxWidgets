@@ -66,16 +66,16 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
 
     // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual unsigned long GetXWindow() const wxOVERRIDE;
+    virtual unsigned long GetXWindow() const override;
     void* GetNativeWindow() const;
 
     // implementation from now on
-    virtual void GTKHandleRealized() wxOVERRIDE;
+    virtual void GTKHandleRealized() override;
 
 #ifdef __WXGTK3__
     wxSize m_size;

@@ -50,10 +50,10 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // called before the application termination
-    virtual int OnExit() wxOVERRIDE;
+    virtual int OnExit() override;
 
     // event handlers
     void OnConnected(wxDialUpEvent& event);

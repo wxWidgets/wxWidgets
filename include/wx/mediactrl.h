@@ -108,7 +108,7 @@ public:
     // Allocates a copy of this object.
     // Required for wxEvtHandler::AddPendingEvent
     // ------------------------------------------------------------------------
-    virtual wxEvent *Clone() const wxOVERRIDE
+    virtual wxEvent *Clone() const override
     {   return new wxMediaEvent(*this);     }
 
 
@@ -217,8 +217,8 @@ protected:
     static const wxClassInfo* NextBackend(wxClassInfo::const_iterator* it);
 
     void OnMediaFinished(wxMediaEvent& evt);
-    virtual void DoMoveWindow(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int w, int h) override;
+    wxSize DoGetBestSize() const override;
 
     class wxMediaBackend* m_imp;
     bool m_bLoaded;

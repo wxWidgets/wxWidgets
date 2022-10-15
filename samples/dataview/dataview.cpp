@@ -54,7 +54,7 @@
 class MyApp: public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // ----------------------------------------------------------------------------
@@ -237,7 +237,7 @@ public:
         : wxDataViewCustomRenderer("string", mode, wxALIGN_CENTER)
        { }
 
-    virtual bool Render( wxRect rect, wxDC *dc, int state ) wxOVERRIDE
+    virtual bool Render( wxRect rect, wxDC *dc, int state ) override
     {
         dc->SetBrush( *wxLIGHT_GREY_BRUSH );
         dc->SetPen( *wxTRANSPARENT_PEN );
@@ -257,7 +257,7 @@ public:
                               wxDataViewModel *WXUNUSED(model),
                               const wxDataViewItem &WXUNUSED(item),
                               unsigned int WXUNUSED(col),
-                              const wxMouseEvent *mouseEvent) wxOVERRIDE
+                              const wxMouseEvent *mouseEvent) override
     {
         wxString position;
         if ( mouseEvent )
@@ -268,32 +268,32 @@ public:
         return false;
     }
 
-    virtual wxSize GetSize() const wxOVERRIDE
+    virtual wxSize GetSize() const override
     {
         return GetView()->FromDIP(wxSize(60, 20));
     }
 
-    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE
+    virtual bool SetValue( const wxVariant &value ) override
     {
         m_value = value.GetString();
         return true;
     }
 
-    virtual bool GetValue( wxVariant &WXUNUSED(value) ) const wxOVERRIDE { return true; }
+    virtual bool GetValue( wxVariant &WXUNUSED(value) ) const override { return true; }
 
 #if wxUSE_ACCESSIBILITY
-    virtual wxString GetAccessibleDescription() const wxOVERRIDE
+    virtual wxString GetAccessibleDescription() const override
     {
         return m_value;
     }
 #endif // wxUSE_ACCESSIBILITY
 
-    virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
+    virtual bool HasEditorCtrl() const override { return true; }
 
     virtual wxWindow*
     CreateEditorCtrl(wxWindow* parent,
                      wxRect labelRect,
-                     const wxVariant& value) wxOVERRIDE
+                     const wxVariant& value) override
     {
         wxTextCtrl* text = new wxTextCtrl(parent, wxID_ANY, value,
                                           labelRect.GetPosition(),
@@ -305,7 +305,7 @@ public:
     }
 
     virtual bool
-    GetValueFromEditorCtrl(wxWindow* ctrl, wxVariant& value) wxOVERRIDE
+    GetValueFromEditorCtrl(wxWindow* ctrl, wxVariant& value) override
     {
         wxTextCtrl* text = wxDynamicCast(ctrl, wxTextCtrl);
         if ( !text )
@@ -333,13 +333,13 @@ public:
         : wxDataViewCustomRenderer("string", wxDATAVIEW_CELL_INERT, 0)
     { }
 
-    virtual bool Render(wxRect rect, wxDC *dc, int state) wxOVERRIDE
+    virtual bool Render(wxRect rect, wxDC *dc, int state) override
     {
         RenderText(m_value, 0, rect, dc, state);
         return true;
     }
 
-    virtual wxSize GetSize() const wxOVERRIDE
+    virtual wxSize GetSize() const override
     {
         wxSize txtSize = GetTextExtent(m_value);
         int lines = m_value.Freq('\n') + 1;
@@ -347,17 +347,17 @@ public:
         return txtSize;
     }
 
-    virtual bool SetValue(const wxVariant &value) wxOVERRIDE
+    virtual bool SetValue(const wxVariant &value) override
     {
         m_value = value.GetString();
         m_value.Replace(" ", "\n");
         return true;
     }
 
-    virtual bool GetValue(wxVariant &WXUNUSED(value)) const wxOVERRIDE { return true; }
+    virtual bool GetValue(wxVariant &WXUNUSED(value)) const override { return true; }
 
 #if wxUSE_ACCESSIBILITY
-    virtual wxString GetAccessibleDescription() const wxOVERRIDE
+    virtual wxString GetAccessibleDescription() const override
     {
         return m_value;
     }

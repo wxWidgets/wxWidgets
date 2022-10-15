@@ -79,7 +79,7 @@ public:
 
     ~wxWebViewHandlerResponseDataString() { delete m_stream; }
 
-    virtual wxInputStream* GetStream() wxOVERRIDE
+    virtual wxInputStream* GetStream() override
     {
         return m_stream;
     }
@@ -104,7 +104,7 @@ public:
 
     ~wxWebViewHandlerResponseDataFile() { delete m_file; }
 
-    virtual wxInputStream* GetStream() wxOVERRIDE
+    virtual wxInputStream* GetStream() override
     { return m_file->GetStream(); }
 
     wxFSFile* m_file;

@@ -140,12 +140,12 @@ public:
     wxBitmapBundleImplRC(const ResourceInfos& resourceInfos,
                          const wxBitmap& bitmap);
 
-    virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
+    virtual wxSize GetDefaultSize() const override;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override;
+    virtual wxBitmap GetBitmap(const wxSize& size) override;
 
 protected:
-    virtual double GetNextAvailableScale(size_t& i) const wxOVERRIDE;
+    virtual double GetNextAvailableScale(size_t& i) const override;
 
 private:
     // Load the bitmap from the given resource and add it m_bitmaps, after

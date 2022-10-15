@@ -91,7 +91,7 @@ public:
         qItemDelegate->setItemEditorFactory(this);
     }
 
-    QWidget* createEditor(int WXUNUSED(userType), QWidget* parent) const wxOVERRIDE
+    QWidget* createEditor(int WXUNUSED(userType), QWidget* parent) const override
     {
         if (m_textCtrl != NULL)
             ClearEditor();

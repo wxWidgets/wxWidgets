@@ -124,6 +124,7 @@ update_msw_setup_h build/cmake/setup.h.in
 update_osx_setup_h include/wx/osx/setup.h
 
 update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup.h
+update_msw_setup_h include/wx/univ/setup.h
 
 exit $rc
 

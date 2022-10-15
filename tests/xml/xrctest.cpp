@@ -286,8 +286,8 @@ TEST_CASE("XRC::EnvVarInPath", "[xrc]")
             wxUnsetEnv("WX_TEST_ENV_IN_PATH");
             wxXmlResource::Get()->SetFlags(wxXRC_USE_LOCALE);
         }
-        virtual wxObject* DoCreateResource() wxOVERRIDE { return NULL; }
-        virtual bool CanHandle(wxXmlNode*) wxOVERRIDE { return false; }
+        virtual wxObject* DoCreateResource() override { return NULL; }
+        virtual bool CanHandle(wxXmlNode*) override { return false; }
         bool varIsSet;
     } handler(xmlDoc.GetRoot());
 

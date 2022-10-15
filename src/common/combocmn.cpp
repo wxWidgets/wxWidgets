@@ -345,10 +345,10 @@ public:
     }
 
 #if wxUSE_POPUPWIN
-    virtual bool Show( bool show ) wxOVERRIDE;
-    virtual bool ProcessLeftDown(wxMouseEvent& event) wxOVERRIDE;
+    virtual bool Show( bool show ) override;
+    virtual bool ProcessLeftDown(wxMouseEvent& event) override;
 protected:
-    virtual void OnDismiss() wxOVERRIDE;
+    virtual void OnDismiss() override;
 #endif
 
 private:
@@ -721,7 +721,7 @@ public:
     wxComboCtrlTextCtrl() : wxTextCtrl() { }
     virtual ~wxComboCtrlTextCtrl() { }
 
-    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
+    virtual wxWindow *GetMainWindowOfCompositeControl() override
     {
         wxComboCtrl* combo = (wxComboCtrl*) GetParent();
 

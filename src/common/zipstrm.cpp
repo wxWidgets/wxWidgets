@@ -284,12 +284,12 @@ public:
     void Open(wxFileOffset len) { Close(); m_len = len; }
     void Close() { m_pos = 0; m_lasterror = wxSTREAM_NO_ERROR; }
 
-    virtual char Peek() wxOVERRIDE { return wxInputStream::Peek(); }
-    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_len; }
+    virtual char Peek() override { return wxInputStream::Peek(); }
+    virtual wxFileOffset GetLength() const override { return m_len; }
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+    virtual size_t OnSysRead(void *buffer, size_t size) override;
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -329,15 +329,15 @@ public:
     wxStoredOutputStream(wxOutputStream& stream) :
         wxFilterOutputStream(stream), m_pos(0) { }
 
-    bool Close() wxOVERRIDE {
+    bool Close() override {
         m_pos = 0;
         m_lasterror = wxSTREAM_NO_ERROR;
         return true;
     }
 
 protected:
-    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+    virtual size_t OnSysWrite(const void *buffer, size_t size) override;
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -391,11 +391,11 @@ public:
     void Open();
     bool Final();
 
-    wxInputStream& Read(void *buffer, size_t size) wxOVERRIDE;
+    wxInputStream& Read(void *buffer, size_t size) override;
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+    virtual size_t OnSysRead(void *buffer, size_t size) override;
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -489,8 +489,8 @@ public:
     wxInputStream& GetTee() const { return *m_tee; }
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+    virtual size_t OnSysRead(void *buffer, size_t size) override;
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -555,7 +555,7 @@ public:
         wxZlibOutputStream(stream, level, wxZLIB_NO_HEADER) { }
 
     bool Open(wxOutputStream& stream);
-    bool Close() wxOVERRIDE { DoFlush(true); m_pos = wxInvalidOffset; return IsOk(); }
+    bool Close() override { DoFlush(true); m_pos = wxInvalidOffset; return IsOk(); }
 };
 
 bool wxZlibOutputStream2::Open(wxOutputStream& stream)

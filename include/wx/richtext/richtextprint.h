@@ -124,11 +124,11 @@ public:
     void CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& headerRect, wxRect& footerRect);
 
     // wxPrintout virtual functions
-    virtual bool OnPrintPage(int page) wxOVERRIDE;
-    virtual bool HasPage(int page) wxOVERRIDE;
-    virtual void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
-    virtual bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
-    virtual void OnPreparePrinting() wxOVERRIDE;
+    virtual bool OnPrintPage(int page) override;
+    virtual bool HasPage(int page) override;
+    virtual void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
+    virtual bool OnBeginDocument(int startPage, int endPage) override;
+    virtual void OnPreparePrinting() override;
 
 private:
 

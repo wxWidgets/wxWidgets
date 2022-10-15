@@ -73,11 +73,11 @@ class RadioWidgetsPage : public WidgetsPage
 public:
     RadioWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_radio; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateRadio(); }
+    virtual wxWindow *GetWidget() const override { return m_radio; }
+    virtual void RecreateWidget() override { CreateRadio(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers

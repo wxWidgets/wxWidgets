@@ -346,13 +346,7 @@
 #define wxUSE_WEBVIEW_WEBKIT2 0
 #endif
 
-
-#if defined(_MSC_VER) || \
-    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
 #define wxUSE_GRAPHICS_CONTEXT 0
-#else
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
 
 #define wxUSE_CAIRO 0
 
@@ -675,7 +669,7 @@
 
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
-#if defined(_MSC_VER) && _MSC_VER >= 1600
+#if defined(_MSC_VER)
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
@@ -690,7 +684,7 @@
 
 #define wxUSE_ACTIVEX 0
 
-#if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
+#if defined(_MSC_VER)
     #define wxUSE_WINRT 0
 #else
     #define wxUSE_WINRT 0
@@ -746,67 +740,6 @@
  * Define if va_list type is an array
  */
 #undef VA_LIST_IS_ARRAY
-
-/*
- * Define if you don't want variadic macros to be used even if they are
- * supported by the compiler.
- */
-#undef wxNO_VARIADIC_MACROS
-
-/*
- * Define if your compiler has std::wstring
- */
-#undef HAVE_STD_WSTRING
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#undef HAVE_STD_STRING_COMPARE
-/*
- * Define if your compiler has <hash_map>
- */
-#undef HAVE_HASH_MAP
-/*
- * Define if your compiler has <ext/hash_map>
- */
-#undef HAVE_EXT_HASH_MAP
-/*
- * Define if your compiler has std::hash_map/hash_set
- */
-#undef HAVE_STD_HASH_MAP
-/*
- * Define if your compiler has __gnu_cxx::hash_map/hash_set
- */
-#undef HAVE_GNU_CXX_HASH_MAP
-
-/*
- * Define if your compiler has std::unordered_map
- */
-#undef HAVE_STD_UNORDERED_MAP
-
-/*
- * Define if your compiler has std::unordered_set
- */
-#undef HAVE_STD_UNORDERED_SET
-
-/*
- * Define if your compiler has std::tr1::unordered_map
- */
-#undef HAVE_TR1_UNORDERED_MAP
-
-/*
- * Define if your compiler has std::tr1::unordered_set
- */
-#undef HAVE_TR1_UNORDERED_SET
-
-/*
- * Define if your compiler has <tr1/type_traits>
- */
-#undef HAVE_TR1_TYPE_TRAITS
-
-/*
- * Define if your compiler has <type_traits>
- */
-#undef HAVE_TYPE_TRAITS
 
 /*
  * Define if the compiler supports simple visibility declarations.
@@ -997,9 +930,6 @@
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 
-/* Define if you have strtoull() and strtoll() */
-#undef HAVE_STRTOULL
-
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
@@ -1040,9 +970,6 @@
 
 /* Define if you have wcsnlen() function */
 #undef HAVE_WCSNLEN
-
-/* Define if you have wcstoull() and wcstoll() */
-#undef HAVE_WCSTOULL
 
 /* The number of bytes in a wchar_t.  */
 #undef SIZEOF_WCHAR_T

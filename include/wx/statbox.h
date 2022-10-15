@@ -30,8 +30,8 @@ public:
     wxStaticBoxBase();
 
     // overridden base class virtuals
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool HasTransparentBackground() override { return true; }
+    virtual bool Enable(bool enable = true) override;
 
     // implementation only: this is used by wxStaticBoxSizer to account for the
     // need for extra space taken by the static box
@@ -48,7 +48,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // If non-null, the window used as our label. This window is owned by the
     // static box and will be deleted when it is.

@@ -30,9 +30,9 @@ public:
     wxUnixTimerImpl(wxTimer *timer);
     virtual ~wxUnixTimerImpl();
 
-    virtual bool IsRunning() const wxOVERRIDE;
-    virtual bool Start(int milliseconds = -1, bool oneShot = false) wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
+    virtual bool IsRunning() const override;
+    virtual bool Start(int milliseconds = -1, bool oneShot = false) override;
+    virtual void Stop() override;
 
     // for wxTimerScheduler only: resets the internal flag indicating that the
     // timer is running

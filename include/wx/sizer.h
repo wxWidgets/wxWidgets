@@ -789,8 +789,8 @@ public:
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int rows, int cols, const wxSize& gap );
 
-    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
-    virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) override;
+    virtual wxSize CalcMin() override;
 
     void SetCols( int cols )
     {
@@ -828,7 +828,7 @@ protected:
     int    m_vgap;
     int    m_hgap;
 
-    virtual wxSizerItem *DoInsert(size_t index, wxSizerItem *item) wxOVERRIDE;
+    virtual wxSizerItem *DoInsert(size_t index, wxSizerItem *item) override;
 
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
 
@@ -920,8 +920,8 @@ public:
     const wxArrayInt& GetColWidths() const  { return m_colWidths; }
 
     // implementation
-    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
-    virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) override;
+    virtual wxSize CalcMin() override;
 
 protected:
     void AdjustForFlexDirection();
@@ -966,7 +966,7 @@ public:
                       wxT("invalid value for wxBoxSizer orientation") );
     }
 
-    virtual wxSizerItem *AddSpacer(int size) wxOVERRIDE;
+    virtual wxSizerItem *AddSpacer(int size) override;
 
     int GetOrientation() const { return m_orient; }
 
@@ -975,16 +975,16 @@ public:
     void SetOrientation(int orient) { m_orient = orient; }
 
     // implementation of our resizing logic
-    virtual wxSize CalcMin() wxOVERRIDE;
-    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
+    virtual wxSize CalcMin() override;
+    virtual void RepositionChildren(const wxSize& minSize) override;
 
     virtual bool InformFirstDirection(int direction,
                                       int size,
-                                      int availableOtherDir) wxOVERRIDE;
+                                      int availableOtherDir) override;
 
 protected:
     // Only overridden to perform extra debugging checks.
-    virtual wxSizerItem *DoInsert(size_t index, wxSizerItem *item) wxOVERRIDE;
+    virtual wxSizerItem *DoInsert(size_t index, wxSizerItem *item) override;
 
     // helpers for our code: this returns the component of the given wxSize in
     // the direction of the sizer and in the other direction, respectively
@@ -1057,19 +1057,19 @@ public:
     wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
     virtual ~wxStaticBoxSizer();
 
-    virtual wxSize CalcMin() wxOVERRIDE;
-    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
+    virtual wxSize CalcMin() override;
+    virtual void RepositionChildren(const wxSize& minSize) override;
 
     wxStaticBox *GetStaticBox() const
         { return m_staticBox; }
 
     // override to hide/show the static box as well
-    virtual void ShowItems (bool show) wxOVERRIDE;
-    virtual bool AreAnyItemsShown() const wxOVERRIDE;
+    virtual void ShowItems (bool show) override;
+    virtual bool AreAnyItemsShown() const override;
 
-    virtual bool Detach( wxWindow *window ) wxOVERRIDE;
-    virtual bool Detach( wxSizer *sizer ) wxOVERRIDE { return wxBoxSizer::Detach(sizer); }
-    virtual bool Detach( int index ) wxOVERRIDE { return wxBoxSizer::Detach(index); }
+    virtual bool Detach( wxWindow *window ) override;
+    virtual bool Detach( wxSizer *sizer ) override { return wxBoxSizer::Detach(sizer); }
+    virtual bool Detach( int index ) override { return wxBoxSizer::Detach(index); }
 
 protected:
     wxStaticBox   *m_staticBox;

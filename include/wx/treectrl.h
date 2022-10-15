@@ -385,14 +385,14 @@ public:
     // implementation
     // --------------
 
-    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
+    virtual bool ShouldInheritColours() const override { return false; }
 
     // hint whether to calculate best size quickly or accurately
     void SetQuickBestSize(bool q) { m_quickBestSize = q; }
     bool GetQuickBestSize() const { return m_quickBestSize; }
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // common part of Get/SetItemState()
     virtual int DoGetItemState(const wxTreeItemId& item) const = 0;

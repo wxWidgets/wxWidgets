@@ -51,7 +51,7 @@ static wxMenuBar *menuBar = NULL;
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxIMPLEMENT_APP(MyApp);

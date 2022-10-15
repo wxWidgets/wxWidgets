@@ -213,47 +213,47 @@ public:
     SurfaceImpl();
     ~SurfaceImpl();
 
-    virtual void Init(WindowID wid) wxOVERRIDE;
-    virtual void Init(SurfaceID sid, WindowID wid) wxOVERRIDE;
-    virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid) wxOVERRIDE;
+    virtual void Init(WindowID wid) override;
+    virtual void Init(SurfaceID sid, WindowID wid) override;
+    virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid) override;
 
-    virtual void Release() wxOVERRIDE;
-    virtual bool Initialised() wxOVERRIDE;
-    virtual void PenColour(ColourDesired fore) wxOVERRIDE;
-    virtual int LogPixelsY() wxOVERRIDE;
-    virtual int DeviceHeightFont(int points) wxOVERRIDE;
-    virtual void MoveTo(int x_, int y_) wxOVERRIDE;
-    virtual void LineTo(int x_, int y_) wxOVERRIDE;
-    virtual void Polygon(Point *pts, int npts, ColourDesired fore, ColourDesired back) wxOVERRIDE;
-    virtual void RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) wxOVERRIDE;
-    virtual void FillRectangle(PRectangle rc, ColourDesired back) wxOVERRIDE;
-    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern) wxOVERRIDE;
-    virtual void RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void Release() override;
+    virtual bool Initialised() override;
+    virtual void PenColour(ColourDesired fore) override;
+    virtual int LogPixelsY() override;
+    virtual int DeviceHeightFont(int points) override;
+    virtual void MoveTo(int x_, int y_) override;
+    virtual void LineTo(int x_, int y_) override;
+    virtual void Polygon(Point *pts, int npts, ColourDesired fore, ColourDesired back) override;
+    virtual void RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) override;
+    virtual void FillRectangle(PRectangle rc, ColourDesired back) override;
+    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern) override;
+    virtual void RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back) override;
     virtual void AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
-                                ColourDesired outline, int alphaOutline, int flags) wxOVERRIDE;
+                                ColourDesired outline, int alphaOutline, int flags) override;
     virtual void DrawRGBAImage(PRectangle rc, int width, int height,
-                               const unsigned char *pixelsImage) wxOVERRIDE;
-    virtual void Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) wxOVERRIDE;
-    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource) wxOVERRIDE;
+                               const unsigned char *pixelsImage) override;
+    virtual void Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) override;
+    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource) override;
 
-    virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) wxOVERRIDE;
-    virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) wxOVERRIDE;
-    virtual void DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore) wxOVERRIDE;
-    virtual void MeasureWidths(Font &font_, const char *s, int len, XYPOSITION *positions) wxOVERRIDE;
-    virtual XYPOSITION WidthText(Font &font_, const char *s, int len) wxOVERRIDE;
-    virtual XYPOSITION WidthChar(Font &font_, char ch) wxOVERRIDE;
-    virtual XYPOSITION Ascent(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION Descent(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION InternalLeading(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION ExternalLeading(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION Height(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION AverageCharWidth(Font &font_) wxOVERRIDE;
+    virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) override;
+    virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) override;
+    virtual void DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore) override;
+    virtual void MeasureWidths(Font &font_, const char *s, int len, XYPOSITION *positions) override;
+    virtual XYPOSITION WidthText(Font &font_, const char *s, int len) override;
+    virtual XYPOSITION WidthChar(Font &font_, char ch) override;
+    virtual XYPOSITION Ascent(Font &font_) override;
+    virtual XYPOSITION Descent(Font &font_) override;
+    virtual XYPOSITION InternalLeading(Font &font_) override;
+    virtual XYPOSITION ExternalLeading(Font &font_) override;
+    virtual XYPOSITION Height(Font &font_) override;
+    virtual XYPOSITION AverageCharWidth(Font &font_) override;
 
-    virtual void SetClip(PRectangle rc) wxOVERRIDE;
-    virtual void FlushCachedState() wxOVERRIDE;
+    virtual void SetClip(PRectangle rc) override;
+    virtual void FlushCachedState() override;
 
-    virtual void SetUnicodeMode(bool unicodeMode_) wxOVERRIDE;
-    virtual void SetDBCSMode(int codePage) wxOVERRIDE;
+    virtual void SetUnicodeMode(bool unicodeMode_) override;
+    virtual void SetDBCSMode(int codePage) override;
 
     void BrushColour(ColourDesired back);
     void SetFont(Font &font_);
@@ -935,61 +935,61 @@ public:
     virtual ~SurfaceD2D();
 
     // base class virtuals
-    virtual void Init(WindowID wid) wxOVERRIDE;
-    virtual void Init(SurfaceID sid, WindowID wid) wxOVERRIDE;
+    virtual void Init(WindowID wid) override;
+    virtual void Init(SurfaceID sid, WindowID wid) override;
     virtual void InitPixMap(int width, int height, Surface *surface_,
-                            WindowID wid) wxOVERRIDE;
+                            WindowID wid) override;
 
-    virtual void Release() wxOVERRIDE;
-    virtual bool Initialised() wxOVERRIDE;
-    virtual void PenColour(ColourDesired fore) wxOVERRIDE;
-    virtual int LogPixelsY() wxOVERRIDE;
-    virtual int DeviceHeightFont(int points) wxOVERRIDE;
-    virtual void MoveTo(int x_, int y_) wxOVERRIDE;
-    virtual void LineTo(int x_, int y_) wxOVERRIDE;
+    virtual void Release() override;
+    virtual bool Initialised() override;
+    virtual void PenColour(ColourDesired fore) override;
+    virtual int LogPixelsY() override;
+    virtual int DeviceHeightFont(int points) override;
+    virtual void MoveTo(int x_, int y_) override;
+    virtual void LineTo(int x_, int y_) override;
     virtual void Polygon(Point *pts, int npts, ColourDesired fore,
-                         ColourDesired back) wxOVERRIDE;
+                         ColourDesired back) override;
     virtual void RectangleDraw(PRectangle rc, ColourDesired fore,
-                               ColourDesired back) wxOVERRIDE;
-    virtual void FillRectangle(PRectangle rc, ColourDesired back) wxOVERRIDE;
-    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern) wxOVERRIDE;
+                               ColourDesired back) override;
+    virtual void FillRectangle(PRectangle rc, ColourDesired back) override;
+    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern) override;
     virtual void RoundedRectangle(PRectangle rc, ColourDesired fore,
-                                  ColourDesired back) wxOVERRIDE;
+                                  ColourDesired back) override;
     virtual void AlphaRectangle(PRectangle rc, int cornerSize,
                                 ColourDesired fill, int alphaFill,
                                 ColourDesired outline, int alphaOutline,
-                                int flags) wxOVERRIDE;
+                                int flags) override;
     virtual void DrawRGBAImage(PRectangle rc, int width, int height,
-                               const unsigned char *pixelsImage) wxOVERRIDE;
+                               const unsigned char *pixelsImage) override;
     virtual void Ellipse(PRectangle rc, ColourDesired fore,
-                         ColourDesired back) wxOVERRIDE;
-    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource) wxOVERRIDE;
+                         ColourDesired back) override;
+    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource) override;
 
     virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase,
                                 const char *s, int len, ColourDesired fore,
-                                ColourDesired back) wxOVERRIDE;
+                                ColourDesired back) override;
     virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase,
                                  const char *s, int len, ColourDesired fore,
-                                 ColourDesired back) wxOVERRIDE;
+                                 ColourDesired back) override;
     virtual void DrawTextTransparent(PRectangle rc, Font &font_,
                                      XYPOSITION ybase, const char *s, int len,
-                                     ColourDesired fore) wxOVERRIDE;
+                                     ColourDesired fore) override;
     virtual void MeasureWidths(Font &font_, const char *s, int len,
-                               XYPOSITION *positions) wxOVERRIDE;
-    virtual XYPOSITION WidthText(Font &font_, const char *s, int len) wxOVERRIDE;
-    virtual XYPOSITION WidthChar(Font &font_, char ch) wxOVERRIDE;
-    virtual XYPOSITION Ascent(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION Descent(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION InternalLeading(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION ExternalLeading(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION Height(Font &font_) wxOVERRIDE;
-    virtual XYPOSITION AverageCharWidth(Font &font_) wxOVERRIDE;
+                               XYPOSITION *positions) override;
+    virtual XYPOSITION WidthText(Font &font_, const char *s, int len) override;
+    virtual XYPOSITION WidthChar(Font &font_, char ch) override;
+    virtual XYPOSITION Ascent(Font &font_) override;
+    virtual XYPOSITION Descent(Font &font_) override;
+    virtual XYPOSITION InternalLeading(Font &font_) override;
+    virtual XYPOSITION ExternalLeading(Font &font_) override;
+    virtual XYPOSITION Height(Font &font_) override;
+    virtual XYPOSITION AverageCharWidth(Font &font_) override;
 
-    virtual void SetClip(PRectangle rc) wxOVERRIDE;
-    virtual void FlushCachedState() wxOVERRIDE;
+    virtual void SetClip(PRectangle rc) override;
+    virtual void FlushCachedState() override;
 
-    virtual void SetUnicodeMode(bool unicodeMode_) wxOVERRIDE;
-    virtual void SetDBCSMode(int codePage) wxOVERRIDE;
+    virtual void SetUnicodeMode(bool unicodeMode_) override;
+    virtual void SetDBCSMode(int codePage) override;
 
     // helpers
     void SetFont(Font &font_);
@@ -2641,8 +2641,8 @@ public:
     wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int);
 
     // wxWindow overrides
-    virtual bool AcceptsFocus() const wxOVERRIDE;
-    virtual void SetFocus() wxOVERRIDE;
+    virtual bool AcceptsFocus() const override;
+    virtual void SetFocus() override;
 
     // Setters
     void SetContainerBorderSize(int);
@@ -2678,9 +2678,9 @@ protected:
     void OnMouseLeaveWindow(wxMouseEvent& event);
 
     // wxVListBox overrides
-    virtual wxCoord OnMeasureItem(size_t) const wxOVERRIDE;
-    virtual void OnDrawItem(wxDC& , const wxRect &, size_t) const wxOVERRIDE;
-    virtual void OnDrawBackground(wxDC&, const wxRect&,size_t) const wxOVERRIDE;
+    virtual wxCoord OnMeasureItem(size_t) const override;
+    virtual void OnDrawItem(wxDC& , const wxRect &, size_t) const override;
+    virtual void OnDrawBackground(wxDC&, const wxRect&,size_t) const override;
 
     wxSTCListBoxVisualData* m_visualData;
     wxVector<wxString>      m_labels;
@@ -3134,7 +3134,7 @@ public:
         delete m_surfaceFontData;
     }
 
-    void SetListBoxFont(Font& font) wxOVERRIDE
+    void SetListBoxFont(Font& font) override
     {
         // Retrieve the SurfaceFontDataD2D from font and store a copy of it.
         wxFontWithAscent* fwa = wxFontWithAscent::FromFID(font.GetID());
@@ -3154,7 +3154,7 @@ public:
     }
 
     void OnDrawItemText(wxDC& dc, const wxRect& rect, const wxString& label,
-                        const wxColour& textCol) const wxOVERRIDE
+                        const wxColour& textCol) const override
     {
         // Create a font and a surface object.
         wxFontWithAscent* fontCopy = new wxFontWithAscent(wxFont());
@@ -3431,7 +3431,7 @@ public:
     }
 
     // Use GetSymbol to get a pointer to the relevant function.
-    virtual Function FindFunction(const char *name) wxOVERRIDE {
+    virtual Function FindFunction(const char *name) override {
         if (m_dynlib.IsLoaded()) {
             bool status;
             void* fn_address = m_dynlib.GetSymbol(wxString::FromUTF8(name),
@@ -3445,7 +3445,7 @@ public:
             return NULL;
     }
 
-    virtual bool IsValid() wxOVERRIDE {
+    virtual bool IsValid() override {
         return m_dynlib.IsLoaded();
     }
 

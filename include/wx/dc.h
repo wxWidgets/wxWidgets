@@ -145,15 +145,15 @@ class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 public:
     wxNativeDCFactory() {}
 
-    virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) wxOVERRIDE;
-    virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) wxOVERRIDE;
-    virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner, wxWindow *window ) wxOVERRIDE;
-    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner ) wxOVERRIDE;
-    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) wxOVERRIDE;
-    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) wxOVERRIDE;
-    virtual wxDCImpl* CreateScreenDC( wxScreenDC *owner ) wxOVERRIDE;
+    virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) override;
+    virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) override;
+    virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner, wxWindow *window ) override;
+    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner ) override;
+    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) override;
+    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) override;
+    virtual wxDCImpl* CreateScreenDC( wxScreenDC *owner ) override;
 #if wxUSE_PRINTING_ARCHITECTURE
-    virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) wxOVERRIDE;
+    virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) override;
 #endif
 };
 

@@ -41,7 +41,7 @@ public:
     }
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
+    virtual wxSize DoGetBestSize() const override { return wxSize(50, 250); }
 };
 
 } // anonymous namespace

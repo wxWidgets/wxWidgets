@@ -55,8 +55,8 @@ public:
 class MainApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 };
 
 

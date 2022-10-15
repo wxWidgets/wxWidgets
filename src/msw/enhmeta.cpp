@@ -224,17 +224,17 @@ public:
                          const wxString& description );
     virtual ~wxEnhMetaFileDCImpl();
 
-    wxSize FromDIP(const wxSize& sz) const wxOVERRIDE
+    wxSize FromDIP(const wxSize& sz) const override
     {
         return sz;
     }
 
-    virtual wxSize ToDIP(const wxSize& sz) const wxOVERRIDE
+    virtual wxSize ToDIP(const wxSize& sz) const override
     {
         return sz;
     }
 
-    void SetFont(const wxFont& font) wxOVERRIDE
+    void SetFont(const wxFont& font) override
     {
         wxFont scaledFont = font;
         if (scaledFont.IsOk())
@@ -246,7 +246,7 @@ public:
     wxEnhMetaFile *Close();
 
 protected:
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
 private:
     void Create(HDC hdcRef,

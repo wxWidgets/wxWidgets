@@ -85,9 +85,9 @@ private:
 
 #define   DECLARE_IUNKNOWN_METHODS                                            \
   public:                                                                     \
-    STDMETHODIMP          QueryInterface(REFIID, void **) wxOVERRIDE;         \
-    STDMETHODIMP_(ULONG)  AddRef() wxOVERRIDE;                                \
-    STDMETHODIMP_(ULONG)  Release() wxOVERRIDE;                               \
+    STDMETHODIMP          QueryInterface(REFIID, void **) override;         \
+    STDMETHODIMP_(ULONG)  AddRef() override;                                \
+    STDMETHODIMP_(ULONG)  Release() override;                               \
   private:                                                                    \
     static  const IID    *ms_aIids[];                                         \
     wxAutoULong           m_cRef
