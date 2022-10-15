@@ -33,13 +33,14 @@ This version of wxWidgets supports the following primary platforms:
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer or 3.x).
 - macOS (10.10 or newer) using Cocoa under both amd64 and ARM platforms.
 
-Most popular C++ compilers are supported including but not limited to:
+All C++11 compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2005 or later (up to 2022).
-- g++ 4 or later (up to 12), including MinGW/MinGW-64/TDM under Windows.
+- Microsoft Visual C++ 2015 or later (up to 2022).
+- g++ 4.8 or later (up to 12), including MinGW/MinGW-64/TDM under Windows.
 - Clang (up to 14).
-- Intel icc compiler.
-- Oracle (ex-Sun) CC.
+
+Please use [3.2 branch](https://github.com/wxWidgets/wxWidgets/tree/3.2) if
+you must use wxWidgets with a C++98 compiler.
 
 
 Licence
