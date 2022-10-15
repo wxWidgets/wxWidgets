@@ -54,8 +54,7 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
-        return CreateUsingMSWClass(GetMSWClassName(style),
-                                   parent, id, pos, size, style, name);
+        return CreateUsingMSWClass(NULL, parent, id, pos, size, style, name);
     }
 
     // Non-portable, MSW-specific Create() variant allowing to create the
