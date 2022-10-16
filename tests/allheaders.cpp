@@ -307,12 +307,6 @@
     GCC_TURN_OFF(redundant-tags) // "struct tm" triggers this
 #endif // 10.1
 
-    // This one is given for NULL, and not just literal 0, up to gcc 10, and so
-    // has to remain disabled for as long as we use any NULLs in our code.
-#if !CHECK_GCC_VERSION(10,1)
-    GCC_TURN_OFF(zero-as-null-pointer-constant)
-#endif
-
     // These ones could be useful to explore, but for now we don't use "final"
     // at all anywhere.
 #if CHECK_GCC_VERSION(5,1)
