@@ -1683,12 +1683,17 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
 
     ::SetParent(hWndChild, hWndParent);
 
+    MSWAfterReparent();
+
+    return true;
+}
+
+void wxWindowMSW::MSWAfterReparent()
+{
     if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         EnsureParentHasControlParentStyle(GetParent());
     }
-
-    return true;
 }
 
 static inline void SendSetRedraw(HWND hwnd, bool on)
