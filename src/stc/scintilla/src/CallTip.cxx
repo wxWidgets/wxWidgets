@@ -165,12 +165,12 @@ int CallTip::DrawChunk(Surface *surface, int x, const char *s, size_t len,
 			xEnd = NextTabPos(x);
 		} else {
 			const char *segText = s + startSeg;
-			xEnd = x + static_cast<int>(Sci::lround(surface->WidthText(font, segText, endSeg - startSeg)));
+			xEnd = x + static_cast<int>(Sci::lround(surface->WidthText(font, segText, (int)(endSeg - startSeg))));
 			if (draw) {
 				rcClient.left = static_cast<XYPOSITION>(x);
 				rcClient.right = static_cast<XYPOSITION>(xEnd);
 				surface->DrawTextTransparent(rcClient, font, static_cast<XYPOSITION>(ytext),
-									segText, endSeg - startSeg,
+									segText, (int)(endSeg - startSeg),
 				                             asHighlight ? colourSel : colourUnSel);
 			}
 		}

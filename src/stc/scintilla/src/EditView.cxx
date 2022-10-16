@@ -1208,7 +1208,7 @@ void EditView::DrawEOLAnnotationText(Surface *surface, const EditModel &model, c
 
 	PRectangle rcSegment = rcLine;
 	FontAlias fontText = vsDraw.styles[style].font;
-	const int widthEOLAnnotationText = static_cast<int>(surface->WidthText(fontText, stEOLAnnotation.text, stEOLAnnotation.length));
+	const int widthEOLAnnotationText = static_cast<int>(surface->WidthText(fontText, stEOLAnnotation.text, (int)stEOLAnnotation.length));
 
 	const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
 	const XYPOSITION virtualSpace = model.sel.VirtualSpaceFor(
@@ -1250,11 +1250,11 @@ void EditView::DrawEOLAnnotationText(Surface *surface, const EditModel &model, c
 	if (phase & drawText) {
 		if (phasesDraw != phasesOne) {
 			surface->DrawTextTransparent(rcSegment, fontText,
-			rcSegment.top + vsDraw.maxAscent, stEOLAnnotation.text, stEOLAnnotation.length,
+			rcSegment.top + vsDraw.maxAscent, stEOLAnnotation.text, (int)stEOLAnnotation.length,
 			textFore);
 		} else {
 			surface->DrawTextNoClip(rcSegment, fontText,
-			rcSegment.top + vsDraw.maxAscent, stEOLAnnotation.text, stEOLAnnotation.length,
+			rcSegment.top + vsDraw.maxAscent, stEOLAnnotation.text, (int)stEOLAnnotation.length,
 			textFore, textBack);
 		}
 	}
