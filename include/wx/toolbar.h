@@ -70,8 +70,6 @@ wxALLOW_COMBINING_ENUMS(wxToolBarStyleFlags, wxBorder)
        #include "wx/univ/toolbar.h"
     #elif defined(__WXMSW__)
        #include "wx/msw/toolbar.h"
-    #elif defined(__WXMOTIF__)
-       #include "wx/motif/toolbar.h"
     #elif defined(__WXGTK20__)
         #include "wx/gtk/toolbar.h"
     #elif defined(__WXGTK__)

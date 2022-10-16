@@ -100,8 +100,6 @@ private:
     #include "wx/univ/stattext.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/stattext.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/stattext.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/stattext.h"
 #elif defined(__WXGTK__)

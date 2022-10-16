@@ -64,12 +64,6 @@
     #include "wx/osx/dcscreen.h"
 #endif
 
-#ifdef __WXMOTIF__
-    #include "wx/motif/dcclient.h"
-    #include "wx/motif/dcmemory.h"
-    #include "wx/motif/dcscreen.h"
-#endif
-
 #ifdef __WXX11__
     #include "wx/x11/dcclient.h"
     #include "wx/x11/dcmemory.h"

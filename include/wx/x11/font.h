@@ -136,7 +136,7 @@ public:
     // Maybe we need to scan the user's machine to build up a profile
     // of the fonts and a mapping file.
 
-    // Return font struct, and optionally the Motif font list
+    // Return font struct, and optionally the font list
     wxXFont *GetInternalFont(double scale = 1.0,
         WXDisplay* display = NULL) const;
 

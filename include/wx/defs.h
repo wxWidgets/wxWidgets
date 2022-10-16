@@ -48,8 +48,7 @@
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
 #       error "Target can't be both X and MSW"
-#   elif !defined(__WXMOTIF__) && \
-         !defined(__WXMSW__)   && \
+#   elif !defined(__WXMSW__)   && \
          !defined(__WXGTK__)   && \
          !defined(__WXOSX_COCOA__)   && \
          !defined(__WXOSX_IPHONE__)   && \
@@ -1461,16 +1460,8 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 /*  Windows, it won't normally get the dialog navigation key events) */
 #define wxWANTS_CHARS           0x00040000
 
-/*  Make window retained (Motif only, see src/generic/scrolwing.cpp)
- *  This is non-zero only under wxMotif, to avoid a clash with wxPOPUP_WINDOW
- *  on other platforms
- */
-
-#ifdef __WXMOTIF__
-#define wxRETAINED              0x00020000
-#else
+/*  Deprecated, defined only for compatibility. */
 #define wxRETAINED              0x00000000
-#endif
 #define wxBACKINGSTORE          wxRETAINED
 
 /*  set this flag to create a special popup window: it will be always shown on */
@@ -2931,8 +2922,8 @@ typedef WXLRESULT (wxSTDCALL *WXWNDPROC)(WXHWND, WXUINT, WXWPARAM, WXLPARAM);
 #endif /*  __WIN32__ */
 
 
-#if defined(__WXMOTIF__) || defined(__WXX11__)
-/* Stand-ins for X/Xt/Motif types */
+#if defined(__WXX11__)
+/* Stand-ins for X/Xt types */
 typedef void*           WXWindow;
 typedef void*           WXWidget;
 typedef void*           WXAppContext;
@@ -2955,9 +2946,9 @@ typedef void*           WXFontType; /* either a XmFontList or XmRenderTable */
 typedef void*           WXString;
 
 typedef unsigned long   Atom;  /* this might fail on a few architectures */
-typedef long            WXPixel; /* safety catch in src/motif/colour.cpp */
+typedef long            WXPixel;
 
-#endif /*  Motif */
+#endif /* X11 */
 
 #ifdef __WXGTK__
 

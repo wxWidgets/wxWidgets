@@ -8,7 +8,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXX11__) || defined(__WXGTK__)
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -2761,4 +2761,4 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     return false;
 }
 
-#endif // __WXX11__ || __WXGTK__ || __WXMOTIF__
+#endif // __WXX11__ || __WXGTK__

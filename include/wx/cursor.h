@@ -42,9 +42,6 @@ public:
 #if defined(__WXMSW__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
     #include "wx/msw/cursor.h"
-#elif defined(__WXMOTIF__)
-    #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_XBM
-    #include "wx/motif/cursor.h"
 #elif defined(__WXGTK20__)
     #ifdef __WINDOWS__
         #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE

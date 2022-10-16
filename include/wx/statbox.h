@@ -68,8 +68,6 @@ protected:
     #include "wx/univ/statbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statbox.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/statbox.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/statbox.h"
 #elif defined(__WXGTK__)

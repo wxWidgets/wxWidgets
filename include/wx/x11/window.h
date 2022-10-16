@@ -14,7 +14,7 @@
 #include "wx/region.h"
 
 // ----------------------------------------------------------------------------
-// wxWindow class for Motif - see also wxWindowBase
+// wxWindow class for X11 - see also wxWindowBase
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxWindowX11 : public wxWindowBase

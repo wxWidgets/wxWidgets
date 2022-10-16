@@ -31,9 +31,9 @@
     What makes sizers so well fitted for use in wxWidgets is the fact that every
     control reports its own minimal size and the algorithm can handle differences in
     font sizes or different window (dialog item) sizes on different platforms without
-    problems. If e.g. the standard font as well as the overall design of Motif widgets
+    problems. If e.g. the standard font as well as the overall design of GTK widgets
     requires more space than on Windows, the initial dialog size will automatically
-    be bigger on Motif than on Windows.
+    be bigger on GTK than on Windows.
 
     Sizers may also be used to control the layout of custom drawn items on the
     window. The wxSizer::Add(), wxSizer::Insert(), and wxSizer::Prepend() functions

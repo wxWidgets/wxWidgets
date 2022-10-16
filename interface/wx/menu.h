@@ -532,14 +532,6 @@ public:
 
     /**
         Destructor, destroying the menu.
-
-        @note
-            Under Motif, a popup menu must have a valid parent (the window
-            it was last popped up on) when being destroyed. Therefore, make sure
-            you delete or re-use the popup menu @e before destroying the parent
-            window. Re-use in this context means popping up the menu on a different
-            window from last time, which causes an implicit destruction and
-            recreation of internal data structures.
     */
     virtual ~wxMenu();
 
@@ -637,8 +629,6 @@ public:
         Adds a radio item to the end of the menu.
         All consequent radio items form a group and when an item in the group is
         checked, all the others are automatically unchecked.
-
-        @note Radio items are not supported under wxMotif.
 
         @see Append(), InsertRadioItem()
     */

@@ -383,8 +383,6 @@ bool WidgetsApp::OnInit()
     title += "wxGTK";
 #elif defined(__WXMAC__)
     title += "wxMAC";
-#elif defined(__WXMOTIF__)
-    title += "wxMOTIF";
 #else
     title += "wxWidgets";
 #endif

@@ -569,7 +569,6 @@ public:
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
-            At present this has an effect on Windows and Motif 2.x only.
         @param faceName
             An optional string specifying the face name to be used.
             If it is an empty string, a default face name will be chosen based on the family.
@@ -607,7 +606,6 @@ public:
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
-            At present this has an effect on Windows and Motif 2.x only.
         @param faceName
             An optional string specifying the face name to be used.
             If it is an empty string, a default face name will be chosen based on the family.

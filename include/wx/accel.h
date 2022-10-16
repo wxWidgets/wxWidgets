@@ -86,11 +86,6 @@ public:
     bool operator!=(const wxAcceleratorEntry& entry) const
         { return !(*this == entry); }
 
-#if defined(__WXMOTIF__)
-    // Implementation use only
-    bool MatchesEvent(const wxKeyEvent& event) const;
-#endif
-
     bool IsOk() const
     {
         return  m_keyCode != 0;
@@ -142,8 +137,6 @@ private:
     #include "wx/generic/accel.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/accel.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/accel.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/accel.h"
 #elif defined(__WXGTK__)

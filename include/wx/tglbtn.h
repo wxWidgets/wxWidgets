@@ -81,8 +81,6 @@ protected:
     #define wxHAS_BITMAPTOGGLEBUTTON
 #elif defined(__WXGTK__)
     #include "wx/gtk1/tglbtn.h"
-# elif defined(__WXMOTIF__)
-    #include "wx/motif/tglbtn.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/tglbtn.h"
     #define wxHAS_BITMAPTOGGLEBUTTON

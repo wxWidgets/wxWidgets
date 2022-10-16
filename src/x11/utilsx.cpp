@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/x11/utilsx.cpp
-// Purpose:     Private functions common to X11 and Motif ports
+// Purpose:     Private functions for X11
 // Author:      Mattia Barbon
 // Modified by:
 // Created:     05/04/03

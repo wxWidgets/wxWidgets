@@ -1474,7 +1474,7 @@ void ImageTestCase::ScaleCompare()
 
 void ImageTestCase::CreateBitmapFromCursor()
 {
-#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
+#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXX11__
 
     wxImage image("image/wx.png");
     wxCursor cursor(image);

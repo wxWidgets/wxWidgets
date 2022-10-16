@@ -151,7 +151,7 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 }
 
 
-// Configurable display in wxX11 and wxMotif
+// Configurable display in wxX11
 static Display *gs_currentDisplay = NULL;
 static wxString gs_displayName;
 

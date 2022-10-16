@@ -631,7 +631,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         // is UTF8 -- but it isn't supported by wxGTK1 in ANSI build at all so
         // don't even try to use it in this case
 #if !wxUSE_UNICODE && \
-        ((defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__WXMOTIF__))
+        ((defined(__WXGTK__) && !defined(__WXGTK20__)))
         if (enc == wxFONTENCODING_UTF8)
         {
             // the most similar supported encoding...

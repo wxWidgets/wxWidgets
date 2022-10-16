@@ -56,12 +56,6 @@
 /* Define this if you want to use GPE features */
 #cmakedefine __WXGPE__ 1
 
-/* Define this if your version of Motif is greater than 2.0 */
-#cmakedefine __WXMOTIF20__ 1
-
-/* Define this if you are using Lesstif */
-#cmakedefine __WXLESSTIF__ 1
-
 /*
  * Define to 1 for Unix[-like] system
  */

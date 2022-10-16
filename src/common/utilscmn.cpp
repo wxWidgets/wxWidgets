@@ -1032,7 +1032,7 @@ unsigned int wxCTZ(wxUint32 x)
 
 // this function is only really implemented for X11-based ports, including GTK1
 // (GTK2 sets detectable auto-repeat automatically anyhow)
-#if !(defined(__WXX11__) || defined(__WXMOTIF__) || \
+#if !(defined(__WXX11__) || \
         (defined(__WXGTK__) && !defined(__WXGTK20__)))
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 {
@@ -1045,7 +1045,7 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 // ----------------------------------------------------------------------------
 
 #if defined(__WINDOWS__) && !defined(__WXQT__) || \
-    defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || \
+    defined(__WXX11__) || defined(__WXGTK__) || \
     defined(__WXOSX__)
 
 // implemented in a port-specific utils source file:

@@ -299,7 +299,6 @@ INPUT                  = mainpages \
                          overviews \
                          ../gtk \
                          ../ios \
-                         ../motif \
                          ../msw \
                          ../osx \
                          ../qt \

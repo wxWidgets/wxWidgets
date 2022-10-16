@@ -62,11 +62,6 @@
 //  make the help frame unusable)
 const wxCoord CONTENT_TREE_INDEX_MIN_WIDTH = 150;
 
-/* Motif defines this as a macro */
-#ifdef Below
-#undef Below
-#endif
-
 //--------------------------------------------------------------------------
 // wxHtmlHelpTreeItemData (private)
 //--------------------------------------------------------------------------

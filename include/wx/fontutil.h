@@ -10,7 +10,7 @@
 
 // General note: this header is private to wxWidgets and is not supposed to be
 // included by user code. The functions declared here are implemented in
-// msw/fontutil.cpp for Windows, unix/fontutil.cpp for GTK/Motif &c.
+// msw/fontutil.cpp for Windows, unix/fontutil.cpp for GTK &c.
 
 #ifndef _WX_FONTUTIL_H_
 #define _WX_FONTUTIL_H_

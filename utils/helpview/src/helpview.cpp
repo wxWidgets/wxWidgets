@@ -46,10 +46,6 @@ hvApp::hvApp()
 
 bool hvApp::OnInit()
 {
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-#endif
-
     wxArtProvider::Push(new AlternateArtProvider);
 
     int istyle = wxHF_DEFAULT_STYLE;
@@ -209,10 +205,6 @@ bool hvApp::OnInit()
         m_helpController->AddBook(fileName);
     }
 
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogGui);
-#endif
-
     m_helpController->DisplayContents();
 
     return true;
@@ -303,7 +295,7 @@ if ( id == artId ) return wxBitmap(xpmRc##_xpm);
 // wxIcon ctor. This depends on the platform:
 #if defined(__WXUNIVERSAL__)
 #define CREATE_STD_ICON(iconId, xpmRc) return wxNullBitmap;
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__)
 #define CREATE_STD_ICON(iconId, xpmRc) return wxBitmap(xpmRc##_xpm);
 #else
 #define CREATE_STD_ICON(iconId, xpmRc) \

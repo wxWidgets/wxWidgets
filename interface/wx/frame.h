@@ -190,11 +190,7 @@ public:
             The window style. See wxFrame class description.
         @param name
             The name of the window. This parameter is used to associate a name with
-            the item, allowing the application user to set Motif resource values for
-            individual windows.
-
-        @remarks For Motif, MWM (the Motif Window Manager) should be running for
-                 any window styles to work (otherwise all styles take effect).
+            the window. This is @e not the same as the title of the window.
 
         @see Create()
     */

@@ -39,8 +39,6 @@ public:
     #include "wx/univ/checklst.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/checklst.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/checklst.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/checklst.h"
 #elif defined(__WXGTK__)

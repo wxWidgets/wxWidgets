@@ -31,7 +31,7 @@
     @style{wxCB_SIMPLE}
            Creates a combobox with a permanently displayed list. Windows only.
     @style{wxCB_DROPDOWN}
-           Creates a combobox with a drop-down list. MSW and Motif only.
+           Creates a combobox with a drop-down list. MSW only.
     @style{wxCB_READONLY}
            A combobox with this style behaves like a wxChoice (and may look in
            the same way as well, although this is platform-dependent), i.e. it

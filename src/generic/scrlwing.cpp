@@ -41,18 +41,6 @@
     #include "wx/msw/winundef.h"
 #endif
 
-#ifdef __WXMOTIF__
-// For wxRETAINED implementation
-#ifdef __VMS__ //VMS's Xm.h is not (yet) compatible with C++
-               //This code switches off the compiler warnings
-# pragma message disable nosimpint
-#endif
-#include <Xm/Xm.h>
-#ifdef __VMS__
-# pragma message enable nosimpint
-#endif
-#endif
-
 /*
     TODO PROPERTIES
         style wxHSCROLL | wxVSCROLL
@@ -1389,39 +1377,6 @@ void wxScrollHelper::AdjustScrollbars()
         if ( GetTargetSize() == clientSize )
             break;
     }
-
-#ifdef __WXMOTIF__
-    // Sorry, some Motif-specific code to implement a backing pixmap
-    // for the wxRETAINED style. Implementing a backing store can't
-    // be entirely generic because it relies on the wxWindowDC implementation
-    // to duplicate X drawing calls for the backing pixmap.
-
-    if ( m_targetWindow->GetWindowStyle() & wxRETAINED )
-    {
-        Display* dpy = XtDisplay((Widget)m_targetWindow->GetMainWidget());
-
-        int totalPixelWidth = m_xScrollLines * m_xScrollPixelsPerLine;
-        int totalPixelHeight = m_yScrollLines * m_yScrollPixelsPerLine;
-        if (m_targetWindow->GetBackingPixmap() &&
-           !((m_targetWindow->GetPixmapWidth() == totalPixelWidth) &&
-             (m_targetWindow->GetPixmapHeight() == totalPixelHeight)))
-        {
-            XFreePixmap (dpy, (Pixmap) m_targetWindow->GetBackingPixmap());
-            m_targetWindow->SetBackingPixmap((WXPixmap) 0);
-        }
-
-        if (!m_targetWindow->GetBackingPixmap() &&
-           (m_xScrollLines != 0) && (m_yScrollLines != 0))
-        {
-            int depth = wxDisplayDepth();
-            m_targetWindow->SetPixmapWidth(totalPixelWidth);
-            m_targetWindow->SetPixmapHeight(totalPixelHeight);
-            m_targetWindow->SetBackingPixmap((WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-              m_targetWindow->GetPixmapWidth(), m_targetWindow->GetPixmapHeight(), depth));
-        }
-
-    }
-#endif // Motif
 
     if (oldXScroll != m_xScrollPosition)
     {

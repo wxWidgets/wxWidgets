@@ -741,8 +741,6 @@ protected:
 
 #if defined(__WXMSW__)
     #include "wx/msw/app.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
 #elif defined(__WXGTK20__)

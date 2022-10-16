@@ -327,8 +327,6 @@ private:
     #include "wx/osx/textentry.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textentry.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/textentry.h"
 #elif defined(__WXQT__)
     #include "wx/qt/textentry.h"
 #else

@@ -72,7 +72,7 @@
     #include <gdk/gdkx.h>
     #define GetDisplay()        GDK_DISPLAY()
     #define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
-#elif defined(__WXX11__) || defined(__WXMOTIF__)
+#elif defined(__WXX11__)
     #include "wx/x11/privx.h"
     #define GetDisplay()        ((Display*)wxGlobalDisplay())
     #define GetXWindow(wxwin)   ((Window)(wxwin)->GetHandle())

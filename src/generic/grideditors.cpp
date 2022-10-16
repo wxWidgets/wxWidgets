@@ -42,12 +42,6 @@
 #include "wx/generic/grideditors.h"
 #include "wx/generic/private/grid.h"
 
-#if defined(__WXMOTIF__)
-    #define WXUNUSED_MOTIF(identifier)  WXUNUSED(identifier)
-#else
-    #define WXUNUSED_MOTIF(identifier)  identifier
-#endif
-
 #if defined(__WXGTK__)
     #define WXUNUSED_GTK(identifier)    WXUNUSED(identifier)
 #else
@@ -505,11 +499,6 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
     int extra_x = 2;
     int extra_y = 2;
 
-    #if defined(__WXMOTIF__)
-        extra_x *= 2;
-        extra_y *= 2;
-    #endif
-
     rect.SetLeft( wxMax(0, rect.x - extra_x) );
     rect.SetTop( wxMax(0, rect.y - extra_y) );
     rect.SetRight( rect.GetRight() + 2 * extra_x );
@@ -635,10 +624,10 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 }
 
 void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
-                                         WXUNUSED_GTK(WXUNUSED_MOTIF(event)) )
+                                         WXUNUSED_GTK(event) )
 {
-#if defined(__WXMOTIF__) || defined(__WXGTK__)
-    // wxMotif needs a little extra help...
+#if defined(__WXGTK__)
+    // wxGTK needs a little extra help...
     size_t pos = (size_t)( Text()->GetInsertionPoint() );
     wxString s( Text()->GetValue() );
     s = s.Left(pos) + wxT("\n") + s.Mid(pos);

@@ -265,8 +265,6 @@ protected:
         #include "wx/gtk/frame.h"
     #elif defined(__WXGTK__)
         #include "wx/gtk1/frame.h"
-    #elif defined(__WXMOTIF__)
-        #include "wx/motif/frame.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/frame.h"
     #elif defined(__WXQT__)

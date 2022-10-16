@@ -1304,8 +1304,6 @@
 #  include "wx/osx/chkconf.h"
 #elif defined(__WXDFB__)
 #  include "wx/dfb/chkconf.h"
-#elif defined(__WXMOTIF__)
-#  include "wx/motif/chkconf.h"
 #elif defined(__WXX11__)
 #  include "wx/x11/chkconf.h"
 #elif defined(__WXANDROID__)

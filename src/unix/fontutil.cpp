@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/unix/fontutil.cpp
-// Purpose:     Font helper functions for wxX11, wxGTK, wxMotif
+// Purpose:     Font helper functions for wxX11, wxGTK
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     05.11.99

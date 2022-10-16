@@ -130,8 +130,6 @@ protected:
     #include "wx/univ/bmpbuttn.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/bmpbuttn.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/bmpbuttn.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/bmpbuttn.h"
 #elif defined(__WXGTK__)

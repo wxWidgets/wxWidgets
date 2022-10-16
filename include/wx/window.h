@@ -2004,8 +2004,6 @@ private:
         #define wxWindowMSW wxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/window.h"
 #elif defined(__WXGTK20__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowGTK

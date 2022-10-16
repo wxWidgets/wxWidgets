@@ -31,7 +31,7 @@
 #include "wx/fontenum.h"
 #include "wx/accel.h"
 
-#if defined (__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+#if defined (__WXGTK__) || defined(__WXX11__)
 #define wxHAVE_PRIMARY_SELECTION 1
 #else
 #define wxHAVE_PRIMARY_SELECTION 0

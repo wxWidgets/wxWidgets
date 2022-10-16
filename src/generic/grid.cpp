@@ -2627,7 +2627,7 @@ void wxGridWindow::OnMouseWheel( wxMouseEvent& event )
         event.Skip();
 }
 
-// This seems to be required for wxMotif/wxGTK otherwise the mouse
+// This seems to be required for wxX11/wxGTK otherwise the mouse
 // cursor must be in the cell edit control to get key events
 //
 void wxGridWindow::OnKeyDown( wxKeyEvent& event )
@@ -2834,7 +2834,7 @@ void wxGrid::Create()
 void wxGrid::InitPixelFields()
 {
     m_defaultRowHeight = m_gridWin->GetCharHeight();
-#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__)  // see also text ctrl sizing in ShowCellEditControl()
+#if defined(__WXGTK__) || defined(__WXQT__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
 #else
     m_defaultRowHeight += 4;
@@ -3730,19 +3730,6 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
         r = iter.GetRect();
         r.Offset(GetGridWindowOffset(gridWindow));
 
-        // TODO: remove this when we can...
-        // There is a bug in wxMotif that gives garbage update
-        // rectangles if you jump-scroll a long way by clicking the
-        // scrollbar with middle button.  This is a work-around
-        //
-#if defined(__WXMOTIF__)
-        int cw, ch;
-        m_gridWin->GetClientSize( &cw, &ch );
-        if ( r.GetTop() > ch )
-            r.SetTop( 0 );
-        r.SetBottom( wxMin( r.GetBottom(), ch ) );
-#endif
-
         // logical bounds of update region
         //
         int dummy;
@@ -3783,19 +3770,6 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *grid
     {
         r = iter.GetRect();
         r.Offset( GetGridWindowOffset(gridWindow) );
-
-        // TODO: remove this when we can...
-        // There is a bug in wxMotif that gives garbage update
-        // rectangles if you jump-scroll a long way by clicking the
-        // scrollbar with middle button.  This is a work-around
-        //
-#if defined(__WXMOTIF__)
-        int cw, ch;
-        m_gridWin->GetClientSize( &cw, &ch );
-        if ( r.GetLeft() > cw )
-            r.SetLeft( 0 );
-        r.SetRight( wxMin( r.GetRight(), cw ) );
-#endif
 
         // logical bounds of update region
         //
@@ -3844,23 +3818,6 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg,
         // getting their rectangles and so on.
         if ( !r.GetHeight() )
             continue;
-
-        // TODO: remove this when we can...
-        // There is a bug in wxMotif that gives garbage update
-        // rectangles if you jump-scroll a long way by clicking the
-        // scrollbar with middle button.  This is a work-around
-        //
-#if defined(__WXMOTIF__)
-        if ( gridWindow )
-        {
-            int cw, ch;
-            gridWindow->GetClientSize( &cw, &ch );
-            if ( r.GetTop() > ch ) r.SetTop( 0 );
-            if ( r.GetLeft() > cw ) r.SetLeft( 0 );
-            r.SetRight( wxMin( r.GetRight(), cw ) );
-            r.SetBottom( wxMin( r.GetBottom(), ch ) );
-        }
-#endif
 
         // logical bounds of update region
         //

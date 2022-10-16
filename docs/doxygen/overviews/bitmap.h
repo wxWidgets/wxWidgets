@@ -43,7 +43,7 @@ wxIcon icon(wxICON(sample));
 
 // The above line is equivalent to this:
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__)
     wxIcon icon(sample_xpm);
 #endif
 
@@ -116,7 +116,7 @@ Under wxGTK, wxBitmap may load the following formats:
 @li XPM data and file (wxBITMAP_TYPE_XPM)
 @li All formats that are supported by the wxImage class.
 
-Under wxMotif and wxX11, wxBitmap may load the following formats:
+Under wxX11, wxBitmap may load the following formats:
 
 @li XBM data and file (wxBITMAP_TYPE_XBM)
 @li XPM data and file (wxBITMAP_TYPE_XPM)
@@ -135,7 +135,7 @@ Under wxGTK, wxIcon may load the following formats:
 @li XPM data and file (wxBITMAP_TYPE_XPM)
 @li All formats that are supported by the wxImage class.
 
-Under wxMotif and wxX11, wxIcon may load the following formats:
+Under wxX11, wxIcon may load the following formats:
 
 @li XBM data and file (wxBITMAP_TYPE_XBM)
 @li XPM data and file (wxBITMAP_TYPE_XPM)
@@ -155,7 +155,7 @@ cursors):
 
 @li None (stock cursors only).
 
-Under wxMotif and wxX11, wxCursor may load the following formats:
+Under wxX11, wxCursor may load the following formats:
 
 @li XBM data and file (wxBITMAP_TYPE_XBM).
 

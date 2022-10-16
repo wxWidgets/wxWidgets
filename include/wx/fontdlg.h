@@ -64,7 +64,6 @@ protected:
 #endif
 
 #if defined(__WXUNIVERSAL__) || \
-    defined(__WXMOTIF__)     || \
     defined(__WXGPE__)
 
     #include "wx/generic/fontdlgg.h"

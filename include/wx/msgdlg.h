@@ -301,8 +301,6 @@ private:
     #define wxMessageDialog wxGenericMessageDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/msgdlg.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/msgdlg.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/msgdlg.h"
 #elif defined(__WXMAC__)

@@ -20,7 +20,7 @@
 // NB: Content of this header is for wxWidgets' private use! It is not
 //     part of public API and may be modified or even disappear in the future!
 
-#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXX11__)
+#if defined(__WXGTK__) || defined(__WXX11__)
 
 #if defined(__WXGTK__)
 typedef void WXDisplay;
@@ -83,6 +83,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxX11Display);
 };
 
-#endif // __WXMOTIF__, __WXGTK__, __WXX11__
+#endif // __WXGTK__, __WXX11__
 
 #endif // _WX_UNIX_UTILSX11_H_

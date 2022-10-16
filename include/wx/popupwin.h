@@ -68,8 +68,6 @@ public:
     #include "wx/gtk1/popupwin.h"
 #elif defined(__WXX11__)
     #include "wx/x11/popupwin.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/popupwin.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/popupwin.h"
 #elif defined(__WXMAC__)

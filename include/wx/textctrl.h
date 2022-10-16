@@ -870,8 +870,6 @@ protected:
     #include "wx/univ/textctrl.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textctrl.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/textctrl.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/textctrl.h"
 #elif defined(__WXGTK__)

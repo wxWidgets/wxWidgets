@@ -178,9 +178,6 @@
 # /include/wx/html/
 /include/wx/html/Makefile.in
 
-# /include/wx/motif/
-/include/wx/motif/Makefile.in
-
 # /include/wx/msw/
 /include/wx/msw/Makefile.in
 /include/wx/msw/Makefile
@@ -325,9 +322,6 @@
 /src/jpeg/jpegM5.mcp
 /src/jpeg/Debug
 /src/jpeg/Release
-
-# /src/motif/
-/src/motif/Makefile.in
 
 # /src/msw/
 /src/msw/Makefile.in

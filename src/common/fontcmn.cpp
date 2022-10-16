@@ -920,7 +920,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 // conversion to/from user-readable string: this is used in the generic
 // versions and under MSW as well because there is no standard font description
 // format there anyhow (but there is a well-defined standard for X11 fonts used
-// by wxGTK and wxMotif)
+// by wxGTK and wxX11)
 
 #if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__) || defined(__WXOSX__)
 

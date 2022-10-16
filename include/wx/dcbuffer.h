@@ -15,8 +15,8 @@
 #include "wx/dcclient.h"
 #include "wx/window.h"
 
-// Only deprecated wxGTK1 and wxMotif platforms don't use double buffering.
-#if defined(__WXMOTIF__) || (defined(__WXGTK__) && !defined(__WXGTK20__))
+// Only deprecated wxGTK1 platform doesn't use double buffering.
+#if defined(__WXGTK__) && !defined(__WXGTK20__)
     #define wxALWAYS_NATIVE_DOUBLE_BUFFER       0
 #else
     #define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
