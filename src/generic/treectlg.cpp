@@ -2662,12 +2662,12 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         dc.SetClippingRegion(item->GetX() + state_w, item->GetY(),
                              image_w, total_h);
-        GetImageList()->Draw( image, dc,
+        dc.DrawBitmap( GetBitmapBundle(image).GetBitmapFor(this),
                                  item->GetX() + state_w,
                                  item->GetY() +
                                     (total_h > image_h ? (total_h-image_h)/2
                                                        : 0),
-                                 wxIMAGELIST_DRAW_TRANSPARENT );
+                                 true /* use mask */ );
         dc.DestroyClippingRegion();
     }
 
