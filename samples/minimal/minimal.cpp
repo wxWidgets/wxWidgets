@@ -63,10 +63,15 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnCount(wxCommandEvent& event);
+    void OnRemove(wxCommandEvent& event);
+    void OnRmAndAdd(wxCommandEvent& event);
 
 private:
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
+    
+    void CreateMenu(void);
 };
 
 // ----------------------------------------------------------------------------
@@ -82,7 +87,11 @@ enum
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
-    Minimal_About = wxID_ABOUT
+    Minimal_About = wxID_ABOUT,
+    
+    ID_Count = 1,
+    ID_Remove = 2,
+    ID_RmAndAdd = 3,
 };
 
 // ----------------------------------------------------------------------------
@@ -95,6 +104,10 @@ enum
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
+
+    EVT_MENU(ID_Count, MyFrame::OnCount)
+    EVT_MENU(ID_Remove, MyFrame::OnRemove)
+    EVT_MENU(ID_RmAndAdd, MyFrame::OnRmAndAdd)
 wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -143,22 +156,48 @@ MyFrame::MyFrame(const wxString& title)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
+    
+    CreateMenu();
+    
+#if wxUSE_STATUSBAR
+    // create a status bar just for fun (by default with 1 pane only)
+    CreateStatusBar(2);
+    SetStatusText("Welcome to wxWidgets!");
+#endif // wxUSE_STATUSBAR
+}
+
+void MyFrame::CreateMenu(void)
+{
+    auto menuBar = GetMenuBar();
+
+    // Create a new menu bar if none has been created so far
+    if (menuBar == nullptr) {
+        menuBar = new wxMenuBar;
+    }
 
 #if wxUSE_MENUBAR
     // create a menu bar
     wxMenu *fileMenu = new wxMenu;
-
+    
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
-
+    
     fileMenu->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
-
+    
+    // Add a test menu - Between file and help
+    wxMenu *bogusMenu = new wxMenu;
+    bogusMenu->Append(ID_Count, "&GetMenuCount", "Get the count of menu bar items");
+    bogusMenu->Append(ID_Remove, "&Remove", "Remove all menu bar items");
+    bogusMenu->Append(ID_RmAndAdd, "RmAndA&dd", "Remove and re-add the menu items");
+    
+    
     // now append the freshly created menu to the menu bar...
-    wxMenuBar *menuBar = new wxMenuBar();
+    //wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(fileMenu, "&File");
+    menuBar->Append(bogusMenu, "&Bogus");
     menuBar->Append(helpMenu, "&Help");
-
+    
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 #else // !wxUSE_MENUBAR
@@ -169,12 +208,7 @@ MyFrame::MyFrame(const wxString& title)
     sizer->Add(aboutBtn, wxSizerFlags().Center());
     SetSizer(sizer);
 #endif // wxUSE_MENUBAR/!wxUSE_MENUBAR
-
-#if wxUSE_STATUSBAR
-    // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar(2);
-    SetStatusText("Welcome to wxWidgets!");
-#endif // wxUSE_STATUSBAR
+    
 }
 
 
@@ -193,11 +227,41 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                     "Welcome to %s!\n"
                     "\n"
                     "This is the minimal wxWidgets sample\n"
+                    "With added Bogosity!\n"
                     "running under %s.",
                     wxVERSION_STRING,
                     wxGetOsDescription()
                  ),
-                 "About wxWidgets minimal sample",
+                 "About wxWidgets Bogus sample",
                  wxOK | wxICON_INFORMATION,
                  this);
+}
+
+void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageBox(wxString::Format("Number of menu bar items: %ld", GetMenuBar()->GetMenuCount()),
+                 "GetMenuCount Result",
+                 wxOK | wxICON_INFORMATION,
+                 this);
+}
+
+void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
+{
+    wxMenuBar *menuBar = GetMenuBar();
+    
+    // Removing all existing menu items is necessary for language switching
+    while (menuBar->GetMenuCount()) {
+        delete menuBar->Remove(0);
+    }
+}
+
+void MyFrame::OnRmAndAdd(wxCommandEvent& WXUNUSED(event))
+{
+    wxMenuBar *menuBar = GetMenuBar();
+    
+    // Removing all existing menu items is necessary for language switching
+    while (menuBar->GetMenuCount()) {
+        delete menuBar->Remove(0);
+    }
+    CreateMenu();
 }
