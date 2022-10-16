@@ -41,6 +41,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/customdraw.h"
 #include "wx/msw/private/keyboard.h"
+#include "wx/msw/private/winstyle.h"
 
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.
@@ -300,6 +301,8 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
+    MSWResetParentComposited();
+
     EnableSystemThemeByDefault();
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
@@ -369,6 +372,26 @@ void wxListCtrl::MSWSetExListStyles()
     }
 
     ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
+}
+
+void wxListCtrl::MSWResetParentComposited()
+{
+    // LISTVIEW doesn't redraw correctly when WS_EX_COMPOSITED is used by
+    // either the control itself (which never happens now, see our overridden
+    // SetDoubleBuffered()) or even by any of its parents, so we must reset
+    // this style for them.
+    for ( wxWindow* parent = GetParent(); parent; parent = parent->GetParent() )
+    {
+        wxMSWWinExStyleUpdater(GetHwndOf(parent)).TurnOff(WS_EX_COMPOSITED);
+
+        if ( parent->IsTopLevel() )
+            break;
+    }
+}
+
+void wxListCtrl::MSWAfterReparent()
+{
+    MSWResetParentComposited();
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const

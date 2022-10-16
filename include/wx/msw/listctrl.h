@@ -399,6 +399,8 @@ protected:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
+    virtual void MSWAfterReparent() override;
+
     void OnDPIChanged(wxDPIChangedEvent& event);
 
     wxSize MSWGetBestViewRect(int x, int y) const;
@@ -440,6 +442,9 @@ private:
     // set the extended styles for the control (used by Create() and
     // UpdateStyle()), only should be called if InReportView()
     void MSWSetExListStyles();
+
+    // ensure that none of our parents uses WS_EX_COMPOSITED
+    void MSWResetParentComposited();
 
     // initialize the (already created) m_textCtrl with the associated HWND
     void InitEditControl(WXHWND hWnd);
