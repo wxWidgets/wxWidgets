@@ -593,10 +593,8 @@ protected:
     #include "wx/univ/menu.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/menu.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/menu.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/menu.h"
+    #include "wx/gtk/menu.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/menu.h"
 #elif defined(__WXQT__)

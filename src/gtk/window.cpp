@@ -3908,19 +3908,12 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 
 void wxWindowGTK::ConstrainSize()
 {
-#ifdef __WXGPE__
-    // GPE's window manager doesn't like size hints at all, esp. when the user
-    // has to use the virtual keyboard, so don't constrain size there
-    if (!IsTopLevel())
-#endif
-    {
-        const wxSize minSize = GetMinSize();
-        const wxSize maxSize = GetMaxSize();
-        if (minSize.x > 0 && m_width  < minSize.x) m_width  = minSize.x;
-        if (minSize.y > 0 && m_height < minSize.y) m_height = minSize.y;
-        if (maxSize.x > 0 && m_width  > maxSize.x) m_width  = maxSize.x;
-        if (maxSize.y > 0 && m_height > maxSize.y) m_height = maxSize.y;
-    }
+    const wxSize minSize = GetMinSize();
+    const wxSize maxSize = GetMaxSize();
+    if (minSize.x > 0 && m_width  < minSize.x) m_width  = minSize.x;
+    if (minSize.y > 0 && m_height < minSize.y) m_height = minSize.y;
+    if (maxSize.x > 0 && m_width  > maxSize.x) m_width  = maxSize.x;
+    if (maxSize.y > 0 && m_height > maxSize.y) m_height = maxSize.y;
 }
 
 void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )

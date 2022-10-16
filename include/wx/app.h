@@ -743,10 +743,8 @@ protected:
     #include "wx/msw/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/app.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/app.h"
+    #include "wx/gtk/app.h"
 #elif defined(__WXX11__)
     #include "wx/x11/app.h"
 #elif defined(__WXMAC__)

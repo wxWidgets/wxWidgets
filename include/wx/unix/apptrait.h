@@ -53,7 +53,7 @@ public:
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) override;
 #endif
-#if wxUSE_THREADS && defined(__WXGTK20__)
+#if wxUSE_THREADS && defined(__WXGTK__)
     virtual void MutexGuiEnter() override;
     virtual void MutexGuiLeave() override;
 #endif
@@ -62,11 +62,11 @@ public:
                                int *minVer = NULL,
                                int *microVer = NULL) const override;
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const override;
-#endif // __WXGTK20____
+#endif // __WXGTK____
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     virtual bool ShowAssertDialog(const wxString& msg) override;
 #endif
 

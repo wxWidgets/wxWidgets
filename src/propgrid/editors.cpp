@@ -2145,11 +2145,7 @@ int wxPGMultiButton::GenId( int itemid ) const
 
 #if defined(__WXGTK__)
 // Dedicated wxBitmapButton with reduced internal borders
-#if defined( __WXGTK127__ )
-#include "wx/gtk1/private.h"
-#else
 #include "wx/gtk/private.h"
-#endif
 
 class wxPGEditorBitmapButton : public wxBitmapButton
 {

@@ -77,7 +77,7 @@ protected:
 //       same prototype for their constructor (and also explains why we use
 //       define instead of a typedef)
 // since GTK > 2.4, there is GtkColorButton
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/clrpicker.h"
     #define wxColourPickerWidget      wxColourButton
 #elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)

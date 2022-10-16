@@ -650,12 +650,6 @@ dnl ### begin block 20_COND_TOOLKIT_GTK[wx.bkl] ###
         COND_TOOLKIT_GTK=""
     fi
     AC_SUBST(COND_TOOLKIT_GTK)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_)
 dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_2[../../samples/dialogs/dialogs.bkl,wx.bkl] ###
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
@@ -710,18 +704,6 @@ dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0[wx.
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_TOOLKIT_GTK_USE_GUI_1[wx.bkl] ###
     COND_TOOLKIT_GTK_USE_GUI_1="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$USE_GUI" = "x1" ; then

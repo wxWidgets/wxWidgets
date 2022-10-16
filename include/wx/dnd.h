@@ -214,10 +214,8 @@ protected:
     #include "wx/msw/ole/droptgt.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dnd.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/dnd.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/dnd.h"
+    #include "wx/gtk/dnd.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dnd.h"
 #elif defined(__WXQT__)

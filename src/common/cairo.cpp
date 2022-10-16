@@ -12,7 +12,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_CAIRO && !defined(__WXGTK20__)
+#if wxUSE_CAIRO && !defined(__WXGTK__)
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.

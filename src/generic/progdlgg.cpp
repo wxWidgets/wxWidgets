@@ -376,7 +376,7 @@ wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
     wxStaticText *value = new wxStaticText(this, wxID_ANY, _("unknown"));
 
     // select placement most native or nice on target GUI
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
     // value and time centered in one row
     sizer->Add(label, 1, wxALIGN_RIGHT | wxTOP | wxRIGHT, LAYOUT_MARGIN);
     sizer->Add(value, 1, wxALIGN_LEFT | wxTOP, LAYOUT_MARGIN);

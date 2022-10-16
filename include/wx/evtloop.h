@@ -294,7 +294,7 @@ private:
     #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/evtloop.h"
 #elif defined(__WXQT__)
     #include "wx/qt/evtloop.h"

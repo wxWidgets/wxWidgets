@@ -56,7 +56,7 @@ bool wxFrameBase::ShouldUpdateMenuFromIdle()
     // check if we're using the global menu bar as we don't get EVT_MENU_OPEN
     // for it and need to fall back to idle time updating even if normally
     // wxUSE_IDLEMENUUPDATES is set to 0 for wxGTK.
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     if ( wxApp::GTKIsUsingGlobalMenu() )
         return true;
 #endif // !__WXGTK__

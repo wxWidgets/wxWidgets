@@ -2581,7 +2581,7 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 /*  ---------------------------------------------------------------------------- */
 
 /*  define this macro if font handling is done using the X font names */
-#if (defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__X__)
+#if defined(__X__)
     #define _WX_X_FONTLIKE
 #endif
 
@@ -2960,11 +2960,7 @@ typedef struct _GdkColor        GdkColor;
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkDragContext  GdkDragContext;
 
-#if defined(__WXGTK20__)
-    typedef struct _GdkAtom* GdkAtom;
-#else
-    typedef unsigned long GdkAtom;
-#endif
+typedef struct _GdkAtom* GdkAtom;
 
 #if !defined(__WXGTK3__)
     typedef struct _GdkColormap GdkColormap;
@@ -2976,13 +2972,9 @@ typedef struct _GdkDragContext  GdkDragContext;
 #if defined(__WXGTK3__)
     typedef struct _GdkWindow GdkWindow;
     typedef struct _GdkEventSequence GdkEventSequence;
-#elif defined(__WXGTK20__)
+#else
     typedef struct _GdkDrawable GdkWindow;
     typedef struct _GdkDrawable GdkPixmap;
-#else
-    typedef struct _GdkWindow GdkWindow;
-    typedef struct _GdkWindow GdkBitmap;
-    typedef struct _GdkWindow GdkPixmap;
 #endif
 
 /* Stand-ins for GTK types */
@@ -3000,14 +2992,9 @@ typedef struct _GtkCellRenderer   GtkCellRenderer;
 
 typedef GtkWidget *WXWidget;
 
-#ifndef __WXGTK20__
-#define GTK_OBJECT_GET_CLASS(object) (GTK_OBJECT(object)->klass)
-#define GTK_CLASS_TYPE(klass) ((klass)->type)
-#endif
-
 #endif /*  __WXGTK__ */
 
-#if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#if defined(__WXGTK__) || (defined(__WXX11__) && wxUSE_UNICODE)
 #define wxUSE_PANGO 1
 #else
 #define wxUSE_PANGO 0

@@ -172,9 +172,6 @@
 # /include/wx/gtk/
 /include/wx/gtk/Makefile.in
 
-# /include/wx/gtk1/
-/include/wx/gtk1/Makefile.in
-
 # /include/wx/html/
 /include/wx/html/Makefile.in
 
@@ -311,11 +308,6 @@
 /src/gtk/Makefile.in
 /src/gtk/*.lo
 /src/gtk/*.la
-
-# /src/gtk1/
-/src/gtk1/Makefile.in
-/src/gtk1/*.lo
-/src/gtk1/*.la
 
 # /src/jpeg/
 /src/jpeg/jpegM*Data

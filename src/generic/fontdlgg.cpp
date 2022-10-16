@@ -11,7 +11,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FONTDLG && (!defined(__WXGTK__) || defined(__WXGPE__) || defined(__WXUNIVERSAL__))
+#if wxUSE_FONTDLG
 
 #ifndef WX_PRECOMP
     #include <stdio.h>

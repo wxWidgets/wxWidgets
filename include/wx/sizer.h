@@ -125,7 +125,7 @@ public:
     static float GetDefaultBorderFractional()
     {
 #if wxUSE_BORDER_BY_DEFAULT
-    #ifdef __WXGTK20__
+    #ifdef __WXGTK__
         // GNOME HIG says to use 6px as the base unit:
         // http://library.gnome.org/devel/hig-book/stable/design-window.html.en
         return 6;

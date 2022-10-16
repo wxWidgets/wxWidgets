@@ -26,7 +26,7 @@ using @ifdef_ and not @if_.
 @itemdef{\__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{\__WXDFB__, wxUniversal using DirectFB}
 @itemdef{\__WXGTK__, GTK+}
-@itemdef{\__WXGTK127__, GTK+ 1.2.7 or higher}
+@itemdef{\__WXGTK127__, GTK+ 1.2.7 or higher (not used any longer)}
 @itemdef{\__WXGTK20__, GTK+ 2.0 (2.6) or higher}
 @itemdef{\__WXGTK210__, GTK+ 2.10 or higher}
 @itemdef{\__WXGTK218__, GTK+ 2.18 or higher}

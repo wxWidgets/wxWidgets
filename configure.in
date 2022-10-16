@@ -428,7 +428,7 @@ fi
 
 dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
-AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use macOS (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iOS], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx,           [  --with-osx              use macOS (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
@@ -441,7 +441,6 @@ WX_ARG_ONLY_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE
 WX_ARG_ONLY_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(qt,            [  --with-qt               use Qt], [wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
-WX_ARG_ENABLE(gpe,         [  --enable-gpe            use GNOME PDA Environment features if possible], wxUSE_GPE)
 
 dnl check that no more than one toolkit is given and that if none are given that
 dnl we have a default one
@@ -2804,12 +2803,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK1=
-    WXGTK127=
     WXGTK2=
     WXGTK3=
     WXGTK4=
-    WXGPE=
 
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
@@ -2847,41 +2843,28 @@ if test "$wxUSE_GUI" = "yes"; then
 
                 dnl detect GTK2
                 wx_cv_lib_gtk=
-                if test "x$wxGTK_VERSION" != "x1"
-                then
-                    dnl The gthread.pc that ships with Solaris returns '-mt',
-                    dnl it's correct for Sun CC, but gcc requires '-pthreads'.
-                    dnl So disable the compile check and remove the -mt below.
-                    case "${host}" in
-                        *-*-solaris2* )
-                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                                enable_gtktest=no
-                            fi
-                    esac
 
-                    if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
-                        AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
-                    fi
-                    if test -z "$wx_cv_lib_gtk"; then
-                        if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
-                            AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                dnl The gthread.pc that ships with Solaris returns '-mt',
+                dnl it's correct for Sun CC, but gcc requires '-pthreads'.
+                dnl So disable the compile check and remove the -mt below.
+                case "${host}" in
+                    *-*-solaris2* )
+                        if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+                            enable_gtktest=no
                         fi
-                    fi
-                    if test -z "$wx_cv_lib_gtk"; then
-                        if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
-                            AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
-                        fi
+                esac
+
+                if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
+                    AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
+                fi
+                if test -z "$wx_cv_lib_gtk"; then
+                    if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
+                        AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
                     fi
                 fi
-
-                dnl detect GTK1.x
                 if test -z "$wx_cv_lib_gtk"; then
-                    if test "x$wxGTK_VERSION" = "x1" -o "x$wxGTK_VERSION" = "xany" ; then
-                        AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
-
-                        if test -z "$wx_cv_lib_gtk"; then
-                            AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
-                        fi
+                    if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
+                        AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
                     fi
                 fi
 
@@ -2919,17 +2902,10 @@ if test "$wxUSE_GUI" = "yes"; then
             2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
                     ;;
-            1.2.7)  WXGTK127=1
-                    WXGTK1=1
-                    ;;
-            1.2*)   WXGTK1=1 ;;
             *)      AC_MSG_ERROR([
-The development files for GTK+ were not found. For GTK+ 2, please
-ensure that pkg-config is in the path and that gtk+-2.0.pc is
-installed. For GTK+ 1.2 please check that gtk-config is in the path,
-and that the version is 1.2.3 or above. Also check that the
-libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
---libs' are in the LD_LIBRARY_PATH or equivalent.
+The development files for GTK+ were not found. Please
+ensure that pkg-config is in the path and that gtk+-VER.0.pc is
+installed, where VER is 2, 3 or 4.
                             ])
                     ;;
         esac
@@ -2938,7 +2914,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             AC_DEFINE(__WXGTK220__)
             AC_DEFINE(__WXGTK218__)
             AC_DEFINE(__WXGTK210__)
-        elif test "$WXGTK2" = 1; then
+        else
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
@@ -3008,20 +2984,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
-        else
-            if test "$wxUSE_UNICODE" = "yes"; then
-                AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
-                wxUSE_UNICODE=no
-            fi
-
-            dnl test for XIM support in libgdk
-            AC_CHECK_LIB(gdk, gdk_im_open, AC_DEFINE(HAVE_XIM))
-
-            dnl we need poll() in src/gtk1/app.cpp (we know that Darwin doesn't
-            dnl have it but we do the check for the others)
-            if test "$USE_DARWIN" != 1; then
-                AC_CHECK_FUNCS(poll)
-            fi
         fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
@@ -3045,32 +3007,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            )
             CFLAGS=$save_CFLAGS
         ])
-
-        dnl test for external libxpm if we're configured to use it
-        if test "$wxUSE_GPE" = "yes"; then
-            AC_MSG_CHECKING(for gpewidget library)
-            WX_PATH_FIND_LIBRARIES(gpewidget)
-            if test "$ac_find_libraries" != "" ; then
-                WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-                dnl -lgpewidget must be before all GTK libs and
-                dnl we guess its path from the prefix
-                GUI_TK_LIBRARY="-L${prefix}/lib -lgpewidget $GUI_TK_LIBRARY"
-                WXGPE=1
-                AC_MSG_RESULT([found in $ac_find_libraries])
-            else
-                AC_MSG_RESULT(not found)
-            fi
-
-            dnl AC_MSG_CHECKING(for gpe library)
-            dnl WX_PATH_FIND_LIBRARIES(gpe)
-            dnl if test "$ac_find_libraries" != "" ; then
-            dnl     WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-            dnl     GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lgpe"
-            dnl     AC_MSG_RESULT(found in $ac_find_libraries)
-            dnl else
-            dnl     AC_MSG_RESULT(not found)
-            dnl fi
-        fi
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -3332,8 +3268,8 @@ dnl ---------------------------------------------------------------------------
 
 USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-    dnl Xinerama is used for wxGTK1/wxX11 only
-    if test "$wxUSE_X11" = 1 -o "$WXGTK1" = 1; then
+    dnl Xinerama is used for wxX11 only
+    if test "$wxUSE_X11" = 1; then
         WX_FIND_LIB(Xinerama, XineramaQueryScreens)
         if test "$ac_find_libraries" != "" ; then
             if test "$ac_find_libraries" != "std" ; then
@@ -4895,23 +4831,18 @@ else
   fi
 fi
 
-if test "$WXGTK4" = 1 ; then
-    AC_DEFINE_UNQUOTED(__WXGTK4__, 1)
-fi
-if test "$WXGTK3" = 1 ; then
-    AC_DEFINE_UNQUOTED(__WXGTK3__, 1)
-    WXGTK2=1
-fi
-if test "$WXGTK2" = 1 ; then
-  AC_DEFINE_UNQUOTED(__WXGTK20__,$WXGTK2)
-fi
+if test "$wxUSE_GTK" = 1 ; then
+    AC_DEFINE_UNQUOTED(__WXGTK__,1)
 
-if test "$WXGTK127" = 1 ; then
-  AC_DEFINE_UNQUOTED(__WXGTK127__,$WXGTK127)
-fi
-
-if test "$WXGPE" = 1 ; then
-  AC_DEFINE_UNQUOTED(__WXGPE__,$WXGPE)
+    if test "$WXGTK4" = 1 ; then
+        AC_DEFINE_UNQUOTED(__WXGTK4__, 1)
+    fi
+    if test "$WXGTK3" = 1 ; then
+        AC_DEFINE_UNQUOTED(__WXGTK3__, 1)
+    fi
+    if test "$WXGTK2" = 1 ; then
+      AC_DEFINE_UNQUOTED(__WXGTK20__,1)
+    fi
 fi
 
 if test "$WXQT" = 1 ; then
@@ -5227,10 +5158,7 @@ dnl ---------------------------------------------------------------------------
 if test "$wxUSE_SECRETSTORE" = "yes"; then
     dnl The required APIs are always available under MSW and OS X but we must
     dnl have GNOME libsecret under Unix to be able to compile this class.
-    if test "$WXGTK1" = "1"; then
-        AC_MSG_WARN([libsecret is incompatible with GTK+ 1, disabled])
-        wxUSE_SECRETSTORE=no
-    elif test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+    if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
         PKG_CHECK_MODULES(LIBSECRET, [libsecret-1],
             [
                 CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
@@ -7387,8 +7315,6 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         if test "$wx_cv_lib_direct2d" = "yes"; then
             AC_DEFINE(wxUSE_GRAPHICS_DIRECT2D)
         fi
-    elif test "$WXGTK1" = "1"; then
-        AC_MSG_WARN([wxGraphicsContext not supported with GTK +1])
     elif test "$wx_needs_cairo_for_gc" = 1; then
         wx_has_graphics=$wx_has_cairo
     else
@@ -7720,13 +7646,6 @@ if test "x$INTELCXX" = "xyes" ; then
 elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
-
-    dnl there are tons of warnings when building with GTK+ 1 which are never
-    dnl going to get fixed, so disable them to at least see new warnings/errors
-    dnl more clearly
-    if test "$WXGTK1" = "1"; then
-        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
-    fi
 
     dnl when building using Cocoa we currently get tons of deprecation
     dnl warnings from the standard headers -- disable them as we already know

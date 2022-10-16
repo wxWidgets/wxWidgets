@@ -46,16 +46,14 @@
     #include "wx/msw/dcscreen.h"
 #endif
 
-#ifdef __WXGTK3__
-    #include "wx/gtk/dc.h"
-#elif defined __WXGTK20__
-    #include "wx/gtk/dcclient.h"
-    #include "wx/gtk/dcmemory.h"
-    #include "wx/gtk/dcscreen.h"
-#elif defined(__WXGTK__)
-    #include "wx/gtk1/dcclient.h"
-    #include "wx/gtk1/dcmemory.h"
-    #include "wx/gtk1/dcscreen.h"
+#ifdef __WXGTK__
+    #ifdef __WXGTK3__
+        #include "wx/gtk/dc.h"
+    #else
+        #include "wx/gtk/dcclient.h"
+        #include "wx/gtk/dcmemory.h"
+        #include "wx/gtk/dcscreen.h"
+    #endif
 #endif
 
 #ifdef __WXMAC__

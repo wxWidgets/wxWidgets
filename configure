@@ -720,8 +720,6 @@ COND_TOOLKIT_MSW_USE_GUI_1
 COND_TOOLKIT_MSW
 COND_TOOLKIT_MAC
 COND_TOOLKIT_GTK_USE_GUI_1
-COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0
-COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4
@@ -731,7 +729,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_
 COND_TOOLKIT_GTK
 COND_TOOLKIT_DFB_USE_GUI_1
 COND_TOOLKIT_DFB
@@ -985,7 +982,6 @@ X_CFLAGS
 XMKMF
 DIRECTFB_LIBS
 DIRECTFB_CFLAGS
-GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
 LIBCURL_LIBS
@@ -1093,7 +1089,6 @@ with_directfb
 with_x11
 with_qt
 enable_nanox
-enable_gpe
 with_libpng
 with_libjpeg
 with_libtiff
@@ -1377,8 +1372,6 @@ enable_webviewedge
 enable_autoidman
 enable_largefile
 enable_gtktest
-with_gtk_prefix
-with_gtk_exec_prefix
 with_x
 with_libiconv_prefix
 with_sdl_prefix
@@ -2091,7 +2084,6 @@ Optional Features:
   --disable-tests         disable building tests
   --enable-universal      use wxWidgets GUI controls instead of native ones
   --enable-nanox          use NanoX
-  --enable-gpe            use GNOME PDA Environment features if possible
   --enable-debug          build library for debugging
   --disable-debug_flag    disable all debugging support
   --enable-debug_info     generate debug information
@@ -2349,7 +2341,6 @@ Optional Features:
   --enable-autoidman      use automatic ids management
   --disable-largefile     omit support for large files
   --disable-gtktest       do not try to compile and run a test GTK+ program
-  --disable-gtktest       Do not try to compile and run a test GTK program
   --disable-sdltest       Do not try to compile and run a test SDL program
   --disable-dependency-tracking
                           don't use dependency tracking even if the compiler
@@ -2364,7 +2355,7 @@ Optional Packages:
   --with-flavour=NAME     specify a name to identify this build
   --with-dpi=none|system|per-monitor   set dpi-awareness (Win32 only), default is per-monitor
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
-  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, 1 or "any"
+  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, or "any"
   --with-osx_cocoa        use macOS (Cocoa)
   --with-osx_iphone       use iOS
   --with-osx              use macOS (default port, Cocoa)
@@ -2402,8 +2393,6 @@ Optional Packages:
   --with-macosx-sdk=PATH  use macOS SDK at PATH
   --with-macosx-version-min=VER   build binaries requiring at least this macOS version (default and lowest supported: 10.10)
   --with-cxx=11|14|17|20  use the given C++ dialect
-  --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)
-  --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)
   --with-x                use the X Window System
   --with-libiconv-prefix=DIR  search for libiconv in DIR/include and DIR/lib
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
@@ -4573,35 +4562,6 @@ fi
 
 
           eval "$wx_cv_use_nanox"
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-gpe was given.
-if test "${enable_gpe+set}" = set; then :
-  enableval=$enable_gpe;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_gpe='wxUSE_GPE=yes'
-                          else
-                            wx_cv_use_gpe='wxUSE_GPE=no'
-                          fi
-
-else
-
-                          wx_cv_use_gpe='wxUSE_GPE=${'DEFAULT_wxUSE_GPE":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_gpe"
 
 
 
@@ -26931,12 +26891,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK1=
-    WXGTK127=
     WXGTK2=
     WXGTK3=
     WXGTK4=
-    WXGPE=
 
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
@@ -26971,16 +26928,15 @@ $as_echo "" >&6; }
                 fi
 
                                 wx_cv_lib_gtk=
-                if test "x$wxGTK_VERSION" != "x1"
-                then
-                                                                                case "${host}" in
-                        *-*-solaris2* )
-                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                                enable_gtktest=no
-                            fi
-                    esac
 
-                    if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
+                                                                case "${host}" in
+                    *-*-solaris2* )
+                        if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
+                            enable_gtktest=no
+                        fi
+                esac
+
+                if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
 
 # Check whether --enable-gtktest was given.
 if test "${enable_gtktest+set}" = set; then :
@@ -27305,10 +27261,10 @@ rm -f core conftest.err conftest.$ac_objext \
 
   rm -f conf.gtktest
 
-                    fi
-                    if test -z "$wx_cv_lib_gtk"; then
-                        if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
-                            # Check whether --enable-gtktest was given.
+                fi
+                if test -z "$wx_cv_lib_gtk"; then
+                    if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
+                        # Check whether --enable-gtktest was given.
 if test "${enable_gtktest+set}" = set; then :
   enableval=$enable_gtktest;
 else
@@ -27633,10 +27589,10 @@ rm -f core conftest.err conftest.$ac_objext \
 
   rm -f conf.gtktest
 
-                        fi
                     fi
-                    if test -z "$wx_cv_lib_gtk"; then
-                        if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
+                fi
+                if test -z "$wx_cv_lib_gtk"; then
+                    if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
 
 # Check whether --enable-gtktest was given.
 if test "${enable_gtktest+set}" = set; then :
@@ -27894,559 +27850,6 @@ rm -f core conftest.err conftest.$ac_objext \
 
   rm -f conf.gtktest
 
-                        fi
-                    fi
-                fi
-
-                                if test -z "$wx_cv_lib_gtk"; then
-                    if test "x$wxGTK_VERSION" = "x1" -o "x$wxGTK_VERSION" = "xany" ; then
-
-# Check whether --with-gtk-prefix was given.
-if test "${with_gtk_prefix+set}" = set; then :
-  withval=$with_gtk_prefix; gtk_config_prefix="$withval"
-else
-  gtk_config_prefix=""
-fi
-
-
-# Check whether --with-gtk-exec-prefix was given.
-if test "${with_gtk_exec_prefix+set}" = set; then :
-  withval=$with_gtk_exec_prefix; gtk_config_exec_prefix="$withval"
-else
-  gtk_config_exec_prefix=""
-fi
-
-# Check whether --enable-gtktest was given.
-if test "${enable_gtktest+set}" = set; then :
-  enableval=$enable_gtktest;
-else
-  enable_gtktest=yes
-fi
-
-
-  for module in . $GTK_MODULES
-  do
-      case "$module" in
-         gthread)
-             gtk_config_args="$gtk_config_args gthread"
-         ;;
-      esac
-  done
-
-  if test x$gtk_config_exec_prefix != x ; then
-     gtk_config_args="$gtk_config_args --exec-prefix=$gtk_config_exec_prefix"
-     if test x${GTK_CONFIG+set} != xset ; then
-        GTK_CONFIG=$gtk_config_exec_prefix/bin/gtk-config
-     fi
-  fi
-  if test x$gtk_config_prefix != x ; then
-     gtk_config_args="$gtk_config_args --prefix=$gtk_config_prefix"
-     if test x${GTK_CONFIG+set} != xset ; then
-        GTK_CONFIG=$gtk_config_prefix/bin/gtk-config
-     fi
-  fi
-
-  # Extract the first word of "gtk-config", so it can be a program name with args.
-set dummy gtk-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_GTK_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $GTK_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_GTK_CONFIG="$GTK_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_GTK_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_GTK_CONFIG" && ac_cv_path_GTK_CONFIG="no"
-  ;;
-esac
-fi
-GTK_CONFIG=$ac_cv_path_GTK_CONFIG
-if test -n "$GTK_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GTK_CONFIG" >&5
-$as_echo "$GTK_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  min_gtk_version=1.2.7
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK - version >= $min_gtk_version" >&5
-$as_echo_n "checking for GTK - version >= $min_gtk_version... " >&6; }
-  no_gtk=""
-  if test "$GTK_CONFIG" = "no" ; then
-    no_gtk=yes
-  else
-    GTK_CFLAGS=`$GTK_CONFIG $gtk_config_args --cflags`
-    GTK_LIBS=`$GTK_CONFIG $gtk_config_args --libs`
-    gtk_config_major_version=`$GTK_CONFIG $gtk_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    gtk_config_minor_version=`$GTK_CONFIG $gtk_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    gtk_config_micro_version=`$GTK_CONFIG $gtk_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-    if test "x$enable_gtktest" = "xyes" ; then
-      ac_save_CFLAGS="$CFLAGS"
-      ac_save_LIBS="$LIBS"
-      CFLAGS="$CFLAGS $GTK_CFLAGS"
-      LIBS="$GTK_LIBS $LIBS"
-      rm -f conf.gtktest
-      if test "$cross_compiling" = yes; then :
-  echo $ac_n "cross compiling; assumed OK... $ac_c"
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <gtk/gtk.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-int
-main ()
-{
-  int major, minor, micro;
-  char *tmp_version;
-
-  system ("touch conf.gtktest");
-
-  /* HP/UX 9 (%@#!) writes to sscanf strings */
-  tmp_version = g_strdup("$min_gtk_version");
-  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
-     g_free(tmp_version);
-     printf("%s, bad version string\n", "$min_gtk_version");
-     exit(1);
-   }
-  g_free(tmp_version);
-
-  if ((gtk_major_version != $gtk_config_major_version) ||
-      (gtk_minor_version != $gtk_config_minor_version) ||
-      (gtk_micro_version != $gtk_config_micro_version))
-    {
-      printf("\n*** 'gtk-config --version' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
-             $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
-             gtk_major_version, gtk_minor_version, gtk_micro_version);
-      printf ("*** was found! If gtk-config was correct, then it is best\n");
-      printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
-      printf("*** by modifying your LD_LIBRARY_PATH environment variable, or by editing\n");
-      printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
-      printf("*** required on your system.\n");
-      printf("*** If gtk-config was wrong, set the environment variable GTK_CONFIG\n");
-      printf("*** to point to the correct copy of gtk-config, and remove the file config.cache\n");
-      printf("*** before re-running configure\n");
-    }
-#if defined (GTK_MAJOR_VERSION) && defined (GTK_MINOR_VERSION) && defined (GTK_MICRO_VERSION)
-  else if ((gtk_major_version != GTK_MAJOR_VERSION) ||
-	   (gtk_minor_version != GTK_MINOR_VERSION) ||
-           (gtk_micro_version != GTK_MICRO_VERSION))
-    {
-      printf("*** GTK+ header files (version %d.%d.%d) do not match\n",
-	     GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
-      printf("*** library (version %d.%d.%d)\n",
-	     gtk_major_version, gtk_minor_version, gtk_micro_version);
-    }
-#endif /* defined (GTK_MAJOR_VERSION) ... */
-  else
-    {
-      if ((gtk_major_version > major) ||
-        ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
-        ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)))
-      {
-        return 0;
-       }
-     else
-      {
-        printf("\n*** An old version of GTK+ (%d.%d.%d) was found.\n",
-               gtk_major_version, gtk_minor_version, gtk_micro_version);
-        printf("*** You need a version of GTK+ newer than %d.%d.%d. The latest version of\n",
-	       major, minor, micro);
-        printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
-        printf("***\n");
-        printf("*** If you have already installed a sufficiently new version, this error\n");
-        printf("*** probably means that the wrong copy of the gtk-config shell script is\n");
-        printf("*** being found. The easiest way to fix this is to remove the old version\n");
-        printf("*** of GTK+, but you can also set the GTK_CONFIG environment to point to the\n");
-        printf("*** correct copy of gtk-config. (In this case, you will have to\n");
-        printf("*** modify your LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf\n");
-        printf("*** so that the correct libraries are found at run-time))\n");
-      }
-    }
-  return 1;
-}
-
-_ACEOF
-if ac_fn_c_try_run "$LINENO"; then :
-
-else
-  no_gtk=yes
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-     fi
-  fi
-  if test "x$no_gtk" = x ; then
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-     wx_cv_lib_gtk=1.2.7
-  else
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-     if test "$GTK_CONFIG" = "no" ; then
-       echo "*** The gtk-config script installed by GTK could not be found"
-       echo "*** If GTK was installed in PREFIX, make sure PREFIX/bin is in"
-       echo "*** your path, or set the GTK_CONFIG environment variable to the"
-       echo "*** full path to gtk-config."
-     else
-       if test -f conf.gtktest ; then
-        :
-       else
-          echo "*** Could not run GTK test program, checking why..."
-          CFLAGS="$CFLAGS $GTK_CFLAGS"
-          LIBS="$LIBS $GTK_LIBS"
-          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <gtk/gtk.h>
-#include <stdio.h>
-
-int
-main ()
-{
- return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version));
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-   echo "*** The test program compiled, but did not run. This usually means"
-          echo "*** that the run-time linker is not finding GTK or finding the wrong"
-          echo "*** version of GTK. If it is not finding GTK, you'll need to set your"
-          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
-          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
-          echo "*** is required on your system"
-	  echo "***"
-          echo "*** If you have an old version installed, it is best to remove it, although"
-          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
-          echo "***"
-          echo "*** If you have a RedHat 5.0 system, you should remove the GTK package that"
-          echo "*** came with the system with the command"
-          echo "***"
-          echo "***    rpm --erase --nodeps gtk gtk-devel"
-else
-   echo "*** The test program failed to compile or link. See the file config.log for the"
-          echo "*** exact error that occurred. This usually means GTK was incorrectly installed"
-          echo "*** or that you have moved GTK since it was installed. In the latter case, you"
-          echo "*** may want to edit the gtk-config script: $GTK_CONFIG"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-          CFLAGS="$ac_save_CFLAGS"
-          LIBS="$ac_save_LIBS"
-       fi
-     fi
-     GTK_CFLAGS=""
-     GTK_LIBS=""
-     :
-  fi
-
-
-  rm -f conf.gtktest
-
-
-                        if test -z "$wx_cv_lib_gtk"; then
-
-# Check whether --with-gtk-prefix was given.
-if test "${with_gtk_prefix+set}" = set; then :
-  withval=$with_gtk_prefix; gtk_config_prefix="$withval"
-else
-  gtk_config_prefix=""
-fi
-
-
-# Check whether --with-gtk-exec-prefix was given.
-if test "${with_gtk_exec_prefix+set}" = set; then :
-  withval=$with_gtk_exec_prefix; gtk_config_exec_prefix="$withval"
-else
-  gtk_config_exec_prefix=""
-fi
-
-# Check whether --enable-gtktest was given.
-if test "${enable_gtktest+set}" = set; then :
-  enableval=$enable_gtktest;
-else
-  enable_gtktest=yes
-fi
-
-
-  for module in . $GTK_MODULES
-  do
-      case "$module" in
-         gthread)
-             gtk_config_args="$gtk_config_args gthread"
-         ;;
-      esac
-  done
-
-  if test x$gtk_config_exec_prefix != x ; then
-     gtk_config_args="$gtk_config_args --exec-prefix=$gtk_config_exec_prefix"
-     if test x${GTK_CONFIG+set} != xset ; then
-        GTK_CONFIG=$gtk_config_exec_prefix/bin/gtk-config
-     fi
-  fi
-  if test x$gtk_config_prefix != x ; then
-     gtk_config_args="$gtk_config_args --prefix=$gtk_config_prefix"
-     if test x${GTK_CONFIG+set} != xset ; then
-        GTK_CONFIG=$gtk_config_prefix/bin/gtk-config
-     fi
-  fi
-
-  # Extract the first word of "gtk-config", so it can be a program name with args.
-set dummy gtk-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_GTK_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $GTK_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_GTK_CONFIG="$GTK_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_GTK_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_GTK_CONFIG" && ac_cv_path_GTK_CONFIG="no"
-  ;;
-esac
-fi
-GTK_CONFIG=$ac_cv_path_GTK_CONFIG
-if test -n "$GTK_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GTK_CONFIG" >&5
-$as_echo "$GTK_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  min_gtk_version=1.2.3
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK - version >= $min_gtk_version" >&5
-$as_echo_n "checking for GTK - version >= $min_gtk_version... " >&6; }
-  no_gtk=""
-  if test "$GTK_CONFIG" = "no" ; then
-    no_gtk=yes
-  else
-    GTK_CFLAGS=`$GTK_CONFIG $gtk_config_args --cflags`
-    GTK_LIBS=`$GTK_CONFIG $gtk_config_args --libs`
-    gtk_config_major_version=`$GTK_CONFIG $gtk_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    gtk_config_minor_version=`$GTK_CONFIG $gtk_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    gtk_config_micro_version=`$GTK_CONFIG $gtk_config_args --version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-    if test "x$enable_gtktest" = "xyes" ; then
-      ac_save_CFLAGS="$CFLAGS"
-      ac_save_LIBS="$LIBS"
-      CFLAGS="$CFLAGS $GTK_CFLAGS"
-      LIBS="$GTK_LIBS $LIBS"
-      rm -f conf.gtktest
-      if test "$cross_compiling" = yes; then :
-  echo $ac_n "cross compiling; assumed OK... $ac_c"
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <gtk/gtk.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-int
-main ()
-{
-  int major, minor, micro;
-  char *tmp_version;
-
-  system ("touch conf.gtktest");
-
-  /* HP/UX 9 (%@#!) writes to sscanf strings */
-  tmp_version = g_strdup("$min_gtk_version");
-  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
-     g_free(tmp_version);
-     printf("%s, bad version string\n", "$min_gtk_version");
-     exit(1);
-   }
-  g_free(tmp_version);
-
-  if ((gtk_major_version != $gtk_config_major_version) ||
-      (gtk_minor_version != $gtk_config_minor_version) ||
-      (gtk_micro_version != $gtk_config_micro_version))
-    {
-      printf("\n*** 'gtk-config --version' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n",
-             $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
-             gtk_major_version, gtk_minor_version, gtk_micro_version);
-      printf ("*** was found! If gtk-config was correct, then it is best\n");
-      printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
-      printf("*** by modifying your LD_LIBRARY_PATH environment variable, or by editing\n");
-      printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
-      printf("*** required on your system.\n");
-      printf("*** If gtk-config was wrong, set the environment variable GTK_CONFIG\n");
-      printf("*** to point to the correct copy of gtk-config, and remove the file config.cache\n");
-      printf("*** before re-running configure\n");
-    }
-#if defined (GTK_MAJOR_VERSION) && defined (GTK_MINOR_VERSION) && defined (GTK_MICRO_VERSION)
-  else if ((gtk_major_version != GTK_MAJOR_VERSION) ||
-	   (gtk_minor_version != GTK_MINOR_VERSION) ||
-           (gtk_micro_version != GTK_MICRO_VERSION))
-    {
-      printf("*** GTK+ header files (version %d.%d.%d) do not match\n",
-	     GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
-      printf("*** library (version %d.%d.%d)\n",
-	     gtk_major_version, gtk_minor_version, gtk_micro_version);
-    }
-#endif /* defined (GTK_MAJOR_VERSION) ... */
-  else
-    {
-      if ((gtk_major_version > major) ||
-        ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
-        ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)))
-      {
-        return 0;
-       }
-     else
-      {
-        printf("\n*** An old version of GTK+ (%d.%d.%d) was found.\n",
-               gtk_major_version, gtk_minor_version, gtk_micro_version);
-        printf("*** You need a version of GTK+ newer than %d.%d.%d. The latest version of\n",
-	       major, minor, micro);
-        printf("*** GTK+ is always available from ftp://ftp.gtk.org.\n");
-        printf("***\n");
-        printf("*** If you have already installed a sufficiently new version, this error\n");
-        printf("*** probably means that the wrong copy of the gtk-config shell script is\n");
-        printf("*** being found. The easiest way to fix this is to remove the old version\n");
-        printf("*** of GTK+, but you can also set the GTK_CONFIG environment to point to the\n");
-        printf("*** correct copy of gtk-config. (In this case, you will have to\n");
-        printf("*** modify your LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf\n");
-        printf("*** so that the correct libraries are found at run-time))\n");
-      }
-    }
-  return 1;
-}
-
-_ACEOF
-if ac_fn_c_try_run "$LINENO"; then :
-
-else
-  no_gtk=yes
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-     fi
-  fi
-  if test "x$no_gtk" = x ; then
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-     wx_cv_lib_gtk=1.2.3
-  else
-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-     if test "$GTK_CONFIG" = "no" ; then
-       echo "*** The gtk-config script installed by GTK could not be found"
-       echo "*** If GTK was installed in PREFIX, make sure PREFIX/bin is in"
-       echo "*** your path, or set the GTK_CONFIG environment variable to the"
-       echo "*** full path to gtk-config."
-     else
-       if test -f conf.gtktest ; then
-        :
-       else
-          echo "*** Could not run GTK test program, checking why..."
-          CFLAGS="$CFLAGS $GTK_CFLAGS"
-          LIBS="$LIBS $GTK_LIBS"
-          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <gtk/gtk.h>
-#include <stdio.h>
-
-int
-main ()
-{
- return ((gtk_major_version) || (gtk_minor_version) || (gtk_micro_version));
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-   echo "*** The test program compiled, but did not run. This usually means"
-          echo "*** that the run-time linker is not finding GTK or finding the wrong"
-          echo "*** version of GTK. If it is not finding GTK, you'll need to set your"
-          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
-          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
-          echo "*** is required on your system"
-	  echo "***"
-          echo "*** If you have an old version installed, it is best to remove it, although"
-          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
-          echo "***"
-          echo "*** If you have a RedHat 5.0 system, you should remove the GTK package that"
-          echo "*** came with the system with the command"
-          echo "***"
-          echo "***    rpm --erase --nodeps gtk gtk-devel"
-else
-   echo "*** The test program failed to compile or link. See the file config.log for the"
-          echo "*** exact error that occurred. This usually means GTK was incorrectly installed"
-          echo "*** or that you have moved GTK since it was installed. In the latter case, you"
-          echo "*** may want to edit the gtk-config script: $GTK_CONFIG"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-          CFLAGS="$ac_save_CFLAGS"
-          LIBS="$ac_save_LIBS"
-       fi
-     fi
-     GTK_CFLAGS=""
-     GTK_LIBS=""
-     :
-  fi
-
-
-  rm -f conf.gtktest
-
-                        fi
                     fi
                 fi
 
@@ -28481,17 +27884,10 @@ $as_echo "$wx_cv_lib_gtk" >&6; }
             2.0)    WXGTK2=1
                     TOOLKIT_VERSION=2
                     ;;
-            1.2.7)  WXGTK127=1
-                    WXGTK1=1
-                    ;;
-            1.2*)   WXGTK1=1 ;;
             *)      as_fn_error $? "
-The development files for GTK+ were not found. For GTK+ 2, please
-ensure that pkg-config is in the path and that gtk+-2.0.pc is
-installed. For GTK+ 1.2 please check that gtk-config is in the path,
-and that the version is 1.2.3 or above. Also check that the
-libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
---libs' are in the LD_LIBRARY_PATH or equivalent.
+The development files for GTK+ were not found. Please
+ensure that pkg-config is in the path and that gtk+-VER.0.pc is
+installed, where VER is 2, 3 or 4.
                             " "$LINENO" 5
                     ;;
         esac
@@ -28503,7 +27899,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
             $as_echo "#define __WXGTK210__ 1" >>confdefs.h
 
-        elif test "$WXGTK2" = 1; then
+        else
             save_CFLAGS="$CFLAGS"
             save_LIBS="$LIBS"
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
@@ -28634,68 +28030,6 @@ $as_echo "$wx_cv_gtk210" >&6; }
 
             CFLAGS="$save_CFLAGS"
             LIBS="$save_LIBS"
-        else
-            if test "$wxUSE_UNICODE" = "yes"; then
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unicode configuration not supported with GTK+ 1.x" >&5
-$as_echo "$as_me: WARNING: Unicode configuration not supported with GTK+ 1.x" >&2;}
-                wxUSE_UNICODE=no
-            fi
-
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gdk_im_open in -lgdk" >&5
-$as_echo_n "checking for gdk_im_open in -lgdk... " >&6; }
-if ${ac_cv_lib_gdk_gdk_im_open+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lgdk  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gdk_im_open ();
-int
-main ()
-{
-return gdk_im_open ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_gdk_gdk_im_open=yes
-else
-  ac_cv_lib_gdk_gdk_im_open=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_gdk_gdk_im_open" >&5
-$as_echo "$ac_cv_lib_gdk_gdk_im_open" >&6; }
-if test "x$ac_cv_lib_gdk_gdk_im_open" = xyes; then :
-  $as_echo "#define HAVE_XIM 1" >>confdefs.h
-
-fi
-
-
-                                    if test "$USE_DARWIN" != 1; then
-                for ac_func in poll
-do :
-  ac_fn_c_check_func "$LINENO" "poll" "ac_cv_func_poll"
-if test "x$ac_cv_func_poll" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_POLL 1
-_ACEOF
-
-fi
-done
-
-            fi
         fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
@@ -28740,46 +28074,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gdk_wayland" >&5
 $as_echo "$wx_cv_gdk_wayland" >&6; }
-
-                if test "$wxUSE_GPE" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gpewidget library" >&5
-$as_echo_n "checking for gpewidget library... " >&6; }
-
-  ac_find_libraries=
-  for ac_dir in  $SEARCH_LIB
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libgpewidget.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-            if test "$ac_find_libraries" != "" ; then
-
-    if test "$ac_find_libraries" = "default location"; then
-    ac_path_to_link=""
-  else
-    echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
-    result=$?
-    if test $result = 0; then
-      ac_path_to_link=""
-    else
-      ac_path_to_link=" -L$ac_find_libraries"
-    fi
-  fi
-
-                                                GUI_TK_LIBRARY="-L${prefix}/lib -lgpewidget $GUI_TK_LIBRARY"
-                WXGPE=1
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: found in $ac_find_libraries" >&5
-$as_echo "found in $ac_find_libraries" >&6; }
-            else
-                { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
-$as_echo "not found" >&6; }
-            fi
-
-                                                                                                                    fi
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -30111,7 +29405,7 @@ fi
 
 USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-        if test "$wxUSE_X11" = 1 -o "$WXGTK1" = 1; then
+        if test "$wxUSE_X11" = 1; then
 
   ac_find_libraries=
 
@@ -36597,38 +35891,30 @@ $as_echo "no" >&6; }
   fi
 fi
 
-if test "$WXGTK4" = 1 ; then
+if test "$wxUSE_GTK" = 1 ; then
     cat >>confdefs.h <<_ACEOF
+#define __WXGTK__ 1
+_ACEOF
+
+
+    if test "$WXGTK4" = 1 ; then
+        cat >>confdefs.h <<_ACEOF
 #define __WXGTK4__ 1
 _ACEOF
 
-fi
-if test "$WXGTK3" = 1 ; then
-    cat >>confdefs.h <<_ACEOF
+    fi
+    if test "$WXGTK3" = 1 ; then
+        cat >>confdefs.h <<_ACEOF
 #define __WXGTK3__ 1
 _ACEOF
 
-    WXGTK2=1
-fi
-if test "$WXGTK2" = 1 ; then
-  cat >>confdefs.h <<_ACEOF
-#define __WXGTK20__ $WXGTK2
+    fi
+    if test "$WXGTK2" = 1 ; then
+      cat >>confdefs.h <<_ACEOF
+#define __WXGTK20__ 1
 _ACEOF
 
-fi
-
-if test "$WXGTK127" = 1 ; then
-  cat >>confdefs.h <<_ACEOF
-#define __WXGTK127__ $WXGTK127
-_ACEOF
-
-fi
-
-if test "$WXGPE" = 1 ; then
-  cat >>confdefs.h <<_ACEOF
-#define __WXGPE__ $WXGPE
-_ACEOF
-
+    fi
 fi
 
 if test "$WXQT" = 1 ; then
@@ -37020,11 +36306,7 @@ fi
 
 
 if test "$wxUSE_SECRETSTORE" = "yes"; then
-            if test "$WXGTK1" = "1"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret is incompatible with GTK+ 1, disabled" >&5
-$as_echo "$as_me: WARNING: libsecret is incompatible with GTK+ 1, disabled" >&2;}
-        wxUSE_SECRETSTORE=no
-    elif test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+            if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSECRET" >&5
@@ -41360,9 +40642,6 @@ $as_echo "$wx_cv_lib_direct2d" >&6; }
             $as_echo "#define wxUSE_GRAPHICS_DIRECT2D 1" >>confdefs.h
 
         fi
-    elif test "$WXGTK1" = "1"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
-$as_echo "$as_me: WARNING: wxGraphicsContext not supported with GTK +1" >&2;}
     elif test "$wx_needs_cairo_for_gc" = 1; then
         wx_has_graphics=$wx_has_cairo
     else
@@ -41939,10 +41218,6 @@ case ".$ac_cv_cxxflags_gcc_option__Woverloaded_virtual" in
  ;;
 esac
 
-
-                if test "$WXGTK1" = "1"; then
-        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
-    fi
 
                         if test "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
@@ -44050,11 +43325,6 @@ EOF
         COND_TOOLKIT_GTK=""
     fi
 
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_=""
-    fi
-
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
@@ -44098,16 +43368,6 @@ EOF
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1=""
-    fi
-
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_GTK_USE_GUI_1="#"

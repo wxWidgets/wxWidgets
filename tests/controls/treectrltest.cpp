@@ -344,7 +344,7 @@ void TreeCtrlTestCase::KeyDown()
 
 void TreeCtrlTestCase::CollapseExpandEvents()
 {
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // Works locally, but not when run on Travis CI.
     if ( IsAutomaticTest() )
         return;

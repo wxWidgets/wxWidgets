@@ -20,7 +20,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_TASKBARICON && !defined(__WXGTK20__)
+#if wxUSE_TASKBARICON
 
 #include "wx/taskbar.h"
 
@@ -63,16 +63,7 @@
 // toolkit dependent methods to set properties on helper window:
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK__)
-    #ifdef __WXGTK20__
-        #include "wx/gtk/private/wrapgtk.h"
-    #else // GTK+ 1.x
-        #include <gtk/gtk.h>
-    #endif
-    #include <gdk/gdkx.h>
-    #define GetDisplay()        GDK_DISPLAY()
-    #define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
-#elif defined(__WXX11__)
+#if defined(__WXX11__)
     #include "wx/x11/privx.h"
     #define GetDisplay()        ((Display*)wxGlobalDisplay())
     #define GetXWindow(wxwin)   ((Window)(wxwin)->GetHandle())
@@ -161,10 +152,6 @@ void wxTaskBarIconArea::SetTrayIcon(const wxBitmapBundle& bmp)
 
 void wxTaskBarIconArea::SetLegacyWMProperties()
 {
-#ifdef __WXGTK__
-    gtk_widget_realize(m_widget);
-#endif
-
     long data[1];
 
     // KDE 2 & KDE 3:

@@ -37,7 +37,7 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // Many version of wxGTK generate spurious diagnostic messages when
     // destroying wxNotebook (or removing pages from it), allow wxWidgets to
     // suppress them.

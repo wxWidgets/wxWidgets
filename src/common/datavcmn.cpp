@@ -740,7 +740,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     m_editorCtrl->PushEventHandler( handler );
 
-#if defined(__WXGTK20__) && !defined(wxHAS_GENERIC_DATAVIEWCTRL)
+#if defined(__WXGTK__) && !defined(wxHAS_GENERIC_DATAVIEWCTRL)
     handler->SetFocusOnIdle();
 #else
     m_editorCtrl->SetFocus();

@@ -26,7 +26,6 @@ ZLIBDIR  = $(WXDIR)/src/zlib
 REGEXDIR = $(WXDIR)/src/regex
 EXPATDIR = $(WXDIR)/src/expat
 GTKDIR   = $(WXDIR)/src/gtk
-GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
 MSWDIR   = $(WXDIR)/src/msw
@@ -326,14 +325,6 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
-	mkdir $(DISTDIR)/include/wx/gtk1
-	$(CP_P) $(INCDIR)/wx/gtk1/*.h $(DISTDIR)/include/wx/gtk1
-	mkdir $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.h $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.cpp $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.c $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.xbm $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.mms $(DISTDIR)/src/gtk1
 	mkdir $(DISTDIR)/include/wx/x11/private
 	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 

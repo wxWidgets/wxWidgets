@@ -433,12 +433,7 @@ bool wxFontBase::operator==(const wxFontBase& font) const
            (
             IsOk() == font.IsOk() &&
             GetPointSize() == font.GetPointSize() &&
-            // in wxGTK1 GetPixelSize() calls GetInternalFont() which uses
-            // operator==() resulting in infinite recursion so we can't use it
-            // in that port
-#if (!defined(__WXGTK__) || defined(__WXGTK20__))
             GetPixelSize() == font.GetPixelSize() &&
-#endif
             GetFamily() == font.GetFamily() &&
             GetStyle() == font.GetStyle() &&
             GetNumericWeight() == font.GetNumericWeight() &&

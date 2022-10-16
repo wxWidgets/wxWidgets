@@ -9,7 +9,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FONTDLG && !defined(__WXGPE__)
+#if wxUSE_FONTDLG
 
 #include "wx/fontdlg.h"
 
@@ -132,4 +132,4 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
-#endif // wxUSE_FONTDLG && !__WXGPE__
+#endif // wxUSE_FONTDLG

@@ -698,7 +698,7 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     const wxPoint pos0 = m_text->PositionToCoords(0);
     if ( pos0 == wxDefaultPosition )
     {
-#if ( wxHAS_2CHAR_NEWLINES ) || defined(__WXGTK20__)
+#if ( wxHAS_2CHAR_NEWLINES ) || defined(__WXGTK__)
         CPPUNIT_FAIL( "PositionToCoords() unexpectedly failed." );
 #endif
         return;

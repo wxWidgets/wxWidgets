@@ -15,8 +15,6 @@ skip_commits:
     - src/dfb/
     - include/wx/gtk/
     - src/gtk/
-    - include/wx/gtk1/
-    - src/gtk1/
     - include/wx/osx/
     - src/osx/
     - include/wx/unix/

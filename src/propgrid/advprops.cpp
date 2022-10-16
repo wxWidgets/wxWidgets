@@ -1773,7 +1773,7 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
 
             wxCursor cursor( cursorIndex );
 
-#if defined(__WXMSW__) || ( defined(__WXGTK__) && defined(__WXGTK20__) )
+#if defined(__WXMSW__) || ( defined(__WXGTK__) && defined(__WXGTK__) )
             wxBitmap bmp(cursor);
             if ( bmp.IsOk() )
             {

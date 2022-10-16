@@ -155,10 +155,8 @@ private:
     #include "wx/univ/radiobox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/radiobox.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/radiobox.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/radiobox.h"
+    #include "wx/gtk/radiobox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/radiobox.h"
 #elif defined(__WXQT__)

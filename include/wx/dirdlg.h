@@ -116,11 +116,8 @@ protected:
     #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/dirdlg.h"  // Native MSW
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/dirdlg.h"  // Native GTK for gtk2.4
 #elif defined(__WXGTK__)
-    #include "wx/generic/dirdlgg.h"
-    #define wxDirDialog wxGenericDirDialog
+    #include "wx/gtk/dirdlg.h"  // Native GTK for gtk2.4
 #elif defined(__WXMAC__)
     #include "wx/osx/dirdlg.h"      // Native Mac
 #elif defined(__WXX11__)

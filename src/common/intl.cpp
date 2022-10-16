@@ -627,18 +627,6 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     {
         wxFontEncoding enc = wxFontMapperBase::GetEncodingFromName(encname);
 
-        // on some modern Linux systems (RedHat 8) the default system locale
-        // is UTF8 -- but it isn't supported by wxGTK1 in ANSI build at all so
-        // don't even try to use it in this case
-#if !wxUSE_UNICODE && \
-        ((defined(__WXGTK__) && !defined(__WXGTK20__)))
-        if (enc == wxFONTENCODING_UTF8)
-        {
-            // the most similar supported encoding...
-            enc = wxFONTENCODING_ISO8859_1;
-        }
-#endif // !wxUSE_UNICODE
-
         // GetEncodingFromName() returns wxFONTENCODING_DEFAULT for C locale
         // (a.k.a. US-ASCII) which is arguably a bug but keep it like this for
         // backwards compatibility and just take care to not return

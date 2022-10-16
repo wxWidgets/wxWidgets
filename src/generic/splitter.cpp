@@ -122,13 +122,9 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
   #endif
 #endif
     {
-        // FIXME: with this line the background is not erased at all under GTK1,
-        //        so temporary avoid it there
-#if !defined(__WXGTK__) || defined(__WXGTK20__)
         // don't erase the splitter background, it's pointless as we overwrite it
         // anyhow
         SetBackgroundStyle(wxBG_STYLE_PAINT);
-#endif
     }
 
     return true;

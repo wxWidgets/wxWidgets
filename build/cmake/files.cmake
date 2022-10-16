@@ -1228,7 +1228,6 @@ set(XWIN_LOWLEVEL_SRC
     src/unix/utilsx11.cpp
     src/unix/sound.cpp
     src/unix/joystick.cpp
-    src/unix/taskbarx11.cpp
     src/common/taskbarcmn.cpp
 )
 
@@ -1237,7 +1236,6 @@ set(XWIN_LOWLEVEL_HDR
     wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
-    wx/unix/taskbarx11.h
     wx/unix/sound.h
     wx/unix/joystick.h
 )
@@ -1423,8 +1421,6 @@ set(GTK_SRC
 
 set(GTK2_SRC
     ${GTK_SRC}
-    # Generic implementations used by wxGPE:
-    src/generic/fontdlgg.cpp
     src/generic/activityindicator.cpp
     src/gtk/eggtrayicon.c
 )
@@ -1498,173 +1494,6 @@ set(GTK2_HDR
     wx/generic/fontdlgg.h
 )
 
-set(GTK1_LOWLEVEL_SRC
-    ${XWIN_LOWLEVEL_SRC}
-    src/generic/icon.cpp
-    src/generic/paletteg.cpp
-    src/generic/textmeasure.cpp
-    src/gtk1/app.cpp
-    src/gtk1/bitmap.cpp
-    src/gtk1/brush.cpp
-    src/gtk1/clipbrd.cpp
-    src/gtk1/colour.cpp
-    src/gtk1/cursor.cpp
-    src/gtk1/data.cpp
-    src/gtk1/dataobj.cpp
-    src/gtk1/dc.cpp
-    src/gtk1/dcclient.cpp
-    src/gtk1/dcmemory.cpp
-    src/gtk1/dcscreen.cpp
-    src/gtk1/dnd.cpp
-    src/gtk1/evtloop.cpp
-    src/gtk1/font.cpp
-    src/gtk1/sockgtk.cpp
-    src/gtk1/main.cpp
-    src/gtk1/minifram.cpp
-    src/gtk1/pen.cpp
-    src/gtk1/popupwin.cpp
-    src/gtk1/region.cpp
-    src/gtk1/renderer.cpp
-    src/gtk1/settings.cpp
-    src/gtk1/timer.cpp
-    src/gtk1/tooltip.cpp
-    src/gtk1/toplevel.cpp
-    src/gtk1/utilsgtk.cpp
-    src/gtk1/win_gtk.c
-    src/gtk1/window.cpp
-    src/unix/displayx11.cpp
-)
-
-set(GTK1_LOWLEVEL_HDR
-    ${XWIN_LOWLEVEL_HDR}
-    wx/generic/icon.h
-    wx/generic/paletteg.h
-    wx/gtk1/app.h
-    wx/gtk1/bitmap.h
-    wx/gtk1/brush.h
-    wx/gtk1/clipbrd.h
-    wx/gtk1/colour.h
-    wx/gtk1/cursor.h
-    wx/gtk1/dataform.h
-    wx/gtk1/dataobj.h
-    wx/gtk1/dataobj2.h
-    wx/gtk1/dc.h
-    wx/gtk1/dcclient.h
-    wx/gtk1/dcmemory.h
-    wx/gtk1/dcscreen.h
-    wx/gtk1/dnd.h
-    wx/gtk1/font.h
-    wx/gtk1/minifram.h
-    wx/gtk1/pen.h
-    wx/gtk1/popupwin.h
-    wx/gtk1/region.h
-    wx/gtk1/tooltip.h
-    wx/gtk1/toplevel.h
-    wx/gtk1/win_gtk.h
-    wx/gtk1/window.h
-)
-
-set(GTK1_SRC
-    # Generic implementations used by wxGTK1:
-    src/generic/accel.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/colrdlgg.cpp
-    src/generic/dirdlgg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filedlgg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/listctrl.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/statusbr.cpp
-    # GTK1 specific files:
-    src/gtk1/bmpbuttn.cpp
-    src/gtk1/button.cpp
-    src/gtk1/checkbox.cpp
-    src/gtk1/checklst.cpp
-    src/gtk1/choice.cpp
-    src/gtk1/combobox.cpp
-    src/gtk1/control.cpp
-    src/gtk1/dialog.cpp
-    src/gtk1/filedlg.cpp
-    src/gtk1/fontdlg.cpp
-    src/gtk1/frame.cpp
-    src/gtk1/gauge.cpp
-    src/gtk1/listbox.cpp
-    src/gtk1/mdi.cpp
-    src/gtk1/menu.cpp
-    src/gtk1/mnemonics.cpp
-    src/gtk1/notebook.cpp
-    src/gtk1/radiobox.cpp
-    src/gtk1/radiobut.cpp
-    src/gtk1/scrolbar.cpp
-    src/gtk1/scrolwin.cpp
-    src/gtk1/slider.cpp
-    src/gtk1/spinbutt.cpp
-    src/gtk1/spinctrl.cpp
-    src/gtk1/statbmp.cpp
-    src/gtk1/statbox.cpp
-    src/gtk1/statline.cpp
-    src/gtk1/stattext.cpp
-    src/gtk1/toolbar.cpp
-    src/gtk1/textctrl.cpp
-    src/gtk1/tglbtn.cpp
-    src/gtk1/eggtrayicon.c
-    src/generic/activityindicator.cpp
-    src/gtk1/taskbar.cpp
-)
-
-set(GTK1_HDR
-    wx/generic/clrpickerg.h
-    wx/generic/collpaneg.h
-    wx/generic/colrdlgg.h
-    wx/generic/dirdlgg.h
-    wx/generic/fdrepdlg.h
-    wx/generic/filedlgg.h
-    wx/generic/filepickerg.h
-    wx/generic/fontdlgg.h
-    wx/generic/fontpickerg.h
-    wx/generic/listctrl.h
-    wx/generic/statusbr.h
-    wx/gtk1/accel.h
-    wx/gtk1/bmpbuttn.h
-    wx/gtk1/button.h
-    wx/gtk1/checkbox.h
-    wx/gtk1/checklst.h
-    wx/gtk1/choice.h
-    wx/gtk1/combobox.h
-    wx/gtk1/control.h
-    wx/gtk1/dialog.h
-    wx/gtk1/filedlg.h
-    wx/gtk1/fontdlg.h
-    wx/gtk1/frame.h
-    wx/gtk1/gauge.h
-    wx/gtk1/listbox.h
-    wx/gtk1/mdi.h
-    wx/gtk1/menu.h
-    wx/gtk1/menuitem.h
-    wx/gtk1/msgdlg.h
-    wx/gtk1/notebook.h
-    wx/gtk1/radiobox.h
-    wx/gtk1/radiobut.h
-    wx/gtk1/scrolbar.h
-    wx/gtk1/scrolwin.h
-    wx/gtk1/slider.h
-    wx/gtk1/spinbutt.h
-    wx/gtk1/spinctrl.h
-    wx/gtk1/statbmp.h
-    wx/gtk1/statbox.h
-    wx/gtk1/statline.h
-    wx/gtk1/stattext.h
-    wx/gtk1/toolbar.h
-    wx/gtk1/textctrl.h
-    wx/gtk1/tglbtn.h
-    wx/gtk1/treectrl.h
-    wx/generic/activityindicator.h
-)
-
 set(X11_LOWLEVEL_SRC
     ${XWIN_LOWLEVEL_SRC}
     src/generic/icon.cpp
@@ -1697,6 +1526,7 @@ set(X11_LOWLEVEL_SRC
     src/x11/utilsx.cpp
     src/x11/window.cpp
     src/unix/displayx11.cpp
+    src/unix/taskbarx11.cpp
 )
 
 set(X11_LOWLEVEL_HDR
@@ -1731,6 +1561,7 @@ set(X11_LOWLEVEL_HDR
     wx/x11/textctrl.h
     wx/x11/toplevel.h
     wx/x11/window.h
+    wx/unix/taskbarx11.h
 )
 
 set(MSW_LOWLEVEL_SRC
@@ -2602,9 +2433,6 @@ set(MEDIA_UNIX_HDR
 )
 
 set(MEDIA_GTK_SRC
-)
-
-set(MEDIA_GTK1_SRC
 )
 
 set(HTML_MSW_SRC
