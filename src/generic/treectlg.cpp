@@ -2665,11 +2665,9 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
         const wxCoord x = item->GetX() + state_w;
         const wxCoord y = item->GetY() + (total_h > image_h ? (total_h-image_h)/2 : 0);
-        const auto scale = this->GetDPIScaleFactor();
-        const auto imgSize = wxSize(image_h*scale,image_h*scale);
 
         auto &img = GetImages().at(image);
-        dc.DrawBitmap(img.GetBitmap(imgSize), x, y, true);
+        dc.DrawBitmap(img.GetBitmapFor(this), x, y, true);
 
         dc.DestroyClippingRegion();
     }
