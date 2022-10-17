@@ -122,7 +122,7 @@ methodOverrideMap = {
                        ),
 
     'AppendText' : (0,
-                 'void %s(const wxString& text) wxOVERRIDE;',
+                 'void %s(const wxString& text) override;',
 
                  '''void %s(const wxString& text) {
                     const wxWX2MBbuf buf = wx2stc(text);
@@ -1083,7 +1083,7 @@ constNonGetterMethods = (
     'CanUndo',
 )
 
-# several methods require wxOVERRIDE
+# several methods require override
 overrideNeeded = (
     'Redo',
     'SelectAll',
@@ -1272,7 +1272,7 @@ def processMethods(methods):
             if is_const:
                 theDef = theDef + ' const'
             if is_override:
-                theDef = theDef + ' wxOVERRIDE'
+                theDef = theDef + ' override'
             theDef = theDef + ';'
         if category=='DeprecatedMessages' or icat=='Deprecated':
             defs.append('    wxDEPRECATED_MSG( "This method uses a function '
@@ -1281,7 +1281,7 @@ def processMethods(methods):
 
         # Skip override from the interface file
         if is_override:
-          theDef = theDef.replace(' wxOVERRIDE', '')
+          theDef = theDef.replace(' override', '')
 
         # Build the method definition for the interface .h file
         intrflines = []
