@@ -3572,7 +3572,6 @@ void wxGtkTreeModelNode::Resort()
 
     gint *new_order = new gint[child_count];
 
-#if 1
     // m_children has the original *void
     // ptrs points to these
     wxGtkTreeModelChildrenPtr ptrs;
@@ -3596,50 +3595,6 @@ void wxGtkTreeModelNode::Resort()
     // Transfer IDs back to m_children
     m_children.Clear();
     WX_APPEND_ARRAY( temp, m_children );
-#endif
-#if 0
-    // Too slow
-
-    // Build up array with IDs and original positions
-    wxGtkTreeModelChildWithPos* temp = new wxGtkTreeModelChildWithPos[child_count];
-    size_t i;
-    for (i = 0; i < child_count; i++)
-    {
-       temp[i].pos = i;
-       temp[i].id = m_children[i];
-    }
-    // Sort array keeping original positions
-    wxQsort( temp, child_count, sizeof(wxGtkTreeModelChildWithPos),
-             &wxGtkTreeModelChildWithPosCmp, m_internal );
-    // Transfer positions to new_order array and
-    // IDs to m_children
-    m_children.Clear();
-    for (i = 0; i < child_count; i++)
-    {
-       new_order[i] = temp[i].pos;
-       m_children.Add( temp[i].id );
-    }
-    // Delete array
-    delete [] temp;
-#endif
-
-#if 0
-    // Too slow
-
-    wxGtkTreeModelChildren temp;
-    WX_APPEND_ARRAY( temp, m_children );
-
-    gs_internal = m_internal;
-    m_children.Sort( &wxGtkTreeModelChildCmp );
-
-    unsigned int pos;
-    for (pos = 0; pos < child_count; pos++)
-    {
-        void *id = m_children.Item( pos );
-        int old_pos = temp.Index( id );
-        new_order[pos] = old_pos;
-    }
-#endif
 
     GtkTreeModel *gtk_tree_model = GTK_TREE_MODEL( m_internal->GetGtkModel() );
 
