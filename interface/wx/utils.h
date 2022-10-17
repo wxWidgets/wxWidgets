@@ -654,20 +654,6 @@ char* wxLoadUserResource(const wxString& resourceName,
                          WXHINSTANCE module = 0);
 
 /**
-    @deprecated Replaced by wxWindow::Close(). See the
-                @ref overview_windowdeletion "window deletion overview".
-
-    Tells the system to delete the specified object when all other events have
-    been processed. In some environments, it is necessary to use this instead
-    of deleting a frame directly with the delete operator, because some GUIs
-    will still send events to a deleted window.
-
-    @header{wx/utils.h}
-*/
-void wxPostDelete(wxObject* object);
-
-
-/**
     Compare function type for use with wxQsort()
 
     @header{wx/utils.h}
