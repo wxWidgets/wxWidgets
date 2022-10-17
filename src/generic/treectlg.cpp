@@ -2384,8 +2384,10 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         int n = GetImageCount();
         for (int i = 0; i < n ; i++)
         {
-            int width = 0, height = 0;
-            GetImageList()->GetSize(i, width, height);
+            int height = 0;
+            wxSize size = GetImages().at(i).GetDefaultSize();
+            height = size.GetHeight();
+
             if (height > m_lineHeight) m_lineHeight = height;
         }
     }
@@ -2666,7 +2668,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         const wxCoord x = item->GetX() + state_w;
         const wxCoord y = item->GetY() + (total_h > image_h ? (total_h-image_h)/2 : 0);
 
-        auto &img = GetImages().at(image);
+        auto img = GetBitmapBundle(image);
         dc.DrawBitmap(img.GetBitmapFor(this), x, y, true);
 
         dc.DestroyClippingRegion();
@@ -3007,10 +3009,6 @@ void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetFont( m_normalFont );
     dc.SetPen( m_dottedPen );
-
-    // this is now done dynamically
-    //if(GetImageList() == NULL)
-    // m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
     int y = 2;
     PaintLevel( m_anchor, dc, 0, y );
