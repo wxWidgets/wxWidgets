@@ -955,7 +955,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
 {
     m_reverseSort = false;
 
-    CreateImages(16);
+    CreateImages(32);
     CreateStateImageList();
 
     // Add some items to the tree
@@ -979,8 +979,6 @@ void MyTreeCtrl::CreateImages(int size)
     // should correspond to TreeCtrlIcon_xxx enum
     wxIcon icons[5];
 
-    const auto scaleFac = this->GetDPIScaleFactor();
-
     if (m_alternateImages)
     {
         icons[TreeCtrlIcon_File] = wxIcon(icon1_xpm);
@@ -992,10 +990,10 @@ void MyTreeCtrl::CreateImages(int size)
     else
     {
         icons[TreeCtrlIcon_File] =
-        icons[TreeCtrlIcon_FileSelected] = wxArtProvider::GetIcon(wxART_NORMAL_FILE, wxART_LIST, iconSize*scaleFac);
+        icons[TreeCtrlIcon_FileSelected] = wxArtProvider::GetIcon(wxART_NORMAL_FILE, wxART_LIST, iconSize);
         icons[TreeCtrlIcon_Folder] =
         icons[TreeCtrlIcon_FolderSelected] =
-        icons[TreeCtrlIcon_FolderOpened] = wxArtProvider::GetIcon(wxART_FOLDER, wxART_LIST, iconSize*scaleFac);
+        icons[TreeCtrlIcon_FolderOpened] = wxArtProvider::GetIcon(wxART_FOLDER, wxART_LIST, iconSize);
     }
 
     // Make a vector of bundles corresponding to the icons. We use a custom
