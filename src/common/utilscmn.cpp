@@ -708,6 +708,8 @@ wxRegisterId (wxWindowID id)
     wxCurrentId = id + 1;
 }
 
+#if WXWIN_COMPATIBILITY_3_2
+
 // ----------------------------------------------------------------------------
 // wxQsort, adapted by RR to allow user_data
 // ----------------------------------------------------------------------------
@@ -950,6 +952,8 @@ void wxQsort(void* pbase, size_t total_elems,
       }
   }
 }
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // ----------------------------------------------------------------------------
 // wxGCD

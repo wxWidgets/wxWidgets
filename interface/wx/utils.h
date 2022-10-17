@@ -654,6 +654,8 @@ char* wxLoadUserResource(const wxString& resourceName,
                          WXHINSTANCE module = 0);
 
 /**
+    @deprecated Don't use this typedef nor wxQsort() itself in the new code.
+
     Compare function type for use with wxQsort()
 
     @header{wx/utils.h}
@@ -661,6 +663,8 @@ char* wxLoadUserResource(const wxString& resourceName,
 typedef int (*wxSortCallback)(const void* pItem1, const void* pItem2, const void* user_data);
 
 /**
+    @deprecated Use `std::sort()` in the new code.
+
     Function implementing quick sort algorithm.
 
     This function sorts @a total_elems objects of size @a size located at @a

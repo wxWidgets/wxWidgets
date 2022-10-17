@@ -576,9 +576,12 @@ typedef int (*wxSortCallback)(const void* pItem1,
                               const void* user_data);
 
 
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("Use std::sort instead")
 WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
                               size_t size, wxSortCallback cmp,
                               const void* user_data);
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #if wxUSE_GUI // GUI only things from now on
 
