@@ -11,6 +11,14 @@ INCOMPATIBLE CHANGES SINCE 3.2.x:
 Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
+- wxMSW now uses double buffering by default, meaning that updating the
+  windows using wxClientDC doesn't work any longer, which is consistent with
+  the behaviour of wxGTK with Wayland backend and of wxOSX, but not with the
+  traditional historic behaviour of wxMSW (or wxGTK/X11). You may call
+  MSWDisableComposited() to restore the previous behaviour, however it is
+  strongly recommended to change your redrawing logic to avoid using wxClientDC
+  instead, as the code using it still won't work with wxGTK/wxOSX.
+
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.

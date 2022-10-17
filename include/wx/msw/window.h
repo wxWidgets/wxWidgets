@@ -556,6 +556,11 @@ public:
     virtual void SetDoubleBuffered(bool on) override;
     virtual bool IsDoubleBuffered() const override;
 
+    // Ensure that neither this window itself nor any of its parents use
+    // WS_EX_COMPOSITED: this is used by the native wxListCtrl which is
+    // incompatible with this style.
+    void MSWDisableComposited();
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
@@ -623,6 +628,11 @@ protected:
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;
 #endif // wxUSE_MENUS_NATIVE
+
+    // Called by Reparent() after the window parent changes, i.e. GetParent()
+    // returns the new parent inside this function.
+    virtual void MSWAfterReparent();
+
 
     // the window handle
     WXHWND                m_hWnd;

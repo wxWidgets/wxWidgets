@@ -1683,12 +1683,28 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
 
     ::SetParent(hWndChild, hWndParent);
 
+    MSWAfterReparent();
+
+    return true;
+}
+
+void wxWindowMSW::MSWAfterReparent()
+{
     if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         EnsureParentHasControlParentStyle(GetParent());
     }
+}
 
-    return true;
+void wxWindowMSW::MSWDisableComposited()
+{
+    for ( wxWindow* win = this; win; win = win->GetParent() )
+    {
+        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
+
+        if ( win->IsTopLevel() )
+            break;
+    }
 }
 
 static inline void SendSetRedraw(HWND hwnd, bool on)
