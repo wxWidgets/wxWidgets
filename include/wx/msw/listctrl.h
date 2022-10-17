@@ -443,9 +443,6 @@ private:
     // UpdateStyle()), only should be called if InReportView()
     void MSWSetExListStyles();
 
-    // ensure that none of our parents uses WS_EX_COMPOSITED
-    void MSWResetParentComposited();
-
     // initialize the (already created) m_textCtrl with the associated HWND
     void InitEditControl(WXHWND hWnd);
 

@@ -1696,6 +1696,17 @@ void wxWindowMSW::MSWAfterReparent()
     }
 }
 
+void wxWindowMSW::MSWDisableComposited()
+{
+    for ( wxWindow* win = this; win; win = win->GetParent() )
+    {
+        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
+
+        if ( win->IsTopLevel() )
+            break;
+    }
+}
+
 static inline void SendSetRedraw(HWND hwnd, bool on)
 {
     ::SendMessage(hwnd, WM_SETREDRAW, (WPARAM)on, 0);

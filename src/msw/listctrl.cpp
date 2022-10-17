@@ -41,7 +41,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/customdraw.h"
 #include "wx/msw/private/keyboard.h"
-#include "wx/msw/private/winstyle.h"
 
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.
@@ -301,7 +300,11 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    MSWResetParentComposited();
+    // LISTVIEW doesn't redraw correctly when WS_EX_COMPOSITED is used by
+    // either the control itself (which never happens now, see our overridden
+    // SetDoubleBuffered()) or even by any of its parents, so we must reset
+    // this style for them.
+    MSWDisableComposited();
 
     EnableSystemThemeByDefault();
 
@@ -374,24 +377,16 @@ void wxListCtrl::MSWSetExListStyles()
     ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
 }
 
-void wxListCtrl::MSWResetParentComposited()
-{
-    // LISTVIEW doesn't redraw correctly when WS_EX_COMPOSITED is used by
-    // either the control itself (which never happens now, see our overridden
-    // SetDoubleBuffered()) or even by any of its parents, so we must reset
-    // this style for them.
-    for ( wxWindow* parent = GetParent(); parent; parent = parent->GetParent() )
-    {
-        wxMSWWinExStyleUpdater(GetHwndOf(parent)).TurnOff(WS_EX_COMPOSITED);
-
-        if ( parent->IsTopLevel() )
-            break;
-    }
-}
-
 void wxListCtrl::MSWAfterReparent()
 {
-    MSWResetParentComposited();
+    // We did it for the original parent in our Create(), but we need to do it
+    // here for the new one.
+    MSWDisableComposited();
+
+    // Ideally we'd re-enable WS_EX_COMPOSITED for the old parent, but this is
+    // difficult to do correctly, as we'd need to track the number of list
+    // controls under it instead of just turning it on/off, so for now we don't
+    // do it.
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const

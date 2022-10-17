@@ -556,6 +556,11 @@ public:
     virtual void SetDoubleBuffered(bool on) override;
     virtual bool IsDoubleBuffered() const override;
 
+    // Ensure that neither this window itself nor any of its parents use
+    // WS_EX_COMPOSITED: this is used by the native wxListCtrl which is
+    // incompatible with this style.
+    void MSWDisableComposited();
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
