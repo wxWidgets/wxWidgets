@@ -571,11 +571,6 @@ WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
 
 
 
-// See wx/vector.h for more about this hack.
-#ifndef wxQSORT_DECLARED
-
-#define wxQSORT_DECLARED
-
 typedef int (*wxSortCallback)(const void* pItem1,
                               const void* pItem2,
                               const void* user_data);
@@ -584,9 +579,6 @@ typedef int (*wxSortCallback)(const void* pItem1,
 WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
                               size_t size, wxSortCallback cmp,
                               const void* user_data);
-
-#endif // !wxQSORT_DECLARED
-
 
 #if wxUSE_GUI // GUI only things from now on
 
