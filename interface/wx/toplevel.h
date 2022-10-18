@@ -536,9 +536,9 @@ public:
         @param maxH
             The maximum height.
         @param incW
-            Specifies the increment for sizing the width (GTK/Motif/Xt only).
+            Specifies the increment for sizing the width (GTK/X11 only).
         @param incH
-            Specifies the increment for sizing the height (GTK/Motif/Xt only).
+            Specifies the increment for sizing the height (GTK/X11 only).
 
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it also
@@ -561,7 +561,7 @@ public:
             The maximum size of the window.
         @param incSize
             Increment size (only taken into account under X11-based ports such
-            as wxGTK/wxMotif/wxX11).
+            as wxGTK and wxX11).
 
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it also

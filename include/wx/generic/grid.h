@@ -33,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGridNameStr[];
 // for compatibility.
 #define WXGRID_DEFAULT_NUMBER_ROWS            10
 #define WXGRID_DEFAULT_NUMBER_COLS            10
-#if defined(__WXMSW__) || defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXGTK__)
 #define WXGRID_DEFAULT_ROW_HEIGHT             25
 #else
 #define WXGRID_DEFAULT_ROW_HEIGHT             30

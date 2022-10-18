@@ -111,7 +111,7 @@ private:
 };
 
 // A version of wxSocketManager which uses FDs for socket IO: it is used by
-// Unix console applications and some X11-like ports (wxGTK and wxMotif but not
+// Unix console applications and some X11-like ports (wxGTK and wxQt but not
 // wxX11 currently) which implement their own port-specific wxFDIOManagers
 class wxSocketFDBasedManager : public wxSocketManager
 {

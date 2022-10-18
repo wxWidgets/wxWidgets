@@ -130,9 +130,8 @@ enum wxDialogLayoutAdaptationMode
            look. This is an extra style.
     @endStyleTable
 
-    Under Unix or Linux, MWM (the Motif Window Manager) or other window
-    managers recognizing the MHM hints should be running for any of these
-    styles to have an effect.
+    Under Unix a window manager recognizing the WM hints should be running for
+    any of these styles to have an effect.
 
 
     @beginEventEmissionTable{wxCloseEvent}
@@ -178,8 +177,8 @@ public:
         @param style
             The window style.
         @param name
-            Used to associate a name with the window, allowing the application
-            user to set Motif resource values for individual dialog boxes.
+            Used to associate a name with the window. This is @a not the same
+            as the title of the window.
 
         @see Create()
     */
@@ -427,11 +426,8 @@ public:
             If @true, iconizes the dialog box; if @false, shows and restores it.
 
         @remarks Note that in Windows, iconization has no effect since dialog
-                 boxes cannot be iconized. However, applications may need to
-                 explicitly restore dialog boxes under Motif which have
-                 user-iconizable frames, and under Windows calling
-                 Iconize(@false) will bring the window to the front, as does
-                 Show(@true).
+                 boxes cannot be iconized. However calling Iconize(@false) will
+                 bring the window to the front, as does Show(@true).
     */
     virtual void Iconize(bool iconize = true);
 

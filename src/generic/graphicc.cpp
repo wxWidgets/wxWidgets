@@ -17,7 +17,7 @@
 
 #if wxUSE_CAIRO
 
-#ifndef __WXGTK20__
+#ifndef __WXGTK__
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
 #define cairo_public
@@ -82,12 +82,8 @@ using namespace std;
 #endif
 
 #ifdef __WXGTK__
-#ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/cairo.h"
-#else // GTK+ 1.x
-#include <gtk/gtk.h>
-#endif
 #include "wx/fontutil.h"
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"
@@ -1992,7 +1988,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     // Since we switched from MM_ANISOTROPIC to MM_TEXT mapping mode
     // we have to apply rescaled DC's device origin to Cairo context.
     ApplyTransformFromDC(dc, Apply_scaled_dev_origin);
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* cr = static_cast<cairo_t*>(impl->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
@@ -2030,13 +2026,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
-#elif defined __WXGTK20__
+#elif defined __WXGTK__
     const wxGTKDCImpl* impldc = static_cast<const wxGTKDCImpl*>(dc.GetImpl());
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
     // Transfer transformation settings from source DC to Cairo context on our own.
     ApplyTransformFromDC(dc);
-#endif // __WXGTK3__ || __WXGTK20__
+#endif // __WXGTK3__ || __WXGTK__
 
 #ifdef __WXX11__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
@@ -2243,13 +2239,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
-#elif defined __WXGTK20__
+#elif defined __WXGTK__
     const wxGTKDCImpl* impldc = static_cast<const wxGTKDCImpl*>(dc.GetImpl());
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
     // Transfer transformation settings from source DC to Cairo context on our own.
     ApplyTransformFromDC(dc);
-#endif // __WXGTK3__ || __WXGTK20__
+#endif // __WXGTK3__ || __WXGTK__
 
 #ifdef __WXX11__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
@@ -2278,7 +2274,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 }
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window )
 : wxGraphicsContext(renderer)
 {
@@ -2294,7 +2290,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window 
     m_height = height;
 #endif
 }
-#endif
+#endif // __WXGTK__
 
 #ifdef __WXMSW__
 

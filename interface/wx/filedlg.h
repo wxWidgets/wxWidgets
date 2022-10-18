@@ -206,8 +206,6 @@ public:
             The default filename, or the empty string.
         @param wildcard
             A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
-            Note that the native Motif dialog has some limitations with respect to
-            wildcards; see the Remarks section above.
         @param style
             A dialog style. See @c wxFD_* styles for more info.
         @param pos
@@ -464,9 +462,6 @@ public:
     /**
         Sets the wildcard, which can contain multiple file types, for example:
         "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
-
-        Note that the native Motif dialog has some limitations with respect to
-        wildcards; see the Remarks section above.
     */
     virtual void SetWildcard(const wxString& wildCard);
 

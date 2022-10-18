@@ -180,12 +180,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTEBOOK_PAGE_CHANGING, wxBook
     #include "wx/univ/notebook.h"
 #elif defined(__WXMSW__)
     #include  "wx/msw/notebook.h"
-#elif defined(__WXMOTIF__)
-    #include  "wx/generic/notebook.h"
-#elif defined(__WXGTK20__)
-    #include  "wx/gtk/notebook.h"
 #elif defined(__WXGTK__)
-    #include  "wx/gtk1/notebook.h"
+    #include  "wx/gtk/notebook.h"
 #elif defined(__WXMAC__)
     #include  "wx/osx/notebook.h"
 #elif defined(__WXQT__)

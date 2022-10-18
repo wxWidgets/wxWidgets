@@ -21,10 +21,6 @@
 
 #include "wx/thread.h"
 
-#ifdef __WXGPE__
-    #include <gpe/init.h>
-#endif
-
 #include "wx/apptrait.h"
 #include "wx/fontmap.h"
 #include "wx/msgout.h"
@@ -505,10 +501,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         gtk_disable_setlocale();
     }
 
-#ifdef __WXGPE__
-    init_result = true;  // is there a _check() version of this?
-    gpe_application_init( &argcGTK, &argvGTK );
-#elif defined(__WXGTK4__)
+#if defined(__WXGTK4__)
     init_result = gtk_init_check() != 0;
 #else
     init_result = gtk_init_check( &argcGTK, &argvGTK ) != 0;

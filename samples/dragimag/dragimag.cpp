@@ -400,7 +400,7 @@ bool MyApp::OnInit()
     }
 
 #if 0
-    // Under Motif or GTK, this demonstrates that
+    // Under GTK, this demonstrates that
     // wxScreenDC only gets the root window content.
     // We need to be able to copy the overall content
     // for full-screen dragging to work.

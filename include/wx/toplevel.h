@@ -363,11 +363,8 @@ protected:
 #if defined(__WXMSW__)
     #include "wx/msw/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMSW
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/toplevel.h"
-    #define wxTopLevelWindowNative wxTopLevelWindowGTK
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/toplevel.h"
+    #include "wx/gtk/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowGTK
 #elif defined(__WXX11__)
     #include "wx/x11/toplevel.h"
@@ -378,9 +375,6 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMac
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/toplevel.h"
-    #define wxTopLevelWindowNative wxTopLevelWindowMotif
 #elif defined(__WXQT__)
     #include "wx/qt/toplevel.h"
 #define wxTopLevelWindowNative wxTopLevelWindowQt

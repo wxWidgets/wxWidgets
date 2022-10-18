@@ -56,10 +56,6 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-#endif
-
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
@@ -77,10 +73,6 @@ bool MyApp::OnInit()
 
     for (int i = 1; i < argc; i++)
         help->AddBook(wxFileName(argv[i]));
-
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogGui);
-#endif
 
     help->SetShouldPreventAppExit(true);
 

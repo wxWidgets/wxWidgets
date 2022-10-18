@@ -30,7 +30,7 @@
 #include "wx/window.h" // for wxGetActiveWindow
 #include "wx/unix/utilsx11.h"
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include <gdk/gdkx.h>
@@ -159,7 +159,7 @@ protected:
         Window focus = None;
         wxWindow* win = wxGetActiveWindow();
 
-    #if defined(__WXGTK20__)
+    #if defined(__WXGTK__)
         if ( win && !win->IsTopLevel() )
         {
             win = wxGetTopLevelParent(win);
@@ -435,7 +435,7 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
     if ( !m_display )
         return false;
 
-#ifdef  __WXGTK20__
+#ifdef  __WXGTK__
 #ifdef  __WXGTK3__
     GdkDisplay* const display = gdk_window_get_display(wxGetTopLevelGDK());
     GdkDevice* const device = wx_get_gdk_device_from_display(display);

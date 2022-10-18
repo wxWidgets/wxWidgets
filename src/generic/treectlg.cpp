@@ -3706,7 +3706,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
             Update();
 #else
             // TODO: remove this call or use wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI)
@@ -3741,7 +3741,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         SetCursor(m_oldCursor);
 
-#if defined( __WXMSW__ ) || defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined( __WXMSW__ ) || defined(__WXMAC__) || defined(__WXGTK__)
         Update();
 #else
         // TODO: remove this call or use wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI)

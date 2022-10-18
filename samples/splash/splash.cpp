@@ -150,7 +150,7 @@ bool MyApp::OnInit()
             wxSIMPLE_BORDER|wxSTAY_ON_TOP);
     }
 
-#if !defined(__WXGTK20__)
+#if !defined(__WXGTK__)
     // we don't need it at least on wxGTK with GTK+ 2.12.9
     wxYield();
 #endif

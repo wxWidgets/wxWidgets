@@ -367,8 +367,7 @@ public:
     // wxUniv always uses the generic MDI implementation and so do the ports
     // without native version (although wxCocoa seems to have one -- but it's
     // probably not functional?)
-    #if defined(__WXMOTIF__) || \
-        defined(__WXUNIVERSAL__)
+    #if defined(__WXUNIVERSAL__)
         #define wxUSE_GENERIC_MDI_AS_NATIVE   1
     #else
         #define wxUSE_GENERIC_MDI_AS_NATIVE   0
@@ -379,10 +378,8 @@ public:
     #include "wx/generic/mdig.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/mdi.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/mdi.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/mdi.h"
+    #include "wx/gtk/mdi.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/mdi.h"
 #elif defined(__WXQT__)

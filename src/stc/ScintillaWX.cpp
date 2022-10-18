@@ -51,7 +51,7 @@
     // GetHwndOf()
     #include "wx/msw/private.h"
 #endif
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     #include <gdk/gdk.h>
 #endif
 
@@ -1159,7 +1159,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     case WXK_SHIFT:             key = 0; break;
     case WXK_MENU:              key = SCK_MENU; break;
     case WXK_NONE:
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
         if (evt.RawControlDown())
         {
             // To allow Ctrl-key shortcuts to work with non-Latin keyboard layouts,

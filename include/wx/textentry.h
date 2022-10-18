@@ -321,14 +321,12 @@ private:
     class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
     {
     };
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/textentry.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/textentry.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textentry.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/textentry.h"
 #elif defined(__WXQT__)
     #include "wx/qt/textentry.h"
 #else

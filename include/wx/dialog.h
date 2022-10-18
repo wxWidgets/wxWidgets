@@ -369,12 +369,8 @@ public:
 #else
     #if defined(__WXMSW__)
         #include "wx/msw/dialog.h"
-    #elif defined(__WXMOTIF__)
-        #include "wx/motif/dialog.h"
-    #elif defined(__WXGTK20__)
-        #include "wx/gtk/dialog.h"
     #elif defined(__WXGTK__)
-        #include "wx/gtk1/dialog.h"
+        #include "wx/gtk/dialog.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dialog.h"
     #elif defined(__WXQT__)

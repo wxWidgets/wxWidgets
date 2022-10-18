@@ -8,7 +8,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXX11__) || defined(__WXGTK__)
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -25,13 +25,8 @@
 #include "wx/private/launchbrowser.h"
 
 #ifdef __WXGTK__
-#ifdef __WXGTK20__
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/backend.h"
-#else // GTK+ 1.x
-#include <gtk/gtk.h>
-#define GDK_WINDOWING_X11
-#endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #define wxHAS_X11_SUPPORT
@@ -69,7 +64,7 @@ static Atom _NET_WM_WINDOW_TYPE_NORMAL = 0;
 static Atom _KDE_NET_WM_WINDOW_TYPE_OVERRIDE = 0;
 static Atom _WIN_LAYER = 0;
 static Atom KWIN_RUNNING = 0;
-#ifndef __WXGTK20__
+#ifndef __WXGTK__
 static Atom _NET_SUPPORTING_WM_CHECK = 0;
 static Atom _NET_SUPPORTED = 0;
 #endif
@@ -285,7 +280,7 @@ static void wxWinHintsSetLayer(Display *display, Window rootWnd,
 
 
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 static bool wxQueryWMspecSupport(Display* WXUNUSED(display),
                                  Window WXUNUSED(rootWnd),
                                  Atom feature)
@@ -2761,4 +2756,4 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     return false;
 }
 
-#endif // __WXX11__ || __WXGTK__ || __WXMOTIF__
+#endif // __WXX11__ || __WXGTK__

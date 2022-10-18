@@ -81,7 +81,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
     for ( int i = 0; i < n_families; i++ )
     {
-#if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
+#if defined(__WXGTK__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
         if ( !fixedWidthOnly ||
             pango_font_family_is_monospace(families[i]) )
 #endif

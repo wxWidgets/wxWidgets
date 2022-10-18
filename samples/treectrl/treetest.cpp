@@ -340,15 +340,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 
-#ifdef __WXMOTIF__
-    // For some reason, we get a memcpy crash in wxLogStream::DoLogStream
-    // on gcc/wxMotif, if we use wxLogTextCtl. Maybe it's just gcc?
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-#else
     // set our text control as the log target
     wxLogTextCtrl *logWindow = new wxLogTextCtrl(m_textCtrl);
     delete wxLog::SetActiveTarget(logWindow);
-#endif
 #endif // wxUSE_LOG
 
     CreateTreeWithDefStyle();

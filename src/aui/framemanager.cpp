@@ -79,7 +79,7 @@ wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
 const int auiToolBarLayer = 10;
 
-#ifndef __WXGTK20__
+#ifndef __WXGTK__
 
 
 class wxPseudoTransparentFrame : public wxFrame
@@ -100,11 +100,7 @@ public:
         m_maxHeight=0;
         m_lastWidth=0;
         m_lastHeight=0;
-#ifdef __WXGTK__
-        m_canSetShape = false; // have to wait for window create event on GTK
-#else
         m_canSetShape = true;
-#endif
         m_region = wxRegion(0, 0, 0, 0);
         SetTransparent(0);
     }
@@ -161,14 +157,6 @@ public:
         }
     }
 
-#ifdef __WXGTK__
-    void OnWindowCreate(wxWindowCreateEvent& WXUNUSED(event))
-    {
-        m_canSetShape=true;
-        SetTransparent(0);
-    }
-#endif
-
     void OnSize(wxSizeEvent& event)
     {
         // We sometimes get surplus size events
@@ -208,14 +196,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame);
 wxBEGIN_EVENT_TABLE(wxPseudoTransparentFrame, wxFrame)
     EVT_PAINT(wxPseudoTransparentFrame::OnPaint)
     EVT_SIZE(wxPseudoTransparentFrame::OnSize)
-#ifdef __WXGTK__
-    EVT_WINDOW_CREATE(wxPseudoTransparentFrame::OnWindowCreate)
-#endif
 wxEND_EVENT_TABLE()
 
 
-#else
-  // __WXGTK20__
+#else // __WXGTK__
 
 #include "wx/gtk/private/wrapgtk.h"
 
@@ -285,8 +269,7 @@ private:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame);
 
-#endif
- // __WXGTK20__
+#endif // !__WXGTK__/__WXGTK__
 
 
 

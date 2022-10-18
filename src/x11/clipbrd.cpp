@@ -530,7 +530,6 @@ bool wxClipboard::IsOpened() const
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     // TODO: this implementation only support copy/paste text for now.
-    // remove the code that paste from gtk1 port.
 
     return format == wxDF_UNICODETEXT;
 }

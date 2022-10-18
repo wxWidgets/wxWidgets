@@ -802,8 +802,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif // GDK_WINDOWING_X11
 
-    // translate wx decorations styles into Motif WM hints (they are recognized
-    // by other WMs as well)
+    // translate wx decorations styles into WM hints
 
     // always enable moving the window as we have no separate flag for enabling
     // it

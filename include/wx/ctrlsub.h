@@ -478,8 +478,6 @@ private:
 // define the platform-specific wxControlWithItems class
 #if defined(__WXMSW__)
     #include "wx/msw/ctrlsub.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/ctrlsub.h"
 #elif defined(__WXQT__)
     #include "wx/qt/ctrlsub.h"
 #else

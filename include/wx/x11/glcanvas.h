@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/x11/glcanvas.h
-// Purpose:     wxGLCanvas, for using OpenGL with wxWidgets 2.0 for Motif.
+// Purpose:     wxGLCanvas, for using OpenGL with X11
 //              Uses the GLX extension.
 // Author:      Julian Smart and Wolfram Gloger
 // Modified by:

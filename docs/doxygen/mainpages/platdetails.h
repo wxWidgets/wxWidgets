@@ -79,16 +79,6 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 
 
-@section page_port_wxmotif wxMotif
-
-wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
-It is no longer actively maintained and by now rather obsolete.
-
-@subpage plat_motif_install "Build Instructions"
-
-
-
-
 @section page_port_wxmsw wxMSW
 
 wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later

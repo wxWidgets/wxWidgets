@@ -76,12 +76,8 @@ private:
     #include "wx/univ/choice.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/choice.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/choice.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/choice.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/choice.h"
+    #include "wx/gtk/choice.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/choice.h"
 #elif defined(__WXQT__)

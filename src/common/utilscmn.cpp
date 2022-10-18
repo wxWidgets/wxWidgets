@@ -105,10 +105,8 @@
 
 #if wxUSE_GUI
     // Include the definitions of GTK_XXX_VERSION constants.
-    #ifdef __WXGTK20__
+    #ifdef __WXGTK__
         #include "wx/gtk/private/wrapgtk.h"
-    #elif defined(__WXGTK__)
-        #include <gtk/gtk.h>
     #elif defined(__WXQT__)
         #include <QtCore/QtGlobal>       // for QT_VERSION_STR constants
     #endif
@@ -1034,22 +1032,20 @@ unsigned int wxCTZ(wxUint32 x)
 
 #if wxUSE_GUI
 
-// this function is only really implemented for X11-based ports, including GTK1
-// (GTK2 sets detectable auto-repeat automatically anyhow)
-#if !(defined(__WXX11__) || defined(__WXMOTIF__) || \
-        (defined(__WXGTK__) && !defined(__WXGTK20__)))
+// this function is only really implemented for wxX11.
+#if !defined(__WXX11__)
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 {
     return true;
 }
-#endif // !X11-based port
+#endif // !wxX11
 
 // ----------------------------------------------------------------------------
 // Launch default browser
 // ----------------------------------------------------------------------------
 
 #if defined(__WINDOWS__) && !defined(__WXQT__) || \
-    defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || \
+    defined(__WXX11__) || defined(__WXGTK__) || \
     defined(__WXOSX__)
 
 // implemented in a port-specific utils source file:

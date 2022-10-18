@@ -71,7 +71,7 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) override;
 #endif
 
-#if wxUSE_THREADS && defined(__WXGTK20__)
+#if wxUSE_THREADS
     virtual void MutexGuiEnter() override;
     virtual void MutexGuiLeave() override;
 #endif

@@ -41,12 +41,7 @@
 
 #ifdef __WXGTK__
 #include "wx/renderer.h"
-#ifdef __WXGTK20__
-    #include "wx/gtk/private/wrapgtk.h"
-#else
-    #include <gtk/gtk.h>
-    #define gtk_widget_is_drawable GTK_WIDGET_DRAWABLE
-#endif
+#include "wx/gtk/private/wrapgtk.h"
 #ifdef __WXGTK3__
     #include "wx/graphics.h"
     #include "wx/gtk/private.h"

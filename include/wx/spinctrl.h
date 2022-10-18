@@ -121,13 +121,10 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #elif defined(__WXMSW__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/msw/spinctrl.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #define wxHAS_NATIVE_SPINCTRL
     #define wxHAS_NATIVE_SPINCTRLDOUBLE
     #include "wx/gtk/spinctrl.h"
-#elif defined(__WXGTK__)
-    #define wxHAS_NATIVE_SPINCTRL
-    #include "wx/gtk1/spinctrl.h"
 #elif defined(__WXQT__)
     #define wxHAS_NATIVE_SPINCTRL
     #define wxHAS_NATIVE_SPINCTRLDOUBLE

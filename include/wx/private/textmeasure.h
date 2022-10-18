@@ -159,7 +159,7 @@ protected:
 };
 
 // Include the platform dependent class declaration, if any.
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #include "wx/gtk/private/textmeasure.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/private/textmeasure.h"

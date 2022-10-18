@@ -365,10 +365,8 @@ public:                                                                       \
         { return ScrollGetBestVirtualSize(); }
 
 // include the declaration of the real wxScrollHelper
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/scrolwin.h"
-#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
-    #include "wx/gtk1/scrolwin.h"
 #else
     #define wxHAS_GENERIC_SCROLLWIN
     #include "wx/generic/scrolwin.h"

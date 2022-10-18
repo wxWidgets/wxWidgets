@@ -148,7 +148,7 @@ public:
         Returns @true if the contents of the clipboard can be pasted into the
         text control.
 
-        On some platforms (Motif, GTK) this is an approximation and returns
+        On some platforms (GTK) this is an approximation and returns
         @true if the control is editable, @false otherwise.
     */
     virtual bool CanPaste() const;

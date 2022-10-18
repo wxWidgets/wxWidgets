@@ -180,12 +180,8 @@ protected:
     #include "wx/univ/anybutton.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/anybutton.h"
-//#elif defined(__WXMOTIF__)
-//    #include "wx/motif/anybutton.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/anybutton.h"
-//#elif defined(__WXGTK__)
-//    #include "wx/gtk1/anybutton.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/anybutton.h"
 #elif defined(__WXQT__)

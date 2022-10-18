@@ -564,8 +564,6 @@ wxEND_EVENT_TABLE()
 
 #if defined(__WXUNIVERSAL__)
     #define FAMILY_CTRLS UNIVERSAL_CTRLS
-#elif defined(__WXMOTIF__)
-    #define FAMILY_CTRLS GENERIC_CTRLS
 #else
     #define FAMILY_CTRLS NATIVE_CTRLS
 #endif

@@ -23,7 +23,7 @@
     #include "wx/control.h"
 #endif
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     #include "wx/gtk/private.h"
 #endif
 
@@ -48,7 +48,7 @@
 // GTK+ signal handler
 // ----------------------------------------------------------------------------
 
-#if defined( __WXGTK20__ )
+#if defined( __WXGTK__ )
 #if GTK_CHECK_VERSION(2,12,0)
 extern "C" {
 static
@@ -85,7 +85,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
 wxBEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_SIZE(wxStatusBarGeneric::OnSize)
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
 #endif
@@ -123,7 +123,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
     SetFieldsCount(1);
 
-#if defined( __WXGTK20__ )
+#if defined( __WXGTK__ )
 #if GTK_CHECK_VERSION(2,12,0)
     if (HasFlag(wxSTB_SHOW_TIPS) && wx_is_at_least_gtk2(12))
     {
@@ -192,16 +192,16 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 bool wxStatusBarGeneric::ShowsSizeGrip() const
 {
     // Currently drawing size grip is implemented only in wxGTK.
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     if ( !HasFlag(wxSTB_SIZEGRIP) )
         return false;
 
     wxTopLevelWindow * const
         tlw = wxDynamicCast(wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
     return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
-#else // !__WXGTK20__
+#else // !__WXGTK__
     return false;
-#endif // __WXGTK20__/!__WXGTK20__
+#endif // __WXGTK__/!__WXGTK__
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
@@ -405,7 +405,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // Draw grip first
     if ( ShowsSizeGrip() )
     {
@@ -440,7 +440,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
                             rc.x, rc.y, rc.width, rc.height );
 #endif
     }
-#endif // __WXGTK20__
+#endif // __WXGTK__
 
     if (GetFont().IsOk())
         dc.SetFont(GetFont());
@@ -461,7 +461,7 @@ void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
 {
     int width, height;
@@ -548,7 +548,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
         event.Skip( true );
     }
 }
-#endif // __WXGTK20__
+#endif // __WXGTK__
 
 void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
 {

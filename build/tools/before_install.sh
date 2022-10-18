@@ -51,7 +51,6 @@ case $(uname -s) in
 
             case "$wxCONFIGURE_FLAGS" in
                 *--with-directfb*) libtoolkit_dev='libdirectfb-dev'         ;;
-                *--with-motif*)    libtoolkit_dev='libmotif-dev libxmu-dev' ;;
                 *--with-qt*)       libtoolkit_dev='qtdeclarative5-dev libqt5opengl5-dev';;
                 *--with-x11*)      extra_deps='libpango1.0-dev' ;;
                 *--disable-gui*)   ;;

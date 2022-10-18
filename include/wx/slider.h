@@ -127,12 +127,8 @@ private:
     #include "wx/univ/slider.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/slider.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/slider.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/slider.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/slider.h"
+    #include "wx/gtk/slider.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/slider.h"
 #elif defined(__WXQT__)

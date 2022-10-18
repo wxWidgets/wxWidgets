@@ -28,14 +28,14 @@ public:
 
 #if wxUSE_GUI
 
-// GTK+ and Motif integrate sockets and child processes monitoring directly in
+// GTK and Qt integrate sockets and child processes monitoring directly in
 // their main loop, the other Unix ports do it at wxEventLoop level and so use
 // the non-GUI traits and don't need anything here
 //
 // TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there is
 //       no advantage in doing this compared to the generic way currently used
-//       by wxX11, should we continue to use GTK/Motif-specific stuff?
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXQT__)
+//       by wxX11, should we continue to use GTK-specific stuff?
+#if defined(__WXGTK__) || defined(__WXQT__)
     #define wxHAS_GUI_FDIOMANAGER
     #define wxHAS_GUI_PROCESS_CALLBACKS
 #endif // ports using wxFDIOManager
@@ -53,7 +53,7 @@ public:
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) override;
 #endif
-#if wxUSE_THREADS && defined(__WXGTK20__)
+#if wxUSE_THREADS && defined(__WXGTK__)
     virtual void MutexGuiEnter() override;
     virtual void MutexGuiLeave() override;
 #endif
@@ -62,11 +62,11 @@ public:
                                int *minVer = NULL,
                                int *microVer = NULL) const override;
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const override;
-#endif // __WXGTK20____
+#endif // __WXGTK____
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     virtual bool ShowAssertDialog(const wxString& msg) override;
 #endif
 

@@ -108,11 +108,6 @@ jobs:
             configure_flags: --with-directfb --enable-pch --disable-stc
             skip_samples: true
             allow_warnings: true
-          - name: Ubuntu 18.04 wxMotif
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-motif --enable-pch --disable-stc
-            skip_samples: true
           - name: Ubuntu 18.04 wxQt
             runner: ubuntu-latest
             container: ubuntu:18.04

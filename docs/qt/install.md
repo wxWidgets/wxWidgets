@@ -175,7 +175,7 @@ to see all the options please use:
 It is recommended to build wxWidgets in another directory (maybe a
 subdirectory of your wxWidgets installation) as this allows you to
 have multiple configurations (for example, debug and release or GTK
-and Motif) simultaneously.
+and X11) simultaneously.
 
 Feature Options                        {#qt_feature_options}
 -----------------

@@ -676,7 +676,7 @@ bool wxApp::HandlePropertyChange(WXEvent *WXUNUSED(event))
 
 void wxApp::WakeUpIdle()
 {
-    // TODO: use wxMotif implementation?
+    // TODO:
 
     // Wake up the idle handler processor, even if it is in another thread...
 }

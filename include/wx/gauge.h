@@ -34,7 +34,7 @@
 
 // GTK and Mac always have native implementation of the indeterminate mode
 // wxMSW has native implementation only if comctl32.dll >= 6.00
-#if !defined(__WXGTK20__) && !defined(__WXMAC__)
+#if !defined(__WXGTK__) && !defined(__WXMAC__)
     #define wxGAUGE_EMULATE_INDETERMINATE_MODE 1
 #else
     #define wxGAUGE_EMULATE_INDETERMINATE_MODE 0
@@ -128,12 +128,8 @@ protected:
     #include "wx/univ/gauge.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/gauge.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/gauge.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/gauge.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/gauge.h"
+    #include "wx/gtk/gauge.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/gauge.h"
 #elif defined(__WXQT__)

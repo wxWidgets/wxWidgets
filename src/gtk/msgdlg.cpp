@@ -12,7 +12,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_MSGDLG && !defined(__WXGPE__)
+#if wxUSE_MSGDLG
 
 #include "wx/msgdlg.h"
 
@@ -297,4 +297,4 @@ int wxMessageDialog::ShowModal()
 }
 
 
-#endif // wxUSE_MSGDLG && !defined(__WXGPE__)
+#endif // wxUSE_MSGDLG

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/unix/fontutil.cpp
-// Purpose:     Font helper functions for wxX11, wxGTK, wxMotif
+// Purpose:     Font helper functions for wxX11, wxGTK
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     05.11.99
@@ -42,7 +42,7 @@
 
 PangoContext* wxGetPangoContext();
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     #include "wx/gtk/private.h"
 
     #define wxPANGO_CONV wxGTK_CONV_SYS
@@ -159,7 +159,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Monospace"
     else if (wxStrnicmp( family_text, "courier", 7 ) == 0)
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Courier"
-#if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
+#if defined(__WXGTK__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
     {
         PangoFontFamily **families;

@@ -37,7 +37,7 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // Many version of wxGTK generate spurious diagnostic messages when
     // destroying wxNotebook (or removing pages from it), allow wxWidgets to
     // suppress them.
@@ -50,14 +50,6 @@ bool MyApp::OnInit()
 
     // Create the main window
     MyFrame *frame = new MyFrame();
-
-    // Problem with generic wxNotebook implementation whereby it doesn't size
-    // properly unless you set the size again
-#if defined(__WXMOTIF__)
-    int width, height;
-    frame->GetSize(& width, & height);
-    frame->SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
-#endif
 
     frame->Show();
 

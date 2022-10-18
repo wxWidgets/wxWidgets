@@ -75,12 +75,8 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataform.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/dataform.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/dataform.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/dataform.h"
+    #include "wx/gtk/dataform.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dataform.h"
 #elif defined(__WXMAC__)
@@ -161,14 +157,10 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataobj.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/dataobj.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dataobj.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/dataobj.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/dataobj.h"
+    #include "wx/gtk/dataobj.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dataobj.h"
 #elif defined(__WXQT__)
@@ -324,7 +316,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-    #if defined(__WXGTK20__) || defined(__WXX11__) || defined(__WXQT__)
+    #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXQT__)
         #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
     #elif defined(__WXMAC__)
         #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
@@ -570,17 +562,13 @@ private:
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataobj2.h"
     // wxURLDataObject defined in msw/ole/dataobj2.h
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/dataobj2.h"
     // wxURLDataObject defined in gtk/dataobj2.h
 
 #else
-    #if defined(__WXGTK__)
-        #include "wx/gtk1/dataobj2.h"
-    #elif defined(__WXX11__)
+    #if defined(__WXX11__)
         #include "wx/x11/dataobj2.h"
-    #elif defined(__WXMOTIF__)
-        #include "wx/motif/dataobj2.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dataobj2.h"
     #elif defined(__WXQT__)

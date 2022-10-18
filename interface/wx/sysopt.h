@@ -114,14 +114,6 @@
     @endFlagTable
 
 
-    @section sysopt_motif Motif
-
-    @beginFlagTable
-    @flag{motif.largebuttons}
-        If 1, uses a bigger default size for wxButtons.
-    @endFlagTable
-
-
     The compile-time option to include or exclude this functionality is wxUSE_SYSTEM_OPTIONS.
 
     @library{wxbase}

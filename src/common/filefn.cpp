@@ -778,7 +778,7 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     }
     else // ok, but we might need to massage the path into the right format
     {
-// MBN: we hope that in the case the user is compiling a GTK+/Motif app,
+// MBN: we hope that in the case the user is compiling a GTK app,
 //      he needs Unix as opposed to Win32 pathnames
 #if defined( __CYGWIN__ ) && defined( __WINDOWS__ )
         // another example of DOS/Unix mix (Cygwin)
@@ -951,53 +951,6 @@ int WXDLLIMPEXP_BASE wxParseCommonDialogsFilter(const wxString& filterStr,
         descriptions.Add(description);
         filters.Add(filter);
     }
-
-#if defined(__WXMOTIF__)
-    // split it so there is one wildcard per entry
-    for( size_t i = 0 ; i < descriptions.GetCount() ; i++ )
-    {
-        pos = filters[i].Find(wxT(';'));
-        if (pos != wxNOT_FOUND)
-        {
-            // first split only filters
-            descriptions.Insert(descriptions[i],i+1);
-            filters.Insert(filters[i].Mid(pos+1),i+1);
-            filters[i]=filters[i].Left(pos);
-
-            // autoreplace new filter in description with pattern:
-            //     C/C++ Files(*.cpp;*.c;*.h)|*.cpp;*.c;*.h
-            // cause split into:
-            //     C/C++ Files(*.cpp)|*.cpp
-            //     C/C++ Files(*.c;*.h)|*.c;*.h
-            // and next iteration cause another split into:
-            //     C/C++ Files(*.cpp)|*.cpp
-            //     C/C++ Files(*.c)|*.c
-            //     C/C++ Files(*.h)|*.h
-            for ( size_t k=i;k<i+2;k++ )
-            {
-                pos = descriptions[k].Find(filters[k]);
-                if (pos != wxNOT_FOUND)
-                {
-                    wxString before = descriptions[k].Left(pos);
-                    wxString after = descriptions[k].Mid(pos+filters[k].Len());
-                    pos = before.Find(wxT('('),true);
-                    if (pos>before.Find(wxT(')'),true))
-                    {
-                        before = before.Left(pos+1);
-                        before << filters[k];
-                        pos = after.Find(wxT(')'));
-                        int pos1 = after.Find(wxT('('));
-                        if (pos != wxNOT_FOUND && (pos<pos1 || pos1==wxNOT_FOUND))
-                        {
-                            before << after.Mid(pos);
-                            descriptions[k] = before;
-                        }
-                    }
-                }
-            }
-        }
-    }
-#endif
 
     // autocompletion
     for( size_t j = 0 ; j < descriptions.GetCount() ; j++ )

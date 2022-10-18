@@ -2004,22 +2004,13 @@ private:
         #define wxWindowMSW wxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/window.h"
-#elif defined(__WXGTK20__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowGTK
-    #else // !wxUniv
-        #define wxWindowGTK wxWindow
-    #endif // wxUniv
-    #include "wx/gtk/window.h"
 #elif defined(__WXGTK__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowGTK
     #else // !wxUniv
         #define wxWindowGTK wxWindow
     #endif // wxUniv
-    #include "wx/gtk1/window.h"
+    #include "wx/gtk/window.h"
 #elif defined(__WXX11__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowX11

@@ -2298,10 +2298,7 @@ protected:
 #ifdef __WXMSW__
     virtual WXHWND GetEditHWND() const { return GetHWND(); }
 #endif
-#ifdef __WXMOTIF__
-    virtual WXWidget GetTextWidget() const { return NULL; }
-#endif
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     virtual GtkEditable *GetEditable() const { return NULL; }
     virtual GtkEntry *GetEntry() const { return NULL; }
 #endif

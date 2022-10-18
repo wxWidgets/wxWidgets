@@ -29,7 +29,7 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/palette.h"
-#elif defined(__WXX11__) || defined(__WXMOTIF__)
+#elif defined(__WXX11__)
     #include "wx/x11/palette.h"
 #elif defined(__WXGTK__)
     #include "wx/generic/paletteg.h"

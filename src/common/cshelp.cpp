@@ -86,27 +86,6 @@ wxContextHelp::~wxContextHelp()
         EndContextHelp();
 }
 
-// Not currently needed, but on some systems capture may not work as
-// expected so we'll leave it here for now.
-#ifdef __WXMOTIF__
-static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool push)
-{
-    if (push)
-        win->PushEventHandler(new wxContextHelpEvtHandler(help));
-    else
-        win->PopEventHandler(true);
-
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow* child = node->GetData();
-        wxPushOrPopEventHandlers(help, child, push);
-
-        node = node->GetNext();
-    }
-}
-#endif
-
 // Begin 'context help mode'
 bool wxContextHelp::BeginContextHelp(wxWindow* win)
 {
@@ -125,11 +104,7 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     m_status = false;
 
-#ifdef __WXMOTIF__
-    wxPushOrPopEventHandlers(this, win, true);
-#else
     win->PushEventHandler(new wxContextHelpEvtHandler(this));
-#endif
 
     win->CaptureMouse();
 
@@ -137,11 +112,7 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     win->ReleaseMouse();
 
-#ifdef __WXMOTIF__
-    wxPushOrPopEventHandlers(this, win, false);
-#else
     win->PopEventHandler(true);
-#endif
 
     win->SetCursor(oldCursor);
 

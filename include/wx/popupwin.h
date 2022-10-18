@@ -62,14 +62,10 @@ public:
 // include the real class declaration
 #if defined(__WXMSW__)
     #include "wx/msw/popupwin.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/popupwin.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/popupwin.h"
+    #include "wx/gtk/popupwin.h"
 #elif defined(__WXX11__)
     #include "wx/x11/popupwin.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/popupwin.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/popupwin.h"
 #elif defined(__WXMAC__)

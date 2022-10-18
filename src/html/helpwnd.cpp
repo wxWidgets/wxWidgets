@@ -62,11 +62,6 @@
 //  make the help frame unusable)
 const wxCoord CONTENT_TREE_INDEX_MIN_WIDTH = 150;
 
-/* Motif defines this as a macro */
-#ifdef Below
-#undef Below
-#endif
-
 //--------------------------------------------------------------------------
 // wxHtmlHelpTreeItemData (private)
 //--------------------------------------------------------------------------
@@ -441,7 +436,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
         m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                        wxDefaultPosition, wxDefaultSize,
-#if defined(__WXGTK20__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXMAC__)
                                        wxSUNKEN_BORDER |
                                        wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
                                        wxTR_NO_LINES

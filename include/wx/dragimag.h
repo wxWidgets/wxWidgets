@@ -25,10 +25,6 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 #       include "wx/msw/dragimag.h"
 #   endif
 
-#elif defined(__WXMOTIF__)
-#   include "wx/generic/dragimgg.h"
-#   define wxDragImage wxGenericDragImage
-
 #elif defined(__WXGTK__)
 #   include "wx/generic/dragimgg.h"
 #   define wxDragImage wxGenericDragImage

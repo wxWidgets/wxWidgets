@@ -63,8 +63,8 @@ enum wxPortId
     wxPORT_BASE     = 1 << 0,       //!< wxBase, no native toolkit used
 
     wxPORT_MSW      = 1 << 1,       //!< wxMSW, native toolkit is Windows API
-    wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, using [Open]Motif or Lesstif
-    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK+ 1.x, 2.x, 3.x, GPE
+    wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, not supported any longer.
+    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK
     wxPORT_DFB      = 1 << 4,       //!< wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
     wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API

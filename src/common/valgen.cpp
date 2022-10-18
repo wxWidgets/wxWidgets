@@ -164,7 +164,7 @@ bool wxGenericValidator::TransferToWindow()
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
     if (wxDynamicCast(m_validatorWindow, wxBitmapToggleButton))
     {
         wxBitmapToggleButton * pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -211,7 +211,7 @@ bool wxGenericValidator::TransferToWindow()
         }
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WXMOTIF__)
+#if wxUSE_SPINCTRL
     if (wxDynamicCast(m_validatorWindow, wxSpinCtrl))
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
@@ -449,7 +449,7 @@ bool wxGenericValidator::TransferFromWindow()
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
     if (wxDynamicCast(m_validatorWindow, wxBitmapToggleButton))
     {
         wxBitmapToggleButton *pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -496,7 +496,7 @@ bool wxGenericValidator::TransferFromWindow()
         }
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WXMOTIF__)
+#if wxUSE_SPINCTRL
     if (wxDynamicCast(m_validatorWindow, wxSpinCtrl))
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;

@@ -63,18 +63,13 @@ protected:
 #define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 0
 #endif
 
-#if defined(__WXUNIVERSAL__) || \
-    defined(__WXMOTIF__)     || \
-    defined(__WXGPE__)
-
+#if defined(__WXUNIVERSAL__)
     #include "wx/generic/fontdlgg.h"
     #define wxFontDialog wxGenericFontDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/fontdlg.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/fontdlg.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/fontdlg.h"
+    #include "wx/gtk/fontdlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/fontdlg.h"
 #elif defined(__WXQT__)

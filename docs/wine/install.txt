@@ -48,7 +48,7 @@ If you want to remove wxWidgets on Unix you can do this:
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
-such as for GTK and Motif, you can now build two complete libraries and use
+such as for GTK and X11, you can now build two complete libraries and use
 them concurrently. For this end, you have to create a directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
@@ -57,9 +57,9 @@ be installed, so you'd have to use local version of the library for that purpose
 For building three versions (one GTK, one WINE and a debug version of the WINE
 source) you'd do this:
 
-md buildmotif
-cd buildmotif
-../configure --with-motif
+md buildx11
+cd buildx11
+../configure --with-x11
 make
 cd ..
 
