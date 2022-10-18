@@ -5701,101 +5701,20 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 {
     // Don't do anything if between Begin/EndBatch...
     // EndBatch() will do all this on the last nested one anyway.
-    if ( m_created && ShouldRefresh() )
+    if ( ShouldRefresh() )
     {
-        // Refresh to get correct scrolled position:
         wxScrolledCanvas::Refresh(eraseb, rect);
 
-        if (rect)
-        {
-            int rect_x, rect_y, rectWidth, rectHeight;
-            int width_label, width_cell, height_label, height_cell;
-            int x, y;
-
-            // Copy rectangle can get scroll offsets..
-            rect_x = rect->GetX();
-            rect_y = rect->GetY();
-            rectWidth = rect->GetWidth();
-            rectHeight = rect->GetHeight();
-
-            width_label = m_rowLabelWidth - rect_x;
-            if (width_label > rectWidth)
-                width_label = rectWidth;
-
-            height_label = m_colLabelHeight - rect_y;
-            if (height_label > rectHeight)
-                height_label = rectHeight;
-
-            if (rect_x > m_rowLabelWidth)
-            {
-                x = rect_x - m_rowLabelWidth;
-                width_cell = rectWidth;
-            }
-            else
-            {
-                x = 0;
-                width_cell = rectWidth - (m_rowLabelWidth - rect_x);
-            }
-
-            if (rect_y > m_colLabelHeight)
-            {
-                y = rect_y - m_colLabelHeight;
-                height_cell = rectHeight;
-            }
-            else
-            {
-                y = 0;
-                height_cell = rectHeight - (m_colLabelHeight - rect_y);
-            }
-
-            // Paint corner label part intersecting rect.
-            if ( width_label > 0 && height_label > 0 )
-            {
-                wxRect anotherrect(rect_x, rect_y, width_label, height_label);
-                m_cornerLabelWin->Refresh(eraseb, &anotherrect);
-            }
-
-            // Paint col labels part intersecting rect.
-            if ( width_cell > 0 && height_label > 0 )
-            {
-                wxRect anotherrect(x, rect_y, width_cell, height_label);
-                m_colLabelWin->Refresh(eraseb, &anotherrect);
-            }
-
-            // Paint row labels part intersecting rect.
-            if ( width_label > 0 && height_cell > 0 )
-            {
-                wxRect anotherrect(rect_x, y, width_label, height_cell);
-                m_rowLabelWin->Refresh(eraseb, &anotherrect);
-            }
-
-            // Paint cell area part intersecting rect.
-            if ( width_cell > 0 && height_cell > 0 )
-            {
-                wxRect anotherrect(x, y, width_cell, height_cell);
-                m_gridWin->Refresh(eraseb, &anotherrect);
-            }
-        }
-        else
-        {
-            m_cornerLabelWin->Refresh(eraseb, NULL);
-            m_colLabelWin->Refresh(eraseb, NULL);
-            m_rowLabelWin->Refresh(eraseb, NULL);
-            m_gridWin->Refresh(eraseb, NULL);
-
-            if ( m_frozenColGridWin )
-            {
-                m_frozenColGridWin->Refresh(eraseb, NULL);
-                m_colFrozenLabelWin->Refresh(eraseb, NULL);
-            }
-            if ( m_frozenRowGridWin )
-            {
-                m_frozenRowGridWin->Refresh(eraseb, NULL);
-                m_rowFrozenLabelWin->Refresh(eraseb, NULL);
-            }
-            if ( m_frozenCornerGridWin )
-                m_frozenCornerGridWin->Refresh(eraseb, NULL);
-        }
+        // Notice that this function expects the rectangle to be relative
+        // to the wxGrid window itself, i.e. the origin (0, 0) at the top
+        // left corner of the window. and will correctly refresh the sub-
+        // windows for us, including the frozen ones, but only the parts
+        // intersecting with rect will be refreshed of course. So if we
+        // want to refresh a rectangle in a grid area, we should pass that
+        // rectangle shifted by the position of the area in the grid. e.g.:
+        // wxRect rect = ... // rect calculated relative to cells area
+        // rect.Offset(GetRowLabelSize(), GetColLabelSize());
+        // Refresh(true, &rect);
     }
 }
 
@@ -8897,7 +8816,7 @@ void wxGrid::SetRowLabelSize( int width )
         m_rowLabelWidth = width;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledCanvas::Refresh( true );
+        Refresh();
     }
 }
 
@@ -8927,7 +8846,7 @@ void wxGrid::SetColLabelSize( int height )
         m_colLabelHeight = height;
         InvalidateBestSize();
         CalcWindowSizes();
-        wxScrolledCanvas::Refresh( true );
+        Refresh();
     }
 }
 
