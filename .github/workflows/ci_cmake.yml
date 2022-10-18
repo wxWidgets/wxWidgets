@@ -56,8 +56,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 3
-            runner: ubuntu-18.04
+          - name: Ubuntu 22.04 wxGTK 3
+            runner: ubuntu-22.04
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
           - name: macOS 11 wxOSX
@@ -121,7 +121,7 @@ jobs:
       # required for CMake to find Ninja
       - name: "[Windows] Set up MSVC Developer Command Prompt"
         if: runner.os == 'Windows'
-        uses: seanmiddleditch/gha-setup-vsdevenv@v3
+        uses: wxWidgets/gha-setup-vsdevenv@ac61ecb4b05909261f8f375601c0e15aabdd9f10
 
       - name: Configuring
         run: |
