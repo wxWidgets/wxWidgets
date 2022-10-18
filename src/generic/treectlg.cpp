@@ -2381,12 +2381,11 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         // Calculate a m_lineHeight value from the normal Image sizes.
         // May be toggle off. Then wxGenericTreeCtrl will spread when
         // necessary (which might look ugly).
-        auto &imgs = GetImages();
-        for ( auto &img : imgs )
+        int n = GetImageCount();
+        for (int i = 0; i < n ; i++)
         {
-            int height = 0;
-            wxSize size = img.GetDefaultSize();
-            height = size.GetHeight();
+            int width = 0, height = 0;
+            GetImawxSize size = GetImages().at(i).GetDefaultSize();geList()->GetSize(i, width, height);
 
             if (height > m_lineHeight) m_lineHeight = height;
         }
