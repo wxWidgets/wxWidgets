@@ -2649,12 +2649,12 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     if ( state != wxTREE_ITEMSTATE_NONE )
     {
         dc.SetClippingRegion( item->GetX(), item->GetY(), state_w, total_h );
-        GetStateImageList()->Draw( state, dc,
+        dc.DrawBitmap( m_imagesState.GetImageBitmapFor(this, state),
                                 item->GetX(),
                                 item->GetY() +
                                     (total_h > state_h ? (total_h-state_h)/2
                                                        : 0),
-                                wxIMAGELIST_DRAW_TRANSPARENT );
+                                true /* use mask */ );
         dc.DestroyClippingRegion();
     }
 
@@ -2830,22 +2830,21 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
             if ( m_imagesButtons.HasImages() )
             {
                 // draw the image button here
-                int image_h = 0,
-                    image_w = 0;
                 int image = item->IsExpanded() ? wxTreeItemIcon_Expanded
                                                : wxTreeItemIcon_Normal;
                 if ( item->IsSelected() )
                     image += wxTreeItemIcon_Selected - wxTreeItemIcon_Normal;
 
-                wxImageList* const
-                    imageListButtons = m_imagesButtons.GetImageList();
-                imageListButtons->GetSize(image, image_w, image_h);
+                const wxBitmap& bmp = m_imagesButtons.GetImageBitmapFor(this, image);
+
+                // we need logical coordinates for wxDC.
+                int image_h = FromPhys(bmp.GetHeight()),
+                    image_w = FromPhys(bmp.GetWidth());
                 int xx = x - image_w/2;
                 int yy = y_mid - image_h/2;
 
                 wxDCClipper clip(dc, xx, yy, image_w, image_h);
-                imageListButtons->Draw(image, dc, xx, yy,
-                                         wxIMAGELIST_DRAW_TRANSPARENT);
+                dc.DrawBitmap( bmp, xx, yy, true /* use mask */ );
             }
             else // no custom buttons
             {
