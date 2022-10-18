@@ -135,7 +135,7 @@ wxMouseState wxGetMouseState()
 class wxDisplayImplSingleiOS : public wxDisplayImplSingle
 {
 public:
-    virtual wxRect GetGeometry() const wxOVERRIDE
+    virtual wxRect GetGeometry() const override
     {
         CGRect bounds = [[UIScreen mainScreen] bounds];
 
@@ -156,12 +156,12 @@ public:
         return wxRect(0, 0, width, height);
     }
 
-    virtual int GetDepth() const wxOVERRIDE
+    virtual int GetDepth() const override
     {
         return 32; // TODO can we determine this ?
     }
 
-    virtual wxSize GetPPI() const wxOVERRIDE
+    virtual wxSize GetPPI() const override
     {
         return wxSize(72, 72);
     }
@@ -170,7 +170,7 @@ public:
 class wxDisplayFactorySingleiOS : public wxDisplayFactorySingle
 {
 protected:
-    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    virtual wxDisplayImpl *CreateSingleDisplay() override
     {
         return new wxDisplayImplSingleiOS;
     }

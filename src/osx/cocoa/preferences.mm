@@ -111,7 +111,7 @@ public:
         tool->SetClientData(info.get());
     }
 
-    virtual bool Show(bool show) wxOVERRIDE
+    virtual bool Show(bool show) override
     {
         if ( show && !m_toolbarRealized )
         {
@@ -127,12 +127,12 @@ public:
         return wxFrame::Show(show);
     }
 
-    virtual bool ShouldPreventAppExit() const wxOVERRIDE { return false; }
+    virtual bool ShouldPreventAppExit() const override { return false; }
 
 protected:
     // Native preferences windows resize when the selected panel changes and
     // the resizing is animated, so we need to override DoMoveWindow.
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE
+    virtual void DoMoveWindow(int x, int y, int width, int height) override
     {
         NSRect r = wxToNSRect(NULL, wxRect(x, y, width, height));
         NSWindow *win = (NSWindow*)GetWXWindow();
@@ -271,12 +271,12 @@ public:
             m_win->Destroy();
     }
 
-    virtual void AddPage(wxPreferencesPage* page) wxOVERRIDE
+    virtual void AddPage(wxPreferencesPage* page) override
     {
         GetWin()->AddPage(page);
     }
 
-    virtual void Show(wxWindow* WXUNUSED(parent)) wxOVERRIDE
+    virtual void Show(wxWindow* WXUNUSED(parent)) override
     {
         // OS X preferences windows don't have parents, they are independent
         // windows, so we just ignore the 'parent' argument.
@@ -285,7 +285,7 @@ public:
         win->Raise();
     }
 
-    virtual void Dismiss() wxOVERRIDE
+    virtual void Dismiss() override
     {
         // Don't destroy the window, only hide it, because OS X preferences
         // window typically remember their state even when closed. Reopening

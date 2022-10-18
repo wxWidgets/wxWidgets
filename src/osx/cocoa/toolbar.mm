@@ -168,7 +168,7 @@ public:
         return wxPoint( m_x, m_y );
     }
 
-    bool Enable( bool enable ) wxOVERRIDE;
+    bool Enable( bool enable ) override;
 
     void UpdateImages();
 
@@ -262,13 +262,13 @@ public:
         return m_index;
     }
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE
+    virtual void SetLabel(const wxString& label) override
     {
         wxToolBarToolBase::SetLabel(label);
         UpdateLabel();
     }
 
-    virtual bool SetShortHelp(const wxString& help) wxOVERRIDE
+    virtual bool SetShortHelp(const wxString& help) override
     {
         if ( !wxToolBarToolBase::SetShortHelp(help) )
             return false;

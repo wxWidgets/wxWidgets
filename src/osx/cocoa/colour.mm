@@ -23,19 +23,19 @@ public:
 
     virtual ~wxNSColorRefData();
     
-    virtual CGFloat Red() const wxOVERRIDE;
-    virtual CGFloat Green() const wxOVERRIDE;
-    virtual CGFloat Blue() const wxOVERRIDE;
-    virtual CGFloat Alpha() const wxOVERRIDE;
+    virtual CGFloat Red() const override;
+    virtual CGFloat Green() const override;
+    virtual CGFloat Blue() const override;
+    virtual CGFloat Alpha() const override;
     
-    virtual bool IsSolid() const wxOVERRIDE;
+    virtual bool IsSolid() const override;
 
-    CGColorRef GetCGColor() const wxOVERRIDE;
+    CGColorRef GetCGColor() const override;
     
-    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
+    virtual wxColourRefData* Clone() const override { return new wxNSColorRefData(*this); }
     
-    virtual WX_NSColor GetNSColor() const wxOVERRIDE;
-    virtual WX_NSImage GetNSPatternImage() const wxOVERRIDE;
+    virtual WX_NSColor GetNSColor() const override;
+    virtual WX_NSImage GetNSPatternImage() const override;
 private:
     static CGFloat GetCGColorComponent(CGColorRef col, int rgbaIndex);
     WX_NSColor m_nsColour;

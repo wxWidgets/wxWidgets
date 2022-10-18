@@ -40,7 +40,7 @@ class wxTaskBarIconWindow : public wxTopLevelWindow
 public:
     wxTaskBarIconWindow(wxTaskBarIconImpl *impl);
 
-    double GetContentScaleFactor() const wxOVERRIDE;
+    double GetContentScaleFactor() const override;
 
     void OnMenuEvent(wxCommandEvent& event);
     void OnUpdateUIEvent(wxUpdateUIEvent& event);
@@ -93,9 +93,9 @@ class wxTaskBarIconDockImpl: public wxTaskBarIconImpl
 public:
     wxTaskBarIconDockImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconDockImpl();
-    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    virtual bool RemoveIcon() wxOVERRIDE;
-    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
+    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
+    virtual bool RemoveIcon() override;
+    virtual bool PopupMenu(wxMenu *menu) override;
 
     static WX_NSMenu OSXGetDockHMenu();
 protected:
@@ -126,11 +126,11 @@ public:
     wxTaskBarIconCustomStatusItemImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconCustomStatusItemImpl();
     
-    virtual bool IsStatusItem() const wxOVERRIDE { return true; }
+    virtual bool IsStatusItem() const override { return true; }
 
-    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    virtual bool RemoveIcon() wxOVERRIDE;
-    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
+    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
+    virtual bool RemoveIcon() override;
+    virtual bool PopupMenu(wxMenu *menu) override;
 protected:
     NSStatusItem *m_statusItem;
     wxOSXStatusItemTarget *m_target;
