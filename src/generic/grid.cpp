@@ -3745,9 +3745,8 @@ wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
         // logical bounds of update region
         //
-        int dummy;
-        CalcGridWindowUnscrolledPosition( 0, r.GetTop(), &dummy, &top, gridWindow );
-        CalcGridWindowUnscrolledPosition( 0, r.GetBottom(), &dummy, &bottom, gridWindow );
+        CalcGridWindowUnscrolledPosition( 0, r.GetTop(), nullptr, &top, gridWindow );
+        CalcGridWindowUnscrolledPosition( 0, r.GetBottom(), nullptr, &bottom, gridWindow );
 
         // find the row labels within these bounds
         const int rowFirst = internalYToRow(top, gridWindow);
@@ -3799,9 +3798,8 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg, wxGridWindow *grid
 
         // logical bounds of update region
         //
-        int dummy;
-        CalcGridWindowUnscrolledPosition( r.GetLeft(), 0, &left, &dummy, gridWindow );
-        CalcGridWindowUnscrolledPosition( r.GetRight(), 0, &right, &dummy, gridWindow );
+        CalcGridWindowUnscrolledPosition( r.GetLeft(), 0, &left, nullptr, gridWindow );
+        CalcGridWindowUnscrolledPosition( r.GetRight(), 0, &right, nullptr, gridWindow );
 
         // find the cells within these bounds
         //
@@ -10594,11 +10592,11 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             }
             else
             {
-                int cw, ch, dummy;
+                int cw, ch;
                 m_gridWin->GetClientSize( &cw, &ch );
                 wxRect rect ( CellToRect( 0, colOrRow ) );
                 rect.y = 0;
-                CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
+                CalcScrolledPosition(rect.x, 0, &rect.x, nullptr);
                 rect.width = cw - rect.x;
                 rect.height = m_colLabelHeight;
                 GetColLabelWindow()->Refresh( true, &rect );
@@ -10616,11 +10614,11 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         SetRowSize(colOrRow, extentMax);
         if ( ShouldRefresh() )
         {
-            int cw, ch, dummy;
+            int cw, ch;
             m_gridWin->GetClientSize( &cw, &ch );
             wxRect rect( CellToRect( colOrRow, 0 ) );
             rect.x = 0;
-            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+            CalcScrolledPosition(0, rect.y, nullptr, &rect.y);
             rect.width = m_rowLabelWidth;
             rect.height = ch - rect.y;
             m_rowLabelWin->Refresh( true, &rect );
@@ -10800,11 +10798,10 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
         m_table->SetValue( row, col, s );
         if ( ShouldRefresh() )
         {
-            int dummy;
             wxRect rect( CellToRect( row, col ) );
             rect.x = 0;
             rect.width = m_gridWin->GetClientSize().GetWidth();
-            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+            CalcScrolledPosition(0, rect.y, nullptr, &rect.y);
             m_gridWin->Refresh( false, &rect );
         }
 
