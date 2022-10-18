@@ -75,7 +75,7 @@ jobs:
         run: |
             ./misc/scripts/check_mixed_eol.sh
 
-  check-c++-style:
+  check-cxx-style:
     runs-on: ubuntu-20.04
     name: Check C++ Style
 
