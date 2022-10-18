@@ -2385,7 +2385,7 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         for (int i = 0; i < n ; i++)
         {
             int width = 0, height = 0;
-            GetImawxSize size = GetImages().at(i).GetDefaultSize();geList()->GetSize(i, width, height);
+            GetImageList()->GetSize(i, width, height);
 
             if (height > m_lineHeight) m_lineHeight = height;
         }
