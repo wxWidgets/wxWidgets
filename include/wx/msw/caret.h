@@ -32,8 +32,8 @@ public:
     }
 
     // process wxWindow notifications
-    virtual void OnSetFocus() override;
-    virtual void OnKillFocus() override;
+    virtual void OnSetFocus() wxOVERRIDE;
+    virtual void OnKillFocus() wxOVERRIDE;
 
 protected:
     // override base class virtuals
