@@ -2647,19 +2647,18 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( state != wxTREE_ITEMSTATE_NONE )
     {
-        dc.SetClippingRegion( item->GetX(), item->GetY(), state_w, total_h );
+        wxDCClipper clip(dc, item->GetX(), item->GetY(), state_w, total_h);
         dc.DrawBitmap( m_imagesState.GetImageBitmapFor(this, state),
                                 item->GetX(),
                                 item->GetY() +
                                     (total_h > state_h ? (total_h-state_h)/2
                                                        : 0),
                                 true /* use mask */ );
-        dc.DestroyClippingRegion();
     }
 
     if ( image != NO_IMAGE )
     {
-        dc.SetClippingRegion(item->GetX() + state_w, item->GetY(),
+        wxDCClipper clip(dc, item->GetX() + state_w, item->GetY(),
                              image_w, total_h);
         dc.DrawBitmap( GetImageBitmapFor(this, image),
                                  item->GetX() + state_w,
@@ -2667,7 +2666,6 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                                     (total_h > image_h ? (total_h-image_h)/2
                                                        : 0),
                                  true /* use mask */ );
-        dc.DestroyClippingRegion();
     }
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
