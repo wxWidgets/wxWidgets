@@ -129,6 +129,37 @@ public:
         return m_imageList;
     }
 
+    // Return the bitmap to use at the current DPI of the given window.
+    //
+    // If index == NO_IMAGE, just returns wxNullBitmap.
+    wxBitmap GetImageBitmapFor(const wxWindow* window, int iconIndex) const
+    {
+        wxBitmap bitmap;
+
+        if ( iconIndex != NO_IMAGE )
+        {
+            if ( !m_images.empty() )
+            {
+                bitmap = m_images.at(iconIndex).GetBitmapFor(window);
+            }
+            else if ( m_imageList )
+            {
+                bitmap = m_imageList->GetBitmap(iconIndex);
+            }
+            else
+            {
+                wxFAIL_MSG
+                (
+                    "Image index specified, but there are no images.\n"
+                    "\n"
+                    "Did you forget to call SetImages()?"
+                );
+            }
+        }
+
+        return bitmap;
+    }
+
 protected:
     // This function is called when the images associated with the control
     // change, due to either SetImages() or SetImageList() being called.

@@ -2662,7 +2662,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         dc.SetClippingRegion(item->GetX() + state_w, item->GetY(),
                              image_w, total_h);
-        dc.DrawBitmap( GetBitmapBundle(image).GetBitmapFor(this),
+        dc.DrawBitmap( GetImageBitmapFor(this, image),
                                  item->GetX() + state_w,
                                  item->GetY() +
                                     (total_h > image_h ? (total_h-image_h)/2
