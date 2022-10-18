@@ -105,7 +105,7 @@ void wxGenericStaticText::SetLabel(const wxString& label)
     if ( m_markupText )
     {
         delete m_markupText;
-        m_markupText = NULL;
+        m_markupText = nullptr;
     }
 #endif // wxUSE_MARKUP
 

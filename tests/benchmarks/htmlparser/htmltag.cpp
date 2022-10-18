@@ -53,7 +53,7 @@ wx28HtmlTagsCache::wx28HtmlTagsCache(const wxString& source)
     int lng = source.length();
     wxChar tagBuffer[256];
 
-    m_Cache = NULL;
+    m_Cache = nullptr;
     m_CacheSize = 0;
     m_CachePos = 0;
 
@@ -166,13 +166,13 @@ wx28HtmlTagsCache::wx28HtmlTagsCache(const wxString& source)
     for (int i = 0; i < m_CacheSize; i++)
     {
         delete[] m_Cache[i].Name;
-        m_Cache[i].Name = NULL;
+        m_Cache[i].Name = nullptr;
     }
 }
 
 void wx28HtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 {
-    if (m_Cache == NULL) return;
+    if (m_Cache == nullptr) return;
     if (m_Cache[m_CachePos].Key != at)
     {
         int delta = (at < m_Cache[m_CachePos].Key) ? -1 : 1;
@@ -212,20 +212,20 @@ wx28HtmlTag::wx28HtmlTag(wx28HtmlTag *parent,
 {
     /* Setup DOM relations */
 
-    m_Next = NULL;
-    m_FirstChild = m_LastChild = NULL;
+    m_Next = nullptr;
+    m_FirstChild = m_LastChild = nullptr;
     m_Parent = parent;
     if (parent)
     {
         m_Prev = m_Parent->m_LastChild;
-        if (m_Prev == NULL)
+        if (m_Prev == nullptr)
             m_Parent->m_FirstChild = this;
         else
             m_Prev->m_Next = this;
         m_Parent->m_LastChild = this;
     }
     else
-        m_Prev = NULL;
+        m_Prev = nullptr;
 
     /* Find parameters and their values: */
 
@@ -460,7 +460,7 @@ wx28HtmlTag *wx28HtmlTag::GetNextTag() const
     if (m_FirstChild) return m_FirstChild;
     if (m_Next) return m_Next;
     wx28HtmlTag *cur = m_Parent;
-    if (!cur) return NULL;
+    if (!cur) return nullptr;
     while (cur->m_Parent && !cur->m_Next)
         cur = cur->m_Parent;
     return cur->m_Next;

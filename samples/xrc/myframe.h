@@ -30,7 +30,7 @@ class MyFrame : public wxFrame
 public:
 
     // Constructor.
-    MyFrame( wxWindow* parent=(wxWindow *)NULL);
+    MyFrame( wxWindow* parent=nullptr);
 
 private:
 

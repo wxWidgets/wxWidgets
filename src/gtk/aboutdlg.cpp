@@ -39,7 +39,7 @@ class GtkArray
 {
 public:
     // Create empty GtkArray
-    GtkArray() : m_strings(0), m_count(0)
+    GtkArray() : m_strings(nullptr), m_count(0)
     {
     }
 
@@ -67,8 +67,8 @@ public:
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
         }
 
-        // array must be NULL-terminated
-        m_strings[m_count] = NULL;
+        // array must be null-terminated
+        m_strings[m_count] = nullptr;
     }
 
     operator const gchar **() const { return m_strings; }
@@ -97,14 +97,14 @@ private:
 // ============================================================================
 
 // GTK+ about dialog is modeless, keep track of it in this variable
-static GtkAboutDialog *gs_aboutDialog = NULL;
+static GtkAboutDialog *gs_aboutDialog = nullptr;
 
 extern "C" {
 static void wxGtkAboutDialogOnClose(GtkAboutDialog *about)
 {
     gtk_widget_destroy(GTK_WIDGET(about));
     if ( about == gs_aboutDialog )
-        gs_aboutDialog = NULL;
+        gs_aboutDialog = nullptr;
 }
 }
 
@@ -140,19 +140,19 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
     if ( info.HasVersion() )
         gtk_about_dialog_set_version(dlg, wxGTK_CONV_SYS(info.GetVersion()));
     else
-        gtk_about_dialog_set_version(dlg, NULL);
+        gtk_about_dialog_set_version(dlg, nullptr);
     if ( info.HasCopyright() )
         gtk_about_dialog_set_copyright(dlg, wxGTK_CONV_SYS(info.GetCopyrightToDisplay()));
     else
-        gtk_about_dialog_set_copyright(dlg, NULL);
+        gtk_about_dialog_set_copyright(dlg, nullptr);
     if ( info.HasDescription() )
         gtk_about_dialog_set_comments(dlg, wxGTK_CONV_SYS(info.GetDescription()));
     else
-        gtk_about_dialog_set_comments(dlg, NULL);
+        gtk_about_dialog_set_comments(dlg, nullptr);
     if ( info.HasLicence() )
         gtk_about_dialog_set_license(dlg, wxGTK_CONV_SYS(info.GetLicence()));
     else
-        gtk_about_dialog_set_license(dlg, NULL);
+        gtk_about_dialog_set_license(dlg, nullptr);
 
     wxIcon icon = info.GetIcon();
     if ( icon.IsOk() )
@@ -166,7 +166,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         // NB: must be called before gtk_about_dialog_set_website() as
         //     otherwise it has no effect (although GTK+ docs don't mention
         //     this...)
-        gtk_about_dialog_set_url_hook(wxGtkAboutDialogOnLink, NULL, NULL);
+        gtk_about_dialog_set_url_hook(wxGtkAboutDialogOnLink, nullptr, nullptr);
 #endif
 
         gtk_about_dialog_set_website(dlg, wxGTK_CONV_SYS(info.GetWebSiteURL()));
@@ -178,12 +178,12 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
     }
     else
     {
-        gtk_about_dialog_set_website(dlg, NULL);
-        gtk_about_dialog_set_website_label(dlg, NULL);
+        gtk_about_dialog_set_website(dlg, nullptr);
+        gtk_about_dialog_set_website_label(dlg, nullptr);
 #ifdef __WXGTK3__
-        g_signal_connect(dlg, "activate-link", G_CALLBACK(activate_link), NULL);
+        g_signal_connect(dlg, "activate-link", G_CALLBACK(activate_link), nullptr);
 #else
-        gtk_about_dialog_set_url_hook(NULL, NULL, NULL);
+        gtk_about_dialog_set_url_hook(nullptr, nullptr, nullptr);
 #endif
     }
 
@@ -228,12 +228,12 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
     if ( !transCredits.empty() )
         gtk_about_dialog_set_translator_credits(dlg, wxGTK_CONV_SYS(transCredits));
     else
-        gtk_about_dialog_set_translator_credits(dlg, NULL);
+        gtk_about_dialog_set_translator_credits(dlg, nullptr);
 
     g_signal_connect(dlg, "response",
-                        G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
+                        G_CALLBACK(wxGtkAboutDialogOnClose), nullptr);
 
-    GtkWindow* gtkParent = NULL;
+    GtkWindow* gtkParent = nullptr;
     if (parent && parent->m_widget)
         gtkParent = (GtkWindow*)gtk_widget_get_ancestor(parent->m_widget, GTK_TYPE_WINDOW);
     gtk_window_set_transient_for(GTK_WINDOW(dlg), gtkParent);

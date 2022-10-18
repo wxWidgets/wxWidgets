@@ -44,7 +44,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
            const wxString& value = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
+           int n = 0, const wxString choices[] = nullptr,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxASCII_STR(wxComboBoxNameStr))
@@ -68,7 +68,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
            const wxString& value = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
+           int n = 0, const wxString choices[] = nullptr,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxASCII_STR(wxComboBoxNameStr));

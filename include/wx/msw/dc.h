@@ -157,15 +157,15 @@ protected:
     void Init()
     {
         m_bOwnsDC = false;
-        m_hDC = NULL;
+        m_hDC = nullptr;
 
-        m_oldBitmap = NULL;
-        m_oldPen = NULL;
-        m_oldBrush = NULL;
-        m_oldFont = NULL;
+        m_oldBitmap = nullptr;
+        m_oldPen = nullptr;
+        m_oldBrush = nullptr;
+        m_oldFont = nullptr;
 
 #if wxUSE_PALETTE
-        m_oldPalette = NULL;
+        m_oldPalette = nullptr;
 #endif // wxUSE_PALETTE
         m_isClipBoxValid = false;
     }
@@ -188,9 +188,9 @@ public:
                                   int *averageWidth) const override;
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const override;
+                                 wxCoord *descent = nullptr,
+                                 wxCoord *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr) const override;
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -262,7 +262,7 @@ public:
                                    wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override
     {
-        return subrect == NULL ? GetSelectedBitmap()
+        return subrect == nullptr ? GetSelectedBitmap()
                                : GetSelectedBitmap().GetSubBitmap(*subrect);
     }
 
@@ -349,7 +349,7 @@ public:
     virtual ~wxDCTempImpl()
     {
         // prevent base class dtor from freeing it
-        SetHDC((WXHDC)NULL);
+        SetHDC((WXHDC)nullptr);
     }
 
     virtual void DoGetSize(int *w, int *h) const override

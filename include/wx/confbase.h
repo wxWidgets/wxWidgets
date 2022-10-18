@@ -104,7 +104,7 @@ public:
     // comments near definition wxUSE_CONFIG_NATIVE for details. It returns
     // the created object and also sets it as ms_pConfig.
   static wxConfigBase *Create();
-    // should Get() try to create a new log object if the current one is NULL?
+    // should Get() try to create a new log object if the current one is null?
   static void DontCreateOnDemand() { ms_bAutoCreate = false; }
 
   // ctor & virtual dtor

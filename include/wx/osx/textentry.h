@@ -100,7 +100,7 @@ protected:
     virtual bool DoAutoCompleteStrings(const wxArrayString& choices) override;
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) override;
 
-    // The object providing auto-completions or NULL if none.
+    // The object providing auto-completions or nullptr if none.
     wxTextCompleter *m_completer;
 
     bool  m_editable;

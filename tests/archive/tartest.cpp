@@ -52,7 +52,7 @@ CppUnit::Test *tartest::makeTest(
     const wxString& unarchiver)
 {
     if ((options & Stub) && (options & PipeIn) == 0)
-        return NULL;
+        return nullptr;
 
     if (genericInterface)
     {

@@ -169,10 +169,10 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
+       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
 {
-    m_listCtrl = NULL;
-    m_logWindow = NULL;
+    m_listCtrl = nullptr;
+    m_logWindow = nullptr;
     m_smallVirtual = false;
     m_numListItems = 10;
 
@@ -1565,7 +1565,7 @@ void MyListCtrl::InsertItemInReportView(int i)
 #if USE_CONTEXT_MENU
 void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
-    if (GetEditControl() == NULL)
+    if (GetEditControl() == nullptr)
     {
         wxPoint point = event.GetPosition();
         // If from keyboard

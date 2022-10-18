@@ -81,7 +81,7 @@ protected:
 protected:
 
     // Dummy method - we override all functions that call this
-    virtual WXHWND GetEditHWND() const override { return NULL; }
+    virtual WXHWND GetEditHWND() const override { return nullptr; }
 
     // customization
     virtual void OnResize() override;

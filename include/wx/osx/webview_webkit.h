@@ -95,7 +95,7 @@ public:
     virtual void SetEditable(bool enable = true) override;
     virtual bool IsEditable() const override;
 
-    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const override;
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = nullptr) const override;
     virtual bool AddScriptMessageHandler(const wxString& name) override;
     virtual bool RemoveScriptMessageHandler(const wxString& name) override;
     virtual bool AddUserScript(const wxString& javascript,

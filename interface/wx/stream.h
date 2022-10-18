@@ -783,12 +783,12 @@ public:
         @param stream
             The associated low-level stream.
         @param buffer
-            The buffer to use if non-@NULL. Notice that the ownership of this
+            The buffer to use if non-null. Notice that the ownership of this
             buffer is taken by the stream, i.e. it will delete it. If this
             parameter is @NULL a default 1KB buffer is used.
     */
     wxBufferedInputStream(wxInputStream& stream,
-                          wxStreamBuffer *buffer = NULL);
+                          wxStreamBuffer *buffer = nullptr);
 
     /**
         Constructor allowing to specify the size of the buffer.
@@ -1058,12 +1058,12 @@ public:
         @param stream
             The associated low-level stream.
         @param buffer
-            The buffer to use if non-@NULL. Notice that the ownership of this
+            The buffer to use if non-null. Notice that the ownership of this
             buffer is taken by the stream, i.e. it will delete it. If this
             parameter is @NULL a default 1KB buffer is used.
     */
     wxBufferedOutputStream(wxOutputStream& stream,
-                           wxStreamBuffer *buffer = NULL);
+                           wxStreamBuffer *buffer = nullptr);
 
     /**
         Constructor allowing to specify the size of the buffer.

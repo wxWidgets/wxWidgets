@@ -162,8 +162,8 @@ public:
 #endif // wxUSE_STATUSBAR
 
     // send wxUpdateUIEvents for all menu items in the menubar,
-    // or just for menu if non-NULL
-    virtual void DoMenuUpdates(wxMenu* menu = NULL);
+    // or just for menu if non-null
+    virtual void DoMenuUpdates(wxMenu* menu = nullptr);
 #endif // wxUSE_MENUS
 
     // do the UI update processing for this window
@@ -261,12 +261,8 @@ protected:
 #else // !__WXUNIVERSAL__
     #if defined(__WXMSW__)
         #include "wx/msw/frame.h"
-    #elif defined(__WXGTK20__)
-        #include "wx/gtk/frame.h"
     #elif defined(__WXGTK__)
-        #include "wx/gtk1/frame.h"
-    #elif defined(__WXMOTIF__)
-        #include "wx/motif/frame.h"
+        #include "wx/gtk/frame.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/frame.h"
     #elif defined(__WXQT__)

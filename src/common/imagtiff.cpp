@@ -62,7 +62,7 @@ FormatTiffMessage(const char *module, const char *fmt, va_list ap)
         // than nothing
         strcpy(buf, "Incorrectly formatted TIFF message");
     }
-    buf[WXSIZEOF(buf)-1] = 0; // make sure it is always NULL-terminated
+    buf[WXSIZEOF(buf)-1] = 0; // make sure it is always NUL-terminated
 
     wxString msg(buf);
     if ( module )
@@ -745,7 +745,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
     else
     {
-        buf = NULL;
+        buf = nullptr;
     }
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (wxUint32) -1));

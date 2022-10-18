@@ -73,7 +73,7 @@ DO:
   It's also very important to make a consistent use of the ALIASES
   defined by wxWidgets' Doxyfile. Open that file for more info.
 
-- when you write true, false and NULL with their C++ semantic meaning,
+- when you write true, false and nullptr with their C++ semantic meaning,
   then use the @true, @false and @NULL commands.
 
 - separate different paragraphs with an empty comment line.

@@ -192,7 +192,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     // wxWindow::Create() returns if parent is already visible)
 #if !wxUSE_GLCANVAS_EGL
     unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
-    g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
+    g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, nullptr);
 #endif
 
     wxWindow::Create( parent, id, pos, size, style, name );

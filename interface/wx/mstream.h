@@ -45,7 +45,7 @@ public:
         If the buffer is created by wxMemoryOutputStream, it will be destroyed
         at the destruction of the stream.
     */
-    wxMemoryOutputStream(void* data = NULL, size_t length = 0);
+    wxMemoryOutputStream(void* data = nullptr, size_t length = 0);
 
     /**
         Destructor.

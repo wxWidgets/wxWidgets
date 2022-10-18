@@ -87,7 +87,7 @@ void OwnerDrawnComboBoxTestCase::setUp()
 void OwnerDrawnComboBoxTestCase::tearDown()
 {
     delete m_combo;
-    m_combo = NULL;
+    m_combo = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ void OwnerDrawnComboBoxTestCase::Sort()
     m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(),
                                        wxID_ANY, "",
                                        wxDefaultPosition, wxDefaultSize,
-                                       0, NULL,
+                                       0, nullptr,
                                        wxCB_SORT);
 
     m_combo->Append("aaa");

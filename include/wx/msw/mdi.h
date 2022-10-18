@@ -65,7 +65,7 @@ public:
 #if wxUSE_MENUS
     virtual void SetWindowMenu(wxMenu* menu) override;
 
-    virtual void DoMenuUpdates(wxMenu* menu = NULL) override;
+    virtual void DoMenuUpdates(wxMenu* menu = nullptr) override;
 
     // return the active child menu, if any
     virtual WXHMENU MSWGetActiveMenu() const override;
@@ -137,7 +137,7 @@ private:
     void OnMDIChild(wxCommandEvent& event);
 
 
-    // add/remove window menu if we have it (i.e. m_windowMenu != NULL)
+    // add/remove window menu if we have it (i.e. m_windowMenu != nullptr)
     void AddWindowMenu();
     void RemoveWindowMenu();
 

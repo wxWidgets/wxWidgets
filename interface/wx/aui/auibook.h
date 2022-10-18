@@ -537,7 +537,7 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
     void DoShowHide();
-    void SetRect(const wxRect& rect, wxWindow* wnd = NULL);
+    void SetRect(const wxRect& rect, wxWindow* wnd = nullptr);
 
     void RemoveButton(int id);
     void AddButton(int id,
@@ -681,7 +681,7 @@ public:
     */
     virtual void SetSizingInfo(const wxSize& tab_ctrl_size,
                                size_t tab_count,
-                               wxWindow* wnd = NULL) = 0;
+                               wxWindow* wnd = nullptr) = 0;
 };
 
 /**
@@ -776,7 +776,7 @@ public:
     void SetFlags(unsigned int flags);
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
-                       wxWindow* wnd = NULL);
+                       wxWindow* wnd = nullptr);
 
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
@@ -882,7 +882,7 @@ public:
 
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
-                       wxWindow* wnd = NULL);
+                       wxWindow* wnd = nullptr);
 
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);

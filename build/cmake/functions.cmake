@@ -812,7 +812,7 @@ function(wx_add name group)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/samples)
     elseif(group STREQUAL Tests)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/tests)
-        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/include)
+        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/single_include)
         target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/unix/fontutil.cpp
-// Purpose:     Font helper functions for wxX11, wxGTK, wxMotif
+// Purpose:     Font helper functions for wxX11, wxGTK
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     05.11.99
@@ -42,7 +42,7 @@
 
 PangoContext* wxGetPangoContext();
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     #include "wx/gtk/private.h"
 
     #define wxPANGO_CONV wxGTK_CONV_SYS
@@ -61,7 +61,7 @@ PangoContext* wxGetPangoContext();
 
 void wxNativeFontInfo::Init()
 {
-    description = NULL;
+    description = nullptr;
     m_underlined = false;
     m_strikethrough = false;
 }
@@ -76,7 +76,7 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     }
     else
     {
-        description = NULL;
+        description = nullptr;
         m_underlined = false;
         m_strikethrough = false;
     }
@@ -159,11 +159,11 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Monospace"
     else if (wxStrnicmp( family_text, "courier", 7 ) == 0)
         ret = wxFONTFAMILY_TELETYPE;    // begins with "Courier"
-#if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
+#if defined(__WXGTK__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
     {
         PangoFontFamily **families;
-        PangoFontFamily  *family = NULL;
+        PangoFontFamily  *family = nullptr;
         int n_families;
         PangoContext* context = wxGetPangoContext();
         pango_context_list_families(context, &families, &n_families);
@@ -186,17 +186,17 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         // don't assert until wxSystemSettings::GetFont is checked for this - MR
         // wxASSERT_MSG( family, "No appropriate PangoFontFamily found for ::description" );
 
-        if (family != NULL && pango_font_family_is_monospace( family ))
+        if (family != nullptr && pango_font_family_is_monospace( family ))
             ret = wxFONTFAMILY_TELETYPE; // is deemed a monospace font by pango
     }
 #endif // GTK+ 2 || HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
 
     if (ret == wxFONTFAMILY_UNKNOWN)
     {
-        if (strstr( family_text, "sans" ) != NULL || strstr( family_text, "Sans" ) != NULL)
+        if (strstr( family_text, "sans" ) != nullptr || strstr( family_text, "Sans" ) != nullptr)
             // checked before serif, so that "* Sans Serif" fonts are detected correctly
             ret = wxFONTFAMILY_SWISS;       // contains "Sans"
-        else if (strstr( family_text, "serif" ) != NULL || strstr( family_text, "Serif" ) != NULL)
+        else if (strstr( family_text, "serif" ) != nullptr || strstr( family_text, "Serif" ) != nullptr)
             ret = wxFONTFAMILY_ROMAN;       // contains "Serif"
         else if (wxStrnicmp( family_text, "times", 5 ) == 0)
             ret = wxFONTFAMILY_ROMAN;       // begins with "Times"
@@ -447,7 +447,7 @@ wxString wxNativeFontInfo::ToUserString() const
 // private data
 // ----------------------------------------------------------------------------
 
-static wxHashTable *g_fontHash = NULL;
+static wxHashTable *g_fontHash = nullptr;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -1195,7 +1195,7 @@ wxNativeFont wxLoadQueryNearestFont(double pointSize,
 
                     // this should never happen as we had tested for it in the
                     // very beginning, but if it does, do return something non
-                    // NULL or we'd crash in wxFont code
+                    // null or we'd crash in wxFont code
                     if ( !font )
                     {
                         wxFAIL_MSG( wxT("this encoding should be available!") );

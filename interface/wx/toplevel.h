@@ -326,7 +326,7 @@ public:
         MSW-specific function for accessing the system menu.
 
         Returns a wxMenu pointer representing the system menu of the window
-        under MSW. The returned wxMenu may be used, if non-@c NULL, to add
+        under MSW. The returned wxMenu may be used, if non-null, to add
         extra items to the system menu. The usual @c wxEVT_MENU
         events (that can be processed using @c EVT_MENU event table macro) will
         then be generated for them. All the other wxMenu methods may be used as
@@ -421,7 +421,7 @@ public:
             other values.
 
             @param name uniquely identifies the field
-            @param value non-@NULL pointer to the value to be filled by this
+            @param value non-null pointer to the value to be filled by this
                 function
 
             @return @true if the value was retrieved or @false if it wasn't
@@ -536,9 +536,9 @@ public:
         @param maxH
             The maximum height.
         @param incW
-            Specifies the increment for sizing the width (GTK/Motif/Xt only).
+            Specifies the increment for sizing the width (GTK/X11 only).
         @param incH
-            Specifies the increment for sizing the height (GTK/Motif/Xt only).
+            Specifies the increment for sizing the height (GTK/X11 only).
 
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it also
@@ -561,7 +561,7 @@ public:
             The maximum size of the window.
         @param incSize
             Increment size (only taken into account under X11-based ports such
-            as wxGTK/wxMotif/wxX11).
+            as wxGTK and wxX11).
 
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it also

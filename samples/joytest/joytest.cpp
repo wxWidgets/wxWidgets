@@ -31,7 +31,7 @@
     #include "../sample.xpm"
 #endif
 
-MyFrame *frame = NULL;
+MyFrame *frame = nullptr;
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -66,7 +66,7 @@ bool MyApp::OnInit()
 
     // Create the main frame window
 
-    frame = new MyFrame(NULL, "Joystick Demo", wxDefaultPosition,
+    frame = new MyFrame(nullptr, "Joystick Demo", wxDefaultPosition,
         wxSize(500, 400), wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
     frame->SetIcon(wxICON(sample));

@@ -209,9 +209,9 @@ public:
 
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
-        wxCoord *descent = NULL,
-        wxCoord *externalLeading = NULL,
-        const wxFont *theFont = NULL) const override;
+        wxCoord *descent = nullptr,
+        wxCoord *externalLeading = nullptr,
+        const wxFont *theFont = nullptr) const override;
 
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
 

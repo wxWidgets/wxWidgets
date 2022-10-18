@@ -359,7 +359,7 @@ public:
             new wxButton(parent, wxID_ANY, label)
           )
     {
-        m_handler = NULL;
+        m_handler = nullptr;
     }
 
     virtual bool DoBind(wxEvtHandler* handler) override
@@ -401,7 +401,7 @@ public:
             new wxCheckBox(parent, wxID_ANY, label)
           )
     {
-        m_handler = NULL;
+        m_handler = nullptr;
     }
 
     virtual bool GetValue() override
@@ -453,7 +453,7 @@ public:
             new wxRadioButton(parent, wxID_ANY, label)
           )
     {
-        m_handler = NULL;
+        m_handler = nullptr;
     }
 
     virtual bool GetValue() override
@@ -507,7 +507,7 @@ public:
                          n, strings)
           )
     {
-        m_handler = NULL;
+        m_handler = nullptr;
     }
 
     virtual int GetSelection() override
@@ -732,9 +732,9 @@ void wxFileDialogBase::Init()
     m_filterIndex = 0;
     m_currentlySelectedFilterIndex = wxNOT_FOUND;
     m_windowStyle = 0;
-    m_customizeHook = NULL;
-    m_extraControl = NULL;
-    m_extraControlCreator = NULL;
+    m_customizeHook = nullptr;
+    m_extraControl = nullptr;
+    m_extraControlCreator = nullptr;
 }
 
 bool wxFileDialogBase::Create(wxWindow *parent,
@@ -889,7 +889,7 @@ wxWindow* wxFileDialogBase::CreateExtraControlWithParent(wxWindow* parent) const
 
     // It's not an error to call this function if there are no extra controls
     // to create, just do nothing in this case.
-    return NULL;
+    return nullptr;
 }
 
 bool wxFileDialogBase::CreateExtraControl()
@@ -899,7 +899,7 @@ bool wxFileDialogBase::CreateExtraControl()
     if ( !m_extraControl )
         m_extraControl = CreateExtraControlWithParent(this);
 
-    return m_extraControl != NULL;
+    return m_extraControl != nullptr;
 }
 
 void wxFileDialogBase::DestroyExtraControl()
@@ -907,7 +907,7 @@ void wxFileDialogBase::DestroyExtraControl()
     if ( m_extraControl )
     {
         m_extraControl->Destroy();
-        m_extraControl = NULL;
+        m_extraControl = nullptr;
     }
 }
 

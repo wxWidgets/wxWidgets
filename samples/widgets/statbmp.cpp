@@ -116,7 +116,7 @@ void StatBmpWidgetsPage::CreateContent()
     Bind(wxEVT_FILEPICKER_CHANGED, &StatBmpWidgetsPage::OnFileChange, this);
     Bind(wxEVT_RADIOBOX, &StatBmpWidgetsPage::OnRadioChange, this);
 
-    m_statbmp = NULL;
+    m_statbmp = nullptr;
     RecreateWidget();
 }
 

@@ -86,7 +86,7 @@ void VirtListCtrlTestCase::setUp()
 void VirtListCtrlTestCase::tearDown()
 {
     delete m_list;
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 void VirtListCtrlTestCase::UpdateSelection()

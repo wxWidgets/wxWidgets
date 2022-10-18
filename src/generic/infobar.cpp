@@ -46,9 +46,9 @@ wxEND_EVENT_TABLE()
 
 void wxInfoBarGeneric::Init()
 {
-    m_icon = NULL;
-    m_text = NULL;
-    m_button = NULL;
+    m_icon = nullptr;
+    m_text = nullptr;
+    m_button = nullptr;
 
     m_showEffect =
     m_hideEffect = wxSHOW_EFFECT_MAX;

@@ -96,7 +96,7 @@ private:
 
     // The values that we compute.
     wxSize m_size;
-    int * const m_visibleHeight;    // may be NULL
+    int * const m_visibleHeight;    // may be null
 
     wxDECLARE_NO_COPY_CLASS(wxMarkupParserMeasureOutput);
 };

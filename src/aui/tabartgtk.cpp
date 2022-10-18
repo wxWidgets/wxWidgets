@@ -69,7 +69,7 @@ void wxAuiGtkTabArt::DrawBackground(wxDC& dc, wxWindow* WXUNUSED(wnd), const wxR
                                        window,
                                        true,
                                        GTK_STATE_NORMAL,
-                                       NULL,
+                                       nullptr,
                                        rect.x, rect.y, rect.width, rect.height);
 }
 
@@ -84,7 +84,7 @@ void wxAuiGtkTabArt::DrawBorder(wxDC& WXUNUSED(dc), wxWindow* wnd, const wxRect&
     GtkStyle *style_notebook = gtk_widget_get_style(wxGTKPrivate::GetNotebookWidget());
 
     gtk_paint_box(style_notebook, wnd->GTKGetDrawingWindow(), GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                  NULL, wnd->m_wxwindow,
+                  nullptr, wnd->m_wxwindow,
                   const_cast<char*>("notebook"),
                   rect.x + generic_border_width + 1, rect.y + generic_border_width + 1,
                   rect.width - (generic_border_width + 1), rect.height - (generic_border_width + 1));
@@ -183,7 +183,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
 
     gtk_widget_style_get(wxGTKPrivate::GetNotebookWidget(),
                          "focus-line-width", &focus_width,
-                         NULL);
+                         nullptr);
 
     int tab_pos;
     if (m_flags &wxAUI_NB_BOTTOM)
@@ -250,7 +250,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
     // have transparent gaps and a line would be visible at the bottom of the tab
     if (page.active)
         gtk_paint_box(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                      NULL, widget,
+                      nullptr, widget,
                       const_cast<char*>("notebook"),
                       gap_rect_x, gap_rect_y,
                       gap_rect_width, gap_rect_height);
@@ -260,7 +260,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         if (page.active)
         {
             gtk_paint_box_gap(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                              NULL, widget,
+                              nullptr, widget,
                               const_cast<char*>("notebook"),
                               gap_rect_x, gap_rect_y,
                               gap_rect_width, gap_rect_height,
@@ -279,7 +279,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         if (page.active)
         {
             gtk_paint_box_gap(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                              NULL, widget,
+                              nullptr, widget,
                               const_cast<char*>("notebook"),
                               gap_rect_x, gap_rect_y,
                               gap_rect_width, gap_rect_height,
@@ -298,7 +298,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
     // otherwise we don't get a gap-box, if the active tab is invisible
     if (!page.active)
         gtk_paint_box(style_notebook, window, GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                      NULL, widget,
+                      nullptr, widget,
                       const_cast<char*>("notebook"),
                       gap_rect_x, gap_rect_y,
                       gap_rect_width, gap_rect_height);
@@ -359,7 +359,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
         if((focus_area.x + focus_area.width) > (area.x + area.width))
             focus_area.width = area.x + area.width - focus_area.x + focus_width - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder;
         gtk_paint_focus (style_notebook, window,
-                         GTK_STATE_ACTIVE, NULL, widget, "tab",
+                         GTK_STATE_ACTIVE, nullptr, widget, "tab",
                          focus_area.x, focus_area.y, focus_area.width, focus_area.height);
     }
 
@@ -397,7 +397,7 @@ wxRect DrawSimpleArrow(wxDC& dc,
     gtk_widget_style_get(widget,
                          "scroll-arrow-hlength", &scroll_arrow_hlength,
                          "scroll-arrow-vlength", &scroll_arrow_vlength,
-                         NULL);
+                         nullptr);
 
     GtkStateType state;
     GtkShadowType shadow;
@@ -415,7 +415,7 @@ wxRect DrawSimpleArrow(wxDC& dc,
 
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     GdkWindow* window = impldc->GetGDKWindow();
-    gtk_paint_arrow (gtk_widget_get_style(wxGTKPrivate::GetButtonWidget()), window, state, shadow, NULL, widget, "notebook",
+    gtk_paint_arrow (gtk_widget_get_style(wxGTKPrivate::GetButtonWidget()), window, state, shadow, nullptr, widget, "notebook",
                      arrow_type, TRUE, out_rect.x, out_rect.y, out_rect.width, out_rect.height);
 
     return out_rect;
@@ -437,7 +437,7 @@ void wxAuiGtkTabArt::DrawButton(wxDC& dc, wxWindow* wnd,
     {
         case wxAUI_BUTTON_CLOSE:
             rect.y -= 2 * gtk_widget_get_style(wxGTKPrivate::GetButtonWidget())->ythickness;
-            rect = DrawCloseButton(dc, widget, button_state, rect, orientation, NULL);
+            rect = DrawCloseButton(dc, widget, button_state, rect, orientation, nullptr);
             break;
 
         case wxAUI_BUTTON_LEFT:
@@ -502,7 +502,7 @@ wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,
     int overlap = 0;
     gtk_widget_style_get (wnd->GetHandle(),
         "focus-line-width", &overlap,
-        NULL);
+        nullptr);
     *x_extent -= overlap;
     return s;
 }

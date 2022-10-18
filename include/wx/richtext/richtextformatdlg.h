@@ -227,11 +227,11 @@ public:
 
     /// Set the dimension into the value and units controls. Optionally pass units to
     /// specify the ordering of units in the combobox.
-    static void SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = NULL);
+    static void SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = nullptr);
 
     /// Get the dimension from the value and units controls Optionally pass units to
     /// specify the ordering of units in the combobox.
-    static void GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = NULL);
+    static void GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = nullptr);
 
     /// Convert from a string to a dimension integer.
     static bool ConvertFromString(const wxString& str, int& ret, int unit);

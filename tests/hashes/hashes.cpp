@@ -155,13 +155,13 @@ void HashesTestCase::wxHashTableTest()
             CPPUNIT_ASSERT( hash.Delete(i) == o + i + 20);
 
         for ( i = 0; i < COUNT/2; ++i )
-            CPPUNIT_ASSERT( hash.Get(i) == NULL);
+            CPPUNIT_ASSERT( hash.Get(i) == nullptr);
 
         hash2.Put(wxT("foo"), o + 1);
         hash2.Put(wxT("bar"), o + 2);
         hash2.Put(wxT("baz"), o + 3);
 
-        CPPUNIT_ASSERT(hash2.Get(wxT("moo")) == NULL);
+        CPPUNIT_ASSERT(hash2.Get(wxT("moo")) == nullptr);
         CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == o + 2);
 
         hash2.Put(wxT("bar"), o + 0);
@@ -177,31 +177,31 @@ void HashesTestCase::wxHashTableTest()
         hash.Put(3, &dummy);
         hash.Delete(3);
 
-        CPPUNIT_ASSERT(hash.Get(3) == NULL);
+        CPPUNIT_ASSERT(hash.Get(3) == nullptr);
 
         hash.Put(3, &dummy);
         hash.Put(13, &dummy);
         hash.Delete(3);
 
-        CPPUNIT_ASSERT(hash.Get(3) == NULL);
+        CPPUNIT_ASSERT(hash.Get(3) == nullptr);
 
         hash.Delete(13);
 
-        CPPUNIT_ASSERT(hash.Get(13) == NULL);
+        CPPUNIT_ASSERT(hash.Get(13) == nullptr);
 
         hash.Put(3, &dummy);
         hash.Put(13, &dummy);
         hash.Delete(13);
 
-        CPPUNIT_ASSERT(hash.Get(13) == NULL);
+        CPPUNIT_ASSERT(hash.Get(13) == nullptr);
 
         hash.Delete(3);
 
-        CPPUNIT_ASSERT(hash.Get(3) == NULL);
+        CPPUNIT_ASSERT(hash.Get(3) == nullptr);
     }
 
     // test for key + value access (specifically that supplying either
-    // wrong key or wrong value returns NULL)
+    // wrong key or wrong value returns nullptr)
     {
         wxHashTable hash(wxKEY_INTEGER, 10);
         wxObject dummy[8];
@@ -209,15 +209,15 @@ void HashesTestCase::wxHashTableTest()
         hash.Put(3, 7, dummy + 7);
         hash.Put(4, 8, dummy + 8);
 
-        CPPUNIT_ASSERT(hash.Get(7) == NULL);
+        CPPUNIT_ASSERT(hash.Get(7) == nullptr);
         CPPUNIT_ASSERT(hash.Get(3, 7) == dummy + 7);
-        CPPUNIT_ASSERT(hash.Get(4) == NULL);
-        CPPUNIT_ASSERT(hash.Get(3) == NULL);
-        CPPUNIT_ASSERT(hash.Get(8) == NULL);
-        CPPUNIT_ASSERT(hash.Get(8, 4) == NULL);
+        CPPUNIT_ASSERT(hash.Get(4) == nullptr);
+        CPPUNIT_ASSERT(hash.Get(3) == nullptr);
+        CPPUNIT_ASSERT(hash.Get(8) == nullptr);
+        CPPUNIT_ASSERT(hash.Get(8, 4) == nullptr);
 
-        CPPUNIT_ASSERT(hash.Delete(7) == NULL);
-        CPPUNIT_ASSERT(hash.Delete(3) == NULL);
+        CPPUNIT_ASSERT(hash.Delete(7) == nullptr);
+        CPPUNIT_ASSERT(hash.Delete(3) == nullptr);
         CPPUNIT_ASSERT(hash.Delete(3, 7) == dummy + 7);
     }
 
@@ -289,13 +289,13 @@ void HashesTestCase::wxTypedHashTableTest()
         {
             Foo *foo = hash.Get(hashTestData[n], n);
 
-            CPPUNIT_ASSERT( foo != NULL );
+            CPPUNIT_ASSERT( foo != nullptr );
             CPPUNIT_ASSERT( foo->n == (int)n );
         }
 
         // element not in hash
-        CPPUNIT_ASSERT( hash.Get(1234) == NULL );
-        CPPUNIT_ASSERT( hash.Get(1, 0) == NULL );
+        CPPUNIT_ASSERT( hash.Get(1234) == nullptr );
+        CPPUNIT_ASSERT( hash.Get(1, 0) == nullptr );
 
         // delete from hash without deleting object
         Foo* foo = hash.Delete(0);

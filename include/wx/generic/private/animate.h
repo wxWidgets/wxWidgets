@@ -20,11 +20,11 @@
 class WXDLLIMPEXP_ADV wxAnimationGenericImpl : public wxAnimationImpl
 {
 public:
-    wxAnimationGenericImpl() : m_decoder(NULL) {}
+    wxAnimationGenericImpl() : m_decoder(nullptr) {}
     virtual ~wxAnimationGenericImpl() { UnRef(); }
 
     virtual bool IsOk() const override
-        { return m_decoder != NULL; }
+        { return m_decoder != nullptr; }
     virtual bool IsCompatibleWith(wxClassInfo* ci) const override;
 
     virtual unsigned int GetFrameCount() const override;

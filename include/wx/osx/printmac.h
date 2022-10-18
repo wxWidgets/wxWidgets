@@ -22,7 +22,7 @@ class WXDLLIMPEXP_CORE wxMacPrinter: public wxPrinterBase
     wxDECLARE_DYNAMIC_CLASS(wxMacPrinter);
 
 public:
-    wxMacPrinter(wxPrintDialogData *data = NULL);
+    wxMacPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxMacPrinter();
 
     virtual bool Print(wxWindow *parent,
@@ -44,8 +44,8 @@ class WXDLLIMPEXP_CORE wxMacPrintPreview: public wxPrintPreviewBase
 
 public:
     wxMacPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = NULL,
-                          wxPrintDialogData *data = NULL);
+                          wxPrintout *printoutForPrinting = nullptr,
+                          wxPrintDialogData *data = nullptr);
     wxMacPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting,
                           wxPrintData *data);

@@ -94,7 +94,7 @@ public:
 
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
-    bool SaveFile( const wxString &name, wxBitmapType type, const wxPalette *palette = NULL ) const;
+    bool SaveFile( const wxString &name, wxBitmapType type, const wxPalette *palette = nullptr ) const;
     bool LoadFile( const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
 
     wxPalette *GetPalette() const;

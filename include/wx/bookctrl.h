@@ -94,11 +94,11 @@ public:
     // get the panel which represents the given page
     virtual wxWindow *GetPage(size_t n) const { return m_pages.at(n); }
 
-    // get the current page or NULL if none
+    // get the current page or nullptr if none
     wxWindow *GetCurrentPage() const
     {
         const int n = GetSelection();
-        return n == wxNOT_FOUND ? NULL : GetPage(n);
+        return n == wxNOT_FOUND ? nullptr : GetPage(n);
     }
 
     // get the currently selected page or wxNOT_FOUND if none
@@ -162,7 +162,7 @@ public:
     virtual bool RemovePage(size_t n)
     {
         DoInvalidateBestSize();
-        return DoRemovePage(n) != NULL;
+        return DoRemovePage(n) != nullptr;
     }
 
     // remove all pages and delete them
@@ -217,7 +217,7 @@ public:
 
     // hit test: returns which page is hit and, optionally, where (icon, label)
     virtual int HitTest(const wxPoint& WXUNUSED(pt),
-                        long * WXUNUSED(flags) = NULL) const
+                        long * WXUNUSED(flags) = nullptr) const
     {
         return wxNOT_FOUND;
     }
@@ -279,7 +279,7 @@ protected:
 
     // create a new "page changing" event
     virtual wxBookCtrlEvent* CreatePageChangingEvent() const
-        { wxFAIL_MSG(wxT("Override this function!")); return NULL; }
+        { wxFAIL_MSG(wxT("Override this function!")); return nullptr; }
 
     // modify the event created by CreatePageChangingEvent() to "page changed"
     // event, usually by just calling SetEventType() on it
@@ -292,15 +292,15 @@ protected:
     virtual void DoShowPage(wxWindow* page, bool show) { page->Show(show); }
 
 
-    // Should we accept NULL page pointers in Add/InsertPage()?
+    // Should we accept null page pointers in Add/InsertPage()?
     //
-    // Default is no but derived classes may override it if they can treat NULL
+    // Default is no but derived classes may override it if they can treat null
     // pages in some sensible way (e.g. wxTreebook overrides this to allow
     // having nodes without any associated page)
     virtual bool AllowNullPage() const { return false; }
 
     // For classes that allow null pages, we also need a way to find the
-    // closest non-NULL page corresponding to the given index, e.g. the first
+    // closest non-null page corresponding to the given index, e.g. the first
     // leaf item in wxTreebook tree and this method must be overridden to
     // return it if AllowNullPage() is overridden. Note that it can still
     // return null if there are no valid pages after this one.
@@ -349,7 +349,7 @@ protected:
     // event handlers
     void OnSize(wxSizeEvent& event);
 
-    // controller buddy if available, NULL otherwise (usually for native book controls like wxNotebook)
+    // controller buddy if available, nullptr otherwise (usually for native book controls like wxNotebook)
     wxWindow *m_bookctrl;
 
     // Whether to shrink to fit current page

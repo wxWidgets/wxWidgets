@@ -67,7 +67,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxWidgets Types Demo",
+    MyFrame *frame = new MyFrame(nullptr, "wxWidgets Types Demo",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Give it an icon

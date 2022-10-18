@@ -42,7 +42,7 @@ private:
     // Creates and returns a standard button sizer using the style of this
     // dialog and the custom labels, if any.
     //
-    // May return NULL on smart phone platforms not using buttons at all.
+    // May return nullptr on smart phone platforms not using buttons at all.
     wxSizer *CreateMsgDlgButtonSizer();
 
     wxPoint m_pos;

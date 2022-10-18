@@ -112,7 +112,7 @@ private:
 class WXDLLIMPEXP_CORE wxLogWindow : public wxLogPassThrough
 {
 public:
-    wxLogWindow(wxWindow *pParent,        // the parent frame (can be NULL)
+    wxLogWindow(wxWindow *pParent,        // the parent frame (can be null)
                 const wxString& szTitle,  // the title of the frame
                 bool bShow = true,        // show window immediately?
                 bool bPassToOld = true);  // pass messages to the old target?

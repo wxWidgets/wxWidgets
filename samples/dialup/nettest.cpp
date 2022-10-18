@@ -217,7 +217,7 @@ void MyApp::OnConnected(wxDialUpEvent& event)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     SetIcon(wxICON(sample));
 

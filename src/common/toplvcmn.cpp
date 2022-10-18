@@ -59,7 +59,7 @@ wxTopLevelWindowBase::~wxTopLevelWindowBase()
 {
     // don't let wxTheApp keep any stale pointers to us
     if ( wxTheApp && wxTheApp->GetTopWindow() == this )
-        wxTheApp->SetTopWindow(NULL);
+        wxTheApp->SetTopWindow(nullptr);
 
     wxTopLevelWindows.DeleteObject(this);
 
@@ -218,14 +218,14 @@ wxSize wxTopLevelWindowBase::GetDefaultSize()
     // size with DPI on the large screens to avoid creating windows too small
     // to fit anything at all when using high DPI
     if ( size.x >= 1024 )
-        size.x = FromDIP(400, NULL /* no window */);
+        size.x = FromDIP(400, nullptr /* no window */);
     else if ( size.x >= 800 )
         size.x = 300;
     else if ( size.x >= 320 )
         size.x = 240;
 
     if ( size.y >= 768 )
-        size.y = FromDIP(250, NULL /* no window */);
+        size.y = FromDIP(250, nullptr /* no window */);
     else if ( size.y > 200 )
     {
         size.y *= 2;
@@ -433,7 +433,7 @@ bool wxTopLevelWindowBase::Layout()
     else
     {
         // do we have _exactly_ one child?
-        wxWindow *child = NULL;
+        wxWindow *child = nullptr;
         for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )

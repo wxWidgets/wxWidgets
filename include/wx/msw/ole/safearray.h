@@ -35,7 +35,7 @@ public:
     SAFEARRAY* Detach();
 
     // Returns true if has a valid SAFEARRAY.
-    bool HasArray() const { return m_array != NULL; }
+    bool HasArray() const { return m_array != nullptr; }
 
     // Returns the number of dimensions.
     size_t GetDim() const;
@@ -54,7 +54,7 @@ protected:
     // it's only used as a base class of wxSafeArray<>.
     wxSafeArrayBase()
     {
-        m_array = NULL;
+        m_array = nullptr;
     }
 
     bool Lock();
@@ -113,7 +113,7 @@ struct wxSafeArrayConvertor<VT_BSTR>
 
         if ( !bstr && !from.empty() )
         {
-            // BSTR can be NULL for empty strings but if the string was
+            // BSTR can be null for empty strings but if the string was
             // not empty, it means we failed to allocate memory for it.
             return false;
         }
@@ -158,7 +158,7 @@ public:
     // Default constructor.
     wxSafeArray()
     {
-        m_array = NULL;
+        m_array = nullptr;
     }
 
     // Creates and locks a zero-based one-dimensional SAFEARRAY with the given

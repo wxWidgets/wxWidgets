@@ -63,7 +63,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     // Check if this radio button should be put into an existing group. This
     // shouldn't be done if it's given a style to explicitly start a new group
     // or if it's not meant to be a part of a group at all.
-    GSList* radioButtonGroup = NULL;
+    GSList* radioButtonGroup = nullptr;
     if (!HasFlag(wxRB_GROUP) && !HasFlag(wxRB_SINGLE))
     {
         // search backward for last group start
@@ -109,7 +109,7 @@ bool wxRadioButton::Create( wxWindow *parent,
 
 void wxRadioButton::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid radiobutton") );
 
     // save the original label
     wxControlBase::SetLabel(label);
@@ -119,7 +119,7 @@ void wxRadioButton::SetLabel( const wxString& label )
 
 void wxRadioButton::SetValue( bool val )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid radiobutton") );
 
     if (val == GetValue())
         return;
@@ -144,7 +144,7 @@ void wxRadioButton::SetValue( bool val )
 
 bool wxRadioButton::GetValue() const
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobutton") );
+    wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid radiobutton") );
 
     return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widget)) != 0;
 }
@@ -178,7 +178,7 @@ wxRadioButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 wxVisualAttributes
 wxRadioButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_radio_button_new_with_label(NULL, ""));
+    return GetDefaultAttributesFromGTKWidget(gtk_radio_button_new_with_label(nullptr, ""));
 }
 
 

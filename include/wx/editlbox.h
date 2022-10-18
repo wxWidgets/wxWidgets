@@ -74,8 +74,8 @@ protected:
     {
         m_style = 0;
         m_selection = 0;
-        m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;
-        m_listCtrl = NULL;
+        m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = nullptr;
+        m_listCtrl = nullptr;
     }
 
     void OnItemSelected(wxListEvent& event);

@@ -217,7 +217,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     if (!image->IsOk())
         return wxPCX_MEMERR;
 
-    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
+    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == nullptr)
         return wxPCX_MEMERR;
 
     // Now start reading the file, line by line, and store
@@ -339,7 +339,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     if (bytesperline % 2)
         bytesperline++;
 
-    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
+    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == nullptr)
         return wxPCX_MEMERR;
 
     // Build header data and write it to the stream. Initially,

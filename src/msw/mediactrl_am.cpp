@@ -930,7 +930,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 {
     wxChar szError[MAX_ERROR_TEXT_LEN];
-    if( m_lpAMGetErrorText != NULL &&
+    if( m_lpAMGetErrorText != nullptr &&
        (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0)
     {
         return wxString::Format(wxT("DirectShow error \"%s\" \n")
@@ -961,12 +961,12 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 // wxAMMediaBackend Constructor
 //---------------------------------------------------------------------------
 wxAMMediaBackend::wxAMMediaBackend()
-                 :m_pAX(NULL),
-                  m_pAM(NULL),
-                  m_pMP(NULL),
+                 :m_pAX(nullptr),
+                  m_pAM(nullptr),
+                  m_pMP(nullptr),
                   m_bestSize(wxDefaultSize)
 {
-   m_evthandler = NULL;
+   m_evthandler = nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -1016,11 +1016,11 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     // Now determine which (if any) media player interface is
     // available - IMediaPlayer or IActiveMovie
-    if( ::CoCreateInstance(CLSID_MediaPlayer, NULL,
+    if( ::CoCreateInstance(CLSID_MediaPlayer, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IMediaPlayer, (void**)&m_pMP) != 0 )
     {
-        if( ::CoCreateInstance(CLSID_ActiveMovie, NULL,
+        if( ::CoCreateInstance(CLSID_ActiveMovie, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IActiveMovie, (void**)&m_pAM) != 0 )
             return false;
@@ -1103,7 +1103,7 @@ bool wxAMMediaBackend::Load(const wxURI& location)
 {
     //  Turn off loading from a proxy as user
     //  may have set it previously
-    INSPlay* pPlay = NULL;
+    INSPlay* pPlay = nullptr;
     GetAM()->QueryInterface(IID_INSPlay, (void**) &pPlay);
     if(pPlay)
     {
@@ -1120,7 +1120,7 @@ bool wxAMMediaBackend::Load(const wxURI& location)
 bool wxAMMediaBackend::Load(const wxURI& location, const wxURI& proxy)
 {
     // Set the proxy of the NETSHOW interface
-    INSPlay* pPlay = NULL;
+    INSPlay* pPlay = nullptr;
     GetAM()->QueryInterface(IID_INSPlay, (void**) &pPlay);
 
     if(pPlay)
@@ -1451,14 +1451,14 @@ bool wxAMMediaBackend::SetPlaybackRate(double dRate)
 void wxAMMediaBackend::DoGetDownloadProgress(wxLongLong* pLoadProgress,
                                              wxLongLong* pLoadTotal)
 {
-    IUnknown* pFG = NULL;
+    IUnknown* pFG = nullptr;
 
     HRESULT hr = m_pAM->get_FilterGraph(&pFG);
 
-    // notice that the call above may return S_FALSE and leave pFG NULL
+    // notice that the call above may return S_FALSE and leave pFG null
     if(SUCCEEDED(hr) && pFG)
     {
-        IAMOpenProgress* pOP = NULL;
+        IAMOpenProgress* pOP = nullptr;
         hr = pFG->QueryInterface(IID_IAMOpenProgress, (void**)&pOP);
         if(SUCCEEDED(hr) && pOP)
         {

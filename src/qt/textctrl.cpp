@@ -426,7 +426,7 @@ public:
 
     virtual QScrollArea *ScrollBarsContainer() const override
     {
-        return NULL;
+        return nullptr;
     }
 
     virtual void SetStyleFlags(long flags) override
@@ -497,7 +497,7 @@ void wxQtTextEdit::textChanged()
 
 
 wxTextCtrl::wxTextCtrl() :
-    m_qtEdit(NULL)
+    m_qtEdit(nullptr)
 {
 }
 
@@ -607,7 +607,7 @@ long wxTextCtrl::XYToPosition(long x, long y) const
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    if ( x == NULL || y == NULL || pos < 0 )
+    if ( x == nullptr || y == nullptr || pos < 0 )
         return false;
 
     return m_qtEdit->PositionToXY(pos, x, y);

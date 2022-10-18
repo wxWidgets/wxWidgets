@@ -52,7 +52,7 @@ public:
     wxDirData(const wxString& dirname);
     ~wxDirData();
 
-    bool IsOk() const { return m_dir != NULL; }
+    bool IsOk() const { return m_dir != nullptr; }
 
     void SetFileSpec(const wxString& filespec) { m_filespec = filespec; }
     void SetFlags(int flags) { m_flags = flags; }
@@ -84,7 +84,7 @@ private:
 wxDirData::wxDirData(const wxString& dirname)
          : m_dirname(dirname)
 {
-    m_dir = NULL;
+    m_dir = nullptr;
 
     // throw away the trailing slashes
     size_t n = m_dirname.length();
@@ -112,7 +112,7 @@ wxDirData::~wxDirData()
 
 bool wxDirData::Read(wxString *filename)
 {
-    dirent *de = NULL;    // just to silence compiler warnings
+    dirent *de = nullptr;    // just to silence compiler warnings
     bool matches = false;
 
     // speed up string concatenation in the loop a bit
@@ -207,7 +207,7 @@ bool wxDirData::Read(wxString * WXUNUSED(filename))
 
 wxDir::wxDir(const wxString& dirname)
 {
-    m_data = NULL;
+    m_data = nullptr;
 
     (void)Open(dirname);
 }
@@ -220,7 +220,7 @@ bool wxDir::Open(const wxString& dirname)
     if ( !M_DIR->IsOk() )
     {
         delete M_DIR;
-        m_data = NULL;
+        m_data = nullptr;
 
         return false;
     }
@@ -230,7 +230,7 @@ bool wxDir::Open(const wxString& dirname)
 
 bool wxDir::IsOpened() const
 {
-    return m_data != NULL;
+    return m_data != nullptr;
 }
 
 wxString wxDir::GetName() const
@@ -257,7 +257,7 @@ void wxDir::Close()
     if ( m_data )
     {
         delete m_data;
-        m_data = NULL;
+        m_data = nullptr;
     }
 }
 

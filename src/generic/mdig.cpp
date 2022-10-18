@@ -60,7 +60,7 @@ wxEND_EVENT_TABLE()
 void wxGenericMDIParentFrame::Init()
 {
 #if wxUSE_MENUS
-    m_pMyMenuBar = NULL;
+    m_pMyMenuBar = nullptr;
 #endif // wxUSE_MENUS
 }
 
@@ -175,21 +175,21 @@ void wxGenericMDIParentFrame::SetMenuBar(wxMenuBar *pMenuBar)
 void wxGenericMDIParentFrame::WXSetChildMenuBar(wxGenericMDIChildFrame *pChild)
 {
 #if wxUSE_MENUS
-    if (pChild  == NULL)
+    if (pChild  == nullptr)
     {
         // No Child, set Our menu bar back.
         SetMenuBar(m_pMyMenuBar);
 
         // Make sure we know our menu bar is in use
-        m_pMyMenuBar = NULL;
+        m_pMyMenuBar = nullptr;
     }
     else
     {
-        if (pChild->GetMenuBar() == NULL)
+        if (pChild->GetMenuBar() == nullptr)
             return;
 
         // Do we need to save the current bar?
-        if (m_pMyMenuBar == NULL)
+        if (m_pMyMenuBar == nullptr)
             m_pMyMenuBar = GetMenuBar();
 
         SetMenuBar(pChild->GetMenuBar());
@@ -206,7 +206,7 @@ wxGenericMDIParentFrame::GetGenericClientWindow() const
 wxBookCtrlBase *wxGenericMDIParentFrame::GetBookCtrl() const
 {
     wxGenericMDIClientWindow * const client = GetGenericClientWindow();
-    return client ? client->GetBookCtrl() : NULL;
+    return client ? client->GetBookCtrl() : nullptr;
 }
 
 void wxGenericMDIParentFrame::AdvanceActive(bool forward)
@@ -243,8 +243,8 @@ void wxGenericMDIParentFrame::WXRemoveChild(wxGenericMDIChildFrame *child)
     const bool removingActive = WXIsActiveChild(child);
     if ( removingActive )
     {
-        SetActiveChild(NULL);
-        WXSetChildMenuBar(NULL);
+        SetActiveChild(nullptr);
+        WXSetChildMenuBar(nullptr);
     }
 
     wxGenericMDIClientWindow * const client = GetGenericClientWindow();
@@ -389,11 +389,11 @@ wxEND_EVENT_TABLE()
 void wxGenericMDIChildFrame::Init()
 {
 #if wxUSE_MENUS
-    m_pMenuBar = NULL;
+    m_pMenuBar = nullptr;
 #endif // wxUSE_MENUS
 
 #if !wxUSE_GENERIC_MDI_AS_NATIVE
-    m_mdiParentGeneric = NULL;
+    m_mdiParentGeneric = nullptr;
 #endif
 }
 
@@ -432,7 +432,7 @@ bool wxGenericMDIChildFrame::Create(wxGenericMDIParentFrame *parent,
 #if wxUSE_GENERIC_MDI_AS_NATIVE
     m_mdiParent = parent;
 #else // generic != native
-    // leave m_mdiParent NULL, we don't have it
+    // leave m_mdiParent null, we don't have it
     m_mdiParentGeneric = parent;
 #endif
 
@@ -469,7 +469,7 @@ void wxGenericMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
             {
                 // Replace current menu bars
                 if (pOldMenuBar)
-                    parent->WXSetChildMenuBar(NULL);
+                    parent->WXSetChildMenuBar(nullptr);
                 parent->WXSetChildMenuBar(this);
             }
         }

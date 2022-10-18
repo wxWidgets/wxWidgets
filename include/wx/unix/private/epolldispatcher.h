@@ -21,7 +21,7 @@ struct epoll_event;
 class WXDLLIMPEXP_BASE wxEpollDispatcher : public wxFDIODispatcher
 {
 public:
-    // create a new instance of this class, can return NULL if
+    // create a new instance of this class, can return nullptr if
     // epoll() is not supported on this system
     //
     // the caller should delete the returned pointer

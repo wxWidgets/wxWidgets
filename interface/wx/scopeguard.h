@@ -140,10 +140,10 @@ wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
 #define wxON_BLOCK_EXIT_SET(var, value)
 
 /**
-    This macro sets the pointer passed to it as argument to NULL on scope exit.
+    This macro sets the pointer passed to it as argument to @NULL on scope exit.
 
-    It must be used instead of wxON_BLOCK_EXIT_SET() when the value being set
-    is @c NULL.
+    It may be used instead of wxON_BLOCK_EXIT_SET() when the value being set
+    is @NULL.
 
     @header{wx/scopeguard.h}
  */

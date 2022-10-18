@@ -127,10 +127,10 @@ wxGenericCalendarCtrl::wxGenericCalendarCtrl(wxWindow *parent,
 
 void wxGenericCalendarCtrl::Init()
 {
-    m_choiceMonth = NULL;
-    m_spinYear = NULL;
-    m_staticYear = NULL;
-    m_staticMonth = NULL;
+    m_choiceMonth = nullptr;
+    m_spinYear = nullptr;
+    m_staticYear = nullptr;
+    m_staticMonth = nullptr;
 
     m_userChangedYear = false;
 
@@ -146,7 +146,7 @@ void wxGenericCalendarCtrl::Init()
 
     for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
     {
-        m_attrs[n] = NULL;
+        m_attrs[n] = nullptr;
     }
 
     InitColours();
@@ -258,7 +258,7 @@ void wxGenericCalendarCtrl::CreateMonthChoice()
     m_choiceMonth = new wxChoice(GetParent(), wxID_ANY,
                                   wxDefaultPosition,
                                   wxDefaultSize,
-                                  0, NULL);
+                                  0, nullptr);
 
     wxDateTime::Month m;
     for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
@@ -304,10 +304,10 @@ bool wxGenericCalendarCtrl::Destroy()
     if ( m_staticMonth )
         m_staticMonth->Destroy();
 
-    m_staticYear = NULL;
-    m_spinYear = NULL;
-    m_choiceMonth = NULL;
-    m_staticMonth = NULL;
+    m_staticYear = nullptr;
+    m_spinYear = nullptr;
+    m_choiceMonth = nullptr;
+    m_staticMonth = nullptr;
 
     return wxControl::Destroy();
 }
@@ -956,13 +956,13 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 unsigned int day = date.GetDay();
                 wxString dayStr = wxString::Format(wxT("%u"), day);
                 wxCoord width;
-                dc.GetTextExtent(dayStr, &width, NULL);
+                dc.GetTextExtent(dayStr, &width, nullptr);
 
                 bool changedColours = false,
                      changedFont = false;
 
                 bool isSel = false;
-                wxCalendarDateAttr *attr = NULL;
+                wxCalendarDateAttr *attr = nullptr;
 
                 if ( date.GetMonth() != m_date.GetMonth() || !IsDateInRange(date) )
                 {

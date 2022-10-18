@@ -152,7 +152,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     m_FoldingID = 2;
 
     // initialize language
-    m_language = NULL;
+    m_language = nullptr;
 
     // default font for all styles
     SetViewEOL (g_CommonPrefs.displayEOLEnable);
@@ -606,7 +606,7 @@ bool Edit::InitializePrefs (const wxString &name) {
 
     // initialize styles
     StyleClearAll();
-    LanguageInfo const* curInfo = NULL;
+    LanguageInfo const* curInfo = nullptr;
 
     // determine language
     bool found = false;

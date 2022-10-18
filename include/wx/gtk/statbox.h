@@ -50,7 +50,7 @@ public:
                  long style = 0,
                  const wxString &name = wxASCII_STR(wxStaticBoxNameStr) )
     {
-        return DoCreate( parent, id, &label, NULL, pos, size, style, name );
+        return DoCreate( parent, id, &label, nullptr, pos, size, style, name );
     }
 
     bool Create( wxWindow *parent,
@@ -61,7 +61,7 @@ public:
                  long style = 0,
                  const wxString &name = wxASCII_STR(wxStaticBoxNameStr) )
     {
-        return DoCreate( parent, id, NULL, label, pos, size, style, name );
+        return DoCreate( parent, id, nullptr, label, pos, size, style, name );
     }
 
     virtual void SetLabel( const wxString &label ) override;

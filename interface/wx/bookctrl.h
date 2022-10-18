@@ -218,7 +218,7 @@ public:
 
     /**
         Returns the index of the tab at the specified position or @c wxNOT_FOUND
-        if none. If @a flags parameter is non-@NULL, the position of the point
+        if none. If @a flags parameter is non-null, the position of the point
         inside the tab is returned as well.
 
         @param pt
@@ -232,7 +232,7 @@ public:
         @return Returns the zero-based tab index or @c wxNOT_FOUND if there is no
                 tab at the specified position.
     */
-    virtual int HitTest(const wxPoint& pt, long* flags = NULL) const;
+    virtual int HitTest(const wxPoint& pt, long* flags = nullptr) const;
 
 
 

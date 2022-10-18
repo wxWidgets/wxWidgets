@@ -170,7 +170,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 
-MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
+MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY,
                              _("wxSocket demo: Server"),
                              wxDefaultPosition, wxSize(300, 200))
 {

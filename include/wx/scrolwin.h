@@ -222,7 +222,7 @@ public:
     virtual void DoPrepareDC(wxDC& dc) override;
 
     // are we generating the autoscroll events?
-    bool IsAutoScrolling() const { return m_timerAutoScroll != NULL; }
+    bool IsAutoScrolling() const { return m_timerAutoScroll != nullptr; }
 
     // stop generating the scroll events when mouse is held outside the window
     void StopAutoScrolling();
@@ -246,10 +246,10 @@ public:
     void HandleOnChildFocus(wxChildFocusEvent& event);
 
 protected:
-    // get pointer to our scroll rect if we use it or NULL
+    // get pointer to our scroll rect if we use it or nullptr
     const wxRect *GetScrollRect() const
     {
-        return m_rectToScroll.width != 0 ? &m_rectToScroll : NULL;
+        return m_rectToScroll.width != 0 ? &m_rectToScroll : nullptr;
     }
 
     // get the size of the target window
@@ -365,10 +365,8 @@ public:                                                                       \
         { return ScrollGetBestVirtualSize(); }
 
 // include the declaration of the real wxScrollHelper
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/scrolwin.h"
-#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
-    #include "wx/gtk1/scrolwin.h"
 #else
     #define wxHAS_GENERIC_SCROLLWIN
     #include "wx/generic/scrolwin.h"

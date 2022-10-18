@@ -18,8 +18,8 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win,
-                const wxGLContext *other = NULL,
-                const wxGLContextAttrs *ctxAttrs = NULL);
+                const wxGLContext *other = nullptr,
+                const wxGLContextAttrs *ctxAttrs = nullptr);
 ///    virtual ~wxGLContext();
 
     virtual bool SetCurrent(const wxGLCanvas& win) const override;
@@ -47,7 +47,7 @@ public:
     explicit
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
-               const int *attribList = NULL,
+               const int *attribList = nullptr,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -71,7 +71,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxGLCanvasName,
-                const int *attribList = NULL,
+                const int *attribList = nullptr,
                 const wxPalette& palette = wxNullPalette);
 
     virtual bool SwapBuffers() override;

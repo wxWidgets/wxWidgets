@@ -30,7 +30,7 @@ bool ComputeMBLength(const wxMBConv& conv)
 {
     // we suppose a fixed length encoding here (which happens to cover UTF-8
     // too as long as the test string is ASCII)
-    return conv.FromWChar(NULL, 0, TEST_STRING)
+    return conv.FromWChar(nullptr, 0, TEST_STRING)
             == (wcslen(TEST_STRING) + 1)*conv.GetMBNulLen();
 }
 

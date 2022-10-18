@@ -365,7 +365,7 @@ void macroCompilabilityTest()
 TEST_CASE("wxLog::Trace", "[log][.]")
 {
     // Running this test without setting WXTRACE is useless.
-    REQUIRE( wxGetEnv("WXTRACE", NULL) );
+    REQUIRE( wxGetEnv("WXTRACE", nullptr) );
 
     wxLogTrace("logtest", "Starting test");
     wxMilliSleep(250);

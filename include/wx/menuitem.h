@@ -46,12 +46,12 @@ class WXDLLIMPEXP_CORE wxMenuItemBase : public wxObject
 {
 public:
     // creation
-    static wxMenuItem *New(wxMenu *parentMenu = NULL,
+    static wxMenuItem *New(wxMenu *parentMenu = nullptr,
                            int itemid = wxID_SEPARATOR,
                            const wxString& text = wxEmptyString,
                            const wxString& help = wxEmptyString,
                            wxItemKind kind = wxITEM_NORMAL,
-                           wxMenu *subMenu = NULL);
+                           wxMenu *subMenu = nullptr);
 
     // destruction: wxMenuItem will delete its submenu
     virtual ~wxMenuItemBase();
@@ -99,7 +99,7 @@ public:
     bool IsCheckable() const
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
 
-    bool IsSubMenu() const { return m_subMenu != NULL; }
+    bool IsSubMenu() const { return m_subMenu != nullptr; }
     void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }
     wxMenu *GetSubMenu() const { return m_subMenu; }
 
@@ -125,11 +125,11 @@ public:
     virtual wxBitmap GetBitmap() const;
 
 #if wxUSE_ACCEL
-    // extract the accelerator from the given menu string, return NULL if none
+    // extract the accelerator from the given menu string, return nullptr if none
     // found
     static wxAcceleratorEntry *GetAccelFromString(const wxString& label);
 
-    // get our accelerator or NULL (caller must delete the pointer)
+    // get our accelerator or nullptr (caller must delete the pointer)
     virtual wxAcceleratorEntry *GetAccel() const;
 
     // set the accel for this item - this may also be done indirectly with
@@ -150,7 +150,7 @@ public:
                            const wxString& text,
                            const wxString& help,
                            bool isCheckable,
-                           wxMenu *subMenu = NULL)
+                           wxMenu *subMenu = nullptr)
     {
         return New(parentMenu, itemid, text, help,
                    isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu);
@@ -163,7 +163,7 @@ protected:
 
     wxWindowIDRef m_id;             // numeric id of the item >= 0 or wxID_ANY or wxID_SEPARATOR
     wxMenu       *m_parentMenu,     // the menu we belong to
-                 *m_subMenu;        // our sub menu or NULL
+                 *m_subMenu;        // our sub menu or nullptr
     wxString      m_text,           // label of the item
                   m_help;           // the help string for the item
     wxBitmapBundle m_bitmap;        // item bitmap, may be invalid
@@ -176,12 +176,12 @@ protected:
 #endif // wxUSE_ACCEL
 
     // this ctor is for the derived classes only, we're never created directly
-    wxMenuItemBase(wxMenu *parentMenu = NULL,
+    wxMenuItemBase(wxMenu *parentMenu = nullptr,
                    int itemid = wxID_SEPARATOR,
                    const wxString& text = wxEmptyString,
                    const wxString& help = wxEmptyString,
                    wxItemKind kind = wxITEM_NORMAL,
-                   wxMenu *subMenu = NULL);
+                   wxMenu *subMenu = nullptr);
 
 private:
     // and, if we have one ctor, compiler won't generate a default copy one, so
@@ -201,12 +201,8 @@ private:
     #include "wx/univ/menuitem.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/menuitem.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/menuitem.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/menuitem.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/menuitem.h"
+    #include "wx/gtk/menuitem.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/menuitem.h"
 #elif defined(__WXQT__)

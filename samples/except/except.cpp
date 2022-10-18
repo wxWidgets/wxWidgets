@@ -400,7 +400,7 @@ void MyApp::OnAssertFailure(const wxChar *file,
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "Except wxWidgets App",
+       : wxFrame(nullptr, wxID_ANY, "Except wxWidgets App",
                  wxPoint(50, 50), wxSize(450, 340))
 {
     // set the frame icon

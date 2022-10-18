@@ -70,7 +70,7 @@ public:
 
     // return the display for the given window or wxNOT_FOUND
     //
-    // the window pointer must not be NULL (i.e. caller should check it)
+    // the window pointer must not be null (i.e. caller should check it)
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
@@ -79,7 +79,7 @@ public:
 protected:
     // create a new display object
     //
-    // it can return a NULL pointer if the display creation failed
+    // it can return a null pointer if the display creation failed
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
 private:

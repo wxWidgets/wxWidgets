@@ -83,7 +83,7 @@ public:
         of the animation is displayed.
 
         @param parent
-            Parent window, must be non-@NULL.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param anim
@@ -248,7 +248,7 @@ public:
         of the animation is displayed.
 
         @param parent
-            Parent window, must be non-@NULL.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param anim

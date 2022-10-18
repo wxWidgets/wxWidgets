@@ -60,7 +60,7 @@ public:
                                           const wxBitmapBundle& bitmap1,
                                           const wxBitmapBundle& bitmap2 = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
-                                          wxObject *clientData = NULL,
+                                          wxObject *clientData = nullptr,
                                           const wxString& shortHelpString = wxEmptyString,
                                           const wxString& longHelpString = wxEmptyString) override;
     virtual wxToolBarToolBase *CreateTool(wxControl *control,

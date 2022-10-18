@@ -65,9 +65,9 @@ public:
                                    double angle) override;
     virtual void DoGetTextExtent( const wxString &string,
                                 wxCoord *width, wxCoord *height,
-                                wxCoord *descent = NULL,
-                                wxCoord *externalLeading = NULL,
-                                const wxFont *theFont = NULL) const override;
+                                wxCoord *descent = nullptr,
+                                wxCoord *externalLeading = nullptr,
+                                const wxFont *theFont = nullptr) const override;
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
     virtual void DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height ) override;
     virtual void DoSetDeviceClippingRegion( const wxRegion &region ) override;

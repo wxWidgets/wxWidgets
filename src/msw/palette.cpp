@@ -79,7 +79,7 @@ public:
 
     UINT GetEntries() const
     {
-        return ::GetPaletteEntries(m_hPalette, 0, 0, NULL);
+        return ::GetPaletteEntries(m_hPalette, 0, 0, nullptr);
     }
 
 private:

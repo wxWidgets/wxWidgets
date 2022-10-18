@@ -69,7 +69,7 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
     }
     else
     {
-        wxLogVerbose("OnPropertyGridChange(NULL)");
+        wxLogVerbose("OnPropertyGridChange(nullptr)");
     }
 }
 

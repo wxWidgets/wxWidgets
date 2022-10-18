@@ -79,7 +79,7 @@ public:
     /**
         Returns the current @e owner of the timer.
 
-        If non-@NULL this is the event handler which will receive the
+        If non-null this is the event handler which will receive the
         timer events (see wxTimerEvent) when the timer is running.
     */
     wxEvtHandler* GetOwner() const;

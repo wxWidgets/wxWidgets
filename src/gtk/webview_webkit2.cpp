@@ -48,7 +48,7 @@ bool wxGetStringFromJSResult(WebKitJavascriptResult* js_result, wxString* output
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    JSValueRef exception = NULL;
+    JSValueRef exception = nullptr;
     wxJSStringRef js_value
                   (
                    JSValueIsObject(context, value)
@@ -60,14 +60,14 @@ bool wxGetStringFromJSResult(WebKitJavascriptResult* js_result, wxString* output
     {
         if ( output )
         {
-            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, NULL));
+            wxJSStringRef ex_value(JSValueToStringCopy(context, exception, nullptr));
             *output = ex_value.ToWxString();
         }
 
         return false;
     }
 
-    if ( output != NULL )
+    if ( output != nullptr )
         *output = js_value.ToWxString();
 
     return true;
@@ -370,7 +370,7 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                                    wxWebViewWebKit *webKitCtrl)
 {
     gchar *title;
-    g_object_get(G_OBJECT(widget), "title", &title, NULL);
+    g_object_get(G_OBJECT(widget), "title", &title, nullptr);
 
     wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
                          webKitCtrl->GetId(),
@@ -552,15 +552,15 @@ wxgtk_new_connection_cb(GDBusServer *,
                         GDBusConnection *connection,
                         GDBusProxy **proxy)
 {
-    GError *error = NULL;
+    GError *error = nullptr;
     GDBusProxyFlags flags = GDBusProxyFlags(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS);
     *proxy = g_dbus_proxy_new_sync(connection,
                                    flags,
-                                   NULL,
-                                   NULL,
+                                   nullptr,
+                                   nullptr,
                                    WXGTK_WEB_EXTENSION_OBJECT_PATH,
                                    WXGTK_WEB_EXTENSION_INTERFACE,
-                                   NULL,
+                                   nullptr,
                                    &error);
     if (error)
     {
@@ -576,7 +576,7 @@ gboolean
 wxgtk_dbus_peer_is_authorized(GCredentials *peer_credentials)
 {
     static GCredentials *own_credentials = g_credentials_new();
-    GError *error = NULL;
+    GError *error = nullptr;
 
     if (peer_credentials && g_credentials_is_same_user(peer_credentials, own_credentials, &error))
     {
@@ -620,9 +620,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
 wxWebViewWebKit::wxWebViewWebKit()
 {
-    m_web_view = NULL;
-    m_dbusServer = NULL;
-    m_extension = NULL;
+    m_web_view = nullptr;
+    m_dbusServer = nullptr;
+    m_extension = nullptr;
 }
 
 bool wxWebViewWebKit::Create(wxWindow *parent,
@@ -633,9 +633,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    m_web_view = NULL;
-    m_dbusServer = NULL;
-    m_extension = NULL;
+    m_web_view = nullptr;
+    m_dbusServer = nullptr;
+    m_extension = nullptr;
     m_busy = false;
     m_guard = false;
     m_creating = false;
@@ -899,10 +899,10 @@ static void wxgtk_can_execute_editing_command_cb(GObject*,
 
 bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
 {
-    GAsyncResult *result = NULL;
+    GAsyncResult *result = nullptr;
     webkit_web_view_can_execute_editing_command(m_web_view,
                                                 command,
-                                                NULL,
+                                                nullptr,
                                                 wxgtk_can_execute_editing_command_cb,
                                                 &result);
 
@@ -914,7 +914,7 @@ bool wxWebViewWebKit::CanExecuteEditingCommand(const gchar* command) const
 
     gboolean can_execute = webkit_web_view_can_execute_editing_command_finish(m_web_view,
                                                                               result,
-                                                                              NULL);
+                                                                              nullptr);
     g_object_unref(result);
 
     return can_execute != 0;
@@ -1008,8 +1008,8 @@ wxString wxWebViewWebKit::GetPageSource() const
         return wxString();
     }
 
-    GAsyncResult *result = NULL;
-    webkit_web_resource_get_data(resource, NULL,
+    GAsyncResult *result = nullptr;
+    webkit_web_resource_get_data(resource, nullptr,
                                  wxgtk_web_resource_get_data_cb,
                                  &result);
 
@@ -1021,7 +1021,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     size_t length;
     guchar *source = webkit_web_resource_get_data_finish(resource, result,
-                                                         &length, NULL);
+                                                         &length, nullptr);
     if (result)
     {
         g_object_unref(result);
@@ -1081,7 +1081,7 @@ void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 void wxWebViewWebKit::Print()
 {
     WebKitPrintOperation* printop = webkit_print_operation_new(m_web_view);
-    webkit_print_operation_run_dialog(printop, NULL);
+    webkit_print_operation_run_dialog(printop, nullptr);
     g_object_unref(printop);
 }
 
@@ -1105,7 +1105,7 @@ bool wxWebViewWebKit::IsEditable() const
 {
 #if WEBKIT_CHECK_VERSION(2, 8, 0)
     gboolean editable;
-    g_object_get(m_web_view, "editable", &editable, NULL);
+    g_object_get(m_web_view, "editable", &editable, nullptr);
     return editable != 0;
 #else
     return false;
@@ -1122,7 +1122,7 @@ void wxWebViewWebKit::DeleteSelection()
                                                   "DeleteSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  NULL, NULL);
+                                                  nullptr, nullptr);
         if (retval)
         {
             g_variant_unref(retval);
@@ -1140,7 +1140,7 @@ bool wxWebViewWebKit::HasSelection() const
                                                   "HasSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  NULL, NULL);
+                                                  nullptr, nullptr);
         if (retval)
         {
             gboolean has_selection = FALSE;
@@ -1168,7 +1168,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
                                                   "GetSelectedText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  NULL, NULL);
+                                                  nullptr, nullptr);
         if (retval)
         {
             char *text;
@@ -1190,7 +1190,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
                                                   "GetSelectedSource",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  NULL, NULL);
+                                                  nullptr, nullptr);
         if (retval)
         {
             char *source;
@@ -1212,7 +1212,7 @@ void wxWebViewWebKit::ClearSelection()
                                                   "ClearSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  NULL, NULL);
+                                                  nullptr, nullptr);
         if (retval)
         {
             g_variant_unref(retval);
@@ -1230,7 +1230,7 @@ wxString wxWebViewWebKit::GetPageText() const
                                                   "GetPageText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  NULL, NULL);
+                                                  nullptr, nullptr);
         if (retval)
         {
             char *text;
@@ -1302,7 +1302,7 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientDat
 
     webkit_web_view_run_javascript(m_web_view,
                                    wrapJS.GetWrappedCode().utf8_str(),
-                                   NULL,
+                                   nullptr,
                                    wxgtk_run_javascript_cb,
                                    params);
 }
@@ -1343,7 +1343,7 @@ bool wxWebViewWebKit::AddUserScript(const wxString& javascript,
         WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
         (injectionTime == wxWEBVIEW_INJECT_AT_DOCUMENT_START) ?
             WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_START : WEBKIT_USER_SCRIPT_INJECT_AT_DOCUMENT_END,
-        NULL, NULL
+        nullptr, nullptr
     );
     WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
     webkit_user_content_manager_add_script(ucm, userScript);
@@ -1364,7 +1364,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     WebKitWebContext* context = webkit_web_context_get_default();
     webkit_web_context_register_uri_scheme(context, handler->GetName().utf8_str(),
                                            (WebKitURISchemeRequestCallback)wxgtk_webview_webkit_uri_scheme_request_cb,
-                                           this, NULL);
+                                           this, nullptr);
 }
 
 void wxWebViewWebKit::EnableContextMenu(bool enable)
@@ -1489,7 +1489,7 @@ void wxWebViewWebKit::SetupWebExtensionServer()
     char *address = g_strdup_printf("unix:tmpdir=%s", g_get_tmp_dir());
     char *guid = g_dbus_generate_guid();
     GDBusAuthObserver *observer = g_dbus_auth_observer_new();
-    GError *error = NULL;
+    GError *error = nullptr;
 
     g_signal_connect(observer, "authorize-authenticated-peer",
                      G_CALLBACK(wxgtk_authorize_authenticated_peer_cb), this);
@@ -1498,7 +1498,7 @@ void wxWebViewWebKit::SetupWebExtensionServer()
                                           G_DBUS_SERVER_FLAGS_NONE,
                                           guid,
                                           observer,
-                                          NULL,
+                                          nullptr,
                                           &error);
 
     if (error)

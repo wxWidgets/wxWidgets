@@ -43,12 +43,12 @@ public:
     //
     // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
     //     compatibility, as well as both icon parameters
-    wxDropSource(wxWindow *win = NULL,
+    wxDropSource(wxWindow *win = nullptr,
                  const wxCursor &cursorCopy = wxNullCursor,
                  const wxCursor &cursorMove = wxNullCursor,
                  const wxCursor &cursorStop = wxNullCursor);
     wxDropSource(wxDataObject& data,
-                 wxWindow *win = NULL,
+                 wxWindow *win = nullptr,
                  const wxCursor &cursorCopy = wxNullCursor,
                  const wxCursor &cursorMove = wxNullCursor,
                  const wxCursor &cursorStop = wxNullCursor);

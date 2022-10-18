@@ -65,8 +65,8 @@ void PickerBaseTestCase::Controls()
     wxPickerBase* const base = GetBase();
 
     CPPUNIT_ASSERT(base->HasTextCtrl());
-    CPPUNIT_ASSERT(base->GetTextCtrl() != NULL);
-    CPPUNIT_ASSERT(base->GetPickerCtrl() != NULL);
+    CPPUNIT_ASSERT(base->GetTextCtrl() != nullptr);
+    CPPUNIT_ASSERT(base->GetPickerCtrl() != nullptr);
 }
 
 #endif

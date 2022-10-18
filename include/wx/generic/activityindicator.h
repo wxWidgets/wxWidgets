@@ -24,7 +24,7 @@ class WXDLLIMPEXP_ADV wxActivityIndicatorGeneric : public wxActivityIndicatorBas
 public:
     wxActivityIndicatorGeneric()
     {
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
     explicit
@@ -35,7 +35,7 @@ public:
                                long style = 0,
                                const wxString& name = wxActivityIndicatorNameStr)
     {
-        m_impl = NULL;
+        m_impl = nullptr;
 
         Create(parent, winid, pos, size, style, name);
     }

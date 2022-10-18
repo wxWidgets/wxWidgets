@@ -64,7 +64,7 @@ public:
                                   int WXUNUSED(flags) = 0,
                                   wxHeaderSortIconType WXUNUSED(sortArrow)
                                     = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL) override
+                                  wxHeaderButtonParams* params = nullptr) override
     {
         wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
         wxDCTextColourChanger setFgCol(dc, *wxWHITE);
@@ -184,7 +184,7 @@ public:
         m_useBitmap =
         m_useGeneric = false;
 #if wxUSE_GRAPHICS_CONTEXT
-        m_renderer = NULL;
+        m_renderer = nullptr;
 #endif
     }
 
@@ -567,7 +567,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL,
+       : wxFrame(nullptr,
                  wxID_ANY,
                  "Render wxWidgets Sample")
 {
@@ -663,7 +663,7 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
-    delete wxRendererNative::Set(NULL);
+    delete wxRendererNative::Set(nullptr);
 }
 
 
@@ -744,7 +744,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUnload(wxCommandEvent& WXUNUSED(event))
 {
-    wxRendererNative *renderer = wxRendererNative::Set(NULL);
+    wxRendererNative *renderer = wxRendererNative::Set(nullptr);
     if ( renderer )
     {
         delete renderer;
@@ -788,7 +788,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_GRAPHICS_CONTEXT
 void MyFrame::OnGraphicContextNone(wxCommandEvent& WXUNUSED(evt))
 {
-    m_panel->UseGraphicRenderer(NULL);
+    m_panel->UseGraphicRenderer(nullptr);
 }
 
 void MyFrame::OnGraphicContextDefault(wxCommandEvent& WXUNUSED(evt))

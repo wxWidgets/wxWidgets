@@ -118,7 +118,7 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return false;
 
     return m_nowpeer->IsMaximized();
@@ -132,7 +132,7 @@ void wxTopLevelWindowMac::Iconize(bool iconize)
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return false;
 
     return m_nowpeer->IsIconized();

@@ -68,7 +68,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
                       gtk_widget_get_window(widget),
                       GTK_STATE_NORMAL,
                       GTK_SHADOW_OUT,
-                      NULL, NULL, NULL, // FIXME: No clipping?
+                      nullptr, nullptr, nullptr, // FIXME: No clipping?
                       0, 0,
                       win->m_width, win->m_height);
 
@@ -188,10 +188,10 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gdk_device_grab(
         gdk_event->device, gdk_event->window, GDK_OWNERSHIP_NONE,
-        false, mask, NULL, gdk_event->time);
+        false, mask, nullptr, gdk_event->time);
     wxGCC_WARNING_RESTORE()
 #else
-    gdk_pointer_grab(gdk_event->window, false, mask, NULL, NULL, gdk_event->time);
+    gdk_pointer_grab(gdk_event->window, false, mask, nullptr, nullptr, gdk_event->time);
 #endif
 
     win->m_dragOffset.Set(int(gdk_event->x), int(gdk_event->y));
@@ -245,7 +245,7 @@ gtk_window_leave_callback(GtkWidget *widget,
     if (gdk_event->window != gtk_widget_get_window(widget))
         return false;
 
-    gdk_window_set_cursor(gtk_widget_get_window(widget), NULL);
+    gdk_window_set_cursor(gtk_widget_get_window(widget), nullptr);
 
     return FALSE;
 }
@@ -280,7 +280,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
             const int x = int(gdk_event->x);
             const int y = int(gdk_event->y);
 
-            GdkCursor* cursor = NULL;
+            GdkCursor* cursor = nullptr;
             GdkWindow* window = gtk_widget_get_window(widget);
             if ((x > win->m_width-14) && (y > win->m_height-14))
             {
@@ -457,7 +457,7 @@ void wxMiniFrame::SetTitle( const wxString &title )
 
     GdkWindow* window = gtk_widget_get_window(gtk_bin_get_child(GTK_BIN(m_widget)));
     if (window)
-        gdk_window_invalidate_rect(window, NULL, false);
+        gdk_window_invalidate_rect(window, nullptr, false);
 }
 
 #endif // wxUSE_MINIFRAME

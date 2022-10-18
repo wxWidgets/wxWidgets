@@ -93,7 +93,7 @@ struct wxCmdLineEntryDesc
 
 // the list of wxCmdLineEntryDesc objects should be terminated with this one
 #define wxCMD_LINE_DESC_END \
-        { wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, 0x0 }
+        { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0x0 }
 
 // ----------------------------------------------------------------------------
 // wxCmdLineArg contains the value for one command line argument
@@ -141,7 +141,7 @@ public:
         typedef std::bidirectional_iterator_tag iterator_category;
 #endif // wx_USE_STD_STRING
 
-        const_iterator() : m_parser(NULL), m_index(0) {}
+        const_iterator() : m_parser(nullptr), m_index(0) {}
         reference operator *() const;
         pointer operator ->() const;
         const_iterator &operator ++ ();

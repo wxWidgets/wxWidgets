@@ -195,12 +195,12 @@ public:
     // Gets native size for given 'client' or wxDefaultSize if it doesn't
     // have native equivalent. The first version returns the size in logical
     // pixels while the second one returns it in DIPs.
-    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
     static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
 
     // Get the size hint of an icon from a specific wxArtClient from the
     // topmost (i.e. first used) provider.
-    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = NULL);
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
     static wxSize GetDIPSizeHint(const wxArtClient& client);
 
 #if WXWIN_COMPATIBILITY_3_0
@@ -281,8 +281,7 @@ private:
 
 
 #if !defined(__WXUNIVERSAL__) && \
-    ((defined(__WXGTK__) && defined(__WXGTK20__)) || defined(__WXMSW__) || \
-     defined(__WXMAC__))
+    (defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__))
   // *some* (partial) native implementation of wxArtProvider exists; this is
   // not the same as wxArtProvider::HasNativeProvider()!
   #define wxHAS_NATIVE_ART_PROVIDER_IMPL

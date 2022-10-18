@@ -78,10 +78,10 @@ public:
     virtual wxColour GetColour(const wxString& param,
                                const wxColour& defaultv = wxNullColour) = 0;
     virtual wxSize GetSize(const wxString& param = wxT("size"),
-                           wxWindow *windowToUse = NULL) = 0;
+                           wxWindow *windowToUse = nullptr) = 0;
     virtual wxPoint GetPosition(const wxString& param = wxT("pos")) = 0;
     virtual wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
-                                 wxWindow *windowToUse = NULL) = 0;
+                                 wxWindow *windowToUse = nullptr) = 0;
     virtual wxSize GetPairInts(const wxString& param) = 0;
     virtual wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT) = 0;
     virtual wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
@@ -108,18 +108,18 @@ public:
 
 #if wxUSE_ANIMATIONCTRL
     virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
-                                      wxAnimationCtrlBase* ctrl = NULL) = 0;
+                                      wxAnimationCtrlBase* ctrl = nullptr) = 0;
 #endif
 
-    virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = NULL) = 0;
+    virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = nullptr) = 0;
     virtual bool GetBoolAttr(const wxString& attr, bool defaultv) = 0;
     virtual wxString GetFilePath(const wxXmlNode* node) = 0;
     virtual void SetupWindow(wxWindow *wnd) = 0;
     virtual void CreateChildren(wxObject *parent, bool this_hnd_only = false) = 0;
     virtual void CreateChildrenPrivately(wxObject *parent,
-                                         wxXmlNode *rootnode = NULL) = 0;
+                                         wxXmlNode *rootnode = nullptr) = 0;
     virtual wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent,
-                                        wxObject *instance = NULL) = 0;
+                                        wxObject *instance = nullptr) = 0;
 
 #if wxUSE_FILESYSTEM
     virtual wxFileSystem& GetCurFileSystem() = 0;
@@ -151,13 +151,13 @@ public:
     // it, SetImpl() needs to be called as done by wxXmlResource::AddHandler().
     wxXmlResourceHandler()
     {
-        m_node = NULL;
+        m_node = nullptr;
         m_parent =
-        m_instance = NULL;
-        m_parentAsWindow = NULL;
-        m_resource = NULL;
+        m_instance = nullptr;
+        m_parentAsWindow = nullptr;
+        m_resource = nullptr;
 
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
     // This should be called exactly once.
@@ -305,7 +305,7 @@ protected:
         return GetImpl()->GetColour(param, defaultv);
     }
     wxSize GetSize(const wxString& param = wxT("size"),
-                   wxWindow *windowToUse = NULL)
+                   wxWindow *windowToUse = nullptr)
     {
         return GetImpl()->GetSize(param, windowToUse);
     }
@@ -314,7 +314,7 @@ protected:
         return GetImpl()->GetPosition(param);
     }
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
-                         wxWindow *windowToUse = NULL)
+                         wxWindow *windowToUse = nullptr)
     {
         return GetImpl()->GetDimension(param, defaultv, windowToUse);
     }
@@ -374,14 +374,14 @@ protected:
 
 #if wxUSE_ANIMATIONCTRL
     wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
-                              wxAnimationCtrlBase* ctrl = NULL)
+                              wxAnimationCtrlBase* ctrl = nullptr)
     {
         return GetImpl()->GetAnimation(param, ctrl);
     }
 #endif
 
     wxFont GetFont(const wxString& param = wxT("font"),
-                   wxWindow* parent = NULL)
+                   wxWindow* parent = nullptr)
     {
         return GetImpl()->GetFont(param, parent);
     }
@@ -401,12 +401,12 @@ protected:
     {
         GetImpl()->CreateChildren(parent, this_hnd_only);
     }
-    void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL)
+    void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = nullptr)
     {
         GetImpl()->CreateChildrenPrivately(parent, rootnode);
     }
     wxObject *CreateResFromNode(wxXmlNode *node,
-                                wxObject *parent, wxObject *instance = NULL)
+                                wxObject *parent, wxObject *instance = nullptr)
     {
         return GetImpl()->CreateResFromNode(node, parent, instance);
     }
@@ -440,7 +440,7 @@ protected:
     friend class wxXmlResourceHandlerImpl;
 
 private:
-    // This is supposed to never return NULL because SetImpl() should have been
+    // This is supposed to never return nullptr because SetImpl() should have been
     // called.
     wxXmlResourceHandlerImplBase* GetImpl() const;
 

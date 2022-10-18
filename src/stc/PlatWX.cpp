@@ -109,7 +109,7 @@ public:
     explicit wxFontWithAscent(const wxFont &font)
         : wxFont(font),
           m_ascent(0),
-          m_surfaceFontData(NULL)
+          m_surfaceFontData(nullptr)
     {
     }
 
@@ -147,7 +147,7 @@ int GetAscent(Font& f)
 } // anonymous namespace
 
 Font::Font() {
-    fid = 0;
+    fid = nullptr;
 }
 
 Font::~Font() {
@@ -195,7 +195,7 @@ void Font::Create(const FontParameters &fp) {
 void Font::Release() {
     if (fid)
         delete wxFontWithAscent::FromFID(fid);
-    fid = 0;
+    fid = nullptr;
 }
 
 //----------------------------------------------------------------------
@@ -262,7 +262,7 @@ public:
 
 
 SurfaceImpl::SurfaceImpl() :
-    hdc(0), hdcOwned(0), bitmap(0),
+    hdc(nullptr), hdcOwned(0), bitmap(nullptr),
     x(0), y(0), unicodeMode(0)
 {}
 
@@ -279,7 +279,7 @@ void SurfaceImpl::Init(WindowID wid) {
     // On Mac and GTK the DC is not really valid until it has a bitmap
     // selected into it.  So instead of just creating the DC with no bitmap,
     // go ahead and give it one.
-    InitPixMap(1,1,NULL,wid);
+    InitPixMap(1,1,nullptr,wid);
 #endif
 }
 
@@ -307,18 +307,18 @@ void SurfaceImpl::Release() {
     if (bitmap) {
         ((wxMemoryDC*)hdc)->SelectObject(wxNullBitmap);
         delete bitmap;
-        bitmap = 0;
+        bitmap = nullptr;
     }
     if (hdcOwned) {
         delete hdc;
-        hdc = 0;
+        hdc = nullptr;
         hdcOwned = false;
     }
 }
 
 
 bool SurfaceImpl::Initialised() {
-    return hdc != 0;
+    return hdc != nullptr;
 }
 
 
@@ -753,7 +753,7 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
 
         hr = pDWriteFactory->CreateTextFormat(
             faceName.wc_str(),
-            NULL,
+            nullptr,
             static_cast<DWRITE_FONT_WEIGHT>(fp.weight),
             fontStyle,
             DWRITE_FONT_STRETCH_NORMAL,
@@ -821,7 +821,7 @@ SurfaceFontDataD2D::SurfaceFontDataD2D(const FontParameters& fp)
 
 bool SurfaceFontDataD2D::Initialised() const
 {
-    return (m_pTextFormat.get() != NULL);
+    return (m_pTextFormat.get() != nullptr);
 }
 
 //----------------------------------------------------------------------
@@ -863,7 +863,7 @@ SurfaceDataD2D::SurfaceDataD2D(ScintillaWX* editor)
 
 bool SurfaceDataD2D::Initialised() const
 {
-    return (m_pD2DFactory.get() != NULL && m_pDWriteFactory.get() != NULL);
+    return (m_pD2DFactory.get() != nullptr && m_pDWriteFactory.get() != nullptr);
 }
 
 void SurfaceDataD2D::DiscardGraphicsResources()
@@ -876,7 +876,7 @@ void SurfaceDataD2D::DiscardGraphicsResources()
 HRESULT SurfaceDataD2D::CreateGraphicsResources()
 {
     HRESULT hr = S_OK;
-    if ( m_pRenderTarget.get() == NULL )
+    if ( m_pRenderTarget.get() == nullptr )
     {
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties =
             D2D1::RenderTargetProperties(
@@ -1041,8 +1041,8 @@ SurfaceD2D::SurfaceD2D()
     m_yInternalLeading = 0;
     m_averageCharWidth = 1;
 
-    m_surfaceData = NULL;
-    m_curFontID = NULL;
+    m_surfaceData = nullptr;
+    m_curFontID = nullptr;
 }
 
 SurfaceD2D::~SurfaceD2D()
@@ -1112,7 +1112,7 @@ void SurfaceD2D::InitPixMap(int width, int height, Surface *surface_, WindowID)
 
     desiredFormat.alphaMode = D2D1_ALPHA_MODE_IGNORE;
     HRESULT hr = psurfOther->m_pRenderTarget->CreateCompatibleRenderTarget(
-        &desiredSize, NULL, &desiredFormat,
+        &desiredSize, nullptr, &desiredFormat,
         D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE, &pCompatibleRenderTarget);
     if ( SUCCEEDED(hr) )
     {
@@ -1147,12 +1147,12 @@ void SurfaceD2D::Release()
     m_pSolidBrush.reset();
     m_pPatternBrush.reset();
     m_pTextFormat.reset();
-    m_curFontID = NULL;
+    m_curFontID = nullptr;
 }
 
 bool SurfaceD2D::Initialised()
 {
-    return m_pRenderTarget.get() != NULL;
+    return m_pRenderTarget.get() != nullptr;
 }
 
 void SurfaceD2D::PenColour(ColourDesired fore)
@@ -1850,7 +1850,7 @@ void Window::Destroy() {
         Show(false);
         GETWIN(wid)->Destroy();
     }
-    wid = 0;
+    wid = nullptr;
 }
 
 bool Window::HasFocus() {
@@ -2052,7 +2052,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
     void wxSTCPopupBase::RestoreSTCCursor()
     {
-        if ( m_stc != NULL && m_cursorSetByPopup )
+        if ( m_stc != nullptr && m_cursorSetByPopup )
             m_stc->SetSTCCursor(m_prevCursor);
 
         m_cursorSetByPopup = false;
@@ -2071,7 +2071,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
     void wxSTCPopupBase::OnParentDestroy(wxWindowDestroyEvent& WXUNUSED(event))
     {
-        m_stc = NULL;
+        m_stc = nullptr;
     }
 
 #elif wxUSE_POPUPWIN
@@ -2378,7 +2378,7 @@ wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
                         m_hasListCtrlAppearance(true),
                         m_useDefaultCurrentBgColour(true),
                         m_useDefaultCurrentTextColour(true),
-                        m_listType(NULL), m_posStart(NULL), m_startLen(NULL)
+                        m_listType(nullptr), m_posStart(nullptr), m_startLen(nullptr)
 {
     ComputeColours();
 }
@@ -2474,7 +2474,7 @@ const wxBitmap* wxSTCListBoxVisualData::GetImage(int i) const
     if ( it != m_imgList.end() )
         return &(it->second);
     else
-        return NULL;
+        return nullptr;
 }
 
 int wxSTCListBoxVisualData::GetImageAreaWidth() const
@@ -2708,7 +2708,7 @@ protected:
 wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
              :wxSystemThemedControl<wxVListBox>(),
               m_visualData(v), m_maxStrWidth(0), m_currentRow(wxNOT_FOUND),
-              m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
+              m_doubleClickAction(nullptr), m_doubleClickActionData(nullptr),
               m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
               m_textTopGap(0)
 {
@@ -3125,7 +3125,7 @@ class wxSTCListBoxD2D : public wxSTCListBox
 public:
     wxSTCListBoxD2D(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
         : wxSTCListBox(parent, v, ht)
-        , m_surfaceFontData(NULL)
+        , m_surfaceFontData(nullptr)
     {
     }
 
@@ -3272,7 +3272,7 @@ void wxSTCListBoxWin::OnPaint(wxPaintEvent& WXUNUSED(evt))
 //----------------------------------------------------------------------
 
 ListBoxImpl::ListBoxImpl()
-            :m_listBox(NULL), m_visualData(new wxSTCListBoxVisualData(5))
+            :m_listBox(nullptr), m_visualData(new wxSTCListBoxVisualData(5))
 {
 }
 
@@ -3403,7 +3403,7 @@ ListBox *ListBox::Allocate() {
 
 //----------------------------------------------------------------------
 
-Menu::Menu() : mid(0) {
+Menu::Menu() : mid(nullptr) {
 }
 
 void Menu::CreatePopUp() {
@@ -3414,7 +3414,7 @@ void Menu::CreatePopUp() {
 void Menu::Destroy() {
     if (mid)
         delete (wxMenu*)mid;
-    mid = 0;
+    mid = nullptr;
 }
 
 void Menu::Show(Point pt, Window &w) {
@@ -3439,10 +3439,10 @@ public:
             if(status)
                 return fn_address;
             else
-                return NULL;
+                return nullptr;
         }
         else
-            return NULL;
+            return nullptr;
     }
 
     virtual bool IsValid() override {

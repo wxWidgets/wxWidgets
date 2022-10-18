@@ -202,10 +202,10 @@ public:
             wxLogError( wxGetTranslation("GetPropertyCollection called w/o valid collection getter") );
     }
 
-    virtual bool HasSetter() const { return m_setter != NULL; }
-    virtual bool HasCollectionGetter() const { return m_collectionGetter != NULL; }
-    virtual bool HasGetter() const { return m_getter != NULL; }
-    virtual bool HasAdder() const { return m_adder != NULL; }
+    virtual bool HasSetter() const { return m_setter != nullptr; }
+    virtual bool HasCollectionGetter() const { return m_collectionGetter != nullptr; }
+    virtual bool HasGetter() const { return m_getter != nullptr; }
+    virtual bool HasAdder() const { return m_adder != nullptr; }
 
     virtual const wxString& GetCollectionGetterName() const
         { return m_collectionGetter->GetName(); }
@@ -313,9 +313,9 @@ public:
                    const wxString& groupString = wxEmptyString) :
                    m_itsClass(itsClass),
            m_name(name),
-           m_typeInfo(NULL),
+           m_typeInfo(nullptr),
            m_typeName(typeName),
-           m_collectionElementTypeInfo(NULL),
+           m_collectionElementTypeInfo(nullptr),
            m_accessor(accessor),
            m_defaultValue(dv),
            m_flags(flags),
@@ -337,7 +337,7 @@ public:
            m_itsClass(itsClass),
            m_name(name),
            m_typeInfo(type),
-           m_collectionElementTypeInfo(NULL),
+           m_collectionElementTypeInfo(nullptr),
            m_accessor(accessor),
            m_defaultValue(dv),
            m_flags(flags),
@@ -357,9 +357,9 @@ public:
                     const wxString& groupString = wxEmptyString) :
         m_itsClass(itsClass),
         m_name(name),
-        m_typeInfo(NULL),
+        m_typeInfo(nullptr),
         m_typeName(collectionTypeName),
-        m_collectionElementTypeInfo(NULL),
+        m_collectionElementTypeInfo(nullptr),
         m_collectionElementTypeName(elementTypeName),
         m_accessor(accessor),
         m_flags(flags),
@@ -387,10 +387,10 @@ public:
     // returns the group string of this property
     const wxString&     GetGroupString() const { return m_groupString; }
 
-    // return the element type info of this property (for collections, otherwise NULL)
+    // return the element type info of this property (for collections, otherwise nullptr)
     const wxTypeInfo *  GetCollectionElementTypeInfo() const
     {
-        if ( m_collectionElementTypeInfo == NULL )
+        if ( m_collectionElementTypeInfo == nullptr )
             m_collectionElementTypeInfo = wxTypeInfo::FindType(m_collectionElementTypeName);
         return m_collectionElementTypeInfo;
     }
@@ -398,7 +398,7 @@ public:
     // return the type info of this property
     const wxTypeInfo *  GetTypeInfo() const
     {
-        if ( m_typeInfo == NULL )
+        if ( m_typeInfo == nullptr )
             m_typeInfo = wxTypeInfo::FindType(m_typeName);
         return m_typeInfo;
     }
@@ -406,7 +406,7 @@ public:
     // return the accessor for this property
     wxPropertyAccessor* GetAccessor() const { return m_accessor; }
 
-    // returns NULL if this is the last property of this class
+    // returns nullptr if this is the last property of this class
     wxPropertyInfo*     GetNext() const { return m_next; }
 
     // returns the default value of this property, its kind may be wxT_VOID if it is not valid
@@ -458,14 +458,14 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
     wxPropertyInfo *theClass::GetPropertiesStatic()             \
     {                                                           \
         typedef theClass class_t;                               \
-        static wxPropertyInfo* first = NULL;
+        static wxPropertyInfo* first = nullptr;
 
 #define wxEND_PROPERTIES_TABLE() \
     return first; }
 
 #define wxHIDE_PROPERTY( pname )                                                      \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
-            wxT(#pname), typeid(void).name(), NULL, wxAny(), wxPROP_DONT_STREAM, \
+            wxT(#pname), typeid(void).name(), nullptr, wxAny(), wxPROP_DONT_STREAM, \
             wxEmptyString, wxEmptyString );
 
 #define wxPROPERTY( pname, type, setter, getter, defaultValue, flags, help, group)    \
@@ -474,7 +474,7 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
     wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
     static wxPropertyGetter##pname _getter##pname;                                    \
     static wxPropertyAccessor _accessor##pname( &_setter##pname,                      \
-                                                &_getter##pname, NULL, NULL );        \
+                                                &_getter##pname, nullptr, nullptr );        \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
             wxT(#pname), typeid(type).name(), &_accessor##pname,                      \
             wxAny(defaultValue), flags, group, help );
@@ -486,7 +486,7 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
     wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
     static wxPropertyGetter##pname _getter##pname;                                    \
     static wxPropertyAccessor _accessor##pname( &_setter##pname,                      \
-                                                &_getter##pname, NULL, NULL );        \
+                                                &_getter##pname, nullptr, nullptr );        \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
             wxT(#pname), typeid(flags).name(), &_accessor##pname,                     \
             wxAny(defaultValue), wxPROP_ENUM_STORE_LONG | pflags, help, group );
@@ -494,7 +494,7 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
 #define wxREADONLY_PROPERTY( pname, type, getter,defaultValue, flags, help, group)    \
     wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
     static wxPropertyGetter##pname _getter##pname;                                    \
-    static wxPropertyAccessor _accessor##pname( NULL, &_getter##pname, NULL, NULL );  \
+    static wxPropertyAccessor _accessor##pname( nullptr, &_getter##pname, nullptr, nullptr );  \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
             wxT(#pname), typeid(type).name(),&_accessor##pname,                       \
             wxAny(defaultValue), flags, help, group );
@@ -503,7 +503,7 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
                                    pflags, help, group)                               \
     wxPROPERTY_GETTER( pname, class_t, type, getter )                                 \
     static wxPropertyGetter##pname _getter##pname;                                    \
-    static wxPropertyAccessor _accessor##pname( NULL, &_getter##pname, NULL, NULL );  \
+    static wxPropertyAccessor _accessor##pname( nullptr, &_getter##pname, nullptr, nullptr );  \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
             wxT(#pname), typeid(flags).name(),&_accessor##pname,                      \
             wxAny(defaultValue), wxPROP_ENUM_STORE_LONG | pflags, help, group );
@@ -514,7 +514,7 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
     static wxPropertyCollectionAdder##pname _adder##pname;                            \
     wxPROPERTY_COLLECTION_GETTER( pname, class_t, colltype, getter )                  \
     static wxPropertyCollectionGetter##pname _collectionGetter##pname;                \
-    static wxPropertyAccessor _accessor##pname( NULL, NULL,&_adder##pname,            \
+    static wxPropertyAccessor _accessor##pname( nullptr, nullptr,&_adder##pname,            \
                                                 &_collectionGetter##pname );          \
     static wxPropertyInfo _propertyInfo##pname( first, class_t::GetClassInfoStatic(), \
             wxT(#pname), typeid(colltype).name(),typeid(addelemtype).name(),          \
@@ -524,7 +524,7 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
                                         flags, help, group)                           \
     wxPROPERTY_COLLECTION_GETTER( pname, class_t, colltype, getter )                  \
     static wxPropertyCollectionGetter##pname _collectionGetter##pname;                \
-    static wxPropertyAccessor _accessor##pname( NULL, NULL, NULL,                     \
+    static wxPropertyAccessor _accessor##pname( nullptr, nullptr, nullptr,                     \
                                                 &_collectionGetter##pname );          \
     static wxPropertyInfo _propertyInfo##pname( first,class_t::GetClassInfoStatic(),  \
         wxT(#pname), typeid(colltype).name(),typeid(addelemtype).name(),              \
@@ -533,13 +533,13 @@ class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBas
 #define wxEVENT_PROPERTY( name, eventType, eventClass )                               \
     static wxEventSourceTypeInfo _typeInfo##name( eventType, wxCLASSINFO( eventClass ) );  \
     static wxPropertyInfo _propertyInfo##name( first,class_t::GetClassInfoStatic(),   \
-        wxT(#name), &_typeInfo##name, NULL, wxAny() );
+        wxT(#name), &_typeInfo##name, nullptr, wxAny() );
 
 #define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass )          \
     static wxEventSourceTypeInfo _typeInfo##name( eventType, lastEventType,              \
                                                wxCLASSINFO( eventClass ) );             \
     static wxPropertyInfo _propertyInfo##name( first, class_t::GetClassInfoStatic(),  \
-        wxT(#name), &_typeInfo##name, NULL, wxAny() );
+        wxT(#name), &_typeInfo##name, nullptr, wxAny() );
 
 // ----------------------------------------------------------------------------
 // Implementation Helper for Simple Properties

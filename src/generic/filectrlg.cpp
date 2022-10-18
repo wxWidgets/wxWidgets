@@ -893,7 +893,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     this->m_style = style;
     m_inSelected = false;
     m_noSelChgEvent = false;
-    m_check = NULL;
+    m_check = nullptr;
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_OPEN ) ),

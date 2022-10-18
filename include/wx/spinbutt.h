@@ -79,12 +79,8 @@ protected:
     #include "wx/univ/spinbutt.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/spinbutt.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/spinbutt.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/spinbutt.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/spinbutt.h"
+    #include "wx/gtk/spinbutt.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/spinbutt.h"
 #elif defined(__WXQT__)

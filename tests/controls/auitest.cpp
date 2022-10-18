@@ -159,7 +159,7 @@ TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
     REQUIRE( nb->AddPage(p1, "Page 1") );
     REQUIRE( nb->AddPage(p2, "Page 2") );
 
-    CHECK( nb->FindPage(NULL) == wxNOT_FOUND );
+    CHECK( nb->FindPage(nullptr) == wxNOT_FOUND );
     CHECK( nb->FindPage(p1) == 0 );
     CHECK( nb->FindPage(p2) == 1 );
     CHECK( nb->FindPage(p3) == wxNOT_FOUND );

@@ -87,7 +87,7 @@ public:
 
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) override;
+                          const wxRect *rect = (const wxRect *) nullptr ) override;
 
     // implementation from now on
     // --------------------------
@@ -143,7 +143,7 @@ public:
 
     virtual void SetMinSize(const wxSize& minSize) override;
 
-    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = NULL) override;
+    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = nullptr) override;
 
 private:
     // Flags to call WXSetInitialFittingClientSize() with if != 0.

@@ -1100,7 +1100,7 @@ public:
     virtual int MoveByPixelDistance(int line, int distance) const override
     {
         int pos = m_oper.GetLineStartPos(m_grid, line);
-        return m_oper.PosToLine(m_grid, pos - distance + 1, NULL, true);
+        return m_oper.PosToLine(m_grid, pos - distance + 1, nullptr, true);
     }
 };
 
@@ -1150,7 +1150,7 @@ public:
     virtual int MoveByPixelDistance(int line, int distance) const override
     {
         int pos = m_oper.GetLineStartPos(m_grid, line);
-        return m_oper.PosToLine(m_grid, pos + distance, NULL, true);
+        return m_oper.PosToLine(m_grid, pos + distance, nullptr, true);
     }
 
 private:

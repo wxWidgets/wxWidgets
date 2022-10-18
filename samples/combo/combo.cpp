@@ -578,7 +578,7 @@ private:
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     wxBoxSizer* topSizer;
     wxBoxSizer* topRowSizer;
@@ -1154,7 +1154,7 @@ void MyFrame::OnIdle(wxIdleEvent& event)
     // This code is useful for debugging focus problems
     // (which are plentiful when dealing with popup windows).
 #if 0
-    static wxWindow* lastFocus = (wxWindow*) NULL;
+    static wxWindow* lastFocus = nullptr;
 
     wxWindow* curFocus = ::wxWindow::FindFocus();
 

@@ -96,13 +96,13 @@ public:
     wxUIntPtr m_data;
 
     // the item coordinates are not used in report mode; instead this pointer is
-    // NULL and the owner window is used to retrieve the item position and size
+    // null and the owner window is used to retrieve the item position and size
     wxRect *m_rect;
 
     // the list ctrl we are in
     wxListMainWindow *m_owner;
 
-    // custom attributes or NULL
+    // custom attributes or nullptr
     wxItemAttr *m_attr;
 
 protected:
@@ -221,7 +221,7 @@ public:
         if ( inReportView )
         {
             delete m_gi;
-            m_gi = NULL;
+            m_gi = nullptr;
         }
         else
         {
@@ -602,13 +602,13 @@ public:
 
     wxTextCtrl *GetEditControl() const
     {
-        return m_textctrlWrapper ? m_textctrlWrapper->GetText() : NULL;
+        return m_textctrlWrapper ? m_textctrlWrapper->GetText() : nullptr;
     }
 
     void ResetTextControl(wxTextCtrl *text)
     {
         delete text;
-        m_textctrlWrapper = NULL;
+        m_textctrlWrapper = nullptr;
     }
 
     void OnRenameTimer();
@@ -946,7 +946,7 @@ private:
             *m_highlightUnfocusedBrush;
 
     // wrapper around the text control currently used for in place editing or
-    // NULL if no item is being edited
+    // nullptr if no item is being edited
     wxListTextCtrlWrapper *m_textctrlWrapper;
 
     // tells whether or not to paint empty rows with alternate colour and draw

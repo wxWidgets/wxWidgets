@@ -58,7 +58,7 @@ public:
     static FieldType* FromObject(ObjectType* obj)
     {
         const typename MapType::const_iterator it = ms_map.find(obj);
-        return it == ms_map.end() ? NULL : it->second;
+        return it == ms_map.end() ? nullptr : it->second;
     }
 
     // Erase the object used for the corresponding window, return true if there

@@ -334,12 +334,12 @@ protected:
     // start of line) is
     wxTextCoord GetRowInLine(wxTextCoord line,
                              wxTextCoord col,
-                             wxTextCoord *colRowStart = NULL) const;
+                             wxTextCoord *colRowStart = nullptr) const;
 
     // find the number of characters of a line before it wraps
     // (and optionally also the real width of the line)
     size_t GetPartOfWrappedLine(const wxChar* text,
-                                wxCoord *widthReal = NULL) const;
+                                wxCoord *widthReal = nullptr) const;
 
     // get the start and end of the selection for this line: if the line is
     // outside the selection, both will be -1 and false will be returned

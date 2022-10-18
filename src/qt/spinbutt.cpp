@@ -61,7 +61,7 @@ void wxQtSpinButton::stepBy(int steps)
 
 
 wxSpinButton::wxSpinButton() :
-    m_qtSpinBox(NULL)
+    m_qtSpinBox(nullptr)
 {
 }
 

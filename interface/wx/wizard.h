@@ -212,17 +212,17 @@ public:
         They may be modified later by SetPrev() or SetNext().
     */
     wxWizardPageSimple(wxWizard* parent,
-                       wxWizardPage* prev = NULL,
-                       wxWizardPage* next = NULL,
+                       wxWizardPage* prev = nullptr,
+                       wxWizardPage* next = nullptr,
                        const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
        Creates the wizard page.
        Must be called if the default constructor had been used to create the object.
     */
-    bool Create(wxWizard *parent = NULL,
-                wxWizardPage *prev = NULL,
-                wxWizardPage *next = NULL,
+    bool Create(wxWizard *parent = nullptr,
+                wxWizardPage *prev = nullptr,
+                wxWizardPage *next = nullptr,
                 const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
@@ -242,7 +242,7 @@ public:
         in fully static wizards, i.e. in those where the order doesn't depend
         on the choices made by the user in the wizard pages during run-time.
 
-        @param next A non-@NULL pointer to the next page.
+        @param next A non-null pointer to the next page.
         @return Reference to @a next on which Chain() can be called again.
 
         @since 2.9.5

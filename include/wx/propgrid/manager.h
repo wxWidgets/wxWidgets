@@ -194,14 +194,14 @@ public:
     // bmp - Bitmap bundle image for toolbar. If it's null then a built-in
     //   default bitmap bundle is used.
     // pageObj - wxPropertyGridPage instance. Manager will take ownership of this object.
-    // NULL indicates that a default page instance should be created.
+    // nullptr indicates that a default page instance should be created.
     // Returns pointer to created page.
     // If toolbar is used, it is highly recommended that the pages are
     // added when the toolbar is not turned off using window style flag
     // switching.
     wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
                                  const wxBitmapBundle& bmp = wxBitmapBundle(),
-                                 wxPropertyGridPage* pageObj = NULL )
+                                 wxPropertyGridPage* pageObj = nullptr )
     {
         return InsertPage(-1, label, bmp, pageObj);
     }
@@ -271,7 +271,7 @@ public:
     // failure. Please only iterate through individual pages or use
     // CreateVIterator().
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL )
+                                        wxPGProperty* firstProp = nullptr )
     {
         wxFAIL_MSG( wxS("Please only iterate through individual pages ")
                     wxS("or use CreateVIterator()") );
@@ -280,7 +280,7 @@ public:
 
     wxPropertyGridConstIterator
     GetIterator(int flags = wxPG_ITERATE_DEFAULT,
-                wxPGProperty* firstProp = NULL) const
+                wxPGProperty* firstProp = nullptr) const
     {
         wxFAIL_MSG( wxS("Please only iterate through individual pages ")
                     wxS("or use CreateVIterator()") );
@@ -380,12 +380,12 @@ public:
     // bmp - Bitmap bundle for toolbar. If it's null, then a built-in
     //   default bitmap bundle is used.
     // pageObj - wxPropertyGridPage instance. Manager will take ownership of this object.
-    //   If NULL, default page object is constructed.
+    //   If nullptr, default page object is constructed.
     // Returns pointer to created page.
     virtual wxPropertyGridPage* InsertPage( int index,
                                             const wxString& label,
                                             const wxBitmapBundle& bmp = wxBitmapBundle(),
-                                            wxPropertyGridPage* pageObj = NULL );
+                                            wxPropertyGridPage* pageObj = nullptr );
 
     // Returns true if any property on any page has been modified by the user.
     bool IsAnyModified() const;

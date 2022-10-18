@@ -121,7 +121,7 @@ protected :
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
-        impl->DoNotifyFocusEvent( false, NULL );
+        impl->DoNotifyFocusEvent( false, nullptr );
     }
 }
 
@@ -134,7 +134,7 @@ protected :
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     lastKeyDownEvent = event;
-    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+    if ( impl == nullptr || !impl->DoHandleKeyEvent(event) )
         [super keyDown:event];
     lastKeyDownEvent = nil;
 }
@@ -142,14 +142,14 @@ protected :
 - (void) keyUp:(NSEvent*) event
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+    if ( impl == nullptr || !impl->DoHandleKeyEvent(event) )
         [super keyUp:event];
 }
 
 - (void) flagsChanged:(NSEvent*) event
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+    if ( impl == nullptr || !impl->DoHandleKeyEvent(event) )
         [super flagsChanged:event];
 }
 
@@ -162,7 +162,7 @@ protected :
 - (void) insertText:(id) str
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || lastKeyDownEvent==nil || !impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+    if ( impl == nullptr || lastKeyDownEvent==nil || !impl->DoHandleCharEvent(lastKeyDownEvent, str) )
     {
         [super insertText:str];
     }
@@ -244,7 +244,7 @@ protected :
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
-        impl->DoNotifyFocusEvent( false, NULL );
+        impl->DoNotifyFocusEvent( false, nullptr );
     }
 }
 @end
@@ -275,14 +275,14 @@ protected :
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( textView );
     if ( impl )
-        impl->DoNotifyFocusEvent(true, NULL);
+        impl->DoNotifyFocusEvent(true, nullptr);
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( textView );
     if ( impl )
-        impl->DoNotifyFocusEvent(false, NULL);
+        impl->DoNotifyFocusEvent(false, nullptr);
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -436,9 +436,9 @@ bool wxUITextViewControl::GetStyle(long position, wxTextAttr& style)
 {
     if (m_textView && position >=0)
     {   
-        // UIFont* font = NULL;
-        // NSColor* bgcolor = NULL;
-        // NSColor* fgcolor = NULL;
+        // UIFont* font = nullptr;
+        // NSColor* bgcolor = nullptr;
+        // NSColor* fgcolor = nullptr;
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that UITextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
@@ -446,9 +446,9 @@ bool wxUITextViewControl::GetStyle(long position, wxTextAttr& style)
         if (position < [[m_textView string] length]) 
         {
             UITextStorage* storage = [m_textView textStorage];
-            font = [[storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL] autorelease];
-            bgcolor = [[storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL] autorelease];
-            fgcolor = [[storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL] autorelease];
+            font = [[storage attribute:NSFontAttributeName atIndex:position effectiveRange:nullptr] autorelease];
+            bgcolor = [[storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:nullptr] autorelease];
+            fgcolor = [[storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:nullptr] autorelease];
         }
         else
         {
@@ -690,8 +690,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxWidgetIPhoneImpl* c = NULL;
-    wxTextWidgetImpl* t = NULL;
+    wxWidgetIPhoneImpl* c = nullptr;
+    wxTextWidgetImpl* t = nullptr;
     id<UITextInputTraits> tv = nil;
 
 #if wxOSX_IPHONE_USE_TEXTFIELD

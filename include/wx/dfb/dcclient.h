@@ -26,7 +26,7 @@ public:
     virtual ~wxWindowDCImpl();
 
 protected:
-    // initializes the DC for painting on given window; if rect!=NULL, then
+    // initializes the DC for painting on given window; if rect!=nullptr, then
     // for painting only on the given region of the window
     void InitForWin(wxWindow *win, const wxRect *rect);
 

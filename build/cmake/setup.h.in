@@ -32,9 +32,6 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #cmakedefine WORDS_BIGENDIAN 1
 
-/* Define this if your version of GTK+ is greater than 1.2.7 */
-#cmakedefine __WXGTK127__ 1
-
 /* Define this if your version of GTK+ is greater than 2.0 */
 #cmakedefine __WXGTK20__ 1
 
@@ -52,15 +49,6 @@
 
 /* Define this if your version of GTK+ is >= 3.90.0 */
 #cmakedefine __WXGTK4__ 1
-
-/* Define this if you want to use GPE features */
-#cmakedefine __WXGPE__ 1
-
-/* Define this if your version of Motif is greater than 2.0 */
-#cmakedefine __WXMOTIF20__ 1
-
-/* Define this if you are using Lesstif */
-#cmakedefine __WXLESSTIF__ 1
 
 /*
  * Define to 1 for Unix[-like] system

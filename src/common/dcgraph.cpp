@@ -119,7 +119,7 @@ wxGCDC::~wxGCDC()
 WXHDC wxGCDC::AcquireHDC()
 {
     wxGraphicsContext* const gc = GetGraphicsContext();
-    wxCHECK_MSG(gc, NULL, "can't acquire HDC because there is no wxGraphicsContext");
+    wxCHECK_MSG(gc, nullptr, "can't acquire HDC because there is no wxGraphicsContext");
     return gc->GetNativeHDC();
 }
 
@@ -208,7 +208,7 @@ wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
    : wxDCImpl(owner)
 {
     // derived class will set a context
-    Init(NULL);
+    Init(nullptr);
 }
 
 void wxGCDCImpl::CommonInit()
@@ -231,7 +231,7 @@ void wxGCDCImpl::Init(wxGraphicsContext* ctx)
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_graphicContext = NULL;
+    m_graphicContext = nullptr;
     if (ctx)
         SetGraphicsContext(ctx);
 }
@@ -239,7 +239,7 @@ void wxGCDCImpl::Init(wxGraphicsContext* ctx)
 bool wxGCDCImpl::DoInitContext(wxGraphicsContext* ctx)
 {
     m_graphicContext = ctx;
-    m_ok = m_graphicContext != NULL;
+    m_ok = m_graphicContext != nullptr;
 
     if ( m_ok )
     {
@@ -280,7 +280,7 @@ void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y,
         // it the copy is cheap as bitmaps are reference-counted
         wxBitmap bmpCopy(bmp);
         if ( !useMask && bmp.GetMask() )
-            bmpCopy.SetMask(NULL);
+            bmpCopy.SetMask(nullptr);
 
         m_graphicContext->DrawBitmap( bmpCopy, x, y, w, h );
     }
@@ -530,7 +530,7 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
 
 void* wxGCDCImpl::GetHandle() const
 {
-    void* cgctx = NULL;
+    void* cgctx = nullptr;
     wxGraphicsContext* gc = GetGraphicsContext();
     if (gc) {
         cgctx = gc->GetNativeContext();
@@ -859,7 +859,7 @@ void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
 void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawSpline - invalid DC") );
-    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points, "null pointer to spline points?");
     wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     if ( !m_logicalFunctionSupported )
@@ -1101,7 +1101,7 @@ bool wxGCDCImpl::DoStretchBlit(
         if ( blit.IsOk() )
         {
             if ( !useMask && blit.GetMask() )
-                blit.SetMask(NULL);
+                blit.SetMask(nullptr);
 
             double x = xdest;
             double y = ydest;
@@ -1251,15 +1251,15 @@ void wxGCDCImpl::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *
              d wxDUMMY_INITIALIZE(0),
              e wxDUMMY_INITIALIZE(0);
 
-    // Don't pass non-NULL pointers for the parts we don't need, this could
+    // Don't pass non-null pointers for the parts we don't need, this could
     // result in doing extra unnecessary work inside GetTextExtent().
     m_graphicContext->GetTextExtent
                       (
                         str,
-                        width ? &w : NULL,
-                        height ? &h : NULL,
-                        descent ? &d : NULL,
-                        externalLeading ? &e : NULL
+                        width ? &w : nullptr,
+                        height ? &h : nullptr,
+                        descent ? &d : nullptr,
+                        externalLeading ? &e : nullptr
                       );
 
     if ( height )
@@ -1297,7 +1297,7 @@ bool wxGCDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& width
 wxCoord wxGCDCImpl::GetCharWidth() const
 {
     wxCoord width = 0;
-    DoGetTextExtent( wxT("g") , &width , NULL , NULL , NULL , NULL );
+    DoGetTextExtent( wxT("g") , &width , nullptr , nullptr , nullptr , nullptr );
 
     return width;
 }
@@ -1305,7 +1305,7 @@ wxCoord wxGCDCImpl::GetCharWidth() const
 wxCoord wxGCDCImpl::GetCharHeight() const
 {
     wxCoord height = 0;
-    DoGetTextExtent( wxT("g") , NULL , &height , NULL , NULL , NULL );
+    DoGetTextExtent( wxT("g") , nullptr , &height , nullptr , nullptr , nullptr );
 
     return height;
 }

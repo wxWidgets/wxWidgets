@@ -99,7 +99,7 @@ public:
         { return m_verbs.Index(verb) != wxNOT_FOUND; }
 
     // returns empty string and wxNOT_FOUND in idx if no such verb
-    wxString GetCommandForVerb(const wxString& verb, size_t *idx = NULL) const;
+    wxString GetCommandForVerb(const wxString& verb, size_t *idx = nullptr) const;
 
     // get a "verb=command" string
     wxString GetVerbCmd(size_t n) const;
@@ -128,7 +128,7 @@ private:
                     const wxString *openCmd,
                     const wxString *printCmd,
                     const wxString *desc,
-                    // the other parameters form a NULL terminated list of
+                    // the other parameters form a nullptr terminated list of
                     // extensions
                     ...);
 
@@ -170,8 +170,7 @@ public:
     //               const wxString& printCmd,
     //               const wxString& desc,
     //               // the other parameters form a list of extensions for this
-    //               // file type and should be terminated with wxNullPtr (not
-    //               // just NULL!)
+    //               // file type and should be terminated with nullptr
     //               ...);
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                4, (const CtorString&,
@@ -368,7 +367,7 @@ private:
     wxFileType(const wxFileType&);
     wxFileType& operator=(const wxFileType&);
 
-    // the static container of wxFileType data: if it's not NULL, it means that
+    // the static container of wxFileType data: if it's not null, it means that
     // this object is used as fallback only
     const wxFileTypeInfo *m_info;
 
@@ -435,7 +434,7 @@ public:
 
     // Database lookup: all functions return a pointer to wxFileType object
     // whose methods may be used to query it for the information you're
-    // interested in. If the return value is !NULL, caller is responsible for
+    // interested in. If the return value is not null, caller is responsible for
     // deleting it.
         // get file type from file extension
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
@@ -450,7 +449,7 @@ public:
     // these functions can be used to provide default values for some of the
     // MIME types inside the program itself
     //
-    // The filetypes array should be terminated by either NULL entry or an
+    // The filetypes array should be terminated by either null entry or an
     // invalid wxFileTypeInfo (i.e. the one created with default ctor)
     void AddFallbacks(const wxFileTypeInfo *filetypes);
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
@@ -480,7 +479,7 @@ private:
     // the object working with the system MIME database
     wxMimeTypesManagerImpl *m_impl;
 
-    // if m_impl is NULL, create one
+    // if m_impl is null, create one
     void EnsureImpl();
 
     friend class wxMimeTypeCmnModule;

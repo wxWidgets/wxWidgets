@@ -58,39 +58,39 @@ void* MyGetGLFuncAddress(const char* fname)
 }
 
 // Declare and initialize pointers
-PFNGLACTIVETEXTUREPROC my_glActiveTexture = NULL;
-PFNGLATTACHSHADERPROC my_glAttachShader = NULL;
-PFNGLBINDATTRIBLOCATIONPROC my_glBindAttribLocation = NULL;
-PFNGLBINDBUFFERPROC my_glBindBuffer = NULL;
-PFNGLBINDVERTEXARRAYPROC my_glBindVertexArray = NULL;
-PFNGLBUFFERDATAPROC my_glBufferData = NULL;
-PFNGLBUFFERSUBDATAPROC my_glBufferSubData = NULL;
-PFNGLCOMPILESHADERPROC my_glCompileShader = NULL;
-PFNGLCREATEPROGRAMPROC my_glCreateProgram = NULL;
-PFNGLCREATESHADERPROC my_glCreateShader = NULL;
-PFNGLDELETEBUFFERSPROC my_glDeleteBuffers = NULL;
-PFNGLDELETEPROGRAMPROC my_glDeleteProgram = NULL;
-PFNGLDELETESHADERPROC my_glDeleteShader = NULL;
-PFNGLDELETEVERTEXARRAYSPROC my_glDeleteVertexArrays = NULL;
-PFNGLDETACHSHADERPROC my_glDetachShader = NULL;
-PFNGLDISABLEVERTEXATTRIBARRAYPROC my_glDisableVertexAttribArray = NULL;
-PFNGLENABLEVERTEXATTRIBARRAYPROC my_glEnableVertexAttribArray = NULL;
-PFNGLGENBUFFERSPROC my_glGenBuffers = NULL;
-PFNGLGENVERTEXARRAYSPROC my_glGenVertexArrays = NULL;
-PFNGLGETPROGRAMINFOLOGPROC my_glGetProgramInfoLog = NULL;
-PFNGLGETPROGRAMIVPROC my_glGetProgramiv = NULL;
-PFNGLGETSHADERINFOLOGPROC my_glGetShaderInfoLog = NULL;
-PFNGLGETSHADERIVPROC my_glGetShaderiv = NULL;
-PFNGLGETUNIFORMLOCATIONPROC my_glGetUniformLocation = NULL;
-PFNGLLINKPROGRAMPROC my_glLinkProgram = NULL;
-PFNGLPROVOKINGVERTEXPROC my_glProvokingVertex = NULL;
-PFNGLSHADERSOURCEPROC my_glShaderSource = NULL;
-PFNGLUNIFORM1IPROC my_glUniform1i = NULL;
-PFNGLUNIFORM3FVPROC my_glUniform3fv = NULL;
-PFNGLUNIFORM4FVPROC my_glUniform4fv = NULL;
-PFNGLUNIFORMMATRIX4FVPROC my_glUniformMatrix4fv = NULL;
-PFNGLUSEPROGRAMPROC my_glUseProgram = NULL;
-PFNGLVERTEXATTRIBPOINTERPROC my_glVertexAttribPointer = NULL;
+PFNGLACTIVETEXTUREPROC my_glActiveTexture = nullptr;
+PFNGLATTACHSHADERPROC my_glAttachShader = nullptr;
+PFNGLBINDATTRIBLOCATIONPROC my_glBindAttribLocation = nullptr;
+PFNGLBINDBUFFERPROC my_glBindBuffer = nullptr;
+PFNGLBINDVERTEXARRAYPROC my_glBindVertexArray = nullptr;
+PFNGLBUFFERDATAPROC my_glBufferData = nullptr;
+PFNGLBUFFERSUBDATAPROC my_glBufferSubData = nullptr;
+PFNGLCOMPILESHADERPROC my_glCompileShader = nullptr;
+PFNGLCREATEPROGRAMPROC my_glCreateProgram = nullptr;
+PFNGLCREATESHADERPROC my_glCreateShader = nullptr;
+PFNGLDELETEBUFFERSPROC my_glDeleteBuffers = nullptr;
+PFNGLDELETEPROGRAMPROC my_glDeleteProgram = nullptr;
+PFNGLDELETESHADERPROC my_glDeleteShader = nullptr;
+PFNGLDELETEVERTEXARRAYSPROC my_glDeleteVertexArrays = nullptr;
+PFNGLDETACHSHADERPROC my_glDetachShader = nullptr;
+PFNGLDISABLEVERTEXATTRIBARRAYPROC my_glDisableVertexAttribArray = nullptr;
+PFNGLENABLEVERTEXATTRIBARRAYPROC my_glEnableVertexAttribArray = nullptr;
+PFNGLGENBUFFERSPROC my_glGenBuffers = nullptr;
+PFNGLGENVERTEXARRAYSPROC my_glGenVertexArrays = nullptr;
+PFNGLGETPROGRAMINFOLOGPROC my_glGetProgramInfoLog = nullptr;
+PFNGLGETPROGRAMIVPROC my_glGetProgramiv = nullptr;
+PFNGLGETSHADERINFOLOGPROC my_glGetShaderInfoLog = nullptr;
+PFNGLGETSHADERIVPROC my_glGetShaderiv = nullptr;
+PFNGLGETUNIFORMLOCATIONPROC my_glGetUniformLocation = nullptr;
+PFNGLLINKPROGRAMPROC my_glLinkProgram = nullptr;
+PFNGLPROVOKINGVERTEXPROC my_glProvokingVertex = nullptr;
+PFNGLSHADERSOURCEPROC my_glShaderSource = nullptr;
+PFNGLUNIFORM1IPROC my_glUniform1i = nullptr;
+PFNGLUNIFORM3FVPROC my_glUniform3fv = nullptr;
+PFNGLUNIFORM4FVPROC my_glUniform4fv = nullptr;
+PFNGLUNIFORMMATRIX4FVPROC my_glUniformMatrix4fv = nullptr;
+PFNGLUSEPROGRAMPROC my_glUseProgram = nullptr;
+PFNGLVERTEXATTRIBPOINTERPROC my_glVertexAttribPointer = nullptr;
 
 #endif // __APPLE__
 

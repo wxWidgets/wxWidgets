@@ -204,7 +204,7 @@ public:
             // But the face name must be converted from Unicode.
             WideCharToMultiByte(CP_ACP, 0, m_lfW.lfFaceName, -1,
                                 m_lfA.lfFaceName, sizeof(m_lfA.lfFaceName),
-                                NULL, NULL);
+                                nullptr, nullptr);
         }
 
         return m_lfA;

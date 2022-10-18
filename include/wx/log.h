@@ -156,7 +156,7 @@ public:
         threadId = wxThread::GetCurrentId();
 #endif // wxUSE_THREADS
 
-        m_data = NULL;
+        m_data = nullptr;
     }
 
     // we need to define copy ctor and assignment operator because of m_data
@@ -184,15 +184,15 @@ public:
 
 
     // the file name and line number of the file where the log record was
-    // generated, if available or NULL and 0 otherwise
+    // generated, if available or nullptr and 0 otherwise
     const char *filename;
     int line;
 
-    // the name of the function where the log record was generated (may be NULL
+    // the name of the function where the log record was generated (may be null
     // if the compiler doesn't support __FUNCTION__)
     const char *func;
 
-    // the name of the component which generated this message, may be NULL if
+    // the name of the component which generated this message, may be null if
     // not set (i.e. wxLOG_COMPONENT not defined). It must be in ASCII.
     const char *component;
 
@@ -277,7 +277,7 @@ private:
         wxStringToStringHashMap strValues;
     };
 
-    // NULL if not used
+    // nullptr if not used
     ExtraData *m_data;
 };
 
@@ -432,7 +432,7 @@ public:
     // wxAppTraits::CreateLogTarget() to create one if none exists
     static wxLog *GetActiveTarget();
 
-    // change log target, logger may be NULL
+    // change log target, logger may be null
     static wxLog *SetActiveTarget(wxLog *logger);
 
 #if wxUSE_THREADS
@@ -450,7 +450,7 @@ public:
     static void Resume() { ms_suspendCount--; }
 
     // should GetActiveTarget() try to create a new log object if the
-    // current is NULL?
+    // current is null?
     static void DontCreateOnDemand();
 
     // Make GetActiveTarget() create a new log object again.
@@ -554,7 +554,7 @@ public:
     // a helper calling the above overload with current time
     static void OnLog(wxLogLevel level, const wxString& msg)
     {
-        OnLog(level, msg, time(NULL));
+        OnLog(level, msg, time(nullptr));
     }
 
 
@@ -679,7 +679,7 @@ class WXDLLIMPEXP_BASE wxLogStderr : public wxLog,
 {
 public:
     // redirect log output to a FILE
-    wxLogStderr(FILE *fp = NULL,
+    wxLogStderr(FILE *fp = nullptr,
                 const wxMBConv &conv = wxConvWhateverWorks);
 
 protected:
@@ -697,7 +697,7 @@ class WXDLLIMPEXP_BASE wxLogStream : public wxLog,
 {
 public:
     // redirect log output to an ostream
-    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) NULL,
+    wxLogStream(wxSTD ostream *ostr = (wxSTD ostream *) nullptr,
                 const wxMBConv& conv = wxConvWhateverWorks);
 
 protected:
@@ -767,14 +767,14 @@ public:
     // are we passing the messages to the previous log target?
     bool IsPassingMessages() const { return m_bPassMessages; }
 
-    // return the previous log target (may be NULL)
+    // return the previous log target (may be null)
     wxLog *GetOldLog() const { return m_logOld; }
 
     // override base class version to flush the old logger as well
     virtual void Flush() override;
 
     // call to avoid destroying the old log target
-    void DetachOldLog() { m_logOld = NULL; }
+    void DetachOldLog() { m_logOld = nullptr; }
 
 protected:
     // pass the record to the old logger if needed
@@ -1307,7 +1307,7 @@ public:
 
 // Dummy macros to replace some functions.
 #define wxSysErrorCode() (unsigned long)0
-#define wxSysErrorMsg( X ) (const wxChar*)NULL
+#define wxSysErrorMsg( X ) (const wxChar*)nullptr
 #define wxSysErrorMsgStr( X ) wxEmptyString
 
 // Fake symbolic trace masks... for those that are used frequently

@@ -608,7 +608,7 @@ protected:
         { return ((wxTextCtrlCommand &)cmd).Undo(m_text); }
 
     // check if this command is a wxTextCtrlInsertCommand and return it casted
-    // to the right type if it is or NULL otherwise
+    // to the right type if it is or nullptr otherwise
     wxTextCtrlInsertCommand *IsInsertCommand(wxCommand *cmd);
 
 private:
@@ -659,7 +659,7 @@ void wxTextCtrl::Init()
     m_cmdProcessor = new wxTextCtrlCommandProcessor(this);
 
     // no data yet
-    m_data.data = NULL;
+    m_data.data = nullptr;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -1364,7 +1364,7 @@ wxTextPos wxTextCtrl::GetInsertionPoint() const
     // else should be current cursor position
     long from;
     if ( HasSelection() )
-        GetSelection(&from, NULL);
+        GetSelection(&from, nullptr);
     else 
         from = m_curPos;
     return from;
@@ -2231,7 +2231,7 @@ wxTextCtrlCommandProcessor::IsInsertCommand(wxCommand *command)
 {
     return (wxTextCtrlInsertCommand *)
             (command && (command->GetName() == wxTEXT_COMMAND_INSERT)
-                ? command : NULL);
+                ? command : nullptr);
 }
 
 void wxTextCtrlCommandProcessor::Store(wxCommand *command)
@@ -2407,7 +2407,7 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
 void wxTextCtrl::UpdateTextRect()
 {
     wxRect rectTotal(GetClientSize());
-    wxCoord *extraSpace = WrapLines() ? &WData().m_widthMark : NULL;
+    wxCoord *extraSpace = WrapLines() ? &WData().m_widthMark : nullptr;
     m_rectText = GetRenderer()->GetTextClientArea(this, rectTotal, extraSpace);
 
     // code elsewhere is confused by negative rect size
@@ -2556,14 +2556,14 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
 wxCoord wxTextCtrl::GetTotalWidth() const
 {
     wxCoord w;
-    CalcUnscrolledPosition(m_rectText.width, 0, &w, NULL);
+    CalcUnscrolledPosition(m_rectText.width, 0, &w, nullptr);
     return w;
 }
 
 wxCoord wxTextCtrl::GetTextWidth(const wxString& text) const
 {
     wxCoord w;
-    GetTextExtent(GetTextToShow(text), &w, NULL);
+    GetTextExtent(GetTextToShow(text), &w, nullptr);
     return w;
 }
 
@@ -2824,7 +2824,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
     {
         wOld = w;
         str += *text++;
-        dc.GetTextExtent(str, &w, NULL);
+        dc.GetTextExtent(str, &w, nullptr);
     }
 
     if ( w > widthMax )
@@ -2877,7 +2877,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     self->DoPrepareDC(dc);
 
     wxCoord width;
-    dc.GetTextExtent(line, &width, NULL);
+    dc.GetTextExtent(line, &width, nullptr);
     if ( x >= width )
     {
         col = line.length();
@@ -2898,7 +2898,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
         // and this should give us much better approximation in such case
         //
         // OPT: maybe using (cache) m_widthAvg would be still faster? profile!
-        dc.GetTextExtent(line[0], &width, NULL);
+        dc.GetTextExtent(line[0], &width, nullptr);
 
         col = x / width;
         if ( col < 0 )
@@ -2933,7 +2933,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
             }
 
             wxString strBefore(line, (size_t)col);
-            dc.GetTextExtent(strBefore, &width, NULL);
+            dc.GetTextExtent(strBefore, &width, nullptr);
             if ( width > x )
             {
                 if ( matchDir == Match_Right )
@@ -2985,13 +2985,13 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     {
         wxCoord width1;
         wxString text = line.Left(col);
-        dc.GetTextExtent(text, &width1, NULL);
+        dc.GetTextExtent(text, &width1, nullptr);
         if ( (size_t)col < line.length() )
         {
             wxCoord width2;
 
             text += line[col];
-            dc.GetTextExtent(text, &width2, NULL);
+            dc.GetTextExtent(text, &width2, nullptr);
 
             wxASSERT_MSG( (width1 <= x) && (x < width2),
                           wxT("incorrect HitTestLine() result") );
@@ -3025,14 +3025,14 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
                                             wxTextCoord *colOut,
                                             wxTextCoord *rowOut) const
 {
-    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, NULL, NULL);
+    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, nullptr, nullptr);
 }
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTestLogical(const wxPoint& pos,
                                                    wxTextCoord *colOut,
                                                    wxTextCoord *rowOut) const
 {
-    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, NULL, NULL, false);
+    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, nullptr, nullptr, false);
 }
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
@@ -3500,7 +3500,7 @@ void wxTextCtrl::UpdateMaxWidth(wxTextCoord line)
     // check if the max width changes after this line was modified
     wxCoord widthMaxOld = MData().m_widthMax,
             width;
-    GetTextExtent(GetLineText(line), &width, NULL);
+    GetTextExtent(GetLineText(line), &width, nullptr);
 
     if ( line == MData().m_lineLongest )
     {
@@ -3561,7 +3561,7 @@ wxCoord wxTextCtrl::GetMaxWidth() const
         for ( size_t n = 0; n < count; n++ )
         {
             wxCoord width;
-            dc.GetTextExtent(GetLines()[n], &width, NULL);
+            dc.GetTextExtent(GetLines()[n], &width, nullptr);
             if ( width > MData().m_widthMax )
             {
                 // remember the width and the line which has it
@@ -4013,10 +4013,10 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     else // multiline
     {
         wxPoint pt = rectUpdate.GetPosition();
-        (void)HitTest(pt, NULL, &lineStart);
+        (void)HitTest(pt, nullptr, &lineStart);
 
         pt.y += rectUpdate.height;
-        (void)HitTest(pt, NULL, &lineEnd);
+        (void)HitTest(pt, nullptr, &lineEnd);
     }
 
     // prepare for drawing
@@ -4041,7 +4041,7 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     }
     else // multiline, adjust for scrolling
     {
-        CalcUnscrolledPosition(0, yClient, NULL, &rectText.y);
+        CalcUnscrolledPosition(0, yClient, nullptr, &rectText.y);
     }
 
     wxRenderer *renderer = GetRenderer();
@@ -4168,14 +4168,14 @@ void wxTextCtrl::DoDrawLineWrapMarks(wxDC& dc, const wxRect& rectUpdate)
     rectMark.x = rectUpdate.x;
     rectMark.width = rectUpdate.width;
     wxCoord yTop = GetClientAreaOrigin().y;
-    CalcUnscrolledPosition(0, rectUpdate.y - yTop, NULL, &rectMark.y);
+    CalcUnscrolledPosition(0, rectUpdate.y - yTop, nullptr, &rectMark.y);
     wxCoord hLine = GetLineHeight();
     rectMark.height = hLine;
 
     wxTextCoord line, rowInLine;
 
     wxCoord yBottom;
-    CalcUnscrolledPosition(0, rectUpdate.GetBottom() - yTop, NULL, &yBottom);
+    CalcUnscrolledPosition(0, rectUpdate.GetBottom() - yTop, nullptr, &yBottom);
     for ( ; rectMark.y < yBottom; rectMark.y += hLine )
     {
         if ( !GetLineAndRow(rectMark.y / hLine, &line, &rowInLine) )
@@ -4336,7 +4336,7 @@ void wxTextCtrl::CreateCaret()
     else
     {
         // read only controls don't have the caret
-        caret = NULL;
+        caret = nullptr;
     }
 
     // SetCaret() will delete the old caret if any
@@ -4450,9 +4450,9 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     // for example) we shouldn't do it - as indicated by this flag
     bool rememberAbscissa = false;
 
-    // the command this action corresponds to or NULL if this action doesn't
+    // the command this action corresponds to or nullptr if this action doesn't
     // change text at all or can't be undone
-    wxTextCtrlCommand *command = NULL;
+    wxTextCtrlCommand *command = nullptr;
 
     wxString action;
     bool del = false,
@@ -4611,11 +4611,11 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
                 MoveInsertionPoint(newPos);
 
-                PositionToLogicalXY(pos, NULL, &y);
+                PositionToLogicalXY(pos, nullptr, &y);
             }
             else // scrolled down
             {
-                PositionToLogicalXY(newPos, NULL, &y);
+                PositionToLogicalXY(newPos, nullptr, &y);
             }
 
             // scroll vertically only
@@ -4834,7 +4834,7 @@ wxInputHandler *wxTextCtrl::GetStdInputHandler(wxInputHandler *handlerDef)
 wxStdTextCtrlInputHandler::wxStdTextCtrlInputHandler(wxInputHandler *inphand)
                          : wxStdInputHandler(inphand)
 {
-    m_winCapture = NULL;
+    m_winCapture = nullptr;
 }
 
 /* static */
@@ -5025,7 +5025,7 @@ bool wxStdTextCtrlInputHandler::HandleMouse(wxInputConsumer *consumer,
             m_winCapture->ShowCaret();
 
             m_winCapture->ReleaseMouse();
-            m_winCapture = NULL;
+            m_winCapture = nullptr;
         }
     }
 

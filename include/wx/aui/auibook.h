@@ -68,7 +68,7 @@ public:
                        int winId = 0)
           : wxBookCtrlEvent(commandType, winId)
     {
-        m_dragSource = NULL;
+        m_dragSource = nullptr;
     }
     wxEvent *Clone() const override { return new wxAuiNotebookEvent(*this); }
 
@@ -151,7 +151,7 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
     void DoShowHide();
-    void SetRect(const wxRect& rect, wxWindow* wnd = NULL);
+    void SetRect(const wxRect& rect, wxWindow* wnd = nullptr);
 
     void RemoveButton(int id);
     void AddButton(int id,
@@ -344,7 +344,7 @@ public:
     //wxBookCtrlBase functions
 
     virtual void SetPageSize (const wxSize &size) override;
-    virtual int  HitTest (const wxPoint &pt, long *flags=NULL) const override;
+    virtual int  HitTest (const wxPoint &pt, long *flags=nullptr) const override;
 
     virtual int GetPageImage(size_t n) const override;
     virtual bool SetPageImage(size_t n, int imageId) override;
@@ -383,7 +383,7 @@ protected:
     virtual wxSize CalculateNewSplitSize();
 
     // remove the page and return a pointer to it
-    virtual wxWindow *DoRemovePage(size_t WXUNUSED(page)) override { return NULL; }
+    virtual wxWindow *DoRemovePage(size_t WXUNUSED(page)) override { return nullptr; }
 
     //A general selection function
     virtual int DoModifySelection(size_t n, bool events);
@@ -415,7 +415,7 @@ protected:
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // set selection to the given window (which must be non-NULL and be one of
+    // set selection to the given window (which must be non-null and be one of
     // our pages, otherwise an assert is raised)
     void SetSelectionToWindow(wxWindow *win);
     void SetSelectionToPage(const wxAuiNotebookPage& page)

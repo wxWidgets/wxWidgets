@@ -126,7 +126,7 @@ protected:
     The wrapper provides same API as DirectFB, with a few exceptions:
      - methods return true/false instead of error code
      - methods that return or create another interface return pointer to the
-       interface (or NULL on failure) instead of storing it in the last
+       interface (or nullptr on failure) instead of storing it in the last
        argument
      - interface arguments use wxFooPtr type instead of raw DirectFB pointer
      - methods taking flags use int type instead of an enum when the flags
@@ -245,9 +245,9 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
 
     /**
         Updates the front buffer from the back buffer. If @a region is not
-        NULL, only given rectangle is updated.
+        nullptr, only given rectangle is updated.
      */
-    bool FlipToFront(const DFBRegion *region = NULL);
+    bool FlipToFront(const DFBRegion *region = nullptr);
 
     wxIDirectFBSurfacePtr GetSubSurface(const DFBRectangle *rect)
     {
@@ -255,7 +255,7 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
         if ( Check(m_ptr->GetSubSurface(m_ptr, rect, &s)) )
             return new wxIDirectFBSurface(s);
         else
-            return NULL;
+            return nullptr;
     }
 
     wxIDirectFBPalettePtr GetPalette()
@@ -264,7 +264,7 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
         if ( Check(m_ptr->GetPalette(m_ptr, &s)) )
             return new wxIDirectFBPalette(s);
         else
-            return NULL;
+            return nullptr;
     }
 
     bool SetPalette(const wxIDirectFBPalettePtr& pal)
@@ -336,7 +336,7 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
             : m_surface(surface)
         {
             if ( !surface->Lock(flags, &ptr, &pitch) )
-                ptr = NULL;
+                ptr = nullptr;
         }
 
         ~Locked()
@@ -415,7 +415,7 @@ struct wxIDirectFBWindow : public wxDfbWrapper<IDirectFBWindow>
         if ( Check(m_ptr->GetSurface(m_ptr, &s)) )
             return new wxIDirectFBSurface(s);
         else
-            return NULL;
+            return nullptr;
     }
 
     bool AttachEventBuffer(const wxIDirectFBEventBufferPtr& buffer)
@@ -443,7 +443,7 @@ struct wxIDirectFBDisplayLayer : public wxDfbWrapper<IDirectFBDisplayLayer>
         if ( Check(m_ptr->CreateWindow(m_ptr, desc, &w)) )
             return new wxIDirectFBWindow(w);
         else
-            return NULL;
+            return nullptr;
     }
 
     bool GetConfiguration(DFBDisplayLayerConfig *config)
@@ -466,7 +466,7 @@ struct wxIDirectFBDisplayLayer : public wxDfbWrapper<IDirectFBDisplayLayer>
 struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
 {
     /**
-        Returns pointer to DirectFB singleton object, it never returns NULL
+        Returns pointer to DirectFB singleton object, it never returns nullptr
         after wxApp was initialized. The object is cached, so calling this
         method is cheap.
      */
@@ -485,7 +485,7 @@ struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
         if ( Check(m_ptr->CreateSurface(m_ptr, desc, &s)) )
             return new wxIDirectFBSurface(s);
         else
-            return NULL;
+            return nullptr;
     }
 
     wxIDirectFBEventBufferPtr CreateEventBuffer()
@@ -494,7 +494,7 @@ struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
         if ( Check(m_ptr->CreateEventBuffer(m_ptr, &b)) )
             return new wxIDirectFBEventBuffer(b);
         else
-            return NULL;
+            return nullptr;
     }
 
     wxIDirectFBFontPtr CreateFont(const char *filename,
@@ -504,7 +504,7 @@ struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
         if ( Check(m_ptr->CreateFont(m_ptr, filename, desc, &f)) )
             return new wxIDirectFBFont(f);
         else
-            return NULL;
+            return nullptr;
     }
 
     wxIDirectFBDisplayLayerPtr
@@ -514,7 +514,7 @@ struct wxIDirectFB : public wxDfbWrapper<IDirectFB>
         if ( Check(m_ptr->GetDisplayLayer(m_ptr, id, &l)) )
             return new wxIDirectFBDisplayLayer(l);
         else
-            return NULL;
+            return nullptr;
     }
 
     /// Returns primary surface

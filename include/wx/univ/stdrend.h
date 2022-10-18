@@ -30,7 +30,7 @@ public:
                                 const wxColour& col,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxWindow *window = NULL) override;
+                                wxWindow *window = nullptr) override;
     virtual void DrawButtonSurface(wxDC& dc,
                                    const wxColour& col,
                                    const wxRect& rect,
@@ -45,7 +45,7 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounds = NULL) override;
+                           wxRect *rectBounds = nullptr) override;
     virtual void DrawButtonLabel(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& image,
@@ -53,19 +53,19 @@ public:
                                  int flags = 0,
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
-                                 wxRect *rectBounds = NULL) override;
+                                 wxRect *rectBounds = nullptr) override;
 
 
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
                             int flags = 0,
-                            wxRect *rectIn = NULL) override;
+                            wxRect *rectIn = nullptr) override;
     virtual void DrawTextBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = NULL) override;
+                                wxRect *rectIn = nullptr) override;
 
     virtual void DrawHorizontalLine(wxDC& dc,
                                     wxCoord y, wxCoord x1, wxCoord x2) override;

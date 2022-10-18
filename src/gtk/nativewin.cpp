@@ -61,7 +61,7 @@ wxNativeWindow::Create(wxWindow* parent,
     // Ensure that the best (and minimal) size is set to fully display the
     // widget.
     GtkRequisition req;
-    gtk_widget_get_preferred_size(widget, NULL, &req);
+    gtk_widget_get_preferred_size(widget, nullptr, &req);
     SetInitialSize(wxSize(req.width, req.height));
 
     return true;
@@ -106,7 +106,7 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 {
     wxCHECK( win, false );
 
-    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, wxString()) )
+    if ( !wxTopLevelWindow::Create(nullptr, wxID_ANY, wxString()) )
         return false;
 
     // we need to realize the window first before reparenting it
@@ -139,7 +139,7 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowId anid)
     GdkWindow * const win = gdk_x11_window_foreign_new_for_display(gdk_display_get_default(), anid);
 #else
     wxUnusedVar(anid);
-    GdkWindow * const win = NULL;
+    GdkWindow * const win = nullptr;
 #endif
 #else
     GdkWindow * const win = gdk_window_foreign_new(anid);
@@ -166,7 +166,7 @@ void wxNativeContainerWindow::OnNativeDestroyed()
     // gdk_window_destroy() results in X errors while nulling just the window
     // pointer and destroying m_widget results in many GTK errors
     GTKDisconnect(m_widget);
-    m_widget = NULL;
+    m_widget = nullptr;
 
     // notice that we intentionally don't use Close() nor Delete() here as our
     // window (and the windows of all of our children) is invalid any more and
@@ -180,5 +180,5 @@ wxNativeContainerWindow::~wxNativeContainerWindow()
     // nothing to do here, either we have a valid m_widget and it will be
     // destroyed as usual (this corresponds to manual destruction of this C++
     // object) or we are being deleted because the native window was destroyed
-    // and in this case our m_widget was set to NULL by OnNativeDestroyed()
+    // and in this case our m_widget was set to nullptr by OnNativeDestroyed()
 }

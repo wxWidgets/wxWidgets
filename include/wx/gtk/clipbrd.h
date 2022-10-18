@@ -105,7 +105,7 @@ private:
     bool DoIsSupported(const wxDataFormat& format);
 
 
-    // both of these pointers can be non-NULL simultaneously but we only use
+    // both of these pointers can be non-null simultaneously but we only use
     // one of them at any moment depending on m_usePrimary value, use Data()
     // (from inside) or GTKGetDataObject() (from outside) accessors
     wxDataObject *m_dataPrimary,

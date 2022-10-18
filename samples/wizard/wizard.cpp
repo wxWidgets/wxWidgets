@@ -431,7 +431,7 @@ MyWizard::MyWizard(wxFrame *frame, bool useSizer)
 // ----------------------------------------------------------------------------
 
 MyFrame::MyFrame(const wxString& title)
-        :wxFrame((wxFrame *)NULL, wxID_ANY, title,
+        :wxFrame(nullptr, wxID_ANY, title,
                   wxDefaultPosition, wxSize(250, 150))  // small frame
 {
     wxMenu *menuFile = new wxMenu;

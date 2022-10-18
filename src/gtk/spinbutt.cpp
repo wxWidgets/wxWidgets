@@ -120,11 +120,11 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     gtk_entry_set_width_chars(GTK_ENTRY(m_widget), 0);
 #if GTK_CHECK_VERSION(3,12,0)
-    if (gtk_check_version(3,12,0) == NULL)
+    if (gtk_check_version(3,12,0) == nullptr)
         gtk_entry_set_max_width_chars(GTK_ENTRY(m_widget), 0);
 #endif
 #ifdef __WXGTK3__
-    if (gtk_check_version(3,20,0) == NULL)
+    if (gtk_check_version(3,20,0) == nullptr)
     {
         GTKApplyCssStyle(
             "entry { min-width:0; padding-left:0; padding-right:0 }"
@@ -146,32 +146,32 @@ bool wxSpinButton::Create(wxWindow *parent,
 
 int wxSpinButton::GetMin() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     double min;
-    gtk_spin_button_get_range((GtkSpinButton*)m_widget, &min, NULL);
+    gtk_spin_button_get_range((GtkSpinButton*)m_widget, &min, nullptr);
     return int(min);
 }
 
 int wxSpinButton::GetMax() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     double max;
-    gtk_spin_button_get_range((GtkSpinButton*)m_widget, NULL, &max);
+    gtk_spin_button_get_range((GtkSpinButton*)m_widget, nullptr, &max);
     return int(max);
 }
 
 int wxSpinButton::GetValue() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     return m_pos;
 }
 
 void wxSpinButton::SetValue( int value )
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+    wxCHECK_RET( (m_widget != nullptr), wxT("invalid spin button") );
 
     GtkDisableEvents();
     gtk_spin_button_set_value((GtkSpinButton*)m_widget, value);
@@ -181,7 +181,7 @@ void wxSpinButton::SetValue( int value )
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+    wxCHECK_RET( (m_widget != nullptr), wxT("invalid spin button") );
 
     GtkDisableEvents();
     gtk_spin_button_set_range((GtkSpinButton*)m_widget, minVal, maxVal);
@@ -237,7 +237,7 @@ GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED_IN_GTK2(window
 {
 #ifdef __WXGTK3__
     GTKFindWindow(m_widget, windows);
-    return NULL;
+    return nullptr;
 #else
     return GTK_SPIN_BUTTON(m_widget)->panel;
 #endif

@@ -74,7 +74,7 @@ public:
     void OnClicked(bool checked)
     {
         wxRadioButton* handler = GetHandler();
-        if ( handler == NULL )
+        if ( handler == nullptr )
             return;
 
         wxCommandEvent event(wxEVT_RADIOBUTTON, handler->GetId());
@@ -84,7 +84,7 @@ public:
 };
 
 wxRadioButton::wxRadioButton() :
-    m_qtRadioButton(NULL)
+    m_qtRadioButton(nullptr)
 {
 }
 

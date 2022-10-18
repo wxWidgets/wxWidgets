@@ -158,8 +158,8 @@ bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
     int ret = ReadDirectoryChangesW(watch.GetHandle(), watch.GetBuffer(),
                                     wxFSWatchEntryMSW::BUFFER_SIZE,
                                     bWatchSubtree,
-                                    flags, NULL,
-                                    watch.GetOverlapped(), NULL);
+                                    flags, nullptr,
+                                    watch.GetOverlapped(), nullptr);
     if (!ret)
     {
         wxLogSysError(_("Unable to set up watch for '%s'"),
@@ -219,8 +219,8 @@ wxThread::ExitCode wxIOCPThread::Entry()
 bool wxIOCPThread::ReadEvents()
 {
     DWORD count = 0;
-    wxFSWatchEntryMSW* watch = NULL;
-    OVERLAPPED* overlapped = NULL;
+    wxFSWatchEntryMSW* watch = nullptr;
+    OVERLAPPED* overlapped = nullptr;
     switch ( m_iocp->GetStatus(&count, &watch, &overlapped) )
     {
         case wxIOCPService::Status_OK:

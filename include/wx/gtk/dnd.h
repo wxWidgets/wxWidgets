@@ -28,7 +28,7 @@
 class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject *dataObject = NULL );
+    wxDropTarget(wxDataObject *dataObject = nullptr );
 
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override;
     virtual bool OnDrop(wxCoord x, wxCoord y) override;
@@ -66,7 +66,7 @@ class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     // constructor. set data later with SetData()
-    wxDropSource( wxWindow *win = NULL,
+    wxDropSource( wxWindow *win = nullptr,
                   const wxIcon &copy = wxNullIcon,
                   const wxIcon &move = wxNullIcon,
                   const wxIcon &none = wxNullIcon);

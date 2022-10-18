@@ -116,7 +116,7 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
     topsizer->Add( buttonsizer, 0, wxTOP | wxALIGN_RIGHT, 10 );
 
     // 1) dir ctrl
-    m_dirCtrl = NULL; // this is necessary, event handler called from
+    m_dirCtrl = nullptr; // this is necessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
     long dirStyle = wxDIRCTRL_DIR_ONLY | wxDEFAULT_CONTROL_BORDER;
 
@@ -246,7 +246,7 @@ void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
 
     wxTreeItemId item = event.GetItem();
 
-    wxDirItemData *data = NULL;
+    wxDirItemData *data = nullptr;
 
     if(item.IsOk())
         data = (wxDirItemData*)m_dirCtrl->GetTreeCtrl()->GetItemData(item);

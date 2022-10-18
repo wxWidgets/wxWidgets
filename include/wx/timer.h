@@ -179,7 +179,7 @@ public:
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("wxTimerEvent not supposed to be created by user code")
     wxTimerEvent()
-        : wxEvent(wxID_ANY, wxEVT_TIMER) { m_timer=NULL; }
+        : wxEvent(wxID_ANY, wxEVT_TIMER) { m_timer=nullptr; }
 #endif // WXWIN_COMPATIBILITY_3_0
 
 private:

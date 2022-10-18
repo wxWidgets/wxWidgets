@@ -79,7 +79,7 @@ public:
   virtual void SetTabSize(const wxSize& sz) override;
 
   // hit test
-  virtual int HitTest(const wxPoint& pt, long *flags = NULL) const override;
+  virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
 
   // calculate size for wxNotebookSizer
   wxSize CalcSizeFromPage(const wxSize& sizePage) const override;

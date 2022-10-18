@@ -107,7 +107,7 @@ private:
     {
         // We don't initialize m_encDefault here as different ctors do it
         // differently.
-        m_conv = NULL;
+        m_conv = nullptr;
         m_bomType = wxBOM_Unknown;
         m_ownsConv = false;
         m_consumedBOM = false;
@@ -139,7 +139,7 @@ private:
     // wxFONTENCODING_MAX but not wxFONTENCODING_DEFAULT
     static wxFontEncoding ms_defaultMBEncoding;
 
-    // conversion object which we really use, NULL until the first call to
+    // conversion object which we really use, null until the first call to
     // either ToWChar() or FromWChar()
     wxMBConv *m_conv;
 

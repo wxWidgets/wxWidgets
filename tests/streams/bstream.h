@@ -50,8 +50,8 @@ public:
          m_bSimpleTellOTest(false),
          m_bSeekInvalidBeyondEnd(true),
          m_bEofAtLastRead(true),
-         m_pCurrentIn(NULL),
-         m_pCurrentOut(NULL)
+         m_pCurrentIn(nullptr),
+         m_pCurrentOut(nullptr)
     { /* Nothing extra */ }
     virtual ~BaseStreamTestCase()
     {
@@ -411,7 +411,7 @@ protected:
         }
 
         m_pCurrentIn = DoCreateInStream();
-        wxASSERT(m_pCurrentIn != NULL);
+        wxASSERT(m_pCurrentIn != nullptr);
         return *m_pCurrentIn;
     }
     TStreamOut &CreateOutStream()
@@ -422,28 +422,28 @@ protected:
         }
 
         m_pCurrentOut = DoCreateOutStream();
-        wxASSERT(m_pCurrentOut != NULL);
+        wxASSERT(m_pCurrentOut != nullptr);
         return *m_pCurrentOut;
     }
 
     void DeleteInStream()
     {
-        if (m_pCurrentIn == NULL)
+        if (m_pCurrentIn == nullptr)
             return;
         delete m_pCurrentIn;
-        m_pCurrentIn = NULL;
+        m_pCurrentIn = nullptr;
         // In case something extra needs to be done.
         DoDeleteInStream();
     }
     void DeleteOutStream()
     {
-        if (m_pCurrentOut == NULL)
+        if (m_pCurrentOut == nullptr)
             return;
 
         CPPUNIT_ASSERT(m_pCurrentOut->Close());
 
         delete m_pCurrentOut;
-        m_pCurrentOut = NULL;
+        m_pCurrentOut = nullptr;
         // In case something extra needs to be done.
         DoDeleteOutStream();
     }

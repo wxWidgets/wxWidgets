@@ -108,7 +108,7 @@ class TransformMatrixTestCaseDCBase : public CppUnit::TestCase
 public:
     TransformMatrixTestCaseDCBase()
     {
-        m_dc = NULL;
+        m_dc = nullptr;
         wxImage::AddHandler(new wxJPEGHandler);
         m_imgOrig.LoadFile(wxS("horse.jpg"));
         CPPUNIT_ASSERT( m_imgOrig.IsOk() );
@@ -315,7 +315,7 @@ public:
         // and therefore we have to destroy the renderer
         // to do so.
         TransformMatrixTestCaseGCDC::FlushDC();
-        m_gcdc->SetGraphicsContext(NULL);
+        m_gcdc->SetGraphicsContext(nullptr);
     }
 
 private:

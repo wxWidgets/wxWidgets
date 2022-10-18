@@ -22,7 +22,7 @@ class WXDLLIMPEXP_CORE wxWindowsPrinter : public wxPrinterBase
     wxDECLARE_DYNAMIC_CLASS(wxWindowsPrinter);
 
 public:
-    wxWindowsPrinter(wxPrintDialogData *data = NULL);
+    wxWindowsPrinter(wxPrintDialogData *data = nullptr);
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
@@ -44,8 +44,8 @@ class WXDLLIMPEXP_CORE wxWindowsPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxWindowsPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = NULL,
-                          wxPrintDialogData *data = NULL);
+                          wxPrintout *printoutForPrinting = nullptr,
+                          wxPrintDialogData *data = nullptr);
     wxWindowsPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting,
                           wxPrintData *data);

@@ -23,7 +23,7 @@ wxPoem was converted to use the wxWindows toolkit, from the original
 WinPoem which received a favourable review from Windows Shareware 500.
 
 Since it now uses wxWindows, wxPoem may be compiled on a variety
-of platforms such as X (XView or Motif), Windows and NT.
+of platforms.
 
 Files
 -----
@@ -49,9 +49,7 @@ Installation
   UNIX
   ====
 
-    wxPoem comes in Open Look and Motif versions for the Sun, and a
-    Linux Open Look version. For other platforms, you will need to
-    recompile the source.
+    You will need to compile wxPoem from the source.
 
 
 Use

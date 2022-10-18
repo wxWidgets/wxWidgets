@@ -887,7 +887,7 @@ public:
     */
     wxImage Rotate(double angle, const wxPoint& rotationCentre,
                    bool interpolating = true,
-                   wxPoint* offsetAfterRotation = NULL) const;
+                   wxPoint* offsetAfterRotation = nullptr) const;
 
     /**
         Returns a copy of the image rotated 90 degrees in the direction
@@ -1683,7 +1683,7 @@ public:
         wxImage takes ownership of the pointer and will free it unless @a static_data
         parameter is set to @true -- in this case the caller should do it.
     */
-    void SetAlpha(unsigned char* alpha = NULL,
+    void SetAlpha(unsigned char* alpha = nullptr,
                   bool static_data = false);
 
     /**
@@ -2113,7 +2113,7 @@ public:
     // find first colour that is not used in the image and has higher
     // RGB values than RGB(startR, startG, startB)
     //
-    // returns true and puts this colour in r, g, b (each of which may be NULL)
+    // returns true and puts this colour in r, g, b (each of which may be @NULL)
     // on success or returns false if there are no more free colours
     bool FindFirstUnusedColour(unsigned char *r,
                                unsigned char *g,

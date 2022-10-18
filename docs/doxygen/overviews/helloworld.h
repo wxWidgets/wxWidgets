@@ -127,7 +127,7 @@ window. Both have to be bound to the frame with respective calls.
 
 @code
 MyFrame::MyFrame()
-        : wxFrame(NULL, wxID_ANY, "Hello World")
+        : wxFrame(nullptr, wxID_ANY, "Hello World")
 {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -272,7 +272,7 @@ bool MyApp::OnInit()
 }
 
 MyFrame::MyFrame()
-    : wxFrame(NULL, wxID_ANY, "Hello World")
+    : wxFrame(nullptr, wxID_ANY, "Hello World")
 {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",

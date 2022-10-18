@@ -29,8 +29,8 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
     wxCursor( const char bits[], int width, int height,
               int hotSpotX = -1, int hotSpotY = -1,
-              const char maskBits[] = NULL,
-              const wxColour* fg = NULL, const wxColour* bg = NULL);
+              const char maskBits[] = nullptr,
+              const wxColour* fg = nullptr, const wxColour* bg = nullptr);
 
     virtual wxPoint GetHotSpot() const override;
 

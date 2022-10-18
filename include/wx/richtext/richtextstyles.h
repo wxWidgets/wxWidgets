@@ -230,15 +230,15 @@ public:
 
     /// Combine the base and list style with a paragraph style, using the given indent (from which
     /// an appropriate level is found)
-    wxRichTextAttr CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet = NULL);
+    wxRichTextAttr CombineWithParagraphStyle(int indent, const wxRichTextAttr& paraStyle, wxRichTextStyleSheet* styleSheet = nullptr);
 
     /// Combine the base and list style, using the given indent (from which
     /// an appropriate level is found)
-    wxRichTextAttr GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet = NULL);
+    wxRichTextAttr GetCombinedStyle(int indent, wxRichTextStyleSheet* styleSheet = nullptr);
 
     /// Combine the base and list style, using the given level from which
     /// an appropriate level is found)
-    wxRichTextAttr GetCombinedStyleForLevel(int level, wxRichTextStyleSheet* styleSheet = NULL);
+    wxRichTextAttr GetCombinedStyleForLevel(int level, wxRichTextStyleSheet* styleSheet = nullptr);
 
     /// Gets the number of available levels
     int GetLevelCount() const { return 10; }
@@ -487,8 +487,8 @@ public:
 
     void Init()
     {
-        m_styleSheet = NULL;
-        m_richTextCtrl = NULL;
+        m_styleSheet = nullptr;
+        m_richTextCtrl = nullptr;
         m_applyOnSelection = false;
         m_styleType = wxRICHTEXT_STYLE_PARAGRAPH;
         m_autoSetSelection = true;
@@ -595,8 +595,8 @@ public:
     /// Member initialisation
     void Init()
     {
-        m_styleListBox = NULL;
-        m_styleChoice = NULL;
+        m_styleListBox = nullptr;
+        m_styleChoice = nullptr;
         m_dontUpdate = false;
     }
 
@@ -668,7 +668,7 @@ public:
     virtual wxString GetStringValue() const override;
 
     /// Can we set the selection based on the editor caret position?
-    // virtual bool CanAutoSetSelection() { return ((m_combo == NULL) || !m_combo->IsPopupShown()); }
+    // virtual bool CanAutoSetSelection() { return ((m_combo == nullptr) || !m_combo->IsPopupShown()); }
     virtual bool CanAutoSetSelection() override { return false; }
 
     //
@@ -717,7 +717,7 @@ public:
 
     void Init()
     {
-        m_stylePopup = NULL;
+        m_stylePopup = nullptr;
     }
 
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,

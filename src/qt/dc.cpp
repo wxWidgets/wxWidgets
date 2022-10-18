@@ -46,8 +46,8 @@ wxIMPLEMENT_CLASS(wxQtDCImpl,wxDCImpl);
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
-    m_qtPixmap = NULL;
-    m_qtPainter = NULL;
+    m_qtPixmap = nullptr;
+    m_qtPainter = nullptr;
     m_rasterColourOp = wxQtNONE;
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
@@ -72,9 +72,9 @@ wxQtDCImpl::~wxQtDCImpl()
 void wxQtDCImpl::QtPreparePainter( )
 {
     //Do here all QPainter initialization (called after each begin())
-    if ( m_qtPainter == NULL )
+    if ( m_qtPainter == nullptr )
     {
-        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter is NULL!!!"));
+        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter is null!!!"));
     }
     else if ( m_qtPainter->isActive() )
     {
@@ -373,25 +373,25 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              const wxFont *theFont ) const
 {
     QFont f;
-    if (theFont != NULL)
+    if (theFont != nullptr)
         f = theFont->GetHandle();
     else
         f = m_font.GetHandle();
 
     QFontMetrics metrics(f);
-    if (x != NULL || y != NULL)
+    if (x != nullptr || y != nullptr)
     {
         // note that boundingRect doesn't return "advance width" for spaces
-        if (x != NULL)
+        if (x != nullptr)
             *x = metrics.width( wxQtConvertString(string) );
-        if (y != NULL)
+        if (y != nullptr)
             *y = metrics.height();
     }
 
-    if (descent != NULL)
+    if (descent != nullptr)
         *descent = metrics.descent();
 
-    if (externalLeading != NULL)
+    if (externalLeading != nullptr)
         *externalLeading = metrics.leading();
 }
 
@@ -524,7 +524,7 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
     if ( col )
     {
-        wxCHECK_MSG( m_qtPixmap != NULL, false, "This DC doesn't support GetPixel()" );
+        wxCHECK_MSG( m_qtPixmap != nullptr, false, "This DC doesn't support GetPixel()" );
         QPixmap pixmap1px = m_qtPixmap->copy( x, y, 1, 1 );
         QImage image = pixmap1px.toImage();
         QColor pixel = image.pixel( 0, 0 );

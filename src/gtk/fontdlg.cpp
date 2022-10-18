@@ -9,7 +9,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FONTDLG && !defined(__WXGPE__)
+#if wxUSE_FONTDLG
 
 #include "wx/fontdlg.h"
 
@@ -32,7 +32,7 @@ static void response(GtkDialog* dialog, int response_id, wxFontDialog* win)
     {
         rc = wxID_OK;
 #if GTK_CHECK_VERSION(3,2,0)
-        if (gtk_check_version(3,2,0) == NULL)
+        if (gtk_check_version(3,2,0) == nullptr)
         {
             wxNativeFontInfo info;
             info.description = gtk_font_chooser_get_font_desc(GTK_FONT_CHOOSER(dialog));
@@ -75,7 +75,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     }
 
     const wxString message(_("Choose font"));
-    GtkWindow* gtk_parent = NULL;
+    GtkWindow* gtk_parent = nullptr;
     if (parent)
         gtk_parent = GTK_WINDOW(parent->m_widget);
 
@@ -83,7 +83,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
 #if GLIB_CHECK_VERSION(2, 34, 0)
     g_type_ensure(PANGO_TYPE_FONT_FACE);
 #endif
-    if (gtk_check_version(3,2,0) == NULL)
+    if (gtk_check_version(3,2,0) == nullptr)
         m_widget = gtk_font_chooser_dialog_new(wxGTK_CONV(message), gtk_parent);
     else
 #endif
@@ -106,7 +106,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
         if ( info )
         {
 #if GTK_CHECK_VERSION(3,2,0)
-            if (gtk_check_version(3,2,0) == NULL)
+            if (gtk_check_version(3,2,0) == nullptr)
                 gtk_font_chooser_set_font_desc(GTK_FONT_CHOOSER(m_widget), info->description);
             else
 #endif
@@ -132,4 +132,4 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
-#endif // wxUSE_FONTDLG && !__WXGPE__
+#endif // wxUSE_FONTDLG

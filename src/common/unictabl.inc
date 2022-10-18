@@ -893,5 +893,5 @@ static const struct {
     { wxFONTENCODING_KOI8, encoding_table__KOI8},
     { wxFONTENCODING_KOI8_U, encoding_table__KOI8_U},
     { wxFONTENCODING_CP866, encoding_table__CP866},
-    {wxFONTENCODING_MAX /*anything*/, NULL}
+    {wxFONTENCODING_MAX /*anything*/, nullptr}
  };

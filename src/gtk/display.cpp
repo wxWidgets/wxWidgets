@@ -208,7 +208,7 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
 {
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 #if GTK_CHECK_VERSION(3,4,0)
-    if (gtk_check_version(3,4,0) == NULL)
+    if (gtk_check_version(3,4,0) == nullptr)
         gdk_screen_get_monitor_workarea(screen, monitor, dest);
     else
 #endif
@@ -334,7 +334,7 @@ int wxDisplayImplGTK::GetDepth() const
 #if GTK_CHECK_VERSION(3,10,0)
 double wxDisplayImplGTK::GetScaleFactor() const
 {
-    if ( gtk_check_version(3,10,0) == NULL )
+    if ( gtk_check_version(3,10,0) == nullptr )
         return gdk_screen_get_monitor_scale_factor(m_screen, m_index);
 
     return 1.0;

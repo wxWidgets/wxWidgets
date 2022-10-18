@@ -62,7 +62,7 @@ public:
         const wxRect& rect,
         int flags = 0,
         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-        wxHeaderButtonParams* params = NULL ) override;
+        wxHeaderButtonParams* params = nullptr ) override;
 
     virtual int GetHeaderButtonHeight(wxWindow *win) override;
 
@@ -811,7 +811,7 @@ void wxRendererMac::DrawGauge(wxWindow* WXUNUSED(win),
 
     cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
-    HIThemeDrawTrack(&tdi, NULL, cgContext, kHIThemeOrientationNormal);
+    HIThemeDrawTrack(&tdi, nullptr, cgContext, kHIThemeOrientationNormal);
 }
 
 #endif

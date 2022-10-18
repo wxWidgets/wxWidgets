@@ -771,7 +771,7 @@ public:
         @param style
             Window style. For generic window styles, please see wxWindow.
         @param name Window name.
-        @return The created wxWebView, or @c NULL if the requested backend
+        @return The created wxWebView, or @NULL if the requested backend
                 is not available
         @since 2.9.5
     */
@@ -848,7 +848,7 @@ public:
                WebKitWebSettings* settings = webkit_web_view_get_settings(wv);
                g_object_set(G_OBJECT(settings),
                             "enable-frame-flattening", TRUE,
-                            NULL);
+                            nullptr);
             #endif
         @endcode
 
@@ -1081,7 +1081,7 @@ public:
 
         @see RunScriptAsync()
     */
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const = 0;
+    virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const = 0;
 
     /**
         Runs the given JavaScript code asynchronously and returns the result
@@ -1101,7 +1101,7 @@ public:
         @since 3.1.6
         @see RunScript()
     */
-    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const;
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = nullptr) const;
 
 
     /**

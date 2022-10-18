@@ -64,7 +64,7 @@ protected:
     wxWindow* const m_win;
 
 private:
-    // SetShape to the given GDK window by calling DoSetShape() if it's non-NULL.
+    // SetShape to the given GDK window by calling DoSetShape() if it's non-null.
     bool SetShapeIfNonNull(GdkWindow* window)
     {
         return window && DoSetShape(window);
@@ -91,7 +91,7 @@ public:
 private:
     virtual bool DoSetShape(GdkWindow* window) override
     {
-        gdk_window_shape_combine_region(window, NULL, 0, 0);
+        gdk_window_shape_combine_region(window, nullptr, 0, 0);
 
         return true;
     }
@@ -230,7 +230,7 @@ void wxNonOwnedWindow::GTKHandleRealized()
         if ( m_shapeImpl->CanBeDeleted() )
         {
             delete m_shapeImpl;
-            m_shapeImpl = NULL;
+            m_shapeImpl = nullptr;
         }
     }
 }
@@ -253,7 +253,7 @@ bool wxNonOwnedWindow::DoClearShape()
     // don't set the custom shape later when we're realized.
 
     delete m_shapeImpl;
-    m_shapeImpl = NULL;
+    m_shapeImpl = nullptr;
 
     return true;
 }
@@ -262,7 +262,7 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
     // In any case get rid of the old data.
     delete m_shapeImpl;
-    m_shapeImpl = NULL;
+    m_shapeImpl = nullptr;
 
     if ( gtk_widget_get_realized(m_widget) )
     {

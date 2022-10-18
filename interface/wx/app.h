@@ -97,7 +97,7 @@ public:
         by OnRun() and which dispatches all events sent from the native toolkit
         to the application (except when new event loops are temporarily set-up).
         The returned value maybe @NULL. Put initialization code which needs a
-        non-@NULL main event loop into OnEventLoopEnter().
+        non-null main event loop into OnEventLoopEnter().
     */
     wxEventLoopBase* GetMainLoop() const;
 
@@ -1004,7 +1004,7 @@ public:
         first frame or dialog (or better, any wxTopLevelWindow) in its top-level
         window list, when it needs to use the top window.
         If you previously called SetTopWindow() and now you need to restore this
-        automatic behaviour you can call @code wxApp::SetTopWindow(NULL) @endcode.
+        automatic behaviour you can call `wxApp::SetTopWindow(nullptr)`.
 
         @param window
             The new top window.
@@ -1402,7 +1402,7 @@ bool wxYield();
 
     @header{wx/app.h}
 */
-bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
+bool wxSafeYield(wxWindow* win = nullptr, bool onlyIfNeeded = false);
 
 /**
     This function initializes wxWidgets in a platform-dependent way. Use this if you
@@ -1441,8 +1441,8 @@ int wxEntry(int& argc, wxChar** argv);
     @header{wx/app.h}
 */
 int wxEntry(HINSTANCE hInstance,
-            HINSTANCE hPrevInstance = NULL,
-            char* pCmdLine = NULL,
+            HINSTANCE hPrevInstance = nullptr,
+            char* pCmdLine = nullptr,
             int nCmdShow = SW_SHOWNORMAL);
 
 ///@}

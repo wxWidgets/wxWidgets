@@ -242,10 +242,10 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkSort =
     m_chkReadonly =
-    m_chkProcessEnter = (wxCheckBox *)NULL;
+    m_chkProcessEnter = nullptr;
 
-    m_combobox = (wxComboBox *)NULL;
-    m_sizerCombo = (wxSizer *)NULL;
+    m_combobox = nullptr;
+    m_sizerCombo = nullptr;
 }
 
 void ComboboxWidgetsPage::CreateContent()
@@ -377,7 +377,7 @@ void ComboboxWidgetsPage::CreateContent()
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
     m_combobox = new wxComboBox(this, ComboPage_Combo, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
-                                0, NULL,
+                                0, nullptr,
                                 0);
     sizerRight->Add(m_combobox, 0, wxGROW | wxALL, 5);
     m_combobox1 = new wxComboBox( this, ComboPage_Dynamic );

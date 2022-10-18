@@ -189,7 +189,7 @@ bool wxUIActionSimulator::Select(const wxString& text)
     // We can only select something in controls inheriting from
     // wxItemContainer, so check that we have it.
 #ifdef wxNO_RTTI
-    wxItemContainer* container = NULL;
+    wxItemContainer* container = nullptr;
 
     if ( wxComboBox* combo = wxDynamicCast(focus, wxComboBox) )
         container = combo;

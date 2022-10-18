@@ -238,10 +238,10 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     wxSize sz = m_window->GetSize();
 
-    int left = subrect != NULL ? subrect->x : 0 ;
-    int top = subrect != NULL ? subrect->y : 0 ;
-    int width = subrect != NULL ? subrect->width : sz.x;
-    int height = subrect !=  NULL ? subrect->height : sz.y ;
+    int left = subrect != nullptr ? subrect->x : 0 ;
+    int top = subrect != nullptr ? subrect->y : 0 ;
+    int width = subrect != nullptr ? subrect->width : sz.x;
+    int height = subrect != nullptr ? subrect->height : sz.y ;
 
     wxBitmap bmp = wxBitmap(width, height, 32);
 

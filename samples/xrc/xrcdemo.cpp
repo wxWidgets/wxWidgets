@@ -111,8 +111,8 @@ bool MyApp::OnInit()
     wxHelpProvider::Set( new wxSimpleHelpProvider );
 #endif // wxUSE_HELP
 
-    // Make an instance of your derived frame. Passing NULL (the default value
-    // of MyFrame's constructor is NULL) as the frame doesn't have a parent
+    // Make an instance of your derived frame. Passing nullptr (the default value
+    // of MyFrame's constructor is null) as the frame doesn't have a parent
     // since it is the main application window.
     MyFrame *frame = new MyFrame();
 

@@ -161,7 +161,7 @@ private:
 class wxIEContainer : public wxActiveXContainer
 {
 public:
-    wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, DocHostUIHandler* uiHandler = NULL);
+    wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, DocHostUIHandler* uiHandler = nullptr);
     virtual ~wxIEContainer();
     virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc) override;
 private:

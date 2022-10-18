@@ -139,7 +139,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-            : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size),
+            : wxFrame(nullptr, wxID_ANY, title, pos, size),
                 help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
 {
     SetIcon(wxICON(sample));
@@ -192,11 +192,11 @@ void MyFrame::OnClose(wxCloseEvent& event)
 {
     // Close the help frame; this will cause the config data to
     // get written.
-    if ( help.GetFrame() ) // returns NULL if no help frame active
+    if ( help.GetFrame() ) // returns nullptr if no help frame active
         help.GetFrame()->Close(true);
     // now we can safely delete the config pointer
     event.Skip();
-    delete wxConfig::Set(NULL);
+    delete wxConfig::Set(nullptr);
 }
 
 

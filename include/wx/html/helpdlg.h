@@ -39,10 +39,10 @@ class WXDLLIMPEXP_HTML wxHtmlHelpDialog : public wxDialog
     wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpDialog);
 
 public:
-    wxHtmlHelpDialog(wxHtmlHelpData* data = NULL) { Init(data); }
+    wxHtmlHelpDialog(wxHtmlHelpData* data = nullptr) { Init(data); }
     wxHtmlHelpDialog(wxWindow* parent, wxWindowID id,
                     const wxString& title = wxEmptyString,
-                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL);
+                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = nullptr);
     virtual ~wxHtmlHelpDialog();
 
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
@@ -68,7 +68,7 @@ public:
     virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {}
 
 protected:
-    void Init(wxHtmlHelpData* data = NULL);
+    void Init(wxHtmlHelpData* data = nullptr);
 
     void OnCloseWindow(wxCloseEvent& event);
 

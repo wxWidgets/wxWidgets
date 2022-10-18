@@ -64,7 +64,7 @@ const char *GetSocketErrorMsg(int pSockError)
 //event sent by workers to server class
 //after client is served
 const wxEventType wxEVT_WORKER = wxNewEventType();
-#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) nullptr ),
 
 class WorkerEvent : public wxEvent
 {
@@ -579,9 +579,9 @@ wxThread::ExitCode ThreadWorker::Entry()
 
 EventWorker::EventWorker(wxSocketBase* pSock)
   : m_socket(pSock),
-    m_inbuf(NULL),
+    m_inbuf(nullptr),
     m_infill(0),
-    m_outbuf(NULL),
+    m_outbuf(nullptr),
     m_outfill(0)
 {
     m_socket->SetNotify(wxSOCKET_LOST_FLAG|wxSOCKET_INPUT_FLAG|wxSOCKET_OUTPUT_FLAG);
@@ -601,7 +601,7 @@ EventWorker::~EventWorker()
 void
 EventWorker::DoRead()
 {
-    if (m_inbuf == NULL)
+    if (m_inbuf == nullptr)
     {
         //read message header
         do
@@ -650,7 +650,7 @@ EventWorker::DoRead()
         while(!m_socket->Error() && (2 - m_infill != 0));
     }
 
-    if (m_inbuf == NULL)
+    if (m_inbuf == nullptr)
         return;
     //read message data
     do

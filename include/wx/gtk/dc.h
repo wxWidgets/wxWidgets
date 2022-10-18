@@ -146,7 +146,7 @@ public:
     virtual void StartPage() override { }
     virtual void EndPage() override { }
 
-    virtual GdkWindow* GetGDKWindow() const { return NULL; }
+    virtual GdkWindow* GetGDKWindow() const { return nullptr; }
     virtual void* GetHandle() const override { return GetGDKWindow(); }
 
     // base class pure virtuals implemented here

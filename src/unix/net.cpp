@@ -67,7 +67,7 @@ public:
         : m_BeaconHost(WXDIALUP_MANAGER_DEFAULT_BEACONHOST)
       {
          m_IsOnline = -1; // unknown
-         m_timer = NULL;
+         m_timer = nullptr;
          m_CanUseIfconfig = -1; // unknown
          m_BeaconPort = 80;
       }
@@ -230,7 +230,7 @@ wxDialUpManagerImpl::HangUp(void)
 bool
 wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
 {
-   wxASSERT(m_timer == NULL);
+   wxASSERT(m_timer == nullptr);
    m_timer = new AutoCheckTimer(this);
    bool rc = m_timer->Start(nSeconds*1000);
    if(! rc)
@@ -243,7 +243,7 @@ wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
 void
 wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
 {
-   wxASSERT(m_timer != NULL);
+   wxASSERT(m_timer != nullptr);
    m_timer->Stop();
    wxDELETE(m_timer);
 }
@@ -343,7 +343,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
       // verify well behaved unix behaviour:
       wxASSERT(output_fd == STDOUT_FILENO);
       wxASSERT(null_fd == STDERR_FILENO);
-      int rc = wxExecute(m_IfconfigPath,TRUE /* sync */,NULL ,wxEXECUTE_DONT_CLOSE_FDS);
+      int rc = wxExecute(m_IfconfigPath,TRUE /* sync */,nullptr ,wxEXECUTE_DONT_CLOSE_FDS);
       close(null_fd); close(output_fd);
       // restore old stdout, stderr:
       int test;
@@ -387,7 +387,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    int sockfd;
 
    m_IsOnline = 0; // assume false
-   if((hp = gethostbyname(m_BeaconHost)) == NULL)
+   if((hp = gethostbyname(m_BeaconHost)) == nullptr)
       return; // no DNS no net
 
    serv_addr.sin_family = hp->h_addrtype;

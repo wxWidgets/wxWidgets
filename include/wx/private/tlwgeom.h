@@ -171,7 +171,7 @@ private:
 
 #endif // !__WXMSW__
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     #include "wx/gtk/private/tlwgeom.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/private/tlwgeom.h"

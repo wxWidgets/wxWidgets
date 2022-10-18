@@ -14,25 +14,11 @@
 // and "catch.hpp"
 #include "testprec.h"
 
-
-// Suppress some warnings in catch_impl.hpp.
-wxCLANG_WARNING_SUPPRESS(missing-braces)
-wxCLANG_WARNING_SUPPRESS(logical-op-parentheses)
-wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
-
-// This file needs to get the CATCH definitions in addition to the usual
-// assertion macros declarations from catch.hpp included by testprec.h.
-// Including an internal file like this is ugly, but there doesn't seem to be
-// any better way, see https://github.com/philsquared/Catch/issues/1061
-#include "internal/catch_impl.hpp"
-
-wxCLANG_WARNING_RESTORE(missing-braces)
-wxCLANG_WARNING_RESTORE(logical-op-parentheses)
-wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
-
-// This probably could be done by predefining CLARA_CONFIG_MAIN, but at the
-// point where we are, just define this global variable manually.
-namespace Catch { namespace Clara { UnpositionalTag _; } }
+// See PCH support documentation in 3rdparty/catch/docs/ci-and-misc.md
+#undef TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
+#define CATCH_CONFIG_IMPL_ONLY
+#define CATCH_CONFIG_RUNNER
+#include <catch2/catch.hpp>
 
 // Also define our own global variables.
 namespace wxPrivate
@@ -470,8 +456,8 @@ extern bool IsAutomaticTest()
     static int s_isAutomatic = -1;
     if ( s_isAutomatic == -1 )
     {
-        s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), NULL) ||
-                            wxGetEnv(wxASCII_STR("APPVEYOR"), NULL);
+        s_isAutomatic = wxGetEnv(wxASCII_STR("GITHUB_ACTIONS"), nullptr) ||
+                            wxGetEnv(wxASCII_STR("APPVEYOR"), nullptr);
     }
 
     return s_isAutomatic == 1;
@@ -599,8 +585,8 @@ TestApp::TestApp()
 {
     m_runTests = true;
 
-    m_filterEventFunc = NULL;
-    m_processEventFunc = NULL;
+    m_filterEventFunc = nullptr;
+    m_processEventFunc = nullptr;
 
 #if wxUSE_GUI
     m_exitcode = EXIT_SUCCESS;
@@ -646,8 +632,8 @@ bool TestApp::OnInit()
 
     Connect(wxEVT_IDLE, wxIdleEventHandler(TestApp::OnIdle));
 
-#ifdef __WXGTK20__
-    g_log_set_default_handler(wxTestGLogHandler, NULL);
+#ifdef __WXGTK__
+    g_log_set_default_handler(wxTestGLogHandler, nullptr);
 #endif // __WXGTK__
 
 #ifdef GDK_WINDOWING_X11

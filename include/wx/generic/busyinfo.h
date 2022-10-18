@@ -33,7 +33,7 @@ public:
         Init(flags);
     }
 
-    wxBusyInfo(const wxString& message, wxWindow *parent = NULL)
+    wxBusyInfo(const wxString& message, wxWindow *parent = nullptr)
     {
         Init(wxBusyInfoFlags().Parent(parent).Label(message));
     }

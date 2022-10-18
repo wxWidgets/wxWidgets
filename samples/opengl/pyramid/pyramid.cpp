@@ -82,7 +82,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(500, 400))
+       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(500, 400))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -118,12 +118,12 @@ MyFrame::MyFrame(const wxString& title)
 
 #if wxUSE_LOGWINDOW
     //Open a log window, don't show it though
-    m_LogWin = new wxLogWindow(NULL, "Pyramid log window", false, false);
+    m_LogWin = new wxLogWindow(nullptr, "Pyramid log window", false, false);
     wxLog::SetActiveTarget(m_LogWin);
 #endif // wxUSE_LOGWINDOW
 
     // The canvas
-    m_mycanvas = NULL;
+    m_mycanvas = nullptr;
     wxGLAttributes vAttrs;
     // Defaults should be accepted
     vAttrs.PlatformDefaults().Defaults().EndList();
@@ -260,7 +260,7 @@ void fOGLErrHandler(int err, int glerr, const GLchar* glMsg)
     else if ( err != myoglERR_JUSTLOG )
         msg += _(" GL reports: ");
 
-    if ( glMsg != NULL )
+    if ( glMsg != nullptr )
         msg += wxString::FromUTF8( reinterpret_cast<const char *>(glMsg) );
 
     wxLogMessage(msg);
@@ -284,7 +284,7 @@ unsigned char* MyImgToArray(const wxImage& img, const wxColour& cTrans, unsigned
     unsigned char *resArr = new unsigned char [siz * 4];
     unsigned char *res = resArr;
     unsigned char *sdata = img.GetData();
-    unsigned char *alpha = NULL;
+    unsigned char *alpha = nullptr;
     if ( img.HasAlpha() )
         alpha = img.GetAlpha();
     // Pixel by pixel
@@ -293,7 +293,7 @@ unsigned char* MyImgToArray(const wxImage& img, const wxColour& cTrans, unsigned
         res[0] = sdata[0] ;
         res[1] = sdata[1] ;
         res[2] = sdata[2] ;
-        if ( alpha != NULL )
+        if ( alpha != nullptr )
         {   //copy alpha
             res[3] = alpha[i] ;
         }
@@ -323,7 +323,7 @@ unsigned char* MyTextToPixels(const wxString& sText,     // The string
                               int* width, int* height)   // Image sizes
 {
     if ( sText.IsEmpty() )
-        return NULL;
+        return nullptr;
 
     // The dc where we temporally draw
     wxMemoryDC mdc;
@@ -388,7 +388,7 @@ MyGLCanvas::MyGLCanvas(MyFrame* parent, const wxGLAttributes& canvasAttrs)
 {
     m_parent = parent;
 
-    m_oglManager = NULL;
+    m_oglManager = nullptr;
     m_winHeight = 0; // We have not been sized yet
 
     // Explicitly create a new rendering context instance for this canvas.
@@ -396,7 +396,7 @@ MyGLCanvas::MyGLCanvas(MyFrame* parent, const wxGLAttributes& canvasAttrs)
 #ifndef __WXMAC__
     // An impossible context, just to test IsOk()
     ctxAttrs.PlatformDefaults().OGLVersion(99, 2).EndList();
-    m_oglContext = new wxGLContext(this, NULL, &ctxAttrs);
+    m_oglContext = new wxGLContext(this, nullptr, &ctxAttrs);
 
     if ( !m_oglContext->IsOK() )
     {
@@ -407,7 +407,7 @@ MyGLCanvas::MyGLCanvas(MyFrame* parent, const wxGLAttributes& canvasAttrs)
         ctxAttrs.Reset();
 #endif //__WXMAC__
         ctxAttrs.PlatformDefaults().CoreProfile().OGLVersion(3, 2).EndList();
-        m_oglContext = new wxGLContext(this, NULL, &ctxAttrs);
+        m_oglContext = new wxGLContext(this, nullptr, &ctxAttrs);
 #ifndef __WXMAC__
     }
 #endif //__WXMAC__
@@ -417,7 +417,7 @@ MyGLCanvas::MyGLCanvas(MyFrame* parent, const wxGLAttributes& canvasAttrs)
         wxMessageBox("This sample needs an OpenGL 3.2 capable driver.\nThe app will end now.",
                      "OpenGL version error", wxOK | wxICON_INFORMATION, this);
         delete m_oglContext;
-        m_oglContext = NULL;
+        m_oglContext = nullptr;
     }
     else
     {
@@ -436,13 +436,13 @@ MyGLCanvas::~MyGLCanvas()
     if ( m_oglManager )
     {
         delete m_oglManager;
-        m_oglManager = NULL;
+        m_oglManager = nullptr;
     }
 
     if ( m_oglContext )
     {
         delete m_oglContext;
-        m_oglContext = NULL;
+        m_oglContext = nullptr;
     }
 }
 

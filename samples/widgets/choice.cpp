@@ -185,10 +185,10 @@ ChoiceWidgetsPage::ChoiceWidgetsPage(WidgetsBookCtrl *book,
 {
     // init everything
 
-    m_chkSort = (wxCheckBox *)NULL;
+    m_chkSort = nullptr;
 
-    m_choice = NULL;
-    m_sizerChoice = (wxSizer *)NULL;
+    m_choice = nullptr;
+    m_sizerChoice = nullptr;
 
 }
 
@@ -302,7 +302,7 @@ void ChoiceWidgetsPage::CreateChoice()
 
     m_choice = new wxChoice(this, ChoicePage_Choice,
                             wxDefaultPosition, wxDefaultSize,
-                            0, NULL,
+                            0, nullptr,
                             flags);
 
     m_choice->Set(items);

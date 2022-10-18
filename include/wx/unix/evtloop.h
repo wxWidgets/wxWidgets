@@ -37,7 +37,7 @@ public:
     virtual bool Dispatch() override;
     virtual int DispatchTimeout(unsigned long timeout) override;
     virtual void WakeUp() override;
-    virtual bool IsOk() const override { return m_dispatcher != NULL; }
+    virtual bool IsOk() const override { return m_dispatcher != nullptr; }
 
 protected:
     virtual void OnNextIteration() override;

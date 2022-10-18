@@ -55,7 +55,7 @@ wxPreferencesEditor::~wxPreferencesEditor()
 
 void wxPreferencesEditor::AddPage(wxPreferencesPage* page)
 {
-    wxCHECK_RET( page, "can't set NULL page" );
+    wxCHECK_RET( page, "can't set null page" );
     m_impl->AddPage(page);
 }
 

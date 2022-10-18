@@ -184,7 +184,7 @@ void ZipPipeTestCase::runTest()
     wxZipInputStream zip(in);
 
     wxScopedPtr<wxZipEntry> entry(zip.GetNextEntry());
-    CPPUNIT_ASSERT(entry.get() != NULL);
+    CPPUNIT_ASSERT(entry.get() != nullptr);
 
     if ((m_options & PipeIn) == 0)
         CPPUNIT_ASSERT(entry->GetSize() != wxInvalidOffset);
@@ -233,7 +233,7 @@ CppUnit::Test *ziptest::makeTest(
 {
     // unzip doesn't support piping in the zip
     if ((options & PipeIn) && !unarchiver.empty())
-        return NULL;
+        return nullptr;
 
     if (genericInterface)
     {

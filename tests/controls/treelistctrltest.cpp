@@ -139,7 +139,7 @@ void TreeListCtrlTestCase::setUp()
 void TreeListCtrlTestCase::tearDown()
 {
     delete m_treelist;
-    m_treelist = NULL;
+    m_treelist = nullptr;
 }
 
 // ----------------------------------------------------------------------------

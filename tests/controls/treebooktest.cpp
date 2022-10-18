@@ -98,7 +98,7 @@ void TreebookTestCase::ContainerPage()
     CHECK( m_treebook->GetPageCount() == 0 );
 
     // Adding a page without the associated window should be allowed.
-    REQUIRE_NOTHROW( m_treebook->AddPage(NULL, "Container page") );
+    REQUIRE_NOTHROW( m_treebook->AddPage(nullptr, "Container page") );
     CHECK( m_treebook->GetPageParent(0) == -1 );
 
     m_treebook->AddSubPage(new wxPanel(m_treebook), "Child page");

@@ -75,7 +75,7 @@ public:
                              const wxColour& foreground,
                              const wxColour& background)
     {
-        m_attrs.push(Attr(NULL, font, foreground, background));
+        m_attrs.push(Attr(nullptr, font, foreground, background));
     }
 
     // Indicates the change of the font and/or colours used. Any of the

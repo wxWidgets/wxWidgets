@@ -145,9 +145,9 @@ public:
                               int flags = wxELLIPSIZE_FLAGS_DEFAULT);
 
     // return the accel index in the string or -1 if none and puts the modified
-    // string into second parameter if non NULL
+    // string into second parameter if non-null
     static int FindAccelIndex(const wxString& label,
-                              wxString *labelOnly = NULL);
+                              wxString *labelOnly = nullptr);
 
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which
@@ -205,12 +205,8 @@ protected:
     #include "wx/univ/control.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/control.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/control.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/control.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/control.h"
+    #include "wx/gtk/control.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/control.h"
 #elif defined(__WXQT__)

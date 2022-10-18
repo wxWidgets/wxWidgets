@@ -38,7 +38,7 @@ public:
 wxPaletteRefData::wxPaletteRefData()
 {
     m_count = 0;
-    m_entries = NULL;
+    m_entries = nullptr;
 }
 
 wxPaletteRefData::wxPaletteRefData(const wxPaletteRefData& palette)
@@ -62,7 +62,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject);
 
 wxPalette::wxPalette()
 {
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)

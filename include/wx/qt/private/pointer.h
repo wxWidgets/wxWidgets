@@ -12,7 +12,7 @@
 
 // Extend QPointer with the ability to delete the object in its destructor. The
 // normal behaviour of the QPointer makes sure that this is safe, because if somebody
-// has deleted the object, then data() returns NULL and delete does nothing.
+// has deleted the object, then data() returns nullptr and delete does nothing.
 
 template < typename T >
 class wxQtPointer : public QPointer< T >

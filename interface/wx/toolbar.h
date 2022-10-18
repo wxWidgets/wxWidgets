@@ -80,13 +80,13 @@ enum
 class wxToolBarToolBase : public wxObject
 {
 public:
-    wxToolBarToolBase(wxToolBarBase *tbar = NULL,
+    wxToolBarToolBase(wxToolBarBase *tbar = nullptr,
                       int toolid = wxID_SEPARATOR,
                       const wxString& label = wxEmptyString,
                       const wxBitmapBundle& bmpNormal = wxNullBitmap,
                       const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                       wxItemKind kind = wxITEM_NORMAL,
-                      wxObject *clientData = NULL,
+                      wxObject *clientData = nullptr,
                       const wxString& shortHelpString = wxEmptyString,
                       const wxString& longHelpString = wxEmptyString);
 
@@ -342,7 +342,7 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject* clientData = NULL);
+                                    wxObject* clientData = nullptr);
 
     /**
         Adds any control to the toolbar, typically e.g.\ a wxComboBox.
@@ -378,7 +378,7 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject* clientData = NULL);
+                                    wxObject* clientData = nullptr);
 
     /**
         Adds a separator for spacing groups of tools.
@@ -503,7 +503,7 @@ public:
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString,
-                               wxObject* clientData = NULL);
+                               wxObject* clientData = nullptr);
     ///@}
 
     /**
@@ -753,7 +753,7 @@ public:
                                     wxItemKind kind = wxITEM_NORMAL,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = NULL);
+                                    wxObject *clientData = nullptr);
 
     wxToolBarToolBase* InsertTool(size_t pos,
                                   wxToolBarToolBase* tool);
@@ -1020,7 +1020,7 @@ public:
                                           const wxBitmapBundle& bmpNormal,
                                           const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
-                                          wxObject *clientData = NULL,
+                                          wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
                                           const wxString& longHelp = wxEmptyString);
     /**

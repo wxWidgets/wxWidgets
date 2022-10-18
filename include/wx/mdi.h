@@ -33,10 +33,10 @@ class WXDLLIMPEXP_CORE wxMDIParentFrameBase : public wxFrame
 public:
     wxMDIParentFrameBase()
     {
-        m_clientWindow = NULL;
-        m_currentChild = NULL;
+        m_clientWindow = nullptr;
+        m_currentChild = nullptr;
 #if wxUSE_MENUS
-        m_windowMenu = NULL;
+        m_windowMenu = nullptr;
 #endif // wxUSE_MENUS
     }
 
@@ -78,13 +78,13 @@ public:
     // --------------------------
 
 #if wxUSE_MENUS
-    // return the pointer to the current window menu or NULL if we don't have
+    // return the pointer to the current window menu or nullptr if we don't have
     // because of wxFRAME_NO_WINDOW_MENU style
     wxMenu* GetWindowMenu() const { return m_windowMenu; }
 
     // use the given menu instead of the default window menu
     //
-    // menu can be NULL to disable the window menu completely
+    // menu can be null to disable the window menu completely
     virtual void SetWindowMenu(wxMenu *menu)
     {
         if ( menu != m_windowMenu )
@@ -134,7 +134,7 @@ protected:
     wxMDIChildFrame *m_currentChild;
 
 #if wxUSE_MENUS
-    // the current window menu or NULL if we are not using it
+    // the current window menu or nullptr if we are not using it
     wxMenu *m_windowMenu;
 #endif // wxUSE_MENUS
 };
@@ -146,7 +146,7 @@ protected:
 class WXDLLIMPEXP_CORE wxMDIChildFrameBase : public wxFrame
 {
 public:
-    wxMDIChildFrameBase() { m_mdiParent = NULL; }
+    wxMDIChildFrameBase() { m_mdiParent = nullptr; }
 
     /*
         Derived classes should provide Create() with the following signature:
@@ -225,10 +225,10 @@ public:
                                          wxWindowID WXUNUSED(id) = 1,
                                          const wxString& WXUNUSED(name)
                                             = wxEmptyString) override
-      { return NULL; }
+      { return nullptr; }
 
     virtual wxStatusBar *GetStatusBar() const override
-        { return NULL; }
+        { return nullptr; }
     virtual void SetStatusText(const wxString &WXUNUSED(text),
                                int WXUNUSED(number)=0) override
         { }
@@ -244,8 +244,8 @@ public:
     virtual wxToolBar *CreateToolBar(long WXUNUSED(style),
                                      wxWindowID WXUNUSED(id),
                                      const wxString& WXUNUSED(name)) override
-        { return NULL; }
-    virtual wxToolBar *GetToolBar() const override { return NULL; }
+        { return nullptr; }
+    virtual wxToolBar *GetToolBar() const override { return nullptr; }
 #endif // wxUSE_TOOLBAR
 
     // no icon
@@ -279,7 +279,7 @@ public:
 
     // extra platform-specific hacks
 #ifdef __WXMSW__
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const override
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override
     {
         return wxWindow::MSWGetStyle(flags, exstyle);
     }
@@ -367,8 +367,7 @@ public:
     // wxUniv always uses the generic MDI implementation and so do the ports
     // without native version (although wxCocoa seems to have one -- but it's
     // probably not functional?)
-    #if defined(__WXMOTIF__) || \
-        defined(__WXUNIVERSAL__)
+    #if defined(__WXUNIVERSAL__)
         #define wxUSE_GENERIC_MDI_AS_NATIVE   1
     #else
         #define wxUSE_GENERIC_MDI_AS_NATIVE   0
@@ -379,10 +378,8 @@ public:
     #include "wx/generic/mdig.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/mdi.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/mdi.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/mdi.h"
+    #include "wx/gtk/mdi.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/mdi.h"
 #elif defined(__WXQT__)

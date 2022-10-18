@@ -133,7 +133,7 @@ TEST_CASE("wxStringOutputStream::Tell", "[stream]")
 
 #if wxUSE_UNICODE
     wxMBConvUTF16 convUTF16;
-    wxStringOutputStream ss16(NULL, convUTF16);
+    wxStringOutputStream ss16(nullptr, convUTF16);
     CHECK( ss16.TellO() == 0 );
 
     const wxCharBuffer s16 = convUTF16.cWC2MB(wxWCharBuffer(str.wc_str()));

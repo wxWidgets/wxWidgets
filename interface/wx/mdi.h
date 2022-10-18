@@ -150,9 +150,7 @@ public:
             The window style. Default value includes wxHSCROLL and wxVSCROLL
             styles.
         @param name
-            The name of the window. This parameter is used to associate a name
-            with the item, allowing the application user to set Motif resource
-            values for individual windows.
+            The name of the window.
 
         @remarks
 
@@ -230,7 +228,7 @@ public:
     /**
         Returns a pointer to the active MDI child, if there is one.
 
-        If there are any children at all this function returns a non-@NULL
+        If there are any children at all this function returns a non-null
         pointer.
     */
     virtual wxMDIChildFrame* GetActiveChild() const;
@@ -394,9 +392,7 @@ public:
         @param style
             The window style. See wxMDIChildFrame.
         @param name
-            The name of the window. This parameter is used to associate a name with the
-            item, allowing the application user to set Motif resource values for individual
-            windows.
+            The name of the window.
 
         @see Create()
     */

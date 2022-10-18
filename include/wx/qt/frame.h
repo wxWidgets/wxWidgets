@@ -64,7 +64,7 @@ private:
     // Common part of all ctors.
     void Init()
     {
-        m_qtToolBar = NULL;
+        m_qtToolBar = nullptr;
     }
 
 

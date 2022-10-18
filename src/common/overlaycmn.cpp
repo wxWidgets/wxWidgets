@@ -166,7 +166,7 @@ public:
 
 wxOverlayImpl::wxOverlayImpl()
 {
-     m_window = NULL ;
+     m_window = nullptr ;
      m_x = m_y = m_width = m_height = 0 ;
 }
 
@@ -261,7 +261,7 @@ wxOverlay::wxOverlay()
 {
     m_impl = Create();
 #if defined(wxHAS_GENERIC_OVERLAY) && defined(wxHAS_NATIVE_OVERLAY)
-    if (m_impl == NULL)
+    if (m_impl == nullptr)
         m_impl = new wxOverlayImpl;
 #endif
     m_inDrawing = false;

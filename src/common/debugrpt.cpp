@@ -380,7 +380,7 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         if ( !path.empty() )
             nodeModule->AddAttribute(wxT("path"), path);
 
-        void *addr = NULL;
+        void *addr = nullptr;
         size_t len = 0;
         if ( info.GetAddress(&addr, &len) )
         {

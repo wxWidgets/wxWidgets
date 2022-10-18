@@ -140,7 +140,7 @@ class WXDLLIMPEXP_CORE wxGenericPrintDialog : public wxPrintDialogBase
 {
 public:
     wxGenericPrintDialog(wxWindow *parent,
-                         wxPrintDialogData* data = NULL);
+                         wxPrintDialogData* data = nullptr);
     wxGenericPrintDialog(wxWindow *parent, wxPrintData* data);
 
     virtual ~wxGenericPrintDialog();
@@ -222,8 +222,8 @@ private:
 class WXDLLIMPEXP_CORE wxGenericPageSetupDialog : public wxPageSetupDialogBase
 {
 public:
-    wxGenericPageSetupDialog(wxWindow *parent = NULL,
-                             wxPageSetupDialogData* data = NULL);
+    wxGenericPageSetupDialog(wxWindow *parent = nullptr,
+                             wxPageSetupDialogData* data = nullptr);
     virtual ~wxGenericPageSetupDialog();
 
     virtual bool TransferDataFromWindow() override;

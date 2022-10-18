@@ -95,7 +95,7 @@ public:
                         TEXT("Press me to do it"),
                         WS_CHILD | WS_VISIBLE | BS_SPLITBUTTON,
                         0, 0, size.x, size.y,
-                        (HWND)parent->GetHWND(), 0, NULL, NULL
+                        (HWND)parent->GetHWND(), 0, nullptr, nullptr
                       );
         if ( !hwnd )
         {
@@ -276,7 +276,7 @@ IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, "Native", NATIVE_CTRLS);
 NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
                  : WidgetsPage(book, imaglist, native_xpm)
 {
-    m_nativeWindow = NULL;
+    m_nativeWindow = nullptr;
 }
 
 void NativeWidgetsPage::CreateContent()

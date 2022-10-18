@@ -199,7 +199,7 @@ class  wx28HtmlTagHandler : public wxObject
     wxDECLARE_ABSTRACT_CLASS(wx28HtmlTagHandler);
 
 public:
-    wx28HtmlTagHandler() : wxObject () { m_Parser = NULL; }
+    wx28HtmlTagHandler() : wxObject () { m_Parser = nullptr; }
 
     // Sets the parser.
     // NOTE : each _instance_ of handler is guaranteed to be called

@@ -36,7 +36,7 @@ enum wxRibbonGalleryButtonState
         This event is available since wxWidgets 2.9.2.
     @event{EVT_RIBBONGALLERY_HOVER_CHANGED(id, func)}
         Triggered when the item being hovered over by the user changes. The
-        item in the event will be the new item being hovered, or NULL if there
+        item in the event will be the new item being hovered, or @NULL if there
         is no longer an item being hovered. Note that the ID is that of the
         gallery, not of the item.
     @endEventTable
@@ -175,14 +175,14 @@ public:
 
     /**
         Set the selection to the given item, or removes the selection if
-        @a item == NULL.
+        @a item == nullptr.
 
         Note that this not cause any events to be emitted.
     */
     void SetSelection(wxRibbonGalleryItem* item);
 
     /**
-        Get the currently selected item, or NULL if there is none.
+        Get the currently selected item, or @NULL if there is none.
 
         The selected item is set by SetSelection(), or by the user clicking on
         an item.
@@ -190,14 +190,14 @@ public:
     wxRibbonGalleryItem* GetSelection() const;
 
     /**
-        Get the currently hovered item, or NULL if there is none.
+        Get the currently hovered item, or @NULL if there is none.
 
         The hovered item is the item underneath the mouse cursor.
     */
     wxRibbonGalleryItem* GetHoveredItem() const;
 
     /**
-        Get the currently active item, or NULL if there is none.
+        Get the currently active item, or @NULL if there is none.
 
         The active item is the item being pressed by the user, and will thus
         become the selected item if the user releases the mouse button.
@@ -273,8 +273,8 @@ public:
     */
     wxRibbonGalleryEvent(wxEventType command_type = wxEVT_NULL,
                          int win_id = 0,
-                         wxRibbonGallery* gallery = NULL,
-                         wxRibbonGalleryItem* item = NULL);
+                         wxRibbonGallery* gallery = nullptr,
+                         wxRibbonGalleryItem* item = nullptr);
 
     /**
         Returns the gallery which the event relates to.
@@ -282,7 +282,7 @@ public:
     wxRibbonGallery* GetGallery();
 
     /**
-        Returns the gallery item which the event relates to, or NULL if it does
+        Returns the gallery item which the event relates to, or @NULL if it does
         not relate to an item.
     */
     wxRibbonGalleryItem* GetGalleryItem();

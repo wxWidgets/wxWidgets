@@ -91,11 +91,11 @@ public:
 
         wxCFStringRef cfName(locId.GetName());
         if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
-            return NULL;
+            return nullptr;
 
         auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
         if ( !nsloc )
-            return NULL;
+            return nullptr;
 
         return new wxUILocaleImplCF(nsloc);
     }
@@ -149,7 +149,7 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 wxString
 wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
-    NSString* str = NULL;
+    NSString* str = nullptr;
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:

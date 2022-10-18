@@ -38,7 +38,7 @@ class WXDLLIMPEXP_HTML wxHtmlWinParser : public wxHtmlParser
     friend class wxHtmlWindow;
 
 public:
-    wxHtmlWinParser(wxHtmlWindowInterface *wndIface = NULL);
+    wxHtmlWinParser(wxHtmlWindowInterface *wndIface = nullptr);
 
     virtual ~wxHtmlWinParser();
 
@@ -68,7 +68,7 @@ public:
     wxHtmlWindowInterface *GetWindowInterface() {return m_windowInterface;}
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
-    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = nullptr);
 
     // Sets font sizes to be relative to the given size or the system
     // default size; use either specified or default font
@@ -218,7 +218,7 @@ private:
             // [bold][italic][underlined][fixed_size]
             // last index is font size : from 0 to 6 (remapped from html sizes 1 to 7)
             // Note : this table covers all possible combinations of fonts, but not
-            // all of them are used, so many items in table are usually NULL.
+            // all of them are used, so many items in table are usually null.
     int m_FontsSizes[7];
     wxString m_FontFaceFixed, m_FontFaceNormal;
             // html font sizes and faces of fixed and proportional fonts

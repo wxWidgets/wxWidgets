@@ -39,11 +39,11 @@
 
 void wxTextMeasure::Init()
 {
-    m_context = NULL;
-    m_layout = NULL;
+    m_context = nullptr;
+    m_layout = nullptr;
 
 #ifndef __WXGTK3__
-    m_wdc = NULL;
+    m_wdc = nullptr;
 
     if ( m_dc )
     {
@@ -142,7 +142,7 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
     {
         // the logical rect bounds the ink rect
         PangoRectangle rect;
-        pango_layout_get_extents(m_layout, NULL, &rect);
+        pango_layout_get_extents(m_layout, nullptr, &rect);
         *width = PANGO_PIXELS(rect.width);
         *height = PANGO_PIXELS(rect.height);
     }
@@ -186,11 +186,11 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
     // Code borrowed from Scintilla's PlatGTK
     PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
     PangoRectangle pos;
-    pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
+    pango_layout_iter_get_cluster_extents(iter, nullptr, &pos);
     size_t i = 0;
     while (pango_layout_iter_next_cluster(iter))
     {
-        pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
+        pango_layout_iter_get_cluster_extents(iter, nullptr, &pos);
         int position = PANGO_PIXELS(pos.x);
         widths[i++] = position;
     }

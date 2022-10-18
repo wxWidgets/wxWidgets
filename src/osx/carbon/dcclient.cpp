@@ -54,7 +54,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 
     m_release = false;
-    if ( cg == NULL )
+    if ( cg == nullptr )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
         m_contentScaleFactor = window->GetContentScaleFactor();

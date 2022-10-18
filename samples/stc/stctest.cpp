@@ -66,13 +66,13 @@ class AppBook;
 
 //----------------------------------------------------------------------------
 //! global application name
-wxString *g_appname = NULL;
+wxString *g_appname = nullptr;
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
 //! global print data, to remember settings during the session
-wxPrintData *g_printData = (wxPrintData*) NULL;
-wxPageSetupDialogData *g_pageSetupData = (wxPageSetupDialogData*) NULL;
+wxPrintData *g_printData = nullptr;
+wxPageSetupDialogData *g_pageSetupData = nullptr;
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
@@ -278,12 +278,12 @@ wxBEGIN_EVENT_TABLE (AppFrame, wxFrame)
 wxEND_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
-        : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550))
+        : wxFrame (nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(750,550))
 {
     SetIcon(wxICON(sample));
 
     // initialize important variables
-    m_edit = NULL;
+    m_edit = nullptr;
 
     // set icon and background
     SetTitle (*g_appname);
@@ -665,7 +665,7 @@ AppAbout::AppAbout (wxWindow *parent,
                     style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 
     // set timer if any
-    m_timer = NULL;
+    m_timer = nullptr;
     if (milliseconds > 0) {
         m_timer = new wxTimer (this, myID_ABOUTTIMER);
         m_timer->Start (milliseconds, wxTIMER_ONE_SHOT);
@@ -840,7 +840,7 @@ void MinimalEditor::OnText(wxStyledTextEvent& event)
 class MinimalEditorFrame : public wxFrame
 {
 public:
-    MinimalEditorFrame() : wxFrame(NULL, wxID_ANY, _("Minimal Editor"))
+    MinimalEditorFrame() : wxFrame(nullptr, wxID_ANY, _("Minimal Editor"))
     {
         MinimalEditor* editor = new MinimalEditor(this);
         editor->SetFont(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));

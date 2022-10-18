@@ -112,9 +112,9 @@ void wxGenericFileDialog::Init()
 {
     m_bypassGenericImpl = false;
 
-    m_filectrl   = NULL;
-    m_upDirButton  = NULL;
-    m_newDirButton = NULL;
+    m_filectrl   = nullptr;
+    m_upDirButton  = nullptr;
+    m_newDirButton = nullptr;
 }
 
 wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
@@ -308,7 +308,7 @@ int wxGenericFileDialog::ShowModal()
     if (m_extraControl)
     {
         m_extraControl->Destroy();
-        m_extraControl = NULL;
+        m_extraControl = nullptr;
     }
 
     return rc;

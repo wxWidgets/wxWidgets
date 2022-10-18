@@ -198,7 +198,7 @@ bool MyApp::OnInit()
 // --------------------------------------------------------------------------
 
 // frame constructor
-MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
+MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY,
                              _("wxSocket demo: Client"),
                              wxDefaultPosition, wxSize(300, 200))
 {
@@ -645,7 +645,7 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
         {
             DoDownload(m_url);
 
-            return NULL;
+            return nullptr;
         }
 
     private:

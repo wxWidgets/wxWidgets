@@ -189,10 +189,10 @@ CreateSurfaceWithFormat(int w, int h, DFBSurfacePixelFormat format)
 // Creates a surface that will use wxImage's pixel data (RGB only)
 wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 {
-    wxCHECK_MSG( image.IsOk(), NULL, "invalid image" );
+    wxCHECK_MSG( image.IsOk(), nullptr, "invalid image" );
     // FIXME_DFB: implement alpha handling by merging alpha buffer with RGB
     //            into a temporary RGBA surface
-    wxCHECK_MSG( !image.HasAlpha(), NULL, "alpha channel not supported" );
+    wxCHECK_MSG( !image.HasAlpha(), nullptr, "alpha channel not supported" );
 
     // NB: wxImage uses RGB order of bytes while DirectFB uses BGR, so we
     //     cannot use preallocated surface that shares data with wxImage, we
@@ -215,7 +215,7 @@ bool ConvertSurfaceToFormat(wxIDirectFBSurfacePtr& surface,
 
     if ( !s->SetBlittingFlags(DSBLIT_NOFX) )
         return false;
-    if ( !s->Blit(surface->GetRaw(), NULL, 0, 0) )
+    if ( !s->Blit(surface->GetRaw(), nullptr, 0, 0) )
         return false;
 
     surface = s;
@@ -349,19 +349,19 @@ class wxBitmapRefData: public wxGDIRefData
 public:
     wxBitmapRefData()
     {
-        m_mask = NULL;
+        m_mask = nullptr;
 #if wxUSE_PALETTE
-        m_palette = NULL;
+        m_palette = nullptr;
 #endif
     }
 
     wxBitmapRefData(const wxBitmapRefData& data)
     {
-        m_surface = data.m_surface ? data.m_surface->Clone() : NULL;
+        m_surface = data.m_surface ? data.m_surface->Clone() : nullptr;
 
-        m_mask = data.m_mask ? new wxMask(*data.m_mask) : NULL;
+        m_mask = data.m_mask ? new wxMask(*data.m_mask) : nullptr;
 #if wxUSE_PALETTE
-        m_palette = data.m_palette ? new wxPalette(*data.m_palette) : NULL;
+        m_palette = data.m_palette ? new wxPalette(*data.m_palette) : nullptr;
 #endif
     }
 
@@ -457,7 +457,7 @@ void wxBitmap::InitFromImage(const wxImage& imageOrig, int depth, double WXUNUSE
 
             if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
                 return;
-            if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
+            if ( !dst->Blit(src->GetRaw(), nullptr, 0, 0) )
                 return;
         }
     }
@@ -485,7 +485,7 @@ wxImage wxBitmap::ConvertToImage() const
 
             if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
                 return wxNullImage;
-            if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
+            if ( !dst->Blit(src->GetRaw(), nullptr, 0, 0) )
                 return wxNullImage;
 
             CopySurfaceToImage(dst, img);
@@ -493,7 +493,7 @@ wxImage wxBitmap::ConvertToImage() const
     }
 
     // FIXME: implement mask setting in the image
-    wxASSERT_MSG( GetMask() == NULL, "bitmap masks are ignored for now" );
+    wxASSERT_MSG( GetMask() == nullptr, "bitmap masks are ignored for now" );
 
     return img;
 }
@@ -501,7 +501,7 @@ wxImage wxBitmap::ConvertToImage() const
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    wxCHECK_MSG( IsOk(), NULL, "invalid bitmap" );
+    wxCHECK_MSG( IsOk(), nullptr, "invalid bitmap" );
 
     AllocExclusive();
 
@@ -516,16 +516,16 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     // as unpacked formats (RGB24, RGB32) are the common case and converting
     // between them while blitting is fast enough (FIXME?)
     if ( !ConvertSurfaceToFormat(M_BITMAP->m_surface, format) )
-        return NULL;
+        return nullptr;
 
-    void *bits = NULL;
+    void *bits = nullptr;
     if ( !M_BITMAP->m_surface->Lock
                                (
                                  (DFBSurfaceLockFlags)(DSLF_READ | DSLF_WRITE),
                                  &bits,
                                  &data.m_stride
                                ) )
-        return NULL;
+        return nullptr;
 
     M_BITMAP->m_surface->GetSize(&data.m_width, &data.m_height);
 
@@ -567,7 +567,7 @@ int wxBitmap::GetHeight() const
     wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
     int h = -1;
-    M_BITMAP->m_surface->GetSize(NULL, &h);
+    M_BITMAP->m_surface->GetSize(nullptr, &h);
     return h;
 }
 
@@ -576,7 +576,7 @@ int wxBitmap::GetWidth() const
     wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
 
     int w = -1;
-    M_BITMAP->m_surface->GetSize(&w, NULL);
+    M_BITMAP->m_surface->GetSize(&w, nullptr);
     return w;
 }
 
@@ -589,7 +589,7 @@ int wxBitmap::GetDepth() const
 
 wxMask *wxBitmap::GetMask() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
     return M_BITMAP->m_mask;
 }
@@ -625,7 +625,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
 
     wxBitmapHandler *handler = FindHandler(type);
 
-    if ( handler == NULL )
+    if ( handler == nullptr )
     {
         wxImage image;
         if ( !image.LoadFile(name, type) || !image.IsOk() )
@@ -652,7 +652,7 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
 
     wxBitmapHandler *handler = FindHandler(type);
 
-    if ( handler == NULL )
+    if ( handler == nullptr )
     {
         wxImage image = ConvertToImage();
 #if wxUSE_PALETTE
@@ -675,7 +675,7 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
     return M_BITMAP->m_palette;
 }
@@ -724,7 +724,7 @@ void wxBitmap::SetDepth(int depth)
         return;
     if ( !s->SetBlittingFlags(DSBLIT_NOFX) )
         return;
-    if ( !s->Blit(M_BITMAP->m_surface->GetRaw(), NULL, 0, 0) )
+    if ( !s->Blit(M_BITMAP->m_surface->GetRaw(), nullptr, 0, 0) )
         return;
 
     M_BITMAP->m_surface = s;
@@ -733,7 +733,7 @@ void wxBitmap::SetDepth(int depth)
 
 wxIDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
     return M_BITMAP->m_surface;
 }

@@ -355,7 +355,7 @@ public:
 
     @header{wx/aboutdlg.h}
 */
-void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
+void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 /**
     This function does the same thing as wxAboutBox() except that it always uses
@@ -372,6 +372,6 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
 
     @header{wx/aboutdlg.h}
 */
-void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
+void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 ///@}

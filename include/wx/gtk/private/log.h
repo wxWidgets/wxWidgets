@@ -30,7 +30,7 @@ class LogFilter
 public:
     LogFilter()
     {
-        m_next = NULL;
+        m_next = nullptr;
     }
 
     // Allow installing our own log writer function, we don't do it by default

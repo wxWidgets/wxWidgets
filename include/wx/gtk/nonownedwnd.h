@@ -19,7 +19,7 @@ class wxNonOwnedWindowShapeImpl;
 class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
-    wxNonOwnedWindow() { m_shapeImpl = NULL; }
+    wxNonOwnedWindow() { m_shapeImpl = nullptr; }
     virtual ~wxNonOwnedWindow();
 
     // Overridden to actually set the shape when the window becomes realized.
@@ -34,7 +34,7 @@ protected:
 
 
 private:
-    // If non-NULL, contains information about custom window shape.
+    // If non-null, contains information about custom window shape.
     wxNonOwnedWindowShapeImpl* m_shapeImpl;
 
     wxDECLARE_NO_COPY_CLASS(wxNonOwnedWindow);

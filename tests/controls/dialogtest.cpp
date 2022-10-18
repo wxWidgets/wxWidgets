@@ -74,7 +74,7 @@ void ModalDialogsTestCase::MessageDialog()
 #if wxUSE_FILEDLG
 void ModalDialogsTestCase::FileDialog()
 {
-    wxFileDialog dlg(NULL);
+    wxFileDialog dlg(nullptr);
     int rc;
 
     wxTEST_DIALOG
@@ -128,7 +128,7 @@ protected:
 
 void ModalDialogsTestCase::CustomDialog()
 {
-    MyDialog dlg(NULL);
+    MyDialog dlg(nullptr);
 
     wxTEST_DIALOG
     (
@@ -143,7 +143,7 @@ void ModalDialogsTestCase::CustomDialog()
 class MyModalDialog : public wxDialog
 {
 public:
-    MyModalDialog() : wxDialog (NULL, wxID_ANY, "Modal Dialog")
+    MyModalDialog() : wxDialog (nullptr, wxID_ANY, "Modal Dialog")
     {
         m_wasModal = false;
         Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );

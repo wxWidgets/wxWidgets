@@ -51,7 +51,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     {
         m_qtArgv[i] = wxStrdupA(wxConvUTF8.cWX2MB(argv[i]));
     }
-    m_qtArgv[argc] = NULL;
+    m_qtArgv[argc] = nullptr;
     m_qtArgc = argc;
 
     m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
@@ -80,7 +80,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
         }
 
         argc = m_qtApplication->arguments().size();
-        argv[argc] = NULL;
+        argv[argc] = nullptr;
     }
 
     return true;

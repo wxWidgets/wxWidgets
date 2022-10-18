@@ -85,7 +85,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* client_data = nullptr);
 
     virtual wxRibbonToolBarToolBase* AddSeparator();
 
@@ -121,7 +121,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* client_data = nullptr);
 
     virtual wxRibbonToolBarToolBase* InsertSeparator(size_t pos);
 
@@ -206,7 +206,7 @@ class WXDLLIMPEXP_RIBBON wxRibbonToolBarEvent : public wxCommandEvent
 public:
     wxRibbonToolBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonToolBar* bar = NULL)
+                       wxRibbonToolBar* bar = nullptr)
         : wxCommandEvent(command_type, win_id)
         , m_bar(bar)
     {

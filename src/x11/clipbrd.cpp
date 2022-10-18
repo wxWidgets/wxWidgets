@@ -213,7 +213,7 @@ unsigned char *GetClipboardDataByFormat(Display* disp, Window win, Atom clipbrdT
                                          unsigned long *length)
 {
     // some variables that used to get the data in window property
-    unsigned char *clipbrddata = NULL;
+    unsigned char *clipbrddata = nullptr;
     int read_bytes = 1024;
     Atom type;
     int format, result;
@@ -223,10 +223,10 @@ unsigned char *GetClipboardDataByFormat(Display* disp, Window win, Atom clipbrdT
 
     do
     {
-        if ( clipbrddata != 0 )
+        if ( clipbrddata != nullptr )
         {
             XFree(clipbrddata);
-            clipbrddata = NULL;
+            clipbrddata = nullptr;
         }
 
         result = XGetWindowProperty(disp, win, clipbrdType, 0, read_bytes, False, AnyPropertyType,
@@ -238,13 +238,13 @@ unsigned char *GetClipboardDataByFormat(Display* disp, Window win, Atom clipbrdT
     if ( result == Success && clipbrddata )
         return clipbrddata;
 
-    return NULL;
+    return nullptr;
 }
 
 // get the data for a specific wxDataFormat that stored as a property in Root window
 void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataFormat dfFormat)
 {
-    unsigned char *clipbrdData = NULL;
+    unsigned char *clipbrdData = nullptr;
 
     // some variables that used to get the data in window property
     unsigned long len;
@@ -270,7 +270,7 @@ void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataForma
 
                 clipbrdData  = GetClipboardDataByFormat(disp, win, XA_CLIPBOARD,
                                                         atomVector.at(i), &len);
-                if ( clipbrdData != NULL )
+                if ( clipbrdData != nullptr )
                     break;
             }
             // if we got any data, copy it.
@@ -414,8 +414,8 @@ wxClipboard::wxClipboard()
     m_ownsClipboard = false;
     m_ownsPrimarySelection = false;
 
-    m_data = NULL;
-    m_receivedData = NULL;
+    m_data = nullptr;
+    m_receivedData = nullptr;
 
     /* we use m_targetsWidget to query what formats are available */
 
@@ -530,7 +530,6 @@ bool wxClipboard::IsOpened() const
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     // TODO: this implementation only support copy/paste text for now.
-    // remove the code that paste from gtk1 port.
 
     return format == wxDF_UNICODETEXT;
 }

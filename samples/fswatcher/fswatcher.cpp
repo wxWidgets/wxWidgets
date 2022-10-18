@@ -135,8 +135,8 @@ wxIMPLEMENT_APP(MyApp);
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-    : wxFrame(NULL, wxID_ANY, title),
-      m_watcher(NULL), m_followLinks(false)
+    : wxFrame(nullptr, wxID_ANY, title),
+      m_watcher(nullptr), m_followLinks(false)
 {
     SetIcon(wxICON(sample));
 

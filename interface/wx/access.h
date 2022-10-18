@@ -358,7 +358,7 @@ public:
         Constructor, taking an optional window. The object can be associated with
         a window later.
     */
-    wxAccessible(wxWindow* win = NULL);
+    wxAccessible(wxWindow* win = nullptr);
 
     /**
         Destructor.

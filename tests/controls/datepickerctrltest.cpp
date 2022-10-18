@@ -56,7 +56,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DatePickerCtrlTestCase, "DatePickerCtrlTe
 void DatePickerCtrlTestCase::setUp()
 {
     m_datepicker = new wxDatePickerCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
-    m_button = NULL;
+    m_button = nullptr;
 }
 
 void DatePickerCtrlTestCase::tearDown()

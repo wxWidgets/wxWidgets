@@ -142,7 +142,7 @@ int wxDirDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParentForModalDialog();
-    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : nullptr;
 
     wxWindowDisabler disableOthers(this, parent);
 
@@ -182,8 +182,8 @@ int wxDirDialog::ShowSHBrowseForFolder(WXHWND owner)
 {
     BROWSEINFO bi;
     bi.hwndOwner      = owner;
-    bi.pidlRoot       = NULL;
-    bi.pszDisplayName = NULL;
+    bi.pidlRoot       = nullptr;
+    bi.pszDisplayName = nullptr;
     bi.lpszTitle      = m_message.c_str();
     bi.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
     bi.lpfn           = BrowseCallbackProc;
@@ -279,7 +279,7 @@ wxIFileDialog::wxIFileDialog(const CLSID& clsid)
     HRESULT hr = ::CoCreateInstance
                  (
                     clsid,
-                    NULL, // no outer IUnknown
+                    nullptr, // no outer IUnknown
                     CLSCTX_INPROC_SERVER,
                     wxIID_PPV_ARGS(IFileDialog, &m_fileDialog)
                  );
@@ -405,7 +405,7 @@ HRESULT InitShellItemFromPath(wxCOMPtr<IShellItem>& item, const wxString& path)
     hr = s_pfnSHCreateItemFromParsingName
          (
             pathWithoutSlashes->wc_str(),
-            NULL,
+            nullptr,
             wxIID_PPV_ARGS(IShellItem, &item)
          );
     if ( FAILED(hr) )
