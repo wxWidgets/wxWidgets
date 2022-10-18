@@ -9165,8 +9165,7 @@ void wxGrid::SetCornerLabelValue( const wxString& s )
         m_table->SetCornerLabelValue( s );
         if ( ShouldRefresh() )
         {
-            wxRect rect = m_cornerLabelWin->GetRect();
-            m_cornerLabelWin->Refresh(true, &rect);
+            m_cornerLabelWin->Refresh();
         }
     }
 }
