@@ -74,3 +74,20 @@ jobs:
       - name: Check for mixed EOL
         run: |
             ./misc/scripts/check_mixed_eol.sh
+
+  check-cxx-style:
+    runs-on: ubuntu-20.04
+    name: Check C++ Style
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check for obsolete macros use
+        run: |
+            git fetch --depth=1 origin master
+            if git diff origin/master ':!.github/workflows/code_checks.yml' |
+               grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT)'; then
+              echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
+              exit 1
+            fi
