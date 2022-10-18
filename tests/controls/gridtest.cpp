@@ -1841,7 +1841,7 @@ TEST_CASE_METHOD(GridTestCase,
     // repeat the same tests for both rows and columns as the code for
     // updating them works symmetrically.
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1876,7 +1876,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     wxSwap(multi.rows, multi.cols);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1958,7 +1958,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     Multicell multi(1, 1, 5, 3);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1993,7 +1993,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     wxSwap(multi.rows, multi.cols);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);

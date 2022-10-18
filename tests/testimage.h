@@ -145,7 +145,7 @@ public:
     std::string describe() const override
     {
         std::string desc = "doesn't have the same RGB data as " +
-                                Catch::toString(m_image);
+                                Catch::StringMaker<wxImage>::convert(m_image);
 
         if ( !m_diffDesc.empty() )
             desc += + ": " + m_diffDesc.ToStdString(wxConvUTF8);

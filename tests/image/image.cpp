@@ -1400,7 +1400,7 @@ FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
         const wxImage imageFromFile(file); \
         if ( imageFromFile.IsOk() ) \
         { \
-            INFO("Wrong scaled \"" << file << "\" " << Catch::toString(image)); \
+            INFO("Wrong scaled \"" << file << "\" " << Catch::StringMaker<wxImage>::convert(image)); \
             CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
         } \
         else \
@@ -1648,8 +1648,12 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     };
 
     // Execute AddHandler() just once.
-    static const bool
-        registeredHandler = (wxImage::AddHandler(new wxPNGHandler()), true);
+    static bool s_registeredHandler = false;
+    if ( !s_registeredHandler )
+    {
+        wxImage::AddHandler(new wxPNGHandler());
+        s_registeredHandler = true;
+    }
 
     SECTION("Paste same size image")
     {

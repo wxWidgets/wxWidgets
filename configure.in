@@ -8187,12 +8187,12 @@ if test "$wxUSE_TESTS_SUBDIR" != "no"; then
     SUBDIRS="$SUBDIRS tests"
 
     dnl Check for catch (C++ Automated Test Cases in Headers) availability.
-    AC_MSG_CHECKING([whether catch.hpp file exists])
-    if ! test -f "$srcdir/3rdparty/catch/include/catch.hpp" ; then
+    AC_MSG_CHECKING([whether catch2/catch.hpp exists])
+    if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp" ; then
         AC_MSG_RESULT([no])
         AC_MSG_ERROR([
     CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $srcdir/3rdparty/catch/include/catch.hpp couldn't be found.
+    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp couldn't be found.
 
     You might need to run
 

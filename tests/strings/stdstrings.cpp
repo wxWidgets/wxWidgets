@@ -557,7 +557,7 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 #else
     std::wstring s6 = s4.ToStdWstring();
 #endif
-    CHECK( s6 == "hello" );
+    CHECK( s6 == L"hello" );
 
 #if wxUSE_UNSAFE_WXSTRING_CONV
     std::string s7(s4);
@@ -565,7 +565,7 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 #endif
 
     std::wstring s8(s4);
-    CHECK( s8 == "hello" );
+    CHECK( s8 == L"hello" );
 
 #if wxUSE_UNICODE
     std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
