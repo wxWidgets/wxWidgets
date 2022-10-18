@@ -23,7 +23,15 @@
 # and once released its version cannot be changed.
 
 
-# public symbols added in 3.2.1 (please keep in alphabetical order):
+# public symbols added in 3.2.2 (please keep in alphabetical order):
+@WX_VERSION_TAG@.2 {
+    extern "C++" {
+        "wxWithImages::GetImageLogicalSize";
+        "wxWithImages::GetImageBitmapFor";
+    };
+};
+
+# public symbols added in 3.2.1
 @WX_VERSION_TAG@.1 {
     extern "C++" {
         "wxApp::GTKAllowDiagnosticsControl()";
