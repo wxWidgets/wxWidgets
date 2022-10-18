@@ -2442,9 +2442,8 @@ void wxGenericTreeCtrl::UpdateAfterImageListChange()
     if (m_anchor)
         m_anchor->RecursiveResetSize();
 
-    // Don't do any drawing if we're setting the list to NULL,
-    // since we may be in the process of deleting the tree control.
-    if (GetImageList())
+    // Don't do this if we're in the process of deleting the tree control.
+    if (HasImages())
         CalculateLineHeight();
 }
 
