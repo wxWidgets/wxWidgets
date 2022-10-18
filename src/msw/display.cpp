@@ -217,7 +217,7 @@ private:
     {
         GetDpiForMonitorData()
         {
-            m_pfnGetDpiForMonitor = NULL;
+            m_pfnGetDpiForMonitor = nullptr;
             m_initialized = false;
         }
 
@@ -242,7 +242,7 @@ private:
             if ( m_dllShcore.IsLoaded() )
             {
                 m_dllShcore.Unload();
-                m_pfnGetDpiForMonitor = NULL;
+                m_pfnGetDpiForMonitor = nullptr;
             }
         }
 
@@ -343,12 +343,12 @@ wxVideoMode wxDisplayMSW::GetCurrentMode() const
 {
     wxVideoMode mode;
 
-    // The first parameter of EnumDisplaySettings() must be NULL according
+    // The first parameter of EnumDisplaySettings() must be null according
     // to MSDN, in order to specify the current display on the computer
     // on which the calling thread is running.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
-                                          ? (const wxChar*)NULL
+                                          ? nullptr
                                           : (const wxChar*)name.c_str();
 
     DEVMODE dm;
@@ -371,12 +371,12 @@ wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
 {
     wxArrayVideoModes modes;
 
-    // The first parameter of EnumDisplaySettings() must be NULL according
+    // The first parameter of EnumDisplaySettings() must be null according
     // to MSDN, in order to specify the current display on the computer
     // on which the calling thread is running.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
-                                            ? (const wxChar*)NULL
+                                            ? nullptr
                                             : (const wxChar*)name.c_str();
 
     DEVMODE dm;
@@ -416,7 +416,7 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
     if ( mode == wxDefaultVideoMode )
     {
         // reset the video mode to default
-        pDevMode = NULL;
+        pDevMode = nullptr;
         flags = 0;
     }
     else // change to the given mode
@@ -453,10 +453,10 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
     switch ( ::ChangeDisplaySettingsEx
              (
                 GetName().t_str(),  // display name
-                pDevMode,           // dev mode or NULL to reset
+                pDevMode,           // dev mode or nullptr to reset
                 wxRESERVED_PARAM,
                 flags,
-                NULL                // pointer to video parameters (not used)
+                nullptr             // pointer to video parameters (not used)
              ) )
     {
         case DISP_CHANGE_SUCCESSFUL:
@@ -507,8 +507,8 @@ wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 wxDisplayFactoryMSW::wxDisplayFactoryMSW()
 {
-    m_hiddenHwnd = NULL;
-    m_hiddenClass = NULL;
+    m_hiddenHwnd = nullptr;
+    m_hiddenClass = nullptr;
 
     DoRefreshMonitors();
 
@@ -565,10 +565,10 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 {
     m_displays.clear();
 
-    // Note that we pass NULL as first parameter here because using screen HDC
+    // Note that we pass nullptr as first parameter here because using screen HDC
     // doesn't work reliably: notably, it doesn't enumerate any displays if
     // this code is executed while a UAC prompt is shown or during log-off.
-    if ( !::EnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
+    if ( !::EnumDisplayMonitors(nullptr, nullptr, MultimonEnumProc, (LPARAM)this) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
     }
@@ -579,7 +579,7 @@ BOOL CALLBACK
 wxDisplayFactoryMSW::MultimonEnumProc(
     HMONITOR hMonitor,              // handle to display monitor
     HDC /* hdcMonitor */,           // handle to monitor-appropriate device context:
-                                    // not set due to our use of EnumDisplayMonitors(NULL, ...)
+                                    // not set due to our use of EnumDisplayMonitors(nullptr, ...)
     LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
     LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
 {
@@ -591,7 +591,7 @@ wxDisplayFactoryMSW::MultimonEnumProc(
         wxLogLastError(wxT("GetMonitorInfo"));
     }
 
-    HDC hdcMonitor = ::CreateDC(NULL, monInfo.szDevice, NULL, NULL);
+    HDC hdcMonitor = ::CreateDC(nullptr, monInfo.szDevice, nullptr, nullptr);
     const int hdcDepth = wxGetHDCDepth(hdcMonitor);
     ::DeleteDC(hdcMonitor);
 
@@ -603,7 +603,7 @@ wxDisplayFactoryMSW::MultimonEnumProc(
 
 wxDisplayImpl *wxDisplayFactoryMSW::CreateDisplay(unsigned n)
 {
-    wxCHECK_MSG( n < m_displays.size(), NULL, wxT("An invalid index was passed to wxDisplay") );
+    wxCHECK_MSG( n < m_displays.size(), nullptr, wxT("An invalid index was passed to wxDisplay") );
 
     return new wxDisplayMSW(n, m_displays[n]);
 }

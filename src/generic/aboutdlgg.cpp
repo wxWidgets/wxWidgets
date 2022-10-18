@@ -227,7 +227,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
 {
     wxCHECK_RET( m_sizerText, wxT("can only be called after Create()") );
-    wxASSERT_MSG( win, wxT("can't add NULL window to about dialog") );
+    wxASSERT_MSG( win, wxT("can't add null window to about dialog") );
 
     m_sizerText->Add(win, flags);
 }

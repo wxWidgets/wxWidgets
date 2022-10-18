@@ -192,7 +192,7 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params=NULL) = 0;
+                                  wxHeaderButtonParams* params=nullptr) = 0;
 
 
     // Draw the contents of a header control button (label, sort arrows, etc.)
@@ -202,7 +202,7 @@ public:
                                           const wxRect& rect,
                                           int flags = 0,
                                           wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                          wxHeaderButtonParams* params=NULL) = 0;
+                                          wxHeaderButtonParams* params=nullptr) = 0;
 
     // Returns the default height of a header button, either a fixed platform
     // height if available, or a generic height based on the window's font.
@@ -399,14 +399,14 @@ public:
 
 #if wxUSE_DYNLIB_CLASS
     // load the renderer from the specified DLL, the returned pointer must be
-    // deleted by caller if not NULL when it is not used any more
+    // deleted by caller if not null when it is not used any more
     static wxRendererNative *Load(const wxString& name);
 #endif // wxUSE_DYNLIB_CLASS
 
-    // set the renderer to use, passing NULL reverts to using the default
+    // set the renderer to use, passing nullptr reverts to using the default
     // renderer
     //
-    // return the previous renderer used with Set() or NULL if none
+    // return the previous renderer used with Set() or nullptr if none
     static wxRendererNative *Set(wxRendererNative *renderer);
 
 
@@ -441,7 +441,7 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL) override
+                                  wxHeaderButtonParams* params = nullptr) override
         { return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params); }
 
     virtual int  DrawHeaderButtonContents(wxWindow *win,
@@ -449,7 +449,7 @@ public:
                                           const wxRect& rect,
                                           int flags = 0,
                                           wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                          wxHeaderButtonParams* params = NULL) override
+                                          wxHeaderButtonParams* params = nullptr) override
         { return m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params); }
 
     virtual int GetHeaderButtonHeight(wxWindow *win) override

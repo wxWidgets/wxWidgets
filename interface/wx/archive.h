@@ -174,7 +174,7 @@ public:
     @li GetSize(): guaranteed to be available after the entry has been read to Eof(),
         or CloseEntry() has been called;
     @li IsReadOnly(): guaranteed to be available after the end of the archive has
-        been reached, i.e. after GetNextEntry() returns NULL and Eof() is true.
+        been reached, i.e. after GetNextEntry() returns @NULL and Eof() is true.
 
     @library{wxbase}
     @category{archive,streams}

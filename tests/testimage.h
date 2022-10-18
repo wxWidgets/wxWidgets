@@ -73,8 +73,8 @@ public:
         {
             for ( int x = 0; x < m_image.GetWidth(); ++x )
             {
-                wxString a1txt = dispAlphaVal ? (a1 != NULL ? wxString::Format("%02x", *a1) : dispAlphaValNull) : wxString();
-                wxString a2txt = dispAlphaVal ? (a2 != NULL ? wxString::Format("%02x", *a2) : dispAlphaValNull) : wxString();
+                wxString a1txt = dispAlphaVal ? (a1 != nullptr ? wxString::Format("%02x", *a1) : dispAlphaValNull) : wxString();
+                wxString a2txt = dispAlphaVal ? (a2 != nullptr ? wxString::Format("%02x", *a2) : dispAlphaValNull) : wxString();
 
                 for ( int i = 0; i < 3; i++ )
                 {

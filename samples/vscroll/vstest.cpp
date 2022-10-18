@@ -490,12 +490,12 @@ bool VarScrollApp::OnInit()
 
 // frame constructor
 VarScrollFrame::VarScrollFrame()
-               : wxFrame(NULL,
+               : wxFrame(nullptr,
                          wxID_ANY,
                          "VScroll wxWidgets Sample",
                          wxDefaultPosition,
                          wxSize(400, 350)),
-                 m_scrollWindow(NULL)
+                 m_scrollWindow(nullptr)
 {
     // set the frame icon
     SetIcon(wxICON(sample));

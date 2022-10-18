@@ -108,7 +108,7 @@ private:
     virtual void MSWProcessSpecialKey(wxKeyEvent& event);
 
     // Check if we really have auto-complete data. This is not the same as just
-    // checking if m_autoCompleteData is NULL, see the code for more details.
+    // checking if m_autoCompleteData is null, see the code for more details.
     bool MSWHasAutoCompleteData() const;
 
     // Check that we have auto-complete data, creating it if necessary. Returns

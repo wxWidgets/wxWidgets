@@ -65,10 +65,10 @@ protected:
     // won't be called if GetPopupMenu() returns a non-null pointer.
 
     // creates menu to be displayed when user clicks on the icon
-    virtual wxMenu *CreatePopupMenu() { return NULL; }
+    virtual wxMenu *CreatePopupMenu() { return nullptr; }
 
     // same as CreatePopupMenu but the returned menu won't be destroyed
-    virtual wxMenu *GetPopupMenu() { return NULL; }
+    virtual wxMenu *GetPopupMenu() { return nullptr; }
 
 private:
     // default events handling, calls CreatePopupMenu:

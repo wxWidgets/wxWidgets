@@ -134,7 +134,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create and display the main frame window.
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, "Validator Test",
+    MyFrame *frame = new MyFrame(nullptr, "Validator Test",
                                  50, 50, 300, 250);
     frame->Show(true);
 

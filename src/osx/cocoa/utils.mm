@@ -240,14 +240,14 @@ void wxBell()
          ++i )
     {
         wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
-        wxNonOwnedWindowImpl* winimpl = win ? win->GetNonOwnedPeer() : NULL;
+        wxNonOwnedWindowImpl* winimpl = win ? win->GetNonOwnedPeer() : nullptr;
         WXWindow nswindow = win ? win->GetWXWindow() : nil;
         
         if ( nswindow && [nswindow hidesOnDeactivate] == NO && winimpl)
             winimpl->RestoreWindowLevel();
     }
     if ( wxTheApp )
-        wxTheApp->SetActive( true , NULL ) ;
+        wxTheApp->SetActive( true , nullptr ) ;
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -270,7 +270,7 @@ void wxBell()
 {
     wxUnusedVar(notification);
     if ( wxTheApp )
-        wxTheApp->SetActive( false , NULL ) ;
+        wxTheApp->SetActive( false , nullptr ) ;
 }
 
 @end
@@ -286,7 +286,7 @@ void wxBell()
     {
         sheetFinished = NO;
         resultCode = -1;
-        impl = 0;
+        impl = nullptr;
     }
     return self;
 }
@@ -462,7 +462,7 @@ extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetMainDisplayClientArea()
 {
     NSRect displayRect = [wxOSXGetMenuScreen() visibleFrame];
-    return wxFromNSRect( NULL, displayRect );
+    return wxFromNSRect( nullptr, displayRect );
 }
 
 static NSScreen* wxOSXGetScreenFromDisplay( CGDirectDisplayID ID)
@@ -473,19 +473,19 @@ static NSScreen* wxOSXGetScreenFromDisplay( CGDirectDisplayID ID)
         if ( displayID == ID )
             return screen;
     }
-    return NULL;
+    return nullptr;
 }
 
 extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetDisplayClientArea(CGDirectDisplayID ID)
 {
     NSRect displayRect = [wxOSXGetScreenFromDisplay(ID) visibleFrame];
-    return wxFromNSRect( NULL, displayRect );
+    return wxFromNSRect( nullptr, displayRect );
 }
 
 void wxGetMousePosition( int* x, int* y )
 {
-    wxPoint pt = wxFromNSPoint(NULL, [NSEvent mouseLocation]);
+    wxPoint pt = wxFromNSPoint(nullptr, [NSEvent mouseLocation]);
     if ( x )
         *x = pt.x;
     if ( y )

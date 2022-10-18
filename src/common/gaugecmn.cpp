@@ -103,11 +103,11 @@ wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
 
 void wxGaugeBase::InitProgressIndicatorIfNeeded()
 {
-    m_appProgressIndicator = NULL;
+    m_appProgressIndicator = nullptr;
     if ( HasFlag(wxGA_PROGRESS) )
     {
         wxWindow* topParent = wxGetTopLevelParent(this);
-        if ( topParent != NULL )
+        if ( topParent != nullptr )
         {
             m_appProgressIndicator =
                 new wxAppProgressIndicator(topParent, GetRange());

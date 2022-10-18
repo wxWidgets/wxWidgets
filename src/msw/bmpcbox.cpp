@@ -235,7 +235,7 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
             if ( clientData )
                 index = wxComboBox::DoInsertItems(items[i], pos+i, clientData+i, type);
             else
-                index = wxComboBox::DoInsertItems(items[i], pos+i, NULL, wxClientData_None);
+                index = wxComboBox::DoInsertItems(items[i], pos+i, nullptr, wxClientData_None);
 
             wxASSERT_MSG( index != wxNOT_FOUND, wxS("Invalid wxBitmapComboBox state") );
             if ( index == wxNOT_FOUND )

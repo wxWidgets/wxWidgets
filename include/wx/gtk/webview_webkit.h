@@ -122,14 +122,14 @@ public:
     virtual void ClearSelection() override;
 
 #if wxUSE_WEBVIEW_WEBKIT2
-    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const override;
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = nullptr) const override;
     virtual bool AddScriptMessageHandler(const wxString& name) override;
     virtual bool RemoveScriptMessageHandler(const wxString& name) override;
     virtual bool AddUserScript(const wxString& javascript,
         wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START) override;
     virtual void RemoveAllUserScripts() override;
 #else
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const override;
+    virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
 #endif
 
     //Virtual Filesystem Support

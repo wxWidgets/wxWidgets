@@ -143,7 +143,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(sample));

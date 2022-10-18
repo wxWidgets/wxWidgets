@@ -24,7 +24,7 @@
 class WXDLLIMPEXP_CORE wxMSWOwnerDrawnButtonBase
 {
 protected:
-    // Ctor takes the back pointer to the real window, must be non-NULL.
+    // Ctor takes the back pointer to the real window, must be non-null.
     wxMSWOwnerDrawnButtonBase(wxWindow* win) :
         m_win(win)
     {

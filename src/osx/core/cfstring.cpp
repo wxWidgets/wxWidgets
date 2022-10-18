@@ -632,7 +632,7 @@ wxString wxCFStringRef::AsStringWithNormalizationFormC( CFStringRef ref, wxFontE
     if ( !ref )
         return wxEmptyString ;
 
-    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, ref);
+    CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(nullptr, 0, ref);
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
     wxString str = wxCFStringRef::AsString(cfMutableString,encoding);
     CFRelease(cfMutableString);
@@ -662,7 +662,7 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
 
     CFIndex cStrLen ;
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding ,
-        '?' , false , NULL , 0 , &cStrLen ) ;
+        '?' , false , nullptr , 0 , &cStrLen ) ;
     char* buf = new char[cStrLen];
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding,
         '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;

@@ -27,7 +27,7 @@
 #include "wx/thread.h"
 
 const wxEventType wxEVT_WORKER = wxNewEventType();
-#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) nullptr ),
 
 const int timeout_val = 1000;
 
@@ -722,7 +722,7 @@ wxThread::ExitCode ThreadWorker::Entry()
     }
     m_clientSocket->Close();
     m_clientSocket->Destroy();
-    m_clientSocket = NULL;
+    m_clientSocket = nullptr;
     delete [] m_outbuf;
     delete [] m_inbuf;
     if (!failed)

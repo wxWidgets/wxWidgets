@@ -60,14 +60,14 @@ void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
 class wxX11Display
 {
 public:
-    wxX11Display() { m_dpy = XOpenDisplay(NULL); }
+    wxX11Display() { m_dpy = XOpenDisplay(nullptr); }
     ~wxX11Display() { if ( m_dpy ) XCloseDisplay(m_dpy); }
 
     // Pseudo move ctor: steals the open display from the other object.
     explicit wxX11Display(wxX11Display& display)
     {
         m_dpy = display.m_dpy;
-        display.m_dpy = NULL;
+        display.m_dpy = nullptr;
     }
 
     operator Display *() const { return m_dpy; }

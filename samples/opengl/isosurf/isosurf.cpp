@@ -53,7 +53,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    new MyFrame(NULL, "wxWidgets OpenGL Isosurf Sample");
+    new MyFrame(nullptr, "wxWidgets OpenGL Isosurf Sample");
 
     return true;
 }
@@ -91,7 +91,7 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
                  const wxSize& size, long style)
     : wxFrame(frame, wxID_ANY, title, pos, size, style),
-      m_canvas(NULL)
+      m_canvas(nullptr)
 {
     SetIcon(wxICON(sample));
 
@@ -109,7 +109,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 
   // JACS
 #ifdef __WXMSW__
-    int *gl_attrib = NULL;
+    int *gl_attrib = nullptr;
 #else
     int gl_attrib[20] =
         { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,

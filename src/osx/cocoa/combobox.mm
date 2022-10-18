@@ -198,7 +198,7 @@ void wxNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     bool reset = false;
     wxEventLoop* const loop = (wxEventLoop*) wxEventLoopBase::GetActive();
 
-    if ( loop != NULL && [event type] == NSLeftMouseDown )
+    if ( loop != nullptr && [event type] == NSLeftMouseDown )
     {
         reset = true;
         loop->OSXUseLowLevelWakeup(true);

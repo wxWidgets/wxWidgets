@@ -58,7 +58,7 @@ called in the process of the d&d operation are OnEnter and OnLeave.
 
 The object created passed to SetDropTarget becomes the propriety of wxWindow
 and will be deleted with the window (or when you call SetDropTarget next
-time). You can always break the association by calling SetDropTarget(NULL).
+time). You can always break the association by calling SetDropTarget(nullptr).
 
   When some data is dragged over a window, the program must decide if it's
 going to accept this data or not. The virtual function IsAcceptedData() is

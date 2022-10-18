@@ -84,7 +84,7 @@ void wxDragImage::Init()
 #if !wxUSE_SIMPLER_DRAGIMAGE
     m_hCursorImageList = 0;
 #endif
-    m_window = NULL;
+    m_window = nullptr;
     m_fullScreen = false;
 }
 
@@ -385,13 +385,13 @@ bool wxDragImage::EndDrag()
     ::ShowCursor(TRUE);
 #endif
 
-    m_window = NULL;
+    m_window = nullptr;
 
     return true;
 }
 
 // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
-// is non-NULL, or in screen coordinates if NULL.
+// is non-null, or in screen coordinates if null.
 bool wxDragImage::Move(const wxPoint& pt)
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Move."));

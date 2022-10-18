@@ -112,7 +112,7 @@ public:
     static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     // Check if bitmap bundle is non-empty.
-    bool IsOk() const { return m_impl.get() != NULL; }
+    bool IsOk() const { return m_impl.get() != nullptr; }
 
     // Clear the bundle contents, IsOk() will return false after doing this.
     void Clear();

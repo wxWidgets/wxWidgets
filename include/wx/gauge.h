@@ -55,7 +55,7 @@ public:
 #if wxGAUGE_EMULATE_INDETERMINATE_MODE
         m_nDirection(wxRIGHT),
 #endif
-        m_appProgressIndicator(NULL) { }
+        m_appProgressIndicator(nullptr) { }
 
     virtual ~wxGaugeBase();
 

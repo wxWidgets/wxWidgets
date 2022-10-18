@@ -23,7 +23,7 @@
 class WXDLLIMPEXP_CORE wxPostScriptPrinter : public wxPrinterBase
 {
 public:
-    wxPostScriptPrinter(wxPrintDialogData *data = NULL);
+    wxPostScriptPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxPostScriptPrinter();
 
     virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) override;
@@ -43,8 +43,8 @@ class WXDLLIMPEXP_CORE wxPostScriptPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxPostScriptPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting = NULL,
-                             wxPrintDialogData *data = NULL);
+                             wxPrintout *printoutForPrinting = nullptr,
+                             wxPrintDialogData *data = nullptr);
     wxPostScriptPrintPreview(wxPrintout *printout,
                              wxPrintout *printoutForPrinting,
                              wxPrintData *data);

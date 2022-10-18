@@ -21,7 +21,7 @@ wxMutex::wxMutex(wxMutexType mutexType)
     if ( !m_internal->IsOk() )
     {
         delete m_internal;
-        m_internal = NULL;
+        m_internal = nullptr;
     }
 }
 
@@ -32,7 +32,7 @@ wxMutex::~wxMutex()
 
 bool wxMutex::IsOk() const
 {
-    return m_internal != NULL;
+    return m_internal != nullptr;
 }
 
 wxMutexError wxMutex::Lock()
@@ -235,7 +235,7 @@ wxCondition::wxCondition(wxMutex& mutex)
     if ( !m_internal->IsOk() )
     {
         delete m_internal;
-        m_internal = NULL;
+        m_internal = nullptr;
     }
 }
 
@@ -246,7 +246,7 @@ wxCondition::~wxCondition()
 
 bool wxCondition::IsOk() const
 {
-    return m_internal != NULL;
+    return m_internal != nullptr;
 }
 
 wxCondError wxCondition::Wait()
@@ -291,7 +291,7 @@ wxSemaphore::wxSemaphore(int initialcount, int maxcount)
     if ( !m_internal->IsOk() )
     {
         delete m_internal;
-        m_internal = NULL;
+        m_internal = nullptr;
     }
 }
 
@@ -302,7 +302,7 @@ wxSemaphore::~wxSemaphore()
 
 bool wxSemaphore::IsOk() const
 {
-    return m_internal != NULL;
+    return m_internal != nullptr;
 }
 
 wxSemaError wxSemaphore::Wait()

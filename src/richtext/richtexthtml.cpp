@@ -34,7 +34,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextHTMLHandler, wxRichTextFileHandler);
 int wxRichTextHTMLHandler::sm_fileCounter = 1;
 
 wxRichTextHTMLHandler::wxRichTextHTMLHandler(const wxString& name, const wxString& ext, int type)
-    : wxRichTextFileHandler(name, ext, type), m_buffer(NULL), m_font(false), m_inTable(false)
+    : wxRichTextFileHandler(name, ext, type), m_buffer(nullptr), m_font(false), m_inTable(false)
 {
     m_fontSizeMapping.Add(8);
     m_fontSizeMapping.Add(10);
@@ -75,8 +75,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     buffer->Defragment(context);
 
 #if wxUSE_UNICODE
-    wxCSConv* customEncoding = NULL;
-    wxMBConv* conv = NULL;
+    wxCSConv* customEncoding = nullptr;
+    wxMBConv* conv = nullptr;
     if (!GetEncoding().IsEmpty())
     {
         customEncoding = new wxCSConv(GetEncoding());
@@ -116,7 +116,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         while (node)
         {
             wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
-            wxASSERT (para != NULL);
+            wxASSERT (para != nullptr);
 
             if (para)
             {
@@ -177,7 +177,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         delete customEncoding;
 #endif
 
-    m_buffer = NULL;
+    m_buffer = nullptr;
 
     return true;
 }

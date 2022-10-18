@@ -151,12 +151,12 @@ public:
     virtual void UnselectAll() override;
 
     virtual void EnsureVisible( const wxDataViewItem& item,
-                                const wxDataViewColumn *column = NULL ) override;
+                                const wxDataViewColumn *column = nullptr ) override;
     virtual void HitTest( const wxPoint &point,
                           wxDataViewItem &item,
                           wxDataViewColumn *&column ) const override;
     virtual wxRect GetItemRect( const wxDataViewItem &item,
-                                const wxDataViewColumn *column = NULL ) const override;
+                                const wxDataViewColumn *column = nullptr ) const override;
 
     virtual bool SetRowHeight( int rowHeight ) override;
 
@@ -187,7 +187,7 @@ public:
 
     // Return wxDataViewColumn matching the given GtkTreeViewColumn.
     //
-    // If the input argument is NULL, return NULL too. Otherwise we must find
+    // If the input argument is null, return nullptr too. Otherwise we must find
     // the matching column and assert if we didn't.
     wxDataViewColumn* GTKColumnToWX(GtkTreeViewColumn *gtk_col) const;
 

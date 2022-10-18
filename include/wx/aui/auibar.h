@@ -110,8 +110,8 @@ public:
 
     wxAuiToolBarItem()
     {
-        m_window = NULL;
-        m_sizerItem = NULL;
+        m_window = nullptr;
+        m_sizerItem = nullptr;
         m_spacerPixels = 0;
         m_toolId = 0;
         m_kind = wxITEM_NORMAL;
@@ -507,7 +507,7 @@ public:
                  const wxBitmapBundle& bitmap,
                  const wxBitmapBundle& disabledBitmap,
                  bool toggle = false,
-                 wxObject* clientData = NULL,
+                 wxObject* clientData = nullptr,
                  const wxString& shortHelpString = wxEmptyString,
                  const wxString& longHelpString = wxEmptyString)
     {

@@ -110,7 +110,7 @@ void SetOwnerDrawnMenuItem(HMENU hmenu,
 // Construct a menu with optional title (then use append)
 void wxMenu::InitNoCreate()
 {
-    m_radioData = NULL;
+    m_radioData = nullptr;
     m_doBreak = false;
 
 #if wxUSE_OWNER_DRAWN
@@ -349,7 +349,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // required by ::AppendMenu() API
     UINT_PTR id;
     wxMenu *submenu = pItem->GetSubMenu();
-    if ( submenu != NULL ) {
+    if ( submenu != nullptr ) {
         wxASSERT_MSG( submenu->GetHMenu(), wxT("invalid submenu") );
 
         submenu->SetParent(this);
@@ -365,7 +365,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
     // prepare to insert the item in the menu
     wxString itemText = pItem->GetItemLabel();
-    LPCTSTR pData = NULL;
+    LPCTSTR pData = nullptr;
     if ( pos == (size_t)-1 )
     {
         // append at the end (note that the item is already appended to
@@ -606,7 +606,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
-    return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item) ? item : NULL;
+    return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item) ? item : nullptr;
 }
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
@@ -614,7 +614,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     if (wxMenuBase::DoInsert(pos, item) && DoInsertOrAppend(item, pos))
         return item;
     else
-        return NULL;
+        return nullptr;
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
@@ -736,7 +736,7 @@ void wxMenu::SetTitle(const wxString& label)
         {
             if ( !::InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
                                (UINT_PTR)idMenuTitle, m_title.t_str()) ||
-                 !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
+                 !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, nullptr) )
             {
                 wxLogLastError(wxT("InsertMenu"));
             }
@@ -838,7 +838,7 @@ wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
     }
 
     // unknown hMenu
-    return NULL;
+    return nullptr;
 }
 
 // ---------------------------------------------------------------------------
@@ -884,7 +884,7 @@ wxMenuBar::~wxMenuBar()
     if (m_hMenu && !IsAttached())
     {
         ::DestroyMenu((HMENU)m_hMenu);
-        m_hMenu = (WXHMENU)NULL;
+        m_hMenu = (WXHMENU)nullptr;
     }
 }
 
@@ -1045,7 +1045,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
     wxMenu *menuOld = wxMenuBarBase::Replace(pos, menu, title);
     if ( !menuOld )
-        return NULL;
+        return nullptr;
 
     menu->wxMenuBase::SetTitle(title);
 
@@ -1179,7 +1179,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
-        return NULL;
+        return nullptr;
 
     if (GetHmenu())
     {
@@ -1269,7 +1269,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu) const
     // If we're called with the handle of the menu bar itself, we can return
     // immediately as it certainly can't be the handle of one of our menus.
     if ( hMenu == GetHMenu() )
-        return NULL;
+        return nullptr;
 
     // query all menus
     for ( size_t n = 0 ; n < GetMenuCount(); ++n )
@@ -1280,7 +1280,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu) const
     }
 
     // unknown hMenu
-    return NULL;
+    return nullptr;
 }
 
 #endif // wxUSE_MENUS

@@ -54,7 +54,7 @@ class wxQtEventSignalHandler : public Widget, public wxQtSignalHandler< Handler 
 {
 public:
     wxQtEventSignalHandler( wxWindow *parent, Handler *handler )
-        : Widget( parent != NULL ? parent->GetHandle() : NULL )
+        : Widget( parent != nullptr ? parent->GetHandle() : nullptr )
         , wxQtSignalHandler< Handler >( handler )
     {
         // Set immediately as it is used to check if wxWindow is alive
@@ -76,7 +76,7 @@ public:
         // Only process the signal / event if the wxWindow is not destroyed
         if ( !wxWindow::QtRetrieveWindowPointer( this ) )
         {
-            return NULL;
+            return nullptr;
         }
         else
             return wxQtSignalHandler< Handler >::GetHandler();

@@ -341,7 +341,7 @@ wxThread::ExitCode wxSoundAsyncPlaybackThread::Entry()
     m_adapt->m_status.m_playing = false;
 
     wxLogTrace(wxT("sound"), wxT("terminated async playback thread"));
-    return 0;
+    return nullptr;
 }
 #endif
 
@@ -403,27 +403,27 @@ bool wxSoundSyncOnlyAdaptor::IsPlaying() const
 // wxSound
 // ----------------------------------------------------------------------------
 
-wxSoundBackend *wxSound::ms_backend = NULL;
+wxSoundBackend *wxSound::ms_backend = nullptr;
 
 // FIXME - temporary, until we have plugins architecture
 #if wxUSE_LIBSDL
     #if wxUSE_PLUGINS
-        wxDynamicLibrary *wxSound::ms_backendSDL = NULL;
+        wxDynamicLibrary *wxSound::ms_backendSDL = nullptr;
     #else
         extern "C" wxSoundBackend *wxCreateSoundBackendSDL();
     #endif
 #endif
 
-wxSound::wxSound() : m_data(NULL)
+wxSound::wxSound() : m_data(nullptr)
 {
 }
 
-wxSound::wxSound(const wxString& sFileName, bool isResource) : m_data(NULL)
+wxSound::wxSound(const wxString& sFileName, bool isResource) : m_data(nullptr)
 {
     Create(sFileName, isResource);
 }
 
-wxSound::wxSound(size_t size, const void* data) : m_data(NULL)
+wxSound::wxSound(size_t size, const void* data) : m_data(nullptr)
 {
     Create(size, data);
 }
@@ -473,7 +473,7 @@ bool wxSound::Create(const wxString& fileName,
 
 bool wxSound::Create(size_t size, const void* data)
 {
-    wxASSERT( data != NULL );
+    wxASSERT( data != nullptr );
 
     Free();
     if (!LoadWAV(data, size, true))

@@ -253,7 +253,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner ) :
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
    wxClientDCImpl( owner )
 {
-    wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
+    wxCHECK_RET( window, wxT("null canvas in wxPaintDCImpl ctor") );
 
     using namespace wxMSWImpl;
     wxCHECK_RET( !paintStack.empty(),
@@ -275,7 +275,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
         m_hDC = info->GetHDC();
     }
 
-    // Note: at this point m_hDC can be NULL under MicroWindows, when dragging.
+    // Note: at this point m_hDC can be null under MicroWindows, when dragging.
     if (!GetHDC())
         return;
 
@@ -302,7 +302,7 @@ wxPaintDCInfo *wxPaintDCImpl::FindInCache(wxWindow *win)
 {
     PaintDCInfos::const_iterator it = gs_PaintDCInfos.find( win );
 
-    return it != gs_PaintDCInfos.end() ? it->second : NULL;
+    return it != gs_PaintDCInfos.end() ? it->second : nullptr;
 }
 
 /* static */

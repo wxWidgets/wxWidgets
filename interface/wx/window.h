@@ -835,7 +835,7 @@ public:
                  function directly.
     */
     virtual void ScrollWindow(int dx, int dy,
-                              const wxRect* rect = NULL);
+                              const wxRect* rect = nullptr);
 
     /**
         Same as #ScrollLines (-1).
@@ -1118,7 +1118,7 @@ public:
         Using these methods is discouraged as passing @NULL will prevent your
         application from correctly supporting monitors with different
         resolutions even in the future wxWidgets versions which will add
-        support for them, and passing non-@NULL window is just a less
+        support for them, and passing non-null window is just a less
         convenient way of calling the non-static FromDIP() method.
 
         @since 3.1.0
@@ -1185,7 +1185,7 @@ public:
     Using these methods is discouraged as passing @NULL will prevent your
     application from correctly supporting monitors with different
     resolutions even in the future wxWidgets versions which will add
-    support for them, and passing non-@NULL window is just a less
+    support for them, and passing non-null window is just a less
     convenient way of calling the non-static ToDIP() method.
 
     @since 3.1.0
@@ -1893,9 +1893,9 @@ public:
         for the child windows or relative to the display origin for the top level windows.
 
         @param x
-            Receives the x position of the window if non-@NULL.
+            Receives the x position of the window if non-null.
         @param y
-            Receives the y position of the window if non-@NULL.
+            Receives the y position of the window if non-null.
 
         @beginWxPerlOnly
         In wxPerl this method is implemented as GetPositionXY() returning
@@ -1926,9 +1926,9 @@ public:
         child window or a top level one.
 
         @param x
-            Receives the x position of the window on the screen if non-@NULL.
+            Receives the x position of the window on the screen if non-null.
         @param y
-            Receives the y position of the window on the screen if non-@NULL.
+            Receives the y position of the window on the screen if non-null.
 
         @see GetPosition()
     */
@@ -2264,9 +2264,9 @@ public:
     */
     void GetTextExtent(const wxString& string,
                        int* w, int* h,
-                       int* descent = NULL,
-                       int* externalLeading = NULL,
-                       const wxFont* font = NULL) const;
+                       int* descent = nullptr,
+                       int* externalLeading = nullptr,
+                       const wxFont* font = nullptr) const;
 
     /**
         Gets the dimensions of the string as it would be drawn on the
@@ -2307,12 +2307,12 @@ public:
             If @true, the background will be erased too. Note that in non-MSW
             ports background is always erased.
         @param rect
-            If non-@NULL, only the given rectangle will be treated as damaged.
+            If non-null, only the given rectangle will be treated as damaged.
 
         @see RefreshRect()
     */
     virtual void Refresh(bool eraseBackground = true,
-                         const wxRect* rect = NULL);
+                         const wxRect* rect = nullptr);
 
     /**
         Redraws the contents of the given rectangle: only the area inside it will be
@@ -2446,7 +2446,7 @@ public:
 
         @since 2.9.4
     */
-    virtual bool IsTransparentBackgroundSupported(wxString *reason = NULL) const;
+    virtual bool IsTransparentBackgroundSupported(wxString *reason = nullptr) const;
 
     /**
         Sets the font for this window. This function should not be called for the
@@ -2726,7 +2726,7 @@ public:
         See wxEvtHandler::Unlink() for more info.
 
         @param handler
-            The event handler to remove, must be non-@NULL and
+            The event handler to remove, must be non-null and
             must be present in this windows event handlers stack.
 
         @return Returns @true if it was found and @false otherwise (this also
@@ -3572,7 +3572,7 @@ public:
         window, it will be deleted if the @a deleteOld parameter is @true.
 
         Note that this function will also call SetAutoLayout() implicitly with @true
-        parameter if the @a sizer is non-@NULL and @false otherwise so that the
+        parameter if the @a sizer is non-null and @false otherwise so that the
         sizer will be effectively used to layout the window children whenever
         it is resized.
 
@@ -4081,7 +4081,7 @@ public:
         Find the first window with the given @e id.
 
         If @a parent is @NULL, the search will start from all top-level frames
-        and dialog boxes; if non-@NULL, the search will be limited to the given
+        and dialog boxes; if non-null, the search will be limited to the given
         window hierarchy.
         The search is recursive in both cases.
 
@@ -4096,7 +4096,7 @@ public:
 
         Depending on the type of window, the label may be a window title
         or panel item label. If @a parent is @NULL, the search will start from all
-        top-level frames and dialog boxes; if non-@NULL, the search will be
+        top-level frames and dialog boxes; if non-null, the search will be
         limited to the given window hierarchy.
 
         The search is recursive in both cases and, unlike with FindWindow(),
@@ -4114,7 +4114,7 @@ public:
         function call).
 
         If @a parent is @NULL, the search will start from all top-level frames
-        and dialog boxes; if non-@NULL, the search will be limited to the given
+        and dialog boxes; if non-null, the search will be limited to the given
         window hierarchy.
 
         The search is recursive in both cases and, unlike FindWindow(),

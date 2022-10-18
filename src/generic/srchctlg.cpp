@@ -282,11 +282,11 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 
 void wxSearchCtrl::Init()
 {
-    m_text = NULL;
-    m_searchButton = NULL;
-    m_cancelButton = NULL;
+    m_text = nullptr;
+    m_searchButton = nullptr;
+    m_cancelButton = nullptr;
 #if wxUSE_MENUS
-    m_menu = NULL;
+    m_menu = nullptr;
 #endif // wxUSE_MENUS
 
     m_searchBitmapUser = false;
@@ -347,7 +347,7 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
         // no change
         return;
     }
-    bool hadMenu = (m_menu != NULL);
+    bool hadMenu = (m_menu != nullptr);
     delete m_menu;
     m_menu = menu;
 

@@ -34,7 +34,7 @@
 class wxExtHelpController : public wxHelpControllerBase
 {
 public:
-    wxExtHelpController(wxWindow* parentWindow = NULL);
+    wxExtHelpController(wxWindow* parentWindow = nullptr);
     virtual ~wxExtHelpController();
 
     /**
@@ -147,8 +147,8 @@ public:
     /**
         Obtains the latest settings used by the help frame and the help frame.
     */
-    virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                                        wxPoint *pos = NULL,
-                                        bool *newFrameEachTime = NULL);
+    virtual wxFrame *GetFrameParameters(wxSize *size = nullptr,
+                                        wxPoint *pos = nullptr,
+                                        bool *newFrameEachTime = nullptr);
 };
 

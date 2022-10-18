@@ -373,7 +373,7 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
     // clean up
-    delete wxHelpProvider::Set(NULL);
+    delete wxHelpProvider::Set(nullptr);
 
     return 0;
 }
@@ -384,7 +384,7 @@ int MyApp::OnExit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, 300, title, pos, size)
+       : wxFrame(nullptr, 300, title, pos, size)
 #if USE_HTML_HELP
     , m_embeddedHtmlHelp(wxHF_EMBEDDED|wxHF_DEFAULT_STYLE)
 #endif

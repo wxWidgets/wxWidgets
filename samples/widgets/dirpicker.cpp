@@ -167,7 +167,7 @@ void DirPickerWidgetsPage::CreateContent()
     Reset();    // set checkboxes state
 
     // create pickers
-    m_dirPicker = NULL;
+    m_dirPicker = nullptr;
     CreatePicker();
 
     // right pane

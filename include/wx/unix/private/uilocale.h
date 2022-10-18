@@ -44,7 +44,7 @@ public:
     explicit TempLocaleSetter(int localeCategory,
                               const wxString& localeId = wxString())
         : m_localeCategory(localeCategory),
-          m_localeOrig(strdup(setlocale(localeCategory, NULL)))
+          m_localeOrig(strdup(setlocale(localeCategory, nullptr)))
     {
         setlocale(localeCategory, localeId.mb_str());
     }

@@ -73,11 +73,11 @@ public:
     // What type is it? Return a string name.
     virtual wxString GetType() const = 0;
     // If it based on wxObject return the ClassInfo.
-    virtual wxClassInfo* GetValueClassInfo() { return NULL; }
+    virtual wxClassInfo* GetValueClassInfo() { return nullptr; }
 
     // Implement this to make wxVariant::UnShare work. Returns
     // a copy of the data.
-    virtual wxVariantData* Clone() const { return NULL; }
+    virtual wxVariantData* Clone() const { return nullptr; }
 
 #if wxUSE_ANY
     // Converts value to wxAny, if possible. Return true if successful.
@@ -143,7 +143,7 @@ public:
     // ensure that the data is exclusive to this variant, and not shared
     bool Unshare();
 
-    // Make NULL (i.e. delete the data)
+    // Make null (i.e. delete the data)
     void MakeNull();
 
     // Delete data and name
@@ -570,7 +570,7 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
 
 #define wxGetVariantCast(var,classname) \
     ((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
-                  var.GetWxObjectPtr() : NULL));
+                  var.GetWxObjectPtr() : nullptr));
 
 // Replacement for using wxDynamicCast on a wxVariantData object
 #ifndef wxNO_RTTI

@@ -206,7 +206,7 @@ void MyApp::DecorateSplashScreen(wxBitmap& bmp)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 

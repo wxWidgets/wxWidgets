@@ -48,12 +48,12 @@ enum wxTextValidatorStyle
 class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
 {
 public:
-    wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
+    wxTextValidator(long style = wxFILTER_NONE, wxString *val = nullptr);
     wxTextValidator(const wxTextValidator& val);
 
     virtual ~wxTextValidator(){}
 
-    // Make a clone of this validator (or return NULL) - currently necessary
+    // Make a clone of this validator (or return nullptr) - currently necessary
     // if you're passing a reference to a validator.
     // Another possibility is to always pass a pointer to a new validator
     // (so the calling code can use a copy constructor of the relevant class).

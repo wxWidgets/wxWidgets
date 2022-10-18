@@ -206,14 +206,14 @@ protected:
     {
         wxFAIL_MSG( "must be overridden if used" );
 
-        return NULL;
+        return nullptr;
     }
 
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const override
     {
         wxFAIL_MSG( "must be overridden if used" );
 
-        return NULL;
+        return nullptr;
     }
 #endif
 };

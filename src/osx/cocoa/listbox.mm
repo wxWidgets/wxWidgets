@@ -142,7 +142,7 @@ public :
     {
         return col;
     }
-    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) override ;
+    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = nullptr ) override ;
     virtual void            UpdateLineToEnd( unsigned int n) override;
 
     virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender) override;
@@ -306,7 +306,7 @@ protected:
 
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     wxListBox* const list = wxDynamicCast(impl->GetWXPeer(), wxListBox);
-    wxCHECK_RET( list != NULL , "Associated control should be a wxListBox" );
+    wxCHECK_RET( list != nullptr , "Associated control should be a wxListBox" );
 
     list->MacHandleSelectionChange(row);
 }
@@ -386,7 +386,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
     [col1 setResizingMask: NSTableColumnAutoresizingMask];
 
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    if ( list != NULL )
+    if ( list != nullptr )
         [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
 
     wxCocoaTableColumn* wxcol = new wxCocoaTableColumn( col1, editable );
@@ -410,7 +410,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     [col1 setDataCell:checkbox] ;
 
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    if ( list != NULL )
+    if ( list != nullptr )
     {
         NSControlSize size = NSRegularControlSize;
 
@@ -619,7 +619,7 @@ void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int WXUNUSED(n))
 void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget WXUNUSED(slf),void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    wxCHECK_RET( list != nullptr , wxT("Listbox expected"));
 
     int sel = [m_tableView clickedRow];
     if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)

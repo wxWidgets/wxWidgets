@@ -244,7 +244,7 @@ public:
     */
     virtual wxTreeItemId AddRoot(const wxString& text, int image = -1,
                                  int selImage = -1,
-                                 wxTreeItemData* data = NULL);
+                                 wxTreeItemData* data = nullptr);
 
     /**
         Appends an item to the end of the branch identified by @a parent, return
@@ -259,7 +259,7 @@ public:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = NULL);
+                            wxTreeItemData* data = nullptr);
 
     /**
         Sets the buttons image list. The button images assigned with this method
@@ -730,7 +730,7 @@ public:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = NULL);
+                            wxTreeItemData* data = nullptr);
 
     /**
         Inserts an item before one identified
@@ -747,7 +747,7 @@ public:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = NULL);
+                            wxTreeItemData* data = nullptr);
 
     /**
         Returns @true if the given item is in bold state.
@@ -812,7 +812,7 @@ public:
                              const wxString& text,
                              int image = -1,
                              int selImage = -1,
-                             wxTreeItemData* data = NULL);
+                             wxTreeItemData* data = nullptr);
 
     /**
         Scrolls the specified item into view.

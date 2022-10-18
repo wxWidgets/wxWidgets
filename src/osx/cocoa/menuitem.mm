@@ -43,7 +43,7 @@ Mapping sActionToWXMapping[] =
     { wxID_PASTE, @selector(paste:) },
     { wxID_CLEAR, @selector(delete:) },
     { wxID_SELECTALL, @selector(selectAll:) },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 int wxOSXGetIdFromSelector(SEL action )
@@ -127,7 +127,7 @@ SEL wxOSXGetSelectorFromID(int menuId )
 
 void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry* entry )
 {
-    if ( entry == NULL )
+    if ( entry == nullptr )
     {
         [menuItem setKeyEquivalent:@""];
         return;
@@ -339,7 +339,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
                        wxItemKind kind,
                        wxMenu *pSubMenu )
 {
-    wxMenuItemImpl* c = NULL;
+    wxMenuItemImpl* c = nullptr;
     NSMenuItem* item = nil;
 
     if ( kind == wxITEM_SEPARATOR )
@@ -351,7 +351,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
         wxCFStringRef cfText(text);
         SEL selector = nil;
         bool targetSelf = false;
-        if ( (pParentMenu == NULL || !pParentMenu->GetNoEventsMode()) && pSubMenu == NULL )
+        if ( (pParentMenu == nullptr || !pParentMenu->GetNoEventsMode()) && pSubMenu == nullptr )
         {
             selector = wxOSXGetSelectorFromID(menuid);
             

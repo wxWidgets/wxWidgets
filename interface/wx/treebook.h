@@ -60,7 +60,7 @@ public:
         Creates an empty wxTreebook.
 
         @param parent
-            The parent window. Must be non-@NULL.
+            The parent window. Must be non-null.
         @param id
             The window identifier.
         @param pos

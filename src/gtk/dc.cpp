@@ -54,7 +54,7 @@ void wxGTKCairoDCImpl::DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool u
 {
     wxCHECK_RET(IsOk(), "invalid DC");
 
-    cairo_t* cr = NULL;
+    cairo_t* cr = nullptr;
     if (m_graphicContext)
         cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
     if (cr)
@@ -204,7 +204,7 @@ bool wxGTKCairoDCImpl::DoGetPixel(int x, int y, wxColour* col) const
 {
     if (col)
     {
-        cairo_t* cr = NULL;
+        cairo_t* cr = nullptr;
         if (m_graphicContext)
             cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
         if (cr)
@@ -239,21 +239,21 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     wxCHECK_MSG(IsOk(), false, "invalid DC");
     wxCHECK_MSG(source && source->IsOk(), false, "invalid source DC");
 
-    cairo_t* cr = NULL;
+    cairo_t* cr = nullptr;
     if (m_graphicContext)
         cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
-    cairo_t* cr_src = NULL;
+    cairo_t* cr_src = nullptr;
     wxGraphicsContext* gc_src = source->GetGraphicsContext();
     if (gc_src)
         cr_src = static_cast<cairo_t*>(gc_src->GetNativeContext());
 
-    if (cr == NULL || cr_src == NULL)
+    if (cr == nullptr || cr_src == nullptr)
         return false;
 
     cairo_surface_t* surfaceSrc = cairo_get_target(cr_src);
     cairo_surface_flush(surfaceSrc);
 
-    cairo_surface_t* surfaceTmp = NULL;
+    cairo_surface_t* surfaceTmp = nullptr;
     // If destination (this) and source wxDC refer to the same Cairo context
     // it means that we operate on one surface and results of drawing
     // can be invalid if destination and source regions overlap.
@@ -315,7 +315,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
     const wxRasterOperationMode rop_save = m_logicalFunction;
     SetLogicalFunction(rop);
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
-    cairo_surface_t* maskSurf = NULL;
+    cairo_surface_t* maskSurf = nullptr;
     if (useMask)
     {
         if (bitmap.IsOk())
@@ -361,7 +361,7 @@ bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dst
 
 void* wxGTKCairoDCImpl::GetCairoContext() const
 {
-    cairo_t* cr = NULL;
+    cairo_t* cr = nullptr;
     if (m_graphicContext)
         cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
     return cr;
@@ -410,9 +410,9 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
     : wxGTKCairoDCImpl(owner, window)
 {
     GtkWidget* widget = window->m_wxwindow;
-    if (widget == NULL)
+    if (widget == nullptr)
         widget = window->m_widget;
-    GdkWindow* gdkWindow = NULL;
+    GdkWindow* gdkWindow = nullptr;
     if (widget)
     {
         gdkWindow = gtk_widget_get_window(widget);
@@ -457,9 +457,9 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     : wxGTKCairoDCImpl(owner, window)
 {
     GtkWidget* widget = window->m_wxwindow;
-    if (widget == NULL)
+    if (widget == nullptr)
         widget = window->m_widget;
-    GdkWindow* gdkWindow = NULL;
+    GdkWindow* gdkWindow = nullptr;
     if (widget)
     {
         window->GetClientSize(&m_size.x, &m_size.y);
@@ -518,7 +518,7 @@ void wxPaintDCImpl::DestroyClippingRegion()
 //-----------------------------------------------------------------------------
 
 wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
-    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(NULL))
+    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(nullptr))
 {
     GdkWindow* window = gdk_get_default_root_window();
     InitSize(window);
@@ -543,7 +543,7 @@ wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner)
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC* owner, wxBitmap& bitmap)
-    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(NULL))
+    : wxGTKCairoDCImpl(owner, static_cast<wxWindow*>(nullptr))
     , m_bitmap(bitmap)
 {
     Setup();
@@ -578,7 +578,7 @@ wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
 
 void wxMemoryDCImpl::Setup()
 {
-    wxGraphicsContext* gc = NULL;
+    wxGraphicsContext* gc = nullptr;
     m_ok = m_bitmap.IsOk();
     if (m_ok)
     {

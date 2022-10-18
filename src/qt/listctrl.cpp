@@ -85,7 +85,7 @@ class wxQtStyledItemDelegate : public QStyledItemDelegate
 public:
     explicit wxQtStyledItemDelegate(wxWindow* parent)
         : m_parent(parent),
-        m_textCtrl(NULL)
+        m_textCtrl(nullptr)
     {
     }
 
@@ -93,7 +93,7 @@ public:
                           const QStyleOptionViewItem &WXUNUSED(option),
                           const QModelIndex &index) const override
     {
-        if (m_textCtrl != NULL)
+        if (m_textCtrl != nullptr)
             destroyEditor(m_textCtrl->GetHandle(), m_currentModelIndex);
 
         m_currentModelIndex = index;
@@ -105,11 +105,11 @@ public:
     void destroyEditor(QWidget *WXUNUSED(editor),
                        const QModelIndex &WXUNUSED(index)) const override
     {
-        if (m_textCtrl != NULL)
+        if (m_textCtrl != nullptr)
         {
             m_currentModelIndex = QModelIndex(); // invalidate the index
             wxTheApp->ScheduleForDestruction(m_textCtrl);
-            m_textCtrl = NULL;
+            m_textCtrl = nullptr;
         }
     }
 
@@ -147,7 +147,7 @@ class wxQtListModel : public QAbstractTableModel
 {
 public:
     explicit wxQtListModel(wxListCtrl *listCtrl) :
-        m_view(NULL),
+        m_view(nullptr),
         m_listCtrl(listCtrl)
     {
     }
@@ -187,7 +187,7 @@ public:
             case Qt::DecorationRole:
             {
                 wxImageList *imageList = GetImageList();
-                if ( imageList == NULL )
+                if ( imageList == nullptr )
                     return QVariant();
 
                 int imageIndex = -1;
@@ -782,14 +782,14 @@ private:
     struct RowItem
     {
         RowItem() :
-            m_data(NULL),
+            m_data(nullptr),
             m_checked(false)
         {
         }
 
         RowItem(int columnCount ) :
             m_columns(columnCount),
-            m_data(NULL),
+            m_data(nullptr),
             m_checked(false)
         {
         }
@@ -866,7 +866,7 @@ public:
         if ( role == Qt::DecorationRole )
         {
             wxImageList *imageList = GetImageList();
-            if ( imageList == NULL )
+            if ( imageList == nullptr )
                 return QVariant();
 
             const int imageIndex = listCtrl->OnGetItemColumnImage(row, col);
@@ -977,7 +977,7 @@ public:
 
     int GetHeaderHeight() const
     {
-        return header() != NULL ? header()->height() : 0;
+        return header() != nullptr ? header()->height() : 0;
     }
 
 private:
@@ -1082,13 +1082,13 @@ bool wxListCtrl::Create(wxWindow *parent,
 void wxListCtrl::Init()
 {
     m_hasCheckBoxes = false;
-    m_model = NULL;
-    m_qtTreeWidget = NULL;
+    m_model = nullptr;
+    m_qtTreeWidget = nullptr;
 }
 
 wxListCtrl::~wxListCtrl()
 {
-    m_qtTreeWidget->setModel(NULL);
+    m_qtTreeWidget->setModel(nullptr);
     m_model->deleteLater();
 }
 

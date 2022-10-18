@@ -153,7 +153,7 @@ void ColourPickerWidgetsPage::CreateContent()
     Reset();    // set checkboxes state
 
     // create pickers
-    m_clrPicker = NULL;
+    m_clrPicker = nullptr;
     CreatePicker();
 
     // right pane

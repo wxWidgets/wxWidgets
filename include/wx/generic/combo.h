@@ -85,8 +85,8 @@ protected:
 #if defined(__WXUNIVERSAL__)
     // Looks like there's nothing we need to override here
 #elif defined(__WXGTK__)
-    virtual GtkEditable *GetEditable() const override { return NULL; }
-    virtual GtkEntry *GetEntry() const override { return NULL; }
+    virtual GtkEditable *GetEditable() const override { return nullptr; }
+    virtual GtkEntry *GetEntry() const override { return nullptr; }
 #elif defined(__WXOSX__)
     virtual wxTextWidgetImpl * GetTextPeer() const override;
 #endif

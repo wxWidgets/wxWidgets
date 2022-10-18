@@ -169,7 +169,7 @@ DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
                    :WidgetsPage(book, imaglist, dirctrl_xpm)
 {
-    m_dirCtrl = NULL;
+    m_dirCtrl = nullptr;
 }
 
 void DirCtrlWidgetsPage::CreateContent()

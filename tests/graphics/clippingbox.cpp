@@ -286,7 +286,7 @@ static void FlushDC(wxDC& dc)
         // to do so.
         wxGraphicsRenderer* rend = gc->GetRenderer();
         if ( rend == wxGraphicsRenderer::GetDirect2DRenderer() )
-            dc.SetGraphicsContext(NULL);
+            dc.SetGraphicsContext(nullptr);
 #endif // __WXMSW__ && wxUSE_GRAPHICS_DIRECT2D
     }
 #else

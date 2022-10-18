@@ -43,7 +43,7 @@ public:
 protected:
     virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return true; }
 
-    void InitFontData(const wxFontData *data = NULL)
+    void InitFontData(const wxFontData *data = nullptr)
         { if ( data ) m_fontData = *data; }
 
     wxFontData m_fontData;
@@ -82,7 +82,7 @@ protected:
 
 // get the font from user and return it, returns wxNullFont if the dialog was
 // cancelled
-WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = NULL,
+WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = nullptr,
                                           const wxFont& fontInit = wxNullFont,
                                           const wxString& caption = wxEmptyString);
 

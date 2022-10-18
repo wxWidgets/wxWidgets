@@ -58,7 +58,7 @@ public:
 
     void *GetPtr() const { return m_waveDataPtr; }
 
-    virtual bool IsOk() const override { return GetPtr() != NULL; }
+    virtual bool IsOk() const override { return GetPtr() != nullptr; }
     virtual DWORD GetSoundFlag() const override { return SND_MEMORY; }
     virtual LPCTSTR GetSoundData() const override { return (LPCTSTR)GetPtr(); }
 
@@ -148,7 +148,7 @@ bool wxSound::CheckCreatedOk()
     if ( m_data && !m_data->IsOk() )
         Free();
 
-    return m_data != NULL;
+    return m_data != nullptr;
 }
 
 bool wxSound::Create(const wxString& filename, bool isResource)
@@ -175,7 +175,7 @@ bool wxSound::DoPlay(unsigned flags) const
         return false;
 
     DWORD flagsMSW = m_data->GetSoundFlag();
-    HMODULE hmod = flagsMSW == SND_RESOURCE ? wxGetInstance() : NULL;
+    HMODULE hmod = flagsMSW == SND_RESOURCE ? wxGetInstance() : nullptr;
 
     // we don't want replacement default sound
     flagsMSW |= SND_NODEFAULT;
@@ -194,7 +194,7 @@ bool wxSound::DoPlay(unsigned flags) const
 /* static */
 void wxSound::Stop()
 {
-    ::PlaySound(NULL, NULL, 0);
+    ::PlaySound(nullptr, nullptr, 0);
 }
 
 #endif // wxUSE_SOUND

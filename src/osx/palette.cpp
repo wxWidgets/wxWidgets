@@ -41,7 +41,7 @@ protected:
 
 wxPaletteRefData::wxPaletteRefData()
 {
-    m_palette = NULL;
+    m_palette = nullptr;
     m_count = 0;
 }
 

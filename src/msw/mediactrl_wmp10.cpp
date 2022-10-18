@@ -720,15 +720,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWMP10MediaBackend, wxMediaBackend);
 wxWMP10MediaBackend::wxWMP10MediaBackend()
                  :
 #ifndef WXTEST_ATL
-                m_pAX(NULL),
+                m_pAX(nullptr),
 #endif
-                m_pWMPPlayer(NULL),
-                m_pWMPSettings(NULL),
-                m_pWMPControls(NULL),
-                m_pWMPControls2(NULL)
+                m_pWMPPlayer(nullptr),
+                m_pWMPSettings(nullptr),
+                m_pWMPControls(nullptr),
+                m_pWMPControls2(nullptr)
 
 {
-    m_evthandler = NULL;
+    m_evthandler = nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -774,11 +774,11 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                      const wxString& name)
 {
 #ifndef WXTEST_ATL
-    if( ::CoCreateInstance(CLSID_WMP10, NULL,
+    if( ::CoCreateInstance(CLSID_WMP10, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IWMPPlayer, (void**)&m_pWMPPlayer) != 0 )
     {
-        if( ::CoCreateInstance(CLSID_WMP10ALT, NULL,
+        if( ::CoCreateInstance(CLSID_WMP10ALT, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IWMPPlayer, (void**)&m_pWMPPlayer) != 0 )
             return false;
@@ -828,14 +828,14 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     m_evthandler = new wxWMP10MediaEvtHandler(this);
     m_ctrl->PushEventHandler(m_evthandler);
 #else
-    _Module.Init(NULL, ::GetModuleHandle(NULL));
+    _Module.Init(nullptr, ::GetModuleHandle(nullptr));
     AtlAxWinInit();
     CComPtr<IAxWinHostWindow>  spHost;
 
     HRESULT hr;
     RECT rcClient;
     ::GetClientRect((HWND)ctrl->GetHandle(), &rcClient);
-    m_wndView.Create((HWND)ctrl->GetHandle(), rcClient, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
+    m_wndView.Create((HWND)ctrl->GetHandle(), rcClient, nullptr, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
     hr = m_wndView.QueryHost(&spHost);
     hr = spHost->CreateControl(CComBSTR(wxT("{6BF52A52-394A-11d3-B153-00C04F79FAA6}")), m_wndView, 0);
     hr = m_wndView.QueryControl(&m_pWMPPlayer);
@@ -1045,7 +1045,7 @@ void wxWMP10MediaBackend::FinishLoad()
     // THIS WILL NOT WORK UNLESS THE MEDIA IS ABOUT TO PLAY
     // See the "introduction" - also get_currentMedia will return
     // "1" which is a VALID HRESULT value
-    // and a NULL pWMPMedia if the media isn't the "current" one
+    // and a null pWMPMedia if the media isn't the "current" one
     // which is rather unintuitive in the sense that it uses it
     // (i.e. basically not currently playing)...
     IWMPMedia* pWMPMedia;

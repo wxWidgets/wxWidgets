@@ -105,7 +105,7 @@ wxAcceleratorTable::~wxAcceleratorTable()
 
 bool wxAcceleratorTable::IsOk() const
 {
-    return m_refData != NULL;
+    return m_refData != nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -161,7 +161,7 @@ wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
     if ( !IsOk() )
     {
         // not an error, the accel table is just empty
-        return NULL;
+        return nullptr;
     }
 
     wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
@@ -186,14 +186,14 @@ wxAcceleratorTable::GetEntry(const wxKeyEvent& event) const
         node = node->GetNext();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 wxMenuItem *wxAcceleratorTable::GetMenuItem(const wxKeyEvent& event) const
 {
     const wxAcceleratorEntry *entry = GetEntry(event);
 
-    return entry ? entry->GetMenuItem() : NULL;
+    return entry ? entry->GetMenuItem() : nullptr;
 }
 
 int wxAcceleratorTable::GetCommand(const wxKeyEvent& event) const

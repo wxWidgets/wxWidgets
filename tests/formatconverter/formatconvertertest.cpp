@@ -250,11 +250,11 @@ void FormatConverterTestCase::doTest(const char *input,
                                      const char *expectedWcharWindows)
 {
     static const wxChar *flag_width[] =
-        { wxT(""), wxT("*"), wxT("10"), wxT("-*"), wxT("-10"), NULL };
+        { wxT(""), wxT("*"), wxT("10"), wxT("-*"), wxT("-10"), nullptr };
     static const wxChar *precision[] =
-        { wxT(""), wxT(".*"), wxT(".10"), NULL };
+        { wxT(""), wxT(".*"), wxT(".10"), nullptr };
     static const wxChar *empty[] =
-        { wxT(""), NULL };
+        { wxT(""), nullptr };
 
     // no precision for %c or %C
     const wxChar **precs = wxTolower(input[wxStrlen(input)-1]) == wxT('c') ?

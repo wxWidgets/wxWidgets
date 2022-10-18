@@ -85,7 +85,7 @@ wxIMPLEMENT_APP(WrapSizerApp);
 // ----------------------------------------------------------------------------
 
 WrapSizerFrame::WrapSizerFrame()
-        : wxFrame(NULL, wxID_ANY, "wxWrapSizer Sample")
+        : wxFrame(nullptr, wxID_ANY, "wxWrapSizer Sample")
 {
     SetIcon(wxICON(sample));
 

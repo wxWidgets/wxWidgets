@@ -30,7 +30,7 @@ public:
             const wxString& value = wxEmptyString,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = NULL,
+            int n = 0, const wxString choices[] = nullptr,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxComboBoxNameStr))
@@ -60,7 +60,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n = 0,
-                const wxString choices[] = NULL,
+                const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxComboBoxNameStr));
@@ -141,7 +141,7 @@ protected:
     virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const override;
 
     // this is the implementation of GetEditHWND() which can also be used when
-    // we don't have the edit control, it simply returns NULL then
+    // we don't have the edit control, it simply returns nullptr then
     //
     // try not to use this function unless absolutely necessary (as in the
     // message handling code where the edit control might not be created yet

@@ -236,10 +236,10 @@ public:
     wxWindow *SetDefaultItem(wxWindow *win)
         { wxWindow *old = GetDefaultItem(); m_winDefault = win; return old; }
 
-    // return the temporary default item, can be NULL
+    // return the temporary default item, can be null
     wxWindow *GetTmpDefaultItem() const { return m_winTmpDefault; }
 
-    // set a temporary default item, SetTmpDefaultItem(NULL) should be called
+    // set a temporary default item, SetTmpDefaultItem(nullptr) should be called
     // soon after a call to SetTmpDefaultItem(window), return the old default
     wxWindow *SetTmpDefaultItem(wxWindow *win)
         { wxWindow *old = GetDefaultItem(); m_winTmpDefault = win; return old; }
@@ -346,10 +346,10 @@ protected:
     // the frame icon
     wxIconBundle m_icons;
 
-    // a default window (usually a button) or NULL
+    // a default window (usually a button) or nullptr
     wxWindowRef m_winDefault;
 
-    // a temporary override of m_winDefault, use the latter if NULL
+    // a temporary override of m_winDefault, use the latter if nullptr
     wxWindowRef m_winTmpDefault;
 
     bool m_modified;

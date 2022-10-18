@@ -179,7 +179,7 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
                 // get width of cell CONTENTS (text)
                 int y;
                 wxFont font = m_grid->GetCellFont(row, col);
-                m_grid->GetTextExtent(value, &textWidth, &y, NULL, NULL, &font);
+                m_grid->GetTextExtent(value, &textWidth, &y, nullptr, nullptr, &font);
 
                 // try to RIGHT align the text by scrolling
                 int client_right = m_grid->GetGridWindow()->GetClientSize().GetWidth();
@@ -229,7 +229,7 @@ wxGridCellEditor::wxGridCellEditor(const wxGridCellEditor& other)
       m_colBgOld(other.m_colBgOld),
       m_fontOld(other.m_fontOld)
 {
-    m_attr = other.m_attr ? other.m_attr->Clone() : NULL;
+    m_attr = other.m_attr ? other.m_attr->Clone() : nullptr;
 }
 
 wxGridCellEditor::~wxGridCellEditor()
@@ -262,7 +262,7 @@ void wxGridCellEditor::Destroy()
         m_control->PopEventHandler( true /* delete it*/ );
 
         m_control->Destroy();
-        m_control = NULL;
+        m_control = nullptr;
     }
 }
 
@@ -1508,7 +1508,7 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be created first!"));
 
-    wxGridCellEditorEvtHandler* evtHandler = NULL;
+    wxGridCellEditorEvtHandler* evtHandler = nullptr;
     if (m_control)
     {
         // This event handler is needed to properly dismiss the editor when the popup is closed
@@ -1651,7 +1651,7 @@ void wxGridCellEnumEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEnumEditor must be Created first!"));
 
-    wxGridCellEditorEvtHandler* evtHandler = NULL;
+    wxGridCellEditorEvtHandler* evtHandler = nullptr;
     if (m_control)
         evtHandler = wxDynamicCast(m_control->GetEventHandler(), wxGridCellEditorEvtHandler);
 
@@ -1787,7 +1787,7 @@ struct wxGridCellDateEditorKeyHandler
     // see the comment before WX_DECLARE_TYPEINFO_INLINE() in wx/typeinfo.h)
     // and this, in turn, requires a default ctor of this class -- which will
     // never be actually used, but must nevertheless exist.
-    wxGridCellDateEditorKeyHandler() : m_handler(NULL) { }
+    wxGridCellDateEditorKeyHandler() : m_handler(nullptr) { }
 #endif // wxNO_RTTI
 };
 #endif // __WXGTK__

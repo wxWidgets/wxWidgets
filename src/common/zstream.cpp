@@ -73,9 +73,9 @@ wxZlibClassFactory::wxZlibClassFactory()
 const wxChar * const *
 wxZlibClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *mimes[] = { wxT("application/x-deflate"), NULL };
-    static const wxChar *encs[] =  { wxT("deflate"), NULL };
-    static const wxChar *empty[] = { NULL };
+    static const wxChar *mimes[] = { wxT("application/x-deflate"), nullptr };
+    static const wxChar *encs[] =  { wxT("deflate"), nullptr };
+    static const wxChar *empty[] = { nullptr };
 
     switch (type) {
         case wxSTREAM_MIMETYPE:         return mimes;
@@ -102,15 +102,15 @@ const wxChar * const *
 wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
     static const wxChar *protos[] =
-        { wxT("gzip"), NULL };
+        { wxT("gzip"), nullptr };
     static const wxChar *mimes[] =
-        { wxT("application/gzip"), wxT("application/x-gzip"), NULL };
+        { wxT("application/gzip"), wxT("application/x-gzip"), nullptr };
     static const wxChar *encs[] =
-        { wxT("gzip"), NULL };
+        { wxT("gzip"), nullptr };
     static const wxChar *exts[] =
-        { wxT(".gz"), wxT(".gzip"), NULL };
+        { wxT(".gz"), wxT(".gzip"), nullptr };
     static const wxChar *empty[] =
-        { NULL };
+        { nullptr };
 
     switch (type) {
         case wxSTREAM_PROTOCOL: return protos;
@@ -140,7 +140,7 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream *stream, int flags)
 
 void wxZlibInputStream::Init(int flags)
 {
-  m_inflate = NULL;
+  m_inflate = nullptr;
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
   m_pos = 0;
@@ -296,7 +296,7 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream *stream,
 
 void wxZlibOutputStream::Init(int level, int flags)
 {
-  m_deflate = NULL;
+  m_deflate = nullptr;
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
   m_pos = 0;

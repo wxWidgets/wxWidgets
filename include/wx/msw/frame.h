@@ -119,7 +119,7 @@ public:
     //
     // The pointer returned by this method belongs to the window and will be
     // deleted when the window itself is, do not delete it yourself. May return
-    // NULL if the initialization of taskbar button failed.
+    // nullptr if the initialization of taskbar button failed.
     wxTaskBarButton* MSWGetTaskBarButton();
 #endif // wxUSE_TASKBARBUTTON
 
@@ -163,7 +163,7 @@ protected:
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_MENUS
-    // frame menu, NULL if none
+    // frame menu, nullptr if none
     WXHMENU m_hMenu;
 
     // The number of currently opened menus: 0 initially, 1 when a top level

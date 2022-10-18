@@ -168,7 +168,7 @@ typedef void (wxEvtHandler::*wxClipboardEventFunction)(wxClipboardEvent&);
 class WXDLLIMPEXP_CORE wxClipboardLocker
 {
 public:
-    wxClipboardLocker(wxClipboard *clipboard = NULL)
+    wxClipboardLocker(wxClipboard *clipboard = nullptr)
     {
         m_clipboard = clipboard ? clipboard : wxTheClipboard;
         if ( m_clipboard )

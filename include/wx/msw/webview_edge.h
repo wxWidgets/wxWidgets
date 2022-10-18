@@ -88,8 +88,8 @@ public:
 
     virtual bool SetUserAgent(const wxString& userAgent) override;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const override;
-    virtual void RunScriptAsync(const wxString& javascript, void* clientData = NULL) const override;
+    virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
+    virtual void RunScriptAsync(const wxString& javascript, void* clientData = nullptr) const override;
     virtual bool AddScriptMessageHandler(const wxString& name) override;
     virtual bool RemoveScriptMessageHandler(const wxString& name) override;
     virtual bool AddUserScript(const wxString& javascript,

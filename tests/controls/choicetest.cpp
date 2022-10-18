@@ -62,7 +62,7 @@ void ChoiceTestCase::Sort()
 #if !defined(__WXOSX__)
     wxDELETE(m_choice);
     m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
                             wxCB_SORT);
 
     wxArrayString testitems;

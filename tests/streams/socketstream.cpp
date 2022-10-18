@@ -83,7 +83,7 @@ protected:
             delete socket;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     int m_port;
@@ -167,10 +167,10 @@ wxSocketFlags socketStream::ms_flags = wxSOCKET_NONE;
 socketStream::socketStream()
 {
     m_readSocket =
-    m_writeSocket = NULL;
+    m_writeSocket = nullptr;
 
     m_writeThread =
-    m_readThread = NULL;
+    m_readThread = nullptr;
 
     wxSocketBase::Initialize();
 }
@@ -233,7 +233,7 @@ void socketStream::DoCheckInputStream(wxSocketInputStream& stream_in)
 {
     // This check sometimes fails in the AppVeyor CI environment for unknown
     // reason, so just log it there but don't fail the entire test suite run.
-    if ( wxGetEnv("APPVEYOR", NULL) )
+    if ( wxGetEnv("APPVEYOR", nullptr) )
     {
         if ( !stream_in.IsOk() )
         {

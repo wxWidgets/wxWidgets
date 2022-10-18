@@ -61,7 +61,7 @@ void wxDialog::OSXEndModalDialog()
 void wxDialog::Init()
 {
     m_modality = wxDIALOG_MODALITY_NONE;
-    m_eventLoop = NULL;
+    m_eventLoop = nullptr;
 }
 
 bool wxDialog::Create( wxWindow *parent,
@@ -168,7 +168,7 @@ int wxDialog::ShowModal()
     modalLoop.Run();
     OSXEndModalDialog();
 
-    m_eventLoop = NULL;
+    m_eventLoop = nullptr;
 
     return GetReturnCode();
 }

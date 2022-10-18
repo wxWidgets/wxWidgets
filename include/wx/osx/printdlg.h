@@ -28,11 +28,11 @@ class WXDLLIMPEXP_CORE wxMacPrintDialog: public wxPrintDialogBase
 {
 public:
     wxMacPrintDialog();
-    wxMacPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+    wxMacPrintDialog(wxWindow *parent, wxPrintDialogData* data = nullptr);
     wxMacPrintDialog(wxWindow *parent, wxPrintData* data );
     virtual ~wxMacPrintDialog();
 
-    bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
+    bool Create(wxWindow *parent, wxPrintDialogData* data = nullptr);
     virtual int ShowModal() override;
 
     virtual wxPrintDialogData& GetPrintDialogData() override { return m_printDialogData; }
@@ -57,12 +57,12 @@ private:
 class WXDLLIMPEXP_CORE wxMacPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
-    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
     virtual ~wxMacPageSetupDialog();
 
     virtual wxPageSetupDialogData& GetPageSetupDialogData() override;
 
-    bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    bool Create(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
     virtual int ShowModal() override;
 
 private:

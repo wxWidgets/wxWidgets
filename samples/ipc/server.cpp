@@ -66,7 +66,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    m_frame = new MyFrame(NULL, "Server");
+    m_frame = new MyFrame(nullptr, "Server");
     m_frame->Show(true);
 
     return true;
@@ -86,7 +86,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     SetIcon(wxICON(sample));
 
-    m_server = NULL;
+    m_server = nullptr;
 
     wxPanel * const panel = new wxPanel(this);
 
@@ -148,8 +148,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
 void MyFrame::UpdateUI()
 {
-    GetStart()->Enable(m_server == NULL);
-    GetServername()->Enable(m_server == NULL);
+    GetStart()->Enable(m_server == nullptr);
+    GetServername()->Enable(m_server == nullptr);
     GetAdvise()->Enable(m_server && m_server->CanAdvise());
     GetDisconnect()->Enable(m_server && m_server->IsConnected());
 }
@@ -224,7 +224,7 @@ void MyFrame::OnAdvise(wxCommandEvent& WXUNUSED(event))
 
 MyServer::MyServer() : wxServer()
 {
-    m_connection = NULL;
+    m_connection = nullptr;
 }
 
 MyServer::~MyServer()
@@ -246,7 +246,7 @@ wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
     //else: unknown topic
 
     wxLogMessage("Unknown topic, connection refused");
-    return NULL;
+    return nullptr;
 }
 
 void MyServer::Disconnect()
@@ -341,7 +341,7 @@ MyConnection::OnRequest(const wxString& topic,
     if ( !*size )
     {
         wxLogMessage("Unknown request for \"%s\"", item);
-        return NULL;
+        return nullptr;
     }
 
     // store the data pointer to which we return in a member variable to ensure

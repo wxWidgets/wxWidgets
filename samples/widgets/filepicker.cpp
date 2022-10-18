@@ -194,7 +194,7 @@ void FilePickerWidgetsPage::CreateContent()
     // create the picker and the static text displaying its current value
     m_labelPath = new wxStaticText(this, PickerPage_CurrentPath, "");
 
-    m_filePicker = NULL;
+    m_filePicker = nullptr;
     CreatePicker();
 
     // right pane

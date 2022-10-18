@@ -118,7 +118,7 @@ class wxSocketFDBasedManager : public wxSocketManager
 public:
     wxSocketFDBasedManager()
     {
-        m_fdioManager = NULL;
+        m_fdioManager = nullptr;
     }
 
     virtual bool OnInit() override;

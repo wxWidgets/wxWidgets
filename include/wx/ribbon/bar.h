@@ -58,7 +58,7 @@ class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
 public:
     wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPage* page = NULL)
+                       wxRibbonPage* page = nullptr)
         : wxNotifyEvent(command_type, win_id)
         , m_page(page)
     {
@@ -165,7 +165,7 @@ protected:
 
     virtual wxSize DoGetBestSize() const override;
     wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
-    wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
+    wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = nullptr);
     void HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag);
 
     void CommonInit(long style);

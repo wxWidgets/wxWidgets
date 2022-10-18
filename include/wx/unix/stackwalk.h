@@ -25,7 +25,7 @@ public:
     //
     // NB: we don't copy syminfo pointer so it should have lifetime at least as
     //     long as ours
-    wxStackFrame(size_t level = 0, void *address = NULL, const char *syminfo = NULL)
+    wxStackFrame(size_t level = 0, void *address = nullptr, const char *syminfo = nullptr)
         : wxStackFrameBase(level, address)
     {
         m_syminfo = syminfo;
@@ -62,7 +62,7 @@ public:
     // addr2line, normally we can retrieve it from wxTheApp but if wxTheApp
     // doesn't exist or doesn't have the correct value, the path may be given
     // explicitly
-    wxStackWalker(const char *argv0 = NULL)
+    wxStackWalker(const char *argv0 = nullptr)
     {
         ms_exepath = wxString::FromAscii(argv0);
     }

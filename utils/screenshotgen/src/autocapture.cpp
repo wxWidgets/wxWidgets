@@ -34,7 +34,7 @@ AutoCaptureMechanism::AutoCaptureMechanism(wxNotebook *notebook,
 : m_notebook(notebook),
   m_flag(flag),
   m_margin(margin),
-  m_grid(NULL)
+  m_grid(nullptr)
 {
 }
 
@@ -352,7 +352,7 @@ void AutoCaptureMechanism::PutBack(wxWindow * ctrl)
 
     sizer->Detach(m_grid);
     delete m_grid;
-    m_grid = NULL;
+    m_grid = nullptr;
 
     sizer->Add(ctrl);
 }

@@ -579,7 +579,7 @@ private:
 
 void wxTimePickerCtrlGeneric::Init()
 {
-    m_impl = NULL;
+    m_impl = nullptr;
 }
 
 bool
@@ -668,7 +668,7 @@ wxSize wxTimePickerCtrlGeneric::DoGetBestSize() const
 
     wxTextCtrl* const text = m_impl->m_text;
     int w;
-    text->GetTextExtent(text->GetValue(), &w, NULL);
+    text->GetTextExtent(text->GetValue(), &w, nullptr);
     wxSize size(text->GetSizeFromTextSize(w + 1));
 
     const wxSize sizeBtn(m_impl->m_btn->GetBestSize());

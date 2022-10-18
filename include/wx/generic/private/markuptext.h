@@ -36,7 +36,7 @@ public:
     // The font currently selected into the DC is used for measuring (notice
     // that it is changed by this function but normally -- i.e. if markup is
     // valid -- restored to its original value when it returns).
-    wxSize Measure(wxDC& dc, int *visibleHeight = NULL) const;
+    wxSize Measure(wxDC& dc, int *visibleHeight = nullptr) const;
 
 protected:
     wxMarkupTextBase(const wxString& markup)

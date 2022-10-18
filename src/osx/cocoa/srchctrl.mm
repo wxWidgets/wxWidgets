@@ -75,7 +75,7 @@
     wxUnusedVar(words);
     wxUnusedVar(index);
 
-    NSMutableArray* matches = NULL;
+    NSMutableArray* matches = nullptr;
     // NSString*       partialString;
     // partialString = [[textView string] substringWithRange:charRange];
     matches       = [NSMutableArray array];

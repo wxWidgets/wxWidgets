@@ -244,7 +244,7 @@ wxEND_EVENT_TABLE()
 
 void wxRearrangeCtrl::Init()
 {
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 bool
@@ -378,7 +378,7 @@ void wxRearrangeDialog::AddExtraControls(wxWindow *win)
 
 wxRearrangeList *wxRearrangeDialog::GetList() const
 {
-    wxCHECK_MSG( m_ctrl, NULL, "the dialog must be created first" );
+    wxCHECK_MSG( m_ctrl, nullptr, "the dialog must be created first" );
 
     return m_ctrl->GetList();
 }

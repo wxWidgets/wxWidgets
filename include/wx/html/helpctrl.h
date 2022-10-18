@@ -44,7 +44,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxE
     wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpController);
 
 public:
-    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
+    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = nullptr);
     wxHtmlHelpController(wxWindow* parentWindow, int style = wxHF_DEFAULT_STYLE);
 
     virtual ~wxHtmlHelpController();
@@ -96,9 +96,9 @@ public:
                                bool newFrameEachTime = false) override;
     /// Obtains the latest settings used by the help frame and the help
     /// frame.
-    virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                               wxPoint *pos = NULL,
-                               bool *newFrameEachTime = NULL) override;
+    virtual wxFrame *GetFrameParameters(wxSize *size = nullptr,
+                               wxPoint *pos = nullptr,
+                               bool *newFrameEachTime = nullptr) override;
 
     // Get direct access to help data:
     wxHtmlHelpData *GetHelpData() { return &m_helpData; }

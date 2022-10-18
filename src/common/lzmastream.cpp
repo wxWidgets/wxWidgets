@@ -384,11 +384,11 @@ wxLZMAClassFactory::wxLZMAClassFactory()
 const wxChar * const *
 wxLZMAClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *mime[] = { wxT("application/xz"), NULL };
-    static const wxChar *encs[] = { wxT("xz"), NULL };
-    static const wxChar *exts[] = { wxT(".xz"), NULL };
+    static const wxChar *mime[] = { wxT("application/xz"), nullptr };
+    static const wxChar *encs[] = { wxT("xz"), nullptr };
+    static const wxChar *exts[] = { wxT(".xz"), nullptr };
 
-    const wxChar* const* ret = NULL;
+    const wxChar* const* ret = nullptr;
     switch ( type )
     {
         case wxSTREAM_PROTOCOL: ret = encs; break;

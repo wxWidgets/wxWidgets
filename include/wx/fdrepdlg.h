@@ -96,7 +96,7 @@ class WXDLLIMPEXP_CORE wxFindReplaceDialogBase : public wxDialog
 {
 public:
     // ctors and such
-    wxFindReplaceDialogBase() { m_FindReplaceData = NULL; }
+    wxFindReplaceDialogBase() { m_FindReplaceData = nullptr; }
     wxFindReplaceDialogBase(wxWindow * WXUNUSED(parent),
                             wxFindReplaceData *data,
                             const wxString& WXUNUSED(title),

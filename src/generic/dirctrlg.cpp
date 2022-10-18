@@ -430,8 +430,8 @@ void wxGenericDirCtrl::Init()
     m_showHidden = false;
     m_currentFilter = 0;
     m_currentFilterStr.clear(); // Default: any file
-    m_treeCtrl = NULL;
-    m_filterListCtrl = NULL;
+    m_treeCtrl = nullptr;
+    m_filterListCtrl = nullptr;
 }
 
 wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID treeid, const wxPoint& pos, const wxSize& size, long treeStyle)
@@ -1148,7 +1148,7 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
     else if (filter.empty() && m_filterListCtrl)
     {
         m_filterListCtrl->Destroy();
-        m_filterListCtrl = NULL;
+        m_filterListCtrl = nullptr;
     }
 
     wxString f, d;
@@ -1247,12 +1247,12 @@ bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
                                  long style)
 {
     m_dirCtrl = parent;
-    return wxChoice::Create(parent, treeid, pos, size, 0, NULL, style);
+    return wxChoice::Create(parent, treeid, pos, size, 0, nullptr, style);
 }
 
 void wxDirFilterListCtrl::Init()
 {
-    m_dirCtrl = NULL;
+    m_dirCtrl = nullptr;
 }
 
 void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& WXUNUSED(event))
@@ -1310,7 +1310,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 // ----------------------------------------------------------------------------
 
 // global instance of a wxFileIconsTable
-wxFileIconsTable* wxTheFileIconsTable = NULL;
+wxFileIconsTable* wxTheFileIconsTable = nullptr;
 
 // A module to allow icons table cleanup
 
@@ -1339,8 +1339,8 @@ public:
 wxFileIconsTable::wxFileIconsTable()
     : m_size(16, 16)
 {
-    m_HashTable = NULL;
-    m_smallImageList = NULL;
+    m_HashTable = nullptr;
+    m_smallImageList = nullptr;
 }
 
 wxFileIconsTable::~wxFileIconsTable()

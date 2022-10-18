@@ -28,7 +28,7 @@ extern WXDLLEXPORT_DATA(const char) wxStaticBoxNameStr[] = "groupBox";
 
 wxStaticBoxBase::wxStaticBoxBase()
 {
-    m_labelWin = NULL;
+    m_labelWin = nullptr;
     m_areChildrenEnabled = true;
 
 #ifndef __WXGTK__

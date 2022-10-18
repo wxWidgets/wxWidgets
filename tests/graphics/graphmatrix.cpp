@@ -29,8 +29,8 @@ public:
     {
         m_bmp.Create(100, 100);
         m_dc.SelectObject(m_bmp);
-        m_rend = NULL;
-        m_ctx = NULL;
+        m_rend = nullptr;
+        m_ctx = nullptr;
     }
 
     ~GraphicsMatrixTestCaseBase()
@@ -48,7 +48,7 @@ public:
     virtual void tearDown() override
     {
         delete m_ctx;
-        m_ctx = NULL;
+        m_ctx = nullptr;
     }
 
 protected:

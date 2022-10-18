@@ -57,7 +57,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
             if ( encoding != wxFONTENCODING_SYSTEM || fixedWidthOnly)
             {
-                wxCFRef<CTFontRef> font(CTFontCreateWithName(fontName, 12.0, NULL));
+                wxCFRef<CTFontRef> font(CTFontCreateWithName(fontName, 12.0, nullptr));
                 if ( encoding != wxFONTENCODING_SYSTEM )
                 {
                     CFStringEncoding fontFamiliyEncoding = CTFontGetStringEncoding(font);

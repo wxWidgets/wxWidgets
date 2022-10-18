@@ -34,7 +34,7 @@ public:
 
     wxWithImages()
     {
-        m_imageList = NULL;
+        m_imageList = nullptr;
         m_ownsImageList = false;
     }
 
@@ -106,7 +106,7 @@ public:
     // Avoid using it if possible.
     void TakeOwnership() { m_ownsImageList = true; }
 
-    // Get pointer (may be NULL) to the associated image list.
+    // Get pointer (may be null) to the associated image list.
     wxImageList* GetImageList() const { return m_imageList; }
 
     // This helper function can be used from OnImagesChanged() if the derived
@@ -150,7 +150,7 @@ protected:
 
 
     // Return true if we have a valid image list.
-    bool HasImageList() const { return m_imageList != NULL; }
+    bool HasImageList() const { return m_imageList != nullptr; }
 
     // Return the image with the given index from the image list.
     //
@@ -210,7 +210,7 @@ private:
         if ( m_ownsImageList )
         {
             delete m_imageList;
-            m_imageList = NULL;
+            m_imageList = nullptr;
 
             // We don't own it any more.
             m_ownsImageList = false;
@@ -221,7 +221,7 @@ private:
     // The images we use: if this vector is not empty, m_imageList is not used.
     Images m_images;
 
-    // The associated image list or NULL.
+    // The associated image list or nullptr.
     wxImageList* m_imageList;
 
     // False by default, if true then we delete m_imageList.

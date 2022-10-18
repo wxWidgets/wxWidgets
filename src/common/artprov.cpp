@@ -211,8 +211,8 @@ private:
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxArtProvider, wxObject);
 
-wxArtProvidersList *wxArtProvider::sm_providers = NULL;
-wxArtProviderCache *wxArtProvider::sm_cache = NULL;
+wxArtProvidersList *wxArtProvider::sm_providers = nullptr;
+wxArtProviderCache *wxArtProvider::sm_cache = nullptr;
 
 // ----------------------------------------------------------------------------
 // wxArtProvider ctors/dtor

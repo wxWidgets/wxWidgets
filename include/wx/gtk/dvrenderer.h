@@ -57,9 +57,9 @@ public:
     virtual void GtkUpdateAlignment() { GtkApplyAlignment(m_renderer); }
 
     // return the text renderer used by this renderer for setting text cell
-    // specific attributes: can return NULL if this renderer doesn't render any
+    // specific attributes: can return nullptr if this renderer doesn't render any
     // text
-    virtual GtkCellRendererText *GtkGetTextRenderer() const { return NULL; }
+    virtual GtkCellRendererText *GtkGetTextRenderer() const { return nullptr; }
 
     // return the widget actually used by the renderer for editing, this may be
     // different from the editor control widget for the custom renderers

@@ -190,11 +190,11 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
         // TODO case wxSYS_WINDOWMIN_Y:
 
         case wxSYS_SCREEN_X:
-            wxDisplaySize(&value, NULL);
+            wxDisplaySize(&value, nullptr);
             return value;
 
         case wxSYS_SCREEN_Y:
-            wxDisplaySize(NULL, &value);
+            wxDisplaySize(nullptr, &value);
             return value;
 
         // TODO case wxSYS_FRAMESIZE_X:

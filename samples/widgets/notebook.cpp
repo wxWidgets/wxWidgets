@@ -188,12 +188,12 @@ BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, c
                 :WidgetsPage(book, imaglist, icon)
 {
     // init everything
-    m_chkImages = NULL;
-    m_imageList = NULL;
+    m_chkImages = nullptr;
+    m_imageList = nullptr;
 
-    m_book = NULL;
-    m_radioOrient = NULL;
-    m_sizerBook = (wxSizer *)NULL;
+    m_book = nullptr;
+    m_radioOrient = nullptr;
+    m_sizerBook = nullptr;
 }
 
 void BookWidgetsPage::CreateContent()
@@ -323,7 +323,7 @@ void BookWidgetsPage::CreateImageList()
         wxDELETE(m_imageList);
     }
 
-    // because of the bug in wxMSW we can't use SetImageList(NULL) - although
+    // because of the bug in wxMSW we can't use SetImageList(nullptr) - although
     // it would be logical if this removed the image list from book, under
     // MSW it crashes instead - FIXME
 }

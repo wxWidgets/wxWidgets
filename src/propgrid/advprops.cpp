@@ -221,7 +221,7 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(SpinCtrl,
 // Destructor. It is useful to reset the global pointer in it.
 wxPGSpinCtrlEditor::~wxPGSpinCtrlEditor()
 {
-    wxPG_EDITOR(SpinCtrl) = NULL;
+    wxPG_EDITOR(SpinCtrl) = nullptr;
 }
 
 // Create controls and initialize event handling.
@@ -268,7 +268,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
     {
         wxFAIL_MSG( "SpinCtrl editor can be assigned only to numeric property" );
         tcSz.Set(sz.x, sz.y);
-        wnd2 = NULL;
+        wnd2 = nullptr;
     }
 
     wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).GetPrimary();
@@ -378,7 +378,7 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(DatePickerCtrl,
 
 wxPGDatePickerCtrlEditor::~wxPGDatePickerCtrlEditor()
 {
-    wxPG_EDITOR(DatePickerCtrl) = NULL;
+    wxPG_EDITOR(DatePickerCtrl) = nullptr;
 }
 
 wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgrid,
@@ -387,7 +387,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
                                                          const wxSize& sz ) const
 {
     wxCHECK_MSG( wxDynamicCast(property, wxDateProperty),
-                 NULL,
+                 nullptr,
                  wxS("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
     wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
@@ -494,7 +494,7 @@ static const wxChar* const gs_fp_es_family_labels[] = {
     wxT("Roman"), wxT("Script"),
     wxT("Swiss"), wxT("Modern"),
     wxT("Teletype"), wxT("Unknown"),
-    (const wxChar*) NULL
+    (const wxChar*) nullptr
 };
 
 static const long gs_fp_es_family_values[] = {
@@ -508,7 +508,7 @@ static const wxChar* const gs_fp_es_style_labels[] = {
     wxT("Normal"),
     wxT("Slant"),
     wxT("Italic"),
-    (const wxChar*) NULL
+    (const wxChar*) nullptr
 };
 
 static const long gs_fp_es_style_values[] = {
@@ -528,7 +528,7 @@ static const wxChar* const gs_fp_es_weight_labels[] = {
     wxT("ExtraBold"),
     wxT("Heavy"),
     wxT("ExtraHeavy"),
-    (const wxChar*) NULL
+    (const wxChar*) nullptr
 };
 
 static const long gs_fp_es_weight_values[] = {
@@ -796,7 +796,7 @@ static const char* const gs_cp_es_syscolour_labels[] = {
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("WindowFrame"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("WindowText"),
     /* TRANSLATORS: Custom colour choice entry */ wxTRANSLATE("Custom"),
-    NULL
+    nullptr
 };
 
 static const long gs_cp_es_syscolour_values[] = {
@@ -1316,7 +1316,7 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
     if ( col.IsOk() )
     {
 #if wxPG_USE_GC_FOR_ALPHA
-        wxGCDC *gdc = NULL;
+        wxGCDC *gdc = nullptr;
         if ( col.Alpha() != wxALPHA_OPAQUE )
         {
             if ( wxPaintDC *paintdc = wxDynamicCast(&dc, wxPaintDC) )
@@ -1517,7 +1517,7 @@ static const char* const gs_cp_es_normcolour_labels[] = {
     wxTRANSLATE("Yellow"),
     wxTRANSLATE("White"),
     /* TRANSLATORS: Custom colour choice entry */ wxTRANSLATE("Custom"),
-    NULL
+    nullptr
 };
 
 static const long gs_cp_es_normcolour_values[] = {
@@ -1679,7 +1679,7 @@ static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Wait"),
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Watch"),
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Wait Arrow"),
-    NULL
+    nullptr
 };
 
 static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
@@ -2053,7 +2053,7 @@ bool wxMultiChoiceProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
                              _("Make a selection:"),
                              m_dlgTitle.empty() ? GetLabel() : m_dlgTitle,
                              choiceCount,
-                             choiceCount?&labels[0]:NULL,
+                             choiceCount?&labels[0]:nullptr,
                              m_dlgStyle );
 
     dlg.Move( pg->GetGoodEditorDialogPosition(this,dlg.GetSize()) );

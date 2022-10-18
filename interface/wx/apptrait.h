@@ -112,9 +112,9 @@ public:
 
         If a micro version is not available it will have a value of 0.
     */
-    virtual wxPortId GetToolkitVersion(int* major = NULL,
-                                       int* minor = NULL,
-                                       int* micro = NULL) const = 0;
+    virtual wxPortId GetToolkitVersion(int* major = nullptr,
+                                       int* minor = nullptr,
+                                       int* micro = nullptr) const = 0;
 
     /**
         Returns @true if @c fprintf(stderr) goes somewhere, @false otherwise.

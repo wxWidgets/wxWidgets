@@ -511,8 +511,8 @@ public:
             driver defaults will be used.
     */
     wxGLContext(wxGLCanvas* win,
-                const wxGLContext* other = NULL,
-                const wxGLContextAttrs* ctxAttrs = NULL);
+                const wxGLContext* other = nullptr,
+                const wxGLContextAttrs* ctxAttrs = nullptr);
 
     /**
         Checks if the underlying OpenGL rendering context was correctly created
@@ -871,7 +871,7 @@ public:
             under most platforms.
     */
     wxGLCanvas(wxWindow* parent, wxWindowID id = wxID_ANY,
-               const int* attribList = NULL,
+               const int* attribList = nullptr,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,

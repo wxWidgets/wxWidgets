@@ -314,7 +314,7 @@ private:
 int WXDLLIMPEXP_CORE wxMessageBox(const wxString& message,
                              const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                              long style = wxOK | wxCENTRE,
-                             wxWindow *parent = NULL,
+                             wxWindow *parent = nullptr,
                              int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 #endif // wxUSE_MSGDLG

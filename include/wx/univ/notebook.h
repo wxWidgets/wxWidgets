@@ -103,7 +103,7 @@ public:
     // hit testing
     // -----------
 
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const override;
+    virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
 
     // input handling
     // --------------

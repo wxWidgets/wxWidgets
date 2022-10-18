@@ -23,13 +23,13 @@ class wxQTTreeItemDelegate : public QStyledItemDelegate
 public:
     explicit wxQTTreeItemDelegate(wxWindow* parent)
         : m_parent(parent),
-        m_textCtrl(NULL)
+        m_textCtrl(nullptr)
     {
     }
 
     QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const override
     {
-        if ( m_textCtrl != NULL )
+        if ( m_textCtrl != nullptr )
             destroyEditor(m_textCtrl->GetHandle(), m_currentModelIndex);
 
         m_currentModelIndex = index;
@@ -40,11 +40,11 @@ public:
 
     void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const override
     {
-        if ( m_textCtrl != NULL )
+        if ( m_textCtrl != nullptr )
         {
             m_currentModelIndex = QModelIndex(); // invalidate the index
             wxTheApp->ScheduleForDestruction(m_textCtrl);
-            m_textCtrl = NULL;
+            m_textCtrl = nullptr;
         }
     }
 

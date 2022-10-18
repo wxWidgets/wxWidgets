@@ -181,7 +181,7 @@ public:
     bool IsPopupShown() const { return m_popupWinState == Visible; }
 
     // set interface class instance derived from wxComboPopup
-    // NULL popup can be used to indicate default in a derived class
+    // null popup can be used to indicate default in a derived class
     void SetPopupControl( wxComboPopup* popup )
     {
         DoSetPopupControl(popup);
@@ -538,7 +538,7 @@ protected:
     virtual wxSize DoGetBestSize() const override;
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
 
-    // NULL popup can be used to indicate default in a derived class
+    // null popup can be used to indicate default in a derived class
     virtual void DoSetPopupControl(wxComboPopup* popup);
 
     // ensures there is at least the default popup
@@ -674,7 +674,7 @@ protected:
     wxRect                  m_tcArea;
     wxRect                  m_btnArea;
 
-    // Colour of the text area, in case m_text is NULL
+    // Colour of the text area, in case m_text is null
     wxColour                m_tcBgCol;
 
     // current button state (uses renderer flags)
@@ -752,7 +752,7 @@ class WXDLLIMPEXP_CORE wxComboPopup
 public:
     wxComboPopup()
     {
-        m_combo = NULL;
+        m_combo = nullptr;
         m_iFlags = 0;
     }
 
@@ -796,7 +796,7 @@ public:
     // implementation. If the found item matched the string, but is
     // different, it should be written back to pItem. Default implementation
     // always return true and does not alter trueItem.
-    virtual bool FindItem(const wxString& item, wxString* trueItem=NULL);
+    virtual bool FindItem(const wxString& item, wxString* trueItem=nullptr);
 
     // This is called to custom paint in the combo control itself (ie. not the popup).
     // Default implementation draws value as string.

@@ -31,7 +31,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    MyApp() { m_glContext = NULL; m_glStereoContext = NULL; }
+    MyApp() { m_glContext = nullptr; m_glStereoContext = nullptr; }
 
     // Returns the shared context used by all frames and sets it as current for
     // the given canvas.
@@ -65,7 +65,7 @@ private:
 class TestGLCanvas : public wxGLCanvas
 {
 public:
-    TestGLCanvas(wxWindow *parent, int *attribList = NULL);
+    TestGLCanvas(wxWindow *parent, int *attribList = nullptr);
 
 private:
     void OnPaint(wxPaintEvent& event);

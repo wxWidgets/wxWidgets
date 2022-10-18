@@ -71,7 +71,7 @@ GtkWidget *gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *labe
                                          const gchar *stock, gint response_id)
 {
     /* create the button */
-    GtkWidget* button = gtk_assert_dialog_add_button_to(NULL, label, stock);
+    GtkWidget* button = gtk_assert_dialog_add_button_to(nullptr, label, stock);
 
     /* add the button to the dialog's action area */
     gtk_dialog_add_action_widget (GTK_DIALOG (dlg), button, response_id);
@@ -90,7 +90,7 @@ void gtk_assert_dialog_append_text_column (GtkWidget *treeview, const gchar *nam
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (name, renderer,
-                                                       "text", index, NULL);
+                                                       "text", index, nullptr);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (treeview), column, index);
     gtk_tree_view_column_set_resizable (column, TRUE);
     gtk_tree_view_column_set_reorderable (column, TRUE);
@@ -141,7 +141,7 @@ void gtk_assert_dialog_process_backtrace (GtkAssertDialog *dlg)
     (*dlg->callback)(dlg->userdata);
 
     /* toggle busy cursor */
-    gdk_window_set_cursor (parent, NULL);
+    gdk_window_set_cursor (parent, nullptr);
 #ifdef __WXGTK3__
     g_object_unref(cur);
 #else
@@ -160,13 +160,13 @@ static void gtk_assert_dialog_expander_callback(GtkWidget*, GtkAssertDialog* dlg
     gboolean expanded = !gtk_expander_get_expanded (GTK_EXPANDER(dlg->expander));
     gtk_window_set_resizable (GTK_WINDOW (dlg), expanded);
 
-    if (dlg->callback == NULL)      /* was the backtrace already processed? */
+    if (dlg->callback == nullptr)      /* was the backtrace already processed? */
         return;
 
     gtk_assert_dialog_process_backtrace (dlg);
 
     /* mark the work as done (so that next activate we won't call the callback again) */
-    dlg->callback = NULL;
+    dlg->callback = nullptr;
 }
 
 static void gtk_assert_dialog_save_backtrace_callback(GtkWidget*, GtkAssertDialog* dlg)
@@ -177,7 +177,7 @@ static void gtk_assert_dialog_save_backtrace_callback(GtkWidget*, GtkAssertDialo
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           static_cast<const char*>(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)).utf8_str()), GTK_RESPONSE_CANCEL,
                                           static_cast<const char*>(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE)).utf8_str()), GTK_RESPONSE_ACCEPT,
-                                          NULL);
+                                          nullptr);
 
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     {
@@ -267,19 +267,19 @@ GType gtk_assert_dialog_get_type()
         const GTypeInfo assert_dialog_info =
         {
             sizeof (GtkAssertDialogClass),
-            NULL,           /* base_init */
-            NULL,           /* base_finalize */
+            nullptr,           /* base_init */
+            nullptr,           /* base_finalize */
 #if GTK_CHECK_VERSION(3,10,0)
             gtk_assert_dialog_class_init,  /* class init */
 #else
-            NULL,
+            nullptr,
 #endif // GTK+ >= 3.10 / < 3.10
-            NULL,           /* class_finalize */
-            NULL,           /* class_data */
+            nullptr,           /* class_finalize */
+            nullptr,           /* class_data */
             sizeof (GtkAssertDialog),
             16,             /* n_preallocs */
             gtk_assert_dialog_init,
-            NULL
+            nullptr
         };
         assert_dialog_type = g_type_register_static (GTK_TYPE_DIALOG, "GtkAssertDialog", &assert_dialog_info, (GTypeFlags)0);
     }
@@ -292,7 +292,7 @@ extern "C" {
 #if GTK_CHECK_VERSION(3,10,0)
 static void gtk_assert_dialog_class_init(gpointer g_class, void*)
 {
-    if (gtk_check_version(3,10,0) == NULL)
+    if (gtk_check_version(3,10,0) == nullptr)
     {
         // GtkBuilder XML to be bound to the dialog class data
         static const char dlgTempl[] =
@@ -678,13 +678,13 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
     // For GTK+ >= 3.10 create and initialize the dialog from the already assigned template
     // or create the dialog "manually" otherwise.
 #if GTK_CHECK_VERSION(3,10,0)
-    if (gtk_check_version(3,10,0) == NULL)
+    if (gtk_check_version(3,10,0) == nullptr)
     {
         GtkAssertDialog* dlg = GTK_ASSERT_DIALOG(instance);
         gtk_widget_init_template(GTK_WIDGET(dlg));
         /* complete creation */
-        dlg->callback = NULL;
-        dlg->userdata = NULL;
+        dlg->callback = nullptr;
+        dlg->userdata = nullptr;
     }
     else
 #endif // GTK+ >= 3.10
@@ -725,7 +725,7 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
                 gtk_box_pack_start (GTK_BOX(vbox2), info, TRUE, TRUE, 8);
 
                 /* assert message */
-                dlg->message = gtk_label_new (NULL);
+                dlg->message = gtk_label_new (nullptr);
                 gtk_label_set_selectable (GTK_LABEL (dlg->message), TRUE);
                 gtk_label_set_line_wrap (GTK_LABEL (dlg->message), TRUE);
                 gtk_label_set_justify (GTK_LABEL (dlg->message), GTK_JUSTIFY_LEFT);
@@ -751,7 +751,7 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
             gtk_container_add (GTK_CONTAINER (dlg->expander), vbox);
 
             /* add a scrollable window under the expander */
-            sw = gtk_scrolled_window_new (NULL, NULL);
+            sw = gtk_scrolled_window_new (nullptr, nullptr);
             gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
             gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC,
                                             GTK_POLICY_AUTOMATIC);
@@ -793,8 +793,8 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
         g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
 
         /* complete creation */
-        dlg->callback = NULL;
-        dlg->userdata = NULL;
+        dlg->callback = nullptr;
+        dlg->userdata = nullptr;
 
         /* the resizable property of this window is modified by the expander:
            when it's collapsed, the window must be non-resizable! */
@@ -831,12 +831,12 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
     GtkTreeIter iter;
     GString *string;
 
-    g_return_val_if_fail (GTK_IS_ASSERT_DIALOG (dlg), NULL);
+    g_return_val_if_fail (GTK_IS_ASSERT_DIALOG (dlg), nullptr);
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(dlg->treeview));
 
     /* iterate over the list */
     if (!gtk_tree_model_get_iter_first (model, &iter))
-        return NULL;
+        return nullptr;
 
     string = g_string_new("");
     do
@@ -908,7 +908,7 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(dlg->treeview));
 
     /* how many items are in the list up to now ? */
-    count = gtk_tree_model_iter_n_children (model, NULL);
+    count = gtk_tree_model_iter_n_children (model, nullptr);
 
     linenum = g_string_new("");
     if ( line_number != 0 )
@@ -930,7 +930,7 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
 
 GtkWidget *gtk_assert_dialog_new(void)
 {
-    void* dialog = g_object_new(GTK_TYPE_ASSERT_DIALOG, NULL);
+    void* dialog = g_object_new(GTK_TYPE_ASSERT_DIALOG, nullptr);
 
     return GTK_WIDGET (dialog);
 }

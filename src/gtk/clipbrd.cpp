@@ -41,8 +41,8 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 // data
 // ----------------------------------------------------------------------------
 
-static GdkAtom  g_targetsAtom     = 0;
-static GdkAtom  g_timestampAtom   = 0;
+static GdkAtom  g_targetsAtom     = nullptr;
+static GdkAtom  g_timestampAtom   = nullptr;
 
 #if wxUSE_UNICODE
 extern GdkAtom g_altTextAtom;
@@ -89,7 +89,7 @@ public:
         wxASSERT_MSG( clipboard == ms_clipboard,
                         wxT("got notification for alien clipboard") );
 
-        ms_clipboard = NULL;
+        ms_clipboard = nullptr;
     }
 
     // this method should be called if it's possible that no async clipboard
@@ -109,7 +109,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxClipboardSync);
 };
 
-wxClipboard *wxClipboardSync::ms_clipboard = NULL;
+wxClipboard *wxClipboardSync::ms_clipboard = nullptr;
 
 // ============================================================================
 // clipboard callbacks implementation
@@ -441,10 +441,10 @@ wxClipboard::wxClipboard()
 
     m_dataPrimary =
     m_dataClipboard =
-    m_receivedData = NULL;
+    m_receivedData = nullptr;
 
     m_formatSupported = false;
-    m_targetRequested = 0;
+    m_targetRequested = nullptr;
 
     // we use m_targetsWidget to query what formats are available
     m_targetsWidget = gtk_window_new( GTK_WINDOW_POPUP );
@@ -468,7 +468,7 @@ wxClipboard::wxClipboard()
                       G_CALLBACK (selection_received), this);
 
     g_signal_connect (m_clipboardWidget, "selection_clear_event",
-                      G_CALLBACK (selection_clear_clip), NULL);
+                      G_CALLBACK (selection_clear_clip), nullptr);
 
     // initialize atoms we use if not done yet
     if ( !g_targetsAtom )
@@ -505,7 +505,7 @@ bool wxClipboard::SetSelectionOwner(bool set)
 {
     bool rc = gtk_selection_owner_set
               (
-                set ? m_clipboardWidget : NULL,
+                set ? m_clipboardWidget : nullptr,
                 GTKGetClipboardAtom(),
                 (guint32)GDK_CURRENT_TIME
               ) != 0;
@@ -589,7 +589,7 @@ void wxClipboard::Clear()
         SetSelectionOwner(false);
     }
 
-    m_targetRequested = 0;
+    m_targetRequested = nullptr;
     m_formatSupported = false;
 }
 
@@ -601,7 +601,7 @@ bool wxClipboard::Flush()
     {
         GtkClipboard* clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 
-        gtk_clipboard_set_can_store(clipboard, NULL, 0);
+        gtk_clipboard_set_can_store(clipboard, nullptr, 0);
         gtk_clipboard_store(clipboard);
 
         return true;
@@ -781,7 +781,7 @@ wxDataObject* wxClipboard::GTKGetDataObject( GdkAtom atom )
     }
     else // some other selection, we're not concerned
     {
-        return (wxDataObject*)NULL;
+        return (wxDataObject*)nullptr;
     }
 }
 

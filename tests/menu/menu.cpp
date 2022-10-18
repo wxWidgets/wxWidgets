@@ -249,8 +249,8 @@ void MenuTestCase::FindInMenubar()
     }
 
     // Find by id:
-    wxMenu* menu = NULL;
-    wxMenuItem* item = NULL;
+    wxMenu* menu = nullptr;
+    wxMenuItem* item = nullptr;
     item = bar->FindItem(MenuTestCase_Foo, &menu);
     CPPUNIT_ASSERT( item );
     CPPUNIT_ASSERT( menu );
@@ -562,7 +562,7 @@ public:
     {
         m_win->Bind(wxEVT_MENU, &MenuEventHandler::OnMenu, this);
 
-        m_event = NULL;
+        m_event = nullptr;
     }
 
     virtual ~MenuEventHandler()
@@ -573,13 +573,13 @@ public:
     }
 
     // Check that we received an event with the given ID and return the event
-    // object if we did (otherwise fail the test and return NULL).
+    // object if we did (otherwise fail the test and return nullptr).
     const wxObject* CheckGot(int expectedId)
     {
         if ( !m_event )
         {
             FAIL("Event not generated");
-            return NULL;
+            return nullptr;
         }
 
         CHECK( m_event->GetId() == expectedId );
@@ -587,14 +587,14 @@ public:
         const wxObject* const src = m_event->GetEventObject();
 
         delete m_event;
-        m_event = NULL;
+        m_event = nullptr;
 
         return src;
     }
 
     bool GotEvent() const
     {
-        return m_event != NULL;
+        return m_event != nullptr;
     }
 
 private:

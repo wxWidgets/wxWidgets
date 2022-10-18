@@ -57,7 +57,7 @@ public:
             The menu item associated with this accelerator.
     */
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0,
-                       wxMenuItem *item = NULL);
+                       wxMenuItem *item = nullptr);
 
     /**
         Copy ctor.
@@ -97,7 +97,7 @@ public:
         @param item
             The menu item associated with this accelerator.
     */
-    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL);
+    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = nullptr);
 
     /**
         Returns @true if this object is correctly initialized.

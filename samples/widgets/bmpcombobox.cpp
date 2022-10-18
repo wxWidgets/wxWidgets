@@ -252,15 +252,15 @@ BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkSort =
     m_chkProcessEnter =
-    m_chkReadonly = NULL;
+    m_chkReadonly = nullptr;
 
-    m_combobox = NULL;
-    m_sizerCombo = NULL;
+    m_combobox = nullptr;
+    m_sizerCombo = nullptr;
 
     m_textInsert =
     m_textChangeHeight =
     m_textChange =
-    m_textDelete = NULL;
+    m_textDelete = nullptr;
 }
 
 // create a sizer containing a label and a small text ctrl
@@ -387,7 +387,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     m_combobox = new wxBitmapComboBox();
     m_combobox->Create(this, BitmapComboBoxPage_Combo, wxEmptyString,
                        wxDefaultPosition, wxDefaultSize,
-                       0, NULL,
+                       0, nullptr,
                        // Flags correspond to the checkboxes state in Reset().
                        wxTE_PROCESS_ENTER);
 
@@ -470,7 +470,7 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
     m_combobox = new wxBitmapComboBox();
     m_combobox->Create(this, BitmapComboBoxPage_Combo, wxEmptyString,
                        wxDefaultPosition, wxDefaultSize,
-                       0, NULL,
+                       0, nullptr,
                        flags);
 
 #if defined(wxGENERIC_BITMAPCOMBOBOX)
@@ -585,7 +585,7 @@ void BitmapComboBoxWidgetsPage::OnButtonLoadFromFile(wxCommandEvent& WXUNUSED(ev
 
 void BitmapComboBoxWidgetsPage::OnButtonSetFromFile(wxCommandEvent& WXUNUSED(event))
 {
-    wxBitmap bmp = QueryBitmap(NULL);
+    wxBitmap bmp = QueryBitmap(nullptr);
     if (bmp.IsOk())
         m_combobox->SetItemBitmap(m_combobox->GetSelection(), bmp);
 }

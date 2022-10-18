@@ -24,7 +24,7 @@ public:
 
     virtual void DoGetSize( int *width, int *height ) const override;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override
-       { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
+       { return subrect == nullptr ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
     virtual void DoSelect(const wxBitmap& bitmap) override;
 
     virtual const wxBitmap& GetSelectedBitmap() const override

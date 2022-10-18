@@ -30,7 +30,7 @@
 // needed hack, see the above-mentioned files for more information
 class wxSocketManager;
 extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
-wxSocketManager *wxOSXSocketManagerCF = NULL;
+wxSocketManager *wxOSXSocketManagerCF = nullptr;
 #endif // wxUSE_SOCKETS
 
 // our OS version is the same in non GUI and GUI cases
@@ -38,13 +38,13 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
 
-    if ( verMaj != NULL )
+    if ( verMaj != nullptr )
         *verMaj = osVer.majorVersion;
 
-    if ( verMin != NULL )
+    if ( verMin != nullptr )
         *verMin = osVer.minorVersion;
 
-    if ( verMicro != NULL )
+    if ( verMicro != nullptr )
         *verMicro = osVer.patchVersion;
 
     return wxOS_MAC_OSX_DARWIN;
@@ -179,7 +179,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     // Loop through command line arguments to the bundle,
     // turn them into CFURLs and then put them in cfaFiles
     // For use to launch services call
-    for( ; *argv != NULL; ++argv )
+    for( ; *argv != nullptr; ++argv )
     {
         NSURL *cfurlCurrentFile;
         wxString dir( *argv );
@@ -234,8 +234,8 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
                            configuration:[NSDictionary dictionary]
                                    error:&error];
 
-        // this was already processed argv is NULL and nothing bad will happen
-        for( ; *argv != NULL; ++argv )
+        // this was already processed argv is null and nothing bad will happen
+        for( ; *argv != nullptr; ++argv )
         {
             wxString currfile(*argv);
             if( [ws openFile:wxCFStringRef(currfile).AsNSString()

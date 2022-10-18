@@ -65,7 +65,7 @@ void HeaderCtrlTestCase::setUp()
 void HeaderCtrlTestCase::tearDown()
 {
     delete m_header;
-    m_header = NULL;
+    m_header = nullptr;
 }
 
 // ----------------------------------------------------------------------------

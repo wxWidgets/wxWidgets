@@ -118,7 +118,7 @@ void wxDateTimePickerCtrl::MSWUpdateFormatIfNeeded(bool valid)
 
 void wxDateTimePickerCtrl::MSWUpdateFormat(bool valid)
 {
-    // We just use NULL to reset to the default format when the date is valid,
+    // We just use nullptr to reset to the default format when the date is valid,
     // as the control seems to remember whichever format was used when it was
     // created, i.e. this works both with and without wxDP_SHOWCENTURY.
 
@@ -126,7 +126,7 @@ void wxDateTimePickerCtrl::MSWUpdateFormat(bool valid)
     // wxUSE_UNICODE_UTF8 case, where t_str() doesn't return a pointer.
     const TCHAR* format;
     if ( valid )
-        format = NULL;
+        format = nullptr;
     else
         format = m_nullText.t_str();
 
@@ -200,7 +200,7 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
                         GetHwndOf(m_parent),
                         0,
                         wxGetInstance(),
-                        NULL
+                        nullptr
                      );
             wxCHECK_MSG( hwnd, wxSize(),
                          wxS("SysDateTimePick32 creation unexpected failed") );

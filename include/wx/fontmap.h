@@ -140,7 +140,7 @@ protected:
     const wxString& GetConfigPath();
 
     // change to the given (relative) path in the config, return true if ok
-    // (then GetConfig() will return something !NULL), false if no config
+    // (then GetConfig() will return something non-null), false if no config
     // object
     //
     // caller should provide a pointer to the string variable which should be
@@ -164,7 +164,7 @@ protected:
     int NonInteractiveCharsetToEncoding(const wxString& charset);
 
 private:
-    // the global fontmapper object or NULL
+    // the global fontmapper object or nullptr
     static wxFontMapper *sm_instance;
 
     friend class wxFontMapperPathChanger;

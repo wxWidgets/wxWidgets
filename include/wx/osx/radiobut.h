@@ -65,7 +65,7 @@ class WXDLLIMPEXP_CORE wxBitmapRadioButton: public wxRadioButton
 protected:
   wxBitmap *theButtonBitmap;
 public:
-  wxBitmapRadioButton() { theButtonBitmap = NULL; }
+  wxBitmapRadioButton() { theButtonBitmap = nullptr; }
   wxBitmapRadioButton(wxWindow *parent, wxWindowID id,
            const wxBitmap *label,
            const wxPoint& pos = wxDefaultPosition,

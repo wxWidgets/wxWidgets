@@ -67,7 +67,7 @@ private:
     void Init()
     {
 #if wxUSE_MARKUP
-        m_markupText = NULL;
+        m_markupText = nullptr;
 #endif // wxUSE_MARKUP
     }
 
@@ -75,7 +75,7 @@ private:
 
     void DoDrawLabel(wxDC& dc, const wxRect& rect);
 
-    // These fields are only used if m_markupText == NULL.
+    // These fields are only used if m_markupText == nullptr.
     wxString m_label;
     int m_mnemonic;
 

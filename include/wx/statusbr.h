@@ -118,7 +118,7 @@ public:
 
     // set the number of fields and call SetStatusWidths(widths) if widths are
     // given
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
+    virtual void SetFieldsCount(int number = 1, const int *widths = nullptr);
     int GetFieldsCount() const { return (int)m_panes.GetCount(); }
 
     // field text

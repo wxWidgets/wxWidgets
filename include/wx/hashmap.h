@@ -30,7 +30,7 @@
 // private
 struct WXDLLIMPEXP_BASE _wxHashTable_NodeBase
 {
-    _wxHashTable_NodeBase() : m_next(NULL) {}
+    _wxHashTable_NodeBase() : m_next(nullptr) {}
 
     _wxHashTable_NodeBase* m_next;
 
@@ -56,7 +56,7 @@ protected:
         for( size_t i = 0; i < buckets; ++i )
             if( table[i] )
                 return table[i];
-        return NULL;
+        return nullptr;
     }
 
     // as static const unsigned prime_count = 31 but works with all compilers
@@ -141,7 +141,7 @@ public: \
         Node* m_node; \
         Self* m_ht; \
  \
-        Iterator() : m_node(NULL), m_ht(NULL) {} \
+        Iterator() : m_node(nullptr), m_ht(nullptr) {} \
         Iterator( Node* node, const Self* ht ) \
             : m_node(node), m_ht(const_cast<Self*>(ht)) {} \
         bool operator ==( const Iterator& it ) const \
@@ -157,7 +157,7 @@ public: \
                 if( m_ht->m_table[i] ) \
                     return static_cast<Node*>(m_ht->m_table[i]); \
             } \
-            return NULL; \
+            return nullptr; \
         } \
  \
         void PlusPlus() \
@@ -206,7 +206,7 @@ public: \
     } \
  \
     CLASSNAME( const Self& ht ) \
-        : m_table(NULL), \
+        : m_table(nullptr), \
           m_tableBuckets( 0 ), \
           m_items( ht.m_items ), \
           m_hasher( ht.m_hasher ), \
@@ -252,8 +252,8 @@ public: \
     size_type max_size() const { return size_type(-1); } \
     bool empty() const { return size() == 0; } \
  \
-    const_iterator end() const { return const_iterator(NULL, this); } \
-    iterator end() { return iterator(NULL, this); } \
+    const_iterator end() const { return const_iterator(nullptr, this); } \
+    iterator end() { return iterator(nullptr, this); } \
     const_iterator begin() const \
         { return const_iterator(static_cast<Node*>(GetFirstNode(m_tableBuckets, m_table)), this); } \
     iterator begin() \
@@ -319,7 +319,7 @@ protected: \
         CreateNode(value, m_hasher( m_getKey(value) ) % m_tableBuckets ); \
     }\
  \
-    /* returns NULL if not found */ \
+    /* returns nullptr if not found */ \
     _wxHashTable_NodeBase** GetNodePtr(const const_key_type& key) const \
     { \
         size_t bucket = m_hasher( key ) % m_tableBuckets; \
@@ -332,10 +332,10 @@ protected: \
             node = &(*node)->m_next; \
         } \
  \
-        return NULL; \
+        return nullptr; \
     } \
  \
-    /* returns NULL if not found */ \
+    /* returns nullptr if not found */ \
     /* expressing it in terms of GetNodePtr is 5-8% slower :-( */ \
     Node* GetNode( const const_key_type& key ) const \
     { \
@@ -349,7 +349,7 @@ protected: \
             node = node->next(); \
         } \
  \
-        return NULL; \
+        return nullptr; \
     } \
  \
     void ResizeTable( size_t newSize ) \

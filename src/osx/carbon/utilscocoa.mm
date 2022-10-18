@@ -101,7 +101,7 @@ void* wxMacCocoaRetain( void* obj )
 
 NSFont* wxFont::OSXGetNSFont() const
 {
-    wxCHECK_MSG( m_refData != NULL , 0, wxT("invalid font") );
+    wxCHECK_MSG( m_refData != nullptr , nullptr, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
@@ -117,7 +117,7 @@ NSFont* wxFont::OSXGetNSFont() const
     // As a workaround for this bug, don't use toll-free bridging, but
     // re-create NSFont from the descriptor instead on buggy OS X versions.
     int osMajor, osMinor;
-    wxGetOsVersion(&osMajor, &osMinor, NULL);
+    wxGetOsVersion(&osMajor, &osMinor, nullptr);
     if (osMajor == 10 && osMinor == 11)
     {
         return [NSFont fontWithDescriptor:[font fontDescriptor] size:[font pointSize]];
@@ -133,7 +133,7 @@ NSFont* wxFont::OSXGetNSFont() const
 
 UIFont* wxFont::OSXGetUIFont() const
 {
-    wxCHECK_MSG( m_refData != NULL , 0, wxT("invalid font") );
+    wxCHECK_MSG( m_refData != nullptr , 0, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
@@ -259,14 +259,14 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
 
-    CGContextRef hbitmap = NULL;
+    CGContextRef hbitmap = nullptr;
     if (nsimage != nil)
     {
         double scale = wxOSXGetMainScreenContentScaleFactor();
 
         CGSize imageSize = wxOSXGetImageSize(nsimage);
 
-        hbitmap = CGBitmapContextCreate(NULL, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
+        hbitmap = CGBitmapContextCreate(nullptr, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
         CGContextScaleCTM( hbitmap, scale, scale );
         CGContextClearRect(hbitmap,CGRectMake(0, 0, imageSize.width, imageSize.height));
 
@@ -328,7 +328,7 @@ WXImage wxOSXGetIconForType(OSType type )
 #if wxOSX_USE_COCOA
     return [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode(type)];
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 
@@ -366,7 +366,7 @@ CGSize wxOSXGetImageSize(WXImage image)
 
 CGImageRef wxOSXCreateCGImageFromImage( WXImage nsimage, double *scaleptr )
 {
-    CGImageRef image = NULL;
+    CGImageRef image = nullptr;
     if (nsimage != nil)
     {
 #if wxOSX_USE_COCOA
@@ -400,7 +400,7 @@ static NSCursor* wxCreateStockCursor( short sIndex )
     //NSCursor takes an NSImage takes a number of Representations - here
     //we need only one for the raw data
     wxNSObjRef<NSBitmapImageRep*> theRep( [[NSBitmapImageRep alloc]
-        initWithBitmapDataPlanes: NULL  // Tell Cocoa to allocate the planes for us.
+        initWithBitmapDataPlanes: nullptr  // Tell Cocoa to allocate the planes for us.
         pixelsWide: 16      // All classic cursors are 16x16
         pixelsHigh: 16
         bitsPerSample: 1    // All classic cursors are bitmaps with bitmasks
@@ -414,11 +414,11 @@ static NSCursor* wxCreateStockCursor( short sIndex )
     // Ensure that Cocoa allocated 2 and only 2 of the 5 possible planes
     unsigned char *planes[5];
     [theRep getBitmapDataPlanes:planes];
-    wxCHECK(planes[0] != NULL, nil);
-    wxCHECK(planes[1] != NULL, nil);
-    wxCHECK(planes[2] == NULL, nil);
-    wxCHECK(planes[3] == NULL, nil);
-    wxCHECK(planes[4] == NULL, nil);
+    wxCHECK(planes[0] != nullptr, nil);
+    wxCHECK(planes[1] != nullptr, nil);
+    wxCHECK(planes[2] == nullptr, nil);
+    wxCHECK(planes[3] == nullptr, nil);
+    wxCHECK(planes[4] == nullptr, nil);
 
     // NOTE1: The Cursor's bits field is white=0 black=1.. thus the bitwise-not
     // Why not use NSCalibratedBlackColorSpace?  Because that reverses the

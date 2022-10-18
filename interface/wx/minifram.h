@@ -59,7 +59,7 @@ public:
         Constructor, creating the window.
 
         @param parent
-            The window parent. This may be @NULL. If it is non-@NULL, the frame will
+            The window parent. This may be @NULL. If it is non-null, the frame will
             always be displayed on top of the parent window on Windows.
         @param id
             The window identifier. It may take a value of -1 to indicate a default value.

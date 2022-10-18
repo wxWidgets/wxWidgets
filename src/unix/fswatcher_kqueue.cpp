@@ -82,7 +82,7 @@ class wxFSWatcherImplKqueue : public wxFSWatcherImpl
 public:
     wxFSWatcherImplKqueue(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_source(NULL),
+        m_source(nullptr),
         m_kfd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
@@ -118,7 +118,7 @@ public:
         // create source
         m_source = wxEventLoopBase::AddSourceForFD(m_kfd, m_handler, wxEVENT_SOURCE_INPUT);
 
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
     void Close()
@@ -147,7 +147,7 @@ public:
 
         // TODO more error conditions according to man
         // TODO best deal with the error here
-        int ret = kevent(m_kfd, &event, 1, NULL, 0, NULL);
+        int ret = kevent(m_kfd, &event, 1, nullptr, 0, nullptr);
         if (ret == -1)
         {
             wxLogSysError(_("Unable to add kqueue watch"));
@@ -196,7 +196,7 @@ public:
         {
             struct kevent event;
             struct timespec timeout = {0, 0};
-            int ret = kevent(m_kfd, NULL, 0, &event, 1, &timeout);
+            int ret = kevent(m_kfd, nullptr, 0, &event, 1, &timeout);
             if (ret == -1)
             {
                 wxLogSysError(_("Unable to get events from kqueue"));
@@ -219,7 +219,7 @@ public:
 
     bool IsOk() const
     {
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
 protected:

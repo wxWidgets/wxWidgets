@@ -98,7 +98,7 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
 
 void wxDirDialog::ShowWindowModal()
 {
-    wxNonOwnedWindow* parentWindow = NULL;
+    wxNonOwnedWindow* parentWindow = nullptr;
 
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));

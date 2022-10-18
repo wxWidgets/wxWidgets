@@ -109,7 +109,7 @@
 
 /*
     Define __WXFUNCTION__ which is like standard __FUNCTION__ but defined as
-    NULL for the compilers which don't support the latter.
+    nullptr for the compilers which don't support the latter.
  */
 #ifndef __WXFUNCTION__
     #if defined(__GNUC__) || \
@@ -118,7 +118,7 @@
         #define __WXFUNCTION__ __FUNCTION__
     #else
         /* still define __WXFUNCTION__ to avoid #ifdefs elsewhere */
-        #define __WXFUNCTION__ (NULL)
+        #define __WXFUNCTION__ (nullptr)
     #endif
 #endif /* __WXFUNCTION__ already defined */
 

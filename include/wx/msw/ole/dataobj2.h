@@ -29,7 +29,7 @@ public:
         {
             SetFormat(wxDF_DIB);
 
-            m_data = NULL;
+            m_data = nullptr;
         }
 
     // implement base class pure virtuals

@@ -336,7 +336,7 @@ public:
 int wxMessageBox(const wxString& message,
                  const wxString& caption = wxMessageBoxCaptionStr,
                  int style = wxOK | wxCENTRE,
-                 wxWindow* parent = NULL,
+                 wxWindow* parent = nullptr,
                  int x = wxDefaultCoord,
                  int y = wxDefaultCoord);
 

@@ -52,7 +52,7 @@ public:
     wxFrame *CreateChildFrame(wxView *view, bool isCanvas);
 
     // these accessors should only be called in single document mode, otherwise
-    // the pointers are NULL and an assert is triggered
+    // the pointers are null and an assert is triggered
     MyCanvas *GetMainWindowCanvas() const
         { wxASSERT(m_canvas); return m_canvas; }
     wxMenu *GetMainWindowEditMenu() const
@@ -66,7 +66,7 @@ private:
     wxMenu *CreateDrawingEditMenu();
 
     // create and associate with the given frame the menu bar containing the
-    // given file and edit (possibly NULL) menus as well as the standard help
+    // given file and edit (possibly null) menus as well as the standard help
     // one
     void CreateMenuBarForFrame(wxFrame *frame, wxMenu *file, wxMenu *edit);
 

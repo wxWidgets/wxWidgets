@@ -107,7 +107,7 @@ public:
         on a default-constructed wxBitmapButton object to achieve the same
         effect.
 
-        @param parent The button parent window, must be non-@NULL.
+        @param parent The button parent window, must be non-null.
         @param winid The identifier for the new button.
         @param name The name for the new button.
 
@@ -125,7 +125,7 @@ public:
         provided to avoid the need to test for the current platform and creates
         the button with as native look as possible.
 
-        @param parent The button parent window, must be non-@NULL.
+        @param parent The button parent window, must be non-null.
         @param winid The identifier for the new button.
         @param name The name for the new button (available since wxWidgets 3.1.5)
         @return The new button.

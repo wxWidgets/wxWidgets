@@ -343,8 +343,8 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     // string in place
 
     // we need to preserve the client data manually
-    void *oldData = NULL;
-    wxClientData *oldObjData = NULL;
+    void *oldData = nullptr;
+    wxClientData *oldObjData = nullptr;
     if ( HasClientUntypedData() )
         oldData = GetClientData(n);
     else if ( HasClientObjectData() )
@@ -426,7 +426,7 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
         wxLogLastError(wxT("CB_GETITEMDATA"));
 
         // unfortunately, there is no way to return an error code to the user
-        rc = (LPARAM) NULL;
+        rc = 0;
     }
 
     return (void *)rc;

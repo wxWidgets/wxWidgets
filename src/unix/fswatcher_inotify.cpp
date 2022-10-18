@@ -41,7 +41,7 @@ class wxFSWatcherImplUnix : public wxFSWatcherImpl
 public:
     wxFSWatcherImplUnix(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_source(NULL),
+        m_source(nullptr),
         m_ifd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
@@ -79,7 +79,7 @@ public:
                           wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION
                          );
 
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
     void Close()
@@ -202,7 +202,7 @@ public:
 
     bool IsOk() const
     {
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
 protected:

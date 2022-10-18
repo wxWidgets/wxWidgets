@@ -36,8 +36,8 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win,
-                const wxGLContext *other = NULL,
-                const wxGLContextAttrs *ctxAttrs = NULL);
+                const wxGLContext *other = nullptr,
+                const wxGLContextAttrs *ctxAttrs = nullptr);
     virtual ~wxGLContext();
 
     virtual bool SetCurrent(const wxGLCanvas& win) const override;
@@ -105,7 +105,7 @@ public:
     // not found
     static bool InitDefaultConfig(const int *attribList);
 
-    // get the default EGL Config (may be NULL, shouldn't be freed by caller)
+    // get the default EGL Config (may be null, shouldn't be freed by caller)
     static EGLConfig *GetDefaultConfig() { return ms_glEGLConfig; }
 
     // free the global GL visual, called by wxGLApp
@@ -113,7 +113,7 @@ public:
 
     // initializes EGLConfig
     //
-    // returns NULL if EGLConfig couldn't be initialized, otherwise caller
+    // returns nullptr if EGLConfig couldn't be initialized, otherwise caller
     // is responsible for freeing the pointer
     static EGLConfig *InitConfig(const wxGLAttributes& dispAttrs);
 

@@ -13,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxQtPrinter : public wxPrinterBase
 {
 public:
-    wxQtPrinter( wxPrintDialogData *data = NULL );
+    wxQtPrinter( wxPrintDialogData *data = nullptr );
 
     virtual bool Setup(wxWindow *parent) override;
     virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) override;
@@ -27,8 +27,8 @@ class WXDLLIMPEXP_CORE wxQtPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxQtPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = NULL,
-                          wxPrintDialogData *data = NULL);
+                          wxPrintout *printoutForPrinting = nullptr,
+                          wxPrintDialogData *data = nullptr);
     wxQtPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting,
                           wxPrintData *data);

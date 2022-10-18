@@ -94,7 +94,7 @@ public:
     virtual bool SetForegroundColour(const wxColour& colour) override;
     virtual bool SetBackgroundColour(const wxColour& colour) override;
 
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const override;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
 
 protected:
     // common part of all ctors
@@ -106,12 +106,12 @@ protected:
     // get the boundig box for the slider and possible labels
     wxRect GetBoundingBox() const;
 
-    // Get the height and, if the pointers are non NULL, widths of both labels.
+    // Get the height and, if the pointers are non null, widths of both labels.
     //
     // Notice that the return value will be 0 if we don't have wxSL_LABELS
     // style but we do fill widthMin and widthMax even if we don't have
     // wxSL_MIN_MAX_LABELS style set so the caller should account for it.
-    int GetLabelsSize(int *widthMin = NULL, int *widthMax = NULL) const;
+    int GetLabelsSize(int *widthMin = nullptr, int *widthMax = nullptr) const;
 
 
     // overridden base class virtuals

@@ -34,18 +34,18 @@ public:
     // object used by default, i.e. if wxUILocale::UseDefault() is not called.
     // This object corresponds to the traditional "C" locale.
     //
-    // It should never return NULL.
+    // It should never return nullptr.
     static wxUILocaleImpl* CreateStdC();
 
     // Similarly, this one returns the object corresponding to the default user
     // locale settings which is used if wxUILocale::UseDefault() was called.
     //
-    // It may return NULL in case of failure.
+    // It may return nullptr in case of failure.
     static wxUILocaleImpl* CreateUserDefault();
 
     // Create locale object for the given locale.
     //
-    // It may return NULL in case of failure.
+    // It may return nullptr in case of failure.
     static wxUILocaleImpl* CreateForLocale(const wxLocaleIdent& locId);
 
     // This function exists only for wxLocale compatibility and creates the
@@ -58,7 +58,7 @@ public:
     // The language passed to this function is a valid language, i.e. neither
     // wxLANGUAGE_UNKNOWN nor wxLANGUAGE_DEFAULT.
     //
-    // It may return NULL in case of failure, but never does so for English
+    // It may return nullptr in case of failure, but never does so for English
     // languages because wxLocale(wxLANGUAGE_ENGLISH) is always supposed to
     // work, so it just falls back on CreateStdC() if it fails to create it.
     static wxUILocaleImpl* CreateForLanguage(const wxLanguageInfo& info);

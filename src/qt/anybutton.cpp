@@ -78,7 +78,7 @@ bool wxQtPushButton::event(QEvent* e)
 }
 
 wxAnyButton::wxAnyButton() :
-    m_qtPushButton(NULL)
+    m_qtPushButton(nullptr)
 {
 }
 
@@ -101,7 +101,7 @@ void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
 
     // load the bitmap and resize the button:
     QPixmap *pixmap = bitmap.GetHandle();
-    if ( pixmap != NULL )
+    if ( pixmap != nullptr )
     {
         m_qtPushButton->setIcon(QIcon(*pixmap));
         m_qtPushButton->setIconSize(pixmap->rect().size());

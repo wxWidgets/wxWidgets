@@ -693,16 +693,16 @@ bool wxGenericValidator::TransferFromWindow()
 */
 void wxGenericValidator::Initialize()
 {
-    m_pBool = NULL;
-    m_pInt = NULL;
-    m_pString = NULL;
-    m_pArrayInt = NULL;
+    m_pBool = nullptr;
+    m_pInt = nullptr;
+    m_pString = nullptr;
+    m_pArrayInt = nullptr;
 #if wxUSE_DATETIME
-    m_pDateTime = NULL;
+    m_pDateTime = nullptr;
 #endif // wxUSE_DATETIME
-    m_pFileName = NULL;
-    m_pFloat = NULL;
-    m_pDouble = NULL;
+    m_pFileName = nullptr;
+    m_pFloat = nullptr;
+    m_pDouble = nullptr;
 }
 
 #endif // wxUSE_VALIDATORS

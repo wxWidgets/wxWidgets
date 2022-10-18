@@ -40,7 +40,7 @@ wxEND_EVENT_TABLE()
 
 void wxSplashScreen::Init()
 {
-    m_window = NULL;
+    m_window = nullptr;
 
     wxEvtHandler::AddFilter(this);
 }

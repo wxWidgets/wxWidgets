@@ -74,7 +74,7 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIDropSource)
 
 wxIDropSource::wxIDropSource(wxDropSource *pDropSource)
 {
-  wxASSERT( pDropSource != NULL );
+  wxASSERT( pDropSource != nullptr );
 
   m_pDropSource = pDropSource;
   m_grfInitKeyState = 0;
@@ -175,7 +175,7 @@ wxDropSource::~wxDropSource()
 // Notes   : you must call SetData() before if you had used def ctor
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
-  wxCHECK_MSG( m_data != NULL, wxDragNone, wxT("No data in wxDropSource!") );
+  wxCHECK_MSG( m_data != nullptr, wxDragNone, wxT("No data in wxDropSource!") );
 
   DWORD dwEffect;
   HRESULT hr = ::DoDragDrop(m_data->GetInterface(),

@@ -138,11 +138,11 @@ public:
 
     // Return font struct, and optionally the font list
     wxXFont *GetInternalFont(double scale = 1.0,
-        WXDisplay* display = NULL) const;
+        WXDisplay* display = nullptr) const;
 
     // Helper function for convenient access of the above.
     WXFontStructPtr GetFontStruct(double scale = 1.0,
-        WXDisplay* display = NULL) const;
+        WXDisplay* display = nullptr) const;
 #endif
 
 protected:

@@ -707,9 +707,7 @@ typedef short int WXTYPE;
         wxDEPRECATED(func) { body }
 #endif
 
-/*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
-/*  it must not be defined as "(void *)0" which is standard for C but completely */
-/*  breaks C++ code) */
+/* Get size_t declaration. */
 #include <stddef.h>
 
 /*  size of statically declared array */
@@ -852,29 +850,29 @@ typedef short int WXTYPE;
 // everybody gets the assert and other debug macros
 #include "wx/debug.h"
 
-    // delete pointer if it is not NULL and NULL it afterwards
+    // delete pointer if it is not null and null it afterwards
     template <typename T>
     inline void wxDELETE(T*& ptr)
     {
         typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
 
-        if ( ptr != NULL )
+        if ( ptr != nullptr )
         {
             delete ptr;
-            ptr = NULL;
+            ptr = nullptr;
         }
     }
 
-    // delete an array and NULL it (see comments above)
+    // delete an array and null it (see comments above)
     template <typename T>
     inline void wxDELETEA(T*& ptr)
     {
         typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
 
-        if ( ptr != NULL )
+        if ( ptr != nullptr )
         {
             delete [] ptr;
-            ptr = NULL;
+            ptr = nullptr;
         }
     }
 
@@ -973,16 +971,10 @@ typedef double wxDouble;
 #endif /* wxWCHAR_T_IS_REAL_TYPE/!wxWCHAR_T_IS_REAL_TYPE */
 
 /*
-   This constant should be used instead of NULL in vararg functions taking
-   wxChar* arguments: passing NULL (which is the same as 0, unless the compiler
-   defines it specially, e.g. like gcc does with its __null built-in) doesn't
-   work in this case as va_arg() wouldn't interpret the integer 0 correctly
-   when trying to convert it to a pointer on architectures where sizeof(int) is
-   strictly less than sizeof(void *).
-
-   Examples of places where this must be used include wxFileTypeInfo ctor.
+   Deprecated constant existing only for compatibility, use nullptr directly in
+   the new code.
  */
-#define wxNullPtr ((void *)NULL)
+#define wxNullPtr nullptr
 
 
 /* Define wxChar16 and wxChar32                                              */

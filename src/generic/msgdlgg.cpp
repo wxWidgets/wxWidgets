@@ -96,7 +96,7 @@ wxSizer *wxGenericMessageDialog::CreateMsgDlgButtonSizer()
     {
         wxStdDialogButtonSizer * const sizerStd = new wxStdDialogButtonSizer;
 
-        wxButton *btnDef = NULL;
+        wxButton *btnDef = nullptr;
 
         if ( m_dialogStyle & wxOK )
         {

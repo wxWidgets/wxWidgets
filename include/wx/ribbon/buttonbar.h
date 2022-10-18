@@ -223,8 +223,8 @@ class WXDLLIMPEXP_RIBBON wxRibbonButtonBarEvent : public wxCommandEvent
 public:
     wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonButtonBar* bar = NULL,
-                       wxRibbonButtonBarButtonBase* button = NULL)
+                       wxRibbonButtonBar* bar = nullptr,
+                       wxRibbonButtonBarButtonBase* button = nullptr)
         : wxCommandEvent(command_type, win_id)
         , m_bar(bar), m_button(button)
     {

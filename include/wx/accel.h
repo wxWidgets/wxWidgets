@@ -48,18 +48,18 @@ class WXDLLIMPEXP_CORE wxAcceleratorEntry
 {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0,
-                       wxMenuItem *item = NULL)
+                       wxMenuItem *item = nullptr)
         : m_flags(flags)
         , m_keyCode(keyCode)
         , m_command(cmd)
         , m_item(item)
         { }
 
-    // create accelerator corresponding to the specified string, return NULL if
+    // create accelerator corresponding to the specified string, return nullptr if
     // string couldn't be parsed or a pointer to be deleted by the caller
     static wxAcceleratorEntry *Create(const wxString& str);
 
-    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
+    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = nullptr)
     {
         m_flags = flags;
         m_keyCode = keyCode;
@@ -121,7 +121,7 @@ private:
     int m_keyCode;  // ASCII or virtual keycode
     int m_command;  // Command id to generate
 
-    // the menu item this entry corresponds to, may be NULL
+    // the menu item this entry corresponds to, may be null
     wxMenuItem *m_item;
 
     // for compatibility with old code, use accessors now!

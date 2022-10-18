@@ -330,7 +330,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
                        _NET_SUPPORTED, 0, LONG_MAX,
                        False, XA_ATOM, &type, &format, &natoms,
                        &after, (unsigned char **)&atoms);
-    if ( type != XA_ATOM || atoms == NULL )
+    if ( type != XA_ATOM || atoms == nullptr )
         return false;
 
     // Lookup the feature we want:
@@ -2602,7 +2602,7 @@ static bool wxGetKeyStateX11(wxKeyCode key)
 
 static bool wxGetKeyStateGTK(wxKeyCode key)
 {
-    if (gtk_check_version(3,4,0) != NULL)
+    if (gtk_check_version(3,4,0) != nullptr)
         return false;
 
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
@@ -2636,7 +2636,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 bool wxGetKeyState(wxKeyCode key)
 {
 #ifdef wxHAS_GETKEYSTATE_GTK
-    if (!wxGTKImpl::IsX11(NULL))
+    if (!wxGTKImpl::IsX11(nullptr))
     {
         return wxGetKeyStateGTK(key);
     }
@@ -2670,7 +2670,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
         const char* argv[3];
         argv[0] = xdg_open.fn_str();
         argv[1] = document.fn_str();
-        argv[2] = NULL;
+        argv[2] = nullptr;
         if (wxExecute(argv))
             return true;
     }
@@ -2688,7 +2688,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 #ifdef __WXGTK__
 #ifdef __WXGTK4__
     if (gtk_show_uri_on_window((GtkWindow*)wxGetTopLevelGTK(),
-            params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
+            params.url.utf8_str(), GDK_CURRENT_TIME, nullptr))
     {
         return true;
     }
@@ -2697,7 +2697,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     {
         GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
+        if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, nullptr))
             return true;
         wxGCC_WARNING_RESTORE()
     }
@@ -2706,7 +2706,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
     const char* argv[4];
     argv[1] = params.GetPathOrURL().fn_str();
-    argv[2] = NULL;
+    argv[2] = nullptr;
 
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
@@ -2748,7 +2748,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
         argv[2] = argv[1];
         argv[0] = "kfmclient";
         argv[1] = "openURL";
-        argv[3] = NULL;
+        argv[3] = nullptr;
         if (wxExecute(argv))
             return true;
     }

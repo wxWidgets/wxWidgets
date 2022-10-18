@@ -200,7 +200,7 @@ private:
     static wxFileName ms_watchDir;
 };
 
-EventGenerator* EventGenerator::ms_instance = 0;
+EventGenerator* EventGenerator::ms_instance = nullptr;
 wxFileName EventGenerator::ms_watchDir;
 
 
@@ -439,7 +439,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             wxFileSystemWatcherEvent event(wxFSW_EVENT_DELETE);
             event.SetPath(eg.m_old);
 
-            // CHECK maybe new path here could be NULL or sth?
+            // CHECK maybe new path here could be null or sth?
             event.SetNewPath(eg.m_old);
             return event;
         }

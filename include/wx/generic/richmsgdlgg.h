@@ -23,8 +23,8 @@ public:
                                const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                                long style = wxOK | wxCENTRE)
         : wxRichMessageDialogBase( parent, message, caption, style ),
-          m_checkBox(NULL),
-          m_detailsPane(NULL)
+          m_checkBox(nullptr),
+          m_detailsPane(nullptr)
     { }
 
     virtual bool IsCheckBoxChecked() const override;

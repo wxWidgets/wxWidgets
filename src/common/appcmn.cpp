@@ -59,7 +59,7 @@ WX_CHECK_BUILD_OPTIONS("wxCore")
 
 wxAppBase::wxAppBase()
 {
-    m_topWindow = NULL;
+    m_topWindow = nullptr;
 
     m_useBestVisual = false;
     m_forceTrueColour = false;
@@ -174,7 +174,7 @@ wxWindow* wxAppBase::GetTopWindow() const
     // we need to search for the first TLW which is not pending delete
     if ( !window || wxPendingDelete.Member(window) )
     {
-        window = NULL;
+        window = nullptr;
         wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
         while ( node )
         {
@@ -196,7 +196,7 @@ wxWindow* wxAppBase::GetMainTopWindow()
 {
     const wxAppBase* const app = GetGUIInstance();
 
-    return app ? app->GetTopWindow() : NULL;
+    return app ? app->GetTopWindow() : nullptr;
 }
 
 wxVideoMode wxAppBase::GetDisplayMode() const
@@ -238,7 +238,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
 #ifdef __WXUNIVERSAL__
         {
             wxCMD_LINE_OPTION,
-            NULL,
+            nullptr,
             OPTION_THEME,
             gettext_noop("specify the theme to use"),
             wxCMD_LINE_VAL_STRING,
@@ -252,7 +252,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
         //     and not dfb/app.cpp
         {
             wxCMD_LINE_OPTION,
-            NULL,
+            nullptr,
             OPTION_MODE,
             gettext_noop("specify display mode to use (e.g. 640x480-16)"),
             wxCMD_LINE_VAL_STRING,
@@ -337,7 +337,7 @@ int wxAppBase::OnRun()
 int wxAppBase::OnExit()
 {
 #ifdef __WXUNIVERSAL__
-    delete wxTheme::Set(NULL);
+    delete wxTheme::Set(nullptr);
 #endif // __WXUNIVERSAL__
 
     return wxAppConsole::OnExit();
@@ -465,7 +465,7 @@ wxFontMapper *wxGUIAppTraitsBase::CreateFontMapper()
 wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
 {
     // use the default native renderer by default
-    return NULL;
+    return nullptr;
 }
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
@@ -505,7 +505,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 #endif // wxUSE_STACKWALKER
 
 #if wxUSE_RICHMSGDLG
-        wxRichMessageDialog dlg(NULL, msgDlg, caption, flags);
+        wxRichMessageDialog dlg(nullptr, msgDlg, caption, flags);
 
         dlg.SetYesNoLabels("Stop", "Continue");
 
@@ -525,7 +525,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
                   wxT("You can also choose [Cancel] to suppress ")
                   wxT("further warnings.");
 
-        wxMessageDialog dlg(NULL, msg, caption, flags);
+        wxMessageDialog dlg(nullptr, msg, caption, flags);
 #endif // wxUSE_RICHMSGDLG/!wxUSE_RICHMSGDLG
 
         switch ( dlg.ShowModal() )

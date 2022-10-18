@@ -414,7 +414,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -953,11 +953,11 @@ wxEND_EVENT_TABLE()
 MyDateDialog::MyDateDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
         : wxDialog(parent, wxID_ANY, wxString("Calendar: Choose a date"))
 {
-    wxWindow* datePickerWindow = NULL;
+    wxWindow* datePickerWindow = nullptr;
 
 #if wxUSE_DATEPICKCTRL_GENERIC
-    m_datePickerGeneric = NULL;
-    m_datePicker = NULL;
+    m_datePickerGeneric = nullptr;
+    m_datePicker = nullptr;
 
     wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);
     if ( frame && frame->GetMenuBar()->IsChecked(Calendar_DatePicker_Generic) )
@@ -1027,11 +1027,11 @@ wxEND_EVENT_TABLE()
 MyTimeDialog::MyTimeDialog(wxWindow *parent)
         : wxDialog(parent, wxID_ANY, wxString("Calendar: Choose time"))
 {
-    wxWindow* timePickerWindow = NULL;
+    wxWindow* timePickerWindow = nullptr;
 
 #if wxUSE_TIMEPICKCTRL_GENERIC
-    m_timePickerGeneric = NULL;
-    m_timePicker = NULL;
+    m_timePickerGeneric = nullptr;
+    m_timePicker = nullptr;
 
     wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);
     if ( frame && frame->GetMenuBar()->IsChecked(Calendar_TimePicker_Generic) )

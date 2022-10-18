@@ -127,7 +127,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 #if GTK_CHECK_VERSION(2,12,0)
     if (HasFlag(wxSTB_SHOW_TIPS) && wx_is_at_least_gtk2(12))
     {
-        g_object_set(m_widget, "has-tooltip", TRUE, NULL);
+        g_object_set(m_widget, "has-tooltip", TRUE, nullptr);
         g_signal_connect(m_widget, "query-tooltip",
                          G_CALLBACK(statusbar_query_tooltip), this);
     }
@@ -143,7 +143,7 @@ wxSize wxStatusBarGeneric::DoGetBestSize() const
 
     // best width is the width of the parent
     if (GetParent())
-        GetParent()->GetClientSize(&width, NULL);
+        GetParent()->GetClientSize(&width, nullptr);
     else
         width = 80;     // a dummy value
 
@@ -433,7 +433,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
         gtk_paint_resize_grip(gtk_widget_get_style(m_widget),
                             GTKGetDrawingWindow(),
                             gtk_widget_get_state(m_widget),
-                            NULL,
+                            nullptr,
                             m_widget,
                             "statusbar",
                             edge,
@@ -475,7 +475,7 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
         rect.width && rect.height)
     wxGCC_WARNING_RESTORE()
     {
-        ancestor = NULL;
+        ancestor = nullptr;
     }
 #endif
 
@@ -525,7 +525,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
         rect.width && rect.height)
     wxGCC_WARNING_RESTORE()
     {
-        ancestor = NULL;
+        ancestor = nullptr;
     }
 #endif
 

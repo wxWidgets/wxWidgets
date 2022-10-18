@@ -36,7 +36,7 @@ public:
 
     /*! @method     wxCFDictionaryRef
      @abstract   Assumes ownership of r and creates a reference to it.
-     @param r        The dictionary reference to assume ownership of.  May be NULL.
+     @param r        The dictionary reference to assume ownership of.  May be null.
      @discussion Like shared_ptr, it is assumed that the caller has a strong reference to r and intends
      to transfer ownership of that reference to this ref holder.  If the object comes from
      a Create or Copy method then this is the correct behaviour.  If the object comes from

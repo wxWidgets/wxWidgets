@@ -53,7 +53,7 @@ public:
     wxBalloonNotifMsgImpl(wxNotificationMessageBase* notification) :
         wxNotificationMessageImpl(notification),
         m_flags(wxICON_INFORMATION),
-        m_parent(NULL)
+        m_parent(nullptr)
     {
 
     }
@@ -119,7 +119,7 @@ public:
         if ( ms_refCountIcon > 0 && !--ms_refCountIcon )
         {
             delete ms_icon;
-            ms_icon = NULL;
+            ms_icon = nullptr;
         }
     }
 
@@ -167,7 +167,7 @@ private:
 // wxBalloonNotifMsgImpl
 // ----------------------------------------------------------------------------
 
-wxTaskBarIcon *wxBalloonNotifMsgImpl::ms_icon = NULL;
+wxTaskBarIcon *wxBalloonNotifMsgImpl::ms_icon = nullptr;
 int wxBalloonNotifMsgImpl::ms_refCountIcon = 0;
 
 /* static */
@@ -276,7 +276,7 @@ wxBalloonNotifMsgImpl::Show(int timeout)
         // disappearance from the system if we failed to install it in the
         // first place.
         delete ms_icon;
-        ms_icon = NULL;
+        ms_icon = nullptr;
         ms_refCountIcon = 0;
 
         return false;

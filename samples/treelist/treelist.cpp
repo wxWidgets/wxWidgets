@@ -284,7 +284,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets tree/list control sample",
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets tree/list control sample",
                  wxDefaultPosition, wxSize(600, 450))
 {
     m_isFlat = false;

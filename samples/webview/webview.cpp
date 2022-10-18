@@ -331,7 +331,7 @@ bool WebApp::OnInit()
 }
 
 WebFrame::WebFrame(const wxString& url) :
-    wxFrame(NULL, wxID_ANY, "wxWebView Sample")
+    wxFrame(nullptr, wxID_ANY, "wxWebView Sample")
 {
     // set the frame icon
     SetIcon(wxICON(sample));

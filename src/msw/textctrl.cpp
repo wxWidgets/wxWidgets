@@ -137,7 +137,7 @@
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
 // dummy value used for m_dropTarget, different from any valid pointer value
-// (which are all even under Windows) and NULL
+// (which are all even under Windows) and nullptr
 static wxDropTarget *
     wxRICHTEXT_DEFAULT_DROPTARGET = reinterpret_cast<wxDropTarget *>(1);
 
@@ -214,7 +214,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxRichEditModule);
 };
 
-HINSTANCE wxRichEditModule::ms_hRichEdit[Version_Max] = { NULL, NULL, NULL };
+HINSTANCE wxRichEditModule::ms_hRichEdit[Version_Max] = { nullptr, nullptr, nullptr };
 
 #if wxUSE_INKEDIT
 wxDynamicLibrary wxRichEditModule::ms_inkEditLib;
@@ -230,7 +230,7 @@ extern wxMenu *wxCurrentPopupMenu;
 class wxTextCtrlOleCallback : public IRichEditOleCallback
 {
 public:
-    wxTextCtrlOleCallback(wxTextCtrl *text) : m_textCtrl(text), m_menu(NULL) {}
+    wxTextCtrlOleCallback(wxTextCtrl *text) : m_textCtrl(text), m_menu(nullptr) {}
     virtual ~wxTextCtrlOleCallback() { DeleteContextMenuObject(); }
 
     wxSTDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) override { return E_NOTIMPL; }
@@ -270,7 +270,7 @@ private:
         {
             m_menu->MSWDetachHMENU();
             if ( wxCurrentPopupMenu == m_menu )
-                wxCurrentPopupMenu = NULL;
+                wxCurrentPopupMenu = nullptr;
             wxDELETE(m_menu);
         }
     }
@@ -388,7 +388,7 @@ void wxTextCtrl::Init()
     m_isInkEdit = 0;
 #endif
 
-    m_privateContextMenu = NULL;
+    m_privateContextMenu = nullptr;
     m_updatesCount = -1;
     m_isNativeCaretShown = true;
 }
@@ -418,7 +418,7 @@ wxTextCtrl::~wxTextCtrl()
     if ( m_dropTarget == wxRICHTEXT_DEFAULT_DROPTARGET )
     {
         // don't try to destroy this dummy pointer in the base class dtor
-        m_dropTarget = NULL;
+        m_dropTarget = nullptr;
     }
 #endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
@@ -710,7 +710,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 
     // Without this, if we pass the size in the constructor and then don't change it,
     // the themed borders will be drawn incorrectly.
-    SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+    SetWindowPos(GetHwnd(), nullptr, 0, 0, 0, 0,
                 SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
                 SWP_FRAMECHANGED);
 
@@ -1218,7 +1218,7 @@ wxTextCtrl::StreamIn(const wxString& value,
 {
     wxCSConv conv(encoding);
 
-    const size_t len = conv.MB2WC(NULL, value.mb_str(), value.length());
+    const size_t len = conv.MB2WC(nullptr, value.mb_str(), value.length());
 
     if (len == wxCONV_FAILED)
         return false;
@@ -1297,7 +1297,7 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
         // now convert to the given encoding (this is a possibly lossful
         // conversion but what else can we do)
         wxCSConv conv(encoding);
-        size_t lenNeeded = conv.WC2MB(NULL, wchBuf, 0);
+        size_t lenNeeded = conv.WC2MB(nullptr, wchBuf, 0);
 
         if ( lenNeeded != wxCONV_FAILED && lenNeeded++ )
         {
@@ -1417,7 +1417,7 @@ void wxTextCtrl::AppendText(const wxString& text)
     // don't do this if we're frozen, saves some time
     if ( !IsFrozen() && IsMultiLine() && GetRichVersion() > 1 )
     {
-        ::SendMessage(GetHwnd(), WM_VSCROLL, SB_BOTTOM, (LPARAM)NULL);
+        ::SendMessage(GetHwnd(), WM_VSCROLL, SB_BOTTOM, (LPARAM)nullptr);
     }
 #endif // wxUSE_RICHEDIT
 }
@@ -2108,9 +2108,9 @@ void wxTextCtrl::EmptyUndoBuffer()
                                        );
             if ( SUCCEEDED(hr) )
             {
-                hr = pDoc->Undo(tomFalse, NULL);
+                hr = pDoc->Undo(tomFalse, nullptr);
                 if ( SUCCEEDED(hr) )
-                    pDoc->Undo(tomTrue, NULL);
+                    pDoc->Undo(tomTrue, nullptr);
             }
         }
     }
@@ -2542,7 +2542,7 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             if ( IsRich() )
             {
                 // wxCurrentPopupMenu stores the popup menu that will receive
-                // WM_COMMAND, but it may be non-NULL even when the underlying
+                // WM_COMMAND, but it may be non-null even when the underlying
                 // native menu is no longer shown. Use ::IsMenu() to check whether
                 // the menu still exists.
                 extern wxMenu *wxCurrentPopupMenu;
@@ -2757,7 +2757,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     int cy;
     wxFont font = GetFont();
     font.WXAdjustToPPI(GetDPI());
-    wxGetCharSize(GetHWND(), NULL, &cy, font);
+    wxGetCharSize(GetHWND(), nullptr, &cy, font);
 
     DWORD wText = FromDIP(1);
     ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
@@ -3113,7 +3113,7 @@ void wxTextCtrl::SetDropTarget(wxDropTarget *dropTarget)
     {
         // get rid of the built-in drop target
         ::RevokeDragDrop(GetHwnd());
-        m_dropTarget = NULL;
+        m_dropTarget = nullptr;
     }
 
     wxTextCtrlBase::SetDropTarget(dropTarget);
@@ -3729,7 +3729,7 @@ void wxRichEditModule::OnExit()
         if ( ms_hRichEdit[i] && ms_hRichEdit[i] != INVALID_HINSTANCE )
         {
             ::FreeLibrary(ms_hRichEdit[i]);
-            ms_hRichEdit[i] = NULL;
+            ms_hRichEdit[i] = nullptr;
         }
     }
 #if wxUSE_INKEDIT

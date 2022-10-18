@@ -30,10 +30,10 @@ public:
     virtual void DoSelect(const wxBitmap& bitmap) override;
 
     virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const override
-    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmapOfHDC(*subrect, GetHDC() );}
+    { return subrect == nullptr ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmapOfHDC(*subrect, GetHDC() );}
 
 protected:
-    // create DC compatible with the given one or screen if dc == NULL
+    // create DC compatible with the given one or screen if dc == nullptr
     bool CreateCompatible(wxDC *dc);
 
     // initialize the newly created DC

@@ -73,11 +73,11 @@ public:
     // create a bitmap compatible with the given HDC (or screen by default) and
     // return its handle, the caller is responsible for freeing it (using
     // DeleteObject())
-    HBITMAP CreateDDB(HDC hdc = NULL) const;
+    HBITMAP CreateDDB(HDC hdc = nullptr) const;
 
     // get the handle from the DIB and reset it, i.e. this object won't destroy
     // the DIB after this (but the caller should do it)
-    HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = NULL; return hbmp; }
+    HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = nullptr; return hbmp; }
 
 #if defined(__WXMSW__) && wxUSE_PALETTE
     // create a palette for this DIB (always a trivial/default one for 24bpp)
@@ -92,7 +92,7 @@ public:
     // ---------
 
     // return true if DIB was successfully created, false otherwise
-    bool IsOk() const { return m_handle != NULL; }
+    bool IsOk() const { return m_handle != nullptr; }
 
     // get the bitmap size
     wxSize GetSize() const { DoGetObject(); return wxSize(m_width, m_height); }
@@ -119,17 +119,17 @@ public:
 
     // creates a DDB compatible with the given (or screen) DC from either
     // a plain DIB or a DIB section (in which case the last parameter must be
-    // non NULL)
+    // non null)
     static HBITMAP ConvertToBitmap(const BITMAPINFO *pbi,
-                                   HDC hdc = NULL,
-                                   const void *bits = NULL);
+                                   HDC hdc = nullptr,
+                                   const void *bits = nullptr);
 
     // create a plain DIB (not a DIB section) from a DDB, the caller is
     // responsible for freeing it using ::GlobalFree()
     static HGLOBAL ConvertFromBitmap(HBITMAP hbmp);
 
     // creates a DIB from the given DDB or calculates the space needed by it:
-    // if pbi is NULL, only the space is calculated, otherwise pbi is supposed
+    // if pbi is null, only the space is calculated, otherwise pbi is supposed
     // to point at BITMAPINFO of the correct size which is filled by this
     // function (this overload is needed for wxBitmapDataObject code in
     // src/msw/ole/dataobj.cpp)
@@ -216,7 +216,7 @@ private:
     // gets their values from m_handle, if not done yet
     void DoGetObject() const;
 
-    // pointer to DIB bits, may be NULL
+    // pointer to DIB bits, may be null
     void *m_data;
 
     // size and depth of the image
@@ -242,10 +242,10 @@ private:
 inline
 void wxDIB::Init()
 {
-    m_handle = NULL;
+    m_handle = nullptr;
     m_ownsHandle = true;
 
-    m_data = NULL;
+    m_data = nullptr;
 
     m_width =
     m_height =

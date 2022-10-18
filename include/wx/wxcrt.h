@@ -26,7 +26,7 @@
 //                              misc functions
 // ============================================================================
 
-/* checks whether the passed in pointer is NULL and if the string is empty */
+/* checks whether the passed in pointer is null and if the string is empty */
 inline bool wxIsEmpty(const char *s) { return !s || !*s; }
 inline bool wxIsEmpty(const wchar_t *s) { return !s || !*s; }
 inline bool wxIsEmpty(const wxScopedCharBuffer& s) { return wxIsEmpty(s.data()); }
@@ -72,7 +72,7 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 
         if(l)
             return const_cast<wxChar*>(s);
-        return NULL;
+        return nullptr;
     }
 
     inline int wxTmemcmp(const wxChar* sz1, const wxChar* sz2, size_t len)
@@ -160,7 +160,7 @@ inline char* wxSetlocale(int category, const wxCStrData& locale)
 //                              string functions
 // ----------------------------------------------------------------------------
 
-/* safe version of strlen() (returns 0 if passed NULL pointer) */
+/* safe version of strlen() (returns 0 if passed null pointer) */
 // NB: these are defined in wxcrtbase.h, see the comment there
 // inline size_t wxStrlen(const char *s) { return s ? strlen(s) : 0; }
 // inline size_t wxStrlen(const wchar_t *s) { return s ? wxCRT_Strlen_(s) : 0; }
@@ -691,19 +691,19 @@ inline const char *wxStrrchr(const char *s, char c)
 inline const wchar_t *wxStrrchr(const wchar_t *s, wchar_t c)
     { return wxCRT_StrrchrW(s, c); }
 inline const char *wxStrchr(const char *s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : nullptr; }
 inline const wchar_t *wxStrchr(const wchar_t *s, const wxUniChar& c)
     { return wxCRT_StrchrW(s, (wchar_t)c); }
 inline const char *wxStrrchr(const char *s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : nullptr; }
 inline const wchar_t *wxStrrchr(const wchar_t *s, const wxUniChar& c)
     { return wxCRT_StrrchrW(s, (wchar_t)c); }
 inline const char *wxStrchr(const char *s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : nullptr; }
 inline const wchar_t *wxStrchr(const wchar_t *s, const wxUniCharRef& c)
     { return wxCRT_StrchrW(s, (wchar_t)c); }
 inline const char *wxStrrchr(const char *s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : nullptr; }
 inline const wchar_t *wxStrrchr(const wchar_t *s, const wxUniCharRef& c)
     { return wxCRT_StrrchrW(s, (wchar_t)c); }
 template<typename T>
@@ -736,13 +736,13 @@ inline const char* wxStrchr(const wxString& s, int c)
 inline const char* wxStrrchr(const wxString& s, int c)
     { return wxCRT_StrrchrA((const char*)s.c_str(), c); }
 inline const char* wxStrchr(const wxString& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : nullptr; }
 inline const char* wxStrrchr(const wxString& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : nullptr; }
 inline const char* wxStrchr(const wxString& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : nullptr; }
 inline const char* wxStrrchr(const wxString& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : nullptr; }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const wchar_t* wxStrchr(const wxString& s, wchar_t c)
     { return wxCRT_StrchrW((const wchar_t*)s.c_str(), c); }
@@ -758,13 +758,13 @@ inline const char* wxStrchr(const wxCStrData& s, int c)
 inline const char* wxStrrchr(const wxCStrData& s, int c)
     { return wxCRT_StrrchrA(s.AsChar(), c); }
 inline const char* wxStrchr(const wxCStrData& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : nullptr; }
 inline const char* wxStrrchr(const wxCStrData& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : nullptr; }
 inline const char* wxStrchr(const wxCStrData& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : nullptr; }
 inline const char* wxStrrchr(const wxCStrData& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : nullptr; }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const wchar_t* wxStrchr(const wxCStrData& s, wchar_t c)
     { return wxCRT_StrchrW(s.AsWChar(), c); }
@@ -943,8 +943,8 @@ template<> struct wxStrtoxCharType<int>
     typedef const char* Type; /* this one is never used */
     static char** AsPointer(int WXUNUSED_UNLESS_DEBUG(p))
     {
-        wxASSERT_MSG( p == 0, "passing non-NULL int is invalid" );
-        return NULL;
+        wxASSERT_MSG( p == 0, "passing non-null int is invalid" );
+        return nullptr;
     }
 };
 
@@ -956,7 +956,7 @@ inline double wxStrtod(const wxString& nptr, T endptr)
         // when we don't care about endptr, use the string representation that
         // doesn't require any conversion (it doesn't matter for this function
         // even if its UTF-8):
-        wxStringCharType** p = NULL;
+        wxStringCharType** p = nullptr;
         return wxStrtod(nptr.wx_str(), p);
     }
     // note that it is important to use c_str() here and not mb_str() or
@@ -973,16 +973,16 @@ inline double wxStrtod(const wxCStrData& nptr, T endptr)
 #ifdef wxHAS_NULLPTR_T
 
 inline double wxStrtod(const wxString& nptr, std::nullptr_t)
-    { return wxStrtod(nptr.wx_str(), static_cast<wxStringCharType**>(NULL)); }
+    { return wxStrtod(nptr.wx_str(), static_cast<wxStringCharType**>(nullptr)); }
 inline double wxStrtod(const wxCStrData& nptr, std::nullptr_t)
-    { return wxStrtod(nptr.AsString(), static_cast<wxStringCharType**>(NULL)); }
+    { return wxStrtod(nptr.AsString(), static_cast<wxStringCharType**>(nullptr)); }
 
 #define WX_STRTOX_DEFINE_NULLPTR_OVERLOADS(rettype, name)                     \
     inline rettype name(const wxString& nptr, std::nullptr_t, int base)       \
-        { return name(nptr.wx_str(), static_cast<wxStringCharType**>(NULL),   \
+        { return name(nptr.wx_str(), static_cast<wxStringCharType**>(nullptr),   \
                       base); }                                                \
     inline rettype name(const wxCStrData& nptr, std::nullptr_t, int base)     \
-        { return name(nptr.AsString(), static_cast<wxStringCharType**>(NULL), \
+        { return name(nptr.AsString(), static_cast<wxStringCharType**>(nullptr), \
                       base); }
 
 #else // !wxHAS_NULLPTR_T
@@ -1004,7 +1004,7 @@ inline double wxStrtod(const wxCStrData& nptr, std::nullptr_t)
     {                                                                         \
         if (!endptr)                                                          \
         {                                                                     \
-            wxStringCharType** p = NULL;                                      \
+            wxStringCharType** p = nullptr;                                      \
             return name(nptr.wx_str(), p, base);                              \
         }                                                                     \
         typedef typename wxStrtoxCharType<T>::Type CharType;                  \

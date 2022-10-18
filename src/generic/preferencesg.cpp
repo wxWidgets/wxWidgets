@@ -178,7 +178,7 @@ public:
         if ( m_win )
         {
             m_win->Close(/*force=*/true);
-            m_win = NULL;
+            m_win = nullptr;
         }
     }
 
@@ -199,7 +199,7 @@ class wxModalPreferencesEditorImpl : public wxGenericPreferencesEditorImplBase
 public:
     wxModalPreferencesEditorImpl()
     {
-        m_dlg = NULL;
+        m_dlg = nullptr;
         m_currentPage = -1;
     }
 
@@ -207,7 +207,7 @@ public:
     {
         wxScopedPtr<wxGenericPrefsDialog> dlg(CreateDialog(parent));
 
-        // Store it for Dismiss() but ensure that the pointer is reset to NULL
+        // Store it for Dismiss() but ensure that the pointer is reset to nullptr
         // when the dialog is destroyed on leaving this function.
         m_dlg = dlg.get();
         wxON_BLOCK_EXIT_NULL(m_dlg);
@@ -226,7 +226,7 @@ public:
         if ( m_dlg )
         {
             m_dlg->EndModal(wxID_CANCEL);
-            m_dlg = NULL;
+            m_dlg = nullptr;
         }
     }
 

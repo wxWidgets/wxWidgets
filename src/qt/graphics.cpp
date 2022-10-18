@@ -658,7 +658,7 @@ protected:
 
     wxQtGraphicsContext(wxGraphicsRenderer* renderer)
         : wxGraphicsContext(renderer),
-          m_qtPainter(NULL)
+          m_qtPainter(nullptr)
     {
     }
 
@@ -1365,7 +1365,7 @@ wxGraphicsBitmap
 wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
 {
     wxGraphicsBitmap p;
-    if ( bitmap != NULL )
+    if ( bitmap != nullptr )
     {
         p.SetRefData(new wxQtBitmapData(this, (QPixmap*)bitmap));
     }

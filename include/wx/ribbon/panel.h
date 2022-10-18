@@ -145,7 +145,7 @@ class WXDLLIMPEXP_RIBBON wxRibbonPanelEvent : public wxCommandEvent
 public:
     wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPanel* panel = NULL)
+                       wxRibbonPanel* panel = nullptr)
         : wxCommandEvent(command_type, win_id)
         , m_panel(panel)
     {

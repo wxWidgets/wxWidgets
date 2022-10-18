@@ -58,14 +58,14 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL) override;
+                                  wxHeaderButtonParams* params = nullptr) override;
 
     virtual int  DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
                                           wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                          wxHeaderButtonParams* params = NULL) override;
+                                          wxHeaderButtonParams* params = nullptr) override;
 
     virtual int GetHeaderButtonHeight(wxWindow *win) override;
 
@@ -256,7 +256,7 @@ void wxRendererGeneric::Cleanup()
     wxDELETE(sm_rendererGeneric);
 }
 
-wxRendererGeneric* wxRendererGeneric::sm_rendererGeneric = NULL;
+wxRendererGeneric* wxRendererGeneric::sm_rendererGeneric = nullptr;
 
 wxRendererGeneric::wxRendererGeneric()
     : m_penBlack(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW)),

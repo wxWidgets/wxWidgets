@@ -62,7 +62,7 @@ wxBEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 wxEND_EVENT_TABLE()
 
 
-wxWindow* wxApp::s_captureWindow = NULL ;
+wxWindow* wxApp::s_captureWindow = nullptr ;
 long      wxApp::s_lastModifiers = 0 ;
 
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
@@ -163,7 +163,7 @@ void wxApp::MacReopenApp()
     // as hidden TLWs, so do preferences and some classes like wxTaskBarIconWindow use placeholder TLWs.
     // We don't want to reshow those, so let's just reopen the minimized a.k.a. iconized TLWs.
 
-    wxTopLevelWindow* firstIconized = NULL;
+    wxTopLevelWindow* firstIconized = nullptr;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
 
     while (node)
@@ -171,7 +171,7 @@ void wxApp::MacReopenApp()
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
         if ( win->IsIconized() )
         {
-            if ( firstIconized == NULL )
+            if ( firstIconized == nullptr )
                 firstIconized = win;
         }
         else if ( win->IsShown() )
@@ -244,8 +244,8 @@ wxMacAssertOutputHandler(const char *WXUNUSED(componentName),
 #if wxUSE_UNICODE
     fileNameStr = wxString(fileName, wxConvLocal);
     assertionStr = wxString(assertionString, wxConvLocal);
-    exceptionStr = wxString((exceptionLabelString!=0) ? exceptionLabelString : "", wxConvLocal) ;
-    errorStr = wxString((errorString!=0) ? errorString : "", wxConvLocal) ;
+    exceptionStr = wxString((exceptionLabelString!=nullptr) ? exceptionLabelString : "", wxConvLocal) ;
+    errorStr = wxString((errorString!=nullptr) ? errorString : "", wxConvLocal) ;
 #else
     fileNameStr = fileName;
     assertionStr = assertionString;
@@ -346,7 +346,7 @@ bool wxApp::OnInitGui()
         return false;
 
 #ifdef __WXOSX_COCOA__
-    CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, NULL);
+    CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, nullptr);
 #endif
 
     return true ;
@@ -384,9 +384,9 @@ wxApp::wxApp()
 {
     m_printMode = wxPRINT_WINDOWS;
 
-    m_macCurrentEvent = NULL ;
-    m_macCurrentEventHandlerCallRef = NULL ;
-    m_macPool = sm_isEmbedded ? NULL : new wxMacAutoreleasePool();
+    m_macCurrentEvent = nullptr ;
+    m_macCurrentEventHandlerCallRef = nullptr ;
+    m_macPool = sm_isEmbedded ? nullptr : new wxMacAutoreleasePool();
 }
 
 wxApp::~wxApp()
@@ -397,8 +397,8 @@ wxApp::~wxApp()
 
 CFMutableArrayRef GetAutoReleaseArray()
 {
-    static CFMutableArrayRef array = 0;
-    if ( array == 0)
+    static CFMutableArrayRef array = nullptr;
+    if ( array == nullptr)
         array= CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
     return array;
 }

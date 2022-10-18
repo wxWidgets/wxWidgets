@@ -123,8 +123,8 @@ void wxStackFrame::OnGetName()
                     char *cppfunc = __cxxabiv1::__cxa_demangle
                                     (
                                         m_name.mb_str(),
-                                        NULL, // output buffer (none, alloc it)
-                                        NULL, // [out] len of output buffer
+                                        nullptr, // output buffer (none, alloc it)
+                                        nullptr, // [out] len of output buffer
                                         &rc
                                     );
                     if ( rc == 0 )
@@ -171,7 +171,7 @@ void wxStackFrame::OnGetName()
 
 // static data
 void *wxStackWalker::ms_addresses[MAX_FRAMES];
-char **wxStackWalker::ms_symbols = NULL;
+char **wxStackWalker::ms_symbols = nullptr;
 int wxStackWalker::m_depth = 0;
 wxString wxStackWalker::ms_exepath;
 static char g_buf[BUFSIZE];
@@ -216,7 +216,7 @@ void wxStackWalker::FreeStack()
     // of the caller, i.e. us, to free that pointer
     if (ms_symbols)
         free( ms_symbols );
-    ms_symbols = NULL;
+    ms_symbols = nullptr;
     m_depth = 0;
 }
 

@@ -126,7 +126,7 @@ public:
     // fonts inside the library itself.
     wxNativeFontInfo(const LOGFONT& lf_, const wxWindow* win
 #ifndef WXBUILDING
-        = NULL
+        = nullptr
 #endif
     );
 

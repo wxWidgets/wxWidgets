@@ -82,7 +82,7 @@ public:
     static void EndPaint(wxWindow *win);
 
 protected:
-    // Find the DC for this window in the cache, return NULL if not found.
+    // Find the DC for this window in the cache, return nullptr if not found.
     static wxPaintDCInfo *FindInCache(wxWindow* win);
 
     wxDECLARE_CLASS(wxPaintDCImpl);

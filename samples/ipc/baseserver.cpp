@@ -110,7 +110,7 @@ public:
     MyServer();
     virtual ~MyServer();
     void Disconnect();
-    bool IsConnected() { return m_connection != NULL; }
+    bool IsConnected() { return m_connection != nullptr; }
 
     virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) override;
 
@@ -172,7 +172,7 @@ bool MyApp::OnInit()
 
 MyServer::MyServer()
 {
-    m_connection = NULL;
+    m_connection = nullptr;
 }
 
 MyServer::~MyServer()
@@ -195,7 +195,7 @@ wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
     else // unknown topic
     {
         wxLogMessage("Unknown topic");
-        return NULL;
+        return nullptr;
     }
 
     wxLogMessage("Connection accepted");
@@ -267,7 +267,7 @@ MyConnection::OnRequest(const wxString& topic,
     }
     else
     {
-        data = NULL;
+        data = nullptr;
         *size = 0;
     }
     Log("OnRequest", topic, item, data, *size, format);

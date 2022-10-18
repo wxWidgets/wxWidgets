@@ -81,19 +81,19 @@ public:
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data ) = 0;
 
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
-                                                    wxPrintout *printout = NULL,
-                                                    wxPrintDialogData *data = NULL ) = 0;
+                                                    wxPrintout *printout = nullptr,
+                                                    wxPrintDialogData *data = nullptr ) = 0;
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
                                                     wxPrintData *data ) = 0;
 
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintDialogData *data = NULL ) = 0;
+                                                  wxPrintDialogData *data = nullptr ) = 0;
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
                                                   wxPrintData *data ) = 0;
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
-                                                          wxPageSetupDialogData * data = NULL ) = 0;
+                                                          wxPageSetupDialogData * data = nullptr ) = 0;
 
     virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) = 0;
 
@@ -125,19 +125,19 @@ public:
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data ) override;
 
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
-                                                    wxPrintout *printout = NULL,
-                                                    wxPrintDialogData *data = NULL ) override;
+                                                    wxPrintout *printout = nullptr,
+                                                    wxPrintDialogData *data = nullptr ) override;
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
                                                     wxPrintData *data ) override;
 
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintDialogData *data = NULL ) override;
+                                                  wxPrintDialogData *data = nullptr ) override;
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
                                                   wxPrintData *data ) override;
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
-                                                          wxPageSetupDialogData * data = NULL ) override;
+                                                          wxPageSetupDialogData * data = nullptr ) override;
 
     virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) override;
 
@@ -190,7 +190,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrinterBase: public wxObject
 {
 public:
-    wxPrinterBase(wxPrintDialogData *data = NULL);
+    wxPrinterBase(wxPrintDialogData *data = nullptr);
     virtual ~wxPrinterBase();
 
     virtual wxPrintAbortDialog *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
@@ -230,7 +230,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrinter: public wxPrinterBase
 {
 public:
-    wxPrinter(wxPrintDialogData *data = NULL);
+    wxPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxPrinter();
 
     virtual wxPrintAbortDialog *CreateAbortWindow(wxWindow *parent, wxPrintout *printout) override;
@@ -323,7 +323,7 @@ public:
     virtual void SetPreview(wxPrintPreview *preview) { m_preview = preview; }
 
     wxPrintPreview *GetPreview() const { return m_preview; }
-    virtual bool IsPreview() const { return GetPreview() != NULL; }
+    virtual bool IsPreview() const { return GetPreview() != nullptr; }
 
 private:
     wxString         m_printoutTitle;
@@ -580,8 +580,8 @@ class WXDLLIMPEXP_CORE wxPrintPreviewBase: public wxObject
 {
 public:
     wxPrintPreviewBase(wxPrintout *printout,
-                       wxPrintout *printoutForPrinting = NULL,
-                       wxPrintDialogData *data = NULL);
+                       wxPrintout *printoutForPrinting = nullptr,
+                       wxPrintDialogData *data = nullptr);
     wxPrintPreviewBase(wxPrintout *printout,
                        wxPrintout *printoutForPrinting,
                        wxPrintData *data);
@@ -691,8 +691,8 @@ class WXDLLIMPEXP_CORE wxPrintPreview: public wxPrintPreviewBase
 {
 public:
     wxPrintPreview(wxPrintout *printout,
-                   wxPrintout *printoutForPrinting = NULL,
-                   wxPrintDialogData *data = NULL);
+                   wxPrintout *printoutForPrinting = nullptr,
+                   wxPrintDialogData *data = nullptr);
     wxPrintPreview(wxPrintout *printout,
                    wxPrintout *printoutForPrinting,
                    wxPrintData *data);

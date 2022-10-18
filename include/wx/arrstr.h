@@ -287,7 +287,7 @@ public:
     friend difference_type operator -(const itor& i1, const itor& i2);
   public:
     pointer m_ptr;
-    reverse_iterator() : m_ptr(NULL) { }
+    reverse_iterator() : m_ptr(nullptr) { }
     explicit reverse_iterator(pointer ptr) : m_ptr(ptr) { }
     reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     reference operator*() const { return *m_ptr; }
@@ -313,7 +313,7 @@ public:
     friend difference_type operator -(const itor& i1, const itor& i2);
   public:
     pointer m_ptr;
-    const_reverse_iterator() : m_ptr(NULL) { }
+    const_reverse_iterator() : m_ptr(nullptr) { }
     explicit const_reverse_iterator(pointer ptr) : m_ptr(ptr) { }
     const_reverse_iterator(const itor& it) : m_ptr(it.m_ptr) { }
     const_reverse_iterator(const reverse_iterator& it) : m_ptr(it.m_ptr) { }
@@ -395,7 +395,7 @@ protected:
 private:
   // Allocate the new buffer big enough to hold m_nCount + nIncrement items and
   // return the pointer to the old buffer, which must be deleted by the caller
-  // (if the old buffer is big enough, just return NULL).
+  // (if the old buffer is big enough, just return nullptr).
   wxString *Grow(size_t nIncrement);
 
   // Binary search in the sorted array: return the index of the string if it's
@@ -432,7 +432,7 @@ class WXDLLIMPEXP_BASE wxCArrayString
 {
 public:
     wxCArrayString( const wxArrayString& array )
-        : m_array( array ), m_strings( NULL )
+        : m_array( array ), m_strings( nullptr )
     { }
     ~wxCArrayString() { delete[] m_strings; }
 
@@ -450,7 +450,7 @@ public:
     wxString* Release()
     {
         wxString *r = GetStrings();
-        m_strings = NULL;
+        m_strings = nullptr;
         return r;
     }
 
@@ -513,7 +513,7 @@ public:
     wxArrayStringsAdapter(const std::vector<wxString>& strings)
         : m_type(wxSTRING_POINTER), m_size(strings.size())
     {
-        m_data.ptr = m_size == 0 ? NULL : &strings[0];
+        m_data.ptr = m_size == 0 ? nullptr : &strings[0];
     }
 #endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 

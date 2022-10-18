@@ -56,7 +56,7 @@ public:
     virtual void SetLabel(const wxString &label) override;
 
     virtual bool IsCollapsed() const override
-        { return m_pPane==NULL || !m_pPane->IsShown(); }
+        { return m_pPane==nullptr || !m_pPane->IsShown(); }
     virtual wxWindow *GetPane() const override
         { return m_pPane; }
     virtual wxString GetLabel() const override;

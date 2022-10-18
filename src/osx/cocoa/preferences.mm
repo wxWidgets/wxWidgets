@@ -69,11 +69,11 @@ class wxCocoaPrefsWindow : public wxFrame
 {
 public:
     wxCocoaPrefsWindow(const wxString& title)
-        : wxFrame(NULL, wxID_ANY, title,
+        : wxFrame(nullptr, wxID_ANY, title,
                   wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX | wxMINIMIZE_BOX)),
           m_toolbarRealized(false),
-          m_visiblePage(NULL)
+          m_visiblePage(nullptr)
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
         if ( WX_IS_MACOS_AVAILABLE(11,0) )
@@ -134,7 +134,7 @@ protected:
     // the resizing is animated, so we need to override DoMoveWindow.
     virtual void DoMoveWindow(int x, int y, int width, int height) override
     {
-        NSRect r = wxToNSRect(NULL, wxRect(x, y, width, height));
+        NSRect r = wxToNSRect(nullptr, wxRect(x, y, width, height));
         NSWindow *win = (NSWindow*)GetWXWindow();
         [win setFrame:r display:YES animate:YES];
     }
@@ -143,7 +143,7 @@ protected:
 private:
     struct PageInfo : public wxObject
     {
-        PageInfo(wxPreferencesPage *p) : page(p), win(NULL) {}
+        PageInfo(wxPreferencesPage *p) : page(p), win(nullptr) {}
 
         wxSharedPtr<wxPreferencesPage> page;
         wxWindow *win;
@@ -258,7 +258,7 @@ class wxCocoaPreferencesEditorImpl : public wxPreferencesEditorImpl
 {
 public:
     wxCocoaPreferencesEditorImpl(const wxString& title)
-        : m_win(NULL), m_title(title)
+        : m_win(nullptr), m_title(title)
     {
     }
 

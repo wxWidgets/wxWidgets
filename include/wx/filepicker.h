@@ -148,7 +148,7 @@ class WXDLLIMPEXP_CORE wxFileDirPickerCtrlBase : public wxPickerBase
 {
 public:
     wxFileDirPickerCtrlBase()
-        : m_pickerIface(NULL)
+        : m_pickerIface(nullptr)
     {
     }
 

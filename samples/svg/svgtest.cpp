@@ -136,7 +136,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame(NULL, -1, "SVG Demo",
+    MyFrame* frame = new MyFrame(nullptr, -1, "SVG Demo",
                                  wxDefaultPosition, wxSize(500, 400));
 
     frame->Show(true);

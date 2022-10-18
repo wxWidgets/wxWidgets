@@ -382,7 +382,7 @@ wxEND_EVENT_TABLE()
 
 
 GridFrame::GridFrame()
-        : wxFrame( (wxFrame *)NULL, wxID_ANY, "wxWidgets grid class demo",
+        : wxFrame( nullptr, wxID_ANY, "wxWidgets grid class demo",
                    wxDefaultPosition,
                    wxDefaultSize )
 {
@@ -775,11 +775,11 @@ GridFrame::GridFrame()
     grid->SetRowAttr(10, attr);
     grid->SetCellValue(10, 0, "You can't resize this row interactively -- try it");
 
-    // this does exactly nothing except testing that SetAttr() handles NULL
+    // this does exactly nothing except testing that SetAttr() handles null
     // attributes and does reference counting correctly
-    grid->SetAttr(11, 11, NULL);
+    grid->SetAttr(11, 11, nullptr);
     grid->SetAttr(11, 11, new wxGridCellAttr);
-    grid->SetAttr(11, 11, NULL);
+    grid->SetAttr(11, 11, nullptr);
 
     grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
 
@@ -1045,7 +1045,7 @@ void GridFrame::ResizeCell( wxCommandEvent& ev )
 
 void GridFrame::SetLabelColour( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxColourDialog dlg( NULL );
+    wxColourDialog dlg( nullptr );
     if ( dlg.ShowModal() == wxID_OK )
     {
         wxColourData retData;
@@ -1059,7 +1059,7 @@ void GridFrame::SetLabelColour( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::SetLabelTextColour( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxColourDialog dlg( NULL );
+    wxColourDialog dlg( nullptr );
     if ( dlg.ShowModal() == wxID_OK )
     {
         wxColourData retData;
@@ -1243,7 +1243,7 @@ void GridFrame::ToggleCornerLabelOrientation( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxColourDialog dlg( NULL );
+    wxColourDialog dlg( nullptr );
     if ( dlg.ShowModal() == wxID_OK )
     {
         wxColourData retData;
@@ -1968,7 +1968,7 @@ void MyGridCellRenderer::Draw(wxGrid& grid,
 // ============================================================================
 
 BigGridFrame::BigGridFrame(long sizeGrid)
-            : wxFrame(NULL, wxID_ANY, "Plugin Virtual Table")
+            : wxFrame(nullptr, wxID_ANY, "Plugin Virtual Table")
 {
     m_grid = new wxGrid(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
@@ -2258,7 +2258,7 @@ wxString BugsGridTable::GetColLabelValue( int col )
 // ----------------------------------------------------------------------------
 
 BugsGridFrame::BugsGridFrame()
-             : wxFrame(NULL, wxID_ANY, "Bugs table")
+             : wxFrame(nullptr, wxID_ANY, "Bugs table")
 {
     wxGrid *grid = new wxGrid(this, wxID_ANY);
     wxGridTableBase *table = new BugsGridTable();
@@ -2303,7 +2303,7 @@ public:
         ROW_MAX = 3
     };
 
-    TabularGridTable() { m_sortOrder = NULL; }
+    TabularGridTable() { m_sortOrder = nullptr; }
 
     virtual int GetNumberRows() override { return ROW_MAX; }
     virtual int GetNumberCols() override { return COL_MAX; }
@@ -2365,7 +2365,7 @@ public:
             { { 1, 0, 2 }, { 2, 0, 1 } },
         };
 
-        m_sortOrder = col == wxNOT_FOUND ? NULL : sortOrders[col][ascending];
+        m_sortOrder = col == wxNOT_FOUND ? nullptr : sortOrders[col][ascending];
     }
 
 private:
@@ -2657,7 +2657,7 @@ wxBEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 TabularGridFrame::TabularGridFrame()
-                : wxFrame(NULL, wxID_ANY, "Tabular table")
+                : wxFrame(nullptr, wxID_ANY, "Tabular table")
 {
     m_shouldUpdateColOrder = false;
 

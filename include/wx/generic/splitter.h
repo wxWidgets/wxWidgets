@@ -118,10 +118,10 @@ public:
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
-    bool Unsplit(wxWindow *toRemove = NULL);
+    bool Unsplit(wxWindow *toRemove = nullptr);
 
     // Replaces one of the windows with another one (neither old nor new
-    // parameter should be NULL)
+    // parameter should be null)
     bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
 
     // Make sure the child window sizes are updated. This is useful
@@ -130,7 +130,7 @@ public:
     void UpdateSize();
 
     // Is the window split?
-    bool IsSplit() const { return (m_windowTwo != NULL); }
+    bool IsSplit() const { return (m_windowTwo != nullptr); }
 
     // Sets the border size
     void SetBorderSize(int WXUNUSED(width)) { }
@@ -316,7 +316,7 @@ class WXDLLIMPEXP_CORE wxSplitterEvent : public wxNotifyEvent
 {
 public:
     wxSplitterEvent(wxEventType type = wxEVT_NULL,
-                    wxSplitterWindow *splitter = NULL)
+                    wxSplitterWindow *splitter = nullptr)
         : wxNotifyEvent(type)
     {
         SetEventObject(splitter);

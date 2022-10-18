@@ -447,10 +447,10 @@ public:
     typedef void *ExitCode;
 
     // static functions
-        // Returns the wxThread object for the calling thread. NULL is returned
+        // Returns the wxThread object for the calling thread. nullptr is returned
         // if the caller is the main thread (but it's recommended to use
         // IsMain() and only call This() for threads other than the main one
-        // because NULL is also returned on error). If the thread wasn't
+        // because nullptr is also returned on error). If the thread wasn't
         // created with wxThread class, the returned value is undefined.
     static wxThread *This();
 
@@ -521,8 +521,8 @@ public:
         // periodically - the thread will only be deleted the next time it
         // does it!
         //
-        // will fill the rc pointer with the thread exit code if it's !NULL
-    wxThreadError Delete(ExitCode *rc = NULL,
+        // will fill the rc pointer with the thread exit code if it's non-null
+    wxThreadError Delete(ExitCode *rc = nullptr,
                          wxThreadWait waitMode = wxTHREAD_WAIT_DEFAULT);
 
         // waits for a joinable thread to finish and returns its exit code
@@ -596,7 +596,7 @@ protected:
     bool SetName(const wxString &name);
 
     // exits from the current thread - can be called only from this thread
-    void Exit(ExitCode exitcode = NULL);
+    void Exit(ExitCode exitcode = nullptr);
 
     // entry point for the thread - called by Run() and executes in the context
     // of this thread.
@@ -678,9 +678,9 @@ private:
     void KillThread()
     {
         // If wxThreadHelperThread is detached and is about to finish, it will
-        // set m_thread to NULL so don't delete it then.
+        // set m_thread to nullptr so don't delete it then.
         // But if KillThread is called before wxThreadHelperThread (in detached mode)
-        // sets it to NULL, then the thread object still exists and can be killed
+        // sets it to nullptr, then the thread object still exists and can be killed
         wxCriticalSectionLocker locker(m_critSection);
 
         if ( m_thread )
@@ -690,14 +690,14 @@ private:
             if ( m_kind == wxTHREAD_JOINABLE )
               delete m_thread;
 
-            m_thread = NULL;
+            m_thread = nullptr;
         }
     }
 
 public:
-    // constructor only initializes m_thread to NULL
+    // constructor only initializes m_thread to nullptr
     wxThreadHelper(wxThreadKind kind = wxTHREAD_JOINABLE)
-        : m_thread(NULL), m_kind(kind) { }
+        : m_thread(nullptr), m_kind(kind) { }
 
     // destructor deletes m_thread
     virtual ~wxThreadHelper() { KillThread(); }
@@ -749,7 +749,7 @@ inline void *wxThreadHelperThread::Entry()
     // And that wxThreadHelper::KillThread will not try to kill
     // an already deleted thread
     if ( m_owner.m_kind == wxTHREAD_DETACHED )
-        m_owner.m_thread = NULL;
+        m_owner.m_thread = nullptr;
 
     return result;
 }

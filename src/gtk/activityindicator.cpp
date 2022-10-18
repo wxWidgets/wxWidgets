@@ -95,7 +95,7 @@ bool wxActivityIndicator::IsRunning() const
         return false;
 
     gboolean b;
-    g_object_get(m_widget, "active", &b, NULL);
+    g_object_get(m_widget, "active", &b, nullptr);
 
     return b != 0;
 }
@@ -116,7 +116,7 @@ wxSize wxActivityIndicator::DoGetBestClientSize() const
     GtkWidgetClass* const wc = GTK_WIDGET_GET_CLASS(m_widget);
 
     // We're not interested in the natural size (and it's the same as minimal
-    // one anyhow currently), but we still need a non-NULL pointer for it.
+    // one anyhow currently), but we still need a non-null pointer for it.
     gint dummy;
     wc->get_preferred_width(m_widget, &w, &dummy);
     wc->get_preferred_height(m_widget, &h, &dummy);

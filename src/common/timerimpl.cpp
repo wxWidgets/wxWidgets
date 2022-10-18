@@ -30,7 +30,7 @@
 wxTimerImpl::wxTimerImpl(wxTimer *timer)
 {
     m_timer = timer;
-    m_owner = NULL;
+    m_owner = nullptr;
     m_idTimer = wxID_ANY;
     m_milli = 0;
     m_oneShot = false;

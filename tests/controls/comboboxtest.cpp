@@ -100,7 +100,7 @@ void ComboBoxTestCase::setUp()
 void ComboBoxTestCase::tearDown()
 {
     delete m_combo;
-    m_combo = NULL;
+    m_combo = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -158,7 +158,7 @@ void ComboBoxTestCase::Sort()
 #if !defined(__WXOSX__)
     delete m_combo;
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                             wxDefaultPosition, wxDefaultSize, 0, NULL,
+                             wxDefaultPosition, wxDefaultSize, 0, nullptr,
                              wxCB_SORT);
 
     m_combo->Append("aaa");

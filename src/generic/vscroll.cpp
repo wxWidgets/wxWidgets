@@ -192,7 +192,7 @@ wxVarScrollHelperBase::wxVarScrollHelperBase(wxWindow *win)
     m_unitFirst = 0;
 
     m_physicalScrolling = true;
-    m_handler = NULL;
+    m_handler = nullptr;
 
     // by default, the associated window is also the target window
     DoSetTargetWindow(win);
@@ -427,7 +427,7 @@ void wxVarScrollHelperBase::DeleteEvtHandler()
         //else: something is very wrong, so better [maybe] leak memory than
         //      risk a crash because of double deletion
 
-        m_handler = NULL;
+        m_handler = nullptr;
     }
 }
 
@@ -457,7 +457,7 @@ void wxVarScrollHelperBase::DoSetTargetWindow(wxWindow *target)
 
 void wxVarScrollHelperBase::SetTargetWindow(wxWindow *target)
 {
-    wxCHECK_RET( target, wxT("target window must not be NULL") );
+    wxCHECK_RET( target, wxT("target window must not be null") );
 
     if ( target == m_targetWindow )
         return;

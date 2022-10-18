@@ -94,7 +94,7 @@ public:
     // Accessors
     const int* GetGLAttrs() const
     {
-        return (m_GLValues.empty() || !m_GLValues[0]) ? NULL : &*m_GLValues.begin();
+        return (m_GLValues.empty() || !m_GLValues[0]) ? nullptr : &*m_GLValues.begin();
     }
 
     int GetSize() const { return (int)(m_GLValues.size()); }
@@ -174,8 +174,8 @@ public:
 //  The derived class should provide a ctor with this signature:
 //
 //  wxGLContext(wxGLCanvas *win,
-//              const wxGLContext *other = NULL,
-//              const wxGLContextAttrs *ctxAttrs = NULL);
+//              const wxGLContext *other = nullptr,
+//              const wxGLContextAttrs *ctxAttrs = nullptr);
 
     // set this context as the current one
     virtual bool SetCurrent(const wxGLCanvas& win) const = 0;
@@ -275,7 +275,7 @@ protected:
     // Return false if an unknown attribute is found.
     static bool ParseAttribList(const int* attribList,
                                 wxGLAttributes& dispAttrs,
-                                wxGLContextAttrs* ctxAttrs = NULL);
+                                wxGLContextAttrs* ctxAttrs = nullptr);
 
 #if wxUSE_PALETTE
     // create default palette if we're not using RGBA mode

@@ -26,7 +26,7 @@ bool wxQtPrinter::Print(wxWindow *WXUNUSED(parent), wxPrintout *WXUNUSED(printou
 
 wxDC* wxQtPrinter::PrintDialog(wxWindow *WXUNUSED(parent))
 {
-    return NULL;
+    return nullptr;
 }
 
 //##############################################################################

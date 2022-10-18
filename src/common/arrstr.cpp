@@ -135,8 +135,8 @@ void wxArrayString::Init(bool autoSort)
 {
   m_nSize  =
   m_nCount = 0;
-  m_pItems = NULL;
-  m_compareFunction = NULL;
+  m_pItems = nullptr;
+  m_compareFunction = nullptr;
   m_autoSort = autoSort;
 }
 
@@ -183,7 +183,7 @@ wxString *wxArrayString::Grow(size_t nIncrement)
     if ( (m_nSize - m_nCount) >= nIncrement )
     {
         // We already have enough space.
-        return NULL;
+        return nullptr;
     }
 
     // if ARRAY_DEFAULT_INITIAL_SIZE were set to 0, the initially empty would
@@ -200,7 +200,7 @@ wxString *wxArrayString::Grow(size_t nIncrement)
       m_pItems = new wxString[m_nSize];
 
       // Nothing to free, we hadn't had any memory before.
-      return NULL;
+      return nullptr;
     }
     else {
       // otherwise when it's called for the first time, nIncrement would be 0

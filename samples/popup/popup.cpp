@@ -66,7 +66,7 @@ public:
     virtual ~SimpleTransientPopup();
 
     // wxPopupTransientWindow virtual methods are all overridden to log them
-    virtual void Popup(wxWindow *focus = NULL) override;
+    virtual void Popup(wxWindow *focus = nullptr) override;
     virtual void OnDismiss() override;
     virtual bool ProcessLeftDown(wxMouseEvent& event) override;
     virtual bool Show( bool show = true ) override;
@@ -338,9 +338,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title)
-: wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(500,300))
+: wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(500,300))
 {
-    m_simplePopup = m_scrolledPopup = NULL;
+    m_simplePopup = m_scrolledPopup = nullptr;
 
     SetIcon(wxICON(sample));
 
@@ -459,9 +459,9 @@ wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 MyDialog::MyDialog(const wxString& title)
-         :wxDialog(NULL, wxID_ANY, title, wxPoint(50,50), wxSize(400,300))
+         :wxDialog(nullptr, wxID_ANY, title, wxPoint(50,50), wxSize(400,300))
 {
-    m_simplePopup = m_scrolledPopup = NULL;
+    m_simplePopup = m_scrolledPopup = nullptr;
     wxPanel *panel = new wxPanel(this, -1);
 
     wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, "Show simple popup", wxPoint(20,20) );

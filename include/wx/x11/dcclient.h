@@ -116,9 +116,9 @@ protected:
     // --------------
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
-        wxCoord *descent = NULL,
-        wxCoord *externalLeading = NULL,
-        const wxFont *theFont = NULL) const;
+        wxCoord *descent = nullptr,
+        wxCoord *externalLeading = nullptr,
+        const wxFont *theFont = nullptr) const;
 
     void Init();
 

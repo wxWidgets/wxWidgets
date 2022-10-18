@@ -138,27 +138,27 @@ void wxRichTextListStylePage::Init()
     m_currentLevel = 1;
 
 ////@begin wxRichTextListStylePage member initialisation
-    m_levelCtrl = NULL;
-    m_styleListBox = NULL;
-    m_periodCtrl = NULL;
-    m_parenthesesCtrl = NULL;
-    m_rightParenthesisCtrl = NULL;
-    m_bulletAlignmentCtrl = NULL;
-    m_symbolCtrl = NULL;
-    m_symbolFontCtrl = NULL;
-    m_bulletNameCtrl = NULL;
-    m_alignmentLeft = NULL;
-    m_alignmentRight = NULL;
-    m_alignmentJustified = NULL;
-    m_alignmentCentred = NULL;
-    m_alignmentIndeterminate = NULL;
-    m_indentLeft = NULL;
-    m_indentLeftFirst = NULL;
-    m_indentRight = NULL;
-    m_spacingBefore = NULL;
-    m_spacingAfter = NULL;
-    m_spacingLine = NULL;
-    m_previewCtrl = NULL;
+    m_levelCtrl = nullptr;
+    m_styleListBox = nullptr;
+    m_periodCtrl = nullptr;
+    m_parenthesesCtrl = nullptr;
+    m_rightParenthesisCtrl = nullptr;
+    m_bulletAlignmentCtrl = nullptr;
+    m_symbolCtrl = nullptr;
+    m_symbolFontCtrl = nullptr;
+    m_bulletNameCtrl = nullptr;
+    m_alignmentLeft = nullptr;
+    m_alignmentRight = nullptr;
+    m_alignmentJustified = nullptr;
+    m_alignmentCentred = nullptr;
+    m_alignmentIndeterminate = nullptr;
+    m_indentLeft = nullptr;
+    m_indentLeftFirst = nullptr;
+    m_indentRight = nullptr;
+    m_spacingBefore = nullptr;
+    m_spacingAfter = nullptr;
+    m_spacingLine = nullptr;
+    m_previewCtrl = nullptr;
 ////@end wxRichTextListStylePage member initialisation
 }
 
@@ -880,7 +880,7 @@ wxRichTextAttr* wxRichTextListStylePage::GetAttributesForSelection()
     if (def)
         return def->GetLevelAttributes(value-1);
     else
-        return NULL;
+        return nullptr;
 }
 
 /// Just transfer from the window and update the preview

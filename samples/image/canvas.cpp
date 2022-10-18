@@ -50,7 +50,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     , m_bmpSmileXpm(smile_xpm)
     , m_iconSmileXpm(smile_xpm)
 {
-    my_horse_ani = NULL;
+    my_horse_ani = nullptr;
     m_ani_images = 0 ;
 
     SetBackgroundColour(* wxWHITE);

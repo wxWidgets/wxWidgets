@@ -187,7 +187,7 @@ public:
         The optional @a win argument is new since wxWidgets 3.1.3 and allows to
         get a per-monitor DPI specific size.
     */
-    static wxSize GetDefaultSize(wxWindow* win = NULL);
+    static wxSize GetDefaultSize(wxWindow* win = nullptr);
 
     /**
         Returns the string label for the button.

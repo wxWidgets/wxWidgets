@@ -908,7 +908,7 @@ enum
 
 static
 void CompareImage(const wxImageHandler& handler, const wxImage& image,
-    int properties = 0, const wxImage *compareTo = NULL)
+    int properties = 0, const wxImage *compareTo = nullptr)
 {
     wxBitmapType type = handler.GetType();
 
@@ -1107,7 +1107,7 @@ void ImageTestCase::SavePNG()
 
 #if wxUSE_LIBTIFF
 static void TestTIFFImage(const wxString& option, int value,
-    const wxImage *compareImage = NULL)
+    const wxImage *compareImage = nullptr)
 {
     wxImage image;
     if (compareImage)

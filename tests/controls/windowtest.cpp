@@ -150,7 +150,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 #if wxUSE_CARET
     CHECK(!m_window->GetCaret());
 
-    wxCaret* caret = NULL;
+    wxCaret* caret = nullptr;
 
     // Try creating the caret in two different, but normally equivalent, ways.
     SECTION("Caret 1-step")
@@ -235,21 +235,21 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Parent", "[window]")
 {
-    CHECK( m_window->GetGrandParent() == static_cast<wxWindow*>(NULL) );
+    CHECK( m_window->GetGrandParent() == static_cast<wxWindow*>(nullptr) );
     CHECK( m_window->GetParent() == wxTheApp->GetTopWindow() );
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Siblings", "[window]")
 {
-    CHECK( m_window->GetNextSibling() == static_cast<wxWindow*>(NULL) );
-    CHECK( m_window->GetPrevSibling() == static_cast<wxWindow*>(NULL) );
+    CHECK( m_window->GetNextSibling() == static_cast<wxWindow*>(nullptr) );
+    CHECK( m_window->GetPrevSibling() == static_cast<wxWindow*>(nullptr) );
 
     wxWindow* newwin = new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY);
 
     CHECK( m_window->GetNextSibling() == newwin );
-    CHECK( m_window->GetPrevSibling() == static_cast<wxWindow*>(NULL) );
+    CHECK( m_window->GetPrevSibling() == static_cast<wxWindow*>(nullptr) );
 
-    CHECK( newwin->GetNextSibling() == static_cast<wxWindow*>(NULL) );
+    CHECK( newwin->GetNextSibling() == static_cast<wxWindow*>(nullptr) );
     CHECK( newwin->GetPrevSibling() == m_window );
 
     wxDELETE(newwin);
@@ -434,9 +434,9 @@ TEST_CASE_METHOD(WindowTestCase, "Window::FindWindowBy", "[window]")
     CHECK( wxWindow::FindWindowByName("name") == m_window );
     CHECK( wxWindow::FindWindowByLabel("label") == m_window );
 
-    CHECK( wxWindow::FindWindowById(wxID_HIGHEST + 3) == NULL );
-    CHECK( wxWindow::FindWindowByName("noname") == NULL );
-    CHECK( wxWindow::FindWindowByLabel("nolabel") == NULL );
+    CHECK( wxWindow::FindWindowById(wxID_HIGHEST + 3) == nullptr );
+    CHECK( wxWindow::FindWindowByName("noname") == nullptr );
+    CHECK( wxWindow::FindWindowByLabel("nolabel") == nullptr );
 }
 
 TEST_CASE_METHOD(WindowTestCase, "Window::SizerErrors", "[window][sizer][error]")

@@ -43,7 +43,7 @@
 
 bool wxNonOwnedWindow::DoClearShape()
 {
-    if (::SetWindowRgn(GetHwnd(), NULL, TRUE) == 0)
+    if (::SetWindowRgn(GetHwnd(), nullptr, TRUE) == 0)
     {
         wxLogLastError(wxT("SetWindowRgn"));
         return false;
@@ -56,10 +56,10 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
     // Windows takes ownership of the region, so
     // we'll have to make a copy of the region to give to it.
-    DWORD noBytes = ::GetRegionData(GetHrgnOf(region), 0, NULL);
+    DWORD noBytes = ::GetRegionData(GetHrgnOf(region), 0, nullptr);
     RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
     ::GetRegionData(GetHrgnOf(region), noBytes, rgnData);
-    HRGN hrgn = ::ExtCreateRegion(NULL, noBytes, rgnData);
+    HRGN hrgn = ::ExtCreateRegion(nullptr, noBytes, rgnData);
     delete[] (char*) rgnData;
 
     // SetWindowRgn expects the region to be in coordinates
@@ -140,7 +140,7 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 wxNonOwnedWindow::wxNonOwnedWindow()
 {
 #if wxUSE_GRAPHICS_CONTEXT
-    m_shapeImpl = NULL;
+    m_shapeImpl = nullptr;
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     m_activeDPI = wxDefaultSize;
@@ -185,8 +185,8 @@ static bool IsPerMonitorDPIAware(HWND hwnd)
     #define WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((WXDPI_AWARENESS_CONTEXT)-4)
     typedef WXDPI_AWARENESS_CONTEXT(WINAPI * GetWindowDpiAwarenessContext_t)(HWND hwnd);
     typedef BOOL(WINAPI * AreDpiAwarenessContextsEqual_t)(WXDPI_AWARENESS_CONTEXT dpiContextA, WXDPI_AWARENESS_CONTEXT dpiContextB);
-    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = NULL;
-    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = NULL;
+    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = nullptr;
+    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = nullptr;
     static bool s_initDone = false;
 
     if ( !s_initDone )

@@ -259,7 +259,7 @@ public:
     */
     wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
                                  const wxBitmapBundle& bmp = wxBitmapBundle(),
-                                 wxPropertyGridPage* pageObj = NULL );
+                                 wxPropertyGridPage* pageObj = nullptr );
 
     /**
         Deletes all properties and all pages.
@@ -413,7 +413,7 @@ public:
     */
     virtual wxPropertyGridPage* InsertPage( int index, const wxString& label,
                                             const wxBitmapBundle& bmp = wxBitmapBundle(),
-                                            wxPropertyGridPage* pageObj = NULL );
+                                            wxPropertyGridPage* pageObj = nullptr );
 
     /**
         Returns @true if any property on any page has been modified by the user.

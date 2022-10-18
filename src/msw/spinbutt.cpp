@@ -111,7 +111,7 @@ bool wxSpinButton::Create(wxWindow *parent,
                        GetHwndOf(parent),
                        m_windowId,
                        wxGetInstance(),
-                       NULL, // no buddy
+                       nullptr, // no buddy
                        m_max, m_min,
                        m_min // initial position
                      );

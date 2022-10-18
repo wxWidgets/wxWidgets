@@ -367,7 +367,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     lastKeyDownEvent = event;
-    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+    if ( impl == nullptr || !impl->DoHandleKeyEvent(event) )
         [super keyDown:event];
     lastKeyDownEvent = nil;
 }
@@ -375,28 +375,28 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (void) keyUp:(NSEvent*) event
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+    if ( impl == nullptr || !impl->DoHandleKeyEvent(event) )
         [super keyUp:event];
 }
 
 - (void) flagsChanged:(NSEvent*) event
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+    if ( impl == nullptr || !impl->DoHandleKeyEvent(event) )
         [super flagsChanged:event];
 }
 
 - (void) rightMouseDown:(NSEvent*) event
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || !impl->DoHandleMouseEvent( event ) )
+    if ( impl == nullptr || !impl->DoHandleMouseEvent( event ) )
         [super rightMouseDown:event];
 }
 
 - (void) rightMouseUp:(NSEvent*) event
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || !impl->DoHandleMouseEvent( event ) )
+    if ( impl == nullptr || !impl->DoHandleMouseEvent( event ) )
         [super rightMouseUp:event];
 }
 
@@ -426,7 +426,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) textField );
 
     BOOL r = [super becomeFirstResponder];
-    if ( impl != NULL && r )
+    if ( impl != nullptr && r )
         impl->DoNotifyFocusSet();
 
     return r;
@@ -542,7 +542,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (BOOL)_handleClipboardEvent:(wxEventType)type
 {
     wxWidgetImpl *impl = wxWidgetImpl::FindFromWXWidget(self);
-    wxWindow* wxpeer = impl ? impl->GetWXPeer() : NULL;
+    wxWindow* wxpeer = impl ? impl->GetWXPeer() : nullptr;
     if ( wxpeer )
     {
         wxClipboardTextEvent evt(type, wxpeer->GetId());
@@ -1098,22 +1098,22 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 {
     if (m_textView && position >=0)
     {
-        NSFont* font = NULL;
-        NSColor* bgcolor = NULL;
-        NSColor* fgcolor = NULL;
-        NSNumber* ultype = NULL;
-        NSColor* ulcolor = NULL;
+        NSFont* font = nullptr;
+        NSColor* bgcolor = nullptr;
+        NSColor* fgcolor = nullptr;
+        NSNumber* ultype = nullptr;
+        NSColor* ulcolor = nullptr;
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that NSTextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
         if (position < (long) [[m_textView string] length])
         {
             NSTextStorage* storage = [m_textView textStorage];
-            font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
-            bgcolor = [storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL];
-            fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
-            ultype = [storage attribute:NSUnderlineStyleAttributeName atIndex:position effectiveRange:NULL];
-            ulcolor = [storage attribute:NSUnderlineColorAttributeName atIndex:position effectiveRange:NULL];
+            font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:nullptr];
+            bgcolor = [storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:nullptr];
+            fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:nullptr];
+            ultype = [storage attribute:NSUnderlineStyleAttributeName atIndex:position effectiveRange:nullptr];
+            ulcolor = [storage attribute:NSUnderlineColorAttributeName atIndex:position effectiveRange:nullptr];
         }
         else
         {
@@ -1721,7 +1721,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxWidgetCocoaImpl* c = NULL;
+    wxWidgetCocoaImpl* c = nullptr;
 
     if ( style & wxTE_MULTILINE )
     {

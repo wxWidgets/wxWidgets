@@ -67,20 +67,20 @@ void wxRichTextIndentsSpacingPage::Init()
     m_dontUpdate = false;
 
 ////@begin wxRichTextIndentsSpacingPage member initialisation
-    m_alignmentLeft = NULL;
-    m_alignmentRight = NULL;
-    m_alignmentJustified = NULL;
-    m_alignmentCentred = NULL;
-    m_alignmentIndeterminate = NULL;
-    m_indentLeft = NULL;
-    m_indentLeftFirst = NULL;
-    m_indentRight = NULL;
-    m_outlineLevelCtrl = NULL;
-    m_spacingBefore = NULL;
-    m_spacingAfter = NULL;
-    m_spacingLine = NULL;
-    m_pageBreakCtrl = NULL;
-    m_previewCtrl = NULL;
+    m_alignmentLeft = nullptr;
+    m_alignmentRight = nullptr;
+    m_alignmentJustified = nullptr;
+    m_alignmentCentred = nullptr;
+    m_alignmentIndeterminate = nullptr;
+    m_indentLeft = nullptr;
+    m_indentLeftFirst = nullptr;
+    m_indentRight = nullptr;
+    m_outlineLevelCtrl = nullptr;
+    m_spacingBefore = nullptr;
+    m_spacingAfter = nullptr;
+    m_spacingLine = nullptr;
+    m_pageBreakCtrl = nullptr;
+    m_previewCtrl = nullptr;
 ////@end wxRichTextIndentsSpacingPage member initialisation
 
 }

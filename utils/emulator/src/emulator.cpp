@@ -75,7 +75,7 @@ static const wxCmdLineEntryDesc sg_cmdLineDesc[] =
     { wxCMD_LINE_SWITCH, "h", "help", "displays help on the command line parameters" },
     { wxCMD_LINE_SWITCH, "v", "version", "print version" },
 
-    { wxCMD_LINE_PARAM,  NULL, NULL, "config file 1", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_PARAM,  nullptr, nullptr, "config file 1", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
     wxCMD_LINE_DESC_END
 };
@@ -91,8 +91,8 @@ static const wxCmdLineEntryDesc sg_cmdLineDesc[] =
 
 wxEmulatorApp::wxEmulatorApp()
 {
-    m_xnestWindow = NULL;
-    m_containerWindow = NULL;
+    m_xnestWindow = nullptr;
+    m_containerWindow = nullptr;
     m_displayNumber = wxT("100");
     m_xnestPID = 0;
 
@@ -259,7 +259,7 @@ bool wxEmulatorApp::LoadEmulator(const wxString& appDir)
 // frame constructor
 wxEmulatorFrame::wxEmulatorFrame(const wxString& title,
     const wxPoint& pos, const wxSize& size)
-    : wxFrame(NULL, wxID_ANY, title, pos, size)
+    : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(emulator));
@@ -311,7 +311,7 @@ void wxEmulatorFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 #ifdef __WXX11__
     if (wxGetApp().m_xnestWindow)
     {
-        wxGetApp().m_xnestWindow->SetHandle((WXWindow) NULL);
+        wxGetApp().m_xnestWindow->SetHandle((WXWindow) nullptr);
     }
 #endif
     this->Destroy();
@@ -382,7 +382,7 @@ void wxEmulatorContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxEmulatorContainer::OnEraseBackground(wxEraseEvent& event)
 {
-    wxDC* dc wxDUMMY_INITIALIZE(NULL);
+    wxDC* dc wxDUMMY_INITIALIZE(nullptr);
 
     if (event.GetDC())
     {

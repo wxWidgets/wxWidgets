@@ -76,7 +76,7 @@ void HtmlWindowTestCase::setUp()
 void HtmlWindowTestCase::tearDown()
 {
     DeleteTestWindow(m_win);
-    m_win = NULL;
+    m_win = nullptr;
 }
 
 // ----------------------------------------------------------------------------

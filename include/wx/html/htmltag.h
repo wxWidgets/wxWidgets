@@ -35,7 +35,7 @@ private:
     wxHtmlTagsCacheData& Cache() { return *m_Cache; }
 
 public:
-    wxHtmlTagsCache() {m_Cache = NULL;}
+    wxHtmlTagsCache() {m_Cache = nullptr;}
     wxHtmlTagsCache(const wxString& source);
     virtual ~wxHtmlTagsCache();
 

@@ -48,14 +48,14 @@ static wxMenuItem *GetMenuItemAt( const wxMenu *menu, size_t position )
     if ( position < menu->GetMenuItemCount() )
         return menu->FindItemByPosition( position );
     else
-        return NULL;
+        return nullptr;
 }
 
 static void AddItemActionToGroup( const wxMenuItem *groupItem, QAction *itemAction )
 {
     QAction *groupItemAction = groupItem->GetHandle();
     QActionGroup *itemActionGroup = groupItemAction->actionGroup();
-    wxASSERT_MSG( itemActionGroup != NULL, "An action group should have been setup" );
+    wxASSERT_MSG( itemActionGroup != nullptr, "An action group should have been setup" );
     itemActionGroup->addAction( itemAction );
 }
 
@@ -70,11 +70,11 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             // If a neighbouring menu item is a radio item then add this item to the
             // same action group, otherwise start a new group:
 
-            if ( previousItem != NULL && previousItem->GetKind() == wxITEM_RADIO )
+            if ( previousItem != nullptr && previousItem->GetKind() == wxITEM_RADIO )
             {
                 AddItemActionToGroup( previousItem, itemAction );
             }
-            else if ( successiveItem != NULL && successiveItem->GetKind() == wxITEM_RADIO )
+            else if ( successiveItem != nullptr && successiveItem->GetKind() == wxITEM_RADIO )
             {
                 AddItemActionToGroup( successiveItem, itemAction );
             }
@@ -119,7 +119,7 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             break;
     }
     // Insert the action into the actual menu:
-    QAction *successiveItemAction = ( successiveItem != NULL ) ? successiveItem->GetHandle() : NULL;
+    QAction *successiveItemAction = ( successiveItem != nullptr ) ? successiveItem->GetHandle() : nullptr;
     qtMenu->insertAction( successiveItemAction, itemAction );
     // Menu items in Qt can be part of multiple menus, so a menu will not take ownership
     // when one is added to it. Take it explicitly, otherwise it will create a memory leak.
@@ -134,8 +134,8 @@ wxMenuItem *wxMenu::DoAppend(wxMenuItem *item)
     wxMenuItem *previousItem = GetMenuItemAt( this, GetMenuItemCount() - 1 );
     wxMenuItem *successiveItem = GetMenuItemAt( this, GetMenuItemCount() );
 
-    if ( wxMenuBase::DoAppend( item ) == NULL )
-        return NULL;
+    if ( wxMenuBase::DoAppend( item ) == nullptr )
+        return nullptr;
 
     InsertMenuItemAction( this, previousItem, item, successiveItem );
 
@@ -151,8 +151,8 @@ wxMenuItem *wxMenu::DoInsert(size_t insertPosition, wxMenuItem *item)
     wxMenuItem *previousItem = GetMenuItemAt( this, insertPosition - 1 );
     wxMenuItem *successiveItem = GetMenuItemAt( this, insertPosition );
 
-    if ( wxMenuBase::DoInsert( insertPosition, item ) == NULL )
-        return NULL;
+    if ( wxMenuBase::DoInsert( insertPosition, item ) == nullptr )
+        return nullptr;
 
     InsertMenuItemAction( this, previousItem, item, successiveItem );
 
@@ -162,8 +162,8 @@ wxMenuItem *wxMenu::DoInsert(size_t insertPosition, wxMenuItem *item)
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
-    if ( wxMenuBase::DoRemove( item ) == NULL )
-        return NULL;
+    if ( wxMenuBase::DoRemove( item ) == nullptr )
+        return nullptr;
 
     m_qtMenu->removeAction( item->GetHandle() );
 
@@ -233,7 +233,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
 static QAction *GetActionAt( const QWidget *qtWidget, size_t pos )
 {
     QList< QAction * > actions = qtWidget->actions();
-    return pos < static_cast< unsigned >( actions.size() ) ? actions.at( pos ) : NULL;
+    return pos < static_cast< unsigned >( actions.size() ) ? actions.at( pos ) : nullptr;
 }
 
 
@@ -256,8 +256,8 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu;
 
-    if (( menu = wxMenuBarBase::Remove( pos )) == NULL )
-        return NULL;
+    if (( menu = wxMenuBarBase::Remove( pos )) == nullptr )
+        return nullptr;
 
     m_qtMenuBar->removeAction( GetActionAt( m_qtMenuBar, pos ));
     return menu;
@@ -301,7 +301,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 void wxMenuBar::Detach()
 {
     // the QMenuBar probably was deleted by Qt as setMenuBar takes ownership
-    m_qtMenuBar = NULL;
+    m_qtMenuBar = nullptr;
     wxMenuBarBase::Detach();
 }
 
