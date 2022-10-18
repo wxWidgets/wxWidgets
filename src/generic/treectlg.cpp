@@ -3005,10 +3005,6 @@ void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetFont( m_normalFont );
     dc.SetPen( m_dottedPen );
 
-    // this is now done dynamically
-    //if(GetImageList() == NULL)
-    // m_lineHeight = (int)(dc.GetCharHeight() + 4);
-
     int y = 2;
     PaintLevel( m_anchor, dc, 0, y );
 }
@@ -3995,8 +3991,6 @@ void wxGenericTreeCtrl::CalculatePositions()
     dc.SetFont( m_normalFont );
 
     dc.SetPen( m_dottedPen );
-    //if(GetImageList() == NULL)
-    // m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
     int y = 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
