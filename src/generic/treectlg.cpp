@@ -714,7 +714,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
                 if ( (GetImage() != NO_IMAGE) && theCtrl->HasImages() )
                 {
                     int image_h;
-                    theCtrl->GetImageList()->GetSize(GetImage(),
+                    theCtrl->GetImageLogicalSize(theCtrl, GetImage(),
                                                         image_w, image_h);
                 }
 
@@ -851,7 +851,7 @@ wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
     int image = GetCurrentImage();
     if ( image != NO_IMAGE && control->HasImages() )
     {
-        control->GetImageList()->GetSize(image, image_w, image_h);
+        control->GetImageLogicalSize(control, image, image_w, image_h);
         image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
     }
 
@@ -2385,7 +2385,7 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         for (int i = 0; i < n ; i++)
         {
             int width = 0, height = 0;
-            GetImageList()->GetSize(i, width, height);
+            GetImageLogicalSize(this, i, width, height);
             if (height > m_lineHeight) m_lineHeight = height;
         }
     }
@@ -2399,7 +2399,7 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         for (int i = 0; i < n ; i++)
         {
             int width = 0, height = 0;
-            m_imagesState.GetImageList()->GetSize(i, width, height);
+            m_imagesState.GetImageLogicalSize(this, i, width, height);
             if (height > m_lineHeight) m_lineHeight = height;
         }
     }
@@ -2413,7 +2413,7 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         for (int i = 0; i < n ; i++)
         {
             int width = 0, height = 0;
-            m_imagesButtons.GetImageList()->GetSize(i, width, height);
+            m_imagesButtons.GetImageLogicalSize(this, i, width, height);
             if (height > m_lineHeight) m_lineHeight = height;
         }
     }
@@ -2517,7 +2517,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         if ( HasImages() )
         {
-            GetImageList()->GetSize(image, image_w, image_h);
+            GetImageLogicalSize(this, image, image_w, image_h);
             image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
         else
@@ -3446,7 +3446,7 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
         if ( image != NO_IMAGE && HasImages() )
         {
             int image_h;
-            GetImageList()->GetSize( image, image_w, image_h );
+            GetImageLogicalSize( this, image, image_w, image_h );
             image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
 

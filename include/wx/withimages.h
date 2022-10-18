@@ -129,6 +129,37 @@ public:
         return m_imageList;
     }
 
+    // Return logical size of the image to use or (0, 0) if there are none.
+    wxSize GetImageLogicalSize(const wxWindow* window, int iconIndex) const
+    {
+        wxSize size;
+
+        if ( iconIndex != NO_IMAGE )
+        {
+            if ( !m_images.empty() )
+            {
+                size = m_images.at(iconIndex).GetPreferredLogicalSizeFor(window);
+            }
+            else if ( m_imageList )
+            {
+                // All images in the image list are of the same size.
+                size = m_imageList->GetSize();
+            }
+        }
+
+        return size;
+    }
+
+    // Overload provided to facilitate transition from the existing code using
+    // wxImageList::GetSize() -- don't use it in the new code.
+    void GetImageLogicalSize(const wxWindow* window, int iconIndex,
+                             int& width, int& height) const
+    {
+        const wxSize size = GetImageLogicalSize(window, iconIndex);
+        width = size.x;
+        height = size.y;
+    }
+
     // Return the bitmap to use at the current DPI of the given window.
     //
     // If index == NO_IMAGE, just returns wxNullBitmap.
