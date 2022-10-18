@@ -53,8 +53,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 3
-            runner: ubuntu-18.04
+          - name: Ubuntu 22.04 wxGTK 3
+            runner: ubuntu-22.04
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
           - name: macOS 10.15 wxOSX
