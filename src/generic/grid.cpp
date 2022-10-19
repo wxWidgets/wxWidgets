@@ -3301,7 +3301,7 @@ void wxGrid::CalcWindowSizes()
 bool wxGrid::Redimension( const wxGridTableMessage& msg )
 {
     int i;
-    bool result = false;
+    int labelArea = 0;
 
     // Clear the attribute cache as the attribute might refer to a different
     // cell than stored in the cache after adding/removing rows/columns.
@@ -3375,11 +3375,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                 attrProvider->UpdateAttrRows( pos, numRows );
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_rowLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_RowLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
@@ -3426,11 +3423,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_rowLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_RowLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_ROWS_DELETED:
@@ -3498,11 +3492,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             }
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_rowLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_RowLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_COLS_INSERTED:
@@ -3568,11 +3559,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
                 attrProvider->UpdateAttrCols( pos, numCols );
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_colLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_ColLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
@@ -3625,11 +3613,8 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             UpdateCurrentCellOnRedim();
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_colLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_ColLabels;
         break;
 
         case wxGRIDTABLE_NOTIFY_COLS_DELETED:
@@ -3702,20 +3687,19 @@ bool wxGrid::Redimension( const wxGridTableMessage& msg )
             }
 
             CalcDimensions();
-
-            if ( ShouldRefresh() )
-                m_colLabelWin->Refresh();
         }
-        result = true;
+        labelArea = wxGA_ColLabels;
         break;
     }
 
     InvalidateBestSize();
 
-    if (result && ShouldRefresh() )
-        Refresh();
+    if ( labelArea && ShouldRefresh() )
+    {
+        RefreshArea(labelArea | wxGA_Cells);
+    }
 
-    return result;
+    return labelArea;
 }
 
 wxArrayInt wxGrid::CalcRowLabelsExposed( const wxRegion& reg, wxGridWindow *gridWindow ) const
@@ -5154,8 +5138,7 @@ void wxGrid::RefreshAfterRowPosChange()
     }
 
     // and make the changes visible
-    m_rowLabelWin->Refresh();
-    m_gridWin->Refresh();
+    RefreshArea(wxGA_Cells | wxGA_RowLabels);
 }
 
 void wxGrid::SetRowsOrder(const wxArrayInt& order)
@@ -5254,6 +5237,8 @@ void wxGrid::RefreshAfterColPosChange()
         }
     }
 
+    int areas = wxGA_Cells;
+
     // and make the changes visible
     if ( m_useNativeHeader )
     {
@@ -5261,9 +5246,10 @@ void wxGrid::RefreshAfterColPosChange()
     }
     else
     {
-        m_colLabelWin->Refresh();
+        areas |= wxGA_ColLabels;
     }
-    m_gridWin->Refresh();
+
+    RefreshArea(areas);
 }
 
 void wxGrid::SetColumnsOrder(const wxArrayInt& order)
@@ -5519,7 +5505,7 @@ void wxGrid::ClearGrid()
 
         m_table->Clear();
         if ( ShouldRefresh() )
-            m_gridWin->Refresh();
+            RefreshArea(wxGA_Cells);
     }
 }
 
@@ -5760,6 +5746,49 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
                                               m_gridWin);
         if ( !rect.IsEmpty() )
             m_gridWin->Refresh(false, &rect);
+    }
+}
+
+void wxGrid::RefreshArea(int areas)
+{
+    if ( areas == wxGA_All )
+    {
+        // Normally if we want to refresh the entire grid we call
+        // Refresh() instead, but to make this function consistent
+        // and correct, just forward to it if the argument is wxGA_All.
+        Refresh();
+        return;
+    }
+
+    // Corner area
+    if ( (areas & wxGA_Corner) != 0 )
+        m_cornerLabelWin->Refresh();
+
+    int cw, ch;
+    GetClientSize(&cw, &ch);
+
+    // Cells area
+    if ( (areas & wxGA_Cells) != 0 )
+    {
+        const wxRect rect(GetRowLabelSize(), GetColLabelSize(), cw, ch);
+
+        Refresh(true, &rect);
+    }
+
+    // RowLabels area
+    if ( (areas & wxGA_RowLabels) != 0 && GetRowLabelSize() > 0 )
+    {
+        const wxRect rect(0, GetColLabelSize(), GetRowLabelSize(), ch);
+
+        Refresh(true, &rect);
+    }
+
+    // ColLabels area
+    if ( (areas & wxGA_ColLabels) != 0 && GetColLabelSize() > 0 )
+    {
+        const wxRect rect(GetRowLabelSize(), 0, cw, GetColLabelSize());
+
+        Refresh(true, &rect);
     }
 }
 
@@ -7025,8 +7054,7 @@ void wxGrid::SetUseNativeColLabels( bool native )
         SetColLabelSize( height );
     }
 
-    GetColLabelWindow()->Refresh();
-    m_cornerLabelWin->Refresh();
+    RefreshArea(wxGA_Heading);
 }
 
 void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
@@ -8822,14 +8850,7 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
 
         if ( ShouldRefresh() )
         {
-            m_rowLabelWin->Refresh();
-            m_colLabelWin->Refresh();
-            m_cornerLabelWin->Refresh();
-
-            if ( m_rowFrozenLabelWin )
-                m_rowFrozenLabelWin->Refresh();
-            if ( m_colFrozenLabelWin )
-                m_colFrozenLabelWin->Refresh();
+            RefreshArea(wxGA_Labels);
         }
     }
 }
@@ -8845,8 +8866,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
 
         if ( ShouldRefresh() )
         {
-            m_rowLabelWin->Refresh();
-            m_colLabelWin->Refresh();
+            RefreshArea(wxGA_Labels);
         }
     }
 }
@@ -8860,8 +8880,7 @@ void wxGrid::SetLabelFont( const wxFont& font )
 
     if ( ShouldRefresh() )
     {
-        m_rowLabelWin->Refresh();
-        m_colLabelWin->Refresh();
+        RefreshArea(wxGA_Labels);
     }
 }
 
@@ -8894,7 +8913,7 @@ void wxGrid::SetRowLabelAlignment( int horiz, int vert )
 
     if ( ShouldRefresh() )
     {
-        m_rowLabelWin->Refresh();
+        RefreshArea(wxGA_RowLabels);
     }
 }
 
@@ -8927,7 +8946,7 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
 
     if ( ShouldRefresh() )
     {
-        m_colLabelWin->Refresh();
+        RefreshArea(wxGA_ColLabels);
     }
 }
 
@@ -8977,7 +8996,7 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
         m_colLabelTextOrientation = textOrientation;
 
     if ( ShouldRefresh() )
-        m_colLabelWin->Refresh();
+        RefreshArea(wxGA_ColLabels);
 }
 
 void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
@@ -9145,17 +9164,8 @@ void wxGrid::SetGridFrozenBorderPenWidth(int width)
 void wxGrid::RedrawGridLines()
 {
     // the lines will be redrawn when the window is thawed or shown
-    if ( !ShouldRefresh() )
-        return;
-
-    m_gridWin->Refresh();
-
-    if ( m_frozenColGridWin )
-        m_frozenColGridWin->Refresh();
-    if ( m_frozenRowGridWin )
-        m_frozenRowGridWin->Refresh();
-    if ( m_frozenCornerGridWin )
-        m_frozenCornerGridWin->Refresh();
+    if ( ShouldRefresh() )
+        RefreshArea(wxGA_Cells);
 }
 
 void wxGrid::EnableGridLines( bool enable )
