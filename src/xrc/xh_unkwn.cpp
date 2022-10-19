@@ -36,7 +36,7 @@ public:
         : wxPanel(parent, id, pos, size, style | wxTAB_TRAVERSAL | wxNO_BORDER,
                   controlName + wxT("_container")),
           m_controlName(controlName),
-          m_control(NULL)
+          m_control(nullptr)
     {
         m_bg = UseBgCol() ? GetBackgroundColour() : wxColour();
     }
@@ -113,7 +113,7 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
 {
     wxPanel::RemoveChild(child);
-    m_control = NULL;
+    m_control = nullptr;
 
     InvalidateBestSize();
 }
@@ -129,7 +129,7 @@ wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
 
 wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
 {
-    wxASSERT_MSG( m_instance == NULL,
+    wxASSERT_MSG( m_instance == nullptr,
                   wxT("'unknown' controls can't be subclassed, use wxXmlResource::AttachUnknownControl") );
 
     wxPanel *panel =

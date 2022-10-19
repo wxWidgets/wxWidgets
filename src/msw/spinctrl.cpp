@@ -152,7 +152,7 @@ wxSpinCtrl *wxSpinCtrl::GetSpinForTextCtrl(WXHWND hwndBuddy)
     const SpinForTextCtrl::const_iterator
         it = gs_spinForTextCtrl.find(hwndBuddy);
     if ( it == gs_spinForTextCtrl.end() )
-        return NULL;
+        return nullptr;
 
     wxSpinCtrl * const spin = it->second;
 
@@ -265,8 +265,8 @@ void wxSpinCtrl::NormalizeValue()
 void wxSpinCtrl::Init()
 {
     m_blockEvent = false;
-    m_hwndBuddy = NULL;
-    m_wndProcBuddy = NULL;
+    m_hwndBuddy = nullptr;
+    m_wndProcBuddy = nullptr;
     m_oldValue = INT_MIN;
 }
 
@@ -312,7 +312,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                   (
                    exStyle,                // sunken border
                    wxT("EDIT"),            // window class
-                   NULL,                   // no window title
+                   nullptr,                // no window title
                    msStyle,                // style (will be shown later)
                    pos.x, pos.y,           // position
                    0, 0,                   // size (will be set later)
@@ -403,7 +403,7 @@ void wxSpinCtrl::Refresh(bool eraseBackground, const wxRect *rect)
 
     // Don't bother computing the intersection of the given rectangle with the
     // buddy control, just always refresh it entirely, as it's much simpler.
-    ::RedrawWindow(GetBuddyHwnd(), NULL, NULL, flags);
+    ::RedrawWindow(GetBuddyHwnd(), nullptr, nullptr, flags);
 }
 
 // ----------------------------------------------------------------------------

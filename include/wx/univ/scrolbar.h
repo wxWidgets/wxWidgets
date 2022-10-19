@@ -254,7 +254,7 @@ protected:
     void HandleThumbMove(wxScrollBar *scrollbar, const wxMouseEvent& event);
 
 
-    // the window (scrollbar) which has capture or NULL and the flag telling if
+    // the window (scrollbar) which has capture or nullptr and the flag telling if
     // the mouse is inside the element which captured it or not
     wxWindow *m_winCapture;
     bool      m_winHasMouse;

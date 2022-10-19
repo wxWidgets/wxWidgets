@@ -78,10 +78,10 @@
 #if USE_NOTEBOOK_ANTIFLICKER
 
 // the pointer to standard spin button wnd proc
-static WXWNDPROC gs_wndprocNotebookSpinBtn = NULL;
+static WXWNDPROC gs_wndprocNotebookSpinBtn = nullptr;
 
 // the pointer to standard tab control wnd proc
-static WXWNDPROC gs_wndprocNotebook = NULL;
+static WXWNDPROC gs_wndprocNotebook = nullptr;
 
 LRESULT APIENTRY
 wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -123,7 +123,7 @@ wxEND_EVENT_TABLE()
 void wxNotebook::Init()
 {
 #if wxUSE_UXTHEME
-    m_hbrBackground = NULL;
+    m_hbrBackground = nullptr;
 #endif // wxUSE_UXTHEME
 
 #if USE_NOTEBOOK_ANTIFLICKER
@@ -192,7 +192,7 @@ bool wxNotebook::Create(wxWindow *parent,
             // get a copy of standard class and modify it
             WNDCLASS wc;
 
-            if ( ::GetClassInfo(NULL, WC_TABCONTROL, &wc) )
+            if ( ::GetClassInfo(nullptr, WC_TABCONTROL, &wc) )
             {
                 gs_wndprocNotebook = wc.lpfnWndProc;
                 wc.lpszClassName = wxT("_wx_SysTabCtl32");
@@ -446,7 +446,7 @@ void wxNotebook::OnImagesChanged()
 {
     wxImageList* const iml = GetUpdatedImageListFor(this);
 
-    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : NULL);
+    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -539,7 +539,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 
 void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 {
-    wxCHECK_RET( page, wxT("NULL page in wxNotebook::AdjustPageSize") );
+    wxCHECK_RET( page, wxT("null page in wxNotebook::AdjustPageSize") );
 
     const wxRect r = GetPageSize();
     if ( !r.IsEmpty() )
@@ -557,7 +557,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 {
     wxNotebookPage *pageRemoved = wxNotebookBase::DoRemovePage(nPage);
     if ( !pageRemoved )
-        return NULL;
+        return nullptr;
 
     // hide the removed page to maintain the invariant that only the
     // selected page is visible and others are hidden:
@@ -625,7 +625,7 @@ bool wxNotebook::InsertPage(size_t nPage,
                             bool bSelect,
                             int imageId)
 {
-    wxCHECK_MSG( pPage != NULL, false, wxT("NULL page in wxNotebook::InsertPage") );
+    wxCHECK_MSG( pPage != nullptr, false, wxT("null page in wxNotebook::InsertPage") );
     wxCHECK_MSG( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false,
                  wxT("invalid index in wxNotebook::InsertPage") );
 
@@ -1146,7 +1146,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
                                     9 /* TABP_PANE */,
                                     0,
                                     &rc,
-                                    NULL
+                                    nullptr
                                 );
     } // deselect bitmap from the memory HDC before using it
 
@@ -1164,7 +1164,7 @@ void wxNotebook::UpdateBgBrush()
     }
     else // no themes or we've got user-defined solid colour
     {
-        m_hbrBackground = NULL;
+        m_hbrBackground = nullptr;
     }
 }
 
@@ -1215,7 +1215,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
                                         9 /* TABP_PANE */,
                                         0,
                                         &rc,
-                                        NULL
+                                        nullptr
                                     );
             return true;
         }
@@ -1278,7 +1278,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             {
                 WCHAR szwThemeFile[1024];
                 WCHAR szwThemeColor[256];
-                if (S_OK == ::GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, NULL, 0))
+                if (S_OK == ::GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, nullptr, 0))
                 {
                     wxString themeFile(szwThemeFile);
                     if (themeFile.Find(wxT("Aero")) != -1 && wxString(szwThemeColor) == wxT("NormalColor"))

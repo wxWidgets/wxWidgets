@@ -22,9 +22,9 @@
 class MyCanvas : public wxScrolledWindow
 {
 public:
-    // view may be NULL if we're not associated with one yet, but parent must
+    // view may be null if we're not associated with one yet, but parent must
     // be a valid pointer
-    MyCanvas(wxView *view, wxWindow *parent = NULL);
+    MyCanvas(wxView *view, wxWindow *parent = nullptr);
     virtual ~MyCanvas();
 
     virtual void OnDraw(wxDC& dc) override;
@@ -45,7 +45,7 @@ public:
     {
         wxASSERT_MSG( m_view, "should be associated with a view" );
 
-        m_view = NULL;
+        m_view = nullptr;
     }
 
 private:
@@ -53,7 +53,7 @@ private:
 
     wxView *m_view;
 
-    // the segment being currently drawn or NULL if none
+    // the segment being currently drawn or nullptr if none
     DoodleSegment *m_currentSegment;
 
     // the last mouse press position
@@ -66,11 +66,11 @@ private:
 class DrawingView : public wxView
 {
 public:
-    DrawingView() : wxView(), m_canvas(NULL) {}
+    DrawingView() : wxView(), m_canvas(nullptr) {}
 
     virtual bool OnCreate(wxDocument *doc, long flags) override;
     virtual void OnDraw(wxDC *dc) override;
-    virtual void OnUpdate(wxView *sender, wxObject *hint = NULL) override;
+    virtual void OnUpdate(wxView *sender, wxObject *hint = nullptr) override;
     virtual bool OnClose(bool deleteWindow = true) override;
 
     DrawingDocument* GetDocument();
@@ -92,7 +92,7 @@ private:
 class TextEditView : public wxView
 {
 public:
-    TextEditView() : wxView(), m_text(NULL) {}
+    TextEditView() : wxView(), m_text(nullptr) {}
 
     virtual bool OnCreate(wxDocument *doc, long flags) override;
     virtual void OnDraw(wxDC *dc) override;
@@ -137,7 +137,7 @@ public:
     virtual bool OnCreate(wxDocument*, long flags) override;
     virtual void OnDraw(wxDC*) override;
     virtual bool OnClose(bool deleteWindow = true) override;
-    virtual void OnUpdate(wxView *sender, wxObject *hint = NULL) override;
+    virtual void OnUpdate(wxView *sender, wxObject *hint = nullptr) override;
 
     ImageDocument* GetDocument();
 

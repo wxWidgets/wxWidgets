@@ -89,7 +89,7 @@ public:
     virtual ~MyServer();
 
     void Disconnect();
-    bool IsConnected() { return m_connection != NULL; }
+    bool IsConnected() { return m_connection != nullptr; }
     MyConnection *GetConnection() { return m_connection; }
 
     void Advise();

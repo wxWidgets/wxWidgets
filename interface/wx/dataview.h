@@ -1398,7 +1398,7 @@ public:
         Call this to ensure that the given item is visible.
     */
     virtual void EnsureVisible(const wxDataViewItem& item,
-                               const wxDataViewColumn* column = NULL);
+                               const wxDataViewColumn* column = nullptr);
 
     /**
         Expands the item.
@@ -1470,7 +1470,7 @@ public:
         item (as opposed to being on the item as a whole), then this is the
         column that the focus is on.
 
-        Returns NULL if no column currently has focus.
+        Returns @NULL if no column currently has focus.
 
         @see GetCurrentItem()
 
@@ -1496,12 +1496,12 @@ public:
         @param item
             A valid item.
         @param col
-            If non-@NULL, the rectangle returned corresponds to the
+            If non-null, the rectangle returned corresponds to the
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
-                               const wxDataViewColumn* col = NULL) const;
+                               const wxDataViewColumn* col = nullptr) const;
 
     /**
         Returns the window corresponding to the main area of the control.
@@ -3100,14 +3100,14 @@ public:
         after adding any items to the control (or, conversely, items must not
         be added before the columns are set up).
     */
-    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Prepends an item (i.e.\ a row) to the control.
 
         See remarks for AppendItem() for preconditions of this method.
     */
-    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Inserts an item (i.e.\ a row) to the control.
@@ -3117,7 +3117,7 @@ public:
         Additionally, @a row must be less than or equal to the current number
         of items in the control (see GetItemCount()).
     */
-    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Delete the row at position @a row.
@@ -3260,7 +3260,7 @@ public:
                                    const wxString& text,
                                    int icon = -1,
                                    int expanded = -1,
-                                   wxClientData* data = NULL);
+                                   wxClientData* data = nullptr);
 
     /**
         Appends an item to the given @a parent.
@@ -3268,7 +3268,7 @@ public:
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
                               int icon = -1,
-                              wxClientData* data = NULL);
+                              wxClientData* data = nullptr);
 
     /**
         Creates the control and a wxDataViewTreeStore as its internal model.
@@ -3357,7 +3357,7 @@ public:
                                    const wxString& text,
                                    int icon = -1,
                                    int expanded = -1,
-                                   wxClientData* data = NULL);
+                                   wxClientData* data = nullptr);
 
     /**
         Calls the same method from wxDataViewTreeStore but uses
@@ -3367,7 +3367,7 @@ public:
                               const wxDataViewItem& previous,
                               const wxString& text,
                               int icon = -1,
-                              wxClientData* data = NULL);
+                              wxClientData* data = nullptr);
 
     /**
         Returns true if item is a container.
@@ -3382,7 +3382,7 @@ public:
                                     const wxString& text,
                                     int icon = -1,
                                     int expanded = -1,
-                                    wxClientData* data = NULL);
+                                    wxClientData* data = nullptr);
 
     /**
         Calls the same method from wxDataViewTreeStore but uses
@@ -3391,7 +3391,7 @@ public:
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
                                int icon = -1,
-                               wxClientData* data = NULL);
+                               wxClientData* data = nullptr);
 
     /**
         Sets the image list.
@@ -3489,7 +3489,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Prepends an item (=row) and fills it with @a values.
@@ -3498,7 +3498,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Inserts an item (=row) and fills it with @a values.
@@ -3507,7 +3507,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Delete the item (=row) at position @a pos.
@@ -3602,7 +3602,7 @@ public:
                                    const wxString& text,
                                    const wxBitmapBundle& icon = wxBitmapBundle(),
                                    const wxBitmapBundle& expanded = wxBitmapBundle(),
-                                   wxClientData* data = NULL);
+                                   wxClientData* data = nullptr);
 
     /**
         Append an item.
@@ -3610,7 +3610,7 @@ public:
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
                               const wxBitmapBundle& icon = wxBitmapBundle(),
-                              wxClientData* data = NULL);
+                              wxClientData* data = nullptr);
 
     /**
         Delete all item in the model.
@@ -3666,7 +3666,7 @@ public:
                                    const wxString& text,
                                    const wxBitmapBundle& icon = wxBitmapBundle(),
                                    const wxBitmapBundle& expanded = wxBitmapBundle(),
-                                   wxClientData* data = NULL);
+                                   wxClientData* data = nullptr);
 
     /**
         Inserts an item after @a previous.
@@ -3675,7 +3675,7 @@ public:
                               const wxDataViewItem& previous,
                               const wxString& text,
                               const wxBitmapBundle& icon = wxBitmapBundle(),
-                              wxClientData* data = NULL);
+                              wxClientData* data = nullptr);
 
     /**
         Inserts a container before the first child item or @a parent.
@@ -3684,7 +3684,7 @@ public:
                                     const wxString& text,
                                     const wxBitmapBundle& icon = wxBitmapBundle(),
                                     const wxBitmapBundle& expanded = wxBitmapBundle(),
-                                    wxClientData* data = NULL);
+                                    wxClientData* data = nullptr);
 
     /**
         Inserts an item before the first child item or @a parent.
@@ -3692,7 +3692,7 @@ public:
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
                                const wxBitmapBundle& icon = wxBitmapBundle(),
-                               wxClientData* data = NULL);
+                               wxClientData* data = nullptr);
 
     /**
         Sets the client data associated with the item.

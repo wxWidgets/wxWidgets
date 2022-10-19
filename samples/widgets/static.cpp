@@ -194,28 +194,28 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
 #if wxUSE_MARKUP
     m_chkGreen =
 #endif // wxUSE_MARKUP
-                NULL;
+                nullptr;
 
     m_radioHAlign =
-    m_radioVAlign = (wxRadioBox *)NULL;
+    m_radioVAlign = nullptr;
 
-    m_statText = NULL;
+    m_statText = nullptr;
 #if wxUSE_STATLINE
-    m_statLine = (wxStaticLine *)NULL;
+    m_statLine = nullptr;
 #endif // wxUSE_STATLINE
 #if wxUSE_MARKUP
-    m_statMarkup = NULL;
+    m_statMarkup = nullptr;
 #endif // wxUSE_MARKUP
 
-    m_sizerStatBox = (wxStaticBoxSizer *)NULL;
-    m_sizerStatic = (wxSizer *)NULL;
+    m_sizerStatBox = nullptr;
+    m_sizerStatic = nullptr;
 
     m_textBox =
     m_textLabel =
 #if wxUSE_MARKUP
     m_textLabelWithMarkup =
 #endif // wxUSE_MARKUP
-                            NULL;
+                            nullptr;
 }
 
 void StaticWidgetsPage::CreateContent()

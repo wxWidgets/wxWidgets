@@ -102,7 +102,7 @@ void wxListBox::Init()
     m_maxWidth = 0;
     m_scrollRangeY = 0;
     m_maxWidthItem = -1;
-    m_strings.unsorted = NULL;
+    m_strings.unsorted = nullptr;
 
     // no items hence no current item
     m_current = -1;
@@ -204,7 +204,7 @@ wxListBox::~wxListBox()
     else
         delete m_strings.unsorted;
 
-    m_strings.sorted = NULL;
+    m_strings.sorted = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -247,7 +247,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         idx = IsSorted() ? m_strings.sorted->Add(item)
                          : (m_strings.unsorted->Insert(item, pos), pos++);
 
-        m_itemsClientData.Insert(NULL, idx);
+        m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
         // call the wxCheckListBox hook
@@ -284,7 +284,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
         // horz scrollbar [dis]appear
         wxCoord width;
 
-        GetTextExtent(s, &width, NULL);
+        GetTextExtent(s, &width, nullptr);
 
         // it might have increased if the new string is long
         if ( width > m_maxWidth )
@@ -640,7 +640,7 @@ void wxListBox::UpdateItems()
 
         // we don't need to calculate x position as we always refresh the
         // entire line(s)
-        CalcScrolledPosition(0, rect.y, NULL, &rect.y);
+        CalcScrolledPosition(0, rect.y, nullptr, &rect.y);
 
         wxLogTrace(wxT("listbox"), wxT("Refreshing items %d..%d (%d-%d)"),
                    m_updateFrom, m_updateFrom + m_updateCount - 1,
@@ -696,8 +696,8 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     wxRect rectUpdate = GetUpdateClientRect();
 
     int yTop, yBottom;
-    CalcUnscrolledPosition(0, rectUpdate.GetTop(), NULL, &yTop);
-    CalcUnscrolledPosition(0, rectUpdate.GetBottom(), NULL, &yBottom);
+    CalcUnscrolledPosition(0, rectUpdate.GetTop(), nullptr, &yTop);
+    CalcUnscrolledPosition(0, rectUpdate.GetBottom(), nullptr, &yBottom);
 
     // get the items which must be redrawn
     wxCoord lineHeight = GetLineHeight();
@@ -775,7 +775,7 @@ wxCoord wxListBox::GetMaxWidth() const
         unsigned int count = GetCount();
         for ( unsigned int n = 0; n < count; n++ )
         {
-            GetTextExtent(this->GetString(n), &width, NULL);
+            GetTextExtent(this->GetString(n), &width, nullptr);
             if ( width > m_maxWidth )
             {
                 self->m_maxWidth = width;
@@ -984,7 +984,7 @@ void wxListBox::DoEnsureVisible(int n)
     }
 
     int first;
-    GetViewStart(0, &first);
+    GetViewStart(nullptr, &first);
     if ( first > n )
     {
         // we need to scroll upwards, so make the current item appear on top
@@ -1109,7 +1109,7 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 
     int y, index;
 
-    CalcUnscrolledPosition(0, point.y, NULL, &y);
+    CalcUnscrolledPosition(0, point.y, nullptr, &y);
     index = y / GetLineHeight();
 
     // mouse is above the first item or below the last item

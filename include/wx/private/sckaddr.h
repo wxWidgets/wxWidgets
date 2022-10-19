@@ -257,7 +257,7 @@ private:
     T *Get() const
     {
         wxCHECK_MSG( static_cast<int>(m_family) == AddressFamily<T>::value,
-                     NULL,
+                     nullptr,
                      "socket address family mismatch" );
 
         return reinterpret_cast<T *>(m_addr);
@@ -266,7 +266,7 @@ private:
     void InitUnspec()
     {
         m_family = FAMILY_UNSPEC;
-        m_addr = NULL;
+        m_addr = nullptr;
         m_len = 0;
     }
 
@@ -286,7 +286,7 @@ private:
         }
         else // no address to copy
         {
-            m_addr = NULL;
+            m_addr = nullptr;
             m_len = 0;
         }
     }

@@ -144,7 +144,7 @@ wxBEGIN_EVENT_TABLE(wxSpinCtrlGTKBase, wxSpinCtrlBase)
 wxEND_EVENT_TABLE()
 
 wxSpinCtrlGTKBase::wxSpinCtrlGTKBase()
-    : m_textOverride(NULL)
+    : m_textOverride(nullptr)
 {
 }
 
@@ -167,7 +167,7 @@ bool wxSpinCtrlGTKBase::GTKResetTextOverrideOnly()
         return false;
 
     delete m_textOverride;
-    m_textOverride = NULL;
+    m_textOverride = nullptr;
 
     return true;
 }
@@ -249,7 +249,7 @@ double wxSpinCtrlGTKBase::DoGetValue() const
 
 double wxSpinCtrlGTKBase::GTKGetValue() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     // Get value directly from current control text, just as
     // gtk_spin_button_update() would do. Calling gtk_spin_button_update() causes
@@ -263,7 +263,7 @@ double wxSpinCtrlGTKBase::GTKGetValue() const
     int handled = 0;
     g_signal_emit(m_widget, sig_id, 0, &value, &handled);
     if (!handled)
-        value = g_strtod(gtk_entry_get_text(GTK_ENTRY(m_widget)), NULL);
+        value = g_strtod(gtk_entry_get_text(GTK_ENTRY(m_widget)), nullptr);
     GtkAdjustment* adj =
         gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(m_widget));
     const double lower = gtk_adjustment_get_lower(adj);
@@ -278,28 +278,28 @@ double wxSpinCtrlGTKBase::GTKGetValue() const
 
 double wxSpinCtrlGTKBase::DoGetMin() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     double min = 0;
-    gtk_spin_button_get_range( GTK_SPIN_BUTTON(m_widget), &min, NULL);
+    gtk_spin_button_get_range( GTK_SPIN_BUTTON(m_widget), &min, nullptr);
     return min;
 }
 
 double wxSpinCtrlGTKBase::DoGetMax() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     double max = 0;
-    gtk_spin_button_get_range( GTK_SPIN_BUTTON(m_widget), NULL, &max);
+    gtk_spin_button_get_range( GTK_SPIN_BUTTON(m_widget), nullptr, &max);
     return max;
 }
 
 double wxSpinCtrlGTKBase::DoGetIncrement() const
 {
-    wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
+    wxCHECK_MSG( (m_widget != nullptr), 0, wxT("invalid spin button") );
 
     double inc = 0;
-    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), &inc, NULL);
+    gtk_spin_button_get_increments( GTK_SPIN_BUTTON(m_widget), &inc, nullptr);
     return inc;
 }
 
@@ -319,7 +319,7 @@ bool wxSpinCtrlGTKBase::GetSnapToTicks() const
 
 void wxSpinCtrlGTKBase::SetValue( const wxString& value )
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+    wxCHECK_RET( (m_widget != nullptr), wxT("invalid spin button") );
 
     double n;
     if ( wxSscanf(value, "%lg", &n) == 1 )
@@ -341,7 +341,7 @@ void wxSpinCtrlGTKBase::SetValue( const wxString& value )
 
 void wxSpinCtrlGTKBase::DoSetValue( double value )
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+    wxCHECK_RET( (m_widget != nullptr), wxT("invalid spin button") );
 
     GTKResetTextOverride();
 
@@ -351,7 +351,7 @@ void wxSpinCtrlGTKBase::DoSetValue( double value )
 
 void wxSpinCtrlGTKBase::SetSnapToTicks(bool snap_to_ticks)
 {
-    wxCHECK_RET( (m_widget != NULL), "invalid spin button" );
+    wxCHECK_RET( (m_widget != nullptr), "invalid spin button" );
 
     gtk_spin_button_set_snap_to_ticks( GTK_SPIN_BUTTON(m_widget), snap_to_ticks);
 }
@@ -371,7 +371,7 @@ void wxSpinCtrlGTKBase::SetSelection(long from, long to)
 
 void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+    wxCHECK_RET( (m_widget != nullptr), wxT("invalid spin button") );
 
     // Negative values in the range are allowed only if base == 10
     if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(int(minVal), int(maxVal), GetBase()) )
@@ -413,7 +413,7 @@ void wxSpinCtrlGTKBase::GtkEnableEvents()
 
 void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid spin ctrl") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid spin ctrl") );
 
     if (event.GetKeyCode() == WXK_RETURN)
     {
@@ -457,7 +457,7 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
     windows.push_back(spinbutton->panel);
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const

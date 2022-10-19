@@ -127,8 +127,8 @@ class WXDLLIMPEXP_RIBBON wxRibbonGalleryEvent : public wxCommandEvent
 public:
     wxRibbonGalleryEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonGallery* gallery = NULL,
-                       wxRibbonGalleryItem* item = NULL)
+                       wxRibbonGallery* gallery = nullptr,
+                       wxRibbonGalleryItem* item = nullptr)
         : wxCommandEvent(command_type, win_id)
         , m_gallery(gallery), m_item(item)
     {

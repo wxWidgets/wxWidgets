@@ -367,7 +367,7 @@ protected:
     // OnDrawItem.
     virtual void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags ) const;
 
-    // NULL popup can be used to indicate default interface
+    // null popup can be used to indicate default interface
     virtual void DoSetPopupControl(wxComboPopup* popup) override;
 
     // clears all allocated client data

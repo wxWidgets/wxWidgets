@@ -96,7 +96,7 @@ wxEND_EVENT_TABLE()
 void wxFrame::Init()
 {
 #if wxUSE_MENUS
-    m_hMenu = NULL;
+    m_hMenu = nullptr;
     m_menuDepth = 0;
 #endif // wxUSE_MENUS
 
@@ -107,7 +107,7 @@ void wxFrame::Init()
     m_wasMinimized = false;
 
 #if wxUSE_TASKBARBUTTON
-    m_taskBarButton = NULL;
+    m_taskBarButton = nullptr;
 #endif
 }
 
@@ -139,7 +139,7 @@ bool wxFrame::Create(wxWindow *parent,
                                                            DWORD dwFlag);
         wxDynamicLibrary dllUser32(wxT("user32.dll"));
 
-        ChangeWindowMessageFilter_t pfnChangeWindowMessageFilter = NULL;
+        ChangeWindowMessageFilter_t pfnChangeWindowMessageFilter = nullptr;
         wxDL_INIT_FUNC(pfn, ChangeWindowMessageFilter, dllUser32);
         if ( pfnChangeWindowMessageFilter )
         {
@@ -283,7 +283,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number,
                                         wxWindowID id,
                                         const wxString& name)
 {
-    wxStatusBar *statusBar wxDUMMY_INITIALIZE(NULL);
+    wxStatusBar *statusBar wxDUMMY_INITIALIZE(nullptr);
 
 #if wxUSE_NATIVE_STATUSBAR
     if ( !UsesNativeStatusBar() )
@@ -339,7 +339,7 @@ void wxFrame::PositionStatusBar()
     // account for this difference. If not, the statusbar will be positioned
     // too high or low.
     int shOld;
-    m_frameStatusBar->GetSize(NULL, &shOld);
+    m_frameStatusBar->GetSize(nullptr, &shOld);
 
     // Resize the status bar to its default height, as it could have been set
     // to a wrong value before by WM_SIZE sent during the frame creation and
@@ -349,7 +349,7 @@ void wxFrame::PositionStatusBar()
     m_frameStatusBar->SetSize(x, h, w, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
 
     int sh;
-    m_frameStatusBar->GetSize(NULL, &sh);
+    m_frameStatusBar->GetSize(nullptr, &sh);
     h += shOld - sh;
 
     // Since we wish the status bar to be directly under the client area,
@@ -371,7 +371,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         m_hMenu = (WXHMENU)0;
         InternalSetMenuBar();
     }
-    else // set new non NULL menu bar
+    else // set new non null menu bar
     {
         // Can set a menubar several times.
         if ( menubar->GetHMenu() )
@@ -515,7 +515,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 #endif // wxUSE_TOOLBAR
 
         if (style & wxFULLSCREEN_NOMENUBAR)
-            SetMenu((HWND)GetHWND(), (HMENU) NULL);
+            SetMenu((HWND)GetHWND(), (HMENU) nullptr);
 
 #if wxUSE_STATUSBAR
         wxStatusBar *theStatusBar = GetStatusBar();

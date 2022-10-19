@@ -67,7 +67,7 @@ public:
 
     // implement base class pure virtual methods
     virtual const void *Request(const wxString& item,
-                                size_t *size = NULL,
+                                size_t *size = nullptr,
                                 wxIPCFormat format = wxIPC_TEXT) override;
     virtual bool StartAdvise(const wxString& item) override;
     virtual bool StopAdvise(const wxString& item) override;
@@ -142,7 +142,7 @@ public:
 
     virtual bool ValidHost(const wxString& host) override;
 
-    // Call this to make a connection. Returns NULL if cannot.
+    // Call this to make a connection. Returns nullptr if cannot.
     virtual wxConnectionBase *MakeConnection(const wxString& host,
                                              const wxString& server,
                                              const wxString& topic) override;

@@ -184,7 +184,7 @@ wxString wxDataInputStream::ReadString()
         if ( tmp )
         {
             m_input->Read(tmp.data(), len);
-            ret = m_conv->cMB2WC(tmp.data(), len, NULL);
+            ret = m_conv->cMB2WC(tmp.data(), len, nullptr);
         }
 #else
         wxStringBuffer buf(ret, len);

@@ -96,7 +96,7 @@ private:
     // Common part of all ctors.
     void Init()
     {
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
     class wxAddRemoveImpl* m_impl;

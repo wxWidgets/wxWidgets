@@ -104,7 +104,7 @@ public:
         digits of the native toolkit currently used.
 
         The version numbers returned are thus detected at run-time and not compile-time
-        (except when this is not possible e.g. wxMotif).
+        if possible.
 
         E.g. if your program is using wxGTK port this function will return wxPORT_GTK
         and put in given pointers the versions of the GTK library in use.
@@ -112,9 +112,9 @@ public:
 
         If a micro version is not available it will have a value of 0.
     */
-    virtual wxPortId GetToolkitVersion(int* major = NULL,
-                                       int* minor = NULL,
-                                       int* micro = NULL) const = 0;
+    virtual wxPortId GetToolkitVersion(int* major = nullptr,
+                                       int* minor = nullptr,
+                                       int* micro = nullptr) const = 0;
 
     /**
         Returns @true if @c fprintf(stderr) goes somewhere, @false otherwise.

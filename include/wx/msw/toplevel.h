@@ -91,7 +91,7 @@ public:
     //
     // The pointer returned by this method belongs to the window and will be
     // deleted when the window itself is, do not delete it yourself. May return
-    // NULL if getting the system menu failed.
+    // nullptr if getting the system menu failed.
     wxMenu *MSWGetSystemMenu() const;
 
     // Enable or disable the close button of the specified window.
@@ -188,7 +188,7 @@ protected:
     bool                  m_fsIsShowing;
 
     // Save the current focus to m_winLastFocused if we're not iconized (the
-    // focus is always NULL when we're iconized).
+    // focus is always null when we're iconized).
     void DoSaveLastFocus();
 
     // Restore focus to m_winLastFocused if possible and needed.
@@ -204,7 +204,7 @@ private:
     void DoSetIcons();
 
 
-    // The system menu: initially NULL but can be set (once) by
+    // The system menu: initially nullptr but can be set (once) by
     // MSWGetSystemMenu(). Owned by this window.
     wxMenu *m_menuSystem;
 

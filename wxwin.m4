@@ -573,7 +573,7 @@ dnl WX_STANDARD_OPTIONS([options-to-add])
 dnl
 dnl Adds to the configure script one or more of the following options:
 dnl   --enable-[debug|unicode|shared|wxshared|wxdebug]
-dnl   --with-[gtk|msw|motif|x11|mac|dfb]
+dnl   --with-[gtk|msw|x11|mac|dfb]
 dnl   --with-wxversion
 dnl Then checks for their presence and eventually set the DEBUG, UNICODE, SHARED,
 dnl PORT, WX_SHARED, WX_DEBUG, variables to one of the "yes", "no", "auto" values.
@@ -599,7 +599,7 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
                [WX_ARG_ENABLE_YESNOAUTO([shared], [SHARED], [Build as shared library], [auto])])
 
         dnl WX_ARG_WITH_YESNOAUTO cannot be used for --with-toolkit since it's an option
-        dnl which must be able to accept the auto|gtk1|gtk2|msw|... values
+        dnl which must be able to accept the auto|gtk2|msw|... values
         ifelse(index([$1], [toolkit]), [-1],,
                [
                 AC_ARG_WITH([toolkit],
@@ -615,12 +615,12 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
                     TOOLKIT="$withval"
 
                     dnl PORT must be one of the allowed values
-                    if test "$TOOLKIT" != "gtk1" -a "$TOOLKIT" != "gtk2" -a "$TOOLKIT" != "gtk3" -a \
-                            "$TOOLKIT" != "msw" -a "$TOOLKIT" != "motif" -a \
+                    if test "$TOOLKIT" != "gtk2" -a "$TOOLKIT" != "gtk3" -a \
+                            "$TOOLKIT" != "msw" -a \
                             "$TOOLKIT" != "osx_carbon" -a "$TOOLKIT" != "osx_cocoa" -a \
                             "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11" -a "$TOOLKIT" != "base"; then
                         AC_MSG_ERROR([
-    Unrecognized option value (allowed values: auto, gtk1, gtk2, gtk3, msw, motif, osx_carbon, osx_cocoa, dfb, x11, base)
+    Unrecognized option value (allowed values: auto, gtk2, gtk3, msw, osx_carbon, osx_cocoa, dfb, x11, base)
                         ])
                     fi
 
@@ -871,11 +871,9 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             dnl so we will detect the wxWidgets relative build setting and use it
             AC_MSG_CHECKING([which wxWidgets toolkit was selected])
 
-            WX_GTKPORT1=$(expr "$WX_SELECTEDCONFIG" : ".*gtk1.*")
             WX_GTKPORT2=$(expr "$WX_SELECTEDCONFIG" : ".*gtk2.*")
             WX_GTKPORT3=$(expr "$WX_SELECTEDCONFIG" : ".*gtk3.*")
             WX_MSWPORT=$(expr "$WX_SELECTEDCONFIG" : ".*msw.*")
-            WX_MOTIFPORT=$(expr "$WX_SELECTEDCONFIG" : ".*motif.*")
             WX_OSXCOCOAPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_cocoa.*")
             WX_OSXCARBONPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_carbon.*")
             WX_X11PORT=$(expr "$WX_SELECTEDCONFIG" : ".*x11.*")
@@ -883,11 +881,9 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             WX_BASEPORT=$(expr "$WX_SELECTEDCONFIG" : ".*base.*")
 
             WX_PORT="unknown"
-            if test "$WX_GTKPORT1" != "0"; then WX_PORT="gtk1"; fi
             if test "$WX_GTKPORT2" != "0"; then WX_PORT="gtk2"; fi
             if test "$WX_GTKPORT3" != "0"; then WX_PORT="gtk3"; fi
             if test "$WX_MSWPORT" != "0"; then WX_PORT="msw"; fi
-            if test "$WX_MOTIFPORT" != "0"; then WX_PORT="motif"; fi
             if test "$WX_OSXCOCOAPORT" != "0"; then WX_PORT="osx_cocoa"; fi
             if test "$WX_OSXCARBONPORT" != "0"; then WX_PORT="osx_carbon"; fi
             if test "$WX_X11PORT" != "0"; then WX_PORT="x11"; fi

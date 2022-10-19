@@ -71,7 +71,7 @@ void wxTextCtrl::Init()
 {
     m_dirty = false;
 
-    m_privateContextMenu = NULL;
+    m_privateContextMenu = nullptr;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -628,7 +628,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     }
 
 #if wxUSE_MENUS
-    if (m_privateContextMenu == NULL)
+    if (m_privateContextMenu == nullptr)
     {
         m_privateContextMenu = new wxMenu;
         m_privateContextMenu->Append(wxID_UNDO, _("&Undo"));

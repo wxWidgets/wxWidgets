@@ -188,7 +188,7 @@ static void children_get_preferred_size(const GList* p)
         if (gtk_widget_get_visible(child->widget))
         {
             GtkRequisition req;
-            gtk_widget_get_preferred_size(child->widget, &req, NULL);
+            gtk_widget_get_preferred_size(child->widget, &req, nullptr);
         }
     }
 }
@@ -197,7 +197,7 @@ static void pizza_get_preferred_width(GtkWidget* widget, int* minimum, int* natu
 {
     children_get_preferred_size(WX_PIZZA(widget)->m_children);
     *minimum = 0;
-    gtk_widget_get_size_request(widget, natural, NULL);
+    gtk_widget_get_size_request(widget, natural, nullptr);
     if (*natural < 0)
         *natural = 0;
 }
@@ -206,7 +206,7 @@ static void pizza_get_preferred_height(GtkWidget* widget, int* minimum, int* nat
 {
     children_get_preferred_size(WX_PIZZA(widget)->m_children);
     *minimum = 0;
-    gtk_widget_get_size_request(widget, NULL, natural);
+    gtk_widget_get_size_request(widget, nullptr, natural);
     if (*natural < 0)
         *natural = 0;
 }
@@ -313,7 +313,7 @@ static void class_init(void* g_class, void*)
             G_TYPE_FROM_CLASS(g_class),
             G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET(wxPizzaClass, set_scroll_adjustments),
-            NULL, NULL,
+            nullptr, nullptr,
             g_cclosure_user_marshal_VOID__OBJECT_OBJECT,
             G_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 #endif
@@ -336,16 +336,16 @@ GType wxPizza::type()
         }
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
-            NULL, NULL,
+            nullptr, nullptr,
             class_init,
-            NULL, NULL,
+            nullptr, nullptr,
             sizeof(wxPizza), 0,
-            NULL, NULL
+            nullptr, nullptr
         };
         type = g_type_register_static(
             GTK_TYPE_FIXED, name, &info, GTypeFlags(0));
 #ifdef __WXGTK3__
-        const GInterfaceInfo interface_info = { NULL, NULL, NULL };
+        const GInterfaceInfo interface_info = { nullptr, nullptr, nullptr };
         g_type_add_interface_static(type, GTK_TYPE_SCROLLABLE, &interface_info);
 #endif
     }
@@ -354,9 +354,9 @@ GType wxPizza::type()
 
 GtkWidget* wxPizza::New(long windowStyle)
 {
-    GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
+    GtkWidget* widget = GTK_WIDGET(g_object_new(type(), nullptr));
     wxPizza* pizza = WX_PIZZA(widget);
-    pizza->m_children = NULL;
+    pizza->m_children = nullptr;
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;
     pizza->m_windowStyle = windowStyle;

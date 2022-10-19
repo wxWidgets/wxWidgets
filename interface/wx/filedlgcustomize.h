@@ -240,7 +240,7 @@ public:
         @param n The number of strings, must be positive, as there is no way to
             add more strings later and creating an empty combobox is not very
             useful.
-        @param strings A non-@NULL pointer to an array of @a n strings.
+        @param strings A non-null pointer to an array of @a n strings.
      */
     wxFileDialogChoice* AddChoice(size_t n, const wxString* strings);
 
@@ -324,7 +324,7 @@ public:
 
     void SomeFunc()
     {
-        wxFileDialog dialog(NULL, "Save document", wxString(), "file.my",
+        wxFileDialog dialog(nullptr, "Save document", wxString(), "file.my",
                             "My files (*.my)|*.my",
                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 

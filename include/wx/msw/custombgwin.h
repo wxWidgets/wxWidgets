@@ -24,7 +24,7 @@ class wxCustomBackgroundWindow : public W,
 public:
     typedef W BaseWindowClass;
 
-    wxCustomBackgroundWindow() { m_backgroundBrush = NULL; }
+    wxCustomBackgroundWindow() { m_backgroundBrush = nullptr; }
 
     virtual ~wxCustomBackgroundWindow() { delete m_backgroundBrush; }
 
@@ -32,7 +32,7 @@ protected:
     virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) override
     {
         delete m_backgroundBrush;
-        m_backgroundBrush = bmp.IsOk() ? new wxBrush(bmp) : NULL;
+        m_backgroundBrush = bmp.IsOk() ? new wxBrush(bmp) : nullptr;
 
         // Our transparent children should use our background if we have it,
         // otherwise try to restore m_inheritBgCol to some reasonable value: true

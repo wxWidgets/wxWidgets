@@ -29,7 +29,7 @@ public:
                const wxString& title,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               int n = 0, const wxString choices[] = NULL,
+               int n = 0, const wxString choices[] = nullptr,
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
@@ -65,7 +65,7 @@ public:
                 const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
@@ -126,7 +126,7 @@ public:
     // -------------------------------
 
     // This function can be used to check if the given radio button HWND
-    // belongs to one of our radio boxes. If it doesn't, NULL is returned.
+    // belongs to one of our radio boxes. If it doesn't, nullptr is returned.
     static wxRadioBox *GetFromRadioButtonHWND(WXHWND hwnd);
 
     virtual bool MSWCommand(WXUINT param, WXWORD id) override;

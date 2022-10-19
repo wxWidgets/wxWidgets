@@ -967,7 +967,7 @@ tabLangData[] =
     { wxLANGUAGE_ZULU,                                             "zu"             , "zu"                        , "zu_ZA"        , 0x35, 0x01, wxLayout_LeftToRight, "isiZulu","isiZulu" },
     { wxLANGUAGE_ZULU_SOUTH_AFRICA,                                "zu-ZA"          , "zu_ZA"                     , ""             , 0x35, 0x01, wxLayout_LeftToRight, "isiZulu (South Africa)","isiZulu (iNingizimu Afrika)" },
 
-    { 0, NULL, NULL, NULL, 0, 0, wxLayout_Default, NULL, NULL }
+    { 0, nullptr, nullptr, nullptr, 0, 0, wxLayout_Default, nullptr, nullptr }
 };
 
 // Data table for known language scripts
@@ -1138,7 +1138,7 @@ tabScriptData[] =
     { "Zyyy", "common" },
     { "Zzzz", "unknown" },
 
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 void wxUILocale::InitLanguagesDB()

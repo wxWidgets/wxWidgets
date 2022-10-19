@@ -49,7 +49,7 @@ bool wxStaticText::Create(wxWindow *parent,
         return false;
     }
 
-    m_widget = gtk_label_new(NULL);
+    m_widget = gtk_label_new(nullptr);
     g_object_ref(m_widget);
 
     GtkJustification justify;
@@ -108,7 +108,7 @@ bool wxStaticText::Create(wxWindow *parent,
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
 #ifdef __WXGTK4__
-    g_object_set(m_widget, "xalign", labelAlignments[justify], NULL);
+    g_object_set(m_widget, "xalign", labelAlignments[justify], nullptr);
 #else
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
@@ -135,7 +135,7 @@ bool wxStaticText::Create(wxWindow *parent,
 
 void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid static text") );
 
     (this->*setter)(GTK_LABEL(m_widget), label);
 
@@ -209,7 +209,7 @@ bool wxStaticText::SetFont( const wxFont &font )
         else // No special attributes any more.
         {
             // Just remove any attributes we had set.
-            gtk_label_set_attributes(GTK_LABEL(m_widget), NULL);
+            gtk_label_set_attributes(GTK_LABEL(m_widget), nullptr);
         }
 
         // The underlines for mnemonics are incompatible with using attributes

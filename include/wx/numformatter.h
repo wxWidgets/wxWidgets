@@ -50,7 +50,7 @@ public:
     // Parse a string representing a number, possibly with thousands separator.
     //
     // Return true on success and stores the result in the provided location
-    // which must be a valid non-NULL pointer.
+    // which must be a valid non-null pointer.
     static bool FromString(wxString s, long *val);
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
     static bool FromString(wxString s, wxLongLong_t *val);

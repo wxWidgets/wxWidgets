@@ -211,7 +211,7 @@ protected:
     bool HasMenu() const
     {
 #if wxUSE_MENUS
-        return m_menu != NULL;
+        return m_menu != nullptr;
 #else // !wxUSE_MENUS
         return false;
 #endif // wxUSE_MENUS/!wxUSE_MENUS

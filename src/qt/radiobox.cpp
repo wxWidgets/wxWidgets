@@ -57,9 +57,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
 wxRadioBox::wxRadioBox() :
-    m_qtGroupBox(NULL),
-    m_qtButtonGroup(NULL),
-    m_qtGridLayout(NULL)
+    m_qtGroupBox(nullptr),
+    m_qtButtonGroup(nullptr),
+    m_qtGridLayout(nullptr)
 {
 }
 
@@ -199,13 +199,13 @@ static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
     // should be fast enough.
 
     QList< QAbstractButton * > buttons = group->buttons();
-    return n < static_cast< unsigned >( buttons.size() ) ? buttons.at( n ) : NULL;
+    return n < static_cast< unsigned >( buttons.size() ) ? buttons.at( n ) : nullptr;
 }
 
 #define INVALID_INDEX_MESSAGE wxT( "invalid radio box index" )
 
 #define CHECK_BUTTON( button, rc ) \
-    wxCHECK_MSG( button != NULL, rc, INVALID_INDEX_MESSAGE )
+    wxCHECK_MSG( button != nullptr, rc, INVALID_INDEX_MESSAGE )
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
@@ -329,7 +329,7 @@ wxString wxRadioBox::GetString(unsigned int n) const
 void wxRadioBox::SetString(unsigned int n, const wxString& s)
 {
     QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    wxCHECK_RET( qtButton != NULL, INVALID_INDEX_MESSAGE );
+    wxCHECK_RET( qtButton != nullptr, INVALID_INDEX_MESSAGE );
 
     qtButton->setText( wxQtConvertString( s ));
 }
@@ -337,14 +337,14 @@ void wxRadioBox::SetString(unsigned int n, const wxString& s)
 void wxRadioBox::SetSelection(int n)
 {
     QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    wxCHECK_RET( qtButton != NULL, INVALID_INDEX_MESSAGE );
+    wxCHECK_RET( qtButton != nullptr, INVALID_INDEX_MESSAGE );
     qtButton->setChecked( true );
 }
 
 int wxRadioBox::GetSelection() const
 {
     QAbstractButton *qtButton = m_qtButtonGroup->checkedButton();
-    if ( qtButton != NULL )
+    if ( qtButton != nullptr )
     {
         QList< QAbstractButton * > buttons = m_qtButtonGroup->buttons();
         return buttons.indexOf( qtButton );

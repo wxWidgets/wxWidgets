@@ -326,12 +326,12 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
     pgman->ClearSelection();
 
-    srand((unsigned int)(time(NULL) % UINT_MAX));
+    srand((unsigned int)(time(nullptr) % UINT_MAX));
 
     int failures = 0;
     bool _failed_ = false;
     wxVector<wxString> errorMessages;
-    wxDialog* dlg = NULL;
+    wxDialog* dlg = nullptr;
 
     dlg = new wxDialog(this,wxID_ANY,"wxPropertyGrid Regression Tests",
         wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
@@ -587,7 +587,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // in wxPropertyGridInterface functions is intentional.
         // Purpose is to test wxPGPropArgCls ctors.
 
-        //pg = (wxPropertyGrid*) NULL;
+        //pg = nullptr;
 
         wxArrayString test_arrstr_1;
         test_arrstr_1.Add("Apple");
@@ -695,7 +695,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg->SetPropertyValue("DateProperty",dt2);
 #endif
 
-        //pg = (wxPropertyGrid*) NULL;
+        //pg = nullptr;
 
         pgman->SelectPage(0);
 
@@ -1130,11 +1130,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_START_TEST(GetPropertyValues)
 
             page1 = pgman->GetPage(0);
-            pg1_values = page1->GetPropertyValues("Page1",NULL,wxPG_KEEP_STRUCTURE);
+            pg1_values = page1->GetPropertyValues("Page1",nullptr,wxPG_KEEP_STRUCTURE);
             page2 = pgman->GetPage(1);
-            pg2_values = page2->GetPropertyValues("Page2",NULL,wxPG_KEEP_STRUCTURE);
+            pg2_values = page2->GetPropertyValues("Page2",nullptr,wxPG_KEEP_STRUCTURE);
             page3 = pgman->GetPage(2);
-            pg3_values = page3->GetPropertyValues("Page3",NULL,wxPG_KEEP_STRUCTURE);
+            pg3_values = page3->GetPropertyValues("Page3",nullptr,wxPG_KEEP_STRUCTURE);
         }
 
         {

@@ -48,13 +48,13 @@ enum wxAutomationInstanceFlags
 class WXDLLIMPEXP_CORE wxAutomationObject: public wxObject
 {
 public:
-    wxAutomationObject(WXIDISPATCH* dispatchPtr = NULL);
+    wxAutomationObject(WXIDISPATCH* dispatchPtr = nullptr);
     virtual ~wxAutomationObject();
 
     // Set/get dispatch pointer
     void SetDispatchPtr(WXIDISPATCH* dispatchPtr) { m_dispatchPtr = dispatchPtr; }
     WXIDISPATCH* GetDispatchPtr() const { return m_dispatchPtr; }
-    bool IsOk() const { return m_dispatchPtr != NULL; }
+    bool IsOk() const { return m_dispatchPtr != nullptr; }
 
     // Get a dispatch pointer from the current object associated
     // with a ProgID, such as "Excel.Application"
@@ -67,7 +67,7 @@ public:
     // Low-level invocation function. Pass either an array of variants,
     // or an array of pointers to variants.
     bool Invoke(const wxString& member, int action,
-        wxVariant& retValue, int noArgs, wxVariant args[], const wxVariant* ptrArgs[] = NULL) const;
+        wxVariant& retValue, int noArgs, wxVariant args[], const wxVariant* ptrArgs[] = nullptr) const;
 
     // Invoke a member function
     wxVariant CallMethod(const wxString& method, int noArgs, wxVariant args[]);
@@ -80,7 +80,7 @@ public:
         const wxVariant& arg5 = wxNullVariant, const wxVariant& arg6 = wxNullVariant);
 
     // Get/Put property
-    wxVariant GetProperty(const wxString& property, int noArgs = 0, wxVariant args[] = NULL) const;
+    wxVariant GetProperty(const wxString& property, int noArgs = 0, wxVariant args[] = nullptr) const;
     wxVariant GetPropertyArray(const wxString& property, int noArgs, const wxVariant **args) const;
     wxVariant GetProperty(const wxString& property,
         const wxVariant& arg1, const wxVariant& arg2 = wxNullVariant,
@@ -103,7 +103,7 @@ public:
 
     // A way of initialising another wxAutomationObject with a dispatch object,
     // without having to deal with nasty IDispatch pointers.
-    bool GetObject(wxAutomationObject& obj, const wxString& property, int noArgs = 0, wxVariant args[] = NULL) const;
+    bool GetObject(wxAutomationObject& obj, const wxString& property, int noArgs = 0, wxVariant args[] = nullptr) const;
     bool GetObject(wxAutomationObject& obj, const wxString& property, int noArgs, const wxVariant **args) const;
 
     // Returns the locale identifier used in automation calls. The default is

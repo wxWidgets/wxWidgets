@@ -39,7 +39,7 @@ public:
                 const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // implement base class methods
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL) override;
+    virtual void SetFieldsCount(int number = 1, const int *widths = nullptr) override;
     virtual void SetStatusWidths(int n, const int widths[]) override;
 
     virtual bool GetFieldRect(int i, wxRect& rect) const override;

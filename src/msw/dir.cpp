@@ -338,7 +338,7 @@ bool wxDirData::Read(wxString *filename)
 
 wxDir::wxDir(const wxString& dirname)
 {
-    m_data = NULL;
+    m_data = nullptr;
 
     (void)Open(dirname);
 }
@@ -356,7 +356,7 @@ bool wxDir::Open(const wxString& dirname)
     }
     else
     {
-        m_data = NULL;
+        m_data = nullptr;
 
         return false;
     }
@@ -364,7 +364,7 @@ bool wxDir::Open(const wxString& dirname)
 
 bool wxDir::IsOpened() const
 {
-    return m_data != NULL;
+    return m_data != nullptr;
 }
 
 wxString wxDir::GetName() const
@@ -394,7 +394,7 @@ void wxDir::Close()
     if ( m_data )
     {
         delete m_data;
-        m_data = NULL;
+        m_data = nullptr;
     }
 }
 

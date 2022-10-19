@@ -123,7 +123,7 @@ void wxWindow::Init()
 {
 #if wxUSE_SCROLLBAR
     m_scrollbarVert =
-    m_scrollbarHorz = NULL;
+    m_scrollbarHorz = nullptr;
 #endif // wxUSE_SCROLLBAR
 
     m_isCurrent = false;
@@ -225,7 +225,7 @@ wxWindow::~wxWindow()
     // children and so will be deleted by DestroyChildren() call below and if
     // any code using the scrollbars would be called in the process or from
     // ~wxWindowBase, the app would crash:
-    m_scrollbarVert = m_scrollbarHorz = NULL;
+    m_scrollbarVert = m_scrollbarHorz = nullptr;
 #endif
 
     // we have to destroy our children before we're destroyed because our
@@ -523,7 +523,7 @@ bool wxWindow::Enable(bool enable)
         return false;
 
     // disabled window can't keep focus
-    if ( FindFocus() == this && GetParent() != NULL )
+    if ( FindFocus() == this && GetParent() != nullptr )
     {
         GetParent()->SetFocus();
     }
@@ -969,9 +969,9 @@ void wxWindow::SetScrollbar(int orient,
                 delete scrollbar;
 
                 if ( orient & wxVERTICAL )
-                    m_scrollbarVert = NULL;
+                    m_scrollbarVert = nullptr;
                 else
-                    m_scrollbarHorz = NULL;
+                    m_scrollbarHorz = nullptr;
 
                 // the client area increased as we removed a scrollbar
                 hasClientSizeChanged = true;
@@ -1096,7 +1096,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             continue;
 #endif // wxUSE_SCROLLBAR
 
-        // VS: Scrolling children has non-trivial semantics. If rect=NULL then
+        // VS: Scrolling children has non-trivial semantics. If rect=nullptr then
         //     it is easy: we scroll all children. Otherwise it gets
         //     complicated:
         //       1. if scrolling in one direction only, scroll only
@@ -1121,7 +1121,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             }
             // else: child outside of scrolling shaft, don't move
         }
-        else // scrolling in both axes or rect=NULL
+        else // scrolling in both axes or rect=nullptr
         {
             shouldMove = true;
         }
@@ -1292,7 +1292,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 
 #if wxUSE_MENUS
     // the last window over which Alt was pressed (used by OnKeyUp)
-    wxWindow *wxWindow::ms_winLastAltPress = NULL;
+    wxWindow *wxWindow::ms_winLastAltPress = nullptr;
 #endif // wxUSE_MENUS
 
 #if wxUSE_ACCEL || wxUSE_MENUS
@@ -1309,7 +1309,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
         return;
     }
 
-    ms_winLastAltPress = NULL;
+    ms_winLastAltPress = nullptr;
 #endif // wxUSE_MENUS
 
 #if wxUSE_ACCEL
@@ -1391,7 +1391,7 @@ wxMenuBar *wxWindow::GetParentFrameMenuBar() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void wxWindow::OnChar(wxKeyEvent& event)
@@ -1459,7 +1459,7 @@ void wxWindow::OnKeyUp(wxKeyEvent& event)
     }
 
     // in any case reset it
-    ms_winLastAltPress = NULL;
+    ms_winLastAltPress = nullptr;
 }
 
 #endif // wxUSE_MENUS

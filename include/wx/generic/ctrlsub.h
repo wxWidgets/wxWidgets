@@ -23,7 +23,7 @@ public:
 
     virtual void DoInitItemClientData()
     {
-        m_itemsClientData.resize(GetCount(), NULL);
+        m_itemsClientData.resize(GetCount(), nullptr);
     }
 
     virtual void DoSetItemClientData(unsigned int n, void *clientData)
@@ -79,7 +79,7 @@ protected:
             // it's more efficient to insert everything at once and then update
             // for big number of items to avoid moving the array contents
             // around (which would result in O(N^2) algorithm)
-            m_itemsClientData.Insert(NULL, pos, numItems);
+            m_itemsClientData.Insert(nullptr, pos, numItems);
 
             for ( unsigned int n = 0; n < numItems; ++n, ++pos )
                 m_itemsClientData[pos] = clientData[n];

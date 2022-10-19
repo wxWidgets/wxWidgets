@@ -194,7 +194,7 @@ public:
     {
     }
 
-    void GetContentArea( int &left , int &top , int &width , int &height ) const wxOVERRIDE
+    void GetContentArea( int &left , int &top , int &width , int &height ) const override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         NSRect r = [slf contentRect];
@@ -204,7 +204,7 @@ public:
         height = (int)r.size.height;
     }
 
-    void SetValue( wxInt32 value ) wxOVERRIDE
+    void SetValue( wxInt32 value ) override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         // avoid 'changed' events when setting the tab programmatically
@@ -215,7 +215,7 @@ public:
         [slf setDelegate:controller];
     }
 
-    wxInt32 GetValue() const wxOVERRIDE
+    wxInt32 GetValue() const override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         NSTabViewItem* selectedItem = [slf selectedTabViewItem];
@@ -225,7 +225,7 @@ public:
             return [slf indexOfTabViewItem:selectedItem]+1;
     }
 
-    void SetMaximum( wxInt32 maximum ) wxOVERRIDE
+    void SetMaximum( wxInt32 maximum ) override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         int cocoacount = [slf numberOfTabViewItems ];
@@ -253,7 +253,7 @@ public:
         [slf setDelegate:controller];
     }
 
-    void SetupTabs( const wxNotebook& notebook) wxOVERRIDE
+    void SetupTabs( const wxNotebook& notebook) override
     {
         int pcount = notebook.GetPageCount();
 
@@ -275,7 +275,7 @@ public:
         }
     }
 
-    int TabHitTest(const wxPoint & pt, long* flags) wxOVERRIDE
+    int TabHitTest(const wxPoint & pt, long* flags) override
     {
         int retval = wxNOT_FOUND;
         
@@ -335,7 +335,7 @@ public:
     m_peer = new wxMacControl( this );
     OSStatus err = CreateTabsControl(
         MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
-        tabsize, tabstyle, 0, NULL, GetPeer()->GetControlRefAddr() );
+        tabsize, tabstyle, 0, nullptr, GetPeer()->GetControlRefAddr() );
     verify_noerr( err );
 #endif
 */
@@ -347,7 +347,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                     long style,
                                     long WXUNUSED(extraStyle))
 {
-    static wxTabViewController* controller = NULL;
+    static wxTabViewController* controller = nullptr;
 
     if ( !controller )
         controller =[[wxTabViewController alloc] init];

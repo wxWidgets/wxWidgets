@@ -53,7 +53,7 @@ public:
                                           const wxBitmapBundle& bmpNormal,
                                           const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
-                                          wxObject *clientData = NULL,
+                                          wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
                                           const wxString& longHelp = wxEmptyString) override;
 

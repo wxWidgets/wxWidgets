@@ -456,11 +456,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame( bool stereoWindow )
-       : wxFrame(NULL, wxID_ANY, "wxWidgets OpenGL Cube Sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
     int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
 
-    new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
+    new TestGLCanvas(this, stereoWindow ? stereoAttribList : nullptr);
 
     SetIcon(wxICON(sample));
 

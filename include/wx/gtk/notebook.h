@@ -74,7 +74,7 @@ public:
 
   // geometry
   virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const override;
-  virtual int HitTest(const wxPoint& pt, long *flags = NULL) const override;
+  virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
 
   // operations
   // ----------

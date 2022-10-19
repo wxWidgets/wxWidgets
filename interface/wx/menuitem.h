@@ -102,13 +102,13 @@ public:
             May be @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, @c wxITEM_CHECK or
             @c wxITEM_RADIO.
         @param subMenu
-            If non-@NULL, indicates that the menu item is a submenu.
+            If non-null, indicates that the menu item is a submenu.
     */
-    wxMenuItem(wxMenu* parentMenu = NULL, int id = wxID_SEPARATOR,
+    wxMenuItem(wxMenu* parentMenu = nullptr, int id = wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& helpString = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu* subMenu = NULL);
+               wxMenu* subMenu = nullptr);
 
     /**
         Destructor.
@@ -288,13 +288,13 @@ public:
     wxColour& GetTextColour() const;
 
     /**
-       Extract the accelerator from the given menu string, return NULL if none
+       Extract the accelerator from the given menu string, return @NULL if none
        found.
     */
     static wxAcceleratorEntry *GetAccelFromString(const wxString& label);
 
     /**
-       Get our accelerator or NULL (caller must delete the pointer)
+       Get our accelerator or @NULL (caller must delete the pointer)
     */
     virtual wxAcceleratorEntry *GetAccel() const;
 

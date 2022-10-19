@@ -202,7 +202,7 @@ void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmapBundle &bmp)
 void wxAnimation::AddHandler( wxAnimationDecoder *handler )
 {
     // Check for an existing handler of the type being added.
-    if (FindHandler( handler->GetType() ) == 0)
+    if (FindHandler( handler->GetType() ) == nullptr)
     {
         sm_handlers.Append( handler );
     }
@@ -222,7 +222,7 @@ void wxAnimation::AddHandler( wxAnimationDecoder *handler )
 void wxAnimation::InsertHandler( wxAnimationDecoder *handler )
 {
     // Check for an existing handler of the type being added.
-    if (FindHandler( handler->GetType() ) == 0)
+    if (FindHandler( handler->GetType() ) == nullptr)
     {
         sm_handlers.Insert( handler );
     }
@@ -244,7 +244,7 @@ const wxAnimationDecoder *wxAnimation::FindHandler( wxAnimationType animType )
         if (handler->GetType() == animType) return handler;
         node = node->GetNext();
     }
-    return 0;
+    return nullptr;
 }
 
 void wxAnimation::InitStandardHandlers()

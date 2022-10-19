@@ -328,7 +328,7 @@ public:
 private:
     wxTestItem GetItemID(const wxDataViewItem &dataViewItem) const
     {
-        if ( dataViewItem.GetID() == NULL )
+        if ( dataViewItem.GetID() == nullptr )
             return wxTEST_ITEM_NULL;
         return *static_cast<wxTestItem*>(dataViewItem.GetID());
     }

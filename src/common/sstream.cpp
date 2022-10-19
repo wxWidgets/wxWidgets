@@ -43,7 +43,7 @@ wxStringInputStream::wxStringInputStream(const wxString& s)
 #endif
 {
 #if wxUSE_UNICODE
-    wxASSERT_MSG(m_buf.data() != NULL, wxT("Could not convert string to UTF8!"));
+    wxASSERT_MSG(m_buf.data() != nullptr, wxT("Could not convert string to UTF8!"));
 #endif
     m_pos = 0;
 }
@@ -142,7 +142,7 @@ wxStringOutputStream::wxStringOutputStream(wxString *pString, wxMBConv& conv)
         m_pos = m_str->utf8_length();
     else
 #endif // wxUSE_UNICODE_UTF8
-        m_pos = m_conv.FromWChar(NULL, 0, m_str->wc_str(), m_str->length());
+        m_pos = m_conv.FromWChar(nullptr, 0, m_str->wc_str(), m_str->length());
 #else // !wxUSE_UNICODE
     m_pos = m_str->length();
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE

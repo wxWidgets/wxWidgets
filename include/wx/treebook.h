@@ -63,7 +63,7 @@ public:
     // Page insertion operations
     // -------------------------
 
-    // Notice that page pointer may be NULL in which case the next non NULL
+    // Notice that page pointer may be null in which case the next non null
     // page (usually the first child page of a node) is shown when this page is
     // selected
 
@@ -131,7 +131,7 @@ public:
     virtual bool SetPageImage(size_t n, int imageId) override;
     virtual int SetSelection(size_t n) override { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) override { return DoSetSelection(n); }
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const override;
+    virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
     virtual bool DeleteAllPages() override;
 
 protected:
@@ -140,7 +140,7 @@ protected:
 
     virtual void OnImagesChanged() override;
 
-    // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
+    // This subclass of wxBookCtrlBase accepts null page pointers (empty pages)
     virtual bool AllowNullPage() const override { return true; }
     virtual wxWindow *TryGetNonNullPage(size_t page) override;
 

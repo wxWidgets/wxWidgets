@@ -90,7 +90,7 @@ bool wxGnomeVFSLibrary::InitializeMethods()
     return true;
 }
 
-static wxGnomeVFSLibrary* gs_lgvfs = NULL;
+static wxGnomeVFSLibrary* gs_lgvfs = nullptr;
 
 //----------------------------------------------------------------------------
 // wxGnomeVFSMimeTypesManagerFactory

@@ -28,7 +28,7 @@ public:
                                  const wxRect& rect,
                                  int WXUNUSED(flags) = 0,
                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
-                                 wxHeaderButtonParams* WXUNUSED(params) = NULL) override
+                                 wxHeaderButtonParams* WXUNUSED(params) = nullptr) override
     {
         dc.SetBrush(*wxCYAN_BRUSH);
         dc.SetTextForeground(*wxRED);

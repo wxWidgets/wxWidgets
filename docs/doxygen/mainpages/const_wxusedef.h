@@ -310,14 +310,6 @@ library:
 @endDefList
 
 
-@section page_wxusedef_motif wxMotif Symbols
-
-@beginDefList
-@itemdef{wxUSE_GADGETS, Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
-@itemdef{wxUSE_INVISIBLE_RESIZE, See src/motif/dialog.cpp file.}
-@endDefList
-
-
 @section page_wxusedef_msw wxMSW Symbols
 
 @beginDefList

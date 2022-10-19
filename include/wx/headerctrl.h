@@ -174,7 +174,7 @@ public:
     // this method is only overridden in order to synchronize the control with
     // the main window when it is scrolled, the derived class must implement
     // DoScrollHorz()
-    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL) override;
+    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = nullptr) override;
 
 protected:
     // this method must be implemented by the derived classes to return the

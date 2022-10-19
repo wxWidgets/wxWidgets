@@ -89,7 +89,7 @@ struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
 
   const tm * const t = localtime(ticks);
   if ( !t )
-      return NULL;
+      return nullptr;
 
   memcpy(temp, t, sizeof(struct tm));
   return temp;
@@ -107,7 +107,7 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
 
   const tm * const t = gmtime(ticks);
   if ( !t )
-      return NULL;
+      return nullptr;
 
   memcpy(temp, gmtime(ticks), sizeof(struct tm));
   return temp;
@@ -128,7 +128,7 @@ int wxGetTimeZone()
     {
         // just call wxLocaltime_r() instead of figuring out whether this
         // system supports tzset(), _tzset() or something else
-        time_t t = time(NULL);
+        time_t t = time(nullptr);
         struct tm tm;
 
         wxLocaltime_r(&t, &tm);
@@ -213,7 +213,7 @@ long wxGetLocalTime()
 // Get UTC time as seconds since 00:00:00, Jan 1st 1970
 long wxGetUTCTime()
 {
-    return (long)time(NULL);
+    return (long)time(nullptr);
 }
 
 #if wxUSE_LONGLONG

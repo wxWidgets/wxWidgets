@@ -370,7 +370,7 @@ bool MyApp::OnInit()
                             "Progress in progress",
                             "Please wait, starting...",
                             PROGRESS_COUNT,
-                            NULL,
+                            nullptr,
                             m_startupProgressStyle
                          );
         for ( int i = 0; i <= PROGRESS_COUNT; i++ )
@@ -693,17 +693,17 @@ bool MyApp::OnInit()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title), m_confirmExit(false)
+       : wxFrame(nullptr, wxID_ANY, title), m_confirmExit(false)
 {
     SetIcon(wxICON(sample));
 
 #if USE_MODAL_PRESENTATION
-    m_dialog = (MyModelessDialog *)NULL;
+    m_dialog = nullptr;
 #endif // USE_MODAL_PRESENTATION
 
 #if wxUSE_FINDREPLDLG
     m_dlgFind =
-    m_dlgReplace = NULL;
+    m_dlgReplace = nullptr;
 #endif
 
 #if wxUSE_COLOURDLG
@@ -766,7 +766,7 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_INFOBAR
 
 #if wxUSE_TIPWINDOW
-    m_tipWindow = NULL;
+    m_tipWindow = nullptr;
 #endif // wxUSE_TIPWINDOW
 
 #ifdef __WXMSW__
@@ -1919,16 +1919,12 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 {
     wxString wildcards =
-#ifdef __WXMOTIF__
-                    "C++ files (*.cpp)|*.cpp";
-#else
                     wxString::Format
                     (
                         "All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h",
                         wxFileSelectorDefaultWildcardStr,
                         wxFileSelectorDefaultWildcardStr
                     );
-#endif
     wxFileDialog dialog(this, "Testing open multiple file dialog",
                         wxEmptyString, wxEmptyString, wildcards,
                         wxFD_OPEN|wxFD_MULTIPLE);
@@ -1962,16 +1958,12 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::FilesOpenWindowModal(wxCommandEvent& WXUNUSED(event) )
 {
     wxString wildcards =
-#ifdef __WXMOTIF__
-                    "C++ files (*.cpp)|*.cpp";
-#else
                     wxString::Format
                     (
                         "All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h",
                         wxFileSelectorDefaultWildcardStr,
                         wxFileSelectorDefaultWildcardStr
                     );
-#endif
     wxFileDialog* dialog = new wxFileDialog(this, "Testing open multiple file dialog",
                         wxEmptyString, wxEmptyString, wildcards,
                         wxFD_OPEN|wxFD_MULTIPLE);
@@ -2302,12 +2294,12 @@ void MyFrame::ModelessDlg(wxCommandEvent& event)
     }
     else // hide
     {
-        // If m_dialog is NULL, then possibly the system
+        // If m_dialog is null, then possibly the system
         // didn't report the checked menu item status correctly.
         // It should be true just after the menu item was selected,
         // if there was no modeless dialog yet.
 
-        wxASSERT( m_dialog != NULL );
+        wxASSERT( m_dialog != nullptr );
         if (m_dialog)
             m_dialog->Hide();
     }
@@ -2367,7 +2359,7 @@ void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 
     if ( s_index == (size_t)-1 )
     {
-        srand(time(NULL));
+        srand(time(nullptr));
 
         // this is completely bogus, we don't know how many lines are there
         // in the file, but who cares, it's a demo only...
@@ -2528,7 +2520,7 @@ public:
         sizerSettings->Add(m_handleEvents);
 
 #if defined(__WXMSW__) && wxUSE_TASKBARICON
-        m_taskbarIcon = NULL;
+        m_taskbarIcon = nullptr;
         m_useTaskbar = new wxCheckBox(this, wxID_ANY, "Use persistent &taskbar icon");
         m_useTaskbar->SetValue(false);
         sizerSettings->Add(m_useTaskbar);
@@ -2643,9 +2635,9 @@ private:
             else
             if ( m_taskbarIcon )
             {
-                wxNotificationMessage::UseTaskBarIcon(NULL);
+                wxNotificationMessage::UseTaskBarIcon(nullptr);
                 delete m_taskbarIcon;
-                m_taskbarIcon = NULL;
+                m_taskbarIcon = nullptr;
             }
 #endif
         }
@@ -2838,7 +2830,7 @@ void MyFrame::OnShowTip(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUpdateShowTipUI(wxUpdateUIEvent& event)
 {
-    event.Check(m_tipWindow != NULL);
+    event.Check(m_tipWindow != nullptr);
 }
 
 #endif // wxUSE_TIPWINDOW
@@ -3574,7 +3566,7 @@ void MyFrame::ShowReplaceDialog( wxCommandEvent& WXUNUSED(event) )
     {
         m_dlgReplace->Destroy();
 
-        m_dlgReplace = NULL;
+        m_dlgReplace = nullptr;
     }
     else
     {
@@ -3596,7 +3588,7 @@ void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
     {
         m_dlgFind->Destroy();
 
-        m_dlgFind = NULL;
+        m_dlgFind = nullptr;
     }
     else
     {
@@ -3654,13 +3646,13 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
         {
             txt = "Find";
             idMenu = DIALOGS_FIND;
-            m_dlgFind = NULL;
+            m_dlgFind = nullptr;
         }
         else if ( dlg == m_dlgReplace )
         {
             txt = "Replace";
             idMenu = DIALOGS_REPLACE;
-            m_dlgReplace = NULL;
+            m_dlgReplace = nullptr;
         }
         else
         {
@@ -3802,7 +3794,7 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
 StdButtonSizerDialog::StdButtonSizerDialog(wxWindow *parent)
     : wxDialog(parent, wxID_ANY, wxString("StdButtonSizer dialog"),
       wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER),
-      m_buttonsSizer(NULL)
+      m_buttonsSizer(nullptr)
 {
     wxBoxSizer *const sizerTop = new wxBoxSizer(wxVERTICAL);
 
@@ -4004,7 +3996,7 @@ SettingsDialog::SettingsDialog(wxWindow* win, SettingsData& settingsData, int di
             Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize));
     }
     else
-        m_imageList = NULL;
+        m_imageList = nullptr;
 
     Create(win, wxID_ANY, "Preferences", wxDefaultPosition, wxDefaultSize,
            wxDEFAULT_DIALOG_STYLE | resizeBorder);
@@ -4565,7 +4557,7 @@ private:
                                         const wxString& title,
                                         int style) override
     {
-        wxMessageDialog dlg(NULL, message, title,
+        wxMessageDialog dlg(nullptr, message, title,
                             wxOK | wxCANCEL | wxCANCEL_DEFAULT | style);
         dlg.SetOKCancelLabels(wxID_COPY, wxID_OK);
         dlg.SetExtendedMessage("Note that this is a custom log dialog.");

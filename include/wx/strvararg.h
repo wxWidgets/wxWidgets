@@ -131,20 +131,20 @@ class WXDLLIMPEXP_BASE wxFormatString
 public:
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxFormatString(const char *str)
-        : m_char(wxScopedCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
+        : m_char(wxScopedCharBuffer::CreateNonOwned(str)), m_str(nullptr), m_cstr(nullptr) {}
 #endif
     wxFormatString(const wchar_t *str)
-        : m_wchar(wxScopedWCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
+        : m_wchar(wxScopedWCharBuffer::CreateNonOwned(str)), m_str(nullptr), m_cstr(nullptr) {}
     wxFormatString(const wxString& str)
-        : m_str(&str), m_cstr(NULL) {}
+        : m_str(&str), m_cstr(nullptr) {}
     wxFormatString(const wxCStrData& str)
-        : m_str(NULL), m_cstr(&str) {}
+        : m_str(nullptr), m_cstr(&str) {}
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxFormatString(const wxScopedCharBuffer& str)
-        : m_char(str), m_str(NULL), m_cstr(NULL)  {}
+        : m_char(str), m_str(nullptr), m_cstr(nullptr)  {}
 #endif
     wxFormatString(const wxScopedWCharBuffer& str)
-        : m_wchar(str), m_str(NULL), m_cstr(NULL) {}
+        : m_wchar(str), m_str(nullptr), m_cstr(nullptr) {}
 
     // Possible argument types. These are or-combinable for wxASSERT_ARG_TYPE
     // convenience. Some of the values are or-combined with another value, this
@@ -241,13 +241,13 @@ private:
 // arguments passed to a vararg template
 struct wxFormatStringArgument
 {
-    wxFormatStringArgument(const wxFormatString *s = NULL) : m_str(s) {}
+    wxFormatStringArgument(const wxFormatString *s = nullptr) : m_str(s) {}
     const wxFormatString *m_str;
 
     // overriding this operator allows us to reuse _WX_VARARG_JOIN macro
     wxFormatStringArgument operator,(const wxFormatStringArgument& a) const
     {
-        wxASSERT_MSG( m_str == NULL || a.m_str == NULL,
+        wxASSERT_MSG( m_str == nullptr || a.m_str == nullptr,
                       "can't have two format strings in vararg function" );
         return wxFormatStringArgument(m_str ? m_str : a.m_str);
     }
@@ -441,7 +441,7 @@ template<typename T>
 struct wxArgNormalizer
 {
     // Ctor. 'value' is the value passed as variadic argument, 'fmt' is pointer
-    // to printf-like format string or NULL if the variadic function doesn't
+    // to printf-like format string or nullptr if the variadic function doesn't
     // use format string and 'index' is index of 'value' in variadic arguments
     // list (starting at 1)
     wxArgNormalizer(T value,
@@ -932,11 +932,11 @@ struct WXDLLIMPEXP_BASE wxArgNormalizedString
 {
     wxArgNormalizedString(const void* ptr) : m_ptr(ptr) {}
 
-    // returns true if non-NULL string was passed in
-    bool IsValid() const { return m_ptr != NULL; }
+    // returns true if non-null string was passed in
+    bool IsValid() const { return m_ptr != nullptr; }
     operator bool() const { return IsValid(); }
 
-    // extracts the string, returns empty string if NULL was passed in
+    // extracts the string, returns empty string if nullptr was passed in
     wxString GetString() const;
     operator wxString() const;
 

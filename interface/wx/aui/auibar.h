@@ -722,7 +722,7 @@ public:
                  const wxBitmapBundle& bitmap,
                  const wxBitmapBundle& disabled_bitmap,
                  bool toggle = false,
-                 wxObject* client_data = NULL,
+                 wxObject* client_data = nullptr,
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString);
 

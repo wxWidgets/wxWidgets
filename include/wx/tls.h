@@ -67,7 +67,7 @@
 
     // wxTlsValue<T> represents a thread-specific value of type T but, unlike
     // with native compiler thread-specific variables, it behaves like a
-    // (never NULL) pointer to T and so needs to be dereferenced before use
+    // (never null) pointer to T and so needs to be dereferenced before use
     //
     // Note: T must be a POD!
     //
@@ -93,7 +93,7 @@
         ~wxTlsValue()
         {
             if ( m_key.Get() )
-                m_key.Set(NULL); // this deletes the value
+                m_key.Set(nullptr); // this deletes the value
         }
 
         // access the object creating it on demand
@@ -116,7 +116,7 @@
                     // slowly dying from out-of-memory errors which would
                     // happen as the next access to this object would allocate
                     // another ValueType instance and so on forever
-                    value = NULL;
+                    value = nullptr;
                 }
             }
 

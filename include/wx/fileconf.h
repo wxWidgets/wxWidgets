@@ -189,7 +189,7 @@ public:
   // functions to work with this list
   wxFileConfigLineList *LineListAppend(const wxString& str);
   wxFileConfigLineList *LineListInsert(const wxString& str,
-                           wxFileConfigLineList *pLine);    // NULL => Prepend()
+                           wxFileConfigLineList *pLine);    // nullptr => Prepend()
   void      LineListRemove(wxFileConfigLineList *pLine);
   bool      LineListIsEmpty();
 

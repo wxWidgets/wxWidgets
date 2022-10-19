@@ -192,7 +192,7 @@ public:
         typedef ptr_type pointer;                                             \
         typedef int difference_type;                                          \
                                                                               \
-        iterator_name() : m_ptr(NULL) { }                                     \
+        iterator_name() : m_ptr(nullptr) { }                                     \
         iterator_name(pointer ptr) : m_ptr(ptr) { }                           \
                                                                               \
         reference operator*() const { return *m_ptr; }                        \

@@ -24,7 +24,7 @@ protected:
     // font larger than it) to it and so it must be valid.
     wxMarkupToAttrStringBase(const wxFont& font)
         : wxMarkupParserAttrOutput(font, wxColour(), wxColour()),
-          m_attrString(NULL)
+          m_attrString(nullptr)
     {}
 
     void Parse(const wxFont& font, const wxString& markup)

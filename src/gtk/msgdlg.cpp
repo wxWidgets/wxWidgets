@@ -12,7 +12,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_MSGDLG && !defined(__WXGPE__)
+#if wxUSE_MSGDLG
 
 #include "wx/msgdlg.h"
 
@@ -110,10 +110,10 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
 void wxMessageDialog::GTKCreateMsgDialog()
 {
     // Avoid crash if wxMessageBox() is called before GTK is initialized
-    if (g_type_class_peek(GDK_TYPE_DISPLAY) == NULL)
+    if (g_type_class_peek(GDK_TYPE_DISPLAY) == nullptr)
         return;
 
-    GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
+    GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : nullptr;
 
     GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_NONE;
@@ -273,7 +273,7 @@ int wxMessageDialog::ShowModal()
     GTKDisconnect(m_widget);
     gtk_widget_destroy(m_widget);
     g_object_unref(m_widget);
-    m_widget = NULL;
+    m_widget = nullptr;
 
     switch (result)
     {
@@ -297,4 +297,4 @@ int wxMessageDialog::ShowModal()
 }
 
 
-#endif // wxUSE_MSGDLG && !defined(__WXGPE__)
+#endif // wxUSE_MSGDLG

@@ -109,7 +109,7 @@ private:
 
     wxString  m_text;           // tooltip text
     wxWindow* m_window;         // main window we're associated with
-    wxToolTipOtherWindows *m_others; // other windows associated with it or NULL
+    wxToolTipOtherWindows *m_others; // other windows associated with it or nullptr
     wxRect    m_rect;           // the rect of the window for which this tooltip is shown
                                 // (or a rect with width/height == 0 to show it for the entire window)
     unsigned int m_id;          // the id of this tooltip (ignored when m_rect width/height is 0)

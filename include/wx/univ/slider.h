@@ -177,7 +177,7 @@ protected:
     wxRect GetShaftRect() const;
 
     // calc the current thumb position using the shaft rect (if the pointer is
-    // NULL, we calculate it here too)
+    // null, we calculate it here too)
     void CalcThumbRect(const wxRect *rectShaft,
                        wxRect *rectThumbOut,
                        wxRect *rectLabelOut,

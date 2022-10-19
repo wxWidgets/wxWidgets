@@ -26,7 +26,7 @@ public:
     wxRadioBox();
     wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = nullptr,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
         {
@@ -45,7 +45,7 @@ public:
     virtual ~wxRadioBox();
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = nullptr,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,

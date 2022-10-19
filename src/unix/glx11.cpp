@@ -453,9 +453,9 @@ wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContext *other,
                          const wxGLContextAttrs *ctxAttrs)
-    : m_glContext(NULL)
+    : m_glContext(nullptr)
 {
-    const int* contextAttribs = NULL;
+    const int* contextAttribs = nullptr;
     Bool x11Direct = True;
     int renderType = GLX_RGBA_TYPE;
     bool needsARB = false;
@@ -485,7 +485,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     // We need to create a temporary context to get the
     // glXCreateContextAttribsARB function
-    GLXContext tempContext = glXCreateContext(dpy, vi, NULL, x11Direct);
+    GLXContext tempContext = glXCreateContext(dpy, vi, nullptr, x11Direct);
     wxCHECK_RET(tempContext, "glXCreateContext failed" );
 
     GLXFBConfig* const fbc = win->GetGLXFBConfig();
@@ -517,12 +517,12 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
                                 x11Direct, contextAttribs );
 
         // Some old hardware may accept the use of this ARB, but may fail.
-        // In case of NULL attributes we'll try creating the context old-way.
+        // In case of null attributes we'll try creating the context old-way.
         XSync( dpy, False );
         if ( g_ctxErrorOccurred && (!contextAttribs || !needsARB) )
         {
             g_ctxErrorOccurred = false; //Reset
-            m_glContext = NULL;
+            m_glContext = nullptr;
         }
     }
 
@@ -561,7 +561,7 @@ wxGLContext::~wxGLContext()
         return;
 
     if ( m_glContext == glXGetCurrentContext() )
-        MakeCurrent(None, NULL);
+        MakeCurrent(None, nullptr);
 
     glXDestroyContext( wxGetX11Display(), m_glContext );
 }
@@ -603,13 +603,13 @@ static bool InitXVisualInfo(
 
 wxGLCanvasX11::wxGLCanvasX11()
 {
-    m_fbc = NULL;
-    m_vi = NULL;
+    m_fbc = nullptr;
+    m_vi = nullptr;
 }
 
 bool wxGLCanvasX11::InitVisual(const wxGLAttributes& dispAttrs)
 {
-    XVisualInfo* vi = NULL;
+    XVisualInfo* vi = nullptr;
     bool ret = InitXVisualInfo(dispAttrs, &m_fbc, &vi);
     m_vi = vi;
     if ( !ret )
@@ -678,25 +678,25 @@ static bool InitXVisualInfo(const wxGLAttributes& dispAttrs,
             if ( !*pXVisual )
             {
                 XFree(*pFBC);
-                *pFBC = NULL;
+                *pFBC = nullptr;
             }
         }
     }
     else // GLX <= 1.2
     {
-        *pFBC = NULL;
+        *pFBC = nullptr;
         *pXVisual = glXChooseVisual(dpy, DefaultScreen(dpy),
                                     const_cast<int*>(attrsListGLX) );
     }
 
-    return *pXVisual != NULL;
+    return *pXVisual != nullptr;
 }
 
 /* static */
 bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
 {
-    GLXFBConfig *fbc = NULL;
-    XVisualInfo *vi = NULL;
+    GLXFBConfig *fbc = nullptr;
+    XVisualInfo *vi = nullptr;
 
     bool isSupported = InitXVisualInfo(dispAttrs, &fbc, &vi);
 
@@ -726,12 +726,12 @@ static void FreeDefaultVisualInfo()
     if (gs_glFBCInfo)
     {
         XFree(gs_glFBCInfo);
-        gs_glFBCInfo = NULL;
+        gs_glFBCInfo = nullptr;
     }
     if (gs_glVisualInfo)
     {
         XFree(gs_glVisualInfo);
-        gs_glVisualInfo = NULL;
+        gs_glVisualInfo = nullptr;
     }
 }
 

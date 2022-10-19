@@ -77,7 +77,7 @@ public:
         description of the corresponding parameters.
     */
     wxNotificationMessage(const wxString& title, const wxString& message = wxEmptyString,
-                          wxWindow* parent = NULL, int flags = wxICON_INFORMATION);
+                          wxWindow* parent = nullptr, int flags = wxICON_INFORMATION);
 
     /**
         Destructor does not hide the notification.
@@ -174,7 +174,7 @@ public:
         to notifications by using this method. This has no effect if toast
         notifications are used.
 
-        @return the task bar icon which was used previously (may be @c NULL)
+        @return the task bar icon which was used previously (may be @NULL)
 
         @onlyfor{wxmsw}
     */

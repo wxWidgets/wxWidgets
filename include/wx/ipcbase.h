@@ -78,7 +78,7 @@ public:
       { return Execute(cs.AsString()); }
 
   virtual const void *Request(const wxString& item,
-                              size_t *size = NULL,
+                              size_t *size = nullptr,
                               wxIPCFormat format = wxIPC_TEXT) = 0;
 
   bool Poke(const wxString& item, const void *data, size_t size,
@@ -150,7 +150,7 @@ public:
                                 const wxString& WXUNUSED(item),
                                 size_t *size,
                                 wxIPCFormat WXUNUSED(format))
-      { *size = 0; return NULL; }
+      { *size = 0; return nullptr; }
 
   virtual bool OnPoke(const wxString& WXUNUSED(topic),
                       const wxString& WXUNUSED(item),
@@ -202,7 +202,7 @@ public:
 
 
   // return a buffer at least this size, reallocating buffer if needed
-  // returns NULL if using an inadequate user buffer which can't be resized
+  // returns nullptr if using an inadequate user buffer which can't be resized
   void *GetBufferAtLeast(size_t bytes);
 
 protected:
@@ -249,7 +249,7 @@ public:
 
   virtual bool ValidHost(const wxString& host) = 0;
 
-  // Call this to make a connection. Returns NULL if cannot.
+  // Call this to make a connection. Returns nullptr if cannot.
   virtual wxConnectionBase *MakeConnection(const wxString& host,
                                            const wxString& server,
                                            const wxString& topic) = 0;

@@ -34,7 +34,7 @@ public:
     // Return this thread's instance.
     static wxThreadSpecificInfo& Get();
 
-    // the thread-specific logger or NULL if the thread is using the global one
+    // the thread-specific logger or nullptr if the thread is using the global one
     // (this is not used for the main thread which always uses the global
     // logger)
     wxLog *logger;
@@ -60,7 +60,7 @@ public:
 #endif
 
 private:
-    wxThreadSpecificInfo() : logger(NULL), loggingDisabled(false) {}
+    wxThreadSpecificInfo() : logger(nullptr), loggingDisabled(false) {}
 };
 
 #define wxThreadInfo wxThreadSpecificInfo::Get()

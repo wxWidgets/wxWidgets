@@ -46,26 +46,17 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
-/* Define this if you want to use GPE features */
-#undef __WXGPE__
-
-/* Define this if your version of Motif is greater than 2.0 */
-#undef __WXMOTIF20__
-
-/* Define this if you are using Lesstif */
-#undef __WXLESSTIF__
-
 #ifdef __WXGTK__
 
 #ifndef VMS_GTK2
 #define GDK_WINDOWING_X11
 #endif
 
-/* Define this if your version of GTK+ is greater than 1.2.7 */
-#define __WXGTK127__ 1
-
 /* Define this if your version of GTK+ is greater than 2.0 */
 #ifdef VMS_GTK2
+
+/* Define if using GTK. */
+#define __WXGTK__ 1
 
 /* Define this if your version of GTK+ is >= 3.0 */
 #if 0

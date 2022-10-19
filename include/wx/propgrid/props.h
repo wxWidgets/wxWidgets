@@ -48,7 +48,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
 //
 // These macros help creating DoGetValidator
 #define WX_PG_DOGETVALIDATOR_ENTRY() \
-    static wxValidator* s_ptr = NULL; \
+    static wxValidator* s_ptr = nullptr; \
     if ( s_ptr ) return s_ptr;
 
 // Common function exit
@@ -66,7 +66,7 @@ class WXDLLIMPEXP_PROPGRID wxPGInDialogValidator
 public:
     wxPGInDialogValidator()
     {
-        m_textCtrl = NULL;
+        m_textCtrl = nullptr;
     }
 
     ~wxPGInDialogValidator()
@@ -350,7 +350,7 @@ public:
 // -----------------------------------------------------------------------
 
 // If set, then selection of choices is static and should not be
-// changed (i.e. returns NULL in GetPropertyChoices).
+// changed (i.e. returns nullptr in GetPropertyChoices).
 #define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
 
 // Represents a single selection from a list of choices
@@ -367,8 +367,8 @@ public:
 #ifndef SWIG
     wxEnumProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
-                    const wxChar* const* labels = NULL,
-                    const long* values = NULL,
+                    const wxChar* const* labels = nullptr,
+                    const long* values = nullptr,
                     int value = 0 );
     wxEnumProperty( const wxString& label,
                     const wxString& name,
@@ -436,12 +436,12 @@ protected:
                            const wxString& text,
                            int argFlags ) const
     {
-        return ValueFromString_(value, NULL, text, argFlags);
+        return ValueFromString_(value, nullptr, text, argFlags);
     }
     wxDEPRECATED_MSG("use ValueFromInt_(wxVariant&, int*, int, int) function instead")
     bool ValueFromInt_( wxVariant& value, int intVal, int argFlags ) const
     {
-        return ValueFromInt_(value, NULL, intVal, argFlags);
+        return ValueFromInt_(value, nullptr, intVal, argFlags);
     }
     wxDEPRECATED_MSG("don't use ResetNextIndex() function")
     static void ResetNextIndex() { }
@@ -523,7 +523,7 @@ public:
     wxFlagsProperty( const wxString& label,
                      const wxString& name,
                      const wxChar* const* labels,
-                     const long* values = NULL,
+                     const long* values = nullptr,
                      long value = 0 );
     wxFlagsProperty( const wxString& label,
                      const wxString& name,
@@ -814,7 +814,7 @@ WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME, \
                                                     DELIMCHAR, \
                                                     CUSTBUTTXT) \
 wxValidator* PROPNAME::DoGetValidator () const \
-{ return NULL; }
+{ return nullptr; }
 
 
 // -----------------------------------------------------------------------
@@ -878,7 +878,7 @@ public:
     // Note: Dialog frees the validator.
     virtual wxValidator* GetTextCtrlValidator() const
     {
-        return NULL;
+        return nullptr;
     }
 
     // Returns true if array was actually modified

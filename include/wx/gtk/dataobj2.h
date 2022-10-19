@@ -57,7 +57,7 @@ protected:
     void DoConvertToPng();
 
 private:
-    void Init() { m_pngData = NULL; m_pngSize = 0; }
+    void Init() { m_pngData = nullptr; m_pngSize = 0; }
 };
 
 // ----------------------------------------------------------------------------

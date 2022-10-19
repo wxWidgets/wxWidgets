@@ -25,7 +25,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSimplebookXmlHandler, wxXmlResourceHandler);
 wxSimplebookXmlHandler::wxSimplebookXmlHandler()
                       : wxXmlResourceHandler(),
                         m_isInside(false),
-                        m_simplebook(NULL)
+                        m_simplebook(nullptr)
 {
     AddWindowStyles();
 }
@@ -43,7 +43,7 @@ wxObject *wxSimplebookXmlHandler::DoCreateResource()
         {
             bool old_ins = m_isInside;
             m_isInside = false;
-            wxObject *item = CreateResFromNode(n, m_simplebook, NULL);
+            wxObject *item = CreateResFromNode(n, m_simplebook, nullptr);
             m_isInside = old_ins;
             wxWindow *wnd = wxDynamicCast(item, wxWindow);
 
@@ -61,7 +61,7 @@ wxObject *wxSimplebookXmlHandler::DoCreateResource()
         else
         {
             ReportError("simplebookpage must have a window child");
-            return NULL;
+            return nullptr;
         }
     }
 

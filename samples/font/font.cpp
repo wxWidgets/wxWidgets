@@ -408,7 +408,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets font sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets font sample")
 {
     SetIcon(wxICON(sample));
 

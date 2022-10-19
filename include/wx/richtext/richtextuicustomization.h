@@ -53,7 +53,7 @@ public:
     wxRichTextHelpInfo()
     {
         m_helpTopic = -1;
-        m_uiCustomization = NULL;
+        m_uiCustomization = nullptr;
     }
     virtual ~wxRichTextHelpInfo() {}
 
@@ -81,7 +81,7 @@ public:
     bool HasHelpId() const { return m_helpTopic != -1; }
 
     /// Is there a valid customization object?
-    bool HasUICustomization() const { return m_uiCustomization != NULL; }
+    bool HasUICustomization() const { return m_uiCustomization != nullptr; }
 
 protected:
     wxRichTextUICustomization*  m_uiCustomization;

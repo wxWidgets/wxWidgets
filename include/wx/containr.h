@@ -39,13 +39,13 @@ public:
     // default ctor, SetContainerWindow() must be called later
     wxControlContainerBase()
     {
-        m_winParent = NULL;
+        m_winParent = nullptr;
 
         // By default, we accept focus ourselves.
         m_acceptsFocusSelf = true;
 
         m_inSetFocus = false;
-        m_winLastFocused = NULL;
+        m_winLastFocused = nullptr;
     }
     virtual ~wxControlContainerBase() {}
 

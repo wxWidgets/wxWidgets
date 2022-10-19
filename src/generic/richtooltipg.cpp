@@ -274,7 +274,7 @@ protected:
 
 private:
 #ifdef HAVE_MSW_THEME
-    // Returns non-NULL theme only if we're using Win7-style tooltips.
+    // Returns non-null theme only if we're using Win7-style tooltips.
     static bool UseTooltipTheme()
     {
         // Even themed applications under XP still use "classic" tooltips.

@@ -62,7 +62,7 @@
         down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 6);
         down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 14);
         wxCursor down_cursor = wxCursor(down_image);
-    #elif defined(__WXGTK__) or defined(__WXMOTIF__)
+    #elif defined(__WXGTK__)
         wxCursor down_cursor = wxCursor(down_bits, 32, 32, 6, 14,
                                         down_mask, wxWHITE, wxBLACK);
     #endif
@@ -93,9 +93,6 @@ public:
         The parameters @a fg and @a bg have an effect only on GTK+, and force
         the cursor to use particular background and foreground colours.
 
-        If either @a hotSpotX or @a hotSpotY is -1, the hotspot will be the
-        centre of the cursor image (Motif only).
-
         @param bits
             An array of XBM data bits.
         @param width
@@ -109,7 +106,7 @@ public:
         @param maskBits
             Bits for a mask bitmap.
 
-        @onlyfor{wxgtk,wxmotif}
+        @onlyfor{wxgtk}
 
         @beginWxPerlOnly
         In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
@@ -117,7 +114,7 @@ public:
     */
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
+             const char maskBits[] = nullptr);
 
     /**
         Constructs a cursor by passing a string resource name or filename.
@@ -146,7 +143,6 @@ public:
             - under GTK, it defaults to @c wxBITMAP_TYPE_XPM.
               See the wxCursor(const wxImage& image) ctor for more info.
             - under X11, it defaults to @c wxBITMAP_TYPE_XPM.
-            - under Motif, it defaults to @c wxBITMAP_TYPE_XBM.
         @param hotSpotX
             Hotspot x coordinate (relative to the top left of the image).
         @param hotSpotY

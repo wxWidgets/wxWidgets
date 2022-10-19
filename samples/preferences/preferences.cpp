@@ -67,7 +67,7 @@ wxIMPLEMENT_APP(MyApp);
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame() : wxFrame(NULL, wxID_ANY, "Preferences sample")
+    MyFrame() : wxFrame(nullptr, wxID_ANY, "Preferences sample")
     {
         wxMenu *fileMenu = new wxMenu;
         fileMenu->Append(wxID_PREFERENCES);

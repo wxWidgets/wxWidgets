@@ -86,7 +86,7 @@ protected:
     // exchange x and y components of all points in the array if necessary
     wxPoint* Mirror(int n, const wxPoint*& points) const
     {
-        wxPoint* points_alloc = NULL;
+        wxPoint* points_alloc = nullptr;
         if ( m_mirror )
         {
             points_alloc = new wxPoint[n];
@@ -256,9 +256,9 @@ protected:
 
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const override
+                                 wxCoord *descent = nullptr,
+                                 wxCoord *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr) const override
     {
         // never mirrored
         m_dc.DoGetTextExtent(string, x, y, descent, externalLeading, theFont);

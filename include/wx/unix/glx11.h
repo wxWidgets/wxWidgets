@@ -23,8 +23,8 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win,
-                const wxGLContext *other = NULL,
-                const wxGLContextAttrs *ctxAttrs = NULL);
+                const wxGLContext *other = nullptr,
+                const wxGLContextAttrs *ctxAttrs = nullptr);
     virtual ~wxGLContext();
 
     virtual bool SetCurrent(const wxGLCanvas& win) const override;

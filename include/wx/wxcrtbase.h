@@ -512,9 +512,9 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     /* _wtof doesn't exist */
 #else
 #ifndef __VMS
-    #define wxCRT_AtofW(s)         wcstod(s, NULL)
+    #define wxCRT_AtofW(s)         wcstod(s, nullptr)
 #endif
-    #define wxCRT_AtolW(s)         wcstol(s, NULL, 10)
+    #define wxCRT_AtolW(s)         wcstol(s, nullptr, 10)
     /* wcstoi doesn't exist */
 #endif
 
@@ -630,7 +630,7 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
  *     for buffer.h and stringimpl.h (both of which must be included before
  *     string.h, which is required by wxcrt.h) to have them here: */
 
-/* safe version of strlen() (returns 0 if passed NULL pointer) */
+/* safe version of strlen() (returns 0 if passed null pointer) */
 inline size_t wxStrlen(const char *s) { return s ? wxCRT_StrlenA(s) : 0; }
 inline size_t wxStrlen(const wchar_t *s) { return s ? wxCRT_StrlenW(s) : 0; }
 #ifndef wxWCHAR_T_IS_WXCHAR16

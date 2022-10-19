@@ -43,10 +43,10 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame()
-        : wxFrame(NULL, wxID_ANY, "wxWidgets Power Management Sample",
+        : wxFrame(nullptr, wxID_ANY, "wxWidgets Power Management Sample",
                   wxDefaultPosition, wxSize(500, 200))
     {
-        m_powerResourceBlocker = NULL;
+        m_powerResourceBlocker = nullptr;
 
         wxMenu *fileMenu = new wxMenu;
         fileMenu->Append(wxID_NEW, "Start long running task\tCtrl-S");

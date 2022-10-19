@@ -182,7 +182,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         // else) to fix themed borders when they're used (if they're not, this
         // is harmless, and it's simpler and more fool proof to always do it
         // rather than try to determine whether we need to do it or not).
-        ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+        ::SetWindowPos(GetHwnd(), nullptr, 0, 0, 0, 0,
                        SWP_FRAMECHANGED |
                        SWP_NOSIZE |
                        SWP_NOMOVE |

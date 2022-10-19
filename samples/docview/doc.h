@@ -87,7 +87,7 @@ public:
     void AddDoodleSegment(const DoodleSegment& segment);
 
     // remove the last segment, if any, and copy it in the provided pointer if
-    // not NULL and return true or return false and do nothing if there are no
+    // not null and return true or return false and do nothing if there are no
     // segments
     bool PopLastSegment(DoodleSegment *segment);
 

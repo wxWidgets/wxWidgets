@@ -311,7 +311,7 @@ public:
     */
     static wxString GetInternalName(const wxString& name,
                                     wxPathFormat format = wxPATH_NATIVE,
-                                    bool* pIsDir = NULL);
+                                    bool* pIsDir = nullptr);
     /**
         Returns the entry's filename in the internal format used within the archive.
         The name can include directory components, i.e. it can be a full path.

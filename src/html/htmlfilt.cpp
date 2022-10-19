@@ -57,7 +57,7 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxInputStream *s = file.GetStream();
     wxString doc, doc2;
 
-    if (s == NULL) return wxEmptyString;
+    if (s == nullptr) return wxEmptyString;
     ReadString(doc, s, wxConvISO8859_1);
 
     doc.Replace(wxT("&"), wxT("&amp;"), true);
@@ -129,7 +129,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     wxInputStream *s = file.GetStream();
     wxString doc;
 
-    if (s == NULL)
+    if (s == nullptr)
     {
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation());
         return wxEmptyString;

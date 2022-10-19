@@ -124,9 +124,7 @@ public:
         @param style
             The window style. See wxStatusBar.
         @param name
-            The name of the window. This parameter is used to associate a name with the
-            item, allowing the application user to set Motif resource values for
-            individual windows.
+            The name of the window.
 
         @see Create()
     */
@@ -248,7 +246,7 @@ public:
         Use SetStatusWidths to set the field widths.
         @endWxPerlOnly
     */
-    virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
+    virtual void SetFieldsCount(int number = 1, const int* widths = nullptr);
 
     /**
         Sets the minimal possible height for the status bar.

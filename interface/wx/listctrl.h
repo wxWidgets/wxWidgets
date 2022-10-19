@@ -495,7 +495,7 @@ public:
 
         This method allows one to programmatically end editing a list control item
         in place. Usually it will only be called when editing is in progress,
-        i.e. if GetEditControl() returns non-NULL. In particular, do not call
+        i.e. if GetEditControl() returns non-null. In particular, do not call
         it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not
         yet fully created by then, just veto the event in this handler instead
         to prevent the editing from even starting.
@@ -895,7 +895,7 @@ public:
         and returns a 2-element list (item, flags).
         @endWxPerlOnly
     */
-    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = nullptr) const;
 
     /**
         Returns true if the control is currently using ::wxLC_REPORT style.

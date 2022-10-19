@@ -109,7 +109,7 @@ public:
     virtual void SetImageList(wxImageList* imageList);
 
     /**
-        Returns the associated image list, may be NULL.
+        Returns the associated image list, may be @NULL.
 
         Note that the new code should use GetUpdatedImageListFor() instead.
 

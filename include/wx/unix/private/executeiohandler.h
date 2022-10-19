@@ -125,7 +125,7 @@ private:
     virtual void DoDisable() override
     {
         delete m_source;
-        m_source = NULL;
+        m_source = nullptr;
     }
 
     wxEventLoopSource* m_source;

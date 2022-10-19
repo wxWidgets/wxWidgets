@@ -99,7 +99,7 @@ public:
 
     virtual void Update() override;
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) override;
+                          const wxRect *rect = nullptr ) override;
 
     virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont(const wxFont& font) override;
@@ -120,14 +120,14 @@ public:
 
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = NULL ) override;
+                               const wxRect* rect = nullptr ) override;
 
     // Styles
     virtual void SetWindowStyleFlag( long style ) override;
     virtual void SetExtraStyle( long exStyle ) override;
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
-    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const override;
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
     virtual bool SetTransparent(wxByte alpha) override;
     virtual bool CanSetTransparent() override { return true; }
 
@@ -184,9 +184,9 @@ public:
 protected:
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *font = NULL) const override;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *font = nullptr) const override;
 
     // coordinates translation
     virtual void DoClientToScreen( int *x, int *y ) const override;
@@ -227,7 +227,7 @@ protected:
 
 private:
     void Init();
-    QScrollArea *m_qtContainer;  // either NULL or the same as m_qtWindow pointer
+    QScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
 
     QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
     QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
@@ -238,7 +238,7 @@ private:
     QWidget *QtGetClientWidget() const;
 
     QScrollBar *QtGetScrollBar( int orientation ) const;
-    QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );
+    QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=nullptr );
 
     bool QtSetBackgroundStyle();
 

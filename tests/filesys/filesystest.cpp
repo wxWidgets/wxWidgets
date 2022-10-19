@@ -41,7 +41,7 @@ public:
 
     bool CanOpen(const wxString& WXUNUSED(url)) override { return false; }
     wxFSFile *OpenFile(wxFileSystem& WXUNUSED(fs),
-                       const wxString& WXUNUSED(url)) override { return NULL; }
+                       const wxString& WXUNUSED(url)) override { return nullptr; }
 
 
 };

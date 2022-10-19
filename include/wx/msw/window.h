@@ -54,7 +54,7 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
-        return CreateUsingMSWClass(NULL, parent, id, pos, size, style, name);
+        return CreateUsingMSWClass(nullptr, parent, id, pos, size, style, name);
     }
 
     // Non-portable, MSW-specific Create() variant allowing to create the
@@ -107,7 +107,7 @@ public:
     virtual bool EnableTouchEvents(int eventsMask) override;
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) override;
+                          const wxRect *rect = nullptr ) override;
     virtual void Update() override;
 
     virtual void SetWindowStyleFlag(long style) override;
@@ -125,7 +125,7 @@ public:
     virtual int GetScrollThumb( int orient ) const override;
     virtual int GetScrollRange( int orient ) const override;
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = NULL ) override;
+                               const wxRect* rect = nullptr ) override;
 
     virtual bool ScrollLines(int lines) override;
     virtual bool ScrollPages(int pages) override;
@@ -222,9 +222,9 @@ public:
     // return true if the window is of a standard (i.e. not wxWidgets') class
     //
     // to understand why does it work, look at SubclassWin() code and comments
-    bool IsOfStandardClass() const { return m_oldWndProc != NULL; }
+    bool IsOfStandardClass() const { return m_oldWndProc != nullptr; }
 
-    wxWindow *FindItem(long id, WXHWND hWnd = NULL) const;
+    wxWindow *FindItem(long id, WXHWND hWnd = nullptr) const;
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     // MSW only: true if this control is part of the main control
@@ -232,7 +232,7 @@ public:
 
 #if wxUSE_TOOLTIPS
     // MSW only: true if this window or any of its children have a tooltip
-    virtual bool HasToolTips() const { return GetToolTip() != NULL; }
+    virtual bool HasToolTips() const { return GetToolTip() != nullptr; }
 #endif // wxUSE_TOOLTIPS
 
     // translate wxWidgets style flags for this control into the Windows style
@@ -240,13 +240,13 @@ public:
     //
     // this is the function that should be overridden in the derived classes,
     // but you will mostly use MSWGetCreateWindowFlags() below
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const ;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const ;
 
     // get the MSW window flags corresponding to wxWidgets ones
     //
     // the functions returns the flags (WS_XXX) directly and puts the ext
-    // (WS_EX_XXX) flags into the provided pointer if not NULL
-    WXDWORD MSWGetCreateWindowFlags(WXDWORD *exflags = NULL) const
+    // (WS_EX_XXX) flags into the provided pointer if not null
+    WXDWORD MSWGetCreateWindowFlags(WXDWORD *exflags = nullptr) const
         { return MSWGetStyle(GetWindowStyle(), exflags); }
 
     // update the real underlying window style flags to correspond to the
@@ -268,7 +268,7 @@ public:
     //
     // returns true if the window has been created, false if creation failed
     bool MSWCreate(const wxChar *wclass,
-                   const wxChar *title = NULL,
+                   const wxChar *title = nullptr,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    WXDWORD style = 0,
@@ -400,7 +400,7 @@ public:
 
     // The main body of common window proc for all wxWindow objects. It tries
     // to handle the given message and returns true if it was handled (the
-    // appropriate return value is then put in result, which must be non-NULL)
+    // appropriate return value is then put in result, which must be non-null)
     // or false if it wasn't.
     //
     // This function should be overridden in any new code instead of
@@ -446,7 +446,7 @@ public:
     // This needs to be overridden for scrolled windows to ensure that the
     // scrolling of their associated DC is taken into account.
     //
-    // Both parameters must be non-NULL.
+    // Both parameters must be non-null.
     virtual void MSWAdjustBrushOrg(int* WXUNUSED(xOrg),
                                    int* WXUNUSED(yOrg)) const
     {
@@ -455,7 +455,7 @@ public:
     // The brush returned from here must remain valid at least until the next
     // event loop iteration. Returning 0, as is done by default, indicates
     // there is no custom background brush.
-    virtual WXHBRUSH MSWGetCustomBgBrush() { return NULL; }
+    virtual WXHBRUSH MSWGetCustomBgBrush() { return nullptr; }
 
     // this function should return the brush to paint the children controls
     // background or 0 if this window doesn't impose any particular background
@@ -464,7 +464,7 @@ public:
     // the hDC parameter is the DC background will be drawn on, it can be used
     // to call SetBrushOrgEx() on it if the returned brush is a bitmap one
     //
-    // child parameter is never NULL, it can be this window itself or one of
+    // child parameter is never null, it can be this window itself or one of
     // its (grand)children
     //
     // the base class version returns a solid brush if we have a non default
@@ -524,8 +524,8 @@ public:
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
     // allows the child to hook into its parent WM_ERASEBKGND processing: call
-    // MSWSetEraseBgHook() with a non-NULL window to make parent call
-    // MSWEraseBgHook() on this window (don't forget to reset it to NULL
+    // MSWSetEraseBgHook() with a non-null window to make parent call
+    // MSWEraseBgHook() on this window (don't forget to reset it to nullptr
     // afterwards)
     //
     // this hack is used by wxToolBar, see comments there
@@ -556,6 +556,11 @@ public:
     virtual void SetDoubleBuffered(bool on) override;
     virtual bool IsDoubleBuffered() const override;
 
+    // Ensure that neither this window itself nor any of its parents use
+    // WS_EX_COMPOSITED: this is used by the native wxListCtrl which is
+    // incompatible with this style.
+    void MSWDisableComposited();
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
@@ -576,7 +581,7 @@ public:
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
-    // Return the default button for the TLW containing this window or NULL if
+    // Return the default button for the TLW containing this window or nullptr if
     // none.
     static wxButton* MSWGetDefaultButtonFor(wxWindow* win);
 
@@ -624,6 +629,11 @@ protected:
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;
 #endif // wxUSE_MENUS_NATIVE
 
+    // Called by Reparent() after the window parent changes, i.e. GetParent()
+    // returns the new parent inside this function.
+    virtual void MSWAfterReparent();
+
+
     // the window handle
     WXHWND                m_hWnd;
 
@@ -641,9 +651,9 @@ protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *font = NULL) const override;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *font = nullptr) const override;
     static void MSWDoClientToScreen( WXHWND hWnd, int *x, int *y );
     static void MSWDoScreenToClient( WXHWND hWnd, int *x, int *y );
     virtual void DoClientToScreen( int *x, int *y ) const override;
@@ -740,7 +750,7 @@ protected:
     // This is used by FindItem() and is overridden in wxControl, see there.
     virtual wxWindow* MSWFindItem(long WXUNUSED(id), WXHWND WXUNUSED(hWnd)) const
     {
-        return NULL;
+        return nullptr;
     }
 
 private:
@@ -788,7 +798,7 @@ protected:
         m_pendingSize = wxDefaultSize;
     }
 
-    // current defer window position operation handle (may be NULL)
+    // current defer window position operation handle (may be null)
     WXHANDLE m_hDWP;
 
     // When deferred positioning is done these hold the pending changes, and

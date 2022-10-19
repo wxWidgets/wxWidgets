@@ -384,7 +384,7 @@ bool MyApp::OnInit()
         return false;
 
     MyFrame *frame =
-        new MyFrame(NULL, "wxDataViewCtrl sample", 40, 40, 1000, 540);
+        new MyFrame(nullptr, "wxDataViewCtrl sample", 40, 40, 1000, 540);
 
     frame->Show(true);
     return true;
@@ -561,11 +561,11 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
-    m_log = NULL;
-    m_col = NULL;
+    m_log = nullptr;
+    m_col = nullptr;
 
     for ( int page = 0; page < Page_Max; ++page )
-        m_ctrl[page] = NULL;
+        m_ctrl[page] = nullptr;
 
     m_eventFromProgram = false;
 
@@ -1152,7 +1152,7 @@ void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
     wxDataViewCtrl* const dvc = m_ctrl[m_notebook->GetSelection()];
 
     wxDataViewItem item;
-    wxDataViewColumn* column = NULL;
+    wxDataViewColumn* column = nullptr;
     dvc->HitTest(dvc->ScreenToClient(wxGetMousePosition()), item, column);
 
     if ( item.IsOk() )
@@ -1366,14 +1366,14 @@ void MyFrame::OnStyleChange( wxCommandEvent& WXUNUSED(event) )
 
     sz->Detach(m_ctrl[nPanel]);
     wxDELETE(m_ctrl[nPanel]);
-    m_ctrl[nPanel] = NULL;
+    m_ctrl[nPanel] = nullptr;
 
     if (nPanel == 0)
-        m_music_model.reset(NULL);
+        m_music_model.reset(nullptr);
     else if (nPanel == 1)
-        m_list_model.reset(NULL);
+        m_list_model.reset(nullptr);
     else if (nPanel == 4)
-        m_long_music_model.reset(NULL);
+        m_long_music_model.reset(nullptr);
 
     int flags = 0;
     if ( GetMenuBar()->FindItem(ID_ALIGN_CENTRE_H)->IsChecked() )
@@ -1938,7 +1938,7 @@ void MyFrame::FillIndexList(Lang lang)
 
 void MyFrame::OnIndexListResetModel(wxCommandEvent&)
 {
-    m_ctrl[Page_IndexList]->AssociateModel(NULL);
+    m_ctrl[Page_IndexList]->AssociateModel(nullptr);
     m_ctrl[Page_IndexList]->AssociateModel(m_index_list_model.get());
 }
 

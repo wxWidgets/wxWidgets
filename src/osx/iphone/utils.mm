@@ -135,7 +135,7 @@ wxMouseState wxGetMouseState()
 class wxDisplayImplSingleiOS : public wxDisplayImplSingle
 {
 public:
-    virtual wxRect GetGeometry() const wxOVERRIDE
+    virtual wxRect GetGeometry() const override
     {
         CGRect bounds = [[UIScreen mainScreen] bounds];
 
@@ -156,12 +156,12 @@ public:
         return wxRect(0, 0, width, height);
     }
 
-    virtual int GetDepth() const wxOVERRIDE
+    virtual int GetDepth() const override
     {
         return 32; // TODO can we determine this ?
     }
 
-    virtual wxSize GetPPI() const wxOVERRIDE
+    virtual wxSize GetPPI() const override
     {
         return wxSize(72, 72);
     }
@@ -170,7 +170,7 @@ public:
 class wxDisplayFactorySingleiOS : public wxDisplayFactorySingle
 {
 protected:
-    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    virtual wxDisplayImpl *CreateSingleDisplay() override
     {
         return new wxDisplayImplSingleiOS;
     }
@@ -238,10 +238,10 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     wxSize sz = m_window->GetSize();
 
-    int left = subrect != NULL ? subrect->x : 0 ;
-    int top = subrect != NULL ? subrect->y : 0 ;
-    int width = subrect != NULL ? subrect->width : sz.x;
-    int height = subrect !=  NULL ? subrect->height : sz.y ;
+    int left = subrect != nullptr ? subrect->x : 0 ;
+    int top = subrect != nullptr ? subrect->y : 0 ;
+    int width = subrect != nullptr ? subrect->width : sz.x;
+    int height = subrect != nullptr ? subrect->height : sz.y ;
 
     wxBitmap bmp = wxBitmap(width, height, 32);
 

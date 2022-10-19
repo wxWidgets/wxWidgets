@@ -233,7 +233,7 @@ wxIMPLEMENT_APP(MyApp);
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "HtmlLbox wxWidgets Sample",
+       : wxFrame(nullptr, wxID_ANY, "HtmlLbox wxWidgets Sample",
                  wxDefaultPosition, wxSize(500, 500))
 {
     // set the frame icon
@@ -314,7 +314,7 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
-    delete wxLog::SetActiveTarget(NULL);
+    delete wxLog::SetActiveTarget(nullptr);
 }
 
 void MyFrame::CreateBox()
@@ -328,7 +328,7 @@ void MyFrame::CreateBox()
     else // simple listbox
     {
         m_hlbox = new wxSimpleHtmlListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          0, NULL, multi ? wxLB_MULTIPLE : 0);
+                                          0, nullptr, multi ? wxLB_MULTIPLE : 0);
 
         // unlike wxHtmlListBox which is abstract, wxSimpleHtmlListBox is a
         // concrete control and doesn't support virtual mode, this we need

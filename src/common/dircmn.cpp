@@ -242,7 +242,7 @@ size_t wxDir::GetAllFiles(const wxString& dirname,
                           const wxString& filespec,
                           int flags)
 {
-    wxCHECK_MSG( files, (size_t)-1, wxT("NULL pointer in wxDir::GetAllFiles") );
+    wxCHECK_MSG( files, (size_t)-1, wxT("null pointer in wxDir::GetAllFiles") );
 
     size_t nFiles = 0;
 

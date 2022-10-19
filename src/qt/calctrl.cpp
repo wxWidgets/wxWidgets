@@ -38,11 +38,11 @@ private:
 
 void wxCalendarCtrl::Init()
 {
-    m_qtCalendar = NULL;
+    m_qtCalendar = nullptr;
 
     for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
     {
-        m_attrs[n] = NULL;
+        m_attrs[n] = nullptr;
     }
 }
 
@@ -296,7 +296,7 @@ void wxCalendarCtrl::SetHeaderColours(const wxColour& colFg, const wxColour& col
 
 wxCalendarDateAttr *wxCalendarCtrl::GetAttr(size_t day) const
 {
-    wxCHECK_MSG( day > 0 && day < 32, NULL, wxT("invalid day") );
+    wxCHECK_MSG( day > 0 && day < 32, nullptr, wxT("invalid day") );
 
     return m_attrs[day - 1];
 }

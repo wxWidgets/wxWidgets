@@ -76,7 +76,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    m_frame = new MyFrame(NULL, "Client");
+    m_frame = new MyFrame(nullptr, "Client");
     m_frame->Show(true);
 
     return true;
@@ -200,7 +200,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     item0->SetSizeHints( this );
 
     // status
-    m_client = NULL;
+    m_client = nullptr;
     GetServername()->SetSelection(0);
     GetHostname()->SetSelection(0);
     GetTopic()->SetSelection(0);
@@ -212,18 +212,18 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
 void MyFrame::EnableControls()
 {
-    GetStart()->Enable(m_client == NULL);
-    GetServername()->Enable(m_client == NULL);
-    GetHostname()->Enable(m_client == NULL);
-    GetTopic()->Enable(m_client == NULL);
+    GetStart()->Enable(m_client == nullptr);
+    GetServername()->Enable(m_client == nullptr);
+    GetHostname()->Enable(m_client == nullptr);
+    GetTopic()->Enable(m_client == nullptr);
 
-    const bool isConnected = (m_client != NULL && m_client->IsConnected());
-    GetDisconnect()->Enable(m_client != NULL && isConnected);
-    GetStartAdvise()->Enable(m_client != NULL && isConnected);
-    GetStopAdvise()->Enable(m_client != NULL && isConnected);
-    GetExecute()->Enable(m_client != NULL && isConnected);
-    GetPoke()->Enable(m_client != NULL && isConnected);
-    GetRequest()->Enable(m_client != NULL && isConnected);
+    const bool isConnected = (m_client != nullptr && m_client->IsConnected());
+    GetDisconnect()->Enable(m_client != nullptr && isConnected);
+    GetStartAdvise()->Enable(m_client != nullptr && isConnected);
+    GetStopAdvise()->Enable(m_client != nullptr && isConnected);
+    GetExecute()->Enable(m_client != nullptr && isConnected);
+    GetPoke()->Enable(m_client != nullptr && isConnected);
+    GetRequest()->Enable(m_client != nullptr && isConnected);
 }
 
 void MyFrame::OnClose(wxCloseEvent& event)
@@ -368,7 +368,7 @@ void MyFrame::OnRequest(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 MyClient::MyClient() : wxClient()
 {
-    m_connection = NULL;
+    m_connection = nullptr;
 }
 
 bool MyClient::Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic)
@@ -377,7 +377,7 @@ bool MyClient::Connect(const wxString& sHost, const wxString& sService, const wx
     wxLogNull nolog;
 
     m_connection = (MyConnection *)MakeConnection(sHost, sService, sTopic);
-    return m_connection    != NULL;
+    return m_connection    != nullptr;
 }
 
 wxConnectionBase *MyClient::OnMakeConnection()

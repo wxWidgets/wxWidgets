@@ -33,7 +33,7 @@ public:
             return S_OK;
         }
 
-        *ppv = NULL;
+        *ppv = nullptr;
         return E_NOINTERFACE;
     }
 

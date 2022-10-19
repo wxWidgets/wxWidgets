@@ -32,7 +32,7 @@ public:
     virtual int GetBorderX() const override;
     virtual int GetBorderY() const override;
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) override;
+                          const wxRect *rect = nullptr ) override;
 
     QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
     QWidget *GetHandle() const override;

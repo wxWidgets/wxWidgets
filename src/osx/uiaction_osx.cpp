@@ -144,7 +144,7 @@ bool wxUIActionSimulatorOSXImpl::MouseDown(int button)
 {
     CGEventType type = CGEventTypeForMouseButton(button, true);
     wxCFRef<CGEventRef> event(
-            CGEventCreateMouseEvent(NULL, type, GetMousePosition(), CGButtonForMouseButton(button)));
+            CGEventCreateMouseEvent(nullptr, type, GetMousePosition(), CGButtonForMouseButton(button)));
 
     if ( !event )
         return false;
@@ -166,7 +166,7 @@ bool wxUIActionSimulatorOSXImpl::MouseMove(long x, long y)
 
     CGEventType type = kCGEventMouseMoved;
     wxCFRef<CGEventRef> event(
-            CGEventCreateMouseEvent(NULL, type, pos, kCGMouseButtonLeft));
+            CGEventCreateMouseEvent(nullptr, type, pos, kCGMouseButtonLeft));
 
     if ( !event )
         return false;
@@ -185,7 +185,7 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
 {
     CGEventType type = CGEventTypeForMouseButton(button, false);
     wxCFRef<CGEventRef> event(
-            CGEventCreateMouseEvent(NULL, type, GetMousePosition(), CGButtonForMouseButton(button)));
+            CGEventCreateMouseEvent(nullptr, type, GetMousePosition(), CGButtonForMouseButton(button)));
 
     if ( !event )
         return false;
@@ -204,7 +204,7 @@ bool wxUIActionSimulatorOSXImpl::MouseDblClick(int button)
     CGEventType downtype = CGEventTypeForMouseButton(button, true);
     CGEventType uptype = CGEventTypeForMouseButton(button, false);
     wxCFRef<CGEventRef> event(
-                              CGEventCreateMouseEvent(NULL, downtype, GetMousePosition(), CGButtonForMouseButton(button)));
+                              CGEventCreateMouseEvent(nullptr, downtype, GetMousePosition(), CGButtonForMouseButton(button)));
     
     if ( !event )
         return false;
@@ -242,7 +242,7 @@ bool wxUIActionSimulatorOSXImpl::MouseDragDrop(long x1, long y1, long x2, long y
     CGEventType dragtype = CGEventTypeForMouseDrag(button) ;
 
     wxCFRef<CGEventRef> event(
-                              CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, pos1, CGButtonForMouseButton(button)));
+                              CGEventCreateMouseEvent(nullptr, kCGEventMouseMoved, pos1, CGButtonForMouseButton(button)));
     
     if ( !event )
         return false;
@@ -273,7 +273,7 @@ wxUIActionSimulatorOSXImpl::DoKey(int keycode, int WXUNUSED(modifiers), bool isD
     CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)keycode);
 
     wxCFRef<CGEventRef>
-        event(CGEventCreateKeyboardEvent(NULL, cgcode, isDown));
+        event(CGEventCreateKeyboardEvent(nullptr, cgcode, isDown));
     if ( !event )
         return false;
 

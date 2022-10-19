@@ -649,7 +649,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 

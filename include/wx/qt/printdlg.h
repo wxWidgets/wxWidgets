@@ -44,9 +44,9 @@ class WXDLLIMPEXP_CORE wxQtPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
     wxQtPageSetupDialog();
-    wxQtPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    wxQtPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
 
-    bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    bool Create(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
 
     virtual wxPageSetupDialogData& GetPageSetupDialogData() override;
 

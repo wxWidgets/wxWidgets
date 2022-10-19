@@ -190,7 +190,7 @@ private:
     // doesn't know about them and so we can't use Header_GetOrderArray()
     wxArrayInt m_colIndices;
 
-    // the image list: initially NULL, created on demand
+    // the image list: initially nullptr, created on demand
     wxImageList *m_imageList;
 
     // the offset of the window used to emulate scrolling it
@@ -202,7 +202,7 @@ private:
     // a column is currently being resized
     bool m_isColBeingResized;
 
-    // the custom draw helper: initially NULL, created on demand, use
+    // the custom draw helper: initially nullptr, created on demand, use
     // GetCustomDraw() to do it
     wxMSWHeaderCtrlCustomDraw *m_customDraw;
 };
@@ -220,11 +220,11 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxMSWHeaderCtrlNameStr[] = "wxMSWHeader
 void wxMSWHeaderCtrl::Init()
 {
     m_numColumns = 0;
-    m_imageList = NULL;
+    m_imageList = nullptr;
     m_scrollOffset = 0;
     m_colBeingDragged = -1;
     m_isColBeingResized = false;
-    m_customDraw = NULL;
+    m_customDraw = nullptr;
 
     Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 }
@@ -340,7 +340,7 @@ void wxMSWHeaderCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 void wxMSWHeaderCtrl::WXHandleDPIChanged(wxDPIChangedEvent& event)
 {
     delete m_imageList;
-    m_imageList = NULL;
+    m_imageList = nullptr;
     for (unsigned int i = 0; i < m_numColumns; ++i)
     {
         UpdateHeader(i);
@@ -679,10 +679,10 @@ wxMSWHeaderCtrlCustomDraw* wxMSWHeaderCtrl::GetCustomDraw()
         if ( m_customDraw )
         {
             delete m_customDraw;
-            m_customDraw = NULL;
+            m_customDraw = nullptr;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     // We do have at least one custom colour, so enable custom drawing.
@@ -1037,7 +1037,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 void wxHeaderCtrl::Init()
 {
-    m_nativeControl = NULL;
+    m_nativeControl = nullptr;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -1073,7 +1073,7 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
 
 void wxHeaderCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    if (m_nativeControl != NULL) // check whether initialisation has been done
+    if (m_nativeControl != nullptr) // check whether initialisation has been done
     {
         int cw, ch;
         GetClientSize(&cw, &ch);

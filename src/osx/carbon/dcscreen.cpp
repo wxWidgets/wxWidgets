@@ -68,7 +68,7 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     if ( subrect )
         srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
 
-    CGImageRef image = NULL;
+    CGImageRef image = nullptr;
     
     image = CGDisplayCreateImage(kCGDirectMainDisplay);
 

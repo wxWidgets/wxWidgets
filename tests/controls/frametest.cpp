@@ -46,7 +46,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FrameTestCase, "FrameTestCase" );
 
 void FrameTestCase::setUp()
 {
-    m_frame = new wxFrame(NULL, wxID_ANY, "test frame");
+    m_frame = new wxFrame(nullptr, wxID_ANY, "test frame");
     m_frame->Show();
 }
 

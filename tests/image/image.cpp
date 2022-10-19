@@ -908,7 +908,7 @@ enum
 
 static
 void CompareImage(const wxImageHandler& handler, const wxImage& image,
-    int properties = 0, const wxImage *compareTo = NULL)
+    int properties = 0, const wxImage *compareTo = nullptr)
 {
     wxBitmapType type = handler.GetType();
 
@@ -1107,7 +1107,7 @@ void ImageTestCase::SavePNG()
 
 #if wxUSE_LIBTIFF
 static void TestTIFFImage(const wxString& option, int value,
-    const wxImage *compareImage = NULL)
+    const wxImage *compareImage = nullptr)
 {
     wxImage image;
     if (compareImage)
@@ -1400,7 +1400,7 @@ FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
         const wxImage imageFromFile(file); \
         if ( imageFromFile.IsOk() ) \
         { \
-            INFO("Wrong scaled \"" << file << "\" " << Catch::toString(image)); \
+            INFO("Wrong scaled \"" << file << "\" " << Catch::StringMaker<wxImage>::convert(image)); \
             CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
         } \
         else \
@@ -1474,7 +1474,7 @@ void ImageTestCase::ScaleCompare()
 
 void ImageTestCase::CreateBitmapFromCursor()
 {
-#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
+#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXX11__
 
     wxImage image("image/wx.png");
     wxCursor cursor(image);
@@ -1648,8 +1648,12 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     };
 
     // Execute AddHandler() just once.
-    static const bool
-        registeredHandler = (wxImage::AddHandler(new wxPNGHandler()), true);
+    static bool s_registeredHandler = false;
+    if ( !s_registeredHandler )
+    {
+        wxImage::AddHandler(new wxPNGHandler());
+        s_registeredHandler = true;
+    }
 
     SECTION("Paste same size image")
     {

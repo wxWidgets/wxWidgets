@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
 class wxPGWindowList
 {
 public:
-    wxPGWindowList(wxWindow* primary, wxWindow* secondary = NULL)
+    wxPGWindowList(wxWindow* primary, wxWindow* secondary = nullptr)
         : m_primary(primary)
         , m_secondary(secondary)
     {
@@ -68,7 +68,7 @@ public:
     // Constructor.
     wxPGEditor()
         : wxObject()
-        , m_clientData(NULL)
+        , m_clientData(nullptr)
     {
     }
 
@@ -193,7 +193,7 @@ wxString CLASSNAME::GetName() const \
 { \
     return wxS(#EDITOR); \
 } \
-wxPGEditor* wxPGEditor_##EDITOR = NULL;
+wxPGEditor* wxPGEditor_##EDITOR = nullptr;
 
 
 //
@@ -400,7 +400,7 @@ public:
 // Editor class registration macro (mostly for internal use)
 
 #define wxPGRegisterEditorClass(EDITOR) \
-    if ( wxPGEditor_##EDITOR == NULL ) \
+    if ( wxPGEditor_##EDITOR == nullptr ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
                 new wxPG##EDITOR##Editor ); \
@@ -419,7 +419,7 @@ class WXDLLIMPEXP_PROPGRID wxPGEditorDialogAdapter : public wxObject
 public:
     wxPGEditorDialogAdapter()
         : wxObject()
-        , m_clientData(NULL)
+        , m_clientData(nullptr)
     {
     }
 

@@ -26,10 +26,8 @@ ZLIBDIR  = $(WXDIR)/src/zlib
 REGEXDIR = $(WXDIR)/src/regex
 EXPATDIR = $(WXDIR)/src/expat
 GTKDIR   = $(WXDIR)/src/gtk
-GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
-MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
 MACDIR   = $(WXDIR)/src/osx
 COCOADIR = $(WXDIR)/src/cocoa
@@ -189,10 +187,8 @@ ALL_GUI_DIST: ALL_DIST
 
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
-	mkdir $(DISTDIR)/art/motif
 	$(CP_P) $(WXDIR)/art/*.xpm $(DISTDIR)/art
 	$(CP_P) $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
-	$(CP_P) $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
 
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	$(CP_P) $(COMMDIR)/*.cpp $(DISTDIR)/src/common
@@ -329,14 +325,6 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
-	mkdir $(DISTDIR)/include/wx/gtk1
-	$(CP_P) $(INCDIR)/wx/gtk1/*.h $(DISTDIR)/include/wx/gtk1
-	mkdir $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.h $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.cpp $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.c $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.xbm $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.mms $(DISTDIR)/src/gtk1
 	mkdir $(DISTDIR)/include/wx/x11/private
 	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 
@@ -367,25 +355,6 @@ X11_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/osx
 	mkdir $(DISTDIR)/include/wx/osx/core
 	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
-
-MOTIF_DIST: ALL_GUI_DIST
-	$(CP_P) $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
-	$(CP_P) $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
-	$(CP_P) $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
-	mkdir $(DISTDIR)/src/motif/xmcombo
-	$(CP_P) $(MOTIFDIR)/xmcombo/*.c $(DISTDIR)/src/motif/xmcombo
-	$(CP_P) $(MOTIFDIR)/xmcombo/*.h $(DISTDIR)/src/motif/xmcombo
-	$(CP_P) $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
-	mkdir $(DISTDIR)/src/x11
-	mkdir $(DISTDIR)/include/wx/x11
-	$(CP_P) $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(X11DIR)/utilsx.cpp \
-		$(X11DIR)/bitmap.cpp $(X11DIR)/glcanvas.cpp $(X11DIR)/region.cpp \
-		$(DISTDIR)/src/x11
-	$(CP_P) $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
-		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
-		$(DISTDIR)/include/wx/x11
-	mkdir $(DISTDIR)/include/wx/x11/private
-	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 
 OSX_CARBON_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/*.* $(DISTDIR)/include

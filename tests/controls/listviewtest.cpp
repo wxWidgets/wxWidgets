@@ -60,7 +60,7 @@ void ListViewTestCase::setUp()
 void ListViewTestCase::tearDown()
 {
     DeleteTestWindow(m_list);
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 void ListViewTestCase::Selection()

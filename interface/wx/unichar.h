@@ -72,7 +72,7 @@ public:
 
         @param c
             An output pointer to the value of this Unicode character as a @c
-            char. Must be non-@NULL.
+            char. Must be non-null.
         @return
             @true if the object is an 8 bit char and @a c was filled with its
             value as char or @false otherwise (@a c won't be modified then).

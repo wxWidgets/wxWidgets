@@ -66,7 +66,7 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
     wxDD_DEFAULT_STYLE unless you explicitly need to use the old dialog version
     under Windows. E.g. do
     @code
-        wxDirDialog dlg(NULL, "Choose input directory", "",
+        wxDirDialog dlg(nullptr, "Choose input directory", "",
                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
     @endcode
     instead of just using @c wxDD_DIR_MUST_EXIST style alone.
@@ -186,7 +186,7 @@ wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
                        const wxString& default_path = wxEmptyString,
                        long style = 0,
                        const wxPoint& pos = wxDefaultPosition,
-                       wxWindow* parent = NULL);
+                       wxWindow* parent = nullptr);
 
 ///@}
 

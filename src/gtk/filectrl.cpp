@@ -190,7 +190,7 @@ void wxGtkFileChooser::SetFilterIndex( int filterIndex )
 
     filter = g_slist_nth_data( filters, filterIndex );
 
-    if ( filter != NULL )
+    if ( filter != nullptr )
     {
         gtk_file_chooser_set_filter( chooser, GTK_FILE_FILTER( filter ) );
     }
@@ -221,7 +221,7 @@ int wxGtkFileChooser::GetFilterIndex() const
 
 bool wxGtkFileChooser::HasFilterChoice() const
 {
-    return gtk_file_chooser_get_filter( m_widget ) != NULL;
+    return gtk_file_chooser_get_filter( m_widget ) != nullptr;
 }
 
 //-----------------------------------------------------------------------------

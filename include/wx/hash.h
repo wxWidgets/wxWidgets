@@ -230,7 +230,7 @@ public:
     // Way of iterating through whole hash table (e.g. to delete everything)
     // Not necessary, of course, if you're only storing pointers to
     // objects maintained separately
-    void BeginFind() { m_curr = NULL; m_currBucket = 0; }
+    void BeginFind() { m_curr = nullptr; m_currBucket = 0; }
     Node* Next();
 
     void Clear() { wxHashTableBase::Clear(); }

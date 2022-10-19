@@ -95,7 +95,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
 wxHtmlListCell::wxHtmlListCell(wxHtmlContainerCell *parent) : wxHtmlContainerCell(parent)
 {
     m_NumRows = 0;
-    m_RowInfo = 0;
+    m_RowInfo = nullptr;
     m_ListmarkWidth = 0;
 }
 
@@ -161,8 +161,8 @@ void wxHtmlListCell::AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont
 void wxHtmlListCell::ReallocRows(int rows)
 {
     m_RowInfo = (wxHtmlListItemStruct*) realloc(m_RowInfo, sizeof(wxHtmlListItemStruct) * rows);
-    m_RowInfo[rows - 1].mark = NULL;
-    m_RowInfo[rows - 1].cont = NULL;
+    m_RowInfo[rows - 1].mark = nullptr;
+    m_RowInfo[rows - 1].cont = nullptr;
     m_RowInfo[rows - 1].minWidth = 0;
     m_RowInfo[rows - 1].maxWidth = 0;
 
@@ -223,7 +223,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
     TAG_HANDLER_CONSTR(OLULLI)
     {
-        m_List = NULL;
+        m_List = nullptr;
         m_Numbering = 0;
     }
 

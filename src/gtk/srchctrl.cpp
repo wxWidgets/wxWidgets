@@ -124,10 +124,10 @@ wxSearchCtrl::~wxSearchCtrl()
 
 void wxSearchCtrl::Init()
 {
-    m_entry = NULL;
+    m_entry = nullptr;
 
 #if wxUSE_MENUS
-    m_menu = NULL;
+    m_menu = nullptr;
 #endif // wxUSE_MENUS
 
     m_cancelButtonVisible = false;
@@ -153,7 +153,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
     if ( HasFlag(wxBORDER_NONE) )
     {
-        g_object_set (m_widget, "has-frame", FALSE, NULL);
+        g_object_set (m_widget, "has-frame", FALSE, nullptr);
     }
 
     GtkEntry * const entry = GetEntry();
@@ -237,7 +237,7 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
     delete m_menu;
     m_menu = menu;
 
-    const bool hasMenu = m_menu != NULL;
+    const bool hasMenu = m_menu != nullptr;
 
     gtk_entry_set_icon_sensitive(m_entry, GTK_ENTRY_ICON_PRIMARY, hasMenu);
     gtk_entry_set_icon_activatable(m_entry, GTK_ENTRY_ICON_PRIMARY, hasMenu);
@@ -275,7 +275,7 @@ void wxSearchCtrl::ShowCancelButton(bool show)
 
     gtk_entry_set_icon_from_icon_name(m_entry,
                                       GTK_ENTRY_ICON_SECONDARY,
-                                      show ? "edit-clear-symbolic" : NULL);
+                                      show ? "edit-clear-symbolic" : nullptr);
 
     m_cancelButtonVisible = show;
 }
@@ -305,7 +305,7 @@ wxString wxSearchCtrl::GetDescriptiveText() const
 
 void wxSearchCtrl::OnChar(wxKeyEvent& key_event)
 {
-    wxCHECK_RET( m_entry != NULL, "invalid search ctrl" );
+    wxCHECK_RET( m_entry != nullptr, "invalid search ctrl" );
 
     if ( key_event.GetKeyCode() == WXK_RETURN )
     {

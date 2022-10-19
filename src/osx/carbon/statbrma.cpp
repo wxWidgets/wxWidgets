@@ -42,7 +42,7 @@ wxStatusBarMac::wxStatusBarMac(wxWindow *parent,
         :
         wxStatusBarGeneric()
 {
-    SetParent( NULL );
+    SetParent( nullptr );
     Create( parent, id, style, name );
 }
 
@@ -50,7 +50,7 @@ wxStatusBarMac::wxStatusBarMac()
         :
         wxStatusBarGeneric()
 {
-    SetParent( NULL );
+    SetParent( nullptr );
 }
 
 wxStatusBarMac::~wxStatusBarMac()
@@ -103,13 +103,13 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // Notice that wxOSXGetKeyWindow (aka [NSApp keyWindow] used below is
     // subtly different from IsActive() (aka [NSWindow iskeyWindow]): the
-    // former remains non-NULL if another application shows a temporary
+    // former remains non-null if another application shows a temporary
     // floating window or a status icon's menu is used. That's what we want: in
     // that case, statusbar appearance shouldn't change. It also shouldn't
     // change if a window-modal sheet attached to this window is key.
     wxTopLevelWindow *tlw = wxDynamicCast(MacGetTopLevelWindow(), wxTopLevelWindow);
     wxNonOwnedWindow* directKeyWindow = wxNonOwnedWindow::GetFromWXWindow(wxOSXGetKeyWindow());
-    wxWindow *keyWindow = directKeyWindow ? directKeyWindow->MacGetTopLevelWindow() : NULL;
+    wxWindow *keyWindow = directKeyWindow ? directKeyWindow->MacGetTopLevelWindow() : nullptr;
     while ( keyWindow && keyWindow != tlw )
     {
         wxDialog *dlg = wxDynamicCast(keyWindow, wxDialog);

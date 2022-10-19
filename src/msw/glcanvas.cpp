@@ -157,7 +157,7 @@ inline T wxWGLProcCast(PROC proc)
 }
 
 // this macro defines a variable of type "name_t" called "name" and initializes
-// it with the pointer to WGL function "name" (which may be NULL)
+// it with the pointer to WGL function "name" (which may be null)
 //
 // NB: type name_t must be defined by the code using the macro
 #define wxDEFINE_WGL_FUNC(name) \
@@ -546,9 +546,9 @@ wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContext *other,
                          const wxGLContextAttrs *ctxAttrs)
-    : m_glContext(NULL)
+    : m_glContext(nullptr)
 {
-    const int* contextAttribs = NULL;
+    const int* contextAttribs = nullptr;
     bool needsARB = false;
 
     if ( ctxAttrs )
@@ -577,7 +577,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
         (HDC hDC, HGLRC hShareContext, const int *attribList);
 
     wxDEFINE_WGL_FUNC(wglCreateContextAttribsARB);
-    wglMakeCurrent(win->GetHDC(), NULL);
+    wglMakeCurrent(win->GetHDC(), nullptr);
     wglDeleteContext(tempContext);
 
     // The preferred way is using wglCreateContextAttribsARB, even for old context
@@ -596,7 +596,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
 
     // Some old hardware may accept the use of this ARB, but may fail.
-    // In case of NULL attributes we'll try creating the context old-way.
+    // In case of null attributes we'll try creating the context old-way.
     if ( !m_glContext && (!contextAttribs || !needsARB) )
     {
         // Create legacy context
@@ -650,7 +650,7 @@ wxEND_EVENT_TABLE()
 
 void wxGLCanvas::Init()
 {
-    m_hDC = NULL;
+    m_hDC = nullptr;
 }
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
@@ -713,7 +713,7 @@ bool wxGLCanvas::CreateWindow(wxWindow *parent,
     msflags |= MSWGetStyle(style, &exStyle);
 
     if ( !MSWCreate(wxApp::GetRegisteredClassName(wxT("wxGLCanvas"), -1, CS_OWNDC),
-                    NULL, pos, size, msflags, exStyle) )
+                    nullptr, pos, size, msflags, exStyle) )
         return false;
 
     m_hDC = ::GetDC(GetHwnd());
@@ -768,7 +768,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     //   "The system's metafile component uses this structure to record the
     //   logical pixel format specification."
     // If anybody understands this sentence, please explain.
-    // Pass pfd just in case it's somehow needed. Passing NULL also works here.
+    // Pass pfd just in case it's somehow needed. Passing nullptr also works here.
     if ( !::SetPixelFormat(m_hDC, pixelFormat, &pfd) )
     {
         wxLogLastError("SetPixelFormat");
@@ -825,7 +825,7 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
             }
             else
             {
-                s_extensionsList = NULL;
+                s_extensionsList = nullptr;
             }
         }
     }
@@ -844,10 +844,10 @@ public:
     wxGLdummyWin()
     {
         hdc = 0;
-        CreateBase(NULL, wxID_ANY);
+        CreateBase(nullptr, wxID_ANY);
         DWORD msflags = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
         if( MSWCreate(wxApp::GetRegisteredClassName(wxT("wxGLCanvas"), -1, CS_OWNDC),
-                      NULL, wxDefaultPosition, wxDefaultSize, msflags, 0) )
+                      nullptr, wxDefaultPosition, wxDefaultSize, msflags, 0) )
         {
             hdc = ::GetDC(GetHwnd());
         }
@@ -1084,7 +1084,7 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
     {
         wxLogLastError("wglChoosePixelFormatARB unavailable");
         // Delete the dummy objects
-        ::wglMakeCurrent(NULL, NULL);
+        ::wglMakeCurrent(nullptr, nullptr);
         ::wglDeleteContext(dumctx);
         dummyWin->Destroy();
         return 0;
@@ -1122,7 +1122,7 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
         UINT numFormats = 0;
 
         // Get the first good match
-        if ( !wglChoosePixelFormatARB(dummyHDC, attrsListWGL, NULL,
+        if ( !wglChoosePixelFormatARB(dummyHDC, attrsListWGL, nullptr,
                                       1, &pixelFormat, &numFormats) )
         {
             wxLogLastError("wglChoosePixelFormatARB. Is the list zero-terminated?");
@@ -1139,7 +1139,7 @@ int wxGLCanvas::FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
     }
 
     // Delete the dummy objects
-    ::wglMakeCurrent(NULL, NULL);
+    ::wglMakeCurrent(nullptr, nullptr);
     ::wglDeleteContext(dumctx);
     dummyWin->Destroy();
 

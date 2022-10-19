@@ -481,7 +481,7 @@ wxDbgHelpDLL::DumpUDT(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
         // between GetWriteBuf() and UngetWriteBuf() calls) and assert when we
         // try to access it contents using public methods, so instead use our
         // knowledge of its internals
-        const wxChar *p = NULL;
+        const wxChar *p = nullptr;
         if ( !::IsBadReadPtr(ps, sizeof(wxString)) )
         {
             p = ps->data();
@@ -489,7 +489,7 @@ wxDbgHelpDLL::DumpUDT(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
             if ( ::IsBadReadPtr(data, sizeof(wxStringData)) ||
                     ::IsBadReadPtr(p, sizeof(wxChar *)*data->nAllocLength) )
             {
-                p = NULL; // don't touch this pointer with 10 feet pole
+                p = nullptr; // don't touch this pointer with 10 feet pole
             }
         }
 
@@ -758,14 +758,14 @@ wxDbgHelpDLL::CallSymInitialize(HANDLE hProcess, BOOL fInvadeProcess)
 #ifdef UNICODE
     if ( SymInitializeW )
     {
-        if ( SymInitializeW(hProcess, NULL, fInvadeProcess) )
+        if ( SymInitializeW(hProcess, nullptr, fInvadeProcess) )
             return TRUE;
     }
 #endif // UNICODE
 
     if ( SymInitialize )
     {
-        if ( SymInitialize(hProcess, NULL, fInvadeProcess) )
+        if ( SymInitialize(hProcess, nullptr, fInvadeProcess) )
             return TRUE;
     }
 
@@ -914,7 +914,7 @@ wxDbgHelpDLL::CallSymEnumSymbols(HANDLE hProcess,
 #ifdef UNICODE
     if ( SymEnumSymbolsW )
     {
-        if ( SymEnumSymbolsW(hProcess, baseOfDll, NULL, callback, callbackParam) )
+        if ( SymEnumSymbolsW(hProcess, baseOfDll, nullptr, callback, callbackParam) )
             return TRUE;
     }
 
@@ -922,13 +922,13 @@ wxDbgHelpDLL::CallSymEnumSymbols(HANDLE hProcess,
     {
         wxEnumSymbolsCallbackBridge br(callback, callbackParam);
 
-        if ( SymEnumSymbols(hProcess, baseOfDll, NULL, wxEnumSymbolsCallback, &br) )
+        if ( SymEnumSymbols(hProcess, baseOfDll, nullptr, wxEnumSymbolsCallback, &br) )
             return TRUE;
     }
 #else // !UNICODE
     if ( SymEnumSymbols )
     {
-        if ( SymEnumSymbols(hProcess, baseOfDll, NULL, callback, callbackParam) )
+        if ( SymEnumSymbols(hProcess, baseOfDll, nullptr, callback, callbackParam) )
             return TRUE;
     }
 #endif // UNICODE/!UNICODE

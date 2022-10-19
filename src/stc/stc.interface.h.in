@@ -313,7 +313,7 @@ public:
        Retrieve the text of the line containing the caret.
        Returns the index of the caret on the line.
     */
-    wxCharBuffer GetCurLineRaw(int* linePos=NULL);
+    wxCharBuffer GetCurLineRaw(int* linePos=nullptr);
 
     /**
        Retrieve the contents of a line.

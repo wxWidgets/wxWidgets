@@ -19,9 +19,9 @@ class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase
 public:
     wxAnyButton()
     {
-        m_imageData = NULL;
+        m_imageData = nullptr;
 #if wxUSE_MARKUP
-        m_markupText = NULL;
+        m_markupText = nullptr;
 #endif // wxUSE_MARKUP
     }
 
@@ -57,7 +57,7 @@ protected:
     // Increases the passed in size to account for the button image.
     //
     // Should only be called if we do have a button, i.e. if m_imageData is
-    // non-NULL.
+    // non-null.
     void AdjustForBitmapSize(wxSize& size) const;
 
     class wxButtonImageData *m_imageData;

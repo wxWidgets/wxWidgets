@@ -39,7 +39,7 @@
 inline bool wxOleInitialize()
 {
     const HRESULT
-    hr = ::OleInitialize(NULL);
+    hr = ::OleInitialize(nullptr);
 
     // RPC_E_CHANGED_MODE indicates that OLE had been already initialized
     // before, albeit with different mode. Don't consider it to be an error as
@@ -66,8 +66,8 @@ inline void wxOleUninitialize()
 class WXDLLIMPEXP_CORE wxBasicString
 {
 public:
-    // Constructs with the owned BSTR set to NULL
-    wxBasicString() : m_bstrBuf(NULL) {}
+    // Constructs with the owned BSTR set to nullptr
+    wxBasicString() : m_bstrBuf(nullptr) {}
 
     // Constructs with the owned BSTR created from a wxString
     wxBasicString(const wxString& str)
@@ -91,7 +91,7 @@ public:
     BSTR Copy() const { return SysAllocString(m_bstrBuf); }
 
     // Returns the address of the owned BSTR, not to be called
-    // when wxBasicString already contains a non-NULL BSTR
+    // when wxBasicString already contains a non-null BSTR
     BSTR* ByRef();
 
     // Sets its BSTR to a copy of the BSTR owned by bstr
@@ -168,7 +168,7 @@ private:
 class WXDLLIMPEXP_CORE wxVariantDataSafeArray : public wxVariantData
 {
 public:
-    explicit wxVariantDataSafeArray(SAFEARRAY* value = NULL)
+    explicit wxVariantDataSafeArray(SAFEARRAY* value = nullptr)
     {
         m_value = value;
     }

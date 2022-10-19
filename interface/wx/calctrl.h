@@ -448,8 +448,8 @@ public:
         Not implemented in wxGTK currently.
     */
     virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
-                                            wxDateTime* date = NULL,
-                                            wxDateTime::WeekDay* wd = NULL);
+                                            wxDateTime* date = nullptr,
+                                            wxDateTime::WeekDay* wd = nullptr);
 
     /**
         Clears any attributes associated with the given day (in the range
@@ -553,11 +553,11 @@ public:
         @see SetDateRange()
 
         @param lowerdate
-            If non-@NULL, the value of the low limit for the dates shown by the
+            If non-null, the value of the low limit for the dates shown by the
             control is returned (which may be ::wxDefaultDateTime if no limit
             is set).
         @param upperdate
-            If non-@NULL, the value of the upper limit for the dates shown by
+            If non-null, the value of the upper limit for the dates shown by
             the control is returned (which may be ::wxDefaultDateTime if no
             limit is set).
         @return

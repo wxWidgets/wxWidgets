@@ -514,7 +514,7 @@ public:
     void DrawLabel(const wxString& text, const wxBitmap& bitmap,
                    const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                   int indexAccel = -1, wxRect* rectBounding = NULL);
+                   int indexAccel = -1, wxRect* rectBounding = nullptr);
 
     /**
         @overload
@@ -885,16 +885,16 @@ public:
         @remarks
         Clipping region is given in logical coordinates.
 
-        @param x If non-@NULL, filled in with the logical horizontal coordinate
+        @param x If non-null, filled in with the logical horizontal coordinate
             of the top left corner of the clipping region if the function
             returns true or 0 otherwise.
-        @param y If non-@NULL, filled in with the logical vertical coordinate
+        @param y If non-null, filled in with the logical vertical coordinate
             of the top left corner of the clipping region if the function
             returns true or 0 otherwise.
-        @param width If non-@NULL, filled in with the width of the clipping
+        @param width If non-null, filled in with the width of the clipping
             region if the function returns true or the device context width
             otherwise.
-        @param height If non-@NULL, filled in with the height of the clipping
+        @param height If non-null, filled in with the height of the clipping
             region if the function returns true or the device context height
             otherwise.
         @return @true if there is a clipping region or @false if there is no
@@ -1014,8 +1014,8 @@ public:
     */
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
                                 wxCoord* h,
-                                wxCoord* heightLine = NULL,
-                                const wxFont* font = NULL) const;
+                                wxCoord* heightLine = nullptr,
+                                const wxFont* font = nullptr) const;
     /**
         Gets the dimensions of the string using the currently selected font.
         @a string is the text string to measure.
@@ -1078,9 +1078,9 @@ public:
              GetMultiLineTextExtent()
     */
     void GetTextExtent(const wxString& string, wxCoord* w, wxCoord* h,
-                       wxCoord* descent = NULL,
-                       wxCoord* externalLeading = NULL,
-                       const wxFont* font = NULL) const;
+                       wxCoord* descent = nullptr,
+                       wxCoord* externalLeading = nullptr,
+                       const wxFont* font = nullptr) const;
 
     /**
         @overload
@@ -1823,7 +1823,7 @@ public:
        For example, on Windows the return value is an HDC, on macOS it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
-       wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
+       wxGraphicsContext::GetNativeContext.  A value of @NULL is returned if
        the DC does not have anything that fits the handle concept.
 
        @since 2.9.5
@@ -1834,7 +1834,7 @@ public:
     /**
        If supported by the platform and the type of DC, fetch the contents of the DC, or a subset of it, as a bitmap.
     */
-    wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
+    wxBitmap GetAsBitmap(const wxRect *subrect = nullptr) const;
 
 
     /**

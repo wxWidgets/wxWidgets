@@ -304,7 +304,7 @@ public:
     // Determines which item (if any) is at the specified point,
     // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
     // Request the subitem number as well at the given coordinate.
-    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = nullptr) const;
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.
@@ -399,6 +399,8 @@ protected:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
+    virtual void MSWAfterReparent() override;
+
     void OnDPIChanged(wxDPIChangedEvent& event);
 
     wxSize MSWGetBestViewRect(int x, int y) const;
@@ -410,7 +412,7 @@ protected:
     // free memory taken by all internal data
     void FreeAllInternalData();
 
-    // get the internal data object for this item (may return NULL)
+    // get the internal data object for this item (may return nullptr)
     wxMSWListItemData *MSWGetItemData(long item) const;
 
     // get the item attribute, either by querying it for virtual control, or by
@@ -444,7 +446,7 @@ private:
     // initialize the (already created) m_textCtrl with the associated HWND
     void InitEditControl(WXHWND hWnd);
 
-    // destroy m_textCtrl if it's currently valid and reset it to NULL
+    // destroy m_textCtrl if it's currently valid and reset it to nullptr
     void DeleteEditControl();
 
     // Update all image lists that we have.
@@ -457,7 +459,7 @@ private:
     // Draw the sort arrow in the header.
     void DrawSortArrow();
 
-    // Object using for header custom drawing if necessary, may be NULL.
+    // Object using for header custom drawing if necessary, may be null.
     wxMSWListHeaderCustomDraw* m_headerCustomDraw;
 
 

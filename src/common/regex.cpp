@@ -157,7 +157,7 @@ int wx_regcomp(regex_t* preg, const wxRegChar* pattern, int cflags)
                     options,
                     &preg->errorcode,
                     &preg->erroroffset,
-                    NULL                    // use default context
+                    nullptr                    // use default context
                  );
 
     if ( !preg->code )
@@ -168,7 +168,7 @@ int wx_regcomp(regex_t* preg, const wxRegChar* pattern, int cflags)
         return REG_BADPAT;
     }
 
-    preg->match_data = pcre2_match_data_create_from_pattern(preg->code, NULL);
+    preg->match_data = pcre2_match_data_create_from_pattern(preg->code, nullptr);
 
     return REG_NOERROR;
 }
@@ -194,7 +194,7 @@ wx_regexec(const regex_t* preg, const wxRegChar* string, size_t len,
                         0,                      // start offset
                         options,
                         preg->match_data,
-                        NULL                    // use default context
+                        nullptr                    // use default context
                    );
 
     if ( rc == PCRE2_ERROR_NOMATCH )
@@ -384,7 +384,7 @@ private:
     void Init()
     {
         m_isCompiled = false;
-        m_Matches = NULL;
+        m_Matches = nullptr;
         m_nMatches = 0;
     }
 
@@ -441,7 +441,7 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
     wxString szError;
 
     // first get the string length needed
-    int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
+    int len = wx_regerror(errorcode, &m_RegEx, nullptr, 0);
     if ( len > 0 )
     {
         wxCharTypeBuffer<wxRegErrorChar> errbuf(len + 1);
@@ -987,7 +987,7 @@ static wxString ConvertWordBoundaries(const wxString& expr)
                 break;
             }
 
-            const char* replacement = NULL;
+            const char* replacement = nullptr;
             switch ( (*it).GetValue() )
             {
                 case 'm':
@@ -1202,11 +1202,11 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
         self->m_Matches = new wxRegExMatches(m_nMatches);
     }
 
-    wxRegExMatches::match_type matches = m_Matches ? m_Matches->get() : NULL;
+    wxRegExMatches::match_type matches = m_Matches ? m_Matches->get() : nullptr;
 
     // do match it
 #if defined WXREGEX_USING_BUILTIN
-    int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, matches, flagsRE);
+    int rc = wx_re_exec(&self->m_RegEx, str, len, nullptr, m_nMatches, matches, flagsRE);
 #elif defined WXREGEX_USING_RE_SEARCH
     int rc = ReSearch(&self->m_RegEx, str, len, matches, flagsRE);
 #else
@@ -1258,7 +1258,7 @@ int wxRegExImpl::Replace(wxString *text,
                          const wxString& replacement,
                          size_t maxMatches) const
 {
-    wxCHECK_MSG( text, wxNOT_FOUND, wxT("NULL text in wxRegEx::Replace") );
+    wxCHECK_MSG( text, wxNOT_FOUND, wxT("null text in wxRegEx::Replace") );
     wxCHECK_MSG( IsValid(), wxNOT_FOUND, wxT("must successfully Compile() first") );
 
     // the input string
@@ -1392,7 +1392,7 @@ int wxRegExImpl::Replace(wxString *text,
 
 void wxRegEx::Init()
 {
-    m_impl = NULL;
+    m_impl = nullptr;
 }
 
 wxRegEx::~wxRegEx()

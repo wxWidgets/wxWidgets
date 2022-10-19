@@ -248,8 +248,8 @@ void StringTestCase::Constructors()
     const char *end = wxStrchr(s, '!');
     CPPUNIT_ASSERT_EQUAL( "really", wxString(start, end) );
 
-    // test if creating string from NULL C pointer works:
-    CPPUNIT_ASSERT_EQUAL( "", wxString((const char *)NULL) );
+    // test if creating string from null C pointer works:
+    CPPUNIT_ASSERT_EQUAL( "", wxString((const char *)nullptr) );
 }
 
 void StringTestCase::StaticConstructors()

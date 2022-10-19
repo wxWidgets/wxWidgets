@@ -106,7 +106,7 @@ public:
         constructor.
 
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param dt

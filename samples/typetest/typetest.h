@@ -15,7 +15,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_textCtrl = NULL; m_mimeDatabase = NULL; }
+    MyApp() { m_textCtrl = nullptr; m_mimeDatabase = nullptr; }
 
     bool OnInit() override;
     int OnExit() override { delete m_mimeDatabase; return wxApp::OnExit(); }

@@ -668,7 +668,7 @@ public:
         Show or hide the edit control, use the specified attributes to set
         colours/fonts for it.
     */
-    virtual void Show(bool show, wxGridCellAttr* attr = NULL);
+    virtual void Show(bool show, wxGridCellAttr* attr = nullptr);
 
     /**
         If the editor is enabled by clicking on the cell, this method will be
@@ -905,7 +905,7 @@ public:
             array.
     */
     wxGridCellChoiceEditor(size_t count = 0,
-                           const wxString choices[] = NULL,
+                           const wxString choices[] = nullptr,
                            bool allowOthers = false);
 
     /**
@@ -1246,7 +1246,7 @@ public:
     /**
         Default constructor.
     */
-    explicit wxGridCellAttr(wxGridCellAttr* attrDefault = NULL);
+    explicit wxGridCellAttr(wxGridCellAttr* attrDefault = nullptr);
 
     /**
         Constructor specifying some of the often used attributes.
@@ -1277,10 +1277,10 @@ public:
         this function, use GetNonDefaultAlignment() if this is not desirable.
 
         @param hAlign
-            Horizontal alignment is returned here if this argument is non-@NULL.
+            Horizontal alignment is returned here if this argument is non-null.
             It is one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
         @param vAlign
-            Vertical alignment is returned here if this argument is non-@NULL.
+            Vertical alignment is returned here if this argument is non-null.
             It is one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
     void GetAlignment(int* hAlign, int* vAlign) const;
@@ -1737,7 +1737,7 @@ public:
         the cell attribute having the highest precedence.
 
         Notice that the caller must call DecRef() on the returned pointer if it
-        is non-@NULL. GetAttrPtr() method can be used to do this automatically.
+        is non-null. GetAttrPtr() method can be used to do this automatically.
 
         @param row
             The row of the cell.
@@ -5363,7 +5363,7 @@ public:
     */
     wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
                              const wxGridCellCoords& bottomRight,
-                             const wxGridWindow *gridWindow = NULL) const;
+                             const wxGridWindow *gridWindow = nullptr) const;
 
     /**
         Return the rectangle corresponding to the grid cell's size and position
@@ -5468,7 +5468,7 @@ public:
         @return
             The column index or @c wxNOT_FOUND.
     */
-    int XToCol(int x, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL) const;
+    int XToCol(int x, bool clipToMinMax = false, wxGridWindow *gridWindow = nullptr) const;
 
     /**
         Returns the column whose right hand edge is close to the given logical
@@ -5487,7 +5487,7 @@ public:
         logical ones.
 
         The parameter @a gridWindow is new since wxWidgets 3.1.3. If it is
-        specified, i.e. non-@NULL, the coordinates must be in this window
+        specified, i.e. non-null, the coordinates must be in this window
         coordinate system and only the cells of this window are considered,
         i.e. the function returns @c wxNOT_FOUND if the coordinates are out of
         bounds.
@@ -5497,10 +5497,10 @@ public:
 
         @see XToCol(), YToRow()
      */
-    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = NULL) const;
+    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = nullptr) const;
 
     /// @overload
-    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow = NULL) const;
+    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow = nullptr) const;
 
     // XYToCell(int, int, wxGridCellCoords&) overload is intentionally
     // undocumented, using it is ugly and non-const reference parameters are
@@ -5519,14 +5519,14 @@ public:
 
 
         The parameter @a gridWindow is new since wxWidgets 3.1.3. If it is
-        specified, i.e. non-@NULL, only the cells of this window are
+        specified, i.e. non-null, only the cells of this window are
         considered, i.e. the function returns @c wxNOT_FOUND if @a y is out of
         bounds.
 
         If @a gridWindow is @NULL, the function returns @c wxNOT_FOUND only if
         there is no row at all at the @a y position.
     */
-    int YToRow(int y, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL) const;
+    int YToRow(int y, bool clipToMinMax = false, wxGridWindow *gridWindow = nullptr) const;
 
     ///@}
 
@@ -5946,11 +5946,11 @@ public:
 
 
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
-                                     wxGridWindow *gridWindow = NULL) const;
+                                     wxGridWindow *gridWindow = nullptr) const;
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
-                                     wxGridWindow *gridWindow = NULL) const;
+                                     wxGridWindow *gridWindow = nullptr) const;
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
-                                            wxGridWindow *gridWindow = NULL) const;
+                                            wxGridWindow *gridWindow = nullptr) const;
 
     ///@}
 
@@ -6240,13 +6240,13 @@ public:
     /**
         Creates an object preventing the updates of the specified @a grid. The
         parameter could be @NULL in which case nothing is done. If @a grid is
-        non-@NULL then the grid must exist for longer than this
+        non-null then the grid must exist for longer than this
         wxGridUpdateLocker object itself.
 
         The default constructor could be followed by a call to Create() to set
         the grid object later.
     */
-    wxGridUpdateLocker(wxGrid* grid = NULL);
+    wxGridUpdateLocker(wxGrid* grid = nullptr);
 
     /**
         Destructor reenables updates for the grid this object is associated

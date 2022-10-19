@@ -73,7 +73,7 @@ auto_ptr<wxZipEntry> entry;
 wxFFileInputStream in(wxT("test.zip"));
 wxZipInputStream zip(in);
 
-while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
+while (entry.reset(zip.GetNextEntry()), entry.get() != nullptr)
 {
     // access meta-data
     wxString name = entry->GetName();
@@ -114,7 +114,7 @@ auto_ptr<wxZipEntry> entry;
 outzip.CopyArchiveMetaData(inzip);
 
 // call CopyEntry for each entry except those matching the pattern
-while (entry.reset(inzip.GetNextEntry()), entry.get() != NULL)
+while (entry.reset(inzip.GetNextEntry()), entry.get() != nullptr)
     if (!entry->GetName().Matches(wxT("*.txt")))
         if (!outzip.CopyEntry(entry.release(), inzip))
             break;
@@ -165,9 +165,9 @@ do
 {
     entry.reset(zip.GetNextEntry());
 }
-while (entry.get() != NULL && entry->GetInternalName() != name);
+while (entry.get() != nullptr && entry->GetInternalName() != name);
 
-if (entry.get() != NULL)
+if (entry.get() != nullptr)
 {
     // read the entry's data...
 }
@@ -189,7 +189,7 @@ wxFFileInputStream in(wxT("test.zip"));
 wxZipInputStream zip(in);
 
 // load the zip catalog
-while ((entry = zip.GetNextEntry()) != NULL)
+while ((entry = zip.GetNextEntry()) != nullptr)
 {
     wxZipEntry*& current = cat[entry->GetInternalName()];
     // some archive formats can have multiple entries with the same name
@@ -296,7 +296,7 @@ if (in->IsOk())
         auto_ptr<wxArchiveEntry> entry;
 
         // list the contents of the archive
-        while ((entry.reset(arc->GetNextEntry())), entry.get() != NULL)
+        while ((entry.reset(arc->GetNextEntry())), entry.get() != nullptr)
             std::wcout << entry->GetName() << "\n";
     }
     else
@@ -381,7 +381,7 @@ auto_ptr<wxArchiveEntry> entry;
 
 outarc->CopyArchiveMetaData(*arc);
 
-while (entry.reset(arc->GetNextEntry()), entry.get() != NULL)
+while (entry.reset(arc->GetNextEntry()), entry.get() != nullptr)
 {
     if (entry->GetName() == from)
         entry->SetName(to);
@@ -418,7 +418,7 @@ MyNotifier notifier;
 
 outarc->CopyArchiveMetaData(*arc);
 
-while (entry.reset(arc->GetNextEntry()), entry.get() != NULL)
+while (entry.reset(arc->GetNextEntry()), entry.get() != nullptr)
 {
     entry->SetNotifier(notifier);
     if (!outarc->CopyEntry(entry.release(), *arc))

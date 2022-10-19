@@ -57,9 +57,9 @@ void wxRichTextStylePage::Init()
     m_nameIsEditable = false;
     
 ////@begin wxRichTextStylePage member initialisation
-    m_styleName = NULL;
-    m_basedOn = NULL;
-    m_nextStyle = NULL;
+    m_styleName = nullptr;
+    m_basedOn = nullptr;
+    m_nextStyle = nullptr;
 ////@end wxRichTextStylePage member initialisation
 }
 
@@ -313,7 +313,7 @@ wxIcon wxRichTextStylePage::GetIconResource( const wxString& name )
 void wxRichTextStylePage::OnNextStyleUpdate( wxUpdateUIEvent& event )
 {
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
-    event.Enable(wxDynamicCast(def, wxRichTextParagraphStyleDefinition) != NULL);
+    event.Enable(wxDynamicCast(def, wxRichTextParagraphStyleDefinition) != nullptr);
 }
 
 #endif // wxUSE_RICHTEXT

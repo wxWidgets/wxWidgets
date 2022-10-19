@@ -110,7 +110,7 @@ namespace
 {
 
 // the pointer to standard radio button wnd proc
-WXWNDPROC s_wndprocRadioBtn = NULL;
+WXWNDPROC s_wndprocRadioBtn = nullptr;
 
 // Hash allowing to find wxRadioBox containing the given radio button by its
 // HWND. This is used by (subclassed) radio button window proc to find the
@@ -131,7 +131,7 @@ RadioBoxFromButton gs_boxFromButton;
 wxRadioBox* wxRadioBox::GetFromRadioButtonHWND(WXHWND hwnd)
 {
     const RadioBoxFromButton::const_iterator it = gs_boxFromButton.find(hwnd);
-    return it == gs_boxFromButton.end() ? NULL : it->second;
+    return it == gs_boxFromButton.end() ? nullptr : it->second;
 }
 
 // ---------------------------------------------------------------------------
@@ -142,8 +142,8 @@ wxRadioBox* wxRadioBox::GetFromRadioButtonHWND(WXHWND hwnd)
 void wxRadioBox::Init()
 {
     m_selectedButton = wxNOT_FOUND;
-    m_radioButtons = NULL;
-    m_dummyHwnd = NULL;
+    m_radioButtons = nullptr;
+    m_dummyHwnd = nullptr;
 }
 
 bool wxRadioBox::Create(wxWindow *parent,
@@ -197,7 +197,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                                       GetHwndOf(parent),
                                       (HMENU)wxUIntToPtr(subid.GetValue()),
                                       wxGetInstance(),
-                                      NULL);
+                                      nullptr);
 
         if ( !hwndBtn )
         {
@@ -223,7 +223,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
                          0, 0, 0, 0, GetHwndOf(parent),
                          (HMENU)wxUIntToPtr(m_dummyId.GetValue()),
-                         wxGetInstance(), NULL);
+                         wxGetInstance(), nullptr);
 
 
     m_radioButtons->SetFont(GetFont());
@@ -501,7 +501,7 @@ void wxRadioBox::DoSetItemToolTip(unsigned int item, wxToolTip *tooltip)
 {
     // we have already checked for the item to be valid in wxRadioBoxBase
     const HWND hwndRbtn = (*m_radioButtons)[item];
-    if ( tooltip != NULL )
+    if ( tooltip != nullptr )
         tooltip->AddOtherWindow(hwndRbtn);
     else // unset the tooltip
         wxToolTip::Remove(hwndRbtn, 0, wxRect(0,0,0,0));

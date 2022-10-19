@@ -78,7 +78,7 @@ public:
     virtual bool EnableTouchEvents(int eventsMask) override;
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = NULL ) override;
+                          const wxRect *rect = nullptr ) override;
 
     virtual void Update() override;
     virtual void ClearBackground() override;
@@ -89,7 +89,7 @@ public:
     virtual bool SetForegroundColour( const wxColour &colour ) override;
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
-    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const override;
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
 
     virtual int GetCharHeight() const override;
     virtual int GetCharWidth() const override;
@@ -102,7 +102,7 @@ public:
     virtual int GetScrollThumb( int orient ) const override;
     virtual int GetScrollRange( int orient ) const override;
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = NULL ) override;
+                               const wxRect* rect = nullptr ) override;
     virtual void AlwaysShowScrollbars(bool horz = true, bool vert = true) override;
     virtual bool IsScrollbarAlwaysShown(int orient) const override
     {
@@ -261,7 +261,7 @@ public:
     // return true unless DontCreatePeer() had been called
     bool                ShouldCreatePeer() const;
 
-    // sets the native implementation wrapper, can replace an existing peer, use peer = NULL to
+    // sets the native implementation wrapper, can replace an existing peer, use peer = nullptr to
     // release existing peer
     void                SetPeer(wxOSXWidgetImpl* peer);
 
@@ -348,9 +348,9 @@ protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *theFont = NULL ) const override;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr ) const override;
 
     virtual void DoEnable( bool enable ) override;
 #if wxUSE_MENUS

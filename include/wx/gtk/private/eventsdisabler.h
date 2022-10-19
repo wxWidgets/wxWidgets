@@ -20,7 +20,7 @@ template <typename T>
 class wxGtkEventsDisabler
 {
 public:
-    // Disable the events for the specified (non-NULL, having lifetime greater
+    // Disable the events for the specified (non-null, having lifetime greater
     // than ours) window for the lifetime of this object.
     explicit wxGtkEventsDisabler(T* win) : m_win(win)
     {

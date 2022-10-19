@@ -333,7 +333,7 @@ union wxAnyValueBuffer
                 // TODO: Free the data in buffer
                 // It is important to clear the buffer like this
                 // at the end of DeleteValue().
-                buf.m_ptr = NULL;
+                buf.m_ptr = nullptr;
             }
 
             virtual void CopyBuffer(const wxAnyValueBuffer& src,

@@ -63,7 +63,7 @@ public:
     // day attributes
     virtual wxCalendarDateAttr *GetAttr(size_t day) const override;
     virtual void SetAttr(size_t day, wxCalendarDateAttr *attr) override;
-    virtual void ResetAttr(size_t day) override { SetAttr(day, NULL); }
+    virtual void ResetAttr(size_t day) override { SetAttr(day, nullptr); }
 
 
     virtual void SetWindowStyleFlag(long style) override;

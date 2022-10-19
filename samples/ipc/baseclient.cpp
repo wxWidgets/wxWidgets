@@ -59,7 +59,7 @@ class MyConnection : public MyConnectionBase
 {
 public:
     virtual bool DoExecute(const void *data, size_t size, wxIPCFormat format) override;
-    virtual const void *Request(const wxString& item, size_t *size = NULL, wxIPCFormat format = wxIPC_TEXT) override;
+    virtual const void *Request(const wxString& item, size_t *size = nullptr, wxIPCFormat format = wxIPC_TEXT) override;
     virtual bool DoPoke(const wxString& item, const void* data, size_t size, wxIPCFormat format) override;
     virtual bool OnAdvise(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format) override;
     virtual bool OnDisconnect() override;
@@ -75,7 +75,7 @@ public:
     bool Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic);
     void Disconnect();
     wxConnectionBase *OnMakeConnection() override;
-    bool IsConnected() { return m_connection != NULL; }
+    bool IsConnected() { return m_connection != nullptr; }
 
     virtual void Notify() override;
 
@@ -149,7 +149,7 @@ void MyApp::OnIdle(wxIdleEvent& event)
 MyClient::MyClient()
     : wxClient()
 {
-    m_connection = NULL;
+    m_connection = nullptr;
     m_step = 0;
 }
 
@@ -199,7 +199,7 @@ void MyClient::Notify()
     // while waiting for IO and so starting another IPC call would result in
     // fatal reentrancies -- instead, just set a flag and perform the test
     // indicated by it later from our idle event handler
-    MyClientTestFunc testfunc = NULL;
+    MyClientTestFunc testfunc = nullptr;
     switch ( m_step++ )
     {
         case 0:

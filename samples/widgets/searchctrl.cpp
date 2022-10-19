@@ -127,7 +127,7 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-#if defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined(__WXMAC__) || defined(__WXGTK__)
     #define FAMILY_CTRLS NATIVE_CTRLS
 #else
     #define FAMILY_CTRLS GENERIC_CTRLS
@@ -144,7 +144,7 @@ SearchCtrlWidgetsPage::SearchCtrlWidgetsPage(WidgetsBookCtrl *book,
 
 void SearchCtrlWidgetsPage::CreateContent()
 {
-    m_srchCtrl = NULL;
+    m_srchCtrl = nullptr;
 
     CreateControl();
 
@@ -225,7 +225,7 @@ void SearchCtrlWidgetsPage::OnToggleSearchMenu(wxCommandEvent&)
     if ( m_menuBtnCheck->GetValue() )
         m_srchCtrl->SetMenu( CreateTestMenu() );
     else
-        m_srchCtrl->SetMenu(NULL);
+        m_srchCtrl->SetMenu(nullptr);
 }
 
 void SearchCtrlWidgetsPage::OnText(wxCommandEvent& event)

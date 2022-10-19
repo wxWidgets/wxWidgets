@@ -150,7 +150,7 @@ void TreeCtrlTestCase::setUp()
 void TreeCtrlTestCase::tearDown()
 {
     delete m_tree;
-    m_tree = NULL;
+    m_tree = nullptr;
 
     m_root =
     m_child1 =
@@ -344,7 +344,7 @@ void TreeCtrlTestCase::KeyDown()
 
 void TreeCtrlTestCase::CollapseExpandEvents()
 {
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // Works locally, but not when run on Travis CI.
     if ( IsAutomaticTest() )
         return;

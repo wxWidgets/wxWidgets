@@ -62,7 +62,7 @@ public:
         : m_cursorCopy(cursorCopy),
           m_cursorMove(cursorMove),
           m_cursorStop(cursorStop)
-        { m_data = NULL; }
+        { m_data = nullptr; }
     virtual ~wxDropSourceBase() { }
 
     // set the data which is transferred by drag and drop
@@ -134,7 +134,7 @@ public:
     // ctor takes a pointer to heap-allocated wxDataObject which will be owned
     // by wxDropTarget and deleted by it automatically. If you don't give it
     // here, you can use SetDataObject() later.
-    wxDropTargetBase(wxDataObject *dataObject = NULL)
+    wxDropTargetBase(wxDataObject *dataObject = nullptr)
         { m_dataObject = dataObject; m_defaultAction = wxDragNone; }
     // dtor deletes our data object
     virtual ~wxDropTargetBase()
@@ -212,14 +212,10 @@ protected:
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dropsrc.h"
     #include "wx/msw/ole/droptgt.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/dnd.h"
 #elif defined(__WXX11__)
     #include "wx/x11/dnd.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/dnd.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/dnd.h"
+    #include "wx/gtk/dnd.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dnd.h"
 #elif defined(__WXQT__)

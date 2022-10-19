@@ -102,7 +102,7 @@ public:
         leave enabled, if it is non-null. This parameter is only available
         since wxWidgets 3.1.7.
     */
-    explicit wxWindowDisabler(wxWindow* winToSkip, wxWindow* winToSkip2 = NULL);
+    explicit wxWindowDisabler(wxWindow* winToSkip, wxWindow* winToSkip2 = nullptr);
 
     /**
         Reenables the windows disabled by the constructor.
@@ -323,7 +323,7 @@ bool wxUnsetEnv(const wxString& var);
     values as values.
 
     @param map
-        The environment map to fill, must be non-@NULL.
+        The environment map to fill, must be non-null.
     @return
         @true if environment was successfully retrieved or @false otherwise.
 
@@ -343,7 +343,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map);
     Fills the memory block with zeros in a way that is guaranteed
     not to be optimized away by the compiler.
 
-    @param p Pointer to the memory block to be zeroed, must be non-@NULL.
+    @param p Pointer to the memory block to be zeroed, must be non-null.
     @param n The number of bytes to zero.
 
     NOTE: If security is vitally important in your use case, please
@@ -403,8 +403,8 @@ wxString wxGetDisplayName();
     @header{wx/utils.h}
 */
 bool wxGetDiskSpace(const wxString& path,
-                    wxLongLong total = NULL,
-                    wxLongLong free = NULL);
+                    wxLongLong total = nullptr,
+                    wxLongLong free = nullptr);
 
 /**
     For normal keys, returns @true if the specified key is currently down.
@@ -464,28 +464,28 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
     Find a window by its label. Depending on the type of window, the label may
     be a window title or panel item label. If @a parent is @NULL, the search
-    will start from all top-level frames and dialog boxes; if non-@NULL, the
+    will start from all top-level frames and dialog boxes; if non-null, the
     search will be limited to the given window hierarchy. The search is
     recursive in both cases.
 
     @header{wx/utils.h}
 */
 wxWindow* wxFindWindowByLabel(const wxString& label,
-                              wxWindow* parent = NULL);
+                              wxWindow* parent = nullptr);
 
 /**
     @deprecated Replaced by wxWindow::FindWindowByName().
 
     Find a window by its name (as given in a window constructor or @e Create
     function call). If @a parent is @NULL, the search will start from all
-    top-level frames and dialog boxes; if non-@NULL, the search will be limited
+    top-level frames and dialog boxes; if non-null, the search will be limited
     to the given window hierarchy. The search is recursive in both cases.
 
     If no such named window is found, wxFindWindowByLabel() is called.
 
     @header{wx/utils.h}
 */
-wxWindow* wxFindWindowByName(const wxString& name, wxWindow* parent = NULL);
+wxWindow* wxFindWindowByName(const wxString& name, wxWindow* parent = nullptr);
 
 /**
     Find a menu item identifier associated with the given frame's menu bar.
@@ -579,7 +579,7 @@ bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
     @endcode
     and then use it in the following way:
     @code
-        const void* data = NULL;
+        const void* data = nullptr;
         size_t size = 0;
         if ( !wxLoadUserResource(&data, &size, "mydata", "MYDATA") ) {
             ... handle error ...
@@ -634,7 +634,7 @@ wxLoadUserResource(const void **outData,
         standard Windows @c MAKEINTRESOURCE() macro, including any constants
         for the standard resources types like @c RT_RCDATA.
     @param pLen Filled with the length of the returned buffer if it is
-        non-@NULL. This parameter should be used if NUL characters can occur in
+        non-null. This parameter should be used if NUL characters can occur in
         the resource data. It is new since wxWidgets 2.9.1
     @param module The @c HINSTANCE of the module to load the resources from.
         The current module is used by default. This parameter is new since
@@ -650,24 +650,12 @@ wxLoadUserResource(const void **outData,
 */
 char* wxLoadUserResource(const wxString& resourceName,
                          const wxChar* resourceType = "TEXT",
-                         int* pLen = NULL,
+                         int* pLen = nullptr,
                          WXHINSTANCE module = 0);
 
 /**
-    @deprecated Replaced by wxWindow::Close(). See the
-                @ref overview_windowdeletion "window deletion overview".
+    @deprecated Don't use this typedef nor wxQsort() itself in the new code.
 
-    Tells the system to delete the specified object when all other events have
-    been processed. In some environments, it is necessary to use this instead
-    of deleting a frame directly with the delete operator, because some GUIs
-    will still send events to a deleted window.
-
-    @header{wx/utils.h}
-*/
-void wxPostDelete(wxObject* object);
-
-
-/**
     Compare function type for use with wxQsort()
 
     @header{wx/utils.h}
@@ -675,6 +663,8 @@ void wxPostDelete(wxObject* object);
 typedef int (*wxSortCallback)(const void* pItem1, const void* pItem2, const void* user_data);
 
 /**
+    @deprecated Use `std::sort()` in the new code.
+
     Function implementing quick sort algorithm.
 
     This function sorts @a total_elems objects of size @a size located at @a
@@ -1056,7 +1046,7 @@ wxString wxGetOsDescription();
 
     @header{wx/utils.h}
 */
-wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL, int* micro = NULL);
+wxOperatingSystemId wxGetOsVersion(int* major = nullptr, int* minor = nullptr, int* micro = nullptr);
 
 /**
     Returns @true if the version of the operating system on which the program
@@ -1346,8 +1336,8 @@ enum
     @endWxPerlOnly
 */
 long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
-                wxProcess* callback = NULL,
-                const wxExecuteEnv* env = NULL);
+                wxProcess* callback = nullptr,
+                const wxExecuteEnv* env = nullptr);
 ///@}
 
 /** @addtogroup group_funcmacro_procctrl */
@@ -1382,11 +1372,11 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
     @endWxPerlOnly
 */
 long wxExecute(const char* const* argv, int flags = wxEXEC_ASYNC,
-                wxProcess* callback = NULL,
-                const wxExecuteEnv *env = NULL);
+                wxProcess* callback = nullptr,
+                const wxExecuteEnv *env = nullptr);
 long wxExecute(const wchar_t* const* argv, int flags = wxEXEC_ASYNC,
-                wxProcess* callback = NULL,
-                const wxExecuteEnv *env = NULL);
+                wxProcess* callback = nullptr,
+                const wxExecuteEnv *env = nullptr);
 ///@}
 
 /** @addtogroup group_funcmacro_procctrl */
@@ -1424,7 +1414,7 @@ long wxExecute(const wchar_t* const* argv, int flags = wxEXEC_ASYNC,
     @endWxPerlOnly
 */
 long wxExecute(const wxString& command, wxArrayString& output, int flags = 0,
-                const wxExecuteEnv *env = NULL);
+                const wxExecuteEnv *env = nullptr);
 
 /**
     This is an overloaded version of wxExecute(const wxString&,int,wxProcess*),
@@ -1461,7 +1451,7 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0,
 */
 long wxExecute(const wxString& command, wxArrayString& output,
                 wxArrayString& errors, int flags = 0,
-                const wxExecuteEnv *env = NULL);
+                const wxExecuteEnv *env = nullptr);
 
 /**
     Returns the number uniquely identifying the current process in the system.
@@ -1533,7 +1523,7 @@ unsigned long wxGetProcessId();
     @header{wx/utils.h}
 */
 int wxKill(long pid, wxSignal sig = wxSIGTERM,
-            wxKillError* rc = NULL, int flags = wxKILL_NOCHILDREN);
+            wxKillError* rc = nullptr, int flags = wxKILL_NOCHILDREN);
 
 /**
     Executes a command in an interactive shell window. If no command is

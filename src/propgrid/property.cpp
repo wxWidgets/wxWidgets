@@ -102,7 +102,7 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
 void wxPGCellRenderer::DrawCaptionSelectionRect(wxDC& dc,
                                                 int x, int y, int w, int h) const
 {
-    wxPGDrawFocusRect(NULL, dc, x, y, w, h);
+    wxPGDrawFocusRect(nullptr, dc, x, y, w, h);
 }
 #else
 void wxPGCellRenderer::DrawCaptionSelectionRect(wxWindow* win, wxDC& dc,
@@ -186,7 +186,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                   const wxPropertyGrid* propertyGrid, wxPGProperty* property,
                                   int column, int item, int flags ) const
 {
-    const wxPGEditor* editor = NULL;
+    const wxPGEditor* editor = nullptr;
 
     wxString text;
     bool isUnspecified = property->IsValueUnspecified();
@@ -279,9 +279,9 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                     propertyGrid->GetCellDisabledTextColour();
                 dc.SetTextForeground(hCol);
 
-                // Must make the editor NULL to override its own rendering
+                // Must make the editor nullptr to override its own rendering
                 // code.
-                editor = NULL;
+                editor = nullptr;
             }
         }
         else
@@ -453,22 +453,22 @@ void wxPGCell::SetEmptyData()
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxPGProperty, wxObject);
 
-wxString* wxPGProperty::sm_wxPG_LABEL = NULL;
+wxString* wxPGProperty::sm_wxPG_LABEL = nullptr;
 
 void wxPGProperty::Init()
 {
     m_commonValue = -1;
     m_arrIndex = 0xFFFF;
-    m_parent = NULL;
+    m_parent = nullptr;
 
-    m_parentState = NULL;
+    m_parentState = nullptr;
 
-    m_clientData = NULL;
-    m_clientObject = NULL;
+    m_clientData = nullptr;
+    m_clientObject = nullptr;
 
-    m_customEditor = NULL;
+    m_customEditor = nullptr;
 #if wxUSE_VALIDATORS
-    m_validator = NULL;
+    m_validator = nullptr;
 #endif
 
     m_maxLen = 0; // infinite maximum length
@@ -483,7 +483,7 @@ void wxPGProperty::Init()
 
 void wxPGProperty::Init( const wxString& label, const wxString& name )
 {
-    // wxPG_LABEL reference can be NULL if we are called before property
+    // wxPG_LABEL reference can be null if we are called before property
     // grid has been initialized
 
     if ( sm_wxPG_LABEL && label != wxPG_LABEL )
@@ -502,10 +502,10 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
 {
     //
     // Called after property has been added to grid or page
-    // (so propgrid can be NULL, too).
+    // (so propgrid can be null, too).
 
     wxPGProperty* parent = m_parent;
-    bool parentIsRoot = wxDynamicCast(parent, wxPGRootProperty) != NULL;
+    bool parentIsRoot = wxDynamicCast(parent, wxPGRootProperty) != nullptr;
 
     //
     // Convert invalid cells to default ones in this grid
@@ -681,7 +681,7 @@ wxPGProperty::~wxPGProperty()
 #endif
 
     // This makes it easier for us to detect dangling pointers
-    m_parent = NULL;
+    m_parent = nullptr;
 }
 
 
@@ -733,7 +733,7 @@ wxString wxPGProperty::GetName() const
 
 wxPropertyGrid* wxPGProperty::GetGrid() const
 {
-    return m_parentState ? m_parentState->GetGrid() : NULL;
+    return m_parentState ? m_parentState->GetGrid() : nullptr;
 }
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
@@ -768,7 +768,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
     wxASSERT_MSG(!pCell || !(*pCell),
           wxS("Cell pointer is a dummy argument and shouldn't be used"));
     wxUnusedVar(pCell);
-    GetDisplayInfo(column, choiceIndex, flags, pString, (wxPGCell*)NULL);
+    GetDisplayInfo(column, choiceIndex, flags, pString, (wxPGCell*)nullptr);
 }
 #endif // WXWIN_COMPATIBILITY_3_0
 
@@ -1426,7 +1426,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                         // For aggregate properties, we will trust RefreshChildren()
                         // to update child values.
                         if ( !HasFlag(wxPG_PROP_AGGREGATE) )
-                            child->SetValue(childValue, NULL, flags|wxPG_SETVAL_FROM_PARENT);
+                            child->SetValue(childValue, nullptr, flags|wxPG_SETVAL_FROM_PARENT);
                         if ( flags & wxPG_SETVAL_BY_USER )
                             child->SetFlag(wxPG_PROP_MODIFIED);
                     }
@@ -1469,7 +1469,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         if ( AreChildrenComponents() )
         {
             for ( unsigned int i = 0; i < GetChildCount(); i++ )
-                Item(i)->SetValue(value, NULL, flags|wxPG_SETVAL_FROM_PARENT);
+                Item(i)->SetValue(value, nullptr, flags|wxPG_SETVAL_FROM_PARENT);
         }
     }
 
@@ -1798,7 +1798,7 @@ void wxPGProperty::SetDefaultColours(int flags)
 
 wxPGEditorDialogAdapter* wxPGProperty::GetEditorDialog() const
 {
-    return NULL;
+    return nullptr;
 }
 
 bool wxPGProperty::DoSetAttribute( const wxString& WXUNUSED(name), wxVariant& WXUNUSED(value) )
@@ -1943,7 +1943,7 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
 
 wxValidator* wxPGProperty::DoGetValidator() const
 {
-    return NULL;
+    return nullptr;
 }
 
 int wxPGProperty::InsertChoice( const wxString& label, int index, int value )
@@ -2198,7 +2198,7 @@ bool wxPGProperty::IsVisible() const
     if ( HasFlag(wxPG_PROP_HIDDEN) )
         return false;
 
-    for (const wxPGProperty* parent = GetParent(); parent != NULL; parent = parent->GetParent() )
+    for (const wxPGProperty* parent = GetParent(); parent != nullptr; parent = parent->GetParent() )
     {
         if ( !parent->IsExpanded() || parent->HasFlag(wxPG_PROP_HIDDEN) )
             return false;
@@ -2211,11 +2211,11 @@ wxPropertyGrid* wxPGProperty::GetGridIfDisplayed() const
 {
     wxPropertyGridPageState* state = GetParentState();
     if ( !state )
-        return NULL;
+        return nullptr;
     wxPropertyGrid* propGrid = state->GetGrid();
     if ( state == propGrid->GetState() )
         return propGrid;
-    return NULL;
+    return nullptr;
 }
 
 
@@ -2226,7 +2226,7 @@ int wxPGProperty::GetY2( int lh ) const
 
     int y = 0;
 
-    for ( parent = GetParent(); parent != NULL; parent = child->GetParent() )
+    for ( parent = GetParent(); parent != nullptr; parent = child->GetParent() )
     {
         if ( !parent->IsExpanded() )
             return parent->GetY2(lh);
@@ -2401,7 +2401,7 @@ void wxPGProperty::FixIndicesOfChildren( unsigned int starthere )
 }
 
 
-// Returns (direct) child property with given name (or NULL if not found)
+// Returns (direct) child property with given name (or nullptr if not found)
 wxPGProperty* wxPGProperty::GetPropertyByName( const wxString& name ) const
 {
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
@@ -2414,12 +2414,12 @@ wxPGProperty* wxPGProperty::GetPropertyByName( const wxString& name ) const
     // Does it have point, then?
     int pos = name.Find(wxS('.'));
     if ( pos <= 0 )
-        return NULL;
+        return nullptr;
 
     wxPGProperty* p = GetPropertyByName(name. substr(0,pos));
 
     if ( !p || !p->GetChildCount() )
-        return NULL;
+        return nullptr;
 
     return p->GetPropertyByName(name.substr(pos+1,name.length()-pos-1));
 }
@@ -2446,7 +2446,7 @@ wxPGProperty* wxPGProperty::GetPropertyByNameWH( const wxString& name, unsigned 
             i = 0;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 int wxPGProperty::GetChildrenHeight( int lh, int iMax ) const
@@ -2490,8 +2490,8 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     // Linear search at the moment
     //
     // nextItemY = y of next visible property, final value will be written back.
-    wxPGProperty* result = NULL;
-    wxPGProperty* current = NULL;
+    wxPGProperty* result = nullptr;
+    wxPGProperty* current = nullptr;
     unsigned int iy = *nextItemY;
 
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
@@ -2557,7 +2557,7 @@ void wxPGProperty::Empty()
 wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
 {
     wxPropertyGrid *pg = GetGrid();
-    wxCHECK_MSG( pg, NULL,
+    wxCHECK_MSG( pg, nullptr,
                  wxS("Cannot obtain property item for detached property") );
 
     unsigned int nextItem = 0;
@@ -2608,7 +2608,7 @@ wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
 
 bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
 {
-    const wxVariantList* pList = NULL;
+    const wxVariantList* pList = nullptr;
     wxVariantList::const_iterator node;
 
     if ( pendingList )
@@ -2620,7 +2620,7 @@ bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
         wxPGProperty* child = Item(i);
-        const wxVariant* listValue = NULL;
+        const wxVariant* listValue = nullptr;
         wxVariant value;
 
         if ( pendingList )
@@ -2648,7 +2648,7 @@ bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
         // Check recursively
         if ( child->GetChildCount() )
         {
-            const wxVariant* childList = NULL;
+            const wxVariant* childList = nullptr;
 
             if ( listValue && listValue->IsType(wxPG_VARIANT_TYPE_LIST) )
                 childList = listValue;
@@ -2706,7 +2706,7 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
         child->InitAfterAdded(state, grid);
     }
 
-    wxPGProperty* sel = NULL;
+    wxPGProperty* sel = nullptr;
     if ( oldSelInd >= (int)m_children.size() )
         oldSelInd = (int)m_children.size() - 1;
 
@@ -2769,7 +2769,7 @@ bool wxPGProperty::SetMaxLength(int maxLen)
 wxBitmap* wxPGProperty::GetValueImage() const
 {
     if ( !m_valueBitmapBundle.IsOk() )
-        return NULL;
+        return nullptr;
 
     wxPropertyGrid* pg = GetGrid();
     if ( pg )
@@ -2854,7 +2854,7 @@ wxString wxPropertyCategory::GetValueAsString( int argFlags ) const
 static int DoGetTextExtent(const wxWindow* wnd, const wxString& label, const wxFont& font)
 {
     int x = 0, y = 0;
-    wnd->GetTextExtent(label, &x, &y, NULL, NULL, &font);
+    wnd->GetTextExtent(label, &x, &y, nullptr, nullptr, &font);
     return x;
 }
 

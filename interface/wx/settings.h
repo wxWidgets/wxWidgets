@@ -368,7 +368,7 @@ public:
         one should still be given, as for example it might determine which displays
         cursor width is requested with wxSYS_CURSOR_X.
     */
-    static int GetMetric(wxSystemMetric index, wxWindow* win = NULL);
+    static int GetMetric(wxSystemMetric index, wxWindow* win = nullptr);
 
     /**
         Returns the screen type.

@@ -71,7 +71,7 @@ it to wxFont::SetNativeFontInfo later to recreate exactly the same font.
 Note that the contents of this string depends on the platform and shouldn't be
 used for any other purpose (in particular, it is not meant to be shown to the
 user). Also please note that although the native font information is currently
-implemented for Windows and Unix (GTK+ and Motif) ports only, all the methods
+implemented for Windows and Unix (GTK and X11) ports only, all the methods
 are available for all the ports and should be used to make your program work
 correctly when they are implemented later.
 

@@ -16,8 +16,6 @@
 #ifndef _WX_MAC_COREFOUNDATION_CFREF_H__
 #define _WX_MAC_COREFOUNDATION_CFREF_H__
 
-// Include unistd to ensure that NULL is defined
-#include <unistd.h>
 // Include Availability for __AVAILABILITY_INTERNAL_DEPRECATED
 #include <Availability.h>
 
@@ -48,32 +46,32 @@ CFTypeRef CFAutorelease(CFTypeRef cf);
 
 
 /*! @function   wxCFRelease
-    @abstract   A CFRelease variant that checks for NULL before releasing.
+    @abstract   A CFRelease variant that checks for nullptr before releasing.
     @discussion The parameter is template not for type safety but to ensure the argument
                 is a raw pointer and not a ref holder of any type.
 */
 template <class Type>
 inline void wxCFRelease(Type *r)
 {
-    if ( r != NULL )
+    if ( r != nullptr )
         ::CFRelease((CFTypeRef)r);
 }
 
 /*! @function   wxCFAutorelease
-    @abstract   A CFAutorelease variant that checks for NULL before releasing.
+    @abstract   A CFAutorelease variant that checks for nullptr before releasing.
     @discussion The parameter is template not for type safety but to ensure the argument
                 is a raw pointer and not a ref holder of any type.
 */
 template <class Type>
 inline Type* wxCFAutorelease(Type *r)
 {
-    if ( r != NULL )
+    if ( r != nullptr )
         r = const_cast<Type*>(static_cast<const Type*>(::CFAutorelease(static_cast<CFTypeRef>(r))));
     return r;
 }
 
 /*! @function   wxCFRetain
-    @abstract   A typesafe CFRetain variant that checks for NULL.
+    @abstract   A typesafe CFRetain variant that checks for nullptr.
 */
 template <class Type>
 inline Type* wxCFRetain(Type *r)
@@ -81,7 +79,7 @@ inline Type* wxCFRetain(Type *r)
     // NOTE(DE): Setting r to the result of CFRetain improves efficiency on both x86 and PPC
     // Casting r to CFTypeRef ensures we are calling the real C version defined in CFBase.h
     // and not any possibly templated/overloaded CFRetain.
-    if ( r != NULL )
+    if ( r != nullptr )
         r = const_cast<Type*>(static_cast<const Type*>(::CFRetain(static_cast<CFTypeRef>(r))));
     return r;
 }
@@ -106,16 +104,16 @@ class wxCFWeakRef
     friend wxCFWeakRef<refTypeA> static_cfref_cast(const wxCFRef<otherRefType> &otherRef);
 public:
     /*! @method     wxCFWeakRef
-        @abstract   Creates a NULL reference
+        @abstract   Creates a null reference
     */
     wxCFWeakRef()
-    :   m_ptr(NULL)
+    :   m_ptr(nullptr)
     {}
 
     // Default copy constructor is fine.
-    // Default destructor is fine but we'll set NULL to avoid bugs
+    // Default destructor is fine but we'll set the pointer to nullptr to avoid bugs
     ~wxCFWeakRef()
-    {   m_ptr = NULL; }
+    {   m_ptr = nullptr; }
 
     // Do not implement a raw-pointer constructor.
 
@@ -159,7 +157,7 @@ protected:
     /*! @method     wxCFWeakRef
         @abstract   Constructs a weak reference to the raw pointer
         @templatefield otherType    Any type.
-        @param p        The raw pointer to assume ownership of.  May be NULL.
+        @param p        The raw pointer to assume ownership of.  May be null.
         @discussion This method is private so that the friend static_cfref_cast can use it
     */
     template <class otherType>
@@ -183,15 +181,15 @@ class wxCFRef
 {
 public:
     /*! @method     wxCFRef
-        @abstract   Creates a NULL reference
+        @abstract   Creates a null reference
     */
     wxCFRef()
-    :   m_ptr(NULL)
+    :   m_ptr(nullptr)
     {}
 
     /*! @method     wxCFRef
         @abstract   Assumes ownership of p and creates a reference to it.
-     @param p        The raw core foundation reference to assume ownership of.  May be NULL.
+     @param p        The raw core foundation reference to assume ownership of.  May be null.
      @discussion Like shared_ptr, it is assumed that the caller has a strong reference to p and intends
      to transfer ownership of that reference to this ref holder.  If the object comes from
      a Create or Copy method then this is the correct behaviour.  If the object comes from
@@ -205,7 +203,7 @@ public:
     /*! @method     wxCFRef
         @abstract   Assumes ownership of p and creates a reference to it.
         @templatefield otherType    Any type.
-        @param p        The raw pointer to assume ownership of.  May be NULL.
+        @param p        The raw pointer to assume ownership of.  May be null.
         @discussion Like shared_ptr, it is assumed that the caller has a strong reference to p and intends
                     to transfer ownership of that reference to this ref holder.  If the object comes from
                     a Create or Copy method then this is the correct behaviour.  If the object comes from
@@ -329,7 +327,7 @@ public:
     void reset()
     {
         wxCFRelease(m_ptr);
-        m_ptr = NULL;
+        m_ptr = nullptr;
     }
 
     /*! @method     reset
@@ -353,7 +351,7 @@ public:
     refType release()
     {
         refType p = m_ptr;
-        m_ptr = NULL;
+        m_ptr = nullptr;
         return p;
     }
     
@@ -361,7 +359,7 @@ public:
     refType autorelease()
     {
         refType p = m_ptr;
-        m_ptr = NULL;
+        m_ptr = nullptr;
         return wxCFAutorelease(p);
     }
 
@@ -374,7 +372,7 @@ protected:
 
 /*! @function   wxCFRefFromGet
     @abstract   Factory function to create wxCFRef from a raw pointer obtained from a Get-rule function
-    @param  p           The pointer to retain and create a wxCFRef from.  May be NULL.
+    @param  p           The pointer to retain and create a wxCFRef from.  May be null.
     @discussion Unlike the wxCFRef raw pointer constructor, this function explicitly retains its
                 argument.  This can be used for functions such as CFDictionaryGetValue() or
                 CFAttributedStringGetString() which return a temporary reference (Get-rule functions).

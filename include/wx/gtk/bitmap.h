@@ -107,7 +107,7 @@ public:
     wxBitmap GetSubBitmap( const wxRect& rect ) const override;
 
     bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const override;
+                          const wxPalette *palette = nullptr) const override;
     bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) override;
 
 #if wxUSE_PALETTE
@@ -129,8 +129,8 @@ public:
 
 #ifdef __WXGTK3__
     cairo_t* CairoCreate() const;
-    void Draw(cairo_t* cr, int x, int y, bool useMask = true, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
-    void SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
+    void Draw(cairo_t* cr, int x, int y, bool useMask = true, const wxColour* fg = nullptr, const wxColour* bg = nullptr) const;
+    void SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg = nullptr, const wxColour* bg = nullptr) const;
     wxBitmap CreateDisabled() const;
 #else
     GdkPixmap *GetPixmap() const;

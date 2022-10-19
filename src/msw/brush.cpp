@@ -86,14 +86,14 @@ wxBrushRefData::wxBrushRefData(const wxColour& colour, wxBrushStyle style)
 {
     m_style = style;
 
-    m_hBrush = NULL;
+    m_hBrush = nullptr;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBitmap& stipple)
 {
     DoSetStipple(stipple);
 
-    m_hBrush = NULL;
+    m_hBrush = nullptr;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
@@ -104,7 +104,7 @@ wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
     m_style = data.m_style;
 
     // we can't share HBRUSH, we'd need to create another one ourselves
-    m_hBrush = NULL;
+    m_hBrush = nullptr;
 }
 
 wxBrushRefData::~wxBrushRefData()
@@ -141,7 +141,7 @@ void wxBrushRefData::Free()
     {
         ::DeleteObject(m_hBrush);
 
-        m_hBrush = NULL;
+        m_hBrush = nullptr;
     }
 }
 
@@ -277,7 +277,7 @@ wxBrushStyle wxBrush::GetStyle() const
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid brush") );
 
     return M_BRUSHDATA->GetStipple();
 }

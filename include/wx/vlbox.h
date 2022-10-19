@@ -77,7 +77,7 @@ public:
     size_t GetItemCount() const { return GetRowCount(); }
 
     // does this control use multiple selection?
-    bool HasMultipleSelection() const { return m_selStore != NULL; }
+    bool HasMultipleSelection() const { return m_selStore != nullptr; }
 
     // get the currently selected item or wxNOT_FOUND if there is no selection
     //
@@ -283,7 +283,7 @@ protected:
 private:
     // the current item or wxNOT_FOUND
     //
-    // if m_selStore == NULL this is also the selected item, otherwise the
+    // if m_selStore == nullptr this is also the selected item, otherwise the
     // selections are managed by m_selStore
     int m_current;
 
@@ -294,7 +294,7 @@ private:
     // always wxNOT_FOUND for single selection listboxes
     int m_anchor;
 
-    // the object managing our selected items if not NULL
+    // the object managing our selected items if not nullptr
     wxSelectionStore *m_selStore;
 
     // margins

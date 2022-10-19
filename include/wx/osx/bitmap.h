@@ -145,7 +145,7 @@ public:
 
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) override;
-    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const override;
+    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = nullptr) const override;
 
     const wxBitmapRefData *GetBitmapData() const
         { return (const wxBitmapRefData *)m_refData; }
@@ -184,7 +184,7 @@ public:
     bool UseAlpha(bool use = true) override;
 
     // returns the 'native' implementation, a GWorldPtr for the content and one for the mask
-    WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
+    WXHBITMAP GetHBITMAP( WXHBITMAP * mask = nullptr ) const;
 
     // returns a CGImageRef which must released after usage with CGImageRelease
     CGImageRef CreateCGImage() const ;

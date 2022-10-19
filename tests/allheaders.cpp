@@ -52,7 +52,7 @@
     #define __USE_W32_SOCKETS
 #endif
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 #if defined(__WXQT__)
     // Include this one before enabling the warnings as doing it later, as it
@@ -306,12 +306,6 @@
 #if CHECK_GCC_VERSION(10,1)
     GCC_TURN_OFF(redundant-tags) // "struct tm" triggers this
 #endif // 10.1
-
-    // This one is given for NULL, and not just literal 0, up to gcc 10, and so
-    // has to remain disabled for as long as we use any NULLs in our code.
-#if !CHECK_GCC_VERSION(10,1)
-    GCC_TURN_OFF(zero-as-null-pointer-constant)
-#endif
 
     // These ones could be useful to explore, but for now we don't use "final"
     // at all anywhere.

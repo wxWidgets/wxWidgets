@@ -39,7 +39,7 @@ wxDEFINE_EVENT( wxEVT_CLIPBOARD_CHANGED, wxClipboardEvent );
 
 bool wxClipboardEvent::SupportsFormat( const wxDataFormat &format ) const
 {
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     for (wxVector<wxDataFormat>::size_type n = 0; n < m_formats.size(); n++)
     {
         if (m_formats[n] == format)
@@ -64,7 +64,7 @@ void wxClipboardEvent::AddFormat(const wxDataFormat& format)
 // wxClipboardBase
 // ---------------------------------------------------------
 
-static wxClipboard *gs_clipboard = NULL;
+static wxClipboard *gs_clipboard = nullptr;
 
 /*static*/ wxClipboard *wxClipboardBase::Get()
 {

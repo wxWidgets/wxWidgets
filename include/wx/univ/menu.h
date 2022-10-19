@@ -93,7 +93,7 @@ protected:
     // forget old menu geometry info
     void InvalidateGeometryInfo();
 
-    // return either the menubar or the invoking window, normally never NULL
+    // return either the menubar or the invoking window, normally never null
     wxWindow *GetRootWindow() const;
 
     // get the renderer we use for drawing: either the one of the menu bar or
@@ -117,7 +117,7 @@ private:
     // which is opaque and defined by the renderer
     wxMenuGeometryInfo *m_geometry;
 
-    // the menu shown on screen or NULL if not currently shown
+    // the menu shown on screen or nullptr if not currently shown
     wxPopupMenuWindow *m_popupMenu;
 
 #if wxUSE_ACCEL
@@ -163,11 +163,11 @@ public:
     // get the next item for the givan accel letter (used by wxFrame), return
     // -1 if none
     //
-    // if unique is not NULL, filled with true if there is only one item with
+    // if unique is not null, filled with true if there is only one item with
     // this accel, false if two or more
     int FindNextItemForAccel(int idxStart,
                              int keycode,
-                             bool *unique = NULL) const;
+                             bool *unique = nullptr) const;
 
     // called by wxFrame to set focus to or open the given menu
     void SelectMenu(size_t pos);
@@ -210,7 +210,7 @@ protected:
     virtual wxSize DoGetBestClientSize() const override;
 
     // has the menubar been created already?
-    bool IsCreated() const { return m_frameLast != NULL; }
+    bool IsCreated() const { return m_frameLast != nullptr; }
 
     // "fast" version of GetMenuCount()
     size_t GetCount() const { return m_menuInfos.GetCount(); }
@@ -240,7 +240,7 @@ protected:
     void DismissMenu();
 
     // do we show a menu currently?
-    bool IsShowingMenu() const { return m_menuShown != 0; }
+    bool IsShowingMenu() const { return m_menuShown != nullptr; }
 
     // we don't want to have focus except while selecting from menu
     void GiveAwayFocus();
@@ -255,14 +255,14 @@ protected:
     int m_current;
 
 private:
-    // the last frame to which we were attached, NULL initially
+    // the last frame to which we were attached, nullptr initially
     wxFrame *m_frameLast;
 
-    // the currently shown menu or NULL
+    // the currently shown menu or nullptr
     wxMenu *m_menuShown;
 
     // should be showing the menu? this is subtly different from m_menuShown !=
-    // NULL as the menu which should be shown may be disabled in which case we
+    // nullptr as the menu which should be shown may be disabled in which case we
     // don't show it - but will do as soon as the focus shifts to another menu
     bool m_shouldShowMenu;
 

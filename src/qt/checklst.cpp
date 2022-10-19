@@ -74,14 +74,14 @@ void wxCheckListBox::Init()
 bool wxCheckListBox::IsChecked(unsigned int n) const
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
-    wxCHECK_MSG(item != NULL, false, wxT("wrong listbox index") );
+    wxCHECK_MSG(item != nullptr, false, wxT("wrong listbox index") );
     return item->checkState() == Qt::Checked;
 }
 
 void wxCheckListBox::Check(unsigned int n, bool check )
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
-    wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
+    wxCHECK_RET(item != nullptr, wxT("wrong listbox index") );
     return item->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 }
 

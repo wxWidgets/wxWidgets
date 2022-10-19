@@ -22,7 +22,7 @@
 // ----------------------------------------------------------------------------
 
 // This is a helper class convertible to either narrow or wide string pointer.
-// It is similar to wxCStrData but, unlike it, can be NULL which is required to
+// It is similar to wxCStrData but, unlike it, can be null which is required to
 // represent the return value of wxDateTime::ParseXXX() methods for example.
 //
 // NB: this class is fully inline and so doesn't need to be DLL-exported
@@ -30,12 +30,12 @@ class wxAnyStrPtr
 {
 public:
     // ctors: this class must be created from the associated string or using
-    // its default ctor for an invalid NULL-like object; notice that it is
+    // its default ctor for an invalid nullptr-like object; notice that it is
     // immutable after creation.
 
     // ctor for invalid pointer
     wxAnyStrPtr()
-        : m_str(NULL)
+        : m_str(nullptr)
     {
     }
 
@@ -58,7 +58,7 @@ public:
     // e.g. "if ( FuncReturningAnyStrPtr() && ... )" (unfortunately using
     // unspecified_bool_type here wouldn't help with ambiguity between all the
     // different conversions to pointers)
-    operator bool() const { return m_str != NULL; }
+    operator bool() const { return m_str != nullptr; }
 
     // at least VC7 also needs this one or it complains about ambiguity
     // for !anystr expressions
@@ -71,7 +71,7 @@ public:
     operator const char *() const
     {
         if ( !m_str )
-            return NULL;
+            return nullptr;
 
         // check if the string is convertible to char at all
         //
@@ -100,7 +100,7 @@ public:
     operator const wchar_t *() const
     {
         if ( !m_str )
-            return NULL;
+            return nullptr;
 
         // no complications with wide strings (as long as we discount
         // surrogates as we do for now)
@@ -112,8 +112,8 @@ public:
     }
 
     // Because the objects of this class are only used as return type for
-    // functions which can return NULL we can skip providing dereferencing
-    // operators: the code using this class must test it for NULL first and if
+    // functions which can return nullptr we can skip providing dereferencing
+    // operators: the code using this class must test it for null first and if
     // it does anything else with it has to assign it to either char* or
     // wchar_t* itself, before dereferencing.
     //
@@ -130,7 +130,7 @@ public:
 
 private:
     // the original string and the position in it we correspond to, if the
-    // string is NULL this object is NULL pointer-like
+    // string is null this object is null pointer-like
     const wxString * const m_str;
     const wxString::const_iterator m_iter;
 

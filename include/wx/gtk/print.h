@@ -36,19 +36,19 @@ public:
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data ) override;
 
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
-                                                    wxPrintout *printout = NULL,
-                                                    wxPrintDialogData *data = NULL ) override;
+                                                    wxPrintout *printout = nullptr,
+                                                    wxPrintDialogData *data = nullptr ) override;
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
                                                     wxPrintData *data ) override;
 
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintDialogData *data = NULL ) override;
+                                                  wxPrintDialogData *data = nullptr ) override;
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
                                                   wxPrintData *data ) override;
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
-                                                          wxPageSetupDialogData * data = NULL ) override;
+                                                          wxPageSetupDialogData * data = nullptr ) override;
 
     virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) override;
 
@@ -71,7 +71,7 @@ class WXDLLIMPEXP_CORE wxGtkPrintDialog: public wxPrintDialogBase
 {
 public:
     wxGtkPrintDialog( wxWindow *parent,
-                         wxPrintDialogData* data = NULL );
+                         wxPrintDialogData* data = nullptr );
     wxGtkPrintDialog( wxWindow *parent, wxPrintData* data);
     virtual ~wxGtkPrintDialog();
 
@@ -116,7 +116,7 @@ class WXDLLIMPEXP_CORE wxGtkPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
     wxGtkPageSetupDialog( wxWindow *parent,
-                            wxPageSetupDialogData* data = NULL );
+                            wxPageSetupDialogData* data = nullptr );
     virtual ~wxGtkPageSetupDialog();
 
     virtual wxPageSetupDialogData& GetPageSetupDialogData() override { return m_pageDialogData; }
@@ -150,7 +150,7 @@ private:
 class WXDLLIMPEXP_CORE wxGtkPrinter : public wxPrinterBase
 {
 public:
-    wxGtkPrinter(wxPrintDialogData *data = NULL);
+    wxGtkPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxGtkPrinter();
 
     virtual bool Print(wxWindow *parent,
@@ -284,9 +284,9 @@ protected:
         wxFAIL_MSG( "not implemented" );
     }
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
-                     wxCoord *descent = NULL,
-                     wxCoord *externalLeading = NULL,
-                     const wxFont *theFont = NULL ) const override;
+                     wxCoord *descent = nullptr,
+                     wxCoord *externalLeading = nullptr,
+                     const wxFont *theFont = nullptr ) const override;
     bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
     void DoGetSize(int* width, int* height) const override;
     void DoGetSizeMM(int *width, int *height) const override;
@@ -324,8 +324,8 @@ class WXDLLIMPEXP_CORE wxGtkPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxGtkPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting = NULL,
-                             wxPrintDialogData *data = NULL);
+                             wxPrintout *printoutForPrinting = nullptr,
+                             wxPrintDialogData *data = nullptr);
     wxGtkPrintPreview(wxPrintout *printout,
                              wxPrintout *printoutForPrinting,
                              wxPrintData *data);

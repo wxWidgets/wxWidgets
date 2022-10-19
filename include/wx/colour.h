@@ -206,14 +206,14 @@ protected:
     {
         wxFAIL_MSG( "must be overridden if used" );
 
-        return NULL;
+        return nullptr;
     }
 
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const override
     {
         wxFAIL_MSG( "must be overridden if used" );
 
-        return NULL;
+        return nullptr;
     }
 #endif
 };
@@ -227,12 +227,8 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
 
 #if defined(__WXMSW__)
     #include "wx/msw/colour.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/colour.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/colour.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/colour.h"
+    #include "wx/gtk/colour.h"
 #elif defined(__WXDFB__)
     #include "wx/generic/colour.h"
 #elif defined(__WXX11__)

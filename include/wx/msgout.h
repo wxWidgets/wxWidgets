@@ -29,7 +29,7 @@ class WXDLLIMPEXP_BASE wxMessageOutput
 public:
     virtual ~wxMessageOutput() { }
 
-    // gets the current wxMessageOutput object (may be NULL during
+    // gets the current wxMessageOutput object (may be null during
     // initialization or shutdown)
     static wxMessageOutput* Get();
 

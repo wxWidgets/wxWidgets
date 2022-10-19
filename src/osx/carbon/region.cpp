@@ -481,14 +481,14 @@ miInsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE,  int scanline,
             if (!tmpSLLBlock)
                 return FALSE;
             (*SLLBlock)->next = tmpSLLBlock;
-            tmpSLLBlock->next = (ScanLineListBlock *)NULL;
+            tmpSLLBlock->next = (ScanLineListBlock *)nullptr;
             *SLLBlock = tmpSLLBlock;
             *iSLLBlock = 0;
         }
         pSLL = &((*SLLBlock)->SLLs[(*iSLLBlock)++]);
         
         pSLL->next = pPrevSLL->next;
-        pSLL->edgelist = (EdgeTableEntry *)NULL;
+        pSLL->edgelist = (EdgeTableEntry *)nullptr;
         pPrevSLL->next = pSLL;
     }
     pSLL->scanline = scanline;
@@ -496,7 +496,7 @@ miInsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE,  int scanline,
     /*
      * now insert the edge in the right bucket
      */
-    prev = (EdgeTableEntry *)NULL;
+    prev = (EdgeTableEntry *)nullptr;
     start = pSLL->edgelist;
     while (start && (start->bres.minor < ETE->bres.minor))
     {
@@ -552,18 +552,18 @@ miCreateETandAET(int count, const wxPoint * pts, EdgeTable *ET, EdgeTableEntry *
     /*
      *  initialize the Active Edge Table
      */
-    AET->next = (EdgeTableEntry *)NULL;
-    AET->back = (EdgeTableEntry *)NULL;
-    AET->nextWETE = (EdgeTableEntry *)NULL;
+    AET->next = (EdgeTableEntry *)nullptr;
+    AET->back = (EdgeTableEntry *)nullptr;
+    AET->nextWETE = (EdgeTableEntry *)nullptr;
     AET->bres.minor = INT_MIN;
     
     /*
      *  initialize the Edge Table.
      */
-    ET->scanlines.next = (ScanLineList *)NULL;
+    ET->scanlines.next = (ScanLineList *)nullptr;
     ET->ymax = INT_MIN;
     ET->ymin = INT_MAX;
-    pSLLBlock->next = (ScanLineListBlock *)NULL;
+    pSLLBlock->next = (ScanLineListBlock *)nullptr;
     
     PrevPt = &pts[count-1];
     
@@ -682,7 +682,7 @@ micomputeWAET(EdgeTableEntry *AET)
     int inside = 1;
     int isInside = 0;
     
-    AET->nextWETE = (EdgeTableEntry *)NULL;
+    AET->nextWETE = (EdgeTableEntry *)nullptr;
     pWETE = AET;
     AET = AET->next;
     while (AET)
@@ -701,7 +701,7 @@ micomputeWAET(EdgeTableEntry *AET)
         }
         AET = AET->next;
     }
-    pWETE->nextWETE = (EdgeTableEntry *)NULL;
+    pWETE->nextWETE = (EdgeTableEntry *)nullptr;
 }
 
 /*
@@ -1175,7 +1175,7 @@ bool wxRegion::IsEmpty() const
 WXHRGN wxRegion::GetWXHRGN() const
 {
     if ( !m_refData )
-        return NULL;
+        return nullptr;
 
     return M_REGION ;
 }
@@ -1227,7 +1227,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
  * Initialize empty iterator
  */
 wxRegionIterator::wxRegionIterator()
-    : m_current(0), m_numRects(0), m_rects(NULL)
+    : m_current(0), m_numRects(0), m_rects(nullptr)
 {
 }
 
@@ -1240,7 +1240,7 @@ wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
     : wxObject()
     , m_current(iterator.m_current)
     , m_numRects(0)
-    , m_rects(NULL)
+    , m_rects(nullptr)
 {
     SetRects(iterator.m_numRects, iterator.m_rects);
 }
@@ -1277,7 +1277,7 @@ void wxRegionIterator::SetRects(long numRects, wxRect *rects)
  */
 wxRegionIterator::wxRegionIterator(const wxRegion& region)
 {
-    m_rects = NULL;
+    m_rects = nullptr;
 
     Reset(region);
 }

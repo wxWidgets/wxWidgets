@@ -89,7 +89,7 @@ public:
 
     virtual wxWindow *GetWidget() const override { return m_combobox; }
     virtual wxTextEntryBase *GetTextEntry() const override
-        { return m_combobox ? m_combobox->GetTextCtrl() : NULL; }
+        { return m_combobox ? m_combobox->GetTextCtrl() : nullptr; }
     virtual wxItemContainer* GetContainer() const override { return m_combobox; }
     virtual void RecreateWidget() override { CreateCombo(); }
 
@@ -307,10 +307,10 @@ ODComboboxWidgetsPage::ODComboboxWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkSort =
     m_chkReadonly =
-    m_chkDclickcycles = (wxCheckBox *)NULL;
+    m_chkDclickcycles = nullptr;
 
-    m_combobox = (wxOwnerDrawnComboBox *)NULL;
-    m_sizerCombo = (wxSizer *)NULL;
+    m_combobox = nullptr;
+    m_sizerCombo = nullptr;
 }
 
 void ODComboboxWidgetsPage::CreateContent()
@@ -458,7 +458,7 @@ void ODComboboxWidgetsPage::CreateContent()
     m_combobox = new DemoODComboBox();
     m_combobox->Create(this, ODComboPage_Combo, wxEmptyString,
                        wxDefaultPosition, wxDefaultSize,
-                       0, NULL,
+                       0, nullptr,
                        0);
     sizerRight->Add(m_combobox, 0, wxGROW | wxALL, 5);
     sizerRight->SetMinSize(150, 0);
@@ -517,7 +517,7 @@ void ODComboboxWidgetsPage::CreateCombo()
     m_combobox = new DemoODComboBox();
     m_combobox->Create(this, ODComboPage_Combo, wxEmptyString,
                        wxDefaultPosition, wxDefaultSize,
-                       0, NULL,
+                       0, nullptr,
                        flags);
 
     unsigned int count = items.GetCount();

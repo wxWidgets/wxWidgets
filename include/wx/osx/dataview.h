@@ -169,13 +169,13 @@ public:
   virtual bool              PrependColumn    (wxDataViewColumn* columnPtr) override;
 
   virtual void Collapse( const wxDataViewItem& item) override;
-  virtual void EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn* columnPtr=NULL) override;
+  virtual void EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn* columnPtr=nullptr) override;
   virtual bool IsExpanded(const wxDataViewItem & item) const override;
 
   virtual unsigned int GetCount() const;
   virtual int GetCountPerPage() const override;
   virtual wxRect GetItemRect(const wxDataViewItem& item,
-                             const wxDataViewColumn* columnPtr = NULL) const override;
+                             const wxDataViewColumn* columnPtr = nullptr) const override;
   virtual int GetSelectedItemsCount() const override;
   virtual int GetSelections(wxDataViewItemArray& sel) const override;
 

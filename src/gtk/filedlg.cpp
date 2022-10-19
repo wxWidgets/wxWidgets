@@ -140,8 +140,8 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
     if ( !filename )
         return;
 
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
-    gboolean have_preview = pixbuf != NULL;
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, nullptr);
+    gboolean have_preview = pixbuf != nullptr;
 
     gtk_image_set_from_pixbuf(GTK_IMAGE(preview), pixbuf);
     if ( pixbuf )
@@ -210,7 +210,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     }
 
     GtkFileChooserAction gtk_action;
-    GtkWindow* gtk_parent = NULL;
+    GtkWindow* gtk_parent = nullptr;
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
@@ -245,7 +245,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #endif
                    GTK_RESPONSE_CANCEL,
                    static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
-                   NULL);
+                   nullptr);
 
     g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
@@ -359,7 +359,7 @@ wxFileDialog::~wxFileDialog()
         // get chooser to drop its reference right now, allowing wxWindow dtor
         // to verify that ref count drops to zero
         gtk_file_chooser_set_extra_widget(
-            GTK_FILE_CHOOSER(m_widget), NULL);
+            GTK_FILE_CHOOSER(m_widget), nullptr);
     }
 }
 

@@ -117,7 +117,7 @@ public:
         if ( attr )
             attr->DecRef();
 
-        return attr != NULL;
+        return attr != nullptr;
     }
 
     size_t GetCellAttrCount() const
@@ -349,7 +349,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
 };
 
-GridTestCase::GridTestCase() : m_tempGrid(NULL)
+GridTestCase::GridTestCase() : m_tempGrid(nullptr)
 {
     m_grid = new TestableGrid(wxTheApp->GetTopWindow());
     m_grid->CreateGrid(10, 2);
@@ -1708,7 +1708,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
     {
         CHECK_ATTR_COUNT( 0 );
 
-        m_grid->SetAttr(0, 0, NULL);
+        m_grid->SetAttr(0, 0, nullptr);
         CHECK_ATTR_COUNT( 0 );
 
         SetCellAttr(0, 0);
@@ -1718,15 +1718,15 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
         SetCellAttr(0, 0);
         CHECK_ATTR_COUNT( 1 );
 
-        m_grid->SetAttr(0, 0, NULL);
+        m_grid->SetAttr(0, 0, nullptr);
         CHECK_ATTR_COUNT( 0 );
 
         SetCellAttr(0, 0);
         m_grid->SetCellBackgroundColour(0, 1, *wxGREEN);
         CHECK_ATTR_COUNT( 2 );
 
-        m_grid->SetAttr(0, 1, NULL);
-        m_grid->SetAttr(0, 0, NULL);
+        m_grid->SetAttr(0, 1, nullptr);
+        m_grid->SetAttr(0, 0, nullptr);
         CHECK_ATTR_COUNT( 0 );
     }
 
@@ -1841,7 +1841,7 @@ TEST_CASE_METHOD(GridTestCase,
     // repeat the same tests for both rows and columns as the code for
     // updating them works symmetrically.
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1876,7 +1876,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     wxSwap(multi.rows, multi.cols);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1958,7 +1958,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     Multicell multi(1, 1, 5, 3);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1993,7 +1993,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     wxSwap(multi.rows, multi.cols);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);

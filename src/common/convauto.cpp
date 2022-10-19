@@ -55,7 +55,7 @@ void wxConvAuto::SetFallbackEncoding(wxFontEncoding enc)
 /* static */
 const char* wxConvAuto::GetBOMChars(wxBOM bom, size_t* count)
 {
-    wxCHECK_MSG( count , NULL, wxS("count pointer must be provided") );
+    wxCHECK_MSG( count , nullptr, wxS("count pointer must be provided") );
 
     switch ( bom )
     {
@@ -67,11 +67,11 @@ const char* wxConvAuto::GetBOMChars(wxBOM bom, size_t* count)
         case wxBOM_Unknown:
         case wxBOM_None:
             wxFAIL_MSG( wxS("Invalid BOM type") );
-            return NULL;
+            return nullptr;
     }
 
     wxFAIL_MSG( wxS("Unknown BOM type") );
-    return NULL;
+    return nullptr;
 }
 
 /* static */
@@ -287,8 +287,8 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
 {
     // we check BOM and create the appropriate conversion the first time we're
     // called but we also need to ensure that the BOM is skipped not only
-    // during this initial call but also during the first call with non-NULL
-    // dst as typically we're first called with NULL dst to calculate the
+    // during this initial call but also during the first call with non-null
+    // dst as typically we're first called with null dst to calculate the
     // needed buffer size
     wxConvAuto *self = const_cast<wxConvAuto *>(this);
 

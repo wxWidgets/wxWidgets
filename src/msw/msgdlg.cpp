@@ -131,7 +131,7 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
     {
         // we won't need this hook any longer
         ::UnhookWindowsHookEx(hhook);
-        wnd->m_hook = NULL;
+        wnd->m_hook = nullptr;
         HookMap().erase(tid);
 
         TempHWNDSetter set(wnd, (WXHWND)wParam);
@@ -169,9 +169,9 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // find the static control to replace: normally there are two of them, the
     // icon and the text itself so search for all of them and ignore the icon
     // ones
-    HWND hwndStatic = ::FindWindowEx(GetHwnd(), NULL, wxT("STATIC"), NULL);
+    HWND hwndStatic = ::FindWindowEx(GetHwnd(), nullptr, wxT("STATIC"), nullptr);
     if ( ::GetWindowLong(hwndStatic, GWL_STYLE) & SS_ICON )
-        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, wxT("STATIC"), NULL);
+        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, wxT("STATIC"), nullptr);
 
     if ( !hwndStatic )
     {
@@ -236,9 +236,9 @@ void wxMessageDialog::ReplaceStaticWithEdit()
                         rc.left, rc.top,
                         rc.right - rc.left, rc.bottom - rc.top,
                         GetHwnd(),
-                        NULL,
+                        nullptr,
                         wxGetInstance(),
-                        NULL
+                        nullptr
                       );
 
     if ( !hwndEdit )
@@ -415,7 +415,7 @@ int wxMessageDialog::ShowMessageBox()
 
     // use the top level window as parent if none specified
     m_parent = GetParentForModalDialog();
-    HWND hWnd = m_parent ? GetHwndOf(m_parent) : NULL;
+    HWND hWnd = m_parent ? GetHwndOf(m_parent) : nullptr;
 
 #if wxUSE_INTL
     // native message box always uses the current user locale but the program
@@ -521,7 +521,7 @@ int wxMessageDialog::ShowMessageBox()
     // control with an edit one)
     const DWORD tid = ::GetCurrentThreadId();
     m_hook = ::SetWindowsHookEx(WH_CBT,
-                                &wxMessageDialog::HookFunction, NULL, tid);
+                                &wxMessageDialog::HookFunction, nullptr, tid);
     HookMap()[tid] = this;
 
     // do show the dialog
@@ -553,7 +553,7 @@ int wxMessageDialog::ShowModal()
         wxTdc.MSWCommonTaskDialogInit( tdc );
 
         int msAns;
-        HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
+        HRESULT hr = taskDialogIndirect( &tdc, &msAns, nullptr, nullptr );
         if ( FAILED(hr) )
         {
             wxLogApiError( "TaskDialogIndirect", hr );
@@ -662,7 +662,7 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     tdc.pszWindowTitle = caption.t_str();
 
     // use the top level window as parent if none specified
-    tdc.hwndParent = parent ? GetHwndOf(parent) : NULL;
+    tdc.hwndParent = parent ? GetHwndOf(parent) : nullptr;
 
     if ( wxApp::MSWGetDefaultLayout(parent) == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;
@@ -789,7 +789,7 @@ wxCRIT_SECT_DECLARE(gs_csTaskDialogIndirect);
 
 TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 {
-    // Initialize the function pointer to an invalid value different from NULL
+    // Initialize the function pointer to an invalid value different from nullptr
     // to avoid reloading comctl32.dll and trying to resolve it every time
     // we're called if task dialog is not available (notice that this may
     // happen even under Vista+ if we don't use comctl32.dll v6).

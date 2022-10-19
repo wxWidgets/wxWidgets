@@ -163,7 +163,7 @@ int RTCore::ms_isAvailable = -1;
 //
 
 TempStringRef::TempStringRef(const wxString &str)
-    : m_hstring(NULL), m_header()
+    : m_hstring(nullptr), m_header()
 {
     if ( !RTCore::IsAvailable() )
     {

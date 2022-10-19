@@ -62,7 +62,7 @@ static const int MINIMUM_NATIVE_ROW_HEIGHT = 17;
 {
     self = [super init];
     if (self != nil)
-        self->pointer = NULL;
+        self->pointer = nullptr;
     return self;
 }
 
@@ -137,7 +137,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     self = [super init];
     if (self != nil)
     {
-        customRenderer = NULL;
+        customRenderer = nullptr;
     }
     return self;
 }
@@ -194,7 +194,7 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     NSPoint locInView = [self convertPoint:locInWindow fromView:nil];
     NSInteger colIdx = [self columnAtPoint:locInView];
     wxDataViewColumn* const
-        column = colIdx == -1 ? NULL : dvc->GetColumn(colIdx);
+        column = colIdx == -1 ? nullptr : dvc->GetColumn(colIdx);
     wxDataViewEvent
         event(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dvc, column);
     if ( !dvc->HandleWindowEvent(event) )
@@ -398,7 +398,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
 {
     wxDataViewRenderer * const renderer = column->GetRenderer();
 
-    wxCHECK_MSG( renderer, NULL, "column should have a renderer" );
+    wxCHECK_MSG( renderer, nullptr, "column should have a renderer" );
 
     wxDVCNSTableColumn * const nativeColumn(
         [[wxDVCNSTableColumn alloc] initWithColumnPointer: column]
@@ -480,8 +480,8 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer,
     self = [super init];
     if (self != nil)
     {
-        columnPtr = NULL;
-        modelPtr  = NULL;
+        columnPtr = nullptr;
+        modelPtr  = nullptr;
     }
     return self;
 }
@@ -550,8 +550,8 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
     self = [super init];
     if (self != nil)
     {
-        implementation = NULL;
-        model          = NULL;
+        implementation = nullptr;
+        model          = nullptr;
 
         currentParentItem = nil;
 
@@ -608,7 +608,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewItemArray dataViewChildren;
 
-    wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
+    wxCHECK_MSG( model, nullptr, "Valid model in data source does not exist." );
     model->GetChildren(wxDataViewItemFromMaybeNilItem(item), dataViewChildren);
     [self bufferItem:item withChildren:&dataViewChildren];
     if ([sortDescriptors count] > 0)
@@ -742,7 +742,7 @@ outlineView:(NSOutlineView*)outlineView
     // the program can do special actions before the sorting actually starts:
     wxDataViewColumn* const col = noOfDescriptors > 0
                                     ? [[wxSortDescriptors objectAtIndex:0] columnPtr]
-                                    : NULL;
+                                    : nullptr;
     wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_SORTED, dvc, col);
     dvc->GetEventHandler()->ProcessEvent(event);
 
@@ -1989,7 +1989,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
         [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)],
         wxWidgetImpl::Widget_UserKeyEvents
       ),
-      m_DataSource(NULL),
+      m_DataSource(nullptr),
       m_OutlineView([[wxCocoaOutlineView alloc] init]),
       m_expanderWidth(-1)
 {
@@ -2441,7 +2441,7 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
         [m_DataSource setModel:model];
     }
     else
-        m_DataSource = NULL;
+        m_DataSource = nullptr;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
 
     // By default, the first column is indented to leave enough place for the
@@ -2468,7 +2468,7 @@ wxDataViewColumn *wxCocoaDataViewControl::GetCurrentColumn() const
 {
     int col = [m_OutlineView selectedColumn];
     if ( col == -1 )
-        return NULL;
+        return nullptr;
     return GetColumn(col);
 }
 
@@ -2561,7 +2561,7 @@ wxDataViewColumn* wxCocoaDataViewControl::GetSortingColumn() const
     for (UInt32 i=0; i<noOfColumns; ++i)
         if ([[columns objectAtIndex:i] sortDescriptorPrototype] != nil)
             return GetColumn(i);
-    return NULL;
+    return nullptr;
 }
 
 void wxCocoaDataViewControl::Resort()
@@ -2586,7 +2586,7 @@ void wxCocoaDataViewControl::DoSetIndent(int indent)
 void wxCocoaDataViewControl::HitTest(const wxPoint& point_, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
 {
     // Assume no item by default.
-    columnPtr = NULL;
+    columnPtr = nullptr;
     item      = wxDataViewItem();
 
     // Make a copy before modifying it.
@@ -2666,9 +2666,9 @@ void wxCocoaDataViewControl::SetFont(const wxFont& font)
 
 void wxDataViewRendererNativeData::Init()
 {
-    m_origFont = NULL;
-    m_origTextColour = NULL;
-    m_origBackgroundColour = NULL;
+    m_origFont = nullptr;
+    m_origTextColour = nullptr;
+    m_origBackgroundColour = nullptr;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
     m_hasCustomFont = false;
 
@@ -2713,7 +2713,7 @@ wxDataViewRenderer::wxDataViewRenderer(const wxString& varianttype,
     : wxDataViewRendererBase(varianttype, mode, align),
       m_alignment(align),
       m_mode(mode),
-      m_NativeDataPtr(NULL)
+      m_NativeDataPtr(nullptr)
 {
 }
 
@@ -2815,9 +2815,9 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
     // had ever changed them before, even if this item itself doesn't have any
     // special attributes as otherwise it would reuse the attributes from the
     // previous cell rendered using the same renderer
-    NSFont *font = NULL;
-    NSColor *colText = NULL;
-    NSColor *colBack = NULL;
+    NSFont *font = nullptr;
+    NSColor *colText = nullptr;
+    NSColor *colBack = nullptr;
 
     if ( attr.HasFont() )
     {
@@ -2924,8 +2924,8 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(const wxString& varianttype,
                                                    wxDataViewCellMode mode,
                                                    int align)
     : wxDataViewCustomRendererBase(varianttype, mode, align),
-      m_editorCtrlPtr(NULL),
-      m_DCPtr(NULL)
+      m_editorCtrlPtr(nullptr),
+      m_DCPtr(nullptr)
 {
     wxCustomCell* cell = [[wxCustomCell alloc] init];
     SetNativeData(new wxDataViewRendererNativeData(cell));

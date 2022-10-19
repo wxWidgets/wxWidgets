@@ -48,8 +48,7 @@
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
 #       error "Target can't be both X and MSW"
-#   elif !defined(__WXMOTIF__) && \
-         !defined(__WXMSW__)   && \
+#   elif !defined(__WXMSW__)   && \
          !defined(__WXGTK__)   && \
          !defined(__WXOSX_COCOA__)   && \
          !defined(__WXOSX_IPHONE__)   && \
@@ -708,9 +707,7 @@ typedef short int WXTYPE;
         wxDEPRECATED(func) { body }
 #endif
 
-/*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
-/*  it must not be defined as "(void *)0" which is standard for C but completely */
-/*  breaks C++ code) */
+/* Get size_t declaration. */
 #include <stddef.h>
 
 /*  size of statically declared array */
@@ -853,29 +850,29 @@ typedef short int WXTYPE;
 // everybody gets the assert and other debug macros
 #include "wx/debug.h"
 
-    // delete pointer if it is not NULL and NULL it afterwards
+    // delete pointer if it is not null and null it afterwards
     template <typename T>
     inline void wxDELETE(T*& ptr)
     {
         typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
 
-        if ( ptr != NULL )
+        if ( ptr != nullptr )
         {
             delete ptr;
-            ptr = NULL;
+            ptr = nullptr;
         }
     }
 
-    // delete an array and NULL it (see comments above)
+    // delete an array and null it (see comments above)
     template <typename T>
     inline void wxDELETEA(T*& ptr)
     {
         typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
 
-        if ( ptr != NULL )
+        if ( ptr != nullptr )
         {
             delete [] ptr;
-            ptr = NULL;
+            ptr = nullptr;
         }
     }
 
@@ -974,16 +971,10 @@ typedef double wxDouble;
 #endif /* wxWCHAR_T_IS_REAL_TYPE/!wxWCHAR_T_IS_REAL_TYPE */
 
 /*
-   This constant should be used instead of NULL in vararg functions taking
-   wxChar* arguments: passing NULL (which is the same as 0, unless the compiler
-   defines it specially, e.g. like gcc does with its __null built-in) doesn't
-   work in this case as va_arg() wouldn't interpret the integer 0 correctly
-   when trying to convert it to a pointer on architectures where sizeof(int) is
-   strictly less than sizeof(void *).
-
-   Examples of places where this must be used include wxFileTypeInfo ctor.
+   Deprecated constant existing only for compatibility, use nullptr directly in
+   the new code.
  */
-#define wxNullPtr ((void *)NULL)
+#define wxNullPtr nullptr
 
 
 /* Define wxChar16 and wxChar32                                              */
@@ -1461,16 +1452,8 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 /*  Windows, it won't normally get the dialog navigation key events) */
 #define wxWANTS_CHARS           0x00040000
 
-/*  Make window retained (Motif only, see src/generic/scrolwing.cpp)
- *  This is non-zero only under wxMotif, to avoid a clash with wxPOPUP_WINDOW
- *  on other platforms
- */
-
-#ifdef __WXMOTIF__
-#define wxRETAINED              0x00020000
-#else
+/*  Deprecated, defined only for compatibility. */
 #define wxRETAINED              0x00000000
-#endif
 #define wxBACKINGSTORE          wxRETAINED
 
 /*  set this flag to create a special popup window: it will be always shown on */
@@ -2590,7 +2573,7 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 /*  ---------------------------------------------------------------------------- */
 
 /*  define this macro if font handling is done using the X font names */
-#if (defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__X__)
+#if defined(__X__)
     #define _WX_X_FONTLIKE
 #endif
 
@@ -2931,8 +2914,8 @@ typedef WXLRESULT (wxSTDCALL *WXWNDPROC)(WXHWND, WXUINT, WXWPARAM, WXLPARAM);
 #endif /*  __WIN32__ */
 
 
-#if defined(__WXMOTIF__) || defined(__WXX11__)
-/* Stand-ins for X/Xt/Motif types */
+#if defined(__WXX11__)
+/* Stand-ins for X/Xt types */
 typedef void*           WXWindow;
 typedef void*           WXWidget;
 typedef void*           WXAppContext;
@@ -2955,9 +2938,9 @@ typedef void*           WXFontType; /* either a XmFontList or XmRenderTable */
 typedef void*           WXString;
 
 typedef unsigned long   Atom;  /* this might fail on a few architectures */
-typedef long            WXPixel; /* safety catch in src/motif/colour.cpp */
+typedef long            WXPixel;
 
-#endif /*  Motif */
+#endif /* X11 */
 
 #ifdef __WXGTK__
 
@@ -2969,11 +2952,7 @@ typedef struct _GdkColor        GdkColor;
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkDragContext  GdkDragContext;
 
-#if defined(__WXGTK20__)
-    typedef struct _GdkAtom* GdkAtom;
-#else
-    typedef unsigned long GdkAtom;
-#endif
+typedef struct _GdkAtom* GdkAtom;
 
 #if !defined(__WXGTK3__)
     typedef struct _GdkColormap GdkColormap;
@@ -2985,13 +2964,9 @@ typedef struct _GdkDragContext  GdkDragContext;
 #if defined(__WXGTK3__)
     typedef struct _GdkWindow GdkWindow;
     typedef struct _GdkEventSequence GdkEventSequence;
-#elif defined(__WXGTK20__)
+#else
     typedef struct _GdkDrawable GdkWindow;
     typedef struct _GdkDrawable GdkPixmap;
-#else
-    typedef struct _GdkWindow GdkWindow;
-    typedef struct _GdkWindow GdkBitmap;
-    typedef struct _GdkWindow GdkPixmap;
 #endif
 
 /* Stand-ins for GTK types */
@@ -3009,14 +2984,9 @@ typedef struct _GtkCellRenderer   GtkCellRenderer;
 
 typedef GtkWidget *WXWidget;
 
-#ifndef __WXGTK20__
-#define GTK_OBJECT_GET_CLASS(object) (GTK_OBJECT(object)->klass)
-#define GTK_CLASS_TYPE(klass) ((klass)->type)
-#endif
-
 #endif /*  __WXGTK__ */
 
-#if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#if defined(__WXGTK__) || (defined(__WXX11__) && wxUSE_UNICODE)
 #define wxUSE_PANGO 1
 #else
 #define wxUSE_PANGO 0

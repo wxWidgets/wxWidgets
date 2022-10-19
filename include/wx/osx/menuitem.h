@@ -28,12 +28,12 @@ class WXDLLIMPEXP_CORE wxMenuItem: public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
     virtual ~wxMenuItem();
 
     // override base class virtuals

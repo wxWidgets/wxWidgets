@@ -31,7 +31,7 @@ private:
     void SetBitmapIfSpecified(wxBitmapButton* button,
                               BitmapSetter setter,
                               const char* paramName,
-                              const char* paramNameAlt = NULL);
+                              const char* paramNameAlt = nullptr);
 };
 
 #endif // wxUSE_XRC && wxUSE_BMPBUTTON

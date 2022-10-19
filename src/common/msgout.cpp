@@ -50,7 +50,7 @@
 // wxMessageOutput
 // ----------------------------------------------------------------------------
 
-wxMessageOutput* wxMessageOutput::ms_msgOut = 0;
+wxMessageOutput* wxMessageOutput::ms_msgOut = nullptr;
 
 wxMessageOutput* wxMessageOutput::Get()
 {
@@ -120,7 +120,7 @@ void wxMessageOutputBest::Output(const wxString& str)
     else // Use some title to avoid default "Error"
         title = _("Message");
 
-    ::MessageBox(NULL, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
+    ::MessageBox(nullptr, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
 #else // !__WINDOWS__
     wxUnusedVar(m_flags);
 

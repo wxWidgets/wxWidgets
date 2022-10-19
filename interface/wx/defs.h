@@ -251,16 +251,8 @@ enum wxBorder
 /*  Windows, it won't normally get the dialog navigation key events) */
 #define wxWANTS_CHARS           0x00040000
 
-/*  Make window retained (Motif only, see src/generic/scrolwing.cpp)
- *  This is non-zero only under wxMotif, to avoid a clash with wxPOPUP_WINDOW
- *  on other platforms
- */
-
-#ifdef __WXMOTIF__
-#define wxRETAINED              0x00020000
-#else
+/*  Deprecated, does nothing and shouldn't be used in the new code. */
 #define wxRETAINED              0x00000000
-#endif
 #define wxBACKINGSTORE          wxRETAINED
 
 /*  set this flag to create a special popup window: it will be always shown on */

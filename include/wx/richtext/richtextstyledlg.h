@@ -132,7 +132,7 @@ public:
     wxRichTextStyleDefinition* GetSelectedStyleDefinition() const;
 
     /// Apply the style
-    bool ApplyStyle(wxRichTextCtrl* ctrl = NULL);
+    bool ApplyStyle(wxRichTextCtrl* ctrl = nullptr);
 
     /// Should we show tooltips?
     static bool ShowToolTips() { return sm_showToolTips; }

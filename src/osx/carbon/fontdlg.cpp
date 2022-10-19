@@ -205,7 +205,7 @@ void wxFontColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
     if (event.LeftDown())
     {
         wxWindow* parent = GetParent();
-        while (parent != NULL && !parent->IsKindOf(CLASSINFO(wxDialog)) && !parent->IsKindOf(CLASSINFO(wxFrame)))
+        while (parent != nullptr && !parent->IsKindOf(CLASSINFO(wxDialog)) && !parent->IsKindOf(CLASSINFO(wxFrame)))
             parent = parent->GetParent();
 
         wxColourData data;
@@ -257,12 +257,12 @@ wxEND_EVENT_TABLE()
 
 wxFontDialog::wxFontDialog( )
 {
-    m_dialogParent = NULL;
+    m_dialogParent = nullptr;
 }
 
 wxFontDialog::wxFontDialog(wxWindow* parent, const wxFontData& fontData)
 {
-    m_dialogParent = NULL;
+    m_dialogParent = nullptr;
 
     Create(parent, fontData);
 }
@@ -283,13 +283,13 @@ bool wxFontDialog::Create(wxWindow* parent, const wxFontData& fontData)
 
     wxString caption = _("Font");
 
-    m_facenameCtrl = NULL;
-    m_sizeCtrl = NULL;
-    m_boldCtrl = NULL;
-    m_italicCtrl = NULL;
-    m_underlinedCtrl = NULL;
-    m_colourCtrl = NULL;
-    m_previewCtrl = NULL;
+    m_facenameCtrl = nullptr;
+    m_sizeCtrl = nullptr;
+    m_boldCtrl = nullptr;
+    m_italicCtrl = nullptr;
+    m_underlinedCtrl = nullptr;
+    m_colourCtrl = nullptr;
+    m_previewCtrl = nullptr;
 
     InitializeFont();
 
@@ -328,7 +328,7 @@ void wxFontDialog::CreateControls()
     wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
     itemFlexGridSizer4->Add(itemBoxSizer6, 0, wxGROW, 5);
 
-    wxString* m_facenameCtrlStrings = NULL;
+    wxString* m_facenameCtrlStrings = nullptr;
     m_facenameCtrl = new wxListBox( itemDialog1, wxID_FONTDIALOG_FACENAME, wxDefaultPosition, wxSize(320, 100), 0, m_facenameCtrlStrings, wxLB_SINGLE );
     itemBoxSizer6->Add(m_facenameCtrl, 0, wxGROW|wxALL, 5);
 

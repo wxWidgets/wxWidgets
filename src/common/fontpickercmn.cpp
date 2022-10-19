@@ -35,7 +35,7 @@
 // implementation
 // ============================================================================
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #define SetMinMaxPointSize(min, max)
 #else
     #define SetMinMaxPointSize(min, max)  GetPickerWidget()->GetFontData()->SetRange((min), (max))

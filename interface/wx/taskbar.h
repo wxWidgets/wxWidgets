@@ -191,7 +191,7 @@ protected:
         clicked.
 
         If GetPopupMenu() returns @NULL (this happens by default),
-        CreatePopupMenu() is called next and its menu is used (if non-@NULL).
+        CreatePopupMenu() is called next and its menu is used (if non-null).
         Otherwise the menu returned by GetPopupMenu() is shown and, contrary to
         CreatePopupMenu(), not destroyed when the user dismisses it, allowing
         to reuse the same menu pointer multiple times.
