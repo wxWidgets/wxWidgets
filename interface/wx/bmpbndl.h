@@ -51,9 +51,15 @@
 
     The code shown above will use 32 pixel bitmap in normal DPI, 64 pixel
     bitmap in "high DPI", i.e. pixel-doubling or 200% resolution, and 48 pixel
-    bitmap in 150% resolution. For all the other resolutions, the best matching
-    bitmap will be created dynamically from the best available match, e.g. for
-    175% resolution, 64 pixel bitmap will be rescaled to 56 pixels.
+    bitmap in 150% resolution. For all the other resolutions, the bitmap with
+    the "best" matching size will be used, where "best" is deemed to be the
+    bitmap with the closest size if it can be used without scaling (so that in
+    this example the 64px bitmap will be used at 175% resolution because it
+    typically looks much better than either downscaling it or upscaling the
+    48px bitmap to 56px) or, if there is no bitmap with close enough size, a
+    bitmap upscaled by an integer scaling factor is used. Note that custom
+    bitmap bundles can use a different algorithm for selecting the best match
+    by overriding wxBitmapBundleImpl::GetPreferredBitmapSizeAtScale().
 
     Of course, this code relies on actually having the resources with the
     corresponding names (i.e. @c open_NxN) in MSW .rc file or Mac application
