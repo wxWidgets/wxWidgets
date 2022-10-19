@@ -188,7 +188,7 @@ public:
         return wxCOND_NO_ERROR;
         @endcode
 
-        The predicate would typically be a C++11 lambda:
+        The predicate would typically be a lambda:
         @code
         condvar.Wait([]{return value == 1;});
         @endcode
