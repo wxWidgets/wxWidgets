@@ -265,6 +265,7 @@ wxMSW:
 - Update top level icon resolution on DPI change (#22807).
 - Remove "Printing" from title when printing to PDF (Blake-Madden, #22836).
 - Fix sometimes missing overvwrite prompt in "Save" file dialog (#22898).
+- Set wxUSE_TASKBARBUTTON correctly when building using configure (#22900).
 
 wxOSX:
 

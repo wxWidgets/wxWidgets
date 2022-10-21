@@ -1374,6 +1374,7 @@ enable_ico_cur
 enable_dccache
 enable_ps_in_msw
 enable_ownerdrawn
+enable_taskbarbutton
 enable_uxtheme
 enable_wxdib
 enable_webviewie
@@ -2346,6 +2347,7 @@ Optional Features:
   --enable-dccache        cache temporary wxDC objects (Win32 only)
   --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)
   --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
+  --enable-taskbarbutton  enable wxTaskBarButton (Win32 only)
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
   --enable-webviewie      use wxWebView IE backend (Win32 only)
@@ -12849,6 +12851,35 @@ fi
 
 
           eval "$wx_cv_use_ownerdrawn"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-taskbarbutton was given.
+if test "${enable_taskbarbutton+set}" = set; then :
+  enableval=$enable_taskbarbutton;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_taskbarbutton='wxUSE_TASKBARBUTTON=yes'
+                          else
+                            wx_cv_use_taskbarbutton='wxUSE_TASKBARBUTTON=no'
+                          fi
+
+else
+
+                          wx_cv_use_taskbarbutton='wxUSE_TASKBARBUTTON=${'DEFAULT_wxUSE_TASKBARBUTTON":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_taskbarbutton"
 
 
           enablestring=
@@ -42027,6 +42058,11 @@ if test "$wxUSE_MSW" = 1 ; then
 
     if test "$wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW" = "yes"; then
         $as_echo "#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1" >>confdefs.h
+
+    fi
+
+    if test "$wxUSE_TASKBARBUTTON" = "yes"; then
+        $as_echo "#define wxUSE_TASKBARBUTTON 1" >>confdefs.h
 
     fi
 
