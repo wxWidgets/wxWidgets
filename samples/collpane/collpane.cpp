@@ -295,7 +295,7 @@ void MyFrame::OnCollapsibleHeaderChanged(wxCommandEvent& WXUNUSED(event))
 
 enum
 {
-    PANEDLG_TOGGLESTATUS_BTN = wxID_HIGHEST
+    PANEDLG_TOGGLESTATUS_BTN = wxID_HIGHEST+1
 };
 
 wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
