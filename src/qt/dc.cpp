@@ -23,6 +23,7 @@
 #include "wx/qt/dc.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
+#include "wx/qt/private/compat.h"
 
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
@@ -383,7 +384,7 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
     {
         // note that boundingRect doesn't return "advance width" for spaces
         if (x != nullptr)
-            *x = metrics.width( wxQtConvertString(string) );
+            *x = wxQtGetWidthFromMetrics(metrics, wxQtConvertString(string));
         if (y != nullptr)
             *y = metrics.height();
     }

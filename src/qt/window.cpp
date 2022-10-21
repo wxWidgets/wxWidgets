@@ -32,6 +32,7 @@
 #include "wx/tooltip.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 
 #define VERT_SCROLLBAR_POSITION 0, 1
@@ -224,7 +225,7 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 /* static */ void wxWindowQt::QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window )
 {
     QVariant variant;
-    qVariantSetValue( variant, window );
+    variant.setValue( window );
     widget->setProperty( WINDOW_POINTER_PROPERTY_NAME, variant );
 }
 
@@ -413,8 +414,8 @@ void wxWindowQt::PostCreation(bool generic)
 //
 
     // Set the default color so Paint Event default handler clears the DC:
-    wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
-    wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
+    wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().window().color()));
+    wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().windowText().color()));
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
@@ -614,7 +615,7 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
     QFontMetrics fontMetrics( font != nullptr ? font->GetHandle() : GetHandle()->font() );
 
     if ( x != nullptr )
-        *x = fontMetrics.width( wxQtConvertString( string ));
+        *x = wxQtGetWidthFromMetrics(fontMetrics, wxQtConvertString( string ));
 
     if ( y != nullptr )
         *y = fontMetrics.height();
@@ -1341,7 +1342,12 @@ bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEven
 bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent *event )
 {
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
-    e.SetPosition( wxQtConvertPoint( event->pos() ) );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    QPoint qPt = event->position().toPoint();
+#else
+    QPoint qPt = event->pos();
+#endif
+    e.SetPosition( wxQtConvertPoint( qPt ) );
     e.SetEventObject(this);
 
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
@@ -1451,7 +1457,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 case Qt::RightButton:
                     wxType = wxEVT_RIGHT_DCLICK;
                     break;
-                case Qt::MidButton:
+                case Qt::MiddleButton:
                     wxType = wxEVT_MIDDLE_DCLICK;
                     break;
                 case Qt::XButton1:
@@ -1475,7 +1481,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 case Qt::RightButton:
                     wxType = wxEVT_RIGHT_DOWN;
                     break;
-                case Qt::MidButton:
+                case Qt::MiddleButton:
                     wxType = wxEVT_MIDDLE_DOWN;
                     break;
                 case Qt::XButton1:
@@ -1499,7 +1505,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 case Qt::RightButton:
                     wxType = wxEVT_RIGHT_UP;
                     break;
-                case Qt::MidButton:
+                case Qt::MiddleButton:
                     wxType = wxEVT_MIDDLE_UP;
                     break;
                 case Qt::XButton1:
