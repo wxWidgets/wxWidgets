@@ -25,13 +25,13 @@ public:
     wxGtkStyleContext& AddLabel();
     wxGtkStyleContext& AddMenu();
     wxGtkStyleContext& AddMenuItem();
-    wxGtkStyleContext& AddTextview(const char* child1 = NULL, const char* child2 = NULL);
+    wxGtkStyleContext& AddTextview(const char* child1 = nullptr, const char* child2 = nullptr);
     wxGtkStyleContext& AddTooltip();
     wxGtkStyleContext& AddTreeview();
 #if GTK_CHECK_VERSION(3,20,0)
     wxGtkStyleContext& AddTreeviewHeaderButton(int pos);
 #endif // GTK >= 3.20
-    wxGtkStyleContext& AddWindow(const char* className2 = NULL);
+    wxGtkStyleContext& AddWindow(const char* className2 = nullptr);
     void Bg(wxColour& color, int state = GTK_STATE_FLAG_NORMAL) const;
     void Fg(wxColour& color, int state = GTK_STATE_FLAG_NORMAL) const;
     void Border(wxColour& color) const;

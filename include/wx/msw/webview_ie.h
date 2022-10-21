@@ -68,75 +68,75 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE;
+           const wxString& name = wxASCII_STR(wxWebViewNameStr)) override;
 
-    virtual void LoadURL(const wxString& url) wxOVERRIDE;
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) wxOVERRIDE;
-    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory() wxOVERRIDE;
-    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() wxOVERRIDE;
+    virtual void LoadURL(const wxString& url) override;
+    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item) override;
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory() override;
+    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() override;
 
-    virtual bool CanGoForward() const wxOVERRIDE;
-    virtual bool CanGoBack() const wxOVERRIDE;
-    virtual void GoBack() wxOVERRIDE;
-    virtual void GoForward() wxOVERRIDE;
-    virtual void ClearHistory() wxOVERRIDE;
-    virtual void EnableHistory(bool enable = true) wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) wxOVERRIDE;
+    virtual bool CanGoForward() const override;
+    virtual bool CanGoBack() const override;
+    virtual void GoBack() override;
+    virtual void GoForward() override;
+    virtual void ClearHistory() override;
+    virtual void EnableHistory(bool enable = true) override;
+    virtual void Stop() override;
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) override;
 
-    virtual wxString GetPageSource() const wxOVERRIDE;
-    virtual wxString GetPageText() const wxOVERRIDE;
+    virtual wxString GetPageSource() const override;
+    virtual wxString GetPageText() const override;
 
-    virtual bool IsBusy() const wxOVERRIDE;
-    virtual wxString GetCurrentURL() const wxOVERRIDE;
-    virtual wxString GetCurrentTitle() const wxOVERRIDE;
+    virtual bool IsBusy() const override;
+    virtual wxString GetCurrentURL() const override;
+    virtual wxString GetCurrentTitle() const override;
 
-    virtual void SetZoomType(wxWebViewZoomType) wxOVERRIDE;
-    virtual wxWebViewZoomType GetZoomType() const wxOVERRIDE;
-    virtual bool CanSetZoomType(wxWebViewZoomType) const wxOVERRIDE;
+    virtual void SetZoomType(wxWebViewZoomType) override;
+    virtual wxWebViewZoomType GetZoomType() const override;
+    virtual bool CanSetZoomType(wxWebViewZoomType) const override;
 
-    virtual void Print() wxOVERRIDE;
+    virtual void Print() override;
 
-    virtual wxWebViewZoom GetZoom() const wxOVERRIDE;
-    virtual float GetZoomFactor() const wxOVERRIDE;
-    virtual void SetZoom(wxWebViewZoom zoom) wxOVERRIDE;
-    virtual void SetZoomFactor(float zoom) wxOVERRIDE;
+    virtual wxWebViewZoom GetZoom() const override;
+    virtual float GetZoomFactor() const override;
+    virtual void SetZoom(wxWebViewZoom zoom) override;
+    virtual void SetZoomFactor(float zoom) override;
 
     //Clipboard functions
-    virtual bool CanCut() const wxOVERRIDE;
-    virtual bool CanCopy() const wxOVERRIDE;
-    virtual bool CanPaste() const wxOVERRIDE;
-    virtual void Cut() wxOVERRIDE;
-    virtual void Copy() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
+    virtual bool CanCut() const override;
+    virtual bool CanCopy() const override;
+    virtual bool CanPaste() const override;
+    virtual void Cut() override;
+    virtual void Copy() override;
+    virtual void Paste() override;
 
     //Undo / redo functionality
-    virtual bool CanUndo() const wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
-    virtual void Undo() wxOVERRIDE;
-    virtual void Redo() wxOVERRIDE;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) wxOVERRIDE;
+    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) override;
 
     //Editing functions
-    virtual void SetEditable(bool enable = true) wxOVERRIDE;
-    virtual bool IsEditable() const wxOVERRIDE;
+    virtual void SetEditable(bool enable = true) override;
+    virtual bool IsEditable() const override;
 
     //Selection
-    virtual void SelectAll() wxOVERRIDE;
-    virtual bool HasSelection() const wxOVERRIDE;
-    virtual void DeleteSelection() wxOVERRIDE;
-    virtual wxString GetSelectedText() const wxOVERRIDE;
-    virtual wxString GetSelectedSource() const wxOVERRIDE;
-    virtual void ClearSelection() wxOVERRIDE;
+    virtual void SelectAll() override;
+    virtual bool HasSelection() const override;
+    virtual void DeleteSelection() override;
+    virtual wxString GetSelectedText() const override;
+    virtual wxString GetSelectedSource() const override;
+    virtual void ClearSelection() override;
 
-    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) const wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
 
     //Virtual Filesystem Support
-    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
+    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) override;
 
-    virtual void* GetNativeBackend() const wxOVERRIDE;
+    virtual void* GetNativeBackend() const override;
 
     // ---- IE-specific methods
 
@@ -172,7 +172,7 @@ public:
     wxDECLARE_EVENT_TABLE();
 
 protected:
-    virtual void DoSetPage(const wxString& html, const wxString& baseUrl) wxOVERRIDE;
+    virtual void DoSetPage(const wxString& html, const wxString& baseUrl) override;
 
 private:
     wxWebViewIEImpl* m_impl;
@@ -183,16 +183,16 @@ private:
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryIE : public wxWebViewFactory
 {
 public:
-    virtual wxWebView* Create() wxOVERRIDE { return new wxWebViewIE; }
+    virtual wxWebView* Create() override { return new wxWebViewIE; }
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
                               const wxString& url = wxWebViewDefaultURLStr,
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
-                              const wxString& name = wxASCII_STR(wxWebViewNameStr)) wxOVERRIDE
+                              const wxString& name = wxASCII_STR(wxWebViewNameStr)) override
     { return new wxWebViewIE(parent, id, url, pos, size, style, name); }
-    virtual wxVersionInfo GetVersionInfo() wxOVERRIDE;
+    virtual wxVersionInfo GetVersionInfo() override;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE && defined(__WXMSW__)

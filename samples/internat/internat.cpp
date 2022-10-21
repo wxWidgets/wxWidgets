@@ -61,9 +61,9 @@ class MyApp: public wxApp
 public:
     MyApp() { m_setLocale = Locale_Ask; }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
+    virtual bool OnInit() override;
 
 protected:
     // Specifies whether we should use the current locale or not. By default we
@@ -284,7 +284,7 @@ bool MyApp::OnInit()
 
 // main frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL,
+       : wxFrame(nullptr,
                  wxID_ANY,
                  _("International wxWidgets App"))
 {
@@ -359,7 +359,7 @@ MyFrame::MyFrame()
                         (
                          _("Current UI locale: %s; C locale: %s"),
                          wxUILocale::GetCurrent().GetName(),
-                         setlocale(LC_ALL, NULL)
+                         setlocale(LC_ALL, nullptr)
                         )
                       ),
                   wxSizerFlags().Center().Border());

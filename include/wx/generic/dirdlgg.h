@@ -54,12 +54,12 @@ public:
                 const wxString& name = wxASCII_STR(wxDirDialogNameStr));
 
     //// Accessors
-    void SetPath(const wxString& path) wxOVERRIDE;
-    wxString GetPath() const wxOVERRIDE;
+    void SetPath(const wxString& path) override;
+    wxString GetPath() const override;
 
     //// Overrides
-    virtual int ShowModal() wxOVERRIDE;
-    virtual void EndModal(int retCode) wxOVERRIDE;
+    virtual int ShowModal() override;
+    virtual void EndModal(int retCode) override;
 
     // this one is specific to wxGenericDirDialog
     wxTextCtrl* GetInputCtrl() const { return m_input; }

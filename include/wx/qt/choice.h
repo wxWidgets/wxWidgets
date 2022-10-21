@@ -18,7 +18,7 @@ public:
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = (const wxString *) NULL,
+            int n = 0, const wxString choices[] = nullptr,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxChoiceNameStr) );
@@ -34,7 +34,7 @@ public:
     bool Create( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = NULL,
+            int n = 0, const wxString choices[] = nullptr,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxChoiceNameStr) );
@@ -47,29 +47,29 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxChoiceNameStr) );
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual unsigned int GetCount() const wxOVERRIDE;
-    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
-    virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
+    virtual unsigned int GetCount() const override;
+    virtual wxString GetString(unsigned int n) const override;
+    virtual void SetString(unsigned int n, const wxString& s) override;
 
-    virtual void SetSelection(int n) wxOVERRIDE;
-    virtual int GetSelection() const wxOVERRIDE;
+    virtual void SetSelection(int n) override;
+    virtual int GetSelection() const override;
 
-    virtual QWidget *GetHandle() const wxOVERRIDE;
+    virtual QWidget *GetHandle() const override;
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
                               void **clientData,
-                              wxClientDataType type) wxOVERRIDE;
-    virtual int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
+                              wxClientDataType type) override;
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos) override;
 
-    virtual void DoSetItemClientData(unsigned int n, void *clientData) wxOVERRIDE;
-    virtual void *DoGetItemClientData(unsigned int n) const wxOVERRIDE;
+    virtual void DoSetItemClientData(unsigned int n, void *clientData) override;
+    virtual void *DoGetItemClientData(unsigned int n) const override;
 
-    virtual void DoClear() wxOVERRIDE;
-    virtual void DoDeleteOneItem(unsigned int pos) wxOVERRIDE;
+    virtual void DoClear() override;
+    virtual void DoDeleteOneItem(unsigned int pos) override;
 
     void QtInitSort(QComboBox *combo);
 

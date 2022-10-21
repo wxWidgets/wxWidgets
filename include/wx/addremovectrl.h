@@ -90,13 +90,13 @@ public:
     void SetButtonsToolTips(const wxString& addtip, const wxString& removetip);
 
 protected:
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
 private:
     // Common part of all ctors.
     void Init()
     {
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
     class wxAddRemoveImpl* m_impl;

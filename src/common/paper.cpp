@@ -74,7 +74,7 @@ WX_DECLARE_LIST(wxPrintPaperType, wxPrintPaperTypeList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxPrintPaperTypeList)
 
-wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
+wxPrintPaperDatabase* wxThePrintPaperDatabase = nullptr;
 
 wxPrintPaperDatabase::wxPrintPaperDatabase()
 {
@@ -242,7 +242,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxString& name) cons
     if (it != m_map->end())
         return it->second;
     else
-        return NULL;
+        return nullptr;
 }
 
 wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(wxPaperSize id) const
@@ -256,7 +256,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(wxPaperSize id) const
             return paperType;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 wxPrintPaperType *wxPrintPaperDatabase::FindPaperTypeByPlatformId(int id) const
@@ -270,7 +270,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperTypeByPlatformId(int id) const
             return paperType;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz) const
@@ -287,7 +287,7 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz) const
             return paperType;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // Convert name to size id
@@ -349,8 +349,8 @@ class WXDLLEXPORT wxPrintPaperModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxPrintPaperModule);
 public:
     wxPrintPaperModule() {}
-    bool OnInit() wxOVERRIDE;
-    void OnExit() wxOVERRIDE;
+    bool OnInit() override;
+    void OnExit() override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperModule, wxModule);

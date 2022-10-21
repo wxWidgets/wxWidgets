@@ -31,7 +31,7 @@ public:
     }
 
     // Called when the associated descriptor is available for reading.
-    virtual void OnReadWaiting() wxOVERRIDE
+    virtual void OnReadWaiting() override
     {
         // Sync process, process all data coming at us from the pipe so that
         // the pipe does not get full and cause a deadlock situation.
@@ -44,8 +44,8 @@ public:
     // These methods are never called as we only monitor the associated FD for
     // reading, but we still must implement them as they're pure virtual in the
     // base class.
-    virtual void OnWriteWaiting() wxOVERRIDE { }
-    virtual void OnExceptionWaiting() wxOVERRIDE { }
+    virtual void OnWriteWaiting() override { }
+    virtual void OnExceptionWaiting() override { }
 
     // Disable any future calls to our OnReadWaiting(), can be called when
     // we're sure that no more input is forthcoming.
@@ -93,7 +93,7 @@ public:
     }
 
 private:
-    virtual void DoDisable() wxOVERRIDE
+    virtual void DoDisable() override
     {
         m_dispatcher.UnregisterFD(m_fd);
     }
@@ -122,10 +122,10 @@ public:
     }
 
 private:
-    virtual void DoDisable() wxOVERRIDE
+    virtual void DoDisable() override
     {
         delete m_source;
-        m_source = NULL;
+        m_source = nullptr;
     }
 
     wxEventLoopSource* m_source;

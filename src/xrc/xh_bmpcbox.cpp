@@ -28,7 +28,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler, wxXmlResourceHandler);
 
 wxBitmapComboBoxXmlHandler::wxBitmapComboBoxXmlHandler()
                      :wxXmlResourceHandler()
-                     ,m_combobox(NULL)
+                     ,m_combobox(nullptr)
                      ,m_isInside(false)
 {
     XRC_ADD_STYLE(wxCB_SORT);
@@ -43,7 +43,7 @@ wxObject *wxBitmapComboBoxXmlHandler::DoCreateResource()
         if ( !m_combobox )
         {
             ReportError("ownerdrawnitem only allowed within a wxBitmapComboBox");
-            return NULL;
+            return nullptr;
         }
 
         m_combobox->Append(GetText(wxT("text")),
@@ -63,7 +63,7 @@ wxObject *wxBitmapComboBoxXmlHandler::DoCreateResource()
                         GetText(wxT("value")),
                         GetPosition(), GetSize(),
                         0,
-                        NULL,
+                        nullptr,
                         GetStyle(),
                         wxDefaultValidator,
                         GetName());
@@ -80,13 +80,13 @@ wxObject *wxBitmapComboBoxXmlHandler::DoCreateResource()
             if ((n->GetType() == wxXML_ELEMENT_NODE) &&
                 (n->GetName() == wxT("object")))
             {
-                CreateResFromNode(n, control, NULL);
+                CreateResFromNode(n, control, nullptr);
             }
             n = n->GetNext();
         }
 
         m_isInside = false;
-        m_combobox = NULL;
+        m_combobox = nullptr;
 
         if (selection != -1)
             control->SetSelection(selection);

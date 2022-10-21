@@ -276,10 +276,10 @@ protected:
         ScreenHDC hdc;
         SelectInHDC selectFont(hdc, (HFONT)GetHFONT());
 
-        UINT otmSize = GetOutlineTextMetrics(hdc, 0, NULL);
+        UINT otmSize = GetOutlineTextMetrics(hdc, 0, nullptr);
         if ( !otmSize )
         {
-            wxLogLastError("GetOutlineTextMetrics(NULL)");
+            wxLogLastError("GetOutlineTextMetrics(nullptr)");
             return wxString();
         }
 
@@ -326,7 +326,7 @@ protected:
 
 wxFontRefData::wxFontRefData(const wxFontInfo& info)
 {
-    m_hFont = NULL;
+    m_hFont = nullptr;
 
     m_sizeUsingPixels = info.IsUsingSizeInPixels();
     if ( m_sizeUsingPixels )
@@ -857,8 +857,8 @@ bool wxFont::RealizeResource()
 {
     // NOTE: the GetHFONT() call automatically triggers a reallocation of
     //       the HFONT if necessary (will do nothing if we already have the resource);
-    //       it returns NULL only if there is a failure in wxFontRefData::Alloc()...
-    return GetHFONT() != NULL;
+    //       it returns nullptr only if there is a failure in wxFontRefData::Alloc()...
+    return GetHFONT() != nullptr;
 }
 
 bool wxFont::FreeResource(bool WXUNUSED(force))
@@ -1059,7 +1059,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : NULL;
+    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : nullptr;
 }
 
 bool wxFont::IsFixedWidth() const
@@ -1110,8 +1110,8 @@ class wxPrivateFontsListModule : public wxModule
 public:
     wxPrivateFontsListModule() { }
 
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { gs_privateFontFileNames.clear(); }
+    bool OnInit() override { return true; }
+    void OnExit() override { gs_privateFontFileNames.clear(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrivateFontsListModule);

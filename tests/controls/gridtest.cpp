@@ -117,7 +117,7 @@ public:
         if ( attr )
             attr->DecRef();
 
-        return attr != NULL;
+        return attr != nullptr;
     }
 
     size_t GetCellAttrCount() const
@@ -160,9 +160,9 @@ class GridAttrMatcher : public Catch::MatcherBase<TestableGrid>
 public:
     GridAttrMatcher(const TestableGrid& grid);
 
-    bool match(const TestableGrid& other) const wxOVERRIDE;
+    bool match(const TestableGrid& other) const override;
 
-    std::string describe() const wxOVERRIDE;
+    std::string describe() const override;
 
 private:
     const TestableGrid* m_grid;
@@ -349,7 +349,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(GridTestCase);
 };
 
-GridTestCase::GridTestCase() : m_tempGrid(NULL)
+GridTestCase::GridTestCase() : m_tempGrid(nullptr)
 {
     m_grid = new TestableGrid(wxTheApp->GetTopWindow());
     m_grid->CreateGrid(10, 2);
@@ -849,7 +849,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
     REQUIRE( sel.begin() != sel.end() );
     CHECK( *sel.begin() == wxGridBlockCoords(1, 0, 3, 1) );
 
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(11)
     m_grid->SelectBlock(4, 0, 7, 1, true);
     int index = 0;
     for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
@@ -868,7 +867,6 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
         }
         ++index;
     }
-#endif
 }
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SelectEmptyGrid", "[grid]")
@@ -1419,31 +1417,31 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 
         void Create(wxWindow* parent,
                     wxWindowID id,
-                    wxEvtHandler* evtHandler) wxOVERRIDE
+                    wxEvtHandler* evtHandler) override
         {
             SetWindow(new wxWindow(parent, id));
             wxGridCellEditor::Create(parent, id, evtHandler);
         }
 
-        void BeginEdit(int, int, wxGrid*) wxOVERRIDE {}
+        void BeginEdit(int, int, wxGrid*) override {}
 
         bool EndEdit(int, int, wxGrid const*, wxString const&,
-                     wxString* newval) wxOVERRIDE
+                     wxString* newval) override
         {
             *newval = GetValue();
             return true;
         }
 
-        void ApplyEdit(int row, int col, wxGrid* grid) wxOVERRIDE
+        void ApplyEdit(int row, int col, wxGrid* grid) override
         {
             grid->GetTable()->SetValue(row, col, GetValue());
         }
 
-        void Reset() wxOVERRIDE {}
+        void Reset() override {}
 
-        wxGridCellEditor* Clone() const wxOVERRIDE { return new TestEditor(); }
+        wxGridCellEditor* Clone() const override { return new TestEditor(); }
 
-        wxString GetValue() const wxOVERRIDE { return "value"; }
+        wxString GetValue() const override { return "value"; }
     };
 
     wxGridCellAttr* attr = new wxGridCellAttr();
@@ -1710,7 +1708,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
     {
         CHECK_ATTR_COUNT( 0 );
 
-        m_grid->SetAttr(0, 0, NULL);
+        m_grid->SetAttr(0, 0, nullptr);
         CHECK_ATTR_COUNT( 0 );
 
         SetCellAttr(0, 0);
@@ -1720,15 +1718,15 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
         SetCellAttr(0, 0);
         CHECK_ATTR_COUNT( 1 );
 
-        m_grid->SetAttr(0, 0, NULL);
+        m_grid->SetAttr(0, 0, nullptr);
         CHECK_ATTR_COUNT( 0 );
 
         SetCellAttr(0, 0);
         m_grid->SetCellBackgroundColour(0, 1, *wxGREEN);
         CHECK_ATTR_COUNT( 2 );
 
-        m_grid->SetAttr(0, 1, NULL);
-        m_grid->SetAttr(0, 0, NULL);
+        m_grid->SetAttr(0, 1, nullptr);
+        m_grid->SetAttr(0, 0, nullptr);
         CHECK_ATTR_COUNT( 0 );
     }
 
@@ -1843,7 +1841,7 @@ TEST_CASE_METHOD(GridTestCase,
     // repeat the same tests for both rows and columns as the code for
     // updating them works symmetrically.
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1878,7 +1876,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     wxSwap(multi.rows, multi.cols);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1960,7 +1958,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     Multicell multi(1, 1, 5, 3);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);
@@ -1995,7 +1993,7 @@ TEST_CASE_METHOD(GridTestCase,
 
     wxSwap(multi.rows, multi.cols);
 
-    GIVEN(Catch::toString(multi))
+    GIVEN(multi.ToString())
     {
         FitGridToMulticell(m_grid, multi);
         m_grid->SetMulticell(multi);

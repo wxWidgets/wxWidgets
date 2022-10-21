@@ -96,9 +96,9 @@ public:
     wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
     virtual ~wxHtmlTableCell();
 
-    virtual void RemoveExtraSpacing(bool top, bool bottom) wxOVERRIDE;
+    virtual void RemoveExtraSpacing(bool top, bool bottom) override;
 
-    virtual void Layout(int w) wxOVERRIDE;
+    virtual void Layout(int w) override;
 
     void AddRow(const wxHtmlTag& tag);
     void AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag);
@@ -125,9 +125,9 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
  : wxHtmlContainerCell(parent)
 {
     m_PixelScale = pixel_scale;
-    m_ColsInfo = NULL;
+    m_ColsInfo = nullptr;
     m_NumCols = m_NumRows = m_NumAllocatedRows = 0;
-    m_CellInfo = NULL;
+    m_CellInfo = nullptr;
     m_ActualCol = m_ActualRow = -1;
 
     /* scan params: */
@@ -227,7 +227,7 @@ void wxHtmlTableCell::ReallocRows(int rows)
     for (int row = m_NumRows; row < rows ; ++row)
     {
         if (m_NumCols == 0)
-            m_CellInfo[row] = NULL;
+            m_CellInfo[row] = nullptr;
         else
         {
             m_CellInfo[row] = (cellStruct*) malloc(sizeof(cellStruct) * m_NumCols);
@@ -710,8 +710,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
     TAG_HANDLER_CONSTR(TABLE)
     {
-        m_Table = NULL;
-        m_enclosingContainer = NULL;
+        m_Table = nullptr;
+        m_enclosingContainer = nullptr;
         m_tAlign.clear();
         m_rAlign.clear();
     }

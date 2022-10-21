@@ -22,7 +22,7 @@ public:
     virtual ~wxCOMBaseStreamAdapter() { }
 
     // IUnknown
-    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) wxOVERRIDE
+    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) override
     {
         if (riid == IID_IUnknown ||
             riid == IID_ISequentialStream ||
@@ -33,16 +33,16 @@ public:
             return S_OK;
         }
 
-        *ppv = NULL;
+        *ppv = nullptr;
         return E_NOINTERFACE;
     }
 
-    STDMETHODIMP_(ULONG) AddRef() wxOVERRIDE
+    STDMETHODIMP_(ULONG) AddRef() override
     {
         return ++m_cRef;
     }
 
-    STDMETHODIMP_(ULONG) Release() wxOVERRIDE
+    STDMETHODIMP_(ULONG) Release() override
     {
         if (--m_cRef == wxAutoULong(0))
         {
@@ -56,7 +56,7 @@ public:
     // IStream
     virtual HRESULT STDMETHODCALLTYPE Seek(
         LARGE_INTEGER WXUNUSED(dlibMove), DWORD WXUNUSED(dwOrigin),
-        ULARGE_INTEGER *WXUNUSED(plibNewPosition)) wxOVERRIDE
+        ULARGE_INTEGER *WXUNUSED(plibNewPosition)) override
     {
         return E_NOTIMPL;
     }
@@ -68,34 +68,34 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE CopyTo(IStream *WXUNUSED(pstm),
         ULARGE_INTEGER WXUNUSED(cb), ULARGE_INTEGER *WXUNUSED(pcbRead),
-        ULARGE_INTEGER *WXUNUSED(pcbWritten)) wxOVERRIDE
+        ULARGE_INTEGER *WXUNUSED(pcbWritten)) override
     {
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD WXUNUSED(grfCommitFlags)) wxOVERRIDE
+    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD WXUNUSED(grfCommitFlags)) override
     {
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Revert(void) wxOVERRIDE
+    virtual HRESULT STDMETHODCALLTYPE Revert(void) override
     {
         return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER WXUNUSED(libOffset),
-        ULARGE_INTEGER WXUNUSED(cb), DWORD WXUNUSED(dwLockType)) wxOVERRIDE
+        ULARGE_INTEGER WXUNUSED(cb), DWORD WXUNUSED(dwLockType)) override
     {
         return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER WXUNUSED(libOffset),
-        ULARGE_INTEGER WXUNUSED(cb), DWORD WXUNUSED(dwLockType)) wxOVERRIDE
+        ULARGE_INTEGER WXUNUSED(cb), DWORD WXUNUSED(dwLockType)) override
     {
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG *pstatstg, DWORD WXUNUSED(grfStatFlag)) wxOVERRIDE
+    virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG *pstatstg, DWORD WXUNUSED(grfStatFlag)) override
     {
         pstatstg->type = STGTY_STREAM;
         pstatstg->cbSize.QuadPart = m_stream->GetSize();
@@ -103,7 +103,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Clone(IStream **WXUNUSED(ppstm)) wxOVERRIDE
+    virtual HRESULT STDMETHODCALLTYPE Clone(IStream **WXUNUSED(ppstm)) override
     {
         return E_NOTIMPL;
     }
@@ -111,13 +111,13 @@ public:
     // ISequentialStream
 
     virtual HRESULT STDMETHODCALLTYPE Read(void *WXUNUSED(pv),
-        ULONG WXUNUSED(cb), ULONG *WXUNUSED(pcbRead)) wxOVERRIDE
+        ULONG WXUNUSED(cb), ULONG *WXUNUSED(pcbRead)) override
     {
         return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Write(const void *WXUNUSED(pv),
-        ULONG WXUNUSED(cb), ULONG *WXUNUSED(pcbWritten)) wxOVERRIDE
+        ULONG WXUNUSED(cb), ULONG *WXUNUSED(pcbWritten)) override
     {
         return E_NOTIMPL;
     }
@@ -155,7 +155,7 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Seek(
         LARGE_INTEGER dlibMove, DWORD dwOrigin,
-        ULARGE_INTEGER *plibNewPosition) wxOVERRIDE
+        ULARGE_INTEGER *plibNewPosition) override
     {
         wxFileOffset newOffset = reinterpret_cast<wxInputStream*>(m_stream)->SeekI(dlibMove.QuadPart, OriginToSeekMode(dwOrigin));
         if (plibNewPosition)
@@ -163,7 +163,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead) wxOVERRIDE
+    virtual HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead) override
     {
         wxInputStream* inputStr = reinterpret_cast<wxInputStream*>(m_stream);
         inputStr->Read(pv, cb);
@@ -182,7 +182,7 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE Seek(
         LARGE_INTEGER dlibMove, DWORD dwOrigin,
-        ULARGE_INTEGER *plibNewPosition) wxOVERRIDE
+        ULARGE_INTEGER *plibNewPosition) override
     {
         wxFileOffset newOffset = reinterpret_cast<wxOutputStream*>(m_stream)->SeekO(dlibMove.QuadPart, OriginToSeekMode(dwOrigin));
         if (plibNewPosition)
@@ -190,7 +190,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Write(const void *pv, ULONG cb, ULONG *pcbWritten) wxOVERRIDE
+    virtual HRESULT STDMETHODCALLTYPE Write(const void *pv, ULONG cb, ULONG *pcbWritten) override
     {
         wxOutputStream* outputStr = reinterpret_cast<wxOutputStream*>(m_stream);
         outputStr->Write(pv, cb);

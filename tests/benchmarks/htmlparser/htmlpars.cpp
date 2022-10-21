@@ -64,14 +64,14 @@ wxIMPLEMENT_ABSTRACT_CLASS(wx28HtmlParser, wxObject);
 
 wx28HtmlParser::wx28HtmlParser()
     : wxObject(), m_HandlersHash(wxKEY_STRING),
-      m_FS(NULL), m_HandlersStack(NULL)
+      m_FS(nullptr), m_HandlersStack(nullptr)
 {
     m_entitiesParser = new wx28HtmlEntitiesParser;
-    m_Tags = NULL;
-    m_CurTag = NULL;
-    m_TextPieces = NULL;
+    m_Tags = nullptr;
+    m_CurTag = nullptr;
+    m_TextPieces = nullptr;
     m_CurTextPiece = 0;
-    m_SavedStates = NULL;
+    m_SavedStates = nullptr;
 }
 
 wx28HtmlParser::~wx28HtmlParser()
@@ -118,7 +118,7 @@ void wx28HtmlParser::SetSource(const wxString& src)
     DestroyDOMTree();
     m_Source = src;
     CreateDOMTree();
-    m_CurTag = NULL;
+    m_CurTag = nullptr;
     m_CurTextPiece = 0;
 }
 
@@ -126,7 +126,7 @@ void wx28HtmlParser::CreateDOMTree()
 {
     wx28HtmlTagsCache cache(m_Source);
     m_TextPieces = new wx28HtmlTextPieces;
-    CreateDOMSubTree(NULL, 0, m_Source.length(), &cache);
+    CreateDOMSubTree(nullptr, 0, m_Source.length(), &cache);
     m_CurTextPiece = 0;
 }
 
@@ -146,7 +146,7 @@ void wx28HtmlParser::CreateDOMSubTree(wx28HtmlTag *cur,
     // and ending tag verbosely. Setting i=end_pos will skip to the very
     // end of this function where text piece is added, bypassing any child
     // tags parsing (CDATA element can't have child elements by definition):
-    if (cur != NULL && wxIsCDATAElement(cur->GetName().c_str()))
+    if (cur != nullptr && wxIsCDATAElement(cur->GetName().c_str()))
     {
         i = end_pos;
     }
@@ -197,7 +197,7 @@ void wx28HtmlParser::CreateDOMSubTree(wx28HtmlTag *cur,
                                         i, end_pos, cache, m_entitiesParser);
                 else
                 {
-                    chd = new wx28HtmlTag(NULL, m_Source,
+                    chd = new wx28HtmlTag(nullptr, m_Source,
                                         i, end_pos, cache, m_entitiesParser);
                     if (!m_Tags)
                     {
@@ -253,10 +253,10 @@ void wx28HtmlParser::DestroyDOMTree()
         delete t1;
         t1 = t2;
     }
-    m_Tags = m_CurTag = NULL;
+    m_Tags = m_CurTag = nullptr;
 
     delete m_TextPieces;
-    m_TextPieces = NULL;
+    m_TextPieces = nullptr;
 }
 
 void wx28HtmlParser::DoParsing()
@@ -347,7 +347,7 @@ void wx28HtmlParser::PushTagHandler(wx28HtmlTagHandler *handler, const wxString&
     wxStringTokenizer tokenizer(tags, wxT(", "));
     wxString key;
 
-    if (m_HandlersStack == NULL)
+    if (m_HandlersStack == nullptr)
     {
         m_HandlersStack = new wxList;
     }
@@ -370,7 +370,7 @@ void wx28HtmlParser::PopTagHandler()
 #if wxUSE_STL
          !(first = m_HandlersStack->GetFirst())
 #else // !wxUSE_STL
-         ((first = m_HandlersStack->GetFirst()) == NULL)
+         ((first = m_HandlersStack->GetFirst()) == nullptr)
 #endif // wxUSE_STL/!wxUSE_STL
         )
     {
@@ -395,9 +395,9 @@ void wx28HtmlParser::SetSourceAndSaveState(const wxString& src)
     s->m_nextState = m_SavedStates;
     m_SavedStates = s;
 
-    m_CurTag = NULL;
-    m_Tags = NULL;
-    m_TextPieces = NULL;
+    m_CurTag = nullptr;
+    m_Tags = nullptr;
+    m_TextPieces = nullptr;
     m_CurTextPiece = 0;
     m_Source = wxEmptyString;
 
@@ -453,7 +453,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wx28HtmlEntitiesParser,wxObject);
 
 wx28HtmlEntitiesParser::wx28HtmlEntitiesParser()
 #if !wxUSE_UNICODE
-    : m_conv(NULL), m_encoding(wxFONTENCODING_SYSTEM)
+    : m_conv(nullptr), m_encoding(wxFONTENCODING_SYSTEM)
 #endif
 {
 }
@@ -475,7 +475,7 @@ void wx28HtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
 
     m_encoding = encoding;
     if (m_encoding == wxFONTENCODING_SYSTEM)
-        m_conv = NULL;
+        m_conv = nullptr;
     else
         m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
 #else
@@ -832,14 +832,14 @@ wxChar wx28HtmlEntitiesParser::GetEntityChar(const wxString& entity)
             { wxT("zeta"),950 },
             { wxT("zwj"),8205 },
             { wxT("zwnj"),8204 },
-            {NULL, 0}};
+            {nullptr, 0}};
         static size_t substitutions_cnt = 0;
 
         if (substitutions_cnt == 0)
             while (substitutions[substitutions_cnt].code != 0)
                 substitutions_cnt++;
 
-        wx28HtmlEntityInfo *info = NULL;
+        wx28HtmlEntityInfo *info = nullptr;
         info = (wx28HtmlEntityInfo*) bsearch(entity.c_str(), substitutions,
                                            substitutions_cnt,
                                            sizeof(wx28HtmlEntityInfo),
@@ -857,7 +857,7 @@ wxChar wx28HtmlEntitiesParser::GetEntityChar(const wxString& entity)
 wxFSFile *wx28HtmlParser::OpenURL(wx28HtmlURLType WXUNUSED(type),
                                 const wxString& url) const
 {
-    return m_FS ? m_FS->OpenFile(url) : NULL;
+    return m_FS ? m_FS->OpenFile(url) : nullptr;
 
 }
 
@@ -871,7 +871,7 @@ class wxMetaTagParser : public wx28HtmlParser
 public:
     wxMetaTagParser() { }
 
-    wxObject* GetProduct() { return NULL; }
+    wxObject* GetProduct() { return nullptr; }
 
 protected:
     virtual void AddText(const wxChar* WXUNUSED(txt)) {}

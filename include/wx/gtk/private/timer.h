@@ -22,9 +22,9 @@ class WXDLLIMPEXP_CORE wxGTKTimerImpl : public wxTimerImpl
 public:
     wxGTKTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { m_sourceId = 0; }
 
-    virtual bool Start( int millisecs = -1, bool oneShot = false ) wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
-    virtual bool IsRunning() const wxOVERRIDE { return m_sourceId != 0; }
+    virtual bool Start( int millisecs = -1, bool oneShot = false ) override;
+    virtual void Stop() override;
+    virtual bool IsRunning() const override { return m_sourceId != 0; }
 
 protected:
     int m_sourceId;

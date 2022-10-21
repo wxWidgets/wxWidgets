@@ -38,16 +38,16 @@ public:
     wxTipWindow(wxWindow *parent,
                 const wxString& text,
                 wxCoord maxLength = 100,
-                wxTipWindow** windowPtr = NULL,
-                wxRect *rectBound = NULL);
+                wxTipWindow** windowPtr = nullptr,
+                wxRect *rectBound = nullptr);
 
     virtual ~wxTipWindow();
 
-    // If windowPtr is not NULL the given address will be NULLed when the
+    // If windowPtr is not null the given address will be nulled when the
     // window has closed
     void SetTipWindowPtr(wxTipWindow** windowPtr) { m_windowPtr = windowPtr; }
 
-    // If rectBound is not NULL, the window will disappear automatically when
+    // If rectBound is not null, the window will disappear automatically when
     // the mouse leave the specified rect: note that rectBound should be in the
     // screen coordinates!
     void SetBoundingRect(const wxRect& rectBound);
@@ -62,7 +62,7 @@ protected:
     // event handlers
     void OnMouseClick(wxMouseEvent& event);
 
-    virtual void OnDismiss() wxOVERRIDE;
+    virtual void OnDismiss() override;
 
 private:
     wxTipWindowView *m_view;

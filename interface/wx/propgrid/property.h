@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#define wxNullProperty  ((wxPGProperty*)NULL)
+#define wxNullProperty  nullptr
 
 /** @class wxPGPaintData
 
@@ -585,7 +585,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     wxLongStringProperty and override DisplayEditorDialog, like this:
 
     @code
-        bool DisplayEditorDialog( wxPropertyGrid* propGrid, wxVariant& value ) wxOVERRIDE
+        bool DisplayEditorDialog( wxPropertyGrid* propGrid, wxVariant& value ) override
         {
             wxSize dialogSize(...size of your dialog...);
 
@@ -1330,7 +1330,7 @@ public:
             Assumes members in this wxVariant list as pending
             replacement values.
     */
-    bool AreAllChildrenSpecified( const wxVariant* pendingList = NULL ) const;
+    bool AreAllChildrenSpecified( const wxVariant* pendingList = nullptr ) const;
 
     /**
         Returns @true if children of this property are component values (for instance,
@@ -1616,7 +1616,7 @@ public:
     wxVariant GetValue() const;
 
     /**
-        Returns bitmap that appears next to value text. Only returns non-@NULL
+        Returns bitmap that appears next to value text. Only returns non-null
         bitmap if one was set with SetValueImage().
     */
     wxBitmap* GetValueImage() const;
@@ -2037,7 +2037,7 @@ public:
             ::wxPG_SETVAL_REFRESH_EDITOR is set by default, to refresh editor
             and redraw properties.
     */
-    void SetValue( wxVariant value, wxVariant* pList = NULL,
+    void SetValue( wxVariant value, wxVariant* pList = nullptr,
                    int flags = wxPG_SETVAL_REFRESH_EDITOR );
 
     /**
@@ -2611,7 +2611,7 @@ protected:
     virtual ~wxPGChoicesData();
 };
 
-#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
+#define wxPGChoicesEmptyData nullptr
 
 
 
@@ -2662,7 +2662,7 @@ public:
 
         @since 3.1.2
      */
-    wxPGChoices(size_t count, const wxString* labels, const long* values = NULL);
+    wxPGChoices(size_t count, const wxString* labels, const long* values = nullptr);
 
     /**
         Constructor overload taking wxChar strings.
@@ -2677,7 +2677,7 @@ public:
             Values for choices. If @NULL, indexes are used. Otherwise must have
             at least the same size as @a labels.
     */
-    wxPGChoices( const wxChar** labels, const long* values = NULL );
+    wxPGChoices( const wxChar** labels, const long* values = nullptr );
 
     /**
         Constructor.
@@ -2715,7 +2715,7 @@ public:
 
         @since 3.1.2
      */
-    void Add(size_t count, const wxString* labels, const long* values = NULL);
+    void Add(size_t count, const wxString* labels, const long* values = nullptr);
 
     /**
         Adds to current.
@@ -2730,7 +2730,7 @@ public:
             Values for added choices. If empty, relevant entry indexes are
             used. Otherwise must have at least the same size as @a labels.
     */
-    void Add( const wxChar** labels, const long* values = NULL );
+    void Add( const wxChar** labels, const long* values = nullptr );
 
     /**
         @overload
@@ -2818,7 +2818,7 @@ public:
         are added to 'unmatched', if not @NULL.
     */
     wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
-                                     wxArrayString* unmatched = NULL ) const;
+                                     wxArrayString* unmatched = nullptr ) const;
 
     /**
         Returns index of item with given label.
@@ -2866,12 +2866,12 @@ public:
 
         This is similar to calling Clear() and the corresponding overload of Add().
     */
-    void Set(size_t count, const wxString* labels, const long* values = NULL);
+    void Set(size_t count, const wxString* labels, const long* values = nullptr);
 
     /**
         @overload
      */
-    void Set( const wxChar** labels, const long* values = NULL );
+    void Set( const wxChar** labels, const long* values = nullptr );
 
     /**
         @overload

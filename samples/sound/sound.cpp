@@ -45,7 +45,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 
@@ -181,9 +181,9 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
-    m_sound = NULL;
+    m_sound = nullptr;
     m_soundFile = WAV_FILE;
     m_useMemory = false;
 
@@ -979,7 +979,7 @@ wxSound* MyFrame::TryCreateSound() const
     if ( !CreateSound(*sound) )
     {
         delete sound;
-        return NULL;
+        return nullptr;
     }
 
     return sound;

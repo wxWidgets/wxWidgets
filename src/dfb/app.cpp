@@ -50,7 +50,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         argvDFB[i] = strdup(wxConvUTF8.cWX2MB(argv[i]));
     }
 
-    argvDFB[argc] = NULL;
+    argvDFB[argc] = nullptr;
 
     int argcDFB = argc;
 

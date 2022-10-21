@@ -36,8 +36,8 @@
 
 void wxTextMeasure::Init()
 {
-    m_hdc = NULL;
-    m_hfontOld = NULL;
+    m_hdc = nullptr;
+    m_hfontOld = nullptr;
 
     if ( m_dc )
     {
@@ -78,14 +78,14 @@ void wxTextMeasure::EndMeasuring()
     if ( m_hfontOld )
     {
         ::SelectObject(m_hdc, m_hfontOld);
-        m_hfontOld = NULL;
+        m_hfontOld = nullptr;
     }
 
     if ( m_win )
         ::ReleaseDC(GetHwndOf(m_win), m_hdc);
     //else: our HDC belongs to m_dc, don't touch it
 
-    m_hdc = NULL;
+    m_hdc = nullptr;
 }
 
 // Notice we don't check here the font. It is supposed to be OK before the call.

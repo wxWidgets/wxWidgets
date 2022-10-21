@@ -101,16 +101,16 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
-    virtual double GetScaleFactor() const wxOVERRIDE;
+    virtual wxRect GetGeometry() const override;
+    virtual wxRect GetClientArea() const override;
+    virtual int GetDepth() const override;
+    virtual double GetScaleFactor() const override;
 
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
+    virtual wxVideoMode GetCurrentMode() const override;
+    virtual bool ChangeMode(const wxVideoMode& mode) override;
 
-    virtual bool IsPrimary() const wxOVERRIDE;
+    virtual bool IsPrimary() const override;
 
 private:
     CGDirectDisplayID m_id;
@@ -123,10 +123,10 @@ class wxDisplayFactoryMacOSX : public wxDisplayFactory
 public:
     wxDisplayFactoryMacOSX() {}
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
-    virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
+    virtual unsigned GetCount() override;
+    virtual int GetFromPoint(const wxPoint& pt) override;
+    virtual int GetFromWindow(const wxWindow *window) override;
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMacOSX);
@@ -145,7 +145,7 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
     CGDisplayErr error = kCGErrorSuccess;
     CGDisplayCount onlineCount;
 
-    error = CGGetOnlineDisplayList(0,NULL,&onlineCount);
+    error = CGGetOnlineDisplayList(0,nullptr,&onlineCount);
     if ( error == kCGErrorSuccess )
     {
         *displayCount = 0;
@@ -160,7 +160,7 @@ static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
                     if ( CGDisplayMirrorsDisplay(onlineDisplays[i]) != kCGNullDirectDisplay )
                         continue;
 
-                    if ( displays == NULL )
+                    if ( displays == nullptr )
                         *displayCount += 1;
                     else
                     {
@@ -182,7 +182,7 @@ static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
 {
     int nWhich = wxNOT_FOUND;
     CGDisplayCount theCount;
-    CGDisplayErr err = wxOSXGetDisplayList(0, NULL, &theCount);
+    CGDisplayErr err = wxOSXGetDisplayList(0, nullptr, &theCount);
 
     if (err == CGDisplayNoErr && theCount > 0 )
     {
@@ -207,7 +207,7 @@ static int wxOSXGetDisplayFromID( CGDirectDisplayID theID )
 unsigned wxDisplayFactoryMacOSX::GetCount()
 {
     CGDisplayCount count;
-    CGDisplayErr err = wxOSXGetDisplayList(0, NULL, &count);
+    CGDisplayErr err = wxOSXGetDisplayList(0, nullptr, &count);
 
     wxCHECK_MSG( err == CGDisplayNoErr, 0, "wxOSXGetDisplayList() failed" );
 
@@ -231,11 +231,11 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
 
 int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
 {
-    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
+    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be null" );
 
     wxNonOwnedWindow* const tlw = window->MacGetTopLevelWindow();
     // not yet instantiated
-    if ( tlw->GetWXWindow() == NULL )
+    if ( tlw->GetWXWindow() == nullptr )
         return wxNOT_FOUND;
 
     int x,y,w,h;
@@ -245,9 +245,9 @@ int wxDisplayFactoryMacOSX::GetFromWindow(const wxWindow *window)
 
     CGRect r = CGRectMake(x, y, w, h);
     CGDisplayCount theCount;
-    CGDisplayErr err = CGGetDisplaysWithRect(r, 0, NULL, &theCount);
+    CGDisplayErr err = CGGetDisplaysWithRect(r, 0, nullptr, &theCount);
     wxCHECK_MSG( err == CGDisplayNoErr,
-                 wxNOT_FOUND, "CGGetDisplaysWithRect(NULL) failed" );
+                 wxNOT_FOUND, "CGGetDisplaysWithRect(nullptr) failed" );
 
     wxScopedArray<CGDirectDisplayID> theIDs(theCount);
     err = CGGetDisplaysWithRect(r, theCount, theIDs.get(), &theCount);
@@ -274,9 +274,9 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
     wxScopedArray<CGDirectDisplayID> theIDs(theCount);
 
     CGDisplayErr err = wxOSXGetDisplayList(theCount, theIDs.get(), &theCount);
-    wxCHECK_MSG( err == CGDisplayNoErr, NULL, "wxOSXGetDisplayList() failed" );
+    wxCHECK_MSG( err == CGDisplayNoErr, nullptr, "wxOSXGetDisplayList() failed" );
 
-    wxCHECK_MSG( n < theCount, NULL, wxS("Invalid display index") );
+    wxCHECK_MSG( n < theCount, nullptr, wxS("Invalid display index") );
 
     return new wxDisplayImplMacOSX(n, theIDs[n]);
 }
@@ -328,7 +328,7 @@ wxArrayVideoModes wxDisplayImplMacOSX::GetModes(const wxVideoMode& mode) const
 {
     wxArrayVideoModes resultModes;
 
-    wxCFRef<CFArrayRef> theArray(CGDisplayCopyAllDisplayModes( m_id ,NULL ) );
+    wxCFRef<CFArrayRef> theArray(CGDisplayCopyAllDisplayModes( m_id ,nullptr ) );
     
     for (CFIndex i = 0; i < CFArrayGetCount(theArray); ++i)
     {
@@ -372,7 +372,7 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
                 wxT("at least the width and height must be specified") );
     
     bool bOK = false;
-    wxCFRef<CFArrayRef> theArray(CGDisplayCopyAllDisplayModes( m_id ,NULL ) );
+    wxCFRef<CFArrayRef> theArray(CGDisplayCopyAllDisplayModes( m_id ,nullptr ) );
     
     for (CFIndex i = 0; i < CFArrayGetCount(theArray); ++i)
     {
@@ -388,7 +388,7 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
             ( mode.GetDepth() == 0 || theMode.GetDepth() == mode.GetDepth() ) &&
             ( mode.GetRefresh() == 0 || theMode.GetRefresh() == mode.GetRefresh() ) )
         {
-            CGDisplaySetDisplayMode( m_id, theValue , NULL );
+            CGDisplaySetDisplayMode( m_id, theValue , nullptr );
             bOK = true;
             break;
         }
@@ -411,17 +411,17 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
 class wxDisplayImplSingleMacOSX : public wxDisplayImplSingle
 {
 public:
-    virtual wxRect GetGeometry() const wxOVERRIDE
+    virtual wxRect GetGeometry() const override
     {
         return wxGetDisplayGeometry(CGMainDisplayID());
     }
 
-    virtual wxRect GetClientArea() const wxOVERRIDE
+    virtual wxRect GetClientArea() const override
     {
         return wxOSXGetMainDisplayClientArea();
     }
 
-    virtual int GetDepth() const wxOVERRIDE
+    virtual int GetDepth() const override
     {
         return wxGetDisplayDepth(CGMainDisplayID());
     }
@@ -430,7 +430,7 @@ public:
 class wxDisplayFactorySingleMacOSX : public wxDisplayFactorySingle
 {
 protected:
-    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    virtual wxDisplayImpl *CreateSingleDisplay() override
     {
         return new wxDisplayImplSingleMacOSX;
     }

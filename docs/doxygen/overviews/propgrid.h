@@ -270,7 +270,7 @@ A very simple example:
     // Using wxChar* array
     //
     const wxChar* arrayDiet[] =
-    { wxT("Herbivore"), wxT("Carnivore"), wxT("Omnivore"), NULL };
+    { wxT("Herbivore"), wxT("Carnivore"), wxT("Omnivore"), nullptr };
 
     pg->Append( new wxEnumProperty("Diet",
                                    wxPG_LABEL,
@@ -348,7 +348,7 @@ wxFlagsProperty has similar construction:
 @code
 
     const wxChar* flags_prop_labels[] = { wxT("wxICONIZE"),
-        wxT("wxCAPTION"), wxT("wxMINIMIZE_BOX"), wxT("wxMAXIMIZE_BOX"), NULL };
+        wxT("wxCAPTION"), wxT("wxMINIMIZE_BOX"), wxT("wxMAXIMIZE_BOX"), nullptr };
 
     // this value array would be optional if values matched string indexes
     long flags_prop_values[] = { wxICONIZE, wxCAPTION, wxMINIMIZE_BOX,

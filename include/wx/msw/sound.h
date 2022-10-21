@@ -27,16 +27,16 @@ public:
     // Create from data
     bool Create(size_t size, const void* data);
 
-    bool IsOk() const { return m_data != NULL; }
+    bool IsOk() const { return m_data != nullptr; }
 
     static void Stop();
 
 protected:
-    void Init() { m_data = NULL; }
+    void Init() { m_data = nullptr; }
     bool CheckCreatedOk();
     void Free();
 
-    virtual bool DoPlay(unsigned flags) const wxOVERRIDE;
+    virtual bool DoPlay(unsigned flags) const override;
 
 private:
     // data of this object

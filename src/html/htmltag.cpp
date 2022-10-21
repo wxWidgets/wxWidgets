@@ -301,20 +301,20 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
 {
     /* Setup DOM relations */
 
-    m_Next = NULL;
-    m_FirstChild = m_LastChild = NULL;
+    m_Next = nullptr;
+    m_FirstChild = m_LastChild = nullptr;
     m_Parent = parent;
     if (parent)
     {
         m_Prev = m_Parent->m_LastChild;
-        if (m_Prev == NULL)
+        if (m_Prev == nullptr)
             m_Parent->m_FirstChild = this;
         else
             m_Prev->m_Next = this;
         m_Parent->m_LastChild = this;
     }
     else
-        m_Prev = NULL;
+        m_Prev = nullptr;
 
     /* Find parameters and their values: */
 
@@ -509,7 +509,7 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_quotes) const
 
 bool wxHtmlTag::GetParamAsString(const wxString& par, wxString *str) const
 {
-    wxCHECK_MSG( str, false, wxT("NULL output string argument") );
+    wxCHECK_MSG( str, false, wxT("null output string argument") );
 
     int index = m_ParamNames.Index(par, false);
     if (index == wxNOT_FOUND)
@@ -680,7 +680,7 @@ wxHtmlTag *wxHtmlTag::GetNextTag() const
     if (m_FirstChild) return m_FirstChild;
     if (m_Next) return m_Next;
     wxHtmlTag *cur = m_Parent;
-    if (!cur) return NULL;
+    if (!cur) return nullptr;
     while (cur->m_Parent && !cur->m_Next)
         cur = cur->m_Parent;
     return cur->m_Next;

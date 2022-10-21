@@ -48,7 +48,7 @@ WX_DEFINE_LIST(wxTimerList)
 // wxTimerScheduler implementation
 // ============================================================================
 
-wxTimerScheduler *wxTimerScheduler::ms_instance = NULL;
+wxTimerScheduler *wxTimerScheduler::ms_instance = nullptr;
 
 wxTimerScheduler::~wxTimerScheduler()
 {
@@ -109,7 +109,7 @@ bool wxTimerScheduler::GetNext(wxUsecClock_t *remaining) const
     if ( m_timers.empty() )
       return false;
 
-    wxCHECK_MSG( remaining, false, wxT("NULL pointer") );
+    wxCHECK_MSG( remaining, false, wxT("null pointer") );
 
     *remaining = (*m_timers.begin())->m_expiration - wxGetUTCTimeUSec();
     if ( *remaining < 0 )
@@ -238,8 +238,8 @@ class wxTimerUnixModule : public wxModule
 {
 public:
     wxTimerUnixModule() {}
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxTimerScheduler::Shutdown(); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxTimerScheduler::Shutdown(); }
 
     wxDECLARE_DYNAMIC_CLASS(wxTimerUnixModule);
 };

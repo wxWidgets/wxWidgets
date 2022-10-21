@@ -119,7 +119,7 @@ private:
 
     int AppendItems(const wxArrayStringsAdapter& items)
     {
-        return AppendItems(items, NULL, wxClientData_None);
+        return AppendItems(items, nullptr, wxClientData_None);
     }
 
     int AppendItems(const wxArrayStringsAdapter& items, void **clientData)
@@ -162,7 +162,7 @@ private:
 
     int InsertItems(const wxArrayStringsAdapter& items, unsigned int pos)
     {
-        return InsertItems(items, pos, NULL, wxClientData_None);
+        return InsertItems(items, pos, nullptr, wxClientData_None);
     }
 
     int InsertItems(const wxArrayStringsAdapter& items,
@@ -316,7 +316,7 @@ public:
     // SetClientObject() takes ownership of the pointer, GetClientObject()
     // returns it but keeps the ownership while DetachClientObject() expects
     // the caller to delete the pointer and also resets the internally stored
-    // one to NULL for this item
+    // one to nullptr for this item
     void SetClientObject(unsigned int n, wxClientData* clientData);
     wxClientData* GetClientObject(unsigned int n) const;
     wxClientData* DetachClientObject(unsigned int n);
@@ -397,7 +397,7 @@ protected:
                                  wxClientDataType type);
 
     // free the client object associated with the item at given position and
-    // set it to NULL (must only be called if HasClientObjectData())
+    // set it to nullptr (must only be called if HasClientObjectData())
     void ResetItemClientObject(unsigned int n);
 
     // set the type of the client data stored in this control: override this if
@@ -456,7 +456,7 @@ public:
 
     // usually the controls like list/combo boxes have their own background
     // colour
-    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
+    virtual bool ShouldInheritColours() const override { return false; }
 
 
     // Implementation only from now on.
@@ -478,8 +478,6 @@ private:
 // define the platform-specific wxControlWithItems class
 #if defined(__WXMSW__)
     #include "wx/msw/ctrlsub.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/ctrlsub.h"
 #elif defined(__WXQT__)
     #include "wx/qt/ctrlsub.h"
 #else

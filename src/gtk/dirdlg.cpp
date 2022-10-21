@@ -84,7 +84,7 @@ bool wxDirDialog::Create(wxWindow* parent,
         return false;
     }
 
-    GtkWindow* gtk_parent = NULL;
+    GtkWindow* gtk_parent = nullptr;
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
@@ -104,7 +104,7 @@ bool wxDirDialog::Create(wxWindow* parent,
                    "gtk-open",
 #endif
                    GTK_RESPONSE_ACCEPT,
-                   NULL);
+                   nullptr);
 
     g_object_ref(m_widget);
 

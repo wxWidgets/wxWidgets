@@ -55,8 +55,8 @@ public:
         }
     }
 
-    virtual size_t GetSize() const wxOVERRIDE { return m_size; }
-    virtual const void *GetData() const wxOVERRIDE { return m_data; }
+    virtual size_t GetSize() const override { return m_size; }
+    virtual const void *GetData() const override { return m_data; }
 
 private:
     const size_t m_size;

@@ -87,7 +87,7 @@
 // notifications and for this we need a (Win) class name for it which we will
 // register the first time it's needed
 static const wxChar *wxMSWEXEC_WNDCLASSNAME = wxT("_wxExecute_Internal_Class");
-static const wxChar *gs_classForHiddenWindow = NULL;
+static const wxChar *gs_classForHiddenWindow = nullptr;
 
 // event used to wake up threads waiting in wxExecuteThread
 static wxWinAPI::Event gs_heventShutdown;
@@ -132,8 +132,8 @@ public:
 class wxExecuteModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
     {
         if ( gs_heventShutdown.IsOk() )
         {
@@ -178,7 +178,7 @@ public:
                 wxLogLastError(wxT("UnregisterClass(wxExecClass)"));
             }
 
-            gs_classForHiddenWindow = NULL;
+            gs_classForHiddenWindow = nullptr;
         }
     }
 
@@ -217,7 +217,7 @@ public:
         SECURITY_ATTRIBUTES security;
 
         security.nLength              = sizeof(security);
-        security.lpSecurityDescriptor = NULL;
+        security.lpSecurityDescriptor = nullptr;
         security.bInheritHandle       = TRUE; // to pass it to the child
 
         if ( !::CreatePipe(&m_handles[0], &m_handles[1], &security, 0) )
@@ -420,10 +420,10 @@ bool wxPipeInputStream::CanRead() const
     DWORD rc = ::PeekNamedPipe
                     (
                       m_hInput,     // handle
-                      NULL, 0,      // ptr to buffer and its size
-                      NULL,         // [out] bytes read
+                      nullptr, 0,   // ptr to buffer and its size
+                      nullptr,      // [out] bytes read
                       &nAvailable,  // [out] bytes available
-                      NULL          // [out] bytes left
+                      nullptr       // [out] bytes left
                     );
 
     if ( !rc )
@@ -457,7 +457,7 @@ size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
     }
 
     DWORD bytesRead;
-    if ( !::ReadFile(m_hInput, buffer, len, &bytesRead, NULL) )
+    if ( !::ReadFile(m_hInput, buffer, len, &bytesRead, nullptr) )
     {
         m_lasterror = ::GetLastError() == ERROR_BROKEN_PIPE
                         ? wxSTREAM_EOF
@@ -484,8 +484,8 @@ wxPipeOutputStream::wxPipeOutputStream(HANDLE hOutput)
             (
                 m_hOutput,
                 &mode,
-                NULL,       // collection count (we don't set it)
-                NULL        // timeout (we don't set it either)
+                nullptr,       // collection count (we don't set it)
+                nullptr        // timeout (we don't set it either)
             ) )
     {
         wxLogLastError(wxT("SetNamedPipeHandleState(PIPE_NOWAIT)"));
@@ -506,7 +506,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
     while ( len > 0 )
     {
         DWORD chunkWritten;
-        if ( !::WriteFile(m_hOutput, buffer, len, &chunkWritten, NULL) )
+        if ( !::WriteFile(m_hOutput, buffer, len, &chunkWritten, nullptr) )
         {
             m_lasterror = ::GetLastError() == ERROR_BROKEN_PIPE
                                 ? wxSTREAM_EOF
@@ -561,7 +561,7 @@ wxExecuteDDE(const wxString& ddeServer,
             // we're prepared for this one to fail, so don't show errors
             wxLogNull noErrors;
 
-            ok = conn->Request(ddeCommand) != NULL;
+            ok = conn->Request(ddeCommand) != nullptr;
         }
 
         if ( !ok )
@@ -834,16 +834,16 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 
     bool ok = ::CreateProcess
                 (
-                 NULL,               // application name (use only cmd line)
+                 nullptr,            // application name (use only cmd line)
                  wxMSW_CONV_LPTSTR(command), // full command line
-                 NULL,               // security attributes: defaults for both
-                 NULL,               //   the process and its main thread
+                 nullptr,            // security attributes: defaults for both
+                 nullptr,            //   the process and its main thread
                  redirect,           // inherit handles if we use pipes
                  dwFlags,            // process creation flags
-                 envBuffer.data(),   // environment (may be NULL which is fine)
+                 envBuffer.data(),   // environment (may be null which is fine)
                  useCwd              // initial working directory
                     ? wxMSW_CONV_LPTSTR(env->cwd)
-                    : NULL,          //     (or use the same)
+                    : nullptr,       //     (or use the same)
                  &si,                // startup info (unused here)
                  &pi                 // process info
                 ) != 0;
@@ -921,20 +921,20 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 
     if ( flags & wxEXEC_SYNC )
     {
-        // handler may be !NULL for capturing program output, but we don't use
+        // handler may be non-null for capturing program output, but we don't use
         // it in wxExecuteData struct in this case because it's only needed
         // there for calling OnTerminate() on it and we don't do this when
         // executing synchronously
-        data->handler = NULL;
+        data->handler = nullptr;
     }
     else
     {
-        // may be NULL or not
+        // may be null or not
         data->handler = handler;
     }
 
     DWORD tid;
-    HANDLE hThread = ::CreateThread(NULL,
+    HANDLE hThread = ::CreateThread(nullptr,
                                     0,
                                     wxExecuteThread,
                                     (void *)data,
@@ -1021,7 +1021,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     wxAppTraits *traits = wxApp::GetTraitsIfExists();
     wxCHECK_MSG( traits, -1, wxT("no wxAppTraits in wxExecute()?") );
 
-    void *cookie = NULL;
+    void *cookie = nullptr;
     if ( !(flags & wxEXEC_NODISABLE) )
     {
         // disable all app windows while waiting for the child process to finish

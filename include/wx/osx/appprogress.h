@@ -16,15 +16,15 @@ class WXDLLIMPEXP_CORE wxAppProgressIndicator
     : public wxAppProgressIndicatorBase
 {
 public:
-    wxAppProgressIndicator(wxWindow* parent = NULL, int maxValue = 100);
+    wxAppProgressIndicator(wxWindow* parent = nullptr, int maxValue = 100);
     virtual ~wxAppProgressIndicator();
 
-    virtual bool IsAvailable() const wxOVERRIDE;
+    virtual bool IsAvailable() const override;
 
-    virtual void SetValue(int value) wxOVERRIDE;
-    virtual void SetRange(int range) wxOVERRIDE;
-    virtual void Pulse() wxOVERRIDE;
-    virtual void Reset() wxOVERRIDE;
+    virtual void SetValue(int value) override;
+    virtual void SetRange(int range) override;
+    virtual void Pulse() override;
+    virtual void Reset() override;
 
 private:
     int m_maxValue;

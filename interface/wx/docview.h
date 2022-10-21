@@ -433,7 +433,7 @@ public:
         changes.
 
         @param doc
-            The document to close, must be non-@NULL.
+            The document to close, must be non-null.
         @param force
             If @true, close the document even if wxDocument::Close() returns
             @false.
@@ -1239,12 +1239,12 @@ public:
         application-specific data.
 
         @param parent
-            Specifying a non-@c NULL parent document here makes this document a
+            Specifying a non-null parent document here makes this document a
             special <em>child document</em>, see their description in the class
             documentation. Notice that this parameter exists but is ignored in
             wxWidgets versions prior to 2.9.1.
     */
-    wxDocument(wxDocument* parent = NULL);
+    wxDocument(wxDocument* parent = nullptr);
 
     /**
         Destructor. Removes itself from the document manager.
@@ -1660,11 +1660,11 @@ public:
     void SetTitle(const wxString& title);
 
     /**
-        Updates all views. If @a sender is non-@NULL, does not update this
+        Updates all views. If @a sender is non-null, does not update this
         view. @a hint represents optional information to allow a view to
         optimize its update.
     */
-    virtual void UpdateAllViews(wxView* sender = NULL, wxObject* hint = NULL);
+    virtual void UpdateAllViews(wxView* sender = nullptr, wxObject* hint = nullptr);
 
 protected:
     /**

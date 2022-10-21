@@ -116,7 +116,7 @@ void wxNotebook::Init()
 
     m_offset = 0;
 
-    m_spinbtn = NULL;
+    m_spinbtn = nullptr;
 }
 
 bool wxNotebook::Create(wxWindow *parent,
@@ -373,7 +373,7 @@ bool wxNotebook::DeleteAllPages()
 
 wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), NULL, wxT("invalid notebook page") );
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), nullptr, wxT("invalid notebook page") );
 
     wxNotebookPage *page = m_pages[nPage];
     m_pages.erase(m_pages.begin() + nPage);
@@ -779,7 +779,7 @@ wxRect wxNotebook::GetTabsPart() const
 
 void wxNotebook::GetTabSize(int page, wxCoord *w, wxCoord *h) const
 {
-    wxCHECK_RET( w && h, wxT("NULL pointer in GetTabSize") );
+    wxCHECK_RET( w && h, wxT("null pointer in GetTabSize") );
 
     if ( IsVertical() )
     {

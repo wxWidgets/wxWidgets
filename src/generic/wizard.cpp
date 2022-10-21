@@ -50,10 +50,10 @@ class wxWizardSizer : public wxSizer
 public:
     wxWizardSizer(wxWizard *owner);
 
-    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item) wxOVERRIDE;
+    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item) override;
 
-    virtual void RecalcSizes() wxOVERRIDE;
-    virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RecalcSizes() override;
+    virtual wxSize CalcMin() override;
 
     // get the max size of all wizard pages
     wxSize GetMaxChildSize();
@@ -267,12 +267,12 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 void wxWizard::Init()
 {
     m_posWizard = wxDefaultPosition;
-    m_page = NULL;
-    m_firstpage = NULL;
-    m_btnPrev = m_btnNext = NULL;
-    m_statbmp = NULL;
-    m_sizerBmpAndPage = NULL;
-    m_sizerPage = NULL;
+    m_page = nullptr;
+    m_firstpage = nullptr;
+    m_btnPrev = m_btnNext = nullptr;
+    m_statbmp = nullptr;
+    m_sizerBmpAndPage = nullptr;
+    m_sizerPage = nullptr;
     m_border = 5;
     m_started = false;
     m_wasModal = false;
@@ -422,7 +422,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
 
     // Desired TAB order is 'next', 'cancel', 'help', 'back'. This makes the 'back' button the last control on the page.
     // Create the buttons in the right order...
-    wxButton *btnHelp=0;
+    wxButton *btnHelp=nullptr;
 #ifdef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
         btnHelp=new wxButton(this, wxID_HELP, wxEmptyString, wxDefaultPosition, wxDefaultSize, buttonStyle);
@@ -609,7 +609,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), false, m_page);
         (void)GetEventHandler()->ProcessEvent(event);
 
-        m_page = NULL;
+        m_page = nullptr;
 
         return true;
     }
@@ -855,7 +855,7 @@ void wxWizard::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
     // this function probably can never be called when we don't have an active
     // page, but a small extra check won't hurt
-    if(m_page != NULL)
+    if(m_page != nullptr)
     {
         // Create and send the help event to the specific page handler
         // event data contains the active page so that context-sensitive

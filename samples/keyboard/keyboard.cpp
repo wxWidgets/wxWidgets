@@ -145,7 +145,7 @@ class MyApp : public wxApp
 {
 public:
     // 'Main program' equivalent: the program execution "starts" here
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         // create the main application window
         new MyFrame("Keyboard wxWidgets App");
@@ -169,8 +169,8 @@ wxIMPLEMENT_APP(MyApp);
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title),
-         m_inputWin(NULL),
+       : wxFrame(nullptr, wxID_ANY, title),
+         m_inputWin(nullptr),
          m_skipHook(true),
          m_skipDown(true)
 {
@@ -515,7 +515,7 @@ const char* GetVirtualKeyCodeName(int keycode)
 #undef WXK_
 
     default:
-        return NULL;
+        return nullptr;
     }
 }
 

@@ -46,26 +46,17 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
-/* Define this if you want to use GPE features */
-#undef __WXGPE__
-
-/* Define this if your version of Motif is greater than 2.0 */
-#undef __WXMOTIF20__
-
-/* Define this if you are using Lesstif */
-#undef __WXLESSTIF__
-
 #ifdef __WXGTK__
 
 #ifndef VMS_GTK2
 #define GDK_WINDOWING_X11
 #endif
 
-/* Define this if your version of GTK+ is greater than 1.2.7 */
-#define __WXGTK127__ 1
-
 /* Define this if your version of GTK+ is greater than 2.0 */
 #ifdef VMS_GTK2
+
+/* Define if using GTK. */
+#define __WXGTK__ 1
 
 /* Define this if your version of GTK+ is >= 3.0 */
 #if 0
@@ -807,73 +798,6 @@ typedef pid_t GPid;
  */
 #undef VA_LIST_IS_ARRAY
 
-#if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
-/*
- * Define if your compiler has std::wstring
- */
-#define HAVE_STD_WSTRING 1
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#define HAVE_STD_STRING_COMPARE 1
-#else
-/*
- * Define if your compiler has std::wstring
- */
-/* #unfine HAVE_STD_WSTRING */
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#undef HAVE_STD_STRING_COMPARE
-#endif
-
-/*
- * Define if your compiler has <hash_map>
- */
-#undef HAVE_HASH_MAP
-/*
- * Define if your compiler has <ext/hash_map>
- */
-#undef HAVE_EXT_HASH_MAP
-/*
- * Define if your compiler has std::hash_map/hash_set
- */
-#undef HAVE_STD_HASH_MAP
-/*
- * Define if your compiler has __gnu_cxx::hash_map/hash_set
- */
-#undef HAVE_GNU_CXX_HASH_MAP
-
-/*
- * Define if your compiler has std::unordered_map
- */
-#undef HAVE_STD_UNORDERED_MAP
-
-/*
- * Define if your compiler has std::unordered_set
- */
-#undef HAVE_STD_UNORDERED_SET
-
-/*
- * Define if your compiler has std::tr1::unordered_map
- */
-#undef HAVE_TR1_UNORDERED_MAP
-
-/*
- * Define if your compiler has std::tr1::unordered_set
- */
-#undef HAVE_TR1_UNORDERED_SET
-
-/*
- * Define if your compiler has <tr1/type_traits>
- */
-#undef HAVE_TR1_TYPE_TRAITS
-
-/*
- * Define if your compiler has <type_traits>
- */
-#undef HAVE_TYPE_TRAITS
-
 /*
  * Define if the compiler supports simple visibility declarations.
  */
@@ -1098,9 +1022,6 @@ typedef pid_t GPid;
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 
-/* Define if you have strtoull() and strtoll() */
-#define HAVE_STRTOULL 1
-
 /* Define if you have all functions to set thread priority */
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
 
@@ -1146,9 +1067,6 @@ typedef pid_t GPid;
 
 /* Define if you have wcsnlen() function */
 #undef HAVE_WCSNLEN
-
-/* Define if you have wcstoull() and wcstoll() */
-#undef HAVE_WCSTOULL
 
 /* The number of bytes in a wchar_t.  */
 #define SIZEOF_WCHAR_T 4

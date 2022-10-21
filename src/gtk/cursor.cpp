@@ -34,7 +34,7 @@ public:
     wxCursorRefData();
     virtual ~wxCursorRefData();
 
-    virtual bool IsOk() const wxOVERRIDE { return m_cursor != NULL; }
+    virtual bool IsOk() const override { return m_cursor != nullptr; }
 
     GdkCursor *m_cursor;
 
@@ -46,7 +46,7 @@ private:
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_cursor = NULL;
+    m_cursor = nullptr;
 }
 
 wxCursorRefData::~wxCursorRefData()
@@ -221,7 +221,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
                 const char bits[] = { 0 };
                 const GdkColor color = { 0, 0, 0, 0 };
 
-                GdkPixmap *pixmap = gdk_bitmap_create_from_data(NULL, bits, 1, 1);
+                GdkPixmap *pixmap = gdk_bitmap_create_from_data(nullptr, bits, 1, 1);
                 M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(pixmap,
                                                                     pixmap,
                                                                     &color,
@@ -296,7 +296,7 @@ void wxCursor::InitFromImage( const wxImage & image )
     int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
     if (hotSpotX < 0 || hotSpotX > w) hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY > h) hotSpotY = 0;
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(image.GetData(), GDK_COLORSPACE_RGB, false, 8, w, h, w * 3, NULL, NULL);
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(image.GetData(), GDK_COLORSPACE_RGB, false, 8, w, h, w * 3, nullptr, nullptr);
     if (alpha || hasMask)
     {
         guchar r = 0, g = 0, b = 0;
@@ -329,7 +329,7 @@ void wxCursor::InitFromImage( const wxImage & image )
 
 GdkCursor *wxCursor::GetCursor() const
 {
-    GdkCursor* cursor = NULL;
+    GdkCursor* cursor = nullptr;
     if (m_refData)
         cursor = M_CURSORDATA->m_cursor;
     return cursor;
@@ -384,7 +384,7 @@ static void UpdateCursors(wxWindow* win, bool isBusyOrGlobalCursor)
 static void SetGlobalCursor(const wxCursor& cursor)
 {
     GdkCursor* gdk_cursor = cursor.GetCursor();
-    GdkDisplay* display = NULL;
+    GdkDisplay* display = nullptr;
     wxWindowList::const_iterator i = wxTopLevelWindows.begin();
     for (size_t n = wxTopLevelWindows.size(); n--; ++i)
     {
@@ -393,8 +393,8 @@ static void SetGlobalCursor(const wxCursor& cursor)
         if (win->m_widget && (window = gtk_widget_get_window(win->m_widget)))
         {
             gdk_window_set_cursor(window, gdk_cursor);
-            UpdateCursors(win, gdk_cursor != NULL);
-            if (display == NULL)
+            UpdateCursors(win, gdk_cursor != nullptr);
+            if (display == nullptr)
                 display = gdk_window_get_display(window);
         }
     }

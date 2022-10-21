@@ -775,7 +775,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     wxString message = wxCFStringRef::AsString([error localizedDescription]);
     NSString* detail = [error localizedFailureReason];
-    if (detail != NULL)
+    if (detail != nullptr)
     {
         message = message + " (" + wxCFStringRef::AsString(detail) + ")";
     }
@@ -853,17 +853,17 @@ class wxWebViewWebKitHandlerRequest: public wxWebViewHandlerRequest
 {
 public:
     wxWebViewWebKitHandlerRequest(NSURLRequest* request):
-        m_data(NULL),
+        m_data(nullptr),
         m_request(request)
     { }
 
     ~wxWebViewWebKitHandlerRequest()
     { wxDELETE(m_data); }
 
-    virtual wxString GetRawURI() const wxOVERRIDE
+    virtual wxString GetRawURI() const override
     { return wxCFStringRef::AsString(m_request.URL.absoluteString); }
 
-    virtual wxInputStream* GetData() const wxOVERRIDE
+    virtual wxInputStream* GetData() const override
     {
         if (!m_data && m_request.HTTPBody)
             m_data = new wxMemoryInputStream(m_request.HTTPBody.bytes, m_request.HTTPBody.length);
@@ -871,10 +871,10 @@ public:
         return m_data;
     }
 
-    virtual wxString GetMethod() const wxOVERRIDE
+    virtual wxString GetMethod() const override
     { return wxCFStringRef::AsString(m_request.HTTPMethod); }
 
-    virtual wxString GetHeader(const wxString& name) const wxOVERRIDE
+    virtual wxString GetHeader(const wxString& name) const override
     {
         return wxCFStringRef::AsString(
             [m_request valueForHTTPHeaderField:wxCFStringRef(name).AsNSString()]);
@@ -900,19 +900,19 @@ public:
         [m_task release];
     }
 
-    virtual void SetStatus(int status) wxOVERRIDE
+    virtual void SetStatus(int status) override
     { m_status = status; }
 
-    virtual void SetContentType(const wxString& contentType) wxOVERRIDE
+    virtual void SetContentType(const wxString& contentType) override
     { SetHeader("Content-Type", contentType); }
 
-    virtual void SetHeader(const wxString& name, const wxString& value) wxOVERRIDE
+    virtual void SetHeader(const wxString& name, const wxString& value) override
     {
         [m_headers setValue:wxCFStringRef(value).AsNSString()
                      forKey:wxCFStringRef(name).AsNSString()];
     }
 
-    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) wxOVERRIDE
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) override
     {
         m_data = data;
         wxInputStream* stream = data->GetStream();
@@ -934,7 +934,7 @@ public:
         [m_task didFinish];
     }
 
-    virtual void FinishWithError() wxOVERRIDE
+    virtual void FinishWithError() override
     {
         NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
                             code:NSURLErrorFileDoesNotExist

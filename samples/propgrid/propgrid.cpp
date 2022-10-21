@@ -86,11 +86,11 @@ public:
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propGrid,
                                            wxPGProperty* property,
                                            const wxPoint& pos,
-                                           const wxSize& sz ) const wxOVERRIDE;
+                                           const wxSize& sz ) const override;
     virtual bool OnEvent( wxPropertyGrid* propGrid,
                           wxPGProperty* property,
                           wxWindow* ctrl,
-                          wxEvent& event ) const wxOVERRIDE;
+                          wxEvent& event ) const override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSampleMultiButtonEditor, wxPGTextCtrlEditor);
@@ -170,12 +170,12 @@ public:
     {
     }
 
-    virtual wxObject* Clone() const wxOVERRIDE
+    virtual wxObject* Clone() const override
     {
         return new wxInvalidWordValidator(m_invalidWord);
     }
 
-    virtual bool Validate(wxWindow* WXUNUSED(parent)) wxOVERRIDE
+    virtual bool Validate(wxWindow* WXUNUSED(parent)) override
     {
         wxTextCtrl* tc = wxDynamicCast(GetWindow(), wxTextCtrl);
         wxCHECK_MSG(tc, true, "validator window must be wxTextCtrl");
@@ -314,7 +314,7 @@ public:
     }
 
     virtual bool DoShowDialog( wxPropertyGrid* WXUNUSED(propGrid),
-                               wxPGProperty* WXUNUSED(property) ) wxOVERRIDE
+                               wxPGProperty* WXUNUSED(property) ) override
     {
         wxString s = ::wxGetSingleChoice("Message",
                                          "Caption",
@@ -350,13 +350,13 @@ public:
     }
 
     // Set editor to have button
-    virtual const wxPGEditor* DoGetEditorClass() const wxOVERRIDE
+    virtual const wxPGEditor* DoGetEditorClass() const override
     {
         return wxPGEditor_TextCtrlAndButton;
     }
 
     // Set what happens on button click
-    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE
+    virtual wxPGEditorDialogAdapter* GetEditorDialog() const override
     {
         return new wxSingleChoiceDialogAdapter(m_choices);
     }
@@ -1760,13 +1760,13 @@ public:
 
     // Return false here to indicate unhandled events should be
     // propagated to manager's parent, as normal.
-    virtual bool IsHandlingAllEvents() const wxOVERRIDE { return false; }
+    virtual bool IsHandlingAllEvents() const override { return false; }
 
 protected:
 
     virtual wxPGProperty* DoInsert( wxPGProperty* parent,
                                     int index,
-                                    wxPGProperty* property ) wxOVERRIDE
+                                    wxPGProperty* property ) override
     {
         return wxPropertyGridPage::DoInsert(parent,index,property);
     }
@@ -1951,11 +1951,11 @@ void FormMain::ReplaceGrid(int style, int extraStyle)
 // -----------------------------------------------------------------------
 
 FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size)
-    : wxFrame((wxFrame *)NULL, -1, title, pos, size,
+    : wxFrame(nullptr, -1, title, pos, size,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
                 wxTAB_TRAVERSAL|wxCLOSE_BOX) )
-    , m_pPropGridManager(NULL)
-    , m_propGrid(NULL)
+    , m_pPropGridManager(nullptr)
+    , m_propGrid(nullptr)
     , m_hasHeader(false)
     , m_labelEditingEnabled(false)
 {
@@ -3181,7 +3181,7 @@ void FormMain::OnIdle( wxIdleEvent& event )
 {
     /*
     // This code is useful for debugging focus problems
-    static wxWindow* last_focus = (wxWindow*) NULL;
+    static wxWindow* last_focus = nullptr;
 
     wxWindow* cur_focus = ::wxWindow::FindFocus();
 
@@ -3206,7 +3206,7 @@ void FormMain::OnIdle( wxIdleEvent& event )
 wxPGProperty* GetRealRoot(wxPropertyGrid *grid)
 {
     wxPGProperty *property = grid->GetRoot();
-    return property ? grid->GetFirstChild(property) : NULL;
+    return property ? grid->GetFirstChild(property) : nullptr;
 }
 
 void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
@@ -3329,7 +3329,7 @@ struct PropertyGridPopup : wxPopupWindow
         Fit();
     }
 
-    void Fit() wxOVERRIDE
+    void Fit() override
     {
         ::SetMinSize(m_grid);
         m_sizer->Fit(m_panel);
@@ -3351,11 +3351,11 @@ wxEND_EVENT_TABLE()
 
 void FormMain::OnShowPopup(wxCommandEvent& WXUNUSED(event))
 {
-    static PropertyGridPopup *popup = NULL;
+    static PropertyGridPopup *popup = nullptr;
     if ( popup )
     {
         delete popup;
-        popup = NULL;
+        popup = nullptr;
         return;
     }
     popup = new PropertyGridPopup(this);

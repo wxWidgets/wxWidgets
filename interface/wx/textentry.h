@@ -81,7 +81,7 @@ public:
         @since 2.9.2
 
         @param completer
-            The object to be used for generating completions if non-@NULL. If
+            The object to be used for generating completions if non-null. If
             it is @NULL, auto-completion is disabled. The wxTextEntry object
             takes ownership of this pointer and will delete it in any case
             (i.e. even if this method returns @false).
@@ -148,7 +148,7 @@ public:
         Returns @true if the contents of the clipboard can be pasted into the
         text control.
 
-        On some platforms (Motif, GTK) this is an approximation and returns
+        On some platforms (GTK) this is an approximation and returns
         @true if the control is editable, @false otherwise.
     */
     virtual bool CanPaste() const;

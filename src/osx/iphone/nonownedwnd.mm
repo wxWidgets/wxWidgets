@@ -74,15 +74,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl);
 wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) :
     wxNonOwnedWindowImpl(nonownedwnd)
 {
-    m_macWindow = NULL;
-    m_macFullScreenData = NULL;
+    m_macWindow = nullptr;
+    m_macFullScreenData = nullptr;
     m_initialShowSent = false;
 }
 
 wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl()
 {
-    m_macWindow = NULL;
-    m_macFullScreenData = NULL;
+    m_macWindow = nullptr;
+    m_macFullScreenData = nullptr;
     m_initialShowSent = false;
 }
 
@@ -281,7 +281,7 @@ void wxNonOwnedWindowIPhoneImpl::Maximize(bool maximize)
 
 bool wxNonOwnedWindowIPhoneImpl::IsFullScreen() const
 {
-    return m_macFullScreenData != NULL ;
+    return m_macFullScreenData != nullptr ;
 }
 
 bool wxNonOwnedWindowIPhoneImpl::EnableFullScreenView(bool WXUNUSED(enable), long WXUNUSED(style))

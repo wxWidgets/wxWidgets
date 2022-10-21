@@ -42,7 +42,7 @@
 
 HTMLHELP GetHtmlHelpFunction()
 {
-    static HTMLHELP s_htmlHelp = NULL;
+    static HTMLHELP s_htmlHelp = nullptr;
 
     if ( !s_htmlHelp )
     {
@@ -66,7 +66,7 @@ HTMLHELP GetHtmlHelpFunction()
 }
 
 // find the window to use in HtmlHelp() call: use the given one by default but
-// fall back to the top level app window and then the desktop if it's NULL
+// fall back to the top level app window and then the desktop if it's null
 static HWND GetSuitableHWND(wxWindow *win)
 {
     if ( !win )
@@ -164,14 +164,14 @@ wxCHMHelpController::DoDisplayTextPopup(const wxChar *text,
     popup.rcMargins.left =
     popup.rcMargins.right =
     popup.rcMargins.bottom = -1;
-    popup.pszFont = NULL;
+    popup.pszFont = nullptr;
 
-    return CallHtmlHelp(window, NULL, HH_DISPLAY_TEXT_POPUP, &popup);
+    return CallHtmlHelp(window, nullptr, HH_DISPLAY_TEXT_POPUP, &popup);
 }
 
 bool wxCHMHelpController::DisplayContextPopup(int contextId)
 {
-    return DoDisplayTextPopup(NULL, wxGetMousePosition(), contextId,
+    return DoDisplayTextPopup(nullptr, wxGetMousePosition(), contextId,
                               GetParentWindow());
 }
 
@@ -220,10 +220,10 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
         link.cbStruct =     sizeof(HH_AKLINK);
         link.fReserved =    FALSE;
         link.pszKeywords =  k.t_str();
-        link.pszUrl =       NULL;
-        link.pszMsgText =   NULL;
-        link.pszMsgTitle =  NULL;
-        link.pszWindow =    NULL;
+        link.pszUrl =       nullptr;
+        link.pszMsgText =   nullptr;
+        link.pszMsgTitle =  nullptr;
+        link.pszWindow =    nullptr;
         link.fIndexOnFail = TRUE;
 
         return CallHtmlHelp(HH_KEYWORD_LOOKUP, &link);
@@ -232,7 +232,7 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
 
 bool wxCHMHelpController::Quit()
 {
-    return CallHtmlHelp(NULL, NULL, HH_CLOSE_ALL);
+    return CallHtmlHelp(nullptr, nullptr, HH_CLOSE_ALL);
 }
 
 wxString wxCHMHelpController::GetValidFilename() const

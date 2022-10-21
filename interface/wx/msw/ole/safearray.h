@@ -93,7 +93,7 @@ public:
     /**
         Returns @true if it has a valid @c SAFEARRAY.
     */
-    bool HasArray() const { return m_array != NULL; }
+    bool HasArray() const { return m_array != nullptr; }
 
     /**
         Returns the number of dimensions.

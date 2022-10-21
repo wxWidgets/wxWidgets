@@ -24,7 +24,7 @@ public:
 
     wxGenericNotificationMessage(const wxString& title,
                                  const wxString& message = wxString(),
-                                 wxWindow *parent = NULL,
+                                 wxWindow *parent = nullptr,
                                  int flags = wxICON_INFORMATION)
     {
         Init();

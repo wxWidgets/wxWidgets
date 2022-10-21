@@ -28,7 +28,7 @@
 class OwnerDrawnApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame type
@@ -89,7 +89,7 @@ bool OwnerDrawnApp::OnInit(void)
     if ( !wxApp::OnInit() )
         return false;
 
-    new OwnerDrawnFrame(NULL, "wxWidgets Ownerdraw Sample", 50, 50, 450, 340);
+    new OwnerDrawnFrame(nullptr, "wxWidgets Ownerdraw Sample", 50, 50, 450, 340);
 
     return true;
 }

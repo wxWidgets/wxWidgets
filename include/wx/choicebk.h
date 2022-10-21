@@ -60,37 +60,37 @@ public:
                 const wxString& name = wxEmptyString);
 
 
-    virtual bool SetPageText(size_t n, const wxString& strText) wxOVERRIDE;
-    virtual wxString GetPageText(size_t n) const wxOVERRIDE;
-    virtual int GetPageImage(size_t n) const wxOVERRIDE;
-    virtual bool SetPageImage(size_t n, int imageId) wxOVERRIDE;
+    virtual bool SetPageText(size_t n, const wxString& strText) override;
+    virtual wxString GetPageText(size_t n) const override;
+    virtual int GetPageImage(size_t n) const override;
+    virtual bool SetPageImage(size_t n, int imageId) override;
     virtual bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
                             bool bSelect = false,
-                            int imageId = NO_IMAGE) wxOVERRIDE;
-    virtual int SetSelection(size_t n) wxOVERRIDE
+                            int imageId = NO_IMAGE) override;
+    virtual int SetSelection(size_t n) override
         { return DoSetSelection(n, SetSelection_SendEvent); }
-    virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
-    virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
+    virtual int ChangeSelection(size_t n) override { return DoSetSelection(n); }
+    virtual void SetImageList(wxImageList *imageList) override;
 
-    virtual bool DeleteAllPages() wxOVERRIDE;
+    virtual bool DeleteAllPages() override;
 
     // returns the choice control
     wxChoice* GetChoiceCtrl() const { return (wxChoice*)m_bookctrl; }
 
 protected:
-    virtual void DoSetWindowVariant(wxWindowVariant variant) wxOVERRIDE;
+    virtual void DoSetWindowVariant(wxWindowVariant variant) override;
 
-    virtual wxWindow *DoRemovePage(size_t page) wxOVERRIDE;
+    virtual wxWindow *DoRemovePage(size_t page) override;
 
-    void UpdateSelectedPage(size_t newsel) wxOVERRIDE
+    void UpdateSelectedPage(size_t newsel) override
     {
         GetChoiceCtrl()->Select(static_cast<int>(newsel));
     }
 
-    wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE;
-    void MakeChangedEvent(wxBookCtrlEvent &event) wxOVERRIDE;
+    wxBookCtrlEvent* CreatePageChangingEvent() const override;
+    void MakeChangedEvent(wxBookCtrlEvent &event) override;
 
     // event handlers
     void OnChoiceSelected(wxCommandEvent& event);

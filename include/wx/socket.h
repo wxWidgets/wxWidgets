@@ -129,7 +129,7 @@ public:
 
     // state
     bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_impl != NULL; }
+    bool IsOk() const { return m_impl != nullptr; }
     bool Error() const { return LastError() != wxSOCKET_NOERROR; }
     bool IsClosed() const { return m_closed; }
     bool IsConnected() const { return m_connected; }
@@ -420,8 +420,8 @@ public:
         { return (wxSocketBase *) GetEventObject(); }
     void *GetClientData() const { return m_clientData; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSocketEvent(*this); }
-    virtual wxEventCategory GetEventCategory() const wxOVERRIDE { return wxEVT_CATEGORY_SOCKET; }
+    virtual wxEvent *Clone() const override { return new wxSocketEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_SOCKET; }
 
 public:
     wxSocketNotify  m_event;

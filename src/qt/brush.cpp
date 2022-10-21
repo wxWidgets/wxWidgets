@@ -114,7 +114,7 @@ wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();
     M_BRUSHDATA.setTexture(*stipple.GetHandle());
-    if (stipple.GetMask() != NULL)
+    if (stipple.GetMask() != nullptr)
         M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
     else
         M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
@@ -145,7 +145,7 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
     AllocExclusive();
     M_BRUSHDATA.setTexture(*stipple.GetHandle());
 
-    if (stipple.GetMask() != NULL)
+    if (stipple.GetMask() != nullptr)
         M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
     else
         M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;

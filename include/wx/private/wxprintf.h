@@ -192,7 +192,7 @@ void wxPrintfConvSpec<CharType>::Init()
     m_nMaxWidth = INT_MAX;
     m_pos = 0;
     m_bAlignLeft = false;
-    m_pArgPos = m_pArgEnd = NULL;
+    m_pArgPos = m_pArgEnd = nullptr;
     m_type = wxPAT_INVALID;
 
     memset(m_szFlags, 0, sizeof(m_szFlags));

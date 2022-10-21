@@ -27,7 +27,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    int nStrings = 0,
-                   const wxString choices[] = NULL,
+                   const wxString choices[] = nullptr,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxASCII_STR(wxListBoxNameStr));
@@ -42,7 +42,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxListBoxNameStr));
@@ -55,17 +55,17 @@ public:
                 const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     // items may be checked
-    virtual bool IsChecked(unsigned int uiIndex) const wxOVERRIDE;
-    virtual void Check(unsigned int uiIndex, bool bCheck = true) wxOVERRIDE;
+    virtual bool IsChecked(unsigned int uiIndex) const override;
+    virtual void Check(unsigned int uiIndex, bool bCheck = true) override;
     virtual void Toggle(unsigned int uiIndex);
 
     // we create our items ourselves and they have non-standard size,
     // so we need to override these functions
-    virtual wxOwnerDrawn *CreateLboxItem(size_t n) wxOVERRIDE;
-    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) wxOVERRIDE;
+    virtual wxOwnerDrawn *CreateLboxItem(size_t n) override;
+    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) override;
 
 protected:
-    virtual wxSize MSWGetFullItemSize(int w, int h) const wxOVERRIDE;
+    virtual wxSize MSWGetFullItemSize(int w, int h) const override;
 
     // pressing space or clicking the check box toggles the item
     void OnKeyDown(wxKeyEvent& event);
@@ -81,9 +81,9 @@ protected:
         ProcessCommand(event);
     }
 
-    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
-    wxSize DoGetBestClientSize() const wxOVERRIDE;
+    wxSize DoGetBestClientSize() const override;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);

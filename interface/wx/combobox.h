@@ -31,7 +31,7 @@
     @style{wxCB_SIMPLE}
            Creates a combobox with a permanently displayed list. Windows only.
     @style{wxCB_DROPDOWN}
-           Creates a combobox with a drop-down list. MSW and Motif only.
+           Creates a combobox with a drop-down list. MSW only.
     @style{wxCB_READONLY}
            A combobox with this style behaves like a wxChoice (and may look in
            the same way as well, although this is platform-dependent), i.e. it
@@ -128,7 +128,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int n = 0,
-               const wxString choices[] = NULL,
+               const wxString choices[] = nullptr,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr);
@@ -184,7 +184,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = (const wxString *) NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);

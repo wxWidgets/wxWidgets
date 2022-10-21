@@ -200,7 +200,7 @@ private:
     static wxFileName ms_watchDir;
 };
 
-EventGenerator* EventGenerator::ms_instance = 0;
+EventGenerator* EventGenerator::ms_instance = nullptr;
 wxFileName EventGenerator::ms_watchDir;
 
 
@@ -400,12 +400,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.CreateFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_CREATE);
             event.SetPath(eg.m_file);
@@ -429,17 +429,17 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.DeleteFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_DELETE);
             event.SetPath(eg.m_old);
 
-            // CHECK maybe new path here could be NULL or sth?
+            // CHECK maybe new path here could be null or sth?
             event.SetNewPath(eg.m_old);
             return event;
         }
@@ -469,12 +469,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.RenameFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_RENAME);
             event.SetPath(eg.m_old);
@@ -500,12 +500,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.ModifyFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_MODIFY);
             event.SetPath(eg.m_file);
@@ -534,12 +534,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.ReadFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
@@ -570,12 +570,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.TouchFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ATTRIB);
             event.SetPath(eg.m_file);
@@ -605,7 +605,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
         // DELETE as the event path fields would be wrong in CheckResult()
         EventTester() : FSWTesterBase(wxFSW_EVENT_ACCESS) {}
 
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             // As wxFSW_EVENT_ACCESS is passed to the ctor only ReadFile() will
             // generate an event. Without it they all will, and the test fails
@@ -614,7 +614,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             CHECK(eg.ReadFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
@@ -815,7 +815,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             CHECK( m_watcher->GetWatchedPathsCount() == 0 );
         }
 
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             // We don't use this function for events. Just run the tests
 
@@ -852,14 +852,14 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             Exit();
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             FAIL("Shouldn't be called");
 
             return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
         }
 
-        virtual void CheckResult() wxOVERRIDE
+        virtual void CheckResult() override
         {
             // Do nothing. We override this to prevent receiving events in
             // ExpectedEvent()
@@ -897,25 +897,25 @@ public:
         Start(1000, true);
     }
 
-    virtual void GenerateEvent() wxOVERRIDE
+    virtual void GenerateEvent() override
     {
         m_watcher->Remove(EventGenerator::GetWatchDir());
         CHECK(eg.CreateFile());
     }
 
-    virtual void CheckResult() wxOVERRIDE
+    virtual void CheckResult() override
     {
         REQUIRE( m_events.empty() );
     }
 
-    virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+    virtual wxFileSystemWatcherEvent ExpectedEvent() override
     {
         FAIL( "Shouldn't be called" );
 
         return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
     }
 
-    virtual void Notify() wxOVERRIDE
+    virtual void Notify() override
     {
         SendIdle();
     }

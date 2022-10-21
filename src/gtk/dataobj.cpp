@@ -28,11 +28,11 @@
 // global data
 //-------------------------------------------------------------------------
 
-GdkAtom  g_textAtom        = 0;
-GdkAtom  g_altTextAtom     = 0;
-GdkAtom  g_pngAtom         = 0;
-GdkAtom  g_fileAtom        = 0;
-GdkAtom  g_htmlAtom        = 0;
+GdkAtom  g_textAtom        = nullptr;
+GdkAtom  g_altTextAtom     = nullptr;
+GdkAtom  g_pngAtom         = nullptr;
+GdkAtom  g_fileAtom        = nullptr;
+GdkAtom  g_htmlAtom        = nullptr;
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -49,7 +49,7 @@ wxDataFormat::wxDataFormat()
     //    calling PrepareFormats (and thus gdk_atom_intern) before GDK is
     //    initialised will result in a crash
     m_type = wxDF_INVALID;
-    m_format = (GdkAtom) 0;
+    m_format = (GdkAtom) nullptr;
 }
 
 wxDataFormat::wxDataFormat( wxDataFormatId type )
@@ -239,7 +239,7 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), 0, 0);
+        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), nullptr, nullptr);
         if (uri)
         {
             size_t const len = strlen(uri);
@@ -261,7 +261,7 @@ size_t wxFileDataObject::GetDataSize() const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), 0, 0);
+        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), nullptr, nullptr);
         if (uri) {
             res += strlen(uri) + 2; // Including "\r\n"
             g_free(uri);
@@ -315,7 +315,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
         // required to give it a trailing zero
         gchar *uri = g_strndup( temp, len );
 
-        gchar *fn = g_filename_from_uri( uri, NULL, NULL );
+        gchar *fn = g_filename_from_uri( uri, nullptr, nullptr );
 
         g_free( uri );
 
@@ -383,7 +383,7 @@ bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 {
     Clear();
 
-    wxCHECK_MSG( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
+    wxCHECK_MSG( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != nullptr,
                  false, wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
 
     m_pngSize = size;
@@ -408,7 +408,7 @@ void wxBitmapDataObject::DoConvertToPng()
     if ( !m_bitmap.IsOk() )
         return;
 
-    wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != NULL,
+    wxCHECK_RET( wxImage::FindHandler(wxBITMAP_TYPE_PNG) != nullptr,
                  wxT("You must call wxImage::AddHandler(new wxPNGHandler); to be able to use clipboard with bitmaps!") );
 
     wxImage image = m_bitmap.ConvertToImage();
@@ -440,7 +440,7 @@ public:
     void SetURL(const wxString& url) { m_url = url; }
 
 
-    virtual size_t GetDataSize() const wxOVERRIDE
+    virtual size_t GetDataSize() const override
     {
         // It is not totally clear whether we should include "\r\n" at the end
         // of the string if there is only one URL or not, but not doing it
@@ -448,7 +448,7 @@ public:
         return strlen(m_url.utf8_str()) + 1;
     }
 
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE
+    virtual bool GetDataHere(void *buf) const override
     {
         char* const dst = static_cast<char*>(buf);
 
@@ -457,7 +457,7 @@ public:
         return true;
     }
 
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE
+    virtual bool SetData(size_t len, const void *buf) override
     {
         const char* const src = static_cast<const char*>(buf);
 
@@ -477,15 +477,15 @@ public:
     }
 
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat&) const override
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const override
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) override
     {
         return SetData(len, buf);
     }

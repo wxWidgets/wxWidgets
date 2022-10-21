@@ -264,7 +264,7 @@ void TokenizerTestCase::StrtokCompat()
         while ( tkz.HasMoreTokens() )
         {
             CPPUNIT_ASSERT_EQUAL( wxString(s), tkz.GetNextToken() );
-            s = wxStrtok(NULL, ttd.delims, &last);
+            s = wxStrtok(nullptr, ttd.delims, &last);
         }
     }
 }

@@ -56,7 +56,7 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxAcceleratorTable::~wxAcceleratorTable()
@@ -80,7 +80,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
 bool wxAcceleratorTable::IsOk() const
 {
-    return (m_refData != NULL);
+    return (m_refData != nullptr);
 }
 
 int wxAcceleratorTable::GetCommand( wxKeyEvent &event )

@@ -34,7 +34,7 @@ void wxBeginBusyCursor(const wxCursor *cursor)
 
 bool wxIsBusy()
 {
-    return QApplication::overrideCursor() != 0;
+    return QApplication::overrideCursor() != nullptr;
 }
 
 void wxEndBusyCursor()

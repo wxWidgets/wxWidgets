@@ -29,7 +29,7 @@ class WXDLLIMPEXP_BASE wxMessageOutput
 public:
     virtual ~wxMessageOutput() { }
 
-    // gets the current wxMessageOutput object (may be NULL during
+    // gets the current wxMessageOutput object (may be null during
     // initialization or shutdown)
     static wxMessageOutput* Get();
 
@@ -97,7 +97,7 @@ public:
     wxMessageOutputStderr(FILE *fp = stderr,
                           const wxMBConv &conv = wxConvWhateverWorks);
 
-    virtual void Output(const wxString& str) wxOVERRIDE;
+    virtual void Output(const wxString& str) override;
 
 protected:
     FILE *m_fp;
@@ -122,7 +122,7 @@ public:
     wxMessageOutputBest(wxMessageOutputFlags flags = wxMSGOUT_PREFER_STDERR)
         : m_flags(flags) { }
 
-    virtual void Output(const wxString& str) wxOVERRIDE;
+    virtual void Output(const wxString& str) override;
 
 private:
     wxMessageOutputFlags m_flags;
@@ -139,7 +139,7 @@ class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 public:
     wxMessageOutputMessageBox() { }
 
-    virtual void Output(const wxString& str) wxOVERRIDE;
+    virtual void Output(const wxString& str) override;
 };
 
 #endif // wxUSE_GUI && wxUSE_MSGDLG
@@ -153,7 +153,7 @@ class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutputStderr
 public:
     wxMessageOutputDebug() { }
 
-    virtual void Output(const wxString& str) wxOVERRIDE;
+    virtual void Output(const wxString& str) override;
 };
 
 // ----------------------------------------------------------------------------
@@ -165,7 +165,7 @@ class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 public:
     wxMessageOutputLog() { }
 
-    virtual void Output(const wxString& str) wxOVERRIDE;
+    virtual void Output(const wxString& str) override;
 };
 
 #endif // _WX_MSGOUT_H_

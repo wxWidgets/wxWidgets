@@ -162,7 +162,7 @@ public:
     // Overridden wxDataViewModel methods.
 
     void GetValue(wxVariant &variant, const wxDataViewItem &item,
-                  unsigned int WXUNUSED(col)) const wxOVERRIDE
+                  unsigned int WXUNUSED(col)) const override
     {
         switch( GetItemID(item) )
         {
@@ -197,18 +197,18 @@ public:
 
     bool SetValue(const wxVariant &WXUNUSED(variant),
                   const wxDataViewItem &WXUNUSED(item),
-                  unsigned int WXUNUSED(col)) wxOVERRIDE
+                  unsigned int WXUNUSED(col)) override
     {
         return false;
     }
 
-    bool HasContainerColumns(const wxDataViewItem &WXUNUSED(item)) const wxOVERRIDE
+    bool HasContainerColumns(const wxDataViewItem &WXUNUSED(item)) const override
     {
         // Always display all the columns, even for the containers.
         return true;
     }
 
-    wxDataViewItem GetParent(const wxDataViewItem &item) const wxOVERRIDE
+    wxDataViewItem GetParent(const wxDataViewItem &item) const override
     {
         switch( GetItemID(item) )
         {
@@ -233,7 +233,7 @@ public:
         return wxDataViewItem();
     }
 
-    bool IsContainer(const wxDataViewItem &item) const wxOVERRIDE
+    bool IsContainer(const wxDataViewItem &item) const override
     {
         switch( GetItemID(item) )
         {
@@ -252,7 +252,7 @@ public:
     }
 
     unsigned int GetChildren(const wxDataViewItem &item,
-                           wxDataViewItemArray &children) const wxOVERRIDE
+                           wxDataViewItemArray &children) const override
     {
         switch( GetItemID(item) )
         {
@@ -328,7 +328,7 @@ public:
 private:
     wxTestItem GetItemID(const wxDataViewItem &dataViewItem) const
     {
-        if ( dataViewItem.GetID() == NULL )
+        if ( dataViewItem.GetID() == nullptr )
             return wxTEST_ITEM_NULL;
         return *static_cast<wxTestItem*>(dataViewItem.GetID());
     }

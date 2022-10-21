@@ -185,7 +185,6 @@ public:
     @library{wxcore}
     @category{misc}
 
-    @nativeimpl{wxmsw}
     @onlyfor{wxmsw}
 
     @see wxFrame::MSWGetTaskBarButton()
@@ -366,7 +365,7 @@ public:
         Constructs a jump list item.
 
         @param parentCategory
-            Category that the jump list item belongs to. Can be NULL if the item
+            Category that the jump list item belongs to. Can be @NULL if the item
             is going to be added to the category later.
         @param type
             The type for this item.
@@ -388,7 +387,7 @@ public:
         @param iconIndex
             The index of the icon, which is specified by iconPath.
     */
-    wxTaskBarJumpListItem(wxTaskBarJumpListCategory *parentCategory = NULL,
+    wxTaskBarJumpListItem(wxTaskBarJumpListCategory *parentCategory = nullptr,
         wxTaskBarJumpListItemType type = wxTASKBAR_JUMP_LIST_SEPARATOR,
         const wxString& title = wxEmptyString,
         const wxString& filePath = wxEmptyString,
@@ -468,7 +467,7 @@ public:
     void SetIconIndex(int iconIndex);
 
     /**
-        Returns the category this jump list item is in, or NULL if this jump
+        Returns the category this jump list item is in, or @NULL if this jump
         list item is not attached.
     */
     wxTaskBarJumpListCategory* GetCategory() const;
@@ -509,12 +508,12 @@ public:
         Constructs the jump list category.
 
         @param parent
-            Jump list that the jump list category belongs to. Can be NULL if
+            Jump list that the jump list category belongs to. Can be @NULL if
             the category is going to be added to the jump list later.
         @param title
             The title of the category.
     */
-    wxTaskBarJumpListCategory(wxTaskBarJumpList *parent = NULL,
+    wxTaskBarJumpListCategory(wxTaskBarJumpList *parent = nullptr,
                               const wxString& title = wxEmptyString);
     virtual ~wxTaskBarJumpListCategory();
 

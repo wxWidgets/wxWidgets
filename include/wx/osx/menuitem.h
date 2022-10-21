@@ -28,23 +28,23 @@ class WXDLLIMPEXP_CORE wxMenuItem: public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
+    virtual void SetItemLabel(const wxString& strName) override;
 
-    virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
-    virtual void Check(bool bDoCheck = true) wxOVERRIDE;
+    virtual void Enable(bool bDoEnable = true) override;
+    virtual void Check(bool bDoCheck = true) override;
 
 #if wxUSE_ACCEL
-    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) wxOVERRIDE;
-    virtual void ClearExtraAccels() wxOVERRIDE;
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) override;
+    virtual void ClearExtraAccels() override;
     void RemoveHiddenItems();
 #endif // wxUSE_ACCEL
 

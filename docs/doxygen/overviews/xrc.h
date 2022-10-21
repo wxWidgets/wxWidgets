@@ -142,7 +142,7 @@ This is how you would use the above simple dialog in your code.
 void MyClass::ShowDialog()
 {
     wxDialog dlg;
-    if (wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+    if (wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "SimpleDialog"))
         dlg.ShowModal();
 }
 @endcode
@@ -165,7 +165,7 @@ the XRCCTRL macro to get a pointer to the child. To expand the previous code:
 void MyClass::ShowDialog()
 {
     wxDialog dlg;
-    if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+    if (!wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "SimpleDialog"))
         return;
 
     wxTextCtrl* pText = XRCCTRL(dlg, "text", wxTextCtrl);
@@ -195,7 +195,7 @@ control to the XRCID macro:
 void MyClass::ShowDialog()
 {
     wxDialog dlg;
-    if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+    if (!wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "SimpleDialog"))
         return;
 
     XRCCTRL(dlg, "text", wxTextCtrl)->Bind(wxEVT_TEXT,
@@ -367,7 +367,7 @@ protected:
 private:
     void InitWidgetsFromXRC()
     {
-        wxXmlResource::Get()->LoadObject(this, NULL, "TestWnd", "wxFrame");
+        wxXmlResource::Get()->LoadObject(this, nullptr, "TestWnd", "wxFrame");
         A = XRCCTRL(*this, "A", wxTextCtrl);
         B = XRCCTRL(*this, "B", wxButton);
     }

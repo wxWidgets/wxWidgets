@@ -144,8 +144,8 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
-    if (!PreCreation( NULL, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
+    if (!PreCreation( nullptr, wxDefaultPosition, wxDefaultSize ) ||
+        !CreateBase( nullptr, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
     {
         wxFAIL_MSG( wxT("wxMenuBar creation failed") );
         return;
@@ -188,12 +188,12 @@ wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long st
 
 wxMenuBar::wxMenuBar(long style)
 {
-    Init(0, NULL, NULL, style);
+    Init(0, nullptr, nullptr, style);
 }
 
 wxMenuBar::wxMenuBar()
 {
-    Init(0, NULL, NULL, 0);
+    Init(0, nullptr, nullptr, 0);
 }
 
 // recursive helpers for wxMenuBar::Attach() and Detach(): they are called to
@@ -381,10 +381,10 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     wxMenu *menuOld = Remove(pos);
     if ( menuOld && !Insert(pos, menu, title) )
     {
-        return NULL;
+        return nullptr;
     }
 
-    // either Insert() succeeded or Remove() failed and menuOld is NULL
+    // either Insert() succeeded or Remove() failed and menuOld is null
     return menuOld;
 }
 
@@ -392,21 +392,21 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
-        return NULL;
+        return nullptr;
 
     // remove item from menubar before destroying item to avoid spurious
     // warnings from Ubuntu libdbusmenu
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
     // remove submenu to avoid destroying it when item is destroyed
 #ifdef __WXGTK3__
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), nullptr);
 #else
     gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu->m_owner));
 #endif
 
     gtk_widget_destroy( menu->m_owner );
     g_object_unref(menu->m_owner);
-    menu->m_owner = NULL;
+    menu->m_owner = nullptr;
 
     if ( m_menuBarFrame )
         DetachFromFrame( menu, m_menuBarFrame );
@@ -457,7 +457,7 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
     wxMenuItem* result = menu->FindChildItem(id);
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while ( node && result == NULL )
+    while ( node && result == nullptr )
     {
         wxMenuItem *item = node->GetData();
         if (item->IsSubMenu())
@@ -472,9 +472,9 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 
 wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 {
-    wxMenuItem* result = 0;
+    wxMenuItem* result = nullptr;
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-    while (node && result == 0)
+    while (node && result == nullptr)
     {
         wxMenu *menu = node->GetData();
         result = FindMenuItemByIdRecursive( menu, id );
@@ -483,7 +483,7 @@ wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 
     if ( menuForItem )
     {
-        *menuForItem = result ? result->GetMenu() : NULL;
+        *menuForItem = result ? result->GetMenu() : nullptr;
     }
 
     return result;
@@ -639,7 +639,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        wxMenu *subMenu)
           : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
-    m_menuItem = NULL;
+    m_menuItem = nullptr;
 }
 
 wxMenuItem::~wxMenuItem()
@@ -851,7 +851,7 @@ void wxMenu::Init()
     m_menu = gtk_menu_new();
     g_object_ref_sink(m_menu);
 
-    m_owner = NULL;
+    m_owner = nullptr;
 
 #ifndef __WXGTK4__
     // Tearoffs are entries, just like separators. So if we want this
@@ -952,7 +952,7 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
             {
                 // See if we need to create a new radio group for this item or
                 // add it to an existing one.
-                wxMenuItem* radioGroupItem = NULL;
+                wxMenuItem* radioGroupItem = nullptr;
 
                 const size_t numItems = GetMenuItemCount();
                 const size_t n = pos == -1 ? numItems - 1 : size_t(pos);
@@ -968,7 +968,7 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
                     }
                 }
 
-                if (radioGroupItem == NULL && n != numItems - 1)
+                if (radioGroupItem == nullptr && n != numItems - 1)
                 {
                     wxMenuItem* const itemNext = FindItemByPosition(n + 1);
                     if ( itemNext->GetKind() == wxITEM_RADIO )
@@ -979,7 +979,7 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
                     }
                 }
 
-                GSList* group = NULL;
+                GSList* group = nullptr;
                 if ( radioGroupItem )
                 {
                     group = gtk_radio_menu_item_get_group(
@@ -1010,7 +1010,7 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
                 if (stockid)
                     // use stock bitmap for this item if available on the assumption
                     // that it never hurts to follow GTK+ conventions more closely
-                    menuItem = gtk_image_menu_item_new_from_stock(stockid, NULL);
+                    menuItem = gtk_image_menu_item_new_from_stock(stockid, nullptr);
                 else
                     menuItem = gtk_menu_item_new_with_label("");
             }
@@ -1063,7 +1063,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
         GtkAppend(mitem);
         return mitem;
     }
-    return NULL;
+    return nullptr;
 }
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
@@ -1073,26 +1073,26 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
         GtkAppend(item, int(pos));
         return item;
     }
-    return NULL;
+    return nullptr;
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
     if ( !wxMenuBase::DoRemove(item) )
-        return NULL;
+        return nullptr;
 
     GtkWidget * const mitem = item->GetMenuItem();
 
     g_signal_handlers_disconnect_by_data(mitem, item);
 
 #ifdef __WXGTK3__
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), nullptr);
 #else
     gtk_menu_item_remove_submenu(GTK_MENU_ITEM(mitem));
 #endif
 
     gtk_widget_destroy(mitem);
-    item->SetMenuItem(NULL);
+    item->SetMenuItem(nullptr);
 
     return item;
 }
@@ -1581,7 +1581,7 @@ const char *wxGetStockGtkID(wxWindowID id)
 
     #undef STOCKITEM
 
-    return NULL;
+    return nullptr;
 }
 wxGCC_WARNING_RESTORE(cast-qual)
 wxGCC_WARNING_RESTORE()

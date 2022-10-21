@@ -10,7 +10,7 @@
 
 // not all ports have support for EVT_CONTEXT_MENU yet, don't define
 // USE_CONTEXT_MENU for those which don't
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXX11__)
     #define USE_CONTEXT_MENU 0
 #else
     #define USE_CONTEXT_MENU 1
@@ -22,7 +22,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 private:
     wxDECLARE_NO_COPY_CLASS(MyApp);
@@ -74,8 +74,8 @@ public:
 
     void OnRightClick(wxMouseEvent& event);
 
-    virtual void CheckItem(long item, bool check) wxOVERRIDE;
-    virtual bool IsItemChecked(long item) const wxOVERRIDE;
+    virtual void CheckItem(long item, bool check) override;
+    virtual bool IsItemChecked(long item) const override;
 
 private:
     void ShowContextMenu(const wxPoint& pos, long item);
@@ -84,10 +84,10 @@ private:
     void LogEvent(const wxListEvent& event, const wxString& eventName);
     void LogColEvent(const wxListEvent& event, const wxString& eventName);
 
-    virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
-    virtual bool OnGetItemIsChecked(long item) const wxOVERRIDE;
-    virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
-    virtual wxItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
+    virtual wxString OnGetItemText(long item, long column) const override;
+    virtual bool OnGetItemIsChecked(long item) const override;
+    virtual int OnGetItemColumnImage(long item, long column) const override;
+    virtual wxItemAttr *OnGetItemAttr(long item) const override;
 
     long m_updated;
 

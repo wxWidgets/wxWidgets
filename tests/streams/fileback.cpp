@@ -30,7 +30,7 @@ public:
     TestStream(const void *buf, size_t size)
         : wxMemoryInputStream(buf, size) { }
 
-    wxFileOffset GetLength() const wxOVERRIDE { return wxInvalidOffset; }
+    wxFileOffset GetLength() const override { return wxInvalidOffset; }
 };
 
 

@@ -14,14 +14,8 @@
 #ifndef _WX_FEATURES_H_
 #define _WX_FEATURES_H_
 
-/*  radio menu items are currently not implemented in wxMotif, use this
-    symbol (kept for compatibility from the time when they were not implemented
-    under other platforms as well) to test for this */
-#if !defined(__WXMOTIF__)
-    #define wxHAS_RADIO_MENU_ITEMS
-#else
-    #undef wxHAS_RADIO_MENU_ITEMS
-#endif
+/* always defined now, kept only for compatibility. */
+#define wxHAS_RADIO_MENU_ITEMS
 
 /*  the raw keyboard codes are generated under wxGTK and wxMSW only */
 #if defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__) \
@@ -33,7 +27,7 @@
 
 /*  taskbar is implemented in the major ports */
 #if defined(__WXMSW__) \
-    || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) \
+    || defined(__WXGTK__) || defined(__WXX11__) \
     || defined(__WXOSX_MAC__) || defined(__WXQT__)
     #define wxHAS_TASK_BAR_ICON
 #else
@@ -64,22 +58,21 @@
 
 /* This is defined when the underlying toolkit handles tab traversal natively.
    Otherwise we implement it ourselves in wxControlContainer. */
-#if defined(__WXGTK20__) || defined(__WXQT__)
+#if defined(__WXGTK__) || defined(__WXQT__)
     #define wxHAS_NATIVE_TAB_TRAVERSAL
 #endif
 
 /* This is defined when the compiler provides some type of extended locale
    functions.  Otherwise, we implement them ourselves to only support the
    'C' locale */
-#if defined(HAVE_LOCALE_T) || \
-    (wxCHECK_VISUALC_VERSION(8))
+#if defined(HAVE_LOCALE_T) || defined(__VISUALC__)
     #define wxHAS_XLOCALE_SUPPORT
 #else
     #undef wxHAS_XLOCALE_SUPPORT
 #endif
 
 /* Direct access to bitmap data is not implemented in all ports yet */
-#if defined(__WXGTK20__) || defined(__WXMAC__) || defined(__WXDFB__) || \
+#if defined(__WXGTK__) || defined(__WXMAC__) || defined(__WXDFB__) || \
         defined(__WXMSW__) || defined(__WXQT__)
 
     /*

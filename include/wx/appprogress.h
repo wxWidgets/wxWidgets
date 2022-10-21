@@ -37,17 +37,17 @@ private:
     class wxAppProgressIndicator : public wxAppProgressIndicatorBase
     {
     public:
-        wxAppProgressIndicator(wxWindow* WXUNUSED(parent) = NULL,
+        wxAppProgressIndicator(wxWindow* WXUNUSED(parent) = nullptr,
                                int WXUNUSED(maxValue) = 100)
         {
         }
 
-        virtual bool IsAvailable() const wxOVERRIDE { return false; }
+        virtual bool IsAvailable() const override { return false; }
 
-        virtual void SetValue(int WXUNUSED(value)) wxOVERRIDE { }
-        virtual void SetRange(int WXUNUSED(range)) wxOVERRIDE { }
-        virtual void Pulse() wxOVERRIDE { }
-        virtual void Reset() wxOVERRIDE { }
+        virtual void SetValue(int WXUNUSED(value)) override { }
+        virtual void SetRange(int WXUNUSED(range)) override { }
+        virtual void Pulse() override { }
+        virtual void Reset() override { }
     };
 #endif
 

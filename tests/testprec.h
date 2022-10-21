@@ -7,6 +7,9 @@
 // This needs to be included before catch.hpp to be taken into account.
 #include "testdate.h"
 
+// This needs to be defined before including catch.hpp for PCH support.
+#define CATCH_CONFIG_ALL_PARTS
+
 #include "wx/catch_cppunit.h"
 
 // Custom test macro that is only defined when wxUIActionSimulator is available
@@ -28,7 +31,7 @@
     #define wxHAVE_U_ESCAPE
 
     // and disable warning that using them results in with MSVC 8+
-    #if wxCHECK_VISUALC_VERSION(8)
+    #if defined(__VISUALC__)
         // universal-character-name encountered in source
         #pragma warning(disable:4428)
     #endif
@@ -48,8 +51,7 @@
         (__MINGW64_VERSION_MAJOR == 5 && __MINGW64_VERSION_MINOR == 0 && __MINGW64_VERSION_BUGFIX >= 4)))
 #define wxMINGW_WITH_FIXED_MANTISSA
 #endif
-#if (defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(14)) || \
-        (defined(__MINGW32__) && !defined(wxMINGW_WITH_FIXED_MANTISSA) && \
+#if (defined(__MINGW32__) && !defined(wxMINGW_WITH_FIXED_MANTISSA) && \
         (!defined(__USE_MINGW_ANSI_STDIO) || !__USE_MINGW_ANSI_STDIO))
     #define wxDEFAULT_MANTISSA_SIZE_3
 #endif

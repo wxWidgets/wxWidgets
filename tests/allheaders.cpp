@@ -18,7 +18,7 @@
     #define CHECK_GCC_VERSION(major, minor) 0
 #endif
 
-#if CHECK_GCC_VERSION(4, 6) || defined(__clang__)
+#if defined(__GNUC__) || defined(__clang__)
     // As above, we can't reuse wxCONCAT() and wxSTRINGIZE macros from wx/cpp.h
     // here, so define their equivalents here.
     #define CONCAT_HELPER(x, y) x ## y
@@ -32,26 +32,27 @@
     #define WARNING_TURN_OFF(comp, warn) \
         _Pragma(STRINGIZE(comp diagnostic ignored STRINGIZE(CONCAT(-W,warn))))
 
-    #if CHECK_GCC_VERSION(4, 6)
-        #define GCC_TURN_ON(warn) WARNING_TURN_ON(GCC, warn)
-        #define GCC_TURN_OFF(warn) WARNING_TURN_OFF(GCC, warn)
-    #elif defined(__clang__)
+    // Test for clang before gcc as clang defines __GNUC__ too.
+    #if defined(__clang__)
         #define CLANG_TURN_ON(warn) WARNING_TURN_ON(clang, warn)
         #define CLANG_TURN_OFF(warn) WARNING_TURN_OFF(clang, warn)
+    #elif defined(__GNUC__)
+        #define GCC_TURN_ON(warn) WARNING_TURN_ON(GCC, warn)
+        #define GCC_TURN_OFF(warn) WARNING_TURN_OFF(GCC, warn)
     #endif
 #endif
 
 // We have to include this one first in order to check for wxUSE_XXX below.
 #include "wx/setup.h"
 
-// Normally this is done in wx/defs.h, but as we don't include it here, we need
-// to do it manually to avoid warnings inside the standard headers included
-// from catch.hpp.
+// Normally this is done in include/wx/msw/gccpriv.h included from wx/defs.h,
+// but as we don't include it here, we need to do it manually to avoid warnings
+// inside the standard headers included from catch.hpp.
 #if defined(__CYGWIN__) && defined(__WINDOWS__)
     #define __USE_W32_SOCKETS
 #endif
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 #if defined(__WXQT__)
     // Include this one before enabling the warnings as doing it later, as it
@@ -83,9 +84,7 @@
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(abi)
 #endif // 6.1
-#if CHECK_GCC_VERSION(4,8)
     GCC_TURN_ON(abi-tag)
-#endif // 4.8
     GCC_TURN_ON(address)
     GCC_TURN_ON(aggregate-return)
 #if CHECK_GCC_VERSION(7,1)
@@ -124,9 +123,7 @@
 #if CHECK_GCC_VERSION(4,9)
     GCC_TURN_ON(date-time)
 #endif // 4.9
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(delete-non-virtual-dtor)
-#endif // 4.7
 #if CHECK_GCC_VERSION(9,1)
     GCC_TURN_ON(deprecated-copy)
 #endif // 9.1
@@ -156,24 +153,18 @@
 #if CHECK_GCC_VERSION(5,1)
     GCC_TURN_ON(format-signedness)
 #endif // 5.1
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(format-zero-length)
-#endif // 4.7
     GCC_TURN_ON(ignored-qualifiers)
     GCC_TURN_ON(init-self)
     GCC_TURN_ON(inline)
     GCC_TURN_ON(invalid-pch)
-#if CHECK_GCC_VERSION(4,8)
     GCC_TURN_ON(literal-suffix)
-#endif // 4.8
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(logical-op)
 #endif // 6.1
     GCC_TURN_ON(long-long)
     GCC_TURN_ON(main)
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(maybe-uninitialized)
-#endif // 4.7
 #if CHECK_GCC_VERSION(10,1)
     GCC_TURN_ON(mismatched-tags)
 #endif // 10.1
@@ -187,17 +178,13 @@
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(namespaces)
 #endif // 6.1
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(narrowing)
-#endif // 4.7
     GCC_TURN_ON(noexcept)
 #if CHECK_GCC_VERSION(7,1)
     GCC_TURN_ON(noexcept-type)
 #endif // 7.1
     GCC_TURN_ON(non-virtual-dtor)
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(nonnull)
-#endif // 4.7
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(null-dereference)
 #endif // 6.1
@@ -246,9 +233,7 @@
     GCC_TURN_ON(suggest-attribute=cold)
 #endif // 8.1
     GCC_TURN_ON(suggest-attribute=const)
-#if CHECK_GCC_VERSION(4,8)
     GCC_TURN_ON(suggest-attribute=format)
-#endif // 4.8
 #if CHECK_GCC_VERSION(8,1)
     GCC_TURN_ON(suggest-attribute=malloc)
 #endif // 8.1
@@ -283,20 +268,14 @@
     GCC_TURN_ON(unused-but-set-variable)
     GCC_TURN_ON(unused-function)
     GCC_TURN_ON(unused-label)
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(unused-local-typedefs)
-#endif // 4.7
     GCC_TURN_ON(unused-macros)
     GCC_TURN_ON(unused-parameter)
     GCC_TURN_ON(unused-value)
     GCC_TURN_ON(unused-variable)
-#if CHECK_GCC_VERSION(4,8)
     GCC_TURN_ON(useless-cast)
-#endif // 4.8
     GCC_TURN_ON(variadic-macros)
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(vector-operation-performance)
-#endif // 4.7
 #if CHECK_GCC_VERSION(6,1)
     GCC_TURN_ON(virtual-inheritance)
 #endif // 6.1
@@ -306,9 +285,7 @@
 #endif // 10.1
     GCC_TURN_ON(volatile-register-var)
     GCC_TURN_ON(write-strings)
-#if CHECK_GCC_VERSION(4,7)
     GCC_TURN_ON(zero-as-null-pointer-constant)
-#endif // 4.7
     // }}}
 
     #undef GCC_TURN_ON
@@ -324,19 +301,11 @@
     GCC_TURN_OFF(sign-conversion)
 
     GCC_TURN_OFF(old-style-cast)
-#if CHECK_GCC_VERSION(4,8)
     GCC_TURN_OFF(useless-cast)
-#endif // 4.8
 
 #if CHECK_GCC_VERSION(10,1)
     GCC_TURN_OFF(redundant-tags) // "struct tm" triggers this
 #endif // 10.1
-
-    // This one is given for NULL, and not just literal 0, up to gcc 10, and so
-    // has to remain disabled for as long as we use any NULLs in our code.
-#if CHECK_GCC_VERSION(4,7) && !CHECK_GCC_VERSION(10,1)
-    GCC_TURN_OFF(zero-as-null-pointer-constant)
-#endif
 
     // These ones could be useful to explore, but for now we don't use "final"
     // at all anywhere.
@@ -356,9 +325,7 @@
 
     // This one is given whenever inheriting from std:: classes without using
     // C++11 ABI tag explicitly, probably harmless.
-#if CHECK_GCC_VERSION(4,8)
     GCC_TURN_OFF(abi-tag)
-#endif // 4.8
 
     // This can be used to ask the compiler to explain why some function is not
     // inlined, but it's perfectly normal for some functions not to be inlined.
@@ -389,14 +356,6 @@
     CLANG_TURN_ON(all)
     CLANG_TURN_ON(extra)
     CLANG_TURN_ON(pedantic)
-
-    // We use long long, variadic macros and empty macro arguments (which are a
-    // C99 extension) even in C++98 builds.
-    #if __cplusplus < 201103L
-        CLANG_TURN_OFF(c++11-long-long)
-        CLANG_TURN_OFF(variadic-macros)
-        CLANG_TURN_OFF(c99-extensions)
-    #endif
 #endif // clang
 
 
@@ -430,7 +389,7 @@ struct DerivedWithoutOverride : Base
 
 struct DerivedWithOverride : Base
 {
-    virtual void Foo() wxOVERRIDE { }
+    virtual void Foo() override { }
 
     void OnIdle(wxIdleEvent&) { }
 

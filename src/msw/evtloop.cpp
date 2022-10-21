@@ -46,7 +46,7 @@
 // GUI wxEventLoop implementation
 // ============================================================================
 
-wxWindowMSW *wxGUIEventLoop::ms_winCritical = NULL;
+wxWindowMSW *wxGUIEventLoop::ms_winCritical = nullptr;
 
 bool wxGUIEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
 {
@@ -78,7 +78,7 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
             // If the control has a wx parent, break and give the parent a chance
             // to process the window message
             wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
-            if (wndThis != NULL)
+            if (wndThis != nullptr)
                 break;
         }
 
@@ -100,7 +100,7 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         // stop an endless stream of WM_PAINTs which would have resulted if we
         // didn't validate the invalidated part of the window
         if ( msg->message == WM_PAINT )
-            ::ValidateRect(hwnd, NULL);
+            ::ValidateRect(hwnd, nullptr);
 
         return true;
     }
@@ -395,7 +395,7 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
         else
         {
             // remove the message and store it
-            ::GetMessage(&msg, NULL, 0, 0);
+            ::GetMessage(&msg, nullptr, 0, 0);
             m_arrMSG.Add(msg);
         }
     }

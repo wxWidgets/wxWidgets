@@ -58,7 +58,7 @@
 // ----------------------------------------------------------------------------
 
 // the tooltip parent window
-WXHWND wxToolTip::ms_hwndTT = (WXHWND)NULL;
+WXHWND wxToolTip::ms_hwndTT = nullptr;
 
 // new tooltip maximum width, default value is set on first call to wxToolTip::Add()
 int wxToolTip::ms_maxWidth = 0;
@@ -66,7 +66,7 @@ int wxToolTip::ms_maxWidth = 0;
 #if wxUSE_TTM_WINDOWFROMPOINT
 
 // the tooltip window proc
-static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
+static WNDPROC gs_wndprocToolTip = nullptr;
 
 #endif // wxUSE_TTM_WINDOWFROMPOINT
 
@@ -140,12 +140,12 @@ public:
     {
     }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxToolTip::DeleteToolTipCtrl();
     }
@@ -280,7 +280,7 @@ void wxToolTip::DeleteToolTipCtrl()
     if ( ms_hwndTT )
     {
         ::DestroyWindow((HWND)ms_hwndTT);
-        ms_hwndTT = (WXHWND)NULL;
+        ms_hwndTT = nullptr;
     }
 }
 
@@ -304,13 +304,13 @@ WXHWND wxToolTip::GetToolTipCtrl()
         // active) and we don't want to strip "&"s from them
         ms_hwndTT = (WXHWND)::CreateWindowEx(exflags,
                                              TOOLTIPS_CLASS,
-                                             (LPCTSTR)NULL,
+                                             nullptr,
                                              TTS_ALWAYSTIP | TTS_NOPREFIX,
                                              CW_USEDEFAULT, CW_USEDEFAULT,
                                              CW_USEDEFAULT, CW_USEDEFAULT,
-                                             NULL, (HMENU)NULL,
+                                             nullptr, nullptr,
                                              wxGetInstance(),
-                                             NULL);
+                                             nullptr);
        if ( ms_hwndTT )
        {
            HWND hwnd = (HWND)ms_hwndTT;
@@ -330,7 +330,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
 /* static */
 void wxToolTip::UpdateVisibility()
 {
-    wxToolInfo ti(NULL, 0, wxRect());
+    wxToolInfo ti(nullptr, 0, wxRect());
     ti.uFlags = 0;
 
     if ( !SendTooltipMessage(ms_hwndTT, TTM_GETCURRENTTOOL, &ti) )
@@ -376,8 +376,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
 wxToolTip::wxToolTip(const wxString &tip)
          : m_text(tip)
 {
-    m_window = NULL;
-    m_others = NULL;
+    m_window = nullptr;
+    m_others = nullptr;
 
     // make sure m_rect.IsEmpty() == true
     m_rect.SetWidth(0);
@@ -390,8 +390,8 @@ wxToolTip::wxToolTip(const wxString &tip)
 wxToolTip::wxToolTip(wxWindow* win, unsigned int id, const wxString &tip, const wxRect& rc)
          : m_text(tip), m_rect(rc), m_id(id)
 {
-    m_window = NULL;
-    m_others = NULL;
+    m_window = nullptr;
+    m_others = nullptr;
 
     SetWindow(win);
 }
@@ -584,7 +584,7 @@ bool wxToolTip::AdjustMaxWidth()
     MemoryHDC hdc;
     if ( !hdc )
     {
-        wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
+        wxLogLastError(wxT("CreateCompatibleDC(nullptr)"));
     }
 
     if ( !SelectObject(hdc, hfont) )

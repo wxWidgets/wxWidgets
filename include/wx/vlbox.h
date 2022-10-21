@@ -77,7 +77,7 @@ public:
     size_t GetItemCount() const { return GetRowCount(); }
 
     // does this control use multiple selection?
-    bool HasMultipleSelection() const { return m_selStore != NULL; }
+    bool HasMultipleSelection() const { return m_selStore != nullptr; }
 
     // get the currently selected item or wxNOT_FOUND if there is no selection
     //
@@ -194,7 +194,7 @@ public:
     void RefreshSelected();
 
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
+    virtual wxVisualAttributes GetDefaultAttributes() const override
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -203,7 +203,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_THEME; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_THEME; }
 
     // the derived class must implement this function to actually draw the item
     // with the given index on the provided DC
@@ -233,7 +233,7 @@ protected:
     // allows us to add borders to the items easily
     //
     // this function is not supposed to be overridden by the derived classes
-    virtual wxCoord OnGetRowHeight(size_t line) const wxOVERRIDE;
+    virtual wxCoord OnGetRowHeight(size_t line) const override;
 
 
     // event handlers
@@ -283,7 +283,7 @@ protected:
 private:
     // the current item or wxNOT_FOUND
     //
-    // if m_selStore == NULL this is also the selected item, otherwise the
+    // if m_selStore == nullptr this is also the selected item, otherwise the
     // selections are managed by m_selStore
     int m_current;
 
@@ -294,7 +294,7 @@ private:
     // always wxNOT_FOUND for single selection listboxes
     int m_anchor;
 
-    // the object managing our selected items if not NULL
+    // the object managing our selected items if not nullptr
     wxSelectionStore *m_selStore;
 
     // margins

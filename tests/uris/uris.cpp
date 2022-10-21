@@ -421,7 +421,7 @@ void URITestCase::URLCompat()
         CPPUNIT_ASSERT(urlProblem.GetError() == wxURL_NOERR);
 
         wxInputStream* is = urlProblem.GetInputStream();
-        CPPUNIT_ASSERT(is != NULL);
+        CPPUNIT_ASSERT(is != nullptr);
 
         wxFile fOut(wxT("test.html"), wxFile::write);
         wxASSERT(fOut.IsOpened());
@@ -453,7 +453,7 @@ void URITestCase::URLProxy()
     wxURL::SetDefaultProxy(wxT("fol.singnet.com.sg:8080"));
     wxURL url2(wxT("http://server-name/path/to/file?query_data=value"));
     wxInputStream *data = url2.GetInputStream();
-    CPPUNIT_ASSERT(data != NULL);
+    CPPUNIT_ASSERT(data != nullptr);
 }
 #endif // wxUSE_PROTOCOL_HTTP
 

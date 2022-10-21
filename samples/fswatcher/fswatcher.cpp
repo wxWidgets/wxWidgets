@@ -70,7 +70,7 @@ class MyApp : public wxApp
 {
 public:
     // 'Main program' equivalent: the program execution "starts" here
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         if ( !wxApp::OnInit() )
             return false;
@@ -86,7 +86,7 @@ public:
     }
 
     // create the file system watcher here, because it needs an active loop
-    virtual void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop)) wxOVERRIDE
+    virtual void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop)) override
     {
         if ( m_frame->CreateWatcherIfNecessary() )
         {
@@ -95,7 +95,7 @@ public:
         }
     }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override
     {
         wxApp::OnInitCmdLine(parser);
         parser.AddParam("directory to watch",
@@ -103,7 +103,7 @@ public:
                         wxCMD_LINE_PARAM_OPTIONAL);
     }
 
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override
     {
         if ( !wxApp::OnCmdLineParsed(parser) )
             return false;
@@ -135,8 +135,8 @@ wxIMPLEMENT_APP(MyApp);
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-    : wxFrame(NULL, wxID_ANY, title),
-      m_watcher(NULL), m_followLinks(false)
+    : wxFrame(nullptr, wxID_ANY, title),
+      m_watcher(nullptr), m_followLinks(false)
 {
     SetIcon(wxICON(sample));
 

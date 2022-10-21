@@ -21,15 +21,15 @@
 // General purpose functions and macros
 // ============================================================================
 
-// release the interface pointer (if !NULL)
+// release the interface pointer (if non-null)
 inline void ReleaseInterface(IUnknown *pIUnk)
 {
-  if ( pIUnk != NULL )
+  if ( pIUnk != nullptr )
     pIUnk->Release();
 }
 
-// release the interface pointer (if !NULL) and make it NULL
-#define   RELEASE_AND_NULL(p)   if ( (p) != NULL ) { p->Release(); p = NULL; };
+// release the interface pointer (if non-null) and set it to nullptr
+#define   RELEASE_AND_NULL(p)   if ( (p) != nullptr ) { p->Release(); p = nullptr; };
 
 // return true if the iid is in the array
 extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
@@ -85,9 +85,9 @@ private:
 
 #define   DECLARE_IUNKNOWN_METHODS                                            \
   public:                                                                     \
-    STDMETHODIMP          QueryInterface(REFIID, void **) wxOVERRIDE;         \
-    STDMETHODIMP_(ULONG)  AddRef() wxOVERRIDE;                                \
-    STDMETHODIMP_(ULONG)  Release() wxOVERRIDE;                               \
+    STDMETHODIMP          QueryInterface(REFIID, void **) override;         \
+    STDMETHODIMP_(ULONG)  AddRef() override;                                \
+    STDMETHODIMP_(ULONG)  Release() override;                               \
   private:                                                                    \
     static  const IID    *ms_aIids[];                                         \
     wxAutoULong           m_cRef
@@ -113,7 +113,7 @@ private:
       return S_OK;                                                            \
     }                                                                         \
     else {                                                                    \
-      *ppv = NULL;                                                            \
+      *ppv = nullptr;                                                            \
                                                                               \
       return (HRESULT) E_NOINTERFACE;                                         \
     }                                                                         \

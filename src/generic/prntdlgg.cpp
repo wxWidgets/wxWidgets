@@ -208,9 +208,9 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
     choices[0] = _("All");
     choices[1] = _("Pages");
 
-    m_fromText = NULL;
-    m_toText = NULL;
-    m_rangeRadioBox = NULL;
+    m_fromText = nullptr;
+    m_toText = nullptr;
+    m_rangeRadioBox = nullptr;
 
     if (m_printDialogData.GetFromPage() != 0)
     {
@@ -760,7 +760,7 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
         if (selectedItem != -1)
         {
             wxPrintPaperType *paper = wxThePrintPaperDatabase->Item(selectedItem);
-            if (paper != NULL)
+            if (paper != nullptr)
               m_printData.SetPaperId( paper->GetId());
         }
     }
@@ -911,7 +911,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
     }
     else
     {
-        m_printerButton = NULL;
+        m_printerButton = nullptr;
     }
 
     //  if (m_printData.GetEnableHelp())

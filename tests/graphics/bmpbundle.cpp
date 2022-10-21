@@ -160,7 +160,7 @@ public:
     {
     }
 
-    bool match(const BitmapAtScale& bitmapAtScale) const wxOVERRIDE
+    bool match(const BitmapAtScale& bitmapAtScale) const override
     {
         const wxBitmap& bmp = bitmapAtScale.bitmap;
 
@@ -183,7 +183,7 @@ public:
         return m_diffDesc.empty();
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         return m_diffDesc.utf8_string();
     }
@@ -386,6 +386,17 @@ TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
     wxBitmapBundle b = wxBitmapBundle::FromSVGFile("horse.svg", size);
     REQUIRE( b.IsOk() );
     CHECK( b.GetDefaultSize() == size );
+}
+
+// This can be used to test loading an arbitrary image file by setting the
+// environment variable WX_TEST_IMAGE_PATH to point to it.
+TEST_CASE("BitmapBundle::Load", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_SVG", &path) );
+
+    wxBitmapBundle bb = wxBitmapBundle::FromSVGFile(path, wxSize(32, 32));
+    REQUIRE( bb.IsOk() );
 }
 
 #endif // wxHAS_SVG

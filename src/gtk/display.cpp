@@ -47,16 +47,16 @@ class wxDisplayImplGTK : public wxDisplayImpl
     typedef wxDisplayImpl base_type;
 public:
     wxDisplayImplGTK(unsigned i);
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
-    virtual double GetScaleFactor() const wxOVERRIDE;
+    virtual wxRect GetGeometry() const override;
+    virtual wxRect GetClientArea() const override;
+    virtual int GetDepth() const override;
+    virtual double GetScaleFactor() const override;
 
 #if wxUSE_DISPLAY
-    virtual bool IsPrimary() const wxOVERRIDE;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual bool IsPrimary() const override;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
+    virtual wxVideoMode GetCurrentMode() const override;
+    virtual bool ChangeMode(const wxVideoMode& mode) override;
 #endif // wxUSE_DISPLAY
 
     GdkMonitor* const m_monitor;
@@ -67,10 +67,10 @@ public:
 class wxDisplayFactoryGTK: public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
-    virtual int GetFromWindow(const wxWindow* win) wxOVERRIDE;
+    virtual wxDisplayImpl* CreateDisplay(unsigned n) override;
+    virtual unsigned GetCount() override;
+    virtual int GetFromPoint(const wxPoint& pt) override;
+    virtual int GetFromWindow(const wxWindow* win) override;
 };
 
 wxDisplayImpl* wxDisplayFactoryGTK::CreateDisplay(unsigned n)
@@ -208,7 +208,7 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
 {
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 #if GTK_CHECK_VERSION(3,4,0)
-    if (gtk_check_version(3,4,0) == NULL)
+    if (gtk_check_version(3,4,0) == nullptr)
         gdk_screen_get_monitor_workarea(screen, monitor, dest);
     else
 #endif
@@ -240,18 +240,18 @@ class wxDisplayImplGTK : public wxDisplayImpl
     typedef wxDisplayImpl base_type;
 public:
     wxDisplayImplGTK(unsigned i);
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
+    virtual wxRect GetGeometry() const override;
+    virtual wxRect GetClientArea() const override;
+    virtual int GetDepth() const override;
 #if GTK_CHECK_VERSION(3,10,0)
-    virtual double GetScaleFactor() const wxOVERRIDE;
+    virtual double GetScaleFactor() const override;
 #endif // GTK+ 3.10
 
 #if wxUSE_DISPLAY
-    virtual bool IsPrimary() const wxOVERRIDE;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual bool IsPrimary() const override;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
+    virtual wxVideoMode GetCurrentMode() const override;
+    virtual bool ChangeMode(const wxVideoMode& mode) override;
 #endif // wxUSE_DISPLAY
 
     GdkScreen* const m_screen;
@@ -261,10 +261,10 @@ public:
 class wxDisplayFactoryGTK: public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
-    virtual int GetFromWindow(const wxWindow* win) wxOVERRIDE;
+    virtual wxDisplayImpl* CreateDisplay(unsigned n) override;
+    virtual unsigned GetCount() override;
+    virtual int GetFromPoint(const wxPoint& pt) override;
+    virtual int GetFromWindow(const wxWindow* win) override;
 };
 
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
@@ -334,7 +334,7 @@ int wxDisplayImplGTK::GetDepth() const
 #if GTK_CHECK_VERSION(3,10,0)
 double wxDisplayImplGTK::GetScaleFactor() const
 {
-    if ( gtk_check_version(3,10,0) == NULL )
+    if ( gtk_check_version(3,10,0) == nullptr )
         return gdk_screen_get_monitor_scale_factor(m_screen, m_index);
 
     return 1.0;

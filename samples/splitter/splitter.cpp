@@ -73,7 +73,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
@@ -164,7 +164,7 @@ public:
     MyCanvas(wxWindow* parent, bool mirror);
     virtual ~MyCanvas(){}
 
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
 
 private:
     bool m_mirror;
@@ -226,7 +226,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxSplitterWindow sample",
+       : wxFrame(nullptr, wxID_ANY, "wxSplitterWindow sample",
                  wxDefaultPosition, wxSize(420, 300))
 {
     m_lockSash = false;
@@ -342,7 +342,7 @@ MyFrame::MyFrame()
     SetStatusText("Min pane size = 0", 1);
 #endif // wxUSE_STATUSBAR
 
-    m_replacewindow = NULL;
+    m_replacewindow = nullptr;
 }
 
 MyFrame::~MyFrame()
@@ -367,7 +367,7 @@ void MyFrame::OnSplitHorizontal(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(true);
     m_right->Show(true);
     m_splitter->SplitHorizontally( m_left, m_right );
-    m_replacewindow = NULL;
+    m_replacewindow = nullptr;
 
 #if wxUSE_STATUSBAR
     SetStatusText("Splitter split horizontally", 1);
@@ -381,7 +381,7 @@ void MyFrame::OnSplitVertical(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(true);
     m_right->Show(true);
     m_splitter->SplitVertically( m_left, m_right );
-    m_replacewindow = NULL;
+    m_replacewindow = nullptr;
 
 #if wxUSE_STATUSBAR
     SetStatusText("Splitter split vertically", 1);
@@ -445,7 +445,7 @@ void MyFrame::OnSetMinSize(wxCommandEvent& WXUNUSED(event) )
     if ( str.empty() )
         return;
 
-    int minsize = wxStrtol( str, (wxChar**)NULL, 10 );
+    int minsize = wxStrtol( str, (wxChar**)nullptr, 10 );
     m_splitter->SetMinimumPaneSize(minsize);
 #if wxUSE_STATUSBAR
     str.Printf( "Min pane size = %d", minsize);
@@ -474,7 +474,7 @@ void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
     if ( str.empty() )
         return;
 
-    double gravity = wxStrtod( str, (wxChar**)NULL);
+    double gravity = wxStrtod( str, (wxChar**)nullptr);
     m_splitter->SetSashGravity(gravity);
 #if wxUSE_STATUSBAR
     str.Printf( "Gravity = %g", gravity);
@@ -499,7 +499,7 @@ void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
         wxASSERT(empty != m_replacewindow);
         m_splitter->ReplaceWindow(empty, m_replacewindow);
         m_replacewindow->Show();
-        m_replacewindow = NULL;
+        m_replacewindow = nullptr;
         empty->Destroy();
     }
 }

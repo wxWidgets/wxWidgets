@@ -69,7 +69,7 @@ wxPostScriptPrinter::~wxPostScriptPrinter()
 bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
     sm_abortIt = false;
-    sm_abortWindow = NULL;
+    sm_abortWindow = nullptr;
 
     if (!printout)
     {
@@ -211,7 +211,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
 wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
 {
-    wxDC* dc = NULL;
+    wxDC* dc = nullptr;
 
     wxGenericPrintDialog dialog( parent, &m_printDialogData );
     if (dialog.ShowModal() == wxID_OK)
@@ -219,7 +219,7 @@ wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
         dc = dialog.GetPrintDC();
         m_printDialogData = dialog.GetPrintDialogData();
 
-        if (dc == NULL)
+        if (dc == nullptr)
             sm_lastError = wxPRINTER_ERROR;
         else
             sm_lastError = wxPRINTER_NO_ERROR;

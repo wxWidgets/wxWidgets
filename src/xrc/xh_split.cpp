@@ -58,7 +58,7 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
     if (gravity != 0)
         splitter->SetSashGravity(double(gravity));
 
-    wxWindow *win1 = NULL, *win2 = NULL;
+    wxWindow *win1 = nullptr, *win2 = nullptr;
     wxXmlNode *n = m_node->GetChildren();
     while (n)
     {
@@ -66,9 +66,9 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
             (n->GetName() == wxT("object") ||
              n->GetName() == wxT("object_ref")))
         {
-            wxObject *created = CreateResFromNode(n, splitter, NULL);
+            wxObject *created = CreateResFromNode(n, splitter, nullptr);
             wxWindow *win = wxDynamicCast(created, wxWindow);
-            if (win1 == NULL)
+            if (win1 == nullptr)
             {
                 win1 = win;
             }
@@ -81,7 +81,7 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
         n = n->GetNext();
     }
 
-    if (win1 == NULL)
+    if (win1 == nullptr)
         ReportError("wxSplitterWindow node must contain at least one window");
 
     bool horizontal = (GetParamValue(wxT("orientation")) != wxT("vertical"));

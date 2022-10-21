@@ -597,7 +597,7 @@ enum wxPG_INTERNAL_FLAGS
 //     to prevent change from taking place, if necessary.
 //  EVT_PG_HIGHLIGHTED(id, func)
 //     Respond to wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
-//     moves over a property. Event's property is NULL if hovered area does
+//     moves over a property. Event's property is null if hovered area does
 //     not belong to any property.
 //  EVT_PG_RIGHT_CLICK(id, func)
 //     Respond to wxEVT_PG_RIGHT_CLICK event, which occurs when property is
@@ -707,7 +707,7 @@ public:
     void CenterSplitter( bool enableAutoResizing = false );
 
     // Deletes all properties.
-    virtual void Clear() wxOVERRIDE;
+    virtual void Clear() override;
 
     // Clears action triggers for given action.
     // action - Which action to trigger.
@@ -811,8 +811,8 @@ public:
     wxRect GetImageRect( wxPGProperty* p, int item ) const;
 
     // Returns size of the custom paint image in front of property.
-    // If no argument is given (p is NULL), returns preferred size.
-    wxSize GetImageSize( wxPGProperty* p = NULL, int item = -1 ) const;
+    // If no argument is given (p is null), returns preferred size.
+    wxSize GetImageSize( wxPGProperty* p = nullptr, int item = -1 ) const;
 
     // Returns last item which could be iterated using given flags.
     wxPGProperty* GetLastItem( int flags = wxPG_ITERATE_DEFAULT )
@@ -907,7 +907,7 @@ public:
     void OnTLPChanging( wxWindow* newTLP );
 
     // Redraws given property.
-    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
+    virtual void RefreshProperty( wxPGProperty* p ) override;
 
     // Registers a new editor class.
     // Returns pointer to the editor class instance that should be used.
@@ -991,7 +991,7 @@ public:
         DoEndLabelEdit(commit, wxPG_SEL_DONT_SEND_EVENT);
     }
 
-    // Returns currently active label editor, NULL if none.
+    // Returns currently active label editor, nullptr if none.
     wxTextCtrl* GetLabelEditor() const
     {
         return m_labelEditor;
@@ -1074,7 +1074,7 @@ public:
         m_sortFunction = sortFunction;
     }
 
-    // Returns the property sort function (default is NULL).
+    // Returns the property sort function (default is null).
     wxPGSortCallback GetSortFunction() const
     {
         return m_sortFunction;
@@ -1141,7 +1141,7 @@ public:
 
     const wxPGCommonValue* GetCommonValue( unsigned int i ) const
     {
-        wxCHECK_MSG( i < m_commonValues.size(), NULL, "Invalid item index" );
+        wxCHECK_MSG( i < m_commonValues.size(), nullptr, "Invalid item index" );
         return m_commonValues[i];
     }
 
@@ -1229,7 +1229,7 @@ public:
     wxRect GetPropertyRect( const wxPGProperty* p1,
                             const wxPGProperty* p2 ) const;
 
-    // Returns pointer to current active primary editor control (NULL if none).
+    // Returns pointer to current active primary editor control (nullptr if none).
     wxWindow* GetEditorControl() const;
 
     wxWindow* GetPrimaryEditor() const
@@ -1237,7 +1237,7 @@ public:
         return GetEditorControl();
     }
 
-    // Returns pointer to current active secondary editor control (NULL if
+    // Returns pointer to current active secondary editor control (nullptr if
     // none).
     wxWindow* GetEditorControlSecondary() const
     {
@@ -1271,7 +1271,7 @@ public:
                                            double value,
                                            int precision,
                                            bool removeZeroes,
-                                           wxString* precTemplate = NULL );
+                                           wxString* precTemplate = nullptr );
 #endif // WXWIN_COMPATIBILITY_3_0
 
     // Call this from wxPGProperty::OnEvent() to cause property value to be
@@ -1372,7 +1372,7 @@ public:
     // property.
     bool UnfocusEditor();
 
-    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
+    virtual void SetWindowStyleFlag( long style ) override;
 
     void DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 );
 
@@ -1426,24 +1426,24 @@ public:
     bool DoSelectProperty( wxPGProperty* p, unsigned int flags = 0 );
 
     // Overridden functions.
-    virtual bool Destroy() wxOVERRIDE;
+    virtual bool Destroy() override;
     // Returns property at given y coordinate (relative to grid's top left).
     wxPGProperty* GetItemAtY( int y ) const { return DoGetItemAtY(y); }
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
-    virtual bool SetFont( const wxFont& font ) wxOVERRIDE;
-    virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
-    virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
-    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) wxOVERRIDE;
+                          const wxRect *rect = (const wxRect *) nullptr ) override;
+    virtual bool SetFont( const wxFont& font ) override;
+    virtual void SetExtraStyle( long exStyle ) override;
+    virtual bool Reparent( wxWindowBase *newParent ) override;
+    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) override;
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
-                               int xPos, int yPos, bool noRefresh) wxOVERRIDE;
+                               int xPos, int yPos, bool noRefresh) override;
 protected:
-    virtual void DoThaw() wxOVERRIDE;
+    virtual void DoThaw() override;
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual void DoEnable(bool enable) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual void DoEnable(bool enable) override;
 
 #ifndef wxPG_ICON_WIDTH
     wxBitmap            m_expandbmp, m_collbmp;
@@ -1642,7 +1642,7 @@ protected:
     // handling mess).
     wxWindow*           m_curFocused;
 
-    // Event currently being sent - NULL if none at the moment
+    // Event currently being sent - nullptr if none at the moment
     wxPropertyGridEvent*    m_processedEvent;
 
     // Last known top-level parent
@@ -1766,7 +1766,7 @@ protected:
 
     bool AddToSelectionFromInputEvent( wxPGProperty* prop,
                                        unsigned int colIndex,
-                                       wxMouseEvent* event = NULL,
+                                       wxMouseEvent* event = nullptr,
                                        int selFlags = 0 );
 
     // Adjust the centering of the bitmap icons (collapse / expand) when the
@@ -1815,14 +1815,14 @@ protected:
     void DrawItems( wxDC& dc,
                     unsigned int topItemY,
                     unsigned int bottomItemY,
-                    const wxRect* itemsRect = NULL );
+                    const wxRect* itemsRect = nullptr );
 
     // Translate wxKeyEvent to wxPG_ACTION_XXX
     int KeyEventToActions(wxKeyEvent &event, int* pSecond) const;
 
     int KeyEventToAction(wxKeyEvent &event) const
     {
-        return KeyEventToActions(event, NULL);
+        return KeyEventToActions(event, nullptr);
     }
 
     void ImprovedClientToScreen( int* px, int* py ) const;
@@ -1901,7 +1901,7 @@ protected:
     // Send event from the property grid.
     // Omit the wxPG_SEL_NOVALIDATE flag to allow vetoing the event
     bool SendEvent( wxEventType eventType, wxPGProperty* p,
-                    wxVariant* pValue = NULL,
+                    wxVariant* pValue = nullptr,
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
 
@@ -1978,20 +1978,20 @@ wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxPropertyGridEventFunction)(wxPropertyGridEvent&);
 
-#define EVT_PG_SELECTED(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_CHANGING(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_CHANGED(id, fn)               wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_HIGHLIGHTED(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_RIGHT_CLICK(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_DOUBLE_CLICK(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_PAGE_CHANGED(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_ITEM_COLLAPSED(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_ITEM_EXPANDED(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_LABEL_EDIT_ENDING(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_BEGIN_DRAG(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_DRAGGING(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_END_DRAG(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_SELECTED(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_CHANGING(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_CHANGED(id, fn)               wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_HIGHLIGHTED(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_RIGHT_CLICK(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_DOUBLE_CLICK(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_PAGE_CHANGED(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_ITEM_COLLAPSED(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_ITEM_EXPANDED(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_LABEL_EDIT_ENDING(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_COL_BEGIN_DRAG(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_COL_DRAGGING(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
+#define EVT_PG_COL_END_DRAG(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), nullptr ),
 
 #define wxPropertyGridEventHandler(fn) \
     wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn )
@@ -2015,7 +2015,7 @@ public:
     ~wxPropertyGridEvent();
 
     // Copyer.
-    virtual wxEvent* Clone() const wxOVERRIDE;
+    virtual wxEvent* Clone() const override;
 
     // Returns the column index associated with this event.
     // For the column dragging events, it is the column to the left
@@ -2027,7 +2027,7 @@ public:
 
     wxPGProperty* GetMainParent() const
     {
-        wxCHECK_MSG(m_property, NULL, "Property cannot be NULL");
+        wxCHECK_MSG(m_property, nullptr, "Property cannot be null");
         return m_property->GetMainParent();
     }
 
@@ -2179,7 +2179,7 @@ public:
                        const wxString& propLabel,
                        const wxString& propName,
                        const wxString* propValue,
-                       wxPGChoices* pChoices = NULL );
+                       wxPGChoices* pChoices = nullptr );
 
     // Pushes property to the back of parent array (ie it becomes bottommost
     // parent), and starts scanning/adding children for it.

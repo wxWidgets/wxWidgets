@@ -27,7 +27,7 @@
 
 MyMusicTreeModel::MyMusicTreeModel()
 {
-    m_root = new MyMusicTreeModelNode( NULL, "My Music" );
+    m_root = new MyMusicTreeModelNode( nullptr, "My Music" );
 
     // setup pop music
     m_pop = new MyMusicTreeModelNode( m_root, "Pop music" );
@@ -128,11 +128,11 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
 
     // is the node one of those we keep stored in special pointers?
     if (node == m_pop)
-        m_pop = NULL;
+        m_pop = nullptr;
     else if (node == m_classical)
-        m_classical = NULL;
+        m_classical = nullptr;
     else if (node == m_ninth)
-        m_ninth = NULL;
+        m_ninth = nullptr;
 
     // first remove the node from the parent's array of children;
     // NOTE: MyMusicTreeModelNodePtrArray is only an array of _pointers_
@@ -147,9 +147,9 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
 }
 void MyMusicTreeModel::Clear()
 {
-    m_pop       = NULL;
-    m_classical = NULL;
-    m_ninth     = NULL;
+    m_pop       = nullptr;
+    m_classical = nullptr;
+    m_ninth     = nullptr;
 
     while (!m_root->GetChildren().IsEmpty())
     {

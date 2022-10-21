@@ -56,9 +56,9 @@
 wxConsoleEventLoop::wxConsoleEventLoop()
 {
     // Be pessimistic initially and assume that we failed to initialize.
-    m_dispatcher = NULL;
-    m_wakeupPipe = NULL;
-    m_wakeupSource = NULL;
+    m_dispatcher = nullptr;
+    m_wakeupPipe = nullptr;
+    m_wakeupSource = nullptr;
 
     // Create the pipe.
     wxScopedPtr<wxWakeUpPipeMT> wakeupPipe(new wxWakeUpPipeMT);
@@ -109,9 +109,9 @@ class wxConsoleEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 public:
     wxEventLoopSource* AddSourceForFD( int fd,
                                        wxEventLoopSourceHandler *handler,
-                                       int flags) wxOVERRIDE
+                                       int flags) override
     {
-        wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
+        wxCHECK_MSG( fd != -1, nullptr, "can't monitor invalid fd" );
 
         wxLogTrace(wxTRACE_EVT_SOURCE,
                     "Adding event loop source for fd=%d", fd);
@@ -123,7 +123,7 @@ public:
             fdioHandler(new wxFDIOEventLoopSourceHandler(handler));
 
         if ( !wxFDIODispatcher::Get()->RegisterFD(fd, fdioHandler.get(), flags) )
-            return NULL;
+            return nullptr;
 
         return new wxUnixEventLoopSource(wxFDIODispatcher::Get(), fdioHandler.release(),
                                          fd, handler, flags);

@@ -18,7 +18,7 @@
 class wxHtmlHelpDialog : public wxDialog
 {
 public:
-    wxHtmlHelpDialog(wxHtmlHelpData* data = NULL);
+    wxHtmlHelpDialog(wxHtmlHelpData* data = nullptr);
 
     /**
         Constructor.
@@ -28,7 +28,7 @@ public:
     wxHtmlHelpDialog(wxWindow* parent, wxWindowID id,
                      const wxString& title = wxEmptyString,
                      int style = wxHF_DEFAULT_STYLE,
-                     wxHtmlHelpData* data = NULL);
+                     wxHtmlHelpData* data = nullptr);
 
     /**
         You may override this virtual method to add more buttons to the help window's

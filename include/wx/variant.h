@@ -73,11 +73,11 @@ public:
     // What type is it? Return a string name.
     virtual wxString GetType() const = 0;
     // If it based on wxObject return the ClassInfo.
-    virtual wxClassInfo* GetValueClassInfo() { return NULL; }
+    virtual wxClassInfo* GetValueClassInfo() { return nullptr; }
 
     // Implement this to make wxVariant::UnShare work. Returns
     // a copy of the data.
-    virtual wxVariantData* Clone() const { return NULL; }
+    virtual wxVariantData* Clone() const { return nullptr; }
 
 #if wxUSE_ANY
     // Converts value to wxAny, if possible. Return true if successful.
@@ -143,7 +143,7 @@ public:
     // ensure that the data is exclusive to this variant, and not shared
     bool Unshare();
 
-    // Make NULL (i.e. delete the data)
+    // Make null (i.e. delete the data)
     void MakeNull();
 
     // Delete data and name
@@ -243,14 +243,14 @@ public:
     operator std::string() const { return (operator wxString()).ToStdString(); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
-    wxVariant(const wxStdWideString& val, const wxString& name = wxEmptyString);
-    bool operator==(const wxStdWideString& value) const
+    wxVariant(const std::wstring& val, const wxString& name = wxEmptyString);
+    bool operator==(const std::wstring& value) const
         { return operator==(wxString(value)); }
-    bool operator!=(const wxStdWideString& value) const
+    bool operator!=(const std::wstring& value) const
         { return operator!=(wxString(value)); }
-    wxVariant& operator=(const wxStdWideString& value)
+    wxVariant& operator=(const std::wstring& value)
         { return operator=(wxString(value)); }
-    operator wxStdWideString() const { return (operator wxString()).ToStdWstring(); }
+    operator std::wstring() const { return (operator wxString()).ToStdWstring(); }
 #endif // wxUSE_STD_STRING
 
     // wxUniChar
@@ -387,8 +387,8 @@ public:
 
 // Attributes
 protected:
-    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
+    virtual wxObjectRefData *CreateRefData() const override;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
 
     wxString        m_name;
 
@@ -434,7 +434,7 @@ public:
     {
     }
 
-    virtual wxAnyValueType* GetAssociatedType() wxOVERRIDE
+    virtual wxAnyValueType* GetAssociatedType() override
     {
         return wxAnyValueTypeImpl<T>::GetInstance();
     }
@@ -442,7 +442,7 @@ private:
 };
 
 #define DECLARE_WXANY_CONVERSION() \
-virtual bool GetAsAny(wxAny* any) const wxOVERRIDE; \
+virtual bool GetAsAny(wxAny* any) const override; \
 static wxVariantData* VariantDataFactory(const wxAny& any);
 
 #define _REGISTER_WXANY_CONVERSION(T, CLASSNAME, FUNC) \
@@ -493,12 +493,12 @@ public:\
 \
     classname &GetValue() { return m_value; } \
 \
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE; \
+    virtual bool Eq(wxVariantData& data) const override; \
 \
-    virtual wxString GetType() const wxOVERRIDE; \
-    virtual wxClassInfo* GetValueClassInfo() wxOVERRIDE; \
+    virtual wxString GetType() const override; \
+    virtual wxClassInfo* GetValueClassInfo() override; \
 \
-    virtual wxVariantData* Clone() const wxOVERRIDE { return new classname##VariantData(m_value); } \
+    virtual wxVariantData* Clone() const override { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\
@@ -570,7 +570,7 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
 
 #define wxGetVariantCast(var,classname) \
     ((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
-                  var.GetWxObjectPtr() : NULL));
+                  var.GetWxObjectPtr() : nullptr));
 
 // Replacement for using wxDynamicCast on a wxVariantData object
 #ifndef wxNO_RTTI

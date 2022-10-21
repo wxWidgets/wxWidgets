@@ -78,7 +78,7 @@ public:
     wxPersistentObject *Register(void *obj, wxPersistentObject *po);
 
     // check if the object is registered and return the associated
-    // wxPersistentObject if it is or NULL otherwise
+    // wxPersistentObject if it is or nullptr otherwise
     wxPersistentObject *Find(void *obj) const;
 
     // unregister the object, this is called by wxPersistentObject itself so

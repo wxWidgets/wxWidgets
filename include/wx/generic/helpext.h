@@ -28,43 +28,43 @@
 class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
 {
 public:
-    wxExtHelpController(wxWindow* parentWindow = NULL);
+    wxExtHelpController(wxWindow* parentWindow = nullptr);
     virtual ~wxExtHelpController();
 
     // Set viewer: new name for SetBrowser
     virtual void SetViewer(const wxString& viewer = wxEmptyString,
-                            long flags = wxHELP_NETSCAPE) wxOVERRIDE;
+                            long flags = wxHELP_NETSCAPE) override;
 
-    virtual bool Initialize(const wxString& dir, int WXUNUSED(server)) wxOVERRIDE
+    virtual bool Initialize(const wxString& dir, int WXUNUSED(server)) override
         { return Initialize(dir); }
 
-    virtual bool Initialize(const wxString& dir) wxOVERRIDE;
-    virtual bool LoadFile(const wxString& file = wxEmptyString) wxOVERRIDE;
-    virtual bool DisplayContents() wxOVERRIDE;
-    virtual bool DisplaySection(int sectionNo) wxOVERRIDE;
-    virtual bool DisplaySection(const wxString& section) wxOVERRIDE;
-    virtual bool DisplayBlock(long blockNo) wxOVERRIDE;
+    virtual bool Initialize(const wxString& dir) override;
+    virtual bool LoadFile(const wxString& file = wxEmptyString) override;
+    virtual bool DisplayContents() override;
+    virtual bool DisplaySection(int sectionNo) override;
+    virtual bool DisplaySection(const wxString& section) override;
+    virtual bool DisplayBlock(long blockNo) override;
     virtual bool KeywordSearch(const wxString& k,
-                                wxHelpSearchMode mode = wxHELP_SEARCH_ALL) wxOVERRIDE;
+                                wxHelpSearchMode mode = wxHELP_SEARCH_ALL) override;
 
-    virtual bool Quit() wxOVERRIDE;
-    virtual void OnQuit() wxOVERRIDE;
+    virtual bool Quit() override;
+    virtual void OnQuit() override;
 
     virtual bool DisplayHelp(const wxString &) ;
 
     virtual void SetFrameParameters(const wxString& WXUNUSED(title),
                                     const wxSize& WXUNUSED(size),
                                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition,
-                                    bool WXUNUSED(newFrameEachTime) = false) wxOVERRIDE
+                                    bool WXUNUSED(newFrameEachTime) = false) override
         {
             // does nothing by default
         }
 
-    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = NULL,
-                                    wxPoint *WXUNUSED(pos) = NULL,
-                                    bool *WXUNUSED(newFrameEachTime) = NULL) wxOVERRIDE
+    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = nullptr,
+                                    wxPoint *WXUNUSED(pos) = nullptr,
+                                    bool *WXUNUSED(newFrameEachTime) = nullptr) override
         {
-            return NULL; // does nothing by default
+            return nullptr; // does nothing by default
         }
 
 protected:

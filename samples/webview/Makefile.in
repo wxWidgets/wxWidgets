@@ -142,7 +142,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: webview$(EXEEXT) $(__webview_bundle___depname)
+all: webview$(EXEEXT) $(__webview_bundle___depname) data
 
 install: 
 
@@ -190,6 +190,18 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 
 @COND_PLATFORM_MACOSX_1@webview_bundle: $(____webview_BUNDLE_TGT_REF_DEP)
 
+data: 
+	@mkdir -p .
+	@for f in handler_advanced.html; do \
+	if test ! -f ./$$f -a ! -d ./$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
+	done
+
 webview_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
@@ -200,4 +212,4 @@ webview_webview.o: $(srcdir)/webview.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean webview_bundle
+.PHONY: all install uninstall clean distclean webview_bundle data

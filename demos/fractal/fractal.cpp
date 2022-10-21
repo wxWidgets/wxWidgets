@@ -40,18 +40,18 @@ hack doesn't fix.
 #include <time.h>
 
 #define Random(x) (rand() % x)
-#define Randomize() (srand((unsigned int)time(NULL)))
+#define Randomize() (srand((unsigned int)time(nullptr)))
 
 static int detail = 9; // CHANGE THIS... 7,8,9 etc
 
 static bool running = false;
-static wxMenuBar *menuBar = NULL;
+static wxMenuBar *menuBar = nullptr;
 
 // Define a new application type
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxIMPLEMENT_APP(MyApp);
@@ -89,7 +89,7 @@ private:
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, wxT("Fractal Mountains for wxWidgets"), wxDefaultPosition, wxSize(640, 480));
+  MyFrame *frame = new MyFrame(nullptr, wxT("Fractal Mountains for wxWidgets"), wxDefaultPosition, wxSize(640, 480));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

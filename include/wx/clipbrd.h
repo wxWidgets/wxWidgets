@@ -92,7 +92,7 @@ public:
 
 
     // don't use this directly, it is public for compatibility with some ports
-    // (wxX11, wxMotif, ...) only
+    // (wxX11) only
     bool m_usePrimary;
 };
 
@@ -117,7 +117,7 @@ public:
     bool SupportsFormat(const wxDataFormat& format) const;
     void AddFormat(const wxDataFormat& format);
 
-    virtual wxEvent *Clone() const wxOVERRIDE
+    virtual wxEvent *Clone() const override
     {
         return new wxClipboardEvent(*this);
     }
@@ -151,12 +151,8 @@ typedef void (wxEvtHandler::*wxClipboardEventFunction)(wxClipboardEvent&);
 
 #if defined(__WXMSW__)
     #include "wx/msw/clipbrd.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/clipbrd.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/clipbrd.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/clipbrd.h"
+    #include "wx/gtk/clipbrd.h"
 #elif defined(__WXX11__)
     #include "wx/x11/clipbrd.h"
 #elif defined(__WXMAC__)
@@ -172,7 +168,7 @@ typedef void (wxEvtHandler::*wxClipboardEventFunction)(wxClipboardEvent&);
 class WXDLLIMPEXP_CORE wxClipboardLocker
 {
 public:
-    wxClipboardLocker(wxClipboard *clipboard = NULL)
+    wxClipboardLocker(wxClipboard *clipboard = nullptr)
     {
         m_clipboard = clipboard ? clipboard : wxTheClipboard;
         if ( m_clipboard )

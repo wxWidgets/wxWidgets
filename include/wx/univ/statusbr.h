@@ -39,35 +39,35 @@ public:
                 const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     // implement base class methods
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL) wxOVERRIDE;
-    virtual void SetStatusWidths(int n, const int widths[]) wxOVERRIDE;
+    virtual void SetFieldsCount(int number = 1, const int *widths = nullptr) override;
+    virtual void SetStatusWidths(int n, const int widths[]) override;
 
-    virtual bool GetFieldRect(int i, wxRect& rect) const wxOVERRIDE;
-    virtual void SetMinHeight(int height) wxOVERRIDE;
+    virtual bool GetFieldRect(int i, wxRect& rect) const override;
+    virtual void SetMinHeight(int height) override;
 
-    virtual int GetBorderX() const wxOVERRIDE;
-    virtual int GetBorderY() const wxOVERRIDE;
+    virtual int GetBorderX() const override;
+    virtual int GetBorderY() const override;
 
     // wxInputConsumer pure virtual
-    virtual wxWindow *GetInputWindow() const wxOVERRIDE
+    virtual wxWindow *GetInputWindow() const override
         { return const_cast<wxStatusBar*>(this); }
 
 protected:
-    virtual void DoUpdateStatusText(int i) wxOVERRIDE;
+    virtual void DoUpdateStatusText(int i) override;
 
     // recalculate the field widths
     void OnSize(wxSizeEvent& event);
 
     // draw the statusbar
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
     // tell them about our preferred height
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // override DoSetSize() to prevent the status bar height from changing
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
 
     // get the (fixed) status bar height
     wxCoord GetHeight() const;

@@ -591,7 +591,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     tmp = tn.GetNextToken();                     // pointsize
     if (tmp != wxT("*"))
     {
-        long num = wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
+        long num = wxStrtol (tmp.c_str(), (wxChar **) nullptr, 10);
         M_FONTDATA->m_pointSize = (int)(num / 10);
     }
 
@@ -761,7 +761,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid font") );
 
 #if wxUSE_UNICODE
 #else
@@ -906,7 +906,7 @@ bool wxFont::SetPangoAttrs(PangoLayout* layout) const
 wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
 {
     if ( !IsOk() )
-        return NULL;
+        return nullptr;
 
     long intScale = long(scale * 100.0 + 0.5); // key for wxXFont
     int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
@@ -941,7 +941,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     {
         wxFAIL_MSG( wxT("Could not allocate even a default font -- something is wrong.") );
 
-        return NULL;
+        return nullptr;
     }
 
     wxXFont* f = new wxXFont;

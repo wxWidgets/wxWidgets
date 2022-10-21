@@ -48,11 +48,11 @@ public:
         return &s_impl;
     }
 
-    virtual bool MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
-    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseMove(long x, long y) override;
+    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
 private:
     // This class has no public ctors, use Get() instead.
@@ -100,23 +100,23 @@ static bool SimulateMouseButton( MouseAction mouseAction, MouseButton mouseButto
 {
     QPoint mousePosition = QCursor::pos();
     QWidget *widget = QApplication::widgetAt( mousePosition );
-    if ( widget != NULL )
+    if ( widget != nullptr )
         mouseEvent( mouseAction, argForEvents(widget), mouseButton, NoModifier, mousePosition );
 
     // If we found a widget then we successfully simulated an event:
 
-    return widget != NULL;
+    return widget != nullptr;
 }
 
 static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
 {
     QWidget *widget = QApplication::focusWidget();
-    if ( widget != NULL )
+    if ( widget != nullptr )
         keyEvent( keyAction, argForEvents(widget), key );
 
     // If we found a widget then we successfully simulated an event:
 
-    return widget != NULL;
+    return widget != nullptr;
 }
 
 bool wxUIActionSimulatorQtImpl::MouseDown( int button )

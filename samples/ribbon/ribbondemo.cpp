@@ -33,7 +33,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxDECLARE_APP(MyApp);
@@ -156,7 +156,7 @@ protected:
         int gallery_id);
     void AddText(wxString msg);
     wxRibbonGalleryItem* AddColourToGallery(wxRibbonGallery *gallery,
-        wxString name, wxMemoryDC& dc, wxColour* value = NULL);
+        wxString name, wxMemoryDC& dc, wxColour* value = nullptr);
     wxColour GetGalleryColour(wxRibbonGallery *gallery,
         wxRibbonGalleryItem* item, wxString* name);
     void ResetGalleryArtProviders();
@@ -284,7 +284,7 @@ wxEND_EVENT_TABLE()
 #include "triangle.xpm"
 
 MyFrame::MyFrame()
-    : wxFrame(NULL, wxID_ANY, "wxRibbon Sample Application", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
+    : wxFrame(nullptr, wxID_ANY, "wxRibbon Sample Application", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
     m_ribbon = new wxRibbonBar(this,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
                                 | wxRIBBON_BAR_SHOW_PAGE_LABELS
@@ -610,7 +610,7 @@ wxColour MyFrame::GetGalleryColour(wxRibbonGallery *gallery,
                                    wxRibbonGalleryItem* item, wxString* name)
 {
     ColourClientData *data = (ColourClientData*)gallery->GetItemClientObject(item);
-    if(name != NULL)
+    if(name != nullptr)
         *name = data->GetName();
     return data->GetColour();
 }
@@ -623,7 +623,7 @@ void MyFrame::OnHoveredColourChange(wxRibbonGalleryEvent& evt)
     wxRibbonGallery *gallery = evt.GetGallery();
     wxRibbonArtProvider *provider = gallery->GetArtProvider();
 
-    if(evt.GetGalleryItem() != NULL)
+    if(evt.GetGalleryItem() != nullptr)
     {
         if(provider == m_ribbon->GetArtProvider())
         {
@@ -631,7 +631,7 @@ void MyFrame::OnHoveredColourChange(wxRibbonGalleryEvent& evt)
             gallery->SetArtProvider(provider);
         }
         provider->SetColour(wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR,
-            GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), NULL));
+            GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), nullptr));
     }
     else
     {
@@ -649,7 +649,7 @@ void MyFrame::OnPrimaryColourSelect(wxRibbonGalleryEvent& evt)
     wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
     AddText("Colour \"" + name + "\" selected as primary.");
     wxColour secondary, tertiary;
-    m_ribbon->GetArtProvider()->GetColourScheme(NULL, &secondary, &tertiary);
+    m_ribbon->GetArtProvider()->GetColourScheme(nullptr, &secondary, &tertiary);
     m_ribbon->GetArtProvider()->SetColourScheme(colour, secondary, tertiary);
     ResetGalleryArtProviders();
     m_ribbon->Refresh();
@@ -661,7 +661,7 @@ void MyFrame::OnSecondaryColourSelect(wxRibbonGalleryEvent& evt)
     wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
     AddText("Colour \"" + name + "\" selected as secondary.");
     wxColour primary, tertiary;
-    m_ribbon->GetArtProvider()->GetColourScheme(&primary, NULL, &tertiary);
+    m_ribbon->GetArtProvider()->GetColourScheme(&primary, nullptr, &tertiary);
     m_ribbon->GetArtProvider()->SetColourScheme(primary, colour, tertiary);
     ResetGalleryArtProviders();
     m_ribbon->Refresh();
@@ -959,7 +959,7 @@ wxRibbonGalleryItem* MyFrame::AddColourToGallery(wxRibbonGallery *gallery,
                                  wxString colour, wxMemoryDC& dc,
                                  wxColour* value)
 {
-    wxRibbonGalleryItem* item = NULL;
+    wxRibbonGalleryItem* item = nullptr;
     wxColour c;
     if (colour != "Default")
         c = wxColour(colour);
@@ -1002,12 +1002,12 @@ wxRibbonGalleryItem* MyFrame::AddColourToGallery(wxRibbonGallery *gallery,
 void MyFrame::OnColourGalleryButton(wxCommandEvent& evt)
 {
     wxRibbonGallery *gallery = wxDynamicCast(evt.GetEventObject(), wxRibbonGallery);
-    if(gallery == NULL)
+    if(gallery == nullptr)
         return;
 
     m_ribbon->DismissExpandedPanel();
     if(gallery->GetSelection())
-        m_colour_data.SetColour(GetGalleryColour(gallery, gallery->GetSelection(), NULL));
+        m_colour_data.SetColour(GetGalleryColour(gallery, gallery->GetSelection(), nullptr));
     wxColourDialog dlg(this, &m_colour_data);
     if(dlg.ShowModal() == wxID_OK)
     {
@@ -1015,18 +1015,18 @@ void MyFrame::OnColourGalleryButton(wxCommandEvent& evt)
         wxColour clr = m_colour_data.GetColour();
 
         // Try to find colour in gallery
-        wxRibbonGalleryItem *item = NULL;
+        wxRibbonGalleryItem *item = nullptr;
         for(unsigned int i = 0; i < gallery->GetCount(); ++i)
         {
             item = gallery->GetItem(i);
-            if(GetGalleryColour(gallery, item, NULL) == clr)
+            if(GetGalleryColour(gallery, item, nullptr) == clr)
                 break;
             else
-                item = NULL;
+                item = nullptr;
         }
 
         // Colour not in gallery - add it
-        if(item == NULL)
+        if(item == nullptr)
         {
             item = AddColourToGallery(gallery,
                 clr.GetAsString(wxC2S_HTML_SYNTAX), m_bitmap_creation_dc,

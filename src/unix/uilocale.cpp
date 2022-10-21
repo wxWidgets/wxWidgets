@@ -166,25 +166,25 @@ bool GetLocaleFromEnvironment(wxString& langFull, wxString& modifier)
 class wxUILocaleImplUnix : public wxUILocaleImpl
 {
 public:
-    // If "loc" is non-NULL, this object takes ownership of it and will free it,
+    // If "loc" is non-null, this object takes ownership of it and will free it,
     // otherwise it creates its own locale_t corresponding to locId.
     explicit wxUILocaleImplUnix(wxLocaleIdent locId
 #ifdef HAVE_LOCALE_T
-                               , locale_t loc = NULL
+                               , locale_t loc = nullptr
 #endif // HAVE_LOCALE_T
                                );
-    ~wxUILocaleImplUnix() wxOVERRIDE;
+    ~wxUILocaleImplUnix() override;
 
-    void Use() wxOVERRIDE;
+    void Use() override;
 
-    wxString GetName() const wxOVERRIDE;
-    wxLocaleIdent GetLocaleId() const wxOVERRIDE;
-    wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
-    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE;
-    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
+    wxString GetName() const override;
+    wxLocaleIdent GetLocaleId() const override;
+    wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const override;
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const override;
+    wxLayoutDirection GetLayoutDirection() const override;
 
     int CompareStrings(const wxString& lhs, const wxString& rhs,
-                       int flags) const wxOVERRIDE;
+                       int flags) const override;
 
 private:
 #ifdef HAVE_LANGINFO_H
@@ -226,14 +226,14 @@ private:
 // Simple wrapper around newlocale().
 inline locale_t TryCreateLocale(const wxLocaleIdent& locId)
 {
-    return newlocale(LC_ALL_MASK, locId.GetName().mb_str(), NULL);
+    return newlocale(LC_ALL_MASK, locId.GetName().mb_str(), nullptr);
 }
 
 // Wrapper around newlocale() also trying to append UTF-8 codeset (and
 // modifying its wxLocaleIdent argument if it succeeds).
 locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
 {
-    locale_t loc = NULL;
+    locale_t loc = nullptr;
 
 #if wxUSE_UNICODE
     if ( locId.GetCharset().empty() )
@@ -352,7 +352,7 @@ wxString wxLocaleIdent::GetName() const
 // with and without UTF-8 suffix. Don't use this one directly.
 static const char *wxSetlocaleTryUTF8(int c, const wxLocaleIdent& locId)
 {
-    const char *l = NULL;
+    const char *l = nullptr;
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
     //     non-UTF-8 locale if it fails.
@@ -609,7 +609,7 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
     // that the current locale is still the same as was set in the ctor.
     //
     // If this assumption turns out to be wrong, we could use wxLocaleSetter to
-    // temporarily change the locale here (maybe only if setlocale(NULL) result
+    // temporarily change the locale here (maybe only if setlocale(nullptr) result
     // differs from the expected one).
     return wxLocale::GetInfo(index, cat);
 #endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
@@ -746,7 +746,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locIdOrig)
 
     const locale_t loc = TryCreateMatchingLocale(locId);
     if ( !loc )
-        return NULL;
+        return nullptr;
 
     return new wxUILocaleImplUnix(locId, loc);
 #else // !HAVE_LOCALE_T

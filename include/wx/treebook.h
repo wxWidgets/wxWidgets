@@ -63,7 +63,7 @@ public:
     // Page insertion operations
     // -------------------------
 
-    // Notice that page pointer may be NULL in which case the next non NULL
+    // Notice that page pointer may be null in which case the next non null
     // page (usually the first child page of a node) is shown when this page is
     // selected
 
@@ -73,7 +73,7 @@ public:
                             wxWindow *page,
                             const wxString& text,
                             bool bSelect = false,
-                            int imageId = NO_IMAGE) wxOVERRIDE;
+                            int imageId = NO_IMAGE) override;
 
     // Inserts a new sub-page to the end of children of the page at given pos.
     virtual bool InsertSubPage(size_t pos,
@@ -86,7 +86,7 @@ public:
     virtual bool AddPage(wxWindow *page,
                          const wxString& text,
                          bool bSelect = false,
-                         int imageId = NO_IMAGE) wxOVERRIDE;
+                         int imageId = NO_IMAGE) override;
 
     // Adds a new child-page to the last top-level page inserted.
     // Useful when constructing 1 level tree structure.
@@ -98,7 +98,7 @@ public:
     // Deletes the page and ALL its children. Could trigger page selection
     // change in a case when selected page is removed. In that case its parent
     // is selected (or the next page if no parent).
-    virtual bool DeletePage(size_t pos) wxOVERRIDE;
+    virtual bool DeletePage(size_t pos) override;
 
 
     // Tree operations
@@ -125,24 +125,24 @@ public:
     // Standard operations inherited from wxBookCtrlBase
     // -------------------------------------------------
 
-    virtual bool SetPageText(size_t n, const wxString& strText) wxOVERRIDE;
-    virtual wxString GetPageText(size_t n) const wxOVERRIDE;
-    virtual int GetPageImage(size_t n) const wxOVERRIDE;
-    virtual bool SetPageImage(size_t n, int imageId) wxOVERRIDE;
-    virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
-    virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
-    virtual bool DeleteAllPages() wxOVERRIDE;
+    virtual bool SetPageText(size_t n, const wxString& strText) override;
+    virtual wxString GetPageText(size_t n) const override;
+    virtual int GetPageImage(size_t n) const override;
+    virtual bool SetPageImage(size_t n, int imageId) override;
+    virtual int SetSelection(size_t n) override { return DoSetSelection(n, SetSelection_SendEvent); }
+    virtual int ChangeSelection(size_t n) override { return DoSetSelection(n); }
+    virtual int HitTest(const wxPoint& pt, long *flags = nullptr) const override;
+    virtual bool DeleteAllPages() override;
 
 protected:
     // Implementation of a page removal. See DeletPage for comments.
-    wxTreebookPage *DoRemovePage(size_t pos) wxOVERRIDE;
+    wxTreebookPage *DoRemovePage(size_t pos) override;
 
-    virtual void OnImagesChanged() wxOVERRIDE;
+    virtual void OnImagesChanged() override;
 
-    // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
-    virtual bool AllowNullPage() const wxOVERRIDE { return true; }
-    virtual wxWindow *TryGetNonNullPage(size_t page) wxOVERRIDE;
+    // This subclass of wxBookCtrlBase accepts null page pointers (empty pages)
+    virtual bool AllowNullPage() const override { return true; }
+    virtual wxWindow *TryGetNonNullPage(size_t page) override;
 
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);
@@ -175,9 +175,9 @@ private:
 
     // Overridden methods used by the base class DoSetSelection()
     // implementation.
-    void UpdateSelectedPage(size_t newsel) wxOVERRIDE;
-    wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE;
-    void MakeChangedEvent(wxBookCtrlEvent &event) wxOVERRIDE;
+    void UpdateSelectedPage(size_t newsel) override;
+    wxBookCtrlEvent* CreatePageChangingEvent() const override;
+    void MakeChangedEvent(wxBookCtrlEvent &event) override;
 
     // Does the selection update. Called from page insertion functions
     // to update selection if the selected page was pushed by the newly inserted

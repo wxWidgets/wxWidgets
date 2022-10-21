@@ -56,12 +56,12 @@ class TextCtrlTestCase : public TextEntryTestCase, public CppUnit::TestCase
 public:
     TextCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_text; }
-    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_text; }
+    virtual wxTextEntry *GetTestEntry() const override { return m_text; }
+    virtual wxWindow *GetTestWindow() const override { return m_text; }
 
     #define SINGLE_AND_MULTI_TESTS() \
         WXUISIM_TEST( ReadOnly ); \
@@ -698,7 +698,7 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
     const wxPoint pos0 = m_text->PositionToCoords(0);
     if ( pos0 == wxDefaultPosition )
     {
-#if ( wxHAS_2CHAR_NEWLINES ) || defined(__WXGTK20__)
+#if ( wxHAS_2CHAR_NEWLINES ) || defined(__WXGTK__)
         CPPUNIT_FAIL( "PositionToCoords() unexpectedly failed." );
 #endif
         return;
@@ -825,7 +825,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( coords_0[i].x, x );
         CPPUNIT_ASSERT_EQUAL( coords_0[i].y, y );
     }
-    ok = m_text->PositionToXY(WXSIZEOF(coords_0), NULL, NULL);
+    ok = m_text->PositionToXY(WXSIZEOF(coords_0), nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // one line
@@ -845,7 +845,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( coords_1[i].x, x );
         CPPUNIT_ASSERT_EQUAL( coords_1[i].y, y );
     }
-    ok = m_text->PositionToXY(WXSIZEOF(coords_1), NULL, NULL);
+    ok = m_text->PositionToXY(WXSIZEOF(coords_1), nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // few lines
@@ -893,7 +893,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( ref_coords_2[i].x, x );
         CPPUNIT_ASSERT_EQUAL( ref_coords_2[i].y, y );
     }
-    ok = m_text->PositionToXY(ref_numChars_2 + 1, NULL, NULL);
+    ok = m_text->PositionToXY(ref_numChars_2 + 1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // only empty lines
@@ -943,7 +943,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( ref_coords_3[i].x, x );
         CPPUNIT_ASSERT_EQUAL( ref_coords_3[i].y, y );
     }
-    ok = m_text->PositionToXY(ref_numChars_3 + 1, NULL, NULL);
+    ok = m_text->PositionToXY(ref_numChars_3 + 1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // mixed empty/non-empty lines
@@ -997,7 +997,7 @@ void TextCtrlTestCase::DoPositionToXYMultiLine(long style)
         CPPUNIT_ASSERT_EQUAL( ref_coords_4[i].x, x );
         CPPUNIT_ASSERT_EQUAL( ref_coords_4[i].y, y  );
     }
-    ok = m_text->PositionToXY(ref_numChars_4 + 1, NULL, NULL);
+    ok = m_text->PositionToXY(ref_numChars_4 + 1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 }
 
@@ -1194,7 +1194,7 @@ void TextCtrlTestCase::PositionToXYSingleLine()
         CPPUNIT_ASSERT_EQUAL( i, x0 );
         CPPUNIT_ASSERT_EQUAL( 0, y0 );
     }
-    ok = m_text->PositionToXY(numChars_0+1, NULL, NULL);
+    ok = m_text->PositionToXY(numChars_0+1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // pure one line
@@ -1210,7 +1210,7 @@ void TextCtrlTestCase::PositionToXYSingleLine()
         CPPUNIT_ASSERT_EQUAL( i, x1 );
         CPPUNIT_ASSERT_EQUAL( 0, y1 );
     }
-    ok = m_text->PositionToXY(numChars_1+1, NULL, NULL);
+    ok = m_text->PositionToXY(numChars_1+1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 
     // with new line characters
@@ -1226,7 +1226,7 @@ void TextCtrlTestCase::PositionToXYSingleLine()
         CPPUNIT_ASSERT_EQUAL( i, x2 );
         CPPUNIT_ASSERT_EQUAL( 0, y2 );
     }
-    ok = m_text->PositionToXY(numChars_2+1, NULL, NULL);
+    ok = m_text->PositionToXY(numChars_2+1, nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL( false, ok );
 }
 
@@ -1294,14 +1294,14 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
         {
         }
 
-        virtual wxControl* Create(wxWindow* parent, int style) const wxOVERRIDE
+        virtual wxControl* Create(wxWindow* parent, int style) const override
         {
             return new wxTextCtrl(parent, wxID_ANY, wxString(),
                                   wxDefaultPosition, wxDefaultSize,
                                   style | m_styleToAdd);
         }
 
-        virtual TextLikeControlCreator* CloneAsMultiLine() const wxOVERRIDE
+        virtual TextLikeControlCreator* CloneAsMultiLine() const override
         {
             return new TextCtrlCreator(wxTE_MULTILINE);
         }

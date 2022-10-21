@@ -36,13 +36,13 @@ public:
         : wxPanel(parent, id, pos, size, style | wxTAB_TRAVERSAL | wxNO_BORDER,
                   controlName + wxT("_container")),
           m_controlName(controlName),
-          m_control(NULL)
+          m_control(nullptr)
     {
         m_bg = UseBgCol() ? GetBackgroundColour() : wxColour();
     }
 
-    virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
-    virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
+    virtual void AddChild(wxWindowBase *child) override;
+    virtual void RemoveChild(wxWindowBase *child) override;
 
 
     // Ensure that setting the min or max size both for this window itself (as
@@ -50,7 +50,7 @@ public:
     // control contained in it works as expected, i.e. the larger/smaller of
     // the sizes is used to satisfy both windows invariants.
 
-    virtual wxSize GetMinSize() const wxOVERRIDE
+    virtual wxSize GetMinSize() const override
     {
         wxSize size = wxPanel::GetMinSize();
         if ( m_control )
@@ -59,7 +59,7 @@ public:
         return size;
     }
 
-    virtual wxSize GetMaxSize() const wxOVERRIDE
+    virtual wxSize GetMaxSize() const override
     {
         wxSize size = wxPanel::GetMaxSize();
         if ( m_control )
@@ -69,7 +69,7 @@ public:
     }
 
 protected:
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE
+    virtual wxSize DoGetBestClientSize() const override
     {
         // We don't have any natural best size when we're empty, so just return
         // the minimal valid size in this case.
@@ -113,7 +113,7 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
 {
     wxPanel::RemoveChild(child);
-    m_control = NULL;
+    m_control = nullptr;
 
     InvalidateBestSize();
 }
@@ -129,7 +129,7 @@ wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
 
 wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
 {
-    wxASSERT_MSG( m_instance == NULL,
+    wxASSERT_MSG( m_instance == nullptr,
                   wxT("'unknown' controls can't be subclassed, use wxXmlResource::AttachUnknownControl") );
 
     wxPanel *panel =

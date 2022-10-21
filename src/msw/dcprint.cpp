@@ -89,16 +89,16 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name,
         PRINTDLG pd;
 
         pd.lStructSize = sizeof( PRINTDLG );
-        pd.hwndOwner = (HWND) NULL;
-        pd.hDevMode = (HANDLE)NULL;
-        pd.hDevNames = (HANDLE)NULL;
+        pd.hwndOwner = (HWND) nullptr;
+        pd.hDevMode = (HANDLE)nullptr;
+        pd.hDevNames = (HANDLE)nullptr;
         pd.Flags = PD_RETURNDC | PD_NOSELECTION | PD_NOPAGENUMS;
         pd.nFromPage = 0;
         pd.nToPage = 0;
         pd.nMinPage = 0;
         pd.nMaxPage = 0;
         pd.nCopies = 1;
-        pd.hInstance = (HINSTANCE)NULL;
+        pd.hInstance = (HINSTANCE)nullptr;
 
         m_ok = PrintDlg( &pd ) != 0;
         if ( m_ok )
@@ -114,7 +114,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name,
             m_hDC = (WXHDC) CreateDC(driver_name.t_str(),
                                      device_name.t_str(),
                                      file.fn_str(),
-                                     NULL);
+                                     nullptr);
         }
         else // we don't have all parameters, ask the user
         {
@@ -183,11 +183,11 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
     wxString filename(m_printData.GetFilename());
 
     if (filename.empty())
-        docinfo.lpszOutput = NULL;
+        docinfo.lpszOutput = nullptr;
     else
         docinfo.lpszOutput = filename.t_str();
 
-    docinfo.lpszDatatype = NULL;
+    docinfo.lpszDatatype = nullptr;
     docinfo.fwType = 0;
 
     if (!m_hDC)
@@ -263,9 +263,9 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     PRINTDLG    pd;
     memset(&pd, 0, sizeof(PRINTDLG));
     pd.lStructSize    = sizeof(PRINTDLG);
-    pd.hwndOwner      = (HWND)NULL;
-    pd.hDevMode       = NULL; // Will be created by PrintDlg
-    pd.hDevNames      = NULL; // Ditto
+    pd.hwndOwner      = nullptr;
+    pd.hDevMode       = nullptr; // Will be created by PrintDlg
+    pd.hDevNames      = nullptr; // Ditto
     pd.Flags          = PD_RETURNDEFAULT;
     pd.nCopies        = 1;
 
@@ -293,13 +293,13 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
         } // unlock pd.hDevNames
 
         GlobalFree(pd.hDevNames);
-        pd.hDevNames=NULL;
+        pd.hDevNames=nullptr;
     }
 
     if (pd.hDevMode)
     {
         GlobalFree(pd.hDevMode);
-        pd.hDevMode=NULL;
+        pd.hDevMode=nullptr;
     }
     return ( !deviceName.empty() );
 }
@@ -338,9 +338,9 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 
     HDC hDC = ::CreateDC
                 (
-                    NULL,               // no driver name as we use device name
+                    nullptr,               // no driver name as we use device name
                     deviceName.t_str(),
-                    NULL,               // unused
+                    nullptr,               // unused
                     static_cast<DEVMODE *>(lockDevMode.Get())
                 );
     if ( !hDC )
@@ -437,7 +437,7 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
         return false;
 
     wxBitmap& bmp = msw_impl->GetSelectedBitmap();
-    wxMask *mask = useMask ? bmp.GetMask() : NULL;
+    wxMask *mask = useMask ? bmp.GetMask() : nullptr;
     if ( mask )
     {
         // If we are printing source colours are screen colours not printer

@@ -71,7 +71,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
     //the services we want to hid services (and also eats the
     //dictionary up for us (consumes one reference))
     CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
-    if(pDictionary == NULL)
+    if(pDictionary == nullptr)
     {
         wxLogSysError( wxT("IOServiceMatching(kIOHIDDeviceKey) failed") );
         return false;
@@ -235,7 +235,7 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
     //the matching dictionary for determining which kind of devices we want,
     //then later some registry properties from an iterator (see below)
     CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
-    if(pDictionary == NULL)
+    if(pDictionary == nullptr)
     {
         wxLogSysError( wxT("IOServiceMatching(kIOHIDDeviceKey) failed") );
         return false;
@@ -328,7 +328,7 @@ void wxHIDDevice::InitCookies(size_t dwSize, bool bQueue)
     m_pCookies = new IOHIDElementCookie[dwSize];
     if (bQueue)
     {
-        wxASSERT( m_ppQueue == NULL);
+        wxASSERT( m_ppQueue == nullptr);
         m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice);
         if ( !m_ppQueue )
         {
@@ -385,9 +385,9 @@ bool wxHIDDevice::HasElement(int nIndex)
 // ----------------------------------------------------------------------------
 wxHIDDevice::~wxHIDDevice()
 {
-    if (m_ppDevice != NULL)
+    if (m_ppDevice != nullptr)
     {
-        if (m_ppQueue != NULL)
+        if (m_ppQueue != nullptr)
         {
             (*m_ppQueue)->stop(m_ppQueue);
             (*m_ppQueue)->dispose(m_ppQueue);
@@ -398,7 +398,7 @@ wxHIDDevice::~wxHIDDevice()
         mach_port_deallocate(mach_task_self(), m_pPort);
     }
 
-    if (m_pCookies != NULL)
+    if (m_pCookies != nullptr)
     {
         delete [] m_pCookies;
     }
@@ -483,7 +483,7 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
                 CFSTR(kIOHIDElementKey)
                                               );
 
-        if (ref != NULL)
+        if (ref != nullptr)
         {
             DoBuildCookies((CFArrayRef) ref);
         }
@@ -642,11 +642,11 @@ class wxHIDModule : public wxModule
 
 public:
         static wxArrayPtrVoid sm_keyboards;
-        virtual bool OnInit() wxOVERRIDE
+        virtual bool OnInit() override
         {
             return true;
         }
-        virtual void OnExit() wxOVERRIDE
+        virtual void OnExit() override
         {
             for(size_t i = 0; i < sm_keyboards.GetCount(); ++i)
                 delete (wxHIDKeyboard*) sm_keyboards[i];

@@ -114,7 +114,7 @@ public:
 
     ~PendingMimeDataSetter()
     {
-        m_targetMimeData = NULL;
+        m_targetMimeData = nullptr;
     }
 
 private:
@@ -128,8 +128,8 @@ class wxDropTarget::Impl : public QObject
 public:
     explicit Impl(wxDropTarget* dropTarget)
         : m_dropTarget(dropTarget),
-          m_widget(NULL),
-          m_pendingMimeData(NULL)
+          m_widget(nullptr),
+          m_pendingMimeData(nullptr)
     {
     }
 
@@ -144,7 +144,7 @@ public:
 
         m_widget = widget;
 
-        if ( m_widget != NULL )
+        if ( m_widget != nullptr )
         {
             m_widget->setAcceptDrops(true);
             m_widget->installEventFilter(this);
@@ -153,17 +153,17 @@ public:
 
     void Disconnect()
     {
-        if ( m_widget != NULL )
+        if ( m_widget != nullptr )
         {
             m_widget->setAcceptDrops(false);
             m_widget->removeEventFilter(this);
-            m_widget = NULL;
+            m_widget = nullptr;
         }
     }
 
-    virtual bool eventFilter(QObject* watched, QEvent* event) wxOVERRIDE
+    virtual bool eventFilter(QObject* watched, QEvent* event) override
     {
-        if ( m_dropTarget != NULL )
+        if ( m_dropTarget != nullptr )
         {
             switch ( event->type() )
             {
@@ -313,7 +313,7 @@ bool wxDropTarget::GetData()
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
     const QMimeData* mimeData = m_pImpl->GetMimeData();
-    if ( mimeData == NULL || m_dataObject == NULL )
+    if ( mimeData == nullptr || m_dataObject == nullptr )
         return wxFormatInvalid;
 
     const QStringList formats = mimeData->formats();
@@ -363,11 +363,11 @@ wxDropSource::wxDropSource(wxDataObject& data,
 
 wxDragResult wxDropSource::DoDragDrop(int flags /*=wxDrag_CopyOnly*/)
 {
-    wxCHECK_MSG(m_data != NULL, wxDragNone,
+    wxCHECK_MSG(m_data != nullptr, wxDragNone,
                 wxT("No data in wxDropSource!"));
 
-    wxCHECK_MSG(m_parentWindow != NULL, wxDragNone,
-                wxT("NULL parent window in wxDropSource!"));
+    wxCHECK_MSG(m_parentWindow != nullptr, wxDragNone,
+                wxT("null parent window in wxDropSource!"));
 
     QDrag drag(m_parentWindow->GetHandle());
     drag.setMimeData(CreateMimeData(m_data));

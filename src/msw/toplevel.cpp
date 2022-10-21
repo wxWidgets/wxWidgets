@@ -60,8 +60,8 @@ class wxTLWHiddenParentModule : public wxModule
 {
 public:
     // module init/finalize
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
     // get the hidden window (creates on demand)
     static HWND GetHWND();
@@ -100,7 +100,7 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsMaximized = false;
     m_fsIsShowing = false;
 
-    m_menuSystem = NULL;
+    m_menuSystem = nullptr;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -211,11 +211,11 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
 WXHWND wxTopLevelWindowMSW::MSWGetParent() const
 {
-    // for the frames without wxFRAME_FLOAT_ON_PARENT style we should use NULL
+    // for the frames without wxFRAME_FLOAT_ON_PARENT style we should use null
     // parent HWND or it would be always on top of its parent which is not what
     // we usually want (in fact, we only want it for frames with the
     // wxFRAME_FLOAT_ON_PARENT flag)
-    HWND hwndParent = NULL;
+    HWND hwndParent = nullptr;
     if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
     {
         const wxWindow *parent = GetParent();
@@ -266,7 +266,7 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                 // and so we need to it ourselves. Moreover, our code in
                 // OnActivate() doesn't work in this case as we receive the
                 // deactivation event too late when the window is being
-                // minimized and the focus is already NULL by then. Similarly,
+                // minimized and the focus is already null by then. Similarly,
                 // we receive the activation event too early and restoring
                 // focus in it fails because the window is still minimized. So
                 // we need to do it here.
@@ -327,6 +327,13 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
     return rc;
 }
 
+void
+wxTopLevelWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& WXUNUSED(newDPI))
+{
+    if ( !m_icons.IsEmpty() )
+        DoSetIcons();
+}
+
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
                                        const wxString& title,
                                        const wxPoint& pos,
@@ -340,7 +347,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
                        (
                         wxGetInstance(),
                         static_cast<const DLGTEMPLATE*>(dlgTemplate),
-                        parent ? GetHwndOf(parent) : NULL,
+                        parent ? GetHwndOf(parent) : nullptr,
                         (DLGPROC)wxDlgProc
                        );
 
@@ -1043,8 +1050,13 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
         return;
     }
 
-    DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
-    DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG);
+    DoSetIcons();
+}
+
+void wxTopLevelWindowMSW::DoSetIcons()
+{
+    DoSelectAndSetIcon(m_icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
+    DoSelectAndSetIcon(m_icons, SM_CXICON, SM_CYICON, ICON_BIG);
 }
 
 wxContentProtection wxTopLevelWindowMSW::GetContentProtection() const
@@ -1209,7 +1221,7 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
         if ( !hmenu )
         {
             wxLogLastError(wxT("GetSystemMenu()"));
-            return NULL;
+            return nullptr;
         }
 
         wxTopLevelWindowMSW * const
@@ -1288,13 +1300,13 @@ void wxTopLevelWindowMSW::DoSaveLastFocus()
     // remember the last focused child if it is our child
     wxWindow* const winFocus = FindFocus();
 
-    m_winLastFocused = IsDescendant(winFocus) ? winFocus : NULL;
+    m_winLastFocused = IsDescendant(winFocus) ? winFocus : nullptr;
 }
 
 void wxTopLevelWindowMSW::DoRestoreLastFocus()
 {
     wxWindow *parent = m_winLastFocused ? m_winLastFocused->GetParent()
-                                        : NULL;
+                                        : nullptr;
     if ( !parent )
     {
         parent = this;
@@ -1336,7 +1348,7 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
         wxLogTrace(wxT("focus"),
                    wxT("wxTLW %p deactivated, last focused: %p."),
                    m_hWnd,
-                   m_winLastFocused ? GetHwndOf(m_winLastFocused) : NULL);
+                   m_winLastFocused ? GetHwndOf(m_winLastFocused) : nullptr);
 
         event.Skip();
     }
@@ -1369,14 +1381,14 @@ wxDlgProc(HWND WXUNUSED(hDlg),
 // wxTLWHiddenParentModule implementation
 // ============================================================================
 
-HWND wxTLWHiddenParentModule::ms_hwnd = NULL;
+HWND wxTLWHiddenParentModule::ms_hwnd = nullptr;
 
-const wxChar *wxTLWHiddenParentModule::ms_className = NULL;
+const wxChar *wxTLWHiddenParentModule::ms_className = nullptr;
 
 bool wxTLWHiddenParentModule::OnInit()
 {
-    ms_hwnd = NULL;
-    ms_className = NULL;
+    ms_hwnd = nullptr;
+    ms_className = nullptr;
 
     return true;
 }
@@ -1390,7 +1402,7 @@ void wxTLWHiddenParentModule::OnExit()
             wxLogLastError(wxT("DestroyWindow(hidden TLW parent)"));
         }
 
-        ms_hwnd = NULL;
+        ms_hwnd = nullptr;
     }
 
     if ( ms_className )
@@ -1400,7 +1412,7 @@ void wxTLWHiddenParentModule::OnExit()
             wxLogLastError(wxT("UnregisterClass(\"wxTLWHiddenParent\")"));
         }
 
-        ms_className = NULL;
+        ms_className = nullptr;
     }
 }
 
@@ -1430,8 +1442,8 @@ HWND wxTLWHiddenParentModule::GetHWND()
             }
         }
 
-        ms_hwnd = ::CreateWindow(ms_className, wxEmptyString, 0, 0, 0, 0, 0, NULL,
-                                 (HMENU)NULL, wxGetInstance(), NULL);
+        ms_hwnd = ::CreateWindow(ms_className, wxEmptyString, 0, 0, 0, 0, 0, nullptr,
+                                 nullptr, wxGetInstance(), nullptr);
         if ( !ms_hwnd )
         {
             wxLogLastError(wxT("CreateWindow(hidden TLW parent)"));

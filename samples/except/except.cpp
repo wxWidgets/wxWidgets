@@ -82,11 +82,11 @@ public:
     // ----------------------------
 
     // program startup
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // 2nd-level exception handling: we get all the exceptions occurring in any
     // event handler here
-    virtual bool OnExceptionInMainLoop() wxOVERRIDE;
+    virtual bool OnExceptionInMainLoop() override;
 
     // 2nd-level exception handling helpers: if we can't deal with the
     // exception immediately, we may also store it and rethrow it later, when
@@ -95,16 +95,16 @@ public:
     // Notice that overriding these methods is not necessary when using C++11
     // as they have a perfectly serviceable implementation inside the library
     // itself in this case.
-    virtual bool StoreCurrentException() wxOVERRIDE;
-    virtual void RethrowStoredException() wxOVERRIDE;
+    virtual bool StoreCurrentException() override;
+    virtual void RethrowStoredException() override;
 
     // 3rd, and final, level exception handling: whenever an unhandled
     // exception is caught, this function is called
-    virtual void OnUnhandledException() wxOVERRIDE;
+    virtual void OnUnhandledException() override;
 
     // and now for something different: this function is called in case of a
     // crash (e.g. dereferencing null pointer, division by 0, ...)
-    virtual void OnFatalException() wxOVERRIDE;
+    virtual void OnFatalException() override;
 
     // you can override this function to do something different (e.g. log the
     // assert to file) whenever an assertion fails
@@ -112,7 +112,7 @@ public:
                                  int line,
                                  const wxChar *func,
                                  const wxChar *cond,
-                                 const wxChar *msg) wxOVERRIDE;
+                                 const wxChar *msg) override;
 
 private:
     // This stores the number of times StoreCurrentException() was called,
@@ -148,7 +148,7 @@ protected:
 
     // 1st-level exception handling: we overload ProcessEvent() to be able to
     // catch exceptions which occur in MyFrame methods here
-    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
+    virtual bool ProcessEvent(wxEvent& event) override;
 
     // provoke assert in main or worker thread
     //
@@ -400,7 +400,7 @@ void MyApp::OnAssertFailure(const wxChar *file,
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "Except wxWidgets App",
+       : wxFrame(nullptr, wxID_ANY, "Except wxWidgets App",
                  wxPoint(50, 50), wxSize(450, 340))
 {
     // set the frame icon
@@ -580,7 +580,7 @@ void MyFrame::OnShowAssertInThread(wxCommandEvent& WXUNUSED(event))
         }
 
     protected:
-        virtual void *Entry() wxOVERRIDE
+        virtual void *Entry() override
         {
             wxFAIL_MSG("Test assert in another thread.");
 

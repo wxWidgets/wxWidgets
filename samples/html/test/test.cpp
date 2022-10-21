@@ -38,7 +38,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Define a new html window type: this is a wrapper for handling wxHtmlWindow events
@@ -53,7 +53,7 @@ public:
 
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                              const wxString& WXUNUSED(url),
-                                             wxString *WXUNUSED(redirect)) const wxOVERRIDE;
+                                             wxString *WXUNUSED(redirect)) const override;
 
     // toggle drawing of custom background
     void DrawCustomBg(bool draw)
@@ -107,7 +107,7 @@ private:
 class BoldProcessor : public wxHtmlProcessor
 {
 public:
-    virtual wxString Process(const wxString& s) const wxOVERRIDE
+    virtual wxString Process(const wxString& s) const override
     {
         wxString r(s);
         r.Replace("<b>", wxEmptyString);
@@ -199,7 +199,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size,
+   : wxFrame(nullptr, wxID_ANY, title, pos, size,
              wxDEFAULT_FRAME_STYLE, "html_test_app")
 {
     // create a menu bar
@@ -272,7 +272,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     m_Html->WriteCustomization(wxConfig::Get());
-    delete wxConfig::Set(NULL);
+    delete wxConfig::Set(nullptr);
 
     // true is to force the frame to close
     Close(true);

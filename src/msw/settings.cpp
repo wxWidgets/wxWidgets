@@ -46,8 +46,8 @@
 class wxSystemSettingsModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
@@ -59,7 +59,7 @@ private:
 
 // the font returned by GetFont(wxSYS_DEFAULT_GUI_FONT): it is created when
 // GetFont() is called for the first time and deleted by wxSystemSettingsModule
-static wxFont *gs_fontDefault = NULL;
+static wxFont *gs_fontDefault = nullptr;
 
 // ============================================================================
 // implementation
@@ -148,7 +148,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info(lf, NULL);
+            wxNativeFontInfo info(lf, nullptr);
             font.Create(info);
         }
         else

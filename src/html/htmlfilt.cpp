@@ -57,7 +57,7 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxInputStream *s = file.GetStream();
     wxString doc, doc2;
 
-    if (s == NULL) return wxEmptyString;
+    if (s == nullptr) return wxEmptyString;
     ReadString(doc, s, wxConvISO8859_1);
 
     doc.Replace(wxT("&"), wxT("&amp;"), true);
@@ -81,8 +81,8 @@ class wxHtmlFilterImage : public wxHtmlFilter
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterImage);
 
     public:
-        virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
-        virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
+        virtual bool CanRead(const wxFSFile& file) const override;
+        virtual wxString ReadFile(const wxFSFile& file) const override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterImage, wxHtmlFilter);
@@ -129,7 +129,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     wxInputStream *s = file.GetStream();
     wxString doc;
 
-    if (s == NULL)
+    if (s == nullptr)
     {
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation());
         return wxEmptyString;
@@ -188,13 +188,13 @@ class wxHtmlFilterModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterModule);
 
     public:
-        virtual bool OnInit() wxOVERRIDE
+        virtual bool OnInit() override
         {
             wxHtmlWindow::AddFilter(new wxHtmlFilterHTML);
             wxHtmlWindow::AddFilter(new wxHtmlFilterImage);
             return true;
         }
-        virtual void OnExit() wxOVERRIDE {}
+        virtual void OnExit() override {}
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterModule, wxModule);

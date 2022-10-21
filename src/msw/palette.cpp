@@ -75,11 +75,11 @@ public:
             ::DeleteObject(m_hPalette);
     }
 
-    virtual bool IsOk() const wxOVERRIDE { return m_hPalette != 0; }
+    virtual bool IsOk() const override { return m_hPalette != 0; }
 
     UINT GetEntries() const
     {
-        return ::GetPaletteEntries(m_hPalette, 0, 0, NULL);
+        return ::GetPaletteEntries(m_hPalette, 0, 0, nullptr);
     }
 
 private:

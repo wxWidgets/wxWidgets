@@ -144,7 +144,7 @@ public:
         context it returns a 2-element list (item, submenu).
         @endWxPerlOnly
     */
-    virtual wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
+    virtual wxMenuItem* FindItem(int id, wxMenu** menu = nullptr) const;
 
     /**
         Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no
@@ -300,7 +300,7 @@ public:
     /**
         Redraw the menu bar
     */
-    virtual void Refresh(bool eraseBackground = true, const wxRect* rect = NULL);
+    virtual void Refresh(bool eraseBackground = true, const wxRect* rect = nullptr);
 
     /**
         Removes the menu from the menu bar and returns the menu object - the caller
@@ -532,14 +532,6 @@ public:
 
     /**
         Destructor, destroying the menu.
-
-        @note
-            Under Motif, a popup menu must have a valid parent (the window
-            it was last popped up on) when being destroyed. Therefore, make sure
-            you delete or re-use the popup menu @e before destroying the parent
-            window. Re-use in this context means popping up the menu on a different
-            window from last time, which causes an implicit destruction and
-            recreation of internal data structures.
     */
     virtual ~wxMenu();
 
@@ -637,8 +629,6 @@ public:
         Adds a radio item to the end of the menu.
         All consequent radio items form a group and when an item in the group is
         checked, all the others are automatically unchecked.
-
-        @note Radio items are not supported under wxMotif.
 
         @see Append(), InsertRadioItem()
     */
@@ -756,7 +746,7 @@ public:
       @return
         Menu item object or @NULL if not found.
      */
-    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
+    wxMenuItem *FindChildItem(int id, size_t *pos = nullptr) const;
 
     /**
         Finds the menu id for a menu item string.
@@ -781,9 +771,9 @@ public:
             If the pointer is not @NULL, it will be filled with the item's
             parent menu (if the item was found)
 
-        @return Menu item object or NULL if none is found.
+        @return Menu item object or nullptr if none is found.
     */
-    wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
+    wxMenuItem* FindItem(int id, wxMenu** menu = nullptr) const;
 
     /**
         Returns the wxMenuItem given a position in the menu.
@@ -1078,7 +1068,7 @@ public:
         not be used, it is deprecated and exists only for backwards
         compatibility.
     */
-    void UpdateUI(wxEvtHandler* source = NULL);
+    void UpdateUI(wxEvtHandler* source = nullptr);
 
 
     void SetInvokingWindow(wxWindow *win);

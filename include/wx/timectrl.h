@@ -75,11 +75,11 @@ public:
         return true;
     }
 
-    // Get the current time components. All pointers must be non-NULL.
+    // Get the current time components. All pointers must be non-null.
     bool GetTime(int* hour, int* min, int* sec) const
     {
         wxCHECK_MSG( hour && min && sec, false,
-                     wxS("Time component pointers must be non-NULL") );
+                     wxS("Time component pointers must be non-null") );
 
         const wxDateTime::Tm tm = this->GetValue().GetTm();
         *hour = tm.hour;

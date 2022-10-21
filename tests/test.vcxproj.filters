@@ -238,9 +238,6 @@
     <ClCompile Include="strings\vararg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vectors\vectors.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="strings\vsnprintf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

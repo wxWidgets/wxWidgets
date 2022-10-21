@@ -70,7 +70,7 @@ class WrapSizerApp : public wxApp
 public:
     WrapSizerApp() {}
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         new WrapSizerFrame;
         return true;
@@ -85,7 +85,7 @@ wxIMPLEMENT_APP(WrapSizerApp);
 // ----------------------------------------------------------------------------
 
 WrapSizerFrame::WrapSizerFrame()
-        : wxFrame(NULL, wxID_ANY, "wxWrapSizer Sample")
+        : wxFrame(nullptr, wxID_ANY, "wxWrapSizer Sample")
 {
     SetIcon(wxICON(sample));
 

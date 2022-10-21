@@ -298,7 +298,7 @@ public:
     void SetClientSize(const wxRect& rect)
         { SetClientSize( rect.width, rect.height ); }
 
-        // get the window position (pointers may be NULL): notice that it is in
+        // get the window position (pointers may be null): notice that it is in
         // client coordinates for child windows and screen coordinates for the
         // top level ones, use GetScreenPosition() if you need screen
         // coordinates for all kinds of windows
@@ -321,7 +321,7 @@ public:
         return wxPoint(x, y);
     }
 
-        // get the window size (pointers may be NULL)
+        // get the window size (pointers may be null)
     void GetSize( int *w, int *h ) const { DoGetSize(w, h); }
     wxSize GetSize() const
     {
@@ -576,7 +576,7 @@ public:
     class ChildrenRepositioningGuard
     {
     public:
-        // Notice that window can be NULL here, for convenience. In this case
+        // Notice that window can be null here, for convenience. In this case
         // this class simply doesn't do anything.
         explicit ChildrenRepositioningGuard(wxWindowBase* win)
             : m_win(win),
@@ -688,7 +688,7 @@ public:
         // set focus to this window as the result of a keyboard action
     virtual void SetFocusFromKbd() { SetFocus(); }
 
-        // return the window which currently has the focus or NULL
+        // return the window which currently has the focus or nullptr
     static wxWindow *FindFocus();
 
     static wxWindow *DoFindFocus() /* = 0: implement in derived classes */;
@@ -785,7 +785,7 @@ public:
     const wxWindowList& GetWindowChildren() const { return GetChildren() ; }
 
         // get the window before/after this one in the parents children list,
-        // returns NULL if this is the first/last window
+        // returns nullptr if this is the first/last window
     wxWindow *GetPrevSibling() const { return DoGetSibling(OrderBefore); }
     wxWindow *GetNextSibling() const { return DoGetSibling(OrderAfter); }
 
@@ -819,16 +819,16 @@ public:
     // -------------------
 
         // find window among the descendants of this one either by id or by
-        // name (return NULL if not found)
+        // name (return nullptr if not found)
     wxWindow *FindWindow(long winid) const;
     wxWindow *FindWindow(const wxString& name) const;
 
-        // Find a window among any window (all return NULL if not found)
-    static wxWindow *FindWindowById( long winid, const wxWindow *parent = NULL );
+        // Find a window among any window (all return nullptr if not found)
+    static wxWindow *FindWindowById( long winid, const wxWindow *parent = nullptr );
     static wxWindow *FindWindowByName( const wxString& name,
-                                       const wxWindow *parent = NULL );
+                                       const wxWindow *parent = nullptr );
     static wxWindow *FindWindowByLabel( const wxString& label,
-                                        const wxWindow *parent = NULL );
+                                        const wxWindow *parent = nullptr );
 
     // event handler stuff
     // -------------------
@@ -874,8 +874,8 @@ public:
     bool HandleWindowEvent(wxEvent& event) const;
 
         // disable wxEvtHandler double-linked list mechanism:
-    virtual void SetNextHandler(wxEvtHandler *handler) wxOVERRIDE;
-    virtual void SetPreviousHandler(wxEvtHandler *handler) wxOVERRIDE;
+    virtual void SetNextHandler(wxEvtHandler *handler) override;
+    virtual void SetPreviousHandler(wxEvtHandler *handler) override;
 
 
 protected:
@@ -1095,7 +1095,7 @@ public:
     void CaptureMouse();
     void ReleaseMouse();
 
-        // get the window which currently captures the mouse or NULL
+        // get the window which currently captures the mouse or nullptr
     static wxWindow *GetCapture();
 
         // does this window have the capture?
@@ -1115,7 +1115,7 @@ public:
         // mark the specified rectangle (or the whole window) as "dirty" so it
         // will be repainted
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) = 0;
+                          const wxRect *rect = nullptr ) = 0;
 
         // a less awkward wrapper for Refresh
     void RefreshRect(const wxRect& rect, bool eraseBackground = true)
@@ -1239,10 +1239,10 @@ public:
 
         // Returns true if background transparency is supported for this
         // window, i.e. if calling SetBackgroundStyle(wxBG_STYLE_TRANSPARENT)
-        // has a chance of succeeding. If reason argument is non-NULL, returns a
+        // has a chance of succeeding. If reason argument is non-null, returns a
         // user-readable explanation of why it isn't supported if the return
         // value is false.
-    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const;
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const;
 
         // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)
@@ -1262,7 +1262,7 @@ public:
 #if wxUSE_CARET
         // associate a caret with the window
     void SetCaret(wxCaret *caret);
-        // get the current caret (may be NULL)
+        // get the current caret (may be null)
     wxCaret *GetCaret() const { return m_caret; }
 #endif // wxUSE_CARET
 
@@ -1274,9 +1274,9 @@ public:
         // font
     void GetTextExtent(const wxString& string,
                        int *x, int *y,
-                       int *descent = NULL,
-                       int *externalLeading = NULL,
-                       const wxFont *font = NULL) const
+                       int *descent = nullptr,
+                       int *externalLeading = nullptr,
+                       const wxFont *font = nullptr) const
     {
         DoGetTextExtent(string, x, y, descent, externalLeading, font);
     }
@@ -1291,7 +1291,7 @@ public:
     // client <-> screen coords
     // ------------------------
 
-        // translate to/from screen/client coordinates (pointers may be NULL)
+        // translate to/from screen/client coordinates (pointers may be null)
     void ClientToScreen( int *x, int *y ) const
         { DoClientToScreen(x, y); }
     void ScreenToClient( int *x, int *y ) const
@@ -1380,7 +1380,7 @@ public:
 
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = NULL ) = 0;
+                               const wxRect* rect = nullptr ) = 0;
 
         // scrolls window by line/page: note that not all controls support this
         //
@@ -1441,21 +1441,21 @@ public:
 #if wxUSE_TOOLTIPS
         // the easiest way to set a tooltip for a window is to use this method
     void SetToolTip( const wxString &tip ) { DoSetToolTipText(tip); }
-        // attach a tooltip to the window, pointer can be NULL to remove
+        // attach a tooltip to the window, pointer can be null to remove
         // existing tooltip
     void SetToolTip( wxToolTip *tip ) { DoSetToolTip(tip); }
-        // more readable synonym for SetToolTip(NULL)
-    void UnsetToolTip() { SetToolTip(NULL); }
-        // get the associated tooltip or NULL if none
+        // more readable synonym for SetToolTip(nullptr)
+    void UnsetToolTip() { SetToolTip(nullptr); }
+        // get the associated tooltip or nullptr if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
     wxString GetToolTipText() const;
 
-    // Use the same tool tip as the given one (which can be NULL to indicate
+    // Use the same tool tip as the given one (which can be null to indicate
     // that no tooltip should be used) for this window. This is currently only
     // used by wxCompositeWindow::DoSetToolTip() implementation and is not part
     // of the public wx API.
     //
-    // Returns true if tip was valid and we copied it or false if it was NULL
+    // Returns true if tip was valid and we copied it or false if it was nullptr
     // and we reset our own tooltip too.
     bool CopyToolTip(wxToolTip *tip);
 #else // !wxUSE_TOOLTIPS
@@ -1469,7 +1469,7 @@ public:
     // -------------
 #if wxUSE_DRAG_AND_DROP
         // set/retrieve the drop target associated with this window (may be
-        // NULL; it's owned by the window and will be deleted by it)
+        // null; it's owned by the window and will be deleted by it)
     virtual void SetDropTarget( wxDropTarget *dropTarget ) = 0;
     virtual wxDropTarget *GetDropTarget() const { return m_dropTarget; }
 
@@ -1487,7 +1487,7 @@ public:
     // constraints and sizers
     // ----------------------
 #if wxUSE_CONSTRAINTS
-        // set the constraints for this window or retrieve them (may be NULL)
+        // set the constraints for this window or retrieve them (may be null)
     void SetConstraints( wxLayoutConstraints *constraints );
     wxLayoutConstraints *GetConstraints() const { return m_constraints; }
 
@@ -1538,7 +1538,7 @@ public:
     // ----------------------
 #if wxUSE_ACCESSIBILITY
     // Override to create a specific accessible object.
-    virtual wxAccessible* CreateAccessible() { return NULL; }
+    virtual wxAccessible* CreateAccessible() { return nullptr; }
 
     // Sets the accessible object.
     void SetAccessible(wxAccessible* accessible) ;
@@ -1547,7 +1547,7 @@ public:
     wxAccessible* GetAccessible() { return m_accessible; }
 
     // Returns the accessible object, calling CreateAccessible if necessary.
-    // May return NULL, in which case system-provide accessible is used.
+    // May return nullptr, in which case system-provide accessible is used.
     wxAccessible* GetOrCreateAccessible() ;
 #endif
 
@@ -1591,7 +1591,7 @@ public:
     // The optional sizer argument can be passed to use the given sizer for
     // laying out the window, which is useful if this function is called before
     // SetSizer(). By default the window sizer is used.
-    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = NULL);
+    virtual void WXSetInitialFittingClientSize(int flags, wxSizer* sizer = nullptr);
 
         // get the handle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call
@@ -1614,7 +1614,7 @@ public:
         // return true if we have a specific palette
     bool HasCustomPalette() const { return m_hasCustomPalette; }
 
-        // return the first parent window with a custom palette or NULL
+        // return the first parent window with a custom palette or nullptr
     wxWindow *GetAncestorWithCustomPalette() const;
 #endif // wxUSE_PALETTE
 
@@ -1663,7 +1663,7 @@ public:
     }
 
     // This is an internal helper function implemented by text-like controls.
-    virtual const wxTextEntry* WXGetTextEntry() const { return NULL; }
+    virtual const wxTextEntry* WXGetTextEntry() const { return nullptr; }
 
 protected:
     // helper for the derived class Create() methods: the first overload, with
@@ -1685,8 +1685,8 @@ protected:
                     const wxString& name);
 
     // event handling specific to wxWindow
-    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
-    virtual bool TryAfter(wxEvent& event) wxOVERRIDE;
+    virtual bool TryBefore(wxEvent& event) override;
+    virtual bool TryAfter(wxEvent& event) override;
 
     enum WindowOrder
     {
@@ -1723,7 +1723,7 @@ protected:
     // its siblings unless it is wxID_ANY
     wxWindowIDRef        m_windowId;
 
-    // the parent window of this window (or NULL) and the list of the children
+    // the parent window of this window (or nullptr) and the list of the children
     // of this window
     wxWindow            *m_parent;
     wxWindowList         m_children;
@@ -1740,7 +1740,7 @@ protected:
     wxEvtHandler        *m_eventHandler;
 
 #if wxUSE_VALIDATORS
-    // associated validator or NULL if none
+    // associated validator or nullptr if none
     wxValidator         *m_windowValidator;
 #endif // wxUSE_VALIDATORS
 
@@ -1767,14 +1767,14 @@ protected:
     wxAcceleratorTable   m_acceleratorTable;
 #endif // wxUSE_ACCEL
 
-    // the tooltip for this window (may be NULL)
+    // the tooltip for this window (may be null)
 #if wxUSE_TOOLTIPS
     wxToolTip           *m_tooltip;
 #endif // wxUSE_TOOLTIPS
 
     // constraints and sizers
 #if wxUSE_CONSTRAINTS
-    // the constraints for this window or NULL
+    // the constraints for this window or nullptr
     wxLayoutConstraints *m_constraints;
 
     // constraints this window is involved in
@@ -1864,9 +1864,9 @@ protected:
     // text extent
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *font = NULL) const = 0;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *font = nullptr) const = 0;
 
     // coordinates translation
     virtual void DoClientToScreen( int *x, int *y ) const = 0;
@@ -2004,22 +2004,13 @@ private:
         #define wxWindowMSW wxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/window.h"
-#elif defined(__WXGTK20__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowGTK
-    #else // !wxUniv
-        #define wxWindowGTK wxWindow
-    #endif // wxUniv
-    #include "wx/gtk/window.h"
 #elif defined(__WXGTK__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowGTK
     #else // !wxUniv
         #define wxWindowGTK wxWindow
     #endif // wxUniv
-    #include "wx/gtk1/window.h"
+    #include "wx/gtk/window.h"
 #elif defined(__WXX11__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowX11
@@ -2063,7 +2054,7 @@ private:
 
 inline wxWindow *wxWindowBase::GetGrandParent() const
 {
-    return m_parent ? m_parent->GetParent() : NULL;
+    return m_parent ? m_parent->GetParent() : nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -2077,7 +2068,7 @@ extern WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 // Get the current mouse position.
 extern WXDLLIMPEXP_CORE wxPoint wxGetMousePosition();
 
-// get the currently active window of this application or NULL
+// get the currently active window of this application or nullptr
 extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 
 // get the (first) top level parent window
@@ -2101,35 +2092,35 @@ public:
 
         // Can return either a child object, or an integer
         // representing the child element, starting from 1.
-    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject) wxOVERRIDE;
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject) override;
 
         // Returns the rectangle for this object (id = 0) or a child element (id > 0).
-    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) wxOVERRIDE;
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
 
         // Navigates from fromId to toId/toObject.
     virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
-                int* toId, wxAccessible** toObject) wxOVERRIDE;
+                int* toId, wxAccessible** toObject) override;
 
         // Gets the name of the specified object.
-    virtual wxAccStatus GetName(int childId, wxString* name) wxOVERRIDE;
+    virtual wxAccStatus GetName(int childId, wxString* name) override;
 
         // Gets the number of children.
-    virtual wxAccStatus GetChildCount(int* childCount) wxOVERRIDE;
+    virtual wxAccStatus GetChildCount(int* childCount) override;
 
         // Gets the specified child (starting from 1).
-        // If *child is NULL and return value is wxACC_OK,
+        // If *child is null and return value is wxACC_OK,
         // this means that the child is a simple element and
         // not an accessible object.
-    virtual wxAccStatus GetChild(int childId, wxAccessible** child) wxOVERRIDE;
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
 
-        // Gets the parent, or NULL.
-    virtual wxAccStatus GetParent(wxAccessible** parent) wxOVERRIDE;
+        // Gets the parent, or nullptr.
+    virtual wxAccStatus GetParent(wxAccessible** parent) override;
 
         // Performs the default action. childId is 0 (the action for this object)
         // or > 0 (the action for a child).
         // Return wxACC_NOT_SUPPORTED if there is no default action for this
         // window (e.g. an edit control).
-    virtual wxAccStatus DoDefaultAction(int childId) wxOVERRIDE;
+    virtual wxAccStatus DoDefaultAction(int childId) override;
 
         // Gets the default action for this object (0) or > 0 (the action for a child).
         // Return wxACC_OK even if there is no action. actionName is the action, or the empty
@@ -2137,36 +2128,36 @@ public:
         // The retrieved string describes the action that is performed on an object,
         // not what the object does as a result. For example, a toolbar button that prints
         // a document has a default action of "Press" rather than "Prints the current document."
-    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName) wxOVERRIDE;
+    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName) override;
 
         // Returns the description for this object or a child.
-    virtual wxAccStatus GetDescription(int childId, wxString* description) wxOVERRIDE;
+    virtual wxAccStatus GetDescription(int childId, wxString* description) override;
 
         // Returns help text for this object or a child, similar to tooltip text.
-    virtual wxAccStatus GetHelpText(int childId, wxString* helpText) wxOVERRIDE;
+    virtual wxAccStatus GetHelpText(int childId, wxString* helpText) override;
 
         // Returns the keyboard shortcut for this object or child.
         // Return e.g. ALT+K
-    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut) wxOVERRIDE;
+    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut) override;
 
         // Returns a role constant.
-    virtual wxAccStatus GetRole(int childId, wxAccRole* role) wxOVERRIDE;
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
 
         // Returns a state constant.
-    virtual wxAccStatus GetState(int childId, long* state) wxOVERRIDE;
+    virtual wxAccStatus GetState(int childId, long* state) override;
 
         // Returns a localized string representing the value for the object
         // or child.
-    virtual wxAccStatus GetValue(int childId, wxString* strValue) wxOVERRIDE;
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
 
         // Selects the object or child.
-    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags) wxOVERRIDE;
+    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags) override;
 
         // Gets the window with the keyboard focus.
-        // If childId is 0 and child is NULL, no object in
+        // If childId is 0 and child is null, no object in
         // this subhierarchy has the focus.
         // If this object has the focus, child should be 'this'.
-    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) wxOVERRIDE;
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
 
 #if wxUSE_VARIANT
         // Gets a variant representing the selected children
@@ -2177,7 +2168,7 @@ public:
         // - an integer representing the selected child element,
         //   or 0 if this object is selected (GetType() == wxT("long")
         // - a "void*" pointer to a wxAccessible child object
-    virtual wxAccStatus GetSelections(wxVariant* selections) wxOVERRIDE;
+    virtual wxAccStatus GetSelections(wxVariant* selections) override;
 #endif // wxUSE_VARIANT
 };
 

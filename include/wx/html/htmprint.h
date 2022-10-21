@@ -60,7 +60,7 @@ public:
     void SetHtmlCell(wxHtmlContainerCell& cell);
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
-    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = nullptr);
 
     // Sets font sizes to be relative to the given size or the system
     // default size; use either specified or default font
@@ -143,7 +143,7 @@ public:
             // You can set different header/footer for odd and even pages
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
-    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = nullptr);
 
     // Sets font sizes to be relative to the given size or the system
     // default size; use either specified or default font
@@ -159,11 +159,11 @@ public:
     void SetMargins(const wxPageSetupDialogData& pageSetupData);
 
     // wxPrintout stuff:
-    bool OnPrintPage(int page) wxOVERRIDE;
-    bool HasPage(int page) wxOVERRIDE;
-    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
-    bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
-    void OnPreparePrinting() wxOVERRIDE;
+    bool OnPrintPage(int page) override;
+    bool HasPage(int page) override;
+    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
+    bool OnBeginDocument(int startPage, int endPage) override;
+    void OnPreparePrinting() override;
 
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);
@@ -231,7 +231,7 @@ private:
 class WXDLLIMPEXP_HTML wxHtmlEasyPrinting : public wxObject
 {
 public:
-    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxWindow *parentWindow = NULL);
+    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxWindow *parentWindow = nullptr);
     virtual ~wxHtmlEasyPrinting();
 
     bool PreviewFile(const wxString &htmlfile);
@@ -257,7 +257,7 @@ public:
             // pg is one of wxPAGE_ODD, wxPAGE_EVEN and wx_PAGE_ALL constants.
             // You can set different header/footer for odd and even pages
 
-    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int* sizes = NULL);
+    void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int* sizes = nullptr);
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used)
 
     // Sets font sizes to be relative to the given size or the system

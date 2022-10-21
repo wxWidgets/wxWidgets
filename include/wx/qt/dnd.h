@@ -13,14 +13,14 @@
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject *dataObject = NULL);
+    wxDropTarget(wxDataObject *dataObject = nullptr);
     virtual ~wxDropTarget();
 
-    virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual bool OnDrop(wxCoord x, wxCoord y) override;
     virtual wxDragResult OnData(wxCoord x,
                                 wxCoord y,
-                                wxDragResult def) wxOVERRIDE;
-    virtual bool GetData() wxOVERRIDE;
+                                wxDragResult def) override;
+    virtual bool GetData() override;
 
     wxDataFormat GetMatchingPair();
 
@@ -35,7 +35,7 @@ private:
 class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
-    wxDropSource(wxWindow *win = NULL,
+    wxDropSource(wxWindow *win = nullptr,
                  const wxCursor &copy = wxNullCursor,
                  const wxCursor &move = wxNullCursor,
                  const wxCursor &none = wxNullCursor);
@@ -46,7 +46,7 @@ public:
                  const wxCursor &move = wxNullCursor,
                  const wxCursor &none = wxNullCursor);
 
-    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) wxOVERRIDE;
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) override;
 
 private:
     wxWindow* m_parentWindow;

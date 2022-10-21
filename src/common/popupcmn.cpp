@@ -38,11 +38,8 @@
     #include "wx/scrolbar.h"
 #endif // __WXUNIVERSAL__
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     #include "wx/gtk/private/wrapgtk.h"
-#elif defined(__WXGTK__)
-    #include <gtk/gtk.h>
-    #define gtk_widget_get_window(x) x->window
 #elif defined(__WXX11__)
     #include "wx/x11/private.h"
 #endif
@@ -234,10 +231,10 @@ bool wxPopupTransientWindowBase::Destroy()
 void wxPopupTransientWindow::Init()
 {
     m_child =
-    m_focus = NULL;
+    m_focus = nullptr;
 
-    m_handlerFocus = NULL;
-    m_handlerPopup = NULL;
+    m_handlerFocus = nullptr;
+    m_handlerPopup = nullptr;
 }
 
 wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent, int style)
@@ -267,13 +264,13 @@ void wxPopupTransientWindow::PopHandlers()
         {
             // something is very wrong and someone else probably deleted our
             // handler - so don't risk deleting it second time
-            m_handlerPopup = NULL;
+            m_handlerPopup = nullptr;
         }
         if (m_child->HasCapture())
         {
             m_child->ReleaseMouse();
         }
-        m_child = NULL;
+        m_child = nullptr;
     }
 
     if ( m_focus )
@@ -281,10 +278,10 @@ void wxPopupTransientWindow::PopHandlers()
         if ( !m_focus->RemoveEventHandler(m_handlerFocus) )
         {
             // see above
-            m_handlerFocus = NULL;
+            m_handlerFocus = nullptr;
         }
     }
-    m_focus = NULL;
+    m_focus = nullptr;
 }
 
 void wxPopupTransientWindow::Popup(wxWindow *winFocus)
@@ -385,7 +382,7 @@ bool wxPopupTransientWindow::Show( bool show )
 #ifdef __WXGTK4__
         GdkDisplay* display = gdk_window_get_display(window);
         GdkSeat* seat = gdk_display_get_default_seat(display);
-        gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_POINTER, false, NULL, NULL, NULL, 0);
+        gdk_seat_grab(seat, window, GDK_SEAT_CAPABILITY_POINTER, false, nullptr, nullptr, nullptr, 0);
 #else
         const GdkEventMask mask = GdkEventMask(
             GDK_BUTTON_PRESS_MASK |
@@ -398,13 +395,13 @@ bool wxPopupTransientWindow::Show( bool show )
         GdkDeviceManager* manager = gdk_display_get_device_manager(display);
         GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_grab(device, window,
-            GDK_OWNERSHIP_NONE, true, mask, NULL, unsigned(GDK_CURRENT_TIME));
+            GDK_OWNERSHIP_NONE, true, mask, nullptr, unsigned(GDK_CURRENT_TIME));
         wxGCC_WARNING_RESTORE()
 #else
         gdk_pointer_grab( window, true,
                           mask,
-                          NULL,
-                          NULL,
+                          nullptr,
+                          nullptr,
                           (guint32)GDK_CURRENT_TIME );
 #endif
 #endif // !__WXGTK4__
@@ -558,7 +555,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
     // in non-Univ ports the system manages scrollbars for us
 #if defined(__WXUNIVERSAL__) && wxUSE_SCROLLBAR
     // scrollbar on which the click occurred
-    wxWindow *sbar = NULL;
+    wxWindow *sbar = nullptr;
 #endif // __WXUNIVERSAL__ && wxUSE_SCROLLBAR
 
     wxWindow *win = (wxWindow *)event.GetEventObject();

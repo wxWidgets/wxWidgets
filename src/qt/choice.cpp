@@ -22,7 +22,7 @@ class LexicalSortProxyModel : public QSortFilterProxyModel
 public:
     explicit LexicalSortProxyModel(QObject* owner) : QSortFilterProxyModel(owner) {}
 
-    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const wxOVERRIDE
+    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override
     {
         const QVariant leftData = sourceModel()->data( left );
         const QVariant rightData = sourceModel()->data( right );
@@ -73,7 +73,7 @@ void wxQtChoice::activated(int WXUNUSED(index))
 
 
 wxChoice::wxChoice() :
-    m_qtComboBox(NULL)
+    m_qtComboBox(nullptr)
 {
 }
 
@@ -118,7 +118,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    return Create( parent, id, pos, size, choices.size(), choices.size() ? &choices[ 0 ] : NULL, style,
+    return Create( parent, id, pos, size, choices.size(), choices.size() ? &choices[ 0 ] : nullptr, style,
         validator, name );
 }
 

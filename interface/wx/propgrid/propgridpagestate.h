@@ -26,7 +26,7 @@ public:
     int GetColumn() const;
 
     /**
-        Returns property hit. NULL if empty space below
+        Returns property hit. @NULL if empty space below
         properties was hit instead.
     */
     wxPGProperty* GetProperty() const;
@@ -228,7 +228,7 @@ public:
     wxPropertyGridIterator();
     wxPropertyGridIterator( wxPropertyGridPageState* state,
                             int flags = wxPG_ITERATE_DEFAULT,
-                            wxPGProperty* property = NULL, int dir = 1 );
+                            wxPGProperty* property = nullptr, int dir = 1 );
     wxPropertyGridIterator( wxPropertyGridPageState* state,
                             int flags, int startPos, int dir = 0 );
     wxPropertyGridIterator( const wxPropertyGridIterator& it );
@@ -253,7 +253,7 @@ public:
     wxPropertyGridConstIterator();
     wxPropertyGridConstIterator( const wxPropertyGridPageState* state,
                                  int flags = wxPG_ITERATE_DEFAULT,
-                                 const wxPGProperty* property = NULL, int dir = 1 );
+                                 const wxPGProperty* property = nullptr, int dir = 1 );
     wxPropertyGridConstIterator( wxPropertyGridPageState* state,
                                  int flags, int startPos, int dir = 0 );
     wxPropertyGridConstIterator( const wxPropertyGridConstIterator& it );

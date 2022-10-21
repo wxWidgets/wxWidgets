@@ -40,9 +40,9 @@ public:
 
     virtual ~wxMenu();
 
-    virtual void Break() wxOVERRIDE;
+    virtual void Break() override;
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual void SetTitle(const wxString& title) override;
 
     // MSW-only methods
     // ----------------
@@ -53,7 +53,7 @@ public:
 
     // Detaches HMENU so that it isn't deleted when this object is destroyed.
     // Don't use this object after calling this method.
-    WXHMENU MSWDetachHMENU() { WXHMENU m = m_hMenu; m_hMenu = NULL; return m; }
+    WXHMENU MSWDetachHMENU() { WXHMENU m = m_hMenu; m_hMenu = nullptr; return m; }
 
     // Process WM_COMMAND.
     virtual bool MSWCommand(WXUINT param, WXWORD id);
@@ -113,9 +113,9 @@ private:
 #endif // wxUSE_OWNER_DRAWN
 
 protected:
-    virtual wxMenuItem* DoAppend(wxMenuItem *item) wxOVERRIDE;
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item) wxOVERRIDE;
-    virtual wxMenuItem* DoRemove(wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem* DoAppend(wxMenuItem *item) override;
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item) override;
+    virtual wxMenuItem* DoRemove(wxMenuItem *item) override;
 
 private:
     // This constructor is private, use MSWNewFromHMENU() to use it.
@@ -136,7 +136,7 @@ private:
     // allows to find whether an item at the given position is part of the
     // group and also where its group starts and ends.
     //
-    // It is initially NULL and only allocated if we have any radio items.
+    // It is initially nullptr and only allocated if we have any radio items.
     wxMenuRadioItemsData *m_radioData;
 
     // if true, insert a break before appending the next item
@@ -181,20 +181,20 @@ public:
     virtual ~wxMenuBar();
 
     // menubar construction
-    virtual bool Append( wxMenu *menu, const wxString &title ) wxOVERRIDE;
-    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
-    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
-    virtual wxMenu *Remove(size_t pos) wxOVERRIDE;
+    virtual bool Append( wxMenu *menu, const wxString &title ) override;
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) override;
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title) override;
+    virtual wxMenu *Remove(size_t pos) override;
 
-    virtual void EnableTop( size_t pos, bool flag ) wxOVERRIDE;
-    virtual bool IsEnabledTop(size_t pos) const wxOVERRIDE;
-    virtual void SetMenuLabel( size_t pos, const wxString& label ) wxOVERRIDE;
-    virtual wxString GetMenuLabel( size_t pos ) const wxOVERRIDE;
+    virtual void EnableTop( size_t pos, bool flag ) override;
+    virtual bool IsEnabledTop(size_t pos) const override;
+    virtual void SetMenuLabel( size_t pos, const wxString& label ) override;
+    virtual wxString GetMenuLabel( size_t pos ) const override;
 
     // implementation from now on
     WXHMENU Create();
-    virtual void Detach() wxOVERRIDE;
-    virtual void Attach(wxFrame *frame) wxOVERRIDE;
+    virtual void Detach() override;
+    virtual void Attach(wxFrame *frame) override;
 
 #if wxUSE_ACCEL
     // update the accel table (must be called after adding/deleting a menu)
@@ -205,12 +205,12 @@ public:
     WXHMENU GetHMenu() const { return m_hMenu; }
 
     // if the menubar is modified, the display is not updated automatically,
-    // call this function to update it (m_menuBarFrame should be !NULL)
+    // call this function to update it (m_menuBarFrame should be non-null)
     void Refresh();
 
     // To avoid compile warning
     void Refresh( bool eraseBackground,
-                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE { wxWindow::Refresh(eraseBackground, rect); }
+                  const wxRect *rect = nullptr ) override { wxWindow::Refresh(eraseBackground, rect); }
 
     // Get a top level menu position or wxNOT_FOUND from its handle.
     int MSWGetTopMenuPos(WXHMENU hMenu) const;

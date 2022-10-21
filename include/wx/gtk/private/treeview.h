@@ -22,8 +22,8 @@
 class wxGtkTreePath
 {
 public:
-    // Ctor takes ownership of the given path and will free it if non-NULL.
-    wxGtkTreePath(GtkTreePath *path = NULL) : m_path(path) { }
+    // Ctor takes ownership of the given path and will free it if non-null.
+    wxGtkTreePath(GtkTreePath *path = nullptr) : m_path(path) { }
 
     // Creates a tree path for the given string path.
     wxGtkTreePath(const gchar *strpath)

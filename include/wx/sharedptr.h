@@ -23,8 +23,8 @@ class wxSharedPtr
 public:
     typedef T element_type;
 
-    explicit wxSharedPtr( T* ptr = NULL )
-        : m_ref(NULL)
+    explicit wxSharedPtr( T* ptr = nullptr )
+        : m_ref(nullptr)
     {
         if (ptr)
             m_ref = new reftype(ptr);
@@ -32,7 +32,7 @@ public:
 
     template<typename Deleter>
     explicit wxSharedPtr(T* ptr, Deleter d)
-        : m_ref(NULL)
+        : m_ref(nullptr)
     {
         if (ptr)
             m_ref = new reftype_with_deleter<Deleter>(ptr, d);
@@ -70,29 +70,29 @@ public:
         if (m_ref && m_ref->m_ptr)
            return  &wxSharedPtr<T>::get;
         else
-           return NULL;
+           return nullptr;
     }
 
     T& operator*() const
     {
-        wxASSERT(m_ref != NULL);
-        wxASSERT(m_ref->m_ptr != NULL);
+        wxASSERT(m_ref != nullptr);
+        wxASSERT(m_ref->m_ptr != nullptr);
         return *(m_ref->m_ptr);
     }
 
     T* operator->() const
     {
-        wxASSERT(m_ref != NULL);
-        wxASSERT(m_ref->m_ptr != NULL);
+        wxASSERT(m_ref != nullptr);
+        wxASSERT(m_ref->m_ptr != nullptr);
         return m_ref->m_ptr;
     }
 
     T* get() const
     {
-        return m_ref ? m_ref->m_ptr : NULL;
+        return m_ref ? m_ref->m_ptr : nullptr;
     }
 
-    void reset( T* ptr = NULL )
+    void reset( T* ptr = nullptr )
     {
         Release();
         if (ptr)
@@ -126,7 +126,7 @@ private:
     struct reftype_with_deleter : public reftype
     {
         reftype_with_deleter(T* ptr, Deleter d) : reftype(ptr), m_deleter(d) {}
-        virtual void delete_ptr() wxOVERRIDE { m_deleter(this->m_ptr); }
+        virtual void delete_ptr() override { m_deleter(this->m_ptr); }
 
         Deleter m_deleter;
     };
@@ -149,7 +149,7 @@ private:
                 m_ref->delete_ptr();
                 delete m_ref;
             }
-            m_ref = NULL;
+            m_ref = nullptr;
         }
     }
 };

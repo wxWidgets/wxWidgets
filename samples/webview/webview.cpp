@@ -67,10 +67,10 @@ public:
     {
     }
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override
     {
         wxApp::OnInitCmdLine(parser);
 
@@ -79,7 +79,7 @@ public:
                         wxCMD_LINE_PARAM_OPTIONAL);
     }
 
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override
     {
         if ( !wxApp::OnCmdLineParsed(parser) )
             return false;
@@ -269,7 +269,7 @@ public:
     { }
 
     virtual void StartRequest(const wxWebViewHandlerRequest& request,
-                              wxSharedPtr<wxWebViewHandlerResponse> response) wxOVERRIDE
+                              wxSharedPtr<wxWebViewHandlerResponse> response) override
     {
         response->SetHeader("Access-Control-Allow-Origin", "*");
         response->SetHeader("Access-Control-Allow-Headers", "*");
@@ -331,7 +331,7 @@ bool WebApp::OnInit()
 }
 
 WebFrame::WebFrame(const wxString& url) :
-    wxFrame(NULL, wxID_ANY, "wxWebView Sample")
+    wxFrame(nullptr, wxID_ANY, "wxWebView Sample")
 {
     // set the frame icon
     SetIcon(wxICON(sample));

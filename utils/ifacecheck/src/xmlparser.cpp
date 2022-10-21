@@ -161,7 +161,7 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     // Note: we adjust the aesthetic form of the m_strDefaultValue string for the "modify mode"
     //       of ifacecheck: we may need to write it out in an interface header
 
-    wxString *p = NULL;
+    wxString *p = nullptr;
     for (int i=0; i<2; i++)     // to avoid copying&pasting the code!
     {
         if (i == 0) p = &m_strDefaultValue;
@@ -545,7 +545,7 @@ const wxMethod* wxClass::FindMethod(const wxMethod& m) const
     for (unsigned int i=0; i<m_methods.GetCount(); i++)
         if (m_methods[i] == m)
             return &m_methods[i];
-    return NULL;
+    return nullptr;
 }
 
 const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
@@ -567,7 +567,7 @@ const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
             if (!parent) {
                 wxLogError("Could not find parent '%s' of class '%s'...",
                          m_parents[i], GetName());
-                return NULL;
+                return nullptr;
             }
 
             const wxMethod *parentMethod = parent->RecursiveUpwardFindMethod(m, allclasses);
@@ -577,7 +577,7 @@ const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
     }
 
     // could not find anything even in parent classes...
-    return NULL;
+    return nullptr;
 }
 
 wxMethodPtrArray wxClass::FindMethodsNamed(const wxString& name) const
@@ -1373,7 +1373,7 @@ static bool HasTextNodeContaining(const wxXmlNode *parent, const wxString& name)
 static const wxXmlNode* FindNodeNamed(const wxXmlNode* parent, const wxString& name)
 {
     if (!parent)
-        return NULL;
+        return nullptr;
 
     const wxXmlNode *p = parent->GetChildren();
     while (p)
@@ -1389,7 +1389,7 @@ static const wxXmlNode* FindNodeNamed(const wxXmlNode* parent, const wxString& n
         p = p->GetNext();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 int GetAvailabilityFor(const wxXmlNode *node)

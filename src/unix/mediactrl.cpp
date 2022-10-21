@@ -117,36 +117,36 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name) wxOVERRIDE;
+                                     const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
     virtual bool Load(const wxURI& location,
-                      const wxURI& proxy) wxOVERRIDE
+                      const wxURI& proxy) override
         { return wxMediaBackendCommonBase::Load(location, proxy); }
 
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double dRate) override;
 
-    virtual wxLongLong GetDownloadProgress() wxOVERRIDE;
-    virtual wxLongLong GetDownloadTotal() wxOVERRIDE;
+    virtual wxLongLong GetDownloadProgress() override;
+    virtual wxLongLong GetDownloadTotal() override;
 
-    virtual bool SetVolume(double dVolume) wxOVERRIDE;
-    virtual double GetVolume() wxOVERRIDE;
+    virtual bool SetVolume(double dVolume) override;
+    virtual double GetVolume() override;
 
     //------------implementation from now on-----------------------------------
     bool CheckForErrors();
@@ -424,7 +424,7 @@ static gboolean gst_bus_async_callback(GstBus* WXUNUSED(bus),
         GError* error;
         gchar* debug;
         gst_message_parse_error(message, &error, &debug);
-        gst_error_callback(NULL, NULL, error, debug, be);
+        gst_error_callback(nullptr, nullptr, error, debug, be);
         return FALSE;
     }
 
@@ -445,7 +445,7 @@ static gboolean gst_bus_async_callback(GstBus* WXUNUSED(bus),
         }
         case GST_MESSAGE_EOS:
         {
-            gst_finish_callback(NULL, be);
+            gst_finish_callback(nullptr, be);
             break;
         }
 
@@ -543,18 +543,18 @@ void wxGStreamerMediaBackend::HandleStateChange(GstState oldstate,
 //-----------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* element)
 {
-    const GList *list = NULL;
-    g_object_get (G_OBJECT (element), "stream-info", &list, NULL);
+    const GList *list = nullptr;
+    g_object_get (G_OBJECT (element), "stream-info", &list, nullptr);
 
-    for ( ; list != NULL; list = list->next)
+    for ( ; list != nullptr; list = list->next)
     {
         GObject *info = (GObject *) list->data;
         gint type;
         GParamSpec *pspec;
         GEnumValue *val;
-        GstPad *pad = NULL;
+        GstPad *pad = nullptr;
 
-        g_object_get (info, "type", &type, NULL);
+        g_object_get (info, "type", &type, nullptr);
         pspec = g_object_class_find_property (
                         G_OBJECT_GET_CLASS (info), "type");
         val = g_enum_get_value (G_PARAM_SPEC_ENUM (pspec)->enum_class, type);
@@ -568,9 +568,9 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* element)
                         G_OBJECT_GET_CLASS (info), "object");
 
             if (!pspec)
-                g_object_get (info, "pad", &pad, NULL);
+                g_object_get (info, "pad", &pad, nullptr);
             else
-                g_object_get (info, "object", &pad, NULL);
+                g_object_get (info, "object", &pad, nullptr);
 
             if(!QueryVideoSizeFromPad(pad))
             {
@@ -586,7 +586,7 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* element)
     }// end searching through info list
 
     // no video (or extremely delayed stream-info)
-    if(list == NULL)
+    if(list == nullptr)
     {
         m_videoSize = wxSize(0,0);
         return false;
@@ -728,7 +728,7 @@ bool wxGStreamerMediaBackend::SyncStateChange(GstElement* element,
 #if 1
         // NB: The GStreamer gst_bus_poll is unfortunately broken and
         // throws silly critical internal errors (for instance
-        // "message != NULL" when the whole point of it is to
+        // "message != nullptr" when the whole point of it is to
         // poll for the message in the first place!) so we implement
         // our own "waiting mechinism"
         if(gst_bus_have_pending(bus) == FALSE)
@@ -769,7 +769,7 @@ bool wxGStreamerMediaBackend::SyncStateChange(GstElement* element,
                     GError* error;
                     gchar* debug;
                     gst_message_parse_error(message, &error, &debug);
-                    gst_error_callback(NULL, NULL, error, debug, this);
+                    gst_error_callback(nullptr, nullptr, error, debug, this);
                     bBreak = true;
                     break;
                 }
@@ -918,11 +918,11 @@ void wxGStreamerMediaEventHandler::NotifyMovieSizeChanged()
 //-----------------------------------------------------------------------------
 // wxGStreamerMediaBackend Constructor
 //
-// Sets m_playbin to NULL signifying we havn't loaded anything yet
+// Sets m_playbin to nullptr signifying we havn't loaded anything yet
 //-----------------------------------------------------------------------------
 wxGStreamerMediaBackend::wxGStreamerMediaBackend()
-    : m_playbin(NULL),
-      m_eventHandler(NULL)
+    : m_playbin(nullptr),
+      m_eventHandler(nullptr)
 {
 }
 
@@ -998,7 +998,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         argvGST[i] = wxStrdupA(wxTheApp->argv[i].utf8_str());
     }
 
-    argvGST[wxTheApp->argc] = NULL;
+    argvGST[wxTheApp->argc] = nullptr;
 
     int argcGST = wxTheApp->argc;
 #else
@@ -1008,7 +1008,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     //Really init gstreamer
     gboolean bInited;
-    GError* error = NULL;
+    GError* error = nullptr;
     bInited = gst_init_check(&argcGST, &argvGST, &error);
 
     // Cleanup arguments for unicode case
@@ -1084,7 +1084,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                        (GstBusFunc) gst_bus_async_callback, this);
 #if GST_CHECK_VERSION(1,0,0)
     gst_bus_set_sync_handler(gst_element_get_bus(m_playbin),
-                             (GstBusSyncHandler) gst_bus_sync_callback, this, NULL);
+                             (GstBusSyncHandler) gst_bus_sync_callback, this, nullptr);
 #else
     gst_bus_set_sync_handler(gst_element_get_bus(m_playbin),
                              (GstBusSyncHandler) gst_bus_sync_callback, this);
@@ -1163,7 +1163,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     g_object_set (G_OBJECT (m_playbin),
                   "video-sink", videosink,
                   "audio-sink", audiosink,
-                   NULL);
+                   nullptr);
 
     m_eventHandler = new wxGStreamerMediaEventHandler(this);
     return true;
@@ -1246,7 +1246,7 @@ bool wxGStreamerMediaBackend::DoLoad(const wxString& locstring)
     wxASSERT(gst_uri_is_valid(locstring.mb_str()));
 
     g_object_set (G_OBJECT (m_playbin), "uri",
-                  (const char*)locstring.mb_str(), NULL);
+                  (const char*)locstring.mb_str(), nullptr);
 
     // Try to pause media as gstreamer won't let us query attributes
     // such as video size unless it is paused or playing
@@ -1575,9 +1575,9 @@ bool wxGStreamerMediaBackend::SetVolume(double dVolume)
 {
     if(g_object_class_find_property(
             G_OBJECT_GET_CLASS(G_OBJECT(m_playbin)),
-            "volume") != NULL)
+            "volume") != nullptr)
     {
-        g_object_set(G_OBJECT(m_playbin), "volume", dVolume, NULL);
+        g_object_set(G_OBJECT(m_playbin), "volume", dVolume, nullptr);
         return true;
     }
     else
@@ -1595,9 +1595,9 @@ double wxGStreamerMediaBackend::GetVolume()
 
     if(g_object_class_find_property(
             G_OBJECT_GET_CLASS(G_OBJECT(m_playbin)),
-            "volume") != NULL)
+            "volume") != nullptr)
     {
-        g_object_get(G_OBJECT(m_playbin), "volume", &dVolume, NULL);
+        g_object_get(G_OBJECT(m_playbin), "volume", &dVolume, nullptr);
     }
     else
     {

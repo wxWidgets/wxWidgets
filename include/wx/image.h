@@ -210,7 +210,7 @@ public:
     // find first colour that is not used in the image and has higher
     // RGB values than RGB(startR, startG, startB)
     //
-    // returns true and puts this colour in r, g, b (each of which may be NULL)
+    // returns true and puts this colour in r, g, b (each of which may be null)
     // on success or returns false if there are no more free colours
     bool FindFirstUnusedColour(unsigned char *r,
                                unsigned char *g,
@@ -383,7 +383,7 @@ public:
     // Rotates the image about the given point, 'angle' radians.
     // Returns the rotated image, leaving this image intact.
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = true, wxPoint * offset_after_rotation = NULL) const;
+                   bool interpolating = true, wxPoint * offset_after_rotation = nullptr) const;
 
     wxImage Rotate90( bool clockwise = true ) const;
     wxImage Rotate180() const;
@@ -506,9 +506,9 @@ public:
     void SetData( unsigned char *data, bool static_data=false );
     void SetData( unsigned char *data, int new_width, int new_height, bool static_data=false );
 
-    unsigned char *GetAlpha() const;    // may return NULL!
-    bool HasAlpha() const { return GetAlpha() != NULL; }
-    void SetAlpha(unsigned char *alpha = NULL, bool static_data=false);
+    unsigned char *GetAlpha() const;    // may return nullptr!
+    bool HasAlpha() const { return GetAlpha() != nullptr; }
+    void SetAlpha(unsigned char *alpha = nullptr, bool static_data=false);
     void InitAlpha();
     void ClearAlpha();
 
@@ -603,8 +603,8 @@ protected:
     // note that index must be multiplied by 3 when using it with RGB array
     long XYToIndex(int x, int y) const;
 
-    virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
+    virtual wxObjectRefData* CreateRefData() const override;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
     // Helper function used internally by wxImage class only.
     template <typename T>

@@ -47,7 +47,7 @@ void wxQtSlider::valueChanged(int position)
 
 
 wxSlider::wxSlider() :
-    m_qtSlider(NULL)
+    m_qtSlider(nullptr)
 {
 }
 

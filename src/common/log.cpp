@@ -161,7 +161,7 @@ public:
     wxLogOutputBest() { }
 
 protected:
-    virtual void DoLogText(const wxString& msg) wxOVERRIDE
+    virtual void DoLogText(const wxString& msg) override
     {
         wxMessageOutputBest().Output(msg);
     }
@@ -509,7 +509,7 @@ wxLog *wxLog::GetActiveTarget()
 /* static */
 wxLog *wxLog::GetMainThreadActiveTarget()
 {
-    if ( ms_bAutoCreate && ms_pLogger == NULL ) {
+    if ( ms_bAutoCreate && ms_pLogger == nullptr ) {
         // prevent infinite recursion if someone calls wxLogXXX() from
         // wxApp::CreateLogTarget()
         static bool s_bInGetActiveTarget = false;
@@ -517,7 +517,7 @@ wxLog *wxLog::GetMainThreadActiveTarget()
             s_bInGetActiveTarget = true;
 
             // ask the application to create a log target for us
-            if ( wxTheApp != NULL )
+            if ( wxTheApp != nullptr )
                 ms_pLogger = wxTheApp->GetTraits()->CreateLogTarget();
             else
                 ms_pLogger = new wxLogOutputBest;
@@ -533,7 +533,7 @@ wxLog *wxLog::GetMainThreadActiveTarget()
 
 wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
 {
-    if ( ms_pLogger != NULL ) {
+    if ( ms_pLogger != nullptr ) {
         // flush the old messages before changing because otherwise they might
         // get lost later if this target is not restored
         ms_pLogger->Flush();
@@ -883,7 +883,7 @@ void wxLogStderr::DoLogText(const wxString& msg)
 wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv& conv)
     : wxMessageOutputWithConv(conv)
 {
-    if ( ostr == NULL )
+    if ( ostr == nullptr )
         m_ostr = &wxSTD cerr;
     else
         m_ostr = ostr;
@@ -999,7 +999,7 @@ wxLogInterposerTemp::wxLogInterposerTemp()
 
 bool            wxLog::ms_bRepetCounting = false;
 
-wxLog          *wxLog::ms_pLogger      = NULL;
+wxLog          *wxLog::ms_pLogger      = nullptr;
 bool            wxLog::ms_doLog        = true;
 bool            wxLog::ms_bAutoCreate  = true;
 bool            wxLog::ms_bVerbose     = false;
@@ -1081,7 +1081,7 @@ wxString wxMSWFormatMessage(DWORD nErrCode, HMODULE hModule)
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             (LPTSTR)&lpMsgBuf,
             0,
-            NULL
+            nullptr
          ) == 0 )
     {
         wxLogDebug(wxS("FormatMessage failed with error 0x%lx"), GetLastError());

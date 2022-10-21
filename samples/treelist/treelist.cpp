@@ -94,7 +94,7 @@ public:
     Compare(wxTreeListCtrl* treelist,
             unsigned column,
             wxTreeListItem item1,
-            wxTreeListItem item2) wxOVERRIDE
+            wxTreeListItem item2) override
     {
         wxString text1 = treelist->GetItemText(item1, column),
                  text2 = treelist->GetItemText(item2, column);
@@ -161,7 +161,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // ----------------------------------------------------------------------------
@@ -284,7 +284,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets tree/list control sample",
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets tree/list control sample",
                  wxDefaultPosition, wxSize(600, 450))
 {
     m_isFlat = false;

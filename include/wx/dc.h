@@ -145,15 +145,15 @@ class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 public:
     wxNativeDCFactory() {}
 
-    virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) wxOVERRIDE;
-    virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) wxOVERRIDE;
-    virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner, wxWindow *window ) wxOVERRIDE;
-    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner ) wxOVERRIDE;
-    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) wxOVERRIDE;
-    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) wxOVERRIDE;
-    virtual wxDCImpl* CreateScreenDC( wxScreenDC *owner ) wxOVERRIDE;
+    virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) override;
+    virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) override;
+    virtual wxDCImpl* CreatePaintDC( wxPaintDC *owner, wxWindow *window ) override;
+    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner ) override;
+    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxBitmap &bitmap ) override;
+    virtual wxDCImpl* CreateMemoryDC( wxMemoryDC *owner, wxDC *dc ) override;
+    virtual wxDCImpl* CreateScreenDC( wxScreenDC *owner ) override;
 #if wxUSE_PRINTING_ARCHITECTURE
-    virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) wxOVERRIDE;
+    virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) override;
 #endif
 };
 
@@ -183,10 +183,10 @@ public:
     // get Cairo context
     virtual void* GetCairoContext() const
     {
-        return NULL;
+        return nullptr;
     }
 
-    virtual void* GetHandle() const { return NULL; }
+    virtual void* GetHandle() const { return nullptr; }
 
     // query dimension, colour deps, resolution
 
@@ -347,14 +347,14 @@ public:
 
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const = 0;
+                                 wxCoord *descent = nullptr,
+                                 wxCoord *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr) const = 0;
     virtual void GetMultiLineTextExtent(const wxString& string,
                                         wxCoord *width,
                                         wxCoord *height,
-                                        wxCoord *heightLine = NULL,
-                                        const wxFont *font = NULL) const;
+                                        wxCoord *heightLine = nullptr,
+                                        const wxFont *font = nullptr) const;
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     // clearing
@@ -592,7 +592,7 @@ public:
 
 #if wxUSE_GRAPHICS_CONTEXT
     virtual wxGraphicsContext* GetGraphicsContext() const
-        { return NULL; }
+        { return nullptr; }
     virtual void SetGraphicsContext( wxGraphicsContext* WXUNUSED(ctx) )
         {}
 #endif
@@ -627,7 +627,7 @@ protected:
     double GetMMToPXy() const;
 
 
-    // window on which the DC draws or NULL
+    // window on which the DC draws or nullptr
     wxWindow   *m_window;
 
     // flags
@@ -876,9 +876,9 @@ public:
 
     void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,
-                       wxCoord *descent = NULL,
-                       wxCoord *externalLeading = NULL,
-                       const wxFont *theFont = NULL) const
+                       wxCoord *descent = nullptr,
+                       wxCoord *externalLeading = nullptr,
+                       const wxFont *theFont = nullptr) const
         { m_pimpl->DoGetTextExtent(string, x, y, descent, externalLeading, theFont); }
 
     wxSize GetTextExtent(const wxString& string) const
@@ -891,8 +891,8 @@ public:
     void GetMultiLineTextExtent(const wxString& string,
                                         wxCoord *width,
                                         wxCoord *height,
-                                        wxCoord *heightLine = NULL,
-                                        const wxFont *font = NULL) const
+                                        wxCoord *heightLine = nullptr,
+                                        const wxFont *font = nullptr) const
         { m_pimpl->GetMultiLineTextExtent( string, width, height, heightLine, font ); }
 
     wxSize GetMultiLineTextExtent(const wxString& string) const
@@ -1190,7 +1190,7 @@ public:
                            const wxRect& rect,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounding = NULL);
+                           wxRect *rectBounding = nullptr);
 
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
@@ -1234,7 +1234,7 @@ public:
                       source, srcPt.x, srcPt.y, srcSize.x, srcSize.y, rop, useMask, srcMaskPt.x, srcMaskPt.y);
     }
 
-    wxBitmap GetAsBitmap(const wxRect *subrect = (const wxRect *) NULL) const
+    wxBitmap GetAsBitmap(const wxRect *subrect = (const wxRect *) nullptr) const
     {
         return m_pimpl->DoGetAsBitmap(subrect);
     }
@@ -1276,7 +1276,7 @@ public:
             : m_dc(thdc.m_dc),
               m_hdc(thdc.m_hdc)
         {
-            const_cast<TempHDC&>(thdc).m_hdc = NULL;
+            const_cast<TempHDC&>(thdc).m_hdc = nullptr;
         }
 
         ~TempHDC()

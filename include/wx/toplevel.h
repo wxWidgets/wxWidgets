@@ -236,10 +236,10 @@ public:
     wxWindow *SetDefaultItem(wxWindow *win)
         { wxWindow *old = GetDefaultItem(); m_winDefault = win; return old; }
 
-    // return the temporary default item, can be NULL
+    // return the temporary default item, can be null
     wxWindow *GetTmpDefaultItem() const { return m_winTmpDefault; }
 
-    // set a temporary default item, SetTmpDefaultItem(NULL) should be called
+    // set a temporary default item, SetTmpDefaultItem(nullptr) should be called
     // soon after a call to SetTmpDefaultItem(window), return the old default
     wxWindow *SetTmpDefaultItem(wxWindow *win)
         { wxWindow *old = GetDefaultItem(); m_winTmpDefault = win; return old; }
@@ -277,14 +277,14 @@ public:
     // -------------------------------
 
     // override some base class virtuals
-    virtual bool Destroy() wxOVERRIDE;
-    virtual bool IsTopLevel() const wxOVERRIDE { return true; }
-    virtual bool IsTopNavigationDomain(NavigationKind kind) const wxOVERRIDE;
+    virtual bool Destroy() override;
+    virtual bool IsTopLevel() const override { return true; }
+    virtual bool IsTopNavigationDomain(NavigationKind kind) const override;
     virtual bool IsVisible() const { return IsShown(); }
 
     // override to do TLW-specific layout: we resize our unique child to fill
     // the entire client area
-    virtual bool Layout() wxOVERRIDE;
+    virtual bool Layout() override;
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);
@@ -298,11 +298,11 @@ public:
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
     // do the window-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE ;
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) override ;
 
     // a different API for SetSizeHints
-    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
-    virtual void SetMaxSize(const wxSize& maxSize) wxOVERRIDE;
+    virtual void SetMinSize(const wxSize& minSize) override;
+    virtual void SetMaxSize(const wxSize& maxSize) override;
 
     virtual void OSXSetModified(bool modified) { m_modified = modified; }
     virtual bool OSXIsModified() const { return m_modified; }
@@ -312,15 +312,15 @@ public:
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
-    virtual void DoClientToScreen(int *x, int *y) const wxOVERRIDE;
-    virtual void DoScreenToClient(int *x, int *y) const wxOVERRIDE;
+    virtual void DoClientToScreen(int *x, int *y) const override;
+    virtual void DoScreenToClient(int *x, int *y) const override;
 
     // add support for wxCENTRE_ON_SCREEN
-    virtual void DoCentre(int dir) wxOVERRIDE;
+    virtual void DoCentre(int dir) override;
 
     // no need to do client to screen translation to get our position in screen
     // coordinates: this is already the case
-    virtual void DoGetScreenPosition(int *x, int *y) const wxOVERRIDE
+    virtual void DoGetScreenPosition(int *x, int *y) const override
     {
         DoGetPosition(x, y);
     }
@@ -346,10 +346,10 @@ protected:
     // the frame icon
     wxIconBundle m_icons;
 
-    // a default window (usually a button) or NULL
+    // a default window (usually a button) or nullptr
     wxWindowRef m_winDefault;
 
-    // a temporary override of m_winDefault, use the latter if NULL
+    // a temporary override of m_winDefault, use the latter if nullptr
     wxWindowRef m_winTmpDefault;
 
     bool m_modified;
@@ -363,11 +363,8 @@ protected:
 #if defined(__WXMSW__)
     #include "wx/msw/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMSW
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/toplevel.h"
-    #define wxTopLevelWindowNative wxTopLevelWindowGTK
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/toplevel.h"
+    #include "wx/gtk/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowGTK
 #elif defined(__WXX11__)
     #include "wx/x11/toplevel.h"
@@ -378,9 +375,6 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMac
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/toplevel.h"
-    #define wxTopLevelWindowNative wxTopLevelWindowMotif
 #elif defined(__WXQT__)
     #include "wx/qt/toplevel.h"
 #define wxTopLevelWindowNative wxTopLevelWindowQt

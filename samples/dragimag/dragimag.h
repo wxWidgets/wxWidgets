@@ -44,8 +44,8 @@ class MyApp: public wxApp
 {
 public:
     MyApp();
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
 //// Operations
 
@@ -181,7 +181,7 @@ public:
     // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
     // a window, so we need to draw the background explicitly.
     virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC, const wxRect& sourceRect,
-                    const wxRect& destRect) const wxOVERRIDE;
+                    const wxRect& destRect) const override;
 #endif
 
 protected:

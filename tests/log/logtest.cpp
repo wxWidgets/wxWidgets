@@ -77,7 +77,7 @@ public:
 protected:
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& info) wxOVERRIDE
+                             const wxLogRecordInfo& info) override
     {
         m_logs[level] = msg;
         m_logsInfo[level] = info;
@@ -96,8 +96,8 @@ class LogTestCase : public CppUnit::TestCase
 public:
     LogTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( LogTestCase );
@@ -300,7 +300,7 @@ void LogTestCase::NoWarnings()
 // The following two functions (v, macroCompilabilityTest) are not run by
 // any test, and their purpose is merely to guarantee that the wx(V)LogXXX
 // macros compile without 'dangling else' warnings.
-#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
+#if defined(__clang__) || defined(__GNUC__)
     // gcc 7 split -Wdangling-else from the much older -Wparentheses, so use
     // the new warning if it's available or the old one otherwise.
     #if wxCHECK_GCC_VERSION(7, 0)
@@ -365,7 +365,7 @@ void macroCompilabilityTest()
 TEST_CASE("wxLog::Trace", "[log][.]")
 {
     // Running this test without setting WXTRACE is useless.
-    REQUIRE( wxGetEnv("WXTRACE", NULL) );
+    REQUIRE( wxGetEnv("WXTRACE", nullptr) );
 
     wxLogTrace("logtest", "Starting test");
     wxMilliSleep(250);

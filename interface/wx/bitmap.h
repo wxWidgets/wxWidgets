@@ -95,7 +95,7 @@ public:
             wxBITMAP_TYPE_BMP_RESOURCE as @a type), the light grey colour is
             considered to be transparent, for historical reasons. If you want
             to handle the light grey pixels normally instead, call
-            SetMask(NULL) after loading the bitmap.
+            `SetMask(nullptr)` after loading the bitmap.
 
         @param bitmap
             The bitmap object which is to be affected by this operation.
@@ -133,7 +133,7 @@ public:
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, LoadFile()
     */
     virtual bool SaveFile(const wxBitmap* bitmap, const wxString& name, wxBitmapType type,
-                          const wxPalette* palette = NULL) const;
+                          const wxPalette* palette = nullptr) const;
 
     /**
         Sets the handler extension.
@@ -913,7 +913,7 @@ public:
         @see LoadFile()
     */
     virtual bool SaveFile(const wxString& name, wxBitmapType type,
-                          const wxPalette* palette = NULL) const;
+                          const wxPalette* palette = nullptr) const;
 
     /**
          @deprecated This function is deprecated since version 3.1.2, dimensions

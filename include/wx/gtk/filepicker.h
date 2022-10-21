@@ -23,14 +23,14 @@
 //-----------------------------------------------------------------------------
 
 #define FILEDIRBTN_OVERRIDES                                                  \
-    /* NULL is because of a problem with destruction order which happens   */ \
+    /* nullptr is because of a problem with destruction order which happens*/ \
     /* if we pass GetParent(): in fact, this GTK native implementation     */ \
     /* needs to create the dialog in ::Create() and not for each user      */ \
     /* request in response to the user click as the generic implementation */ \
     /* does.                                                               */ \
-    virtual wxWindow *GetDialogParent() wxOVERRIDE                            \
+    virtual wxWindow *GetDialogParent() override                              \
     {                                                                         \
-        return NULL;                                                          \
+        return nullptr;                                                       \
     }                                                                         \
                                                                               \
     /* even if wx derive from wxGenericFileButton, i.e. from wxButton, our */ \
@@ -38,12 +38,12 @@
     /* GTK_BUTTON(m_widget) macro done by wxButton must be bypassed to     */ \
     /* avoid bunch of GTK+ warnings like:                                  */ \
     /*      invalid cast from `GtkFileChooserButton' to  `GtkButton'       */ \
-    /* so, override wxButton::GTKGetWindow and return NULL as GTK+ doesn't */ \
+    /* so, override wxButton::GTKGetWindow and return nullptr as GTK+ doesn't */ \
     /* give us access to the internal GdkWindow of a GtkFileChooserButton  */ \
 protected:                                                                    \
     virtual GdkWindow *                                                       \
-    GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const wxOVERRIDE       \
-        { return NULL; }
+    GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const override         \
+        { return nullptr; }
 
 
 //-----------------------------------------------------------------------------
@@ -92,8 +92,8 @@ public:     // overrides
     // event handler for the click
     void OnDialogOK(wxCommandEvent &);
 
-    virtual void SetPath(const wxString &str) wxOVERRIDE;
-    virtual void SetInitialDirectory(const wxString& dir) wxOVERRIDE;
+    virtual void SetPath(const wxString &str) override;
+    virtual void SetInitialDirectory(const wxString& dir) override;
 
     // see macro defined above
     FILEDIRBTN_OVERRIDES
@@ -101,11 +101,11 @@ public:     // overrides
 protected:
     wxDialog *m_dialog;
 
-    virtual void DoApplyWidgetStyle(GtkRcStyle*) wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle*) override;
 
 private:
     // common part of all ctors
-    void Init() { m_dialog = NULL; }
+    void Init() { m_dialog = nullptr; }
 
     wxDECLARE_DYNAMIC_CLASS(wxFileButton);
 };
@@ -158,13 +158,13 @@ public:     // overrides
 
     // GtkFileChooserButton does not support GTK_FILE_CHOOSER_CREATE_FOLDER
     // thus we must ensure that the wxDD_DIR_MUST_EXIST style was given
-    long GetDialogStyle() const wxOVERRIDE
+    long GetDialogStyle() const override
     {
         return (wxGenericDirButton::GetDialogStyle() | wxDD_DIR_MUST_EXIST);
     }
 
-    virtual void SetPath(const wxString &str) wxOVERRIDE;
-    virtual void SetInitialDirectory(const wxString& dir) wxOVERRIDE;
+    virtual void SetPath(const wxString &str) override;
+    virtual void SetInitialDirectory(const wxString& dir) override;
 
     // see macro defined above
     FILEDIRBTN_OVERRIDES
@@ -172,7 +172,7 @@ public:     // overrides
 protected:
     wxDialog *m_dialog;
 
-    virtual void DoApplyWidgetStyle(GtkRcStyle*) wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle*) override;
 
 public:    // used by the GTK callback only
 
@@ -183,7 +183,7 @@ public:    // used by the GTK callback only
 private:
     void Init()
     {
-        m_dialog = NULL;
+        m_dialog = nullptr;
         m_bIgnoreNextChange = false;
     }
 

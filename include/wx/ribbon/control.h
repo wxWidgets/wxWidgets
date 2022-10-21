@@ -69,7 +69,7 @@ protected:
                                        wxSize relative_to) const;
 
 private:
-    void Init() { m_art = NULL; }
+    void Init() { m_art = nullptr; }
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonControl);

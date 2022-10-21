@@ -79,7 +79,7 @@ public:
         m_skipped = false;
         m_msgChangeElementText = TDM_UPDATE_ELEMENT_TEXT;
         m_notifications = 0;
-        m_parent = NULL;
+        m_parent = nullptr;
     }
 
     wxCriticalSection m_cs;
@@ -161,7 +161,7 @@ public:
 private:
     wxProgressDialogSharedData m_sharedData;
 
-    virtual void* Entry() wxOVERRIDE;
+    virtual void* Entry() override;
 
     static HRESULT CALLBACK TaskDialogCallbackProc(HWND hwnd,
                                                    UINT uNotification,
@@ -184,7 +184,7 @@ public:
     }
 
 protected:
-    virtual void OnNextIteration() wxOVERRIDE
+    virtual void OnNextIteration() override
     {
         wxCriticalSectionLocker locker(m_data.m_cs);
 
@@ -299,7 +299,7 @@ void PerformNotificationUpdates(HWND hwnd,
 
     if ( sharedData->m_notifications & wxSPDD_WINDOW_MOVED )
     {
-        ::SetWindowPos(hwnd, NULL, sharedData->m_winPosition.x, sharedData->m_winPosition.y,
+        ::SetWindowPos(hwnd, nullptr, sharedData->m_winPosition.x, sharedData->m_winPosition.y,
                        -1, -1, // ignored
                        SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
     }
@@ -394,8 +394,8 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
                                     wxWindow *parent,
                                     int style )
     : wxGenericProgressDialog(),
-      m_taskDialogRunner(NULL),
-      m_sharedData(NULL),
+      m_taskDialogRunner(nullptr),
+      m_sharedData(nullptr),
       m_message(message),
       m_title(title)
 {
@@ -1105,10 +1105,10 @@ void* wxProgressDialogTaskRunner::Entry()
 
     TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
     if ( !taskDialogIndirect )
-        return NULL;
+        return nullptr;
 
     int msAns;
-    HRESULT hr = taskDialogIndirect(&tdc, &msAns, NULL, NULL);
+    HRESULT hr = taskDialogIndirect(&tdc, &msAns, nullptr, nullptr);
     if ( FAILED(hr) )
         wxLogApiError( "TaskDialogIndirect", hr );
 
@@ -1116,7 +1116,7 @@ void* wxProgressDialogTaskRunner::Entry()
     // Update(), wake it up so that it checks our status again.
     wxWakeUpIdle();
 
-    return NULL;
+    return nullptr;
 }
 
 // static

@@ -63,13 +63,13 @@
 // global variables
 // ----------------------------------------------------------------------------
 
-static wxBitmap *gs_bmpNoMask = NULL,
-                *gs_bmpWithColMask = NULL,
-                *gs_bmpMask = NULL,
-                *gs_bmpWithMask = NULL,
-                *gs_bmp4 = NULL,
-                *gs_bmp4_mono = NULL,
-                *gs_bmp36 = NULL;
+static wxBitmap *gs_bmpNoMask = nullptr,
+                *gs_bmpWithColMask = nullptr,
+                *gs_bmpMask = nullptr,
+                *gs_bmpWithMask = nullptr,
+                *gs_bmp4 = nullptr,
+                *gs_bmp4_mono = nullptr,
+                *gs_bmp36 = nullptr;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -85,9 +85,9 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
-    virtual int OnExit() wxOVERRIDE { DeleteBitmaps(); return 0; }
+    virtual int OnExit() override { DeleteBitmaps(); return 0; }
 
 protected:
     void DeleteBitmaps();
@@ -114,7 +114,7 @@ public:
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 #if wxUSE_GRAPHICS_CONTEXT
-    bool HasRenderer() const { return m_renderer != NULL; }
+    bool HasRenderer() const { return m_renderer != nullptr; }
     void UseGraphicRenderer(wxGraphicsRenderer* renderer);
     bool IsDefaultRenderer() const
     {   if ( !m_renderer ) return false;
@@ -198,7 +198,7 @@ public:
 #if wxUSE_GRAPHICS_CONTEXT
     void OnGraphicContextNone(wxCommandEvent& WXUNUSED(event))
     {
-        m_canvas->UseGraphicRenderer(NULL);
+        m_canvas->UseGraphicRenderer(nullptr);
     }
 
     void OnGraphicContextDefault(wxCommandEvent& WXUNUSED(event))
@@ -233,7 +233,7 @@ public:
 
     void OnAntiAliasingUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Enable(m_canvas->GetRenderer() != NULL);
+        event.Enable(m_canvas->GetRenderer() != nullptr);
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
@@ -248,7 +248,7 @@ public:
 #if wxUSE_COLOURDLG
     wxColour SelectColour();
 #endif // wxUSE_COLOURDLG
-    void PrepareDC(wxDC& dc) wxOVERRIDE;
+    void PrepareDC(wxDC& dc) override;
 
     int         m_backgroundMode;
     int         m_textureBackground;
@@ -518,7 +518,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_clip = false;
     m_rubberBand = false;
 #if wxUSE_GRAPHICS_CONTEXT
-    m_renderer = NULL;
+    m_renderer = nullptr;
     m_useAntiAliasing = true;
 #endif
     m_useBuffer = false;
@@ -1155,7 +1155,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
                 break;
         }
         wxDouble w, h;
-        gc->GetTextExtent(label, &w, &h, NULL, NULL);
+        gc->GetTextExtent(label, &w, &h, nullptr, nullptr);
         gc->DrawText(label, -w/2, -BASE2 - h - gc->FromDIP(4));
         switch( i )
         {
@@ -1225,7 +1225,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     gc->DrawText(labelText, 0, 0);
     // Center a bitmap horizontally
     wxDouble textWidth;
-    gc->GetTextExtent(labelText, &textWidth, NULL);
+    gc->GetTextExtent(labelText, &textWidth, nullptr);
     const wxDouble rectSize = gc->FromDIP(100);
     wxDouble x0 = (textWidth - rectSize) / 2;
     gc->DrawRectangle(x0, BASE2, rectSize, rectSize);
@@ -1816,10 +1816,8 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     dc.DestroyClippingRegion();
 
     wxRegion region(x + dc.FromDIP(110), y + dc.FromDIP(20), dc.FromDIP(100), dc.FromDIP(270));
-#if !defined(__WXMOTIF__)
     if ( !firstTime )
         region.Offset(dc.FromDIP(10), dc.FromDIP(10));
-#endif
     dc.SetDeviceClippingRegion(region);
 
     dc.SetBrush( *wxGREY_BRUSH );
@@ -2176,7 +2174,7 @@ public:
         SetSizerAndFit(sizer);
     }
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE
+    virtual bool TransferDataFromWindow() override
     {
         if ( !wxDialog::TransferDataFromWindow() )
             return false;
@@ -2262,7 +2260,7 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -2515,7 +2513,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
                 return;
             }
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
-            m_canvas->UseGraphicRenderer(NULL);
+            m_canvas->UseGraphicRenderer(nullptr);
 #endif
             wxSVGFileDC svgdc(dlg.GetPath(),
                               canvasSize.GetWidth(),
@@ -2541,7 +2539,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
                 return;
             }
             wxGraphicsRenderer* curRenderer = m_canvas->GetRenderer();
-            m_canvas->UseGraphicRenderer(NULL);
+            m_canvas->UseGraphicRenderer(nullptr);
 #endif // wxUSE_GRAPHICS_CONTEXT
             wxPrintData printData;
             printData.SetPrintMode(wxPRINT_MODE_FILE);

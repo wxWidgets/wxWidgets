@@ -69,7 +69,7 @@ public:
 
     // Returns true if the character is representable as a single byte in the
     // current locale encoding and return this byte in output argument c (which
-    // must be non-NULL)
+    // must be non-null)
     bool GetAsChar(char *c) const
     {
 #if wxUSE_UNICODE
@@ -363,8 +363,6 @@ void swap<wxUniCharRef>(wxUniCharRef& lhs, wxUniCharRef& rhs)
 
 } // namespace std
 
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
-
 // For std::iter_swap() to work with wxString::iterator, which uses
 // wxUniCharRef as its reference type, we need to ensure that swap() works with
 // wxUniCharRef objects by defining this overload.
@@ -377,8 +375,6 @@ void swap(wxUniCharRef&& lhs, wxUniCharRef&& rhs)
     lhs = rhs;
     rhs = tmp;
 }
-
-#endif // C++11
 
 
 // Comparison operators for the case when wxUniChar(Ref) is the second operand

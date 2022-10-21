@@ -67,7 +67,7 @@ public:
     unsigned char *p;               /* bitmap */
     unsigned char *pal;             /* palette */
 
-    IFFImage() : w(0), h(0), colors(0), p(0), pal(0) {}
+    IFFImage() : w(0), h(0), colors(0), p(nullptr), pal(nullptr) {}
     ~IFFImage() { delete [] p; delete [] pal; }
 };
 
@@ -109,9 +109,9 @@ public:
 wxIFFDecoder::wxIFFDecoder(wxInputStream *s)
 {
     m_f = s;
-    m_image = 0;
-    databuf = 0;
-    decomp_mem = 0;
+    m_image = nullptr;
+    databuf = nullptr;
+    decomp_mem = nullptr;
 }
 
 void wxIFFDecoder::Destroy()
@@ -320,7 +320,7 @@ int wxIFFDecoder::ReadIFF()
     Destroy();
 
     m_image = new IFFImage();
-    if (m_image == 0) {
+    if (m_image == nullptr) {
         Destroy();
         return wxIFF_MEMERR;
     }
@@ -339,7 +339,7 @@ int wxIFFDecoder::ReadIFF()
     }
 
     // allocate memory for complete file
-    if ((databuf = new byte[filesize]) == 0) {
+    if ((databuf = new byte[filesize]) == nullptr) {
         Destroy();
         return wxIFF_MEMERR;
     }
@@ -461,7 +461,7 @@ int wxIFFDecoder::ReadIFF()
         size_t decomp_bufsize = (((bmhd_width + 15) >> 4) << 1)
             * bmhd_height * bmhd_bitplanes;
 
-        if ((decomp_mem = new byte[decomp_bufsize]) == 0) {
+        if ((decomp_mem = new byte[decomp_bufsize]) == nullptr) {
             Destroy();
             return wxIFF_MEMERR;
         }

@@ -95,7 +95,7 @@ wxIcon CreateRandomIcon()
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 class MyFrame : public wxFrame
@@ -135,7 +135,7 @@ bool MyApp::OnInit()
 
     wxTaskBarJumpList jumpList;
     wxTaskBarJumpListItem *item1 = new wxTaskBarJumpListItem(
-        NULL,
+        nullptr,
         wxTASKBAR_JUMP_LIST_TASK,
         "Task 1",
         wxStandardPaths::Get().GetExecutablePath(),
@@ -144,7 +144,7 @@ bool MyApp::OnInit()
         wxStandardPaths::Get().GetExecutablePath(),
         0);
     wxTaskBarJumpListItem *item2 = new wxTaskBarJumpListItem(
-        NULL,
+        nullptr,
         wxTASKBAR_JUMP_LIST_TASK,
         "Task 2",
         wxStandardPaths::Get().GetExecutablePath(),
@@ -154,7 +154,7 @@ bool MyApp::OnInit()
         0);
     jumpList.GetTasks().Append(item1);
     jumpList.GetTasks().Append(
-        new wxTaskBarJumpListItem(NULL, wxTASKBAR_JUMP_LIST_SEPARATOR));
+        new wxTaskBarJumpListItem(nullptr, wxTASKBAR_JUMP_LIST_SEPARATOR));
     jumpList.GetTasks().Append(item2);
     jumpList.ShowRecentCategory();
     jumpList.ShowFrequentCategory();
@@ -202,7 +202,7 @@ bool MyApp::OnInit()
 }
 
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     wxPanel *panel = new wxPanel(this);
     wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);

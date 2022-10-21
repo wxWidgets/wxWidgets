@@ -16,7 +16,7 @@
 size_t
 wxBase64Encode(char *dst, size_t dstLen, const void *src_, size_t srcLen)
 {
-    wxCHECK_MSG( src_, wxCONV_FAILED, wxT("NULL input buffer") );
+    wxCHECK_MSG( src_, wxCONV_FAILED, wxT("null input buffer") );
 
     const unsigned char *src = static_cast<const unsigned char *>(src_);
 
@@ -69,7 +69,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
                wxBase64DecodeMode mode,
                size_t *posErr)
 {
-    wxCHECK_MSG( src, wxCONV_FAILED, wxT("NULL input buffer") );
+    wxCHECK_MSG( src, wxCONV_FAILED, wxT("null input buffer") );
 
     unsigned char *dst = static_cast<unsigned char *>(dst_);
 
@@ -219,7 +219,7 @@ wxMemoryBuffer wxBase64Decode(const char *src,
                               size_t *posErr)
 {
     wxMemoryBuffer buf;
-    wxCHECK_MSG( src, buf, wxT("NULL input buffer") );
+    wxCHECK_MSG( src, buf, wxT("null input buffer") );
 
     if ( srcLen == wxNO_LEN )
         srcLen = strlen(src);

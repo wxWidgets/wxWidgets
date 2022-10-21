@@ -92,7 +92,7 @@
 
 #if defined(__WINDOWS__)
     /* Select wxMSW under Windows if no other port is specified. */
-#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
+#   if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
 #       define __WXMSW__
 #   endif
 
@@ -315,7 +315,7 @@
 #    define __UNIX__
 #endif /* Unix */
 
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXX11__)
 #    define __X__
 #endif
 
@@ -338,7 +338,6 @@
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) ) && \
-    !defined(__WXMOTIF__) && \
     !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"
 #else
@@ -519,11 +518,6 @@
 
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
-#ifdef __WXMOTIF__
-#define XtParent XTPARENT
-#define XtScreen XTSCREEN
-#define XtWindow XTWINDOW
-#endif
 #endif
 
 /* Choose which method we will use for updating menus
@@ -578,7 +572,7 @@
 #       if !__has_feature(cxx_rtti)
 #           define wxNO_RTTI
 #       endif
-#   elif wxCHECK_GCC_VERSION(4, 3)
+#   elif defined(__GNUG__)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif

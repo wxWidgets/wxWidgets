@@ -316,7 +316,7 @@ void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 wxRibbonPage* wxRibbonBar::GetPage(int n)
 {
     if(n < 0 || (size_t)n >= m_pages.GetCount())
-        return 0;
+        return nullptr;
     return m_pages.Item(n).page;
 }
 
@@ -748,7 +748,7 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 
 wxRibbonBar::~wxRibbonBar()
 {
-    SetArtProvider(NULL);
+    SetArtProvider(nullptr);
 
     for ( size_t n = 0; n < m_image_lists.size(); ++n )
     {
@@ -792,7 +792,7 @@ void wxRibbonBar::CommonInit(long style)
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
 
-    if(m_art == NULL)
+    if(m_art == nullptr)
     {
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
@@ -993,7 +993,7 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
                 continue;
             if(info.rect.Contains(position))
             {
-                if(index != NULL)
+                if(index != nullptr)
                 {
                     *index = (int)i;
                 }
@@ -1001,11 +1001,11 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
             }
         }
     }
-    if(index != NULL)
+    if(index != nullptr)
     {
         *index = -1;
     }
-    return NULL;
+    return nullptr;
 }
 
 void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
@@ -1044,7 +1044,7 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
             ProcessWindowEvent(notification);
         }
     }
-    else if(tab == NULL)
+    else if(tab == nullptr)
     {
         if(m_tab_scroll_left_button_rect.Contains(evt.GetPosition()))
         {

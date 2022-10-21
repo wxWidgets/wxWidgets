@@ -55,7 +55,7 @@ wxVariant::wxVariant()
 
 bool wxVariant::IsNull() const
 {
-     return (m_refData == NULL);
+     return (m_refData == nullptr);
 }
 
 void wxVariant::MakeNull()
@@ -91,7 +91,7 @@ wxObjectRefData *wxVariant::CreateRefData() const
 {
     // We cannot create any particular wxVariantData.
     wxFAIL_MSG("wxVariant::CreateRefData() cannot be implemented");
-    return NULL;
+    return nullptr;
 }
 
 wxObjectRefData *wxVariant::CloneRefData(const wxObjectRefData *data) const
@@ -236,22 +236,22 @@ public:
     inline long GetValue() const { return m_value; }
     inline void SetValue(long value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Read(wxString& str) override;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataLong(m_value); }
+    wxVariantData* Clone() const override { return new wxVariantDataLong(m_value); }
 
-    virtual wxString GetType() const wxOVERRIDE { return wxT("long"); }
+    virtual wxString GetType() const override { return wxT("long"); }
 
 #if wxUSE_ANY
     // Since wxAny does not have separate type for integers shorter than
@@ -260,7 +260,7 @@ public:
   #ifndef wxLongLong_t
     DECLARE_WXANY_CONVERSION()
   #else
-    bool GetAsAny(wxAny* any) const wxOVERRIDE
+    bool GetAsAny(wxAny* any) const override
     {
         *any = m_value;
         return true;
@@ -405,22 +405,22 @@ public:
     inline double GetValue() const { return m_value; }
     inline void SetValue(double value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
-    virtual bool Read(wxString& str) wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
+    virtual bool Read(wxString& str) override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const wxOVERRIDE { return wxT("double"); }
+    virtual wxString GetType() const override { return wxT("double"); }
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDoubleData(m_value); }
+    wxVariantData* Clone() const override { return new wxVariantDoubleData(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -545,22 +545,22 @@ public:
     inline bool GetValue() const { return m_value; }
     inline void SetValue(bool value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
-    virtual bool Read(wxString& str) wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
+    virtual bool Read(wxString& str) override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const wxOVERRIDE { return wxT("bool"); }
+    virtual wxString GetType() const override { return wxT("bool"); }
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataBool(m_value); }
+    wxVariantData* Clone() const override { return new wxVariantDataBool(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -688,19 +688,19 @@ public:
     inline wxUniChar GetValue() const { return m_value; }
     inline void SetValue(const wxUniChar& value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Read(wxString& str) override;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const wxOVERRIDE { return wxT("char"); }
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataChar(m_value); }
+    virtual wxString GetType() const override { return wxT("char"); }
+    wxVariantData* Clone() const override { return new wxVariantDataChar(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -841,21 +841,21 @@ public:
     inline wxString GetValue() const { return m_value; }
     inline void SetValue(const wxString& value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Read(wxString& str) override;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& WXUNUSED(str)) wxOVERRIDE { return false; }
+    virtual bool Read(wxSTD istream& WXUNUSED(str)) override { return false; }
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const wxOVERRIDE { return wxT("string"); }
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataString(m_value); }
+    virtual wxString GetType() const override { return wxT("string"); }
+    wxVariantData* Clone() const override { return new wxVariantDataString(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -976,7 +976,7 @@ wxVariant::wxVariant(const std::string& val, const wxString& name)
     m_name = name;
 }
 
-wxVariant::wxVariant(const wxStdWideString& val, const wxString& name)
+wxVariant::wxVariant(const std::wstring& val, const wxString& name)
 {
     m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
@@ -1036,19 +1036,19 @@ public:
     inline wxObject* GetValue() const { return m_value; }
     inline void SetValue(wxObject* value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual wxString GetType() const wxOVERRIDE ;
-    virtual wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataWxObjectPtr(m_value); }
+    virtual bool Read(wxString& str) override;
+    virtual wxString GetType() const override ;
+    virtual wxVariantData* Clone() const override { return new wxVariantDataWxObjectPtr(m_value); }
 
-    virtual wxClassInfo* GetValueClassInfo() wxOVERRIDE;
+    virtual wxClassInfo* GetValueClassInfo() override;
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -1081,7 +1081,7 @@ wxString wxVariantDataWxObjectPtr::GetType() const
 
 wxClassInfo* wxVariantDataWxObjectPtr::GetValueClassInfo()
 {
-    wxClassInfo* returnVal=NULL;
+    wxClassInfo* returnVal=nullptr;
 
     if (m_value) returnVal = m_value->GetClassInfo();
 
@@ -1160,17 +1160,17 @@ public:
     inline void* GetValue() const { return m_value; }
     inline void SetValue(void* value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual wxString GetType() const wxOVERRIDE { return wxT("void*"); }
-    virtual wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataVoidPtr(m_value); }
+    virtual bool Read(wxString& str) override;
+    virtual wxString GetType() const override { return wxT("void*"); }
+    virtual wxVariantData* Clone() const override { return new wxVariantDataVoidPtr(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -1253,7 +1253,7 @@ void* wxVariant::GetVoidPtr() const
 {
     // handling this specially is convenient when working with COM, see #9873
     if ( IsNull() )
-        return NULL;
+        return nullptr;
 
     wxASSERT( GetType() == wxT("void*") );
 
@@ -1275,17 +1275,17 @@ public:
     inline wxDateTime GetValue() const { return m_value; }
     inline void SetValue(const wxDateTime& value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual wxString GetType() const wxOVERRIDE { return wxT("datetime"); }
-    virtual wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataDateTime(m_value); }
+    virtual bool Read(wxString& str) override;
+    virtual wxString GetType() const override { return wxT("datetime"); }
+    virtual wxVariantData* Clone() const override { return new wxVariantDataDateTime(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -1408,17 +1408,17 @@ public:
     wxArrayString GetValue() const { return m_value; }
     void SetValue(const wxArrayString& value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual wxString GetType() const wxOVERRIDE { return wxT("arrstring"); }
-    virtual wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataArrayString(m_value); }
+    virtual bool Read(wxString& str) override;
+    virtual wxString GetType() const override { return wxT("arrstring"); }
+    virtual wxVariantData* Clone() const override { return new wxVariantDataArrayString(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -1536,25 +1536,25 @@ public:
     wxLongLong GetValue() const { return m_value; }
     void SetValue(wxLongLong value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Read(wxString& str) override;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
 
-    wxVariantData* Clone() const wxOVERRIDE
+    wxVariantData* Clone() const override
     {
         return new wxVariantDataLongLong(m_value);
     }
 
-    virtual wxString GetType() const wxOVERRIDE { return wxS("longlong"); }
+    virtual wxString GetType() const override { return wxS("longlong"); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -1735,25 +1735,25 @@ public:
     wxULongLong GetValue() const { return m_value; }
     void SetValue(wxULongLong value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Read(wxString& str) override;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
 
-    wxVariantData* Clone() const wxOVERRIDE
+    wxVariantData* Clone() const override
     {
         return new wxVariantDataULongLong(m_value);
     }
 
-    virtual wxString GetType() const wxOVERRIDE { return wxS("ulonglong"); }
+    virtual wxString GetType() const override { return wxS("ulonglong"); }
 
     DECLARE_WXANY_CONVERSION()
 protected:
@@ -1934,20 +1934,20 @@ public:
     wxVariantList& GetValue() { return m_value; }
     void SetValue(const wxVariantList& value) ;
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(wxSTD ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str) wxOVERRIDE;
+    virtual bool Read(wxSTD istream& str) override;
 #endif
-    virtual bool Read(wxString& str) wxOVERRIDE;
-    virtual wxString GetType() const wxOVERRIDE { return wxT("list"); }
+    virtual bool Read(wxString& str) override;
+    virtual wxString GetType() const override { return wxT("list"); }
 
     void Clear();
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataList(m_value); }
+    wxVariantData* Clone() const override { return new wxVariantDataList(m_value); }
 
     DECLARE_WXANY_CONVERSION()
 protected:

@@ -19,30 +19,30 @@ class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
     virtual ~wxMenuItem();
 
     // override base class virtuals to update the item appearance on screen
-    virtual void SetItemLabel(const wxString& text) wxOVERRIDE;
-    virtual void SetCheckable(bool checkable) wxOVERRIDE;
+    virtual void SetItemLabel(const wxString& text) override;
+    virtual void SetCheckable(bool checkable) override;
 
-    virtual void Enable(bool enable = true) wxOVERRIDE;
-    virtual void Check(bool check = true) wxOVERRIDE;
+    virtual void Enable(bool enable = true) override;
+    virtual void Check(bool check = true) override;
 
     // we add some extra functions which are also available under MSW from
     // wxOwnerDrawn class - they will be moved to wxMenuItemBase later
     // hopefully
     void SetBitmaps(const wxBitmapBundle& bmpChecked,
                     const wxBitmapBundle& bmpUnchecked = wxBitmapBundle());
-    virtual void SetBitmap(const wxBitmapBundle& bmp) wxOVERRIDE { SetBitmaps(bmp); }
+    virtual void SetBitmap(const wxBitmapBundle& bmp) override { SetBitmaps(bmp); }
     wxBitmap GetBitmap(bool checked) const
       { return GetBitmapFromBundle(checked ? m_bitmap : m_bmpUnchecked); }
-    virtual wxBitmap GetBitmap() const wxOVERRIDE
+    virtual wxBitmap GetBitmap() const override
       { return GetBitmap(true); }
 
     void SetDisabledBitmap( const wxBitmapBundle& bmpDisabled )

@@ -59,7 +59,7 @@ public:
     virtual bool Save(const wxString& service,
                       const wxString& user,
                       const wxSecretValueImpl& secret,
-                      wxString& errmsg) wxOVERRIDE
+                      wxString& errmsg) override
     {
         CREDENTIAL cred;
         wxZeroMemory(cred);
@@ -89,9 +89,9 @@ public:
     virtual bool Load(const wxString& service,
                       wxString* user,
                       wxSecretValueImpl** secret,
-                      wxString& errmsg) const wxOVERRIDE
+                      wxString& errmsg) const override
     {
-        CREDENTIAL* pcred = NULL;
+        CREDENTIAL* pcred = nullptr;
         if ( !::CredRead(service.t_str(), CRED_TYPE_GENERIC, 0, &pcred) || !pcred )
         {
             // Not having the password for this service/user combination is not
@@ -112,7 +112,7 @@ public:
     }
 
     virtual bool Delete(const wxString& service,
-                        wxString& errmsg) wxOVERRIDE
+                        wxString& errmsg) override
     {
         if ( !::CredDelete(service.t_str(), CRED_TYPE_GENERIC, 0) )
         {

@@ -36,17 +36,17 @@ class OwnerDrawnComboBoxTestCase : public TextEntryTestCase,
 public:
     OwnerDrawnComboBoxTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_combo; }
-    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
+    virtual wxWindow *GetTestWindow() const override { return m_combo; }
 
-    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
 
-    virtual void CheckStringSelection(const char * WXUNUSED(sel)) wxOVERRIDE
+    virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
         // GetStringSelection() is the wxChoice, not wxTextEntry, one and there
@@ -87,7 +87,7 @@ void OwnerDrawnComboBoxTestCase::setUp()
 void OwnerDrawnComboBoxTestCase::tearDown()
 {
     delete m_combo;
-    m_combo = NULL;
+    m_combo = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ void OwnerDrawnComboBoxTestCase::Sort()
     m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(),
                                        wxID_ANY, "",
                                        wxDefaultPosition, wxDefaultSize,
-                                       0, NULL,
+                                       0, nullptr,
                                        wxCB_SORT);
 
     m_combo->Append("aaa");

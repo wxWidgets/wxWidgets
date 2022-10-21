@@ -139,7 +139,7 @@ public:
     WidgetsApp()
     {
 #if USE_LOG
-        m_logTarget = NULL;
+        m_logTarget = nullptr;
 #endif // USE_LOG
     }
 
@@ -149,7 +149,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // real implementation of WidgetsPage method with the same name
     bool IsUsingLogWindow() const;
@@ -215,14 +215,14 @@ protected:
 
     void OnUpdateTextUI(wxUpdateUIEvent& event)
     {
-        event.Enable( CurrentPage()->GetTextEntry() != NULL );
+        event.Enable( CurrentPage()->GetTextEntry() != nullptr );
     }
 #endif // wxUSE_MENUS
 
     // initialize the book: add all pages to it
     void InitBook();
 
-    // return the currently selected page (never NULL)
+    // return the currently selected page (never null)
     WidgetsPage *CurrentPage();
 
 private:
@@ -268,7 +268,7 @@ public:
 
 private:
     // implement sink functions
-    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) wxOVERRIDE
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) override
     {
         if ( level == wxLOG_Trace )
         {
@@ -383,8 +383,6 @@ bool WidgetsApp::OnInit()
     title += "wxGTK";
 #elif defined(__WXMAC__)
     title += "wxMAC";
-#elif defined(__WXMOTIF__)
-    title += "wxMOTIF";
 #else
     title += "wxWidgets";
 #endif
@@ -413,17 +411,17 @@ bool WidgetsApp::IsUsingLogWindow() const
 // ----------------------------------------------------------------------------
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
-            : wxFrame(NULL, wxID_ANY, title)
+            : wxFrame(nullptr, wxID_ANY, title)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
 
     // init everything
 #if USE_LOG
-    m_lboxLog = NULL;
-    m_logTarget = NULL;
+    m_lboxLog = nullptr;
+    m_logTarget = nullptr;
 #endif // USE_LOG
-    m_book = NULL;
+    m_book = nullptr;
 
 #if wxUSE_MENUS
     // create the menubar
@@ -640,7 +638,7 @@ void WidgetsFrame::InitBook()
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
 #if USE_TREEBOOK
-        m_book->AddPage(NULL,WidgetsCategories[cat],false,0);
+        m_book->AddPage(nullptr,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
         books[cat]->SetImageList(imageList);
@@ -696,7 +694,7 @@ WidgetsPage *WidgetsFrame::CurrentPage()
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *subBook = wxStaticCast(page, WidgetsBookCtrl);
-    wxCHECK_MSG( subBook, NULL, "no WidgetsBookCtrl?" );
+    wxCHECK_MSG( subBook, nullptr, "no WidgetsBookCtrl?" );
 
     page = subBook->GetCurrentPage();
 #endif // !USE_TREEBOOK
@@ -713,7 +711,7 @@ void WidgetsFrame::ConnectToWidgetEvents()
             ++it )
     {
         wxWindow* const w = *it;
-        wxCHECK_RET(w, "NULL widget");
+        wxCHECK_RET(w, "null widget");
 
         w->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
         w->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
@@ -1098,7 +1096,7 @@ void WidgetsFrame::DoUseCustomAutoComplete(size_t minLength)
         {
         }
 
-        virtual void GetCompletions(const wxString& prefix, wxArrayString& res) wxOVERRIDE
+        virtual void GetCompletions(const wxString& prefix, wxArrayString& res) override
         {
             // This is used for illustrative purposes only and shows how many
             // completions we return every time when we're called.
@@ -1270,7 +1268,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxString& label, int ca
 {
     m_ctor = ctor;
 
-    m_next = NULL;
+    m_next = nullptr;
 
     // dummy sorting: add and immediately sort in the list according to label
     if ( WidgetsPage::ms_widgetPages )
@@ -1296,7 +1294,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxString& label, int ca
                         node_prev->SetNext(this);
                         m_next = node_next;
                         // force to break loop
-                        node_next = NULL;
+                        node_next = nullptr;
                     }
                 }
                 else
@@ -1321,7 +1319,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxString& label, int ca
 // WidgetsPage
 // ----------------------------------------------------------------------------
 
-WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
+WidgetsPageInfo *WidgetsPage::ms_widgetPages = nullptr;
 
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          wxImageList *imaglist,
@@ -1350,7 +1348,7 @@ void WidgetsPage::SetUpWidget()
             it != widgets.end();
             ++it )
     {
-        wxCHECK_RET(*it, "NULL widget");
+        wxCHECK_RET(*it, "null widget");
 
 #if wxUSE_TOOLTIPS
         (*it)->SetToolTip(GetAttrs().m_tooltip);

@@ -176,7 +176,7 @@ public:
     virtual void CollapseTree();
 
     // overridden base class methods
-    virtual void SetFocus() wxOVERRIDE;
+    virtual void SetFocus() override;
 
 protected:
     virtual void ExpandRoot();
@@ -186,7 +186,7 @@ protected:
     virtual wxTreeItemId AppendItem (const wxTreeItemId & parent,
                 const wxString & text,
                 int image = -1, int selectedImage = -1,
-                wxTreeItemData * data = NULL);
+                wxTreeItemData * data = nullptr);
     //void FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayString& filenames);
     virtual wxTreeCtrl* CreateTreeCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long treeStyle);
 
@@ -305,7 +305,7 @@ public:
     const wxSize& GetSize() const { return m_size; }
     void SetSize(const wxSize& sz) { m_size = sz; }
 
-    bool IsOk() const { return m_smallImageList != NULL; }
+    bool IsOk() const { return m_smallImageList != nullptr; }
 
 protected:
     void Create(const wxSize& sz);  // create on first use

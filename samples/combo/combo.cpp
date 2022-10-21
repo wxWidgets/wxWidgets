@@ -59,7 +59,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -176,7 +176,7 @@ public:
     virtual void OnDrawItem( wxDC& dc,
                              const wxRect& rect,
                              int item,
-                             int flags ) const wxOVERRIDE
+                             int flags ) const override
     {
         if ( item == wxNOT_FOUND )
             return;
@@ -230,7 +230,7 @@ public:
     }
 
     virtual void OnDrawBackground( wxDC& dc, const wxRect& rect,
-                                   int item, int flags ) const wxOVERRIDE
+                                   int item, int flags ) const override
     {
 
         // If item is selected or even, or we are painting the
@@ -249,13 +249,13 @@ public:
         dc.DrawRectangle(rect);
     }
 
-    virtual wxCoord OnMeasureItem( size_t item ) const wxOVERRIDE
+    virtual wxCoord OnMeasureItem( size_t item ) const override
     {
         // Simply demonstrate the ability to have variable-height items
         return FromDIP( item & 1 ? 36 : 24 );
     }
 
-    virtual wxCoord OnMeasureItemWidth( size_t WXUNUSED(item) ) const wxOVERRIDE
+    virtual wxCoord OnMeasureItemWidth( size_t WXUNUSED(item) ) const override
     {
         return -1; // default - will be measured from text width
     }
@@ -273,13 +273,13 @@ class ListViewComboPopup : public wxListView, public wxComboPopup
 {
 public:
 
-    virtual void Init() wxOVERRIDE
+    virtual void Init() override
     {
         m_value = -1;
         m_itemHere = -1; // hot item in list
     }
 
-    virtual bool Create( wxWindow* parent ) wxOVERRIDE
+    virtual bool Create( wxWindow* parent ) override
     {
         return wxListView::Create(parent,1,
                                   wxPoint(0,0),wxDefaultSize,
@@ -287,16 +287,16 @@ public:
                                   wxLC_SORT_ASCENDING|wxSIMPLE_BORDER);
     }
 
-    virtual wxWindow *GetControl() wxOVERRIDE { return this; }
+    virtual wxWindow *GetControl() override { return this; }
 
-    virtual void SetStringValue( const wxString& s ) wxOVERRIDE
+    virtual void SetStringValue( const wxString& s ) override
     {
         int n = wxListView::FindItem(-1,s);
         if ( n >= 0 && n < GetItemCount() )
             wxListView::Select(n);
     }
 
-    virtual wxString GetStringValue() const wxOVERRIDE
+    virtual wxString GetStringValue() const override
     {
         if ( m_value >= 0 )
             return wxListView::GetItemText(m_value);
@@ -367,7 +367,7 @@ class TreeCtrlComboPopup : public wxTreeCtrl, public wxComboPopup
 {
 public:
 
-    virtual void Init() wxOVERRIDE
+    virtual void Init() override
     {
     }
     virtual ~TreeCtrlComboPopup()
@@ -379,7 +379,7 @@ public:
         SendDestroyEvent();
     }
 
-    virtual bool Create( wxWindow* parent ) wxOVERRIDE
+    virtual bool Create( wxWindow* parent ) override
     {
         return wxTreeCtrl::Create(parent,1,
                                   wxPoint(0,0),wxDefaultSize,
@@ -395,12 +395,12 @@ public:
 
     virtual wxSize GetAdjustedSize( int minWidth,
                                     int WXUNUSED(prefHeight),
-                                    int maxHeight ) wxOVERRIDE
+                                    int maxHeight ) override
     {
         return wxSize(wxMax(300,minWidth),wxMin(250,maxHeight));
     }
 
-    virtual wxWindow *GetControl() wxOVERRIDE { return this; }
+    virtual wxWindow *GetControl() override { return this; }
 
     // Needed by SetStringValue
     wxTreeItemId FindItemByText( wxTreeItemId parent, const wxString& text )
@@ -424,7 +424,7 @@ public:
         return wxTreeItemId();
     }
 
-    virtual void SetStringValue( const wxString& s ) wxOVERRIDE
+    virtual void SetStringValue( const wxString& s ) override
     {
         wxTreeItemId root = GetRootItem();
         if ( !root.IsOk() )
@@ -438,7 +438,7 @@ public:
         }
     }
 
-    virtual wxString GetStringValue() const wxOVERRIDE
+    virtual wxString GetStringValue() const override
     {
         if ( m_value.IsOk() )
             return wxTreeCtrl::GetItemText(m_value);
@@ -501,7 +501,7 @@ wxEND_EVENT_TABLE()
 class wxComboCtrlWithCustomPopupAnim : public wxComboCtrl
 {
 protected:
-    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) ) wxOVERRIDE
+    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) ) override
     {
         wxWindow* win = GetPopupWindow();
         win->SetSize(rect);
@@ -543,7 +543,7 @@ public:
 #endif
     }
 
-    virtual void OnButtonClick() wxOVERRIDE
+    virtual void OnButtonClick() override
     {
         // Show standard wxFileDialog on button click
 
@@ -561,7 +561,7 @@ public:
     }
 
     // Implement empty DoSetPopupControl to prevent assertion failure.
-    virtual void DoSetPopupControl(wxComboPopup* WXUNUSED(popup)) wxOVERRIDE
+    virtual void DoSetPopupControl(wxComboPopup* WXUNUSED(popup)) override
     {
     }
 
@@ -578,7 +578,7 @@ private:
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     wxBoxSizer* topSizer;
     wxBoxSizer* topRowSizer;
@@ -1154,7 +1154,7 @@ void MyFrame::OnIdle(wxIdleEvent& event)
     // This code is useful for debugging focus problems
     // (which are plentiful when dealing with popup windows).
 #if 0
-    static wxWindow* lastFocus = (wxWindow*) NULL;
+    static wxWindow* lastFocus = nullptr;
 
     wxWindow* curFocus = ::wxWindow::FindFocus();
 

@@ -41,7 +41,7 @@ public:
     };
 
     WebRequestFrame(const wxString& title):
-        wxFrame(NULL, wxID_ANY, title)
+        wxFrame(nullptr, wxID_ANY, title)
     {
         // set the frame icon
         SetIcon(wxICON(sample));
@@ -486,7 +486,7 @@ private:
 class WebRequestApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         if ( !wxApp::OnInit() )
             return false;

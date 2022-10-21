@@ -52,7 +52,7 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // a text ctrl which allows to call different wxTextCtrl functions
@@ -155,7 +155,7 @@ public:
 private:
     // get the currently focused text control or return the default one
     // (m_multitext) is no text ctrl has focus -- in any case, returns
-    // something non NULL
+    // something non null
     wxTextCtrl *GetFocusedText() const;
 };
 
@@ -1311,7 +1311,7 @@ wxTextCtrl *MyPanel::GetFocusedText() const
 {
     wxWindow *win = FindFocus();
 
-    wxTextCtrl *text = win ? wxDynamicCast(win, wxTextCtrl) : NULL;
+    wxTextCtrl *text = win ? wxDynamicCast(win, wxTextCtrl) : nullptr;
     return text ? text : m_multitext;
 }
 
@@ -1533,7 +1533,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title, int x, int y)
-       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y))
+       : wxFrame(nullptr, wxID_ANY, title, wxPoint(x, y))
 {
     SetIcon(wxICON(sample));
 
@@ -1672,7 +1672,7 @@ void MyFrame::OnRichTextTest(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnIdle( wxIdleEvent& event )
 {
     // track the window which has the focus in the status bar
-    static wxWindow *s_windowFocus = (wxWindow *)NULL;
+    static wxWindow *s_windowFocus = nullptr;
     wxWindow *focus = wxWindow::FindFocus();
     if ( focus && (focus != s_windowFocus) )
     {

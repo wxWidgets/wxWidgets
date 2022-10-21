@@ -28,8 +28,8 @@ class TreeListCtrlTestCase : public CppUnit::TestCase
 public:
     TreeListCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( TreeListCtrlTestCase );
@@ -139,7 +139,7 @@ void TreeListCtrlTestCase::setUp()
 void TreeListCtrlTestCase::tearDown()
 {
     delete m_treelist;
-    m_treelist = NULL;
+    m_treelist = nullptr;
 }
 
 // ----------------------------------------------------------------------------

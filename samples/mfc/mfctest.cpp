@@ -89,7 +89,7 @@ SampleMFCWinApp theApp;
 class MyApp: public wxAppWithMFC
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     wxFrame *CreateFrame();
 };
@@ -174,8 +174,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, char *, int)
 CMainWindow::CMainWindow()
 {
     LoadAccelTable( "MainAccelTable" );
-    Create( NULL, "Hello Foundation Application",
-        WS_OVERLAPPEDWINDOW, rectDefault, NULL, "MainMenu" );
+    Create( nullptr, "Hello Foundation Application",
+        WS_OVERLAPPEDWINDOW, rectDefault, nullptr, "MainMenu" );
 
     // Create a container representing the MFC window in wxWidgets window
     // hierarchy.
@@ -251,7 +251,7 @@ bool MyApp::OnInit()
 
 wxFrame *MyApp::CreateFrame()
 {
-    MyChild *subframe = new MyChild(NULL, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
+    MyChild *subframe = new MyChild(nullptr, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
         wxDEFAULT_FRAME_STYLE);
 
     subframe->SetTitle("wxWidgets canvas frame");
@@ -343,7 +343,7 @@ wxEND_EVENT_TABLE()
 MyChild::MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style)
        : wxFrame(frame, -1, title, pos, size, style)
 {
-    canvas = NULL;
+    canvas = nullptr;
 }
 
 MyChild::~MyChild()

@@ -60,7 +60,7 @@ public:
         Creates an empty wxTreebook.
 
         @param parent
-            The parent window. Must be non-@NULL.
+            The parent window. Must be non-null.
         @param id
             The window identifier.
         @param pos
@@ -70,7 +70,7 @@ public:
         @param style
             The window style. See wxNotebook.
         @param name
-            The name of the control (used only under Motif).
+            The name of the control.
     */
     wxTreebook(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,

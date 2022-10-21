@@ -81,7 +81,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Define an array of process pointers used by MyFrame
@@ -261,7 +261,7 @@ public:
     // instead of overriding this virtual function we might as well process the
     // event from it in the frame class - this might be more convenient in some
     // cases
-    virtual void OnTerminate(int pid, int status) wxOVERRIDE;
+    virtual void OnTerminate(int pid, int status) override;
 
 protected:
     MyFrame *m_parent;
@@ -278,7 +278,7 @@ public:
             Redirect();
         }
 
-    virtual void OnTerminate(int pid, int status) wxOVERRIDE;
+    virtual void OnTerminate(int pid, int status) override;
 
     virtual bool HasInput();
 };
@@ -293,7 +293,7 @@ public:
         {
         }
 
-    virtual bool HasInput() wxOVERRIDE;
+    virtual bool HasInput() override;
 
 private:
     wxString m_input;
@@ -442,7 +442,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size),
+       : wxFrame(nullptr, wxID_ANY, title, pos, size),
          m_timerIdleWakeUp(this, Exec_TimerIdle),
          m_timerBg(this, Exec_TimerBg)
 {
@@ -738,7 +738,7 @@ wxBEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 ExecQueryDialog::ExecQueryDialog(const wxString& cmd)
-    : wxDialog(NULL, wxID_ANY, GetDialogTitle(),
+    : wxDialog(nullptr, wxID_ANY, GetDialogTitle(),
                wxDefaultPosition, wxDefaultSize,
                wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
@@ -876,7 +876,7 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 
     wxLogStatus( "'%s' is running please wait...", cmd );
 
-    int code = wxExecute(cmd, wxEXEC_SYNC | GetExecFlags(), NULL, &env);
+    int code = wxExecute(cmd, wxEXEC_SYNC | GetExecFlags(), nullptr, &env);
 
     wxLogStatus("Process '%s' terminated with exit code %d.",
         cmd, code);
@@ -1434,7 +1434,7 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
                          wxProcess *process)
            : wxFrame(parent, wxID_ANY, cmd),
              m_process(process),
-             // in a real program we'd check that the streams are !NULL here
+             // in a real program we'd check that the streams are non-null here
              m_out(*process->GetOutputStream()),
              m_in(*process->GetInputStream()),
              m_err(*process->GetErrorStream())
@@ -1557,8 +1557,8 @@ void MyPipeFrame::OnClose(wxCloseEvent& event)
         // we're not interested in getting the process termination notification
         // if we are closing it ourselves
         wxProcess *process = m_process;
-        m_process = NULL;
-        process->SetNextHandler(NULL);
+        m_process = nullptr;
+        process->SetNextHandler(nullptr);
 
         process->CloseOutput();
     }

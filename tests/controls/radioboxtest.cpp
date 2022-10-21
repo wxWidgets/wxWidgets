@@ -198,7 +198,7 @@ TEST_CASE("RadioBox::NoItems", "[radiobox]")
     wxScopedPtr<wxRadioBox>
         radio(new wxRadioBox(wxTheApp->GetTopWindow(), wxID_ANY, "Empty",
                              wxDefaultPosition, wxDefaultSize,
-                             0, NULL,
+                             0, nullptr,
                              1, wxRA_SPECIFY_COLS));
 
     CHECK( radio->GetCount() == 0 );

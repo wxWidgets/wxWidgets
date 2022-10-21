@@ -349,12 +349,12 @@ protected:
     int             m_precision;
 
     // Mandatory overridden methods
-    virtual wxString ArrayGet( size_t index ) wxOVERRIDE;
-    virtual size_t ArrayGetCount() wxOVERRIDE;
-    virtual bool ArrayInsert( const wxString& str, int index ) wxOVERRIDE;
-    virtual bool ArraySet( size_t index, const wxString& str ) wxOVERRIDE;
-    virtual void ArrayRemoveAt( int index ) wxOVERRIDE;
-    virtual void ArraySwap( size_t first, size_t second ) wxOVERRIDE;
+    virtual wxString ArrayGet( size_t index ) override;
+    virtual size_t ArrayGetCount() override;
+    virtual bool ArrayInsert( const wxString& str, int index ) override;
+    virtual bool ArraySet( size_t index, const wxString& str ) override;
+    virtual void ArrayRemoveAt( int index ) override;
+    virtual void ArraySwap( size_t first, size_t second ) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog);
@@ -649,7 +649,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 

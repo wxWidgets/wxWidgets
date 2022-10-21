@@ -266,7 +266,7 @@ wxRealPoint::wxRealPoint(const wxPoint& pt)
 wxColourDatabase::wxColourDatabase ()
 {
     // will be created on demand in Initialize()
-    m_map = NULL;
+    m_map = nullptr;
 }
 
 wxColourDatabase::~wxColourDatabase ()
@@ -498,7 +498,7 @@ void wxStockGDI::DeleteAll()
 const wxBrush* wxStockGDI::GetBrush(Item item)
 {
     wxBrush* brush = static_cast<wxBrush*>(ms_stockObject[item]);
-    if (brush == NULL)
+    if (brush == nullptr)
     {
         switch (item)
         {
@@ -546,7 +546,7 @@ const wxBrush* wxStockGDI::GetBrush(Item item)
 const wxColour* wxStockGDI::GetColour(Item item)
 {
     wxColour* colour = static_cast<wxColour*>(ms_stockObject[item]);
-    if (colour == NULL)
+    if (colour == nullptr)
     {
         switch (item)
         {
@@ -585,7 +585,7 @@ const wxColour* wxStockGDI::GetColour(Item item)
 const wxCursor* wxStockGDI::GetCursor(Item item)
 {
     wxCursor* cursor = static_cast<wxCursor*>(ms_stockObject[item]);
-    if (cursor == NULL)
+    if (cursor == nullptr)
     {
         switch (item)
         {
@@ -609,7 +609,7 @@ const wxCursor* wxStockGDI::GetCursor(Item item)
 const wxFont* wxStockGDI::GetFont(Item item)
 {
     wxFont* font = static_cast<wxFont*>(ms_stockObject[item]);
-    if (font == NULL)
+    if (font == nullptr)
     {
         switch (item)
         {
@@ -650,7 +650,7 @@ const wxFont* wxStockGDI::GetFont(Item item)
 const wxPen* wxStockGDI::GetPen(Item item)
 {
     wxPen* pen = static_cast<wxPen*>(ms_stockObject[item]);
-    if (pen == NULL)
+    if (pen == nullptr)
     {
         switch (item)
         {
@@ -745,7 +745,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, wxPenStyle
             return pen;
     }
 
-    wxPen* pen = NULL;
+    wxPen* pen = nullptr;
     wxPen penTmp(colour, width, style);
     if (penTmp.IsOk())
     {
@@ -767,7 +767,7 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle st
             return brush;
     }
 
-    wxBrush* brush = NULL;
+    wxBrush* brush = nullptr;
     wxBrush brushTmp(colour, style);
     if (brushTmp.IsOk())
     {
@@ -847,7 +847,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     }
 
     // font not found, create the new one
-    font = NULL;
+    font = nullptr;
     wxFont fontTmp(pointSize, family, style, weight, underline, facename, encoding);
     if (fontTmp.IsOk())
     {

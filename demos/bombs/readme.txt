@@ -13,12 +13,12 @@ installed wxWin on your system.
 Now you have to modify makefile.bcc
 (if a Windows user) or makefile.unx (if you use a real OS) setting the 
 proper values for the directories. Finally, you have to run:
-  make -f makefile.bcc
-for Windows (nmake if you use a MicroSoft compiler), or:
-  make -f makefile.unx xview
-for Unix+xview and
-  make -f makefile.unx motif
-for Unix+motif
+  make -f makefile.gcc
+for Windows or
+  nmake -f makefile.vc
+if you use a MicroSoft compiler, or:
+  make -f makefile.unx
+for Unix.
 
 If you are lucky, you will find the bombs executable, ready to be run.
 

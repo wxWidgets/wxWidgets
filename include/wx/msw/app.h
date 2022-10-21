@@ -29,12 +29,12 @@ public:
     virtual ~wxApp();
 
     // override base class (pure) virtuals
-    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
-    virtual void CleanUp() wxOVERRIDE;
+    virtual bool Initialize(int& argc, wxChar **argv) override;
+    virtual void CleanUp() override;
 
-    virtual void WakeUpIdle() wxOVERRIDE;
+    virtual void WakeUpIdle() override;
 
-    virtual void SetPrintMode(int mode) wxOVERRIDE { m_printMode = mode; }
+    virtual void SetPrintMode(int mode) override { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
     // implementation only
@@ -43,7 +43,7 @@ public:
     void OnQueryEndSession(wxCloseEvent& event);
 
 #if wxUSE_EXCEPTIONS
-    virtual bool OnExceptionInMainLoop() wxOVERRIDE;
+    virtual bool OnExceptionInMainLoop() override;
 #endif // wxUSE_EXCEPTIONS
 
     // MSW-specific from now on
@@ -73,7 +73,7 @@ public:
     // get the name of the registered Win32 class with the given (unique) base
     // name: this function constructs the unique class name using this name as
     // prefix, checks if the class is already registered and registers it if it
-    // isn't and returns the name it was registered under (or NULL if it failed)
+    // isn't and returns the name it was registered under (or nullptr if it failed)
     //
     // the registered class will always have CS_[HV]REDRAW and CS_DBLCLKS
     // styles as well as any additional styles specified as arguments here; and
@@ -101,7 +101,7 @@ public:
     // Notice that this normally should not be used for the child windows as
     // they already inherit, just dialogs such as wxMessageDialog may want to
     // use it.
-    static wxLayoutDirection MSWGetDefaultLayout(wxWindow* parent = NULL);
+    static wxLayoutDirection MSWGetDefaultLayout(wxWindow* parent = nullptr);
 
     // Call ProcessPendingEvents() but only if we need to do it, i.e. there was
     // a recent call to WakeUpIdle().

@@ -23,39 +23,39 @@ public:
     virtual ~wxTextEntry();
 
     // implement wxTextEntryBase pure virtual methods
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
-    virtual void Remove(long from, long to) wxOVERRIDE;
+    virtual void WriteText(const wxString& text) override;
+    virtual void Remove(long from, long to) override;
 
-    virtual void Copy() wxOVERRIDE;
-    virtual void Cut() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
 
-    virtual void Undo() wxOVERRIDE;
-    virtual void Redo() wxOVERRIDE;
-    virtual bool CanUndo() const wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
 
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
-    virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual long GetLastPosition() const wxOVERRIDE;
+    virtual void SetInsertionPoint(long pos) override;
+    virtual long GetInsertionPoint() const override;
+    virtual long GetLastPosition() const override;
 
-    virtual void SetSelection(long from, long to) wxOVERRIDE
+    virtual void SetSelection(long from, long to) override
         { DoSetSelection(from, to); }
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual bool IsEditable() const wxOVERRIDE;
-    virtual void SetEditable(bool editable) wxOVERRIDE;
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
 
-    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
-    virtual void ForceUpper() wxOVERRIDE;
+    virtual void SetMaxLength(unsigned long len) override;
+    virtual void ForceUpper() override;
 
 #if wxUSE_UXTHEME
-    virtual bool SetHint(const wxString& hint) wxOVERRIDE;
-    virtual wxString GetHint() const wxOVERRIDE;
+    virtual bool SetHint(const wxString& hint) override;
+    virtual wxString GetHint() const override;
 #endif // wxUSE_UXTHEME
 
 protected:
-    virtual wxString DoGetValue() const wxOVERRIDE;
+    virtual wxString DoGetValue() const override;
 
     // this is really a hook for multiline text controls as the single line
     // ones don't need to ever scroll to show the selection but having it here
@@ -68,17 +68,17 @@ protected:
     virtual void DoSetSelection(long from, long to, int flags = SetSel_Scroll);
 
     // margins functions
-    virtual bool DoSetMargins(const wxPoint& pt) wxOVERRIDE;
-    virtual wxPoint DoGetMargins() const wxOVERRIDE;
+    virtual bool DoSetMargins(const wxPoint& pt) override;
+    virtual wxPoint DoGetMargins() const override;
 
     // auto-completion uses COM under Windows so they won't work without
     // wxUSE_OLE as OleInitialize() is not called then
 #if wxUSE_OLE
-    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) wxOVERRIDE;
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) override;
 #if wxUSE_DYNLIB_CLASS
-    virtual bool DoAutoCompleteFileNames(int flags) wxOVERRIDE;
+    virtual bool DoAutoCompleteFileNames(int flags) override;
 #endif // wxUSE_DYNLIB_CLASS
-    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) override;
 #endif // wxUSE_OLE
 
     // Returns true if this control uses standard file names completion.
@@ -108,7 +108,7 @@ private:
     virtual void MSWProcessSpecialKey(wxKeyEvent& event);
 
     // Check if we really have auto-complete data. This is not the same as just
-    // checking if m_autoCompleteData is NULL, see the code for more details.
+    // checking if m_autoCompleteData is null, see the code for more details.
     bool MSWHasAutoCompleteData() const;
 
     // Check that we have auto-complete data, creating it if necessary. Returns

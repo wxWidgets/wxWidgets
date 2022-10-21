@@ -188,7 +188,7 @@ void wxMicroSleep(unsigned long microseconds)
     tmReq.tv_nsec = (microseconds % 1000000) * 1000;
 
     // we're not interested in remaining time nor in return value
-    (void)nanosleep(&tmReq, NULL);
+    (void)nanosleep(&tmReq, nullptr);
 #elif defined(HAVE_USLEEP)
     // uncomment this if you feel brave or if you are sure that your version
     // of Solaris has a safe usleep() function but please notice that usleep()
@@ -330,7 +330,7 @@ bool wxPipeInputStream::CanRead() const
     wxFD_ZERO(&readfds);
     wxFD_SET(fd, &readfds);
 
-    switch ( select(fd + 1, &readfds, NULL, NULL, &tv) )
+    switch ( select(fd + 1, &readfds, nullptr, nullptr, &tv) )
     {
         case -1:
             wxLogSysError(_("Impossible to get child process input"));
@@ -476,7 +476,7 @@ private:
     {
         m_argc = argc;
         m_argv = new char *[m_argc + 1];
-        m_argv[m_argc] = NULL;
+        m_argv[m_argc] = nullptr;
     }
 
     int m_argc;
@@ -913,19 +913,19 @@ const wxChar* wxGetHomeDir( wxString *home  )
 
 wxString wxGetUserHome( const wxString &user )
 {
-    struct passwd *who = (struct passwd *) NULL;
+    struct passwd *who = (struct passwd *) nullptr;
 
     if ( !user )
     {
         wxChar *ptr;
 
-        if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
+        if ((ptr = wxGetenv(wxT("HOME"))) != nullptr)
         {
             return ptr;
         }
 
-        if ((ptr = wxGetenv(wxT("USER"))) != NULL ||
-             (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
+        if ((ptr = wxGetenv(wxT("USER"))) != nullptr ||
+             (ptr = wxGetenv(wxT("LOGNAME"))) != nullptr)
         {
             who = getpwnam(wxSafeConvertWX2MB(ptr));
         }
@@ -941,7 +941,7 @@ wxString wxGetUserHome( const wxString &user )
       who = getpwnam (user.mb_str());
     }
 
-    return wxSafeConvertMB2WX(who ? who->pw_dir : 0);
+    return wxSafeConvertMB2WX(who ? who->pw_dir : nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -996,7 +996,7 @@ wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 // private use only)
 static bool wxGetHostNameInternal(wxChar *buf, int sz)
 {
-    wxCHECK_MSG( buf, false, wxT("NULL pointer in wxGetHostNameInternal") );
+    wxCHECK_MSG( buf, false, wxT("null pointer in wxGetHostNameInternal") );
 
     *buf = wxT('\0');
 
@@ -1080,7 +1080,7 @@ bool wxGetUserId(wxChar *buf, int sz)
     struct passwd *who;
 
     *buf = wxT('\0');
-    if ((who = getpwuid(getuid ())) != NULL)
+    if ((who = getpwuid(getuid ())) != nullptr)
     {
         wxStrlcpy (buf, wxSafeConvertMB2WX(who->pw_name), sz);
         return true;
@@ -1095,7 +1095,7 @@ bool wxGetUserName(wxChar *buf, int sz)
     struct passwd *who;
 
     *buf = wxT('\0');
-    if ((who = getpwuid (getuid ())) != NULL)
+    if ((who = getpwuid (getuid ())) != nullptr)
     {
        char *comma = strchr(who->pw_gecos, ',');
        if (comma)
@@ -1136,7 +1136,7 @@ wxString wxGetNativeCpuArchitectureName()
     // macOS on ARM will report an x86_64 process as translated, assume the native CPU is arm64
     int translated;
     size_t translated_size = sizeof(translated);
-    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, NULL, 0) == 0)
+    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, nullptr, 0) == 0)
         return "arm64";
     else
 #endif
@@ -1423,7 +1423,7 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
         unsetenv(variable.mb_str());
         return true;
 #else
-        value = ""; // we can't pass NULL to setenv()
+        value = ""; // we can't pass nullptr to setenv()
 #endif
     }
 
@@ -1464,7 +1464,7 @@ bool wxSetEnv(const wxString& variable, const wxString& value)
 
 bool wxUnsetEnv(const wxString& variable)
 {
-    return wxDoSetEnv(variable, NULL);
+    return wxDoSetEnv(variable, nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -1524,10 +1524,10 @@ bool wxHandleFatalExceptions(bool doit)
     else if ( s_savedHandlers )
     {
         // uninstall the signal handler
-        ok &= sigaction(SIGFPE, &s_handlerFPE, NULL) == 0;
-        ok &= sigaction(SIGILL, &s_handlerILL, NULL) == 0;
-        ok &= sigaction(SIGBUS, &s_handlerBUS, NULL) == 0;
-        ok &= sigaction(SIGSEGV, &s_handlerSEGV, NULL) == 0;
+        ok &= sigaction(SIGFPE, &s_handlerFPE, nullptr) == 0;
+        ok &= sigaction(SIGILL, &s_handlerILL, nullptr) == 0;
+        ok &= sigaction(SIGBUS, &s_handlerBUS, nullptr) == 0;
+        ok &= sigaction(SIGSEGV, &s_handlerSEGV, nullptr) == 0;
         if ( !ok )
         {
             wxLogDebug(wxT("Failed to uninstall our signal handler."));

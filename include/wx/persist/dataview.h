@@ -46,11 +46,11 @@ public:
     {
     }
 
-    virtual void Save() const wxOVERRIDE
+    virtual void Save() const override
     {
         wxDataViewCtrl* const control = Get();
 
-        const wxDataViewColumn* sortColumn = NULL;
+        const wxDataViewColumn* sortColumn = nullptr;
 
         for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
         {
@@ -92,7 +92,7 @@ public:
         }
     }
 
-    virtual bool Restore() wxOVERRIDE
+    virtual bool Restore() override
     {
         wxDataViewCtrl* const control = Get();
 
@@ -139,7 +139,7 @@ public:
         return true;
     }
 
-    virtual wxString GetKind() const wxOVERRIDE
+    virtual wxString GetKind() const override
     {
         return wxASCII_STR(wxPERSIST_DVC_KIND);
     }
@@ -151,7 +151,7 @@ private:
         return wxString::Format(wxASCII_STR("/Columns/%s/"), column->GetTitle());
     }
 
-    // Return the column with the given title or NULL.
+    // Return the column with the given title or nullptr.
     static wxDataViewColumn*
     GetColumnByTitle(wxDataViewCtrl* control, const wxString& title)
     {
@@ -161,7 +161,7 @@ private:
                 return control->GetColumn(col);
         }
 
-        return NULL;
+        return nullptr;
     }
 };
 

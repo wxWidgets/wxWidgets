@@ -133,12 +133,12 @@ public:
 
     bool IsNull() const;
 
-    // returns the renderer that was used to create this instance, or NULL if it has not been initialized yet
+    // returns the renderer that was used to create this instance, or nullptr if it has not been initialized yet
     wxGraphicsRenderer* GetRenderer() const;
     wxGraphicsObjectRefData* GetGraphicsData() const;
 protected:
-    virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
+    virtual wxObjectRefData* CreateRefData() const override;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
@@ -220,8 +220,8 @@ public:
         wxDouble tx=0.0, wxDouble ty=0.0);
 
     // gets the component values of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+    virtual void Get(wxDouble* a=nullptr, wxDouble* b=nullptr,  wxDouble* c=nullptr,
+                     wxDouble* d=nullptr, wxDouble* tx=nullptr, wxDouble* ty=nullptr) const;
 
     // makes this the inverse matrix
     virtual void Invert();
@@ -565,7 +565,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    wxGraphicsContext(wxGraphicsRenderer* renderer, wxWindow* window = NULL);
+    wxGraphicsContext(wxGraphicsRenderer* renderer, wxWindow* window = nullptr);
 
     virtual ~wxGraphicsContext();
 
@@ -580,7 +580,7 @@ public:
 #endif
 #endif
 
-    // Create a context from a DC of unknown type, if supported, returns NULL otherwise
+    // Create a context from a DC of unknown type, if supported, returns nullptr otherwise
     static wxGraphicsContext* CreateFromUnknownDC(const wxDC& dc);
 
     static wxGraphicsContext* CreateFromNative( void * context );
@@ -850,7 +850,7 @@ public:
 
 
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
-        wxDouble *descent = NULL, wxDouble *externalLeading = NULL ) const  = 0;
+        wxDouble *descent = nullptr, wxDouble *externalLeading = nullptr ) const  = 0;
 
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const = 0;
 
@@ -1099,7 +1099,7 @@ public:
 
     virtual wxString GetName() const = 0;
     virtual void
-    GetVersion(int* major, int* minor = NULL, int* micro = NULL) const = 0;
+    GetVersion(int* major, int* minor = nullptr, int* micro = nullptr) const = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxGraphicsRenderer);

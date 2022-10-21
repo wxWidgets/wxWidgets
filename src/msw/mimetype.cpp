@@ -213,7 +213,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
 void wxFileTypeImpl::MSWNotifyShell()
 {
     if (!m_suppressNotify)
-        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST | SHCNF_FLUSHNOWAIT, NULL, NULL);
+        SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST | SHCNF_FLUSHNOWAIT, nullptr, nullptr);
 }
 
 void wxFileTypeImpl::MSWSuppressNotifications(bool supress)
@@ -266,7 +266,7 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
                     wxASSOCF_NOTRUNCATE,// Fail if buffer is too small.
                     assoc,              // The association to retrieve.
                     ext.t_str(),        // The extension to retrieve it for.
-                    verb.empty() ? NULL
+                    verb.empty() ? nullptr
                                  : static_cast<const TCHAR*>(verb.t_str()),
                     bufOut,             // The buffer for output value.
                     &dwSize             // And its size
@@ -492,7 +492,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     if ( !knownExtension )
     {
         // unknown extension
-        return NULL;
+        return nullptr;
     }
 
     return CreateFileType(wxEmptyString, ext);
@@ -517,7 +517,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     }
 
     // unknown MIME type
-    return NULL;
+    return nullptr;
 }
 
 size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
@@ -544,7 +544,7 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
 
 wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 {
-    wxCHECK_MSG( !ftInfo.GetExtensions().empty(), NULL,
+    wxCHECK_MSG( !ftInfo.GetExtensions().empty(), nullptr,
                  wxT("Associate() needs extension") );
 
     bool ok;
@@ -554,7 +554,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
     wxString ext = ftInfo.GetExtensions()[iExtCount];
 
-    wxCHECK_MSG( !ext.empty(), NULL,
+    wxCHECK_MSG( !ext.empty(), nullptr,
                  wxT("Associate() needs non empty extension") );
 
     if ( ext[0u] != wxT('.') )

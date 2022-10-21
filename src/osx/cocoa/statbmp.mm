@@ -65,7 +65,7 @@ public :
     {
     }
 
-    void SetLabel( const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding) ) wxOVERRIDE
+    void SetLabel( const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding) ) override
     {
         // although NSControl has this method, NSImageView throws an exception if it is called
     }

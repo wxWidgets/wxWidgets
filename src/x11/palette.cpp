@@ -63,10 +63,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxXPalette, wxObject);
 
 wxXPalette::wxXPalette()
 {
-    m_cmap = (WXColormap) 0;
+    m_cmap = (WXColormap) nullptr;
     m_pix_array_n = 0;
-    m_pix_array = (unsigned long*) 0;
-    m_display = (WXDisplay*) 0;
+    m_pix_array = (unsigned long*) nullptr;
+    m_display = (WXDisplay*) nullptr;
     m_destroyable = false;
 }
 
@@ -76,7 +76,7 @@ wxPaletteRefData::wxPaletteRefData()
 
 wxPaletteRefData::~wxPaletteRefData()
 {
-    Display *display = NULL;
+    Display *display = nullptr;
 
     wxList::compatibility_iterator node, next;
 
@@ -384,7 +384,7 @@ bool wxPalette::TransferBitmap8(unsigned char *data, unsigned long sz,
 unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)
 {
     if (!M_PALETTEDATA)
-        return (unsigned long*) 0;
+        return (unsigned long*) nullptr;
     wxList::compatibility_iterator node;
 
     for (node = M_PALETTEDATA->m_palettes.GetFirst(); node; node = node->GetNext())
@@ -402,7 +402,7 @@ unsigned long *wxPalette::GetXPixArray(WXDisplay *display, int *n)
     if (GetXColormap(display))
         return GetXPixArray(display, n);
     else
-        return (unsigned long*) 0;
+        return (unsigned long*) nullptr;
 }
 
 void wxPalette::PutXColormap(WXDisplay* display, WXColormap cm, bool dp)
@@ -414,7 +414,7 @@ void wxPalette::PutXColormap(WXDisplay* display, WXColormap cm, bool dp)
     wxXPalette *c = new wxXPalette;
 
     c->m_pix_array_n = 0;
-    c->m_pix_array = (unsigned long*) NULL;
+    c->m_pix_array = (unsigned long*) nullptr;
     c->m_display = display;
     c->m_cmap = cm;
     c->m_destroyable = dp;

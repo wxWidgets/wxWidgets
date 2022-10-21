@@ -206,32 +206,32 @@ public:
         }
     }
 
-    virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
+    virtual wxBitmap GetBitmap(wxAnyButton::State which) const override
     {
         return m_bitmaps[which];
     }
 
-    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) wxOVERRIDE
+    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) override
     {
         m_bitmaps[which] = bitmap;
     }
 
-    virtual wxSize GetBitmapMargins() const wxOVERRIDE
+    virtual wxSize GetBitmapMargins() const override
     {
         return m_margin;
     }
 
-    virtual void SetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y) override
     {
         m_margin = wxSize(x, y);
     }
 
-    virtual wxDirection GetBitmapPosition() const wxOVERRIDE
+    virtual wxDirection GetBitmapPosition() const override
     {
         return m_dir;
     }
 
-    virtual void SetBitmapPosition(wxDirection dir) wxOVERRIDE
+    virtual void SetBitmapPosition(wxDirection dir) override
     {
         m_dir = dir;
     }
@@ -258,7 +258,7 @@ private:
         }
     }
 
-    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
+    void OnDPIChanged(wxDPIChangedEvent& event) override
     {
         wxButtonImageData::OnDPIChanged(event);
 
@@ -302,12 +302,12 @@ public:
         UpdateImageInfo();
     }
 
-    virtual wxBitmap GetBitmap(wxAnyButton::State which) const wxOVERRIDE
+    virtual wxBitmap GetBitmap(wxAnyButton::State which) const override
     {
         return m_iml.GetBitmap(which);
     }
 
-    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) wxOVERRIDE
+    virtual void SetBitmap(const wxBitmap& bitmap, wxAnyButton::State which) override
     {
         m_iml.Replace(which, bitmap);
 
@@ -319,19 +319,19 @@ public:
         UpdateImageInfo();
     }
 
-    virtual wxSize GetBitmapMargins() const wxOVERRIDE
+    virtual wxSize GetBitmapMargins() const override
     {
         return wxSize(m_data.margin.left, m_data.margin.top);
     }
 
-    virtual void SetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y) override
     {
         ::SetRect(&m_data.margin, x, y, x, y);
 
         UpdateImageInfo();
     }
 
-    virtual wxDirection GetBitmapPosition() const wxOVERRIDE
+    virtual wxDirection GetBitmapPosition() const override
     {
         switch ( m_data.uAlign )
         {
@@ -353,7 +353,7 @@ public:
         }
     }
 
-    virtual void SetBitmapPosition(wxDirection dir) wxOVERRIDE
+    virtual void SetBitmapPosition(wxDirection dir) override
     {
         UINT alignNew;
         switch ( dir )
@@ -441,7 +441,7 @@ private:
         }
     }
 
-    void OnDPIChanged(wxDPIChangedEvent& event) wxOVERRIDE
+    void OnDPIChanged(wxDPIChangedEvent& event) override
     {
         wxButtonImageData::OnDPIChanged(event);
 
@@ -564,7 +564,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
     // The standard height is generally higher than this, but if not (e.g. when
     // using a larger font) increase the button height as well.
     int yText;
-    wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
+    wxGetCharSize(GetHwndOf(btn), nullptr, &yText, btn->GetFont());
     yText = wxGetEditHeightFromCharHeight(yText, btn);
 
     sizeBtn.IncTo(wxSize(-1, yText));
@@ -597,7 +597,7 @@ void wxAnyButton::SetLabel(const wxString& label)
     if ( m_markupText )
     {
         delete m_markupText;
-        m_markupText = NULL;
+        m_markupText = nullptr;
 
         // Unfortunately we don't really know whether we can reset the button
         // to be non-owner-drawn or not: if we had made it owner-drawn just
@@ -650,11 +650,11 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
             // Initialize margins with the default values (at least under
             // Windows 7) in case GetThemeMargins() fails.
             MARGINS margins = {3, 3, 3, 3};
-            ::GetThemeMargins(theme, NULL,
+            ::GetThemeMargins(theme, nullptr,
                                                     BP_PUSHBUTTON,
                                                     PBS_NORMAL,
                                                     TMT_CONTENTMARGINS,
-                                                    NULL,
+                                                    nullptr,
                                                     &margins);
 
             // XP doesn't draw themed buttons correctly when the client
@@ -785,7 +785,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
     if ( which == State_Normal )
     {
         delete m_imageData;
-        m_imageData = NULL;
+        m_imageData = nullptr;
     }
 
     if ( !bitmapBundle.IsOk() )
@@ -807,7 +807,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
     }
 
 #if wxUSE_UXTHEME
-    wxXPButtonImageData *oldData = NULL;
+    wxXPButtonImageData *oldData = nullptr;
 #endif // wxUSE_UXTHEME
 
     // Check if we already had bitmaps of different size.
@@ -825,7 +825,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
         oldData = wxDynamicCast(m_imageData, wxXPButtonImageData);
         if ( oldData )
         {
-            m_imageData = NULL;
+            m_imageData = nullptr;
         }
 #endif // wxUSE_UXTHEME
         //else: wxODButtonImageData doesn't require anything special
@@ -1068,7 +1068,7 @@ void DrawButtonText(HDC hdc,
 
             ::OffsetRect(&rc, 0, y0 + lineNum * hLine);
 
-            ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(lines[lineNum]),
+            ::DrawState(hdc, nullptr, nullptr, wxMSW_CONV_LPARAM(lines[lineNum]),
                         lines[lineNum].length(),
                         rc.left, rc.top, rc.right, rc.bottom, dsFlags);
         }
@@ -1284,12 +1284,12 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
 
         ::DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
 
-        wxWindowBeingErased = NULL;
+        wxWindowBeingErased = nullptr;
     }
 
     // draw background
     ::DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
-                                &rectBtn, NULL);
+                                &rectBtn, nullptr);
 
     // calculate content area margins, using the defaults in case we fail to
     // retrieve the current theme margins
@@ -1323,7 +1323,7 @@ void wxAnyButton::MakeOwnerDrawn()
         // We need to use owner-drawn specific data structure so we have
         // to create it and copy the data from native data structure,
         // if necessary.
-        if ( m_imageData && wxDynamicCast(m_imageData, wxODButtonImageData) == NULL )
+        if ( m_imageData && wxDynamicCast(m_imageData, wxODButtonImageData) == nullptr )
         {
             wxODButtonImageData* newData = new wxODButtonImageData(this, m_imageData->GetBitmapBundle(State_Normal));
             for ( int n = 0; n < State_Max; n++ )

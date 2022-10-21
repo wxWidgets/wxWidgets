@@ -110,7 +110,7 @@ wxBEGIN_EVENT_TABLE(wxDialogBase, wxTopLevelWindow)
     EVT_CHAR_HOOK(wxDialogBase::OnCharHook)
 wxEND_EVENT_TABLE()
 
-wxDialogLayoutAdapter* wxDialogBase::sm_layoutAdapter = NULL;
+wxDialogLayoutAdapter* wxDialogBase::sm_layoutAdapter = nullptr;
 bool wxDialogBase::sm_layoutAdaptation = false;
 
 wxDialogBase::wxDialogBase()
@@ -133,21 +133,21 @@ wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
                                        wxWindow *parent) const
 {
     if ( !parent )
-        return NULL;
+        return nullptr;
 
     extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
     if ( wxPendingDelete.Member(parent) || parent->IsBeingDeleted() )
     {
         // this window is being deleted and we shouldn't create any children
         // under it
-        return NULL;
+        return nullptr;
     }
 
     if ( parent->HasExtraStyle(wxWS_EX_TRANSIENT) )
     {
         // this window is not being deleted yet but it's going to disappear
         // soon so still don't parent this window under it
-        return NULL;
+        return nullptr;
     }
 
     // This check is done for modal dialogs only because modeless dialogs can
@@ -162,7 +162,7 @@ wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
             if ( !parent->IsShownOnScreen() )
             {
                 // using hidden parent won't work correctly either
-                return NULL;
+                return nullptr;
             }
             break;
     }
@@ -171,7 +171,7 @@ wxDialogBase::CheckIfCanBeUsedAsParent(wxDialogModality modality,
     {
         // not sure if this can really happen but it doesn't hurt to guard
         // against this clearly invalid situation
-        return NULL;
+        return nullptr;
     }
 
     return parent;
@@ -186,7 +186,7 @@ wxDialogBase::DoGetParentForDialog(wxDialogModality modality,
     // in an unfocused dialog, so try to find a valid parent for it unless we
     // were explicitly asked not to
     if ( style & wxDIALOG_NO_PARENT )
-        return NULL;
+        return nullptr;
 
     // first try the given parent
     if ( parent )
@@ -239,7 +239,7 @@ wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 #else // !wxUSE_BUTTON
     wxUnusedVar(flags);
 
-    return NULL;
+    return nullptr;
 #endif // wxUSE_BUTTON/!wxUSE_BUTTON
 }
 
@@ -262,7 +262,7 @@ wxSizer *wxDialogBase::CreateSeparatedButtonSizer(long flags)
 {
     wxSizer *sizer = CreateButtonSizer(flags);
     if ( !sizer )
-        return NULL;
+        return nullptr;
 
     return CreateSeparatedSizer(sizer);
 }
@@ -273,9 +273,9 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 {
     wxStdDialogButtonSizer *sizer = new wxStdDialogButtonSizer();
 
-    wxButton *ok = NULL;
-    wxButton *yes = NULL;
-    wxButton *no = NULL;
+    wxButton *ok = nullptr;
+    wxButton *yes = nullptr;
+    wxButton *no = nullptr;
 
     if (flags & wxOK)
     {
@@ -594,7 +594,7 @@ bool wxDialogBase::CanDoLayoutAdaptation()
     // Check if local setting overrides the global setting
     bool layoutEnabled = (GetLayoutAdaptationMode() == wxDIALOG_ADAPTATION_MODE_ENABLED) || (IsLayoutAdaptationEnabled() && (GetLayoutAdaptationMode() != wxDIALOG_ADAPTATION_MODE_DISABLED));
 
-    return (layoutEnabled && !m_layoutAdaptationDone && GetLayoutAdaptationLevel() != 0 && GetLayoutAdapter() != NULL && GetLayoutAdapter()->CanDoLayoutAdaptation((wxDialog*) this));
+    return (layoutEnabled && !m_layoutAdaptationDone && GetLayoutAdaptationLevel() != 0 && GetLayoutAdapter() != nullptr && GetLayoutAdapter()->CanDoLayoutAdaptation((wxDialog*) this));
 }
 
 /// Set scrolling adapter class, returning old adapter
@@ -779,7 +779,7 @@ wxSizer* wxStandardDialogLayoutAdapter::FindButtonSizer(bool stdButtonSizer, wxD
                 return s;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /// Check if this sizer contains standard buttons, and so can be repositioned in the dialog
@@ -980,8 +980,8 @@ class wxDialogLayoutAdapterModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxDialogLayoutAdapterModule);
 public:
     wxDialogLayoutAdapterModule() {}
-    virtual void OnExit() wxOVERRIDE { delete wxDialogBase::SetLayoutAdapter(NULL); }
-    virtual bool OnInit() wxOVERRIDE { wxDialogBase::SetLayoutAdapter(new wxStandardDialogLayoutAdapter); return true; }
+    virtual void OnExit() override { delete wxDialogBase::SetLayoutAdapter(nullptr); }
+    virtual bool OnInit() override { wxDialogBase::SetLayoutAdapter(new wxStandardDialogLayoutAdapter); return true; }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDialogLayoutAdapterModule, wxModule);

@@ -50,7 +50,7 @@ public:
     }
 
     // don't use in the new code, use IsOk() instead
-    bool IsNull() const { return m_refData == NULL; }
+    bool IsNull() const { return m_refData == nullptr; }
 
     // older version, for backwards compatibility only (but not deprecated
     // because it's still widely used)
@@ -66,19 +66,19 @@ public:
     virtual bool IsFree() const { return false; }
 
     // Returns handle.
-    virtual WXHANDLE GetResourceHandle() const { return NULL; }
+    virtual WXHANDLE GetResourceHandle() const { return nullptr; }
 #endif // defined(__WXMSW__)
 
 protected:
     // replace base class functions using wxObjectRefData with our own which
     // use wxGDIRefData to ensure that we always work with data objects of the
     // correct type (i.e. derived from wxGDIRefData)
-    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE
+    virtual wxObjectRefData *CreateRefData() const override
     {
         return CreateGDIRefData();
     }
 
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override
     {
         return CloneGDIRefData(static_cast<const wxGDIRefData *>(data));
     }

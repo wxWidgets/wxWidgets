@@ -33,10 +33,10 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 };
 
 
@@ -46,7 +46,7 @@ class TestGLCanvas : public wxGLCanvas
 public:
     TestGLCanvas(wxWindow *parent,
                  wxWindowID id = wxID_ANY,
-                 int *gl_attrib = NULL);
+                 int *gl_attrib = nullptr);
 
     virtual ~TestGLCanvas();
 

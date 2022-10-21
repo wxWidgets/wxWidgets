@@ -57,8 +57,6 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 
 #include "wx/arrstr.h"
 
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
-
 int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
     int n = 0;
@@ -82,116 +80,13 @@ int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
     return wxNOT_FOUND;
 }
 
-#else // C++98 version
-
-#include "wx/beforestd.h"
-#include <functional>
-#include "wx/afterstd.h"
-
-// some compilers (Sun CC being the only known example) distinguish between
-// extern "C" functions and the functions with C++ linkage and ptr_fun and
-// wxStringCompareLess can't take wxStrcmp/wxStricmp directly as arguments in
-// this case, we need the wrappers below to make this work
-struct wxStringCmp
-{
-    typedef wxString first_argument_type;
-    typedef wxString second_argument_type;
-    typedef int result_type;
-
-    int operator()(const wxString& s1, const wxString& s2) const
-    {
-        return s1.compare(s2);
-    }
-};
-
-struct wxStringCmpNoCase
-{
-    typedef wxString first_argument_type;
-    typedef wxString second_argument_type;
-    typedef int result_type;
-
-    int operator()(const wxString& s1, const wxString& s2) const
-    {
-        return s1.CmpNoCase(s2);
-    }
-};
-
-int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
-{
-    if (!bFromEnd)
-    {
-        wxArrayString::const_iterator it;
-
-        if (bCase)
-        {
-            it = std::find_if(begin(), end(),
-                              std::not1(
-                                  std::bind2nd(
-                                      wxStringCmp(), str)));
-        }
-        else // !bCase
-        {
-            it = std::find_if(begin(), end(),
-                              std::not1(
-                                  std::bind2nd(
-                                      wxStringCmpNoCase(), str)));
-        }
-
-        return it == end() ? wxNOT_FOUND : it - begin();
-    }
-    else // bFromEnd
-    {
-        wxArrayString::const_reverse_iterator it;
-
-        if (bCase)
-        {
-            it = std::find_if(rbegin(), rend(),
-                              std::not1(
-                                  std::bind2nd(
-                                      wxStringCmp(), str)));
-        }
-        else // !bCase
-        {
-            it = std::find_if(rbegin(), rend(),
-                              std::not1(
-                                  std::bind2nd(
-                                      wxStringCmpNoCase(), str)));
-        }
-
-        return it == rend() ? wxNOT_FOUND : it.base()-1 - begin();
-    }
-}
-
-template<class F>
-class wxStringCompareLess
-{
-public:
-    wxStringCompareLess(F f) : m_f(f) { }
-    bool operator()(const wxString& s1, const wxString& s2)
-        { return m_f(s1, s2) < 0; }
-private:
-    F m_f;
-};
-
-template<class F>
-wxStringCompareLess<F> wxStringCompare(F f)
-{
-    return wxStringCompareLess<F>(f);
-}
-
-#endif // C++11/C++98
-
 void wxArrayString::Sort(CompareFunction function)
 {
     std::sort(begin(), end(),
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
               [function](const wxString& s1, const wxString& s2)
               {
                   return function(s1, s2) < 0;
               }
-#else // C++98 version
-              wxStringCompare(function)
-#endif // C++11/C++98
              );
 }
 
@@ -217,14 +112,10 @@ int wxSortedArrayString::Index(const wxString& str,
     SCMPFUNC function = GetCompareFunction();
     wxSortedArrayString::const_iterator
         it = std::lower_bound(begin(), end(), str,
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14)
                               [function](const wxString& s1, const wxString& s2)
                               {
                                   return function(s1, s2) < 0;
                               }
-#else // C++98 version
-                              wxStringCompare(function)
-#endif // C++11/C++98
                               );
 
     if ( it == end() || str.Cmp(*it) != 0 )
@@ -244,8 +135,8 @@ void wxArrayString::Init(bool autoSort)
 {
   m_nSize  =
   m_nCount = 0;
-  m_pItems = NULL;
-  m_compareFunction = NULL;
+  m_pItems = nullptr;
+  m_compareFunction = nullptr;
   m_autoSort = autoSort;
 }
 
@@ -292,7 +183,7 @@ wxString *wxArrayString::Grow(size_t nIncrement)
     if ( (m_nSize - m_nCount) >= nIncrement )
     {
         // We already have enough space.
-        return NULL;
+        return nullptr;
     }
 
     // if ARRAY_DEFAULT_INITIAL_SIZE were set to 0, the initially empty would
@@ -309,7 +200,7 @@ wxString *wxArrayString::Grow(size_t nIncrement)
       m_pItems = new wxString[m_nSize];
 
       // Nothing to free, we hadn't had any memory before.
-      return NULL;
+      return nullptr;
     }
     else {
       // otherwise when it's called for the first time, nIncrement would be 0

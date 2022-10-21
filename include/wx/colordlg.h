@@ -21,7 +21,7 @@
     #include "wx/msw/colordlg.h"
 #elif defined(__WXMAC__) && !defined(__WXUNIVERSAL__)
     #include "wx/osx/colordlg.h"
-#elif defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/colordlg.h"
 #elif defined(__WXQT__)
     #include "wx/qt/colordlg.h"
@@ -57,7 +57,7 @@ public:
     wxColour GetColour() const { return m_colour; }
     void SetColour(const wxColour& colour) { m_colour = colour; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE
+    virtual wxEvent *Clone() const override
     {
         return new wxColourDialogEvent(*this);
     }
@@ -78,10 +78,10 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COLOUR_CHANGED, wxColourDialogE
 
 
 // get the colour from user and return it
-WXDLLIMPEXP_CORE wxColour wxGetColourFromUser(wxWindow *parent = NULL,
+WXDLLIMPEXP_CORE wxColour wxGetColourFromUser(wxWindow *parent = nullptr,
                                               const wxColour& colInit = wxNullColour,
                                               const wxString& caption = wxEmptyString,
-                                              wxColourData *data = NULL);
+                                              wxColourData *data = nullptr);
 
 #endif // wxUSE_COLOURDLG
 

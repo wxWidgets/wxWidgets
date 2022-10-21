@@ -74,15 +74,15 @@ class wxAutoOleInterface
 public:
     typedef I Interface;
 
-    explicit wxAutoOleInterface(I *pInterface = NULL) : m_interface(pInterface)
+    explicit wxAutoOleInterface(I *pInterface = nullptr) : m_interface(pInterface)
         {}
-    wxAutoOleInterface(REFIID riid, IUnknown *pUnk) : m_interface(NULL)
+    wxAutoOleInterface(REFIID riid, IUnknown *pUnk) : m_interface(nullptr)
         { QueryInterface(riid, pUnk); }
-    wxAutoOleInterface(REFIID riid, IDispatch *pDispatch) : m_interface(NULL)
+    wxAutoOleInterface(REFIID riid, IDispatch *pDispatch) : m_interface(nullptr)
         { QueryInterface(riid, pDispatch); }
-    wxAutoOleInterface(REFCLSID clsid, REFIID riid) : m_interface(NULL)
+    wxAutoOleInterface(REFCLSID clsid, REFIID riid) : m_interface(nullptr)
         { CreateInstance(clsid, riid); }
-    wxAutoOleInterface(const wxAutoOleInterface& ti) : m_interface(NULL)
+    wxAutoOleInterface(const wxAutoOleInterface& ti) : m_interface(nullptr)
         { operator=(ti); }
 
     wxAutoOleInterface& operator=(const wxAutoOleInterface& ti)
@@ -107,13 +107,13 @@ public:
     {
         if ( m_interface )
             m_interface->Release();
-        m_interface = NULL;
+        m_interface = nullptr;
     }
 
     HRESULT QueryInterface(REFIID riid, IUnknown *pUnk)
     {
         Free();
-        wxASSERT(pUnk != NULL);
+        wxASSERT(pUnk != nullptr);
         return pUnk->QueryInterface(riid, (void **)&m_interface);
     }
 
@@ -123,7 +123,7 @@ public:
         return CoCreateInstance
                (
                    clsid,
-                   NULL,
+                   nullptr,
                    CLSCTX_ALL,
                    riid,
                    (void **)&m_interface
@@ -134,7 +134,7 @@ public:
     I* operator->() {return m_interface; }
     I** GetRef() {return &m_interface; }
     bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_interface != NULL; }
+    bool IsOk() const { return m_interface != nullptr; }
 
 protected:
     I *m_interface;
@@ -159,7 +159,7 @@ public:
     void OnPaint(wxPaintEvent&);
     void OnSetFocus(wxFocusEvent&);
     void OnKillFocus(wxFocusEvent&);
-    virtual bool MSWTranslateMessage(WXMSG* pMsg) wxOVERRIDE;
+    virtual bool MSWTranslateMessage(WXMSG* pMsg) override;
     virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc);
 
 protected:
@@ -214,7 +214,7 @@ private:
     DISPID m_dispid;
 
 public:
-    virtual wxEvent *Clone() const wxOVERRIDE
+    virtual wxEvent *Clone() const override
     { return new wxActiveXEvent(*this); }
 
     size_t ParamCount() const;
@@ -248,7 +248,7 @@ typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
 #define wxActiveXEventHandler(func) \
     wxEVENT_HANDLER_CAST( wxActiveXEventFunction, func )
 
-#define EVT_ACTIVEX(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, wxActiveXEventHandler( fn ), NULL ),
+#define EVT_ACTIVEX(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, wxActiveXEventHandler( fn ), nullptr ),
 
 #endif // wxUSE_ACTIVEX
 

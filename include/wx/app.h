@@ -226,14 +226,14 @@ public:
     // wxTheApp->GetTraits() during startup or termination when the global
     // application object itself may be unavailable
     //
-    // of course, it still returns NULL in this case and the caller must check
+    // of course, it still returns nullptr in this case and the caller must check
     // for it
     static wxAppTraits *GetTraitsIfExists();
 
     // Return some valid traits object.
     //
     // This method checks if we have wxTheApp and returns its traits if it does
-    // exist and the traits are non-NULL, similarly to GetTraitsIfExists(), but
+    // exist and the traits are non-null, similarly to GetTraitsIfExists(), but
     // falls back to wxConsoleAppTraits to ensure that it always returns
     // something valid.
     static wxAppTraits& GetValidTraits();
@@ -241,8 +241,8 @@ public:
     // returns the main event loop instance, i.e. the event loop which is started
     // by OnRun() and which dispatches all events sent from the native toolkit
     // to the application (except when new event loops are temporarily set-up).
-    // The returned value maybe NULL. Put initialization code which needs a
-    // non-NULL main event loop into OnEventLoopEnter().
+    // The returned value maybe null. Put initialization code which needs a
+    // non-null main event loop into OnEventLoopEnter().
     wxEventLoopBase* GetMainLoop() const
         { return m_mainLoop; }
 
@@ -264,7 +264,7 @@ public:
 
     // Implement the inherited wxEventFilter method but just return -1 from it
     // to indicate that default processing should take place.
-    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
+    virtual int FilterEvent(wxEvent& event) override;
 
     // return true if we're running event loop, i.e. if the events can
     // (already) be dispatched
@@ -495,7 +495,7 @@ protected:
     // the one and only global application object
     static wxAppConsole *ms_appInstance;
 
-    // create main loop from AppTraits or return NULL if
+    // create main loop from AppTraits or return nullptr if
     // there is no main loop implementation
     wxEventLoopBase *CreateMainLoop();
 
@@ -506,11 +506,11 @@ protected:
              m_appDisplayName,    // app display name ("My Application")
              m_className;         // class name
 
-    // the class defining the application behaviour, NULL initially and created
+    // the class defining the application behaviour, nullptr initially and created
     // by GetTraits() when first needed
     wxAppTraits *m_traits;
 
-    // the main event loop of the application (may be NULL if the loop hasn't
+    // the main event loop of the application (may be null if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoopBase *m_mainLoop;
 
@@ -567,7 +567,7 @@ public:
         // very first initialization function
         //
         // Override: very rarely
-    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
+    virtual bool Initialize(int& argc, wxChar **argv) override;
 
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.
@@ -582,15 +582,15 @@ public:
         // of the program really starts here
         //
         // Override: rarely in GUI applications, always in console ones.
-    virtual int OnRun() wxOVERRIDE;
+    virtual int OnRun() override;
 
         // a matching function for OnInit()
-    virtual int OnExit() wxOVERRIDE;
+    virtual int OnExit() override;
 
         // very last clean up function
         //
         // Override: very rarely
-    virtual void CleanUp() wxOVERRIDE;
+    virtual void CleanUp() override;
 
 
     // the worker functions - usually not used directly by the user code
@@ -605,10 +605,10 @@ public:
         // parties
         //
         // it should return true if more idle events are needed, false if not
-    virtual bool ProcessIdle() wxOVERRIDE;
+    virtual bool ProcessIdle() override;
 
         // override base class version: GUI apps always use an event loop
-    virtual bool UsesEventLoop() const wxOVERRIDE { return true; }
+    virtual bool UsesEventLoop() const override { return true; }
 
 
     // top level window functions
@@ -622,11 +622,11 @@ public:
 
         // return the "main" top level window (if it hadn't been set previously
         // with SetTopWindow(), will return just some top level window and, if
-        // there are none, will return NULL)
+        // there are none, will return nullptr)
     virtual wxWindow *GetTopWindow() const;
 
         // convenient helper which is safe to use even if there is no wxApp at
-        // all, it will just return NULL in this case
+        // all, it will just return nullptr in this case
     static wxWindow *GetMainTopWindow();
 
         // control the exit behaviour: by default, the program will exit the
@@ -675,8 +675,8 @@ public:
     // ------------------------------------------------------------------------
 
 #if wxUSE_CMDLINE_PARSER
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
 #endif
 
     // miscellaneous other stuff
@@ -687,7 +687,7 @@ public:
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 
-    virtual bool IsGUI() const wxOVERRIDE { return true; }
+    virtual bool IsGUI() const override { return true; }
 
     // returns non-null pointer only if we have a GUI application object: this
     // is only useful in the rare cases when the same code can be used in both
@@ -697,19 +697,19 @@ public:
     {
         return ms_appInstance && ms_appInstance->IsGUI()
                 ? static_cast<wxAppBase*>(ms_appInstance)
-                : NULL;
+                : nullptr;
     }
 
 protected:
     // override base class method to use GUI traits
-    virtual wxAppTraits *CreateTraits() wxOVERRIDE;
+    virtual wxAppTraits *CreateTraits() override;
 
     // Helper method deleting all existing top level windows: this is used
     // during the application shutdown.
     void DeleteAllTLWs();
 
 
-    // the main top level window (may be NULL)
+    // the main top level window (may be null)
     wxWindow *m_topWindow;
 
     // if Yes, exit the main loop when the last top level window is deleted, if
@@ -741,14 +741,10 @@ protected:
 
 #if defined(__WXMSW__)
     #include "wx/msw/app.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/app.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/app.h"
+    #include "wx/gtk/app.h"
 #elif defined(__WXX11__)
     #include "wx/x11/app.h"
 #elif defined(__WXMAC__)

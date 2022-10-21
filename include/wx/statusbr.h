@@ -118,7 +118,7 @@ public:
 
     // set the number of fields and call SetStatusWidths(widths) if widths are
     // given
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
+    virtual void SetFieldsCount(int number = 1, const int *widths = nullptr);
     int GetFieldsCount() const { return (int)m_panes.GetCount(); }
 
     // field text
@@ -181,10 +181,10 @@ public:
     // wxWindow overrides:
 
     // don't want status bars to accept the focus at all
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     // the client size of a toplevel window doesn't include the status bar
-    virtual bool CanBeOutsideClientArea() const wxOVERRIDE { return true; }
+    virtual bool CanBeOutsideClientArea() const override { return true; }
 
 protected:
     // called after the status bar pane text changed and should update its
@@ -195,14 +195,14 @@ protected:
     // wxWindow overrides:
 
 #if wxUSE_TOOLTIPS
-   virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE
+   virtual void DoSetToolTip( wxToolTip *tip ) override
         {
             wxASSERT_MSG(!HasFlag(wxSTB_SHOW_TIPS),
                          "Do not set tooltip(s) manually when using wxSTB_SHOW_TIPS!");
             wxWindow::DoSetToolTip(tip);
         }
 #endif // wxUSE_TOOLTIPS
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
 
     // internal helpers & data:

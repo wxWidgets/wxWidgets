@@ -63,16 +63,16 @@ public:
     wxRibbonGalleryButtonState GetExtensionButtonState() const;
 
     bool IsHovered() const;
-    virtual bool IsSizingContinuous() const wxOVERRIDE;
-    virtual bool Realize() wxOVERRIDE;
-    virtual bool Layout() wxOVERRIDE;
+    virtual bool IsSizingContinuous() const override;
+    virtual bool Realize() override;
+    virtual bool Layout() override;
 
-    virtual bool ScrollLines(int lines) wxOVERRIDE;
+    virtual bool ScrollLines(int lines) override;
     bool ScrollPixels(int pixels);
     void EnsureVisible(const wxRibbonGalleryItem* item);
 
 protected:
-    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     void CommonInit(long style);
     void CalculateMinSize();
     bool TestButtonHover(const wxRect& rect, wxPoint pos,
@@ -89,11 +89,11 @@ protected:
     void OnSize(wxSizeEvent& evt);
     int GetScrollLineSize() const;
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                        wxSize relative_to) const wxOVERRIDE;
+                                        wxSize relative_to) const override;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                       wxSize relative_to) const wxOVERRIDE;
+                                       wxSize relative_to) const override;
 
     wxArrayRibbonGalleryItem m_items;
     wxRibbonGalleryItem* m_selected_item;
@@ -127,8 +127,8 @@ class WXDLLIMPEXP_RIBBON wxRibbonGalleryEvent : public wxCommandEvent
 public:
     wxRibbonGalleryEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonGallery* gallery = NULL,
-                       wxRibbonGalleryItem* item = NULL)
+                       wxRibbonGallery* gallery = nullptr,
+                       wxRibbonGalleryItem* item = nullptr)
         : wxCommandEvent(command_type, win_id)
         , m_gallery(gallery), m_item(item)
     {
@@ -140,7 +140,7 @@ public:
         m_item = e.m_item;
     }
 #endif
-    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonGalleryEvent(*this); }
+    wxEvent *Clone() const override { return new wxRibbonGalleryEvent(*this); }
 
     wxRibbonGallery* GetGallery() {return m_gallery;}
     wxRibbonGalleryItem* GetGalleryItem() {return m_item;}

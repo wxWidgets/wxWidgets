@@ -227,7 +227,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
 {
     wxCHECK_RET( m_sizerText, wxT("can only be called after Create()") );
-    wxASSERT_MSG( win, wxT("can't add NULL window to about dialog") );
+    wxASSERT_MSG( win, wxT("can't add null window to about dialog") );
 
     m_sizerText->Add(win, flags);
 }
@@ -312,7 +312,7 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 // currently wxAboutBox is implemented natively only under these platforms, for
 // the others we provide a generic fallback here
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && \
-        (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
+        (!defined(__WXGTK__) || defined(__WXUNIVERSAL__))
 
 void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {

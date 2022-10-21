@@ -56,9 +56,9 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
     static void _GetInterface(cls *self, REFIID iid, void **_interface, const char *&desc);\
     public:\
     LONG GetRefCount();\
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) wxOVERRIDE;\
-    ULONG STDMETHODCALLTYPE AddRef() wxOVERRIDE;\
-    ULONG STDMETHODCALLTYPE Release() wxOVERRIDE;\
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject) override;\
+    ULONG STDMETHODCALLTYPE AddRef() override;\
+    ULONG STDMETHODCALLTYPE Release() override;\
     ULONG STDMETHODCALLTYPE AddLock();\
     ULONG STDMETHODCALLTYPE ReleaseLock()
 
@@ -70,7 +70,7 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
         {\
             return E_FAIL;\
         }\
-        const char *desc = NULL;\
+        const char *desc = nullptr;\
         cls::_GetInterface(this, iid, ppvObject, desc);\
         if (! *ppvObject)\
         {\
@@ -119,8 +119,8 @@ wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
 #define DEFINE_OLE_BASE(cls)\
     void cls::_GetInterface(cls *self, REFIID iid, void **_interface, const char *&desc)\
     {\
-        *_interface = NULL;\
-        desc = NULL;
+        *_interface = nullptr;\
+        desc = nullptr;
 
 #define OLE_INTERFACE(_iid, _type)\
     if (IsEqualIID(iid, _iid))\
@@ -205,28 +205,28 @@ public:
         m_bAmbientShowGrabHandles = true;
         m_bAmbientAppearance = true;
 
-        m_hDCBuffer = NULL;
+        m_hDCBuffer = nullptr;
         m_hWndParent = (HWND)win->GetHWND();
     }
     virtual ~FrameSite(){}
     //***************************IDispatch*****************************
     HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID, OLECHAR ** ,
                                             unsigned int , LCID ,
-                                            DISPID * ) wxOVERRIDE
+                                            DISPID * ) override
     {   return E_NOTIMPL;   }
-    STDMETHOD(GetTypeInfo)(unsigned int, LCID, ITypeInfo **) wxOVERRIDE
+    STDMETHOD(GetTypeInfo)(unsigned int, LCID, ITypeInfo **) override
     {   return E_NOTIMPL;   }
-    HRESULT STDMETHODCALLTYPE GetTypeInfoCount(unsigned int *) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetTypeInfoCount(unsigned int *) override
     {   return E_NOTIMPL;   }
     HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember, REFIID, LCID,
                             WORD wFlags, DISPPARAMS *,
                             VARIANT * pVarResult, EXCEPINFO *,
-                            unsigned int *) wxOVERRIDE
+                            unsigned int *) override
     {
         if (!(wFlags & DISPATCH_PROPERTYGET))
             return S_OK;
 
-        if (pVarResult == NULL)
+        if (pVarResult == nullptr)
             return E_INVALIDARG;
 
         //The most common case is boolean, use as an initial type
@@ -293,32 +293,32 @@ public:
     }
 
     //**************************IOleWindow***************************
-    HRESULT STDMETHODCALLTYPE GetWindow(HWND * phwnd) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetWindow(HWND * phwnd) override
     {
-        if (phwnd == NULL)
+        if (phwnd == nullptr)
             return E_INVALIDARG;
         (*phwnd) = m_hWndParent;
         return S_OK;
     }
-    HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL) override
     {return S_OK;}
     //**************************IOleInPlaceUIWindow*****************
-    HRESULT STDMETHODCALLTYPE GetBorder(LPRECT lprectBorder) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetBorder(LPRECT lprectBorder) override
     {
-        if (lprectBorder == NULL)
+        if (lprectBorder == nullptr)
             return E_INVALIDARG;
         return INPLACE_E_NOTOOLSPACE;
     }
-    HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS pborderwidths) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS pborderwidths) override
     {
-        if (pborderwidths == NULL)
+        if (pborderwidths == nullptr)
             return E_INVALIDARG;
         return INPLACE_E_NOTOOLSPACE;
     }
-    HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS) override
     {return S_OK;}
     HRESULT STDMETHODCALLTYPE SetActiveObject(
-        IOleInPlaceActiveObject *pActiveObject, LPCOLESTR) wxOVERRIDE
+        IOleInPlaceActiveObject *pActiveObject, LPCOLESTR) override
     {
         if (pActiveObject)
             pActiveObject->AddRef();
@@ -329,12 +329,12 @@ public:
 
     //********************IOleInPlaceFrame************************
 
-    STDMETHOD(InsertMenus)(HMENU, LPOLEMENUGROUPWIDTHS) wxOVERRIDE {return S_OK;}
-    STDMETHOD(SetMenu)(HMENU, HOLEMENU, HWND) wxOVERRIDE {return S_OK;}
-    STDMETHOD(RemoveMenus)(HMENU) wxOVERRIDE {return S_OK;}
-    STDMETHOD(SetStatusText)(LPCOLESTR) wxOVERRIDE {return S_OK;}
-    HRESULT STDMETHODCALLTYPE EnableModeless(BOOL) wxOVERRIDE {return S_OK;}
-    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg, WORD) wxOVERRIDE
+    STDMETHOD(InsertMenus)(HMENU, LPOLEMENUGROUPWIDTHS) override {return S_OK;}
+    STDMETHOD(SetMenu)(HMENU, HOLEMENU, HWND) override {return S_OK;}
+    STDMETHOD(RemoveMenus)(HMENU) override {return S_OK;}
+    STDMETHOD(SetStatusText)(LPCOLESTR) override {return S_OK;}
+    HRESULT STDMETHODCALLTYPE EnableModeless(BOOL) override {return S_OK;}
+    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg, WORD) override
     {
         // TODO: send an event with this id
         if (m_window->m_oleInPlaceActiveObject.IsOk())
@@ -343,24 +343,24 @@ public:
     }
 
     //*******************IOleInPlaceSite**************************
-    HRESULT STDMETHODCALLTYPE CanInPlaceActivate() wxOVERRIDE {return S_OK;}
-    HRESULT STDMETHODCALLTYPE OnInPlaceActivate() wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE CanInPlaceActivate() override {return S_OK;}
+    HRESULT STDMETHODCALLTYPE OnInPlaceActivate() override
     {   m_bInPlaceActive = true;    return S_OK;    }
-    HRESULT STDMETHODCALLTYPE OnUIActivate() wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE OnUIActivate() override
     {   m_bUIActive = true;         return S_OK;    }
     HRESULT STDMETHODCALLTYPE GetWindowContext(IOleInPlaceFrame **ppFrame,
                                         IOleInPlaceUIWindow **ppDoc,
                                         LPRECT lprcPosRect,
                                         LPRECT lprcClipRect,
-                                        LPOLEINPLACEFRAMEINFO lpFrameInfo) wxOVERRIDE
+                                        LPOLEINPLACEFRAMEINFO lpFrameInfo) override
     {
-        if (ppFrame == NULL || ppDoc == NULL || lprcPosRect == NULL ||
-            lprcClipRect == NULL || lpFrameInfo == NULL)
+        if (ppFrame == nullptr || ppDoc == nullptr || lprcPosRect == nullptr ||
+            lprcClipRect == nullptr || lpFrameInfo == nullptr)
         {
-            if (ppFrame != NULL)
-                (*ppFrame) = NULL;
-            if (ppDoc != NULL)
-                (*ppDoc) = NULL;
+            if (ppFrame != nullptr)
+                (*ppFrame) = nullptr;
+            if (ppDoc != nullptr)
+                (*ppDoc) = nullptr;
             return E_INVALIDARG;
         }
 
@@ -374,7 +374,7 @@ public:
         if (! SUCCEEDED(hr))
         {
             (*ppFrame)->Release();
-            *ppFrame = NULL;
+            *ppFrame = nullptr;
             return E_UNEXPECTED;
         }
 
@@ -399,14 +399,14 @@ public:
 
         return S_OK;
     }
-    HRESULT STDMETHODCALLTYPE Scroll(SIZE) wxOVERRIDE {return S_OK;}
-    HRESULT STDMETHODCALLTYPE OnUIDeactivate(BOOL) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE Scroll(SIZE) override {return S_OK;}
+    HRESULT STDMETHODCALLTYPE OnUIDeactivate(BOOL) override
     {   m_bUIActive = false;         return S_OK;    }
-    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivate() wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivate() override
     {   m_bInPlaceActive = false;    return S_OK;    }
-    HRESULT STDMETHODCALLTYPE DiscardUndoState() wxOVERRIDE {return S_OK;}
-    HRESULT STDMETHODCALLTYPE DeactivateAndUndo() wxOVERRIDE {return S_OK; }
-    HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT lprcPosRect) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE DiscardUndoState() override {return S_OK;}
+    HRESULT STDMETHODCALLTYPE DeactivateAndUndo() override {return S_OK; }
+    HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT lprcPosRect) override
     {
         if (m_window->m_oleInPlaceObject.IsOk() && lprcPosRect)
         {
@@ -426,7 +426,7 @@ public:
         return S_OK;
     }
     //*************************IOleInPlaceSiteEx***********************
-    HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD) override
     {
         OleLockRunning(m_window->m_ActiveX, TRUE, FALSE);
         if (pfNoRedraw)
@@ -434,14 +434,14 @@ public:
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL) override
     {
         OleLockRunning(m_window->m_ActiveX, FALSE, FALSE);
         return S_OK;
     }
-    STDMETHOD(RequestUIActivate)() wxOVERRIDE { return S_OK;}
+    STDMETHOD(RequestUIActivate)() override { return S_OK;}
     //*************************IOleClientSite**************************
-    HRESULT STDMETHODCALLTYPE SaveObject() wxOVERRIDE {return S_OK;}
+    HRESULT STDMETHODCALLTYPE SaveObject() override {return S_OK;}
     const char *OleGetMonikerToStr(DWORD dwAssign)
     {
         switch (dwAssign)
@@ -464,30 +464,30 @@ public:
         default                     : return "Bad Enum";
         }
     }
-    STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **) wxOVERRIDE {return E_FAIL;}
-    HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer) wxOVERRIDE
+    STDMETHOD(GetMoniker)(DWORD, DWORD, IMoniker **) override {return E_FAIL;}
+    HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER * ppContainer) override
     {
-        if (ppContainer == NULL)
+        if (ppContainer == nullptr)
             return E_INVALIDARG;
         HRESULT hr = QueryInterface(
             IID_IOleContainer, (void**)(ppContainer));
         wxASSERT(SUCCEEDED(hr));
         return hr;
     }
-    HRESULT STDMETHODCALLTYPE ShowObject() wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE ShowObject() override
     {
         if (m_window->m_oleObjectHWND)
             ::ShowWindow(m_window->m_oleObjectHWND, SW_SHOW);
         return S_OK;
     }
-    STDMETHOD(OnShowWindow)(BOOL) wxOVERRIDE {return S_OK;}
-    STDMETHOD(RequestNewObjectLayout)() wxOVERRIDE {return E_NOTIMPL;}
+    STDMETHOD(OnShowWindow)(BOOL) override {return S_OK;}
+    STDMETHOD(RequestNewObjectLayout)() override {return E_NOTIMPL;}
     //********************IParseDisplayName***************************
     HRESULT STDMETHODCALLTYPE ParseDisplayName(
-        IBindCtx *, LPOLESTR, ULONG *, IMoniker **) wxOVERRIDE {return E_NOTIMPL;}
+        IBindCtx *, LPOLESTR, ULONG *, IMoniker **) override {return E_NOTIMPL;}
     //********************IOleContainer*******************************
-    STDMETHOD(EnumObjects)(DWORD, IEnumUnknown **) wxOVERRIDE {return E_NOTIMPL;}
-    HRESULT STDMETHODCALLTYPE LockContainer(BOOL) wxOVERRIDE {return S_OK;}
+    STDMETHOD(EnumObjects)(DWORD, IEnumUnknown **) override {return E_NOTIMPL;}
+    HRESULT STDMETHODCALLTYPE LockContainer(BOOL) override {return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
     #if defined(_UNICODE)
@@ -495,53 +495,53 @@ public:
     #else
     GetObjectA
     #endif
-    (LPOLESTR pszItem, DWORD, IBindCtx *, REFIID, void ** ppvObject) wxOVERRIDE
+    (LPOLESTR pszItem, DWORD, IBindCtx *, REFIID, void ** ppvObject) override
     {
-        if (pszItem == NULL || ppvObject == NULL)
+        if (pszItem == nullptr || ppvObject == nullptr)
             return E_INVALIDARG;
-        *ppvObject = NULL;
+        *ppvObject = nullptr;
         return MK_E_NOOBJECT;
     }
     HRESULT STDMETHODCALLTYPE GetObjectStorage(
-        LPOLESTR pszItem, IBindCtx * , REFIID, void ** ppvStorage) wxOVERRIDE
+        LPOLESTR pszItem, IBindCtx * , REFIID, void ** ppvStorage) override
     {
-        if (pszItem == NULL || ppvStorage == NULL)
+        if (pszItem == nullptr || ppvStorage == nullptr)
             return E_INVALIDARG;
-        *ppvStorage = NULL;
+        *ppvStorage = nullptr;
         return MK_E_NOOBJECT;
     }
-    HRESULT STDMETHODCALLTYPE IsRunning(LPOLESTR pszItem) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE IsRunning(LPOLESTR pszItem) override
     {
-        if (pszItem == NULL)
+        if (pszItem == nullptr)
             return E_INVALIDARG;
         return MK_E_NOOBJECT;
     }
     //***********************IOleControlSite*****************************
-    HRESULT STDMETHODCALLTYPE OnControlInfoChanged() wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE OnControlInfoChanged() override
     {return S_OK;}
-    HRESULT STDMETHODCALLTYPE LockInPlaceActive(BOOL fLock) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE LockInPlaceActive(BOOL fLock) override
     {
         m_bInPlaceLocked = (fLock) ? true : false;
         return S_OK;
     }
-    HRESULT STDMETHODCALLTYPE GetExtendedControl(IDispatch **) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE GetExtendedControl(IDispatch **) override
     {return E_NOTIMPL;}
     HRESULT STDMETHODCALLTYPE TransformCoords(
-        POINTL * pPtlHimetric, POINTF * pPtfContainer, DWORD) wxOVERRIDE
+        POINTL * pPtlHimetric, POINTF * pPtfContainer, DWORD) override
     {
-        if (pPtlHimetric == NULL || pPtfContainer == NULL)
+        if (pPtlHimetric == nullptr || pPtfContainer == nullptr)
             return E_INVALIDARG;
         return E_NOTIMPL;
     }
-    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG, DWORD) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG, DWORD) override
     {return E_NOTIMPL;}
-    HRESULT STDMETHODCALLTYPE OnFocus(BOOL) wxOVERRIDE {return S_OK;}
-    HRESULT STDMETHODCALLTYPE ShowPropertyFrame() wxOVERRIDE {return E_NOTIMPL;}
+    HRESULT STDMETHODCALLTYPE OnFocus(BOOL) override {return S_OK;}
+    HRESULT STDMETHODCALLTYPE ShowPropertyFrame() override {return E_NOTIMPL;}
     //**************************IOleCommandTarget***********************
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG cCmds,
-                                OLECMD prgCmds[], OLECMDTEXT *) wxOVERRIDE
+                                OLECMD prgCmds[], OLECMDTEXT *) override
     {
-        if (prgCmds == NULL) return E_INVALIDARG;
+        if (prgCmds == nullptr) return E_INVALIDARG;
         for (ULONG nCmd = 0; nCmd < cCmds; nCmd++)
         {
             // unsupported by default
@@ -551,19 +551,19 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD,
-                            DWORD, VARIANTARG *, VARIANTARG *) wxOVERRIDE
+                            DWORD, VARIANTARG *, VARIANTARG *) override
     {return OLECMDERR_E_NOTSUPPORTED;}
 
     //**********************IAdviseSink************************************
-    void STDMETHODCALLTYPE OnDataChange(FORMATETC *, STGMEDIUM *) wxOVERRIDE {}
-    void STDMETHODCALLTYPE OnViewChange(DWORD, LONG) wxOVERRIDE {}
-    void STDMETHODCALLTYPE OnRename(IMoniker *) wxOVERRIDE {}
-    void STDMETHODCALLTYPE OnSave() wxOVERRIDE {}
-    void STDMETHODCALLTYPE OnClose() wxOVERRIDE {}
+    void STDMETHODCALLTYPE OnDataChange(FORMATETC *, STGMEDIUM *) override {}
+    void STDMETHODCALLTYPE OnViewChange(DWORD, LONG) override {}
+    void STDMETHODCALLTYPE OnRename(IMoniker *) override {}
+    void STDMETHODCALLTYPE OnSave() override {}
+    void STDMETHODCALLTYPE OnClose() override {}
 
     //**********************IOleDocumentSite***************************
     HRESULT STDMETHODCALLTYPE ActivateMe(
-        IOleDocumentView __RPC_FAR *pViewToActivate) wxOVERRIDE
+        IOleDocumentView __RPC_FAR *pViewToActivate) override
     {
         wxAutoIOleInPlaceSite inPlaceSite(
             IID_IOleInPlaceSite, (IDispatch *) this);
@@ -582,7 +582,7 @@ public:
             if (! oleDoc.IsOk())
                 return E_FAIL;
 
-            HRESULT hr = oleDoc->CreateView(inPlaceSite, NULL,
+            HRESULT hr = oleDoc->CreateView(inPlaceSite, nullptr,
                                     0, m_window->m_docView.GetRef());
             if (hr != S_OK)
                 return E_FAIL;
@@ -674,17 +674,17 @@ public:
     }
 
     // IDispatch
-    STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR**, unsigned int, LCID, DISPID*) wxOVERRIDE
+    STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR**, unsigned int, LCID, DISPID*) override
     {
         return E_NOTIMPL;
     }
 
-    STDMETHODIMP GetTypeInfo(unsigned int, LCID, ITypeInfo**) wxOVERRIDE
+    STDMETHODIMP GetTypeInfo(unsigned int, LCID, ITypeInfo**) override
     {
         return E_NOTIMPL;
     }
 
-    STDMETHODIMP GetTypeInfoCount(unsigned int*) wxOVERRIDE
+    STDMETHODIMP GetTypeInfoCount(unsigned int*) override
     {
         return E_NOTIMPL;
     }
@@ -694,7 +694,7 @@ public:
                         LCID lcid,
                           WORD wFlags, DISPPARAMS * pDispParams,
                           VARIANT * pVarResult, EXCEPINFO * pExcepInfo,
-                          unsigned int * puArgErr) wxOVERRIDE
+                          unsigned int * puArgErr) override
     {
         if (wFlags & (DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
             return E_NOTIMPL;
@@ -856,9 +856,9 @@ wxActiveXContainer::~wxActiveXContainer()
             m_oleObject->Unadvise(m_docAdviseCookie);
 
         m_oleObject->DoVerb(
-            OLEIVERB_HIDE, NULL, m_clientSite, 0, (HWND) GetHWND(), NULL);
+            OLEIVERB_HIDE, nullptr, m_clientSite, 0, (HWND) GetHWND(), nullptr);
         m_oleObject->Close(OLECLOSE_NOSAVE);
-        m_oleObject->SetClientSite(NULL);
+        m_oleObject->SetClientSite(nullptr);
     }
 
     // m_clientSite uses m_frameSite so destroy it first
@@ -866,7 +866,7 @@ wxActiveXContainer::~wxActiveXContainer()
     delete m_frameSite;
 
     // our window doesn't belong to us, don't destroy it
-    m_hWnd = NULL;
+    m_hWnd = nullptr;
 }
 
 // VZ: we might want to really report an error instead of just asserting here
@@ -921,7 +921,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     wxASSERT(typeInfo.IsOk());
 
     // TYPEATTR
-    TYPEATTR *ta = NULL;
+    TYPEATTR *ta = nullptr;
     hret = typeInfo->GetTypeAttr(&ta);
     CHECK_HR(hret);
 
@@ -969,7 +969,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
         // wxAutoOleInterface<> assumes a ref has already been added
         // TYPEATTR
-        TYPEATTR *ta2 = NULL;
+        TYPEATTR *ta2 = nullptr;
         hret = ti->GetTypeAttr(&ta2);
         CHECK_HR(hret);
 
@@ -1034,7 +1034,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     // TODO:Needed?
 //    hret = m_viewObject->SetAdvise(DVASPECT_CONTENT, 0, adviseSink);
-    m_oleObject->SetHostNames(L"wxActiveXContainer", NULL);
+    m_oleObject->SetHostNames(L"wxActiveXContainer", nullptr);
     OleSetContainedObject(m_oleObject, TRUE);
     OleRun(m_oleObject);
 
@@ -1076,7 +1076,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         RECT posRect;
         wxCopyRectToRECT(m_realparent->GetClientSize(), posRect);
 
-        hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL,
+        hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, nullptr,
             m_clientSite, 0, (HWND)m_realparent->GetHWND(), &posRect);
         CHECK_HR(hret);
 
@@ -1181,11 +1181,11 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         posRect.right = w;
         posRect.bottom = h;
 
-        ::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
+        ::RedrawWindow(m_oleObjectHWND, nullptr, nullptr, RDW_INTERNALPAINT);
         RECTL *prcBounds = (RECTL *) &posRect;
         wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
-        m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
-            (HDC)msw->GetHDC(), prcBounds, NULL, NULL, 0);
+        m_viewObject->Draw(DVASPECT_CONTENT, -1, nullptr, nullptr, nullptr,
+            (HDC)msw->GetHDC(), prcBounds, nullptr, nullptr, 0);
     }
 }
 

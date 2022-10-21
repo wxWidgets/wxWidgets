@@ -37,7 +37,7 @@ inline
 NSProgressIndicator *GetProgressIndicator(wxWidgetImpl* peer)
 {
     return peer ? static_cast<NSProgressIndicator*>(peer->GetWXWidget())
-                : NULL;
+                : nullptr;
 }
 
 } // anonymous namespace

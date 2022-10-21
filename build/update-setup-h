@@ -108,7 +108,6 @@ if [ ! -f wxwin.m4 ]; then
 fi
 
 update_common_setup_h include/wx/android/setup.h
-update_common_setup_h include/wx/motif/setup.h
 update_common_setup_h include/wx/msw/setup.h
 update_common_setup_h include/wx/gtk/setup.h
 update_common_setup_h include/wx/osx/setup.h
@@ -124,6 +123,7 @@ update_msw_setup_h build/cmake/setup.h.in
 update_osx_setup_h include/wx/osx/setup.h
 
 update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup.h
+update_msw_setup_h include/wx/univ/setup.h
 
 exit $rc
 

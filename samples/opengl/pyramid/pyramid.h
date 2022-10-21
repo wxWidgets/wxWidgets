@@ -15,7 +15,7 @@ class MyApp: public wxApp
 {
 public:
     MyApp(){}
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 
@@ -56,7 +56,7 @@ public:
 
     //Used just to know if we must end now because OGL 3.2 isn't available
     bool OglCtxAvailable()
-        {return m_oglContext != NULL;}
+        {return m_oglContext != nullptr;}
 
     //Init the OpenGL stuff
     bool oglInit();

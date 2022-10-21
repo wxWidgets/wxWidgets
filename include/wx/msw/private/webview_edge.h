@@ -60,6 +60,7 @@ public:
 
     bool m_initialized;
     bool m_isBusy;
+    bool m_inEventCallback;
     wxString m_pendingURL;
     wxString m_pendingPage;
     int m_pendingContextMenuEnabled;

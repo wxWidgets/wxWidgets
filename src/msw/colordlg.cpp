@@ -52,7 +52,7 @@
 static wxRect gs_rectDialog(0, 0, 222, 324);
 
 // The dialog currently being shown or null.
-static wxColourDialog* gs_activeDialog = NULL;
+static wxColourDialog* gs_activeDialog = nullptr;
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -178,7 +178,7 @@ int wxColourDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
-    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : nullptr;
 
     wxWindowDisabler disableOthers(this, parent);
 

@@ -22,14 +22,14 @@ class WXDLLIMPEXP_CORE wxMacPrinter: public wxPrinterBase
     wxDECLARE_DYNAMIC_CLASS(wxMacPrinter);
 
 public:
-    wxMacPrinter(wxPrintDialogData *data = NULL);
+    wxMacPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxMacPrinter();
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
-                       bool prompt = true) wxOVERRIDE;
-    virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
-    virtual bool Setup(wxWindow *parent) wxOVERRIDE;
+                       bool prompt = true) override;
+    virtual wxDC* PrintDialog(wxWindow *parent) override;
+    virtual bool Setup(wxWindow *parent) override;
 
 };
 
@@ -44,15 +44,15 @@ class WXDLLIMPEXP_CORE wxMacPrintPreview: public wxPrintPreviewBase
 
 public:
     wxMacPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = NULL,
-                          wxPrintDialogData *data = NULL);
+                          wxPrintout *printoutForPrinting = nullptr,
+                          wxPrintDialogData *data = nullptr);
     wxMacPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting,
                           wxPrintData *data);
     virtual ~wxMacPrintPreview();
 
-    virtual bool Print(bool interactive) wxOVERRIDE;
-    virtual void DetermineScaling() wxOVERRIDE;
+    virtual bool Print(bool interactive) override;
+    virtual void DetermineScaling() override;
 };
 
 #endif

@@ -126,7 +126,7 @@ wxWindow *wxGetActiveWindow()
         node = node->GetPrevious();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )

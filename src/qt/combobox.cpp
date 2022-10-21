@@ -23,8 +23,8 @@ class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
 public:
     wxQtComboBox( wxWindow *parent, wxComboBox *handler );
-    virtual void showPopup() wxOVERRIDE;
-    virtual void hidePopup() wxOVERRIDE;
+    virtual void showPopup() override;
+    virtual void hidePopup() override;
 
     class IgnoreTextChange
     {
@@ -146,7 +146,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    const wxString *pChoices = choices.size() ? &choices[ 0 ] : NULL;
+    const wxString *pChoices = choices.size() ? &choices[ 0 ] : nullptr;
     return Create(parent, id, value, pos, size, choices.size(), pChoices,
                   style, validator, name );
 }
@@ -294,7 +294,7 @@ void wxComboBox::SetSelection( long from, long to )
 
     SetInsertionPoint( from );
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != NULL )
+    if ( m_qtComboBox->lineEdit() != nullptr )
     {
         m_qtComboBox->lineEdit()->setSelection( from, to - from );
     }
@@ -322,7 +322,7 @@ long wxComboBox::GetInsertionPoint() const
 void wxComboBox::GetSelection(long* from, long* to) const
 {
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != NULL )
+    if ( m_qtComboBox->lineEdit() != nullptr )
     {
         *from = m_qtComboBox->lineEdit()->selectionStart();
         if ( *from >= 0 )

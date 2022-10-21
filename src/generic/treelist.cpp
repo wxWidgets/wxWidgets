@@ -52,12 +52,12 @@ public:
                         const wxString& text = wxString(),
                         int imageClosed = wxWithImages::NO_IMAGE,
                         int imageOpened = wxWithImages::NO_IMAGE,
-                        wxClientData* data = NULL)
+                        wxClientData* data = nullptr)
         : m_text(text),
           m_parent(parent)
     {
         m_child =
-        m_next = NULL;
+        m_next = nullptr;
 
         m_imageClosed = imageClosed;
         m_imageOpened = imageOpened;
@@ -66,7 +66,7 @@ public:
 
         m_data = data;
 
-        m_columnsTexts = NULL;
+        m_columnsTexts = nullptr;
     }
 
     // Destroying the node also (recursively) destroys its children.
@@ -115,7 +115,7 @@ public:
     // the text for the first column is always stored in m_text and so we don't
     // store it in m_columnsTexts.
 
-    bool HasColumnsTexts() const { return m_columnsTexts != NULL; }
+    bool HasColumnsTexts() const { return m_columnsTexts != nullptr; }
     const wxString& GetColumnText(unsigned col) const
     {
         return m_columnsTexts[col - 1];
@@ -190,7 +190,7 @@ public:
         if ( m_columnsTexts )
         {
             delete [] m_columnsTexts;
-            m_columnsTexts = NULL;
+            m_columnsTexts = nullptr;
         }
     }
 
@@ -236,9 +236,9 @@ public:
     }
 
 
-    // Functions for tree traversal. All of them can return NULL.
+    // Functions for tree traversal. All of them can return nullptr.
 
-    // Only returns NULL when called on the root item.
+    // Only returns nullptr when called on the root item.
     wxTreeListModelNode* GetParent() const { return m_parent; }
 
     // Returns the first child of this item.
@@ -265,22 +265,22 @@ public:
                 return node->m_next;
         }
 
-        return NULL;
+        return nullptr;
     }
 
 
 private:
     // The (never changing after creation) parent of this node and the possibly
-    // NULL pointers to its first child and next sibling.
+    // null pointers to its first child and next sibling.
     wxTreeListModelNode* const m_parent;
     wxTreeListModelNode* m_child;
     wxTreeListModelNode* m_next;
 
-    // Client data pointer owned by the control. May be NULL.
+    // Client data pointer owned by the control. May be null.
     wxClientData* m_data;
 
     // Array of column values for all the columns except the first one. May be
-    // NULL if no values had been set for them.
+    // nullptr if no values had been set for them.
     wxString* m_columnsTexts;
 };
 
@@ -329,7 +329,7 @@ public:
 
     wxDataViewItem ToDVI(Node* node) const
     {
-        // Our root item must be represented as NULL at wxDVC level to map to
+        // Our root item must be represented as nullptr at wxDVC level to map to
         // its own invisible root.
         if ( !node->GetParent() )
             return wxDataViewItem();
@@ -366,24 +366,24 @@ public:
     // Implement the base class pure virtual methods.
     virtual void GetValue(wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned col) const wxOVERRIDE;
+                          unsigned col) const override;
     virtual bool SetValue(const wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned col) wxOVERRIDE;
-    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
-    virtual bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
-    virtual bool HasContainerColumns(const wxDataViewItem& item) const wxOVERRIDE;
+                          unsigned col) override;
+    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const override;
+    virtual bool IsContainer(const wxDataViewItem& item) const override;
+    virtual bool HasContainerColumns(const wxDataViewItem& item) const override;
     virtual unsigned GetChildren(const wxDataViewItem& item,
-                                 wxDataViewItemArray& children) const wxOVERRIDE;
-    virtual bool IsListModel() const wxOVERRIDE { return m_isFlat; }
+                                 wxDataViewItemArray& children) const override;
+    virtual bool IsListModel() const override { return m_isFlat; }
     virtual int Compare(const wxDataViewItem& item1,
                         const wxDataViewItem& item2,
                         unsigned col,
-                        bool ascending) const wxOVERRIDE;
+                        bool ascending) const override;
 
 protected:
     virtual int DoCompareValues(const wxVariant& value1,
-                                const wxVariant& value2) const wxOVERRIDE;
+                                const wxVariant& value2) const override;
 
 private:
     // The control we're associated with.
@@ -407,7 +407,7 @@ private:
 
 wxTreeListModel::wxTreeListModel(wxTreeListCtrl* treelist)
     : m_treelist(treelist),
-      m_root(new Node(NULL))
+      m_root(new Node(nullptr))
 {
     m_numColumns = 0;
     m_isFlat = true;
@@ -467,10 +467,10 @@ wxTreeListModel::InsertItem(Node* parent,
                             int imageOpened,
                             wxClientData* data)
 {
-    wxCHECK_MSG( parent, NULL,
+    wxCHECK_MSG( parent, nullptr,
                  "Must have a valid parent (maybe GetRootItem()?)" );
 
-    wxCHECK_MSG( previous, NULL,
+    wxCHECK_MSG( previous, nullptr,
                  "Must have a valid previous item (maybe wxTLI_FIRST/LAST?)" );
 
     if ( m_isFlat && parent != m_root )
@@ -515,7 +515,7 @@ wxTreeListModel::InsertItem(Node* parent,
         else // We already have the previous item.
         {
             // Just check it's under the correct parent.
-            wxCHECK_MSG( previous->GetParent() == parent, NULL,
+            wxCHECK_MSG( previous->GetParent() == parent, nullptr,
                          "Previous item is not under the right parent" );
         }
 
@@ -613,7 +613,7 @@ void wxTreeListModel::SetItemImage(Node* item, int closed, int opened)
 
 wxClientData* wxTreeListModel::GetItemData(Node* item) const
 {
-    wxCHECK_MSG( item, NULL, "Invalid item" );
+    wxCHECK_MSG( item, nullptr, "Invalid item" );
 
     return item->GetClientData();
 }
@@ -718,7 +718,7 @@ bool wxTreeListModel::IsContainer(const wxDataViewItem& item) const
 #else
     Node* const node = FromDVI(item);
 
-    return node->GetChild() != NULL;
+    return node->GetChild() != nullptr;
 #endif
 }
 
@@ -802,9 +802,9 @@ wxEND_EVENT_TABLE()
 
 void wxTreeListCtrl::Init()
 {
-    m_view = NULL;
-    m_model = NULL;
-    m_comparator = NULL;
+    m_view = nullptr;
+    m_model = nullptr;
+    m_comparator = nullptr;
 }
 
 bool wxTreeListCtrl::Create(wxWindow* parent,
@@ -839,7 +839,7 @@ bool wxTreeListCtrl::Create(wxWindow* parent,
                          styleDataView) )
     {
         delete m_view;
-        m_view = NULL;
+        m_view = nullptr;
 
         return false;
     }
@@ -1115,7 +1115,7 @@ void wxTreeListCtrl::SetItemImage(wxTreeListItem item, int closed, int opened)
 
 wxClientData* wxTreeListCtrl::GetItemData(wxTreeListItem item) const
 {
-    wxCHECK_MSG( m_model, NULL, "Must create first" );
+    wxCHECK_MSG( m_model, nullptr, "Must create first" );
 
     return m_model->GetItemData(item);
 }

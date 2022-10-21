@@ -89,11 +89,11 @@ class ButtonWidgetsPage : public WidgetsPage
 public:
     ButtonWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_button; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateButton(); }
+    virtual wxWindow *GetWidget() const override { return m_button; }
+    virtual void RecreateWidget() override { CreateButton(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -149,7 +149,7 @@ protected:
     wxButton *m_button;
 
 #if wxUSE_COMMANDLINKBUTTON
-    // same as m_button or NULL if not showing a command link button currently
+    // same as m_button or nullptr if not showing a command link button currently
     wxCommandLinkButton *m_cmdLnkButton;
 #endif // wxUSE_COMMANDLINKBUTTON
 
@@ -226,19 +226,19 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
-    m_chkUseDisabled = (wxCheckBox *)NULL;
+    m_chkUseDisabled = nullptr;
 
     m_radioImagePos =
     m_radioHAlign =
-    m_radioVAlign = (wxRadioBox *)NULL;
+    m_radioVAlign = nullptr;
 
-    m_textLabel = (wxTextCtrl *)NULL;
+    m_textLabel = nullptr;
 
-    m_textImageMarginH = NULL;
-    m_textImageMarginV = NULL;
+    m_textImageMarginH = nullptr;
+    m_textImageMarginV = nullptr;
 
-    m_button = (wxButton *)NULL;
-    m_sizerButton = (wxSizer *)NULL;
+    m_button = nullptr;
+    m_sizerButton = nullptr;
 
     m_imageMarginH = 0;
     m_imageMarginV = 0;
@@ -526,13 +526,13 @@ void ButtonWidgetsPage::CreateButton()
             bbtn->SetBitmapDisabled(CreateBitmap("disabled", wxART_MISSING_IMAGE));
         m_button = bbtn;
 #if wxUSE_COMMANDLINKBUTTON
-        m_cmdLnkButton = NULL;
+        m_cmdLnkButton = nullptr;
 #endif
     }
     else // normal button
     {
 #if wxUSE_COMMANDLINKBUTTON
-        m_cmdLnkButton = NULL;
+        m_cmdLnkButton = nullptr;
 
         if ( m_chkCommandLink->GetValue() )
         {

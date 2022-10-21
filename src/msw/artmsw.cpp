@@ -49,7 +49,7 @@ MSW_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
     typedef HRESULT
     (WINAPI *SHDefExtractIcon_t)(LPCTSTR, int, UINT, HICON*, HICON*, UINT);
 
-    static SHDefExtractIcon_t s_SHDefExtractIcon = NULL;
+    static SHDefExtractIcon_t s_SHDefExtractIcon = nullptr;
     if ( !s_SHDefExtractIcon )
     {
         wxDynamicLibrary shell32(wxT("shell32.dll"));
@@ -124,8 +124,8 @@ MSW_SHGetStockIconInfo(SHSTOCKICONID siid,
 wxBitmap
 MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
 {
-    HICON hIcon = NULL;
-    if ( MSW_SHDefExtractIcon(path, index, 0, &hIcon, NULL, size.x) != S_OK )
+    HICON hIcon = nullptr;
+    if ( MSW_SHDefExtractIcon(path, index, 0, &hIcon, nullptr, size.x) != S_OK )
         return wxNullBitmap;
 
     // Note that using "size.x" twice here is not a typo: normally size.y is
@@ -200,7 +200,7 @@ class wxWindowsArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
 };
 
 wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
@@ -263,7 +263,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
     {
         // handle message box icons specially (wxIcon ctor treat these names
         // as special cases via wxICOResourceHandler::LoadIcon):
-        const char *name = NULL;
+        const char *name = nullptr;
         if ( id == wxART_ERROR )
             name = "wxICON_ERROR";
         else if ( id == wxART_INFORMATION )

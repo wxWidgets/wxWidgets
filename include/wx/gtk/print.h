@@ -33,34 +33,34 @@ typedef struct _cairo cairo_t;
 class wxGtkPrintFactory: public wxPrintFactory
 {
 public:
-    virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data ) wxOVERRIDE;
+    virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data ) override;
 
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
-                                                    wxPrintout *printout = NULL,
-                                                    wxPrintDialogData *data = NULL ) wxOVERRIDE;
+                                                    wxPrintout *printout = nullptr,
+                                                    wxPrintDialogData *data = nullptr ) override;
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview,
                                                     wxPrintout *printout,
-                                                    wxPrintData *data ) wxOVERRIDE;
+                                                    wxPrintData *data ) override;
 
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintDialogData *data = NULL ) wxOVERRIDE;
+                                                  wxPrintDialogData *data = nullptr ) override;
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent,
-                                                  wxPrintData *data ) wxOVERRIDE;
+                                                  wxPrintData *data ) override;
 
     virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
-                                                          wxPageSetupDialogData * data = NULL ) wxOVERRIDE;
+                                                          wxPageSetupDialogData * data = nullptr ) override;
 
-    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) wxOVERRIDE;
+    virtual wxDCImpl* CreatePrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) override;
 
-    virtual bool HasPrintSetupDialog() wxOVERRIDE;
-    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data ) wxOVERRIDE;
-    virtual bool HasOwnPrintToFile() wxOVERRIDE;
-    virtual bool HasPrinterLine() wxOVERRIDE;
-    virtual wxString CreatePrinterLine() wxOVERRIDE;
-    virtual bool HasStatusLine() wxOVERRIDE;
-    virtual wxString CreateStatusLine() wxOVERRIDE;
+    virtual bool HasPrintSetupDialog() override;
+    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data ) override;
+    virtual bool HasOwnPrintToFile() override;
+    virtual bool HasPrinterLine() override;
+    virtual wxString CreatePrinterLine() override;
+    virtual bool HasStatusLine() override;
+    virtual wxString CreateStatusLine() override;
 
-    virtual wxPrintNativeDataBase *CreatePrintNativeData() wxOVERRIDE;
+    virtual wxPrintNativeDataBase *CreatePrintNativeData() override;
 };
 
 //----------------------------------------------------------------------------
@@ -71,22 +71,22 @@ class WXDLLIMPEXP_CORE wxGtkPrintDialog: public wxPrintDialogBase
 {
 public:
     wxGtkPrintDialog( wxWindow *parent,
-                         wxPrintDialogData* data = NULL );
+                         wxPrintDialogData* data = nullptr );
     wxGtkPrintDialog( wxWindow *parent, wxPrintData* data);
     virtual ~wxGtkPrintDialog();
 
-    wxPrintData& GetPrintData() wxOVERRIDE
+    wxPrintData& GetPrintData() override
         { return m_printDialogData.GetPrintData(); }
-    wxPrintDialogData& GetPrintDialogData() wxOVERRIDE
+    wxPrintDialogData& GetPrintDialogData() override
         { return m_printDialogData; }
 
-    wxDC *GetPrintDC() wxOVERRIDE;
+    wxDC *GetPrintDC() override;
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
-    virtual bool Validate() wxOVERRIDE { return true; }
-    virtual bool TransferDataToWindow() wxOVERRIDE { return true; }
-    virtual bool TransferDataFromWindow() wxOVERRIDE { return true; }
+    virtual bool Validate() override { return true; }
+    virtual bool TransferDataToWindow() override { return true; }
+    virtual bool TransferDataFromWindow() override { return true; }
 
     void SetShowDialog(bool show) { m_showDialog = show; }
     bool GetShowDialog() { return m_showDialog; }
@@ -96,9 +96,9 @@ protected:
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) override {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
-                              int WXUNUSED(width), int WXUNUSED(height)) wxOVERRIDE {}
+                              int WXUNUSED(width), int WXUNUSED(height)) override {}
 
 private:
     wxPrintDialogData    m_printDialogData;
@@ -116,25 +116,25 @@ class WXDLLIMPEXP_CORE wxGtkPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
     wxGtkPageSetupDialog( wxWindow *parent,
-                            wxPageSetupDialogData* data = NULL );
+                            wxPageSetupDialogData* data = nullptr );
     virtual ~wxGtkPageSetupDialog();
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData() wxOVERRIDE { return m_pageDialogData; }
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() override { return m_pageDialogData; }
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
-    virtual bool Validate() wxOVERRIDE { return true; }
-    virtual bool TransferDataToWindow() wxOVERRIDE { return true; }
-    virtual bool TransferDataFromWindow() wxOVERRIDE { return true; }
+    virtual bool Validate() override { return true; }
+    virtual bool TransferDataToWindow() override { return true; }
+    virtual bool TransferDataFromWindow() override { return true; }
 
 protected:
     // Implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) override {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
-                              int WXUNUSED(width), int WXUNUSED(height)) wxOVERRIDE {}
+                              int WXUNUSED(width), int WXUNUSED(height)) override {}
 
 private:
     wxPageSetupDialogData    m_pageDialogData;
@@ -150,14 +150,14 @@ private:
 class WXDLLIMPEXP_CORE wxGtkPrinter : public wxPrinterBase
 {
 public:
-    wxGtkPrinter(wxPrintDialogData *data = NULL);
+    wxGtkPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxGtkPrinter();
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
-                       bool prompt = true) wxOVERRIDE;
-    virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
-    virtual bool Setup(wxWindow *parent) wxOVERRIDE;
+                       bool prompt = true) override;
+    virtual wxDC* PrintDialog(wxWindow *parent) override;
+    virtual bool Setup(wxWindow *parent) override;
 
     GtkPrintContext *GetPrintContext() { return m_gpc; }
     void SetPrintContext(GtkPrintContext *context) {m_gpc = context;}
@@ -182,11 +182,11 @@ public:
     wxGtkPrintNativeData();
     virtual ~wxGtkPrintNativeData();
 
-    virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
-    virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
+    virtual bool TransferTo( wxPrintData &data ) override;
+    virtual bool TransferFrom( const wxPrintData &data ) override;
 
-    virtual bool Ok() const wxOVERRIDE { return IsOk(); }
-    virtual bool IsOk() const wxOVERRIDE { return true; }
+    virtual bool Ok() const override { return IsOk(); }
+    virtual bool IsOk() const override { return true; }
 
     GtkPrintSettings* GetPrintConfig() { return m_config; }
     void SetPrintConfig( GtkPrintSettings * config );
@@ -218,78 +218,78 @@ public:
     virtual ~wxGtkPrinterDCImpl();
 
     bool Ok() const { return IsOk(); }
-    bool IsOk() const wxOVERRIDE;
+    bool IsOk() const override;
 
-    virtual void* GetCairoContext() const wxOVERRIDE;
-    virtual void* GetHandle() const wxOVERRIDE;
+    virtual void* GetCairoContext() const override;
+    virtual void* GetHandle() const override;
 
-    bool CanDrawBitmap() const wxOVERRIDE { return true; }
-    void Clear() wxOVERRIDE;
-    void SetFont( const wxFont& font ) wxOVERRIDE;
-    void SetPen( const wxPen& pen ) wxOVERRIDE;
-    void SetBrush( const wxBrush& brush ) wxOVERRIDE;
-    void SetLogicalFunction( wxRasterOperationMode function ) wxOVERRIDE;
-    void SetBackground( const wxBrush& brush ) wxOVERRIDE;
-    void DestroyClippingRegion() wxOVERRIDE;
-    bool StartDoc(const wxString& message) wxOVERRIDE;
-    void EndDoc() wxOVERRIDE;
-    void StartPage() wxOVERRIDE;
-    void EndPage() wxOVERRIDE;
-    wxCoord GetCharHeight() const wxOVERRIDE;
-    wxCoord GetCharWidth() const wxOVERRIDE;
-    bool CanGetTextExtent() const wxOVERRIDE { return true; }
-    wxSize GetPPI() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE { return 24; }
-    void SetBackgroundMode(int mode) wxOVERRIDE;
+    bool CanDrawBitmap() const override { return true; }
+    void Clear() override;
+    void SetFont( const wxFont& font ) override;
+    void SetPen( const wxPen& pen ) override;
+    void SetBrush( const wxBrush& brush ) override;
+    void SetLogicalFunction( wxRasterOperationMode function ) override;
+    void SetBackground( const wxBrush& brush ) override;
+    void DestroyClippingRegion() override;
+    bool StartDoc(const wxString& message) override;
+    void EndDoc() override;
+    void StartPage() override;
+    void EndPage() override;
+    wxCoord GetCharHeight() const override;
+    wxCoord GetCharWidth() const override;
+    bool CanGetTextExtent() const override { return true; }
+    wxSize GetPPI() const override;
+    virtual int GetDepth() const override { return 24; }
+    void SetBackgroundMode(int mode) override;
 #if wxUSE_PALETTE
-    void SetPalette(const wxPalette& WXUNUSED(palette)) wxOVERRIDE { }
+    void SetPalette(const wxPalette& WXUNUSED(palette)) override { }
 #endif
     void SetResolution(int ppi);
 
     // overridden for wxPrinterDC Impl
-    virtual int GetResolution() const wxOVERRIDE;
-    virtual wxRect GetPaperRect() const wxOVERRIDE;
+    virtual int GetResolution() const override;
+    virtual wxRect GetPaperRect() const override;
 
 protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
-                     wxFloodFillStyle style=wxFLOOD_SURFACE ) wxOVERRIDE;
-    void DoGradientFillConcentric(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, const wxPoint& circleCenter) wxOVERRIDE;
-    void DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection = wxEAST) wxOVERRIDE;
-    bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const wxOVERRIDE;
-    void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) wxOVERRIDE;
-    void DoCrossHair(wxCoord x, wxCoord y) wxOVERRIDE;
-    void DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc) wxOVERRIDE;
-    void DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea) wxOVERRIDE;
-    void DoDrawPoint(wxCoord x, wxCoord y) wxOVERRIDE;
-    void DoDrawLines(int n, const wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0) wxOVERRIDE;
-    void DoDrawPolygon(int n, const wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, wxPolygonFillMode fillStyle=wxODDEVEN_RULE) wxOVERRIDE;
-    void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, wxPolygonFillMode fillStyle=wxODDEVEN_RULE) wxOVERRIDE;
-    void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
-    void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20.0) wxOVERRIDE;
-    void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
+                     wxFloodFillStyle style=wxFLOOD_SURFACE ) override;
+    void DoGradientFillConcentric(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, const wxPoint& circleCenter) override;
+    void DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection = wxEAST) override;
+    bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const override;
+    void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) override;
+    void DoCrossHair(wxCoord x, wxCoord y) override;
+    void DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoord xc,wxCoord yc) override;
+    void DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea) override;
+    void DoDrawPoint(wxCoord x, wxCoord y) override;
+    void DoDrawLines(int n, const wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0) override;
+    void DoDrawPolygon(int n, const wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, wxPolygonFillMode fillStyle=wxODDEVEN_RULE) override;
+    void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, wxPolygonFillMode fillStyle=wxODDEVEN_RULE) override;
+    void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height) override;
+    void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20.0) override;
+    void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height) override;
 #if wxUSE_SPLINES
-    void DoDrawSpline(const wxPointList *points) wxOVERRIDE;
+    void DoDrawSpline(const wxPointList *points) override;
 #endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc,
             wxRasterOperationMode rop = wxCOPY, bool useMask = false,
-            wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) wxOVERRIDE;
-    void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y ) wxOVERRIDE;
-    void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false  ) wxOVERRIDE;
-    void DoDrawText(const wxString& text, wxCoord x, wxCoord y ) wxOVERRIDE;
-    void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle) wxOVERRIDE;
-    void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
-    void DoSetDeviceClippingRegion( const wxRegion &WXUNUSED(clip) ) wxOVERRIDE
+            wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) override;
+    void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y ) override;
+    void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false  ) override;
+    void DoDrawText(const wxString& text, wxCoord x, wxCoord y ) override;
+    void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle) override;
+    void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height) override;
+    void DoSetDeviceClippingRegion( const wxRegion &WXUNUSED(clip) ) override
     {
         wxFAIL_MSG( "not implemented" );
     }
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
-                     wxCoord *descent = NULL,
-                     wxCoord *externalLeading = NULL,
-                     const wxFont *theFont = NULL ) const wxOVERRIDE;
-    bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
-    void DoGetSize(int* width, int* height) const wxOVERRIDE;
-    void DoGetSizeMM(int *width, int *height) const wxOVERRIDE;
+                     wxCoord *descent = nullptr,
+                     wxCoord *externalLeading = nullptr,
+                     const wxFont *theFont = nullptr ) const override;
+    bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
+    void DoGetSize(int* width, int* height) const override;
+    void DoGetSizeMM(int *width, int *height) const override;
 
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& data);
@@ -324,16 +324,16 @@ class WXDLLIMPEXP_CORE wxGtkPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxGtkPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting = NULL,
-                             wxPrintDialogData *data = NULL);
+                             wxPrintout *printoutForPrinting = nullptr,
+                             wxPrintDialogData *data = nullptr);
     wxGtkPrintPreview(wxPrintout *printout,
                              wxPrintout *printoutForPrinting,
                              wxPrintData *data);
 
     virtual ~wxGtkPrintPreview();
 
-    virtual bool Print(bool interactive) wxOVERRIDE;
-    virtual void DetermineScaling() wxOVERRIDE;
+    virtual bool Print(bool interactive) override;
+    virtual void DetermineScaling() override;
 
 private:
     void Init(wxPrintout *printout,

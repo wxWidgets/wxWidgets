@@ -36,7 +36,7 @@ public:
     // The font currently selected into the DC is used for measuring (notice
     // that it is changed by this function but normally -- i.e. if markup is
     // valid -- restored to its original value when it returns).
-    wxSize Measure(wxDC& dc, int *visibleHeight = NULL) const;
+    wxSize Measure(wxDC& dc, int *visibleHeight = nullptr) const;
 
 protected:
     wxMarkupTextBase(const wxString& markup)
@@ -93,7 +93,7 @@ public:
     void Render(wxDC& dc, const wxRect& rect, int flags);
 
 protected:
-    virtual wxString GetMarkupForMeasuring() const wxOVERRIDE;
+    virtual wxString GetMarkupForMeasuring() const override;
 };
 
 
@@ -132,7 +132,7 @@ public:
                 wxEllipsizeMode ellipsizeMode);
 
 protected:
-    virtual wxString GetMarkupForMeasuring() const wxOVERRIDE { return m_markup; }
+    virtual wxString GetMarkupForMeasuring() const override { return m_markup; }
 };
 
 #endif // _WX_GENERIC_PRIVATE_MARKUPTEXT_H_

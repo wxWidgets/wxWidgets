@@ -49,7 +49,7 @@
 static void
 ShowException(const wxString& member,
               HRESULT hr,
-              EXCEPINFO *pexcep = NULL,
+              EXCEPINFO *pexcep = nullptr,
               unsigned int uiArgErr = 0);
 
 // wxAutomationObject
@@ -66,7 +66,7 @@ wxAutomationObject::~wxAutomationObject()
     if (m_dispatchPtr)
     {
         ((IDispatch*)m_dispatchPtr)->Release();
-        m_dispatchPtr = NULL;
+        m_dispatchPtr = nullptr;
     }
 }
 
@@ -163,7 +163,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     {
         namedArgCount = 1;
         dispIds[1] = DISPID_PROPERTYPUT;
-        vReturnPtr = NULL;
+        vReturnPtr = nullptr;
     }
 
     // Convert the wxVariants to VARIANTARGs
@@ -176,7 +176,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     }
 
     dispparams.rgdispidNamedArgs = &dispIds[0] + 1;
-    dispparams.rgvarg = oleArgs.empty() ? NULL : &oleArgs[0];
+    dispparams.rgvarg = oleArgs.empty() ? nullptr : &oleArgs[0];
     dispparams.cArgs = noArgs;
     dispparams.cNamedArgs = namedArgCount;
 
@@ -208,13 +208,13 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
             // Mustn't release the dispatch pointer
             if (vReturn.vt == VT_DISPATCH)
             {
-                vReturn.pdispVal = NULL;
+                vReturn.pdispVal = nullptr;
             }
             // Mustn't free the SAFEARRAY if it is contained in the retValue
             if ((vReturn.vt & VT_ARRAY) &&
                     retValue.GetType() == wxS("safearray"))
             {
-                vReturn.parray = NULL;
+                vReturn.parray = nullptr;
             }
         }
     }
@@ -235,7 +235,7 @@ wxVariant wxAutomationObject::CallMethod(const wxString& member, int noArgs, wxV
 wxVariant wxAutomationObject::CallMethodArray(const wxString& member, int noArgs, const wxVariant **args)
 {
     wxVariant retVariant;
-    if (!Invoke(member, DISPATCH_METHOD, retVariant, noArgs, NULL, args))
+    if (!Invoke(member, DISPATCH_METHOD, retVariant, noArgs, nullptr, args))
     {
         retVariant.MakeNull();
     }
@@ -280,7 +280,7 @@ wxVariant wxAutomationObject::CallMethod(const wxString& member,
         i ++;
     }
     wxVariant retVariant;
-    if (!Invoke(member, DISPATCH_METHOD, retVariant, i, NULL, args))
+    if (!Invoke(member, DISPATCH_METHOD, retVariant, i, nullptr, args))
     {
         retVariant.MakeNull();
     }
@@ -292,7 +292,7 @@ wxVariant wxAutomationObject::CallMethod(const wxString& member,
 wxVariant wxAutomationObject::GetPropertyArray(const wxString& property, int noArgs, const wxVariant **args) const
 {
     wxVariant retVariant;
-    if (!Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, NULL, args))
+    if (!Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, nullptr, args))
     {
         retVariant.MakeNull();
     }
@@ -346,7 +346,7 @@ wxVariant wxAutomationObject::GetProperty(const wxString& property,
         i ++;
     }
     wxVariant retVariant;
-    if (!Invoke(property, DISPATCH_PROPERTYGET, retVariant, i, NULL, args))
+    if (!Invoke(property, DISPATCH_PROPERTYGET, retVariant, i, nullptr, args))
     {
         retVariant.MakeNull();
     }
@@ -367,7 +367,7 @@ bool wxAutomationObject::PutProperty(const wxString& property, int noArgs, wxVar
 bool wxAutomationObject::PutPropertyArray(const wxString& property, int noArgs, const wxVariant **args)
 {
     wxVariant retVariant;
-    if (!Invoke(property, DISPATCH_PROPERTYPUT, retVariant, noArgs, NULL, args))
+    if (!Invoke(property, DISPATCH_PROPERTYPUT, retVariant, noArgs, nullptr, args))
     {
         return false;
     }
@@ -412,7 +412,7 @@ bool wxAutomationObject::PutProperty(const wxString& property,
         i ++;
     }
     wxVariant retVariant;
-    bool ret = Invoke(property, DISPATCH_PROPERTYPUT, retVariant, i, NULL, args);
+    bool ret = Invoke(property, DISPATCH_PROPERTYPUT, retVariant, i, nullptr, args);
     delete[] args;
     return ret;
 }
@@ -433,7 +433,7 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // Uses DISPATCH_PROPERTYGET
@@ -443,7 +443,7 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
 WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, int noArgs, const wxVariant **args) const
 {
     wxVariant retVariant;
-    if (Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, NULL, args))
+    if (Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, nullptr, args))
     {
         if (retVariant.GetType() == wxT("void*"))
         {
@@ -451,7 +451,7 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -505,13 +505,13 @@ void *DoCreateInstance(const wxString& progId, const CLSID& clsId)
     // NB: using CLSCTX_INPROC_HANDLER results in failure when getting
     //     Automation interface for Microsoft Office applications so don't use
     //     CLSCTX_ALL which includes it
-    void *pDispatch = NULL;
-    HRESULT hr = CoCreateInstance(clsId, NULL, CLSCTX_SERVER,
+    void *pDispatch = nullptr;
+    HRESULT hr = CoCreateInstance(clsId, nullptr, CLSCTX_SERVER,
                                   IID_IDispatch, &pDispatch);
     if (FAILED(hr))
     {
         wxLogSysError(hr, _("Failed to create an instance of \"%s\""), progId);
-        return NULL;
+        return nullptr;
     }
 
     return pDispatch;
@@ -531,8 +531,8 @@ bool wxAutomationObject::GetInstance(const wxString& progId, int flags) const
     if (FAILED(hr))
         return false;
 
-    IUnknown *pUnk = NULL;
-    hr = GetActiveObject(clsId, NULL, &pUnk);
+    IUnknown *pUnk = nullptr;
+    hr = GetActiveObject(clsId, nullptr, &pUnk);
     if (FAILED(hr))
     {
         if ( flags & wxAutomationInstance_CreateIfNeeded )
@@ -585,7 +585,7 @@ bool wxAutomationObject::CreateInstance(const wxString& progId) const
     const_cast<wxAutomationObject *>(this)->
         m_dispatchPtr = DoCreateInstance(progId, clsId);
 
-    return m_dispatchPtr != NULL;
+    return m_dispatchPtr != nullptr;
 }
 
 WXLCID wxAutomationObject::GetLCID() const

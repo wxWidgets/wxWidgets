@@ -49,7 +49,7 @@ inline gpointer wxGtkGetIdFromWidget(GtkWidget* widget)
     }
 #endif
 
-    return (gpointer)NULL;
+    return (gpointer)nullptr;
 }
 }
 

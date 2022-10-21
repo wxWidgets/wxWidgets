@@ -307,14 +307,14 @@ wxAcceleratorEntry *wxAcceleratorEntry::Create(const wxString& str)
     {
         // It's ok to pass strings not containing any accelerators at all to
         // this function, wxMenuItem code does it and we should just return
-        // NULL in this case.
-        return NULL;
+        // nullptr in this case.
+        return nullptr;
     }
 
     int flags,
         keyCode;
     if ( !ParseAccel(accelStr, &flags, &keyCode) )
-        return NULL;
+        return nullptr;
 
     return new wxAcceleratorEntry(flags, keyCode);
 }

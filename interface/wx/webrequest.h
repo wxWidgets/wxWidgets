@@ -666,7 +666,7 @@ public:
         and destroyed.
 
         @param handler
-            The handler object to notify, must be non-@NULL.
+            The handler object to notify, must be non-null.
         @param url
             The URL of the HTTP resource for this request
         @param id

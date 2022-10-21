@@ -61,7 +61,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // FontPanel contains controls allowing to specify the font properties
@@ -152,7 +152,7 @@ public:
     void OnPaint( wxPaintEvent &event );
 
 protected:
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE
+    virtual wxSize DoGetBestClientSize() const override
     {
         return wxSize(80*GetCharWidth(), 15*GetCharHeight());
     }
@@ -408,7 +408,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets font sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets font sample")
 {
     SetIcon(wxICON(sample));
 
@@ -575,7 +575,7 @@ public:
 
 protected:
     virtual bool OnFontEncoding(const wxString& facename,
-                                const wxString& encoding) wxOVERRIDE
+                                const wxString& encoding) override
     {
         wxString text;
         text.Printf("Encoding %u: %s (available in facename '%s')\n",
@@ -611,7 +611,7 @@ public:
         { return m_facenames; }
 
 protected:
-    virtual bool OnFacename(const wxString& facename) wxOVERRIDE
+    virtual bool OnFacename(const wxString& facename) override
     {
         m_facenames.Add(facename);
         return true;

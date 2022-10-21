@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxMenuXmlHandler : public wxXmlResourceHandler
 
 public:
     wxMenuXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     bool m_insideMenu;
@@ -33,8 +33,8 @@ class WXDLLIMPEXP_XRC wxMenuBarXmlHandler : public wxXmlResourceHandler
 
 public:
     wxMenuBarXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 };
 
 #endif // wxUSE_XRC && wxUSE_MENUS

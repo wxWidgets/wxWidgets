@@ -24,7 +24,7 @@ class WXDLLIMPEXP_ADV wxActivityIndicatorGeneric : public wxActivityIndicatorBas
 public:
     wxActivityIndicatorGeneric()
     {
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
     explicit
@@ -35,7 +35,7 @@ public:
                                long style = 0,
                                const wxString& name = wxActivityIndicatorNameStr)
     {
-        m_impl = NULL;
+        m_impl = nullptr;
 
         Create(parent, winid, pos, size, style, name);
     }
@@ -49,12 +49,12 @@ public:
 
     virtual ~wxActivityIndicatorGeneric();
 
-    virtual void Start() wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
-    virtual bool IsRunning() const wxOVERRIDE;
+    virtual void Start() override;
+    virtual void Stop() override;
+    virtual bool IsRunning() const override;
 
 protected:
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
 private:
     class wxActivityIndicatorImpl *m_impl;

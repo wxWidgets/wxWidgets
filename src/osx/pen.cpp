@@ -65,7 +65,7 @@ wxPenRefData::wxPenRefData()
     m_join = wxJOIN_ROUND ;
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
-    m_dash = 0 ;
+    m_dash = nullptr ;
 }
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
@@ -203,7 +203,7 @@ int wxPen::GetDashCount() const
 
 wxBitmap *wxPen::GetStipple() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid pen") );
 
     return &M_PENDATA->m_stipple;
 }

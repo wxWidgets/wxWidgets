@@ -89,7 +89,7 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
     m_list = new wxListBox( this, ID_LISTBOX,
         wxDefaultPosition,
         listSize,
-        0, NULL,
+        0, nullptr,
         wxLB_SINGLE | wxLB_NEEDED_SB | wxLB_HSCROLL );
 
     for (unsigned i = 0; i < (sizeof(g_patterns) / sizeof(LifePattern)); i++)

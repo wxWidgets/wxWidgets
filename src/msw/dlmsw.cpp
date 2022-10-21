@@ -139,7 +139,7 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(const wxChar* name,
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
-    return (wxDllType)::GetModuleHandle(NULL);
+    return (wxDllType)::GetModuleHandle(nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -240,7 +240,7 @@ namespace
 {
 
 // Tries to dynamically load GetModuleHandleEx() from kernel32.dll and call it
-// to get the module handle from the given address. Returns NULL if it fails to
+// to get the module handle from the given address. Returns nullptr if it fails to
 // either resolve the function (which can only happen on pre-Vista systems
 // normally) or if the function itself failed.
 HMODULE CallGetModuleHandleEx(const void* addr)
@@ -259,13 +259,13 @@ HMODULE CallGetModuleHandleEx(const void* addr)
     }
 
     if ( !s_pfnGetModuleHandleEx )
-        return NULL;
+        return nullptr;
 
     // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
     //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
     HMODULE hmod;
     if ( !s_pfnGetModuleHandleEx(6, (LPCTSTR)addr, &hmod) )
-        return NULL;
+        return nullptr;
 
     return hmod;
 }
@@ -279,7 +279,7 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
     if ( !hmod )
     {
         wxLogLastError(wxT("GetModuleHandleEx"));
-        return NULL;
+        return nullptr;
     }
 
     if ( path )
@@ -292,7 +292,7 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
             // in principle, MAX_PATH could be unsufficient and we should try
             // increasing the buffer size here.
             wxLogLastError(wxT("GetModuleFromAddress"));
-            return NULL;
+            return nullptr;
         }
 
         libname[MAX_PATH-1] = wxT('\0');
@@ -310,7 +310,7 @@ WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const wxString& name, void *addr)
 {
     // we want to use GetModuleHandleEx() instead of usual GetModuleHandle()
     // because the former works correctly for comctl32.dll while the latter
-    // returns NULL when comctl32.dll version 6 is used under XP (note that
+    // returns nullptr when comctl32.dll version 6 is used under XP (note that
     // GetModuleHandleEx() is only available under XP and later, coincidence?)
     HMODULE hmod = CallGetModuleHandleEx(addr);
 

@@ -42,14 +42,14 @@ class wxInfoBarGTKImpl
 public:
     wxInfoBarGTKImpl()
     {
-        m_label = NULL;
-        m_close = NULL;
+        m_label = nullptr;
+        m_close = nullptr;
     }
 
     // label for the text shown in the bar
     GtkWidget *m_label;
 
-    // the default close button, NULL if not needed (m_buttons is not empty) or
+    // the default close button, nullptr if not needed (m_buttons is not empty) or
     // not created yet
     GtkWidget *m_close;
 
@@ -150,8 +150,8 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     // Run-time check is needed because the bug was introduced in 3.10 and
     // fixed in 3.22.29 (see 6b4d95e86dabfcdaa805fbf068a99e19736a39a4 and a
     // couple of previous commits in GTK+ repository).
-    if ( gtk_check_version(3, 10, 0) == NULL &&
-            gtk_check_version(3, 22, 29) != NULL )
+    if ( gtk_check_version(3, 10, 0) == nullptr &&
+            gtk_check_version(3, 22, 29) != nullptr )
     {
         GObject* const
             revealer = gtk_widget_get_template_child(GTK_WIDGET(m_widget),
@@ -277,7 +277,7 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
     if ( m_impl->m_close )
     {
         gtk_widget_destroy(m_impl->m_close);
-        m_impl->m_close = NULL;
+        m_impl->m_close = nullptr;
     }
 
     GtkWidget * const button = GTKAddButton(btnid, label);

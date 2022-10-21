@@ -26,13 +26,13 @@ public:
     // it
     wxStringInputStream(const wxString& s);
 
-    virtual wxFileOffset GetLength() const wxOVERRIDE;
-    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+    virtual wxFileOffset GetLength() const override;
+    virtual bool IsSeekable() const override { return true; }
 
 protected:
-    virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
-    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode) override;
+    virtual wxFileOffset OnSysTell() const override;
+    virtual size_t OnSysRead(void *buffer, size_t size) override;
 
 private:
     // the string that was passed in the ctor
@@ -62,17 +62,17 @@ public:
     //
     // Note that the conversion object should have the life time greater than
     // this stream.
-    explicit wxStringOutputStream(wxString *pString = NULL,
+    explicit wxStringOutputStream(wxString *pString = nullptr,
                                   wxMBConv& conv = wxConvUTF8);
 
     // get the string containing current output
     const wxString& GetString() const { return *m_str; }
 
-    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+    virtual bool IsSeekable() const override { return true; }
 
 protected:
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
-    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysTell() const override;
+    virtual size_t OnSysWrite(const void *buffer, size_t size) override;
 
 private:
     // internal string, not used if caller provided his own string

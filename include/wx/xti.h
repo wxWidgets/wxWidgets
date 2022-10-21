@@ -112,15 +112,15 @@ public:
                 wxVariantToObjectPtrConverter _PtrConverter1,
                 wxVariantToObjectConverter _Converter2,
                 wxObjectToVariantConverter _Converter3,
-                wxObjectStreamingCallback _streamingCallback = NULL) :
+                wxObjectStreamingCallback _streamingCallback = nullptr) :
             m_className(_ClassName),
             m_objectSize(size),
             m_objectConstructor(ctor),
             m_next(sm_first),
             m_firstPropertyFn(_Props),
             m_firstHandlerFn(_Handlers),
-            m_firstProperty(NULL),
-            m_firstHandler(NULL),
+            m_firstProperty(nullptr),
+            m_firstHandler(nullptr),
             m_firstInited(false),
             m_parents(_Parents),
             m_unitName(_UnitName),
@@ -140,22 +140,22 @@ public:
                 const wxClassInfo **_Parents) :
             m_className(_ClassName),
             m_objectSize(0),
-            m_objectConstructor(NULL),
+            m_objectConstructor(nullptr),
             m_next(sm_first),
-            m_firstPropertyFn(NULL),
-            m_firstHandlerFn(NULL),
-            m_firstProperty(NULL),
-            m_firstHandler(NULL),
+            m_firstPropertyFn(nullptr),
+            m_firstHandlerFn(nullptr),
+            m_firstProperty(nullptr),
+            m_firstHandler(nullptr),
             m_firstInited(true),
             m_parents(_Parents),
             m_unitName(_UnitName),
-            m_constructor(NULL),
-            m_constructorProperties(NULL),
+            m_constructor(nullptr),
+            m_constructorProperties(nullptr),
             m_constructorPropertiesCount(0),
-            m_variantOfPtrToObjectConverter(NULL),
-            m_variantToObjectConverter(NULL),
-            m_objectToVariantConverter(NULL),
-            m_streamingCallback(NULL)
+            m_variantOfPtrToObjectConverter(nullptr),
+            m_variantToObjectConverter(nullptr),
+            m_objectToVariantConverter(nullptr),
+            m_streamingCallback(nullptr)
     {
         sm_first = this;
         Register();
@@ -171,25 +171,25 @@ public:
             m_objectSize(size),
             m_objectConstructor(ctor),
             m_next(sm_first),
-            m_firstPropertyFn(NULL),
-            m_firstHandlerFn(NULL),
-            m_firstProperty(NULL),
-            m_firstHandler(NULL),
+            m_firstPropertyFn(nullptr),
+            m_firstHandlerFn(nullptr),
+            m_firstProperty(nullptr),
+            m_firstHandler(nullptr),
             m_firstInited(true),
-            m_parents(NULL),
-            m_unitName(NULL),
-            m_constructor(NULL),
-            m_constructorProperties(NULL),
+            m_parents(nullptr),
+            m_unitName(nullptr),
+            m_constructor(nullptr),
+            m_constructorProperties(nullptr),
             m_constructorPropertiesCount(0),
-            m_variantOfPtrToObjectConverter(NULL),
-            m_variantToObjectConverter(NULL),
-            m_objectToVariantConverter(NULL),
-            m_streamingCallback(NULL)
+            m_variantOfPtrToObjectConverter(nullptr),
+            m_variantToObjectConverter(nullptr),
+            m_objectToVariantConverter(nullptr),
+            m_streamingCallback(nullptr)
     {
         sm_first = this;
         m_parents[0] = _Parent1;
         m_parents[1] = _Parent2;
-        m_parents[2] = NULL;
+        m_parents[2] = nullptr;
         Register();
     }
 
@@ -211,14 +211,14 @@ public:
     const wxChar       *GetClassName() const
         { return m_className; }
     const wxChar       *GetBaseClassName1() const
-        { return m_parents[0] ? m_parents[0]->GetClassName() : NULL; }
+        { return m_parents[0] ? m_parents[0]->GetClassName() : nullptr; }
     const wxChar       *GetBaseClassName2() const
-        { return (m_parents[0] && m_parents[1]) ? m_parents[1]->GetClassName() : NULL; }
+        { return (m_parents[0] && m_parents[1]) ? m_parents[1]->GetClassName() : nullptr; }
 
     const wxClassInfo  *GetBaseClass1() const
         { return m_parents[0]; }
     const wxClassInfo  *GetBaseClass2() const
-        { return m_parents[0] ? m_parents[1] : NULL; }
+        { return m_parents[0] ? m_parents[1] : nullptr; }
 
     const wxChar       *GetIncludeName() const
         { return m_unitName; }
@@ -227,7 +227,7 @@ public:
     int                 GetSize() const
         { return m_objectSize; }
     bool                IsDynamic() const
-        { return (NULL != m_objectConstructor); }
+        { return (nullptr != m_objectConstructor); }
 
     wxObjectConstructorFn      GetConstructor() const
         { return m_objectConstructor; }
@@ -338,9 +338,9 @@ protected:
     {
         if ( !m_firstInited)
         {
-            if ( m_firstPropertyFn != NULL)
+            if ( m_firstPropertyFn != nullptr)
                 m_firstProperty = (*m_firstPropertyFn)();
-            if ( m_firstHandlerFn != NULL)
+            if ( m_firstHandlerFn != nullptr)
                 m_firstHandler = (*m_firstHandlerFn)();
             m_firstInited = true;
         }

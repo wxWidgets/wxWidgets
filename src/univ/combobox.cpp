@@ -117,7 +117,7 @@ bool wxComboListBox::Create(wxWindow* parent)
 {
     if ( !wxListBox::Create(parent, wxID_ANY,
                             wxDefaultPosition, wxDefaultSize,
-                            0, NULL,
+                            0, nullptr,
                             wxBORDER_SIMPLE |
                             ( m_combo->GetWindowStyle() & wxCB_SORT ? wxLB_SORT : 0 ) ) )
         return false;
@@ -199,7 +199,7 @@ wxSize wxComboListBox::GetAdjustedSize(int minWidth,
 
 void wxComboBox::Init()
 {
-    m_lbox = NULL;
+    m_lbox = nullptr;
 }
 
 wxComboBox::wxComboBox(wxWindow *parent,
@@ -448,7 +448,7 @@ void *wxComboBox::DoGetItemClientData(unsigned int n) const
 
 bool wxComboBox::IsEditable() const
 {
-    return GetTextCtrl() != NULL && (!HasFlag(wxCB_READONLY) || GetTextCtrl()->IsEditable() );
+    return GetTextCtrl() != nullptr && (!HasFlag(wxCB_READONLY) || GetTextCtrl()->IsEditable() );
 }
 
 void wxComboBox::Undo()
@@ -470,7 +470,7 @@ void wxComboBox::SelectAll()
 
 bool wxComboBox::CanCopy() const
 {
-    if (GetTextCtrl() != NULL)
+    if (GetTextCtrl() != nullptr)
         return GetTextCtrl()->CanCopy();
     else
         return false;
@@ -478,7 +478,7 @@ bool wxComboBox::CanCopy() const
 
 bool wxComboBox::CanCut() const
 {
-    if (GetTextCtrl() != NULL)
+    if (GetTextCtrl() != nullptr)
         return GetTextCtrl()->CanCut();
     else
         return false;

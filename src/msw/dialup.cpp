@@ -53,7 +53,7 @@ wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
 static const wxChar *
     wxMSWDIALUP_WNDCLASSNAME = wxT("_wxDialUpManager_Internal_Class");
-static const wxChar *gs_classForDialUpWindow = NULL;
+static const wxChar *gs_classForDialUpWindow = nullptr;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -124,7 +124,7 @@ struct WXDLLEXPORT wxRasThreadData
     wxRasThreadData()
     {
         hWnd = 0;
-        dialUpManager = NULL;
+        dialUpManager = nullptr;
     }
 
     ~wxRasThreadData()
@@ -152,23 +152,23 @@ public:
     virtual ~wxDialUpManagerMSW();
 
     // implement base class pure virtuals
-    virtual bool IsOk() const wxOVERRIDE;
-    virtual size_t GetISPNames(wxArrayString& names) const wxOVERRIDE;
+    virtual bool IsOk() const override;
+    virtual size_t GetISPNames(wxArrayString& names) const override;
     virtual bool Dial(const wxString& nameOfISP,
                       const wxString& username,
                       const wxString& password,
-                      bool async) wxOVERRIDE;
-    virtual bool IsDialing() const wxOVERRIDE;
-    virtual bool CancelDialing() wxOVERRIDE;
-    virtual bool HangUp() wxOVERRIDE;
-    virtual bool IsAlwaysOnline() const wxOVERRIDE;
-    virtual bool IsOnline() const wxOVERRIDE;
-    virtual void SetOnlineStatus(bool isOnline = true) wxOVERRIDE;
-    virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) wxOVERRIDE;
-    virtual void DisableAutoCheckOnlineStatus() wxOVERRIDE;
-    virtual void SetWellKnownHost(const wxString& hostname, int port) wxOVERRIDE;
+                      bool async) override;
+    virtual bool IsDialing() const override;
+    virtual bool CancelDialing() override;
+    virtual bool HangUp() override;
+    virtual bool IsAlwaysOnline() const override;
+    virtual bool IsOnline() const override;
+    virtual void SetOnlineStatus(bool isOnline = true) override;
+    virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds) override;
+    virtual void DisableAutoCheckOnlineStatus() override;
+    virtual void SetWellKnownHost(const wxString& hostname, int port) override;
     virtual void SetConnectCommand(const wxString& commandDial,
-                                   const wxString& commandHangup) wxOVERRIDE;
+                                   const wxString& commandHangup) override;
 
     // for RasTimer
     void CheckRasStatus();
@@ -179,7 +179,7 @@ public:
 
     // for wxRasDialFunc
     static HWND GetRasWindow() { return ms_hwndRas; }
-    static void ResetRasWindow() { ms_hwndRas = NULL; }
+    static void ResetRasWindow() { ms_hwndRas = nullptr; }
     static wxDialUpManagerMSW *GetDialer() { return ms_dialer; }
 
 private:
@@ -206,7 +206,7 @@ private:
         RasTimer(wxDialUpManagerMSW *dialUpManager)
             { m_dialUpManager = dialUpManager; }
 
-        virtual void Notify() wxOVERRIDE { m_dialUpManager->CheckRasStatus(); }
+        virtual void Notify() override { m_dialUpManager->CheckRasStatus(); }
 
     private:
         wxDialUpManagerMSW *m_dialUpManager;
@@ -267,8 +267,8 @@ private:
 class wxDialUpManagerModule : public wxModule
 {
 public:
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE
+    bool OnInit() override { return true; }
+    void OnExit() override
     {
         HWND hwnd = wxDialUpManagerMSW::GetRasWindow();
         if ( hwnd )
@@ -280,7 +280,7 @@ public:
         if ( gs_classForDialUpWindow )
         {
             ::UnregisterClass(wxMSWDIALUP_WNDCLASSNAME, wxGetInstance());
-            gs_classForDialUpWindow = NULL;
+            gs_classForDialUpWindow = nullptr;
         }
     }
 
@@ -337,7 +337,7 @@ RASCONNECTIONNOTIFICATION wxDialUpManagerMSW::ms_pfnRasConnectionNotification = 
 
 int wxDialUpManagerMSW::ms_userSpecifiedOnlineStatus = -1;
 int wxDialUpManagerMSW::ms_isConnected = -1;
-wxDialUpManagerMSW *wxDialUpManagerMSW::ms_dialer = NULL;
+wxDialUpManagerMSW *wxDialUpManagerMSW::ms_dialer = nullptr;
 
 // ----------------------------------------------------------------------------
 // ctor and dtor: the dynamic linking happens here
@@ -373,7 +373,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
 
         // this will contain the name of the function we failed to resolve
         // if any at the end
-        const char *funcName = NULL;
+        const char *funcName = nullptr;
 
         // get the function from rasapi32.dll and abort if it's not found
         #define RESOLVE_RAS_FUNCTION(type, name)                          \
@@ -558,7 +558,7 @@ void wxDialUpManagerMSW::CleanUpThreadData()
 
             // the thread still needs m_data so we can't free it here, rather
             // let the thread do it itself
-            m_data = NULL;
+            m_data = nullptr;
         }
 
         CloseHandle(m_hThread);
@@ -630,14 +630,14 @@ void wxDialUpManagerMSW::OnDialProgress(RASCONNSTATE rasconnstate,
             ms_hRasConnection = 0;
         }
 
-        ms_dialer = NULL;
+        ms_dialer = nullptr;
 
         NotifyApp(false /* !connected */, true /* we dialed ourselves */);
     }
     else if ( rasconnstate == RASCS_Connected )
     {
         ms_isConnected = true;
-        ms_dialer = NULL;
+        ms_dialer = nullptr;
 
         NotifyApp(true /* connected */, true /* we dialed ourselves */);
     }
@@ -666,7 +666,7 @@ size_t wxDialUpManagerMSW::GetISPNames(wxArrayString& names) const
         dwRet = ms_pfnRasEnumEntries
                   (
                    wxRESERVED_PARAM,
-                   NULL,                // default phone book (or all)
+                   nullptr,             // default phone book (or all)
                    rasEntries,          // [out] buffer for the entries
                    &size,               // [in/out] size of the buffer
                    &nEntries            // [out] number of entries fetched
@@ -676,7 +676,7 @@ size_t wxDialUpManagerMSW::GetISPNames(wxArrayString& names) const
         {
             // reallocate the buffer
             void *n  = realloc(rasEntries, size);
-            if (n == NULL)
+            if (n == nullptr)
             {
                 free(rasEntries);
                 return 0;
@@ -781,7 +781,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
         BOOL gotPassword;
         DWORD dwRet = ms_pfnRasGetEntryDialParams
                       (
-                       NULL,            // default phonebook
+                       nullptr,         // default phonebook
                        &rasDialParams,  // [in/out] the params of this entry
                        &gotPassword     // [out] did we get password?
                       );
@@ -806,14 +806,14 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     rasDialParams.szDomain[0] = '*';
     rasDialParams.szDomain[1] = '\0';
 
-    // apparently, this is not really necessary - passing NULL instead of the
+    // apparently, this is not really necessary - passing nullptr instead of the
     // phone book has the same effect
 #if 0
     wxString phoneBook;
     if ( wxGetOsVersion() == wxWINDOWS_NT )
     {
         // first get the length
-        UINT nLen = ::GetSystemDirectory(NULL, 0);
+        UINT nLen = ::GetSystemDirectory(nullptr, 0);
         nLen++;
 
         if ( !::GetSystemDirectory(phoneBook.GetWriteBuf(nLen), nLen) )
@@ -835,8 +835,8 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
     DWORD dwRet = ms_pfnRasDial
                   (
-                   NULL,                    // no extended features
-                   NULL,                    // default phone book file (NT only)
+                   nullptr,                 // no extended features
+                   nullptr,                 // default phone book file (NT only)
                    &rasDialParams,
                    0,                       // use callback for notifications
                    async ? (void *)wxRasDialFunc  // cast needed for gcc 3.1
@@ -865,7 +865,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
             ms_hRasConnection = 0;
         }
 
-        ms_dialer = NULL;
+        ms_dialer = nullptr;
 
         return false;
     }
@@ -881,7 +881,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
 bool wxDialUpManagerMSW::IsDialing() const
 {
-    return GetDialer() != NULL;
+    return GetDialer() != nullptr;
 }
 
 bool wxDialUpManagerMSW::CancelDialing()
@@ -894,7 +894,7 @@ bool wxDialUpManagerMSW::CancelDialing()
 
     wxASSERT_MSG( ms_hRasConnection, wxT("dialing but no connection?") );
 
-    ms_dialer = NULL;
+    ms_dialer = nullptr;
 
     return HangUp();
 }
@@ -1100,7 +1100,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         DWORD tid;
         m_hThread = CreateThread
                     (
-                     NULL,
+                     nullptr,
                      0,
                      (LPTHREAD_START_ROUTINE)wxRasMonitorThread,
                      (void *)m_data,

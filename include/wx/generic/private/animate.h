@@ -20,22 +20,22 @@
 class WXDLLIMPEXP_ADV wxAnimationGenericImpl : public wxAnimationImpl
 {
 public:
-    wxAnimationGenericImpl() : m_decoder(NULL) {}
+    wxAnimationGenericImpl() : m_decoder(nullptr) {}
     virtual ~wxAnimationGenericImpl() { UnRef(); }
 
-    virtual bool IsOk() const wxOVERRIDE
-        { return m_decoder != NULL; }
-    virtual bool IsCompatibleWith(wxClassInfo* ci) const wxOVERRIDE;
+    virtual bool IsOk() const override
+        { return m_decoder != nullptr; }
+    virtual bool IsCompatibleWith(wxClassInfo* ci) const override;
 
-    virtual unsigned int GetFrameCount() const wxOVERRIDE;
-    virtual int GetDelay(unsigned int i) const wxOVERRIDE;
-    virtual wxImage GetFrame(unsigned int i) const wxOVERRIDE;
-    virtual wxSize GetSize() const wxOVERRIDE;
+    virtual unsigned int GetFrameCount() const override;
+    virtual int GetDelay(unsigned int i) const override;
+    virtual wxImage GetFrame(unsigned int i) const override;
+    virtual wxSize GetSize() const override;
 
     virtual bool LoadFile(const wxString& filename,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) override;
     virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) override;
 
     // extended interface used only by the generic implementation of wxAnimationCtrl
     virtual wxPoint GetFramePosition(unsigned int frame) const;

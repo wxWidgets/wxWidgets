@@ -55,7 +55,7 @@ wxFontInstance::wxFontInstance(float ptSize, bool aa,
     desc.fract_height = pixSize;
 
     if ( filename == BUILTIN_DFB_FONT_FILENAME )
-        m_font = wxIDirectFB::Get()->CreateFont(NULL, &desc);
+        m_font = wxIDirectFB::Get()->CreateFont(nullptr, &desc);
     else
         m_font = wxIDirectFB::Get()->CreateFont(filename.fn_str(), &desc);
 

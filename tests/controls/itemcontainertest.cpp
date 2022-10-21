@@ -201,8 +201,8 @@ void ItemContainerTestCase::VoidData()
 
     CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
 
-    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, NULL) );
-    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, NULL) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, nullptr) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, nullptr) );
 
     // wxMSW used to hace problems retrieving the client data of -1 from a few
     // standard controls, especially if the last error was set before doing it,
@@ -311,7 +311,7 @@ void ItemContainerTestCase::SetSelection()
     class CommandEventHandler : public wxEvtHandler
     {
     public:
-        virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
+        virtual bool ProcessEvent(wxEvent& event) override
         {
             CPPUNIT_ASSERT_MESSAGE
             (

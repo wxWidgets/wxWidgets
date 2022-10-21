@@ -72,7 +72,7 @@ static inline bool wx_is_at_least_gtk3(int /* minor */)
 #else
 static inline bool wx_is_at_least_gtk3(int minor)
 {
-    return gtk_check_version(3, minor, 0) == NULL;
+    return gtk_check_version(3, minor, 0) == nullptr;
 }
 #endif
 

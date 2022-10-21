@@ -92,49 +92,49 @@ public:
 
     //IInternetProtocolRoot
     HRESULT STDMETHODCALLTYPE Abort(HRESULT WXUNUSED(hrReason),
-                                    DWORD WXUNUSED(dwOptions)) wxOVERRIDE
+                                    DWORD WXUNUSED(dwOptions)) override
                                    { return E_NOTIMPL; }
-    HRESULT STDMETHODCALLTYPE Continue(wxPROTOCOLDATA *WXUNUSED(pProtocolData)) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE Continue(wxPROTOCOLDATA *WXUNUSED(pProtocolData)) override
                                        { return S_OK; }
-    HRESULT STDMETHODCALLTYPE Resume() wxOVERRIDE { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Resume() override { return S_OK; }
     HRESULT STDMETHODCALLTYPE Start(LPCWSTR szUrl,
                                     wxIInternetProtocolSink *pOIProtSink,
                                     wxIInternetBindInfo *pOIBindInfo,
                                     DWORD grfPI,
-                                    HANDLE_PTR dwReserved) wxOVERRIDE;
-    HRESULT STDMETHODCALLTYPE Suspend() wxOVERRIDE { return S_OK; }
-    HRESULT STDMETHODCALLTYPE Terminate(DWORD WXUNUSED(dwOptions)) wxOVERRIDE { return S_OK; }
+                                    HANDLE_PTR dwReserved) override;
+    HRESULT STDMETHODCALLTYPE Suspend() override { return S_OK; }
+    HRESULT STDMETHODCALLTYPE Terminate(DWORD WXUNUSED(dwOptions)) override { return S_OK; }
 
     //IInternetProtocol
-    HRESULT STDMETHODCALLTYPE LockRequest(DWORD WXUNUSED(dwOptions)) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE LockRequest(DWORD WXUNUSED(dwOptions)) override
                                           { return S_OK; }
-    HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead) wxOVERRIDE;
+    HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead) override;
     HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER WXUNUSED(dlibMove),
                                    DWORD WXUNUSED(dwOrigin),
-                                   ULARGE_INTEGER* WXUNUSED(plibNewPosition)) wxOVERRIDE
+                                   ULARGE_INTEGER* WXUNUSED(plibNewPosition)) override
                                    { return E_FAIL; }
-    HRESULT STDMETHODCALLTYPE UnlockRequest() wxOVERRIDE { return S_OK; }
+    HRESULT STDMETHODCALLTYPE UnlockRequest() override { return S_OK; }
 
     //IInternetProtocolInfo
     HRESULT STDMETHODCALLTYPE CombineUrl(
             LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,
             DWORD dwCombineFlags, LPWSTR pwzResult,
             DWORD cchResult, DWORD *pcchResult,
-            DWORD dwReserved) wxOVERRIDE;
+            DWORD dwReserved) override;
     HRESULT STDMETHODCALLTYPE ParseUrl(
             LPCWSTR pwzUrl, wxPARSEACTION ParseAction,
             DWORD dwParseFlags, LPWSTR pwzResult,
             DWORD cchResult, DWORD *pcchResult,
-            DWORD dwReserved) wxOVERRIDE;
+            DWORD dwReserved) override;
     HRESULT STDMETHODCALLTYPE CompareUrl(
             LPCWSTR pwzUrl1,
             LPCWSTR pwzUrl2,
-            DWORD dwCompareFlags) wxOVERRIDE;
+            DWORD dwCompareFlags) override;
     HRESULT STDMETHODCALLTYPE QueryInfo(
             LPCWSTR pwzUrl, wxQUERYOPTION OueryOption,
             DWORD dwQueryFlags, LPVOID pBuffer,
             DWORD cbBuffer, DWORD *pcbBuf,
-            DWORD dwReserved) wxOVERRIDE;
+            DWORD dwReserved) override;
 };
 
 class ClassFactory : public IClassFactory
@@ -148,8 +148,8 @@ public:
 
     //IClassFactory
     HRESULT STDMETHODCALLTYPE CreateInstance(IUnknown* pUnkOuter,
-                                             REFIID riid, void** ppvObject) wxOVERRIDE;
-    HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock) wxOVERRIDE;
+                                             REFIID riid, void** ppvObject) override;
+    HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock) override;
 
     //IUnknown
     DECLARE_IUNKNOWN_METHODS;
@@ -161,9 +161,9 @@ private:
 class wxIEContainer : public wxActiveXContainer
 {
 public:
-    wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, DocHostUIHandler* uiHandler = NULL);
+    wxIEContainer(wxWindow *parent, REFIID iid, IUnknown *pUnk, DocHostUIHandler* uiHandler = nullptr);
     virtual ~wxIEContainer();
-    virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc) wxOVERRIDE;
+    virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc) override;
 private:
     DocHostUIHandler* m_uiHandler;
 };
@@ -176,48 +176,48 @@ public:
 
     virtual HRESULT wxSTDCALL ShowContextMenu(DWORD dwID, POINT *ppt,
                                               IUnknown *pcmdtReserved,
-                                              IDispatch *pdispReserved) wxOVERRIDE;
+                                              IDispatch *pdispReserved) override;
 
-    virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL GetHostInfo(DOCHOSTUIINFO *pInfo) override;
 
     virtual HRESULT wxSTDCALL ShowUI(DWORD dwID,
                                      IOleInPlaceActiveObject *pActiveObject,
                                      IOleCommandTarget *pCommandTarget,
                                      IOleInPlaceFrame *pFrame,
-                                     IOleInPlaceUIWindow *pDoc) wxOVERRIDE;
+                                     IOleInPlaceUIWindow *pDoc) override;
 
-    virtual HRESULT wxSTDCALL HideUI(void) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL HideUI(void) override;
 
-    virtual HRESULT wxSTDCALL UpdateUI(void) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL UpdateUI(void) override;
 
-    virtual HRESULT wxSTDCALL EnableModeless(BOOL fEnable) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL EnableModeless(BOOL fEnable) override;
 
-    virtual HRESULT wxSTDCALL OnDocWindowActivate(BOOL fActivate) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL OnDocWindowActivate(BOOL fActivate) override;
 
-    virtual HRESULT wxSTDCALL OnFrameWindowActivate(BOOL fActivate) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL OnFrameWindowActivate(BOOL fActivate) override;
 
     virtual HRESULT wxSTDCALL ResizeBorder(LPCRECT prcBorder,
                                            IOleInPlaceUIWindow *pUIWindow,
-                                           BOOL fRameWindow) wxOVERRIDE;
+                                           BOOL fRameWindow) override;
 
     virtual HRESULT wxSTDCALL TranslateAccelerator(LPMSG lpMsg,
                                                    const GUID *pguidCmdGroup,
-                                                   DWORD nCmdID) wxOVERRIDE;
+                                                   DWORD nCmdID) override;
 
     virtual HRESULT wxSTDCALL GetOptionKeyPath(LPOLESTR *pchKey,
-                                               DWORD dw) wxOVERRIDE;
+                                               DWORD dw) override;
 
     virtual HRESULT wxSTDCALL GetDropTarget(IDropTarget *pDropTarget,
-                                            IDropTarget **ppDropTarget) wxOVERRIDE;
+                                            IDropTarget **ppDropTarget) override;
 
-    virtual HRESULT wxSTDCALL GetExternal(IDispatch **ppDispatch) wxOVERRIDE;
+    virtual HRESULT wxSTDCALL GetExternal(IDispatch **ppDispatch) override;
 
     virtual HRESULT wxSTDCALL TranslateUrl(DWORD dwTranslate,
                                            OLECHAR *pchURLIn,
-                                           OLECHAR **ppchURLOut) wxOVERRIDE;
+                                           OLECHAR **ppchURLOut) override;
 
     virtual HRESULT wxSTDCALL FilterDataObject(IDataObject *pDO,
-                                               IDataObject **ppDORet) wxOVERRIDE;
+                                               IDataObject **ppDORet) override;
     //IUnknown
     DECLARE_IUNKNOWN_METHODS;
 

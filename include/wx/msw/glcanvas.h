@@ -25,11 +25,11 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win,
-                const wxGLContext *other = NULL,
-                const wxGLContextAttrs *ctxAttrs = NULL);
+                const wxGLContext *other = nullptr,
+                const wxGLContextAttrs *ctxAttrs = nullptr);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
     HGLRC GetGLRC() const { return m_glContext; }
 
@@ -60,7 +60,7 @@ public:
     explicit
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
-               const int *attribList = NULL,
+               const int *attribList = nullptr,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -82,13 +82,13 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxGLCanvasName,
-                const int *attribList = NULL,
+                const int *attribList = nullptr,
                 const wxPalette& palette = wxNullPalette);
 
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
 
     // MSW-specific helpers
@@ -101,15 +101,15 @@ public:
     // specified HDC, return 0 on error, otherwise ppfd is filled in with the
     // information from dispAttrs
     static int FindMatchingPixelFormat(const wxGLAttributes& dispAttrs,
-                                       PIXELFORMATDESCRIPTOR* ppfd = NULL);
+                                       PIXELFORMATDESCRIPTOR* ppfd = nullptr);
     // Same as FindMatchingPixelFormat
     static int ChooseMatchingPixelFormat(HDC hdc, const int *attribList,
-                                         PIXELFORMATDESCRIPTOR *pfd = NULL);
+                                         PIXELFORMATDESCRIPTOR *pfd = nullptr);
 
 #if wxUSE_PALETTE
     // palette stuff
     bool SetupPalette(const wxPalette& palette);
-    virtual wxPalette CreateDefaultPalette() wxOVERRIDE;
+    virtual wxPalette CreateDefaultPalette() override;
     void OnQueryNewPalette(wxQueryNewPaletteEvent& event);
     void OnPaletteChanged(wxPaletteChangedEvent& event);
 #endif // wxUSE_PALETTE

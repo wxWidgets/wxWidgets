@@ -48,7 +48,7 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
-    virtual void SetSelection(int n) wxOVERRIDE;
+    virtual void SetSelection(int n) override;
     void SetSelection(int n, bool select) { DoSetSelection(n, select); }
     void Deselect(int n) { DoSetSelection(n, false); }
     void DeselectAll(int itemToLeaveSelected = -1);
@@ -87,11 +87,11 @@ public:
     }
 
     // override wxItemContainer::IsSorted
-    virtual bool IsSorted() const wxOVERRIDE { return HasFlag( wxLB_SORT ); }
+    virtual bool IsSorted() const override { return HasFlag( wxLB_SORT ); }
 
     // emulate selecting or deselecting the item event.GetInt() (depending on
     // event.GetExtraLong())
-    void Command(wxCommandEvent& event) wxOVERRIDE;
+    void Command(wxCommandEvent& event) override;
 
     // return the index of the item at this position or wxNOT_FOUND
     int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
@@ -148,12 +148,8 @@ private:
     #include "wx/univ/listbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/listbox.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/listbox.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/listbox.h"
 #elif defined(__WXGTK__)
-  #include "wx/gtk1/listbox.h"
+    #include "wx/gtk/listbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/listbox.h"
 #elif defined(__WXQT__)

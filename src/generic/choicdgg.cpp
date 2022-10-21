@@ -181,7 +181,7 @@ void *wxGetSingleChoiceData( const wxString& message,
                                 client_data);
 
     dialog.SetSelection(initialSelection);
-    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : NULL;
+    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : nullptr;
 }
 
 void *wxGetSingleChoiceData( const wxString& message,
@@ -197,7 +197,7 @@ void *wxGetSingleChoiceData( const wxString& message,
     wxSingleChoiceDialog dialog(parent, message, caption, choices, client_data);
 
     dialog.SetSelection(initialSelection);
-    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : NULL;
+    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : nullptr;
 }
 
 void* wxGetSingleChoiceData( const wxString& message,

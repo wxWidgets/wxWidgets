@@ -41,7 +41,7 @@ public:
     explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
-               const int *attribList = NULL,
+               const int *attribList = nullptr,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -63,19 +63,19 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxGLCanvasName,
-                const int *attribList = NULL,
+                const int *attribList = nullptr,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
 
     // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual unsigned long GetXWindow() const wxOVERRIDE;
+    virtual unsigned long GetXWindow() const override;
     void* GetNativeWindow() const;
 
     // implementation from now on
-    virtual void GTKHandleRealized() wxOVERRIDE;
+    virtual void GTKHandleRealized() override;
 
 #ifdef __WXGTK3__
     wxSize m_size;

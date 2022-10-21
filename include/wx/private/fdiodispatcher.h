@@ -28,7 +28,7 @@ class WXDLLIMPEXP_BASE wxFDIODispatcher
 public:
     enum { TIMEOUT_INFINITE = -1 };
 
-    // return the global dispatcher to be used for IO events, can be NULL only
+    // return the global dispatcher to be used for IO events, can be null only
     // if wxSelectDispatcher wasn't compiled into the library at all as
     // creating it never fails
     //
@@ -66,6 +66,8 @@ struct wxFDIOHandlerEntry
 {
     wxFDIOHandlerEntry()
     {
+        handler = nullptr;
+        flags = 0;
     }
 
     wxFDIOHandlerEntry(wxFDIOHandler *handler_, int flags_)
@@ -95,18 +97,18 @@ WX_DECLARE_HASH_MAP(
 class WXDLLIMPEXP_BASE wxMappedFDIODispatcher : public wxFDIODispatcher
 {
 public:
-    // find the handler for the given fd, return NULL if none
+    // find the handler for the given fd, return nullptr if none
     wxFDIOHandler *FindHandler(int fd) const;
 
     // register handler for the given descriptor with the dispatcher, return
     // true on success or false on error
-    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) wxOVERRIDE;
+    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) override;
 
     // modify descriptor flags or handler, return true on success
-    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags) wxOVERRIDE;
+    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags) override;
 
     // unregister descriptor previously registered with RegisterFD()
-    virtual bool UnregisterFD(int fd) wxOVERRIDE;
+    virtual bool UnregisterFD(int fd) override;
 
     virtual ~wxMappedFDIODispatcher() { }
 

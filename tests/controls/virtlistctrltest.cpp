@@ -32,8 +32,8 @@ class VirtListCtrlTestCase : public CppUnit::TestCase
 public:
     VirtListCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( VirtListCtrlTestCase );
@@ -74,7 +74,7 @@ void VirtListCtrlTestCase::setUp()
         }
 
     protected:
-        virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE
+        virtual wxString OnGetItemText(long item, long column) const override
         {
             return wxString::Format("Row %ld, col %ld", item, column);
         }
@@ -86,7 +86,7 @@ void VirtListCtrlTestCase::setUp()
 void VirtListCtrlTestCase::tearDown()
 {
     delete m_list;
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 void VirtListCtrlTestCase::UpdateSelection()

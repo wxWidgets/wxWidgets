@@ -33,11 +33,11 @@
 namespace wxGTKPrivate
 {
 
-static GtkWidget *gs_container = NULL;
+static GtkWidget *gs_container = nullptr;
 
 static GtkContainer* GetContainer()
 {
-    if ( gs_container == NULL )
+    if ( gs_container == nullptr )
     {
         GtkWidget* window = gtk_window_new(GTK_WINDOW_POPUP);
         gs_container = gtk_fixed_new();
@@ -48,7 +48,7 @@ static GtkContainer* GetContainer()
 
 GtkWidget *GetButtonWidget()
 {
-    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_button = nullptr;
 
     if ( !s_button )
     {
@@ -63,7 +63,7 @@ GtkWidget *GetButtonWidget()
 
 GtkWidget *GetNotebookWidget()
 {
-    static GtkWidget *s_notebook = NULL;
+    static GtkWidget *s_notebook = nullptr;
 
     if ( !s_notebook )
     {
@@ -78,7 +78,7 @@ GtkWidget *GetNotebookWidget()
 
 GtkWidget *GetCheckButtonWidget()
 {
-    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_button = nullptr;
 
     if ( !s_button )
     {
@@ -93,7 +93,7 @@ GtkWidget *GetCheckButtonWidget()
 
 GtkWidget * GetComboBoxWidget()
 {
-    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_button = nullptr;
 
     if ( !s_button )
     {
@@ -109,7 +109,7 @@ GtkWidget * GetComboBoxWidget()
 
 GtkWidget *GetEntryWidget()
 {
-    static GtkWidget *s_entry = NULL;
+    static GtkWidget *s_entry = nullptr;
 
     if ( !s_entry )
     {
@@ -125,9 +125,9 @@ GtkWidget *GetEntryWidget()
 // This one just gets the button used by the column header. Although it's
 // still a gtk_button the themes will typically differentiate and draw them
 // differently if the button is in a treeview.
-static GtkWidget *s_first_button = NULL;
-static GtkWidget *s_other_button = NULL;
-static GtkWidget *s_last_button = NULL;
+static GtkWidget *s_first_button = nullptr;
+static GtkWidget *s_other_button = nullptr;
+static GtkWidget *s_last_button = nullptr;
 
 static void CreateHeaderButtons()
 {
@@ -190,11 +190,11 @@ GtkWidget *GetHeaderButtonWidget()
 
 GtkWidget * GetRadioButtonWidget()
 {
-    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_button = nullptr;
 
     if ( !s_button )
     {
-        s_button = gtk_radio_button_new(NULL);
+        s_button = gtk_radio_button_new(nullptr);
         g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
         gtk_container_add(GetContainer(), s_button);
         gtk_widget_realize( s_button );
@@ -209,7 +209,7 @@ GtkWidget* GetSplitterWidget(wxOrientation orient)
     const GtkOrientation gtkOrient =
         orient == wxHORIZONTAL ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
     GtkWidget*& widget = widgets[gtkOrient];
-    if (widget == NULL)
+    if (widget == nullptr)
     {
 #ifdef __WXGTK3__
         widget = gtk_paned_new(gtkOrient);
@@ -229,7 +229,7 @@ GtkWidget* GetSplitterWidget(wxOrientation orient)
 
 GtkWidget * GetTextEntryWidget()
 {
-    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_button = nullptr;
 
     if ( !s_button )
     {
@@ -244,7 +244,7 @@ GtkWidget * GetTextEntryWidget()
 
 GtkWidget *GetTreeWidget()
 {
-    static GtkWidget *s_tree = NULL;
+    static GtkWidget *s_tree = nullptr;
 
     if ( !s_tree )
     {
@@ -261,18 +261,18 @@ GtkWidget *GetTreeWidget()
 class WidgetsCleanupModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         if ( gs_container )
         {
             GtkWidget* parent = gtk_widget_get_parent(gs_container);
             gtk_widget_destroy(parent);
-            gs_container = NULL;
+            gs_container = nullptr;
         }
     }
 

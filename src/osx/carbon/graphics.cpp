@@ -105,7 +105,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
 {
     CGColorRef retval = col.CreateCGColor();
 
-    wxASSERT(retval != NULL);
+    wxASSERT(retval != nullptr);
     return retval;
 }
 
@@ -169,9 +169,9 @@ public :
         Init( image , transform );
     }
 
-    virtual void Render( CGContextRef ctxRef ) wxOVERRIDE
+    virtual void Render( CGContextRef ctxRef ) override
     {
-        if (m_image != NULL)
+        if (m_image != nullptr)
             wxMacDrawCGImage( ctxRef, &m_imageBounds, m_image );
     }
 
@@ -217,7 +217,7 @@ public :
         CGContextStrokeLineSegments( ctxRef , pts , count );
     }
 
-    virtual void Render( CGContextRef ctxRef ) wxOVERRIDE
+    virtual void Render( CGContextRef ctxRef ) override
     {
         switch ( m_hatch )
         {
@@ -305,53 +305,53 @@ public :
 
     virtual ~wxMacCoreGraphicsMatrixData() ;
 
-    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
+    virtual wxGraphicsObjectRefData *Clone() const override ;
 
     // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
+    virtual void Concat( const wxGraphicsMatrixData *t ) override;
 
     // sets the matrix to the respective values
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
+        wxDouble tx=0.0, wxDouble ty=0.0) override;
 
     // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
+    virtual void Get(wxDouble* a=nullptr, wxDouble* b=nullptr,  wxDouble* c=nullptr,
+                     wxDouble* d=nullptr, wxDouble* tx=nullptr, wxDouble* ty=nullptr) const override;
 
     // makes this the inverse matrix
-    virtual void Invert() wxOVERRIDE;
+    virtual void Invert() override;
 
     // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const override ;
 
     // return true if this is the identity matrix
-    virtual bool IsIdentity() const wxOVERRIDE;
+    virtual bool IsIdentity() const override;
 
     //
     // transformation
     //
 
     // add the translation to this matrix
-    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
+    virtual void Translate( wxDouble dx , wxDouble dy ) override;
 
     // add the scale to this matrix
-    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) override;
 
     // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
+    virtual void Rotate( wxDouble angle ) override;
 
     //
     // apply the transforms
     //
 
     // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const override;
 
     // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const override;
 
     // returns the native representation
-    virtual void * GetNativeMatrix() const wxOVERRIDE;
+    virtual void * GetNativeMatrix() const override;
 
 private :
     CGAffineTransform m_matrix;
@@ -519,7 +519,7 @@ protected:
         GradientComponents()
         {
             count = 0;
-            comps = NULL;
+            comps = nullptr;
         }
 
         void Init(unsigned count_)
@@ -564,11 +564,11 @@ wxMacCoreGraphicsPenBrushDataBase::~wxMacCoreGraphicsPenBrushDataBase()
 void
 wxMacCoreGraphicsPenBrushDataBase::Init()
 {
-    m_gradientFunction = NULL;
-    m_shading = NULL;
+    m_gradientFunction = nullptr;
+    m_shading = nullptr;
     m_isShading = false;
-    m_shadingMatrix = NULL;
-    m_gradientComponents = NULL;
+    m_shadingMatrix = nullptr;
+    m_gradientComponents = nullptr;
 }
 
 void
@@ -810,7 +810,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         case wxPENSTYLE_USER_DASH:
             wxDash *dashes;
             m_count = info.GetDashes( &dashes );
-            if ((dashes != NULL) && (m_count > 0))
+            if ((dashes != nullptr) && (m_count > 0))
             {
                 m_userLengths = new CGFloat[m_count];
                 for ( int i = 0; i < m_count; ++i )
@@ -831,7 +831,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                 wxBitmap bmp = info.GetStipple();
                 if ( bmp.IsOk() )
                 {
-                    m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
+                    m_colorSpace.reset( CGColorSpaceCreatePattern( nullptr ) );
                     m_pattern.reset( (CGPatternRef) *( new ImagePattern( &bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
                     m_patternColorComponents = new CGFloat[1] ;
                     m_patternColorComponents[0] = (CGFloat) 1.0;
@@ -853,7 +853,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
             }
             break;
     }
-    if ((m_lengths != NULL) && (m_count > 0))
+    if ((m_lengths != nullptr) && (m_count > 0))
     {
         // force the line cap, otherwise we get artifacts (overlaps) and just solid lines
         m_cap = kCGLineCapButt;
@@ -890,11 +890,11 @@ wxMacCoreGraphicsPenData::~wxMacCoreGraphicsPenData()
 
 void wxMacCoreGraphicsPenData::Init()
 {
-    m_lengths = NULL;
-    m_userLengths = NULL;
+    m_lengths = nullptr;
+    m_userLengths = nullptr;
     m_width = 0;
     m_count = 0;
-    m_patternColorComponents = NULL;
+    m_patternColorComponents = nullptr;
     m_isPattern = false;
 }
 
@@ -959,7 +959,7 @@ wxMacCoreGraphicsColour::~wxMacCoreGraphicsColour()
 void wxMacCoreGraphicsColour::Init()
 {
     m_isPattern = false;
-    m_patternColorComponents = NULL;
+    m_patternColorComponents = nullptr;
 }
 
 void wxMacCoreGraphicsColour::Apply( CGContextRef cgContext )
@@ -1010,7 +1010,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
             m_isPattern = true;
             m_patternColorComponents = new CGFloat[1] ;
             m_patternColorComponents[0] = (CGFloat) 1.0;
-            m_colorSpace.reset( CGColorSpaceCreatePattern( NULL ) );
+            m_colorSpace.reset( CGColorSpaceCreatePattern( nullptr ) );
             m_pattern.reset( (CGPatternRef) *( new ImagePattern( bmp , CGAffineTransformMakeScale( 1,-1 ) ) ) );
         }
     }
@@ -1117,7 +1117,7 @@ public:
     ~wxMacCoreGraphicsBitmapData();
 
     virtual CGImageRef GetBitmap() { return m_bitmap; }
-    virtual void* GetNativeBitmap() const wxOVERRIDE { return m_bitmap; }
+    virtual void* GetNativeBitmap() const override { return m_bitmap; }
     bool IsMonochrome() { return m_monochrome; }
 
 #if wxUSE_IMAGE
@@ -1149,29 +1149,29 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
 class WXDLLEXPORT wxMacCoreGraphicsPathData : public wxGraphicsPathData
 {
 public :
-    wxMacCoreGraphicsPathData( wxGraphicsRenderer* renderer, CGMutablePathRef path = NULL);
+    wxMacCoreGraphicsPathData( wxGraphicsRenderer* renderer, CGMutablePathRef path = nullptr);
 
     ~wxMacCoreGraphicsPathData();
 
-    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE;
+    virtual wxGraphicsObjectRefData *Clone() const override;
 
     // begins a new subpath at (x,y)
-    virtual void MoveToPoint( wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void MoveToPoint( wxDouble x, wxDouble y ) override;
 
     // adds a straight line from the current point to (x,y)
-    virtual void AddLineToPoint( wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void AddLineToPoint( wxDouble x, wxDouble y ) override;
 
     // adds a cubic Bezier curve from the current point, using two control points and an end point
-    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y ) override;
 
     // closes the current sub-path
-    virtual void CloseSubpath() wxOVERRIDE;
+    virtual void CloseSubpath() override;
 
     // gets the last point of the current path, (0,0) if not yet set
-    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const wxOVERRIDE;
+    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const override;
 
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
-    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) wxOVERRIDE;
+    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) override;
 
     //
     // These are convenience functions which - if not available natively will be assembled
@@ -1179,36 +1179,36 @@ public :
     //
 
     // adds a quadratic Bezier curve from the current point, using a control point and an end point
-    virtual void AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y ) override;
 
     // appends a rectangle as a new closed subpath
-    virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
     // appends a circle as a new closed subpath
-    virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r ) wxOVERRIDE;
+    virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r ) override;
 
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
-    virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
-    virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) wxOVERRIDE;
+    virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) override;
 
     // adds another path
-    virtual void AddPath( const wxGraphicsPathData* path ) wxOVERRIDE;
+    virtual void AddPath( const wxGraphicsPathData* path ) override;
 
     // returns the native path
-    virtual void * GetNativePath() const wxOVERRIDE { return m_path; }
+    virtual void * GetNativePath() const override { return m_path; }
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    virtual void UnGetNativePath(void *WXUNUSED(p)) const wxOVERRIDE {}
+    virtual void UnGetNativePath(void *WXUNUSED(p)) const override {}
 
     // transforms each point of this path by the matrix
-    virtual void Transform( const wxGraphicsMatrixData* matrix ) wxOVERRIDE;
+    virtual void Transform( const wxGraphicsMatrixData* matrix ) override;
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const override;
 
-    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const wxOVERRIDE;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const override;
 private :
     CGMutablePathRef m_path;
 };
@@ -1237,7 +1237,7 @@ wxGraphicsObjectRefData* wxMacCoreGraphicsPathData::Clone() const
 // opens (starts) a new subpath
 void wxMacCoreGraphicsPathData::MoveToPoint( wxDouble x1 , wxDouble y1 )
 {
-    CGPathMoveToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
+    CGPathMoveToPoint( m_path , nullptr , (CGFloat) x1 , (CGFloat) y1 );
 }
 
 void wxMacCoreGraphicsPathData::AddLineToPoint( wxDouble x1 , wxDouble y1 )
@@ -1250,7 +1250,7 @@ void wxMacCoreGraphicsPathData::AddLineToPoint( wxDouble x1 , wxDouble y1 )
     }
     else
     {
-        CGPathAddLineToPoint( m_path , NULL , (CGFloat) x1 , (CGFloat) y1 );
+        CGPathAddLineToPoint( m_path , nullptr , (CGFloat) x1 , (CGFloat) y1 );
     }
 }
 
@@ -1262,7 +1262,7 @@ void wxMacCoreGraphicsPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxD
     {
         MoveToPoint(cx1, cy1);
     }
-    CGPathAddCurveToPoint( m_path , NULL , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) cx2, (CGFloat) cy2, (CGFloat) x , (CGFloat) y );
+    CGPathAddCurveToPoint( m_path , nullptr , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) cx2, (CGFloat) cy2, (CGFloat) x , (CGFloat) y );
 }
 
 void wxMacCoreGraphicsPathData::AddQuadCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble x, wxDouble y )
@@ -1273,30 +1273,30 @@ void wxMacCoreGraphicsPathData::AddQuadCurveToPoint( wxDouble cx1, wxDouble cy1,
     {
         MoveToPoint(cx1, cy1);
     }
-    CGPathAddQuadCurveToPoint( m_path , NULL , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) x , (CGFloat) y );
+    CGPathAddQuadCurveToPoint( m_path , nullptr , (CGFloat) cx1 , (CGFloat) cy1 , (CGFloat) x , (CGFloat) y );
 }
 
 void wxMacCoreGraphicsPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     CGRect cgRect = { { (CGFloat) x , (CGFloat) y } , { (CGFloat) w , (CGFloat) h } };
-    CGPathAddRect( m_path , NULL , cgRect );
+    CGPathAddRect( m_path , nullptr , cgRect );
 }
 
 void wxMacCoreGraphicsPathData::AddCircle( wxDouble x, wxDouble y , wxDouble r )
 {
-    CGPathAddEllipseInRect( m_path, NULL, CGRectMake(x-r,y-r,2*r,2*r));
+    CGPathAddEllipseInRect( m_path, nullptr, CGRectMake(x-r,y-r,2*r,2*r));
 }
 
 void wxMacCoreGraphicsPathData::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    CGPathAddEllipseInRect( m_path, NULL, CGRectMake(x,y,w,h));
+    CGPathAddEllipseInRect( m_path, nullptr, CGRectMake(x,y,w,h));
 }
 
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 void wxMacCoreGraphicsPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise )
 {
     // inverse direction as we the 'normal' state is a y axis pointing down, ie mirrored to the standard core graphics setup
-    CGPathAddArc( m_path, NULL , (CGFloat) x, (CGFloat) y, (CGFloat) r, (CGFloat) startAngle, (CGFloat) endAngle, !clockwise);
+    CGPathAddArc( m_path, nullptr , (CGFloat) x, (CGFloat) y, (CGFloat) r, (CGFloat) startAngle, (CGFloat) endAngle, !clockwise);
 }
 
 void wxMacCoreGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )
@@ -1307,12 +1307,12 @@ void wxMacCoreGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDoub
     {
         MoveToPoint(0, 0);
     }
-    CGPathAddArcToPoint( m_path, NULL , (CGFloat) x1, (CGFloat) y1, (CGFloat) x2, (CGFloat) y2, (CGFloat) r);
+    CGPathAddArcToPoint( m_path, nullptr , (CGFloat) x1, (CGFloat) y1, (CGFloat) x2, (CGFloat) y2, (CGFloat) r);
 }
 
 void wxMacCoreGraphicsPathData::AddPath( const wxGraphicsPathData* path )
 {
-    CGPathAddPath( m_path , NULL, (CGPathRef) path->GetNativePath() );
+    CGPathAddPath( m_path , nullptr, (CGPathRef) path->GetNativePath() );
 }
 
 // closes the current subpath
@@ -1366,7 +1366,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle) const
 {
-    return CGPathContainsPoint( m_path, NULL, CGPointMake((CGFloat) x,(CGFloat) y), fillStyle == wxODDEVEN_RULE );
+    return CGPathContainsPoint( m_path, nullptr, CGPointMake((CGFloat) x,(CGFloat) y), fillStyle == wxODDEVEN_RULE );
 }
 
 
@@ -1380,7 +1380,7 @@ public:
                               CGContextRef cgcontext,
                               wxDouble width = 0,
                               wxDouble height = 0,
-                              wxWindow* window = NULL );
+                              wxWindow* window = nullptr );
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
@@ -1396,82 +1396,82 @@ public:
 
     void Init();
 
-    virtual void StartPage( wxDouble width, wxDouble height ) wxOVERRIDE;
+    virtual void StartPage( wxDouble width, wxDouble height ) override;
 
-    virtual void EndPage() wxOVERRIDE;
+    virtual void EndPage() override;
 
-    virtual void Flush() wxOVERRIDE;
+    virtual void Flush() override;
 
-    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const override;
 
     // push the current state of the context, ie the transformation matrix on a stack
-    virtual void PushState() wxOVERRIDE;
+    virtual void PushState() override;
 
     // pops a stored state from the stack
-    virtual void PopState() wxOVERRIDE;
+    virtual void PopState() override;
 
     // clips drawings to the region
-    virtual void Clip( const wxRegion &region ) wxOVERRIDE;
+    virtual void Clip( const wxRegion &region ) override;
 
     // clips drawings to the rect
-    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
     // resets the clipping to original extent
-    virtual void ResetClip() wxOVERRIDE;
+    virtual void ResetClip() override;
 
     // returns bounding box of the clipping region
-    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE;
+    virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) override;
 
-    virtual void * GetNativeContext() wxOVERRIDE;
+    virtual void * GetNativeContext() override;
 
-    virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias) override;
 
-    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) override;
 
-    virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
+    virtual bool SetCompositionMode(wxCompositionMode op) override;
 
-    virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
+    virtual void BeginLayer(wxDouble opacity) override;
 
-    virtual void EndLayer() wxOVERRIDE;
+    virtual void EndLayer() override;
 
     //
     // transformation
     //
 
     // translate
-    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
+    virtual void Translate( wxDouble dx , wxDouble dy ) override;
 
     // scale
-    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) override;
 
     // rotate (radians)
-    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
+    virtual void Rotate( wxDouble angle ) override;
 
     // concatenates this transform with the current transform of this context
-    virtual void ConcatTransform( const wxGraphicsMatrix& matrix ) wxOVERRIDE;
+    virtual void ConcatTransform( const wxGraphicsMatrix& matrix ) override;
 
     // sets the transform of this context
-    virtual void SetTransform( const wxGraphicsMatrix& matrix ) wxOVERRIDE;
+    virtual void SetTransform( const wxGraphicsMatrix& matrix ) override;
 
     // gets the matrix of this context
-    virtual wxGraphicsMatrix GetTransform() const wxOVERRIDE;
+    virtual wxGraphicsMatrix GetTransform() const override;
     //
     // setting the paint
     //
 
     // strokes along a path with the current pen
-    virtual void StrokePath( const wxGraphicsPath &path ) wxOVERRIDE;
+    virtual void StrokePath( const wxGraphicsPath &path ) override;
 
     // fills a path with the current brush
-    virtual void FillPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
+    virtual void FillPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) override;
 
     // draws a path by first filling and then stroking
-    virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
+    virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) override;
 
     // paints a transparent rectangle (only useful for bitmaps or windows)
-    virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
+    virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override;
 
-    virtual bool ShouldOffset() const wxOVERRIDE
+    virtual bool ShouldOffset() const override
     {
         if (!m_enableOffset || m_pen.IsNull())
             return false;
@@ -1497,24 +1497,24 @@ public:
     //
 
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
-        wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
+        wxDouble *descent, wxDouble *externalLeading ) const override;
 
-    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
+    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const override;
 
     //
     // image support
     //
 
-    virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
-    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
-    virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
     // fast convenience methods
 
 
-    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
     void SetNativeContext( CGContextRef cg );
 
@@ -1527,8 +1527,8 @@ private:
     bool DoSetInterpolationQuality(wxInterpolationQuality interpolation);
     bool DoSetCompositionMode(wxCompositionMode op);
 
-    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
-    virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) wxOVERRIDE;
+    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) override;
+    virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) override;
 
     CGContextRef m_cgContext;
     WXWidget m_view;
@@ -1591,12 +1591,12 @@ public :
 
 void wxMacCoreGraphicsContext::Init()
 {
-    m_cgContext = NULL;
+    m_cgContext = nullptr;
     m_contextSynthesized = false;
     m_width = 0;
     m_height = 0;
 #if wxOSX_USE_COCOA_OR_IPHONE
-    m_view = NULL;
+    m_view = nullptr;
 #endif
     m_invisible = false;
     m_antialias = wxANTIALIAS_DEFAULT;
@@ -1672,7 +1672,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 
     const wxSize sz = win->GetSize();
 
-    // having a cgctx being NULL is fine (will be created on demand)
+    // having a cgctx being null is fine (will be created on demand)
     // this is the case for all wxWindowDCs except wxPaintDC
 
     m_width = sz.x;
@@ -1683,7 +1683,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
-   : wxGraphicsContext(renderer, NULL )
+   : wxGraphicsContext(renderer, nullptr )
 {
     Init();
 
@@ -1705,7 +1705,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 #if wxUSE_PRINTING_ARCHITECTURE
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
-   : wxGraphicsContext(renderer, NULL)
+   : wxGraphicsContext(renderer, nullptr)
 {
     Init();
 
@@ -1726,7 +1726,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 #endif
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
-    SetNativeContext(NULL);
+    SetNativeContext(nullptr);
 }
 
 
@@ -1795,7 +1795,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if ( wxOSXLockFocus(m_view) )
         {
             m_cgContext = wxOSXGetContextFromCurrentContext();
-            wxASSERT_MSG( m_cgContext != NULL, wxT("Unable to retrieve drawing context from View"));
+            wxASSERT_MSG( m_cgContext != nullptr, wxT("Unable to retrieve drawing context from View"));
         }
         else
         {
@@ -1804,7 +1804,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
 #endif
 #if wxOSX_USE_IPHONE
         m_cgContext = wxOSXGetContextFromCurrentContext();
-        if ( m_cgContext == NULL )
+        if ( m_cgContext == nullptr )
         {
             m_invisible = true;
         }
@@ -1856,7 +1856,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
     }
     CheckInvariants();
 
-    return m_cgContext != NULL;
+    return m_cgContext != nullptr;
 }
 
 bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
@@ -2072,7 +2072,7 @@ void wxMacCoreGraphicsContext::BeginLayer(wxDouble opacity)
     CheckInvariants();
     CGContextSaveGState(m_cgContext);
     CGContextSetAlpha(m_cgContext, (CGFloat) opacity);
-    CGContextBeginTransparencyLayer(m_cgContext, 0);
+    CGContextBeginTransparencyLayer(m_cgContext, nullptr);
     CheckInvariants();
 }
 
@@ -2115,7 +2115,7 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
     }
 #else
     // allow usage as measuring context
-    // wxASSERT_MSG( m_cgContext != NULL, "Needs a valid context for clipping" );
+    // wxASSERT_MSG( m_cgContext != nullptr, "Needs a valid context for clipping" );
 #endif
     CheckInvariants();
 }
@@ -2254,7 +2254,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
         CGContextReplacePathWithStrokedPath(m_cgContext);
         CGContextClip( m_cgContext );
         // Apply the gradient's transform, if there is one.
-        if ( penData->GetMatrix() != NULL )
+        if ( penData->GetMatrix() != nullptr )
         {
             wxMacCoreGraphicsMatrixData* m = penData->GetMatrix();
             CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) m->GetNativeMatrix());
@@ -2346,7 +2346,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
         CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
         CGContextClip( m_cgContext );
         // Apply the gradient's transform, if there is one.
-        if ( brushData->GetMatrix() != NULL )
+        if ( brushData->GetMatrix() != nullptr )
         {
             wxMacCoreGraphicsMatrixData* m = brushData->GetMatrix();
             CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) m->GetNativeMatrix());
@@ -2370,7 +2370,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
 void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 {
     // we allow either setting or clearing but not replacing
-    wxASSERT( m_cgContext == NULL || cg == NULL );
+    wxASSERT( m_cgContext == nullptr || cg == nullptr );
 
     if ( m_cgContext )
     {
@@ -2391,7 +2391,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 
     // FIXME: This check is needed because currently we need to use a DC/GraphicsContext
     // in order to get font properties, like wxFont::GetPixelSize, but since we don't have
-    // a native window attached to use, I create a wxGraphicsContext with a NULL CGContextRef
+    // a native window attached to use, I create a wxGraphicsContext with a null CGContextRef
     // for this one operation.
 
     // When wxFont::GetPixelSize on Mac no longer needs a graphics context, this check
@@ -2548,7 +2548,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 
     // if we emulate boldness the stroke color is not taken from the current context
     // therefore we have to set it explicitly
-    if ( fontattr.GetValue(kCTStrokeWidthAttributeName) != NULL)
+    if ( fontattr.GetValue(kCTStrokeWidthAttributeName) != nullptr)
     {
         setColorsInLine = true;
         inlinefontattr = fontattr.CreateMutableCopy();
@@ -2574,7 +2574,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 
     if ( fref->GetUnderlined() ) {
         //AKT: draw horizontal line 1 pixel thick and with 1 pixel gap under baseline
-        CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
+        CGFloat width = CTLineGetTypographicBounds(line, nullptr, nullptr, nullptr);
 
         CGPoint points[] = { {0.0, -2.0},  {width, -2.0} };
 
@@ -2585,7 +2585,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     }
     if ( fref->GetStrikethrough() )
     {
-        CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
+        CGFloat width = CTLineGetTypographicBounds(line, nullptr, nullptr, nullptr);
         CGFloat height = CTFontGetXHeight( font ) * 0.6;
         CGPoint points[] = { {0.0, height},  {width, height} };
         CGContextSetStrokeColorWithColor(m_cgContext, col);
@@ -2689,7 +2689,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         {
             ++u16index;
         }
-        widths.push_back( CTLineGetOffsetForStringIndex( line, u16index, NULL ) );
+        widths.push_back( CTLineGetOffsetForStringIndex( line, u16index, nullptr ) );
     }
 
     CheckInvariants();
@@ -2825,7 +2825,7 @@ public:
         m_image = m_bitmap.ConvertToImage();
     }
 
-    virtual void Flush() wxOVERRIDE
+    virtual void Flush() override
     {
       wxMacCoreGraphicsContext::Flush();
       m_image = m_bitmap.ConvertToImage();
@@ -2856,77 +2856,77 @@ public :
 
     // Context
 
-    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) wxOVERRIDE;
-    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) override;
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) override;
 #if wxUSE_PRINTING_ARCHITECTURE
-    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) override;
 #endif
 
-    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) override;
 
-    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) override;
 
-    virtual wxGraphicsContext * CreateContext( wxWindow* window ) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( wxWindow* window ) override;
 
 #if wxUSE_IMAGE
-    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) override;
 #endif // wxUSE_IMAGE
 
-    virtual wxGraphicsContext * CreateMeasuringContext() wxOVERRIDE;
+    virtual wxGraphicsContext * CreateMeasuringContext() override;
 
     // Path
 
-    virtual wxGraphicsPath CreatePath() wxOVERRIDE;
+    virtual wxGraphicsPath CreatePath() override;
 
     // Matrix
 
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
+        wxDouble tx=0.0, wxDouble ty=0.0) override;
 
 
-    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE ;
+    virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) override ;
 
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) override ;
 
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix) override;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix) override;
 
    // sets the font
-    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) override ;
     virtual wxGraphicsFont CreateFont(double sizeInPixels,
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
-                                      const wxColour& col = *wxBLACK) wxOVERRIDE;
+                                      const wxColour& col = *wxBLACK) override;
     virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
                                            const wxRealPoint& dpi,
-                                           const wxColour& col) wxOVERRIDE;
+                                           const wxColour& col) override;
 
     // create a native bitmap representation
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE ;
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) override ;
 
 #if wxUSE_IMAGE
-    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) wxOVERRIDE;
-    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) wxOVERRIDE;
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) override;
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) override;
 #endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
-    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) wxOVERRIDE;
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) override;
 
     // create a native bitmap representation
-    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) wxOVERRIDE ;
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) override ;
 
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
+    virtual wxString GetName() const override;
+    virtual void GetVersion(int *major, int *minor, int *micro) const override;
 
 private :
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer);
@@ -2955,7 +2955,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
 #ifdef __WXMAC__
     return new wxMacCoreGraphicsContext(this, dc);
 #endif
-    return NULL;
+    return nullptr;
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -2964,7 +2964,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC&
 #ifdef __WXMAC__
     return new wxMacCoreGraphicsContext(this, dc);
 #endif
-    return NULL;
+    return nullptr;
 }
 #endif
 
@@ -2976,7 +2976,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( v
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeWindow( void * window )
 {
     wxUnusedVar(window);
-    return NULL;
+    return nullptr;
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( wxWindow* window )
@@ -3081,7 +3081,7 @@ wxImage wxMacCoreGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap&
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 {
-    if ( bitmap != NULL )
+    if ( bitmap != nullptr )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxMacCoreGraphicsBitmapData( this , (CGImageRef) bitmap, false ));
@@ -3216,16 +3216,16 @@ void wxMacReleaseCFDataConsumerCallback( void *info )
 
 CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRef data )
 {
-    if ( data == NULL )
-        return NULL;
+    if ( data == nullptr )
+        return nullptr;
 
     return CGDataProviderCreateWithCFData( data );
 }
 
 CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data )
 {
-    if ( data == NULL )
-        return NULL;
+    if ( data == nullptr )
+        return nullptr;
 
     return CGDataConsumerCreateWithCFData( data );
 }
@@ -3248,7 +3248,7 @@ CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffe
     if ( b->GetDataLen() == 0 )
     {
         delete b;
-        return NULL;
+        return nullptr;
     }
 
     return CGDataProviderCreateWithData( b , (const void *) b->GetData() , b->GetDataLen() ,

@@ -53,7 +53,7 @@ public:
     // ctor both creates and starts the thread
     TLSTestThread() : wxThread(wxTHREAD_JOINABLE) { Create(); Run(); }
 
-    virtual void *Entry() wxOVERRIDE
+    virtual void *Entry() override
     {
         gs_threadInt = 17;
 
@@ -65,7 +65,7 @@ public:
         wxASSERT( gs_threadData.name == std::string("worker") );
         wxASSERT( gs_threadData.number == 2 );
 
-        return NULL;
+        return nullptr;
     }
 };
 
@@ -112,7 +112,7 @@ void TLSTestCase::TestInt()
 
 void TLSTestCase::TestStruct()
 {
-    CPPUNIT_ASSERT_EQUAL( NULL, gs_threadData.name );
+    CPPUNIT_ASSERT_EQUAL( nullptr, gs_threadData.name );
     CPPUNIT_ASSERT_EQUAL( 0, gs_threadData.number );
 
     gs_threadData.name = "main";

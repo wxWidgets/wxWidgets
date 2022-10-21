@@ -39,41 +39,41 @@ public:
                 long style = wxCAL_SHOW_HOLIDAYS,
                 const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
-    virtual bool SetDate(const wxDateTime& date) wxOVERRIDE;
-    virtual wxDateTime GetDate() const wxOVERRIDE;
+    virtual bool SetDate(const wxDateTime& date) override;
+    virtual wxDateTime GetDate() const override;
 
     virtual bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
-                              const wxDateTime& upperdate = wxDefaultDateTime) wxOVERRIDE;
-    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const wxOVERRIDE;
+                              const wxDateTime& upperdate = wxDefaultDateTime) override;
+    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const override;
 
-    virtual bool EnableMonthChange(bool enable = true) wxOVERRIDE;
-    virtual void Mark(size_t day, bool mark) wxOVERRIDE;
+    virtual bool EnableMonthChange(bool enable = true) override;
+    virtual void Mark(size_t day, bool mark) override;
 
     // holidays colours
-    virtual void SetHoliday(size_t day) wxOVERRIDE;
-    virtual void SetHolidayColours(const wxColour& colFg, const wxColour& colBg) wxOVERRIDE;
-    virtual const wxColour& GetHolidayColourFg() const wxOVERRIDE { return m_colHolidayFg; }
-    virtual const wxColour& GetHolidayColourBg() const wxOVERRIDE { return m_colHolidayBg; }
+    virtual void SetHoliday(size_t day) override;
+    virtual void SetHolidayColours(const wxColour& colFg, const wxColour& colBg) override;
+    virtual const wxColour& GetHolidayColourFg() const override { return m_colHolidayFg; }
+    virtual const wxColour& GetHolidayColourBg() const override { return m_colHolidayBg; }
 
     // header colours
-    virtual void SetHeaderColours(const wxColour& colFg, const wxColour& colBg) wxOVERRIDE;
-    virtual const wxColour& GetHeaderColourFg() const wxOVERRIDE { return m_colHeaderFg; }
-    virtual const wxColour& GetHeaderColourBg() const wxOVERRIDE { return m_colHeaderBg; }
+    virtual void SetHeaderColours(const wxColour& colFg, const wxColour& colBg) override;
+    virtual const wxColour& GetHeaderColourFg() const override { return m_colHeaderFg; }
+    virtual const wxColour& GetHeaderColourBg() const override { return m_colHeaderBg; }
 
     // day attributes
-    virtual wxCalendarDateAttr *GetAttr(size_t day) const wxOVERRIDE;
-    virtual void SetAttr(size_t day, wxCalendarDateAttr *attr) wxOVERRIDE;
-    virtual void ResetAttr(size_t day) wxOVERRIDE { SetAttr(day, NULL); }
+    virtual wxCalendarDateAttr *GetAttr(size_t day) const override;
+    virtual void SetAttr(size_t day, wxCalendarDateAttr *attr) override;
+    virtual void ResetAttr(size_t day) override { SetAttr(day, nullptr); }
 
 
-    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long style) override;
 
     using wxCalendarCtrlBase::GenerateAllChangeEvents;
 
-    virtual QWidget *GetHandle() const wxOVERRIDE;
+    virtual QWidget *GetHandle() const override;
 
 protected:
-    virtual void RefreshHolidays() wxOVERRIDE;
+    virtual void RefreshHolidays() override;
 
 private:
     void Init();

@@ -36,7 +36,7 @@
 // ----------------------------------------------------------------------------
 
 // This is the C locale object, it is created on demand
-static wxXLocale *gs_cLocale = NULL;
+static wxXLocale *gs_cLocale = nullptr;
 
 wxXLocale wxNullXLocale;
 
@@ -52,8 +52,8 @@ wxXLocale wxNullXLocale;
 class wxXLocaleModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxDELETE(gs_cLocale); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxDELETE(gs_cLocale); }
 
     wxDECLARE_DYNAMIC_CLASS(wxXLocaleModule);
 };
@@ -74,9 +74,9 @@ wxXLocale& wxXLocale::GetCLocale()
 {
     if ( !gs_cLocale )
     {
-        // Notice that we need a separate variable because clang 3.1 refuses to
-        // cast nullptr (which is how NULL is defined in it) to anything.
-        static wxXLocaleCTag* const tag = NULL;
+        // Notice that we need a separate variable because wxXLocale has
+        // overloaded ctors from two different pointer types.
+        static wxXLocaleCTag* const tag = nullptr;
         gs_cLocale = new wxXLocale(tag);
     }
 
@@ -88,7 +88,7 @@ wxXLocale& wxXLocale::GetCLocale()
 #if wxUSE_INTL
 wxXLocale::wxXLocale(wxLanguage lang)
 {
-    m_locale = NULL;
+    m_locale = nullptr;
 
     const wxLanguageInfo * const info = wxUILocale::GetLanguageInfo(lang);
     if ( info )
@@ -98,7 +98,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
 }
 #endif // wxUSE_INTL
 
-#if wxCHECK_VISUALC_VERSION(8)
+#if defined(__VISUALC__)
 
 // ----------------------------------------------------------------------------
 // implementation using MSVC locale API
@@ -129,7 +129,7 @@ void wxXLocale::Init(const char *loc)
     if (!loc || *loc == '\0')
         return;
 
-    m_locale = newlocale(LC_ALL_MASK, loc, NULL);
+    m_locale = newlocale(LC_ALL_MASK, loc, nullptr);
     if (!m_locale)
     {
         // NOTE: here we do something similar to what wxSetLocaleTryUTF8() does
@@ -137,21 +137,21 @@ void wxXLocale::Init(const char *loc)
         wxString buf(loc);
         wxString buf2;
         buf2 = buf + wxS(".UTF-8");
-        m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+        m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), nullptr);
         if ( !m_locale )
         {
             buf2 = buf + wxS(".utf-8");
-            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), nullptr);
         }
         if ( !m_locale )
         {
             buf2 = buf + wxS(".UTF8");
-            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), nullptr);
         }
         if ( !m_locale )
         {
             buf2 = buf + wxS(".utf8");
-            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), nullptr);
         }
     }
 
@@ -286,7 +286,7 @@ class CNumericLocaleSetter
 {
 public:
     CNumericLocaleSetter()
-        : m_oldLocale(wxStrdupA(setlocale(LC_NUMERIC, NULL)))
+        : m_oldLocale(wxStrdupA(setlocale(LC_NUMERIC, nullptr)))
     {
         if ( !wxSetlocale(LC_NUMERIC, "C") )
         {

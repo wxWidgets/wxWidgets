@@ -243,7 +243,7 @@ wxTopLevelWindowX11::~wxTopLevelWindowX11()
     // If this is the last top-level window, exit.
     if ( wxTheApp && (wxTopLevelWindows.GetCount() == 0) )
     {
-        wxTheApp->SetTopWindow(NULL);
+        wxTheApp->SetTopWindow(nullptr);
 
         if (wxTheApp->GetExitOnFrameDelete())
         {

@@ -44,7 +44,7 @@
     #include <sstream>
 #endif
 
-#ifndef HAVE_STD_STRING_COMPARE
+#if !wxUSE_STL_BASED_WXSTRING
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
     #define wxStringMemcmp   memcmp
@@ -65,7 +65,7 @@ namespace wxPrivate
 // to make it safe to access it even before all global statics are initialized
 UntypedBufferData *GetUntypedNullData()
 {
-    static UntypedBufferData s_untypedNullData(NULL, 0);
+    static UntypedBufferData s_untypedNullData(nullptr, 0);
 
     return &s_untypedNullData;
 }
@@ -479,9 +479,9 @@ const wchar_t *wxString::AsWChar(const wxMBConv& conv) const
     const size_t lenMB = m_impl.length();
 
     // find out the size of the buffer needed
-    const size_t lenWC = conv.ToWChar(NULL, 0, strMB, lenMB);
+    const size_t lenWC = conv.ToWChar(nullptr, 0, strMB, lenMB);
     if ( lenWC == wxCONV_FAILED )
-        return NULL;
+        return nullptr;
 
     // keep the same buffer if the string size didn't change: this is not only
     // an optimization but also ensure that code which modifies string
@@ -496,14 +496,14 @@ const wchar_t *wxString::AsWChar(const wxMBConv& conv) const
     if ( !m_convertedToWChar.m_str || lenWC != m_convertedToWChar.m_len )
     {
         if ( !const_cast<wxString *>(this)->m_convertedToWChar.Extend(lenWC) )
-            return NULL;
+            return nullptr;
     }
 
     // finally do convert
     m_convertedToWChar.m_str[lenWC] = L'\0';
     if ( conv.ToWChar(m_convertedToWChar.m_str, lenWC,
                       strMB, lenMB) == wxCONV_FAILED )
-        return NULL;
+        return nullptr;
 
     return m_convertedToWChar.m_str;
 }
@@ -530,20 +530,20 @@ const char *wxString::AsChar(const wxMBConv& conv) const
     const size_t lenWC = m_impl.length();
 #endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
 
-    const size_t lenMB = conv.FromWChar(NULL, 0, strWC, lenWC);
+    const size_t lenMB = conv.FromWChar(nullptr, 0, strWC, lenWC);
     if ( lenMB == wxCONV_FAILED )
-        return NULL;
+        return nullptr;
 
     if ( !m_convertedToChar.m_str || lenMB != m_convertedToChar.m_len )
     {
         if ( !const_cast<wxString *>(this)->m_convertedToChar.Extend(lenMB) )
-            return NULL;
+            return nullptr;
     }
 
     m_convertedToChar.m_str[lenMB] = '\0';
     if ( conv.FromWChar(m_convertedToChar.m_str, lenMB,
                         strWC, lenWC) == wxCONV_FAILED )
-        return NULL;
+        return nullptr;
 
     return m_convertedToChar.m_str;
 }
@@ -686,9 +686,9 @@ bool wxString::IsSameAs(wxUniChar c, bool compareWithCase) const
                                : wxToupper(GetChar(0u)) == wxToupper(c));
 }
 
-#ifdef HAVE_STD_STRING_COMPARE
+#if wxUSE_STL_BASED_WXSTRING
 
-// NB: Comparison code (both if HAVE_STD_STRING_COMPARE and if not) works with
+// NB: Comparison code (both if wxUSE_STL_BASED_WXSTRING and if not) works with
 //     UTF-8 encoded strings too, thanks to UTF-8's design which allows us to
 //     sort strings in characters code point order by sorting the byte sequence
 //     in byte values order (i.e. what strcmp() and memcmp() do).
@@ -751,7 +751,7 @@ int wxString::compare(size_t nStart, size_t nLen,
     return m_impl.compare(pos, len, str.data, str.len);
 }
 
-#else // !HAVE_STD_STRING_COMPARE
+#else // !wxUSE_STL_BASED_WXSTRING
 
 static inline int wxDoCmp(const wxStringCharType* s1, size_t l1,
                           const wxStringCharType* s2, size_t l2)
@@ -860,7 +860,7 @@ int wxString::compare(size_t nStart, size_t nLen,
     return ::wxDoCmp(m_impl.data() + pos, len, str.data, str.len);
 }
 
-#endif // HAVE_STD_STRING_COMPARE/!HAVE_STD_STRING_COMPARE
+#endif // wxUSE_STL_BASED_WXSTRING/!wxUSE_STL_BASED_WXSTRING
 
 
 // ---------------------------------------------------------------------------
@@ -1025,22 +1025,22 @@ size_t wxString::find_first_of(const wxOtherCharType* sz, size_t nStart) const
 
 size_t wxString::find_first_of(const wxOtherCharType* sz, size_t nStart,
                                size_t n) const
-    { return find_first_of(STRCONV(sz, n, NULL), nStart, n); }
+    { return find_first_of(STRCONV(sz, n, nullptr), nStart, n); }
 size_t wxString::find_last_of(const wxOtherCharType* sz, size_t nStart) const
     { return find_last_of(STRCONV(sz), nStart); }
 size_t wxString::find_last_of(const wxOtherCharType* sz, size_t nStart,
                               size_t n) const
-    { return find_last_of(STRCONV(sz, n, NULL), nStart, n); }
+    { return find_last_of(STRCONV(sz, n, nullptr), nStart, n); }
 size_t wxString::find_first_not_of(const wxOtherCharType* sz, size_t nStart) const
     { return find_first_not_of(STRCONV(sz), nStart); }
 size_t wxString::find_first_not_of(const wxOtherCharType* sz, size_t nStart,
                                    size_t n) const
-    { return find_first_not_of(STRCONV(sz, n, NULL), nStart, n); }
+    { return find_first_not_of(STRCONV(sz, n, nullptr), nStart, n); }
 size_t wxString::find_last_not_of(const wxOtherCharType* sz, size_t nStart) const
     { return find_last_not_of(STRCONV(sz), nStart); }
 size_t wxString::find_last_not_of(const wxOtherCharType* sz, size_t nStart,
                                   size_t n) const
-    { return find_last_not_of(STRCONV(sz, n, NULL), nStart, n); }
+    { return find_last_not_of(STRCONV(sz, n, nullptr), nStart, n); }
 
 #undef wxOtherCharType
 #undef STRCONV
@@ -1236,7 +1236,7 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
 }
 
 // check that the string starts with prefix and return the rest of the string
-// in the provided pointer if it is not NULL, otherwise return false
+// in the provided pointer if it is not null, otherwise return false
 bool wxString::StartsWith(const wxString& prefix, wxString *rest) const
 {
     if ( compare(0, prefix.length(), prefix) != 0 )
@@ -1253,7 +1253,7 @@ bool wxString::StartsWith(const wxString& prefix, wxString *rest) const
 
 
 // check that the string ends with suffix and return the rest of it in the
-// provided pointer if it is not NULL, otherwise return false
+// provided pointer if it is not null, otherwise return false
 bool wxString::EndsWith(const wxString& suffix, wxString *rest) const
 {
     int start = length() - suffix.length();
@@ -1645,7 +1645,7 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
 // we can use wxStringCharType and wx_str() for maximum efficiency.
 
 #define WX_STRING_TO_X_TYPE_START                                           \
-    wxCHECK_MSG( pVal, false, wxT("NULL output pointer") );                  \
+    wxCHECK_MSG( pVal, false, wxT("null output pointer") );                  \
     errno = 0;                                                              \
     const wxStringCharType *start = wx_str();                               \
     wxStringCharType *end;
@@ -2193,8 +2193,8 @@ bool wxString::Matches(const wxString& mask) const
 #endif
 
   // the last location where '*' matched
-  const wxChar *pszLastStarInText = NULL;
-  const wxChar *pszLastStarInMask = NULL;
+  const wxChar *pszLastStarInText = nullptr;
+  const wxChar *pszLastStarInMask = nullptr;
 
 match:
   for ( ; *pszMask != wxT('\0'); pszMask++, pszTxt++ ) {
@@ -2226,7 +2226,7 @@ match:
           size_t uiLenMask;
           const wxChar *pEndMask = wxStrpbrk(pszMask, wxT("*?"));
 
-          if ( pEndMask != NULL ) {
+          if ( pEndMask != nullptr ) {
             // we have to match the string between two metachars
             uiLenMask = pEndMask - pszMask;
           }
@@ -2237,7 +2237,7 @@ match:
 
           wxString strToMatch(pszMask, uiLenMask);
           const wxChar* pMatch = wxStrstr(pszTxt, strToMatch);
-          if ( pMatch == NULL )
+          if ( pMatch == nullptr )
             return false;
 
           // -1 to compensate "++" in the loop
@@ -2262,7 +2262,7 @@ match:
     pszTxt = pszLastStarInText + 1;
     pszMask = pszLastStarInMask;
 
-    pszLastStarInText = NULL;
+    pszLastStarInText = nullptr;
 
     // don't bother resetting pszLastStarInMask, it's unnecessary
 

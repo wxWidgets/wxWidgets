@@ -25,10 +25,10 @@ public:
     wxHyperlinkCtrlXmlHandler();
 
     // Creates the control and returns a pointer to it.
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
 
     // Returns true if we know how to create a control for the given node.
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) override;
 };
 
 #endif // wxUSE_XRC && wxUSE_HYPERLINKCTRL

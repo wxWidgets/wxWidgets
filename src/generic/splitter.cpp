@@ -122,13 +122,9 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
   #endif
 #endif
     {
-        // FIXME: with this line the background is not erased at all under GTK1,
-        //        so temporary avoid it there
-#if !defined(__WXGTK__) || defined(__WXGTK20__)
         // don't erase the splitter background, it's pointless as we overwrite it
         // anyhow
         SetBackgroundStyle(wxBG_STYLE_PAINT);
-#endif
     }
 
     return true;
@@ -138,8 +134,8 @@ void wxSplitterWindow::Init()
 {
     m_splitMode = wxSPLIT_VERTICAL;
     m_permitUnsplitAlways = true;
-    m_windowOne = NULL;
-    m_windowTwo = NULL;
+    m_windowOne = nullptr;
+    m_windowTwo = nullptr;
     m_dragMode = wxSPLIT_DRAG_NONE;
     m_oldX = 0;
     m_oldY = 0;
@@ -322,7 +318,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 // We remove the first window from the view
                 wxWindow *removedWindow = m_windowOne;
                 m_windowOne = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = nullptr;
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
@@ -333,7 +329,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             {
                 // We remove the second window from the view
                 wxWindow *removedWindow = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = nullptr;
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
@@ -553,7 +549,7 @@ void wxSplitterWindow::SetSashGravity(double gravity)
 
 bool wxSplitterWindow::SashHitTest(int x, int y)
 {
-    if ( m_windowTwo == NULL || m_sashPosition == 0)
+    if ( m_windowTwo == nullptr || m_sashPosition == 0)
         return false; // No sash
 
     int z = m_splitMode == wxSPLIT_VERTICAL ? x : y;
@@ -822,7 +818,7 @@ void wxSplitterWindow::Initialize(wxWindow *window)
         window->Show();
 
     m_windowOne = window;
-    m_windowTwo = NULL;
+    m_windowTwo = nullptr;
     DoSetSashPosition(0);
 }
 
@@ -837,7 +833,7 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
         return false;
 
     wxCHECK_MSG( window1 && window2, false,
-                 wxT("cannot split with NULL window(s)") );
+                 wxT("cannot split with null window(s)") );
 
     wxCHECK_MSG( window1->GetParent() == this && window2->GetParent() == this, false,
                   wxT("windows in the splitter should have it as parent!") );
@@ -882,16 +878,16 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         return false;
 
     wxWindow *win;
-    if ( toRemove == NULL || toRemove == m_windowTwo)
+    if ( toRemove == nullptr || toRemove == m_windowTwo)
     {
         win = m_windowTwo ;
-        m_windowTwo = NULL;
+        m_windowTwo = nullptr;
     }
     else if ( toRemove == m_windowOne )
     {
         win = m_windowOne ;
         m_windowOne = m_windowTwo;
-        m_windowTwo = NULL;
+        m_windowTwo = nullptr;
     }
     else
     {

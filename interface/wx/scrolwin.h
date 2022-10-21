@@ -114,8 +114,6 @@ enum wxScrollbarVisibility
     @style{wxALWAYS_SHOW_SB}
            Since wxWidgets 2.9.5, specifying this style makes the window always
            show its scrollbars, even if they are not used. See ShowScrollbars().
-    @style{wxRETAINED}
-           Uses a backing pixmap to speed refreshes. Motif only.
     @endStyleTable
 
 
@@ -423,11 +421,6 @@ public:
         @see SetScrollbars(), GetScrollPixelsPerUnit()
     */
     void GetVirtualSize(int* x, int* y) const;
-
-    /**
-        Motif only: @true if the window has a backing bitmap.
-    */
-    bool IsRetained() const;
 
     /**
         Called by the default paint event handler to allow the application to

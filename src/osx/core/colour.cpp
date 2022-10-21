@@ -32,16 +32,16 @@ public:
 
     wxCGColorRefData(const wxCGColorRefData& other);
 
-    virtual bool IsOk() const  wxOVERRIDE{ return m_cgColour != NULL; }
+    virtual bool IsOk() const  override{ return m_cgColour != nullptr; }
 
-    virtual CGFloat Red() const wxOVERRIDE { return m_red; }
-    virtual CGFloat Green() const wxOVERRIDE { return m_green; }
-    virtual CGFloat Blue() const wxOVERRIDE { return m_blue; }
-    virtual CGFloat Alpha() const wxOVERRIDE { return m_alpha; }
+    virtual CGFloat Red() const override { return m_red; }
+    virtual CGFloat Green() const override { return m_green; }
+    virtual CGFloat Blue() const override { return m_blue; }
+    virtual CGFloat Alpha() const override { return m_alpha; }
 
-    CGColorRef GetCGColor() const wxOVERRIDE { return m_cgColour; }
+    CGColorRef GetCGColor() const override { return m_cgColour; }
 
-    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxCGColorRefData(*this); }
+    virtual wxColourRefData* Clone() const override { return new wxCGColorRefData(*this); }
 
 private:
     void Init(CGFloat components[4]);
@@ -94,7 +94,7 @@ void wxCGColorRefData::Init(CGFloat components[4])
 
 wxCGColorRefData::wxCGColorRefData(CGColorRef col)
 {
-    wxASSERT_MSG(col != NULL, "Invalid CoreGraphics Color");
+    wxASSERT_MSG(col != nullptr, "Invalid CoreGraphics Color");
     m_cgColour.reset(col);
 
     wxCFRef<CGColorRef> rgbacol;
@@ -120,7 +120,7 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     {
         if ( WX_IS_MACOS_OR_IOS_AVAILABLE(10, 11, 9, 0) )
         {
-            rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
+            rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, nullptr);
             noComp = CGColorGetNumberOfComponents(rgbacol);
             components = CGColorGetComponents(rgbacol);
         }
@@ -155,7 +155,7 @@ wxColour::wxColour(const RGBColor& col)
 
 wxColour::wxColour(CGColorRef col)
 {
-    wxASSERT_MSG(col != NULL, "Invalid CoreGraphics Color");
+    wxASSERT_MSG(col != nullptr, "Invalid CoreGraphics Color");
 
     m_refData = new wxCGColorRefData(col);
 }
@@ -208,7 +208,7 @@ void wxColour::GetRGBColor(RGBColor* col) const
 
 CGColorRef wxColour::GetCGColor() const
 {
-    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+    wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
     return M_COLDATA->GetCGColor();
 }
@@ -216,14 +216,14 @@ CGColorRef wxColour::GetCGColor() const
 #if wxOSX_USE_COCOA
 WX_NSColor wxColour::OSXGetNSColor() const
 {
-    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+    wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
     return M_COLDATA->GetNSColor();
 }
 
 WX_NSImage wxColour::OSXGetNSPatternImage() const
 {
-    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+    wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
     return M_COLDATA->GetNSPatternImage();
 }

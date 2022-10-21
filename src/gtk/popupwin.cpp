@@ -146,8 +146,8 @@ void wxPopupWindow::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(
 
 void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
-    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid dialog") );
+    wxASSERT_MSG( (m_widget != nullptr), wxT("invalid dialog") );
+    wxASSERT_MSG( (m_wxwindow != nullptr), wxT("invalid dialog") );
 
     int old_x = m_x;
     int old_y = m_y;

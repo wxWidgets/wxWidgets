@@ -68,13 +68,13 @@ struct wxObjectAllocatorAndCreator_Dummy : public wxObjectAllocatorAndCreator
 #define wxCONSTRUCTOR_0(klass) \
     wxObjectAllocatorAndCreator_0<klass> constructor##klass; \
     wxObjectAllocatorAndCreator* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { NULL }; \
+    const wxChar *klass::ms_constructorProperties[] = { nullptr }; \
     const int klass::ms_constructorPropertiesCount = 0;
 
 #define wxCONSTRUCTOR_DUMMY(klass) \
     wxObjectAllocatorAndCreator_Dummy constructor##klass; \
     wxObjectAllocatorAndCreator* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { NULL }; \
+    const wxChar *klass::ms_constructorProperties[] = { nullptr }; \
     const int klass::ms_constructorPropertiesCount = 0;
 
 // direct constructor version
@@ -85,14 +85,14 @@ struct wxDirectConstructorBridge_0 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class( );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
 #define wxDIRECT_CONSTRUCTOR_0(klass) \
     wxDirectConstructorBridge_0<klass> constructor##klass; \
     wxObjectAllocatorAndCreator* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { NULL }; \
+    const wxChar *klass::ms_constructorProperties[] = { nullptr }; \
     const int klass::ms_constructorPropertiesCount = 0;
 
 
@@ -105,7 +105,7 @@ struct wxObjectAllocatorAndCreator_1 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr))
             );
     }
 };
@@ -124,9 +124,9 @@ struct wxDirectConstructorBridge_1 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -147,8 +147,8 @@ struct wxObjectAllocatorAndCreator_2 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr))
             );
     }
 };
@@ -168,10 +168,10 @@ struct wxDirectConstructorBridge_2 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -192,9 +192,9 @@ struct wxObjectAllocatorAndCreator_3 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr))
             );
     }
 };
@@ -214,11 +214,11 @@ struct wxDirectConstructorBridge_3 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -239,10 +239,10 @@ struct wxObjectAllocatorAndCreator_4 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr))
             );
     }
 };
@@ -263,12 +263,12 @@ struct wxDirectConstructorBridge_4 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -290,11 +290,11 @@ struct wxObjectAllocatorAndCreator_5 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr))
             );
     }
 };
@@ -315,13 +315,13 @@ struct wxDirectConstructorBridge_5 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -343,12 +343,12 @@ struct wxObjectAllocatorAndCreator_6 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL)),
-            (args[5]).As(static_cast<T5*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr)),
+            (args[5]).As(static_cast<T5*>(nullptr))
             );
     }
 };
@@ -369,14 +369,14 @@ struct wxDirectConstructorBridge_6 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL)),
-            (args[5]).As(static_cast<T5*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr)),
+            (args[5]).As(static_cast<T5*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -398,13 +398,13 @@ struct wxObjectAllocatorAndCreator_7 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL)),
-            (args[5]).As(static_cast<T5*>(NULL)),
-            (args[6]).As(static_cast<T6*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr)),
+            (args[5]).As(static_cast<T5*>(nullptr)),
+            (args[6]).As(static_cast<T6*>(nullptr))
             );
     }
 };
@@ -425,15 +425,15 @@ struct wxDirectConstructorBridge_7 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL)),
-            (args[5]).As(static_cast<T5*>(NULL)),
-            (args[6]).As(static_cast<T6*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr)),
+            (args[5]).As(static_cast<T5*>(nullptr)),
+            (args[6]).As(static_cast<T6*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 
@@ -456,14 +456,14 @@ struct wxObjectAllocatorAndCreator_8 : public wxObjectAllocatorAndCreator
     {
         Class *obj = wx_dynamic_cast(Class*, o);
         return obj->Create(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL)),
-            (args[5]).As(static_cast<T5*>(NULL)),
-            (args[6]).As(static_cast<T6*>(NULL)),
-            (args[7]).As(static_cast<T7*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr)),
+            (args[5]).As(static_cast<T5*>(nullptr)),
+            (args[6]).As(static_cast<T6*>(nullptr)),
+            (args[7]).As(static_cast<T7*>(nullptr))
             );
     }
 };
@@ -485,16 +485,16 @@ struct wxDirectConstructorBridge_8 : public wxObjectAllocator
     bool Create(wxObject * &o, wxAny *args)
     {
         o = new Class(
-            (args[0]).As(static_cast<T0*>(NULL)),
-            (args[1]).As(static_cast<T1*>(NULL)),
-            (args[2]).As(static_cast<T2*>(NULL)),
-            (args[3]).As(static_cast<T3*>(NULL)),
-            (args[4]).As(static_cast<T4*>(NULL)),
-            (args[5]).As(static_cast<T5*>(NULL)),
-            (args[6]).As(static_cast<T6*>(NULL)),
-            (args[7]).As(static_cast<T7*>(NULL))
+            (args[0]).As(static_cast<T0*>(nullptr)),
+            (args[1]).As(static_cast<T1*>(nullptr)),
+            (args[2]).As(static_cast<T2*>(nullptr)),
+            (args[3]).As(static_cast<T3*>(nullptr)),
+            (args[4]).As(static_cast<T4*>(nullptr)),
+            (args[5]).As(static_cast<T5*>(nullptr)),
+            (args[6]).As(static_cast<T6*>(nullptr)),
+            (args[7]).As(static_cast<T7*>(nullptr))
             );
-        return o != NULL;
+        return o != nullptr;
     }
 };
 

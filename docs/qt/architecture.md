@@ -59,7 +59,7 @@ The approach chosen was to use templates to help inherit QObject's (QWidget), pr
 
 ### Delete later
 
-Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reset to NULL when the wx counterpart is marked to deletion).
+Both templates also have some safety checks to avoid invalid spurious access to deleted wx objects (using a special pointer to the wx instance stored in the Qt object, that is reset to @NULL when the wx counterpart is marked to deletion).
 
 This is due that in some situations, Qt object could still be referenced in the Qt event queue, so it cannot be removed immediately.
 

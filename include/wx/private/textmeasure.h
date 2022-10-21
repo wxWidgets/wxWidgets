@@ -21,9 +21,9 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class wxTextMeasureBase
 {
 public:
-    // The first ctor argument must be non-NULL, i.e. each object of this class
+    // The first ctor argument must be non-null, i.e. each object of this class
     // is associated with either a valid wxDC or a valid wxWindow. The font can
-    // be NULL to use the current DC/window font or can be specified explicitly.
+    // be null to use the current DC/window font or can be specified explicitly.
     wxTextMeasureBase(const wxDC *dc, const wxFont *theFont);
     wxTextMeasureBase(const wxWindow *win, const wxFont *theFont);
 
@@ -36,14 +36,14 @@ public:
     void GetTextExtent(const wxString& string,
                        wxCoord *width,
                        wxCoord *height,
-                       wxCoord *descent = NULL,
-                       wxCoord *externalLeading = NULL);
+                       wxCoord *descent = nullptr,
+                       wxCoord *externalLeading = nullptr);
 
     // The same for a multiline (with '\n') string.
     void GetMultiLineTextExtent(const wxString& text,
                                 wxCoord *width,
                                 wxCoord *height,
-                                wxCoord *heightOneLine = NULL);
+                                wxCoord *heightOneLine = nullptr);
 
     // Find the dimensions of the largest string.
     wxSize GetLargestStringExtent(size_t n, const wxString* strings);
@@ -102,13 +102,13 @@ protected:
     // The main function of this class, to be implemented in platform-specific
     // way used by all our public methods.
     //
-    // The width and height pointers here are never NULL and the input string
+    // The width and height pointers here are never null and the input string
     // is not empty.
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *width,
                                  wxCoord *height,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL) = 0;
+                                 wxCoord *descent = nullptr,
+                                 wxCoord *externalLeading = nullptr) = 0;
 
     // The real implementation of GetPartialTextExtents().
     //
@@ -125,8 +125,8 @@ protected:
     void CallGetTextExtent(const wxString& string,
                            wxCoord *width,
                            wxCoord *height,
-                           wxCoord *descent = NULL,
-                           wxCoord *externalLeading = NULL);
+                           wxCoord *descent = nullptr,
+                           wxCoord *externalLeading = nullptr);
 
     // Get line height: used when the line is empty because CallGetTextExtent()
     // would just return (0, 0) in this case.
@@ -137,7 +137,7 @@ protected:
     wxFont GetFont() const;
 
 
-    // Exactly one of m_dc and m_win is non-NULL for any given object of this
+    // Exactly one of m_dc and m_win is non-null for any given object of this
     // class.
     const wxDC* const m_dc;
     const wxWindow* const m_win;
@@ -152,14 +152,14 @@ protected:
     // implementation of text measuring itself.
     bool m_useDCImpl;
 
-    // This one can be NULL or not.
+    // This one can be null or not.
     const wxFont* const m_font;
 
     wxDECLARE_NO_COPY_CLASS(wxTextMeasureBase);
 };
 
 // Include the platform dependent class declaration, if any.
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #include "wx/gtk/private/textmeasure.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/private/textmeasure.h"

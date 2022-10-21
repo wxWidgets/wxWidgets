@@ -132,56 +132,6 @@ if(NOT MSVC)
     endif()
 endif()
 
-wx_check_cxx_source_compiles("
-    std::string foo, bar;
-    foo.compare(bar);
-    foo.compare(1, 1, bar);
-    foo.compare(1, 1, bar, 1, 1);
-    foo.compare(\"\");
-    foo.compare(1, 1, \"\");
-    foo.compare(1, 1, \"\", 2);"
-    HAVE_STD_STRING_COMPARE
-    string
-    )
-
-wx_check_cxx_source_compiles(
-    "std::wstring s;"
-    HAVE_STD_WSTRING
-    string
-    )
-
-wx_check_cxx_source_compiles("
-    std::hash_map<double*, char*, std::hash<double*>, std::equal_to<double*> > test1;
-    std::hash_set<char*, std::hash<char*>, std::equal_to<char*> > test2;"
-    HAVE_HASH_MAP
-    hash_map hash_set
-    )
-set(HAVE_STD_HASH_MAP ${HAVE_HASH_MAP})
-
-wx_check_cxx_source_compiles("
-    __gnu_cxx::hash_map<double*, char*, __gnu_cxx::hash<double*>, std::equal_to<double*> > test1;
-    __gnu_cxx::hash_set<char*, __gnu_cxx::hash<char*>, std::equal_to<char*> > test2;"
-    HAVE_EXT_HASH_MAP
-    ext/hash_map ext/hash_set
-    )
-set(HAVE_GNU_CXX_HASH_MAP ${HAVE_EXT_HASH_MAP})
-
-wx_check_cxx_source_compiles("
-    std::unordered_map<double*, char*> test1;
-    std::unordered_set<char*> test2;"
-    HAVE_STD_UNORDERED_MAP
-    unordered_map unordered_set
-    )
-set(HAVE_STD_UNORDERED_SET ${HAVE_STD_UNORDERED_MAP})
-
-wx_check_cxx_source_compiles("
-    std::tr1::unordered_map<double*, char*> test1;
-    std::tr1::unordered_set<char*> test2;"
-    HAVE_TR1_UNORDERED_MAP
-    tr1/unordered_map tr1/unordered_set
-    )
-set(HAVE_TR1_UNORDERED_SET ${HAVE_TR1_UNORDERED_MAP})
-
 # Check for availability of GCC's atomic operations builtins.
 wx_check_c_source_compiles("
     unsigned int value=0;
@@ -597,10 +547,6 @@ endif()
 check_cxx_symbol_exists(round math.h HAVE_ROUND)
 
 # Check includes
-if(NOT MSVC_VERSION LESS 1600)
-    check_include_file_cxx(tr1/type_traits HAVE_TR1_TYPE_TRAITS)
-    check_include_file_cxx(type_traits HAVE_TYPE_TRAITS)
-endif()
 check_include_file(fcntl.h HAVE_FCNTL_H)
 check_include_file(langinfo.h HAVE_LANGINFO_H)
 check_include_file(sched.h HAVE_SCHED_H)

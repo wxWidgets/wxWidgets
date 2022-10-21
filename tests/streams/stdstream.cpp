@@ -123,7 +123,7 @@ void StdStreamTestCase::InputBuffer_pubsetbuf()
     wxStdInputStreamBuffer buffer(stream);
     char testBuffer[TEST_SIZE];
 
-    CPPUNIT_ASSERT(buffer.pubsetbuf(testBuffer, TEST_SIZE) == NULL);
+    CPPUNIT_ASSERT(buffer.pubsetbuf(testBuffer, TEST_SIZE) == nullptr);
 }
 
 void StdStreamTestCase::InputBuffer_pubseekoff()
@@ -328,7 +328,7 @@ void StdStreamTestCase::OutputBuffer_pubsetbuf()
     wxStdOutputStreamBuffer buffer(stream);
     char testBuffer[TEST_SIZE];
 
-    CPPUNIT_ASSERT(buffer.pubsetbuf(testBuffer, TEST_SIZE) == NULL);
+    CPPUNIT_ASSERT(buffer.pubsetbuf(testBuffer, TEST_SIZE) == nullptr);
 }
 
 void StdStreamTestCase::OutputBuffer_pubseekoff()

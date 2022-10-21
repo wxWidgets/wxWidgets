@@ -42,9 +42,9 @@ public:
 #endif
 
 protected:
-    virtual void FreeData() wxOVERRIDE;
-    virtual bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour) wxOVERRIDE;
-    virtual bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void FreeData() override;
+    virtual bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour) override;
+    virtual bool InitFromMonoBitmap(const wxBitmap& bitmap) override;
 
 private:
 #ifdef __WXGTK3__
@@ -81,38 +81,38 @@ public:
     explicit wxBitmap(const wxCursor& cursor);
     virtual ~wxBitmap();
 
-    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
-    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) override;
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 #ifdef __WXGTK3__
     bool Create(int width, int height, const wxDC& dc);
-    virtual void SetScaleFactor(double scale) wxOVERRIDE;
-    virtual double GetScaleFactor() const wxOVERRIDE;
+    virtual void SetScaleFactor(double scale) override;
+    virtual double GetScaleFactor() const override;
 #else
     bool Create(int width, int height, const wxDC& WXUNUSED(dc))
         { return Create(width,height); }
 #endif
 
-    virtual int GetHeight() const wxOVERRIDE;
-    virtual int GetWidth() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
+    virtual int GetHeight() const override;
+    virtual int GetWidth() const override;
+    virtual int GetDepth() const override;
 
 #if wxUSE_IMAGE
-    wxImage ConvertToImage() const wxOVERRIDE;
+    wxImage ConvertToImage() const override;
 #endif // wxUSE_IMAGE
 
-    wxMask *GetMask() const wxOVERRIDE;
-    void SetMask( wxMask *mask ) wxOVERRIDE;
+    wxMask *GetMask() const override;
+    void SetMask( wxMask *mask ) override;
 
-    wxBitmap GetSubBitmap( const wxRect& rect ) const wxOVERRIDE;
+    wxBitmap GetSubBitmap( const wxRect& rect ) const override;
 
     bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const wxOVERRIDE;
-    bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
+                          const wxPalette *palette = nullptr) const override;
+    bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) override;
 
 #if wxUSE_PALETTE
-    wxPalette *GetPalette() const wxOVERRIDE;
-    void SetPalette(const wxPalette& palette) wxOVERRIDE;
+    wxPalette *GetPalette() const override;
+    void SetPalette(const wxPalette& palette) override;
     wxPalette *GetColourMap() const { return GetPalette(); }
 #endif // wxUSE_PALETTE
 
@@ -122,15 +122,15 @@ public:
     // --------------
 
 #if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED(void SetHeight( int height ) wxOVERRIDE);
-    wxDEPRECATED(void SetWidth( int width ) wxOVERRIDE);
-    wxDEPRECATED(void SetDepth( int depth ) wxOVERRIDE);
+    wxDEPRECATED(void SetHeight( int height ) override);
+    wxDEPRECATED(void SetWidth( int width ) override);
+    wxDEPRECATED(void SetDepth( int depth ) override);
 #endif
 
 #ifdef __WXGTK3__
     cairo_t* CairoCreate() const;
-    void Draw(cairo_t* cr, int x, int y, bool useMask = true, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
-    void SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg = NULL, const wxColour* bg = NULL) const;
+    void Draw(cairo_t* cr, int x, int y, bool useMask = true, const wxColour* fg = nullptr, const wxColour* bg = nullptr) const;
+    void SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg = nullptr, const wxColour* bg = nullptr) const;
     wxBitmap CreateDisabled() const;
 #else
     GdkPixmap *GetPixmap() const;
@@ -145,7 +145,7 @@ public:
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
 
-    bool HasAlpha() const wxOVERRIDE;
+    bool HasAlpha() const override;
 
 protected:
 #if wxUSE_IMAGE
@@ -155,11 +155,11 @@ protected:
 #endif
 #endif // wxUSE_IMAGE
 
-    virtual wxGDIRefData* CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const wxOVERRIDE;
+    virtual wxGDIRefData* CreateGDIRefData() const override;
+    virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const override;
 
 #ifdef __WXGTK3__
-    virtual bool DoCreate(const wxSize& sz, double scale, int depth) wxOVERRIDE;
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) override;
 #endif
 
 private:

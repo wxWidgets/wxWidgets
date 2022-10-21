@@ -83,8 +83,8 @@ class wxTimerHiddenWindowModule : public wxModule
 {
 public:
     // module init/finalize
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
     // get the hidden window (creates on demand)
     static HWND GetHWND();
@@ -123,7 +123,7 @@ bool wxMSWTimerImpl::Start(int milliseconds, bool oneShot)
               wxTimerHiddenWindowModule::GetHWND(),  // window for WM_TIMER
               m_id,                                  // timer ID to create
               (UINT)m_milli,                         // delay
-              NULL                                   // timer proc (unused)
+              nullptr                                // timer proc (unused)
              );
 
     if ( ret == 0 )
@@ -183,13 +183,13 @@ wxTimerWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 // ----------------------------------------------------------------------------
 
 
-HWND wxTimerHiddenWindowModule::ms_hwnd = NULL;
+HWND wxTimerHiddenWindowModule::ms_hwnd = nullptr;
 
-const wxChar *wxTimerHiddenWindowModule::ms_className = NULL;
+const wxChar *wxTimerHiddenWindowModule::ms_className = nullptr;
 
 bool wxTimerHiddenWindowModule::OnInit()
 {
-    // do not initialize ms_hwnd to ms_className to NULL here: it may happen
+    // do not initialize ms_hwnd to ms_className to nullptr here: it may happen
     // that our GetHWND() is called before the modules are initialized if a
     // timer is created from wxApp-derived class ctor and in this case we
     // shouldn't overwrite it
@@ -206,7 +206,7 @@ void wxTimerHiddenWindowModule::OnExit()
             wxLogLastError(wxT("DestroyWindow(wxTimerHiddenWindow)"));
         }
 
-        ms_hwnd = NULL;
+        ms_hwnd = nullptr;
     }
 
     if ( ms_className )
@@ -216,7 +216,7 @@ void wxTimerHiddenWindowModule::OnExit()
             wxLogLastError(wxT("UnregisterClass(\"wxTimerHiddenWindow\")"));
         }
 
-        ms_className = NULL;
+        ms_className = nullptr;
     }
 }
 

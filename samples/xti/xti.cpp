@@ -154,7 +154,7 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyFrame::MyFrame(const wxString& title)
-    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
+    : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -212,7 +212,7 @@ MyFrame::MyFrame(const wxString& title)
 //      MyXTIFrame()
 //      {
 //          Init();
-//          m_button = NULL;
+//          m_button = nullptr;
 //      }
 //
 //      bool Create(wxWindow *parent,
@@ -313,16 +313,16 @@ void RegisterFrameRTTI()
     // is not defined anywhere in this program
     wxDynamicClassInfo *dyninfo =
         wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass("MyXTIFrame"));
-    if ( dyninfo == NULL )
+    if ( dyninfo == nullptr )
     {
         dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
                             wxT("MyXTIFrame"),
                             CLASSINFO(wxFrame) );
 
         // this class has a property named "Button" and the relative handler:
-        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) NULL));
+        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) nullptr));
         dyninfo->AddHandler(wxT("ButtonClickHandler"),
-            NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
+            nullptr /* no instance of the handler method */, CLASSINFO( wxEvent ) );
     }
 }
 
@@ -338,7 +338,7 @@ wxDynamicObject* CreateFrameRTTI()
     wxASSERT( info );
     wxDynamicObject* frameWrapper =
         wx_dynamic_cast(wxDynamicObject*, info->CreateObject() );
-    Params[0] = wxAny((wxWindow*)(NULL));
+    Params[0] = wxAny((wxWindow*)(nullptr));
     Params[1] = wxAny(wxWindowID(baseID++));
     Params[2] = wxAny(wxString("This is a frame created from XTI"));
     Params[3] = wxAny(wxPoint(-1,-1));
@@ -550,11 +550,11 @@ wxDynamicObject* LoadFrameRTTI(const wxString &fileName)
     // load the XML document
     wxXmlDocument xml;
     if (!xml.Load(fileName))
-        return NULL;
+        return nullptr;
 
     wxXmlNode *root = xml.GetRoot();
     if (root->GetName() != "TestXTI")
-        return NULL;
+        return nullptr;
 
     // now depersist the wxFrame we saved into it using wxObjectRuntimeReaderCallback
     wxObjectRuntimeReaderCallback Callbacks;

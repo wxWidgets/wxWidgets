@@ -36,11 +36,11 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win,
-                const wxGLContext *other = NULL,
-                const wxGLContextAttrs *ctxAttrs = NULL);
+                const wxGLContext *other = nullptr,
+                const wxGLContextAttrs *ctxAttrs = nullptr);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
 private:
     EGLContext m_glContext;
@@ -73,7 +73,7 @@ public:
     // implement wxGLCanvasBase methods
     // --------------------------------
 
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
 
     // X11-specific methods
@@ -88,7 +88,7 @@ public:
 
     // return true only if the window is realized: OpenGL context can't be
     // created until we are
-    virtual bool IsShownOnScreen() const wxOVERRIDE;
+    virtual bool IsShownOnScreen() const override;
 
 
     // implementation only from now on
@@ -105,7 +105,7 @@ public:
     // not found
     static bool InitDefaultConfig(const int *attribList);
 
-    // get the default EGL Config (may be NULL, shouldn't be freed by caller)
+    // get the default EGL Config (may be null, shouldn't be freed by caller)
     static EGLConfig *GetDefaultConfig() { return ms_glEGLConfig; }
 
     // free the global GL visual, called by wxGLApp
@@ -113,7 +113,7 @@ public:
 
     // initializes EGLConfig
     //
-    // returns NULL if EGLConfig couldn't be initialized, otherwise caller
+    // returns nullptr if EGLConfig couldn't be initialized, otherwise caller
     // is responsible for freeing the pointer
     static EGLConfig *InitConfig(const wxGLAttributes& dispAttrs);
 
@@ -153,7 +153,7 @@ public:
     wxGLApp() : wxGLAppBase() { }
 
     // implement wxGLAppBase method
-    virtual bool InitGLVisual(const int *attribList) wxOVERRIDE
+    virtual bool InitGLVisual(const int *attribList) override
     {
         return wxGLCanvasEGL::InitDefaultConfig(attribList);
     }
@@ -161,13 +161,13 @@ public:
     // This method is not currently used by the library itself, but remains for
     // backwards compatibility and also because wxGTK has it we could start
     // using it for the same purpose in wxX11 too some day.
-    virtual void* GetXVisualInfo() wxOVERRIDE
+    virtual void* GetXVisualInfo() override
     {
         return wxGLCanvasEGL::GetDefaultConfig();
     }
 
     // and override this wxApp method to clean up
-    virtual int OnExit() wxOVERRIDE
+    virtual int OnExit() override
     {
         wxGLCanvasEGL::FreeDefaultConfig();
 

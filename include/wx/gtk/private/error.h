@@ -20,7 +20,7 @@
 class wxGtkError
 {
 public:
-    wxGtkError() { m_error = NULL; }
+    wxGtkError() { m_error = nullptr; }
     explicit wxGtkError(GError* error) { m_error = error; }
     ~wxGtkError() { if ( m_error ) g_error_free(m_error); }
 
@@ -35,7 +35,7 @@ public:
     // Check if any error actually occurred.
     operator bool() const
     {
-        return m_error != NULL;
+        return m_error != nullptr;
     }
 
     operator GError*() const

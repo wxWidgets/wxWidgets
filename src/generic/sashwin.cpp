@@ -75,7 +75,7 @@ void wxSashWindow::Init()
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
     m_mouseCaptured = false;
-    m_currentCursor = NULL;
+    m_currentCursor = nullptr;
 
     // Eventually, we'll respond to colour change messages
     InitColours();
@@ -310,7 +310,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         else
         {
             SetCursor(wxNullCursor);
-            m_currentCursor = NULL;
+            m_currentCursor = nullptr;
         }
     }
     else if ( event.Dragging() &&

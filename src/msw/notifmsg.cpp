@@ -53,43 +53,43 @@ public:
     wxBalloonNotifMsgImpl(wxNotificationMessageBase* notification) :
         wxNotificationMessageImpl(notification),
         m_flags(wxICON_INFORMATION),
-        m_parent(NULL)
+        m_parent(nullptr)
     {
 
     }
 
     virtual ~wxBalloonNotifMsgImpl();
 
-    virtual bool Show(int timeout) wxOVERRIDE;
+    virtual bool Show(int timeout) override;
 
-    virtual bool Close() wxOVERRIDE;
+    virtual bool Close() override;
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE
+    virtual void SetTitle(const wxString& title) override
     {
         m_title = title;
     }
 
-    virtual void SetMessage(const wxString& message) wxOVERRIDE
+    virtual void SetMessage(const wxString& message) override
     {
         m_message = message;
     }
 
-    virtual void SetParent(wxWindow *parent) wxOVERRIDE
+    virtual void SetParent(wxWindow *parent) override
     {
         m_parent = parent;
     }
 
-    virtual void SetFlags(int flags) wxOVERRIDE
+    virtual void SetFlags(int flags) override
     {
         m_flags = flags;
     }
 
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
+    virtual void SetIcon(const wxIcon& icon) override
     {
         m_icon = icon;
     }
 
-    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label)) wxOVERRIDE
+    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label)) override
     {
         // Actions are not supported in balloon notifications
         return false;
@@ -119,7 +119,7 @@ public:
         if ( ms_refCountIcon > 0 && !--ms_refCountIcon )
         {
             delete ms_icon;
-            ms_icon = NULL;
+            ms_icon = nullptr;
         }
     }
 
@@ -167,7 +167,7 @@ private:
 // wxBalloonNotifMsgImpl
 // ----------------------------------------------------------------------------
 
-wxTaskBarIcon *wxBalloonNotifMsgImpl::ms_icon = NULL;
+wxTaskBarIcon *wxBalloonNotifMsgImpl::ms_icon = nullptr;
 int wxBalloonNotifMsgImpl::ms_refCountIcon = 0;
 
 /* static */
@@ -276,7 +276,7 @@ wxBalloonNotifMsgImpl::Show(int timeout)
         // disappearance from the system if we failed to install it in the
         // first place.
         delete ms_icon;
-        ms_icon = NULL;
+        ms_icon = nullptr;
         ms_refCountIcon = 0;
 
         return false;

@@ -73,11 +73,11 @@ class RadioWidgetsPage : public WidgetsPage
 public:
     RadioWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_radio; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateRadio(); }
+    virtual wxWindow *GetWidget() const override { return m_radio; }
+    virtual void RecreateWidget() override { CreateRadio(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -178,16 +178,16 @@ RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                   : WidgetsPage(book, imaglist, radio_xpm)
 {
     // init everything
-    m_chkSpecifyRows = (wxCheckBox *)NULL;
-    m_chkEnableItem = (wxCheckBox *)NULL;
-    m_chkShowItem = (wxCheckBox *)NULL;
+    m_chkSpecifyRows = nullptr;
+    m_chkEnableItem = nullptr;
+    m_chkShowItem = nullptr;
 
     m_textNumBtns =
     m_textLabelBtns =
-    m_textLabel = (wxTextCtrl *)NULL;
+    m_textLabel = nullptr;
 
-    m_radio = (wxRadioBox *)NULL;
-    m_sizerRadio = (wxSizer *)NULL;
+    m_radio = nullptr;
+    m_sizerRadio = nullptr;
 }
 
 void RadioWidgetsPage::CreateContent()

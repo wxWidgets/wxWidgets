@@ -63,7 +63,7 @@
 class MyApp: public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // ----------------------------------------------------------------------------
@@ -311,7 +311,7 @@ private:
             return;
 
         wxString extension;
-        wxFileName::SplitPath(savefilename, NULL, NULL, &extension);
+        wxFileName::SplitPath(savefilename, nullptr, nullptr, &extension);
 
         bool saved = false;
         if ( extension == "bmp" )
@@ -563,7 +563,7 @@ private:
     // This is a copy of protected wxImageHandler::GetResolutionFromOptions()
     static wxImageResolution GetResolutionFromOptions(const wxImage& image, int* x, int* y)
     {
-        wxCHECK_MSG(x && y, wxIMAGE_RESOLUTION_NONE, wxT("NULL pointer"));
+        wxCHECK_MSG(x && y, wxIMAGE_RESOLUTION_NONE, wxT("null pointer"));
 
         if ( image.HasOption(wxIMAGE_OPTION_RESOLUTIONX) &&
             image.HasOption(wxIMAGE_OPTION_RESOLUTIONY) )
@@ -1100,7 +1100,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-    : wxFrame( (wxFrame *)NULL, wxID_ANY, "wxImage sample",
+    : wxFrame( nullptr, wxID_ANY, "wxImage sample",
                 wxPoint(20, 20), wxSize(950, 700) )
 {
     SetIcon(wxICON(sample));

@@ -31,9 +31,9 @@
     What makes sizers so well fitted for use in wxWidgets is the fact that every
     control reports its own minimal size and the algorithm can handle differences in
     font sizes or different window (dialog item) sizes on different platforms without
-    problems. If e.g. the standard font as well as the overall design of Motif widgets
+    problems. If e.g. the standard font as well as the overall design of GTK widgets
     requires more space than on Windows, the initial dialog size will automatically
-    be bigger on Motif than on Windows.
+    be bigger on GTK than on Windows.
 
     Sizers may also be used to control the layout of custom drawn items on the
     window. The wxSizer::Add(), wxSizer::Insert(), and wxSizer::Prepend() functions
@@ -187,7 +187,7 @@ public:
                      int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = NULL);
+                     wxObject* userData = nullptr);
 
     /**
         Appends a child to the sizer.
@@ -245,7 +245,7 @@ public:
                      int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = NULL);
+                     wxObject* userData = nullptr);
 
     /**
         Appends a spacer child to the sizer.
@@ -293,7 +293,7 @@ public:
                      int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = NULL);
+                     wxObject* userData = nullptr);
 
     /**
         Appends a spacer child to the sizer.
@@ -578,7 +578,7 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = NULL);
+                        wxObject* userData = nullptr);
 
     /**
         Insert a child into the sizer before any existing item at @a index.
@@ -597,7 +597,7 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = NULL);
+                        wxObject* userData = nullptr);
 
     /**
         Insert a child into the sizer before any existing item at @a index.
@@ -608,7 +608,7 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = NULL);
+                        wxObject* userData = nullptr);
     /**
         Insert a child into the sizer before any existing item at @a index.
 
@@ -681,7 +681,7 @@ public:
     wxSizerItem* Prepend(wxWindow* window, int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = NULL);
+                         wxObject* userData = nullptr);
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -697,7 +697,7 @@ public:
     wxSizerItem* Prepend(wxSizer* sizer, int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = NULL);
+                         wxObject* userData = nullptr);
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -707,7 +707,7 @@ public:
                          int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = NULL);
+                         wxObject* userData = nullptr);
 
     /**
         Same as Add(), but prepends the items to the beginning of the
@@ -1091,7 +1091,7 @@ public:
         Construct a sizer item for tracking a spacer.
     */
     wxSizerItem(int width, int height, int proportion=0, int flag=0,
-                int border=0, wxObject* userData=NULL);
+                int border=0, wxObject* userData=nullptr);
 
     ///@{
     /**
@@ -1100,7 +1100,7 @@ public:
     wxSizerItem(wxWindow* window, const wxSizerFlags& flags);
     wxSizerItem(wxWindow* window, int proportion=0, int flag=0,
                 int border=0,
-                wxObject* userData=NULL);
+                wxObject* userData=nullptr);
     ///@}
 
     ///@{
@@ -1110,7 +1110,7 @@ public:
     wxSizerItem(wxSizer* sizer, const wxSizerFlags& flags);
     wxSizerItem(wxSizer* sizer, int proportion=0, int flag=0,
                 int border=0,
-                wxObject* userData=NULL);
+                wxObject* userData=nullptr);
     ///@}
 
     /**

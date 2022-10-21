@@ -58,12 +58,12 @@ class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
 public:
     wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPage* page = NULL)
+                       wxRibbonPage* page = nullptr)
         : wxNotifyEvent(command_type, win_id)
         , m_page(page)
     {
     }
-    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonBarEvent(*this); }
+    wxEvent *Clone() const override { return new wxRibbonBarEvent(*this); }
 
     wxRibbonPage* GetPage() {return m_page;}
     void SetPage(wxRibbonPage* page) {m_page = page;}
@@ -117,7 +117,7 @@ public:
 
     void SetTabCtrlMargins(int left, int right);
 
-    void SetArtProvider(wxRibbonArtProvider* art) wxOVERRIDE;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
 
     bool SetActivePage(size_t page);
     bool SetActivePage(wxRibbonPage* page);
@@ -144,11 +144,11 @@ public:
     bool ArePanelsShown() const { return m_arePanelsShown; }
     wxRibbonDisplayMode GetDisplayMode() const { return m_ribbon_state; }
 
-    virtual bool HasMultiplePages() const wxOVERRIDE { return true; }
+    virtual bool HasMultiplePages() const override { return true; }
 
-    void SetWindowStyleFlag(long style) wxOVERRIDE;
-    long GetWindowStyleFlag() const wxOVERRIDE;
-    virtual bool Realize() wxOVERRIDE;
+    void SetWindowStyleFlag(long style) override;
+    long GetWindowStyleFlag() const override;
+    virtual bool Realize() override;
 
     // Implementation only.
     bool IsToggleButtonHovered() const { return m_toggle_button_hovered; }
@@ -163,9 +163,9 @@ public:
 protected:
     friend class wxRibbonPage;
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
-    wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
+    virtual wxSize DoGetBestSize() const override;
+    wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = nullptr);
     void HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag);
 
     void CommonInit(long style);

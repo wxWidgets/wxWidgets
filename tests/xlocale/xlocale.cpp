@@ -81,11 +81,11 @@ void XLocaleTestCase::TestCtor()
 void XLocaleTestCase::PreserveLocale()
 {
     // Test that using locale functions doesn't change the global C locale.
-    const wxString origLocale(setlocale(LC_ALL, NULL));
+    const wxString origLocale(setlocale(LC_ALL, nullptr));
 
-    wxStrtod_l(wxT("1.234"), NULL, wxCLocale);
+    wxStrtod_l(wxT("1.234"), nullptr, wxCLocale);
 
-    CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, NULL) );
+    CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, nullptr) );
 }
 
 // test the ctype functions with the given locale
@@ -198,23 +198,23 @@ void XLocaleTestCase::TestStdlibFunctionsWith(const wxXLocale& loc)
 #endif
 
     // strtod (don't use decimal separator as it's locale-specific)
-    CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0"), NULL, loc) );
-    CPPUNIT_ASSERT_EQUAL( 1234.0,     wxStrtod_l(wxT("1234"), NULL, loc) );
+    CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0"), nullptr, loc) );
+    CPPUNIT_ASSERT_EQUAL( 1234.0,     wxStrtod_l(wxT("1234"), nullptr, loc) );
 
     // strtol
-    endptr = NULL;
-    CPPUNIT_ASSERT_EQUAL( 100,        wxStrtol_l(wxT("100"), NULL, 0, loc) );
-    CPPUNIT_ASSERT_EQUAL( 0xFF,       wxStrtol_l(wxT("0xFF"), NULL, 0, loc) );
+    endptr = nullptr;
+    CPPUNIT_ASSERT_EQUAL( 100,        wxStrtol_l(wxT("100"), nullptr, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( 0xFF,       wxStrtol_l(wxT("0xFF"), nullptr, 0, loc) );
     CPPUNIT_ASSERT_EQUAL( 2001,       wxStrtol_l(wxT("2001 60c0c0 -1101110100110100100000 0x6fffff"), &endptr, 10, loc) );
     CPPUNIT_ASSERT_EQUAL( 0x60c0c0,   wxStrtol_l(endptr, &endptr, 16, loc) );
     CPPUNIT_ASSERT_EQUAL( -0x374D20,  wxStrtol_l(endptr, &endptr, 2, loc) );
-    CPPUNIT_ASSERT_EQUAL( 0x6fffff,   wxStrtol_l(endptr, NULL, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( 0x6fffff,   wxStrtol_l(endptr, nullptr, 0, loc) );
 
     // strtoul
     // NOTE: 3147483647 and 0xEE6B2800 are greater than LONG_MAX (on 32bit machines) but
     //       smaller than ULONG_MAX
-    CPPUNIT_ASSERT_EQUAL( 3147483647ul,  wxStrtoul_l(wxT("3147483647"), NULL, 0, loc) );
-    CPPUNIT_ASSERT_EQUAL( 0xEE6B2800ul, wxStrtoul_l(wxT("0xEE6B2800"), NULL, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( 3147483647ul,  wxStrtoul_l(wxT("3147483647"), nullptr, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( 0xEE6B2800ul, wxStrtoul_l(wxT("0xEE6B2800"), nullptr, 0, loc) );
 
     // TODO: test for "failure" behaviour of the functions above
 }
@@ -274,12 +274,12 @@ void XLocaleTestCase::TestStdlibFunctions()
 #endif
 
         // strtod checks specific for C locale
-        endptr = NULL;
-        CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0.000"), NULL, wxCLocale) );
-        CPPUNIT_ASSERT_EQUAL( 1.234,      wxStrtod_l(wxT("1.234"), NULL, wxCLocale) );
-        CPPUNIT_ASSERT_EQUAL( -1.234E-5,  wxStrtod_l(wxT("-1.234E-5"), NULL, wxCLocale) );
+        endptr = nullptr;
+        CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0.000"), nullptr, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( 1.234,      wxStrtod_l(wxT("1.234"), nullptr, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( -1.234E-5,  wxStrtod_l(wxT("-1.234E-5"), nullptr, wxCLocale) );
         CPPUNIT_ASSERT_EQUAL( 365.24,     wxStrtod_l(wxT("365.24 29.53"), &endptr, wxCLocale) );
-        CPPUNIT_ASSERT_EQUAL( 29.53,      wxStrtod_l(endptr, NULL, wxCLocale) );
+        CPPUNIT_ASSERT_EQUAL( 29.53,      wxStrtod_l(endptr, nullptr, wxCLocale) );
     }
 
 #ifdef wxHAS_XLOCALE_SUPPORT
@@ -292,10 +292,10 @@ void XLocaleTestCase::TestStdlibFunctions()
         TestCtypeFunctionsWith(locFR);
 
         // comma as decimal point:
-        CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locFR) );
+        CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), nullptr, locFR) );
 
         // space as thousands separator is not recognized by wxStrtod_l():
-        CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1 234,5"), NULL, locFR) );
+        CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1 234,5"), nullptr, locFR) );
     }
 
 
@@ -308,10 +308,10 @@ void XLocaleTestCase::TestStdlibFunctions()
         TestStdlibFunctionsWith(locIT);
 
         // comma as decimal point:
-        CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locIT) );
+        CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), nullptr, locIT) );
 
         // dot as thousands separator is not recognized by wxStrtod_l():
-        CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1.234,5"), NULL, locIT) );
+        CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1.234,5"), nullptr, locIT) );
     }
 #endif // wxHAS_XLOCALE_SUPPORT
 }

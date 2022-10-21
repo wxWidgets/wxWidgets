@@ -35,18 +35,8 @@
       define special symbols for different VC version instead of writing tests
       for magic numbers such as 1200, 1300 &c repeatedly
     */
-#if __VISUALC__ < 1400
-#   error "This Visual C++ version is not supported any longer (at least MSVC 2005 required)."
-#elif __VISUALC__ < 1500
-#   define __VISUALC8__
-#elif __VISUALC__ < 1600
-#   define __VISUALC9__
-#elif __VISUALC__ < 1700
-#   define __VISUALC10__
-#elif __VISUALC__ < 1800
-#   define __VISUALC11__
-#elif __VISUALC__ < 1900
-#   define __VISUALC12__
+#if __VISUALC__ < 1900
+#   error "This Visual C++ version is not supported any longer (at least MSVC 2015 required)."
 #elif __VISUALC__ < 2000
     /* There is no __VISUALC13__! */
 #   define __VISUALC14__
@@ -81,6 +71,18 @@
     #define wxCHECK_GCC_VERSION( major, minor ) \
         ( ( __GNUC__ > (major) ) \
             || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) )
+
+    /*
+        clang predefines __GNUC__ and __GNUC_MINOR__ as 4 and 6, don't give an
+        error below for it.
+     */
+    #if defined(__clang__)
+        #if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 4)
+            #error "This clang version is not supported any longer (at least clang 3.4 required)."
+        #endif
+    #elif !wxCHECK_GCC_VERSION(4, 8)
+        #error "This gcc version is not supported any longer (at least gcc 4.8 required)."
+    #endif
 #else
     #define wxCHECK_GCC_VERSION( major, minor ) 0
 #endif

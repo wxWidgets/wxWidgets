@@ -35,7 +35,7 @@ class wxHtmlListmarkCell : public wxHtmlCell
     public:
         wxHtmlListmarkCell(wxDC *dc, const wxColour& clr);
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                  wxHtmlRenderingInfo& info) wxOVERRIDE;
+                  wxHtmlRenderingInfo& info) override;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlListmarkCell);
 };
@@ -87,7 +87,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
         wxHtmlListCell(wxHtmlContainerCell *parent);
         virtual ~wxHtmlListCell();
         void AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont);
-        virtual void Layout(int w) wxOVERRIDE;
+        virtual void Layout(int w) override;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlListCell);
 };
@@ -95,7 +95,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
 wxHtmlListCell::wxHtmlListCell(wxHtmlContainerCell *parent) : wxHtmlContainerCell(parent)
 {
     m_NumRows = 0;
-    m_RowInfo = 0;
+    m_RowInfo = nullptr;
     m_ListmarkWidth = 0;
 }
 
@@ -161,8 +161,8 @@ void wxHtmlListCell::AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont
 void wxHtmlListCell::ReallocRows(int rows)
 {
     m_RowInfo = (wxHtmlListItemStruct*) realloc(m_RowInfo, sizeof(wxHtmlListItemStruct) * rows);
-    m_RowInfo[rows - 1].mark = NULL;
-    m_RowInfo[rows - 1].cont = NULL;
+    m_RowInfo[rows - 1].mark = nullptr;
+    m_RowInfo[rows - 1].cont = nullptr;
     m_RowInfo[rows - 1].minWidth = 0;
     m_RowInfo[rows - 1].maxWidth = 0;
 
@@ -202,7 +202,7 @@ class wxHtmlListcontentCell : public wxHtmlContainerCell
 {
 public:
     wxHtmlListcontentCell(wxHtmlContainerCell *p) : wxHtmlContainerCell(p) {}
-    virtual void Layout(int w) wxOVERRIDE {
+    virtual void Layout(int w) override {
         // Reset top indentation, fixes <li><p>
         SetIndent(0, wxHTML_INDENT_TOP);
         wxHtmlContainerCell::Layout(w);
@@ -223,7 +223,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
     TAG_HANDLER_CONSTR(OLULLI)
     {
-        m_List = NULL;
+        m_List = nullptr;
         m_Numbering = 0;
     }
 

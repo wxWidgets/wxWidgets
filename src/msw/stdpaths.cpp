@@ -67,7 +67,7 @@ struct ShellFunctions
 {
     ShellFunctions()
     {
-        pSHGetKnownFolderPath = NULL;
+        pSHGetKnownFolderPath = nullptr;
         initialized = false;
     }
 
@@ -131,9 +131,9 @@ wxString wxStandardPaths::DoGetDirectory(int csidl)
 
     hr = ::SHGetFolderPath
             (
-            NULL,               // parent window, not used
+            nullptr,               // parent window, not used
             csidl,
-            NULL,               // access token (current user)
+            nullptr,               // access token (current user)
             SHGFP_TYPE_CURRENT, // current path, not just default value
             wxStringBuffer(dir, MAX_PATH)
             );
@@ -149,9 +149,9 @@ wxString wxStandardPaths::DoGetDirectory(int csidl)
         // directory doesn't exist, maybe we can get its default value?
         hr = ::SHGetFolderPath
                 (
-                NULL,
+                nullptr,
                 csidl,
-                NULL,
+                nullptr,
                 SHGFP_TYPE_DEFAULT,
                 wxStringBuffer(dir, MAX_PATH)
                 );

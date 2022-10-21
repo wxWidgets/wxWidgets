@@ -240,110 +240,110 @@ static const wxChar* const gs_encodingNames[][9] =
 {
     // names from the columns correspond to these OS:
     //      Linux        Solaris and IRIX       HP-UX             AIX
-    { wxT("ISO-8859-1"),  wxT("ISO8859-1"),  wxT("iso88591"),  wxT("8859-1"), wxT("iso_8859_1"), NULL },
-    { wxT("ISO-8859-2"),  wxT("ISO8859-2"),  wxT("iso88592"),  wxT("8859-2"), NULL },
-    { wxT("ISO-8859-3"),  wxT("ISO8859-3"),  wxT("iso88593"),  wxT("8859-3"), NULL },
-    { wxT("ISO-8859-4"),  wxT("ISO8859-4"),  wxT("iso88594"),  wxT("8859-4"), NULL },
-    { wxT("ISO-8859-5"),  wxT("ISO8859-5"),  wxT("iso88595"),  wxT("8859-5"), NULL },
-    { wxT("ISO-8859-6"),  wxT("ISO8859-6"),  wxT("iso88596"),  wxT("8859-6"), NULL },
-    { wxT("ISO-8859-7"),  wxT("ISO8859-7"),  wxT("iso88597"),  wxT("8859-7"), NULL },
-    { wxT("ISO-8859-8"),  wxT("ISO8859-8"),  wxT("iso88598"),  wxT("8859-8"), NULL },
-    { wxT("ISO-8859-9"),  wxT("ISO8859-9"),  wxT("iso88599"),  wxT("8859-9"), NULL },
-    { wxT("ISO-8859-10"), wxT("ISO8859-10"), wxT("iso885910"), wxT("8859-10"), NULL },
-    { wxT("ISO-8859-11"), wxT("ISO8859-11"), wxT("iso885911"), wxT("8859-11"), NULL },
-    { wxT("ISO-8859-12"), wxT("ISO8859-12"), wxT("iso885912"), wxT("8859-12"), NULL },
-    { wxT("ISO-8859-13"), wxT("ISO8859-13"), wxT("iso885913"), wxT("8859-13"), NULL },
-    { wxT("ISO-8859-14"), wxT("ISO8859-14"), wxT("iso885914"), wxT("8859-14"), NULL },
-    { wxT("ISO-8859-15"), wxT("ISO8859-15"), wxT("iso885915"), wxT("8859-15"), NULL },
+    { wxT("ISO-8859-1"),  wxT("ISO8859-1"),  wxT("iso88591"),  wxT("8859-1"), wxT("iso_8859_1"), nullptr },
+    { wxT("ISO-8859-2"),  wxT("ISO8859-2"),  wxT("iso88592"),  wxT("8859-2"), nullptr },
+    { wxT("ISO-8859-3"),  wxT("ISO8859-3"),  wxT("iso88593"),  wxT("8859-3"), nullptr },
+    { wxT("ISO-8859-4"),  wxT("ISO8859-4"),  wxT("iso88594"),  wxT("8859-4"), nullptr },
+    { wxT("ISO-8859-5"),  wxT("ISO8859-5"),  wxT("iso88595"),  wxT("8859-5"), nullptr },
+    { wxT("ISO-8859-6"),  wxT("ISO8859-6"),  wxT("iso88596"),  wxT("8859-6"), nullptr },
+    { wxT("ISO-8859-7"),  wxT("ISO8859-7"),  wxT("iso88597"),  wxT("8859-7"), nullptr },
+    { wxT("ISO-8859-8"),  wxT("ISO8859-8"),  wxT("iso88598"),  wxT("8859-8"), nullptr },
+    { wxT("ISO-8859-9"),  wxT("ISO8859-9"),  wxT("iso88599"),  wxT("8859-9"), nullptr },
+    { wxT("ISO-8859-10"), wxT("ISO8859-10"), wxT("iso885910"), wxT("8859-10"), nullptr },
+    { wxT("ISO-8859-11"), wxT("ISO8859-11"), wxT("iso885911"), wxT("8859-11"), nullptr },
+    { wxT("ISO-8859-12"), wxT("ISO8859-12"), wxT("iso885912"), wxT("8859-12"), nullptr },
+    { wxT("ISO-8859-13"), wxT("ISO8859-13"), wxT("iso885913"), wxT("8859-13"), nullptr },
+    { wxT("ISO-8859-14"), wxT("ISO8859-14"), wxT("iso885914"), wxT("8859-14"), nullptr },
+    { wxT("ISO-8859-15"), wxT("ISO8859-15"), wxT("iso885915"), wxT("8859-15"), nullptr },
 
     // although koi8-ru is not strictly speaking the same as koi8-r,
     // they are similar enough to make mapping it to koi8 better than
     // not recognizing it at all
-    { wxT( "KOI8-R" ), wxT( "KOI8-RU" ), NULL },
-    { wxT( "KOI8-U" ), NULL },
+    { wxT( "KOI8-R" ), wxT( "KOI8-RU" ), nullptr },
+    { wxT( "KOI8-U" ), nullptr },
 
-    { wxT( "WINDOWS-866" ), wxT( "CP866" ), NULL },
+    { wxT( "WINDOWS-866" ), wxT( "CP866" ), nullptr },
 
-    { wxT( "WINDOWS-874" ), wxT( "CP874" ), wxT( "MS874" ), wxT( "IBM-874" ), NULL },
-    { wxT( "WINDOWS-932" ), wxT( "CP932" ), wxT( "MS932" ), wxT( "IBM-932" ), wxT( "SJIS" ), wxT( "SHIFT-JIS" ), wxT( "SHIFT_JIS" ), NULL },
-    { wxT( "WINDOWS-936" ), wxT( "CP936" ), wxT( "MS936" ), wxT( "IBM-936" ), wxT( "GB2312" ), wxT( "gbk" ),wxT( "GBK" ), NULL },
-    { wxT( "WINDOWS-949" ), wxT( "CP949" ), wxT( "MS949" ), wxT( "IBM-949" ), wxT( "EUC-KR" ), wxT( "eucKR" ), wxT( "euc_kr" ), NULL },
-    { wxT( "WINDOWS-950" ), wxT( "CP950" ), wxT( "MS950" ), wxT( "IBM-950" ), wxT( "BIG5" ), wxT( "BIG-5" ), wxT( "BIG-FIVE" ), NULL },
-    { wxT( "WINDOWS-1250" ),wxT( "CP1250" ),wxT( "MS1250" ),wxT( "IBM-1250" ),NULL },
-    { wxT( "WINDOWS-1251" ),wxT( "CP1251" ),wxT( "MS1251" ),wxT( "IBM-1251" ),NULL },
-    { wxT( "WINDOWS-1252" ),wxT( "CP1252" ),wxT( "MS1252" ),wxT( "IBM-1252" ),NULL },
-    { wxT( "WINDOWS-1253" ),wxT( "CP1253" ),wxT( "MS1253" ),wxT( "IBM-1253" ),NULL },
-    { wxT( "WINDOWS-1254" ),wxT( "CP1254" ),wxT( "MS1254" ),wxT( "IBM-1254" ),NULL },
-    { wxT( "WINDOWS-1255" ),wxT( "CP1255" ),wxT( "MS1255" ),wxT( "IBM-1255" ),NULL },
-    { wxT( "WINDOWS-1256" ),wxT( "CP1256" ),wxT( "MS1256" ),wxT( "IBM-1256" ),NULL },
-    { wxT( "WINDOWS-1257" ),wxT( "CP1257" ),wxT( "MS1257" ),wxT( "IBM-1257" ),NULL },
-    { wxT( "WINDOWS-1258" ),wxT( "CP1258" ),wxT( "MS1258" ),wxT( "IBM-1258" ),NULL },
-    { wxT( "WINDOWS-1361" ),wxT( "CP1361" ),wxT( "MS1361" ),wxT( "IBM-1361" ), wxT( "JOHAB" ), NULL },
-    { wxT( "WINDOWS-437" ), wxT( "CP437" ), wxT( "MS437" ), wxT( "IBM-437" ), NULL },
+    { wxT( "WINDOWS-874" ), wxT( "CP874" ), wxT( "MS874" ), wxT( "IBM-874" ), nullptr },
+    { wxT( "WINDOWS-932" ), wxT( "CP932" ), wxT( "MS932" ), wxT( "IBM-932" ), wxT( "SJIS" ), wxT( "SHIFT-JIS" ), wxT( "SHIFT_JIS" ), nullptr },
+    { wxT( "WINDOWS-936" ), wxT( "CP936" ), wxT( "MS936" ), wxT( "IBM-936" ), wxT( "GB2312" ), wxT( "gbk" ),wxT( "GBK" ), nullptr },
+    { wxT( "WINDOWS-949" ), wxT( "CP949" ), wxT( "MS949" ), wxT( "IBM-949" ), wxT( "EUC-KR" ), wxT( "eucKR" ), wxT( "euc_kr" ), nullptr },
+    { wxT( "WINDOWS-950" ), wxT( "CP950" ), wxT( "MS950" ), wxT( "IBM-950" ), wxT( "BIG5" ), wxT( "BIG-5" ), wxT( "BIG-FIVE" ), nullptr },
+    { wxT( "WINDOWS-1250" ),wxT( "CP1250" ),wxT( "MS1250" ),wxT( "IBM-1250" ),nullptr },
+    { wxT( "WINDOWS-1251" ),wxT( "CP1251" ),wxT( "MS1251" ),wxT( "IBM-1251" ),nullptr },
+    { wxT( "WINDOWS-1252" ),wxT( "CP1252" ),wxT( "MS1252" ),wxT( "IBM-1252" ),nullptr },
+    { wxT( "WINDOWS-1253" ),wxT( "CP1253" ),wxT( "MS1253" ),wxT( "IBM-1253" ),nullptr },
+    { wxT( "WINDOWS-1254" ),wxT( "CP1254" ),wxT( "MS1254" ),wxT( "IBM-1254" ),nullptr },
+    { wxT( "WINDOWS-1255" ),wxT( "CP1255" ),wxT( "MS1255" ),wxT( "IBM-1255" ),nullptr },
+    { wxT( "WINDOWS-1256" ),wxT( "CP1256" ),wxT( "MS1256" ),wxT( "IBM-1256" ),nullptr },
+    { wxT( "WINDOWS-1257" ),wxT( "CP1257" ),wxT( "MS1257" ),wxT( "IBM-1257" ),nullptr },
+    { wxT( "WINDOWS-1258" ),wxT( "CP1258" ),wxT( "MS1258" ),wxT( "IBM-1258" ),nullptr },
+    { wxT( "WINDOWS-1361" ),wxT( "CP1361" ),wxT( "MS1361" ),wxT( "IBM-1361" ), wxT( "JOHAB" ), nullptr },
+    { wxT( "WINDOWS-437" ), wxT( "CP437" ), wxT( "MS437" ), wxT( "IBM-437" ), nullptr },
 
-    { wxT( "UTF-7" ), wxT("UTF7"), NULL },
-    { wxT( "UTF-8" ), wxT("UTF8"), NULL },
+    { wxT( "UTF-7" ), wxT("UTF7"), nullptr },
+    { wxT( "UTF-8" ), wxT("UTF8"), nullptr },
 #ifdef WORDS_BIGENDIAN
-    { wxT( "UTF-16BE" ), wxT("UTF16BE"), wxT("UCS-2BE"), wxT("UCS2BE"), wxT("UTF-16"), wxT("UTF16"), wxT("UCS-2"), wxT("UCS2"), NULL },
-    { wxT( "UTF-16LE" ), wxT("UTF16LE"), wxT("UCS-2LE"), wxT("UCS2LE"), NULL },
-    { wxT( "UTF-32BE" ), wxT("UTF32BE"), wxT("UCS-4BE" ), wxT("UTF-32"), wxT("UTF32"), wxT("UCS-4"), wxT("UCS4"), NULL },
-    { wxT( "UTF-32LE" ), wxT("UTF32LE"), wxT("UCS-4LE"), wxT("UCS4LE"), NULL },
+    { wxT( "UTF-16BE" ), wxT("UTF16BE"), wxT("UCS-2BE"), wxT("UCS2BE"), wxT("UTF-16"), wxT("UTF16"), wxT("UCS-2"), wxT("UCS2"), nullptr },
+    { wxT( "UTF-16LE" ), wxT("UTF16LE"), wxT("UCS-2LE"), wxT("UCS2LE"), nullptr },
+    { wxT( "UTF-32BE" ), wxT("UTF32BE"), wxT("UCS-4BE" ), wxT("UTF-32"), wxT("UTF32"), wxT("UCS-4"), wxT("UCS4"), nullptr },
+    { wxT( "UTF-32LE" ), wxT("UTF32LE"), wxT("UCS-4LE"), wxT("UCS4LE"), nullptr },
 #else // WORDS_BIGENDIAN
-    { wxT("UTF-16BE"), wxT("UTF16BE"), wxT("UCS-2BE"), wxT("UCS2BE"), NULL },
-    { wxT("UTF-16LE"), wxT("UTF16LE"), wxT("UCS-2LE"), wxT("UTF-16"), wxT("UTF16"), wxT("UCS-2"), wxT("UCS2"), NULL },
-    { wxT("UTF-32BE"), wxT("UTF32BE"), wxT("UCS-4BE"), wxT("UCS4BE"), NULL },
-    { wxT("UTF-32LE"), wxT("UTF32LE"), wxT("UCS-4LE"), wxT("UCS4LE"), wxT("UTF-32"), wxT("UTF32"), wxT("UCS-4"), wxT("UCS4"), NULL },
+    { wxT("UTF-16BE"), wxT("UTF16BE"), wxT("UCS-2BE"), wxT("UCS2BE"), nullptr },
+    { wxT("UTF-16LE"), wxT("UTF16LE"), wxT("UCS-2LE"), wxT("UTF-16"), wxT("UTF16"), wxT("UCS-2"), wxT("UCS2"), nullptr },
+    { wxT("UTF-32BE"), wxT("UTF32BE"), wxT("UCS-4BE"), wxT("UCS4BE"), nullptr },
+    { wxT("UTF-32LE"), wxT("UTF32LE"), wxT("UCS-4LE"), wxT("UCS4LE"), wxT("UTF-32"), wxT("UTF32"), wxT("UCS-4"), wxT("UCS4"), nullptr },
 #endif // WORDS_BIGENDIAN
 
-    { wxT( "EUC-JP" ), wxT( "eucJP" ), wxT( "euc_jp" ), wxT( "IBM-eucJP" ), NULL },
+    { wxT( "EUC-JP" ), wxT( "eucJP" ), wxT( "euc_jp" ), wxT( "IBM-eucJP" ), nullptr },
 
     // 646 is for Solaris, roman8 -- for HP-UX
     { wxT( "US-ASCII" ), wxT( "ASCII" ), wxT("C"), wxT("POSIX"), wxT("ANSI_X3.4-1968"),
-      wxT("646"), wxT("roman8"), wxT( "" ), NULL },
+      wxT("646"), wxT("roman8"), wxT( "" ), nullptr },
 
-    { wxT( "ISO-2022-JP" ), NULL },
+    { wxT( "ISO-2022-JP" ), nullptr },
 
 
-    { wxT( "MacRoman" ), NULL },
-    { wxT( "MacJapanese" ), NULL },
-    { wxT( "MacChineseTrad" ), NULL },
-    { wxT( "MacKorean" ), NULL },
-    { wxT( "MacArabic" ), NULL },
-    { wxT( "MacHebrew" ), NULL },
-    { wxT( "MacGreek" ), NULL },
-    { wxT( "MacCyrillic" ), NULL },
-    { wxT( "MacDevanagari" ), NULL },
-    { wxT( "MacGurmukhi" ), NULL },
-    { wxT( "MacGujarati" ), NULL },
-    { wxT( "MacOriya" ), NULL },
-    { wxT( "MacBengali" ), NULL },
-    { wxT( "MacTamil" ), NULL },
-    { wxT( "MacTelugu" ), NULL },
-    { wxT( "MacKannada" ), NULL },
-    { wxT( "MacMalayalam" ), NULL },
-    { wxT( "MacSinhalese" ), NULL },
-    { wxT( "MacBurmese" ), NULL },
-    { wxT( "MacKhmer" ), NULL },
-    { wxT( "MacThai" ), NULL },
-    { wxT( "MacLaotian" ), NULL },
-    { wxT( "MacGeorgian" ), NULL },
-    { wxT( "MacArmenian" ), NULL },
-    { wxT( "MacChineseSimp" ), NULL },
-    { wxT( "MacTibetan" ), NULL },
-    { wxT( "MacMongolian" ), NULL },
-    { wxT( "MacEthiopic" ), NULL },
-    { wxT( "MacCentralEurRoman" ), NULL },
-    { wxT( "MacVietnamese" ), NULL },
-    { wxT( "MacExtArabic" ), NULL },
-    { wxT( "MacSymbol" ), NULL },
-    { wxT( "MacDingbats" ), NULL },
-    { wxT( "MacTurkish" ), NULL },
-    { wxT( "MacCroatian" ), NULL },
-    { wxT( "MacIcelandic" ), NULL },
-    { wxT( "MacRomanian" ), NULL },
-    { wxT( "MacCeltic" ), NULL },
-    { wxT( "MacGaelic" ), NULL },
-    { wxT( "MacKeyboardGlyphs" ), NULL }
+    { wxT( "MacRoman" ), nullptr },
+    { wxT( "MacJapanese" ), nullptr },
+    { wxT( "MacChineseTrad" ), nullptr },
+    { wxT( "MacKorean" ), nullptr },
+    { wxT( "MacArabic" ), nullptr },
+    { wxT( "MacHebrew" ), nullptr },
+    { wxT( "MacGreek" ), nullptr },
+    { wxT( "MacCyrillic" ), nullptr },
+    { wxT( "MacDevanagari" ), nullptr },
+    { wxT( "MacGurmukhi" ), nullptr },
+    { wxT( "MacGujarati" ), nullptr },
+    { wxT( "MacOriya" ), nullptr },
+    { wxT( "MacBengali" ), nullptr },
+    { wxT( "MacTamil" ), nullptr },
+    { wxT( "MacTelugu" ), nullptr },
+    { wxT( "MacKannada" ), nullptr },
+    { wxT( "MacMalayalam" ), nullptr },
+    { wxT( "MacSinhalese" ), nullptr },
+    { wxT( "MacBurmese" ), nullptr },
+    { wxT( "MacKhmer" ), nullptr },
+    { wxT( "MacThai" ), nullptr },
+    { wxT( "MacLaotian" ), nullptr },
+    { wxT( "MacGeorgian" ), nullptr },
+    { wxT( "MacArmenian" ), nullptr },
+    { wxT( "MacChineseSimp" ), nullptr },
+    { wxT( "MacTibetan" ), nullptr },
+    { wxT( "MacMongolian" ), nullptr },
+    { wxT( "MacEthiopic" ), nullptr },
+    { wxT( "MacCentralEurRoman" ), nullptr },
+    { wxT( "MacVietnamese" ), nullptr },
+    { wxT( "MacExtArabic" ), nullptr },
+    { wxT( "MacSymbol" ), nullptr },
+    { wxT( "MacDingbats" ), nullptr },
+    { wxT( "MacTurkish" ), nullptr },
+    { wxT( "MacCroatian" ), nullptr },
+    { wxT( "MacIcelandic" ), nullptr },
+    { wxT( "MacRomanian" ), nullptr },
+    { wxT( "MacCeltic" ), nullptr },
+    { wxT( "MacGaelic" ), nullptr },
+    { wxT( "MacKeyboardGlyphs" ), nullptr }
 };
 
 wxCOMPILE_TIME_ASSERT( WXSIZEOF(gs_encodingDescs) == WXSIZEOF(gs_encodings), EncodingsArraysNotInSync );
@@ -359,7 +359,7 @@ class wxFontMapperModule : public wxModule
 public:
     wxFontMapperModule() : wxModule() { }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         // a dummy wxFontMapperBase object could have been created during the
         // program startup before wxApp was created, we have to delete it to
@@ -373,7 +373,7 @@ public:
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxFontMapperBase::Reset();
     }
@@ -388,7 +388,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontMapperModule, wxModule);
 // wxFontMapperBase implementation
 // ============================================================================
 
-wxFontMapper *wxFontMapperBase::sm_instance = NULL;
+wxFontMapper *wxFontMapperBase::sm_instance = nullptr;
 
 // ----------------------------------------------------------------------------
 // ctor and dtor
@@ -397,7 +397,7 @@ wxFontMapper *wxFontMapperBase::sm_instance = NULL;
 wxFontMapperBase::wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
-    m_configDummy = NULL;
+    m_configDummy = nullptr;
 #endif // wxUSE_CONFIG
 }
 
@@ -450,7 +450,7 @@ void wxFontMapperBase::Reset()
         // compiler can't know that it derives from wxFontMapperBase (but
         // run-time behaviour will be correct because the dtor is virtual)
         delete (wxFontMapperBase *)sm_instance;
-        sm_instance = NULL;
+        sm_instance = nullptr;
     }
 }
 
@@ -835,7 +835,7 @@ wxString wxFontMapperBase::GetEncodingName(wxFontEncoding encoding)
 /* static */
 const wxChar** wxFontMapperBase::GetAllEncodingNames(wxFontEncoding encoding)
 {
-    static const wxChar* const dummy[] = { NULL };
+    static const wxChar* const dummy[] = { nullptr };
 
     for ( size_t i = 0; i < WXSIZEOF(gs_encodingNames); i++ )
     {

@@ -76,7 +76,7 @@ public:
     {
     }
 
-    ~wxUILocaleImplCF() wxOVERRIDE
+    ~wxUILocaleImplCF() override
     {
         [m_nsloc release];
     }
@@ -91,23 +91,23 @@ public:
 
         wxCFStringRef cfName(locId.GetName());
         if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
-            return NULL;
+            return nullptr;
 
         auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
         if ( !nsloc )
-            return NULL;
+            return nullptr;
 
         return new wxUILocaleImplCF(nsloc);
     }
 
-    void Use() wxOVERRIDE;
-    wxString GetName() const wxOVERRIDE;
-    wxLocaleIdent GetLocaleId() const wxOVERRIDE;
-    wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const wxOVERRIDE;
-    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const wxOVERRIDE;
-    wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
+    void Use() override;
+    wxString GetName() const override;
+    wxLocaleIdent GetLocaleId() const override;
+    wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const override;
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const override;
+    wxLayoutDirection GetLayoutDirection() const override;
     int CompareStrings(const wxString& lhs, const wxString& rhs,
-                       int flags) const wxOVERRIDE;
+                       int flags) const override;
 
 private:
     NSLocale* const m_nsloc;
@@ -149,7 +149,7 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 wxString
 wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
-    NSString* str = NULL;
+    NSString* str = nullptr;
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
