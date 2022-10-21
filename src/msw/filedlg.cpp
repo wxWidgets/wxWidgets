@@ -1597,6 +1597,16 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
         hr = fileDialog->SetFileTypeIndex(m_filterIndex + 1);
         if ( FAILED(hr) )
             wxLogApiError(wxS("IFileDialog::SetFileTypeIndex"), hr);
+
+        // We need to call SetDefaultExtension() to make the file dialog append
+        // the selected extension by default. It will append the correct
+        // extension depending on the current file type choice if we call this
+        // function, but won't do anything at all without it, so find the first
+        // extension associated with the selected filter and use it here.
+        wxString defExt =
+            wildFilters[m_filterIndex].BeforeFirst(';').AfterFirst('.');
+        if ( !defExt.empty() && defExt != wxS("*") )
+            fileDialog->SetDefaultExtension(defExt.wc_str());
     }
 
     if ( !m_dir.empty() )
@@ -1608,7 +1618,7 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
     {
         hr = fileDialog->SetFileName(m_fileName.wc_str());
         if ( FAILED(hr) )
-            wxLogApiError(wxS("IFileDialog::SetDefaultExtension"), hr);
+            wxLogApiError(wxS("IFileDialog::SetFileName"), hr);
     }
 
 

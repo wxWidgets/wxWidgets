@@ -264,6 +264,7 @@ wxMSW:
 - Fix return value of wxZoomGestureEvent::GetZoomFactor() (s-murphree, #22818).
 - Update top level icon resolution on DPI change (#22807).
 - Remove "Printing" from title when printing to PDF (Blake-Madden, #22836).
+- Fix sometimes missing overvwrite prompt in "Save" file dialog (#22898).
 
 wxOSX:
 
