@@ -25,9 +25,10 @@
 // This setting determines the compatibility with 3.0 API: set it to 0 to
 // flag all cases of using deprecated functions.
 //
-// Default is 1 but please try building your code with 0 as the default will
-// change to 0 in the next version and the deprecated functions will disappear
-// in the version after it completely.
+// Default is 0, but you may still set it to 1 if you can't update the existing
+// code relying on the deprecated functions. Please do consider updating it if
+// at all possible instead of changing this to 1, however, as these functions
+// will completely disappear in the next wxWidgets release.
 //
 // Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_3_0 0
@@ -210,9 +211,10 @@
 
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
-// Default is 0
+// This feature is incomplete and experimental, please only enable it if
+// you want to participate in its development.
 //
-// Recommended setting: 0 (this is still work in progress...)
+// Recommended setting: 0 (unless you wish to try working on it).
 #define wxUSE_EXTENDED_RTTI 0
 
 // Support for message/error logging. This includes wxLogXXX() functions and
@@ -467,7 +469,7 @@
 // wxFileConfig
 #define wxUSE_TEXTFILE      1
 
-// i18n support: _() macro, wxLocale class. Requires wxTextFile.
+// i18n support: _() macro, wxLocale class.
 #define wxUSE_INTL          1
 
 // Provide wxFoo_l() functions similar to standard foo() functions but taking
@@ -734,8 +736,7 @@
 // Recommended setting: 1 (requires wxUSE_XML)
 #define wxUSE_XRC       1
 
-// XML parsing classes. Note that their API will change in the future, so
-// using wxXmlDocument and wxXmlNode in your app is not recommended.
+// XML parsing classes.
 //
 // Default is 1
 //
@@ -1271,8 +1272,6 @@
 
 // wxDirDlg class for getting a directory name from user
 #define wxUSE_DIRDLG 1
-
-// TODO: setting to choose the generic or native one
 
 // Use file open/save dialogs.
 //
