@@ -185,7 +185,6 @@ public:
     @library{wxcore}
     @category{misc}
 
-    @nativeimpl{wxmsw}
     @onlyfor{wxmsw}
 
     @see wxFrame::MSWGetTaskBarButton()
