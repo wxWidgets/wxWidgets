@@ -33,7 +33,7 @@
 
 enum {
     // menu IDs
-    myID_PROPERTIES = wxID_HIGHEST,
+    myID_PROPERTIES = wxID_HIGHEST+1,
     myID_EDIT_FIRST,
     myID_INDENTINC = myID_EDIT_FIRST,
     myID_INDENTRED,
