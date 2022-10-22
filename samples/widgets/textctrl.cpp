@@ -49,7 +49,7 @@
 // control ids
 enum
 {
-    TextPage_Reset = wxID_HIGHEST,
+    TextPage_Reset = wxID_HIGHEST+1,
 
     TextPage_Set,
     TextPage_Add,
