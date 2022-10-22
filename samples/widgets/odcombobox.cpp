@@ -53,7 +53,7 @@
 // control ids
 enum
 {
-    ODComboPage_Reset = wxID_HIGHEST,
+    ODComboPage_Reset = wxID_HIGHEST+1,
     ODComboPage_PopupMinWidth,
     ODComboPage_PopupHeight,
     ODComboPage_ButtonWidth,
