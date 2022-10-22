@@ -51,7 +51,7 @@
 // control ids
 enum
 {
-    BookPage_Reset = wxID_HIGHEST,
+    BookPage_Reset = wxID_HIGHEST+1,
     BookPage_SelectPage,
     BookPage_AddPage,
     BookPage_InsertPage,
