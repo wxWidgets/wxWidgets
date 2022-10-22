@@ -1592,9 +1592,6 @@ void wxListMainWindow::Init()
     m_headerWidth =
     m_lineHeight = 0;
 
-    m_small_image_list = nullptr;
-    m_normal_image_list = nullptr;
-
     m_small_spacing = 30;
     m_normal_spacing = 40;
 
@@ -1751,11 +1748,15 @@ wxCoord wxListMainWindow::GetLineHeight() const
         wxCoord y;
         dc.GetTextExtent(wxT("H"), nullptr, &y);
 
-        if ( m_small_image_list && m_small_image_list->GetImageCount() )
+        if(m_small_images)
         {
-            int iw = 0, ih = 0;
-            m_small_image_list->GetSize(0, iw, ih);
-            y = wxMax(y, ih);
+            auto m_small_image_list = m_small_images->GetImageList();
+            if ( m_small_image_list && m_small_image_list->GetImageCount() )
+            {
+                int iw = 0, ih = 0;
+                m_small_image_list->GetSize(0, iw, ih);
+                y = wxMax(y, ih);
+            }
         }
 
         y += EXTRA_HEIGHT;
@@ -3302,46 +3303,81 @@ void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
-    if ( HasFlag(wxLC_ICON) && (m_normal_image_list))
+
+    if ( HasFlag(wxLC_ICON) && (m_normal_images))
     {
-        m_normal_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+        dc->DrawBitmap(m_normal_images->GetImageBitmapFor(this, index), x, y);
     }
-    else if ( HasFlag(wxLC_SMALL_ICON) && (m_small_image_list))
+    else if ( HasFlag(wxLC_SMALL_ICON) && (m_small_images))
     {
-        m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+        dc->DrawBitmap(m_small_images->GetImageBitmapFor(this, index), x, y);
     }
-    else if ( HasFlag(wxLC_LIST) && (m_small_image_list))
+    else if ( HasFlag(wxLC_LIST) && (m_small_images))
     {
-        m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+        dc->DrawBitmap(m_small_images->GetImageBitmapFor(this, index), x, y);
     }
-    else if ( InReportView() && (m_small_image_list))
+    else if ( InReportView() && (m_small_images))
     {
-        m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+        dc->DrawBitmap(m_small_images->GetImageBitmapFor(this, index), x, y);
     }
 }
 
 void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
 {
-    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
+    const auto scale = GetDPIScaleFactor();
+    width = height = 0;
+    wxSize size = {0,0};
+
+    if ( HasFlag(wxLC_ICON) && m_normal_images )
     {
-        m_normal_image_list->GetSize( index, width, height );
+        size = m_normal_images->GetImageBitmapFor(this, index).GetSize();
     }
-    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
+    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_images )
     {
-        m_small_image_list->GetSize( index, width, height );
+        size = m_small_images->GetImageBitmapFor(this, index).GetSize();
     }
-    else if ( HasFlag(wxLC_LIST) && m_small_image_list )
+    else if ( HasFlag(wxLC_LIST) && m_small_images )
     {
-        m_small_image_list->GetSize( index, width, height );
+        size = m_small_images->GetImageBitmapFor(this, index).GetSize();
     }
-    else if ( InReportView() && m_small_image_list )
+    else if ( InReportView() && m_small_images )
     {
-        m_small_image_list->GetSize( index, width, height );
+        size = m_small_images->GetImageBitmapFor(this, index).GetSize();
     }
-    else
+
+    width = decltype(scale)(size.GetWidth())/scale;
+    height = decltype(scale)(size.GetHeight())/scale;
+}
+
+
+void wxListMainWindow::SetImages( wxWithImages &images, const int which )
+{
+    m_dirty = true;
+
+    // calc the spacing from the icon size
+    int width = 0;
+
+    if ( images.GetImageCount() )
     {
-        width =
-        height = 0;
+        int height;
+        auto imageList = images.GetImageList();
+        if(imageList)
+        {
+            imageList->GetSize(0, width, height);
+        }
+    }
+
+    if (which == wxIMAGE_LIST_NORMAL)
+    {
+        m_normal_images = &images;
+        m_normal_spacing = width + 8;
+    }
+
+    if (which == wxIMAGE_LIST_SMALL)
+    {
+        m_small_images = &images;
+        m_small_spacing = width + 14;
+        m_lineHeight = 0;  // ensure that the line height will be recalc'd
     }
 }
 
@@ -3360,13 +3396,13 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
 
     if (which == wxIMAGE_LIST_NORMAL)
     {
-        m_normal_image_list = imageList;
+        m_normal_images->SetImageList(imageList);
         m_normal_spacing = width + 8;
     }
 
     if (which == wxIMAGE_LIST_SMALL)
     {
-        m_small_image_list = imageList;
+        m_small_images->SetImageList(imageList);
         m_small_spacing = width + 14;
         m_lineHeight = 0;  // ensure that the line height will be recalc'd
     }
@@ -3403,11 +3439,15 @@ wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
     const int image = column->GetImage();
     if ( image != -1 )
     {
-        if ( m_small_image_list )
+        if(m_small_images)
         {
-            int ix = 0, iy = 0;
-            m_small_image_list->GetSize(image, ix, iy);
-            width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
+            auto small_image_list = m_small_images->GetImageList();
+            if ( small_image_list )
+            {
+                int ix = 0, iy = 0;
+                small_image_list->GetSize(image, ix, iy);
+                width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
+            }
         }
     }
 
@@ -4029,9 +4069,9 @@ void wxListMainWindow::RecalculatePositions()
     const size_t count = GetItemCount();
 
     int iconSpacing;
-    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
+    if ( HasFlag(wxLC_ICON) && m_normal_images )
         iconSpacing = m_normal_spacing;
-    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
+    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_images )
         iconSpacing = m_small_spacing;
     else
         iconSpacing = 0;
@@ -4626,10 +4666,10 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     {
         // Reset the buffered height if it's not big enough for the new image.
         int image = item.GetImage();
-        if ( m_small_image_list && image != -1 && InReportView() )
+        if ( m_small_images && image != -1 && InReportView() )
         {
-            int imageWidth, imageHeight;
-            m_small_image_list->GetSize(image, imageWidth, imageHeight);
+            int imageWidth, imageHeight;            
+            m_small_images->GetImageList()->GetSize(image, imageWidth, imageHeight);
 
             if ( imageHeight > m_lineHeight )
                 m_lineHeight = 0;
@@ -5454,8 +5494,9 @@ long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
     return m_mainWin->GetNextItem( item, geom, state );
 }
 
-void wxGenericListCtrl::DoUpdateImages(int which )
+void wxGenericListCtrl::DoUpdateImages(int which, wxWithImages &images )
 {
+    m_mainWin->SetImages(images, which);
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
 

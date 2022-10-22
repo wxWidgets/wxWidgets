@@ -296,14 +296,14 @@ void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle>& images)
 {
     m_imagesNormal.SetImages(images);
 
-    DoUpdateImages(wxIMAGE_LIST_NORMAL);
+    DoUpdateImages(wxIMAGE_LIST_NORMAL, m_imagesNormal);
 }
 
 void wxListCtrlBase::SetSmallImages(const wxVector<wxBitmapBundle>& images)
 {
     m_imagesSmall.SetImages(images);
 
-    DoUpdateImages(wxIMAGE_LIST_SMALL);
+    DoUpdateImages(wxIMAGE_LIST_SMALL, m_imagesSmall);
 }
 
 wxWithImages* wxListCtrlBase::GetImages(int which)
@@ -361,7 +361,7 @@ void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)
     }
 
     // Actually update the images shown in the control.
-    DoUpdateImages(which);
+    DoUpdateImages(which, m_imagesNormal);
 }
 
 void wxListCtrlBase::AssignImageList(wxImageList *imageList, int which)

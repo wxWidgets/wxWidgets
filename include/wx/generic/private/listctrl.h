@@ -19,6 +19,7 @@
 #include "wx/timer.h"
 #include "wx/settings.h"
 
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -640,6 +641,7 @@ public:
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
 
+    void SetImages(wxWithImages &images, const int which );
     void SetImageList( wxImageList *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = false );
     int GetItemSpacing( bool isSmall = false );
@@ -695,7 +697,7 @@ public:
     }
 
     wxImageList* GetSmallImageList() const
-        { return m_small_image_list; }
+        { return m_small_images->GetImageList(); }
 
     // set the scrollbars and update the positions of the items
     void RecalculatePositions();
@@ -811,8 +813,8 @@ protected:
     bool                 m_dirty;
 
     wxColour            *m_highlightColour;
-    wxImageList         *m_small_image_list;
-    wxImageList         *m_normal_image_list;
+    wxWithImages         *m_normal_images = nullptr;
+    wxWithImages         *m_small_images = nullptr;
     int                  m_small_spacing;
     int                  m_normal_spacing;
     bool                 m_hasFocus;

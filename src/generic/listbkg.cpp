@@ -280,7 +280,7 @@ void wxListbook::OnImagesChanged()
 
     // We also need to propagate the actual images to use to the list control.
     const Images& images = GetImages();
-    if ( !images.empty() )
+    if ( !images.empty() )        
         list->SetNormalImages(images);
     else
         list->SetImageList(GetImageList(), wxIMAGE_LIST_NORMAL);
