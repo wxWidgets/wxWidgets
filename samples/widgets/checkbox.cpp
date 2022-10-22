@@ -46,7 +46,7 @@
 // control ids
 enum
 {
-    CheckboxPage_Reset = wxID_HIGHEST,
+    CheckboxPage_Reset = wxID_HIGHEST+1,
     CheckboxPage_ChangeLabel,
     CheckboxPage_Check,
     CheckboxPage_Uncheck,
