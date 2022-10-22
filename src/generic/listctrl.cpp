@@ -5500,6 +5500,11 @@ void wxGenericListCtrl::DoUpdateImages(int which, wxWithImages &images )
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
 
+void wxGenericListCtrl::DoUpdateImages(int which )
+{
+    m_mainWin->SetImageList( GetUpdatedImageList(which), which );
+}
+
 bool wxGenericListCtrl::Arrange( int WXUNUSED(flag) )
 {
     return 0;

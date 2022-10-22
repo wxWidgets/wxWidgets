@@ -469,7 +469,8 @@ protected:
 
     // Real implementations methods to which our public forwards.
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
-    virtual void DoUpdateImages(int which, wxWithImages &images) = 0;
+    virtual void DoUpdateImages(int, wxWithImages &) {};
+    virtual void DoUpdateImages(int which) = 0;
 
     // Overridden methods of the base class.
     virtual wxSize DoGetBestClientSize() const override;

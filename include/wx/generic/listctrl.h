@@ -218,6 +218,7 @@ protected:
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info) override;
     void DoUpdateImages(int which, wxWithImages &images) override;
+    void DoUpdateImages(int which ) override;
 
     virtual wxSize DoGetBestClientSize() const override;
 
