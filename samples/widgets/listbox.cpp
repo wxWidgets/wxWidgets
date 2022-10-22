@@ -53,7 +53,7 @@
 // control ids
 enum
 {
-    ListboxPage_Reset = wxID_HIGHEST,
+    ListboxPage_Reset = wxID_HIGHEST+1,
     ListboxPage_Add,
     ListboxPage_AddText,
     ListboxPage_AddSeveral,
