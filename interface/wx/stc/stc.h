@@ -8206,7 +8206,7 @@ public:
             The position of the point to check, in window device coordinates.
         @param pos
             Receives the position of the character at the given position. May
-            be @NULL.
+            be @nullptr.
 
         @see PositionToXY(), XYToPosition()
     */
@@ -8232,10 +8232,10 @@ public:
             The position of the point to check, in window device coordinates.
         @param col
             Receives the column of the character at the given position. May be
-            @NULL.
+            @nullptr.
         @param row
             Receives the row of the character at the given position. May be
-            @NULL.
+            @nullptr.
 
         @see PositionToXY(), XYToPosition()
     */
