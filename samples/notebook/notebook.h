@@ -139,7 +139,7 @@ private:
 enum ID_COMMANDS
 {
     // these should be in the same order as Type_XXX elements above
-    ID_BOOK_NOTEBOOK = wxID_HIGHEST,
+    ID_BOOK_NOTEBOOK = wxID_HIGHEST+1,
     ID_BOOK_LISTBOOK,
     ID_BOOK_CHOICEBOOK,
     ID_BOOK_TREEBOOK,
