@@ -48,7 +48,7 @@ enum
 {
     Wizard_About = wxID_ABOUT,
     Wizard_Quit = wxID_EXIT,
-    Wizard_RunModal = wxID_HIGHEST,
+    Wizard_RunModal = wxID_HIGHEST+1,
 
     Wizard_RunNoSizer,
     Wizard_RunModeless,
