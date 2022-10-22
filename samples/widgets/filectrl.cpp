@@ -44,7 +44,7 @@
 // control ids
 enum
 {
-    FileCtrlPage_Reset = wxID_HIGHEST,
+    FileCtrlPage_Reset = wxID_HIGHEST+1,
     FileCtrlPage_SetDirectory,
     FileCtrlPage_SetPath,
     FileCtrlPage_SetFilename,
