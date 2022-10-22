@@ -47,7 +47,7 @@
 // control ids
 enum
 {
-    RadioPage_Reset = wxID_HIGHEST,
+    RadioPage_Reset = wxID_HIGHEST+1,
     RadioPage_Update,
     RadioPage_Selection,
     RadioPage_Label,
