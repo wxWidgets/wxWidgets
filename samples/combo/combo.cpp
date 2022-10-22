@@ -101,7 +101,7 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    ComboCtrl_Compare = wxID_HIGHEST,
+    ComboCtrl_Compare = wxID_HIGHEST+1,
 
     // menu items
     ComboCtrl_Quit = wxID_EXIT,
