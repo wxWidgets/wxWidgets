@@ -48,7 +48,7 @@
 // control ids
 enum
 {
-    GaugePage_Reset = wxID_HIGHEST,
+    GaugePage_Reset = wxID_HIGHEST+1,
     GaugePage_Progress,
     GaugePage_IndeterminateProgress,
     GaugePage_Clear,
