@@ -96,7 +96,7 @@ private:
 enum
 {
     // menu items
-    Minimal_Persist = wxID_HIGHEST,
+    Minimal_Persist = wxID_HIGHEST+1,
     Minimal_Depersist,
     Minimal_GenerateCode,
     Minimal_DumpClasses,
