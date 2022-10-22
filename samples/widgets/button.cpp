@@ -50,7 +50,7 @@
 // control ids
 enum
 {
-    ButtonPage_Reset = wxID_HIGHEST,
+    ButtonPage_Reset = wxID_HIGHEST+1,
     ButtonPage_ChangeLabel,
     ButtonPage_ChangeNote,
     ButtonPage_ChangeImageMargins,
