@@ -326,7 +326,7 @@ enum
     TreeTest_Quit = wxID_EXIT,
     TreeTest_About = wxID_ABOUT,
     TreeTest_ClearLog = wxID_CLEAR,
-    TreeTest_TogButtons = wxID_HIGHEST,
+    TreeTest_TogButtons = wxID_HIGHEST+1,
     TreeTest_TogTwist,
     TreeTest_TogLines,
     TreeTest_TogEdit,
