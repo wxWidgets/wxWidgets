@@ -51,7 +51,7 @@
 // control ids
 enum
 {
-    DatePickerPage_Reset = wxID_HIGHEST,
+    DatePickerPage_Reset = wxID_HIGHEST+1,
     DatePickerPage_Set,
     DatePickerPage_SetRange,
     DatePickerPage_SetNullText,
