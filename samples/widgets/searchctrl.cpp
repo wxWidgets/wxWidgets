@@ -49,7 +49,7 @@
 // control ids
 enum
 {
-     ID_SEARCH_CB = wxID_HIGHEST,
+     ID_SEARCH_CB = wxID_HIGHEST+1,
      ID_CANCEL_CB,
      ID_MENU_CB,
 
