@@ -52,7 +52,7 @@
 // control ids
 enum
 {
-    EditableListboxPage_Reset = wxID_HIGHEST,
+    EditableListboxPage_Reset = wxID_HIGHEST+1,
     EditableListboxPage_Listbox,
     EditableListboxPage_ContainerTests
 };
