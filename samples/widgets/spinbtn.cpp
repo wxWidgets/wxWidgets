@@ -50,7 +50,7 @@
 // control ids
 enum
 {
-    SpinBtnPage_Reset = wxID_HIGHEST,
+    SpinBtnPage_Reset = wxID_HIGHEST+1,
     SpinBtnPage_Clear,
     SpinBtnPage_SetValue,
     SpinBtnPage_SetMinAndMax,
