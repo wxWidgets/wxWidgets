@@ -51,7 +51,7 @@
 // control ids
 enum
 {
-    HyperlinkPage_Reset = wxID_HIGHEST,
+    HyperlinkPage_Reset = wxID_HIGHEST+1,
     HyperlinkPage_SetLabel,
     HyperlinkPage_SetURL,
     HyperlinkPage_Ctrl
