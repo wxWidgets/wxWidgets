@@ -296,7 +296,7 @@ void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle>& images)
 {
     m_imagesNormal.SetImages(images);
 
-    DoUpdateImages(wxIMAGE_LIST_NORMAL);
+    DoUpdateImages(wxIMAGE_LIST_NORMAL, &m_imagesNormal);
 }
 
 void wxListCtrlBase::SetSmallImages(const wxVector<wxBitmapBundle>& images)

@@ -640,6 +640,7 @@ public:
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
 
+    void SetImages(wxWithImages *images, const int which);
     void SetImageList( wxImageList *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = false );
     int GetItemSpacing( bool isSmall = false );
@@ -813,6 +814,9 @@ protected:
     wxColour            *m_highlightColour;
     wxImageList         *m_small_image_list;
     wxImageList         *m_normal_image_list;
+
+    wxWithImages         *m_normal_images = nullptr;
+
     int                  m_small_spacing;
     int                  m_normal_spacing;
     bool                 m_hasFocus;

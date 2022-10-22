@@ -3302,7 +3302,12 @@ void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
-    if ( HasFlag(wxLC_ICON) && (m_normal_image_list))
+    if ( HasFlag(wxLC_ICON) && (m_normal_images))
+    {
+        const auto bmp = m_normal_images->GetImageBitmapFor(this, index);
+        dc->DrawBitmap(bmp, x, y);
+    }
+    else if ( HasFlag(wxLC_ICON) && (m_normal_image_list))
     {
         m_normal_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
     }
@@ -3345,6 +3350,36 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
     }
 }
 
+void wxListMainWindow::SetImages( wxWithImages *images, const int which)
+{
+
+    m_dirty = true;
+/*
+    // calc the spacing from the icon size
+    int width = 0;
+
+    if ((imageList) && (imageList->GetImageCount()) )
+    {
+        int height;
+        imageList->GetSize(0, width, height);
+    }
+*/
+    if (which == wxIMAGE_LIST_NORMAL)
+    {
+        m_normal_images = images;
+        //m_normal_spacing = width + 8;
+    }
+/*
+    if (which == wxIMAGE_LIST_SMALL)
+    {
+        m_small_image_list = imageList;
+        m_small_spacing = width + 14;
+        m_lineHeight = 0;  // ensure that the line height will be recalc'd
+    }
+  */
+}
+
+
 void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
 {
     m_dirty = true;
@@ -3361,6 +3396,7 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
     if (which == wxIMAGE_LIST_NORMAL)
     {
         m_normal_image_list = imageList;
+        //m_normal_images.SetImageList(imageList);
         m_normal_spacing = width + 8;
     }
 
@@ -5458,6 +5494,13 @@ void wxGenericListCtrl::DoUpdateImages(int which )
 {
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
+
+void wxGenericListCtrl::DoUpdateImages(int which, wxWithImages *images)
+{
+    m_mainWin->SetImageList( GetUpdatedImageList(which), which );
+    m_mainWin->SetImages(images, which);
+}
+
 
 bool wxGenericListCtrl::Arrange( int WXUNUSED(flag) )
 {
