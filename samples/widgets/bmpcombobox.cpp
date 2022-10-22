@@ -64,7 +64,7 @@
 // control ids
 enum
 {
-    BitmapComboBoxPage_Reset = wxID_HIGHEST,
+    BitmapComboBoxPage_Reset = wxID_HIGHEST+1,
     BitmapComboBoxPage_Insert,
     BitmapComboBoxPage_InsertText,
     BitmapComboBoxPage_ChangeHeight,
