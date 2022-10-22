@@ -287,7 +287,7 @@ enum
     File_Quit = wxID_EXIT,
     File_About = wxID_ABOUT,
 
-    MenuShow_First = wxID_HIGHEST,
+    MenuShow_First = wxID_HIGHEST+1,
     File_ShowDefault = MenuShow_First,
     File_ShowText,
     File_ShowLines,
