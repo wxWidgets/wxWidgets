@@ -48,7 +48,7 @@
 // control ids
 enum
 {
-    TimePickerPage_Reset = wxID_HIGHEST,
+    TimePickerPage_Reset = wxID_HIGHEST+1,
     TimePickerPage_Set,
     TimePickerPage_Picker
 };
