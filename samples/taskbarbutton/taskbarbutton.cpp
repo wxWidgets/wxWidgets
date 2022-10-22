@@ -20,7 +20,7 @@
 
 enum
 {
-    ProgressValueSlider = wxID_HIGHEST,
+    ProgressValueSlider = wxID_HIGHEST+1,
     VisibilityRadio,
     ThumbnailTooltipSetBtn,
     ProgressStateChoice,
