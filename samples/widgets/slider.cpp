@@ -52,7 +52,7 @@
 // control ids
 enum
 {
-    SliderPage_Reset = wxID_HIGHEST,
+    SliderPage_Reset = wxID_HIGHEST+1,
     SliderPage_Clear,
     SliderPage_SetValue,
     SliderPage_SetMinAndMax,
