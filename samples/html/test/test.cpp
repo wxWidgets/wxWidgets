@@ -127,7 +127,7 @@ public:
 enum
 {
     // menu items
-    ID_PageOpen = wxID_HIGHEST,
+    ID_PageOpen = wxID_HIGHEST+1,
     ID_DefaultLocalBrowser,
     ID_DefaultWebBrowser,
     ID_Back,
