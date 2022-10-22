@@ -42,7 +42,7 @@
 // Control IDs
 enum
 {
-    ActivityIndicator_Start = wxID_HIGHEST,
+    ActivityIndicator_Start = wxID_HIGHEST+1,
     ActivityIndicator_Stop,
     ActivityIndicator_IsRunning
 };
