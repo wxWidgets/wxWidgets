@@ -51,7 +51,7 @@
 // control ids
 enum
 {
-    DirCtrlPage_Reset = wxID_HIGHEST,
+    DirCtrlPage_Reset = wxID_HIGHEST+1,
     DirCtrlPage_SetPath,
     DirCtrlPage_Ctrl
 };
