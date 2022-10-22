@@ -49,7 +49,7 @@
 // control ids
 enum
 {
-    TogglePage_Reset = wxID_HIGHEST,
+    TogglePage_Reset = wxID_HIGHEST+1,
     TogglePage_ChangeLabel,
     TogglePage_Picker
 };
