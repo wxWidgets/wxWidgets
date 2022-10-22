@@ -1134,7 +1134,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // and the width of the icon, if any
         int ix = 0, iy = 0;    // init them just to suppress the compiler warnings
         const int image = item.m_image;
-        wxImageList *imageList;
+        wxImageList *imageList = nullptr;
         if ( image != -1 )
         {
             imageList = m_owner->GetSmallImageList();
@@ -1143,10 +1143,6 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 imageList->GetSize(image, ix, iy);
                 wLabel += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
             }
-        }
-        else
-        {
-            imageList = nullptr;
         }
 
         // ignore alignment if there is not enough space anyhow
@@ -1748,15 +1744,13 @@ wxCoord wxListMainWindow::GetLineHeight() const
         wxCoord y;
         dc.GetTextExtent(wxT("H"), nullptr, &y);
 
-        if(m_small_images)
+        if(m_small_images && m_small_images->GetImageCount())
         {
-            auto m_small_image_list = m_small_images->GetImageList();
-            if ( m_small_image_list && m_small_image_list->GetImageCount() )
-            {
-                int iw = 0, ih = 0;
-                m_small_image_list->GetSize(0, iw, ih);
-                y = wxMax(y, ih);
-            }
+            int ih = 0;
+            auto bmp = m_small_images->GetImageBitmapFor(this, 0);
+            auto size = bmp.GetScaledSize();
+            ih = size.GetHeight();
+            y = wxMax(y, ih);
         }
 
         y += EXTRA_HEIGHT;
@@ -3370,12 +3364,14 @@ void wxListMainWindow::SetImages( wxWithImages &images, const int which )
     if (which == wxIMAGE_LIST_NORMAL)
     {
         m_normal_images = &images;
+        m_normal_images->GetUpdatedImageListFor(this);
         m_normal_spacing = width + 8;
     }
 
     if (which == wxIMAGE_LIST_SMALL)
     {
         m_small_images = &images;
+        m_small_images->GetUpdatedImageListFor(this);
         m_small_spacing = width + 14;
         m_lineHeight = 0;  // ensure that the line height will be recalc'd
     }
@@ -4668,8 +4664,9 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         int image = item.GetImage();
         if ( m_small_images && image != -1 && InReportView() )
         {
-            int imageWidth, imageHeight;            
-            m_small_images->GetImageList()->GetSize(image, imageWidth, imageHeight);
+            const auto bmp = m_small_images->GetImageBitmapFor(this, 0);
+            auto size = bmp.GetScaledSize();
+            int imageHeight = size.GetHeight();
 
             if ( imageHeight > m_lineHeight )
                 m_lineHeight = 0;

@@ -284,7 +284,7 @@ private:
     Images m_images;
 
     // The associated image list or nullptr.
-    wxImageList* m_imageList;
+    wxImageList* m_imageList = nullptr;
 
     // False by default, if true then we delete m_imageList.
     bool m_ownsImageList;
