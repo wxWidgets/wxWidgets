@@ -207,7 +207,7 @@ class UnhandledException
 enum
 {
     // control ids and menu items
-    Except_ThrowInt = wxID_HIGHEST,
+    Except_ThrowInt = wxID_HIGHEST+1,
     Except_ThrowString,
     Except_ThrowObject,
     Except_ThrowUnhandled,
