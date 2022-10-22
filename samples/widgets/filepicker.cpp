@@ -54,7 +54,7 @@ enum
 // control ids
 enum
 {
-    PickerPage_Reset = wxID_HIGHEST,
+    PickerPage_Reset = wxID_HIGHEST+1,
     PickerPage_File,
     PickerPage_SetDir,
     PickerPage_CurrentPath
