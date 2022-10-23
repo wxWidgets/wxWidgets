@@ -5504,7 +5504,7 @@ void wxGenericListCtrl::DoUpdateImages(int which )
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
 
-void wxGenericListCtrl::DoUpdateImages(int which, const wxVector<wxBitmapBundle> &images)
+void wxGenericListCtrl::DoUpdateImagesDPI(int which, const wxVector<wxBitmapBundle> &images)
 {
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
     m_mainWin->SetImages(images, which);
