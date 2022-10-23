@@ -167,6 +167,17 @@ set(BASE_OSX_NOTWXMAC_HDR
     ${BASE_COREFOUNDATION_HDR}
 )
 
+set(QT_UNIX_SRC
+    src/unix/dialup.cpp
+    src/unix/joystick.cpp
+    src/unix/sound.cpp
+)
+
+set(QT_UNIX_HDR
+    wx/unix/joystick.h
+    wx/unix/sound.h
+)
+
 set(QT_WIN32_SRC
     src/msw/ole/automtn.cpp
     src/msw/ole/safearray.cpp
