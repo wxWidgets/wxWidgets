@@ -235,14 +235,9 @@ enum wxEllipsizeMode
 
 #if defined(__WINDOWS__) && wxUSE_WXDIB
     #define wxBITMAP(name) wxBitmap(wxT(#name), wxBITMAP_TYPE_BMP_RESOURCE)
-#elif defined(__WXGTK__)   || \
-      defined(__WXX11__)   || \
-      defined(__WXMAC__)   || \
-      defined(__WXDFB__)
+#else
     // Initialize from an included XPM
     #define wxBITMAP(name) wxBitmap(name##_xpm)
-#else // other platforms
-    #define wxBITMAP(name) wxBitmap(name##_xpm, wxBITMAP_TYPE_XPM)
 #endif // platform
 
 // Macro for creating wxBitmap from in-memory PNG data.
