@@ -3302,9 +3302,9 @@ void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
-    if ( HasFlag(wxLC_ICON) && (m_normal_images))
+    if ( HasFlag(wxLC_ICON) && (!m_normal_images.empty()))
     {
-        const auto bmp = m_normal_images->GetImageBitmapFor(this, index);
+        const auto bmp = m_normal_images.at(index).GetBitmapFor(this);
         dc->DrawBitmap(bmp, x, y);
     }
     else if ( HasFlag(wxLC_ICON) && (m_normal_image_list))
@@ -3327,7 +3327,14 @@ void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 
 void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
 {
-    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
+    if ( HasFlag(wxLC_ICON) && (!m_normal_images.empty()))
+    {
+        auto size = m_normal_images.at(index).GetBitmapFor(this).GetSize();
+        size /= GetDPIScaleFactor();
+        width = size.GetWidth();
+        height = size.GetHeight();
+    }
+    else if ( HasFlag(wxLC_ICON) && m_normal_image_list )
     {
         m_normal_image_list->GetSize( index, width, height );
     }
@@ -3350,7 +3357,7 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
     }
 }
 
-void wxListMainWindow::SetImages( wxWithImages *images, const int which)
+void wxListMainWindow::SetImages( const wxVector<wxBitmapBundle> &images, const int which)
 {
 
     m_dirty = true;
@@ -3366,6 +3373,7 @@ void wxListMainWindow::SetImages( wxWithImages *images, const int which)
 */
     if (which == wxIMAGE_LIST_NORMAL)
     {
+
         m_normal_images = images;
         //m_normal_spacing = width + 8;
     }
@@ -3396,7 +3404,6 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
     if (which == wxIMAGE_LIST_NORMAL)
     {
         m_normal_image_list = imageList;
-        //m_normal_images.SetImageList(imageList);
         m_normal_spacing = width + 8;
     }
 
@@ -4065,8 +4072,11 @@ void wxListMainWindow::RecalculatePositions()
     const size_t count = GetItemCount();
 
     int iconSpacing;
-    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
+    if ( HasFlag(wxLC_ICON) && !m_normal_images.empty() )
+        iconSpacing = m_normal_spacing;    
+    else if ( HasFlag(wxLC_ICON) && m_normal_image_list )
         iconSpacing = m_normal_spacing;
+
     else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
         iconSpacing = m_small_spacing;
     else
@@ -5495,7 +5505,7 @@ void wxGenericListCtrl::DoUpdateImages(int which )
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
 }
 
-void wxGenericListCtrl::DoUpdateImages(int which, wxWithImages *images)
+void wxGenericListCtrl::DoUpdateImages(int which, const wxVector<wxBitmapBundle> &images)
 {
     m_mainWin->SetImageList( GetUpdatedImageList(which), which );
     m_mainWin->SetImages(images, which);

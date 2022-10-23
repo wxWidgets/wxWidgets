@@ -292,11 +292,11 @@ wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)
 // Images support
 // ----------------------------------------------------------------------------
 
-void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle>& images)
+void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle> &images)
 {
     m_imagesNormal.SetImages(images);
 
-    DoUpdateImages(wxIMAGE_LIST_NORMAL, &m_imagesNormal);
+    DoUpdateImages(wxIMAGE_LIST_NORMAL, images);
 }
 
 void wxListCtrlBase::SetSmallImages(const wxVector<wxBitmapBundle>& images)

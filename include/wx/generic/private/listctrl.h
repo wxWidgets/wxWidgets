@@ -640,7 +640,7 @@ public:
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
 
-    void SetImages(wxWithImages *images, const int which);
+    void SetImages(const wxVector<wxBitmapBundle> &images, const int which);
     void SetImageList( wxImageList *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = false );
     int GetItemSpacing( bool isSmall = false );
@@ -815,7 +815,7 @@ protected:
     wxImageList         *m_small_image_list;
     wxImageList         *m_normal_image_list;
 
-    wxWithImages         *m_normal_images = nullptr;
+    wxVector<wxBitmapBundle> m_normal_images;
 
     int                  m_small_spacing;
     int                  m_normal_spacing;
