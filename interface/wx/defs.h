@@ -591,11 +591,12 @@ enum wxStandardID
     /**
         Start of the range reserved for wxWidgets-defined IDs.
 
-        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST.
+        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST
+        (exclusive).
      */
-    wxID_LOWEST = 4999,
+    wxID_LOWEST = 5000,
 
-    wxID_OPEN,
+    wxID_OPEN = wxID_LOWEST,
     wxID_CLOSE,
     wxID_NEW,
     wxID_SAVE,
@@ -743,13 +744,14 @@ enum wxStandardID
     /**
         End of the range reserved for wxWidgets-defined IDs.
 
-        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST.
+        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST
+        (exclusive).
 
         When using an enum to define a number of custom IDs, assigning the
-        value of @c wxID_HIGHEST+1 to the first element ensures that none of
+        value of @c wxID_HIGHEST to the first element ensures that none of
         the enum elements will conflict with any standard IDs.
      */
-    wxID_HIGHEST = 5999
+    wxID_HIGHEST = 6000
 };
 
 /**
