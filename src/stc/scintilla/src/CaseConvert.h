@@ -10,9 +10,7 @@
 #ifndef CASECONVERT_H
 #define CASECONVERT_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 enum CaseConversion {
 	CaseConversionFold,
@@ -33,7 +31,7 @@ const char *CaseConvert(int character, enum CaseConversion conversion);
 // When performing CaseConvertString, the converted value may be up to 3 times longer than the input.
 // Ligatures are often decomposed into multiple characters and long cases include:
 // ΐ "\xce\x90" folds to ΐ "\xce\xb9\xcc\x88\xcc\x81"
-const int maxExpansionCaseConversion=3;
+constexpr size_t maxExpansionCaseConversion = 3;
 
 // Converts a mixed case string using a particular conversion.
 // Result may be a different length to input and the length is the return value.
@@ -43,8 +41,6 @@ size_t CaseConvertString(char *converted, size_t sizeConverted, const char *mixe
 // Converts a mixed case string using a particular conversion.
 std::string CaseConvertString(const std::string &s, enum CaseConversion conversion);
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

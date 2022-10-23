@@ -1,5 +1,5 @@
 // Scintilla source code edit control
-/** @file LexESCRIPT.cxx
+/** @file LexEScript.cxx
  ** Lexer for ESCRIPT
  **/
 // Copyright 2003 by Patrizio Bekerle (patrizio@bekerle.com)
@@ -22,9 +22,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 
 static inline bool IsAWordChar(const int ch) {

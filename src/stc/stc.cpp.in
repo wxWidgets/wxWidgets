@@ -38,11 +38,8 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#include <ctype.h>
-
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
-#include "wx/image.h"
 #include "wx/vlbox.h"
 #include "wx/stack.h"
 #if wxUSE_FFILE
@@ -753,27 +750,28 @@ void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
     SetFocus();
     wxPoint pt = evt.GetPosition();
     m_swx->DoLeftButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
-                      evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+                            evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
 }
 
 void wxStyledTextCtrl::OnMouseRightDown(wxMouseEvent& evt) {
     SetFocus();
     wxPoint pt = evt.GetPosition();
     m_swx->DoRightButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
-                      evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+                             evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
     // We need to call evt.Skip() to allow generating EVT_CONTEXT_MENU
     evt.Skip();
 }
 
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
-    m_swx->DoLeftButtonMove(Point(pt.x, pt.y));
+    m_swx->DoLeftButtonMove(Point(pt.x, pt.y), m_stopWatch.Time(),
+                            evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
 }
 
 void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoLeftButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
-                      evt.ControlDown());
+                          evt.ShiftDown(), evt.ControlDown(), evt.AltDown(), evt.MetaDown());
 }
 
 void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {
@@ -1118,7 +1116,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
@@ -1166,7 +1163,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
@@ -1182,13 +1178,18 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_AUTOCOMP_COMPLETED);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
-        evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
         break;
 
     case SCN_MARGINRIGHTCLICK:
         evt.SetEventType(wxEVT_STC_MARGIN_RIGHT_CLICK);
         evt.SetMargin(scn.margin);
+        break;
+
+    case SCN_AUTOCSELECTIONCHANGE:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION_CHANGE);
+        evt.SetListType(scn.listType);
+        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     default:
@@ -1297,7 +1298,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 7, 2, "Scintilla 3.7.2");
+    return wxVersionInfo("Scintilla", 3, 21, 1, "Scintilla 3.21.1");
 }
 
 #endif // wxUSE_STC

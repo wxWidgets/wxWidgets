@@ -23,9 +23,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static const char * const yamlWordListDesc[] = {
 	"Keywords",
@@ -98,7 +96,7 @@ static void ColouriseYAMLLine(
 		}
 	}
 	styler.SetLineState(currentLine, 0);
-	if (strncmp(lineBuffer, "---", 3) == 0) {	// Document marker
+	if (strncmp(lineBuffer, "---", 3) == 0 || strncmp(lineBuffer, "...", 3) == 0) {	// Document marker
 		styler.SetLineState(currentLine, YAML_STATE_DOCUMENT);
 		styler.ColourTo(endPos, SCE_YAML_DOCUMENT);
 		return;
@@ -119,6 +117,10 @@ static void ColouriseYAMLLine(
 	while (i < lengthLine) {
 		if (lineBuffer[i] == '\'' || lineBuffer[i] == '\"') {
 			bInQuotes = !bInQuotes;
+		} else if (lineBuffer[i] == '#' && isspacechar(lineBuffer[i - 1]) && !bInQuotes) {
+			styler.ColourTo(startLine + i - 1, SCE_YAML_DEFAULT);
+			styler.ColourTo(endPos, SCE_YAML_COMMENT);
+			return;
 		} else if (lineBuffer[i] == ':' && !bInQuotes) {
 			styler.ColourTo(startLine + i - 1, SCE_YAML_IDENTIFIER);
 			styler.ColourTo(startLine + i, SCE_YAML_OPERATOR);
