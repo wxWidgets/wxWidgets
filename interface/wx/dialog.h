@@ -630,7 +630,7 @@ public:
         passed as the argument upon completion, instead of generating the
         wxEVT_WINDOW_MODAL_DIALOG_CLOSED event.
 
-        This form is particularly useful in combination with C++11 lambdas,
+        This form is particularly useful in combination with lambdas,
         when it allows writing window-modal very similarly to how ShowModal()
         is used (with the notable exception of not being able to create
         the dialog on stack):

@@ -684,13 +684,13 @@ public:
 
     /**
        Return @true to allow the given key to start editing: the base class
-       version only checks that the event has no modifiers. 
+       version only checks that the event has no modifiers.
 
        If the key is F2 (special), editing will always start and this
        method will not be called at all (but StartingKey() will)
     */
     virtual bool IsAcceptedKey(wxKeyEvent& event);
-    
+
 
     /**
        Returns the value currently in the editor control.
@@ -2212,19 +2212,10 @@ struct wxGridBlockDiffResult
     Note that objects of this class can only be returned by wxGrid, but not
     constructed in the application code.
 
-    The preferable way to iterate over it is using C++11 range-for loop:
+    The preferable way to iterate over it is using range-for loop:
     @code
         for ( const auto& block: grid->GetSelectedBlocks() ) {
             ... do something with block ...
-        }
-    @endcode
-    When not using C++11, iteration has to be done manually:
-    @code
-        wxGridBlocks range = grid->GetSelectedBlocks();
-        for ( wxGridBlocks::iterator it = range.begin();
-              it != range.end();
-              ++it ) {
-            ... do something with *it ...
         }
     @endcode
 
@@ -5024,7 +5015,7 @@ public:
     /**
         Returns a range of grid selection blocks.
 
-        The returned range can be iterated over, e.g. with C++11 range-for loop:
+        The returned range can be iterated over, e.g. with range-for loop:
         @code
             for ( const auto block: grid->GetSelectedBlocks() ) {
                 if ( block.Intersects(myBlock) )

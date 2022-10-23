@@ -23,7 +23,7 @@ enum wxCondError
     They may be used in a multithreaded application to wait until the given condition
     becomes @true which happens when the condition becomes signaled.
 
-    @note In C++11 programs, prefer using @c std::condition to this class.
+    @note Prefer using @c std::condition rather than this class in the new code.
 
     For example, if a worker thread is doing some long task and another thread has
     to wait until it is finished, the latter thread will wait on the condition
@@ -188,7 +188,7 @@ public:
         return wxCOND_NO_ERROR;
         @endcode
 
-        The predicate would typically be a C++11 lambda:
+        The predicate would typically be a lambda:
         @code
         condvar.Wait([]{return value == 1;});
         @endcode
@@ -716,7 +716,7 @@ enum wxThreadError
     between threads and processes is that memory spaces of different processes are
     separated while all threads share the same address space.
 
-    @note In C++11 programs, consider using @c std::thread instead of this class.
+    @note Prefer using @c std::thread rather than this class in the new code.
 
     While it makes it much easier to share common data between several threads, it
     also makes it much easier to shoot oneself in the foot, so careful use of
@@ -1601,7 +1601,7 @@ enum wxMutexError
     from its usefulness in coordinating mutually-exclusive access to a shared
     resource as only one thread at a time can own a mutex object.
 
-    @note In C++11 programs, prefer using @c std::mutex to this class.
+    @note Prefer using @c std::mutex rather than this class in the new code.
 
     Mutexes may be recursive in the sense that a thread can lock a mutex which it
     had already locked before (instead of dead locking the entire process in this
