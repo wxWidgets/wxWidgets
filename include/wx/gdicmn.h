@@ -231,6 +231,8 @@ enum wxEllipsizeMode
 
 /* Another macro: this one is for portable creation of bitmaps. We assume that
    under Unix bitmaps live in XPMs and under Windows they're in resources.
+
+   This is a legacy macro, prefer using wxBITMAP_PNG() in the new code.
  */
 
 #if defined(__WINDOWS__) && wxUSE_WXDIB
