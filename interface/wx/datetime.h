@@ -852,7 +852,7 @@ public:
 
     /**
         This function does the same as the standard ANSI C @c strftime(3)
-        function (http://www.cplusplus.com/reference/clibrary/ctime/strftime.html).
+        function (https://cplusplus.com/reference/ctime/strftime/).
         Please see its description for the meaning of @a format parameter.
 
         Notice that POSIX @c "%g", @c "%G", @c "%V" and @c "%z" format
