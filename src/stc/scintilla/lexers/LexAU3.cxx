@@ -1,6 +1,6 @@
 // Scintilla source code edit control
 // @file LexAU3.cxx
-// Lexer for AutoIt3  http://www.hiddensoft.com/autoit3
+// Lexer for AutoIt3 https://www.autoitscript.com/site/
 // by Jos van der Zande, jvdzande@yahoo.com
 //
 // Changes:
@@ -68,9 +68,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsTypeCharacter(const int ch)
 {

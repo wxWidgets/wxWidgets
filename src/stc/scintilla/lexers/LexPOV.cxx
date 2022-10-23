@@ -32,9 +32,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAWordChar(int ch) {
 	return ch < 0x80 && (isalnum(ch) || ch == '_');

@@ -482,7 +482,6 @@
 
 #cmakedefine01 wxUSE_DIRDLG
 
-
 #cmakedefine01 wxUSE_FILEDLG
 
 #cmakedefine01 wxUSE_FINDREPLDLG
@@ -580,7 +579,6 @@
 #cmakedefine01 wxUSE_SVG
 
 #cmakedefine01 wxUSE_DC_TRANSFORM_MATRIX
-
 
 
 #cmakedefine01 wxUSE_IMAGE

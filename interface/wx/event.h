@@ -550,7 +550,7 @@ public:
          threads, but that the method will be always called in the main, GUI,
          thread context.
 
-         This overload is particularly useful in combination with C++11 lambdas:
+         This overload is particularly useful in combination with lambdas:
          @code
          wxGetApp().CallAfter([]{
              wxBell();

@@ -5,13 +5,13 @@
 
 #if wxUSE_STC
 
-#include "wx/imaglist.h"
 #include "Platform.h"
 
 class wxStyledTextCtrl;
 class wxSTCListBox;
 class wxSTCListBoxVisualData;
 
+using namespace Scintilla;
 
 
 wxRect wxRectFromPRectangle(PRectangle prc);
@@ -46,9 +46,8 @@ public:
             void RegisterImageHelper(int type, const wxBitmap& bmp);
     virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) override;
     virtual void ClearRegisteredImages() override;
-    virtual void SetDoubleClickAction(CallBackAction, void *) override;
+    virtual void SetDelegate(IListBoxDelegate *lbDelegate) override;
     virtual void SetList(const char* list, char separator, char typesep) override;
-            void SetListInfo(int*, int*, int*);
 };
 
 

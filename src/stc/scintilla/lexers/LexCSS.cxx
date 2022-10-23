@@ -1,7 +1,8 @@
 // Scintilla source code edit control
+// Encoding: UTF-8
 /** @file LexCSS.cxx
  ** Lexer for Cascading Style Sheets
- ** Written by Jakub Vr·na
+ ** Written by Jakub Vr√°na
  ** Improved by Philippe Lhoste (CSS2)
  ** Improved by Ross McKay (SCSS mode; see http://sass-lang.com/ )
  **/
@@ -31,9 +32,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 
 static inline bool IsAWordChar(const unsigned int ch) {
@@ -347,6 +346,7 @@ static void ColouriseCssDoc(Sci_PositionU startPos, Sci_Position length, int ini
 				case SCE_CSS_DEFAULT:
 					if (isLessDocument) // give priority to pseudo elements
 						break;
+					// Falls through.
 				case SCE_CSS_VALUE:
 					lastStateVar = sc.state;
 					sc.SetState(SCE_CSS_VARIABLE);

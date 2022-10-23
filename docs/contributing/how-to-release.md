@@ -166,6 +166,10 @@ and from the root directory run
 
         autoconf -B build/autoconf_prepend-include
 
+or, if you're not using Debian Stable version of autoconf, see the instructions
+in `build/tools/autoconf/README.md` for regenerating configure on a different
+system.
+
 * Restore the description of the Git notes use and create a skeleton section
   for the next release in `docs/changes.txt`.
 

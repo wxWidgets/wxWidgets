@@ -12,20 +12,25 @@
 #include <stdarg.h>
 #include <assert.h>
 
+#include <string>
+#include <vector>
+#include <map>
+
 #include "ILexer.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#include "StringCopy.h"
 #include "WordList.h"
 #include "LexAccessor.h"
-#include "Accessor.h"
 #include "StyleContext.h"
 #include "CharacterSet.h"
 #include "LexerModule.h"
+#include "OptionSet.h"
+#include "SubStyles.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 #define HERE_DELIM_MAX			256
 
@@ -60,7 +65,9 @@ using namespace Scintilla;
 
 #define BASH_DELIM_STACK_MAX	7
 
-static inline int translateBashDigit(int ch) {
+namespace {
+
+inline int translateBashDigit(int ch) {
 	if (ch >= '0' && ch <= '9') {
 		return ch - '0';
 	} else if (ch >= 'a' && ch <= 'z') {
@@ -75,7 +82,7 @@ static inline int translateBashDigit(int ch) {
 	return BASH_BASE_ERROR;
 }
 
-static inline int getBashNumberBase(char *s) {
+inline int getBashNumberBase(char *s) {
 	int i = 0;
 	int base = 0;
 	while (*s) {
@@ -88,7 +95,7 @@ static inline int getBashNumberBase(char *s) {
 	return base;
 }
 
-static int opposite(int ch) {
+int opposite(int ch) {
 	if (ch == '(') return ')';
 	if (ch == '[') return ']';
 	if (ch == '{') return '}';
@@ -96,23 +103,200 @@ static int opposite(int ch) {
 	return ch;
 }
 
-static int GlobScan(StyleContext &sc) {
-	// forward scan for a glob-like (...), no whitespace allowed
+int GlobScan(StyleContext &sc) {
+	// forward scan for zsh globs, disambiguate versus bash arrays
+	// complex expressions may still fail, e.g. unbalanced () '' "" etc
 	int c, sLen = 0;
+	int pCount = 0;
+	int hash = 0;
 	while ((c = sc.GetRelativeCharacter(++sLen)) != 0) {
 		if (IsASpace(c)) {
 			return 0;
+		} else if (c == '\'' || c == '\"') {
+			if (hash != 2) return 0;
+		} else if (c == '#' && hash == 0) {
+			hash = (sLen == 1) ? 2:1;
+		} else if (c == '(') {
+			pCount++;
 		} else if (c == ')') {
-			return sLen;
+			if (pCount == 0) {
+				if (hash) return sLen;
+				return 0;
+			}
+			pCount--;
 		}
 	}
 	return 0;
 }
 
-static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
-							 WordList *keywordlists[], Accessor &styler) {
+bool IsCommentLine(Sci_Position line, LexAccessor &styler) {
+	Sci_Position pos = styler.LineStart(line);
+	Sci_Position eol_pos = styler.LineStart(line + 1) - 1;
+	for (Sci_Position i = pos; i < eol_pos; i++) {
+		char ch = styler[i];
+		if (ch == '#')
+			return true;
+		else if (ch != ' ' && ch != '\t')
+			return false;
+	}
+	return false;
+}
 
-	WordList &keywords = *keywordlists[0];
+struct OptionsBash {
+	bool fold;
+	bool foldComment;
+	bool foldCompact;
+
+	OptionsBash() {
+		fold = false;
+		foldComment = false;
+		foldCompact = true;
+	}
+};
+
+const char * const bashWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+struct OptionSetBash : public OptionSet<OptionsBash> {
+	OptionSetBash() {
+		DefineProperty("fold", &OptionsBash::fold);
+
+		DefineProperty("fold.comment", &OptionsBash::foldComment);
+
+		DefineProperty("fold.compact", &OptionsBash::foldCompact);
+
+		DefineWordListSets(bashWordListDesc);
+	}
+};
+
+const char styleSubable[] = { SCE_SH_IDENTIFIER, SCE_SH_SCALAR, 0 };
+
+LexicalClass lexicalClasses[] = {
+	// Lexer Bash SCLEX_BASH SCE_SH_:
+	0, "SCE_SH_DEFAULT", "default", "White space",
+	1, "SCE_SH_ERROR", "error", "Error",
+	2, "SCE_SH_COMMENTLINE", "comment line", "Line comment: #",
+	3, "SCE_SH_NUMBER", "literal numeric", "Number",
+	4, "SCE_SH_WORD", "keyword", "Keyword",
+	5, "SCE_SH_STRING", "literal string", "String",
+	6, "SCE_SH_CHARACTER", "literal string", "Single quoted string",
+	7, "SCE_SH_OPERATOR", "operator", "Operators",
+	8, "SCE_SH_IDENTIFIER", "identifier", "Identifiers",
+	9, "SCE_SH_SCALAR", "identifier", "Scalar variable",
+	10, "SCE_SH_PARAM", "identifier", "Parameter",
+	11, "SCE_SH_BACKTICKS", "literal string", "Backtick quoted command",
+	12, "SCE_SH_HERE_DELIM", "operator", "Heredoc delimiter",
+	13, "SCE_SH_HERE_Q", "literal string", "Heredoc quoted string",
+};
+
+}
+
+class LexerBash : public DefaultLexer {
+	WordList keywords;
+	OptionsBash options;
+	OptionSetBash osBash;
+	enum { ssIdentifier, ssScalar };
+	SubStyles subStyles;
+public:
+	LexerBash() :
+		DefaultLexer("bash", SCLEX_BASH, lexicalClasses, ELEMENTS(lexicalClasses)),
+		subStyles(styleSubable, 0x80, 0x40, 0) {
+	}
+	virtual ~LexerBash() {
+	}
+	void SCI_METHOD Release() override {
+		delete this;
+	}
+	int SCI_METHOD Version() const override {
+		return lvIdentity;
+	}
+	const char * SCI_METHOD PropertyNames() override {
+		return osBash.PropertyNames();
+	}
+	int SCI_METHOD PropertyType(const char* name) override {
+		return osBash.PropertyType(name);
+	}
+	const char * SCI_METHOD DescribeProperty(const char *name) override {
+		return osBash.DescribeProperty(name);
+	}
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
+	const char * SCI_METHOD PropertyGet(const char* key) override {
+		return osBash.PropertyGet(key);
+	}
+	const char * SCI_METHOD DescribeWordListSets() override {
+		return osBash.DescribeWordListSets();
+	}
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+
+	void * SCI_METHOD PrivateCall(int, void *) override {
+		return 0;
+	}
+
+	int SCI_METHOD AllocateSubStyles(int styleBase, int numberStyles) override {
+		return subStyles.Allocate(styleBase, numberStyles);
+	}
+	int SCI_METHOD SubStylesStart(int styleBase) override {
+		return subStyles.Start(styleBase);
+	}
+	int SCI_METHOD SubStylesLength(int styleBase) override {
+		return subStyles.Length(styleBase);
+	}
+	int SCI_METHOD StyleFromSubStyle(int subStyle) override {
+		const int styleBase = subStyles.BaseStyle(subStyle);
+		return styleBase;
+	}
+	int SCI_METHOD PrimaryStyleFromStyle(int style) override {
+		return style;
+	}
+	void SCI_METHOD FreeSubStyles() override {
+		subStyles.Free();
+	}
+	void SCI_METHOD SetIdentifiers(int style, const char *identifiers) override {
+		subStyles.SetIdentifiers(style, identifiers);
+	}
+	int SCI_METHOD DistanceToSecondaryStyles() override {
+		return 0;
+	}
+	const char *SCI_METHOD GetSubStyleBases() override {
+		return styleSubable;
+	}
+
+	static ILexer *LexerFactoryBash() {
+		return new LexerBash();
+	}
+};
+
+Sci_Position SCI_METHOD LexerBash::PropertySet(const char *key, const char *val) {
+	if (osBash.PropertySet(&options, key, val)) {
+		return 0;
+	}
+	return -1;
+}
+
+Sci_Position SCI_METHOD LexerBash::WordListSet(int n, const char *wl) {
+	WordList *wordListN = 0;
+	switch (n) {
+	case 0:
+		wordListN = &keywords;
+		break;
+	}
+	Sci_Position firstModification = -1;
+	if (wordListN) {
+		WordList wlNew;
+		wlNew.Set(wl);
+		if (*wordListN != wlNew) {
+			wordListN->Set(wl);
+			firstModification = 0;
+		}
+	}
+	return firstModification;
+}
+
+void SCI_METHOD LexerBash::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) {
 	WordList cmdDelimiter, bashStruct, bashStruct_in;
 	cmdDelimiter.Set("| || |& & && ; ;; ( ) { }");
 	bashStruct.Set("if elif fi while until else then do done esac eval");
@@ -226,11 +410,15 @@ static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int in
 	};
 	QuoteStackCls QuoteStack;
 
+	const WordClassifier &classifierIdentifiers = subStyles.Classifier(SCE_SH_IDENTIFIER);
+	const WordClassifier &classifierScalars = subStyles.Classifier(SCE_SH_SCALAR);
+
 	int numBase = 0;
 	int digit;
 	Sci_PositionU endPos = startPos + length;
 	int cmdState = BASH_CMD_START;
 	int testExprType = 0;
+	LexAccessor styler(pAccess);
 
 	// Always backtracks to the start of a line that is not a continuation
 	// of the previous line (i.e. start of a bash command segment)
@@ -295,6 +483,11 @@ static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int in
 					char s[500];
 					char s2[10];
 					sc.GetCurrent(s, sizeof(s));
+					int identifierStyle = SCE_SH_IDENTIFIER;
+					int subStyle = classifierIdentifiers.ValueFor(s);
+					if (subStyle >= 0) {
+						identifierStyle = subStyle;
+					}
 					// allow keywords ending in a whitespace or command delimiter
 					s2[0] = static_cast<char>(sc.ch);
 					s2[1] = '\0';
@@ -306,7 +499,7 @@ static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int in
 						else if (strcmp(s, "do") == 0 && keywordEnds)
 							cmdStateNew = BASH_CMD_START;
 						else
-							sc.ChangeState(SCE_SH_IDENTIFIER);
+							sc.ChangeState(identifierStyle);
 						sc.SetState(SCE_SH_DEFAULT);
 						break;
 					}
@@ -316,42 +509,49 @@ static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int in
 							cmdStateNew = BASH_CMD_TEST;
 							testExprType = 0;
 						} else
-							sc.ChangeState(SCE_SH_IDENTIFIER);
+							sc.ChangeState(identifierStyle);
 					}
 					// detect bash construct keywords
 					else if (bashStruct.InList(s)) {
 						if (cmdState == BASH_CMD_START && keywordEnds)
 							cmdStateNew = BASH_CMD_START;
 						else
-							sc.ChangeState(SCE_SH_IDENTIFIER);
+							sc.ChangeState(identifierStyle);
 					}
 					// 'for'|'case'|'select' needs 'in'|'do' to be highlighted later
 					else if (bashStruct_in.InList(s)) {
 						if (cmdState == BASH_CMD_START && keywordEnds)
 							cmdStateNew = BASH_CMD_WORD;
 						else
-							sc.ChangeState(SCE_SH_IDENTIFIER);
+							sc.ChangeState(identifierStyle);
 					}
 					// disambiguate option items and file test operators
 					else if (s[0] == '-') {
 						if (cmdState != BASH_CMD_TEST)
-							sc.ChangeState(SCE_SH_IDENTIFIER);
+							sc.ChangeState(identifierStyle);
 					}
 					// disambiguate keywords and identifiers
 					else if (cmdState != BASH_CMD_START
 						  || !(keywords.InList(s) && keywordEnds)) {
-						sc.ChangeState(SCE_SH_IDENTIFIER);
+						sc.ChangeState(identifierStyle);
 					}
 					sc.SetState(SCE_SH_DEFAULT);
 				}
 				break;
 			case SCE_SH_IDENTIFIER:
-				if (sc.chPrev == '\\') {	// for escaped chars
-					sc.ForwardSetState(SCE_SH_DEFAULT);
-				} else if (!setWord.Contains(sc.ch)) {
-					sc.SetState(SCE_SH_DEFAULT);
-				} else if (cmdState == BASH_CMD_ARITH && !setWordStart.Contains(sc.ch)) {
-					sc.SetState(SCE_SH_DEFAULT);
+				if (sc.chPrev == '\\' || !setWord.Contains(sc.ch) ||
+					  (cmdState == BASH_CMD_ARITH && !setWordStart.Contains(sc.ch))) {
+					char s[500];
+					sc.GetCurrent(s, sizeof(s));
+					int subStyle = classifierIdentifiers.ValueFor(s);
+					if (subStyle >= 0) {
+						sc.ChangeState(subStyle);
+					}
+					if (sc.chPrev == '\\') {	// for escaped chars
+						sc.ForwardSetState(SCE_SH_DEFAULT);
+					} else {
+						sc.SetState(SCE_SH_DEFAULT);
+					}
 				}
 				break;
 			case SCE_SH_NUMBER:
@@ -505,6 +705,12 @@ static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int in
 				break;
 			case SCE_SH_SCALAR:	// variable names
 				if (!setParam.Contains(sc.ch)) {
+					char s[500];
+					sc.GetCurrent(s, sizeof(s));
+					int subStyle = classifierScalars.ValueFor(&s[1]); // skip the $
+					if (subStyle >= 0) {
+						sc.ChangeState(subStyle);
+					}
 					if (sc.LengthCurrent() == 1) {
 						// Special variable: $(, $_ etc.
 						sc.ForwardSetState(SCE_SH_DEFAULT);
@@ -788,23 +994,12 @@ static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int in
 	sc.Complete();
 }
 
-static bool IsCommentLine(Sci_Position line, Accessor &styler) {
-	Sci_Position pos = styler.LineStart(line);
-	Sci_Position eol_pos = styler.LineStart(line + 1) - 1;
-	for (Sci_Position i = pos; i < eol_pos; i++) {
-		char ch = styler[i];
-		if (ch == '#')
-			return true;
-		else if (ch != ' ' && ch != '\t')
-			return false;
-	}
-	return false;
-}
+void SCI_METHOD LexerBash::Fold(Sci_PositionU startPos, Sci_Position length, int, IDocument *pAccess) {
+	if(!options.fold)
+		return;
 
-static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordList *[],
-						Accessor &styler) {
-	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
-	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	LexAccessor styler(pAccess);
+
 	Sci_PositionU endPos = startPos + length;
 	int visibleChars = 0;
 	int skipHereCh = 0;
@@ -813,6 +1008,8 @@ static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 	int levelCurrent = levelPrev;
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);
+	char word[8] = { '\0' }; // we're not interested in long words anyway
+	unsigned int wordlen = 0;
 	for (Sci_PositionU i = startPos; i < endPos; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
@@ -820,7 +1017,7 @@ static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 		// Comment folding
-		if (foldComment && atEOL && IsCommentLine(lineCurrent, styler))
+		if (options.foldComment && atEOL && IsCommentLine(lineCurrent, styler))
 		{
 			if (!IsCommentLine(lineCurrent - 1, styler)
 				&& IsCommentLine(lineCurrent + 1, styler))
@@ -828,6 +1025,19 @@ static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 			else if (IsCommentLine(lineCurrent - 1, styler)
 					 && !IsCommentLine(lineCurrent + 1, styler))
 				levelCurrent--;
+		}
+		if (style == SCE_SH_WORD) {
+			if ((wordlen + 1) < sizeof(word))
+				word[wordlen++] = ch;
+			if (styleNext != style) {
+				word[wordlen] = '\0';
+				wordlen = 0;
+				if (strcmp(word, "if") == 0 || strcmp(word, "case") == 0 || strcmp(word, "do") == 0) {
+					levelCurrent++;
+				} else if (strcmp(word, "fi") == 0 || strcmp(word, "esac") == 0 || strcmp(word, "done") == 0) {
+					levelCurrent--;
+				}
+			}
 		}
 		if (style == SCE_SH_OPERATOR) {
 			if (ch == '{') {
@@ -854,7 +1064,7 @@ static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 		}
 		if (atEOL) {
 			int lev = levelPrev;
-			if (visibleChars == 0 && foldCompact)
+			if (visibleChars == 0 && options.foldCompact)
 				lev |= SC_FOLDLEVELWHITEFLAG;
 			if ((levelCurrent > levelPrev) && (visibleChars > 0))
 				lev |= SC_FOLDLEVELHEADERFLAG;
@@ -873,9 +1083,4 @@ static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-static const char * const bashWordListDesc[] = {
-	"Keywords",
-	0
-};
-
-LexerModule lmBash(SCLEX_BASH, ColouriseBashDoc, "bash", FoldBashDoc, bashWordListDesc);
+LexerModule lmBash(SCLEX_BASH, LexerBash::LexerFactoryBash, "bash", bashWordListDesc);

@@ -51,9 +51,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsNewline(const int ch) {
     return (ch == '\n' || ch == '\r');
@@ -147,6 +145,7 @@ static void ColorizeMarkdownDoc(Sci_PositionU startPos, Sci_Position length, int
                                WordList **, Accessor &styler) {
     Sci_PositionU endPos = startPos + length;
     int precharCount = 0;
+    bool isLinkNameDetecting = false;
     // Don't advance on a new loop iteration and retry at the same position.
     // Useful in the corner case of having to start at the beginning file position
     // in the default state.
@@ -339,6 +338,27 @@ static void ColorizeMarkdownDoc(Sci_PositionU startPos, Sci_Position length, int
                 ++precharCount;
         }
 
+        // Any link
+        if (sc.state == SCE_MARKDOWN_LINK) {
+            if (sc.Match("](") && sc.GetRelative(-1) != '\\') {
+              sc.Forward(2);
+              isLinkNameDetecting = true;
+            }
+            else if (sc.Match("]:") && sc.GetRelative(-1) != '\\') {
+              sc.Forward(2);
+              sc.SetState(SCE_MARKDOWN_DEFAULT);
+            }
+            else if (!isLinkNameDetecting && sc.ch == ']' && sc.GetRelative(-1) != '\\') {
+              sc.Forward();
+              sc.SetState(SCE_MARKDOWN_DEFAULT);
+            }
+            else if (isLinkNameDetecting && sc.ch == ')' && sc.GetRelative(-1) != '\\') {
+              sc.Forward();
+              sc.SetState(SCE_MARKDOWN_DEFAULT);
+              isLinkNameDetecting = false;
+            }
+        }
+
         // New state anywhere in doc
         if (sc.state == SCE_MARKDOWN_DEFAULT) {
             if (sc.atLineStart && sc.ch == '#') {
@@ -346,38 +366,16 @@ static void ColorizeMarkdownDoc(Sci_PositionU startPos, Sci_Position length, int
                 freezeCursor = true;
             }
             // Links and Images
-            if (sc.Match("![") || sc.ch == '[') {
-                Sci_Position i = 0, j = 0, k = 0;
-                Sci_Position len = endPos - sc.currentPos;
-                while (i < len && (sc.GetRelative(++i) != ']' || sc.GetRelative(i - 1) == '\\'))
-                    ;
-                if (sc.GetRelative(i) == ']') {
-                    j = i;
-                    if (sc.GetRelative(++i) == '(') {
-                        while (i < len && (sc.GetRelative(++i) != ')' || sc.GetRelative(i - 1) == '\\'))
-                            ;
-                        if (sc.GetRelative(i) == ')')
-                            k = i;
-                    }
-                    else if (sc.GetRelative(i) == '[' || sc.GetRelative(++i) == '[') {
-                        while (i < len && (sc.GetRelative(++i) != ']' || sc.GetRelative(i - 1) == '\\'))
-                            ;
-                        if (sc.GetRelative(i) == ']')
-                            k = i;
-                    }
-                }
-                // At least a link text
-                if (j) {
-                    sc.SetState(SCE_MARKDOWN_LINK);
-                    sc.Forward(j);
-                    // Also has a URL or reference portion
-                    if (k)
-                        sc.Forward(k - j);
-                    sc.ForwardSetState(SCE_MARKDOWN_DEFAULT);
-                }
+            if (sc.Match("![")) {
+              sc.SetState(SCE_MARKDOWN_LINK);
+              sc.Forward(2);
+            }
+            else if (sc.ch == '[' && sc.GetRelative(-1) != '\\') {
+              sc.SetState(SCE_MARKDOWN_LINK);
+              sc.Forward();
             }
             // Code - also a special case for alternate inside spacing
-            if (sc.Match("``") && sc.GetRelative(3) != ' ' && AtTermStart(sc)) {
+            else if (sc.Match("``") && sc.GetRelative(3) != ' ' && AtTermStart(sc)) {
                 sc.SetState(SCE_MARKDOWN_CODE2);
                 sc.Forward();
             }

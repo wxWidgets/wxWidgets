@@ -212,7 +212,7 @@ struct wxCmdLineEntryDesc
     }
     @endcode
 
-    With C++11, the for loop could be written:
+    The for loop could be written:
     @code
     for (const auto &arg : parser.GetArguments()) {
         // working on arg as with *itarg above
