@@ -4073,10 +4073,9 @@ void wxListMainWindow::RecalculatePositions()
 
     int iconSpacing;
     if ( HasFlag(wxLC_ICON) && !m_normal_images.empty() )
-        iconSpacing = m_normal_spacing;    
+        iconSpacing = m_normal_spacing;
     else if ( HasFlag(wxLC_ICON) && m_normal_image_list )
         iconSpacing = m_normal_spacing;
-
     else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
         iconSpacing = m_small_spacing;
     else
