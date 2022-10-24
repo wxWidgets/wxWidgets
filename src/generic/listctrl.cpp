@@ -1134,13 +1134,13 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // and the width of the icon, if any
         int ix = 0, iy = 0;    // init them just to suppress the compiler warnings
         const int image = item.m_image;
-        wxImageList *imageList;
+        wxWithImages *imageList;
         if ( image != -1 )
         {
-            imageList = m_owner->GetSmallImageList();
+            imageList = m_owner->GetSmallImages();
             if ( imageList )
             {
-                imageList->GetSize(image, ix, iy);
+                imageList->GetImageLogicalSize(this, image, ix, iy);
                 wLabel += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
             }
         }
@@ -1177,14 +1177,13 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // if we have an image, draw it on the right of the label
         if ( imageList )
         {
-            imageList->Draw
-                       (
-                        image,
-                        dc,
-                        xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
-                        HEADER_OFFSET_Y + (h - iy)/2,
-                        wxIMAGELIST_DRAW_TRANSPARENT
-                       );
+            wxBitmap bmp = imageList->GetImageBitmapFor(this, image);
+            dc.DrawBitmap(
+                          bmp,
+                          xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
+                          HEADER_OFFSET_Y + (h - iy)/2,
+                          wxIMAGELIST_DRAW_TRANSPARENT
+                         );
         }
 
         dc.DrawText( item.GetText(),

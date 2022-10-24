@@ -694,8 +694,12 @@ public:
         SetItem( info );
     }
 
-    wxImageList* GetSmallImageList() const
-        { return m_small_images ? m_small_images->GetImageList() : nullptr; }
+/*    wxImageList* GetSmallImageList() const
+        { return m_small_images ? m_small_images->GetImageList() : nullptr; }*/
+
+    wxWithImages* GetSmallImages() const
+        { return m_small_images; }
+
 
     // set the scrollbars and update the positions of the items
     void RecalculatePositions();
