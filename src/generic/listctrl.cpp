@@ -3410,7 +3410,8 @@ wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
     {
         if ( m_small_images )
         {
-            const int ix = m_small_images->GetImageLogicalSize(this, image).GetWidth();
+            int ix = 0, iy = 0;
+            m_small_images->GetImageLogicalSize(this, image, ix, iy);
             width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
         }
     }
@@ -4632,8 +4633,8 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         int image = item.GetImage();
         if ( m_small_images && image != -1 && InReportView() )
         {
-            const auto size = m_small_images->GetImageLogicalSize(this, image);
-            const int imageHeight = size.GetHeight();
+            int imageWidth, imageHeight;
+            m_small_images->GetImageLogicalSize(this, image, imageWidth, imageHeight);
 
             if ( imageHeight > m_lineHeight )
                 m_lineHeight = 0;
