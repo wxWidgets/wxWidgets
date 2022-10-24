@@ -3359,8 +3359,8 @@ void wxListMainWindow::SetImages( wxWithImages *images, const int which )
 
     if ((images) && (images->HasImages()) )
     {
-        const auto size = images->GetImageLogicalSize(this, 0);
-        width = size.GetWidth();
+        int height;
+        images->GetImageLogicalSize(this, 0, width, height);
     }
 
     if (which == wxIMAGE_LIST_NORMAL)
