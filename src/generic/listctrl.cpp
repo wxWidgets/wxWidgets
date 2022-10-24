@@ -3328,27 +3328,19 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
 {
     if ( HasFlag(wxLC_ICON) && m_normal_images )
     {
-        const auto size = m_normal_images->GetImageLogicalSize(this, index);
-        width = size.GetWidth();
-        height = size.GetHeight();
+        m_normal_images->GetImageLogicalSize(this, index, width, height);
     }
     else if ( HasFlag(wxLC_SMALL_ICON) && m_small_images )
     {
-        const auto size = m_small_images->GetImageLogicalSize(this, index);
-        width = size.GetWidth();
-        height = size.GetHeight();
+        m_small_images->GetImageLogicalSize(this, index, width, height);
     }
     else if ( HasFlag(wxLC_LIST) && m_small_images )
     {
-        const auto size = m_small_images->GetImageLogicalSize(this, index);
-        width = size.GetWidth();
-        height = size.GetHeight();
+        m_small_images->GetImageLogicalSize(this, index, width, height);
     }
     else if ( InReportView() && m_small_images )
     {
-        const auto size = m_small_images->GetImageLogicalSize(this, index);
-        width = size.GetWidth();
-        height = size.GetHeight();
+        m_small_images->GetImageLogicalSize(this, index, width, height);
     }
     else
     {
