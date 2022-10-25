@@ -3903,13 +3903,16 @@ public:
                  HWND hwnd,
                  wxWindow* window = nullptr);
 
-    // Create the context for the given HDC which may be associated (if it's
-    // non-null) with the given wxDC.
+    // Create the context for the given wxDC.
     wxD2DContext(wxGraphicsRenderer* renderer,
                  ID2D1Factory* direct2dFactory,
-                 HDC hdc,
-                 const wxDC* dc = nullptr,
+                 const wxDC& dc,
                  D2D1_ALPHA_MODE alphaMode = D2D1_ALPHA_MODE_IGNORE);
+
+    // Create the context for the given HDC.
+    wxD2DContext(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 HDC hdc);
 
 #if wxUSE_IMAGE
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, wxImage& image);
@@ -4082,37 +4085,46 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer,
 
 wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer,
                            ID2D1Factory* direct2dFactory,
-                           HDC hdc,
-                           const wxDC* dc,
-                           D2D1_ALPHA_MODE alphaMode) :
-    wxGraphicsContext(renderer, dc->GetWindow()), m_direct2dFactory(direct2dFactory),
-    m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, alphaMode))
+                           const wxDC& dc,
+                           D2D1_ALPHA_MODE alphaMode)
+    : wxGraphicsContext(renderer, dc.GetWindow())
+    , m_direct2dFactory(direct2dFactory)
+    , m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, dc.GetHDC(), alphaMode))
 {
-    if ( dc )
-    {
-        const wxSize dcSize = dc->GetSize();
-        m_width = dcSize.GetWidth();
-        m_height = dcSize.GetHeight();
+    const wxSize dcSize = dc.GetSize();
+    m_width = dcSize.GetWidth();
+    m_height = dcSize.GetHeight();
 
-        // We don't set HDC origin at MSW level in wxDC because this limits it to
-        // 2^27 range and we prefer to handle it ourselves to allow using the full
-        // 2^32 range of int coordinates, but we need to let D2D know about the
-        // origin shift by storing it as an internal transformation
-        // (which is not going to be exposed).
-        double sx, sy;
-        dc->GetUserScale(&sx, &sy);
-        double lsx, lsy;
-        dc->GetLogicalScale(&lsx, &lsy);
-        sx *= lsx;
-        sy *= lsy;
-        wxPoint org = dc->GetDeviceOrigin();
-        m_inheritedTransform = D2D1::Matrix3x2F::Translation(org.x / sx, org.y / sy);
-    }
-    else
-    {
-        m_inheritedTransform = D2D1::Matrix3x2F::Identity();
-    }
+    // We don't set HDC origin at MSW level in wxDC because this limits it to
+    // 2^27 range and we prefer to handle it ourselves to allow using the full
+    // 2^32 range of int coordinates, but we need to let D2D know about the
+    // origin shift by storing it as an internal transformation
+    // (which is not going to be exposed).
+    double sx, sy;
+    dc.GetUserScale(&sx, &sy);
+    double lsx, lsy;
+    dc.GetLogicalScale(&lsx, &lsy);
+    sx *= lsx;
+    sy *= lsy;
+    wxPoint org = dc.GetDeviceOrigin();
+    m_inheritedTransform = D2D1::Matrix3x2F::Translation(org.x / sx, org.y / sy);
 
+    Init();
+}
+
+wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc)
+    : wxGraphicsContext(renderer)
+    , m_direct2dFactory(direct2dFactory)
+    , m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, D2D1_ALPHA_MODE_IGNORE))
+    , m_inheritedTransform(D2D1::Matrix3x2F::Identity())
+{
+    RECT r;
+    if ( ::GetClipBox(hdc, &r) == ERROR )
+    {
+        wxLogLastError("GetClipBox");
+    }
+    m_width = r.right - r.left;
+    m_height = r.bottom - r.top;
     Init();
 }
 
@@ -5152,7 +5164,7 @@ wxD2DRenderer::~wxD2DRenderer()
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxWindowDC& dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc);
+    return new wxD2DContext(this, m_direct2dFactory, dc);
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
@@ -5160,7 +5172,7 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
     wxBitmap bmp = dc.GetSelectedBitmap();
     wxASSERT_MSG( bmp.IsOk(), wxS("Should select a bitmap before creating wxGraphicsContext") );
 
-    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc,
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, dc,
                             bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
     d2d->SetContentScaleFactor(dc.GetContentScaleFactor());
     return d2d;
