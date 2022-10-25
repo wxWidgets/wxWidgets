@@ -4667,7 +4667,7 @@ TEST_CASE("ClippingBoxTestCaseGC::DefaultRenderer", "[clip][gc][default]")
 
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
+TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus]")
 {
     wxBitmap bmp(s_dcSize);
     wxMemoryDC dc(bmp);
@@ -4758,7 +4758,7 @@ TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
 #endif // wxUSE_GRAPHICS_GDIPLUS
 
 #if wxUSE_GRAPHICS_DIRECT2D
-TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
+TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d]")
 {
     wxBitmap bmp(s_dcSize);
     wxMemoryDC dc(bmp);
