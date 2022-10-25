@@ -35,6 +35,8 @@
 
 #include "wx/imaglist.h"
 #include "wx/renderer.h"
+
+#include "wx/generic/private/drawbitmap.h"
 #include "wx/generic/private/listctrl.h"
 #include "wx/generic/private/widthcalc.h"
 
@@ -1177,12 +1179,13 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // if we have an image, draw it on the right of the label
         if ( smallImages )
         {
-            wxBitmap bmp = smallImages->GetImageBitmapFor(this, image);
-            dc.DrawBitmap(
-                          bmp,
-                          xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
-                          HEADER_OFFSET_Y + (h - iy)/2
-                         );
+            wxDrawImageBitmap
+            (
+                this, *smallImages, image,
+                dc,
+                xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
+                HEADER_OFFSET_Y + (h - iy)/2
+            );
         }
 
         dc.DrawText( item.GetText(),
@@ -3302,23 +3305,19 @@ void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
     if ( HasFlag(wxLC_ICON) && (m_normal_images))
     {
-        const auto bmp = m_normal_images->GetImageBitmapFor(this, index);
-        dc->DrawBitmap(bmp, x, y);
+        wxDrawImageBitmap(this, *m_normal_images, index, *dc, x, y);
     }
     else if ( HasFlag(wxLC_SMALL_ICON) && (m_small_images))
     {
-        const auto bmp = m_small_images->GetImageBitmapFor(this, index);
-        dc->DrawBitmap(bmp, x, y);
+        wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
     }
     else if ( HasFlag(wxLC_LIST) && (m_small_images))
     {
-        const auto bmp = m_small_images->GetImageBitmapFor(this, index);
-        dc->DrawBitmap(bmp, x, y);
+        wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
     }
     else if ( InReportView() && (m_small_images))
     {
-        const auto bmp = m_small_images->GetImageBitmapFor(this, index);
-        dc->DrawBitmap(bmp, x, y);
+        wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
     }
 }
 
