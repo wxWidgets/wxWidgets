@@ -1134,19 +1134,19 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // and the width of the icon, if any
         int ix = 0, iy = 0;    // init them just to suppress the compiler warnings
         const int image = item.m_image;
-        wxWithImages *imageList;
+        wxWithImages *smallImages;
         if ( image != -1 )
         {
-            imageList = m_owner->GetSmallImages();
-            if ( imageList )
+            smallImages = m_owner->GetSmallImages();
+            if ( smallImages )
             {
-                imageList->GetImageLogicalSize(this, image, ix, iy);
+                smallImages->GetImageLogicalSize(this, image, ix, iy);
                 wLabel += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
             }
         }
         else
         {
-            imageList = nullptr;
+            smallImages = nullptr;
         }
 
         // ignore alignment if there is not enough space anyhow
@@ -1175,9 +1175,9 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h);
 
         // if we have an image, draw it on the right of the label
-        if ( imageList )
+        if ( smallImages )
         {
-            wxBitmap bmp = imageList->GetImageBitmapFor(this, image);
+            wxBitmap bmp = smallImages->GetImageBitmapFor(this, image);
             dc.DrawBitmap(
                           bmp,
                           xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
