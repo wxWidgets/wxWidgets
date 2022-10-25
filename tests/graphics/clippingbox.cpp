@@ -350,7 +350,7 @@ static void InitialState(wxDC& dc, const wxBitmap& bmp)
 static void InitialStateWithTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -611,7 +611,7 @@ static void OneRegionAndEmpty(wxDC& dc, const wxBitmap& bmp)
 static void OneRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -768,7 +768,7 @@ static void OneRegionOverRotatedDC(wxDC& dc)
 static void OneRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -965,7 +965,7 @@ static void TwoRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp)
 static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1018,7 +1018,7 @@ static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, boo
 static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1071,7 +1071,7 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
 static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1121,7 +1121,7 @@ static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords
 static void OneOuterDevRegion(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1156,7 +1156,7 @@ static void OneOuterDevRegion(wxDC& dc, const wxBitmap& bmp, bool useTransformMa
 static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1223,7 +1223,7 @@ static void DrawFigure(wxDC& dc, int n, const wxPoint points[])
 static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords,  bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1308,7 +1308,7 @@ static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoor
 static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1358,7 +1358,7 @@ static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoo
 static void OneDevRegionAndEmpty(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1395,7 +1395,7 @@ static void OneDevRegionAndEmpty(wxDC& dc, const wxBitmap& bmp, bool useTransfor
 static void OneDevRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1520,7 +1520,7 @@ static void OneDevRegionOverRotatedDC(wxDC& dc)
 static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1597,7 +1597,7 @@ static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool 
 static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1653,7 +1653,7 @@ static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkEx
 static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1719,7 +1719,7 @@ static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool c
 static void TwoDevRegionsNonOverlapping(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1760,7 +1760,7 @@ static void TwoDevRegionsNonOverlapping(wxDC& dc, const wxBitmap& bmp, bool useT
 static void TwoDevRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
