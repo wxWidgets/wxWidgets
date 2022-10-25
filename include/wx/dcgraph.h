@@ -228,7 +228,10 @@ protected:
     wxGCDCImpl(wxDC* owner, int);
 
 #ifdef __WXOSX__
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Don't use OSXGetOrigin()")
     virtual wxPoint OSXGetOrigin() const { return wxPoint(); }
+#endif // WXWIN_COMPATIBILITY_3_2
 #endif
 
     // scaling variables
