@@ -3303,19 +3303,11 @@ void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
-    if ( HasFlag(wxLC_ICON) && (m_normal_images))
+    if ( HasFlag(wxLC_ICON) && m_normal_images )
     {
         wxDrawImageBitmap(this, *m_normal_images, index, *dc, x, y);
     }
-    else if ( HasFlag(wxLC_SMALL_ICON) && (m_small_images))
-    {
-        wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
-    }
-    else if ( HasFlag(wxLC_LIST) && (m_small_images))
-    {
-        wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
-    }
-    else if ( InReportView() && (m_small_images))
+    else if ( HasFlag(wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT) && m_small_images )
     {
         wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
     }
@@ -3327,15 +3319,7 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
     {
         m_normal_images->GetImageLogicalSize(this, index, width, height);
     }
-    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_images )
-    {
-        m_small_images->GetImageLogicalSize(this, index, width, height);
-    }
-    else if ( HasFlag(wxLC_LIST) && m_small_images )
-    {
-        m_small_images->GetImageLogicalSize(this, index, width, height);
-    }
-    else if ( InReportView() && m_small_images )
+    else if ( HasFlag(wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT) && m_small_images )
     {
         m_small_images->GetImageLogicalSize(this, index, width, height);
     }
