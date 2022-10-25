@@ -525,7 +525,7 @@ protected:
 
     void Init(cairo_t *context);
 
-    enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin };
+    enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin, Apply_scaled_dev_origin_only };
     void ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mode = Apply_directly);
 
 #ifdef __WXQT__
@@ -2021,6 +2021,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     m_mswStateSavedDC = ::SaveDC(hdc);
     m_mswSurface = cairo_win32_surface_create(hdc);
     Init( cairo_create(m_mswSurface) );
+    // We don't set HDC origin at MSW level in wxDC because this limits it to
+    // 2^27 range and we prefer to handle it ourselves to allow using the full
+    // 2^32 range of int coordinates, but we need to let Cairo know about the
+    // origin shift by storing it as an internal transformation
+    // (which is not going to be exposed).
+    ApplyTransformFromDC(dc, Apply_scaled_dev_origin_only);
 #endif
 
 #ifdef __WXGTK3__
@@ -2234,6 +2240,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     // to Cairo context on our own, if required.
     if ( adjustTransformFromDC )
         ApplyTransformFromDC(dc);
+    else
+        // Let Cairo know about the origin shift by storing it as an internal
+        // transformation (which is not going to be exposed).
+        ApplyTransformFromDC(dc, Apply_scaled_dev_origin_only);
 #endif // __WXMSW__
 
 #ifdef __WXGTK3__
@@ -2555,17 +2565,22 @@ void wxCairoContext::ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mod
     sy *= lsy;
 
     wxPoint org = dc.GetDeviceOrigin();
-    if ( mode == Apply_scaled_dev_origin )
+    if ( mode == Apply_scaled_dev_origin || mode == Apply_scaled_dev_origin_only )
         // This is used when mapping mode has been changed
-        // under wxMSW from MM_ANISOTROPIC to MM_TEXT.
+        // under wxMSW from MM_ANISOTROPIC to MM_TEXT
+        // or when we need to take into account device origin
+        // which is not passed to HDC under wxMSW
         cairo_matrix_translate(&m_internalTransform, org.x/sx, org.y/sy);
     else
         cairo_matrix_translate(&m_internalTransform, org.x, org.y);
 
-    cairo_matrix_scale(&m_internalTransform, sx, sy);
+    if ( mode != Apply_scaled_dev_origin_only )
+    {
+        cairo_matrix_scale(&m_internalTransform, sx, sy);
 
-    org = dc.GetLogicalOrigin();
-    cairo_matrix_translate(&m_internalTransform, -org.x, -org.y);
+        org = dc.GetLogicalOrigin();
+        cairo_matrix_translate(&m_internalTransform, -org.x, -org.y);
+    }
 
     cairo_set_matrix(m_context, &m_internalTransform);
 }
