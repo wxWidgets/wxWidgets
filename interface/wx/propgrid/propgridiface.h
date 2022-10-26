@@ -557,7 +557,7 @@ public:
             Each attribute will be stored as list variant named
             @"@@@<propname@>@@attr.@"
     */
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
+    wxVariant GetPropertyValues( const wxString& listname = wxString(),
                                  wxPGProperty* baseparent = nullptr, long flags = 0 ) const;
 
     /**
@@ -926,7 +926,7 @@ public:
     */
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
+                          const wxString& text = wxString(),
                           const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );

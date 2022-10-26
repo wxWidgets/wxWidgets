@@ -99,7 +99,7 @@ class WXDLLIMPEXP_PROPGRID wxStringProperty : public wxPGProperty
 public:
     wxStringProperty( const wxString& label = wxPG_LABEL,
                       const wxString& name = wxPG_LABEL,
-                      const wxString& value = wxEmptyString );
+                      const wxString& value = wxString() );
     virtual ~wxStringProperty();
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
@@ -479,11 +479,11 @@ public:
                         const wxString& name = wxPG_LABEL,
                         const wxArrayString& labels = wxArrayString(),
                         const wxArrayInt& values = wxArrayInt(),
-                        const wxString& value = wxEmptyString );
+                        const wxString& value = wxString() );
     wxEditEnumProperty( const wxString& label,
                         const wxString& name,
                         wxPGChoices& choices,
-                        const wxString& value = wxEmptyString );
+                        const wxString& value = wxString() );
 
     // Special constructor for caching choices (used by derived class)
     wxEditEnumProperty( const wxString& label,
@@ -605,7 +605,7 @@ public:
 
     wxFileProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
-                    const wxString& value = wxEmptyString );
+                    const wxString& value = wxString() );
     virtual ~wxFileProperty ();
 
     virtual void OnSetValue() override;
@@ -645,7 +645,7 @@ public:
 
     wxLongStringProperty( const wxString& label = wxPG_LABEL,
                           const wxString& name = wxPG_LABEL,
-                          const wxString& value = wxEmptyString );
+                          const wxString& value = wxString() );
     virtual ~wxLongStringProperty();
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
@@ -667,7 +667,7 @@ class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxEditorDialogProperty
 public:
     wxDirProperty( const wxString& label = wxPG_LABEL,
                    const wxString& name = wxPG_LABEL,
-                   const wxString& value = wxEmptyString );
+                   const wxString& value = wxString() );
     virtual ~wxDirProperty();
 
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const override;

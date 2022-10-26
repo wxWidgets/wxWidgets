@@ -262,7 +262,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             // Add units string?
             if ( propertyGrid->GetColumnCount() <= 2 )
             {
-                wxString unitsString = property->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
+                wxString unitsString = property->GetAttribute(wxPG_ATTR_UNITS, wxString());
                 if ( !unitsString.empty() )
                     text = wxString::Format(wxS("%s %s"), text, unitsString );
             }
@@ -811,7 +811,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
             else if ( column == 1 )
                 *pString = GetDisplayedString();
             else if ( column == 2 )
-                *pString = GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
+                *pString = GetAttribute(wxPG_ATTR_UNITS, wxString());
         }
     }
     else
@@ -858,7 +858,7 @@ wxString wxPGProperty::GetColumnText( unsigned int col, int choiceIndex ) const
             else if ( col == 1 )
                 return GetDisplayedString();
             else if ( col == 2 )
-                return GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
+                return GetAttribute(wxPG_ATTR_UNITS, wxString());
         }
     }
     else
@@ -867,7 +867,7 @@ wxString wxPGProperty::GetColumnText( unsigned int col, int choiceIndex ) const
         return m_choices.GetLabel(choiceIndex);
     }
 
-    return wxEmptyString;
+    return wxString();
 }
 */
 
@@ -994,7 +994,7 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
                                       int argFlags ) const
 {
     wxCHECK_MSG( GetChildCount() > 0,
-                 wxEmptyString,
+                 wxString(),
                  wxS("If user property does not have any children, it must ")
                  wxS("override GetValueAsString") );
 
@@ -1011,7 +1011,7 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
 wxString wxPGProperty::GetValueAsString( int argFlags ) const
 {
     wxPropertyGrid* pg = GetGrid();
-    wxCHECK_MSG( pg, wxEmptyString,
+    wxCHECK_MSG( pg, wxString(),
                  wxS("Cannot get valid value for detached property") );
 
     if ( IsValueUnspecified() )
@@ -2816,13 +2816,13 @@ wxPropertyCategory::~wxPropertyCategory()
 wxString wxPropertyCategory::ValueToString( wxVariant& WXUNUSED(value),
                                             int WXUNUSED(argFlags) ) const
 {
-    return m_value.IsType(wxPG_VARIANT_TYPE_STRING) ? m_value.GetString() : wxEmptyString;
+    return m_value.IsType(wxPG_VARIANT_TYPE_STRING) ? m_value.GetString() : wxString();
 }
 
 wxString wxPropertyCategory::GetValueAsString( int argFlags ) const
 {
     // Unspecified value is always empty string
-    return IsValueUnspecified() ? wxEmptyString : wxPGProperty::GetValueAsString(argFlags);
+    return IsValueUnspecified() ? wxString() : wxPGProperty::GetValueAsString(argFlags);
 }
 
 static int DoGetTextExtent(const wxWindow* wnd, const wxString& label, const wxFont& font)

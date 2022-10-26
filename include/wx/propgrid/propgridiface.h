@@ -378,7 +378,7 @@ public:
     // Returns help string associated with a property.
     wxString GetPropertyHelpString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxString())
         return p->GetHelpString();
     }
 
@@ -456,7 +456,7 @@ public:
     // Use wxPG_INC_ATTRIBUTES to include property attributes as well.
     // Each attribute will be stored as list variant named
     // "@<propname>@attr."
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
+    wxVariant GetPropertyValues( const wxString& listname = wxString(),
         wxPGProperty* baseparent = nullptr, long flags = 0 ) const
     {
         return m_pState->DoGetPropertyValues(listname, baseparent, flags);
@@ -756,7 +756,7 @@ public:
     // You can use wxPG_LABEL as text to use default text for column.
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
+                          const wxString& text = wxString(),
                           const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );

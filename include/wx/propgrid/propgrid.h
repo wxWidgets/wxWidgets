@@ -913,7 +913,7 @@ public:
     static wxPGEditor* RegisterEditorClass( wxPGEditor* editor,
                                             bool noDefCheck = false )
     {
-        return DoRegisterEditorClass(editor, wxEmptyString, noDefCheck);
+        return DoRegisterEditorClass(editor, wxString(), noDefCheck);
     }
 
     static wxPGEditor* DoRegisterEditorClass( wxPGEditor* editorClass,

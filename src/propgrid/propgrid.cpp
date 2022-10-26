@@ -3149,7 +3149,7 @@ void wxPropertyGrid::DoHidePropertyError( wxPGProperty* WXUNUSED(property) )
         wxStatusBar* pStatusBar = GetStatusBar();
         if ( pStatusBar )
         {
-            pStatusBar->SetStatusText(wxEmptyString);
+            pStatusBar->SetStatusText(wxString());
             return;
         }
     }
@@ -3316,7 +3316,7 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
         {
             wxStatusBar* pStatusBar = GetStatusBar();
             if ( pStatusBar )
-                pStatusBar->SetStatusText(wxEmptyString);
+                pStatusBar->SetStatusText(wxString());
         }
     }
 #endif
@@ -3852,7 +3852,7 @@ wxPropertyGrid::GetUnspecifiedValueText( int argFlags ) const
          !(argFlags & wxPG_EDITABLE_VALUE) )
         return ua.GetText();
 
-    return wxEmptyString;
+    return wxString();
 }
 
 // -----------------------------------------------------------------------
@@ -4328,7 +4328,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             {
                 // Clear help box - but only if it was written
                 // by us at previous time.
-                statusbar->SetStatusText(wxEmptyString);
+                statusbar->SetStatusText(wxString());
                 m_iFlags &= ~(wxPG_FL_STRING_IN_STATUSBAR);
             }
         }
@@ -5082,7 +5082,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             tipString = m_propHover->GetValueAsString();
                             if ( GetColumnCount() <= 2 )
                             {
-                                wxString unitsString = m_propHover->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
+                                wxString unitsString = m_propHover->GetAttribute(wxPG_ATTR_UNITS, wxString());
                                 if ( !unitsString.empty() )
                                     tipString = wxString::Format(wxS("%s %s"), tipString, unitsString );
                             }
@@ -5102,12 +5102,12 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                     }
                     else
                     {
-                        SetToolTip(wxEmptyString);
+                        SetToolTip(wxString());
                     }
                 }
                 else
                 {
-                    SetToolTip(wxEmptyString);
+                    SetToolTip(wxString());
                 }
             }
         }
