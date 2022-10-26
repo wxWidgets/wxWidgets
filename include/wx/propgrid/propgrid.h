@@ -760,8 +760,7 @@ public:
     // GetState->GetColumnWidth() immediately after this function returns.
     wxSize FitColumns()
     {
-        wxSize sz = m_pState->DoFitColumns();
-        return sz;
+        return m_pState->DoFitColumns();
     }
 
     // Returns wxWindow that the properties are painted on, and which should
