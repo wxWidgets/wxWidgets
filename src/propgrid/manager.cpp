@@ -2016,7 +2016,7 @@ wxVariant wxPropertyGridManager::GetEditableStateItem( const wxString& name ) co
     {
         return (long) GetDescBoxHeight();
     }
-    return wxNullVariant;
+    return wxVariant();
 }
 
 // -----------------------------------------------------------------------

@@ -1353,7 +1353,7 @@ bool wxPGProperty::OnEvent( wxPropertyGrid*, wxWindow*, wxEvent& )
 void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 {
     // If auto unspecified values are not wanted (via window or property style),
-    // then get default value instead of wxNullVariant.
+    // then get default value instead of null wxVariant.
     if ( value.IsNull() && (flags & wxPG_SETVAL_BY_USER) &&
          !UsesAutoUnspecified() )
     {
@@ -2587,7 +2587,7 @@ wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
                                       int WXUNUSED(childIndex),
                                       wxVariant& WXUNUSED(childValue) ) const
 {
-    return wxNullVariant;
+    return wxVariant();
 }
 
 bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
