@@ -85,7 +85,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/evtloopsrc.h
     wx/unix/pipe.h
     wx/unix/stackwalk.h
-    wx/unix/tls.h
     wx/unix/fswatcher_kqueue.h
 </set>
 

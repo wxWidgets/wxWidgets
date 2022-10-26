@@ -791,7 +791,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/unix/fswatcher_inotify.h \
@@ -2537,7 +2536,6 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2565,7 +2563,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2593,7 +2590,6 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2636,7 +2632,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/osx/fswatcher_fsevents.h
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR)
@@ -2649,7 +2644,6 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2678,7 +2672,6 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/unix/fswatcher_inotify.h \

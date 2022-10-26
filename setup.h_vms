@@ -157,8 +157,6 @@ typedef pid_t GPid;
 
 /* --- start common options --- */
 
-#define wxUSE_COMPILER_TLS 1
-
 #ifndef wxUSE_GUI
     #define wxUSE_GUI            1
 #endif
@@ -856,11 +854,6 @@ typedef pid_t GPid;
  * Define if you have pthread_cleanup_push/pop()
  */
 #define wxHAVE_PTHREAD_CLEANUP 1
-
-/*
- * Define if compiler has __thread keyword.
- */
-#undef HAVE___THREAD_KEYWORD
 
 /*
  * Define if large (64 bit file offsets) files are supported.
