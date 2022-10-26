@@ -2708,7 +2708,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                           dc,
                           item->GetX(),
                           item->GetY() +
-                          total_h > state_h ? (total_h-state_h)/2 : 0);
+                          (total_h > state_h ? (total_h-state_h)/2 : 0));
     }
 
     if ( image != NO_IMAGE )
@@ -2719,7 +2719,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                           dc,
                           item->GetX() + state_w,
                           item->GetY() +
-                          total_h > image_h ? (total_h-image_h)/2 : 0);
+                          (total_h > image_h ? (total_h-image_h)/2 : 0));
     }
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
