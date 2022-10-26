@@ -780,7 +780,7 @@ public:
     // Simple interface constructor.
     wxPGChoices( wxPGChoicesData* data )
     {
-        wxASSERT(data);
+        wxCHECK_RET(data, "Data pointer cannot be null");
         m_data = data;
         data->IncRef();
     }
