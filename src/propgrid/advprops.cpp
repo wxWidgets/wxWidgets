@@ -1805,10 +1805,8 @@ const wxString& wxPGGetDefaultImageWildcard()
 
         wxList& handlers = wxImage::GetHandlers();
 
-        wxList::iterator node;
-
         // Let's iterate over the image handler list.
-        for ( node = handlers.begin(); node != handlers.end(); ++node )
+        for (wxList::iterator node = handlers.begin(); node != handlers.end(); ++node)
         {
             wxImageHandler *handler = (wxImageHandler*)*node;
 
