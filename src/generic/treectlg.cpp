@@ -38,6 +38,8 @@
 
 #include "wx/renderer.h"
 
+#include "wx/generic/private/drawbitmap.h"
+
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
 #endif
@@ -2648,24 +2650,23 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     if ( state != wxTREE_ITEMSTATE_NONE )
     {
         wxDCClipper clip(dc, item->GetX(), item->GetY(), state_w, total_h);
-        dc.DrawBitmap( m_imagesState.GetImageBitmapFor(this, state),
-                                item->GetX(),
-                                item->GetY() +
-                                    (total_h > state_h ? (total_h-state_h)/2
-                                                       : 0),
-                                true /* use mask */ );
+
+        wxDrawImageBitmap(this, m_imagesState, state,
+                          dc,
+                          item->GetX(),
+                          item->GetY() +
+                          total_h > state_h ? (total_h-state_h)/2 : 0);
     }
 
     if ( image != NO_IMAGE )
     {
         wxDCClipper clip(dc, item->GetX() + state_w, item->GetY(),
                              image_w, total_h);
-        dc.DrawBitmap( GetImageBitmapFor(this, image),
-                                 item->GetX() + state_w,
-                                 item->GetY() +
-                                    (total_h > image_h ? (total_h-image_h)/2
-                                                       : 0),
-                                 true /* use mask */ );
+        wxDrawImageBitmap(this, image,
+                          dc,
+                          item->GetX() + state_w,
+                          item->GetY() +
+                          total_h > image_h ? (total_h-image_h)/2 : 0);
     }
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
@@ -2832,16 +2833,13 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
                 if ( item->IsSelected() )
                     image += wxTreeItemIcon_Selected - wxTreeItemIcon_Normal;
 
-                const wxBitmap& bmp = m_imagesButtons.GetImageBitmapFor(this, image);
-
-                // we need logical coordinates for wxDC.
-                int image_h = FromPhys(bmp.GetHeight()),
-                    image_w = FromPhys(bmp.GetWidth());
+                int image_w, image_h;
+                m_imagesButtons.GetImageLogicalSize(this, image, image_w, image_h);
                 int xx = x - image_w/2;
                 int yy = y_mid - image_h/2;
 
                 wxDCClipper clip(dc, xx, yy, image_w, image_h);
-                dc.DrawBitmap( bmp, xx, yy, true /* use mask */ );
+                wxDrawImageBitmap(this, m_imagesButtons, image, dc, xx, yy);
             }
             else // no custom buttons
             {
