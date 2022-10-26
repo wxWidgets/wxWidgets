@@ -1703,9 +1703,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 
 wxPGProperty* wxPropertyGridPageState::DoAppend( wxPGProperty* property )
 {
-    wxPropertyCategory* cur_cat = m_currentCategory;
-    if ( property->IsCategory() )
-        cur_cat = nullptr;
+    wxPropertyCategory* cur_cat = property->IsCategory() ? nullptr : m_currentCategory;
 
     return DoInsert( cur_cat, -1, property );
 }

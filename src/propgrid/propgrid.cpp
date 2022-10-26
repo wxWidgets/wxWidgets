@@ -6084,9 +6084,7 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
     if ( !noDefCheck && wxPGGlobalVars->m_mapEditorClasses.empty() )
         RegisterDefaultEditors();
 
-    wxString name = editorName;
-    if ( name.empty() )
-        name = editorClass->GetName();
+    wxString name = editorName.empty() ? editorClass->GetName() : editorName;
 
     // Existing editor under this name?
     wxPGHashMapS2P::iterator vt_it = wxPGGlobalVars->m_mapEditorClasses.find(name);
