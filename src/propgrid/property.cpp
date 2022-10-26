@@ -675,7 +675,6 @@ wxPGProperty::~wxPGProperty()
 
     Empty();  // this deletes items
 
-//    delete m_valueBitmap;
 #if wxUSE_VALIDATORS
     delete m_validator;
 #endif

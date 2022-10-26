@@ -591,10 +591,6 @@ protected:
     // Initializes some members.
     void Init2( int style );
 
-/*#ifdef __WXMSW__
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
-#endif*/
-
     virtual bool ProcessEvent( wxEvent& event ) override;
 
     // Recalculates new positions for components, according to the
