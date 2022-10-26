@@ -2065,9 +2065,6 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
     }
     else
     {
-        wxClientDC dc(this);
-        dc.SetFont(m_pPropGrid->GetFont());
-
         int highest = 0;
 
         for ( size_t i = 0; i < GetPageCount(); i++ )
@@ -2096,9 +2093,6 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
 
     if (page < (int) GetPageCount())
     {
-        wxClientDC dc(this);
-        dc.SetFont(m_pPropGrid->GetFont());
-
         int maxW = m_pState->GetColumnFitWidth(m_arrPages[page]->DoGetRoot(), 0, subProps );
         maxW += m_pPropGrid->GetMarginWidth();
         SetPageSplitterPosition( page, maxW );
