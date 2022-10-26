@@ -509,9 +509,9 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
 
     //
     // Convert invalid cells to default ones in this grid
-    for ( unsigned int i=0; i<m_cells.size(); i++ )
+    for (wxVector<wxPGCell>::iterator it = m_cells.begin(); it != m_cells.end(); ++it)
     {
-        wxPGCell& cell = m_cells[i];
+        wxPGCell& cell = *it;
         if ( cell.IsInvalid() )
         {
             cell = IsCategory() ? propgrid->GetCategoryDefaultCell()
@@ -643,9 +643,9 @@ void wxPGProperty::OnDetached(wxPropertyGridPageState* WXUNUSED(state),
         const wxPGCell& catDefCell = propgrid->GetCategoryDefaultCell();
 
         // Make default cells invalid
-        for ( unsigned int i=0; i<m_cells.size(); i++ )
+        for(wxVector<wxPGCell>::iterator it = m_cells.begin(); it != m_cells.end(); ++it)
         {
-            wxPGCell& cell = m_cells[i];
+            wxPGCell& cell = *it;
             if ( cell.IsSameAs(propDefCell) ||
                  cell.IsSameAs(catDefCell) )
             {

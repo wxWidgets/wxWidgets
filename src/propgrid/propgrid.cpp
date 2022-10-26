@@ -479,17 +479,15 @@ void wxPropertyGrid::Init2()
 
 wxPropertyGrid::~wxPropertyGrid()
 {
-    size_t i;
-
 #if wxUSE_THREADS
     wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
 
     //
     // Remove grid and property pointers from live wxPropertyGridEvents.
-    for ( i=0; i<m_liveEvents.size(); i++ )
+    for (wxVector<wxPropertyGridEvent*>::iterator it = m_liveEvents.begin(); it != m_liveEvents.end(); ++it)
     {
-        wxPropertyGridEvent* evt = m_liveEvents[i];
+        wxPropertyGridEvent* evt = *it;
         evt->SetPropertyGrid(nullptr);
         evt->SetProperty(nullptr);
     }
@@ -562,11 +560,9 @@ wxPropertyGrid::~wxPropertyGrid()
         delete m_pState;
 
     // Delete common value records
-    for ( i=0; i<m_commonValues.size(); i++ )
+    for(wxVector<wxPGCommonValue*>::iterator it = m_commonValues.begin(); it != m_commonValues.end(); ++it)
     {
-        // Use temporary variable to work around possible strange VC6 (asserts because m_size is zero)
-        wxPGCommonValue* value = m_commonValues[i];
-        delete value;
+        delete *it;
     }
 #if WXWIN_COMPATIBILITY_3_0
     wxASSERT( gs_deletedEditorObjects[this]->empty() );
