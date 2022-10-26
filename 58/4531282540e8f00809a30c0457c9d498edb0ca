@@ -1,0 +1,1 @@
+wxAll (GUI): Add high DPI support to generic wxListCtrl (Gerhard Stein, #22916).
