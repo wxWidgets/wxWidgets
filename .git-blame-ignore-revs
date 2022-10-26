@@ -7,6 +7,9 @@
 #
 #   git config blame.ignoreRevsFile misc/git/ignore_revs
 
+# Get rid of commented out code, 2022-10-26
+db31a0161503c6ea4cc461f4e10b67830b7d6b52
+
 # Fix comment typos in sources, 2021-10-02
 668a2186cd89fd4576bed224df3624811eebeca1
 
