@@ -255,7 +255,7 @@ All (GUI):
 - Improve wxWebView::RunScriptAsync() performance (Tobias Taschner, #22781).
 - Fix data race when processing events generated in a worker thread.
 - Fix compilation problem in wx/propgrid/editors.h (Loïc Bartoletti, #22875).
-- Fix wxGenericTreeCtrl icons rendering in high DPI (Gerhard Stein, #22887).
+- Fix wxGeneric{List,Tree}Ctrl high DPI icons (Gerhard Stein, #22887, #22916).
 - Add macros for event tables for missing wxWebView events (PB, #22949).
 - Improve month selection in wxGenericCalendarCtrl (Lauri Nurmi, #22853).
 - Fix maximum length of wxPropertyGrid editors (#23033).
