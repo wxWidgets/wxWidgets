@@ -485,9 +485,8 @@ wxPropertyGrid::~wxPropertyGrid()
 
     //
     // Remove grid and property pointers from live wxPropertyGridEvents.
-    for (wxVector<wxPropertyGridEvent*>::iterator it = m_liveEvents.begin(); it != m_liveEvents.end(); ++it)
+    for ( wxPropertyGridEvent* evt : m_liveEvents )
     {
-        wxPropertyGridEvent* evt = *it;
         evt->SetPropertyGrid(nullptr);
         evt->SetProperty(nullptr);
     }
@@ -560,9 +559,9 @@ wxPropertyGrid::~wxPropertyGrid()
         delete m_pState;
 
     // Delete common value records
-    for(wxVector<wxPGCommonValue*>::iterator it = m_commonValues.begin(); it != m_commonValues.end(); ++it)
+    for ( wxPGCommonValue* v : m_commonValues )
     {
-        delete *it;
+        delete v;
     }
 #if WXWIN_COMPATIBILITY_3_0
     wxASSERT( gs_deletedEditorObjects[this]->empty() );
@@ -2158,9 +2157,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxVector<int> splitterPos;
     splitterPos.reserve(colCount);
     int sx = x;
-    for (wxVector<int>::const_iterator cit = colWidths.begin(); cit != colWidths.end(); ++cit)
+    for ( int cw : colWidths )
     {
-        sx += *cit;
+        sx += cw;
         splitterPos.push_back(sx);
     }
 

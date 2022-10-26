@@ -412,10 +412,9 @@ public:
 
     virtual ~wxPGHeaderCtrl()
     {
-        for (wxVector<wxHeaderColumnSimple*>::const_iterator it = m_columns.begin();
-             it != m_columns.end(); ++it)
+        for ( wxHeaderColumnSimple* c : m_columns )
         {
-            delete *it;
+            delete c;
         }
     }
 
