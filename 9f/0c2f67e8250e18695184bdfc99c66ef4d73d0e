@@ -1,0 +1,1 @@
+wxQt: Refresh children too in wxWindow::Refresh() (Ali Kettab, #22918).
