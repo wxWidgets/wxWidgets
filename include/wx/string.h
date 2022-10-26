@@ -48,14 +48,7 @@
 // notice that this optimization is well worth using even in debug builds as it
 // changes asymptotic complexity of algorithms using indices to iterate over
 // wxString back to expected linear from quadratic
-//
-// also notice that wxTLS_TYPE() (__declspec(thread) in this case) is unsafe to
-// use in DLL build under pre-Vista Windows so we disable this code for now, if
-// anybody really needs to use UTF-8 build under Windows with this optimization
-// it would have to be re-tested and probably corrected
-// CS: under OSX release builds the string destructor/cache cleanup sometimes
-// crashes, disable until we find the true reason or a better workaround
-#if wxUSE_UNICODE_UTF8 && !defined(__WINDOWS__) && !defined(__WXOSX__)
+#if wxUSE_UNICODE_UTF8
     #define wxUSE_STRING_POS_CACHE 1
 #else
     #define wxUSE_STRING_POS_CACHE 0
@@ -445,8 +438,8 @@ private:
       unsigned lastUsed;
   };
 
-  static wxTLS_TYPE(Cache) ms_cache;
-  static Cache& GetCache() { return wxTLS_VALUE(ms_cache); }
+  static wxTHREAD_SPECIFIC_DECL Cache ms_cache;
+  static Cache& GetCache() { return ms_cache; }
 
   static Cache::Element *GetCacheBegin() { return GetCache().cached; }
   static Cache::Element *GetCacheEnd() { return GetCacheBegin() + Cache::SIZE; }
