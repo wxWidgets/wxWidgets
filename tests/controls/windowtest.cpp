@@ -23,6 +23,7 @@
 #include "wx/uiaction.h"
 #include "wx/caret.h"
 #include "wx/cshelp.h"
+#include "wx/dcclient.h"
 #include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 #include "wx/tooltip.h"
@@ -458,4 +459,68 @@ TEST_CASE_METHOD(WindowTestCase, "Window::SizerErrors", "[window][sizer][error]"
     CHECK_NOTHROW( sizer2->Add(child) );
 
     REQUIRE_NOTHROW( delete child );
+}
+
+TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
+{
+    wxWindow* const parent = m_window;
+    wxWindow* const child1 = new wxWindow(parent, wxID_ANY, wxPoint(10, 20), wxSize(80, 50));
+    wxWindow* const child2 = new wxWindow(parent, wxID_ANY, wxPoint(110, 20), wxSize(80, 50));
+    wxWindow* const child3 = new wxWindow(parent, wxID_ANY, wxPoint(210, 20), wxSize(80, 50));
+
+    m_window->SetSize(300, 100);
+
+    // to help see the windows when debugging
+    parent->SetBackgroundColour(*wxBLACK);
+    child1->SetBackgroundColour(*wxBLUE);
+    child2->SetBackgroundColour(*wxRED);
+    child3->SetBackgroundColour(*wxGREEN);
+
+    // Notice that using EventCounter here will give incorrect results,
+    // so we have to bind each window to a distinct event handler instead.
+
+    bool isParentPainted;
+    bool isChild1Painted;
+    bool isChild2Painted;
+    bool isChild3Painted;
+
+    const auto setFlagOnPaint = [](wxWindow* win, bool* flag)
+    {
+        win->Bind(wxEVT_PAINT, [=](wxPaintEvent&)
+        {
+            wxPaintDC dc(win);
+            *flag = true;
+        });
+    };
+
+    setFlagOnPaint(parent, &isParentPainted);
+    setFlagOnPaint(child1, &isChild1Painted);
+    setFlagOnPaint(child2, &isChild2Painted);
+    setFlagOnPaint(child3, &isChild3Painted);
+
+    // Prepare for the RefreshRect() call below
+    wxYield();
+
+    // Now initialize/reset the flags before calling RefreshRect()
+    isParentPainted =
+    isChild1Painted =
+    isChild2Painted =
+    isChild3Painted = false;
+
+    parent->RefreshRect(wxRect(150, 10, 300, 80));
+
+    for ( wxStopWatch sw; sw.Time() < 100; )
+    {
+        if ( isParentPainted )
+            break;
+
+        wxYield();
+    }
+
+    // child1 should be the only window not to receive the wxEVT_PAINT event
+    // because it does not intersect with the refreshed rectangle.
+    CHECK(isParentPainted == true);
+    CHECK(isChild1Painted == false);
+    CHECK(isChild2Painted == true);
+    CHECK(isChild3Painted == true);
 }
