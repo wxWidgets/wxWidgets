@@ -116,7 +116,7 @@ public:
 enum
 {
     // menu items
-    Display_FromPoint = wxID_HIGHEST + 1,
+    Display_FromPoint = wxID_HIGHEST,
     Display_FullScreen,
     Display_ContentProtection_None,
     Display_ContentProtection_Enable,

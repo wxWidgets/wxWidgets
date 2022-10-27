@@ -397,7 +397,7 @@ bool MyApp::OnInit()
 
 enum
 {
-    ID_CLEARLOG = wxID_HIGHEST+1,
+    ID_CLEARLOG = wxID_HIGHEST,
     ID_GET_PAGE_INFO,
     ID_HIT_TEST,
     ID_DISABLE,

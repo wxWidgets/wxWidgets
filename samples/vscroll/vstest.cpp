@@ -431,7 +431,7 @@ enum
     // (where it is special and put into the "Apple" menu)
     VScroll_About = wxID_ABOUT,
 
-    VScroll_VScrollMode = wxID_HIGHEST + 1,
+    VScroll_VScrollMode = wxID_HIGHEST,
     VScroll_HScrollMode,
     VScroll_HVScrollMode
 };

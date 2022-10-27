@@ -60,7 +60,7 @@ private:
 enum
 {
     ID_Quit = wxID_EXIT,
-    ID_Logs = wxID_HIGHEST+1,
+    ID_Logs = wxID_HIGHEST,
     ID_Browser,
     ID_PlugProvider
 };

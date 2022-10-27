@@ -109,7 +109,7 @@ public:
 // ID for the menu commands
 enum
 {
-    INTERNAT_TEST = wxID_HIGHEST + 1,
+    INTERNAT_TEST = wxID_HIGHEST,
     INTERNAT_PLAY,
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
