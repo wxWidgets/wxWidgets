@@ -465,7 +465,6 @@ Here is what you need to do:
   be used for debug builds only.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
-  - `_UNICODE` unless you want to use deprecated ANSI build of wxWidgets.
   - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
   - `WXUSINGDLL` if you are using DLL build of wxWidgets.
 * Add `<wx-lib-dir>` directory described above to the libraries path.

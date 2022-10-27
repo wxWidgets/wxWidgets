@@ -19,24 +19,19 @@
 #include "wx/version.h"
 #include "wx/cpp.h"
 
+#ifndef _UNICODE
+    #error "wxWidgets requires Unicode."
+#endif
+
 // notice that wxSUFFIX_DEBUG is a string but wxSUFFIX itself must be an
 // identifier as string concatenation is not done inside #include where we
 // need it
 #ifdef _DEBUG
     #define wxSUFFIX_DEBUG "d"
-    #ifdef _UNICODE
-        #define wxSUFFIX ud
-    #else // !_UNICODE
-        #define wxSUFFIX d
-    #endif // _UNICODE/!_UNICODE
+    #define wxSUFFIX ud
 #else
     #define wxSUFFIX_DEBUG ""
-    #ifdef _UNICODE
-        #define wxSUFFIX u
-    #else // !_UNICODE
-        // don't define wxSUFFIX at all as preprocessor operations don't work
-        // with empty values so we need to check for this case specially below
-    #endif // _UNICODE/!_UNICODE
+    #define wxSUFFIX u
 #endif
 
 // compiler-specific prefix: by default it's always just "vc" for compatibility
@@ -115,11 +110,7 @@
     #endif
 #endif // wxTOOLKIT_PREFIX
 
-#ifdef wxSUFFIX
-    #define wxTOOLKIT_FULL wxCONCAT(wxTOOLKIT_PREFIX, wxSUFFIX)
-#else // suffix is empty
-    #define wxTOOLKIT_FULL wxTOOLKIT_PREFIX
-#endif
+#define wxTOOLKIT_FULL wxCONCAT(wxTOOLKIT_PREFIX, wxSUFFIX)
 
 // the real setup.h header file we need is in the build-specific directory,
 // construct the path to it
@@ -132,11 +123,7 @@
 
 // the library names depend on the build, these macro builds the correct
 // library name for the given base name
-#ifdef wxSUFFIX
-    #define wxSUFFIX_STR wxSTRINGIZE(wxSUFFIX)
-#else // suffix is empty
-    #define wxSUFFIX_STR ""
-#endif
+#define wxSUFFIX_STR wxSTRINGIZE(wxSUFFIX)
 #define wxSHORT_VERSION_STRING \
     wxSTRINGIZE(wxMAJOR_VERSION) wxSTRINGIZE(wxMINOR_VERSION)
 

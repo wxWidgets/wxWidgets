@@ -490,11 +490,7 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL) override {return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #if defined(_UNICODE)
     GetObjectW
-    #else
-    GetObjectA
-    #endif
     (LPOLESTR pszItem, DWORD, IBindCtx *, REFIID, void ** ppvObject) override
     {
         if (pszItem == nullptr || ppvObject == nullptr)
