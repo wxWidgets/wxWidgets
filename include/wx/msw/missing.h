@@ -105,11 +105,7 @@
 
 #ifndef INKEDIT_CLASS
 #   define INKEDIT_CLASSW  L"INKEDIT"
-#   ifdef UNICODE
-#       define INKEDIT_CLASS   INKEDIT_CLASSW
-#   else
-#       define INKEDIT_CLASS   "INKEDIT"
-#   endif
+#   define INKEDIT_CLASS   INKEDIT_CLASSW
 #endif
 
 #ifndef EM_SETINKINSERTMODE

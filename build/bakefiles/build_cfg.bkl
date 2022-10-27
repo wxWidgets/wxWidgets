@@ -24,7 +24,7 @@
                 @echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
                 @echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
                 @echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
-                @echo UNICODE=$(UNICODE) >>$(BUILD_CFG_FILE)
+                @echo UNICODE=1 >>$(BUILD_CFG_FILE)
                 @echo TOOLKIT=$(TOOLKIT) >>$(BUILD_CFG_FILE)
                 @echo TOOLKIT_VERSION=$(TOOLKIT_VERSION) >>$(BUILD_CFG_FILE)
                 @echo WXUNIV=$(WXUNIV) >>$(BUILD_CFG_FILE)

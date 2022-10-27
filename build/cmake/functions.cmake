@@ -283,10 +283,6 @@ function(wx_set_target_properties target_name)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
     endif()
 
-    if(WIN32)
-        target_compile_definitions(${target_name} PUBLIC UNICODE)
-    endif()
-
     if(WIN32 AND MSVC)
         # Suppress deprecation warnings for standard library calls
         target_compile_definitions(${target_name} PRIVATE
@@ -526,10 +522,6 @@ function(wx_set_builtin_target_properties target_name)
         OUTPUT_NAME       "${target_name}${lib_unicode}${lib_rls}${lib_flavour}${lib_version}"
         OUTPUT_NAME_DEBUG "${target_name}${lib_unicode}${lib_dbg}${lib_flavour}${lib_version}"
     )
-
-    if(WIN32)
-        target_compile_definitions(${target_name} PUBLIC UNICODE)
-    endif()
 
     if(MSVC)
         # we're not interested in deprecation warnings about the use of

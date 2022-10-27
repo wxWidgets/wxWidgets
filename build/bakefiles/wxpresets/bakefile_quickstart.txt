@@ -167,8 +167,8 @@ subfolder of Bakefile, or you can also find it on the Bakefile web site.
 
 -- Build Options --
 
-What if you want to offer a DEBUG and a RELEASE build? Or a UNICODE/ANSI
-build? You can do this in Bakefile by creating options. To create an option,
+What if you want to offer a DEBUG and a RELEASE build?
+You can do this in Bakefile by creating options. To create an option,
 use the "<option>" tag. A typical option has three important parts: a name, a
 default value, and a comma-separated list of values. For example, here is how
 to create a DEBUG option which builds debug by default:
@@ -235,7 +235,6 @@ options are:
     WX_MONOLITHIC       0(default),1        Set this to 1 if you built wx
                                             as a monolithic library
     WX_SHARED           0(default),1        Specify static or dynamic wx libs
-    WX_UNICODE          0(default),1        Use ANSI or UNICODE wx libs
     WX_DEBUG            0,1(default)        Use release or debug wx libs
     *WX_VERSION         25,26(default)      Specify version of wx libs
 

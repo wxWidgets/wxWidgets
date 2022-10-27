@@ -92,23 +92,6 @@
         </option>
     </if>
 
-    <!-- don't include ANSI configuration in project files, it's going to be
-         eventually removed anyway and it only doubles the number of build
-         configs in projects: -->
-    <if cond="IS_MSVC_PRJ=='1'">
-        <set var="UNICODE">1</set>
-    </if>
-    <if cond="IS_MSVC_PRJ=='0'">
-        <option name="UNICODE">
-            <values>0,1</values>
-            <values-description>,Unicode</values-description>
-            <default-value>1</default-value>
-            <description>
-                Compile Unicode build of wxWidgets?
-            </description>
-        </option>
-    </if>
-
     <option name="BUILD">
         <values>debug,release</values>
         <values-description>Debug,Release</values-description>
@@ -565,7 +548,6 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="BUILD">debug</set>
         <set var="SHARED">0</set>
         <set var="WXUNIV">0</set>
-        <set var="UNICODE">1</set>
         <!-- Free version does not distribute OpenGL,
              in commercial distribution better use dmars_smake format -->
         <set var="USE_OPENGL">0</set>

@@ -90,11 +90,8 @@
         <if cond="BUILD=='debug' and DEBUG_RUNTIME_LIBS=='default'">d</if>
         <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
     </set>
-    <set var="WXUNICODEFLAG">
-        <if cond="UNICODE=='1'">u</if>
-    </set>
     <set var="WX_U_D_SUFFIX">
-        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+        u$(WXDEBUGFLAG)
     </set>
     <set var="WXNAMESUFFIX">
         $(WX_U_D_SUFFIX)$(WX_LIB_FLAVOUR)

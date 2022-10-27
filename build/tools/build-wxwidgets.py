@@ -418,8 +418,6 @@ def main(scriptName, args):
         if toolkit == "msvc":
             print("setting build options...")
             args.append("-f makefile.vc")
-            if options.unicode:
-                args.append("UNICODE=1")
     
             if options.wxpython:
                 args.append("OFFICIAL_BUILD=1")

@@ -10,12 +10,11 @@
 #
 # NOTE2:
 #  This wxGTK autopackage contains wx libraries built in
-#  Unicode, shared, multilib, release mode.
+#  shared, multilib, release mode.
 #  This is because:
-#  1) UNICODE is better than ansi
-#  2) Autopackages of a library only have sense when shipping with SHARED libraries
-#  3) MULTILIB builds of wxWidgets are the default and suggested build mode
-#  4) Released applications should use RELEASE builds of wxWidgets not debug ones!
+#  - Autopackages of a library only have sense when shipping with SHARED libraries
+#  - MULTILIB builds of wxWidgets are the default and suggested build mode
+#  - Released applications should use RELEASE builds of wxWidgets not debug ones!
 #
 
 

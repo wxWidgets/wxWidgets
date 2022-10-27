@@ -304,15 +304,6 @@ The full list of the build settings follows:
   Build shared libraries (DLLs). By default, DLLs are not built
   (SHARED=0).
 
-* `UNICODE=0`
-
-  To completely disable Unicode support (default is UNICODE=1). It should not
-  be necessary to do this.
-
-  This option affect name of the library ('u' is appended in the default
-  Unicode build) and the directory where the library and setup.h are stored
-  (ditto).
-
 * `WXUNIV=1`
 
   Build wxUniversal instead of native wxMSW
