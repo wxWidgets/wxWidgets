@@ -373,8 +373,6 @@ def main(scriptName, args):
         buildDir = os.path.abspath(os.path.join(scriptDir, "..", "msw"))
 
         print("creating wx/msw/setup.h")
-        if options.unicode:
-            flags["wxUSE_UNICODE"] = "1"
     
         if options.cairo:
             if not os.environ.get("CAIRO_ROOT"):
