@@ -87,6 +87,5 @@ message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM}
     Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION} ${wxTOOLKIT_DESC}
     Should wxWidgets be compiled into single library?  ${wxBUILD_MONOLITHIC}
     Should wxWidgets be linked as a shared library?    ${wxBUILD_SHARED}
-    Should wxWidgets support Unicode?                  ${wxUSE_UNICODE}
     Which wxWidgets API compatibility should be used?  ${wxBUILD_COMPATIBILITY}"
     )
