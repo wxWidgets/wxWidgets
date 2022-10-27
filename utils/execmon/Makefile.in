@@ -44,8 +44,8 @@ WX_RELEASE = 3.3
 LIBDIRNAME = $(wx_top_builddir)/lib
 EXECMON_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(WX_CXXFLAGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 EXECMON_OBJECTS =  \
 	execmon_execmon.o
 

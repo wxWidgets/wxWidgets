@@ -54,14 +54,15 @@ WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 MY_DLL_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__DLLFLAG_p) -DMY_DLL_BUILDING -I$(srcdir) \
+	$(__THREAD_DEFINE_p) -D_UNICODE $(__DLLFLAG_p) -DMY_DLL_BUILDING -I$(srcdir) \
 	$(PIC_FLAG) $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 MY_DLL_OBJECTS =  \
 	my_dll_my_dll.o
 WX_EXE_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
-	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) $(__DLLFLAG_p) \
+	-I$(srcdir)/../../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) \
+	$(CXXFLAGS)
 WX_EXE_OBJECTS =  \
 	$(__wx_exe___win32rc) \
 	wx_exe_wx_exe.o
@@ -223,7 +224,7 @@ my_dll_my_dll.o: $(srcdir)/my_dll.cpp
 	$(CXXC) -c -o $@ $(MY_DLL_CXXFLAGS) $(srcdir)/my_dll.cpp
 
 wx_exe_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3)  $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3)  --include-dir $(srcdir) $(__DLLFLAG_p_3) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3)  $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) --define _UNICODE --include-dir $(srcdir) $(__DLLFLAG_p_3) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 wx_exe_wx_exe.o: $(srcdir)/wx_exe.cpp
 	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/wx_exe.cpp

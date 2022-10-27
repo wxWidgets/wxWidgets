@@ -23,11 +23,10 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 BENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -D_UNICODE \
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
+	-I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.o \
 	$(OBJS)\bench_datetime.o \
@@ -42,11 +41,10 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_printfbench.o
 BENCH_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
-	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -D_UNICODE \
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
+	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GUI_OBJECTS =  \
 	$(OBJS)\bench_gui_sample_rc.o \
 	$(OBJS)\bench_gui_bench.o \
@@ -54,11 +52,10 @@ BENCH_GUI_OBJECTS =  \
 	$(OBJS)\bench_gui_image.o
 BENCH_GRAPHICS_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
-	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -D_UNICODE \
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
+	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GRAPHICS_OBJECTS =  \
 	$(OBJS)\bench_graphics_sample_rc.o \
 	$(OBJS)\bench_graphics_graphics.o
@@ -164,18 +161,6 @@ __THREAD_DEFINE_p = -DwxNO_THREADS
 endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p_0 = --define wxNO_THREADS
-endif
-ifeq ($(UNICODE),0)
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
-endif
-ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p = -D_UNICODE
-endif
-ifeq ($(UNICODE),0)
-__UNICODE_DEFINE_p_0 = --define wxUSE_UNICODE=0
-endif
-ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p_0 = --define _UNICODE
 endif
 ifeq ($(USE_CAIRO),1)
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
@@ -324,7 +309,7 @@ $(OBJS)\bench_printfbench.o: ./printfbench.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_gui_sample_rc.o: ./../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --define _UNICODE --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\bench_gui_bench.o: ./bench.cpp
 	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
@@ -336,7 +321,7 @@ $(OBJS)\bench_gui_image.o: ./image.cpp
 	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_graphics_sample_rc.o: ./../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --define _UNICODE --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\bench_graphics_graphics.o: ./graphics.cpp
 	$(CXX) -c -o $@ $(BENCH_GRAPHICS_CXXFLAGS) $(CPPDEPS) $<

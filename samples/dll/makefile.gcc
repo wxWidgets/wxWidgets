@@ -23,20 +23,18 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 MY_DLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall $(__DLLFLAG_p) -DMY_DLL_BUILDING \
-	-I. $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -D_UNICODE \
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
+	$(__DLLFLAG_p) -DMY_DLL_BUILDING -I. $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MY_DLL_OBJECTS =  \
 	$(OBJS)\my_dll_my_dll.o
 WX_EXE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
-	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -D_UNICODE \
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
+	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  \
 	$(OBJS)\wx_exe_sample_rc.o \
 	$(OBJS)\wx_exe_wx_exe.o
@@ -101,12 +99,6 @@ endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p_3 = --define wxNO_THREADS
 endif
-ifeq ($(UNICODE),0)
-__UNICODE_DEFINE_p_3 = --define wxUSE_UNICODE=0
-endif
-ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p_3 = --define _UNICODE
-endif
 ifeq ($(USE_CAIRO),1)
 __CAIRO_INCLUDEDIR_p_1 = --include-dir $(CAIRO_ROOT)/include/cairo
 endif
@@ -130,12 +122,6 @@ __RTTI_DEFINE_p = -DwxNO_RTTI
 endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p = -DwxNO_THREADS
-endif
-ifeq ($(UNICODE),0)
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
-endif
-ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p = -D_UNICODE
 endif
 ifeq ($(USE_CAIRO),1)
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
@@ -257,7 +243,7 @@ $(OBJS)\my_dll_my_dll.o: ./my_dll.cpp
 	$(CXX) -c -o $@ $(MY_DLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wx_exe_sample_rc.o: ./../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) --define _UNICODE --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\wx_exe_wx_exe.o: ./wx_exe.cpp
 	$(CXX) -c -o $@ $(WX_EXE_CXXFLAGS) $(CPPDEPS) $<

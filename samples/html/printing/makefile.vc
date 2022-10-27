@@ -26,11 +26,10 @@ HTMLPRINTING_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\..\samples /DNOPCH $(__RTTIFLAG_11) $(__EXCEPTIONSFLAG_12) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) /D_UNICODE \
+	/I$(SETUPHDIR) /I.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 \
+	/I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples /DNOPCH $(__RTTIFLAG_11) \
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 HTMLPRINTING_OBJECTS =  \
 	$(OBJS)\htmlprinting_printing.obj
 HTMLPRINTING_RESOURCES =  \
@@ -352,18 +351,6 @@ __THREAD_DEFINE_p = /DwxNO_THREADS
 !if "$(USE_THREADS)" == "0"
 __THREAD_DEFINE_p_1 = /d wxNO_THREADS
 !endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /D_UNICODE
-!endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = /d _UNICODE
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES_p = /I$(CAIRO_ROOT)\include\cairo
 !endif
@@ -438,7 +425,7 @@ data:
 	for %f in (logo6.gif test.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\htmlprinting_sample.res: .\..\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\..\samples /d NOPCH .\..\..\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) /d _UNICODE /i $(SETUPHDIR) /i .\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\..\samples /d NOPCH .\..\..\..\samples\sample.rc
 
 $(OBJS)\htmlprinting_printing.obj: .\printing.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLPRINTING_CXXFLAGS) .\printing.cpp

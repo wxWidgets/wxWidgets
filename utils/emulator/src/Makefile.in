@@ -45,7 +45,7 @@ WX_RELEASE = 3.3
 LIBDIRNAME = $(wx_top_builddir)/lib
 WXEMULATOR_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
+	$(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 WXEMULATOR_OBJECTS =  \
 	$(__wxemulator___win32rc) \
@@ -151,7 +151,7 @@ data:
 	done
 
 wxemulator_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1)  --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) --define _UNICODE --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 wxemulator_emulator.o: $(srcdir)/emulator.cpp
 	$(CXXC) -c -o $@ $(WXEMULATOR_CXXFLAGS) $(srcdir)/emulator.cpp

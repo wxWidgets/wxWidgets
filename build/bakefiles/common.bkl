@@ -295,10 +295,6 @@
         <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
         <if cond="FORMAT=='msvc' and BUILD=='release' and DEBUG_FLAG=='1'">__NO_VC_CRTDBG__</if>
     </set>
-    <set var="UNICODE_DEFINE">
-        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
-        <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
-    </set>
 
     <!-- fill for the specific case of the format/compiler -->
     <set var="WIN32_WINNT">
@@ -569,7 +565,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <define>$(EXCEPTIONS_DEFINE)</define>
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
-        <define>$(UNICODE_DEFINE)</define>
+        <define>_UNICODE</define>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>

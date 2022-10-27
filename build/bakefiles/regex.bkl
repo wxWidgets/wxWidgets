@@ -43,7 +43,7 @@
         <include cond="FORMAT=='autoconf'">$(INC_REGEX_BUILD)</include>
         <define>__WX__</define>
         <define>HAVE_CONFIG_H</define>
-        <define>$(UNICODE_DEFINE)</define>
+        <define>_UNICODE</define>
         <define cond="FORMAT=='autoconf'">PCRE2_CODE_UNIT_WIDTH=$(wxPCRE2_CODE_UNIT_WIDTH)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
