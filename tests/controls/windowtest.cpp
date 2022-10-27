@@ -470,53 +470,38 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
 
     m_window->SetSize(300, 100);
 
-#if wxDEBUG_LEVEL
     // to help see the windows when debugging
     parent->SetBackgroundColour(*wxBLACK);
     child1->SetBackgroundColour(*wxBLUE);
     child2->SetBackgroundColour(*wxRED);
     child3->SetBackgroundColour(*wxGREEN);
-#endif
 
     // Notice that using EventCounter here will give incorrect results,
     // so we have to bind each window to a distinct event handler instead.
 
-    static bool isParentPainted;
-    static bool isChild1Painted;
-    static bool isChild2Painted;
-    static bool isChild3Painted;
+    bool isParentPainted;
+    bool isChild1Painted;
+    bool isChild2Painted;
+    bool isChild3Painted;
 
-    parent->Bind(wxEVT_PAINT,
-                [parent](wxPaintEvent& )
-                {
-                    wxPaintDC dc(parent);
-                    isParentPainted = true;
-                });
+    const auto setFlagOnPaint = [](wxWindow* win, bool* flag)
+    {
+        win->Bind(wxEVT_PAINT, [=](wxPaintEvent&)
+        {
+            wxPaintDC dc(win);
+            *flag = true;
+        });
+    };
 
-    child1->Bind(wxEVT_PAINT,
-                [child1](wxPaintEvent& )
-                {
-                    wxPaintDC dc(child1);
-                    isChild1Painted = true;
-                });
-
-    child2->Bind(wxEVT_PAINT,
-                [child2](wxPaintEvent& )
-                {
-                    wxPaintDC dc(child2);
-                    isChild2Painted = true;
-                });
-
-    child3->Bind(wxEVT_PAINT,
-                [child3](wxPaintEvent& )
-                {
-                    wxPaintDC dc(child3);
-                    isChild3Painted = true;
-                });
+    setFlagOnPaint(parent, &isParentPainted);
+    setFlagOnPaint(child1, &isChild1Painted);
+    setFlagOnPaint(child2, &isChild2Painted);
+    setFlagOnPaint(child3, &isChild3Painted);
 
     // Prepare for the RefreshRect() call below
     wxYield();
 
+    // Now initialize/reset the flags before calling RefreshRect()
     isParentPainted =
     isChild1Painted =
     isChild2Painted =
@@ -532,7 +517,8 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
         wxYield();
     }
 
-    // child1 should be the only window not to receive the wxEVT_PAINT event.
+    // child1 should be the only window not to receive the wxEVT_PAINT event
+    // because it does not intersect with the refreshed rectangle.
     CHECK(isParentPainted == true);
     CHECK(isChild1Painted == false);
     CHECK(isChild2Painted == true);
