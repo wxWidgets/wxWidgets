@@ -1693,6 +1693,10 @@ public:
     void RefreshBlock(int topRow, int leftCol,
                       int bottomRow, int rightCol);
 
+    // Refresh one or more areas (a combination of wxGridArea enums) entirely.
+    void RefreshArea(int areas);
+
+
     // ------
     // Code that does a lot of grid modification can be enclosed
     // between BeginBatch() and EndBatch() calls to avoid screen
