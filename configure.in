@@ -3563,9 +3563,6 @@ else
 fi
 
 
-dnl This variable only exists for compatibility and will be removed soon.
-WX_CHARTYPE="unicode"
-
 WX_FLAVOUR=${WX_FLAVOUR:+-$WX_FLAVOUR}
 WX_LIB_FLAVOUR=`echo $WX_FLAVOUR | tr '-' '_'`
 
@@ -3578,7 +3575,7 @@ WX_VERSION_TAG=`echo WXU${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}u${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
-TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
+TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-unicode${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 dnl library link name
 dnl These just save us from exporting lib_{unicode,flavour}_suffix.
@@ -8043,7 +8040,6 @@ AC_SUBST(WIDGET_SET)
 AC_SUBST(WX_RELEASE)
 AC_SUBST(WX_VERSION)
 AC_SUBST(WX_SUBVERSION)
-AC_SUBST(WX_CHARTYPE)
 
 dnl both versions of all the usual flags variables: WX_FLAGS which are used for
 dnl building the library itself, and WXCONFIG_-prefixed variants which
