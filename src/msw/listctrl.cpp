@@ -129,7 +129,7 @@ class wxLV_ITEM
 {
 public:
     // default ctor, use Init() later
-    wxLV_ITEM() { m_buf = nullptr; m_pItem = nullptr; }
+    wxLV_ITEM() { m_pItem = nullptr; }
 
     // init without conversion
     void Init(LV_ITEMW& item)
@@ -154,27 +154,25 @@ public:
         // convert text from ANSI to Unicod if necessary
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
-            m_buf = new wxWCharBuffer(wxConvLocal.cMB2WC(item.pszText));
-            m_item.pszText = (wxChar *)m_buf->data();
+            m_buf = wxConvLocal.cMB2WC(item.pszText);
+            m_item.pszText = m_buf.data();
         }
     }
 
     // ctor without conversion
-    wxLV_ITEM(LV_ITEMW& item) : m_buf(nullptr), m_pItem(&item) { }
+    wxLV_ITEM(LV_ITEMW& item) : m_pItem(&item) { }
 
     // ctor with conversion
-    wxLV_ITEM(LV_ITEMA& item) : m_buf(nullptr)
+    wxLV_ITEM(LV_ITEMA& item)
     {
         Init(item);
     }
-
-    ~wxLV_ITEM() { delete m_buf; }
 
     // conversion to the real LV_ITEM
     operator LV_ITEMW&() const { return *m_pItem; }
 
 private:
-    wxWCharBuffer *m_buf;
+    wxWCharBuffer m_buf;
 
     LV_ITEMW *m_pItem;
     LV_ITEMW m_item;
