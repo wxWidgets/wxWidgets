@@ -354,10 +354,10 @@ void MenuDrawData::Init(wxWindow const* window)
 
         Offset = -14;
 
-        wxUxThemeFont themeFont;
-        ::GetThemeSysFont(hTheme, TMT_MENUFONT, themeFont.GetPtr());
+        LOGFONTW themeFont;
+        ::GetThemeSysFont(hTheme, TMT_MENUFONT, &themeFont);
         // Use null window for wxNativeFontInfo, height it is already at the correct ppi
-        Font = wxFont(wxNativeFontInfo(themeFont.GetLOGFONT(), nullptr));
+        Font = wxFont(wxNativeFontInfo(themeFont, nullptr));
 
         Theme = true;
 
