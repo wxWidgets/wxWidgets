@@ -148,11 +148,6 @@
 
 
 
-#ifndef wxUSE_UNICODE
-    #cmakedefine01 wxUSE_UNICODE
-#endif
-
-
 #cmakedefine01 wxUSE_EXCEPTIONS
 
 #cmakedefine01 wxUSE_EXTENDED_RTTI

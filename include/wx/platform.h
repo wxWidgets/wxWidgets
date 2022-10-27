@@ -197,30 +197,26 @@
 
 
 /*
-   adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
-   and is used by wxWidgets, _UNICODE and/or UNICODE may be defined or used by
-   the system headers so bring these settings in sync
+   Always define wxUSE_UNICODE as 1 for compatibility.
+
+   Additionally, define _UNICODE and UNICODE too: this is used by MSW SDK/CRT
+   headers and also may be used by wx applications code.
  */
 
-/* set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined */
-#if defined(_UNICODE) || defined(UNICODE)
-#   undef wxUSE_UNICODE
+#ifdef wxUSE_UNICODE
+#   if wxUSE_UNICODE != 1
+#       error "wxUSE_UNICODE may be only defined as 1"
+#   endif
+#else
 #   define wxUSE_UNICODE 1
-#else /* !UNICODE */
-#   ifndef wxUSE_UNICODE
-#       define wxUSE_UNICODE 0
-#   endif
-#endif /* UNICODE/!UNICODE */
+#endif
 
-/* and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1 */
-#if wxUSE_UNICODE
-#   ifndef _UNICODE
-#       define _UNICODE
-#   endif
-#   ifndef UNICODE
-#       define UNICODE
-#   endif
-#endif /* wxUSE_UNICODE */
+#ifndef _UNICODE
+#    define _UNICODE
+#endif
+#ifndef UNICODE
+#    define UNICODE
+#endif
 
 
 
