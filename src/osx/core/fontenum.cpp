@@ -17,7 +17,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
-    #include "wx/intl.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -75,7 +74,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
             }
             
             wxCFStringRef cfName(wxCFRetain(fontName)) ;
-            fontFamilies.Add(cfName.AsString(wxLocale::GetSystemEncoding()));
+            fontFamilies.Add(cfName.AsString());
         }
         
         CFRelease(cfFontFamilies);

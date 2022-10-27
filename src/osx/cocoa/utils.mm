@@ -14,7 +14,6 @@
 #include "wx/platinfo.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/intl.h"
     #include "wx/app.h"
     #if wxUSE_GUI
         #include "wx/dialog.h"
@@ -95,7 +94,7 @@ void wxBell()
         CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
         CFRelease( url ) ;
-        wxString app = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+        wxString app = wxCFStringRef(path).AsString();
         if ( !app.EndsWith(".app") )
         {
             [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];

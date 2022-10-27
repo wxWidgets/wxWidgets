@@ -251,7 +251,7 @@ bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& region)
     return false;
 }
 
-void wxNonOwnedWindowIPhoneImpl::SetTitle( const wxString& title, wxFontEncoding encoding )
+void wxNonOwnedWindowIPhoneImpl::SetTitle( const wxString& title )
 {
 // TODO change title of app ?
 }

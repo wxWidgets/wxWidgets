@@ -129,7 +129,7 @@ public :
 
     void                SetDefaultButton( bool isDefault ) override;
     void                PerformClick() override;
-    virtual void        SetLabel(const wxString& title, wxFontEncoding encoding) override;
+    virtual void        SetLabel(const wxString& title) override;
 
     void                SetCursor( const wxCursor & cursor ) override;
     void                CaptureMouse() override;
@@ -295,7 +295,7 @@ public :
     void GetContentArea( int &left, int &top, int &width, int &height ) const override;
     bool SetShape(const wxRegion& region) override;
 
-    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) override;
+    virtual void SetTitle( const wxString& title ) override;
 
     virtual wxContentProtection GetContentProtection() const override;
     virtual bool SetContentProtection(wxContentProtection contentProtection) override;

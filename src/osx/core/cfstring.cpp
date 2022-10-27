@@ -587,7 +587,7 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 
 // converts this string into a core foundation string with optional pc 2 mac encoding
 
-wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED(encoding) )
+wxCFStringRef::wxCFStringRef( const wxString &st )
 {
     if (st.IsEmpty())
     {
@@ -622,19 +622,19 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED(encod
     }
 }
 
-wxString wxCFStringRef::AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding )
+wxString wxCFStringRef::AsStringWithNormalizationFormC( CFStringRef ref )
 {
     if ( !ref )
         return wxEmptyString ;
 
     CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(nullptr, 0, ref);
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
-    wxString str = wxCFStringRef::AsString(cfMutableString,encoding);
+    wxString str = wxCFStringRef::AsString(cfMutableString);
     CFRelease(cfMutableString);
     return str;
 }
 
-wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED(encoding) )
+wxString wxCFStringRef::AsString( CFStringRef ref )
 {
     if ( !ref )
         return wxEmptyString ;
@@ -670,21 +670,21 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED(encod
     return wxMacConvertNewlines10To13(result);
 }
 
-wxString wxCFStringRef::AsString(wxFontEncoding encoding) const
+wxString wxCFStringRef::AsString() const
 {
-    return AsString( get(), encoding );
+    return AsString( get() );
 }
 
 #ifdef __WXMAC__
 
-wxString wxCFStringRef::AsString( NSString* ref, wxFontEncoding encoding )
+wxString wxCFStringRef::AsString( NSString* ref )
 {
-    return AsString( (CFStringRef) ref, encoding );
+    return AsString( (CFStringRef) ref );
 }
 
-wxString wxCFStringRef::AsStringWithNormalizationFormC( NSString* ref, wxFontEncoding encoding )
+wxString wxCFStringRef::AsStringWithNormalizationFormC( NSString* ref )
 {
-    return AsStringWithNormalizationFormC( (CFStringRef) ref, encoding );
+    return AsStringWithNormalizationFormC( (CFStringRef) ref );
 }
 
 #endif

@@ -36,7 +36,7 @@ public:
     wxNativeWidgetCocoaImpl(wxWindowMac* peer, WXWidget w) : wxWidgetCocoaImpl(peer, w)
     {}
 
-    virtual void SetInitialLabel(const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding)) override
+    virtual void SetInitialLabel(const wxString& WXUNUSED(title)) override
     {
         // Don't set initial label, because the control was created by the
         // caller and is already fully setup. And some controls (notably

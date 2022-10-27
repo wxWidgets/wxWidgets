@@ -91,11 +91,11 @@ public:
         m_lineBreak = lineBreak;
     }
 
-    virtual void SetLabel(const wxString& title, wxFontEncoding encoding) override
+    virtual void SetLabel(const wxString& title) override
     {
         wxMacAutoreleasePool autoreleasepool;
 
-        wxCFStringRef text( title , encoding );
+        wxCFStringRef text( title );
 
         NSMutableAttributedString *
             attrstring = [[NSMutableAttributedString alloc] initWithString:text.AsNSString()];

@@ -336,7 +336,7 @@ wxString wxUITextViewControl::GetStringValue() const
     if (m_textView)
     {
         result = wxMacConvertNewlines13To10(
-            wxCFStringRef::AsString([m_textView text], m_wxPeer->GetFont().GetEncoding()));
+            wxCFStringRef::AsString([m_textView text]));
     }
     return result;
 }
@@ -348,7 +348,7 @@ void wxUITextViewControl::SetStringValue( const wxString &str)
     if (m_textView)
     {
         wxString st(wxMacConvertNewlines10To13(str));
-        [m_textView setText: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        [m_textView setText: wxCFStringRef( st ).AsNSString()];
     }
 }
 
@@ -419,7 +419,7 @@ void wxUITextViewControl::WriteText(const wxString& str)
     wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
 
-    wxCFStringRef insert( st , m_wxPeer->GetFont().GetEncoding() );
+    wxCFStringRef insert( st );
     NSMutableString* subst = [NSMutableString stringWithString:[m_textView text]];
     [subst replaceCharactersInRange:[m_textView selectedRange] withString:insert.AsNSString()];
 
@@ -550,13 +550,13 @@ wxUITextFieldControl::~wxUITextFieldControl()
 
 wxString wxUITextFieldControl::GetStringValue() const
 {
-    return wxCFStringRef::AsString([m_textField text], m_wxPeer->GetFont().GetEncoding());
+    return wxCFStringRef::AsString([m_textField text]);
 }
 
 void wxUITextFieldControl::SetStringValue( const wxString &str)
 {
 //    wxMacEditHelper helper(m_textField);
-    [m_textField setText: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    [m_textField setText: wxCFStringRef( str ).AsNSString()];
 }
 
 wxSize wxUITextFieldControl::GetBestSize() const
@@ -636,7 +636,7 @@ void wxUITextFieldControl::WriteText(const wxString& str)
     if ( editor )
     {
         wxMacEditHelper helper(m_textField);
-        [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        [editor insertText:wxCFStringRef( str ).AsNSString()];
     }
     else
 #endif

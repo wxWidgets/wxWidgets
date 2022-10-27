@@ -264,7 +264,7 @@ public:
             wxNotebookPage* page = notebook.GetPage(i);
             NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
             [item setView:page->GetHandle() ];
-            wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
+            wxCFStringRef cf( page->GetLabel() );
             [item setLabel:cf.AsNSString()];
 
             const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);

@@ -38,8 +38,7 @@ public:
     {
     }
 
-    wxCFStringRef(const wxString &str,
-                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT) ;
+    wxCFStringRef(const wxString &str);
 
 #ifdef __OBJC__
     wxCFStringRef(WX_NSString ref)
@@ -62,13 +61,13 @@ public:
     {
     }
 
-    wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) const;
+    wxString AsString() const;
 
-    static wxString AsString( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-    static wxString AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
+    static wxString AsString( CFStringRef ref ) ;
+    static wxString AsStringWithNormalizationFormC( CFStringRef ref ) ;
 #ifdef __WXMAC__
-    static wxString AsString( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-    static wxString AsStringWithNormalizationFormC( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
+    static wxString AsString( WX_NSString ref ) ;
+    static wxString AsStringWithNormalizationFormC( WX_NSString ref ) ;
 #endif
 #ifdef __OBJC__
     WX_NSString AsNSString() const { return (WX_OSX_BRIDGE WX_NSString)(CFStringRef) *this; }

@@ -3334,7 +3334,7 @@ bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
     return true ;
 }
 
-void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding )
+void wxWidgetCocoaImpl::SetLabel( const wxString& title )
 {
     if ( [m_osxView respondsToSelector:@selector(setAttributedTitle:) ] )
     {
@@ -3343,7 +3343,7 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
         wxColour col = GetWXPeer()->UseForegroundColour() ? GetWXPeer()->GetForegroundColour() : wxNullColour;
         if ( f.GetStrikethrough() || f.GetUnderlined() || col.IsOk() )
         {
-            wxCFStringRef cf(title, encoding );
+            wxCFStringRef cf(title );
 
             NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc]
                                                      initWithString:cf.AsNSString()];
@@ -3395,12 +3395,12 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
 
     if ( [m_osxView respondsToSelector:@selector(setTitle:) ] )
     {
-        wxCFStringRef cf( title , encoding );
+        wxCFStringRef cf( title );
         [m_osxView setTitle:cf.AsNSString()];
     }
     else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
-        wxCFStringRef cf( title , encoding );
+        wxCFStringRef cf( title );
         [m_osxView setStringValue:cf.AsNSString()];
     }
 }
@@ -3664,7 +3664,7 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font)
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
     if ([m_osxView respondsToSelector:@selector(setAttributedTitle:)])
-        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics), GetWXPeer()->GetFont().GetEncoding());
+        SetLabel(wxStripMenuCodes(GetWXPeer()->GetLabel(), wxStrip_Mnemonics));
 }
 
 void wxWidgetCocoaImpl::SetForegroundColour(const wxColour& col)
@@ -3681,7 +3681,7 @@ void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
 {
     if ( tooltip )
     {
-        wxCFStringRef cf( tooltip->GetTip() , m_wxPeer->GetFont().GetEncoding() );
+        wxCFStringRef cf( tooltip->GetTip() );
         [m_osxView setToolTip: cf.AsNSString()];
     }
     else 

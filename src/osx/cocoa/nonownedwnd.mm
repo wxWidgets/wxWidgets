@@ -1105,9 +1105,9 @@ bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
     return true;
 }
 
-void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding encoding )
+void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title )
 {
-    [m_macWindow setTitle:wxCFStringRef( title , encoding ).AsNSString()];
+    [m_macWindow setTitle:wxCFStringRef( title  ).AsNSString()];
 }
 
 wxContentProtection wxNonOwnedWindowCocoaImpl::GetContentProtection() const
