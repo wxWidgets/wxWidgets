@@ -55,9 +55,6 @@ enum wxXmlNodeType
     The @c wxXML_DOCUMENT_TYPE_NODE is not implemented at this time. Instead,
     you should get and set the DOCTYPE values using the wxXmlDocument class.
 
-    If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
-    wxXmlDocument::Load (default is UTF-8).
-
     @note
     Once a wxXmlNode has been added to a wxXmlDocument it becomes owned by the
     document and this has two implications. Firstly, the wxXmlDocument takes

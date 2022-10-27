@@ -34,8 +34,8 @@ library:
     particular is implicitly convertible to @c char* and not std::[w]string).}
 @itemdef{wxUSE_STD_IOSTREAM, Standard C++ classes are used instead of or in
     addition to wx stream classes.}
-@itemdef{wxUSE_UNICODE, Compiled with Unicode support (default in wxWidgets
-    3.0, non-Unicode build is deprecated and will be removed in the future).}
+@itemdef{wxUSE_UNICODE, Always defined as 1 in wxWidgets 3.3 and later, only
+    exists for compatibility.}
 @itemdef{wxUSE_UNICODE_WCHAR, wxString uses wchar_t buffer for internal storage
     (default).}
 @itemdef{wxUSE_UNICODE_UTF8, wxString uses UTF-8 for internal storage (mostly

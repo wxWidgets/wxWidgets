@@ -368,7 +368,8 @@ more details.
         and so the usual idiom which allows to support both cases is to first include
         @c wx/wxprec.h} and then, inside <tt>\#ifndef WX_PRECOMP</tt>, individual
         headers you need.}
-@itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to @c 1}
+@itemdef{_UNICODE and UNICODE, are both always defined in current wxWidgets
+    versions.}
 @itemdef{wxUSE_GUI,
         this particular feature test macro is defined to 1
         when compiling or using the library with the GUI features activated,
