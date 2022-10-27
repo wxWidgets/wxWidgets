@@ -206,10 +206,8 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     m_lastKeyDownConsumed = false;
     m_vScrollBar = nullptr;
     m_hScrollBar = nullptr;
-#if wxUSE_UNICODE
     // Put Scintilla into unicode (UTF-8) mode
     SetCodePage(wxSTC_CP_UTF8);
-#endif
 
     SetInitialSize(size);
 
@@ -587,13 +585,8 @@ int wxStyledTextCtrl::GetNextTabStop(int line, int x)
 
 // Set the code page used to interpret the bytes of the document as characters.
 void wxStyledTextCtrl::SetCodePage(int codePage) {
-#if wxUSE_UNICODE
     wxASSERT_MSG(codePage == wxSTC_CP_UTF8,
-                 wxT("Only wxSTC_CP_UTF8 may be used when wxUSE_UNICODE is on."));
-#else
-    wxASSERT_MSG(codePage != wxSTC_CP_UTF8,
-                 wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
-#endif
+                 wxT("Only wxSTC_CP_UTF8 may be used."));
     SendMsg(SCI_SETCODEPAGE, codePage);
 }
 
@@ -5650,15 +5643,12 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 #endif
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
-#if wxUSE_UNICODE
     // apparently if we don't do this, Unicode keys pressed after non-char
     // ASCII ones (e.g. Enter, Tab) are not taken into account (patch 1615989)
     if (m_lastKeyDownConsumed && evt.GetUnicodeKey() > 255)
         m_lastKeyDownConsumed = false;
-#endif
 
     if (!m_lastKeyDownConsumed && !skip) {
-#if wxUSE_UNICODE
         int key = evt.GetUnicodeKey();
         bool keyOk = true;
 
@@ -5674,13 +5664,6 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
             m_swx->DoAddChar(key);
             return;
         }
-#else
-        int key = evt.GetKeyCode();
-        if (key < WXK_START) {
-            m_swx->DoAddChar(key);
-            return;
-        }
-#endif
     }
 
     evt.Skip();

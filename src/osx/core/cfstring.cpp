@@ -587,7 +587,7 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 
 // converts this string into a core foundation string with optional pc 2 mac encoding
 
-wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UNICODE(encoding) )
+wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED(encoding) )
 {
     if (st.IsEmpty())
     {
@@ -596,7 +596,6 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
     else
     {
         wxString str(wxMacConvertNewlines13To10(st));
-#if wxUSE_UNICODE
 #if wxUSE_UNICODE_WCHAR
         // native = wchar_t 4 bytes for us
         const wchar_t * const data = str.wc_str();
@@ -620,10 +619,6 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
         {
             reset( wxCFRetain( CFSTR("") ) );
         }
-#else // not wxUSE_UNICODE
-        reset( CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
-            wxMacGetSystemEncFromFontEnc( encoding ) ) );
-#endif
     }
 }
 
@@ -639,7 +634,7 @@ wxString wxCFStringRef::AsStringWithNormalizationFormC( CFStringRef ref, wxFontE
     return str;
 }
 
-wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UNICODE(encoding) )
+wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED(encoding) )
 {
     if ( !ref )
         return wxEmptyString ;
@@ -648,7 +643,6 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
 
     CFStringEncoding cfencoding;
     wxString result;
-#if wxUSE_UNICODE
   #if wxUSE_UNICODE_WCHAR
     cfencoding = kCFStringEncodingUTF32Native;
   #elif wxUSE_UNICODE_UTF8
@@ -656,9 +650,6 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
   #else
     #error "unsupported unicode representation"
   #endif
-#else
-    cfencoding = wxMacGetSystemEncFromFontEnc( encoding );
-#endif
 
     CFIndex cStrLen ;
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding ,
@@ -667,7 +658,6 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding,
         '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
 
-#if wxUSE_UNICODE
   #if wxUSE_UNICODE_WCHAR
     result = wxString( (const wchar_t*) buf , cStrLen/4);
   #elif wxUSE_UNICODE_UTF8
@@ -675,9 +665,6 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
   #else
     #error "unsupported unicode representation"
   #endif
-#else
-    result = wxString(buf, cStrLen) ;
-#endif
 
     delete[] buf ;
     return wxMacConvertNewlines10To13(result);

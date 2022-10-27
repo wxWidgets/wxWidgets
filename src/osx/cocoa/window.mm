@@ -523,7 +523,6 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
             keyval = aunichar;
     }
 
-#if wxUSE_UNICODE
     // OS X generates events with key codes in Unicode private use area for
     // unprintable symbols such as cursor arrows (WXK_UP is mapped to U+F700)
     // and function keys (WXK_F2 is U+F705). We don't want to use them as the
@@ -534,7 +533,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     // as key codes beyond it don't seem to be currently used.
     if ( !(aunichar >= 0xe000 && aunichar < 0xf900) )
         wxevent.m_uniChar = aunichar;
-#endif
+
     wxevent.m_keyCode = keyval;
 
     wxWindowMac* peer = GetWXPeer();
@@ -3780,9 +3779,7 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
                 wxevent.m_rawFlags = 0;
 
                 const wxChar aunichar = *it;
-#if wxUSE_UNICODE
                 wxevent.m_uniChar = aunichar;
-#endif
                 wxevent.m_keyCode = aunichar < 0x80 ? aunichar : WXK_NONE;
                 
                 wxevent.SetEventObject(peer);

@@ -474,7 +474,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     bool init_result;
 
-#if wxUSE_UNICODE
     int i;
 
     // gtk_init() wants UTF-8, not wchar_t, so convert
@@ -530,19 +529,10 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     }
 
     delete [] argvGTK;
-#else // !wxUSE_UNICODE
-    // gtk_init() shouldn't actually change argv_ itself (just its contents) so
-    // it's ok to pass pointer to it
-    init_result = gtk_init_check( &argc_, &argv_ );
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // update internal arg[cv] as GTK+ may have removed processed options:
     this->argc = argc_;
-#if wxUSE_UNICODE
     this->argv.Init(argc_, argv_);
-#else
-    this->argv = argv_;
-#endif
 
     if ( !init_result )
     {

@@ -188,16 +188,9 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
 wxMacUniCharBuffer::wxMacUniCharBuffer( const wxString &str )
 {
     wxMBConvUTF16 converter ;
-#if wxUSE_UNICODE
     size_t unicharlen = converter.WC2MB( nullptr , str.wc_str() , 0 ) ;
     m_ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
     converter.WC2MB( (char*) m_ubuf , str.wc_str(), unicharlen + 2 ) ;
-#else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    size_t unicharlen = converter.WC2MB( nullptr , wchar.data() , 0 ) ;
-    m_ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
-    converter.WC2MB( (char*) m_ubuf , wchar.data() , unicharlen + 2 ) ;
-#endif
     m_chars = unicharlen / 2 ;
 }
 

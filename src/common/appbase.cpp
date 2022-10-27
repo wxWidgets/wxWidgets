@@ -142,12 +142,10 @@ wxAppConsoleBase::wxAppConsoleBase()
 
 #ifdef __WXDEBUG__
     SetTraceMasks();
-#if wxUSE_UNICODE
-    // In unicode mode the SetTraceMasks call can cause an apptraits to be
+    // SetTraceMasks call can cause an apptraits to be
     // created, but since we are still in the constructor the wrong kind will
     // be created for GUI apps.  Destroy it so it can be created again later.
     wxDELETE(m_traits);
-#endif
 #endif
 
     wxEvtHandler::AddFilter(this);
@@ -1173,12 +1171,10 @@ void wxOnAssert(const wxChar *file,
                 const wxChar *cond,
                 const wxChar *msg)
 {
-    // this is the backwards-compatible version (unless we don't use Unicode)
+    // this is the backwards-compatible version
     // so it could be called directly from the user code and this might happen
     // even when wxTheAssertHandler is null
-#if wxUSE_UNICODE
     if ( wxTheAssertHandler )
-#endif // wxUSE_UNICODE
         wxTheAssertHandler(file, line, func, cond, msg);
 }
 
@@ -1200,7 +1196,6 @@ void wxOnAssert(const char *file,
     wxTheAssertHandler(file, line, func, cond, msg);
 }
 
-#if wxUSE_UNICODE
 void wxOnAssert(const char *file,
                 int line,
                 const char *func,
@@ -1226,7 +1221,6 @@ void wxOnAssert(const char *file,
 {
     wxTheAssertHandler(file, line, func, cond, msg);
 }
-#endif // wxUSE_UNICODE
 
 #endif // wxDEBUG_LEVEL
 

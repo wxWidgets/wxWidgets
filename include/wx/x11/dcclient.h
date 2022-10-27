@@ -134,10 +134,8 @@ protected:
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
 
-#if wxUSE_UNICODE
     PangoContext *m_context;
     PangoFontDescription *m_fontdesc;
-#endif
 
     void SetUpDC();
     void Destroy();

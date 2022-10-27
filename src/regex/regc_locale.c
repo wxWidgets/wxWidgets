@@ -123,8 +123,6 @@ static struct cname {
     {NULL,                      0}
 };
 
-#if wxUSE_UNICODE
-
 /* Unicode character-class tables */
 
 typedef struct crange {
@@ -590,57 +588,6 @@ Tcl_UniChar Tcl_UniCharToTitle(int ch)
     }
 }
 
-#else   /* wxUSE_UNICODE */
-
-#include <locale.h>
-
-typedef int (*isfunc_t)(int);
-
-/* ASCII character-class table */
-static struct cclass {
-    char *name;
-    char *chars;
-    int hasch;
-    isfunc_t isfunc;
-} cclasses[] = {
-    {"alnum",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
-0123456789",                1,  isalnum},
-    {"alpha",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-                    1,  isalpha},
-    {"blank",   " \t",      0,  NULL},
-    {"cntrl",   "\007\b\t\n\v\f\r\1\2\3\4\5\6\16\17\20\21\22\23\24\
-\25\26\27\30\31\32\33\34\35\36\37\177", 0, iscntrl},
-    {"digit",   "0123456789",   0,  isdigit},
-    {"graph",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
-0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
-                    1,  isgraph},
-    {"lower",   "abcdefghijklmnopqrstuvwxyz",
-                    1,  islower},
-    {"print",   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\
-0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ ",
-                    1,  isprint},
-    {"punct",   "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
-                    0,  ispunct},
-    {"space",   "\t\n\v\f\r ",  0,  isspace},
-    {"upper",   "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-                    0,  isupper},
-    {"xdigit",  "0123456789ABCDEFabcdef",
-                    0,  isxdigit},
-    {NULL,      0,      0, NULL}
-};
-
-/*
- * Supply implementations for some tcl functions that this module depends on
- * to make it self contained
- */
-
-#define Tcl_UniChar wxChar
-Tcl_UniChar Tcl_UniCharToUpper(int ch) { return wxCRT_ToupperNative(ch); }
-Tcl_UniChar Tcl_UniCharToLower(int ch) { return wxCRT_TolowerNative(ch); }
-Tcl_UniChar Tcl_UniCharToTitle(int ch) { return wxCRT_ToupperNative(ch); }
-
-#endif  /* !wxUSE_UNICODE */
-
 #define	CH	NOCELT
 
 /*
@@ -825,8 +772,6 @@ eclass(v, c, cases)
     addchr(cv, (chr)c);
     return cv;
 }
-
-#if wxUSE_UNICODE
 
 /*
  - cclass - supply cvec for a character class
@@ -1035,79 +980,6 @@ cclass(v, startp, endp, cases)
     }
     return cv;
 }
-
-#else   /* wxUSE_UNICODE */
-
-static struct cvec *
-cclass(v, startp, endp, cases)
-struct vars *v;
-chr *startp;                    /* where the name starts */
-chr *endp;                      /* just past the end of the name */
-int cases;                      /* case-independent? */
-{
-    size_t len;
-    char *p;
-    struct cclass *cc;
-    struct cvec *cv;
-    chr *np;
-    int i;
-    int count;
-    char buf[256];
-    const char *loc;
-
-    /* find the name */
-    len = endp - startp;
-    np = startp;
-    if (cases && len == 5 && (wxCRT_StrncmpNative(wxT("lower"), np, 5) == 0 ||
-                                    wxCRT_StrncmpNative(wxT("upper"), np, 5) == 0))
-            np = wxT("alpha");
-    for (cc = cclasses; cc->name != NULL; cc++)
-            if (wxCRT_StrlenNative(cc->name) == len && wxCRT_StrncmpNative(cc->name, np, len) == 0)
-                    break;          /* NOTE BREAK OUT */
-    if (cc->name == NULL) {
-            ERR(REG_ECTYPE);
-            return NULL;
-    }
-
-    loc = setlocale(LC_CTYPE, NULL);
-
-    if (!cc->isfunc || loc == NULL || strcmp(loc, "C") == 0)
-    {
-        /* set up vector */
-        cv = getcvec(v, (int)strlen(cc->chars), 0, 0);
-        if (cv == NULL) {
-                ERR(REG_ESPACE);
-                return NULL;
-        }
-
-        /* fill it in */
-        for (p = cc->chars; *p != '\0'; p++)
-                addchr(cv, (chr)*p);
-    }
-    else
-    {
-        count = 0;
-        for (i = 0; i < 256; i++)
-            if (cc->isfunc(i))
-                buf[count++] = i;
-
-        /* set up vector */
-        cv = getcvec(v, count, 0, 0);
-        if (cv == NULL) {
-            ERR(REG_ESPACE);
-            return NULL;
-        }
-
-        /* fill it in */
-        for (i = 0; i < count; i++)
-            addchr(cv, buf[i]);
-    }
-
-    return cv;
-}
-
-#endif  /* !wxUSE_UNICODE */
-
 
 /*
  - allcases - supply cvec for all case counterparts of a chr (including itself)

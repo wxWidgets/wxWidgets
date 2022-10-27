@@ -176,48 +176,9 @@ public:
     // Trivial default ctor.
     wxUxThemeFont() { }
 
-#if wxUSE_UNICODE
-    // In Unicode build we always use LOGFONT anyhow so this class is
-    // completely trivial.
+    // This class is now completely trivial and should be removed.
     LPLOGFONTW GetPtr() { return &m_lfW; }
     const LOGFONTW& GetLOGFONT() { return m_lfW; }
-#else // !wxUSE_UNICODE
-    // Return either LOGFONTA or LOGFONTW pointer as required by the current
-    // Windows version.
-    LPLOGFONTW GetPtr()
-    {
-        return UseLOGFONTW() ? &m_lfW
-                             : reinterpret_cast<LPLOGFONTW>(&m_lfA);
-    }
-
-    // This method returns LOGFONT (i.e. LOGFONTA in ANSI build and LOGFONTW in
-    // Unicode one) which can be used with other, normal, Windows or wx
-    // functions. Internally it may need to transform LOGFONTW to LOGFONTA.
-    const LOGFONTA& GetLOGFONT()
-    {
-        if ( UseLOGFONTW() )
-        {
-            // Most of the fields are the same in LOGFONTA and LOGFONTW so just
-            // copy everything by default.
-            memcpy(&m_lfA, &m_lfW, sizeof(m_lfA));
-
-            // But the face name must be converted from Unicode.
-            WideCharToMultiByte(CP_ACP, 0, m_lfW.lfFaceName, -1,
-                                m_lfA.lfFaceName, sizeof(m_lfA.lfFaceName),
-                                nullptr, nullptr);
-        }
-
-        return m_lfA;
-    }
-
-private:
-    static bool UseLOGFONTW()
-    {
-        return wxGetWinVersion() >= wxWinVersion_Vista;
-    }
-
-    LOGFONTA m_lfA;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 private:
     LOGFONTW m_lfW;

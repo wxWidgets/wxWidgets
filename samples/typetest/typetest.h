@@ -29,9 +29,7 @@ public:
     void DoStreamDemo5(wxCommandEvent& event);
     void DoStreamDemo6(wxCommandEvent& event);
     void DoStreamDemo7(wxCommandEvent& event);
-#if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
-#endif // wxUSE_UNICODE
     void DoMIMEDemo(wxCommandEvent& event);
 
     wxTextCtrl* GetTextCtrl() const { return m_textCtrl; }

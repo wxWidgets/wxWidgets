@@ -250,7 +250,6 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::S", "[vsnprintf]")
     CMP("abcde", "%.5s", wxT("abcdefghi"));
 
     // do the same tests but with Unicode characters:
-#if wxUSE_UNICODE
 
     // Unicode code points from U+03B1 to U+03B9 are the greek letters alpha-iota;
     // UTF8 encoding of such code points is 0xCEB1 to 0xCEB9
@@ -280,7 +279,6 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::S", "[vsnprintf]")
     CMP_UTF8(ABC "  ",     "%-5s", ABC);
     CMP_UTF8(ABCDEFGHI,    "%-5s", ABCDEFGHI);
     CMP_UTF8(ABCDE,        "%.5s", ABCDEFGHI);
-#endif // wxUSE_UNICODE
 
     // test a string which has a NUL character after "ab";
     // obviously it should be handled exactly like just as "ab"
@@ -399,13 +397,11 @@ void VsnprintfTestCase::DoBigToSmallBuffer(T *buffer, int size)
 
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::BigToSmallBuffer", "[vsnprintf]")
 {
-#if wxUSE_UNICODE
     wchar_t bufw[1024], bufw2[16], bufw3[4], bufw4;
     DoBigToSmallBuffer(bufw, 1024);
     DoBigToSmallBuffer(bufw2, 16);
     DoBigToSmallBuffer(bufw3, 4);
     DoBigToSmallBuffer(&bufw4, 1);
-#endif // wxUSE_UNICODE
 
     char bufa[1024], bufa2[16], bufa3[4], bufa4;
     DoBigToSmallBuffer(bufa, 1024);

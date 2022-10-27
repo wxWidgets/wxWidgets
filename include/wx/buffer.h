@@ -411,26 +411,18 @@ typedef wxWritableCharTypeBuffer<char> wxWritableCharBuffer;
 typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
 
 
-#if wxUSE_UNICODE
-    #define wxWxCharBuffer wxWCharBuffer
+// Compatibility defines, don't use them in the new code.
+#define wxWxCharBuffer wxWCharBuffer
 
-    #define wxMB2WXbuf wxWCharBuffer
-    #define wxWX2MBbuf wxCharBuffer
-    #if wxUSE_UNICODE_WCHAR
-        #define wxWC2WXbuf wxChar*
-        #define wxWX2WCbuf wxChar*
-    #elif wxUSE_UNICODE_UTF8
-        #define wxWC2WXbuf wxWCharBuffer
-        #define wxWX2WCbuf wxWCharBuffer
-    #endif
-#else // ANSI
-    #define wxWxCharBuffer wxCharBuffer
-
-    #define wxMB2WXbuf wxChar*
-    #define wxWX2MBbuf wxChar*
-    #define wxWC2WXbuf wxCharBuffer
+#define wxMB2WXbuf wxWCharBuffer
+#define wxWX2MBbuf wxCharBuffer
+#if wxUSE_UNICODE_WCHAR
+    #define wxWC2WXbuf wxChar*
+    #define wxWX2WCbuf wxChar*
+#elif wxUSE_UNICODE_UTF8
+    #define wxWC2WXbuf wxWCharBuffer
     #define wxWX2WCbuf wxWCharBuffer
-#endif // Unicode/ANSI
+#endif
 
 // ----------------------------------------------------------------------------
 // A class for holding growable data buffers (not necessarily strings)

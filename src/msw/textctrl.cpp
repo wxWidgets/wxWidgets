@@ -499,11 +499,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         // notice that 1.0 has no Unicode support at all so in Unicode build we
         // must use another version
 
-#if wxUSE_UNICODE
         m_verRichEdit = 2;
-#else // !wxUSE_UNICODE
-        m_verRichEdit = m_windowStyle & wxTE_RICH2 ? 2 : 1;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 #if wxUSE_INKEDIT
         // First test if we can load an ink edit control. Normally, all edit
@@ -544,12 +540,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
                 }
                 else if ( wxRichEditModule::Load(wxRichEditModule::Version_2or3) )
                 {
-                    windowClass = wxT("RichEdit20")
-#if wxUSE_UNICODE
-                                wxT("W");
-#else // ANSI
-                                wxT("A");
-#endif // Unicode/ANSI
+                    windowClass = wxT("RichEdit20W");
                 }
                 else // failed to load msftedit.dll and riched20.dll
                 {
@@ -1017,74 +1008,27 @@ wxString wxTextCtrl::GetRange(long from, long to) const
             if ( to == -1 )
                 to = len;
 
-#if !wxUSE_UNICODE
-            // we must use EM_STREAMOUT if we don't want to lose all characters
-            // not representable in the current character set (EM_GETTEXTRANGE
-            // simply replaces them with question marks...)
-            if ( GetRichVersion() > 1 )
+            // alloc one extra WORD as needed by the control
+            wxStringBuffer tmp(str, ++len);
+            wxChar *p = tmp;
+
+            TEXTRANGE textRange;
+            textRange.chrg.cpMin = from;
+            textRange.chrg.cpMax = to;
+            textRange.lpstrText = p;
+
+            (void)::SendMessage(GetHwnd(), EM_GETTEXTRANGE,
+                                0, (LPARAM)&textRange);
+
+            if ( m_verRichEdit > 1 )
             {
-                // we must have some encoding, otherwise any 8bit chars in the
-                // control are simply *lost* (replaced by '?')
-                wxFontEncoding encoding = wxFONTENCODING_SYSTEM;
-
-                wxFont font = m_defaultStyle.GetFont();
-                if ( !font.IsOk() )
-                    font = GetFont();
-
-                if ( font.IsOk() )
+                // RichEdit 2.0 uses just CR ('\r') for the
+                // newlines which is neither Unix nor Windows
+                // style - convert it to something reasonable
+                for ( ; *p; p++ )
                 {
-                   encoding = font.GetEncoding();
-                }
-
-#if wxUSE_INTL
-                if ( encoding == wxFONTENCODING_SYSTEM )
-                {
-                    encoding = wxLocale::GetSystemEncoding();
-                }
-#endif // wxUSE_INTL
-
-                if ( encoding == wxFONTENCODING_SYSTEM )
-                {
-                    encoding = wxFONTENCODING_ISO8859_1;
-                }
-
-                str = StreamOut(encoding);
-
-                if ( !str.empty() )
-                {
-                    // we have to manually extract the required part, luckily
-                    // this is easy in this case as EOL characters in str are
-                    // just LFs because we remove CRs in wxRichEditStreamOut
-                    str = str.Mid(from, to - from);
-                }
-            }
-
-            // StreamOut() wasn't used or failed, try to do it in normal way
-            if ( str.empty() )
-#endif // !wxUSE_UNICODE
-            {
-                // alloc one extra WORD as needed by the control
-                wxStringBuffer tmp(str, ++len);
-                wxChar *p = tmp;
-
-                TEXTRANGE textRange;
-                textRange.chrg.cpMin = from;
-                textRange.chrg.cpMax = to;
-                textRange.lpstrText = p;
-
-                (void)::SendMessage(GetHwnd(), EM_GETTEXTRANGE,
-                                    0, (LPARAM)&textRange);
-
-                if ( m_verRichEdit > 1 )
-                {
-                    // RichEdit 2.0 uses just CR ('\r') for the
-                    // newlines which is neither Unix nor Windows
-                    // style - convert it to something reasonable
-                    for ( ; *p; p++ )
-                    {
-                        if ( *p == wxT('\r') )
-                            *p = wxT('\n');
-                    }
+                    if ( *p == wxT('\r') )
+                        *p = wxT('\n');
                 }
             }
 
@@ -1149,167 +1093,6 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
     }
 }
 
-#if wxUSE_RICHEDIT && !wxUSE_UNICODE
-
-// TODO: using memcpy() would improve performance a lot for big amounts of text
-
-DWORD CALLBACK
-wxRichEditStreamIn(DWORD_PTR dwCookie, BYTE *buf, LONG cb, LONG *pcb)
-{
-    *pcb = 0;
-
-    const wchar_t ** const ppws = (const wchar_t **)dwCookie;
-
-    wchar_t *wbuf = (wchar_t *)buf;
-    const wchar_t *wpc = *ppws;
-    while ( cb && *wpc )
-    {
-        *wbuf++ = *wpc++;
-
-        cb -= sizeof(wchar_t);
-        (*pcb) += sizeof(wchar_t);
-    }
-
-    *ppws = wpc;
-
-    return 0;
-}
-
-// helper struct used to pass parameters from wxTextCtrl to wxRichEditStreamOut
-struct wxStreamOutData
-{
-    wchar_t *wpc;
-    size_t len;
-};
-
-DWORD CALLBACK
-wxRichEditStreamOut(DWORD_PTR dwCookie, BYTE *buf, LONG cb, LONG *pcb)
-{
-    *pcb = 0;
-
-    wxStreamOutData *data = (wxStreamOutData *)dwCookie;
-
-    const wchar_t *wbuf = (const wchar_t *)buf;
-    wchar_t *wpc = data->wpc;
-    while ( cb )
-    {
-        wchar_t wch = *wbuf++;
-
-        // turn "\r\n" into "\n" on the fly
-        if ( wch != L'\r' )
-            *wpc++ = wch;
-        else
-            data->len--;
-
-        cb -= sizeof(wchar_t);
-        (*pcb) += sizeof(wchar_t);
-    }
-
-    data->wpc = wpc;
-
-    return 0;
-}
-
-
-bool
-wxTextCtrl::StreamIn(const wxString& value,
-                     wxFontEncoding encoding,
-                     bool selectionOnly)
-{
-    wxCSConv conv(encoding);
-
-    const size_t len = conv.MB2WC(nullptr, value.mb_str(), value.length());
-
-    if (len == wxCONV_FAILED)
-        return false;
-
-    wxWCharBuffer wchBuf(len); // allocates one extra character
-    wchar_t *wpc = wchBuf.data();
-
-    conv.MB2WC(wpc, value.mb_str(), len + 1);
-
-    // finally, stream it in the control
-    EDITSTREAM eds;
-    wxZeroMemory(eds);
-    eds.dwCookie = (DWORD_PTR)&wpc;
-    // the cast below is needed for broken (very) old mingw32 headers
-    eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
-
-    // same problem as in DoWriteText(): we can get multiple events here
-    UpdatesCountFilter ucf(m_updatesCount);
-
-    ::SendMessage(GetHwnd(), EM_STREAMIN,
-                  SF_TEXT |
-                  SF_UNICODE |
-                  (selectionOnly ? SFF_SELECTION : 0),
-                  (LPARAM)&eds);
-
-    // It's okay for EN_UPDATE to not be sent if the selection is empty and
-    // the text is empty, otherwise warn the programmer about it.
-    wxASSERT_MSG( ucf.GotUpdate() || ( !HasSelection() && value.empty() ),
-                  wxT("EM_STREAMIN didn't send EN_UPDATE?") );
-
-    if ( eds.dwError )
-    {
-        wxLogLastError(wxT("EM_STREAMIN"));
-    }
-
-    return true;
-}
-
-wxString
-wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
-{
-    wxString out;
-
-    const int len = GetWindowTextLength(GetHwnd());
-
-    wxWCharBuffer wchBuf(len);
-    wchar_t *wpc = wchBuf.data();
-
-    wxStreamOutData data;
-    data.wpc = wpc;
-    data.len = len;
-
-    EDITSTREAM eds;
-    wxZeroMemory(eds);
-    eds.dwCookie = (DWORD_PTR)&data;
-    eds.pfnCallback = wxRichEditStreamOut;
-
-    ::SendMessage
-      (
-        GetHwnd(),
-        EM_STREAMOUT,
-        SF_TEXT | SF_UNICODE | (selectionOnly ? SFF_SELECTION : 0),
-        (LPARAM)&eds
-      );
-
-    if ( eds.dwError )
-    {
-        wxLogLastError(wxT("EM_STREAMOUT"));
-    }
-    else // streamed out ok
-    {
-        // NUL-terminate the string because its length could have been
-        // decreased by wxRichEditStreamOut
-        *(wchBuf.data() + data.len) = L'\0';
-
-        // now convert to the given encoding (this is a possibly lossful
-        // conversion but what else can we do)
-        wxCSConv conv(encoding);
-        size_t lenNeeded = conv.WC2MB(nullptr, wchBuf, 0);
-
-        if ( lenNeeded != wxCONV_FAILED && lenNeeded++ )
-        {
-            conv.WC2MB(wxStringBuffer(out, lenNeeded), wchBuf, lenNeeded);
-        }
-    }
-
-    return out;
-}
-
-#endif // wxUSE_RICHEDIT
-
 void wxTextCtrl::WriteText(const wxString& value)
 {
     DoWriteText(value);
@@ -1325,8 +1108,6 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
         valueDos = value;
 
 #if wxUSE_RICHEDIT
-    // there are several complications with the rich edit controls here
-    bool done = false;
     if ( IsRich() )
     {
         // first, ensure that the new text will be in the default style
@@ -1336,76 +1117,49 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
             GetSelection(&start, &end);
             SetStyle(start, end, m_defaultStyle);
         }
-
-#if !wxUSE_UNICODE
-        // next check if the text we're inserting must be shown in a non
-        // default charset -- this only works for RichEdit > 1.0
-        if ( GetRichVersion() > 1 )
-        {
-            wxFont font = m_defaultStyle.GetFont();
-            if ( !font.IsOk() )
-                font = GetFont();
-
-            if ( font.IsOk() )
-            {
-               wxFontEncoding encoding = font.GetEncoding();
-               if ( encoding != wxFONTENCODING_SYSTEM )
-               {
-                   // we have to use EM_STREAMIN to force richedit control 2.0+
-                   // to show any text in the non default charset -- otherwise
-                   // it thinks it knows better than we do and always shows it
-                   // in the default one
-                   done = StreamIn(valueDos, encoding, selectionOnly);
-               }
-            }
-        }
-#endif // !wxUSE_UNICODE
     }
 
-    if ( !done )
 #endif // wxUSE_RICHEDIT
+    // in some cases we get 2 EN_CHANGE notifications after the SendMessage
+    // call (this happens for plain EDITs with EM_REPLACESEL and under some
+    // -- undetermined -- conditions with rich edit) and sometimes we don't
+    // get any events at all (plain EDIT with WM_SETTEXT), so ensure that
+    // we generate exactly one of them by ignoring all but the first one in
+    // SendUpdateEvent() and generating one ourselves if we hadn't got any
+    // notifications from Windows
+    if ( !(flags & SetValue_SendEvent) )
+        m_updatesCount = -2;        // suppress any update event
+
+    UpdatesCountFilter ucf(m_updatesCount);
+
+    // Remember the length of the text we're inserting so that
+    // AdjustSpaceLimit() could adjust the limit to be big enough for it:
+    // and also signal us whether it did it by resetting it to 0.
+    gs_lenOfInsertedText.push(valueDos.length());
+
+    ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
+                  // EM_REPLACESEL takes 1 to indicate the operation should be redoable
+                  selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
+
+    const int lenActuallyInserted = gs_lenOfInsertedText.top();
+    gs_lenOfInsertedText.pop();
+
+    if ( lenActuallyInserted == -1 )
     {
-        // in some cases we get 2 EN_CHANGE notifications after the SendMessage
-        // call (this happens for plain EDITs with EM_REPLACESEL and under some
-        // -- undetermined -- conditions with rich edit) and sometimes we don't
-        // get any events at all (plain EDIT with WM_SETTEXT), so ensure that
-        // we generate exactly one of them by ignoring all but the first one in
-        // SendUpdateEvent() and generating one ourselves if we hadn't got any
-        // notifications from Windows
-        if ( !(flags & SetValue_SendEvent) )
-            m_updatesCount = -2;        // suppress any update event
-
-        UpdatesCountFilter ucf(m_updatesCount);
-
-        // Remember the length of the text we're inserting so that
-        // AdjustSpaceLimit() could adjust the limit to be big enough for it:
-        // and also signal us whether it did it by resetting it to 0.
-        gs_lenOfInsertedText.push(valueDos.length());
+        // Text size limit has been hit and added text has been truncated.
+        // But the max length has been increased by the EN_MAXTEXT message
+        // handler, which also reset the top of the lengths stack to -1),
+        // so we should be able to set it successfully now if we try again.
+        if ( selectionOnly )
+            Undo();
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
-                      // EM_REPLACESEL takes 1 to indicate the operation should be redoable
                       selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
+    }
 
-        const int lenActuallyInserted = gs_lenOfInsertedText.top();
-        gs_lenOfInsertedText.pop();
-
-        if ( lenActuallyInserted == -1 )
-        {
-            // Text size limit has been hit and added text has been truncated.
-            // But the max length has been increased by the EN_MAXTEXT message
-            // handler, which also reset the top of the lengths stack to -1),
-            // so we should be able to set it successfully now if we try again.
-            if ( selectionOnly )
-                Undo();
-
-            ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
-                          selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
-        }
-
-        if ( !ucf.GotUpdate() && (flags & SetValue_SendEvent) )
-        {
-            SendUpdateEvent();
-        }
+    if ( !ucf.GotUpdate() && (flags & SetValue_SendEvent) )
+    {
+        SendUpdateEvent();
     }
 }
 

@@ -54,7 +54,6 @@ TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
 #undef TESTVAR_NAME
 }
 
-#if wxUSE_UNICODE
 TEST_CASE("CRT::Strchr", "[crt][strchr]")
 {
     // test that searching for a wide character in a narrow string simply
@@ -67,7 +66,6 @@ TEST_CASE("CRT::Strchr", "[crt][strchr]")
     CHECK( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
                     static_cast<wchar_t>(smiley)) );
 }
-#endif // wxUSE_UNICODE
 
 TEST_CASE("CRT::Strcmp", "[crt][strcmp]")
 {

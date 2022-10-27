@@ -166,8 +166,6 @@ inline void wxDisableAsserts() { wxSetAssertHandler(nullptr); }
     (assert macros do it).
  */
 
-#if wxUSE_UNICODE
-
 // these overloads are the ones typically used by debugging macros: we have to
 // provide wxChar* msg version because it's common to use wxT() in the macros
 // and finally, we can't use const wx(char)* msg = nullptr, because that would
@@ -191,7 +189,6 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         const char *func,
                                         const char *cond,
                                         const wxChar *msg) ;
-#endif /* wxUSE_UNICODE */
 
 // this version is for compatibility with wx 2.8 Unicode build only, we don't
 // use it ourselves any more except in ANSI-only build in which case it is all

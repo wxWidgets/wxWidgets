@@ -89,10 +89,8 @@ private:
     // arbitrary 8 bit data
     wxMBConv& m_conv;
 
-#if wxUSE_UNICODE
     // unconverted data from the last call to OnSysWrite()
     wxMemoryBuffer m_unconv;
-#endif // wxUSE_UNICODE
 
     wxDECLARE_NO_COPY_CLASS(wxStringOutputStream);
 };

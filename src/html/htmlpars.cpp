@@ -431,34 +431,12 @@ void wxHtmlTagHandler::ParseInnerSource(const wxString& source)
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlEntitiesParser, wxObject);
 
 wxHtmlEntitiesParser::wxHtmlEntitiesParser()
-#if !wxUSE_UNICODE
-    : m_conv(nullptr), m_encoding(wxFONTENCODING_SYSTEM)
-#endif
 {
 }
 
 wxHtmlEntitiesParser::~wxHtmlEntitiesParser()
 {
-#if !wxUSE_UNICODE
-    delete m_conv;
-#endif
 }
-
-#if !wxUSE_UNICODE
-void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
-{
-    if (encoding == m_encoding)
-        return;
-
-    delete m_conv;
-
-    m_encoding = encoding;
-    if (m_encoding == wxFONTENCODING_SYSTEM)
-        m_conv = nullptr;
-    else
-        m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
-}
-#endif // !wxUSE_UNICODE
 
 wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
 {
@@ -515,20 +493,6 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
         output.append(last, end);
     return output;
 }
-
-#if !wxUSE_UNICODE
-wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code) const
-{
-    char buf[2];
-    wchar_t wbuf[2];
-    wbuf[0] = (wchar_t)code;
-    wbuf[1] = 0;
-    wxMBConv *conv = m_conv ? m_conv : &wxConvLocal;
-    if (conv->WC2MB(buf, wbuf, 2) == (size_t)-1)
-        return '?';
-    return buf[0];
-}
-#endif
 
 struct wxHtmlEntityInfo
 {

@@ -211,14 +211,9 @@ wxHTTP::SetPostText(const wxString& contentType,
                     const wxString& data,
                     const wxMBConv& conv)
 {
-#if wxUSE_UNICODE
     wxScopedCharBuffer scb = data.mb_str(conv);
     const size_t len = scb.length();
     const char* const buf = scb.data();
-#else // !wxUSE_UNICODE
-    const size_t len = data.length();
-    const char* const buf = data.mb_str(conv);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     if ( !len )
         return false;

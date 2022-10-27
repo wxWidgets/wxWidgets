@@ -493,8 +493,7 @@
 
 /*
    check the consistency of the settings in setup.h: note that this must be
-   done after setting wxUSE_UNICODE correctly as it is used in wx/chkconf.h
-   and after defining the compiler macros which are used in it too
+   done after defining the compiler macros used in wx/chkconf.h
  */
 #include "wx/chkconf.h"
 

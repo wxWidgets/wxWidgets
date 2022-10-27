@@ -175,9 +175,7 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     {
         suffix = wxPlatformInfo::Get().GetPortIdShortName();
     }
-#if wxUSE_UNICODE
     suffix << wxT('u');
-#endif
 #ifdef __WXDEBUG__
     suffix << wxT('d');
 #endif

@@ -1344,7 +1344,7 @@ bool wxFileDataObject::GetDataHere(void *pData) const
     // initialize DROPFILES struct
     pDrop->pFiles = sizeof(DROPFILES);
     pDrop->fNC = FALSE;                 // not non-client coords
-    pDrop->fWide = wxUSE_UNICODE;
+    pDrop->fWide = TRUE;
 
     const size_t sizeOfChar = pDrop->fWide ? sizeof(wchar_t) : 1;
 
@@ -1375,7 +1375,7 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 // ----------------------------------------------------------------------------
 
 // Work around bug in Wine headers
-#if defined(__WINE__) && defined(CFSTR_SHELLURL) && wxUSE_UNICODE
+#if defined(__WINE__) && defined(CFSTR_SHELLURL)
 #undef CFSTR_SHELLURL
 #define CFSTR_SHELLURL wxT("CFSTR_SHELLURL")
 #endif
@@ -1450,15 +1450,10 @@ wxString wxURLDataObject::GetURL() const
 
         // CFSTR_SHELLURL is always ANSI so we need to convert it from it in
         // Unicode build
-#if wxUSE_UNICODE
         wxCharBuffer buf(len);
 
         if ( m_dataObjectLast->GetDataHere(buf.data()) )
             url = buf;
-#else // !wxUSE_UNICODE
-        // in ANSI build no conversion is necessary
-        m_dataObjectLast->GetDataHere(wxStringBuffer(url, len));
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
     }
     else // must be wxTextDataObject
     {
@@ -1475,21 +1470,13 @@ void wxURLDataObject::SetURL(const wxString& url)
     {
         const size_t len = strlen(urlMB);
 
-#if !wxUSE_UNICODE
-        // wxTextDataObject takes the number of characters in the string, not
-        // the size of the buffer (which would be len+1)
-        SetData(wxDF_TEXT, len, urlMB);
-#endif // !wxUSE_UNICODE
-
         // however CFSTR_SHELLURLDataObject doesn't append NUL automatically
         // but we probably still want to have it on the clipboard (just to be
         // safe), so do append it
         SetData(wxDataFormat(CFSTR_SHELLURL), len + 1, urlMB);
     }
 
-#if wxUSE_UNICODE
     SetData(wxDF_UNICODETEXT, url.length()*sizeof(wxChar), url.wc_str());
-#endif
 }
 
 #if wxUSE_OLE

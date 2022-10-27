@@ -142,13 +142,6 @@ public:
     // following space as being part of the same space run as before.
     void StopCollapsingSpaces() { m_tmpLastWasSpace = false; }
 
-#if !wxUSE_UNICODE
-    void SetInputEncoding(wxFontEncoding enc);
-    wxFontEncoding GetInputEncoding() const { return m_InputEnc; }
-    wxFontEncoding GetOutputEncoding() const { return m_OutputEnc; }
-    wxEncodingConverter *GetEncodingConverter() const { return m_EncConv; }
-#endif
-
     // creates font depending on m_Font* members.
     virtual wxFont* CreateCurrentFont();
 
@@ -210,9 +203,6 @@ private:
 
     wxFont* m_FontsTable[2][2][2][2][7];
     wxString m_FontsFacesTable[2][2][2][2][7];
-#if !wxUSE_UNICODE
-    wxFontEncoding m_FontsEncTable[2][2][2][2][7];
-#endif
             // table of loaded fonts. 1st four indexes are 0 or 1, depending on on/off
             // state of these flags (from left to right):
             // [bold][italic][underlined][fixed_size]
@@ -222,13 +212,6 @@ private:
     int m_FontsSizes[7];
     wxString m_FontFaceFixed, m_FontFaceNormal;
             // html font sizes and faces of fixed and proportional fonts
-
-#if !wxUSE_UNICODE
-    wxChar m_nbsp;
-    wxFontEncoding m_InputEnc, m_OutputEnc;
-            // I/O font encodings
-    wxEncodingConverter *m_EncConv;
-#endif
 
     // current whitespace handling mode
     WhitespaceMode m_whitespaceMode;

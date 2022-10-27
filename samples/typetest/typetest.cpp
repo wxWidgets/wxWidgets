@@ -45,9 +45,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(MyApp, wxApp);
 wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
-#if wxUSE_UNICODE
     EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
-#endif // wxUSE_UNICODE
     EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
     EVT_MENU(TYPES_STREAM2, MyApp::DoStreamDemo2)
     EVT_MENU(TYPES_STREAM3, MyApp::DoStreamDemo3)
@@ -83,9 +81,7 @@ bool MyApp::OnInit()
     wxMenu *test_menu = new wxMenu;
     test_menu->Append(TYPES_VARIANT, "&Variant test");
     test_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
-#if wxUSE_UNICODE
     test_menu->Append(TYPES_UNICODE, "&Unicode test");
-#endif // wxUSE_UNICODE
     test_menu->Append(TYPES_STREAM, "&Stream test");
     test_menu->Append(TYPES_STREAM2, "&Stream seek test");
     test_menu->Append(TYPES_STREAM3, "&Stream error test");
@@ -870,7 +866,6 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( str );
 }
 
-#if wxUSE_UNICODE
 void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
@@ -889,7 +884,6 @@ void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
     puts( str.mbc_str() );
 
 }
-#endif
 
 void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
 {

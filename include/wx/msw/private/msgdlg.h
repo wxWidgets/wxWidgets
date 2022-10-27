@@ -17,7 +17,7 @@
 // TD_WARNING_ICON being defined in the headers for this as this symbol is used
 // by the task dialogs only. Also notice that task dialogs are available for
 // Unicode applications only.
-#if defined(TD_WARNING_ICON) && wxUSE_UNICODE
+#if defined(TD_WARNING_ICON)
     #define wxHAS_MSW_TASKDIALOG
 #endif
 

@@ -473,11 +473,7 @@ public:
     // type of argv parameter of main()) or to "wchar_t **" (for compatibility
     // with Unicode build in previous wx versions and because the command line
     // can, in pr
-#if wxUSE_UNICODE
     wxCmdLineArgsArray argv;
-#else
-    char **argv;
-#endif
 
 protected:
     // delete all objects in wxPendingDelete list
@@ -825,7 +821,7 @@ public:
 // locale (under Unix UTF-8, capable of representing any Unicode string, is
 // almost always used and there is no way to retrieve the Unicode command line
 // anyhow).
-#if wxUSE_UNICODE && defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     #ifdef __VISUALC__
         #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                \
             int wmain(int argc, wchar_t **argv)                               \

@@ -660,7 +660,6 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *
 
     hdc->GetPartialTextExtents(str, tpos);
 
-#if wxUSE_UNICODE
     // Map the widths back to the UTF-8 input string
     size_t utf8i = 0;
     for (size_t wxi = 0; wxi < str.size(); ++wxi) {
@@ -687,12 +686,6 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *
         if (c >= 0x10000)
             positions[utf8i++] = tpos[wxi];
     }
-#else // !wxUSE_UNICODE
-    // If not unicode then just use the widths we have
-    for (int i = 0; i < len; i++) {
-        positions[i] = tpos[i];
-    }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 
@@ -3171,12 +3164,8 @@ public:
         for ( int i = label.length(); curWidth > rect.GetWidth() && i; --i )
         {
             ellipsizedLabel = label.Left(i);
-            #if wxUSE_UNICODE
-                // Add the "Horizontal Ellipsis" character (U+2026).
-                ellipsizedLabel << wxUniChar(0x2026);
-            #else
-                ellipsizedLabel << "...";
-            #endif
+            // Add the "Horizontal Ellipsis" character (U+2026).
+            ellipsizedLabel << wxUniChar(0x2026);
 
             buffer = wx2stc(ellipsizedLabel);
             ellipsizedLen = wx2stclen(ellipsizedLabel, buffer);
@@ -3531,8 +3520,6 @@ void Platform::Assert(const char *c, const char *file, int line) {
 
 //----------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-
 // For historical reasons, we use Scintilla-specific conversion functions, we
 // should probably just call FromUTF8()/utf8_str() directly instead now.
 
@@ -3553,7 +3540,5 @@ wxWX2MBbuf wx2stc(const wxString& str)
 {
     return str.utf8_str();
 }
-
-#endif
 
 #endif // wxUSE_STC

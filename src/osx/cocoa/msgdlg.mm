@@ -91,11 +91,7 @@ int wxMessageDialog::ShowModal()
         CFStringRef alternateButtonTitle = nullptr;
         CFStringRef otherButtonTitle = nullptr;
 
-#if wxUSE_UNICODE
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT;
-#else
-        wxFontEncoding encoding = GetFont().GetEncoding();
-#endif
 
         wxCFStringRef cfTitle( msgtitle, encoding );
         wxCFStringRef cfText( msgtext, encoding );
@@ -242,11 +238,7 @@ void* wxMessageDialog::ConstructNSAlert()
     NSAlert* alert = [[NSAlert alloc] init];
     NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
 
-#if wxUSE_UNICODE
     wxFontEncoding encoding = wxFONTENCODING_DEFAULT;
-#else
-    wxFontEncoding encoding = GetFont().GetEncoding();
-#endif
     
     wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), encoding );
     wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), encoding );

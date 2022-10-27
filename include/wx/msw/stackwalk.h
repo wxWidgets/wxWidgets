@@ -21,11 +21,7 @@ struct _EXCEPTION_POINTERS;
 struct _SYMBOL_INFO;
 struct _SYMBOL_INFOW;
 
-#if wxUSE_UNICODE
-    #define wxSYMBOL_INFO _SYMBOL_INFOW
-#else // !wxUSE_UNICODE
-    #define wxSYMBOL_INFO _SYMBOL_INFO
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+#define wxSYMBOL_INFO _SYMBOL_INFOW
 
 // ----------------------------------------------------------------------------
 // wxStackFrame

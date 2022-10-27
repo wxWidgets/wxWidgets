@@ -107,12 +107,10 @@ extern "C" {
 #ifdef __REG_NOCHAR
 #undef __REG_NOCHAR
 #endif
-#if wxUSE_UNICODE
-#   define  __REG_WIDE_T        wxChar
-#   define  __REG_WIDE_COMPILE  wx_re_comp
-#   define  __REG_WIDE_EXEC     wx_re_exec
-#   define  __REG_NOCHAR        /* don't want the char versions */
-#endif
+#define  __REG_WIDE_T        wxChar
+#define  __REG_WIDE_COMPILE  wx_re_comp
+#define  __REG_WIDE_EXEC     wx_re_exec
+#define  __REG_NOCHAR        /* don't want the char versions */
 #define __REG_NOFRONT           /* don't want regcomp() and regexec() */
 #define _ANSI_ARGS_(x)          x
 /* --- end --- */

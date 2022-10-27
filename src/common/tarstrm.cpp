@@ -274,7 +274,6 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
 {
     bool badconv = false;
 
-#if wxUSE_UNICODE
     wxCharBuffer nameBuf = name.mb_str(conv);
 
     // if the conversion fails make an approximation
@@ -291,10 +290,6 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
     }
 
     const char *mbName = nameBuf;
-#else
-    const char *mbName = name.c_str();
-    (void)conv;
-#endif
 
     bool fits;
     bool notGoingToFit = false;
@@ -1434,16 +1429,8 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
                                           const wxString& value)
 {
     if (m_pax) {
-#if wxUSE_UNICODE
         const wxCharBuffer utf_key = key.utf8_str();
         const wxCharBuffer utf_value = value.utf8_str();
-#else
-        const wxWX2WCbuf wide_key = key.wc_str(GetConv());
-        const wxCharBuffer utf_key = wxConvUTF8.cWC2MB(wide_key);
-
-        const wxWX2WCbuf wide_value = value.wc_str(GetConv());
-        const wxCharBuffer utf_value = wxConvUTF8.cWC2MB(wide_value);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
         // a small buffer to format the length field in
         char buf[32];

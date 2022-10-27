@@ -290,20 +290,14 @@ public:
     }
 
 #ifdef __WINDOWS__
-    // this function is useful for loading functions from the standard Windows
-    // DLLs: such functions have an 'A' (in ANSI build) or 'W' (in Unicode, or
-    // wide character build) suffix if they take string parameters
+    // This function is misnamed now as it always loads "W" symbol because we
+    // always use Unicode now, but keeps its old name for compatibility.
     static void *RawGetSymbolAorW(wxDllType handle, const wxString& name)
     {
         return RawGetSymbol
                (
                 handle,
-                name +
-#if wxUSE_UNICODE
-                L'W'
-#else
-                'A'
-#endif
+                name + L'W'
                );
     }
 

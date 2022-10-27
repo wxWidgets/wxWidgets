@@ -92,11 +92,7 @@ const wxString g_verylongString =
 
 // we need to avoid the use of wxPrintf() here since it could have been mapped
 // to wxWidgets' implementation of wxVsnPrintf() !
-#if wxUSE_UNICODE
-    #define sys_printf swprintf
-#else
-    #define sys_printf snprintf
-#endif
+#define sys_printf swprintf
 
 
 // ----------------------------------------------------------------------------

@@ -758,15 +758,6 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
     }
 
     wxString encoding(wxT("UTF-8"));
-#if !wxUSE_UNICODE && wxUSE_INTL
-    if ( (GetFlags() & wxXRC_USE_LOCALE) == 0 )
-    {
-        // In case we are not using wxLocale to translate strings, convert the
-        // strings GUI's charset. This must not be done when wxXRC_USE_LOCALE
-        // is on, because it could break wxGetTranslation lookup.
-        encoding = wxLocale::GetSystemEncodingName();
-    }
-#endif
 
     wxScopedPtr<wxXmlDocument> doc(new wxXmlDocument);
     if (!doc->Load(*stream, encoding))
@@ -1655,13 +1646,7 @@ wxString wxXmlResourceHandlerImpl::GetNodeText(const wxXmlNode* node, int flags)
         }
         else
         {
-#if wxUSE_UNICODE
             return str2;
-#else
-            // The string is internally stored as UTF-8, we have to convert
-            // it into system's default encoding so that it can be displayed:
-            return wxString(str2.wc_str(wxConvUTF8), wxConvLocal);
-#endif
         }
     }
 

@@ -428,7 +428,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
                 break;
 
             case wxT('c'):
-#if wxUSE_UNICODE
                 if (ilen == -1)
                 {
                     // %hc == ANSI character
@@ -439,23 +438,10 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
                     // %lc == %c == Unicode character
                     m_type = wxPAT_WCHAR;
                 }
-#else
-                if (ilen == 1)
-                {
-                    // %lc == Unicode character
-                    m_type = wxPAT_WCHAR;
-                }
-                else
-                {
-                    // %hc == %c == ANSI character
-                    m_type = wxPAT_CHAR;
-                }
-#endif
                 done = true;
                 break;
 
             case wxT('s'):
-#if wxUSE_UNICODE
                 if (ilen == -1)
                 {
                     // wx extension: we'll let %hs mean non-Unicode strings
@@ -466,18 +452,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
                     // %ls == %s == Unicode string
                     m_type = wxPAT_PWCHAR;
                 }
-#else
-                if (ilen == 1)
-                {
-                    // %ls == Unicode string
-                    m_type = wxPAT_PWCHAR;
-                }
-                else
-                {
-                    // %s == %hs == ANSI string
-                    m_type = wxPAT_PCHAR;
-                }
-#endif
                 done = true;
                 break;
 

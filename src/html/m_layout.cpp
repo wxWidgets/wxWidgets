@@ -279,15 +279,6 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
         if (winIface)
         {
             wxString title(tag.GetBeginIter(), tag.GetEndIter1());
-#if !wxUSE_UNICODE
-            const wxFontEncoding enc = m_WParser->GetInputEncoding();
-            if ( enc != wxFONTENCODING_DEFAULT )
-            {
-                // need to convert to the current one
-                title = wxString(title.wc_str(wxCSConv(enc)), wxConvLocal);
-            }
-#endif // !wxUSE_UNICODE
-
             title = m_WParser->GetEntitiesParser()->Parse(title);
 
             winIface->SetHTMLWindowTitle(title);

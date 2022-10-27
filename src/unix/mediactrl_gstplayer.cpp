@@ -292,8 +292,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //init gstreamer
     //
 
-    //Convert arguments to unicode if enabled
-#if wxUSE_UNICODE
+    //Convert arguments to unicode
     int i;
     char **argvGST = new char*[wxTheApp->argc + 1];
     for ( i = 0; i < wxTheApp->argc; i++ )
@@ -304,10 +303,6 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     argvGST[wxTheApp->argc] = nullptr;
 
     int argcGST = wxTheApp->argc;
-#else
-#define argcGST wxTheApp->argc
-#define argvGST wxTheApp->argv
-#endif
 
     //Really init gstreamer
     gboolean bInited;
@@ -315,14 +310,12 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     bInited = gst_init_check(&argcGST, &argvGST, &error);
 
     // Cleanup arguments for unicode case
-#if wxUSE_UNICODE
     for ( i = 0; i < argcGST; i++ )
     {
         free(argvGST[i]);
     }
 
     delete [] argvGST;
-#endif
 
     if(!bInited)    //gst_init_check fail?
     {

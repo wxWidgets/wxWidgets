@@ -400,13 +400,8 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
     if ((ctrl || alt) && !(ctrl && alt))
         return false;
 
-#if wxUSE_UNICODE
     if ( static_cast<int>(event.GetUnicodeKey()) == WXK_NONE )
         return false;
-#else
-    if ( event.GetKeyCode() > WXK_START )
-        return false;
-#endif
 
     return true;
 }
@@ -584,12 +579,10 @@ void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 
     bool isPrintable;
 
-#if wxUSE_UNICODE
     ch = event.GetUnicodeKey();
     if ( ch != WXK_NONE )
         isPrintable = true;
     else
-#endif // wxUSE_UNICODE
     {
         ch = event.GetKeyCode();
         isPrintable = ch >= WXK_SPACE && ch < WXK_START;

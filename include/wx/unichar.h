@@ -72,7 +72,6 @@ public:
     // must be non-null)
     bool GetAsChar(char *c) const
     {
-#if wxUSE_UNICODE
         if ( !IsAscii() )
         {
 #if !wxUSE_UTF8_LOCALE_ONLY
@@ -82,7 +81,6 @@ public:
 
             return false;
         }
-#endif // wxUSE_UNICODE
 
         *c = wx_truncate_cast(char, m_value);
         return true;
@@ -181,26 +179,18 @@ private:
     // characters purely for performance reasons
     static value_type From8bit(char c)
     {
-#if wxUSE_UNICODE
         if ( (unsigned char)c < 0x80 )
             return c;
 
         return FromHi8bit(c);
-#else
-        return c;
-#endif
     }
 
     static char To8bit(value_type c)
     {
-#if wxUSE_UNICODE
         if ( c < 0x80 )
             return wx_truncate_cast(char, c);
 
         return ToHi8bit(c);
-#else
-        return wx_truncate_cast(char, c);
-#endif
     }
 
     // helpers of the functions above called to deal with non-ASCII chars

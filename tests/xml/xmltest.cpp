@@ -181,7 +181,6 @@ void XmlTestCase::LoadSave()
     CPPUNIT_ASSERT_EQUAL( xmlText, sos.GetString() );
 
 
-#if wxUSE_UNICODE
     const char *utf8xmlText =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 "<word>\n"
@@ -204,7 +203,6 @@ void XmlTestCase::LoadSave()
     CPPUNIT_ASSERT( doc.Save(sos8) );
     CPPUNIT_ASSERT_EQUAL( wxString(utf8xmlText),
                           wxString(sos8.GetString().ToUTF8()) );
-#endif // wxUSE_UNICODE
 
     const char *xmlTextProlog =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

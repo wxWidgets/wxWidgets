@@ -175,9 +175,7 @@ bool RegExTestCase::parseFlags(const wxString& flags)
             // match options
             case '^': m_matchFlags |= wxRE_NOTBOL; break;
             case '$': m_matchFlags |= wxRE_NOTEOL; break;
-#if wxUSE_UNICODE
             case '*': break;
-#endif
             // compile options
             case '&': m_advanced = m_basic = true; break;
             case 'b': m_basic = true; break;
@@ -468,12 +466,6 @@ CheckRE(
         const char *expected,
         ...)
 {
-#if !wxUSE_UNICODE
-    // Skip tests requiring Unicode support, we can't do anything else.
-    if ( *data != '\0' && wxString::FromUTF8(data).empty() )
-        return;
-#endif // wxUSE_UNICODE
-
     vector<const char *> expected_results;
     va_list ap;
 

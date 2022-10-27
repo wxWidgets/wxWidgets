@@ -515,11 +515,10 @@ void ScintillaWX::Paste() {
 
         const wxCharBuffer buf(wx2stc(evt.GetString()));
 
-#if wxUSE_UNICODE
         // free up the old character buffer in case the text is real big
         text.clear();
         data.SetText(text);
-#endif
+
         const size_t len = buf.length();
         SelectionPosition selStart = sel.IsRectangular() ?
             sel.Rectangular().Start() :
@@ -594,7 +593,7 @@ bool ScintillaWX::CanPaste() {
             wxTheClipboard->Open();
 
         if (wxTheClipboard->IsOpened()) {
-            canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
+            canPaste = wxTheClipboard->IsSupported(wxDF_UNICODETEXT);
             if (didOpen)
                 wxTheClipboard->Close();
         }
@@ -1044,15 +1043,11 @@ void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
 
 
 void ScintillaWX::DoAddChar(int key) {
-#if wxUSE_UNICODE
     wxChar wszChars[2];
     wszChars[0] = (wxChar)key;
     wszChars[1] = 0;
     const wxCharBuffer buf(wx2stc(wszChars));
     AddCharUTF(buf, buf.length());
-#else
-    AddChar((char)key);
-#endif
 }
 
 

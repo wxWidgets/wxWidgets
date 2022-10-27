@@ -413,12 +413,17 @@ typedef short int WXTYPE;
 /*  Very common macros */
 /*  ---------------------------------------------------------------------------- */
 
-/*  Printf-like attribute definitions to obtain warnings with GNU C/C++ */
-#if defined(__GNUC__) && !wxUSE_UNICODE
+/* Printf-like attribute definitions which could be used to obtain warnings
+   with GNU C/C++ but unfortunately don't work any longer
+
+   TODO: make this work with Unicode functions
+
+#if defined(__GNUC__)
 #    define WX_ATTRIBUTE_FORMAT(like, m, n) __attribute__ ((__format__ (like, m, n)))
 #else
-#    define WX_ATTRIBUTE_FORMAT(like, m, n)
-#endif
+*/
+
+#define WX_ATTRIBUTE_FORMAT(like, m, n)
 
 #ifndef WX_ATTRIBUTE_PRINTF
 #   define WX_ATTRIBUTE_PRINTF(m, n) WX_ATTRIBUTE_FORMAT(__printf__, m, n)
@@ -801,12 +806,8 @@ typedef short int WXTYPE;
     #define WXUNUSED(identifier) identifier
 #endif
 
-/*  some arguments are not used in unicode mode */
-#if wxUSE_UNICODE
-    #define WXUNUSED_IN_UNICODE(param)  WXUNUSED(param)
-#else
-    #define WXUNUSED_IN_UNICODE(param)  param
-#endif
+/* Defined for compatibility only. */
+#define WXUNUSED_IN_UNICODE(param)  WXUNUSED(param)
 
 /*  unused parameters in non stream builds */
 #if wxUSE_STREAMS
@@ -2987,7 +2988,7 @@ typedef GtkWidget *WXWidget;
 
 #endif /*  __WXGTK__ */
 
-#if defined(__WXGTK__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#if defined(__WXGTK__) || defined(__WXX11__)
 #define wxUSE_PANGO 1
 #else
 #define wxUSE_PANGO 0

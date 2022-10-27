@@ -51,7 +51,7 @@
     #endif // wxCrtSetDbgFlag
 #endif // __WINDOWS__
 
-#if wxUSE_UNICODE && defined(__WXOSX__)
+#if defined(__WXOSX__)
     #include <locale.h>
 #endif
 
@@ -132,10 +132,8 @@ static struct InitData
     InitData()
         : nInitCount(0)
     {
-#if wxUSE_UNICODE
         argc = argcOrig = 0;
         // argv = argvOrig = nullptr; -- not even really needed
-#endif // wxUSE_UNICODE
     }
 
     // number of times wxInitialize() was called minus the number of times
@@ -145,7 +143,6 @@ static struct InitData
     // only one of them to actually initialize the library
     wxAtomicInt nInitCount;
 
-#if wxUSE_UNICODE
     int argc;
 
     // if we receive the command line arguments as ASCII and have to convert
@@ -159,7 +156,6 @@ static struct InitData
     // the latter to be able to free everything correctly
     int argcOrig;
     wchar_t **argvOrig;
-#endif // wxUSE_UNICODE
 
     wxDECLARE_NO_COPY_CLASS(InitData);
 } gs_initData;
@@ -171,8 +167,6 @@ static struct InitData
 // ----------------------------------------------------------------------------
 // command line arguments ANSI -> Unicode conversion
 // ----------------------------------------------------------------------------
-
-#if wxUSE_UNICODE
 
 static void ConvertArgsToUnicode(int argc, char **argv)
 {
@@ -219,8 +213,6 @@ static void FreeConvertedArgs()
     }
 }
 
-#endif // wxUSE_UNICODE
-
 // ----------------------------------------------------------------------------
 // start up
 // ----------------------------------------------------------------------------
@@ -228,7 +220,7 @@ static void FreeConvertedArgs()
 // initialization which is always done (not customizable) before wxApp creation
 static bool DoCommonPreInit()
 {
-#if wxUSE_UNICODE && defined(__WXOSX__)
+#if defined(__WXOSX__)
     // In OS X and iOS, wchar_t CRT functions convert to char* and fail under
     // some locales. The safest fix is to set LC_CTYPE to UTF-8 to ensure that
     // they can handle any input.
@@ -238,7 +230,7 @@ static bool DoCommonPreInit()
     //
     // See https://stackoverflow.com/questions/11713745/why-does-the-printf-family-of-functions-care-about-locale
     setlocale(LC_CTYPE, "UTF-8");
-#endif // wxUSE_UNICODE && defined(__WXOSX__)
+#endif // defined(__WXOSX__)
 
 #if wxUSE_LOG
     // Reset logging in case we were cleaned up and are being reinitialized.
@@ -332,11 +324,7 @@ bool wxEntryStart(int& argc, wxChar **argv)
     // remember, possibly modified (e.g. due to removal of toolkit-specific
     // parameters), command line arguments in member variables
     app->argc = argc;
-#if wxUSE_UNICODE
     app->argv.Init(argc, argv);
-#else
-    app->argv = argv;
-#endif
 
     wxCallAppCleanup callAppCleanup(app.get());
 
@@ -365,8 +353,6 @@ bool wxEntryStart(int& argc, wxChar **argv)
     return true;
 }
 
-#if wxUSE_UNICODE
-
 // we provide a wxEntryStart() wrapper taking "char *" pointer too
 bool wxEntryStart(int& argc, char **argv)
 {
@@ -381,8 +367,6 @@ bool wxEntryStart(int& argc, char **argv)
 
     return true;
 }
-
-#endif // wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // clean up
@@ -411,9 +395,7 @@ static void DoCommonPostCleanup()
 
     // we can't do this in wxApp itself because it doesn't know if argv had
     // been allocated
-#if wxUSE_UNICODE
     FreeConvertedArgs();
-#endif // wxUSE_UNICODE
 
     // use Set(nullptr) and not Get() to avoid creating a message output object on
     // demand when we just want to delete it
@@ -505,8 +487,6 @@ int wxEntryReal(int& argc, wxChar **argv)
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
 }
 
-#if wxUSE_UNICODE
-
 // as with wxEntryStart, we provide an ANSI wrapper
 int wxEntry(int& argc, char **argv)
 {
@@ -514,8 +494,6 @@ int wxEntry(int& argc, char **argv)
 
     return wxEntry(gs_initData.argc, gs_initData.argv);
 }
-
-#endif // wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // wxInitialize/wxUninitialize
@@ -538,7 +516,6 @@ bool wxInitialize(int& argc, wxChar **argv)
     return wxEntryStart(argc, argv);
 }
 
-#if wxUSE_UNICODE
 bool wxInitialize(int& argc, char **argv)
 {
     if ( wxAtomicInc(gs_initData.nInitCount) != 1 )
@@ -549,7 +526,6 @@ bool wxInitialize(int& argc, char **argv)
 
     return wxEntryStart(argc, argv);
 }
-#endif // wxUSE_UNICODE
 
 void wxUninitialize()
 {

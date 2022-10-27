@@ -107,18 +107,11 @@ public:
     wxCharBuffer
         cWC2MB(const wchar_t *in, size_t inLen, size_t *outLen) const;
 
-    // convenience functions for converting MB or WC to/from wxWin default
-#if wxUSE_UNICODE
+    // Obsolete convenience functions.
     wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
     wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
     const wchar_t* cWC2WX(const wchar_t *psz) const { return psz; }
     const wchar_t* cWX2WC(const wchar_t *psz) const { return psz; }
-#else // ANSI
-    const char* cMB2WX(const char *psz) const { return psz; }
-    const char* cWX2MB(const char *psz) const { return psz; }
-    wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
-    wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
-#endif // Unicode/ANSI
 
     // return the maximum number of bytes that can be required to encode a
     // single character in this encoding, e.g. 4 for UTF-8
@@ -677,7 +670,7 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 // ----------------------------------------------------------------------------
 
 // filenames are multibyte on Unix and widechar on Windows
-#if wxMBFILES && wxUSE_UNICODE
+#if wxMBFILES
     #define wxFNCONV(name) wxConvFileName->cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST
 #else
@@ -693,31 +686,23 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 // macros for the most common conversions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-    #define wxConvertWX2MB(s)   wxConvCurrent->cWX2MB(s)
-    #define wxConvertMB2WX(s)   wxConvCurrent->cMB2WX(s)
+#define wxConvertWX2MB(s)   wxConvCurrent->cWX2MB(s)
+#define wxConvertMB2WX(s)   wxConvCurrent->cMB2WX(s)
 
-    // these functions should be used when the conversions really, really have
-    // to succeed (usually because we pass their results to a standard C
-    // function which would crash if we passed nullptr to it), so these functions
-    // always return a valid pointer if their argument is non-null
+// these functions should be used when the conversions really, really have
+// to succeed (usually because we pass their results to a standard C
+// function which would crash if we passed nullptr to it), so these functions
+// always return a valid pointer if their argument is non-null
 
-    inline wxWCharBuffer wxSafeConvertMB2WX(const char *s)
-    {
-        return wxConvWhateverWorks.cMB2WC(s);
-    }
+inline wxWCharBuffer wxSafeConvertMB2WX(const char *s)
+{
+    return wxConvWhateverWorks.cMB2WC(s);
+}
 
-    inline wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
-    {
-        return wxConvWhateverWorks.cWC2MB(ws);
-    }
-#else // ANSI
-    // no conversions to do
-    #define wxConvertWX2MB(s)   (s)
-    #define wxConvertMB2WX(s)   (s)
-    #define wxSafeConvertMB2WX(s) (s)
-    #define wxSafeConvertWX2MB(s) (s)
-#endif // Unicode/ANSI
+inline wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
+{
+    return wxConvWhateverWorks.cWC2MB(ws);
+}
 
 // Macro that indicates the default encoding for converting C strings
 // to wxString. It provides a default value for a const wxMBConv&

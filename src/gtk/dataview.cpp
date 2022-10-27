@@ -2876,19 +2876,7 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     SetMode(mode);
     SetAlignment(align);
 
-#if !wxUSE_UNICODE
-    // We can't initialize the renderer just yet because we don't have the
-    // pointer to the column that uses this renderer yet and so attempt to
-    // dereference GetOwner() to get the font that is used as a source of
-    // encoding in multibyte-to-Unicode conversion in GTKSetLabel() in
-    // non-Unicode builds would crash. So simply remember to do it later.
-    if ( !m_label.empty() )
-        m_needsToSetLabel = true;
-    else
-#endif // !wxUSE_UNICODE
-    {
-        GTKSetLabel();
-    }
+    GTKSetLabel();
 }
 
 wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
@@ -2909,19 +2897,10 @@ void wxDataViewProgressRenderer::GTKSetLabel()
 
     g_value_set_string( gvalue, buf);
     g_object_set_property( G_OBJECT(m_renderer), "text", gvalue );
-
-#if !wxUSE_UNICODE
-    m_needsToSetLabel = false;
-#endif // !wxUSE_UNICODE
 }
 
 bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
-#if !wxUSE_UNICODE
-    if ( m_needsToSetLabel )
-        GTKSetLabel();
-#endif // !wxUSE_UNICODE
-
     gint tmp = (long) value;
     wxGtkValue gvalue( G_TYPE_INT );
     g_value_set_int( gvalue, tmp );

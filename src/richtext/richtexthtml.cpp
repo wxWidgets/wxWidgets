@@ -74,7 +74,6 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     wxRichTextDrawingContext context(buffer);
     buffer->Defragment(context);
 
-#if wxUSE_UNICODE
     wxCSConv* customEncoding = nullptr;
     wxMBConv* conv = nullptr;
     if (!GetEncoding().IsEmpty())
@@ -89,14 +88,9 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         conv = customEncoding;
     else
         conv = & wxConvUTF8;
-#endif
 
     {
-#if wxUSE_UNICODE
         wxTextOutputStream str(stream, wxEOL_NATIVE, *conv);
-#else
-        wxTextOutputStream str(stream, wxEOL_NATIVE);
-#endif
 
         wxRichTextAttr currentParaStyle = buffer->GetAttributes();
         wxRichTextAttr currentCharStyle = buffer->GetAttributes();
@@ -172,10 +166,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         str << wxT("\n");
     }
 
-#if wxUSE_UNICODE
     if (customEncoding)
         delete customEncoding;
-#endif
 
     m_buffer = nullptr;
 

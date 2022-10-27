@@ -52,7 +52,7 @@
 
 #if wxUSE_PCRE
     // Use the same code unit width for PCRE as we use for wxString.
-#   if !wxUSE_UNICODE || wxUSE_UNICODE_UTF8
+#   if wxUSE_UNICODE_UTF8
 #       define PCRE2_CODE_UNIT_WIDTH 8
         typedef char wxRegChar;
 #   elif wxUSE_UNICODE_UTF16
@@ -280,9 +280,7 @@ typedef char wxRegErrorChar;
             return regexec(preg, string, nmatch, pmatch, eflags);
         }
 #   endif
-#   if wxUSE_UNICODE
-#       define WXREGEX_CONVERT_TO_MB
-#   endif
+#   define WXREGEX_CONVERT_TO_MB
 #   define wx_regcomp regcomp
 #   define wx_regfree regfree
 #   define wx_regerror regerror

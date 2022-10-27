@@ -43,11 +43,7 @@
 // macros and constants
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-    #define DDE_CP      CP_WINUNICODE
-#else
-    #define DDE_CP      CP_WINANSI
-#endif
+#define DDE_CP      CP_WINUNICODE
 
 #define GetHConv()       ((HCONV)m_hConv)
 
@@ -549,9 +545,8 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
     size_t realSize = 0;
     wxMBConv *conv = nullptr;
 
-    // Windows only supports either ANSI or UTF-16 format depending on the
+    // Windows only supports UTF-16 format depending on the
     // build, so we need to convert the data if it doesn't use it already
-#if wxUSE_UNICODE
     if ( format == wxIPC_TEXT )
     {
         conv = &wxConvLibc;
@@ -587,44 +582,6 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
         // not the length of the string.
         realSize *= sizeof(wchar_t);
     }
-#else // !wxUSE_UNICODE
-    if ( format == wxIPC_UNICODETEXT )
-    {
-        conv = &wxConvLibc;
-    }
-    else if ( format == wxIPC_UTF8TEXT )
-    {
-        // we could implement this in theory but it's not obvious how to pass
-        // the format information and, basically, why bother -- just use
-        // Unicode build
-        wxFAIL_MSG( wxT("UTF-8 text not supported in ANSI build") );
-
-        return false;
-    }
-    else // don't convert wxIPC_TEXT
-    {
-        realData = (LPBYTE)data;
-        realSize = size;
-    }
-
-    if ( conv )
-    {
-        const wchar_t * const wtext = (const wchar_t *)data;
-        const size_t len = size/sizeof(wchar_t);
-
-        realSize = conv->FromWChar(nullptr, 0, wtext, len);
-        if ( realSize == wxCONV_FAILED )
-            return false;
-
-        realData = (LPBYTE)buffer.GetWriteBuf(realSize);
-        if ( !realData )
-            return false;
-
-        realSize = conv->FromWChar((char*)realData, realSize, wtext, len);
-        if ( realSize == wxCONV_FAILED )
-            return false;
-    }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     DWORD result;
     bool ok = DdeClientTransaction(realData,
@@ -896,14 +853,8 @@ _DDECallback(UINT wType,
 
                     DdeFreeDataHandle(hData);
 
-                    // XTYP_EXECUTE can be used for text only and the text is
-                    // always in ANSI format for ANSI build and Unicode format
-                    // in Unicode build
-                    #if wxUSE_UNICODE
-                        wFmt = wxIPC_UNICODETEXT;
-                    #else
-                        wFmt = wxIPC_TEXT;
-                    #endif
+                    // XTYP_EXECUTE can be used for text only
+                    wFmt = wxIPC_UNICODETEXT;
 
                     if ( connection->OnExecute(connection->m_topicName,
                                                data,

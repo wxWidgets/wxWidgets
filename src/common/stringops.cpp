@@ -26,7 +26,7 @@
 // implementation
 // ===========================================================================
 
-#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF16
 
@@ -88,7 +88,7 @@ wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& 
 
 #endif // wxUSE_UNICODE_UTF16
 
-#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#endif // wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF8
 

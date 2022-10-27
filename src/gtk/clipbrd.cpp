@@ -44,9 +44,7 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 static GdkAtom  g_targetsAtom     = nullptr;
 static GdkAtom  g_timestampAtom   = nullptr;
 
-#if wxUSE_UNICODE
 extern GdkAtom g_altTextAtom;
-#endif
 
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
@@ -316,7 +314,6 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     // use UTF8_STRING format if requested in Unicode build but just plain
     // STRING one in ANSI or if explicitly asked in Unicode
-#if wxUSE_UNICODE
     if (format == wxDF_UNICODETEXT)
     {
         gtk_selection_data_set_text(
@@ -325,7 +322,6 @@ selection_handler( GtkWidget *WXUNUSED(widget),
             size );
     }
     else
-#endif // wxUSE_UNICODE
     {
         gtk_selection_data_set(
             selection_data,
@@ -689,13 +685,11 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     if ( DoIsSupported(format) )
         return true;
 
-#if wxUSE_UNICODE
     if ( format == wxDF_UNICODETEXT )
     {
         // also with plain STRING format
         return DoIsSupported(g_altTextAtom);
     }
-#endif // wxUSE_UNICODE
 
     return false;
 }
@@ -744,11 +738,7 @@ bool wxClipboard::GetData( wxDataObject& data )
            tokens is given (that is more than 1 for non-ASCII characters)
            (tested with Gnumeric-1.6.1 and OpenOffice.org-2.0.2)
          */
-#if wxUSE_UNICODE
         if ( format != wxDF_UNICODETEXT || data.GetDataSize(format) > 0 )
-#else // !UNICODE
-        if ( format != wxDF_TEXT || data.GetDataSize(format) > 1 )
-#endif // UNICODE / !UNICODE
         {
             wxCHECK_MSG( m_formatSupported, false,
                          wxT("error retrieving data from clipboard") );

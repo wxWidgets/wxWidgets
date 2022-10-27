@@ -42,17 +42,11 @@ inline bool wxIsEmpty(const wxCStrData& s) { return s.AsString().empty(); }
 WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n);
 WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 
-#if wxUSE_UNICODE
-    #define wxMB2WX wxMB2WC
-    #define wxWX2MB wxWC2MB
-    #define wxWC2WX wxStrncpy
-    #define wxWX2WC wxStrncpy
-#else
-    #define wxMB2WX wxStrncpy
-    #define wxWX2MB wxStrncpy
-    #define wxWC2WX wxWC2MB
-    #define wxWX2WC wxMB2WC
-#endif
+// Obsolete helpers.
+#define wxMB2WX wxMB2WC
+#define wxWX2MB wxWC2MB
+#define wxWC2WX wxStrncpy
+#define wxWX2WC wxStrncpy
 
 
 //  RN: We could do the usual tricky compiler detection here,
@@ -64,47 +58,45 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 //
 #include <string.h>
 
-#if wxUSE_UNICODE
-    //implement our own wmem variants
-    inline wxChar* wxTmemchr(const wxChar* s, wxChar c, size_t l)
-    {
-        for(;l && *s != c;--l, ++s) {}
+//implement our own wmem variants
+inline wxChar* wxTmemchr(const wxChar* s, wxChar c, size_t l)
+{
+    for(;l && *s != c;--l, ++s) {}
 
-        if(l)
-            return const_cast<wxChar*>(s);
-        return nullptr;
-    }
+    if(l)
+        return const_cast<wxChar*>(s);
+    return nullptr;
+}
 
-    inline int wxTmemcmp(const wxChar* sz1, const wxChar* sz2, size_t len)
-    {
-        for(; *sz1 == *sz2 && len; --len, ++sz1, ++sz2) {}
+inline int wxTmemcmp(const wxChar* sz1, const wxChar* sz2, size_t len)
+{
+    for(; *sz1 == *sz2 && len; --len, ++sz1, ++sz2) {}
 
-        if(len)
-            return *sz1 < *sz2 ? -1 : *sz1 > *sz2;
-        else
-            return 0;
-    }
+    if(len)
+        return *sz1 < *sz2 ? -1 : *sz1 > *sz2;
+    else
+        return 0;
+}
 
-    inline wxChar* wxTmemcpy(wxChar* szOut, const wxChar* szIn, size_t len)
-    {
-        return (wxChar*) memcpy(szOut, szIn, len * sizeof(wxChar));
-    }
+inline wxChar* wxTmemcpy(wxChar* szOut, const wxChar* szIn, size_t len)
+{
+    return (wxChar*) memcpy(szOut, szIn, len * sizeof(wxChar));
+}
 
-    inline wxChar* wxTmemmove(wxChar* szOut, const wxChar* szIn, size_t len)
-    {
-        return (wxChar*) memmove(szOut, szIn, len * sizeof(wxChar));
-    }
+inline wxChar* wxTmemmove(wxChar* szOut, const wxChar* szIn, size_t len)
+{
+    return (wxChar*) memmove(szOut, szIn, len * sizeof(wxChar));
+}
 
-    inline wxChar* wxTmemset(wxChar* szOut, wxChar cIn, size_t len)
-    {
-        wxChar* szRet = szOut;
+inline wxChar* wxTmemset(wxChar* szOut, wxChar cIn, size_t len)
+{
+    wxChar* szRet = szOut;
 
-        while (len--)
-            *szOut++ = cIn;
+    while (len--)
+        *szOut++ = cIn;
 
-        return szRet;
-    }
-#endif /* wxUSE_UNICODE */
+    return szRet;
+}
 
 // provide trivial wrappers for char* versions for both ANSI and Unicode builds
 // (notice that these intentionally return "char *" and not "void *" unlike the
@@ -556,15 +548,11 @@ WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2)
 {
-#if wxUSE_UNICODE
     // NB: strcoll() doesn't work correctly on UTF-8 strings, so we have to use
     //     wc_str() even if wxUSE_UNICODE_UTF8; the (const wchar_t*) cast is
     //     there just as optimization to avoid going through
     //     wxStrcoll<wxScopedWCharBuffer>:
     return wxStrcoll((const wchar_t*)s1.wc_str(), s2);
-#else
-    return wxStrcoll((const char*)s1.mb_str(), s2);
-#endif
 }
 
 #endif // defined(wxCRT_Strcoll[AW])

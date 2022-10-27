@@ -303,10 +303,6 @@ wxHtmlCell* wxHtmlListBox::CreateCellForItem(size_t n) const
         self->m_htmlParser = new wxHtmlWinParser(self);
         m_htmlParser->SetDC(new wxClientDC(self));
         m_htmlParser->SetFS(&self->m_filesystem);
-#if !wxUSE_UNICODE
-        if (GetFont().IsOk())
-            m_htmlParser->SetInputEncoding(GetFont().GetEncoding());
-#endif
         // use system's default GUI font by default:
         m_htmlParser->SetStandardFonts();
     }

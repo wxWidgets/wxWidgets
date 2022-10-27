@@ -96,11 +96,9 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
 {
     wxString ret = m_copyright;
 
-#if wxUSE_UNICODE
     const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
     ret.Replace("(c)", copyrightSign);
     ret.Replace("(C)", copyrightSign);
-#endif // wxUSE_UNICODE
 
     return ret;
 }

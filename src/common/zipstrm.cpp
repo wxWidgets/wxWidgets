@@ -89,18 +89,9 @@ static wxString ReadString(wxInputStream& stream, wxUint16 len, wxMBConv& conv)
     if (len == 0)
         return wxEmptyString;
 
-#if wxUSE_UNICODE
     wxCharBuffer buf(len);
     stream.Read(buf.data(), len);
     wxString str(buf, conv);
-#else
-    wxString str;
-    (void)conv;
-    {
-        wxStringBuffer buf(str, len);
-        stream.Read(buf, len);
-    }
-#endif
 
     return str;
 }

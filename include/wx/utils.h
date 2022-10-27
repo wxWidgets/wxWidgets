@@ -389,12 +389,10 @@ WXDLLIMPEXP_BASE long wxExecute(const char* const* argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = nullptr,
                                 const wxExecuteEnv *env = nullptr);
-#if wxUSE_UNICODE
 WXDLLIMPEXP_BASE long wxExecute(const wchar_t* const* argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = nullptr,
                                 const wxExecuteEnv *env = nullptr);
-#endif // wxUSE_UNICODE
 
 // execute the command capturing its output into an array line by line, this is
 // always synchronous

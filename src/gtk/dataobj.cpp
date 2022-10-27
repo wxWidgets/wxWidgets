@@ -76,18 +76,10 @@ void wxDataFormat::SetType( wxDataFormatId type )
 
     m_type = type;
 
-#if wxUSE_UNICODE
     if (m_type == wxDF_UNICODETEXT)
         m_format = g_textAtom;
     else if (m_type == wxDF_TEXT)
         m_format = g_altTextAtom;
-#else // !wxUSE_UNICODE
-    // notice that we don't map wxDF_UNICODETEXT to g_textAtom here, this
-    // would lead the code elsewhere to treat data objects with this format as
-    // containing UTF-8 data which is not true
-    if (m_type == wxDF_TEXT)
-        m_format = g_textAtom;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
     else
     if (m_type == wxDF_BITMAP)
         m_format = g_pngAtom;
@@ -120,11 +112,7 @@ void wxDataFormat::SetId( NativeFormat format )
     m_format = format;
 
     if (m_format == g_textAtom)
-#if wxUSE_UNICODE
         m_type = wxDF_UNICODETEXT;
-#else
-        m_type = wxDF_TEXT;
-#endif
     else
     if (m_format == g_altTextAtom)
         m_type = wxDF_TEXT;
@@ -159,12 +147,8 @@ void wxDataFormat::PrepareFormats()
     //     here (with whom?)
     if (!g_textAtom)
     {
-#if wxUSE_UNICODE
         g_textAtom = gdk_atom_intern( "UTF8_STRING", FALSE );
         g_altTextAtom = gdk_atom_intern( "STRING", FALSE );
-#else
-        g_textAtom = gdk_atom_intern( "STRING" /* "text/plain" */, FALSE );
-#endif
     }
     if (!g_pngAtom)
         g_pngAtom = gdk_atom_intern( "image/png", FALSE );
@@ -217,8 +201,6 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
 // wxTextDataObject
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-
 void
 wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
@@ -226,8 +208,6 @@ wxTextDataObject::GetAllFormats(wxDataFormat *formats,
     *formats++ = GetPreferredFormat();
     *formats = g_altTextAtom;
 }
-
-#endif // wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // wxFileDataObject

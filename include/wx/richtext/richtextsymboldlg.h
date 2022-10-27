@@ -32,13 +32,6 @@ class wxSymbolListCtrl;
 class wxStdDialogButtonSizer;
 ////@end forward declarations
 
-// __UNICODE__ is a symbol used by DialogBlocks-generated code.
-#ifndef __UNICODE__
-#if wxUSE_UNICODE
-#define __UNICODE__
-#endif
-#endif
-
 /*!
  * Symbols
  */
@@ -110,19 +103,15 @@ public:
     /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_FONT
     void OnFontCtrlSelected( wxCommandEvent& event );
 
-#if defined(__UNICODE__)
     /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_SUBSET
     void OnSubsetSelected( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_SYMBOLPICKERDIALOG_SUBSET
     void OnSymbolpickerdialogSubsetUpdate( wxUpdateUIEvent& event );
 
-#endif
-#if defined(__UNICODE__)
     /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_FROM
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
-#endif
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
@@ -157,15 +146,11 @@ public:
 
 ////@begin wxSymbolPickerDialog member variables
     wxComboBox* m_fontCtrl;
-#if defined(__UNICODE__)
     wxComboBox* m_subsetCtrl;
-#endif
     wxSymbolListCtrl* m_symbolsCtrl;
     wxStaticText* m_symbolStaticCtrl;
     wxTextCtrl* m_characterCodeCtrl;
-#if defined(__UNICODE__)
     wxComboBox* m_fromUnicodeCtrl;
-#endif
     wxStdDialogButtonSizer* m_stdButtonSizer;
     wxString m_fontName;
     bool m_fromUnicode;

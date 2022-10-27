@@ -448,8 +448,6 @@ int wxDoSprintfUtf8(char *str, const char *format, ...)
 }
 #endif // wxUSE_UNICODE_UTF8
 
-#if wxUSE_UNICODE
-
 #if !wxUSE_UTF8_LOCALE_ONLY
 int wxDoSprintfWchar(wchar_t *str, const wxChar *format, ...)
 {
@@ -475,8 +473,6 @@ int wxDoSprintfUtf8(wchar_t *str, const char *format, ...)
     return rv;
 }
 #endif // wxUSE_UNICODE_UTF8
-
-#endif // wxUSE_UNICODE
 
 #if !wxUSE_UTF8_LOCALE_ONLY
 int wxDoSnprintfWchar(char *str, size_t size, const wxChar *format, ...)
@@ -504,8 +500,6 @@ int wxDoSnprintfUtf8(char *str, size_t size, const char *format, ...)
 }
 #endif // wxUSE_UNICODE_UTF8
 
-#if wxUSE_UNICODE
-
 #if !wxUSE_UTF8_LOCALE_ONLY
 int wxDoSnprintfWchar(wchar_t *str, size_t size, const wxChar *format, ...)
 {
@@ -532,14 +526,10 @@ int wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...)
 }
 #endif // wxUSE_UNICODE_UTF8
 
-#endif // wxUSE_UNICODE
-
 
 #ifdef HAVE_BROKEN_VSNPRINTF_DECL
     #define vsnprintf wx_fixed_vsnprintf
 #endif
-
-#if wxUSE_UNICODE
 
 namespace
 {
@@ -593,7 +583,6 @@ static size_t PrintfViaString(T *out, size_t outsize,
 
     return ConvertStringToBuf(s, out, outsize);
 }
-#endif // wxUSE_UNICODE
 
 int wxVsprintf(char *str, const wxString& format, va_list argptr)
 {
@@ -605,15 +594,10 @@ int wxVsprintf(char *str, const wxString& format, va_list argptr)
         return wxCRT_VsprintfA(str, format.wx_str(), argptr);
     else
     #endif
-    #if wxUSE_UNICODE
     return PrintfViaString(str, wxNO_LEN, format, argptr);
-    #else
-    return wxCRT_VsprintfA(str, format.mb_str(), argptr);
-    #endif
 #endif
 }
 
-#if wxUSE_UNICODE
 int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
 {
 #if wxUSE_UNICODE_WCHAR
@@ -627,7 +611,6 @@ int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
         return PrintfViaString(str, wxNO_LEN, format, argptr);
 #endif // wxUSE_UNICODE_UTF8
 }
-#endif // wxUSE_UNICODE
 
 int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
 {
@@ -640,16 +623,12 @@ int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
         rv = wxCRT_VsnprintfA(str, size, format.wx_str(), argptr);
     else
     #endif
-    #if wxUSE_UNICODE
     {
         // NB: if this code is called, then wxString::PrintV() would use the
         //     wchar_t* version of wxVsnprintf(), so it's safe to use PrintV()
         //     from here
         rv = PrintfViaString(str, size, format, argptr);
     }
-    #else
-    rv = wxCRT_VsnprintfA(str, size, format.mb_str(), argptr);
-    #endif
 #endif
 
     // VsnprintfTestCase reveals that glibc's implementation of vswprintf
@@ -659,7 +638,6 @@ int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
     return rv;
 }
 
-#if wxUSE_UNICODE
 int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr)
 {
     int rv;
@@ -687,8 +665,6 @@ int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argpt
 
     return rv;
 }
-#endif // wxUSE_UNICODE
-
 
 // ----------------------------------------------------------------------------
 // ctype.h stuff (currently unused)
@@ -1173,13 +1149,9 @@ int wxFputs(const wxString& s, FILE *stream)
 
 int wxFputc(const wxUniChar& c, FILE *stream)
 {
-#if !wxUSE_UNICODE // FIXME-UTF8: temporary, remove this with ANSI build
-    return wxCRT_FputcA((char)c, stream);
-#else
     CALL_ANSI_OR_UNICODE(return,
                          wxCRT_FputsA(c.AsUTF8(), stream),
                          wxCRT_FputcW((wchar_t)c, stream));
-#endif
 }
 
 #ifdef wxCRT_PerrorA
