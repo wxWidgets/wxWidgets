@@ -565,7 +565,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <define>$(EXCEPTIONS_DEFINE)</define>
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
-        <define>_UNICODE</define>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>

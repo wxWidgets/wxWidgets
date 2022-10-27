@@ -47,8 +47,8 @@ WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 BENCH_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(WX_CXXFLAGS) \
+	$(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	bench_bench.o \
 	bench_datetime.o \
@@ -63,9 +63,8 @@ BENCH_OBJECTS =  \
 	bench_printfbench.o
 BENCH_GUI_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
+	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GUI_OBJECTS =  \
 	$(__bench_gui___win32rc) \
 	bench_gui_bench.o \
@@ -73,9 +72,9 @@ BENCH_GUI_OBJECTS =  \
 	bench_gui_image.o
 BENCH_GRAPHICS_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) \
-	$(__DLLFLAG_p) -I$(srcdir)/../../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
+	-I$(srcdir)/../../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) \
+	$(CXXFLAGS)
 BENCH_GRAPHICS_OBJECTS =  \
 	$(__bench_graphics___win32rc) \
 	bench_graphics_graphics.o
@@ -324,7 +323,7 @@ bench_printfbench.o: $(srcdir)/printfbench.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/printfbench.cpp
 
 bench_gui_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --define _UNICODE --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 bench_gui_bench.o: $(srcdir)/bench.cpp
 	$(CXXC) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(srcdir)/bench.cpp
@@ -336,7 +335,7 @@ bench_gui_image.o: $(srcdir)/image.cpp
 	$(CXXC) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(srcdir)/image.cpp
 
 bench_graphics_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --define _UNICODE --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 bench_graphics_graphics.o: $(srcdir)/graphics.cpp
 	$(CXXC) -c -o $@ $(BENCH_GRAPHICS_CXXFLAGS) $(srcdir)/graphics.cpp

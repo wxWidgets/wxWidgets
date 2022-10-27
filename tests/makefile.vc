@@ -25,7 +25,7 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/D_CRT_SECURE_NO_DEPRECATE=1 /D_CRT_NON_CONFORMING_SWPRINTFS=1 \
 	/D_SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) \
 	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) /D_UNICODE \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
 	$(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 \
 	/I.\..\3rdparty\catch\single_include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
@@ -124,7 +124,7 @@ TEST_DRAWING_CXXFLAGS = /M$(__RUNTIME_LIBS_27)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) /D_UNICODE \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
 	$(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 \
 	/I.\..\3rdparty\catch\single_include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
@@ -143,7 +143,7 @@ TEST_DRAWINGPLUGIN_CXXFLAGS = /M$(__RUNTIME_LIBS_45)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) /D_UNICODE \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 \
 	$(__DLLFLAG_p) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 TEST_DRAWINGPLUGIN_OBJECTS =  \
@@ -154,7 +154,7 @@ TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_59)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) /D_UNICODE \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
 	$(__DLLFLAG_p) /I.\..\samples /DNOPCH /I.\..\3rdparty\catch\single_include \
 	/D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"testprec.h" \
@@ -272,7 +272,7 @@ TEST_ALLHEADERS_CXXFLAGS = /M$(__RUNTIME_LIBS_76)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) /D_UNICODE \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
 	$(__DLLFLAG_p) /I.\..\samples /DNOPCH /I.\..\3rdparty\catch\single_include \
 	/D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"testprec.h" \
@@ -1136,7 +1136,7 @@ $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /d _UNICODE /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\samples\sample.rc
 
 $(OBJS)\test_gui_asserthelper.obj: .\asserthelper.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\asserthelper.cpp
@@ -1451,7 +1451,7 @@ $(OBJS)\test_allheaders_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_allheaders_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /d _UNICODE /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\samples\sample.rc
 
 $(OBJS)\test_allheaders_asserthelper.obj: .\asserthelper.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) .\asserthelper.cpp

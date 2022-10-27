@@ -48,9 +48,8 @@ WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 TREECTRL_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -D_UNICODE -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
+	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TREECTRL_OBJECTS =  \
 	$(__treectrl___win32rc) \
 	treectrl_treetest.o
@@ -184,7 +183,7 @@ treectrl$(EXEEXT): $(TREECTRL_OBJECTS) $(__treectrl___win32rc)
 @COND_PLATFORM_MACOSX_1@treectrl_bundle: $(____treectrl_BUNDLE_TGT_REF_DEP)
 
 treectrl_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) --define _UNICODE --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 treectrl_treetest.o: $(srcdir)/treetest.cpp
 	$(CXXC) -c -o $@ $(TREECTRL_CXXFLAGS) $(srcdir)/treetest.cpp

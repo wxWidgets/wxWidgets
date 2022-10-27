@@ -286,7 +286,6 @@ function(wx_set_target_properties target_name)
     if(WIN32)
         target_compile_definitions(${target_name} PUBLIC UNICODE)
     endif()
-    target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
     if(WIN32 AND MSVC)
         # Suppress deprecation warnings for standard library calls
@@ -531,7 +530,6 @@ function(wx_set_builtin_target_properties target_name)
     if(WIN32)
         target_compile_definitions(${target_name} PUBLIC UNICODE)
     endif()
-    target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
     if(MSVC)
         # we're not interested in deprecation warnings about the use of
