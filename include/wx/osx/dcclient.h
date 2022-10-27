@@ -30,9 +30,13 @@ public:
 
     virtual void DoGetSize( int *width, int *height ) const override;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override;
+    virtual void DestroyClippingRegion() override;
 
 protected:
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Don't use OSXGetOrigin()")
     virtual wxPoint OSXGetOrigin() const override;
+#endif // WXWIN_COMPATIBILITY_3_2
 
     bool m_release;
     int m_width;

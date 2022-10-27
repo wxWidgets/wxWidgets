@@ -105,10 +105,21 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
+void wxWindowDCImpl::DestroyClippingRegion()
+{
+    wxGCDCImpl::DestroyClippingRegion();
+
+    wxPoint clipPos = DeviceToLogical(m_origin.x, m_origin.y);
+    wxSize clipDim = DeviceToLogicalRel(m_width, m_height);
+    DoSetClippingRegion(clipPos.x, clipPos.y, clipDim.x, clipDim.y);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
 wxPoint wxWindowDCImpl::OSXGetOrigin() const
 {
     return m_origin;
 }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 /*
  * wxClientDCImpl

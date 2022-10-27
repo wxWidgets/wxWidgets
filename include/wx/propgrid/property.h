@@ -780,7 +780,7 @@ public:
     // Simple interface constructor.
     wxPGChoices( wxPGChoicesData* data )
     {
-        wxASSERT(data);
+        wxCHECK_RET(data, "Data pointer cannot be null");
         m_data = data;
         data->IncRef();
     }
@@ -1033,7 +1033,7 @@ public:
     // Converts text into wxVariant value appropriate for this property.
     // Parameters:
     // variant - On function entry this is the old value (should not be
-    //   wxNullVariant in normal cases). Translated value must be assigned
+    //   null wxVariant in normal cases). Translated value must be assigned
     //   back to it.
     // text - Text to be translated into variant.
     // argFlags - If wxPG_FULL_VALUE is set, returns complete, storable value instead
@@ -1054,7 +1054,7 @@ public:
     // Converts integer (possibly a choice selection) into wxVariant value
     // appropriate for this property.
     // Parameters:
-    // variant - On function entry this is the old value (should not be wxNullVariant
+    // variant - On function entry this is the old value (should not be null wxVariant
     //   in normal cases). Translated value must be assigned back to it.
     // number - Integer to be translated into variant.
     // argFlags - If wxPG_FULL_VALUE is set, returns complete, storable value

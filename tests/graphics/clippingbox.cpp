@@ -25,7 +25,7 @@
 #include "testfile.h"
 #include "waitforpaint.h"
 
-static const wxSize s_dcSize(100, 120);
+static const wxSize s_dcSize(120, 140);
 static const wxColour s_bgColour(*wxWHITE); // colour to draw outside clipping box
 static const wxColour s_fgColour(*wxGREEN); // colour to draw inside clipping box
 static const wxColour s_tmpColour(*wxBLUE);
@@ -296,7 +296,7 @@ static void FlushDC(wxDC& dc)
 
 static void CheckClipBox(wxDC& dc, const wxBitmap& bmp,
                          int x, int y, int width, int height,
-                         int devX, int devY, int devWidth, int devHeight,
+                         int xPh, int yPh, int wPh, int hPh,
                          int posTolerance = 0)
 {
     // Check clipping box boundaries.
@@ -313,7 +313,7 @@ static void CheckClipBox(wxDC& dc, const wxBitmap& bmp,
         // We check whether diagonal corners
         // of the rectangular clipping box are actually
         // drawn at the edge of the clipping region.
-        CheckClipRect(bmp, devX, devY, devWidth, devHeight);
+        CheckClipRect(bmp, xPh, yPh, wPh, hPh);
 #endif // wxUSE_IMAGE
     }
 }
@@ -337,20 +337,21 @@ static void CheckClipShape(wxDC& dc, const wxBitmap& bmp, const wxBitmap& bmpRef
 // ====================
 
 // Actual tests
-static void InitialState(wxDC& dc, const wxBitmap& bmp)
+static void InitialState(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Initial clipping box should be the same as the entire DC surface.
     dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
     CheckClipBox(dc, bmp,
-                 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
+                 0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
                  0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
-static void InitialStateWithTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void InitialStateWithTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix,
+                                          const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -375,7 +376,7 @@ static void InitialStateWithTransformedDC(wxDC& dc, const wxBitmap& bmp, bool ch
     dc.Clear();
     if ( checkExtCoords )
     {
-        wxPoint pos = dc.DeviceToLogical(0, 0);
+        wxPoint pos = dc.DeviceToLogical(0 - parentDcOrigin.x, 0 - parentDcOrigin.y);
         wxSize dim = dc.DeviceToLogicalRel(s_dcSize);
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
@@ -384,14 +385,14 @@ static void InitialStateWithTransformedDC(wxDC& dc, const wxBitmap& bmp, bool ch
     else
     {
         CheckClipBox(dc, bmp,
-                     dc.DeviceToLogicalX(0), dc.DeviceToLogicalY(0),
+                     dc.DeviceToLogicalX(0 - parentDcOrigin.x), dc.DeviceToLogicalY(0 - parentDcOrigin.y),
                      dc.DeviceToLogicalXRel(s_dcSize.GetWidth()),
                      dc.DeviceToLogicalYRel(s_dcSize.GetHeight()),
                      0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
     }
 }
 
-static void InitialStateWithRotatedDC(wxDC& dc, const wxBitmap& bmp)
+static void InitialStateWithRotatedDC(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Initial clipping box with rotated DC.
 #if wxUSE_DC_TRANSFORM_MATRIX
@@ -408,32 +409,32 @@ static void InitialStateWithRotatedDC(wxDC& dc, const wxBitmap& bmp)
     double x1, y1, x2, y2;
     double x, y;
     // Top-left corner
-    x = 0.0;
-    y = 0.0;
+    x = 0.0 - parentDcOrigin.x;
+    y = 0.0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = x;
     y1 = y;
     x2 = x;
     y2 = y;
     // Top-right corner
-    x = s_dcSize.GetWidth();
-    y = 0.0;
+    x = s_dcSize.GetWidth() - parentDcOrigin.x;
+    y = 0.0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
     x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
     // Bottom-right corner
-    x = s_dcSize.GetWidth();
-    y = s_dcSize.GetHeight();
+    x = s_dcSize.GetWidth() - parentDcOrigin.x;
+    y = s_dcSize.GetHeight() - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
     x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
     // Bottom-left corner
-    x = 0.0;
-    y = s_dcSize.GetHeight();
+    x = 0.0 - parentDcOrigin.x;
+    y = s_dcSize.GetHeight() - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
@@ -453,7 +454,7 @@ static void InitialStateWithRotatedDC(wxDC& dc, const wxBitmap& bmp)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
-static void SameRegionRepeatRotatedDC(wxDC& dc)
+static void SameRegionRepeatRotatedDC(wxDC& dc, const wxPoint& parentDcOrigin)
 {
     // While setting the same clipping region several times
     // the same clipping box should be should be returned.
@@ -471,32 +472,32 @@ static void SameRegionRepeatRotatedDC(wxDC& dc)
     double x1, y1, x2, y2;
     double x, y;
     // Top-left corner
-    x = 0.0;
-    y = 0.0;
+    x = 0.0 - parentDcOrigin.x;
+    y = 0.0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = x;
     y1 = y;
     x2 = x;
     y2 = y;
     // Top-right corner
-    x = s_dcSize.GetWidth();
-    y = 0.0;
+    x = s_dcSize.GetWidth() - parentDcOrigin.x;
+    y = 0.0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
     x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
     // Bottom-right corner
-    x = s_dcSize.GetWidth();
-    y = s_dcSize.GetHeight();
+    x = s_dcSize.GetWidth() - parentDcOrigin.x;
+    y = s_dcSize.GetHeight() - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
     x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
     // Bottom-left corner
-    x = 0.0;
-    y = s_dcSize.GetHeight();
+    x = 0.0 - parentDcOrigin.x;
+    y = s_dcSize.GetHeight() - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
@@ -518,7 +519,7 @@ static void SameRegionRepeatRotatedDC(wxDC& dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
-static void OneRegion(wxDC& dc, const wxBitmap& bmp)
+static void OneRegion(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region inside DC area.
     const int x = 10;
@@ -531,19 +532,19 @@ static void OneRegion(wxDC& dc, const wxBitmap& bmp)
     dc.Clear();
     CheckClipBox(dc, bmp,
                  x, y, w, h,
-                 x, y, w, h);
+                 x + parentDcOrigin.x , y + parentDcOrigin.y, w, h);
 }
 
-static void OneLargeRegion(wxDC& dc, const wxBitmap& bmp)
+static void OneLargeRegion(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region larger then DC surface.
     // Final clipping box should be limited to the DC extents.
-    dc.SetClippingRegion(-10, -20,
+    dc.SetClippingRegion(-15, -25,
                          s_dcSize.GetWidth()+30, s_dcSize.GetHeight()+50);
     dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
     CheckClipBox(dc, bmp,
-                 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
+                 0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
                  0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
@@ -559,7 +560,7 @@ static void OneOuterRegion(wxDC& dc, const wxBitmap& bmp)
                  0, 0, 0, 0);
 }
 
-static void OneRegionNegDim(wxDC& dc, const wxBitmap& bmp)
+static void OneRegionNegDim(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region with negative sizes values.
     // Final clipping box should have standard positive size values.
@@ -568,7 +569,7 @@ static void OneRegionNegDim(wxDC& dc, const wxBitmap& bmp)
     const int w = -80;
     const int h = -75;
     wxClipRect r1(x, y, w, h);
-    wxRect r2(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    wxRect r2(0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight());
     wxRect r = r1.Intersect(r2);
     REQUIRE( !r.IsEmpty() );
 
@@ -578,12 +579,22 @@ static void OneRegionNegDim(wxDC& dc, const wxBitmap& bmp)
     CheckClipBox(dc, bmp,
                  r.GetLeft(), r.GetTop(),
                  r.GetWidth(), r.GetHeight(),
-                 r.GetLeft(), r.GetTop(),
+                 r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                  r.GetWidth(), r.GetHeight());
 }
 
-static void OneRegionAndReset(wxDC& dc, const wxBitmap& bmp)
+static void OneRegionAndReset(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
+#ifdef __WXGTK__
+    if ( parentDcOrigin != wxPoint(0, 0) )
+    {
+        // Due to the bug in resetting wxGCDC clipping region when parent wxDC is scrolled
+        // we need to skip test on wxGTK
+        WARN("Skipping test known not to work under wxGTK");
+        return;
+    }
+#endif
+
     // Setting one clipping region and next destroy it.
     // Final clipping box should be the same as DC surface.
     dc.SetClippingRegion(10, 20, 80, 75);
@@ -591,7 +602,7 @@ static void OneRegionAndReset(wxDC& dc, const wxBitmap& bmp)
     dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
     CheckClipBox(dc, bmp,
-                 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
+                 0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
                  0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
@@ -608,10 +619,10 @@ static void OneRegionAndEmpty(wxDC& dc, const wxBitmap& bmp)
                  0, 0, 0, 0);
 }
 
-static void OneRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -641,14 +652,14 @@ static void OneRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool check
     wxRect r2;
     if ( checkExtCoords )
     {
-        wxPoint pos = dc.DeviceToLogical(0, 0);
+        wxPoint pos = dc.DeviceToLogical(0 - parentDcOrigin.x, 0 - parentDcOrigin.y);
         wxSize dim = dc.DeviceToLogicalRel(s_dcSize);
         r2 = wxRect(pos.x, pos.y, dim.x, dim.y);
     }
     else
     {
-        r2 = wxRect(dc.DeviceToLogicalX(0),
-                    dc.DeviceToLogicalY(0),
+        r2 = wxRect(dc.DeviceToLogicalX(0 - parentDcOrigin.x),
+                    dc.DeviceToLogicalY(0 - parentDcOrigin.y),
                     dc.DeviceToLogicalXRel(s_dcSize.GetWidth()),
                     dc.DeviceToLogicalYRel(s_dcSize.GetHeight()));
     }
@@ -661,15 +672,15 @@ static void OneRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool check
         CheckClipBox(dc, bmp,
                      r.GetLeft(), r.GetTop(),
                      r.GetWidth(), r.GetHeight(),
-                     pos.x, pos.y, dim.x, dim.y);
+                     pos.x + parentDcOrigin.x, pos.y + parentDcOrigin.y, dim.x, dim.y);
     }
     else
     {
         CheckClipBox(dc, bmp,
                      r.GetLeft(), r.GetTop(),
                      r.GetWidth(), r.GetHeight(),
-                     dc.LogicalToDeviceX(r.GetLeft()),
-                     dc.LogicalToDeviceY(r.GetTop()),
+                     dc.LogicalToDeviceX(r.GetLeft()) + parentDcOrigin.x,
+                     dc.LogicalToDeviceY(r.GetTop()) + parentDcOrigin.y,
                      dc.LogicalToDeviceXRel(r.GetWidth()),
                      dc.LogicalToDeviceYRel(r.GetHeight()));
     }
@@ -765,10 +776,10 @@ static void OneRegionOverRotatedDC(wxDC& dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
-static void OneRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -826,14 +837,14 @@ static void OneRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool che
         wxSize dim = dc.LogicalToDeviceRel(clipW, clipH);
         CheckClipBox(dc, bmp,
                      clipX, clipY, clipW, clipH,
-                     pos.x, pos.y, dim.x, dim.y);
+                     pos.x + parentDcOrigin.x, pos.y + parentDcOrigin.y, dim.x, dim.y);
     }
     else
     {
         CheckClipBox(dc, bmp,
                      clipX, clipY, clipW, clipH,
-                     dc.LogicalToDeviceX(clipX),
-                     dc.LogicalToDeviceY(clipY),
+                     dc.LogicalToDeviceX(clipX) + parentDcOrigin.x,
+                     dc.LogicalToDeviceY(clipY) + parentDcOrigin.y,
                      dc.LogicalToDeviceXRel(clipW),
                      dc.LogicalToDeviceYRel(clipH));
     }
@@ -868,7 +879,7 @@ static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
 #endif
 }
 
-static void TwoRegionsOverlapping(wxDC& dc, const wxBitmap& bmp)
+static void TwoRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region and next another region (partially overlapping).
     // Final clipping box should be an intersection of these two boxes.
@@ -884,11 +895,11 @@ static void TwoRegionsOverlapping(wxDC& dc, const wxBitmap& bmp)
     CheckClipBox(dc, bmp,
                  r.GetLeft(), r.GetTop(),
                  r.GetWidth(), r.GetHeight(),
-                 r.GetLeft(), r.GetTop(),
+                 r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                  r.GetWidth(), r.GetHeight());
 }
 
-static void TwoRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp)
+static void TwoRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region with negative size values
     // and next another region (partially overlapping).
@@ -914,7 +925,7 @@ static void TwoRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp)
     CheckClipBox(dc, bmp,
                  r.GetLeft(), r.GetTop(),
                  r.GetWidth(), r.GetHeight(),
-                 r.GetLeft(), r.GetTop(),
+                 r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                  r.GetWidth(), r.GetHeight());
 }
 
@@ -962,10 +973,10 @@ static void TwoRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp)
                  0, 0, 0, 0);
 }
 
-static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1002,7 +1013,7 @@ static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, boo
         wxSize dim = dc.DeviceToLogicalRel(w, h);
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
-                     x, y, w, h);
+                     x + parentDcOrigin.x, y + parentDcOrigin.y, w, h);
     }
     else
     {
@@ -1011,14 +1022,14 @@ static void OneDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, boo
                      dc.DeviceToLogicalY(y),
                      dc.DeviceToLogicalXRel(w),
                      dc.DeviceToLogicalYRel(h),
-                     x, y, w, h);
+                     x + parentDcOrigin.x, y + parentDcOrigin.y, w, h);
     }
 }
 
 static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1068,10 +1079,10 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
 #endif
 }
 
-static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1100,7 +1111,7 @@ static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords
     dc.Clear();
     if ( checkExtCoords )
     {
-        wxPoint pos = dc.DeviceToLogical(0, 0);
+        wxPoint pos = dc.DeviceToLogical(0 - parentDcOrigin.x, 0 - parentDcOrigin.y);
         wxSize dim = dc.DeviceToLogicalRel(s_dcSize);
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
@@ -1109,8 +1120,8 @@ static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords
     else
     {
         CheckClipBox(dc, bmp,
-                     dc.DeviceToLogicalX(0),
-                     dc.DeviceToLogicalY(0),
+                     dc.DeviceToLogicalX(0 - parentDcOrigin.x),
+                     dc.DeviceToLogicalY(0 - parentDcOrigin.y),
                      dc.DeviceToLogicalXRel(s_dcSize.GetWidth()),
                      dc.DeviceToLogicalYRel(s_dcSize.GetHeight()),
                      0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
@@ -1121,7 +1132,7 @@ static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords
 static void OneOuterDevRegion(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1153,10 +1164,10 @@ static void OneOuterDevRegion(wxDC& dc, const wxBitmap& bmp, bool useTransformMa
                  0, 0, 0, 0);
 }
 
-static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1168,7 +1179,7 @@ static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoord
     const int w = -80;
     const int h = -75;
     wxClipRect r1(x, y, w, h);
-    wxRect r2(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    wxRect r2(0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight());
     wxRect r = r1.Intersect(r2);
     REQUIRE( !r.IsEmpty() );
 
@@ -1198,7 +1209,7 @@ static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoord
         wxSize dim = dc.DeviceToLogicalRel(r.GetSize());
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
-                     r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight());
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
     }
     else
     {
@@ -1207,23 +1218,28 @@ static void OneDevRegionNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoord
                      dc.DeviceToLogicalY(r.GetTop()),
                      dc.DeviceToLogicalXRel(r.GetWidth()),
                      dc.DeviceToLogicalYRel(r.GetHeight()),
-                     r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight());
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
     }
 }
 
-static void DrawFigure(wxDC& dc, int n, const wxPoint points[])
+static void DrawFigure(wxDC& dc, int n, const wxPoint points[], const wxPoint& ofs)
 {
+    wxVector<wxPoint> pts;
+    for (int i = 0; i < n; i++)
+    {
+        pts.push_back(points[i] + ofs);
+    }
     dc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
     dc.SetBrush(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dc.SetPen(wxPen(s_fgColour));
-    dc.DrawPolygon(n, points);
+    dc.DrawPolygon(n, &pts[0]);
 }
 
-static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords,  bool useTransformMatrix)
+static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords,  bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1253,12 +1269,12 @@ static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoor
         gc->SetAntialiasMode(wxANTIALIAS_NONE);
         gc->DisableOffset();
         wxGCDC gdc(gc);
-        DrawFigure(gdc, WXSIZEOF(poly), poly);
+        DrawFigure(gdc, WXSIZEOF(poly), poly, parentDcOrigin);
     }
     else
 #endif // wxUSE_GRAPHICS_CONTEXT
     {
-        DrawFigure(memDC, WXSIZEOF(poly), poly);
+        DrawFigure(memDC, WXSIZEOF(poly), poly, parentDcOrigin);
     }
 
 #if wxUSE_DC_TRANSFORM_MATRIX
@@ -1305,10 +1321,20 @@ static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoor
     CheckClipShape(dc, bmp, bmpRef, 1);
 }
 
-static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
+#ifdef __WXGTK__
+    if ( parentDcOrigin != wxPoint(0, 0) )
+    {
+        // Due to the bug in resetting wxGCDC clipping region when parent wxDC is scrolled
+        // we need to skip test on wxGTK
+        WARN("Skipping test known not to work under wxGTK");
+        return;
+    }
+#endif
+
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1338,7 +1364,7 @@ static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoo
     dc.Clear();
     if ( checkExtCoords )
     {
-        wxPoint pos = dc.DeviceToLogical(0, 0);
+        wxPoint pos = dc.DeviceToLogical(0 - parentDcOrigin.x, 0 - parentDcOrigin.y);
         wxSize dim = dc.DeviceToLogicalRel(s_dcSize);
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
@@ -1347,8 +1373,8 @@ static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoo
     else
     {
         CheckClipBox(dc, bmp,
-                     dc.DeviceToLogicalX(0),
-                     dc.DeviceToLogicalY(0),
+                     dc.DeviceToLogicalX(0 - parentDcOrigin.x),
+                     dc.DeviceToLogicalY(0 - parentDcOrigin.y),
                      dc.DeviceToLogicalXRel(s_dcSize.GetWidth()),
                      dc.DeviceToLogicalYRel(s_dcSize.GetHeight()),
                      0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
@@ -1358,7 +1384,7 @@ static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoo
 static void OneDevRegionAndEmpty(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1392,10 +1418,10 @@ static void OneDevRegionAndEmpty(wxDC& dc, const wxBitmap& bmp, bool useTransfor
                  0, 0, 0, 0);
 }
 
-static void OneDevRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneDevRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1432,7 +1458,7 @@ static void OneDevRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool ch
         wxSize dim = dc.DeviceToLogicalRel(r.GetSize());
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
-                     r.GetLeft(), r.GetTop(),
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                      r.GetWidth(), r.GetHeight());
     }
     else
@@ -1442,7 +1468,7 @@ static void OneDevRegionOverTransformedDC(wxDC& dc, const wxBitmap& bmp, bool ch
                      dc.DeviceToLogicalY(r.GetTop()),
                      dc.DeviceToLogicalXRel(r.GetWidth()),
                      dc.DeviceToLogicalYRel(r.GetHeight()),
-                     r.GetLeft(), r.GetTop(),
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                      r.GetWidth(), r.GetHeight());
     }
 }
@@ -1517,10 +1543,10 @@ static void OneDevRegionOverRotatedDC(wxDC& dc)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 }
 
-static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1579,7 +1605,7 @@ static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool 
         wxSize dim = dc.DeviceToLogicalRel(r.GetSize());
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
-                     r.GetLeft(), r.GetTop(),
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                      r.GetWidth(), r.GetHeight());
     }
     else
@@ -1589,15 +1615,15 @@ static void OneDevRegionAndDCTransformation(wxDC& dc, const wxBitmap& bmp, bool 
                      dc.DeviceToLogicalY(r.GetTop()),
                      dc.DeviceToLogicalXRel(r.GetWidth()),
                      dc.DeviceToLogicalYRel(r.GetHeight()),
-                     r.GetLeft(), r.GetTop(),
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y,
                      r.GetWidth(), r.GetHeight());
     }
 }
 
-static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1637,7 +1663,7 @@ static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkEx
         wxSize dim = dc.DeviceToLogicalRel(r.GetSize());
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
-                     r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight());
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
     }
     else
     {
@@ -1646,14 +1672,14 @@ static void TwoDevRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, bool checkEx
                      dc.DeviceToLogicalY(r.GetTop()),
                      dc.DeviceToLogicalXRel(r.GetWidth()),
                      dc.DeviceToLogicalYRel(r.GetHeight()),
-                     r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight());
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
     }
 }
 
-static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix)
+static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1703,7 +1729,7 @@ static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool c
         wxSize dim = dc.DeviceToLogicalRel(r.GetSize());
         CheckClipBox(dc, bmp,
                      pos.x, pos.y, dim.x, dim.y,
-                     r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight());
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
     }
     else
     {
@@ -1712,14 +1738,14 @@ static void TwoDevRegionsOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool c
                      dc.DeviceToLogicalY(r.GetTop()),
                      dc.DeviceToLogicalXRel(r.GetWidth()),
                      dc.DeviceToLogicalYRel(r.GetHeight()),
-                     r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight());
+                     r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
     }
 }
 
 static void TwoDevRegionsNonOverlapping(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1760,7 +1786,7 @@ static void TwoDevRegionsNonOverlapping(wxDC& dc, const wxBitmap& bmp, bool useT
 static void TwoDevRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, bool useTransformMatrix)
 {
 #if wxUSE_DC_TRANSFORM_MATRIX
-    if ( useTransformMatrix & !dc.CanUseTransformMatrix() )
+    if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
@@ -1809,7 +1835,7 @@ static void TwoDevRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, boo
 
 // Tests specific to wxGCDC
 #if wxUSE_GRAPHICS_CONTEXT
-static void InitialStateWithRotatedGCForDC(wxGCDC& dc, const wxBitmap& bmp)
+static void InitialStateWithRotatedGCForDC(wxGCDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Initial wxGCDC clipping box with rotated wxGraphicsContext.
     wxGraphicsContext* gc = dc.GetGraphicsContext();
@@ -1825,36 +1851,35 @@ static void InitialStateWithRotatedGCForDC(wxGCDC& dc, const wxBitmap& bmp)
     double x1, y1, x2, y2;
     double x, y;
     // Top-left corner
-    x = 0.0;
-    y = 0.0;
+    x = 0.0 - parentDcOrigin.x;
+    y = 0.0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = x;
     y1 = y;
     x2 = x;
     y2 = y;
     // Top-right corner
-    x = s_dcSize.GetWidth();
-    y = 0.0;
+    x = s_dcSize.GetWidth() - parentDcOrigin.x;
+    y = 0.0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
     x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
     // Bottom-right corner
-    x = s_dcSize.GetWidth();
-    y = s_dcSize.GetHeight();
+    x = s_dcSize.GetWidth() - parentDcOrigin.x;
+    y = s_dcSize.GetHeight() - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
     x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
     // Bottom-left corner
-    x = 0.0;
-    y = s_dcSize.GetHeight();
+    x = 0.0 - parentDcOrigin.x;
+    y = s_dcSize.GetHeight() - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     x1 = wxMin(x1, x);
     y1 = wxMin(y1, y);
-    x2 = wxMax(x2, x);
     y2 = wxMax(y2, y);
 
     clipX = wxRound(x1);
@@ -1877,42 +1902,42 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, wxPoint());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, wxPoint());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, wxPoint());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, wxPoint());
     }
 
     SECTION("OneOuterRegion")
@@ -1922,12 +1947,12 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, wxPoint());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, wxPoint());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -1937,17 +1962,17 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -1957,17 +1982,17 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneRegionRTL")
@@ -1977,12 +2002,12 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, wxPoint());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, wxPoint());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -1997,17 +2022,17 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionRTL")
@@ -2022,17 +2047,17 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneOuterDevRegion")
@@ -2047,47 +2072,47 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -2102,17 +2127,17 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
@@ -2122,47 +2147,47 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping (dc, bmp, true, false);
+        TwoDevRegionsOverlapping (dc, bmp, true, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -2189,50 +2214,53 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
 #if wxUSE_GRAPHICS_CONTEXT
 TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC mdc(bmp);
     mdc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     mdc.Clear();
+    mdc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGCDC dc(mdc);
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -2242,12 +2270,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -2257,17 +2285,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -2277,17 +2305,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionRTL")
@@ -2297,12 +2325,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -2317,17 +2345,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionRTL")
@@ -2342,17 +2370,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterDevRegion")
@@ -2367,47 +2395,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -2421,17 +2449,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
     }
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
@@ -2441,47 +2469,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, false);
+        TwoDevRegionsOverlapping(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -2506,7 +2534,7 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 
     SECTION("InitialStateWithRotatedGCForDC")
     {
-        InitialStateWithRotatedGCForDC(dc, bmp);
+        InitialStateWithRotatedGCForDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 }
 
@@ -2514,10 +2542,13 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
 #if wxUSE_GRAPHICS_GDIPLUS
 TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC mdc(bmp);
     mdc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     mdc.Clear();
+    mdc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetGDIPlusRenderer();
     REQUIRE(rend);
     wxGraphicsContext* ctx = rend->CreateContext(mdc);
@@ -2525,42 +2556,42 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -2570,12 +2601,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -2585,17 +2616,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -2605,17 +2636,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionRTL")
@@ -2625,12 +2656,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -2645,17 +2676,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionRTL")
@@ -2670,17 +2701,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterDevRegion")
@@ -2695,47 +2726,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -2750,67 +2781,68 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
+
     {
         OneDevRegionOverRotatedDC(dc);
     }
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, false);
+        TwoDevRegionsOverlapping(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -2835,7 +2867,7 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 
     SECTION("InitialStateWithRotatedGCForDC")
     {
-        InitialStateWithRotatedGCForDC(dc, bmp);
+        InitialStateWithRotatedGCForDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 }
 #endif // wxUSE_GRAPHICS_GDIPLUS
@@ -2843,10 +2875,13 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
 #if wxUSE_GRAPHICS_DIRECT2D
 TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC mdc(bmp);
     mdc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     mdc.Clear();
+    mdc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDirect2DRenderer();
     REQUIRE(rend);
     wxGraphicsContext* ctx = rend->CreateContext(mdc);
@@ -2854,42 +2889,42 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -2899,12 +2934,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -2914,17 +2949,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -2934,17 +2969,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionRTL")
@@ -2954,12 +2989,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -2974,17 +3009,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionRTL")
@@ -2999,17 +3034,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterDevRegion")
@@ -3024,46 +3059,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
+
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -3078,17 +3114,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
@@ -3098,47 +3134,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, false);
+        TwoDevRegionsOverlapping(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -3163,7 +3199,7 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 
     SECTION("InitialStateWithRotatedGCForDC")
     {
-        InitialStateWithRotatedGCForDC(dc, bmp);
+        InitialStateWithRotatedGCForDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 }
 #endif // wxUSE_GRAPHICS_DIRECT2D
@@ -3172,10 +3208,13 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
 #if wxUSE_CAIRO
 TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC mdc(bmp);
     mdc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     mdc.Clear();
+    mdc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetCairoRenderer();
     REQUIRE(rend);
     wxGraphicsContext* ctx = rend->CreateContext(mdc);
@@ -3183,42 +3222,42 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -3228,12 +3267,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -3243,17 +3282,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -3263,17 +3302,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionRTL")
@@ -3283,12 +3322,12 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -3303,17 +3342,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionRTL")
@@ -3328,17 +3367,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterDevRegion")
@@ -3353,47 +3392,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -3408,17 +3447,17 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
@@ -3428,47 +3467,47 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, false);
+        TwoDevRegionsOverlapping(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, mdc.GetDeviceOrigin());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -3493,7 +3532,7 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
 
     SECTION("InitialStateWithRotatedGCForDC")
     {
-        InitialStateWithRotatedGCForDC(dc, bmp);
+        InitialStateWithRotatedGCForDC(dc, bmp, mdc.GetDeviceOrigin());
     }
 }
 #endif // wxUSE_CAIRO
@@ -3510,42 +3549,42 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, wxPoint());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, wxPoint());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, wxPoint());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, wxPoint());
     }
 
     SECTION("OneOuterRegion")
@@ -3555,12 +3594,12 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, wxPoint());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, wxPoint());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -3570,17 +3609,17 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -3590,17 +3629,17 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneRegionRTL")
@@ -3610,12 +3649,12 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, wxPoint());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, wxPoint());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -3630,17 +3669,17 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionRTL")
@@ -3655,17 +3694,17 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneOuterDevRegion")
@@ -3680,47 +3719,47 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -3735,17 +3774,17 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
@@ -3755,47 +3794,47 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, false);
+        TwoDevRegionsOverlapping(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -3847,42 +3886,42 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("InitialState")
     {
-        InitialState(dc, bmp);
+        InitialState(dc, bmp, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC 1")
     {
-        InitialStateWithTransformedDC(dc, bmp, false, false);
+        InitialStateWithTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC 2")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, false);
+        InitialStateWithTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("InitialStateWithTransformedDC Transform Matrix")
     {
-        InitialStateWithTransformedDC(dc, bmp, true, true);
+        InitialStateWithTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("InitialStateWithRotatedDC")
     {
-        InitialStateWithRotatedDC(dc, bmp);
+        InitialStateWithRotatedDC(dc, bmp, wxPoint());
     }
 
     SECTION("SameRegionRepeatRotatedDC")
     {
-        SameRegionRepeatRotatedDC(dc);
+        SameRegionRepeatRotatedDC(dc, wxPoint());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(dc, bmp);
+        OneRegion(dc, bmp, wxPoint());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(dc, bmp);
+        OneLargeRegion(dc, bmp, wxPoint());
     }
 
     SECTION("OneOuterRegion")
@@ -3892,12 +3931,12 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(dc, bmp);
+        OneRegionNegDim(dc, bmp, wxPoint());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(dc, bmp);
+        OneRegionAndReset(dc, bmp, wxPoint());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -3907,17 +3946,17 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneRegionOverTransformedDC 1")
     {
-        OneRegionOverTransformedDC(dc, bmp, false, false);
+        OneRegionOverTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneRegionOverTransformedDC 2")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, false);
+        OneRegionOverTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneRegionOverTransformedDC Transform Matrix")
     {
-        OneRegionOverTransformedDC(dc, bmp, true, true);
+        OneRegionOverTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneRegionOverRotatedDC")
@@ -3927,17 +3966,17 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneRegionAndDCTransformation 1")
     {
-        OneRegionAndDCTransformation(dc, bmp, false, false);
+        OneRegionAndDCTransformation(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneRegionAndDCTransformation 2")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, false);
+        OneRegionAndDCTransformation(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneRegionAndDCTransformation Transform Matrix")
     {
-        OneRegionAndDCTransformation(dc, bmp, true, true);
+        OneRegionAndDCTransformation(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneRegionRTL")
@@ -3947,12 +3986,12 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(dc, bmp);
+        TwoRegionsOverlapping(dc, bmp, wxPoint());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(dc, bmp);
+        TwoRegionsOverlappingNegDim(dc, bmp, wxPoint());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -3967,17 +4006,17 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneDevRegion 1")
     {
-        OneDevRegion(dc, bmp, false, false);
+        OneDevRegion(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegion 2")
     {
-        OneDevRegion(dc, bmp, true, false);
+        OneDevRegion(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegion Transform Matrix")
     {
-        OneDevRegion(dc, bmp, true, true);
+        OneDevRegion(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionRTL")
@@ -3992,17 +4031,17 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneLargeDevRegion 1")
     {
-        OneLargeDevRegion(dc, bmp, false, false);
+        OneLargeDevRegion(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneLargeDevRegion 2")
     {
-        OneLargeDevRegion(dc, bmp, true, false);
+        OneLargeDevRegion(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneLargeDevRegion Transform Matrix")
     {
-        OneLargeDevRegion(dc, bmp, true, true);
+        OneLargeDevRegion(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneOuterDevRegion")
@@ -4017,47 +4056,47 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneDevRegionNegDim 1")
     {
-        OneDevRegionNegDim(dc, bmp, false, false);
+        OneDevRegionNegDim(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionNegDim 2")
     {
-        OneDevRegionNegDim(dc, bmp, true, false);
+        OneDevRegionNegDim(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionNegDim Transform Matrix")
     {
-        OneDevRegionNegDim(dc, bmp, true, true);
+        OneDevRegionNegDim(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect 1")
     {
-        OneDevRegionNonRect(dc, bmp, false, false);
+        OneDevRegionNonRect(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect 2")
     {
-        OneDevRegionNonRect(dc, bmp, true, false);
+        OneDevRegionNonRect(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionNonRect Transform Matrix")
     {
-        OneDevRegionNonRect(dc, bmp, true, true);
+        OneDevRegionNonRect(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset 1")
     {
-        OneDevRegionAndReset(dc, bmp, false, false);
+        OneDevRegionAndReset(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset 2")
     {
-        OneDevRegionAndReset(dc, bmp, true, false);
+        OneDevRegionAndReset(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndReset Transform Matrix")
     {
-        OneDevRegionAndReset(dc, bmp, true, true);
+        OneDevRegionAndReset(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionAndEmpty")
@@ -4072,17 +4111,17 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneDevRegionOverTransformedDC 1")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, false, false);
+        OneDevRegionOverTransformedDC(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionOverTransformedDC 2")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, false);
+        OneDevRegionOverTransformedDC(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionOverTransformedDC Transform Matrix")
     {
-        OneDevRegionOverTransformedDC(dc, bmp, true, true);
+        OneDevRegionOverTransformedDC(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("OneDevRegionOverRotatedDC")
@@ -4092,47 +4131,47 @@ TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 
     SECTION("OneDevRegionAndDCTransformation 1")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, false, false);
+        OneDevRegionAndDCTransformation(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndDCTransformation 2")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, false);
+        OneDevRegionAndDCTransformation(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("OneDevRegionAndDCTransformation Transform Matrix")
     {
-        OneDevRegionAndDCTransformation(dc, bmp, true, true);
+        OneDevRegionAndDCTransformation(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping 1")
     {
-        TwoDevRegionsOverlapping(dc, bmp, false, false);
+        TwoDevRegionsOverlapping(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping 2")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, false);
+        TwoDevRegionsOverlapping(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlapping Transform Matrix")
     {
-        TwoDevRegionsOverlapping(dc, bmp, true, true);
+        TwoDevRegionsOverlapping(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 1")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, false, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim 2")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, false, wxPoint());
     }
 
     SECTION("TwoDevRegionsOverlappingNegDim Transform Matrix")
     {
-        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true);
+        TwoDevRegionsOverlappingNegDim(dc, bmp, true, true, wxPoint());
     }
 
     SECTION("TwoDevRegionsNonOverlapping")
@@ -4191,30 +4230,19 @@ static void CheckClipPos(wxGraphicsContext* gc,
 }
 
 static void CheckClipBox(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp,
-                         int x, int y, int width, int height)
+                         int x, int y, int w, int h,
+                         int xPh, int yPh, int wPh, int hPh)
 {
-    CheckClipPos(gc.get(), x, y, width, height);
+    CheckClipPos(gc.get(), x, y, w, h);
 
-    if ( bmp.IsOk() )
+    if (bmp.IsOk())
     {
-        // We will examine pixels directly in the underlying bitmap
-        // so we need to get device coordinates of examined area.
-        wxGraphicsMatrix m = gc->GetTransform();
-        double xdev = x;
-        double ydev = y;
-        m.TransformPoint(&xdev, &ydev);
-        double wdev = width;
-        double hdev = height;
-        m.TransformDistance(&wdev, &hdev);
-
         // Update wxGraphicsContext contents.
         FlushGC(gc);
-#if wxUSE_IMAGE
         // We check whether diagonal corners
         // of the rectangular clipping box are actually
         // drawn at the edge of the clipping region.
-        CheckClipRect(bmp, wxRound(xdev), wxRound(ydev), wxRound(wdev), wxRound(hdev));
-#endif // wxUSE_IMAGE
+        CheckClipRect(bmp, xPh, yPh, wPh, hPh);
     }
 }
 
@@ -4244,14 +4272,15 @@ void ClearGC(wxGraphicsContext* gc)
 
 // Actual tests
 
-static void InitialState(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void InitialState(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Initial clipping box should be the same as the entire GC surface.
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    CheckClipBox(gc, bmp, 0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
+             0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
-static void InitialStateWithTransformedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void InitialStateWithTransformedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Initial clipping box with transformed GC.
     wxGraphicsMatrix m = gc->CreateMatrix();
@@ -4261,17 +4290,18 @@ static void InitialStateWithTransformedGC(wxScopedPtr<wxGraphicsContext>& gc, co
     gc->SetTransform(m);
     ClearGC(gc.get());
     m.Invert();
-    double x = 0;
-    double y = 0;
+    double x = 0 - parentDcOrigin.x;
+    double y = 0 - parentDcOrigin.y;
     m.TransformPoint(&x, &y);
     double w = s_dcSize.GetWidth();
     double h = s_dcSize.GetHeight();
     m.TransformDistance(&w, &h);
     CheckClipBox(gc, bmp,
-                 wxRound(x), wxRound(y), wxRound(w), wxRound(h));
+                 wxRound(x), wxRound(y), wxRound(w), wxRound(h),
+                 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
-static void OneRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void OneRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region inside DC area.
     const int x = 10;
@@ -4281,17 +4311,19 @@ static void OneRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
 
     gc->Clip(x, y, w, h);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, x, y, w, h);
+    CheckClipBox(gc, bmp, x, y, w, h,
+                 x + parentDcOrigin.x, y + parentDcOrigin.y, w, h);
 }
 
-static void OneLargeRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void OneLargeRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region larger then GC surface.
     // Final clipping box should be limited to the GC extents.
-    gc->Clip(-10, -20,
-             s_dcSize.GetWidth()+30, s_dcSize.GetHeight()+50);
+    gc->Clip(-20, -30,
+             s_dcSize.GetWidth()+40, s_dcSize.GetHeight()+60);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    CheckClipBox(gc, bmp, 0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
+             0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
 static void OneOuterRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
@@ -4300,10 +4332,11 @@ static void OneOuterRegion(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& b
     // Final clipping box should be empty.
     gc->Clip(-100, -80, 20, 40);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, 0, 0);
+    CheckClipBox(gc, bmp, 0, 0, 0, 0,
+             0, 0, 0, 0);
 }
 
-static void OneRegionNegDim(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void OneRegionNegDim(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region with negative sizes values.
     // Final clipping box should have standard positive size values.
@@ -4312,24 +4345,25 @@ static void OneRegionNegDim(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& 
     const int w = -80;
     const int h = -75;
     wxClipRect r1(x, y, w, h, 0);
-    wxRect r2(0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    wxRect r2(0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight());
     wxRect r = r1.Intersect(r2);
     REQUIRE( !r.IsEmpty() );
 
     gc->Clip(x, y, w, h);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(),
-                 r.GetWidth(), r.GetHeight());
+    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
+             r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
 }
 
-static void OneRegionAndReset(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void OneRegionAndReset(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region and next destroy it.
     // Final clipping box should be the same as GC surface.
     gc->Clip(10, 20, 80, 75);
     gc->ResetClip();
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
+    CheckClipBox(gc, bmp, 0 - parentDcOrigin.x, 0 - parentDcOrigin.y, s_dcSize.GetWidth(), s_dcSize.GetHeight(),
+                  0, 0, s_dcSize.GetWidth(), s_dcSize.GetHeight());
 }
 
 static void OneRegionAndEmpty(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
@@ -4339,10 +4373,11 @@ static void OneRegionAndEmpty(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap
     gc->Clip(10, 20, 80, 75);
     gc->Clip(0, 0, 0, 0);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, 0, 0);
+    CheckClipBox(gc, bmp, 0, 0, 0, 0,
+                 0, 0, 0, 0);
 }
 
-static void OneRegionWithTransformedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void OneRegionWithTransformedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region inside GC area
     // with applied some transformations.
@@ -4365,11 +4400,18 @@ static void OneRegionWithTransformedGC(wxScopedPtr<wxGraphicsContext>& gc, const
     wxRect r2(wxRound(x), wxRound(y), wxRound(w), wxRound(h));
     wxRect r = r1.Intersect(r2);
     REQUIRE( !r.IsEmpty() );
-    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(),
-                 r.GetWidth(), r.GetHeight());
+    wxGraphicsMatrix m2 = gc->GetTransform();
+    double xd = r.GetLeft();
+    double yd = r.GetTop();
+    m2.TransformPoint(&xd, &yd);
+    double wd = r.GetWidth();
+    double hd = r.GetHeight();
+    m2.TransformDistance(&wd, &hd);
+    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
+                 wxRound(xd + parentDcOrigin.x), wxRound(yd + parentDcOrigin.y), wxRound(wd), wxRound(hd));
 }
 
-static void OneRegionWithRotatedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void OneRegionWithRotatedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one rectangular clipping region for rotated graphics context.
     const double rotAngle = wxDegToRad(1.0);
@@ -4389,6 +4431,9 @@ static void OneRegionWithRotatedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxB
     wxBitmap bmpRef(s_dcSize);
     {
         wxMemoryDC memDC(bmpRef);
+        memDC.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+        memDC.Clear();
+        memDC.SetDeviceOrigin(parentDcOrigin.x, parentDcOrigin.y);
         wxGraphicsRenderer* rend = gc->GetRenderer();
         wxScopedPtr<wxGraphicsContext> gcRef(rend->CreateContext(memDC));
         gcRef->SetAntialiasMode(wxANTIALIAS_NONE);
@@ -4411,7 +4456,7 @@ static void OneRegionWithRotatedGC(wxScopedPtr<wxGraphicsContext>& gc, const wxB
     CheckClipShape(gc, bmp, bmpRef, 1);
 }
 
-static void TwoRegionsOverlapping(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void TwoRegionsOverlapping(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region and next another region (partially overlapping).
     // Final clipping box should be an intersection of these two boxes.
@@ -4423,11 +4468,11 @@ static void TwoRegionsOverlapping(wxScopedPtr<wxGraphicsContext>& gc, const wxBi
     gc->Clip(r1.x, r1.y, r1.width, r1.height);
     gc->Clip(r2.x, r2.y, r2.width, r2.height);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(),
-                 r.GetWidth(), r.GetHeight());
+    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
+             r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
 }
 
-static void TwoRegionsOverlappingNegDim(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void TwoRegionsOverlappingNegDim(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting one clipping region with negative size values
     // and next another region (partially overlapping).
@@ -4449,8 +4494,8 @@ static void TwoRegionsOverlappingNegDim(wxScopedPtr<wxGraphicsContext>& gc, cons
     gc->Clip(x1, y1, w1, h1);
     gc->Clip(x2, y2, w2, h2);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(),
-                 r.GetWidth(), r.GetHeight());
+    CheckClipBox(gc, bmp, r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
+                 r.GetLeft() + parentDcOrigin.x, r.GetTop() + parentDcOrigin.y, r.GetWidth(), r.GetHeight());
 }
 
 static void TwoRegionsNonOverlapping(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
@@ -4464,7 +4509,8 @@ static void TwoRegionsNonOverlapping(wxScopedPtr<wxGraphicsContext>& gc, const w
     gc->Clip(r1.x, r1.y, r1.width, r1.height);
     gc->Clip(r2.x, r2.y, r2.width, r2.height);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, 0, 0);
+    CheckClipBox(gc, bmp, 0, 0, 0, 0,
+                 0, 0, 0, 0);
 }
 
 static void TwoRegionsNonOverlappingNegDim(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
@@ -4488,10 +4534,11 @@ static void TwoRegionsNonOverlappingNegDim(wxScopedPtr<wxGraphicsContext>& gc, c
     gc->Clip(x1, y1, w1, h1);
     gc->Clip(x2, y2, w2, h2);
     ClearGC(gc.get());
-    CheckClipBox(gc, bmp, 0, 0, 0, 0);
+    CheckClipBox(gc, bmp, 0, 0, 0, 0,
+                 0, 0, 0, 0);
 }
 
-static void RegionsAndPushPopState(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp)
+static void RegionsAndPushPopState(wxScopedPtr<wxGraphicsContext>& gc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
     // Setting muliple rectangular clipping regions
     // for transformed wxGC and store/restore them.
@@ -4539,6 +4586,9 @@ static void RegionsAndPushPopState(wxScopedPtr<wxGraphicsContext>& gc, const wxB
     wxBitmap bmpRef(s_dcSize);
     {
         wxMemoryDC memDC(bmpRef);
+        memDC.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
+        memDC.Clear();
+        memDC.SetDeviceOrigin(parentDcOrigin.x, parentDcOrigin.y);
         wxGraphicsRenderer* rend = gc->GetRenderer();
         wxScopedPtr<wxGraphicsContext> gcRef(rend->CreateContext(memDC));
         gcRef->SetAntialiasMode(wxANTIALIAS_NONE);
@@ -4578,10 +4628,13 @@ static void RegionsAndPushPopState(wxScopedPtr<wxGraphicsContext>& gc, const wxB
 
 TEST_CASE("ClippingBoxTestCaseGC::DefaultRenderer", "[clip][gc][default]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC dc(bmp);
     dc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
+    dc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDefaultRenderer();
     REQUIRE(rend);
     wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
@@ -4591,22 +4644,22 @@ TEST_CASE("ClippingBoxTestCaseGC::DefaultRenderer", "[clip][gc][default]")
 
     SECTION("InitialState")
     {
-        InitialState(gc, bmp);
+        InitialState(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedGC")
     {
-        InitialStateWithTransformedGC(gc, bmp);
+        InitialStateWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(gc, bmp);
+        OneRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(gc, bmp);
+        OneLargeRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -4616,12 +4669,12 @@ TEST_CASE("ClippingBoxTestCaseGC::DefaultRenderer", "[clip][gc][default]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(gc, bmp);
+        OneRegionNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(gc, bmp);
+        OneRegionAndReset(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -4631,22 +4684,22 @@ TEST_CASE("ClippingBoxTestCaseGC::DefaultRenderer", "[clip][gc][default]")
 
     SECTION("OneRegionWithTransformedGC")
     {
-        OneRegionWithTransformedGC(gc, bmp);
+        OneRegionWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionWithRotatedGC")
     {
-        OneRegionWithRotatedGC(gc, bmp);
+        OneRegionWithRotatedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(gc, bmp);
+        TwoRegionsOverlapping(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(gc, bmp);
+        TwoRegionsOverlappingNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -4661,18 +4714,21 @@ TEST_CASE("ClippingBoxTestCaseGC::DefaultRenderer", "[clip][gc][default]")
 
     SECTION("RegionsAndPushPopState")
     {
-        RegionsAndPushPopState(gc, bmp);
+        RegionsAndPushPopState(gc, bmp, dc.GetDeviceOrigin());
     }
 }
 
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
+TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC dc(bmp);
     dc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
+    dc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetGDIPlusRenderer();
     REQUIRE(rend);
     wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
@@ -4682,22 +4738,22 @@ TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
 
     SECTION("InitialState")
     {
-        InitialState(gc, bmp);
+        InitialState(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedGC")
     {
-        InitialStateWithTransformedGC(gc, bmp);
+        InitialStateWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(gc, bmp);
+        OneRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(gc, bmp);
+        OneLargeRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -4707,12 +4763,12 @@ TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(gc, bmp);
+        OneRegionNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(gc, bmp);
+        OneRegionAndReset(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -4722,22 +4778,22 @@ TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
 
     SECTION("OneRegionWithTransformedGC")
     {
-        OneRegionWithTransformedGC(gc, bmp);
+        OneRegionWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionWithRotatedGC")
     {
-        OneRegionWithRotatedGC(gc, bmp);
+        OneRegionWithRotatedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(gc, bmp);
+        TwoRegionsOverlapping(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(gc, bmp);
+        TwoRegionsOverlappingNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -4752,18 +4808,21 @@ TEST_CASE("ClippingBoxTestCaseGC::GDI+Renderer", "[clip][gc][gdiplus")
 
     SECTION("RegionsAndPushPopState")
     {
-        RegionsAndPushPopState(gc, bmp);
+        RegionsAndPushPopState(gc, bmp, dc.GetDeviceOrigin());
     }
 }
 #endif // wxUSE_GRAPHICS_GDIPLUS
 
 #if wxUSE_GRAPHICS_DIRECT2D
-TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
+TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC dc(bmp);
     dc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
+    dc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDirect2DRenderer();
     REQUIRE(rend);
     wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
@@ -4773,22 +4832,22 @@ TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
 
     SECTION("InitialState")
     {
-        InitialState(gc, bmp);
+        InitialState(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedGC")
     {
-        InitialStateWithTransformedGC(gc, bmp);
+        InitialStateWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(gc, bmp);
+        OneRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(gc, bmp);
+        OneLargeRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -4798,12 +4857,12 @@ TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(gc, bmp);
+        OneRegionNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(gc, bmp);
+        OneRegionAndReset(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -4813,22 +4872,22 @@ TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
 
     SECTION("OneRegionWithTransformedGC")
     {
-        OneRegionWithTransformedGC(gc, bmp);
+        OneRegionWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionWithRotatedGC")
     {
-        OneRegionWithRotatedGC(gc, bmp);
+        OneRegionWithRotatedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(gc, bmp);
+        TwoRegionsOverlapping(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(gc, bmp);
+        TwoRegionsOverlappingNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -4843,7 +4902,7 @@ TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
 
     SECTION("RegionsAndPushPopState")
     {
-        RegionsAndPushPopState(gc, bmp);
+        RegionsAndPushPopState(gc, bmp, dc.GetDeviceOrigin());
     }
 }
 #endif // wxUSE_GRAPHICS_DIRECT2D
@@ -4852,10 +4911,13 @@ TEST_CASE("ClippingBoxTestCaseGC::Direct2DRenderer", "[clip][gc][direct2d")
 #if wxUSE_CAIRO
 TEST_CASE("ClippingBoxTestCaseGC::CairoRenderer", "[clip][gc][cairo]")
 {
+    wxPoint parentDcDevOrigin = GENERATE(wxPoint(0, 0), wxPoint(10, 20));
+
     wxBitmap bmp(s_dcSize);
     wxMemoryDC dc(bmp);
     dc.SetBackground(wxBrush(s_bgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
+    dc.SetDeviceOrigin(parentDcDevOrigin.x, parentDcDevOrigin.y);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetCairoRenderer();
     REQUIRE(rend);
     wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
@@ -4865,22 +4927,22 @@ TEST_CASE("ClippingBoxTestCaseGC::CairoRenderer", "[clip][gc][cairo]")
 
     SECTION("InitialState")
     {
-        InitialState(gc, bmp);
+        InitialState(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("InitialStateWithTransformedGC")
     {
-        InitialStateWithTransformedGC(gc, bmp);
+        InitialStateWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegion")
     {
-        OneRegion(gc, bmp);
+        OneRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneLargeRegion")
     {
-        OneLargeRegion(gc, bmp);
+        OneLargeRegion(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneOuterRegion")
@@ -4890,12 +4952,12 @@ TEST_CASE("ClippingBoxTestCaseGC::CairoRenderer", "[clip][gc][cairo]")
 
     SECTION("OneRegionNegDim")
     {
-        OneRegionNegDim(gc, bmp);
+        OneRegionNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndReset")
     {
-        OneRegionAndReset(gc, bmp);
+        OneRegionAndReset(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionAndEmpty")
@@ -4905,22 +4967,22 @@ TEST_CASE("ClippingBoxTestCaseGC::CairoRenderer", "[clip][gc][cairo]")
 
     SECTION("OneRegionWithTransformedGC")
     {
-        OneRegionWithTransformedGC(gc, bmp);
+        OneRegionWithTransformedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("OneRegionWithRotatedGC")
     {
-        OneRegionWithRotatedGC(gc, bmp);
+        OneRegionWithRotatedGC(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlapping")
     {
-        TwoRegionsOverlapping(gc, bmp);
+        TwoRegionsOverlapping(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsOverlappingNegDim")
     {
-        TwoRegionsOverlappingNegDim(gc, bmp);
+        TwoRegionsOverlappingNegDim(gc, bmp, dc.GetDeviceOrigin());
     }
 
     SECTION("TwoRegionsNonOverlapping")
@@ -4935,7 +4997,7 @@ TEST_CASE("ClippingBoxTestCaseGC::CairoRenderer", "[clip][gc][cairo]")
 
     SECTION("RegionsAndPushPopState")
     {
-        RegionsAndPushPopState(gc, bmp);
+        RegionsAndPushPopState(gc, bmp, dc.GetDeviceOrigin());
     }
 }
 #endif // wxUSE_GRAPHICS_CAIRO

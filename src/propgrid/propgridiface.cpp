@@ -757,7 +757,7 @@ wxVariant wxPropertyGridInterface::GetPropertyValue(wxPGPropArg id)
 // String is different from others.
 wxString wxPropertyGridInterface::GetPropertyValueAsString( wxPGPropArg id ) const
 {
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
+    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxString())
     return p->GetValueAsString(wxPG_FULL_VALUE);
 }
 

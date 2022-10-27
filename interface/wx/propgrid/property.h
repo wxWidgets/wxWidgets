@@ -817,7 +817,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
             // use wxPG_LABEL for label and name
             MyProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name = wxPG_LABEL,
-                        const wxString& value = wxEmptyString )
+                        const wxString& value = wxString() )
                 : wxPGProperty(label, name)
             {
                 // m_value is wxVariant
@@ -920,7 +920,7 @@ public:
         Converts text into wxVariant value appropriate for this property.
 
         @param variant
-            On function entry this is the old value (should not be wxNullVariant
+            On function entry this is the old value (should not be null wxVariant
             in normal cases). Translated value must be assigned back to it.
 
         @param text
@@ -949,7 +949,7 @@ public:
         appropriate for this property.
 
         @param variant
-            On function entry this is the old value (should not be wxNullVariant
+            On function entry this is the old value (should not be null wxVariant
             in normal cases). Translated value must be assigned back to it.
         @param number
             Integer to be translated into variant.

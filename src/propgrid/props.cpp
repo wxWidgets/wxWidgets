@@ -390,7 +390,7 @@ wxString wxIntProperty::ValueToString( wxVariant& value,
     }
 #endif
 
-    return wxEmptyString;
+    return wxString();
 }
 
 bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
@@ -680,7 +680,7 @@ wxString wxUIntProperty::ValueToString(wxVariant& value, int argFlags) const
         return wxString::Format(fmt, ull.GetValue());
     }
 #endif
-    return wxEmptyString;
+    return wxString();
 }
 
 bool wxUIntProperty::StringToValue(wxVariant& variant, const wxString& text, int argFlags) const
@@ -1107,7 +1107,7 @@ wxString wxBoolProperty::ValueToString( wxVariant& value,
         else
         {
             if ( argFlags & wxPG_UNEDITABLE_COMPOSITE_FRAGMENT )
-                return wxEmptyString;
+                return wxString();
 
             wxString notFmt;
             if ( wxPGGlobalVars->m_autoGetTranslation )
@@ -1309,7 +1309,7 @@ wxString wxEnumProperty::ValueToString( wxVariant& value,
 
     int index = m_choices.Index(value.GetLong());
     if ( index < 0 )
-        return wxEmptyString;
+        return wxString();
 
     return m_choices.GetLabel(index);
 }
@@ -2091,11 +2091,11 @@ wxString wxFileProperty::ValueToString( wxVariant& value,
     wxFileName filename = value.GetString();
 
     if ( !filename.HasName() )
-        return wxEmptyString;
+        return wxString();
 
     wxString fullName = filename.GetFullName();
     if ( fullName.empty() )
-        return wxEmptyString;
+        return wxString();
 
     if ( argFlags & wxPG_FULL_VALUE )
     {
@@ -2561,9 +2561,9 @@ void wxPGArrayEditorDialog::OnEndLabelEdit(wxListEvent& event)
             // Editable list box doesn't really respect Veto(), but
             // it recognizes if no text was added, so we simulate
             // Veto() using it.
-            event.m_item.SetText(wxEmptyString);
+            event.m_item.SetText(wxString());
             m_elb->GetListCtrl()->SetItemText(m_itemPendingAtIndex,
-                                              wxEmptyString);
+                                              wxString());
 
             event.Veto();
         }
@@ -2813,7 +2813,7 @@ bool wxArrayStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
         strEdDlg->SetCustomButton(m_customBtnText, this);
 
     dlg->SetDialogValue( value );
-    dlg->Create(pg->GetPanel(), wxEmptyString,
+    dlg->Create(pg->GetPanel(), wxString(),
                 m_dlgTitle.empty() ? GetLabel() : m_dlgTitle, m_dlgStyle);
 
     if ( !wxPropertyGrid::IsSmallScreen() )
@@ -2912,7 +2912,7 @@ bool wxPGInDialogValidator::DoValidate( wxPropertyGrid* propGrid,
     if ( !tc )
     {
         {
-            tc = new wxTextCtrl( propGrid, wxID_ANY, wxEmptyString,
+            tc = new wxTextCtrl( propGrid, wxID_ANY, wxString(),
                                  wxPoint(30000,30000));
             tc->Hide();
         }

@@ -561,11 +561,35 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
                        GetName(),
                        rect->x, rect->y, rect->width, rect->height);
             widget->update( wxQtConvertRect( *rect ));
+
+            wxWindowList& children = GetChildren();
+            if ( !children.empty() )
+            {
+                wxRect parentRect = *rect;
+                ClientToScreen(&parentRect.x, &parentRect.y);
+
+                for ( auto childWin : children )
+                {
+                    wxRect childRect = childWin->GetScreenRect();
+                    childRect.Intersect(parentRect);
+                    if ( !childRect.IsEmpty() )
+                    {
+                        childWin->ScreenToClient(&childRect.x, &childRect.y);
+                        childWin->RefreshRect(childRect);
+                    }
+                }
+            }
         }
         else
         {
             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s"), GetName());
             widget->update();
+
+            wxWindowList& children = GetChildren();
+            for ( auto childWin : children )
+            {
+                childWin->Refresh();
+            }
         }
     }
 }

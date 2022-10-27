@@ -1007,7 +1007,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 #endif
     cb->Create(ctrlParent,
                wxID_ANY,
-               wxEmptyString,
+               wxString(),
                po,
                si,
                labels,
@@ -1054,9 +1054,9 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 
 void wxPGChoiceEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
-    wxASSERT( ctrl );
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
+
     int ind = property->GetChoiceSelection();
     cb->SetSelection(ind);
 }
@@ -1070,9 +1070,8 @@ wxPGWindowList wxPGChoiceEditor::CreateControls( wxPropertyGrid* propGrid, wxPGP
 
 int wxPGChoiceEditor::InsertItem( wxWindow* ctrl, const wxString& label, int index ) const
 {
-    wxASSERT( ctrl );
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxCHECK_MSG(cb, wxNOT_FOUND, "Only wxOwnerDrawnComboBox editor can be updated");
 
     if (index < 0)
         index = cb->GetCount();
@@ -1083,18 +1082,16 @@ int wxPGChoiceEditor::InsertItem( wxWindow* ctrl, const wxString& label, int ind
 
 void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 {
-    wxASSERT( ctrl );
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
     cb->Delete(index);
 }
 
 void wxPGChoiceEditor::SetItems(wxWindow* ctrl, const wxArrayString& labels) const
 {
-    wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
-    wxASSERT( cb );
+    wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
     cb->Set(labels);
 }
@@ -1160,8 +1157,9 @@ void wxPGChoiceEditor::SetControlStringValue( wxPGProperty* property,
                                               wxWindow* ctrl,
                                               const wxString& txt ) const
 {
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb );
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
+
     property->GetGrid()->SetupTextCtrlValue(txt);
     cb->SetValue(txt);
 }
@@ -1169,8 +1167,9 @@ void wxPGChoiceEditor::SetControlStringValue( wxPGProperty* property,
 
 void wxPGChoiceEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), wxWindow* ctrl, int value ) const
 {
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb );
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
+
     cb->SetSelection(value);
 }
 
@@ -1178,7 +1177,8 @@ void wxPGChoiceEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), wxW
 void wxPGChoiceEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property),
                                               wxWindow* ctrl ) const
 {
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
+    wxOwnerDrawnComboBox* cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox);
+    wxCHECK_RET(cb, "Only wxOwnerDrawnComboBox editor can be updated");
 
     if ( cb->HasFlag(wxCB_READONLY) )
         cb->SetSelection(-1);
@@ -1673,8 +1673,8 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
 void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
                                         wxWindow* ctrl ) const
 {
-    wxSimpleCheckBox* cb = (wxSimpleCheckBox*) ctrl;
-    wxASSERT( cb );
+    wxSimpleCheckBox* cb = wxDynamicCast(ctrl, wxSimpleCheckBox);
+    wxCHECK_RET(cb, "Only wxSimpleCheckBox editor can be updated");
 
     if ( !property->IsValueUnspecified() )
         cb->m_state = property->GetChoiceSelection();

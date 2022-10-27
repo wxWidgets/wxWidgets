@@ -199,7 +199,7 @@ public:
     // If toolbar is used, it is highly recommended that the pages are
     // added when the toolbar is not turned off using window style flag
     // switching.
-    wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
+    wxPropertyGridPage* AddPage( const wxString& label = wxString(),
                                  const wxBitmapBundle& bmp = wxBitmapBundle(),
                                  wxPropertyGridPage* pageObj = nullptr )
     {
@@ -590,10 +590,6 @@ protected:
 
     // Initializes some members.
     void Init2( int style );
-
-/*#ifdef __WXMSW__
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
-#endif*/
 
     virtual bool ProcessEvent( wxEvent& event ) override;
 

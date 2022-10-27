@@ -479,17 +479,14 @@ void wxPropertyGrid::Init2()
 
 wxPropertyGrid::~wxPropertyGrid()
 {
-    size_t i;
-
 #if wxUSE_THREADS
     wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
 
     //
     // Remove grid and property pointers from live wxPropertyGridEvents.
-    for ( i=0; i<m_liveEvents.size(); i++ )
+    for ( wxPropertyGridEvent* evt : m_liveEvents )
     {
-        wxPropertyGridEvent* evt = m_liveEvents[i];
         evt->SetPropertyGrid(nullptr);
         evt->SetProperty(nullptr);
     }
@@ -562,11 +559,9 @@ wxPropertyGrid::~wxPropertyGrid()
         delete m_pState;
 
     // Delete common value records
-    for ( i=0; i<m_commonValues.size(); i++ )
+    for ( wxPGCommonValue* v : m_commonValues )
     {
-        // Use temporary variable to work around possible strange VC6 (asserts because m_size is zero)
-        wxPGCommonValue* value = m_commonValues[i];
-        delete value;
+        delete v;
     }
 #if WXWIN_COMPATIBILITY_3_0
     wxASSERT( gs_deletedEditorObjects[this]->empty() );
@@ -2162,9 +2157,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxVector<int> splitterPos;
     splitterPos.reserve(colCount);
     int sx = x;
-    for (wxVector<int>::const_iterator cit = colWidths.begin(); cit != colWidths.end(); ++cit)
+    for ( int cw : colWidths )
     {
-        sx += *cit;
+        sx += cw;
         splitterPos.push_back(sx);
     }
 
@@ -3154,7 +3149,7 @@ void wxPropertyGrid::DoHidePropertyError( wxPGProperty* WXUNUSED(property) )
         wxStatusBar* pStatusBar = GetStatusBar();
         if ( pStatusBar )
         {
-            pStatusBar->SetStatusText(wxEmptyString);
+            pStatusBar->SetStatusText(wxString());
             return;
         }
     }
@@ -3321,7 +3316,7 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
         {
             wxStatusBar* pStatusBar = GetStatusBar();
             if ( pStatusBar )
-                pStatusBar->SetStatusText(wxEmptyString);
+                pStatusBar->SetStatusText(wxString());
         }
     }
 #endif
@@ -3462,7 +3457,7 @@ wxVariant wxPropertyGrid::GetUncommittedPropertyValue()
     wxPGProperty* prop = GetSelectedProperty();
 
     if ( !prop )
-        return wxNullVariant;
+        return wxVariant();
 
     wxTextCtrl* tc = GetEditorTextCtrl();
     wxVariant value = prop->GetValue();
@@ -3857,7 +3852,7 @@ wxPropertyGrid::GetUnspecifiedValueText( int argFlags ) const
          !(argFlags & wxPG_EDITABLE_VALUE) )
         return ua.GetText();
 
-    return wxEmptyString;
+    return wxString();
 }
 
 // -----------------------------------------------------------------------
@@ -4333,7 +4328,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             {
                 // Clear help box - but only if it was written
                 // by us at previous time.
-                statusbar->SetStatusText(wxEmptyString);
+                statusbar->SetStatusText(wxString());
                 m_iFlags &= ~(wxPG_FL_STRING_IN_STATUSBAR);
             }
         }
@@ -5087,7 +5082,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             tipString = m_propHover->GetValueAsString();
                             if ( GetColumnCount() <= 2 )
                             {
-                                wxString unitsString = m_propHover->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
+                                wxString unitsString = m_propHover->GetAttribute(wxPG_ATTR_UNITS, wxString());
                                 if ( !unitsString.empty() )
                                     tipString = wxString::Format(wxS("%s %s"), tipString, unitsString );
                             }
@@ -5107,12 +5102,12 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                     }
                     else
                     {
-                        SetToolTip(wxEmptyString);
+                        SetToolTip(wxString());
                     }
                 }
                 else
                 {
-                    SetToolTip(wxEmptyString);
+                    SetToolTip(wxString());
                 }
             }
         }
@@ -6084,9 +6079,7 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
     if ( !noDefCheck && wxPGGlobalVars->m_mapEditorClasses.empty() )
         RegisterDefaultEditors();
 
-    wxString name = editorName;
-    if ( name.empty() )
-        name = editorClass->GetName();
+    wxString name = editorName.empty() ? editorClass->GetName() : editorName;
 
     // Existing editor under this name?
     wxPGHashMapS2P::iterator vt_it = wxPGGlobalVars->m_mapEditorClasses.find(name);

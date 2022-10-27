@@ -257,7 +257,7 @@ public:
                 added when the toolbar is not turned off using window style flag
                 switching. Otherwise toolbar buttons might not be added properly.
     */
-    wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
+    wxPropertyGridPage* AddPage( const wxString& label = wxString(),
                                  const wxBitmapBundle& bmp = wxBitmapBundle(),
                                  wxPropertyGridPage* pageObj = nullptr );
 

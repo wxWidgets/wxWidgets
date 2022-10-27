@@ -93,13 +93,13 @@ jobs:
           runner: macos-11
           arch: x86_64
           configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
+          configure_env: PKG_CONFIG_LIBDIR=/dev/null
           xcode_sdk: iphonesimulator
           skip_samples: true
           skip_testing: true
           allow_warnings: true
 
     env:
-      wxCONFIGURE_FLAGS: --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
       wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
@@ -160,7 +160,7 @@ jobs:
 
     - name: Configuring
       run: |
-        wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+        wxCONFIGURE_OPTIONS="--disable-optimise --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}"
 
         if [ -n "${{ matrix.xcode_sdk }}" ]; then
           sdk_path=`xcrun --sdk ${{ matrix.xcode_sdk }} --show-sdk-path`
@@ -172,9 +172,9 @@ jobs:
           wxASAN_CXXFLAGS=$wxASAN_CFLAGS
           wxASAN_LDFLAGS="-fsanitize=address"
 
-          ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+          ${{ matrix.configure_env }} ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
         else
-          ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+          ${{ matrix.configure_env }} ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
         fi
         if [ -n "$rc" ]; then
           echo '*** Configuring failed, contents of config.log follows: ***'

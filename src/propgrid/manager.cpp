@@ -412,10 +412,9 @@ public:
 
     virtual ~wxPGHeaderCtrl()
     {
-        for (wxVector<wxHeaderColumnSimple*>::const_iterator it = m_columns.begin();
-             it != m_columns.end(); ++it)
+        for ( wxHeaderColumnSimple* c : m_columns )
         {
-            delete *it;
+            delete c;
         }
     }
 
@@ -463,7 +462,7 @@ private:
     {
         while ( m_columns.size() < count )
         {
-            wxHeaderColumnSimple* colInfo = new wxHeaderColumnSimple(wxEmptyString);
+            wxHeaderColumnSimple* colInfo = new wxHeaderColumnSimple(wxString());
             m_columns.push_back(colInfo);
         }
     }
@@ -1845,7 +1844,7 @@ void wxPropertyGridManager::RecreateControls()
         {
             m_pTxtHelpCaption = new wxStaticText(this,
                                                  wxID_ANY,
-                                                 wxEmptyString,
+                                                 wxString(),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
                                                  wxALIGN_LEFT|wxST_NO_AUTORESIZE);
@@ -1856,7 +1855,7 @@ void wxPropertyGridManager::RecreateControls()
         {
             m_pTxtHelpContent = new wxStaticText(this,
                                                  wxID_ANY,
-                                                 wxEmptyString,
+                                                 wxString(),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
                                                  wxALIGN_LEFT|wxST_NO_AUTORESIZE);
@@ -2016,7 +2015,7 @@ wxVariant wxPropertyGridManager::GetEditableStateItem( const wxString& name ) co
     {
         return (long) GetDescBoxHeight();
     }
-    return wxNullVariant;
+    return wxVariant();
 }
 
 // -----------------------------------------------------------------------
@@ -2050,7 +2049,7 @@ void wxPropertyGridManager::SetDescribedProperty( wxPGProperty* p )
         }
         else
         {
-            SetDescription( wxEmptyString, wxEmptyString );
+            SetDescription( wxString(), wxString() );
         }
     }
 }
@@ -2065,9 +2064,6 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
     }
     else
     {
-        wxClientDC dc(this);
-        dc.SetFont(m_pPropGrid->GetFont());
-
         int highest = 0;
 
         for ( size_t i = 0; i < GetPageCount(); i++ )
@@ -2096,9 +2092,6 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
 
     if (page < (int) GetPageCount())
     {
-        wxClientDC dc(this);
-        dc.SetFont(m_pPropGrid->GetFont());
-
         int maxW = m_pState->GetColumnFitWidth(m_arrPages[page]->DoGetRoot(), 0, subProps );
         maxW += m_pPropGrid->GetMarginWidth();
         SetPageSplitterPosition( page, maxW );

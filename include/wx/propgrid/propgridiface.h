@@ -331,11 +331,11 @@ public:
                                                 wxPG_ITERATE_HIDDEN |
                                                 wxPG_ITERATE_CATEGORIES) const;
 
-    // Returns value of given attribute. If none found, returns wxNullVariant.
+    // Returns value of given attribute. If none found, returns null wxVariant.
     wxVariant GetPropertyAttribute( wxPGPropArg id,
                                     const wxString& attrName ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullVariant)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxVariant())
         return p->GetAttribute(attrName);
     }
 
@@ -378,7 +378,7 @@ public:
     // Returns help string associated with a property.
     wxString GetPropertyHelpString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxString())
         return p->GetHelpString();
     }
 
@@ -421,7 +421,7 @@ public:
 
     // Returns value as wxVariant. To get wxObject pointer from it,
     // you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.
-    // If property value is unspecified, wxNullVariant is returned.
+    // If property value is unspecified, null wxVariant is returned.
     wxVariant GetPropertyValue(wxPGPropArg id);
 
     wxString GetPropertyValueAsString( wxPGPropArg id ) const;
@@ -456,7 +456,7 @@ public:
     // Use wxPG_INC_ATTRIBUTES to include property attributes as well.
     // Each attribute will be stored as list variant named
     // "@<propname>@attr."
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
+    wxVariant GetPropertyValues( const wxString& listname = wxString(),
         wxPGProperty* baseparent = nullptr, long flags = 0 ) const
     {
         return m_pState->DoGetPropertyValues(listname, baseparent, flags);
@@ -691,7 +691,7 @@ public:
     // value - Value of attribute.
     // argFlags - Optional. Use wxPG_RECURSE to set the attribute to child
     //   properties recursively.
-    // Setting attribute's value to wxNullVariant will simply remove it
+    // Setting attribute's value to null wxVariant will simply remove it
     // from property's set of attributes.
     void SetPropertyAttribute( wxPGPropArg id,
                                const wxString& attrName,
@@ -756,7 +756,7 @@ public:
     // You can use wxPG_LABEL as text to use default text for column.
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
+                          const wxString& text = wxString(),
                           const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
@@ -1061,7 +1061,7 @@ protected:
     virtual wxVariant GetEditableStateItem( const wxString& name ) const
     {
         wxUnusedVar(name);
-        return wxNullVariant;
+        return wxVariant();
     }
 
     // Returns page state data for given (sub) page (-1 means current page).

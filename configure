@@ -25188,15 +25188,6 @@ $as_echo "no" >&6; }
 
 fi
 
-if test "$build" != "$host"; then
-
-
-                if test -z "$PKG_CONFIG_LIBDIR"; then
-        PKG_CONFIG_LIBDIR=/dev/null
-        export PKG_CONFIG_LIBDIR
-    fi
-fi
-
 
 
 if test "$wxUSE_REGEX" != "no"; then
