@@ -101,7 +101,7 @@ private:
 enum
 {
     // menu items
-    Sound_SelectFile = wxID_HIGHEST + 1,
+    Sound_SelectFile = wxID_HIGHEST,
 #ifdef __WXMSW__
     Sound_SelectResource,
 #endif // __WXMSW__

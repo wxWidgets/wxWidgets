@@ -54,7 +54,7 @@ class MyFrame : public wxFrame
 {
     enum
     {
-        ID_CreateTree = wxID_HIGHEST+1,
+        ID_CreateTree = wxID_HIGHEST,
         ID_CreateGrid,
         ID_CreateText,
         ID_CreateHTML,
@@ -260,7 +260,7 @@ class SettingsPanel : public wxPanel
 {
     enum
     {
-        ID_PaneBorderSize = wxID_HIGHEST+1,
+        ID_PaneBorderSize = wxID_HIGHEST,
         ID_SashSize,
         ID_CaptionSize,
         ID_BackgroundColor,

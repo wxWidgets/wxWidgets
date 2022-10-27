@@ -81,7 +81,7 @@ enum
 {
     Pyramid_Quit = wxID_EXIT,
     Pyramid_About = wxID_ABOUT,
-    Pyramid_LogW = wxID_HIGHEST + 10
+    Pyramid_LogW = wxID_HIGHEST
 };
 
 #endif // PYRSAMLE_H

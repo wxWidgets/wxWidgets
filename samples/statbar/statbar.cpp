@@ -198,7 +198,7 @@ enum
     StatusBar_Quit = wxID_EXIT,
     StatusBar_About = wxID_ABOUT,
 
-    StatusBar_SetFields = wxID_HIGHEST+1,
+    StatusBar_SetFields = wxID_HIGHEST,
     StatusBar_SetField,
     StatusBar_SetText,
     StatusBar_PushText,

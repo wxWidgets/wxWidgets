@@ -267,7 +267,7 @@ enum
     Font_Quit = wxID_EXIT,
     Font_About = wxID_ABOUT,
 
-    Font_ViewMsg = wxID_HIGHEST+1,
+    Font_ViewMsg = wxID_HIGHEST,
     Font_TestTextValue,
 
     Font_IncSize,

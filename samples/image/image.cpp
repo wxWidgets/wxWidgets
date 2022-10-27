@@ -124,7 +124,7 @@ private:
 
 enum
 {
-    ID_ROTATE_LEFT = wxID_HIGHEST+1,
+    ID_ROTATE_LEFT = wxID_HIGHEST,
     ID_ROTATE_RIGHT,
     ID_RESIZE,
     ID_ZOOM_x2,

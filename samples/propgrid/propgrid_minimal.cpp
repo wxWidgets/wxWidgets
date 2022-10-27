@@ -28,7 +28,7 @@ private:
 
 enum
 {
-    ID_ACTION = wxID_HIGHEST+1
+    ID_ACTION = wxID_HIGHEST
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)

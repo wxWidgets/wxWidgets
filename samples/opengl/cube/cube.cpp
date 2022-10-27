@@ -41,7 +41,7 @@
 // control ids
 enum
 {
-    SpinTimer = wxID_HIGHEST + 1
+    SpinTimer = wxID_HIGHEST
 };
 
 // ----------------------------------------------------------------------------

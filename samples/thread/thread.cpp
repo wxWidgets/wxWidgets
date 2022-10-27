@@ -195,7 +195,7 @@ enum
 
     THREAD_SHOWCPUS,
 
-    WORKER_EVENT = wxID_HIGHEST+1,   // this one gets sent from MyWorkerThread
+    WORKER_EVENT = wxID_HIGHEST,   // this one gets sent from MyWorkerThread
     GUITHREAD_EVENT                  // this one gets sent from MyGUIThread
 };
 

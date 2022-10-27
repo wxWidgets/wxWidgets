@@ -49,7 +49,7 @@ public:
 
     enum
     {
-        ID_CIRCLE = wxID_HIGHEST + 1,
+        ID_CIRCLE = wxID_HIGHEST,
         ID_CROSS,
         ID_TRIANGLE,
         ID_SQUARE,
