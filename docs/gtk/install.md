@@ -194,9 +194,6 @@ Some other general compilation options:
    Do not optimise the code. Can be useful for debugging but shouldn't be used
    for production builds.
 
- * `--disable-unicode` \n
-   Disable Unicode support. Not recommended.
-
  * `--enable-no_rtti` \n
    Enable compilation without creation of C++ RTTI information in object files.
    This will speed-up compilation and reduce binary size.
