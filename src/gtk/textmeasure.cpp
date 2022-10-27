@@ -124,14 +124,7 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
     }
 
     // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, GetFont());
-    if ( !dataUTF8 && !string.empty() )
-    {
-        // hardly ideal, but what else can we do if conversion failed?
-        wxLogLastError(wxT("GetTextExtent"));
-        return;
-    }
-    pango_layout_set_text(m_layout, dataUTF8, -1);
+    pango_layout_set_text(m_layout, string.utf8_str(), -1);
 
     if ( m_dc )
     {
@@ -170,15 +163,7 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
         return wxTextMeasureBase::DoGetPartialTextExtents(text, widths, scaleX);
 
     // Set layout's text
-    const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(text, GetFont());
-    if ( !dataUTF8 )
-    {
-        // hardly ideal, but what else can we do if conversion failed?
-        wxLogLastError(wxT("GetPartialTextExtents"));
-        return false;
-    }
-
-    pango_layout_set_text(m_layout, dataUTF8, -1);
+    pango_layout_set_text(m_layout, text.utf8_str(), -1);
 
     // Calculate the position of each character based on the widths of
     // the previous characters

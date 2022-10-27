@@ -36,13 +36,6 @@ class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
-// Some Unicode <-> UTF8 macros stolen from GTK
-// ----------------------------------------------------------------------------
-
-#define wxGTK_CONV(s) wxConvUTF8.cWX2MB(s)
-#define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX(s)
-
-// ----------------------------------------------------------------------------
 // we maintain a hash table which contains the mapping from Widget to wxWindow
 // corresponding to the window for this widget
 // ----------------------------------------------------------------------------

@@ -192,7 +192,7 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     GtkMessageType type;
     if ( wxGTKImpl::ConvertMessageTypeFromWX(flags, &type) )
         gtk_info_bar_set_message_type(GTK_INFO_BAR(m_widget), type);
-    gtk_label_set_text(GTK_LABEL(m_impl->m_label), wxGTK_CONV(msg));
+    gtk_label_set_text(GTK_LABEL(m_impl->m_label), msg.utf8_str());
     gtk_label_set_line_wrap(GTK_LABEL(m_impl->m_label), TRUE );
 #if GTK_CHECK_VERSION(2,10,0)
     if( wx_is_at_least_gtk2( 10 ) )
@@ -234,9 +234,9 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
 
     GtkWidget* button = gtk_info_bar_add_button(GTK_INFO_BAR(m_widget),
 #ifdef __WXGTK4__
-        wxGTK_CONV(label.empty() ? wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)) : label),
+        (label.empty() ? wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)) : label).utf8_str(),
 #else
-        label.empty() ? wxGetStockGtkID(btnid) : static_cast<const char*>(wxGTK_CONV(label)),
+        label.empty() ? wxGetStockGtkID(btnid) : static_cast<const char*>(label.utf8_str()),
 #endif
         btnid);
 

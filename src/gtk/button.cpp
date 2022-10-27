@@ -268,7 +268,7 @@ void wxButton::SetLabel( const wxString &lbl )
     // so "use-underline" GtkButton property remained unset
     gtk_button_set_use_underline(GTK_BUTTON(m_widget), TRUE);
     const wxString labelGTK = GTKConvertMnemonics(label);
-    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
+    gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
 #ifndef __WXGTK4__
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);

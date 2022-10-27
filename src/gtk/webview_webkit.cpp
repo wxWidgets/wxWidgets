@@ -576,7 +576,7 @@ void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 
 void wxWebViewWebKit::LoadURL(const wxString& url)
 {
-    webkit_web_view_load_uri(m_web_view, wxGTK_CONV(url));
+    webkit_web_view_load_uri(m_web_view, url.utf8_str());
 }
 
 
@@ -986,7 +986,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
     if(newSearch)
     {
         //Initially we mark the matches to know how many we have
-        m_findCount = webkit_web_view_mark_text_matches(m_web_view, wxGTK_CONV(text), matchCase, 0);
+        m_findCount = webkit_web_view_mark_text_matches(m_web_view, text.utf8_str(), matchCase, 0);
         //In this case we return early to match IE behaviour
         m_findPosition = -1;
         return m_findCount;
@@ -1007,7 +1007,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
     bool highlight = flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT ? true : false;
     webkit_web_view_set_highlight_text_matches(m_web_view, highlight);     
 
-    if(!webkit_web_view_search_text(m_web_view, wxGTK_CONV(text), matchCase, forward, wrap))
+    if(!webkit_web_view_search_text(m_web_view, text.utf8_str(), matchCase, forward, wrap))
     {
         m_findPosition = -1;
         ClearSelection();

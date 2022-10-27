@@ -142,9 +142,9 @@ bool wxChoice::GTKHandleFocusOut()
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
 #ifdef __WXGTK3__
-    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(m_widget), n, wxGTK_CONV(text));
+    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(m_widget), n, text.utf8_str());
 #else
-    gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n, wxGTK_CONV( text ) );
+    gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n,  text.utf8_str() );
 #endif
 }
 
@@ -248,7 +248,7 @@ int wxChoice::FindString( const wxString &item, bool bCase ) const
     {
         wxGtkValue value;
         gtk_tree_model_get_value( model, &iter, m_stringCellIndex, value );
-        wxString str = wxGTK_CONV_BACK( g_value_get_string( value ) );
+        wxString str = wxString::FromUTF8Unchecked( g_value_get_string( value ) );
 
         if (item.IsSameAs( str, bCase ) )
             return count;
@@ -277,7 +277,7 @@ void wxChoice::SetString(unsigned int n, const wxString &text)
     if (gtk_tree_model_iter_nth_child (model, &iter, nullptr, n))
     {
         wxGtkValue value(G_TYPE_STRING);
-        g_value_set_string( value, wxGTK_CONV( text ) );
+        g_value_set_string( value, text.utf8_str() );
         gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, m_stringCellIndex, value );
     }
 
@@ -299,7 +299,7 @@ wxString wxChoice::GetString(unsigned int n) const
 
     wxGtkValue value;
     gtk_tree_model_get_value( model, &iter, m_stringCellIndex, value );
-    return wxGTK_CONV_BACK( g_value_get_string( value ) );
+    return wxString::FromUTF8Unchecked( g_value_get_string( value ) );
 }
 
 unsigned int wxChoice::GetCount() const

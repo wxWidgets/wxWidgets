@@ -211,7 +211,7 @@ void wxFontRefData::InitFromNative()
     PangoFontDescription *desc = m_nativeFontInfo.description;
 
     // init fields
-    m_faceName = wxGTK_CONV_BACK( pango_font_description_get_family( desc ) );
+    m_faceName = wxString::FromUTF8( pango_font_description_get_family( desc ) );
 
     m_pointSize = static_cast<float>(pango_font_description_get_size( desc )) / PANGO_SCALE;
 
@@ -378,7 +378,7 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
+bool wxFont::Create(const wxString& fontname, wxFontEncoding WXUNUSED(enc))
 {
     if( !fontname )
     {

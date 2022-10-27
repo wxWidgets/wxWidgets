@@ -43,14 +43,14 @@ void wxToolTip::SetTip( const wxString &tip )
 {
     m_text = tip;
     if (m_window)
-        m_window->GTKApplyToolTip(wxGTK_CONV_SYS(m_text));
+        m_window->GTKApplyToolTip(m_text.utf8_str());
 }
 
 void wxToolTip::GTKSetWindow(wxWindow* win)
 {
     wxASSERT(win);
     m_window = win;
-    m_window->GTKApplyToolTip(wxGTK_CONV_SYS(m_text));
+    m_window->GTKApplyToolTip(m_text.utf8_str());
 }
 
 /* static */

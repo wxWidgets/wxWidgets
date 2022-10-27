@@ -307,7 +307,7 @@ wxString wxSpinCtrlGTKBase::GetTextValue() const
 {
     wxCHECK_MSG(m_widget, wxEmptyString, "invalid spin button");
 
-    return wxGTK_CONV_BACK(gtk_entry_get_text( GTK_ENTRY(m_widget) ));
+    return wxString::FromUTF8Unchecked(gtk_entry_get_text( GTK_ENTRY(m_widget) ));
 }
 
 bool wxSpinCtrlGTKBase::GetSnapToTicks() const
@@ -336,7 +336,7 @@ void wxSpinCtrlGTKBase::SetValue( const wxString& value )
     GTKSetTextOverride(value);
 
     wxSpinCtrlEventDisabler disable(this);
-    gtk_entry_set_text( GTK_ENTRY(m_widget), wxGTK_CONV( value ) );
+    gtk_entry_set_text( GTK_ENTRY(m_widget), value.utf8_str() );
 }
 
 void wxSpinCtrlGTKBase::DoSetValue( double value )

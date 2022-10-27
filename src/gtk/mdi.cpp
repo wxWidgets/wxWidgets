@@ -368,7 +368,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 
     GtkNotebook * const notebook = GTKGetNotebook();
     wxCHECK_RET( notebook, "no parent notebook?" );
-    gtk_notebook_set_tab_label_text(notebook, m_widget, wxGTK_CONV( title ) );
+    gtk_notebook_set_tab_label_text(notebook, m_widget, title.utf8_str() );
 }
 
 void wxMDIChildFrame::DoGetPosition(int *x, int *y) const

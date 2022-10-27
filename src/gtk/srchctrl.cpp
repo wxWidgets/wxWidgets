@@ -177,7 +177,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation(size);
 
-    gtk_entry_set_text(entry, wxGTK_CONV(value));
+    gtk_entry_set_text(entry, value.utf8_str());
 
     SetHint(_("Search"));
 

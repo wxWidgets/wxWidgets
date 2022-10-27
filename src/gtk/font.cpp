@@ -89,7 +89,7 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
     if ( info.HasFaceName() )
     {
         pango_font_description_set_family( m_nativeFontInfo.description,
-                                           wxGTK_CONV_SYS(info.GetFaceName()) );
+                                           info.GetFaceName().utf8_str() );
     }
     else
     {

@@ -634,7 +634,7 @@ void wxTextEntry::WriteText(const wxString& value)
     gtk_editable_insert_text
     (
         edit,
-        wxGTK_CONV_FONT(value, GetEditableWindow()->GetFont()),
+        value.utf8_str(),
         -1,     // text: length: compute it using strlen()
         &len    // will be updated to position after the text end
     );
@@ -681,8 +681,7 @@ wxString wxTextEntry::DoGetValue() const
 {
     const wxGtkString value(gtk_editable_get_chars(GetEditable(), 0, -1));
 
-    return wxGTK_CONV_BACK_FONT(value,
-            const_cast<wxTextEntry *>(this)->GetEditableWindow()->GetFont());
+    return wxString::FromUTF8Unchecked(value);
 }
 
 void wxTextEntry::Remove(long from, long to)
@@ -1115,11 +1114,7 @@ bool wxTextEntry::SetHint(const wxString& hint)
     GtkEntry *entry = GetEntry();
     if (entry && gtk_check_version(3,2,0) == nullptr)
     {
-        gtk_entry_set_placeholder_text
-        (
-            entry,
-            wxGTK_CONV_FONT(hint, GetEditableWindow()->GetFont())
-        );
+        gtk_entry_set_placeholder_text(entry, hint.utf8_str());
         return true;
     }
 #endif
@@ -1132,11 +1127,7 @@ wxString wxTextEntry::GetHint() const
     GtkEntry *entry = GetEntry();
     if (entry && gtk_check_version(3,2,0) == nullptr)
     {
-        return wxGTK_CONV_BACK_FONT
-               (
-                gtk_entry_get_placeholder_text(entry),
-                const_cast<wxTextEntry *>(this)->GetEditableWindow()->GetFont()
-               );
+        return wxString::FromUTF8(gtk_entry_get_placeholder_text(entry));
     }
 #endif
     return wxTextEntryBase::GetHint();

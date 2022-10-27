@@ -84,12 +84,12 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     g_type_ensure(PANGO_TYPE_FONT_FACE);
 #endif
     if (gtk_check_version(3,2,0) == nullptr)
-        m_widget = gtk_font_chooser_dialog_new(wxGTK_CONV(message), gtk_parent);
+        m_widget = gtk_font_chooser_dialog_new(message.utf8_str(), gtk_parent);
     else
 #endif
     {
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        m_widget = gtk_font_selection_dialog_new(wxGTK_CONV(message));
+        m_widget = gtk_font_selection_dialog_new(message.utf8_str());
         if (gtk_parent)
             gtk_window_set_transient_for(GTK_WINDOW(m_widget), gtk_parent);
         wxGCC_WARNING_RESTORE()
@@ -114,7 +114,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
                 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                 const wxString& fontname = info->ToString();
                 GtkFontSelectionDialog* sel = GTK_FONT_SELECTION_DIALOG(m_widget);
-                gtk_font_selection_dialog_set_font_name(sel, wxGTK_CONV(fontname));
+                gtk_font_selection_dialog_set_font_name(sel, fontname.utf8_str());
                 wxGCC_WARNING_RESTORE()
             }
         }

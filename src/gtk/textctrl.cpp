@@ -1136,7 +1136,7 @@ wxString wxTextCtrl::DoGetValue() const
         gtk_text_buffer_get_end_iter( m_buffer, &end );
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &start, &end, true));
 
-        return wxGTK_CONV_BACK(text);
+        return wxString::FromUTF8Unchecked(text);
     }
     else // single line
     {
@@ -1304,7 +1304,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
             gtk_text_iter_forward_to_line_end(&end);
 
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &line, &end, true));
-        result = wxGTK_CONV_BACK(text);
+        result = wxString::FromUTF8Unchecked(text);
     }
     else
     {

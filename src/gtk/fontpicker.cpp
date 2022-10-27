@@ -108,7 +108,7 @@ void wxFontButton::UpdateFont()
     const wxString& fontname = info->ToString();
 
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    gtk_font_button_set_font_name(GTK_FONT_BUTTON(m_widget), wxGTK_CONV(fontname));
+    gtk_font_button_set_font_name(GTK_FONT_BUTTON(m_widget), fontname.utf8_str());
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 

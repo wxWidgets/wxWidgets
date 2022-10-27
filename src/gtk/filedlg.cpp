@@ -235,16 +235,16 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     }
 
     m_widget = gtk_file_chooser_dialog_new(
-                   wxGTK_CONV(m_message),
+                   m_message.utf8_str(),
                    gtk_parent,
                    gtk_action,
 #ifdef __WXGTK4__
-                   static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
+                   static_cast<const gchar*>(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)).utf8_str()),
 #else
                    "gtk-cancel",
 #endif
                    GTK_RESPONSE_CANCEL,
-                   static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
+                   static_cast<const gchar*>(ok_btn_stock.utf8_str()), GTK_RESPONSE_ACCEPT,
                    nullptr);
 
     g_object_ref(m_widget);
@@ -448,7 +448,7 @@ void wxFileDialog::SetFilename(const wxString& name)
 
     if (HasFdFlag(wxFD_SAVE))
     {
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), name.utf8_str());
     }
 
     else

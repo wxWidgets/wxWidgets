@@ -350,7 +350,7 @@ void wxToolBarTool::SetLabel(const wxString& label)
         {
             wxString newLabel = wxControl::RemoveMnemonics(label);
             gtk_tool_button_set_label(GTK_TOOL_BUTTON(m_item),
-                                      wxGTK_CONV_SYS(newLabel));
+                                      newLabel.utf8_str());
             // To show the label for toolbar with wxTB_HORZ_LAYOUT.
             gtk_tool_item_set_is_important(m_item, true);
         }
@@ -587,7 +587,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     label = wxControl::RemoveMnemonics(tool->GetLabel());
 
                 gtk_tool_button_set_label(
-                    GTK_TOOL_BUTTON(tool->m_item), wxGTK_CONV(label));
+                    GTK_TOOL_BUTTON(tool->m_item), label.utf8_str());
                 // needed for labels in horizontal toolbar with wxTB_HORZ_LAYOUT
                 gtk_tool_item_set_is_important(tool->m_item, true);
             }
@@ -597,14 +597,14 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                 if (wx_is_at_least_gtk2(12))
                 {
                     gtk_tool_item_set_tooltip_text(tool->m_item,
-                        wxGTK_CONV(tool->GetShortHelp()));
+                        tool->GetShortHelp().utf8_str());
                 }
                 else
 #endif
                 {
 #ifndef __WXGTK3__
                     gtk_tool_item_set_tooltip(tool->m_item,
-                        m_tooltips, wxGTK_CONV(tool->GetShortHelp()), "");
+                        m_tooltips, tool->GetShortHelp().utf8_str(), "");
 #endif
                 }
             }
@@ -775,14 +775,14 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
             if (wx_is_at_least_gtk2(12))
             {
                 gtk_tool_item_set_tooltip_text(tool->m_item,
-                    wxGTK_CONV(helpString));
+                    helpString.utf8_str());
             }
             else
 #endif
             {
 #ifndef __WXGTK3__
                 gtk_tool_item_set_tooltip(tool->m_item,
-                    m_tooltips, wxGTK_CONV(helpString), "");
+                    m_tooltips, helpString.utf8_str(), "");
 #endif
             }
         }

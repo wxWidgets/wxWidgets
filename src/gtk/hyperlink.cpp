@@ -181,7 +181,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     {
         wxControl::SetLabel(label);
         const wxString labelGTK = GTKConvertMnemonics(label);
-        gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
+        gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
     }
     else
         wxGenericHyperlinkCtrl::SetLabel(label);
@@ -190,7 +190,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
 void wxHyperlinkCtrl::SetURL(const wxString &uri)
 {
     if ( UseNative() )
-        gtk_link_button_set_uri(GTK_LINK_BUTTON(m_widget), wxGTK_CONV(uri));
+        gtk_link_button_set_uri(GTK_LINK_BUTTON(m_widget), uri.utf8_str());
     else
         wxGenericHyperlinkCtrl::SetURL(uri);
 }

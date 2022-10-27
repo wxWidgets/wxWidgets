@@ -450,7 +450,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 int wxListBox::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
     wxTreeEntry* entry = wx_tree_entry_new();
-    wx_tree_entry_set_label(entry, wxGTK_CONV(item));
+    wx_tree_entry_set_label(entry, item.utf8_str());
     wx_tree_entry_set_destroy_func(entry, (wxTreeEntryDestroy)tree_entry_destroy_cb, this);
 
 #if wxUSE_CHECKLISTBOX
@@ -593,7 +593,7 @@ void wxListBox::SetString(unsigned int n, const wxString& label)
     wxTreeEntry* entry = GetEntry(m_liststore, &iter, this);
 
     // update the item itself
-    wx_tree_entry_set_label(entry, wxGTK_CONV(label));
+    wx_tree_entry_set_label(entry, label.utf8_str());
 
     // signal row changed
     GtkTreeModel* tree_model = GTK_TREE_MODEL(m_liststore);
@@ -608,7 +608,7 @@ wxString wxListBox::GetString(unsigned int n) const
     wxTreeEntry* entry = GTKGetEntry(n);
     wxCHECK_MSG( entry, wxEmptyString, wxT("wrong listbox index") );
 
-    return wxGTK_CONV_BACK(wx_tree_entry_get_label(entry));
+    return wxString::FromUTF8Unchecked(wx_tree_entry_get_label(entry));
 }
 
 unsigned int wxListBox::GetCount() const

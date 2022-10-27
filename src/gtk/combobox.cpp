@@ -174,7 +174,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         else // editable combobox
         {
             // any value is accepted, even if it's not in our list
-            gtk_entry_set_text( entry, wxGTK_CONV(value) );
+            gtk_entry_set_text( entry, value.utf8_str() );
         }
 
         GTKConnectChangedSignal();

@@ -801,7 +801,7 @@ void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
 
 void wxWebViewWebKit::LoadURL(const wxString& url)
 {
-    webkit_web_view_load_uri(m_web_view, wxGTK_CONV(url));
+    webkit_web_view_load_uri(m_web_view, url.utf8_str());
 }
 
 
@@ -1417,7 +1417,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
         //Initially we count the matches to know how many we have
         m_findCount = -1;
         webkit_find_controller_count_matches(findctrl,
-                                             wxGTK_CONV(text),
+                                             text.utf8_str(),
                                              options,
                                              G_MAXUINT);
         GMainContext *main_context = g_main_context_get_thread_default();
@@ -1429,7 +1429,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
         if(flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT)
         {
             webkit_find_controller_search(findctrl,
-                                          wxGTK_CONV(text),
+                                          text.utf8_str(),
                                           options,
                                           G_MAXUINT);
         }

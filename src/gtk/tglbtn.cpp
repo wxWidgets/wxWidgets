@@ -177,7 +177,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     const wxString labelGTK = GTKConvertMnemonics(label);
 
-    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
+    gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
 
     GTKApplyWidgetStyle( false );
 }

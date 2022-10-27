@@ -53,7 +53,7 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(m_widget), m_data.GetChooseAlpha());
 #else
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
+    m_widget = gtk_color_selection_dialog_new(title.utf8_str());
 
     g_object_ref(m_widget);
 

@@ -219,7 +219,7 @@ wxString wxNotebook::GetPageText( size_t page ) const
     wxCHECK_MSG(page < GetPageCount(), wxEmptyString, "invalid notebook index");
 
     GtkLabel* label = GTK_LABEL(GetNotebookPage(page)->m_label);
-    return wxGTK_CONV_BACK(gtk_label_get_text(label));
+    return wxString::FromUTF8(gtk_label_get_text(label));
 }
 
 int wxNotebook::GetPageImage( size_t page ) const
@@ -273,7 +273,7 @@ bool wxNotebook::SetPageText( size_t page, const wxString &text )
     wxCHECK_MSG(page < GetPageCount(), false, "invalid notebook index");
 
     GtkLabel* label = GTK_LABEL(GetNotebookPage(page)->m_label);
-    gtk_label_set_text(label, wxGTK_CONV(text));
+    gtk_label_set_text(label, text.utf8_str());
 
     return true;
 }
@@ -506,7 +506,7 @@ bool wxNotebook::InsertPage( size_t position,
     }
 
     /* set the label text */
-    pageData->m_label = gtk_label_new(wxGTK_CONV(wxStripMenuCodes(text)));
+    pageData->m_label = gtk_label_new(wxStripMenuCodes(text).utf8_str());
 
     if (m_windowStyle & wxBK_LEFT)
         gtk_label_set_angle(GTK_LABEL(pageData->m_label), 90);

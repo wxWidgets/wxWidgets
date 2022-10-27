@@ -1350,7 +1350,7 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
         event.SetEventObject(this);
     }
 
-    const wxString data(wxGTK_CONV_BACK_SYS(str));
+    const wxString data(wxString::FromUTF8Unchecked(str));
     if( data.empty() )
         return false;
 
