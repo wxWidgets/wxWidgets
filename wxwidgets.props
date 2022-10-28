@@ -117,6 +117,9 @@
     <Error
       Condition="'$(wxUsingDll)$(wxUsingLib)' == ''"
       Text="wxWidgets libraries not found under &quot;$(MSBuildThisFileDirectory)lib\vc{,$(wxToolsetVersion),$(wxToolsetVerABICompat)}$(wxArchSuffix)_{lib,dll}$(wxCfg)&quot;." />
+    <Error
+      Condition="'$(CharacterSet)' != 'Unicode'"
+      Text="wxWidgets requires using Unicode, please change your project options to enable it." />
   </Target>
 
   <ItemDefinitionGroup>
