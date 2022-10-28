@@ -1135,9 +1135,8 @@ wxDefaultAssertHandler(const wxString& file,
     else
     {
         // let the app process it as it wants
-        // FIXME-UTF8: use wc_str(), not c_str(), when ANSI build is removed
-        wxTheApp->OnAssertFailure(file.c_str(), line, func.c_str(),
-                                  cond.c_str(), msg.c_str());
+        wxTheApp->OnAssertFailure(file.wc_str(), line, func.wc_str(),
+                                  cond.wc_str(), msg.wc_str());
     }
 }
 
