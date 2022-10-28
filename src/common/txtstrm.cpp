@@ -585,7 +585,7 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
         }
     }
 #else // SIZEOF_WCHAR_T == 4
-    WriteString( wxString(&c, *m_conv, 1) );
+    WriteString( wxString(&c, 1) );
 #endif // SIZEOF_WCHAR_T == 2 or 4
     return *this;
 }

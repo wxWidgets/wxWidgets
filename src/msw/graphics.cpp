@@ -2340,7 +2340,7 @@ void wxGDIPlusContext::DoDrawText(const wxString& str,
 
     m_context->DrawString
                (
-                    str.wc_str(*wxConvUI),  // string to draw, always Unicode
+                    str.wc_str(),           // string to draw, always Unicode
                     -1,                     // length: string is NUL-terminated
                     fontData->GetGDIPlusFont(),
                     PointF(x, y),
@@ -2354,7 +2354,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxGDIPlusContext::GetTextExtent - no valid font set") );
 
-    wxWCharBuffer s = str.wc_str( *wxConvUI );
+    wxWCharBuffer s = str.wc_str();
     Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
 
     // Get the font metrics if we actually need them.
@@ -2428,7 +2428,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
         return;
 
     Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
-    wxWCharBuffer ws = text.wc_str( *wxConvUI );
+    wxWCharBuffer ws = text.wc_str();
     size_t len = wcslen( ws ) ;
     wxASSERT_MSG(text.length() == len , wxT("GetPartialTextExtents not yet implemented for multichar situations"));
 

@@ -1171,10 +1171,15 @@ public:
     // ctors from wchar_t* strings:
   wxString(const wchar_t *pwz)
     : m_impl(ImplStr(pwz)) {}
-  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
-    : m_impl(ImplStr(pwz)) {}
   wxString(const wchar_t *pwz, size_t nLength)
     { assign(pwz, nLength); }
+
+    // These ctors only existed for compatibility with the ANSI build and
+    // shouldn't be used any longer.
+  wxDEPRECATED_MSG("remove the wxMBConv ctor argument")
+  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
+    : m_impl(ImplStr(pwz)) {}
+  wxDEPRECATED_MSG("remove the wxMBConv ctor argument")
   wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv), size_t nLength)
     { assign(pwz, nLength); }
 
@@ -1773,6 +1778,7 @@ public:
         { return AsWCharBuf(wxMBConvStrictUTF8()); }
 #endif
     // for compatibility only
+    wxDEPRECATED_MSG("remove the wxMBConv argument")
     const wxWX2WCbuf wc_str(const wxMBConv& WXUNUSED(conv)) const
       { return wc_str(); }
 

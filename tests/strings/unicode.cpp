@@ -208,7 +208,7 @@ void UnicodeTestCase::ConstructorsWithConversion()
     wxString s3(utf8, wxConvUTF8, 4);
     CPPUNIT_ASSERT_EQUAL( sub, s3 );
 
-    wxString s4(wchar, wxConvUTF8, 3);
+    wxString s4(wchar, 3);
     CPPUNIT_ASSERT_EQUAL( sub, s4 );
 
     // conversion should stop with failure at pos 35
@@ -248,7 +248,7 @@ void UnicodeTestCase::ConversionWithNULs()
 {
     static const size_t lenNulString = 10;
 
-    wxString szTheString(L"The\0String", wxConvLibc, lenNulString);
+    wxString szTheString(L"The\0String", lenNulString);
     wxCharBuffer theBuffer = szTheString.mb_str(wxConvLibc);
 
     CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String",

@@ -1342,8 +1342,7 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
-                        textNew += wxString(textstr + matchStart + start,
-                                            wxConvUTF8, len);
+                        textNew += wxString(textstr + matchStart + start, len);
 
                         mayHaveBackrefs = true;
                     }
@@ -1369,7 +1368,7 @@ int wxRegExImpl::Replace(wxString *text,
         if (result.capacity() < result.length() + start + textNew.length())
             result.reserve(2 * result.length());
 
-        result.append(wxString(textstr + matchStart, wxConvUTF8, start));
+        result.append(wxString(textstr + matchStart, start));
         matchStart += start;
         result.append(textNew);
 
@@ -1378,7 +1377,7 @@ int wxRegExImpl::Replace(wxString *text,
         matchStart += len;
     }
 
-    result.append(wxString(textstr + matchStart, wxConvUTF8));
+    result.append(wxString(textstr + matchStart));
     *text = result;
 
     return countRepl;

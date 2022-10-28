@@ -837,14 +837,14 @@ wxString wxTarInputStream::GetExtendedHeader(const wxString& key) const
     if (m_HeaderRecs) {
         it = m_HeaderRecs->find(key);
         if (it != m_HeaderRecs->end())
-            return wxString(it->second.wc_str(wxConvUTF8), GetConv());
+            return it->second;
     }
 
     // if not found, look at the global header records
     if (m_GlobalHeaderRecs) {
         it = m_GlobalHeaderRecs->find(key);
         if (it != m_GlobalHeaderRecs->end())
-            return wxString(it->second.wc_str(wxConvUTF8), GetConv());
+            return it->second;
     }
 
     return wxEmptyString;
@@ -966,8 +966,8 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
         // replace the '=' with a nul, to terminate the key
         *p++ = 0;
 
-        wxString key(wxConvUTF8.cMB2WC(pKey), GetConv());
-        wxString value(wxConvUTF8.cMB2WC(p), GetConv());
+        wxString key = wxString::FromUTF8(pKey);
+        wxString value = wxString::FromUTF8(p);
 
         // an empty value unsets a previously given value
         if (value.empty())

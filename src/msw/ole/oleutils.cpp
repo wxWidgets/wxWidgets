@@ -56,7 +56,7 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 void wxBasicString::AssignFromString(const wxString& str)
 {
     SysFreeString(m_bstrBuf);
-    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
+    m_bstrBuf = SysAllocString(str.wc_str());
 }
 
 BSTR wxBasicString::Detach()
