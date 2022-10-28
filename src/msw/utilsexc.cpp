@@ -760,7 +760,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 
     dwFlags |= CREATE_DEFAULT_ERROR_MODE ;
 
-    wxWxCharBuffer envBuffer;
+    wxWCharBuffer envBuffer;
     bool useCwd = false;
     if ( env )
     {

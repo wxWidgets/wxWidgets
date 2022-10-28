@@ -72,7 +72,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
         buf.data[1] = 0;
         return buf;
     }
-    static wxWxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
+    static wxWCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
     static bool IsSingleCodeUnitCharacter(const wxUniChar&) { return true; }
 #endif
 

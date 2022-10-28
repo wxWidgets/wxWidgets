@@ -75,9 +75,9 @@ wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& c
 
 #else
 
-wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
+wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
 {
-    wxWxCharBuffer buf(n);
+    wxWCharBuffer buf(n);
 #if wxUSE_UNICODE_WCHAR
     wmemset(buf.data(), (wchar_t)ch, n);
 #else // ANSI

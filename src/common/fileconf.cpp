@@ -405,7 +405,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
     m_linesTail = nullptr;
 
     // read the entire stream contents in memory
-    wxWxCharBuffer cbuf;
+    wxWCharBuffer cbuf;
     static const size_t chunkLen = 1024;
 
     wxMemoryBuffer buf(chunkLen);
@@ -501,8 +501,8 @@ void wxFileConfig::Parse(const wxTextBuffer& buffer, bool bLocal)
   for ( size_t n = 0; n < nLineCount; n++ )
   {
     wxString strLine = buffer[n];
-    // FIXME-UTF8: rewrite using iterators, without this buffer
-    wxWxCharBuffer buf(strLine.c_str());
+    // FIXME-UTF8: rewrite using iterators
+    wxWCharBuffer buf(strLine.c_str());
     const wxChar *pStart;
     const wxChar *pEnd;
 
