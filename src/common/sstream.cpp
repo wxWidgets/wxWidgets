@@ -32,11 +32,8 @@
 // construction/destruction
 // ----------------------------------------------------------------------------
 
-// TODO:  Do we want to include the null char in the stream?  If so then
-// just add +1 to m_len in the ctor
 wxStringInputStream::wxStringInputStream(const wxString& s)
-    // FIXME-UTF8: use wxCharBufferWithLength if we have it
-    : m_str(s), m_buf(s.utf8_str()), m_len(strlen(m_buf))
+    : m_str(s), m_buf(s.utf8_str())
 {
     wxASSERT_MSG(m_buf.data() != nullptr, wxT("Could not convert string to UTF8!"));
     m_pos = 0;
@@ -48,7 +45,7 @@ wxStringInputStream::wxStringInputStream(const wxString& s)
 
 wxFileOffset wxStringInputStream::GetLength() const
 {
-    return m_len;
+    return GetBufferSize();
 }
 
 // ----------------------------------------------------------------------------
@@ -64,7 +61,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             break;
 
         case wxFromEnd:
-            ofs += m_len;
+            ofs += GetBufferSize();
             break;
 
         case wxFromCurrent:
@@ -76,7 +73,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             return wxInvalidOffset;
     }
 
-    if ( ofs < 0 || ofs > static_cast<wxFileOffset>(m_len) )
+    if ( ofs < 0 || ofs > static_cast<wxFileOffset>(GetBufferSize()) )
         return wxInvalidOffset;
 
     // FIXME: this can't be right
@@ -96,7 +93,7 @@ wxFileOffset wxStringInputStream::OnSysTell() const
 
 size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 {
-    const size_t sizeMax = m_len - m_pos;
+    const size_t sizeMax = GetBufferSize() - m_pos;
 
     if ( size >= sizeMax )
     {

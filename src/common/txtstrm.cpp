@@ -520,7 +520,8 @@ void wxTextOutputStream::WriteString(const wxString& string)
         out << c;
     }
 
-    // FIXME-UTF8: use wxCharBufferWithLength if/when we have it
+    // Note that we have to use the length returned by cWC2MB() here to handle
+    // string with the embedded NULs correctly.
     wxCharBuffer buffer = m_conv->cWC2MB(out.wc_str(), out.length(), &len);
     m_output.Write(buffer, len);
 }
