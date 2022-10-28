@@ -115,6 +115,11 @@ void wxAnyButton::SetLabel( const wxString &label )
     m_qtPushButton->setText( wxQtConvertString( label ));
 }
 
+wxString wxAnyButton::GetLabel() const
+{
+    return wxQtConvertString( m_qtPushButton->text() );
+}
+
 QWidget *wxAnyButton::GetHandle() const
 {
     return m_qtPushButton;
