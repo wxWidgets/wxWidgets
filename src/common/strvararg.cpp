@@ -562,9 +562,8 @@ const char* wxFormatString::InputAsChar()
     if ( m_char )
         return m_char.data();
 
-    // in ANSI build, wx_str() returns char*, in UTF-8 build, this function
-    // is only called under UTF-8 locales, so we should return UTF-8 string,
-    // which is, again, what wx_str() returns:
+    // in this build, wx_str() returns UTF-8-encoded string and this function
+    // is only called under UTF-8 locales, so we can just return it directly
     if ( m_str )
         return m_str->wx_str();
 

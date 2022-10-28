@@ -508,9 +508,9 @@ const wchar_t *wxString::AsWChar(const wxMBConv& conv) const
 
 
 // Same thing for mb_str() which returns a normal char pointer to string
-// contents: this always requires converting it to the specified encoding in
-// non-ANSI build except if we need to convert to UTF-8 and this is what we
-// already use internally.
+// contents: this always requires converting it to the specified encoding
+// except if we need to convert to UTF-8 and this is what we already use
+// internally.
 const char *wxString::AsChar(const wxMBConv& conv) const
 {
 #if wxUSE_UNICODE_UTF8
@@ -861,10 +861,10 @@ int wxString::compare(size_t nStart, size_t nLen,
 
 #if !wxUSE_STL_BASED_WXSTRING || wxUSE_UNICODE_UTF8
 
-// NB: All these functions are implemented  with the argument being wxChar*,
-//     i.e. widechar string in any Unicode build, even though native string
-//     representation is char* in the UTF-8 build. This is because we couldn't
-//     use memchr() to determine if a character is in a set encoded as UTF-8.
+// NB: All these functions are implemented with the argument always being
+//     wchar_t*, even in UTF-8 build in which the native string representation
+//     is char*. This is because we couldn't use memchr() to determine if a
+//     character is in a set encoded as UTF-8.
 
 size_t wxString::find_first_of(const wxChar* sz, size_t nStart) const
 {
@@ -1943,13 +1943,8 @@ int wxString::DoPrintfUtf8(const char *format, ...)
 /*
     Uses wxVsnprintf and places the result into the this string.
 
-    In ANSI build, wxVsnprintf is effectively vsnprintf but in Unicode build
-    it is vswprintf.  Due to a discrepancy between vsnprintf and vswprintf in
-    the ISO C99 (and thus SUSv3) standard the return value for the case of
-    an undersized buffer is inconsistent.  For conforming vsnprintf
-    implementations the function must return the number of characters that
-    would have been printed had the buffer been large enough, which is useful.
-    Unfortunately, for conforming vswprintf implementations, the function must
+    wxVsnprintf() is effectively vswprintf() and, according to ISO C99 (and
+    thus SUSv3) standard, a conforming vswprintf implementations must
     just return a negative number and is not even required to set errno, which
     makes the standard behaviour totally useless as there is no way to
     determine if the error occurred due to a (fatal) problem with either the
