@@ -1572,8 +1572,9 @@ public:
     // returned buffer won't affect the string, these methods are only useful
     // for passing values to const-incorrect functions
     wxWritableCharBuffer char_str(const wxMBConv& conv wxSTRING_DEFAULT_CONV_ARG) const
-        { return mb_str(conv); }
-    wxWritableWCharBuffer wchar_str() const { return wc_str(); }
+        { return wxWritableCharBuffer(mb_str(conv)); }
+    wxWritableWCharBuffer wchar_str() const
+        { return wxWritableWCharBuffer(wc_str()); }
 
     // conversion to the buffer of the given type T (= char or wchar_t) and
     // also optionally return the buffer length
