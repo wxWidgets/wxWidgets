@@ -26,11 +26,11 @@ When an item of the name is empty, `'_'` or `'-'` are omitted.
 
 *UNIX libraries* (configure, CMake on Linux/macOS/Cygwin):
 
-    libwx_$(toolkit)$(widgetset)$(unicode)_$(flavour)_$(name)-$(version)-$(host).$(lib_extension)
+    libwx_$(toolkit)$(widgetset)u_$(flavour)_$(name)-$(version)-$(host).$(lib_extension)
 
 *Windows libraries* (VS solution, makefile.gcc/vc, CMake on Windows/MinGW, shared libraries on Windows):
 
-    wx$(toolkit)$(widgetset)$(version)$(unicode)$(debug)_$(flavour)_$(name)_$(compiler)_$(arch)_$(vendor).$(lib_extension)
+    wx$(toolkit)$(widgetset)$(version)u$(debug)_$(flavour)_$(name)_$(compiler)_$(arch)_$(vendor).$(lib_extension)
 
 
 Where:
@@ -79,9 +79,8 @@ the library soname (see the notes in configure.in for details on this).
 
 --------------------------------------------------------------------
 
-`$unicode` is set to `'u'` when Unicode is enabled (default on), and is empty
-when disabled. In the `setup.h` and `wx-config` names, the full `'unicode'`
-name is used.
+The `'u'` in the library names refers to "Unicode" build, which is now the only
+supported one, but which used to be optional.
 
 --------------------------------------------------------------------
 
@@ -140,7 +139,7 @@ On UNIX, type is empty for shared libraries and `'static'` for static libraries.
 The installed location of the library specific setup.h is also
 determined by the values of these items. On UNIX they will be found in:
 
-    $(prefix)/lib/wx/include/$(host)-$(toolkit)$(widgetset)-$(unicode)-$(type)-$(version)-$(flavour)/wx/setup.h
+    $(prefix)/lib/wx/include/$(host)-$(toolkit)$(widgetset)-unicode-$(type)-$(version)-$(flavour)/wx/setup.h
 
 which will be in the include search path returned by the relevant
 wx-config for that library (or presumably set in the relevant
@@ -148,7 +147,7 @@ make/project files for platforms that do not use wx-config).
 
 For MSVC and gcc/vc makefile, the file is found in:
 
-    $(prefix)/lib/$(compiler)_$(arch)_$(type)/$(toolkit)$(widgetset)$(unicode)$(debug)/wx/setup.h
+    $(prefix)/lib/$(compiler)_$(arch)_$(type)/$(toolkit)$(widgetset)u$(debug)/wx/setup.h
 
 --------------------------------------------------------------------
 
@@ -156,7 +155,7 @@ For MSVC and gcc/vc makefile, the file is found in:
 
 The port specific wx-config file for each library shall be named:
 
-    $(prefix)/lib/wx/config/$(host)-$(toolkit)$(widgetset)-$(unicode)-$(type)-$(version)-$(flavour)
+    $(prefix)/lib/wx/config/$(host)-$(toolkit)$(widgetset)-unicode-$(type)-$(version)-$(flavour)
 
 ${prefix}/bin/wx-config shall exist as a link to (or copy of) one of
 these port specific files (on platforms which support it) and as such
