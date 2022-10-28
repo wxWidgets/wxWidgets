@@ -190,15 +190,6 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         const char *cond,
                                         const wxChar *msg) ;
 
-// this version is for compatibility with wx 2.8 Unicode build only, we don't
-// use it ourselves any more except in ANSI-only build in which case it is all
-// we need
-extern WXDLLIMPEXP_BASE void wxOnAssert(const wxChar *file,
-                                        int line,
-                                        const char *func,
-                                        const wxChar *cond,
-                                        const wxChar *msg = nullptr);
-
 // these overloads work when msg passed to debug macro is a string and we
 // also have to provide wxCStrData overload to resolve ambiguity which would
 // otherwise arise from wxASSERT( s.c_str() )

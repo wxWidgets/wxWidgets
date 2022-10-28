@@ -1165,19 +1165,6 @@ void wxOnAssert(const wxString& file,
     wxTheAssertHandler(file, line, func, cond, wxString());
 }
 
-void wxOnAssert(const wxChar *file,
-                int line,
-                const char *func,
-                const wxChar *cond,
-                const wxChar *msg)
-{
-    // this is the backwards-compatible version
-    // so it could be called directly from the user code and this might happen
-    // even when wxTheAssertHandler is null
-    if ( wxTheAssertHandler )
-        wxTheAssertHandler(file, line, func, cond, msg);
-}
-
 void wxOnAssert(const char *file,
                 int line,
                 const char *func,
