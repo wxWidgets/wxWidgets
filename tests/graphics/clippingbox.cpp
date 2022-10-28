@@ -585,16 +585,6 @@ static void OneRegionNegDim(wxDC& dc, const wxBitmap& bmp, const wxPoint& parent
 
 static void OneRegionAndReset(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
 {
-#ifdef __WXGTK__
-    if ( parentDcOrigin != wxPoint(0, 0) )
-    {
-        // Due to the bug in resetting wxGCDC clipping region when parent wxDC is scrolled
-        // we need to skip test on wxGTK
-        WARN("Skipping test known not to work under wxGTK");
-        return;
-    }
-#endif
-
     // Setting one clipping region and next destroy it.
     // Final clipping box should be the same as DC surface.
     dc.SetClippingRegion(10, 20, 80, 75);
@@ -1323,16 +1313,6 @@ static void OneDevRegionNonRect(wxDC& dc, const wxBitmap& bmp, bool checkExtCoor
 
 static void OneDevRegionAndReset(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
 {
-#ifdef __WXGTK__
-    if ( parentDcOrigin != wxPoint(0, 0) )
-    {
-        // Due to the bug in resetting wxGCDC clipping region when parent wxDC is scrolled
-        // we need to skip test on wxGTK
-        WARN("Skipping test known not to work under wxGTK");
-        return;
-    }
-#endif
-
 #if wxUSE_DC_TRANSFORM_MATRIX
     if ( useTransformMatrix && !dc.CanUseTransformMatrix() )
         return;
