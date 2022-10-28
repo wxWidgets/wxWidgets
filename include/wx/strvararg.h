@@ -842,8 +842,8 @@ struct wxArgNormalizerNarrowChar
         wxASSERT_ARG_TYPE( fmt, index,
                            wxFormatString::Arg_Char | wxFormatString::Arg_Int );
 
-        // FIXME-UTF8: which one is better default in absence of fmt string
-        //             (i.e. when used like e.g. Foo("foo", "bar", 'c', NULL)?
+        // We use char if there is no format string at all, i.e. when used like
+        // e.g. Foo("foo", "bar", 'c', nullptr), but is this the bast choice?
         if ( !fmt || fmt->GetArgumentType(index) == wxFormatString::Arg_Char )
             m_value = wx_truncate_cast(T, wxUniChar(value).GetValue());
         else
