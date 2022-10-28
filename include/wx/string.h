@@ -2094,7 +2094,9 @@ public:
     { return IsSameAs(str.data(), compareWithCase); }
     // comparison with a single character: returns true if equal
   bool IsSameAs(wxUniChar c, bool compareWithCase = true) const;
-  // FIXME-UTF8: remove these overloads
+    // we need all these overloads too as any of the types below can be
+    // converted either to wxUniChar or wxString, so without them, calling
+    // IsSameAs('x') would result in an ambiguity.
   bool IsSameAs(wxUniCharRef c, bool compareWithCase = true) const
     { return IsSameAs(wxUniChar(c), compareWithCase); }
   bool IsSameAs(char c, bool compareWithCase = true) const
