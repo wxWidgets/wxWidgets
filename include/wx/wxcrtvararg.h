@@ -236,21 +236,17 @@
 // user-friendly wrappers to CRT functions
 // ----------------------------------------------------------------------------
 
-// FIXME-UTF8: remove this
-#define wxCRT_PrintfNative wxCRT_PrintfW
-#define wxCRT_FprintfNative wxCRT_FprintfW
-
 wxGCC_ONLY_WARNING_SUPPRESS(format-nonliteral)
 
 WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxPrintf, 1, (const wxFormatString&),
-                              wxCRT_PrintfNative, wxCRT_PrintfA)
+                              wxCRT_PrintfW, wxCRT_PrintfA)
 inline int wxPrintf(const wxFormatString& s)
 {
     return wxPrintf(wxASCII_STR("%s"), s.InputAsString());
 }
 
 WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxFprintf, 2, (FILE*, const wxFormatString&),
-                              wxCRT_FprintfNative, wxCRT_FprintfA)
+                              wxCRT_FprintfW, wxCRT_FprintfA)
 inline int wxFprintf(FILE *f, const wxFormatString& s)
 {
     return wxFprintf(f, wxASCII_STR("%s"), s.InputAsString());
