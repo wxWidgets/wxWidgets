@@ -119,7 +119,6 @@ typedef wchar_t wxUChar;
 
 /* depending on the build options, strings can store their data either as
    wchar_t* or UTF-8 encoded char*: */
-/* FIXME-UTF8: what would be better place for this? */
 #if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
     #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
 #endif
@@ -150,7 +149,7 @@ typedef wchar_t wxUChar;
 /* define char type used by wxString internal representation: */
 #if wxUSE_UNICODE_WCHAR
     typedef wchar_t wxStringCharType;
-#else /* wxUSE_UNICODE_UTF8 || ANSI */
+#else /* wxUSE_UNICODE_UTF8 */
     typedef char wxStringCharType;
 #endif
 
@@ -186,16 +185,15 @@ typedef wchar_t wxUChar;
 
 /*
    wxS ("wx string") macro can be used to create literals using the same
-   representation as wxString does internally, i.e. wchar_t in Unicode build
-   under Windows or char in UTF-8-based Unicode builds and (deprecated) ANSI
-   builds everywhere (see wxStringCharType definition above).
+   representation as wxString does internally, i.e. wchar_t by default
+   char in UTF-8-based builds.
  */
 #if wxUSE_UNICODE_WCHAR
     /*
         As above with wxT(), wxS() argument is expanded if it's a macro.
      */
     #define wxS(x) wxCONCAT_HELPER(L, x)
-#else /* wxUSE_UNICODE_UTF8 || ANSI */
+#else /* wxUSE_UNICODE_UTF8 */
     #define wxS(x) x
 #endif
 
