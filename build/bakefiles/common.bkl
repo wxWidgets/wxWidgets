@@ -90,11 +90,8 @@
         <if cond="BUILD=='debug' and DEBUG_RUNTIME_LIBS=='default'">d</if>
         <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
     </set>
-    <set var="WXUNICODEFLAG">
-        <if cond="UNICODE=='1'">u</if>
-    </set>
     <set var="WX_U_D_SUFFIX">
-        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+        u$(WXDEBUGFLAG)
     </set>
     <set var="WXNAMESUFFIX">
         $(WX_U_D_SUFFIX)$(WX_LIB_FLAVOUR)
@@ -294,10 +291,6 @@
     <set var="NO_VC_CRTDBG">
         <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
         <if cond="FORMAT=='msvc' and BUILD=='release' and DEBUG_FLAG=='1'">__NO_VC_CRTDBG__</if>
-    </set>
-    <set var="UNICODE_DEFINE">
-        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
-        <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
     </set>
 
     <!-- fill for the specific case of the format/compiler -->
@@ -569,7 +562,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <define>$(EXCEPTIONS_DEFINE)</define>
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
-        <define>$(UNICODE_DEFINE)</define>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>

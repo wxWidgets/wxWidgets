@@ -315,13 +315,11 @@ private:
 // wxTextDataObject contains text data
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-    #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXQT__)
-        #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
-    #elif defined(__WXMAC__)
-        #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
-    #endif
-#endif // wxUSE_UNICODE
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXQT__)
+    #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
+#elif defined(__WXMAC__)
+    #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
+#endif
 
 class WXDLLIMPEXP_CORE wxHTMLDataObject : public wxDataObjectSimple
 {
@@ -368,13 +366,7 @@ public:
     // ctor: you can specify the text here or in SetText(), or override
     // GetText()
     wxTextDataObject(const wxString& text = wxEmptyString)
-        : wxDataObjectSimple(
-#if wxUSE_UNICODE
-                             wxDF_UNICODETEXT
-#else
-                             wxDF_TEXT
-#endif
-                            ),
+        : wxDataObjectSimple(wxDF_UNICODETEXT),
           m_text(text)
         {
         }

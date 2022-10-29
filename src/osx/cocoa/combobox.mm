@@ -245,7 +245,7 @@ int wxNSComboBoxControl::GetNumberOfItems() const
 
 void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
 {
-    wxCFStringRef itemLabel(  item, m_wxPeer->GetFont().GetEncoding() );
+    wxCFStringRef itemLabel( item );
     NSString* const cocoaStr = itemLabel.AsNSString();
 
     if ( m_wxPeer->HasFlag(wxCB_SORT) )
@@ -289,12 +289,12 @@ void wxNSComboBoxControl::Clear()
 
 wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const
 {
-    return wxCFStringRef::AsString([m_comboBox itemObjectValueAtIndex:pos], m_wxPeer->GetFont().GetEncoding());
+    return wxCFStringRef::AsString([m_comboBox itemObjectValueAtIndex:pos]);
 }
 
 int wxNSComboBoxControl::FindString(const wxString& text) const
 {
-    NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text ).AsNSString()];
 
     int result;
     if (nsresult == NSNotFound)

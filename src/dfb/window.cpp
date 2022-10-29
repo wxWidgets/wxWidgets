@@ -961,21 +961,7 @@ static long GetUntraslatedKeyCode(DFBInputDeviceKeyIdentifier key_id,
     switch ( DFB_KEY_TYPE(key_symbol) )
     {
         case DIKT_UNICODE:
-#if wxUSE_UNICODE
             return key_symbol;
-#else
-            if ( key_symbol < 128 )
-                return key_symbol;
-            else
-            {
-                wchar_t chr = key_symbol;
-                wxCharBuffer buf(wxConvUI->cWC2MB(&chr, 1, nullptr));
-                if ( buf )
-                    return *buf; // may be 0 if failed
-                else
-                    return 0;
-            }
-#endif
 
         default:
             return GetTranslatedKeyCode(key_id);
@@ -1002,9 +988,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     event.SetTimestamp(wxDFB_EVENT_TIMESTAMP(e));
     event.m_rawCode = e.key_code;
     event.m_keyCode = GetTranslatedKeyCode(e.key_id);
-#if wxUSE_UNICODE
     event.m_uniChar = e.key_symbol;
-#endif
     event.m_shiftDown = ( e.modifiers & DIMM_SHIFT ) != 0;
     event.m_controlDown = ( e.modifiers & DIMM_CONTROL ) != 0;
     event.m_altDown = ( e.modifiers & DIMM_ALT ) != 0;

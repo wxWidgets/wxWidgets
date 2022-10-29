@@ -344,8 +344,7 @@ inline static wxString CacheReadString(wxInputStream *f)
 #define CURRENT_CACHED_BOOK_VERSION     5
 
 // Additional flags to detect incompatibilities of the runtime environment:
-#define CACHED_BOOK_FORMAT_FLAGS \
-                     (wxUSE_UNICODE << 0)
+#define CACHED_BOOK_FORMAT_FLAGS 1
 
 
 bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
@@ -499,13 +498,8 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
 {
-#if wxUSE_UNICODE
     #define CORRECT_STR(str, conv) \
         str = wxString((str).mb_str(wxConvISO8859_1), conv)
-#else
-    #define CORRECT_STR(str, conv) \
-        str = wxString((str).wc_str(conv), wxConvLocal)
-#endif
 
     wxFileSystem fsys;
     wxFSFile *fi;

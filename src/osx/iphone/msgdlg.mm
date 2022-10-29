@@ -60,13 +60,13 @@ int wxMessageDialog::ShowModal()
         msgtext  = m_extendedMessage;
     }
 
-    wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
+    wxCFStringRef cfNoString( GetNoLabel() );
+    wxCFStringRef cfYesString( GetYesLabel() );
+    wxCFStringRef cfOKString( GetOKLabel() );
+    wxCFStringRef cfCancelString( GetCancelLabel() );
 
-    wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
-    wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
+    wxCFStringRef cfTitle( msgtitle );
+    wxCFStringRef cfText( msgtext );
 
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:cfTitle.AsNSString() message:cfText.AsNSString() delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
 

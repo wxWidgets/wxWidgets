@@ -191,11 +191,7 @@ void XLocaleTestCase::TestStdlibFunctionsWith(const wxXLocale& loc)
     // NOTE: here go the checks which must pass under _any_ locale "loc";
     //       checks for specific locales are in TestStdlibFunctions()
 
-#if wxUSE_UNICODE
     wchar_t* endptr;
-#else
-    char* endptr;
-#endif
 
     // strtod (don't use decimal separator as it's locale-specific)
     CPPUNIT_ASSERT_EQUAL( 0.0,        wxStrtod_l(wxT("0"), nullptr, loc) );
@@ -267,11 +263,7 @@ void XLocaleTestCase::TestStdlibFunctions()
     {
         TestStdlibFunctionsWith(wxCLocale);
 
-#if wxUSE_UNICODE
         wchar_t* endptr;
-#else
-        char* endptr;
-#endif
 
         // strtod checks specific for C locale
         endptr = nullptr;

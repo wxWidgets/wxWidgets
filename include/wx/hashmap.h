@@ -547,10 +547,8 @@ struct WXDLLIMPEXP_BASE wxStringEqual
         { return a == b; }
     bool operator()( const wxChar* a, const wxChar* b ) const noexcept
         { return wxStrcmp( a, b ) == 0; }
-#if wxUSE_UNICODE
     bool operator()( const char* a, const char* b ) const noexcept
         { return strcmp( a, b ) == 0; }
-#endif // wxUSE_UNICODE
 };
 
 #ifdef wxNEEDS_WX_HASH_MAP

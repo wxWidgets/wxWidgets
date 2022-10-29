@@ -43,7 +43,6 @@ wxGCC_WARNING_SUPPRESS(ctor-dtor-privacy)
 // arguments passed in so that they are of the type expected by variadic
 // functions taking string arguments, i.e., char* or wchar_t*, depending on the
 // build:
-//   * char* in the current locale's charset in ANSI build
 //   * char* with UTF-8 encoding if wxUSE_UNICODE_UTF8 and the app is running
 //     under an UTF-8 locale
 //   * wchar_t* if wxUSE_UNICODE_WCHAR or if wxUSE_UNICODE_UTF8 and the current
@@ -72,7 +71,7 @@ wxGCC_WARNING_SUPPRESS(ctor-dtor-privacy)
 //        impl      Name of the variadic function that implements 'name' for
 //                  the native strings representation (wchar_t* if
 //                  wxUSE_UNICODE_WCHAR or wxUSE_UNICODE_UTF8 when running under
-//                  non-UTF8 locale, char* in ANSI build)  [wxCrt_Fprintf]
+//                  non-UTF8 locale, char* otherwise)  [wxCrt_Fprintf]
 //        implUtf8  Like 'impl', but for the UTF-8 char* version to be used
 //                  if wxUSE_UNICODE_UTF8 and running under UTF-8 locale
 //                  (ignored otherwise)  [fprintf]
@@ -214,7 +213,7 @@ private:
     wxScopedCharBuffer m_convertedChar;
 #endif // !wxUSE_UNICODE_WCHAR && !defined wx_NO_IMPLICIT_WXSTRING_ENCODING
 
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UTF8_LOCALE_ONLY
 public:
     operator const wchar_t*() const
         { return const_cast<wxFormatString*>(this)->AsWChar(); }
@@ -222,7 +221,7 @@ private:
     const wchar_t* InputAsWChar();
     const wchar_t* AsWChar();
     wxScopedWCharBuffer m_convertedWChar;
-#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
 private:
     wxScopedCharBuffer  m_char;
@@ -398,12 +397,6 @@ wxFORMAT_STRING_SPECIFIER(long double, wxFormatString::Arg_LongDouble)
 wxFORMAT_STRING_SPECIFIER(wchar_t, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
 #endif
 
-#if !wxUSE_UNICODE && !defined wxNO_IMPLICIT_WXSTRING_ENCODING
-wxFORMAT_STRING_SPECIFIER(char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
-wxFORMAT_STRING_SPECIFIER(signed char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
-wxFORMAT_STRING_SPECIFIER(unsigned char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
-#endif
-
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String)
 wxFORMAT_STRING_SPECIFIER(unsigned char*, wxFormatString::Arg_String)
@@ -452,15 +445,14 @@ struct wxArgNormalizer
     }
 
     // Returns the value in a form that can be safely passed to real vararg
-    // functions. In case of strings, this is char* in ANSI build and wchar_t*
-    // in Unicode build.
+    // functions. In case of strings, this is char* in UTF-8-only build and
+    // wchar_t* otherwise.
     T get() const { return m_value; }
 
     T m_value;
 };
 
-// normalizer for passing arguments to functions working with wchar_t* (and
-// until ANSI build is removed, char* in ANSI build as well - FIXME-UTF8)
+// normalizer for passing arguments to functions working with wchar_t*
 // string representation
 #if !wxUSE_UTF8_LOCALE_ONLY
 template<typename T>
@@ -569,8 +561,8 @@ struct WXDLLIMPEXP_BASE wxArgNormalizerWchar<const wxCStrData&>
 #endif // wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
 
 
-// C string pointers of the wrong type (wchar_t* for ANSI or UTF8 build,
-// char* for wchar_t Unicode build or UTF8):
+// C string pointers of the wrong type (wchar_t* for UTF-8-only build,
+// char* otherwise):
 #if wxUSE_UNICODE_WCHAR
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -584,7 +576,7 @@ struct wxArgNormalizerWchar<const char*>
 };
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
-#elif wxUSE_UNICODE_UTF8
+#else // wxUSE_UNICODE_UTF8
 
 template<>
 struct wxArgNormalizerUtf8<const wchar_t*>
@@ -635,20 +627,7 @@ struct wxArgNormalizerWchar<const char*>
 };
 #endif // !wxUSE_UTF8_LOCALE_ONLY && !defined wxNO_IMPLICIT_WXSTRING_ENCODING
 
-#else // ANSI - FIXME-UTF8
-
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-template<>
-struct wxArgNormalizerWchar<const wchar_t*>
-    : public wxArgNormalizerWithBuffer<char>
-{
-    wxArgNormalizerWchar(const wchar_t* s,
-                         const wxFormatString *fmt, unsigned index)
-        : wxArgNormalizerWithBuffer<char>(wxConvLibc.cWC2MB(s), fmt, index) {}
-};
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-#endif // wxUSE_UNICODE_WCHAR/wxUSE_UNICODE_UTF8/ANSI
+#endif // wxUSE_UNICODE_WCHAR/wxUSE_UNICODE_UTF8
 
 
 #ifdef wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -849,12 +828,11 @@ struct wxArgNormalizer<const wxUniChar&> : public wxArgNormalizer<wchar_t>
 
 // for wchar_t, default handler does the right thing
 
-// char has to be treated differently in Unicode builds: a char argument may
+// char has to be treated differently: a char argument may
 // be used either for a character value (which should be converted into
 // wxUniChar) or as an integer value (which should be left as-is). We take
 // advantage of the fact that both char and wchar_t are converted into int
 // in variadic arguments here.
-#if wxUSE_UNICODE
 template<typename T>
 struct wxArgNormalizerNarrowChar
 {
@@ -864,8 +842,8 @@ struct wxArgNormalizerNarrowChar
         wxASSERT_ARG_TYPE( fmt, index,
                            wxFormatString::Arg_Char | wxFormatString::Arg_Int );
 
-        // FIXME-UTF8: which one is better default in absence of fmt string
-        //             (i.e. when used like e.g. Foo("foo", "bar", 'c', NULL)?
+        // We use char if there is no format string at all, i.e. when used like
+        // e.g. Foo("foo", "bar", 'c', nullptr), but is this the bast choice?
         if ( !fmt || fmt->GetArgumentType(index) == wxFormatString::Arg_Char )
             m_value = wx_truncate_cast(T, wxUniChar(value).GetValue());
         else
@@ -902,8 +880,6 @@ struct wxArgNormalizer<signed char>
                     const wxFormatString *fmt, unsigned index)
         : wxArgNormalizerNarrowChar<signed char>(value, fmt, index) {}
 };
-
-#endif // wxUSE_UNICODE
 
 // convert references:
 WX_ARG_NORMALIZER_FORWARD(wxUniChar, const wxUniChar&);
@@ -1169,7 +1145,7 @@ private:
             else                                                              \
               _WX_VARARG_DO_CALL0_WCHAR(return_kw, impl, implUtf8, numfixed)
     #endif // wxUSE_UTF8_LOCALE_ONLY or not
-#else // wxUSE_UNICODE_WCHAR or ANSI
+#else // wxUSE_UNICODE_WCHAR
     #define _WX_VARARG_DO_CALL _WX_VARARG_DO_CALL_WCHAR
     #define _WX_VARARG_DO_CALL0 _WX_VARARG_DO_CALL0_WCHAR
 #endif // wxUSE_UNICODE_UTF8 / wxUSE_UNICODE_WCHAR

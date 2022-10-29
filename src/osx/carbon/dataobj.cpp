@@ -350,11 +350,7 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
                 {
                     wxString filenames;
                     
-#if wxUSE_UNICODE
                     filenames = wxString( (const char*)buf, *wxConvFileName );
-#else
-                    filenames = wxString (wxConvLocal.cWC2WX(wxConvFileName->cMB2WC( (const char*)buf)));
-#endif
                     wxArrayString files = wxStringTokenize( filenames, wxT("\n"), wxTOKEN_STRTOK );
 
                     for ( size_t j = 0 ; j < files.GetCount(); ++j )
@@ -586,14 +582,12 @@ void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir) 
 // wxTextDataObject
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
 void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                      wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     *formats++ = wxDataFormat(wxDF_UNICODETEXT);
     *formats = wxDataFormat(wxDF_TEXT);
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // wxFileDataObject
@@ -642,11 +636,7 @@ bool wxFileDataObject::SetData( size_t WXUNUSED(nSize), const void *pBuf )
 {
     wxString filenames;
 
-#if wxUSE_UNICODE
     filenames = wxString( (const char*)pBuf, *wxConvFileName );
-#else
-    filenames = wxString (wxConvLocal.cWC2WX(wxConvFileName->cMB2WC( (const char*)pBuf)));
-#endif
 
     m_filenames = wxStringTokenize( filenames, wxT("\n"), wxTOKEN_STRTOK );
 

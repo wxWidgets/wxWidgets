@@ -15,11 +15,10 @@
 WX_RELEASE_NODOT = 33
 COMPILER_PREFIX = vc
 OBJS = \
-	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = \
 	.\..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
-SETUPHDIR = \
-	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+SETUPHDIR = $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)
 SOUND_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\sound.pdb $(____DEBUGRUNTIME_3_p) \
 	$(__OPTIMIZEFLAG_6) /D_CRT_SECURE_NO_DEPRECATE=1 \
@@ -27,10 +26,9 @@ SOUND_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) $(__EXCEPTIONSFLAG_12) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	/I$(SETUPHDIR) /I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG_11) \
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 SOUND_OBJECTS =  \
 	$(OBJS)\sound_sound.obj
 SOUND_RESOURCES =  \
@@ -82,9 +80,6 @@ WXDEBUGFLAG = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 WXDEBUGFLAG = d
-!endif
-!if "$(UNICODE)" == "1"
-WXUNICODEFLAG = u
 !endif
 !if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
@@ -352,18 +347,6 @@ __THREAD_DEFINE_p = /DwxNO_THREADS
 !if "$(USE_THREADS)" == "0"
 __THREAD_DEFINE_p_1 = /d wxNO_THREADS
 !endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /D_UNICODE
-!endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = /d _UNICODE
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES_p = /I$(CAIRO_ROOT)\include\cairo
 !endif
@@ -378,15 +361,15 @@ __DLLFLAG_p_1 = /d WXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	wxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
@@ -426,7 +409,7 @@ clean:
 
 $(OBJS)\sound.exe: $(SOUND_OBJECTS) $(OBJS)\sound_sound.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\sound.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
-	$(SOUND_OBJECTS) $(SOUND_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(SOUND_OBJECTS) $(SOUND_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 
 data: 
@@ -437,5 +420,5 @@ $(OBJS)\sound_sound.obj: .\sound.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(SOUND_CXXFLAGS) .\sound.cpp
 
 $(OBJS)\sound_sound.res: .\sound.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\samples /d NOPCH .\sound.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\samples /d NOPCH .\sound.rc
 

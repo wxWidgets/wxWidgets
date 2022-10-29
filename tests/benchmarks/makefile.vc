@@ -15,20 +15,19 @@
 WX_RELEASE_NODOT = 33
 COMPILER_PREFIX = vc
 OBJS = \
-	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+	$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = \
 	.\..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
-SETUPHDIR = \
-	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+SETUPHDIR = $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)
 BENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\bench.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	/D_CRT_SECURE_NO_DEPRECATE=1 /D_CRT_NON_CONFORMING_SWPRINTFS=1 \
 	/D_SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) \
 	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
-	/DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I$(SETUPHDIR) /I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
+	$(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
 	$(OBJS)\bench_datetime.obj \
@@ -48,9 +47,9 @@ BENCH_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_26)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /I.\..\..\samples \
-	/DNOPCH /D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I$(SETUPHDIR) /I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
+	$(__DLLFLAG_p) /I.\..\..\samples /DNOPCH /D_CONSOLE $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GUI_OBJECTS =  \
 	$(OBJS)\bench_gui_bench.obj \
 	$(OBJS)\bench_gui_display.obj \
@@ -64,9 +63,9 @@ BENCH_GRAPHICS_CXXFLAGS = /M$(__RUNTIME_LIBS_42)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /I.\..\..\samples \
-	/DNOPCH /D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I$(SETUPHDIR) /I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
+	$(__DLLFLAG_p) /I.\..\..\samples /DNOPCH /D_CONSOLE $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GRAPHICS_OBJECTS =  \
 	$(OBJS)\bench_graphics_graphics.obj
 BENCH_GRAPHICS_RESOURCES =  \
@@ -118,9 +117,6 @@ WXDEBUGFLAG = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 WXDEBUGFLAG = d
-!endif
-!if "$(UNICODE)" == "1"
-WXUNICODEFLAG = u
 !endif
 !if "$(WXUNIV)" == "1"
 WXUNIVNAME = univ
@@ -222,7 +218,7 @@ __RUNTIME_LIBS_10 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_NET_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+	wxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
 !if "$(MONOLITHIC)" == "1"
 __LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
@@ -437,18 +433,6 @@ __THREAD_DEFINE_p = /DwxNO_THREADS
 !if "$(USE_THREADS)" == "0"
 __THREAD_DEFINE_p_0 = /d wxNO_THREADS
 !endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /D_UNICODE
-!endif
-!if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p_0 = /d wxUSE_UNICODE=0
-!endif
-!if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_0 = /d _UNICODE
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES = /I$(CAIRO_ROOT)\include\cairo
 !endif
@@ -463,15 +447,15 @@ __DLLFLAG_p_0 = /d WXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_CORE_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	wxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 !if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
@@ -517,7 +501,7 @@ clean:
 
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_3) /pdb:"$(OBJS)\bench.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(BENCH_OBJECTS)   $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(BENCH_OBJECTS)   $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 
 data: 
@@ -527,14 +511,14 @@ data:
 !if "$(USE_GUI)" == "1"
 $(OBJS)\bench_gui.exe: $(BENCH_GUI_OBJECTS) $(OBJS)\bench_gui_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_3) /pdb:"$(OBJS)\bench_gui.pdb" $(__DEBUGINFO_18)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(BENCH_GUI_OBJECTS) $(BENCH_GUI_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(BENCH_GUI_OBJECTS) $(BENCH_GUI_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\bench_graphics.exe: $(BENCH_GRAPHICS_OBJECTS) $(OBJS)\bench_graphics_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_3) /pdb:"$(OBJS)\bench_graphics.pdb" $(__DEBUGINFO_34)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(BENCH_GRAPHICS_OBJECTS) $(BENCH_GRAPHICS_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib opengl32.lib glu32.lib $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(BENCH_GRAPHICS_OBJECTS) $(BENCH_GRAPHICS_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib opengl32.lib glu32.lib $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
@@ -576,7 +560,7 @@ $(OBJS)\bench_printfbench.obj: .\printfbench.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\printfbench.cpp
 
 $(OBJS)\bench_gui_sample.res: .\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\..\samples /d NOPCH /d _CONSOLE .\..\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\..\samples /d NOPCH /d _CONSOLE .\..\..\samples\sample.rc
 
 $(OBJS)\bench_gui_bench.obj: .\bench.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\bench.cpp
@@ -588,7 +572,7 @@ $(OBJS)\bench_gui_image.obj: .\image.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\image.cpp
 
 $(OBJS)\bench_graphics_sample.res: .\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\..\samples /d NOPCH /d _CONSOLE .\..\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\..\samples /d NOPCH /d _CONSOLE .\..\..\samples\sample.rc
 
 $(OBJS)\bench_graphics_graphics.obj: .\graphics.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GRAPHICS_CXXFLAGS) .\graphics.cpp

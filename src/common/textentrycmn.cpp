@@ -313,9 +313,7 @@ bool wxTextEntryBase::CanPaste() const
 #if wxUSE_CLIPBOARD
         // check if there is any text on the clipboard
         if ( wxTheClipboard->IsSupported(wxDF_TEXT)
-#if wxUSE_UNICODE
                 || wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
-#endif // wxUSE_UNICODE
            )
         {
             return true;

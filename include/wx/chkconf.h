@@ -370,14 +370,6 @@
 #   endif
 #endif /* !defined(wxUSE_TEXTFILE) */
 
-#ifndef wxUSE_UNICODE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_UNICODE must be defined, please read comment near the top of this file."
-#   else
-#       define wxUSE_UNICODE 0
-#   endif
-#endif /* !defined(wxUSE_UNICODE) */
-
 #ifndef wxUSE_UNSAFE_WXSTRING_CONV
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_UNSAFE_WXSTRING_CONV must be defined, please read comment near the top of this file."

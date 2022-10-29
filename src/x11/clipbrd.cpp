@@ -346,11 +346,7 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
     atomVector.push_back(XA_IMAGE_TIFF);
     atomVector.push_back(XA_IMAGE_PNG);
 
-#if wxUSE_UNICODE
     wxDataFormat dfFormat = wxDF_UNICODETEXT;
-#else
-    wxDataFormat dfFormat = wxDF_TEXT;
-#endif
 
     for ( unsigned i = 0; i <= atomVector.size(); i++ )
     {

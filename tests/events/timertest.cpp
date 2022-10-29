@@ -111,10 +111,6 @@ void TimerEventTestCase::OneShot()
 
 void TimerEventTestCase::Multiple()
 {
-    // FIXME: This test crashes on wxGTK ANSI build slave for unknown reason,
-    //        disable it here to let the rest of the test suite run until this
-    //        can be fixed.
-#if !defined(__WXGTK__) || wxUSE_UNICODE
     wxEventLoop loop;
 
     TimerCounterHandler handler;
@@ -140,5 +136,4 @@ void TimerEventTestCase::Multiple()
     // parallel actually) it may be much less than 20 so just check that we get
     // more than one
     CPPUNIT_ASSERT( numTicks > 1 );
-#endif // !(wxGTK Unicode)
 }

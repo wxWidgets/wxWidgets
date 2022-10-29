@@ -251,11 +251,7 @@ void TokenizerTestCase::StrtokCompat()
         if ( ttd.mode != wxTOKEN_STRTOK )
             continue;
 
-#if wxUSE_UNICODE
         wxWCharBuffer
-#else
-        wxCharBuffer
-#endif
             buf(ttd.str);
         wxChar *last;
         wxChar *s = wxStrtok(buf.data(), ttd.delims, &last);

@@ -158,7 +158,7 @@ void wxGtkFileChooser::SetWildcard( const wxString& wildCard )
             {
                 GtkFileFilter* filter = gtk_file_filter_new();
 
-                gtk_file_filter_set_name( filter, wxGTK_CONV_SYS( wildDescriptions[n] ) );
+                gtk_file_filter_set_name( filter, wildDescriptions[n].utf8_str() );
 
                 wxStringTokenizer exttok( wildFilters[n], wxT( ";" ) );
 
@@ -166,7 +166,7 @@ void wxGtkFileChooser::SetWildcard( const wxString& wildCard )
                 while ( exttok.HasMoreTokens() )
                 {
                     wxString token = exttok.GetNextToken();
-                    gtk_file_filter_add_pattern( filter, wxGTK_CONV_SYS( token ) );
+                    gtk_file_filter_add_pattern( filter, token.utf8_str() );
 
                     if (n1 == 1)
                         m_wildcards.Add( token ); // Only add first pattern to list, used later when saving
@@ -422,7 +422,7 @@ bool wxGtkFileCtrl::SetFilename( const wxString& name )
 {
     if ( HasFlag( wxFC_SAVE ) )
     {
-        gtk_file_chooser_set_current_name( m_fcWidget, wxGTK_CONV( name ) );
+        gtk_file_chooser_set_current_name( m_fcWidget, name.utf8_str() );
         return true;
     }
     else

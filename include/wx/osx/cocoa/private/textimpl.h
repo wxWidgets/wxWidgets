@@ -33,7 +33,7 @@ public :
 
     virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const override;
 
-    virtual void SetInitialLabel(const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding)) override
+    virtual void SetInitialLabel(const wxString& WXUNUSED(title)) override
     {
         // Don't do anything here, text controls don't have any label and
         // setting it would overwrite the string value set when creating it.

@@ -83,10 +83,6 @@ jobs:
             compiler: clang++-10
             configure_flags: --disable-sys-libs
             use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK ANSI
-            runner: ubuntu-20.04
-            configure_flags: --disable-unicode
-            skip_samples: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
             configure_flags: --disable-compat30 --disable-sys-libs --disable-webview

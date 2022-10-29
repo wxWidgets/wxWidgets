@@ -215,9 +215,7 @@ size and removes the need for conversions in more cases.
 
 @subsection overview_unicode_settings Unicode Related Preprocessor Symbols
 
-@c wxUSE_UNICODE is defined as 1 now to indicate Unicode support. It can be
-explicitly set to 0 in @c setup.h under MSW or you can use @c \--disable-unicode
-under Unix but doing this is strongly discouraged. By default, @c
+@c wxUSE_UNICODE is always defined as 1 in wxWidgets 3.3 or later. By default, @c
 wxUSE_UNICODE_WCHAR is also defined as 1, however in UTF-8 build (described in
 the previous section), it is set to 0 and @c wxUSE_UNICODE_UTF8, which is
 usually 0, is set to 1 instead. In the latter case, @c wxUSE_UTF8_LOCALE_ONLY

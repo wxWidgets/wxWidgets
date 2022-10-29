@@ -110,7 +110,6 @@ typedef enum
 } wxUnicodeSubsetCodes;
 
 /* Unicode subsets */
-#ifdef __UNICODE__
 
 static struct
 {
@@ -261,8 +260,6 @@ static struct
     U_SPECIALS, wxT("Specials") }
 };
 
-#endif // __UNICODE__
-
 #if 0
 // Not yet used, but could be used to test under Win32 whether this subset is available
 // for the given font. The Win32 function is allegedly not accurate, however.
@@ -289,14 +286,9 @@ wxBEGIN_EVENT_TABLE(wxSymbolPickerDialog, wxDialog)
 
 ////@begin wxSymbolPickerDialog event table entries
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_FONT, wxSymbolPickerDialog::OnFontCtrlSelected )
-#if defined(__UNICODE__)
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSubsetSelected )
     EVT_UPDATE_UI( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSymbolpickerdialogSubsetUpdate )
-#endif
-
-#if defined(__UNICODE__)
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_FROM, wxSymbolPickerDialog::OnFromUnicodeSelected )
-#endif
 
     EVT_UPDATE_UI( wxID_OK, wxSymbolPickerDialog::OnOkUpdate )
     EVT_BUTTON( wxID_HELP, wxSymbolPickerDialog::OnHelpClick )
@@ -355,15 +347,11 @@ void wxSymbolPickerDialog::Init()
 ////@begin wxSymbolPickerDialog member initialisation
     m_fromUnicode = true;
     m_fontCtrl = nullptr;
-#if defined(__UNICODE__)
     m_subsetCtrl = nullptr;
-#endif
     m_symbolsCtrl = nullptr;
     m_symbolStaticCtrl = nullptr;
     m_characterCodeCtrl = nullptr;
-#if defined(__UNICODE__)
     m_fromUnicodeCtrl = nullptr;
-#endif
     m_stdButtonSizer = nullptr;
 ////@end wxSymbolPickerDialog member initialisation
     m_dontUpdate = false;
@@ -406,21 +394,15 @@ void wxSymbolPickerDialog::CreateControls()
 
     itemBoxSizer5->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-#if defined(__UNICODE__)
     wxStaticText* itemStaticText9 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Subset:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-#endif
-
-#if defined(__UNICODE__)
     wxArrayString m_subsetCtrlStrings;
     m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_subsetCtrlStrings, wxCB_READONLY );
     m_subsetCtrl->SetHelpText(_("Shows a Unicode subset."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_subsetCtrl->SetToolTip(_("Shows a Unicode subset."));
     itemBoxSizer5->Add(m_subsetCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-#endif
 
     m_symbolsCtrl = new wxSymbolListCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_LISTCTRL, wxDefaultPosition, wxSize(500, 200), 0 );
     itemBoxSizer3->Add(m_symbolsCtrl, 1, wxGROW|wxALL, 5);
@@ -444,13 +426,9 @@ void wxSymbolPickerDialog::CreateControls()
 
     itemBoxSizer12->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-#if defined(__UNICODE__)
     wxStaticText* itemStaticText18 = new wxStaticText( itemDialog1, wxID_STATIC, _("&From:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer12->Add(itemStaticText18, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-#endif
-
-#if defined(__UNICODE__)
     wxArrayString m_fromUnicodeCtrlStrings;
     m_fromUnicodeCtrlStrings.Add(_("ASCII"));
     m_fromUnicodeCtrlStrings.Add(_("Unicode"));
@@ -460,8 +438,6 @@ void wxSymbolPickerDialog::CreateControls()
     if (wxSymbolPickerDialog::ShowToolTips())
         m_fromUnicodeCtrl->SetToolTip(_("The range to show."));
     itemBoxSizer12->Add(m_fromUnicodeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-#endif
 
     m_stdButtonSizer = new wxStdDialogButtonSizer;
 
@@ -514,7 +490,6 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
             m_fontCtrl->SetSelection(0);
     }
 
-#if defined(__UNICODE__)
     if (m_subsetCtrl->GetCount() == 0)
     {
         // Insert items into subset combo
@@ -525,11 +500,8 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
         }
         m_subsetCtrl->SetSelection(0);
     }
-#endif
 
-#if defined(__UNICODE__)
     m_symbolsCtrl->SetUnicodeMode(m_fromUnicode);
-#endif
 
     if (!m_symbol.empty())
     {
@@ -579,25 +551,19 @@ void wxSymbolPickerDialog::UpdateSymbolDisplay(bool updateSymbolList, bool showA
         m_characterCodeCtrl->SetValue(wxEmptyString);
     }
 
-#if defined(__UNICODE__)
     if (showAtSubset)
         ShowAtSubset();
-#else
-    wxUnusedVar(showAtSubset);
-#endif
 }
 
 /// Show at the current subset selection
 void wxSymbolPickerDialog::ShowAtSubset()
 {
-#if defined(__UNICODE__)
     if (m_fromUnicode)
     {
         int sel = m_subsetCtrl->GetSelection();
         int low = g_UnicodeSubsetTable[sel].m_low;
         m_symbolsCtrl->EnsureVisible(low);
     }
-#endif
 }
 
 // Handle font selection
@@ -622,7 +588,6 @@ void wxSymbolPickerDialog::OnSymbolSelected( wxCommandEvent& event )
     if (sel != wxNOT_FOUND)
         m_symbol << (wxChar) sel;
 
-#if defined(__UNICODE__)
     if (sel != -1 && m_fromUnicode)
     {
         // Need to make the subset selection reflect the current symbol
@@ -638,12 +603,10 @@ void wxSymbolPickerDialog::OnSymbolSelected( wxCommandEvent& event )
             }
         }
     }
-#endif
 
     UpdateSymbolDisplay(false, false);
 }
 
-#if defined(__UNICODE__)
 // Handle Unicode/ASCII selection
 void wxSymbolPickerDialog::OnFromUnicodeSelected( wxCommandEvent& WXUNUSED(event) )
 {
@@ -663,9 +626,6 @@ void wxSymbolPickerDialog::OnSubsetSelected( wxCommandEvent& WXUNUSED(event) )
 
     ShowAtSubset();
 }
-#endif
-
-#if defined(__UNICODE__)
 
 /*!
  * wxEVT_UPDATE_UI event handler for ID_SYMBOLPICKERDIALOG_SUBSET
@@ -675,7 +635,6 @@ void wxSymbolPickerDialog::OnSymbolpickerdialogSubsetUpdate( wxUpdateUIEvent& ev
 {
     event.Enable(m_fromUnicode);
 }
-#endif
 
 /*!
  * wxEVT_UPDATE_UI event handler for wxID_OK
@@ -689,16 +648,12 @@ void wxSymbolPickerDialog::OnOkUpdate( wxUpdateUIEvent& event )
 /// Set Unicode mode
 void wxSymbolPickerDialog::SetUnicodeMode(bool unicodeMode)
 {
-#if defined(__UNICODE__)
     m_dontUpdate = true;
     m_fromUnicode = unicodeMode;
     if (m_fromUnicodeCtrl)
         m_fromUnicodeCtrl->SetSelection(m_fromUnicode ? 1 : 0);
     UpdateSymbolDisplay();
     m_dontUpdate = false;
-#else
-    wxUnusedVar(unicodeMode);
-#endif
 }
 
 /// Get the selected symbol character

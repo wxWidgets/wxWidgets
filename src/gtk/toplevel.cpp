@@ -721,10 +721,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
 #if 0
     if (!name.empty())
-        gtk_window_set_role( GTK_WINDOW(m_widget), wxGTK_CONV( name ) );
+        gtk_window_set_role( GTK_WINDOW(m_widget), name.utf8_str() );
 #endif
 
-    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
+    gtk_window_set_title( GTK_WINDOW(m_widget), title.utf8_str() );
     gtk_widget_set_can_focus(m_widget, false);
 
     g_signal_connect (m_widget, "delete_event",
@@ -1620,7 +1620,7 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 
     m_title = title;
 
-    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
+    gtk_window_set_title( GTK_WINDOW(m_widget), title.utf8_str() );
 }
 
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )

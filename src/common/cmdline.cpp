@@ -206,10 +206,8 @@ struct wxCmdLineParserData
     // methods
     wxCmdLineParserData();
     void SetArguments(int argc, char **argv);
-#if wxUSE_UNICODE
     void SetArguments(int argc, wxChar **argv);
     void SetArguments(int argc, const wxCmdLineArgsArray& argv);
-#endif // wxUSE_UNICODE
     void SetArguments(const wxString& cmdline);
 
     int FindOption(const wxString& name);
@@ -443,8 +441,6 @@ void wxCmdLineParserData::SetArguments(int argc, char **argv)
     }
 }
 
-#if wxUSE_UNICODE
-
 void wxCmdLineParserData::SetArguments(int argc, wxChar **argv)
 {
     m_arguments.clear();
@@ -460,8 +456,6 @@ void wxCmdLineParserData::SetArguments(int WXUNUSED(argc),
 {
     m_arguments = argv.GetArguments();
 }
-
-#endif // wxUSE_UNICODE
 
 void wxCmdLineParserData::SetArguments(const wxString& cmdLine)
 {
@@ -542,8 +536,6 @@ void wxCmdLineParser::SetCmdLine(int argc, char **argv)
     m_data->SetArguments(argc, argv);
 }
 
-#if wxUSE_UNICODE
-
 void wxCmdLineParser::SetCmdLine(int argc, wxChar **argv)
 {
     m_data->SetArguments(argc, argv);
@@ -553,8 +545,6 @@ void wxCmdLineParser::SetCmdLine(int argc, const wxCmdLineArgsArray& argv)
 {
     m_data->SetArguments(argc, argv);
 }
-
-#endif // wxUSE_UNICODE
 
 void wxCmdLineParser::SetCmdLine(const wxString& cmdline)
 {
@@ -853,8 +843,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
         // empty argument or just '-' is not an option but a parameter
         if ( maybeOption && arg.length() > 1 &&
-                // FIXME-UTF8: use wc_str() after removing ANSI build
-                wxStrchr(m_data->m_switchChars.c_str(), arg[0u]) )
+                wxStrchr(m_data->m_switchChars.wc_str(), arg[0u]) )
         {
             bool isLong;
             wxString name;

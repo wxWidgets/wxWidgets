@@ -461,7 +461,7 @@ bool wxLocale::Init(int lang, int flags)
     const char *retloc = lang == wxLANGUAGE_DEFAULT ? wxSetlocale(LC_ALL, "")
                                                     : info->TrySetLocale();
 
-#if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
+#if defined(__VISUALC__) || defined(__MINGW32__)
     // VC++ setlocale() (also used by Mingw) can't set locale to languages that
     // can only be written using Unicode, therefore wxSetlocale() call fails
     // for such languages but we don't want to report it as an error -- so that
@@ -770,12 +770,8 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
     wxTranslations *t = wxTranslations::Get();
     if ( !t )
         return false;
-#if wxUSE_UNICODE
     wxUnusedVar(msgIdCharset);
     return t->AddCatalog(szDomain, msgIdLanguage);
-#else
-    return t->AddCatalog(szDomain, msgIdLanguage, msgIdCharset);
-#endif
 }
 
 bool wxLocale::IsLoaded(const wxString& domain) const

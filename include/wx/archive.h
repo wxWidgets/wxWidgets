@@ -336,8 +336,6 @@ public:
         const wxString& name,
         wxPathFormat format = wxPATH_NATIVE) const = 0;
 
-    // FIXME-UTF8: remove these from this file, they are used for ANSI
-    //             build only
     void SetConv(wxMBConv& conv) { m_pConv = &conv; }
     wxMBConv& GetConv() const
         { if (m_pConv) return *m_pConv; else return wxConvLocal; }

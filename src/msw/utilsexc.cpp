@@ -760,7 +760,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 
     dwFlags |= CREATE_DEFAULT_ERROR_MODE ;
 
-    wxWxCharBuffer envBuffer;
+    wxWCharBuffer envBuffer;
     bool useCwd = false;
     if ( env )
     {
@@ -770,13 +770,11 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         // NUL-terminated strings.
         if ( !env->env.empty() )
         {
-#if wxUSE_UNICODE
             // Environment variables can contain non-ASCII characters. We could
             // check for it and not use this flag if everything is really ASCII
             // only but there doesn't seem to be any reason to do it so just
             // assume Unicode by default.
             dwFlags |= CREATE_UNICODE_ENVIRONMENT;
-#endif // wxUSE_UNICODE
 
             wxEnvVariableHashMap::const_iterator it;
 
@@ -1118,12 +1116,8 @@ long wxExecute(const char* const* argv, int flags, wxProcess* handler,
     return wxExecuteImpl(argv, flags, handler, env);
 }
 
-#if wxUSE_UNICODE
-
 long wxExecute(const wchar_t* const* argv, int flags, wxProcess* handler,
                const wxExecuteEnv *env)
 {
     return wxExecuteImpl(argv, flags, handler, env);
 }
-
-#endif // wxUSE_UNICODE

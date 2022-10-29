@@ -35,14 +35,14 @@ protected:
     virtual size_t OnSysRead(void *buffer, size_t size) override;
 
 private:
+    // Return the length of the string in bytes.
+    size_t GetBufferSize() const { return m_buf.length(); }
+
     // the string that was passed in the ctor
     wxString m_str;
 
     // the buffer we're reading from
-    wxCharBuffer m_buf;
-
-    // length of the buffer we're reading from
-    size_t m_len;
+    const wxCharBuffer m_buf;
 
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
@@ -89,10 +89,8 @@ private:
     // arbitrary 8 bit data
     wxMBConv& m_conv;
 
-#if wxUSE_UNICODE
     // unconverted data from the last call to OnSysWrite()
     wxMemoryBuffer m_unconv;
-#endif // wxUSE_UNICODE
 
     wxDECLARE_NO_COPY_CLASS(wxStringOutputStream);
 };

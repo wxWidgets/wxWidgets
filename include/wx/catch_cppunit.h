@@ -94,11 +94,9 @@ namespace Catch
                   i != wxs.end();
                   ++i )
             {
-#if wxUSE_UNICODE
                 if ( !iswprint(*i) )
                     s += wxString::Format(wxASCII_STR("\\u%04X"), *i).ToAscii();
                 else
-#endif // wxUSE_UNICODE
                     s += *i;
             }
 

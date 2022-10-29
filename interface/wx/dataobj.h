@@ -753,18 +753,16 @@ public:
     /**
         Returns 2 under wxMac and wxGTK, where text data coming from the
         clipboard may be provided as ANSI (@c wxDF_TEXT) or as Unicode text
-        (@c wxDF_UNICODETEXT, but only when @c wxUSE_UNICODE==1).
+        (@c wxDF_UNICODETEXT).
 
-        Returns 1 under other platforms (e.g. wxMSW) or when building in ANSI mode
-        (@c wxUSE_UNICODE==0).
+        Returns 1 under other platforms (e.g. wxMSW).
     */
     virtual size_t GetFormatCount(wxDataObject::Direction dir = wxDataObject::Get) const;
 
     /**
         Returns the preferred format supported by this object.
 
-        This is @c wxDF_TEXT or @c wxDF_UNICODETEXT depending on the platform
-        and from the build mode (i.e. from @c wxUSE_UNICODE).
+        This is @c wxDF_TEXT or @c wxDF_UNICODETEXT depending on the platform.
     */
     const wxDataFormat& GetFormat() const;
 

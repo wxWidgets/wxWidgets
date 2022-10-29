@@ -22,8 +22,7 @@
 // one for UTF-8 encoded char* string and one for "raw" wchar_t* strings (or
 // char* in ANSI build).
 
-// FIXME-UTF8: only wchar after we remove ANSI build
-#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 struct WXDLLIMPEXP_BASE wxStringOperationsWchar
 {
     // moves the iterator to the next Unicode character
@@ -73,14 +72,14 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
         buf.data[1] = 0;
         return buf;
     }
-    static wxWxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
+    static wxWCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
     static bool IsSingleCodeUnitCharacter(const wxUniChar&) { return true; }
 #endif
 
     static wxUniChar DecodeChar(const wxStringImpl::const_iterator& i)
         { return *i; }
 };
-#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#endif // wxUSE_UNICODE_WCHAR
 
 
 #if wxUSE_UNICODE_UTF8

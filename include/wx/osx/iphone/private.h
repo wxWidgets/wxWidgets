@@ -80,7 +80,7 @@ public :
 
     void                SetDefaultButton( bool isDefault );
     void                PerformClick();
-    virtual void        SetLabel(const wxString& title, wxFontEncoding encoding);
+    virtual void        SetLabel(const wxString& title);
 
     void                SetCursor( const wxCursor & cursor );
     void                CaptureMouse();
@@ -163,7 +163,7 @@ public :
     void GetContentArea( int &left , int &top , int &width , int &height ) const;
     bool SetShape(const wxRegion& region);
 
-    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
+    virtual void SetTitle( const wxString& title ) ;
 
     // Title bar buttons don't exist in iOS.
     virtual bool EnableCloseButton(bool WXUNUSED(enable)) { return false; }

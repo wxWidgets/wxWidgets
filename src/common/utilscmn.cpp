@@ -1391,10 +1391,8 @@ wxVersionInfo wxGetLibraryVersionInfo()
                wxRELEASE_NUMBER,
 #if wxUSE_UNICODE_UTF8
                "UTF-8",
-#elif wxUSE_UNICODE
-               "wchar_t",
 #else
-               "none",
+               "wchar_t",
 #endif
                wxDEBUG_LEVEL,
 #if !wxUSE_REPRODUCIBLE_BUILD

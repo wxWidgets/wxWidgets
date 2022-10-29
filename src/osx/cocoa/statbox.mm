@@ -54,14 +54,14 @@ namespace
         {
         }
 
-        virtual void SetLabel( const wxString& title, wxFontEncoding encoding ) override
+        virtual void SetLabel( const wxString& title ) override
         {
             if (title.empty())
                 [GetNSBox() setTitlePosition:NSNoTitle];
             else
                 [GetNSBox() setTitlePosition:NSAtTop];
 
-            wxWidgetCocoaImpl::SetLabel(title, encoding);
+            wxWidgetCocoaImpl::SetLabel(title);
         }
 
     private:

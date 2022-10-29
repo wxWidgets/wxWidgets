@@ -72,11 +72,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
         argv = new wxChar *[qtArgs.size() + 1];
         for ( int i = 0; i < qtArgs.size(); i++ )
         {
-#if wxUSE_UNICODE
             argv[i] = wxStrdupW( wxConvUTF8.cMB2WX( qtArgs[i].toUtf8().data() ) );
-#else // wxUSE_UNICODE
-            argv[i] = wxStrdupA( wxConvUTF8.cMB2WX( qtArgs[i].toUtf8().data() ) );
-#endif // wxUSE_UNICODE
         }
 
         argc = m_qtApplication->arguments().size();

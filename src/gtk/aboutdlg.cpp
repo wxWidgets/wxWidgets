@@ -52,19 +52,12 @@ public:
 
         for ( size_t n = 0; n < m_count; n++ )
         {
-#if wxUSE_UNICODE
             // notice that there is no need to copy the string pointer here
             // because this class is used only as a temporary and during its
             // existence the pointer persists in wxString which uses it either
             // for internal representation (in wxUSE_UNICODE_UTF8 case) or as
             // cached m_convertedToChar (in wxUSE_UNICODE_WCHAR case)
-            m_strings[n] = wxGTK_CONV_SYS(a[n]);
-#else // !wxUSE_UNICODE
-            // and in ANSI build we can simply borrow the pointer from
-            // wxCharBuffer (which owns it in this case) instead of copying it
-            // but we then become responsible for freeing it
-            m_strings[n] = wxGTK_CONV_SYS(a[n]).release();
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+            m_strings[n] = a[n].utf8_str();
         }
 
         // array must be null-terminated
@@ -75,11 +68,6 @@ public:
 
     ~GtkArray()
     {
-#if !wxUSE_UNICODE
-        for ( size_t n = 0; n < m_count; n++ )
-            free(const_cast<gchar *>(m_strings[n]));
-#endif
-
         delete [] m_strings;
     }
 
@@ -114,7 +102,7 @@ static gboolean activate_link(GtkAboutDialog*, const char* link, void* dontIgnor
 {
     if (dontIgnore)
     {
-        wxLaunchDefaultBrowser(wxGTK_CONV_BACK_SYS(link));
+        wxLaunchDefaultBrowser(wxString::FromUTF8(link));
         return true;
     }
     return false;
@@ -124,7 +112,7 @@ static gboolean activate_link(GtkAboutDialog*, const char* link, void* dontIgnor
 extern "C" {
 static void wxGtkAboutDialogOnLink(GtkAboutDialog*, const char* link, void*)
 {
-    wxLaunchDefaultBrowser(wxGTK_CONV_BACK_SYS(link));
+    wxLaunchDefaultBrowser(wxString::FromUTF8(link));
 }
 }
 #endif
@@ -136,21 +124,21 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         gs_aboutDialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 
     GtkAboutDialog * const dlg = gs_aboutDialog;
-    gtk_about_dialog_set_program_name(dlg, wxGTK_CONV_SYS(info.GetName()));
+    gtk_about_dialog_set_program_name(dlg, info.GetName().utf8_str());
     if ( info.HasVersion() )
-        gtk_about_dialog_set_version(dlg, wxGTK_CONV_SYS(info.GetVersion()));
+        gtk_about_dialog_set_version(dlg, info.GetVersion().utf8_str());
     else
         gtk_about_dialog_set_version(dlg, nullptr);
     if ( info.HasCopyright() )
-        gtk_about_dialog_set_copyright(dlg, wxGTK_CONV_SYS(info.GetCopyrightToDisplay()));
+        gtk_about_dialog_set_copyright(dlg, info.GetCopyrightToDisplay().utf8_str());
     else
         gtk_about_dialog_set_copyright(dlg, nullptr);
     if ( info.HasDescription() )
-        gtk_about_dialog_set_comments(dlg, wxGTK_CONV_SYS(info.GetDescription()));
+        gtk_about_dialog_set_comments(dlg, info.GetDescription().utf8_str());
     else
         gtk_about_dialog_set_comments(dlg, nullptr);
     if ( info.HasLicence() )
-        gtk_about_dialog_set_license(dlg, wxGTK_CONV_SYS(info.GetLicence()));
+        gtk_about_dialog_set_license(dlg, info.GetLicence().utf8_str());
     else
         gtk_about_dialog_set_license(dlg, nullptr);
 
@@ -169,11 +157,11 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         gtk_about_dialog_set_url_hook(wxGtkAboutDialogOnLink, nullptr, nullptr);
 #endif
 
-        gtk_about_dialog_set_website(dlg, wxGTK_CONV_SYS(info.GetWebSiteURL()));
+        gtk_about_dialog_set_website(dlg, info.GetWebSiteURL().utf8_str());
         gtk_about_dialog_set_website_label
         (
             dlg,
-            wxGTK_CONV_SYS(info.GetWebSiteDescription())
+            info.GetWebSiteDescription().utf8_str()
         );
     }
     else
@@ -226,7 +214,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
     }
 
     if ( !transCredits.empty() )
-        gtk_about_dialog_set_translator_credits(dlg, wxGTK_CONV_SYS(transCredits));
+        gtk_about_dialog_set_translator_credits(dlg, transCredits.utf8_str());
     else
         gtk_about_dialog_set_translator_credits(dlg, nullptr);
 

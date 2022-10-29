@@ -490,8 +490,8 @@ wxString wxClass::GetNameWithoutTemplate() const
 
 bool wxClass::IsValidCtorForThisClass(const wxMethod& m) const
 {
-    // remember that e.g. the ctor for wxWritableCharTypeBuffer<wchar_t> is
-    // named wxWritableCharTypeBuffer, without the <...> part!
+    // remember that e.g. the ctor for wxScopedCharBuffer<wchar_t> is
+    // named wxScopedCharBuffer, without the <...> part!
 
     if (m.IsCtor() && m.GetName() == GetNameWithoutTemplate())
         return true;

@@ -47,21 +47,7 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 
     const int len = SysStringLen(bStr);
 
-#if wxUSE_UNICODE
-    wxString str(bStr, len);
-#else
-    wxString str;
-    if (len)
-    {
-        wxStringBufferLength buf(str, len); // asserts if len == 0
-        buf.SetLength(WideCharToMultiByte(CP_ACP, 0 /* no flags */,
-                                  bStr, len /* not necessarily NUL-terminated */,
-                                  buf, len,
-                                  nullptr, nullptr /* no default char */));
-    }
-#endif
-
-    return str;
+    return wxString(bStr, len);
 }
 
 // ----------------------------------------------------------------------------
@@ -70,7 +56,7 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 void wxBasicString::AssignFromString(const wxString& str)
 {
     SysFreeString(m_bstrBuf);
-    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
+    m_bstrBuf = SysAllocString(str.wc_str());
 }
 
 BSTR wxBasicString::Detach()

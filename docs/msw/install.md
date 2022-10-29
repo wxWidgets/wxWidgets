@@ -304,15 +304,6 @@ The full list of the build settings follows:
   Build shared libraries (DLLs). By default, DLLs are not built
   (SHARED=0).
 
-* `UNICODE=0`
-
-  To completely disable Unicode support (default is UNICODE=1). It should not
-  be necessary to do this.
-
-  This option affect name of the library ('u' is appended in the default
-  Unicode build) and the directory where the library and setup.h are stored
-  (ditto).
-
 * `WXUNIV=1`
 
   Build wxUniversal instead of native wxMSW
@@ -465,7 +456,6 @@ Here is what you need to do:
   be used for debug builds only.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
-  - `_UNICODE` unless you want to use deprecated ANSI build of wxWidgets.
   - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
   - `WXUSINGDLL` if you are using DLL build of wxWidgets.
 * Add `<wx-lib-dir>` directory described above to the libraries path.

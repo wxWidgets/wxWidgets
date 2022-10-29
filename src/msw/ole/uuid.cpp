@@ -42,11 +42,7 @@ Uuid::Uuid(const Uuid& uuid)
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // allocate new buffer
   m_pszCForm = new wxChar[UUID_CSTRLEN];
@@ -61,11 +57,7 @@ Uuid& Uuid::operator=(const Uuid& uuid)
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // allocate new buffer if not done yet
   if ( !m_pszCForm )
@@ -90,11 +82,7 @@ Uuid::~Uuid()
   // this string must be allocated by RPC!
   // (otherwise you get a debug breakpoint deep inside RPC DLL)
   if ( m_pszUuid )
-#ifdef _UNICODE
     RpcStringFree((unsigned short **)&m_pszUuid);
-#else
-    RpcStringFree(&m_pszUuid);
-#endif
 
   // perhaps we should just use a static buffer and not bother
   // with new and delete?
@@ -108,11 +96,7 @@ void Uuid::Set(const UUID &uuid)
   m_uuid = uuid;
 
   // get string representation
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // cache UUID in C format
   UuidToCForm();
@@ -133,20 +117,12 @@ void Uuid::Create()
 bool Uuid::Set(const wxChar *pc)
 {
   // get UUID from string
-#ifdef _UNICODE
   if ( UuidFromString(reinterpret_cast<unsigned short *>(const_cast<wxChar*>(pc)), &m_uuid) != RPC_S_OK )
-#else
-  if ( UuidFromString((wxUChar *)pc, &m_uuid) != RPC_S_OK)
-#endif
     // failed: probably invalid string
     return false;
 
   // transform it back to string to normalize it
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // update m_pszCForm
   UuidToCForm();

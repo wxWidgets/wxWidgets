@@ -295,7 +295,7 @@ void wxBitmapComboBox::GTKInsertComboBoxTextItem( unsigned int n, const wxString
     gtk_list_store_insert( store, &iter, n );
 
     wxGtkValue value( G_TYPE_STRING );
-    g_value_set_string( value, wxGTK_CONV( text ) );
+    g_value_set_string( value, text.utf8_str() );
     gtk_list_store_set_value( store, &iter, m_stringCellIndex, value );
 }
 

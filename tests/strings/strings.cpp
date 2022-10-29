@@ -197,7 +197,6 @@ void StringTestCase::Format()
 
 void StringTestCase::FormatUnicode()
 {
-#if wxUSE_UNICODE
     // At least under FreeBSD vsnprintf(), used by wxString::Format(), doesn't
     // work with Unicode strings unless a UTF-8 locale is used, so set it.
     wxLocaleSetter loc("C.UTF-8");
@@ -210,7 +209,6 @@ void StringTestCase::FormatUnicode()
     wxString expected(fmt);
     expected.Replace("%i", "1");
     CPPUNIT_ASSERT_EQUAL( expected, s );
-#endif // wxUSE_UNICODE
 }
 
 void StringTestCase::Constructors()
@@ -221,13 +219,11 @@ void StringTestCase::Constructors()
     CPPUNIT_ASSERT_EQUAL( "Hell", wxString("Hello", 4) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString("Hello", 5) );
 
-#if wxUSE_UNICODE
     CPPUNIT_ASSERT_EQUAL( L"", wxString(L'Z', 0) );
     CPPUNIT_ASSERT_EQUAL( L"Z", wxString(L'Z') );
     CPPUNIT_ASSERT_EQUAL( L"ZZZZ", wxString(L'Z', 4) );
     CPPUNIT_ASSERT_EQUAL( L"Hell", wxString(L"Hello", 4) );
     CPPUNIT_ASSERT_EQUAL( L"Hello", wxString(L"Hello", 5) );
-#endif // wxUSE_UNICODE
 
     CPPUNIT_ASSERT_EQUAL( 0, wxString(wxString(), 17).length() );
 
@@ -270,9 +266,7 @@ void StringTestCase::StaticConstructors()
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello") );
 
-#if wxUSE_UNICODE
     CPPUNIT_ASSERT_EQUAL( 2, wxString::FromUTF8("h\xc3\xa9llo", 3).length() );
-#endif // wxUSE_UNICODE
 
 
     //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromUTF8("", 1).length() );
@@ -290,13 +284,11 @@ void StringTestCase::Extraction()
     CPPUNIT_ASSERT( wxStrcmp( s.substr(3, 5).c_str() , wxT("lo, w") ) == 0 );
     CPPUNIT_ASSERT( wxStrcmp( s.substr(3).c_str() , wxT("lo, world!") ) == 0 );
 
-#if wxUSE_UNICODE
     static const char *germanUTF8 = "Oberfl\303\244che";
     wxString strUnicode(wxString::FromUTF8(germanUTF8));
 
     CPPUNIT_ASSERT( strUnicode.Mid(0, 10) == strUnicode );
     CPPUNIT_ASSERT( strUnicode.Mid(7, 2) == "ch" );
-#endif // wxUSE_UNICODE
 
     wxString rest;
 
@@ -1035,7 +1027,6 @@ void StringTestCase::StringBuf()
 
 void StringTestCase::UTF8Buf()
 {
-#if wxUSE_UNICODE
     // "czech" in Czech ("cestina"):
     static const char *textUTF8 = "\304\215e\305\241tina";
     static const wchar_t textUTF16[] = {0x10D, 0x65, 0x161, 0x74, 0x69, 0x6E, 0x61, 0};
@@ -1050,7 +1041,6 @@ void StringTestCase::UTF8Buf()
         buf.SetLength(5);
     }
     CPPUNIT_ASSERT(s == wxString(textUTF16, 0, 3));
-#endif // wxUSE_UNICODE
 }
 
 
@@ -1171,15 +1161,9 @@ void StringTestCase::BeforeAndAfter()
     // parts: before the first "=", in between the two "="s and after the last
     // one. This allows to avoid duplicating the string contents (which has to
     // be different for Unicode and ANSI builds) in the tests below.
-#if wxUSE_UNICODE
     #define FIRST_PART L"letter"
     #define MIDDLE_PART L"\xe9;\xe7a"
     #define LAST_PART L"l\xe0"
-#else // !wxUSE_UNICODE
-    #define FIRST_PART "letter"
-    #define MIDDLE_PART "e;ca"
-    #define LAST_PART "la"
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     const wxString s(FIRST_PART wxT("=") MIDDLE_PART wxT("=") LAST_PART);
 
@@ -1251,7 +1235,6 @@ void StringTestCase::ScopedBuffers()
 
 void StringTestCase::SupplementaryUniChar()
 {
-#if wxUSE_UNICODE
     // Test wxString(wxUniChar ch, size_t nRepeat = 1),
     // which is implemented upon assign(size_t n, wxUniChar ch).
     {
@@ -1414,5 +1397,4 @@ void StringTestCase::SupplementaryUniChar()
     /* Not tested here:
          find_first_of, find_last_of, find_first_not_of, find_last_not_of
     */
-#endif
 }

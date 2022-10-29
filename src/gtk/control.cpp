@@ -144,7 +144,7 @@ void wxControl::GTKFixSensitivity(bool WXUNUSED_IN_GTK3(onlyIfUnderMouse))
 void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonics(label);
-    gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
+    gtk_label_set_text_with_mnemonic(w, labelGTK.utf8_str());
 }
 
 #if wxUSE_MARKUP
@@ -152,7 +152,7 @@ void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 void wxControl::GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonicsWithMarkup(label);
-    gtk_label_set_markup_with_mnemonic(w, wxGTK_CONV(labelGTK));
+    gtk_label_set_markup_with_mnemonic(w, labelGTK.utf8_str());
 }
 
 #endif // wxUSE_MARKUP
@@ -168,7 +168,7 @@ void wxControl::GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label
 GtkWidget* wxControl::GTKCreateFrame(const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonics(label);
-    GtkWidget* labelwidget = gtk_label_new_with_mnemonic(wxGTK_CONV(labelGTK));
+    GtkWidget* labelwidget = gtk_label_new_with_mnemonic(labelGTK.utf8_str());
     gtk_widget_show(labelwidget); // without this it won't show...
 
     GtkWidget* framewidget = gtk_frame_new(nullptr);

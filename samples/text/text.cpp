@@ -717,9 +717,7 @@ void MyTextCtrl::LogKeyEvent(const wxString& name, wxKeyEvent& event) const
         }
     }
 
-#if wxUSE_UNICODE
     key += wxString::Format(" (Unicode: %#04x)", event.GetUnicodeKey());
-#endif // wxUSE_UNICODE
 
     wxLogMessage( "%s event: %s (flags = %c%c%c%c)",
                   name,
@@ -1184,11 +1182,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                 m_horizontal->SetFont(wxFontInfo(18)
                                         .Family(wxFONTFAMILY_SWISS)
                                         .Encoding(wxFONTENCODING_CP1251));
-#if wxUSE_UNICODE
                 m_horizontal->AppendText(L"\x0412\x0430\x0434\x0438\x043c \x0426");
-#else
-                m_horizontal->AppendText("\313\301\326\305\324\323\321 \325\304\301\336\316\331\315");
-#endif
         }
     }
     else

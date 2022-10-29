@@ -348,7 +348,7 @@ void wxMenuBar::GtkAppend(wxMenu* menu, const wxString& title, int pos)
 
         const wxString str(wxConvertMnemonicsToGTK(title));
         // The "m_owner" is the "menu item"
-        menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
+        menu->m_owner = gtk_menu_item_new_with_mnemonic( str.utf8_str() );
 
         gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
     }
@@ -533,7 +533,7 @@ void wxMenuBar::SetMenuLabel( size_t pos, const wxString& label )
 
     const wxString str(wxConvertMnemonicsToGTK(label));
     if (menu->m_owner)
-        gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menu->m_owner))), wxGTK_CONV(str));
+        gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menu->m_owner))), str.utf8_str());
 }
 
 //-----------------------------------------------------------------------------
@@ -682,7 +682,7 @@ void wxMenuItem::SetGtkLabel()
 {
     const wxString text = wxConvertMnemonicsToGTK(m_text.BeforeFirst('\t'));
     GtkLabel* label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(m_menuItem)));
-    gtk_label_set_text_with_mnemonic(label, wxGTK_CONV_SYS(text));
+    gtk_label_set_text_with_mnemonic(label, text.utf8_str());
 #if wxUSE_ACCEL
     GtkAccel gtkAccel(this);
     if ( gtkAccel.IsOk() )
@@ -1366,7 +1366,7 @@ wxString GtkAccel::GetGtkHotKey(const wxAcceleratorEntry *accel)
                 if ( code < 127 )
                 {
                     const wxString
-                        name = wxGTK_CONV_BACK_SYS(gdk_keyval_name((guint)code));
+                        name = wxString::FromUTF8(gdk_keyval_name((guint)code));
                     if ( !name.empty() )
                     {
                         hotkey << name;
@@ -1410,7 +1410,7 @@ void GtkAccel::Init(const wxAcceleratorEntry* entry)
     const wxString string = GetGtkHotKey(entry);
     if (!string.empty())
     {
-        gtk_accelerator_parse(wxGTK_CONV_SYS(string), &m_key, &m_mods);
+        gtk_accelerator_parse(string.utf8_str(), &m_key, &m_mods);
 
         // Normally, we detect all the keys considered invalid by GTK in
         // GetGtkHotKey(), but just in case GTK decides to add more invalid

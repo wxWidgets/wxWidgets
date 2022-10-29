@@ -106,53 +106,34 @@
 #endif /* wxHAVE_TCHAR_SUPPORT */
 
 /* ------------------------------------------------------------------------- */
-/* define wxChar type                                                        */
+/* define wxChar type for compatibility only                                 */
 /* ------------------------------------------------------------------------- */
 
-/* TODO: define wxCharInt to be equal to either int or wint_t? */
-
-#if !wxUSE_UNICODE
-    typedef char wxChar;
-    typedef signed char wxSChar;
-    typedef unsigned char wxUChar;
-#else
-    /* VZ: note that VC++ defines _T[SU]CHAR simply as wchar_t and not as    */
-    /*     signed/unsigned version of it which (a) makes sense to me (unlike */
-    /*     char wchar_t is always unsigned) and (b) was how the previous     */
-    /*     definitions worked so keep it like this                           */
-    typedef wchar_t wxChar;
-    typedef wchar_t wxSChar;
-    typedef wchar_t wxUChar;
-#endif /* ASCII/Unicode */
+typedef wchar_t wxChar;
+typedef wchar_t wxSChar;
+typedef wchar_t wxUChar;
 
 /* ------------------------------------------------------------------------- */
 /* define wxStringCharType                                                   */
 /* ------------------------------------------------------------------------- */
 
-/* depending on the platform, Unicode build can either store wxStrings as
+/* depending on the build options, strings can store their data either as
    wchar_t* or UTF-8 encoded char*: */
-#if wxUSE_UNICODE
-    /* FIXME-UTF8: what would be better place for this? */
-    #if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
-        #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
-    #endif
-    #ifndef wxUSE_UTF8_LOCALE_ONLY
-        #define wxUSE_UTF8_LOCALE_ONLY 0
-    #endif
-
-    #ifndef wxUSE_UNICODE_UTF8
-        #define wxUSE_UNICODE_UTF8 0
-    #endif
-
-    #if wxUSE_UNICODE_UTF8
-        #define wxUSE_UNICODE_WCHAR 0
-    #else
-        #define wxUSE_UNICODE_WCHAR 1
-    #endif
-#else
-    #define wxUSE_UNICODE_WCHAR 0
-    #define wxUSE_UNICODE_UTF8  0
+#if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
+    #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
+#endif
+#ifndef wxUSE_UTF8_LOCALE_ONLY
     #define wxUSE_UTF8_LOCALE_ONLY 0
+#endif
+
+#ifndef wxUSE_UNICODE_UTF8
+    #define wxUSE_UNICODE_UTF8 0
+#endif
+
+#if wxUSE_UNICODE_UTF8
+    #define wxUSE_UNICODE_WCHAR 0
+#else
+    #define wxUSE_UNICODE_WCHAR 1
 #endif
 
 #ifndef SIZEOF_WCHAR_T
@@ -168,7 +149,7 @@
 /* define char type used by wxString internal representation: */
 #if wxUSE_UNICODE_WCHAR
     typedef wchar_t wxStringCharType;
-#else /* wxUSE_UNICODE_UTF8 || ANSI */
+#else /* wxUSE_UNICODE_UTF8 */
     typedef char wxStringCharType;
 #endif
 
@@ -189,15 +170,11 @@
    compatibility.
  */
 #ifndef wxT
-    #if !wxUSE_UNICODE
-        #define wxT(x) x
-    #else /* Unicode */
-        /*
-            Notice that we use an intermediate macro to allow x to be expanded
-            if it's a macro itself.
-         */
-        #define wxT(x) wxCONCAT_HELPER(L, x)
-    #endif /* ASCII/Unicode */
+    /*
+        Notice that we use an intermediate macro to allow x to be expanded
+        if it's a macro itself.
+     */
+    #define wxT(x) wxCONCAT_HELPER(L, x)
 #endif /* !defined(wxT) */
 
 /*
@@ -208,16 +185,15 @@
 
 /*
    wxS ("wx string") macro can be used to create literals using the same
-   representation as wxString does internally, i.e. wchar_t in Unicode build
-   under Windows or char in UTF-8-based Unicode builds and (deprecated) ANSI
-   builds everywhere (see wxStringCharType definition above).
+   representation as wxString does internally, i.e. wchar_t by default
+   char in UTF-8-based builds.
  */
 #if wxUSE_UNICODE_WCHAR
     /*
         As above with wxT(), wxS() argument is expanded if it's a macro.
      */
     #define wxS(x) wxCONCAT_HELPER(L, x)
-#else /* wxUSE_UNICODE_UTF8 || ANSI */
+#else /* wxUSE_UNICODE_UTF8 */
     #define wxS(x) x
 #endif
 

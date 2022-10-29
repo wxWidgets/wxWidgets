@@ -188,18 +188,6 @@
 
 
 // ----------------------------------------------------------------------------
-// Unicode support
-// ----------------------------------------------------------------------------
-
-// This option is deprecated: the library should be always built in Unicode mode
-// now, only set wxUSE_UNICODE to 0 to compile legacy code in ANSI mode if
-// absolutely necessary -- updating it is strongly recommended as the ANSI mode
-// will disappear completely in future wxWidgets releases.
-#ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 1
-#endif
-
-// ----------------------------------------------------------------------------
 // global features
 // ----------------------------------------------------------------------------
 

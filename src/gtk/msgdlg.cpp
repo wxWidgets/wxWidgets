@@ -163,7 +163,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
                                       type,
                                       buttons,
                                       "%s",
-                                      (const char*)wxGTK_CONV(message));
+                                      (const char*)message.utf8_str());
 
     if ( needsExtMessage )
     {
@@ -171,14 +171,14 @@ void wxMessageDialog::GTKCreateMsgDialog()
         (
             (GtkMessageDialog *)m_widget,
             "%s",
-            (const char *)wxGTK_CONV(m_extendedMessage)
+            (const char *)m_extendedMessage.utf8_str()
         );
     }
 
     g_object_ref(m_widget);
 
     if (m_caption != wxMessageBoxCaptionStr)
-        gtk_window_set_title(GTK_WINDOW(m_widget), wxGTK_CONV(m_caption));
+        gtk_window_set_title(GTK_WINDOW(m_widget), m_caption.utf8_str());
 
     GtkDialog * const dlg = GTK_DIALOG(m_widget);
 
@@ -196,7 +196,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
     {
         if ( m_dialogStyle & wxHELP )
         {
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetHelpLabel()),
+            gtk_dialog_add_button(dlg, GetHelpLabel().utf8_str(),
                                   GTK_RESPONSE_HELP);
         }
 
@@ -208,24 +208,24 @@ void wxMessageDialog::GTKCreateMsgDialog()
             //
             // [Help]                  [Alternative] [Cancel] [Affirmative]
 
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetNoLabel()),
+            gtk_dialog_add_button(dlg, GetNoLabel().utf8_str(),
                                   GTK_RESPONSE_NO);
 
             if ( m_dialogStyle & wxCANCEL )
             {
-                gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
+                gtk_dialog_add_button(dlg, GetCancelLabel().utf8_str(),
                                       GTK_RESPONSE_CANCEL);
             }
 
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
+            gtk_dialog_add_button(dlg, GetYesLabel().utf8_str(),
                                   GTK_RESPONSE_YES);
         }
         else // Ok or Ok/Cancel dialog
         {
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetOKLabel()), GTK_RESPONSE_OK);
+            gtk_dialog_add_button(dlg, GetOKLabel().utf8_str(), GTK_RESPONSE_OK);
             if ( m_dialogStyle & wxCANCEL )
             {
-                gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
+                gtk_dialog_add_button(dlg, GetCancelLabel().utf8_str(),
                                       GTK_RESPONSE_CANCEL);
             }
         }

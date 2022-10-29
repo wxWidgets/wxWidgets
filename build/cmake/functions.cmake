@@ -190,9 +190,7 @@ function(wx_set_target_properties target_name)
     endif()
 
     set(lib_unicode)
-    if(wxUSE_UNICODE)
-        set(lib_unicode "u")
-    endif()
+    set(lib_unicode "u")
 
     set(lib_rls)
     set(lib_dbg)
@@ -283,13 +281,6 @@ function(wx_set_target_properties target_name)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
     else()
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
-    endif()
-
-    if(wxUSE_UNICODE)
-        if(WIN32)
-            target_compile_definitions(${target_name} PUBLIC UNICODE)
-        endif()
-        target_compile_definitions(${target_name} PUBLIC _UNICODE)
     endif()
 
     if(WIN32 AND MSVC)
@@ -510,7 +501,7 @@ endmacro()
 # Set common properties for a builtin third party library
 function(wx_set_builtin_target_properties target_name)
     set(lib_unicode)
-    if(wxUSE_UNICODE AND target_name STREQUAL "wxregex")
+    if(target_name STREQUAL "wxregex")
         set(lib_unicode "u")
     endif()
 
@@ -531,13 +522,6 @@ function(wx_set_builtin_target_properties target_name)
         OUTPUT_NAME       "${target_name}${lib_unicode}${lib_rls}${lib_flavour}${lib_version}"
         OUTPUT_NAME_DEBUG "${target_name}${lib_unicode}${lib_dbg}${lib_flavour}${lib_version}"
     )
-
-    if(wxUSE_UNICODE)
-        if(WIN32)
-            target_compile_definitions(${target_name} PUBLIC UNICODE)
-        endif()
-        target_compile_definitions(${target_name} PUBLIC _UNICODE)
-    endif()
 
     if(MSVC)
         # we're not interested in deprecation warnings about the use of

@@ -128,11 +128,7 @@ bool wxDirData::Read(wxString *filename)
         if ( !de )
             return false;
 
-#if wxUSE_UNICODE
         de_d_name = wxString(de->d_name, *wxConvFileName);
-#else
-        de_d_name = de->d_name;
-#endif
 
         // don't return "." and ".." unless asked for
         if ( de->d_name[0] == '.' &&

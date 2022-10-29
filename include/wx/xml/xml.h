@@ -88,9 +88,6 @@ private:
 // are irrelevant) and wxXML_ELEMENT_NODE (e.g. in <title>hi</title> there is
 // element with name="title", irrelevant content and one child (wxXML_TEXT_NODE
 // with content="hi").
-//
-// If wxUSE_UNICODE is 0, all strings are encoded in the encoding given to Load
-// (default is UTF-8).
 
 class WXDLLIMPEXP_XML wxXmlNode
 {
@@ -280,22 +277,11 @@ public:
     void SetFileType(wxTextFileType fileType);
     void AppendToProlog(wxXmlNode *node);
 
-#if !wxUSE_UNICODE
-    // Returns encoding of in-memory representation of the document
-    // (same as passed to Load or ctor, defaults to UTF-8).
-    // NB: this is meaningless in Unicode build where data are stored as wchar_t*
-    wxString GetEncoding() const { return m_encoding; }
-    void SetEncoding(const wxString& enc) { m_encoding = enc; }
-#endif
-
     static wxVersionInfo GetLibraryVersionInfo();
 
 private:
     wxString   m_version;
     wxString   m_fileEncoding;
-#if !wxUSE_UNICODE
-    wxString   m_encoding;
-#endif
     wxXmlDoctype m_doctype;
     wxXmlNode *m_docNode;
     wxTextFileType m_fileType;

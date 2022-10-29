@@ -386,7 +386,7 @@ private:
 
     // retrieve the command line history into the provided buffer and return
     // its length
-    int GetCommandHistory(wxWxCharBuffer& buf) const;
+    int GetCommandHistory(wxWCharBuffer& buf) const;
 
     // check if the console history has changed
     bool IsHistoryUnchanged() const;
@@ -398,7 +398,7 @@ private:
     HANDLE m_hStderr;           // console handle, if it's valid we must call
                                 // FreeConsole() (even if m_ok != 1)
 
-    wxWxCharBuffer m_history;   // command history on startup
+    wxWCharBuffer m_history;    // command history on startup
     int m_historyLen;           // length command history buffer
 
     wxCharBuffer m_data;        // data between empty line and cursor position
@@ -493,7 +493,7 @@ bool wxConsoleStderr::DoInit()
     return true;
 }
 
-int wxConsoleStderr::GetCommandHistory(wxWxCharBuffer& buf) const
+int wxConsoleStderr::GetCommandHistory(wxWCharBuffer& buf) const
 {
     // these functions are internal and may only be called by cmd.exe
     static const wxChar *CMD_EXE = wxT("cmd.exe");
@@ -504,12 +504,6 @@ int wxConsoleStderr::GetCommandHistory(wxWxCharBuffer& buf) const
         buf.extend(len);
 
         int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
-
-#if !wxUSE_UNICODE
-        // there seems to be a bug in the GetConsoleCommandHistoryA(), it
-        // returns the length of Unicode string and not ANSI one
-        len2 /= 2;
-#endif // !wxUSE_UNICODE
 
         if ( len2 != len )
         {
@@ -525,7 +519,7 @@ bool wxConsoleStderr::IsHistoryUnchanged() const
     wxASSERT_MSG( m_ok == 1, wxT("shouldn't be called if not initialized") );
 
     // get (possibly changed) command history
-    wxWxCharBuffer history;
+    wxWCharBuffer history;
     const int historyLen = GetCommandHistory(history);
 
     // and compare it with the original one

@@ -1071,7 +1071,6 @@ int wxWindowX11::GetCharHeight() const
     wxFont font(GetFont());
     wxCHECK_MSG( font.IsOk(), 0, wxT("valid window font needed") );
 
-#if wxUSE_UNICODE
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
     pango_layout_set_font_description( layout, font.GetNativeFontInfo()->description );
@@ -1081,17 +1080,6 @@ int wxWindowX11::GetCharHeight() const
     g_object_unref( G_OBJECT( layout ) );
 
     return h;
-#else
-    WXFontStructPtr pFontStruct = font.GetFontStruct(1.0, wxGlobalDisplay());
-
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-
-    //  return (overall.ascent + overall.descent);
-    return (ascent + descent);
-#endif
 }
 
 int wxWindowX11::GetCharWidth() const
@@ -1099,7 +1087,6 @@ int wxWindowX11::GetCharWidth() const
     wxFont font(GetFont());
     wxCHECK_MSG( font.IsOk(), 0, wxT("valid window font needed") );
 
-#if wxUSE_UNICODE
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
     pango_layout_set_font_description( layout, font.GetNativeFontInfo()->description );
@@ -1109,16 +1096,6 @@ int wxWindowX11::GetCharWidth() const
     g_object_unref( G_OBJECT( layout ) );
 
     return w;
-#else
-    WXFontStructPtr pFontStruct = font.GetFontStruct(1.0, wxGlobalDisplay());
-
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-
-    return overall.width;
-#endif
 }
 
 void wxWindowX11::DoGetTextExtent(const wxString& string,
@@ -1139,7 +1116,6 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
         return;
     }
 
-#if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
 
     PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
@@ -1164,25 +1140,6 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
     if (externalLeading) (*externalLeading) = 0;  // ??
 
     g_object_unref( G_OBJECT( layout ) );
-#else
-    WXFontStructPtr pFontStruct = fontToUse.GetFontStruct(1.0, wxGlobalDisplay());
-
-    int direction, ascent, descent2;
-    XCharStruct overall;
-    int slen = string.length();
-
-    XTextExtents((XFontStruct*) pFontStruct, (const char*) string.c_str(), slen,
-                 &direction, &ascent, &descent2, &overall);
-
-    if ( x )
-        *x = (overall.width);
-    if ( y )
-        *y = (ascent + descent2);
-    if (descent)
-        *descent = descent2;
-    if (externalLeading)
-        *externalLeading = 0;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1616,11 +1573,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
 
             KeySym keySym;
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, nullptr);
-#if wxUSE_UNICODE
             int id = wxUnicodeCharXToWX(keySym);
-#else
-            int id = wxCharCodeXToWX(keySym);
-#endif
             // id may be WXK_xxx code - these are outside ASCII range, so we
             // can't just use toupper() on id.
             // Only change this if we want the raw key that was pressed,
@@ -1635,9 +1588,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
-#if wxUSE_UNICODE
             wxevent.m_uniChar = id;
-#endif
             wxevent.m_keyCode = id;
 
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));

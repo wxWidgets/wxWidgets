@@ -493,27 +493,6 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
 };
 #endif // wxUSE_UNICODE_UTF8
 
-#if !wxUSE_UNICODE // FIXME-UTF8: remove
-class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>
-{
-    virtual void HandleString(CharType WXUNUSED(conv),
-                              SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize)
-    {
-        outConv = 's';
-        outSize = Size_Default;
-    }
-
-    virtual void HandleChar(CharType WXUNUSED(conv),
-                            SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize)
-    {
-        outConv = 'c';
-        outSize = Size_Default;
-    }
-};
-#endif // ANSI
-
 #ifndef __WINDOWS__
 /*
 
@@ -583,9 +562,8 @@ const char* wxFormatString::InputAsChar()
     if ( m_char )
         return m_char.data();
 
-    // in ANSI build, wx_str() returns char*, in UTF-8 build, this function
-    // is only called under UTF-8 locales, so we should return UTF-8 string,
-    // which is, again, what wx_str() returns:
+    // in this build, wx_str() returns UTF-8-encoded string and this function
+    // is only called under UTF-8 locales, so we can just return it directly
     if ( m_str )
         return m_str->wx_str();
 
@@ -605,17 +583,13 @@ const char* wxFormatString::InputAsChar()
 const char* wxFormatString::AsChar()
 {
     if ( !m_convertedChar )
-#if !wxUSE_UNICODE // FIXME-UTF8: remove this
-        m_convertedChar = wxPrintfFormatConverterANSI().Convert(InputAsChar());
-#else
         m_convertedChar = wxPrintfFormatConverterUtf8().Convert(InputAsChar());
-#endif
 
     return m_convertedChar.data();
 }
 #endif // !wxUSE_UNICODE_WCHAR
 
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UTF8_LOCALE_ONLY
 const wchar_t* wxFormatString::InputAsWChar()
 {
     if ( m_wchar )
@@ -655,7 +629,7 @@ const wchar_t* wxFormatString::AsWChar()
 
     return m_convertedWChar.data();
 }
-#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
 wxString wxFormatString::InputAsString() const
 {

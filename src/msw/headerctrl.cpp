@@ -456,7 +456,7 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     // notice that we need to store the string we use the pointer to until we
     // pass it to the control
     hdi.mask |= HDI_TEXT;
-    wxWxCharBuffer buf = col.GetTitle().t_str();
+    wxWCharBuffer buf = col.GetTitle().t_str();
     hdi.pszText = buf.data();
     hdi.cchTextMax = wxStrlen(buf);
 

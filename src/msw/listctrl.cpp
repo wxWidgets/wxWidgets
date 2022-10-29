@@ -123,31 +123,16 @@ wxGetListCtrlItemRect(HWND hwnd, int item, int flags, RECT& rect)
 
 // We have to handle both fooW and fooA notifications in several cases
 // because of broken comctl32.dll and/or unicows.dll. This class is used to
-// convert LV_ITEMA and LV_ITEMW to LV_ITEM (which is either LV_ITEMA or
-// LV_ITEMW depending on wxUSE_UNICODE setting), so that it can be processed
-// by wxConvertToMSWListItem().
-#if wxUSE_UNICODE
-    #define LV_ITEM_NATIVE  LV_ITEMW
-    #define LV_ITEM_OTHER   LV_ITEMA
-
-    #define LV_CONV_TO_WX   cMB2WX
-    #define LV_CONV_BUF     wxMB2WXbuf
-#else // ANSI
-    #define LV_ITEM_NATIVE  LV_ITEMA
-    #define LV_ITEM_OTHER   LV_ITEMW
-
-    #define LV_CONV_TO_WX   cWC2WX
-    #define LV_CONV_BUF     wxWC2WXbuf
-#endif // Unicode/ANSI
-
+// convert LV_ITEMA to LV_ITEMW, so that it can be processed by
+// wxConvertToMSWListItem().
 class wxLV_ITEM
 {
 public:
     // default ctor, use Init() later
-    wxLV_ITEM() { m_buf = nullptr; m_pItem = nullptr; }
+    wxLV_ITEM() { m_pItem = nullptr; }
 
     // init without conversion
-    void Init(LV_ITEM_NATIVE& item)
+    void Init(LV_ITEMW& item)
     {
         wxASSERT_MSG( !m_pItem, wxT("Init() called twice?") );
 
@@ -155,44 +140,42 @@ public:
     }
 
     // init with conversion
-    void Init(const LV_ITEM_OTHER& item)
+    void Init(const LV_ITEMA& item)
     {
         // avoid unnecessary dynamic memory allocation, jjust make m_pItem
         // point to our own m_item
 
         // memcpy() can't work if the struct sizes are different
-        wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEM_OTHER) == sizeof(LV_ITEM_NATIVE),
+        wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEMA) == sizeof(LV_ITEMW),
                                CodeCantWorkIfDiffSizes);
 
-        memcpy(&m_item, &item, sizeof(LV_ITEM_NATIVE));
+        memcpy(&m_item, &item, sizeof(LV_ITEMW));
 
         // convert text from ANSI to Unicod if necessary
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
-            m_buf = new LV_CONV_BUF(wxConvLocal.LV_CONV_TO_WX(item.pszText));
-            m_item.pszText = (wxChar *)m_buf->data();
+            m_buf = wxConvLocal.cMB2WC(item.pszText);
+            m_item.pszText = m_buf.data();
         }
     }
 
     // ctor without conversion
-    wxLV_ITEM(LV_ITEM_NATIVE& item) : m_buf(nullptr), m_pItem(&item) { }
+    wxLV_ITEM(LV_ITEMW& item) : m_pItem(&item) { }
 
     // ctor with conversion
-    wxLV_ITEM(LV_ITEM_OTHER& item) : m_buf(nullptr)
+    wxLV_ITEM(LV_ITEMA& item)
     {
         Init(item);
     }
 
-    ~wxLV_ITEM() { delete m_buf; }
-
     // conversion to the real LV_ITEM
-    operator LV_ITEM_NATIVE&() const { return *m_pItem; }
+    operator LV_ITEMW&() const { return *m_pItem; }
 
 private:
-    LV_CONV_BUF *m_buf;
+    wxWCharBuffer m_buf;
 
-    LV_ITEM_NATIVE *m_pItem;
-    LV_ITEM_NATIVE m_item;
+    LV_ITEMW *m_pItem;
+    LV_ITEMW m_item;
 
     wxDECLARE_NO_COPY_CLASS(wxLV_ITEM);
 };

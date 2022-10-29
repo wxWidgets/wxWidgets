@@ -373,8 +373,6 @@ def main(scriptName, args):
         buildDir = os.path.abspath(os.path.join(scriptDir, "..", "msw"))
 
         print("creating wx/msw/setup.h")
-        if options.unicode:
-            flags["wxUSE_UNICODE"] = "1"
     
         if options.cairo:
             if not os.environ.get("CAIRO_ROOT"):
@@ -420,8 +418,6 @@ def main(scriptName, args):
         if toolkit == "msvc":
             print("setting build options...")
             args.append("-f makefile.vc")
-            if options.unicode:
-                args.append("UNICODE=1")
     
             if options.wxpython:
                 args.append("OFFICIAL_BUILD=1")

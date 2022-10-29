@@ -821,7 +821,7 @@ wxString wxNSTextViewControl::GetStringValue() const
     if (m_textView)
     {
         result = wxMacConvertNewlines13To10(
-            wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding()));
+            wxCFStringRef::AsString([m_textView string]));
     }
     return result;
 }
@@ -833,7 +833,7 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
     if (m_textView)
     {
         wxString st(wxMacConvertNewlines10To13(str));
-        [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        [m_textView setString: wxCFStringRef( st ).AsNSString()];
         if ( m_wxPeer->HasFlag(wxTE_AUTO_URL) )
         {
             // Make sure that any URLs in the new text are highlighted.
@@ -1022,7 +1022,7 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
     wxWidgetCocoaNativeKeyDownSuspender suspend(this);
-    [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    [m_textView insertText:wxCFStringRef( st ).AsNSString()];
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
 }
@@ -1404,13 +1404,13 @@ wxNSTextFieldControl::~wxNSTextFieldControl()
 
 wxString wxNSTextFieldControl::GetStringValue() const
 {
-    return wxCFStringRef::AsString([m_textField stringValue], m_wxPeer->GetFont().GetEncoding());
+    return wxCFStringRef::AsString([m_textField stringValue]);
 }
 
 void wxNSTextFieldControl::SetStringValue( const wxString &str)
 {
     wxMacEditHelper helper(m_textField);
-    [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    [m_textField setStringValue: wxCFStringRef( str ).AsNSString()];
 }
 
 wxTextEntryFormatter* wxNSTextFieldControl::GetFormatter()
@@ -1587,7 +1587,7 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
         BOOL hasUndo = [editor respondsToSelector:@selector(setAllowsUndo:)];
         if ( hasUndo )
             [(NSTextView*)editor setAllowsUndo:NO];
-        [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        [editor insertText:wxCFStringRef( str ).AsNSString()];
         if ( hasUndo )
             [(NSTextView*)editor setAllowsUndo:YES];
     }

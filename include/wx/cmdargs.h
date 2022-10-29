@@ -16,8 +16,6 @@
 // wxCmdLineArgsArray: helper class used by wxApp::argv
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-
 // this class is used instead of either "char **" or "wchar_t **" (neither of
 // which would be backwards compatible with all the existing code) for argv
 // field of wxApp
@@ -147,8 +145,6 @@ inline bool operator&&(bool cond, const wxCmdLineArgsArray& array)
 {
     return cond && !array.IsEmpty();
 }
-
-#endif // wxUSE_UNICODE
 
 #endif // _WX_CMDARGS_H_
 

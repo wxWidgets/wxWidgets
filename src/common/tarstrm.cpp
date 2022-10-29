@@ -274,7 +274,6 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
 {
     bool badconv = false;
 
-#if wxUSE_UNICODE
     wxCharBuffer nameBuf = name.mb_str(conv);
 
     // if the conversion fails make an approximation
@@ -291,10 +290,6 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
     }
 
     const char *mbName = nameBuf;
-#else
-    const char *mbName = name.c_str();
-    (void)conv;
-#endif
 
     bool fits;
     bool notGoingToFit = false;
@@ -842,14 +837,14 @@ wxString wxTarInputStream::GetExtendedHeader(const wxString& key) const
     if (m_HeaderRecs) {
         it = m_HeaderRecs->find(key);
         if (it != m_HeaderRecs->end())
-            return wxString(it->second.wc_str(wxConvUTF8), GetConv());
+            return it->second;
     }
 
     // if not found, look at the global header records
     if (m_GlobalHeaderRecs) {
         it = m_GlobalHeaderRecs->find(key);
         if (it != m_GlobalHeaderRecs->end())
-            return wxString(it->second.wc_str(wxConvUTF8), GetConv());
+            return it->second;
     }
 
     return wxEmptyString;
@@ -971,8 +966,8 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
         // replace the '=' with a nul, to terminate the key
         *p++ = 0;
 
-        wxString key(wxConvUTF8.cMB2WC(pKey), GetConv());
-        wxString value(wxConvUTF8.cMB2WC(p), GetConv());
+        wxString key = wxString::FromUTF8(pKey);
+        wxString value = wxString::FromUTF8(p);
 
         // an empty value unsets a previously given value
         if (value.empty())
@@ -1434,16 +1429,8 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
                                           const wxString& value)
 {
     if (m_pax) {
-#if wxUSE_UNICODE
         const wxCharBuffer utf_key = key.utf8_str();
         const wxCharBuffer utf_value = value.utf8_str();
-#else
-        const wxWX2WCbuf wide_key = key.wc_str(GetConv());
-        const wxCharBuffer utf_key = wxConvUTF8.cWC2MB(wide_key);
-
-        const wxWX2WCbuf wide_value = value.wc_str(GetConv());
-        const wxCharBuffer utf_value = wxConvUTF8.cWC2MB(wide_value);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
         // a small buffer to format the length field in
         char buf[32];

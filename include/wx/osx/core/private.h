@@ -322,12 +322,12 @@ public :
 
     virtual void        SetDefaultButton( bool isDefault ) = 0;
     virtual void        PerformClick() = 0;
-    virtual void        SetLabel( const wxString& title, wxFontEncoding encoding ) = 0;
+    virtual void        SetLabel( const wxString& title ) = 0;
 #if wxUSE_MARKUP && wxOSX_USE_COCOA
     virtual void        SetLabelMarkup( const wxString& WXUNUSED(markup) ) { }
 #endif
-    virtual void        SetInitialLabel( const wxString& title, wxFontEncoding encoding )
-                            { SetLabel(title, encoding); }
+    virtual void        SetInitialLabel( const wxString& title )
+                            { SetLabel(title); }
 
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
@@ -945,7 +945,7 @@ public :
         return false;
     }
 
-    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) = 0;
+    virtual void SetTitle( const wxString& title ) = 0;
 
     virtual bool EnableCloseButton(bool enable) = 0;
     virtual bool EnableMaximizeButton(bool enable) = 0;

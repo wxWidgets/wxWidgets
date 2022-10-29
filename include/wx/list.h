@@ -1219,10 +1219,10 @@ public:
         // default
 #ifdef wxWARN_COMPAT_LIST_USE
     wxStringList();
-    wxDEPRECATED( wxStringList(const wxChar *first ...) ); // FIXME-UTF8
+    wxDEPRECATED( wxStringList(const wxChar *first ...) );
 #else
     wxStringList();
-    wxStringList(const wxChar *first ...); // FIXME-UTF8
+    wxStringList(const wxChar *first ...);
 #endif
 
         // copying the string list: the strings are copied, too (extremely

@@ -203,8 +203,8 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
                     if ( PMPaperCreateCustom
                          (
                             printer,
-                            wxCFStringRef(id, wxFont::GetDefaultEncoding()),
-                            wxCFStringRef(name, wxFont::GetDefaultEncoding()),
+                            wxCFStringRef(id),
+                            wxCFStringRef(name),
                             papersize.x, papersize.y,
                             &margins,
                             &paper

@@ -2226,8 +2226,7 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *WXUNUSED(rende
 {
     wxDataViewRenderer *cell = (wxDataViewRenderer*) user_data;
 
-    cell->GtkOnTextEdited(arg1, wxGTK_CONV_BACK_FONT(
-                arg2, cell->GetOwner()->GetOwner()->GetFont()));
+    cell->GtkOnTextEdited(arg1, wxString::FromUTF8Unchecked(arg2));
 }
 
 }
@@ -2375,7 +2374,7 @@ const char* wxDataViewTextRenderer::GetTextPropertyName() const
 bool wxDataViewTextRenderer::SetTextValue(const wxString& str)
 {
     wxGtkValue gvalue( G_TYPE_STRING );
-    g_value_set_string( gvalue, wxGTK_CONV_FONT( str, GetOwner()->GetOwner()->GetFont() ) );
+    g_value_set_string( gvalue, str.utf8_str() );
     g_object_set_property( G_OBJECT(m_renderer), GetTextPropertyName(), gvalue );
 
     return true;
@@ -2385,7 +2384,7 @@ bool wxDataViewTextRenderer::GetTextValue(wxString& str) const
 {
     wxGtkValue gvalue( G_TYPE_STRING );
     g_object_get_property( G_OBJECT(m_renderer), GetTextPropertyName(), gvalue );
-    str = wxGTK_CONV_BACK_FONT( g_value_get_string( gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
+    str = wxString::FromUTF8Unchecked( g_value_get_string( gvalue ) );
 
     return true;
 }
@@ -2787,7 +2786,7 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
     GtkCellRendererText * const textRenderer = GtkGetTextRenderer();
 
     wxGtkValue gvalue( G_TYPE_STRING );
-    g_value_set_string( gvalue, wxGTK_CONV_FONT( text, GetOwner()->GetOwner()->GetFont() ) );
+    g_value_set_string( gvalue, text.utf8_str() );
     g_object_set_property( G_OBJECT(textRenderer), "text", gvalue );
 
     GtkApplyAttr(textRenderer, GetAttr());
@@ -2876,19 +2875,7 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     SetMode(mode);
     SetAlignment(align);
 
-#if !wxUSE_UNICODE
-    // We can't initialize the renderer just yet because we don't have the
-    // pointer to the column that uses this renderer yet and so attempt to
-    // dereference GetOwner() to get the font that is used as a source of
-    // encoding in multibyte-to-Unicode conversion in GTKSetLabel() in
-    // non-Unicode builds would crash. So simply remember to do it later.
-    if ( !m_label.empty() )
-        m_needsToSetLabel = true;
-    else
-#endif // !wxUSE_UNICODE
-    {
-        GTKSetLabel();
-    }
+    GTKSetLabel();
 }
 
 wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
@@ -2905,23 +2892,14 @@ void wxDataViewProgressRenderer::GTKSetLabel()
     if ( m_label.empty() )
         buf = wxScopedCharBuffer::CreateNonOwned("");
     else
-        buf = wxGTK_CONV_FONT(m_label, GetOwner()->GetOwner()->GetFont());
+        buf = m_label.utf8_str();
 
     g_value_set_string( gvalue, buf);
     g_object_set_property( G_OBJECT(m_renderer), "text", gvalue );
-
-#if !wxUSE_UNICODE
-    m_needsToSetLabel = false;
-#endif // !wxUSE_UNICODE
 }
 
 bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
-#if !wxUSE_UNICODE
-    if ( m_needsToSetLabel )
-        GTKSetLabel();
-#endif // !wxUSE_UNICODE
-
     gint tmp = (long) value;
     wxGtkValue gvalue( G_TYPE_INT );
     g_value_set_int( gvalue, tmp );
@@ -3004,9 +2982,7 @@ wxSize wxDataViewChoiceRenderer::GetSize() const
 bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
 {
     wxGtkValue gvalue( G_TYPE_STRING );
-    g_value_set_string(gvalue,
-                       wxGTK_CONV_FONT(value.GetString(),
-                                       GetOwner()->GetOwner()->GetFont()));
+    g_value_set_string(gvalue, value.GetString().utf8_str());
     g_object_set_property( G_OBJECT(m_renderer), "text", gvalue );
 
     return true;
@@ -3016,8 +2992,7 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
 {
     wxGtkValue gvalue( G_TYPE_STRING );
     g_object_get_property( G_OBJECT(m_renderer), "text", gvalue );
-    value = wxGTK_CONV_BACK_FONT(g_value_get_string(gvalue),
-                                 GetOwner()->GetOwner()->GetFont());
+    value = wxString::FromUTF8Unchecked(g_value_get_string(gvalue));
 
     return true;
 }
@@ -3326,14 +3301,12 @@ void wxDataViewColumn::SetOwner( wxDataViewCtrl *owner )
 
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
-    gtk_tree_view_column_set_title( column, wxGTK_CONV_FONT(GetTitle(), GetOwner()->GetFont() ) );
+    gtk_tree_view_column_set_title( column, GetTitle().utf8_str() );
 }
 
 void wxDataViewColumn::SetTitle( const wxString &title )
 {
-    wxDataViewCtrl *ctrl = GetOwner();
-    gtk_label_set_text( GTK_LABEL(m_label), ctrl ? wxGTK_CONV_FONT(title, ctrl->GetFont())
-                                                 : wxGTK_CONV_SYS(title) );
+    gtk_label_set_text( GTK_LABEL(m_label), title.utf8_str() );
     if (title.empty())
         gtk_widget_hide( m_label );
     else
@@ -3342,9 +3315,8 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 
 wxString wxDataViewColumn::GetTitle() const
 {
-    return wxGTK_CONV_BACK_FONT(
-            gtk_label_get_text( GTK_LABEL(m_label) ),
-            GetOwner()->GetFont()
+    return wxString::FromUTF8Unchecked(
+            gtk_label_get_text( GTK_LABEL(m_label) )
            );
 }
 

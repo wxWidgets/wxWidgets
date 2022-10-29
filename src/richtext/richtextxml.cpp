@@ -32,15 +32,6 @@
 #include "wx/stopwatch.h"
 #include "wx/xml/xml.h"
 
-// For use with earlier versions of wxWidgets
-#ifndef WXUNUSED_IN_UNICODE
-#if wxUSE_UNICODE
-#define WXUNUSED_IN_UNICODE(x) WXUNUSED(x)
-#else
-#define WXUNUSED_IN_UNICODE(x) x
-#endif
-#endif
-
 // Set to 1 for slower wxXmlDocument method, 0 for faster direct method.
 // If we make wxXmlDocument::Save more efficient, we might switch to this
 // method.
@@ -81,10 +72,6 @@ bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& s
 
     // This is the encoding to convert to (memory encoding rather than file encoding)
     wxString encoding(wxT("UTF-8"));
-
-#if !wxUSE_UNICODE && wxUSE_INTL
-    encoding = wxLocale::GetSystemEncodingName();
-#endif
 
     if (!xmlDoc->Load(stream, encoding))
     {
@@ -527,11 +514,7 @@ bool wxRichTextPlainText::ExportXML(wxOutputStream& stream, int indent, wxRichTe
     }
     else for (i = 0; i < len; i++)
     {
-#if wxUSE_UNICODE
         int c = (int) text[i];
-#else
-        int c = (int) wxUChar(text[i]);
-#endif
         if (((c < 32 || c == 34) && /* c != 9 && */ c != 10 && c != 13)
             // XML ranges
             || (!(c >= 32 && c <= 55295) && !(c >= 57344 && c <= 65533))
@@ -638,11 +621,7 @@ bool wxRichTextPlainText::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* han
     }
     else for (i = 0; i < len; i++)
     {
-#if wxUSE_UNICODE
         int c = (int) text[i];
-#else
-        int c = (int) wxUChar(text[i]);
-#endif
         if ((c < 32 || c == 34) && c != 10 && c != 13)
         {
             if (i > 0)
@@ -1085,16 +1064,9 @@ void wxRichTextXMLHelper::SetupForSaving(const wxString& enc)
 {
     Clear();
 
-#if wxUSE_UNICODE
     m_fileEncoding = wxT("UTF-8");
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
     m_convFile = & wxConvUTF8;
-#endif
-#else
-    m_fileEncoding = wxT("ISO-8859-1");
-#if wxRICHTEXT_HAVE_DIRECT_OUTPUT
-    m_convFile = & wxConvISO8859_1;
-#endif
 #endif
 
     // If we pass an explicit encoding, change the output encoding.
@@ -1114,11 +1086,7 @@ void wxRichTextXMLHelper::SetupForSaving(const wxString& enc)
 
         // GetSystemEncodingName may not have returned a name
         if (m_fileEncoding.empty())
-#if wxUSE_UNICODE
             m_fileEncoding = wxT("UTF-8");
-#else
-            m_fileEncoding = wxT("ISO-8859-1");
-#endif
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
         m_convFile = new wxCSConv(m_fileEncoding);
         m_deleteConvFile = true;
@@ -1126,11 +1094,7 @@ void wxRichTextXMLHelper::SetupForSaving(const wxString& enc)
     }
 
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
-#if !wxUSE_UNICODE
-    m_convMem = wxConvCurrent;
-#else
     m_convMem = nullptr;
-#endif
 #endif
 }
 
@@ -1271,11 +1235,7 @@ wxString wxRichTextXMLHelper::AttributeToXML(const wxString& str)
             str1 += str.Mid(last, i - last);
 
             wxString s(wxT("&#"));
-#if wxUSE_UNICODE
             s << (int) c;
-#else
-            s << (int) wxUChar(c);
-#endif
             s << wxT(";");
             str1 += s;
             last = i + 1;
@@ -1916,10 +1876,9 @@ bool wxRichTextXMLHelper::ImportProperties(wxRichTextProperties& properties, wxX
 #if wxRICHTEXT_HAVE_DIRECT_OUTPUT
 // write string to output
 void wxRichTextXMLHelper::OutputString(wxOutputStream& stream, const wxString& str,
-                                wxMBConv *WXUNUSED_IN_UNICODE(convMem), wxMBConv *convFile)
+                                wxMBConv *WXUNUSED(convMem), wxMBConv *convFile)
 {
     if (str.empty()) return;
-#if wxUSE_UNICODE
     if (convFile)
     {
         const wxWX2MBbuf buf(str.mb_str(*convFile));
@@ -1930,15 +1889,6 @@ void wxRichTextXMLHelper::OutputString(wxOutputStream& stream, const wxString& s
         const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
         stream.Write((const char*)buf, strlen((const char*)buf));
     }
-#else
-    if ( convFile == nullptr )
-        stream.Write(str.mb_str(), str.Len());
-    else
-    {
-        wxString str2(str.wc_str(*convMem), *convFile);
-        stream.Write(str2.mb_str(), str2.Len());
-    }
-#endif
 }
 
 void wxRichTextXMLHelper::OutputIndentation(wxOutputStream& stream, int indent)
@@ -1995,11 +1945,7 @@ void wxRichTextXMLHelper::OutputStringEnt(wxOutputStream& stream, const wxString
             OutputString(stream, str.Mid(last, i - last), convMem, convFile);
 
             wxString s(wxT("&#"));
-#if wxUSE_UNICODE
             s << (int) c;
-#else
-            s << (int) wxUChar(c);
-#endif
             s << wxT(";");
             OutputString(stream, s, nullptr, nullptr);
             last = i + 1;

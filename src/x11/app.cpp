@@ -183,13 +183,11 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
     if ( !wxAppBase::Initialize(argC, argV) )
         return false;
 
-#if wxUSE_UNICODE
     // Glib's type system required by Pango (deprecated since glib 2.36 but
     // used to be required, so still call it, it's harmless).
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     g_type_init();
     wxGCC_WARNING_RESTORE()
-#endif
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
@@ -708,8 +706,6 @@ bool wxApp::OnInitGui()
     return true;
 }
 
-#if wxUSE_UNICODE
-
 #include <pango/pango.h>
 #include <pango/pangoxft.h>
 
@@ -746,7 +742,6 @@ PangoContext* wxGetPangoContext()
     g_object_ref(context);
     return context;
 }
-#endif // wxUSE_UNICODE
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {

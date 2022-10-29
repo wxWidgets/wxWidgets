@@ -1385,7 +1385,7 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text, int xLogical, int y
 
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    pango_layout_set_text(m_layout, wxGTK_CONV(text), -1);
+    pango_layout_set_text(m_layout, text.utf8_str(), -1);
     const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
 
     const GdkColor* bg_col = nullptr;

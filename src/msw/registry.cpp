@@ -1257,12 +1257,8 @@ static inline bool WriteAsciiString(wxOutputStream& ostr, const char *p)
 
 static inline bool WriteAsciiString(wxOutputStream& ostr, const wxString& s)
 {
-#if wxUSE_UNICODE
     wxCharBuffer name(s.mb_str());
     ostr.Write(name, strlen(name));
-#else
-    ostr.Write(s.mb_str(), s.length());
-#endif
 
     return ostr.IsOk();
 }

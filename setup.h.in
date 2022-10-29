@@ -151,11 +151,6 @@
 
 
 
-#ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
-#endif
-
-
 #define wxUSE_EXCEPTIONS    0
 
 #define wxUSE_EXTENDED_RTTI 0

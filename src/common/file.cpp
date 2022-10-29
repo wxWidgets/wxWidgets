@@ -365,7 +365,6 @@ bool wxFile::Write(const wxString& s, const wxMBConv& conv)
 
     const wxWX2MBbuf buf = s.mb_str(conv);
 
-#if wxUSE_UNICODE
     const size_t size = buf.length();
 
     if ( !size )
@@ -375,9 +374,6 @@ bool wxFile::Write(const wxString& s, const wxMBConv& conv)
         // must fail too to indicate that we can't save the data.
         return false;
     }
-#else
-    const size_t size = s.length();
-#endif
 
     return Write(buf, size) == size;
 }

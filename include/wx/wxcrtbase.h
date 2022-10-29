@@ -270,19 +270,6 @@ WXDLLIMPEXP_BASE int wxCRT_StrncmpW(const wchar_t *s1, const wchar_t *s2, size_t
 }
 #endif
 
-/* FIXME-UTF8: remove this once we are Unicode only */
-#if wxUSE_UNICODE
-    #define wxCRT_StrlenNative  wxCRT_StrlenW
-    #define wxCRT_StrncmpNative wxCRT_StrncmpW
-    #define wxCRT_ToupperNative wxCRT_ToupperW
-    #define wxCRT_TolowerNative wxCRT_TolowerW
-#else
-    #define wxCRT_StrlenNative  wxCRT_StrlenA
-    #define wxCRT_StrncmpNative wxCRT_StrncmpA
-    #define wxCRT_ToupperNative toupper
-    #define wxCRT_TolowerNative tolower
-#endif
-
 #ifndef wxCRT_StrcatW
 WXDLLIMPEXP_BASE wchar_t *wxCRT_StrcatW(wchar_t *dest, const wchar_t *src);
 #endif
@@ -413,7 +400,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 
 /* these functions are only needed in the form used for filenames (i.e. char*
    on Unix, wchar_t* on Windows), so we don't need to use A/W suffix: */
-#if wxMBFILES || !wxUSE_UNICODE /* ANSI filenames */
+#if wxMBFILES /* ANSI filenames */
 
     #define wxCRT_Fopen   fopen
     #define wxCRT_Freopen freopen

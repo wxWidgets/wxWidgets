@@ -41,8 +41,13 @@ Changes in behaviour which may result in build errors
   default, you need to set WXWIN_COMPATIBILITY_3_0 to 1 to enable them. Symbols
   deprecated in 2.8 are not available any longer.
 
+- Building with wxUSE_UNICODE=0 is not supported any longer.
+
 - wxMotif and wxGTK1 ports have been removed, please use wxWidgets 3.2 if you
   still need them.
+
+- wxOnAssert() overload taking wide character file name was removed. If you
+  call it for any reason, please use one of the other overloads instead.
 
 
 3.3.0: (released 2022-??-??)

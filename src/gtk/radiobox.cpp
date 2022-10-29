@@ -304,9 +304,9 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             label += *pc;
         }
         if ( hasMnemonic )
-            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_mnemonic( radio_button_group, wxGTK_CONV( label ) ) );
+            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_mnemonic( radio_button_group, label.utf8_str() ) );
         else
-            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
+            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, label.utf8_str() ) );
 
         gtk_widget_show( GTK_WIDGET(rbtn) );
 
@@ -460,9 +460,7 @@ wxString wxRadioBox::GetString(unsigned int n) const
 
     GtkLabel* label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(node->GetData()->button)));
 
-    wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
-
-    return str;
+    return wxString::FromUTF8Unchecked( gtk_label_get_text(label) );
 }
 
 void wxRadioBox::SetLabel( const wxString& label )
@@ -482,7 +480,7 @@ void wxRadioBox::SetString(unsigned int item, const wxString& label)
 
     GtkLabel* g_label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(node->GetData()->button)));
 
-    gtk_label_set_text( g_label, wxGTK_CONV( label ) );
+    gtk_label_set_text( g_label, label.utf8_str() );
 }
 
 bool wxRadioBox::Enable( bool enable )
@@ -661,7 +659,7 @@ void wxRadioBox::DoSetItemToolTip(unsigned int n, wxToolTip *tooltip)
     if ( !tooltip )
         tooltip = GetToolTip();
     if ( tooltip )
-        buf = wxGTK_CONV(tooltip->GetTip());
+        buf = tooltip->GetTip().utf8_str();
 
     wxToolTip::GTKApply(GTK_WIDGET(m_buttonsInfo[n]->button), buf);
 }

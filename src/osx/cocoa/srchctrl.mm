@@ -157,7 +157,7 @@ public :
     virtual void SetDescriptiveText(const wxString& text) override
     {
         [m_searchFieldCell setPlaceholderString:
-            wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+            wxCFStringRef( text ).AsNSString()];
     }
 
     virtual bool SetFocus() override

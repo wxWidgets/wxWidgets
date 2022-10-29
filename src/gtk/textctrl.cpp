@@ -1136,7 +1136,7 @@ wxString wxTextCtrl::DoGetValue() const
         gtk_text_buffer_get_end_iter( m_buffer, &end );
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &start, &end, true));
 
-        return wxGTK_CONV_BACK(text);
+        return wxString::FromUTF8Unchecked(text);
     }
     else // single line
     {
@@ -1250,30 +1250,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         return;
     }
 
-#if wxUSE_UNICODE
     const wxScopedCharBuffer buffer(text.utf8_str());
-#else
-    // check if we have a specific style for the current position
-    wxFontEncoding enc = wxFONTENCODING_SYSTEM;
-    wxTextAttr style;
-    if ( GetStyle(GetInsertionPoint(), style) && style.HasFontEncoding() )
-    {
-        enc = style.GetFontEncoding();
-    }
-
-    if ( enc == wxFONTENCODING_SYSTEM )
-        enc = GetTextEncoding();
-
-    const wxScopedCharBuffer buffer(wxGTK_CONV_ENC(text, enc));
-    if ( !buffer )
-    {
-        // we must log an error here as losing the text like this can be a
-        // serious problem (e.g. imagine the document edited by user being
-        // empty instead of containing the correct text)
-        wxLogWarning(_("Failed to insert text in the control."));
-        return;
-    }
-#endif
 
     // First remove the selection if there is one
     gtk_text_buffer_delete_selection(m_buffer, false, true);
@@ -1327,7 +1304,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
             gtk_text_iter_forward_to_line_end(&end);
 
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &line, &end, true));
-        result = wxGTK_CONV_BACK(text);
+        result = wxString::FromUTF8Unchecked(text);
     }
     else
     {

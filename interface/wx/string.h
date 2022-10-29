@@ -24,7 +24,7 @@
     dual nature of wxString API makes it simple to use in all cases and,
     importantly, allows the code written for either ANSI or Unicode builds of
     the previous wxWidgets versions to compile and work correctly with the
-    single unified Unicode build of wxWidgets 3.0. It is also mostly
+    single unified build of wxWidgets 3.0 and later. It is also mostly
     transparent when using wxString with the few exceptions described below.
 
 
@@ -691,19 +691,14 @@ public:
     const std::string utf8_string() const;
 
     /**
-        Converts the strings contents to the wide character representation
-        and returns it as a temporary wxWCharBuffer object (Unix and macOS)
-        or returns a pointer to the internal string contents in wide character
-        mode (Windows).
+        Returns the strings contents as a wide character string.
 
-        Depending on OS and configuration, TYPE is either @c wchar_t*
-        or wxCharBuffer.
-
-        The macro wxWX2WCbuf is defined as the correct return type (without const).
+        wxWX2WCbuf is macro which can be either `wchar_t*` or wxWCharBuffer
+        depending on whether wxUSE_UNICODE_UTF8 is 0 or 1.
 
         @see utf8_str(), c_str(), mb_str(), fn_str(), wchar_str()
     */
-    const TYPE wc_str() const;
+    const wxWX2WCbuf wc_str() const;
 
     /**
         Returns an object with string data that is implicitly convertible to
@@ -724,7 +719,7 @@ public:
 
     /**
         Converts the string to an 8-bit string in ISO-8859-1 encoding in the
-        form of a wxCharBuffer (Unicode builds only).
+        form of a wxCharBuffer.
 
         This is a convenience method useful when storing binary data in
         wxString. It should be used @em only for this purpose. It is only valid
@@ -737,8 +732,7 @@ public:
     const wxScopedCharBuffer To8BitData() const;
 
     /**
-        Converts the string to an ASCII, 7-bit string in the form of
-        a wxCharBuffer (Unicode builds only) or a C string (ANSI builds).
+        Converts the string to an ASCII, 7-bit string.
 
         Note that this conversion is only lossless if the string contains only
         ASCII characters as all the non-ASCII ones are replaced with the (same)
@@ -746,14 +740,11 @@ public:
 
         Use mb_str() or utf8_str() to convert to other encodings.
 
-        Depending on OS and configuration, TYPE is either @c char* or
-        wxCharBuffer.
-
         @param replaceWith
             The character used to replace any non-ASCII characters, default to
             underscore (@c "_"). This parameter is new since wxWidgets 3.1.0.
     */
-    const TYPE ToAscii(char replaceWith = '_') const;
+    const wxCharBuffer ToAscii(char replaceWith = '_') const;
 
     /**
         Return the string as a std::string using @e conv's wxMBConv::cWC2MB method.

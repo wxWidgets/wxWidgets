@@ -46,7 +46,7 @@
 #elif wxUSE_UNICODE_WCHAR
     #define __WX_BO_UNICODE "wchar_t"
 #else
-    #define __WX_BO_UNICODE "ANSI"
+    #error "Either wxUSE_UNICODE_UTF8 or wxUSE_UNICODE_WCHAR must be 1"
 #endif
 
 // GCC and Intel C++ share same C++ ABI (and possibly others in the future),

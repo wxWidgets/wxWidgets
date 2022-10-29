@@ -294,13 +294,8 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
     createParamOids = new int[classInfo->GetCreateParamCount() ];
     createClassInfos = new const wxClassInfo*[classInfo->GetCreateParamCount() ];
 
-#if wxUSE_UNICODE
     typedef map<wstring, wxXmlNode *> PropertyNodes;
     typedef vector<wstring> PropertyNames;
-#else
-    typedef map<string, wxXmlNode *> PropertyNodes;
-    typedef vector<string> PropertyNames;
-#endif
     PropertyNodes propertyNodes;
     PropertyNames propertyNames;
 

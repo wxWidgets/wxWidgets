@@ -145,7 +145,7 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
     }
 
     m_widget =
-        gtk_expander_new_with_mnemonic(wxGTK_CONV(GTKConvertMnemonics(label)));
+        gtk_expander_new_with_mnemonic(GTKConvertMnemonics(label).utf8_str());
     g_object_ref(m_widget);
 
     // Connect to the "notify::expanded" signal instead of the more common
@@ -209,7 +209,7 @@ bool wxCollapsiblePane::IsCollapsed() const
 void wxCollapsiblePane::SetLabel(const wxString &str)
 {
     gtk_expander_set_label(GTK_EXPANDER(m_widget),
-                           wxGTK_CONV(GTKConvertMnemonics(str)));
+                           GTKConvertMnemonics(str).utf8_str());
 
     // FIXME: we need to update our collapsed width in some way but using GetBestSize()
     // we may get the size of the control with the pane size summed up if we are expanded!

@@ -80,7 +80,6 @@ wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
 wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)
 
-wx_option(wxUSE_UNICODE "compile with Unicode support (NOT RECOMMENDED to be turned off)")
 if(NOT WIN32)
     wx_option(wxUSE_UNICODE_UTF8 "use UTF-8 representation for strings (Unix only)" OFF)
     wx_dependent_option(wxUSE_UTF8_LOCALE_ONLY "only support UTF-8 locales in UTF-8 build (Unix only)" ON "wxUSE_UNICODE_UTF8" OFF)
@@ -97,7 +96,7 @@ wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
 # external libraries
 # ---------------------------------------------------------------------------
 set(PCRE2_CODE_UNIT_WIDTH 8)
-if(wxUSE_UNICODE AND (NOT DEFINED wxUSE_UNICODE_UTF8 OR NOT wxUSE_UNICODE_UTF8))
+if(NOT DEFINED wxUSE_UNICODE_UTF8 OR NOT wxUSE_UNICODE_UTF8)
     # This is also checked in setup.cmake, but setup.cmake will run after options.cmake.
     include(CheckTypeSize)
     check_type_size(wchar_t SIZEOF_WCHAR_T)

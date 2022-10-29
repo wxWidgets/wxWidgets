@@ -7,7 +7,7 @@
         <option name="wxPCRE2_CODE_UNIT_WIDTH"/>
         <set var="LIB_REGEX">
             <if cond="wxUSE_REGEX=='builtin'">
-                wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+                wxregexu$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
             </if>
         </set>
         <set var="INC_REGEX_BUILD">
@@ -18,7 +18,7 @@
         <set var="wxUSE_REGEX">builtin</set>
         <set var="LIB_REGEX">
             <if cond="wxUSE_REGEX=='builtin'">
-                wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)
+                wxregexu$(WXDEBUGFLAG)$(HOST_SUFFIX)
             </if>
         </set>
     </if>
@@ -32,10 +32,10 @@
     <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
          cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
         <libname cond="FORMAT=='autoconf'">
-            $(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            $(id)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
         </libname>
         <libname cond="FORMAT!='autoconf'">
-            $(id)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            $(id)u$(WXDEBUGFLAG)$(HOST_SUFFIX)
         </libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
@@ -43,7 +43,6 @@
         <include cond="FORMAT=='autoconf'">$(INC_REGEX_BUILD)</include>
         <define>__WX__</define>
         <define>HAVE_CONFIG_H</define>
-        <define>$(UNICODE_DEFINE)</define>
         <define cond="FORMAT=='autoconf'">PCRE2_CODE_UNIT_WIDTH=$(wxPCRE2_CODE_UNIT_WIDTH)</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>

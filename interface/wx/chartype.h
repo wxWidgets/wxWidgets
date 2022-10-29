@@ -98,36 +98,29 @@
 #define _T(string)
 
 /**
-    wxChar is defined to be
-    \- @c char when <tt>wxUSE_UNICODE==0</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    wxChar is a compatibility typedef always defined as @c wchar_t now.
+
+    Note that it is not affected by @c wxUSE_UNICODE_UTF8 option.
 */
-typedef wxUSE_UNICODE_dependent wxChar;
+typedef wchar_t wxChar;
 
 /**
-    wxSChar is defined to be
-    \- <tt>signed char</tt> when <tt>wxUSE_UNICODE==0</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    wxSChar is a compatibility typedef always defined as @c wchar_t now.
 */
-typedef wxUSE_UNICODE_dependent wxSChar;
+typedef wchar_t wxSChar;
 
 /**
-    wxUChar is defined to be
-    \- <tt>unsigned char</tt> when <tt>wxUSE_UNICODE==0</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    wxUChar is a compatibility typedef always defined as @c wchar_t now.
 */
-typedef wxUSE_UNICODE_dependent wxUChar;
+typedef wchar_t wxUChar;
 
 /**
     wxStringCharType is defined to be:
-    \- @c char when <tt>wxUSE_UNICODE==0</tt>
-    \- @c char when <tt>wxUSE_UNICODE_WCHAR==0</tt> and <tt>wxUSE_UNICODE==1</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt> and <tt>wxUSE_UNICODE==1</tt>
+    \- @c char when <tt>wxUSE_UNICODE_WCHAR==0</tt>
+    \- @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt>
 
-    The @c wxUSE_UNICODE_WCHAR symbol is defined to @c 1 when building on
-    Windows while it's defined to @c 0 when building on Unix, Linux or macOS.
-    (Note that @c wxUSE_UNICODE_UTF8 symbol is defined as the opposite of
-    @c wxUSE_UNICODE_WCHAR.)
+    The @c wxUSE_UNICODE_WCHAR symbol is defined by default, but may be turned
+    off in which case @c wxUSE_UNICODE_UTF8 is turned on.
 
     Note that wxStringCharType (as the name says) is the type used by wxString
     for internal storage of the characters.

@@ -44,16 +44,13 @@ PangoContext* wxGetPangoContext();
 
 #ifdef __WXGTK__
     #include "wx/gtk/private.h"
-
-    #define wxPANGO_CONV wxGTK_CONV_SYS
-    #define wxPANGO_CONV_BACK wxGTK_CONV_BACK_SYS
 #else
     #include "wx/x11/private.h"
     #include "wx/gtk/private/string.h"
-
-    #define wxPANGO_CONV(s) s.utf8_str()
-    #define wxPANGO_CONV_BACK(s) wxString::FromUTF8Unchecked(s)
 #endif
+
+#define wxPANGO_CONV(s) s.utf8_str()
+#define wxPANGO_CONV_BACK(s) wxString::FromUTF8Unchecked(s)
 
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo

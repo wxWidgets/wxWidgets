@@ -71,7 +71,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
     if (str.empty())
         return FALSE;
 
-    gtk_tooltip_set_text(tooltip, wxGTK_CONV_SYS(str));
+    gtk_tooltip_set_text(tooltip, str.utf8_str());
     return TRUE;
 }
 }

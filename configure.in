@@ -676,7 +676,6 @@ WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream 
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unsafe_conv_in_wxstring,     [ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString], wxUSE_UNSAFE_WXSTRING_CONV)
-WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
 WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)], wxUSE_EXTENDED_RTTI)
@@ -2134,20 +2133,16 @@ if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
 
     dnl Find the PCRE library we need.
-    if test "$wxUSE_UNICODE" = "yes"; then
-        if test "$wxUSE_UNICODE_UTF8" = "yes"; then
-            pcre_suffix=8
-        else
-            if test "$ac_cv_sizeof_wchar_t" = 2; then
-                pcre_suffix=16
-            elif test "$ac_cv_sizeof_wchar_t" = 4; then
-                pcre_suffix=32
-            else
-                AC_MSG_ERROR([unknown sizeof(wchar_t)])
-            fi
-        fi
-    else
+    if test "$wxUSE_UNICODE_UTF8" = "yes"; then
         pcre_suffix=8
+    else
+        if test "$ac_cv_sizeof_wchar_t" = 2; then
+            pcre_suffix=16
+        elif test "$ac_cv_sizeof_wchar_t" = 4; then
+            pcre_suffix=32
+        else
+            AC_MSG_ERROR([unknown sizeof(wchar_t)])
+        fi
     fi
 
     if test "$wxUSE_REGEX" != "builtin"; then
@@ -3037,32 +3032,30 @@ installed, where VER is 2, 3 or 4.
             fi
         fi
 
-        if test "$wxUSE_UNICODE" = "yes"; then
-            PKG_CHECK_MODULES(PANGOXFT, pangoxft,
-                [
-                    AC_DEFINE(HAVE_PANGO_XFT)
-                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
-                ],
-                [
-                    AC_MSG_ERROR([pangoxft library not found, library cannot be compiled in Unicode mode])
-                ]
-            )
-            PKG_CHECK_MODULES(PANGOFT2, pangoft2,
-                [
-                    CFLAGS="$PANGOFT2_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
-                ],
-                [
-                    AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
-                    wxUSE_PRINTING_ARCHITECTURE="no"
-                ]
-            )
+        PKG_CHECK_MODULES(PANGOXFT, pangoxft,
+            [
+                AC_DEFINE(HAVE_PANGO_XFT)
+                CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
+                CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
+            ],
+            [
+                AC_MSG_ERROR([Required pangoxft library not found])
+            ]
+        )
+        PKG_CHECK_MODULES(PANGOFT2, pangoft2,
+            [
+                CFLAGS="$PANGOFT2_CFLAGS $CFLAGS"
+                CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
+            ],
+            [
+                AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
+                wxUSE_PRINTING_ARCHITECTURE="no"
+            ]
+        )
 
-            AC_CHECK_FUNCS([pango_font_family_is_monospace])
-        fi
+        AC_CHECK_FUNCS([pango_font_family_is_monospace])
 
         wxUSE_UNIVERSAL="yes"
 
@@ -3570,15 +3563,6 @@ else
 fi
 
 
-UNICODE=0
-lib_unicode_suffix=
-WX_CHARTYPE="ansi"
-if test "$wxUSE_UNICODE" = "yes"; then
-    lib_unicode_suffix=u
-    WX_CHARTYPE="unicode"
-    UNICODE=1
-fi
-
 WX_FLAVOUR=${WX_FLAVOUR:+-$WX_FLAVOUR}
 WX_LIB_FLAVOUR=`echo $WX_FLAVOUR | tr '-' '_'`
 
@@ -3587,22 +3571,22 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
+WX_VERSION_TAG=`echo WXU${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}u${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
-TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
+TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-unicode${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 dnl library link name
 dnl These just save us from exporting lib_{unicode,flavour}_suffix.
 dnl If we ever need to do that, we won't need to keep these.
 
 if test "$wxUSE_OSX_COCOA" = 1; then
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_baseu${WX_LIB_FLAVOUR}"
 else
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}u${WX_LIB_FLAVOUR}"
 fi
-WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
+WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}u${WX_LIB_FLAVOUR}"
 
 
 
@@ -6129,11 +6113,7 @@ if test "$wxUSE_FONTMAP" = "yes" ; then
   AC_DEFINE(wxUSE_FONTMAP)
 fi
 
-if test "$wxUSE_UNICODE" = "yes" ; then
-  AC_DEFINE(wxUSE_UNICODE)
-fi
-
-if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
+if test "$wxUSE_UNICODE_UTF8" = "yes"; then
     AC_DEFINE(wxUSE_UNICODE_UTF8)
 
     if test "$wxUSE_UNICODE_UTF8_LOCALE" = "yes"; then
@@ -7730,7 +7710,7 @@ if test "$wxUSE_GUI" = "yes"; then
 fi
 case "$wxUSE_REGEX" in
     builtin)
-        wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
+        wxconfig_3rdparty="regexu $wxconfig_3rdparty"
         ;;
     sys)
         WXCONFIG_LIBS="$PCRE_LINK $WXCONFIG_LIBS"
@@ -7836,7 +7816,6 @@ AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(EXTRALIBS_STC)
 AC_SUBST(EXTRALIBS_WEBVIEW)
 AC_SUBST(WITH_PLUGIN_SDL)
-AC_SUBST(UNICODE)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
@@ -8061,7 +8040,6 @@ AC_SUBST(WIDGET_SET)
 AC_SUBST(WX_RELEASE)
 AC_SUBST(WX_VERSION)
 AC_SUBST(WX_SUBVERSION)
-AC_SUBST(WX_CHARTYPE)
 
 dnl both versions of all the usual flags variables: WX_FLAGS which are used for
 dnl building the library itself, and WXCONFIG_-prefixed variants which
@@ -8282,15 +8260,15 @@ echo ""
 echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_DESC}"
 echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
-echo $ECHO_N "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}$ECHO_C"
-if test "$wxUSE_UNICODE" = "yes"; then
-    if test "$wxUSE_UNICODE_UTF8" = "yes"; then
-        echo " (using UTF-8)"
-    else
-        echo " (using wchar_t)"
-    fi
+echo $ECHO_N "  Unicode encoding used by wxString?                      $ECHO_C"
+if test "$wxUSE_UNICODE_UTF8" = "yes"; then
+    echo "UTF-8"
+elif test "$ac_cv_sizeof_wchar_t" = 2; then
+    echo "UTF-16"
+elif test "$ac_cv_sizeof_wchar_t" = 4; then
+    echo "UTF-32"
 else
-    echo
+    echo "unknown??"
 fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"

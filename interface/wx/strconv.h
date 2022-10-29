@@ -231,18 +231,10 @@ public:
      */
     wxWCharBuffer cMB2WC(const wxCharBuffer& buf) const;
 
-    ///@{
     /**
-        Converts from multibyte encoding to the current wxChar type (which
-        depends on whether wxUSE_UNICODE is set to 1).
-
-        If wxChar is char, it returns the parameter unaltered. If wxChar is
-        wchar_t, it returns the result in a wxWCharBuffer. The macro wxMB2WXbuf
-        is defined as the correct return type (without const).
+        Converts from multibyte encoding to `wchar_t`.
     */
-    const char* cMB2WX(const char* psz) const;
     wxWCharBuffer cMB2WX(const char* psz) const;
-    ///@}
 
     /**
         Converts from Unicode to multibyte encoding by calling FromWChar() and

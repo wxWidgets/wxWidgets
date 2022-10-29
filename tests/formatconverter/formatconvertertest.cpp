@@ -305,7 +305,7 @@ void FormatConverterTestCase::check(const wxString& input,
     CPPUNIT_ASSERT_MESSAGE(string(msg.mb_str()), result == expectedUtf8);
 #endif // wxUSE_UNICODE_UTF8
 
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UTF8_LOCALE_ONLY
     result = (const wchar_t*)wxFormatString(input);
 
 #if defined(__WINDOWS__) && \
@@ -320,7 +320,7 @@ void FormatConverterTestCase::check(const wxString& input,
           wxT("', result (wchar_t): '") + result +
           wxT("', expected: '") + expectedWchar + wxT("'");
     CPPUNIT_ASSERT_MESSAGE(string(msg.mb_str()), result == expectedWchar);
-#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 
 

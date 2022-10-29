@@ -352,9 +352,8 @@ private:
                                     const wxMBConv& conv);
 #endif
 
-#if !wxUSE_UNICODE_UTF8 // wxUSE_UNICODE_WCHAR or !wxUSE_UNICODE
+#if !wxUSE_UNICODE_UTF8 // wxUSE_UNICODE_WCHAR
   // returns C string encoded as the implementation expects:
-  #if wxUSE_UNICODE
   static const wchar_t* ImplStr(const wchar_t* str)
     { return str ? str : wxT(""); }
   static const SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
@@ -365,20 +364,6 @@ private:
   static SubstrBufFromMB ImplStr(const char* str, size_t n,
                                  const wxMBConv& conv wxSTRING_DEFAULT_CONV_ARG)
     { return ConvertStr(str, n, conv); }
-  #else
-  static const char* ImplStr(const char* str,
-                             const wxMBConv& WXUNUSED(conv) wxSTRING_DEFAULT_CONV_ARG)
-    { return str ? str : ""; }
-  static const SubstrBufFromMB ImplStr(const char* str, size_t n,
-                                       const wxMBConv& WXUNUSED(conv) wxSTRING_DEFAULT_CONV_ARG)
-    { return SubstrBufFromMB(str, (str && n == npos) ? wxStrlen(str) : n); }
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-  static wxScopedCharBuffer ImplStr(const wchar_t* str)
-    { return ConvertStr(str, npos, wxConvLibc).data; }
-  static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
-    { return ConvertStr(str, n, wxConvLibc); }
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-  #endif
 
   // translates position index in wxString to/from index in underlying
   // wxStringImpl:
@@ -1186,10 +1171,15 @@ public:
     // ctors from wchar_t* strings:
   wxString(const wchar_t *pwz)
     : m_impl(ImplStr(pwz)) {}
-  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
-    : m_impl(ImplStr(pwz)) {}
   wxString(const wchar_t *pwz, size_t nLength)
     { assign(pwz, nLength); }
+
+    // These ctors only existed for compatibility with the ANSI build and
+    // shouldn't be used any longer.
+  wxDEPRECATED_MSG("remove the wxMBConv ctor argument")
+  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
+    : m_impl(ImplStr(pwz)) {}
+  wxDEPRECATED_MSG("remove the wxMBConv ctor argument")
   wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv), size_t nLength)
     { assign(pwz, nLength); }
 
@@ -1246,13 +1236,8 @@ public:
   #endif
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-  #if !wxUSE_UNICODE // ANSI build
-    // FIXME-UTF8: do this in UTF8 build #if wxUSE_UTF8_LOCALE_ONLY, too
-    wxString(const std::string& str) : m_impl(str) {}
-  #else // Unicode
-    wxString(const std::string& str)
-        { assign(str.c_str(), str.length()); }
-  #endif
+  wxString(const std::string& str)
+      { assign(str.c_str(), str.length()); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 #endif // wxUSE_STD_STRING
 
@@ -1280,7 +1265,7 @@ public:
     }
   #endif
 
-  #if (!wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY) && wxUSE_STL_BASED_WXSTRING
+  #if wxUSE_UTF8_LOCALE_ONLY && wxUSE_STL_BASED_WXSTRING
     // wxStringImpl is std::string in the encoding we want
     #define wxStringToStdStringRetType const std::string&
     const std::string& ToStdString() const { return m_impl; }
@@ -1587,8 +1572,9 @@ public:
     // returned buffer won't affect the string, these methods are only useful
     // for passing values to const-incorrect functions
     wxWritableCharBuffer char_str(const wxMBConv& conv wxSTRING_DEFAULT_CONV_ARG) const
-        { return mb_str(conv); }
-    wxWritableWCharBuffer wchar_str() const { return wc_str(); }
+        { return wxWritableCharBuffer(mb_str(conv)); }
+    wxWritableWCharBuffer wchar_str() const
+        { return wxWritableWCharBuffer(wc_str()); }
 
     // conversion to the buffer of the given type T (= char or wchar_t) and
     // also optionally return the buffer length
@@ -1597,16 +1583,8 @@ public:
     template <typename T>
     wxCharTypeBuffer<T> tchar_str(size_t *len = nullptr) const
     {
-#if wxUSE_UNICODE
         // we need a helper dispatcher depending on type
         return wxPrivate::wxStringAsBufHelper<T>::Get(*this, len);
-#else // ANSI
-        // T can only be char in ANSI build
-        if ( len )
-            *len = length();
-
-        return wxCharTypeBuffer<T>::CreateNonOwned(wx_str(), length());
-#endif // Unicode build kind
     }
 
     // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
@@ -1615,18 +1593,10 @@ public:
     //
     // the behaviour of these functions with the strings containing anything
     // else than 7 bit ASCII characters is undefined, use at your own risk.
-#if wxUSE_UNICODE
     static wxString FromAscii(const char *ascii, size_t len);
     static wxString FromAscii(const char *ascii);
     static wxString FromAscii(char ascii);
     const wxScopedCharBuffer ToAscii(char replaceWith = '_') const;
-#else // ANSI
-    static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
-    static wxString FromAscii(const char *ascii, size_t len)
-        { return wxString( ascii, len ); }
-    static wxString FromAscii(char ascii) { return wxString( ascii ); }
-    const char *ToAscii(char WXUNUSED(replaceWith) = '_') const { return c_str(); }
-#endif // Unicode/!Unicode
 
     // also provide unsigned char overloads as signed/unsigned doesn't matter
     // for 7 bit ASCII characters
@@ -1764,7 +1734,6 @@ public:
     const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
 
     // functions for storing binary data in wxString:
-#if wxUSE_UNICODE
     static wxString From8BitData(const char *data, size_t len)
       { return wxString(data, wxConvISO8859_1, len); }
     // version for NUL-terminated data:
@@ -1772,15 +1741,6 @@ public:
       { return wxString(data, wxConvISO8859_1); }
     const wxScopedCharBuffer To8BitData() const
         { return mb_str(wxConvISO8859_1); }
-#else // ANSI
-    static wxString From8BitData(const char *data, size_t len)
-      { return wxString(data, len); }
-    // version for NUL-terminated data:
-    static wxString From8BitData(const char *data)
-      { return wxString(data); }
-    const wxScopedCharBuffer To8BitData() const
-        { return wxScopedCharBuffer::CreateNonOwned(wx_str(), length()); }
-#endif // Unicode/ANSI
 
     // conversions with (possible) format conversions: have to return a
     // buffer with temporary data
@@ -1791,8 +1751,6 @@ public:
     // accepting the file names. The return value is always the same, but the
     // type differs because a function may either return pointer to the buffer
     // directly or have to use intermediate buffer for translation.
-
-#if wxUSE_UNICODE
 
     // this is an optimization: even though using mb_str(wxConvLibc) does the
     // same thing (i.e. returns pointer to internal representation as locale is
@@ -1820,7 +1778,8 @@ public:
     const wxScopedWCharBuffer wc_str() const
         { return AsWCharBuf(wxMBConvStrictUTF8()); }
 #endif
-    // for compatibility with !wxUSE_UNICODE version
+    // for compatibility only
+    wxDEPRECATED_MSG("remove the wxMBConv argument")
     const wxWX2WCbuf wc_str(const wxMBConv& WXUNUSED(conv)) const
       { return wc_str(); }
 
@@ -1829,23 +1788,6 @@ public:
 #else // !wxMBFILES
     const wxWX2WCbuf fn_str() const { return wc_str(); }
 #endif // wxMBFILES/!wxMBFILES
-
-#else // ANSI
-    const char* mb_str() const { return wx_str(); }
-
-    // for compatibility with wxUSE_UNICODE version
-    const char* mb_str(const wxMBConv& WXUNUSED(conv)) const { return wx_str(); }
-
-    const wxWX2MBbuf mbc_str() const { return mb_str(); }
-
-    const wxScopedWCharBuffer wc_str(const wxMBConv& conv wxSTRING_DEFAULT_CONV_ARG) const
-        { return AsWCharBuf(conv); }
-
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    const wxScopedCharBuffer fn_str() const
-        { return wxConvFile.cWC2WX( wc_str( wxConvLibc ) ); }
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-#endif // Unicode/ANSI
 
 #if wxUSE_UNICODE_UTF8
     const wxScopedWCharBuffer t_str() const { return wc_str(); }
@@ -2152,7 +2094,9 @@ public:
     { return IsSameAs(str.data(), compareWithCase); }
     // comparison with a single character: returns true if equal
   bool IsSameAs(wxUniChar c, bool compareWithCase = true) const;
-  // FIXME-UTF8: remove these overloads
+    // we need all these overloads too as any of the types below can be
+    // converted either to wxUniChar or wxString, so without them, calling
+    // IsSameAs('x') would result in an ambiguity.
   bool IsSameAs(wxUniCharRef c, bool compareWithCase = true) const
     { return IsSameAs(wxUniChar(c), compareWithCase); }
   bool IsSameAs(char c, bool compareWithCase = true) const
@@ -3253,11 +3197,7 @@ public:
 
     // as strpbrk() but starts at nStart, returns npos if not found
   size_t find_first_of(const wxString& str, size_t nStart = 0) const
-#if wxUSE_UNICODE // FIXME-UTF8: temporary
     { return find_first_of(str.wc_str(), nStart); }
-#else
-    { return find_first_of(str.mb_str(), nStart); }
-#endif
     // same as above
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   size_t find_first_of(const char* sz, size_t nStart = 0) const;
@@ -3272,11 +3212,7 @@ public:
     { return find(c, nStart); }
     // find the last (starting from nStart) char from str in this string
   size_t find_last_of (const wxString& str, size_t nStart = npos) const
-#if wxUSE_UNICODE // FIXME-UTF8: temporary
     { return find_last_of(str.wc_str(), nStart); }
-#else
-    { return find_last_of(str.mb_str(), nStart); }
-#endif
     // same as above
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   size_t find_last_of (const char* sz, size_t nStart = npos) const;
@@ -3294,11 +3230,7 @@ public:
 
     // as strspn() (starting from nStart), returns npos on failure
   size_t find_first_not_of(const wxString& str, size_t nStart = 0) const
-#if wxUSE_UNICODE // FIXME-UTF8: temporary
     { return find_first_not_of(str.wc_str(), nStart); }
-#else
-    { return find_first_not_of(str.mb_str(), nStart); }
-#endif
     // same as above
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   size_t find_first_not_of(const char* sz, size_t nStart = 0) const;
@@ -3312,11 +3244,7 @@ public:
   size_t find_first_not_of(wxUniChar ch, size_t nStart = 0) const;
     //  as strcspn()
   size_t find_last_not_of(const wxString& str, size_t nStart = npos) const
-#if wxUSE_UNICODE // FIXME-UTF8: temporary
     { return find_last_not_of(str.wc_str(), nStart); }
-#else
-    { return find_last_not_of(str.mb_str(), nStart); }
-#endif
     // same as above
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   size_t find_last_not_of(const char* sz, size_t nStart = npos) const;
@@ -3587,7 +3515,6 @@ private:
   };
 
 
-#if wxUSE_UNICODE
   // common mb_str() and wxCStrData::AsChar() helper: performs the conversion
   // and returns either m_convertedToChar.m_str (in which case its m_len is
   // also updated) or nullptr if it failed
@@ -3635,7 +3562,6 @@ private:
   }
 
   ConvertedBuffer<char> m_convertedToChar;
-#endif // !wxUSE_UNICODE
 
 #if !wxUSE_UNICODE_WCHAR
   // common wc_str() and wxCStrData::AsWChar() helper for both UTF-8 and ANSI
@@ -4212,13 +4138,13 @@ WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxScopedCharBuf
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxScopedWCharBuffer&);
 
-#if wxUSE_UNICODE && defined(HAVE_WOSTREAM)
+#if defined(HAVE_WOSTREAM)
 
 WXDLLIMPEXP_BASE wxSTD wostream& operator<<(wxSTD wostream&, const wxString&);
 WXDLLIMPEXP_BASE wxSTD wostream& operator<<(wxSTD wostream&, const wxCStrData&);
 WXDLLIMPEXP_BASE wxSTD wostream& operator<<(wxSTD wostream&, const wxScopedWCharBuffer&);
 
-#endif  // wxUSE_UNICODE && defined(HAVE_WOSTREAM)
+#endif  // defined(HAVE_WOSTREAM)
 
 #endif  // wxUSE_STD_IOSTREAM
 
@@ -4259,39 +4185,19 @@ inline const wchar_t* wxCStrData::AsWChar() const
         m_str->AsWChar(wxConvLibc);
 #endif
 
-    // in Unicode build the string always has a valid Unicode representation
-    // and even if a conversion is needed (as in UTF8 case) it can't fail
-    //
-    // but in ANSI build the string contents might be not convertible to
-    // Unicode using the current locale encoding so we do need to check for
-    // errors
-#if !wxUSE_UNICODE
-    if ( !p )
-    {
-        // if conversion fails, return empty string and not nullptr to avoid
-        // crashes in code written with either wxWidgets 2 wxString or
-        // std::string behaviour in mind: neither of them ever returns nullptr
-        // from its c_str() and so we shouldn't either
-        //
-        // notice that the same is done in AsChar() below and
-        // wxString::wc_str() and mb_str() for the same reasons
-        return L"";
-    }
-#endif // !wxUSE_UNICODE
-
     return p + m_offset;
 }
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 inline const char* wxCStrData::AsChar() const
 {
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UTF8_LOCALE_ONLY
     const char * const p = m_str->AsChar(wxConvLibc);
     if ( !p )
         return "";
-#else // !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
+#else // wxUSE_UTF8_LOCALE_ONLY
     const char * const p = m_str->mb_str();
-#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#endif
 
     return p + m_offset;
 }

@@ -522,7 +522,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             wxUxThemeHandle hTheme(this, L"BUTTON");
             if ( hTheme )
             {
-                wxUxThemeFont themeFont;
+                LOGFONTW themeFont;
                 if ( ::GetThemeFont
                                              (
                                                 hTheme,
@@ -530,10 +530,10 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
                                                 BP_GROUPBOX,
                                                 GBS_NORMAL,
                                                 TMT_FONT,
-                                                themeFont.GetPtr()
+                                                &themeFont
                                              ) == S_OK )
                 {
-                    font.Init(themeFont.GetLOGFONT());
+                    font.Init(themeFont);
                     if ( font )
                         selFont.Init(hdc, font);
                 }

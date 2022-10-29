@@ -73,7 +73,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
         return false;
 
     wxWindow::SetLabel( title ) ;
-    m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
+    m_nowpeer->SetTitle(title);
     wxTopLevelWindows.Append(this);
 
     return true;
@@ -160,7 +160,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
     m_label = title ;
 
     if ( m_nowpeer )
-        m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
+        m_nowpeer->SetTitle(title);
 }
 
 wxString wxTopLevelWindowMac::GetTitle() const

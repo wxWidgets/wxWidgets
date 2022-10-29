@@ -452,35 +452,16 @@ void wx28HtmlTagHandler::ParseInnerSource(const wxString& source)
 wxIMPLEMENT_DYNAMIC_CLASS(wx28HtmlEntitiesParser,wxObject);
 
 wx28HtmlEntitiesParser::wx28HtmlEntitiesParser()
-#if !wxUSE_UNICODE
-    : m_conv(nullptr), m_encoding(wxFONTENCODING_SYSTEM)
-#endif
 {
 }
 
 wx28HtmlEntitiesParser::~wx28HtmlEntitiesParser()
 {
-#if !wxUSE_UNICODE
-    delete m_conv;
-#endif
 }
 
 void wx28HtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
 {
-#if !wxUSE_UNICODE
-    if (encoding == m_encoding)
-        return;
-
-    delete m_conv;
-
-    m_encoding = encoding;
-    if (m_encoding == wxFONTENCODING_SYSTEM)
-        m_conv = nullptr;
-    else
-        m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
-#else
     (void) encoding;
-#endif
 }
 
 wxString wx28HtmlEntitiesParser::Parse(const wxString& input)
@@ -541,20 +522,6 @@ extern "C" int LINKAGEMODE wx28HtmlEntityCompare(const void *key, const void *it
 {
     return wxStrcmp((wxChar*)key, ((wx28HtmlEntityInfo*)item)->name);
 }
-
-#if !wxUSE_UNICODE
-wxChar wx28HtmlEntitiesParser::GetCharForCode(unsigned code)
-{
-    char buf[2];
-    wchar_t wbuf[2];
-    wbuf[0] = (wchar_t)code;
-    wbuf[1] = 0;
-    wxMBConv *conv = m_conv ? m_conv : &wxConvLocal;
-    if (conv->WC2MB(buf, wbuf, 2) == (size_t)-1)
-        return '?';
-    return buf[0];
-}
-#endif
 
 wxChar wx28HtmlEntitiesParser::GetEntityChar(const wxString& entity)
 {

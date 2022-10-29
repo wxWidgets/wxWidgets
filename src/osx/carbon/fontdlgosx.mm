@@ -21,7 +21,6 @@
 #include "wx/fontdlg.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/cmndata.h"
 #endif
@@ -122,8 +121,8 @@
 {
     if ( self = [super initWithFrame:rectBox] )
     {
-        wxCFStringRef cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
-        wxCFStringRef cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
+        wxCFStringRef cfOkString( wxT("OK") );
+        wxCFStringRef cfCancelString( wxT("Cancel") );
 
         NSRect rectCancel = NSMakeRect( (CGFloat) 10.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
         NSRect rectOK = NSMakeRect( (CGFloat)100.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );

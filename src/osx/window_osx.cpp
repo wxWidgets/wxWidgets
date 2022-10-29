@@ -330,7 +330,7 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
         if ( !m_hasFont )
             DoSetWindowVariant( m_windowVariant );
 
-        GetPeer()->SetInitialLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
+        GetPeer()->SetInitialLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics) ) ;
 
         // for controls we want to use best size for wxDefaultSize params )
         if ( !GetPeer()->IsUserPane() )
@@ -1185,7 +1185,7 @@ void wxWindowMac::SetLabel(const wxString& title)
     InvalidateBestSize();
 
     if ( GetPeer() && GetPeer()->IsOk() )
-        GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
+        GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics) ) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
     if ( IsShownOnScreen() )

@@ -70,12 +70,10 @@
 #ifdef __REG_NOCHAR
 #undef __REG_NOCHAR
 #endif
-#if wxUSE_UNICODE
-#   define  __REG_WIDE_T        wxChar
-#   define  __REG_WIDE_COMPILE  wx_re_comp
-#   define  __REG_WIDE_EXEC     wx_re_exec
-#   define  __REG_NOCHAR        /* don't want the char versions */
-#endif
+#define  __REG_WIDE_T        wxChar
+#define  __REG_WIDE_COMPILE  wx_re_comp
+#define  __REG_WIDE_EXEC     wx_re_exec
+#define  __REG_NOCHAR        /* don't want the char versions */
 #define __REG_NOFRONT           /* don't want regcomp() and regexec() */
 #define _ANSI_ARGS_(x)          x
 /* --- end --- */
@@ -89,11 +87,7 @@ typedef int celt;               /* type to hold chr, MCCE number, or NOCELT */
 #define UCHAR(c) ((unsigned char) (c))
 #define CHR(c)  (UCHAR(c))      /* turn char literal into chr literal */
 #define DIGITVAL(c) ((c)-'0')   /* turn chr digit into its value */
-#if !wxUSE_UNICODE
-#   define CHRBITS 8            /* bits in a chr; must not use sizeof */
-#   define CHR_MIN 0x00         /* smallest and largest chr; the value */
-#   define CHR_MAX 0xff         /*  CHR_MAX-CHR_MIN+1 should fit in uchr */
-#elif SIZEOF_WCHAR_T == 4
+#if SIZEOF_WCHAR_T == 4
 #   define CHRBITS 32           /* bits in a chr; must not use sizeof */
 #   define CHR_MIN 0x00000000   /* smallest and largest chr; the value */
 #   define CHR_MAX 0xffffffff   /*  CHR_MAX-CHR_MIN+1 should fit in uchr */

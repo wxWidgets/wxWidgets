@@ -26,7 +26,7 @@
 // implementation
 // ===========================================================================
 
-#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF16
 
@@ -75,9 +75,9 @@ wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& c
 
 #else
 
-wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
+wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
 {
-    wxWxCharBuffer buf(n);
+    wxWCharBuffer buf(n);
 #if wxUSE_UNICODE_WCHAR
     wmemset(buf.data(), (wchar_t)ch, n);
 #else // ANSI
@@ -88,7 +88,7 @@ wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& 
 
 #endif // wxUSE_UNICODE_UTF16
 
-#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#endif // wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF8
 

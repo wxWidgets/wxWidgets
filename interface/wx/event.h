@@ -1632,9 +1632,6 @@ public:
         If the key pressed doesn't have any character value (e.g. a cursor key)
         this method will return @c WXK_NONE. In this case you should use
         GetKeyCode() to retrieve the value of the key.
-
-        This function is only available in Unicode build, i.e. when
-        @c wxUSE_UNICODE is 1.
     */
     wxChar GetUnicodeKey() const;
 

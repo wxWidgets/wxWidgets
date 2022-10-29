@@ -2713,15 +2713,11 @@ void FormMain::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     wxString msg;
     msg.Printf( "wxPropertyGrid Sample"
-#if wxUSE_UNICODE
   #if defined(wxUSE_UNICODE_UTF8) && wxUSE_UNICODE_UTF8
                 " <utf-8>"
   #else
                 " <unicode>"
   #endif
-#else
-                " <ansi>"
-#endif
 #ifdef __WXDEBUG__
                 " <debug>"
 #else

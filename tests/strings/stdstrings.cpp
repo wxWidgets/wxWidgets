@@ -470,12 +470,10 @@ TEST_CASE("StdString::Resize", "[stdstring]")
     CHECK( s3 == wxT("abcABCdefDEF  ") );
     CHECK( s4 == wxT("abcABCdefDEFWW") );
 
-#if wxUSE_UNICODE
     wxString s =
         wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
     s.resize(3);
     CHECK( s == wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8") );
-#endif // wxUSE_UNICODE
 }
 
 TEST_CASE("StdString::Riter", "[stdstring]")
@@ -567,12 +565,10 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
     std::wstring s8(s4);
     CHECK( s8 == L"hello" );
 
-#if wxUSE_UNICODE
     std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
     wxString s10 = wxString::FromUTF8(s9);
     CHECK( s10.ToStdString(wxConvUTF8) == s9 );
     CHECK( s10.utf8_string() == s9 );
-#endif // wxUSE_UNICODE
 
     std::string s11("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
     CHECK( "" == wxString::FromUTF8(s11) );

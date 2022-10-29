@@ -20,7 +20,6 @@
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/string.h"
-    #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/timer.h"
 #endif
@@ -280,7 +279,7 @@ bool wxOSXQuickTimeSoundData::Play(unsigned flags)
         Handle dataRef = nullptr;
         OSType dataRefType;
 
-        err = QTNewDataReferenceFromFullPathCFString(wxCFStringRef(m_sndname,wxLocale::GetSystemEncoding()),
+        err = QTNewDataReferenceFromFullPathCFString(wxCFStringRef(m_sndname),
                                                      (UInt32)kQTNativeDefaultPathStyle, 0, &dataRef, &dataRefType);
 
         wxASSERT(err == noErr);

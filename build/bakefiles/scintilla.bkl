@@ -53,7 +53,6 @@
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
         <define>$(DEBUG_DEFINE)</define>
-        <define>$(UNICODE_DEFINE)</define>
         <define>LPEG_LEXER=0</define>
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>

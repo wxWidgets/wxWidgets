@@ -159,7 +159,6 @@ wxDECLARE_APP(MyApp);
 // Notice use of wxIMPLEMENT_APP_NO_MAIN() instead of the usual wxIMPLEMENT_APP!
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
-#ifdef _UNICODE
 // In Unicode build MFC normally requires to manually change the entry point to
 // wWinMainCRTStartup() but to avoid having to modify the project options to do
 // it we provide an adapter for it.
@@ -169,7 +168,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, char *, int)
 {
     wWinMainCRTStartup();
 }
-#endif // _UNICODE
 
 CMainWindow::CMainWindow()
 {

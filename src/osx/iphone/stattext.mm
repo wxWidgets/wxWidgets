@@ -52,10 +52,10 @@ public:
     {
     }
 
-    virtual void SetLabel(const wxString& title, wxFontEncoding encoding)
+    virtual void SetLabel(const wxString& title)
     {
         wxUILabel* v = (wxUILabel*)GetWXWidget();
-        wxCFStringRef text( title , encoding );
+        wxCFStringRef text( title );
         
         [v setText:text.AsNSString()];
     }

@@ -438,17 +438,17 @@ bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
     return true;
 }
 
-void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding)
+void wxWidgetIPhoneImpl::SetLabel(const wxString& title)
 {
     if ( [m_osxView respondsToSelector:@selector(setTitle:forState:) ] )
     {
-        wxCFStringRef cf( title , encoding );
+        wxCFStringRef cf( title );
         [m_osxView setTitle:cf.AsNSString() forState:UIControlStateNormal ];
     }
 #if 0 // nonpublic API problems
     else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
-        wxCFStringRef cf( title , encoding );
+        wxCFStringRef cf( title );
         [m_osxView setStringValue:cf.AsNSString()];
     }
 #endif

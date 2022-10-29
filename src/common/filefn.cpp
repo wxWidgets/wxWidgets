@@ -734,9 +734,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation
-#if !wxUSE_UNICODE
-    #define cbuf buf
-#else // wxUSE_UNICODE
     bool needsANSI = true;
 
     #if !defined(HAVE_WGETCWD)
@@ -752,7 +749,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     #endif
 
     if ( needsANSI )
-#endif // wxUSE_UNICODE
     {
     #if defined(_MSC_VER) || defined(__MINGW32__)
         ok = _getcwd(cbuf, sz) != nullptr;
@@ -760,10 +756,8 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
         ok = getcwd(cbuf, sz) != nullptr;
     #endif // platform
 
-    #if wxUSE_UNICODE
         // finally convert the result to Unicode if needed
         wxConvFile.MB2WC(buf, cbuf, sz);
-    #endif // wxUSE_UNICODE
     }
 
     if ( !ok )
@@ -783,7 +777,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 #if defined( __CYGWIN__ ) && defined( __WINDOWS__ )
         // another example of DOS/Unix mix (Cygwin)
         wxString pathUnix = buf;
-#if wxUSE_UNICODE
     #if CYGWIN_VERSION_DLL_MAJOR >= 1007
         cygwin_conv_path(CCP_POSIX_TO_WIN_W, pathUnix.mb_str(wxConvFile), buf, sz);
     #else
@@ -791,22 +784,10 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
         cygwin_conv_to_full_win32_path(pathUnix.mb_str(wxConvFile), bufA);
         wxConvFile.MB2WC(buf, bufA, sz);
     #endif
-#else
-    #if CYGWIN_VERSION_DLL_MAJOR >= 1007
-        cygwin_conv_path(CCP_POSIX_TO_WIN_A, pathUnix, buf, sz);
-    #else
-        cygwin_conv_to_full_win32_path(pathUnix, buf);
-    #endif
-#endif // wxUSE_UNICODE
 #endif // __CYGWIN__
     }
 
     return buf;
-
-#if !wxUSE_UNICODE
-    #undef cbuf
-#endif
-
 }
 
 wxString wxGetCwd()

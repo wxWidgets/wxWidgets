@@ -181,8 +181,8 @@ public:
 
         // strip mnemonics from the label for compatibility with the usual
         // labels in wxStaticText sense
-        wxCFStringRef l(wxStripMenuCodes(m_label), GetToolBarFontEncoding());
-        wxCFStringRef sh( GetShortHelp(), GetToolBarFontEncoding() );
+        wxCFStringRef l(wxStripMenuCodes(m_label));
+        wxCFStringRef sh( GetShortHelp() );
 #if wxOSX_USE_NATIVE_TOOLBAR
        if ( m_toolbarItem )
         {
@@ -280,14 +280,6 @@ public:
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
 private:
-    wxFontEncoding GetToolBarFontEncoding() const
-    {
-        wxFont f;
-        if ( GetToolBar() )
-            f = GetToolBar()->GetFont();
-        return f.IsOk() ? f.GetEncoding() : wxFont::GetDefaultEncoding();
-    }
-
     void Init()
     {
         m_controlHandle = nullptr;
@@ -1175,13 +1167,6 @@ bool wxToolBar::Realize()
     bool insertAll = false;
 
     NSToolbar* refTB = (NSToolbar*)m_macToolbar;
-    wxFont f;
-    wxFontEncoding enc;
-    f = GetFont();
-    if ( f.IsOk() )
-        enc = f.GetEncoding();
-    else
-        enc = wxFont::GetDefaultEncoding();
 
     node = m_tools.GetFirst();
     while ( node )
@@ -1201,7 +1186,7 @@ bool wxToolBar::Realize()
             {
                 // since setting the help texts is non-virtual we have to update
                 // the strings now
-                wxCFStringRef sh( tool->GetShortHelp(), enc);
+                wxCFStringRef sh( tool->GetShortHelp() );
                 [hiItemRef setToolTip:sh.AsNSString()];
                 
                 if ( insertAll || (tool->GetIndex() != currentPosition) )
@@ -1521,7 +1506,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 if (m_macToolbar != nullptr)
                 {
                     wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
-                    wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );
+                    wxCFStringRef cfidentifier( identifier );
                     wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                     [item setImplementation:tool];
                     tool->SetToolbarItemRef( item );
@@ -1550,7 +1535,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 wxCHECK_MSG( view, false, wxT("control must be non-null") );
 
                 wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
-                wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );
+                wxCFStringRef cfidentifier( identifier );
                 wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                 [item setImplementation:tool];
                 tool->SetToolbarItemRef( item );
@@ -1707,7 +1692,7 @@ void wxToolBar::OSXSelectTool(int toolId)
     wxCHECK_RET( m_macToolbar, "toolbar must be non-null" );
 
     wxString identifier = wxString::Format(wxT("%ld"), (long)tool);
-    wxCFStringRef cfidentifier(identifier, wxFont::GetDefaultEncoding());
+    wxCFStringRef cfidentifier(identifier);
     [(NSToolbar*)m_macToolbar setSelectedItemIdentifier:cfidentifier.AsNSString()];
 }
 #endif // wxOSX_USE_NATIVE_TOOLBAR

@@ -203,12 +203,6 @@ private:
     wxString    m_label;
     int         m_value;
 
-#if !wxUSE_UNICODE
-    // Flag used to indicate that we need to set the label because we were
-    // unable to do it in the ctor (see comments there).
-    bool m_needsToSetLabel;
-#endif // !wxUSE_UNICODE
-
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
 };

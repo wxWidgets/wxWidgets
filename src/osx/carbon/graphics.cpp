@@ -2537,7 +2537,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         return;
 
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
+    wxCFStringRef text(str);
     CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
     CTFontRef font = fref->OSXGetCTFont();
 
@@ -2641,7 +2641,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
-    wxCFStringRef text(strToMeasure, wxLocale::GetSystemEncoding() );
+    wxCFStringRef text(strToMeasure);
 
     wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, fref->OSXGetCTFontAttributes() ) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
@@ -2675,7 +2675,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
-    wxCFStringRef t(text, wxLocale::GetSystemEncoding() );
+    wxCFStringRef t(text);
     wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, fref->OSXGetCTFontAttributes()) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 

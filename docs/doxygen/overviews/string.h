@@ -402,12 +402,9 @@ difference the change to @c EXTRA_ALLOC makes to your program.
 
 @section overview_string_settings wxString Related Compilation Settings
 
-The main option affecting wxString is @c wxUSE_UNICODE which is now always
-defined as @c 1 by default to indicate Unicode support. You may set it to 0 to
-disable Unicode support in wxString and elsewhere in wxWidgets but this is @e
-strongly not recommended.
-
-Another option affecting wxWidgets is @c wxUSE_UNICODE_WCHAR which is also 1 by
+wxString always supports Unicode in wxWidgets 3.3 and later, but it may use
+either UTF-8 or `wchar_t` (which, in turn, may use either UTF-16 or UTF-32)
+internally. It uses the latter if @c wxUSE_UNICODE_WCHAR is set, which is the case by
 default. You may want to set it to 0 and set @c wxUSE_UNICODE_UTF8 to 1 instead
 to use UTF-8 internally. wxString still provides the same API in this case, but
 using UTF-8 has performance implications as explained in @ref

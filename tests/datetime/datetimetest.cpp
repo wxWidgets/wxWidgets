@@ -979,10 +979,8 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "09:07-04:30", true },
         { "19:22+05:45", true },
 
-#if wxUSE_UNICODE
         // Containing minus sign (U+2212) as separator between time and tz.
         { "09:37" "\xe2\x88\x92" "0400", true },
-#endif
 
         // Some invalid ones too.
 

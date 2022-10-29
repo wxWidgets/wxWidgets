@@ -140,7 +140,7 @@ private:
         int            sizeofNull   // number of bytes occupied by terminating null in this encoding
         );
 
-#if wxUSE_UNICODE && wxUSE_STREAMS
+#if wxUSE_STREAMS
     // use wxTextInputStream to exercise wxMBConv interface
     // (this reveals some bugs in certain wxMBConv subclasses)
     void TestStreamDecoder(
@@ -1182,7 +1182,7 @@ void MBConvTestCase::TestDecoder(
         CPPUNIT_ASSERT( ((unsigned char*)outputBuffer.data())[i] == UNINITIALIZED );
     }
 
-#if wxUSE_UNICODE && wxUSE_STREAMS
+#if wxUSE_STREAMS
     TestStreamDecoder( wideBuffer, wideChars, multiBuffer, multiBytes, converter );
 #endif
 }
@@ -1248,12 +1248,12 @@ void MBConvTestCase::TestEncoder(
         CPPUNIT_ASSERT( ((unsigned char*)outputBuffer.data())[i] == UNINITIALIZED );
     }
 
-#if wxUSE_UNICODE && wxUSE_STREAMS
+#if wxUSE_STREAMS
     TestStreamEncoder( wideBuffer, wideChars, multiBuffer, multiBytes, converter );
 #endif
 }
 
-#if wxUSE_UNICODE && wxUSE_STREAMS
+#if wxUSE_STREAMS
 // use wxTextInputStream to exercise wxMBConv interface
 // (this reveals some bugs in certain wxMBConv subclasses)
 void MBConvTestCase::TestStreamDecoder(
@@ -1283,7 +1283,7 @@ void MBConvTestCase::TestStreamDecoder(
 }
 #endif
 
-#if wxUSE_UNICODE && wxUSE_STREAMS
+#if wxUSE_STREAMS
 // use wxTextInputStream to exercise wxMBConv interface
 // (this reveals some bugs in certain wxMBConv subclasses)
 void MBConvTestCase::TestStreamEncoder(

@@ -118,10 +118,7 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     set_target_properties(wxwebkit2_ext PROPERTIES NO_SONAME 1)
 
     # Change output name to match expected name in webview_webkit2.cpp: webkit2_ext*
-    set(lib_unicode)
-    if(wxUSE_UNICODE)
-        set(lib_unicode "u")
-    endif()
+    set(lib_unicode "u")
 
     set(lib_rls)
     set(lib_dbg)

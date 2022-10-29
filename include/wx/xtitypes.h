@@ -314,7 +314,7 @@ public:
     {
         Register();
     }
-#if 0 // wxUSE_UNICODE
+#if 0
     wxTypeInfo(wxTypeKind kind,
                wxVariant2StringFnc to, wxString2VariantFnc from,
                const char *name):

@@ -388,49 +388,41 @@ public:
     wxWCharBuffer(const wxCStrData& cstr);
 };
 
-// wxCharTypeBuffer<T> implicitly convertible to T*
-template <typename T>
-class wxWritableCharTypeBuffer : public wxCharTypeBuffer<T>
+// wxCharTypeBuffer<T> implicitly convertible to T*, for char and wchar_t,
+// implemented slightly differently because in one case we must be
+// constructible from a buffer and in another -- from a raw pointer.
+
+class wxWritableCharBuffer : public wxScopedCharTypeBuffer<char>
 {
 public:
-    typedef typename wxScopedCharTypeBuffer<T>::CharType CharType;
+    explicit wxWritableCharBuffer(const wxScopedCharTypeBuffer<char>& src)
+        : wxScopedCharTypeBuffer<char>(src) {}
 
-    wxWritableCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src)
-        : wxCharTypeBuffer<T>(src) {}
-    // FIXME-UTF8: this won't be needed after converting mb_str()/wc_str() to
-    //             always return a buffer
-    //             + we should derive this class from wxScopedCharTypeBuffer
-    //               then
-    wxWritableCharTypeBuffer(const CharType *str = nullptr)
-        : wxCharTypeBuffer<T>(str) {}
-
-    operator CharType*() { return this->data(); }
+    operator char*() { return data(); }
 };
 
-typedef wxWritableCharTypeBuffer<char> wxWritableCharBuffer;
-typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
+class wxWritableWCharBuffer : public wxCharTypeBuffer<wchar_t>
+{
+public:
+    explicit wxWritableWCharBuffer(const CharType *str)
+        : wxCharTypeBuffer<wchar_t>(str) {}
+
+    operator wchar_t*() { return data(); }
+};
 
 
-#if wxUSE_UNICODE
-    #define wxWxCharBuffer wxWCharBuffer
+// Compatibility defines, don't use them in the new code.
+#define wxWxCharBuffer wxWCharBuffer
 
-    #define wxMB2WXbuf wxWCharBuffer
-    #define wxWX2MBbuf wxCharBuffer
-    #if wxUSE_UNICODE_WCHAR
-        #define wxWC2WXbuf wxChar*
-        #define wxWX2WCbuf wxChar*
-    #elif wxUSE_UNICODE_UTF8
-        #define wxWC2WXbuf wxWCharBuffer
-        #define wxWX2WCbuf wxWCharBuffer
-    #endif
-#else // ANSI
-    #define wxWxCharBuffer wxCharBuffer
-
-    #define wxMB2WXbuf wxChar*
-    #define wxWX2MBbuf wxChar*
-    #define wxWC2WXbuf wxCharBuffer
+#define wxMB2WXbuf wxWCharBuffer
+#define wxWX2MBbuf wxCharBuffer
+#if wxUSE_UNICODE_WCHAR
+    #define wxWC2WXbuf wxChar*
+    #define wxWX2WCbuf wxChar*
+#elif wxUSE_UNICODE_UTF8
+    #define wxWC2WXbuf wxWCharBuffer
     #define wxWX2WCbuf wxWCharBuffer
-#endif // Unicode/ANSI
+#endif
 
 // ----------------------------------------------------------------------------
 // A class for holding growable data buffers (not necessarily strings)

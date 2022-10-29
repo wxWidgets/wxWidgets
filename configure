@@ -650,7 +650,6 @@ WXCONFIG_CFLAGS
 WX_CFLAGS
 WXCONFIG_CPPFLAGS
 WX_CPPFLAGS
-WX_CHARTYPE
 WX_SUBVERSION
 WX_VERSION
 WX_RELEASE
@@ -702,7 +701,6 @@ COND_USE_GUI_0
 COND_USE_EXCEPTIONS_1
 COND_USE_EXCEPTIONS_0
 COND_USE_CAIRO_1
-COND_UNICODE_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
 COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
@@ -897,7 +895,6 @@ TOOLKIT_VERSION
 TOOLKIT_LOWERCASE
 DEBUG_FLAG
 DEBUG_INFO
-UNICODE
 WITH_PLUGIN_SDL
 EXTRALIBS_WEBVIEW
 EXTRALIBS_STC
@@ -1131,7 +1128,6 @@ enable_std_iostreams
 enable_std_string
 enable_std_string_conv_in_wxstring
 enable_unsafe_conv_in_wxstring
-enable_unicode
 enable_utf8
 enable_utf8only
 enable_extended_rtti
@@ -2101,7 +2097,6 @@ Optional Features:
   --enable-std_string     use standard C++ string classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
  --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString
-  --disable-unicode       compile without Unicode support
   --enable-utf8           use UTF-8 representation for strings (Unix only)
   --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
   --enable-extended_rtti  use extended RTTI (XTI)
@@ -5848,35 +5843,6 @@ fi
 
 
           eval "$wx_cv_use_unsafe_conv_in_wxstring"
-
-
-          enablestring=disable
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-unicode was given.
-if test "${enable_unicode+set}" = set; then :
-  enableval=$enable_unicode;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_unicode='wxUSE_UNICODE=yes'
-                          else
-                            wx_cv_use_unicode='wxUSE_UNICODE=no'
-                          fi
-
-else
-
-                          wx_cv_use_unicode='wxUSE_UNICODE=${'DEFAULT_wxUSE_UNICODE":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_unicode"
 
 
           enablestring=
@@ -25194,20 +25160,16 @@ if test "$wxUSE_REGEX" != "no"; then
     $as_echo "#define wxUSE_REGEX 1" >>confdefs.h
 
 
-        if test "$wxUSE_UNICODE" = "yes"; then
         if test "$wxUSE_UNICODE_UTF8" = "yes"; then
-            pcre_suffix=8
-        else
-            if test "$ac_cv_sizeof_wchar_t" = 2; then
-                pcre_suffix=16
-            elif test "$ac_cv_sizeof_wchar_t" = 4; then
-                pcre_suffix=32
-            else
-                as_fn_error $? "unknown sizeof(wchar_t)" "$LINENO" 5
-            fi
-        fi
-    else
         pcre_suffix=8
+    else
+        if test "$ac_cv_sizeof_wchar_t" = 2; then
+            pcre_suffix=16
+        elif test "$ac_cv_sizeof_wchar_t" = 4; then
+            pcre_suffix=32
+        else
+            as_fn_error $? "unknown sizeof(wchar_t)" "$LINENO" 5
+        fi
     fi
 
     if test "$wxUSE_REGEX" != "builtin"; then
@@ -28891,7 +28853,6 @@ $as_echo "$MICROWIN" >&6; }
             fi
         fi
 
-        if test "$wxUSE_UNICODE" = "yes"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOXFT" >&5
@@ -28952,12 +28913,12 @@ fi
 	echo "$PANGOXFT_PKG_ERRORS" >&5
 
 
-                    as_fn_error $? "pangoxft library not found, library cannot be compiled in Unicode mode" "$LINENO" 5
+                as_fn_error $? "Required pangoxft library not found" "$LINENO" 5
 
 
 elif test $pkg_failed = untried; then
 
-                    as_fn_error $? "pangoxft library not found, library cannot be compiled in Unicode mode" "$LINENO" 5
+                as_fn_error $? "Required pangoxft library not found" "$LINENO" 5
 
 
 else
@@ -28966,11 +28927,11 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    $as_echo "#define HAVE_PANGO_XFT 1" >>confdefs.h
+                $as_echo "#define HAVE_PANGO_XFT 1" >>confdefs.h
 
-                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
+                CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
+                CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
 
 fi
 
@@ -29033,16 +28994,16 @@ fi
 	echo "$PANGOFT2_PKG_ERRORS" >&5
 
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
 $as_echo "$as_me: WARNING: pangoft2 library not found, library will be compiled without printing support" >&2;}
-                    wxUSE_PRINTING_ARCHITECTURE="no"
+                wxUSE_PRINTING_ARCHITECTURE="no"
 
 
 elif test $pkg_failed = untried; then
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
 $as_echo "$as_me: WARNING: pangoft2 library not found, library will be compiled without printing support" >&2;}
-                    wxUSE_PRINTING_ARCHITECTURE="no"
+                wxUSE_PRINTING_ARCHITECTURE="no"
 
 
 else
@@ -29051,13 +29012,13 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    CFLAGS="$PANGOFT2_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
+                CFLAGS="$PANGOFT2_CFLAGS $CFLAGS"
+                CXXFLAGS="$PANGOFT2_CFLAGS $CXXFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOFT2_LIBS"
 
 fi
 
-            for ac_func in pango_font_family_is_monospace
+        for ac_func in pango_font_family_is_monospace
 do :
   ac_fn_c_check_func "$LINENO" "pango_font_family_is_monospace" "ac_cv_func_pango_font_family_is_monospace"
 if test "x$ac_cv_func_pango_font_family_is_monospace" = xyes; then :
@@ -29068,7 +29029,6 @@ _ACEOF
 fi
 done
 
-        fi
 
         wxUSE_UNIVERSAL="yes"
 
@@ -32322,15 +32282,6 @@ else
 fi
 
 
-UNICODE=0
-lib_unicode_suffix=
-WX_CHARTYPE="ansi"
-if test "$wxUSE_UNICODE" = "yes"; then
-    lib_unicode_suffix=u
-    WX_CHARTYPE="unicode"
-    UNICODE=1
-fi
-
 WX_FLAVOUR=${WX_FLAVOUR:+-$WX_FLAVOUR}
 WX_LIB_FLAVOUR=`echo $WX_FLAVOUR | tr '-' '_'`
 
@@ -32339,19 +32290,19 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[a-z]' '[A-Z]'`
+WX_VERSION_TAG=`echo WXU${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[a-z]' '[A-Z]'`
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}u${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
-TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
+TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-unicode${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 
 if test "$wxUSE_OSX_COCOA" = 1; then
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_baseu${WX_LIB_FLAVOUR}"
 else
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}u${WX_LIB_FLAVOUR}"
 fi
-WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
+WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}u${WX_LIB_FLAVOUR}"
 
 
 
@@ -38894,12 +38845,7 @@ if test "$wxUSE_FONTMAP" = "yes" ; then
 
 fi
 
-if test "$wxUSE_UNICODE" = "yes" ; then
-  $as_echo "#define wxUSE_UNICODE 1" >>confdefs.h
-
-fi
-
-if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
+if test "$wxUSE_UNICODE_UTF8" = "yes"; then
     $as_echo "#define wxUSE_UNICODE_UTF8 1" >>confdefs.h
 
 
@@ -41320,7 +41266,7 @@ if test "$wxUSE_GUI" = "yes"; then
 fi
 case "$wxUSE_REGEX" in
     builtin)
-        wxconfig_3rdparty="regex${lib_unicode_suffix} $wxconfig_3rdparty"
+        wxconfig_3rdparty="regexu $wxconfig_3rdparty"
         ;;
     sys)
         WXCONFIG_LIBS="$PCRE_LINK $WXCONFIG_LIBS"
@@ -41408,7 +41354,6 @@ if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
 else
     OFFICIAL_BUILD=0
 fi
-
 
 
 
@@ -43488,11 +43433,6 @@ EOF
         COND_TOOLKIT_X11_USE_GUI_1=""
     fi
 
-    COND_UNICODE_1="#"
-    if test "x$UNICODE" = "x1" ; then
-        COND_UNICODE_1=""
-    fi
-
     COND_USE_CAIRO_1="#"
     if test "x$USE_CAIRO" = "x1" ; then
         COND_USE_CAIRO_1=""
@@ -43783,7 +43723,6 @@ OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
-
 
 
 
@@ -45644,15 +45583,15 @@ echo ""
 echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_DESC}"
 echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
-echo $ECHO_N "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}$ECHO_C"
-if test "$wxUSE_UNICODE" = "yes"; then
-    if test "$wxUSE_UNICODE_UTF8" = "yes"; then
-        echo " (using UTF-8)"
-    else
-        echo " (using wchar_t)"
-    fi
+echo $ECHO_N "  Unicode encoding used by wxString?                      $ECHO_C"
+if test "$wxUSE_UNICODE_UTF8" = "yes"; then
+    echo "UTF-8"
+elif test "$ac_cv_sizeof_wchar_t" = 2; then
+    echo "UTF-16"
+elif test "$ac_cv_sizeof_wchar_t" = 4; then
+    echo "UTF-32"
 else
-    echo
+    echo "unknown??"
 fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"

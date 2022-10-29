@@ -235,7 +235,6 @@ locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
 {
     locale_t loc = nullptr;
 
-#if wxUSE_UNICODE
     if ( locId.GetCharset().empty() )
     {
         wxLocaleIdent locIdUTF8(locId);
@@ -263,7 +262,6 @@ locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
 
     // if we can't set UTF-8 locale, try non-UTF-8 one:
     if ( !loc )
-#endif // wxUSE_UNICODE
         loc = TryCreateLocale(locId);
 
     return loc;
@@ -356,7 +354,6 @@ static const char *wxSetlocaleTryUTF8(int c, const wxLocaleIdent& locId)
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
     //     non-UTF-8 locale if it fails.
-#if wxUSE_UNICODE
     if ( locId.GetCharset().empty() )
     {
         wxLocaleIdent locIdUTF8(locId);
@@ -382,7 +379,6 @@ static const char *wxSetlocaleTryUTF8(int c, const wxLocaleIdent& locId)
 
     // if we can't set UTF-8 locale, try non-UTF-8 one:
     if ( !l )
-#endif // wxUSE_UNICODE
         l = wxSetlocale(c, locId.GetName());
 
     return l;
