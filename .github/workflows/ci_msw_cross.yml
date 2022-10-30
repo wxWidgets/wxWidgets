@@ -12,6 +12,7 @@ on:
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_msw.yml'
       - '.github/workflows/docs_update.yml'
+      - 'build/cmake/**'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -25,6 +26,7 @@ on:
       - '*.md'
       - '*.yml'
       - 'wxwidgets.props'
+      - 'CMakeLists.txt'
   pull_request:
     branches:
       - master
@@ -35,6 +37,7 @@ on:
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_msw.yml'
       - '.github/workflows/docs_update.yml'
+      - 'build/cmake/**'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -48,6 +51,7 @@ on:
       - '*.md'
       - '*.yml'
       - 'wxwidgets.props'
+      - 'CMakeLists.txt'
 
 permissions:
   contents: read

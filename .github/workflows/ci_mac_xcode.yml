@@ -11,6 +11,7 @@ on:
     - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - '.github/workflows/docs_update.yml'
+    - 'build/cmake/**'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
     - 'docs/**'
@@ -27,6 +28,7 @@ on:
     - 'src/x11/**'
     - '*.md'
     - '*.yml'
+    - 'CMakeLists.txt'
     - 'wxwidgets.props'
   pull_request:
     branches: [ master ]
@@ -37,6 +39,7 @@ on:
     - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - '.github/workflows/docs_update.yml'
+    - 'build/cmake/**'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
     - 'docs/**'
@@ -53,6 +56,7 @@ on:
     - 'src/x11/**'
     - '*.md'
     - '*.yml'
+    - 'CMakeLists.txt'
     - 'wxwidgets.props'
 
 permissions:

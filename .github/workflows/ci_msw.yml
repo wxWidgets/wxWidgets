@@ -12,6 +12,7 @@ on:
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_msw_cross.yml'
       - '.github/workflows/docs_update.yml'
+      - 'build/cmake/**'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -23,6 +24,7 @@ on:
       - 'src/osx/**'
       - '*.md'
       - '*.yml'
+      - 'CMakeLists.txt'
   pull_request:
     branches:
       - master
@@ -33,6 +35,7 @@ on:
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_msw_cross.yml'
       - '.github/workflows/docs_update.yml'
+      - 'build/cmake/**'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -44,6 +47,7 @@ on:
       - 'src/osx/**'
       - '*.md'
       - '*.yml'
+      - 'CMakeLists.txt'
 
 permissions:
   contents: read
