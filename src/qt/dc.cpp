@@ -373,6 +373,21 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *externalLeading,
                              const wxFont *theFont ) const
 {
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
+
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( string.empty() && !descent && !externalLeading )
+        return;
+
     QFont f;
     if (theFont != nullptr)
         f = theFont->GetHandle();

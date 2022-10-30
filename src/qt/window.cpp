@@ -636,6 +636,21 @@ int wxWindowQt::GetCharWidth() const
 void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
         int *externalLeading, const wxFont *font ) const
 {
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
+
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( string.empty() && !descent && !externalLeading )
+        return;
+
     QFontMetrics fontMetrics( font != nullptr ? font->GetHandle() : GetHandle()->font() );
 
     if ( x != nullptr )

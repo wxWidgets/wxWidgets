@@ -960,6 +960,21 @@ public:
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetTextExtent - no valid font set" );
 
+        if ( width )
+            *width = 0;
+        if ( height )
+            *height = 0;
+        if ( descent )
+            *descent = 0;
+        if ( externalLeading )
+            *externalLeading = 0;
+
+        // We can skip computing the string width and height if it is empty, but
+        // not its descent and/or external leading, which still needs to be
+        // returned even for an empty string.
+        if ( str.empty() && !descent && !externalLeading )
+            return;
+
         EnsurePainterIsActive active(m_qtPainter);
 
         const wxQtFontData*
