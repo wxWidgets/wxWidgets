@@ -12,17 +12,12 @@
 @tableofcontents
 
 wxWidgets had been started long before the exceptions were introduced in C++ so
-it is not very surprising that it is not built around using them as some more
-modern C++ libraries are. For instance, the library doesn't throw exceptions to
-signal about the errors. Moreover, up to (and including) the version 2.4 of
-wxWidgets, even using the exceptions in the user code was dangerous because the
-library code wasn't exception-safe and so an exception propagating through it
-could result in memory and/or resource leaks, and also not very convenient.
+it is not very surprising that it is not built around using them, i.e.
+the library doesn't throw exceptions to signal about the errors.
 
-However the recent wxWidgets versions are exception-friendly. This means that
-while the library still doesn't use the exceptions by itself, it should be now
-safe to use the exceptions in the user code and the library tries to help you
-with this.
+However it is exception-friendly. This means that while the library doesn't
+use the exceptions by itself, it should be now safe to use the exceptions in
+the user code and the library tries to help you with this.
 
 
 
@@ -96,17 +91,6 @@ void TestNewDocument()
     }
 }
 @endcode
-
-Unfortunately, by default this example only works when using a C++11 compiler
-because the exception can't be safely propagated back to the code handling it
-in @c TestNewDocument() through the system event dispatch functions which are
-not compatible with C++ exceptions and needs to be stored by wxWidgets when it
-is first caught and rethrown later, when it is safe to do it. And such storing
-and rethrowing of exceptions is only possible in C++11, so while everything
-just works if you do use C++11, there is an extra step if you are using C++98:
-In this case you need to override wxApp::StoreCurrentException() and
-wxApp::RethrowStoredException() to help wxWidgets to do this, please see the
-documentation of these functions for more details.
 
 
 @section overview_exceptions_tech Technicalities
