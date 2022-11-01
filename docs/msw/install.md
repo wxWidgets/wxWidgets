@@ -479,7 +479,7 @@ project file from `$WXWIN\samples\minimal` or some other sample and adapt it to
 your application.
 
 If you are not using Visual Studio please see
-@subpage plat_msw_winxp "Windows XP Support" to enable visual styles in your
+@subpage plat_msw_winxp "Theme Support" to enable visual styles in your
 application.
 
 Advanced Library Configurations        {#msw_advanced}
