@@ -37,10 +37,12 @@ enum wxPenStyle
         /**< No pen is used. */
 
     wxPENSTYLE_STIPPLE_MASK_OPAQUE,
-        /**< @todo WHAT's this? */
+        /**< Uses a bitmap as a stipple; the mask is used for blitting
+             monochrome using text foreground and background colors. */
 
     wxPENSTYLE_STIPPLE_MASK,
-        /**< @todo WHAT's this? */
+        /**< Uses a bitmap as a stipple; mask is used for masking
+             areas in the stipple bitmap. */
 
     wxPENSTYLE_STIPPLE,
         /**< Use the stipple bitmap. */
@@ -105,8 +107,14 @@ enum wxPenJoin
     wxJOIN_INVALID = -1,
 
     wxJOIN_BEVEL = 120,
+        /**< The intersection of two lines will have
+             a diagonal edge "cut" into it. */
     wxJOIN_MITER,
+        /**< The intersection of two lines will have
+             a sharp corner. */
     wxJOIN_ROUND,
+        /**< The intersection of two lines will have
+             a rounded edge. */
 };
 
 
@@ -120,8 +128,14 @@ enum wxPenCap
     wxCAP_INVALID = -1,
 
     wxCAP_ROUND = 130,
+        /**< The pen will have a rounded edge and will extend
+             beyond the start and end of a line. */
     wxCAP_PROJECTING,
+        /**< The pen's edge will be square and will extend
+             beyond the start and end of a line. */
     wxCAP_BUTT
+        /**< The pen's edge will be square and will not extend
+             beyond the start and end of a line. */
 };
 
 
