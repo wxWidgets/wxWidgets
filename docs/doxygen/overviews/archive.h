@@ -153,13 +153,13 @@ better to convert the local name to the archive's internal format and search
 for that:
 
 @code
-auto_ptr<wxZipEntry> entry;
+std::unique_ptr<wxZipEntry> entry;
 
 // convert the local name we are looking for into the internal format
-wxString name = wxZipEntry::GetInternalName(localname);
+wxString name = wxZipEntry::GetInternalName(localName);
 
 // open the zip
-wxFFileInputStream in(wxT("test.zip"));
+wxFFileInputStream in("test.zip");
 wxZipInputStream zip(in);
 
 // call GetNextEntry() until the required internal name is found
@@ -181,27 +181,22 @@ entries looked up by name can be opened using the
 wxArchiveInputStream::OpenEntry() method.
 
 @code
-WX_DECLARE_STRING_HASH_MAP(wxZipEntry*, ZipCatalog);
-ZipCatalog::iterator it;
-wxZipEntry *entry;
+using ZipEntryPtr = std::shared_ptr<wxZipEntry>;
+using ZipCatalog = std::map<wxString, ZipEntryPtr>;
+ZipEntryPtr entry;
 ZipCatalog cat;
 
 // open the zip
-wxFFileInputStream in(wxT("test.zip"));
+wxFFileInputStream in("test.zip");
 wxZipInputStream zip(in);
 
 // load the zip catalog
-while ((entry = zip.GetNextEntry()) != nullptr)
-{
-    wxZipEntry*& current = cat[entry->GetInternalName()];
-    // some archive formats can have multiple entries with the same name
-    // (e.g. tar) though it is an error in the case of zip
-    delete current;
-    current = entry;
-}
+while (entry.reset(zip.GetNextEntry()), entry.get() != nullptr)
+    cat[entry->GetInternalName()] = entry;
 
 // open an entry by name
-if ((it = cat.find(wxZipEntry::GetInternalName(localname))) != cat.end())
+auto it = cat.find(wxZipEntry::GetInternalName(localName));
+if (it != cat.end())
 {
     zip.OpenEntry(*it->second);
     // ... now read entry's data
