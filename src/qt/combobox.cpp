@@ -82,7 +82,16 @@ void wxQtComboBox::activated(int WXUNUSED(index))
 {
     wxComboBox *handler = GetHandler();
     if ( handler )
-        handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    {
+        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
+        {
+            wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
+            event.SetString( handler->GetValue() );
+            EmitEvent( event );
+        }
+        else
+            handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    }
 }
 
 void wxQtComboBox::editTextChanged(const QString &text)
