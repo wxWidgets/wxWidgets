@@ -33,11 +33,11 @@ protected:
         m_handler = handler;
     }
 
-    void EmitEvent( wxEvent &event ) const
+    bool EmitEvent( wxEvent &event ) const
     {
         wxWindow *handler = GetHandler();
         event.SetEventObject( handler );
-        handler->HandleWindowEvent( event );
+        return handler->HandleWindowEvent( event );
     }
 
     virtual Handler *GetHandler() const
