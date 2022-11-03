@@ -659,21 +659,7 @@ bool wxNotebook::IsVertical() const
     return dir == wxLEFT || dir == wxRIGHT;
 }
 
-wxDirection wxNotebook::GetTabOrientation() const
-{
-    long style = GetWindowStyle();
-    if ( style & wxBK_BOTTOM )
-        return wxBOTTOM;
-    else if ( style & wxBK_RIGHT )
-        return wxRIGHT;
-    else if ( style & wxBK_LEFT )
-        return wxLEFT;
-
-    // wxBK_TOP == 0 so we don't have to test for it
-    return wxTOP;
-}
-
-wxRect wxNotebook::GetTabRect(int page) const
+wxRect wxNotebook::GetTabRect(size_t page) const
 {
     wxRect rect;
     wxCHECK_MSG( IS_VALID_PAGE(page), rect, wxT("invalid notebook page") );
@@ -688,7 +674,7 @@ wxRect wxNotebook::GetTabRect(int page) const
     else
     {
         widthBefore = 0;
-        for ( int n = 0; n < page; n++ )
+        for ( size_t n = 0; n < page; n++ )
         {
             widthBefore += m_widths[n];
         }

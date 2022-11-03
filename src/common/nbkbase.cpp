@@ -33,6 +33,8 @@
 
 extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[] = "notebook";
 
+#define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
+
 wxDEFINE_EVENT( wxEVT_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent );
 wxDEFINE_EVENT( wxEVT_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 
@@ -195,6 +197,29 @@ void wxNotebookBase::SendPageChangedEvent(int nPageOld, int nPageNew)
     event.SetOldSelection(nPageOld);
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+}
+
+wxDirection wxNotebookBase::GetTabOrientation() const
+{
+    long style = GetWindowStyle();
+    if ( style & wxBK_BOTTOM )
+        return wxBOTTOM;
+    else if ( style & wxBK_RIGHT )
+        return wxRIGHT;
+    else if ( style & wxBK_LEFT )
+        return wxLEFT;
+
+    // wxBK_TOP == 0 so we don't have to test for it
+    return wxTOP;
+}
+
+wxRect wxNotebookBase::GetTabRect(size_t page) const
+{
+    wxRect r;
+    wxCHECK_MSG(IS_VALID_PAGE(page), r, wxT("invalid notebook page"));
+    wxFAIL_MSG("Not implemented");
+
+    return r;
 }
 
 #endif // wxUSE_NOTEBOOK

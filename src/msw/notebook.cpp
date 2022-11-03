@@ -499,6 +499,21 @@ void wxNotebook::SetTabSize(const wxSize& sz)
     ::SendMessage(GetHwnd(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
 }
 
+wxRect wxNotebook::GetTabRect(size_t page) const
+{
+    wxRect r;
+    wxCHECK_MSG(IS_VALID_PAGE(page), r, wxT("invalid notebook page"));
+
+    if (GetPageCount() > 0)
+    {
+        RECT rect;
+        if (TabCtrl_GetItemRect(GetHwnd(), page, &rect))
+            r = wxRectFromRECT(rect);
+    }
+
+    return r;
+}
+
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // we can't use TabCtrl_AdjustRect here because it only works for wxNB_TOP
