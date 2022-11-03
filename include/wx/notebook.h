@@ -139,6 +139,13 @@ public:
     // new is wxNOT_FOUND)
     void SendPageChangedEvent(int nPageOld, int nPageNew = wxNOT_FOUND);
 
+    // return wxTOP/wxBOTTOM/wxRIGHT/wxLEFT
+    wxDirection GetTabOrientation() const;
+
+    // return the rectangle in window coordinates of the page selector.
+    // For example, for a wxNotebook this would be its tab.
+    virtual wxRect GetTabRect(size_t page) const;
+
 #if wxUSE_EXTENDED_RTTI
     // XTI accessors
     virtual void AddPageInfo( wxNotebookPageInfo* info );

@@ -10,7 +10,6 @@
 
 #if wxUSE_NOTEBOOK
 
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/panel.h"
@@ -45,10 +44,12 @@ private:
         CPPUNIT_TEST( Image );
         CPPUNIT_TEST( RowCount );
         CPPUNIT_TEST( NoEventsOnDestruction );
+        CPPUNIT_TEST( GetTabRect );
     CPPUNIT_TEST_SUITE_END();
 
     void RowCount();
     void NoEventsOnDestruction();
+    void GetTabRect();
 
     void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
@@ -161,6 +162,38 @@ TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
     // And events for the selection change should have been generated.
     CHECK( countPageChanging.GetCount() == 1 );
     CHECK( countPageChanged.GetCount() == 1 );
+}
+
+void NotebookTestCase::GetTabRect()
+{
+    // Not yet implemented for GTK or OSX, and possibly other platforms.
+#if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+
+    if (wxIsRunningUnderWine())
+    {
+        // Wine behaves different than Windows. Windows reports the size of a tab even if it is not visible
+        // while Wine returns an empty rectangle.
+        WARN("Skipping test known to fail under Wine.");
+        return;
+    }
+
+    wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400, 200));
+    wxScopedPtr<wxNotebook> cleanup(notebook);
+
+    // Create many pages, so at least some of the are not visible.
+    for (size_t i = 0; i < 30; i++)
+        notebook->AddPage(new wxPanel(notebook), "Page");
+
+    for (size_t i = 0; i < notebook->GetPageCount(); i++)
+    {
+        wxRect r = notebook->GetTabRect(i);
+        CHECK(r.width != 0);
+        CHECK(r.height != 0);
+    }
+
+#else
+    WARN("Skipping test because notebook->GetTabRect() is not supported on this platform");
+#endif // defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 }
 
 #endif //wxUSE_NOTEBOOK

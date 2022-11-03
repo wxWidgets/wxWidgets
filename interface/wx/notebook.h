@@ -191,6 +191,26 @@ public:
     */
     virtual void SetPadding(const wxSize& padding);
 
+    /**
+        This is a convenience function mapping wxBK_TOP etc styles to one of the
+        wxDirection enum elements.
+
+        @since 3.3.0
+    */
+    wxDirection GetTabOrientation() const;
+
+    /**
+        Return the rectangle of the given page tab in window coordinates.
+        This function will always return the rectangle for the specified tab, even
+        if the tab is currently not visible. If the page is invalid the returned
+        rectangle is empty.
+
+        @note Currently only available in Univ and MSW
+
+        @since 3.3.0
+    */
+    virtual wxRect GetTabRect(size_t page) const;
+
     // implementations of pure virtuals
     virtual int GetPageImage(size_t nPage) const;
     virtual bool SetPageImage(size_t page, int image);
@@ -201,6 +221,5 @@ public:
     virtual int ChangeSelection(size_t page);
     virtual bool InsertPage(size_t index, wxWindow * page, const wxString & text,
                             bool select = false, int imageId = NO_IMAGE);
-
 };
 

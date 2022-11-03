@@ -93,9 +93,6 @@ public:
     // return true if all tabs have the same width
     bool FixedSizeTabs() const { return HasFlag(wxNB_FIXEDWIDTH); }
 
-    // return wxTOP/wxBOTTOM/wxRIGHT/wxLEFT
-    wxDirection GetTabOrientation() const;
-
     // return true if the notebook has tabs at the sidesand not at the top (or
     // bottom) as usual
     bool IsVertical() const;
@@ -120,6 +117,9 @@ public:
 
     // refresh the currently selected tab
     void RefreshCurrent();
+
+    // get the tab rect
+    wxRect GetTabRect(size_t page) const override;
 
 protected:
     virtual wxNotebookPage *DoRemovePage(size_t nPage) override;
@@ -163,9 +163,6 @@ protected:
 
     // refresh all tabs
     void RefreshAllTabs();
-
-    // get the tab rect (inefficient, don't use this in a loop)
-    wxRect GetTabRect(int page) const;
 
     // get the rectangle containing all tabs
     wxRect GetAllTabsRect() const;
