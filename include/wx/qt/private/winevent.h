@@ -458,4 +458,23 @@ protected:
     }
 };
 
+// Used by wxTextEntry derived classes to toggle the dialog's default button
+// off and on. see src/qt/textentry.cpp for the reason.
+#define wxHANDLE_DIALOG_DEFAULT_BUTTON(Widget)              \
+    virtual void focusInEvent(QFocusEvent *e) override      \
+    {                                                       \
+        if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )    \
+            GetHandler()->ToggleDefaultButton();            \
+                                                            \
+        Widget::focusInEvent(e);                            \
+    }                                                       \
+                                                            \
+    virtual void focusOutEvent(QFocusEvent *e) override     \
+    {                                                       \
+        if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )    \
+            GetHandler()->ToggleDefaultButton();            \
+                                                            \
+        Widget::focusOutEvent(e);                           \
+    }
+
 #endif

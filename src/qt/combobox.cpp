@@ -26,6 +26,8 @@ public:
     virtual void showPopup() override;
     virtual void hidePopup() override;
 
+    wxHANDLE_DIALOG_DEFAULT_BUTTON(QComboBox)
+
     class IgnoreTextChange
     {
     public:
@@ -87,7 +89,12 @@ void wxQtComboBox::activated(int WXUNUSED(index))
         {
             wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
             event.SetString( handler->GetValue() );
-            EmitEvent( event );
+            if ( !EmitEvent( event ) )
+            {
+                // allow the dialog (if we are child of) to close itself
+                // by forwarding the event to the default button if any.
+                handler->ToggleDefaultButton();
+            }
         }
         else
             handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
