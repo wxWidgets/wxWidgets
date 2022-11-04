@@ -259,6 +259,19 @@ typedef short int WXTYPE;
     #define wxFALLTHROUGH ((void)0)
 #endif
 
+/* wxNODISCARD is used to indicate that the function return value must not be ignored */
+
+#if wxCHECK_CXX_STD(201703L)
+    #define wxNODISCARD [[nodiscard]]
+#elif defined(__VISUALC__)
+    #define wxNODISCARD _Check_return_
+#elif defined(__clang__) || defined(__GNUCC__)
+    #define wxNODISCARD __attribute__ ((warn_unused_result))
+#else
+    #define wxNODISCARD
+#endif
+
+
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
 #define wx_const_cast(t, x) const_cast<t>(x)

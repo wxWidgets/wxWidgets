@@ -32,7 +32,7 @@ public:
     void Destroy();
 
     // Unlocks the owned SAFEARRAY, returns it and gives up its ownership.
-    SAFEARRAY* Detach();
+    wxNODISCARD SAFEARRAY* Detach();
 
     // Returns true if has a valid SAFEARRAY.
     bool HasArray() const { return m_array != nullptr; }
@@ -367,7 +367,7 @@ public:
             result = sa.ConvertToVariant(variant);
 
         if ( sa.HasArray() )
-            sa.Detach();
+            wxUnusedVar(sa.Detach()); // we do not own the array, just attached it
 
         return result;
     }
@@ -381,7 +381,7 @@ public:
             result = sa.ConvertToArrayString(strings);
 
         if ( sa.HasArray() )
-            sa.Detach();
+            wxUnusedVar(sa.Detach()); // we do not own the array, just attached it
 
         return result;
     }
