@@ -68,7 +68,7 @@ public:
 
     // Gives up the ownership of the pointer,
     // making the caller responsible for freeing it.
-    T* release()
+    wxNODISCARD T* release()
     {
         T* ptr(m_ptr);
 

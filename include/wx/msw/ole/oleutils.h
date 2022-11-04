@@ -84,11 +84,11 @@ public:
 
     // Returns the owned BSTR and gives up its ownership,
     // the caller is responsible for freeing it
-    BSTR Detach();
+    wxNODISCARD BSTR Detach();
 
     // Returns a copy of the owned BSTR,
     // the caller is responsible for freeing it
-    BSTR Copy() const { return SysAllocString(m_bstrBuf); }
+    wxNODISCARD BSTR Copy() const { return SysAllocString(m_bstrBuf); }
 
     // Returns the address of the owned BSTR, not to be called
     // when wxBasicString already contains a non-null BSTR
@@ -102,7 +102,7 @@ public:
 
     // retrieve a copy of our string - caller must SysFreeString() it later!
     wxDEPRECATED_MSG("use Copy() instead")
-    BSTR Get() const { return Copy(); }
+    wxNODISCARD BSTR Get() const { return Copy(); }
 private:
     // actual string
     BSTR m_bstrBuf;
@@ -129,7 +129,7 @@ public:
 #endif
     virtual bool Write(wxString& str) const override;
 
-    wxVariantData* Clone() const override { return new wxVariantDataCurrency(m_value); }
+    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataCurrency(m_value); }
     virtual wxString GetType() const override { return wxS("currency"); }
 
     DECLARE_WXANY_CONVERSION()
@@ -155,7 +155,7 @@ public:
 #endif
     virtual bool Write(wxString& str) const override;
 
-    wxVariantData* Clone() const override { return new wxVariantDataErrorCode(m_value); }
+    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataErrorCode(m_value); }
     virtual wxString GetType() const override { return wxS("errorcode"); }
 
     DECLARE_WXANY_CONVERSION()
@@ -183,7 +183,7 @@ public:
 #endif
     virtual bool Write(wxString& str) const override;
 
-    wxVariantData* Clone() const override { return new wxVariantDataSafeArray(m_value); }
+    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataSafeArray(m_value); }
     virtual wxString GetType() const override { return wxS("safearray"); }
 
     DECLARE_WXANY_CONVERSION()
@@ -214,7 +214,7 @@ bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant,
 #endif // wxUSE_VARIANT
 
 // Convert string to Unicode
-WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
+wxNODISCARD WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
 
 // Convert string from BSTR to wxString
 WXDLLIMPEXP_CORE wxString wxConvertStringFromOle(BSTR bStr);

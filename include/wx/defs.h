@@ -249,6 +249,7 @@ typedef short int WXTYPE;
 
 #if wxCHECK_CXX_STD(201703L)
     #define wxFALLTHROUGH [[fallthrough]]
+    #define wxNODISCARD [[nodiscard]]
 #elif defined(__has_warning) && WX_HAS_CLANG_FEATURE(cxx_attributes)
     #define wxFALLTHROUGH [[clang::fallthrough]]
 #elif wxCHECK_GCC_VERSION(7, 0)
@@ -257,6 +258,10 @@ typedef short int WXTYPE;
 
 #ifndef wxFALLTHROUGH
     #define wxFALLTHROUGH ((void)0)
+#endif
+
+#ifndef wxNODISCARD
+    #define wxNODISCARD
 #endif
 
 /* these macros are obsolete, use the standard C++ casts directly now */
