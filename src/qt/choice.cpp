@@ -161,6 +161,8 @@ unsigned wxChoice::GetCount() const
 
 wxString wxChoice::GetString(unsigned int n) const
 {
+    wxCHECK_MSG(n < GetCount(), wxString(), "invalid index");
+
     return wxQtConvertString( m_qtComboBox->itemText(n) );
 }
 
