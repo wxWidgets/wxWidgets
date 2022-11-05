@@ -249,6 +249,7 @@ All (GUI):
 - Fix data race when processing events generated in a worker thread.
 - Fix compilation problem in wx/propgrid/editors.h (Loïc Bartoletti, #22875).
 - Fix wxGenericTreeCtrl icons rendering in high DPI (Gerhard Stein, #22887).
+- Add macros for event tables for missing wxWebView events (PB, #22949).
 
 wxGTK:
 
