@@ -26116,6 +26116,7 @@ else
 
                     #include <zlib.h>
                     #include <stdio.h>
+                    #include <stdlib.h>
 
                     int main()
                     {
@@ -26255,6 +26256,7 @@ else
 
                     #include <png.h>
                     #include <stdio.h>
+                    #include <stdlib.h>
 
                     int main()
                     {
@@ -37928,6 +37930,7 @@ if ${wx_cv_inotify_usable+:} false; then :
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#include <sys/inotify.h>
 int main() { return inotify_init(); }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
