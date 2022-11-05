@@ -391,6 +391,18 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_TITLE_CHANGED, id, \
                      wxWebViewEventHandler(fn))
 
+#define EVT_WEBVIEW_FULLSCREEN_CHANGED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, id, \
+                     wxWebViewEventHandler(fn))
+
+#define EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, id, \
+                     wxWebViewEventHandler(fn))
+
+#define EVT_WEBVIEW_SCRIPT_RESULT(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_SCRIPT_RESULT, id, \
+                     wxWebViewEventHandler(fn))
+
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATING      wxEVT_WEBVIEW_NAVIGATING
 #define wxEVT_COMMAND_WEBVIEW_NAVIGATED       wxEVT_WEBVIEW_NAVIGATED
