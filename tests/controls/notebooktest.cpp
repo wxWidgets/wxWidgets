@@ -47,11 +47,13 @@ private:
         CPPUNIT_TEST( RowCount );
         CPPUNIT_TEST( NoEventsOnDestruction );
         CPPUNIT_TEST( GetTabRect );
+        CPPUNIT_TEST( HitTestFlags );
     CPPUNIT_TEST_SUITE_END();
 
     void RowCount();
     void NoEventsOnDestruction();
     void GetTabRect();
+    void HitTestFlags();
 
     void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
@@ -210,6 +212,91 @@ void NotebookTestCase::GetTabRect()
     }
 #else // !(__WXMSW__ || __WXUNIVERSAL__)
     WX_ASSERT_FAILS_WITH_ASSERT( notebook->GetTabRect(0) );
+#endif // ports
+}
+
+void NotebookTestCase::HitTestFlags()
+{
+    wxScopedPtr<wxNotebook> notebook;
+
+#if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+    long style = 0;
+
+    SECTION("Top") { style = wxBK_TOP; }
+    SECTION("Bottom") { style = wxBK_BOTTOM; }
+    SECTION("Left") { style = wxBK_LEFT; }
+    SECTION("Right") { style = wxBK_RIGHT; }
+
+    INFO("Style=" << style);
+
+    const bool isVertical = style == wxBK_TOP || style == wxBK_BOTTOM;
+
+    // HitTest() uses TCM_HITTEST for the vertical orientations and it doesn't
+    // seem to work correctly under Wine, so skip the test there (for the
+    // horizontal tabs we use our own code which does work even under Wine).
+    if ( isVertical && wxIsRunningUnderWine() )
+        return;
+
+    notebook.reset(new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
+                                  wxPoint(0, 0), wxSize(400, 200),
+                                  style));
+
+    // Simulate an icon of standard size, its contents doesn't matter.
+    const wxSize imageSize(16, 16);
+    wxBookCtrlBase::Images images;
+    images.push_back(wxBitmapBundle::FromBitmap(wxBitmap(imageSize)));
+    notebook->SetImages(images);
+
+    notebook->AddPage(new wxPanel(notebook.get()), "First Page", false, 0);
+
+    const wxRect r = notebook->GetTabRect(0);
+    INFO("Rect=" << r);
+
+    wxPoint pt;
+    if ( isVertical )
+        pt.y = r.y + r.height / 2;
+    else
+        pt.x = r.x + r.width / 2;
+
+    int nowhere = 0;
+    int onIcon = 0;
+    int onLabel = 0;
+    int onItem = 0;
+
+    const int d = isVertical ? r.width : r.height;
+    for (int i = 0; i < d; i++)
+    {
+        long flags = 0;
+        notebook->HitTest(pt, &flags);
+
+        if (flags & wxBK_HITTEST_NOWHERE)
+            nowhere++;
+
+        if (flags & wxBK_HITTEST_ONICON)
+            onIcon++;
+
+        if (flags & wxBK_HITTEST_ONLABEL)
+            onLabel++;
+
+        if (flags & wxBK_HITTEST_ONITEM)
+            onItem++;
+
+        if (isVertical)
+            pt.x++;
+        else
+            pt.y++;
+    }
+
+    CHECK(nowhere);
+    CHECK(onIcon);
+    CHECK(onLabel);
+    CHECK(onItem);
+#else // !(__WXMSW__ || __WXUNIVERSAL__)
+    notebook.reset(new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
+                                  wxDefaultPosition, wxSize(400, 200)));
+    notebook->AddPage(new wxPanel(notebook.get()), "First Page");
+
+    WX_ASSERT_FAILS_WITH_ASSERT(notebook->GetTabRect(0));
 #endif // ports
 }
 

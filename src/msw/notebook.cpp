@@ -729,8 +729,216 @@ bool wxNotebook::InsertPage(size_t nPage,
     return true;
 }
 
+// This can be defined to help with debugging this code by visually
+// highlighting the rectangle passed to it.
+#ifdef WXDEBUG_NOTEBOOK_HITTEST
+static void ShowHitbox(wxWindow *w, wxRect r, bool text, bool refresh)
+{
+    wxBrush green(wxColor(0, 200, 0));
+    wxBrush blue(wxColor(0, 0, 200));
+
+    wxScreenDC dc;
+
+    if (refresh)
+    {
+        w->Refresh();
+        w->Update();
+    }
+
+    r.x += (r.width / 2)+2;
+    w->ClientToScreen(&r.x, &r.y);
+    if (text)
+        dc.SetBrush(green);
+    else
+        dc.SetBrush(blue);
+
+    dc.DrawRectangle(r);
+}
+#endif // WXDEBUG_NOTEBOOK_HITTEST
+
+int wxNotebook::MSWHitTestLeftRight(const wxPoint& pt, long *flags) const
+{
+    long dummy;
+    if (!flags)
+        flags = &dummy;
+
+    *flags = wxBK_HITTEST_NOWHERE;
+
+    wxRect r = GetRect();
+    if (!r.Contains(pt))
+    {
+        return -1;
+    }
+
+    const size_t pages = GetPageCount();
+    if (!pages)
+    {
+        *flags |= wxBK_HITTEST_ONPAGE;
+        return -1;
+    }
+
+    if (GetPageSize().Contains(pt))
+    {
+        *flags = wxBK_HITTEST_ONPAGE;
+        return -1;
+    }
+
+    int item = wxNOT_FOUND;
+
+    const wxDirection tabDir = GetTabOrientation();
+    for (size_t i = 0; i < pages; i++)
+    {
+        r = GetTabRect(i);
+        if (!r.Contains(pt))
+            continue;
+
+        item = i;
+
+        // If the user doesn't care about the flags we are done here.
+        if (flags == &dummy)
+            break;
+
+        // Default assumption.
+        *flags = wxBK_HITTEST_ONITEM;
+
+        // Just a magic number between the icon and the start of the text
+        // I checked with different resolutions and it seems to be about right.
+        // My assumption was that the icon and the label are both centered in
+        // the tab and this assumption seems to be mostly right with this
+        // adjustment offset being required.
+        int gap = 8;
+
+        TCHAR buffer[256];
+        TCITEM ti;
+        ti.mask = TCIF_IMAGE | TCIF_TEXT;
+        ti.cchTextMax = WXSIZEOF(buffer);
+        ti.pszText = buffer;
+        TabCtrl_GetItem(GetHwnd(), i, &ti);
+
+        wxRect tabRect;
+        wxRect imageRect;
+
+        // If the tab has an image, we need to check if the mouse is over it.
+        if (ti.iImage != -1)
+        {
+            const wxIcon& icon = GetImage(ti.iImage);
+            if (icon.IsOk())
+                imageRect = icon.GetSize();
+        }
+
+        // The label text and the icon (if available) is centered in the tab,
+        // so we need to find out the size of that.
+        const wxString label = ti.pszText;
+        if (!label.empty())
+        {
+            // This is intentional and not a bug. :) On left/right the font is
+            // rotated 90 degree so we have to account for that by flipping
+            // width with height.
+            GetTextExtent(label, &tabRect.height, &tabRect.width);
+        }
+
+        // The tab has neither a text nor an icon
+        if (label.empty() && imageRect.width == 0)
+            break;
+
+        if (!label.empty())
+        {
+            tabRect.x = r.x + (r.width - tabRect.width) / 2;
+            if (tabDir == wxLEFT)
+            {
+                if (imageRect.height)
+                    tabRect.y = r.y + (r.height - tabRect.height - gap - imageRect.height) / 2;
+                else
+                    tabRect.y = r.y + (r.height - tabRect.height - imageRect.height) / 2;
+            }
+            else
+            {
+                if (imageRect.height)
+                    tabRect.y = r.y + (r.height - tabRect.height + gap + imageRect.height) / 2;
+                else
+                    tabRect.y = r.y + (r.height - tabRect.height) / 2;
+            }
+
+#ifdef WXDEBUG_NOTEBOOK_HITTEST
+            ::ShowHitbox(const_cast<wxWindow *>(this), tabRect, true, true);
+#endif
+            if (tabRect.Contains(pt))
+            {
+                *flags = wxBK_HITTEST_ONLABEL;
+                break;
+            }
+        }
+
+        if (imageRect.height)
+        {
+            double scale = GetDPIScaleFactor();
+
+            // When the tab has no text and only an icon, the position of the
+            // icon is moving around a bit when scaling is applied. So I
+            // checked with various resolutions and scaling settings to make
+            // sure that the hitbox is where it is supposed to be. Otherwise
+            // the hitbox is so far off the mark that the user will consider it
+            // a bug as the flag is not reported where it is expected.
+            // To get this numbers I switched the scaling factor (have to
+            // restart the app in between) and look where the hitbox is
+            // located, then adjust the values until they look right.
+            int displacement;
+            if (scale <= 1.0f)
+                displacement = 3;
+            else if (scale <= 1.25f)
+                displacement = 8;
+            else if (scale <= 1.50f)
+                displacement = 14;
+            else if (scale <= 1.75f)
+                displacement = 3;
+            else if (scale <= 2.00f)
+                displacement = 6;
+            else
+                displacement = 12;
+
+            imageRect.x = r.x + (r.width - imageRect.width) / 2;
+            if (tabDir == wxLEFT)
+            {
+                if (!label.empty())
+                    imageRect.y = tabRect.y + tabRect.height + gap;
+                else
+                    imageRect.y = r.y - displacement + (r.height - imageRect.height) / 2;
+            }
+            else
+            {
+                if (!label.empty())
+                    imageRect.y = r.y + (r.height - imageRect.height - gap - tabRect.height) / 2;
+                else
+                    imageRect.y = r.y - displacement + (r.height - imageRect.height) / 2;
+            }
+
+#ifdef WXDEBUG_NOTEBOOK_HITTEST
+            ::ShowHitbox(const_cast<wxWindow *>(this), imageRect, false, false);
+#endif
+            if (imageRect.Contains(pt))
+            {
+                *flags = wxBK_HITTEST_ONICON;
+                break;
+            }
+        }
+
+        break;
+    }
+
+    return item;
+}
+
 int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
+    // In Windows there is a bug so that the flags are not properly reported
+    // for left/right orientation, so we have to do it manually.
+    // It seems that the tabs are evaluated the same as if they were top/bottom
+    // oriented, because if multiple tabs are stacked the flags are quite different
+    // for each tab on the x axis.
+    const wxDirection tabDir = GetTabOrientation();
+    if (tabDir == wxLEFT || tabDir == wxRIGHT)
+        return MSWHitTestLeftRight(pt, flags);
+
     TC_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = pt.x;
     hitTestInfo.pt.y = pt.y;
