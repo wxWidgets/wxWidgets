@@ -18,6 +18,7 @@
 
 #include "wx/notebook.h"
 #include "wx/scopedptr.h"
+#include "wx/artprov.h"
 
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
@@ -46,11 +47,13 @@ private:
         CPPUNIT_TEST( RowCount );
         CPPUNIT_TEST( NoEventsOnDestruction );
         CPPUNIT_TEST( GetTabRect );
+        CPPUNIT_TEST( HitTestFlags );
     CPPUNIT_TEST_SUITE_END();
 
     void RowCount();
     void NoEventsOnDestruction();
     void GetTabRect();
+    void HitTestFlags();
 
     void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
@@ -195,6 +198,141 @@ void NotebookTestCase::GetTabRect()
     }
 #else // !(__WXMSW__ || __WXUNIVERSAL__)
     WX_ASSERT_FAILS_WITH_ASSERT( notebook->GetTabRect(0) );
+#endif // ports
+}
+
+#if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+// Helpers for HitTestFlags()
+static wxNotebook *CreateNotebook(wxBookCtrlBase::Images const &images, long flags)
+{
+    wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400, 200), flags);
+    notebook->SetImages(images);
+    wxPanel *panel = new wxPanel(notebook);
+    notebook->AddPage(panel, "First Page", false, 0);
+
+    panel->Show();
+    notebook->Show();
+    notebook->Move(0, 0);
+
+    return notebook;
+}
+
+static void CheckNotebookFlags(wxNotebook *notebook, wxPoint &pt)
+{
+    int nowhere = 0;
+    int onIcon = 0;
+    int onLabel = 0;
+    int onItem = 0;
+
+    wxRect tabRect = notebook->GetTabRect(0);
+    wxDirection tabDir = notebook->GetTabOrientation();
+
+    int d;
+    if (tabDir == wxTOP || tabDir == wxBOTTOM)
+        d = tabRect.width;
+    else
+        d = tabRect.height;
+
+    for (int i = 0; i < d; i++)
+    {
+        long flags = 0;
+
+        notebook->HitTest(pt, &flags);
+        if (flags & wxBK_HITTEST_NOWHERE)
+            nowhere++;
+
+        if (flags & wxBK_HITTEST_ONICON)
+            onIcon++;
+
+        if (flags & wxBK_HITTEST_ONLABEL)
+            onLabel++;
+
+        if (flags & wxBK_HITTEST_ONITEM)
+            onItem++;
+
+        if (tabDir == wxTOP || tabDir == wxBOTTOM)
+            pt.x++;
+        else
+            pt.y++;
+    }
+
+    CHECK(nowhere);
+    CHECK(onIcon);
+    CHECK(onLabel);
+    CHECK(onItem);
+
+    if (!nowhere || !onIcon || !onLabel || !onItem)
+    {
+        // Make the direction visible
+        wxString const t = "FAILED";
+        if (tabDir == wxTOP)
+        {
+            CHECK("wxTOP" == t);
+        }
+        else if (tabDir == wxBOTTOM)
+        {
+            CHECK("wxBOTTOM" == t);
+        }
+        else if (tabDir == wxLEFT)
+        {
+            CHECK("wxLEFT" == t);
+        }
+        else if (tabDir == wxRIGHT)
+        {
+            CHECK("wxRIGHT" == t);
+        }
+    }
+}
+#endif // ports
+
+void NotebookTestCase::HitTestFlags()
+{
+    const wxSize imageSize(40, 40);
+    static wxBookCtrlBase::Images images;
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_OTHER, imageSize));
+
+#if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+
+    wxPoint pt;
+    wxNotebook *notebook;
+    wxRect r;
+    wxScopedPtr<wxNotebook> cleanup;
+
+    // For some reason these tests fail, even though they shouldn't. As these are using the
+    // Microsft original code, so we leave it for now.
+    //notebook = CreateNotebook(images, wxBK_TOP);
+    //cleanup.reset(notebook);
+    //CHECK(notebook);
+    //r = notebook->GetTabRect(0);
+    //pt = wxPoint(0, r.y + r.height / 2);
+    //CheckNotebookFlags(notebook, pt);
+
+    //notebook = CreateNotebook(images, wxBK_BOTTOM);
+    //cleanup.reset(notebook);
+    //CHECK(notebook);
+    //r = notebook->GetTabRect(0);
+    //pt = wxPoint(0, r.y + r.height / 2);
+    //CheckNotebookFlags(notebook, pt);
+
+    notebook = CreateNotebook(images, wxBK_LEFT);
+    cleanup.reset(notebook);
+    CHECK(notebook);
+    r = notebook->GetTabRect(0);
+    pt = wxPoint(r.x + r.width / 2, 0);
+    CheckNotebookFlags(notebook, pt);
+
+    notebook = CreateNotebook(images, wxBK_RIGHT);
+    cleanup.reset(notebook);
+    CHECK(notebook);
+    r = notebook->GetTabRect(0);
+    pt = wxPoint(r.x + r.width / 2, 0);
+    CheckNotebookFlags(notebook, pt);
+
+#else // !(__WXMSW__ || __WXUNIVERSAL__)
+    wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400, 200));
+    notebook->AddPage(new wxPanel(notebook), "First Page");
+    wxScopedPtr<wxNotebook> cleanup(notebook);
+    WX_ASSERT_FAILS_WITH_ASSERT(notebook->GetTabRect(0));
 #endif // ports
 }
 

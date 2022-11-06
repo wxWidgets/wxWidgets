@@ -192,6 +192,11 @@ protected:
   wxPoint m_bgBrushAdj;
 #endif // wxUSE_UXTHEME
 
+private:
+      // Workaround for Windows bug to detect the correct flags for left/right
+      // tab orientation.
+      // Returns the pageindex or -1 if the point is not on a tab, same as HitTest().
+      int MSWHitTestLeftRight(const wxPoint &pt, long *flags) const;
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook);
   wxDECLARE_EVENT_TABLE();
