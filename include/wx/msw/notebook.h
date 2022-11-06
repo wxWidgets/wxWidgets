@@ -192,6 +192,12 @@ protected:
   wxPoint m_bgBrushAdj;
 #endif // wxUSE_UXTHEME
 
+private:
+  // This function is used instead of TCM_HITTEST for implementing HitTest()
+  // for the notebooks with horizontal orientation.
+  //
+  // It has the same semantics as HitTest().
+  int MSWHitTestLeftRight(const wxPoint& pt, long *flags) const;
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook);
   wxDECLARE_EVENT_TABLE();
