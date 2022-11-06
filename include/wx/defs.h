@@ -249,7 +249,6 @@ typedef short int WXTYPE;
 
 #if wxCHECK_CXX_STD(201703L)
     #define wxFALLTHROUGH [[fallthrough]]
-    #define wxNODISCARD [[nodiscard]]
 #elif defined(__has_warning) && WX_HAS_CLANG_FEATURE(cxx_attributes)
     #define wxFALLTHROUGH [[clang::fallthrough]]
 #elif wxCHECK_GCC_VERSION(7, 0)
@@ -260,9 +259,18 @@ typedef short int WXTYPE;
     #define wxFALLTHROUGH ((void)0)
 #endif
 
-#ifndef wxNODISCARD
+/* wxNODISCARD is used to notate that the function return value should not be ignored */
+
+#if wxCHECK_CXX_STD(201703L)
+    #define wxNODISCARD [[nodiscard]]
+#elif defined(__VISUALC__)
+    #define wxNODISCARD _Check_return_
+#elif defined(__clang__) || defined(__GNUCC__)
+    #define wxNODISCARD __attribute__ ((warn_unused_result))
+#else
     #define wxNODISCARD
 #endif
+
 
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
