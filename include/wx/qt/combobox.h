@@ -76,6 +76,8 @@ public:
     virtual void WriteText(const wxString &value) override;
     virtual void SetInsertionPoint(long insertion) override;
     virtual long GetInsertionPoint() const override;
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
 
     virtual void Popup();
     virtual void Dismiss();

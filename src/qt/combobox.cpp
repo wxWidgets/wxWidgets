@@ -190,6 +190,20 @@ bool wxComboBox::IsReadOnly() const
     return HasFlag( wxCB_READONLY );
 }
 
+bool wxComboBox::IsEditable() const
+{
+    // Only editable combo boxes have a line edit.
+    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    return lineEdit && !lineEdit->isReadOnly();
+}
+
+void wxComboBox::SetEditable(bool editable)
+{
+    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    if ( lineEdit )
+        lineEdit->setReadOnly(!editable);
+}
+
 void wxComboBox::SetValue(const wxString& value)
 {
     SetActualValue( value );
