@@ -160,8 +160,6 @@ protected:
     virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip) override;
 #endif
 
-    virtual WXHRGN MSWGetRegionWithoutChildren() override;
-
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
     // resolve ambiguity in base classes

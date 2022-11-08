@@ -756,31 +756,6 @@ void wxRadioBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
         m_radioButtons->SetFont(m_font);
 }
 
-// ----------------------------------------------------------------------------
-// radio box drawing
-// ----------------------------------------------------------------------------
-
-WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
-{
-    RECT rc;
-    ::GetWindowRect(GetHwnd(), &rc);
-    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-
-    const unsigned int count = GetCount();
-    for ( unsigned int i = 0; i < count; ++i )
-    {
-        // don't clip out hidden children
-        if ( !IsItemShown(i) )
-            continue;
-
-        ::GetWindowRect((*m_radioButtons)[i], &rc);
-        AutoHRGN hrgnchild(::CreateRectRgnIndirect(&rc));
-        ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
-    }
-
-    return (WXHRGN)hrgn;
-}
-
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
 // ---------------------------------------------------------------------------
