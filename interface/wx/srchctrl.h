@@ -14,6 +14,11 @@
     This control is implemented natively under macOS and GTK 3.6 or later and
     generically for all the other platforms.
 
+    Please note that this class provides many wxTextCtrl-like methods, but does
+    _not_ necessarily derive from wxTextCtrl in all ports (although it does in
+    the generic version). Only the methods defined in wxTextEntry interface
+    class are guaranteed to be available under all platforms.
+
     @beginStyleTable
     @style{wxTE_PROCESS_TAB}
            The control will receive @c wxEVT_CHAR events for TAB pressed -
@@ -60,7 +65,7 @@
 
     @see wxTextCtrl
 */
-class wxSearchCtrl : public wxTextCtrl
+class wxSearchCtrl : public wxControl, public wxTextEntry
 {
 public:
     /**
