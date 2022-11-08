@@ -95,6 +95,8 @@ protected:
 private:
     void PositionLabelWindow();
 
+    using base_type = wxCompositeWindowSettersOnly<wxStaticBoxBase>;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox);
 };
 

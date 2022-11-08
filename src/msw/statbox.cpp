@@ -230,7 +230,7 @@ bool wxStaticBox::SetBackgroundColour(const wxColour& colour)
 
 bool wxStaticBox::SetFont(const wxFont& font)
 {
-    if ( !wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetFont(font) )
+    if ( !base_type::SetFont(font) )
         return false;
 
     // We need to reposition the label as its size may depend on the font.
