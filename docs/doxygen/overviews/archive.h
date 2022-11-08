@@ -14,7 +14,7 @@
 The archive classes handle archive formats such as zip.
 Currently zip and tar support is bundled with wxWidgets and
 when external liblzma library is available (see @ref page_build_liblzma),
-XZ format using LZMA2 algorithm is supported.
+XZ format using LZMA2 algorithm is supported as well.
 
 For each archive type, there are the following classes (using zip here as an
 example):
