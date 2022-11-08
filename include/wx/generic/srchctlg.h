@@ -69,16 +69,7 @@ public:
 
     virtual wxString GetRange(long from, long to) const override;
 
-    virtual int GetLineLength(long lineNo) const override;
-    virtual wxString GetLineText(long lineNo) const override;
-    virtual int GetNumberOfLines() const override;
-
-    virtual bool IsModified() const override;
     virtual bool IsEditable() const override;
-
-    // more readable flag testing methods
-    virtual bool IsSingleLine() const;
-    virtual bool IsMultiLine() const;
 
     // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(long* from, long* to) const override;
@@ -95,14 +86,6 @@ public:
     virtual void Replace(long from, long to, const wxString& value) override;
     virtual void Remove(long from, long to) override;
 
-    // load/save the controls contents from/to the file
-    virtual bool LoadFile(const wxString& file);
-    virtual bool SaveFile(const wxString& file = wxEmptyString);
-
-    // sets/clears the dirty flag
-    virtual void MarkDirty() override;
-    virtual void DiscardEdits() override;
-
     // set the max number of characters which may be entered in a single line
     // text control
     virtual void SetMaxLength(unsigned long WXUNUSED(len)) override;
@@ -115,31 +98,6 @@ public:
     // insert the character which would have resulted from this key event,
     // return true if anything has been inserted
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
-
-    // text control under some platforms supports the text styles: these
-    // methods allow to apply the given text style to the given selection or to
-    // set/get the style which will be used for all appended text
-    virtual bool SetStyle(long start, long end, const wxTextAttr& style) override;
-    virtual bool GetStyle(long position, wxTextAttr& style) override;
-    virtual bool SetDefaultStyle(const wxTextAttr& style) override;
-    virtual const wxTextAttr& GetDefaultStyle() const override;
-
-    // translate between the position (which is just an index in the text ctrl
-    // considering all its contents as a single strings) and (x, y) coordinates
-    // which represent column and line.
-    virtual long XYToPosition(long x, long y) const override;
-    virtual bool PositionToXY(long pos, long *x, long *y) const override;
-
-    virtual void ShowPosition(long pos) override;
-
-    // find the character at position given in pixels
-    //
-    // NB: pt is in device coords (not adjusted for the client area origin nor
-    //     scrolling)
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                            wxTextCoord *col,
-                                            wxTextCoord *row) const override;
 
     // Clipboard operations
     virtual void Copy() override;
@@ -188,9 +146,6 @@ public:
 protected:
     virtual void DoSetValue(const wxString& value, int flags) override;
     virtual wxString DoGetValue() const override;
-
-    virtual bool DoLoadFile(const wxString& file, int fileType) override;
-    virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const override;
