@@ -549,7 +549,11 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
     // checking it it's already set for the parent, even though we could.
     if ( !classname )
     {
-        exstyle |= WS_EX_COMPOSITED;
+        // We also allow disabling the use of this style globally by setting
+        // a system option if nothing else (i.e. turning it off for individual
+        // windows) works.
+        if ( !wxSystemOptions::GetOptionInt("msw.window.no-composited") )
+            exstyle |= WS_EX_COMPOSITED;
     }
 
     if ( IsShown() )
