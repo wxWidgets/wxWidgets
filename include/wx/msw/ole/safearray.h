@@ -367,7 +367,7 @@ public:
             result = sa.ConvertToVariant(variant);
 
         if ( sa.HasArray() )
-            static_cast<void*>(sa.Detach()); // we do not own the array, just attached it
+            wxUnusedVar(sa.Detach()); // we do not own the array, just attached it
 
         return result;
     }
@@ -381,7 +381,7 @@ public:
             result = sa.ConvertToArrayString(strings);
 
         if ( sa.HasArray() )
-            static_cast<void*>(sa.Detach()); // we do not own the array, just attached it
+            wxUnusedVar(sa.Detach()); // we do not own the array, just attached it
 
         return result;
     }

@@ -259,7 +259,7 @@ typedef short int WXTYPE;
     #define wxFALLTHROUGH ((void)0)
 #endif
 
-/* wxNODISCARD is used to notate that the function return value should not be ignored */
+/* wxNODISCARD is used to indicate that the function return value must not be ignored */
 
 #if wxCHECK_CXX_STD(201703L)
     #define wxNODISCARD [[nodiscard]]
