@@ -259,6 +259,7 @@ wxGTK:
 
 wxMSW:
 
+- Fix glitch in drawing wxStaticBox with a control as label (#22952).
 - Save windows geometry correctly when using Aero Snap (Randalphwa, #22730).
 - Fix generating wxEVT_TEXT_ENTER in wxBitmapComboBox (#16318).
 - Fix return value of wxZoomGestureEvent::GetZoomFactor() (s-murphree, #22818).

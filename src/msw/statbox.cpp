@@ -636,10 +636,10 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
                 labelRect.GetLeft() - gap - border,
                 borderTop,
                 &memdc, border, 0);
-        dc.Blit(labelRect.GetRight() + gap, 0,
-                rc.right - (labelRect.GetRight() + gap),
-                borderTop,
-                &memdc, border, 0);
+
+        const int xStart = labelRect.GetRight() + gap;
+        dc.Blit(xStart, 0, rc.right - xStart, borderTop,
+                &memdc, xStart, 0);
     }
     else
     {
