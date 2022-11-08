@@ -67,7 +67,7 @@ ownership).
 Reading from the input stream then returns the entry's data. Eof() becomes
 @true after an attempt has been made to read past the end of the entry's data.
 
-When there are no more entries, GetNextEntry() returns @nullptr and sets Eof().
+When there are no more entries, GetNextEntry() returns @NULL and sets Eof().
 
 @code
 std::unique_ptr<wxZipEntry> entry;
