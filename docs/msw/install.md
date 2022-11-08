@@ -310,11 +310,9 @@ The full list of the build settings follows:
 
 * `MONOLITHIC=1`
 
-  Starting with version 2.5.1, wxWidgets has the ability to be built as
-  several smaller libraries instead of single big one as used to be the case
-  in 2.4 and older versions. This is called "multilib build" and is the
-  default behaviour of makefiles. You can still build single library
-  ("monolithic build") by setting MONOLITHIC variable to 1.
+  wxWidgets is by default built as several smaller libraries ("multilib build")
+  instead of single big one as used to be the case in its much older versions.
+  You can still build single library ("monolithic build") by setting MONOLITHIC variable to 1.
 
 * `USE_GUI=0`
 
@@ -333,7 +331,7 @@ The full list of the build settings follows:
 
   Links static version of C and C++ runtime libraries into the executable, so
   that the program does not depend on DLLs provided with the compiler (e.g.
-  Visual C++'s msvcrt.dll).
+  Visual C++'s msvcrt.dll). Can be used only with MSVC.
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
 
 * `DEBUG_FLAG=0`
@@ -396,8 +394,8 @@ The full list of the build settings follows:
 * `COMPILER_PREFIX=<string>`
 
   If you build with multiple versions of the same compiler, you can put
-  their outputs into directories like `vc6_lib`, `vc8_lib` etc. instead of
-  `vc_lib` by setting this variable to e.g. `vc6`. This is merely a
+  their outputs into directories like `vc14_lib`, `vc15_lib` etc. instead of
+  `vc_lib` by setting this variable to e.g. `vc15`. This is merely a
   convenience variable, you can achieve the same effect (but different
   directory names) with the CFG option.
 
@@ -415,7 +413,7 @@ The full list of the build settings follows:
 Building Applications Using wxWidgets  {#msw_build_apps}
 =====================================
 
-If you use MSVS 2010 or later IDE for building your project, simply add
+If you use MSVS for building your project, simply add
 `wxwidgets.props` property sheet to (all) your project(s) using wxWidgets
 by using "View|Property Manager" menu item to open the property manager
 window and then selecting "Add Existing Property Sheet..." from the context
@@ -481,7 +479,7 @@ project file from `$WXWIN\samples\minimal` or some other sample and adapt it to
 your application.
 
 If you are not using Visual Studio please see
-@subpage plat_msw_winxp "Windows XP Support" to enable visual styles in your
+@subpage plat_msw_winxp "Theme Support" to enable visual styles in your
 application.
 
 Advanced Library Configurations        {#msw_advanced}

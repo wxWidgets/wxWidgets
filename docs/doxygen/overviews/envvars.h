@@ -39,3 +39,4 @@ wxWidgets programs.
          be safely ignored if the code works as expected.}
 */
 
+@see wxSystemOptions
