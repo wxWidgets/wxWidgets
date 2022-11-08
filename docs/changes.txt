@@ -19,6 +19,11 @@ Changes in behaviour not resulting in compilation errors
   strongly recommended to change your redrawing logic to avoid using wxClientDC
   instead, as the code using it still won't work with wxGTK/wxOSX.
 
+  You may also choose to globally set the new msw.window.no-composited system
+  option to disable the use of double buffering, but please consider doing it
+  only as a last resort and/or temporary solution, as this _will_ result in
+  flicker and won't be supported at all in the future wxWidgets versions.
+
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.
