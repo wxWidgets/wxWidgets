@@ -181,7 +181,7 @@ entries looked up by name can be opened using the
 wxArchiveInputStream::OpenEntry() method.
 
 @code
-using ZipEntryPtr = std::shared_ptr<wxZipEntry>;
+using ZipEntryPtr = std::unique_ptr<wxZipEntry>;
 using ZipCatalog = std::map<wxString, ZipEntryPtr>;
 ZipEntryPtr entry;
 ZipCatalog cat;
@@ -192,7 +192,7 @@ wxZipInputStream zip(in);
 
 // load the zip catalog
 while (entry.reset(zip.GetNextEntry()), entry.get() != nullptr)
-    cat[entry->GetInternalName()] = entry;
+    cat[entry->GetInternalName()] = std::move(entry);
 
 // open an entry by name
 auto it = cat.find(wxZipEntry::GetInternalName(localName));
