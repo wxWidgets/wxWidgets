@@ -62,6 +62,7 @@ public:
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
     virtual bool SetBackgroundColour(const wxColour& colour) override;
+    virtual bool SetForegroundColour(const wxColour& colour) override;
     virtual bool SetFont(const wxFont& font) override;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
@@ -94,6 +95,9 @@ protected:
 
 private:
     void PositionLabelWindow();
+
+    bool ShouldUseCustomPaint() const;
+    void UseCustomPaint();
 
     using base_type = wxCompositeWindowSettersOnly<wxStaticBoxBase>;
 
