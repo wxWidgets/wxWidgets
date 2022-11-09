@@ -1,0 +1,1 @@
+All: Add wxNODISCARD and use it for some functions (PB, #22943).
