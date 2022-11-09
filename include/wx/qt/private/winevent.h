@@ -458,4 +458,26 @@ protected:
     }
 };
 
+// RAII wrapper for blockSignals(). It blocks signals in its constructor and in
+// the destructor it restores the state to what it was before the constructor ran.
+class wxQtEnsureSignalsBlocked
+{
+public:
+    // Use QObject instead of QWidget to avoid including <QWidget> from here.
+    wxQtEnsureSignalsBlocked(QObject *widget) :
+        m_widget(widget)
+    {
+        m_restore = m_widget->blockSignals(true);
+    }
+
+    ~wxQtEnsureSignalsBlocked()
+    {
+        m_widget->blockSignals(m_restore);
+    }
+
+private:
+    QObject* const m_widget;
+    bool m_restore;
+};
+
 #endif

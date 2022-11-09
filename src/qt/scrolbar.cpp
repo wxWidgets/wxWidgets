@@ -99,11 +99,10 @@ void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
     // Configure the scrollbar
     if (range != 0 )
     {
+        wxQtEnsureSignalsBlocked blocker(m_qtScrollBar);
         m_qtScrollBar->setRange( 0, range - pageSize );
         m_qtScrollBar->setPageStep( pageSize );
-        m_qtScrollBar->blockSignals(true);
         m_qtScrollBar->setValue( position );
-        m_qtScrollBar->blockSignals(false);
         m_qtScrollBar->show();
     }
     else
