@@ -36,14 +36,6 @@ enum wxPenStyle
     wxPENSTYLE_TRANSPARENT,
         /**< No pen is used. */
 
-    wxPENSTYLE_STIPPLE_MASK_OPAQUE,
-        /**< Uses a bitmap as a stipple; the mask is used for blitting
-             monochrome using text foreground and background colors. */
-
-    wxPENSTYLE_STIPPLE_MASK,
-        /**< Uses a bitmap as a stipple; mask is used for masking
-             areas in the stipple bitmap. */
-
     wxPENSTYLE_STIPPLE,
         /**< Use the stipple bitmap. */
 
