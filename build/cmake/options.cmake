@@ -85,7 +85,6 @@ if(NOT WIN32)
     wx_dependent_option(wxUSE_UTF8_LOCALE_ONLY "only support UTF-8 locales in UTF-8 build (Unix only)" ON "wxUSE_UNICODE_UTF8" OFF)
 endif()
 
-wx_option(wxUSE_COMPILER_TLS "enable use of compiler TLS support")
 if(NOT WIN32)
     wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
 endif()

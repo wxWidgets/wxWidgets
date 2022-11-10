@@ -947,7 +947,6 @@ GSPELL_LIBS
 GSPELL_CFLAGS
 LIBSECRET_LIBS
 LIBSECRET_CFLAGS
-GXX_VERSION
 LIBICONV
 CXXFLAGS_VISIBILITY
 CFLAGS_VISIBILITY
@@ -1144,7 +1143,6 @@ enable_compat30
 enable_compat32
 enable_rpath
 enable_visibility
-enable_tls
 enable_repro_build
 enable_pch
 enable_intl
@@ -2113,7 +2111,6 @@ Optional Features:
   --disable-compat32      disable wxWidgets 3.2 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
   --disable-visibility    disable use of ELF symbols visibility even if supported
-  --disable-tls           disable use of compiler TLS support
   --enable-repro-build    enable reproducible build mode
   --enable-pch            use precompiled headers if possible (off by default)
   --enable-intl           use internationalization system
@@ -4065,7 +4062,6 @@ DEFAULT_wxUSE_UNICODE_UTF8=no
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
-DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
@@ -6275,35 +6271,6 @@ fi
 
 
           eval "$wx_cv_use_visibility"
-
-
-          enablestring=disable
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-tls was given.
-if test "${enable_tls+set}" = set; then :
-  enableval=$enable_tls;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_tls='wxUSE_COMPILER_TLS=yes'
-                          else
-                            wx_cv_use_tls='wxUSE_COMPILER_TLS=no'
-                          fi
-
-else
-
-                          wx_cv_use_tls='wxUSE_COMPILER_TLS=${'DEFAULT_wxUSE_COMPILER_TLS":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_tls"
 
 
 
@@ -35211,178 +35178,27 @@ $as_echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "yes"; then
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread keyword" >&5
-$as_echo_n "checking for __thread keyword... " >&6; }
-if ${wx_cv_cc___thread+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-                  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <pthread.h>
-int
-main ()
-{
-
-                          static __thread int n = 0;
-                          static __thread int *p = 0;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  wx_cv_cc___thread=yes
-else
-  wx_cv_cc___thread=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_cc___thread" >&5
-$as_echo "$wx_cv_cc___thread" >&6; }
-
-          if test "$wx_cv_cc___thread" = "yes"; then
-
-  GXX_VERSION=""
-
-
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if gcc accepts -dumpversion option" >&5
-$as_echo_n "checking if gcc accepts -dumpversion option... " >&6; }
-
-  if  test "x$GCC" = "xyes" ; then :
-
-    if  test -z "" ; then :
-
-      ax_gcc_option_test="int main()
-{
-	return 0;
-}"
-
-else
-
-      ax_gcc_option_test=""
-
-fi
-
-    # Dump the test program to file
-    cat <<EOF > conftest.c
-$ax_gcc_option_test
-EOF
-
-    # Dump back the file to the log, useful for debugging purposes
-    { ac_try='cat conftest.c 1>&5'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }
-
-    if  { ac_try='$CC  -dumpversion -c conftest.c 1>&5'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; } ; then :
-
-   	        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-    ax_gcc_version_option=yes
-
-
-else
-
-   		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-    ax_gcc_version_option=no
-
-
-fi
-
-else
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no gcc available" >&5
-$as_echo "no gcc available" >&6; }
-
-fi
-
-  if test "x$GXX" = "xyes"; then :
-
-    if test "x$ax_gxx_version_option" != "no"; then :
-
-      { $as_echo "$as_me:${as_lineno-$LINENO}: checking gxx version" >&5
-$as_echo_n "checking gxx version... " >&6; }
-if ${ax_cv_gxx_version+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-        ax_cv_gxx_version="`$CXX -dumpversion`"
-        if test "x$ax_cv_gxx_version" = "x"; then :
-
-          ax_cv_gxx_version=""
-
-fi
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_gxx_version" >&5
-$as_echo "$ax_cv_gxx_version" >&6; }
-      GXX_VERSION=$ax_cv_gxx_version
-
-fi
-
-fi
-
-
-              if test -n "$ax_cv_gxx_version"; then
-                                                                                                                                                                  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether __thread support in g++ is usable" >&5
-$as_echo_n "checking whether __thread support in g++ is usable... " >&6; }
-                  case "$ax_cv_gxx_version" in
-                    1.* | 2.* | 3.* )
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no, it's broken" >&5
-$as_echo "no, it's broken" >&6; }
-                        wx_cv_cc___thread=no
-                        ;;
-                    *)
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes, it works" >&5
-$as_echo "yes, it works" >&6; }
-                        ;;
-                  esac
-              fi
-          fi
-
-          if test "$wx_cv_cc___thread" = "yes"; then
-            $as_echo "#define HAVE___THREAD_KEYWORD 1" >>confdefs.h
-
-          fi
-        fi
-
-        if test "$ac_cv_header_cxxabi_h" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for abi::__forced_unwind() in <cxxabi.h>" >&5
+      if test "$ac_cv_header_cxxabi_h" = "yes"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for abi::__forced_unwind() in <cxxabi.h>" >&5
 $as_echo_n "checking for abi::__forced_unwind() in <cxxabi.h>... " >&6; }
 if ${wx_cv_type_abi_forced_unwind+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
-                    ac_ext=cpp
+                ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <cxxabi.h>
 int
 main ()
 {
 
-                            void foo(abi::__forced_unwind&);
+                        void foo(abi::__forced_unwind&);
 
   ;
   return 0;
@@ -35395,7 +35211,7 @@ else
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                    ac_ext=c
+                ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -35406,16 +35222,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_type_abi_forced_unwind" >&5
 $as_echo "$wx_cv_type_abi_forced_unwind" >&6; }
-        else
-            wx_cv_type_abi_forced_unwind=no
-        fi
 
         if test "$wx_cv_type_abi_forced_unwind" = "yes"; then
             $as_echo "#define HAVE_ABI_FORCEDUNWIND 1" >>confdefs.h
 
         fi
+      fi
     fi
-
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
@@ -35843,9 +35656,6 @@ fi
 done
 
       fi
-
-$as_echo "#define wxUSE_COMPILER_TLS 1" >>confdefs.h
-
 
 if test "$wxUSE_THREADS" = "yes"; then
   $as_echo "#define wxUSE_THREADS 1" >>confdefs.h

@@ -35,11 +35,8 @@ struct PerThreadData
     int number;
 };
 
-wxTLS_TYPE(PerThreadData) gs_threadDataVar;
-#define gs_threadData wxTLS_VALUE(gs_threadDataVar)
-
-wxTLS_TYPE(int) gs_threadIntVar;
-#define gs_threadInt wxTLS_VALUE(gs_threadIntVar)
+wxTHREAD_SPECIFIC_DECL PerThreadData gs_threadData;
+wxTHREAD_SPECIFIC_DECL int gs_threadInt;
 
 // ----------------------------------------------------------------------------
 // test thread

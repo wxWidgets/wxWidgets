@@ -168,8 +168,6 @@
 
 #cmakedefine01 wxUSE_PRINTF_POS_PARAMS
 
-#cmakedefine01 wxUSE_COMPILER_TLS
-
 
 #cmakedefine01 wxUSE_STL
 

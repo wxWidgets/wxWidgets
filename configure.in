@@ -347,7 +347,6 @@ DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
 dnl automatic features
 DEFAULT_wxUSE_ARTPROVIDER_TANGO=auto
-DEFAULT_wxUSE_COMPILER_TLS=auto
 DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
@@ -700,7 +699,6 @@ WX_ARG_DISABLE(compat32,     [  --disable-compat32      disable wxWidgets 3.2 co
 WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
 WX_ARG_DISABLE(visibility,   [  --disable-visibility    disable use of ELF symbols visibility even if supported], wxUSE_VISIBILITY)
-WX_ARG_DISABLE(tls,          [  --disable-tls           disable use of compiler TLS support], wxUSE_COMPILER_TLS)
 
 WX_ARG_ENABLE(repro_build,   [  --enable-repro-build    enable reproducible build mode], wxUSE_REPRODUCIBLE_BUILD)
 WX_ARG_ENABLE(pch,           [  --enable-pch            use precompiled headers if possible (off by default)], wxUSE_PCH)
@@ -4622,75 +4620,27 @@ if test "$TOOLKIT" != "MSW"; then
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "yes"; then
-          dnl test for compiler thread-specific variables support
-          AC_CACHE_CHECK([for __thread keyword],
-                         wx_cv_cc___thread,
-              [
-                  AC_TRY_COMPILE([#include <pthread.h>],
-                      [
-                          static __thread int n = 0;
-                          static __thread int *p = 0;
-                      ],
-                      wx_cv_cc___thread=yes,
-                      wx_cv_cc___thread=no
-                  )
-              ]
-          )
-
-          if test "$wx_cv_cc___thread" = "yes"; then
-              AX_GXX_VERSION
-              if test -n "$ax_cv_gxx_version"; then
-                  dnl g++ supports __thread since at least version 3.3 but its support
-                  dnl seems to be broken until 4.1, see
-                  dnl   http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/108388
-                  dnl
-                  dnl NB: we still need to test __thread support with
-                  dnl     AC_TRY_COMPILE above even for g++ 4 as it doesn't
-                  dnl     support it for all architectures (e.g. it doesn't
-                  dnl     work under OS X)
-                  AC_MSG_CHECKING([whether __thread support in g++ is usable])
-                  case "$ax_cv_gxx_version" in
-                    1.* | 2.* | 3.* )
-                        AC_MSG_RESULT([no, it's broken])
-                        wx_cv_cc___thread=no
-                        ;;
-                    *)
-                        AC_MSG_RESULT([yes, it works])
-                        ;;
-                  esac
-              fi
-          fi
-
-          if test "$wx_cv_cc___thread" = "yes"; then
-            AC_DEFINE(HAVE___THREAD_KEYWORD)
-          fi
-        fi
-
-        if test "$ac_cv_header_cxxabi_h" = "yes"; then
-            AC_CACHE_CHECK([for abi::__forced_unwind() in <cxxabi.h>],
-                wx_cv_type_abi_forced_unwind,
-                [
-                    AC_LANG_PUSH(C++)
-                    AC_TRY_COMPILE([#include <cxxabi.h>],
-                        [
-                            void foo(abi::__forced_unwind&);
-                        ],
-                        wx_cv_type_abi_forced_unwind=yes,
-                        wx_cv_type_abi_forced_unwind=no
-                    )
-                    AC_LANG_POP()
-                ]
-            )
-        else
-            wx_cv_type_abi_forced_unwind=no
-        fi
+      if test "$ac_cv_header_cxxabi_h" = "yes"; then
+        AC_CACHE_CHECK([for abi::__forced_unwind() in <cxxabi.h>],
+            wx_cv_type_abi_forced_unwind,
+            [
+                AC_LANG_PUSH(C++)
+                AC_TRY_COMPILE([#include <cxxabi.h>],
+                    [
+                        void foo(abi::__forced_unwind&);
+                    ],
+                    wx_cv_type_abi_forced_unwind=yes,
+                    wx_cv_type_abi_forced_unwind=no
+                )
+                AC_LANG_POP()
+            ]
+        )
 
         if test "$wx_cv_type_abi_forced_unwind" = "yes"; then
             AC_DEFINE(HAVE_ABI_FORCEDUNWIND)
         fi
+      fi
     fi
-
 dnl from if !MSW
 else
     if test "$wxUSE_THREADS" = "yes" ; then
@@ -4778,10 +4728,6 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
       dnl  check to fit this case, if it's really needed.                - SN )
 dnl    ]
 dnl )
-
-dnl This is currently always defined under Unix, there is no reason to ever
-dnl disable compiler TLS support there.
-AC_DEFINE(wxUSE_COMPILER_TLS)
 
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)

@@ -171,8 +171,6 @@
 
 #define wxUSE_PRINTF_POS_PARAMS      0
 
-#define wxUSE_COMPILER_TLS 0
-
 
 #define wxUSE_STL 0
 
@@ -779,10 +777,6 @@
  * Define if you have pthread_cleanup_push/pop()
  */
 #undef wxHAVE_PTHREAD_CLEANUP
-/*
- * Define if compiler has __thread keyword.
- */
-#undef HAVE___THREAD_KEYWORD
 /*
  * Define if large (64 bit file offsets) files are supported.
  */

@@ -28,7 +28,6 @@ set(BASE_UNIX_AND_DARWIN_HDR
     wx/unix/evtloopsrc.h
     wx/unix/pipe.h
     wx/unix/stackwalk.h
-    wx/unix/tls.h
     wx/unix/fswatcher_kqueue.h
 )
 
