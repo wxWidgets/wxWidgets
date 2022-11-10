@@ -542,12 +542,8 @@ int wxMessageDialog::ShowModal()
 
     wxWindowDisabler disableOthers(this, GetParentForModalDialog());
 
-#ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeTaskDialog() )
+    if ( TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc() )
     {
-        TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-        wxCHECK_MSG( taskDialogIndirect, wxID_CANCEL, wxS("no task dialog?") );
-
         WinStruct<TASKDIALOGCONFIG> tdc;
         wxMSWTaskDialogConfig wxTdc( *this );
         wxTdc.MSWCommonTaskDialogInit( tdc );
@@ -572,7 +568,6 @@ int wxMessageDialog::ShowModal()
 
         return MSWTranslateReturnCode( msAns );
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return ShowMessageBox();
 }
@@ -591,13 +586,11 @@ long wxMessageDialog::GetEffectiveIcon() const
 
 void wxMessageDialog::DoCentre(int dir)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     // Task dialog is always centered on its parent window and trying to center
     // it manually doesn't work because its HWND is not created yet so don't
     // even try as this would only result in (debug) error messages.
     if ( HasNativeTaskDialog() )
         return;
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxMessageDialogBase::DoCentre(dir);
 }
@@ -605,8 +598,6 @@ void wxMessageDialog::DoCentre(int dir)
 // ----------------------------------------------------------------------------
 // Helpers of the wxMSWMessageDialog namespace
 // ----------------------------------------------------------------------------
-
-#ifdef wxHAS_MSW_TASKDIALOG
 
 wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
                      : buttons(new TASKDIALOG_BUTTON[MAX_BUTTONS])
@@ -808,19 +799,9 @@ TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
     return s_TaskDialogIndirect;
 }
 
-#endif // wxHAS_MSW_TASKDIALOG
-
 bool wxMSWMessageDialog::HasNativeTaskDialog()
 {
-#ifdef wxHAS_MSW_TASKDIALOG
-    if ( wxGetWinVersion() >= wxWinVersion_6 )
-    {
-        if ( wxMSWMessageDialog::GetTaskDialogIndirectFunc() )
-            return true;
-    }
-#endif // wxHAS_MSW_TASKDIALOG
-
-    return false;
+    return wxMSWMessageDialog::GetTaskDialogIndirectFunc() != nullptr;
 }
 
 int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
