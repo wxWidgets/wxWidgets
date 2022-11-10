@@ -81,7 +81,7 @@ bool wxCheckListBox::IsChecked(unsigned int n) const
 
 void wxCheckListBox::Check(unsigned int n, bool check )
 {
-    // Prevent the emission of wxEVT_CHECKLISTBOX event by temporarily block all
+    // Prevent the emission of wxEVT_CHECKLISTBOX event by temporarily blocking all
     // signals on m_qtListWidget object.
     wxQtEnsureSignalsBlocked blocker(m_qtListWidget);
     QListWidgetItem* item = m_qtListWidget->item(n);

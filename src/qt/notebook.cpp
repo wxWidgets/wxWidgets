@@ -182,9 +182,7 @@ bool wxNotebook::DeleteAllPages()
 
     // Pages will be deleted one by one in the base class.
     // There's no need to explicitly clear() the Qt control.
-    bool deleted = wxNotebookBase::DeleteAllPages();
-
-    return deleted;
+    return wxNotebookBase::DeleteAllPages();
 }
 
 int wxNotebook::SetSelection(size_t page)
@@ -206,9 +204,7 @@ int wxNotebook::ChangeSelection(size_t nPage)
     // SetSelection().
     wxQtEnsureSignalsBlocked blocker(m_qtTabWidget);
 
-    const int selOld = SetSelection(nPage);
-
-    return selOld;
+    return SetSelection(nPage);
 }
 
 wxWindow *wxNotebook::DoRemovePage(size_t page)

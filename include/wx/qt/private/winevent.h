@@ -478,6 +478,8 @@ public:
 private:
     QObject* const m_widget;
     bool m_restore;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtEnsureSignalsBlocked);
 };
 
 #endif
