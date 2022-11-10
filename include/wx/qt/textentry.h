@@ -38,7 +38,7 @@ public:
 
     // For internal use only, see implementation for explanation.
     // Only controls with wxTE_PROCESS_ENTER flag use this function.
-    void ToggleDefaultButton();
+    void QtToggleDefaultButton();
 
 protected:
     virtual wxString DoGetValue() const override;

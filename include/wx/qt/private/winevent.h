@@ -82,6 +82,11 @@ public:
             return wxQtSignalHandler< Handler >::GetHandler();
     }
 
+    // Hack used by wxTextEntry derived classes (by specializing this function)
+    // to toggle the dialog's default button off and on on focus events.
+    // see src/qt/textentry.cpp for the reason.
+    void ToggleDefaultButtonOnFocusEvent() { }
+
 protected:
     /* Not implemented here: wxHelpEvent, wxIdleEvent wxJoystickEvent,
      * wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent,
@@ -144,6 +149,8 @@ protected:
         if ( !this->GetHandler() )
             return;
 
+        ToggleDefaultButtonOnFocusEvent();
+
         if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusInEvent(event);
         else
@@ -155,6 +162,8 @@ protected:
     {
         if ( !this->GetHandler() )
             return;
+
+        ToggleDefaultButtonOnFocusEvent();
 
         if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusOutEvent(event);
@@ -457,24 +466,5 @@ protected:
         }
     }
 };
-
-// Used by wxTextEntry derived classes to toggle the dialog's default button
-// off and on. see src/qt/textentry.cpp for the reason.
-#define wxHANDLE_DIALOG_DEFAULT_BUTTON(Widget)              \
-    virtual void focusInEvent(QFocusEvent *e) override      \
-    {                                                       \
-        if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )    \
-            GetHandler()->ToggleDefaultButton();            \
-                                                            \
-        Widget::focusInEvent(e);                            \
-    }                                                       \
-                                                            \
-    virtual void focusOutEvent(QFocusEvent *e) override     \
-    {                                                       \
-        if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )    \
-            GetHandler()->ToggleDefaultButton();            \
-                                                            \
-        Widget::focusOutEvent(e);                           \
-    }
 
 #endif

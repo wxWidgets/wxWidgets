@@ -26,8 +26,6 @@ public:
     virtual void showPopup() override;
     virtual void hidePopup() override;
 
-    wxHANDLE_DIALOG_DEFAULT_BUTTON(QComboBox)
-
     class IgnoreTextChange
     {
     public:
@@ -55,6 +53,14 @@ private:
 
     bool m_textChangeIgnored;
 };
+
+// specialization
+template<> void
+wxQtEventSignalHandler<QComboBox, wxComboBox>::ToggleDefaultButtonOnFocusEvent()
+{
+    if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )
+        GetHandler()->QtToggleDefaultButton();
+}
 
 wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
     : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler ),
@@ -93,7 +99,7 @@ void wxQtComboBox::activated(int WXUNUSED(index))
             {
                 // allow the dialog (if we are child of) to close itself
                 // by forwarding the event to the default button if any.
-                handler->ToggleDefaultButton();
+                handler->QtToggleDefaultButton();
             }
         }
         else

@@ -12,6 +12,7 @@
 #include "wx/window.h"
 
 #include <QtWidgets/QPushButton>
+#include <QPointer>
 
 namespace
 {
@@ -29,7 +30,7 @@ namespace
 // the button to false. We'll toggle this property off in focusInEvent(), and if the
 // wxEVT_TEXT_ENTER handler decides to Skip() the event, toggle it on again and let
 // the default processing to take place.
-QPushButton* g_defaultButton = nullptr;
+QPointer<QPushButton> g_defaultButton;
 
 }
 
@@ -134,14 +135,9 @@ wxWindow *wxTextEntry::GetEditableWindow()
     return nullptr;
 }
 
-void wxTextEntry::ToggleDefaultButton()
+void wxTextEntry::QtToggleDefaultButton()
 {
-    if ( g_defaultButton )
-    {
-        g_defaultButton->setDefault(true);
-        g_defaultButton = nullptr;
-    }
-    else
+    if ( g_defaultButton.isNull() )
     {
         wxWindow* const wxwin = GetEditableWindow();
         QWidget* const qwin = wxwin->GetHandle()->window();
@@ -156,10 +152,13 @@ void wxTextEntry::ToggleDefaultButton()
                 if ( button->isDefault() )
                 {
                     button->setDefault(false);
-                    g_defaultButton = button;
-                    break;
+                    g_defaultButton = QPointer<QPushButton>(button);
+                    return;
                 }
             }
         }
     }
+
+    if ( g_defaultButton )
+        g_defaultButton->setDefault(!g_defaultButton->isDefault());
 }
