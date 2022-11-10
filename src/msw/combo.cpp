@@ -105,8 +105,8 @@ bool wxComboCtrl::Create(wxWindow *parent,
                            name) )
         return false;
 
-    if ( wxUxThemeIsActive() && ::wxGetWinVersion() >= wxWinVersion_Vista )
-            m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
+    if ( wxUxThemeIsActive() )
+        m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
 
     if ( style & wxCC_STD_BUTTON )
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
@@ -346,8 +346,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 #if wxUSE_UXTHEME
     if ( hTheme )
     {
-        const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_Vista;
-
         RECT rFull;
         wxCopyRectToRECT(borderRect, rFull);
 
@@ -368,10 +366,8 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         {
             butState = CBXS_DISABLED;
         }
-        // Vista will display the drop-button as depressed always
-        // when the popup window is visilbe
         else if ( (m_btnState & wxCONTROL_PRESSED) ||
-                  (useVistaComboBox && !IsPopupWindowState(Hidden)) )
+                  !IsPopupWindowState(Hidden) )
         {
             butState = CBXS_PRESSED;
         }
@@ -384,40 +380,37 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
             butState = CBXS_NORMAL;
         }
 
-        int comboBoxPart = 0;  // For XP, use the 'default' part
+        int comboBoxPart wxDUMMY_INITIALIZE(0);
         RECT* rUseForBg = &rBorder;
 
         bool drawFullButton = false;
         int bgState = butState;
         const bool isFocused = (FindFocus() == GetMainWindowOfCompositeControl()) ? true : false;
 
-        if ( useVistaComboBox )
+        // Draw the entire control as a single button?
+        if ( !isNonStdButton )
         {
-            // Draw the entire control as a single button?
-            if ( !isNonStdButton )
-            {
-                if ( HasFlag(wxCB_READONLY) )
-                    drawFullButton = true;
-            }
+            if ( HasFlag(wxCB_READONLY) )
+                drawFullButton = true;
+        }
 
-            if ( drawFullButton )
-            {
-                comboBoxPart = CP_READONLY;
-                rUseForBg = &rFull;
+        if ( drawFullButton )
+        {
+            comboBoxPart = CP_READONLY;
+            rUseForBg = &rFull;
 
-                // It should be safe enough to update this flag here.
-                m_iFlags |= wxCC_FULL_BUTTON;
-            }
+            // It should be safe enough to update this flag here.
+            m_iFlags |= wxCC_FULL_BUTTON;
+        }
+        else
+        {
+            comboBoxPart = CP_BORDER;
+            m_iFlags &= ~wxCC_FULL_BUTTON;
+
+            if ( isFocused )
+                bgState = CBB_FOCUSED;
             else
-            {
-                comboBoxPart = CP_BORDER;
-                m_iFlags &= ~wxCC_FULL_BUTTON;
-
-                if ( isFocused )
-                    bgState = CBB_FOCUSED;
-                else
-                    bgState = CBB_NORMAL;
-            }
+                bgState = CBB_NORMAL;
         }
 
         //
@@ -455,27 +448,23 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
             int butPart = CP_DROPDOWNBUTTON;
 
-            if ( useVistaComboBox )
+            if ( drawFullButton )
             {
-                if ( drawFullButton )
-                {
-                    // We need to alter the button style slightly before
-                    // drawing the actual button (but it was good above
-                    // when background etc was done).
-                    if ( butState == CBXS_HOT || butState == CBXS_PRESSED )
-                        butState = CBXS_NORMAL;
-                }
-
-                if ( m_btnSide == wxRIGHT )
-                    butPart = CP_DROPDOWNBUTTONRIGHT;
-                else
-                    butPart = CP_DROPDOWNBUTTONLEFT;
-
+                // We need to alter the button style slightly before
+                // drawing the actual button (but it was good above
+                // when background etc was done).
+                if ( butState == CBXS_HOT || butState == CBXS_PRESSED )
+                    butState = CBXS_NORMAL;
             }
+
+            if ( m_btnSide == wxRIGHT )
+                butPart = CP_DROPDOWNBUTTONRIGHT;
+            else
+                butPart = CP_DROPDOWNBUTTONLEFT;
+
             ::DrawThemeBackground( hTheme, hDc, butPart, butState, &rButton, nullptr );
         }
-        else if ( useVistaComboBox &&
-                  (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) )
+        else if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
         {
             // We'll do this, because DrawThemeParentBackground
             // doesn't seem to be reliable on Vista.

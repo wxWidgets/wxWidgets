@@ -19,7 +19,7 @@
 
 void wxSystemThemedControlBase::DoEnableSystemTheme(bool enable, wxWindow* window)
 {
-    if ( wxGetWinVersion() >= wxWinVersion_Vista && wxUxThemeIsActive() )
+    if ( wxUxThemeIsActive() )
     {
         // It's possible to call EnableSystemTheme(false) before creating the
         // window, just don't do anything in this case.

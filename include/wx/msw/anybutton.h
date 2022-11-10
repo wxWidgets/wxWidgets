@@ -68,7 +68,7 @@ protected:
 
     // Switches button into owner-drawn mode: this is used if we need to draw
     // something not supported by the native control, such as using non default
-    // colours or a bitmap on pre-XP systems.
+    // colours or font.
     void MakeOwnerDrawn();
     bool IsOwnerDrawn() const;
 

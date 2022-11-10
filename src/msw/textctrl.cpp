@@ -902,7 +902,7 @@ void wxTextCtrl::SetWindowStyleFlag(long style)
     // XP but not other ones, and we have no way to determine it so be
     // conservative here) and only for plain EDIT controls (not RICH ones) and
     // we have to recreate the control to make it always work
-    if ( IsRich() || wxGetWinVersion() < wxWinVersion_2003 )
+    if ( IsRich() )
     {
         const long alignMask = wxTE_LEFT | wxTE_CENTRE | wxTE_RIGHT;
         if ( (style & alignMask) != (GetWindowStyle() & alignMask) )

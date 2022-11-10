@@ -121,11 +121,6 @@ public:
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
-#if wxUSE_UXTHEME
-    // override wxTextEntry method to work around Windows bug
-    virtual bool SetHint(const wxString& hint) override;
-#endif // wxUSE_UXTHEME
-
     virtual void SetLayoutDirection(wxLayoutDirection dir) override;
 
     virtual const wxTextEntry* WXGetTextEntry() const override { return this; }

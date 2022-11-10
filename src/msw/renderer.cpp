@@ -38,30 +38,6 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
 
-// These Vista+ only types used by DrawThemeTextEx may not be available in older SDK headers
-typedef int(__stdcall *WXDTT_CALLBACK_PROC)(HDC hdc, const wchar_t * pszText,
-    int cchText, RECT * prc, unsigned int dwFlags, WXLPARAM lParam);
-
-typedef struct _WXDTTOPTS
-{
-    DWORD             dwSize;
-    DWORD             dwFlags;
-    COLORREF          crText;
-    COLORREF          crBorder;
-    COLORREF          crShadow;
-    int               iTextShadowType;
-    POINT             ptShadowOffset;
-    int               iBorderSize;
-    int               iFontPropId;
-    int               iColorPropId;
-    int               iStateId;
-    BOOL              fApplyOverlay;
-    int               iGlowSize;
-    WXDTT_CALLBACK_PROC pfnDrawTextCallback;
-    WXLPARAM          lParam;
-} WXDTTOPTS, *WXPDTTOPTS;
-
-
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
 // ----------------------------------------------------------------------------
@@ -1048,31 +1024,11 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 
     const int itemState = GetListItemState(flags);
 
-    typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
-    typedef HRESULT(__stdcall *GetThemeTextExtent_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, RECT *);
-
-    static DrawThemeTextEx_t s_DrawThemeTextEx = nullptr;
-    static GetThemeTextExtent_t s_GetThemeTextExtent = nullptr;
-    static bool s_initDone = false;
-
-    if ( !s_initDone )
-    {
-        if (wxGetWinVersion() >= wxWinVersion_Vista)
-        {
-            wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
-            wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
-            wxDL_INIT_FUNC(s_, GetThemeTextExtent, dllUxTheme);
-        }
-
-        s_initDone = true;
-    }
-
-    if ( s_DrawThemeTextEx && // Not available under XP
-            ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
+    if ( ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc = ConvertToRECT(dc, rect);
 
-        WXDTTOPTS textOpts;
+        DTTOPTS textOpts;
         textOpts.dwSize = sizeof(textOpts);
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
@@ -1119,7 +1075,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         */
         bool useTopDrawing = false;
 
-        if ( s_GetThemeTextExtent != nullptr )
+        if ( ::GetThemeTextExtent != nullptr )
         {
             /*
             Get the actual text extent using GetThemeTextExtent() and adjust
@@ -1129,7 +1085,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
             and DTT_CALCRECT can also be used to get the text extent.
             This seems to always result in the exact same extent (checked
             with an assert) as using GetThemeTextExtent(), despite having
-            an additional WXDTTOPTS argument for various effects.
+            an additional DTTOPTS argument for various effects.
             Some effects have been tried (DTT_BORDERSIZE, DTT_SHADOWTYPE
             and DTT_SHADOWOFFSET) and while rendered correctly with effects
             the returned extent remains the same as without effects.
@@ -1155,7 +1111,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
             something like {0, 0, LONG_MAX, LONG_MAX} ).
             */
             RECT rcExtent;
-            HRESULT hr = s_GetThemeTextExtent(hTheme, dc.GetHDC(),
+            HRESULT hr = ::GetThemeTextExtent(hTheme, dc.GetHDC(),
                 LVP_LISTITEM, itemState, text.wchar_str(), -1,
                 defTextFlags, nullptr, &rcExtent);
             if ( SUCCEEDED(hr) )
@@ -1248,7 +1204,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 break;
         }
 
-        s_DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
+        ::DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
                             drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
     }
     else

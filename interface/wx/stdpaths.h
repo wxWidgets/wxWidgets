@@ -102,7 +102,7 @@ public:
 
             Example return values:
             - Unix/Mac: @c ~/Downloads
-            - Windows: @c "C:\Users\username\Downloads" (Only available on Vista and newer)
+            - Windows: @c "C:\Users\username\Downloads"
         */
         Dir_Downloads,
 

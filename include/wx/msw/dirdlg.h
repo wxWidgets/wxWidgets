@@ -27,8 +27,8 @@ public:
     virtual int ShowModal() override;
 
 private:
-    // The real implementations of ShowModal(), used for Windows versions
-    // before and since Vista.
+    // The real implementations of ShowModal(), one using the traditional shell
+    // function and another one using IFileOpenDialog.
     int ShowSHBrowseForFolder(WXHWND owner);
     int ShowIFileOpenDialog(WXHWND owner);
 

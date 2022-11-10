@@ -325,7 +325,7 @@ namespace
     Helper class to manipulate console from a GUI app.
 
     Notice that console output is available in the GUI app only if:
-    - AttachConsole() returns TRUE (which means it never works under pre-XP)
+    - AttachConsole() returns TRUE
     - we have a valid STD_ERROR_HANDLE
     - command history hasn't been changed since our startup
 

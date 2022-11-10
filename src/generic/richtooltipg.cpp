@@ -92,7 +92,7 @@ public:
 #ifdef HAVE_MSW_THEME
             // When using themes MSW tooltips use larger bluish version of the
             // normal font.
-            if ( UseTooltipTheme() )
+            if ( wxUxThemeIsActive() )
             {
                 titleFont.MakeLarger();
 
@@ -136,7 +136,7 @@ public:
         wxSizer* sizerText = wrapper.CreateSizer(message, -1 /* No wrapping */);
 
 #ifdef HAVE_MSW_THEME
-        if ( icon.IsOk() && UseTooltipTheme() )
+        if ( icon.IsOk() && wxUxThemeIsActive() )
         {
             // Themed tooltips under MSW align the text with the title, not
             // with the icon, so use a helper horizontal sizer in this case.
@@ -171,7 +171,7 @@ public:
         {
             // Determine the best colour(s) to use on our own.
 #ifdef HAVE_MSW_THEME
-            if ( UseTooltipTheme() )
+            if ( wxUxThemeIsActive() )
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
 
@@ -273,24 +273,12 @@ protected:
     }
 
 private:
-#ifdef HAVE_MSW_THEME
-    // Returns non-null theme only if we're using Win7-style tooltips.
-    static bool UseTooltipTheme()
-    {
-        // Even themed applications under XP still use "classic" tooltips.
-        if ( wxGetWinVersion() <= wxWinVersion_XP )
-            return false;
-        else
-            return wxUxThemeIsActive();
-    }
-#endif // HAVE_MSW_THEME
-
     // For now we just hard code the tip height, would be nice to do something
     // smarter in the future.
     static int GetTipHeight()
     {
 #ifdef HAVE_MSW_THEME
-        if ( UseTooltipTheme() )
+        if ( wxUxThemeIsActive() )
             return 20;
 #endif // HAVE_MSW_THEME
 
