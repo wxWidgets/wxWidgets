@@ -26,6 +26,7 @@
 #include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -780,7 +781,14 @@ void wxMenuItem::SetupBitmaps()
 
 wxSize wxMenuItem::GetMenuTextExtent(const wxString& text) const
 {
-    wxMemoryDC dc;
+    // We need to use the window that this menu is associated with to use the
+    // correct DPI.
+    //
+    // Note that we must have both a valid menu and a valid window by the time
+    // we can be called -- and GetFontToUse() already assumes this, so there is
+    // no need to check that they're both non-null here.
+    wxClientDC dc(GetMenu()->GetWindow());
+
     wxFont font;
     GetFontToUse(font);
     dc.SetFont(font);
