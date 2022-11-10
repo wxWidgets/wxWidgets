@@ -654,15 +654,15 @@ public:
 
         beginInsertColumns(QModelIndex(), newColumnIndex, newColumnIndex);
 
-        std::vector<ColumnItem>::iterator i = m_headers.begin();
-        std::advance(i, newColumnIndex);
-        m_headers.insert(i, newColumn);
+        std::vector<ColumnItem>::iterator it = m_headers.begin();
+        std::advance(it, newColumnIndex);
+        m_headers.insert(it, newColumn);
 
         const int numberOfRows = m_rows.size();
 
         for (int i = 0; i < numberOfRows; ++i )
         {
-            std::vector<ColumnItem>::iterator it = m_rows[i].m_columns.begin();
+            it = m_rows[i].m_columns.begin();
             std::advance(it, newColumnIndex);
             m_rows[i].m_columns.insert(it, newColumn);
         }
