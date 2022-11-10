@@ -168,8 +168,7 @@ public:
         Returns @true if an authentication needed symbol is displayed on the
         button.
 
-        @remarks This method always returns @false if the platform is not
-                 Windows Vista or newer.
+        @remarks This method always returns @false on non-Windows platforms.
 
         @see SetAuthNeeded()
 
@@ -200,8 +199,7 @@ public:
         Sets whether an authentication needed symbol should be displayed on the
         button.
 
-        @remarks This method doesn't do anything if the platform is not Windows
-                 Vista or newer.
+        @remarks This method doesn't do anything on non-Windows platforms.
 
         @see GetAuthNeeded()
 

@@ -81,8 +81,8 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 @section page_port_wxmsw wxMSW
 
-wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later
-are supported). wxMSW provides native look and feel for each Windows version.
+wxMSW is a port of wxWidgets for the Windows platforms (current version
+requires Windows 7 or later). wxMSW provides native look and feel for each Windows version.
 This port can be compiled with several compilers including Microsoft
 VC++ 2015 or later, MinGW, Cygwin as well as cross-compilation with a
 Linux-hosted MinGW tool chain.

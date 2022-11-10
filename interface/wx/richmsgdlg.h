@@ -15,9 +15,8 @@
     extra explanatory text which is initially collapsed and not shown to the
     user but can be expanded to show more information.
 
-    Notice that currently the native dialog is used only under MSW when using
-    Vista or later Windows version. Elsewhere, or for older versions of
-    Windows, a generic implementation which is less familiar to the users is
+    Notice that currently the native dialog is used only under MSW. Elsewhere,
+    a generic implementation which is less familiar to the users is
     used. Because of this it's recommended to use this class only if you do
     need its extra functionality and use wxMessageDialog which does have native
     implementation under all platforms otherwise. However if you do need to put

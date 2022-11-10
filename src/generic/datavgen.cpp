@@ -2148,11 +2148,12 @@ int wxDataViewMainWindow::GetDefaultRowHeight() const
 #ifdef __WXMSW__
     // We would like to use the same line height that Explorer uses. This is
     // different from standard ListView control since Vista.
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-        return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(6);
-    else
-#endif // __WXMSW__
-        return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(1);
+    const int EXTRA_MARGIN = 6;
+#else // !__WXMSW__
+    const int EXTRA_MARGIN = 1;
+#endif // __WXMSW__/!__WXMSW__
+
+    return wxMax(SMALL_ICON_HEIGHT, GetCharHeight()) + FromDIP(EXTRA_MARGIN);
 }
 
 

@@ -150,9 +150,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
 
 wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
 {
-    // LM_GETIDEALSIZE only exists under Vista so use the generic version even
-    // when using the native control under XP
-    if ( !HasNativeHyperlinkCtrl() || (wxGetWinVersion() < wxWinVersion_6) )
+    if ( !HasNativeHyperlinkCtrl() )
         return wxGenericHyperlinkCtrl::DoGetBestClientSize();
 
     SIZE idealSize;

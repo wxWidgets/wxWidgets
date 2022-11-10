@@ -743,22 +743,9 @@ bool wxRegKey::DeleteSelf()
   Close();
 
   // deleting a key which doesn't exist is not considered an error
-#if wxUSE_DYNLIB_CLASS
-  wxDynamicLibrary dllAdvapi32(wxT("advapi32"));
-  // Minimum supported OS for RegDeleteKeyEx: Vista, XP Pro x64, Win Server 2008, Win Server 2003 SP1
-  typedef LONG (WINAPI *RegDeleteKeyEx_t)(HKEY, LPCTSTR, REGSAM, DWORD);
-  RegDeleteKeyEx_t wxDL_INIT_FUNC_AW(pfn, RegDeleteKeyEx, dllAdvapi32);
-  if (pfnRegDeleteKeyEx)
-  {
-    m_dwLastError = (*pfnRegDeleteKeyEx)((HKEY) m_hRootKey, m_strKey.t_str(),
-        GetMSWViewFlags(m_viewMode),
-        wxRESERVED_PARAM);
-  }
-  else
-#endif // wxUSE_DYNLIB_CLASS
-  {
-    m_dwLastError = RegDeleteKey((HKEY) m_hRootKey, m_strKey.t_str());
-  }
+  m_dwLastError = ::RegDeleteKeyEx((HKEY) m_hRootKey, m_strKey.t_str(),
+                                   GetMSWViewFlags(m_viewMode),
+                                   wxRESERVED_PARAM);
 
   if ( m_dwLastError != ERROR_SUCCESS &&
           m_dwLastError != ERROR_FILE_NOT_FOUND ) {

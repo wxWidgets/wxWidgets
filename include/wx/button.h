@@ -29,8 +29,7 @@ public:
     wxButtonBase() { }
 
     // show the authentication needed symbol on the button: this is currently
-    // only implemented on Windows Vista and newer (on which it shows the UAC
-    // shield symbol)
+    // only implemented in wxMSW where it shows the UAC shield symbol
     void SetAuthNeeded(bool show = true) { DoSetAuthNeeded(show); }
     bool GetAuthNeeded() const { return DoGetAuthNeeded(); }
 

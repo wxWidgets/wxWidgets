@@ -80,7 +80,7 @@ enum
     wxCC_BUTTON_STAYS_DOWN          = 0x0008,
     // Drop-button covers the entire control.
     wxCC_FULL_BUTTON                = 0x0010,
-    // Drop-button goes over the custom-border (used under WinVista).
+    // Drop-button goes over the custom-border (used under Windows).
     wxCC_BUTTON_COVERS_BORDER       = 0x0020,
 
     // Internal use: signals creation is complete
