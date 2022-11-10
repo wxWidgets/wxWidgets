@@ -114,24 +114,18 @@ wxUint32 wxLanguageInfo::GetLCID() const
 
 const char* wxLanguageInfo::TrySetLocale() const
 {
-    wxString locale;
+    // Prefer to use the locale names instead of locale identifiers if
+    // supported, both at the OS level (LOCALE_SNAME) and by the CRT (check by
+    // calling setlocale()).
+    const char* const retloc = wxSetlocale(LC_ALL, LocaleTag);
+    if ( retloc )
+        return retloc;
 
+    // Fall back to LOCALE_SENGLANGUAGE
     const LCID lcid = GetLCID();
 
     wxChar buffer[256];
     buffer[0] = wxT('\0');
-
-    // Prefer to use the new (Vista and later) locale names instead of locale
-    // identifiers if supported, both at the OS level (LOCALE_SNAME) and by the
-    // CRT (check by calling setlocale()).
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-    {
-        locale = LocaleTag;
-        const char* const retloc = wxSetlocale(LC_ALL, locale);
-        if ( retloc )
-            return retloc;
-        //else: fall back to LOCALE_SENGLANGUAGE
-    }
 
     if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
     {
@@ -139,7 +133,7 @@ const char* wxLanguageInfo::TrySetLocale() const
         return nullptr;
     }
 
-    locale = buffer;
+    wxString locale = buffer;
     if ( ::GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY,
                         buffer, WXSIZEOF(buffer)) > 0 )
     {
@@ -1206,97 +1200,6 @@ wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 }
 
 #if defined(__WINDOWS__)
-
-// These functions are also used by wxUILocaleImpl, so don't make them private.
-extern wxString
-wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
-
-LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
-{
-    switch ( index )
-    {
-        case wxLOCALE_SHORT_DATE_FMT:
-            return LOCALE_SSHORTDATE;
-
-        case wxLOCALE_LONG_DATE_FMT:
-            return LOCALE_SLONGDATE;
-
-        case wxLOCALE_TIME_FMT:
-            return LOCALE_STIMEFORMAT;
-
-        default:
-            wxFAIL_MSG( "no matching LCTYPE" );
-    }
-
-    return 0;
-}
-
-// This function is also used by wxUILocaleImpl, so don't make it private.
-wxString
-wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat)
-{
-    wxString str;
-
-    wxChar buf[256];
-    buf[0] = wxT('\0');
-
-    switch ( index )
-    {
-        case wxLOCALE_THOUSANDS_SEP:
-            if ( ::GetLocaleInfo(lcid, LOCALE_STHOUSAND, buf, WXSIZEOF(buf)) )
-                str = buf;
-            break;
-
-        case wxLOCALE_DECIMAL_POINT:
-            if ( ::GetLocaleInfo(lcid,
-                                 cat == wxLOCALE_CAT_MONEY
-                                     ? LOCALE_SMONDECIMALSEP
-                                     : LOCALE_SDECIMAL,
-                                 buf,
-                                 WXSIZEOF(buf)) )
-            {
-                str = buf;
-            }
-            break;
-
-        case wxLOCALE_SHORT_DATE_FMT:
-        case wxLOCALE_LONG_DATE_FMT:
-        case wxLOCALE_TIME_FMT:
-            if ( ::GetLocaleInfo(lcid, wxGetLCTYPEFormatFromLocalInfo(index),
-                                 buf, WXSIZEOF(buf)) )
-            {
-                return wxTranslateFromUnicodeFormat(buf);
-            }
-            break;
-
-        case wxLOCALE_DATE_TIME_FMT:
-            // there doesn't seem to be any specific setting for this, so just
-            // combine date and time ones
-            //
-            // we use the short date because this is what "%c" uses by default
-            // ("%#c" uses long date but we have no way to specify the
-            // alternate representation here)
-            {
-                const wxString
-                    datefmt = wxGetInfoFromLCID(lcid, wxLOCALE_SHORT_DATE_FMT, cat);
-                if ( datefmt.empty() )
-                    break;
-
-                const wxString
-                    timefmt = wxGetInfoFromLCID(lcid, wxLOCALE_TIME_FMT, cat);
-                if ( timefmt.empty() )
-                    break;
-
-                str << datefmt << ' ' << timefmt;
-            }
-            break;
-
-        default:
-            wxFAIL_MSG( "unknown wxLocaleInfo" );
-    }
-
-    return str;
-}
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
