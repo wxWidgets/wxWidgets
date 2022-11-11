@@ -3089,28 +3089,20 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl without wxTE_PROCESS_ENTER"),
                     wxSizerFlags().CentreVertical());
 
-    // We have to define a new class in order to actually handle pressing
-    // Enter, if we didn't do it, pressing it would still close the dialog.
-    class EnterHandlingTextCtrl : public wxTextCtrl
-    {
-    public:
-        EnterHandlingTextCtrl(wxWindow* parent, int id, const wxString& value)
-            : wxTextCtrl(parent, id, value,
-                         wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER)
-        {
-            Bind(wxEVT_TEXT_ENTER, &EnterHandlingTextCtrl::OnEnter, this);
-
-            SetInitialSize(GetSizeFromTextSize(GetTextExtent(value).x));
-        }
-
-    private:
-        void OnEnter(wxCommandEvent& WXUNUSED(event))
+    wxTextCtrl* textHandlingEnter =
+        new wxTextCtrl(this, wxID_ANY, "Enter here is handled by the application",
+                       wxDefaultPosition,
+                       wxSize(50*GetCharWidth(), -1), // big enough
+                       wxTE_PROCESS_ENTER);
+    textHandlingEnter->Bind(wxEVT_TEXT_ENTER,
+        [](wxCommandEvent& WXUNUSED(event))
         {
             wxLogMessage("Enter pressed");
-        }
-    };
 
-    grid_sizer->Add(new EnterHandlingTextCtrl(this, wxID_ANY, "Enter here is handled by the application"),
+            // Don't skip the event here, otherwise the dialog would close.
+        }
+    );
+    grid_sizer->Add(textHandlingEnter,
                     wxSizerFlags().CentreVertical());
     grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl with wxTE_PROCESS_ENTER"),
                     wxSizerFlags().CentreVertical());
