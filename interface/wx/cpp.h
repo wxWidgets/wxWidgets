@@ -48,13 +48,13 @@
 #define wxSTRINGIZE_T(x)
 
 /**
-    This macro expands to the name of the current function if the compiler
-    supports any of @c \__FUNCTION__, @c \__func__ or equivalent variables or
-    macros or to @NULL if none of them is available.
+    This obsolete macro is the same as the standard @c \__func__ constant.
+
+    Please use the standard macro instead.
 
     @header{wx/cpp.h}
 */
-#define __WXFUNCTION__
+#define __WXFUNCTION__ __func__
 
 ///@}
 

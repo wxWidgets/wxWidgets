@@ -319,7 +319,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnWatch(wxCommandEvent& event)
 {
-    wxLogDebug("%s start=%d", __WXFUNCTION__, event.IsChecked());
+    wxLogDebug("%s start=%d", __func__, event.IsChecked());
 
     if (event.IsChecked())
     {
