@@ -419,6 +419,9 @@ void wxWindowQt::PostCreation(bool generic)
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
+    if ( !IsThisEnabled() )
+        DoEnable(false);
+
     // The window might have been hidden before Create() and it needs to remain
     // hidden in this case, so do it (unfortunately there doesn't seem to be
     // any way to create the window initially hidden with Qt).
@@ -474,7 +477,8 @@ wxString wxWindowQt::GetLabel() const
 
 void wxWindowQt::DoEnable(bool enable)
 {
-    GetHandle()->setEnabled(enable);
+    if ( GetHandle() )
+        GetHandle()->setEnabled(enable);
 }
 
 void wxWindowQt::SetFocus()
@@ -636,6 +640,21 @@ int wxWindowQt::GetCharWidth() const
 void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
         int *externalLeading, const wxFont *font ) const
 {
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
+
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( string.empty() && !descent && !externalLeading )
+        return;
+
     QFontMetrics fontMetrics( font != nullptr ? font->GetHandle() : GetHandle()->font() );
 
     if ( x != nullptr )
@@ -726,9 +745,10 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
     {
         scrollBar->setRange( 0, range - thumbvisible );
         scrollBar->setPageStep( thumbvisible );
-        scrollBar->blockSignals( true );
-        scrollBar->setValue(pos);
-        scrollBar->blockSignals( false );
+        {
+            wxQtEnsureSignalsBlocked blocker(scrollBar);
+            scrollBar->setValue(pos);
+        }
         scrollBar->show();
 
         if ( HasFlag(wxALWAYS_SHOW_SB) && (range == 0) )

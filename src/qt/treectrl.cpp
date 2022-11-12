@@ -357,9 +357,8 @@ private:
 
         if ( !changingEvent.IsAllowed() )
         {
-            blockSignals(true);
+            wxQtEnsureSignalsBlocked blocker(this);
             setCurrentItem(previous);
-            blockSignals(false);
             return;
         }
 
@@ -398,9 +397,8 @@ private:
 
         if ( !collapsingEvent.IsAllowed() )
         {
-            blockSignals(true);
+            wxQtEnsureSignalsBlocked blocker(this);
             item->setExpanded(true);
-            blockSignals(false);
             return;
         }
 
@@ -423,9 +421,8 @@ private:
 
         if ( !expandingEvent.IsAllowed() )
         {
-            blockSignals(true);
+            wxQtEnsureSignalsBlocked blocker(this);
             item->setExpanded(false);
-            blockSignals(false);
             return;
         }
 
@@ -1115,25 +1112,6 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 
     delete qTreeItem;
 }
-
-class wxQtEnsureSignalsBlocked
-{
-public:
-    wxQtEnsureSignalsBlocked(QWidget *widget) :
-        m_widget(widget)
-    {
-        m_restore = m_widget->blockSignals(true);
-    }
-
-    ~wxQtEnsureSignalsBlocked()
-    {
-        m_widget->blockSignals(m_restore);
-    }
-
-private:
-    QWidget *m_widget;
-    bool m_restore;
-};
 
 void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 {
