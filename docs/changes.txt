@@ -264,6 +264,7 @@ wxMSW:
 - Fix generating wxEVT_TEXT_ENTER in wxBitmapComboBox (#16318).
 - Fix return value of wxZoomGestureEvent::GetZoomFactor() (s-murphree, #22818).
 - Update top level icon resolution on DPI change (#22807).
+- Fix menu items with custom font in high DPI (#22957).
 - Remove "Printing" from title when printing to PDF (Blake-Madden, #22836).
 - Fix sometimes missing overvwrite prompt in "Save" file dialog (#22898).
 - Set wxUSE_TASKBARBUTTON correctly when building using configure (#22900).
