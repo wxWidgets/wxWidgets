@@ -137,6 +137,9 @@ private:
     // position (which is not really supposed to ever happen).
     int MSGetMenuItemPos() const;
 
+    // Get the extent of the given text using the correct font.
+    wxSize GetMenuTextExtent(const wxString& text) const;
+
     // item bitmaps
     wxBitmapBundle m_bmpUnchecked;   // (used only for checkable items)
 #if wxUSE_OWNER_DRAWN

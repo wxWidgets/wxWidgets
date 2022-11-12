@@ -26,6 +26,7 @@
 #include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -778,19 +779,28 @@ void wxMenuItem::SetupBitmaps()
 
 #if wxUSE_OWNER_DRAWN
 
-int wxMenuItem::MeasureAccelWidth() const
+wxSize wxMenuItem::GetMenuTextExtent(const wxString& text) const
 {
-    wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
+    // We need to use the window that this menu is associated with to use the
+    // correct DPI.
+    //
+    // Note that we must have both a valid menu and a valid window by the time
+    // we can be called -- and GetFontToUse() already assumes this, so there is
+    // no need to check that they're both non-null here.
+    wxClientDC dc(GetMenu()->GetWindow());
 
-    wxMemoryDC dc;
     wxFont font;
     GetFontToUse(font);
     dc.SetFont(font);
 
-    wxCoord w;
-    dc.GetTextExtent(accel, &w, nullptr);
+    return dc.GetTextExtent(text);
+}
 
-    return w;
+int wxMenuItem::MeasureAccelWidth() const
+{
+    wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
+
+    return GetMenuTextExtent(accel).x;
 }
 
 wxString wxMenuItem::GetName() const
@@ -816,20 +826,12 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
             return true;
         }
 
-        wxString str = GetName();
+        const wxSize extent = GetMenuTextExtent(GetName());
 
-        wxMemoryDC dc;
-        wxFont font;
-        GetFontToUse(font);
-        dc.SetFont(font);
+        *width = data->TextBorder + extent.x + data->AccelBorder;
+        *height = extent.y;
 
-        wxCoord w, h;
-        dc.GetTextExtent(str, &w, &h);
-
-        *width = data->TextBorder + w + data->AccelBorder;
-        *height = h;
-
-        w = m_parentMenu->GetMaxAccelWidth();
+        int w = m_parentMenu->GetMaxAccelWidth();
         if ( w > 0 )
             *width += w + data->ArrowBorder;
 
