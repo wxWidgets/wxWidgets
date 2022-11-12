@@ -1193,6 +1193,10 @@ public:
         functions to enable dark mode support for the desktop applications
         under Windows 10 20H1 or later (including all Windows 11 versions).
 
+        Note that dark mode can also be enabled by setting the "msw.dark-mode"
+        @ref wxSystemOptions "system option" via an environment variable from
+        outside the application.
+
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the
             dark mode by default. Otherwise dark mode is only used if it is the

@@ -48,6 +48,7 @@
 #include "wx/thread.h"
 #include "wx/platinfo.h"
 #include "wx/scopeguard.h"
+#include "wx/sysopt.h"
 #include "wx/vector.h"
 #include "wx/weakref.h"
 
@@ -630,6 +631,14 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     InitCommonControls();
 
     wxSetKeyboardHook(true);
+
+    // this is useful to allow users to enable dark mode for the applications
+    // not enabling it themselves by setting the corresponding environment
+    // variable
+    if ( const int darkMode = wxSystemOptions::GetOptionInt("msw.dark-mode") )
+    {
+        MSWEnableDarkMode(darkMode > 1 ? DarkMode_Always : DarkMode_Auto);
+    }
 
     callBaseCleanup.Dismiss();
 

@@ -76,6 +76,11 @@
         If set to 1, disables the use of composited, i.e. double-buffered,
         windows by default in wxMSW. This is not recommended, but can be useful
         for debugging or working around redraw problems in the existing code.
+    @flag{msw.dark-mode}
+        If set to 1, enable experimental support of dark mode if the system is
+        using it, i.e. this has the same effect as calling
+        wxApp::MSWEnableDarkMode(). If set to 2, use dark mode unconditionally,
+        as if this function were called with wxApp::DarkMode_Always argument.
     @endFlagTable
 
 
