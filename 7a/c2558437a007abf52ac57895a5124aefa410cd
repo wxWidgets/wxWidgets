@@ -1,0 +1,1 @@
+wxQt: Fix wxEVT_TEXT_ENTER processing (AliKet, #22942).
