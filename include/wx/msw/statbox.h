@@ -62,7 +62,10 @@ public:
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
     virtual bool SetBackgroundColour(const wxColour& colour) override;
+    virtual bool SetForegroundColour(const wxColour& colour) override;
     virtual bool SetFont(const wxFont& font) override;
+
+    virtual void SetLabel(const wxString& label) override;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
@@ -78,22 +81,10 @@ public:
 protected:
     virtual wxWindowList GetCompositeWindowParts() const override;
 
-    // return the region with all the windows inside this static box excluded
-    virtual WXHRGN MSWGetRegionWithoutChildren();
-
-    // remove the parts which are painted by static box itself from the given
-    // region which is embedded in a rectangle (0, 0)-(w, h)
-    virtual void MSWGetRegionWithoutSelf(WXHRGN hrgn, int w, int h);
-
-    // paint the given rectangle with our background brush/colour
-    virtual void PaintBackground(wxDC& dc, const struct tagRECT& rc);
-    // paint the foreground of the static box
-    virtual void PaintForeground(wxDC& dc, const struct tagRECT& rc);
-
-    void OnPaint(wxPaintEvent& event);
-
 private:
     void PositionLabelWindow();
+
+    using base_type = wxCompositeWindowSettersOnly<wxStaticBoxBase>;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox);
 };

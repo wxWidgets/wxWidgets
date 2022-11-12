@@ -583,7 +583,9 @@ void StaticWidgetsPage::OnBoxCheckBox(wxCommandEvent& event)
 
 void StaticWidgetsPage::OnButtonBoxText(wxCommandEvent& WXUNUSED(event))
 {
-    m_sizerStatBox->GetStaticBox()->SetLabel(m_textBox->GetValue());
+    wxStaticBox* const box = m_sizerStatBox->GetStaticBox();
+    box->SetLabel(m_textBox->GetValue());
+    wxLogMessage("Box label changed, now is '%s'", box->GetLabel());
 }
 
 void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& WXUNUSED(event))

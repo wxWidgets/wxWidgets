@@ -30,6 +30,7 @@
     #include "wx/dcmemory.h"
     #include "wx/image.h"
     #include "wx/sizer.h"
+    #include "wx/stattext.h"
 #endif
 
 #include "wx/notebook.h"
@@ -89,15 +90,6 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
         return false;
 
-    if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
-    {
-        Bind(wxEVT_PAINT, &wxStaticBox::OnPaint, this);
-
-        // Our OnPaint() completely erases our background, so don't do it in
-        // WM_ERASEBKGND too to avoid flicker.
-        SetBackgroundStyle(wxBG_STYLE_PAINT);
-    }
-
     return true;
 }
 
@@ -152,8 +144,7 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
         // navigation ourselves, but this could change in the future).
         *exstyle |= WS_EX_CONTROLPARENT;
 
-        if (wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
-            *exstyle |= WS_EX_TRANSPARENT;
+        *exstyle |= WS_EX_TRANSPARENT;
     }
 
     styleWin |= BS_GROUPBOX;
@@ -228,9 +219,25 @@ bool wxStaticBox::SetBackgroundColour(const wxColour& colour)
     return wxStaticBoxBase::SetBackgroundColour(colour);
 }
 
+bool wxStaticBox::SetForegroundColour(const wxColour& colour)
+{
+    if ( !base_type::SetForegroundColour(colour) )
+        return false;
+
+    if ( colour.IsOk() && !m_labelWin )
+    {
+        // Switch to using a custom label as we can't support custom colours
+        // otherwise.
+        m_labelWin = new wxStaticText(this, wxID_ANY, GetLabel());
+        PositionLabelWindow();
+    }
+
+    return true;
+}
+
 bool wxStaticBox::SetFont(const wxFont& font)
 {
-    if ( !wxCompositeWindowSettersOnly<wxStaticBoxBase>::SetFont(font) )
+    if ( !base_type::SetFont(font) )
         return false;
 
     // We need to reposition the label as its size may depend on the font.
@@ -240,6 +247,23 @@ bool wxStaticBox::SetFont(const wxFont& font)
     }
 
     return true;
+}
+
+void wxStaticBox::SetLabel(const wxString& label)
+{
+    if ( m_labelWin )
+    {
+        // Ensure that GetLabel() returns the correct value.
+        m_labelOrig = label;
+
+        // And update the actually shown label.
+        m_labelWin->SetLabel(label);
+        PositionLabelWindow();
+    }
+    else
+    {
+        base_type::SetLabel(label);
+    }
 }
 
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
@@ -278,401 +302,26 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
             // no, we don't, erase the background ourselves
             RECT rc;
             ::GetClientRect(GetHwnd(), &rc);
-            wxDCTemp dc((WXHDC)wParam);
-            PaintBackground(dc, rc);
+
+            HDC hdc = (HDC)wParam;
+            HBRUSH hbr = MSWGetBgBrush(hdc);
+
+            // if there is no special brush for painting this control, just use
+            // the solid background colour
+            wxBrush brush;
+            if ( !hbr )
+            {
+                brush = wxBrush(GetParent()->GetBackgroundColour());
+                hbr = GetHbrushOf(brush);
+            }
+
+            ::FillRect(hdc, &rc, hbr);
         }
 
         return 0;
     }
 
-    if ( nMsg == WM_UPDATEUISTATE )
-    {
-        // DefWindowProc() redraws just the static box text when it gets this
-        // message and it does it using the standard (blue in standard theme)
-        // colour and not our own label colour that we use in PaintForeground()
-        // resulting in the label mysteriously changing the colour when e.g.
-        // "Alt" is pressed anywhere in the window, see #12497.
-        //
-        // To avoid this we simply refresh the window forcing our own code
-        // redrawing the label in the correct colour to be called. This is
-        // inefficient but there doesn't seem to be anything else we can do.
-        //
-        // Notice that the problem is XP-specific and doesn't arise under later
-        // systems.
-        if ( m_hasFgCol && wxGetWinVersion() == wxWinVersion_XP )
-            Refresh();
-    }
-
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-}
-
-// ----------------------------------------------------------------------------
-// static box drawing
-// ----------------------------------------------------------------------------
-
-/*
-   We draw the static box ourselves because it's the only way to prevent it
-   from flickering horribly on resize (because everything inside the box is
-   erased twice: once when the box itself is repainted and second time when
-   the control inside it is repainted) without using WS_EX_TRANSPARENT style as
-   we used to do and which resulted in other problems.
- */
-
-// MSWGetRegionWithoutSelf helper: removes the given rectangle from region
-static inline void
-SubtractRectFromRgn(HRGN hrgn, int left, int top, int right, int bottom)
-{
-    AutoHRGN hrgnRect(::CreateRectRgn(left, top, right, bottom));
-    if ( !hrgnRect )
-    {
-        wxLogLastError(wxT("CreateRectRgn()"));
-        return;
-    }
-
-    ::CombineRgn(hrgn, hrgn, hrgnRect, RGN_DIFF);
-}
-
-void wxStaticBox::MSWGetRegionWithoutSelf(WXHRGN hRgn, int w, int h)
-{
-    HRGN hrgn = (HRGN)hRgn;
-
-    // remove the area occupied by the static box borders from the region
-    int borderTop, border;
-    GetBordersForSizer(&borderTop, &border);
-
-    // top
-    if ( m_labelWin )
-    {
-        // Don't exclude the entire rectangle at the top, we do need to paint
-        // the background of the gap between the label window and the box
-        // frame.
-        const wxRect labelRect = m_labelWin->GetRect();
-        const int gap = FromDIP(LABEL_HORZ_BORDER);
-
-        SubtractRectFromRgn(hrgn, 0, 0, labelRect.GetLeft() - gap, borderTop);
-        SubtractRectFromRgn(hrgn, labelRect.GetRight() + gap, 0, w, borderTop);
-    }
-    else
-    {
-        SubtractRectFromRgn(hrgn, 0, 0, w, borderTop);
-    }
-
-    // bottom
-    SubtractRectFromRgn(hrgn, 0, h - border, w, h);
-
-    // left
-    SubtractRectFromRgn(hrgn, 0, 0, border, h);
-
-    // right
-    SubtractRectFromRgn(hrgn, w - border, 0, w, h);
-}
-
-namespace {
-RECT AdjustRectForRtl(wxLayoutDirection dir, RECT const& childRect, RECT const& boxRect) {
-    RECT ret = childRect;
-    if( dir == wxLayout_RightToLeft ) {
-        // The clipping region too is mirrored in RTL layout.
-        // We need to mirror screen coordinates relative to static box window priot to
-        // intersecting with region.
-        ret.right = boxRect.right - (childRect.left - boxRect.left);
-        ret.left = boxRect.left + (boxRect.right - childRect.right);
-    }
-
-    return ret;
-}
-}
-
-WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
-{
-    RECT boxRc;
-    ::GetWindowRect(GetHwnd(), &boxRc);
-    HRGN hrgn = ::CreateRectRgn(boxRc.left, boxRc.top, boxRc.right + 1, boxRc.bottom + 1);
-    bool foundThis = false;
-
-    // Iterate over all sibling windows as in the old wxWidgets API the
-    // controls appearing inside the static box were created as its siblings
-    // and not children. This is now deprecated but should still work.
-    //
-    // Also notice that we must iterate over all windows, not just all
-    // wxWindows, as there may be composite windows etc.
-    HWND child;
-    for ( child = ::GetWindow(GetHwndOf(GetParent()), GW_CHILD);
-          child;
-          child = ::GetWindow(child, GW_HWNDNEXT) )
-    {
-        if ( ! ::IsWindowVisible(child) )
-        {
-            // if the window isn't visible then it doesn't need clipped
-            continue;
-        }
-
-        wxMSWWinStyleUpdater updateStyle(child);
-        wxString str(wxGetWindowClass(child));
-        str.MakeUpper();
-        if ( str == wxT("BUTTON") && updateStyle.IsOn(BS_GROUPBOX) )
-        {
-            if ( child == GetHwnd() )
-                foundThis = true;
-
-            // Any static boxes below this one in the Z-order can't be clipped
-            // since if we have the case where a static box with a low Z-order
-            // is nested inside another static box with a high Z-order then the
-            // nested static box would be painted over. Doing it this way
-            // unfortunately results in flicker if the Z-order of nested static
-            // boxes is not inside (lowest) to outside (highest) but at least
-            // they are still shown.
-            if ( foundThis )
-                continue;
-        }
-
-        RECT rc;
-        ::GetWindowRect(child, &rc);
-        rc = AdjustRectForRtl(GetLayoutDirection(), rc, boxRc );
-        if ( ::RectInRegion(hrgn, &rc) )
-        {
-            // need to remove WS_CLIPSIBLINGS from all sibling windows
-            // that are within this staticbox if set
-            if ( updateStyle.IsOn(WS_CLIPSIBLINGS) )
-            {
-                updateStyle.TurnOff(WS_CLIPSIBLINGS).Apply();
-
-                // MSDN: "If you have changed certain window data using
-                // SetWindowLong, you must call SetWindowPos to have the
-                // changes take effect."
-                ::SetWindowPos(child, nullptr, 0, 0, 0, 0,
-                               SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
-                               SWP_FRAMECHANGED);
-            }
-
-            AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
-            ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
-        }
-    }
-
-    // Also iterate over all children of the static box, we need to clip them
-    // out as well.
-    for ( child = ::GetWindow(GetHwnd(), GW_CHILD);
-          child;
-          child = ::GetWindow(child, GW_HWNDNEXT) )
-    {
-        if ( !::IsWindowVisible(child) )
-        {
-            // if the window isn't visible then it doesn't need clipped
-            continue;
-        }
-
-        RECT rc;
-        ::GetWindowRect(child, &rc);
-        rc = AdjustRectForRtl(GetLayoutDirection(), rc, boxRc );
-        AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
-        ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
-    }
-
-    return (WXHRGN)hrgn;
-}
-
-// helper for OnPaint(): really erase the background, i.e. do it even if we
-// don't have any non default brush for doing it (DoEraseBackground() doesn't
-// do anything in such case)
-void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
-{
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    HBRUSH hbr = MSWGetBgBrush(impl->GetHDC());
-
-    // if there is no special brush for painting this control, just use the
-    // solid background colour
-    wxBrush brush;
-    if ( !hbr )
-    {
-        brush = wxBrush(GetParent()->GetBackgroundColour());
-        hbr = GetHbrushOf(brush);
-    }
-
-    ::FillRect(GetHdcOf(*impl), &rc, hbr);
-}
-
-void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
-{
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
-
-#if wxUSE_UXTHEME
-    // when using XP themes, neither setting the text colour nor transparent
-    // background mode changes anything: the static box def window proc
-    // still draws the label in its own colours, so we need to redraw the text
-    // ourselves if we have a non default fg colour
-    if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin )
-    {
-        // draw over the text in default colour in our colour
-        HDC hdc = GetHdcOf(*impl);
-        ::SetTextColor(hdc, GetForegroundColour().GetPixel());
-
-        // Get dimensions of the label
-        const wxString label = GetLabel();
-
-        // choose the correct font
-        AutoHFONT font;
-        SelectInHDC selFont;
-        if ( m_hasFont )
-        {
-            selFont.Init(hdc, GetHfontOf(GetFont()));
-        }
-        else // no font set, use the one set by the theme
-        {
-            wxUxThemeHandle hTheme(this, L"BUTTON");
-            if ( hTheme )
-            {
-                LOGFONTW themeFont;
-                if ( ::GetThemeFont
-                                             (
-                                                hTheme,
-                                                hdc,
-                                                BP_GROUPBOX,
-                                                GBS_NORMAL,
-                                                TMT_FONT,
-                                                &themeFont
-                                             ) == S_OK )
-                {
-                    font.Init(themeFont);
-                    if ( font )
-                        selFont.Init(hdc, font);
-                }
-            }
-        }
-
-        // Get the font extent
-        int width, height;
-        dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics),
-                         &width, &height);
-
-        // first we need to correctly paint the background of the label
-        // as Windows ignores the brush offset when doing it
-        // NOTE: Border intentionally does not use DIPs in order to match native look
-        const int x = LABEL_HORZ_OFFSET;
-        RECT dimensions = { x, 0, 0, height };
-        dimensions.left = x;
-        dimensions.right = x + width;
-
-        // need to adjust the rectangle to cover all the label background
-        dimensions.left -= LABEL_HORZ_BORDER;
-        dimensions.right += LABEL_HORZ_BORDER;
-        dimensions.bottom += LABEL_VERT_BORDER;
-
-        if ( UseBgCol() )
-        {
-            // our own background colour should be used for the background of
-            // the label: this is consistent with the behaviour under pre-XP
-            // systems (i.e. without visual themes) and generally makes sense
-            wxBrush brush = wxBrush(GetBackgroundColour());
-            ::FillRect(hdc, &dimensions, GetHbrushOf(brush));
-        }
-        else // paint parent background
-        {
-            PaintBackground(dc, dimensions);
-        }
-
-        UINT drawTextFlags = DT_SINGLELINE | DT_VCENTER;
-
-        // determine the state of UI queues to draw the text correctly under XP
-        // and later systems
-        static const bool isXPorLater = wxGetWinVersion() >= wxWinVersion_XP;
-        if ( isXPorLater )
-        {
-            if ( ::SendMessage(GetHwnd(), WM_QUERYUISTATE, 0, 0) &
-                    UISF_HIDEACCEL )
-            {
-                drawTextFlags |= DT_HIDEPREFIX;
-            }
-        }
-
-        // now draw the text
-        RECT rc2 = { x, 0, x + width, height };
-        ::DrawText(hdc, label.t_str(), label.length(), &rc2,
-                   drawTextFlags);
-    }
-#endif // wxUSE_UXTHEME
-}
-
-void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    RECT rc;
-    ::GetClientRect(GetHwnd(), &rc);
-    wxPaintDC dc(this);
-
-    // No need to do anything if the client rectangle is empty and, worse,
-    // doing it would result in an assert when creating the bitmap below.
-    if ( !rc.right || !rc.bottom )
-        return;
-
-    // draw the entire box in a memory DC
-    wxMemoryDC memdc(&dc);
-    wxBitmap bitmap(rc.right, rc.bottom);
-    memdc.SelectObject(bitmap);
-
-    PaintBackground(memdc, rc);
-    PaintForeground(memdc, rc);
-
-    // now only blit the static box border itself, not the interior, to avoid
-    // flicker when background is drawn below
-    //
-    // note that it seems to be faster to do 4 small blits here and then paint
-    // directly into wxPaintDC than painting background in wxMemoryDC and then
-    // blitting everything at once to wxPaintDC, this is why we do it like this
-    int borderTop, border;
-    GetBordersForSizer(&borderTop, &border);
-
-    // top
-    if ( m_labelWin )
-    {
-        // We also have to exclude the area taken by the label window,
-        // otherwise there would be flicker when it draws itself on top of it.
-        const wxRect labelRect = m_labelWin->GetRect();
-
-        // We also leave a small border around label window to make it appear
-        // more similarly to a plain text label.
-        const int gap = FromDIP(LABEL_HORZ_BORDER);
-
-        dc.Blit(border, 0,
-                labelRect.GetLeft() - gap - border,
-                borderTop,
-                &memdc, border, 0);
-        dc.Blit(labelRect.GetRight() + gap, 0,
-                rc.right - (labelRect.GetRight() + gap),
-                borderTop,
-                &memdc, border, 0);
-    }
-    else
-    {
-        dc.Blit(border, 0, rc.right - border, borderTop,
-                &memdc, border, 0);
-    }
-
-    // bottom
-    dc.Blit(border, rc.bottom - border, rc.right - border, border,
-            &memdc, border, rc.bottom - border);
-    // left
-    dc.Blit(0, 0, border, rc.bottom,
-            &memdc, 0, 0);
-    // right (note that upper and bottom right corners were already part of the
-    // first two blits so we shouldn't overwrite them here to avoi flicker)
-    dc.Blit(rc.right - border, borderTop,
-            border, rc.bottom - borderTop - border,
-            &memdc, rc.right - border, borderTop);
-
-
-    // create the region excluding box children
-    AutoHRGN hrgn((HRGN)MSWGetRegionWithoutChildren());
-    RECT rcWin;
-    ::GetWindowRect(GetHwnd(), &rcWin);
-    ::OffsetRgn(hrgn, -rcWin.left, -rcWin.top);
-
-    // and also the box itself
-    MSWGetRegionWithoutSelf((WXHRGN) hrgn, rc.right, rc.bottom);
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    HDCClipper clipToBg(GetHdcOf(*impl), hrgn);
-
-    // paint the inside of the box (excluding box itself and child controls)
-    PaintBackground(dc, rc);
 }
 
 #endif // wxUSE_STATBOX
