@@ -606,12 +606,13 @@ protected:
     virtual wxObjectRefData* CreateRefData() const override;
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
-    // Helper function used internally by wxImage class only.
-    template <typename T>
-    void ApplyToAllPixels(void (*filter)(wxImage *, unsigned char *, T), T value);
-
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;
+
+    // Helper function used internally by wxImage class only: it applies the
+    // given functor, which is passed the pixel data for each image pixel.
+    template <typename F>
+    void ApplyToAllPixels(const F& func);
 
     // Possible values for MakeEmptyClone() flags.
     enum

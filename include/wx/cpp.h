@@ -108,18 +108,10 @@
 #define wxDO_IF(condition) wxDO_IF_HELPER(wxMAKE_UNIQUE_NAME(wxdoif), condition)
 
 /*
-    Define __WXFUNCTION__ which is like standard __FUNCTION__ but defined as
-    nullptr for the compilers which don't support the latter.
+    This macro is obsolete, use standard __func__ instead.
  */
 #ifndef __WXFUNCTION__
-    #if defined(__GNUC__) || \
-          defined(__VISUALC__) || \
-          defined(__FUNCTION__)
-        #define __WXFUNCTION__ __FUNCTION__
-    #else
-        /* still define __WXFUNCTION__ to avoid #ifdefs elsewhere */
-        #define __WXFUNCTION__ (nullptr)
-    #endif
+    #define __WXFUNCTION__ __func__
 #endif /* __WXFUNCTION__ already defined */
 
 

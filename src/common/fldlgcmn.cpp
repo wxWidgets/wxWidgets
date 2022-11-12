@@ -553,9 +553,7 @@ private:
 class TextCtrlImpl : public ControlImplBase<wxFileDialogTextCtrlImpl>
 {
 public:
-    // The dummy argument is there just for consistency with the other classes
-    // and allows to keep the code simple even without vararg templates support.
-    explicit TextCtrlImpl(wxWindow* parent, const wxString& WXUNUSED(dummy))
+    explicit TextCtrlImpl(wxWindow* parent)
         : ControlImplBase<wxFileDialogTextCtrlImpl>
           (
             new wxTextCtrl(parent, wxID_ANY)
@@ -668,13 +666,7 @@ public:
     {
         m_lastWasRadio = false;
 
-        // TODO-C++11: Can't use AddToLayoutAndReturn() here easily without
-        // variadic templates.
-        ChoiceImpl* const impl = new ChoiceImpl(this, n, strings);
-
-        AddToLayout(impl->m_win);
-
-        return impl;
+        return AddToLayoutAndReturn<ChoiceImpl>(n, strings);
     }
 
 
@@ -703,10 +695,11 @@ private:
         GetSizer()->Add(win, wxSizerFlags().Center().Border(wxRIGHT));
     }
 
-    template <typename T>
-    T* AddToLayoutAndReturn(const wxString& label = wxString())
+    // Function arguments are used to construct T.
+    template <typename T, typename... Args>
+    T* AddToLayoutAndReturn(Args... args)
     {
-        T* const controlImpl = new T(this, label);
+        T* const controlImpl = new T(this, args...);
 
         AddToLayout(controlImpl->m_win);
 

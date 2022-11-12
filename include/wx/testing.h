@@ -429,7 +429,7 @@ protected:
         wxFAIL_MSG_AT( msg,
                        m_file ? m_file : __FILE__,
                        m_line ? m_line : __LINE__,
-                       m_func ? m_func : __WXFUNCTION__ );
+                       m_func ? m_func : __func__ );
 #else // !__WXDEBUG__
         // We still need to report the failure somehow when wx asserts are
         // disabled.
@@ -437,7 +437,7 @@ protected:
                   msg,
                   wxASCII_STR(m_file ? m_file : __FILE__),
                   m_line ? m_line : __LINE__,
-                  wxASCII_STR(m_func ? m_func : __WXFUNCTION__));
+                  wxASCII_STR(m_func ? m_func : __func__));
 #endif // __WXDEBUG__/!__WXDEBUG__
     }
 
@@ -517,7 +517,7 @@ private:
  */
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
     {                                                                          \
-        wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __WXFUNCTION__);  \
+        wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __func__);        \
         wxCALL_FOR_EACH(WX_TEST_IMPL_ADD_EXPECTATION, __VA_ARGS__)             \
         codeToRun;                                                             \
         wx_hook.CheckUnmetExpectations();                                      \

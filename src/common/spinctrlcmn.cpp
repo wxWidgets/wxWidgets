@@ -144,9 +144,8 @@ bool wxSpinCtrlImpl::IsBaseCompatibleWithRange(int minVal, int maxVal, int base)
 
 unsigned wxSpinCtrlImpl::DetermineDigits(double inc)
 {
-    // TODO-C++11: Use std::modf() to get the fractional part.
-    inc = fabs(inc);
-    inc -= static_cast<int>(inc);
+    double ipart;
+    inc = std::abs(std::modf(inc, &ipart));
     if ( inc > 0.0 )
     {
         return wxMin(SPINCTRLDBL_MAX_DIGITS, -static_cast<int>(floor(log10(inc))));

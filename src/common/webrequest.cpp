@@ -165,28 +165,6 @@ wxFileOffset wxWebRequestImpl::GetBytesExpectedToReceive() const
 namespace
 {
 
-// Functor used with CallAfter() below.
-//
-// TODO-C++11: Replace with a lambda.
-struct StateEventProcessor
-{
-    StateEventProcessor(wxWebRequestImpl& request,
-                        wxWebRequest::State state,
-                        const wxString& failMsg)
-        : m_request(request), m_state(state), m_failMsg(failMsg)
-    {
-    }
-
-    void operator()()
-    {
-        m_request.ProcessStateEvent(m_state, m_failMsg);
-    }
-
-    wxWebRequestImpl& m_request;
-    const wxWebRequest::State m_state;
-    const wxString m_failMsg;
-};
-
 #if wxUSE_LOG_TRACE
 
 // Tiny helper to log states as strings rather than meaningless numbers.
@@ -242,7 +220,10 @@ void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & fail
     }
     else
     {
-        m_handler->CallAfter(StateEventProcessor(*this, state, failMsg));
+        m_handler->CallAfter([this, state, failMsg]()
+            {
+                ProcessStateEvent(state, failMsg);
+            });
     }
 }
 

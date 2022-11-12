@@ -15,7 +15,6 @@
 #include <limits.h>          // for CHAR_BIT used below
 
 #include "wx/chartype.h"     // for __TFILE__ and wxChar
-#include "wx/cpp.h"          // for __WXFUNCTION__
 #include "wx/dlimpexp.h"     // for WXDLLIMPEXP_FWD_BASE
 
 class WXDLLIMPEXP_FWD_BASE wxString;
@@ -284,7 +283,7 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
 
     // A version asserting at the current location.
     #define wxASSERT_MSG(cond, msg) \
-        wxASSERT_MSG_AT(cond, msg, __FILE__, __LINE__, __WXFUNCTION__)
+        wxASSERT_MSG_AT(cond, msg, __FILE__, __LINE__, __func__)
 
     // a version without any additional message, don't use unless condition
     // itself is fully self-explanatory
@@ -307,7 +306,7 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
         wxFAIL_COND_MSG_AT("Assert failure", msg, file, line, func)
 
     #define wxFAIL_COND_MSG(cond, msg) \
-        wxFAIL_COND_MSG_AT(cond, msg, __FILE__, __LINE__, __WXFUNCTION__)
+        wxFAIL_COND_MSG_AT(cond, msg, __FILE__, __LINE__, __func__)
 
     #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("Assert failure", msg)
     #define wxFAIL wxFAIL_MSG((const char*)nullptr)
