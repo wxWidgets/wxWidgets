@@ -38,30 +38,6 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
 
-// These Vista+ only types used by DrawThemeTextEx may not be available in older SDK headers
-typedef int(__stdcall *WXDTT_CALLBACK_PROC)(HDC hdc, const wchar_t * pszText,
-    int cchText, RECT * prc, unsigned int dwFlags, WXLPARAM lParam);
-
-typedef struct _WXDTTOPTS
-{
-    DWORD             dwSize;
-    DWORD             dwFlags;
-    COLORREF          crText;
-    COLORREF          crBorder;
-    COLORREF          crShadow;
-    int               iTextShadowType;
-    POINT             ptShadowOffset;
-    int               iBorderSize;
-    int               iFontPropId;
-    int               iColorPropId;
-    int               iStateId;
-    BOOL              fApplyOverlay;
-    int               iGlowSize;
-    WXDTT_CALLBACK_PROC pfnDrawTextCallback;
-    WXLPARAM          lParam;
-} WXDTTOPTS, *WXPDTTOPTS;
-
-
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
 // ----------------------------------------------------------------------------
@@ -1048,31 +1024,11 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 
     const int itemState = GetListItemState(flags);
 
-    typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
-    typedef HRESULT(__stdcall *GetThemeTextExtent_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, RECT *);
-
-    static DrawThemeTextEx_t s_DrawThemeTextEx = nullptr;
-    static GetThemeTextExtent_t s_GetThemeTextExtent = nullptr;
-    static bool s_initDone = false;
-
-    if ( !s_initDone )
-    {
-        if (wxGetWinVersion() >= wxWinVersion_Vista)
-        {
-            wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
-            wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
-            wxDL_INIT_FUNC(s_, GetThemeTextExtent, dllUxTheme);
-        }
-
-        s_initDone = true;
-    }
-
-    if ( s_DrawThemeTextEx && // Not available under XP
-            ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
+    if ( ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc = ConvertToRECT(dc, rect);
 
-        WXDTTOPTS textOpts;
+        DTTOPTS textOpts;
         textOpts.dwSize = sizeof(textOpts);
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
@@ -1119,97 +1075,94 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         */
         bool useTopDrawing = false;
 
-        if ( s_GetThemeTextExtent != nullptr )
+        /*
+        Get the actual text extent using GetThemeTextExtent() and adjust
+        drawing rect if needed.
+
+        Note that DrawThemeTextEx() in combination with DT_CALCRECT
+        and DTT_CALCRECT can also be used to get the text extent.
+        This seems to always result in the exact same extent (checked
+        with an assert) as using GetThemeTextExtent(), despite having
+        an additional DTTOPTS argument for various effects.
+        Some effects have been tried (DTT_BORDERSIZE, DTT_SHADOWTYPE
+        and DTT_SHADOWOFFSET) and while rendered correctly with effects
+        the returned extent remains the same as without effects.
+
+        Official docs don't seem to prefer one method over the other
+        though a possibly outdated note for DrawThemeText() recommends
+        using GetThemeTextExtent(). Because Wine as of writing doesn't
+        support DT_CALCRECT with DrawThemeTextEx() while it does support
+        GetThemeTextExtent(), opt to use the latter.
+        */
+
+        /*
+        It's important for the dwTextFlags parameter passed to
+        GetThemeTextExtent() not to have some DT_* flags because they
+        influence the extent size in unwanted ways: Using
+        DT_SINGLELINE combined with either DT_VCENTER or DT_BOTTOM
+        results in a height that can't be used (either halved or 0),
+        and having DT_END_ELLIPSIS ends up always ellipsizing.
+        Passing a non-null rect solves these problems but is not
+        really a good option as it doesn't make the rectangle extent
+        a tight fit and calculations would have to be done with large
+        numbers needlessly (provided the passed rect is set to
+        something like {0, 0, LONG_MAX, LONG_MAX} ).
+        */
+        RECT rcExtent;
+        HRESULT hr = ::GetThemeTextExtent(hTheme, dc.GetHDC(),
+            LVP_LISTITEM, itemState, text.wchar_str(), -1,
+            defTextFlags, nullptr, &rcExtent);
+        if ( SUCCEEDED(hr) )
         {
             /*
-            Get the actual text extent using GetThemeTextExtent() and adjust
-            drawing rect if needed.
-
-            Note that DrawThemeTextEx() in combination with DT_CALCRECT
-            and DTT_CALCRECT can also be used to get the text extent.
-            This seems to always result in the exact same extent (checked
-            with an assert) as using GetThemeTextExtent(), despite having
-            an additional WXDTTOPTS argument for various effects.
-            Some effects have been tried (DTT_BORDERSIZE, DTT_SHADOWTYPE
-            and DTT_SHADOWOFFSET) and while rendered correctly with effects
-            the returned extent remains the same as without effects.
-
-            Official docs don't seem to prefer one method over the other
-            though a possibly outdated note for DrawThemeText() recommends
-            using GetThemeTextExtent(). Because Wine as of writing doesn't
-            support DT_CALCRECT with DrawThemeTextEx() while it does support
-            GetThemeTextExtent(), opt to use the latter.
+            Compensate for rare cases where the horizontal extents differ
+            slightly. Don't use the width of the passed rect here to deal
+            with horizontal alignment as it results in the text always
+            fitting and ellipsization then can't occur. Instead check for
+            width differences by comparing with the extent as calculated
+            by wxDC.
             */
+            const int textWidthDc = dc.GetMultiLineTextExtent(text).x;
+            const int widthDiff = textWidthDc - rcExtent.right;
+            if ( widthDiff )
+            {
+                if ( align & wxALIGN_CENTRE_HORIZONTAL )
+                {
+                    const int widthOffset = widthDiff / 2;
+                    rc.left += widthOffset;
+                    rc.right -= widthOffset;
+                }
+                else if ( align & wxALIGN_RIGHT )
+                    rc.left += widthDiff;
+                else // left aligned
+                    rc.right -= widthDiff;
+            }
 
             /*
-            It's important for the dwTextFlags parameter passed to
-            GetThemeTextExtent() not to have some DT_* flags because they
-            influence the extent size in unwanted ways: Using
-            DT_SINGLELINE combined with either DT_VCENTER or DT_BOTTOM
-            results in a height that can't be used (either halved or 0),
-            and having DT_END_ELLIPSIS ends up always ellipsizing.
-            Passing a non-null rect solves these problems but is not
-            really a good option as it doesn't make the rectangle extent
-            a tight fit and calculations would have to be done with large
-            numbers needlessly (provided the passed rect is set to
-            something like {0, 0, LONG_MAX, LONG_MAX} ).
+            For height compare with the height of the passed rect and use
+            the difference for handling vertical alignment. This has
+            consequences for particularly multi-line text: it will now
+            always try to fit vertically while a rect received from wxDVC
+            may have its extent based on calculations for a single line
+            only and therefore couldn't show more than one line. This is
+            consistent with other major platforms where no clipping to
+            the rect takes places either, including non-themed MSW.
             */
-            RECT rcExtent;
-            HRESULT hr = s_GetThemeTextExtent(hTheme, dc.GetHDC(),
-                LVP_LISTITEM, itemState, text.wchar_str(), -1,
-                defTextFlags, nullptr, &rcExtent);
-            if ( SUCCEEDED(hr) )
+            if ( text.Contains(wxS('\n')) )
             {
-                /*
-                Compensate for rare cases where the horizontal extents differ
-                slightly. Don't use the width of the passed rect here to deal
-                with horizontal alignment as it results in the text always
-                fitting and ellipsization then can't occur. Instead check for
-                width differences by comparing with the extent as calculated
-                by wxDC.
-                */
-                const int textWidthDc = dc.GetMultiLineTextExtent(text).x;
-                const int widthDiff = textWidthDc - rcExtent.right;
-                if ( widthDiff )
-                {
-                    if ( align & wxALIGN_CENTRE_HORIZONTAL )
-                    {
-                        const int widthOffset = widthDiff / 2;
-                        rc.left += widthOffset;
-                        rc.right -= widthOffset;
-                    }
-                    else if ( align & wxALIGN_RIGHT )
-                        rc.left += widthDiff;
-                    else // left aligned
-                        rc.right -= widthDiff;
-                }
+                useTopDrawing = true;
 
-                /*
-                For height compare with the height of the passed rect and use
-                the difference for handling vertical alignment. This has
-                consequences for particularly multi-line text: it will now
-                always try to fit vertically while a rect received from wxDVC
-                may have its extent based on calculations for a single line
-                only and therefore couldn't show more than one line. This is
-                consistent with other major platforms where no clipping to
-                the rect takes places either, including non-themed MSW.
-                */
-                if ( text.Contains(wxS('\n')) )
+                const int heightDiff = rect.GetHeight() - rcExtent.bottom;
+                if ( align & wxALIGN_CENTRE_VERTICAL )
                 {
-                    useTopDrawing = true;
-
-                    const int heightDiff = rect.GetHeight() - rcExtent.bottom;
-                    if ( align & wxALIGN_CENTRE_VERTICAL )
-                    {
-                        const int heightOffset = heightDiff / 2;
-                        rc.top += heightOffset;
-                        rc.bottom -= heightOffset;
-                    }
-                    else if ( align & wxALIGN_BOTTOM )
-                        rc.top += heightDiff;
-                    else // top aligned
-                        rc.bottom -= heightDiff;
+                    const int heightOffset = heightDiff / 2;
+                    rc.top += heightOffset;
+                    rc.bottom -= heightOffset;
                 }
+                else if ( align & wxALIGN_BOTTOM )
+                    rc.top += heightDiff;
+                else // top aligned
+                    rc.bottom -= heightDiff;
             }
         }
 
@@ -1248,7 +1201,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 break;
         }
 
-        s_DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
+        ::DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
                             drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
     }
     else

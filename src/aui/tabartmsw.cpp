@@ -228,12 +228,8 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         else
             btnState = TTCS_NORMAL;
 
-        int offsetY = tabY;
-        if ( wxGetWinVersion() < wxWinVersion_Vista )
-            offsetY++; // WinXP theme needs a little more padding
-
         wxRect rect(tabX + tabWidth - m_closeBtnSize.x - wnd->FromDIP(4),
-            offsetY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
+            tabY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
             m_closeBtnSize.x,
             m_closeBtnSize.y);
 

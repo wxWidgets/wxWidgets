@@ -95,8 +95,8 @@ public:
         The language is determined from the preferred UI language or languages
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, macOS) have separate language and regional (= locale) settings.
+        wxLocale::GetSystemLanguage() as operating systems have separate
+        language and regional (i.e. locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -118,8 +118,8 @@ public:
         The language is determined from the preferred UI language or languages
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, macOS) have separate language and regional (= locale) settings.
+        wxLocale::GetSystemLanguage() as operating systems have separate
+        language and regional (i.e. locale) settings.
 
         @param domain
             The catalog domain to look for.

@@ -2343,17 +2343,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-            case HDN_GETDISPINFOW:
-                // letting Windows XP handle this message results in mysterious
-                // crashes in comctl32.dll seemingly because of bad message
-                // parameters
-                //
-                // I have no idea what is the real cause of the bug (which is,
-                // just to make things interesting, impossible to reproduce
-                // reliably) but ignoring all these messages does fix it and
-                // doesn't seem to have any negative consequences
-                return true;
-
             case NM_CUSTOMDRAW:
                 if ( m_headerCustomDraw )
                 {

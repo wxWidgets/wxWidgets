@@ -24,6 +24,9 @@ Changes in behaviour not resulting in compilation errors
   only as a last resort and/or temporary solution, as this _will_ result in
   flicker and won't be supported at all in the future wxWidgets versions.
 
+- wxMSW doesn't support versions of Microsoft Windows before Windows 7. If you
+  need Windows XP or Vista support, please use wxWidgets 3.2.
+
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.

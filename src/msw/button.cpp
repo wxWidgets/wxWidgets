@@ -461,13 +461,9 @@ bool wxButton::DoGetAuthNeeded() const
 
 void wxButton::DoSetAuthNeeded(bool show)
 {
-    // show/hide UAC symbol on Windows Vista and later
-    if ( wxGetWinVersion() >= wxWinVersion_6 )
-    {
-        m_authNeeded = show;
-        ::SendMessage(GetHwnd(), BCM_SETSHIELD, 0, show);
-        InvalidateBestSize();
-    }
+    m_authNeeded = show;
+    ::SendMessage(GetHwnd(), BCM_SETSHIELD, 0, show);
+    InvalidateBestSize();
 }
 
 #endif // wxUSE_BUTTON

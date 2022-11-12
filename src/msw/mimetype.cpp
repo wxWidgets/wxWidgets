@@ -277,12 +277,8 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
     if ( hr != S_OK )
     {
         // The only really expected error here is that no association is
-        // defined, anything else is not expected. The confusing thing is that
-        // different errors are returned for this expected error under
-        // different Windows versions: XP returns ERROR_FILE_NOT_FOUND while 7
-        // returns ERROR_NO_ASSOCIATION. Just check for both to be sure.
-        if ( hr != HRESULT_FROM_WIN32(ERROR_NO_ASSOCIATION) &&
-                hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) )
+        // defined, anything else is not expected.
+        if ( hr != HRESULT_FROM_WIN32(ERROR_NO_ASSOCIATION) )
         {
             wxLogApiError("AssocQueryString", hr);
         }

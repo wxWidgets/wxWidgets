@@ -285,7 +285,6 @@ public:
     enum MenuLayoutType
     {
         FullTheme,      // full menu themes (Vista or new)
-        PseudoTheme,    // pseudo menu themes (on XP)
         Classic
     };
 
@@ -294,13 +293,7 @@ public:
         MenuLayoutType menu = Classic;
     #if wxUSE_UXTHEME
         if ( wxUxThemeIsActive() )
-        {
-            static wxWinVersion ver = wxGetWinVersion();
-            if ( ver >= wxWinVersion_Vista )
-                menu = FullTheme;
-            else if ( ver == wxWinVersion_XP )
-                menu = PseudoTheme;
-        }
+            menu = FullTheme;
     #endif // wxUSE_UXTHEME
         return menu;
     }
@@ -679,7 +672,7 @@ wxBitmap wxMenuItem::GetBitmap(bool bChecked) const
 {
     wxBitmap bmp = GetBitmapFromBundle(bChecked ? m_bitmap : m_bmpUnchecked);
 #if wxUSE_IMAGE
-    if ( bmp.IsOk() && wxGetWinVersion() >= wxWinVersion_Vista)
+    if ( bmp.IsOk() )
     {
         // we must use PARGB DIB for the menu bitmaps so ensure that we do
         if ( !bmp.HasAlpha() )
@@ -1298,33 +1291,9 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
 bool wxMenuItem::MSWMustUseOwnerDrawn()
 {
     // we have to use owner drawn item if it has custom colours or font
-    bool mustUseOwnerDrawn = GetTextColour().IsOk() ||
-                             GetBackgroundColour().IsOk() ||
-                             GetFont().IsOk();
-
-    // Windows XP or earlier don't display menu bitmaps bigger than
-    // standard size correctly (they're truncated) nor can
-    // checked bitmaps use HBMMENU_CALLBACK, so we must use
-    // owner-drawn items to show them correctly there. OTOH Win7
-    // doesn't seem to have any problems with even very large bitmaps
-    // so don't use owner-drawn items unnecessarily there (Vista wasn't
-    // actually tested but I assume it works as 7 rather than as XP).
-    static const wxWinVersion winver = wxGetWinVersion();
-    if ( !mustUseOwnerDrawn && winver < wxWinVersion_Vista )
-    {
-        const wxBitmap& bmpUnchecked = GetBitmap(false),
-                        bmpChecked   = GetBitmap(true);
-
-        const wxWindow* win = m_parentMenu ? m_parentMenu->GetWindow() : nullptr;
-        if ( (bmpUnchecked.IsOk() && IsGreaterThanStdSize(bmpUnchecked, win)) ||
-                (bmpChecked.IsOk()   && IsGreaterThanStdSize(bmpChecked, win)) ||
-                (bmpChecked.IsOk() && IsCheckable()) )
-        {
-            mustUseOwnerDrawn = true;
-        }
-    }
-
-    return mustUseOwnerDrawn;
+    return GetTextColour().IsOk() ||
+           GetBackgroundColour().IsOk() ||
+           GetFont().IsOk();
 }
 
 #endif // wxUSE_OWNER_DRAWN
@@ -1332,40 +1301,18 @@ bool wxMenuItem::MSWMustUseOwnerDrawn()
 // returns the HBITMAP to use in MENUITEMINFO
 HBITMAP wxMenuItem::GetHBitmapForMenu(BitmapKind kind) const
 {
-    // Under versions of Windows older than Vista we can't pass HBITMAP
-    // directly as hbmpItem for 2 reasons:
-    //  1. We can't draw it with transparency then (this is not
-    //     very important now but would be with themed menu bg)
-    //  2. Worse, Windows inverts the bitmap for the selected
-    //     item and this looks downright ugly
-    //
-    // So we prefer to instead draw it ourselves in MSWOnDrawItem() by using
-    // HBMMENU_CALLBACK for normal menu items when inserting it. And use
-    // nullptr for checkable menu items as hbmpChecked/hBmpUnchecked does not
-    // support HBMMENU_CALLBACK.
-    //
-    // However under Vista using HBMMENU_CALLBACK causes the entire menu to be
-    // drawn using the classic theme instead of the current one and it does
-    // handle transparency just fine so do use the real bitmap there
-#if wxUSE_IMAGE
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    // We need to store the returned bitmap, so that its HBITMAP remains
+    // valid for as long as it's used.
+    bool checked = (kind != Unchecked);
+    wxBitmap& bmp = const_cast<wxBitmap&>(checked ? m_bmpCheckedCurrent
+                                                  : m_bmpUncheckedCurrent);
+    bmp = GetBitmap(checked);
+    if ( bmp.IsOk() )
     {
-        // We need to store the returned bitmap, so that its HBITMAP remains
-        // valid for as long as it's used.
-        bool checked = (kind != Unchecked);
-        wxBitmap& bmp = const_cast<wxBitmap&>(checked ? m_bmpCheckedCurrent
-                                                      : m_bmpUncheckedCurrent);
-        bmp = GetBitmap(checked);
-        if ( bmp.IsOk() )
-        {
-            return GetHbitmapOf(bmp);
-        }
-        //else: bitmap is not set
-        return nullptr;
+        return GetHbitmapOf(bmp);
     }
-#endif // wxUSE_IMAGE
-
-    return (kind == Normal) ? HBMMENU_CALLBACK : nullptr;
+    //else: bitmap is not set
+    return nullptr;
 }
 
 int wxMenuItem::MSGetMenuItemPos() const

@@ -2522,14 +2522,8 @@ public:
         // wouldn't work if reading an incomplete MB char didn't result in an
         // error
         //
-        // Moreover, MB_ERR_INVALID_CHARS is not supported for UTF-8 under XP
-        // and for UTF-7 under any Windows version, so we always use our own
-        // conversions in this case.
-        if ( m_CodePage == CP_UTF8 )
-        {
-            return wxMBConvUTF8().MB2WC(buf, psz, n);
-        }
-
+        // But MB_ERR_INVALID_CHARS is not supported for UTF-7, so we always
+        // use our own conversions in this case.
         if ( m_CodePage == CP_UTF7 )
         {
             return wxMBConvUTF7().MB2WC(buf, psz, n);

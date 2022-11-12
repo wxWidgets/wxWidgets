@@ -93,19 +93,10 @@ private:
 // NotifyIconData: wrapper around NOTIFYICONDATA
 // ----------------------------------------------------------------------------
 
-struct NotifyIconData : public NOTIFYICONDATA
+struct NotifyIconData : public WinStruct<NOTIFYICONDATA>
 {
     NotifyIconData(WXHWND hwnd)
     {
-        wxZeroMemory(*this);
-
-        // Since Vista there is a new member hBalloonIcon which will be used
-        // if a user specified icon is specified in ShowBalloon(). For XP 
-        // use the old size
-        cbSize = wxPlatformInfo::Get().CheckOSVersion(6, 0)
-                    ? sizeof(NOTIFYICONDATA)
-                    : NOTIFYICONDATA_V2_SIZE;
-
         hWnd = (HWND) hwnd;
         uCallbackMessage = gs_msgTaskbar;
         uFlags = NIF_MESSAGE;
@@ -257,8 +248,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
 
     wxUnusedVar(icon); // It's only unused if not supported actually.
 
-    // User specified icon is only supported since Vista
-    if ( icon.IsOk() && wxPlatformInfo::Get().CheckOSVersion(6, 0) )
+    if ( icon.IsOk() )
     {
         m_balloonIcon = icon.GetIconFor(m_win);
         notifyData.hBalloonIcon = GetHiconOf(m_balloonIcon);

@@ -79,10 +79,9 @@ paragraphs, but here are some of the benefits:
 wxWidgets first-tier "ports", ie implementations of wxWidgets API, are:
 
 @li wxMSW: This is the native port for Microsoft Windows systems (from Windows
-XP up to Windows 11), either 32 or 64 bits. The primarily supported compilers
-are Microsoft Visual C++ (versions 2005 up to 2022 are supported, at least 2010
-is recommended) and GNU g++ (either from the traditional MinGW, TDM-GCC or
-MinGW-w64 distributions).
+7 up to Windows 11), either 32 or 64 bits. The primarily supported compilers
+are Microsoft Visual C++ (versions 2015 up to 2022 are supported) and GNU g++
+(either MinGW-w64 or TDM-GCC).
 
 @li wxGTK: wxGTK2 and wxGTK3 are the ports using GTK+ library version 2.x and
 3.x respectively. They are very similar, with wxGTK2 being, however, more

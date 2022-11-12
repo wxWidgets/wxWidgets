@@ -760,24 +760,6 @@ void wxComboBox::DoSetToolTip(wxToolTip *tip)
 
 #endif // wxUSE_TOOLTIPS
 
-#if wxUSE_UXTHEME
-
-bool wxComboBox::SetHint(const wxString& hintOrig)
-{
-    wxString hint(hintOrig);
-    if ( wxUxThemeIsActive() )
-    {
-        // under XP (but not Vista) there is a bug in cue banners
-        // implementation for combobox edit control: the first character is
-        // partially chopped off, so prepend a space to make it fully visible
-        hint.insert(0, " ");
-    }
-
-    return wxTextEntry::SetHint(hint);
-}
-
-#endif // wxUSE_UXTHEME
-
 wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxSize tsize( wxChoice::DoGetSizeFromTextSize(xlen, ylen) );

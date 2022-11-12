@@ -56,7 +56,7 @@
     @style{wxTR_TWIST_BUTTONS}
         Selects alternative style of @c +/@c - buttons and shows rotating
         ("twisting") arrows instead. Currently this style is only implemented
-        under Microsoft Windows Vista and later Windows versions and is ignored
+        in wxMSW and is ignored
         under the other platforms as enabling it is equivalent to using
         wxSystemThemedControl::EnableSystemTheme().
     @style{wxTR_NO_LINES}

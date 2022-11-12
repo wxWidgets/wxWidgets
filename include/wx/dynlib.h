@@ -336,9 +336,9 @@ public:
 
 #ifdef __WINDOWS__
     // return the handle (HMODULE/HINSTANCE) of the DLL with the given name
-    // and/or containing the specified address: for XP and later systems only
-    // the address is used and the name is ignored but for the previous systems
-    // only the name (which may be either a full path to the DLL or just its
+    // and/or containing the specified address: if a valid address is
+    // specified, it is used and then name is ignored, but if the address is
+    // null, the name (which may be either a full path to the DLL or just its
     // base name, possibly even without extension) is used
     //
     // the returned handle reference count is not incremented so it doesn't

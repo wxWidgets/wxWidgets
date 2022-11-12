@@ -95,29 +95,6 @@ SHSTOCKICONID MSWGetStockIconIdForArtProviderId(const wxArtID& art_id)
 };
 
 
-// try to load SHGetStockIconInfo dynamically, so this code runs
-// even on pre-Vista Windows versions
-HRESULT
-MSW_SHGetStockIconInfo(SHSTOCKICONID siid,
-                       UINT uFlags,
-                       SHSTOCKICONINFO *psii)
-{
-    typedef HRESULT (WINAPI *PSHGETSTOCKICONINFO)(SHSTOCKICONID, UINT, SHSTOCKICONINFO *);
-    static PSHGETSTOCKICONINFO pSHGetStockIconInfo = (PSHGETSTOCKICONINFO)-1;
-
-    if ( pSHGetStockIconInfo == (PSHGETSTOCKICONINFO)-1 )
-    {
-        wxDynamicLibrary shell32(wxT("shell32.dll"));
-
-        pSHGetStockIconInfo = (PSHGETSTOCKICONINFO)shell32.RawGetSymbol( wxT("SHGetStockIconInfo") );
-    }
-
-    if ( !pSHGetStockIconInfo )
-        return E_FAIL;
-
-    return pSHGetStockIconInfo(siid, uFlags, psii);
-}
-
 #endif // #ifdef wxHAS_SHGetStockIconInfo
 
 // Wrapper for SHDefExtractIcon().
@@ -200,7 +177,6 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
                         : wxArtProvider::GetNativeSizeHint(client);
 
 #ifdef wxHAS_SHGetStockIconInfo
-    // first try to use SHGetStockIconInfo, available only on Vista and higher
     SHSTOCKICONID stockIconId = MSWGetStockIconIdForArtProviderId( id );
     if ( stockIconId != SIID_INVALID )
     {
@@ -208,7 +184,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 
         UINT uFlags = SHGSI_ICONLOCATION | SHGSI_SYSICONINDEX;
 
-        HRESULT res = MSW_SHGetStockIconInfo(stockIconId, uFlags, &sii);
+        HRESULT res = ::SHGetStockIconInfo(stockIconId, uFlags, &sii);
         if ( res == S_OK )
         {
             bitmap = MSWGetBitmapFromIconLocation(sii.szPath, sii.iIcon,

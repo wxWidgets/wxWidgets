@@ -88,21 +88,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
     #define wxHAS_MT_SAFE_GETBY_FUNCS
 
     #if wxUSE_IPV6
-        #ifdef __VISUALC__
-            // this header does dynamic dispatching of getaddrinfo/freeaddrinfo()
-            // by implementing them in its own code if the system versions are
-            // not available (as is the case for anything < XP)
-            #pragma warning(push)
-            #pragma warning(disable:4706)
-            #include <wspiapi.h>
-            #pragma warning(pop)
-        #else
-            // TODO: Use wxDynamicLibrary to bind to these functions
-            //       dynamically on older Windows systems, currently a program
-            //       built with wxUSE_IPV6==1 won't even start there, even if
-            //       it doesn't actually use the socket stuff.
-            #include <ws2tcpip.h>
-        #endif
+        #include <ws2tcpip.h>
     #endif
 #endif // __WINDOWS__
 
