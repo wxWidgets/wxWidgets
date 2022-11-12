@@ -19,8 +19,6 @@
 #include "wx/window.h"
 #include "wx/containr.h"
 
-class WXDLLIMPEXP_FWD_CORE wxControlContainer;
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 
 // ----------------------------------------------------------------------------
