@@ -1477,9 +1477,6 @@
     <ClInclude Include="..\..\include\wx\generic\numdlgg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\generic\panelg.h">
-      <Filter>Generic Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\printps.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
@@ -1904,9 +1901,6 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\palette.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\panel.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\pen.h">

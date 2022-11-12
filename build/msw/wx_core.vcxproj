@@ -1181,7 +1181,6 @@
     <ClInclude Include="..\..\include\wx\msw\ownerdrw.h" />
     <ClInclude Include="..\..\include\wx\msw\ownerdrawnbutton.h" />
     <ClInclude Include="..\..\include\wx\msw\palette.h" />
-    <ClInclude Include="..\..\include\wx\msw\panel.h" />
     <ClInclude Include="..\..\include\wx\msw\pen.h" />
     <ClInclude Include="..\..\include\wx\msw\popupwin.h" />
     <ClInclude Include="..\..\include\wx\msw\printdlg.h" />
@@ -1232,7 +1231,6 @@
     <ClInclude Include="..\..\include\wx\generic\msgdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\notebook.h" />
     <ClInclude Include="..\..\include\wx\generic\numdlgg.h" />
-    <ClInclude Include="..\..\include\wx\generic\panelg.h" />
     <ClInclude Include="..\..\include\wx\generic\printps.h" />
     <ClInclude Include="..\..\include\wx\generic\prntdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\progdlgg.h" />
