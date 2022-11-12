@@ -71,6 +71,9 @@ protected:
 
     virtual QScrollArea *QtGetScrollBarsContainer() const override;
 
+    // From wxTextEntry:
+    virtual wxWindow *GetEditableWindow() override { return this; }
+
 private:
     wxQtEdit *m_qtEdit;
 

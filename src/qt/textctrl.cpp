@@ -48,6 +48,14 @@ public:
     virtual void SetStyleFlags(long flags) = 0;
 };
 
+// specialization
+template<> void
+wxQtEventSignalHandler<QLineEdit, wxTextCtrl>::ToggleDefaultButtonOnFocusEvent()
+{
+    if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )
+        GetHandler()->QtToggleDefaultButton();
+}
+
 namespace
 {
 
@@ -472,7 +480,12 @@ void wxQtLineEdit::returnPressed()
         {
             wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
             event.SetString( handler->GetValue() );
-            EmitEvent( event );
+            if ( !EmitEvent( event ) )
+            {
+                // allow the dialog (if we are child of) to close itself
+                // by forwarding the event to the default button if any.
+                handler->QtToggleDefaultButton();
+            }
         }
     }
 }

@@ -36,6 +36,10 @@ public:
     virtual bool IsEditable() const override;
     virtual void SetEditable(bool editable) override;
 
+    // For internal use only, see implementation for explanation.
+    // Only controls with wxTE_PROCESS_ENTER flag use this function.
+    void QtToggleDefaultButton();
+
 protected:
     virtual wxString DoGetValue() const override;
     virtual void DoSetValue(const wxString& value, int flags=0) override;
