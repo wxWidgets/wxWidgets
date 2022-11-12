@@ -140,10 +140,6 @@ public:
     // methods used by wxColourScheme to choose the colours for this window
     // --------------------------------------------------------------------
 
-    // return true if this is a panel/canvas window which contains other
-    // controls only
-    virtual bool IsCanvasWindow() const { return false; }
-
     // return true if this control can be highlighted when the mouse is over
     // it (the theme decides itself whether it is really highlighted or not)
     virtual bool CanBeHighlighted() const { return false; }

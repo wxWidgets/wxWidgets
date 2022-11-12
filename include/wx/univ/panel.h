@@ -29,8 +29,6 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
-    virtual bool IsCanvasWindow() const { return true; }
-
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };
