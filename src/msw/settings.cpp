@@ -31,6 +31,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/registry.h"
 
@@ -98,6 +99,14 @@ void wxSystemSettingsModule::OnExit()
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+    // As GetSysColor() doesn't support dark mode, check for it before using it.
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        const wxColour colDark = wxMSWDarkMode::GetColour(index);
+        if ( colDark.IsOk() )
+            return colDark;
+    }
+
     if ( index == wxSYS_COLOUR_LISTBOXTEXT)
     {
         // there is no standard colour with this index, map to another one
@@ -371,6 +380,11 @@ extern wxFont wxGetCCDefaultFont()
 // Windows 10 light/dark mode in Win32 application?").
 bool wxSystemAppearance::IsDark() const
 {
+    // If the application opted in using dark mode, use the undocumented API
+    // which we use for dark mode support directly.
+    if ( wxMSWDarkMode::IsActive() )
+        return true;
+
     wxRegKey rk(wxRegKey::HKCU, "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
     if ( rk.Exists() && rk.HasValue("AppsUseLightTheme") )
     {

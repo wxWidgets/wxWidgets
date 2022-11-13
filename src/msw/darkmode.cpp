@@ -260,6 +260,81 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeClass)
     }
 }
 
+wxColour GetColour(wxSystemColour index)
+{
+    // This is not great at all, but better than using light mode colours that
+    // are not appropriate for the dark mode.
+    switch ( index )
+    {
+        case wxSYS_COLOUR_ACTIVECAPTION:
+        case wxSYS_COLOUR_APPWORKSPACE:
+        case wxSYS_COLOUR_INFOBK:
+        case wxSYS_COLOUR_LISTBOX:
+        case wxSYS_COLOUR_WINDOW:
+            return wxColour(0x202020);
+
+        case wxSYS_COLOUR_BTNTEXT:
+        case wxSYS_COLOUR_CAPTIONTEXT:
+        case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        case wxSYS_COLOUR_INFOTEXT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
+        case wxSYS_COLOUR_LISTBOXTEXT:
+        case wxSYS_COLOUR_MENUTEXT:
+        case wxSYS_COLOUR_WINDOWTEXT:
+            return wxColour(0xe0e0e0);
+
+        case wxSYS_COLOUR_SCROLLBAR:
+            return wxColour(0x4d4d4d);
+
+        case wxSYS_COLOUR_INACTIVECAPTION:
+        case wxSYS_COLOUR_MENU:
+            return wxColour(0x2b2b2b);
+
+        case wxSYS_COLOUR_BTNFACE:
+            return wxColour(0x333333);
+
+        case wxSYS_COLOUR_MENUBAR:
+            return wxColour(0x626262);
+
+        case wxSYS_COLOUR_MENUHILIGHT:
+            return wxColour(0x353535);
+
+        case wxSYS_COLOUR_HIGHLIGHT:
+            return wxColour(0x777777);
+
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+            return wxColour(0xaaaaaa);
+
+        case wxSYS_COLOUR_3DDKSHADOW:
+        case wxSYS_COLOUR_3DLIGHT:
+        case wxSYS_COLOUR_ACTIVEBORDER:
+        case wxSYS_COLOUR_BTNHIGHLIGHT:
+        case wxSYS_COLOUR_BTNSHADOW:
+        case wxSYS_COLOUR_DESKTOP:
+        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+        case wxSYS_COLOUR_GRAYTEXT:
+        case wxSYS_COLOUR_HOTLIGHT:
+        case wxSYS_COLOUR_INACTIVEBORDER:
+        case wxSYS_COLOUR_WINDOWFRAME:
+            return wxColour();
+
+        case wxSYS_COLOUR_MAX:
+            break;
+    }
+
+    wxFAIL_MSG( "unreachable" );
+    return wxColour();
+}
+
+HBRUSH GetBackgroundBrush()
+{
+    wxBrush* const brush =
+        wxTheBrushList->FindOrCreateBrush(GetColour(wxSYS_COLOUR_WINDOW));
+
+    return brush ? GetHbrushOf(*brush) : 0;
+}
+
 } // namespace wxMSWDarkMode
 
 #else // !wxUSE_DARK_MODE
@@ -283,6 +358,16 @@ void EnableForTLW(HWND WXUNUSED(hwnd))
 
 void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass))
 {
+}
+
+wxColour GetColour(wxSystemColour WXUNUSED(index))
+{
+    return wxColour();
+}
+
+HBRUSH GetBackgroundBrush()
+{
+    return 0;
 }
 
 } // namespace wxMSWDarkMode

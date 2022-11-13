@@ -352,6 +352,13 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                 ::InvalidateRect(GetHwnd(), nullptr, false /* erase bg */);
             }
             break;
+
+        case WM_CTLCOLORDLG:
+            // We need to explicitly set the dark background colour when using
+            // dark mode, otherwise we'd be using the default light background.
+            if ( wxMSWDarkMode::IsActive() )
+                return (WXLRESULT)wxMSWDarkMode::GetBackgroundBrush();
+            break;
     }
 
     if ( !processed )

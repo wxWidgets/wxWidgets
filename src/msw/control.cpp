@@ -294,6 +294,8 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 {
     HDC hdc = (HDC)pDC;
 
+    wxColour colFg;
+
     WXHBRUSH hbr = 0;
     if ( !colBg.IsOk() )
     {
@@ -328,11 +330,22 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         if ( win )
             hbr = win->MSWGetBgBrush(pDC);
 
-        // if the control doesn't have any bg colour, foreground colour will be
-        // ignored as the return value would be 0 -- so forcefully give it a
-        // non default background brush in this case
-        if ( !hbr && m_hasFgCol )
-            colBg = GetBackgroundColour();
+        if ( !hbr )
+        {
+            if ( wxMSWDarkMode::IsActive() )
+            {
+                colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+                if ( !m_hasFgCol )
+                    colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+            }
+            // if the control doesn't have any bg colour, foreground colour will be
+            // ignored as the return value would be 0 -- so forcefully give it a
+            // non default background brush in this case
+            else if ( m_hasFgCol )
+            {
+                colBg = GetBackgroundColour();
+            }
+        }
     }
 
     // use the background colour override if a valid colour is given: this is
@@ -350,7 +363,9 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     // default just the simple black is used
     if ( hbr )
     {
-        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+        if ( !colFg.IsOk() )
+            colFg = GetForegroundColour();
+        ::SetTextColor(hdc, wxColourToRGB(colFg));
     }
 
     // finally also set the background colour for text drawing: without this,
