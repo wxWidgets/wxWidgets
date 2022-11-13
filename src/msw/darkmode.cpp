@@ -110,6 +110,33 @@ bool InitDarkMode()
            TryLoadByOrd(SetPreferredAppMode, dllUxTheme, 135);
 }
 
+// This function is only used in this file as it's more clear than using
+// IsActive() without the namespace name -- but in the rest of our code, it's
+// IsActive() which is more clear.
+bool ShouldUseDarkMode()
+{
+    switch ( gs_appMode )
+    {
+        case AppMode_Default:
+            // Dark mode support not enabled, don't try using dark mode.
+            return false;
+
+        case AppMode_AllowDark:
+            // Follow the global setting.
+            return wxMSWImpl::ShouldAppsUseDarkMode();
+
+        case AppMode_ForceDark:
+            return true;
+
+        case AppMode_ForceLight:
+            return false;
+    }
+
+    wxFAIL_MSG( "unreachable" );
+
+    return false;
+}
+
 } // namespace wxMSWImpl
 
 // ----------------------------------------------------------------------------
@@ -194,34 +221,15 @@ bool wxApp::MSWEnableDarkMode(int flags)
 namespace wxMSWDarkMode
 {
 
-bool ShouldUseDarkMode()
+bool IsActive()
 {
-    switch ( gs_appMode )
-    {
-        case AppMode_Default:
-            // Dark mode support not enabled, don't try using dark mode.
-            return false;
-
-        case AppMode_AllowDark:
-            // Follow the global setting.
-            return wxMSWImpl::ShouldAppsUseDarkMode();
-
-        case AppMode_ForceDark:
-            return true;
-
-        case AppMode_ForceLight:
-            return false;
-    }
-
-    wxFAIL_MSG( "unreachable" );
-
-    return false;
+    return wxMSWImpl::ShouldUseDarkMode();
 }
 
 void EnableForTLW(HWND hwnd)
 {
     // Nothing to do, dark mode support not enabled or dark mode is not used.
-    if ( !ShouldUseDarkMode() )
+    if ( !wxMSWImpl::ShouldUseDarkMode() )
         return;
 
     BOOL useDarkMode = TRUE;
@@ -240,7 +248,7 @@ void EnableForTLW(HWND hwnd)
 
 void AllowForWindow(HWND hwnd)
 {
-    if ( ShouldUseDarkMode() )
+    if ( wxMSWImpl::ShouldUseDarkMode() )
     {
         // Using "DARK_EXPLORER" theme works as well, but is subtly different
         // and it seems better to use the explicit (even if undocumented) API
@@ -261,6 +269,11 @@ bool wxApp::MSWEnableDarkMode(int WXUNUSED(flags))
 
 namespace wxMSWDarkMode
 {
+
+bool IsActive()
+{
+    return false;
+}
 
 void EnableForTLW(HWND WXUNUSED(hwnd))
 {
