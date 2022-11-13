@@ -21,7 +21,10 @@ bool IsActive();
 void EnableForTLW(HWND hwnd);
 
 // Set dark theme for the given (child) window if appropriate.
-void AllowForWindow(HWND hwnd);
+//
+// Optional theme class can be specified if a particular class must be used,
+// otherwise the default one is used for it.
+void AllowForWindow(HWND hwnd, const wchar_t* themeClass = nullptr);
 
 } // namespace wxMSWDarkMode
 

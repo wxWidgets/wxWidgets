@@ -246,15 +246,17 @@ void EnableForTLW(HWND hwnd)
     wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
 }
 
-void AllowForWindow(HWND hwnd)
+void AllowForWindow(HWND hwnd, const wchar_t* themeClass)
 {
     if ( wxMSWImpl::ShouldUseDarkMode() )
     {
-        // Using "DARK_EXPLORER" theme works as well, but is subtly different
-        // and it seems better to use the explicit (even if undocumented) API
-        // provided for this instead of relying on this special theme name.
         wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
-        ::SetWindowTheme(hwnd, L"EXPLORER", nullptr);
+
+        // For some reason using a theme class is incompatible with using
+        // "Explorer" as the app name, even though it looks like it ought to
+        // be, but passing ("Explorer", "ExplorerStatusBar") here, for example,
+        // does _not_ work, while omitting the app name in this case does work.
+        ::SetWindowTheme(hwnd, themeClass ? nullptr : L"Explorer", themeClass);
     }
 }
 
@@ -279,7 +281,7 @@ void EnableForTLW(HWND WXUNUSED(hwnd))
 {
 }
 
-void AllowForWindow(HWND WXUNUSED(hwnd))
+void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass))
 {
 }
 

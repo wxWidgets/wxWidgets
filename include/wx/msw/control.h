@@ -124,6 +124,12 @@ protected:
     // Look in our GetSubcontrols() for the windows with the given ID.
     virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const override;
 
+    // Return the theme class to use for this control in dark mode. Default is
+    // not to use any special class, but use "Explorer" as app name, as this
+    // works for several controls, but not all of them and the other must
+    // override this function.
+    virtual const wchar_t* MSWGetDarkThemeClass() const { return nullptr; }
+
 
     // for controls like radiobuttons which are really composite this array
     // holds the ids (not HWNDs!) of the sub controls

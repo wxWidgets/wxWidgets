@@ -138,7 +138,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         return false;
     }
 
-    wxMSWDarkMode::AllowForWindow(m_hWnd);
+    wxMSWDarkMode::AllowForWindow(m_hWnd, MSWGetDarkThemeClass());
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
