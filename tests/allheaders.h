@@ -325,7 +325,6 @@
 #include <wx/strconv.h>
 #include <wx/stream.h>
 #include <wx/string.h>
-#include <wx/stringimpl.h>
 #include <wx/stringops.h>
 #include <wx/strvararg.h>
 #include <wx/sysopt.h>

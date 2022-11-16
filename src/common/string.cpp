@@ -79,6 +79,11 @@ UntypedBufferData *GetUntypedNullData()
 //According to STL _must_ be a -1 size_t
 const size_t wxString::npos = (size_t) -1;
 
+// FIXME-UTF8: get rid of this, have only one wxEmptyString
+#if wxUSE_UNICODE_UTF8
+const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
+#endif
+const wxChar WXDLLIMPEXP_BASE *wxEmptyString = wxT("");
 #if wxUSE_STRING_POS_CACHE
 
 wxTHREAD_SPECIFIC_DECL wxString::Cache wxString::ms_cache;

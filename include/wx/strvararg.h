@@ -18,7 +18,12 @@
 #include "wx/buffer.h"
 #include "wx/unichar.h"
 
+#include <string>
 #include <type_traits>
+
+#ifdef __cpp_lib_string_view
+    #include <string_view>
+#endif // __cpp_lib_string_view
 
 class WXDLLIMPEXP_FWD_BASE wxCStrData;
 class WXDLLIMPEXP_FWD_BASE wxString;
@@ -721,18 +726,7 @@ WX_ARG_NORMALIZER_FORWARD(const wxCharBuffer&, const char*);
 WX_ARG_NORMALIZER_FORWARD(wxWCharBuffer, const wchar_t*);
 WX_ARG_NORMALIZER_FORWARD(const wxWCharBuffer&, const wchar_t*);
 
-// versions for std::[w]string:
-#if wxUSE_STD_STRING
-
-#include "wx/stringimpl.h"
-
-// And also string_view, if we have it (notice that <string> was included from
-// wx/stringimpl.h above, so __cpp_lib_string_view should be defined if it's
-// supported).
-#ifdef __cpp_lib_string_view
-    #include <string_view>
-#endif // __cpp_lib_string_view
-
+// versions for std::[w]string and string_view, if we have it.
 #if !wxUSE_UTF8_LOCALE_ONLY
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 template<>
@@ -812,8 +806,6 @@ WX_ARG_NORMALIZER_FORWARD(std::string_view, const std::string_view&);
 #endif // __cpp_lib_string_view
 #endif
 WX_ARG_NORMALIZER_FORWARD(std::wstring, const std::wstring&);
-
-#endif // wxUSE_STD_STRING
 
 
 // versions for wxUniChar, wxUniCharRef:

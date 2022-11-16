@@ -128,7 +128,7 @@ bool wxStringOperationsUtf8::IsValidUtf8String(const char *str, size_t len)
         return true; // empty string is UTF8 string
 
     const unsigned char *c = (const unsigned char*)str;
-    const unsigned char * const end = (len == wxStringImpl::npos) ? nullptr : c + len;
+    const unsigned char * const end = (len == std::string::npos) ? nullptr : c + len;
 
     for ( ; end != nullptr ? c != end : *c; ++c )
     {
@@ -285,7 +285,7 @@ wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const
 }
 
 wxUniChar
-wxStringOperationsUtf8::DecodeNonAsciiChar(wxStringImpl::const_iterator i)
+wxStringOperationsUtf8::DecodeNonAsciiChar(std::string::const_iterator i)
 {
     wxASSERT( IsValidUtf8LeadByte(*i) );
 
