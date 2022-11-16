@@ -54,14 +54,6 @@ private:
     bool m_textChangeIgnored;
 };
 
-// specialization
-template<> void
-wxQtEventSignalHandler<QComboBox, wxComboBox>::ToggleDefaultButtonOnFocusEvent()
-{
-    if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )
-        GetHandler()->QtToggleDefaultButton();
-}
-
 wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
     : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler ),
       m_textChangeIgnored( false )
@@ -91,19 +83,7 @@ void wxQtComboBox::activated(int WXUNUSED(index))
     wxComboBox *handler = GetHandler();
     if ( handler )
     {
-        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
-        {
-            wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
-            event.SetString( handler->GetValue() );
-            if ( !EmitEvent( event ) )
-            {
-                // allow the dialog (if we are child of) to close itself
-                // by forwarding the event to the default button if any.
-                handler->QtToggleDefaultButton();
-            }
-        }
-        else
-            handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+        handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
     }
 }
 

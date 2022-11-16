@@ -82,11 +82,6 @@ public:
             return wxQtSignalHandler< Handler >::GetHandler();
     }
 
-    // Hack used by wxTextEntry derived classes (by specializing this function)
-    // to toggle the dialog's default button off and on on focus events.
-    // see src/qt/textentry.cpp for the reason.
-    void ToggleDefaultButtonOnFocusEvent() { }
-
 protected:
     /* Not implemented here: wxHelpEvent, wxIdleEvent wxJoystickEvent,
      * wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent,
@@ -149,8 +144,6 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        ToggleDefaultButtonOnFocusEvent();
-
         if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusInEvent(event);
         else
@@ -162,8 +155,6 @@ protected:
     {
         if ( !this->GetHandler() )
             return;
-
-        ToggleDefaultButtonOnFocusEvent();
 
         if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusOutEvent(event);
