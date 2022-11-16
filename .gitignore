@@ -318,11 +318,6 @@
 # /src/msw/
 /src/msw/Makefile.in
 
-# /src/regex/
-/src/regex/Debug
-/src/regex/Release
-/src/regex/*.vcl
-
 # /src/zlib/
 /src/zlib/zlibM*Data
 /src/zlib/zlibM5.mcp

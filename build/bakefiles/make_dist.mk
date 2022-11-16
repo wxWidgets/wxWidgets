@@ -23,7 +23,6 @@ PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
 TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
-REGEXDIR = $(WXDIR)/src/regex
 EXPATDIR = $(WXDIR)/src/expat
 GTKDIR   = $(WXDIR)/src/gtk
 X11DIR   = $(WXDIR)/src/x11
@@ -105,11 +104,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
 	$(CP_P) $(ZLIBDIR)/README $(DISTDIR)/src/zlib
 	#$(CP_P) $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
-	mkdir $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/*.h $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/*.c $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/README $(DISTDIR)/src/regex
 	$(CP_PR) $(EXPATDIR) $(DISTDIR)/src/expat
 	#(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	# copy some files from include/ that are not installed:
