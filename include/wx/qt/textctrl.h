@@ -57,6 +57,17 @@ public:
     virtual void SetSelection( long from, long to ) override;
     virtual void GetSelection(long *from, long *to) const override;
 
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
+
+    virtual void EmptyUndoBuffer() override;
+
     virtual wxString DoGetValue() const override;
     virtual void DoSetValue(const wxString &text, int flags = 0) override;
     virtual void WriteText(const wxString& text) override;
