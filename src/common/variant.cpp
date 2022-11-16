@@ -969,7 +969,6 @@ wxVariant::wxVariant(const wxScopedWCharBuffer& val, const wxString& name)
     m_name = name;
 }
 
-#if wxUSE_STD_STRING
 wxVariant::wxVariant(const std::string& val, const wxString& name)
 {
     m_refData = new wxVariantDataString(wxString(val));
@@ -981,7 +980,6 @@ wxVariant::wxVariant(const std::wstring& val, const wxString& name)
     m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
 }
-#endif // wxUSE_STD_STRING
 
 bool wxVariant::operator== (const wxString& value) const
 {

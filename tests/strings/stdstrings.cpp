@@ -520,7 +520,6 @@ TEST_CASE("StdString::Substr", "[stdstring]")
     CHECK( s1.substr( 17, 30 ) == wxT("") );
 }
 
-#if wxUSE_STD_STRING
 TEST_CASE("StdString::Conversion", "[stdstring]")
 {
     std::string strStd("std::string value");
@@ -575,7 +574,6 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 
     CHECK( wxString("bye").utf8_string() == std::string("bye") );
 }
-#endif // wxUSE_STD_STRING
 
 TEST_CASE("StdString::Algo", "[stdstring]")
 {

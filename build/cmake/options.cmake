@@ -76,6 +76,7 @@ mark_as_advanced(wxBUILD_PIC)
 wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options
+wx_option(wxUSE_STD_IOSTREAM "use standard C++ streams" ON)
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
 wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)

@@ -15,9 +15,7 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
-    #include <vector>
-#endif
+#include <vector>
 
 // these functions are only used in STL build now but we define them in any
 // case for compatibility with the existing code outside of the library which
@@ -508,14 +506,12 @@ public:
         m_data.ptr = strings;
     }
 
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
     // construct an adapter from a vector of strings
     wxArrayStringsAdapter(const std::vector<wxString>& strings)
         : m_type(wxSTRING_POINTER), m_size(strings.size())
     {
         m_data.ptr = m_size == 0 ? nullptr : &strings[0];
     }
-#endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 
     // construct an adapter from a single wxString
     wxArrayStringsAdapter(const wxString& s)
