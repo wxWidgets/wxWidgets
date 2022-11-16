@@ -47,6 +47,11 @@ public:
         wxQtComboBox* m_combo;
     };
 
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
+
 private:
     void activated(int index);
     void editTextChanged(const QString &text);

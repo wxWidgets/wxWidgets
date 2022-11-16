@@ -83,6 +83,11 @@ class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 public:
     wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler );
 
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
+
 private:
     void textChanged();
 };
@@ -91,6 +96,11 @@ class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
 {
 public:
     wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
+
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
 
 private:
     void textChanged();

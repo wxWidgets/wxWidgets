@@ -22,7 +22,11 @@
 #include <QtWidgets/QGestureEvent>
 #include <QtGui/QCursor>
 
+// redeclare wxEVT_TEXT_ENTER here instead of including "wx/textctrl.h"
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_ENTER, wxCommandEvent);
+
 class QPaintEvent;
+
 
 template< typename Handler >
 class wxQtSignalHandler
@@ -44,6 +48,31 @@ protected:
     {
         return m_handler;
     }
+
+    // A hack for wxQtEventSignalHandler<>::keyPressEvent() handler for the
+    // convenience of wxTextCtrl-like controls to emit the wxEVT_TEXT_ENTER
+    // event. i.e: if the control has wxTE_PROCESS_ENTER flag.
+    bool ProcessTextEnter(QKeyEvent* e)
+    {
+        Handler* const handler = GetHandler();
+
+        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
+        {
+            if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
+            {
+                wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
+                event.SetString( this->GetValueForProcessEnter() );
+                event.SetEventObject( handler );
+                return handler->HandleWindowEvent( event );
+            }
+        }
+
+        return false;
+    }
+
+    // Controls supporting wxTE_PROCESS_ENTER flag (e.g. wxTextCtrl, wxComboBox and wxSpinCtrl)
+    // should override this to return the control value as string when enter is pressed.
+    virtual wxString GetValueForProcessEnter() { return wxString(); }
 
 private:
     Handler *m_handler;
@@ -180,7 +209,8 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
+        if ( !this->ProcessTextEnter(event) &&
+             !this->GetHandler()->QtHandleKeyEvent(this, event) )
             Widget::keyPressEvent(event);
         else
             event->accept();

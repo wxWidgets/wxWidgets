@@ -145,6 +145,11 @@ public:
         : wxQtEventSignalHandler< Widget, wxControl >( parent, handler )
     { }
 
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return this->GetHandler()->GetTextValue();
+    }
+
     using Widget::valueFromText;
 };
 
