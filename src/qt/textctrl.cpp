@@ -115,11 +115,8 @@ public:
 private:
     void textChanged();
 
-    void undoAvailable(bool available);
-    void redoAvailable(bool available);
-
-    bool m_undoAvailable,
-         m_redoAvailable;
+    bool m_undoAvailable = false,
+         m_redoAvailable = false;
 };
 
 class wxQtMultiLineEdit : public wxQtEdit
@@ -551,15 +548,16 @@ void wxQtLineEdit::returnPressed()
 
 wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
     : wxQtEventSignalHandler< QTextEdit, wxTextCtrl >( parent, handler )
-    , m_undoAvailable(false), m_redoAvailable(false)
 {
     connect(this, &QTextEdit::textChanged,
             this, &wxQtTextEdit::textChanged);
 
-    connect(this, &QTextEdit::undoAvailable,
-            this, &wxQtTextEdit::undoAvailable);
-    connect(this, &QTextEdit::redoAvailable,
-            this, &wxQtTextEdit::redoAvailable);
+    connect(this, &QTextEdit::undoAvailable, [this](bool available) {
+                m_undoAvailable = available;
+            });
+    connect(this, &QTextEdit::redoAvailable, [this](bool available) {
+                m_redoAvailable = available;
+            });
 }
 
 void wxQtTextEdit::textChanged()
@@ -572,16 +570,6 @@ void wxQtTextEdit::textChanged()
 
     if ( !isUndoRedoEnabled() )
         setUndoRedoEnabled(true);
-}
-
-void wxQtTextEdit::undoAvailable(bool available)
-{
-    m_undoAvailable = available;
-}
-
-void wxQtTextEdit::redoAvailable(bool available)
-{
-    m_redoAvailable = available;
 }
 
 } // anonymous namespace
