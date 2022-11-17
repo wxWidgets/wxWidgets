@@ -16,8 +16,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
-#include "wx/chartype.h"
-#include "wx/strvararg.h"
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 // wxMessageOutput is a class abstracting formatted output target, i.e.
@@ -37,21 +36,15 @@ public:
     static wxMessageOutput* Set(wxMessageOutput* msgout);
 
     // show a message to the user
-    // void Printf(const wxString& format, ...) = 0;
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxFormatString&),
-                               DoPrintfWchar, DoPrintfUtf8)
+    template <typename FormatString, typename... Targs>
+    void Printf(FormatString format, Targs... args)
+    {
+        Output(wxString::Format(format, args...));
+    }
 
     // called by DoPrintf() to output formatted string but can also be called
     // directly if no formatting is needed
     virtual void Output(const wxString& str) = 0;
-
-protected:
-#if !wxUSE_UTF8_LOCALE_ONLY
-    void DoPrintfWchar(const wxChar *format, ...);
-#endif
-#if wxUSE_UNICODE_UTF8
-    void DoPrintfUtf8(const char *format, ...);
-#endif
 
 private:
     static wxMessageOutput* ms_msgOut;
