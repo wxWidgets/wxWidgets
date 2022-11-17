@@ -1681,11 +1681,7 @@ wxString wxString::FromCDouble(double val, int precision)
 
 #if !wxUSE_UTF8_LOCALE_ONLY
 /* static */
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-wxString wxStringPrintfMixinBase::DoFormatWchar(const wxChar *format, ...)
-#else
 wxString wxString::DoFormatWchar(const wxChar *format, ...)
-#endif
 {
     va_list argptr;
     va_start(argptr, format);
@@ -1724,25 +1720,12 @@ wxString wxString::FormatV(const wxString& format, va_list argptr)
 }
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-int wxStringPrintfMixinBase::DoPrintfWchar(const wxChar *format, ...)
-#else
 int wxString::DoPrintfWchar(const wxChar *format, ...)
-#endif
 {
     va_list argptr;
     va_start(argptr, format);
 
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-    // get a pointer to the wxString instance; we have to use dynamic_cast<>
-    // because it's the only cast that works safely for downcasting when
-    // multiple inheritance is used:
-    wxString *str = static_cast<wxString*>(this);
-#else
-    wxString *str = this;
-#endif
-
-    int iLen = str->PrintfV(format, argptr);
+    int iLen = PrintfV(format, argptr);
 
     va_end(argptr);
 
