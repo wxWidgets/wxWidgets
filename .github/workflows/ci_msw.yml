@@ -121,3 +121,37 @@ jobs:
         working-directory: tests
         run: |
             .\vc*msw*\test_gui.exe
+
+  msw-msys2-clang:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+
+      - name: Configuring
+        run: |
+          clang --version
+          cmake --version
+          mkdir build_cmake
+          pushd build_cmake
+          cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=clang.exe -DCMAKE_CXX_COMPILER=clang++.exe -DwxBUILD_SAMPLES=ALL -DwxBUILD_TESTS=ALL -DwxBUILD_DEMOS=ON -DCMAKE_BUILD_TYPE=Release ..
+
+      - name: Building
+        working-directory: build_cmake
+        run: |
+          wxPROC_COUNT=`../build/tools/proc_count.sh`
+          cmake --build . -- -j$wxPROC_COUNT
