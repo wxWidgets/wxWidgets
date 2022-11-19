@@ -459,8 +459,6 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
 {
     connect(this, &QLineEdit::textChanged,
             this, &wxQtLineEdit::textChanged);
-    connect(this, &QLineEdit::returnPressed,
-            this, &wxQtLineEdit::returnPressed);
 }
 
 void wxQtLineEdit::textChanged()
