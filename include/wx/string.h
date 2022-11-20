@@ -43,6 +43,8 @@
 
 #include "wx/beforestd.h"
 #include <string>
+#include <tuple>
+#include <utility>
 #include "wx/afterstd.h"
 
 // by default we cache the mapping of the positions in UTF-8 string to the byte
@@ -2195,17 +2197,27 @@ public:
 
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
-    // (take 'this' into account in attribute parameter count)
-  // int Printf(const wxString& format, ...);
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
-                        DoPrintfWchar, DoPrintfUtf8)
+  template <typename... Targs>
+  int Printf(const wxString& format, Targs... args)
+  {
+      // Package the arguments into a tuple to pass them on together with the
+      // indices that are needed by the implementation.
+      return DoPrintf(format,
+                      std::make_tuple(args...),
+                      std::index_sequence_for<Targs...>{});
+  }
+
     // as vprintf(), returns the number of characters written or < 0 on error
   int PrintfV(const wxString& format, va_list argptr);
 
     // returns the string containing the result of Printf() to it
-  // static wxString Format(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_1;
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxFormatString&),
-                        DoFormatWchar, DoFormatUtf8)
+  template <typename... Targs>
+  static wxString Format(const wxString& format, Targs... args)
+  {
+      wxString s;
+      s.Printf(format, args...);
+      return s;
+  }
     // the same as above, but takes a va_list
   static wxString FormatV(const wxString& format, va_list argptr);
 
@@ -2228,10 +2240,11 @@ public:
   enum stripType {leading = 0x1, trailing = 0x2, both = 0x3};
 
   // use Printf()
-  // (take 'this' into account in attribute parameter count)
-  // int sprintf(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_2;
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
-                        DoPrintfWchar, DoPrintfUtf8)
+  template <typename... Targs>
+  int sprintf(const wxString& format, Targs... args)
+  {
+      return Printf(format, args...);
+  }
 
     // use Cmp()
   int CompareTo(const wxChar* psz, caseCompare cmp = exact) const
@@ -3373,13 +3386,36 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
+  template <typename ArgsTuple, std::size_t... Ns>
+  int DoPrintf(const wxFormatString& format,
+               const ArgsTuple& args,
+               std::index_sequence<Ns...>)
+  {
+#if wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+      if ( wxLocaleIsUtf8 )
+    #endif
+        return DoPrintfUtf8
+               (
+                 format,
+                 wxNormalizeArgUtf8(std::get<Ns>(args), &format, Ns).get()...
+               );
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+      return DoPrintfWchar
+             (
+                format,
+                wxNormalizeArgWchar(std::get<Ns>(args), &format, Ns).get()...
+             );
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+  }
+
   #if !wxUSE_UTF8_LOCALE_ONLY
   int DoPrintfWchar(const wxChar *format, ...);
-  static wxString DoFormatWchar(const wxChar *format, ...);
   #endif
   #if wxUSE_UNICODE_UTF8
   int DoPrintfUtf8(const char *format, ...);
-  static wxString DoFormatUtf8(const char *format, ...);
   #endif
 
 private:

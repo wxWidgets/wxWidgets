@@ -467,6 +467,18 @@ struct wxArgNormalizerWchar : public wxArgNormalizer<T>
                          const wxFormatString *fmt, unsigned index)
         : wxArgNormalizer<T>(value, fmt, index) {}
 };
+
+// Helper function for creating a wxArgNormalizerWchar<T> with type deduced
+// from the type of the argument.
+//
+// NB: Unlike the class ctor, which uses 1-based indices, it takes 0-based
+//     index which makes it more convenient to use in pack expansions.
+template<typename T>
+wxArgNormalizerWchar<T>
+wxNormalizeArgWchar(T value, const wxFormatString *fmt, unsigned indexFrom0)
+{
+    return wxArgNormalizerWchar<T>(value, fmt, indexFrom0 + 1);
+}
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 // normalizer for passing arguments to functions working with UTF-8 encoded
@@ -479,6 +491,14 @@ struct wxArgNormalizerWchar : public wxArgNormalizer<T>
                             const wxFormatString *fmt, unsigned index)
             : wxArgNormalizer<T>(value, fmt, index) {}
     };
+
+    // Same type-deducing helper as above, but for wxArgNormalizerUtf8<T>
+    template<typename T>
+    wxArgNormalizerUtf8<T>
+    wxNormalizeArgUtf8(T value, const wxFormatString *fmt, unsigned indexFrom0)
+    {
+        return wxArgNormalizerUtf8<T>(value, fmt, indexFrom0 + 1);
+    }
 
     #define wxArgNormalizerNative wxArgNormalizerUtf8
 #else // wxUSE_UNICODE_WCHAR
