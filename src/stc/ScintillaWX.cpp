@@ -34,12 +34,6 @@
 #include "wx/scopedarray.h"
 #include "wx/dcbuffer.h"
 
-#if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
-    #include "wx/beforestd.h"
-    #include <string>
-    #include "wx/afterstd.h"
-#endif
-
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
 #include "wx/stc/private.h"

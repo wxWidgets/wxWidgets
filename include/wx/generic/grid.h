@@ -19,9 +19,7 @@
 
 #include "wx/scrolwin.h"
 
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
-    #include <iterator>
-#endif
+#include <iterator>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -1129,9 +1127,7 @@ public:
     class iterator
     {
     public:
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
         typedef std::forward_iterator_tag iterator_category;
-#endif
         typedef ptrdiff_t difference_type;
         typedef wxGridBlockCoords value_type;
         typedef const value_type& reference;

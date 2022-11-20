@@ -457,7 +457,6 @@
 		0D6596A44A8C37DE85D578F6 /* Document.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 71DB140E670738839EC42C2B /* Document.cxx */; };
 		353B584AD0C03919A57A3048 /* affinematrix2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD09A813E10A31C19554B425 /* affinematrix2d.cpp */; };
 		EA10DA3199813E90B39C70D3 /* xh_infobar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C65E309F3A39598C043657 /* xh_infobar.cpp */; };
-		55F0D287F60F3EDEA16CCB64 /* stringimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5357E76650035639844D15B /* stringimpl.cpp */; };
 		056CA84179433AA48D55DA65 /* bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FDDE855D9F83E4891362EB4 /* bar.cpp */; };
 		E3AD8574E13B39BDB8D4E92E /* LexKVIrc.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FCE8B55EBD6B348B8351AB08 /* LexKVIrc.cxx */; };
 		90BC965B1A1F35A3B2C9D1C9 /* Decoration.cxx in Sources */ = {isa = PBXBuildFile; fileRef = BF1C44D726E63B18A98006EC /* Decoration.cxx */; };
@@ -1350,7 +1349,6 @@
 		7A1CE0B28CB73F90AE92B5AB /* richtooltipcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtooltipcmn.cpp; path = ../../src/common/richtooltipcmn.cpp; sourceTree = SOURCE_ROOT; };
 		93BA27DFFB023F2EBD6295E3 /* dynload.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dynload.cpp; path = ../../src/common/dynload.cpp; sourceTree = SOURCE_ROOT; };
 		B4028ABB08C63AB59F5F240B /* m_list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_list.cpp; path = ../../src/html/m_list.cpp; sourceTree = SOURCE_ROOT; };
-		E5357E76650035639844D15B /* stringimpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringimpl.cpp; path = ../../src/common/stringimpl.cpp; sourceTree = SOURCE_ROOT; };
 		497861EB7E623C68951D1AB2 /* LexAPDL.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexAPDL.cxx; path = ../../src/stc/scintilla/lexers/LexAPDL.cxx; sourceTree = SOURCE_ROOT; };
 		DDE22D7DDAC93DCABAE5AED0 /* socketiohandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = socketiohandler.cpp; path = ../../src/common/socketiohandler.cpp; sourceTree = SOURCE_ROOT; };
 		DE16011AD6323AAC8616F973 /* stdstream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdstream.cpp; path = ../../src/common/stdstream.cpp; sourceTree = SOURCE_ROOT; };
@@ -2158,7 +2156,6 @@
 				9FEB8204E530329FA085E5B8 /* strconv.cpp */,
 				FFDD414DBCC73D0FB6C2C5FD /* stream.cpp */,
 				F7E99B35A98D30818120B002 /* string.cpp */,
-				E5357E76650035639844D15B /* stringimpl.cpp */,
 				F1E724EA70AB35DDB130F84F /* stringops.cpp */,
 				0EEAD9C3E180305D8899441E /* strvararg.cpp */,
 				F32F6B47EBB23068B1FCDC0D /* sysopt.cpp */,
@@ -3095,7 +3092,6 @@
 				E882402BEE0330A080A6516F /* strconv.cpp in Sources */,
 				30493B486DFF35AF80D12C49 /* stream.cpp in Sources */,
 				795613831EC8332A83FF26E7 /* string.cpp in Sources */,
-				55F0D287F60F3EDEA16CCB64 /* stringimpl.cpp in Sources */,
 				88E1AE56FD393C8BA5CF8545 /* stringops.cpp in Sources */,
 				056E30EA43753A7CB1AF8C9E /* strvararg.cpp in Sources */,
 				4DD98A9436C83CF3B9425A78 /* sysopt.cpp in Sources */,

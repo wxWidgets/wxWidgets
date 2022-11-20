@@ -614,8 +614,8 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
 #ifdef __cplusplus
 
 /* NB: this belongs to wxcrt.h and not this header, but it makes life easier
- *     for buffer.h and stringimpl.h (both of which must be included before
- *     string.h, which is required by wxcrt.h) to have them here: */
+ *     for buffer.h which must be included before string.h, which is required
+ *     by wxcrt.h, to have them here: */
 
 /* safe version of strlen() (returns 0 if passed null pointer) */
 inline size_t wxStrlen(const char *s) { return s ? wxCRT_StrlenA(s) : 0; }

@@ -218,20 +218,7 @@ typedef pid_t GPid;
 
 #define wxUSE_STL 0
 
-#if defined(__DMC__) \
-        || (defined(_MSC_VER) && _MSC_VER < 1200)
-    #define wxUSE_STD_DEFAULT  0
-#else
-    #define wxUSE_STD_DEFAULT  1
-#endif
-
-#define wxUSE_STD_CONTAINERS_COMPATIBLY wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_CONTAINERS wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_IOSTREAM  wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
+#define wxUSE_STD_CONTAINERS wxUSE_STL
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
 

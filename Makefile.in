@@ -538,7 +538,6 @@ ALL_BASE_HEADERS =  \
 	wx/strconv.h \
 	wx/stream.h \
 	wx/string.h \
-	wx/stringimpl.h \
 	wx/stringops.h \
 	wx/strvararg.h \
 	wx/sysopt.h \
@@ -725,7 +724,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/strconv.h \
 	wx/stream.h \
 	wx/string.h \
-	wx/stringimpl.h \
 	wx/stringops.h \
 	wx/strvararg.h \
 	wx/sysopt.h \
@@ -891,7 +889,6 @@ ALL_BASE_SOURCES =  \
 	src/common/strconv.cpp \
 	src/common/stream.cpp \
 	src/common/string.cpp \
-	src/common/stringimpl.cpp \
 	src/common/stringops.cpp \
 	src/common/strvararg.cpp \
 	src/common/sysopt.cpp \
@@ -1084,7 +1081,6 @@ MONODLL_OBJECTS =  \
 	monodll_strconv.o \
 	monodll_stream.o \
 	monodll_string.o \
-	monodll_stringimpl.o \
 	monodll_stringops.o \
 	monodll_strvararg.o \
 	monodll_sysopt.o \
@@ -1231,7 +1227,6 @@ MONOLIB_OBJECTS =  \
 	monolib_strconv.o \
 	monolib_stream.o \
 	monolib_string.o \
-	monolib_stringimpl.o \
 	monolib_stringops.o \
 	monolib_strvararg.o \
 	monolib_sysopt.o \
@@ -1362,7 +1357,6 @@ BASEDLL_OBJECTS =  \
 	basedll_strconv.o \
 	basedll_stream.o \
 	basedll_string.o \
-	basedll_stringimpl.o \
 	basedll_stringops.o \
 	basedll_strvararg.o \
 	basedll_sysopt.o \
@@ -1475,7 +1469,6 @@ BASELIB_OBJECTS =  \
 	baselib_strconv.o \
 	baselib_stream.o \
 	baselib_string.o \
-	baselib_stringimpl.o \
 	baselib_stringops.o \
 	baselib_strvararg.o \
 	baselib_sysopt.o \
@@ -14804,9 +14797,6 @@ monodll_stream.o: $(srcdir)/src/common/stream.cpp $(MONODLL_ODEP)
 monodll_string.o: $(srcdir)/src/common/string.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/string.cpp
 
-monodll_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
-
 monodll_stringops.o: $(srcdir)/src/common/stringops.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stringops.cpp
 
@@ -19570,9 +19560,6 @@ monolib_stream.o: $(srcdir)/src/common/stream.cpp $(MONOLIB_ODEP)
 
 monolib_string.o: $(srcdir)/src/common/string.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/string.cpp
-
-monolib_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
 
 monolib_stringops.o: $(srcdir)/src/common/stringops.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stringops.cpp
@@ -24338,9 +24325,6 @@ basedll_stream.o: $(srcdir)/src/common/stream.cpp $(BASEDLL_ODEP)
 basedll_string.o: $(srcdir)/src/common/string.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/string.cpp
 
-basedll_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
-
 basedll_stringops.o: $(srcdir)/src/common/stringops.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/stringops.cpp
 
@@ -24826,9 +24810,6 @@ baselib_stream.o: $(srcdir)/src/common/stream.cpp $(BASELIB_ODEP)
 
 baselib_string.o: $(srcdir)/src/common/string.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/string.cpp
-
-baselib_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
 
 baselib_stringops.o: $(srcdir)/src/common/stringops.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/stringops.cpp

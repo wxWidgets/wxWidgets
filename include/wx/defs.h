@@ -2602,17 +2602,15 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 #endif
 
 #if defined(__CYGWIN__) && defined(__WXMSW__)
-#   if wxUSE_STD_CONTAINERS || defined(wxUSE_STD_STRING)
-         /*
-            NASTY HACK because the gethostname in sys/unistd.h which the gnu
-            stl includes and wx builds with by default clash with each other
-            (windows version 2nd param is int, sys/unistd.h version is unsigned
-            int).
-          */
-#        define gethostname gethostnameHACK
-#        include <unistd.h>
-#        undef gethostname
-#   endif
+    /*
+       NASTY HACK because the gethostname in sys/unistd.h which the gnu
+       stl includes and wx builds with by default clash with each other
+       (windows version 2nd param is int, sys/unistd.h version is unsigned
+       int).
+     */
+#   define gethostname gethostnameHACK
+#   include <unistd.h>
+#   undef gethostname
 #endif
 
 /*  --------------------------------------------------------------------------- */

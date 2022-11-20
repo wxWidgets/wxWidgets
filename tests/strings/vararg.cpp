@@ -122,7 +122,6 @@ TEST_CASE("SizetPrintf", "[wxString][Printf][vararg]")
                 == "size_t=0xA0" );
 }
 
-#if wxUSE_STD_STRING
 TEST_CASE("StdString", "[wxString][Printf][vararg]")
 {
     // test passing std::[w]string
@@ -137,7 +136,6 @@ TEST_CASE("StdString", "[wxString][Printf][vararg]")
     s.Printf("string %s(%i).", wc, 2);
     CHECK( s == "string widechar(2)." );
 }
-#endif // wxUSE_STD_STRING
 
 #if wxUSE_LONGLONG
 TEST_CASE("LongLongPrintf", "[wxString][Printf][vararg]")

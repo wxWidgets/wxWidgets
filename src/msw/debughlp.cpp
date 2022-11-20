@@ -468,86 +468,55 @@ wxDbgHelpDLL::DumpUDT(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
     s.reserve(512);
     s = GetSymbolName(pSym);
 
-#if !wxUSE_STD_STRING
-    // special handling for ubiquitous wxString: although the code below works
-    // for it as well, it shows the wxStringBase class and takes 4 lines
-    // instead of only one as this branch
-    if ( s == wxT("wxString") )
+    // Determine how many children this type has.
+    DWORD dwChildrenCount = 0;
+    DoGetTypeInfo(pSym, TI_GET_CHILDRENCOUNT, &dwChildrenCount);
+
+    // Prepare to get an array of "TypeIds", representing each of the children.
+    TI_FINDCHILDREN_PARAMS *children = (TI_FINDCHILDREN_PARAMS *)
+        malloc(sizeof(TI_FINDCHILDREN_PARAMS) +
+                    (dwChildrenCount - 1)*sizeof(ULONG));
+    if ( !children )
+        return s;
+
+    children->Count = dwChildrenCount;
+    children->Start = 0;
+
+    // Get the array of TypeIds, one for each child type
+    if ( !DoGetTypeInfo(pSym, TI_FINDCHILDREN, children) )
     {
-        wxString *ps = (wxString *)pVariable;
-
-        // we can't just dump wxString directly as it could be corrupted or
-        // invalid and it could also be locked for writing (i.e. if we're
-        // between GetWriteBuf() and UngetWriteBuf() calls) and assert when we
-        // try to access it contents using public methods, so instead use our
-        // knowledge of its internals
-        const wxChar *p = nullptr;
-        if ( !::IsBadReadPtr(ps, sizeof(wxString)) )
-        {
-            p = ps->data();
-            wxStringData *data = (wxStringData *)p - 1;
-            if ( ::IsBadReadPtr(data, sizeof(wxStringData)) ||
-                    ::IsBadReadPtr(p, sizeof(wxChar *)*data->nAllocLength) )
-            {
-                p = nullptr; // don't touch this pointer with 10 feet pole
-            }
-        }
-
-        s << wxT("(\"") << (p ? p : wxT("???")) << wxT(")\"");
-    }
-    else // any other UDT
-#endif // !wxUSE_STD_STRING
-    {
-        // Determine how many children this type has.
-        DWORD dwChildrenCount = 0;
-        DoGetTypeInfo(pSym, TI_GET_CHILDRENCOUNT, &dwChildrenCount);
-
-        // Prepare to get an array of "TypeIds", representing each of the children.
-        TI_FINDCHILDREN_PARAMS *children = (TI_FINDCHILDREN_PARAMS *)
-            malloc(sizeof(TI_FINDCHILDREN_PARAMS) +
-                        (dwChildrenCount - 1)*sizeof(ULONG));
-        if ( !children )
-            return s;
-
-        children->Count = dwChildrenCount;
-        children->Start = 0;
-
-        // Get the array of TypeIds, one for each child type
-        if ( !DoGetTypeInfo(pSym, TI_FINDCHILDREN, children) )
-        {
-            free(children);
-            return s;
-        }
-
-        s << wxT(" {\n");
-
-        // Iterate through all children
-        wxSYMBOL_INFO sym;
-        wxZeroMemory(sym);
-        sym.ModBase = pSym->ModBase;
-        for ( unsigned i = 0; i < dwChildrenCount; i++ )
-        {
-            sym.TypeIndex = children->ChildId[i];
-
-            // children here are in lexicographic sense, i.e. we get all our nested
-            // classes and not only our member fields, but we can't get the values
-            // for the members of the nested classes, of course!
-            DWORD nested;
-            if ( DoGetTypeInfo(&sym, TI_GET_NESTED, &nested) && nested )
-                continue;
-
-            // avoid infinite recursion: this does seem to happen sometimes with
-            // complex typedefs...
-            if ( sym.TypeIndex == pSym->TypeIndex )
-                continue;
-
-            s += DumpField(&sym, pVariable, level + 1);
-        }
-
         free(children);
-
-        s << wxString(wxT('\t'), level + 1) << wxT('}');
+        return s;
     }
+
+    s << wxT(" {\n");
+
+    // Iterate through all children
+    wxSYMBOL_INFO sym;
+    wxZeroMemory(sym);
+    sym.ModBase = pSym->ModBase;
+    for ( unsigned i = 0; i < dwChildrenCount; i++ )
+    {
+        sym.TypeIndex = children->ChildId[i];
+
+        // children here are in lexicographic sense, i.e. we get all our nested
+        // classes and not only our member fields, but we can't get the values
+        // for the members of the nested classes, of course!
+        DWORD nested;
+        if ( DoGetTypeInfo(&sym, TI_GET_NESTED, &nested) && nested )
+            continue;
+
+        // avoid infinite recursion: this does seem to happen sometimes with
+        // complex typedefs...
+        if ( sym.TypeIndex == pSym->TypeIndex )
+            continue;
+
+        s += DumpField(&sym, pVariable, level + 1);
+    }
+
+    free(children);
+
+    s << wxString(wxT('\t'), level + 1) << wxT('}');
 
     return s;
 }

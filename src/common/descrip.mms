@@ -175,7 +175,6 @@ OBJECTS1=fs_inet.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
-		stringimpl.obj,\
 		stringops.obj,\
 		strvararg.obj,\
 		sysopt.obj
@@ -376,7 +375,6 @@ SOURCES = \
 		strvararg.cpp,\
 		sysopt.cpp,\
 		string.cpp,\
-		stringimpl.cpp,\
 		stringops.cpp,\
 		tbarbase.cpp,\
 		textbuf.cpp,\
@@ -615,7 +613,6 @@ stream.obj : stream.cpp
 strvararg.obj : strvararg.cpp
 sysopt.obj : sysopt.cpp
 string.obj : string.cpp
-stringimpl.obj : stringimpl.cpp
 stringops.obj : stringops.cpp
 tbarbase.obj : tbarbase.cpp
 textbuf.obj : textbuf.cpp

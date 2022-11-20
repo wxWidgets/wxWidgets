@@ -33,13 +33,17 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#include "wx/chartype.h"    // for wxChar
 #include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
-#include "wx/stringimpl.h"
 #include "wx/stringops.h"
 #include "wx/unichar.h"
+
+#include "wx/beforestd.h"
+#include <string>
+#include "wx/afterstd.h"
 
 // by default we cache the mapping of the positions in UTF-8 string to the byte
 // offset as this results in noticeable performance improvements for loops over
@@ -91,6 +95,32 @@ namespace wxPrivate
 {
     template <typename T> struct wxStringAsBufHelper;
 }
+
+// All the symbols here only exist for compatibility in case they're referenced
+// in the existing code.
+#define wxUSE_STL_BASED_WXSTRING 1
+
+// Define this for compatibility only, it is not used any longer.
+typedef std::wstring wxStdWideString;
+
+#if wxUSE_UNICODE_WCHAR
+    typedef std::wstring wxStdString;
+#else
+    typedef std::string wxStdString;
+#endif
+
+typedef wxStdString wxStringImpl;
+
+// ----------------------------------------------------------------------------
+// global data
+// ----------------------------------------------------------------------------
+
+// global pointer to empty string
+extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxEmptyString;
+#if wxUSE_UNICODE_UTF8
+// FIXME-UTF8: we should have only one wxEmptyString
+extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
+#endif
 
 // ---------------------------------------------------------------------------
 // macros
@@ -673,7 +703,6 @@ public:
   typedef size_t size_type;
   typedef const wxUniChar const_reference;
 
-#if wxUSE_STD_STRING
   #if wxUSE_UNICODE_UTF8
     // random access is not O(1), as required by Random Access Iterator
     #define WX_STR_ITERATOR_TAG std::bidirectional_iterator_tag
@@ -681,12 +710,6 @@ public:
     #define WX_STR_ITERATOR_TAG std::random_access_iterator_tag
   #endif
   #define WX_DEFINE_ITERATOR_CATEGORY(cat) typedef cat iterator_category;
-#else
-  // not defining iterator_category at all in this case is better than defining
-  // it as some dummy type -- at least it results in more intelligible error
-  // messages
-  #define WX_DEFINE_ITERATOR_CATEGORY(cat)
-#endif
 
   #define WX_STR_ITERATOR_IMPL(iterator_name, pointer_type, reference_type) \
       private:                                                              \
@@ -1053,7 +1076,7 @@ private:
   // instead we define dummy type that lets us have wxString ctor for creation
   // from wxStringImpl that couldn't be used by user code (in all other builds,
   // "standard" ctors can be used):
-#if wxUSE_UNICODE_UTF8 && wxUSE_STL_BASED_WXSTRING
+#if wxUSE_UNICODE_UTF8
   struct CtorFromStringImplTag {};
 
   wxString(CtorFromStringImplTag* WXUNUSED(dummy), const wxStringImpl& src)
@@ -1062,10 +1085,6 @@ private:
   static wxString FromImpl(const wxStringImpl& src)
       { return wxString((CtorFromStringImplTag*)nullptr, src); }
 #else
-  #if !wxUSE_STL_BASED_WXSTRING
-  wxString(const wxStringImpl& src) : m_impl(src) { }
-  // else: already defined as wxString(wxStdString) below
-  #endif
   static wxString FromImpl(const wxStringImpl& src) { return wxString(src); }
 #endif
 
@@ -1181,14 +1200,6 @@ public:
   }
 #endif // wxUSE_STRING_POS_CACHE
 
-  // even if we're not built with wxUSE_STD_STRING_CONV_IN_WXSTRING == 1 it is
-  // very convenient to allow implicit conversions from std::string to wxString
-  // and vice verse as this allows to use the same strings in non-GUI and GUI
-  // code, however we don't want to unconditionally add this ctor as it would
-  // make wx lib dependent on libstdc++ on some Linux versions which is bad, so
-  // instead we ask the client code to define this wxUSE_STD_STRING symbol if
-  // they need it
-#if wxUSE_STD_STRING
   #if wxUSE_UNICODE_WCHAR
     wxString(const std::wstring& str) : m_impl(str) {}
   #else // UTF-8 or ANSI
@@ -1200,14 +1211,12 @@ public:
   wxString(const std::string& str)
       { assign(str.c_str(), str.length()); }
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-#endif // wxUSE_STD_STRING
 
   // Also always provide explicit conversions to std::[w]string in any case,
   // see below for the implicit ones.
-#if wxUSE_STD_STRING
   // We can avoid a copy if we already use this string type internally,
   // otherwise we create a copy on the fly:
-  #if wxUSE_UNICODE_WCHAR && wxUSE_STL_BASED_WXSTRING
+  #if wxUSE_UNICODE_WCHAR
     #define wxStringToStdWstringRetType const std::wstring&
     const std::wstring& ToStdWstring() const { return m_impl; }
   #else
@@ -1226,7 +1235,7 @@ public:
     }
   #endif
 
-  #if wxUSE_UTF8_LOCALE_ONLY && wxUSE_STL_BASED_WXSTRING
+  #if wxUSE_UTF8_LOCALE_ONLY
     // wxStringImpl is std::string in the encoding we want
     #define wxStringToStdStringRetType const std::string&
     const std::string& ToStdString() const { return m_impl; }
@@ -1260,8 +1269,6 @@ public:
 
 #undef wxStringToStdStringRetType
 #undef wxStringToStdWstringRetType
-
-#endif // wxUSE_STD_STRING
 
   wxString Clone() const
   {
@@ -1605,14 +1612,9 @@ public:
         return FromImpl(wxStringImpl(utf8, len));
     }
 
-#if wxUSE_STD_STRING
     static wxString FromUTF8Unchecked(const std::string& utf8)
     {
         wxASSERT( wxStringOperations::IsValidUtf8String(utf8.c_str(), utf8.length()) );
-        /*
-          Note that, under wxUSE_UNICODE_UTF8 and wxUSE_STD_STRING, wxStringImpl can be
-          initialized with a std::string whether wxUSE_STL_BASED_WXSTRING is 1 or not.
-        */
         return FromImpl(utf8);
     }
     static wxString FromUTF8(const std::string& utf8)
@@ -1623,7 +1625,6 @@ public:
     }
 
     std::string utf8_string() const { return m_impl; }
-#endif
 
     const wxScopedCharBuffer utf8_str() const
         { return wxCharBuffer::CreateNonOwned(m_impl.c_str(), m_impl.length()); }
@@ -1641,14 +1642,12 @@ public:
                       "string must be valid UTF-8" );
         return s;
     }
-#if wxUSE_STD_STRING
     static wxString FromUTF8(const std::string& utf8)
       { return FromUTF8(utf8.c_str(), utf8.length()); }
     static wxString FromUTF8Unchecked(const std::string& utf8)
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
 
     std::string utf8_string() const { return ToStdString(wxMBConvUTF8()); }
-#endif
     const wxScopedCharBuffer utf8_str() const { return mb_str(wxMBConvUTF8()); }
 #else // ANSI
     static wxString FromUTF8(const char *utf8)
@@ -1676,14 +1675,12 @@ public:
 
         return wxString(buf.data(), wlen);
     }
-#if wxUSE_STD_STRING
     static wxString FromUTF8(const std::string& utf8)
       { return FromUTF8(utf8.c_str(), utf8.length()); }
     static wxString FromUTF8Unchecked(const std::string& utf8)
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
 
     std::string utf8_string() const { return ToStdString(wxMBConvUTF8()); }
-#endif
     const wxScopedCharBuffer utf8_str() const
     {
         if (empty())
@@ -1798,7 +1795,6 @@ public:
     { return operator=(wxUniChar(ch)); }
     // from a C string - STL probably will crash on nullptr,
     // so we need to compensate in that case
-#if wxUSE_STL_BASED_WXSTRING
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   wxString& operator=(const char *psz)
   {
@@ -1824,27 +1820,6 @@ public:
 
       return *this;
   }
-#else // !wxUSE_STL_BASED_WXSTRING
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-  wxString& operator=(const char *psz)
-  {
-      wxSTRING_INVALIDATE_CACHE();
-
-      m_impl = ImplStr(psz);
-
-      return *this;
-  }
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-  wxString& operator=(const wchar_t *pwz)
-  {
-      wxSTRING_INVALIDATE_CACHE();
-
-      m_impl = ImplStr(pwz);
-
-      return *this;
-  }
-#endif // wxUSE_STL_BASED_WXSTRING/!wxUSE_STL_BASED_WXSTRING
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   wxString& operator=(const unsigned char *psz)
@@ -3081,7 +3056,7 @@ public:
     {  return rfind(wxUniChar(ch), nStart); }
 
   // find first/last occurrence of any character (not) in the set:
-#if wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+#if !wxUSE_UNICODE_UTF8
   // FIXME-UTF8: this is not entirely correct, because it doesn't work if
   //             sizeof(wchar_t)==2 and surrogates are present in the string;
   //             should we care? Probably not.
@@ -3217,7 +3192,7 @@ public:
   size_t find_last_not_of(const wchar_t* sz, size_t nStart, size_t n) const;
     // same as above
   size_t find_last_not_of(wxUniChar ch, size_t nStart = npos) const;
-#endif // wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8 or not
+#endif // !wxUSE_UNICODE_UTF8
 
   // provide char/wchar_t/wxUniCharRef overloads for char-finding functions
   // above to resolve ambiguities:
@@ -3398,28 +3373,6 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
-#if !wxUSE_STL_BASED_WXSTRING
-  // helpers for wxStringBuffer and wxStringBufferLength
-  wxStringCharType *DoGetWriteBuf(size_t nLen)
-  {
-      return m_impl.DoGetWriteBuf(nLen);
-  }
-
-  void DoUngetWriteBuf()
-  {
-      wxSTRING_INVALIDATE_CACHE();
-
-      m_impl.DoUngetWriteBuf();
-  }
-
-  void DoUngetWriteBuf(size_t nLen)
-  {
-      wxSTRING_INVALIDATE_CACHE();
-
-      m_impl.DoUngetWriteBuf(nLen);
-  }
-#endif // !wxUSE_STL_BASED_WXSTRING
-
   #if !wxUSE_UTF8_LOCALE_ONLY
   int DoPrintfWchar(const wxChar *format, ...);
   static wxString DoFormatWchar(const wxChar *format, ...);
@@ -3428,11 +3381,6 @@ private:
   int DoPrintfUtf8(const char *format, ...);
   static wxString DoFormatUtf8(const char *format, ...);
   #endif
-
-#if !wxUSE_STL_BASED_WXSTRING
-  // check string's data validity
-  bool IsValid() const { return m_impl.GetStringData()->IsValid(); }
-#endif
 
 private:
   wxStringImpl m_impl;
@@ -3681,61 +3629,6 @@ struct wxStringAsBufHelper<wchar_t>
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
 // ----------------------------------------------------------------------------
 
-#if !wxUSE_STL_BASED_WXSTRING
-// string buffer for direct access to string data in their native
-// representation:
-class wxStringInternalBuffer
-{
-public:
-    typedef wxStringCharType CharType;
-
-    wxStringInternalBuffer(wxString& str, size_t lenWanted = 1024)
-        : m_str(str), m_buf(nullptr)
-        { m_buf = m_str.DoGetWriteBuf(lenWanted); }
-
-    ~wxStringInternalBuffer() { m_str.DoUngetWriteBuf(); }
-
-    operator wxStringCharType*() const { return m_buf; }
-
-private:
-    wxString&         m_str;
-    wxStringCharType *m_buf;
-
-    wxDECLARE_NO_COPY_CLASS(wxStringInternalBuffer);
-};
-
-class wxStringInternalBufferLength
-{
-public:
-    typedef wxStringCharType CharType;
-
-    wxStringInternalBufferLength(wxString& str, size_t lenWanted = 1024)
-        : m_str(str), m_buf(nullptr), m_len(0), m_lenSet(false)
-    {
-        m_buf = m_str.DoGetWriteBuf(lenWanted);
-        wxASSERT(m_buf != nullptr);
-    }
-
-    ~wxStringInternalBufferLength()
-    {
-        wxASSERT(m_lenSet);
-        m_str.DoUngetWriteBuf(m_len);
-    }
-
-    operator wxStringCharType*() const { return m_buf; }
-    void SetLength(size_t length) { m_len = length; m_lenSet = true; }
-
-private:
-    wxString&         m_str;
-    wxStringCharType *m_buf;
-    size_t            m_len;
-    bool              m_lenSet;
-
-    wxDECLARE_NO_COPY_CLASS(wxStringInternalBufferLength);
-};
-
-#endif // !wxUSE_STL_BASED_WXSTRING
-
 template<typename T>
 class wxStringTypeBufferBase
 {
@@ -3828,8 +3721,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxStringTypeBufferLength);
 };
 
-#if wxUSE_STL_BASED_WXSTRING
-
 class wxStringInternalBuffer : public wxStringTypeBufferBase<wxStringCharType>
 {
 public:
@@ -3856,16 +3747,13 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxStringInternalBufferLength);
 };
 
-#endif // wxUSE_STL_BASED_WXSTRING
-
-
-#if wxUSE_STL_BASED_WXSTRING || wxUSE_UNICODE_UTF8
+#if wxUSE_UNICODE_UTF8
 typedef wxStringTypeBuffer<wxChar>        wxStringBuffer;
 typedef wxStringTypeBufferLength<wxChar>  wxStringBufferLength;
-#else // if !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+#else // !wxUSE_UNICODE_UTF8
 typedef wxStringInternalBuffer                wxStringBuffer;
 typedef wxStringInternalBufferLength          wxStringBufferLength;
-#endif // !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+#endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
 
 #if wxUSE_UNICODE_UTF8
 typedef wxStringInternalBuffer                wxUTF8StringBuffer;
@@ -4063,11 +3951,6 @@ wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
 // Implement hashing using C++11 std::hash<>.
 // ----------------------------------------------------------------------------
 
-// Don't do this if ToStdWstring() is not available. We could work around it
-// but, presumably, if using std::wstring is undesirable, then so is using
-// std::hash<> anyhow.
-#if wxUSE_STD_STRING
-
 #include <functional>
 
 namespace std
@@ -4081,8 +3964,6 @@ namespace std
         }
     };
 } // namespace std
-
-#endif // wxUSE_STD_STRING
 
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file

@@ -307,7 +307,6 @@
 		28ADE8D385A53445A5451F23 /* jdhuff.c in Sources */ = {isa = PBXBuildFile; fileRef = 72869747E68E37998CB0A07E /* jdhuff.c */; };
 		BD53E095EC1136EF853A47D9 /* m_layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5EE0B8985443BDCB36F781F /* m_layout.cpp */; };
 		4788F736CD9C324E8A3DFA74 /* LexEScript.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 58EFF24DE2E737CA8A164F5C /* LexEScript.cxx */; };
-		55F0D287F60F3EDEA16CCB64 /* stringimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5357E76650035639844D15B /* stringimpl.cpp */; };
 		EAE02BA934B43EEE92C496C8 /* dcpsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EEA0945B20913754A54D0FD9 /* dcpsg.cpp */; };
 		6AC347D2DCC730149A0A83D8 /* button_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4F4F5211933057824B5621 /* button_osx.cpp */; };
 		2EECB3C2F9523D0B95847A7F /* accel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C78A1539462370CAA429508 /* accel.cpp */; };
@@ -740,7 +739,6 @@
 		784F7C50882F320FA76537B5 /* LexAU3.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C76222F466E831F896A89269 /* LexAU3.cxx */; };
 		BF068F3C06473D8CBC55D508 /* PositionCache.cxx in Sources */ = {isa = PBXBuildFile; fileRef = BCD873D873A53BBF955D8A4E /* PositionCache.cxx */; };
 		700BBDECBE313E108BA99ABD /* toplvcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 861438BD294335D4B859EA71 /* toplvcmn.cpp */; };
-		55F0D287F60F3EDEA16CCB65 /* stringimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5357E76650035639844D15B /* stringimpl.cpp */; };
 		20BEEFFA08F3396791596871 /* dlunix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CA2D9F325F833C408657E7B7 /* dlunix.cpp */; };
 		1E17F95DD433379E8C18298C /* odcombo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7906BD74118A3B4DAC515BC2 /* odcombo.cpp */; };
 		97C551F8AEF133D680D1FD36 /* LexProgress.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E4A9905843A4683A6B460 /* LexProgress.cxx */; };
@@ -2272,7 +2270,6 @@
 		05814571E7A83F5DBFB6E4C7 /* msgout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E968913A9A593B258BD8EACB /* msgout.cpp */; };
 		DC6B669C9A78398F914AEE55 /* fontutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FF661188B563D27A11F5716 /* fontutil.cpp */; };
 		6D723C987BFB39B7B887DCB3 /* Editor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = DA5E95D498C53A808A8E2EEB /* Editor.cxx */; };
-		55F0D287F60F3EDEA16CCB66 /* stringimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5357E76650035639844D15B /* stringimpl.cpp */; };
 		438EAEA4B30C325C827F6199 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
 		0164A65CDB7A334A8E9AA4C1 /* dynload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93BA27DFFB023F2EBD6295E3 /* dynload.cpp */; };
 		86003C8EB906304F9025F78A /* jcinit.c in Sources */ = {isa = PBXBuildFile; fileRef = AA6C6739C3BD3EFA9CF71102 /* jcinit.c */; };
@@ -4167,7 +4164,6 @@
 		080597FC0436378E96EDA94B /* m_links.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_links.cpp; path = ../../src/html/m_links.cpp; sourceTree = SOURCE_ROOT; };
 		726C0457DF1232C793918DC1 /* tif_zip.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_zip.c; path = ../../src/tiff/libtiff/tif_zip.c; sourceTree = SOURCE_ROOT; };
 		C3904351139F3F0DB4B72F94 /* pcre2_auto_possess.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_auto_possess.c; path = ../../3rdparty/pcre/src/pcre2_auto_possess.c; sourceTree = SOURCE_ROOT; };
-		E5357E76650035639844D15B /* stringimpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringimpl.cpp; path = ../../src/common/stringimpl.cpp; sourceTree = SOURCE_ROOT; };
 		B60497805D37375EBFCF3D98 /* pcre2_tables.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_tables.c; path = ../../3rdparty/pcre/src/pcre2_tables.c; sourceTree = SOURCE_ROOT; };
 		FC6A8FAE9CA63EEB8883B6BD /* pcre2_config.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_config.c; path = ../../3rdparty/pcre/src/pcre2_config.c; sourceTree = SOURCE_ROOT; };
 		A0DCC5EF59143640BE13AD73 /* jidctfst.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jidctfst.c; path = ../../src/jpeg/jidctfst.c; sourceTree = SOURCE_ROOT; };
@@ -6370,7 +6366,6 @@
 				9FEB8204E530329FA085E5B8 /* strconv.cpp */,
 				FFDD414DBCC73D0FB6C2C5FD /* stream.cpp */,
 				F7E99B35A98D30818120B002 /* string.cpp */,
-				E5357E76650035639844D15B /* stringimpl.cpp */,
 				F1E724EA70AB35DDB130F84F /* stringops.cpp */,
 				0EEAD9C3E180305D8899441E /* strvararg.cpp */,
 				F32F6B47EBB23068B1FCDC0D /* sysopt.cpp */,
@@ -7702,7 +7697,6 @@
 				E882402BEE0330A080A65171 /* strconv.cpp in Sources */,
 				30493B486DFF35AF80D12C49 /* stream.cpp in Sources */,
 				795613831EC8332A83FF26E8 /* string.cpp in Sources */,
-				55F0D287F60F3EDEA16CCB64 /* stringimpl.cpp in Sources */,
 				88E1AE56FD393C8BA5CF8546 /* stringops.cpp in Sources */,
 				056E30EA43753A7CB1AF8C9F /* strvararg.cpp in Sources */,
 				4DD98A9436C83CF3B9425A78 /* sysopt.cpp in Sources */,
@@ -8426,7 +8420,6 @@
 				E882402BEE0330A080A6516F /* strconv.cpp in Sources */,
 				30493B486DFF35AF80D12C4B /* stream.cpp in Sources */,
 				795613831EC8332A83FF26E9 /* string.cpp in Sources */,
-				55F0D287F60F3EDEA16CCB66 /* stringimpl.cpp in Sources */,
 				88E1AE56FD393C8BA5CF8545 /* stringops.cpp in Sources */,
 				056E30EA43753A7CB1AF8C9E /* strvararg.cpp in Sources */,
 				4DD98A9436C83CF3B9425A7A /* sysopt.cpp in Sources */,
@@ -9750,7 +9743,6 @@
 				E882402BEE0330A080A65170 /* strconv.cpp in Sources */,
 				30493B486DFF35AF80D12C4A /* stream.cpp in Sources */,
 				795613831EC8332A83FF26E7 /* string.cpp in Sources */,
-				55F0D287F60F3EDEA16CCB65 /* stringimpl.cpp in Sources */,
 				88E1AE56FD393C8BA5CF8547 /* stringops.cpp in Sources */,
 				056E30EA43753A7CB1AF8CA0 /* strvararg.cpp in Sources */,
 				4DD98A9436C83CF3B9425A79 /* sysopt.cpp in Sources */,

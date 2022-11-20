@@ -134,12 +134,7 @@ public:
         typedef wxCmdLineArg value_type;
         typedef const wxCmdLineArg* pointer;
         typedef const wxCmdLineArg& reference;
-
-// We avoid dependency on standard library by default but if we do use
-// std::string, then it's ok to use iterator tags as well.
-#if wxUSE_STD_STRING
         typedef std::bidirectional_iterator_tag iterator_category;
-#endif // wx_USE_STD_STRING
 
         const_iterator() : m_parser(nullptr), m_index(0) {}
         reference operator *() const;
