@@ -1445,33 +1445,38 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
 
 TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
 {
-    wxWindow* const parent = wxTheApp->GetTopWindow();
+    long style = 0;
 
-    const long styles[] = { 0, wxTE_RICH, wxTE_RICH2 };
+    SECTION("Plain") { }
+    SECTION("With wxTE_MULTILINE") { style = wxTE_MULTILINE; }
 
-    for ( size_t n = 0; n < WXSIZEOF(styles); n++ )
-    {
-        const long style = styles[n];
+    SECTION("Rich") { style = wxTE_RICH; }
+    SECTION("Rich with wxTE_MULTILINE") { style = wxTE_RICH | wxTE_MULTILINE; }
 
-#ifdef __MINGW32_TOOLCHAIN__
-        if ( style == wxTE_RICH2 )
-        {
-            // We can't call ITextDocument::Undo() in wxMSW code when using
-            // MinGW32, so this test would always fail with it.
-            WARN("Skipping test known to fail with MinGW-32.");
-        }
-        continue;
+#ifndef __MINGW32_TOOLCHAIN__
+    // We can't call ITextDocument::Undo() in wxMSW code when using
+    // MinGW32, so this test would always fail with it.
+    SECTION("Rich v2") { style = wxTE_RICH2; }
+    SECTION("Rich v2 with wxTE_MULTILINE") { style = wxTE_RICH2 | wxTE_MULTILINE; }
 #endif // __MINGW32_TOOLCHAIN__
 
-        INFO("wxTextCtrl with style " << style);
-
-        wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "",
-                                                    wxDefaultPosition,
-                                                    wxDefaultSize,
-                                                    style));
-
-        CHECK( !text->CanUndo() );
+    if ( !style )
+    {
+        // This can happen when explicitly selecting just a single section to
+        // execute -- this code still runs even if the corresponding section is
+        // skipped, so we have to explicitly skip it too in this case.
+        return;
     }
+
+    INFO("wxTextCtrl with style " << style);
+
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "",
+                                                wxDefaultPosition,
+                                                wxDefaultSize,
+                                                style));
+
+    CHECK( !text->CanUndo() );
 }
 
 // This test would always fail with MinGW-32 for the same reason as described

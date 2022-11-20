@@ -46,6 +46,14 @@ public:
     virtual void SetSelection( long from, long to ) = 0;
     virtual void SetInsertionPoint(long pos) = 0;
     virtual void SetStyleFlags(long flags) = 0;
+    virtual void Copy() = 0;
+    virtual void Cut() = 0;
+    virtual void Paste() = 0;
+    virtual void Undo() = 0;
+    virtual void Redo() = 0;
+    virtual bool CanUndo() const = 0;
+    virtual bool CanRedo() const = 0;
+    virtual void EmptyUndoBuffer() = 0;
 };
 
 // specialization
@@ -101,8 +109,14 @@ class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
 public:
     wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
 
+    bool IsUndoAvailable() const { return m_undoAvailable; }
+    bool IsRedoAvailable() const { return m_redoAvailable; }
+
 private:
     void textChanged();
+
+    bool m_undoAvailable = false,
+         m_redoAvailable = false;
 };
 
 class wxQtMultiLineEdit : public wxQtEdit
@@ -110,11 +124,39 @@ class wxQtMultiLineEdit : public wxQtEdit
 public:
     explicit wxQtMultiLineEdit(QTextEdit *edit) : m_edit(edit)
     {
+        // wx expects no initial undo when the control is first created, i.e.:
+        // CanUndo() should return false. but Qt emits undoAvailable(true) for
+        // a freshly created control and we should prevent this by disabling
+        // undo/redo here and re-enable it in textChanged signal.
+        m_edit->setUndoRedoEnabled(false);
     }
 
     virtual bool IsModified() const override
     {
         return m_edit->isWindowModified();
+    }
+
+    virtual void Copy() override { m_edit->copy(); }
+    virtual void Cut() override  { m_edit->cut(); }
+    virtual void Paste() override  { m_edit->paste(); }
+
+    virtual void Undo() override  { m_edit->undo(); }
+    virtual void Redo() override  { m_edit->redo(); }
+
+    virtual bool CanUndo() const override
+    {
+        return static_cast<wxQtTextEdit*>(m_edit)->IsUndoAvailable();
+    }
+
+    virtual bool CanRedo() const override
+    {
+        return static_cast<wxQtTextEdit*>(m_edit)->IsRedoAvailable();
+    }
+
+    virtual void EmptyUndoBuffer() override
+    {
+        m_edit->setUndoRedoEnabled(false);
+        m_edit->setUndoRedoEnabled(true);
     }
 
     virtual wxString DoGetValue() const override
@@ -330,6 +372,20 @@ public:
         return 1;
     }
 
+    virtual void Copy() override { m_edit->copy(); }
+    virtual void Cut() override  { m_edit->cut(); }
+    virtual void Paste() override  { m_edit->paste(); }
+
+    virtual void Undo() override  { m_edit->undo(); }
+    virtual void Redo() override  { m_edit->redo(); }
+    virtual bool CanUndo() const override  { return m_edit->isUndoAvailable(); }
+    virtual bool CanRedo() const override  { return m_edit->isRedoAvailable(); }
+
+    virtual void EmptyUndoBuffer() override
+    {
+        // how to empty undo buffer for QLineEdit control ?
+    }
+
     virtual wxString DoGetValue() const override
     {
         return wxQtConvertString( m_edit->text() );
@@ -495,6 +551,13 @@ wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
 {
     connect(this, &QTextEdit::textChanged,
             this, &wxQtTextEdit::textChanged);
+
+    connect(this, &QTextEdit::undoAvailable, [this](bool available) {
+                m_undoAvailable = available;
+            });
+    connect(this, &QTextEdit::redoAvailable, [this](bool available) {
+                m_redoAvailable = available;
+            });
 }
 
 void wxQtTextEdit::textChanged()
@@ -504,6 +567,9 @@ void wxQtTextEdit::textChanged()
     {
         handler->SendTextUpdatedEventIfAllowed();
     }
+
+    if ( !isUndoRedoEnabled() )
+        setUndoRedoEnabled(true);
 }
 
 } // anonymous namespace
@@ -638,6 +704,46 @@ bool wxTextCtrl::DoLoadFile(const wxString& WXUNUSED(file), int WXUNUSED(fileTyp
 bool wxTextCtrl::DoSaveFile(const wxString& WXUNUSED(file), int WXUNUSED(fileType))
 {
     return false;
+}
+
+void wxTextCtrl::Copy()
+{
+    m_qtEdit->Copy();
+}
+
+void wxTextCtrl::Cut()
+{
+    m_qtEdit->Cut();
+}
+
+void wxTextCtrl::Paste()
+{
+    m_qtEdit->Paste();
+}
+
+void wxTextCtrl::Undo()
+{
+    m_qtEdit->Undo();
+}
+
+void wxTextCtrl::Redo()
+{
+    m_qtEdit->Redo();
+}
+
+bool wxTextCtrl::CanUndo() const
+{
+    return m_qtEdit->CanUndo();
+}
+
+bool wxTextCtrl::CanRedo() const
+{
+    return m_qtEdit->CanRedo();
+}
+
+void wxTextCtrl::EmptyUndoBuffer()
+{
+    m_qtEdit->EmptyUndoBuffer();
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
