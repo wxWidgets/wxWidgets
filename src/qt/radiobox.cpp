@@ -26,23 +26,30 @@ public:
 };
 
 
-class wxQtButtonGroup : public wxQtSignalHandler< wxRadioBox >, public QButtonGroup
+class wxQtButtonGroup : public QButtonGroup, public wxQtSignalHandler
 {
 public:
-    wxQtButtonGroup( QGroupBox *parent, wxRadioBox *handler ):
-        wxQtSignalHandler< wxRadioBox >(handler ),
-        QButtonGroup(parent)
+    wxQtButtonGroup( QGroupBox *parent, wxRadioBox *handler )
+        : QButtonGroup(parent),
+          wxQtSignalHandler(handler)
     {
         connect(this,
                 static_cast<void (QButtonGroup::*)(int index)>(&QButtonGroup::buttonClicked),
                 this, &wxQtButtonGroup::buttonClicked);
     }
+
+    wxRadioBox* GetRadioBox() const
+    {
+        return static_cast<wxRadioBox*>(wxQtSignalHandler::GetHandler());
+    }
+
 private:
     void buttonClicked(int index);
 };
 
-void wxQtButtonGroup::buttonClicked(int index) {
-    wxRadioBox *handler = GetHandler();
+void wxQtButtonGroup::buttonClicked(int index)
+{
+    wxRadioBox *handler = GetRadioBox();
     if ( handler )
     {
         wxCommandEvent event( wxEVT_RADIOBOX, handler->GetId() );
