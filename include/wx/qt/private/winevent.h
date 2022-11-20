@@ -22,40 +22,72 @@
 #include <QtWidgets/QGestureEvent>
 #include <QtGui/QCursor>
 
+// redeclare wxEVT_TEXT_ENTER here instead of including "wx/textctrl.h"
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_ENTER, wxCommandEvent);
+
 class QPaintEvent;
 
-template< typename Handler >
+
 class wxQtSignalHandler
 {
 protected:
-    wxQtSignalHandler( Handler *handler )
+    wxQtSignalHandler( wxEvtHandler *handler )
     {
         m_handler = handler;
     }
 
     bool EmitEvent( wxEvent &event ) const
     {
-        wxWindow *handler = GetHandler();
+        // We're only called with the objects of class (or derived from)
+        // wxWindow, so the cast is safe.
+        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
         event.SetEventObject( handler );
         return handler->HandleWindowEvent( event );
     }
 
-    virtual Handler *GetHandler() const
+    virtual wxEvtHandler *GetHandler() const
     {
         return m_handler;
     }
 
+    // A hack for wxQtEventSignalHandler<>::keyPressEvent() handler for the
+    // convenience of wxTextCtrl-like controls to emit the wxEVT_TEXT_ENTER
+    // event if the control has wxTE_PROCESS_ENTER flag.
+    bool HandleKeyPressEvent(QWidget* widget, QKeyEvent* e)
+    {
+        // We're only called with the objects of class (or derived from)
+        // wxWindow, so the cast is safe.
+        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
+
+        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
+        {
+            if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
+            {
+                wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
+                event.SetString( GetValueForProcessEnter() );
+                event.SetEventObject( handler );
+                return handler->HandleWindowEvent( event );
+            }
+        }
+
+        return handler->QtHandleKeyEvent(widget, e);
+    }
+
+    // Controls supporting wxTE_PROCESS_ENTER flag (e.g. wxTextCtrl, wxComboBox and wxSpinCtrl)
+    // should override this to return the control value as string when enter is pressed.
+    virtual wxString GetValueForProcessEnter() { return wxString(); }
+
 private:
-    Handler *m_handler;
+    wxEvtHandler *m_handler;
 };
 
 template < typename Widget, typename Handler >
-class wxQtEventSignalHandler : public Widget, public wxQtSignalHandler< Handler >
+class wxQtEventSignalHandler : public Widget, public wxQtSignalHandler
 {
 public:
     wxQtEventSignalHandler( wxWindow *parent, Handler *handler )
         : Widget( parent != nullptr ? parent->GetHandle() : nullptr )
-        , wxQtSignalHandler< Handler >( handler )
+        , wxQtSignalHandler( handler )
     {
         // Set immediately as it is used to check if wxWindow is alive
         wxWindow::QtStoreWindowPointer( this, handler );
@@ -79,13 +111,8 @@ public:
             return nullptr;
         }
         else
-            return wxQtSignalHandler< Handler >::GetHandler();
+            return static_cast<Handler*>(wxQtSignalHandler::GetHandler());
     }
-
-    // Hack used by wxTextEntry derived classes (by specializing this function)
-    // to toggle the dialog's default button off and on on focus events.
-    // see src/qt/textentry.cpp for the reason.
-    void ToggleDefaultButtonOnFocusEvent() { }
 
 protected:
     /* Not implemented here: wxHelpEvent, wxIdleEvent wxJoystickEvent,
@@ -149,8 +176,6 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        ToggleDefaultButtonOnFocusEvent();
-
         if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusInEvent(event);
         else
@@ -162,8 +187,6 @@ protected:
     {
         if ( !this->GetHandler() )
             return;
-
-        ToggleDefaultButtonOnFocusEvent();
 
         if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusOutEvent(event);
@@ -189,7 +212,7 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
+        if ( !this->HandleKeyPressEvent(this, event) )
             Widget::keyPressEvent(event);
         else
             event->accept();

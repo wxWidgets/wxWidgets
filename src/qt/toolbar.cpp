@@ -53,47 +53,51 @@ public:
     wxQtToolButton* m_qtToolButton;
 };
 
-class wxQtToolButton : public QToolButton, public wxQtSignalHandler< wxToolBarTool >
+class wxQtToolButton : public QToolButton, public wxQtSignalHandler
 {
 
 public:
-    wxQtToolButton(wxToolBar *parent, wxToolBarTool *handler)
-        : QToolButton(parent->GetHandle()),
-          wxQtSignalHandler< wxToolBarTool >( handler ) {
+    wxQtToolButton(wxToolBar *handler, wxToolBarTool *tool)
+        : QToolButton(handler->GetHandle()),
+          wxQtSignalHandler( handler ), m_toolId(tool->GetId())
+    {
         setContextMenuPolicy(Qt::PreventContextMenu);
+    }
+
+    wxToolBarBase* GetToolBar() const
+    {
+        return static_cast<wxToolBarBase*>(wxQtSignalHandler::GetHandler());
     }
 
 private:
     void mouseReleaseEvent( QMouseEvent *event ) override;
     void mousePressEvent( QMouseEvent *event ) override;
     void enterEvent( QEvent *event ) override;
+
+    const wxWindowID m_toolId;
 };
 
 void wxQtToolButton::mouseReleaseEvent( QMouseEvent *event )
 {
     QToolButton::mouseReleaseEvent(event);
-    if (event->button() == Qt::LeftButton) {
-        wxToolBarTool *handler = GetHandler();
-        wxToolBarBase *toolbar = handler->GetToolBar();
-        toolbar->OnLeftClick( handler->GetId(), isCheckable() ? 1 : 0 );
+    if (event->button() == Qt::LeftButton)
+    {
+        GetToolBar()->OnLeftClick( m_toolId, isCheckable() ? 1 : 0 );
     }
 }
 
 void wxQtToolButton::mousePressEvent( QMouseEvent *event )
 {
     QToolButton::mousePressEvent(event);
-    if (event->button() == Qt::RightButton) {
-        wxToolBarTool *handler = GetHandler();
-        wxToolBarBase *toolbar = handler->GetToolBar();
-        toolbar->OnRightClick( handler->GetId(), event->x(), event->y() );
+    if (event->button() == Qt::RightButton)
+    {
+        GetToolBar()->OnRightClick( m_toolId, event->x(), event->y() );
     }
 }
 
 void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
 {
-    wxToolBarTool *handler = GetHandler();
-    wxToolBarBase *toolbar = handler->GetToolBar();
-    toolbar->OnMouseEnter( handler->GetId() );
+    GetToolBar()->OnMouseEnter( m_toolId );
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);

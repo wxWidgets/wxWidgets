@@ -180,7 +180,7 @@ void wxQtInternalScrollBar::sliderReleased()
 }
 
 #if wxUSE_ACCEL || defined( Q_MOC_RUN )
-class wxQtShortcutHandler : public QObject, public wxQtSignalHandler< wxWindowQt >
+class wxQtShortcutHandler : public QObject, public wxQtSignalHandler
 {
 
 public:
@@ -191,7 +191,7 @@ public:
 };
 
 wxQtShortcutHandler::wxQtShortcutHandler( wxWindowQt *window )
-    : wxQtSignalHandler< wxWindowQt >( window )
+    : wxQtSignalHandler( window )
 {
 }
 
@@ -199,7 +199,7 @@ void wxQtShortcutHandler::activated()
 {
     int command = sender()->property("wxQt_Command").toInt();
 
-    GetHandler()->QtHandleShortcut( command );
+    static_cast<wxWindowQt*>(GetHandler())->QtHandleShortcut( command );
 }
 #endif // wxUSE_ACCEL
 

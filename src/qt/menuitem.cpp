@@ -18,19 +18,27 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QMenuBar>
 
-class wxQtAction : public QAction, public wxQtSignalHandler< wxMenuItem >
+class wxQtAction : public QAction, public wxQtSignalHandler
 {
 
 public:
-    wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
-        wxItemKind kind, wxMenu *subMenu, wxMenuItem *handler );
+    wxQtAction( wxMenu *handler, int id, const wxString &text, const wxString &help,
+        wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem );
 
     // Set the action shortcut to correspond to the accelerator specified by
     // the given label.
     void UpdateShortcutsFromLabel(const wxString& text);
 
+    wxMenu* GetMenu() const
+    {
+        return static_cast<wxMenu*>(wxQtSignalHandler::GetHandler());
+    }
+
 private:
     void onActionTriggered( bool checked );
+
+    const wxWindowID m_mitemId;
+    const bool m_isCheckable;
 };
 
 
@@ -140,10 +148,11 @@ QAction *wxMenuItem::GetHandle() const
 
 //=============================================================================
 
-wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
-        wxItemKind kind, wxMenu *subMenu, wxMenuItem *handler )
-    : QAction( wxQtConvertString( text ), parent->GetHandle() ),
-      wxQtSignalHandler< wxMenuItem >( handler )
+wxQtAction::wxQtAction( wxMenu *handler, int id, const wxString &text, const wxString &help,
+        wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem )
+    : QAction( wxQtConvertString( text ), handler->GetHandle() ),
+      wxQtSignalHandler( handler ),
+      m_mitemId(menuItem->GetId()), m_isCheckable(menuItem->IsCheckable())
 {
     setStatusTip( wxQtConvertString( help ));
 
@@ -189,9 +198,6 @@ void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
 
 void wxQtAction::onActionTriggered( bool checked )
 {
-    wxMenuItem *handler = GetHandler();
-    wxMenu *menu = handler->GetMenu();
-    if ( handler->IsCheckable() )
-        handler->Check(checked);
-    menu->SendEvent( handler->GetId(), handler->IsCheckable() ? checked : -1 );
+    GetMenu()->Check(m_mitemId, checked);
+    GetMenu()->SendEvent(m_mitemId, m_isCheckable ? checked : -1 );
 }

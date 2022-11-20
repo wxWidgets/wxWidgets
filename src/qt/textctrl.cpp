@@ -56,14 +56,6 @@ public:
     virtual void EmptyUndoBuffer() = 0;
 };
 
-// specialization
-template<> void
-wxQtEventSignalHandler<QLineEdit, wxTextCtrl>::ToggleDefaultButtonOnFocusEvent()
-{
-    if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )
-        GetHandler()->QtToggleDefaultButton();
-}
-
 namespace
 {
 
@@ -99,15 +91,24 @@ class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 public:
     wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler );
 
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
+
 private:
     void textChanged();
-    void returnPressed();
 };
 
 class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
 {
 public:
     wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
+
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
 
     bool IsUndoAvailable() const { return m_undoAvailable; }
     bool IsRedoAvailable() const { return m_redoAvailable; }
@@ -514,8 +515,6 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
 {
     connect(this, &QLineEdit::textChanged,
             this, &wxQtLineEdit::textChanged);
-    connect(this, &QLineEdit::returnPressed,
-            this, &wxQtLineEdit::returnPressed);
 }
 
 void wxQtLineEdit::textChanged()
@@ -524,25 +523,6 @@ void wxQtLineEdit::textChanged()
     if ( handler )
     {
         handler->SendTextUpdatedEventIfAllowed();
-    }
-}
-
-void wxQtLineEdit::returnPressed()
-{
-    wxTextCtrl *handler = GetHandler();
-    if ( handler )
-    {
-        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
-        {
-            wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
-            event.SetString( handler->GetValue() );
-            if ( !EmitEvent( event ) )
-            {
-                // allow the dialog (if we are child of) to close itself
-                // by forwarding the event to the default button if any.
-                handler->QtToggleDefaultButton();
-            }
-        }
     }
 }
 
