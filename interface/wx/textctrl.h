@@ -1389,8 +1389,9 @@ public:
         Delete the undo history.
 
         Currently only implemented in wxMSW (for controls using wxTE_RICH2
-        style only) and wxOSX (for multiline text controls only), does nothing
-        in the other ports or for the controls not using the appropriate styles.
+        style only), wxOSX and wxQt (for multiline text controls only in both
+        of these ports), does nothing in the other ports or for the controls
+        not using the appropriate styles.
 
         @since 3.1.6
     */
