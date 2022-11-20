@@ -1,0 +1,1 @@
+wxQt: Implement clipboard and undo support in wxTextCtrl (AliKet, #22973).
