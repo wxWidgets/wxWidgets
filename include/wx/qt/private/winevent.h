@@ -28,23 +28,24 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_ENTER, wxCommandEvent);
 class QPaintEvent;
 
 
-template< typename Handler >
 class wxQtSignalHandler
 {
 protected:
-    wxQtSignalHandler( Handler *handler )
+    wxQtSignalHandler( wxEvtHandler *handler )
     {
         m_handler = handler;
     }
 
     bool EmitEvent( wxEvent &event ) const
     {
-        wxWindow *handler = GetHandler();
+        // We're only called with the objects of class (or derived from)
+        // wxWindow, so the cast is safe.
+        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
         event.SetEventObject( handler );
         return handler->HandleWindowEvent( event );
     }
 
-    virtual Handler *GetHandler() const
+    virtual wxEvtHandler *GetHandler() const
     {
         return m_handler;
     }
@@ -54,20 +55,22 @@ protected:
     // event if the control has wxTE_PROCESS_ENTER flag.
     bool HandleKeyPressEvent(QWidget* widget, QKeyEvent* e)
     {
-        Handler* const handler = this->GetHandler();
+        // We're only called with the objects of class (or derived from)
+        // wxWindow, so the cast is safe.
+        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
 
         if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
         {
             if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
             {
                 wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
-                event.SetString( this->GetValueForProcessEnter() );
+                event.SetString( GetValueForProcessEnter() );
                 event.SetEventObject( handler );
                 return handler->HandleWindowEvent( event );
             }
         }
 
-        return this->GetHandler()->QtHandleKeyEvent(widget, e);
+        return handler->QtHandleKeyEvent(widget, e);
     }
 
     // Controls supporting wxTE_PROCESS_ENTER flag (e.g. wxTextCtrl, wxComboBox and wxSpinCtrl)
@@ -75,16 +78,16 @@ protected:
     virtual wxString GetValueForProcessEnter() { return wxString(); }
 
 private:
-    Handler *m_handler;
+    wxEvtHandler *m_handler;
 };
 
 template < typename Widget, typename Handler >
-class wxQtEventSignalHandler : public Widget, public wxQtSignalHandler< Handler >
+class wxQtEventSignalHandler : public Widget, public wxQtSignalHandler
 {
 public:
     wxQtEventSignalHandler( wxWindow *parent, Handler *handler )
         : Widget( parent != nullptr ? parent->GetHandle() : nullptr )
-        , wxQtSignalHandler< Handler >( handler )
+        , wxQtSignalHandler( handler )
     {
         // Set immediately as it is used to check if wxWindow is alive
         wxWindow::QtStoreWindowPointer( this, handler );
@@ -108,7 +111,7 @@ public:
             return nullptr;
         }
         else
-            return wxQtSignalHandler< Handler >::GetHandler();
+            return static_cast<Handler*>(wxQtSignalHandler::GetHandler());
     }
 
 protected:
