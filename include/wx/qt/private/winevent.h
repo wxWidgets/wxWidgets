@@ -51,10 +51,10 @@ protected:
 
     // A hack for wxQtEventSignalHandler<>::keyPressEvent() handler for the
     // convenience of wxTextCtrl-like controls to emit the wxEVT_TEXT_ENTER
-    // event. i.e: if the control has wxTE_PROCESS_ENTER flag.
-    bool ProcessTextEnter(QKeyEvent* e)
+    // event if the control has wxTE_PROCESS_ENTER flag.
+    bool HandleKeyPressEvent(QWidget* widget, QKeyEvent* e)
     {
-        Handler* const handler = GetHandler();
+        Handler* const handler = this->GetHandler();
 
         if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
         {
@@ -67,7 +67,7 @@ protected:
             }
         }
 
-        return false;
+        return this->GetHandler()->QtHandleKeyEvent(widget, e);
     }
 
     // Controls supporting wxTE_PROCESS_ENTER flag (e.g. wxTextCtrl, wxComboBox and wxSpinCtrl)
@@ -209,8 +209,7 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        if ( !this->ProcessTextEnter(event) &&
-             !this->GetHandler()->QtHandleKeyEvent(this, event) )
+        if ( !this->HandleKeyPressEvent(this, event) )
             Widget::keyPressEvent(event);
         else
             event->accept();
