@@ -653,31 +653,9 @@ wxString wxFormatString::InputAsString() const
 namespace
 {
 
-template<typename CharType>
-wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
-                                               unsigned n)
+wxFormatString::ArgumentType ArgTypeFromParamType(wxPrintfArgType type)
 {
-    wxCHECK_MSG( format, wxFormatString::Arg_Unknown,
-                 "empty format string not allowed here" );
-
-    wxPrintfConvSpecParser<CharType> parser(format);
-
-    if ( n > parser.nargs )
-    {
-        // The n-th argument doesn't appear in the format string and is unused.
-        // This can happen e.g. if a translation of the format string is used
-        // and the translation language tends to avoid numbers in singular forms.
-        // The translator would then typically replace "%d" with "One" (e.g. in
-        // Hebrew). Passing too many vararg arguments does not harm, so its
-        // better to be more permissive here and allow legitimate uses in favour
-        // of catching harmless errors.
-        return wxFormatString::Arg_Unused;
-    }
-
-    wxCHECK_MSG( parser.pspec[n-1] != nullptr, wxFormatString::Arg_Unknown,
-                 "requested argument not found - invalid format string?" );
-
-    switch ( parser.pspec[n-1]->m_type )
+    switch ( type )
     {
         case wxPAT_CHAR:
         case wxPAT_WCHAR:
@@ -725,6 +703,33 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
     // silence warning
     wxFAIL_MSG( "unexpected argument type" );
     return wxFormatString::Arg_Unknown;
+}
+
+template<typename CharType>
+wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
+                                               unsigned n)
+{
+    wxCHECK_MSG( format, wxFormatString::Arg_Unknown,
+                 "empty format string not allowed here" );
+
+    wxPrintfConvSpecParser<CharType> parser(format);
+
+    if ( n > parser.nargs )
+    {
+        // The n-th argument doesn't appear in the format string and is unused.
+        // This can happen e.g. if a translation of the format string is used
+        // and the translation language tends to avoid numbers in singular forms.
+        // The translator would then typically replace "%d" with "One" (e.g. in
+        // Hebrew). Passing too many vararg arguments does not harm, so its
+        // better to be more permissive here and allow legitimate uses in favour
+        // of catching harmless errors.
+        return wxFormatString::Arg_Unused;
+    }
+
+    wxCHECK_MSG( parser.pspec[n-1] != nullptr, wxFormatString::Arg_Unknown,
+                 "requested argument not found - invalid format string?" );
+
+    return ArgTypeFromParamType(parser.pspec[n-1]->m_type);
 }
 
 } // anonymous namespace
