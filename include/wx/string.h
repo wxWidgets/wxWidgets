@@ -43,7 +43,6 @@
 
 #include "wx/beforestd.h"
 #include <string>
-#include <tuple>
 #include <utility>
 #include "wx/afterstd.h"
 
@@ -2198,13 +2197,20 @@ public:
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
   template <typename... Targs>
-  int Printf(const wxString& format, Targs... args)
+  int Printf(const wxFormatString& format, Targs... args)
   {
-      // Package the arguments into a tuple to pass them on together with the
-      // indices that are needed by the implementation.
-      return DoPrintf(format,
-                      std::make_tuple(args...),
-                      std::index_sequence_for<Targs...>{});
+    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+
+#if wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+      if ( wxLocaleIsUtf8 )
+    #endif
+        return DoPrintfUtf8(format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+      return DoPrintfWchar(format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+#endif // !wxUSE_UTF8_LOCALE_ONLY
   }
 
     // as vprintf(), returns the number of characters written or < 0 on error
@@ -3386,31 +3392,6 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
-  template <typename ArgsTuple, std::size_t... Ns>
-  int DoPrintf(const wxFormatString& format,
-               const ArgsTuple& args,
-               std::index_sequence<Ns...>)
-  {
-#if wxUSE_UNICODE_UTF8
-    #if !wxUSE_UTF8_LOCALE_ONLY
-      if ( wxLocaleIsUtf8 )
-    #endif
-        return DoPrintfUtf8
-               (
-                 format,
-                 wxNormalizeArgUtf8(std::get<Ns>(args), &format, Ns).get()...
-               );
-#endif // wxUSE_UNICODE_UTF8
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-      return DoPrintfWchar
-             (
-                format,
-                wxNormalizeArgWchar(std::get<Ns>(args), &format, Ns).get()...
-             );
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-  }
-
   #if !wxUSE_UTF8_LOCALE_ONLY
   int DoPrintfWchar(const wxChar *format, ...);
   #endif

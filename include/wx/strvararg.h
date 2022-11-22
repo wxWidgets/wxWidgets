@@ -20,6 +20,7 @@
 
 #include <string>
 #include <type_traits>
+#include <vector>
 
 #ifdef __cpp_lib_string_view
     #include <string_view>
@@ -195,6 +196,10 @@ public:
         Arg_Unknown     = 0x8000     // unrecognized specifier (likely error)
     };
 
+    // Validate all format string parameters at once: the vector contains the
+    // format specifiers corresponding to the actually given arguments.
+    void Validate(const std::vector<int>& argTypes) const;
+
     // returns the type of format specifier for n-th variadic argument (this is
     // not necessarily n-th format specifier if positional specifiers are used);
     // called by wxArgNormalizer<> specializations to get information about
@@ -335,6 +340,13 @@ struct wxFormatStringArgumentFinder<wxWCharBuffer>
     #define wxASSERT_ARG_TYPE(fmt, index, expected_mask)                      \
         wxUnusedVar(fmt);                                                     \
         wxUnusedVar(index)
+
+    // Also provide a trivial implementation of Validate() doing nothing in
+    // this case.
+    inline void
+    wxFormatString::Validate(const std::vector<int>& WXUNUSED(argTypes)) const
+    {
+    }
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
 
@@ -459,6 +471,10 @@ struct wxArgNormalizer
     // to printf-like format string or nullptr if the variadic function doesn't
     // use format string and 'index' is index of 'value' in variadic arguments
     // list (starting at 1)
+    //
+    // Because the format string and index are used for checking for the format
+    // specifier mismatches and can be nullptr and 0, respectively, if they had
+    // been already checked using wxFormatString::Validate().
     wxArgNormalizer(T value,
                     const wxFormatString *fmt, unsigned index)
         : m_value(value)
@@ -485,17 +501,6 @@ struct wxArgNormalizerWchar : public wxArgNormalizer<T>
         : wxArgNormalizer<T>(value, fmt, index) {}
 };
 
-// Helper function for creating a wxArgNormalizerWchar<T> with type deduced
-// from the type of the argument.
-//
-// NB: Unlike the class ctor, which uses 1-based indices, it takes 0-based
-//     index which makes it more convenient to use in pack expansions.
-template<typename T>
-wxArgNormalizerWchar<T>
-wxNormalizeArgWchar(T value, const wxFormatString *fmt, unsigned indexFrom0)
-{
-    return wxArgNormalizerWchar<T>(value, fmt, indexFrom0 + 1);
-}
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 // normalizer for passing arguments to functions working with UTF-8 encoded
@@ -508,14 +513,6 @@ wxNormalizeArgWchar(T value, const wxFormatString *fmt, unsigned indexFrom0)
                             const wxFormatString *fmt, unsigned index)
             : wxArgNormalizer<T>(value, fmt, index) {}
     };
-
-    // Same type-deducing helper as above, but for wxArgNormalizerUtf8<T>
-    template<typename T>
-    wxArgNormalizerUtf8<T>
-    wxNormalizeArgUtf8(T value, const wxFormatString *fmt, unsigned indexFrom0)
-    {
-        return wxArgNormalizerUtf8<T>(value, fmt, indexFrom0 + 1);
-    }
 
     #define wxArgNormalizerNative wxArgNormalizerUtf8
 #else // wxUSE_UNICODE_WCHAR
