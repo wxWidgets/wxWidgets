@@ -2212,7 +2212,7 @@ public:
 
     // returns the string containing the result of Printf() to it
   template <typename... Targs>
-  static wxString Format(const wxString& format, Targs... args)
+  static wxString Format(const wxFormatString& format, Targs... args)
   {
       wxString s;
       s.Printf(format, args...);
@@ -2241,7 +2241,7 @@ public:
 
   // use Printf()
   template <typename... Targs>
-  int sprintf(const wxString& format, Targs... args)
+  int sprintf(const wxFormatString& format, Targs... args)
   {
       return Printf(format, args...);
   }
