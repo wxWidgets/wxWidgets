@@ -7,6 +7,17 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+    This header contains helpers for implementing printf-like functions in
+    wxWidgets as well as legacy WX_DEFINE_VARARG_FUNC macros that are not used
+    by wxWidgets itself any more, but are preserved here as they can be used in
+    the application code (even if they had never been part of documented API).
+
+    The only non-deprecated parts of this header are wxFormatString class and
+    wxFormatStringSpecifier and wxArgNormalizer templates, which are used by
+    wxWidgets itself.
+ */
+
 #ifndef _WX_STRVARARG_H_
 #define _WX_STRVARARG_H_
 
