@@ -384,6 +384,9 @@ struct wxFormatStringSpecifier<const T*>
     };
 
 wxFORMAT_STRING_SPECIFIER(bool, wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(signed char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(unsigned char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
 wxFORMAT_STRING_SPECIFIER(int, wxFormatString::Arg_Int)
 wxFORMAT_STRING_SPECIFIER(unsigned int, wxFormatString::Arg_Int)
 wxFORMAT_STRING_SPECIFIER(short int, wxFormatString::Arg_Int)
@@ -401,6 +404,8 @@ wxFORMAT_STRING_SPECIFIER(long double, wxFormatString::Arg_LongDouble)
 #if wxWCHAR_T_IS_REAL_TYPE
 wxFORMAT_STRING_SPECIFIER(wchar_t, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
 #endif
+wxFORMAT_STRING_SPECIFIER(wxUniChar, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(wxUniCharRef, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
 
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String)
@@ -409,6 +414,12 @@ wxFORMAT_STRING_SPECIFIER(signed char*, wxFormatString::Arg_String)
 wxFORMAT_STRING_SPECIFIER(const char*, wxFormatString::Arg_String)
 wxFORMAT_STRING_SPECIFIER(const unsigned char*, wxFormatString::Arg_String)
 wxFORMAT_STRING_SPECIFIER(const signed char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(wxCharBuffer, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(wxScopedCharBuffer, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(std::string, wxFormatString::Arg_String)
+#ifdef __cpp_lib_string_view
+wxFORMAT_STRING_SPECIFIER(std::string_view, wxFormatString::Arg_String)
+#endif
 #else // wxNO_IMPLICIT_WXSTRING_ENCODING
 wxDISABLED_FORMAT_STRING_SPECIFIER(char*)
 wxDISABLED_FORMAT_STRING_SPECIFIER(unsigned char*)
@@ -419,6 +430,12 @@ wxDISABLED_FORMAT_STRING_SPECIFIER(const signed char*)
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 wxFORMAT_STRING_SPECIFIER(wchar_t*, wxFormatString::Arg_String)
 wxFORMAT_STRING_SPECIFIER(const wchar_t*, wxFormatString::Arg_String)
+
+wxFORMAT_STRING_SPECIFIER(wxWCharBuffer, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(wxScopedWCharBuffer, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(wxString, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(wxCStrData, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(std::wstring, wxFormatString::Arg_String)
 
 wxFORMAT_STRING_SPECIFIER(int*, wxFormatString::Arg_IntPtr | wxFormatString::Arg_Pointer)
 wxFORMAT_STRING_SPECIFIER(short int*, wxFormatString::Arg_ShortIntPtr | wxFormatString::Arg_Pointer)

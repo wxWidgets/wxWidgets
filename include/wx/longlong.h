@@ -1112,6 +1112,12 @@ namespace std
 #include "wx/strvararg.h"
 
 template<>
+struct wxFormatStringSpecifier<wxLongLong>
+{
+    enum { value = wxFormatString::Arg_LongLongInt };
+};
+
+template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<wxLongLong>
 {
      wxArgNormalizer(wxLongLong value,
