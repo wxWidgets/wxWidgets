@@ -90,7 +90,7 @@ jobs:
             if git diff origin/master \
                ':!.github/workflows/code_checks.yml' \
                ':!src/stc/scintilla/' \
-               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|\WNULL)'; then
+               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^_@]NULL)'; then
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1
             fi
