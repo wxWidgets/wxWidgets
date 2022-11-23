@@ -109,15 +109,15 @@ public:
 
 // macro to use for the functions which are supposed to fail an assertion
 #if wxDEBUG_LEVEL
-    // some old cppunit versions don't define CPPUNIT_ASSERT_THROW so roll our
-    // own
     #define WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE(msg, code) \
         wxSTATEMENT_MACRO_BEGIN \
             bool throwsAssert = false; \
             try { code ; } \
             catch ( const TestAssertFailure& ) { throwsAssert = true; } \
-            if ( !throwsAssert ) \
-                CPPUNIT_FAIL(msg); \
+            if ( throwsAssert ) \
+                SUCCEED("assert triggered"); \
+            else \
+                FAIL_CHECK(msg); \
         wxSTATEMENT_MACRO_END
 
     #define WX_ASSERT_FAILS_WITH_ASSERT(code) \
