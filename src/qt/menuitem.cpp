@@ -26,7 +26,10 @@ public:
         wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem );
 
     // Set the action shortcut to correspond to the accelerator specified by
-    // the given label.
+    // the given label. They set the primary shortcut the first time they are
+    // called, and set additional shortcuts/accels for subsequent calls. if
+    // text is empty, any axtra accelerators will be removed.
+    void UpdateShortcuts(const wxString& text);
     void UpdateShortcutsFromLabel(const wxString& text);
 
     wxMenu* GetMenu() const
@@ -147,6 +150,22 @@ QAction *wxMenuItem::GetHandle() const
     return m_qtAction;
 }
 
+#if wxUSE_ACCEL
+void wxMenuItem::AddExtraAccel(const wxAcceleratorEntry& accel)
+{
+    wxMenuItemBase::AddExtraAccel(accel);
+
+    m_qtAction->UpdateShortcuts( accel.ToRawString() );
+}
+
+void wxMenuItem::ClearExtraAccels()
+{
+    wxMenuItemBase::ClearExtraAccels();
+
+    m_qtAction->UpdateShortcuts( wxString() );
+}
+#endif // wxUSE_ACCEL
+
 //=============================================================================
 
 wxQtAction::wxQtAction( wxMenu *handler, int id, const wxString &text, const wxString &help,
@@ -193,9 +212,48 @@ void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
     const wxString accelStr = text.AfterFirst('\t');
     if ( !accelStr.empty() )
     {
-        setShortcut(  QKeySequence( wxQtConvertString(accelStr) ) );
+        UpdateShortcuts(accelStr);
     }
+#else
+    wxUnusedVar(text);
 #endif // wxUSE_ACCEL
+}
+
+void wxQtAction::UpdateShortcuts(const wxString& text)
+{
+#if wxUSE_ACCEL
+    QList<QKeySequence> shortcuts = this->shortcuts();
+
+    if ( text.empty() )
+    {
+        if ( shortcuts.size() > 1 )
+        {
+            // Keep the primary shortcut only and get rid of the rest
+            setShortcut( shortcuts.first() );
+        }
+    }
+    else
+    {
+        QKeySequence keySequence = QKeySequence( wxQtConvertString( text ) );
+
+        if ( !shortcuts.contains(keySequence) )
+        {
+            shortcuts.push_back(keySequence);
+            setShortcuts( shortcuts );
+        }
+    }
+#else
+    wxUnusedVar(text);
+#endif // wxUSE_ACCEL
+}
+
+void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
+{
+    const wxString accelStr = text.AfterFirst('\t');
+    if ( !accelStr.empty() )
+    {
+        UpdateShortcuts(accelStr);
+    }
 }
 
 void wxQtAction::onActionToggled( bool checked )

@@ -40,6 +40,12 @@ public:
     virtual QAction *GetHandle() const;
 
     virtual void SetFont(const wxFont& font);
+
+#if wxUSE_ACCEL
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) override;
+    virtual void ClearExtraAccels() override;
+#endif // wxUSE_ACCEL
+
 private:
     // Qt is using an action instead of a menu item.
     wxQtAction *m_qtAction;
