@@ -37,6 +37,14 @@ public:
         return static_cast<wxMenu*>(wxQtSignalHandler::GetHandler());
     }
 
+    // Convert hyphenated shortcuts to use the plus sign (+) which Qt understands.
+    static wxString Normalize(const wxString& text)
+    {
+        QString normalized = wxQtConvertString( text );
+        normalized.replace(QRegExp("([^+-])[-]"), "\\1+");
+        return wxQtConvertString( normalized );
+    }
+
 private:
     void onActionToggled( bool checked );
     void onActionTriggered( bool checked );
@@ -58,18 +66,22 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
         const wxString& help, wxItemKind kind, wxMenu *subMenu)
     : wxMenuItemBase( parentMenu, id, text, help, kind, subMenu )
 {
-    m_qtAction = new wxQtAction( parentMenu, id, text, help, kind, subMenu, this );
+    m_qtAction = new wxQtAction( parentMenu, id,
+                                 wxQtAction::Normalize( text ),
+                                 help, kind, subMenu, this );
 }
 
 
 
 void wxMenuItem::SetItemLabel( const wxString &label )
 {
-    wxMenuItemBase::SetItemLabel( label );
+    const wxString qtlabel = wxQtAction::Normalize( label );
 
-    m_qtAction->UpdateShortcutsFromLabel( label );
+    wxMenuItemBase::SetItemLabel( qtlabel );
 
-    m_qtAction->setText( wxQtConvertString( label ));
+    m_qtAction->UpdateShortcutsFromLabel( qtlabel );
+
+    m_qtAction->setText( wxQtConvertString( qtlabel ));
 }
 
 
@@ -245,15 +257,6 @@ void wxQtAction::UpdateShortcuts(const wxString& text)
 #else
     wxUnusedVar(text);
 #endif // wxUSE_ACCEL
-}
-
-void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
-{
-    const wxString accelStr = text.AfterFirst('\t');
-    if ( !accelStr.empty() )
-    {
-        UpdateShortcuts(accelStr);
-    }
 }
 
 void wxQtAction::onActionToggled( bool checked )
