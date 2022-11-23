@@ -35,6 +35,7 @@ public:
     }
 
 private:
+    void onActionToggled( bool checked );
     void onActionTriggered( bool checked );
 
     const wxWindowID m_mitemId;
@@ -180,6 +181,7 @@ wxQtAction::wxQtAction( wxMenu *handler, int id, const wxString &text, const wxS
             break;
     }
 
+    connect( this, &QAction::toggled, this, &wxQtAction::onActionToggled );
     connect( this, &QAction::triggered, this, &wxQtAction::onActionTriggered );
 
     UpdateShortcutsFromLabel( text );
@@ -196,8 +198,12 @@ void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
 #endif // wxUSE_ACCEL
 }
 
-void wxQtAction::onActionTriggered( bool checked )
+void wxQtAction::onActionToggled( bool checked )
 {
     GetMenu()->Check(m_mitemId, checked);
+}
+
+void wxQtAction::onActionTriggered( bool checked )
+{
     GetMenu()->SendEvent(m_mitemId, m_isCheckable ? checked : -1 );
 }
