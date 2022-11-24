@@ -81,19 +81,6 @@ bool wxSlider::Create(wxWindow *parent,
     SetRange( minValue, maxValue );
     SetPageSize(wxMax(1, (maxValue - minValue) / 10));
 
-#if 0 // there are not normally ticks for a wxSlider
-    // draw ticks marks (default bellow if horizontal, right if vertical):
-    if ( style & wxSL_VERTICAL )
-    {
-        m_qtSlider->setTickPosition( style & wxSL_LEFT ? QSlider::TicksLeft :
-                                                         QSlider::TicksRight );
-    }
-    else // horizontal slider
-    {
-        m_qtSlider->setTickPosition( style & wxSL_TOP ? QSlider::TicksAbove :
-                                                        QSlider::TicksBelow );
-    }
-#endif
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
