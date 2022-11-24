@@ -65,7 +65,7 @@ wxSlider::wxSlider(wxWindow *parent,
 
 bool wxSlider::Create(wxWindow *parent,
             wxWindowID id,
-            int WXUNUSED(value), int minValue, int maxValue,
+            int value, int minValue, int maxValue,
             const wxPoint& pos,
             const wxSize& size,
             long style,
@@ -79,6 +79,7 @@ bool wxSlider::Create(wxWindow *parent,
 
     wxQtEnsureSignalsBlocked blocker(m_qtSlider);
     SetRange( minValue, maxValue );
+    SetValue( value );
     SetPageSize(wxMax(1, (maxValue - minValue) / 10));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
