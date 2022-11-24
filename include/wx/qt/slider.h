@@ -39,7 +39,6 @@ public:
     virtual int GetMin() const override;
     virtual int GetMax() const override;
 
-    virtual void DoSetTickFreq(int freq) override;
     virtual int GetTickFreq() const override;
 
     virtual void SetLineSize(int lineSize) override;
@@ -51,6 +50,9 @@ public:
     virtual int GetThumbLength() const override;
 
     virtual QWidget *GetHandle() const override;
+
+protected:
+    virtual void DoSetTickFreq(int freq) override;
 
 private:
     QSlider *m_qtSlider;
