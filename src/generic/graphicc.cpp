@@ -530,7 +530,10 @@ protected:
 #ifdef __WXMSW__
     static wxPoint MSWAdjustHdcOrigin(HDC hdc);
 #endif // __WXMSW__
-
+#ifdef __WXMAC__
+    static wxPoint MacAdjustCgContextOrigin(CGContextRef cg);
+#endif // __WXMAC__
+    
 #ifdef __WXQT__
     QPainter* m_qtPainter;
     QImage* m_qtImage;
@@ -581,6 +584,10 @@ protected:
 #endif // __WXGTK3__
 #endif // __WXGTK__
 
+#ifdef __WXMAC__
+    CGContextRef m_cgContext;
+#endif // __WXMAC__
+    
 private:
     cairo_t* m_context;
     cairo_matrix_t m_internalTransform;
@@ -2056,8 +2063,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     if ( cr )
         Init(cairo_reference(cr), true);
 #elif defined(__WXMAC__)
-    CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
-    cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
+    m_cgContext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
+    CGContextSaveGState(m_cgContext);
+    // Cairo surface works properly if origin of the clipping region of CGContext is (0,0)
+    // so if it's not the cae we need to move it to (0,0) and apply corrective offset to the device coordinates.
+    wxPoint surfOffs = MacAdjustCgContextOrigin(m_cgContext);
+    cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(m_cgContext, width, height);
+    cairo_surface_set_device_offset(surface, surfOffs.x, surfOffs.y);
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
 #endif
@@ -2258,8 +2270,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXMAC__
-    CGContextRef cgcontext = (CGContextRef)dc.GetGraphicsContext()->GetNativeContext();
-    cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
+    m_cgContext = (CGContextRef)dc.GetGraphicsContext()->GetNativeContext();
+    CGContextSaveGState(m_cgContext);
+    // Cairo surface works properly if origin of the clipping region of CGContext is (0,0)
+    // so if it's not the cae we need to move it to (0,0) and apply corrective offset to the device coordinates.
+    wxPoint surfOffs = MacAdjustCgContextOrigin(m_cgContext);
+    cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(m_cgContext, width, height);
+    cairo_surface_set_device_offset(surface, surfOffs.x, surfOffs.y);
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
 #endif
@@ -2383,6 +2400,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
     m_mswSurface = nullptr;
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
+#ifdef __WXMAC__
+    m_cgContext = nullptr;
+#endif // __WXMAC__
+    
     Init( cairo_reference(context), true );
     m_width = 0;
     m_height = 0;
@@ -2425,6 +2446,10 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     m_height = sz.y;
 #endif //  __WXMSW__
 
+#ifdef __WXMAC__
+    m_cgContext = nullptr;
+#endif // __WXMAC__
+
 #ifdef __WXQT__
     // direct m_qtSurface is not being used yet (this needs cairo qt surface)
 #endif
@@ -2442,6 +2467,9 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     m_mswSurface = nullptr;
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
+#ifdef __WXMAC__
+    m_cgContext = nullptr;
+#endif // __WXMAC__
     Init(nullptr);
     m_width = 0;
     m_height = 0;
@@ -2466,6 +2494,12 @@ wxCairoContext::~wxCairoContext()
             ::RestoreDC(hdc, m_mswStateSavedDC);
     }
 #endif
+#ifdef __WXMAC__
+    if ( m_cgContext != nullptr )
+    {
+        CGContextRestoreGState(m_cgContext);
+    }
+#endif // __WXMAC__
 #ifdef __WXQT__
     if ( m_qtPainter != nullptr )
     {
@@ -2591,6 +2625,21 @@ wxPoint wxCairoContext::MSWAdjustHdcOrigin(HDC hdc)
     return offs;
 }
 #endif // __WXMSW__
+
+#ifdef __WXMAC__
+/* static */
+wxPoint wxCairoContext::MacAdjustCgContextOrigin(CGContextRef cg)
+{
+    // Cairo surface works properly if origin of the clipping region of CGContext is (0,0)
+    // so if it's not the case we need to apply a transformation to move it to (0,0).
+    // This shift needs to be applied as an offset added to the device coordinates when drawing to surface.
+
+    CGRect clip = CGContextGetClipBoundingBox(cg);
+    CGAffineTransform cgTransform = CGAffineTransformMake(1, 0, 0, 1, clip.origin.x, clip.origin.y);
+    CGContextConcatCTM(cg, cgTransform);
+    return wxPoint(-clip.origin.x, -clip.origin.y);
+}
+#endif // __WXMAC__
 
 void wxCairoContext::Clip( const wxRegion& region )
 {
