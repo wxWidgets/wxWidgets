@@ -32,16 +32,26 @@ void QtStartNewGroup(QRadioButton* qtRadioButton)
     // parent // QRadioButton is destroyed.
     QButtonGroup* qtButtonGroup = new QButtonGroup(qtRadioButton);
     qtButtonGroup->addButton(qtRadioButton);
+
+    // From QButtonGroup documentation:
+    // If you create an exclusive button group, you should ensure that one of
+    // the buttons in the group is initially checked; otherwise, the group will
+    // initially be in a state where no buttons are checked.
+
+    qtRadioButton->setChecked(true);
 }
 
 bool QtTryJoiningExistingGroup(wxRadioButton* radioBtnThis)
 {
+    bool checkRadioBtn = true;
+
     for ( wxWindow* previous = radioBtnThis->GetPrevSibling();
           previous;
           previous = previous->GetPrevSibling() )
     {
         if ( wxRadioButton* radioBtn = wxDynamicCast(previous, wxRadioButton) )
         {
+            checkRadioBtn = false;
             // We should never join the exclusive group of wxRB_SINGLE button.
             if ( !radioBtn->HasFlag(wxRB_SINGLE) )
             {
@@ -55,6 +65,11 @@ bool QtTryJoiningExistingGroup(wxRadioButton* radioBtnThis)
             break;
         }
     }
+
+    // Make sure radioBtnThis will be initially checked if there is no group
+    // to add it to.
+    if ( checkRadioBtn )
+        radioBtnThis->SetValue(true);
 
     return false;
 }
