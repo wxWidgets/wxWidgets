@@ -165,6 +165,10 @@ bool wxSlider::Create(wxWindow *parent,
 
     m_qtSlider->setInvertedAppearance( style & wxSL_INVERSE );
 
+    // For compatibility with the other ports, pressing PageUp should move value
+    // towards the slider's minimum.
+    m_qtSlider->setInvertedControls(true);
+
     wxQtEnsureSignalsBlocked blocker(m_qtSlider);
     SetRange( minValue, maxValue );
     SetValue( value );
