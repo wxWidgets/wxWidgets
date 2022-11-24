@@ -527,6 +527,9 @@ protected:
 
     enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin, Apply_scaled_dev_origin_only };
     void ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mode = Apply_directly);
+#ifdef __WXMSW__
+    static wxPoint MSWAdjustHdcOrigin(HDC hdc);
+#endif // __WXMSW__
 
 #ifdef __WXQT__
     QPainter* m_qtPainter;
@@ -2023,9 +2026,13 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #ifdef __WXMSW__
     HDC hdc = (HDC)dc.GetHDC();
     m_mswStateSavedDC = ::SaveDC(hdc);
+    // Cairo doesn't work with HDC having negative x- or y-coordinate of the origin of the clipping region
+    // so in such case we need to convert the origin to the offset added the device coordinates.
+    wxPoint surfOffs = MSWAdjustHdcOrigin(hdc);
     m_mswSurface = cairo_win32_surface_create(hdc);
+    cairo_surface_set_device_offset(m_mswSurface, surfOffs.x, surfOffs.y);
     Init( cairo_create(m_mswSurface) );
-    // We don't set HDC origin at MSW level in wxDC because this limits it to
+    // We don't set dev origin at MSW HDC level in wxDC because this limits it to
     // 2^27 range and we prefer to handle it ourselves to allow using the full
     // 2^32 range of int coordinates, but we need to let Cairo know about the
     // origin shift by storing it as an internal transformation
@@ -2194,27 +2201,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     // Fallback if Cairo surface hasn't been created from bitmap data.
     if( !hasBitmap )
     {
-        // When x- or y-coordinate of DC origin > 0 then surface
-        // created from DC is not fully operational (for some Cairo
-        // operations memory access violation errors occur - see Cairo
-        // bug 96482) so in this case we would need to pass non-transformed
-        // DC to Cairo and to apply original DC transformation to the Cairo
-        // context operations on our own.
-        // Bug 96482 was fixed in Cairo 1.15.12 so this workaround needs
-        // to be applied only for older Cairo versions.
-        if ( cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 12) )
-        {
-            wxCoord orgX, orgY;
-            dc.GetDeviceOrigin(&orgX, &orgY);
-            if ( orgX > 0 || orgY > 0 )
-            {
-                ::SetViewportOrgEx(hdc, 0, 0, nullptr);
-                ::SetViewportExtEx(hdc, 1, 1, nullptr);
-                ::SetWindowOrgEx(hdc, 0, 0, nullptr);
-                ::SetWindowExtEx(hdc, 1, 1, nullptr);
-                adjustTransformFromDC = true;
-            }
-        }
+        // Cairo doesn't work with HDC having negative x- or y-coordinate of the origin of the clipping region
+        // so in such case we need to convert the origin to the offset added the device coordinates.
+        wxPoint surfOffs = MSWAdjustHdcOrigin(hdc);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
         if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 15, 4) )
@@ -2229,6 +2218,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         }
         wxASSERT_MSG( cairo_surface_status(m_mswSurface) == CAIRO_STATUS_SUCCESS,
                       wxS("wxCairoContext ctor - Error creating Cairo surface") );
+        cairo_surface_set_device_offset(m_mswSurface, surfOffs.x, surfOffs.y);
     }
 
     Init( cairo_create(m_mswSurface) );
@@ -2336,53 +2326,12 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 {
     m_mswStateSavedDC = ::SaveDC(handle);
 
-    bool adjustTransformFromDC = false; // To signal that we have to transfer
-                                        // transformation settings from source
-                                        // wxDC to Cairo context on our own.
-    cairo_matrix_t dcTransform;
-    cairo_matrix_init_identity(&dcTransform);
-    // When x- or y-coordinate of DC origin > 0 then surface
-    // created from DC is not fully operational (for some Cairo
-    // operations memory access violation errors occur - see Cairo
-    // bug 96482) so in this case we would need to pass non-transformed
-    // DC to Cairo and to apply original DC transformation to the Cairo
-    // context operations on our own.
-    if ( cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 12) )
-    {
-        POINT devOrg;
-        ::GetViewportOrgEx(handle, &devOrg);
-        if ( devOrg.x > 0 || devOrg.y > 0 )
-        {
-            SIZE devExt;
-            ::GetViewportExtEx(handle, &devExt);
-            POINT logOrg;
-            ::GetWindowOrgEx(handle, &logOrg);
-            SIZE logExt;
-            ::GetWindowExtEx(handle, &logExt);
-
-            double sx = (double)devExt.cx / logExt.cx;
-            double sy = (double)devExt.cy / logExt.cy;
-
-            cairo_matrix_translate(&dcTransform, devOrg.x, devOrg.y);
-            cairo_matrix_scale(&dcTransform, sx, sy);
-            cairo_matrix_translate(&dcTransform, -logOrg.x, -logOrg.y);
-
-            ::SetViewportOrgEx(handle, 0, 0, nullptr);
-            ::SetViewportExtEx(handle, 1, 1, nullptr);
-            ::SetWindowOrgEx(handle, 0, 0, nullptr);
-            ::SetWindowExtEx(handle, 1, 1, nullptr);
-
-            adjustTransformFromDC = true;
-        }
-    }
+    // Cairo doesn't work with HDC having negative x- or y-coordinate of the origin of the clipping region
+    // so in such case we need to convert the origin to the offset added the device coordinates.
+    wxPoint surfOffs = MSWAdjustHdcOrigin(handle);
     m_mswSurface = cairo_win32_surface_create(handle);
+    cairo_surface_set_device_offset(m_mswSurface, surfOffs.x, surfOffs.y);
     Init( cairo_create(m_mswSurface) );
-    if ( adjustTransformFromDC )
-    {
-        cairo_matrix_multiply(&m_internalTransform,
-                              &dcTransform, &m_internalTransform);
-        cairo_set_matrix(m_context, &m_internalTransform);
-    }
 
     m_width = 0;
     m_height = 0;
@@ -2600,6 +2549,48 @@ void wxCairoContext::ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mod
 
     cairo_set_matrix(m_context, &m_internalTransform);
 }
+
+#ifdef __WXMSW__
+/* static */
+wxPoint wxCairoContext::MSWAdjustHdcOrigin(HDC hdc)
+{
+    // For Cairo < 1.15.12 surface created from HDC having negative x- or y-coordinate of the origin
+    // of the clipping region is not fully operational (see Cairo bug https://bugs.freedesktop.org/show_bug.cgi?id=96482)
+    // - for some operations memory access violation errors occur.
+    // For Cairo >= 1.15.2 HDC having negative x- or y-coordinate of the origin of the clipping region
+    // is not supported - see https://gitlab.freedesktop.org/cairo/cairo/-/commit/4d07b57c168b88019a5510eaa7e9467149c53f12
+    // So for such HDC we need to pass non-transformed HDC to Cairo surface and to apply initial origin of the clipping
+    // region as an offset added to the device coordinates when drawing to surface.
+
+    wxPoint offs(0, 0);
+
+    RECT clipRect;
+    ::GetClipBox(hdc, &clipRect);
+    if ( clipRect.left < 0 || clipRect.top < 0 )
+    {
+        POINT viewOrg;
+        ::GetViewportOrgEx(hdc, &viewOrg);
+        POINT windOrg;
+        ::GetWindowOrgEx(hdc, &windOrg);
+        if ( clipRect.left < 0 )
+        {
+            viewOrg.x = 0;
+            windOrg.x = 0;
+            offs.x = -clipRect.left;
+        }
+        if ( clipRect.top < 0 )
+        {
+            viewOrg.y = 0;
+            windOrg.y = 0;
+            offs.y = -clipRect.top;
+        }
+        ::SetViewportOrgEx(hdc, viewOrg.x,viewOrg.y, nullptr);
+        ::SetWindowOrgEx(hdc, windOrg.x, windOrg.y, nullptr);
+    }
+
+    return offs;
+}
+#endif // __WXMSW__
 
 void wxCairoContext::Clip( const wxRegion& region )
 {

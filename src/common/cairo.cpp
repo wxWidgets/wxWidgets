@@ -186,7 +186,9 @@
     m( cairo_user_to_device_distance, \
        (cairo_t* cr, double *dx, double* dy), (cr, dx, dy) ) \
     m( cairo_surface_mark_dirty, \
-       (cairo_surface_t* surface), (surface))
+       (cairo_surface_t* surface), (surface)) \
+    m( cairo_surface_set_device_offset, \
+       (cairo_surface_t* surface, double x_offset, double y_offset), (surface, x_offset, y_offset) )
 
 #ifdef __WXMAC__
 #define wxCAIRO_PLATFORM_METHODS(m) \
