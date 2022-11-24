@@ -40,6 +40,8 @@ public:
     virtual int GetMax() const override;
 
     virtual int GetTickFreq() const override;
+    virtual void ClearTicks() override;
+    virtual void SetTick(int tickPos) override;
 
     virtual void SetLineSize(int lineSize) override;
     virtual void SetPageSize(int pageSize) override;
