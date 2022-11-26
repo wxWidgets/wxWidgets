@@ -1341,7 +1341,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
         {
             // SHFileOperation may return non-Win32 error codes, so don't use
             // wxLogApiError() as the error message used by it could be wrong.
-            wxLogDebug(wxS("SHFileOperation(FO_DELETE) failed: error 0x%08lx"),
+            wxLogDebug(wxS("SHFileOperation(FO_DELETE) failed: error 0x%08x"),
                        ret);
             return false;
         }

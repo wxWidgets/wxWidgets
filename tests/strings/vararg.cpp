@@ -232,6 +232,7 @@ TEST_CASE("ArgsValidation", "[wxString][vararg][error]")
 #endif
 
     // but these are not:
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d + %d = %d", 2, 2) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i", "foo") );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", (void*)&written) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d", ptr) );

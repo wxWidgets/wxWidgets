@@ -653,31 +653,9 @@ wxString wxFormatString::InputAsString() const
 namespace
 {
 
-template<typename CharType>
-wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
-                                               unsigned n)
+wxFormatString::ArgumentType ArgTypeFromParamType(wxPrintfArgType type)
 {
-    wxCHECK_MSG( format, wxFormatString::Arg_Unknown,
-                 "empty format string not allowed here" );
-
-    wxPrintfConvSpecParser<CharType> parser(format);
-
-    if ( n > parser.nargs )
-    {
-        // The n-th argument doesn't appear in the format string and is unused.
-        // This can happen e.g. if a translation of the format string is used
-        // and the translation language tends to avoid numbers in singular forms.
-        // The translator would then typically replace "%d" with "One" (e.g. in
-        // Hebrew). Passing too many vararg arguments does not harm, so its
-        // better to be more permissive here and allow legitimate uses in favour
-        // of catching harmless errors.
-        return wxFormatString::Arg_Unused;
-    }
-
-    wxCHECK_MSG( parser.pspec[n-1] != nullptr, wxFormatString::Arg_Unknown,
-                 "requested argument not found - invalid format string?" );
-
-    switch ( parser.pspec[n-1]->m_type )
+    switch ( type )
     {
         case wxPAT_CHAR:
         case wxPAT_WCHAR:
@@ -727,6 +705,91 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
     return wxFormatString::Arg_Unknown;
 }
 
+template<typename CharType>
+wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
+                                               unsigned n)
+{
+    wxCHECK_MSG( format, wxFormatString::Arg_Unknown,
+                 "empty format string not allowed here" );
+
+    wxPrintfConvSpecParser<CharType> parser(format);
+
+    if ( n > parser.nargs )
+    {
+        // The n-th argument doesn't appear in the format string and is unused.
+        // This can happen e.g. if a translation of the format string is used
+        // and the translation language tends to avoid numbers in singular forms.
+        // The translator would then typically replace "%d" with "One" (e.g. in
+        // Hebrew). Passing too many vararg arguments does not harm, so its
+        // better to be more permissive here and allow legitimate uses in favour
+        // of catching harmless errors.
+        return wxFormatString::Arg_Unused;
+    }
+
+    wxCHECK_MSG( parser.pspec[n-1] != nullptr, wxFormatString::Arg_Unknown,
+                 "requested argument not found - invalid format string?" );
+
+    return ArgTypeFromParamType(parser.pspec[n-1]->m_type);
+}
+
+#if wxDEBUG_LEVEL
+
+template<typename CharType>
+void DoValidateFormat(const CharType* format, const std::vector<int>& argTypes)
+{
+    wxPrintfConvSpecParser<CharType> parser(format);
+
+    // For the reasons mentioned in the comment in DoGetArgumentType() above,
+    // we ignore any extraneous argument types, so we only check that the
+    // format format specifiers we actually have match the types.
+    for ( unsigned n = 0; n < parser.nargs; ++n )
+    {
+        if ( n == argTypes.size() )
+        {
+            wxFAIL_MSG
+            (
+                wxString::Format
+                (
+                    "Not enough arguments, %zu given but at least %u needed",
+                    argTypes.size(),
+                    parser.nargs
+                )
+            );
+
+            // Useless to continue further.
+            return;
+        }
+
+        auto const pspec = parser.pspec[n];
+        if ( !pspec )
+        {
+            wxFAIL_MSG
+            (
+                wxString::Format
+                (
+                    "Missing format specifier for argument %u in \"%s\"",
+                    n + 1, format
+                )
+            );
+
+            continue;
+        }
+
+        auto const ptype = ArgTypeFromParamType(pspec->m_type);
+        wxASSERT_MSG
+        (
+            (ptype & argTypes[n]) == ptype,
+            wxString::Format
+            (
+                "Format specifier mismatch for argument %u of \"%s\"",
+                n + 1, format
+            )
+        );
+    }
+}
+
+#endif // wxDEBUG_LEVEL
+
 } // anonymous namespace
 
 wxFormatString::ArgumentType wxFormatString::GetArgumentType(unsigned n) const
@@ -743,3 +806,19 @@ wxFormatString::ArgumentType wxFormatString::GetArgumentType(unsigned n) const
     wxFAIL_MSG( "unreachable code" );
     return Arg_Unknown;
 }
+
+#if wxDEBUG_LEVEL
+
+void wxFormatString::Validate(const std::vector<int>& argTypes) const
+{
+    if ( m_char )
+        DoValidateFormat(m_char.data(), argTypes);
+    else if ( m_wchar )
+        DoValidateFormat(m_wchar.data(), argTypes);
+    else if ( m_str )
+        DoValidateFormat(m_str->wx_str(), argTypes);
+    else if ( m_cstr )
+        DoValidateFormat(m_cstr->AsInternal(), argTypes);
+}
+
+#endif // wxDEBUG_LEVEL

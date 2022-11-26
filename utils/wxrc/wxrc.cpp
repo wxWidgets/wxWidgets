@@ -417,7 +417,7 @@ wxArrayString XmlResApp::PrepareTempFiles()
     for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
         if (flagVerbose)
-            wxPrintf(wxT("processing ") + parFiles[i] +  wxT("...\n"));
+            wxPrintf(wxT("processing %s...\n"), parFiles[i]);
 
         wxXmlDocument doc;
 
@@ -529,7 +529,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
                 fullname = inputPath + wxFILE_SEP_PATH + n->GetContent();
 
             if (flagVerbose)
-                wxPrintf(wxT("adding     ") + fullname +  wxT("...\n"));
+                wxPrintf(wxT("adding     %s...\n"), fullname);
 
             wxString filename = GetInternalFileName(n->GetContent(), flist);
             n->SetContent(filename);
@@ -569,7 +569,7 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
     files.RemoveLast();
 
     if (flagVerbose)
-        wxPrintf(wxT("compressing ") + parOutput +  wxT("...\n"));
+        wxPrintf(wxT("compressing %s...\n"), parOutput);
 
     wxString cwd = wxGetCwd();
     wxSetWorkingDirectory(parOutputPath);
@@ -639,7 +639,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
     unsigned i;
 
     if (flagVerbose)
-        wxPrintf(wxT("creating C++ source file ") + parOutput +  wxT("...\n"));
+        wxPrintf(wxT("creating C++ source file %s...\n"), parOutput);
 
     file.Write(""
 "//\n"
@@ -797,7 +797,7 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
     unsigned i;
 
     if (flagVerbose)
-        wxPrintf(wxT("creating Python source file ") + parOutput +  wxT("...\n"));
+        wxPrintf(wxT("creating Python source file %s...\n"), parOutput);
 
     file.Write(
        "#\n"
@@ -881,7 +881,7 @@ ExtractedStrings XmlResApp::FindStrings()
     for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
         if (flagVerbose)
-            wxPrintf(wxT("processing ") + parFiles[i] +  wxT("...\n"));
+            wxPrintf(wxT("processing %s...\n"), parFiles[i]);
 
         wxXmlDocument doc;
         if (!doc.Load(parFiles[i]))

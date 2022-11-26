@@ -17,6 +17,7 @@
 #include "wx/defs.h"
 
 #include "wx/math.h"
+#include "wx/mimetype.h"
 
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
@@ -213,3 +214,30 @@ TEST_CASE("wxMulDivInt32", "[math]")
     // Check that it doesn't overflow.
     CHECK( wxMulDivInt32((INT_MAX - 1)/2, 200, 100) == INT_MAX - 1 );
 }
+
+#if wxUSE_MIMETYPE
+TEST_CASE("wxFileTypeInfo", "[mime]")
+{
+    SECTION("no extensions")
+    {
+        wxFileTypeInfo fti("binary/*", "", wxString{}, L"plain binary");
+        REQUIRE( fti.GetExtensionsCount() == 0 );
+    }
+
+    SECTION("extension without null at the end")
+    {
+        wxFileTypeInfo fti("image/png", "", wxEmptyString, "PNG image", "png");
+        REQUIRE( fti.GetExtensionsCount() == 1 );
+        CHECK( fti.GetExtensions()[0] == "png" );
+    }
+
+    SECTION("two extensions with null at the end")
+    {
+        wxFileTypeInfo fti("image/jpeg", "", "", "JPEG image",
+                           "jpg", L"jpeg", nullptr);
+        REQUIRE( fti.GetExtensionsCount() == 2 );
+        CHECK( fti.GetExtensions()[0] == "jpg" );
+        CHECK( fti.GetExtensions()[1] == "jpeg" );
+    }
+}
+#endif // wxUSE_MIMETYPE

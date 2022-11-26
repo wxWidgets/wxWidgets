@@ -103,55 +103,6 @@ wxString wxMimeTypeCommands::GetVerbCmd(size_t n) const
 // wxFileTypeInfo
 // ----------------------------------------------------------------------------
 
-void wxFileTypeInfo::DoVarArgInit(const wxString& mimeType,
-                                  const wxString& openCmd,
-                                  const wxString& printCmd,
-                                  const wxString& desc,
-                                  va_list argptr)
-{
-    m_mimeType = mimeType;
-    m_openCmd = openCmd;
-    m_printCmd = printCmd;
-    m_desc = desc;
-
-    for ( ;; )
-    {
-        // icc gives this warning in its own va_arg() macro, argh
-#ifdef __INTELC__
-    #pragma warning(push)
-    #pragma warning(disable: 1684)
-#endif
-
-        wxArgNormalizedString ext(WX_VA_ARG_STRING(argptr));
-
-#ifdef __INTELC__
-    #pragma warning(pop)
-#endif
-        if ( !ext )
-        {
-            // nullptr terminates the list
-            break;
-        }
-
-        m_exts.Add(ext.GetString());
-    }
-}
-
-void wxFileTypeInfo::VarArgInit(const wxString *mimeType,
-                                const wxString *openCmd,
-                                const wxString *printCmd,
-                                const wxString *desc,
-                                ...)
-{
-    va_list argptr;
-    va_start(argptr, desc);
-
-    DoVarArgInit(*mimeType, *openCmd, *printCmd, *desc, argptr);
-
-    va_end(argptr);
-}
-
-
 wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)
     : m_mimeType(sArray[0u])
     , m_openCmd( sArray[1u])

@@ -26,7 +26,6 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 
 #include "wx/string.h"
-#include "wx/strvararg.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -882,7 +881,7 @@ public:
         // remember that fatal errors can't be disabled
         if ( m_level == wxLOG_FatalError ||
                 wxLog::IsLevelEnabled(m_level, wxASCII_STR(m_info.component)) )
-            DoCallOnLog(format, argptr);
+            DoCallOnLog(wxString::FormatV(format, argptr));
     }
 
     // overloads used by functions with optional leading arguments (whose
@@ -912,173 +911,87 @@ public:
     }
 
 
-    // vararg functions used by wxLogXXX():
+    // variadic functions used by wxLogXXX():
+
+    // we need to use an extra class with a more restricted set of ctors than
+    // wxString itself, as otherwise we'd get ambiguities between constructing
+    // wxString from long
+    struct FormatString : wxString
+    {
+        FormatString(const wxString& str) : wxString(str) {}
+        FormatString(const wxCStrData& str) : wxString(str) {}
+        FormatString(const wchar_t *str) : wxString(str) {}
+        FormatString(const wxScopedWCharBuffer& str) : wxString(str) {}
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+        FormatString(const char *str) : wxString(str) {}
+        FormatString(const wxScopedCharBuffer& str) : wxString(str) {}
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
+    };
 
     // will log the message at the level specified in the ctor
     //
     // notice that this function supposes that the caller already checked that
     // the level was enabled and does no checks itself
-    WX_DEFINE_VARARG_FUNC_VOID
-    (
-        Log,
-        1, (const wxFormatString&),
-        DoLog, DoLogUtf8
-    )
+    template <typename... Targs>
+    void Log(const FormatString& format, Targs... args)
+    {
+        DoCallOnLog(wxString::Format(format, args...));
+    }
 
     // same as Log() but with an extra numeric or pointer parameters: this is
     // used to pass an optional value by storing it in m_info under the name
     // passed to MaybeStore() and is required to support "overloaded" versions
     // of wxLogStatus() and wxLogSysError()
-    WX_DEFINE_VARARG_FUNC_VOID
-    (
-        Log,
-        2, (long, const wxFormatString&),
-        DoLogWithNum, DoLogWithNumUtf8
-    )
+    template <typename... Targs>
+    void Log(long num, const FormatString& format, Targs... args)
+    {
+        Store(m_optKey, num);
+
+        DoCallOnLog(wxString::Format(format, args...));
+    }
 
     // unfortunately we can't use "void *" here as we get overload ambiguities
-    // with Log(wxFormatString, ...) when the first argument is a "char *" or
+    // with Log(FormatString, ...) when the first argument is a "char *" or
     // "wchar_t *" then -- so we only allow passing wxObject here, which is
     // ugly but fine in practice as this overload is only used by wxLogStatus()
     // whose first argument is a wxFrame
-    WX_DEFINE_VARARG_FUNC_VOID
-    (
-        Log,
-        2, (wxObject *, const wxFormatString&),
-        DoLogWithPtr, DoLogWithPtrUtf8
-    )
+    template <typename... Targs>
+    void Log(wxObject* ptr, const FormatString& format, Targs... args)
+    {
+        Store(m_optKey, wxPtrToUInt(ptr));
+
+        DoCallOnLog(wxString::Format(format, args...));
+    }
 
     // log the message at the level specified as its first argument
     //
     // as the macros don't have access to the level argument in this case, this
     // function does check that the level is enabled itself
-    WX_DEFINE_VARARG_FUNC_VOID
-    (
-        LogAtLevel,
-        2, (wxLogLevel, const wxFormatString&),
-        DoLogAtLevel, DoLogAtLevelUtf8
-    )
+    template <typename... Targs>
+    void LogAtLevel(wxLogLevel level, const wxString& format, Targs... args)
+    {
+        if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
+            return;
+
+        DoCallOnLog(level, wxString::Format(format, args...));
+    }
 
     // special versions for wxLogTrace() which is passed either string or
     // integer mask as first argument determining whether the message should be
     // logged or not
-    WX_DEFINE_VARARG_FUNC_VOID
-    (
-        LogTrace,
-        2, (const wxString&, const wxFormatString&),
-        DoLogTrace, DoLogTraceUtf8
-    )
+    template <typename... Targs>
+    void LogTrace(const wxString& mask, const wxString& format, Targs... args)
+    {
+        if ( !wxLog::IsAllowedTraceMask(mask) )
+            return;
+
+        Store(wxLOG_KEY_TRACE_MASK, mask);
+
+        DoCallOnLog(wxString::Format(format, args...));
+    }
 
 private:
-#if !wxUSE_UTF8_LOCALE_ONLY
-    void DoLog(const wxChar *format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogWithNum(long num, const wxChar *format, ...)
-    {
-        Store(m_optKey, num);
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogWithPtr(void *ptr, const wxChar *format, ...)
-    {
-        Store(m_optKey, wxPtrToUInt(ptr));
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogAtLevel(wxLogLevel level, const wxChar *format, ...)
-    {
-        if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
-            return;
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(level, format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogTrace(const wxString& mask, const wxChar *format, ...)
-    {
-        if ( !wxLog::IsAllowedTraceMask(mask) )
-            return;
-
-        Store(wxLOG_KEY_TRACE_MASK, mask);
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-    void DoLogUtf8(const char *format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogWithNumUtf8(long num, const char *format, ...)
-    {
-        Store(m_optKey, num);
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogWithPtrUtf8(void *ptr, const char *format, ...)
-    {
-        Store(m_optKey, wxPtrToUInt(ptr));
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogAtLevelUtf8(wxLogLevel level, const char *format, ...)
-    {
-        if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
-            return;
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(level, format, argptr);
-        va_end(argptr);
-    }
-
-    void DoLogTraceUtf8(const wxString& mask, const char *format, ...)
-    {
-        if ( !wxLog::IsAllowedTraceMask(mask) )
-            return;
-
-        Store(wxLOG_KEY_TRACE_MASK, mask);
-
-        va_list argptr;
-        va_start(argptr, format);
-        DoCallOnLog(format, argptr);
-        va_end(argptr);
-    }
-#endif // wxUSE_UNICODE_UTF8
-
-    void DoCallOnLog(wxLogLevel level, const wxString& format, va_list argptr)
+    void DoCallOnLog(wxLogLevel level, const wxString& msg)
     {
         // As explained in wxLogRecordInfo ctor, we don't initialize its
         // timestamp to avoid calling time() unnecessary, but now that we are
@@ -1089,12 +1002,12 @@ private:
         m_info.timestamp = m_info.timestampMS / 1000;
 #endif // WXWIN_COMPATIBILITY_3_0
 
-        wxLog::OnLog(level, wxString::FormatV(format, argptr), m_info);
+        wxLog::OnLog(level, msg, m_info);
     }
 
-    void DoCallOnLog(const wxString& format, va_list argptr)
+    void DoCallOnLog(const wxString& msg)
     {
-        DoCallOnLog(m_level, format, argptr);
+        DoCallOnLog(m_level, msg);
     }
 
 
@@ -1272,14 +1185,17 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 
 // define macros for defining log functions which do nothing at all
 #define wxDEFINE_EMPTY_LOG_FUNCTION(level)                                  \
-    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxFormatString&))     \
-    inline void wxVLog##level(const wxFormatString& WXUNUSED(format),       \
+    template <typename... Targs>                                            \
+    void wxLog##level(const wxString& WXUNUSED(format), Targs...) { }       \
+    inline void wxVLog##level(const wxString& WXUNUSED(format),             \
                               va_list WXUNUSED(argptr)) { }                 \
 
 #define wxDEFINE_EMPTY_LOG_FUNCTION2(level, argclass)                       \
-    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxFormatString&)) \
+    template <typename... Targs>                                            \
+    void wxLog##level(argclass WXUNUSED(arg),                               \
+                      const wxString& WXUNUSED(format), Targs...) { }       \
     inline void wxVLog##level(argclass WXUNUSED(arg),                       \
-                              const wxFormatString& WXUNUSED(format),       \
+                              const wxString& WXUNUSED(format),             \
                               va_list WXUNUSED(argptr)) {}
 
 wxDEFINE_EMPTY_LOG_FUNCTION(FatalError);

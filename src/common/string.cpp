@@ -1679,38 +1679,6 @@ wxString wxString::FromCDouble(double val, int precision)
 // formatted output
 // ---------------------------------------------------------------------------
 
-#if !wxUSE_UTF8_LOCALE_ONLY
-/* static */
-wxString wxString::DoFormatWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-
-    wxString s;
-    s.PrintfV(format, argptr);
-
-    va_end(argptr);
-
-    return s;
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-/* static */
-wxString wxString::DoFormatUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-
-    wxString s;
-    s.PrintfV(format, argptr);
-
-    va_end(argptr);
-
-    return s;
-}
-#endif // wxUSE_UNICODE_UTF8
-
 /* static */
 wxString wxString::FormatV(const wxString& format, va_list argptr)
 {

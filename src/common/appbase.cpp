@@ -972,7 +972,7 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 #if !defined(__WINDOWS__)
     // on Unix stack frame generation may take some time, depending on the
     // size of the executable mainly... warn the user that we are working
-    wxFprintf(stderr, "Collecting stack trace information, please wait...");
+    wxFputs("Collecting stack trace information, please wait...", stderr);
     fflush(stderr);
 #endif // !__WINDOWS__
 
