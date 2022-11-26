@@ -35658,11 +35658,7 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=0"
 
     if test "$wxUSE_GTK" = 1 ; then
-        if test "$WXGTK2" = 1 ; then
-            CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
-        else
-            CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
-        fi
+        CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
     fi
 fi
 
@@ -36929,7 +36925,7 @@ if test "$wxUSE_SOUND" = "yes"; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
 
-if test "$WXGTK2" = 1; then
+if test "$wxUSE_GTK" = 1; then
     if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
 
         if test "$wxUSE_GTKPRINT" = "yes" ; then
@@ -41123,12 +41119,8 @@ TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
 case "$TOOLKIT" in
     GTK)
         TOOLKIT_DESC="GTK+"
-        if test "$WXGTK2" = 1; then
-            if test "$WXGTK3" = 1; then
-                TOOLKIT_DESC="$TOOLKIT_DESC ${TOOLKIT_VERSION}"
-            else
-                TOOLKIT_DESC="$TOOLKIT_DESC 2"
-            fi
+        if test "$wxUSE_GTK" = 1; then
+            TOOLKIT_DESC="$TOOLKIT_DESC ${TOOLKIT_VERSION}"
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
             fi
