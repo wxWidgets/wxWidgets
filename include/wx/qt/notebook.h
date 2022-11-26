@@ -52,6 +52,8 @@ public:
 protected:
     virtual wxWindow *DoRemovePage(size_t page) override;
 
+    virtual void OnImagesChanged() override;
+
 private:
     QTabWidget *m_qtTabWidget;
 

@@ -75,7 +75,17 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     m_qtTabWidget = new wxQtTabWidget( parent, this );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    if ( !QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name ) )
+        return false;
+
+    if ( m_windowStyle & wxBK_RIGHT )
+        m_qtTabWidget->setTabPosition( QTabWidget::East );
+    else if ( m_windowStyle & wxBK_LEFT )
+        m_qtTabWidget->setTabPosition( QTabWidget::West );
+    else if ( m_windowStyle & wxBK_BOTTOM )
+        m_qtTabWidget->setTabPosition( QTabWidget::South );
+
+    return true;
 }
 
 void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))
@@ -125,6 +135,19 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
     }
     m_images[n] = imageId;
     return true;
+}
+
+void wxNotebook::OnImagesChanged()
+{
+    if ( HasImages() )
+    {
+        wxImageList* const imageList = GetUpdatedImageListFor(this);
+
+        int width, height;
+        imageList->GetSize(0, width, height);
+        m_qtTabWidget->setIconSize(QSize(width, height));
+        m_qtTabWidget->update();
+    }
 }
 
 bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
