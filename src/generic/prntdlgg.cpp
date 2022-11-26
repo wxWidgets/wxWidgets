@@ -519,7 +519,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     wxArrayString errors;
     wxArrayString output;
-    long res = wxExecute( wxT("lpstat -v"), output, errors, wxEXEC_NODISABLE );
+    long res = wxExecute( wxT("lpstat -v"), output, errors, wxEXEC_NOEVENTS );
     if (res >= 0 && errors.GetCount() == 0)
     {
         size_t i;
