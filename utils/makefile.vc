@@ -36,18 +36,12 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_emulator sub_execmon sub_helpview sub_hhp2cached sub_ifacecheck sub_screenshotgen sub_wxrc
+all: sub_helpview sub_hhp2cached sub_ifacecheck sub_screenshotgen sub_wxrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 	-if exist .\*.pch del .\*.pch
-	cd emulator\src
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
-	cd execmon
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
 	cd helpview\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
@@ -62,16 +56,6 @@ clean:
 	cd "$(MAKEDIR)"
 	cd wxrc
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
-
-sub_emulator: 
-	cd emulator\src
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
-
-sub_execmon: 
-	cd execmon
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
 sub_helpview: 
