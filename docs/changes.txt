@@ -277,6 +277,7 @@ wxOSX:
 - Fix wxDataViewCtrl::HitTest() (Vojtěch Bubník, #22789).
 - Fix position of the controls in wxStaticBox after resizing it (#22837).
 - Ensure that "Window" menu is inserted before "Help" (#22871).
+- Fix compiling with Xcode 7.3 and macOS 11 SDK (crazbot, #22988).
 
 
 3.2.1: (released 2022-09-09)
