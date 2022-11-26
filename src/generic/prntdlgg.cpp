@@ -501,7 +501,8 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
     item.SetMask( wxLIST_MASK_TEXT );
     item.SetColumn( 1 );
     item.SetText( _("Default printer") );
-    item.SetId( m_printerListCtrl->InsertItem( item ) );
+    item.SetId( 0 );
+    m_printerListCtrl->InsertItem( item );
 
     if (data->GetPrinterName().empty())
     {
