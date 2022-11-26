@@ -1,0 +1,1 @@
+All: Use variadic templates for vararg functions (#22981).
