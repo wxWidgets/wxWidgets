@@ -75,7 +75,17 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     m_qtTabWidget = new wxQtTabWidget( parent, this );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    if ( !QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name ) )
+        return false;
+
+    if ( m_windowStyle & wxBK_RIGHT )
+        m_qtTabWidget->setTabPosition( QTabWidget::East );
+    else if ( m_windowStyle & wxBK_LEFT )
+        m_qtTabWidget->setTabPosition( QTabWidget::West );
+    else if ( m_windowStyle & wxBK_BOTTOM )
+        m_qtTabWidget->setTabPosition( QTabWidget::South );
+
+    return true;
 }
 
 void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))
