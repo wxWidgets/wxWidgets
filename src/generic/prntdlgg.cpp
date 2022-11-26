@@ -169,8 +169,7 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 
     wxPrintFactory* factory = wxPrintFactory::GetFactory();
 
-    wxStaticBoxSizer *topsizer = new wxStaticBoxSizer(
-        new wxStaticBox( this, wxID_ANY, _( "Printer options" ) ), wxHORIZONTAL );
+    wxStaticBoxSizer *topsizer = new wxStaticBoxSizer( wxHORIZONTAL, this, _( "Printer options" ) );
     wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
     flex->AddGrowableCol( 1 );
     topsizer->Add( flex, 1, wxGROW );
@@ -482,7 +481,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     // printer selection
 
-    wxStaticBoxSizer *printer_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Printer") ), wxVERTICAL );
+    wxStaticBoxSizer *printer_sizer = new wxStaticBoxSizer( wxVERTICAL, this, _("Printer") );
     main_sizer->Add( printer_sizer, 0, wxALL|wxGROW, 10 );
 
     m_printerListCtrl = new wxListCtrl( this, wxPRINTID_PRINTER,
@@ -593,8 +592,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     wxBoxSizer *item2 = new wxBoxSizer( wxVERTICAL );
 
-    wxStaticBox *item4 = new wxStaticBox( this, wxPRINTID_STATIC, _("Paper size") );
-    wxStaticBoxSizer *item3 = new wxStaticBoxSizer( item4, wxVERTICAL );
+    wxStaticBoxSizer *item3 = new wxStaticBoxSizer( wxVERTICAL, this, _("Paper size") );
 
     m_paperTypeChoice = CreatePaperTypeChoice();
     item3->Add( m_paperTypeChoice, 0, wxALIGN_CENTER|wxALL, 5 );
@@ -609,8 +607,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
     m_orientationRadioBox= new wxRadioBox( this, wxPRINTID_ORIENTATION, _("Orientation"), wxDefaultPosition, wxDefaultSize, 2, strs6, 1, wxRA_SPECIFY_ROWS );
     item2->Add( m_orientationRadioBox, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxStaticBox *item8 = new wxStaticBox( this, wxID_ANY, _("Options") );
-    wxStaticBoxSizer *item7 = new wxStaticBoxSizer( item8, wxHORIZONTAL );
+    wxStaticBoxSizer *item7 = new wxStaticBoxSizer( wxHORIZONTAL, this, _("Options") );
 
     m_colourCheckBox = new wxCheckBox( this, wxPRINTID_PRINTCOLOUR, _("Print in colour") );
     item7->Add( m_colourCheckBox, 0, wxALIGN_CENTER|wxALL, 5 );
@@ -621,8 +618,7 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     // spooling options (on the right)
 
-    wxStaticBox *item11 = new wxStaticBox( this, wxID_ANY, _("Print spooling") );
-    wxStaticBoxSizer *item10 = new wxStaticBoxSizer( item11, wxVERTICAL );
+    wxStaticBoxSizer *item10 = new wxStaticBoxSizer( wxVERTICAL, this, _("Print spooling") );
 
     wxStaticText *item12 = new wxStaticText( this, wxID_ANY, _("Printer command:") );
     item10->Add( item12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -831,8 +827,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) top
-    wxStaticBoxSizer *topsizer = new wxStaticBoxSizer(
-      new wxStaticBox(this,wxPRINTID_STATIC, _("Paper size")), wxHORIZONTAL );
+    wxStaticBoxSizer *topsizer = new wxStaticBoxSizer( wxHORIZONTAL, this, _("Paper size") );
 
     size_t      n = wxThePrintPaperDatabase->GetCount();
     wxString   *choices = new wxString [n];
