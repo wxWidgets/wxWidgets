@@ -21,12 +21,20 @@ public:
 
 private:
     void valueChanged(int position);
+    void actionTriggered(int action);
+
+    void sliderPressed();
+    void sliderReleased();
 };
 
 wxQtSlider::wxQtSlider( wxWindow *parent, wxSlider *handler )
     : wxQtEventSignalHandler< QSlider, wxSlider >( parent, handler )
 {
     connect(this, &QSlider::valueChanged, this, &wxQtSlider::valueChanged);
+    connect(this, &QSlider::actionTriggered, this, &wxQtSlider::actionTriggered);
+
+    connect(this, &QSlider::sliderPressed, this, &wxQtSlider::sliderPressed);
+    connect(this, &QSlider::sliderReleased, this, &wxQtSlider::sliderReleased);
 }
 
 void wxQtSlider::valueChanged(int position)
@@ -45,6 +53,86 @@ void wxQtSlider::valueChanged(int position)
     }
 }
 
+void wxQtSlider::actionTriggered(int action)
+{
+    wxEventType eventType = wxEVT_NULL;
+    switch( action )
+    {
+        case QAbstractSlider::SliderSingleStepAdd:
+            eventType = wxEVT_SCROLL_LINEDOWN;
+            break;
+        case QAbstractSlider::SliderSingleStepSub:
+            eventType = wxEVT_SCROLL_LINEUP;
+            break;
+        case QAbstractSlider::SliderPageStepAdd:
+            eventType = wxEVT_SCROLL_PAGEDOWN;
+            break;
+        case QAbstractSlider::SliderPageStepSub:
+            eventType = wxEVT_SCROLL_PAGEUP;
+            break;
+        case QAbstractSlider::SliderToMinimum:
+            eventType = wxEVT_SCROLL_TOP;
+            break;
+        case QAbstractSlider::SliderToMaximum:
+            eventType = wxEVT_SCROLL_BOTTOM;
+            break;
+        /*
+        case QAbstractSlider::SliderMove:
+            eventType = wxEVT_SCROLL_CHANGED;
+            break;
+        */
+        default:
+            return;
+    }
+
+    wxSlider *handler = GetHandler();
+    if ( handler )
+    {
+        const int  newPosition = sliderPosition();
+        const bool hasValueChanged = handler->GetValue() != newPosition;
+
+        // Event handlers expect the wxSlider to return the new position;
+        // and because valueChanged() signal is not emitted yet, it will
+        // return the old position not the new one. So we need to update
+        // the value here and call the valueChanged() signal manually
+        // (because it won't be emitted after we call SetValue()) with
+        // the new position if it was really changed,
+        handler->SetValue(newPosition);
+
+        wxScrollEvent e( eventType, handler->GetId(), newPosition,
+                wxQtConvertOrientation( orientation() ));
+        EmitEvent( e );
+
+        if ( hasValueChanged )
+        {
+            valueChanged(newPosition);
+        }
+    }
+}
+
+void wxQtSlider::sliderPressed()
+{
+    wxSlider *handler = GetHandler();
+    if ( handler )
+    {
+        wxScrollEvent e( wxEVT_SCROLL_THUMBTRACK,
+                         handler->GetId(), sliderPosition(),
+                         wxQtConvertOrientation( orientation() ));
+        EmitEvent( e );
+    }
+}
+
+void wxQtSlider::sliderReleased()
+{
+    wxSlider *handler = GetHandler();
+    if ( handler )
+    {
+        wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE,
+                         handler->GetId(), sliderPosition(),
+                         wxQtConvertOrientation( orientation() ));
+        EmitEvent( e );
+    }
+}
 
 wxSlider::wxSlider() :
     m_qtSlider(nullptr)
@@ -65,7 +153,7 @@ wxSlider::wxSlider(wxWindow *parent,
 
 bool wxSlider::Create(wxWindow *parent,
             wxWindowID id,
-            int WXUNUSED(value), int minValue, int maxValue,
+            int value, int minValue, int maxValue,
             const wxPoint& pos,
             const wxSize& size,
             long style,
@@ -77,24 +165,23 @@ bool wxSlider::Create(wxWindow *parent,
 
     m_qtSlider->setInvertedAppearance( style & wxSL_INVERSE );
 
+    // For compatibility with the other ports, pressing PageUp should move value
+    // towards the slider's minimum.
+    m_qtSlider->setInvertedControls(true);
+
     wxQtEnsureSignalsBlocked blocker(m_qtSlider);
     SetRange( minValue, maxValue );
+    SetValue( value );
     SetPageSize(wxMax(1, (maxValue - minValue) / 10));
 
-#if 0 // there are not normally ticks for a wxSlider
-    // draw ticks marks (default bellow if horizontal, right if vertical):
-    if ( style & wxSL_VERTICAL )
-    {
-        m_qtSlider->setTickPosition( style & wxSL_LEFT ? QSlider::TicksLeft :
-                                                         QSlider::TicksRight );
-    }
-    else // horizontal slider
-    {
-        m_qtSlider->setTickPosition( style & wxSL_TOP ? QSlider::TicksAbove :
-                                                        QSlider::TicksBelow );
-    }
-#endif
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    if ( !QtCreateControl( parent, id, pos, size, style, validator, name ) )
+        return false;
+
+    // SetTick() needs the window style which is normally set after QtCreateControl()
+    // is called. Pass 0 as tickPos parameter is not used by Qt anyhow.
+    SetTick( 0 );
+
+    return true;
 }
 
 int wxSlider::GetValue() const
@@ -134,8 +221,45 @@ int wxSlider::GetTickFreq() const
     return m_qtSlider->tickInterval();
 }
 
-void wxSlider::SetLineSize(int WXUNUSED(lineSize))
+void wxSlider::ClearTicks()
 {
+    m_qtSlider->setTickPosition(QSlider::NoTicks);
+}
+
+void wxSlider::SetTick(int WXUNUSED(tickPos))
+{
+    QSlider::TickPosition posTicks;
+
+    const int style = GetWindowStyle();
+
+    if ( !(style & wxSL_TICKS) &&
+         !(style & (wxSL_TOP|wxSL_BOTTOM|wxSL_LEFT|wxSL_RIGHT|wxSL_BOTH)) )
+    {
+        posTicks = QSlider::NoTicks;
+    }
+    else if ( style & wxSL_BOTH )
+    {
+        posTicks = QSlider::TicksBothSides;
+    }
+    else if ( style & (wxSL_TOP|wxSL_LEFT) )
+    {
+        // TicksAbove is the same as TicksLeft for vertical slider
+        posTicks = QSlider::TicksAbove;
+    }
+    else // if ( style & (wxSL_BOTTOM|wxSL_RIGHT) )
+    {
+        // This the default, below if horizontal, right if vertical
+        // TicksBelow is the same as TicksRight for vertical slider
+        posTicks = QSlider::TicksBelow;
+    }
+
+    // Draw ticks marks if posTicks != QSlider::NoTicks. remove them otherwise.
+    m_qtSlider->setTickPosition( posTicks );
+}
+
+void wxSlider::SetLineSize(int lineSize)
+{
+    m_qtSlider->setSingleStep(lineSize);
 }
 
 void wxSlider::SetPageSize(int pageSize)
@@ -145,7 +269,7 @@ void wxSlider::SetPageSize(int pageSize)
 
 int wxSlider::GetLineSize() const
 {
-    return 0;
+    return m_qtSlider->singleStep();
 }
 
 int wxSlider::GetPageSize() const
