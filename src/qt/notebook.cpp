@@ -127,6 +127,19 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
     return true;
 }
 
+void wxNotebook::OnImagesChanged()
+{
+    if ( HasImages() )
+    {
+        wxImageList* const imageList = GetUpdatedImageListFor(this);
+
+        int width, height;
+        imageList->GetSize(0, width, height);
+        m_qtTabWidget->setIconSize(QSize(width, height));
+        m_qtTabWidget->update();
+    }
+}
+
 bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     bool bSelect, int imageId)
 {
