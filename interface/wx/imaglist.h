@@ -48,6 +48,10 @@ class wxImageList : public wxObject
 public:
     /**
         Default ctor.
+
+        Note that the object created using the default ctor is invalid and
+        calling any methods other than Create() on it will result in an
+        assertion failure.
     */
     wxImageList();
 

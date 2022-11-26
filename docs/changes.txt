@@ -41,6 +41,11 @@ Changes in behaviour not resulting in compilation errors
   even if the grid is currently too small to show all of them or if there are
   no unfrozen rows/columns remaining.
 
+- Calling wxImageList methods on an invalid wxImageList object now consistently
+  results in assert failures instead of just failing silently. To avoid these
+  asserts, make sure that wxImageList is created with a valid size before
+  operating on it.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
