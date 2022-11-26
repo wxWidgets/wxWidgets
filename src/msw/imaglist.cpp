@@ -293,6 +293,8 @@ wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
 // 'bitmap' and 'mask'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     wxMSWBitmaps bitmaps;
     GetImageListBitmaps(bitmaps, bitmap, mask);
 
@@ -310,6 +312,8 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 // 'bitmap'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     wxMSWBitmaps bitmaps;
     wxMask mask(bitmap, maskColour);
     GetImageListBitmaps(bitmaps, bitmap, mask.GetBitmap());
@@ -342,6 +346,8 @@ bool wxImageList::Replace(int index,
                           const wxBitmap& bitmap,
                           const wxBitmap& mask)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     wxMSWBitmaps bitmaps;
     GetImageListBitmaps(bitmaps, bitmap, mask);
 
@@ -365,6 +371,8 @@ bool wxImageList::Replace(int i, const wxIcon& icon)
 // Removes the image at the given index.
 bool wxImageList::Remove(int index)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     bool ok = index >= 0 && ImageList_Remove(GetHImageList(), index) != FALSE;
     if ( !ok )
     {
@@ -377,6 +385,8 @@ bool wxImageList::Remove(int index)
 // Remove all images
 bool wxImageList::RemoveAll()
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     // don't use ImageList_RemoveAll() because mingw32 headers don't have it
     bool ok = ImageList_Remove(GetHImageList(), -1) != FALSE;
     if ( !ok )
@@ -397,6 +407,8 @@ bool wxImageList::Draw(int index,
                        int flags,
                        bool solidBackground)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     wxDCImpl *impl = dc.GetImpl();
     wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
     if (!msw_impl)
@@ -445,6 +457,8 @@ bool wxImageList::Draw(int index,
 // Get the bitmap
 wxBitmap wxImageList::GetBitmap(int index) const
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     int bmp_width = 0, bmp_height = 0;
     GetSize(index, bmp_width, bmp_height);
 
@@ -508,6 +522,8 @@ wxBitmap wxImageList::GetBitmap(int index) const
 // Get the icon
 wxIcon wxImageList::GetIcon(int index) const
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     HICON hIcon = ImageList_ExtractIcon(0, GetHImageList(), index);
     if (hIcon)
     {

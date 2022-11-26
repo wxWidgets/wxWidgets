@@ -112,8 +112,7 @@ wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
     // Cannot add image to invalid list
-    if ( m_size == wxSize(0, 0) )
-        return -1;
+    wxCHECK_MSG( m_size != wxSize(0, 0), -1, "Invalid image list" );
 
     // We use the logical size here as image list images size is specified in
     // logical pixels, just as window coordinates and sizes are.
@@ -160,6 +159,8 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour 
 
 const wxBitmap *wxGenericImageList::DoGetPtr( int index ) const
 {
+    wxCHECK_MSG( m_size != wxSize(0, 0), nullptr, "Invalid image list" );
+
     if ( index < 0 || (size_t)index >= m_images.size() )
         return nullptr;
 
@@ -208,6 +209,8 @@ wxGenericImageList::Replace(int index,
 
 bool wxGenericImageList::Remove( int index )
 {
+    wxCHECK_MSG( m_size != wxSize(0, 0), false, "Invalid image list" );
+
     if ( index < 0 || (size_t)index >= m_images.size() )
         return false;
 
@@ -218,6 +221,8 @@ bool wxGenericImageList::Remove( int index )
 
 bool wxGenericImageList::RemoveAll()
 {
+    wxCHECK_MSG( m_size != wxSize(0, 0), false, "Invalid image list" );
+
     m_images.clear();
 
     return true;

@@ -609,11 +609,11 @@ TEST_CASE("ImageList:NegativeTests", "[imagelist][negative]")
         CHECK(h == 0);
 #endif
 
-        int idx = il.Add(bmp);
-        CHECK(idx == -1);
 #ifdef __WXDEBUG__
+        CHECK_THROWS(il.Add(bmp));
         REQUIRE_THROWS(il.GetImageCount());
 #else
+        CHECK(il.Add(bmp) == -1);
         CHECK(il.GetImageCount() == 0);
 #endif
     }
@@ -644,20 +644,30 @@ TEST_CASE("ImageList:NegativeTests", "[imagelist][negative]")
         CHECK(h == 0);
 #endif
 
-        int idx = il.Add(bmp);
-        CHECK(idx == -1);
 #ifdef __WXDEBUG__
+        CHECK_THROWS(il.Add(bmp));
         REQUIRE_THROWS(il.GetImageCount());
 #else
+        CHECK(il.Add(bmp) == -1);
         CHECK(il.GetImageCount() == 0);
 #endif
 
-        ok = il.Replace(0, bmp);
-        CHECK_FALSE(ok);
 #ifdef __WXDEBUG__
+        CHECK_THROWS(il.Replace(0, bmp));
         REQUIRE_THROWS(il.GetImageCount());
 #else
+        CHECK_FALSE(il.Replace(0, bmp));
         CHECK(il.GetImageCount() == 0);
+#endif
+    }
+
+    SECTION("Add to invalid image list")
+    {
+        wxImageList il;
+#ifdef __WXDEBUG__
+        CHECK_THROWS( il.Add(bmp) );
+#else
+        CHECK( il.Add(bmp) == -1 );
 #endif
     }
 
