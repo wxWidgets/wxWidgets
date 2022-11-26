@@ -487,8 +487,9 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 
     m_printerListCtrl = new wxListCtrl( this, wxPRINTID_PRINTER,
         wxDefaultPosition, wxSize(wxDefaultCoord,100), wxLC_REPORT|wxLC_SINGLE_SEL|wxSUNKEN_BORDER );
-    wxImageList *image_list = new wxImageList;
-    image_list->Add( wxBitmap(check_xpm) );
+    wxBitmap checkBmp(check_xpm);
+    wxImageList *image_list = new wxImageList( checkBmp.GetWidth(), checkBmp.GetHeight() ) ;
+    image_list->Add( checkBmp );
     m_printerListCtrl->AssignImageList( image_list, wxIMAGE_LIST_SMALL );
 
     m_printerListCtrl->InsertColumn( 0, wxT(" "), wxLIST_FORMAT_LEFT, 20 );
