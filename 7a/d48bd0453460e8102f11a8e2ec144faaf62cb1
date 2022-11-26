@@ -1,0 +1,1 @@
+wxQt: Fixes for wxSlider ticks and events (AliKet, #22989).
