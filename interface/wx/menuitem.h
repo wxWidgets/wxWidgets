@@ -439,7 +439,10 @@ public:
         <tt>\\t</tt> followed by a valid key combination (e.g. <tt>CTRL+V</tt>).
         Its general syntax is any combination of @c "CTRL", @c "RAWCTRL",  @c
         "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
-        @c '-' or @c '+' characters and followed by the accelerator itself.
+        @c '-' or @c '+' characters and followed by the accelerator itself. Note that
+        the displayed accelerator can differ from the string specified here though,
+        e.g. <tt>Ctrl+X</tt> could be actually shown on the screen when <tt>Ctrl-X</tt>
+        is used.
         Notice that @c CTRL corresponds to the "Ctrl" key on most platforms but
         not under macOS where it is mapped to "Cmd" key on Mac keyboard.
         Usually this is exactly what you want in portable code but if you

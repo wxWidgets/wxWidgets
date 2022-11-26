@@ -26,7 +26,10 @@ public:
         wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem );
 
     // Set the action shortcut to correspond to the accelerator specified by
-    // the given label.
+    // the given label. They set the primary shortcut the first time they are
+    // called, and set additional shortcuts/accels for subsequent calls. if
+    // text is empty, any axtra accelerators will be removed.
+    void UpdateShortcuts(const wxString& text);
     void UpdateShortcutsFromLabel(const wxString& text);
 
     wxMenu* GetMenu() const
@@ -34,7 +37,16 @@ public:
         return static_cast<wxMenu*>(wxQtSignalHandler::GetHandler());
     }
 
+    // Convert hyphenated shortcuts to use the plus sign (+) which Qt understands.
+    static wxString Normalize(const wxString& text)
+    {
+        QString normalized = wxQtConvertString( text );
+        normalized.replace(QRegExp("([^+-])[-]"), "\\1+");
+        return wxQtConvertString( normalized );
+    }
+
 private:
+    void onActionToggled( bool checked );
     void onActionTriggered( bool checked );
 
     const wxWindowID m_mitemId;
@@ -54,18 +66,22 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
         const wxString& help, wxItemKind kind, wxMenu *subMenu)
     : wxMenuItemBase( parentMenu, id, text, help, kind, subMenu )
 {
-    m_qtAction = new wxQtAction( parentMenu, id, text, help, kind, subMenu, this );
+    m_qtAction = new wxQtAction( parentMenu, id,
+                                 wxQtAction::Normalize( text ),
+                                 help, kind, subMenu, this );
 }
 
 
 
 void wxMenuItem::SetItemLabel( const wxString &label )
 {
-    wxMenuItemBase::SetItemLabel( label );
+    const wxString qtlabel = wxQtAction::Normalize( label );
 
-    m_qtAction->UpdateShortcutsFromLabel( label );
+    wxMenuItemBase::SetItemLabel( qtlabel );
 
-    m_qtAction->setText( wxQtConvertString( label ));
+    m_qtAction->UpdateShortcutsFromLabel( qtlabel );
+
+    m_qtAction->setText( wxQtConvertString( qtlabel ));
 }
 
 
@@ -146,6 +162,22 @@ QAction *wxMenuItem::GetHandle() const
     return m_qtAction;
 }
 
+#if wxUSE_ACCEL
+void wxMenuItem::AddExtraAccel(const wxAcceleratorEntry& accel)
+{
+    wxMenuItemBase::AddExtraAccel(accel);
+
+    m_qtAction->UpdateShortcuts( accel.ToRawString() );
+}
+
+void wxMenuItem::ClearExtraAccels()
+{
+    wxMenuItemBase::ClearExtraAccels();
+
+    m_qtAction->UpdateShortcuts( wxString() );
+}
+#endif // wxUSE_ACCEL
+
 //=============================================================================
 
 wxQtAction::wxQtAction( wxMenu *handler, int id, const wxString &text, const wxString &help,
@@ -180,6 +212,7 @@ wxQtAction::wxQtAction( wxMenu *handler, int id, const wxString &text, const wxS
             break;
     }
 
+    connect( this, &QAction::toggled, this, &wxQtAction::onActionToggled );
     connect( this, &QAction::triggered, this, &wxQtAction::onActionTriggered );
 
     UpdateShortcutsFromLabel( text );
@@ -191,13 +224,47 @@ void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
     const wxString accelStr = text.AfterFirst('\t');
     if ( !accelStr.empty() )
     {
-        setShortcut(  QKeySequence( wxQtConvertString(accelStr) ) );
+        UpdateShortcuts(accelStr);
     }
+#else
+    wxUnusedVar(text);
 #endif // wxUSE_ACCEL
+}
+
+void wxQtAction::UpdateShortcuts(const wxString& text)
+{
+#if wxUSE_ACCEL
+    QList<QKeySequence> shortcuts = this->shortcuts();
+
+    if ( text.empty() )
+    {
+        if ( shortcuts.size() > 1 )
+        {
+            // Keep the primary shortcut only and get rid of the rest
+            setShortcut( shortcuts.first() );
+        }
+    }
+    else
+    {
+        QKeySequence keySequence = QKeySequence( wxQtConvertString( text ) );
+
+        if ( !shortcuts.contains(keySequence) )
+        {
+            shortcuts.push_back(keySequence);
+            setShortcuts( shortcuts );
+        }
+    }
+#else
+    wxUnusedVar(text);
+#endif // wxUSE_ACCEL
+}
+
+void wxQtAction::onActionToggled( bool checked )
+{
+    GetMenu()->Check(m_mitemId, checked);
 }
 
 void wxQtAction::onActionTriggered( bool checked )
 {
-    GetMenu()->Check(m_mitemId, checked);
     GetMenu()->SendEvent(m_mitemId, m_isCheckable ? checked : -1 );
 }

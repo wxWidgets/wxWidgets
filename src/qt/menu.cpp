@@ -11,6 +11,7 @@
 #include "wx/menu.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
 #include "wx/stockitem.h"
 
 #include <QtWidgets/QMenu>
@@ -21,6 +22,36 @@ static void ApplyStyle( QMenu *qtMenu, long style )
     if ( style & wxMENU_TEAROFF )
         qtMenu->setTearOffEnabled( true );
 }
+
+// wxQtActionGroup: an exclusive group which synchronizes QActions in
+// QActionGroup with their wx wrappers.
+class wxQtActionGroup : public QActionGroup, public wxQtSignalHandler
+{
+
+public:
+    explicit wxQtActionGroup( wxMenu* handler )
+        : QActionGroup( handler->GetHandle() ),
+          wxQtSignalHandler( handler )
+    {
+        setExclusive(true);
+
+        connect( this, &QActionGroup::triggered, this, &wxQtActionGroup::triggered );
+    }
+
+    void AddAction( QAction* action )
+    {
+        m_activeAction = QActionGroup::addAction(action);
+    }
+
+private:
+    void triggered ( QAction* action );
+
+    QAction* m_activeAction;
+};
+
+//-----------------------------------------------------------------------------
+// wxMenu implementation
+//-----------------------------------------------------------------------------
 
 wxMenu::wxMenu(long style)
     : wxMenuBase( style )
@@ -80,8 +111,8 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             }
             else
             {
-                QActionGroup *actionGroup = new QActionGroup( qtMenu );
-                actionGroup->addAction( itemAction );
+                auto actionGroup = new wxQtActionGroup( const_cast<wxMenu*>(menu) );
+                actionGroup->AddAction( itemAction );
                 item->Check();
                 wxASSERT_MSG( itemAction->actionGroup() == actionGroup, "Must be the same action group" );
             }
@@ -308,4 +339,15 @@ void wxMenuBar::Detach()
 QWidget *wxMenuBar::GetHandle() const
 {
     return m_qtMenuBar;
+}
+
+void wxQtActionGroup::triggered( QAction* action )
+{
+    if ( action != m_activeAction )
+    {
+        if ( m_activeAction->isCheckable() )
+            m_activeAction->setChecked(false);
+
+        m_activeAction = action;
+    }
 }
