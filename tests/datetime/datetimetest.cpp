@@ -1441,6 +1441,15 @@ void DateTimeTestCase::TestDateTimeParse()
         },
 
         {
+            // with 'T' separator
+            "2010-01-04T14:30",
+            {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
+            true,
+            "",
+            false
+        },
+
+        {
             // date after time
             "14:30:00 2020-01-04",
             {  4, wxDateTime::Jan, 2020, 14, 30,  0 },
