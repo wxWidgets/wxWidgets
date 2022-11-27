@@ -1752,6 +1752,10 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
         // Skip spaces, as the ParseTime() function fails on spaces
         while ( endDate != date.end() && wxIsspace(*endDate) )
             ++endDate;
+        
+        // Skip possible 'T' separator in front of time component
+        if ( endDate != date.end() && *endDate == 'T' )
+            ++endDate;
 
         const wxString timestr(endDate, date.end());
         if ( !dtTime.ParseTime(timestr, &endTime) )
