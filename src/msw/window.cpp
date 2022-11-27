@@ -1704,10 +1704,12 @@ void wxWindowMSW::MSWDisableComposited()
 {
     for ( wxWindow* win = this; win; win = win->GetParent() )
     {
-        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
-
+        // We never set WS_EX_COMPOSITED on TLWs, and we shouldn't recurse into
+        // different windows, so we can stop here.
         if ( win->IsTopLevel() )
             break;
+
+        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
     }
 }
 
