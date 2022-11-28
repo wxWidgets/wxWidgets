@@ -45,9 +45,11 @@
 #include "wx/filename.h"
 #include "wx/dynlib.h"
 #include "wx/evtloop.h"
+#include "wx/msgdlg.h"
 #include "wx/thread.h"
 #include "wx/platinfo.h"
 #include "wx/scopeguard.h"
+#include "wx/sysopt.h"
 #include "wx/vector.h"
 #include "wx/weakref.h"
 
@@ -776,6 +778,32 @@ void wxApp::CleanUp()
 wxApp::wxApp()
 {
     m_printMode = wxPRINT_WINDOWS;
+
+    if ( !wxSystemOptions::GetOptionInt("msw.no-manifest-check") )
+    {
+        if ( GetComCtl32Version() < 610 )
+        {
+            wxMessageBox
+            (
+                R"(WARNING!
+
+This application doesn't use a correct manifest specifying
+the use of Common Controls Library v6.
+
+This is deprecated and won't be supported in the future
+wxWidgets versions, however for now you can still set
+"msw.no-manifest-check" system option to 1 (see
+https://docs.wxwidgets.org/latest/classwx_system_options.html
+for how to do it) to skip this check.
+
+Please use the appropriate manifest when building the
+application or contact us by posting to wx-dev@googlegroups.com
+if you believe not using the manifest should remain supported.
+)",
+                "wxWidgets Warning"
+            );
+        }
+    }
 }
 
 wxApp::~wxApp()
