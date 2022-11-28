@@ -46,6 +46,10 @@ Changes in behaviour not resulting in compilation errors
   asserts, make sure that wxImageList is created with a valid size before
   operating on it.
 
+- wxTRANSPARENT_WINDOW doesn't do anything and shouldn't be used any more. If
+  you ever used it under MSW (it never did anything in the other ports), you
+  can turn on the native WS_EX_TRANSPARENT extended style if really needed.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
