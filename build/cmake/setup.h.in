@@ -857,9 +857,6 @@
 /* Define if fsync() is available */
 #cmakedefine HAVE_FSYNC 1
 
-/* Define if round() is available */
-#cmakedefine HAVE_ROUND 1
-
 /* Define if you have ftime() */
 #cmakedefine HAVE_FTIME 1
 

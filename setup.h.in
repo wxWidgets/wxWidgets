@@ -855,9 +855,6 @@
 /* Define if fsync() is available */
 #undef HAVE_FSYNC
 
-/* Define if round() is available */
-#undef HAVE_ROUND
-
 /* Define if you have ftime() */
 #undef HAVE_FTIME
 
