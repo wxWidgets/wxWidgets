@@ -581,7 +581,7 @@ bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
     @code
         const void* data = nullptr;
         size_t size = 0;
-        if ( !wxLoadUserResource(&data, &size, "mydata", "MYDATA") ) {
+        if ( !wxLoadUserResource(&data, &size, "mydata", L"MYDATA") ) {
             ... handle error ...
         }
         else {
