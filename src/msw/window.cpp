@@ -553,7 +553,14 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
         // a system option if nothing else (i.e. turning it off for individual
         // windows) works.
         if ( !wxSystemOptions::GetOptionInt("msw.window.no-composited") )
+        {
             exstyle |= WS_EX_COMPOSITED;
+
+            // We have to use the class including CS_[HV]REDRAW bits, as
+            // WS_EX_COMPOSITED doesn't work correctly if the entire window is
+            // not redrawn every time it's drawn.
+            style |= wxFULL_REPAINT_ON_RESIZE;
+        }
     }
 
     if ( IsShown() )
