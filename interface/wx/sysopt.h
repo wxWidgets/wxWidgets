@@ -62,10 +62,10 @@
         Note that this won't disable the theme on the actual notebook background
         (noticeable only if there are no pages).
     @flag{msw.staticbox.optimized-paint}
-        This obsolete option doesn't do anything any more, wxMSW now always
-        behaves as if it were set to 0. Note that programs painting over the
-        static box may still not work correctly when double buffering is
-        enabled (which is the case by default) and could need to disable it.
+        If set to 0, switches off optimized wxStaticBox painting.
+        Setting this to 0 causes more flicker, but allows applications to paint
+        graphics on the parent of a static box (the optimized refresh causes any
+        such drawing to disappear).
     @flag{msw.font.no-proof-quality}
         If set to 1, use default fonts quality instead of proof quality when
         creating fonts. With proof quality the fonts have slightly better
