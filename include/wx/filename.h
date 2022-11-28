@@ -490,7 +490,7 @@ public:
 
     // get the canonical path separator for this format
     static wxUniChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE)
-        { return GetPathSeparators(format)[0u]; }
+        { return GetPathSeparators(format)[0]; }
 
     // is the char a path separator for this format?
     static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
