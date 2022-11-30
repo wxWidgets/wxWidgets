@@ -1031,6 +1031,15 @@ void wxQtListTreeWidget::itemActivated(const QModelIndex &index)
     EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, index);
 }
 
+// Specialization: to safely remove and delete the model associated with QTreeView
+template<>
+void wxQtEventSignalHandler< QTreeView, wxListCtrl >::HandleDestroyedSignal()
+{
+    // This handler is emitted immediately before the QTreeView obj is destroyed
+    // at which point the parent object (wxListCtrl) pointer is guaranteed to still
+    // be valid for the model to be safely removed.
+    this->setModel(nullptr);
+}
 
 wxListCtrl::wxListCtrl()
 {
@@ -1088,7 +1097,6 @@ void wxListCtrl::Init()
 
 wxListCtrl::~wxListCtrl()
 {
-    m_qtTreeWidget->setModel(nullptr);
     m_model->deleteLater();
 }
 
