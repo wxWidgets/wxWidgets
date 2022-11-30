@@ -7157,22 +7157,9 @@ if test "$wx_needs_cairo_for_gc" = 1 -a "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
 fi
 
 if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
-    PKG_CHECK_MODULES(CAIRO, cairo,
-        [wx_has_cairo=1],
-        [AC_MSG_RESULT(no)]
-    )
-    if test "$wx_has_cairo" = 1; then
-        dnl Check that Cairo library is new enough: wxGraphicsContext
-        dnl won't compile without cairo_push_group() and
-        dnl cairo_pop_group_to_source() which are new in 1.2.
-        save_LIBS="$LIBS"
-        LIBS="$LIBS $CAIRO_LIBS"
-        AC_CHECK_FUNCS([cairo_push_group])
-        LIBS="$save_LIBS"
-        if test "$ac_cv_func_cairo_push_group" = "no"; then
-            wx_has_cairo=0
-            AC_MSG_WARN([Cairo library is too old and misses cairo_push_group()])
-        else
+    PKG_CHECK_MODULES(CAIRO, [cairo >= 1.2],
+        [
+            wx_has_cairo=1
             AC_DEFINE(wxUSE_CAIRO)
 
             dnl We don't need to do this for wxGTK as we already get Cairo
@@ -7181,8 +7168,9 @@ if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
                 CXXFLAGS="$CXXFLAGS $CAIRO_CFLAGS"
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY $CAIRO_LIBS"
             fi
-        fi
-    fi
+        ],
+        [AC_MSG_RESULT(no)]
+    )
 fi
 
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
