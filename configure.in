@@ -2093,6 +2093,39 @@ fi
 dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
 PKG_PROG_PKG_CONFIG
 
+dnl When cross-compiling for another system from Linux, don't use .pc files on
+dnl the build system, they are at best useless and can be harmful (e.g. they
+dnl may define options inappropriate for the cross-build, resulting in the
+dnl failure of all the subsequent tests).
+dnl
+dnl Note that we only do it in this particular case because in other cases we
+dnl may want to use .pc files on the build system, e.g. it's common to have
+dnl them when cross-compiling from x86_64 Linux to ARM Linux.
+if test "$build" != "$host"; then
+    case "${host}" in
+        *-linux-*)
+            ;;
+
+        *)
+            disable_build_system_pkg_config=1
+            ;;
+    esac
+fi
+
+if test "$disable_build_system_pkg_config" = 1; then
+    dnl pkg.m4 forbids the use of PKG_XXX, so undo it here to avoid autoconf
+    dnl errors.
+    m4_pattern_allow([PKG_CONFIG_LIBDIR])
+
+    dnl If pkg-config libdir is already defined, we suppose that they know what
+    dnl they're doing and leave it alone, but if not, set it to a path in which
+    dnl no .pc files will be found.
+    if test -z "$PKG_CONFIG_LIBDIR"; then
+        PKG_CONFIG_LIBDIR=/dev/null
+        export PKG_CONFIG_LIBDIR
+    fi
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl

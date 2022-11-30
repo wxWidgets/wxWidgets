@@ -25051,6 +25051,26 @@ $as_echo "no" >&6; }
 
 fi
 
+if test "$build" != "$host"; then
+    case "${host}" in
+        *-linux-*)
+            ;;
+
+        *)
+            disable_build_system_pkg_config=1
+            ;;
+    esac
+fi
+
+if test "$disable_build_system_pkg_config" = 1; then
+
+
+                if test -z "$PKG_CONFIG_LIBDIR"; then
+        PKG_CONFIG_LIBDIR=/dev/null
+        export PKG_CONFIG_LIBDIR
+    fi
+fi
+
 
 
 if test "$wxUSE_REGEX" != "no"; then
