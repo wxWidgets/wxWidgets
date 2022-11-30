@@ -153,8 +153,12 @@ wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
     if ( !HasNativeHyperlinkCtrl() )
         return wxGenericHyperlinkCtrl::DoGetBestClientSize();
 
+    // Windows allows to pass 0 as maximum width here, but Wine interprets 0 as
+    // meaning "minimum possible width", so use something that works for both.
+    const WPARAM UNLIMITED_WIDTH = 10000;
+
     SIZE idealSize;
-    ::SendMessage(m_hWnd, LM_GETIDEALSIZE, 0, (LPARAM)&idealSize);
+    ::SendMessage(m_hWnd, LM_GETIDEALSIZE, UNLIMITED_WIDTH, (LPARAM)&idealSize);
 
     return wxSize(idealSize.cx, idealSize.cy);
 }
