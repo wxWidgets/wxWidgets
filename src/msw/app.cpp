@@ -46,6 +46,7 @@
 #include "wx/dynlib.h"
 #include "wx/evtloop.h"
 #include "wx/thread.h"
+#include "wx/platinfo.h"
 #include "wx/scopeguard.h"
 #include "wx/vector.h"
 #include "wx/weakref.h"
@@ -906,6 +907,21 @@ int wxApp::GetComCtl32Version()
     // NB: this is MT-ok as in the worst case we'd compute s_verComCtl32 twice,
     //     but as its value should be the same both times it doesn't matter
     static int s_verComCtl32 = -1;
+
+    if ( s_verComCtl32 == -1 )
+    {
+        // Test for Wine first because its comctl32.dll always returns 581 from
+        // its DllGetVersion() even though it supports the functionality of
+        // much later versions too.
+        wxVersionInfo verWine;
+        if ( wxIsRunningUnderWine(&verWine) )
+        {
+            // Not sure which version of Wine implements comctl32.dll v6
+            // functionality, but 5 seems to have it already.
+            if ( verWine.GetMajor() >= 5 )
+                s_verComCtl32 = 610;
+        }
+    }
 
     if ( s_verComCtl32 == -1 )
     {
