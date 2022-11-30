@@ -622,8 +622,15 @@ bool TestApp::OnInit()
          << "unidentified compiler"
 #endif
          << "\n"
-         << "running under " << wxGetOsDescription()
-         << " as " << wxGetUserId()
+         << "running under " << wxGetOsDescription();
+
+#ifdef __WXMSW__
+    wxVersionInfo verWine;
+    if ( wxIsRunningUnderWine(&verWine) )
+        cout << " emulated by " << verWine.GetVersionString();
+#endif // __WXMSW__
+
+    cout << " as " << wxGetUserId()
          << std::endl;
 
 #if wxUSE_GUI
