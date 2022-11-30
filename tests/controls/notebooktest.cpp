@@ -19,6 +19,7 @@
 #include "wx/notebook.h"
 #include "wx/scopedptr.h"
 
+#include "asserthelper.h"
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
 
@@ -167,19 +168,11 @@ TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
 
 void NotebookTestCase::GetTabRect()
 {
-    if (wxIsRunningUnderWine())
-    {
-        // Wine behaves different than Windows. Windows reports the size of a
-        // tab even if it is not visible while Wine returns an empty rectangle.
-        WARN("Skipping test known to fail under Wine.");
-        return;
-    }
-
     wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
                                           wxDefaultPosition, wxSize(400, 200));
     wxScopedPtr<wxNotebook> cleanup(notebook);
 
-    notebook->AddPage(new wxPanel(notebook), "First");
+    notebook->AddPage(new wxPanel(notebook), "Page");
 
     // This function is only really implemented for wxMSW and wxUniv currently.
 #if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
@@ -187,11 +180,33 @@ void NotebookTestCase::GetTabRect()
     for ( size_t i = 0; i < 30; i++ )
         notebook->AddPage(new wxPanel(notebook), "Page");
 
-    for ( size_t i = 0; i < notebook->GetPageCount(); i++ )
+    const wxRect rectPage = notebook->GetTabRect(0);
+    REQUIRE(rectPage.width != 0);
+    REQUIRE(rectPage.height != 0);
+
+    int x = rectPage.x + rectPage.width;
+    for ( size_t i = 1; i < notebook->GetPageCount(); i++ )
     {
         wxRect r = notebook->GetTabRect(i);
-        CHECK(r.width != 0);
-        CHECK(r.height != 0);
+
+        if (wxIsRunningUnderWine())
+        {
+            // Wine behaves different than Windows. Windows reports the size of a
+            // tab even if it is not visible while Wine returns an empty rectangle.
+            if ( r == wxRect() )
+            {
+                WARN("Skipping test for pages after " << i << " under Wine.");
+                break;
+            }
+        }
+
+        INFO("Page #" << i << ": rect=" << r);
+        REQUIRE(r.x == x);
+        REQUIRE(r.y == rectPage.y);
+        REQUIRE(r.width == rectPage.width);
+        REQUIRE(r.height == rectPage.height);
+
+        x += r.width;
     }
 #else // !(__WXMSW__ || __WXUNIVERSAL__)
     WX_ASSERT_FAILS_WITH_ASSERT( notebook->GetTabRect(0) );
