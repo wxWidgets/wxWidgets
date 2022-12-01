@@ -333,9 +333,9 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( l.CompareStrings(u8("ä"), "ae") == -1 );
 
 #if defined(__WINDOWS__) || defined(__WXOSX__)
-        // Unfortunately CompareStringsEx() doesn't seem to work correctly
-        // under Wine.
-        if ( wxIsRunningUnderWine() )
+        // CompareStringsEx() was only implemented correctly in Wine 7.10.
+        wxVersionInfo wineVer;
+        if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(7, 10) )
             return;
 
         CHECK( l.CompareStrings(u8("ß"), "ss", wxCompare_CaseInsensitive) == 0 );
@@ -344,7 +344,8 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 
     SECTION("Swedish")
     {
-        if ( wxIsRunningUnderWine() )
+        wxVersionInfo wineVer;
+        if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(7, 10) )
             return;
 
         const wxUILocale l(wxUILocale::FromTag("sv"));
