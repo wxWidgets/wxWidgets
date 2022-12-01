@@ -3907,7 +3907,9 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 TEST_CASE("ClippingBoxTestCase::wxClientDC", "[clip][dc][clientdc]")
 {
     wxBitmap bmp; // We need wxNullBitmap because we can't check the output
-    // Ensure window is large enough for testing
+    // Ensure window is shown and large enough for testing
+    wxTheApp->GetTopWindow()->Raise();
+    REQUIRE(wxTheApp->GetTopWindow()->IsShown());
     wxSize winSize = wxTheApp->GetTopWindow()->GetSize();
     winSize.x = wxMax(winSize.x, s_dcSize.x + 50);
     winSize.y = wxMax(winSize.y, s_dcSize.y + 50);
