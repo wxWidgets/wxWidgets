@@ -1078,8 +1078,17 @@ private:
 
   static wxString FromImpl(const wxStringImpl& src)
       { return wxString((CtorFromStringImplTag*)nullptr, src); }
+
+  wxString(CtorFromStringImplTag* WXUNUSED(dummy), wxStringImpl&& src) noexcept
+      : m_impl(std::move(src)) {}
+
+  static wxString FromImpl(wxStringImpl&& src) noexcept
+  {
+      return wxString((CtorFromStringImplTag*)nullptr, std::move(src));
+  }
 #else // wxUSE_UNICODE_WCHAR
   static wxString FromImpl(const wxStringImpl& src) { return wxString(src); }
+  static wxString FromImpl(wxStringImpl&& src) noexcept { return wxString(std::move(src)); }
 #endif
 
 public:
@@ -1190,6 +1199,8 @@ public:
     // we also need to provide this one
   wxString(const wxString& str, size_t nLength)
     { assign(str, nLength); }
+  wxString(wxString&& str, size_t nLength)
+    { assign(std::move(str), nLength); }
 
 
 #if wxUSE_STRING_POS_CACHE
@@ -1204,6 +1215,7 @@ public:
 
   #if wxUSE_UNICODE_WCHAR
     wxString(const std::wstring& str) : m_impl(str) {}
+    wxString(std::wstring&& str) noexcept : m_impl(std::move(str)) {}
   #else // wxUSE_UNICODE_UTF8
     wxString(const std::wstring& str)
         { assign(str.c_str(), str.length()); }
@@ -1618,6 +1630,18 @@ public:
         if ( utf8.empty() || !wxStringOperations::IsValidUtf8String(utf8.c_str(), utf8.length()) )
             return wxString();
         return FromImpl(utf8);
+    }
+
+    static wxString FromUTF8Unchecked(std::string&& utf8) noexcept
+    {
+        wxASSERT(wxStringOperations::IsValidUtf8String(utf8.c_str(), utf8.length()));
+        return FromImpl(std::move(utf8));
+    }
+    static wxString FromUTF8(std::string&& utf8)
+    {
+        if (utf8.empty() || !wxStringOperations::IsValidUtf8String(utf8.c_str(), utf8.length()))
+            return wxString();
+        return FromImpl(std::move(utf8));
     }
 
     std::string utf8_string() const { return m_impl; }
@@ -2422,6 +2446,17 @@ public:
       return *this;
   }
 
+  wxString& assign(wxString&& str) noexcept
+  {
+  #if wxUSE_STRING_POS_CACHE
+      wxSTRING_SET_CACHED_LENGTH(str.length());
+      str.InvalidateCache();
+  #endif
+      m_impl = std::move(str.m_impl);
+
+      return *this;
+  }
+
     // This is a non-standard-compliant overload taking the first "len"
     // characters of the source string.
   wxString& assign(const wxString& str, size_t len)
@@ -2441,6 +2476,12 @@ public:
       m_impl.assign(str.m_impl, 0, str.LenToImpl(len));
 
       return *this;
+  }
+
+  wxString& assign(wxString&& str, size_t len)
+  {
+      str.Truncate(len);
+      return assign(std::move(str));
   }
 
     // same as ` = str[pos..pos + n]
