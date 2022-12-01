@@ -43,6 +43,24 @@ public:
     // Default copy ctor, assignment operator and dtor are ok.
 
 
+    // Check if this version is at least equal to the given one.
+    bool AtLeast(int major, int minor = 0, int micro = 0) const
+    {
+        if ( m_major > major )
+            return true;
+
+        if ( m_major < major )
+            return false;
+
+        if ( m_minor > minor )
+            return true;
+
+        if ( m_minor < minor )
+            return false;
+
+        return m_micro >= micro;
+    }
+
     const wxString& GetName() const { return m_name; }
 
     int GetMajor() const { return m_major; }

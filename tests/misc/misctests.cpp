@@ -18,6 +18,7 @@
 
 #include "wx/math.h"
 #include "wx/mimetype.h"
+#include "wx/versioninfo.h"
 
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
@@ -241,3 +242,15 @@ TEST_CASE("wxFileTypeInfo", "[mime]")
     }
 }
 #endif // wxUSE_MIMETYPE
+
+TEST_CASE("wxVersionInfo", "[version]")
+{
+    wxVersionInfo ver120("test", 1, 2);
+    CHECK( ver120.AtLeast(1, 2) );
+    CHECK( ver120.AtLeast(1, 0) );
+    CHECK( ver120.AtLeast(0, 9) );
+
+    CHECK_FALSE( ver120.AtLeast(1, 2, 1) );
+    CHECK_FALSE( ver120.AtLeast(1, 3) );
+    CHECK_FALSE( ver120.AtLeast(2, 0) );
+}
