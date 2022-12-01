@@ -235,6 +235,10 @@ Changes in behaviour which may result in build errors
 3.2.3: (released 2023-??-??)
 ----------------------------
 
+All:
+
+- Add move ctor and assignment to wxString (Pavel Tyunin, #23224).
+
 
 3.2.2: (released 2023-02-08)
 ----------------------------

@@ -1637,6 +1637,7 @@ wxString& wxString::Truncate(size_t uiLen)
     if ( uiLen < length() )
     {
         erase(begin() + uiLen, end());
+        wxSTRING_SET_CACHED_LENGTH(uiLen);
     }
     //else: nothing to do, string is already short enough
 
