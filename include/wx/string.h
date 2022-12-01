@@ -1140,12 +1140,25 @@ private:
 
   static wxString FromImpl(const wxStringImpl& src)
       { return wxString((CtorFromStringImplTag*)NULL, src); }
+
+  #ifdef wxHAS_RVALUE_REF
+  wxString(CtorFromStringImplTag* WXUNUSED(dummy), wxStringImpl&& src) wxNOEXCEPT
+      : m_impl(std::move(src)) {}
+
+  static wxString FromImpl(wxStringImpl&& src) wxNOEXCEPT
+  {
+      return wxString((CtorFromStringImplTag*)NULL, std::move(src));
+  }
+  #endif
 #else
   #if !wxUSE_STL_BASED_WXSTRING
   wxString(const wxStringImpl& src) : m_impl(src) { }
   // else: already defined as wxString(wxStdString) below
   #endif
   static wxString FromImpl(const wxStringImpl& src) { return wxString(src); }
+  #ifdef wxHAS_RVALUE_REF
+  static wxString FromImpl(wxStringImpl&& src) wxNOEXCEPT { return wxString(std::move(src)); }
+  #endif
 #endif
 
 public:
@@ -1253,6 +1266,10 @@ public:
     // we also need to provide this one
   wxString(const wxString& str, size_t nLength)
     { assign(str, nLength); }
+#ifdef wxHAS_RVALUE_REF
+  wxString(wxString&& str, size_t nLength)
+    { assign(std::move(str), nLength); }
+#endif
 
 
 #if wxUSE_STRING_POS_CACHE
@@ -1275,6 +1292,9 @@ public:
 #if wxUSE_STD_STRING
   #if wxUSE_UNICODE_WCHAR
     wxString(const wxStdWideString& str) : m_impl(str) {}
+    #ifdef wxHAS_RVALUE_REF
+    wxString(wxStdWideString&& str) wxNOEXCEPT : m_impl(std::move(str)) {}
+    #endif
   #else // UTF-8 or ANSI
     wxString(const wxStdWideString& str)
         { assign(str.c_str(), str.length()); }
@@ -1284,6 +1304,9 @@ public:
   #if !wxUSE_UNICODE // ANSI build
     // FIXME-UTF8: do this in UTF8 build #if wxUSE_UTF8_LOCALE_ONLY, too
     wxString(const std::string& str) : m_impl(str) {}
+    #ifdef wxHAS_RVALUE_REF
+    wxString(std::string&& str) wxNOEXCEPT : m_impl(std::move(str)) {}
+    #endif
   #else // Unicode
     wxString(const std::string& str)
         { assign(str.c_str(), str.length()); }
@@ -1725,6 +1748,20 @@ public:
             return wxString();
         return FromImpl(utf8);
     }
+
+  #ifdef wxHAS_RVALUE_REF
+    static wxString FromUTF8Unchecked(std::string&& utf8) wxNOEXCEPT
+    {
+        wxASSERT(wxStringOperations::IsValidUtf8String(utf8.c_str(), utf8.length()));
+        return FromImpl(std::move(utf8));
+    }
+    static wxString FromUTF8(std::string&& utf8)
+    {
+        if (utf8.empty() || !wxStringOperations::IsValidUtf8String(utf8.c_str(), utf8.length()))
+            return wxString();
+        return FromImpl(std::move(utf8));
+    }
+  #endif
 
     std::string utf8_string() const { return m_impl; }
 #endif
@@ -2620,6 +2657,19 @@ public:
       return *this;
   }
 
+#ifdef wxHAS_RVALUE_REF
+  wxString& assign(wxString&& str) wxNOEXCEPT
+  {
+  #if wxUSE_STRING_POS_CACHE
+      wxSTRING_SET_CACHED_LENGTH(str.length());
+      str.InvalidateCache();
+  #endif
+      m_impl = std::move(str.m_impl);
+
+      return *this;
+  }
+#endif
+
     // This is a non-standard-compliant overload taking the first "len"
     // characters of the source string.
   wxString& assign(const wxString& str, size_t len)
@@ -2640,6 +2690,14 @@ public:
 
       return *this;
   }
+
+#ifdef wxHAS_RVALUE_REF
+  wxString& assign(wxString&& str, size_t len)
+  {
+      str.Truncate(len);
+      return assign(std::move(str));
+  }
+#endif
 
     // same as ` = str[pos..pos + n]
   wxString& assign(const wxString& str, size_t pos, size_t n)
