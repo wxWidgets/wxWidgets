@@ -334,7 +334,13 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 - (void) clickedAction: (id) sender
 {
     wxUnusedVar(sender);
-    wxMenu *menu = impl->CreatePopupMenu();
+    wxMenu *menu = impl->GetPopupMenu();
+    if (menu)
+    {
+        impl->PopupMenu(menu);
+        return;
+    }
+    menu = impl->CreatePopupMenu();
     if (menu)
     {
         impl->PopupMenu(menu);
