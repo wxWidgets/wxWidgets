@@ -71,8 +71,8 @@ jobs:
           - name: wxMSW 64 bits
             configure_flags: --enable-stl --disable-compat30
             triplet: x86_64-w64-mingw32
-          - name: wxMSW 32 bits
-            triplet: i686-w64-mingw32
+##          - name: wxMSW 32 bits
+##            triplet: i686-w64-mingw32
     env:
       wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
 
