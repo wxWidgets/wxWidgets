@@ -112,6 +112,17 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     return true;
 }
 
+wxHyperlinkCtrl::~wxHyperlinkCtrl()
+{
+    if ( m_hWnd )
+    {
+        // Due to https://bugs.winehq.org/show_bug.cgi?id=54066 we have to
+        // reset the font before the native control destroys it.
+        if ( wxIsRunningUnderWine() )
+            ::SendMessage(m_hWnd, WM_SETFONT, 0, FALSE);
+    }
+}
+
 WXDWORD wxHyperlinkCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle( style, exstyle );

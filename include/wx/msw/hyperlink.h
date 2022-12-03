@@ -43,6 +43,7 @@ public:
                 long style = wxHL_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxHyperlinkCtrlNameStr));
 
+    virtual ~wxHyperlinkCtrl();
 
     // overridden base class methods
     // -----------------------------
