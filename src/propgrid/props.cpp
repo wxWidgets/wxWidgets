@@ -69,7 +69,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
 {
     wxString s = value.GetString();
 
-    if ( GetChildCount() && HasFlag(wxPG_PROP_COMPOSED_VALUE) )
+    if ( GetChildCount() > 0 && HasFlag(wxPG_PROP_COMPOSED_VALUE) )
     {
         // Value stored in m_value is non-editable, non-full value
         if ( (argFlags & wxPG_FULL_VALUE) ||
@@ -97,7 +97,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
 
 bool wxStringProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
-    if ( GetChildCount() && HasFlag(wxPG_PROP_COMPOSED_VALUE) )
+    if ( GetChildCount() > 0 && HasFlag(wxPG_PROP_COMPOSED_VALUE) )
         return wxPGProperty::StringToValue(variant, text, argFlags);
 
     if ( variant != text )
@@ -1771,7 +1771,7 @@ long wxFlagsProperty::IdToBit( const wxString& id ) const
 
 void wxFlagsProperty::RefreshChildren()
 {
-    if ( !m_choices.IsOk() || !GetChildCount() ) return;
+    if ( !m_choices.IsOk() || GetChildCount() == 0 ) return;
 
     int flags = m_value.GetLong();
 

@@ -1559,7 +1559,7 @@ public:
 
     // Returns true if property has visible children.
     bool IsExpanded() const
-        { return (!(m_flags & wxPG_PROP_COLLAPSED) && GetChildCount()); }
+        { return (!(m_flags & wxPG_PROP_COLLAPSED) && GetChildCount() > 0); }
 
     // Returns true if all parents expanded.
     bool IsVisible() const;

@@ -293,7 +293,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
     //
     // If has children, and limited editing is specified, then don't create.
     if ( property->HasFlag(wxPG_PROP_NOEDITOR) &&
-         property->GetChildCount() )
+         property->GetChildCount() > 0 )
         return nullptr;
 
     int argFlags = 0;

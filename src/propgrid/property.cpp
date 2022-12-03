@@ -593,7 +593,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
 
     //
     // Has initial children
-    if ( GetChildCount() )
+    if ( GetChildCount() > 0 )
     {
         // Check parental flags
         wxASSERT_MSG( ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
@@ -945,14 +945,14 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
             }
         }
 
-        if ( childResults && curChild->GetChildCount() )
+        if ( childResults && curChild->GetChildCount() > 0 )
             (*childResults)[curChild->GetName()] = s;
 
         bool skip = false;
         if ( (argFlags & wxPG_UNEDITABLE_COMPOSITE_FRAGMENT) && s.empty() )
             skip = true;
 
-        if ( !curChild->GetChildCount() || skip )
+        if ( curChild->GetChildCount() == 0 || skip )
             text += s;
         else
             text += wxS("[") + s + wxS("]");
@@ -966,7 +966,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
 
             if ( !skip )
             {
-                if ( !curChild->GetChildCount() )
+                if ( curChild->GetChildCount() == 0 )
                     text += wxS("; ");
                 else
                     text += wxS(" ");
@@ -1045,7 +1045,7 @@ bool wxPGProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argF
 // Convert semicolon delimited tokens into child values.
 bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFlags ) const
 {
-    if ( !GetChildCount() )
+    if ( GetChildCount() == 0 )
         return false;
 
     unsigned int curChild = 0;
@@ -1383,7 +1383,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         if ( pList && !pList->IsNull() )
         {
             wxASSERT( pList->IsType(wxPG_VARIANT_TYPE_LIST) );
-            wxASSERT( GetChildCount() );
+            wxASSERT( GetChildCount() > 0 );
             wxASSERT( !IsCategory() );
 
             wxVariantList& list = pList->GetList();
@@ -1708,7 +1708,7 @@ void wxPGProperty::SetBackgroundColour( const wxColour& colour,
     {
         while ( firstProp->IsCategory() )
         {
-            if ( !firstProp->GetChildCount() )
+            if ( firstProp->GetChildCount() == 0 )
                 return;
             firstProp = firstProp->Item(0);
         }
@@ -1744,7 +1744,7 @@ void wxPGProperty::SetTextColour( const wxColour& colour,
     {
         while ( firstProp->IsCategory() )
         {
-            if ( !firstProp->GetChildCount() )
+            if ( firstProp->GetChildCount() == 0 )
                 return;
             firstProp = firstProp->Item(0);
         }
@@ -1778,7 +1778,7 @@ void wxPGProperty::SetDefaultColours(int flags)
     {
         while ( firstProp->IsCategory() )
         {
-            if ( !firstProp->GetChildCount() )
+            if ( firstProp->GetChildCount() == 0 )
                 return;
             firstProp = firstProp->Item(0);
         }
@@ -1986,7 +1986,7 @@ int wxPGProperty::GetChoiceSelection() const
     wxString valueType = value.GetType();
     int index = wxNOT_FOUND;
 
-    if ( IsValueUnspecified() || !m_choices.GetCount() )
+    if ( IsValueUnspecified() || m_choices.GetCount() == 0 )
         return wxNOT_FOUND;
 
     if ( valueType == wxPG_VARIANT_TYPE_LONG )
@@ -2166,7 +2166,7 @@ const wxPGProperty* wxPGProperty::GetLastVisibleSubItem() const
 {
     //
     // Returns last visible sub-item, recursively.
-    if ( !IsExpanded() || !GetChildCount() )
+    if ( !IsExpanded() || GetChildCount() == 0 )
         return this;
 
     return Last()->GetLastVisibleSubItem();
@@ -2318,12 +2318,12 @@ void wxPGProperty::SortChildren(int (*fCmp)(wxPGProperty**, wxPGProperty**))
 
 void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 {
-    wxASSERT( GetChildCount() );
+    wxASSERT( GetChildCount() > 0 );
     wxASSERT( !IsCategory() );
 
     *value = GetValue();
 
-    if ( !list.GetCount() )
+    if ( list.GetCount() == 0 )
         return;
 
     wxASSERT( GetChildCount() >= (unsigned int)list.GetCount() );
@@ -2395,7 +2395,7 @@ wxPGProperty* wxPGProperty::GetPropertyByName( const wxString& name ) const
 
     wxPGProperty* p = GetPropertyByName(name. substr(0,pos));
 
-    if ( !p || !p->GetChildCount() )
+    if ( !p || p->GetChildCount() == 0 )
         return nullptr;
 
     return p->GetPropertyByName(name.substr(pos+1,name.length()-pos-1));
@@ -2545,7 +2545,7 @@ void wxPGProperty::DeleteChildren()
 {
     wxPropertyGridPageState* state = m_parentState;
 
-    if ( !GetChildCount() )
+    if ( GetChildCount() == 0 )
         return;
 
     // Because deletion is sometimes deferred, we have to use
@@ -2623,7 +2623,7 @@ bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
             return false;
 
         // Check recursively
-        if ( child->GetChildCount() )
+        if ( child->GetChildCount() > 0 )
         {
             const wxVariant* childList = nullptr;
 
@@ -2658,7 +2658,7 @@ bool wxPGProperty::IsTextEditable() const
         return false;
 
     if ( HasFlag(wxPG_PROP_NOEDITOR) &&
-         (GetChildCount() ||
+         (GetChildCount() > 0 ||
           wxString(GetEditorClass()->GetClassInfo()->GetClassName()).EndsWith(wxS("Button")))
        )
         return false;

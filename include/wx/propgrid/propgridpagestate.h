@@ -155,7 +155,7 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 #define wxPG_ITERATOR_PARENTEXMASK_TEST(PWC, PARENTMASK) \
         ( \
         !PWC->HasFlag(PARENTMASK) && \
-        PWC->GetChildCount() \
+        PWC->GetChildCount() > 0 \
         )
 
 
