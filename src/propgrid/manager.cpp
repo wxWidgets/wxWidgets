@@ -1114,7 +1114,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
         wxS("wxPropertyGridManager currently only supports appending pages (due to wxToolBar limitation)."));
 
     bool needInit = true;
-    bool isPageInserted = m_iFlags & wxPG_MAN_FL_PAGE_INSERTED ? true : false;
+    bool isPageInserted = (m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) != 0;
 
     wxASSERT( index == 0 || isPageInserted );
 

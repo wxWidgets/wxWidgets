@@ -2893,7 +2893,7 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
         wxWindow* oldFocus = m_curFocused;
 
         bool validationFailure = false;
-        bool forceSuccess = (flags & (wxPG_SEL_NOVALIDATE|wxPG_SEL_FORCE)) ? true : false;
+        bool forceSuccess = (flags & (wxPG_SEL_NOVALIDATE | wxPG_SEL_FORCE)) != 0;
 
         m_chgInfo_changedProperty = nullptr;
 

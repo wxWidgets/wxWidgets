@@ -2187,7 +2187,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
     if ( ms_defaultDateFormat.empty() )
     {
 #if wxUSE_DATEPICKCTRL
-        bool showCentury = m_dpStyle & wxDP_SHOWCENTURY ? true : false;
+        bool showCentury = (m_dpStyle & wxDP_SHOWCENTURY) != 0;
 #else
         bool showCentury = true;
 #endif

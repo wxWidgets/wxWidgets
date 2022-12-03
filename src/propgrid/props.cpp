@@ -1141,7 +1141,7 @@ bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, in
 
 bool wxBoolProperty::IntToValue( wxVariant& variant, int value, int ) const
 {
-    bool boolValue = value ? true : false;
+    bool boolValue = (bool)value;
 
     if ( variant != boolValue )
     {

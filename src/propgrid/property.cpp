@@ -1699,7 +1699,7 @@ void wxPGProperty::SetBackgroundColour( const wxColour& colour,
                                         int flags )
 {
     wxPGProperty* firstProp = this;
-    bool recursively = flags & wxPG_RECURSE ? true : false;
+    bool recursively = (flags & wxPG_RECURSE) != 0;
 
     //
     // If category is tried to set recursively, skip it and only
@@ -1735,7 +1735,7 @@ void wxPGProperty::SetTextColour( const wxColour& colour,
                                   int flags )
 {
     wxPGProperty* firstProp = this;
-    bool recursively = flags & wxPG_RECURSE ? true : false;
+    bool recursively = (flags & wxPG_RECURSE) != 0;
 
     //
     // If category is tried to set recursively, skip it and only
@@ -1770,7 +1770,7 @@ void wxPGProperty::SetTextColour( const wxColour& colour,
 void wxPGProperty::SetDefaultColours(int flags)
 {
     wxPGProperty* firstProp = this;
-    bool recursively = flags & wxPG_RECURSE ? true : false;
+    bool recursively = (flags & wxPG_RECURSE) != 0;
 
     // If category is tried to set recursively, skip it and only
     // affect the children.
