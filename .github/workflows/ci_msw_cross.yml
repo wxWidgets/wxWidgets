@@ -58,7 +58,7 @@ permissions:
 
 jobs:
   msw-cross-build:
-    # Set up this job to run in a Debian Sid container because it has recent
+    # Set up this job to run in a Debian Testing container because it has recent
     # versions of MinGW and Wine and is simpler to test with locally than the
     # bespoke container used by GitHub Actions by default.
     runs-on: ubuntu-latest
@@ -83,31 +83,16 @@ jobs:
       # correctly, so set the locale explicitly for it.
       LC_ALL: C.UTF-8
 
-    # Run all commands as the normal user, created by the first step below.
-    #
-    # Note that the Bash options used here are the same as for the default
-    # shell used by GitHub Actions to minimize any surprises.
     defaults:
       run:
-        shell: /usr/bin/setpriv --reuid=runner --regid=adm --clear-groups --inh-caps=-all bash --noprofile --norc -eo pipefail {0}
+        shell: bash
 
     steps:
-      - name: Set up container user
-        # Specify the default shell explicitly to override the default value above.
-        shell: bash
-        run: |
-          apt-get -q -o=Dpkg::Use-Pty=0 update
-          apt-get -q -o=Dpkg::Use-Pty=0 -y install sudo
-
-          # Create a user with the same UID/GID and name as the existing user
-          # outside of the container and allow it using sudo without password.
-          useradd --home-dir $HOME --no-create-home --gid adm --uid 1001 runner
-
-          echo 'runner ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
-
       - name: Install prerequisites
         run: |
-          packages="git make wine x11-xserver-utils"
+          export DEBIAN_FRONTEND=noninteractive
+
+          packages="bash git make wine x11-xserver-utils"
 
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
@@ -116,8 +101,7 @@ jobs:
               ;;
 
             i686-w64-mingw32)
-              sudo dpkg --add-architecture i386
-              sudo apt-get -q -o=Dpkg::Use-Pty=0 update
+              dpkg --add-architecture i386
               packages="$packages g++-mingw-w64-i686 wine32 libgl1:i386 xvfb:i386"
               winerun=wine
               ;;
@@ -128,7 +112,8 @@ jobs:
               ;;
           esac
 
-          sudo DEBIAN_FRONTEND=noninteractive apt-get -q -o=Dpkg::Use-Pty=0 -y install $packages
+          apt-get -q -o=Dpkg::Use-Pty=0 update
+          apt-get -q -o=Dpkg::Use-Pty=0 -y install $packages
 
           echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
 
@@ -144,19 +129,16 @@ jobs:
 
       - name: System and environment setup
         run: |
-          normal_uid=`id --user`
-
-          # The checkout actions runs as root and there doesn't seem to be any
-          # way to change this, so just adjust the owner after checkout.
-          sudo chown -R $normal_uid $GITHUB_WORKSPACE
+          # Wine refuses to run if home is not owned by the current user (which
+          # is actually root, but /github/home is actually owned by "runner").
+          chown -R `id --user` $HOME
 
           # Add the directories containing MinGW and wx DLLs to Wine path.
           winepath="$(winepath --windows $(dirname $(${HOST_TRIPLET}-g++ -print-libgcc-file-name)))"
           winepath="${winepath};$(winepath --windows $(pwd)/lib)"
           echo "WINEPATH=${winepath}" >> $GITHUB_ENV
 
-          cpu_count=`nproc`
-          ((cpu_count++))
+          cpu_count=`./build/tools/proc_count.sh`
           echo "wxMAKE_ARGS=-k -j$cpu_count" >> $GITHUB_ENV
 
           echo "wxMAKEFILE_ERROR_CXXFLAGS=-Werror -Wno-error=cpp" >> $GITHUB_ENV
@@ -192,8 +174,8 @@ jobs:
       - name: Launch Xvfb
         run: |
           echo 'Launching Xvfb...'
-          sudo mkdir /tmp/.X11-unix
-          sudo chmod 1777 /tmp/.X11-unix
+          mkdir /tmp/.X11-unix
+          chmod 1777 /tmp/.X11-unix
           Xvfb :10 -screen 0 1600x1200x24 &
           num_tries=1
           while true; do
