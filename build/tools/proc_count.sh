@@ -14,5 +14,4 @@ case `uname` in
         ;;
 esac
 
-((wxPROC_COUNT++))
-echo $wxPROC_COUNT
+echo $((wxPROC_COUNT+1))
