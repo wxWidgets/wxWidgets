@@ -80,8 +80,8 @@ class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
 {
     wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
 public:
-    wxSampleMultiButtonEditor() {}
-    virtual ~wxSampleMultiButtonEditor() {}
+    wxSampleMultiButtonEditor() = default;
+    virtual ~wxSampleMultiButtonEditor() = default;
 
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propGrid,
                                            wxPGProperty* property,
@@ -219,8 +219,6 @@ wxVectorProperty::wxVectorProperty( const wxString& label,
     AddPrivateChild( new wxFloatProperty("Z",wxPG_LABEL,value.z) );
 }
 
-wxVectorProperty::~wxVectorProperty() { }
-
 void wxVectorProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
@@ -269,8 +267,6 @@ wxTriangleProperty::wxTriangleProperty( const wxString& label,
     AddPrivateChild( new wxVectorProperty("B",wxPG_LABEL,value.b) );
     AddPrivateChild( new wxVectorProperty("C",wxPG_LABEL,value.c) );
 }
-
-wxTriangleProperty::~wxTriangleProperty() { }
 
 void wxTriangleProperty::RefreshChildren()
 {

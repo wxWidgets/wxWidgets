@@ -60,9 +60,8 @@ class WXDLLIMPEXP_PROPGRID wxPGCellRenderer : public wxObjectRefData
 {
 public:
 
-    wxPGCellRenderer()
-        : wxObjectRefData() { }
-    virtual ~wxPGCellRenderer() { }
+    wxPGCellRenderer() = default;
+    virtual ~wxPGCellRenderer() = default;
 
     // Render flags
     enum
@@ -188,7 +187,7 @@ public:
     void SetFont( const wxFont& font ) { m_font = font; }
 
 protected:
-    virtual ~wxPGCellData() { }
+    virtual ~wxPGCellData() = default;
 
     wxString    m_text;
     wxBitmapBundle m_bitmapBundle;
@@ -205,7 +204,7 @@ protected:
 class WXDLLIMPEXP_PROPGRID wxPGCell : public wxObject
 {
 public:
-    wxPGCell();
+    wxPGCell() = default;
     wxPGCell(const wxPGCell& other)
         : wxObject(other)
     {
@@ -216,7 +215,7 @@ public:
               const wxColour& fgCol = wxNullColour,
               const wxColour& bgCol = wxNullColour );
 
-    virtual ~wxPGCell() { }
+    virtual ~wxPGCell() = default;
 
     wxPGCellData* GetData()
     {
@@ -650,7 +649,7 @@ public:
         SetText(label);
     }
 
-    virtual ~wxPGChoiceEntry() { }
+    virtual ~wxPGChoiceEntry() = default;
 
     void SetValue( int value ) { m_value = value; }
     int GetValue() const { return m_value; }

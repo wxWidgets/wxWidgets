@@ -140,7 +140,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridInterface
 public:
 
     // Destructor.
-    virtual ~wxPropertyGridInterface() { }
+    virtual ~wxPropertyGridInterface() = default;
 
     // Appends property to the list.
     // wxPropertyGrid assumes ownership of the object.

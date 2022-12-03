@@ -64,8 +64,6 @@ void wxStringProperty::OnSetValue()
     }
 }
 
-wxStringProperty::~wxStringProperty() { }
-
 wxString wxStringProperty::ValueToString( wxVariant& value,
                                           int argFlags ) const
 {
@@ -372,8 +370,6 @@ wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
 }
 #endif
 
-wxIntProperty::~wxIntProperty() { }
-
 wxString wxIntProperty::ValueToString( wxVariant& value,
                                        int WXUNUSED(argFlags) ) const
 {
@@ -609,8 +605,6 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
     SetValue(wxVariant(value));
 }
 #endif
-
-wxUIntProperty::~wxUIntProperty() { }
 
 wxString wxUIntProperty::ValueToString(wxVariant& value, int argFlags) const
 {
@@ -882,8 +876,6 @@ wxFloatProperty::wxFloatProperty( const wxString& label,
     SetValue(value);
 }
 
-wxFloatProperty::~wxFloatProperty() { }
-
 #if WXWIN_COMPATIBILITY_3_0
 // This helper method provides standard way for floating point-using
 // properties to convert values to string.
@@ -1088,8 +1080,6 @@ wxBoolProperty::wxBoolProperty( const wxString& label, const wxString& name, boo
 
     m_flags |= wxPG_PROP_USE_DCC;
 }
-
-wxBoolProperty::~wxBoolProperty() { }
 
 wxString wxBoolProperty::ValueToString( wxVariant& value,
                                         int argFlags ) const
@@ -1856,8 +1846,6 @@ wxDirProperty::wxDirProperty( const wxString& label, const wxString& name, const
     SetValue(value);
 }
 
-wxDirProperty::~wxDirProperty() { }
-
 wxString wxDirProperty::ValueToString(wxVariant& value, int WXUNUSED(argFlags)) const
 {
     return value;
@@ -1999,8 +1987,6 @@ wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
 
     SetValue(value);
 }
-
-wxFileProperty::~wxFileProperty() {}
 
 wxValidator* wxFileProperty::GetClassValidator()
 {
@@ -2226,8 +2212,6 @@ wxLongStringProperty::wxLongStringProperty( const wxString& label, const wxStrin
     m_dlgStyle = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxCLIP_CHILDREN;
     SetValue(value);
 }
-
-wxLongStringProperty::~wxLongStringProperty() {}
 
 wxString wxLongStringProperty::ValueToString( wxVariant& value,
                                               int WXUNUSED(argFlags) ) const
@@ -2674,8 +2658,6 @@ wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
     m_dlgStyle = wxAEDIALOG_STYLE;
     SetValue( array );
 }
-
-wxArrayStringProperty::~wxArrayStringProperty() { }
 
 void wxArrayStringProperty::OnSetValue()
 {

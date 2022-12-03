@@ -602,8 +602,6 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
                      font.GetFamily()) );
 }
 
-wxFontProperty::~wxFontProperty() { }
-
 void wxFontProperty::OnSetValue()
 {
     wxFont font;
@@ -882,10 +880,6 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 {
         Init( wxPG_COLOUR_CUSTOM, value );
 }
-
-
-wxSystemColourProperty::~wxSystemColourProperty() { }
-
 
 wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant ) const
 {

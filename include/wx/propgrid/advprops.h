@@ -138,7 +138,7 @@ public:
     wxFontProperty(const wxString& label = wxPG_LABEL,
                    const wxString& name = wxPG_LABEL,
                    const wxFont& value = wxFont());
-    virtual ~wxFontProperty();
+    virtual ~wxFontProperty() = default;
     virtual void OnSetValue() override;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
     virtual wxVariant ChildChanged( wxVariant& thisValue,
@@ -168,7 +168,7 @@ public:
                             const wxString& name = wxPG_LABEL,
                             const wxColourPropertyValue&
                                 value = wxColourPropertyValue() );
-    virtual ~wxSystemColourProperty();
+    virtual ~wxSystemColourProperty() = default;
 
     virtual void OnSetValue() override;
     virtual bool IntToValue(wxVariant& variant,

@@ -2364,7 +2364,7 @@ public:
     {
         m_it.Init(manager->GetPage(0), flags);
     }
-    virtual ~wxPGVIteratorBase_Manager() { }
+    virtual ~wxPGVIteratorBase_Manager() = default;
     virtual void Next() override
     {
         m_it.Next();

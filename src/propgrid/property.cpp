@@ -355,11 +355,6 @@ wxPGCellData::wxPGCellData()
 // wxPGCell
 // -----------------------------------------------------------------------
 
-wxPGCell::wxPGCell()
-    : wxObject()
-{
-}
-
 wxPGCell::wxPGCell( const wxString& text,
                     const wxBitmapBundle& bitmap,
                     const wxColour& fgCol,

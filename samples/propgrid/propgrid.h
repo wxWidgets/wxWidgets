@@ -73,7 +73,7 @@ public:
     wxVectorProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     const wxVector3f& value = wxVector3f() );
-    virtual ~wxVectorProperty();
+    virtual ~wxVectorProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
@@ -106,7 +106,7 @@ public:
     wxTriangleProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name = wxPG_LABEL,
                         const wxTriangle& value = wxTriangle() );
-    virtual ~wxTriangleProperty();
+    virtual ~wxTriangleProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,

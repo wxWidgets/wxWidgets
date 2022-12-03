@@ -100,7 +100,7 @@ public:
     wxStringProperty( const wxString& label = wxPG_LABEL,
                       const wxString& name = wxPG_LABEL,
                       const wxString& value = wxString() );
-    virtual ~wxStringProperty();
+    virtual ~wxStringProperty() = default;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
     virtual bool StringToValue( wxVariant& variant,
@@ -146,7 +146,7 @@ public:
     };
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
-    virtual ~wxNumericPropertyValidator() { }
+    virtual ~wxNumericPropertyValidator() = default;
     virtual bool Validate(wxWindow* parent) override;
 };
 
@@ -190,7 +190,7 @@ public:
     wxIntProperty( const wxString& label = wxPG_LABEL,
                    const wxString& name = wxPG_LABEL,
                    long value = 0 );
-    virtual ~wxIntProperty();
+    virtual ~wxIntProperty() = default;
 
 #if wxUSE_LONGLONG
     wxIntProperty( const wxString& label,
@@ -245,7 +245,7 @@ public:
     wxUIntProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     unsigned long value = 0 );
-    virtual ~wxUIntProperty();
+    virtual ~wxUIntProperty() = default;
 #if wxUSE_LONGLONG
     wxUIntProperty( const wxString& label,
                     const wxString& name,
@@ -300,7 +300,7 @@ public:
     wxFloatProperty( const wxString& label = wxPG_LABEL,
                      const wxString& name = wxPG_LABEL,
                      double value = 0.0 );
-    virtual ~wxFloatProperty();
+    virtual ~wxFloatProperty() = default;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
     virtual bool StringToValue( wxVariant& variant,
@@ -336,7 +336,7 @@ public:
     wxBoolProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     bool value = false );
-    virtual ~wxBoolProperty();
+    virtual ~wxBoolProperty() = default;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
     virtual bool StringToValue( wxVariant& variant,
@@ -606,7 +606,7 @@ public:
     wxFileProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     const wxString& value = wxString() );
-    virtual ~wxFileProperty ();
+    virtual ~wxFileProperty() = default;
 
     virtual void OnSetValue() override;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
@@ -646,7 +646,7 @@ public:
     wxLongStringProperty( const wxString& label = wxPG_LABEL,
                           const wxString& name = wxPG_LABEL,
                           const wxString& value = wxString() );
-    virtual ~wxLongStringProperty();
+    virtual ~wxLongStringProperty() = default;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
     virtual bool StringToValue( wxVariant& variant,
@@ -668,7 +668,7 @@ public:
     wxDirProperty( const wxString& label = wxPG_LABEL,
                    const wxString& name = wxPG_LABEL,
                    const wxString& value = wxString() );
-    virtual ~wxDirProperty();
+    virtual ~wxDirProperty() = default;
 
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const override;
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
@@ -700,7 +700,7 @@ public:
     wxArrayStringProperty( const wxString& label = wxPG_LABEL,
                            const wxString& name = wxPG_LABEL,
                            const wxArrayString& value = wxArrayString() );
-    virtual ~wxArrayStringProperty();
+    virtual ~wxArrayStringProperty() = default;
 
     virtual void OnSetValue() override;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
@@ -801,7 +801,7 @@ PROPNAME::PROPNAME( const wxString& label, \
     m_delimiter = DELIMCHAR; \
     m_customBtnText = CUSTBUTTXT; \
 } \
-PROPNAME::~PROPNAME() { }
+PROPNAME::~PROPNAME() = default;
 
 #define WX_PG_DECLARE_ARRAYSTRING_PROPERTY(PROPNAME) \
 WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME)
@@ -833,7 +833,7 @@ class WXDLLIMPEXP_PROPGRID wxPGArrayEditorDialog : public wxDialog
 {
 public:
     wxPGArrayEditorDialog();
-    virtual ~wxPGArrayEditorDialog() { }
+    virtual ~wxPGArrayEditorDialog() = default;
 
     void Init();
 
@@ -939,7 +939,7 @@ class WXDLLIMPEXP_PROPGRID
 {
 public:
     wxPGArrayStringEditorDialog();
-    virtual ~wxPGArrayStringEditorDialog() { }
+    virtual ~wxPGArrayStringEditorDialog() = default;
 
     void Init();
 

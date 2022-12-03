@@ -2175,7 +2175,7 @@ public:
 #endif
     }
 
-    virtual ~wxPGEditorBitmapButton() { }
+    virtual ~wxPGEditorBitmapButton() = default;
 
 private:
 #ifndef __WXGTK3__

@@ -144,7 +144,7 @@ class wxPGGlobalVarsClassManager : public wxModule
 {
     wxDECLARE_DYNAMIC_CLASS(wxPGGlobalVarsClassManager);
 public:
-    wxPGGlobalVarsClassManager() {}
+    wxPGGlobalVarsClassManager() = default;
     virtual bool OnInit() override { wxPGGlobalVars = new wxPGGlobalVarsClass(); return true; }
     virtual void OnExit() override { wxDELETE(wxPGGlobalVars); }
 };

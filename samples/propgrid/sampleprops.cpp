@@ -77,8 +77,6 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
                                           fontData.GetColour() ) );
 }
 
-wxFontDataProperty::~wxFontDataProperty () { }
-
 void wxFontDataProperty::OnSetValue()
 {
     if ( !m_value.IsType("wxFontData") )
@@ -203,8 +201,6 @@ wxSizeProperty::wxSizeProperty( const wxString& label, const wxString& name,
     AddPrivateChild( new wxIntProperty("Height",wxPG_LABEL,value.y) );
 }
 
-wxSizeProperty::~wxSizeProperty() { }
-
 void wxSizeProperty::RefreshChildren()
 {
     if ( !GetChildCount() ) return;
@@ -242,8 +238,6 @@ wxPointProperty::wxPointProperty( const wxString& label, const wxString& name,
     AddPrivateChild( new wxIntProperty("X",wxPG_LABEL,value.x) );
     AddPrivateChild( new wxIntProperty("Y",wxPG_LABEL,value.y) );
 }
-
-wxPointProperty::~wxPointProperty() { }
 
 void wxPointProperty::RefreshChildren()
 {
@@ -504,8 +498,6 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
 
     SetValue( WXVARIANT(array) );
 }
-
-wxArrayDoubleProperty::~wxArrayDoubleProperty () { }
 
 void wxArrayDoubleProperty::OnSetValue()
 {

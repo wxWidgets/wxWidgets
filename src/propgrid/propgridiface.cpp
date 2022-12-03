@@ -888,7 +888,7 @@ public:
     {
         m_it.Init( state, flags );
     }
-    virtual ~wxPGVIteratorBase_State() { }
+    virtual ~wxPGVIteratorBase_State() = default;
     virtual void Next() override { m_it.Next(); }
 };
 

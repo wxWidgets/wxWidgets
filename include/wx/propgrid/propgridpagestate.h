@@ -277,10 +277,10 @@ class WXDLLIMPEXP_PROPGRID wxPGVIteratorBase : public wxObjectRefData
 {
     friend class wxPGVIterator;
 public:
-    wxPGVIteratorBase() { }
+    wxPGVIteratorBase() = default;
     virtual void Next() = 0;
 protected:
-    virtual ~wxPGVIteratorBase() { }
+    virtual ~wxPGVIteratorBase() = default;
 
     wxPropertyGridIterator  m_it;
 };

@@ -24,7 +24,7 @@ public:
     wxFontDataProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name = wxPG_LABEL,
                         const wxFontData& value = wxFontData() );
-    virtual ~wxFontDataProperty ();
+    virtual ~wxFontDataProperty() = default;
 
     void OnSetValue() override;
 
@@ -56,7 +56,7 @@ public:
 
     wxSizeProperty( const wxString& label = wxPG_LABEL, const wxString& name = wxPG_LABEL,
                     const wxSize& value = wxSize() );
-    virtual ~wxSizeProperty();
+    virtual ~wxSizeProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
@@ -81,7 +81,7 @@ public:
 
     wxPointProperty( const wxString& label = wxPG_LABEL, const wxString& name = wxPG_LABEL,
                      const wxPoint& value = wxPoint() );
-    virtual ~wxPointProperty();
+    virtual ~wxPointProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
@@ -114,7 +114,7 @@ public:
                            const wxString& name = wxPG_LABEL,
                            const wxArrayDouble& value = wxArrayDouble() );
 
-    virtual ~wxArrayDoubleProperty ();
+    virtual ~wxArrayDoubleProperty() = default;
 
     virtual void OnSetValue() override;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
