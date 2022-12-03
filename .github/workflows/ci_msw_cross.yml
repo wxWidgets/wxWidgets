@@ -83,12 +83,16 @@ jobs:
       # correctly, so set the locale explicitly for it.
       LC_ALL: C.UTF-8
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Install prerequisites
         run: |
           export DEBIAN_FRONTEND=noninteractive
 
-          packages="git make wine x11-xserver-utils"
+          packages="bash git make wine x11-xserver-utils"
 
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
