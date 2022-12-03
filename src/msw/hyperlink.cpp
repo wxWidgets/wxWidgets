@@ -60,9 +60,12 @@ namespace
     {
         // Any "&"s in the text should appear on the screen and not be (mis)
         // interpreted as mnemonics.
-        return wxString::Format("<A HREF=\"%s\">%s</A>",
-                                url,
-                                wxControl::EscapeMnemonics(text));
+        return wxString::Format
+               (
+                "<A HREF=\"%s\">%s</A>",
+                url,
+                wxControl::EscapeMnemonics(text.empty() ? url : text)
+               );
     }
 }
 
@@ -90,8 +93,10 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         return false;
     }
 
-    SetURL( url );
-    SetVisited( false );
+    // Don't call our own version of SetURL() which would try to update the
+    // label of the not yet created window which wouldn't do anything and is
+    // unnecessary anyhow as we're going to set the label when creating it.
+    wxGenericHyperlinkCtrl::SetURL( url );
 
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
@@ -101,10 +106,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     {
         return false;
     }
-
-    // Make sure both the label and URL are non-empty strings.
-    SetURL(url.empty() ? label : url);
-    SetLabel(label.empty() ? url : label);
 
     ConnectMenuHandlers();
 
