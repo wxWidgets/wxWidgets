@@ -1559,7 +1559,7 @@ public:
 
     // Returns true if property has visible children.
     bool IsExpanded() const
-        { return (!(m_flags & wxPG_PROP_COLLAPSED) && GetChildCount() > 0); }
+        { return (!(m_flags & wxPG_PROP_COLLAPSED) && HasAnyChild()); }
 
     // Returns true if all parents expanded.
     bool IsVisible() const;
@@ -1836,6 +1836,12 @@ public:
     unsigned int GetChildCount() const
     {
         return (unsigned int) m_children.size();
+    }
+
+    // Checks if contains any child property.
+    bool HasAnyChild() const
+    {
+        return !m_children.empty();
     }
 
     // Returns sub-property at index i.

@@ -203,7 +203,7 @@ wxSizeProperty::wxSizeProperty( const wxString& label, const wxString& name,
 
 void wxSizeProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( !HasAnyChild() ) return;
     const wxSize& size = wxSizeRefFromVariant(m_value);
     Item(0)->SetValue( (long)size.x );
     Item(1)->SetValue( (long)size.y );
@@ -241,7 +241,7 @@ wxPointProperty::wxPointProperty( const wxString& label, const wxString& name,
 
 void wxPointProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( !HasAnyChild() ) return;
     const wxPoint& point = wxPointRefFromVariant(m_value);
     Item(0)->SetValue( (long)point.x );
     Item(1)->SetValue( (long)point.y );

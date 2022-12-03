@@ -1479,6 +1479,13 @@ public:
     unsigned int GetChildCount() const;
 
     /**
+        Checks if there is any child property.
+
+        @since 3.3.0
+    */
+    bool HasAnyChild() const;
+
+    /**
         Returns height of children, recursively, and
         by taking expanded/collapsed status into account.
 

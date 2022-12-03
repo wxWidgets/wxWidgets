@@ -125,7 +125,7 @@ wxPGProperty* wxPropertyGridInterface::RemoveProperty( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
 
-    wxCHECK( p->GetChildCount() == 0 || p->HasFlag(wxPG_PROP_AGGREGATE),
+    wxCHECK( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE),
              wxNullProperty);
 
     wxPropertyGridPageState* state = p->GetParentState();
@@ -286,7 +286,7 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
 {
     wxPropertyGridPageState* state = m_pState;
 
-    if ( state->DoGetRoot()->GetChildCount() == 0 )
+    if ( !state->DoGetRoot()->HasAnyChild() )
         return true;
 
     wxPropertyGrid* pg = state->GetGrid();
@@ -302,7 +302,7 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
     for ( it = GetVIterator( wxPG_ITERATE_ALL ); !it.AtEnd(); it.Next() )
     {
         wxPGProperty* p = it.GetProperty();
-        if ( p->GetChildCount() > 0 )
+        if ( p->HasAnyChild() )
         {
             if ( doExpand )
             {
@@ -504,7 +504,7 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByName( const wxString& name,
                                                              const wxString& subname ) const
 {
     wxPGProperty* p = DoGetPropertyByName(name);
-    if ( !p || p->GetChildCount() == 0 )
+    if ( !p || !p->HasAnyChild() )
         return wxNullProperty;
 
     return p->GetPropertyByName(subname);

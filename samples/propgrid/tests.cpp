@@ -1357,7 +1357,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( pgman->GetPageCount() )
             RT_FAILURE();
 
-        if ( pgman->GetGrid()->GetRoot()->GetChildCount() )
+        if ( pgman->GetGrid()->GetRoot()->HasAnyChild() )
             RT_FAILURE();
 
         // Recreate the original grid
@@ -1368,7 +1368,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->SelectProperty("Label");
         pgman->GetGrid()->Clear();
 
-        if ( pgman->GetGrid()->GetRoot()->GetChildCount() )
+        if ( pgman->GetGrid()->GetRoot()->HasAnyChild() )
             RT_FAILURE();
 
         // Recreate the original grid

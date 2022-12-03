@@ -43,7 +43,7 @@ void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags
 
     m_state = state;
     m_baseParent = state->DoGetRoot();
-    if ( !property && m_baseParent->GetChildCount() > 0 )
+    if ( !property && m_baseParent->HasAnyChild() )
         property = m_baseParent->Item(0);
 
     m_property = property;
@@ -110,7 +110,7 @@ void wxPropertyGridIteratorBase::Prev()
         property = parent->Item(index);
 
         // Go to last children?
-        if ( property->GetChildCount() > 0 &&
+        if ( property->HasAnyChild() &&
              wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) )
         {
             // First child
@@ -144,7 +144,7 @@ void wxPropertyGridIteratorBase::Next( bool iterateChildren )
     if ( !property )
         return;
 
-    if ( property->GetChildCount() > 0 &&
+    if ( property->HasAnyChild() &&
          wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) &&
          iterateChildren )
     {
@@ -234,7 +234,7 @@ void wxPropertyGridPageState::InitNonCatMode()
     // to run as expected.
     m_properties = &m_regularArray;
 
-    if ( m_properties->GetChildCount() > 0 )
+    if ( m_properties->HasAnyChild() )
     {
         //
         // Prepare m_abcArray
@@ -372,7 +372,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             // If too long, don't set splitter
             if ( timeSinceCreation < 250 )
             {
-                if ( m_properties->GetChildCount() > 0 )
+                if ( m_properties->HasAnyChild() )
                 {
                     SetSplitterLeft( false );
                 }
@@ -397,14 +397,14 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 
 wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
 {
-    if ( m_properties->GetChildCount() == 0 )
+    if ( !m_properties->HasAnyChild() )
         return nullptr;
 
     wxPG_ITERATOR_CREATE_MASKS(flags, wxPGProperty::FlagType itemExMask, wxPGProperty::FlagType parentExMask)
 
     // First, get last child of last parent
     wxPGProperty* pwc = m_properties->Last();
-    while ( pwc->GetChildCount() > 0 &&
+    while ( pwc->HasAnyChild() &&
             wxPG_ITERATOR_PARENTEXMASK_TEST(pwc, parentExMask) )
         pwc = pwc->Last();
 
@@ -461,7 +461,7 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
         if ( p->GetLabel() == label )
             return p;
         // Check children recursively.
-        if ( p->GetChildCount() > 0 )
+        if ( p->HasAnyChild() )
         {
             p = BaseGetPropertyByLabel(label, p);
             if ( p )
@@ -560,7 +560,7 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
                 p->m_depth = parent->GetDepth() + 1;
             }
 
-            if ( p->GetChildCount() > 0 )
+            if ( p->HasAnyChild() )
             {
                 i = 0;
                 parent = p;
@@ -629,7 +629,7 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
         p = m_properties;
 
     // Can only sort items with children
-    if ( p->GetChildCount() == 0 )
+    if ( !p->HasAnyChild() )
         return;
 
     // Never sort children of aggregate properties
@@ -744,7 +744,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
                 maxW = w;
         }
 
-        if ( p->GetChildCount() > 0 &&
+        if ( p->HasAnyChild() &&
              ( subProps || p->IsCategory() ) )
         {
             w = GetColumnFitWidth(p, col, subProps );
@@ -786,7 +786,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned i
                 maxW = w;
         }
 
-        if ( pc->GetChildCount() > 0 && (subProps || pc->IsCategory()) )
+        if ( pc->HasAnyChild() && (subProps || pc->IsCategory()) )
         {
             w = GetColumnFitWidth(pc, col, subProps);
 
@@ -1346,7 +1346,7 @@ bool wxPropertyGridPageState::DoCollapse( wxPGProperty* p )
 {
     wxCHECK_MSG( p, false, wxS("invalid property id") );
 
-    if ( p->GetChildCount() == 0 ) return false;
+    if ( !p->HasAnyChild() ) return false;
 
     if ( !p->IsExpanded() ) return false;
 
@@ -1363,7 +1363,7 @@ bool wxPropertyGridPageState::DoExpand( wxPGProperty* p )
 {
     wxCHECK_MSG( p, false, wxS("invalid property id") );
 
-    if ( p->GetChildCount() == 0 ) return false;
+    if ( !p->HasAnyChild() ) return false;
 
     if ( p->IsExpanded() ) return false;
 
@@ -1414,7 +1414,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
     wxVariantList tempList;
     wxVariant v( tempList, listname );
 
-    if ( pwc->GetChildCount() > 0 )
+    if ( pwc->HasAnyChild() )
     {
         if ( flags & wxPG_KEEP_STRUCTURE )
         {
@@ -1423,7 +1423,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
             for ( unsigned int i = 0; i < pwc->GetChildCount(); i++ )
             {
                 wxPGProperty* p = pwc->Item(i);
-                if ( p->GetChildCount() == 0 || p->HasFlag(wxPG_PROP_AGGREGATE) )
+                if ( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE) )
                 {
                     wxVariant variant = p->GetValue();
                     variant.SetName( p->GetBaseName() );
@@ -1447,7 +1447,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                 const wxPGProperty* p = it.GetProperty();
 
                 // Use a trick to ignore wxParentProperty itself, but not its sub-properties.
-                if ( p->GetChildCount() == 0 || p->HasFlag(wxPG_PROP_AGGREGATE) )
+                if ( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE) )
                 {
                     wxVariant variant = p->GetValue();
                     variant.SetName( p->GetName() );
@@ -2010,7 +2010,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     unsigned int indinparent = item->GetIndexInParent();
 
     // Delete children
-    if ( item->GetChildCount() > 0  && !item->HasFlag(wxPG_PROP_AGGREGATE) )
+    if ( item->HasAnyChild() && !item->HasFlag(wxPG_PROP_AGGREGATE) )
     {
         // deleting a category
         item->DeleteChildren();
