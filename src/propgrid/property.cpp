@@ -3021,9 +3021,9 @@ wxArrayInt wxPGChoices::GetValuesForStrings( const wxArrayString& strings ) cons
 
     if ( IsOk() )
     {
-        for ( size_t i = 0; i < strings.size(); i++ )
+        for( const wxString& str : strings )
         {
-            int index = Index(strings[i]);
+            int index = Index(str);
             if ( index >= 0 )
                 arr.Add(GetValue(index));
             else
@@ -3043,9 +3043,8 @@ wxArrayInt wxPGChoices::GetIndicesForStrings( const wxArrayString& strings,
 
     if ( IsOk() )
     {
-        for ( size_t i = 0; i < strings.size(); i++ )
+        for( const wxString& str : strings )
         {
-            const wxString& str = strings[i];
             int index = Index(str);
             if ( index >= 0 )
                 arr.Add(index);

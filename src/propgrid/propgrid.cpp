@@ -205,8 +205,10 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
     delete m_fontFamilyChoices;
 
 #if wxUSE_VALIDATORS
-    for ( size_t i = 0; i < m_arrValidators.size(); i++ )
-        delete (m_arrValidators[i]);
+    for ( wxValidator* val : m_arrValidators )
+    {
+        delete val;
+    }
 #endif
 
     // Destroy editor class instances.
@@ -1732,10 +1734,8 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, const wxStri
 
     bool prev_is_slash = false;
 
-    for ( wxString::const_iterator i = src_str.begin(); i != src_str.end(); ++i )
+    for ( wxUniChar a : src_str )
     {
-        wxUniChar a = *i;
-
         if ( a != wxS('\\') )
         {
             if ( !prev_is_slash )
@@ -1782,10 +1782,8 @@ wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, const wxStri
         return dst_str;
     }
 
-    for ( wxString::const_iterator i = src_str.begin(); i != src_str.end(); ++i )
+    for( wxUniChar a : src_str )
     {
-        wxUniChar a = *i;
-
         if ( a == wxS('\r') )
             // Carriage Return.
             dst_str << wxS("\\r");
@@ -4109,9 +4107,9 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         m_pState->DoSetSelection(p);
 
         // Redraw unselected
-        for ( unsigned int i=0; i<prevSelection.size(); i++ )
+        for( wxPGProperty* selProp : prevSelection )
         {
-            DrawItem(prevSelection[i]);
+            DrawItem(selProp);
         }
 
         //
@@ -4490,9 +4488,8 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         return m_pState->DoHideProperty(p, hide, flags);
 
     wxArrayPGProperty selection = m_pState->m_selection;  // Must use a copy
-    for ( unsigned int i=0; i<selection.size(); i++ )
+    for( wxPGProperty* selected: selection )
     {
-        wxPGProperty* selected = selection[i];
         if ( selected == p || selected->IsSomeParent(p) )
         {
             if ( !DoRemoveFromSelection(p, flags) )
@@ -6018,9 +6015,9 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
         if ( m_iFlags & wxPG_FL_INITIALIZED )
         {
             const wxArrayPGProperty& sel = GetSelectedProperties();
-            for ( size_t i = 0; i < sel.size(); i++ )
+            for( wxPGProperty* selProp : sel )
             {
-                DrawItem(sel[i]);
+                DrawItem(selProp);
             }
         }
     }
@@ -6491,10 +6488,8 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
             int state = 0;
             bool labelValid = false;
 
-            for (wxString::const_iterator it = choicesString.begin(); it != choicesString.end(); ++it )
+            for ( wxUniChar c : choicesString )
             {
-                wxUniChar c = *it;
-
                 if ( state != 1 )
                 {
                     if ( c == wxS('"') )

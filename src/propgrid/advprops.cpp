@@ -2012,9 +2012,9 @@ wxArrayInt wxMultiChoiceProperty::GetValueAsIndices() const
     }
     else
     {
-        for ( i=0; i<valueArr.size(); i++ )
+        for( int val : valueArr )
         {
-            int sIndex = m_choices.Index(valueArr[i]);
+            int sIndex = m_choices.Index(val);
             if ( sIndex >= 0 )
                 selections.Add(sIndex);
         }
@@ -2058,20 +2058,19 @@ bool wxMultiChoiceProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
 
         // Translate string indices to strings
 
-        size_t n;
         if ( m_userStringMode == 1 )
         {
-            for (n=0;n<extraStrings.size();n++)
-                newValue.push_back(extraStrings[n]);
+            for( wxString& str : extraStrings )
+                newValue.push_back(str);
         }
 
-        for ( size_t i = 0; i < arrInt.size(); i++ )
-            newValue.push_back(m_choices.GetLabel(arrInt[i]));
+        for( int ind : arrInt )
+            newValue.push_back(m_choices.GetLabel(ind));
 
         if ( m_userStringMode == 2 )
         {
-            for (n=0;n<extraStrings.size();n++)
-                newValue.push_back(extraStrings[n]);
+            for ( wxString& str : extraStrings )
+                newValue.push_back(str);
         }
 
         value = wxVariant(newValue);

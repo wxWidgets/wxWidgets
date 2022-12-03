@@ -780,9 +780,9 @@ wxPropertyGridManager::~wxPropertyGridManager()
     //m_pPropGrid->ClearSelection();
     wxDELETE(m_pPropGrid);
 
-    for ( size_t i = 0; i < m_arrPages.size(); i++ )
+    for( wxPropertyGridPage* page : m_arrPages )
     {
-        delete m_arrPages[i];
+        delete page;
     }
 
     delete m_emptyPage;
