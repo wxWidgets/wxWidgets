@@ -125,6 +125,10 @@ jobs:
 
       - name: System and environment setup
         run: |
+          # Wine refuses to run if home is not owned by the current user (which
+          # is actually root, but /github/home is actually owned by "runner").
+          chown -R `id --user` $HOME
+
           # Add the directories containing MinGW and wx DLLs to Wine path.
           winepath="$(winepath --windows $(dirname $(${HOST_TRIPLET}-g++ -print-libgcc-file-name)))"
           winepath="${winepath};$(winepath --windows $(pwd)/lib)"
