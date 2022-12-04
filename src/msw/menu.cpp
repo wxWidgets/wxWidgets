@@ -365,6 +365,18 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
     // prepare to insert the item in the menu
     wxString itemText = pItem->GetItemLabel();
+#if wxUSE_ACCEL
+    const int n = FindAccel(pItem->GetId());
+    if ( n != wxNOT_FOUND )
+    {
+        // We need to normalize the accelerator if only to account for RawCtrl
+        // modifier used: we want to show just "Ctrl" for it in the menu.
+        itemText = wxString::Format("%s\t%s",
+                                    itemText.BeforeFirst('\t'),
+                                    m_accels[n]->ToString());
+    }
+#endif // wxUSE_ACCEL
+
     LPCTSTR pData = nullptr;
     if ( pos == (size_t)-1 )
     {
