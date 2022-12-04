@@ -430,8 +430,16 @@ bool wxTextDataObject::GetDataHere(void *buf) const
 
 bool wxTextDataObject::SetData(size_t len, const void *buf)
 {
-    const wxString
-        text = wxString(static_cast<const wxChar*>(buf), len/sizeof(wxChar));
+    const wxChar* const cbuf = static_cast<const wxChar*>(buf);
+
+    // Input data is normally NUL-terminated and we don't want to make this NUL
+    // part of the string, so take everything up to but excluding it, but take
+    // all if anything doesn't conform to our expectations for compatibility.
+    size_t size = len/sizeof(wxChar);
+    if ( len && !(len % sizeof(wxChar)) && !cbuf[size - 1] )
+        size--;
+
+    const wxString text(cbuf, size);
     SetText(wxTextBuffer::Translate(text, wxTextFileType_Unix));
 
     return true;
