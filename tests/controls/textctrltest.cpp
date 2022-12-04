@@ -1485,10 +1485,12 @@ TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
 
 TEST_CASE("wxTextCtrl::EmptyUndoBuffer", "[wxTextCtrl][undo]")
 {
-    if ( wxIsRunningUnderWine() )
+    // Wine added implementation of ITextDocument::Undo() used by our
+    // EmptyUndoBuffer() in 7.13, see upstream commit ded822777457.
+    wxVersionInfo wineVer;
+    if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(7, 13) )
     {
-        // Wine doesn't implement EM_GETOLEINTERFACE and related stuff currently
-        WARN("Skipping test known to fail under Wine.");
+        WARN("Skipping test known to fail under Wine < 7.13.");
         return;
     }
 

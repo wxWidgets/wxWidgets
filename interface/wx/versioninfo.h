@@ -51,6 +51,18 @@ public:
                   const wxString& copyright = wxString());
 
     /**
+        Return true if the version is at least equal to the given one.
+
+        @param major Major version to compare with.
+        @param minor Optional minor version to compare with.
+        @param micro Optional micro version to compare with.
+        @return @true if this version is equal to or greater than the given one.
+
+        @since 3.3.0
+     */
+    bool AtLeast(int major, int minor = 0, int micro = 0) const;
+
+    /**
         Get the name of the object (library).
 
         @return Name string.

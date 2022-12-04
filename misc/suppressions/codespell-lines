@@ -29,3 +29,5 @@ expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
     static wxString ConvertFromBasic(const wxString& bre);
     @c makefile.unx in the sample directory to build it using the version of
     makefile.unx</code> in the sample directory to build it.
+    bool AtLeast(int major, int minor = 0, int micro = 0) const
+    bool AtLeast(int major, int minor = 0, int micro = 0) const;

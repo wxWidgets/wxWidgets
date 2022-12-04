@@ -642,12 +642,17 @@ public:
 /**
     Returns @true only for MSW programs running under Wine.
 
-    This function can be used to check for some functionality not implemented
-    when using Wine.
+    Return @true if the program is running under [Wine](https://www.winehq.org/)
+    and not a "native" MSW system.
+
+    @param ver If non-null and the program is executing under Wine, it is
+        filled with Wine version information (this output parameter is only
+        available in wxWidgets 3.3.0 and later).
+    @return @true if running under Wine, @false otherwise.
 
     @since 3.1.6
 
     @library{wxbase}
     @category{cfg}
 */
-bool wxIsRunningUnderWine();
+bool wxIsRunningUnderWine(wxVersionInfo* ver = nullptr);

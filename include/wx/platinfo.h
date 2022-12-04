@@ -13,6 +13,8 @@
 
 #include "wx/string.h"
 
+class wxVersionInfo;
+
 // ----------------------------------------------------------------------------
 // wxPlatformInfo enums & structs
 // ----------------------------------------------------------------------------
@@ -436,11 +438,15 @@ protected:
     wxString m_nativeCpuArch;
 };
 
-// Returns true only for MSW programs running under Wine.
+// Return true if running under Wine and fills the provided pointer with
+// its version in this case if it's non-null.
 #ifdef __WINDOWS__
-WXDLLIMPEXP_BASE bool wxIsRunningUnderWine();
+WXDLLIMPEXP_BASE bool wxIsRunningUnderWine(wxVersionInfo* ver = nullptr);
 #else // !__WINDOWS__
-inline bool wxIsRunningUnderWine() { return false; }
+inline bool wxIsRunningUnderWine(wxVersionInfo* WXUNUSED(ver) = nullptr)
+{
+    return false;
+}
 #endif // __WINDOWS__/!__WINDOWS__
 
 #endif // _WX_PLATINFO_H_
