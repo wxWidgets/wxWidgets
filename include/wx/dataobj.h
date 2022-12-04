@@ -373,7 +373,6 @@ public:
 
     // virtual functions which you may override if you want to provide text on
     // demand only - otherwise, the trivial default versions will be used
-    virtual size_t GetTextLength() const { return m_text.Len() + 1; }
     virtual wxString GetText() const { return m_text; }
     virtual void SetText(const wxString& text) { m_text = text; }
 
@@ -411,6 +410,9 @@ public:
         return SetData(len, buf);
     }
 #endif // different wxTextDataObject implementations
+
+    wxDEPRECATED_MSG("Don't call nor override this function")
+    size_t GetTextLength() const { return m_text.Len() + 1; }
 
 private:
 #if defined(__WXQT__)
