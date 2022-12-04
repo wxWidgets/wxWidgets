@@ -2050,10 +2050,17 @@ wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 // End label editing, optionally cancelling the edit
 void wxTreeCtrl::DoEndEditLabel(bool discardChanges)
 {
+    // Delete m_textCtrl before sending TVM_ENDEDITLABELNOW to the control
+    // because otherwise we'd try to end editing the label again when we get
+    // EN_KILLFOCUS from the EDIT control which will get destroyed as part of
+    // the default handling of this message -- so reset m_textCtrl to prevent
+    // this from happening, as it's clearly unwanted, even if it doesn't seem
+    // to result in any actual problems other than logging an error message
+    // below.
+    DeleteTextCtrl();
+
     if ( !TreeView_EndEditLabelNow(GetHwnd(), discardChanges) )
         wxLogLastError(wxS("TreeView_EndEditLabelNow()"));
-
-    DeleteTextCtrl();
 }
 
 wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
