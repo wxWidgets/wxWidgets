@@ -40,7 +40,7 @@ namespace
 inline bool SupportsPerMonitorDPI()
 {
     static bool s_checkDPI =
-#if defined(__WXMSW__) && wxUSE_DYNLIB_CLASS
+#if defined(__WXMSW__)
         // Only check the DPI when GetDpiForWindow is available because the old
         // method (GetDeviceCaps) is a lot slower (about 1500 times).
         // And when GetDpiForWindow is not available (for example older Windows

@@ -1357,8 +1357,6 @@ void wxWebViewIEImpl::FindClear()
 
 bool wxWebViewIEImpl::EnableControlFeature(long flag, bool enable)
 {
-#if wxUSE_DYNLIB_CLASS
-
     wxDynamicLibrary urlMon(wxT("urlmon.dll"));
     if( urlMon.IsLoaded() &&
         urlMon.HasSymbol("CoInternetSetFeatureEnabled") &&
@@ -1386,11 +1384,6 @@ bool wxWebViewIEImpl::EnableControlFeature(long flag, bool enable)
         return true;
     }
     return false;
-#else
-    wxUnusedVar(flag);
-    wxUnusedVar(enable);
-    return false;
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 }
 
 void wxWebViewIE::onActiveXEvent(wxActiveXEvent& evt)

@@ -1061,7 +1061,6 @@ void wxTopLevelWindowMSW::DoSetIcons()
 
 wxContentProtection wxTopLevelWindowMSW::GetContentProtection() const
 {
-#if wxUSE_DYNLIB_CLASS
     typedef BOOL(WINAPI *GetWindowDisplayAffinity_t)(HWND, DWORD *);
 
     wxDynamicLibrary dllUser32("user32.dll");
@@ -1075,13 +1074,12 @@ wxContentProtection wxTopLevelWindowMSW::GetContentProtection() const
         else if (affinity & WDA_MONITOR)
             return wxCONTENT_PROTECTION_ENABLED;
     }
-#endif
+
     return wxCONTENT_PROTECTION_NONE;
 }
 
 bool wxTopLevelWindowMSW::SetContentProtection(wxContentProtection contentProtection)
 {
-#if wxUSE_DYNLIB_CLASS
     typedef BOOL(WINAPI *SetWindowDisplayAffinity_t)(HWND, DWORD);
 
     wxDynamicLibrary dllUser32("user32.dll");
@@ -1096,7 +1094,7 @@ bool wxTopLevelWindowMSW::SetContentProtection(wxContentProtection contentProtec
         else
             wxLogLastError("SetWindowDisplayAffinity");
     }
-#endif
+
     return false;
 }
 

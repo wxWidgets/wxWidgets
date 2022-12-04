@@ -87,8 +87,6 @@ ShellFunctions gs_shellFuncs;
 
 void ResolveShellFunctions()
 {
-#if wxUSE_DYNLIB_CLASS
-
     // start with the newest functions, fall back to the oldest ones
     // first check for SHGetFolderPath (shell32.dll 5.0)
     wxString shellDllName(wxT("shell32"));
@@ -110,7 +108,6 @@ void ResolveShellFunctions()
     // because we also link to it statically, so it's ok
 
     gs_shellFuncs.initialized = true;
-#endif
 }
 
 } // anonymous namespace

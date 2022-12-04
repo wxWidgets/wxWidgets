@@ -16,8 +16,6 @@
 
 #include "wx/dynlib.h"
 
-#if wxUSE_DYNLIB_CLASS
-
 namespace wxMSWImpl
 {
 
@@ -70,13 +68,6 @@ private:
     // This static member is defined in src/msw/window.cpp.
     static SetThreadDpiAwarenessContext_t ms_pfnSetThreadDpiAwarenessContext;
 };
-
-#else // !wxUSE_DYNLIB_CLASS
-
-// Just a stub to avoid littering the code with wxUSE_DYNLIB_CLASS checks.
-class AutoSystemDpiAware { };
-
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 
 } // namespace wxMSWImpl
 

@@ -564,10 +564,6 @@ public:
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 
-    // virtual function for implementing internal idle
-    // behaviour
-    virtual void OnInternalIdle() override;
-
 #if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
     virtual bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
 

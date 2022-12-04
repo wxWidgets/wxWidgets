@@ -193,6 +193,12 @@
 #   endif
 #endif
 
+/* wxMSW implementation requires wxDynamicLibrary. */
+#if defined(__WXMSW__) && !wxUSE_DYNLIB_CLASS
+#   undef wxUSE_DYNLIB_CLASS
+#   define wxUSE_DYNLIB_CLASS 1
+#endif  /* !wxUSE_DYNLIB_CLASS */
+
 /*
    un/redefine the options which we can't compile (after checking that they're
    defined
@@ -215,7 +221,7 @@
 #endif /* !wxUSE_ACTIVITYINDICATOR && !_MSC_VER */
 
 /* MinGW-w64 (32 and 64 bit) has winhttp.h available, legacy MinGW does not. */
-#if (!defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR)) || !wxUSE_DYNLIB_CLASS
+#if (!defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR))
     #undef wxUSE_WEBREQUEST_WINHTTP
     #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
@@ -289,49 +295,6 @@
 #        endif
 #    endif
 #endif  /* !wxUSE_DYNAMIC_LOADER */
-
-#if !wxUSE_DYNLIB_CLASS
-#   if wxUSE_DBGHELP
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_DBGHELP requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_DBGHELP
-#           define wxUSE_DBGHELP 0
-#       endif
-#   endif
-#   if wxUSE_DC_TRANSFORM_MATRIX
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_DC_TRANSFORM_MATRIX
-#           define wxUSE_DC_TRANSFORM_MATRIX 0
-#       endif
-#   endif
-#   if wxUSE_UXTHEME
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_UXTHEME requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_UXTHEME
-#           define wxUSE_UXTHEME 0
-#       endif
-#   endif
-#   if wxUSE_MEDIACTRL
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_MEDIACTRL requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_MEDIACTRL
-#           define wxUSE_MEDIACTRL 0
-#       endif
-#   endif
-#   if wxUSE_INKEDIT
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_INKEDIT requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_INKEDIT
-#           define wxUSE_INKEDIT 0
-#       endif
-#   endif
-#endif  /* !wxUSE_DYNLIB_CLASS */
 
 #if !wxUSE_OLE
 #   if wxUSE_ACTIVEX
