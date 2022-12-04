@@ -4927,9 +4927,14 @@ dnl ------------------------------------------------------------------------
 dnl DLL support
 dnl ------------------------------------------------------------------------
 
-dnl under MSW we always have LoadLibrary/GetProcAddress
-if test "$TOOLKIT" != "MSW"; then
-
+dnl under MSW we always have LoadLibrary/GetProcAddress and always use
+dnl wxDynamicLibrary
+if test "$TOOLKIT" = "MSW"; then
+    if test "$wxUSE_DYNLIB_CLASS" != "yes" ; then
+        AC_MSG_WARN([Not disabling wxDynamicLibrary support required by wxMSW])
+        wxUSE_DYNLIB_CLASS=yes
+    fi
+else
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
     if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
