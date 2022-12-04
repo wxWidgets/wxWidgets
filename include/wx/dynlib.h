@@ -111,8 +111,10 @@ enum wxPluginCategory
 
 #ifdef __WINDOWS__
 
-// same as wxDL_INIT_FUNC() but appends 'A' or 'W' to the function name, see
-// wxDynamicLibrary::GetSymbolAorW()
+// same as wxDL_INIT_FUNC() but appends 'W' (never 'A' any more) to the
+// function name, see wxDynamicLibrary::GetSymbolAorW()
+//
+// shouldn't be used any longer, just use wxDL_INIT_FUNC() instead
 #define wxDL_INIT_FUNC_AW(pfx, name, dynlib) \
     pfx ## name = (name ## _t)(dynlib).GetSymbolAorW(#name)
 
@@ -292,6 +294,8 @@ public:
 #ifdef __WINDOWS__
     // This function is misnamed now as it always loads "W" symbol because we
     // always use Unicode now, but keeps its old name for compatibility.
+    //
+    // Use RawGetSymbol() directly with the name containing "W" in the new code.
     static void *RawGetSymbolAorW(wxDllType handle, const wxString& name)
     {
         return RawGetSymbol

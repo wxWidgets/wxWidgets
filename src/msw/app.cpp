@@ -402,13 +402,13 @@ private:
     int m_dataLen;              // length data buffer
     int m_dataLine;             // line offset
 
-    typedef DWORD (WINAPI *GetConsoleCommandHistory_t)(LPTSTR sCommands,
-                                                       DWORD nBufferLength,
-                                                       LPCTSTR sExeName);
-    typedef DWORD (WINAPI *GetConsoleCommandHistoryLength_t)(LPCTSTR sExeName);
+    typedef DWORD (WINAPI *GetConsoleCommandHistoryW_t)(LPWSTR sCommands,
+                                                        DWORD nBufferLength,
+                                                        LPCWSTR sExeName);
+    typedef DWORD (WINAPI *GetConsoleCommandHistoryLengthW_t)(LPCWSTR sExeName);
 
-    GetConsoleCommandHistory_t m_pfnGetConsoleCommandHistory;
-    GetConsoleCommandHistoryLength_t m_pfnGetConsoleCommandHistoryLength;
+    GetConsoleCommandHistoryW_t m_pfnGetConsoleCommandHistoryW;
+    GetConsoleCommandHistoryLengthW_t m_pfnGetConsoleCommandHistoryLengthW;
 
     wxDECLARE_NO_COPY_CLASS(wxConsoleStderr);
 };
@@ -430,12 +430,12 @@ bool wxConsoleStderr::DoInit()
     // dtor
     m_hStderr = hStderr;
 
-    wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistory, m_dllKernel32);
-    if ( !m_pfnGetConsoleCommandHistory )
+    wxDL_INIT_FUNC(m_pfn, GetConsoleCommandHistoryW, m_dllKernel32);
+    if ( !m_pfnGetConsoleCommandHistoryW )
         return false;
 
-    wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistoryLength, m_dllKernel32);
-    if ( !m_pfnGetConsoleCommandHistoryLength )
+    wxDL_INIT_FUNC(m_pfn, GetConsoleCommandHistoryLengthW, m_dllKernel32);
+    if ( !m_pfnGetConsoleCommandHistoryLengthW )
         return false;
 
     // remember the current command history to be able to compare with it later
@@ -495,12 +495,12 @@ int wxConsoleStderr::GetCommandHistory(wxWCharBuffer& buf) const
     // these functions are internal and may only be called by cmd.exe
     static const wxChar *CMD_EXE = wxT("cmd.exe");
 
-    const int len = m_pfnGetConsoleCommandHistoryLength(CMD_EXE);
+    const int len = m_pfnGetConsoleCommandHistoryLengthW(CMD_EXE);
     if ( len )
     {
         buf.extend(len);
 
-        int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
+        int len2 = m_pfnGetConsoleCommandHistoryW(buf.data(), len, CMD_EXE);
 
         if ( len2 != len )
         {

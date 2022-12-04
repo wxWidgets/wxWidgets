@@ -807,7 +807,7 @@ struct IBaseFilter : public IMediaFilter
 //
 //---------------------------------------------------------------------------
 
-typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, wxChar *, DWORD);
+typedef BOOL (WINAPI* AMGetErrorTextW_t)(HRESULT, wxChar *, DWORD);
 
 class WXDLLIMPEXP_MEDIA wxAMMediaBackend : public wxMediaBackendCommonBase
 {
@@ -876,7 +876,7 @@ public:
     // Stuff for getting useful debugging strings
 #if wxDEBUG_LEVEL
     wxDynamicLibrary m_dllQuartz;
-    LPAMGETERRORTEXT m_lpAMGetErrorText;
+    AMGetErrorTextW_t m_lpAMGetErrorTextW;
     wxString GetErrorString(HRESULT hrdsv);
 #endif // wxDEBUG_LEVEL
     wxEvtHandler* m_evthandler;
@@ -930,8 +930,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 {
     wxChar szError[MAX_ERROR_TEXT_LEN];
-    if( m_lpAMGetErrorText != nullptr &&
-       (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0)
+    if( m_lpAMGetErrorTextW != nullptr &&
+       (*m_lpAMGetErrorTextW)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0)
     {
         return wxString::Format(wxT("DirectShow error \"%s\" \n")
                                      wxT("(numeric %X)\n")
@@ -1007,8 +1007,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 #if wxDEBUG_LEVEL
     if ( m_dllQuartz.Load(wxT("quartz.dll"), wxDL_VERBATIM) )
     {
-        m_lpAMGetErrorText = (LPAMGETERRORTEXT)
-                                m_dllQuartz.GetSymbolAorW(wxT("AMGetErrorText"));
+        wxDL_INIT_FUNC(m_lp, AMGetErrorTextW, m_dllQuartz);
     }
 #endif // wxDEBUG_LEVEL
 

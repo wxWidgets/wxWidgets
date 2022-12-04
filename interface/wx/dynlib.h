@@ -182,13 +182,14 @@ public:
     void* GetSymbol(const wxString& name, bool* success = 0) const;
 
     /**
-        This function is available only under Windows as it is only useful when
-        dynamically loading symbols from standard Windows DLLs. Such functions
-        have either @c 'A' (in ANSI build) or @c 'W' (in Unicode, or wide
-        character build) suffix if they take string parameters. Using this
-        function, you can use just the base name of the function and the
-        correct suffix is appended automatically depending on the current
-        build. Otherwise, this method is identical to GetSymbol().
+        @deprecated
+
+        Returns the symbol with the given name with "W" appended to it.
+
+        This function was useful to hide the differences between ANSI and
+        Unicode builds but shouldn't be used in the new code, as ANSI build is
+        not supported any longer. Just call GetSymbol() directly instead and
+        pass the name ending with `W` to it.
 
         @onlyfor{wxmsw}
     */

@@ -49,13 +49,13 @@ MSW_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
     typedef HRESULT
     (WINAPI *SHDefExtractIcon_t)(LPCTSTR, int, UINT, HICON*, HICON*, UINT);
 
-    static SHDefExtractIcon_t s_SHDefExtractIcon = nullptr;
-    if ( !s_SHDefExtractIcon )
+    static SHDefExtractIcon_t s_SHDefExtractIconW = nullptr;
+    if ( !s_SHDefExtractIconW )
     {
         wxDynamicLibrary shell32(wxT("shell32.dll"));
-        wxDL_INIT_FUNC_AW(s_, SHDefExtractIcon, shell32);
+        wxDL_INIT_FUNC(s_, SHDefExtractIconW, shell32);
 
-        if ( !s_SHDefExtractIcon )
+        if ( !s_SHDefExtractIconW )
             return E_FAIL;
 
         // Prevent the DLL from being unloaded while we use its function.
@@ -63,8 +63,8 @@ MSW_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
         shell32.Detach();
     }
 
-    return (*s_SHDefExtractIcon)(pszIconFile, iIndex, uFlags,
-                                 phiconLarge, phiconSmall, nIconSize);
+    return (*s_SHDefExtractIconW)(pszIconFile, iIndex, uFlags,
+                                  phiconLarge, phiconSmall, nIconSize);
 }
 
 #endif // !defined(SHDefExtractIcon)
