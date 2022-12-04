@@ -50,6 +50,12 @@ Changes in behaviour not resulting in compilation errors
   you ever used it under MSW (it never did anything in the other ports), you
   can turn on the native WS_EX_TRANSPARENT extended style if really needed.
 
+- In wxMSW, size passed to wxTextDataObject::SetData() must include the size of
+  the trailing NUL (in bytes, i.e. 2) now, for consistency with GetDataSize().
+  Typically this function shouldn't be used directly as SetText() should be
+  used instead, but if you do use it, you need to update your code to prevent
+  the last character of the data from being chopped.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

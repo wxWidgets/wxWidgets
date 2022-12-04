@@ -58,7 +58,23 @@ TEST_CASE("GUI::DisplaySize", "[guifuncs]")
 }
 
 #if wxUSE_DATAOBJ
-TEST_CASE("GUI::URLDataObject", "[guifuncs]")
+TEST_CASE("GUI::TextDataObject", "[guifuncs][clipboard]")
+{
+    const wxString text("Hello clipboard!");
+
+    wxTextDataObject* const dobj = new wxTextDataObject(text);
+    CHECK( dobj->GetText() == text );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxTextDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetText() == text );
+}
+
+TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
 {
     // this tests for buffer overflow, see #11102
     const char * const
@@ -69,6 +85,10 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs]")
     wxClipboardLocker lockClip;
     CHECK( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
+
+    wxURLDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetURL() == url );
 }
 
 TEST_CASE("GUI::DataFormatCompare", "[guifuncs][dataformat]")
