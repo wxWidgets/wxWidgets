@@ -553,7 +553,14 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
         // a system option if nothing else (i.e. turning it off for individual
         // windows) works.
         if ( !wxSystemOptions::GetOptionInt("msw.window.no-composited") )
+        {
             exstyle |= WS_EX_COMPOSITED;
+
+            // We have to use the class including CS_[HV]REDRAW bits, as
+            // WS_EX_COMPOSITED doesn't work correctly if the entire window is
+            // not redrawn every time it's drawn.
+            style |= wxFULL_REPAINT_ON_RESIZE;
+        }
     }
 
     if ( IsShown() )
@@ -1589,9 +1596,6 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     {
         *exstyle = 0;
 
-        if ( flags & wxTRANSPARENT_WINDOW )
-            *exstyle |= WS_EX_TRANSPARENT;
-
         switch ( border )
         {
             default:
@@ -1704,10 +1708,12 @@ void wxWindowMSW::MSWDisableComposited()
 {
     for ( wxWindow* win = this; win; win = win->GetParent() )
     {
-        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
-
+        // We never set WS_EX_COMPOSITED on TLWs, and we shouldn't recurse into
+        // different windows, so we can stop here.
         if ( win->IsTopLevel() )
             break;
+
+        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
     }
 }
 

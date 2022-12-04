@@ -209,8 +209,8 @@ enum wxWindowVariant
     @style{wxBORDER_DOUBLE}
            This style is obsolete and should not be used.
     @style{wxTRANSPARENT_WINDOW}
-           The window is transparent, that is, it will not receive paint
-           events. Windows only.
+           This style is obsolete and doesn't do anything. See
+           wxWindow::SetTransparent().
     @style{wxTAB_TRAVERSAL}
            This style is used by wxWidgets for the windows supporting TAB
            navigation among their children, such as wxDialog and wxPanel. It

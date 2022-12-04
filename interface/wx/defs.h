@@ -189,7 +189,7 @@ enum wxBorder
       |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxPOPUP_WINDOW
       |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxWANTS_CHARS
       |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxTAB_TRAVERSAL
-      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxTRANSPARENT_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ (ex-wxTRANSPARENT_WINDOW)
       |  |  |  |  |  |  |  |  |  |  \________________ wxBORDER_NONE
       |  |  |  |  |  |  |  |  |  \___________________ wxCLIP_CHILDREN
       |  |  |  |  |  |  |  |  \______________________ wxALWAYS_SHOW_SB
@@ -241,7 +241,8 @@ enum wxBorder
 /*  for subwindows/controls */
 #define wxCLIP_SIBLINGS         0x20000000
 
-#define wxTRANSPARENT_WINDOW    0x00100000
+/* This style is obsolete and doesn't do anything. */
+#define wxTRANSPARENT_WINDOW    0
 
 /*  Add this style to a panel to get tab traversal working outside of dialogs */
 /*  (on by default for wxPanel, wxDialog, wxScrolledWindow) */
@@ -274,7 +275,7 @@ enum wxBorder
  */
 #define wxWINDOW_STYLE_MASK     \
     (wxVSCROLL|wxHSCROLL|wxBORDER_MASK|wxALWAYS_SHOW_SB|wxCLIP_CHILDREN| \
-     wxCLIP_SIBLINGS|wxTRANSPARENT_WINDOW|wxTAB_TRAVERSAL|wxWANTS_CHARS| \
+     wxCLIP_SIBLINGS|wxTAB_TRAVERSAL|wxWANTS_CHARS| \
      wxRETAINED|wxPOPUP_WINDOW|wxFULL_REPAINT_ON_RESIZE)
 
 /*
