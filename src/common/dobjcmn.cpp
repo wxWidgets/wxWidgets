@@ -434,8 +434,7 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
     wxCHECK_MSG( len, false, "data can't be empty" );
     wxCHECK_MSG( !(len % sizeof(wxChar)), false, "wrong data size" );
 
-    const wxString
-        text = wxString(static_cast<const wxChar*>(buf), len/sizeof(wxChar));
+    const wxString text(static_cast<const wxChar*>(buf), len/sizeof(wxChar));
     SetText(wxTextBuffer::Translate(text, wxTextFileType_Unix));
 
     return true;
