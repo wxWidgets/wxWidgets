@@ -484,9 +484,11 @@
 #define wxUSE_DIALUP_MANAGER   1
 
 // Compile in classes for run-time DLL loading and function calling.
-// Required by wxUSE_DIALUP_MANAGER.
 //
-// This setting is for Win32 only
+// This is required by wxMSW implementation and so is always enabled there,
+// regardless of the value here. For the other ports this option can be
+// disabled to save a tiny amount of code, but there is typically no reason to
+// do it.
 //
 // Default is 1.
 //

@@ -18,9 +18,6 @@
 
 #include  "wx/wxprec.h"
 
-
-#if wxUSE_DYNLIB_CLASS
-
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -282,6 +279,3 @@ WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const wxString& name, void *addr)
 
     return hmod;
 }
-
-#endif // wxUSE_DYNLIB_CLASS
-

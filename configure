@@ -2135,8 +2135,8 @@ Optional Features:
   --enable-datetime       use wxDateTime class
   --enable-debugreport    use wxDebugReport class
   --enable-dialupman      use dialup network classes
-  --enable-dynlib         use wxLibrary class for DLL loading
-  --enable-dynamicloader  use (new) wxDynamicLibrary class
+  --enable-dynlib         use wxDynamicLibrary class for DLL loading
+  --enable-dynamicloader  use wxPluginLibrary and wxPluginManager classes
   --enable-exceptions     build exception-safe library
   --enable-ffile          use wxFFile class
   --enable-file           use wxFile class
@@ -35727,8 +35727,13 @@ if test "$wxUSE_UNIX" = "yes"; then
 fi
 
 
-if test "$TOOLKIT" != "MSW"; then
-
+if test "$TOOLKIT" = "MSW"; then
+    if test "$wxUSE_DYNLIB_CLASS" != "yes" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Not disabling wxDynamicLibrary support required by wxMSW" >&5
+$as_echo "$as_me: WARNING: Not disabling wxDynamicLibrary support required by wxMSW" >&2;}
+        wxUSE_DYNLIB_CLASS=yes
+    fi
+else
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
     if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
@@ -35875,8 +35880,8 @@ $as_echo "$as_me: WARNING: Missing dynamic loading support, several features wil
                   wxUSE_DYNAMIC_LOADER=no
                   wxUSE_DYNLIB_CLASS=no
               else
-                  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Assuming wxLibrary class works on this platform" >&5
-$as_echo "$as_me: WARNING: Assuming wxLibrary class works on this platform" >&2;}
+                  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Assuming wxDynamicLibrary class works on this platform" >&5
+$as_echo "$as_me: WARNING: Assuming wxDynamicLibrary class works on this platform" >&2;}
               fi
             fi
         fi

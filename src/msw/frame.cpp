@@ -134,7 +134,6 @@ bool wxFrame::Create(wxWindow *parent,
 
         // In case the application is run elevated, allow the
         // TaskbarButtonCreated and WM_COMMAND messages through.
-#if wxUSE_DYNLIB_CLASS
         typedef BOOL (WINAPI *ChangeWindowMessageFilter_t)(UINT message,
                                                            DWORD dwFlag);
         wxDynamicLibrary dllUser32(wxT("user32.dll"));
@@ -147,10 +146,6 @@ bool wxFrame::Create(wxWindow *parent,
                                            wxMSGFLT_ADD);
             pfnChangeWindowMessageFilter(WM_COMMAND, wxMSGFLT_ADD);
         }
-#else
-        ChangeWindowMessageFilter(wxMsgTaskbarButtonCreated, wxMSGFLT_ADD);
-        ChangeWindowMessageFilter(WM_COMMAND, wxMSGFLT_ADD);
-#endif // wxUSE_DYNLIB_CLASS
     }
 #endif // wxUSE_TASKBARBUTTON
 

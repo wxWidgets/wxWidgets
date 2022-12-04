@@ -69,11 +69,9 @@
     //
     // We also load some GDI functions not present in MinGW libraries
     // dynamically.
-    #if wxUSE_DYNLIB_CLASS
-        #include "wx/dynlib.h"
+    #include "wx/dynlib.h"
 
-        #define USE_DYNAMIC_GDI_FUNCS
-    #endif
+    #define USE_DYNAMIC_GDI_FUNCS
 #endif // _MSC_VER/!_MSC_VER
 
 using namespace wxMSWImpl;

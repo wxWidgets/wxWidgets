@@ -181,7 +181,6 @@ static bool IsPerMonitorDPIAware(HWND hwnd)
 
     // Determine if 'Per Monitor v2' DPI awareness is enabled in the
     // applications manifest.
-#if wxUSE_DYNLIB_CLASS
     #define WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((WXDPI_AWARENESS_CONTEXT)-4)
     typedef WXDPI_AWARENESS_CONTEXT(WINAPI * GetWindowDpiAwarenessContext_t)(HWND hwnd);
     typedef BOOL(WINAPI * AreDpiAwarenessContextsEqual_t)(WXDPI_AWARENESS_CONTEXT dpiContextA, WXDPI_AWARENESS_CONTEXT dpiContextB);
@@ -206,7 +205,6 @@ static bool IsPerMonitorDPIAware(HWND hwnd)
             dpiAware = true;
         }
     }
-#endif // wxUSE_DYNLIB_CLASS
 
     return dpiAware;
 }

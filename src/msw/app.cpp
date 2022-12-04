@@ -315,10 +315,6 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 // Stuff for using console from the GUI applications
 // ---------------------------------------------------------------------------
 
-#if wxUSE_DYNLIB_CLASS
-
-#include <wx/dynlib.h>
-
 namespace
 {
 
@@ -583,20 +579,6 @@ bool wxGUIAppTraits::WriteToStderr(const wxString& text)
 {
     return s_consoleStderr.IsOkToUse() && s_consoleStderr.Write(text);
 }
-
-#else // !wxUSE_DYNLIB_CLASS
-
-bool wxGUIAppTraits::CanUseStderr()
-{
-    return false;
-}
-
-bool wxGUIAppTraits::WriteToStderr(const wxString& WXUNUSED(text))
-{
-    return false;
-}
-
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 
 WXHWND wxGUIAppTraits::GetMainHWND() const
 {
@@ -869,8 +851,6 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 // system DLL versions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_DYNLIB_CLASS
-
 namespace
 {
 
@@ -974,16 +954,6 @@ int wxApp::GetComCtl32Version()
 
     return s_verComCtl32;
 }
-
-#else // !wxUSE_DYNLIB_CLASS
-
-/* static */
-int wxApp::GetComCtl32Version()
-{
-    return 0;
-}
-
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 
 #if wxUSE_EXCEPTIONS
 
