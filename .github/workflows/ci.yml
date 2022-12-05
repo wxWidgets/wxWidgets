@@ -48,6 +48,13 @@ on:
       - '*.yml'
       - 'CMakeLists.txt'
       - 'wxwidgets.props'
+  workflow_dispatch:
+    inputs:
+      debug_tests:
+        type: boolean
+        description: 'Enable ssh server before running the tests'
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -270,6 +277,10 @@ jobs:
         run: |
           make $wxBUILD_ARGS failtest
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Setup tmate
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_tests }}
 
       - name: Setup Python
         if: matrix.container == ''
