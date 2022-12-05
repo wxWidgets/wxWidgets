@@ -2055,12 +2055,17 @@ void wxTreeCtrl::DoEndEditLabel(bool discardChanges)
     // EN_KILLFOCUS from the EDIT control which will get destroyed as part of
     // the default handling of this message -- so reset m_textCtrl to prevent
     // this from happening, as it's clearly unwanted, even if it doesn't seem
-    // to result in any actual problems other than logging an error message
-    // below.
+    // to result in any actual problems.
     DeleteTextCtrl();
 
-    if ( !TreeView_EndEditLabelNow(GetHwnd(), discardChanges) )
-        wxLogLastError(wxS("TreeView_EndEditLabelNow()"));
+    // Ignore the return value here: we may get FALSE here if edit control had
+    // been already dismissed, which happens when we're called from the above
+    // mentioned EN_KILLFOCUS handler when the focus loss is due to clicking in
+    // the tree control itself, as the tree dismisses the editor automatically
+    // then. But we still have to call this because the tree does not dismiss
+    // it when clicking outside the tree and it's simpler to just always do it
+    // than to distinguish between the two cases.
+    (void)TreeView_EndEditLabelNow(GetHwnd(), discardChanges);
 }
 
 wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
