@@ -847,7 +847,7 @@ static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
     dc.SetLayoutDirection(wxLayout_RightToLeft);
     if ( dc.GetLayoutDirection() != wxLayout_RightToLeft )
     {
-        WARN("Skipping test because RTL layout direction is not supported on this platform");
+        // Skipping test because RTL layout direction is not supported
         return;
     }
 
@@ -1028,7 +1028,7 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     dc.SetLayoutDirection(wxLayout_RightToLeft);
     if ( dc.GetLayoutDirection() != wxLayout_RightToLeft )
     {
-        WARN("Skipping test because RTL layout direction is not supported on this platform");
+        // Skipping test because RTL layout direction is not supported
         return;
     }
 
