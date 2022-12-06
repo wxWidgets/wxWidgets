@@ -438,6 +438,12 @@ public:
     {
         const char* const src = static_cast<const char*>(buf);
 
+        // Length here includes the trailing NUL, but we don't want to include
+        // it into the string contents.
+        wxCHECK_MSG( len != 0 && !src[len], false, "must have trailing NUL" );
+
+        len--;
+
         // The string might be "\r\n"-terminated but this is not necessarily
         // the case (e.g. when dragging an URL from Firefox, it isn't).
         if ( len > 1 && src[len - 1] == '\n' )
