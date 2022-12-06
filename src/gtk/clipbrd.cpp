@@ -45,7 +45,8 @@ static GdkAtom  g_targetsAtom     = 0;
 static GdkAtom  g_timestampAtom   = 0;
 
 #if wxUSE_UNICODE
-extern GdkAtom g_altTextAtom;
+// This is defined in src/gtk/dataobj.cpp.
+extern GdkAtom wxGetAltTextAtom();
 #endif
 
 // the trace mask we use with wxLogTrace() - call
@@ -306,7 +307,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     if ( !size )
         return;
 
-    wxLogTrace(TRACE_CLIPBOARD, "Valid clipboard data found");
+    wxLogTrace(TRACE_CLIPBOARD, "Valid clipboard data of size %d found", size);
 
     wxCharBuffer buf(size - 1); // it adds 1 internally (for NUL)
 
@@ -341,16 +342,18 @@ void wxClipboard::GTKOnSelectionReceived(const GtkSelectionData& sel)
 {
     wxCHECK_RET( m_receivedData, wxT("should be inside GetData()") );
 
-    const wxDataFormat format(gtk_selection_data_get_target(const_cast<GtkSelectionData*>(&sel)));
-    wxLogTrace(TRACE_CLIPBOARD, wxT("Received selection %s"),
-               format.GetId());
+    GtkSelectionData* const gsel = const_cast<GtkSelectionData*>(&sel);
+
+    const wxDataFormat format(gtk_selection_data_get_target(gsel));
+    wxLogTrace(TRACE_CLIPBOARD, wxT("Received selection %s, len=%d"),
+               format.GetId(), gtk_selection_data_get_length(gsel));
 
     if ( !m_receivedData->IsSupportedFormat(format, wxDataObject::Set) )
         return;
 
     m_receivedData->SetData(format,
-        gtk_selection_data_get_length(const_cast<GtkSelectionData*>(&sel)),
-        gtk_selection_data_get_data(const_cast<GtkSelectionData*>(&sel)));
+        gtk_selection_data_get_length(gsel),
+        gtk_selection_data_get_data(gsel));
     m_formatSupported = true;
 }
 
@@ -693,7 +696,7 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     if ( format == wxDF_UNICODETEXT )
     {
         // also with plain STRING format
-        return DoIsSupported(g_altTextAtom);
+        return DoIsSupported(wxGetAltTextAtom());
     }
 #endif // wxUSE_UNICODE
 
