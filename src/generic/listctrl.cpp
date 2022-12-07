@@ -2391,9 +2391,6 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     wxASSERT_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)),
                  wxT("EditLabel() needs a text control") );
 
-    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
-    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
-
     size_t itemEdit = (size_t)item;
 
     wxListEvent le( wxEVT_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
@@ -2403,6 +2400,11 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     wxListLineData *data = GetLine(itemEdit);
     wxCHECK_MSG( data, nullptr, wxT("invalid index in EditLabel()") );
     data->GetItem( 0, le.m_item );
+
+    // See comment in EditLabel() (src/msw/listctrl.cpp) for why we create the
+    // text control before sending the wxEVT_LIST_BEGIN_LABEL_EDIT event.
+    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
+    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
 
     if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
     {
