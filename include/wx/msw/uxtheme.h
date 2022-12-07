@@ -169,9 +169,14 @@ WXDLLIMPEXP_CORE bool wxUxThemeIsActive();
 class wxUxThemeHandle
 {
 public:
-    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes)
+    wxUxThemeHandle(HWND hwnd, const wchar_t *classes) :
+        m_hTheme{::OpenThemeData(hwnd, classes)}
     {
-        m_hTheme = (HTHEME)::OpenThemeData(GetHwndOf(win), classes);
+    }
+
+    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes) :
+        wxUxThemeHandle(GetHwndOf(win), classes)
+    {
     }
 
     operator HTHEME() const { return m_hTheme; }
