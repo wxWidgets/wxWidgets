@@ -185,7 +185,7 @@ public:
     }
 
 private:
-    HTHEME m_hTheme;
+    const HTHEME m_hTheme;
 
     wxDECLARE_NO_COPY_CLASS(wxUxThemeHandle);
 };
