@@ -679,7 +679,7 @@ bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* W
 }
 #endif // wxUSE_TOOLTIPS
 
-const wchar_t* wxStatusBar::MSWGetDarkThemeClass() const
+const wchar_t* wxStatusBar::MSWGetDarkThemeId() const
 {
     // This is not documented anywhere but seems to work.
     return L"ExplorerStatusBar";

@@ -24,9 +24,11 @@ void EnableForTLW(HWND hwnd);
 
 // Set dark theme for the given (child) window if appropriate.
 //
-// Optional theme class can be specified if a particular class must be used,
-// otherwise the default one is used for it.
-void AllowForWindow(HWND hwnd, const wchar_t* themeClass = nullptr);
+// Optional theme name and ID can be specified if something other than the
+// default "Explorer" should be used.
+void AllowForWindow(HWND hwnd,
+                    const wchar_t* themeName = nullptr,
+                    const wchar_t* themeId = nullptr);
 
 // Return the colour value appropriate for dark mode if it's used or an invalid
 // colour if it isn't.

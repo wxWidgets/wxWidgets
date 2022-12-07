@@ -250,17 +250,26 @@ void EnableForTLW(HWND hwnd)
     wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
 }
 
-void AllowForWindow(HWND hwnd, const wchar_t* themeClass)
+void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 {
     if ( wxMSWImpl::ShouldUseDarkMode() )
     {
-        wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
+        if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE) )
+            wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
 
-        // For some reason using a theme class is incompatible with using
-        // "Explorer" as the app name, even though it looks like it ought to
-        // be, but passing ("Explorer", "ExplorerStatusBar") here, for example,
-        // does _not_ work, while omitting the app name in this case does work.
-        ::SetWindowTheme(hwnd, themeClass ? nullptr : L"Explorer", themeClass);
+        // Default is to just use "Explorer" theme as it works for several
+        // controls, but we do _not_ use it if the theme ID is specified, as
+        // using it can be incompatible with the "Explorer" theme, e.g.
+        // "ExplorerStatusBar" only works _without_ specifying the theme name.
+        if ( !themeName && !themeId )
+            themeName = L"Explorer";
+
+        HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
+                                           hwnd, themeName, themeId), hr);
+        }
     }
 }
 
