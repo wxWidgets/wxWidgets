@@ -2391,6 +2391,9 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     wxASSERT_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)),
                  wxT("EditLabel() needs a text control") );
 
+    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
+    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
+
     size_t itemEdit = (size_t)item;
 
     wxListEvent le( wxEVT_LIST_BEGIN_LABEL_EDIT, GetParent()->GetId() );
@@ -2403,6 +2406,7 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
 
     if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
     {
+        m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
         // vetoed by user code
         return nullptr;
     }
@@ -2413,8 +2417,6 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
         Update();
     }
 
-    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
-    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
     return m_textctrlWrapper->GetText();
 }
 
