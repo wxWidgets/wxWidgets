@@ -1197,6 +1197,12 @@ public:
         @ref wxSystemOptions "system option" via an environment variable from
         outside the application.
 
+        Known limitations of dark mode support include:
+
+            - wxMessageBox() contents doesn't use dark mode. Consider using
+              wxGenericMessageDialog if dark mode support is more important
+              than using the native dialog.
+
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the
             dark mode by default. Otherwise dark mode is only used if it is the
