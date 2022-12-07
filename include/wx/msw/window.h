@@ -211,6 +211,13 @@ public:
 
     void OnPaint(wxPaintEvent& event);
 
+    // Override this to return true to automatically invert the window colours
+    // in dark mode.
+    //
+    // This doesn't result in visually great results, but may still be better
+    // than using light background.
+    virtual bool MSWShouldUseAutoDarkMode() const { return false; }
+
 public:
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);

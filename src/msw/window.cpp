@@ -76,6 +76,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/dpiaware.h"
 #include "wx/msw/private/keyboard.h"
 #include "wx/msw/private/paint.h"
@@ -3132,7 +3133,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             else // no DC given
             {
-                processed = HandlePaint();
+                if ( MSWShouldUseAutoDarkMode() &&
+                        wxMSWDarkMode::PaintIfNecessary(this) )
+                    processed = true;
+                else
+                    processed = HandlePaint();
             }
             break;
 

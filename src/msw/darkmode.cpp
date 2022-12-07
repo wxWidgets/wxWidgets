@@ -34,12 +34,16 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+    #include "wx/image.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/dynlib.h"
 #include "wx/module.h"
 
+#include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
 
 static const char* TRACE_DARKMODE = "msw-darkmode";
@@ -335,6 +339,57 @@ HBRUSH GetBackgroundBrush()
     return brush ? GetHbrushOf(*brush) : 0;
 }
 
+bool PaintIfNecessary(wxWindow* w)
+{
+#if wxUSE_IMAGE
+    if ( !wxMSWImpl::ShouldUseDarkMode() )
+        return false;
+
+    const wxSize size = w->GetClientSize();
+
+    // Don't bother doing anything with the empty windows.
+    if ( size == wxSize() )
+        return false;
+
+    // Ask the control to paint itself on the given bitmap.
+    wxBitmap bmp(size);
+    {
+        wxMemoryDC mdc(bmp);
+        w->MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(mdc), 0);
+    }
+
+    wxImage image = bmp.ConvertToImage();
+
+    unsigned char *data = image.GetData();
+    for ( int i = 0; i < size.x*size.y; ++i, data += 3 )
+    {
+        wxImage::RGBValue rgb(data[0], data[1], data[2]);
+        wxImage::HSVValue hsv = wxImage::RGBtoHSV(rgb);
+
+        // There is no really good way to convert normal colours to dark mode,
+        // but try to do a bit better than just inverting the value because
+        // this results in colours which are much too dark.
+        hsv.value = sqrt(1.0 - hsv.value*hsv.value);
+
+        rgb = wxImage::HSVtoRGB(hsv);
+        data[0] = rgb.red;
+        data[1] = rgb.green;
+        data[2] = rgb.blue;
+    }
+
+    PAINTSTRUCT ps;
+    wxDCTemp dc(::BeginPaint(GetHwndOf(w), &ps), size);
+    dc.DrawBitmap(wxBitmap(image), 0, 0);
+    ::EndPaint(GetHwndOf(w), &ps);
+
+    return true;
+#else // !wxUSE_IMAGE
+    wxUnusedVar(w);
+
+    return false;
+#endif
+}
+
 } // namespace wxMSWDarkMode
 
 #else // !wxUSE_DARK_MODE
@@ -368,6 +423,11 @@ wxColour GetColour(wxSystemColour WXUNUSED(index))
 HBRUSH GetBackgroundBrush()
 {
     return 0;
+}
+
+bool PaintIfNecessary(wxWindow* WXUNUSED(w))
+{
+    return false;
 }
 
 } // namespace wxMSWDarkMode

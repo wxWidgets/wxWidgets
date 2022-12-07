@@ -35,6 +35,14 @@ wxColour GetColour(wxSystemColour index);
 // Return the background brush to be used by default in dark mode.
 HBRUSH GetBackgroundBrush();
 
+// If dark mode is active, paint the given window using inverted colours.
+// Otherwise just return false without doing anything.
+//
+// This can only be called from WM_PAINT handler for a native control and
+// assumes that this control handles WPARAM argument of WM_PAINT as HDC to
+// paint on.
+bool PaintIfNecessary(wxWindow* w);
+
 } // namespace wxMSWDarkMode
 
 #endif // _WX_MSW_PRIVATE_DARKMODE_H_
