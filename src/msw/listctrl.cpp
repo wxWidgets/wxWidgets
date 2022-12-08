@@ -39,7 +39,9 @@
 #include "wx/vector.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/uxtheme.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/keyboard.h"
 
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
@@ -113,6 +115,34 @@ inline bool
 wxGetListCtrlItemRect(HWND hwnd, int item, int flags, RECT& rect)
 {
     return wxGetListCtrlSubItemRect(hwnd, item, 0, flags, rect);
+}
+
+// Return the text and background colours for the given part of the specified
+// theme.
+//
+// Note that the font of the returned wxVisualAttributes object is never set,
+// but it's not worth returning a separate struct with just colours.
+wxVisualAttributes
+GetThemeColors(HWND hwnd, const wchar_t* themeName, int part)
+{
+    wxVisualAttributes attrs;
+
+    wxUxThemeHandle theme{hwnd, themeName};
+
+    COLORREF col;
+    HRESULT hr = ::GetThemeColor(theme, part, 0, TMT_TEXTCOLOR, &col);
+    if ( FAILED(hr) )
+        wxLogApiError("GetThemeColor(TMT_TEXTCOLOR)", hr);
+    else
+        attrs.colFg = wxRGBToColour(col);
+
+    hr = ::GetThemeColor(theme, part, 0, TMT_FILLCOLOR, &col);
+    if ( FAILED(hr) )
+        wxLogApiError("GetThemeColor(TMT_FILLCOLOR)", hr);
+    else
+        attrs.colBg = wxRGBToColour(col);
+
+    return attrs;
 }
 
 } // anonymous namespace
@@ -289,15 +319,30 @@ bool wxListCtrl::Create(wxWindow *parent,
     // this style for them.
     MSWDisableComposited();
 
-    EnableSystemThemeByDefault();
+    const wxVisualAttributes& defAttrs = GetDefaultAttributes();
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        MSWInitHeader();
+
+        // We also need to explicitly set the background colour as the value
+        // returned by GetBackgroundColour() by default doesn't match the
+        // actually used colour neither when using dark mode.
+        SetBackgroundColour(defAttrs.colBg);
+    }
+    else
+    {
+        EnableSystemThemeByDefault();
+    }
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA)
     wxSetCCUnicodeFormat(GetHwnd());
 
     // We must set the default text colour to the system/theme color, otherwise
-    // GetTextColour will always return black
-    SetTextColour(GetDefaultAttributes().colFg);
+    // GetTextColour will always return black even if this is not what is used
+    // by default.
+    SetTextColour(defAttrs.colFg);
 
     if ( InReportView() )
         MSWSetExListStyles();
@@ -358,6 +403,34 @@ void wxListCtrl::MSWSetExListStyles()
     }
 
     ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
+}
+
+void wxListCtrl::MSWInitHeader()
+{
+    // Currently we only need to do something here in dark mode.
+    if ( !wxMSWDarkMode::IsActive() )
+        return;
+
+    // It's not an error if the header doesn't exist.
+    HWND hwndHdr = ListView_GetHeader(GetHwnd());
+    if ( !hwndHdr )
+        return;
+
+    // But if it does, configure it to use dark mode.
+    wxMSWDarkMode::AllowForWindow(hwndHdr, L"ItemsView");
+
+    // It's not clear why do we have to do it, but without using custom drawing
+    // the header text is drawn in black, making it unreadable, so do use it.
+    if ( !m_headerCustomDraw )
+        m_headerCustomDraw = new wxMSWListHeaderCustomDraw();
+
+    const auto attrs = GetThemeColors(hwndHdr, L"Header", HP_HEADERITEM);
+
+    if ( attrs.colFg.IsOk() )
+        m_headerCustomDraw->m_attr.SetTextColour(attrs.colFg);
+
+    if ( attrs.colBg.IsOk() )
+        m_headerCustomDraw->m_attr.SetBackgroundColour(attrs.colBg);
 }
 
 void wxListCtrl::MSWAfterReparent()
@@ -593,9 +666,13 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
         m_windowStyle &= ~(wxHSCROLL | wxVSCROLL);
 
         // if we switched to the report view, set the extended styles for
-        // it too
+        // it too and configure the header which hadn't existed before
         if ( !wasInReportView && InReportView() )
+        {
             MSWSetExListStyles();
+
+            MSWInitHeader();
+        }
 
         Refresh();
     }
@@ -604,6 +681,39 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
+
+const wchar_t* wxListCtrl::MSWGetDarkThemeName() const
+{
+    // There doesn't seem to be any theme that works well here:
+    //  - "Explorer" draws bluish hover highlight rectangle which is not at
+    //    all like the greyish one used by the actual Explorer in dark mode.
+    //  - "DarkMode_Explorer" uses the same selection colours as the light mode
+    //    and doesn't draw hover rectangle at all.
+    //  - "ItemsView", which we use currently, draws the selection and hover as
+    //    expected, but uses light mode scrollbars.
+    return L"ItemsView";
+}
+
+wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = GetClassDefaultAttributes(GetWindowVariant());
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Note that we intentionally do not use this window HWND for the
+        // theme, as it doesn't have dark values for it -- but does have them
+        // when we use null window.
+        const auto attrsDark = GetThemeColors(0, MSWGetDarkThemeName(), 0);
+
+        if ( attrsDark.colFg.IsOk() )
+            attrs.colFg = attrsDark.colFg;
+
+        if ( attrsDark.colBg.IsOk() )
+            attrs.colBg = attrsDark.colBg;
+    }
+
+    return attrs;
+}
 
 /* static */ wxVisualAttributes
 wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)

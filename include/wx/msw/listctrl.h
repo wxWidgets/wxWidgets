@@ -366,10 +366,7 @@ public:
 
     virtual bool ShouldInheritColours() const override { return false; }
 
-    virtual wxVisualAttributes GetDefaultAttributes() const override
-    {
-        return GetClassDefaultAttributes(GetWindowVariant());
-    }
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -400,6 +397,8 @@ protected:
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
     virtual void MSWAfterReparent() override;
+
+    virtual const wchar_t* MSWGetDarkThemeName() const override;
 
     void OnDPIChanged(wxDPIChangedEvent& event);
 
@@ -442,6 +441,9 @@ private:
     // set the extended styles for the control (used by Create() and
     // UpdateStyle()), only should be called if InReportView()
     void MSWSetExListStyles();
+
+    // Initialize the header control if it exists.
+    void MSWInitHeader();
 
     // initialize the (already created) m_textCtrl with the associated HWND
     void InitEditControl(WXHWND hWnd);
