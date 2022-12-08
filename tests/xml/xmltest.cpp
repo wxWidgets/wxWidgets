@@ -608,3 +608,20 @@ void XmlTestCase::Doctype()
     dt = wxXmlDoctype( "root", "O'Reilly (\"editor\")", "Public-ID" );
     CPPUNIT_ASSERT( !dt.IsValid() );
 }
+
+// This test is disabled by default as it requires the environment variable
+// below to be defined to point to a XML file to load.
+TEST_CASE("XML::Load", "[xml][.]")
+{
+    wxString file;
+    REQUIRE( wxGetEnv("WX_TEST_XML_FILE", &file) );
+
+    wxXmlDocument doc;
+    REQUIRE( doc.Load(file) );
+    CHECK( doc.IsOk() );
+
+    wxStringOutputStream sos;
+    REQUIRE( doc.Save(sos) );
+
+    WARN("Dump of " << file << ":\n" << sos.GetString());
+}
