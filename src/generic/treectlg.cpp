@@ -434,16 +434,18 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     // corrects position and size for better appearance
 #ifdef __WXMSW__
     rect.x -= 5;
-    rect.width += 10;
 #elif defined(__WXGTK__)
     rect.x -= 5;
     rect.y -= 2;
-    rect.width  += 8;
-    rect.height += 4;
 #endif // platforms
 
     (void)Create(m_owner, wxID_ANY, m_startValue,
                  rect.GetPosition(), rect.GetSize());
+
+    int w;
+    GetTextExtent(m_startValue, &w, nullptr);
+    const wxSize size(GetSizeFromTextSize(w));
+    SetSize(size);
 
     SelectAll();
 }
