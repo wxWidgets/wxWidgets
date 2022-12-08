@@ -1753,6 +1753,11 @@ void wxListCtrl::InitEditControl(WXHWND hWnd)
 
 wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
+    // This function will fail to edit labels if the wxLC_EDIT_LABELS flag
+    // is not already set on the control.
+    wxASSERT_MSG( HasFlag(wxLC_EDIT_LABELS),
+                 "should only be called if wxLC_EDIT_LABELS flag is set");
+
     wxCHECK_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)), nullptr,
                   "control used for label editing must be a wxTextCtrl" );
 
