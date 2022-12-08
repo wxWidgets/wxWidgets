@@ -436,7 +436,6 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     rect.x -= 5;
 #elif defined(__WXGTK__)
     rect.x -= 5;
-    rect.y -= 2;
 #endif // platforms
 
     (void)Create(m_owner, wxID_ANY, m_startValue,
@@ -445,7 +444,9 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     int w;
     GetTextExtent(m_startValue, &w, nullptr);
     const wxSize size(GetSizeFromTextSize(w));
-    SetSize(size);
+    rect.y += (rect.height - size.y) / 2;
+    rect.SetSize(size);
+    SetSize(rect);
 
     SelectAll();
 }
