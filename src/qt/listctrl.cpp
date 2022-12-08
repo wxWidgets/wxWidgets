@@ -1622,6 +1622,12 @@ void wxListCtrl::ClearAll()
 wxTextCtrl* wxListCtrl::EditLabel(long item,
                                   wxClassInfo* WXUNUSED(textControlClass))
 {
+    // Calling this function for control without wxLC_EDIT_LABELS flag set
+    // is not portable. i.e. on wxMSW this function cannot edit labels if
+    // the flag is not already set on the control.
+    wxASSERT_MSG( HasFlag(wxLC_EDIT_LABELS),
+                 "should only be called if wxLC_EDIT_LABELS flag is set");
+
     // Open the editor first so that it's available when handling events as per
     // wx standard.
     const QModelIndex index = m_model->index(item, 0);

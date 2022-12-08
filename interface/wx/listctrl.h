@@ -453,6 +453,9 @@ public:
         If the user changed the label (i.e. s/he does not press ESC or leave
         the text control without changes, a @c EVT_LIST_END_LABEL_EDIT event
         will be sent which can be vetoed as well.
+
+        Notice that this function should only be called if wxLC_EDIT_LABELS flag
+        is already set on the control. an assertion failure is triggered otherwise.
     */
     wxTextCtrl* EditLabel(long item,
                           wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));

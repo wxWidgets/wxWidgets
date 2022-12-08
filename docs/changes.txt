@@ -56,6 +56,9 @@ Changes in behaviour not resulting in compilation errors
   used instead, but if you do use it, you need to update your code to prevent
   the last character of the data from being chopped.
 
+- Calling wxListCtrl::EditLabel() now asserts if the control doesn't have
+  wxLC_EDIT_LABELS style: previously this silently didn't work in wxMSW.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

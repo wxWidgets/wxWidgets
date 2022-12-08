@@ -2385,6 +2385,12 @@ void wxListMainWindow::ChangeCurrent(size_t current)
 
 wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass)
 {
+    // Calling this function for control without wxLC_EDIT_LABELS flag set
+    // is not portable. i.e. on wxMSW this function cannot edit labels if
+    // the flag is not already set on the control.
+    wxASSERT_MSG( HasFlag(wxLC_EDIT_LABELS),
+                 "should only be called if wxLC_EDIT_LABELS flag is set");
+
     wxCHECK_MSG( (item >= 0) && ((size_t)item < GetItemCount()), nullptr,
                  wxT("wrong index in wxGenericListCtrl::EditLabel()") );
 
