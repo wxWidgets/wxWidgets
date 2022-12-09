@@ -226,7 +226,7 @@ public:
 
             case Qt::CheckStateRole:
                 return col == 0 && m_listCtrl->HasCheckBoxes()
-                    ? rowItem.m_checked
+                    ? rowItem.CheckState()
                     : QVariant();
 
             default:
@@ -802,6 +802,11 @@ private:
         ColumnItem &operator[](int index)
         {
             return m_columns[index];
+        }
+
+        Qt::CheckState CheckState() const
+        {
+            return m_checked ? Qt::Checked : Qt::Unchecked;
         }
 
         std::vector<ColumnItem> m_columns;
