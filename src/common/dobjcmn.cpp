@@ -430,8 +430,15 @@ bool wxTextDataObject::GetDataHere(void *buf) const
 
 bool wxTextDataObject::SetData(size_t len, const void *buf)
 {
-    const wxString
-        text = wxString(static_cast<const wxChar*>(buf), len/sizeof(wxChar));
+    // Some sanity checks to avoid problems below.
+    wxCHECK_MSG( len, false, "data can't be empty" );
+    wxCHECK_MSG( !(len % sizeof(wxChar)), false, "wrong data size" );
+
+    // Input data is always NUL-terminated, but we don't want to make this NUL
+    // part of the string, so take everything up to but excluding it.
+    const size_t size = len/sizeof(wxChar) - 1;
+
+    const wxString text(static_cast<const wxChar*>(buf), size);
     SetText(wxTextBuffer::Translate(text, wxTextFileType_Unix));
 
     return true;

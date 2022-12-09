@@ -711,8 +711,7 @@ public:
     providing text on-demand in order to minimize memory consumption when
     offering data in several formats, such as plain text and RTF because by
     default the text is stored in a string in this class, but it might as well
-    be generated when requested. For this, GetTextLength() and GetText() will
-    have to be overridden.
+    be generated when requested, in which case GetText() should be overridden.
 
     Note that if you already have the text inside a string, you will not
     achieve any efficiency gain by overriding these functions because copying
@@ -743,12 +742,12 @@ public:
     virtual wxString GetText() const;
 
     /**
-        Returns the data size. By default, returns the size of the text data
-        set in the constructor or using SetText(). This can be overridden to
-        provide text size data on-demand. It is recommended to return the text
-        length plus 1 for a trailing zero, but this is not strictly required.
+        @deprecated
+
+        Don't use or call this function, it simply returns the length of the
+        text plus one for compatibility purposes.
     */
-    virtual size_t GetTextLength() const;
+    size_t GetTextLength() const;
 
     /**
         Returns 2 under wxMac and wxGTK, where text data coming from the

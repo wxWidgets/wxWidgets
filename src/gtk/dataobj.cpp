@@ -25,14 +25,48 @@
 #include "wx/gtk/private.h"
 
 //-------------------------------------------------------------------------
-// global data
+// module data
 //-------------------------------------------------------------------------
 
-GdkAtom  g_textAtom        = nullptr;
-GdkAtom  g_altTextAtom     = nullptr;
-GdkAtom  g_pngAtom         = nullptr;
-GdkAtom  g_fileAtom        = nullptr;
-GdkAtom  g_htmlAtom        = nullptr;
+namespace
+{
+
+// Atom initialized on first access.
+//
+// Note that this is more than just an optimization, as we have to delay
+// calling gdk_atom_intern() until after GDK initialization.
+class wxGdkAtom
+{
+public:
+    // Name is literal, so we don't copy it but just store the pointer.
+    wxGdkAtom(const char* name) : m_name{name} {}
+
+    wxGdkAtom(const wxGdkAtom&) = delete;
+    wxGdkAtom& operator=(const wxGdkAtom&) = delete;
+
+    operator GdkAtom()
+    {
+        if ( !m_atom )
+            m_atom = gdk_atom_intern(m_name, FALSE);
+
+        return m_atom;
+    }
+
+private:
+    const char* const m_name;
+    GdkAtom m_atom = nullptr;
+};
+
+wxGdkAtom g_textAtom    {"UTF8_STRING"};
+wxGdkAtom g_altTextAtom {"STRING"};
+wxGdkAtom g_pngAtom     {"image/png"};
+wxGdkAtom g_fileAtom    {"text/uri-list"};
+wxGdkAtom g_htmlAtom    {"text/html"};
+
+} // anonymous namespace
+
+// This is used in src/gtk/clipbrd.cpp
+extern GdkAtom wxGetAltTextAtom() { return g_altTextAtom; }
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -40,40 +74,27 @@ GdkAtom  g_htmlAtom        = nullptr;
 
 wxDataFormat::wxDataFormat()
 {
-    // do *not* call PrepareFormats() from here for 2 reasons:
-    //
-    // 1. we will have time to do it later because some other Set function
-    //    must be called before we really need them
-    //
-    // 2. doing so prevents us from declaring global wxDataFormats because
-    //    calling PrepareFormats (and thus gdk_atom_intern) before GDK is
-    //    initialised will result in a crash
     m_type = wxDF_INVALID;
     m_format = (GdkAtom) nullptr;
 }
 
 wxDataFormat::wxDataFormat( wxDataFormatId type )
 {
-    PrepareFormats();
     SetType( type );
 }
 
 void wxDataFormat::InitFromString( const wxString &id )
 {
-    PrepareFormats();
     SetId( id );
 }
 
 wxDataFormat::wxDataFormat( NativeFormat format )
 {
-    PrepareFormats();
     SetId( format );
 }
 
 void wxDataFormat::SetType( wxDataFormatId type )
 {
-    PrepareFormats();
-
     m_type = type;
 
     if (m_type == wxDF_UNICODETEXT)
@@ -108,7 +129,6 @@ wxString wxDataFormat::GetId() const
 
 void wxDataFormat::SetId( NativeFormat format )
 {
-    PrepareFormats();
     m_format = format;
 
     if (m_format == g_textAtom)
@@ -131,31 +151,8 @@ void wxDataFormat::SetId( NativeFormat format )
 
 void wxDataFormat::SetId( const wxString& id )
 {
-    PrepareFormats();
     m_type = wxDF_PRIVATE;
     m_format = gdk_atom_intern( id.ToAscii(), FALSE );
-}
-
-void wxDataFormat::PrepareFormats()
-{
-    // VZ: GNOME included in RedHat 6.1 uses the MIME types below and not the
-    //     atoms STRING and file:ALL as the old code was, but normal X apps
-    //     use STRING for text selection when transferring the data via
-    //     clipboard, for example, so do use STRING for now (GNOME apps will
-    //     probably support STRING as well for compatibility anyhow), but use
-    //     text/uri-list for file dnd because compatibility is not important
-    //     here (with whom?)
-    if (!g_textAtom)
-    {
-        g_textAtom = gdk_atom_intern( "UTF8_STRING", FALSE );
-        g_altTextAtom = gdk_atom_intern( "STRING", FALSE );
-    }
-    if (!g_pngAtom)
-        g_pngAtom = gdk_atom_intern( "image/png", FALSE );
-    if (!g_fileAtom)
-        g_fileAtom = gdk_atom_intern( "text/uri-list", FALSE );
-    if (!g_htmlAtom)
-        g_htmlAtom = gdk_atom_intern( "text/html", FALSE );
 }
 
 //-------------------------------------------------------------------------
@@ -440,6 +437,12 @@ public:
     virtual bool SetData(size_t len, const void *buf) override
     {
         const char* const src = static_cast<const char*>(buf);
+
+        // Length here includes the trailing NUL, but we don't want to include
+        // it into the string contents.
+        wxCHECK_MSG( len != 0 && !src[len], false, "must have trailing NUL" );
+
+        len--;
 
         // The string might be "\r\n"-terminated but this is not necessarily
         // the case (e.g. when dragging an URL from Firefox, it isn't).
