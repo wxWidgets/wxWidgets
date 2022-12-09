@@ -985,6 +985,24 @@ public:
         return header() != nullptr ? header()->height() : 0;
     }
 
+    int GetRowCount() const
+    {
+        if ( model() )
+            return model()->rowCount();
+
+        return 0;
+    }
+
+    int GetCountPerPage() const
+    {
+        // this may not be exact but should be a good approximation:
+        const int h = rowHeight(model()->index(0, 0));
+        if ( h )
+            return viewport()->height() / h;
+        else
+            return 0;
+    }
+
 private:
     void itemClicked(const QModelIndex &index);
     void itemActivated(const QModelIndex &index);
@@ -1170,12 +1188,9 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
 
 int wxListCtrl::GetCountPerPage() const
 {
-    // this may not be exact but should be a good approximation:
-    const int h = m_qtTreeWidget->visualRect(m_model->index(0, 0)).height();
-    if ( h )
-        return m_qtTreeWidget->height() / h;
-    else
-        return 0;
+    wxCHECK_MSG(m_qtTreeWidget->GetRowCount() > 0, 0,
+        "wxListCtrl needs at least one item to calculate the count per page");
+    return m_qtTreeWidget->GetCountPerPage();
 }
 
 wxRect wxListCtrl::GetViewRect() const
