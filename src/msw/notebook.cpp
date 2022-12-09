@@ -1254,14 +1254,8 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             // This is total guesswork.
             // See PlatformSDK\Include\Tmschema.h for values.
             // JACS: can also use 9 (TABP_PANE)
-            COLORREF themeColor;
-            bool success = (S_OK == ::GetThemeColor(
-                                        hTheme,
-                                        10 /* TABP_BODY */,
-                                        1 /* NORMAL */,
-                                        3821 /* FILLCOLORHINT */,
-                                        &themeColor));
-            if (!success)
+            wxColour colour = hTheme.GetColour(TABP_BODY, TMT_FILLCOLORHINT, TIS_NORMAL);
+            if ( !colour.IsOk() )
                 return GetBackgroundColour();
 
             /*
@@ -1273,17 +1267,8 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             This workaround potentially breaks appearance of some themes,
             but in practice it already fixes some themes.
             */
-            if (themeColor == 1)
-            {
-                ::GetThemeColor(
-                                            hTheme,
-                                            10 /* TABP_BODY */,
-                                            1 /* NORMAL */,
-                                            3802 /* FILLCOLOR */,
-                                            &themeColor);
-            }
-
-            wxColour colour = wxRGBToColour(themeColor);
+            if ( colour.GetRGB() == 1 )
+                colour = hTheme.GetColour(TABP_BODY, TMT_FILLCOLOR, TIS_NORMAL);
 
             // Under Vista, the tab background colour is reported incorrectly.
             // So for the default theme at least, hard-code the colour to something

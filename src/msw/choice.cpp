@@ -35,6 +35,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/uxtheme.h"
 
 // ============================================================================
 // implementation
@@ -193,11 +194,10 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
 
     // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
-    attrs.colBg = wnd->MSWGetThemeColour(L"EDIT",
-                                         EP_EDITTEXT,
-                                         ETS_NORMAL,
-                                         ThemeColourBackground,
-                                         wxSYS_COLOUR_WINDOW);
+    wxUxThemeHandle hTheme(wnd, L"EDIT");
+    attrs.colBg = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
+    if ( !attrs.colBg.IsOk() )
+        attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
     return attrs;
 }

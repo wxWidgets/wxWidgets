@@ -189,6 +189,12 @@ public:
         }
     }
 
+    // Return the colour for the given part, property and state.
+    //
+    // Note that the order of arguments here is _not_ the same as for
+    // GetThemeColor() because we want to default the state.
+    wxColour GetColour(int part, int prop, int state = 0) const;
+
 private:
     const HTHEME m_hTheme;
 

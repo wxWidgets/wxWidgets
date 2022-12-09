@@ -36,6 +36,23 @@ bool wxUxThemeIsActive()
 {
     return ::IsAppThemed() && ::IsThemeActive();
 }
+
+wxColour wxUxThemeHandle::GetColour(int part, int prop, int state) const
+{
+    COLORREF col;
+
+    HRESULT hr = ::GetThemeColor(m_hTheme, part, state, prop, &col);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("GetThemeColor(%i, %i, %i)", part, state, prop),
+            hr
+        );
+        return wxColour{};
+    }
+
+    return wxRGBToColour(col);
+}
 #else
 bool wxUxThemeIsActive()
 {

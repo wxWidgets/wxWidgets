@@ -117,34 +117,6 @@ wxGetListCtrlItemRect(HWND hwnd, int item, int flags, RECT& rect)
     return wxGetListCtrlSubItemRect(hwnd, item, 0, flags, rect);
 }
 
-// Return the text and background colours for the given part of the specified
-// theme.
-//
-// Note that the font of the returned wxVisualAttributes object is never set,
-// but it's not worth returning a separate struct with just colours.
-wxVisualAttributes
-GetThemeColors(HWND hwnd, const wchar_t* themeName, int part)
-{
-    wxVisualAttributes attrs;
-
-    wxUxThemeHandle theme{hwnd, themeName};
-
-    COLORREF col;
-    HRESULT hr = ::GetThemeColor(theme, part, 0, TMT_TEXTCOLOR, &col);
-    if ( FAILED(hr) )
-        wxLogApiError("GetThemeColor(TMT_TEXTCOLOR)", hr);
-    else
-        attrs.colFg = wxRGBToColour(col);
-
-    hr = ::GetThemeColor(theme, part, 0, TMT_FILLCOLOR, &col);
-    if ( FAILED(hr) )
-        wxLogApiError("GetThemeColor(TMT_FILLCOLOR)", hr);
-    else
-        attrs.colBg = wxRGBToColour(col);
-
-    return attrs;
-}
-
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -396,13 +368,14 @@ void wxListCtrl::MSWInitHeader()
     if ( !m_headerCustomDraw )
         m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
-    const auto attrs = GetThemeColors(hwndHdr, L"Header", HP_HEADERITEM);
+    wxUxThemeHandle theme{hwndHdr, L"Header"};
 
-    if ( attrs.colFg.IsOk() )
-        m_headerCustomDraw->m_attr.SetTextColour(attrs.colFg);
-
-    if ( attrs.colBg.IsOk() )
-        m_headerCustomDraw->m_attr.SetBackgroundColour(attrs.colBg);
+    m_headerCustomDraw->m_attr.SetTextColour(
+        theme.GetColour(HP_HEADERITEM, TMT_TEXTCOLOR)
+    );
+    m_headerCustomDraw->m_attr.SetBackgroundColour(
+        theme.GetColour(HP_HEADERITEM, TMT_FILLCOLOR)
+    );
 }
 
 void wxListCtrl::MSWAfterReparent()
@@ -680,13 +653,15 @@ wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
         // Note that we intentionally do not use this window HWND for the
         // theme, as it doesn't have dark values for it -- but does have them
         // when we use null window.
-        const auto attrsDark = GetThemeColors(0, MSWGetDarkThemeName(), 0);
+        wxUxThemeHandle theme{HWND(0), MSWGetDarkThemeName()};
 
-        if ( attrsDark.colFg.IsOk() )
-            attrs.colFg = attrsDark.colFg;
+        wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
+        if ( col.IsOk() )
+            attrs.colFg = col;
 
-        if ( attrsDark.colBg.IsOk() )
-            attrs.colBg = attrsDark.colBg;
+        col = theme.GetColour(0, TMT_FILLCOLOR);
+        if ( col.IsOk() )
+            attrs.colBg = col;
     }
 
     return attrs;

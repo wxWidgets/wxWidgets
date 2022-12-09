@@ -482,21 +482,6 @@ public:
     // querying the parent windows via MSWGetBgBrushForChild() recursively
     WXHBRUSH MSWGetBgBrush(WXHDC hDC);
 
-    enum MSWThemeColour
-    {
-        ThemeColourText = 0,
-        ThemeColourBackground,
-        ThemeColourBorder
-    };
-
-    // returns a specific theme colour, or if that is not possible then
-    // wxSystemSettings::GetColour(fallback)
-    wxColour MSWGetThemeColour(const wchar_t *themeName,
-                               int themePart,
-                               int themeState,
-                               MSWThemeColour themeColour,
-                               wxSystemColour fallback) const;
-
     // gives the parent the possibility to draw its children background, e.g.
     // this is used by wxNotebook to do it using DrawThemeBackground()
     //

@@ -1223,23 +1223,11 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
         return;
     }
 
-    wxColour fill;
-    wxColour bdr;
-    COLORREF cref;
-
-    ::GetThemeColor(hTheme, EP_EDITTEXT,
-                                          ETS_NORMAL, TMT_FILLCOLOR, &cref);
-    fill = wxRGBToColour(cref);
-
-    int etsState;
-    if ( flags & wxCONTROL_DISABLED )
-        etsState = ETS_DISABLED;
-    else
-        etsState = ETS_NORMAL;
-
-    ::GetThemeColor(hTheme, EP_EDITTEXT,
-                                              etsState, TMT_BORDERCOLOR, &cref);
-    bdr = wxRGBToColour(cref);
+    wxColour fill = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
+    wxColour bdr = hTheme.GetColour(EP_EDITTEXT, TMT_BORDERCOLOR,
+                                    flags & wxCONTROL_DISABLED
+                                        ? ETS_DISABLED
+                                        : ETS_NORMAL);
 
     wxDCPenChanger setPen(dc, bdr);
     wxDCBrushChanger setBrush(dc, fill);
