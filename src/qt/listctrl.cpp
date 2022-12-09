@@ -1671,6 +1671,17 @@ bool wxListCtrl::EnsureVisible(long item)
     return true;
 }
 
+bool wxListCtrl::IsVisible(long item) const
+{
+    wxRect itemRect;
+    if ( !GetItemRect(item, itemRect) )
+        return false;
+
+    wxRect viewportRect = wxQtConvertRect( m_qtTreeWidget->viewport()->rect() );
+    viewportRect.y += m_qtTreeWidget->GetHeaderHeight();
+    return !viewportRect.Intersect(itemRect).IsEmpty();
+}
+
 long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 {
     return m_model->FindItem(start, wxQtConvertString(str), partial);

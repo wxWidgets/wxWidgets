@@ -209,6 +209,8 @@ public:
     // Ensures this item is visible
     bool EnsureVisible(long item);
 
+    bool IsVisible(long item) const override;
+
     // Find an item whose label matches this string, starting from the item after 'start'
     // or the beginning if 'start' is -1.
     long FindItem(long start, const wxString& str, bool partial = false);
