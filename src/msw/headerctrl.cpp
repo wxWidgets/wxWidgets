@@ -35,6 +35,7 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 #ifndef HDM_SETBITMAPMARGIN
@@ -92,6 +93,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) override;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
+
+    virtual const wchar_t* MSWGetDarkThemeName() const override;
 
     // This function can be used as event handle for wxEVT_DPI_CHANGED event.
     void WXHandleDPIChanged(wxDPIChangedEvent& event);
@@ -216,6 +219,12 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_HEADER, wxT(""), pos, size) )
         return false;
 
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        m_customDraw = new wxMSWHeaderCtrlCustomDraw();
+        m_customDraw->UseHeaderThemeColors(GetHwnd());
+    }
+
     // special hack for margins when using comctl32.dll v6 or later: the
     // default margin is too big and results in label truncation when the
     // column width is just about right to show it together with the sort
@@ -244,6 +253,11 @@ WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     msStyle |= HDS_HORZ | HDS_BUTTONS | HDS_FULLDRAG | HDS_HOTTRACK;
 
     return msStyle;
+}
+
+const wchar_t* wxMSWHeaderCtrl::MSWGetDarkThemeName() const
+{
+    return L"ItemsView";
 }
 
 wxMSWHeaderCtrl::~wxMSWHeaderCtrl()

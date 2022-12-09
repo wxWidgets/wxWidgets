@@ -368,14 +368,7 @@ void wxListCtrl::MSWInitHeader()
     if ( !m_headerCustomDraw )
         m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
-    wxUxThemeHandle theme{hwndHdr, L"Header"};
-
-    m_headerCustomDraw->m_attr.SetTextColour(
-        theme.GetColour(HP_HEADERITEM, TMT_TEXTCOLOR)
-    );
-    m_headerCustomDraw->m_attr.SetBackgroundColour(
-        theme.GetColour(HP_HEADERITEM, TMT_FILLCOLOR)
-    );
+    m_headerCustomDraw->UseHeaderThemeColors(hwndHdr);
 }
 
 void wxListCtrl::MSWAfterReparent()
