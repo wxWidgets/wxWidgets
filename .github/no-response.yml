@@ -1,0 +1,10 @@
+# Configuration for probot-no-response - https://github.com/probot/no-response
+
+daysUntilClose: 100
+responseRequiredLabel: "repro needed"
+closeComment: >
+  This issue has been automatically closed because there has been no response
+  to our request for more information from the original author since 100 days
+  and we're unable to do anything about the problem without more information.
+  Please comment on this issue if you can provide any additional data so that
+  we could investigate it further.
