@@ -694,6 +694,11 @@ const wchar_t* wxListCtrl::MSWGetDarkThemeName() const
     return L"ItemsView";
 }
 
+int wxListCtrl::MSWGetToolTipMessage() const
+{
+    return LVM_GETTOOLTIPS;
+}
+
 wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
 {
     wxVisualAttributes attrs = GetClassDefaultAttributes(GetWindowVariant());

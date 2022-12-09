@@ -134,6 +134,11 @@ protected:
     // disables the use of "Explorer" theme by default.
     virtual const wchar_t* MSWGetDarkThemeId() const { return nullptr; }
 
+    // Return the message that can be used to retrieve the tooltip window used
+    // by a native control. If this message is non-zero and sending it returns
+    // a valid HWND, the dark theme is also applied to it, if appropriate.
+    virtual int MSWGetToolTipMessage() const { return 0; }
+
 
     // for controls like radiobuttons which are really composite this array
     // holds the ids (not HWNDs!) of the sub controls

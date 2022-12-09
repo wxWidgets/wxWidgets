@@ -138,9 +138,19 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         return false;
     }
 
-    wxMSWDarkMode::AllowForWindow(m_hWnd,
-                                  MSWGetDarkThemeName(),
-                                  MSWGetDarkThemeId());
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        wxMSWDarkMode::AllowForWindow(m_hWnd,
+                                      MSWGetDarkThemeName(),
+                                      MSWGetDarkThemeId());
+
+        if ( const int msgTT = MSWGetToolTipMessage() )
+        {
+            const HWND hwndTT = (HWND)::SendMessage(GetHwnd(), msgTT, 0, 0);
+            if ( ::IsWindow(hwndTT) )
+                wxMSWDarkMode::AllowForWindow(hwndTT);
+        }
+    }
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()

@@ -400,6 +400,8 @@ protected:
 
     virtual const wchar_t* MSWGetDarkThemeName() const override;
 
+    virtual int MSWGetToolTipMessage() const override;
+
     void OnDPIChanged(wxDPIChangedEvent& event);
 
     wxSize MSWGetBestViewRect(int x, int y) const;

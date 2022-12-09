@@ -141,6 +141,8 @@ protected:
   // common part of all ctors
   void Init();
 
+  virtual int MSWGetToolTipMessage() const override;
+
   // hides the currently shown page and shows the given one (if not -1) and
   // updates m_selection accordingly
   void UpdateSelection(int selNew);

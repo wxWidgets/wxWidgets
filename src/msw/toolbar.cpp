@@ -714,6 +714,11 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+int wxToolBar::MSWGetToolTipMessage() const
+{
+    return TB_GETTOOLTIPS;
+}
+
 // ----------------------------------------------------------------------------
 // adding/removing tools
 // ----------------------------------------------------------------------------

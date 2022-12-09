@@ -281,6 +281,11 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     return tabStyle;
 }
 
+int wxNotebook::MSWGetToolTipMessage() const
+{
+    return TCM_GETTOOLTIPS;
+}
+
 wxNotebook::~wxNotebook()
 {
 #if wxUSE_UXTHEME

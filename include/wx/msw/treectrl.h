@@ -212,6 +212,8 @@ protected:
 
     virtual bool MSWShouldSetDefaultFont() const override { return false; }
 
+    virtual int MSWGetToolTipMessage() const override;
+
     virtual void OnImagesChanged() override;
 
     // SetImageList helper

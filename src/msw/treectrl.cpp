@@ -2208,6 +2208,11 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
 // implementation
 // ----------------------------------------------------------------------------
 
+int wxTreeCtrl::MSWGetToolTipMessage() const
+{
+    return TVM_GETTOOLTIPS;
+}
+
 bool wxTreeCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
     if ( msg->message == WM_KEYDOWN )
