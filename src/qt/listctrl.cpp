@@ -386,8 +386,13 @@ public:
             false, "Invalid column");
 
         ColumnItem &column = m_headers[index];
-        column.m_label = wxQtConvertString(info.GetText());
-        column.m_align = wxQtConvertTextAlign(info.GetAlign());
+
+        if ( info.m_mask & wxLIST_MASK_TEXT )
+            column.m_label = wxQtConvertString(info.GetText());
+        if ( info.m_mask & wxLIST_MASK_FORMAT )
+            column.m_align = wxQtConvertTextAlign(info.GetAlign());
+        if ( info.m_mask & wxLIST_MASK_IMAGE )
+            column.m_image = info.m_image;
 
         headerDataChanged(Qt::Horizontal, index, index);
         return true;
