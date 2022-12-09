@@ -50,36 +50,6 @@
 extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
 // ----------------------------------------------------------------------------
-// wxMSWHeaderCtrlCustomDraw: our custom draw helper
-// ----------------------------------------------------------------------------
-
-class wxMSWHeaderCtrlCustomDraw : public wxMSWImpl::CustomDraw
-{
-public:
-    wxMSWHeaderCtrlCustomDraw()
-    {
-    }
-
-    // Make this field public to let wxHeaderCtrl update it directly when its
-    // attributes change.
-    wxItemAttr m_attr;
-
-private:
-    virtual bool HasCustomDrawnItems() const override
-    {
-        // We only exist if the header does need to be custom drawn.
-        return true;
-    }
-
-    virtual const wxItemAttr*
-    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
-    {
-        // We use the same attribute for all items for now.
-        return &m_attr;
-    }
-};
-
-// ----------------------------------------------------------------------------
 // wxMSWHeaderCtrl: the native header control
 // ----------------------------------------------------------------------------
 class wxMSWHeaderCtrl : public wxControl

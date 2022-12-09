@@ -16,7 +16,7 @@
 #include "wx/vector.h"
 
 class wxMSWListItemData;
-class wxMSWListHeaderCustomDraw;
+class wxMSWHeaderCtrlCustomDraw;
 
 // define this symbol to indicate the availability of SetColumnsOrder() and
 // related functions
@@ -464,7 +464,7 @@ private:
     void DrawSortArrow();
 
     // Object using for header custom drawing if necessary, may be null.
-    wxMSWListHeaderCustomDraw* m_headerCustomDraw;
+    wxMSWHeaderCtrlCustomDraw* m_headerCustomDraw;
 
 
     wxDECLARE_DYNAMIC_CLASS(wxListCtrl);

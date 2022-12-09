@@ -56,4 +56,34 @@ private:
 
 } // namespace wxMSWImpl
 
+// ----------------------------------------------------------------------------
+// wxMSWHeaderCtrlCustomDraw: custom draw helper for header control
+// ----------------------------------------------------------------------------
+
+class wxMSWHeaderCtrlCustomDraw : public wxMSWImpl::CustomDraw
+{
+public:
+    wxMSWHeaderCtrlCustomDraw()
+    {
+    }
+
+    // Make this field public to let the control update it directly when its
+    // attributes change.
+    wxItemAttr m_attr;
+
+private:
+    virtual bool HasCustomDrawnItems() const override
+    {
+        // We only exist if the header does need to be custom drawn.
+        return true;
+    }
+
+    virtual const wxItemAttr*
+    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
+    {
+        // We use the same attribute for all items for now.
+        return &m_attr;
+    }
+};
+
 #endif // _WX_MSW_CUSTOMDRAW_H_

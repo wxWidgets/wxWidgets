@@ -244,34 +244,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
-// wxMSWListHeaderCustomDraw: custom draw helper for the header
-class wxMSWListHeaderCustomDraw : public wxMSWImpl::CustomDraw
-{
-public:
-    wxMSWListHeaderCustomDraw()
-    {
-    }
-
-    // Make this field public to let wxListCtrl update it directly when its
-    // header attributes change.
-    wxItemAttr m_attr;
-
-private:
-    virtual bool HasCustomDrawnItems() const override
-    {
-        // We only exist if the header does need to be custom drawn.
-        return true;
-    }
-
-    virtual const wxItemAttr*
-    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
-    {
-        // We use the same attribute for all items for now.
-        return &m_attr;
-    }
-};
-
-
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
@@ -422,7 +394,7 @@ void wxListCtrl::MSWInitHeader()
     // It's not clear why do we have to do it, but without using custom drawing
     // the header text is drawn in black, making it unreadable, so do use it.
     if ( !m_headerCustomDraw )
-        m_headerCustomDraw = new wxMSWListHeaderCustomDraw();
+        m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
     const auto attrs = GetThemeColors(hwndHdr, L"Header", HP_HEADERITEM);
 
@@ -782,7 +754,7 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
     else // We do have custom attributes.
     {
         if ( !m_headerCustomDraw )
-            m_headerCustomDraw = new wxMSWListHeaderCustomDraw();
+            m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
         if ( m_headerCustomDraw->m_attr == attr )
         {
