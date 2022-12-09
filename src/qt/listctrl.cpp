@@ -1364,7 +1364,11 @@ int wxListCtrl::GetItemCount() const
 
 int wxListCtrl::GetColumnCount() const
 {
-    return m_model->columnCount(QModelIndex());
+    // wxLC_LIST is special as we want to return 1 for it, for compatibility
+    // with the native wxMSW version and not the real number of columns, which
+    // is 0. For the other non-wxLC_REPORT modes returning 0 is fine, however,
+    // as wxMSW does it too.
+    return HasFlag(wxLC_LIST) ? 1 : m_model->columnCount(QModelIndex());
 }
 
 wxSize wxListCtrl::GetItemSpacing() const
