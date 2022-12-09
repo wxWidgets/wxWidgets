@@ -669,6 +669,8 @@ public:
 
         endInsertColumns();
 
+        m_listCtrl->SetColumnWidth(newColumnIndex, info.m_width);
+
         return true;
     }
 
@@ -1156,13 +1158,42 @@ int wxListCtrl::GetColumnWidth(int col) const
 
 bool wxListCtrl::SetColumnWidth(int col, int width)
 {
-    if ( width < 0 )
+    const auto header = m_qtTreeWidget->header();
+
+    if ( header &&
+         col == GetColumnIndexFromOrder(col) &&
+         col == GetColumnCount() - 1 )
     {
-        m_qtTreeWidget->resizeColumnToContents(width);
-        return true;
+        // Always stretch the last section if _with_ is either
+        // wxLIST_AUTOSIZE or wxLIST_AUTOSIZE_USEHEADER
+        header->setStretchLastSection( width < 0 );
     }
 
-    m_qtTreeWidget->setColumnWidth(col, width);
+    if ( width >= 0 )
+        m_qtTreeWidget->setColumnWidth(col, width);
+    else
+    {
+        if ( width == wxLIST_AUTOSIZE_USEHEADER )
+        {
+            const auto header = m_qtTreeWidget->header();
+            const QHeaderView::ResizeMode oldResizeMode = header->sectionResizeMode(col);
+
+            header->setSectionResizeMode(col, QHeaderView::ResizeToContents);
+            header->resizeSection(col, header->defaultSectionSize()); // passing any value > 0 is ok
+            header->setSectionResizeMode(col, oldResizeMode);
+        }
+        else // wxLIST_AUTOSIZE
+        {
+            // Temporarily hide the header if it's shown as we don't want the header section
+            // to be considered by resizeColumnToContents() because it's size will be honored
+            // if it's larger than the column content.
+            const bool wasHidden = m_qtTreeWidget->isHeaderHidden();
+            m_qtTreeWidget->setHeaderHidden(true);
+            m_qtTreeWidget->resizeColumnToContents(col);
+            m_qtTreeWidget->setHeaderHidden(wasHidden);
+        }
+     }
+
     return true;
 }
 

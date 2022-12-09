@@ -1077,7 +1077,7 @@ public:
         @c wxLIST_AUTOSIZE will resize the column to the length of its longest item.
 
         @c wxLIST_AUTOSIZE_USEHEADER will resize the column to the length of the
-        header (Win32) or 80 pixels (other platforms).
+        header (wxMSW and wxQt) or 80 pixels (other platforms).
 
         In small or normal icon view, @a col must be -1, and the column width is set
         for all columns.
