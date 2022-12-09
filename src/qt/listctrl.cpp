@@ -299,6 +299,25 @@ public:
 
             case Qt::TextAlignmentRole:
                 return header.m_align;
+
+            case Qt::DecorationRole:
+            {
+                wxImageList *imageList = GetImageList();
+                if ( imageList == nullptr )
+                    return QVariant();
+
+                int imageIndex = -1;
+
+                if ( imageIndex == -1 )
+                    imageIndex = header.m_image;
+
+                if ( imageIndex == -1 )
+                    return QVariant();
+
+                wxBitmap image = imageList->GetBitmap(imageIndex);
+                wxCHECK_MSG(image.IsOk(), QVariant(), "Invalid image");
+                return QVariant::fromValue(*image.GetHandle());
+            }
         }
         return QVariant();
     }
@@ -714,7 +733,7 @@ public:
 protected:
     wxImageList *GetImageList() const
     {
-        const int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON)
+        const int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
             ? wxIMAGE_LIST_SMALL
             : wxIMAGE_LIST_NORMAL;
         return m_listCtrl->GetImageList(requiredList);
@@ -1597,9 +1616,17 @@ long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
     return -1;
 }
 
-void wxListCtrl::DoUpdateImages(int WXUNUSED(which))
+void wxListCtrl::DoUpdateImages(int which)
 {
-    // TODO: Ensure the icons are actually updated.
+    wxImageList* const imageList = GetUpdatedImageList(which);
+
+    if ( imageList )
+    {
+        int width, height;
+        imageList->GetSize(0, width, height);
+        m_qtTreeWidget->setIconSize(QSize(width, height));
+        m_qtTreeWidget->update();
+    }
 }
 
 void wxListCtrl::RefreshItem(long item)
