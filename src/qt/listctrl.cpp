@@ -1005,6 +1005,17 @@ public:
         return m_itemDelegate.GetEditControl();
     }
 
+    void EnableEditLabel(bool enable)
+    {
+        if ( enable )
+        {
+            setItemDelegate(&m_itemDelegate);
+            setEditTriggers(SelectedClicked | EditKeyPressed);
+        }
+        else
+            setEditTriggers(NoEditTriggers);
+    }
+
     virtual void paintEvent(QPaintEvent *event) override
     {
         QTreeView::paintEvent(event);
@@ -1050,9 +1061,6 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     connect(this, &QTreeView::clicked, this, &wxQtListTreeWidget::itemClicked);
     connect(this, &QTreeView::pressed, this, &wxQtListTreeWidget::itemPressed);
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
-
-    setItemDelegate(&m_itemDelegate);
-    setEditTriggers(NoEditTriggers);
 }
 
 void wxQtListTreeWidget::EmitListEvent(wxEventType typ,
@@ -1614,6 +1622,7 @@ void wxListCtrl::SetWindowStyleFlag(long style)
 {
     m_windowStyle = style;
     m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
+    m_qtTreeWidget->EnableEditLabel((style & wxLC_EDIT_LABELS) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
         ? QAbstractItemView::SingleSelection
         : QAbstractItemView::ExtendedSelection
@@ -1758,6 +1767,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item,
     // Open the editor first so that it's available when handling events as per
     // wx standard.
     const QModelIndex index = m_model->index(item, 0);
+    m_qtTreeWidget->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
     m_qtTreeWidget->openPersistentEditor(index);
 
     wxListEvent event;
