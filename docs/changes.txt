@@ -243,6 +243,7 @@ All:
 - Add serial number to wxwin.m4 file (#22848).
 - Update Expat submodule to include the fix for CVE-2022-40674.
 - Allow 'T' separator in wxDateTime::ParseDateTime() (Blake-Madden, #22999).
+- Add Serbian translations (Nikola Jović).
 
 All (GUI):
 
