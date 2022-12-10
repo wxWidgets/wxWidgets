@@ -87,10 +87,7 @@ wxMessageDialogMap& HookMap()
 void ScreenRectToClient(HWND hwnd, RECT& rc)
 {
     // map from desktop (i.e. screen) coordinates to ones of this window
-    //
-    // notice that a RECT is laid out as 2 consecutive POINTs so the cast is
-    // valid
-    ::MapWindowPoints(HWND_DESKTOP, hwnd, reinterpret_cast<POINT *>(&rc), 2);
+    wxMapWindowPoints(HWND_DESKTOP, hwnd, &rc);
 }
 
 // set window position to the given rect

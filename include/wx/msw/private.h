@@ -386,6 +386,21 @@ inline RECT wxGetClientRect(HWND hwnd)
     return rect;
 }
 
+// Call MapWindowPoints() on a RECT: because a RECT is (intentionally) laid out
+// as 2 consecutive POINTs, the cast below is valid but we still prefer to hide
+// it in this function instead of writing it out in the rest of the code.
+inline void wxMapWindowPoints(HWND hwndFrom, HWND hwndTo, RECT* rc)
+{
+    ::MapWindowPoints(hwndFrom, hwndTo, reinterpret_cast<POINT *>(rc), 2);
+}
+
+// For consistency also provide an overload taking a POINT, even if this one is
+// even more trivial.
+inline void wxMapWindowPoints(HWND hwndFrom, HWND hwndTo, POINT* pt)
+{
+    ::MapWindowPoints(hwndFrom, hwndTo, pt, 1);
+}
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------

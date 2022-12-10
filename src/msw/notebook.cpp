@@ -1195,7 +1195,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 
     // map rect to the coords of the window we're drawing in
     if ( child )
-        ::MapWindowPoints(GetHwnd(), GetHwndOf(child), (POINT *)&rc, 2);
+        wxMapWindowPoints(GetHwnd(), GetHwndOf(child), &rc);
 
     // If we're using a solid colour (for example if we've switched off
     // theming for this notebook), paint it
