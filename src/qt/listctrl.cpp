@@ -1128,9 +1128,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     m_qtTreeWidget->setModel(m_model);
     m_model->SetView(m_qtTreeWidget);
 
-    if (style & wxLC_NO_HEADER)
-        m_qtTreeWidget->setHeaderHidden(true);
-
     m_qtTreeWidget->setRootIsDecorated(false);
     m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
