@@ -1138,6 +1138,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     m_qtTreeWidget->setRootIsDecorated(false);
     m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_qtTreeWidget->setTabKeyNavigation(true);
 
     if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
         return false;
