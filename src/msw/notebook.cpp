@@ -1127,7 +1127,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     if ( !theme )
         return 0;
 
-    WindowHDC hDC(GetHwnd());
+    ClientHDC hDC(GetHwnd());
 
     RECT rcBg;
     ::GetThemeBackgroundContentRect(theme,

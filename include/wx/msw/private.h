@@ -421,38 +421,39 @@ private:
 
 #endif // __WXMSW__
 
-// create an instance of this class and use it as the HDC for screen, will
-// automatically release the DC going out of scope
-class ScreenHDC
+// RAII helper for releasing an HDC in its dtor.
+class AutoHDC
 {
 public:
-    ScreenHDC() { m_hdc = ::GetDC(nullptr);    }
-   ~ScreenHDC() { ::ReleaseDC(nullptr, m_hdc); }
+    ~AutoHDC() { if ( m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
 
     operator HDC() const { return m_hdc; }
 
+protected:
+    AutoHDC(HWND hwnd, HDC hdc) : m_hwnd(hwnd), m_hdc(hdc) { }
+
 private:
+    HWND m_hwnd;
     HDC m_hdc;
 
-    wxDECLARE_NO_COPY_CLASS(ScreenHDC);
+    wxDECLARE_NO_COPY_CLASS(AutoHDC);
 };
 
-// the same as ScreenHDC but for window DCs (and if HWND is null, then exactly
-// the same as it)
-class WindowHDC
+// create an instance of this class and use it as the HDC for screen, will
+// automatically release the DC going out of scope
+class ScreenHDC : public AutoHDC
 {
 public:
-    WindowHDC() : m_hwnd(nullptr), m_hdc(nullptr) { }
-    WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { if ( m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
+    ScreenHDC() : AutoHDC(nullptr, ::GetDC(nullptr)) { }
+};
 
-    operator HDC() const { return m_hdc; }
-
-private:
-   HWND m_hwnd;
-   HDC m_hdc;
-
-   wxDECLARE_NO_COPY_CLASS(WindowHDC);
+// the same as ScreenHDC but for client part of the window (if HWND is null,
+// then it's exactly the same as ScreenHDC)
+class ClientHDC : public AutoHDC
+{
+public:
+    ClientHDC() : AutoHDC(nullptr, nullptr) { }
+    explicit ClientHDC(HWND hwnd) : AutoHDC(hwnd, ::GetDC(hwnd)) { }
 };
 
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with

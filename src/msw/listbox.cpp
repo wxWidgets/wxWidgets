@@ -569,7 +569,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         return;
 
 
-    WindowHDC dc(GetHwnd());
+    ClientHDC dc(GetHwnd());
     SelectInHDC selFont(dc, GetHfontOf(GetFont()));
 
     TEXTMETRIC lpTextMetric;

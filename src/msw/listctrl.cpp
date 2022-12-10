@@ -3132,7 +3132,7 @@ static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
         RECT rc = GetCustomDrawnItemRect(nmcd);
 
         // don't use the provided HDC, it's in some strange state by now
-        ::DrawFocusRect(WindowHDC(nmcd.hdr.hwndFrom), &rc);
+        ::DrawFocusRect(ClientHDC(nmcd.hdr.hwndFrom), &rc);
     }
 }
 
