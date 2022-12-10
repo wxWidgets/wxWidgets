@@ -1376,7 +1376,7 @@ bool wxListCtrl::SetItemData(long item, long data)
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
 {
     wxCHECK_MSG(item >= 0 && (item < GetItemCount()), false,
-                 "invalid item in GetSubItemRect");
+                 "invalid item in GetItemRect");
 
     const int columnCount = m_model->columnCount(QModelIndex());
     if ( columnCount == 0 )
@@ -1395,7 +1395,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
 bool wxListCtrl::GetSubItemRect(long item,
                                 long subItem,
                                 wxRect& rect,
-                                int WXUNUSED(code)) const
+                                int code) const
 {
     wxCHECK_MSG(item >= 0 && item < GetItemCount(),
         false, "invalid row index in GetSubItemRect");
@@ -1406,6 +1406,45 @@ bool wxListCtrl::GetSubItemRect(long item,
     const QModelIndex index = m_qtTreeWidget->model()->index(item, subItem);
     rect = wxQtConvertRect(m_qtTreeWidget->visualRect(index));
     rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
+
+    switch ( code )
+    {
+        case wxLIST_RECT_BOUNDS:
+            // Nothing to do.
+            break;
+
+        case wxLIST_RECT_ICON:
+        case wxLIST_RECT_LABEL:
+            {
+                QVariant var = index.data(Qt::DecorationRole);
+                if ( var.isValid() )
+                {
+                    const int iconWidth = m_qtTreeWidget->iconSize().width();
+
+                    if ( code == wxLIST_RECT_ICON )
+                    {
+                        rect.width = iconWidth;
+                    }
+                    else // wxLIST_RECT_LABEL
+                    {
+                        rect.x += iconWidth;
+                        rect.width -= iconWidth;
+                    }
+                }
+                else // No icon
+                {
+                    if ( code == wxLIST_RECT_ICON )
+                        rect = wxRect();
+                    //else: label rect is the same as the full one
+                }
+            }
+            break;
+
+        default:
+            wxFAIL_MSG(wxS("Unknown rectangle requested"));
+            return false;
+        }
+
     return true;
 }
 
