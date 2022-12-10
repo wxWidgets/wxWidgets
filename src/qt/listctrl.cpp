@@ -152,11 +152,11 @@ public:
     {
     }
 
-    int rowCount(const QModelIndex& WXUNUSED(parent)) const override
+    int rowCount(const QModelIndex& WXUNUSED(parent) = QModelIndex()) const override
     {
         return static_cast<int>(m_rows.size());
     }
-    int columnCount(const QModelIndex& WXUNUSED(parent)) const override
+    int columnCount(const QModelIndex& WXUNUSED(parent) = QModelIndex()) const override
     {
         return static_cast<int>(m_headers.size());
     }
@@ -166,7 +166,7 @@ public:
         const int row = index.row();
         const int col = index.column();
 
-        wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(),
+        wxCHECK_MSG(row >= 0 && row < rowCount(),
             QVariant(),
             "Invalid row index"
         );
@@ -441,16 +441,36 @@ public:
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
-        wxCHECK_MSG( static_cast<size_t>(row) < m_rows.size(),
-            false, "Invalid row");
-        wxCHECK_MSG( static_cast<size_t>(col) < m_headers.size(),
-            false, "Invalid col");
+        wxCHECK_MSG( row < rowCount(), false, "Invalid row");
+        wxCHECK_MSG( col < columnCount(), false, "Invalid col");
 
         const QModelIndex modelIndex = index(row, col);
+        QVector<int> roles;
+
+        if ( info.m_mask & wxLIST_MASK_STATE )
+        {
+            if ( (info.m_stateMask & wxLIST_STATE_FOCUSED) &&
+                (info.m_state & wxLIST_STATE_FOCUSED) )
+                m_view->setCurrentIndex(modelIndex);
+            if ( info.m_stateMask & wxLIST_STATE_SELECTED )
+            {
+                QItemSelectionModel *selection = m_view->selectionModel();
+                const QItemSelectionModel::SelectionFlag flag =
+                    info.m_state & wxLIST_STATE_SELECTED
+                        ? QItemSelectionModel::Select
+                        : QItemSelectionModel::Deselect;
+                selection->select(modelIndex,  flag|QItemSelectionModel::Rows);
+            }
+        }
+
+        if ( IsVirtual() )
+        {
+            // wxLIST_MASK_STATE is the only mask supported by virtual wxListCtrl
+            return true;
+        }
+
         RowItem &rowItem = m_rows[row];
         ColumnItem &columnItem = rowItem[col];
-
-        QVector<int> roles;
 
         if ( (info.m_mask & wxLIST_MASK_TEXT) && !info.GetText().empty() )
         {
@@ -468,22 +488,6 @@ public:
         {
             rowItem.m_data = (void*)(info.GetData());
             roles.push_back(Qt::UserRole);
-        }
-
-        if ( info.m_mask & wxLIST_MASK_STATE )
-        {
-            if ( (info.m_stateMask & wxLIST_STATE_FOCUSED) &&
-                (info.m_state & wxLIST_STATE_FOCUSED) )
-                m_view->setCurrentIndex(modelIndex);
-            if ( info.m_stateMask & wxLIST_STATE_SELECTED )
-            {
-                QItemSelectionModel *selection = m_view->selectionModel();
-                const QItemSelectionModel::SelectionFlag flag =
-                    info.m_state & wxLIST_STATE_SELECTED
-                        ? QItemSelectionModel::Select
-                        : QItemSelectionModel::Deselect;
-                selection->select(modelIndex,  flag|QItemSelectionModel::Rows);
-            }
         }
 
         if ( info.m_mask & wxLIST_MASK_IMAGE )
@@ -876,7 +880,7 @@ public:
     {
     }
 
-    int rowCount(const QModelIndex& WXUNUSED(parent)) const override
+    int rowCount(const QModelIndex& WXUNUSED(parent) = QModelIndex()) const override
     {
         return m_rowCount;
     }
