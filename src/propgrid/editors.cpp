@@ -176,17 +176,13 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
                                        bool unspecified ) const
 {
     // Get old editor appearance
-    wxTextCtrl* tc = nullptr;
+    wxTextCtrl* tc = wxDynamicCast(ctrl, wxTextCtrl);
     wxComboCtrl* cb = nullptr;
-    if ( wxDynamicCast(ctrl, wxTextCtrl) )
+    if ( !tc )
     {
-        tc = (wxTextCtrl*) ctrl;
-    }
-    else
-    {
-        if ( wxDynamicCast(ctrl, wxComboCtrl) )
+        cb = wxDynamicCast(ctrl, wxComboCtrl);
+        if ( cb )
         {
-            cb = (wxComboCtrl*) ctrl;
             tc = cb->GetTextCtrl();
         }
     }
