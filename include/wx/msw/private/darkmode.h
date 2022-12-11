@@ -45,6 +45,16 @@ HBRUSH GetBackgroundBrush();
 // paint on.
 bool PaintIfNecessary(wxWindow* w);
 
+// If dark mode is active and if the message is one of those used for menu
+// drawing, process it and return true, otherwise just return false without
+// doing anything.
+bool
+HandleMenuMessage(WXLRESULT* result,
+                  wxWindow* w,
+                  WXUINT nMsg,
+                  WXWPARAM wParam,
+                  WXLPARAM lParam);
+
 } // namespace wxMSWDarkMode
 
 #endif // _WX_MSW_PRIVATE_DARKMODE_H_

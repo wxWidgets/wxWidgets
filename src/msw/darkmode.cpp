@@ -11,6 +11,7 @@
     The code in this file is based on the following sources:
 
     - win32-darkmode by Richard Yu (https://github.com/ysc3839/win32-darkmode)
+    - UAH menu by adzm (https://github.com/adzm/win32-custom-menubar-aero-theme)
  */
 
 // ============================================================================
@@ -399,6 +400,209 @@ bool PaintIfNecessary(wxWindow* w)
 #endif
 }
 
+// ----------------------------------------------------------------------------
+// Menu bar custom drawing
+// ----------------------------------------------------------------------------
+
+namespace wxMSWMenuImpl
+{
+
+// Definitions for undocumented messages and structs used in this code.
+constexpr int WM_MENUBAR_DRAWMENU = 0x91;
+constexpr int WM_MENUBAR_DRAWMENUITEM = 0x92;
+
+// This is passed via LPARAM of WM_MENUBAR_DRAWMENU.
+struct MenuBarDrawMenu
+{
+    HMENU hmenu;
+    HDC hdc;
+    DWORD dwReserved;
+};
+
+struct MenuBarMenuItem
+{
+    int iPosition;
+
+    // There are more fields in this (undocumented) struct but we don't
+    // currently need them, so don't bother with declaring them.
+};
+
+struct MenuBarDrawMenuItem
+{
+    DRAWITEMSTRUCT dis;
+    MenuBarDrawMenu mbdm;
+    MenuBarMenuItem mbmi;
+};
+
+constexpr COLORREF COL_STANDARD = 0xffffff;
+constexpr COLORREF COL_DISABLED = 0x6d6d6d;
+constexpr COLORREF COL_MENU_HOT = 0x414141;
+
+HBRUSH GetMenuBrush()
+{
+    wxBrush* const brush =
+        wxTheBrushList->FindOrCreateBrush(GetColour(wxSYS_COLOUR_MENU));
+
+    return brush ? GetHbrushOf(*brush) : 0;
+}
+
+} // namespace wxMSWMenuImpl
+
+bool
+HandleMenuMessage(WXLRESULT* result,
+                  wxWindow* w,
+                  WXUINT nMsg,
+                  WXWPARAM wParam,
+                  WXLPARAM lParam)
+{
+    if ( !wxMSWImpl::ShouldUseDarkMode() )
+        return false;
+
+    using namespace wxMSWMenuImpl;
+
+    switch ( nMsg )
+    {
+        case WM_MENUBAR_DRAWMENU:
+            // Erase the menu bar background using custom brush.
+            if ( auto* const drawMenu = (MenuBarDrawMenu*)lParam )
+            {
+                HWND hwnd = GetHwndOf(w);
+
+                WinStruct<MENUBARINFO> mbi;
+                if ( !::GetMenuBarInfo(hwnd, OBJID_MENU, 0, &mbi) )
+                {
+                    wxLogLastError("GetMenuBarInfo");
+                    break;
+                }
+
+                const RECT rcWindow = wxGetWindowRect(hwnd);
+
+                // rcBar is expressed in screen coordinates.
+                ::OffsetRect(&mbi.rcBar, -rcWindow.left, -rcWindow.top);
+
+                ::FillRect(drawMenu->hdc, &mbi.rcBar, GetMenuBrush());
+            }
+
+            *result = 0;
+            return true;
+
+        case WM_NCPAINT:
+        case WM_NCACTIVATE:
+            // Drawing the menu bar background in WM_MENUBAR_DRAWMENU somehow
+            // leaves a single pixel line unpainted (and increasing the size of
+            // the rectangle doesn't help, i.e. drawing is clipped to an area
+            // which is one pixel too small), so we have to draw over it here
+            // to get rid of it.
+            {
+                *result = w->MSWDefWindowProc(nMsg, wParam, lParam);
+
+                HWND hwnd = GetHwndOf(w);
+                WindowHDC hdc(hwnd);
+
+                // Create a RECT one pixel above the client area: note that we
+                // have to use window (and not client) coordinates for this as
+                // this is outside of the client area of the window.
+                const RECT rcWindow = wxGetWindowRect(hwnd);
+                RECT rc = wxGetClientRect(hwnd);
+
+                // Convert client coordinates to window ones.
+                wxMapWindowPoints(hwnd, HWND_DESKTOP, &rc);
+                ::OffsetRect(&rc, -rcWindow.left, -rcWindow.top);
+
+                rc.bottom = rc.top;
+                rc.top--;
+
+                ::FillRect(hdc, &rc, GetMenuBrush());
+            }
+            return true;
+
+        case WM_MENUBAR_DRAWMENUITEM:
+            if ( auto* const drawMenuItem = (MenuBarDrawMenuItem*)lParam )
+            {
+                const DRAWITEMSTRUCT& dis = drawMenuItem->dis;
+
+                // Just a sanity check.
+                if ( dis.CtlType != ODT_MENU )
+                    break;
+
+                wchar_t buf[256];
+                WinStruct<MENUITEMINFO> mii;
+                mii.fMask = MIIM_STRING;
+                mii.dwTypeData = buf;
+                mii.cch = sizeof(buf) - 1;
+
+                // Note that we need to use the iPosition field of the
+                // undocumented struct here because DRAWITEMSTRUCT::itemID is
+                // not initialized in the struct passed to us here, so this is
+                // the only way to identify the item we're dealing with.
+                if ( !::GetMenuItemInfo((HMENU)dis.hwndItem,
+                                        drawMenuItem->mbmi.iPosition,
+                                        TRUE,
+                                        &mii) )
+                    break;
+
+                const UINT itemState = dis.itemState;
+
+                HBRUSH hbr = 0;
+                int partState = 0;
+                if ( itemState & ODS_INACTIVE )
+                {
+                    partState = MBI_DISABLED;
+                }
+                else if ( (itemState & ODS_GRAYED) && (itemState & ODS_HOTLIGHT) )
+                {
+                    partState = MBI_DISABLEDHOT;
+                }
+                else if ( itemState & ODS_GRAYED )
+                {
+                    partState = MBI_DISABLED;
+                }
+                else if ( itemState & (ODS_HOTLIGHT | ODS_SELECTED) )
+                {
+                    partState = MBI_HOT;
+
+                    auto* const
+                        brush = wxTheBrushList->FindOrCreateBrush(COL_MENU_HOT);
+                    if ( brush )
+                        hbr = GetHbrushOf(*brush);
+                }
+                else
+                {
+                    partState = MBI_NORMAL;
+                }
+
+                RECT* const rcItem = const_cast<RECT*>(&dis.rcItem);
+
+                // Don't use DrawThemeBackground() here, as it doesn't use the
+                // correct colours in the dark mode, at least not when using
+                // the "Menu" theme.
+                ::FillRect(dis.hDC, &dis.rcItem, hbr ? hbr : GetMenuBrush());
+
+                // We have to specify the text colour explicitly as by default
+                // black would be used, making the menu label unreadable on the
+                // (almost) black background.
+                DTTOPTS textOpts;
+                textOpts.dwSize = sizeof(textOpts);
+                textOpts.dwFlags = DTT_TEXTCOLOR;
+                textOpts.crText = itemState & (ODS_INACTIVE | ODS_GRAYED)
+                                    ? COL_DISABLED
+                                    : COL_STANDARD;
+
+                DWORD drawTextFlags = DT_CENTER | DT_SINGLELINE | DT_VCENTER;
+                if ( itemState & ODS_NOACCEL)
+                    drawTextFlags |= DT_HIDEPREFIX;
+
+                wxUxThemeHandle menuTheme(GetHwndOf(w), L"Menu");
+                ::DrawThemeTextEx(menuTheme, dis.hDC, MENU_BARITEM, partState,
+                                  buf, mii.cch, drawTextFlags, rcItem,
+                                  &textOpts);
+            }
+            return true;
+    }
+
+    return false;
+}
+
 } // namespace wxMSWDarkMode
 
 #else // !wxUSE_DARK_MODE
@@ -435,6 +639,16 @@ HBRUSH GetBackgroundBrush()
 }
 
 bool PaintIfNecessary(wxWindow* WXUNUSED(w))
+{
+    return false;
+}
+
+bool
+HandleMenuMessage(WXLRESULT* WXUNUSED(result),
+                  wxWindow* WXUNUSED(w),
+                  WXUINT WXUNUSED(nMsg),
+                  WXWPARAM WXUNUSED(wParam),
+                  WXLPARAM WXUNUSED(lParam))
 {
     return false;
 }
