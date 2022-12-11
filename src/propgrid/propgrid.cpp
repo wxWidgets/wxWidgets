@@ -6071,7 +6071,7 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
                                                    const wxString& editorName,
                                                    bool noDefCheck )
 {
-    wxASSERT( editorClass );
+    wxCHECK( editorClass, nullptr );
 
     if ( !noDefCheck && wxPGGlobalVars->m_mapEditorClasses.empty() )
         RegisterDefaultEditors();
