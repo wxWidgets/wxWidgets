@@ -294,7 +294,7 @@ private:
 class WXDLLIMPEXP_PROPGRID wxPGAttributeStorage
 {
 public:
-    wxPGAttributeStorage();
+    wxPGAttributeStorage() = default;
     wxPGAttributeStorage(const wxPGAttributeStorage& other);
     ~wxPGAttributeStorage();
 
@@ -302,35 +302,11 @@ public:
 
     void Set( const wxString& name, const wxVariant& value );
     unsigned int GetCount() const { return (unsigned int) m_map.size(); }
-    wxVariant FindValue( const wxString& name ) const
-    {
-        wxPGHashMapS2P::const_iterator it = m_map.find(name);
-        if ( it != m_map.end() )
-        {
-            wxVariantData* data = (wxVariantData*) it->second;
-            data->IncRef();
-            return wxVariant(data, it->first);
-        }
-        return wxVariant();
-    }
+    wxVariant FindValue(const wxString& name) const;
 
     typedef wxPGHashMapS2P::const_iterator const_iterator;
-    const_iterator StartIteration() const
-    {
-        return m_map.begin();
-    }
-    bool GetNext( const_iterator& it, wxVariant& variant ) const
-    {
-        if ( it == m_map.end() )
-            return false;
-
-        wxVariantData* data = (wxVariantData*) it->second;
-        data->IncRef();
-        variant.SetData(data);
-        variant.SetName(it->first);
-        ++it;
-        return true;
-    }
+    const_iterator StartIteration() const;
+    bool GetNext(const_iterator& it, wxVariant& variant) const;
 
 protected:
     wxPGHashMapS2P  m_map;

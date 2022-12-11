@@ -3108,24 +3108,18 @@ void wxPGChoices::Free()
 
 static inline void IncDataRef(wxPGHashMapS2P& map)
 {
-    wxPGHashMapS2P::iterator it;
-    for ( it = map.begin(); it != map.end(); ++it )
+    for( const auto& it: map )
     {
-        static_cast<wxVariantData*>(it->second)->IncRef();
+        static_cast<wxVariantData*>(it.second)->IncRef();
     }
 }
 
 static inline void DecDataRef(wxPGHashMapS2P& map)
 {
-    wxPGHashMapS2P::iterator it;
-    for ( it = map.begin(); it != map.end(); ++it )
+    for ( const auto& it : map )
     {
-        static_cast<wxVariantData*>(it->second)->DecRef();
+        static_cast<wxVariantData*>(it.second)->DecRef();
     }
-}
-
-wxPGAttributeStorage::wxPGAttributeStorage()
-{
 }
 
 wxPGAttributeStorage::wxPGAttributeStorage(const wxPGAttributeStorage& other)
@@ -3150,7 +3144,7 @@ wxPGAttributeStorage& wxPGAttributeStorage::operator=(const wxPGAttributeStorage
     return *this;
 }
 
-void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )
+void wxPGAttributeStorage::Set(const wxString& name, const wxVariant& value)
 {
     wxVariantData* data = value.GetData();
 
@@ -3158,7 +3152,7 @@ void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )
     wxPGHashMapS2P::iterator it = m_map.find(name);
     if ( it != m_map.end() )
     {
-        ((wxVariantData*)it->second)->DecRef();
+        static_cast<wxVariantData*>(it->second)->DecRef();
 
         if ( !data )
         {
@@ -3174,6 +3168,36 @@ void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )
 
         m_map[name] = data;
     }
+}
+
+wxVariant wxPGAttributeStorage::FindValue(const wxString& name) const
+{
+    wxPGHashMapS2P::const_iterator it = m_map.find(name);
+    if ( it != m_map.end() )
+    {
+        wxVariantData* data = static_cast<wxVariantData*>(it->second);
+        data->IncRef();
+        return wxVariant(data, it->first);
+    }
+    return wxVariant();
+}
+
+wxPGAttributeStorage::const_iterator wxPGAttributeStorage::StartIteration() const
+{
+    return m_map.begin();
+}
+
+bool wxPGAttributeStorage::GetNext(const_iterator& it, wxVariant& variant) const
+{
+    if ( it == m_map.end() )
+        return false;
+
+    wxVariantData* data = static_cast<wxVariantData*>(it->second);
+    data->IncRef();
+    variant.SetData(data);
+    variant.SetName(it->first);
+    ++it;
+    return true;
 }
 
 #endif  // wxUSE_PROPGRID
