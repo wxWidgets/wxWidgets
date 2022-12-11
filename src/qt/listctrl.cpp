@@ -13,6 +13,7 @@
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QItemDelegate>
 #include <QtWidgets/QStyledItemDelegate>
+#include <QtGui/QGuiApplication>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -1054,9 +1055,34 @@ public:
             return 0;
     }
 
+protected:
+    virtual void currentChanged(const QModelIndex& current,
+                                const QModelIndex& previous) override
+    {
+        EmitListEvent(wxEVT_LIST_ITEM_FOCUSED, current);
+        QTreeView::currentChanged(current, previous);
+    }
+
+    virtual void selectionChanged(const QItemSelection &selected,
+                                  const QItemSelection &deselected) override;
+
+    // Event handlers
+    virtual void mousePressEvent(QMouseEvent* event) override
+    {
+        const QModelIndex itemPressed = indexAt(event->pos());
+
+        BaseClass::mousePressEvent(event);
+
+        if ( !itemPressed.isValid() )
+        {
+            // wx: deselect all if clicking on empty space
+            clearSelection();
+        }
+    }
+
 private:
-    void itemClicked(const QModelIndex &index);
-    void itemActivated(const QModelIndex &index);
+    void itemActivated(const QModelIndex &index)
+        { EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, index); }
     void itemPressed(const QModelIndex &index);
 
     wxQtStyledItemDelegate m_itemDelegate;
@@ -1068,7 +1094,6 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     m_itemDelegate(handler),
     m_closingEditor(0)
 {
-    connect(this, &QTreeView::clicked, this, &wxQtListTreeWidget::itemClicked);
     connect(this, &QTreeView::pressed, this, &wxQtListTreeWidget::itemPressed);
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
 }
@@ -1116,19 +1141,48 @@ bool wxQtListTreeWidget::EmitListEvent(wxEventType type,
     return false;
 }
 
-void wxQtListTreeWidget::itemClicked(const QModelIndex &index)
-{
-    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, index);
-}
-
 void wxQtListTreeWidget::itemPressed(const QModelIndex &index)
 {
-    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, index);
+    wxEventType eventType;
+    Qt::MouseButtons mouseButton = QGuiApplication::mouseButtons();
+
+    switch( mouseButton )
+    {
+    case Qt::RightButton:
+        eventType = wxEVT_LIST_ITEM_RIGHT_CLICK;
+        break;
+    case Qt::MiddleButton:
+        eventType = wxEVT_LIST_ITEM_MIDDLE_CLICK;
+        break;
+    default:
+        return;
+    }
+
+    EmitListEvent(eventType, index);
 }
 
-void wxQtListTreeWidget::itemActivated(const QModelIndex &index)
+void wxQtListTreeWidget::selectionChanged(const QItemSelection& selected,
+                                          const QItemSelection& deselected)
 {
-    EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, index);
+    // A QItemSelection is basically a list of selection ranges, i.e. QItemSelectionRange.
+
+    for ( const auto& range : deselected )
+    {
+        for ( int row = range.top(); row <= range.bottom(); ++row )
+        {
+            EmitListEvent(wxEVT_LIST_ITEM_DESELECTED, model()->index(row, 0));
+        }
+    }
+
+    for ( const auto& range : selected )
+    {
+        for ( int row = range.top(); row <= range.bottom(); ++row )
+        {
+            EmitListEvent(wxEVT_LIST_ITEM_SELECTED, model()->index(row, 0));
+        }
+    }
+
+    QTreeView::selectionChanged(selected, deselected);
 }
 
 // Specialization: to safely remove and delete the model associated with QTreeView
