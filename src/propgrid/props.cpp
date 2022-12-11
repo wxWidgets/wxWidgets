@@ -402,20 +402,10 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
     if ( text.IsNumber() )
     {
         // Remove leading zeros, so that the number is not interpreted as octal
-        wxString::const_iterator i = text.begin();
-        wxString::const_iterator iMax = text.end() - 1;  // Let's allow one, last zero though
-
-        int firstNonZeroPos = 0;
-
-        for ( ; i != iMax; ++i )
-        {
-            wxUniChar c = *i;
-            if ( c != wxS('0') && c != wxS(' ') )
-                break;
-            firstNonZeroPos++;
-        }
-
-        wxString useText = text.substr(firstNonZeroPos, text.length() - firstNonZeroPos);
+        // Let's allow one, last zero though
+        wxString::const_iterator itFirstNonZero = std::find_if(text.begin(), text.end()-1,
+                                                               [](wxUniChar c) { return c != '0' && c != ' '; });
+        wxString useText(itFirstNonZero, text.end());
 
         const wxString variantType(variant.GetType());
         bool isPrevLong = variantType == wxPG_VARIANT_TYPE_LONG;
