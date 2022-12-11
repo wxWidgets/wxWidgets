@@ -1979,7 +1979,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxPGProperty* selected = GetSelection();
     wxASSERT(selected);
 
-    const wxString label = wxString::FromUTF8("\xe2\x80\xa6"); // "Horizontal ellipsis" character
+    const wxString label("\u2026"); // "Horizontal ellipsis" character
 
     int dim = sz.y + 2*wxPG_BUTTON_BORDER_WIDTH;
 
