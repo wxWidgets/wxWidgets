@@ -456,6 +456,13 @@ public:
     explicit ClientHDC(HWND hwnd) : AutoHDC(hwnd, ::GetDC(hwnd)) { }
 };
 
+// same as ClientHDC but includes the non-client part of the window
+class WindowHDC : public AutoHDC
+{
+public:
+    explicit WindowHDC(HWND hwnd) : AutoHDC(hwnd, ::GetWindowDC(hwnd)) { }
+};
+
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with
 // the given one (screen by default) in ctor and destroys it in dtor
 class MemoryHDC
