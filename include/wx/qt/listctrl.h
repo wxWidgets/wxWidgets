@@ -264,6 +264,11 @@ public:
     // data is arbitrary data to be passed to the sort function.
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
+    // Sort indicator in header.
+    virtual void ShowSortIndicator(int col, bool ascending = true) override;
+    virtual int GetSortIndicator() const override;
+    virtual bool IsAscendingSortIndicator() const override;
+
     virtual QWidget *GetHandle() const override;
 
 protected:

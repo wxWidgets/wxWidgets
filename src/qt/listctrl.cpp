@@ -706,7 +706,9 @@ public:
     void SortItems(wxListCtrlCompare fn, wxIntPtr data)
     {
         CompareAdapter compare(fn, data);
+        beginResetModel();
         std::sort(m_rows.begin(), m_rows.end(), compare);
+        endResetModel();
     }
 
     bool IsItemChecked(long item) const
@@ -1092,6 +1094,7 @@ protected:
         {
             setSectionsClickable(true);
             setContextMenuPolicy(Qt::CustomContextMenu);
+            setSortIndicatorShown(true);
 
             connect(this, &QHeaderView::sectionClicked,
                     this, &wxQtHeaderView::sectionClicked);
@@ -1188,6 +1191,8 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     m_closingEditor(0)
 {
     setHeader(new wxQtHeaderView(this));
+
+    setSortingEnabled(true);
 
     connect(this, &QTreeView::pressed, this, &wxQtListTreeWidget::itemPressed);
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
@@ -2105,6 +2110,36 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
 {
     m_model->SortItems(fn, data);
+    return true;
+}
+
+void wxListCtrl::ShowSortIndicator(int col, bool ascending)
+{
+    const auto header = m_qtTreeWidget->header();
+    if ( header )
+        header->setSortIndicator(col, ascending ? Qt::DescendingOrder
+                                                : Qt::AscendingOrder);
+}
+
+int wxListCtrl::GetSortIndicator() const
+{
+    const auto header = m_qtTreeWidget->header();
+    if ( header && header->isSortIndicatorShown() )
+    {
+        // If no section has a sort indicator, sortIndicatorSection()
+        // returns section 0 by default.
+        return header->sortIndicatorSection();
+    }
+
+    return -1;
+}
+
+bool wxListCtrl::IsAscendingSortIndicator() const
+{
+    const auto header = m_qtTreeWidget->header();
+    if ( header )
+        return header->sortIndicatorOrder() == Qt::AscendingOrder;
+
     return true;
 }
 
