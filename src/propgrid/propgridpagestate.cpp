@@ -1480,15 +1480,12 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
         use_category = (wxPropertyCategory*)m_properties;
 
     // Let's iterate over the list of variants.
-    wxVariantList::const_iterator node;
     int numSpecialEntries = 0;
 
     //
     // Second pass for special entries
-    for ( node = list.begin(); node != list.end(); ++node )
+    for ( auto current : list )
     {
-        wxVariant *current = const_cast<wxVariant*>(*node);
-
         // Make sure it is wxVariant.
         wxASSERT( current );
         wxASSERT( wxStrcmp(current->GetClassInfo()->GetClassName(),wxS("wxVariant")) == 0 );
@@ -1548,10 +1545,8 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 
     if ( numSpecialEntries )
     {
-        for ( node = list.begin(); node != list.end(); ++node )
+        for ( auto current : list )
         {
-            wxVariant *current = const_cast<wxVariant*>(*node);
-
             const wxString& name = current->GetName();
             if ( !name.empty() )
             {
@@ -1577,11 +1572,8 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                                 wxASSERT( current->IsType(wxPG_VARIANT_TYPE_LIST) );
 
                                 wxVariantList& list2 = current->GetList();
-                                wxVariantList::const_iterator node2;
-
-                                for ( node2 = list2.begin(); node2 != list2.end(); ++node2 )
+                                for ( auto attr : list2 )
                                 {
-                                    wxVariant *attr = const_cast<wxVariant*>(*node2);
                                     foundProp->SetAttribute( attr->GetName(), *attr );
                                 }
                             }

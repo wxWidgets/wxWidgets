@@ -1393,9 +1393,9 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
             // Children in list can be in any order, but we will give hint to
             // GetPropertyByNameWH(). This optimizes for full list parsing.
-            for ( wxVariantList::iterator node = list.begin(); node != list.end(); ++node )
+            for ( auto node : list )
             {
-                wxVariant& childValue = *const_cast<wxVariant*>(*node);
+                wxVariant& childValue = *node;
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {

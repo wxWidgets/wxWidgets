@@ -213,9 +213,9 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
 
     // Destroy editor class instances.
     // iterate over all the elements in the class
-    for( wxPGHashMapS2P::iterator vt_it = m_mapEditorClasses.begin(); vt_it != m_mapEditorClasses.end(); ++vt_it )
+    for( const auto& vt_it : m_mapEditorClasses )
     {
-        delete ((wxPGEditor*)vt_it->second);
+        delete static_cast<wxPGEditor*>(vt_it.second);
     }
 
     // Make sure the global pointers have been reset
@@ -6387,10 +6387,9 @@ void wxPropertyGridPopulator::SetGrid( wxPropertyGrid* pg )
 wxPropertyGridPopulator::~wxPropertyGridPopulator()
 {
     // Free unused sets of choices
-    for( wxPGHashMapS2P::iterator it = m_dictIdChoices.begin(); it != m_dictIdChoices.end(); ++it )
+    for( const auto& it : m_dictIdChoices )
     {
-        wxPGChoicesData* data = (wxPGChoicesData*) it->second;
-        data->DecRef();
+        static_cast<wxPGChoicesData*>(it.second)->DecRef();
     }
 
     if ( m_pg )

@@ -1800,9 +1800,9 @@ const wxString& wxPGGetDefaultImageWildcard()
         wxList& handlers = wxImage::GetHandlers();
 
         // Let's iterate over the image handler list.
-        for (wxList::iterator node = handlers.begin(); node != handlers.end(); ++node)
+        for ( auto node : handlers )
         {
-            wxImageHandler *handler = (wxImageHandler*)*node;
+            wxImageHandler *handler = static_cast<wxImageHandler*>(node);
 
             wxString ext_lo = handler->GetExtension();
             wxString ext_up = ext_lo.Upper();
