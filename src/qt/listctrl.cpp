@@ -946,10 +946,20 @@ private:
 
 class wxQtListTreeWidget : public wxQtEventSignalHandler< QTreeView, wxListCtrl >
 {
+    using BaseClass = wxQtEventSignalHandler< QTreeView, wxListCtrl >;
+
+    // Data type passed to EmitListEvent() as extra data which is essentially
+    // a pair of two ints with these meanings:
+    // first  = column or first (de)selected row
+    // second = column width or last (de)selected row
+    using ListEventData = std::pair<int, int>;
+
 public:
     wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler );
 
-    void EmitListEvent(wxEventType typ, const QModelIndex &index) const;
+    bool EmitListEvent(wxEventType type,
+                       const QModelIndex &index,
+                       const ListEventData* data = nullptr) const;
 
     void closeEditor(
         QWidget *editor,
@@ -1063,8 +1073,9 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
 }
 
-void wxQtListTreeWidget::EmitListEvent(wxEventType typ,
-                                       const QModelIndex &index) const
+bool wxQtListTreeWidget::EmitListEvent(wxEventType type,
+                                       const QModelIndex &index,
+                                       const ListEventData* data) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -1072,9 +1083,37 @@ void wxQtListTreeWidget::EmitListEvent(wxEventType typ,
         // prepare the event
         // -----------------
         wxListEvent event;
-        InitListEvent(event, handler, typ, index);
-        EmitEvent(event);
+        InitListEvent(event, handler, type, index);
+
+        if ( !index.isValid() && data )
+        {
+            if ( type == wxEVT_LIST_ITEM_SELECTED ||
+                 type == wxEVT_LIST_ITEM_DESELECTED )
+            {
+                // Instead of sending hundreds of (de)selection messages, send only
+                // one for each range which is more efficient (see issue #4541)
+                // data->first is the first row in the (de)selection
+                // data->second is the last row in the (de)selection
+                wxFAIL_MSG("No implemention yet");
+            }
+            else if ( data->first >= 0 && data->first < handler->GetColumnCount() )
+            {
+                event.m_col = data->first;
+                event.m_item.m_width = data->second;
+                event.m_pointDrag = wxQtConvertPoint( QCursor::pos() );
+
+                if ( type == wxEVT_LIST_COL_RIGHT_CLICK )
+                {
+                    // handlers of this event expect m_pointDrag in client coordinates
+                    event.m_pointDrag = handler->ScreenToClient(event.m_pointDrag);
+                }
+            }
+        }
+
+        return !EmitEvent(event) || event.IsAllowed();
     }
+
+    return false;
 }
 
 void wxQtListTreeWidget::itemClicked(const QModelIndex &index)
