@@ -1080,6 +1080,99 @@ protected:
         }
     }
 
+    // wxQtHeaderView is for wxEVT_LIST_COL_XXX events generation only,
+    // i.e. it doesn't try to add anything fancy or new functionality
+    // not supported by QHeaderView
+    class wxQtHeaderView : public QHeaderView
+    {
+    public:
+        wxQtHeaderView(wxQtListTreeWidget* parent)
+            : QHeaderView(Qt::Horizontal, parent)
+            , m_parent(parent), m_isDragging(false)
+        {
+            setSectionsClickable(true);
+            setContextMenuPolicy(Qt::CustomContextMenu);
+
+            connect(this, &QHeaderView::sectionClicked,
+                    this, &wxQtHeaderView::sectionClicked);
+            connect(this, &QHeaderView::customContextMenuRequested,
+                    this, &wxQtHeaderView::sectionRightClicked);
+            connect(this, &QHeaderView::sectionResized,
+                    this, &wxQtHeaderView::sectionResized);
+        }
+
+    protected:
+        virtual void mouseReleaseEvent(QMouseEvent* event) override
+        {
+            if ( m_isDragging )
+            {
+                m_isDragging = false;
+
+                const ListEventData data =
+                    std::make_pair(m_parent->columnAt(event->x()), -1);
+
+                m_parent->EmitListEvent(wxEVT_LIST_COL_END_DRAG, QModelIndex(), &data);
+            }
+
+            QHeaderView::mouseReleaseEvent(event);
+        }
+
+    private:
+        void sectionClicked(int logicalIndex)
+        {
+            const ListEventData data = std::make_pair(logicalIndex, -1);
+
+            m_parent->EmitListEvent(wxEVT_LIST_COL_CLICK, QModelIndex(), &data);
+        }
+
+        void sectionRightClicked(const QPoint& pos)
+        {
+            const ListEventData data =
+                std::make_pair(m_parent->columnAt(pos.x()), -1);
+
+            m_parent->EmitListEvent(wxEVT_LIST_COL_RIGHT_CLICK, QModelIndex(), &data);
+        }
+
+        void sectionResized(int logicalIndex, int oldSize, int newSize)
+        {
+            ListEventData data;
+
+            if ( m_isDragging )
+            {
+                data = std::make_pair(logicalIndex, newSize);
+                m_parent->EmitListEvent(wxEVT_LIST_COL_DRAGGING, QModelIndex(), &data);
+                return;
+            }
+
+            if ( !underMouse() )
+            {
+                // sectionResized() also called if the control is being resized and
+                // the last section in the header is strechable, so just return and
+                // do nothing in this case.
+                return;
+            }
+
+            data = std::make_pair(logicalIndex, oldSize);
+
+            if ( sectionResizeMode(logicalIndex) == QHeaderView::Fixed ||
+                 !m_parent->EmitListEvent(wxEVT_LIST_COL_BEGIN_DRAG, QModelIndex(), &data) )
+            {
+                wxQtEnsureSignalsBlocked blocker(this);
+                resizeSection(logicalIndex, oldSize);
+                // This only takes effect after wxEVT_LIST_COL_END_DRAG is generated,
+                // after which the user can no longer drag the column.
+                setSectionResizeMode(logicalIndex, QHeaderView::Fixed);
+                return;
+            }
+
+            m_isDragging = true;
+        }
+
+        wxQtListTreeWidget* const m_parent;
+
+        bool m_isDragging;
+    };
+
 private:
     void itemActivated(const QModelIndex &index)
         { EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, index); }
@@ -1094,6 +1187,8 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     m_itemDelegate(handler),
     m_closingEditor(0)
 {
+    setHeader(new wxQtHeaderView(this));
+
     connect(this, &QTreeView::pressed, this, &wxQtListTreeWidget::itemPressed);
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
 }
