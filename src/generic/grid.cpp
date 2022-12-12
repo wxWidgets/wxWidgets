@@ -2625,6 +2625,9 @@ void wxGridWindow::OnMouseWheel( wxMouseEvent& event )
 {
     if (!m_owner->ProcessWindowEvent( event ))
         event.Skip();
+
+    // To redraw grid after scroll. If not called - some lines are not updated in grids where cell is combined from multiple items.
+    m_owner->Refresh();
 }
 
 // This seems to be required for wxX11/wxGTK otherwise the mouse
@@ -2839,6 +2842,9 @@ void wxGrid::InitPixelFields()
 #else
     m_defaultRowHeight += 4;
 #endif
+
+    // To make full row scroll. In other case rows are scrolled partialy.
+    m_yScrollPixelsPerLine = m_defaultRowHeight;
 
     // Don't change the value when called from OnDPIChanged() later if the
     // corresponding label window is hidden, these values should remain zeroes
@@ -6791,6 +6797,11 @@ void wxGrid::DrawAllGridWindowLines(wxDC& dc, const wxRegion & WXUNUSED(reg), wx
 {
     if ( !m_gridLinesEnabled || !gridWindow )
          return;
+
+    wxObjectRefData *pRefData = this->GetRefData();
+    if (pRefData) {
+        return;
+    }
 
     int top, bottom, left, right;
 

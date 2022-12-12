@@ -485,6 +485,11 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
         return;
     }
 
+    if (m_win) {
+        wxObjectRefData *pRefObjData = new wxObjectRefData;
+        m_win->SetRefData(pRefObjData);
+    }
+
     bool needsRefresh = false;
     int dx = 0,
         dy = 0;
@@ -550,6 +555,10 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
         m_win->Refresh(true, GetScrollRect());
     }
 #endif // __WXUNIVERSAL__
+
+    if (m_win) {
+        m_win->UnRef();
+    }
 }
 
 int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
