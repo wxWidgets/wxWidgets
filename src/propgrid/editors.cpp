@@ -2037,7 +2037,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
     if ( !property->IsValueUnspecified() )
         text = property->GetValueAsString(property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
 
-    return GenerateEditorTextCtrl(pos,sz,text,but,property->GetMaxLength());
+    return GenerateEditorTextCtrl(pos, sz, text, but, 0, property->GetMaxLength());
 }
 
 // -----------------------------------------------------------------------
