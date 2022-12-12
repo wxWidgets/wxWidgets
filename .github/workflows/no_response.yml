@@ -5,7 +5,7 @@ on:
     types: [created]
   schedule:
     # Schedule to run once per day
-    - cron: '19 32 * * *'
+    - cron: '27 20 * * *'
 
 jobs:
   no-response:
