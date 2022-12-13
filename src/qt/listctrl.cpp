@@ -955,8 +955,8 @@ class wxQtListTreeWidget : public wxQtEventSignalHandler< QTreeView, wxListCtrl 
     // Data type passed to EmitListEvent() as extra data
     struct ListEventData
     {
-        int m_colOrFirstRow = -1; // column index or first (de)selected row
-        int m_colWidthOrLastRow = -1; // column width or last (de)selected row
+        int m_colOrFirstRow; // column index or first (de)selected row
+        int m_colWidthOrLastRow; // column width or last (de)selected row
     };
 
 public:
