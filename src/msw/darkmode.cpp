@@ -285,6 +285,7 @@ wxColour GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INFOBK:
         case wxSYS_COLOUR_LISTBOX:
         case wxSYS_COLOUR_WINDOW:
+        case wxSYS_COLOUR_BTNFACE:
             return wxColour(0x202020);
 
         case wxSYS_COLOUR_BTNTEXT:
@@ -303,9 +304,6 @@ wxColour GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
             return wxColour(0x2b2b2b);
-
-        case wxSYS_COLOUR_BTNFACE:
-            return wxColour(0x333333);
 
         case wxSYS_COLOUR_MENUBAR:
             return wxColour(0x626262);
