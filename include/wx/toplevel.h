@@ -354,6 +354,14 @@ protected:
 
     bool m_modified;
 
+private:
+    // Return true if this window uses some automatic layout mechanism.
+    bool UsesAutoLayout() const;
+
+    // Return the only child of this window if it has exactly one or null
+    // pointer otherwise.
+    wxWindow* GetUniqueChild() const;
+
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowBase);
     wxDECLARE_EVENT_TABLE();
 };
