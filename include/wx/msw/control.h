@@ -134,6 +134,10 @@ protected:
         // The theme IDs to use. If neither this field nor the theme name is
         // set, no theme is applied to the window.
         const wchar_t* themeId = nullptr;
+
+        // For some controls we need to set the foreground explicitly, even if
+        // they have some support for the dark theme.
+        bool setForeground = false;
     };
 
     // Called after creating the control to enable dark mode support if needed.

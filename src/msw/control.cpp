@@ -143,6 +143,9 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     {
         wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
 
+        if ( support.setForeground )
+            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
+
         if ( const int msgTT = MSWGetToolTipMessage() )
         {
             const HWND hwndTT = (HWND)::SendMessage(GetHwnd(), msgTT, 0, 0);
