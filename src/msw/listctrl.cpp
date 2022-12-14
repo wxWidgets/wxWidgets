@@ -620,7 +620,7 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // accessors
 // ----------------------------------------------------------------------------
 
-const wchar_t* wxListCtrl::MSWGetDarkThemeName() const
+bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
     // There doesn't seem to be any theme that works well here:
     //  - "Explorer" draws bluish hover highlight rectangle which is not at
@@ -629,7 +629,9 @@ const wchar_t* wxListCtrl::MSWGetDarkThemeName() const
     //    and doesn't draw hover rectangle at all.
     //  - "ItemsView", which we use currently, draws the selection and hover as
     //    expected, but uses light mode scrollbars.
-    return L"ItemsView";
+    support.themeName = L"ItemsView";
+
+    return true;
 }
 
 int wxListCtrl::MSWGetToolTipMessage() const
@@ -646,7 +648,7 @@ wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
         // Note that we intentionally do not use this window HWND for the
         // theme, as it doesn't have dark values for it -- but does have them
         // when we use null window.
-        wxUxThemeHandle theme{HWND(0), MSWGetDarkThemeName()};
+        wxUxThemeHandle theme{HWND(0), L"ItemsView"};
 
         wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
         if ( col.IsOk() )

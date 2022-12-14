@@ -253,18 +253,14 @@ void EnableForTLW(HWND hwnd)
 
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 {
-    if ( wxMSWImpl::ShouldUseDarkMode() )
+    if ( !wxMSWImpl::ShouldUseDarkMode() )
+        return;
+
+    if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE) )
+        wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
+
+    if ( themeName || themeId )
     {
-        if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE) )
-            wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
-
-        // Default is to just use "Explorer" theme as it works for several
-        // controls, but we do _not_ use it if the theme ID is specified, as
-        // using it can be incompatible with the "Explorer" theme, e.g.
-        // "ExplorerStatusBar" only works _without_ specifying the theme name.
-        if ( !themeName && !themeId )
-            themeName = L"Explorer";
-
         HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
         if ( FAILED(hr) )
         {

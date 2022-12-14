@@ -398,7 +398,7 @@ protected:
 
     virtual void MSWAfterReparent() override;
 
-    virtual const wchar_t* MSWGetDarkThemeName() const override;
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     virtual int MSWGetToolTipMessage() const override;
 

@@ -94,7 +94,7 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) override;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
-    virtual const wchar_t* MSWGetDarkThemeName() const override;
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     // This function can be used as event handle for wxEVT_DPI_CHANGED event.
     void WXHandleDPIChanged(wxDPIChangedEvent& event);
@@ -255,9 +255,11 @@ WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-const wchar_t* wxMSWHeaderCtrl::MSWGetDarkThemeName() const
+bool wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    return L"ItemsView";
+    support.themeName = L"ItemsView";
+
+    return true;
 }
 
 wxMSWHeaderCtrl::~wxMSWHeaderCtrl()

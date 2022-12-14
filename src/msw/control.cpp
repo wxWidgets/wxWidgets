@@ -138,11 +138,10 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         return false;
     }
 
-    if ( wxMSWDarkMode::IsActive() )
+    MSWDarkModeSupport support;
+    if ( wxMSWDarkMode::IsActive() && MSWGetDarkModeSupport(support) )
     {
-        wxMSWDarkMode::AllowForWindow(m_hWnd,
-                                      MSWGetDarkThemeName(),
-                                      MSWGetDarkThemeId());
+        wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
 
         if ( const int msgTT = MSWGetToolTipMessage() )
         {
@@ -194,6 +193,16 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                        SWP_NOOWNERZORDER |
                        SWP_NOSENDCHANGING);
     }
+
+    return true;
+}
+
+bool wxControl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // This theme works for a few controls (buttons, texts, comboboxes) and
+    // doesn't seem to do any harm for those that don't support it, so use it
+    // by default.
+    support.themeName = L"Explorer";
 
     return true;
 }
