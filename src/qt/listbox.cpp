@@ -232,6 +232,35 @@ int wxListBox::GetSelection() const
     return m_qtListWidget->row(item);
 }
 
+void wxListBox::EnsureVisible(int n)
+{
+    wxCHECK_RET( n >= 0 && n < static_cast<int>(GetCount()),
+                "invalid index in wxListBox::EnsureVisible" );
+
+    m_qtListWidget->scrollToItem(m_qtListWidget->item(n));
+}
+
+int wxListBox::GetTopItem() const
+{
+    const auto item = m_qtListWidget->itemAt(2, 2);
+
+    return item ? m_qtListWidget->row(item) : -1;
+}
+
+int wxListBox::GetCountPerPage() const
+{
+    wxCHECK_MSG(GetCount() > 0, 0,
+        "wxListBox needs at least one item to calculate the count per page");
+
+    // this may not be exact but should be a good approximation:
+    const int h = m_qtListWidget->visualItemRect(
+                    m_qtListWidget->item(0)).height();
+    if ( h )
+        return m_qtListWidget->viewport()->height() / h;
+
+    return 0;
+}
+
 void wxListBox::DoSetFirstItem(int n)
 {
     m_qtListWidget->scrollToItem(m_qtListWidget->item(n), QAbstractItemView::PositionAtTop);
@@ -295,6 +324,13 @@ void wxListBox::DoDeleteOneItem(unsigned int pos)
 {
     QListWidgetItem* item = m_qtListWidget->item(pos);
     delete item;
+}
+
+int wxListBox::DoListHitTest(const wxPoint& point) const
+{
+    QListWidgetItem* item = m_qtListWidget->itemAt( wxQtConvertPoint(point) );
+
+    return item ? m_qtListWidget->row(item) : wxNOT_FOUND;
 }
 
 QWidget *wxListBox::GetHandle() const
