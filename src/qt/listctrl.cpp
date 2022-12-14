@@ -153,12 +153,18 @@ public:
     {
     }
 
-    int rowCount(const QModelIndex& WXUNUSED(parent) = QModelIndex()) const override
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override
     {
+        if ( parent.isValid() )
+            return 0;
+
         return static_cast<int>(m_rows.size());
     }
-    int columnCount(const QModelIndex& WXUNUSED(parent) = QModelIndex()) const override
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override
     {
+        if ( parent.isValid() )
+            return 0;
+
         return static_cast<int>(m_headers.size());
     }
 
@@ -884,8 +890,11 @@ public:
     {
     }
 
-    int rowCount(const QModelIndex& WXUNUSED(parent) = QModelIndex()) const override
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override
     {
+        if ( parent.isValid() )
+            return 0;
+
         return m_rowCount;
     }
 
