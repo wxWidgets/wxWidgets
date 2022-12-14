@@ -1176,6 +1176,8 @@ private:
         { EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, index); }
     void itemPressed(const QModelIndex &index);
 
+    void OnKeyDown(wxKeyEvent& event); // to generate wxEVT_LIST_KEY_DOWN event
+
     wxQtStyledItemDelegate m_itemDelegate;
     wxRecursionGuardFlag m_closingEditor;
 };
@@ -1191,6 +1193,8 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
 
     connect(this, &QTreeView::pressed, this, &wxQtListTreeWidget::itemPressed);
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
+
+    handler->Bind(wxEVT_KEY_DOWN, &wxQtListTreeWidget::OnKeyDown, this);
 }
 
 bool wxQtListTreeWidget::EmitListEvent(wxEventType type,
@@ -1279,6 +1283,28 @@ void wxQtListTreeWidget::selectionChanged(const QItemSelection& selected,
     }
 
     QTreeView::selectionChanged(selected, deselected);
+}
+
+void wxQtListTreeWidget::OnKeyDown(wxKeyEvent& event)
+{
+    // send a list event
+    wxListEvent le;
+    InitListEvent(le, GetHandler(), wxEVT_LIST_KEY_DOWN, currentIndex());
+
+    const long itemId = le.m_item.m_itemId;
+
+    if ( itemId != -1 )
+    {
+        // fill the other fields too
+        le.m_item.m_text = GetHandler()->GetItemText(itemId, 0);
+        le.m_item.m_data = GetHandler()->GetItemData(itemId);
+    }
+
+    le.m_code = event.GetKeyCode();
+
+    EmitEvent( le );
+
+    event.Skip();
 }
 
 // Specialization: to safely remove and delete the model associated with QTreeView
