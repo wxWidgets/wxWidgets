@@ -1202,6 +1202,8 @@ public:
             - wxMessageBox() contents doesn't use dark mode. Consider using
               wxGenericMessageDialog if dark mode support is more important
               than using the native dialog.
+            - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
+              use the same (light) background as by default in it.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the
