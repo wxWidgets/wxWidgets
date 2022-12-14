@@ -325,6 +325,8 @@ protected:
         DoGetPosition(x, y);
     }
 
+    virtual wxSize DoGetBestClientSize() const override;
+
     // test whether this window makes part of the frame
     // (menubar, toolbar and statusbar are excluded from automatic layout)
     virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const

@@ -486,6 +486,18 @@ bool wxTopLevelWindowBase::Layout()
     return false;
 }
 
+wxSize wxTopLevelWindowBase::DoGetBestClientSize() const
+{
+    // The logic here parallels that of Layout() above.
+    if ( !UsesAutoLayout() )
+    {
+        if ( wxWindow* const child = GetUniqueChild() )
+            return child->GetBestSize();
+    }
+
+    return wxNonOwnedWindow::DoGetBestClientSize();
+}
+
 // The default implementation for the close window event.
 void wxTopLevelWindowBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
