@@ -25052,23 +25052,21 @@ $as_echo "no" >&6; }
 fi
 
 if test "$build" != "$host"; then
-    case "${host}" in
-        *-linux-*)
+    case "$PKG_CONFIG" in
+        */$host-pkg-config )
             ;;
 
-        *)
-            disable_build_system_pkg_config=1
-            ;;
+        * )
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Not using native pkg-config when cross-compiling." >&5
+$as_echo "$as_me: WARNING: Not using native pkg-config when cross-compiling." >&2;}
+
+
+
+                                                if test -z "$PKG_CONFIG_LIBDIR"; then
+                PKG_CONFIG_LIBDIR=/dev/null
+                export PKG_CONFIG_LIBDIR
+            fi
     esac
-fi
-
-if test "$disable_build_system_pkg_config" = 1; then
-
-
-                if test -z "$PKG_CONFIG_LIBDIR"; then
-        PKG_CONFIG_LIBDIR=/dev/null
-        export PKG_CONFIG_LIBDIR
-    fi
 fi
 
 
