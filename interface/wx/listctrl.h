@@ -632,6 +632,10 @@ public:
         Gets the number of items that can fit vertically in the visible area of
         the list control (list or report view) or the total number of items in
         the list control (icon or small icon view).
+
+        @note The caller must ensure that there is at least one item in the control
+              to be able to calculate the count per page under wxQt, otherwise 0 will
+              be returned.
     */
     int GetCountPerPage() const;
 
@@ -1073,7 +1077,7 @@ public:
         @c wxLIST_AUTOSIZE will resize the column to the length of its longest item.
 
         @c wxLIST_AUTOSIZE_USEHEADER will resize the column to the length of the
-        header (Win32) or 80 pixels (other platforms).
+        header (wxMSW and wxQt) or 80 pixels (other platforms).
 
         In small or normal icon view, @a col must be -1, and the column width is set
         for all columns.

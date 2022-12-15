@@ -151,6 +151,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
     EVT_MENU(LIST_TOGGLE_BELL, MyFrame::OnToggleBell)
     EVT_MENU(LIST_CHECKVISIBILITY, MyFrame::OnCheckVisibility)
+    EVT_MENU(LIST_AUTOSIZE, MyFrame::OnAutoResize)
+    EVT_MENU(LIST_AUTOSIZE_USEHEADER, MyFrame::OnAutoResize)
     EVT_MENU(LIST_FIND, MyFrame::OnFind)
     EVT_MENU(LIST_TOGGLE_CHECKBOX, MyFrame::OnToggleItemCheckBox)
     EVT_MENU(LIST_GET_CHECKBOX, MyFrame::OnGetItemCheckBox)
@@ -259,6 +261,9 @@ MyFrame::MyFrame(const wxString& title)
     menuList->Check(LIST_TOGGLE_HEADER, true);
     menuList->AppendCheckItem(LIST_TOGGLE_BELL, "Toggle &bell on no match");
     menuList->Append( LIST_CHECKVISIBILITY, "Check if lines 2 and 9 are visible" );
+    menuList->AppendSeparator();
+    menuList->Append( LIST_AUTOSIZE, "Auto resize column 2\tCtrl-R" );
+    menuList->Append( LIST_AUTOSIZE_USEHEADER, "Auto resize column 2 (use header)\tCtrl-Shift-R" );
     menuList->AppendSeparator();
     menuList->AppendCheckItem(LIST_TOGGLE_CHECKBOXES,
                               "&Enable Checkboxes");
@@ -377,6 +382,20 @@ void MyFrame::OnCheckVisibility(wxCommandEvent& WXUNUSED(event))
         wxLogMessage( "Line 9 is visible" );
     else
         wxLogMessage( "Line 9 is not visible" );
+}
+
+void MyFrame::OnAutoResize(wxCommandEvent& event)
+{
+    if ( event.GetId() == LIST_AUTOSIZE )
+    {
+        wxLogMessage( "Column 2 resized to content" );
+        m_listCtrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
+    }
+    else
+    {
+        wxLogMessage( "Column 2 resized to header" );
+        m_listCtrl->SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER);
+    }
 }
 
 void MyFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))

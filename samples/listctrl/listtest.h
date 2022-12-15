@@ -117,6 +117,7 @@ protected:
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
     void OnCheckVisibility(wxCommandEvent& event);
+    void OnAutoResize(wxCommandEvent& event);
     void OnSetItemsCount(wxCommandEvent& event);
 
 
@@ -243,5 +244,7 @@ enum
     LIST_THAW,
     LIST_TOGGLE_LINES,
     LIST_CHECKVISIBILITY,
+    LIST_AUTOSIZE,
+    LIST_AUTOSIZE_USEHEADER,
     LIST_CTRL                   = 1000
 };
