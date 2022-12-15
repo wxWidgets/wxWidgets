@@ -474,6 +474,8 @@ void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
 
+wxWindow *wxTheWindowBeingScrolled;
+
 void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
     int nScrollInc = CalcScrollInc(event);
@@ -485,10 +487,7 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
         return;
     }
 
-    if (m_win) {
-        wxObjectRefData *pRefObjData = new wxObjectRefData;
-        m_win->SetRefData(pRefObjData);
-    }
+    wxTheWindowBeingScrolled = m_win;
 
     bool needsRefresh = false;
     int dx = 0,
@@ -555,10 +554,6 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
         m_win->Refresh(true, GetScrollRect());
     }
 #endif // __WXUNIVERSAL__
-
-    if (m_win) {
-        m_win->UnRef();
-    }
 }
 
 int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)

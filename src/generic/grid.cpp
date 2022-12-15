@@ -6790,6 +6790,8 @@ wxGrid::DrawRangeGridLines(wxDC& dc,
     dc.DestroyClippingRegion();
 }
 
+extern wxWindow *wxTheWindowBeingScrolled;
+
 // This is used to redraw all grid lines e.g. when the grid line colour
 // has been changed
 //
@@ -6798,8 +6800,8 @@ void wxGrid::DrawAllGridWindowLines(wxDC& dc, const wxRegion & WXUNUSED(reg), wx
     if ( !m_gridLinesEnabled || !gridWindow )
          return;
 
-    wxObjectRefData *pRefData = this->GetRefData();
-    if (pRefData) {
+    // Minimizing grid lines redraw count.
+    if (this == wxTheWindowBeingScrolled) {
         return;
     }
 
