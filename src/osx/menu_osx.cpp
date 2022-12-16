@@ -361,7 +361,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item )
 {
     int menuid = item ? item->GetId() : 0;
     bool processed = false;
-    if (item && item->IsCheckable())
+    if ( item && item->IsCheckable() )
         item->Check( !item->IsChecked() ) ;
 
     if ( SendEvent( menuid , (item && item->IsCheckable()) ? item->IsChecked() : -1 ) )
