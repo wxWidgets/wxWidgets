@@ -1310,6 +1310,7 @@ void wxTreeListCtrl::SetSortColumn(unsigned col, bool ascendingOrder)
     wxCHECK_RET( col < m_view->GetColumnCount(), "Invalid column index" );
 
     m_view->GetColumn(col)->SetSortOrder(ascendingOrder);
+    m_model->Resort();
 }
 
 bool wxTreeListCtrl::GetSortColumn(unsigned* col, bool* ascendingOrder)
