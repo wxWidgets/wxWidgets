@@ -384,6 +384,9 @@ public:
         All messages at levels strictly greater than the value returned by this
         function are not logged at all.
 
+        Note that this function is *not* thread-safe and should only be used
+        from the main thread.
+
         @see SetLogLevel(), IsLevelEnabled()
     */
     static wxLogLevel GetLogLevel();
@@ -394,6 +397,9 @@ public:
         This function only returns @true if logging is globally enabled and if
         @a level is less than or equal to the maximal log level enabled for the
         given @a component.
+
+        Note that this function is *not* thread-safe and should only be used
+        from the main thread.
 
         @see IsEnabled(), SetLogLevel(), GetLogLevel(), SetComponentLevel()
 
@@ -427,6 +433,10 @@ public:
         Specifies that log messages with level greater (numerically) than
         @a logLevel should be ignored and not sent to the active log target.
 
+        Note that this function is *not* thread-safe and can only be called
+        from the main thread. To temporarily disable logging from the other
+        threads, use wxLogNull, which is safe to use from them.
+
         @see SetComponentLevel()
     */
     static void SetLogLevel(wxLogLevel logLevel);
@@ -446,6 +456,9 @@ public:
         Calling this function with @false argument disables all log messages
         for the current thread.
 
+        This function is thread-safe and can be called by multiple threads
+        concurrently.
+
         @see wxLogNull, IsEnabled()
 
         @return
@@ -456,6 +469,9 @@ public:
 
     /**
         Returns true if logging is enabled at all now.
+
+        This function is thread-safe and can be called by multiple threads
+        concurrently.
 
         @see IsLevelEnabled(), EnableLogging()
      */
@@ -937,6 +953,8 @@ public:
       }
     @endcode
 
+    This class is thread-safe and can be used from both the main and the
+    backgrounds threads.
 
     @library{wxbase}
     @category{logging}
