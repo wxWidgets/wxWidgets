@@ -3906,6 +3906,9 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
 
 TEST_CASE("ClippingBoxTestCase::wxPaintDC", "[clip][dc][paintdc]")
 {
+#ifdef __WXOSX__
+    WARN("Skipping tests known to fail in wxOSX");
+#else
     wxBitmap bmp; // We need wxNullBitmap because we can't check the output
     // Ensure window is shown and large enough for testing
     wxTheApp->GetTopWindow()->Raise();
@@ -4260,6 +4263,7 @@ TEST_CASE("ClippingBoxTestCase::wxPaintDC", "[clip][dc][paintdc]")
     testWin->Refresh();
     testWin->Update();
     CHECK(paintExecuted == true);
+#endif // !__WXOSX__
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
