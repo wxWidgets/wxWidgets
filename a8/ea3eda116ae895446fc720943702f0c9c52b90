@@ -1,0 +1,1 @@
+wxGTK: Allow copying text in wxMessageDialog under GTK (Ian McInerney, #23039)
