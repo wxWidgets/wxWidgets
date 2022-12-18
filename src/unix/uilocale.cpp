@@ -615,7 +615,7 @@ wxString
 wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
     wxString str;
-#if defined(HAVE_LANGINFO_H) && defined(__LINUX__)
+#if defined(HAVE_LANGINFO_H) && defined(__LINUX__) && defined(__GLIBC__)
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
