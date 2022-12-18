@@ -4155,11 +4155,7 @@ TEST_CASE("ClippingBoxTestCase::wxPaintDC", "[clip][dc][paintdc]")
 
         SECTION("OneDevRegionAndReset Transform Matrix")
         {
-#ifdef __WXGTK3__
-            WARN("Skipping test known to fail in wxGTK 3");
-#else
             OneDevRegionAndReset(dc, bmp, true, true, wxPoint());
-#endif
         }
 
         SECTION("OneDevRegionAndEmpty")
