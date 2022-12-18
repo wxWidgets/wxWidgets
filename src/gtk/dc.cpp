@@ -490,7 +490,6 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
 
 wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
     : wxGTKCairoDCImpl(owner, window)
-    , m_clip(window->m_nativeUpdateRegion)
 {
     cairo_t* cr = window->GTKPaintContext();
     wxCHECK_RET(cr, "using wxPaintDC without being in a native paint event");
@@ -500,20 +499,6 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
     SetGraphicsContext(gc);
     // context is already adjusted for RTL
     m_layoutDir = window->GetLayoutDirection();
-}
-
-void wxPaintDCImpl::DestroyClippingRegion()
-{
-    BaseType::DestroyClippingRegion();
-
-    // re-establish clip for paint update area
-    int x, y, w, h;
-    m_clip.GetBox(x, y, w, h);
-    cairo_t* cr = static_cast<cairo_t*>(GetCairoContext());
-    cairo_rectangle(cr,
-        DeviceToLogicalX(x), DeviceToLogicalY(y),
-        DeviceToLogicalXRel(w), DeviceToLogicalYRel(h));
-    cairo_clip(cr);
 }
 //-----------------------------------------------------------------------------
 
