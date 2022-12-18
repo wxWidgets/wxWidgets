@@ -61,8 +61,12 @@
 
 static void DoCrash()
 {
+    wxGCC_WARNING_SUPPRESS(nonnull)
+
     char *p = 0;
     strcpy(p, "Let's crash");
+
+    wxGCC_WARNING_RESTORE(nonnull)
 }
 
 // ----------------------------------------------------------------------------
