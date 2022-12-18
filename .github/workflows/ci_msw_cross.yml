@@ -145,6 +145,10 @@ jobs:
 
           echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
 
+          echo "Compiler version:"
+          ${HOST_TRIPLET}-g++ --version
+          echo
+
       - name: Configure
         run: |
           ./configure --host=${HOST_TRIPLET} --disable-sys-libs --disable-debug_info $wxCONFIGURE_FLAGS || rc=$?
