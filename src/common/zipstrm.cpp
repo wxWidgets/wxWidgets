@@ -146,14 +146,9 @@ static inline wxUint16 CrackUint16(const char *m)
 static wxFileOffset QuietSeek(wxInputStream& stream, wxFileOffset pos)
 {
 #if wxUSE_LOG
-    wxLogLevel level = wxLog::GetLogLevel();
-    wxLog::SetLogLevel(wxLOG_Debug - 1);
-    wxFileOffset result = stream.SeekI(pos);
-    wxLog::SetLogLevel(level);
-    return result;
-#else
-    return stream.SeekI(pos);
+    wxLogNull noLog;
 #endif
+    return stream.SeekI(pos);
 }
 
 
