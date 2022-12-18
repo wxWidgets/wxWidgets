@@ -949,6 +949,10 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
         return;
     }
 
+    unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
+    wxINFO_FMT("Compare test '%s (%d-bit)' for saving",
+               handler.GetExtension(), bitsPerPixel);
+
     wxMemoryInputStream memIn(memOut);
     REQUIRE(memIn.IsOk());
 
@@ -956,10 +960,6 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     REQUIRE(actual.IsOk());
 
     const wxImage *expected = compareTo ? compareTo : &image;
-
-    unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
-    wxINFO_FMT("Compare test '%s (%d-bit)' for saving",
-               handler.GetExtension(), bitsPerPixel);
     CHECK_THAT(actual, RGBSameAs(*expected));
 
 #if wxUSE_PALETTE
