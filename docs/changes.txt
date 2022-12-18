@@ -253,6 +253,7 @@ All (GUI):
 - Fix wxGenericTreeCtrl icons rendering in high DPI (Gerhard Stein, #22887).
 - Add macros for event tables for missing wxWebView events (PB, #22949).
 - Improve month selection in wxGenericCalendarCtrl (Lauri Nurmi, #22853).
+- Fix maximum length of wxPropertyGrid editors (#23033).
 
 wxGTK:
 
