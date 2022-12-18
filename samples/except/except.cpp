@@ -564,7 +564,7 @@ void MyFrame::OnShowAssert(wxCommandEvent& WXUNUSED(event))
 {
     // provoke an assert from wxArrayString
     wxArrayString arr;
-    arr[0];
+    wxUnusedVar(arr[0]);
 }
 
 #if wxUSE_THREADS
