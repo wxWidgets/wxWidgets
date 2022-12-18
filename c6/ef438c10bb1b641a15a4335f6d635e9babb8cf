@@ -1,0 +1,1 @@
+wxMSW: wxNotebook::HitTest() for tabs on the right/left (Gerhard Gruber, #23023)
