@@ -70,13 +70,8 @@ public:
 
 class wxPaintDCImpl: public wxGTKCairoDCImpl
 {
-    typedef wxGTKCairoDCImpl BaseType;
 public:
     wxPaintDCImpl(wxPaintDC* owner, wxWindow* window);
-    virtual void DestroyClippingRegion() override;
-
-private:
-    const wxRegion& m_clip;
 
     wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
 };
