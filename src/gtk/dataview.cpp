@@ -3426,6 +3426,17 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
     gtk_tree_view_column_set_sort_indicator( column, TRUE );
 
     wxDataViewCtrlInternal* internal = m_owner->GtkGetInternal();
+
+    // We need to explicitly reset the sort indicator on the previously used
+    // column, if any, as GTK doesn't do it for us when we set it for this one
+    // (but it does reset it automatically when clicking on the column header).
+    if (wxDataViewColumn* colOldSort = internal->GetDataViewSortColumn())
+    {
+        gtk_tree_view_column_set_sort_indicator(
+            GTK_TREE_VIEW_COLUMN(colOldSort->GetGtkHandle()), FALSE
+        );
+    }
+
     internal->SetSortOrder(order);
     internal->SetSortColumn(m_model_column);
     internal->SetDataViewSortColumn(this);
