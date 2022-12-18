@@ -325,6 +325,8 @@ protected:
         DoGetPosition(x, y);
     }
 
+    virtual wxSize DoGetBestClientSize() const override;
+
     // test whether this window makes part of the frame
     // (menubar, toolbar and statusbar are excluded from automatic layout)
     virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const
@@ -353,6 +355,14 @@ protected:
     wxWindowRef m_winTmpDefault;
 
     bool m_modified;
+
+private:
+    // Return true if this window uses some automatic layout mechanism.
+    bool UsesAutoLayout() const;
+
+    // Return the only child of this window if it has exactly one or null
+    // pointer otherwise.
+    wxWindow* GetUniqueChild() const;
 
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowBase);
     wxDECLARE_EVENT_TABLE();
