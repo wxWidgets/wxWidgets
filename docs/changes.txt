@@ -244,6 +244,7 @@ All:
 - Update Expat submodule to include the fix for CVE-2022-40674.
 - Allow 'T' separator in wxDateTime::ParseDateTime() (Blake-Madden, #22999).
 - Add Serbian translations (Nikola Jović).
+- Fix MT-safety problem in wxZipInputStream (#23054).
 
 All (GUI):
 
