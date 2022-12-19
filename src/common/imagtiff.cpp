@@ -181,6 +181,12 @@ wxTIFFSeekOProc(thandle_t handle, toff_t off, int whence)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
 
+    // For weird reasons of compatibility with Solaris libc, libtiff calls
+    // Seek(0, SEEK_END) before every write, but we really don't need to do
+    // anything in this case.
+    if ( off == 0 && whence == SEEK_END )
+        return wxFileOffsetToTIFF( stream->TellO() );
+
     toff_t offset = wxFileOffsetToTIFF(
         stream->SeekO((wxFileOffset)off, wxSeekModeFromTIFF(whence)) );
 
