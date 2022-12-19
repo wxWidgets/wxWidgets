@@ -28,7 +28,7 @@ When an item of the name is empty, `'_'` or `'-'` are omitted.
 
     libwx_$(toolkit)$(widgetset)u_$(flavour)_$(name)-$(version)-$(host).$(lib_extension)
 
-*Windows libraries* (VS solution, makefile.gcc/vc, CMake on Windows/MinGW, shared libraries on Windows):
+*Windows libraries* (VS solution, makefile.gcc/vc, CMake on Windows, shared libraries on Windows):
 
     wx$(toolkit)$(widgetset)$(version)u$(debug)_$(flavour)_$(name)_$(compiler)_$(arch)_$(vendor).$(lib_extension)
 
@@ -69,10 +69,10 @@ Eg. for wxWidgets 3.1.5, `$version` is `315` for Windows shared libraries,
 
 The rationale for this is that under UNIX-like systems it is desirable
 that differently 'minor numbered' releases can be installed together,
-meaning your old 2.2 apps can continue to work even if you migrate
-development to the next stable or unstable release (eg. 2.3, 2.4),
-but binary compatibility is maintained between point releases (those
-with the same major.minor number).
+meaning 3.0 apps can continue to work even if you migrate development
+to the next stable or unstable release (eg. 3.2, 3.3), but binary
+compatibility is maintained between point releases (those with the same
+major.minor number).
 
 A known break in binary compatibility should be addressed by updating
 the library soname (see the notes in configure.in for details on this).
@@ -85,10 +85,10 @@ supported one, but which used to be optional.
 --------------------------------------------------------------------
 
 `$debug` is set to `'d'` for the libraries using debug version of CRT and is empty
-for release libraries. It is only really useful for the libraries created with MSVC
-projects and makefiles, as MSVC debug and release CRT are not ABI-compatible,
-but is also used by `makefile.gcc` under MSW for consistency with `makefile.vc`.
-When using configure under MSW or UNIX, it is always empty.
+for release libraries. It is only really useful for the libraries created with MSVC,
+as MSVC debug and release CRT are not ABI-compatible, but is also used by MinGW
+(makefile.gcc, CMake) for consistency with MSVC builds. When using configure under
+MSW or UNIX, it is always empty.
 
 --------------------------------------------------------------------
 
@@ -105,13 +105,14 @@ It is only added to shared libraries on Windows.
 
 --------------------------------------------------------------------
 
-`$arch` is used by MSVC solutions. It is empty for 32-bit builds and
+`$arch` is used only by MSVS solutions. It is empty for 32-bit builds and
 `'x64'` for 64-bit builds. It is only added to shared libraries.
 
 --------------------------------------------------------------------
 
 `$vendor` is an optional name appended to the library name. It is only
-added to shared libraries on Windows. It defaults to `'custom'`.
+added to shared libraries on Windows. It defaults to `'custom'` and is
+empty for the official Windows binaries.
 
 --------------------------------------------------------------------
 
@@ -122,14 +123,15 @@ that are cross compiled.
 
 --------------------------------------------------------------------
 
-`$lib_extension` is system specific and most usually set to `'.a'` for
-a static UNIX library, `'.so.$so_version'` for a shared UNIX library,
-`'.lib'` for a static MSVC library or `'.dll'` for a shared MSVC library.
+`$lib_extension` is system specific. On UNIX, it is most usually set
+to `'.a'` for a static library and `'.so.$so_version'` for a shared library.
+On Windows, it is `'.lib'` for a static or import MSVC library, `'.a'` for a
+static or import GCC or clang library, and `'.dll'` for a shared library.
 
 --------------------------------------------------------------------
 
-`type` is used to indicate a shared or static build. For MSVC, type is
-`'lib'` for shared libraries and `'dll'` for static libraries.
+`type` is used to indicate a shared or static build. On Windows, type is
+`'dll'` for shared libraries and `'lib'` for static libraries.
 On UNIX, type is empty for shared libraries and `'static'` for static libraries.
 
 --------------------------------------------------------------------
