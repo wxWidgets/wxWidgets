@@ -25,8 +25,6 @@
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
-    #include "wx/control.h"
-    #include "wx/panel.h"
 #endif  // WX_PRECOMP
 
 #include "wx/imaglist.h"
