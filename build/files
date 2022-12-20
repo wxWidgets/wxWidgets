@@ -1626,6 +1626,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/ole/oleutils.cpp
     src/msw/ole/safearray.cpp
     src/msw/ole/uuid.cpp
+    src/msw/overlay.cpp
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
