@@ -58,6 +58,12 @@ public:
 
     virtual int GetSelection() const override;
 
+    virtual void EnsureVisible(int item) override;
+
+    virtual int GetTopItem() const override;
+
+    virtual int GetCountPerPage() const override;
+
     virtual QWidget *GetHandle() const override;
 
     void QtSendEvent(wxEventType evtType, int rowIndex, bool selected);
@@ -78,6 +84,8 @@ protected:
 
     virtual void DoClear() override;
     virtual void DoDeleteOneItem(unsigned int pos) override;
+
+    virtual int DoListHitTest(const wxPoint& point) const override;
 
     virtual QScrollArea *QtGetScrollBarsContainer() const override;
 
