@@ -25,6 +25,7 @@
     #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/settings.h"
 #endif  // WX_PRECOMP
 
 #include "wx/imaglist.h"
@@ -35,6 +36,8 @@
 
 #include <windowsx.h>
 #include "wx/msw/winundef.h"
+
+#include "wx/msw/private/darkmode.h"
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -219,12 +222,34 @@ bool wxNotebook::Create(wxWindow *parent,
     if ( !MSWCreateControl(className, wxEmptyString, pos, size) )
         return false;
 
+    Bind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
+
     // Inherit parent attributes and, unlike the default, also inherit the
     // parent background colour in order to blend in with its background if
-    // it's set to a non-default value.
+    // it's set to a non-default value -- or if we're using dark mode, in which
+    // the default colour always needs to be changed.
     InheritAttributes();
-    if ( parent->InheritsBackgroundColour() && !UseBgCol() )
-        SetBackgroundColour(parent->GetBackgroundColour());
+    if ( !UseBgCol() )
+    {
+        wxColour colBg;
+        if ( parent->InheritsBackgroundColour() )
+        {
+            colBg = parent->GetBackgroundColour();
+        }
+        else if ( wxMSWDarkMode::IsActive() )
+        {
+            colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+            // We also need to change the foreground in this case to ensure a
+            // good contrast with the dark background.
+            SetForegroundColour(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT)
+            );
+        }
+
+        if ( colBg.IsOk() )
+            SetBackgroundColour(colBg);
+    }
 
 #if wxUSE_UXTHEME
     if ( HasFlag(wxNB_NOPAGETHEME) ||
@@ -790,9 +815,113 @@ void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
     // do nothing here
 }
 
-void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
+void wxNotebook::MSWNotebookPaint(wxDC& dc)
 {
+    dc.Clear();
+
+    // We currently only support drawing tabs on the top in the code below, so
+    // draw the ugly but at least functional light tabs in this case (note that
+    // this must be done after clearing the DC, as we don't do anything in
+    // WM_ERASEBKGND and the native control doesn't erase it on its own).
+    if ( GetTabOrientation() != wxTOP )
+    {
+        MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(dc), 0);
+        return;
+    }
+
+    // This colour, just as scrollbar one below, is just an approximation which
+    // seems to look acceptable.
+    dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+
+    const wxSize sizeWindow = GetClientSize();
+    const int selected = GetSelection();
+    const wxPoint posCursor = ScreenToClient(wxGetMousePosition());
+
+    const int selectedOffset = FromDIP(2);
+    const int labelOffset = 2*selectedOffset;
+
+    const size_t pages = GetPageCount();
+    for ( size_t n = 0; n < pages; ++n )
+    {
+        wxRect rect = GetTabRect(n);
+
+        if ( rect.x > sizeWindow.x )
+        {
+            // This tab, and all the remaining ones, can't be seen anyhow, so
+            // don't bother drawing them.
+            break;
+        }
+
+        const bool isSelected = static_cast<int>(n) == selected;
+
+        wxColour colTab;
+        if ( isSelected )
+        {
+            // Selected tab literally stands out, so make it bigger -- but clip
+            // drawing to ensure we don't draw the lower border of the inflated
+            // selected tab rectangle, it shouldn't overflow into the notebook
+            // page area.
+            rect.Inflate(selectedOffset);
+            dc.SetClippingRegion(rect.x, rect.y,
+                                 rect.width, rect.height - selectedOffset);
+
+            colTab = GetBackgroundColour();
+        }
+        else
+        {
+            if ( rect.Contains(posCursor) )
+                colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_SCROLLBAR);
+            else
+                colTab = *wxBLACK;
+        }
+
+        // All tab rectangles overlap the next one to avoid double pixel
+        // borders between them -- except the last one, which has nothing to
+        // overlap with.
+        if ( n != pages - 1 )
+            rect.width++;
+
+        dc.SetBrush(colTab);
+        dc.DrawRectangle(rect);
+
+        if ( isSelected )
+        {
+            // Undo Inflate() above in the horizontal direction, but leave the
+            // label appear higher than for the other tabs -- this is what the
+            // native control does.
+            rect.Deflate(selectedOffset, 0);
+
+            dc.DestroyClippingRegion();
+        }
+
+        // Draw the label and the image, if any (if there is none we just pass
+        // an empty bitmap to DrawLabel() which ignores it).
+        rect.Deflate(labelOffset);
+        dc.DrawLabel(GetPageText(n), GetImageBitmapFor(this, GetPageImage(n)),
+                     rect, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+    }
+}
+
+void wxNotebook::OnPaint(wxPaintEvent& event)
+{
+    // We can rely on the default implementation if we don't have a custom
+    // background colour (note that it is always set when using dark mode).
+    if ( !m_hasBgCol )
+    {
+        event.Skip();
+        return;
+    }
+
     wxPaintDC dc(this);
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We can't use default painting in dark mode, it just doesn't work
+        // there, whichever theme we use, so draw everything ourselves.
+        MSWNotebookPaint(dc);
+        return;
+    }
+
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
     if ( !rc.right || !rc.bottom )
@@ -1101,11 +1230,9 @@ bool wxNotebook::SetBackgroundColour(const wxColour& colour)
 
 #if USE_NOTEBOOK_ANTIFLICKER
     Unbind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
-    Unbind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
     if ( m_hasBgCol || !wxUxThemeIsActive() )
     {
         Bind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
-        Bind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
     }
 #endif // USE_NOTEBOOK_ANTIFLICKER
 
@@ -1362,7 +1489,14 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   // Change the selection before generating the event as its handler should
   // already see the new page selected.
   if ( hdr->code == TCN_SELCHANGE )
+  {
       UpdateSelection(event.GetSelection());
+
+      // We need to update the tabs after the selection change when drawing
+      // them ourselves, otherwise the previously selected tab is not redrawn.
+      if ( wxMSWDarkMode::IsActive() )
+          Refresh();
+  }
 
   bool processed = HandleWindowEvent(event);
   *result = !event.IsAllowed();
