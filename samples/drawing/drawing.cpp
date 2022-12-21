@@ -2055,13 +2055,17 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
         wxDCOverlay overlaydc( m_overlay, &dc );
         overlaydc.Clear();
-#ifdef __WXMAC__
-        dc.SetPen( *wxGREY_PEN );
-        dc.SetBrush( wxColour( 192,192,192,64 ) );
-#else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-#endif
+        if ( m_overlay.IsNative() )
+        {
+            dc.SetPen( *wxGREY_PEN );
+            dc.SetBrush( wxColour( 192,192,192,64 ) );
+        }
+        else
+        {
+            dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
+            dc.SetBrush( *wxTRANSPARENT_BRUSH );
+        }
+
         dc.DrawRectangle( newrect );
     }
 #else
