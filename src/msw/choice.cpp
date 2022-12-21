@@ -202,6 +202,13 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attrs;
 }
 
+bool wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    support.themeName = L"CFD";
+
+    return true;
+}
+
 wxChoice::~wxChoice()
 {
     Clear();
