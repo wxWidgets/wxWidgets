@@ -54,6 +54,7 @@ protected:
     wxFile *m_file;
     bool m_file_destroy;
 
+    wxDECLARE_ABSTRACT_CLASS(wxFileInputStream);
     wxDECLARE_NO_COPY_CLASS(wxFileInputStream);
 };
 
@@ -86,6 +87,7 @@ protected:
     wxFile *m_file;
     bool m_file_destroy;
 
+    wxDECLARE_ABSTRACT_CLASS(wxFileOutputStream);
     wxDECLARE_NO_COPY_CLASS(wxFileOutputStream);
 };
 
@@ -210,6 +212,7 @@ protected:
     wxFFile *m_file;
     bool m_file_destroy;
 
+    wxDECLARE_ABSTRACT_CLASS(wxFFileInputStream);
     wxDECLARE_NO_COPY_CLASS(wxFFileInputStream);
 };
 
@@ -242,6 +245,7 @@ protected:
     wxFFile *m_file;
     bool m_file_destroy;
 
+    wxDECLARE_ABSTRACT_CLASS(wxFFileOutputStream);
     wxDECLARE_NO_COPY_CLASS(wxFFileOutputStream);
 };
 

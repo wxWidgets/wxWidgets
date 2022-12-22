@@ -39,6 +39,11 @@ extern "C"
 }
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
+#include "wx/mstream.h"
+
+#if defined(__UNIX__)
+#include <sys/mman.h>
+#endif
 
 #ifndef TIFFLINKAGEMODE
     #define TIFFLINKAGEMODE LINKAGEMODE
@@ -241,19 +246,103 @@ wxTIFFSizeProc(thandle_t handle)
     return (toff_t) stream->GetSize();
 }
 
-static int TIFFLINKAGEMODE
-wxTIFFMapProc(thandle_t WXUNUSED(handle),
-             tdata_t* WXUNUSED(pbase),
-             toff_t* WXUNUSED(psize))
+static void* wxMmap(int fd, size_t size)
 {
-    return 0;
+    void* ptr = nullptr;
+#if defined(__WINDOWS__)
+    HANDLE hFile = (HANDLE)_get_osfhandle(fd);
+    if(hFile == INVALID_HANDLE_VALUE)
+    {
+        return nullptr;
+    }
+
+    HANDLE hMapView = CreateFileMappingW(hFile, nullptr, PAGE_READONLY, 0, 0, nullptr);
+    if(hMapView == nullptr)
+    {
+        return nullptr;
+    }
+
+    ptr = MapViewOfFile(hMapView, FILE_MAP_READ, 0, 0, size);
+    CloseHandle(hMapView);
+#elif defined(__UNIX__)
+    ptr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0);
+#endif
+
+    return ptr;
+}
+
+static void wxUnmap(void* ptr, size_t size)
+{
+#if defined(__WINDOWS__)
+    (void)size;
+    UnmapViewOfFile(ptr);
+#elif defined(__UNIX__)
+    munmap(ptr, size);
+#endif
+}
+
+static int TIFFLINKAGEMODE
+wxTIFFMapProc(thandle_t handle,
+             tdata_t* pbase,
+             toff_t* psize)
+{
+    wxStreamBase *stream = (wxStreamBase*) handle;
+    if(wxBufferedInputStream* bufferedInputStream = wxDynamicCast(stream, wxBufferedInputStream))
+    {
+        stream = bufferedInputStream->GetFilterInputStream();
+    }
+
+    size_t fileSize = stream->GetSize();
+    if(wxFileInputStream* fileInputStream = wxDynamicCast(stream, wxFileInputStream))
+    {
+        wxFile* file = fileInputStream->GetFile();
+        wxASSERT(file != nullptr);
+
+        *pbase = wxMmap(file->fd(), fileSize);
+        *psize = fileSize;
+    }
+    else if(wxFFileInputStream* ffileInputStream = wxDynamicCast(stream, wxFFileInputStream))
+    {
+        wxFFile* file = ffileInputStream->GetFile();
+        wxASSERT(file != nullptr);
+#if defined(__VISUALC__)
+#define fileno(x) _fileno(x)
+#endif
+        *pbase = wxMmap(fileno(file->fp()), fileSize);
+        *psize = fileSize;
+
+#undef fileno
+    }
+    else if(wxMemoryInputStream* memoryInputStream = wxDynamicCast(stream, wxMemoryInputStream))
+    {
+        wxStreamBuffer* buffer = memoryInputStream->GetInputStreamBuffer();
+
+        *pbase = buffer->GetBufferStart();
+        *psize = buffer->GetBufferSize();
+    }
+    else
+    {
+        return 0;
+    }
+
+    return *pbase != nullptr;
 }
 
 static void TIFFLINKAGEMODE
-wxTIFFUnmapProc(thandle_t WXUNUSED(handle),
-               tdata_t WXUNUSED(base),
-               toff_t WXUNUSED(size))
+wxTIFFUnmapProc(thandle_t handle,
+               tdata_t base,
+               toff_t size)
 {
+    wxStreamBase *stream = (wxStreamBase*) handle;
+    if(wxBufferedInputStream* bufferedInputStream = wxDynamicCast(stream, wxBufferedInputStream))
+    {
+        stream = bufferedInputStream->GetFilterInputStream();
+    }
+
+    if(wxDynamicCast(stream, wxMemoryInputStream) == nullptr)
+    {
+        wxUnmap(base, size);
+    }
 }
 
 } // extern "C"

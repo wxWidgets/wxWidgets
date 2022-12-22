@@ -585,6 +585,7 @@ protected:
 
     wxStreamBuffer *m_i_streambuf;
 
+    wxDECLARE_ABSTRACT_CLASS(wxBufferedInputStream);
     wxDECLARE_NO_COPY_CLASS(wxBufferedInputStream);
 };
 

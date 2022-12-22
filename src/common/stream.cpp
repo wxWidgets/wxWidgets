@@ -1325,6 +1325,8 @@ CreateBufferIfNeeded(T& stream, wxStreamBuffer *buffer, size_t bufsize = 1024)
 
 } // anonymous namespace
 
+wxIMPLEMENT_ABSTRACT_CLASS(wxBufferedInputStream, wxFilterInputStream)
+
 wxBufferedInputStream::wxBufferedInputStream(wxInputStream& stream,
                                              wxStreamBuffer *buffer)
                      : wxFilterInputStream(stream)
