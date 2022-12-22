@@ -4075,6 +4075,16 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
         return false;
     }
 
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We currently allow customizing the theme at wxControl level as some
+        // native controls require using a different theme, but for plain
+        // windows it looks like the default ("Explorer") should always be used
+        // and its only (but important) effect is to make their scrollbars
+        // dark, if they're used.
+        wxMSWDarkMode::AllowForWindow(m_hWnd);
+    }
+
     SubclassWin(m_hWnd);
 
     return true;
