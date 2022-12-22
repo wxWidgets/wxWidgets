@@ -277,6 +277,7 @@ wxMSW:
 - Set wxUSE_TASKBARBUTTON correctly when building using configure (#22900).
 - Queue wxWebViewEdge events to avoid hangs (Tobias Taschner, #23025).
 - Fix getting printer information in the print dialog (Stefan Ziegler, #23068).
+- Fix building samples with clang under MSYS (Maarten Bent, #23057).
 
 wxOSX:
 
