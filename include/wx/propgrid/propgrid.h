@@ -1548,8 +1548,8 @@ protected:
     wxPGCell            m_unspecifiedAppearance;
 
     // List of properties to be deleted/removed in idle event handler.
-    wxVector<wxPGProperty*>  m_deletedProperties;
-    wxVector<wxPGProperty*>  m_removedProperties;
+    std::set<wxPGProperty*>  m_deletedProperties;
+    std::set<wxPGProperty*>  m_removedProperties;
 
 #if !WXWIN_COMPATIBILITY_3_0
     // List of editors and their event handlers to be deleted in idle event handler.

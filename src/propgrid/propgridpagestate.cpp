@@ -285,8 +285,8 @@ void wxPropertyGridPageState::DoClear()
         for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
             wxPGProperty* p = m_regularArray.Item(i);
-            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, p);
-            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, p);
+            m_pPropGrid->m_deletedProperties.erase(p);
+            m_pPropGrid->m_removedProperties.erase(p);
         }
 
         m_regularArray.Empty();
@@ -1966,17 +1966,11 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         // Prevent adding duplicates to the lists.
         if ( doDelete )
         {
-            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item) )
-                return;
-
-            pg->m_deletedProperties.push_back(item);
+            pg->m_deletedProperties.insert(item);
         }
         else
         {
-            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item) )
-                return;
-
-            pg->m_removedProperties.push_back(item);
+            pg->m_removedProperties.insert(item);
         }
 
         // Rename the property and its children so it won't remain in the way
@@ -2061,23 +2055,14 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     {
         // Remove the item from both lists of pending operations.
         // (Deleted item cannot be also the subject of further removal.)
-        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_deletedProperties, item);
-        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item),
-                    wxS("Too many occurrences of the item"));
-
-        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
-        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
-                    wxS("Too many occurrences of the item"));
-
+        pg->m_deletedProperties.erase(item);
+        pg->m_removedProperties.erase(item);
         delete item;
     }
     else
     {
         // Remove the item from the list of pending removals.
-        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
-        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
-                    wxS("Too many occurrences of the item"));
-
+        pg->m_removedProperties.erase(item);
         item->OnDetached(this, pg);
     }
 
