@@ -1250,14 +1250,8 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
         int flags = wxPG_REPORT_ERROR|wxPG_FULL_VALUE|wxPG_PROGRAMMATIC_VALUE;
 
         wxVariant variant = p->GetValueRef();
-        bool res;
 
-        if ( p->GetMaxLength() <= 0 )
-            res = p->StringToValue( variant, value, flags );
-        else
-            res = p->StringToValue( variant, value.Mid(0,p->GetMaxLength()), flags );
-
-        if ( res )
+        if ( p->StringToValue(variant, value, flags) )
         {
             p->SetValue(variant);
             if ( p == m_pPropGrid->GetSelection() && IsDisplayed() )

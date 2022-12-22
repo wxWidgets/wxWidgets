@@ -1955,9 +1955,15 @@ public:
     void SetLabel( const wxString& label );
 
     /**
-        Set maximum length of the text the user can enter in the text editor.
-        If it is 0, the length is not limited and the text can be as long as
-        it is supported by the underlying native text control widget.
+        Set maximum length of the text the user can enter in the text editor
+        associated with property.
+        It does not affect a text representation of the value already stored
+        when the limit is set, nor does it affect the length of the text
+        representation of the value set programmatically e.g. with SetValue()
+        or wxPropertyGridInterface::SetPropertyValue().
+        If @a maxLen is 0, the length is not limited and the text can be
+        as long as it is supported by the underlying native text control
+        widget.
 
         @return
         Returns @true if maximum length was set.
