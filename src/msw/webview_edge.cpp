@@ -161,8 +161,8 @@ class wxWebViewEdgeHandlerResponseStream : public wxCOMInputStreamAdapter
 {
 public:
     wxWebViewEdgeHandlerResponseStream(wxSharedPtr<wxWebViewHandlerResponseData> data):
-        m_data(data),
-        wxCOMInputStreamAdapter(data->GetStream())
+        wxCOMInputStreamAdapter(data->GetStream()),
+        m_data(data)
     { }
 
     wxSharedPtr<wxWebViewHandlerResponseData> m_data;
@@ -172,8 +172,8 @@ class wxWebViewEdgeHandlerResponse : public wxWebViewHandlerResponse
 {
 public:
     wxWebViewEdgeHandlerResponse(ICoreWebView2WebResourceRequestedEventArgs* args, ICoreWebView2Environment* env):
-        m_args(args),
-        m_env(env)
+        m_env(env),
+        m_args(args)
     {
         m_args->GetDeferral(&m_deferral);
 
@@ -218,6 +218,8 @@ public:
 
         return true;
     }
+
+    using wxWebViewHandlerResponse::Finish;
 
     virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) override
     {

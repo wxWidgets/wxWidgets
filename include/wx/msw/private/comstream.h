@@ -61,7 +61,7 @@ public:
         return E_NOTIMPL;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER WXUNUSED(libNewSize))
+    virtual HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER WXUNUSED(libNewSize)) override
     {
         return E_NOTIMPL;
     }
