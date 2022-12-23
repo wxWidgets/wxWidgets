@@ -1204,6 +1204,9 @@ public:
               than using the native dialog.
             - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
               use the same (light) background as by default in it.
+            - Toolbar items for which wxToolBar::SetDropdownMenu() was called
+              don't draw the menu drop-down correctly, making it almost
+              invisible.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the
