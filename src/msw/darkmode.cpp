@@ -347,13 +347,14 @@ HBRUSH GetBackgroundBrush()
     return brush ? GetHbrushOf(*brush) : 0;
 }
 
-bool PaintIfNecessary(wxWindow* w)
+bool PaintIfNecessary(HWND hwnd, WXWNDPROC defWndProc)
 {
 #if wxUSE_IMAGE
     if ( !wxMSWImpl::ShouldUseDarkMode() )
         return false;
 
-    const wxSize size = w->GetClientSize();
+    const RECT rc = wxGetClientRect(hwnd);
+    const wxSize size{rc.right - rc.left, rc.bottom - rc.top};
 
     // Don't bother doing anything with the empty windows.
     if ( size == wxSize() )
@@ -363,7 +364,12 @@ bool PaintIfNecessary(wxWindow* w)
     wxBitmap bmp(size);
     {
         wxMemoryDC mdc(bmp);
-        w->MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(mdc), 0);
+
+        WPARAM wparam = (WPARAM)GetHdcOf(mdc);
+        if ( defWndProc )
+            ::CallWindowProc(defWndProc, hwnd, WM_PAINT, wparam, 0);
+        else
+            ::DefWindowProc(hwnd, WM_PAINT, wparam, 0);
     }
 
     wxImage image = bmp.ConvertToImage();
@@ -386,13 +392,14 @@ bool PaintIfNecessary(wxWindow* w)
     }
 
     PAINTSTRUCT ps;
-    wxDCTemp dc(::BeginPaint(GetHwndOf(w), &ps), size);
+    wxDCTemp dc(::BeginPaint(hwnd, &ps), size);
     dc.DrawBitmap(wxBitmap(image), 0, 0);
-    ::EndPaint(GetHwndOf(w), &ps);
+    ::EndPaint(hwnd, &ps);
 
     return true;
 #else // !wxUSE_IMAGE
-    wxUnusedVar(w);
+    wxUnusedVar(hwnd);
+    wxUnusedVar(defWndProc);
 
     return false;
 #endif
@@ -636,7 +643,7 @@ HBRUSH GetBackgroundBrush()
     return 0;
 }
 
-bool PaintIfNecessary(wxWindow* WXUNUSED(w))
+bool PaintIfNecessary(HWND WXUNUSED(hwnd), WXWNDPROC WXUNUSED(defWndProc))
 {
     return false;
 }

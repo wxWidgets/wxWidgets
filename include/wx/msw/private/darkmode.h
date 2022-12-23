@@ -44,7 +44,7 @@ HBRUSH GetBackgroundBrush();
 // This can only be called from WM_PAINT handler for a native control and
 // assumes that this control handles WPARAM argument of WM_PAINT as HDC to
 // paint on.
-bool PaintIfNecessary(wxWindow* w);
+bool PaintIfNecessary(HWND hwnd, WXWNDPROC defWndProc);
 
 // If dark mode is active and if the message is one of those used for menu
 // drawing, process it and return true, otherwise just return false without

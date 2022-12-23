@@ -3135,7 +3135,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             else // no DC given
             {
                 if ( MSWShouldUseAutoDarkMode() &&
-                        wxMSWDarkMode::PaintIfNecessary(this) )
+                        wxMSWDarkMode::PaintIfNecessary(GetHwnd(), m_oldWndProc) )
                     processed = true;
                 else
                     processed = HandlePaint();
