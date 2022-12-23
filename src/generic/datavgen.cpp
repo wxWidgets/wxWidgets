@@ -265,6 +265,11 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
     if ( !m_owner )
         return;
 
+    // If we only allow sorting by a single column, we need to reset any
+    // existing sort columns.
+    if ( !m_owner->IsMultiColumnSortAllowed() )
+        m_owner->ResetAllSortColumns();
+
     const int idx = m_owner->GetColumnIndex(this);
 
     // If this column isn't sorted already, mark it as sorted
@@ -394,11 +399,9 @@ private:
         }
         else // not using this column for sorting yet
         {
-            // We will sort by this column only now, so reset all the
-            // previously used ones.
-            owner->ResetAllSortColumns();
-
-            // Sort the column
+            // Sort by this column: note that it can add it to the existing
+            // sort columns if multi-column sort is allowed, but by default it
+            // will replace the existing sort column (if any).
             col->SetSortOrder(true);
         }
 
