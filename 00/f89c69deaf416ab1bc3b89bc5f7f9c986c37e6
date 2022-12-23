@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxWebView::EnableBrowserAcceleratorKeys() (Tobias Taschner, #23070)
