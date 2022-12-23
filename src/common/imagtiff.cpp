@@ -181,6 +181,12 @@ wxTIFFSeekOProc(thandle_t handle, toff_t off, int whence)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
 
+    // For weird reasons of compatibility with Solaris libc, libtiff calls
+    // Seek(0, SEEK_END) before every write, but we really don't need to do
+    // anything in this case.
+    if ( off == 0 && whence == SEEK_END )
+        return wxFileOffsetToTIFF( stream->TellO() );
+
     toff_t offset = wxFileOffsetToTIFF(
         stream->SeekO((wxFileOffset)off, wxSeekModeFromTIFF(whence)) );
 
@@ -611,8 +617,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     const int imageWidth = image->GetWidth();
     TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (wxUint32) imageWidth);
     TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (wxUint32)image->GetHeight());
-    TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-    TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    TIFFSetField(tif, TIFFTAG_ORIENTATION, (wxUint16)ORIENTATION_TOPLEFT);
+    TIFFSetField(tif, TIFFTAG_PLANARCONFIG, (wxUint16)PLANARCONFIG_CONTIG);
 
     // save the image resolution if we have it
     int xres, yres;
@@ -640,8 +646,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if ( tiffRes != RESUNIT_NONE )
     {
         TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, tiffRes);
-        TIFFSetField(tif, TIFFTAG_XRESOLUTION, xres);
-        TIFFSetField(tif, TIFFTAG_YRESOLUTION, yres);
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION, static_cast<double>(xres));
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION, static_cast<double>(yres));
     }
 
 
@@ -706,15 +712,15 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int extraSamples = hasAlpha ? 1 : 0;
 
-    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp + extraSamples);
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
+    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, (wxUint16)(spp + extraSamples));
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, (wxUint16)bps);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, (wxUint16)photometric);
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, (wxUint16)compression);
 
     if (extraSamples)
     {
         wxUint16 extra[] = { EXTRASAMPLE_UNSPECIFIED };
-        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, (long) 1, &extra);
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, (wxUint16) 1, &extra);
     }
 
     // scanlinesize is determined by spp+extraSamples and bps
