@@ -148,7 +148,15 @@ jobs:
           cmake --version
           mkdir build_cmake
           pushd build_cmake
-          cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=clang.exe -DCMAKE_CXX_COMPILER=clang++.exe -DwxBUILD_SAMPLES=ALL -DwxBUILD_TESTS=ALL -DwxBUILD_DEMOS=ON -DCMAKE_BUILD_TYPE=Release ..
+          cmake -G "MinGW Makefiles" \
+                -DCMAKE_C_COMPILER=clang.exe \
+                -DCMAKE_CXX_COMPILER=clang++.exe \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DwxBUILD_SAMPLES=ALL \
+                -DwxBUILD_TESTS=ALL \
+                -DwxBUILD_DEMOS=ON \
+                -DwxUSE_WEBVIEW_EDGE=ON \
+                ..
 
       - name: Building
         working-directory: build_cmake
