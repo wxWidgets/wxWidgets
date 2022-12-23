@@ -29,6 +29,7 @@
 #endif  // WX_PRECOMP
 
 #include "wx/imaglist.h"
+#include "wx/renderer.h"
 #include "wx/sysopt.h"
 
 #include "wx/msw/private.h"
@@ -815,36 +816,246 @@ void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
     // do nothing here
 }
 
+namespace
+{
+
+// Flags may include:
+// - wxCONTROL_SELECTED for the currently selected tab
+// - wxCONTROL_CURRENT for the "hot" tab, i.e. the one under mouse pointer
+// - wxCONTROL_SPECIAL for the first tab.
+void
+DrawNotebookTab(wxWindow* win,
+                wxDC& dc,
+                const wxRect& rectOrig,
+                const wxString& text,
+                const wxBitmap& image,
+                wxDirection tabOrient,
+                int flags = wxCONTROL_NONE)
+{
+    // This colour is just an approximation which seems to look acceptable.
+    dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+
+    const int selectedOffset = win->FromDIP(2);
+    const int labelOffset = 3*selectedOffset;
+
+    wxRect rectTab = rectOrig;
+    wxColour colTab;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        // Selected tab literally stands out, so make it bigger -- but clip
+        // drawing to ensure we don't draw the inner border of the inflated
+        // selected tab rectangle, it shouldn't overflow into the notebook
+        // page area.
+        rectTab.Inflate(selectedOffset);
+
+        wxRect rectClip = rectTab;
+        switch ( tabOrient )
+        {
+            case wxTOP:
+                rectClip.height -= selectedOffset;
+                break;
+
+            case wxBOTTOM:
+                rectClip.y += selectedOffset;
+                rectClip.height -= selectedOffset;
+                break;
+
+            case wxLEFT:
+                rectClip.width -= selectedOffset;
+                break;
+
+            case wxRIGHT:
+                rectClip.x += selectedOffset;
+                rectClip.width -= selectedOffset;
+                break;
+
+            default:
+                wxFAIL_MSG("unreachable");
+        }
+
+        dc.SetClippingRegion(rectClip);
+
+        colTab = win->GetBackgroundColour();
+    }
+    else // not the selected tab
+    {
+        // All tab rectangles overlap the previous one to avoid double pixel
+        // borders between them in Windows 10 flat look, except for the first
+        // one which has nothing to overlap.
+        if ( !(flags & wxCONTROL_SPECIAL) )
+        {
+            switch ( tabOrient )
+            {
+                case wxTOP:
+                case wxBOTTOM:
+                    rectTab.x--;
+                    rectTab.width++;
+                    break;
+
+                case wxLEFT:
+                case wxRIGHT:
+                    rectTab.y--;
+                    rectTab.height++;
+                    break;
+
+                default:
+                    wxFAIL_MSG("unreachable");
+            }
+        }
+
+        if ( flags & wxCONTROL_CURRENT )
+            colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+        else
+            colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+    }
+
+    dc.SetBrush(colTab);
+    dc.DrawRectangle(rectTab);
+
+    wxRect rectLabel = rectOrig;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        dc.DestroyClippingRegion();
+
+        // Also shift the label to mimic the native control which makes it "pop
+        // up" for the selected tab (with "up" being "in the tab direction").
+        switch ( tabOrient )
+        {
+            case wxTOP:
+                rectLabel.y -= selectedOffset;
+                break;
+
+            case wxBOTTOM:
+                rectLabel.y += selectedOffset;
+                break;
+
+            case wxLEFT:
+                rectLabel.x -= selectedOffset;
+                break;
+
+            case wxRIGHT:
+                rectLabel.x += selectedOffset;
+                break;
+
+            default:
+                wxFAIL_MSG("unreachable");
+        }
+    }
+
+    rectLabel.Deflate(labelOffset);
+
+    // Draw the label and the image, if any.
+    switch ( tabOrient )
+    {
+        case wxTOP:
+        case wxBOTTOM:
+            // We can use an existing helper that will do everything for us.
+            dc.DrawLabel(text, image, rectLabel,
+                         wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+            break;
+
+        case wxLEFT:
+        case wxRIGHT:
+            {
+                const wxSize textSize = dc.GetTextExtent(text);
+
+                // Exchange width and height because we're drawing text
+                // vertically.
+                wxSize totalSize{textSize.y, textSize.x};
+
+                int textOfs = 0;
+                wxSize imageSize;
+                if ( image.IsOk() )
+                {
+                    imageSize = image.GetSize();
+
+                    // Use label offset for the gap between image and the label
+                    // too because why not.
+                    totalSize.y += imageSize.y + labelOffset;
+
+                    if ( imageSize.x > totalSize.x )
+                    {
+                        textOfs = (imageSize.x - totalSize.x) / 2;
+                        totalSize.x = imageSize.x;
+                    }
+                }
+
+                // Native control actually draws text bottom/top aligned in the
+                // first/only row but centers them if there is more than one
+                // row of tabs. Don't bother with this, especially because it's
+                // really not obvious that it looks any better and just center
+                // them always.
+                const wxRect rect = wxRect(totalSize).CentreIn(rectLabel);
+
+                if ( tabOrient == wxLEFT )
+                {
+                    int y = rect.y + textSize.x;
+
+                    dc.DrawRotatedText(text, rect.x + textOfs, y, 90.0);
+
+                    if ( image.IsOk() )
+                        dc.DrawBitmap(image, rect.x, y + labelOffset, true);
+                }
+                else // tabOrient == wxRIGHT
+                {
+                    int y = rect.y;
+
+                    if ( image.IsOk() )
+                    {
+                        dc.DrawBitmap(image, rect.x, y, true);
+
+                        y += imageSize.y + labelOffset;
+                    }
+
+                    dc.DrawRotatedText(text, rect.GetRight() - textOfs, y, -90.0);
+                }
+            }
+            break;
+
+        default:
+            wxFAIL_MSG("unreachable");
+    }
+}
+
+} // anonymous namespace
+
 void wxNotebook::MSWNotebookPaint(wxDC& dc)
 {
     dc.Clear();
 
-    // We currently only support drawing tabs on the top in the code below, so
-    // draw the ugly but at least functional light tabs in this case (note that
-    // this must be done after clearing the DC, as we don't do anything in
-    // WM_ERASEBKGND and the native control doesn't erase it on its own).
-    if ( GetTabOrientation() != wxTOP )
-    {
-        MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(dc), 0);
-        return;
-    }
-
-    // This colour, just as scrollbar one below, is just an approximation which
-    // seems to look acceptable.
-    dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+    const wxDirection tabOrient = GetTabOrientation();
 
     const wxSize sizeWindow = GetClientSize();
     const int selected = GetSelection();
     const wxPoint posCursor = ScreenToClient(wxGetMousePosition());
 
-    const int selectedOffset = FromDIP(2);
-    const int labelOffset = 2*selectedOffset;
+    const auto drawTab = [this, &dc, tabOrient](wxRect rect, size_t n, int flags)
+    {
+        if ( n == 0 )
+            flags |= wxCONTROL_SPECIAL;
+
+        DrawNotebookTab(this, dc, rect,
+                        GetPageText(n),
+                        GetImageBitmapFor(this, GetPageImage(n)),
+                        tabOrient,
+                        flags);
+    };
 
     const size_t pages = GetPageCount();
     for ( size_t n = 0; n < pages; ++n )
     {
-        wxRect rect = GetTabRect(n);
+        if ( static_cast<int>(n) == selected )
+        {
+            // We're going to draw this one after all the other ones as it
+            // overlaps them.
+            continue;
+        }
 
+        const wxRect rect = GetTabRect(n);
+
+        // For horizontal tabs, some of them can be scrolled out of view, skip
+        // drawing them just in case we have zillions of tabs to avoid drawing
+        // the off-screen ones unnecessarily.
         if ( rect.x > sizeWindow.x )
         {
             // This tab, and all the remaining ones, can't be seen anyhow, so
@@ -852,54 +1063,19 @@ void wxNotebook::MSWNotebookPaint(wxDC& dc)
             break;
         }
 
-        const bool isSelected = static_cast<int>(n) == selected;
+        // We can't track the "hot" tab when using non-top tabs as the native
+        // control doesn't refresh them on mouse move (it seems to switch to
+        // comctl32.dll v5-like implementation in this case), so don't paint
+        // them specially.
+        int flags = wxCONTROL_NONE;
+        if ( tabOrient == wxTOP && rect.Contains(posCursor) )
+            flags |= wxCONTROL_CURRENT;
 
-        wxColour colTab;
-        if ( isSelected )
-        {
-            // Selected tab literally stands out, so make it bigger -- but clip
-            // drawing to ensure we don't draw the lower border of the inflated
-            // selected tab rectangle, it shouldn't overflow into the notebook
-            // page area.
-            rect.Inflate(selectedOffset);
-            dc.SetClippingRegion(rect.x, rect.y,
-                                 rect.width, rect.height - selectedOffset);
-
-            colTab = GetBackgroundColour();
-        }
-        else
-        {
-            if ( rect.Contains(posCursor) )
-                colTab = wxSystemSettings::GetColour(wxSYS_COLOUR_SCROLLBAR);
-            else
-                colTab = *wxBLACK;
-        }
-
-        // All tab rectangles overlap the next one to avoid double pixel
-        // borders between them -- except the last one, which has nothing to
-        // overlap with.
-        if ( n != pages - 1 )
-            rect.width++;
-
-        dc.SetBrush(colTab);
-        dc.DrawRectangle(rect);
-
-        if ( isSelected )
-        {
-            // Undo Inflate() above in the horizontal direction, but leave the
-            // label appear higher than for the other tabs -- this is what the
-            // native control does.
-            rect.Deflate(selectedOffset, 0);
-
-            dc.DestroyClippingRegion();
-        }
-
-        // Draw the label and the image, if any (if there is none we just pass
-        // an empty bitmap to DrawLabel() which ignores it).
-        rect.Deflate(labelOffset);
-        dc.DrawLabel(GetPageText(n), GetImageBitmapFor(this, GetPageImage(n)),
-                     rect, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+        drawTab(rect, n, flags);
     }
+
+    if ( selected != wxNOT_FOUND )
+        drawTab(GetTabRect(selected), selected, wxCONTROL_SELECTED);
 }
 
 void wxNotebook::OnPaint(wxPaintEvent& event)
