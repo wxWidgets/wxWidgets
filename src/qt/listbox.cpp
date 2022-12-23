@@ -21,9 +21,8 @@
 class wxQtListWidgetItem : public QListWidgetItem
 {
 public:
-    wxQtListWidgetItem(QListWidget* parent = nullptr)
-        : QListWidgetItem(parent)
-    { }
+    // Inherit QListWidgetItem constructors
+    using QListWidgetItem::QListWidgetItem;
 
     virtual void setData(int role, const QVariant& value) override;
 };
