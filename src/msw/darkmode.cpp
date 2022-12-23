@@ -276,6 +276,9 @@ wxColour GetColour(wxSystemColour index)
     // are not appropriate for the dark mode.
     switch ( index )
     {
+        case wxSYS_COLOUR_BTNSHADOW:
+            return *wxBLACK;
+
         case wxSYS_COLOUR_ACTIVECAPTION:
         case wxSYS_COLOUR_APPWORKSPACE:
         case wxSYS_COLOUR_INFOBK:
@@ -293,6 +296,9 @@ wxColour GetColour(wxSystemColour index)
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
             return wxColour(0xe0e0e0);
+
+        case wxSYS_COLOUR_HOTLIGHT:
+            return wxColour(0x474747);
 
         case wxSYS_COLOUR_SCROLLBAR:
             return wxColour(0x4d4d4d);
@@ -317,12 +323,10 @@ wxColour GetColour(wxSystemColour index)
         case wxSYS_COLOUR_3DLIGHT:
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_BTNHIGHLIGHT:
-        case wxSYS_COLOUR_BTNSHADOW:
         case wxSYS_COLOUR_DESKTOP:
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         case wxSYS_COLOUR_GRAYTEXT:
-        case wxSYS_COLOUR_HOTLIGHT:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_WINDOWFRAME:
             return wxColour();
