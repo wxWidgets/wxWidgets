@@ -797,8 +797,16 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 LRESULT APIENTRY
 wxNotebookSpinBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    if ( message == WM_ERASEBKGND )
-        return 0;
+    switch ( message )
+    {
+        case WM_ERASEBKGND:
+            return 0;
+
+        case WM_PAINT:
+            if ( wxMSWDarkMode::PaintIfNecessary(hwnd, gs_wndprocNotebookSpinBtn) )
+                return 0;
+            break;
+    }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocNotebookSpinBtn,
                             hwnd, message, wParam, lParam);
