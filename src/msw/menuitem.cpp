@@ -123,12 +123,6 @@ private:
     int m_modeOld;
 };
 
-inline bool IsGreaterThanStdSize(const wxBitmap& bmp, const wxWindow* win)
-{
-    return bmp.GetWidth() > wxGetSystemMetrics(SM_CXMENUCHECK, win) ||
-            bmp.GetHeight() > wxGetSystemMetrics(SM_CYMENUCHECK, win);
-}
-
 } // anonymous namespace
 
 // ============================================================================
