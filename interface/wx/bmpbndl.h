@@ -273,7 +273,7 @@ public:
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle. As SVG images usually don't have any natural
             default size, it should be provided when creating the bundle.
- 
+
         @note Converting text objects to path objects will allow them to be
             rasterized as expected. This can be done in an SVG editor such as
             Inkscape. (In Inkscape, select a text object and choose
