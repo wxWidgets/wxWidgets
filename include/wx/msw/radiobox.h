@@ -118,8 +118,14 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const override { return false; }
 
+
+    // Non-portable MSW-specific functions.
+#ifdef WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Does nothing, don't use")
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
+    wxDEPRECATED_MSG("Use portable SetFont() instead")
     void SetButtonFont(const wxFont& font) { SetFont(font); }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 
     // implementation only from now on
