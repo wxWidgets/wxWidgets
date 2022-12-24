@@ -93,10 +93,6 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
-#if wxUSE_RADIOBOX
-    #include "wx/radiobox.h"
-#endif // wxUSE_RADIOBOX
-
 #if wxUSE_SPINCTRL
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
@@ -7085,17 +7081,6 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         win = wxFindWinFromHandle(hwnd);
         if ( !win )
         {
-#if wxUSE_RADIOBOX && !defined(__WXUNIVERSAL__)
-            // native radiobuttons return DLGC_RADIOBUTTON here and for any
-            // wxWindow class which overrides WM_GETDLGCODE processing to
-            // do it as well, win would be already non null
-            if ( ::SendMessage(hwnd, WM_GETDLGCODE, 0, 0) & DLGC_RADIOBUTTON )
-            {
-                win = wxRadioBox::GetFromRadioButtonHWND(hwnd);
-            }
-            //else: it's a wxRadioButton, not a radiobutton from wxRadioBox
-#endif // wxUSE_RADIOBOX
-
             // spin control text buddy window should be mapped to spin ctrl
             // itself so try it too
 #if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
