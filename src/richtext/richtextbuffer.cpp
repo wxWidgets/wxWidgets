@@ -3345,7 +3345,6 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 /// Get any text in this object for the given range
 wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& range) const
 {
-    int lineCount = 0;
     wxString text;
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -3365,8 +3364,6 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
 
             if ((childRange.GetEnd() == child->GetRange().GetEnd()) && node->GetNext())
                 text += wxT("\n");
-
-            lineCount ++;
         }
         node = node->GetNext();
     }
