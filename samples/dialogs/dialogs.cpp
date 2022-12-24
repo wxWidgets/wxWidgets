@@ -3878,19 +3878,16 @@ void StdButtonSizerDialog::OnEvent(wxCommandEvent& WXUNUSED(event))
     EnableDisableControls();
 
     long flags = 0;
-    unsigned long numButtons = 0;
 
     if (m_chkboxAffirmativeButton->IsChecked())
     {
         if (m_radiobtnOk->GetValue())
         {
             flags |= wxOK;
-            numButtons ++;
         }
         else if (m_radiobtnYes->GetValue())
         {
             flags |= wxYES;
-            numButtons ++;
         }
     }
 
@@ -3899,13 +3896,11 @@ void StdButtonSizerDialog::OnEvent(wxCommandEvent& WXUNUSED(event))
         if (m_radiobtnCancel->GetValue())
         {
             flags |= wxCANCEL;
-            numButtons ++;
         }
 
         else if (m_radiobtnClose->GetValue())
         {
             flags |= wxCLOSE;
-            numButtons ++;
         }
 
     }
@@ -3913,19 +3908,16 @@ void StdButtonSizerDialog::OnEvent(wxCommandEvent& WXUNUSED(event))
     if (m_chkboxApply->IsChecked())
     {
         flags |= wxAPPLY;
-        numButtons ++;
     }
 
     if (m_chkboxNo->IsChecked())
     {
         flags |= wxNO;
-        numButtons ++;
     }
 
     if (m_chkboxHelp->IsChecked())
     {
         flags |= wxHELP;
-        numButtons ++;
     }
 
     if (m_chkboxNoDefault->IsChecked())
