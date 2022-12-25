@@ -149,9 +149,7 @@ private:
         gc->Rotate(m_frame*angle);
 
         // Choose a contrasting background colour.
-        wxColour colBg = wxSystemSettings::GetAppearance().IsDark()
-            ? *wxWHITE
-            : *wxBLACK;
+        wxColour colBg = wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
 
         const bool isEnabled = m_win->IsThisEnabled();
         for ( int n = 0; n < NUM_DOTS; n++ )

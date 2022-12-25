@@ -221,6 +221,14 @@ public:
     // get the object describing the current system appearance
     static wxSystemAppearance GetAppearance();
 
+#if wxABI_VERSION >= 30206
+    // get the first colour for light appearance and the second one for the dark
+    static wxColour SelectLightDark(wxColour colForLight, wxColour colForDark)
+    {
+        return GetAppearance().IsDark() ? colForDark : colForLight;
+    }
+#endif // wxABI_VERSION >= 30206
+
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
 };
