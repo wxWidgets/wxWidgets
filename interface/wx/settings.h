@@ -286,6 +286,11 @@ public:
 
         This method should be used to check whether custom colours more
         appropriate for the default (light) or dark appearance should be used.
+
+        Note that this checks the appearance of the current application and not
+        the other applications on the system, so under MSW, for example, it
+        will return @false even if dark mode is used system-wide unless the
+        application opted in using dark mode using wxApp::MSWEnableDarkMode().
      */
     bool IsDark() const;
 

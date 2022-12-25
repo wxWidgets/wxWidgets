@@ -33,7 +33,6 @@
 #include "wx/msw/missing.h" // for SM_CXCURSOR, SM_CYCURSOR, SM_TABLETPC
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/metrics.h"
-#include "wx/msw/registry.h"
 
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
@@ -370,14 +369,6 @@ extern wxFont wxGetCCDefaultFont()
 
 #endif // wxUSE_LISTCTRL || wxUSE_TREECTRL
 
-// There is no official API for determining whether dark mode is being used,
-// but // HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize has
-// a value AppsUseLightTheme = 0 for dark mode and 1 for normal mode, so use it
-// and fall back to the generic algorithm in IsUsingDarkBackground() if it's
-// absent.
-//
-// Adapted from https://stackoverflow.com/a/51336913/15275 ("How to detect
-// Windows 10 light/dark mode in Win32 application?").
 bool wxSystemAppearance::IsDark() const
 {
     // If the application opted in using dark mode, use the undocumented API
@@ -385,13 +376,8 @@ bool wxSystemAppearance::IsDark() const
     if ( wxMSWDarkMode::IsActive() )
         return true;
 
-    wxRegKey rk(wxRegKey::HKCU, "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-    if ( rk.Exists() && rk.HasValue("AppsUseLightTheme") )
-    {
-        long value = -1;
-        if ( rk.QueryValue("AppsUseLightTheme", &value) )
-            return value <= 0;
-    }
-
+    // Note that we should _not_ check if the system is configured to use the
+    // dark mode for the other applications here, what matters is whether this
+    // application itself uses dark colour schema or not.
     return IsUsingDarkBackground();
 }
