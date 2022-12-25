@@ -171,11 +171,12 @@ public:
 
                 colStart = hTheme.GetColour(TTP_BALLOONTITLE, TMT_GRADIENTCOLOR1);
                 if ( !colStart.IsOk() )
-                    colStart = *wxWHITE;
+                    colStart = wxSystemSettings::SelectLightDark(*wxWHITE, *wxBLACK);
 
                 colEnd = hTheme.GetColour(TTP_BALLOONTITLE, TMT_GRADIENTCOLOR2);
                 if ( !colEnd.IsOk() )
-                    colEnd.Set(0xe4, 0xe5, 0xf0);
+                    colEnd = wxSystemSettings::SelectLightDark({0xe4, 0xe5, 0xf0},
+                                                               {0x40, 0x40, 0x20});
             }
             else
 #endif // HAVE_MSW_THEME
