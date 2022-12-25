@@ -388,5 +388,20 @@ public:
         See the ::wxSystemFeature enum values.
     */
     static bool HasFeature(wxSystemFeature index);
+
+    /**
+        Select one of the two colours depending on whether light or dark mode
+        is used.
+
+        This is just a convenient helper using wxSystemAppearance::IsDark() to
+        select between the two colours.
+
+        @param colForLight Colour returned when using light appearance.
+        @param colForDark Colour returned when using dark appearance, as
+            detected by wxSystemAppearance::IsDark().
+
+        @since 3.3.0
+     */
+    static wxColour SelectLightDark(wxColour colForLight, wxColour colForDark);
 };
 
