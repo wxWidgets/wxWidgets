@@ -80,11 +80,11 @@ protected:
     virtual wxWindowList GetCompositeWindowParts() const override;
 
     // return the region with all the windows inside this static box excluded
-    virtual WXHRGN MSWGetRegionWithoutChildren();
+    WXHRGN MSWGetRegionWithoutChildren();
 
     // remove the parts which are painted by static box itself from the given
     // region which is embedded in a rectangle (0, 0)-(w, h)
-    virtual void MSWGetRegionWithoutSelf(WXHRGN hrgn, int w, int h);
+    void MSWGetRegionWithoutSelf(WXHRGN hrgn, int w, int h);
 
     // paint the given rectangle with our background brush/colour
     virtual void PaintBackground(wxDC& dc, const struct tagRECT& rc);
