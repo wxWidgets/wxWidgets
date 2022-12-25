@@ -4938,7 +4938,9 @@ bool wxRichTextParagraph::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
                     child->Draw(dc, context, objectRange, selection, childRect, maxDescent, style);
 
                     objectPosition.x += objectSize.x;
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING && wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
                     i ++;
+#endif
                 }
                 else if (child->GetRange().GetStart() > lineRange.GetEnd())
                     // Can break out of inner loop now since we've passed this line's range
