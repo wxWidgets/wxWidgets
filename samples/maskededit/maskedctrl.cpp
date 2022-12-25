@@ -64,7 +64,9 @@ public:
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
+#if wxUSE_ACCESSIBILITY
     void OnBell(wxCommandEvent& event);
+#endif
     void OnAbout(wxCommandEvent& event);
     void OnUpdatePlain(wxCommandEvent& event);
 
@@ -105,8 +107,9 @@ enum
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
     MaskCtrl_About = wxID_ABOUT,
-
+#if wxUSE_ACCESSIBILITY
     MaskCtrl_Bell = wxID_HIGHEST + 1000,
+#endif
     MaskCtrl_First
 };
 
@@ -119,7 +122,9 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MaskCtrl_Quit,  MyFrame::OnQuit)
+#if wxUSE_ACCESSIBILITY
     EVT_MENU(MaskCtrl_Bell,  MyFrame::OnBell)
+#endif
     EVT_MENU(MaskCtrl_About, MyFrame::OnAbout)
     EVT_TEXT(wxID_ANY, MyFrame::OnUpdatePlain)
 END_EVENT_TABLE()
@@ -178,19 +183,21 @@ MyFrame::MyFrame(const wxString& title)
     // set menus
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(MaskCtrl_Quit, "E&xit\tAlt-X", "Quit this program");
-
+#if wxUSE_ACCESSIBILITY
     wxMenu *bellMenu = new wxMenu;
     bellMenu->AppendCheckItem(MaskCtrl_Bell, _("&Bell on error"),
                                _("Toggle bell on error"));
     bellMenu->Check(MaskCtrl_Bell, true);
-
+#endif
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(MaskCtrl_About, "&About...\tF1", "Show about dialog");
 
     // now append the freshly created menu to the menu bar...
     menuBar->Append(fileMenu, "&File");
+#if wxUSE_ACCESSIBILITY
     menuBar->Append(bellMenu, "&Bell");
+#endif
     menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
@@ -225,6 +232,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
+#if wxUSE_ACCESSIBILITY
 void MyFrame::OnBell(wxCommandEvent& WXUNUSED(event))
 {
     //Use the ID of each wxMaskedEdit control
@@ -238,6 +246,7 @@ void MyFrame::OnBell(wxCommandEvent& WXUNUSED(event))
             ecombo->SetBellOnError( GetMenuBar()->IsChecked(MaskCtrl_Bell) );
     }
 }
+#endif
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
