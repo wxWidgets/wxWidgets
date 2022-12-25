@@ -721,7 +721,7 @@ public:
 
     // IUnknown
 
-    wxSTDMETHODIMP QueryInterface(REFIID iid, void** ppv)
+    wxSTDMETHODIMP QueryInterface(REFIID iid, void** ppv) override
     {
         if ( iid == IID_IUnknown || iid == IID_IFileDialogEvents )
         {
@@ -749,8 +749,8 @@ public:
     }
 
     // Dummy implementations because we're not really ref-counted.
-    STDMETHODIMP_(ULONG) AddRef() { return 1; }
-    STDMETHODIMP_(ULONG) Release() { return 1; }
+    STDMETHODIMP_(ULONG) AddRef() override { return 1; }
+    STDMETHODIMP_(ULONG) Release() override { return 1; }
 
 
     // IFileDialogEvents
