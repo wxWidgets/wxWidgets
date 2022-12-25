@@ -160,7 +160,11 @@ private:
 public:
     //ctor.
     wxMaskedEdit()
-    { m_bellOnError = true; }
+    {
+#if wxUSE_ACCESSIBILITY
+         m_bellOnError = true;
+#endif
+     }
 
     //dtor.
     ~wxMaskedEdit() {};
@@ -230,13 +234,13 @@ public:
 
     //Check characters, fields and the whole control's value.
     long GetInvalidFieldIndex() const;
-
+#if wxUSE_ACCESSIBILITY
     //Bell on error.
     void SetBellOnError(bool bell)
     {
         m_bellOnError = bell;
     }
-
+#endif
 
     //Accessors -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
     //Get the number of fields.
@@ -364,14 +368,14 @@ protected:
         OKColour,
         InvalidColour
     };
-
+#if wxUSE_ACCESSIBILITY
     //Bell
     void DoBell()
     {
         if ( m_bellOnError )
             wxBell();
     }
-
+#endif
     //General Test Functions -  -  -  -  -  -  -  -  -
     //Test the character according with the mask.
     bool CharAgreesWithMask(wxChar testChar, long pos) const;
@@ -404,10 +408,10 @@ protected:
 
     //The real control
     wxControl* msk_control;
-
+#if wxUSE_ACCESSIBILITY
     //Bell on error. Default is true
     bool m_bellOnError;
-
+#endif
     //The mask identifiers
     enum
     {

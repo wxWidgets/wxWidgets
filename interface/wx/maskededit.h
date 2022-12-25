@@ -2,7 +2,6 @@
 // Name:        maskededit.h
 // Purpose:     interface of wxMaskedEdit
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
