@@ -534,25 +534,42 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
     // Enable double buffering by default for all our own, i.e. not the ones
     // using native controls, classes.
     //
-    // Note that this function is not used for top-level windows, so we don't
-    // set this style for them, and also that setting it for children of
-    // windows that already have WS_EX_COMPOSITED set doesn't seem to have any
-    // bad effect as the style is just ignored in this case, so we don't bother
-    // checking it it's already set for the parent, even though we could.
-    if ( !classname )
+    // The loop here is a bogus one just to create a block that we can break
+    // from, it never executes more than once.
+    while ( !classname )
     {
+        // WS_EX_COMPOSITED seems to be incompatible with WS_EX_TOPMOST, so
+        // don't use it for:
+
+        // Popup windows that get created with this style themselves: this
+        // seems to work under Windows 10, but doesn't under Windows 7 and
+        // using WS_EX_COMPOSITED for these windows that are temporarily
+        // doesn't seem to be very useful anyhow, so don't bother testing for
+        // the OS version and just always disable it for them.
+        if ( exstyle & WS_EX_TOPMOST )
+            break;
+
+        // Children of such windows as this doesn't work neither (see #23078).
+        wxWindow* const tlw = wxGetTopLevelParent(this);
+        if ( tlw && tlw->HasFlag(wxSTAY_ON_TOP) )
+            break;
+
         // We also allow disabling the use of this style globally by setting
         // a system option if nothing else (i.e. turning it off for individual
         // windows) works.
         if ( !wxSystemOptions::GetOptionInt("msw.window.no-composited") )
-        {
-            exstyle |= WS_EX_COMPOSITED;
+            break;
 
-            // We have to use the class including CS_[HV]REDRAW bits, as
-            // WS_EX_COMPOSITED doesn't work correctly if the entire window is
-            // not redrawn every time it's drawn.
-            style |= wxFULL_REPAINT_ON_RESIZE;
-        }
+        // Do enable composition for this window.
+
+        exstyle |= WS_EX_COMPOSITED;
+
+        // We have to use the class including CS_[HV]REDRAW bits, as
+        // WS_EX_COMPOSITED doesn't work correctly if the entire window is
+        // not redrawn every time it's drawn.
+        style |= wxFULL_REPAINT_ON_RESIZE;
+
+        break;
     }
 
     if ( IsShown() )
