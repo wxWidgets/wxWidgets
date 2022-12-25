@@ -211,6 +211,10 @@ void wxDialog::SetWindowStyleFlag(long style)
 {
     wxDialogBase::SetWindowStyleFlag(style);
 
+    // Don't do anything if we're setting the style before creating the dialog.
+    if ( !GetHwnd() )
+        return;
+
     if ( HasFlag(wxRESIZE_BORDER) )
         CreateGripper();
     else
