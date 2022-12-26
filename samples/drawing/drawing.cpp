@@ -524,6 +524,13 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_useBuffer = false;
     m_showBBox = false;
     m_sizeDIP = wxSize(0, 0);
+
+    Bind(wxEVT_SYS_COLOUR_CHANGED, [this](wxSysColourChangedEvent& event) {
+        event.Skip();
+
+        if ( m_show == File_ShowSystemColours )
+            Refresh();
+    });
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
