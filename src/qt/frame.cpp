@@ -29,7 +29,7 @@ public:
     wxQtMainWindow( wxWindow *parent, wxFrame *handler );
 
 private:
-    virtual bool focusNextPrevChild(bool) wxOVERRIDE { return false; }
+    virtual bool focusNextPrevChild(bool) override { return false; }
 };
 
 // Central widget helper (container to show scroll bars and receive events):
@@ -44,7 +44,7 @@ class wxQtCentralWidget : public wxQtEventSignalHandler< QScrollArea, wxFrame >
 wxFrame::~wxFrame()
 {
     // central widget should be deleted by qt when the main window is destroyed
-    QtStoreWindowPointer( GetQMainWindow()->centralWidget(), NULL );
+    QtStoreWindowPointer( GetQMainWindow()->centralWidget(), nullptr );
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
@@ -88,7 +88,7 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 {
     // The current status bar could be deleted by Qt when dereferencing it
     // TODO: add a mechanism like Detach in menus to avoid issues
-    if ( statusBar != NULL )
+    if ( statusBar != nullptr )
     {
         GetQMainWindow()->setStatusBar( statusBar->GetQStatusBar() );
         // Update statusbar sizes now that it has a size
@@ -97,14 +97,14 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
     else
     {
         // Remove the current status bar
-        GetQMainWindow()->setStatusBar(NULL);
+        GetQMainWindow()->setStatusBar(nullptr);
     }
     wxFrameBase::SetStatusBar( statusBar );
 }
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    if ( toolbar != NULL )
+    if ( toolbar != nullptr )
     {
         int area = 0;
         if      (toolbar->HasFlag(wxTB_LEFT))  { area = Qt::LeftToolBarArea;  }
@@ -119,10 +119,10 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 
         GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, m_qtToolBar);
     }
-    else if ( m_frameToolBar != NULL )
+    else if ( m_frameToolBar != nullptr )
     {
         GetQMainWindow()->removeToolBar(m_qtToolBar);
-        m_qtToolBar = NULL;
+        m_qtToolBar = nullptr;
     }
     wxFrameBase::SetToolBar( toolbar );
 }
@@ -206,6 +206,45 @@ void wxFrame::RemoveChild( wxWindowBase *child )
 QScrollArea *wxFrame::QtGetScrollBarsContainer() const
 {
     return dynamic_cast <QScrollArea *> (GetQMainWindow()->centralWidget() );
+}
+
+// get the origin of the client area in the client coordinates
+// excluding any menubar and toolbar if any.
+wxPoint wxFrame::GetClientAreaOrigin() const
+{
+    wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
+
+    // It seems that Qt always adds 1px border around QMainWindow,
+    // being resizable or not, so account for it here.
+    pt += wxPoint(1, 1);
+
+#ifndef __WXUNIVERSAL__
+#if wxUSE_MENUBAR
+    wxMenuBar * const menubar = GetMenuBar();
+    if ( menubar && menubar->IsAttached() )
+        pt.y += menubar->GetSize().y;
+#endif // wxUSE_MENUBAR
+
+#if wxUSE_TOOLBAR
+    wxToolBar * const toolbar = GetToolBar();
+    if ( toolbar && toolbar->IsShown() )
+    {
+        const wxSize sizeTB = toolbar->GetSize();
+        const int directionTB = toolbar->GetDirection();
+
+        if ( directionTB == wxTB_TOP )
+        {
+            pt.y += sizeTB.y;
+        }
+        else if ( directionTB == wxTB_LEFT )
+        {
+            pt.x += sizeTB.x;
+        }
+    }
+#endif // wxUSE_TOOLBAR
+#endif // __WXUNIVERSAL__
+
+    return pt;
 }
 
 void wxFrame::DoGetClientSize(int *width, int *height) const

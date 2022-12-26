@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Common Sources">
@@ -58,6 +58,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\bmpbase.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\bmpbndl.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\bmpbtncmn.cpp">
@@ -471,6 +474,9 @@
     <ClCompile Include="..\..\src\generic\bmpcboxg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\bmpsvg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\busyinfo.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -691,6 +697,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\bitmap.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\bmpbndl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\bmpbuttn.cpp">
@@ -1132,6 +1141,9 @@
     <ClInclude Include="..\..\include\wx\bitmap.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\bmpbndl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\bmpbuttn.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1319,6 +1331,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\filedlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\filedlgcustomize.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\filehistory.h">
@@ -2314,9 +2329,6 @@
     <ClInclude Include="..\..\include\wx\bmpbndl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\maskededit.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\maskededit.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -2329,4 +2341,5 @@
       <Filter>MSW Headers</Filter>
     </CustomBuild>
   </ItemGroup>
+</Project>
 </Project>

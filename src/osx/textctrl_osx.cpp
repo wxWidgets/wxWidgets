@@ -71,7 +71,7 @@ void wxTextCtrl::Init()
 {
     m_dirty = false;
 
-    m_privateContextMenu = NULL;
+    m_privateContextMenu = nullptr;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -131,6 +131,11 @@ void wxTextCtrl::MacCheckSpelling(bool check)
                                        : wxTextProofOptions::Disable());
 }
 #endif // WXWIN_COMPATIBILITY_3_0 && wxUSE_SPELLCHECK
+
+void wxTextCtrl::OSXEnableNewLineReplacement(bool enable)
+{
+    GetTextPeer()->EnableNewLineReplacement(enable);
+}
 
 void wxTextCtrl::OSXEnableAutomaticQuoteSubstitution(bool enable)
 {
@@ -458,7 +463,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     return;
             }
 
-            if ( !(m_windowStyle & wxTE_MULTILINE) )
+            if ( GetTextPeer()->GetNewLineReplacement() )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
@@ -623,7 +628,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     }
 
 #if wxUSE_MENUS
-    if (m_privateContextMenu == NULL)
+    if (m_privateContextMenu == nullptr)
     {
         m_privateContextMenu = new wxMenu;
         m_privateContextMenu->Append(wxID_UNDO, _("&Undo"));

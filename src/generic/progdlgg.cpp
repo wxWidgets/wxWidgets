@@ -78,13 +78,13 @@ void wxGenericProgressDialog::Init()
     // create a valid window in this class).
 
     m_pdStyle = 0;
-    m_parentTop = NULL;
+    m_parentTop = nullptr;
 
-    m_gauge = NULL;
-    m_msg = NULL;
+    m_gauge = nullptr;
+    m_msg = nullptr;
     m_elapsed =
     m_estimated =
-    m_remaining = NULL;
+    m_remaining = nullptr;
 
     m_state = Uncancelable;
     m_maximum = 0;
@@ -96,7 +96,7 @@ void wxGenericProgressDialog::Init()
     m_skip = false;
 
     m_btnAbort =
-    m_btnSkip = NULL;
+    m_btnSkip = nullptr;
 
     m_display_estimated =
     m_last_timeupdate =
@@ -104,8 +104,8 @@ void wxGenericProgressDialog::Init()
 
     m_delay = 3;
 
-    m_winDisabler = NULL;
-    m_tempEventLoop = NULL;
+    m_winDisabler = nullptr;
+    m_tempEventLoop = nullptr;
 
     SetWindowStyle(wxDEFAULT_DIALOG_STYLE);
 }
@@ -208,7 +208,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     // create the estimated/remaining/total time zones if requested
     m_elapsed =
     m_estimated =
-    m_remaining = NULL;
+    m_remaining = nullptr;
 
     // also count how many labels we really have
     size_t nTimeLabels = 0;
@@ -376,7 +376,7 @@ wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
     wxStaticText *value = new wxStaticText(this, wxID_ANY, _("unknown"));
 
     // select placement most native or nice on target GUI
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
     // value and time centered in one row
     sizer->Add(label, 1, wxALIGN_RIGHT | wxTOP | wxRIGHT, LAYOUT_MARGIN);
     sizer->Add(value, 1, wxALIGN_LEFT | wxTOP, LAYOUT_MARGIN);
@@ -717,7 +717,7 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
             "wxGenericProgressDialog lifetime"
         );
 
-        wxEventLoopBase::SetActive(NULL);
+        wxEventLoopBase::SetActive(nullptr);
         delete m_tempEventLoop;
     }
 }
@@ -732,7 +732,7 @@ void wxGenericProgressDialog::DisableOtherWindows()
     {
         if ( m_parentTop )
             m_parentTop->Disable();
-        m_winDisabler = NULL;
+        m_winDisabler = nullptr;
     }
 }
 

@@ -79,7 +79,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         size_t doubleslash = path.find("//");
         //The path is incorrectly formed without // after the scheme
         if(doubleslash == wxString::npos)
-            return NULL;
+            return nullptr;
 
         wxString fspath = "file:" +
                           EscapeFileNameCharsInURL(path.substr(doubleslash + 2).utf8_str());
@@ -92,7 +92,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         //For the path to be valid there must to a path after the protocol
         if(end == wxString::npos)
         {
-            return NULL;
+            return nullptr;
         }
         wxString mainpath = path.substr(0, start);
         wxString archivepath = path.substr(end);
@@ -102,7 +102,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         size_t doubleslash = path.find("//");
         //The path is incorrectly formed without // after the first protocol
         if(doubleslash == wxString::npos)
-            return NULL;
+            return nullptr;
 
         wxString fspath = "file:" +
                           EscapeFileNameCharsInURL(mainpath.substr(doubleslash + 2).utf8_str())

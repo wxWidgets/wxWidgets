@@ -92,7 +92,7 @@ public:
 
     void TransformPoint(wxDouble* x, wxDouble* y) const
     {
-        wxCHECK_RET( x && y, "Can't be NULL" );
+        wxCHECK_RET( x && y, "Can't be null" );
 
         const wxPoint2DDouble dst = DoTransformPoint(wxPoint2DDouble(*x, *y));
         *x = dst.m_x;
@@ -107,7 +107,7 @@ public:
 
     void TransformDistance(wxDouble* dx, wxDouble* dy) const
     {
-        wxCHECK_RET( dx && dy, "Can't be NULL" );
+        wxCHECK_RET( dx && dy, "Can't be null" );
 
         const wxPoint2DDouble
             dst = DoTransformDistance(wxPoint2DDouble(*dx, *dy));

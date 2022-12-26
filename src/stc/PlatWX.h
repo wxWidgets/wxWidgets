@@ -5,13 +5,13 @@
 
 #if wxUSE_STC
 
-#include "wx/imaglist.h"
 #include "Platform.h"
 
 class wxStyledTextCtrl;
 class wxSTCListBox;
 class wxSTCListBoxVisualData;
 
+using namespace Scintilla;
 
 
 wxRect wxRectFromPRectangle(PRectangle prc);
@@ -28,27 +28,26 @@ public:
     ~ListBoxImpl();
     static ListBox *Allocate();
 
-    virtual void SetFont(Font &font) wxOVERRIDE;
-    virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_) wxOVERRIDE;
-    virtual void SetAverageCharWidth(int width) wxOVERRIDE;
-    virtual void SetVisibleRows(int rows) wxOVERRIDE;
-    virtual int GetVisibleRows() const wxOVERRIDE;
-    virtual PRectangle GetDesiredRect() wxOVERRIDE;
-    virtual int CaretFromEdge() wxOVERRIDE;
-    virtual void Clear() wxOVERRIDE;
-    virtual void Append(char *s, int type = -1) wxOVERRIDE;
-    virtual int Length() wxOVERRIDE;
-    virtual void Select(int n) wxOVERRIDE;
-    virtual int GetSelection() wxOVERRIDE;
-    virtual int Find(const char *prefix) wxOVERRIDE;
-    virtual void GetValue(int n, char *value, int len) wxOVERRIDE;
-    virtual void RegisterImage(int type, const char *xpm_data) wxOVERRIDE;
+    virtual void SetFont(Font &font) override;
+    virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_) override;
+    virtual void SetAverageCharWidth(int width) override;
+    virtual void SetVisibleRows(int rows) override;
+    virtual int GetVisibleRows() const override;
+    virtual PRectangle GetDesiredRect() override;
+    virtual int CaretFromEdge() override;
+    virtual void Clear() override;
+    virtual void Append(char *s, int type = -1) override;
+    virtual int Length() override;
+    virtual void Select(int n) override;
+    virtual int GetSelection() override;
+    virtual int Find(const char *prefix) override;
+    virtual void GetValue(int n, char *value, int len) override;
+    virtual void RegisterImage(int type, const char *xpm_data) override;
             void RegisterImageHelper(int type, const wxBitmap& bmp);
-    virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) wxOVERRIDE;
-    virtual void ClearRegisteredImages() wxOVERRIDE;
-    virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
-    virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
-            void SetListInfo(int*, int*, int*);
+    virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) override;
+    virtual void ClearRegisteredImages() override;
+    virtual void SetDelegate(IListBoxDelegate *lbDelegate) override;
+    virtual void SetList(const char* list, char separator, char typesep) override;
 };
 
 
@@ -72,10 +71,10 @@ public:
     public:
         wxSTCPopupBase(wxWindow*);
         virtual ~wxSTCPopupBase();
-        virtual bool Show(bool show=true) wxOVERRIDE;
+        virtual bool Show(bool show=true) override;
 
     protected:
-        virtual void DoSetSize(int, int, int, int, int) wxOVERRIDE;
+        virtual void DoSetSize(int, int, int, int, int) override;
         void SetSTCCursor(int);
         void RestoreSTCCursor();
         void OnMouseEnter(wxMouseEvent&);
@@ -101,10 +100,10 @@ public:
         #ifdef __WXGTK__
             virtual ~wxSTCPopupBase();
         #elif defined(__WXMSW__)
-            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool Show(bool show=true) override;
             virtual bool MSWHandleMessage(WXLRESULT *result, WXUINT message,
                                           WXWPARAM wParam, WXLPARAM lParam)
-                                          wxOVERRIDE;
+                                          override;
         #endif
     };
 
@@ -118,12 +117,12 @@ public:
     public:
         wxSTCPopupBase(wxWindow*);
         #ifdef __WXMSW__
-            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool Show(bool show=true) override;
             virtual bool MSWHandleMessage(WXLRESULT *result, WXUINT message,
                                           WXWPARAM wParam, WXLPARAM lParam)
-                                          wxOVERRIDE;
+                                          override;
         #elif !wxSTC_POPUP_IS_CUSTOM
-            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool Show(bool show=true) override;
             void ActivateParent();
         #endif
     };
@@ -135,12 +134,12 @@ class wxSTCPopupWindow:public wxSTCPopupBase
 public:
     wxSTCPopupWindow(wxWindow*);
     virtual ~wxSTCPopupWindow();
-    virtual bool Destroy() wxOVERRIDE;
-    virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual bool Destroy() override;
+    virtual bool AcceptsFocus() const override;
 
 protected:
     virtual void DoSetSize(int x, int y, int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
     void OnParentMove(wxMoveEvent& event);
     #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
         void OnIconize(wxIconizeEvent& event);

@@ -116,9 +116,10 @@ public:
 
         In the simplest case, this can be used as following:
         @code
-            const wxUILocale loc(wxLocaleIdent("fr"));
+            const wxUILocale loc(wxLocaleIdent().Language("fr"));
         @endcode
-        see wxLocaleIdent description for more details.
+        see wxLocaleIdent description for more details, including other ways of
+        specifying the locale.
 
         If @a localeId is not recognized or not supported, default ("C") locale
         is used instead. Additionally, if @a localeId is empty (see
@@ -163,6 +164,11 @@ public:
     wxString GetName() const;
 
     /**
+        Get the locale id from which the current locale was instantiated.
+     */
+    wxLocaleIdent GetLocaleId() const;
+
+    /**
         Query the locale for the specified information.
 
         This function returns the value of the locale-specific option specified
@@ -180,6 +186,26 @@ public:
                      wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT) const;
 
     /**
+        Query the locale for the specified localized name.
+
+        @param name
+            One of the elements of wxLocaleName enum.
+        @param form
+            The representation form requested.
+        @return
+            The localized name value or empty string if the function failed.
+     */
+    wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
+
+    /**
+        Query the layout direction of the current locale.
+
+        @return
+            The layout direction or wxLayout_Default if the function failed.
+     */
+    wxLayoutDirection GetLayoutDirection() const;
+
+    /**
         Return true if locale is supported on the current system.
 
         If this function returns @a false, the other functions of this class,
@@ -192,7 +218,6 @@ public:
 
     /**
         Adds custom, user-defined language to the database of known languages.
-        This database is used in conjunction with the first form of Init().
     */
     static void AddLanguage(const wxLanguageInfo& info);
 
@@ -200,7 +225,9 @@ public:
         This function may be used to find the language description structure for the
         given locale, specified either as a two letter ISO language code (for example,
         "pt"), a language code followed by the country code ("pt_BR") or a full, human
-        readable, language description ("Portuguese-Brazil").
+        readable, language description ("Portuguese_Brazil"). Please note that only
+        the underscore character is supported as the separator between language and
+        region codes.
 
         Returns the information for the given language or @NULL if this language
         is unknown. Note that even if the returned pointer is valid, the caller
@@ -209,6 +236,18 @@ public:
         @see GetLanguageInfo()
     */
     static const wxLanguageInfo* FindLanguageInfo(const wxString& locale);
+
+    /**
+        This function may be used to find the language description structure for the
+        given locale, specified as a locale identifier.
+
+        Returns the information for the given language or @NULL if this language
+        is unknown. Note that even if the returned pointer is valid, the caller
+        should @e not delete it.
+
+        @see GetLanguageInfo()
+    */
+    static const wxLanguageInfo* FindLanguageInfo(const wxLocaleIdent& localeId);
 
     /**
         Returns a pointer to wxLanguageInfo structure containing information about
@@ -231,17 +270,33 @@ public:
     static wxString GetLanguageName(int lang);
 
     /**
-        Returns canonical name (see GetCanonicalName()) of the given language
-        or empty string if this language is unknown.
+        Returns canonical name of the given language or empty string if this
+        language is unknown.
 
         See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
     */
     static wxString GetLanguageCanonicalName(int lang);
 
     /**
-        Tries to detect the user's default locale setting.
+        Tries to detect the user's default user interface language setting.
 
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
+        algorithm failed.
+
+        @note Where possible this function returns the user's preferred UI @em language.
+              This may be, and usually is, the same as the user's default locale, but it's
+              not the same thing. If retrieving the preferred UI language is not supported
+              by the operating system (for example, Windows 7 and below), the user's
+              default @em locale will be used.
+
+        @see wxTranslations::GetBestTranslation().
+    */
+    static int GetSystemLanguage();
+
+    /**
+        Tries to detect the user's default locale setting.
+
+        Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the locale-guessing
         algorithm failed.
 
         @note This function works with @em locales and returns the user's default
@@ -249,10 +304,11 @@ public:
               language, but it's not the same thing. Use wxTranslation to obtain
               @em language information.
 
+        @since 3.1.7
+
         @see wxTranslations::GetBestTranslation().
     */
-    static int GetSystemLanguage();
-};
+    static int GetSystemLocale();};
 
 /**
     Return the format to use for formatting user-visible dates.
@@ -274,13 +330,13 @@ wxString wxGetUIDateFormat();
 
     There are two possible ways to construct wxLocaleIdent:
 
-        - You can either use fromTag() to create it from a string in the form
-          @code language ["-" script] ["-" region] @endcode, corresponding to
-          the subset of BCP 47 (https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
-          syntax.
-        - Or you can create it from the different parts of this string by using
-          the default constructor and then chaining calls to Language(),
-          Region(), Script() and other methods.
+    - You can either use FromTag() to create it from a string in the form
+      `language ["-" script] ["-" region]`, corresponding to
+      the subset of BCP 47 (https://www.rfc-editor.org/rfc/bcp/bcp47.txt)
+      syntax.
+    - Or you can create it from the different parts of this string by using
+      the default constructor and then chaining calls to Language(),
+      Region(), Script() and other methods.
 
     The first method is useful for interoperating with the other software using
     BCP 47 language tags, while the second one may may result in more readable
@@ -308,15 +364,49 @@ class wxLocaleIdent
 {
 public:
     /**
-        Return the locale identifier corresponding to the given BCP 47-like tag.
+        Return the locale identifier corresponding to the given locale tag.
+
+        This method accepts locale tags in various formats:
+
+        - BCP-47,
+        - Windows,
+        - POSIX,
+        - macOS. and
+        - MSVC CRT.
+
+        See section 2.01 of https://www.rfc-editor.org/rfc/bcp/bcp47.txt for the
+        full BCP-47 syntax. Here we fully support just the subset we're interested in:
+
+        - Normal language tags (not private use or grandfathered ones),
+        - Script, and
+        - Region.
+
+        Additionally platform-specific tags are supported:
+
+        - Extensions (without validity checks) (Windows only),
+        - Sortorder (Windows only)
+        - Charset (POSIX only), and
+        - Modifier (POSIX only).
+
+        Only language, script, and region are supported across all platforms.
+        The script tag is mapped to the modifier tag for POSIX platforms.
+        The script tag takes precedence, if a modifier is also specified.
+
+        The following tag syntax is accepted:
+
+        - BCP-47:   \<language\>[-\<script\>][-\<region\>][-\<extension\>]
+        - Windows:  \<language\>[-\<script\>][-\<region\>][-\<extension\>][_\<sortorder\>]
+        - POSIX:    \<language\>[_\<region\>][.\<charset\>][@@\<modifier\>]
+        - macOS:    \<language\>[-\<script\>][_\<region\>]
+        - MSVC CRT: \<language\>[_\<region\>][.\<charset\>]
 
         The string must contain at least the language part (2 or 3 ASCII
         letters) and may contain script and region separated by dashes, i.e.
         all of the following are valid:
 
-            - "mn"
-            - "mn-MN"
-            - "mn-Cyrl-MN"
+        - "mn"
+        - "mn-MN"
+        - "mn-Cyrl-MN"
 
         Note that while BCP 47 extlangs, variants, extensions, private use and
         grandfathered tags are currently not directly supported, they may still
@@ -327,6 +417,11 @@ public:
         empty wxLocaleIdent is returned. Of course, even if this function
         returns a non-empty object, the resulting locale may still be invalid
         or unsupported, use wxUILocale::IsSupported() to check for this.
+
+        Note that the format "MSVC CRT" (Microsoft Visual C++ C RunTime) is
+        only supported as an input format, so that locale names as returned
+        by the CRT function setlocale can be handled, mainly for compatibility
+        with wxLocale.
      */
     static wxLocaleIdent FromTag(const wxString& tag);
 
@@ -340,7 +435,7 @@ public:
     /**
         Set language.
 
-        Return reference to @this for method chaining.
+        Return reference to `this` for method chaining.
 
         See https://www.loc.gov/standards/iso639-2/php/English_list.php for the
         list of all language codes.
@@ -353,7 +448,7 @@ public:
 
     /**
         Set region.
-        Return reference to @this for method chaining.
+        Return reference to `this` for method chaining.
 
         @param region
             It specifies an uppercase ISO 3166-1 country/region identifier.
@@ -363,9 +458,11 @@ public:
     /**
         Set script.
 
-        Note that script value is currently ignored under Unix systems.
+        Note that under Unix systems the script value is currently mapped
+        to the modifier attribute using the script alias name, if the latter
+        is known. Otherwise it is ignored.
 
-        Return reference to @this for method chaining.
+        Return reference to `this` for method chaining.
 
         @param script
             It is an initial-uppercase ISO 15924 script code.
@@ -378,7 +475,7 @@ public:
         Note that this value is only used under Unix systems and simply ignored
         under the other ones.
 
-        Return reference to @this for method chaining.
+        Return reference to `this` for method chaining.
 
         @param charset
             Charset is a string such as "UTF-8", "ISO855915" or "KOI8R".
@@ -391,14 +488,45 @@ public:
 
         Note that this value is only used under Unix systems and simply ignored
         under the other ones.
+        Note that under Unix systems the modifier value may represent a script
+        value. If the value corresponds to a valid script alias it is mapped
+        to the associated script tag.
 
-        Return reference to @this for method chaining.
+        Return reference to `this` for method chaining.
 
         @param modifier
-            Modifier is defined by ISO/IEC 15897.
-            It is a semi-colon separated list of identifiers, or name=value pairs.
+            Modifier is a free-form text string.
     */
     wxLocaleIdent& Modifier(const wxString& modifier);
+
+    /**
+        Set extension.
+
+        Note that this value is only used under Windows systems and simply ignored
+        under the other ones.
+
+        Return reference to `this` for method chaining.
+
+        @param extension
+            Extension identifiers allow to support custom Windows locales.
+            They are usually not portable, not even from one Windows system
+            to the other.
+    */
+    wxLocaleIdent& Extension(const wxString& extension);
+
+    /**
+        Set sortorder.
+
+        Note that this value is only used under Windows systems and simply ignored
+        under the other ones.
+
+        Return reference to `this` for method chaining.
+
+        @param sortorder
+            Sortorder identifiers are defined in the Windows Development documentation:
+            https://docs.microsoft.com/en-us/windows/win32/intl/sort-order-identifiers.
+    */
+    wxLocaleIdent& Sortorder(const wxString& sortorder);
 
     /// Return the language part of the locale identifier.
     const wxString& GetLanguage() const;
@@ -415,14 +543,37 @@ public:
     /// Return the modifier part of the locale identifier.
     const wxString& GetModifier() const;
 
+    /// Return the extension part of the locale identifier.
+    const wxString& GetExtension() const;
+
+    /// Return the sortorder part of the locale identifier.
+    const wxString& GetSortorder() const;
+
     /**
         Construct platform dependent name.
+
         Format:
-        Windows: <language>-<script>-<REGION>
-        Unix:    <language>_<REGION>.<charset>@<modifier>
-        MacOS:   <language>-<script>_<REGION>
+        - Windows: \<language\>-\<script\>-\<REGION\>-\<extension\>_\<sortorder\>
+        - Unix:    \<language\>_\<REGION\>.\<charset\>@@{\<modifier\>\|\<scriptalias\>}
+        - MacOS:   \<language\>-\<script\>_\<REGION\>
     */
     wxString GetName() const;
+
+    /**
+        Construct name in specified format.
+
+        Format:
+        - Default: name as used in wxLocaleIdent::FromTag() or system format
+        - System:  name in platform-dependent format
+        - Windows: \<language\>-\<script\>-\<REGION\>-\<extension\>_\<sortorder\>
+        - Unix:    \<language\>_\<REGION\>.\<charset\>@@\<modifier\>
+        - MacOS:   \<language\>-\<script\>_\<REGION\>
+        - BCP 47:  \<language\>-\<script\>-\<REGION\>-\<extension\>
+
+        @param tagType
+            Value from wxLocaleTagType enum.
+    */
+    wxString GetTag(wxLocaleTagType tagType = wxLOCALE_TAGTYPE_DEFAULT) const;
 
     /**
         Check if the locale is empty.

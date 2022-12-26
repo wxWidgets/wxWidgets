@@ -24,14 +24,16 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wcomma"
+#endif
+
 inline int  issml(int c) {return isalnum(c) || c == '_';}
 inline int issmlf(int c) {return isalpha(c) || c == '_';}
 inline int issmld(int c) {return isdigit(c) || c == '_';}
 
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static void ColouriseSMLDoc(
 	Sci_PositionU startPos, Sci_Position length,

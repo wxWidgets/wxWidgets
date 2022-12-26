@@ -174,7 +174,7 @@ public:
     // active loop
     // -----------
 
-    // return currently active (running) event loop, may be NULL
+    // return currently active (running) event loop, may be null
     static wxEventLoopBase *GetActive() { return ms_activeLoop; }
 
     // set currently active (running) event loop
@@ -238,12 +238,12 @@ public:
 
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
-    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
+    virtual void ScheduleExit(int rc = 0) override;
 
 protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
-    virtual int DoRun() wxOVERRIDE;
+    virtual int DoRun() override;
 
     // may be overridden to perform some action at the start of each new event
     // loop iteration
@@ -294,7 +294,7 @@ private:
     #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/evtloop.h"
 #elif defined(__WXQT__)
     #include "wx/qt/evtloop.h"
@@ -307,7 +307,7 @@ class WXDLLIMPEXP_FWD_CORE wxEventLoopImpl;
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
-    wxGUIEventLoop() { m_impl = NULL; }
+    wxGUIEventLoop() { m_impl = nullptr; }
     virtual ~wxGUIEventLoop();
 
     virtual void ScheduleExit(int rc = 0);
@@ -377,10 +377,10 @@ public:
     }
 
 protected:
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         delete m_windowDisabler;
-        m_windowDisabler = NULL;
+        m_windowDisabler = nullptr;
 
         wxGUIEventLoop::OnExit();
     }
@@ -424,7 +424,7 @@ class wxEventLoopGuarantor
 public:
     wxEventLoopGuarantor()
     {
-        m_evtLoopNew = NULL;
+        m_evtLoopNew = nullptr;
         if (!wxEventLoop::GetActive())
         {
             m_evtLoopNew = new wxEventLoop;
@@ -436,7 +436,7 @@ public:
     {
         if (m_evtLoopNew)
         {
-            wxEventLoop::SetActive(NULL);
+            wxEventLoop::SetActive(nullptr);
             delete m_evtLoopNew;
         }
     }

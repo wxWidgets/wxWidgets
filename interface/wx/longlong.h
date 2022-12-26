@@ -59,14 +59,14 @@ public:
     */
     wxLongLong(long hi, unsigned long lo);
 
-    //@{
+    ///@{
     /**
         Returns an absolute value of wxLongLong - either making a copy (const version)
         or modifying it in place (the second one).
     */
     wxLongLong Abs() const;
     wxLongLong& Abs();
-    //@}
+    ///@}
 
     /**
         This allows converting a double value to wxLongLong type.
@@ -131,21 +131,21 @@ public:
     wxLongLong& operator-(const wxLongLong& ll);
 
 
-    //@{
+    ///@{
     /**
         Pre/post increment operator.
     */
     wxLongLong operator++();
     wxLongLong operator++(int);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Pre/post decrement operator.
     */
     wxLongLong operator--();
     wxLongLong operator--(int);
-    //@}
+    ///@}
 
     /**
         Returns the value of this wxLongLong with opposite sign.
@@ -273,21 +273,21 @@ public:
     wxULongLong& operator-(const wxULongLong& ll);
 
 
-    //@{
+    ///@{
     /**
         Pre/post increment operator.
     */
     wxULongLong operator++();
     wxULongLong operator++(int);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Pre/post decrement operator.
     */
     wxULongLong operator--();
     wxULongLong operator--(int);
-    //@}
+    ///@}
 
     /**
         Assignment operator from signed long long. The sign bit will be copied too.
@@ -329,7 +329,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     This macro is defined to contain the @c printf() format specifier using
@@ -381,5 +381,5 @@ wxLongLong_t wxLL(number);
 */
 wxLongLong_t wxULL(number);
 
-//@}
+///@}
 

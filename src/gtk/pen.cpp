@@ -30,7 +30,7 @@ public:
         m_style = wxPENSTYLE_SOLID;
         m_joinStyle = wxJOIN_ROUND;
         m_capStyle = wxCAP_ROUND;
-        m_dash = NULL;
+        m_dash = nullptr;
         m_countDashes = 0;
     }
 
@@ -206,7 +206,7 @@ int wxPen::GetDashCount() const
 
 wxDash* wxPen::GetDash() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid pen") );
 
     return const_cast<wxDash*>(M_PENDATA->m_dash);
 }
@@ -254,6 +254,6 @@ void wxPen::SetStipple(const wxBitmap& WXUNUSED(stipple))
 
 wxBitmap *wxPen::GetStipple() const
 {
-    return NULL;
+    return nullptr;
 }
 

@@ -21,7 +21,7 @@ public:
     wxScreenDCImpl( wxScreenDC *owner );
 
     // Return the size of the whole virtual screen (all monitors)
-    virtual void DoGetSize(int *w, int *h) const wxOVERRIDE;
+    virtual void DoGetSize(int *w, int *h) const override;
 
     wxDECLARE_CLASS(wxScreenDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);

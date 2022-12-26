@@ -41,16 +41,16 @@ public:
 
     virtual ~wxToolBar();
 
-    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const override;
 
-    virtual void SetToolShortHelp(int id, const wxString& helpString) wxOVERRIDE;
+    virtual void SetToolShortHelp(int id, const wxString& helpString) override;
 
-    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
+    virtual void SetWindowStyleFlag( long style ) override;
 
-    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
-    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) override;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) override;
 
-    virtual bool Realize() wxOVERRIDE;
+    virtual bool Realize() override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -60,11 +60,11 @@ public:
                                           const wxBitmapBundle& bitmap1,
                                           const wxBitmapBundle& bitmap2 = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
-                                          wxObject *clientData = NULL,
+                                          wxObject *clientData = nullptr,
                                           const wxString& shortHelpString = wxEmptyString,
-                                          const wxString& longHelpString = wxEmptyString) wxOVERRIDE;
+                                          const wxString& longHelpString = wxEmptyString) override;
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
-                                          const wxString& label) wxOVERRIDE;
+                                          const wxString& label) override;
 
     // implementation from now on
     // --------------------------
@@ -73,24 +73,24 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_DEFAULT; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_DEFAULT; }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
 
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) wxOVERRIDE;
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) override;
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
 
 private:
     void Init();
     void GtkSetStyle();
     GSList* GetRadioGroup(size_t pos);
-    virtual void AddChildGTK(wxWindowGTK* child) wxOVERRIDE;
+    virtual void AddChildGTK(wxWindowGTK* child) override;
 
     GtkToolbar* m_toolbar;
     GtkTooltips* m_tooltips;

@@ -148,7 +148,7 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxMDIParentFrame(NULL, wxID_ANY, "wxWidgets MDI Sample",
+       : wxMDIParentFrame(nullptr, wxID_ANY, "wxWidgets MDI Sample",
                           wxDefaultPosition, wxSize(500, 400)),
          MenuEventLogger("parent", this)
 {
@@ -227,7 +227,7 @@ MyFrame::~MyFrame()
     Unbind(wxEVT_SIZE, &MyFrame::OnSize, this);
 
     // also prevent its use as log target
-    delete wxLog::SetActiveTarget(NULL);
+    delete wxLog::SetActiveTarget(nullptr);
 }
 
 #if wxUSE_MENUS

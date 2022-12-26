@@ -39,7 +39,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Existing pages:
@@ -91,7 +91,7 @@ class MyPage : public wxScrolledWindow
 {
 public:
     MyPage(wxNotebook *parent, int index);
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
     bool OnSave(wxString);
 private:
     int m_index;
@@ -136,7 +136,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame(NULL, -1, "SVG Demo",
+    MyFrame* frame = new MyFrame(nullptr, -1, "SVG Demo",
                                  wxDefaultPosition, wxSize(500, 400));
 
     frame->Show(true);

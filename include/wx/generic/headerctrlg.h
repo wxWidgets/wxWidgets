@@ -48,19 +48,19 @@ public:
     virtual ~wxHeaderCtrl();
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
 
 private:
     // implement base class pure virtuals
-    virtual void DoSetCount(unsigned int count) wxOVERRIDE;
-    virtual unsigned int DoGetCount() const wxOVERRIDE;
-    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
+    virtual void DoSetCount(unsigned int count) override;
+    virtual unsigned int DoGetCount() const override;
+    virtual void DoUpdate(unsigned int idx) override;
 
-    virtual void DoScrollHorz(int dx) wxOVERRIDE;
+    virtual void DoScrollHorz(int dx) override;
 
-    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
-    virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
+    virtual void DoSetColumnsOrder(const wxArrayInt& order) override;
+    virtual wxArrayInt DoGetColumnsOrder() const override;
 
     // common part of all ctors
     void Init();
@@ -96,7 +96,7 @@ private:
     // position is near the divider at the right end of this column (notice
     // that this means that we return column 0 even if the position is over
     // column 1 but close enough to the divider separating it from column 0)
-    unsigned int FindColumnAtPoint(int x, bool *onSeparator = NULL) const;
+    unsigned int FindColumnAtPoint(int x, bool *onSeparator = nullptr) const;
 
     // return the result of FindColumnAtPoint() if it is a valid column,
     // otherwise the index of the last (rightmost) displayed column

@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(GL_FILES OPENGL_CMN)
 
 if(WXMSW)
@@ -24,7 +22,5 @@ elseif(WXQT)
 endif()
 
 wx_add_library(wxgl ${GL_FILES})
-wx_lib_include_directories(wxgl PUBLIC ${OPENGL_INCLUDE_DIR})
+wx_lib_include_directories(wxgl ${OPENGL_INCLUDE_DIR})
 wx_lib_link_libraries(wxgl PUBLIC ${OPENGL_LIBRARIES})
-
-wx_finalize_lib(wxgl)

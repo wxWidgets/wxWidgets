@@ -87,9 +87,9 @@ public:
     {
         // MSW sends extra kill focus event on destroy
         if (m_spin)
-            m_spin->m_textCtrl = NULL;
+            m_spin->m_textCtrl = nullptr;
 
-        m_spin = NULL;
+        m_spin = nullptr;
     }
 
     void OnChar( wxKeyEvent &event )
@@ -115,7 +115,7 @@ public:
         event.Skip();
     }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    virtual wxSize DoGetBestSize() const override
     {
         wxString minVal = m_spin->DoValueToText(m_spin->m_min);
         wxString maxVal = m_spin->DoValueToText(m_spin->m_max);
@@ -200,8 +200,8 @@ void wxSpinCtrlGenericBase::Init()
 
     m_spin_value    = 0;
 
-    m_textCtrl = NULL;
-    m_spinButton  = NULL;
+    m_textCtrl = nullptr;
+    m_spinButton  = nullptr;
 }
 
 bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
@@ -269,10 +269,10 @@ wxSpinCtrlGenericBase::~wxSpinCtrlGenericBase()
     if (m_textCtrl)
     {
         // null this since MSW sends KILL_FOCUS on deletion, see ~wxSpinCtrlTextGeneric
-        wxDynamicCast(m_textCtrl, wxSpinCtrlTextGeneric)->m_spin = NULL;
+        wxDynamicCast(m_textCtrl, wxSpinCtrlTextGeneric)->m_spin = nullptr;
 
         wxSpinCtrlTextGeneric *text = (wxSpinCtrlTextGeneric*)m_textCtrl;
-        m_textCtrl = NULL;
+        m_textCtrl = nullptr;
         delete text;
     }
 

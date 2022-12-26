@@ -31,9 +31,9 @@ public:
         m_pid = 0;
         m_exitcode = -1;
 
-        m_process = NULL;
+        m_process = nullptr;
 
-        m_syncEventLoop = NULL;
+        m_syncEventLoop = nullptr;
 
 #if wxUSE_STREAMS
         m_fdOut =
@@ -63,7 +63,7 @@ public:
     // The exit code of the process, set once the child terminates.
     int m_exitcode;
 
-    // the associated process object or NULL
+    // the associated process object or nullptr
     wxProcess *m_process;
 
     // Local event loop used to wait for the child process termination in

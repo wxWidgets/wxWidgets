@@ -72,13 +72,13 @@ public:
     */
     void Clear();
 
-    //@{
+    ///@{
     /**
         Deletes entry in hash table and returns the user's data (if found).
     */
     wxObject* Delete(long key);
     wxObject* Delete(const wxString& key);
-    //@}
+    ///@}
 
     /**
         If set to @true data stored in hash table will be deleted when hash table
@@ -86,14 +86,14 @@ public:
     */
     void DeleteContents(bool flag);
 
-    //@{
+    ///@{
     /**
         Gets data from the hash table, using an integer or string key
         (depending on which has table constructor was used).
     */
     wxObject* Get(long key);
     wxObject* Get(const char* key);
-    //@}
+    ///@}
 
     /**
         Returns the number of elements in the hash table.
@@ -117,7 +117,7 @@ public:
     */
     wxHashTable::Node* Next();
 
-    //@{
+    ///@{
     /**
         Inserts data into the hash table, using an integer or string key (depending on
         which has table constructor was used).
@@ -125,6 +125,6 @@ public:
     */
     void Put(long key, wxObject* object);
     void Put(const char* key, wxObject* object);
-    //@}
+    ///@}
 };
 

@@ -85,7 +85,7 @@ wxObject *wxEditableListBoxXmlHandler::DoCreateResource()
         if ( contents )
         {
             m_insideBox = true;
-            CreateChildrenPrivately(NULL, contents);
+            CreateChildrenPrivately(nullptr, contents);
             m_insideBox = false;
 
             control->SetStrings(m_items);
@@ -98,12 +98,12 @@ wxObject *wxEditableListBoxXmlHandler::DoCreateResource()
     {
         m_items.push_back(GetNodeText(m_node, wxXRC_TEXT_NO_ESCAPE));
 
-        return NULL;
+        return nullptr;
     }
     else
     {
         ReportError("Unexpected node inside wxEditableListBox");
-        return NULL;
+        return nullptr;
     }
 }
 

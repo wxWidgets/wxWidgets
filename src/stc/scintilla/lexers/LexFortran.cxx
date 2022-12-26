@@ -25,9 +25,7 @@
 #include "LexerModule.h"
 /***************************************/
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 /***********************************************/
 static inline bool IsAWordChar(const int ch) {
@@ -120,14 +118,6 @@ static void ColouriseFortranDoc(Sci_PositionU startPos, Sci_Position length, int
 			continue;
 		}
 		/***************************************/
-		// Hanndle preprocessor directives
-		if (sc.ch == '#' && numNonBlank == 1)
-		{
-			sc.SetState(SCE_F_PREPROCESSOR);
-			while (!sc.atLineEnd && sc.More())
-				sc.Forward(); // Until line end
-		}
-		/***************************************/
 		// Handle line continuation generically.
 		if (!isFixFormat && sc.ch == '&' && sc.state != SCE_F_COMMENT) {
 			char chTemp = ' ';
@@ -143,13 +133,25 @@ static void ColouriseFortranDoc(Sci_PositionU startPos, Sci_Position length, int
 				int currentState = sc.state;
 				sc.SetState(SCE_F_CONTINUATION);
 				sc.ForwardSetState(SCE_F_DEFAULT);
-				while (IsASpace(sc.ch) && sc.More()) sc.Forward();
+				while (IsASpace(sc.ch) && sc.More()) {
+					sc.Forward();
+					if (sc.atLineStart) numNonBlank = 0;
+					if (!IsASpaceOrTab(sc.ch)) numNonBlank ++;
+				}
 				if (sc.ch == '&') {
 					sc.SetState(SCE_F_CONTINUATION);
 					sc.Forward();
 				}
 				sc.SetState(currentState);
 			}
+		}
+		/***************************************/
+		// Hanndle preprocessor directives
+		if (sc.ch == '#' && numNonBlank == 1)
+		{
+			sc.SetState(SCE_F_PREPROCESSOR);
+			while (!sc.atLineEnd && sc.More())
+				sc.Forward(); // Until line end
 		}
 		/***************************************/
 		// Determine if the current state should terminate.
@@ -223,7 +225,7 @@ static void ColouriseFortranDoc(Sci_PositionU startPos, Sci_Position length, int
 		if (sc.state == SCE_F_DEFAULT) {
 			if (sc.ch == '!') {
 				if (sc.MatchIgnoreCase("!dec$") || sc.MatchIgnoreCase("!dir$") ||
-				        sc.MatchIgnoreCase("!ms$") || sc.chNext == '$') {
+					sc.MatchIgnoreCase("!ms$") || sc.chNext == '$') {
 					sc.SetState(SCE_F_PREPROCESSOR);
 				} else {
 					sc.SetState(SCE_F_COMMENT);
@@ -233,7 +235,7 @@ static void ColouriseFortranDoc(Sci_PositionU startPos, Sci_Position length, int
 			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				sc.SetState(SCE_F_NUMBER);
 			} else if ((tolower(sc.ch) == 'b' || tolower(sc.ch) == 'o' ||
-			        tolower(sc.ch) == 'z') && (sc.chNext == '\"' || sc.chNext == '\'')) {
+				tolower(sc.ch) == 'z') && (sc.chNext == '\"' || sc.chNext == '\'')) {
 				sc.SetState(SCE_F_NUMBER);
 				sc.Forward();
 			} else if (sc.ch == '.' && isalpha(sc.chNext)) {
@@ -250,6 +252,165 @@ static void ColouriseFortranDoc(Sci_PositionU startPos, Sci_Position length, int
 		}
 	}
 	sc.Complete();
+}
+/***************************************/
+static void CheckLevelCommentLine(const unsigned int nComL,
+				  Sci_Position nComColB[], Sci_Position nComColF[], Sci_Position &nComCur,
+				  bool comLineB[], bool comLineF[], bool &comLineCur,
+				  int &levelDeltaNext) {
+	levelDeltaNext = 0;
+	if (!comLineCur) {
+		return;
+	}
+
+	if (!comLineF[0] || nComColF[0] != nComCur) {
+		unsigned int i=0;
+		for (; i<nComL; i++) {
+			if (!comLineB[i] || nComColB[i] != nComCur) {
+				break;
+			}
+		}
+		if (i == nComL) {
+			levelDeltaNext = -1;
+		}
+	}
+	else if (!comLineB[0] || nComColB[0] != nComCur) {
+		unsigned int i=0;
+		for (; i<nComL; i++) {
+			if (!comLineF[i] || nComColF[i] != nComCur) {
+				break;
+			}
+		}
+		if (i == nComL) {
+			levelDeltaNext = 1;
+		}
+	}
+}
+/***************************************/
+static void GetIfLineComment(Accessor &styler, bool isFixFormat, const Sci_Position line, bool &isComLine, Sci_Position &comCol) {
+	Sci_Position col = 0;
+	isComLine = false;
+	Sci_Position pos = styler.LineStart(line);
+	Sci_Position len = styler.Length();
+	while(pos<len) {
+		char ch = styler.SafeGetCharAt(pos);
+		if (ch == '!' || (isFixFormat && col == 0 && (tolower(ch) == 'c' || ch == '*'))) {
+			isComLine = true;
+			comCol = col;
+			break;
+		}
+		else if (!IsABlank(ch) || IsALineEnd(ch)) {
+			break;
+		}
+		pos++;
+		col++;
+	}
+}
+/***************************************/
+static void StepCommentLine(Accessor &styler, bool isFixFormat, Sci_Position lineCurrent, const unsigned int nComL,
+				  Sci_Position nComColB[], Sci_Position nComColF[], Sci_Position &nComCur,
+				  bool comLineB[], bool comLineF[], bool &comLineCur) {
+	Sci_Position nLineTotal = styler.GetLine(styler.Length()-1) + 1;
+	if (lineCurrent >= nLineTotal) {
+		return;
+	}
+
+	for (int i=nComL-2; i>=0; i--) {
+		nComColB[i+1] = nComColB[i];
+		comLineB[i+1] = comLineB[i];
+	}
+	nComColB[0] = nComCur;
+	comLineB[0] = comLineCur;
+	nComCur = nComColF[0];
+	comLineCur = comLineF[0];
+	for (unsigned int i=0; i+1<nComL; i++) {
+		nComColF[i] = nComColF[i+1];
+		comLineF[i] = comLineF[i+1];
+	}
+	Sci_Position chL = lineCurrent + nComL;
+	if (chL < nLineTotal) {
+		GetIfLineComment(styler, isFixFormat, chL, comLineF[nComL-1], nComColF[nComL-1]);
+	}
+	else {
+		comLineF[nComL-1] = false;
+	}
+}
+/***************************************/
+static void CheckBackComLines(Accessor &styler, bool isFixFormat, Sci_Position lineCurrent, const unsigned int nComL,
+				  Sci_Position nComColB[], Sci_Position nComColF[], Sci_Position nComCur,
+				  bool comLineB[], bool comLineF[], bool &comLineCur) {
+	unsigned int nLines = nComL + nComL + 1;
+	bool* comL = new bool[nLines];
+	Sci_Position* nComCol = new Sci_Position[nLines];
+	bool comL0;
+	Sci_Position nComCol0;
+	GetIfLineComment(styler, isFixFormat, lineCurrent-nComL-1, comL0, nComCol0);
+	for (unsigned int i=0; i<nComL; i++) {
+		unsigned copyTo = nComL - i - 1;
+		comL[copyTo]    = comLineB[i];
+		nComCol[copyTo] = nComColB[i];
+	}
+	assert(nComL < nLines);
+	comL[nComL] = comLineCur;
+	nComCol[nComL] = nComCur;
+	for (unsigned int i=0; i<nComL; i++) {
+		unsigned copyTo = i + nComL + 1;
+		comL[copyTo]    = comLineF[i];
+		nComCol[copyTo] = nComColF[i];
+	}
+	
+	Sci_Position lineC = lineCurrent - nComL + 1;
+	Sci_PositionU iStart;
+	if (lineC <= 0) {
+		lineC = 0;
+		iStart = nComL - lineCurrent;
+	}
+	else {
+		iStart = 1;
+	}
+	bool levChanged = false;
+	int lev = styler.LevelAt(lineC) & SC_FOLDLEVELNUMBERMASK;
+	
+	for (Sci_PositionU i=iStart; i<=nComL; i++) {
+		if (comL[i] && (!comL[i-1] || nComCol[i] != nComCol[i-1])) {
+			bool increase = true;
+			Sci_PositionU until = i + nComL;
+			for (Sci_PositionU j=i+1; j<=until; j++) {
+				if (!comL[j] || nComCol[j] != nComCol[i]) {
+					increase = false;
+					break;
+				}
+			}
+			lev = styler.LevelAt(lineC) & SC_FOLDLEVELNUMBERMASK;
+			if (increase) {
+				int levH = lev | SC_FOLDLEVELHEADERFLAG;
+				lev += 1;
+				if (levH != styler.LevelAt(lineC)) {
+					styler.SetLevel(lineC, levH);
+				}
+				for (Sci_Position j=lineC+1; j<=lineCurrent; j++) {
+					if (lev != styler.LevelAt(j)) {
+						styler.SetLevel(j, lev);
+					}
+				}
+				break;
+			}
+			else {
+				if (lev != styler.LevelAt(lineC)) {
+					styler.SetLevel(lineC, lev);
+				}
+			}
+			levChanged = true;
+		}
+		else if (levChanged && comL[i]) {
+			if (lev != styler.LevelAt(lineC)) {
+				styler.SetLevel(lineC, lev);
+			}
+		}
+		lineC++;
+	}
+	delete[] comL;
+	delete[] nComCol;
 }
 /***************************************/
 // To determine the folding level depending on keywords
@@ -282,7 +443,7 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 	        || strcmp(s, "endsubroutine") == 0 || strcmp(s, "endtype") == 0
 	        || strcmp(s, "endwhere") == 0 || strcmp(s, "endcritical") == 0
 		|| (strcmp(prevWord, "module") == 0 && strcmp(s, "procedure") == 0)  // Take care of the "module procedure" statement
-		|| strcmp(s, "endsubmodule") == 0) {
+		|| strcmp(s, "endsubmodule") == 0 || strcmp(s, "endteam") == 0) {
 		lev = -1;
 	} else if (strcmp(prevWord, "end") == 0 && strcmp(s, "if") == 0){ // end if
 		lev = 0;
@@ -291,6 +452,8 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 	} else if ((strcmp(prevWord, "end") == 0 && strcmp(s, "procedure") == 0)
 			   || strcmp(s, "endprocedure") == 0) {
 			lev = 1; // level back to 0, because no folding support for "module procedure" in submodule
+	} else if (strcmp(prevWord, "change") == 0 && strcmp(s, "team") == 0){ // change team
+		lev = 1;
 	}
 	return lev;
 }
@@ -298,29 +461,62 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 // Folding the code
 static void FoldFortranDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
         Accessor &styler, bool isFixFormat) {
-	//
-	// bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
-	// Do not know how to fold the comment at the moment.
-	//
+
+	bool foldComment = styler.GetPropertyInt("fold.comment", 1) != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	Sci_PositionU endPos = startPos + length;
 	int visibleChars = 0;
 	Sci_Position lineCurrent = styler.GetLine(startPos);
-	int levelCurrent;
 	bool isPrevLine;
 	if (lineCurrent > 0) {
 		lineCurrent--;
 		startPos = styler.LineStart(lineCurrent);
-		levelCurrent = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 		isPrevLine = true;
 	} else {
-		levelCurrent = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 		isPrevLine = false;
 	}
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);
 	int style = initStyle;
 	int levelDeltaNext = 0;
+
+	const unsigned int nComL = 3; // defines how many comment lines should be before they are folded
+	Sci_Position nComColB[nComL] = {};
+	Sci_Position nComColF[nComL] = {};
+	Sci_Position nComCur = 0;
+	bool comLineB[nComL] = {};
+	bool comLineF[nComL] = {};
+	bool comLineCur;
+	Sci_Position nLineTotal = styler.GetLine(styler.Length()-1) + 1;
+	if (foldComment) {
+		for (unsigned int i=0; i<nComL; i++) {
+			Sci_Position chL = lineCurrent-(i+1);
+			if (chL < 0) {
+				comLineB[i] = false;
+				break;
+			}
+			GetIfLineComment(styler, isFixFormat, chL, comLineB[i], nComColB[i]);
+			if (!comLineB[i]) {
+				for (unsigned int j=i+1; j<nComL; j++) {
+					comLineB[j] = false;
+				}
+				break;
+			}
+		}
+		for (unsigned int i=0; i<nComL; i++) {
+			Sci_Position chL = lineCurrent+i+1;
+			if (chL >= nLineTotal) {
+				comLineF[i] = false;
+				break;
+			}
+			GetIfLineComment(styler, isFixFormat, chL, comLineF[i], nComColF[i]);
+		}
+		GetIfLineComment(styler, isFixFormat, lineCurrent, comLineCur, nComCur);
+		CheckBackComLines(styler, isFixFormat, lineCurrent, nComL, nComColB, nComColF, nComCur, 
+				comLineB, comLineF, comLineCur);
+	}
+	int levelCurrent = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
+
 	/***************************************/
 	Sci_Position lastStart = 0;
 	char prevWord[32] = "";
@@ -463,6 +659,11 @@ static void FoldFortranDoc(Sci_PositionU startPos, Sci_Position length, int init
 			}
 		}
 		if (atEOL) {
+			if (foldComment) {
+				int ldNext;
+				CheckLevelCommentLine(nComL, nComColB, nComColF, nComCur, comLineB, comLineF, comLineCur, ldNext);
+				levelDeltaNext += ldNext;
+			}
 			int lev = levelCurrent;
 			if (visibleChars == 0 && foldCompact)
 				lev |= SC_FOLDLEVELWHITEFLAG;
@@ -477,6 +678,11 @@ static void FoldFortranDoc(Sci_PositionU startPos, Sci_Position length, int init
 			visibleChars = 0;
 			strcpy(prevWord, "");
 			isPrevLine = false;
+
+			if (foldComment) {
+				StepCommentLine(styler, isFixFormat, lineCurrent, nComL, nComColB, nComColF, nComCur,
+						comLineB, comLineF, comLineCur);
+			}
 		}
 		/***************************************/
 		if (!isspacechar(ch)) visibleChars++;

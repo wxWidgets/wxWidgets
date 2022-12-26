@@ -105,7 +105,7 @@ private:
         {
         }
 
-        virtual void Notify() wxOVERRIDE
+        virtual void Notify() override
         {
             m_owner->Advance();
         }

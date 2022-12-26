@@ -373,8 +373,6 @@ def main(scriptName, args):
         buildDir = os.path.abspath(os.path.join(scriptDir, "..", "msw"))
 
         print("creating wx/msw/setup.h")
-        if options.unicode:
-            flags["wxUSE_UNICODE"] = "1"
     
         if options.cairo:
             if not os.environ.get("CAIRO_ROOT"):
@@ -392,10 +390,6 @@ def main(scriptName, args):
             flags["wxUSE_AFM_FOR_POSTSCRIPT"] = "0"
             flags["wxUSE_DATEPICKCTRL_GENERIC"] = "1"
 
-            # Remove this when Windows XP finally dies, or when there is a
-            # solution for ticket #13116...
-            flags["wxUSE_COMPILER_TLS"] = "0"
-            
             if VERSION < (2,9):
                 flags["wxUSE_DIB_FOR_BITMAP"] = "1"
 
@@ -420,8 +414,6 @@ def main(scriptName, args):
         if toolkit == "msvc":
             print("setting build options...")
             args.append("-f makefile.vc")
-            if options.unicode:
-                args.append("UNICODE=1")
     
             if options.wxpython:
                 args.append("OFFICIAL_BUILD=1")

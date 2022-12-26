@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-11-11 23:05+0100\n"
-"PO-Revision-Date: 2021-11-11 23:09+0100\n"
+"POT-Creation-Date: 2021-12-10 10:06+0100\n"
+"PO-Revision-Date: 2021-12-10 10:15+0100\n"
 "Last-Translator: Ulrich Telle <ulrich@telle-online.eu>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -103,37 +103,37 @@ msgstr "Testet die Übersetzung der Schaltflächen im Hinweisfenster"
 
 #: internat.cpp:316
 msgid "item"
-msgstr "Eintrag"
+msgstr "Eintrag ohne Kontext"
 
 #: internat.cpp:317
 msgctxt "context_1"
 msgid "item"
-msgstr "Eintrag A"
+msgstr "Eintrag Kontext 1"
 
 #: internat.cpp:318
 msgctxt "context_2"
 msgid "item"
-msgstr "Eintrag B"
+msgstr "Eintrag Kontext 2"
 
 #: internat.cpp:319 internat.cpp:320
 msgid "sing"
 msgid_plural "plur"
-msgstr[0] "Einzahl"
-msgstr[1] "Mehrzahl"
+msgstr[0] "Einzahl ohne Kontext"
+msgstr[1] "Mehrzahl ohne Kontext"
 
 #: internat.cpp:321 internat.cpp:322
 msgctxt "context_1"
 msgid "sing"
 msgid_plural "plur"
-msgstr[0] "Einzahl A"
-msgstr[1] "Mehrzahl A"
+msgstr[0] "Einzahl Kontext 1"
+msgstr[1] "Mehrzahl Kontext 1"
 
 #: internat.cpp:323 internat.cpp:324
 msgctxt "context_2"
 msgid "sing"
 msgid_plural "plur"
-msgstr[0] "Einzahl B"
-msgstr[1] "Mehrzahl B"
+msgstr[0] "Einzahl Kontext 2"
+msgstr[1] "Mehrzahl Kontext 2"
 
 #: internat.cpp:328
 msgid "Show coreutils &help"
@@ -161,24 +161,34 @@ msgstr "&Hilfe"
 msgid "Current UI locale: %s; C locale: %s"
 msgstr "Aktuelles UI Gebietsschema: %s; C Gebietsschema: %s"
 
-#: internat.cpp:372
+#: internat.cpp:373
+#, c-format
+msgid "UI locale name in English: %s"
+msgstr "Name des UI Gebietsschema auf Englisch: %s"
+
+#: internat.cpp:385
+#, c-format
+msgid "... and in the locale language: %s"
+msgstr "… und in der Sprache des Gebietsschemas: %s"
+
+#: internat.cpp:396
 msgid "Numeric input:"
 msgstr "Numerische Eingabe:"
 
-#: internat.cpp:393
+#: internat.cpp:417
 msgid "Number"
 msgstr "Zahl"
 
-#: internat.cpp:397
+#: internat.cpp:421
 msgid "Date"
 msgstr "Datum"
 
-#: internat.cpp:413
+#: internat.cpp:437
 #, c-format
 msgid "Number in UI locale: %s; in C locale: %.2f"
 msgstr "Zahl im UI Gebietsschema: %s; im C Gebietsschema: %.2f"
 
-#: internat.cpp:433
+#: internat.cpp:457
 msgid ""
 "I18n sample\n"
 "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
@@ -186,108 +196,111 @@ msgstr ""
 "I18n Beispiel\n"
 "© 1998, 1999 Vadim Zeitlin und Julian Smart"
 
-#: internat.cpp:434
+#: internat.cpp:458
 msgid "About Internat"
 msgstr "Über Internat"
 
-#: internat.cpp:467
+#: internat.cpp:491
 msgid "Enter your number:"
 msgstr "Geben Sie eine Zahl ein:"
 
-#: internat.cpp:468
+#: internat.cpp:492
 msgid "Try to guess my number!"
 msgstr "Versuchen Sie, die Zahl zu raten!"
 
-#: internat.cpp:482
+#: internat.cpp:506
 msgid "You've probably entered an invalid number."
 msgstr "Sie haben wahrscheinlich eine ungültige Zahl eingegeben."
 
-#: internat.cpp:496
+#: internat.cpp:520
 msgid "Congratulations! you've won. Here is the magic phrase:"
 msgstr ""
 "Herzlichen Glückwunsch! Sie haben gewonnen. Hier ist der magische Satz:"
 
-#: internat.cpp:497
+#: internat.cpp:521
 #, c-format
 msgid "cannot create fifo `%s'"
 msgstr "Fifo `%s' kann nicht erzeugt werden"
 
-#: internat.cpp:506
+#: internat.cpp:530
 msgid "Bad luck! try again..."
 msgstr "Pech gehabt! Versuchen Sie es noch einmal..."
 
-#: internat.cpp:514
+#: internat.cpp:538
 msgid "Result"
 msgstr "Ergebnis"
 
-#: internat.cpp:522
+#: internat.cpp:546
 msgid "Enter the locale to test"
 msgstr "Geben Sie das zu testende Gebietsschema ein"
 
-#: internat.cpp:534
+#: internat.cpp:562
 #, c-format
-msgid "Locale \"%s\" is unknown."
-msgstr "Gebietsschema \"%s\" ist unbekannt."
+msgid ""
+"Locale \"%s\" is available.\n"
+"Identifier: %s; Layout: %s\n"
+"English name: %s\n"
+"Localized name: %s"
+msgstr ""
+"Gebietsschema \"%s\" ist verfügbar.\n"
+"Identifikator: %s; Layout: %s\n"
+"Englischer Name: %s\n"
+"Lokaler Name: %s"
 
-#: internat.cpp:540
-#, c-format
-msgid "Locale \"%s\" is available."
-msgstr "Gebietsschema \"%s\" ist verfügbar."
-
-#: internat.cpp:544
+#: internat.cpp:569
 #, c-format
 msgid "Locale \"%s\" is not available."
 msgstr "Gebietsschema \"%s\" ist nicht verfügbar."
 
-#: internat.cpp:559
+#: internat.cpp:584
 msgid "Dummy file dialog"
 msgstr "Dummy-Datei-Dialog"
 
-#: internat.cpp:564
+#: internat.cpp:589
 msgid "Testing _() (gettext)"
 msgstr "Test von _() (gettext)"
 
-#: internat.cpp:572
+#: internat.cpp:597
 msgid "Please enter text to translate"
 msgstr "Bitte geben Sie einen zu übersetzenden Text ein"
 
-#: internat.cpp:573
+#: internat.cpp:598
 msgid "default value"
 msgstr "Default-Wert"
 
-#: internat.cpp:587
+#: internat.cpp:612
 msgid "Testing _N() (ngettext)"
 msgstr "Test von _N() (ngettext)"
 
-#: internat.cpp:589
+#: internat.cpp:614
 msgid "Please enter range for plural forms of \"n files deleted\" phrase"
 msgstr ""
 "Bitte geben Sie einen Bereich für Pluralformen des Satzes \"n Dateien "
 "gelöscht\" ein"
 
-#: internat.cpp:601
+#: internat.cpp:626
 msgid "file deleted"
 msgid_plural "files deleted"
 msgstr[0] "Datei gelöscht"
 msgstr[1] "Dateien gelöscht"
 
-#: internat.cpp:612
+#: internat.cpp:637
 msgid "line 1"
 msgstr "Zeile 1"
 
-#: internat.cpp:613
+#: internat.cpp:638
 msgid "line 2"
 msgstr "Zeile 2"
 
-#: internat.cpp:614
+#: internat.cpp:639
 msgid "line 3"
 msgstr "Zeile 3"
 
-#: internat.cpp:617
+#: internat.cpp:642
 msgid "Testing wxTRANSLATE() (gettext_noop)"
 msgstr "Test von wxTRANSLATE() (gettext_noop)"
 
-#: internat.cpp:630
+#: internat.cpp:655
 msgid ""
 "Are the labels of the buttons in this message box translated into the "
 "current locale language?"
@@ -295,10 +308,18 @@ msgstr ""
 "Wurden die Beschriftungen der Schaltflächen in diesem Hinweisfenster in die "
 "Sprache des aktuellen Gebietsschemas übersetzt?"
 
-#: internat.cpp:632
+#: internat.cpp:657
 msgid "wxWidgets i18n sample"
 msgstr "wxWidgets I18n Beispiel"
 
-#: internat.cpp:637
+#: internat.cpp:662
 msgid "Please report the details of your platform to us."
 msgstr "Bitte teilen Sie uns über die Details Ihrer Plattform mit."
+
+#, c-format
+#~ msgid "Locale \"%s\" is unknown."
+#~ msgstr "Gebietsschema \"%s\" ist unbekannt."
+
+#, c-format
+#~ msgid "Locale \"%s\" is available."
+#~ msgstr "Gebietsschema \"%s\" ist verfügbar."

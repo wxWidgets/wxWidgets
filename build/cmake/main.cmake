@@ -10,11 +10,12 @@
 list(APPEND CMAKE_MODULE_PATH "${wxSOURCE_DIR}/build/cmake/modules")
 
 include(build/cmake/files.cmake)            # Files list
+include(build/cmake/source_groups.cmake)    # Source group definitions
 include(build/cmake/functions.cmake)        # wxWidgets functions
 include(build/cmake/toolkit.cmake)          # Platform/toolkit settings
 include(build/cmake/options.cmake)          # User options
 include(build/cmake/init.cmake)             # Init various global build vars
-include(build/cmake/install.cmake)          # Install target support
+include(build/cmake/pch.cmake)              # Precompiled header support
 
 add_subdirectory(build/cmake/lib libs)
 add_subdirectory(build/cmake/utils utils)
@@ -50,6 +51,9 @@ if(NOT MSVC)
     include(build/cmake/config.cmake)
 endif()
 
+# Install target support
+include(build/cmake/install.cmake)
+
 # Determine minimum required OS at runtime
 set(wxREQUIRED_OS_DESC "${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_PROCESSOR}")
 if(MSVC OR MINGW OR CYGWIN)
@@ -73,11 +77,15 @@ endif()
 # Print configuration summary
 wx_print_thirdparty_library_summary()
 
+if(wxTOOLKIT_EXTRA)
+    string(REPLACE ";" ", " wxTOOLKIT_DESC "${wxTOOLKIT_EXTRA}")
+    set(wxTOOLKIT_DESC "with support for: ${wxTOOLKIT_DESC}")
+endif()
+
 message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM}
     Min OS Version required at runtime:                ${wxREQUIRED_OS_DESC}
-    Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION}
+    Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION} ${wxTOOLKIT_DESC}
     Should wxWidgets be compiled into single library?  ${wxBUILD_MONOLITHIC}
     Should wxWidgets be linked as a shared library?    ${wxBUILD_SHARED}
-    Should wxWidgets support Unicode?                  ${wxUSE_UNICODE}
-    What wxWidgets compatibility level should be used? ${wxBUILD_COMPATIBILITY}"
+    Which wxWidgets API compatibility should be used?  ${wxBUILD_COMPATIBILITY}"
     )

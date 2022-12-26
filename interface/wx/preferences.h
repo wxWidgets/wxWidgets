@@ -147,15 +147,21 @@ public:
     virtual wxString GetName() const = 0;
 
     /**
-        Return 32x32 icon used for the page on some platforms.
+        Return the icon to be used for the page on some platforms.
 
         Currently only used on macOS.
 
-        @note This method is only pure virtual on platforms that require it
-              (macOS). On other platforms, it has default implementation that
-              returns an invalid bitmap. The preprocessor symbol
+        @note This method is not pure virtual, but must be implemented on the
+              platforms that require it (macOS). The preprocessor symbol
               `wxHAS_PREF_EDITOR_ICONS` is defined if this method must be
               implemented.
+
+        @since 3.1.6
+     */
+    virtual wxBitmapBundle GetIcon() const = 0;
+
+    /**
+        @deprecated This function is deprecated, override GetIcon() instead.
      */
     virtual wxBitmap GetLargeIcon() const = 0;
 
@@ -187,7 +193,7 @@ public:
     Instead of reimplementing this behaviour yourself, you can inherit from
     wxStockPreferencesPage and get correct title and icon.
 
-    Notice that this class only implements GetName() and GetLargeIcon(), you
+    Notice that this class only implements GetName() and GetIcon(), you
     still have to provide the rest of wxPreferencesPage implementation.
 
     @library{wxcore}
@@ -215,5 +221,5 @@ public:
     /// Reimplemented to return suitable name for the page's kind.
     virtual wxString GetName() const;
     /// Reimplemented to return stock icon on macOS.
-    virtual wxBitmap GetLargeIcon() const;
+    virtual wxBitmapBundle GetIcon() const;
 };

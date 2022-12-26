@@ -29,64 +29,36 @@
 wxChar wxNumberFormatter::GetDecimalSeparator()
 {
 #if wxUSE_INTL
-    // Notice that while using static variable here is not MT-safe, the worst
-    // that can happen is that we redo the initialization if we're called
-    // concurrently from more than one thread so it's not a real problem.
-    static wxChar s_decimalSeparator = 0;
-
-    if ( !s_decimalSeparator )
+    const wxString
+        s = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
+    if ( s.length() == 1 )
     {
-        const wxString
-            s = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
-        if ( s.length() == 1 )
-        {
-            s_decimalSeparator = s[0];
-        }
-        else
-        {
-            // We really must have something for decimal separator, so fall
-            // back to the C locale default.
-            s_decimalSeparator = '.';
-        }
+        return s[0];
     }
 
-    return s_decimalSeparator;
-#else // !wxUSE_INTL
+    // We really must have something for decimal separator, so fall
+    // back to the C locale default.
+#endif // wxUSE_INTL
+
     return wxT('.');
-#endif // wxUSE_INTL/!wxUSE_INTL
 }
 
 bool wxNumberFormatter::GetThousandsSeparatorIfUsed(wxChar *sep)
 {
 #if wxUSE_INTL
-    static wxChar s_thousandsSeparator = 0;
-    static bool s_thousandsSeparatorInitialized = false;
-
-    if ( !s_thousandsSeparatorInitialized )
+    const wxString
+        s = wxUILocale::GetCurrent().GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
+    if ( s.length() == 1 )
     {
-        s_thousandsSeparatorInitialized = true;
+        if ( sep )
+            *sep = s[0];
 
-        const wxString
-            s = wxUILocale::GetCurrent().GetInfo(wxLOCALE_THOUSANDS_SEP, wxLOCALE_CAT_NUMBER);
-        if ( s.length() == 1 )
-        {
-            s_thousandsSeparator = s[0];
-        }
-        //else: Unlike above it's perfectly fine for the thousands separator to
-        //      be empty if grouping is not used, so just leave it as 0.
+        return true;
     }
+#endif // wxUSE_INTL
 
-    if ( !s_thousandsSeparator )
-        return false;
-
-    if ( sep )
-        *sep = s_thousandsSeparator;
-
-    return true;
-#else // !wxUSE_INTL
     wxUnusedVar(sep);
     return false;
-#endif // wxUSE_INTL/!wxUSE_INTL
 }
 
 // ----------------------------------------------------------------------------
@@ -222,7 +194,7 @@ void wxNumberFormatter::RemoveTrailingZeroes(wxString& s)
     // Find the last character to keep.
     size_t posLastNonZero = s.find_last_not_of("0");
 
-    // If it's the decimal separator itself, don't keep it neither.
+    // If it's the decimal separator itself, don't keep it either.
     if ( posLastNonZero == posDecSep )
         posLastNonZero--;
 

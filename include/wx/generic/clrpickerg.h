@@ -67,9 +67,9 @@ public:
 protected:
     wxBitmap    m_bitmap;
 
-    wxSize DoGetBestSize() const wxOVERRIDE;
+    wxSize DoGetBestSize() const override;
 
-    void UpdateColour() wxOVERRIDE;
+    void UpdateColour() override;
 
     void OnDPIChanged(wxDPIChangedEvent& event);
 

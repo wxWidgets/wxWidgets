@@ -143,14 +143,14 @@ public:
 
     wxFormatConverterBase()
     {
-        m_fmtOrig = NULL;
-        m_fmtLast = NULL;
+        m_fmtOrig = nullptr;
+        m_fmtLast = nullptr;
         m_nCopied = 0;
     }
 
     wxScopedCharTypeBuffer<CharType> Convert(const CharType *format)
     {
-        // this is reset to NULL if we modify the format string
+        // this is reset to nullptr if we modify the format string
         m_fmtOrig = format;
 
         while ( *format )
@@ -284,7 +284,7 @@ public:
             }
         }
 
-        // notice that we only translated the string if m_fmtOrig == NULL (as
+        // notice that we only translated the string if m_fmtOrig == nullptr (as
         // set by CopyAllBefore()), otherwise we should simply use the original
         // format
         if ( m_fmtOrig )
@@ -369,7 +369,7 @@ private:
 
     void CopyAllBefore()
     {
-        wxASSERT_MSG( m_fmtOrig && m_fmt.data() == NULL, "logic error" );
+        wxASSERT_MSG( m_fmtOrig && m_fmt.data() == nullptr, "logic error" );
 
         // the modified format string is guaranteed to be no longer than
         // 3/2 of the original (worst case: the entire format string consists
@@ -386,7 +386,7 @@ private:
 
         // we won't need it any longer and resetting it also indicates that we
         // modified the format
-        m_fmtOrig = NULL;
+        m_fmtOrig = nullptr;
     }
 
     static bool IsFlagChar(CharType ch)
@@ -452,7 +452,7 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 {
     virtual void HandleString(CharType WXUNUSED(conv),
                               SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize) wxOVERRIDE
+                              CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 's';
         outSize = Size_Long;
@@ -460,7 +460,7 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 
     virtual void HandleChar(CharType WXUNUSED(conv),
                             SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize) wxOVERRIDE
+                            CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 'c';
         outSize = Size_Long;
@@ -475,7 +475,7 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
 {
     virtual void HandleString(CharType WXUNUSED(conv),
                               SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize) wxOVERRIDE
+                              CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 's';
         outSize = Size_Default;
@@ -483,7 +483,7 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
 
     virtual void HandleChar(CharType WXUNUSED(conv),
                             SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize) wxOVERRIDE
+                            CharType& outConv, SizeModifier& outSize) override
     {
         // chars are represented using wchar_t in both builds, so this is
         // the same as above
@@ -492,27 +492,6 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
     }
 };
 #endif // wxUSE_UNICODE_UTF8
-
-#if !wxUSE_UNICODE // FIXME-UTF8: remove
-class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>
-{
-    virtual void HandleString(CharType WXUNUSED(conv),
-                              SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize)
-    {
-        outConv = 's';
-        outSize = Size_Default;
-    }
-
-    virtual void HandleChar(CharType WXUNUSED(conv),
-                            SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize)
-    {
-        outConv = 'c';
-        outSize = Size_Default;
-    }
-};
-#endif // ANSI
 
 #ifndef __WINDOWS__
 /*
@@ -533,14 +512,14 @@ class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>
 class wxScanfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 {
     virtual void HandleString(CharType conv, SizeModifier size,
-                              CharType& outConv, SizeModifier& outSize) wxOVERRIDE
+                              CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 's';
         outSize = GetOutSize(conv == 'S', size);
     }
 
     virtual void HandleChar(CharType conv, SizeModifier size,
-                            CharType& outConv, SizeModifier& outSize) wxOVERRIDE
+                            CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 'c';
         outSize = GetOutSize(conv == 'C', size);
@@ -583,9 +562,8 @@ const char* wxFormatString::InputAsChar()
     if ( m_char )
         return m_char.data();
 
-    // in ANSI build, wx_str() returns char*, in UTF-8 build, this function
-    // is only called under UTF-8 locales, so we should return UTF-8 string,
-    // which is, again, what wx_str() returns:
+    // in this build, wx_str() returns UTF-8-encoded string and this function
+    // is only called under UTF-8 locales, so we can just return it directly
     if ( m_str )
         return m_str->wx_str();
 
@@ -605,17 +583,13 @@ const char* wxFormatString::InputAsChar()
 const char* wxFormatString::AsChar()
 {
     if ( !m_convertedChar )
-#if !wxUSE_UNICODE // FIXME-UTF8: remove this
-        m_convertedChar = wxPrintfFormatConverterANSI().Convert(InputAsChar());
-#else
         m_convertedChar = wxPrintfFormatConverterUtf8().Convert(InputAsChar());
-#endif
 
     return m_convertedChar.data();
 }
 #endif // !wxUSE_UNICODE_WCHAR
 
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UTF8_LOCALE_ONLY
 const wchar_t* wxFormatString::InputAsWChar()
 {
     if ( m_wchar )
@@ -655,7 +629,7 @@ const wchar_t* wxFormatString::AsWChar()
 
     return m_convertedWChar.data();
 }
-#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
 wxString wxFormatString::InputAsString() const
 {
@@ -679,31 +653,9 @@ wxString wxFormatString::InputAsString() const
 namespace
 {
 
-template<typename CharType>
-wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
-                                               unsigned n)
+wxFormatString::ArgumentType ArgTypeFromParamType(wxPrintfArgType type)
 {
-    wxCHECK_MSG( format, wxFormatString::Arg_Unknown,
-                 "empty format string not allowed here" );
-
-    wxPrintfConvSpecParser<CharType> parser(format);
-
-    if ( n > parser.nargs )
-    {
-        // The n-th argument doesn't appear in the format string and is unused.
-        // This can happen e.g. if a translation of the format string is used
-        // and the translation language tends to avoid numbers in singular forms.
-        // The translator would then typically replace "%d" with "One" (e.g. in
-        // Hebrew). Passing too many vararg arguments does not harm, so its
-        // better to be more permissive here and allow legitimate uses in favour
-        // of catching harmless errors.
-        return wxFormatString::Arg_Unused;
-    }
-
-    wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Unknown,
-                 "requested argument not found - invalid format string?" );
-
-    switch ( parser.pspec[n-1]->m_type )
+    switch ( type )
     {
         case wxPAT_CHAR:
         case wxPAT_WCHAR:
@@ -753,6 +705,91 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
     return wxFormatString::Arg_Unknown;
 }
 
+template<typename CharType>
+wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
+                                               unsigned n)
+{
+    wxCHECK_MSG( format, wxFormatString::Arg_Unknown,
+                 "empty format string not allowed here" );
+
+    wxPrintfConvSpecParser<CharType> parser(format);
+
+    if ( n > parser.nargs )
+    {
+        // The n-th argument doesn't appear in the format string and is unused.
+        // This can happen e.g. if a translation of the format string is used
+        // and the translation language tends to avoid numbers in singular forms.
+        // The translator would then typically replace "%d" with "One" (e.g. in
+        // Hebrew). Passing too many vararg arguments does not harm, so its
+        // better to be more permissive here and allow legitimate uses in favour
+        // of catching harmless errors.
+        return wxFormatString::Arg_Unused;
+    }
+
+    wxCHECK_MSG( parser.pspec[n-1] != nullptr, wxFormatString::Arg_Unknown,
+                 "requested argument not found - invalid format string?" );
+
+    return ArgTypeFromParamType(parser.pspec[n-1]->m_type);
+}
+
+#if wxDEBUG_LEVEL
+
+template<typename CharType>
+void DoValidateFormat(const CharType* format, const std::vector<int>& argTypes)
+{
+    wxPrintfConvSpecParser<CharType> parser(format);
+
+    // For the reasons mentioned in the comment in DoGetArgumentType() above,
+    // we ignore any extraneous argument types, so we only check that the
+    // format format specifiers we actually have match the types.
+    for ( unsigned n = 0; n < parser.nargs; ++n )
+    {
+        if ( n == argTypes.size() )
+        {
+            wxFAIL_MSG
+            (
+                wxString::Format
+                (
+                    "Not enough arguments, %zu given but at least %u needed",
+                    argTypes.size(),
+                    parser.nargs
+                )
+            );
+
+            // Useless to continue further.
+            return;
+        }
+
+        auto const pspec = parser.pspec[n];
+        if ( !pspec )
+        {
+            wxFAIL_MSG
+            (
+                wxString::Format
+                (
+                    "Missing format specifier for argument %u in \"%s\"",
+                    n + 1, format
+                )
+            );
+
+            continue;
+        }
+
+        auto const ptype = ArgTypeFromParamType(pspec->m_type);
+        wxASSERT_MSG
+        (
+            (ptype & argTypes[n]) == ptype,
+            wxString::Format
+            (
+                "Format specifier mismatch for argument %u of \"%s\"",
+                n + 1, format
+            )
+        );
+    }
+}
+
+#endif // wxDEBUG_LEVEL
+
 } // anonymous namespace
 
 wxFormatString::ArgumentType wxFormatString::GetArgumentType(unsigned n) const
@@ -769,3 +806,19 @@ wxFormatString::ArgumentType wxFormatString::GetArgumentType(unsigned n) const
     wxFAIL_MSG( "unreachable code" );
     return Arg_Unknown;
 }
+
+#if wxDEBUG_LEVEL
+
+void wxFormatString::Validate(const std::vector<int>& argTypes) const
+{
+    if ( m_char )
+        DoValidateFormat(m_char.data(), argTypes);
+    else if ( m_wchar )
+        DoValidateFormat(m_wchar.data(), argTypes);
+    else if ( m_str )
+        DoValidateFormat(m_str->wx_str(), argTypes);
+    else if ( m_cstr )
+        DoValidateFormat(m_cstr->AsInternal(), argTypes);
+}
+
+#endif // wxDEBUG_LEVEL

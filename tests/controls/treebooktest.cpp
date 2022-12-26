@@ -24,16 +24,16 @@ class TreebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 public:
     TreebookTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxBookCtrlBase *GetBase() const wxOVERRIDE { return m_treebook; }
+    virtual wxBookCtrlBase *GetBase() const override { return m_treebook; }
 
-    virtual wxEventType GetChangedEvent() const wxOVERRIDE
+    virtual wxEventType GetChangedEvent() const override
         { return wxEVT_TREEBOOK_PAGE_CHANGED; }
 
-    virtual wxEventType GetChangingEvent() const wxOVERRIDE
+    virtual wxEventType GetChangingEvent() const override
         { return wxEVT_TREEBOOK_PAGE_CHANGING; }
 
     CPPUNIT_TEST_SUITE( TreebookTestCase );
@@ -98,7 +98,7 @@ void TreebookTestCase::ContainerPage()
     CHECK( m_treebook->GetPageCount() == 0 );
 
     // Adding a page without the associated window should be allowed.
-    REQUIRE_NOTHROW( m_treebook->AddPage(NULL, "Container page") );
+    REQUIRE_NOTHROW( m_treebook->AddPage(nullptr, "Container page") );
     CHECK( m_treebook->GetPageParent(0) == -1 );
 
     m_treebook->AddSubPage(new wxPanel(m_treebook), "Child page");

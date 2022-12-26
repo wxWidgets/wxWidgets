@@ -304,7 +304,7 @@ public:
         Note that if you associate a sizer with this window, the sizer takes
         precedence and the only-child-resizing is only used as fallback.
 
-        @returns @false if nothing was done because the window doesn't have
+        @returns @false if nothing was done because the window has
                  neither a sizer nor a single child, @true otherwise.
     */
     virtual bool Layout();
@@ -326,7 +326,7 @@ public:
         MSW-specific function for accessing the system menu.
 
         Returns a wxMenu pointer representing the system menu of the window
-        under MSW. The returned wxMenu may be used, if non-@c NULL, to add
+        under MSW. The returned wxMenu may be used, if non-null, to add
         extra items to the system menu. The usual @c wxEVT_MENU
         events (that can be processed using @c EVT_MENU event table macro) will
         then be generated for them. All the other wxMenu methods may be used as
@@ -421,7 +421,7 @@ public:
             other values.
 
             @param name uniquely identifies the field
-            @param value non-@NULL pointer to the value to be filled by this
+            @param value non-null pointer to the value to be filled by this
                 function
 
             @return @true if the value was retrieved or @false if it wasn't
@@ -536,9 +536,9 @@ public:
         @param maxH
             The maximum height.
         @param incW
-            Specifies the increment for sizing the width (GTK/Motif/Xt only).
+            Specifies the increment for sizing the width (GTK/X11 only).
         @param incH
-            Specifies the increment for sizing the height (GTK/Motif/Xt only).
+            Specifies the increment for sizing the height (GTK/X11 only).
 
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it also
@@ -561,7 +561,7 @@ public:
             The maximum size of the window.
         @param incSize
             Increment size (only taken into account under X11-based ports such
-            as wxGTK/wxMotif/wxX11).
+            as wxGTK and wxX11).
 
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it also
@@ -584,6 +584,13 @@ public:
 
     /**
         If the platform supports it will set the window to be translucent.
+
+        Note that in wxGTK this function must be called before the window is
+        shown the first time it's called (but it can be called again after
+        showing the window too).
+
+        See @ref page_samples_shaped "the shaped sample" for an example of
+        using this function.
 
         @param alpha
             Determines how opaque or transparent the window will be, if the
@@ -649,6 +656,10 @@ public:
         @param enable
             If @true (default) make the zoom button toggle full screen;
             if @false the button does only toggle zoom.
+        @param style
+            This parameter sets which elements will be hidden when the
+            user presses the full screen button. See ShowFullScreen()
+            for possible values. It is available since wxWidgets 3.1.6.
 
         @return @true if the button behaviour has been changed, @false if running
         under another OS.
@@ -658,6 +669,8 @@ public:
         and entering and exiting the mode is animated.
         If the button is not present the old way of switching to full screen
         is used.
+        Only @c ::wxFULLSCREEN_NOTOOLBAR and @c ::wxFULLSCREEN_NOMENUBAR will be
+        used when using the fullscreen API (other values are ignored).
 
         @onlyfor{wxosx}
 
@@ -665,7 +678,7 @@ public:
 
         @since 3.1.0
     */
-    virtual bool EnableFullScreenView(bool enable = true);
+    virtual bool EnableFullScreenView(bool enable = true, long style = wxFULLSCREEN_ALL);
 
     /**
         Depending on the value of @a show parameter the window is either shown

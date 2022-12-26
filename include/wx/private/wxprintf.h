@@ -192,7 +192,7 @@ void wxPrintfConvSpec<CharType>::Init()
     m_nMaxWidth = INT_MAX;
     m_pos = 0;
     m_bAlignLeft = false;
-    m_pArgPos = m_pArgEnd = NULL;
+    m_pArgPos = m_pArgEnd = nullptr;
     m_type = wxPAT_INVALID;
 
     memset(m_szFlags, 0, sizeof(m_szFlags));
@@ -430,25 +430,13 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('c'):
                 if (ilen == -1)
                 {
-                    // in Unicode mode %hc == ANSI character
-                    // and in ANSI mode, %hc == %c == ANSI...
+                    // %hc == ANSI character
                     m_type = wxPAT_CHAR;
-                }
-                else if (ilen == 1)
-                {
-                    // in ANSI mode %lc == Unicode character
-                    // and in Unicode mode, %lc == %c == Unicode...
-                    m_type = wxPAT_WCHAR;
                 }
                 else
                 {
-#if wxUSE_UNICODE
-                    // in Unicode mode, %c == Unicode character
+                    // %lc == %c == Unicode character
                     m_type = wxPAT_WCHAR;
-#else
-                    // in ANSI mode, %c == ANSI character
-                    m_type = wxPAT_CHAR;
-#endif
                 }
                 done = true;
                 break;
@@ -456,23 +444,13 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('s'):
                 if (ilen == -1)
                 {
-                    // Unicode mode wx extension: we'll let %hs mean non-Unicode
-                    // strings (when in ANSI mode, %s == %hs == ANSI string)
+                    // wx extension: we'll let %hs mean non-Unicode strings
                     m_type = wxPAT_PCHAR;
-                }
-                else if (ilen == 1)
-                {
-                    // in Unicode mode, %ls == %s == Unicode string
-                    // in ANSI mode, %ls == Unicode string
-                    m_type = wxPAT_PWCHAR;
                 }
                 else
                 {
-#if wxUSE_UNICODE
+                    // %ls == %s == Unicode string
                     m_type = wxPAT_PWCHAR;
-#else
-                    m_type = wxPAT_PCHAR;
-#endif
                 }
                 done = true;
                 break;

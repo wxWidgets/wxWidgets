@@ -114,7 +114,8 @@ void ListsTestCase::wxStdListTest()
     wxListInt list1;
     wxListInt::iterator it, en;
     wxListInt::reverse_iterator rit, ren;
-    int i;
+    int buf[4];
+    int& i = buf[0];
     for ( i = 0; i < 5; ++i )
         list1.push_back(i + &i);
 
@@ -252,8 +253,6 @@ TEST_CASE("wxWindowList::Find", "[list]")
     CHECK( it == l.GetFirst() );
 }
 
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
-
 #include <list>
 
 // Check that we convert wxList to std::list using the latter's ctor taking 2
@@ -274,5 +273,3 @@ TEST_CASE("wxList::iterator", "[list][std][iterator]")
     const wxListBazs cli;
     CHECK( std::list<Baz*>(cli.begin(), cli.end()).empty() );
 }
-
-#endif // wxUSE_STD_CONTAINERS_COMPATIBLY

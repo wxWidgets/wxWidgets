@@ -84,8 +84,8 @@ class SpinBtnWidgetsPage : public WidgetsPage
 public:
     SpinBtnWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_spinbtn; }
-    virtual Widgets GetWidgets() const wxOVERRIDE
+    virtual wxWindow *GetWidget() const override { return m_spinbtn; }
+    virtual Widgets GetWidgets() const override
     {
         Widgets widgets(WidgetsPage::GetWidgets());
         widgets.push_back(m_spinctrl);
@@ -93,10 +93,10 @@ public:
         return widgets;
     }
 
-    virtual void RecreateWidget() wxOVERRIDE { CreateSpin(); }
+    virtual void RecreateWidget() override { CreateSpin(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -223,19 +223,19 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
                                        wxImageList *imaglist)
                   : WidgetsPage(book, imaglist, spinbtn_xpm)
 {
-    m_chkVert = NULL;
-    m_chkArrowKeys = NULL;
-    m_chkWrap = NULL;
-    m_chkProcessEnter = NULL;
-    m_radioAlign = NULL;
-    m_spinbtn = NULL;
-    m_spinctrl = NULL;
-    m_spinctrldbl = NULL;
+    m_chkVert = nullptr;
+    m_chkArrowKeys = nullptr;
+    m_chkWrap = nullptr;
+    m_chkProcessEnter = nullptr;
+    m_radioAlign = nullptr;
+    m_spinbtn = nullptr;
+    m_spinctrl = nullptr;
+    m_spinctrldbl = nullptr;
     m_textValue =
     m_textMin =
     m_textMax =
     m_textBase =
-    m_textIncrement = NULL;
+    m_textIncrement = nullptr;
 
     m_min = 0;
     m_max = 10;
@@ -243,7 +243,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
     m_base = 10;
     m_increment = 1;
 
-    m_sizerSpin = NULL;
+    m_sizerSpin = nullptr;
 }
 
 void SpinBtnWidgetsPage::CreateContent()

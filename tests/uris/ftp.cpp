@@ -82,11 +82,11 @@ TEST_CASE("FTP", "[net][.]")
 
         // test RETR
         wxInputStream *in1 = ftp.GetInputStream("bloordyblop");
-        CPPUNIT_ASSERT( in1 == NULL );
+        CPPUNIT_ASSERT( in1 == nullptr );
         delete in1;
 
         wxInputStream *in2 = ftp.GetInputStream(valid_filename);
-        CPPUNIT_ASSERT( in2 != NULL );
+        CPPUNIT_ASSERT( in2 != nullptr );
 
         size_t size = in2->GetSize();
         wxChar *data = new wxChar[size];
@@ -131,7 +131,7 @@ TEST_CASE("FTP", "[net][.]")
         // upload a file
         static const wxChar *file1 = wxT("test1");
         wxOutputStream *out = ftp.GetOutputStream(file1);
-        CPPUNIT_ASSERT( out != NULL );
+        CPPUNIT_ASSERT( out != nullptr );
         CPPUNIT_ASSERT( out->Write("First hello", 11).GetLastError() == wxSTREAM_NO_ERROR );
         delete out;
 

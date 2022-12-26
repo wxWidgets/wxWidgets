@@ -45,7 +45,7 @@ namespace
 
 inline bool HasNativeCommandLinkButton()
 {
-    return wxGetWinVersion() >= wxWinVersion_6;
+    return wxApp::GetComCtl32Version() >= 610;
 }
 
 } // anonymous namespace

@@ -63,85 +63,34 @@ bool wxGenericImageList::Create( int width, int height, bool mask, int WXUNUSED(
     // Prevent from storing negative dimensions
     m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
     m_useMask = mask;
-    m_scaleFactor = 1.0;
 
     // Images must have proper size
     return m_size != wxSize(0, 0);
 }
 
-namespace
-{
-wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& imgSize, double scaleFactor)
+wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 {
     wxBitmap bmp(bitmap);
-    if ( useMask )
+
+    // If we have neither mask nor alpha and were asked to use a mask,
+    // create a default one.
+    if ( m_useMask && !bmp.GetMask() && !bmp.HasAlpha() )
     {
-        if ( bmp.GetMask() )
-        {
-            if ( bmp.HasAlpha() )
-            {
-                // We need to remove alpha channel for compatibility with
-                // native-based wxMSW wxImageList where stored images are not allowed
-                // to have both mask and alpha channel.
-#if wxUSE_IMAGE
-                wxImage img = bmp.ConvertToImage();
-                img.ClearAlpha();
-                bmp = wxBitmap(img, -1, scaleFactor);
-#endif // wxUSE_IMAGE
-            }
-        }
-        else
-        {
-            if ( bmp.HasAlpha() )
-            {
-                // Convert alpha channel to mask.
-#if wxUSE_IMAGE
-                wxImage img = bmp.ConvertToImage();
-                img.ConvertAlphaToMask();
-                bmp = wxBitmap(img, -1, scaleFactor);
-#endif // wxUSE_IMAGE
-            }
-            else
-            {
-                // Like for wxMSW, use the light grey from standard colour map as transparent colour.
-                wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-                bmp.SetMask(new wxMask(bmp, col));
-            }
-        }
-    }
-    else
-    {
-        if ( bmp.GetMask() )
-        {
-            if ( bmp.HasAlpha() )
-            {
-                // TODO: It would be better to blend a mask with existing alpha values.
-                bmp.SetMask(NULL);
-            }
-            else
-            {
-                // Convert a mask to alpha values.
-#if wxUSE_IMAGE
-                wxImage img = bmp.ConvertToImage();
-                img.InitAlpha();
-                bmp = wxBitmap(img, -1, scaleFactor);
-#else
-                bmp.SetMask(NULL);
-#endif // wxUSE_IMAGE
-            }
-        }
+        // Like for wxMSW, use the light grey from standard colour map as transparent colour.
+        wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+        bmp.SetMask(new wxMask(bmp, col));
     }
 
     // Ensure image size is the same as the size of the images on the image list.
     wxBitmap bmpResized;
     const wxSize sz = bmp.GetLogicalSize();
-    if ( sz.x == imgSize.x && sz.y == imgSize.y )
+    if ( sz.x == m_size.x && sz.y == m_size.y )
     {
         bmpResized = bmp;
     }
-    else if ( sz.x > imgSize.x && sz.y > imgSize.y )
+    else if ( sz.x > m_size.x && sz.y > m_size.y )
     {
-        wxRect r(0, 0, imgSize.x, imgSize.y);
+        wxRect r(0, 0, m_size.x, m_size.y);
         bmpResized = bmp.GetSubBitmap(r);
     }
     else
@@ -149,7 +98,8 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 #if wxUSE_IMAGE
         wxImage img = bmp.ConvertToImage();
         // We need image with new physical size
-        wxImage imgResized = img.Size(scaleFactor * imgSize, wxPoint(0, 0), 0, 0, 0);
+        const double scaleFactor = bmp.GetScaleFactor();
+        wxImage imgResized = img.Size(scaleFactor * m_size, wxPoint(0, 0), 0, 0, 0);
         bmpResized = wxBitmap(imgResized, -1, scaleFactor);
 #else
         bmpResized = bmp;
@@ -158,25 +108,11 @@ wxBitmap GetImageListBitmap(const wxBitmap& bitmap, bool useMask, const wxSize& 
 
     return bmpResized;
 }
-};
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
     // Cannot add image to invalid list
-    if ( m_size == wxSize(0, 0) )
-        return -1;
-
-    if ( m_images.empty() )
-    {
-        // This is the first time Add() is called so we should save
-        // scale factor to check if further images will have the same scaling
-        m_scaleFactor = bitmap.GetScaleFactor();
-    }
-    else if ( bitmap.GetScaleFactor() != m_scaleFactor )
-    {
-        // All images in the list should have the same scale factor
-        return -1;
-    }
+    wxCHECK_MSG( m_size != wxSize(0, 0), -1, "Invalid image list" );
 
     // We use the logical size here as image list images size is specified in
     // logical pixels, just as window coordinates and sizes are.
@@ -187,7 +123,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     // ImageList_Add() does.
     if ( bitmapSize.x == m_size.x )
     {
-        m_images.push_back(GetImageListBitmap(bitmap, m_useMask, m_size, m_scaleFactor));
+        m_images.push_back(GetImageListBitmap(bitmap));
     }
     else if ( bitmapSize.x > m_size.x )
     {
@@ -195,7 +131,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         for (int subIndex = 0; subIndex < numImages; subIndex++)
         {
             wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
-            m_images.push_back(GetImageListBitmap(bitmap.GetSubBitmap(rect), m_useMask, m_size, m_scaleFactor));
+            m_images.push_back(GetImageListBitmap(bitmap.GetSubBitmap(rect)));
         }
     }
     else
@@ -223,8 +159,10 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour 
 
 const wxBitmap *wxGenericImageList::DoGetPtr( int index ) const
 {
+    wxCHECK_MSG( m_size != wxSize(0, 0), nullptr, "Invalid image list" );
+
     if ( index < 0 || (size_t)index >= m_images.size() )
-        return NULL;
+        return nullptr;
 
     return &m_images[index];
 }
@@ -260,23 +198,19 @@ wxGenericImageList::Replace(int index,
     if ( !DoGetPtr(index) )
         return false;
 
-    if ( bitmap.GetScaleFactor() != m_scaleFactor )
-    {
-        // All images in the list should have the same scale factor
-        return false;
-    }
-
     wxBitmap bmp(bitmap);
     if ( mask.IsOk() )
         bmp.SetMask(new wxMask(mask));
 
-    m_images[index] = GetImageListBitmap(bmp, m_useMask, m_size, m_scaleFactor);
+    m_images[index] = GetImageListBitmap(bmp);
 
     return true;
 }
 
 bool wxGenericImageList::Remove( int index )
 {
+    wxCHECK_MSG( m_size != wxSize(0, 0), false, "Invalid image list" );
+
     if ( index < 0 || (size_t)index >= m_images.size() )
         return false;
 
@@ -287,6 +221,8 @@ bool wxGenericImageList::Remove( int index )
 
 bool wxGenericImageList::RemoveAll()
 {
+    wxCHECK_MSG( m_size != wxSize(0, 0), false, "Invalid image list" );
+
     m_images.clear();
 
     return true;

@@ -127,12 +127,12 @@ class TestDirTraverser : public wxDirTraverser
 public:
     wxArrayString dirs;
 
-    virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename)) wxOVERRIDE
+    virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename)) override
     {
         return wxDIR_CONTINUE;
     }
 
-    virtual wxDirTraverseResult OnDir(const wxString& dirname) wxOVERRIDE
+    virtual wxDirTraverseResult OnDir(const wxString& dirname) override
     {
         dirs.push_back(dirname);
         return wxDIR_CONTINUE;

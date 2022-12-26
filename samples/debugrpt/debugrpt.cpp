@@ -64,7 +64,7 @@ protected:
     // this is called with the contents of the server response: you will
     // probably want to parse the XML document in OnServerReply() instead of
     // just dumping it as I do
-    virtual bool OnServerReply(const wxArrayString& reply) wxOVERRIDE
+    virtual bool OnServerReply(const wxArrayString& reply) override
     {
         if ( reply.IsEmpty() )
         {
@@ -177,7 +177,7 @@ private:
     public:
         BadTimer() { }
 
-        virtual void Notify() wxOVERRIDE
+        virtual void Notify() override
         {
             foo(8);
         }
@@ -205,10 +205,10 @@ public:
     MyApp();
 
     // create our main window here
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // called when a crash occurs in this application
-    virtual void OnFatalException() wxOVERRIDE;
+    virtual void OnFatalException() override;
 
     // this is where we really generate the debug report
     void GenerateReport(wxDebugReport::Context ctx);
@@ -248,7 +248,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets Debug Report Sample",
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets Debug Report Sample",
                  wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
 {
     m_numLines = 10;

@@ -48,7 +48,7 @@ public:
     /// Stored characters type.
     typedef T CharType;
 
-    /// Default constructor, creates NULL buffer.
+    /// Default constructor, creates null, empty buffer.
     wxScopedCharTypeBuffer();
 
     /**
@@ -106,7 +106,7 @@ public:
      */
     CharType* release() const;
 
-    /// Resets the buffer to NULL, freeing the data if necessary.
+    /// Resets the buffer to empty, freeing the data if necessary.
     void reset();
 
     /// Returns pointer to the stored data.
@@ -163,7 +163,7 @@ public:
 
         @see wxScopedCharTypeBuffer<T>::CreateOwned()
      */
-    wxCharTypeBuffer(const CharType *str = NULL, size_t len = wxNO_LEN);
+    wxCharTypeBuffer(const CharType *str = nullptr, size_t len = wxNO_LEN);
 
 
     /**
@@ -250,7 +250,7 @@ public:
 
     wxCharBuffer(const wxCharTypeBufferBase& buf);
     wxCharBuffer(const wxScopedCharTypeBufferBase& buf);
-    wxCharBuffer(const CharType *str = NULL);
+    wxCharBuffer(const CharType *str = nullptr);
     wxCharBuffer(size_t len);
     wxCharBuffer(const wxCStrData& cstr);
 };
@@ -269,7 +269,7 @@ public:
 
     wxWCharBuffer(const wxCharTypeBufferBase& buf);
     wxWCharBuffer(const wxScopedCharTypeBufferBase& buf);
-    wxWCharBuffer(const CharType *str = NULL);
+    wxWCharBuffer(const CharType *str = nullptr);
     wxWCharBuffer(size_t len);
     wxWCharBuffer(const wxCStrData& cstr);
 };

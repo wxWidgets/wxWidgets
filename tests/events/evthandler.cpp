@@ -29,7 +29,7 @@ class MyEvent : public wxEvent
 public:
     MyEvent() : wxEvent(0, MyEventType) { }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new MyEvent; }
+    virtual wxEvent *Clone() const override { return new MyEvent; }
 };
 
 typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);
@@ -162,8 +162,8 @@ TEST_CASE("Event::BuiltinConnect", "[event][connect]")
     handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle));
     handler.Disconnect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle));
 
-    handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), NULL, &handler);
-    handler.Disconnect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), NULL, &handler);
+    handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &handler);
+    handler.Disconnect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &handler);
 
     // using casts like this is even uglier than using wxIdleEventHandler but
     // it should still continue to work for compatibility
@@ -197,13 +197,13 @@ TEST_CASE("Event::LegacyConnect", "[event][connect]")
     handler.Disconnect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent );
 
 
-    handler.Connect( LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
-    handler.Connect( 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
-    handler.Connect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+    handler.Connect( LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, nullptr, &handler );
+    handler.Connect( 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, nullptr, &handler );
+    handler.Connect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, nullptr, &handler );
 
-    handler.Disconnect( LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
-    handler.Disconnect( 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
-    handler.Disconnect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+    handler.Disconnect( LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, nullptr, &handler );
+    handler.Disconnect( 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, nullptr, &handler );
+    handler.Disconnect( 0, 0, LegacyEventType, (wxObjectEventFunction)&MyHandler::OnEvent, nullptr, &handler );
 }
 
 TEST_CASE("Event::ConnectOverloaded", "[event][connect]")
@@ -221,7 +221,7 @@ TEST_CASE("Event::DisconnectWildcard", "[event][connect][disconnect]")
     // should be able to disconnect a different handler using "wildcard search"
     MyHandler sink;
     wxEvtHandler source;
-    source.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), NULL, &sink);
+    source.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &sink);
     CHECK(source.Disconnect(wxID_ANY, wxEVT_IDLE));
     // destruction of source and sink here should properly clean up the
     // wxEventConnectionRef without crashing
@@ -232,9 +232,9 @@ TEST_CASE("Event::AutoDisconnect", "[event][connect][disconnect]")
     wxEvtHandler source;
     {
         MyHandler sink;
-        source.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), NULL, &sink);
+        source.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &sink);
         // mismatched event type, so nothing should be disconnected
-        CHECK(!source.Disconnect(wxEVT_THREAD, wxIdleEventHandler(MyHandler::OnIdle), NULL, &sink));
+        CHECK(!source.Disconnect(wxEVT_THREAD, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &sink));
     }
     // destruction of sink should have automatically disconnected it, so
     // there should be nothing to disconnect anymore
@@ -510,9 +510,6 @@ TEST_CASE("Event::UnbindFromHandler", "[event][bind][unbind]")
 // This is a compilation-time-only test: just check that a class inheriting
 // from wxEvtHandler non-publicly can use Bind() with its method, this used to
 // result in compilation errors.
-// Note that this test will work only on C++11 compilers, so we test this only
-// for such compilers.
-#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(14)
 class HandlerNonPublic : protected wxEvtHandler
 {
 public:
@@ -523,7 +520,6 @@ public:
 
     void OnIdle(wxIdleEvent&) { }
 };
-#endif // C++11
 
 // Another compilation-time-only test, but this one checking that these event
 // objects can't be created from outside of the library.

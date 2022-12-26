@@ -296,6 +296,7 @@ egg_tray_icon_get_orientation_property (EggTrayIcon *icon)
 static GdkFilterReturn
 egg_tray_icon_manager_filter (GdkXEvent *xevent, GdkEvent *event, gpointer user_data)
 {
+  (void)event;
   EggTrayIcon *icon = user_data;
   XEvent *xev = (XEvent *)xevent;
 
@@ -345,6 +346,8 @@ egg_tray_icon_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+#else
+  wxUnusedVar(widget);
 #endif
 }
 
@@ -451,6 +454,7 @@ egg_tray_icon_manager_window_destroyed (EggTrayIcon *icon)
 static gboolean
 transparent_expose_event (GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
 {
+  (void)user_data;
   gdk_window_clear_area (widget->window, event->area.x, event->area.y,
 			 event->area.width, event->area.height);
   return FALSE;
@@ -460,12 +464,15 @@ static void
 make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
 			gpointer user_data)
 {
+  (void)previous_style;
+  (void)user_data;
   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
 static void
 make_transparent (GtkWidget *widget, gpointer user_data)
 {
+  (void)user_data;
   if (GTK_WIDGET_NO_WINDOW (widget) || GTK_WIDGET_APP_PAINTABLE (widget))
     return;
 
@@ -523,6 +530,8 @@ egg_tray_icon_realize (GtkWidget *widget)
   /* Add a root window filter so that we get changes on MANAGER */
   gdk_window_add_filter (root_window,
 			 egg_tray_icon_manager_filter, icon);
+#else
+  wxUnusedVar(widget);
 #endif
 }
 

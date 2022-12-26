@@ -26,8 +26,8 @@ class RichTextCtrlTestCase : public CppUnit::TestCase
 public:
     RichTextCtrlTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );
@@ -875,7 +875,7 @@ void RichTextCtrlTestCase::Table()
     CPPUNIT_ASSERT_EQUAL(0, table->GetRowCount());
 
     m_rich->Clear();
-    m_rich->SetFocusObject(NULL);
+    m_rich->SetFocusObject(nullptr);
 }
 
 #endif //wxUSE_RICHTEXT

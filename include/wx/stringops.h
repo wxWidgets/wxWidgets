@@ -12,9 +12,12 @@
 #define _WX_WXSTRINGOPS_H__
 
 #include "wx/chartype.h"
-#include "wx/stringimpl.h"
 #include "wx/unichar.h"
 #include "wx/buffer.h"
+
+#include "wx/beforestd.h"
+#include <string>
+#include "wx/afterstd.h"
 
 // This header contains wxStringOperations "namespace" class that implements
 // elementary operations on string data as static methods; wxString methods and
@@ -22,8 +25,7 @@
 // one for UTF-8 encoded char* string and one for "raw" wchar_t* strings (or
 // char* in ANSI build).
 
-// FIXME-UTF8: only wchar after we remove ANSI build
-#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 struct WXDLLIMPEXP_BASE wxStringOperationsWchar
 {
     // moves the iterator to the next Unicode character
@@ -73,14 +75,14 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
         buf.data[1] = 0;
         return buf;
     }
-    static wxWxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
+    static wxWCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
     static bool IsSingleCodeUnitCharacter(const wxUniChar&) { return true; }
 #endif
 
-    static wxUniChar DecodeChar(const wxStringImpl::const_iterator& i)
+    static wxUniChar DecodeChar(const std::wstring::const_iterator& i)
         { return *i; }
 };
-#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#endif // wxUSE_UNICODE_WCHAR
 
 
 #if wxUSE_UNICODE_UTF8
@@ -88,7 +90,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
 {
     // checks correctness of UTF-8 sequence
     static bool IsValidUtf8String(const char *c,
-                                  size_t len = wxStringImpl::npos);
+                                  size_t len = std::string::npos);
     static bool IsValidUtf8LeadByte(unsigned char c)
     {
         return (c <= 0x7F) || (c >= 0xC2 && c <= 0xF4);
@@ -182,7 +184,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     }
 
     // decodes single UTF-8 character from UTF-8 string
-    static wxUniChar DecodeChar(wxStringImpl::const_iterator i)
+    static wxUniChar DecodeChar(std::string::const_iterator i)
     {
         if ( (unsigned char)*i < 0x80 )
             return (int)*i;
@@ -190,7 +192,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     }
 
 private:
-    static wxUniChar DecodeNonAsciiChar(wxStringImpl::const_iterator i);
+    static wxUniChar DecodeNonAsciiChar(std::string::const_iterator i);
 };
 #endif // wxUSE_UNICODE_UTF8
 

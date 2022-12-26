@@ -784,7 +784,7 @@ public:
 
         @see SetListStyle(), PromoteList(), ClearListStyle().
     */
-    virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def = NULL, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def = nullptr, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
     virtual bool NumberList(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
     //@}
 
@@ -805,7 +805,7 @@ public:
 
         @see SetListStyle(), @see SetListStyle(), ClearListStyle().
     */
-    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def = NULL, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def = nullptr, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
     virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
     //@}
 
@@ -1385,7 +1385,7 @@ public:
         Please note that this does not update the current editing style
         from the new position; to do that, call wxRichTextCtrl::SetInsertionPoint instead.
     */
-    virtual bool MoveCaret(long pos, bool showAtLineStart = false, wxRichTextParagraphLayoutBox* container = NULL);
+    virtual bool MoveCaret(long pos, bool showAtLineStart = false, wxRichTextParagraphLayoutBox* container = nullptr);
 
     /**
         Moves right.
@@ -1601,7 +1601,7 @@ public:
     /**
         Applies the style sheet to the buffer, for example if the styles have changed.
     */
-    bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL);
+    bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         Shows the given context menu, optionally adding appropriate property-editing commands for the current position in the object hierarchy.
@@ -1921,7 +1921,7 @@ public:
         Internal function to position the visible caret according to the current caret
         position.
     */
-    virtual void PositionCaret(wxRichTextParagraphLayoutBox* container = NULL);
+    virtual void PositionCaret(wxRichTextParagraphLayoutBox* container = nullptr);
 
     /**
         Helper function for extending the selection, returning @true if the selection
@@ -1996,7 +1996,7 @@ public:
         2-element list (ok, rect).
         @endWxPerlOnly
     */
-    bool GetCaretPositionForIndex(long position, wxRect& rect, wxRichTextParagraphLayoutBox* container = NULL);
+    bool GetCaretPositionForIndex(long position, wxRect& rect, wxRichTextParagraphLayoutBox* container = nullptr);
 
     /**
         Internal helper function returning the line for the visible caret position.
@@ -2021,7 +2021,7 @@ public:
         list (ok, newPos).
         @endWxPerlOnly
     */
-    virtual bool DeleteSelectedContent(long* newPos= NULL);
+    virtual bool DeleteSelectedContent(long* newPos= nullptr);
 
     /**
         Transforms logical (unscrolled) position to physical window position.

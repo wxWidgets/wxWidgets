@@ -56,7 +56,6 @@ wxBEGIN_FLAGS( wxPanelStyle )
     // standard window styles
     wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
     wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
     wxFLAGS_MEMBER(wxWANTS_CHARS)
     wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB)
@@ -86,14 +85,14 @@ wxCONSTRUCTOR_6( wxPanel, wxWindow*, Parent, wxWindowID, Id, \
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxPanelBase creation
+// wxPanel creation
 // ----------------------------------------------------------------------------
 
-bool wxPanelBase::Create(wxWindow *parent, wxWindowID id,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         long style,
-                         const wxString& name)
+bool wxPanel::Create(wxWindow *parent, wxWindowID id,
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     long style,
+                     const wxString& name)
 {
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
@@ -104,7 +103,7 @@ bool wxPanelBase::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-void wxPanelBase::InitDialog()
+void wxPanel::InitDialog()
 {
     wxInitDialogEvent event(GetId());
     event.SetEventObject(this);

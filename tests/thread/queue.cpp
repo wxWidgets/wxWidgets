@@ -52,7 +52,7 @@ private:
         {}
 
         // thread execution starts here
-        virtual void *Entry() wxOVERRIDE;
+        virtual void *Entry() override;
 
         // Thread message queue
         Queue& GetQueue()
@@ -101,7 +101,7 @@ void QueueTestCase::TestReceive()
     int i;
     for ( i = 0; i < threadCount; ++i )
     {
-        MyThread *previousThread = i == 0 ? NULL : threads[i-1];
+        MyThread *previousThread = i == 0 ? nullptr : threads[i-1];
         MyThread *thread =
             new MyThread(WaitInfinitlyLong, previousThread, msgCount);
 
@@ -139,8 +139,8 @@ void QueueTestCase::TestReceive()
 // should return wxMSGQUEUUE_TIMEOUT.
 void QueueTestCase::TestReceiveTimeout()
 {
-    MyThread* thread1 = new MyThread(WaitWithTimeout, NULL, 2);
-    MyThread* thread2 = new MyThread(WaitWithTimeout, NULL, 2);
+    MyThread* thread1 = new MyThread(WaitWithTimeout, nullptr, 2);
+    MyThread* thread2 = new MyThread(WaitWithTimeout, nullptr, 2);
 
     CPPUNIT_ASSERT_EQUAL ( thread1->Create(), wxTHREAD_NO_ERROR );
     CPPUNIT_ASSERT_EQUAL ( thread2->Create(), wxTHREAD_NO_ERROR );
@@ -185,7 +185,7 @@ void *QueueTestCase::MyThread::Entry()
 
         if ( result == wxMSGQUEUE_NO_ERROR )
         {
-            if ( m_nextThread != NULL )
+            if ( m_nextThread != nullptr )
             {
                 wxMessageQueueError res = m_nextThread->GetQueue().Post(msg);
 

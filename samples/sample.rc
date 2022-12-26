@@ -26,7 +26,9 @@ sample ICON "sample.ico"
 #define wxUSE_NO_MANIFEST 0
 
 // To get DPI change events, we need to opt in into per monitor DPI support.
+#ifndef wxUSE_DPI_AWARE_MANIFEST
 #define wxUSE_DPI_AWARE_MANIFEST 2
+#endif
 
 // this is not always needed but doesn't hurt (except making the executable
 // very slightly larger): this file contains the standard icons, cursors, ...

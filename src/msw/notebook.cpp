@@ -78,10 +78,10 @@
 #if USE_NOTEBOOK_ANTIFLICKER
 
 // the pointer to standard spin button wnd proc
-static WXWNDPROC gs_wndprocNotebookSpinBtn = NULL;
+static WXWNDPROC gs_wndprocNotebookSpinBtn = nullptr;
 
 // the pointer to standard tab control wnd proc
-static WXWNDPROC gs_wndprocNotebook = NULL;
+static WXWNDPROC gs_wndprocNotebook = nullptr;
 
 LRESULT APIENTRY
 wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -109,11 +109,6 @@ static bool HasTroubleWithNonTopTabs()
 wxBEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_SIZE(wxNotebook::OnSize)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-
-#if USE_NOTEBOOK_ANTIFLICKER
-    EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
-    EVT_PAINT(wxNotebook::OnPaint)
-#endif // USE_NOTEBOOK_ANTIFLICKER
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -128,7 +123,7 @@ wxEND_EVENT_TABLE()
 void wxNotebook::Init()
 {
 #if wxUSE_UXTHEME
-    m_hbrBackground = NULL;
+    m_hbrBackground = nullptr;
 #endif // wxUSE_UXTHEME
 
 #if USE_NOTEBOOK_ANTIFLICKER
@@ -179,11 +174,7 @@ bool wxNotebook::Create(wxWindow *parent,
     }
 #endif //wxUSE_UXTHEME
 
-#if defined(__WINE__) && wxUSE_UNICODE
-    LPCTSTR className = L"SysTabControl32";
-#else
     LPCTSTR className = WC_TABCONTROL;
-#endif
 
 #if USE_NOTEBOOK_ANTIFLICKER
     // SysTabCtl32 class has natively CS_HREDRAW and CS_VREDRAW enabled and it
@@ -197,7 +188,7 @@ bool wxNotebook::Create(wxWindow *parent,
             // get a copy of standard class and modify it
             WNDCLASS wc;
 
-            if ( ::GetClassInfo(NULL, WC_TABCONTROL, &wc) )
+            if ( ::GetClassInfo(nullptr, WC_TABCONTROL, &wc) )
             {
                 gs_wndprocNotebook = wc.lpfnWndProc;
                 wc.lpszClassName = wxT("_wx_SysTabCtl32");
@@ -451,7 +442,7 @@ void wxNotebook::OnImagesChanged()
 {
     wxImageList* const iml = GetUpdatedImageListFor(this);
 
-    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : NULL);
+    (void) TabCtrl_SetImageList(GetHwnd(), iml ? GetHimagelistOf(iml) : nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -508,6 +499,21 @@ void wxNotebook::SetTabSize(const wxSize& sz)
     ::SendMessage(GetHwnd(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
 }
 
+wxRect wxNotebook::GetTabRect(size_t page) const
+{
+    wxRect r;
+    wxCHECK_MSG(IS_VALID_PAGE(page), r, wxT("invalid notebook page"));
+
+    if (GetPageCount() > 0)
+    {
+        RECT rect;
+        if (TabCtrl_GetItemRect(GetHwnd(), page, &rect))
+            r = wxRectFromRECT(rect);
+    }
+
+    return r;
+}
+
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // we can't use TabCtrl_AdjustRect here because it only works for wxNB_TOP
@@ -544,7 +550,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 
 void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 {
-    wxCHECK_RET( page, wxT("NULL page in wxNotebook::AdjustPageSize") );
+    wxCHECK_RET( page, wxT("null page in wxNotebook::AdjustPageSize") );
 
     const wxRect r = GetPageSize();
     if ( !r.IsEmpty() )
@@ -562,7 +568,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 {
     wxNotebookPage *pageRemoved = wxNotebookBase::DoRemovePage(nPage);
     if ( !pageRemoved )
-        return NULL;
+        return nullptr;
 
     // hide the removed page to maintain the invariant that only the
     // selected page is visible and others are hidden:
@@ -630,7 +636,7 @@ bool wxNotebook::InsertPage(size_t nPage,
                             bool bSelect,
                             int imageId)
 {
-    wxCHECK_MSG( pPage != NULL, false, wxT("NULL page in wxNotebook::InsertPage") );
+    wxCHECK_MSG( pPage != nullptr, false, wxT("null page in wxNotebook::InsertPage") );
     wxCHECK_MSG( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false,
                  wxT("invalid index in wxNotebook::InsertPage") );
 
@@ -723,8 +729,216 @@ bool wxNotebook::InsertPage(size_t nPage,
     return true;
 }
 
+// This can be defined to help with debugging this code by visually
+// highlighting the rectangle passed to it.
+#ifdef WXDEBUG_NOTEBOOK_HITTEST
+static void ShowHitbox(wxWindow *w, wxRect r, bool text, bool refresh)
+{
+    wxBrush green(wxColor(0, 200, 0));
+    wxBrush blue(wxColor(0, 0, 200));
+
+    wxScreenDC dc;
+
+    if (refresh)
+    {
+        w->Refresh();
+        w->Update();
+    }
+
+    r.x += (r.width / 2)+2;
+    w->ClientToScreen(&r.x, &r.y);
+    if (text)
+        dc.SetBrush(green);
+    else
+        dc.SetBrush(blue);
+
+    dc.DrawRectangle(r);
+}
+#endif // WXDEBUG_NOTEBOOK_HITTEST
+
+int wxNotebook::MSWHitTestLeftRight(const wxPoint& pt, long *flags) const
+{
+    long dummy;
+    if (!flags)
+        flags = &dummy;
+
+    *flags = wxBK_HITTEST_NOWHERE;
+
+    wxRect r = GetRect();
+    if (!r.Contains(pt))
+    {
+        return -1;
+    }
+
+    const size_t pages = GetPageCount();
+    if (!pages)
+    {
+        *flags |= wxBK_HITTEST_ONPAGE;
+        return -1;
+    }
+
+    if (GetPageSize().Contains(pt))
+    {
+        *flags = wxBK_HITTEST_ONPAGE;
+        return -1;
+    }
+
+    int item = wxNOT_FOUND;
+
+    const wxDirection tabDir = GetTabOrientation();
+    for (size_t i = 0; i < pages; i++)
+    {
+        r = GetTabRect(i);
+        if (!r.Contains(pt))
+            continue;
+
+        item = i;
+
+        // If the user doesn't care about the flags we are done here.
+        if (flags == &dummy)
+            break;
+
+        // Default assumption.
+        *flags = wxBK_HITTEST_ONITEM;
+
+        // Just a magic number between the icon and the start of the text
+        // I checked with different resolutions and it seems to be about right.
+        // My assumption was that the icon and the label are both centered in
+        // the tab and this assumption seems to be mostly right with this
+        // adjustment offset being required.
+        int gap = 8;
+
+        TCHAR buffer[256];
+        TCITEM ti;
+        ti.mask = TCIF_IMAGE | TCIF_TEXT;
+        ti.cchTextMax = WXSIZEOF(buffer);
+        ti.pszText = buffer;
+        TabCtrl_GetItem(GetHwnd(), i, &ti);
+
+        wxRect tabRect;
+        wxRect imageRect;
+
+        // If the tab has an image, we need to check if the mouse is over it.
+        if (ti.iImage != -1)
+        {
+            const wxIcon& icon = GetImage(ti.iImage);
+            if (icon.IsOk())
+                imageRect = icon.GetSize();
+        }
+
+        // The label text and the icon (if available) is centered in the tab,
+        // so we need to find out the size of that.
+        const wxString label = ti.pszText;
+        if (!label.empty())
+        {
+            // This is intentional and not a bug. :) On left/right the font is
+            // rotated 90 degree so we have to account for that by flipping
+            // width with height.
+            GetTextExtent(label, &tabRect.height, &tabRect.width);
+        }
+
+        // The tab has neither a text nor an icon
+        if (label.empty() && imageRect.width == 0)
+            break;
+
+        if (!label.empty())
+        {
+            tabRect.x = r.x + (r.width - tabRect.width) / 2;
+            if (tabDir == wxLEFT)
+            {
+                if (imageRect.height)
+                    tabRect.y = r.y + (r.height - tabRect.height - gap - imageRect.height) / 2;
+                else
+                    tabRect.y = r.y + (r.height - tabRect.height - imageRect.height) / 2;
+            }
+            else
+            {
+                if (imageRect.height)
+                    tabRect.y = r.y + (r.height - tabRect.height + gap + imageRect.height) / 2;
+                else
+                    tabRect.y = r.y + (r.height - tabRect.height) / 2;
+            }
+
+#ifdef WXDEBUG_NOTEBOOK_HITTEST
+            ::ShowHitbox(const_cast<wxWindow *>(this), tabRect, true, true);
+#endif
+            if (tabRect.Contains(pt))
+            {
+                *flags = wxBK_HITTEST_ONLABEL;
+                break;
+            }
+        }
+
+        if (imageRect.height)
+        {
+            double scale = GetDPIScaleFactor();
+
+            // When the tab has no text and only an icon, the position of the
+            // icon is moving around a bit when scaling is applied. So I
+            // checked with various resolutions and scaling settings to make
+            // sure that the hitbox is where it is supposed to be. Otherwise
+            // the hitbox is so far off the mark that the user will consider it
+            // a bug as the flag is not reported where it is expected.
+            // To get this numbers I switched the scaling factor (have to
+            // restart the app in between) and look where the hitbox is
+            // located, then adjust the values until they look right.
+            int displacement;
+            if (scale <= 1.0f)
+                displacement = 3;
+            else if (scale <= 1.25f)
+                displacement = 8;
+            else if (scale <= 1.50f)
+                displacement = 14;
+            else if (scale <= 1.75f)
+                displacement = 3;
+            else if (scale <= 2.00f)
+                displacement = 6;
+            else
+                displacement = 12;
+
+            imageRect.x = r.x + (r.width - imageRect.width) / 2;
+            if (tabDir == wxLEFT)
+            {
+                if (!label.empty())
+                    imageRect.y = tabRect.y + tabRect.height + gap;
+                else
+                    imageRect.y = r.y - displacement + (r.height - imageRect.height) / 2;
+            }
+            else
+            {
+                if (!label.empty())
+                    imageRect.y = r.y + (r.height - imageRect.height - gap - tabRect.height) / 2;
+                else
+                    imageRect.y = r.y - displacement + (r.height - imageRect.height) / 2;
+            }
+
+#ifdef WXDEBUG_NOTEBOOK_HITTEST
+            ::ShowHitbox(const_cast<wxWindow *>(this), imageRect, false, false);
+#endif
+            if (imageRect.Contains(pt))
+            {
+                *flags = wxBK_HITTEST_ONICON;
+                break;
+            }
+        }
+
+        break;
+    }
+
+    return item;
+}
+
 int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 {
+    // In Windows there is a bug so that the flags are not properly reported
+    // for left/right orientation, so we have to do it manually.
+    // It seems that the tabs are evaluated the same as if they were top/bottom
+    // oriented, because if multiple tabs are stacked the flags are quite different
+    // for each tab on the x axis.
+    const wxDirection tabDir = GetTabOrientation();
+    if (tabDir == wxLEFT || tabDir == wxRIGHT)
+        return MSWHitTestLeftRight(pt, flags);
+
     TC_HITTESTINFO hitTestInfo;
     hitTestInfo.pt.x = pt.x;
     hitTestInfo.pt.y = pt.y;
@@ -1081,6 +1295,28 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
     }
 }
 
+bool wxNotebook::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxNotebookBase::SetBackgroundColour(colour) )
+        return false;
+
+#if wxUSE_UXTHEME
+    UpdateBgBrush();
+#endif // wxUSE_UXTHEME
+
+#if USE_NOTEBOOK_ANTIFLICKER
+    Unbind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
+    Unbind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
+    if ( m_hasBgCol || !wxUxThemeIsActive() )
+    {
+        Bind(wxEVT_ERASE_BACKGROUND, &wxNotebook::OnEraseBackground, this);
+        Bind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
+    }
+#endif // USE_NOTEBOOK_ANTIFLICKER
+
+    return true;
+}
+
 #if wxUSE_UXTHEME
 
 WXHBRUSH wxNotebook::QueryBgBitmap()
@@ -1129,7 +1365,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
                                     9 /* TABP_PANE */,
                                     0,
                                     &rc,
-                                    NULL
+                                    nullptr
                                 );
     } // deselect bitmap from the memory HDC before using it
 
@@ -1147,7 +1383,7 @@ void wxNotebook::UpdateBgBrush()
     }
     else // no themes or we've got user-defined solid colour
     {
-        m_hbrBackground = NULL;
+        m_hbrBackground = nullptr;
     }
 }
 
@@ -1198,7 +1434,7 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
                                         9 /* TABP_PANE */,
                                         0,
                                         &rc,
-                                        NULL
+                                        nullptr
                                     );
             return true;
         }
@@ -1261,7 +1497,7 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
             {
                 WCHAR szwThemeFile[1024];
                 WCHAR szwThemeColor[256];
-                if (S_OK == ::GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, NULL, 0))
+                if (S_OK == ::GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, nullptr, 0))
                 {
                     wxString themeFile(szwThemeFile);
                     if (themeFile.Find(wxT("Aero")) != -1 && wxString(szwThemeColor) == wxT("NormalColor"))

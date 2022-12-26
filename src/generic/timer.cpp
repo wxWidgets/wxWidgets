@@ -55,8 +55,8 @@ class wxTimerDesc
 {
 public:
     wxTimerDesc(wxGenericTimerImpl *t) :
-        timer(t), running(false), next(NULL), prev(NULL),
-        shotTime(0), deleteFlag(NULL) {}
+        timer(t), running(false), next(nullptr), prev(nullptr),
+        shotTime(0), deleteFlag(nullptr) {}
 
     wxGenericTimerImpl  *timer;
     bool                running;
@@ -68,7 +68,7 @@ public:
 class wxTimerScheduler
 {
 public:
-    wxTimerScheduler() : m_timers(NULL) {}
+    wxTimerScheduler() : m_timers(nullptr) {}
 
     void QueueTimer(wxTimerDesc *desc, wxTimerTick_t when = 0);
     void RemoveTimer(wxTimerDesc *desc);
@@ -105,7 +105,7 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, wxTimerTick_t when)
     else
     {
         m_timers = desc;
-        desc->prev = desc->next = NULL;
+        desc->prev = desc->next = nullptr;
     }
 }
 
@@ -118,7 +118,7 @@ void wxTimerScheduler::RemoveTimer(wxTimerDesc *desc)
         desc->prev->next = desc->next;
     if ( desc->next )
         desc->next->prev = desc->prev;
-    desc->prev = desc->next = NULL;
+    desc->prev = desc->next = nullptr;
 }
 
 void wxTimerScheduler::NotifyTimers()
@@ -148,7 +148,7 @@ void wxTimerScheduler::NotifyTimers()
                                 desc->timer,
                                 wxTimerTickPrintfArg(desc->shotTime) );
 
-                    desc->deleteFlag = NULL;
+                    desc->deleteFlag = nullptr;
                     if ( !oneShot )
                         QueueTimer(desc, now + desc->timer->GetInterval());
                 }
@@ -168,7 +168,7 @@ void wxTimerScheduler::NotifyTimers()
 // wxTimer
 // ----------------------------------------------------------------------------
 
-wxTimerScheduler *gs_scheduler = NULL;
+wxTimerScheduler *gs_scheduler = nullptr;
 
 void wxGenericTimerImpl::Init()
 {
@@ -187,7 +187,7 @@ wxGenericTimerImpl::~wxGenericTimerImpl()
     //     that wxTimer object was deleted under its hands -- this may
     //     happen if somebody is really nasty and deletes the timer
     //     from wxTimer::Notify()
-    if ( m_desc->deleteFlag != NULL )
+    if ( m_desc->deleteFlag != nullptr )
         *m_desc->deleteFlag = true;
 
     delete m_desc;

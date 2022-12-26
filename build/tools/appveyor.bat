@@ -9,12 +9,12 @@ goto %TOOLSET%
 
 :msbuild
 cd build\msw
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc12.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc14.sln %MSBUILD_LOGGER%
 cd ..\..\tests
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc12.sln %MSBUILD_LOGGER%
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc12.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc14.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc14.sln %MSBUILD_LOGGER%
 cd  ..\samples\minimal
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" minimal_vc12.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" minimal_vc14.sln %MSBUILD_LOGGER%
 goto :eof
 
 :nmake
@@ -65,7 +65,7 @@ goto :eof
 :cmake_qt
 set SKIPINSTALL=1
 set QT5DIR="C:\Qt\5.11\msvc2015_64"
-set CMAKE_CONFIGURE_FLAGS=-DCMAKE_PREFIX_PATH=%QT5DIR% -DwxBUILD_TOOLKIT="qt" -DCMAKE_CXX_STANDARD=11
+set CMAKE_CONFIGURE_FLAGS=-DCMAKE_PREFIX_PATH=%QT5DIR% -DwxBUILD_TOOLKIT="qt"
 goto cmake
 
 :cmake
@@ -116,11 +116,11 @@ if NOT "%SKIPINSTALL%"=="1" (
     echo.
     echo --- Test installed library
     echo.
-    set WXWIN=%WX_INSTALL_PATH%
+    set wxWidgets_DIR=%WX_INSTALL_PATH%
     mkdir build_cmake_install_test
     pushd build_cmake_install_test
     echo --- Configure minimal sample
-    cmake -G "%GENERATOR%" ..\samples\minimal
+    cmake -G "%GENERATOR%" -DCMAKE_CONFIGURATION_TYPES=%CONFIGURATION% ..\samples\minimal
     if ERRORLEVEL 1 goto error
     echo --- Building minimal sample with installed library
     cmake --build . --config %CONFIGURATION% -- %CMAKE_LOGGER%

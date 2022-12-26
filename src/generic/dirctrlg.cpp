@@ -354,7 +354,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     treeStyle |= wxTR_HIDE_ROOT;
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     treeStyle |= wxTR_NO_LINES;
 #endif
 
@@ -430,8 +430,8 @@ void wxGenericDirCtrl::Init()
     m_showHidden = false;
     m_currentFilter = 0;
     m_currentFilterStr.clear(); // Default: any file
-    m_treeCtrl = NULL;
-    m_filterListCtrl = NULL;
+    m_treeCtrl = nullptr;
+    m_filterListCtrl = nullptr;
 }
 
 wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID treeid, const wxPoint& pos, const wxSize& size, long treeStyle)
@@ -483,7 +483,7 @@ void wxGenericDirCtrl::SetupSections()
 
     size_t n, count = wxGetAvailableDrives(paths, names, icons);
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     wxString home = wxGetHomeDir();
     AddSection( home, _("Home directory"), 1);
     home += wxT("/Desktop");
@@ -1148,7 +1148,7 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
     else if (filter.empty() && m_filterListCtrl)
     {
         m_filterListCtrl->Destroy();
-        m_filterListCtrl = NULL;
+        m_filterListCtrl = nullptr;
     }
 
     wxString f, d;
@@ -1247,12 +1247,12 @@ bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
                                  long style)
 {
     m_dirCtrl = parent;
-    return wxChoice::Create(parent, treeid, pos, size, 0, NULL, style);
+    return wxChoice::Create(parent, treeid, pos, size, 0, nullptr, style);
 }
 
 void wxDirFilterListCtrl::Init()
 {
-    m_dirCtrl = NULL;
+    m_dirCtrl = nullptr;
 }
 
 void wxDirFilterListCtrl::OnSelFilter(wxCommandEvent& WXUNUSED(event))
@@ -1306,84 +1306,11 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
 
 // ----------------------------------------------------------------------------
-// wxFileIconsTable icons
-// ----------------------------------------------------------------------------
-
-#if 0
-#ifndef __WXGTK20__
-/* Computer (c) Julian Smart */
-static const char* const file_icons_tbl_computer_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"16 16 42 1",
-"r c #4E7FD0",
-"$ c #7198D9",
-"; c #DCE6F6",
-"q c #FFFFFF",
-"u c #4A7CCE",
-"# c #779DDB",
-"w c #95B2E3",
-"y c #7FA2DD",
-"f c #3263B4",
-"= c #EAF0FA",
-"< c #B1C7EB",
-"% c #6992D7",
-"9 c #D9E4F5",
-"o c #9BB7E5",
-"6 c #F7F9FD",
-", c #BED0EE",
-"3 c #F0F5FC",
-"1 c #A8C0E8",
-"  c None",
-"0 c #FDFEFF",
-"4 c #C4D5F0",
-"@ c #81A4DD",
-"e c #4377CD",
-"- c #E2EAF8",
-"i c #9FB9E5",
-"> c #CCDAF2",
-"+ c #89A9DF",
-"s c #5584D1",
-"t c #5D89D3",
-": c #D2DFF4",
-"5 c #FAFCFE",
-"2 c #F5F8FD",
-"8 c #DFE8F7",
-"& c #5E8AD4",
-"X c #638ED5",
-"a c #CEDCF2",
-"p c #90AFE2",
-"d c #2F5DA9",
-"* c #5282D0",
-"7 c #E5EDF9",
-". c #A2BCE6",
-"O c #8CACE0",
-/* pixels */
-"                ",
-"  .XXXXXXXXXXX  ",
-"  oXO++@#$%&*X  ",
-"  oX=-;:>,<1%X  ",
-"  oX23=-;:4,$X  ",
-"  oX5633789:@X  ",
-"  oX05623=78+X  ",
-"  oXqq05623=OX  ",
-"  oX,,,,,<<<$X  ",
-"  wXXXXXXXXXXe  ",
-"  XrtX%$$y@+O,, ",
-"  uyiiiiiiiii@< ",
-" ouiiiiiiiiiip<a",
-" rustX%$$y@+Ow,,",
-" dfffffffffffffd",
-"                "
-};
-#endif // !GTK+ 2
-#endif
-
-// ----------------------------------------------------------------------------
 // wxFileIconsTable & friends
 // ----------------------------------------------------------------------------
 
 // global instance of a wxFileIconsTable
-wxFileIconsTable* wxTheFileIconsTable = NULL;
+wxFileIconsTable* wxTheFileIconsTable = nullptr;
 
 // A module to allow icons table cleanup
 
@@ -1392,8 +1319,8 @@ class wxFileIconsTableModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxFileIconsTableModule);
 public:
     wxFileIconsTableModule() {}
-    bool OnInit() wxOVERRIDE { wxTheFileIconsTable = new wxFileIconsTable; return true; }
-    void OnExit() wxOVERRIDE
+    bool OnInit() override { wxTheFileIconsTable = new wxFileIconsTable; return true; }
+    void OnExit() override
     {
         wxDELETE(wxTheFileIconsTable);
     }
@@ -1412,8 +1339,8 @@ public:
 wxFileIconsTable::wxFileIconsTable()
     : m_size(16, 16)
 {
-    m_HashTable = NULL;
-    m_smallImageList = NULL;
+    m_HashTable = nullptr;
+    m_smallImageList = nullptr;
 }
 
 wxFileIconsTable::~wxFileIconsTable()
@@ -1442,7 +1369,7 @@ void wxFileIconsTable::Create(const wxSize& sz)
                                                    wxART_CMN_DIALOG,
                                                    sz));
     // computer
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // GTK24 uses this icon in the file open dialog
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
                                                    wxART_CMN_DIALOG,

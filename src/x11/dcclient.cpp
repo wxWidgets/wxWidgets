@@ -22,6 +22,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/scopedarray.h"
 #include "wx/vector.h"
 
 #include "wx/x11/private.h"
@@ -32,12 +33,10 @@
 #include "cairo-xlib.h"
 #endif
 
-#if wxUSE_UNICODE
 #include "glib.h"
 #include "pango/pangoxft.h"
 
 #include "pango_x.cpp"
-#endif
 
 //-----------------------------------------------------------------------------
 // local defines
@@ -62,7 +61,7 @@
 #define IS_16_PIX_HATCH(s) ((s)!=wxBRUSHSTYLE_CROSSDIAG_HATCH && (s)!=wxBRUSHSTYLE_HORIZONTAL_HATCH && (s)!=wxBRUSHSTYLE_VERTICAL_HATCH)
 
 static Pixmap  hatches[num_hatches];
-static Pixmap *hatch_bitmap = NULL;
+static Pixmap *hatch_bitmap = nullptr;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -129,7 +128,7 @@ static GC wxGetPoolGC( Window window, wxPoolGCType type )
     {
         if (!wxGCPool[i].m_gc)
         {
-            wxGCPool[i].m_gc = XCreateGC( wxGlobalDisplay(), window, 0, NULL );
+            wxGCPool[i].m_gc = XCreateGC( wxGlobalDisplay(), window, 0, nullptr );
             XSetGraphicsExposures( wxGlobalDisplay(), wxGCPool[i].m_gc, FALSE );
             wxGCPool[i].m_type = type;
             wxGCPool[i].m_used = false;
@@ -143,7 +142,7 @@ static GC wxGetPoolGC( Window window, wxPoolGCType type )
 
     wxFAIL_MSG( wxT("No GC available") );
 
-    return (GC) NULL;
+    return (GC) nullptr;
 }
 
 static void wxFreePoolGC( GC gc )
@@ -194,9 +193,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC* owner, wxWindow *window )
 
     m_display = (WXDisplay *) wxGlobalDisplay();
 
-#if wxUSE_UNICODE
     m_fontdesc = window->GetFont().GetNativeFontInfo()->description;
-#endif
 
     int screen = DefaultScreen( (Display*) m_display );
     m_cmap = (WXColormap) DefaultColormap( (Display*) m_display, screen );
@@ -220,20 +217,18 @@ wxWindowDCImpl::~wxWindowDCImpl()
 
 void wxWindowDCImpl::Init()
 {
-    m_display = NULL;
-    m_penGC = NULL;
-    m_brushGC = NULL;
-    m_textGC = NULL;
-    m_bgGC = NULL;
-    m_cmap = NULL;
+    m_display = nullptr;
+    m_penGC = nullptr;
+    m_brushGC = nullptr;
+    m_textGC = nullptr;
+    m_bgGC = nullptr;
+    m_cmap = nullptr;
     m_isMemDC = false;
     m_isScreenDC = false;
-    m_x11window = NULL;
+    m_x11window = nullptr;
 
-#if wxUSE_UNICODE
     m_context = wxTheApp->GetPangoContext();
-    m_fontdesc = NULL;
-#endif
+    m_fontdesc = nullptr;
 }
 
 void wxWindowDCImpl::SetUpDC()
@@ -411,8 +406,7 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
             //    (GC) m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
         }
 
-        CalcBoundingBox(x1, y1);
-        CalcBoundingBox(x2, y2);
+        CalcBoundingBox(x1, y1, x2, y2);
     }
 }
 
@@ -543,8 +537,7 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         }
     }
 
-    CalcBoundingBox (x1, y1);
-    CalcBoundingBox (x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
@@ -623,8 +616,7 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
         }
     }
 
-    CalcBoundingBox (x, y);
-    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
@@ -645,7 +637,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
     if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
     if (n <= 0) return;
 
-    XPoint *xpoints = new XPoint[n];
+    wxScopedArray<XPoint> xpoints(n);
     for (int i = 0; i < n; i++)
     {
         xpoints[i].x = XLOG2DEV (points[i].x + xoffset);
@@ -653,9 +645,7 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
 
         CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
-    XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints, n, 0 );
-
-    delete[] xpoints;
+    XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n, 0 );
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
@@ -666,7 +656,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
     if (n <= 0) return;
 
-    XPoint *xpoints = new XPoint[n + 1];
+    wxScopedArray<XPoint> xpoints(n + 1);
     int i;
     for (i = 0; i < n; i++)
     {
@@ -688,7 +678,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_textGC, xpoints, n, Complex, 0);
+                    (GC) m_textGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_textGC, 0, 0 );
             } else
@@ -698,7 +688,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginX % 15, m_deviceOriginY % 15 );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             } else
@@ -708,7 +698,7 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginX % 16, m_deviceOriginY % 16 );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             } else
@@ -719,14 +709,14 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
 
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
 
                 XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0 );
             }
             else
             {
                 XFillPolygon( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_brushGC, xpoints, n, Complex, 0);
+                    (GC) m_brushGC, xpoints.get(), n, Complex, 0);
             }
         }
 
@@ -736,11 +726,9 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             xpoints[i].x = xpoints[0].x;
             xpoints[i].y = xpoints[0].y;
 
-            XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints, n + 1, 0);
+            XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n + 1, 0);
         }
     }
-
-    delete[] xpoints;
 }
 
 void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -819,8 +807,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
         }
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -942,8 +929,7 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     }
 
     // this ignores the radius
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1019,8 +1005,7 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
         }
     }
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + width, y + height );
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
@@ -1037,7 +1022,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
 
     wxCHECK_RET( bitmap.IsOk(), wxT("invalid bitmap") );
 
-    bool is_mono = (bitmap.GetBitmap() != NULL);
+    bool is_mono = (bitmap.GetBitmap() != nullptr);
 
     /* scale/translate size and position */
     int xx = XLOG2DEV(x);
@@ -1046,8 +1031,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + w, y + h );
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_x11window) return;
 
@@ -1082,7 +1066,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     }
 
     /* apply mask if any */
-    WXPixmap mask = NULL;
+    WXPixmap mask = nullptr;
     if (use_bitmap.GetMask())
         mask = use_bitmap.GetMask()->GetBitmap();
 
@@ -1156,7 +1140,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
 
     wxCHECK_RET( bitmap.IsOk(), wxT("invalid bitmap") );
 
-    bool is_mono = (bitmap.GetBitmap() != NULL);
+    bool is_mono = (bitmap.GetBitmap() != nullptr);
 
     // scale/translate size and position
     int xx = XLOG2DEV(x);
@@ -1165,8 +1149,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox( x, y );
-    CalcBoundingBox( x + w, y + h );
+    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_x11window) return;
 
@@ -1201,7 +1184,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     }
 
     // apply mask if any
-    WXPixmap mask = NULL;
+    WXPixmap mask = nullptr;
     if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
 
     bool setClipMask = false;
@@ -1220,7 +1203,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
             Window xroot = RootWindow( xdisplay, xscreen );
 
             new_pixmap = XCreatePixmap( xdisplay, xroot, ww, hh, 1 );
-            GC gc = XCreateGC( xdisplay, new_pixmap, 0, NULL );
+            GC gc = XCreateGC( xdisplay, new_pixmap, 0, nullptr );
 
             XSetForeground( xdisplay, gc, BlackPixel(xdisplay,xscreen) );
 
@@ -1384,8 +1367,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         }
     }
 
-    CalcBoundingBox( xdest, ydest );
-    CalcBoundingBox( xdest + width, ydest + height );
+    CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height));
 
     // scale/translate size and position
     wxCoord xx = XLOG2DEV(xdest);
@@ -1438,12 +1420,12 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         }
 
         // apply mask if any
-        WXPixmap mask = NULL;
+        WXPixmap mask = nullptr;
         if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
 
         if (useMask && mask)
         {
-            WXPixmap new_mask = NULL;
+            WXPixmap new_mask = nullptr;
 #if 0
             if (!m_currentClippingRegion.IsNull())
             {
@@ -1583,7 +1565,6 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-#if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
 
@@ -1601,67 +1582,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     g_object_unref( G_OBJECT( layout ) );
 
-    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
-#else
-    XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
-
-    wxCHECK_RET( xfont, wxT("invalid font") );
-
-    // First draw a rectangle representing the text background, if a text
-    // background is specified
-    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxBRUSHSTYLE_TRANSPARENT))
-    {
-        // Since X draws from the baseline of the text, must add the text height
-        int cx = 0;
-        int cy = 0;
-        int ascent = 0;
-        int slen;
-        int direction, descent;
-
-        slen = strlen(text);
-        XCharStruct overall_return;
-
-        (void)XTextExtents(xfont, (const char*) text.c_str(), slen, &direction,
-                                 &ascent, &descent, &overall_return);
-
-        cx = overall_return.width;
-        cy = ascent + descent;
-        m_textBackgroundColour.CalcPixel(m_cmap);
-        m_textForegroundColour.CalcPixel(m_cmap);
-        XSetForeground ((Display*) m_display, (GC) m_textGC, m_textBackgroundColour.GetPixel());
-        XFillRectangle( (Display*) m_display, (Window) m_x11window,
-                    (GC) m_textGC, x, y, cx, cy );
-        XSetForeground ((Display*) m_display, (GC) m_textGC, m_textForegroundColour.GetPixel());
-
-    }
-
-    XSetFont( (Display*) m_display, (GC) m_textGC, xfont->fid );
-#if !wxUSE_NANOX
-    // This may be a test for whether the font is 16-bit, but it also
-    // seems to fail for valid 8-bit fonts too.
-    if (1) // (xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
-#endif
-    {
-        XDrawString( (Display*) m_display, (Window) m_x11window,
-            (GC) m_textGC, x, y + XFontStructGetAscent(xfont), text.c_str(), text.length() );
-    }
-
-#if 0
-    if (m_font.GetUnderlined())
-    {
-        wxCoord ul_y = y + XFontStructGetAscent(font);
-        if (font->descent > 0) ul_y++;
-        gdk_draw_line( m_x11window, m_textGC, x, ul_y, x + width, ul_y);
-    }
-
-    width = wxCoord(width / m_scaleX);
-    height = wxCoord(height / m_scaleY);
-
-    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
-#endif
-#endif
+    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
@@ -1711,7 +1632,6 @@ void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wx
         return;
     }
 
-#if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
 
     if (font)
@@ -1736,31 +1656,6 @@ void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wx
     if (externalLeading) (*externalLeading) = 0;  // ??
 
     g_object_unref( G_OBJECT( layout ) );
-#else
-    wxFont fontToUse = m_font;
-    if (font) fontToUse = *font;
-
-    wxCHECK_RET( fontToUse.IsOk(), wxT("invalid font") );
-
-    XFontStruct *xfont = (XFontStruct*) fontToUse.GetFontStruct( m_scaleY, m_display );
-
-    wxCHECK_RET( xfont, wxT("invalid font") );
-
-    int direction, ascent, descent2;
-    XCharStruct overall;
-
-    XTextExtents( xfont, (const char*) string.c_str(), string.length(), &direction,
-        &ascent, &descent2, &overall);
-
-    if (width)
-        *width = (wxCoord)( overall.width / m_scaleX );
-    if (height)
-        *height = (wxCoord)((ascent + descent2) / m_scaleY );
-    if (descent)
-        *descent = (wxCoord)(descent2 / m_scaleY );
-    if (externalLeading)
-        *externalLeading = 0; // ??
-#endif
 }
 
 wxCoord wxWindowDCImpl::GetCharWidth() const
@@ -1768,7 +1663,6 @@ wxCoord wxWindowDCImpl::GetCharWidth() const
     // Do not test for DC validity here for the same reasons as in
     // DoGetTextExtent() above.
 
-#if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
 
     if (m_fontdesc)
@@ -1782,20 +1676,6 @@ wxCoord wxWindowDCImpl::GetCharWidth() const
     g_object_unref( G_OBJECT( layout ) );
 
     return w;
-#else
-    wxCHECK_MSG( m_font.IsOk(), 0, wxT("invalid font") );
-
-    XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
-
-    wxCHECK_MSG( xfont, 0, wxT("invalid font") );
-
-    int direction, ascent, descent;
-    XCharStruct overall;
-
-    XTextExtents( xfont, "H", 1, &direction, &ascent, &descent, &overall );
-
-    return (wxCoord)(overall.width / m_scaleX);
-#endif
 }
 
 wxCoord wxWindowDCImpl::GetCharHeight() const
@@ -1803,7 +1683,6 @@ wxCoord wxWindowDCImpl::GetCharHeight() const
     // Do not test for DC validity here for the same reasons as in
     // DoGetTextExtent() above.
 
-#if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
 
     if (m_fontdesc)
@@ -1817,20 +1696,6 @@ wxCoord wxWindowDCImpl::GetCharHeight() const
     g_object_unref( G_OBJECT( layout ) );
 
     return h;
-#else
-    wxCHECK_MSG( m_font.IsOk(), 0, wxT("invalid font") );
-
-    XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
-
-    wxCHECK_MSG( xfont, 0, wxT("invalid font") );
-
-    int direction, ascent, descent;
-    XCharStruct overall;
-
-    XTextExtents( xfont, "H", 1, &direction, &ascent, &descent, &overall );
-
-    return (wxCoord)((ascent+descent) / m_scaleY);
-#endif
 }
 
 void wxWindowDCImpl::Clear()
@@ -1869,9 +1734,7 @@ void wxWindowDCImpl::SetFont( const wxFont &font )
 
     m_font = font;
 
-#if wxUSE_UNICODE
     m_fontdesc = font.GetNativeFontInfo()->description;
-#endif
 }
 
 void wxWindowDCImpl::SetPen( const wxPen &pen )
@@ -1959,7 +1822,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         default:
         {
             lineStyle = LineSolid;
-            req_dash = NULL;
+            req_dash = nullptr;
             req_nb_dash = 0;
             break;
         }
@@ -2351,13 +2214,13 @@ void wxWindowDCImpl::DestroyClippingRegion()
 void wxWindowDCImpl::Destroy()
 {
     if (m_penGC) wxFreePoolGC( (GC) m_penGC );
-    m_penGC = NULL;
+    m_penGC = nullptr;
     if (m_brushGC) wxFreePoolGC( (GC) m_brushGC );
-    m_brushGC = NULL;
+    m_brushGC = nullptr;
     if (m_textGC) wxFreePoolGC( (GC) m_textGC );
-    m_textGC = NULL;
+    m_textGC = nullptr;
     if (m_bgGC) wxFreePoolGC( (GC) m_bgGC );
-    m_bgGC = NULL;
+    m_bgGC = nullptr;
 }
 
 void wxWindowDCImpl::ComputeScaleAndOrigin()
@@ -2401,7 +2264,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl);
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window )
           : wxWindowDCImpl( owner, window )
 {
-    wxCHECK_RET( window, wxT("NULL window in wxClientDC::wxClientDC") );
+    wxCHECK_RET( window, wxT("null window in wxClientDC::wxClientDC") );
 
     m_x11window = (WXWindow*) window->GetClientAreaWindow();
 

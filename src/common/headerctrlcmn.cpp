@@ -113,9 +113,9 @@ int wxHeaderCtrlBase::GetColumnTitleWidth(const wxHeaderColumn& col)
     w += wxRendererNative::Get().GetHeaderButtonMargin(this);
 
     // if a bitmap is used, add space for it and 2px border:
-    wxBitmap bmp = col.GetBitmap();
+    wxBitmapBundle bmp = col.GetBitmapBundle();
     if ( bmp.IsOk() )
-        w += bmp.GetWidth() + 2;
+        w += bmp.GetPreferredLogicalSizeFor(this).GetWidth() + 2;
 
     return w;
 }

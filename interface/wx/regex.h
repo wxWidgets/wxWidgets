@@ -33,9 +33,9 @@ enum
         Use basic regular expression syntax, close to its POSIX definition,
         but with some extensions still available.
 
-        The word start/end boundary assertions @c "\<" and @c "\>" are only
-        available when using basic syntax, use @c "[[:<:]] and @c "[[:>:]]" or
-        just more general word boundary assertion @c "\b" when not using it.
+        The word start/end boundary assertions `\<` and `\>` are only
+        available when using basic syntax, use `[[:<:]]` and `[[:>:]]` or
+        just more general word boundary assertion `\b` when not using it.
      */
     wxRE_BASIC    = 2,
 
@@ -46,9 +46,11 @@ enum
     wxRE_NOSUB    = 8,
 
     /**
-        If not set, treat '\n' as an ordinary character, otherwise it is
-        special: it is not matched by '.' and '^' and '$' always match
-        after/before it regardless of the setting of wxRE_NOT[BE]OL.
+        If not set, treat `\n` as an ordinary character.
+
+        Otherwise `\n` is special: it is not matched by `.` and `^` and `$`
+        always match after/before it regardless of the setting of
+        ::wxRE_NOTBOL and ::wxRE_NOTEOL.
     */
     wxRE_NEWLINE  = 16,
 
@@ -238,8 +240,12 @@ public:
         May only be called after successful call to Matches() and only if @c wxRE_NOSUB
         was @b not used in Compile().
 
-        Returns @false if no match or if an error occurred.
-
+        This function only returns @false if the regex didn't match at all or
+        one of the arguments is invalid (e.g. @a index is greater or equal than
+        the number of captures) and returns @true in all the other cases, even
+        if the corresponding capture group didn't match anything, which can be
+        the case when using captures in different alternation (@c "|"). In this
+        case the returned @a len is @c 0 and @a start is @c -1.
     */
     bool GetMatch(size_t* start, size_t* len, size_t index = 0) const;
 
@@ -267,7 +273,7 @@ public:
     */
     bool IsValid() const;
 
-    //@{
+    ///@{
     /**
         Matches the precompiled regular expression against the string @a text,
         returns @true if matches and @false otherwise.
@@ -289,7 +295,7 @@ public:
     */
     bool Matches(const wxChar* text, int flags = 0) const;
     bool Matches(const wxChar* text, int flags, size_t len) const;
-    //@}
+    ///@}
 
     /**
         Matches the precompiled regular expression against the string @a text,

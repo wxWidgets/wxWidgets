@@ -189,7 +189,7 @@ See @ref overview_config for the descriptions of all features of this class.
 
 This sample shows how to use wxDebugReport class to
 generate a debug report in case of a program crash or otherwise. On start up,
-it proposes to either crash itself (by dereferencing a NULL pointer) or
+it proposes to either crash itself (by dereferencing a @NULL) or
 generate debug report without doing it. Next it initializes the debug report
 with standard information adding a custom file to it (just a timestamp) and
 allows to view the information gathered using
@@ -690,10 +690,14 @@ utility under macOS).
 
 @section page_samples_shaped Shaped Window Sample
 
-@sampleabout{how to implement a shaped or transparent window\, and a window showing/hiding with effect}
+@sampleabout{Showing unusual, e.g. shaped or semi-transparent windows}
+
+This sample shows windows with non-rectangular shapes and non-opaque windows as
+well as how the windows can be shown with a special effect.
 
 @see wxTopLevelWindow::SetShape(), wxTopLevelWindow::SetTransparent(),
-wxWindow::ShowWithEffect(), wxWindow::HideWithEffect()
+wxWindow::ShowWithEffect(), wxWindow::HideWithEffect(),
+wxWindow::SetBackgroundStyle()
 
 @sampledir{shaped}
 

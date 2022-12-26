@@ -137,7 +137,7 @@ size_t wxLZMAInputStream::OnSysRead(void* outbuf, size_t size)
     m_stream->avail_out = size;
 
     // Decompress input as long as we don't have any errors (including EOF, as
-    // it doesn't make sense to continue after it neither) and have space to
+    // it doesn't make sense to continue after it either) and have space to
     // decompress it to.
     while ( m_lasterror == wxSTREAM_NO_ERROR && m_stream->avail_out > 0 )
     {
@@ -384,11 +384,11 @@ wxLZMAClassFactory::wxLZMAClassFactory()
 const wxChar * const *
 wxLZMAClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *mime[] = { wxT("application/xz"), NULL };
-    static const wxChar *encs[] = { wxT("xz"), NULL };
-    static const wxChar *exts[] = { wxT(".xz"), NULL };
+    static const wxChar *mime[] = { wxT("application/xz"), nullptr };
+    static const wxChar *encs[] = { wxT("xz"), nullptr };
+    static const wxChar *exts[] = { wxT(".xz"), nullptr };
 
-    const wxChar* const* ret = NULL;
+    const wxChar* const* ret = nullptr;
     switch ( type )
     {
         case wxSTREAM_PROTOCOL: ret = encs; break;

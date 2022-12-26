@@ -111,15 +111,15 @@ protected:
 private:
     const char *GetDataBuffer();
     const unsigned char *GetCompressedData();
-    void doTestStreamData(int input_flag, int output_flag, int compress_level, const wxMemoryBuffer *buf = NULL);
+    void doTestStreamData(int input_flag, int output_flag, int compress_level, const wxMemoryBuffer *buf = nullptr);
     void doDecompress_ExternalData(const unsigned char *data, const char *value, size_t data_size, size_t value_size, int flag = wxZLIB_AUTO);
 
 private:
     // Implement base class functions.
-    virtual wxZlibInputStream  *DoCreateInStream() wxOVERRIDE;
-    virtual wxZlibOutputStream *DoCreateOutStream() wxOVERRIDE;
-    virtual void DoDeleteInStream() wxOVERRIDE;
-    virtual void DoDeleteOutStream() wxOVERRIDE;
+    virtual wxZlibInputStream  *DoCreateInStream() override;
+    virtual wxZlibOutputStream *DoCreateOutStream() override;
+    virtual void DoDeleteInStream() override;
+    virtual void DoDeleteOutStream() override;
 
     // Helper that can be used to create new wx compatibility tests...
     // Otherwise not used by the tests.
@@ -138,9 +138,9 @@ private:
 
 zlibStream::zlibStream()
     :m_SizeCompressedData(0),
-     m_pCompressedData(NULL),
-     m_pTmpMemInStream(NULL),
-     m_pTmpMemOutStream(NULL)
+     m_pCompressedData(nullptr),
+     m_pTmpMemInStream(nullptr),
+     m_pTmpMemOutStream(nullptr)
 {
     // Init the data buffer.
     for (size_t i = 0; i < DATABUFFER_SIZE; i++)
@@ -311,7 +311,7 @@ const unsigned char *zlibStream::GetCompressedData()
         memstream_out.CopyTo(m_pCompressedData, m_SizeCompressedData);
     }
 
-    CPPUNIT_ASSERT(m_pCompressedData != NULL);
+    CPPUNIT_ASSERT(m_pCompressedData != nullptr);
     return m_pCompressedData;
 }
 
@@ -381,8 +381,8 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
 void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char *value, size_t data_size, size_t value_size, int flag)
 {
     // See that the input is ok.
-    wxASSERT(data != NULL);
-    wxASSERT(value != NULL);
+    wxASSERT(data != nullptr);
+    wxASSERT(value != nullptr);
     wxASSERT(data_size > 0);
     wxASSERT(value_size > 0);
 
@@ -494,12 +494,12 @@ wxZlibOutputStream *zlibStream::DoCreateOutStream()
 void zlibStream::DoDeleteInStream()
 {
     delete m_pTmpMemInStream;
-    m_pTmpMemInStream = NULL;
+    m_pTmpMemInStream = nullptr;
 }
 void zlibStream::DoDeleteOutStream()
 {
     delete m_pTmpMemOutStream;
-    m_pTmpMemOutStream = NULL;
+    m_pTmpMemOutStream = nullptr;
 }
 
 

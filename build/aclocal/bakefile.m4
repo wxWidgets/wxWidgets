@@ -710,7 +710,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.12"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.13"
 
     dnl includes autoconf_inc.m4:
     $1

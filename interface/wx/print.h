@@ -195,6 +195,9 @@ public:
 
         Pass a print preview object plus other normal frame arguments.
         The print preview object will be destroyed by the frame when it closes.
+
+        Note that @a size typically should @e not be specified explicitly to
+        let the frame use its default size, adapted to its contents.
     */
     wxPreviewFrame(wxPrintPreviewBase* preview, wxWindow* parent,
                    const wxString& title = "Print Preview",
@@ -308,7 +311,7 @@ public:
         printing, and the address of an optional block of printer data, which will
         be copied to the print preview object's print data.
 
-        If @a printoutForPrinting is non-@NULL, a @b "Print..." button will be placed on
+        If @a printoutForPrinting is non-null, a @b "Print..." button will be placed on
         the preview frame so that the user can print directly from the preview interface.
 
         @remarks
@@ -319,8 +322,8 @@ public:
         Use IsOk() to check whether the wxPrintPreview object was created correctly.
     */
     wxPrintPreview(wxPrintout* printout,
-                   wxPrintout* printoutForPrinting = NULL,
-                   wxPrintDialogData* data = NULL);
+                   wxPrintout* printoutForPrinting = nullptr,
+                   wxPrintDialogData* data = nullptr);
     wxPrintPreview(wxPrintout* printout,
                    wxPrintout* printoutForPrinting,
                    wxPrintData* data);
@@ -459,7 +462,7 @@ public:
 
         @see wxPrintDialogData, wxPrintData
     */
-    wxPrinter(wxPrintDialogData* data = NULL);
+    wxPrinter(wxPrintDialogData* data = nullptr);
 
     /**
         Creates the default printing abort window, with a cancel button.

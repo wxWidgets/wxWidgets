@@ -16,6 +16,7 @@
 #include "wx/defs.h"
 
 #include <CoreFoundation/CoreFoundation.h>
+#include <CoreGraphics/CoreGraphics.h>      // At least for CGFloat
 
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
@@ -48,7 +49,7 @@
 void WXDLLIMPEXP_CORE wxMacStringToPascal( const wxString&from , unsigned char * to );
 wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from );
 
-WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = NULL );
+WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent = nullptr );
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
@@ -68,9 +69,7 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 
 #if wxUSE_GUI
 
-#if wxOSX_USE_IPHONE
-#include <CoreGraphics/CoreGraphics.h>
-#else
+#if !wxOSX_USE_IPHONE
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
@@ -125,9 +124,9 @@ WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 // UI
 
 CGSize WXDLLIMPEXP_CORE wxOSXGetImageSize(WXImage image);
-CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double *scale = NULL );
+CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double *scale = nullptr );
 CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg);
-CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = NULL);
+CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = nullptr);
 WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
 double WXDLLIMPEXP_CORE wxOSXGetImageScaleFactor(WXImage image);
 
@@ -255,7 +254,7 @@ public :
 
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
 
-    bool IsOk() const { return GetWXWidget() != NULL; }
+    bool IsOk() const { return GetWXWidget() != nullptr; }
 
     // not only the control itself, but also all its parents must be visible
     // in order for this function to return true
@@ -303,7 +302,7 @@ public :
     // native view coordinates are topleft to bottom right (flipped regarding CoreGraphics origin)
     virtual bool        IsFlipped() const { return true; }
 
-    virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
+    virtual void        SetNeedsDisplay( const wxRect* where = nullptr ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
 
     virtual void        EnableFocusRing(bool WXUNUSED(enabled)) {}
@@ -323,12 +322,12 @@ public :
 
     virtual void        SetDefaultButton( bool isDefault ) = 0;
     virtual void        PerformClick() = 0;
-    virtual void        SetLabel( const wxString& title, wxFontEncoding encoding ) = 0;
+    virtual void        SetLabel( const wxString& title ) = 0;
 #if wxUSE_MARKUP && wxOSX_USE_COCOA
     virtual void        SetLabelMarkup( const wxString& WXUNUSED(markup) ) { }
 #endif
-    virtual void        SetInitialLabel( const wxString& title, wxFontEncoding encoding )
-                            { SetLabel(title, encoding); }
+    virtual void        SetInitialLabel( const wxString& title )
+                            { SetLabel(title); }
 
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
@@ -363,7 +362,7 @@ public :
     // state changing logic is required from the outside
     virtual bool        ButtonClickDidStateChange() = 0;
 
-    virtual void        InstallEventHandler( WXWidget control = NULL ) = 0;
+    virtual void        InstallEventHandler( WXWidget control = nullptr ) = 0;
 
     virtual bool        EnableTouchEvents(int eventsMask) = 0;
 
@@ -667,7 +666,7 @@ public:
     virtual void            ListScrollTo( unsigned int n ) = 0;
     virtual int             ListGetTopItem() const = 0;
     virtual int             ListGetCountPerPage() const = 0;
-    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) = 0;
+    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = nullptr ) = 0;
     virtual void            UpdateLineToEnd( unsigned int n) = 0;
 
     // accessing content
@@ -750,6 +749,8 @@ public :
     virtual void EnableAutomaticQuoteSubstitution(bool WXUNUSED(enable)) {}
     virtual void EnableAutomaticDashSubstitution(bool WXUNUSED(enable)) {}
 
+    virtual void EnableNewLineReplacement(bool WXUNUSED(enable)) {}
+    virtual bool GetNewLineReplacement() { return true; }
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
 
     virtual bool SetHint(const wxString& WXUNUSED(hint)) { return false; }
@@ -944,7 +945,7 @@ public :
         return false;
     }
 
-    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) = 0;
+    virtual void SetTitle( const wxString& title ) = 0;
 
     virtual bool EnableCloseButton(bool enable) = 0;
     virtual bool EnableMaximizeButton(bool enable) = 0;
@@ -962,7 +963,7 @@ public :
 
     virtual void ShowWithoutActivating() { Show(true); }
 
-    virtual bool EnableFullScreenView(bool enable) = 0;
+    virtual bool EnableFullScreenView(bool enable, long style) = 0;
 
     virtual bool ShowFullScreen(bool show, long style)= 0;
 
@@ -1042,7 +1043,7 @@ public:
     typedef T element_type;
 
     wxNSObjRef()
-        : m_ptr(NULL)
+        : m_ptr(nullptr)
     {
     }
 
@@ -1094,7 +1095,7 @@ public:
         return m_ptr;
     }
 
-    void reset( T p = NULL )
+    void reset( T p = nullptr )
     {
         wxMacCocoaRelease(m_ptr);
         m_ptr = p; // Automatic conversion should occur
@@ -1104,7 +1105,7 @@ public:
     T release()
     {
         T p = m_ptr;
-        m_ptr = NULL;
+        m_ptr = nullptr;
         return p;
     }
 

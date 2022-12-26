@@ -115,7 +115,7 @@ public:
     */
     wxGenericProgressDialog(const wxString& title, const wxString& message,
                             int maximum = 100,
-                            wxWindow* parent = NULL,
+                            wxWindow* parent = nullptr,
                             int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL);
 
     /**
@@ -158,7 +158,7 @@ public:
 
         @see wxGauge::Pulse(), Update()
     */
-    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool* skip = NULL);
+    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool* skip = nullptr);
 
     /**
         Can be used to continue with the dialog, after the user had clicked the "Abort" button.
@@ -242,7 +242,7 @@ public:
             this is set to @true.
     */
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString,
-                        bool* skip = NULL);
+                        bool* skip = nullptr);
 };
 
 
@@ -259,6 +259,6 @@ class wxProgressDialog : public wxGenericProgressDialog
 public:
     wxProgressDialog( const wxString& title, const wxString& message,
                       int maximum = 100,
-                      wxWindow *parent = NULL,
+                      wxWindow *parent = nullptr,
                       int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE );
 };

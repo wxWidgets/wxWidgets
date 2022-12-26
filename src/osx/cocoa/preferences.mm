@@ -38,18 +38,17 @@
 #import <AppKit/NSWindow.h>
 
 
-wxBitmap wxStockPreferencesPage::GetLargeIcon() const
+wxBitmapBundle wxStockPreferencesPage::GetIcon() const
 {
-    wxBitmapBundle bundle;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
         switch ( m_kind )
         {
             case Kind_General:
-                bundle = wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
+                return wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape" accessibilityDescription:nil]);
             case Kind_Advanced:
-                bundle = wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
+                return wxOSXMakeBundleFromImage([NSImage imageWithSystemSymbolName:@"gearshape.2" accessibilityDescription:nil]);
         }
     }
 #endif
@@ -57,12 +56,12 @@ wxBitmap wxStockPreferencesPage::GetLargeIcon() const
     switch ( m_kind )
     {
         case Kind_General:
-            bundle = wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNamePreferencesGeneral]);
+            return wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNamePreferencesGeneral]);
         case Kind_Advanced:
-            bundle = wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNameAdvanced]);
+            return wxOSXMakeBundleFromImage([NSImage imageNamed:NSImageNameAdvanced]);
     }
 
-    return bundle.IsOk() ? bundle.GetBitmap(bundle.GetDefaultSize()) : wxNullBitmap;
+    return wxBitmapBundle();
 }
 
 
@@ -70,11 +69,11 @@ class wxCocoaPrefsWindow : public wxFrame
 {
 public:
     wxCocoaPrefsWindow(const wxString& title)
-        : wxFrame(NULL, wxID_ANY, title,
+        : wxFrame(nullptr, wxID_ANY, title,
                   wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX | wxMINIMIZE_BOX)),
           m_toolbarRealized(false),
-          m_visiblePage(NULL)
+          m_visiblePage(nullptr)
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
         if ( WX_IS_MACOS_AVAILABLE(11,0) )
@@ -100,7 +99,7 @@ public:
                       "can't add more preferences pages after showing the window" );
 
         const wxString title = page->GetName();
-        wxBitmapBundle bmp(page->GetLargeIcon());
+        wxBitmapBundle bmp(page->GetIcon());
         wxASSERT_MSG( bmp.IsOk(), "OS X requires valid bitmap for preference page" );
 
         int toolId = wxIdManager::ReserveId();
@@ -112,7 +111,7 @@ public:
         tool->SetClientData(info.get());
     }
 
-    virtual bool Show(bool show) wxOVERRIDE
+    virtual bool Show(bool show) override
     {
         if ( show && !m_toolbarRealized )
         {
@@ -128,14 +127,14 @@ public:
         return wxFrame::Show(show);
     }
 
-    virtual bool ShouldPreventAppExit() const wxOVERRIDE { return false; }
+    virtual bool ShouldPreventAppExit() const override { return false; }
 
 protected:
     // Native preferences windows resize when the selected panel changes and
     // the resizing is animated, so we need to override DoMoveWindow.
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE
+    virtual void DoMoveWindow(int x, int y, int width, int height) override
     {
-        NSRect r = wxToNSRect(NULL, wxRect(x, y, width, height));
+        NSRect r = wxToNSRect(nullptr, wxRect(x, y, width, height));
         NSWindow *win = (NSWindow*)GetWXWindow();
         [win setFrame:r display:YES animate:YES];
     }
@@ -144,7 +143,7 @@ protected:
 private:
     struct PageInfo : public wxObject
     {
-        PageInfo(wxPreferencesPage *p) : page(p), win(NULL) {}
+        PageInfo(wxPreferencesPage *p) : page(p), win(nullptr) {}
 
         wxSharedPtr<wxPreferencesPage> page;
         wxWindow *win;
@@ -259,7 +258,7 @@ class wxCocoaPreferencesEditorImpl : public wxPreferencesEditorImpl
 {
 public:
     wxCocoaPreferencesEditorImpl(const wxString& title)
-        : m_win(NULL), m_title(title)
+        : m_win(nullptr), m_title(title)
     {
     }
 
@@ -272,12 +271,12 @@ public:
             m_win->Destroy();
     }
 
-    virtual void AddPage(wxPreferencesPage* page) wxOVERRIDE
+    virtual void AddPage(wxPreferencesPage* page) override
     {
         GetWin()->AddPage(page);
     }
 
-    virtual void Show(wxWindow* WXUNUSED(parent)) wxOVERRIDE
+    virtual void Show(wxWindow* WXUNUSED(parent)) override
     {
         // OS X preferences windows don't have parents, they are independent
         // windows, so we just ignore the 'parent' argument.
@@ -286,7 +285,7 @@ public:
         win->Raise();
     }
 
-    virtual void Dismiss() wxOVERRIDE
+    virtual void Dismiss() override
     {
         // Don't destroy the window, only hide it, because OS X preferences
         // window typically remember their state even when closed. Reopening

@@ -223,7 +223,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         }
     }
 
-    xpm_lines[lines_cnt] = NULL;
+    xpm_lines[lines_cnt] = nullptr;
 
     /*
      *  Read the image:
@@ -497,7 +497,7 @@ static const rgbRecord theRGBRecords[] =
     {"whitesmoke", myRGB(245, 245, 245)},
     {"yellow", myRGB(255, 255, 0)},
     {"yellowgreen", myRGB(50, 216, 56)},
-    {NULL, myRGB(0, 0, 0)}
+    {nullptr, myRGB(0, 0, 0)}
 };
 static const int numTheRGBRecords = 235;
 
@@ -544,7 +544,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     // lot of gray...
 
     // so first extract ' '
-    while ((p = strchr(name, ' ')) != NULL)
+    while ((p = strchr(name, ' ')) != nullptr)
     {
         while (*(p))            // till eof of string
         {
@@ -562,7 +562,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 
     // substitute Grey with Gray, else rgbtab.h would have more than 100
     // 'duplicate' entries
-    if ( (grey = strstr(name, "grey")) != NULL )
+    if ( (grey = strstr(name, "grey")) != nullptr )
         grey[2] = 'a';
 
     // check for special 'none' colour:
@@ -616,13 +616,13 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 static const char *ParseColor(const char *data)
 {
     static const char *const targets[] =
-                        {"c ", "g ", "g4 ", "m ", "b ", "s ", NULL};
+                        {"c ", "g ", "g4 ", "m ", "b ", "s ", nullptr};
 
     const char *p, *r;
     const char *q;
     int i;
 
-    for (i = 0; targets[i] != NULL; i++)
+    for (i = 0; targets[i] != nullptr; i++)
     {
         r = data;
         for (q = targets[i]; *r != '\0'; r++)
@@ -642,7 +642,7 @@ static const char *ParseColor(const char *data)
             q = targets[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 struct wxXPMColourMapData
@@ -654,7 +654,7 @@ WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap);
 
 wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 {
-    wxCHECK_MSG(xpm_data, wxNullImage, wxT("NULL XPM data") );
+    wxCHECK_MSG(xpm_data, wxNullImage, wxT("null XPM data") );
 
     wxImage img;
     int count;
@@ -709,7 +709,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         const char *clr_def;
         clr_def = ParseColor(xmpColLine + chars_per_pixel);
 
-        if ( clr_def == NULL )
+        if ( clr_def == nullptr )
         {
             wxLogError(_("XPM: malformed colour definition '%s' at line %d!"),
                        xmpColLine, (int)(1 + i));

@@ -102,13 +102,13 @@ public:
             May be @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, @c wxITEM_CHECK or
             @c wxITEM_RADIO.
         @param subMenu
-            If non-@NULL, indicates that the menu item is a submenu.
+            If non-null, indicates that the menu item is a submenu.
     */
-    wxMenuItem(wxMenu* parentMenu = NULL, int id = wxID_SEPARATOR,
+    wxMenuItem(wxMenu* parentMenu = nullptr, int id = wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& helpString = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu* subMenu = NULL);
+               wxMenu* subMenu = nullptr);
 
     /**
         Destructor.
@@ -138,7 +138,7 @@ public:
         For example:
 
         @code
-          wxMenuItem::GetLabelfromText("&Hello\tCtrl-h");
+          wxMenuItem::GetLabelText("&Hello\tCtrl-h");
         @endcode
 
         will return just @c "Hello".
@@ -151,7 +151,7 @@ public:
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
         Returns the background colour associated with the menu item.
@@ -161,18 +161,38 @@ public:
     wxColour& GetBackgroundColour() const;
 
     /**
-        Returns the checked or unchecked bitmap.
+        Returns the item bitmap.
 
-        @onlyfor{wxmsw}
+        This method exists only for compatibility, please use GetBitmapBundle()
+        in the new code.
     */
-    virtual const wxBitmap& GetBitmap(bool checked = true) const;
+    wxBitmap GetBitmap() const;
 
     /**
-        Returns the bitmap to be used for disabled items.
+        Returns the checked or unchecked bitmap.
+
+        This overload only exists in wxMSW, avoid using it in portable code.
+    */
+    wxBitmap GetBitmap(bool checked) const;
+
+    /**
+        Returns the bitmap bundle containing the bitmap used for this item.
+
+        The returned bundle is invalid, i.e. empty, if no bitmap is associated
+        with the item.
+
+        @see SetBitmap()
+
+        @since 3.2.0
+    */
+    wxBitmapBundle GetBitmapBundle() const;
+
+    /**
+        Returns the bitmap used for disabled items.
 
         @onlyfor{wxmsw}
     */
-    virtual const wxBitmap& GetDisabledBitmap() const;
+    virtual wxBitmap GetDisabledBitmap() const;
 
     /**
         Returns the font associated with the menu item.
@@ -256,7 +276,7 @@ public:
 
         @deprecated This function is deprecated in favour of GetItemLabel().
 
-        @see GetLabelFromText()
+        @see GetItemLabel()
     */
     const wxString& GetText() const;
 
@@ -268,24 +288,24 @@ public:
     wxColour& GetTextColour() const;
 
     /**
-       Extract the accelerator from the given menu string, return NULL if none
+       Extract the accelerator from the given menu string, return @NULL if none
        found.
     */
     static wxAcceleratorEntry *GetAccelFromString(const wxString& label);
 
     /**
-       Get our accelerator or NULL (caller must delete the pointer)
+       Get our accelerator or @NULL (caller must delete the pointer)
     */
     virtual wxAcceleratorEntry *GetAccel() const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Checkers
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if the item is a check item.
@@ -332,14 +352,14 @@ public:
     */
     bool IsSubMenu() const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Setters
     */
-    //@{
+    ///@{
 
     /**
         Sets the background colour associated with the menu item.
@@ -351,23 +371,26 @@ public:
     /**
         Sets the bitmap for the menu item.
 
-        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if
-        @a checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
-        otherwise.
-
-        SetBitmap() must be called before the item is appended to the menu,
-        i.e. appending the item without a bitmap and setting one later is not
-        guaranteed to work. But the bitmap can be changed or reset later if it
-        had been set up initially.
-
         Notice that GTK+ uses a global setting called @c gtk-menu-images to
         determine if the images should be shown in the menus at all. If it is
         off (which is the case in e.g. Gnome 2.28 by default), no images will
         be shown, consistently with the native behaviour.
-
-        @onlyfor{wxmsw,wxosx,wxgtk}
     */
-    virtual void SetBitmap(const wxBitmap& bmp, bool checked = true);
+    void SetBitmap(const wxBitmapBundle& bmp);
+
+    /**
+        Sets the checked or unchecked bitmap for the menu item.
+
+        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if
+        @a checked is @true or SetBitmaps(wxNullBitmap, bmp) otherwise.
+
+        Note that different bitmaps for checked and unchecked item states are
+        not supported in most ports, while setting just a single bitmap using
+        the overload above is supported in all of them.
+
+        @onlyfor{wxmsw}
+    */
+    void SetBitmap(const wxBitmapBundle& bmp, bool checked);
 
     /**
         Sets the checked/unchecked bitmaps for the menu item.
@@ -375,15 +398,15 @@ public:
 
         @onlyfor{wxmsw}
     */
-    void SetBitmaps(const wxBitmap& checked,
-                    const wxBitmap& unchecked = wxNullBitmap);
+    void SetBitmaps(const wxBitmapBundle& checked,
+                    const wxBitmapBundle& unchecked = wxNullBitmap);
 
     /**
         Sets the to be used for disabled menu items.
 
         @onlyfor{wxmsw}
     */
-    void SetDisabledBitmap(const wxBitmap& disabled);
+    void SetDisabledBitmap(const wxBitmapBundle& disabled);
 
 
     /**
@@ -416,7 +439,10 @@ public:
         <tt>\\t</tt> followed by a valid key combination (e.g. <tt>CTRL+V</tt>).
         Its general syntax is any combination of @c "CTRL", @c "RAWCTRL",  @c
         "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
-        @c '-' or @c '+' characters and followed by the accelerator itself.
+        @c '-' or @c '+' characters and followed by the accelerator itself. Note that
+        the displayed accelerator can differ from the string specified here though,
+        e.g. <tt>Ctrl+X</tt> could be actually shown on the screen when <tt>Ctrl-X</tt>
+        is used.
         Notice that @c CTRL corresponds to the "Ctrl" key on most platforms but
         not under macOS where it is mapped to "Cmd" key on Mac keyboard.
         Usually this is exactly what you want in portable code but if you
@@ -580,7 +606,7 @@ public:
 
         @since 3.1.6
     */
-    void AddExtraAccel(wxAcceleratorEntry *accel);
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel);
 
     /**
        Clear the extra accelerators list.
@@ -591,6 +617,6 @@ public:
     */
     void ClearExtraAccels();
 
-    //@}
+    ///@}
 };
 

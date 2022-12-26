@@ -30,7 +30,7 @@ wxQtProgressBar::wxQtProgressBar( wxWindow *parent, wxGauge *handler )
 
 
 wxGauge::wxGauge() :
-    m_qtProgressBar(NULL)
+    m_qtProgressBar(nullptr)
 {
 }
 

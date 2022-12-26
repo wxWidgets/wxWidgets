@@ -37,15 +37,6 @@
 
     #include <stdlib.h>
 
-    // Defining _CRTBLD should never be necessary at all, but keep it for now
-    // as there is no time to retest all the compilers before 3.0 release.
-    // Definitely do not use it with MSVS 2013 as defining it results in errors
-    // if the standard <assert.h> is included afterwards.
-    #if !defined(_CRTBLD) && !wxCHECK_VISUALC_VERSION(12)
-        // Needed when building with pure MS SDK
-        #define _CRTBLD
-    #endif
-
     #include <crtdbg.h>
 
     #undef WXDEBUG_NEW

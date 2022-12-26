@@ -17,6 +17,8 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#include "wx/private/localeset.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -43,6 +45,8 @@ private:
         CPPUNIT_TEST( Compare );
         CPPUNIT_TEST( CompareNoCase );
         CPPUNIT_TEST( Contains );
+        CPPUNIT_TEST( ToInt );
+        CPPUNIT_TEST( ToUInt );
         CPPUNIT_TEST( ToLong );
         CPPUNIT_TEST( ToULong );
 #ifdef wxLongLong_t
@@ -78,6 +82,8 @@ private:
     void Compare();
     void CompareNoCase();
     void Contains();
+    void ToInt();
+    void ToUInt();
     void ToLong();
     void ToULong();
 #ifdef wxLongLong_t
@@ -191,7 +197,10 @@ void StringTestCase::Format()
 
 void StringTestCase::FormatUnicode()
 {
-#if wxUSE_UNICODE
+    // At least under FreeBSD vsnprintf(), used by wxString::Format(), doesn't
+    // work with Unicode strings unless a UTF-8 locale is used, so set it.
+    wxLocaleSetter loc("C.UTF-8");
+
     const char *UNICODE_STR = "Iestat\xC4\xAB %i%i";
     //const char *UNICODE_STR = "Iestat\xCC\x84 %i%i";
 
@@ -200,7 +209,6 @@ void StringTestCase::FormatUnicode()
     wxString expected(fmt);
     expected.Replace("%i", "1");
     CPPUNIT_ASSERT_EQUAL( expected, s );
-#endif // wxUSE_UNICODE
 }
 
 void StringTestCase::Constructors()
@@ -211,13 +219,11 @@ void StringTestCase::Constructors()
     CPPUNIT_ASSERT_EQUAL( "Hell", wxString("Hello", 4) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString("Hello", 5) );
 
-#if wxUSE_UNICODE
     CPPUNIT_ASSERT_EQUAL( L"", wxString(L'Z', 0) );
     CPPUNIT_ASSERT_EQUAL( L"Z", wxString(L'Z') );
     CPPUNIT_ASSERT_EQUAL( L"ZZZZ", wxString(L'Z', 4) );
     CPPUNIT_ASSERT_EQUAL( L"Hell", wxString(L"Hello", 4) );
     CPPUNIT_ASSERT_EQUAL( L"Hello", wxString(L"Hello", 5) );
-#endif // wxUSE_UNICODE
 
     CPPUNIT_ASSERT_EQUAL( 0, wxString(wxString(), 17).length() );
 
@@ -238,8 +244,8 @@ void StringTestCase::Constructors()
     const char *end = wxStrchr(s, '!');
     CPPUNIT_ASSERT_EQUAL( "really", wxString(start, end) );
 
-    // test if creating string from NULL C pointer works:
-    CPPUNIT_ASSERT_EQUAL( "", wxString((const char *)NULL) );
+    // test if creating string from null C pointer works:
+    CPPUNIT_ASSERT_EQUAL( "", wxString((const char *)nullptr) );
 }
 
 void StringTestCase::StaticConstructors()
@@ -260,9 +266,7 @@ void StringTestCase::StaticConstructors()
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
     CPPUNIT_ASSERT_EQUAL( "Hello", wxString::FromUTF8("Hello") );
 
-#if wxUSE_UNICODE
     CPPUNIT_ASSERT_EQUAL( 2, wxString::FromUTF8("h\xc3\xa9llo", 3).length() );
-#endif // wxUSE_UNICODE
 
 
     //CPPUNIT_ASSERT_EQUAL( 1, wxString::FromUTF8("", 1).length() );
@@ -280,13 +284,11 @@ void StringTestCase::Extraction()
     CPPUNIT_ASSERT( wxStrcmp( s.substr(3, 5).c_str() , wxT("lo, w") ) == 0 );
     CPPUNIT_ASSERT( wxStrcmp( s.substr(3).c_str() , wxT("lo, world!") ) == 0 );
 
-#if wxUSE_UNICODE
     static const char *germanUTF8 = "Oberfl\303\244che";
     wxString strUnicode(wxString::FromUTF8(germanUTF8));
 
     CPPUNIT_ASSERT( strUnicode.Mid(0, 10) == strUnicode );
     CPPUNIT_ASSERT( strUnicode.Mid(7, 2) == "ch" );
-#endif // wxUSE_UNICODE
 
     wxString rest;
 
@@ -602,7 +604,8 @@ enum
     Number_Unsigned = 2,    // if not specified, works for signed conversion
     Number_Signed   = 4,    // if not specified, works for unsigned
     Number_LongLong = 8,    // only for long long tests
-    Number_Long     = 16    // only for long tests
+    Number_Long     = 16,   // only for long tests
+    Number_Int      = 32    // only for int tests
 };
 
 #ifdef wxLongLong_t
@@ -612,6 +615,38 @@ typedef long TestValue_t;
 #endif
 
 wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
+static const struct ToIntData
+{
+    const wxChar *str;
+    TestValue_t value;
+    int flags;
+    int base;
+
+    int IValue() const { return value; }
+    unsigned int UIValue() const { return value; }
+
+    bool IsOk() const { return !(flags & Number_Invalid); }
+} intData[] =
+{
+    { wxT("1"), 1, Number_Ok },
+    { wxT("0"), 0, Number_Ok },
+    { wxT("a"), 0, Number_Invalid },
+    { wxT("12345"), 12345, Number_Ok },
+    { wxT("--1"), 0, Number_Invalid },
+
+    { wxT("-1"), -1, Number_Signed | Number_Int },
+    { wxT("-1"), (TestValue_t)UINT_MAX, Number_Unsigned | Number_Int | Number_Invalid },
+
+    { wxT("2147483647"), (TestValue_t)INT_MAX, Number_Int | Number_Signed },
+    { wxT("2147483648"), (TestValue_t)INT_MAX, Number_Int | Number_Signed | Number_Invalid },
+
+    { wxT("-2147483648"), (TestValue_t)INT_MIN, Number_Int | Number_Signed },
+    { wxT("-2147483649"), (TestValue_t)INT_MIN, Number_Int | Number_Signed | Number_Invalid },
+
+    { wxT("4294967295"), (TestValue_t)UINT_MAX, Number_Int | Number_Unsigned },
+    { wxT("4294967296"), (TestValue_t)UINT_MAX, Number_Int | Number_Unsigned | Number_Invalid },
+};
 
 static const struct ToLongData
 {
@@ -669,6 +704,64 @@ static const struct ToLongData
 };
 
 wxGCC_WARNING_RESTORE(missing-field-initializers)
+
+void StringTestCase::ToInt()
+{
+    int i;
+    for (size_t n = 0; n < WXSIZEOF(intData); n++)
+    {
+        const ToIntData &id = intData[n];
+
+        if (id.flags & (Number_Unsigned))
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL(id.IsOk(),
+            wxString(id.str).ToInt(&i, id.base));
+
+        if (id.IsOk())
+            CPPUNIT_ASSERT_EQUAL(id.IValue(), i);
+    }
+
+    // special case: check that the output is not modified if the parsing
+    // failed completely
+    i = 17;
+    CPPUNIT_ASSERT(!wxString("foo").ToInt(&i));
+    CPPUNIT_ASSERT_EQUAL(17, i);
+
+    // also check that it is modified if we did parse something successfully in
+    // the beginning of the string
+    CPPUNIT_ASSERT(!wxString("9 cats").ToInt(&i));
+    CPPUNIT_ASSERT_EQUAL(9, i);
+}
+
+void StringTestCase::ToUInt()
+{
+    unsigned int i;
+    for (size_t n = 0; n < WXSIZEOF(intData); n++)
+    {
+        const ToIntData &id = intData[n];
+
+        if (id.flags & (Number_Signed))
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL(id.IsOk(),
+            wxString(id.str).ToUInt(&i, id.base));
+
+        if (id.IsOk())
+            CPPUNIT_ASSERT_EQUAL(id.UIValue(), i);
+    }
+
+    // special case: check that the output is not modified if the parsing
+    // failed completely
+    i = 17;
+    CPPUNIT_ASSERT(!wxString("foo").ToUInt(&i));
+    CPPUNIT_ASSERT_EQUAL(17, i);
+
+    // also check that it is modified if we did parse something successfully in
+    // the beginning of the string
+    CPPUNIT_ASSERT(!wxString("9 cats").ToUInt(&i));
+    CPPUNIT_ASSERT_EQUAL(9, i);
+}
 
 void StringTestCase::ToLong()
 {
@@ -934,7 +1027,6 @@ void StringTestCase::StringBuf()
 
 void StringTestCase::UTF8Buf()
 {
-#if wxUSE_UNICODE
     // "czech" in Czech ("cestina"):
     static const char *textUTF8 = "\304\215e\305\241tina";
     static const wchar_t textUTF16[] = {0x10D, 0x65, 0x161, 0x74, 0x69, 0x6E, 0x61, 0};
@@ -949,7 +1041,6 @@ void StringTestCase::UTF8Buf()
         buf.SetLength(5);
     }
     CPPUNIT_ASSERT(s == wxString(textUTF16, 0, 3));
-#endif // wxUSE_UNICODE
 }
 
 
@@ -1070,15 +1161,9 @@ void StringTestCase::BeforeAndAfter()
     // parts: before the first "=", in between the two "="s and after the last
     // one. This allows to avoid duplicating the string contents (which has to
     // be different for Unicode and ANSI builds) in the tests below.
-#if wxUSE_UNICODE
     #define FIRST_PART L"letter"
     #define MIDDLE_PART L"\xe9;\xe7a"
     #define LAST_PART L"l\xe0"
-#else // !wxUSE_UNICODE
-    #define FIRST_PART "letter"
-    #define MIDDLE_PART "e;ca"
-    #define LAST_PART "la"
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     const wxString s(FIRST_PART wxT("=") MIDDLE_PART wxT("=") LAST_PART);
 
@@ -1150,7 +1235,6 @@ void StringTestCase::ScopedBuffers()
 
 void StringTestCase::SupplementaryUniChar()
 {
-#if wxUSE_UNICODE
     // Test wxString(wxUniChar ch, size_t nRepeat = 1),
     // which is implemented upon assign(size_t n, wxUniChar ch).
     {
@@ -1313,5 +1397,4 @@ void StringTestCase::SupplementaryUniChar()
     /* Not tested here:
          find_first_of, find_last_of, find_first_not_of, find_last_not_of
     */
-#endif
 }

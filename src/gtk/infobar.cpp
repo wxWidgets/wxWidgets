@@ -42,14 +42,14 @@ class wxInfoBarGTKImpl
 public:
     wxInfoBarGTKImpl()
     {
-        m_label = NULL;
-        m_close = NULL;
+        m_label = nullptr;
+        m_close = nullptr;
     }
 
     // label for the text shown in the bar
     GtkWidget *m_label;
 
-    // the default close button, NULL if not needed (m_buttons is not empty) or
+    // the default close button, nullptr if not needed (m_buttons is not empty) or
     // not created yet
     GtkWidget *m_close;
 
@@ -150,8 +150,8 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     // Run-time check is needed because the bug was introduced in 3.10 and
     // fixed in 3.22.29 (see 6b4d95e86dabfcdaa805fbf068a99e19736a39a4 and a
     // couple of previous commits in GTK+ repository).
-    if ( gtk_check_version(3, 10, 0) == NULL &&
-            gtk_check_version(3, 22, 29) != NULL )
+    if ( gtk_check_version(3, 10, 0) == nullptr &&
+            gtk_check_version(3, 22, 29) != nullptr )
     {
         GObject* const
             revealer = gtk_widget_get_template_child(GTK_WIDGET(m_widget),
@@ -192,7 +192,7 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     GtkMessageType type;
     if ( wxGTKImpl::ConvertMessageTypeFromWX(flags, &type) )
         gtk_info_bar_set_message_type(GTK_INFO_BAR(m_widget), type);
-    gtk_label_set_text(GTK_LABEL(m_impl->m_label), wxGTK_CONV(msg));
+    gtk_label_set_text(GTK_LABEL(m_impl->m_label), msg.utf8_str());
     gtk_label_set_line_wrap(GTK_LABEL(m_impl->m_label), TRUE );
 #if GTK_CHECK_VERSION(2,10,0)
     if( wx_is_at_least_gtk2( 10 ) )
@@ -234,9 +234,9 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
 
     GtkWidget* button = gtk_info_bar_add_button(GTK_INFO_BAR(m_widget),
 #ifdef __WXGTK4__
-        wxGTK_CONV(label.empty() ? wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)) : label),
+        (label.empty() ? wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)) : label).utf8_str(),
 #else
-        label.empty() ? wxGetStockGtkID(btnid) : static_cast<const char*>(wxGTK_CONV(label)),
+        label.empty() ? wxGetStockGtkID(btnid) : static_cast<const char*>(label.utf8_str()),
 #endif
         btnid);
 
@@ -277,7 +277,7 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
     if ( m_impl->m_close )
     {
         gtk_widget_destroy(m_impl->m_close);
-        m_impl->m_close = NULL;
+        m_impl->m_close = nullptr;
     }
 
     GtkWidget * const button = GTKAddButton(btnid, label);

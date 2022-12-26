@@ -44,7 +44,7 @@ public:
     wxGenericAboutDialog() { Init(); }
 
     // ctor which fully initializes the object
-    wxGenericAboutDialog(const wxAboutDialogInfo& info, wxWindow* parent = NULL)
+    wxGenericAboutDialog(const wxAboutDialogInfo& info, wxWindow* parent = nullptr)
     {
         Init();
 
@@ -52,7 +52,7 @@ public:
     }
 
     // this method must be called if and only if the default ctor was used
-    bool Create(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
+    bool Create(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 protected:
     // this virtual method may be overridden to add some more controls to the
@@ -80,7 +80,7 @@ protected:
 
 private:
     // common part of all ctors
-    void Init() { m_sizerText = NULL; }
+    void Init() { m_sizerText = nullptr; }
 
 #if !wxUSE_MODAL_ABOUT_DIALOG
     // An explicit handler for deleting the dialog when it's closed is needed
@@ -94,7 +94,7 @@ private:
 
 // unlike wxAboutBox which can show either the native or generic about dialog,
 // this function always shows the generic one
-WXDLLIMPEXP_CORE void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
+WXDLLIMPEXP_CORE void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 #endif // wxUSE_ABOUTDLG
 

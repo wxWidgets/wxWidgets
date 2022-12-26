@@ -20,10 +20,10 @@ public:
     wxOSXTimerImpl(wxTimer *timer);
     virtual ~wxOSXTimerImpl();
 
-    virtual bool Start(int milliseconds = -1, bool one_shot = false) wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
+    virtual bool Start(int milliseconds = -1, bool one_shot = false) override;
+    virtual void Stop() override;
 
-    virtual bool IsRunning() const wxOVERRIDE;
+    virtual bool IsRunning() const override;
 
 private:
     wxOSXTimerInfo *m_info;

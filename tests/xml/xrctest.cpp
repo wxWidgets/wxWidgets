@@ -161,7 +161,7 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::ObjectReferences", "[xrc]")
         // In xrc there's now a dialog containing two panels, one an object
         // reference of the other
         wxDialog dlg;
-        REQUIRE( wxXmlResource::Get()->LoadDialog(&dlg, NULL, "dialog") );
+        REQUIRE( wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "dialog") );
         // Might as well test XRCCTRL too
         wxPanel* panel1 = XRCCTRL(dlg,"panel1",wxPanel);
         wxPanel* panel2 = XRCCTRL(dlg,"ref_of_panel1",wxPanel);
@@ -286,8 +286,8 @@ TEST_CASE("XRC::EnvVarInPath", "[xrc]")
             wxUnsetEnv("WX_TEST_ENV_IN_PATH");
             wxXmlResource::Get()->SetFlags(wxXRC_USE_LOCALE);
         }
-        virtual wxObject* DoCreateResource() wxOVERRIDE { return NULL; }
-        virtual bool CanHandle(wxXmlNode*) wxOVERRIDE { return false; }
+        virtual wxObject* DoCreateResource() override { return nullptr; }
+        virtual bool CanHandle(wxXmlNode*) override { return false; }
         bool varIsSet;
     } handler(xmlDoc.GetRoot());
 

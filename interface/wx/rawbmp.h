@@ -205,7 +205,7 @@ public:
         */
         void MoveTo(const PixelData& data, int x, int y);
 
-        //@{
+        ///@{
         /**
             Data Access: Access to individual colour components.
         */
@@ -213,7 +213,7 @@ public:
         ChannelType& Green();
         ChannelType& Blue();
         ChannelType& Alpha();
-        //@}
+        ///@}
     };
 };
 

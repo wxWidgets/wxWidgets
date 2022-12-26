@@ -74,10 +74,10 @@ static const int DEFAULT_FIELD_WIDTH = 25;
 
 wxStatusBar::wxStatusBar()
 {
-    SetParent(NULL);
+    SetParent(nullptr);
     m_hWnd = 0;
     m_windowId = 0;
-    m_pDC = NULL;
+    m_pDC = nullptr;
 }
 
 WXDWORD wxStatusBar::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -183,7 +183,7 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     }
 
     // shrink/expand the array:
-    m_tooltips.resize(nFields, NULL);
+    m_tooltips.resize(nFields, nullptr);
 #endif // wxUSE_TOOLTIPS
 
     wxStatusBarBase::SetFieldsCount(nFields, widths);
@@ -352,7 +352,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
             // create a new tooltip for this pane if needed
             if (GetField(nField).IsEllipsized())
                 m_tooltips[nField] = new wxToolTip(this, nField, GetStatusText(nField), rc);
-            //else: leave m_tooltips[nField]==NULL
+            //else: leave m_tooltips[nField]==nullptr
         }
     }
 #endif // wxUSE_TOOLTIPS
@@ -459,7 +459,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
             r.left -= 2;
         }
 
-        ::GetThemeBackgroundContentRect(theme, NULL,
+        ::GetThemeBackgroundContentRect(theme, nullptr,
                                                               1 /* SP_PANE */, 0,
                                                               &r, &r);
     }
@@ -521,7 +521,7 @@ void wxStatusBar::DoMoveWindow(int x, int y, int width, int height)
         // WM_WINDOWPOSCHANGING since we don't want to change pos/size later
         // we must use SWP_NOCOPYBITS here otherwise it paints incorrectly
         // if other windows are size deferred
-        ::SetWindowPos(GetHwnd(), NULL, x, y, width, height,
+        ::SetWindowPos(GetHwnd(), nullptr, x, y, width, height,
                        SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE
                        | SWP_NOCOPYBITS | SWP_NOSENDCHANGING
                        );
@@ -643,9 +643,9 @@ bool wxStatusBar::MSWProcessMessage(WXMSG* pMsg)
     {
         // for a tooltip to be shown, we need to relay mouse events to it;
         // this is typically done by wxWindowMSW::MSWProcessMessage but only
-        // if wxWindow::m_tooltip pointer is non-NULL.
+        // if wxWindow::m_tooltip pointer is non-null.
         // Since wxStatusBar has multiple tooltips for a single HWND, it keeps
-        // wxWindow::m_tooltip == NULL and then relays mouse events here:
+        // wxWindow::m_tooltip == nullptr and then relays mouse events here:
         MSG *msg = (MSG *)pMsg;
         if ( msg->message == WM_MOUSEMOVE )
             wxToolTip::RelayEvent(pMsg);
@@ -660,7 +660,7 @@ bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* W
     {
         // see comment in wxStatusBar::MSWProcessMessage for more info;
         // basically we need to override wxWindow::MSWOnNotify because
-        // we have wxWindow::m_tooltip always NULL but we still use tooltips...
+        // we have wxWindow::m_tooltip always null but we still use tooltips...
 
         NMHDR* hdr = (NMHDR *)lParam;
 

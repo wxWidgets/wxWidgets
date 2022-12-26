@@ -14,8 +14,8 @@ class MyApp: public wxApp
 public:
     MyApp() {}
 
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
     void Draw(wxDC& dc);
 
@@ -40,7 +40,7 @@ class MyCanvas;
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame(const wxString& title);
 
     void OnAngleUp(wxCommandEvent& event);
     void OnAngleDown(wxCommandEvent& event);
@@ -73,10 +73,10 @@ private:
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas(wxFrame *frame, const wxPoint& pos, const wxSize& size, long style = wxRETAINED);
+    MyCanvas(wxFrame *frame, long style);
 
     //void OnPaint(wxPaintEvent& evt);
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -89,10 +89,10 @@ public:
     MyPrintout(MyFrame* frame, const wxString &title = "My printout")
         : wxPrintout(title) { m_frame=frame; }
 
-    virtual bool OnPrintPage(int page) wxOVERRIDE;
-    virtual bool HasPage(int page) wxOVERRIDE;
-    virtual bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
-    virtual void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
+    virtual bool OnPrintPage(int page) override;
+    virtual bool HasPage(int page) override;
+    virtual bool OnBeginDocument(int startPage, int endPage) override;
+    virtual void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
 
     void DrawPageOne();
     void DrawPageTwo();

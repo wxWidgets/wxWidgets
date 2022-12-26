@@ -9,6 +9,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   check-unix:
     runs-on: ubuntu-20.04
@@ -16,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install codespell
         run: |
@@ -33,7 +36,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Check for trailing whitespace and TABs
         run: |
@@ -47,12 +50,14 @@ jobs:
                 ':!configure' \
                 ':!descrip.mms' \
                 ':!install-sh' \
+                ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
                 ':!**/Info*.plist*' \
                 ':!**/*.sln' \
                 ':!**/*.vcproj' \
-                ':!**/*.xpm'
+                ':!**/*.xpm' \
+                ':!src/stc/scintilla/'
 
 
   check-mixed-eol:
@@ -61,7 +66,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install dos2unix
         run: |
@@ -70,3 +75,22 @@ jobs:
       - name: Check for mixed EOL
         run: |
             ./misc/scripts/check_mixed_eol.sh
+
+  check-cxx-style:
+    runs-on: ubuntu-20.04
+    name: Check C++ Style
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check for obsolete macros use
+        run: |
+            git fetch --depth=1 origin master
+            if git diff origin/master \
+               ':!.github/workflows/code_checks.yml' \
+               ':!src/stc/scintilla/' \
+               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^_@]NULL)'; then
+              echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
+              exit 1
+            fi

@@ -220,8 +220,8 @@ class XmlResApp : public wxAppConsole
 {
 public:
     // don't use builtin cmd line parsing:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual int OnRun() wxOVERRIDE;
+    virtual bool OnInit() override { return true; }
+    virtual int OnRun() override;
 
 private:
     void ParseParams(const wxCmdLineParser& cmdline);
@@ -271,7 +271,7 @@ int XmlResApp::OnRun()
 #if 0 // not yet implemented
         { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of necessary handlers to this file" },
 #endif
-        { wxCMD_LINE_PARAM,  NULL, NULL, "input file(s)",
+        { wxCMD_LINE_PARAM,  nullptr, nullptr, "input file(s)",
               wxCMD_LINE_VAL_STRING,
               wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_OPTION_MANDATORY },
 
@@ -417,7 +417,7 @@ wxArrayString XmlResApp::PrepareTempFiles()
     for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
         if (flagVerbose)
-            wxPrintf(wxT("processing ") + parFiles[i] +  wxT("...\n"));
+            wxPrintf(wxT("processing %s...\n"), parFiles[i]);
 
         wxXmlDocument doc;
 
@@ -472,7 +472,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
 
    // wxBitmapButton:
    wxXmlNode *parent = node->GetParent();
-   if (parent != NULL &&
+   if (parent != nullptr &&
        parent->GetAttribute(wxT("class"), wxT("")) == wxT("wxBitmapButton") &&
        (name == wxT("focus") ||
         name == wxT("disabled") ||
@@ -496,7 +496,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
 
    // URLs in wxHtmlWindow:
    if ( name == wxT("url") &&
-        parent != NULL &&
+        parent != nullptr &&
         parent->GetAttribute(wxT("class"), wxT("")) == wxT("wxHtmlWindow") )
    {
        // FIXME: this is wrong for e.g. http:// URLs
@@ -510,7 +510,7 @@ static bool NodeContainsFilename(wxXmlNode *node)
 void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxString& inputPath)
 {
     // Is 'node' XML node element?
-    if (node == NULL) return;
+    if (node == nullptr) return;
     if (node->GetType() != wxXML_ELEMENT_NODE) return;
 
     bool containsFilename = NodeContainsFilename(node);
@@ -529,7 +529,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
                 fullname = inputPath + wxFILE_SEP_PATH + n->GetContent();
 
             if (flagVerbose)
-                wxPrintf(wxT("adding     ") + fullname +  wxT("...\n"));
+                wxPrintf(wxT("adding     %s...\n"), fullname);
 
             wxString filename = GetInternalFileName(n->GetContent(), flist);
             n->SetContent(filename);
@@ -569,7 +569,7 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
     files.RemoveLast();
 
     if (flagVerbose)
-        wxPrintf(wxT("compressing ") + parOutput +  wxT("...\n"));
+        wxPrintf(wxT("compressing %s...\n"), parOutput);
 
     wxString cwd = wxGetCwd();
     wxSetWorkingDirectory(parOutputPath);
@@ -622,7 +622,7 @@ static wxString FileToCppArray(wxString filename, int num)
             output << wxT("\n");
         }
         output << tmp;
-        linelng += tmp.Length()+1;
+        linelng += tmp.length()+1;
     }
 
     delete[] buffer;
@@ -639,7 +639,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
     unsigned i;
 
     if (flagVerbose)
-        wxPrintf(wxT("creating C++ source file ") + parOutput +  wxT("...\n"));
+        wxPrintf(wxT("creating C++ source file %s...\n"), parOutput);
 
     file.Write(""
 "//\n"
@@ -780,7 +780,7 @@ static wxString FileToPythonArray(wxString filename, int num)
             output << wxT("\\\n");
         }
         output << tmp;
-        linelng += tmp.Length();
+        linelng += tmp.length();
     }
 
     delete[] buffer;
@@ -797,7 +797,7 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
     unsigned i;
 
     if (flagVerbose)
-        wxPrintf(wxT("creating Python source file ") + parOutput +  wxT("...\n"));
+        wxPrintf(wxT("creating Python source file %s...\n"), parOutput);
 
     file.Write(
        "#\n"
@@ -881,7 +881,7 @@ ExtractedStrings XmlResApp::FindStrings()
     for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
         if (flagVerbose)
-            wxPrintf(wxT("processing ") + parFiles[i] +  wxT("...\n"));
+            wxPrintf(wxT("processing %s...\n"), parFiles[i]);
 
         wxXmlDocument doc;
         if (!doc.Load(parFiles[i]))
@@ -991,7 +991,7 @@ XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
     ExtractedStrings arr;
 
     wxXmlNode *n = node;
-    if (n == NULL) return arr;
+    if (n == nullptr) return arr;
     n = n->GetChildren();
 
     while (n)

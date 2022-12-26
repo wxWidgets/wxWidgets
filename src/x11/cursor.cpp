@@ -49,8 +49,8 @@ private:
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_cursor = NULL;
-    m_display = NULL;
+    m_cursor = nullptr;
+    m_display = nullptr;
 }
 
 wxCursorRefData::~wxCursorRefData()

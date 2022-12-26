@@ -47,7 +47,7 @@ public:
     /**
         Construct a new stream object writing the data to a string.
 
-        If the provided pointer is non-@NULL, data will be written to it.
+        If the provided pointer is non-null, data will be written to it.
         Otherwise, an internal string is used for the data written to this
         stream, use GetString() to get access to it.
 
@@ -62,7 +62,7 @@ public:
         with default value of this argument the data written to the stream must
         be valid UTF-8, pass @c wxConvISO8859_1 to deal with arbitrary 8 bit data.
     */
-    explicit wxStringOutputStream(wxString* pString = NULL, wxMBConv& conv = wxConvUTF8);
+    explicit wxStringOutputStream(wxString* pString = nullptr, wxMBConv& conv = wxConvUTF8);
 
     /**
         Returns the string containing all the data written to the stream so far.

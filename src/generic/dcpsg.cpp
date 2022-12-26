@@ -290,7 +290,7 @@ wxPostScriptDCImpl::wxPostScriptDCImpl( wxPrinterDC *owner, const wxPrintData& d
 
 void wxPostScriptDCImpl::Init()
 {
-    m_pstream = NULL;
+    m_pstream = nullptr;
 
     m_currentRed = 0;
     m_currentGreen = 0;
@@ -311,7 +311,7 @@ wxPostScriptDCImpl::~wxPostScriptDCImpl ()
     if (m_pstream)
     {
         fclose( m_pstream );
-        m_pstream = NULL;
+        m_pstream = nullptr;
     }
 }
 
@@ -420,8 +420,7 @@ void wxPostScriptDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord
     buffer.Replace( ",", "." );
     PsPrint( buffer );
 
-    CalcBoundingBox( x1, y1 );
-    CalcBoundingBox( x2, y2 );
+    CalcBoundingBox( x1, y1, x2, y2 );
 }
 
 void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
@@ -500,8 +499,7 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
         PsPrint( "stroke\n" );
     }
 
-    CalcBoundingBox( xc-i_radius, yc-i_radius );
-    CalcBoundingBox( xc+i_radius, yc+i_radius );
+    CalcBoundingBox( xc-i_radius, yc-i_radius, xc+i_radius, yc+i_radius );
 }
 
 void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
@@ -536,8 +534,7 @@ void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x ,y );
-        CalcBoundingBox( x+w, y+h );
+        CalcBoundingBox( wxPoint(x, y), wxSize(w, h) );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -553,8 +550,7 @@ void wxPostScriptDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x ,y );
-        CalcBoundingBox( x+w, y+h );
+        CalcBoundingBox( wxPoint(x, y), wxSize(w, h) );
     }
 }
 
@@ -787,8 +783,7 @@ void wxPostScriptDCImpl::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -810,8 +805,7 @@ void wxPostScriptDCImpl::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 }
 
@@ -860,8 +854,7 @@ void wxPostScriptDCImpl::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -892,8 +885,7 @@ void wxPostScriptDCImpl::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord w
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x, y );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
     }
 }
 
@@ -917,8 +909,7 @@ void wxPostScriptDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxC
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x - width, y - height );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( x - width, y - height, x + width, y + height );
     }
 
     if ( m_pen.IsNonTransparent() )
@@ -934,8 +925,7 @@ void wxPostScriptDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxC
         buffer.Replace( ",", "." );
         PsPrint( buffer );
 
-        CalcBoundingBox( x - width, y - height );
-        CalcBoundingBox( x + width, y + height );
+        CalcBoundingBox( x - width, y - height, x + width, y + height );
     }
 }
 
@@ -1220,7 +1210,7 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
                 PsPrint( buffer );
             }
             PsPrint ("] 0 setdash\n");
-            psdash = 0;
+            psdash = nullptr;
         }
         break;
         case wxPENSTYLE_SOLID:
@@ -1360,7 +1350,7 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
     SetPSFont();
 
     wxCoord text_descent;
-    GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
+    GetOwner()->GetTextExtent(text, nullptr, nullptr, &text_descent);
     int size = m_font.GetPointSize();
 
 //    wxCoord by = y + (wxCoord)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
@@ -1375,10 +1365,7 @@ void wxPostScriptDCImpl::DoDrawText( const wxString& text, wxCoord x, wxCoord y 
 
     DrawAnyText(textbuf, text_descent, size);
 
-    wxCoord w, h;
-    GetOwner()->GetMultiLineTextExtent(text, &w, &h);
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + w , y + h);
+    CalcBoundingBox(wxPoint(x, y), GetOwner()->GetMultiLineTextExtent(text));
 }
 
 void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord y, double angle )
@@ -1399,7 +1386,7 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
 
     // Calculate bottom-left coordinates of the rotated text
     wxCoord text_descent;
-    GetOwner()->GetTextExtent(text, NULL, NULL, &text_descent);
+    GetOwner()->GetTextExtent(text, nullptr, nullptr, &text_descent);
     int size = m_font.GetPointSize();
     double rad = wxDegToRad(angle);
     wxCoord bx = wxRound(x + (size - text_descent) * sin(rad));
@@ -1423,13 +1410,11 @@ void wxPostScriptDCImpl::DoDrawRotatedText( const wxString& text, wxCoord x, wxC
     wxCoord w, h;
     GetOwner()->GetMultiLineTextExtent(text, &w, &h);
     // "upper left" and "upper right"
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 void wxPostScriptDCImpl::SetBackground (const wxBrush& brush)
@@ -1446,7 +1431,7 @@ void wxPostScriptDCImpl::SetLogicalFunction(wxRasterOperationMode WXUNUSED(funct
 void wxPostScriptDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
-    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points, "null pointer to spline points?");
     wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     SetPen( m_pen );
@@ -1614,6 +1599,15 @@ wxSize wxPostScriptDCImpl::GetPPI() const
     return wxSize( DPI, DPI );
 }
 
+wxSize wxPostScriptDCImpl::FromDIP(const wxSize& sz) const
+{
+    return sz;
+}
+
+wxSize wxPostScriptDCImpl::ToDIP(const wxSize& sz) const
+{
+    return sz;
+}
 
 bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
 {
@@ -1715,7 +1709,7 @@ void wxPostScriptDCImpl::EndDoc ()
 
     if ( m_pstream ) {
         fclose( m_pstream );
-        m_pstream = NULL;
+        m_pstream = nullptr;
     }
 
     // Reset the list of fonts for which PS font registration code was generated.
@@ -1980,7 +1974,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     /
     /  example:
     /
-    /    wxPostScriptDC dc(NULL, true);
+    /    wxPostScriptDC dc(nullptr, true);
     /    if (dc.IsOk()){
     /      wxSetAFMPath("d:\\wxw161\\afm\\");
     /      dc.StartDoc("Test");
@@ -2059,7 +2053,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
             }
         }
 
-        FILE *afmFile = NULL;
+        FILE *afmFile = nullptr;
 
         // Get the directory of the AFM files
         wxString afmName;
@@ -2113,7 +2107,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
            /
            /  when the font has changed, we read in the right AFM file and store the
            /  character widths in an array, which is processed below (see point 3.). */
-        if (afmFile==NULL)
+        if (afmFile==nullptr)
         {
             wxLogDebug( wxT("GetTextExtent: can't open AFM file '%s'"), afmName );
             wxLogDebug( wxT("               using approximate values"));
@@ -2132,7 +2126,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
             char line[256];
             int ascii,cWidth;
             /* read in the file and parse it */
-            while(fgets(line,sizeof(line),afmFile)!=NULL)
+            while(fgets(line,sizeof(line),afmFile)!=nullptr)
             {
                 /* A.) check for descender definition */
                 if (strncmp(line,"Descender",9)==0)

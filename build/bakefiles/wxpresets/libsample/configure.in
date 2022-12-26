@@ -32,9 +32,8 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CXXCPP
 
-dnl we want to always have DEBUG==WX_DEBUG and UNICODE==WX_UNICODE
+dnl we want to always have DEBUG==WX_DEBUG
 WX_DEBUG=$DEBUG
-WX_UNICODE=$UNICODE
 
 dnl the following macros will search for the best matching wxWidgets build 
 dnl (taking in count the values of the --enable-debug|unicode|shared and of

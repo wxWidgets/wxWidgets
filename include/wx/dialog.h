@@ -104,7 +104,7 @@ public:
     // not set yet and hence must be passed explicitly to it so that we could
     // check whether it contains wxDIALOG_NO_PARENT bit.
     //
-    // This function always returns a valid top level window or NULL.
+    // This function always returns a valid top level window or nullptr.
     wxWindow *GetParentForModalDialog(wxWindow *parent, long style) const
     {
         return DoGetParentForDialog(wxDIALOG_MODALITY_APP_MODAL, parent, style);
@@ -142,7 +142,7 @@ public:
 
     // returns a horizontal wxBoxSizer containing the given buttons
     //
-    // notice that the returned sizer can be NULL if no buttons are put in the
+    // notice that the returned sizer can be null if no buttons are put in the
     // sizer (this mostly happens under smart phones and other atypical
     // platforms which have hardware buttons replacing OK/Cancel and such)
     wxSizer *CreateButtonSizer(long flags);
@@ -171,7 +171,7 @@ public:
 
     // Returns a content window if there is one. This can be used by the layout adapter, for
     // example to make the pages of a book control into scrolling windows
-    virtual wxWindow* GetContentWindow() const { return NULL; }
+    virtual wxWindow* GetContentWindow() const { return nullptr; }
 
     // Add an id to the list of main button identifiers that should be in the button sizer
     void AddMainButtonId(wxWindowID id) { m_mainButtonIds.Add((int) id); }
@@ -262,7 +262,7 @@ private:
                                    long style) const;
 
     // helper of DoGetParentForDialog(): returns the passed in window if it
-    // can be used as parent for this kind of dialog or NULL if it can't
+    // can be used as parent for this kind of dialog or nullptr if it can't
     wxWindow *CheckIfCanBeUsedAsParent(wxDialogModality modality,
                                        wxWindow *parent) const;
 
@@ -324,10 +324,10 @@ public:
 // Overrides
 
     // Indicate that adaptation should be done
-    virtual bool CanDoLayoutAdaptation(wxDialog* dialog) wxOVERRIDE;
+    virtual bool CanDoLayoutAdaptation(wxDialog* dialog) override;
 
     // Do layout adaptation
-    virtual bool DoLayoutAdaptation(wxDialog* dialog) wxOVERRIDE;
+    virtual bool DoLayoutAdaptation(wxDialog* dialog) override;
 
 // Implementation
 
@@ -349,8 +349,8 @@ public:
 #endif // wxUSE_BUTTON
 
     // Reparent the controls to the scrolled window, except those in buttonSizer
-    virtual void ReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer = NULL);
-    static void DoReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer = NULL);
+    virtual void ReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer = nullptr);
+    static void DoReparentControls(wxWindow* parent, wxWindow* reparentTo, wxSizer* buttonSizer = nullptr);
 
     // A function to fit the dialog around its contents, and then adjust for screen size.
     // If scrolled windows are passed, scrolling is enabled in the required orientation(s).
@@ -369,12 +369,8 @@ public:
 #else
     #if defined(__WXMSW__)
         #include "wx/msw/dialog.h"
-    #elif defined(__WXMOTIF__)
-        #include "wx/motif/dialog.h"
-    #elif defined(__WXGTK20__)
-        #include "wx/gtk/dialog.h"
     #elif defined(__WXGTK__)
-        #include "wx/gtk1/dialog.h"
+        #include "wx/gtk/dialog.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dialog.h"
     #elif defined(__WXQT__)
@@ -394,7 +390,7 @@ public:
     int GetReturnCode() const
         { return GetDialog()->GetReturnCode(); }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxWindowModalDialogEvent (*this); }
+    virtual wxEvent *Clone() const override { return new wxWindowModalDialogEvent (*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWindowModalDialogEvent);

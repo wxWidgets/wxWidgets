@@ -115,6 +115,12 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU (myID_ANNOTATION_STYLE_HIDDEN,   Edit::OnAnnotationStyle)
     EVT_MENU (myID_ANNOTATION_STYLE_STANDARD, Edit::OnAnnotationStyle)
     EVT_MENU (myID_ANNOTATION_STYLE_BOXED,    Edit::OnAnnotationStyle)
+    // indicators
+    EVT_MENU (myID_INDICATOR_FILL,     Edit::OnIndicatorFill)
+    EVT_MENU (myID_INDICATOR_CLEAR,    Edit::OnIndicatorClear)
+    EVT_MENU_RANGE (myID_INDICATOR_STYLE_FIRST,
+                    myID_INDICATOR_STYLE_LAST,
+                    Edit::OnIndicatorStyle)
     // extra
     EVT_MENU (myID_CHANGELOWER,                 Edit::OnChangeCase)
     EVT_MENU (myID_CHANGEUPPER,                 Edit::OnChangeCase)
@@ -146,7 +152,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     m_FoldingID = 2;
 
     // initialize language
-    m_language = NULL;
+    m_language = nullptr;
 
     // default font for all styles
     SetViewEOL (g_CommonPrefs.displayEOLEnable);
@@ -430,6 +436,26 @@ void Edit::OnAnnotationStyle(wxCommandEvent& event)
     AnnotationSetVisible(style);
 }
 
+void Edit::OnIndicatorFill(wxCommandEvent& WXUNUSED(event))
+{
+    long from, to;
+    GetSelection(&from, &to);
+    IndicatorFillRange(from, to - from);
+}
+
+void Edit::OnIndicatorClear(wxCommandEvent& WXUNUSED(event))
+{
+    long from, to;
+    GetSelection(&from, &to);
+    IndicatorClearRange(from, to - from);
+}
+
+void Edit::OnIndicatorStyle(wxCommandEvent& event)
+{
+    IndicatorSetStyle(GetIndicatorCurrent(),
+                      event.GetId() - myID_INDICATOR_STYLE_FIRST);
+}
+
 void Edit::OnChangeCase (wxCommandEvent &event) {
     switch (event.GetId()) {
         case myID_CHANGELOWER: {
@@ -580,7 +606,7 @@ bool Edit::InitializePrefs (const wxString &name) {
 
     // initialize styles
     StyleClearAll();
-    LanguageInfo const* curInfo = NULL;
+    LanguageInfo const* curInfo = nullptr;
 
     // determine language
     bool found = false;

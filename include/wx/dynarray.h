@@ -108,11 +108,7 @@ public:
     void Empty() { this->clear(); }
     void Clear() { this->clear(); }
     void Alloc(size_t uiSize) { this->reserve(uiSize); }
-
-    void Shrink()
-    {
-        wxShrinkToFit(*this);
-    }
+    void Shrink() { this->shrink_to_fit(); }
 
     size_t GetCount() const { return this->size(); }
     void SetCount(size_t n, T v = T()) { this->resize(n, v); }
@@ -256,7 +252,7 @@ public:
     }
 
 protected:
-    SCMPFUNC GetCompareFunction() const wxNOEXCEPT { return m_fnCompare; }
+    SCMPFUNC GetCompareFunction() const noexcept { return m_fnCompare; }
 
 private:
     SCMPFUNC m_fnCompare;
@@ -364,7 +360,7 @@ public:
         T* const pItem = Traits::Clone(item);
 
         const size_t nOldSize = size();
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             base::insert(this->end(), nInsert, pItem);
 
         for ( size_t i = 1; i < nInsert; i++ )
@@ -385,7 +381,7 @@ public:
             return;
 
         T* const pItem = Traits::Clone(item);
-        if ( pItem != NULL )
+        if ( pItem != nullptr )
             base::insert(this->begin() + uiIndex, nInsert, pItem);
 
         for ( size_t i = 1; i < nInsert; ++i )

@@ -26,10 +26,6 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-// wxCmdLineParser is only used when we can't use ::CommandLineToArgvW().
-#if !wxUSE_UNICODE
-    #include "wx/cmdline.h"
-#endif
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -60,7 +56,7 @@ extern int wxEntryCleanupReal(int& argc, wxChar **argv);
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
-extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
+extern EXCEPTION_POINTERS *wxGlobalSEInformation = nullptr;
 
 // flag telling us whether the application wants to handle exceptions at all
 static bool gs_handleExceptions = false;
@@ -85,7 +81,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         }
         wxSEH_IGNORE      // ignore any exceptions inside the exception handler
 
-        wxGlobalSEInformation = NULL;
+        wxGlobalSEInformation = nullptr;
 
         // this will execute our handler and terminate the process
         return EXCEPTION_EXECUTE_HANDLER;
@@ -194,14 +190,13 @@ int wxEntry(int& argc, wxChar **argv)
 
 struct wxMSWCommandLineArguments
 {
-    wxMSWCommandLineArguments() { argc = 0; argv = NULL; }
+    wxMSWCommandLineArguments() { argc = 0; argv = nullptr; }
 
     // Initialize this object from the current process command line.
     //
     // In Unicode build prefer to use the standard function for tokenizing the
     // command line, but we can't use it with narrow strings, so use our own
     // approximation instead then.
-#if wxUSE_UNICODE
     void Init()
     {
         argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
@@ -212,44 +207,6 @@ struct wxMSWCommandLineArguments
         if ( argc )
             ::LocalFree(argv);
     }
-#else // !wxUSE_UNICODE
-    void Init()
-    {
-        // Get the command line.
-        const wxChar* const cmdLine = ::GetCommandLine();
-        if ( !cmdLine )
-            return;
-
-        // And tokenize it.
-        const wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
-
-        argc = args.size();
-
-        // +1 here for the terminating NULL
-        argv = new wxChar *[argc + 1];
-        for ( int i = 0; i < argc; i++ )
-        {
-            argv[i] = wxStrdup(args[i].t_str());
-        }
-
-        // argv[] must be NULL-terminated
-        argv[argc] = NULL;
-    }
-
-    ~wxMSWCommandLineArguments()
-    {
-        if ( !argc )
-            return;
-
-        for ( int i = 0; i < argc; i++ )
-        {
-            free(argv[i]);
-        }
-
-        wxDELETEA(argv);
-        argc = 0;
-    }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     int argc;
     wxChar **argv;
@@ -267,6 +224,8 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxSetInstance(hInstance);
 #ifdef __WXMSW__
     wxApp::m_nCmdShow = nCmdShow;
+#else
+    wxUnusedVar(nCmdShow);
 #endif
 
     wxArgs.Init();

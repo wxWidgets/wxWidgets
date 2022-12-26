@@ -212,7 +212,7 @@ struct wxCmdLineEntryDesc
     }
     @endcode
 
-    With C++11, the for loop could be written:
+    The for loop could be written:
     @code
     for (const auto &arg : parser.GetArguments()) {
         // working on arg as with *itarg above
@@ -449,24 +449,19 @@ public:
     wxCmdLineParser();
 
     /**
-        Constructor which specifies the command line to parse. This is the
-        traditional (Unix) command line format. The parameters @a argc and
-        @a argv have the same meaning as the typical @c main() function.
+        Constructor which specifies the command line to parse.
 
-        This constructor is available in both ANSI and Unicode modes because under
-        some platforms the command line arguments are passed as ASCII strings
-        even to Unicode programs.
+        This is the traditional (Unix) command line format and the parameters
+        @a argc and @a argv have the same meaning as the typical @c main()
+        function.
     */
     wxCmdLineParser(int argc, char** argv);
 
     /**
         Constructor which specifies the command line to parse.
-        This is the traditional (Unix) command line format.
 
         The parameters @a argc and @a argv have the same meaning as the typical
-        @c main() function.
-
-        This constructor is only available in Unicode build.
+        @c main() function, but the latter uses wide character strings.
     */
     wxCmdLineParser(int argc, wchar_t** argv);
 
@@ -580,7 +575,7 @@ public:
 
         By default, this function uses Windows-like word splitting algorithm,
         i.e. single quotes have no special meaning and backslash can't be used
-        to escape spaces neither. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
+        to escape spaces either. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
         semantics is used, i.e. both single and double quotes can be used and
         backslash can be used to escape all the other special characters.
     */
@@ -688,7 +683,7 @@ public:
     */
     int Parse(bool giveUsage = true);
 
-    //@{
+    ///@{
     /**
         Set the command line to parse after using one of the constructors which
         don't do it.
@@ -696,7 +691,7 @@ public:
     void SetCmdLine(int argc, char** argv);
     void SetCmdLine(int argc, wchar_t** argv);
     void SetCmdLine(const wxString& cmdline);
-    //@}
+    ///@}
 
     /**
         Constructs the command line description.
@@ -717,7 +712,7 @@ public:
             { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
 
-            { wxCMD_LINE_PARAM,  NULL, NULL, "input file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
+            { wxCMD_LINE_PARAM,  nullptr, nullptr, "input file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
 
             { wxCMD_LINE_NONE }
         };

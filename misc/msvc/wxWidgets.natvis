@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 
-This file contains visualizers for Visual Studio 2012+ debugger.
-It should be copied into the %USERPROFILE%\My Documents\Visual Studio 2012\Visualizers\
-directory (or the corresponding location for newer versions, e.g. ...2013\Visualizers).
+This file contains visualizers for Visual Studio debugger.
+It should be copied into the %USERPROFILE%\My Documents\Visual Studio 2015\Visualizers\
+directory (or the corresponding location for newer versions, e.g. ...2017\Visualizers).
 
-Introductory reference for the format:
-http://blogs.msdn.com/b/vcblog/archive/2012/07/12/10329460.aspx
-http://code.msdn.microsoft.com/windowsdesktop/Writing-type-visualizers-2eae77a2#content
+More information can be found at https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects
+
 -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
     <!-- We want to avoid showing 'L' before the string, this is useless and
@@ -62,6 +61,10 @@ http://code.msdn.microsoft.com/windowsdesktop/Writing-type-visualizers-2eae77a2#
         </Expand>
     </Type>
 
+    <Type Name="wxWindow">
+        <DisplayString>$(Type) HWND={m_hWnd,x}</DisplayString>
+    </Type>
+
     <!--
         Defining visualizer for wxListBase is not really useful, so do it for
         the most commonly used "concrete" list type.
@@ -79,15 +82,4 @@ http://code.msdn.microsoft.com/windowsdesktop/Writing-type-visualizers-2eae77a2#
         </Expand>
     </Type>
 
-    <Type Name="wxVector&lt;*&gt;">
-        <DisplayString>size={m_size}</DisplayString>
-        <Expand>
-            <Item Name="[size]">m_size</Item>
-            <Item Name="[capacity]">m_capacity</Item>
-            <ArrayItems>
-                <Size>m_size</Size>
-                <ValuePointer>m_values</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
 </AutoVisualizer>

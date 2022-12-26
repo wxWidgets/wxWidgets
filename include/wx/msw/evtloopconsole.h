@@ -18,8 +18,8 @@ public:
     virtual ~wxMSWEventLoopBase();
 
     // implement base class pure virtuals
-    virtual bool Pending() const wxOVERRIDE;
-    virtual void WakeUp() wxOVERRIDE;
+    virtual bool Pending() const override;
+    virtual void WakeUp() override;
 
 #if wxUSE_THREADS
     // MSW-specific method to wait for the termination of the specified (by its
@@ -57,14 +57,14 @@ public:
     wxConsoleEventLoop() { }
 
     // override/implement base class virtuals
-    virtual bool Dispatch() wxOVERRIDE;
-    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual bool Dispatch() override;
+    virtual int DispatchTimeout(unsigned long timeout) override;
 
     // Windows-specific function to process a single message
     virtual void ProcessMessage(WXMSG *msg);
 
 protected:
-    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
+    virtual void DoYieldFor(long eventsToProcess) override;
 };
 
 #endif // wxUSE_CONSOLE_EVENTLOOP

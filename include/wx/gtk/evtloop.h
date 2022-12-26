@@ -21,18 +21,18 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 public:
     wxGUIEventLoop();
 
-    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
-    virtual bool Pending() const wxOVERRIDE;
-    virtual bool Dispatch() wxOVERRIDE;
-    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
-    virtual void WakeUp() wxOVERRIDE;
+    virtual void ScheduleExit(int rc = 0) override;
+    virtual bool Pending() const override;
+    virtual bool Dispatch() override;
+    virtual int DispatchTimeout(unsigned long timeout) override;
+    virtual void WakeUp() override;
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
 
 protected:
-    virtual int DoRun() wxOVERRIDE;
-    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
+    virtual int DoRun() override;
+    virtual void DoYieldFor(long eventsToProcess) override;
 
 private:
     // the exit code of this event loop

@@ -30,6 +30,7 @@
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
 #include "wx/msgdlg.h"
+#include "wx/mstream.h"
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
 
@@ -111,6 +112,11 @@ wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+void wxWebViewWebKit::Init()
+{
+    m_webViewConfiguration = [[WKWebViewConfiguration alloc] init];
+}
+
 bool wxWebViewWebKit::Create(wxWindow *parent,
                                  wxWindowID winID,
                                  const wxString& strURL,
@@ -122,7 +128,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
-    WKWebViewConfiguration* webViewConfig = [[WKWebViewConfiguration alloc] init];
+    WKWebViewConfiguration* webViewConfig = (WKWebViewConfiguration*) m_webViewConfiguration;
 
     if (!m_handlers.empty())
     {
@@ -145,6 +151,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     SetPeer(new wxWidgetCocoaImpl( this, m_webView ));
 
     MacPostControlCreate(pos, size);
+
+    // WKWebView configuration is only used during creation
+    [m_webViewConfiguration release];
+    m_webViewConfiguration = nil;
 
     if (!m_customUserAgent.empty())
         SetUserAgent(m_customUserAgent);
@@ -169,16 +179,35 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     // Implement javascript fullscreen interface with user script and message handler
     AddUserScript("\
         document.__wxToggleFullscreen = function (elem) { \
-            document.fullscreenElement = elem; \
+            if (!document.__wxStylesAdded) { \
+                function createClass(name,rules) { \
+                    var style= document.createElement('style'); style.type = 'text/css'; \
+                    document.getElementsByTagName('head')[0].appendChild(style); \
+                    style.sheet.addRule(name, rules); \
+                } \
+                createClass(\"body.wxfullscreen\", \"padding: 0; margin: 0; height: 100%;\"); \
+                createClass(\".wxfullscreen\", \"position: fixed; overflow: hidden; z-index: 1000; left: 0; top: 0; bottom: 0; right: 0;\"); \
+                createClass(\".wxfullscreenelem\", \"width: 100% !important; height: 100% !important; padding-top: 0 !important;\"); \
+                document.__wxStylesAdded = true; \
+            } \
+            if (elem) { \
+                elem.classList.add(\"wxfullscreen\"); \
+                elem.classList.add(\"wxfullscreenelem\"); \
+                document.body.classList.add(\"wxfullscreen\"); \
+            } else if (document.webkitFullscreenElement) { \
+                document.webkitFullscreenElement.classList.remove(\"wxfullscreen\"); \
+                document.webkitFullscreenElement.classList.remove(\"wxfullscreenelem\"); \
+                document.body.classList.remove(\"wxfullscreen\"); \
+            } \
+            document.webkitFullscreenElement = elem; \
             window.webkit.messageHandlers.__wxfullscreen.postMessage((elem) ? 1: 0); \
-            document.dispatchEvent(new Event('fullscreenchange')); \
+            document.dispatchEvent(new Event('webkitfullscreenchange')); \
+            if (document.onwebkitfullscreenchange) document.onwebkitfullscreenchange(); \
         }; \
-        Element.prototype.requestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
-        Element.prototype.webkitRequestFullscreen = Element.prototype.requestFullscreen; \
-        document.exitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
-        document.webkitExitFullscreen = document.exitFullscreen; \
-        document.onfullscreenchange = null; \
-        document.fullscreenEnabled = true; \
+        Element.prototype.webkitRequestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
+        document.webkitExitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
+        document.onwebkitfullscreenchange = null; \
+        document.webkitFullscreenEnabled = true; \
     ");
     [m_webView.configuration.userContentController addScriptMessageHandler:
         [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
@@ -746,7 +775,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     wxString message = wxCFStringRef::AsString([error localizedDescription]);
     NSString* detail = [error localizedFailureReason];
-    if (detail != NULL)
+    if (detail != nullptr)
     {
         message = message + " (" + wxCFStringRef::AsString(detail) + ")";
     }
@@ -819,6 +848,107 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 @end
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
+
+class wxWebViewWebKitHandlerRequest: public wxWebViewHandlerRequest
+{
+public:
+    wxWebViewWebKitHandlerRequest(NSURLRequest* request):
+        m_data(nullptr),
+        m_request(request)
+    { }
+
+    ~wxWebViewWebKitHandlerRequest()
+    { wxDELETE(m_data); }
+
+    virtual wxString GetRawURI() const override
+    { return wxCFStringRef::AsString(m_request.URL.absoluteString); }
+
+    virtual wxInputStream* GetData() const override
+    {
+        if (!m_data && m_request.HTTPBody)
+            m_data = new wxMemoryInputStream(m_request.HTTPBody.bytes, m_request.HTTPBody.length);
+
+        return m_data;
+    }
+
+    virtual wxString GetMethod() const override
+    { return wxCFStringRef::AsString(m_request.HTTPMethod); }
+
+    virtual wxString GetHeader(const wxString& name) const override
+    {
+        return wxCFStringRef::AsString(
+            [m_request valueForHTTPHeaderField:wxCFStringRef(name).AsNSString()]);
+    }
+
+    mutable wxInputStream* m_data;
+    NSURLRequest* m_request;
+};
+
+class API_AVAILABLE(macos(10.13)) wxWebViewWebkitHandlerResponse: public wxWebViewHandlerResponse
+{
+public:
+    wxWebViewWebkitHandlerResponse(id<WKURLSchemeTask> task):
+        m_status(200),
+        m_task([task retain])
+    {
+        m_headers = [[NSMutableDictionary alloc] init];
+    }
+
+    ~wxWebViewWebkitHandlerResponse()
+    {
+        [m_headers release];
+        [m_task release];
+    }
+
+    virtual void SetStatus(int status) override
+    { m_status = status; }
+
+    virtual void SetContentType(const wxString& contentType) override
+    { SetHeader("Content-Type", contentType); }
+
+    virtual void SetHeader(const wxString& name, const wxString& value) override
+    {
+        [m_headers setValue:wxCFStringRef(value).AsNSString()
+                     forKey:wxCFStringRef(name).AsNSString()];
+    }
+
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) override
+    {
+        m_data = data;
+        wxInputStream* stream = data->GetStream();
+        size_t length = stream->GetLength();
+        NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:m_task.request.URL
+                                                                  statusCode:m_status
+                                                                 HTTPVersion:nil
+                                                                headerFields:m_headers];
+        [m_task didReceiveResponse:response];
+        [response release];
+
+        //Load the data, we malloc it so it is tidied up properly
+        void* buffer = malloc(length);
+        stream->Read(buffer, length);
+        NSData *taskData = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
+        [m_task didReceiveData:taskData];
+        [taskData release];
+
+        [m_task didFinish];
+    }
+
+    virtual void FinishWithError() override
+    {
+        NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
+                            code:NSURLErrorFileDoesNotExist
+                            userInfo:nil];
+        [m_task didFailWithError:error];
+        [error release];
+    }
+
+    int m_status;
+    NSMutableDictionary* m_headers;
+    id<WKURLSchemeTask> m_task;
+    wxSharedPtr<wxWebViewHandlerResponseData> m_data;
+};
+
 @implementation WebViewCustomProtocol
 
 - (id)initWithHandler:(wxWebViewHandler *)handler
@@ -830,49 +960,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 - (void)webView:(WKWebView *)webView startURLSchemeTask:(id<WKURLSchemeTask>)urlSchemeTask
 WX_API_AVAILABLE_MACOS(10, 13)
 {
-    NSURLRequest *request = urlSchemeTask.request;
-    NSString* path = [[request URL] absoluteString];
-
-    wxString wxpath = wxCFStringRef::AsString(path);
-
-    wxFSFile* file = m_handler->GetFile(wxpath);
-
-    if (!file)
-    {
-        NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
-                            code:NSURLErrorFileDoesNotExist
-                            userInfo:nil];
-
-        [urlSchemeTask didFailWithError:error];
-
-        [error release];
-
-        return;
-    }
-
-    size_t length = file->GetStream()->GetLength();
-
-
-    NSURLResponse *response =  [[NSURLResponse alloc] initWithURL:[request URL]
-                               MIMEType:wxCFStringRef(file->GetMimeType()).AsNSString()
-                               expectedContentLength:length
-                               textEncodingName:nil];
-
-    //Load the data, we malloc it so it is tidied up properly
-    void* buffer = malloc(length);
-    file->GetStream()->Read(buffer, length);
-    NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
-
-    //Set the data
-    [urlSchemeTask didReceiveResponse:response];
-    [urlSchemeTask didReceiveData:data];
-
-    //Notify that we have finished
-    [urlSchemeTask didFinish];
-
-    [data release];
-
-    [response release];
+    wxWebViewWebKitHandlerRequest request(urlSchemeTask.request);
+    wxSharedPtr<wxWebViewHandlerResponse> response(new wxWebViewWebkitHandlerResponse(urlSchemeTask));
+    m_handler->StartRequest(request, response);
 }
 
 - (void)webView:(WKWebView *)webView stopURLSchemeTask:(id<WKURLSchemeTask>)urlSchemeTask

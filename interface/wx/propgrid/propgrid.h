@@ -763,7 +763,7 @@ public:
             Which choice of property to use (each choice may have
             different image).
     */
-    wxSize GetImageSize( wxPGProperty* property = NULL, int item = -1 ) const;
+    wxSize GetImageSize( wxPGProperty* property = nullptr, int item = -1 ) const;
 
     /**
         Returns last item which could be iterated using given flags.
@@ -1332,7 +1332,7 @@ public:
     @endEventTable
 
     @library{wxpropgrid}
-    @category{propgrid}
+    @category{propgrid,events}
 */
 class wxPropertyGridEvent : public wxCommandEvent
 {
@@ -1508,7 +1508,7 @@ public:
                        const wxString& propLabel,
                        const wxString& propName,
                        const wxString* propValue,
-                       wxPGChoices* pChoices = NULL );
+                       wxPGChoices* pChoices = nullptr );
 
     /**
         Pushes property to the back of parent array (ie it becomes bottommost

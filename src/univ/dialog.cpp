@@ -41,8 +41,8 @@ wxEND_EVENT_TABLE()
 void wxDialog::Init()
 {
     m_returnCode = 0;
-    m_windowDisabler = NULL;
-    m_eventLoop = NULL;
+    m_windowDisabler = nullptr;
+    m_eventLoop = nullptr;
     m_isShowingModal = false;
 }
 

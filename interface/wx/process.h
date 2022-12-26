@@ -63,10 +63,10 @@ public:
         @param id
             id of an event.
     */
-    wxProcess(wxEvtHandler* parent = NULL, int id = -1);
+    wxProcess(wxEvtHandler* parent = nullptr, int id = -1);
 
     /**
-        Creates an object without any associated parent (and hence no id neither)
+        Creates an object without any associated parent (and hence no id either)
         but allows specifying the @a flags which can have the value of
         @c wxPROCESS_DEFAULT or @c wxPROCESS_REDIRECT.
 

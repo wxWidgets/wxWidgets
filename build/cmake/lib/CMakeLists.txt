@@ -7,22 +7,21 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../source_groups.cmake)
-
 if(wxBUILD_MONOLITHIC)
     # Initialize variables for monolithic build
     set(wxMONO_SRC_FILES)
     set(wxMONO_LIBS_PRIVATE)
     set(wxMONO_LIBS_PUBLIC)
-    set(wxMONO_INCLUDE_DIRS_PRIVATE)
-    set(wxMONO_INCLUDE_DIRS_PUBLIC)
+    set(wxMONO_INCLUDE_DIRS)
+    set(wxMONO_DEFINITIONS)
     set(wxMONO_NONCOMPILED_CPP_FILES)
+    set(wxMONO_DEPENDENCIES)
 endif()
 
 # Define third party libraries
 set(LIBS_THIRDPARTY regex zlib expat)
 if(wxUSE_GUI)
-    list(APPEND LIBS_THIRDPARTY jpeg png tiff)
+    list(APPEND LIBS_THIRDPARTY jpeg png tiff nanosvg)
 endif()
 foreach(LIB IN LISTS LIBS_THIRDPARTY)
     include(${LIB}.cmake)
@@ -74,8 +73,7 @@ endforeach()
 
 if(wxBUILD_MONOLITHIC)
     # Create monolithic library target
-    list(LENGTH wxMONO_SRC_FILES src_file_count)
-    wx_add_library(wxmono ${wxMONO_SRC_FILES})
+    wx_add_library(wxmono IS_MONO ${wxMONO_SRC_FILES})
     foreach(vis PRIVATE PUBLIC)
         if(wxMONO_LIBS_${vis})
             # Remove libs included in mono from list
@@ -85,22 +83,22 @@ if(wxBUILD_MONOLITHIC)
 
             target_link_libraries(wxmono ${vis} ${wxMONO_LIBS_${vis}})
         endif()
-        if(wxMONO_INCLUDE_DIRS_${vis})
-            set(INCLUDE_POS)
-            if (vis STREQUAL PRIVATE)
-                set(INCLUDE_POS BEFORE)
-            endif()
-            target_include_directories(wxmono ${INCLUDE_POS} ${vis} ${wxMONO_INCLUDE_DIRS_${vis}})
-        endif()
-        if(wxMONO_DEFINITIONS_${vis})
-            target_compile_definitions(wxmono ${vis} ${wxMONO_DEFINITIONS_${vis}})
-        endif()
     endforeach()
+    if(wxMONO_INCLUDE_DIRS)
+        target_include_directories(wxmono BEFORE PRIVATE ${wxMONO_INCLUDE_DIRS})
+    endif()
+    if(wxMONO_DEFINITIONS)
+        target_compile_definitions(wxmono PRIVATE ${wxMONO_DEFINITIONS})
+    endif()
     foreach(file ${wxMONO_NONCOMPILED_CPP_FILES})
         set_source_files_properties(${file} PROPERTIES HEADER_FILE_ONLY TRUE)
     endforeach()
-    wx_webview_copy_webview2_loader(wxmono)
-    wx_finalize_lib(wxmono)
+    foreach(dep ${wxMONO_DEPENDENCIES})
+        add_dependencies(wxmono ${dep})
+    endforeach()
+    if(wxUSE_WEBVIEW)
+        wx_webview_copy_webview2_loader(wxmono)
+    endif()
 endif()
 
 # Propagate variable(s) to parent scope

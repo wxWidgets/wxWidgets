@@ -37,14 +37,14 @@ typedef char *wxCmdLineArgType;
 // parameters passed to WinMain() instead of those passed to main()
 extern WXDLLIMPEXP_CORE bool
     wxEntryStart(HINSTANCE hInstance,
-                HINSTANCE hPrevInstance = NULL,
-                wxCmdLineArgType pCmdLine = NULL,
+                HINSTANCE hPrevInstance = nullptr,
+                wxCmdLineArgType pCmdLine = nullptr,
                 int nCmdShow = SW_SHOWNORMAL);
 
 extern WXDLLIMPEXP_CORE int
     wxEntry(HINSTANCE hInstance,
-            HINSTANCE hPrevInstance = NULL,
-            wxCmdLineArgType pCmdLine = NULL,
+            HINSTANCE hPrevInstance = nullptr,
+            wxCmdLineArgType pCmdLine = nullptr,
             int nCmdShow = SW_SHOWNORMAL);
 
 #define wxIMPLEMENT_WXWIN_MAIN                                              \

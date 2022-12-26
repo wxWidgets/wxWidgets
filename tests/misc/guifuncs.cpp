@@ -43,10 +43,10 @@ TEST_CASE("GUI::DisplaySize", "[guifuncs]")
     CHECK( sz.x == w );
     CHECK( sz.y == h );
 
-    // test that passing NULL works as expected, e.g. doesn't crash
-    wxDisplaySize(NULL, NULL);
-    wxDisplaySize(&w, NULL);
-    wxDisplaySize(NULL, &h);
+    // test that passing nullptr works as expected, e.g. doesn't crash
+    wxDisplaySize(nullptr, nullptr);
+    wxDisplaySize(&w, nullptr);
+    wxDisplaySize(nullptr, &h);
 
     CHECK( sz.x == w );
     CHECK( sz.y == h );
@@ -58,7 +58,23 @@ TEST_CASE("GUI::DisplaySize", "[guifuncs]")
 }
 
 #if wxUSE_DATAOBJ
-TEST_CASE("GUI::URLDataObject", "[guifuncs]")
+TEST_CASE("GUI::TextDataObject", "[guifuncs][clipboard]")
+{
+    const wxString text("Hello clipboard!");
+
+    wxTextDataObject* const dobj = new wxTextDataObject(text);
+    CHECK( dobj->GetText() == text );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxTextDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetText() == text );
+}
+
+TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
 {
     // this tests for buffer overflow, see #11102
     const char * const
@@ -69,6 +85,17 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs]")
     wxClipboardLocker lockClip;
     CHECK( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
+
+    wxURLDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetURL() == url );
+}
+
+TEST_CASE("GUI::DataFormatCompare", "[guifuncs][dataformat]")
+{
+    const wxDataFormat df(wxDF_TEXT);
+    CHECK( df == wxDF_TEXT );
+    CHECK( df != wxDF_INVALID );
 }
 #endif // wxUSE_DATAOBJ
 
@@ -204,7 +231,7 @@ TEST_CASE("GUI::FindWindowAtPoint", "[guifuncs]")
 
 TEST_CASE("wxWindow::Dump", "[window]")
 {
-    CHECK_NOTHROW( wxDumpWindow(NULL) );
+    CHECK_NOTHROW( wxDumpWindow(nullptr) );
 
     wxScopedPtr<wxButton>
         button(new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "bloordyblop"));

@@ -298,7 +298,7 @@ the following table:
 @itemdef{ "\n", line break }
 @itemdef{ "\r", carriage return }
 @itemdef{ "\t", tab }
-@itemdef{ "\\", "\" }
+@itemdef{ \"\\\", backslash }
 @endDefList
 
 By default, the text is translated using wxLocale::GetTranslation() before
@@ -470,8 +470,7 @@ and can be one of the following "sub-properties":
 @row3col{underlined, @ref overview_xrcformat_type_bool,
     Whether the font should be underlined (default: 0).}
 @row3col{strikethrough, @ref overview_xrcformat_type_bool,
-    Whether the strikethrough font should be used (default: 0). This property
-    is only supported since wxWidgets 3.1.2.}
+    Whether the strikethrough font should be used (default: 0). @since 3.1.2}
 @row3col{face, ,
     Comma-separated list of face names; the first one available is used
     (default: unspecified).}
@@ -609,7 +608,8 @@ from properties lists below.
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the control (default: not set).}
 @row3col{variant, @ref overview_xrcformat_type_string,
-    Window variant (see wxWindow::SetWindowVariant()), one of "normal", "small", "mini" or "large" (default: "normal") (new since wxWidgets 3.0.2).}
+    Window variant (see wxWindow::SetWindowVariant()), one of "normal", "small", "mini" or "large" (default: "normal")
+    @since 3.0.2}
 @row3col{font, @ref overview_xrcformat_type_font,
     Font to use for the control (default: window's default).}
 @row3col{ownfont, @ref overview_xrcformat_type_font,
@@ -741,6 +741,14 @@ wxAuiPaneInfo objects have the following properties:
 
 @subsubsection xrc_wxauinotebook wxAuiNotebook
 
+@beginTable
+@hdr3col{property, type, description}
+@row3col{art-provider, @ref overview_xrcformat_type_string,
+    One of @c default for wxAuiDefaultTabArt or @c simple for wxAuiSimpleTabArt
+    (default: @c default).
+    @since 3.2.0}
+@endTable
+
 A wxAuiNotebook can have one or more child objects of the @c notebookpage
 pseudo-class.
 @c notebookpage objects have the following properties:
@@ -828,8 +836,7 @@ Refer to the section @ref xrc_wxtoolbar for more details.
 @row3col{close, @ref overview_xrcformat_type_bool,
      If set, this is a special "Close" button using system-defined appearance,
      see wxBitmapButton::NewCloseButton(). If this property is set, @c bitmap
-     and @c style are ignored and shouldn't be used. Available since wxWidgets
-     3.1.5.}
+     and @c style are ignored and shouldn't be used. @since 3.1.5}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap to show on the button (default: none).}
 @row3col{pressed, @ref overview_xrcformat_type_bitmap,
@@ -894,6 +901,17 @@ Example:
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Label to display on the button (default: none).}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{margins, @ref overview_xrcformat_type_size,
+    Set the margins between the bitmap and the text of the button.
+    This method is currently only implemented under MSW. If it is not called, a default margin is used around the bitmap. @since 3.1.7}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the button be checked/pressed initially (default: 0)?}
 @endTable
@@ -907,6 +925,17 @@ Example:
     Label to display on the button (may be omitted if only the bitmap or stock ID is used).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional).}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{margins, @ref overview_xrcformat_type_size,
+    Set the margins between the bitmap and the text of the button.
+    This method is currently only implemented under MSW. If it is not called, a default margin is used around the bitmap. @since 3.1.7}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
     Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT).}
 @row3col{default, @ref overview_xrcformat_type_bool,
@@ -925,8 +954,10 @@ No additional properties.
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
      Label to use for the checkbox (default: empty).}
-@row3col{checked, @ref overview_xrcformat_type_bool,
-     Should the checkbox be checked initially (default: 0)?}
+@row3col{checked, integer,
+    Sets the initial state of the checkbox. 0 is unchecked (default),
+    1 is checked, and since wxWidgets 3.1.7, 2 sets the undetermined
+    state of a 3-state checkbox.}
 @endTable
 
 
@@ -1015,30 +1046,6 @@ its @c notebookpage).
 Each @c choicebookpage has exactly one non-toplevel window as its child.
 
 
-@subsubsection xrc_wxcommandlinkbutton wxCommandLinkButton
-
-The wxCommandLinkButton contains a main title-like @c label and an optional
-@c note for longer description. The main @c label and the @c note can be
-concatenated into a single string using a new line character between them
-(notice that the @c note part can have more new lines in it).
-
-Since wxWidgets 3.1.5 it also supports @c default and @c bitmap properties,
-just as @ref xrc_wxbutton wxButton.
-
-@beginTable
-@hdr3col{property, type, description}
-@row3col{label, @ref overview_xrcformat_type_text,
-    First line of text on the button, typically the label of an action that
-    will be made when the button is pressed (default: empty). }
-@row3col{note, @ref overview_xrcformat_type_text,
-    Second line of text describing the action performed when the button is pressed (default: none).  }
-@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to display in the button (optional).}
-@row3col{default, @ref overview_xrcformat_type_bool,
-    Should this button be the default button in dialog (default: 0)?}
-@endTable
-
-
 @subsubsection xrc_wxcollapsiblepane wxCollapsiblePane
 
 @beginTable
@@ -1106,6 +1113,35 @@ Example:
 @endTable
 
 
+@subsubsection xrc_wxcommandlinkbutton wxCommandLinkButton
+
+The wxCommandLinkButton contains a main title-like @c label and an optional
+@c note for longer description. The main @c label and the @c note can be
+concatenated into a single string using a new line character between them
+(notice that the @c note part can have more new lines in it).
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    First line of text on the button, typically the label of an action that
+    will be made when the button is pressed (default: empty). }
+@row3col{note, @ref overview_xrcformat_type_text,
+    Second line of text describing the action performed when the button is pressed (default: none).  }
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to display in the button (optional). @since 3.1.5}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{default, @ref overview_xrcformat_type_bool,
+    Should this button be the default button in dialog (default: 0)? @since 3.1.5}
+@endTable
+
+
 @subsubsection xrc_wxdataviewctrl wxDataViewCtrl
 
 No additional properties.
@@ -1127,7 +1163,13 @@ No additional properties.
 
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
 
-No additional properties.
+@beginTable
+@hdr3col{property, type, description}
+@row3col{null-text, @ref overview_xrcformat_type_string,
+    Set the text to show when there is no valid value (default: empty).
+    Only used if the control has wxDP_ALLOWNONE style.
+    Currently implemented on MSW, ignored elsewhere. @since 3.1.5.}
+@endTable
 
 
 @subsubsection xrc_wxdialog wxDialog
@@ -1550,8 +1592,7 @@ wxMenuItem objects support the following properties:
      Item's accelerator (default: none).}
 @row3col{extra-accels, @ref overview_xrcformat_type_extra_accels,
      List of item's extra accelerators. Such accelerators will not be shown
-     in item's label, but still will work. (default: none).
-     This property is only supported since wxWidgets 3.1.6.}
+     in item's label, but still will work. (default: none). @since 3.1.6.}
 @row3col{radio, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_RADIO (default: 0)?}
 @row3col{checkable, @ref overview_xrcformat_type_bool,
@@ -1924,19 +1965,17 @@ a single wxSizer child with non-ribbon windows in it.
 @hdr3col{property, type, description}
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
-@row3col{maxlength, integer,
-    Maximum length of the text entered (default: unlimited).}
 @endTable
 
-Notice that wxRichTextCtrl support in XRC is available in wxWidgets 2.9.5 and
-later only and you need to explicitly register its handler using
+Notice that you need to explicitly register the handler using
 @code
     #include <wx/xrc/xh_richtext.h>
 
-    AddHandler(new wxRichTextCtrl);
+    AddHandler(new wxRichTextCtrlXmlHandler);
 @endcode
 to use it.
 
+@since 2.9.5
 
 @subsubsection xrc_wxscrollbar wxScrollBar
 
@@ -1999,9 +2038,9 @@ HTML markup. Note that the markup has to be escaped:
 @subsubsection xrc_wxsimplebook wxSimplebook
 
 wxSimplebook is similar to @ref xrc_wxnotebook "wxNotebook" but simpler: as it
-doesn't show any page headers, it doesn't use neither image list nor individual
+doesn't show any page headers, it uses neither image list nor individual
 page bitmaps and while it still accepts page labels, they are optional as they
-are not shown to the user neither.
+are not shown to the user either.
 
 So @c simplebookpage child elements, that must occur inside this object, only
 have the following properties:
@@ -2062,7 +2101,7 @@ exactly one non-toplevel window as its child.
 @row3col{max, integer,
     Maximum allowed value (default: 100).}
 @row3col{inc, integer,
-    Increment (default: 1). Available since wxWidgets 3.1.6.}
+    Increment (default: 1). @since 3.1.6.}
 @endTable
 
 
@@ -2084,9 +2123,11 @@ additional property:
 @beginTable
 @row3col{inc, float,
     The amount by which the number is changed by a single arrow press.}
+@row3col{digits, integer,
+    Sets the precision of the value of the spin control (default: 0). @since 3.1.7.}
 @endTable
 
-This handler was added in wxWidgets 3.1.1.
+@since  3.1.1.
 
 
 @subsubsection xrc_wxsplitterwindow wxSplitterWindow
@@ -2116,8 +2157,8 @@ child and the second one for right/bottom child window.
 @row3col{value, @ref overview_xrcformat_type_text,
     Initial value of the control (default: empty).}
 @row3col{hint, @ref overview_xrcformat_type_text,
-    Descriptive text shown in the empty control (default: "Search"). This
-    property is new since wxWidgets 3.1.1.}
+    Descriptive text shown in the empty control (default: "Search").
+    @since 3.1.1.}
 @endTable
 
 
@@ -2188,7 +2229,7 @@ later only and you need to explicitly register its handler using
 @code
     #include <wx/xrc/xh_styledtextctrl.h>
 
-    AddHandler(new wxStyledTextCtrl);
+    AddHandler(new wxStyledTextCtrlXmlHandler);
 @endcode
 to use it.
 
@@ -2204,7 +2245,7 @@ to use it.
     If true, use wxTextEntry::ForceUpper() to force the control contents to be
     upper case.}
 @row3col{hint, @ref overview_xrcformat_type_text,
-    Hint shown in empty control (new since wxWidgets 3.0.1).}
+    Hint shown in empty control. @since 3.0.1}
 @endTable
 
 
@@ -2223,6 +2264,17 @@ No additional properties.
      Should the button be checked/pressed initially (default: 0)?}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional). @since 3.1.1}
+@row3col{pressed, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is pressed (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{focus, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button has focus (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{disabled, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the button is disabled (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{current, @ref overview_xrcformat_type_bitmap,
+     Bitmap to show when the mouse cursor hovers above the bitmap (default: none, same as @c bitmap). @since 3.1.7}
+@row3col{margins, @ref overview_xrcformat_type_size,
+    Set the margins between the bitmap and the text of the button.
+    This method is currently only implemented under MSW. If it is not called, a default margin is used around the bitmap. @since 3.1.7}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
     Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT). @since 3.1.1}
 @endTable
@@ -2231,8 +2283,11 @@ No additional properties.
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{bitmapsize, @ref overview_xrcformat_type_size,
-    Size of toolbar bitmaps (default: not set).}
+@row3col{bitmapsize, @ref overview_xrcformat_type_pair_ints,
+    Size of toolbar bitmaps in pixels. Note that these are physical pixels, as
+    they typically correspond to the size of available bitmaps, and @e not
+    DIPs, i.e. not depending on the current DPI value. In particular, "d" suffix
+    is invalid and cannot be used here (default: not set).}
 @row3col{margins, @ref overview_xrcformat_type_size,
     Margins (default: platform default).}
 @row3col{packing, integer,
@@ -2270,7 +2325,7 @@ properties:
 @row3col{toggle, @ref overview_xrcformat_type_bool,
      Item's kind is wxITEM_CHECK (default: 0)?}
 @row3col{dropdown, see below,
-     Item's kind is wxITEM_DROPDOWN (default: 0)? (only available since wxWidgets 2.9.0)}
+     Item's kind is wxITEM_DROPDOWN (default: 0)? @since 2.9.0}
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the tool (default: none).}
 @row3col{longhelp, @ref overview_xrcformat_type_text,
@@ -2278,7 +2333,7 @@ properties:
 @row3col{disabled, @ref overview_xrcformat_type_bool,
      Is the tool initially disabled (default: 0)?}
 @row3col{checked, @ref overview_xrcformat_type_bool,
-     Is the tool initially checked (default: 0)? (only available since wxWidgets 2.9.3)}
+     Is the tool initially checked (default: 0)? @since 2.9.3}
 @endTable
 
 The presence of a @c dropdown property indicates that the tool is of type
@@ -2465,6 +2520,22 @@ corresponds to the following tree of labels:
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display on the left side of the wizard (default: none).}
+@row3col{border, integer, Sets width of border around page area. (default: 0).
+    @since 3.2.0}
+@row3col{bitmap-placement, @ref overview_xrcformat_type_style,
+    Sets the flags indicating how the wizard or page bitmap should be expanded
+    and positioned to fit the page height. By default, placement is 0
+    (no expansion is done). See wxWizard::SetBitmapPlacement()
+    @since 3.2.0}
+@row3col{bitmap-minwidth, integer,
+    Sets the minimum width for the bitmap that will be constructed to contain
+    the actual wizard or page bitmap if a non-zero bitmap placement flag has
+    been set.
+    @since 3.2.0}
+@row3col{bitmap-bg, @ref overview_xrcformat_type_colour,
+    Sets the colour that should be used to fill the area not taken up by the
+    wizard or page bitmap, if a non-zero bitmap placement flag has been set.
+    @since 3.2.0}
 @endTable
 
 A wizard object can have one or more child objects of the wxWizardPage or
@@ -2620,7 +2691,7 @@ support the following properties:
     Label to be used for the static box around the sizer (default: empty).}
 @row3col{windowlabel, any window,
     Window to be used instead of the plain text label (default: none).
-    This property is only available since wxWidgets 3.1.1.}}
+    @since 3.1.1}
 @endTable
 
 @subsection overview_xrcformat_wxgridsizer wxGridSizer
@@ -2643,12 +2714,12 @@ support the following properties:
 @row3col{hgap, @ref overview_xrcformat_type_dimension, Horizontal gap between children (default: 0).}
 @row3col{flexibledirection, @ref overview_xrcformat_type_style,
     Flexible direction, @c wxVERTICAL, @c wxHORIZONTAL or @c wxBOTH (default).
-    This property is only available since wxWidgets 2.9.5.}
+    @since 2.9.5}
 @row3col{nonflexiblegrowmode, @ref overview_xrcformat_type_style,
     Grow mode in the non-flexible direction,
     @c wxFLEX_GROWMODE_NONE, @c wxFLEX_GROWMODE_SPECIFIED (default) or
     @c wxFLEX_GROWMODE_ALL.
-    This property is only available since wxWidgets 2.9.5.}
+    @since 2.9.5}
 @row3col{growablerows, comma-separated integers list,
     Comma-separated list of indexes of rows that are growable (none by default).
     Since wxWidgets 2.9.5 optional proportion can be appended to each number
@@ -2681,6 +2752,9 @@ support the following properties:
     optionally the proportion can be appended after each number
     separated by a @c :
     (default: none).}
+@row3col{empty_cellsize, @ref overview_xrcformat_type_size,
+    Size used for cells in the grid with no item. (default: @c wxDefaultSize).
+    @since 3.2.0}
 @endTable
 
 @subsection overview_xrcformat_wxwrapsizer wxWrapSizer
@@ -2946,10 +3020,10 @@ files with older values of @c version attribute of @c \<resource\>).
 
 @subsection overview_xrcformat_pre_v2530 Versions Before 2.5.3.0
 
-Version 2.5.3.0 introduced C-like handling of "\\" in text. In older versions,
+Version 2.5.3.0 introduced C-like handling of \"\\\\\" in text. In older versions,
 "\n", "\t" and "\r" escape sequences were replaced with respective characters
-in the same matter it's done in C, but "\\" was left intact instead of being
-replaced with single "\", as one would expect. Starting with 2.5.3.0, all of
+in the same matter as it's done in C, but \"\\\\\" was left intact instead of being
+replaced with a single \"\\\", as one would expect. Starting with 2.5.3.0, all of
 them are handled in C-like manner.
 
 

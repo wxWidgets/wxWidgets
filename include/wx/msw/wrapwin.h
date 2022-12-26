@@ -35,7 +35,7 @@
 // When the application wants to use <winsock2.h> (this is required for IPv6
 // support, for example), we must include it before winsock.h, and as windows.h
 // includes winsock.h, we have to do it before including it.
-#if wxUSE_WINSOCK2
+#if wxUSE_SOCKETS && wxUSE_WINSOCK2
     // Avoid warnings about Winsock 1.x functions deprecated in Winsock 2 that
     // we still use (and that will certainly remain available for the
     // foreseeable future anyhow).
@@ -52,7 +52,7 @@
     #pragma warning(pop)
 #endif
 
-// #undef the macros defined in winsows.h which conflict with code elsewhere
+// #undef the macros defined in windows.h which conflict with code elsewhere
 #include "wx/msw/winundef.h"
 
 #endif // _WX_WRAPWIN_H_

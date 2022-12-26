@@ -1,24 +1,24 @@
-# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004,2006,2019.
+# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004, 2006, 2019, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.0\n"
+"Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 17:46+0200\n"
-"PO-Revision-Date: 2019-11-03 13:41+0200\n"
+"POT-Creation-Date: 2022-06-02 08:37+0200\n"
+"PO-Revision-Date: 2022-06-25 11:38+0300\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: <wx-translators@wxwidgets.org>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.4.2\n"
 
-#: ../include/wx/defs.h:2622
+#: ../include/wx/defs.h:2705
 msgid "All files (*.*)|*.*"
 msgstr "Krejt kartelat (*.*)|*.*"
 
-#: ../include/wx/defs.h:2625
+#: ../include/wx/defs.h:2708
 msgid "All files (*)|*"
 msgstr "Krejt kartelat (*)|*"
 
@@ -45,23 +45,21 @@ msgid "No"
 msgstr "Jo"
 
 #: ../include/wx/msgdlg.h:280 ../src/common/stockitem.cpp:184
-#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/msgdlg.cpp:741 ../src/richtext/richtextstyledlg.cpp:293
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/msgdlg.cpp:449
+#: ../src/msw/msgdlg.cpp:744 ../src/richtext/richtextstyledlg.cpp:293
 msgid "OK"
 msgstr "OK"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../include/wx/msgdlg.h:281 ../src/common/accelcmn.cpp:68
-#: ../src/common/stockitem.cpp:151 ../src/gtk1/fontdlg.cpp:144
-#: ../src/motif/msgdlg.cpp:196 ../src/msw/msgdlg.cpp:448
-#: ../src/msw/progdlg.cpp:940 ../src/richtext/richtextstyledlg.cpp:296
+#: ../include/wx/msgdlg.h:281 ../src/common/stockitem.cpp:151
+#: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
+#: ../src/msw/msgdlg.cpp:449 ../src/msw/progdlg.cpp:940
+#: ../src/richtext/richtextstyledlg.cpp:296
 msgid "Cancel"
 msgstr "Anuloje"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../include/wx/msgdlg.h:282 ../src/common/accelcmn.cpp:77
-#: ../src/common/stockitem.cpp:169 ../src/html/helpdlg.cpp:63
-#: ../src/html/helpfrm.cpp:108 ../src/osx/button_osx.cpp:39
+#: ../include/wx/msgdlg.h:282 ../src/common/stockitem.cpp:169
+#: ../src/html/helpdlg.cpp:63 ../src/html/helpfrm.cpp:108
+#: ../src/osx/button_osx.cpp:39
 msgid "Help"
 msgstr "Ndihmë"
 
@@ -77,7 +75,7 @@ msgstr "S’arrihet të mbyllet trajtuesi për '%s'"
 #: ../include/wx/msw/private/fswatcher.h:92
 #, c-format
 msgid "Failed to open directory \"%s\" for monitoring."
-msgstr "S’u arrit të hapej drejtoria \"%s\" për mbikëqyrje."
+msgstr "S’u arrit të hapej drejtoria “%s” për mbikëqyrje."
 
 #: ../include/wx/msw/private/fswatcher.h:125
 msgid "Unable to close I/O completion port handle"
@@ -116,19 +114,19 @@ msgstr "&Shihni hollësi"
 msgid "&Hide details"
 msgstr "&Fshihi hollësitë"
 
-#: ../include/wx/richtext/richtextbuffer.h:3863
+#: ../include/wx/richtext/richtextbuffer.h:3865
 msgid "&Box"
 msgstr "&Kuadrat"
 
-#: ../include/wx/richtext/richtextbuffer.h:5007
+#: ../include/wx/richtext/richtextbuffer.h:5009
 msgid "&Picture"
 msgstr "&Foto"
 
-#: ../include/wx/richtext/richtextbuffer.h:5957
+#: ../include/wx/richtext/richtextbuffer.h:5959
 msgid "&Cell"
 msgstr "&Kutizë"
 
-#: ../include/wx/richtext/richtextbuffer.h:6066
+#: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
 msgstr "&Tabelë"
 
@@ -136,7 +134,7 @@ msgstr "&Tabelë"
 msgid "Object Properties"
 msgstr "Veti Objekti"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:530
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
 msgid "Printing"
 msgstr "Po shtypet"
@@ -151,7 +149,7 @@ msgstr "Dështoi krijimi i kanalit"
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
-msgstr "S’u arrit të numërtohen mënyra video"
+msgstr "S’u arrit të numërtoheshin mënyra video"
 
 #: ../include/wx/unix/private/displayx11.h:89
 msgid "Failed to change video mode"
@@ -214,526 +212,590 @@ msgstr "&I mëparshmi"
 msgid "&Window"
 msgstr "&Dritare"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:47 ../src/common/stockitem.cpp:158
-#: ../src/richtext/richtextbuffer.cpp:8217 ../src/stc/stc_i18n.cpp:20
+#: ../src/common/accelcmn.cpp:47
+msgctxt "keyboard key"
 msgid "Delete"
-msgstr "Fshije"
+msgstr "Tasti Delete"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48
+msgctxt "keyboard key"
 msgid "Del"
-msgstr "Del"
+msgstr "Tasti Del"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:49 ../src/common/stockitem.cpp:148
-msgid "Back"
-msgstr "Mbrapsht"
-
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
+msgctxt "keyboard key"
+msgid "Back"
+msgstr "Tasti Back"
+
+#: ../src/common/accelcmn.cpp:49
+msgctxt "keyboard key"
 msgid "Backspace"
 msgstr "Tasti Backspace"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:50 ../src/richtext/richtextsymboldlg.cpp:469
+#: ../src/common/accelcmn.cpp:50
+msgctxt "keyboard key"
 msgid "Insert"
-msgstr ""
+msgstr "Tasti Insert"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51
+msgctxt "keyboard key"
 msgid "Ins"
-msgstr ""
+msgstr "Tasti Ins"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
+msgctxt "keyboard key"
 msgid "Enter"
-msgstr ""
+msgstr "Tasti Enter"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
+msgctxt "keyboard key"
 msgid "Return"
-msgstr ""
+msgstr "Tasti Return"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
+msgctxt "keyboard key"
 msgid "PageUp"
 msgstr "Tasti PageUp"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
+msgctxt "keyboard key"
 msgid "Page Up"
 msgstr "Tasti Page Up"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
+msgctxt "keyboard key"
 msgid "PageDown"
 msgstr "Tasti PageDown"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
+msgctxt "keyboard key"
 msgid "Page Down"
 msgstr "Tasti Page Down"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
+msgctxt "keyboard key"
 msgid "PgUp"
-msgstr "PgUp"
+msgstr "Tasti PgUp"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
+msgctxt "keyboard key"
 msgid "PgDn"
-msgstr "PgDn"
+msgstr "Tasti PgDn"
 
-#. TRANSLATORS: Name of keyboard key
-#. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/common/accelcmn.cpp:58 ../src/generic/datavgen.cpp:6993
-#: ../src/richtext/richtextbulletspage.cpp:186
-#: ../src/richtext/richtextbulletspage.cpp:189
-#: ../src/richtext/richtextbulletspage.cpp:190
-#: ../src/richtext/richtextliststylepage.cpp:249
-#: ../src/richtext/richtextliststylepage.cpp:252
-#: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/common/accelcmn.cpp:58
+msgctxt "keyboard key"
 msgid "Left"
-msgstr "Majtas"
+msgstr "Tasti Shigjetë Majtas"
 
-#. TRANSLATORS: Name of keyboard key
-#. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/common/accelcmn.cpp:59 ../src/generic/datavgen.cpp:6996
-#: ../src/richtext/richtextbulletspage.cpp:188
-#: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextsizepage.cpp:250
+#: ../src/common/accelcmn.cpp:59
+msgctxt "keyboard key"
 msgid "Right"
-msgstr "Djathtas"
+msgstr "Tasti Shigjetë Djathtas"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:60 ../src/common/stockitem.cpp:211
-#: ../src/generic/fdrepdlg.cpp:149
+#: ../src/common/accelcmn.cpp:60
+msgctxt "keyboard key"
 msgid "Up"
-msgstr "Sipër"
+msgstr "Tasti Shigjetë Sipër"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:61 ../src/common/stockitem.cpp:159
-#: ../src/generic/fdrepdlg.cpp:149
+#: ../src/common/accelcmn.cpp:61
+msgctxt "keyboard key"
 msgid "Down"
-msgstr "Poshtë"
+msgstr "Tasti Shigjetë Poshtë"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:62 ../src/common/stockitem.cpp:170
+#: ../src/common/accelcmn.cpp:62
+msgctxt "keyboard key"
 msgid "Home"
-msgstr "Hyrje"
+msgstr "Tasti Home"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63
+msgctxt "keyboard key"
 msgid "End"
-msgstr ""
+msgstr "Tasti End"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
+msgctxt "keyboard key"
 msgid "Space"
-msgstr "Hapësirë"
+msgstr "Tasti Space"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
+msgctxt "keyboard key"
 msgid "Tab"
-msgstr ""
+msgstr "Tasti Tab"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
+msgctxt "keyboard key"
 msgid "Esc"
-msgstr "Esc"
+msgstr "Tasti Esc"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
+msgctxt "keyboard key"
 msgid "Escape"
-msgstr ""
+msgstr "Tasti Escape"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:69 ../src/common/stockitem.cpp:153
+#: ../src/common/accelcmn.cpp:68
+#| msgid "Cancel"
+msgctxt "keyboard key"
+msgid "Cancel"
+msgstr "Tasti Cancel"
+
+#: ../src/common/accelcmn.cpp:69
+#| msgid "Clear"
+msgctxt "keyboard key"
 msgid "Clear"
-msgstr "Spastroje"
+msgstr "Tasti Clear"
 
-#. TRANSLATORS: Name of keyboard key
-#. TRANSLATORS: Keyword of system colour
-#: ../src/common/accelcmn.cpp:70 ../src/propgrid/advprops.cpp:790
+#: ../src/common/accelcmn.cpp:70
+#| msgid "Menu"
+msgctxt "keyboard key"
 msgid "Menu"
-msgstr "Menu"
+msgstr "Tasti Menu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:71
+#| msgid "Pause"
+msgctxt "keyboard key"
 msgid "Pause"
-msgstr "Pushim"
+msgstr "Tasti Pause"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
+#| msgid "Capital"
+msgctxt "keyboard key"
 msgid "Capital"
-msgstr "Të mëdha"
+msgstr "Tasti Capital"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
+#| msgid "Select"
+msgctxt "keyboard key"
 msgid "Select"
-msgstr "Përzgjidhe"
+msgstr "Tasti Select"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:74 ../src/common/prntbase.cpp:421
-#: ../src/common/prntbase.cpp:1566 ../src/generic/prntdlgg.cpp:136
-#: ../src/generic/prntdlgg.cpp:150 ../src/gtk/print.cpp:621
-#: ../src/gtk/print.cpp:639
+#: ../src/common/accelcmn.cpp:74
+#| msgid "Print"
+msgctxt "keyboard key"
 msgid "Print"
-msgstr "Shtyp"
+msgstr "Tasti Print"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:75 ../src/common/stockitem.cpp:161
+#: ../src/common/accelcmn.cpp:75
+#| msgid "Execute"
+msgctxt "keyboard key"
 msgid "Execute"
-msgstr "Përmbushe"
+msgstr "Tasti Execute"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:76
+#| msgid "Snapshot"
+msgctxt "keyboard key"
 msgid "Snapshot"
-msgstr "Fotografim"
+msgstr "Tasti Snapshot"
 
-#. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:78 ../src/common/stockitem.cpp:146
+#: ../src/common/accelcmn.cpp:77
+#| msgid "Help"
+msgctxt "keyboard key"
+msgid "Help"
+msgstr "Tasti Help"
+
+#: ../src/common/accelcmn.cpp:78
+#| msgid "Add"
+msgctxt "keyboard key"
 msgid "Add"
-msgstr "Shtoni"
+msgstr "Tasti Add"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:79
+#| msgid "Separator"
+msgctxt "keyboard key"
 msgid "Separator"
-msgstr "Ndarës"
+msgstr "Tasti Separator"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
+msgctxt "keyboard key"
 msgid "Subtract"
-msgstr ""
+msgstr "Tasti Subtract"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
+msgctxt "keyboard key"
 msgid "Decimal"
-msgstr "Dhjetor"
+msgstr "Tasti Decimal"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
+msgctxt "keyboard key"
 msgid "Multiply"
-msgstr ""
+msgstr "Tasti Shumëzim"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
+msgctxt "keyboard key"
 msgid "Divide"
-msgstr ""
+msgstr "Tasti Pjesëtim"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
+msgctxt "keyboard key"
 msgid "Num_lock"
-msgstr "Num_lock"
+msgstr "Tasti Num_lock"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
+msgctxt "keyboard key"
 msgid "Num Lock"
-msgstr "Num Lock"
+msgstr "Tasti Num Lock"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
+msgctxt "keyboard key"
 msgid "Scroll_lock"
 msgstr "Tasti Scroll_lock"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
+msgctxt "keyboard key"
 msgid "Scroll Lock"
 msgstr "Tasti Scroll Lock"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
+#| msgid "Space"
+msgctxt "keyboard key"
 msgid "KP_Space"
-msgstr ""
+msgstr "Tasti KP_Space"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
+msgctxt "keyboard key"
 msgid "Num Space"
-msgstr "Num Space"
+msgstr "Tasti Num Space"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
+msgctxt "keyboard key"
 msgid "KP_Tab"
-msgstr ""
+msgstr "Tasti KP_Tab"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
+#| msgid "Num Tab"
+msgctxt "keyboard key"
 msgid "Num Tab"
-msgstr "Num Tab"
+msgstr "Tasti Num Tab"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
+#| msgid "Enter"
+msgctxt "keyboard key"
 msgid "KP_Enter"
-msgstr ""
+msgstr "Tasti KP_Enter"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
+#| msgid "Num Enter"
+msgctxt "keyboard key"
 msgid "Num Enter"
-msgstr "Num Enter"
+msgstr "Tasti Num Enter"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
+#| msgid "Home"
+msgctxt "keyboard key"
 msgid "KP_Home"
-msgstr ""
+msgstr "Tasti KP_Home"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
+#| msgid "Num Home"
+msgctxt "keyboard key"
 msgid "Num Home"
-msgstr "Num Home"
+msgstr "Tasti Num Home"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
+#| msgid "Left"
+msgctxt "keyboard key"
 msgid "KP_Left"
-msgstr ""
+msgstr "Tasti KP_Left"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
+#| msgid "Num left"
+msgctxt "keyboard key"
 msgid "Num left"
-msgstr "Num left"
+msgstr "Tasti Num left"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
+msgctxt "keyboard key"
 msgid "KP_Up"
-msgstr ""
+msgstr "Tasti KP_Up"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
+#| msgid "Num Up"
+msgctxt "keyboard key"
 msgid "Num Up"
-msgstr "Num Up"
+msgstr "Tasti Num Up"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
+#| msgid "Right"
+msgctxt "keyboard key"
 msgid "KP_Right"
-msgstr ""
+msgstr "Tasti KP_Right"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
+#| msgid "Num Right"
+msgctxt "keyboard key"
 msgid "Num Right"
-msgstr "Num Right"
+msgstr "Tasti Num Right"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
+#| msgid "Down"
+msgctxt "keyboard key"
 msgid "KP_Down"
-msgstr ""
+msgstr "Tasti KP_Down"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
+#| msgid "Num Down"
+msgctxt "keyboard key"
 msgid "Num Down"
-msgstr "Num Down"
+msgstr "Tasti Num Down"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
+#| msgid "PageUp"
+msgctxt "keyboard key"
 msgid "KP_PageUp"
-msgstr ""
+msgstr "Tasti KP_PageUp"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
+#| msgid "Num Page Up"
+msgctxt "keyboard key"
 msgid "Num Page Up"
-msgstr "Num Page Up"
+msgstr "Tasti Num Page Up"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
+#| msgid "PageDown"
+msgctxt "keyboard key"
 msgid "KP_PageDown"
-msgstr ""
+msgstr "Tasti KP_PageDown"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
+#| msgid "Num Page Down"
+msgctxt "keyboard key"
 msgid "Num Page Down"
-msgstr "Num Page Down"
+msgstr "Tasti Num Page Down"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
+msgctxt "keyboard key"
 msgid "KP_Prior"
-msgstr ""
+msgstr "Tasti KP_Prior"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
+#| msgid "Next"
+msgctxt "keyboard key"
 msgid "KP_Next"
-msgstr ""
+msgstr "Tasti KP_Next"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
+msgctxt "keyboard key"
 msgid "KP_End"
-msgstr ""
+msgstr "Tasti KP_End"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
+#| msgid "Num End"
+msgctxt "keyboard key"
 msgid "Num End"
-msgstr "Num End"
+msgstr "Tasti Num End"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
+msgctxt "keyboard key"
 msgid "KP_Begin"
-msgstr ""
+msgstr "Tasti KP_Begin"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
+#| msgid "Num Begin"
+msgctxt "keyboard key"
 msgid "Num Begin"
-msgstr "Num Begin"
+msgstr "Tasti Num Begin"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
+#| msgid "Insert"
+msgctxt "keyboard key"
 msgid "KP_Insert"
-msgstr ""
+msgstr "Tasti KP_Insert"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
+#| msgid "Num Insert"
+msgctxt "keyboard key"
 msgid "Num Insert"
-msgstr "Num Insert"
+msgstr "Tasti Num Insert"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
+#| msgid "Delete"
+msgctxt "keyboard key"
 msgid "KP_Delete"
-msgstr ""
+msgstr "Tasti KP_Delete"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
+#| msgid "Num Delete"
+msgctxt "keyboard key"
 msgid "Num Delete"
-msgstr "Num Delete"
+msgstr "Tasti Num Delete"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
+msgctxt "keyboard key"
 msgid "KP_Equal"
-msgstr ""
+msgstr "Tasti KP_Equal"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
+#| msgid "Num ="
+msgctxt "keyboard key"
 msgid "Num ="
-msgstr "Num ="
+msgstr "Tasti Num ="
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
+msgctxt "keyboard key"
 msgid "KP_Multiply"
-msgstr ""
+msgstr "Tasti KP_Multiply"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
+#| msgid "Num *"
+msgctxt "keyboard key"
 msgid "Num *"
-msgstr "Num *"
+msgstr "Tasti Num *"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
+msgctxt "keyboard key"
 msgid "KP_Add"
-msgstr ""
+msgstr "Tasti KP_Add"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
+#| msgid "Num +"
+msgctxt "keyboard key"
 msgid "Num +"
-msgstr "Num +"
+msgstr "Tasti Num +"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
+#| msgid "Separator"
+msgctxt "keyboard key"
 msgid "KP_Separator"
-msgstr ""
+msgstr "Tasti KP_Separator"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
+#| msgid "Num ,"
+msgctxt "keyboard key"
 msgid "Num ,"
-msgstr "Num ,"
+msgstr "Tasti Num ,"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
+msgctxt "keyboard key"
 msgid "KP_Subtract"
-msgstr ""
+msgstr "Tasti KP_Subtract"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
+#| msgid "Num -"
+msgctxt "keyboard key"
 msgid "Num -"
-msgstr "Num -"
+msgstr "Tasti Num -"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
+#| msgid "Decimal"
+msgctxt "keyboard key"
 msgid "KP_Decimal"
-msgstr ""
+msgstr "Tasti KP_Decimal"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
+#| msgid "Num ."
+msgctxt "keyboard key"
 msgid "Num ."
-msgstr "Num ."
+msgstr "Tasti Num ."
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
+#| msgid "Divide"
+msgctxt "keyboard key"
 msgid "KP_Divide"
-msgstr ""
+msgstr "Tasti KP_Divide"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
+#| msgid "Num /"
+msgctxt "keyboard key"
 msgid "Num /"
-msgstr "Num /"
+msgstr "Tasti Num /"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
+#| msgid "Windows 7"
+msgctxt "keyboard key"
 msgid "Windows_Left"
-msgstr ""
+msgstr "Tasti Windows_Left"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
+#| msgid "Windows Vista"
+msgctxt "keyboard key"
 msgid "Windows_Right"
-msgstr ""
+msgstr "Tasti Windows_Right"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
+#| msgid "Windows ME"
+msgctxt "keyboard key"
 msgid "Windows_Menu"
-msgstr ""
+msgstr "Tasti Windows_Menu"
 
-#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
+#| msgid "Command"
+msgctxt "keyboard key"
 msgid "Command"
-msgstr "Urdhër"
+msgstr "Tasti Command"
 
 #: ../src/common/accelcmn.cpp:186
+#| msgid "ctrl"
+msgctxt "keyboard key"
 msgid "ctrl"
-msgstr "ctrl"
+msgstr "Tasti ctrl"
 
 #: ../src/common/accelcmn.cpp:188
+#| msgid "alt"
+msgctxt "keyboard key"
 msgid "alt"
-msgstr "alt"
+msgstr "Tasti alt"
 
 #: ../src/common/accelcmn.cpp:190
+#| msgid "Shift+"
+msgctxt "keyboard key"
 msgid "shift"
-msgstr "shift"
+msgstr "Tasti shift"
 
 #: ../src/common/accelcmn.cpp:192
+#| msgid "rawctrl"
+msgctxt "keyboard key"
 msgid "rawctrl"
-msgstr "rawctrl"
+msgstr "Tasti rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
+msgctxt "keyboard key"
 msgid "num "
-msgstr ""
+msgstr "Tasti num "
 
-#: ../src/common/accelcmn.cpp:259 ../src/common/accelcmn.cpp:358
+#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#| msgid "F"
+msgctxt "keyboard key"
 msgid "F"
-msgstr "P"
+msgstr "Tasti F"
 
-#: ../src/common/accelcmn.cpp:276 ../src/common/accelcmn.cpp:361
+#: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+msgctxt "keyboard key"
 msgid "KP_F"
-msgstr ""
+msgstr "Tasti KP_F"
 
-#: ../src/common/accelcmn.cpp:279 ../src/common/accelcmn.cpp:364
+#: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+msgctxt "keyboard key"
 msgid "KP_"
-msgstr ""
+msgstr "Tasti KP_"
 
-#: ../src/common/accelcmn.cpp:282 ../src/common/accelcmn.cpp:367
+#: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
+#| msgid "SPECIAL"
+msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr "SPECIAL"
+msgstr "Tasti SPECIAL"
 
-#: ../src/common/accelcmn.cpp:345 ../src/univ/themes/win32.cpp:3753
+#: ../src/common/accelcmn.cpp:343
+#| msgid "Alt+"
+msgctxt "keyboard key"
 msgid "Alt+"
-msgstr "Alt+"
+msgstr "Tasti Alt+"
+
+#: ../src/common/accelcmn.cpp:345
+#| msgid "Ctrl+"
+msgctxt "keyboard key"
+msgid "Ctrl+"
+msgstr "Tasti Ctrl+"
 
 #: ../src/common/accelcmn.cpp:347
-msgid "Ctrl+"
-msgstr "Ctrl+"
-
-#: ../src/common/accelcmn.cpp:349
+#| msgid "Shift+"
+msgctxt "keyboard key"
 msgid "Shift+"
-msgstr "Shift+"
+msgstr "Tasti Shift+"
 
-#: ../src/common/accelcmn.cpp:352
+#: ../src/common/accelcmn.cpp:350
+#| msgid "RawCtrl+"
+msgctxt "keyboard key"
 msgid "RawCtrl+"
-msgstr "RawCtrl+"
+msgstr "Tasti RawCtrl+"
 
 #: ../src/common/appbase.cpp:774
 msgid "show this help message"
@@ -743,20 +805,20 @@ msgstr "shfaq këtë mesazh ndihme"
 msgid "generate verbose log messages"
 msgstr "prodho mesazhe fjalamanë regjistrimi"
 
-#: ../src/common/appcmn.cpp:250
+#: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
 msgstr "caktoni temë për t’u përdorur"
 
-#: ../src/common/appcmn.cpp:264
+#: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "caktoni një mënyrë ekrani për përdorim (p.sh., 640x480-16)"
+msgstr "caktoni mënyrë ekrani për përdorim (p.sh., 640x480-16)"
 
-#: ../src/common/appcmn.cpp:286
+#: ../src/common/appcmn.cpp:279
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Temë '%s' e pambuluar."
 
-#: ../src/common/appcmn.cpp:303
+#: ../src/common/appcmn.cpp:296
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Specifikim i pavlefshëm mënyre ekrani '%s'."
@@ -789,7 +851,7 @@ msgstr "Mundësia '%s' lyp një vlerë."
 #: ../src/common/cmdline.cpp:1079
 #, c-format
 msgid "Separator expected after the option '%s'."
-msgstr "Pritej ndarës pas mundësisë '%s'."
+msgstr "Pas mundësisë '%s' pritej ndarës."
 
 #: ../src/common/cmdline.cpp:1109 ../src/common/cmdline.cpp:1127
 #, c-format
@@ -856,7 +918,7 @@ msgid "Can't &Undo "
 msgstr "S’&zhbëhet Dot "
 
 #: ../src/common/cmdproc.cpp:264 ../src/common/stockitem.cpp:209
-#: ../src/msw/textctrl.cpp:2896 ../src/osx/textctrl_osx.cpp:591
+#: ../src/msw/textctrl.cpp:2932 ../src/osx/textctrl_osx.cpp:634
 #: ../src/richtext/richtextctrl.cpp:328
 msgid "&Undo"
 msgstr "&Zhbëje"
@@ -866,8 +928,8 @@ msgid "&Redo "
 msgstr "&Ribëje "
 
 #: ../src/common/cmdproc.cpp:286 ../src/common/cmdproc.cpp:293
-#: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2897
-#: ../src/osx/textctrl_osx.cpp:592 ../src/richtext/richtextctrl.cpp:329
+#: ../src/common/stockitem.cpp:191 ../src/msw/textctrl.cpp:2933
+#: ../src/osx/textctrl_osx.cpp:635 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
 msgstr "&Ribëje"
 
@@ -879,7 +941,7 @@ msgstr "Varg për Ngjyrë : Specifikim i pavlefshëm ngjyre : %s"
 #: ../src/common/config.cpp:259
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr "Vlerë %ld e pavlefshme për element bulean \"%s\" në kartelë formësimi."
+msgstr "Vlerë %ld e pavlefshme për element bulean “%s” në kartelë formësimi."
 
 #: ../src/common/config.cpp:526
 #, c-format
@@ -894,124 +956,124 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' ka '..' ekstra, u shpërfill."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2062 ../src/generic/datavgen.cpp:1397
+#: ../src/common/datavcmn.cpp:2165 ../src/generic/datavgen.cpp:1416
 msgid "checked"
-msgstr ""
+msgstr "me shenjë"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2066 ../src/generic/datavgen.cpp:1399
+#: ../src/common/datavcmn.cpp:2169 ../src/generic/datavgen.cpp:1418
 msgid "unchecked"
-msgstr ""
+msgstr "pa shenjë"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2070
+#: ../src/common/datavcmn.cpp:2173
 msgid "undetermined"
 msgstr "e papërcaktuar"
 
-#: ../src/common/datetimefmt.cpp:1781
+#: ../src/common/datetimefmt.cpp:1845
 msgid "today"
 msgstr "sot"
 
-#: ../src/common/datetimefmt.cpp:1782
+#: ../src/common/datetimefmt.cpp:1846
 msgid "yesterday"
 msgstr "dje"
 
-#: ../src/common/datetimefmt.cpp:1783
+#: ../src/common/datetimefmt.cpp:1847
 msgid "tomorrow"
 msgstr "nesër"
 
-#: ../src/common/datetimefmt.cpp:1975
+#: ../src/common/datetimefmt.cpp:2041
 msgid "first"
 msgstr "i pari"
 
-#: ../src/common/datetimefmt.cpp:1976
+#: ../src/common/datetimefmt.cpp:2042
 msgid "second"
 msgstr "i dyti"
 
-#: ../src/common/datetimefmt.cpp:1977
+#: ../src/common/datetimefmt.cpp:2043
 msgid "third"
 msgstr "i treti"
 
-#: ../src/common/datetimefmt.cpp:1978
+#: ../src/common/datetimefmt.cpp:2044
 msgid "fourth"
 msgstr "i katërti"
 
-#: ../src/common/datetimefmt.cpp:1979
+#: ../src/common/datetimefmt.cpp:2045
 msgid "fifth"
 msgstr "i pesti"
 
-#: ../src/common/datetimefmt.cpp:1980
+#: ../src/common/datetimefmt.cpp:2046
 msgid "sixth"
 msgstr "i gjashti"
 
-#: ../src/common/datetimefmt.cpp:1981
+#: ../src/common/datetimefmt.cpp:2047
 msgid "seventh"
 msgstr "i shtati"
 
-#: ../src/common/datetimefmt.cpp:1982
+#: ../src/common/datetimefmt.cpp:2048
 msgid "eighth"
 msgstr "i teti"
 
-#: ../src/common/datetimefmt.cpp:1983
+#: ../src/common/datetimefmt.cpp:2049
 msgid "ninth"
 msgstr "i nënti"
 
-#: ../src/common/datetimefmt.cpp:1984
+#: ../src/common/datetimefmt.cpp:2050
 msgid "tenth"
 msgstr "i dhjeti"
 
-#: ../src/common/datetimefmt.cpp:1985
+#: ../src/common/datetimefmt.cpp:2051
 msgid "eleventh"
 msgstr "i njëmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1986
+#: ../src/common/datetimefmt.cpp:2052
 msgid "twelfth"
 msgstr "i dymbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1987
+#: ../src/common/datetimefmt.cpp:2053
 msgid "thirteenth"
 msgstr "i trembëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1988
+#: ../src/common/datetimefmt.cpp:2054
 msgid "fourteenth"
 msgstr "i katërmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1989
+#: ../src/common/datetimefmt.cpp:2055
 msgid "fifteenth"
 msgstr "i pesëmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1990
+#: ../src/common/datetimefmt.cpp:2056
 msgid "sixteenth"
 msgstr "i gjashtëmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1991
+#: ../src/common/datetimefmt.cpp:2057
 msgid "seventeenth"
 msgstr "i shtatëmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1992
+#: ../src/common/datetimefmt.cpp:2058
 msgid "eighteenth"
 msgstr "i tetëmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1993
+#: ../src/common/datetimefmt.cpp:2059
 msgid "nineteenth"
 msgstr "i nëntëmbëdhjeti"
 
-#: ../src/common/datetimefmt.cpp:1994
+#: ../src/common/datetimefmt.cpp:2060
 msgid "twentieth"
 msgstr "i njëzeti"
 
-#: ../src/common/datetimefmt.cpp:2147
+#: ../src/common/datetimefmt.cpp:2218
 msgid "noon"
 msgstr "mesditë"
 
-#: ../src/common/datetimefmt.cpp:2148
+#: ../src/common/datetimefmt.cpp:2219
 msgid "midnight"
 msgstr "mesnatë"
 
 #: ../src/common/debugrpt.cpp:210
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "S’u arrit të krijohej drejtori \"%s\""
+msgstr "S’u arrit të krijohej drejtori “%s”"
 
 #: ../src/common/debugrpt.cpp:211
 msgid "Debug report couldn't be created."
@@ -1020,12 +1082,12 @@ msgstr "S'u krijua dot raport diagnostikimi."
 #: ../src/common/debugrpt.cpp:228
 #, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "S’u arrit të hiqej kartela raporti diagnostikimi \"%s\""
+msgstr "S’u arrit të hiqej kartela raporti diagnostikimi “%s”"
 
 #: ../src/common/debugrpt.cpp:240
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "S’u arrit të pastrohej drejtori \"%s\" raportesh diagnostikimi"
+msgstr "S’u arrit të pastrohej drejtori “%s” raportesh diagnostikimi"
 
 #: ../src/common/debugrpt.cpp:515
 msgid "process context description"
@@ -1045,7 +1107,7 @@ msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
 "Përpunimi i raportit të diagnostikimit dështoi, kartelat po lihen te "
-"drejtoria \"%s\"."
+"drejtoria “%s”."
 
 #: ../src/common/debugrpt.cpp:574
 msgid "A debug report has been generated. It can be found in"
@@ -1093,22 +1155,22 @@ msgstr "Doni të ruhen ndryshimet te %s?"
 #: ../src/common/docview.cpp:641
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
-msgstr "Kartela \"%s\" s’u hap dot për shkrim."
+msgstr "Kartela “%s” s’u hap dot për shkrim."
 
 #: ../src/common/docview.cpp:647
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
-msgstr "S’u arrit të ruhej dokument te kartela \"%s\"."
+msgstr "S’u arrit të ruhej dokument te kartela “%s”."
 
 #: ../src/common/docview.cpp:664
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
-msgstr "Kartela \"%s\" s’u hap dot për lexim."
+msgstr "Kartela “%s” s’u hap dot për lexim."
 
 #: ../src/common/docview.cpp:676
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
-msgstr "S’u arrit të lexohej dokument prej kartelës \"%s\"."
+msgstr "S’u arrit të lexohej dokument prej kartelës “%s”."
 
 #: ../src/common/docview.cpp:1196
 #, c-format
@@ -1183,7 +1245,7 @@ msgstr "S’u arrit të ngarkohej librari e përbashkët '%s'"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "S’u gjet dot simbol '%s' në një librari dinamike"
 
-#: ../src/common/ffile.cpp:57 ../src/common/file.cpp:228
+#: ../src/common/ffile.cpp:57 ../src/common/file.cpp:216
 #, c-format
 msgid "can't open file '%s'"
 msgstr "s’hapet dot kartelë '%s'"
@@ -1224,66 +1286,66 @@ msgstr "Gabim kërkimi te kartela '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "S’gjendet dot pozicioni i tanishëm te kartela '%s'"
 
-#: ../src/common/ffile.cpp:355 ../src/common/file.cpp:586
+#: ../src/common/ffile.cpp:354 ../src/common/file.cpp:574
 msgid "Failed to set temporary file permissions"
-msgstr "S’u arrit të caktohen leje kartele të përkohshme"
+msgstr "S’u arrit të caktoheshin leje kartele të përkohshme"
 
-#: ../src/common/ffile.cpp:377 ../src/common/file.cpp:608
+#: ../src/common/ffile.cpp:376 ../src/common/file.cpp:596
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "s’hiqet dot kartelë '%s'"
 
-#: ../src/common/ffile.cpp:382 ../src/common/file.cpp:613
+#: ../src/common/ffile.cpp:381 ../src/common/file.cpp:601
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "s’kryhen dot ndryshimet te kartelë '%s'"
 
-#: ../src/common/ffile.cpp:394 ../src/common/file.cpp:625
+#: ../src/common/ffile.cpp:393 ../src/common/file.cpp:613
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "s’hiqet dot kartelë të përkohshme '%s'"
 
-#: ../src/common/file.cpp:175
+#: ../src/common/file.cpp:163
 #, c-format
 msgid "can't create file '%s'"
 msgstr "s’krijohet dot kartelë '%s'"
 
-#: ../src/common/file.cpp:242
+#: ../src/common/file.cpp:230
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "s’mbyllet dot përshkrues kartele %d"
 
-#: ../src/common/file.cpp:345
+#: ../src/common/file.cpp:333
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "s’lexohet dot prej përshkruesi kartele %d"
 
-#: ../src/common/file.cpp:364
+#: ../src/common/file.cpp:352
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "s’shkruhet dot te përshkrues kartele %d"
 
-#: ../src/common/file.cpp:407
+#: ../src/common/file.cpp:395
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "s’zbrazet dot përshkrues kartele %d"
 
-#: ../src/common/file.cpp:449
+#: ../src/common/file.cpp:437
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "s’shihet dot te përshkrues kartele %d"
 
-#: ../src/common/file.cpp:463
+#: ../src/common/file.cpp:451
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr ""
 
-#: ../src/common/file.cpp:492
+#: ../src/common/file.cpp:480
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "s’gjendet dot gjatësi kartele te përshkrues kartele %d"
 
-#: ../src/common/file.cpp:522
+#: ../src/common/file.cpp:510
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr ""
@@ -1304,7 +1366,7 @@ msgstr "s’hapet dot kartelë formësimi e përdoruesit '%s'."
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr ""
 "Ndryshimet s’do të ruhen, për të shmangur mbishkrimin e kartelës ekzistuese "
-"\"%s\""
+"“%s”"
 
 #: ../src/common/fileconf.cpp:421
 msgid "Error reading config options."
@@ -1322,7 +1384,7 @@ msgstr "kartela '%s': shenjë e papritur %c te rreshti %zu."
 #: ../src/common/fileconf.cpp:579
 #, c-format
 msgid "file '%s', line %zu: '%s' ignored after group header."
-msgstr ""
+msgstr "kartela '%s', rreshti %zu: '%s' u shpërfill pas kryesh grupi."
 
 #: ../src/common/fileconf.cpp:608
 #, c-format
@@ -1333,6 +1395,7 @@ msgstr "kartela '%s', rreshti %zu: pritej '='."
 #, c-format
 msgid "file '%s', line %zu: value for immutable key '%s' ignored."
 msgstr ""
+"kartela '%s', rreshti %zu: u shpërfill vlerë për kyç të pandryshueshëm '%s'."
 
 #: ../src/common/fileconf.cpp:631
 #, c-format
@@ -1358,7 +1421,7 @@ msgstr "S’u arrit të përditësohej kartelë përdoruesi për formësimin."
 
 #: ../src/common/fileconf.cpp:1029
 msgid "Error saving user configuration data."
-msgstr "Gabim gjatë ruajtjes së të dhënave formësimi të përdoruesit."
+msgstr "Gabim në ruajtje të dhënash formësimi të përdoruesit."
 
 #: ../src/common/fileconf.cpp:1141
 #, c-format
@@ -1378,12 +1441,12 @@ msgstr "u shpërfill përpjekja për ndryshim kyçi të pandryshueshëm '%s'."
 #: ../src/common/fileconf.cpp:1946
 #, c-format
 msgid "trailing backslash ignored in '%s'"
-msgstr ""
+msgstr "u shpërfill pjerrake së prapthi në fund te '%s'"
 
 #: ../src/common/fileconf.cpp:1981
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
-msgstr "\" të papritura në vendin %d te '%s'."
+msgstr "\" të papritura në pozicionin %d te '%s'."
 
 #: ../src/common/filefn.cpp:905
 #, c-format
@@ -1457,39 +1520,39 @@ msgstr "S’u caktua dot drejtori e tanishme e punës"
 msgid "Files (%s)"
 msgstr "Kartela (%s)"
 
-#: ../src/common/filename.cpp:176
+#: ../src/common/filename.cpp:183
 #, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "S’u arrit të hapej '%s' për lexim"
 
-#: ../src/common/filename.cpp:181
+#: ../src/common/filename.cpp:188
 #, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "S’u arrit të hapej '%s' për shkrim"
 
-#: ../src/common/filename.cpp:193
+#: ../src/common/filename.cpp:200
 msgid "Failed to close file handle"
 msgstr "S’u arrit të mbyllej trajtues kartele"
 
-#: ../src/common/filename.cpp:1028
+#: ../src/common/filename.cpp:1033
 msgid "Failed to create a temporary file name"
 msgstr "S’u arrit të krijohej emër kartele të përkohshme"
 
-#: ../src/common/filename.cpp:1063
+#: ../src/common/filename.cpp:1068
 msgid "Failed to open temporary file."
 msgstr "S’u arrit të hapej kartelë e përkohshme."
 
-#: ../src/common/filename.cpp:2713
+#: ../src/common/filename.cpp:2768
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "S’u arrit të ndryshoheshin kohë kartele për '%s'"
 
-#: ../src/common/filename.cpp:2728
+#: ../src/common/filename.cpp:2783
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "S’u arrit të kryhej \"touch\" për kartelën '%s'"
+msgstr "S’u arrit të kryhej “touch” për kartelën '%s'"
 
-#: ../src/common/filename.cpp:2809
+#: ../src/common/filename.cpp:2864
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "S’u arrit të merreshin kohë kartele për '%s'"
@@ -1498,7 +1561,7 @@ msgstr "S’u arrit të merreshin kohë kartele për '%s'"
 msgid "Browse"
 msgstr "Shfletoni"
 
-#: ../src/common/fldlgcmn.cpp:104 ../src/generic/filectrlg.cpp:1186
+#: ../src/common/fldlgcmn.cpp:104 ../src/generic/filectrlg.cpp:1185
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Krejt kartelat (%s)|%s"
@@ -1886,34 +1949,31 @@ msgstr " hequrvije"
 
 #: ../src/common/fontcmn.cpp:953
 msgid " thin"
-msgstr ""
+msgstr " të holla"
 
 #: ../src/common/fontcmn.cpp:957
-#, fuzzy
 msgid " extra light"
-msgstr " të lehta"
+msgstr " tejet të holla"
 
 #: ../src/common/fontcmn.cpp:961
 msgid " light"
-msgstr " të lehta"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:965
 msgid " medium"
-msgstr ""
+msgstr " mesatare"
 
 #: ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid " semi bold"
-msgstr " të trasha"
+msgstr " gjysmë të trasha"
 
 #: ../src/common/fontcmn.cpp:973
 msgid " bold"
 msgstr " të trasha"
 
 #: ../src/common/fontcmn.cpp:977
-#, fuzzy
 msgid " extra bold"
-msgstr " të trasha"
+msgstr " tejet të trasha"
 
 #: ../src/common/fontcmn.cpp:981
 msgid " heavy"
@@ -1933,12 +1993,11 @@ msgstr "hequrvije"
 
 #: ../src/common/fontcmn.cpp:1154
 msgid "thin"
-msgstr ""
+msgstr "të holla"
 
 #: ../src/common/fontcmn.cpp:1167
-#, fuzzy
 msgid "extralight"
-msgstr " të lehta"
+msgstr ""
 
 #: ../src/common/fontcmn.cpp:1172
 msgid "light"
@@ -1950,21 +2009,19 @@ msgstr "normale"
 
 #: ../src/common/fontcmn.cpp:1185
 msgid "medium"
-msgstr ""
+msgstr "mesatare"
 
 #: ../src/common/fontcmn.cpp:1190 ../src/common/fontcmn.cpp:1210
-#, fuzzy
 msgid "semibold"
-msgstr "të trasha"
+msgstr "gjysmë të trasha"
 
 #: ../src/common/fontcmn.cpp:1195
 msgid "bold"
 msgstr "të trasha"
 
 #: ../src/common/fontcmn.cpp:1205
-#, fuzzy
 msgid "extrabold"
-msgstr "të trasha"
+msgstr "tejet të trasha"
 
 #: ../src/common/fontcmn.cpp:1215
 msgid "heavy"
@@ -2035,13 +2092,13 @@ msgstr ""
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Kujtesa VFS përmban tashmë një kartelë '%s'!"
 
-#: ../src/common/fs_mem.cpp:222
+#: ../src/common/fs_mem.cpp:227
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr ""
 "Po provohet të hiqet kartela '%s' prej kujtese VFS, por s’është e ngarkuar!"
 
-#: ../src/common/fs_mem.cpp:256
+#: ../src/common/fs_mem.cpp:261
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "S’u arrit të depozitohej figura '%s' te kujtesë VFS!"
@@ -2095,14 +2152,14 @@ msgid "&Customize..."
 msgstr "&Përshtateni…"
 
 #: ../src/common/hyperlnkcmn.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in the default browser"
-msgstr "S’u arrit të hapej URL-ja \"%s\" në shfletuesin parazgjedhje."
+msgstr "S’u arrit të hapej URL-ja “%s” në shfletuesin parazgjedhje"
 
 #: ../src/common/iconbndl.cpp:198
 #, c-format
 msgid "Failed to load image %%d from file '%s'."
-msgstr "S’u arrit të ngarkohej figurë %%d prej kartelës \"%s\"."
+msgstr "S’u arrit të ngarkohej figurë %%d prej kartelës “%s”."
 
 #: ../src/common/iconbndl.cpp:206
 #, c-format
@@ -2112,7 +2169,7 @@ msgstr "S’u arrit të ngarkohej figurë %d prej rrjedhe."
 #: ../src/common/iconbndl.cpp:224
 #, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "S’u arrit të shtohen ikona prej burimi '%s'."
+msgstr "S’u arrit të shtoheshin ikona prej burimi '%s'."
 
 #: ../src/common/imagbmp.cpp:97
 msgid "BMP: Couldn't save invalid image."
@@ -2138,129 +2195,136 @@ msgstr "BMP: S’u shkrua dot hartë ngjyrash RGB."
 msgid "BMP: Couldn't write data."
 msgstr "BMP: S’u shkruan dot të dhëna."
 
-#: ../src/common/imagbmp.cpp:528 ../src/common/imagbmp.cpp:558
-#: ../src/common/imagbmp.cpp:573
+#: ../src/common/imagbmp.cpp:533
+#, c-format
+msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
+msgstr "BMP: kryet kanë biClrUsed=%d, ndërkohë që biBitCount=%d."
+
+#: ../src/common/imagbmp.cpp:544 ../src/common/imagbmp.cpp:574
+#: ../src/common/imagbmp.cpp:589
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: S’u sigurua dot kujtesë."
 
-#: ../src/common/imagbmp.cpp:1066
-msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "Krye DIB: Gjerësi figure > 32767 piksela për kartelë."
-
-#: ../src/common/imagbmp.cpp:1074
-msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "Krye DIB: Lartësi figure > 32767 piksela për kartelë."
-
 #: ../src/common/imagbmp.cpp:1094
-msgid "DIB Header: Unknown bitdepth in file."
-msgstr "Krye DIB: \"Bitdepth\" i panjohur në kartelë."
+msgid "DIB Header: Image width > 32767 pixels for file."
+msgstr "Krye DIB: Gjerësi figure > 32767 piksel për kartelë."
 
-#: ../src/common/imagbmp.cpp:1149
+#: ../src/common/imagbmp.cpp:1102
+msgid "DIB Header: Image height > 32767 pixels for file."
+msgstr "Krye DIB: Lartësi figure > 32767 piksel për kartelë."
+
+#: ../src/common/imagbmp.cpp:1122
+msgid "DIB Header: Unknown bitdepth in file."
+msgstr "Krye DIB: “Bitdepth” i panjohur në kartelë."
+
+#: ../src/common/imagbmp.cpp:1177
 msgid "DIB Header: Unknown encoding in file."
 msgstr "Krye DIB: Kodim i panjohur në kartelë."
 
-#: ../src/common/imagbmp.cpp:1181
+#: ../src/common/imagbmp.cpp:1209
 msgid "DIB Header: Encoding doesn't match bitdepth."
-msgstr "Krye DIB: Kodimi s’përputhet me \"bitdepth\"."
+msgstr "Krye DIB: Kodimi s’përputhet me “bitdepth”."
 
-#: ../src/common/imagbmp.cpp:1193
+#: ../src/common/imagbmp.cpp:1221
 msgid "Error in reading image DIB."
 msgstr "Gabim në lexim DIB figure."
 
-#: ../src/common/imagbmp.cpp:1208
+#: ../src/common/imagbmp.cpp:1236
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Gabim në lexim maske DIB."
 
-#: ../src/common/imagbmp.cpp:1267
+#: ../src/common/imagbmp.cpp:1295
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Figurë shumë e lartë për ikonë."
 
-#: ../src/common/imagbmp.cpp:1275
+#: ../src/common/imagbmp.cpp:1303
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Figurë shumë e gjerë për ikonë."
 
-#: ../src/common/imagbmp.cpp:1302 ../src/common/imagbmp.cpp:1402
-#: ../src/common/imagbmp.cpp:1417 ../src/common/imagbmp.cpp:1428
-#: ../src/common/imagbmp.cpp:1442 ../src/common/imagbmp.cpp:1490
-#: ../src/common/imagbmp.cpp:1505 ../src/common/imagbmp.cpp:1519
-#: ../src/common/imagbmp.cpp:1530
+#: ../src/common/imagbmp.cpp:1330 ../src/common/imagbmp.cpp:1430
+#: ../src/common/imagbmp.cpp:1445 ../src/common/imagbmp.cpp:1456
+#: ../src/common/imagbmp.cpp:1470 ../src/common/imagbmp.cpp:1518
+#: ../src/common/imagbmp.cpp:1533 ../src/common/imagbmp.cpp:1547
+#: ../src/common/imagbmp.cpp:1558
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Gabim gjatë shkrimit të kartelës figurë!"
 
-#: ../src/common/imagbmp.cpp:1615
+#: ../src/common/imagbmp.cpp:1643
 msgid "ICO: Invalid icon index."
 msgstr "ICO: tregues i pavlefshëm ikone."
 
-#: ../src/common/image.cpp:2344
+#: ../src/common/image.cpp:2360
 msgid "Image and mask have different sizes."
 msgstr "Figura dhe maska kanë madhësi të ndryshme."
 
-#: ../src/common/image.cpp:2352 ../src/common/image.cpp:2393
+#: ../src/common/image.cpp:2368 ../src/common/image.cpp:2409
 msgid "No unused colour in image being masked."
 msgstr "Pa maskim ngjyre të papërdorur në figurë."
 
-#: ../src/common/image.cpp:2576
+#: ../src/common/image.cpp:2592
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "S’u arrit të ngarkohej bitmap \"%s\" prej burimesh."
+msgstr "S’u arrit të ngarkohej bitmap “%s” prej burimesh."
 
-#: ../src/common/image.cpp:2585
+#: ../src/common/image.cpp:2601
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "S’u arrit të ngarkohej ikonë \"%s\" prej burimesh."
+msgstr "S’u arrit të ngarkohej ikonë “%s” prej burimesh."
 
-#: ../src/common/image.cpp:2663 ../src/common/image.cpp:2682
+#: ../src/common/image.cpp:2679 ../src/common/image.cpp:2698
 #, c-format
 msgid "Failed to load image from file \"%s\"."
-msgstr "S’u arrit të ngarkohej figurë prej kartelës \"%s\"."
+msgstr "S’u arrit të ngarkohej figurë prej kartelës “%s”."
 
-#: ../src/common/image.cpp:2696
+#: ../src/common/image.cpp:2712
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "S’ruhet dot figurë te kartela '%s': zgjatim i panjohur."
 
-#: ../src/common/image.cpp:2804
+#: ../src/common/image.cpp:2820
 msgid "No handler found for image type."
 msgstr "S’u gjet trajtues për llojin e figurave."
 
-#: ../src/common/image.cpp:2812 ../src/common/image.cpp:2935
-#: ../src/common/image.cpp:3001
+#: ../src/common/image.cpp:2828 ../src/common/image.cpp:2951
+#: ../src/common/image.cpp:3017
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "S’është përcaktuar trajtues figurash për llojin %d."
 
-#: ../src/common/image.cpp:2822
+#: ../src/common/image.cpp:2838
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Kartela figurë s’është e llojit %d."
 
-#: ../src/common/image.cpp:2905
+#: ../src/common/image.cpp:2921
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
+"Formati i figurës s’përcaktohet dot automatikisht prej input-i te i cili "
+"s’kërkohet dot."
 
-#: ../src/common/image.cpp:2923
+#: ../src/common/image.cpp:2939
 msgid "Unknown image data format."
 msgstr "Format i panjohur të dhënash figure."
 
-#: ../src/common/image.cpp:2944
+#: ../src/common/image.cpp:2960
 #, c-format
 msgid "This is not a %s."
 msgstr "Kjo s’është %s."
 
-#: ../src/common/image.cpp:2967 ../src/common/image.cpp:3015
+#: ../src/common/image.cpp:2983 ../src/common/image.cpp:3031
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "S’është përcaktuar trajtues figurash për llojin %s."
 
-#: ../src/common/image.cpp:2976
+#: ../src/common/image.cpp:2992
 #, c-format
 msgid "Image is not of type %s."
 msgstr "Figura s’është e llojit %s."
 
-#: ../src/common/image.cpp:3458
+#: ../src/common/image.cpp:3457
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
-msgstr "S’u arrit të kontrollohej format kartele figurash \"%s\"."
+msgstr "S’u arrit të kontrollohej format kartele figurash “%s”."
 
 #: ../src/common/imaggif.cpp:125
 msgid "GIF: error in GIF image format."
@@ -2312,7 +2376,7 @@ msgstr "PCX: format i pambuluar figurash"
 
 #: ../src/common/imagpcx.cpp:456 ../src/common/imagpcx.cpp:479
 msgid "PCX: couldn't allocate memory"
-msgstr "BMP: s’u sigurua dot kujtesë"
+msgstr "PCX: s’u sigurua dot kujtesë"
 
 #: ../src/common/imagpcx.cpp:457
 msgid "PCX: version number too low"
@@ -2348,7 +2412,7 @@ msgstr "PNM: Format kartele i papranuar."
 
 #: ../src/common/imagpnm.cpp:89
 msgid "PNM: Couldn't allocate memory."
-msgstr "BMP: S’u sigurua dot kujtesë."
+msgstr "PNM: S’u sigurua dot kujtesë."
 
 #: ../src/common/imagpnm.cpp:111 ../src/common/imagpnm.cpp:134
 #: ../src/common/imagpnm.cpp:156
@@ -2358,7 +2422,7 @@ msgstr "PNM: Kartela duket si e cunguar."
 #: ../src/common/imagtiff.cpp:69
 #, c-format
 msgid " (in module \"%s\")"
-msgstr " (në modulin \"%s\")"
+msgstr " (në modulin “%s”)"
 
 #: ../src/common/imagtiff.cpp:298
 msgid "TIFF: Error loading image."
@@ -2370,7 +2434,7 @@ msgstr "Tregues i pavlefshëm figurash TIFF."
 
 #: ../src/common/imagtiff.cpp:352
 msgid "TIFF: Image size is abnormally big."
-msgstr "TIFF: Madhësia e figurës është anormalisht e madhe."
+msgstr "TIFF: Madhësia e figurës është në mënyrë anormale e madhe."
 
 #: ../src/common/imagtiff.cpp:366 ../src/common/imagtiff.cpp:379
 #: ../src/common/imagtiff.cpp:738
@@ -2394,7 +2458,7 @@ msgstr "TIFF: Gabim në ruajtje figure."
 msgid "TIFF: Error writing image."
 msgstr "TIFF: Gabim në shkrim figure."
 
-#: ../src/common/init.cpp:193
+#: ../src/common/init.cpp:192
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2403,11 +2467,11 @@ msgstr ""
 "S’u shndërrua dot në Unikod argumenti %d për rresht urdhrash dhe do të "
 "shpërfillet."
 
-#: ../src/common/init.cpp:284
+#: ../src/common/init.cpp:283
 msgid "Initialization failed in post init, aborting."
 msgstr "Gatitja në post init dështoi, po ndërpritet."
 
-#: ../src/common/intl.cpp:376
+#: ../src/common/intl.cpp:393
 #, c-format
 msgid "Cannot set locale to language \"%s\"."
 msgstr "S’caktohet dot gjuha '%s' si vendore."
@@ -2435,8 +2499,8 @@ msgstr[1] "Mesazhi i mëparshëm u përsërit %u herë."
 #, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "Mesazhi i fundit i përsëritur (\"%s\", %u herë) s’qe output"
-msgstr[1] "Mesazhi i fundit i përsëritur (\"%s\", %u herë) s’qe output"
+msgstr[0] "Mesazhi i fundit i përsëritur (“%s”, %u herë) s’qe output"
+msgstr[1] "Mesazhi i fundit i përsëritur (“%s”, %u herë) s’qe output"
 
 #: ../src/common/log.cpp:443
 #, c-format
@@ -2444,46 +2508,43 @@ msgid " (error %ld: %s)"
 msgstr " (gabim %ld: %s)"
 
 #: ../src/common/lzmastream.cpp:121
-#, fuzzy
 msgid "Failed to allocate memory for LZMA decompression."
-msgstr "S’u arrit të jepej ngjyrë për OpeGL"
+msgstr "S’u arrit të jepej kujtesë për çngjeshje LZMA."
 
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr ""
+msgstr "S’u arrit të gatitej çngjeshje LZMA: gabim i papritur %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
-msgstr ""
+msgstr "ç’u dha s’është në formatin XZ"
 
 #: ../src/common/lzmastream.cpp:183
 msgid "input compressed using unknown XZ option"
-msgstr ""
+msgstr "ç’u dha u ngjesh duke përdorur mundësinë e panjohur XZ"
 
 #: ../src/common/lzmastream.cpp:188
 msgid "input is corrupted"
-msgstr ""
+msgstr "ç’u dha është e dëmtuar"
 
 #: ../src/common/lzmastream.cpp:192
-#, fuzzy
 msgid "unknown decompression error"
-msgstr "gabim çngjeshjeje"
+msgstr "gabim i panjohur çngjeshjeje"
 
 #: ../src/common/lzmastream.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA decompression error: %s"
-msgstr "gabim çngjeshjeje"
+msgstr "Gabim çngjeshjeje LZMA: %s"
 
 #: ../src/common/lzmastream.cpp:231
-#, fuzzy
 msgid "Failed to allocate memory for LZMA compression."
-msgstr "S’u arrit të jepej ngjyrë për OpeGL"
+msgstr "S’u arrit të jepej kujtesë për ngjeshje LZMA."
 
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr ""
+msgstr "S’u arrit të gatitej ngjeshje LZMA: gabim i papritur %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -2491,39 +2552,38 @@ msgid "out of memory"
 msgstr "kujtesë e pamjaftueshme"
 
 #: ../src/common/lzmastream.cpp:276 ../src/common/lzmastream.cpp:346
-#, fuzzy
 msgid "unknown compression error"
-msgstr "gabim ngjeshjeje"
+msgstr "gabim i panjohur ngjeshjeje"
 
 #: ../src/common/lzmastream.cpp:280
-#, fuzzy, c-format
+#, c-format
 msgid "LZMA compression error: %s"
-msgstr "gabim ngjeshjeje"
+msgstr "Gabim ngjeshjeje LZMA: %s"
 
 #: ../src/common/lzmastream.cpp:350
 #, c-format
 msgid "LZMA compression error when flushing output: %s"
-msgstr ""
+msgstr "Gabim ngjeshjeje LZMA, kur spastrohej output-i: %s"
 
 #: ../src/common/mimecmn.cpp:221
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr "'{' pa shoqe te zë për lloj mime %s."
+msgstr "'{' pa shoqe te një zë për lloj mime %s."
 
 #: ../src/common/module.cpp:78
 #, c-format
 msgid "Circular dependency involving module \"%s\" detected."
-msgstr "U pikas varësi rrethore që përfshin modulin \"%s\"."
+msgstr "U pikas varësi rrethore që përfshin modulin “%s”."
 
 #: ../src/common/module.cpp:130
 #, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
-msgstr "Varësia \"%s\" e modulit \"%s\" s’ekziston."
+msgstr "Varësia “%s” e modulit “%s” s’ekziston."
 
 #: ../src/common/module.cpp:139
 #, c-format
 msgid "Module \"%s\" initialization failed"
-msgstr "Gatitja e modulit \"%s\" dështoi"
+msgstr "Gatitja e modulit “%s” dështoi"
 
 #: ../src/common/msgout.cpp:121
 msgid "Message"
@@ -2675,7 +2735,7 @@ msgstr "Zarf Italie, 110 x 230 mm"
 
 #: ../src/common/paper.cpp:128
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
-msgstr "#10 Envelope, 4 1/8 x 9 1/2 inç"
+msgstr "Zarf Monark, 3 7/8 x 7 1/2 inç"
 
 #: ../src/common/paper.cpp:129
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
@@ -2683,15 +2743,15 @@ msgstr "Zarf 6 3/4, 3 5/8 x 6 1/2 inç"
 
 #: ../src/common/paper.cpp:130
 msgid "US Std Fanfold, 14 7/8 x 11 in"
-msgstr "US Std Fanfold, 14 7/8 x 11 inç"
+msgstr "Fletëpalosje ShBA Std., 14 7/8 x 11 inç"
 
 #: ../src/common/paper.cpp:131
 msgid "German Std Fanfold, 8 1/2 x 12 in"
-msgstr ""
+msgstr "Fletëpalosje Gjermane Std, 8 1/2 x 12 inç"
 
 #: ../src/common/paper.cpp:132
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
-msgstr ""
+msgstr "Fletëpalosje Gjermane Legale, 8 1/2 x 13 inç"
 
 #: ../src/common/paper.cpp:134
 msgid "B4 (ISO) 250 x 353 mm"
@@ -2899,7 +2959,7 @@ msgstr "PRC 32K 97 x 151 mm"
 
 #: ../src/common/paper.cpp:186
 msgid "PRC 32K(Big) 97 x 151 mm"
-msgstr "PRC 32K(e Madhe) 97 x 151 mm"
+msgstr "PRC 32K(E madhe) 97 x 151 mm"
 
 #: ../src/common/paper.cpp:187
 msgid "PRC Envelope #1 102 x 165 mm"
@@ -2951,7 +3011,7 @@ msgstr "PRC 32K e Rrotulluar"
 
 #: ../src/common/paper.cpp:199
 msgid "PRC 32K(Big) Rotated"
-msgstr "PRC 32K(e Madhe) e Rrotulluar"
+msgstr "PRC 32K(E madhe) e Rrotulluar"
 
 #: ../src/common/paper.cpp:200
 msgid "PRC Envelope #1 Rotated 165 x 102 mm"
@@ -3009,123 +3069,125 @@ msgstr "Të përgjithshme"
 msgid "Advanced"
 msgstr "Të mëtejshme"
 
-#: ../src/common/prntbase.cpp:253
+#: ../src/common/prntbase.cpp:255
 msgid "Generic PostScript"
 msgstr "PostScript Bazë"
 
-#: ../src/common/prntbase.cpp:267
+#: ../src/common/prntbase.cpp:269
 msgid "Ready"
 msgstr "Gati"
 
-#: ../src/common/prntbase.cpp:342
+#: ../src/common/prntbase.cpp:344
 msgid "Printing Error"
 msgstr "Gabim Shtypjeje"
 
-#: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:821
+#: ../src/common/prntbase.cpp:423 ../src/common/prntbase.cpp:1575
+#: ../src/generic/prntdlgg.cpp:136 ../src/generic/prntdlgg.cpp:150
+#: ../src/gtk/print.cpp:622 ../src/gtk/print.cpp:640
+msgid "Print"
+msgstr "Shtyp"
+
+#: ../src/common/prntbase.cpp:481 ../src/generic/prntdlgg.cpp:819
 msgid "Page setup"
 msgstr "Rregullim faqeje"
 
-#: ../src/common/prntbase.cpp:533
+#: ../src/common/prntbase.cpp:535
 msgid "Please wait while printing..."
 msgstr "Ju lutemi, prisni, teksa shtypet…"
 
-#: ../src/common/prntbase.cpp:537
+#: ../src/common/prntbase.cpp:539
 msgid "Document:"
 msgstr "Dokument:"
 
-#: ../src/common/prntbase.cpp:540
+#: ../src/common/prntbase.cpp:542
 msgid "Progress:"
 msgstr "Ecuri:"
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:543
 msgid "Preparing"
 msgstr "Po përgatitet"
 
-#: ../src/common/prntbase.cpp:560
+#: ../src/common/prntbase.cpp:562
 #, c-format
 msgid "Printing page %d"
 msgstr "Po shtypet faqja %d"
 
-#: ../src/common/prntbase.cpp:565
+#: ../src/common/prntbase.cpp:567
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "Po shtypet faqja %d nga %d"
 
-#: ../src/common/prntbase.cpp:568
+#: ../src/common/prntbase.cpp:570
 #, c-format
 msgid " (copy %d of %d)"
 msgstr " (kopje %d e %d)"
 
-#: ../src/common/prntbase.cpp:607
+#: ../src/common/prntbase.cpp:609
 msgid "Printing "
 msgstr "Po shtypet "
 
-#: ../src/common/prntbase.cpp:1573
+#: ../src/common/prntbase.cpp:1582
 msgid "First page"
 msgstr "Faqja e parë"
 
-#: ../src/common/prntbase.cpp:1578 ../src/html/helpwnd.cpp:662
+#: ../src/common/prntbase.cpp:1587 ../src/html/helpwnd.cpp:661
 msgid "Previous page"
 msgstr "Faqja e mëparshme"
 
-#: ../src/common/prntbase.cpp:1592 ../src/html/helpwnd.cpp:663
+#: ../src/common/prntbase.cpp:1601 ../src/html/helpwnd.cpp:662
 msgid "Next page"
 msgstr "Faqe pasuese"
 
-#: ../src/common/prntbase.cpp:1597
+#: ../src/common/prntbase.cpp:1606
 msgid "Last page"
 msgstr "Faqja e fundit"
 
-#: ../src/common/prntbase.cpp:1605 ../src/common/stockitem.cpp:216
+#: ../src/common/prntbase.cpp:1614 ../src/common/stockitem.cpp:216
 msgid "Zoom Out"
 msgstr "Zvogëloje"
 
-#: ../src/common/prntbase.cpp:1619 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1628 ../src/common/stockitem.cpp:215
 msgid "Zoom In"
 msgstr "Zmadhoje"
 
-#: ../src/common/prntbase.cpp:1625 ../src/common/stockitem.cpp:154
+#: ../src/common/prntbase.cpp:1634 ../src/common/stockitem.cpp:154
 #: ../src/generic/logg.cpp:513 ../src/univ/themes/win32.cpp:3753
 msgid "&Close"
 msgstr "&Mbylle"
 
-#: ../src/common/prntbase.cpp:2037
+#: ../src/common/prntbase.cpp:2060
 msgid "Could not start document preview."
 msgstr "S’u nis dot paraparje dokumenti."
 
-#: ../src/common/prntbase.cpp:2037 ../src/common/prntbase.cpp:2079
-#: ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2060 ../src/common/prntbase.cpp:2102
+#: ../src/common/prntbase.cpp:2110
 msgid "Print Preview Failure"
 msgstr "Dështim Paraparje Shtypjeje"
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2087
+#: ../src/common/prntbase.cpp:2102 ../src/common/prntbase.cpp:2110
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Na ndjeni, s’ka kujtesë të mjaftueshme për krijim paraparjeje."
 
-#: ../src/common/prntbase.cpp:2094
+#: ../src/common/prntbase.cpp:2117
 #, c-format
 msgid "Page %d of %d"
 msgstr "Faqe %d nga %d"
 
-#: ../src/common/prntbase.cpp:2096
+#: ../src/common/prntbase.cpp:2119
 #, c-format
 msgid "Page %d"
 msgstr "Faqe %d"
 
-#: ../src/common/regex.cpp:233
-msgid "conversion to 8-bit encoding failed"
-msgstr "shndërrimi në kodim 8-bit dështoi"
-
-#: ../src/common/regex.cpp:255 ../src/html/chm.cpp:348
+#: ../src/common/regex.cpp:456 ../src/html/chm.cpp:348
 msgid "unknown error"
 msgstr "gabim i panjohur"
 
-#: ../src/common/regex.cpp:307
+#: ../src/common/regex.cpp:1095
 #, c-format
 msgid "Invalid regular expression '%s': %s"
 msgstr "Shprehje e rregullt e pavlefshme '%s': %s"
 
-#: ../src/common/regex.cpp:428 ../src/common/regex.cpp:476
+#: ../src/common/regex.cpp:1224
 #, c-format
 msgid "Failed to find match for regular expression: %s"
 msgstr "S’u arrit të gjendej përputhje për shprehje të rregullt: %s"
@@ -3133,37 +3195,36 @@ msgstr "S’u arrit të gjendej përputhje për shprehje të rregullt: %s"
 #: ../src/common/rendcmn.cpp:190
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
-msgstr ""
-"Vizatuesi \"%s\" ka version %d.%d të papërputhshëm dhe s’u ngarkua dot."
+msgstr "Vizatuesi “%s” ka version %d.%d të papërputhshëm dhe s’u ngarkua dot."
 
 #: ../src/common/secretstore.cpp:168
 msgid "Not available for this platform"
-msgstr ""
+msgstr "Jo e passhme për këtë platformë"
 
 #: ../src/common/secretstore.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Saving password for \"%s\" failed: %s."
-msgstr "S\"u arrit të ruhej fjalëkalimi për \"%s/%s\": %s."
+msgstr "S’u arrit të ruhej fjalëkalimi për “%s”: %s."
 
 #: ../src/common/secretstore.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "Reading password for \"%s\" failed: %s."
-msgstr "S’u arrit të lexohej fjalëkalimi për \"%s/%s\": %s."
+msgstr "S’u arrit të lexohej fjalëkalimi për “%s”: %s."
 
 #: ../src/common/secretstore.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting password for \"%s\" failed: %s."
-msgstr "Fshirja e fjalëkalimit për \"%s/%s\" dështoi: %s."
+msgstr "S’u arrit të fshihet fjalëkalimi për “%s”: %s."
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
-msgstr "S’u arrit të mbikëqyren kanale I/O"
+msgstr "S’u arrit të mbikëqyreshin kanale I/O"
 
-#: ../src/common/sizer.cpp:2944 ../src/common/stockitem.cpp:196
+#: ../src/common/sizer.cpp:3023 ../src/common/stockitem.cpp:196
 msgid "Save"
 msgstr "Ruaje"
 
-#: ../src/common/sizer.cpp:2946
+#: ../src/common/sizer.cpp:3025
 msgid "Don't Save"
 msgstr "Mos e Ruaj"
 
@@ -3172,18 +3233,21 @@ msgid "Cannot initialize sockets"
 msgstr "S’gatiten dot socket-e"
 
 #: ../src/common/stockitem.cpp:128
-#, fuzzy
 msgctxt "standard Windows menu"
 msgid "&Help"
 msgstr "&Ndihmë"
 
 #: ../src/common/stockitem.cpp:145
 msgid "&About"
-msgstr "&Rreth"
+msgstr "&Mbi"
 
 #: ../src/common/stockitem.cpp:145
 msgid "About"
-msgstr "Rreth"
+msgstr "Mbi"
+
+#: ../src/common/stockitem.cpp:146
+msgid "Add"
+msgstr "Shtoni"
 
 #: ../src/common/stockitem.cpp:147
 msgid "&Apply"
@@ -3197,12 +3261,16 @@ msgstr "Zbatoje"
 msgid "&Back"
 msgstr "&Mbrapsht"
 
+#: ../src/common/stockitem.cpp:148
+msgid "Back"
+msgstr "Mbrapsht"
+
 #: ../src/common/stockitem.cpp:149
 msgid "&Bold"
 msgstr "&Të trasha"
 
 #: ../src/common/stockitem.cpp:149 ../src/generic/fontdlgg.cpp:329
-#: ../src/osx/carbon/fontdlg.cpp:351 ../src/richtext/richtextfontpage.cpp:355
+#: ../src/osx/carbon/fontdlg.cpp:350 ../src/richtext/richtextfontpage.cpp:355
 msgid "Bold"
 msgstr "Të trasha"
 
@@ -3214,28 +3282,30 @@ msgstr "&Në fund"
 msgid "Bottom"
 msgstr "Në Fund"
 
-#: ../src/common/stockitem.cpp:151 ../src/generic/fontdlgg.cpp:466
-#: ../src/generic/fontdlgg.cpp:485 ../src/generic/wizard.cpp:433
-#: ../src/osx/carbon/fontdlg.cpp:399 ../src/osx/cocoa/button.mm:200
+#: ../src/common/stockitem.cpp:151 ../src/generic/fontdlgg.cpp:465
+#: ../src/generic/fontdlgg.cpp:484 ../src/generic/wizard.cpp:435
+#: ../src/osx/carbon/fontdlg.cpp:398 ../src/osx/cocoa/button.mm:157
 msgid "&Cancel"
 msgstr "&Anuloje"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "&CD-ROM"
 msgstr "&CD-ROM"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "CD-ROM"
-msgstr "CD-Rom"
+msgstr "CD-ROM"
 
 #: ../src/common/stockitem.cpp:153
 msgid "&Clear"
 msgstr "&Spastroje"
 
+#: ../src/common/stockitem.cpp:153
+msgid "Clear"
+msgstr "Spastroje"
+
 #: ../src/common/stockitem.cpp:154 ../src/generic/dbgrptg.cpp:94
-#: ../src/generic/progdlgg.cpp:781 ../src/html/helpdlg.cpp:87
+#: ../src/generic/progdlgg.cpp:781 ../src/html/helpdlg.cpp:86
 #: ../src/msw/progdlg.cpp:211 ../src/msw/progdlg.cpp:946
 #: ../src/richtext/richtextstyledlg.cpp:273
 #: ../src/richtext/richtextsymboldlg.cpp:473
@@ -3250,8 +3320,8 @@ msgstr "&Shndërroje"
 msgid "Convert"
 msgstr "Shndërroje"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2900
-#: ../src/osx/textctrl_osx.cpp:595 ../src/richtext/richtextctrl.cpp:332
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2936
+#: ../src/osx/textctrl_osx.cpp:638 ../src/richtext/richtextctrl.cpp:332
 msgid "&Copy"
 msgstr "&Kopjoje"
 
@@ -3259,8 +3329,8 @@ msgstr "&Kopjoje"
 msgid "Copy"
 msgstr "Kopjoje"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2899
-#: ../src/osx/textctrl_osx.cpp:594 ../src/richtext/richtextctrl.cpp:331
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2935
+#: ../src/osx/textctrl_osx.cpp:637 ../src/richtext/richtextctrl.cpp:331
 msgid "Cu&t"
 msgstr "P&rije"
 
@@ -3268,15 +3338,24 @@ msgstr "P&rije"
 msgid "Cut"
 msgstr "Prije"
 
-#: ../src/common/stockitem.cpp:158 ../src/msw/textctrl.cpp:2902
-#: ../src/osx/textctrl_osx.cpp:597 ../src/richtext/richtextctrl.cpp:334
+#: ../src/common/stockitem.cpp:158 ../src/msw/textctrl.cpp:2938
+#: ../src/osx/textctrl_osx.cpp:640 ../src/richtext/richtextctrl.cpp:334
 #: ../src/richtext/richtexttabspage.cpp:138
 msgid "&Delete"
 msgstr "&Fshije"
 
+#: ../src/common/stockitem.cpp:158 ../src/richtext/richtextbuffer.cpp:8266
+#: ../src/stc/stc_i18n.cpp:20
+msgid "Delete"
+msgstr "Fshije"
+
 #: ../src/common/stockitem.cpp:159
 msgid "&Down"
 msgstr "&Poshtë"
+
+#: ../src/common/stockitem.cpp:159 ../src/generic/fdrepdlg.cpp:149
+msgid "Down"
+msgstr "Poshtë"
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Edit"
@@ -3289,6 +3368,10 @@ msgstr "Përpunoni"
 #: ../src/common/stockitem.cpp:161
 msgid "&Execute"
 msgstr "&Kryeje"
+
+#: ../src/common/stockitem.cpp:161
+msgid "Execute"
+msgstr "Përmbushe"
 
 #: ../src/common/stockitem.cpp:162
 msgid "&Quit"
@@ -3307,14 +3390,12 @@ msgid "File"
 msgstr "Kartelë"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "&Find..."
-msgstr "&Gjej"
+msgstr "&Gjeni…"
 
 #: ../src/common/stockitem.cpp:164
-#, fuzzy
 msgid "Find..."
-msgstr "Gjej"
+msgstr "Gjeni…"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&First"
@@ -3338,7 +3419,7 @@ msgstr "&Përpara"
 
 #: ../src/common/stockitem.cpp:167
 msgid "Forward"
-msgstr ""
+msgstr "Përpara"
 
 #: ../src/common/stockitem.cpp:168
 msgid "&Harddisk"
@@ -3348,7 +3429,7 @@ msgstr "&HD"
 msgid "Harddisk"
 msgstr "HD"
 
-#: ../src/common/stockitem.cpp:169 ../src/generic/wizard.cpp:436
+#: ../src/common/stockitem.cpp:169 ../src/generic/wizard.cpp:438
 #: ../src/osx/cocoa/menu.mm:226 ../src/richtext/richtextstyledlg.cpp:299
 #: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "&Help"
@@ -3358,15 +3439,19 @@ msgstr "&Ndihmë"
 msgid "&Home"
 msgstr "&Kreu"
 
+#: ../src/common/stockitem.cpp:170
+msgid "Home"
+msgstr "Hyrje"
+
 #: ../src/common/stockitem.cpp:171
 msgid "Indent"
-msgstr "Kryeradhë"
+msgstr "Shmangie brendazi"
 
 #: ../src/common/stockitem.cpp:172
 msgid "&Index"
 msgstr "&Tregues"
 
-#: ../src/common/stockitem.cpp:172 ../src/html/helpwnd.cpp:513
+#: ../src/common/stockitem.cpp:172 ../src/html/helpwnd.cpp:512
 msgid "Index"
 msgstr "Tregues"
 
@@ -3383,7 +3468,7 @@ msgid "&Italic"
 msgstr "&Të pjerrëta"
 
 #: ../src/common/stockitem.cpp:174 ../src/generic/fontdlgg.cpp:325
-#: ../src/osx/carbon/fontdlg.cpp:358 ../src/richtext/richtextfontpage.cpp:351
+#: ../src/osx/carbon/fontdlg.cpp:357 ../src/richtext/richtextfontpage.cpp:351
 msgid "Italic"
 msgstr "Të pjerrta"
 
@@ -3417,7 +3502,7 @@ msgstr "E &fundit"
 
 #: ../src/common/stockitem.cpp:180
 msgid "Last"
-msgstr ""
+msgstr "E fundit"
 
 #: ../src/common/stockitem.cpp:181
 msgid "&Network"
@@ -3433,14 +3518,14 @@ msgstr "I &ri"
 
 #: ../src/common/stockitem.cpp:182
 msgid "New"
-msgstr ""
+msgstr "I ri"
 
-#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:183 ../src/msw/msgdlg.cpp:436
 msgid "&No"
 msgstr "&Jo"
 
-#: ../src/common/stockitem.cpp:184 ../src/generic/fontdlgg.cpp:471
-#: ../src/generic/fontdlgg.cpp:478 ../src/osx/carbon/fontdlg.cpp:405
+#: ../src/common/stockitem.cpp:184 ../src/generic/fontdlgg.cpp:470
+#: ../src/generic/fontdlgg.cpp:477 ../src/osx/carbon/fontdlg.cpp:404
 msgid "&OK"
 msgstr "&OK"
 
@@ -3452,8 +3537,8 @@ msgstr "&Hapni…"
 msgid "Open..."
 msgstr "Hapni…"
 
-#: ../src/common/stockitem.cpp:186 ../src/msw/textctrl.cpp:2901
-#: ../src/osx/textctrl_osx.cpp:596 ../src/richtext/richtextctrl.cpp:333
+#: ../src/common/stockitem.cpp:186 ../src/msw/textctrl.cpp:2937
+#: ../src/osx/textctrl_osx.cpp:639 ../src/richtext/richtextctrl.cpp:333
 msgid "&Paste"
 msgstr "&Ngjite"
 
@@ -3466,7 +3551,7 @@ msgstr "Ngjitje"
 msgid "&Preferences"
 msgstr "&Parapëlqime"
 
-#: ../src/common/stockitem.cpp:187 ../src/osx/cocoa/preferences.mm:303
+#: ../src/common/stockitem.cpp:187 ../src/osx/cocoa/preferences.mm:304
 msgid "Preferences"
 msgstr "Parapëlqime"
 
@@ -3508,14 +3593,12 @@ msgid "Remove"
 msgstr "Hiqe"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Rep&lace..."
-msgstr "&Zëvendësoje"
+msgstr "&Zëvendësoni…"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Replace..."
-msgstr "Zëvendësoje"
+msgstr "Zëvendësoni…"
 
 #: ../src/common/stockitem.cpp:195
 msgid "Revert to Saved"
@@ -3530,12 +3613,11 @@ msgid "Save &As..."
 msgstr "Ruajeni &Si…"
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Save As..."
-msgstr "Ruajeni &Si…"
+msgstr "Ruajeni Si…"
 
-#: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2904
-#: ../src/osx/textctrl_osx.cpp:599 ../src/richtext/richtextctrl.cpp:336
+#: ../src/common/stockitem.cpp:198 ../src/msw/textctrl.cpp:2940
+#: ../src/osx/textctrl_osx.cpp:642 ../src/richtext/richtextctrl.cpp:336
 msgid "Select &All"
 msgstr "Përzgjidhni &Krejt"
 
@@ -3613,7 +3695,7 @@ msgstr "Në krye"
 msgid "Undelete"
 msgstr "Shfshije"
 
-#: ../src/common/stockitem.cpp:208 ../src/generic/fontdlgg.cpp:441
+#: ../src/common/stockitem.cpp:208 ../src/generic/fontdlgg.cpp:440
 msgid "&Underline"
 msgstr "&Nënvijë"
 
@@ -3637,7 +3719,11 @@ msgstr "Hiqi shmangien"
 msgid "&Up"
 msgstr "&Sipër"
 
-#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:435
+#: ../src/common/stockitem.cpp:211 ../src/generic/fdrepdlg.cpp:149
+msgid "Up"
+msgstr "Sipër"
+
+#: ../src/common/stockitem.cpp:212 ../src/msw/msgdlg.cpp:436
 msgid "&Yes"
 msgstr "&Po"
 
@@ -3682,13 +3768,12 @@ msgid "Delete selection"
 msgstr "Fshije përzgjedhjen"
 
 #: ../src/common/stockitem.cpp:267
-#, fuzzy
 msgid "Find in document"
-msgstr "Hap dokument HTML"
+msgstr "Gjej në dokument"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Find and replace in document"
-msgstr ""
+msgstr "Gjeni dhe zëvendësoni në dokument"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Paste selection"
@@ -3707,14 +3792,12 @@ msgid "Undo last action"
 msgstr "Zhbëje veprimin e fundit"
 
 #: ../src/common/stockitem.cpp:273
-#, fuzzy
 msgid "Create new document"
-msgstr "Krijoni drejtori të re"
+msgstr "Krijoni dokument të ri"
 
 #: ../src/common/stockitem.cpp:274
-#, fuzzy
 msgid "Open an existing document"
-msgstr "Hap dokument HTML"
+msgstr "Hapni një dokument ekzistues"
 
 #: ../src/common/stockitem.cpp:275
 msgid "Close current document"
@@ -3744,7 +3827,7 @@ msgstr "bllok i paplotë kryesh në tar"
 
 #: ../src/common/tarstrm.cpp:812
 msgid "checksum failure reading tar header block"
-msgstr ""
+msgstr "dështim checksum-i në lexim blloku kryesh tar"
 
 #: ../src/common/tarstrm.cpp:985
 msgid "invalid data in extended tar header"
@@ -3778,9 +3861,9 @@ msgid "File couldn't be loaded."
 msgstr "Kartela s’u ngarkua dot."
 
 #: ../src/common/textfile.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read text file \"%s\"."
-msgstr "S’u arrit të lexohej dokument prej kartelës \"%s\"."
+msgstr "S’u arrit të lexohej kartela tekst “%s”."
 
 #: ../src/common/textfile.cpp:161
 #, c-format
@@ -3789,37 +3872,37 @@ msgstr "s’shkruhet dot shtytëza '%s' në disk."
 
 #: ../src/common/time.cpp:216
 msgid "Failed to get the local system time"
-msgstr "S’u arrit të merret koha vendore e sistemit"
+msgstr "S’u arrit të merrej koha vendore e sistemit"
 
 #: ../src/common/time.cpp:285
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay dështoi."
 
-#: ../src/common/translation.cpp:1143
+#: ../src/common/translation.cpp:1025
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' s’është katalog i vlefshëm mesazhesh."
 
-#: ../src/common/translation.cpp:1168
+#: ../src/common/translation.cpp:1050
 msgid "Invalid message catalog."
 msgstr "Katalog i pavlefshëm mesazhi."
 
-#: ../src/common/translation.cpp:1227
+#: ../src/common/translation.cpp:1109
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "S’u arrit të përtypeshin Plural-Forms: '%s'"
 
-#: ../src/common/translation.cpp:1942
+#: ../src/common/translation.cpp:1823
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "po përdoret katalog '%s' prej '%s'."
 
-#: ../src/common/translation.cpp:2025
+#: ../src/common/translation.cpp:1906
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "Burimi '%s' s’është katalog i vlefshëm mesazhesh."
 
-#: ../src/common/translation.cpp:2074
+#: ../src/common/translation.cpp:1955
 msgid "Couldn't enumerate translations"
 msgstr "S’u numërtuan dot përkthimet"
 
@@ -3830,7 +3913,7 @@ msgstr "S’ka aplikacion parazgjedhje të formësuar për kartela HTML."
 #: ../src/common/utilscmn.cpp:1140
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
-msgstr "S’u arrit të hapej URL-ja \"%s\" në shfletuesin parazgjedhje."
+msgstr "S’u arrit të hapej URL-ja “%s” në shfletuesin parazgjedhje."
 
 #: ../src/common/valtext.cpp:142
 msgid "Validation conflict"
@@ -3851,29 +3934,38 @@ msgid "'%s' is not one of the valid strings"
 msgstr "'%s' s’është një nga vargjet e vlefshëm"
 
 #: ../src/common/valtext.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains invalid character(s)"
-msgstr "'%s' përmban shenja të paligjshme"
+msgstr "'%s' përmban shenjë(a) të pavlefshme"
 
 #: ../src/common/webrequest.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s (%d)"
-msgstr "Gabim: "
+msgstr "Gabim: %s (%d)"
 
-#: ../src/common/webrequest.cpp:642
+#: ../src/common/webrequest.cpp:647
 msgid "Not enough free disk space for download."
-msgstr ""
+msgstr "Hapësirë disku e pamjaftueshme për shkarkim."
 
 #: ../src/common/webrequest_curl.cpp:884
-#, fuzzy
 msgid "libcurl could not be initialized"
-msgstr "Kartela s’u ngarkua dot."
+msgstr "S’u gatit dot përshkrim libcurl"
 
-#: ../src/common/wincmn.cpp:1673
+#: ../src/common/webview.cpp:246
+#| msgid "String conversions not supported"
+msgid "RunScriptAsync not supported"
+msgstr "S’mbulohet RunScriptAsync"
+
+#: ../src/common/webview.cpp:257 ../src/msw/webview_ie.cpp:1061
+#, c-format
+msgid "Error running JavaScript: %s"
+msgstr "Gabim në xhirim JavaScript-i: %s"
+
+#: ../src/common/wincmn.cpp:1671
 msgid "This platform does not support background transparency."
 msgstr "Kjo platformë nuk mbulon tejdukshmëri sfondesh."
 
-#: ../src/common/wincmn.cpp:2146
+#: ../src/common/wincmn.cpp:2144
 msgid "Could not transfer data to window"
 msgstr "S’u shpërngulën dot të dhëna te dritare"
 
@@ -3919,7 +4011,7 @@ msgstr "Numër i Paligjshëm Parametri për Metodë ConstructObject"
 #: ../src/common/xtistrm.cpp:163
 #, c-format
 msgid "Create Parameter %s not found in declared RTTI Parameters"
-msgstr ""
+msgstr "S’u gjet Parametër Create %s te Parametra RTTI të deklaruar"
 
 #: ../src/common/xtistrm.cpp:292
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
@@ -3928,7 +4020,7 @@ msgstr "Klasë e Paligjshme Objektesh (Non-wxEvtHandler) si Burim Akti"
 #: ../src/common/xtistrm.cpp:315 ../src/common/xtixml.cpp:352
 #: ../src/common/xtixml.cpp:505
 msgid "Type must have enum - long conversion"
-msgstr ""
+msgstr "Lloji duhet të ketë shndërrim “enum - long”"
 
 #: ../src/common/xtistrm.cpp:402 ../src/common/xtistrm.cpp:417
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
@@ -3991,15 +4083,17 @@ msgstr "varg i pasaktë trajtuesi aktesh, mungon një pikë"
 
 #: ../src/common/zipstrm.cpp:572
 msgid "can't re-initialize zlib deflate stream"
-msgstr "s’rigatitet dot rrjedhë zlib \"deflate\""
+msgstr "s’rigatitet dot rrjedhë zlib “deflate”"
 
 #: ../src/common/zipstrm.cpp:597
 msgid "can't re-initialize zlib inflate stream"
-msgstr "s’rigatitet dot rrjedhë zlib \"inflate\""
+msgstr "s’rigatitet dot rrjedhë zlib “inflate”"
 
 #: ../src/common/zipstrm.cpp:1043
 msgid "Ignoring malformed extra data record, ZIP file may be corrupted"
 msgstr ""
+"Po shpërfillet zë i keqformuar të dhënash ekstra, kartela ZIP mund të jetë e "
+"dëmtuar"
 
 #: ../src/common/zipstrm.cpp:1522
 msgid "assuming this is a multi-part zip concatenated"
@@ -4019,7 +4113,7 @@ msgstr "gabim në lexim drejtorie qendrore zip"
 
 #: ../src/common/zipstrm.cpp:1940
 msgid "error reading zip local header"
-msgstr "gabim në leximi kryesh vendore zip"
+msgstr "gabim në lexim kryesh vendore zip"
 
 #: ../src/common/zipstrm.cpp:1988
 msgid "bad zipfile offset to entry"
@@ -4027,7 +4121,7 @@ msgstr ""
 
 #: ../src/common/zipstrm.cpp:2055
 msgid "stored file length not in Zip header"
-msgstr ""
+msgstr "gjatësi kartele jo e depozituar te kryet ZIP"
 
 #: ../src/common/zipstrm.cpp:2069 ../src/common/zipstrm.cpp:2390
 msgid "unsupported Zip compression method"
@@ -4044,9 +4138,9 @@ msgid "reading zip stream (entry %s): bad crc"
 msgstr "po lexohet rrjedhë zip (zëri %s): crc e gabuar"
 
 #: ../src/common/zipstrm.cpp:2608
-#, fuzzy, c-format
+#, c-format
 msgid "error writing zip entry '%s': file too large without ZIP64"
-msgstr "gabim në shkrim zëri zip '%s': crc ose gjatësi e gabuar"
+msgstr "gabim në shkrim zëri zip '%s': kartelë shumë e madhe pa ZIP64"
 
 #: ../src/common/zipstrm.cpp:2615
 #, c-format
@@ -4059,11 +4153,11 @@ msgstr "Gzip-i s’mbulohet nga ky version i zlib-it"
 
 #: ../src/common/zstream.cpp:182
 msgid "Can't initialize zlib inflate stream."
-msgstr "S’gatitet dot rrjedhë zlib \"inflate\"."
+msgstr "S’gatitet dot rrjedhë zlib “inflate”."
 
 #: ../src/common/zstream.cpp:241
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
-msgstr "S’lexohet dot rrjedhë \"inflate\": EOF i papritur nën rrjedhë."
+msgstr "S’lexohet dot rrjedhë “inflate”: EOF i papritur nën rrjedhë."
 
 #: ../src/common/zstream.cpp:248 ../src/common/zstream.cpp:423
 #, c-format
@@ -4073,18 +4167,18 @@ msgstr "gabim zlib %d“"
 #: ../src/common/zstream.cpp:249
 #, c-format
 msgid "Can't read from inflate stream: %s"
-msgstr "S’lexohet dot prej rrjedhe \"inflate\": %s"
+msgstr "S’lexohet dot prej rrjedhe “inflate”: %s"
 
 #: ../src/common/zstream.cpp:343
 msgid "Can't initialize zlib deflate stream."
-msgstr "S’gatitet dot rrymë zlib \"deflate\"."
+msgstr "S’gatitet dot rrjedhë zlib “deflate”."
 
 #: ../src/common/zstream.cpp:424
 #, c-format
 msgid "Can't write to deflate stream: %s"
-msgstr "S’shkruhet dot te rrjedhë \"deflate\": %s"
+msgstr "S’shkruhet dot te rrjedhë “deflate”: %s"
 
-#: ../src/dfb/bitmap.cpp:639 ../src/dfb/bitmap.cpp:673
+#: ../src/dfb/bitmap.cpp:633 ../src/dfb/bitmap.cpp:667
 #, c-format
 msgid "No bitmap handler for type %d defined."
 msgstr "S’ka trajtues bitmap të përcaktuar për llojin %d."
@@ -4137,7 +4231,6 @@ msgid "Version "
 msgstr "Version "
 
 #: ../src/generic/aboutdlgg.cpp:137 ../src/msw/aboutdlg.cpp:61
-#: ../src/osx/menu_osx.cpp:439
 #, c-format
 msgid "About %s"
 msgstr "Rreth %s"
@@ -4176,82 +4269,100 @@ msgstr "S’ka trajtues animacioni të përcaktuar për llojin %ld."
 msgid "Animation file is not of type %ld."
 msgstr "Kartela e animacionit s’është e llojit %ld."
 
-#: ../src/generic/colrdlgg.cpp:156 ../src/gtk/colordlg.cpp:49
+#: ../src/generic/colrdlgg.cpp:155 ../src/gtk/colordlg.cpp:49
 msgid "Choose colour"
 msgstr "Zgjidhni ngjyrë"
 
-#: ../src/generic/colrdlgg.cpp:359
+#: ../src/generic/colrdlgg.cpp:358
 msgid "Red:"
 msgstr "E kuqe:"
 
-#: ../src/generic/colrdlgg.cpp:362
+#: ../src/generic/colrdlgg.cpp:361
 msgid "Green:"
 msgstr "E gjelbër:"
 
-#: ../src/generic/colrdlgg.cpp:365
+#: ../src/generic/colrdlgg.cpp:364
 msgid "Blue:"
 msgstr "Blu:"
 
-#: ../src/generic/colrdlgg.cpp:374
+#: ../src/generic/colrdlgg.cpp:373
 msgid "Opacity:"
 msgstr "Patejdukshmëri:"
 
-#: ../src/generic/colrdlgg.cpp:386
+#: ../src/generic/colrdlgg.cpp:385
 msgid "Add to custom colours"
-msgstr "Shto tek ngjyra vetjake"
+msgstr "Shtoje tek ngjyra vetjake"
 
 #: ../src/generic/creddlgg.cpp:56
 msgid "Username:"
-msgstr ""
+msgstr "Emër përdoruesi:"
 
 #: ../src/generic/creddlgg.cpp:63
 msgid "Password:"
-msgstr ""
+msgstr "Fjalëkalim:"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1161
+#: ../src/generic/datavgen.cpp:1164
 msgid "true"
-msgstr ""
+msgstr "true"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1163
+#: ../src/generic/datavgen.cpp:1166
 msgid "false"
-msgstr ""
+msgstr "false"
 
-#: ../src/generic/datavgen.cpp:6763
+#: ../src/generic/datavgen.cpp:6855
 #, c-format
 msgid "Row %i"
 msgstr "Rreshti %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6853
+#: ../src/generic/datavgen.cpp:6945
 msgid "Collapse"
 msgstr "Tkurre"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6856
+#: ../src/generic/datavgen.cpp:6948
 msgid "Expand"
 msgstr "Zgjeroje"
 
-#: ../src/generic/datavgen.cpp:6875
+#: ../src/generic/datavgen.cpp:6967
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s (%d elementë)"
 
-#: ../src/generic/datavgen.cpp:6924
+#: ../src/generic/datavgen.cpp:7018
 #, c-format
 msgid "Column %u"
 msgstr "Shtylla %u"
 
+#. TRANSLATORS: Keystroke for manipulating a tree control
+#: ../src/generic/datavgen.cpp:7087 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextliststylepage.cpp:249
+#: ../src/richtext/richtextliststylepage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:249
+msgid "Left"
+msgstr "Majtas"
+
+#. TRANSLATORS: Keystroke for manipulating a tree control
+#: ../src/generic/datavgen.cpp:7090 ../src/richtext/richtextbulletspage.cpp:188
+#: ../src/richtext/richtextliststylepage.cpp:251
+#: ../src/richtext/richtextsizepage.cpp:250
+msgid "Right"
+msgstr "Djathtas"
+
 #: ../src/generic/dbgrptg.cpp:160
 #, c-format
 msgid "Open file \"%s\""
-msgstr "Hap kartelë \"%s\""
+msgstr "Hap kartelën “%s”"
 
 #: ../src/generic/dbgrptg.cpp:171
 #, c-format
 msgid "Enter command to open file \"%s\":"
-msgstr "Jepni një urdhër për hapjen e kartelës \"%s\":"
+msgstr "Jepni një urdhër për hapjen e kartelës “%s”:"
 
 #: ../src/generic/dbgrptg.cpp:231
 msgid "Executable files (*.exe)|*.exe|"
@@ -4260,7 +4371,7 @@ msgstr "Kartela të ekzekutueshmish (*.exe)|*.exe|"
 #: ../src/generic/dbgrptg.cpp:301
 #, c-format
 msgid "Debug report \"%s\""
-msgstr "Raport diagnostikimi \"%s\""
+msgstr "Raport diagnostikimi “%s”"
 
 #: ../src/generic/dbgrptg.cpp:317
 msgid "A debug report has been generated in the directory\n"
@@ -4268,7 +4379,7 @@ msgstr "Te drejtoria u prodhua një raport diagnostikimi\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr ""
+msgstr "Do të prodhohet raporti vijues i diagnostikimit\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4288,7 +4399,7 @@ msgid ""
 "at all possible please do continue with the report generation.\n"
 msgstr ""
 "Nëse doni ta hiqni fare qafe këtë raport diagnostikimi, ju lutemi, zgjidhni "
-"butonin \"Anuloje\",\n"
+"butonin “Anuloje”,\n"
 "por kini parasysh që kjo mund të zvarrisë përmirësimin e programit, ndaj,\n"
 "në qoftë e mundur, ju lutemi të vazhdoni me prodhimin e raportit.\n"
 
@@ -4316,46 +4427,46 @@ msgstr ""
 "Në paçi ndonjë të dhënë shtesë lidhur me këtë raport\n"
 "të mete, ju lutemi, jepeni këtu dhe do t’i bashkëngjitet:"
 
-#: ../src/generic/dcpsg.cpp:1665
+#: ../src/generic/dcpsg.cpp:1628
 msgid "Cannot open file for PostScript printing!"
 msgstr "S’hapet dot kartelë për shtypje PostScript!"
 
-#: ../src/generic/dirctrlg.cpp:410
+#: ../src/generic/dirctrlg.cpp:408
 msgid "Computer"
 msgstr "Kompjuter"
 
-#: ../src/generic/dirctrlg.cpp:412
+#: ../src/generic/dirctrlg.cpp:410
 msgid "Sections"
 msgstr "Ndarje"
 
-#: ../src/generic/dirctrlg.cpp:490
+#: ../src/generic/dirctrlg.cpp:488
 msgid "Home directory"
 msgstr "Drejtori krye"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/generic/dirctrlg.cpp:492 ../src/propgrid/advprops.cpp:783
+#: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:784
 msgid "Desktop"
 msgstr "Desktop"
 
-#: ../src/generic/dirctrlg.cpp:536 ../src/generic/filectrlg.cpp:752
+#: ../src/generic/dirctrlg.cpp:534 ../src/generic/filectrlg.cpp:752
 msgid "Illegal directory name."
 msgstr "Emër i paligjshëm drejtorie."
 
-#: ../src/generic/dirctrlg.cpp:536 ../src/generic/dirctrlg.cpp:554
-#: ../src/generic/dirctrlg.cpp:565 ../src/generic/dirdlgg.cpp:320
+#: ../src/generic/dirctrlg.cpp:534 ../src/generic/dirctrlg.cpp:552
+#: ../src/generic/dirctrlg.cpp:563 ../src/generic/dirdlgg.cpp:318
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
-#: ../src/generic/filectrlg.cpp:1357 ../src/generic/filectrlg.cpp:1388
+#: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
 #: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:74
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "Gabim"
 
-#: ../src/generic/dirctrlg.cpp:554 ../src/generic/filectrlg.cpp:766
+#: ../src/generic/dirctrlg.cpp:552 ../src/generic/filectrlg.cpp:766
 msgid "File name exists already."
 msgstr "Ka një emër të tillë kartele."
 
-#: ../src/generic/dirctrlg.cpp:565 ../src/generic/dirdlgg.cpp:320
+#: ../src/generic/dirctrlg.cpp:563 ../src/generic/dirdlgg.cpp:318
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:782
 msgid "Operation not permitted."
 msgstr "Veprim i palejuar."
@@ -4372,7 +4483,7 @@ msgstr "Shko te drejtoria krye"
 msgid "Show &hidden directories"
 msgstr "Shfaq drejtori të &fshehura"
 
-#: ../src/generic/dirdlgg.cpp:199
+#: ../src/generic/dirdlgg.cpp:197
 #, c-format
 msgid ""
 "The directory '%s' does not exist\n"
@@ -4381,11 +4492,11 @@ msgstr ""
 "Drejtoria '%s' s’ekziston\n"
 "Të krijohet tani?"
 
-#: ../src/generic/dirdlgg.cpp:201
+#: ../src/generic/dirdlgg.cpp:199
 msgid "Directory does not exist"
 msgstr "Drejtoria s’ekziston"
 
-#: ../src/generic/dirdlgg.cpp:217
+#: ../src/generic/dirdlgg.cpp:215
 #, c-format
 msgid ""
 "Failed to create directory '%s'\n"
@@ -4394,22 +4505,22 @@ msgstr ""
 "S’u arrit të krijohej drejtori '%s'\n"
 "(I keni lejet e domosdoshme?)"
 
-#: ../src/generic/dirdlgg.cpp:219
+#: ../src/generic/dirdlgg.cpp:217
 msgid "Error creating directory"
 msgstr "Gabim në krijim drejtorie"
 
-#: ../src/generic/dirdlgg.cpp:284
+#: ../src/generic/dirdlgg.cpp:282
 msgid "You cannot add a new directory to this section."
 msgstr "S’mund të shtoni drejtori të re në këtë ndarje."
 
-#: ../src/generic/dirdlgg.cpp:285
+#: ../src/generic/dirdlgg.cpp:283
 msgid "Create directory"
 msgstr "Krijoni drejtori"
 
-#: ../src/generic/dirdlgg.cpp:294 ../src/generic/dirdlgg.cpp:304
+#: ../src/generic/dirdlgg.cpp:292 ../src/generic/dirdlgg.cpp:302
 #: ../src/generic/filectrlg.cpp:614 ../src/generic/filectrlg.cpp:623
 msgid "NewName"
-msgstr "Emër i ri"
+msgstr ""
 
 #: ../src/generic/editlbox.cpp:131
 msgid "Edit item"
@@ -4437,7 +4548,7 @@ msgstr "Kërko për:"
 
 #: ../src/generic/fdrepdlg.cpp:121
 msgid "Replace with:"
-msgstr "Zëvendëso me:"
+msgstr "Zëvendësoje me:"
 
 #: ../src/generic/fdrepdlg.cpp:141
 msgid "Whole word"
@@ -4493,7 +4604,7 @@ msgstr "Lloj"
 
 #: ../src/generic/filectrlg.cpp:423
 msgid "Modified"
-msgstr "Ndryshuar"
+msgstr "E ndryshuar"
 
 #: ../src/generic/filectrlg.cpp:426
 msgid "Permissions"
@@ -4511,11 +4622,11 @@ msgstr "Drejtoria e çastit:"
 msgid "Show &hidden files"
 msgstr "Shfaq kartela të &fshehura"
 
-#: ../src/generic/filectrlg.cpp:1356
+#: ../src/generic/filectrlg.cpp:1355
 msgid "Illegal file specification."
 msgstr "Specifikim i paligjshëm kartele."
 
-#: ../src/generic/filectrlg.cpp:1388
+#: ../src/generic/filectrlg.cpp:1387
 msgid "Directory doesn't exist."
 msgstr "Drejtoria s’ekziston."
 
@@ -4563,7 +4674,7 @@ msgstr "Zbukures(e)"
 
 #: ../src/generic/fontdlgg.cpp:320
 msgid "Modern"
-msgstr "Modern"
+msgstr "Moderne"
 
 #: ../src/generic/fontdlgg.cpp:321
 msgid "Script"
@@ -4589,66 +4700,66 @@ msgstr ""
 msgid "Light"
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:367
+#: ../src/generic/fontdlgg.cpp:366
 msgid "&Font family:"
 msgstr "&Familje shkronjash:"
 
-#: ../src/generic/fontdlgg.cpp:371 ../src/generic/fontdlgg.cpp:373
+#: ../src/generic/fontdlgg.cpp:370 ../src/generic/fontdlgg.cpp:372
 msgid "The font family."
 msgstr "Familja e shkronjave."
 
-#: ../src/generic/fontdlgg.cpp:378 ../src/richtext/richtextstylepage.cpp:106
+#: ../src/generic/fontdlgg.cpp:377 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
 msgstr "&Stil:"
 
-#: ../src/generic/fontdlgg.cpp:382 ../src/generic/fontdlgg.cpp:384
+#: ../src/generic/fontdlgg.cpp:381 ../src/generic/fontdlgg.cpp:383
 msgid "The font style."
 msgstr "Stili i shkronjave."
 
-#: ../src/generic/fontdlgg.cpp:389
+#: ../src/generic/fontdlgg.cpp:388
 msgid "&Weight:"
 msgstr "&Lartësi:"
 
-#: ../src/generic/fontdlgg.cpp:393 ../src/generic/fontdlgg.cpp:395
+#: ../src/generic/fontdlgg.cpp:392 ../src/generic/fontdlgg.cpp:394
 msgid "The font weight."
 msgstr "Lartësia e shkronjave."
 
-#: ../src/generic/fontdlgg.cpp:403
+#: ../src/generic/fontdlgg.cpp:402
 msgid "C&olour:"
 msgstr "N&gjyrë:"
 
-#: ../src/generic/fontdlgg.cpp:411 ../src/generic/fontdlgg.cpp:413
+#: ../src/generic/fontdlgg.cpp:410 ../src/generic/fontdlgg.cpp:412
 msgid "The font colour."
 msgstr "Ngjyra e shkronjave."
 
-#: ../src/generic/fontdlgg.cpp:419
+#: ../src/generic/fontdlgg.cpp:418
 msgid "&Point size:"
 msgstr "Madhësia në &pikë:"
 
-#: ../src/generic/fontdlgg.cpp:424 ../src/generic/fontdlgg.cpp:426
-#: ../src/generic/fontdlgg.cpp:430 ../src/generic/fontdlgg.cpp:432
+#: ../src/generic/fontdlgg.cpp:423 ../src/generic/fontdlgg.cpp:425
+#: ../src/generic/fontdlgg.cpp:429 ../src/generic/fontdlgg.cpp:431
 msgid "The font point size."
-msgstr "Madhësia e shkronjasve në pikë."
+msgstr "Madhësia e shkronjave në pikë."
 
-#: ../src/generic/fontdlgg.cpp:443 ../src/generic/fontdlgg.cpp:445
+#: ../src/generic/fontdlgg.cpp:442 ../src/generic/fontdlgg.cpp:444
 msgid "Whether the font is underlined."
 msgstr "Nëse janë apo jo të nënvizuara shkronjat."
 
-#: ../src/generic/fontdlgg.cpp:452 ../src/html/helpwnd.cpp:1220
-#: ../src/osx/carbon/fontdlg.cpp:387
+#: ../src/generic/fontdlgg.cpp:451 ../src/html/helpwnd.cpp:1219
+#: ../src/osx/carbon/fontdlg.cpp:386
 msgid "Preview:"
 msgstr "Paraparje:"
 
-#: ../src/generic/fontdlgg.cpp:456 ../src/generic/fontdlgg.cpp:458
+#: ../src/generic/fontdlgg.cpp:455 ../src/generic/fontdlgg.cpp:457
 msgid "Shows the font preview."
 msgstr "Shfaq paraparjen e shkronjave."
 
-#: ../src/generic/fontdlgg.cpp:468 ../src/generic/fontdlgg.cpp:487
+#: ../src/generic/fontdlgg.cpp:467 ../src/generic/fontdlgg.cpp:486
 msgid "Click to cancel the font selection."
-msgstr "Klikoni për anulim përzgjedhjeje shkronjash."
+msgstr "Klikoni që të anulohet përzgjedhjeje shkronjash."
 
-#: ../src/generic/fontdlgg.cpp:473 ../src/generic/fontdlgg.cpp:475
-#: ../src/generic/fontdlgg.cpp:480 ../src/generic/fontdlgg.cpp:482
+#: ../src/generic/fontdlgg.cpp:472 ../src/generic/fontdlgg.cpp:474
+#: ../src/generic/fontdlgg.cpp:479 ../src/generic/fontdlgg.cpp:481
 msgid "Click to confirm the font selection."
 msgstr "Klikoni për ripohim përzgjedhjeje shkronjash."
 
@@ -4657,45 +4768,46 @@ msgstr "Klikoni për ripohim përzgjedhjeje shkronjash."
 msgid "Choose font"
 msgstr "Zgjidhni shkronja"
 
-#: ../src/generic/grid.cpp:6091
+#: ../src/generic/grid.cpp:6222
 msgid "Copying more than one selected block to clipboard is not supported."
 msgstr ""
+"Nuk mbulohet kopjimi në të papastër i më shumë se një blloku të përzgjedhur."
 
-#: ../src/generic/helpext.cpp:265
+#: ../src/generic/helpext.cpp:266
 #, c-format
 msgid "Help directory \"%s\" not found."
-msgstr "S’u gjet drejtori ndihme \"%s\"."
+msgstr "S’u gjet drejtori ndihme “%s”."
 
-#: ../src/generic/helpext.cpp:273
+#: ../src/generic/helpext.cpp:274
 #, c-format
 msgid "Help file \"%s\" not found."
-msgstr "S’u gjet kartelë ndihme \"%s\"."
+msgstr "S’u gjet kartelë ndihme “%s”."
 
-#: ../src/generic/helpext.cpp:292
+#: ../src/generic/helpext.cpp:293
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr ""
-"Rreshti %lu i kartelës së hartës \"%s\" pat sintaksë të pavlefshme, u "
+"Rreshti %lu i kartelës së hartës “%s” pat sintaksë të pavlefshme, u "
 "anashkalua."
 
-#: ../src/generic/helpext.cpp:300
+#: ../src/generic/helpext.cpp:301
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
-msgstr "S’u gjetën përshoqërime të vlefshme te kartela \"%s\"."
+msgstr "S’u gjetën përshoqërime të vlefshme te kartela “%s”."
 
-#: ../src/generic/helpext.cpp:443
+#: ../src/generic/helpext.cpp:444
 msgid "No entries found."
 msgstr "S’u gjetën zëra."
 
-#: ../src/generic/helpext.cpp:452 ../src/generic/helpext.cpp:453
+#: ../src/generic/helpext.cpp:453 ../src/generic/helpext.cpp:454
 msgid "Help Index"
 msgstr "Tregues i Ndihmës"
 
-#: ../src/generic/helpext.cpp:456
+#: ../src/generic/helpext.cpp:457
 msgid "Relevant entries:"
 msgstr "Zëra me peshë:"
 
-#: ../src/generic/helpext.cpp:457
+#: ../src/generic/helpext.cpp:458
 msgid "Entries found"
 msgstr "U gjetën zëra"
 
@@ -4722,8 +4834,7 @@ msgstr "Sinjalizim %s"
 msgid "%s Information"
 msgstr "Të dhëna %s"
 
-#: ../src/generic/logg.cpp:236 ../src/osx/menu_osx.cpp:458
-#: ../src/osx/menu_osx.cpp:466
+#: ../src/generic/logg.cpp:236
 msgid "Application"
 msgstr "Aplikacion"
 
@@ -4754,7 +4865,7 @@ msgstr "S’ruhet dot lëndë regjistrimi te kartelë."
 #: ../src/generic/logg.cpp:573
 #, c-format
 msgid "Log saved to the file '%s'."
-msgstr "Regjistrim u ruajt te kartela '%s'."
+msgstr "Regjistrimi u ruajt te kartela '%s'."
 
 #: ../src/generic/logg.cpp:679
 msgid "&Details"
@@ -4783,21 +4894,21 @@ msgstr ""
 msgid "Notice"
 msgstr "Shënim"
 
-#: ../src/generic/preferencesg.cpp:110
+#: ../src/generic/preferencesg.cpp:112
 #, c-format
 msgid "%s Preferences"
 msgstr "Parapëlqime mbi %s"
 
-#: ../src/generic/printps.cpp:142
+#: ../src/generic/printps.cpp:143
 msgid "Printing..."
 msgstr "Po shtypet…"
 
-#: ../src/generic/printps.cpp:159 ../src/gtk/print.cpp:1153
-#: ../src/msw/printwin.cpp:184
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1154
+#: ../src/msw/printwin.cpp:185
 msgid "Could not start printing."
 msgstr "S’u nis dot shtypje."
 
-#: ../src/generic/printps.cpp:182
+#: ../src/generic/printps.cpp:183
 #, c-format
 msgid "Printing page %d..."
 msgstr "Po shtypet faqja %d…"
@@ -4846,77 +4957,77 @@ msgstr "Për:"
 msgid "Copies:"
 msgstr "Kopje:"
 
-#: ../src/generic/prntdlgg.cpp:291
+#: ../src/generic/prntdlgg.cpp:290
 msgid "PostScript file"
 msgstr "Kartelë PostScript"
 
-#: ../src/generic/prntdlgg.cpp:442
+#: ../src/generic/prntdlgg.cpp:441
 msgid "Print Setup"
 msgstr "Rregullim Shtypjeje"
 
-#: ../src/generic/prntdlgg.cpp:486
+#: ../src/generic/prntdlgg.cpp:485
 msgid "Printer"
 msgstr "Shtypës"
 
-#: ../src/generic/prntdlgg.cpp:503
+#: ../src/generic/prntdlgg.cpp:502
 msgid "Default printer"
 msgstr "Shtypës parazgjedhje"
 
-#: ../src/generic/prntdlgg.cpp:595 ../src/generic/prntdlgg.cpp:794
-#: ../src/generic/prntdlgg.cpp:835 ../src/generic/prntdlgg.cpp:848
-#: ../src/generic/prntdlgg.cpp:1045 ../src/generic/prntdlgg.cpp:1050
+#: ../src/generic/prntdlgg.cpp:594 ../src/generic/prntdlgg.cpp:792
+#: ../src/generic/prntdlgg.cpp:833 ../src/generic/prntdlgg.cpp:846
+#: ../src/generic/prntdlgg.cpp:1042 ../src/generic/prntdlgg.cpp:1047
 msgid "Paper size"
 msgstr "Madhësi letre"
 
-#: ../src/generic/prntdlgg.cpp:605 ../src/generic/prntdlgg.cpp:860
+#: ../src/generic/prntdlgg.cpp:604 ../src/generic/prntdlgg.cpp:858
 msgid "Portrait"
 msgstr "Portret"
 
-#: ../src/generic/prntdlgg.cpp:606 ../src/generic/prntdlgg.cpp:861
+#: ../src/generic/prntdlgg.cpp:605 ../src/generic/prntdlgg.cpp:859
 msgid "Landscape"
 msgstr "Së gjeri"
 
-#: ../src/generic/prntdlgg.cpp:608 ../src/generic/prntdlgg.cpp:862
+#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:860
 msgid "Orientation"
 msgstr "Drejtim"
 
-#: ../src/generic/prntdlgg.cpp:611
+#: ../src/generic/prntdlgg.cpp:610
 msgid "Options"
 msgstr "Mundësi"
 
-#: ../src/generic/prntdlgg.cpp:614
+#: ../src/generic/prntdlgg.cpp:613
 msgid "Print in colour"
 msgstr "Shtyp me ngjyra"
 
-#: ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/prntdlgg.cpp:622
 msgid "Print spooling"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:625
 msgid "Printer command:"
 msgstr "Urdhër shtypësi:"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:637
 msgid "Printer options:"
 msgstr "Mundësi shtypësi:"
 
-#: ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:871
 msgid "Left margin (mm):"
 msgstr "Mënjanë majtas (mm):"
 
-#: ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:872
 msgid "Top margin (mm):"
 msgstr "Mënjanë në krye (mm):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:883
 msgid "Right margin (mm):"
 msgstr "Mënjanë djathtas (mm):"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:884
 msgid "Bottom margin (mm):"
 msgstr "Mënjanë fundi (mm):"
 
-#: ../src/generic/prntdlgg.cpp:909
+#: ../src/generic/prntdlgg.cpp:907
 msgid "Printer..."
 msgstr "Shtypës…"
 
@@ -4933,7 +5044,7 @@ msgid "Done."
 msgstr "U bë."
 
 #: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:182
-#: ../src/html/helpwnd.cpp:533 ../src/html/helpwnd.cpp:548
+#: ../src/html/helpwnd.cpp:532 ../src/html/helpwnd.cpp:547
 msgid "Search"
 msgstr "Kërko"
 
@@ -4961,15 +5072,15 @@ msgstr "&Shfaq ndihmëza në nisje"
 msgid "&Next Tip"
 msgstr "Ndihmëza &Pasuese"
 
-#: ../src/generic/wizard.cpp:429
+#: ../src/generic/wizard.cpp:431
 msgid "&Next >"
 msgstr "&Pasuesi >"
 
-#: ../src/generic/wizard.cpp:430
+#: ../src/generic/wizard.cpp:432
 msgid "&Finish"
 msgstr "&Përfundoje"
 
-#: ../src/generic/wizard.cpp:438
+#: ../src/generic/wizard.cpp:440
 msgid "< &Back"
 msgstr "< &Mbrapsht"
 
@@ -4977,47 +5088,50 @@ msgstr "< &Mbrapsht"
 msgid "translator-credits"
 msgstr "kredite përkthyesish"
 
-#: ../src/gtk/app.cpp:348
+#: ../src/gtk/app.cpp:456
 msgid ""
 "WARNING: using XIM input method is unsupported and may result in problems "
 "with input handling and flickering. Consider unsetting GTK_IM_MODULE or "
 "setting to \"ibus\"."
 msgstr ""
+"KUJDES: nuk mbulohet përdorimi i metodës XIM për dhënie dhe mund të sjellë "
+"probleme me trajtimin e çka jepet dhe dridhje të figurës. Shihni mundësinë e "
+"çaktivizimit të GTK_IM_MODULE, ose vënien e tij si “ibus”."
 
-#: ../src/gtk/app.cpp:431
+#: ../src/gtk/app.cpp:539
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "S’arrihet të gatitet GTK+, a është caktuar saktë DISPLAY?"
 
-#: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
+#: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:192
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "S’u arrit të ndryshohej drejtoria e tanishme si \"%s\""
+msgstr "S’u arrit të ndryshohej drejtoria e tanishme si “%s”"
 
 #: ../src/gtk/font.cpp:552
 msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
+"Në këtë sistem s’mbulohet përdorimi i shkronjave private: biblioteka Pango "
+"është shumë e vjetër, lypset 1.38 ose i mëvonshëm."
 
 #: ../src/gtk/font.cpp:562
-#, fuzzy
 msgid "Failed to create font configuration object."
-msgstr "S’u arrit të përditësohej kartelë përdoruesi për formësimin."
+msgstr "S’u arrit të krijohej objekt formësimi shkronjash."
 
 #: ../src/gtk/font.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "S’u arrit të lexohej dokument prej kartelës \"%s\"."
+msgstr "S’u arrit të shtohen shkronja vetjake “%s”."
 
 #: ../src/gtk/font.cpp:580
-#, fuzzy
 msgid "Failed to register font configuration using private fonts."
-msgstr "S’u arrit të përditësohej kartelë përdoruesi për formësimin."
+msgstr ""
+"S’u arrit të regjistrohej formësim shkronjash që përdor shkronja private."
 
 #: ../src/gtk/glcanvas.cpp:181 ../src/gtk/glcanvas.cpp:196
-#, fuzzy
 msgid "Fatal Error"
-msgstr "Gabim kartele"
+msgstr "Gabim Fatal"
 
 #: ../src/gtk/glcanvas.cpp:181
 msgid ""
@@ -5026,6 +5140,11 @@ msgid ""
 "install EGL libraries and rebuild or run it under X11 backend by setting\n"
 "environment variable GDK_BACKEND=x11 before starting your program."
 msgstr ""
+"Ky program s’është përpiluar me mbulim për EGL, i domosdoshëm nën Wayland, "
+"ose\n"
+"instaloni bibliotekat EGL dhe rimontojeni, ose xhirojeni nën X11, duke e "
+"vënë\n"
+"ndryshoren e mjedisit GDK_BACKEND=x11 para se të nisni programin tuaj."
 
 #: ../src/gtk/glcanvas.cpp:196
 msgid ""
@@ -5034,38 +5153,37 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
+"wxGLCanvas aktualisht mbulohet vetëm në Wayland dhe X11.  Mund të jeni në "
+"gjendje\n"
+"ta zgjidhni këtë punë duke ujdisur ndryshoren e mjedisit GDK_BACKEND=x11 "
+"para se\n"
+"të nisni programin tuaj."
 
 #: ../src/gtk/mdi.cpp:433 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
 msgstr "Pjellë MDI"
 
-#: ../src/gtk/print.cpp:211
+#: ../src/gtk/print.cpp:212
 msgid "Custom size"
 msgstr "Madhësi vetjake"
 
-#: ../src/gtk/print.cpp:725
+#: ../src/gtk/print.cpp:726
 msgid "Error while printing: "
 msgstr "Gabim teksa shtypej: "
 
-#: ../src/gtk/print.cpp:847
+#: ../src/gtk/print.cpp:848
 msgid "Page Setup"
 msgstr "Rregullim Faqeje"
 
-#: ../src/gtk/textctrl.cpp:1209
+#: ../src/gtk/textctrl.cpp:1273
 msgid "Failed to insert text in the control."
 msgstr "S’u arrit të futej tekst te kontrolli."
 
 #: ../src/gtk/webview_webkit.cpp:930
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
-msgstr ""
+msgstr "Me WebKit v1 s’mbulohet marrje output-i programthi JavaScript"
 
-#: ../src/gtk/webview_webkit2.cpp:1310 ../src/msw/webview_edge.cpp:881
-#: ../src/msw/webview_ie.cpp:1077 ../src/osx/webview_webkit.mm:439
-#, c-format
-msgid "Error running JavaScript: %s"
-msgstr ""
-
-#: ../src/gtk/window.cpp:5664
+#: ../src/gtk/window.cpp:5781
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -5073,7 +5191,7 @@ msgstr ""
 "GTK+ i instaluar në këtë makinë është shumë i vjetër për të mbuluar hartim "
 "skenash, ju lutemi, instaloni GTK+ 2.12 ose të mëvonshëm."
 
-#: ../src/gtk/window.cpp:5682
+#: ../src/gtk/window.cpp:5799
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -5081,7 +5199,7 @@ msgstr ""
 "Hartimi nuk mbulohet nga ky sistem, ju lutemi, aktivizojeni te Window "
 "Manager juaj."
 
-#: ../src/gtk/window.cpp:5693
+#: ../src/gtk/window.cpp:5810
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5137,7 +5255,7 @@ msgstr "gabim në format të dhënash"
 
 #: ../src/html/chm.cpp:342
 msgid "checksum error"
-msgstr "gabim \"checksum\""
+msgstr "gabim checksum-i"
 
 #: ../src/html/chm.cpp:344
 msgid "compression error"
@@ -5162,11 +5280,11 @@ msgstr "S’u krijua dot kartelë të përkohshme '%s'"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Dështoi përftimi i '%s' te '%s'."
 
-#: ../src/html/chm.cpp:806 ../src/html/chm.cpp:865
+#: ../src/html/chm.cpp:806 ../src/html/chm.cpp:863
 msgid "CHM handler currently supports only local files!"
 msgstr "Hëpërhë, trajtuesi CHM, mbulon vetëm kartela vendore!"
 
-#: ../src/html/chm.cpp:829
+#: ../src/html/chm.cpp:827
 msgid "Link contained '//', converted to absolute link."
 msgstr "Lidhja përmbante '//', u shndërrua në lidhje absolute."
 
@@ -5188,7 +5306,7 @@ msgstr "S’hapet dot kartelë lëndësh: %s"
 #: ../src/html/helpdata.cpp:310
 #, c-format
 msgid "Cannot open index file: %s"
-msgstr "S’hap dot kartelë treguesi: %s"
+msgstr "S’hapet dot kartelë treguesi: %s"
 
 #: ../src/html/helpdata.cpp:650
 msgid "noname"
@@ -5197,38 +5315,38 @@ msgstr "paemër"
 #: ../src/html/helpdata.cpp:660
 #, c-format
 msgid "Cannot open HTML help book: %s"
-msgstr "S’hap dot libër HTML ndihme: %s"
+msgstr "S’hapet dot libër HTML ndihme: %s"
 
 #: ../src/html/helpwnd.cpp:320
 msgid "Displays help as you browse the books on the left."
 msgstr "Shfaq ndihmën teksa shfletoni librat në të majtë."
 
-#: ../src/html/helpwnd.cpp:417 ../src/html/helpwnd.cpp:1104
-#: ../src/html/helpwnd.cpp:1740
+#: ../src/html/helpwnd.cpp:416 ../src/html/helpwnd.cpp:1103
+#: ../src/html/helpwnd.cpp:1739
 msgid "(bookmarks)"
 msgstr "(faqerojtës)"
 
-#: ../src/html/helpwnd.cpp:430
+#: ../src/html/helpwnd.cpp:429
 msgid "Add current page to bookmarks"
 msgstr "Shto te faqerojtësit faqen e çastit"
 
-#: ../src/html/helpwnd.cpp:431
+#: ../src/html/helpwnd.cpp:430
 msgid "Remove current page from bookmarks"
 msgstr "Hiq prej faqerojtësish faqen e tanishme"
 
-#: ../src/html/helpwnd.cpp:473
+#: ../src/html/helpwnd.cpp:472
 msgid "Contents"
 msgstr "Lëndë"
 
-#: ../src/html/helpwnd.cpp:488
+#: ../src/html/helpwnd.cpp:487
 msgid "Find"
 msgstr "Gjej"
 
-#: ../src/html/helpwnd.cpp:490
+#: ../src/html/helpwnd.cpp:489
 msgid "Show all"
 msgstr "Shfaqi krejt"
 
-#: ../src/html/helpwnd.cpp:500
+#: ../src/html/helpwnd.cpp:499
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -5236,19 +5354,19 @@ msgstr ""
 "Shfaq tërë zërat e treguesit që përmbajnë nënvargun e dhënë. Kërkim ashtu si "
 "është shkruar."
 
-#: ../src/html/helpwnd.cpp:501
+#: ../src/html/helpwnd.cpp:500
 msgid "Show all items in index"
 msgstr "Shfaq tërë objektet në tregues"
 
-#: ../src/html/helpwnd.cpp:531
+#: ../src/html/helpwnd.cpp:530
 msgid "Case sensitive"
 msgstr "Siç është shkruajtur"
 
-#: ../src/html/helpwnd.cpp:532
+#: ../src/html/helpwnd.cpp:531
 msgid "Whole words only"
 msgstr "Vetëm fjalë të plota"
 
-#: ../src/html/helpwnd.cpp:535
+#: ../src/html/helpwnd.cpp:534
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
@@ -5256,148 +5374,148 @@ msgstr ""
 "Kërko në lëndën e librit(ve) të ndihmës për krejt hasjet e tekstit që "
 "shtypët më sipër"
 
-#: ../src/html/helpwnd.cpp:656
+#: ../src/html/helpwnd.cpp:655
 msgid "Show/hide navigation panel"
 msgstr "Shfaq/fshih panel lëvizjeje"
 
-#: ../src/html/helpwnd.cpp:658
+#: ../src/html/helpwnd.cpp:657
 msgid "Go back"
 msgstr "Shko prapa"
 
-#: ../src/html/helpwnd.cpp:659
+#: ../src/html/helpwnd.cpp:658
 msgid "Go forward"
 msgstr "Shko përpara"
 
-#: ../src/html/helpwnd.cpp:661
+#: ../src/html/helpwnd.cpp:660
 msgid "Go one level up in document hierarchy"
 msgstr "Shko një shkallë më sipër në hierarki dokumenti"
 
-#: ../src/html/helpwnd.cpp:669 ../src/html/helpwnd.cpp:1552
+#: ../src/html/helpwnd.cpp:668 ../src/html/helpwnd.cpp:1551
 msgid "Open HTML document"
 msgstr "Hap dokument HTML"
 
-#: ../src/html/helpwnd.cpp:673
+#: ../src/html/helpwnd.cpp:672
 msgid "Print this page"
 msgstr "Shtyp këtë faqe"
 
-#: ../src/html/helpwnd.cpp:677
+#: ../src/html/helpwnd.cpp:676
 msgid "Display options dialog"
 msgstr "Dialog mundësish paraqitjeje"
 
-#: ../src/html/helpwnd.cpp:798
+#: ../src/html/helpwnd.cpp:797
 msgid "Please choose the page to display:"
 msgstr "Ju lutemi, zgjidhni faqen për shfaqje:"
 
-#: ../src/html/helpwnd.cpp:799
+#: ../src/html/helpwnd.cpp:798
 msgid "Help Topics"
 msgstr "Tema Ndihme"
 
-#: ../src/html/helpwnd.cpp:855
+#: ../src/html/helpwnd.cpp:854
 msgid "Searching..."
 msgstr "Po kërkohet…"
 
-#: ../src/html/helpwnd.cpp:856
+#: ../src/html/helpwnd.cpp:855
 msgid "No matching page found yet"
 msgstr "Ende s’u gjet faqe me përputhje"
 
-#: ../src/html/helpwnd.cpp:873
+#: ../src/html/helpwnd.cpp:872
 #, c-format
 msgid "Found %i matches"
 msgstr "U gjetën %i përputhje"
 
-#: ../src/html/helpwnd.cpp:961
+#: ../src/html/helpwnd.cpp:960
 msgid "(Help)"
 msgstr "(Ndihmë)"
 
-#: ../src/html/helpwnd.cpp:1029
+#: ../src/html/helpwnd.cpp:1028
 #, c-format
 msgid "%d of %lu"
 msgstr "%d nga %lu"
 
-#: ../src/html/helpwnd.cpp:1031
+#: ../src/html/helpwnd.cpp:1030
 #, c-format
 msgid "%lu of %lu"
 msgstr "%lu nga %lu"
 
-#: ../src/html/helpwnd.cpp:1050
+#: ../src/html/helpwnd.cpp:1049
 msgid "Search in all books"
 msgstr "Kërko në tërë librat"
 
-#: ../src/html/helpwnd.cpp:1198
+#: ../src/html/helpwnd.cpp:1197
 msgid "Help Browser Options"
 msgstr "Mundësi Shfletuesi Ndihme"
 
-#: ../src/html/helpwnd.cpp:1203
+#: ../src/html/helpwnd.cpp:1202
 msgid "Normal font:"
 msgstr "Shkronja normale:"
 
-#: ../src/html/helpwnd.cpp:1204
+#: ../src/html/helpwnd.cpp:1203
 msgid "Fixed font:"
 msgstr "Shkronja të fiksuara:"
 
-#: ../src/html/helpwnd.cpp:1205
+#: ../src/html/helpwnd.cpp:1204
 msgid "Font size:"
 msgstr "Madhësi shkronjash:"
 
-#: ../src/html/helpwnd.cpp:1250
+#: ../src/html/helpwnd.cpp:1249
 msgid "font size"
 msgstr "madhësi shkronjash"
 
-#: ../src/html/helpwnd.cpp:1261
+#: ../src/html/helpwnd.cpp:1260
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "Normale<br>dhe <u>të nënvijëzuara</u>. "
 
-#: ../src/html/helpwnd.cpp:1262
+#: ../src/html/helpwnd.cpp:1261
 msgid "<i>Italic face.</i> "
 msgstr "<i>Shkronja të pjerrëta.</i> "
 
-#: ../src/html/helpwnd.cpp:1263
+#: ../src/html/helpwnd.cpp:1262
 msgid "<b>Bold face.</b> "
 msgstr "<b>Shkronja të trasha.</b> "
 
-#: ../src/html/helpwnd.cpp:1264
+#: ../src/html/helpwnd.cpp:1263
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>Shkronja të pjerrëta të trasha.</i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1267
+#: ../src/html/helpwnd.cpp:1266
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr ""
 "Shkronja me madhësi të fiksuar.<br> <b>të trasha</b> <i>të pjerrëta</i> "
 
-#: ../src/html/helpwnd.cpp:1268
+#: ../src/html/helpwnd.cpp:1267
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>të pjerrëta të trasha <u>të nënvizuara</u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1529
+#: ../src/html/helpwnd.cpp:1528
 msgid "Help Printing"
 msgstr "Ndihmë për Shtypjen"
 
-#: ../src/html/helpwnd.cpp:1532
+#: ../src/html/helpwnd.cpp:1531
 msgid "Cannot print empty page."
 msgstr "S’shtypet dot faqe e zbrazët."
 
-#: ../src/html/helpwnd.cpp:1545
+#: ../src/html/helpwnd.cpp:1544
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Kartela HTML (*.html;*.htm)|*.html;*.htm|"
 
-#: ../src/html/helpwnd.cpp:1546
+#: ../src/html/helpwnd.cpp:1545
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Libra ndihme (*.htb)|*.htb|Libra ndihme (*.zip)|*.zip|"
 
-#: ../src/html/helpwnd.cpp:1547
+#: ../src/html/helpwnd.cpp:1546
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "Projekt Ndihme HTML (*.hhp)|*.hhp|"
 
-#: ../src/html/helpwnd.cpp:1549
+#: ../src/html/helpwnd.cpp:1548
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Kartelë e ngjeshur HTML ndihme HTML (*.chm)|*.chm|"
 
-#: ../src/html/helpwnd.cpp:1676
+#: ../src/html/helpwnd.cpp:1675
 #, c-format
 msgid "%i of %u"
 msgstr "%i nga %u"
 
-#: ../src/html/helpwnd.cpp:1714
+#: ../src/html/helpwnd.cpp:1713
 #, c-format
 msgid "%u of %u"
 msgstr "%u nga %u"
@@ -5432,7 +5550,7 @@ msgstr "Spiranca HTML %s s’ekziston."
 #: ../src/html/htmlwin.cpp:1020
 #, c-format
 msgid "Copied to clipboard:\"%s\""
-msgstr "U kopjua në të papastër:\"%s\""
+msgstr "U kopjua në të papastër:“%s”"
 
 #: ../src/html/htmprint.cpp:267
 msgid ""
@@ -5449,10 +5567,10 @@ msgid ""
 "\n"
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
-"Dokumentin \"%s\" s’e nxë faqja horizontalisht dhe do të qethet, në u "
+"Dokumentin “%s” s’e nxë faqja horizontalisht dhe do të qethet, në u "
 "shtyptë.\n"
 "\n"
-"Do të doni të vazhdohet me shtypjen, sido që të jetë?"
+"Doni të vazhdohet me shtypjen, sido që të jetë?"
 
 #: ../src/html/htmprint.cpp:294
 msgid ""
@@ -5464,7 +5582,7 @@ msgstr ""
 
 #: ../src/html/htmprint.cpp:443
 msgid ": file does not exist!"
-msgstr ": kartela nuk ekziston!"
+msgstr ": kartela s’ekziston!"
 
 #: ../src/html/htmprint.cpp:712 ../src/richtext/richtextprint.cpp:589
 msgid " Preview"
@@ -5529,13 +5647,13 @@ msgstr "S’u arrit të hidheshin të dhëna në të papastër"
 
 #: ../src/msw/clipbrd.cpp:731
 msgid "Failed to get data from the clipboard"
-msgstr "S’u arrit të merren të dhëna nga e papastra"
+msgstr "S’u arrit të merreshin të dhëna nga e papastra"
 
 #: ../src/msw/clipbrd.cpp:768
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "S’u arrit të merreshin formate të mbuluar për të papastrën"
 
-#: ../src/msw/colordlg.cpp:227
+#: ../src/msw/colordlg.cpp:229
 #, c-format
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Dialogu i përzgjedhjes së ngjyrës dështoi me gabimin %0lx."
@@ -5585,7 +5703,7 @@ msgstr "pa gabim DDE."
 
 #: ../src/msw/dde.cpp:1184
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "një kërkese për transaksion të njëkohshëm \"advise\" i mbaroi koha."
+msgstr "një kërkese për transaksion të njëkohshëm “advise” i mbaroi koha."
 
 #: ../src/msw/dde.cpp:1187
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
@@ -5613,14 +5731,14 @@ msgid ""
 "or an application initialized as APPCMD_CLIENTONLY has \n"
 "attempted to perform server transactions."
 msgstr ""
-"një aplikacion i filluar si APPCLASS_MONITOR\n"
+"një zbatim i filluar si APPCLASS_MONITOR\n"
 "u përpoq të kryejë një transaksion DDE,\n"
 "ose një aplikacion i filluar si APPCMD_CLIENTONLY \n"
 "u përpoq të kryejë transaksion shërbyesish."
 
 #: ../src/msw/dde.cpp:1199
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "një kërkese për transaksion të njëkohshëm \"execute\" i mbaroi koha."
+msgstr "një kërkese për transaksion të njëkohshëm “execute” i mbaroi koha."
 
 #: ../src/msw/dde.cpp:1202
 msgid "a parameter failed to be validated by the DDEML."
@@ -5644,7 +5762,7 @@ msgstr "dështoi një transaksion."
 
 #: ../src/msw/dde.cpp:1217
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr "një kërkese për transaksion të njëkohshëm \"poke\" i mbaroi koha."
+msgstr "një kërkese për transaksion të njëkohshëm “poke” i mbaroi koha."
 
 #: ../src/msw/dde.cpp:1220
 msgid "an internal call to the PostMessage function has failed. "
@@ -5692,7 +5810,7 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
-"S’janë të passhëm funksione \"dial up\", ngaqë shërbimi i hyrjes në largësi "
+"S’janë të passhëm funksione “dial up”, ngaqë shërbimi i hyrjes së largëti "
 "(RAS) s’është i instaluar në këtë makinë. Ju lutemi, instalojeni."
 
 #: ../src/msw/dialup.cpp:427
@@ -5717,7 +5835,7 @@ msgstr "gabim i panjohur (kod gabimi %08x)."
 #: ../src/msw/dialup.cpp:517
 #, c-format
 msgid "Cannot find active dialup connection: %s"
-msgstr "S’gjendet dot lidhje \"dialup\" aktive: %s"
+msgstr "S’gjendet dot lidhje “dialup” aktive: %s"
 
 #: ../src/msw/dialup.cpp:538
 msgid "Several active dialup connections found, choosing one randomly."
@@ -5726,7 +5844,7 @@ msgstr "U gjetën disa lidhje dialup vepruese, po zgjidhet një kuturu."
 #: ../src/msw/dialup.cpp:623 ../src/msw/dialup.cpp:857
 #, c-format
 msgid "Failed to establish dialup connection: %s"
-msgstr "S’u arrit të vendosej lidhjeje \"dialup\": %s"
+msgstr "S’u arrit të vendosej lidhjeje “dialup”: %s"
 
 #: ../src/msw/dialup.cpp:689
 #, c-format
@@ -5756,21 +5874,21 @@ msgstr "S’gjendet dot vendi i kartelës së librit të adresave"
 #: ../src/msw/dialup.cpp:852
 #, c-format
 msgid "Failed to initiate dialup connection: %s"
-msgstr "S’u arrit të nisej lidhje \"dialup\": %s"
+msgstr "S’u arrit të nisej lidhje “dialup”: %s"
 
 #: ../src/msw/dialup.cpp:922
 msgid "Cannot hang up - no active dialup connection."
-msgstr "S’bëhet dot mbyllje - s’ka lidhje \"dialup\" aktive."
+msgstr "S’bëhet dot mbyllje - s’ka lidhje “dialup” aktive."
 
 #: ../src/msw/dialup.cpp:932
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
-msgstr "S’u arrit të ndërpritej lidhja \"dialup\": %s"
+msgstr "S’u arrit të ndërpritej lidhja “dialup”: %s"
 
 #: ../src/msw/dib.cpp:312
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "S’u arrit të ruhej figurë bitmap te kartela \"%s\"."
+msgstr "S’u arrit të ruhej figurë bitmap te kartela “%s”."
 
 #: ../src/msw/dib.cpp:535
 #, c-format
@@ -5782,25 +5900,26 @@ msgstr "S’u arrit të jepeshin %luKb kujtesë për të dhëna bitmap."
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "S’numërtohen dot kartela në drejtori '%s'"
 
-#: ../src/msw/dirdlg.cpp:287
+#: ../src/msw/dirdlg.cpp:289
 msgid "Couldn't obtain folder name"
 msgstr "S’u mor dot emër dosjeje"
 
 #: ../src/msw/dlmsw.cpp:167
-#, fuzzy, c-format
+#, c-format
+#| msgid " (error %ld: %s)"
 msgid "(error %d: %s)"
-msgstr " (gabim %ld: %s)"
+msgstr "(gabim %d: %s)"
 
 #: ../src/msw/dragimag.cpp:182 ../src/msw/dragimag.cpp:217
-#: ../src/msw/imaglist.cpp:224 ../src/msw/imaglist.cpp:246
-#: ../src/msw/imaglist.cpp:271
+#: ../src/msw/imaglist.cpp:302 ../src/msw/imaglist.cpp:322
+#: ../src/msw/imaglist.cpp:347
 msgid "Couldn't add an image to the image list."
 msgstr "S’u shtua dot një figurë te lista e figurave."
 
-#: ../src/msw/enhmeta.cpp:94
+#: ../src/msw/enhmeta.cpp:95
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "S’u arrit të ngarkohej metafile prej kartelës \"%s\"."
+msgstr "S’u arrit të ngarkohej “metafile” prej kartelës “%s”."
 
 #: ../src/msw/fdrepdlg.cpp:408
 #, c-format
@@ -5813,11 +5932,11 @@ msgid "File dialog failed with error code %0lx."
 msgstr "Dialogu i kartelës dështoi me kod gabimi %0lx."
 
 #: ../src/msw/font.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "Kartela s’u ngarkua dot."
+msgstr "Kartela e shkronjave “%s” s’u ngarkua dot"
 
-#: ../src/msw/fontdlg.cpp:170
+#: ../src/msw/fontdlg.cpp:232
 #, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "Dialogu i rëndomtë dështoi me kod gabimi %0lx."
@@ -5846,14 +5965,14 @@ msgstr "S’arrihet të ujdiset mbikëqyrës për '%s'"
 #: ../src/msw/fswatcher.cpp:475
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr "S’mund të mbikëqyret për ndryshime drejtori \"%s\" që s’ekziston."
+msgstr "S’mund të mbikëqyret për ndryshime drejtori “%s” që s’ekziston."
 
 #: ../src/msw/glcanvas.cpp:592 ../src/unix/glx11.cpp:513
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr "OpenGL 3.0 ose i mëvonshëm nuk mbulohet nga përudhësi OpenGL."
 
 #: ../src/msw/glcanvas.cpp:616 ../src/osx/glcanvas_osx.cpp:411
-#: ../src/unix/glegl.cpp:315 ../src/unix/glx11.cpp:559
+#: ../src/unix/glegl.cpp:318 ../src/unix/glx11.cpp:559
 msgid "Couldn't create OpenGL context"
 msgstr "S’u krijua dot kontekst OpenGL"
 
@@ -5863,7 +5982,7 @@ msgstr "S’u arrit të gatitej OpeGL-i"
 
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
-msgstr ""
+msgstr "S’u regjistrua dot ngarkues shkronjash vetjake DirectWrite."
 
 #: ../src/msw/helpchm.cpp:53
 msgid ""
@@ -5877,12 +5996,12 @@ msgstr ""
 msgid "Failed to initialize MS HTML Help."
 msgstr "S’u arrit të gatitej Ndihmë MS HTML."
 
-#: ../src/msw/iniconf.cpp:455
+#: ../src/msw/iniconf.cpp:459
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "S’fshihet dot kartela INI '%s'"
 
-#: ../src/msw/listctrl.cpp:933
+#: ../src/msw/listctrl.cpp:945
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "S’u morën dot të dhëna rreth objekti kontrolli liste %d."
@@ -5915,22 +6034,22 @@ msgstr "S’u arrit të krijohej zë regjistri për kartela '%s'."
 #: ../src/msw/ole/automtn.cpp:496
 #, c-format
 msgid "Failed to find CLSID of \"%s\""
-msgstr "S’u arrit të gjendet CLSID e \"%s\""
+msgstr "S’u arrit të gjendej CLSID e “%s”"
 
 #: ../src/msw/ole/automtn.cpp:513
 #, c-format
 msgid "Failed to create an instance of \"%s\""
-msgstr "S’u arrit të krijohej një instancë e \"%s\""
+msgstr "S’u arrit të krijohej një instancë e “%s”"
 
 #: ../src/msw/ole/automtn.cpp:553
 #, c-format
 msgid "Cannot get an active instance of \"%s\""
-msgstr "S’merret dot një instancë aktive e \"%s\""
+msgstr "S’merret dot një instancë aktive e “%s”"
 
 #: ../src/msw/ole/automtn.cpp:565
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "S’u arrit të merrej ndërfaqe automatizimi OLE për \"%s\""
+msgstr "S’u arrit të merrej ndërfaqe automatizimi OLE për “%s”"
 
 #: ../src/msw/ole/automtn.cpp:622
 msgid "Unknown name or named argument."
@@ -5958,7 +6077,7 @@ msgstr "Sendërtimi i objektit nuk mbulon argumente të emërtuar."
 
 #: ../src/msw/ole/automtn.cpp:655
 msgid "The locale ID is unknown."
-msgstr "ID-ja e vendore është e panjohur."
+msgstr "ID-ja e vendores është e panjohur."
 
 #: ../src/msw/ole/automtn.cpp:659
 msgid "Missing a required parameter."
@@ -6083,9 +6202,9 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
-"Kyçi '%s' i regjistrit është i domosdoshëm për punimin normal të sistemit,\n"
-"fshirja e tij do ta lërë sistemin tuaj në gjendje të paqëndrueshme:\n"
-"veprimi u ndërpre."
+"Kyçi '%s' i regjistrit është i domosdoshëm për punimin normal\n"
+"të sistemit, fshirja e tij do ta lërë sistemin tuaj në gjendje\n"
+"të paqëndrueshme: veprimi u ndërpre."
 
 #: ../src/msw/registry.cpp:765
 #, c-format
@@ -6112,17 +6231,17 @@ msgstr "S’caktohet dot vlerë e '%s'"
 #: ../src/msw/registry.cpp:905 ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr "Vlera e regjistrit \"%s\" s’është numerike (por e llojit %s)"
+msgstr "Vlera “%s” e regjistrit s’është numerike (por e llojit %s)"
 
 #: ../src/msw/registry.cpp:990
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr "Vlera e regjistrit \"%s\" s’është dyore (por e llojit %s)"
+msgstr "Vlera “%s” e regjistrit s’është dyore (por e llojit %s)"
 
 #: ../src/msw/registry.cpp:1039
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr "Vlera e regjistrit \"%s\" s’është tekst (por e llojit %s)"
+msgstr "Vlera “%s” e regjistrit s’është tekst (por e llojit %s)"
 
 #: ../src/msw/registry.cpp:1100
 #, c-format
@@ -6144,7 +6263,7 @@ msgstr "S’numërtohen dot nënkyçe të kyçit '%s'"
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
 msgstr ""
-"Po eksportohet kyç regjistri: kartela \"%s\" ekziston tashmë dhe s’do të "
+"Po eksportohet kyç regjistri: kartela “%s” ekziston tashmë dhe s’do të "
 "mbishkruhet."
 
 #: ../src/msw/registry.cpp:1426
@@ -6155,9 +6274,9 @@ msgstr "S’eksportohet dot vlerë lloji të pambuluar %d."
 #: ../src/msw/registry.cpp:1442
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
-msgstr "Po shpërfillet vlera \"%s\" e kyçit \"%s\"."
+msgstr "Po shpërfillet vlera “%s” e kyçit “%s”."
 
-#: ../src/msw/textctrl.cpp:534
+#: ../src/msw/textctrl.cpp:554
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -6165,49 +6284,49 @@ msgstr ""
 "E pamundur të krijohet kontroll përpunimi të pasur, në vend të tij po "
 "përdoret kontroll teksti të thjeshtë. Ju lutemi, riinstaloni riched32.dll"
 
-#: ../src/msw/thread.cpp:529 ../src/unix/threadpsx.cpp:855
+#: ../src/msw/thread.cpp:530 ../src/unix/threadpsx.cpp:855
 msgid "Cannot start thread: error writing TLS."
 msgstr "S’fillohet dot rrjedhë: gabim në shkrim TLS-je."
 
-#: ../src/msw/thread.cpp:620
+#: ../src/msw/thread.cpp:621
 msgid "Can't set thread priority"
 msgstr "S’caktohet dot përparësi rrjedhe"
 
-#: ../src/msw/thread.cpp:656
+#: ../src/msw/thread.cpp:657
 msgid "Can't create thread"
 msgstr "S’krijohet dot rrjedhë"
 
-#: ../src/msw/thread.cpp:675
+#: ../src/msw/thread.cpp:676
 msgid "Couldn't terminate thread"
 msgstr "S’u përfundua dot rrjedhë"
 
-#: ../src/msw/thread.cpp:785
+#: ../src/msw/thread.cpp:786
 msgid "Cannot wait for thread termination"
 msgstr "S’pritet dot për përfundim rrjedhe"
 
-#: ../src/msw/thread.cpp:863
+#: ../src/msw/thread.cpp:864
 #, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "S’pezullohet dot rrjedha %lx"
 
-#: ../src/msw/thread.cpp:893
+#: ../src/msw/thread.cpp:894
 #, c-format
 msgid "Cannot resume thread %lx"
 msgstr "S’rimerret dot rrjedha %lx"
 
-#: ../src/msw/thread.cpp:922
+#: ../src/msw/thread.cpp:923
 msgid "Couldn't get the current thread pointer"
 msgstr ""
 
-#: ../src/msw/thread.cpp:1235
+#: ../src/msw/thread.cpp:1326
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr ""
-"Gatitja e modulit të rrjedhës dështoi: e pamundur jepet tregues te depo "
+"Gatitja e modulit të rrjedhës dështoi: e pamundur të jepet tregues te depo "
 "vendore rrjedhe"
 
-#: ../src/msw/thread.cpp:1247
+#: ../src/msw/thread.cpp:1338
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6219,31 +6338,31 @@ msgstr ""
 msgid "Couldn't create a timer"
 msgstr "S’u krijua dot kohëmatës"
 
-#: ../src/msw/utils.cpp:336
+#: ../src/msw/utils.cpp:360
 msgid "can't find user's HOME, using current directory."
-msgstr "s’gjendet dot SHTËPI të përdoruesit, po përdoret drejtoria e tanishme."
+msgstr "s’gjendet dot SHTËPI e përdoruesit, po përdoret drejtoria e tanishme."
 
-#: ../src/msw/utils.cpp:619
+#: ../src/msw/utils.cpp:661
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "S’u arrit të asgjësohej procesi %d"
 
-#: ../src/msw/utils.cpp:943
+#: ../src/msw/utils.cpp:985
 #, c-format
 msgid "Failed to load resource \"%s\"."
-msgstr "S’u arrit të ngarkohej burimi \"%s\"."
+msgstr "S’u arrit të ngarkohej burimi “%s”."
 
-#: ../src/msw/utils.cpp:950
+#: ../src/msw/utils.cpp:992
 #, c-format
 msgid "Failed to lock resource \"%s\"."
-msgstr "S’u arrit të kyçej burimi \"%s\"."
+msgstr "S’u arrit të kyçej burimi “%s”."
 
-#: ../src/msw/utils.cpp:1135
+#: ../src/msw/utils.cpp:1182
 #, c-format
 msgid "build %lu"
-msgstr ""
+msgstr "monto %lu"
 
-#: ../src/msw/utils.cpp:1143
+#: ../src/msw/utils.cpp:1190
 msgid ", 64-bit edition"
 msgstr ", varianti 64-bitësh"
 
@@ -6276,155 +6395,147 @@ msgstr "S’ngarkohet dot ikonë prej '%s'."
 
 #: ../src/msw/webview_ie.cpp:998
 msgid "Failed to find web view emulation level in the registry"
-msgstr ""
+msgstr "S’u arrit të gjendet te regjistri shkallë emulimi parjeje web"
 
 #: ../src/msw/webview_ie.cpp:1007
 msgid "Failed to set web view to modern emulation level"
-msgstr ""
+msgstr "S’u arrit të caktohet emulim modern si shkallë për parje web"
 
 #: ../src/msw/webview_ie.cpp:1015
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
+"S’u arrit të rikthehet te parazgjedhja standarde shkalla e emulimit për "
+"parje web"
 
 #: ../src/msw/webview_ie.cpp:1037
 msgid "Can't run JavaScript script without a valid HTML document"
-msgstr ""
+msgstr "S’xhirohet dot programth JavaScript pa një dokument HTML të vlefshëm"
 
 #: ../src/msw/webview_ie.cpp:1044
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "S’caktohet dot përparësi rrjedhe"
+msgstr "S’merret dot objekt JavaScript"
 
-#: ../src/msw/webview_ie.cpp:1056
-#, fuzzy
+#: ../src/msw/webview_ie.cpp:1058
 msgid "failed to evaluate"
-msgstr "S’u arrit të përmbushej '%s'\n"
-
-#: ../src/msw/webview_ie.cpp:1065
-#, fuzzy
-msgid "failed to retrieve execution result"
-msgstr "S’u arrit të merrej tekst mesazhi gabimi RAS"
+msgstr "s’u arrit të bëhej vlerësim"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
 msgstr "Ngjyrë sfondi"
 
-#: ../src/osx/carbon/fontdlg.cpp:326
+#: ../src/osx/carbon/fontdlg.cpp:325
 msgid "Font:"
 msgstr "Shkronja:"
 
-#: ../src/osx/carbon/fontdlg.cpp:336
+#: ../src/osx/carbon/fontdlg.cpp:335
 msgid "Size:"
 msgstr "Madhësi:"
 
-#: ../src/osx/carbon/fontdlg.cpp:340 ../src/osx/carbon/fontdlg.cpp:342
+#: ../src/osx/carbon/fontdlg.cpp:339 ../src/osx/carbon/fontdlg.cpp:341
 msgid "The font size in points."
 msgstr "Madhësia e shkronjave në pikë."
 
-#: ../src/osx/carbon/fontdlg.cpp:345
+#: ../src/osx/carbon/fontdlg.cpp:344
 msgid "Style:"
 msgstr "Stil:"
 
-#: ../src/osx/carbon/fontdlg.cpp:353 ../src/osx/carbon/fontdlg.cpp:355
+#: ../src/osx/carbon/fontdlg.cpp:352 ../src/osx/carbon/fontdlg.cpp:354
 msgid "Check to make the font bold."
 msgstr "I vini shenjë për t’i bërë shkronjat të trasha."
 
-#: ../src/osx/carbon/fontdlg.cpp:360 ../src/osx/carbon/fontdlg.cpp:362
+#: ../src/osx/carbon/fontdlg.cpp:359 ../src/osx/carbon/fontdlg.cpp:361
 msgid "Check to make the font italic."
 msgstr "I vini shenjë për t’i bërë shkronjat të pjerrëta."
 
 #. TRANSLATORS: Label of underlined font
-#: ../src/osx/carbon/fontdlg.cpp:367 ../src/propgrid/advprops.cpp:600
+#: ../src/osx/carbon/fontdlg.cpp:366 ../src/propgrid/advprops.cpp:601
 #: ../src/richtext/richtextfontpage.cpp:359
 msgid "Underlined"
 msgstr "Nënvijëzuar"
 
-#: ../src/osx/carbon/fontdlg.cpp:369 ../src/osx/carbon/fontdlg.cpp:371
+#: ../src/osx/carbon/fontdlg.cpp:368 ../src/osx/carbon/fontdlg.cpp:370
 msgid "Check to make the font underlined."
 msgstr "I vini shenjë për t’i bërë shkronjat të nënvizuara."
 
-#: ../src/osx/carbon/fontdlg.cpp:377
+#: ../src/osx/carbon/fontdlg.cpp:376
 msgid "Colour:"
 msgstr "Ngjyrë:"
 
-#: ../src/osx/carbon/fontdlg.cpp:381 ../src/osx/carbon/fontdlg.cpp:383
+#: ../src/osx/carbon/fontdlg.cpp:380 ../src/osx/carbon/fontdlg.cpp:382
 msgid "Click to change the font colour."
 msgstr "Klikoni që të ndryshohet ngjyra e shkronjave."
 
-#: ../src/osx/carbon/fontdlg.cpp:391 ../src/osx/carbon/fontdlg.cpp:393
+#: ../src/osx/carbon/fontdlg.cpp:390 ../src/osx/carbon/fontdlg.cpp:392
 msgid "Shows a preview of the font."
 msgstr "Shfaq një paraparje të shkronjave."
 
-#: ../src/osx/carbon/fontdlg.cpp:400 ../src/osx/carbon/fontdlg.cpp:402
+#: ../src/osx/carbon/fontdlg.cpp:399 ../src/osx/carbon/fontdlg.cpp:401
 msgid "Click to cancel changes to the font."
 msgstr "Klikoni që të anulohen ndryshime te shkronjat."
 
-#: ../src/osx/carbon/fontdlg.cpp:407 ../src/osx/carbon/fontdlg.cpp:409
+#: ../src/osx/carbon/fontdlg.cpp:406 ../src/osx/carbon/fontdlg.cpp:408
 msgid "Click to confirm changes to the font."
 msgstr "Klikoni për ripohim të ndryshimeve te shkronjat."
 
-#: ../src/osx/carbon/fontdlg.cpp:417
+#: ../src/osx/carbon/fontdlg.cpp:416
 msgid "<Any>"
 msgstr "<Çfarëdo>"
 
-#: ../src/osx/carbon/fontdlg.cpp:418 ../src/osx/carbon/fontdlg.cpp:623
-#: ../src/osx/carbon/fontdlg.cpp:643
+#: ../src/osx/carbon/fontdlg.cpp:417 ../src/osx/carbon/fontdlg.cpp:622
+#: ../src/osx/carbon/fontdlg.cpp:642
 msgid "<Any Roman>"
 msgstr "<Çfarëdo Roman>"
 
-#: ../src/osx/carbon/fontdlg.cpp:419 ../src/osx/carbon/fontdlg.cpp:625
-#: ../src/osx/carbon/fontdlg.cpp:645
+#: ../src/osx/carbon/fontdlg.cpp:418 ../src/osx/carbon/fontdlg.cpp:624
+#: ../src/osx/carbon/fontdlg.cpp:644
 msgid "<Any Decorative>"
 msgstr "<Çfarëdo Decorative>"
 
-#: ../src/osx/carbon/fontdlg.cpp:420 ../src/osx/carbon/fontdlg.cpp:627
-#: ../src/osx/carbon/fontdlg.cpp:647
+#: ../src/osx/carbon/fontdlg.cpp:419 ../src/osx/carbon/fontdlg.cpp:626
+#: ../src/osx/carbon/fontdlg.cpp:646
 msgid "<Any Modern>"
 msgstr "<Çfarëdo Modern>"
 
-#: ../src/osx/carbon/fontdlg.cpp:421 ../src/osx/carbon/fontdlg.cpp:629
-#: ../src/osx/carbon/fontdlg.cpp:649
+#: ../src/osx/carbon/fontdlg.cpp:420 ../src/osx/carbon/fontdlg.cpp:628
+#: ../src/osx/carbon/fontdlg.cpp:648
 msgid "<Any Script>"
 msgstr "<Çfarëdo Script>"
 
-#: ../src/osx/carbon/fontdlg.cpp:422 ../src/osx/carbon/fontdlg.cpp:634
-#: ../src/osx/carbon/fontdlg.cpp:653
+#: ../src/osx/carbon/fontdlg.cpp:421 ../src/osx/carbon/fontdlg.cpp:633
+#: ../src/osx/carbon/fontdlg.cpp:652
 msgid "<Any Swiss>"
 msgstr "<Çfarëdo Swiss>"
 
-#: ../src/osx/carbon/fontdlg.cpp:423 ../src/osx/carbon/fontdlg.cpp:631
-#: ../src/osx/carbon/fontdlg.cpp:651
+#: ../src/osx/carbon/fontdlg.cpp:422 ../src/osx/carbon/fontdlg.cpp:630
+#: ../src/osx/carbon/fontdlg.cpp:650
 msgid "<Any Teletype>"
 msgstr "<Çfarëdo Teletype>"
 
-#: ../src/osx/cocoa/filedlg.mm:274
-#, fuzzy
+#: ../src/osx/cocoa/filedlg.mm:337
 msgid "File type:"
-msgstr "Teleshkrim"
+msgstr "Lloj kartele:"
 
 #: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
 msgid "Minimize"
-msgstr "Mi&nimizo"
+msgstr "Minimizoje"
 
 #: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
 msgid "Zoom"
-msgstr "Zmadhoje"
+msgstr ""
 
 #: ../src/osx/cocoa/menu.mm:292
 msgid "Bring All to Front"
-msgstr ""
+msgstr "Silli të Tëra Para"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "S’u arrit të ngarkohej tingull prej \"%s\" (gabim %d)."
+msgstr "S’u arrit të ngarkohej tingull prej “%s” (gabim %d)."
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr ": kartela nuk ekziston!"
+msgstr "Kartela e shkronjave “%s” s’ekziston."
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6432,462 +6543,494 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
 "\"."
 msgstr ""
+"Kartela e shkronjave “%s” s’mund të përdoret, ngaqë s’gjendet brenda "
+"drejtorisë së shkronjave “%s”."
 
-#: ../src/osx/menu_osx.cpp:441
+#: ../src/osx/menu_osx.cpp:491
+#, c-format
+msgctxt "macOS menu item"
+msgid "About %s"
+msgstr "Rreth %s"
+
+#: ../src/osx/menu_osx.cpp:494
+msgctxt "macOS menu item"
 msgid "About..."
 msgstr "Rreth…"
 
-#: ../src/osx/menu_osx.cpp:449
+#: ../src/osx/menu_osx.cpp:502
+msgctxt "macOS menu item"
 msgid "Preferences..."
 msgstr "Parapëlqime…"
 
-#: ../src/osx/menu_osx.cpp:453
+#: ../src/osx/menu_osx.cpp:507
+msgctxt "macOS menu item"
 msgid "Services"
 msgstr "Shërbime"
 
-#: ../src/osx/menu_osx.cpp:458
+#: ../src/osx/menu_osx.cpp:514
 #, c-format
+msgctxt "macOS menu item"
 msgid "Hide %s"
 msgstr "Fshihe %s"
 
-#: ../src/osx/menu_osx.cpp:460
+#: ../src/osx/menu_osx.cpp:517
+msgctxt "macOS menu item"
+msgid "Hide Application"
+msgstr "Fshihe Aplikacionin"
+
+#: ../src/osx/menu_osx.cpp:520
+msgctxt "macOS menu item"
 msgid "Hide Others"
 msgstr "Fshihi të Tjerat"
 
-#: ../src/osx/menu_osx.cpp:461
+#: ../src/osx/menu_osx.cpp:522
+msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Shfaqi Krejt"
 
-#: ../src/osx/menu_osx.cpp:466
+#: ../src/osx/menu_osx.cpp:528
 #, c-format
+msgctxt "macOS menu item"
 msgid "Quit %s"
 msgstr "Mbylleni %s"
 
-#: ../src/osx/webview_webkit.mm:278
-#, fuzzy
-msgid "Printing is not supported by the system web control"
-msgstr "Gzip-i s’mbulohet nga ky version i zlib-it"
+#: ../src/osx/menu_osx.cpp:531
+msgctxt "macOS menu item"
+msgid "Quit Application"
+msgstr "Mbylle Aplikacionin"
 
-#: ../src/osx/webview_webkit.mm:287
+#: ../src/osx/webview_webkit.mm:285
+#| msgid "Gzip not supported by this version of zlib"
+msgid "Printing is not supported by the system web control"
+msgstr "Shtypja nuk mbulohet nga kontrolli web i sistemit"
+
+#: ../src/osx/webview_webkit.mm:294
 msgid "Print operation could not be initialized"
-msgstr ""
+msgstr "S’u gatit dot veprimi i shtypjes"
 
 #. TRANSLATORS: Label of font point size
-#: ../src/propgrid/advprops.cpp:572
+#: ../src/propgrid/advprops.cpp:573
 msgid "Point Size"
 msgstr ""
 
 #. TRANSLATORS: Label of font face name
-#: ../src/propgrid/advprops.cpp:582
+#: ../src/propgrid/advprops.cpp:583
 msgid "Face Name"
 msgstr "Emër Shkronjash"
 
 #. TRANSLATORS: Label of font style
-#: ../src/propgrid/advprops.cpp:590 ../src/richtext/richtextformatdlg.cpp:332
+#: ../src/propgrid/advprops.cpp:591 ../src/richtext/richtextformatdlg.cpp:332
 msgid "Style"
 msgstr "Stil"
 
 #. TRANSLATORS: Label of font weight
-#: ../src/propgrid/advprops.cpp:595
+#: ../src/propgrid/advprops.cpp:596
 msgid "Weight"
 msgstr "Madhësi"
 
 #. TRANSLATORS: Label of font family
-#: ../src/propgrid/advprops.cpp:604
+#: ../src/propgrid/advprops.cpp:605
 msgid "Family"
 msgstr "Familje"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:773
+#: ../src/propgrid/advprops.cpp:774
 msgid "AppWorkspace"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:774
+#: ../src/propgrid/advprops.cpp:775
 msgid "ActiveBorder"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:775
+#: ../src/propgrid/advprops.cpp:776
 msgid "ActiveCaption"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:776
+#: ../src/propgrid/advprops.cpp:777
 msgid "ButtonFace"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:777
+#: ../src/propgrid/advprops.cpp:778
 msgid "ButtonHighlight"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:778
+#: ../src/propgrid/advprops.cpp:779
 msgid "ButtonShadow"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:779
+#: ../src/propgrid/advprops.cpp:780
 msgid "ButtonText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:780
+#: ../src/propgrid/advprops.cpp:781
 msgid "CaptionText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:781
+#: ../src/propgrid/advprops.cpp:782
 msgid "ControlDark"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:782
+#: ../src/propgrid/advprops.cpp:783
 msgid "ControlLight"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:784
+#: ../src/propgrid/advprops.cpp:785
 msgid "GrayText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:785
+#: ../src/propgrid/advprops.cpp:786
 msgid "Highlight"
 msgstr "Theksim"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:786
+#: ../src/propgrid/advprops.cpp:787
 msgid "HighlightText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:787
+#: ../src/propgrid/advprops.cpp:788
 msgid "InactiveBorder"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:788
+#: ../src/propgrid/advprops.cpp:789
 msgid "InactiveCaption"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:789
+#: ../src/propgrid/advprops.cpp:790
 msgid "InactiveCaptionText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:791
+msgid "Menu"
+msgstr "Menu"
+
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:792
 msgid "Scrollbar"
 msgstr "Rrëshqitës"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:792
+#: ../src/propgrid/advprops.cpp:793
 msgid "Tooltip"
 msgstr "Ndihmëz"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:793
+#: ../src/propgrid/advprops.cpp:794
 msgid "TooltipText"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:794
+#: ../src/propgrid/advprops.cpp:795
 msgid "Window"
 msgstr "Dritare"
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:795
+#: ../src/propgrid/advprops.cpp:796
 msgid "WindowFrame"
 msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
-#: ../src/propgrid/advprops.cpp:796
+#: ../src/propgrid/advprops.cpp:797
 msgid "WindowText"
 msgstr ""
 
 #. TRANSLATORS: Custom colour choice entry
-#: ../src/propgrid/advprops.cpp:797 ../src/propgrid/advprops.cpp:1475
-#: ../src/propgrid/advprops.cpp:1518
+#: ../src/propgrid/advprops.cpp:798 ../src/propgrid/advprops.cpp:1476
+#: ../src/propgrid/advprops.cpp:1519
 msgid "Custom"
 msgstr "Vetjake"
 
-#: ../src/propgrid/advprops.cpp:1500
+#: ../src/propgrid/advprops.cpp:1501
 msgid "Black"
 msgstr "E zezë"
 
-#: ../src/propgrid/advprops.cpp:1501
-msgid "Maroon"
-msgstr ""
-
 #: ../src/propgrid/advprops.cpp:1502
+msgid "Maroon"
+msgstr "Ngjyrë gështenje"
+
+#: ../src/propgrid/advprops.cpp:1503
 msgid "Navy"
 msgstr "Blu"
 
-#: ../src/propgrid/advprops.cpp:1503
+#: ../src/propgrid/advprops.cpp:1504
 msgid "Purple"
 msgstr "E purpurt"
 
-#: ../src/propgrid/advprops.cpp:1504
+#: ../src/propgrid/advprops.cpp:1505
 msgid "Teal"
 msgstr "Blu e gjelbër"
 
-#: ../src/propgrid/advprops.cpp:1505
+#: ../src/propgrid/advprops.cpp:1506
 msgid "Gray"
 msgstr "Gri"
 
-#: ../src/propgrid/advprops.cpp:1506
+#: ../src/propgrid/advprops.cpp:1507
 msgid "Green"
 msgstr "E gjelbër"
 
-#: ../src/propgrid/advprops.cpp:1507
+#: ../src/propgrid/advprops.cpp:1508
 msgid "Olive"
 msgstr "Ulli"
 
-#: ../src/propgrid/advprops.cpp:1508
+#: ../src/propgrid/advprops.cpp:1509
 msgid "Brown"
 msgstr "Kafe"
 
-#: ../src/propgrid/advprops.cpp:1509
+#: ../src/propgrid/advprops.cpp:1510
 msgid "Blue"
 msgstr "Blu"
 
-#: ../src/propgrid/advprops.cpp:1510
+#: ../src/propgrid/advprops.cpp:1511
 msgid "Fuchsia"
 msgstr "Fuksia"
 
-#: ../src/propgrid/advprops.cpp:1511
+#: ../src/propgrid/advprops.cpp:1512
 msgid "Red"
 msgstr "E kuqe"
 
-#: ../src/propgrid/advprops.cpp:1512
+#: ../src/propgrid/advprops.cpp:1513
 msgid "Orange"
 msgstr "Portokalli"
 
-#: ../src/propgrid/advprops.cpp:1513
+#: ../src/propgrid/advprops.cpp:1514
 msgid "Silver"
 msgstr "E argjendtë"
 
-#: ../src/propgrid/advprops.cpp:1514
+#: ../src/propgrid/advprops.cpp:1515
 msgid "Lime"
 msgstr "Qitro"
 
-#: ../src/propgrid/advprops.cpp:1515
+#: ../src/propgrid/advprops.cpp:1516
 msgid "Aqua"
 msgstr "Blu e gjelbër"
 
-#: ../src/propgrid/advprops.cpp:1516
+#: ../src/propgrid/advprops.cpp:1517
 msgid "Yellow"
 msgstr "E verdhë"
 
-#: ../src/propgrid/advprops.cpp:1517
+#: ../src/propgrid/advprops.cpp:1518
 msgid "White"
 msgstr "E bardhë"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1653
+#: ../src/propgrid/advprops.cpp:1654
+msgctxt "system cursor name"
 msgid "Default"
 msgstr "Parazgjedhje"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1654
+#: ../src/propgrid/advprops.cpp:1655
+msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Shigjetë"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1655
-msgid "Right Arrow"
-msgstr "Tasti Shigjetë Djathtas"
-
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1656
+msgctxt "system cursor name"
+msgid "Right Arrow"
+msgstr "Shigjetë Djathtas"
+
+#: ../src/propgrid/advprops.cpp:1657
+msgctxt "system cursor name"
 msgid "Blank"
 msgstr "E zbrazët"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1657
-msgid "Bullseye"
-msgstr ""
-
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1658
+#| msgid "Bullet style"
+msgctxt "system cursor name"
+msgid "Bullseye"
+msgstr "Bullseye"
+
+#: ../src/propgrid/advprops.cpp:1659
+#| msgid "Character"
+msgctxt "system cursor name"
 msgid "Character"
 msgstr "Shenjë"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1659
-msgid "Cross"
-msgstr ""
-
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1660
-msgid "Hand"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Cross"
+msgstr "Kryq"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1661
-msgid "I-Beam"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Hand"
+msgstr "Dorë"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1662
+msgctxt "system cursor name"
+msgid "I-Beam"
+msgstr "I-Beam"
+
+#: ../src/propgrid/advprops.cpp:1663
+msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Butoni Majtas"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1663
+#: ../src/propgrid/advprops.cpp:1664
+msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Zmadhues"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1664
-msgid "Middle Button"
-msgstr "Butoni i Mesit i Miut"
-
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1665
+msgctxt "system cursor name"
+msgid "Middle Button"
+msgstr "Butoni i Mesit"
+
+#: ../src/propgrid/advprops.cpp:1666
+msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Pa Zë"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1666
+#: ../src/propgrid/advprops.cpp:1667
+msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Penel"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1667
+#: ../src/propgrid/advprops.cpp:1668
+msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Laps"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1668
-msgid "Point Left"
-msgstr ""
-
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1669
-msgid "Point Right"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Point Left"
+msgstr "Trego Majtas"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1670
+msgctxt "system cursor name"
+msgid "Point Right"
+msgstr "Trego Djathtas"
+
+#: ../src/propgrid/advprops.cpp:1671
+msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr ""
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1671
+#: ../src/propgrid/advprops.cpp:1672
+msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Butoni Djathtas"
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1672
-msgid "Sizing NE-SW"
-msgstr ""
-
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1673
-msgid "Sizing N-S"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Sizing NE-SW"
+msgstr "Ripërmasim VL-JP"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1674
-msgid "Sizing NW-SE"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Sizing N-S"
+msgstr "Ripërmasim V-J"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1675
-msgid "Sizing W-E"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Sizing NW-SE"
+msgstr "Ripërmasim VP-JL"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1676
-msgid "Sizing"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Sizing W-E"
+msgstr "Ripërmasim P-L"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1677
-msgid "Spraycan"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Sizing"
+msgstr "Ripërmasim"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1678
-msgid "Wait"
-msgstr ""
+msgctxt "system cursor name"
+msgid "Spraycan"
+msgstr "Sprei"
 
-#. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1679
+msgctxt "system cursor name"
+msgid "Wait"
+msgstr "Pritni"
+
+#: ../src/propgrid/advprops.cpp:1680
+msgctxt "system cursor name"
 msgid "Watch"
 msgstr ""
 
-#. TRANSLATORS: System cursor name
-#: ../src/propgrid/advprops.cpp:1680
+#: ../src/propgrid/advprops.cpp:1681
+msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2050
+#: ../src/propgrid/advprops.cpp:2053
 msgid "Make a selection:"
 msgstr "Bëni një përzgjedhje:"
 
-#: ../src/propgrid/manager.cpp:223
+#: ../src/propgrid/manager.cpp:405
 msgid "Property"
 msgstr "Veti"
 
-#: ../src/propgrid/manager.cpp:224
+#: ../src/propgrid/manager.cpp:406
 msgid "Value"
 msgstr "Vlerë"
 
-#: ../src/propgrid/manager.cpp:1527
+#: ../src/propgrid/manager.cpp:1701
 msgid "Categorized Mode"
-msgstr ""
+msgstr "Mënyrë e Kategorizuar"
 
-#: ../src/propgrid/manager.cpp:1544
+#: ../src/propgrid/manager.cpp:1727
 msgid "Alphabetic Mode"
 msgstr "Mënyrë Alfabetike"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/propgrid/propgrid.cpp:191
+#: ../src/propgrid/propgrid.cpp:197
 msgid "False"
-msgstr ""
+msgstr "False"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/propgrid/propgrid.cpp:193
+#: ../src/propgrid/propgrid.cpp:199
 msgid "True"
-msgstr ""
+msgstr "True"
 
 #. TRANSLATORS: Text  displayed for unspecified value
-#: ../src/propgrid/propgrid.cpp:393
+#: ../src/propgrid/propgrid.cpp:381
 msgid "Unspecified"
 msgstr "E papërcaktuar"
 
 #. TRANSLATORS: Caption of message box displaying any property error
-#: ../src/propgrid/propgrid.cpp:3169 ../src/propgrid/propgrid.cpp:3306
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
 msgid "Property Error"
 msgstr "Gabim Vetie"
 
-#: ../src/propgrid/propgrid.cpp:3283
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 "Keni dhënë vlerë të pavlefshme. Shtypni tastin ESC që të anulohet përpunimi."
 
-#: ../src/propgrid/propgrid.cpp:6681
+#: ../src/propgrid/propgrid.cpp:6650
 #, c-format
 msgid "Error in resource: %s"
-msgstr "Gabim në burimi: %s"
+msgstr "Gabim në burim: %s"
 
-#: ../src/propgrid/propgridiface.cpp:385
+#: ../src/propgrid/propgridiface.cpp:379
 #, c-format
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-"Veprimi i shtypjes \"%s\" dështoi: Vetia e etiketuar \"%s\" është e llojit "
-"\"%s\", JO \"%s\"."
+"Veprimi “%s” i shtypjes dështoi: Vetia e etiketuar me “%s” është e llojit "
+"“%s”, JO “%s”."
 
 #: ../src/propgrid/props.cpp:155
 #, c-format
 msgid "Unknown base %d. Base 10 will be used."
-msgstr ""
+msgstr "Bazë e panjohur %d. Do të përdoret 10 si bazë."
 
 #: ../src/propgrid/props.cpp:309
 #, c-format
@@ -6904,16 +7047,16 @@ msgstr "Vlera duhet të jetë mes %s dhe %s."
 msgid "Value must be %s or less."
 msgstr "Vlera duhet të jetë %s ose më e vogël."
 
-#: ../src/propgrid/props.cpp:1115
+#: ../src/propgrid/props.cpp:1114
 #, c-format
 msgid "Not %s"
 msgstr "Jo %s"
 
-#: ../src/propgrid/props.cpp:1904
+#: ../src/propgrid/props.cpp:1901
 msgid "Choose a directory:"
 msgstr "Zgjidhni një drejtori:"
 
-#: ../src/propgrid/props.cpp:2199
+#: ../src/propgrid/props.cpp:2196
 msgid "Choose a file"
 msgstr "Zgjidhni një kartelë"
 
@@ -7296,27 +7439,27 @@ msgstr "I vini shenjë që të përpunohen njëkohësisht krejt anët."
 #: ../src/richtext/richtextborderspage.cpp:398
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Outline"
-msgstr ""
+msgstr "Përvijim"
 
 #: ../src/richtext/richtextborderspage.cpp:426
 #: ../src/richtext/richtextborderspage.cpp:428
 msgid "Units for the left outline width."
-msgstr ""
+msgstr "Njësi për gjerësinë e përvijimit majtas."
 
 #: ../src/richtext/richtextborderspage.cpp:460
 #: ../src/richtext/richtextborderspage.cpp:462
 msgid "Units for the right outline width."
-msgstr ""
+msgstr "Njësi për gjerësinë e përvijimit djathtas."
 
 #: ../src/richtext/richtextborderspage.cpp:494
 #: ../src/richtext/richtextborderspage.cpp:496
 msgid "Units for the top outline width."
-msgstr ""
+msgstr "Njësi për gjerësinë e përvijimit të sipërm."
 
 #: ../src/richtext/richtextborderspage.cpp:528
 #: ../src/richtext/richtextborderspage.cpp:530
 msgid "Units for the bottom outline width."
-msgstr ""
+msgstr "Njësi për gjerësinë e përvijimit të poshtëm."
 
 #: ../src/richtext/richtextborderspage.cpp:566
 #: ../src/richtext/richtextborderspage.cpp:601
@@ -7330,17 +7473,17 @@ msgstr "&Rreze cepi:"
 #: ../src/richtext/richtextborderspage.cpp:577
 #: ../src/richtext/richtextborderspage.cpp:579
 msgid "An optional corner radius for adding rounded corners."
-msgstr "Një rreze opsionale këndesh për shtim cepash të rrumbullakuar."
+msgstr "Një rreze opsionale cepash, për shtim cepash të rrumbullakuar."
 
 #: ../src/richtext/richtextborderspage.cpp:585
 #: ../src/richtext/richtextborderspage.cpp:587
 msgid "The value of the corner radius."
-msgstr "Vlera e rrezes së këndit."
+msgstr "Vlera e rrezes së cepit."
 
 #: ../src/richtext/richtextborderspage.cpp:596
 #: ../src/richtext/richtextborderspage.cpp:598
 msgid "Units for the corner radius."
-msgstr "Njësi për rreze këndi."
+msgstr "Njësi për rreze cepi."
 
 #: ../src/richtext/richtextborderspage.cpp:610
 #: ../src/richtext/richtextsizepage.cpp:248
@@ -7350,7 +7493,7 @@ msgstr "Asnjë"
 
 #: ../src/richtext/richtextborderspage.cpp:611
 msgid "Solid"
-msgstr ""
+msgstr "Solide"
 
 #: ../src/richtext/richtextborderspage.cpp:612
 msgid "Dotted"
@@ -7358,7 +7501,7 @@ msgstr "Me pika"
 
 #: ../src/richtext/richtextborderspage.cpp:613
 msgid "Dashed"
-msgstr ""
+msgstr "Me vija"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Double"
@@ -7374,123 +7517,123 @@ msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:617
 msgid "Inset"
-msgstr ""
+msgstr "Brendazi"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Outset"
-msgstr ""
+msgstr "Jashtazi"
 
-#: ../src/richtext/richtextbuffer.cpp:3523
+#: ../src/richtext/richtextbuffer.cpp:3522
 msgid "Change Style"
 msgstr "Ndryshoni Stil"
 
-#: ../src/richtext/richtextbuffer.cpp:3706
+#: ../src/richtext/richtextbuffer.cpp:3705
 msgid "Change Object Style"
 msgstr "Ndryshoni Stil Objekti"
 
-#: ../src/richtext/richtextbuffer.cpp:3979
-#: ../src/richtext/richtextbuffer.cpp:8125
+#: ../src/richtext/richtextbuffer.cpp:3978
+#: ../src/richtext/richtextbuffer.cpp:8174
 msgid "Change Properties"
 msgstr "Ndryshoni Veti"
 
-#: ../src/richtext/richtextbuffer.cpp:4351
+#: ../src/richtext/richtextbuffer.cpp:4350
 msgid "Change List Style"
 msgstr "Ndryshoni Stil Liste"
 
-#: ../src/richtext/richtextbuffer.cpp:4524
+#: ../src/richtext/richtextbuffer.cpp:4523
 msgid "Renumber List"
 msgstr "Rinumërto Listën"
 
-#: ../src/richtext/richtextbuffer.cpp:7818
-#: ../src/richtext/richtextbuffer.cpp:7848
-#: ../src/richtext/richtextbuffer.cpp:7890
+#: ../src/richtext/richtextbuffer.cpp:7867
+#: ../src/richtext/richtextbuffer.cpp:7897
+#: ../src/richtext/richtextbuffer.cpp:7939
 #: ../src/richtext/richtextctrl.cpp:1287 ../src/richtext/richtextctrl.cpp:1495
 msgid "Insert Text"
 msgstr "Futni Tekst"
 
-#: ../src/richtext/richtextbuffer.cpp:7974
-#: ../src/richtext/richtextbuffer.cpp:8934
+#: ../src/richtext/richtextbuffer.cpp:8023
+#: ../src/richtext/richtextbuffer.cpp:8983
 msgid "Insert Image"
 msgstr "Futni Figurë"
 
-#: ../src/richtext/richtextbuffer.cpp:8021
+#: ../src/richtext/richtextbuffer.cpp:8070
 msgid "Insert Object"
 msgstr "Futni Objekt"
 
-#: ../src/richtext/richtextbuffer.cpp:8063
+#: ../src/richtext/richtextbuffer.cpp:8112
 msgid "Insert Field"
 msgstr "Futni Fushë"
 
-#: ../src/richtext/richtextbuffer.cpp:8361
+#: ../src/richtext/richtextbuffer.cpp:8410
 msgid "Too many EndStyle calls!"
 msgstr "Shumë thirrje EndStyle!"
 
-#: ../src/richtext/richtextbuffer.cpp:8736
+#: ../src/richtext/richtextbuffer.cpp:8785
 msgid "files"
 msgstr "kartela"
 
-#: ../src/richtext/richtextbuffer.cpp:9337
+#: ../src/richtext/richtextbuffer.cpp:9386
 msgid "standard/circle"
 msgstr "standard/rreth"
 
-#: ../src/richtext/richtextbuffer.cpp:9338
+#: ../src/richtext/richtextbuffer.cpp:9387
 msgid "standard/circle-outline"
-msgstr ""
+msgstr "standard/përvijim-rrethor"
 
-#: ../src/richtext/richtextbuffer.cpp:9339
+#: ../src/richtext/richtextbuffer.cpp:9388
 msgid "standard/square"
 msgstr "standard/katror"
 
-#: ../src/richtext/richtextbuffer.cpp:9340
+#: ../src/richtext/richtextbuffer.cpp:9389
 msgid "standard/diamond"
 msgstr "standard/romb"
 
-#: ../src/richtext/richtextbuffer.cpp:9341
+#: ../src/richtext/richtextbuffer.cpp:9390
 msgid "standard/triangle"
 msgstr "standard/trikëndësh"
 
-#: ../src/richtext/richtextbuffer.cpp:9380
+#: ../src/richtext/richtextbuffer.cpp:9429
 msgid "Box Properties"
 msgstr "Veti Kuadrati"
 
-#: ../src/richtext/richtextbuffer.cpp:9963
+#: ../src/richtext/richtextbuffer.cpp:10012
 msgid "Multiple Cell Properties"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9965
+#: ../src/richtext/richtextbuffer.cpp:10014
 msgid "Cell Properties"
 msgstr "Veti Kutize"
 
-#: ../src/richtext/richtextbuffer.cpp:11216
+#: ../src/richtext/richtextbuffer.cpp:11265
 msgid "Set Cell Style"
 msgstr "Caktoni Stil Kutize"
 
-#: ../src/richtext/richtextbuffer.cpp:11290
+#: ../src/richtext/richtextbuffer.cpp:11339
 msgid "Delete Row"
 msgstr "Fshije Rreshtin"
 
-#: ../src/richtext/richtextbuffer.cpp:11340
+#: ../src/richtext/richtextbuffer.cpp:11389
 msgid "Delete Column"
 msgstr "Fshije Shtyllën"
 
-#: ../src/richtext/richtextbuffer.cpp:11391
+#: ../src/richtext/richtextbuffer.cpp:11440
 msgid "Add Row"
 msgstr "Shtoni Rresht"
 
-#: ../src/richtext/richtextbuffer.cpp:11454
+#: ../src/richtext/richtextbuffer.cpp:11503
 msgid "Add Column"
 msgstr "Shtoni Shtyllë"
 
-#: ../src/richtext/richtextbuffer.cpp:11497
+#: ../src/richtext/richtextbuffer.cpp:11546
 msgid "Table Properties"
 msgstr "Veti Tabele"
 
-#: ../src/richtext/richtextbuffer.cpp:12863
+#: ../src/richtext/richtextbuffer.cpp:12909
 msgid "Picture Properties"
 msgstr "Veti Fotoje"
 
-#: ../src/richtext/richtextbuffer.cpp:13133
-#: ../src/richtext/richtextbuffer.cpp:13243
+#: ../src/richtext/richtextbuffer.cpp:13179
+#: ../src/richtext/richtextbuffer.cpp:13289
 msgid "image"
 msgstr "figurë"
 
@@ -7583,7 +7726,7 @@ msgstr "Klikoni që të shfletoni për një simbol."
 #: ../src/richtext/richtextbulletspage.cpp:227
 #: ../src/richtext/richtextliststylepage.cpp:288
 msgid "Symbol &font:"
-msgstr ""
+msgstr "&Shkronja simbol:"
 
 #: ../src/richtext/richtextbulletspage.cpp:232
 #: ../src/richtext/richtextbulletspage.cpp:234
@@ -7652,7 +7795,7 @@ msgstr "Numra romakë me të vogla"
 #: ../src/richtext/richtextbulletspage.cpp:279
 #: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Numbered outline"
-msgstr ""
+msgstr "Përvijim i numërtuar"
 
 #: ../src/richtext/richtextbulletspage.cpp:280
 #: ../src/richtext/richtextliststylepage.cpp:488
@@ -7696,7 +7839,7 @@ msgstr "~"
 
 #: ../src/richtext/richtextctrl.cpp:864
 msgid "Drag"
-msgstr ""
+msgstr "Tërhiqeni"
 
 #: ../src/richtext/richtextctrl.cpp:1346 ../src/richtext/richtextctrl.cpp:1585
 msgid "Delete Text"
@@ -7800,7 +7943,7 @@ msgstr "I vini shenjë që të shfaqet një vijë nëpër tekst."
 
 #: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
-msgstr ""
+msgstr "Ka&pitale"
 
 #: ../src/richtext/richtextfontpage.cpp:284
 #: ../src/richtext/richtextfontpage.cpp:286
@@ -7823,7 +7966,7 @@ msgstr "S&ipërshkrim"
 #: ../src/richtext/richtextfontpage.cpp:298
 #: ../src/richtext/richtextfontpage.cpp:300
 msgid "Check to show the text in superscript."
-msgstr "I vini shenjë që teksti të shfaqet me superskript."
+msgstr "I vini shenjë që teksti të shfaqet me sipërshkrim."
 
 #: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
@@ -7832,7 +7975,7 @@ msgstr "P&oshtëshkrim"
 #: ../src/richtext/richtextfontpage.cpp:305
 #: ../src/richtext/richtextfontpage.cpp:307
 msgid "Check to show the text in subscript."
-msgstr "I vini shenjë që teksti të shfaqet me subskript."
+msgstr "I vini shenjë që teksti të shfaqet me poshtëshkrim."
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
@@ -7883,11 +8026,11 @@ msgstr "Jo të nënvijëzuara"
 
 #: ../src/richtext/richtextformatdlg.cpp:342
 msgid "Indents && Spacing"
-msgstr "Kryeradhë && Hapësira"
+msgstr "Shmangie brendazi && Hapësira"
 
 #: ../src/richtext/richtextformatdlg.cpp:347
 msgid "Tabs"
-msgstr ""
+msgstr "Tabulacione"
 
 #: ../src/richtext/richtextformatdlg.cpp:352
 msgid "Bullets"
@@ -7937,7 +8080,7 @@ msgstr "&Djathtas"
 #: ../src/richtext/richtextliststylepage.cpp:337
 #: ../src/richtext/richtextliststylepage.cpp:339
 msgid "Right-align text."
-msgstr "Vendose tekstin djathtas"
+msgstr "Vendose tekstin djathtas."
 
 #: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:342
@@ -8008,12 +8151,12 @@ msgstr "Shmangia brendazi djathtas."
 
 #: ../src/richtext/richtextindentspage.cpp:222
 msgid "&Outline level:"
-msgstr ""
+msgstr "Shkallë për&vijimi:"
 
 #: ../src/richtext/richtextindentspage.cpp:227
 #: ../src/richtext/richtextindentspage.cpp:229
 msgid "The outline level."
-msgstr ""
+msgstr "Shkalla e përvijimit."
 
 #: ../src/richtext/richtextindentspage.cpp:242
 #: ../src/richtext/richtextliststylepage.cpp:417
@@ -8157,7 +8300,7 @@ msgstr "Hapësirë mes rreshtash:"
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
-msgstr ""
+msgstr "Hapësirë"
 
 #: ../src/richtext/richtextmarginspage.cpp:194
 #: ../src/richtext/richtextmarginspage.cpp:196
@@ -8245,16 +8388,16 @@ msgstr "Njësi për mbushjen poshtë."
 
 #: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
-msgstr ""
+msgstr "Pezull"
 
 #: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
-msgstr ""
+msgstr "Mënyrë ndenjeje &pezull:"
 
 #: ../src/richtext/richtextsizepage.cpp:253
 #: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
-msgstr ""
+msgstr "Si do të rrijë pezull objekti kundrejt tekstit."
 
 #: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
@@ -8726,6 +8869,10 @@ msgstr "Unikod"
 msgid "The range to show."
 msgstr "Intervali për shfaqje."
 
+#: ../src/richtext/richtextsymboldlg.cpp:469
+msgid "Insert"
+msgstr "Tasti Insert"
+
 #: ../src/richtext/richtextsymboldlg.cpp:503
 msgid "(Normal text)"
 msgstr "(Tekst normal)"
@@ -8802,6 +8949,10 @@ msgstr "Mi&nimizo"
 msgid "Ma&ximize"
 msgstr "Ma&ksimizo"
 
+#: ../src/univ/themes/win32.cpp:3753
+msgid "Alt+"
+msgstr "Alt+"
+
 #: ../src/unix/appunix.cpp:179
 msgid "Failed to install signal handler"
 msgstr "S’u arrit të instalohej trajtues sinjali"
@@ -8811,9 +8962,8 @@ msgid "Already dialling ISP."
 msgstr "Po provohet tashmë numri i ISP-së."
 
 #: ../src/unix/dlunix.cpp:90
-#, fuzzy
 msgid "Failed to unload shared library"
-msgstr "S’u arrit të ngarkohej librari e përbashkët '%s'"
+msgstr "S’u arrit të hiqej ngarkim librarie të përbashkët"
 
 #: ../src/unix/dlunix.cpp:118
 msgid "Unknown dynamic library error"
@@ -8867,12 +9017,12 @@ msgstr "S’arrihet të hiqet mbikëqyrës inotifyi %i"
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr "Akt i papritur për \"%s\": s’ka përshkrues mbikëqyrësi me përputhje."
+msgstr "Akt i papritur për “%s”: s’ka përshkrues mbikëqyrësi me përputhje."
 
 #: ../src/unix/fswatcher_inotify.cpp:320
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr "Akt i paligjshëm inotify për \"%s\""
+msgstr "Akt i paligjshëm “inotify” për “%s”"
 
 #: ../src/unix/fswatcher_inotify.cpp:553
 msgid "Unable to read from inotify descriptor"
@@ -8910,7 +9060,7 @@ msgstr "Gabim në luajtje mediash: %s"
 #: ../src/unix/mediactrl.cpp:1234
 #, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "S’u arrit të përgatitej për luajtje \"%s\"."
+msgstr "S’u arrit të përgatitej për luajtje “%s”."
 
 #: ../src/unix/snglinst.cpp:165
 #, c-format
@@ -8920,7 +9070,7 @@ msgstr "S’u arrit të shkruhej kartelë kyçjeje '%s'"
 #: ../src/unix/snglinst.cpp:178
 #, c-format
 msgid "Failed to set permissions on lock file '%s'"
-msgstr "S’u arrit të caktohen leje mbi kartelë kyçjeje '%s'"
+msgstr "S’u arrit të caktoheshin leje mbi kartelë kyçjeje '%s'"
 
 #: ../src/unix/snglinst.cpp:195
 #, c-format
@@ -9042,51 +9192,51 @@ msgstr "S’u arrit të caktohej përparësie rrjedhe %d."
 msgid "Failed to terminate a thread."
 msgstr "S’u arrit të përfundohej një rrjedhë."
 
-#: ../src/unix/threadpsx.cpp:1843
+#: ../src/unix/threadpsx.cpp:1875
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "Gatitja e modulit të rrjedhës dështoi: s’u arrit të krijohej kyç rrjedhe"
 
-#: ../src/unix/utilsunx.cpp:303
+#: ../src/unix/utilsunx.cpp:338
 msgid "Impossible to get child process input"
-msgstr "E pamundur të merret \"input\" procesi pjelle"
+msgstr "E pamundur të merret “input” procesi pjelle"
 
-#: ../src/unix/utilsunx.cpp:353
+#: ../src/unix/utilsunx.cpp:388
 msgid "Can't write to child process's stdin"
 msgstr "S’shkruhet dot te stdin procesi pjelle"
 
-#: ../src/unix/utilsunx.cpp:613
+#: ../src/unix/utilsunx.cpp:648
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "S’u arrit të përmbushej '%s'\n"
 
-#: ../src/unix/utilsunx.cpp:647
+#: ../src/unix/utilsunx.cpp:682
 msgid "Fork failed"
 msgstr "Degëzimi dështoi"
 
-#: ../src/unix/utilsunx.cpp:670
+#: ../src/unix/utilsunx.cpp:705
 msgid "Failed to set process priority"
 msgstr "S’u arrit të caktohej përparësi procesi"
 
-#: ../src/unix/utilsunx.cpp:681
+#: ../src/unix/utilsunx.cpp:716
 msgid "Failed to redirect child process input/output"
 msgstr "S’u arrit të ridrejtohej input/output procesi pjellë"
 
-#: ../src/unix/utilsunx.cpp:785
+#: ../src/unix/utilsunx.cpp:820
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "S’u arrit të ujdisej kanal jobllokues, programi mund të ngecë."
 
-#: ../src/unix/utilsunx.cpp:989
+#: ../src/unix/utilsunx.cpp:1028
 msgid "Cannot get the hostname"
 msgstr "S’merret dot strehëemër"
 
-#: ../src/unix/utilsunx.cpp:1025
+#: ../src/unix/utilsunx.cpp:1064
 msgid "Cannot get the official hostname"
 msgstr "S’merret dot strehëemër zyrtar"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
-msgstr "S’u arrit të krijohej kanal zgjimi nga qerthull akti."
+msgstr "S’u arrit të krijohej kanal zgjimi i përdorur nga qerthull akti."
 
 #: ../src/unix/wakeuppipe.cpp:56
 msgid "Failed to switch wake up pipe to non-blocking mode"
@@ -9113,32 +9263,32 @@ msgstr "S’u arrit të mbyllej ekrani '%s'"
 #: ../src/x11/utils.cpp:189
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "S’u arrit të hapej ekrani \"%s\"."
+msgstr "S’u arrit të hapej ekrani “%s”."
 
 #: ../src/xml/xml.cpp:925
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "Gabim përtypjeje XML: '%s' te rresht %d"
 
-#: ../src/xrc/xmlres.cpp:423
+#: ../src/xrc/xmlres.cpp:418
 #, c-format
 msgid "Cannot load resources from '%s'."
 msgstr "S’ngarkohen dot burime prej kartele '%s'."
 
-#: ../src/xrc/xmlres.cpp:761
+#: ../src/xrc/xmlres.cpp:756
 #, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "S’hapet dot kartelë burimesh %s."
 
-#: ../src/xrc/xmlres.cpp:779
+#: ../src/xrc/xmlres.cpp:774
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "S’ngarkohen dot burime prej kartele '%s'."
 
-#: ../src/xrc/xmlres.cpp:2589
+#: ../src/xrc/xmlres.cpp:2744
 #, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Krijimi i %s \"%s\" dështoi."
+msgstr "Krijimi i %s “%s” dështoi."
 
 #~ msgid " (while overwriting an existing item)"
 #~ msgstr " (teksa mbishkruhet një element ekzistues)"
@@ -9146,24 +9296,31 @@ msgstr "Krijimi i %s \"%s\" dështoi."
 #~ msgid "&Save as"
 #~ msgstr "&Ruaje si"
 
+#, c-format
 #~ msgid "'%s' doesn't consist only of valid characters"
 #~ msgstr "'%s' s’përbëhet vetëm nga shenja të vlefshme"
 
+#, c-format
 #~ msgid "'%s' should be numeric."
 #~ msgstr "'%s' duhet të jetë numerik."
 
+#, c-format
 #~ msgid "'%s' should only contain ASCII characters."
 #~ msgstr "'%s' duhet të përmbajë vetëm shenja ASCII."
 
+#, c-format
 #~ msgid "'%s' should only contain alphabetic characters."
 #~ msgstr "'%s' duhet të përmbajë vetëm shenja abc-je."
 
+#, c-format
 #~ msgid "'%s' should only contain alphabetic or numeric characters."
 #~ msgstr "'%s' duhet të përmbajë vetëm shenja abc-je ose numerike."
 
+#, c-format
 #~ msgid "'%s' should only contain digits."
 #~ msgstr "'%s' duhet të përmbajë vetëm shifra."
 
+#, c-format
 #~ msgid "Can't create window of class %s"
 #~ msgstr "S’krijohet dritare klase %s"
 
@@ -9173,12 +9330,14 @@ msgstr "Krijimi i %s \"%s\" dështoi."
 #~ msgid "Couldn't create the overlay window"
 #~ msgstr "S’u krijua dot dritarja përsipër"
 
+#, c-format
 #~ msgid "Failed to convert file \"%s\" to Unicode."
 #~ msgstr "S’u arrit të shndërrohej kartela \"%s\" në Unikod."
 
 #~ msgid "Failed to set text in the text control."
 #~ msgstr "S’u arrit të caktohej tekst te kontrolli i tekstit."
 
+#, c-format
 #~ msgid "Invalid GTK+ command line option, use \"%s --help\""
 #~ msgstr "Mundësi e paligjshme rreshti urdhrash GTK+, përdorni \"%s --help\""
 
@@ -9200,5 +9359,706 @@ msgstr "Krijimi i %s \"%s\" dështoi."
 #~ msgid "The following standard GTK+ options are also supported:\n"
 #~ msgstr "Mbulohen edhe mundësitë standarde GTK+ vijuese:\n"
 
+#~ msgid "conversion to 8-bit encoding failed"
+#~ msgstr "shndërrimi në kodim 8-bit dështoi"
+
+#, c-format
 #~ msgid "locale '%s' cannot be set."
 #~ msgstr "nuk caktohet dot vendorja '%s'."
+
+#, fuzzy
+#~ msgid "Adding flavor TEXT failed"
+#~ msgstr "Shtimi i kategorisë dështoi"
+
+#, fuzzy
+#~ msgid "Adding flavor utxt failed"
+#~ msgstr "Shtimi i kategorisë dështoi"
+
+#~ msgid "Bitmap renderer cannot render value; value type: "
+#~ msgstr "Vizatuesi bitmap s’vizaton dot vlerën; lloj vlere: "
+
+#~ msgid "Column could not be added."
+#~ msgstr "S’shtohej dot shtyllë."
+
+#~ msgid "Column index not found."
+#~ msgstr "S’u gjet tregues shtyllash."
+
+#~ msgid "Column width could not be determined"
+#~ msgstr "S’u përcaktua dot gjerësi shtylle"
+
+#~ msgid "Column width could not be set."
+#~ msgstr "S’u caktua dot gjerësi shtylle."
+
+#~ msgid "Confirm registry update"
+#~ msgstr "Ripohoni përditësim regjistri"
+
+#~ msgid "Could not determine column index."
+#~ msgstr "S’u përcaktua dot tregues shtyllash."
+
+#~ msgid "Could not determine column's position"
+#~ msgstr "S’u përcaktua dot pozicioni i shtyllës"
+
+#~ msgid "Could not determine number of columns."
+#~ msgstr "S’u përcaktua dot numër shtyllash."
+
+#~ msgid "Could not determine number of items"
+#~ msgstr "S’u përcaktua dot numër objektesh"
+
+#~ msgid "Could not get header description."
+#~ msgstr "S’u mor dot përshkrim kryesh."
+
+#~ msgid "Could not get items."
+#~ msgstr "S’u morën dot objekte."
+
+#, fuzzy
+#~ msgid "Could not get property flags."
+#~ msgstr "S’u morën dot objektet e përzgjedhur."
+
+#~ msgid "Could not get selected items."
+#~ msgstr "S’u morën dot objektet e përzgjedhur."
+
+#~ msgid "Could not remove column."
+#~ msgstr "S’u hoq dot shtyllë."
+
+#~ msgid "Could not retrieve number of items"
+#~ msgstr "S’u mor dot numër objektesh"
+
+#~ msgid "Could not set column width."
+#~ msgstr "S’u caktua dot gjerësi shtylle."
+
+#~ msgid "Could not set header description."
+#~ msgstr "S’u caktua dot përshkrim kryesh."
+
+#~ msgid "Could not set icon."
+#~ msgstr "S’u caktua dot ikonë."
+
+#~ msgid "Could not set maximum width."
+#~ msgstr "S’u caktua dot gjerësi maksimum."
+
+#~ msgid "Could not set minimum width."
+#~ msgstr "S’u caktua dot gjerësi minimum."
+
+#, fuzzy
+#~ msgid "Could not set property flags."
+#~ msgstr "Caktoni flamurka në ndarje të re."
+
+#~ msgid "Data object has invalid data format"
+#~ msgstr "Objekt të dhënash ka format të pavlefshëm të dhënash"
+
+#~ msgid "Date renderer cannot render value; value type: "
+#~ msgstr "Vizatuesi i datave s’vizaton dot vlerën; lloj vlere: "
+
+#~ msgid ""
+#~ "Do you want to overwrite the command used to %s files with extension \"%s"
+#~ "\" ?\n"
+#~ "Current value is \n"
+#~ "%s, \n"
+#~ "New value is \n"
+#~ "%s %1"
+#~ msgstr ""
+#~ "Doni të mbishkruhet urdhri i përdorur mbi kartelat %s me zgjatim \"%s"
+#~ "\" ?\n"
+#~ "Vlera e çastit është \n"
+#~ "%s, \n"
+#~ "Vlera e re është \n"
+#~ "%s %1"
+
+#~ msgid "Failed to retrieve data from the clipboard."
+#~ msgstr "S’u arrit të merreshin të dhënash prej të papastrës."
+
+#~ msgid "GIF: Invalid gif index."
+#~ msgstr "GIF: tregues gif i pavlefshëm."
+
+#~ msgid "GIF: unknown error!!!"
+#~ msgstr "GIF: gabim i panjohur!!!"
+
+#~ msgid "Icon & text renderer cannot render value; value type: "
+#~ msgstr ""
+#~ "Vizatuesi i ikonave & teksteve s’mund të vizatojë vlerën; lloj vlere: "
+
+#, fuzzy
+#~ msgid "Invalid data view item"
+#~ msgstr "ID e pavlefshme objekti."
+
+#~ msgid "New directory"
+#~ msgstr "Drejtori e re"
+
+#, fuzzy
+#~ msgid "No column existing."
+#~ msgstr "Shtyllë"
+
+#, fuzzy
+#~ msgid "No column for the specified column existing."
+#~ msgstr "Pa vizatues të specifikuar për shtyllë."
+
+#, fuzzy
+#~ msgid "No column for the specified column position existing."
+#~ msgstr "S’ka shtyllë ose vizatues për treguesin e specifikuar të shtyllave."
+
+#~ msgid "No renderer specified for column."
+#~ msgstr "Pa vizatues të specifikuar për shtyllë."
+
+#~ msgid "Number of columns could not be determined."
+#~ msgstr "S’u përcaktua dot numër shtyllash."
+
+#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
+#~ msgstr "Funksioni OpenGL \"%s\" dështoi: %s (gabim %d)."
+
+#~ msgid ""
+#~ "Please install a newer version of comctl32.dll\n"
+#~ "(at least version 4.70 is required but you have %d.%02d)\n"
+#~ "or this program won't operate correctly."
+#~ msgstr ""
+#~ "Ju lutemi, instaloni një version më të ri të comctl32.dll\n"
+#~ "(lypset e pakta versioni 4.70, ndërsa ju keni %d.%02d)\n"
+#~ "ose programi s’ka për të punuar si duhet."
+
+#, fuzzy
+#~ msgid "Pointer to model not set correctly."
+#~ msgstr "Si model tastiere cakto %1.<br/>"
+
+#~ msgid "Progress renderer cannot render value type; value type: "
+#~ msgstr "Vizatuesi i ecurisë s’vizaton dot vlerën; lloj vlere: "
+
+#~ msgid "Rendering failed."
+#~ msgstr "Vizatimi dështoi."
+
+#~ msgid "Show hidden directories"
+#~ msgstr "Shfaq drejtori të fshehura"
+
+#~ msgid "Text renderer cannot render value; value type: "
+#~ msgstr "Vizatuesi i teksteve s’mund të vizatojë vlerën; lloj vlere: "
+
+#~ msgid "There is no column or renderer for the specified column index."
+#~ msgstr "S’ka shtyllë ose vizatues për treguesin e specifikuar të shtyllave."
+
+#~ msgid ""
+#~ "This system doesn't support date controls, please upgrade your version of "
+#~ "comctl32.dll"
+#~ msgstr ""
+#~ "Ky sistem s’mbulon kontrolle datash, ju lutemi, përmirësoni versionin "
+#~ "tuaj të comctl32.dll-së"
+
+#~ msgid "Too many colours in PNG, the image may be slightly blurred."
+#~ msgstr "Si shumë ngjyra në PNG, figura mund të jetë pakëz e turbullt."
+
+#~ msgid "Unable to initialize Hildon program"
+#~ msgstr "S’arrihet të gatitet programi Hildon"
+
+#~ msgid "Unknown data format"
+#~ msgstr "Format i panjohur të dhënash"
+
+#~ msgid "Win32s on Windows 3.1"
+#~ msgstr "Win32s për Windows 3.1"
+
+#~ msgid "Windows 10"
+#~ msgstr "Windows 10"
+
+#~ msgid "Windows 2000"
+#~ msgstr "Windows 2000"
+
+#~ msgid "Windows 8"
+#~ msgstr "Windows 8"
+
+#~ msgid "Windows 8.1"
+#~ msgstr "Windows 8.1"
+
+#~ msgid "Windows 95"
+#~ msgstr "Windows 95"
+
+#~ msgid "Windows 95 OSR2"
+#~ msgstr "Windows 95 OSR2"
+
+#~ msgid "Windows 98"
+#~ msgstr "Windows 98"
+
+#~ msgid "Windows 98 SE"
+#~ msgstr "Windows 98 SE"
+
+#~ msgid "Windows 9x (%d.%d)"
+#~ msgstr "Windows 9x (%d.%d)"
+
+#~ msgid "Windows CE (%d.%d)"
+#~ msgstr "Windows CE (%d.%d)"
+
+#~ msgid "Windows NT %lu.%lu"
+#~ msgstr "Windows NT %lu.%lu"
+
+#~ msgid "Windows Server 10"
+#~ msgstr "Windows Server 10"
+
+#~ msgid "Windows Server 2003"
+#~ msgstr "Windows Server 2003"
+
+#~ msgid "Windows Server 2008"
+#~ msgstr "Windows Server 2008"
+
+#~ msgid "Windows Server 2008 R2"
+#~ msgstr "Windows Server 2008 R2"
+
+#~ msgid "Windows Server 2012"
+#~ msgstr "Windows Server 2012"
+
+#~ msgid "Windows Server 2012 R2"
+#~ msgstr "Windows Server 2012 R2"
+
+#~ msgid "Windows XP"
+#~ msgstr "Windows XP"
+
+#~ msgid "can't execute '%s'"
+#~ msgstr "s’përmbushet dot '%s'"
+
+#~ msgid "error opening '%s'"
+#~ msgstr "gabim në hapjen e '%s'"
+
+#~ msgid "Cannot create mutex."
+#~ msgstr "S'krijoj dot mutex."
+
+#~ msgid "Cannot resume thread %lu"
+#~ msgstr "Cannot resume thread %lu"
+
+#~ msgid "Cannot suspend thread %lu"
+#~ msgstr "S'pushoj dot rrjedhën %lu"
+
+#~ msgid "Couldn't release a mutex"
+#~ msgstr "S'munda të lëshoj mutex"
+
+#, fuzzy
+#~ msgid "DIVIDE"
+#~ msgstr "<DRIVE>"
+
+#~ msgid "Execution of command '%s' failed with error: %ul"
+#~ msgstr "Përmbushja e urdhrit '%s' dështoi me gabim: %ul"
+
+#~ msgid ""
+#~ "File '%s' already exists.\n"
+#~ "Do you want to replace it?"
+#~ msgstr ""
+#~ "Ka një kartelë %s tashmë.\n"
+#~ "Doni ta zëvendësoni?"
+
+#~ msgid "buffer is too small for Windows directory."
+#~ msgstr "shtytëza është shumë e vogël për drejtori Windows."
+
+#~ msgid "Print preview"
+#~ msgstr "Paraparje shtypjeje"
+
+#, fuzzy
+#~ msgid "&Preview..."
+#~ msgstr " Paraparje"
+
+#, fuzzy
+#~ msgid "Preview..."
+#~ msgstr " Paraparje"
+
+#~ msgid "&Save..."
+#~ msgstr "&Ruaj..."
+
+#, fuzzy
+#~ msgid "About "
+#~ msgstr "&Rreth..."
+
+#~ msgid "All files (*.*)|*"
+#~ msgstr "Tërë kartelat (*.*)|*"
+
+#~ msgid "Cannot initialize SciTech MGL!"
+#~ msgstr "S'gatis dot SciTech MGL!"
+
+#~ msgid "Cannot initialize display."
+#~ msgstr "S'gatis dot ekranin."
+
+#~ msgid "Cannot start thread: error writing TLS"
+#~ msgstr "S'nis dot rrjedhë: gabim në shkrim TLS-je"
+
+#~ msgid "Close\tAlt-F4"
+#~ msgstr "Mbyll\tAlt-F4"
+
+#~ msgid "Couldn't create cursor."
+#~ msgstr "S'krijova dot kursor"
+
+#~ msgid "Directory '%s' doesn't exist!"
+#~ msgstr "Drejtoria '%s' nuk ekziston!"
+
+#~ msgid "Mode %ix%i-%i not available."
+#~ msgstr "Mënyrë %ix%i-%i jo e mundshme."
+
+#~ msgid "Paper Size"
+#~ msgstr "Madhësi Letre "
+
+#~ msgid "&Goto..."
+#~ msgstr "&Goto..."
+
+#~ msgid "<<"
+#~ msgstr "<<"
+
+#~ msgid ">>"
+#~ msgstr ">>"
+
+#~ msgid ">>|"
+#~ msgstr ">>|"
+
+#~ msgid "Archive doesnt contain #SYSTEM file"
+#~ msgstr "Arkiva nuk përfshin kartelë #SYSTEM"
+
+#~ msgid "Can't check image format of file '%s': file does not exist."
+#~ msgstr ""
+#~ "S'kontrolloj dot format pamjeje të kartelës '%s': kartela nuk ekziston."
+
+#~ msgid "Can't load image from file '%s': file does not exist."
+#~ msgstr "S'ngarkoj dot pamje prej kartelës '%s': kartela nuk ekziston."
+
+#~ msgid "Cannot convert dialog units: dialog unknown."
+#~ msgstr "S'shndërroj dot njësi dialogjesh: dialog i panjohur."
+
+#~ msgid "Cannot convert from the charset '%s'!"
+#~ msgstr "S'shndërroj dot prej kodimi '%s'!"
+
+#~ msgid "Cannot find container for unknown control '%s'."
+#~ msgstr "S'gjej dot përmbajtës për kontrollin e panjohur '%s'."
+
+#~ msgid "Cannot find font node '%s'."
+#~ msgstr "S'gjej dot nyje gërmash '%s'."
+
+#~ msgid "Cannot open file '%s'."
+#~ msgstr "S'hap dot kartelë '%s'."
+
+#~ msgid "Cannot parse coordinates from '%s'."
+#~ msgstr "S'përtyp dot koordinata prej '%s'."
+
+#~ msgid "Cannot parse dimension from '%s'."
+#~ msgstr "S'përtyp dot përmasa prej '%s'."
+
+#~ msgid "Cant create the thread event queue"
+#~ msgstr "S'mund të krijoj radhë ngjarjesh rrjedhe"
+
+#, fuzzy
+#~ msgid "Click to cancel this window."
+#~ msgstr "Mbyll këtë dritare"
+
+#, fuzzy
+#~ msgid "Click to confirm your selection."
+#~ msgstr "KLikoni për ripohim përzgjedhje gërmash."
+
+#~ msgid "Could not unlock mutex"
+#~ msgstr "S'çkyça dot \"mutex\"-in"
+
+#~ msgid "Error while waiting on semaphore"
+#~ msgstr "Gabim gjatë pritjes në semafor"
+
+#, fuzzy
+#~ msgid "Failed to connect to session manager: %s"
+#~ msgstr "Dështova në lidhjen dialup %s: %s"
+
+#~ msgid "Failed to create a status bar."
+#~ msgstr "Dështova në krijimin e një shtylle gjendjesh."
+
+#~ msgid "Failed to register OpenGL window class."
+#~ msgstr "Dështova në regjistrim klase dritareje OpenGL."
+
+#~ msgid "Fatal error: "
+#~ msgstr "Gabim fatal:"
+
+#~ msgid "Goto Page"
+#~ msgstr "Shko te Faqe"
+
+#, fuzzy
+#~ msgid "Help : %s"
+#~ msgstr "Ndihmë: %s"
+
+#~ msgid "I64"
+#~ msgstr "I64"
+
+#~ msgid "Internal error, illegal wxCustomTypeInfo"
+#~ msgstr "Gabim i brendshëm, wxCustomTypeInfo i jashtëligjshëm"
+
+#~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+#~ msgstr "Burim XRC i pavlefshëm '%s': s'ka nyje rrënje 'resource'."
+
+#~ msgid "No handler found for XML node '%s', class '%s'!"
+#~ msgstr "S'u gjet trajtues për nyje XML '%s', klasa '%s'!"
+
+#, fuzzy
+#~ msgid "No image handler for type %ld defined."
+#~ msgstr "Nuk është përcaktuar trajtues pamjesh për tipin %d."
+
+#, fuzzy
+#~ msgid "Owner not initialized."
+#~ msgstr "S'gatis dot ekranin."
+
+#, fuzzy
+#~ msgid "Passed item is invalid."
+#~ msgstr "'%s' është e mangët"
+
+#~ msgid "Passing a already registered object to SetObjectName"
+#~ msgstr "Po i kaloj SetObjectName-it një objekt tashmë të regjistruar"
+
+#~ msgid "Program aborted."
+#~ msgstr "Programi u ndërpre."
+
+#~ msgid "Resource files must have same version number!"
+#~ msgstr "kartelat e burimit duhet të të kenë të njëjtij numër versioni!"
+
+#, fuzzy
+#~ msgid "Search!"
+#~ msgstr "Kërko"
+
+#~ msgid "Sorry, could not open this file for saving."
+#~ msgstr "Më ndjeni, s'munda ta hap dot këtë kartelë për ruajtje."
+
+#~ msgid "Sorry, could not save this file."
+#~ msgstr "Më ndjeni, s'munda ta ruaj dot këtë kartelë."
+
+#~ msgid "Sorry, print preview needs a printer to be installed."
+#~ msgstr ""
+#~ "Më ndjeni, paraparjet e shtypjes lypin të ketë një shtypës të instaluar."
+
+#~ msgid "Status: "
+#~ msgstr "Gjendje:"
+
+#~ msgid "TIFF library error."
+#~ msgstr "Gabim librarie TIFF"
+
+#~ msgid "TIFF library warning."
+#~ msgstr "Sinjalizim librarie TIFF."
+
+#~ msgid ""
+#~ "The file '%s' couldn't be opened.\n"
+#~ "It has been removed from the most recently used files list."
+#~ msgstr ""
+#~ "Kartela '%s' s'mund të hapej.\n"
+#~ "Është hequr nga lista e kartelave më të përdorura së fundmi."
+
+#~ msgid "The path '%s' contains too many \"..\"!"
+#~ msgstr "Shtegu '%s' përmban shumë \"..\"!"
+
+#~ msgid "Trying to solve a NULL hostname: giving up"
+#~ msgstr "Po përpiqem të shquaj një strehëemër NULL: po dorëzohem"
+
+#~ msgid "Unknown style flag "
+#~ msgstr "Shenjë e panjohur stili"
+
+#~ msgid "Warning"
+#~ msgstr "Sinjalizim"
+
+#~ msgid "Windows 2000 (build %lu"
+#~ msgstr "Windows 2000 (build %lu"
+
+#~ msgid "XRC resource '%s' (class '%s') not found!"
+#~ msgstr "Nuk u gjet burim XRC '%s' (klasa '%s')!"
+
+#, fuzzy
+#~ msgid "XRC resource: Cannot create animation from '%s'."
+#~ msgstr "Burim XRC: Nuk mund të krijoj bitmap prej '%s'."
+
+#~ msgid "XRC resource: Cannot create bitmap from '%s'."
+#~ msgstr "Burim XRC: Nuk mund të krijoj bitmap prej '%s'."
+
+#, fuzzy
+#~ msgid ""
+#~ "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
+#~ msgstr "Burim XRC: tregim i pasaktë ngjyre '%s' për vetinë '%s'."
+
+#~ msgid "[EMPTY]"
+#~ msgstr "[BOSH]"
+
+#~ msgid "catalog file for domain '%s' not found."
+#~ msgstr "nuk u gjet kartelë katalogu për përkatësinë '%s'."
+
+#~ msgid "delegate has no type info"
+#~ msgstr "i deleguari nuk ka të dhëna tipi"
+
+#, fuzzy
+#~ msgid "encoding %i"
+#~ msgstr "kodim %s"
+
+#~ msgid "looking for catalog '%s' in path '%s'."
+#~ msgstr "po shoh për katalog '%s' te shtegu '%s'."
+
+#~ msgid "wxSocket: invalid signature in ReadMsg."
+#~ msgstr "wxSocket: nënshkrim i pavlefshëm në ReadMsg."
+
+#~ msgid "wxSocket: unknown event!."
+#~ msgstr "wxSocket: ngjarje e panjohur!."
+
+#~ msgid "|<<"
+#~ msgstr "|<<"
+
+#~ msgid "\t%s: %s\n"
+#~ msgstr "\t%s: %s\n"
+
+#, fuzzy
+#~ msgid " Couldn't create the UnicodeConverter"
+#~ msgstr "S'krijova dot kursor"
+
+#~ msgid "#define %s must be an integer."
+#~ msgstr "#define %s duhet të jetë një numër i plotë."
+
+#~ msgid "%s not a bitmap resource specification."
+#~ msgstr "%s jo një përcaktim burimi bitmap."
+
+#~ msgid "%s not an icon resource specification."
+#~ msgstr "%s jo një përcaktim burimi ikone."
+
+#~ msgid "%s: ill-formed resource file syntax."
+#~ msgstr "%s: sintaksë e keqformuar kartele burimi."
+
+#~ msgid "&Open"
+#~ msgstr "&Hap"
+
+#~ msgid "&Print"
+#~ msgstr "&Shtyp"
+
+#~ msgid "*** It can be found in \"%s\"\n"
+#~ msgstr "*** Mund të gjendet te \"%s\"\n"
+
+#~ msgid ""
+#~ ", expected static, #include or #define\n"
+#~ "while parsing resource."
+#~ msgstr ""
+#~ ", pritej statik, #include ose #define\n"
+#~ "ndërkohë që përtypej burimi."
+
+#~ msgid "Bitmap resource specification %s not found."
+#~ msgstr "Nuk u gjet përcaktim burimi bitmap %s."
+
+#~ msgid ""
+#~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
+#~ "instead\n"
+#~ " or provide #define (see manual for caveats)"
+#~ msgstr ""
+#~ "S'arrita të pikas klasë kontrolli ose id '%s'. Përdorni më mirë numër të "
+#~ "plotë (jo-zero)\n"
+#~ " ose jepni #define (shihni doracakun për gracka të mundshme)"
+
+#~ msgid ""
+#~ "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+#~ "or provide #define (see manual for caveats)"
+#~ msgstr ""
+#~ "S'arrita të pikas id menuje '%s'. Përdorni më mirë numër të plotë (jo-"
+#~ "zero)\n"
+#~ " ose jepni #define (shihni doracakun për gracka të mundshme)"
+
+#~ msgid "Expected '*' while parsing resource."
+#~ msgstr "Pritej '*' ndërkohë që përtypej burimi."
+
+#~ msgid "Expected '=' while parsing resource."
+#~ msgstr "Pritej '=' ndërkohë që përtypej burimi."
+
+#~ msgid "Expected 'char' while parsing resource."
+#~ msgstr "Pritej 'char' ndërkohë që përtypej burimi."
+
+#~ msgid ""
+#~ "Failed to find XBM resource %s.\n"
+#~ "Forgot to use wxResourceLoadBitmapData?"
+#~ msgstr ""
+#~ "Dështova në gjetje burimi XBM resource %s.\n"
+#~ "Harruat të përdorni wxResourceLoadBitmapData?"
+
+#~ msgid ""
+#~ "Failed to find XBM resource %s.\n"
+#~ "Forgot to use wxResourceLoadIconData?"
+#~ msgstr ""
+#~ "Dështova në gjetje burimi XBM %s.\n"
+#~ "Harruat të përdornit wxResourceLoadIconData?"
+
+#~ msgid ""
+#~ "Failed to find XPM resource %s.\n"
+#~ "Forgot to use wxResourceLoadBitmapData?"
+#~ msgstr ""
+#~ "Dështova në gjetje burimi XPM resource %s.\n"
+#~ "Harruat të përdornit wxResourceLoadBitmapData?"
+
+#~ msgid "Failed to get clipboard data."
+#~ msgstr "Dështova në marrje të dhënash të papastre"
+
+#~ msgid "Failed to load shared library '%s' Error '%s'"
+#~ msgstr "Dështova në ngarkim librarie të përbashkët '%s' Gabim '%s'"
+
+#~ msgid "Found "
+#~ msgstr "U gjetën"
+
+#~ msgid "Icon resource specification %s not found."
+#~ msgstr "Nuk u gjet përcaktim %s burimi ikone."
+
+#~ msgid "Ill-formed resource file syntax."
+#~ msgstr "Sintaksë e keqformuar kartele burimi."
+
+#~ msgid "Long Conversions not supported"
+#~ msgstr "Shndërrime të Gjatë të pambuluar"
+
+#~ msgid "No XPM icon facility available!"
+#~ msgstr "Pa lehtësira ikone XPM të mundshme!"
+
+#~ msgid "Option '%s' requires a value, '=' expected."
+#~ msgstr "Mundësia '%s' lyp një vlerë, pritej '='."
+
+#, fuzzy
+#~ msgid "Select all"
+#~ msgstr "Përzgjidhni &Tërë"
+
+#~ msgid "Unexpected end of file while parsing resource."
+#~ msgstr "Fund i papritur kartele ndërkohë që përtypja burime."
+
+#~ msgid "Unrecognized style %s while parsing resource."
+#~ msgstr "Stil %s i papranuar ndërkohë që përtypja burime."
+
+#~ msgid "Video Output"
+#~ msgstr "Dalje Video"
+
+#~ msgid "establish"
+#~ msgstr "vendos"
+
+#~ msgid "initiate"
+#~ msgstr "fillo"
+
+#~ msgid "invalid eof() return value."
+#~ msgstr "vlerë e pavlefshme përgjigjeje eof()"
+
+#~ msgid "unknown line terminator"
+#~ msgstr "përfundues i panjohur rreshti"
+
+#~ msgid "writing"
+#~ msgstr "po shkruaj"
+
+#~ msgid "."
+#~ msgstr "."
+
+#~ msgid "Cannot open URL '%s'"
+#~ msgstr "S'hap dot URL '%s'"
+
+#~ msgid "Error "
+#~ msgstr "Gabim"
+
+#~ msgid "Failed to create directory %s/.gnome."
+#~ msgstr "Dështova në krijimin e drejtorisë %s/.gnome."
+
+#~ msgid "Failed to create directory %s/mime-info."
+#~ msgstr "Dështova në krijimin e drejtorisë %s/mime-info."
+
+#~ msgid "MP Thread Support is not available on this System"
+#~ msgstr "Mbulimi për Rrjedha MP nuk është i passhëm në këtë Sistem"
+
+#~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
+#~ msgstr "Kartela mailcap %s, rreshti %d: u shpërfill zë jo i plotë."
+
+#~ msgid "Mime.types file %s, line %d: unterminated quoted string."
+#~ msgstr "Kartela mime.types %s, rreshti %d: varg në thojza i papërfunduar."
+
+#~ msgid "Unknown field in file %s, line %d: '%s'."
+#~ msgstr "Zonë e panjohur te kartela %s, rreshti %d: '%s'."
+
+#~ msgid "bold "
+#~ msgstr "të trasha"
+
+#~ msgid "can't query for GUI plugins name in console applications"
+#~ msgstr "s'pyes dot për emra shtojcash GUI në zbatime konsole"
+
+#, fuzzy
+#~ msgid "light "
+#~ msgstr "butë"
+
+#~ msgid "underlined "
+#~ msgstr "nënvijëzuar"
+
+#~ msgid "unsupported zip archive"
+#~ msgstr "arkivë zip e pambuluar"

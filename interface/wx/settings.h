@@ -363,12 +363,12 @@ public:
 
         @a win is a pointer to the window for which the metric is requested.
         Specifying the @a win parameter is encouraged, because some metrics on some
-        ports are not supported without one,or they might be capable of reporting
+        ports are not supported without one, or they might be capable of reporting
         better values if given one. If a window does not make sense for a metric,
         one should still be given, as for example it might determine which displays
         cursor width is requested with wxSYS_CURSOR_X.
     */
-    static int GetMetric(wxSystemMetric index, wxWindow* win = NULL);
+    static int GetMetric(wxSystemMetric index, wxWindow* win = nullptr);
 
     /**
         Returns the screen type.

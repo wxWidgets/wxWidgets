@@ -24,7 +24,7 @@ public:
         Initializes the library.
         Calls wxInitialize().
     */
-    wxInitializer(int argc = 0, wxChar **argv = NULL);
+    wxInitializer(int argc = 0, wxChar **argv = nullptr);
 
     /**
         Has the initialization been successful? (explicit test)
@@ -41,7 +41,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_appinitterm */
-//@{
+///@{
 
 /**
     This function can be used to perform the initialization of wxWidgets if you
@@ -73,8 +73,8 @@ bool wxEntryStart(int& argc, wxChar** argv);
     @header{wx/init.h}
 */
 bool wxEntryStart(HINSTANCE hInstance,
-                  HINSTANCE hPrevInstance = NULL,
-                  char* pCmdLine = NULL,
+                  HINSTANCE hPrevInstance = nullptr,
+                  char* pCmdLine = nullptr,
                   int nCmdShow = SW_SHOWNORMAL);
 
 /**
@@ -94,7 +94,7 @@ void wxEntryCleanup();
 
     @header{wx/init.h}
 */
-bool wxInitialize(int argc = 0, wxChar **argv = NULL);
+bool wxInitialize(int argc = 0, wxChar **argv = nullptr);
 
 /**
     Clean up; the library can't be used any more after the last call to
@@ -106,5 +106,5 @@ bool wxInitialize(int argc = 0, wxChar **argv = NULL);
 */
 void wxUninitialize();
 
-//@}
+///@}
 

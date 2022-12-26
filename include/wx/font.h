@@ -476,12 +476,6 @@ public:
     // account as well.
     static int GetNumericWeightOf(wxFontWeight weight);
 
-    // this doesn't do anything and is kept for compatibility only
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no);)
-    wxDEPRECATED_INLINE(bool GetNoAntiAliasing() const, return false;)
-#endif // WXWIN_COMPATIBILITY_2_8
-
     wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants instead of raw values")
     void SetWeight(int weight)
         { SetWeight(static_cast<wxFontWeight>(weight)); }
@@ -625,12 +619,8 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
 // include the real class declaration
 #if defined(__WXMSW__)
     #include "wx/msw/font.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/font.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/font.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/font.h"
+    #include "wx/gtk/font.h"
 #elif defined(__WXX11__)
     #include "wx/x11/font.h"
 #elif defined(__WXDFB__)

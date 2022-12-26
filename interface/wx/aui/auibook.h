@@ -238,6 +238,9 @@ public:
     /**
         Returns the page index for the specified window.
         If the window is not found in the notebook, wxNOT_FOUND is returned.
+
+        This is AUI-specific equivalent to wxBookCtrl::FindPage() and it is
+        recommended to use that generic method instead of this one.
     */
     int GetPageIndex(wxWindow* page_wnd) const;
 
@@ -523,7 +526,7 @@ public:
     bool TabHitTest(int x, int y, wxWindow** hit) const;
     bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
-    int GetIdxFromWindow(wxWindow* page) const;
+    int GetIdxFromWindow(const wxWindow* page) const;
     size_t GetPageCount() const;
     wxAuiNotebookPage& GetPage(size_t idx);
     const wxAuiNotebookPage& GetPage(size_t idx) const;
@@ -534,7 +537,7 @@ public:
     void SetColour(const wxColour& colour);
     void SetActiveColour(const wxColour& colour);
     void DoShowHide();
-    void SetRect(const wxRect& rect, wxWindow* wnd = NULL);
+    void SetRect(const wxRect& rect, wxWindow* wnd = nullptr);
 
     void RemoveButton(int id);
     void AddButton(int id,
@@ -678,7 +681,7 @@ public:
     */
     virtual void SetSizingInfo(const wxSize& tab_ctrl_size,
                                size_t tab_count,
-                               wxWindow* wnd = NULL) = 0;
+                               wxWindow* wnd = nullptr) = 0;
 };
 
 /**
@@ -773,7 +776,7 @@ public:
     void SetFlags(unsigned int flags);
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
-                       wxWindow* wnd = NULL);
+                       wxWindow* wnd = nullptr);
 
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);
@@ -879,7 +882,7 @@ public:
 
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
-                       wxWindow* wnd = NULL);
+                       wxWindow* wnd = nullptr);
 
     void SetNormalFont(const wxFont& font);
     void SetSelectedFont(const wxFont& font);

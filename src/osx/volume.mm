@@ -35,6 +35,7 @@
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSFileManager.h>
+#import <Foundation/NSURL.h>
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // wxFSVolume

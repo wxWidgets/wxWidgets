@@ -29,6 +29,7 @@ wxButtonXmlHandler::wxButtonXmlHandler()
     XRC_ADD_STYLE(wxBU_TOP);
     XRC_ADD_STYLE(wxBU_BOTTOM);
     XRC_ADD_STYLE(wxBU_EXACTFIT);
+    XRC_ADD_STYLE(wxBU_NOTEXT);
     AddWindowStyles();
 }
 
@@ -54,6 +55,23 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
     }
 
     SetupWindow(button);
+
+    const wxXmlNode* node = GetParamNode("pressed");
+    if (node)
+        button->SetBitmapPressed(GetBitmapBundle(node));
+    node = GetParamNode("focus");
+    if (node)
+        button->SetBitmapFocus(GetBitmapBundle(node));
+    node = GetParamNode("disabled");
+    if (node)
+        button->SetBitmapDisabled(GetBitmapBundle(node));
+    node = GetParamNode("current");
+    if (node)
+        button->SetBitmapCurrent(GetBitmapBundle(node));
+
+    const wxSize margins = GetSize("margins");
+    if (margins != wxDefaultSize)
+        button->SetBitmapMargins(margins);
 
     return button;
 }

@@ -108,8 +108,8 @@ void wxFileDialog::Init()
 {
     m_filterIndex = -1;
     m_delegate = nil;
-    m_filterPanel = NULL;
-    m_filterChoice = NULL;
+    m_filterPanel = nullptr;
+    m_filterChoice = nullptr;
     m_useFileTypeFilter = false;
     m_firstFileTypeFilter = 0;
 }
@@ -242,7 +242,7 @@ void wxFileDialog::ShowWindowModal()
     wxCFStringRef dir( m_dir );
     wxCFStringRef file( m_fileName );
 
-    wxNonOwnedWindow* parentWindow = NULL;
+    wxNonOwnedWindow* parentWindow = nullptr;
     
     m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
 
@@ -321,7 +321,7 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
     // and then reparenting extracontrol. Reparenting is less desired as user
     // code may expect the parent to be a wxFileDialog as on other platforms.
     const bool useExtraControlAsPanel = extracontrol &&
-        wxDynamicCast(extracontrol, wxPanel) != NULL;
+        wxDynamicCast(extracontrol, wxPanel) != nullptr;
 
     wxWindow* extrapanel = useExtraControlAsPanel
                             ? extracontrol
@@ -357,7 +357,7 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
         if ( useExtraControlAsPanel && existingSizer )
         {
             // Move extra control's sizer to verticalSizer.
-            extracontrol->SetSizer(NULL, /* deleteOld = */ false);
+            extracontrol->SetSizer(nullptr, /* deleteOld = */ false);
             verticalSizer->Add(existingSizer);
         }
         else
@@ -407,16 +407,15 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     // for sandboxed app we cannot access the outer structures
     // this leads to problems with extra controls, so as a temporary
     // workaround for crashes we don't support those yet
-    if ( [panel contentView] == nil || getenv("APP_SANDBOX_CONTAINER_ID") != NULL )
+    if ( [panel contentView] == nil || getenv("APP_SANDBOX_CONTAINER_ID") != nullptr )
         return;
     
     wxNonOwnedWindow::Create( GetParent(), nativeWindow );
-    wxWindow* extracontrol = NULL;
-    if ( HasExtraControlCreator() )
-    {
-        CreateExtraControl();
-        extracontrol = GetExtraControl();
-    }
+
+    // This won't do anything if there are no extra controls to create and
+    // extracontrol will be null in this case.
+    CreateExtraControl();
+    wxWindow* const extracontrol = GetExtraControl();
 
     NSView* accView = nil;
 
@@ -427,8 +426,8 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     }
     else
     {
-        m_filterPanel = NULL;
-        m_filterChoice = NULL;
+        m_filterPanel = nullptr;
+        m_filterChoice = nullptr;
         if ( extracontrol != nil )
             accView = extracontrol->GetHandle();
     }
@@ -495,14 +494,7 @@ int wxFileDialog::ShowModal()
     m_fileNames.Clear();
     m_paths.Clear();
 
-    wxNonOwnedWindow* parentWindow = NULL;
     int returnCode = -1;
-
-    if (GetParent())
-    {
-        parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
-    }
-
 
     NSArray* types = GetTypesFromFilter( m_wildCard, m_filterNames, m_filterExtensions, m_currentExtensions ) ;
 
@@ -628,32 +620,24 @@ int wxFileDialog::ShowModal()
 
 void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
-    int result = wxID_CANCEL;
+    NSSavePanel* const sPanel = static_cast<NSSavePanel*>(panel);
+
+    const bool wasAccepted = returnCode == NSModalResponseOK;
     if (HasFlag(wxFD_SAVE))
     {
-        if (returnCode == NSModalResponseOK )
+        if (wasAccepted)
         {
-            NSSavePanel* sPanel = (NSSavePanel*)panel;
-            result = wxID_OK;
-
             NSString* unsafePath = [NSString stringWithUTF8String:[[sPanel URL] fileSystemRepresentation]];
             m_path = wxCFStringRef([[unsafePath precomposedStringWithCanonicalMapping] retain]).AsString();
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
-            if (m_filterChoice)
-                m_filterIndex = m_filterChoice->GetSelection();
-            else
-                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
     }
     else
     {
-        NSOpenPanel* oPanel = (NSOpenPanel*)panel;
-        if (returnCode == NSModalResponseOK )
+        NSOpenPanel* const oPanel = static_cast<NSOpenPanel*>(sPanel);
+        if (wasAccepted)
         {
-            panel = oPanel;
-            result = wxID_OK;
-
             bool isFirst = true;
             for (NSURL* filename in [oPanel URLs])
             {
@@ -669,11 +653,6 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
                     isFirst = false;
                 }
             }
-
-            if (m_filterChoice)
-                 m_filterIndex = m_filterChoice->GetSelection();
-            else
-                m_filterIndex = GetMatchingFilterExtension(m_fileName);
         }
         if ( m_delegate )
         {
@@ -682,7 +661,18 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
             m_delegate = nil;
         }
     }
-    SetReturnCode(result);
+
+    if (wasAccepted)
+    {
+        if (m_filterChoice)
+            m_filterIndex = m_filterChoice->GetSelection();
+        else
+            m_filterIndex = GetMatchingFilterExtension(m_fileName);
+
+        TransferDataFromExtraControl();
+    }
+
+    SetReturnCode(wasAccepted ? wxID_OK : wxID_CANCEL);
     
     // workaround for sandboxed app, see above, must be executed before window modal handler
     // because there this instance will be deleted
@@ -692,7 +682,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
     
-    [(NSSavePanel*) panel setAccessoryView:nil];
+    [sPanel setAccessoryView:nil];
 }
 
 #endif // wxUSE_FILEDLG

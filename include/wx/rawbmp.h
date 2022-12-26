@@ -353,12 +353,12 @@ struct wxPixelDataOut<wxImage>
                 }
                 else // alpha is not used at all
                 {
-                    m_pAlpha = NULL;
+                    m_pAlpha = nullptr;
                 }
             }
 
             // true if the iterator is valid
-            bool IsOk() const { return m_pRGB != NULL; }
+            bool IsOk() const { return m_pRGB != nullptr; }
 
 
             // navigation
@@ -439,7 +439,7 @@ struct wxPixelDataOut<wxImage>
             // pointer into RGB buffer
             unsigned char *m_pRGB;
 
-            // pointer into alpha buffer or NULL if alpha isn't used
+            // pointer into alpha buffer or nullptr if alpha isn't used
             unsigned char *m_pAlpha;
         };
 
@@ -551,11 +551,11 @@ struct wxPixelDataOut<wxBitmap>
             // default constructor
             Iterator()
             {
-                m_ptr = NULL;
+                m_ptr = nullptr;
             }
 
             // return true if this iterator is valid
-            bool IsOk() const { return m_ptr != NULL; }
+            bool IsOk() const { return m_ptr != nullptr; }
 
 
             // navigation
@@ -675,11 +675,6 @@ struct wxPixelDataOut<wxBitmap>
             // else: don't call UngetRawData() if GetRawData() failed
         }
 
-#if WXWIN_COMPATIBILITY_2_8
-        // not needed anymore, calls to it should be simply removed
-        wxDEPRECATED_INLINE( void UseAlpha(), wxEMPTY_PARAMETER_VALUE )
-#endif
-
     // private: -- see comment in the beginning of the file
 
         // the bitmap we're associated with
@@ -717,7 +712,11 @@ struct wxPixelDataOut<wxBitmap>
                 {
                     wxByte mask = static_cast<wxByte>(1 << m_bit);
                     wxByte value = static_cast<wxByte>(b << m_bit);
-                    (*m_ptr &= ~mask) |= value;
+                    wxByte& val_m_ptr = *m_ptr;
+
+                    val_m_ptr = static_cast<wxByte>(val_m_ptr & ~mask);
+                    val_m_ptr |= value;
+
                     return *this;
                 }
                 operator bool() const
@@ -781,12 +780,12 @@ struct wxPixelDataOut<wxBitmap>
                 // default constructor
                 Iterator()
                 {
-                    m_ptr = NULL;
-                    // m_bit doesn't need to be set until m_ptr != NULL
+                    m_ptr = nullptr;
+                    // m_bit doesn't need to be set until m_ptr != nullptr
                 }
 
                 // return true if this iterator is valid
-                bool IsOk() const { return m_ptr != NULL; }
+                bool IsOk() const { return m_ptr != nullptr; }
 
 
                 // navigation

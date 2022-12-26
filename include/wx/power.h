@@ -64,12 +64,12 @@ public:
 
     // default copy ctor, assignment operator and dtor are ok
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxPowerEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxPowerEvent(*this); }
 
 private:
     bool m_veto;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPowerEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxPowerEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDING, wxPowerEvent );

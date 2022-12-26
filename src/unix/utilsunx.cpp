@@ -54,6 +54,7 @@
 
 #include "wx/private/selectdispatcher.h"
 #include "wx/private/fdiodispatcher.h"
+#include "wx/private/glibc.h"
 #include "wx/unix/private/execute.h"
 #include "wx/unix/pipe.h"
 #include "wx/unix/private.h"
@@ -84,7 +85,11 @@
 // different platforms and even different versions of the same system (Solaris
 // 7 and 8): if you want to test for this, don't forget that the problems only
 // appear if the large files support is enabled
-#ifdef HAVE_STATFS
+#if defined(HAVE_STATVFS)
+    #include <sys/statvfs.h>
+
+    #define wxStatfs statvfs
+#elif defined(HAVE_STATFS)
     #ifdef __BSD__
         #include <sys/param.h>
         #include <sys/mount.h>
@@ -98,15 +103,9 @@
         // some systems lack statfs() prototype in the system headers (AIX 4)
         extern "C" int statfs(const char *path, struct statfs *buf);
     #endif
-#endif // HAVE_STATFS
+#endif // HAVE_STATVFS/HAVE_STATFS
 
-#ifdef HAVE_STATVFS
-    #include <sys/statvfs.h>
-
-    #define wxStatfs statvfs
-#endif // HAVE_STATVFS
-
-#if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
+#if defined(HAVE_STATVFS) || defined(HAVE_STATFS)
     // WX_STATFS_T is detected by configure
     #define wxStatfs_t WX_STATFS_T
 #endif
@@ -189,7 +188,7 @@ void wxMicroSleep(unsigned long microseconds)
     tmReq.tv_nsec = (microseconds % 1000000) * 1000;
 
     // we're not interested in remaining time nor in return value
-    (void)nanosleep(&tmReq, NULL);
+    (void)nanosleep(&tmReq, nullptr);
 #elif defined(HAVE_USLEEP)
     // uncomment this if you feel brave or if you are sure that your version
     // of Solaris has a safe usleep() function but please notice that usleep()
@@ -216,8 +215,7 @@ void wxMilliSleep(unsigned long milliseconds)
 
 void wxSecureZeroMemory(void* v, size_t n)
 {
-#if (defined(__GLIBC__) && \
-        (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 25))) || \
+#if wxCHECK_GLIBC_VERSION(2, 25) || \
     (defined(__FreeBSD__) && __FreeBSD__ >= 11)
     // This non-standard function is somewhat widely available elsewhere too,
     // but may be found in a non-standard header file, or in a library that is
@@ -332,7 +330,7 @@ bool wxPipeInputStream::CanRead() const
     wxFD_ZERO(&readfds);
     wxFD_SET(fd, &readfds);
 
-    switch ( select(fd + 1, &readfds, NULL, NULL, &tv) )
+    switch ( select(fd + 1, &readfds, nullptr, nullptr, &tv) )
     {
         case -1:
             wxLogSysError(_("Impossible to get child process input"));
@@ -445,7 +443,6 @@ public:
         }
     }
 
-#if wxUSE_UNICODE
     ArgsArray(const wchar_t* const* wargv)
     {
         int argc = 0;
@@ -459,7 +456,6 @@ public:
             m_argv[i] = wxSafeConvertWX2MB(wargv[i]).release();
         }
     }
-#endif // wxUSE_UNICODE
 
     ~ArgsArray()
     {
@@ -478,7 +474,7 @@ private:
     {
         m_argc = argc;
         m_argv = new char *[m_argc + 1];
-        m_argv[m_argc] = NULL;
+        m_argv[m_argc] = nullptr;
     }
 
     int m_argc;
@@ -506,8 +502,6 @@ long wxExecute(const wxString& command, int flags, wxProcess *process,
     return wxExecute(argv, flags, process, env);
 }
 
-#if wxUSE_UNICODE
-
 long wxExecute(const wchar_t* const* wargv, int flags, wxProcess* process,
         const wxExecuteEnv *env)
 {
@@ -515,8 +509,6 @@ long wxExecute(const wchar_t* const* wargv, int flags, wxProcess* process,
 
     return wxExecute(argv, flags, process, env);
 }
-
-#endif // wxUSE_UNICODE
 
 namespace
 {
@@ -915,19 +907,19 @@ const wxChar* wxGetHomeDir( wxString *home  )
 
 wxString wxGetUserHome( const wxString &user )
 {
-    struct passwd *who = (struct passwd *) NULL;
+    struct passwd *who = (struct passwd *) nullptr;
 
     if ( !user )
     {
         wxChar *ptr;
 
-        if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
+        if ((ptr = wxGetenv(wxT("HOME"))) != nullptr)
         {
             return ptr;
         }
 
-        if ((ptr = wxGetenv(wxT("USER"))) != NULL ||
-             (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
+        if ((ptr = wxGetenv(wxT("USER"))) != nullptr ||
+             (ptr = wxGetenv(wxT("LOGNAME"))) != nullptr)
         {
             who = getpwnam(wxSafeConvertWX2MB(ptr));
         }
@@ -943,7 +935,7 @@ wxString wxGetUserHome( const wxString &user )
       who = getpwnam (user.mb_str());
     }
 
-    return wxSafeConvertMB2WX(who ? who->pw_dir : 0);
+    return wxSafeConvertMB2WX(who ? who->pw_dir : nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -961,7 +953,11 @@ wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 {
     // Suppress stderr from the shell to avoid outputting errors if the command
     // doesn't exist.
+#ifdef __VMS
+    FILE *f = popen(( "pipe " + cmd + " 2>/nl:").ToAscii(), "r");
+#else
     FILE *f = popen((cmd + " 2>/dev/null").ToAscii(), "r");
+#endif
     if ( !f )
     {
         // Notice that this doesn't happen simply if the command doesn't exist,
@@ -994,7 +990,7 @@ wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 // private use only)
 static bool wxGetHostNameInternal(wxChar *buf, int sz)
 {
-    wxCHECK_MSG( buf, false, wxT("NULL pointer in wxGetHostNameInternal") );
+    wxCHECK_MSG( buf, false, wxT("null pointer in wxGetHostNameInternal") );
 
     *buf = wxT('\0');
 
@@ -1078,7 +1074,7 @@ bool wxGetUserId(wxChar *buf, int sz)
     struct passwd *who;
 
     *buf = wxT('\0');
-    if ((who = getpwuid(getuid ())) != NULL)
+    if ((who = getpwuid(getuid ())) != nullptr)
     {
         wxStrlcpy (buf, wxSafeConvertMB2WX(who->pw_name), sz);
         return true;
@@ -1093,7 +1089,7 @@ bool wxGetUserName(wxChar *buf, int sz)
     struct passwd *who;
 
     *buf = wxT('\0');
-    if ((who = getpwuid (getuid ())) != NULL)
+    if ((who = getpwuid (getuid ())) != nullptr)
     {
        char *comma = strchr(who->pw_gecos, ',');
        if (comma)
@@ -1134,7 +1130,7 @@ wxString wxGetNativeCpuArchitectureName()
     // macOS on ARM will report an x86_64 process as translated, assume the native CPU is arm64
     int translated;
     size_t translated_size = sizeof(translated);
-    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, NULL, 0) == 0)
+    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, nullptr, 0) == 0)
         return "arm64";
     else
 #endif
@@ -1182,13 +1178,25 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     // get OS version
     int major = -1, minor = -1, micro = -1;
+#ifdef __VMS
+    wxString release = wxGetCommandOutput(wxT("uname -v"));
+#else
     wxString release = wxGetCommandOutput(wxT("uname -r"));
+#endif
     if ( !release.empty() )
     {
+#ifdef __VMS
+        if ( wxSscanf(release.c_str(), wxT("V%d.%d-%d"), &major, &minor, &micro ) != 3 )
+#else
         if ( wxSscanf(release.c_str(), wxT("%d.%d.%d"), &major, &minor, &micro ) != 3 )
+#endif
         {
             micro = 0;
+#ifdef __VMS
+            if ( wxSscanf(release.c_str(), wxT("V%d.%d"), &major, &minor ) != 2 )
+#else
             if ( wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor ) != 2 )
+#endif
             {
                 // failed to get version string or unrecognized format
                 major = minor = micro = -1;
@@ -1216,7 +1224,11 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
 wxString wxGetOsDescription()
 {
+#ifdef __VMS
+    return wxGetCommandOutput(wxT("uname -s -v -m"));
+#else
     return wxGetCommandOutput(wxT("uname -s -r -m"));
+#endif
 }
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
@@ -1405,7 +1417,7 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
         unsetenv(variable.mb_str());
         return true;
 #else
-        value = ""; // we can't pass NULL to setenv()
+        value = ""; // we can't pass nullptr to setenv()
 #endif
     }
 
@@ -1446,7 +1458,7 @@ bool wxSetEnv(const wxString& variable, const wxString& value)
 
 bool wxUnsetEnv(const wxString& variable)
 {
-    return wxDoSetEnv(variable, NULL);
+    return wxDoSetEnv(variable, nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -1506,10 +1518,10 @@ bool wxHandleFatalExceptions(bool doit)
     else if ( s_savedHandlers )
     {
         // uninstall the signal handler
-        ok &= sigaction(SIGFPE, &s_handlerFPE, NULL) == 0;
-        ok &= sigaction(SIGILL, &s_handlerILL, NULL) == 0;
-        ok &= sigaction(SIGBUS, &s_handlerBUS, NULL) == 0;
-        ok &= sigaction(SIGSEGV, &s_handlerSEGV, NULL) == 0;
+        ok &= sigaction(SIGFPE, &s_handlerFPE, nullptr) == 0;
+        ok &= sigaction(SIGILL, &s_handlerILL, nullptr) == 0;
+        ok &= sigaction(SIGBUS, &s_handlerBUS, nullptr) == 0;
+        ok &= sigaction(SIGSEGV, &s_handlerSEGV, nullptr) == 0;
         if ( !ok )
         {
             wxLogDebug(wxT("Failed to uninstall our signal handler."));

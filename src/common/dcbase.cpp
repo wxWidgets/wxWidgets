@@ -26,6 +26,7 @@
 #include "wx/dcscreen.h"
 #include "wx/dcprint.h"
 #include "wx/prntbase.h"
+#include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
 #include "wx/stack.h"
 
@@ -36,6 +37,8 @@
 #endif
 
 #include "wx/private/textmeasure.h"
+#include "wx/private/rescale.h"
+#include "wx/display.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/dcclient.h"
@@ -43,28 +46,20 @@
     #include "wx/msw/dcscreen.h"
 #endif
 
-#ifdef __WXGTK3__
-    #include "wx/gtk/dc.h"
-#elif defined __WXGTK20__
-    #include "wx/gtk/dcclient.h"
-    #include "wx/gtk/dcmemory.h"
-    #include "wx/gtk/dcscreen.h"
-#elif defined(__WXGTK__)
-    #include "wx/gtk1/dcclient.h"
-    #include "wx/gtk1/dcmemory.h"
-    #include "wx/gtk1/dcscreen.h"
+#ifdef __WXGTK__
+    #ifdef __WXGTK3__
+        #include "wx/gtk/dc.h"
+    #else
+        #include "wx/gtk/dcclient.h"
+        #include "wx/gtk/dcmemory.h"
+        #include "wx/gtk/dcscreen.h"
+    #endif
 #endif
 
 #ifdef __WXMAC__
     #include "wx/osx/dcclient.h"
     #include "wx/osx/dcmemory.h"
     #include "wx/osx/dcscreen.h"
-#endif
-
-#ifdef __WXMOTIF__
-    #include "wx/motif/dcclient.h"
-    #include "wx/motif/dcmemory.h"
-    #include "wx/motif/dcscreen.h"
 #endif
 
 #ifdef __WXX11__
@@ -88,7 +83,7 @@
 // wxDCFactory
 //----------------------------------------------------------------------------
 
-wxDCFactory *wxDCFactory::m_factory = NULL;
+wxDCFactory *wxDCFactory::m_factory = nullptr;
 
 void wxDCFactory::Set(wxDCFactory *factory)
 {
@@ -108,8 +103,8 @@ wxDCFactory *wxDCFactory::Get()
 class wxDCFactoryCleanupModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxDCFactory::Set(NULL); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxDCFactory::Set(nullptr); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDCFactoryCleanupModule);
@@ -315,7 +310,7 @@ int wxPrinterDC::GetResolution() const
 wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
-        : m_window(NULL)
+        : m_window(nullptr)
         , m_colour(true)
         , m_ok(true)
         , m_clipping(false)
@@ -604,6 +599,28 @@ void wxDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     ComputeScaleAndOrigin();
 }
 
+wxSize wxDCImpl::FromDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    const wxSize dpi = GetPPI();
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(baseline).To(dpi);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
+wxSize wxDCImpl::ToDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    const wxSize dpi = GetPPI();
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(dpi).To(baseline);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
 bool wxDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     wxTextMeasure tm(GetOwner(), &m_font);
@@ -637,8 +654,7 @@ void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     DoDrawLine(x1, y3, x3, y2);
     DoDrawLine(x3, y2, x2, y1);
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 bool
@@ -695,7 +711,7 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 void wxDCImpl::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffset)
 {
     int n = list->GetCount();
-    wxPoint *points = new wxPoint[n];
+    wxScopedArray<wxPoint> points(n);
 
     int i = 0;
     for ( wxPointList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
@@ -705,9 +721,7 @@ void wxDCImpl::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffs
         points[i].y = point->y;
     }
 
-    DoDrawLines(n, points, xoffset, yoffset);
-
-    delete [] points;
+    DoDrawLines(n, points.get(), xoffset, yoffset);
 }
 
 void wxDCImpl::DrawPolygon(const wxPointList *list,
@@ -715,7 +729,7 @@ void wxDCImpl::DrawPolygon(const wxPointList *list,
                            wxPolygonFillMode fillStyle)
 {
     int n = list->GetCount();
-    wxPoint *points = new wxPoint[n];
+    wxScopedArray<wxPoint> points(n);
 
     int i = 0;
     for ( wxPointList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
@@ -725,9 +739,7 @@ void wxDCImpl::DrawPolygon(const wxPointList *list,
         points[i].y = point->y;
     }
 
-    DoDrawPolygon(n, points, xoffset, yoffset, fillStyle);
-
-    delete [] points;
+    DoDrawPolygon(n, points.get(), xoffset, yoffset, fillStyle);
 }
 
 void
@@ -744,14 +756,13 @@ wxDCImpl::DoDrawPolyPolygon(int n,
     }
 
     int      i, j, lastOfs;
-    wxPoint* pts;
 
     for (i = j = lastOfs = 0; i < n; i++)
     {
         lastOfs = j;
         j      += count[i];
     }
-    pts = new wxPoint[j+n-1];
+    wxScopedArray<wxPoint> pts(j+n-1);
     for (i = 0; i < j; i++)
         pts[i] = points[i];
     for (i = 2; i <= n; i++)
@@ -762,15 +773,14 @@ wxDCImpl::DoDrawPolyPolygon(int n,
 
     {
         wxDCPenChanger setTransp(*m_owner, *wxTRANSPARENT_PEN);
-        DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
+        DoDrawPolygon(j, pts.get(), xoffset, yoffset, fillStyle);
     }
 
     for (i = j = 0; i < n; i++)
     {
-        DoDrawLines(count[i], pts+j, xoffset, yoffset);
+        DoDrawLines(count[i], pts.get()+j, xoffset, yoffset);
         j += count[i];
     }
-    delete[] pts;
 }
 
 #if wxUSE_SPLINES
@@ -909,7 +919,7 @@ static void wx_spline_draw_point_array(wxDC *dc)
 void wxDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
-    wxCHECK_RET(points, "NULL pointer to spline points?");
+    wxCHECK_RET(points, "null pointer to spline points?");
     wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     const wxPoint *p;
@@ -1125,7 +1135,7 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
 void wxDCImpl::InheritAttributes(wxWindow *win)
 {
-    wxCHECK_RET( win, "window can't be NULL" );
+    wxCHECK_RET( win, "window can't be null" );
 
     SetFont(win->GetFont());
     SetTextForeground(win->GetForegroundColour());
@@ -1261,7 +1271,7 @@ void wxDC::DrawLabel(const wxString& text,
                 if ( alignment & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL) )
                 {
                     wxCoord widthLine;
-                    GetTextExtent(curLine, &widthLine, NULL);
+                    GetTextExtent(curLine, &widthLine, nullptr);
 
                     if ( alignment & wxALIGN_RIGHT )
                     {
@@ -1298,9 +1308,9 @@ void wxDC::DrawLabel(const wxString& text,
             if ( pc - text.begin() == indexAccel )
             {
                 // remember to draw underscore here
-                GetTextExtent(curLine, &startUnderscore, NULL);
+                GetTextExtent(curLine, &startUnderscore, nullptr);
                 curLine += *pc;
-                GetTextExtent(curLine, &endUnderscore, NULL);
+                GetTextExtent(curLine, &endUnderscore, nullptr);
 
                 yUnderscore = y + heightLine;
             }
@@ -1335,70 +1345,8 @@ void wxDC::DrawLabel(const wxString& text,
         *rectBounding = wxRect(x, y - heightText, widthText, heightText);
     }
 
-    CalcBoundingBox(x0, y0);
-    CalcBoundingBox(x0 + width0, y0 + height);
+    m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-    // for compatibility with the old code when wxCoord was long everywhere
-void wxDC::GetTextExtent(const wxString& string,
-                       long *x, long *y,
-                       long *descent,
-                       long *externalLeading,
-                       const wxFont *theFont) const
-    {
-        wxCoord x2, y2, descent2, externalLeading2;
-        m_pimpl->DoGetTextExtent(string, &x2, &y2,
-                        &descent2, &externalLeading2,
-                        theFont);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-        if ( descent )
-            *descent = descent2;
-        if ( externalLeading )
-            *externalLeading = externalLeading2;
-    }
-
-void wxDC::GetLogicalOrigin(long *x, long *y) const
-    {
-        wxCoord x2, y2;
-        m_pimpl->DoGetLogicalOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxDC::GetDeviceOrigin(long *x, long *y) const
-    {
-        wxCoord x2, y2;
-        m_pimpl->DoGetDeviceOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
-    {
-        wxRect r;
-        m_pimpl->DoGetClippingRect(r);
-        if (x) *x = r.x;
-        if (y) *y = r.y;
-        if (w) *w = r.width;
-        if (h) *h = r.height;
-    }
-
-void wxDC::DrawObject(wxDrawObject* drawobject)
-{
-    drawobject->Draw(*this);
-    CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
-    CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
-}
-
-#endif  // WXWIN_COMPATIBILITY_2_8
 
 /*
 Notes for wxWidgets DrawEllipticArcRot(...)
@@ -1447,8 +1395,7 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     // are ~6 times smaller when printing. Unfortunately, this bug is so severe
     // that *all* printing code has to account for it and consequently, other
     // ports need to emulate this bug too:
-    const wxSize screenPPI = wxGetDisplayPPI();
-    return float(screenPPI.y) / dpi;
+    return float(wxDisplay::GetStdPPIValue()) / dpi;
 }
 
 double wxDCImpl::GetMMToPXx() const

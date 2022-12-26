@@ -22,9 +22,9 @@
     Currently bitmap bundles can be created from:
 
         - A vector of bitmaps, of any provenance.
+        - An SVG (as memory block, file, or resource) which will be rasterized at required resolutions.
+        - A custom bitmap source using wxBitmapBundleImpl.
         - A single wxBitmap or wxImage for backwards compatibility.
-
-    More functions for creating bitmap bundles will be added in the future.
 
     Objects of wxBitmapBundle class have value-like semantics, i.e. they can be
     copied around freely (and cheaply) and don't need to be allocated on the
@@ -45,15 +45,21 @@
         bitmaps.push_back(wxBITMAP_PNG(open_48x48));
         bitmaps.push_back(wxBITMAP_PNG(open_64x64));
 
-        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromBitmaps(bitmaps));
+        toolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromBitmaps(bitmaps));
     }
     @endcode
 
     The code shown above will use 32 pixel bitmap in normal DPI, 64 pixel
     bitmap in "high DPI", i.e. pixel-doubling or 200% resolution, and 48 pixel
-    bitmap in 150% resolution. For all the other resolutions, the best matching
-    bitmap will be created dynamically from the best available match, e.g. for
-    175% resolution, 64 pixel bitmap will be rescaled to 56 pixels.
+    bitmap in 150% resolution. For all the other resolutions, the bitmap with
+    the "best" matching size will be used, where "best" is deemed to be the
+    bitmap with the closest size if it can be used without scaling (so that in
+    this example the 64px bitmap will be used at 175% resolution because it
+    typically looks much better than either downscaling it or upscaling the
+    48px bitmap to 56px) or, if there is no bitmap with close enough size, a
+    bitmap upscaled by an integer scaling factor is used. Note that custom
+    bitmap bundles can use a different algorithm for selecting the best match
+    by overriding wxBitmapBundleImpl::GetPreferredBitmapSizeAtScale().
 
     Of course, this code relies on actually having the resources with the
     corresponding names (i.e. @c open_NxN) in MSW .rc file or Mac application
@@ -66,7 +72,7 @@
     having to explicitly list all the bitmaps, e.g. the code above becomes
     @code
     #ifdef wxHAS_IMAGE_RESOURCES
-        toolBar->AddTool(wxID_OPEN, wxBitmapBundle::FromResources("open"));
+        toolBar->AddTool(wxID_OPEN, "Open", wxBitmapBundle::FromResources("open"));
     #else
         ... same code as shown above ...
     #endif
@@ -127,6 +133,18 @@ public:
     wxBitmapBundle(const wxImage& image);
 
     /**
+        Conversion constructor from XPM data.
+
+        This constructor overload exists only for compatibility with the
+        existing code passing XPM data (e.g. @c foo_xpm after including @c
+        foo.xpm) directly to the functions expecting a bitmap. Don't use it in
+        the new code, as it is likely to be deprecated in the future.
+
+        @since 3.2.0
+     */
+    wxBitmapBundle(const char* const* xpm);
+
+    /**
         Copy constructor creates a copy of another bundle.
      */
     wxBitmapBundle(const wxBitmapBundle& other);
@@ -159,6 +177,15 @@ public:
         If @a bitmap is invalid, empty bundle is returned.
      */
     static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
+
+    /**
+        Create a bundle from an icon bundle.
+
+        If @a iconBundle is invalid or empty, empty bundle is returned.
+
+        @since 3.1.7
+     */
+    static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
 
     /**
         Create a bundle from a single image.
@@ -223,7 +250,7 @@ public:
         (https://github.com/memononen/nanosvg) for parsing and rasterizing SVG
         images which imposes the following limitations:
 
-        - Text elements are not supported at all.
+        - Text elements are not supported at all (see note for workaround).
         - SVG 1.1 filters are not supported.
 
         These limitations will be relaxed in the future wxWidgets versions.
@@ -235,20 +262,31 @@ public:
 
         @param data This data may, or not, have the XML document preamble, i.e.
             it can start either with @c "<?xml" processing instruction or
-            directly with @c svg tag. Notice that two overloads of this
-            function, taking const and non-const data, are provided: as the
-            current implementation modifies the data while parsing, using the
-            non-const variant is more efficient, as it avoids making copy of
-            the data, but the data is consumed by it and can't be reused any
-            more.
+            directly with @c svg tag. For NUL-terminated string, two overloads
+            of this function, taking const and non-const data, are provided: as
+            the current implementation modifies the data while parsing, using
+            the non-const variant is more efficient, as it avoids making copy
+            of the data, but the data is consumed by it and can't be reused any
+            more. For non-NUL-terminated data, the third overload, taking an
+            extra parameter explicitly specifying the length of the input data,
+            @e must be used.
         @param sizeDef The default size to return from GetDefaultSize() for
             this bundle. As SVG images usually don't have any natural
             default size, it should be provided when creating the bundle.
+
+        @note Converting text objects to path objects will allow them to be
+            rasterized as expected. This can be done in an SVG editor such as
+            Inkscape. (In Inkscape, select a text object and choose
+            *Object to Path* from the *Path* menu.)
      */
     static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
     /// @overload
     static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+
+    /// @overload
+    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+
 
     /**
         Create a bundle from the SVG image loaded from the given file.
@@ -278,6 +316,18 @@ public:
         @see FromResources(), FromSVGFile()
      */
     static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+
+    /**
+        Clear the existing bundle contents.
+
+        After calling this function IsOk() returns @false.
+
+        This is the same as assigning a default-constructed bitmap bundle to
+        this object but slightly more explicit.
+
+        @since 3.1.7
+     */
+    void Clear();
 
     /**
         Check if bitmap bundle is non-empty.
@@ -409,22 +459,23 @@ public:
             {
             }
 
-            wxSize GetDefaultSize() const wxOVERRIDE
+            wxSize GetDefaultSize() const override
             {
                 ... determine the minimum/default size for bitmap to use ...
             }
 
-            wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+            wxSize GetPreferredBitmapSizeAtScale(double scale) const override
             {
                 // If it's ok to scale the bitmap, just use the standard size
                 // at the given scale:
                 return GetDefaultSize()*scale;
 
                 ... otherwise, an existing bitmap of the size closest to the
-                    one above would need to be found and its size returned ...
+                    one above would need to be found and its size returned,
+                    possibly by letting DoGetPreferredSize() choose it ...
             }
 
-            wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+            wxBitmap GetBitmap(const wxSize& size) override
             {
                 ... get the bitmap of the requested size from somewhere and
                     cache it if necessary, i.e. if getting it is expensive ...
@@ -467,6 +518,110 @@ public:
         on demand and cache it.
      */
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
+
+protected:
+    /**
+        Helper for implementing GetPreferredBitmapSizeAtScale() in the derived
+        classes.
+
+        This function implements the standard algorithm used inside wxWidgets
+        itself and tries to find the scale closest to the given one, while also
+        trying to choose one of the available scales, to avoid actually
+        rescaling the bitmaps.
+
+        It relies on GetNextAvailableScale() to get information about the
+        available bitmaps, so that function must be overridden if this one is
+        used.
+
+        Typically this function is used in the derived classes implementation
+        to forward GetPreferredBitmapSizeAtScale() to it and when this is done,
+        GetBitmap() may also use GetIndexToUpscale() to choose the bitmap to
+        upscale if necessary:
+        @code
+        class MyCustomBitmapBundleImpl : public wxBitmapBundleImpl
+        {
+        public:
+            wxSize GetDefaultSize() const
+            {
+                return wxSize(32, 32);
+            }
+
+            wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+            {
+                return DoGetPreferredSize(scale);
+            }
+
+            wxBitmap GetBitmap(const wxSize& size) override
+            {
+                // For consistency with GetNextAvailableScale(), we must have
+                // bitmap variants for 32, 48 and 64px sizes.
+                const wxSize availableSizes[] = { 32, 48, 64 };
+                if ( size.y <= 64 )
+                {
+                    ... get the bitmap from somewhere ...
+                }
+                else
+                {
+                    size_t n = GetIndexToUpscale(size);
+                    bitmap = ... get bitmap for availableSizes[n] ...;
+                    wxBitmap::Rescale(bitmap, size);
+                }
+
+                return bitmap;
+            }
+
+        protected:
+            double GetNextAvailableScale(size_t& i) const override
+            {
+                const double availableScales[] = { 1, 1.5, 2, 0 };
+
+                // We can rely on not being called again once we return 0.
+                return availableScales[i++];
+            }
+
+            ...
+        };
+        @endcode
+
+        @param scale The required scale, typically the same one as passed to
+            GetPreferredBitmapSizeAtScale().
+
+        @since 3.1.7
+     */
+    wxSize DoGetPreferredSize(double scale) const;
+
+    /**
+        Return the index of the available scale most suitable to be upscaled to
+        the given size.
+
+        See DoGetPreferredSize() for an example of using this function.
+
+        @param size The required size, typically the same one as passed to
+            GetBitmap()
+
+        @since 3.1.7
+     */
+    size_t GetIndexToUpscale(const wxSize& size) const;
+
+    /**
+        Return information about the available bitmaps.
+
+        Overriding this function is optional and only needs to be done if
+        either DoGetPreferredSize() or GetIndexToUpscale() are called. If you
+        do override it, this function must return the next available scale or
+        0.0 if there are no more.
+
+        The returned scales must be in ascending order and the first returned
+        scale, for the initial @a i value of 0, should be 1. The function must
+        change @a i, but the values of this index don't have to be consecutive
+        and it's only used by this function itself, the caller only initializes
+        it to 0 before the first call.
+
+        See DoGetPreferredSize() for an example of implementing this function.
+
+        @since 3.1.7
+     */
+    virtual double GetNextAvailableScale(size_t& i) const;
 };
 
 /**

@@ -57,7 +57,7 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     wxInputStream *s = file.GetStream();
     wxString doc, doc2;
 
-    if (s == NULL) return wxEmptyString;
+    if (s == nullptr) return wxEmptyString;
     ReadString(doc, s, wxConvISO8859_1);
 
     doc.Replace(wxT("&"), wxT("&amp;"), true);
@@ -81,8 +81,8 @@ class wxHtmlFilterImage : public wxHtmlFilter
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterImage);
 
     public:
-        virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
-        virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
+        virtual bool CanRead(const wxFSFile& file) const override;
+        virtual wxString ReadFile(const wxFSFile& file) const override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterImage, wxHtmlFilter);
@@ -129,7 +129,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     wxInputStream *s = file.GetStream();
     wxString doc;
 
-    if (s == NULL)
+    if (s == nullptr)
     {
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation());
         return wxEmptyString;
@@ -139,7 +139,6 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     //     either Content-Type header or <meta> tags. In ANSI mode, we don't
     //     do it as it is done by wxHtmlParser (for this reason, we add <meta>
     //     tag if we used Content-Type header).
-#if wxUSE_UNICODE
     int charsetPos;
     if ((charsetPos = file.GetMimeType().Find(wxT("; charset="))) != wxNOT_FOUND)
     {
@@ -163,17 +162,6 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
             doc = wxString( buf, conv );
         }
     }
-#else // !wxUSE_UNICODE
-    ReadString(doc, s, wxConvLibc);
-    // add meta tag if we obtained this through http:
-    if (!file.GetMimeType().empty())
-    {
-        wxString hdr;
-        wxString mime = file.GetMimeType();
-        hdr.Printf(wxT("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime);
-        return hdr+doc;
-    }
-#endif
 
     return doc;
 }
@@ -188,13 +176,13 @@ class wxHtmlFilterModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterModule);
 
     public:
-        virtual bool OnInit() wxOVERRIDE
+        virtual bool OnInit() override
         {
             wxHtmlWindow::AddFilter(new wxHtmlFilterHTML);
             wxHtmlWindow::AddFilter(new wxHtmlFilterImage);
             return true;
         }
-        virtual void OnExit() wxOVERRIDE {}
+        virtual void OnExit() override {}
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterModule, wxModule);

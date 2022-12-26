@@ -24,8 +24,8 @@ class ToggleButtonTestCase : public CppUnit::TestCase
 public:
     ToggleButtonTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( ToggleButtonTestCase );

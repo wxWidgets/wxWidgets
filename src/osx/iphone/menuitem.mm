@@ -44,7 +44,7 @@ Mapping sActionToWXMapping[] =
     { wxID_PASTE, @selector(paste:) },
     { wxID_CLEAR, @selector(delete:) },
     { wxID_SELECTALL, @selector(selectAll:) },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 int wxOSXGetIdFromSelector(SEL action )
@@ -76,7 +76,7 @@ SEL wxOSXGetSelectorFromID(int menuId )
 /*
 void wxMacCocoaMenuItemSetAccelerator( UIMenuItem* menuItem, wxAcceleratorEntry* entry )
 {
-    if ( entry == NULL )
+    if ( entry == nullptr )
     {
         [menuItem setKeyEquivalent:@""];
         return;
@@ -192,11 +192,11 @@ public :
 
     ~wxMenuItemCocoaImpl();
 
-    void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE
+    void SetBitmap( const wxBitmap& bitmap ) override
     {
     }
 
-    void Enable( bool enable ) wxOVERRIDE
+    void Enable( bool enable ) override
     {
         UIMenuElement* menuElement = m_osxMenuItem.get();
         if ( [menuElement isKindOfClass:UIAction.class] )
@@ -209,7 +209,7 @@ public :
         }
     }
 
-    void Check( bool check ) wxOVERRIDE
+    void Check( bool check ) override
     {
         UIMenuElement* menuElement = m_osxMenuItem.get();
         if ( [menuElement isKindOfClass:UIAction.class] )
@@ -219,7 +219,7 @@ public :
         }
     }
 
-    void Hide( bool hide ) wxOVERRIDE
+    void Hide( bool hide ) override
     {
         UIMenuElement* menuElement = m_osxMenuItem.get();
         if ( [menuElement isKindOfClass:UIAction.class] )
@@ -232,14 +232,14 @@ public :
         }
     }
 
-    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) wxOVERRIDE
+    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) override
     {
         // recreate, it's readonly
     }
 
-    bool DoDefault() wxOVERRIDE;
+    bool DoDefault() override;
 
-    void * GetHMenuItem() wxOVERRIDE { return m_osxMenuItem; }
+    void * GetHMenuItem() override { return m_osxMenuItem; }
 
 protected :
     wxCFRef<UIMenuElement*> m_osxMenuItem ;
@@ -287,7 +287,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
                        wxItemKind kind,
                        wxMenu *pSubMenu )
 {
-    wxMenuItemImpl* c = NULL;
+    wxMenuItemImpl* c = nullptr;
     UIMenuElement* item = nil;
 
     if ( kind == wxITEM_SEPARATOR )

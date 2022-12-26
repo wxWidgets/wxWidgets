@@ -83,7 +83,7 @@ public:
         or derive your own bitmap handler class and use it if you need to
         customize the bitmap handling further.
 
-        @param handler The new bitmap handler. If non-NULL, this object takes
+        @param handler The new bitmap handler. If non-null, this object takes
             ownership of this handler and will delete it when it is not needed
             any more.
 
@@ -110,7 +110,7 @@ public:
     */
     void DestroyClippingRegion();
 
-    //@{
+    ///@{
     /**
         Function not implemented in this DC class.
     */
@@ -126,7 +126,7 @@ public:
     void EndDoc();
     void StartPage();
     void EndPage();
-    //@}
+    ///@}
 };
 
 /**

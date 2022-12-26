@@ -20,7 +20,7 @@
 // NB: Content of this header is for wxWidgets' private use! It is not
 //     part of public API and may be modified or even disappear in the future!
 
-#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXX11__)
+#if defined(__WXGTK__) || defined(__WXX11__)
 
 #if defined(__WXGTK__)
 typedef void WXDisplay;
@@ -60,14 +60,14 @@ void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
 class wxX11Display
 {
 public:
-    wxX11Display() { m_dpy = XOpenDisplay(NULL); }
+    wxX11Display() { m_dpy = XOpenDisplay(nullptr); }
     ~wxX11Display() { if ( m_dpy ) XCloseDisplay(m_dpy); }
 
     // Pseudo move ctor: steals the open display from the other object.
     explicit wxX11Display(wxX11Display& display)
     {
         m_dpy = display.m_dpy;
-        display.m_dpy = NULL;
+        display.m_dpy = nullptr;
     }
 
     operator Display *() const { return m_dpy; }
@@ -83,6 +83,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxX11Display);
 };
 
-#endif // __WXMOTIF__, __WXGTK__, __WXX11__
+#endif // __WXGTK__, __WXX11__
 
 #endif // _WX_UNIX_UTILSX11_H_

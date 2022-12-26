@@ -85,7 +85,7 @@ wxWidgets can also be built in @b multilib and @b monolithic variants. See the
 
 When using project files and makefiles directly to build wxWidgets, options are
 configurable in the file @c "wx/XXX/setup.h" where XXX is the required
-platform (such as @c msw, @c motif, @c gtk, @c mac).
+platform (such as @c msw, @c gtk, @c mac).
 
 Some settings are a matter of taste, some help with platform-specific problems,
 and others can be set to minimize the size of the library. Please see the

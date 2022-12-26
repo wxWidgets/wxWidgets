@@ -10,9 +10,7 @@
 #ifndef OPTIONSET_H
 #define OPTIONSET_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 template <typename T>
 class OptionSet {
@@ -27,6 +25,7 @@ class OptionSet {
 			plcoi pi;
 			plcos ps;
 		};
+		std::string value;
 		std::string description;
 		Option() :
 			opType(SC_TYPE_BOOLEAN), pb(0), description("") {
@@ -40,7 +39,8 @@ class OptionSet {
 		Option(plcos ps_, std::string description_) :
 			opType(SC_TYPE_STRING), ps(ps_), description(description_) {
 		}
-		bool Set(T *base, const char *val) const {
+		bool Set(T *base, const char *val) {
+			value = val;
 			switch (opType) {
 			case SC_TYPE_BOOLEAN: {
 					bool option = atoi(val) != 0;
@@ -68,6 +68,9 @@ class OptionSet {
 			}
 			return false;
 		}
+		const char *Get() const noexcept {
+			return value.c_str();
+		}
 	};
 	typedef std::map<std::string, Option> OptionMap;
 	OptionMap nameToDef;
@@ -80,8 +83,6 @@ class OptionSet {
 		names += name;
 	}
 public:
-	virtual ~OptionSet() {
-	}
 	void DefineProperty(const char *name, plcob pb, std::string description="") {
 		nameToDef[name] = Option(pb, description);
 		AppendName(name);
@@ -94,7 +95,7 @@ public:
 		nameToDef[name] = Option(ps, description);
 		AppendName(name);
 	}
-	const char *PropertyNames() const {
+	const char *PropertyNames() const noexcept {
 		return names.c_str();
 	}
 	int PropertyType(const char *name) {
@@ -120,6 +121,14 @@ public:
 		return false;
 	}
 
+	const char *PropertyGet(const char *name) {
+		typename OptionMap::iterator it = nameToDef.find(name);
+		if (it != nameToDef.end()) {
+			return it->second.Get();
+		}
+		return nullptr;
+	}
+
 	void DefineWordListSets(const char * const wordListDescriptions[]) {
 		if (wordListDescriptions) {
 			for (size_t wl = 0; wordListDescriptions[wl]; wl++) {
@@ -130,13 +139,11 @@ public:
 		}
 	}
 
-	const char *DescribeWordListSets() const {
+	const char *DescribeWordListSets() const noexcept {
 		return wordLists.c_str();
 	}
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

@@ -50,10 +50,10 @@ class wxWizardSizer : public wxSizer
 public:
     wxWizardSizer(wxWizard *owner);
 
-    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item) wxOVERRIDE;
+    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item) override;
 
-    virtual void RecalcSizes() wxOVERRIDE;
-    virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RecalcSizes() override;
+    virtual wxSize CalcMin() override;
 
     // get the max size of all wizard pages
     wxSize GetMaxChildSize();
@@ -267,12 +267,12 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 void wxWizard::Init()
 {
     m_posWizard = wxDefaultPosition;
-    m_page = NULL;
-    m_firstpage = NULL;
-    m_btnPrev = m_btnNext = NULL;
-    m_statbmp = NULL;
-    m_sizerBmpAndPage = NULL;
-    m_sizerPage = NULL;
+    m_page = nullptr;
+    m_firstpage = nullptr;
+    m_btnPrev = m_btnNext = nullptr;
+    m_statbmp = nullptr;
+    m_sizerBmpAndPage = nullptr;
+    m_sizerPage = nullptr;
     m_border = 5;
     m_started = false;
     m_wasModal = false;
@@ -422,7 +422,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
 
     // Desired TAB order is 'next', 'cancel', 'help', 'back'. This makes the 'back' button the last control on the page.
     // Create the buttons in the right order...
-    wxButton *btnHelp=0;
+    wxButton *btnHelp=nullptr;
 #ifdef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
         btnHelp=new wxButton(this, wxID_HELP, wxEmptyString, wxDefaultPosition, wxDefaultSize, buttonStyle);
@@ -438,6 +438,37 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
         btnHelp=new wxButton(this, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, buttonStyle);
 #endif
     m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxDefaultPosition, wxDefaultSize, buttonStyle);
+
+    // compute the maximum width of the buttons and use it for all of them
+    // (except for the "Help" button under Mac which is special there)
+    wxSize buttonSize;
+    buttonSize.IncTo(m_btnPrev->GetBestSize());
+    buttonSize.IncTo(m_btnNext->GetBestSize());
+    buttonSize.IncTo(btnCancel->GetBestSize());
+
+    // use the other possible label for the "Next" button temporarily, so that
+    // we could make it big enough to fit it too if it's longer
+    m_btnNext->SetLabel(m_finishLabel);
+    buttonSize.IncTo(m_btnNext->GetBestSize());
+
+#ifndef __WXMAC__
+    if (btnHelp)
+        buttonSize.IncTo(btnHelp->GetBestSize());
+#endif
+
+    // now do make all buttons of the same (and big enough) size
+    m_btnPrev->SetMinSize(buttonSize);
+    m_btnNext->SetMinSize(buttonSize);
+    btnCancel->SetMinSize(buttonSize);
+
+#ifndef __WXMAC__
+    if (btnHelp)
+        btnHelp->SetMinSize(buttonSize);
+#endif
+
+    // restore the initial label of the 'next' button after temporarily
+    // changing it above
+    m_btnNext->SetLabel(m_nextLabel);
 
     if (btnHelp)
     {
@@ -578,7 +609,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         wxWizardEvent event(wxEVT_WIZARD_FINISHED, GetId(), false, m_page);
         (void)GetEventHandler()->ProcessEvent(event);
 
-        m_page = NULL;
+        m_page = nullptr;
 
         return true;
     }
@@ -824,7 +855,7 @@ void wxWizard::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
     // this function probably can never be called when we don't have an active
     // page, but a small extra check won't hurt
-    if(m_page != NULL)
+    if(m_page != nullptr)
     {
         // Create and send the help event to the specific page handler
         // event data contains the active page so that context-sensitive
@@ -873,10 +904,11 @@ void wxWizard::SetBitmap(const wxBitmapBundle& bitmap)
 
 void wxWizard::WXHandleDPIChanged(wxDPIChangedEvent& event)
 {
-    wxBitmap bmp;
     if ( m_statbmp )
     {
-        bmp = m_page->GetBitmap();
+        wxBitmap bmp;
+        if ( m_page )
+            bmp = m_page->GetBitmap();
         if ( !bmp.IsOk() )
             bmp = m_bitmap.GetBitmapFor(this);
 

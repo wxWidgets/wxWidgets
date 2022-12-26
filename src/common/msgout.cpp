@@ -50,7 +50,7 @@
 // wxMessageOutput
 // ----------------------------------------------------------------------------
 
-wxMessageOutput* wxMessageOutput::ms_msgOut = 0;
+wxMessageOutput* wxMessageOutput::ms_msgOut = nullptr;
 
 wxMessageOutput* wxMessageOutput::Get()
 {
@@ -68,34 +68,6 @@ wxMessageOutput* wxMessageOutput::Set(wxMessageOutput* msgout)
     ms_msgOut = msgout;
     return old;
 }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxMessageOutput::DoPrintfWchar(const wxChar *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    wxString out;
-
-    out.PrintfV(format, args);
-    va_end(args);
-
-    Output(out);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxMessageOutput::DoPrintfUtf8(const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    wxString out;
-
-    out.PrintfV(format, args);
-    va_end(args);
-
-    Output(out);
-}
-#endif // wxUSE_UNICODE_UTF8
 
 // ----------------------------------------------------------------------------
 // wxMessageOutputBest
@@ -120,7 +92,7 @@ void wxMessageOutputBest::Output(const wxString& str)
     else // Use some title to avoid default "Error"
         title = _("Message");
 
-    ::MessageBox(NULL, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
+    ::MessageBox(nullptr, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
 #else // !__WINDOWS__
     wxUnusedVar(m_flags);
 

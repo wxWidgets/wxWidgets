@@ -338,9 +338,9 @@ public:
 
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL );
+                                        wxPGProperty* firstProp = nullptr );
     wxPropertyGridConstIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                             wxPGProperty* firstProp = NULL ) const;
+                                             wxPGProperty* firstProp = nullptr ) const;
     //@}
 
     //@{
@@ -405,7 +405,7 @@ public:
                                 int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
 
     /**
-        Returns value of given attribute. If none found, returns wxNullVariant.
+        Returns value of given attribute. If none found, returns null wxVariant.
     */
     wxVariant GetPropertyAttribute( wxPGPropArg id, const wxString& attrName ) const;
 
@@ -500,7 +500,7 @@ public:
     /**
         Returns property's value as wxVariant.
 
-        If property value is unspecified, wxNullVariant is returned.
+        If property value is unspecified, null wxVariant is returned.
     */
     wxVariant GetPropertyValue( wxPGPropArg id );
 
@@ -557,8 +557,8 @@ public:
             Each attribute will be stored as list variant named
             @"@@@<propname@>@@attr.@"
     */
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-                                 wxPGProperty* baseparent = NULL, long flags = 0 ) const;
+    wxVariant GetPropertyValues( const wxString& listname = wxString(),
+                                 wxPGProperty* baseparent = nullptr, long flags = 0 ) const;
 
     /**
         Returns list of currently selected properties.
@@ -718,7 +718,7 @@ public:
     /**
         If state is shown in its grid, refresh it now.
     */
-    virtual void RefreshGrid( wxPropertyGridPageState* state = NULL );
+    virtual void RefreshGrid( wxPropertyGridPageState* state = nullptr );
 
     /**
         Initializes additional property editors (SpinCtrl etc.). Causes
@@ -878,7 +878,7 @@ public:
             Use wxPG_RECURSE to set the attribute to child properties recursively.
 
         @remarks
-        - Setting attribute's value to wxNullVariant will simply remove it
+        - Setting attribute's value to null wxVariant will simply remove it
         from property's set of attributes.
         - Property is refreshed with new settings.
     */
@@ -926,7 +926,7 @@ public:
     */
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
+                          const wxString& text = wxString(),
                           const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );

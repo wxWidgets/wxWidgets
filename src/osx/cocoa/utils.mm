@@ -14,7 +14,6 @@
 #include "wx/platinfo.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/intl.h"
     #include "wx/app.h"
     #if wxUSE_GUI
         #include "wx/dialog.h"
@@ -64,6 +63,14 @@ void wxBell()
     [appleEventManager setEventHandler:self andSelector:@selector(handleQuitAppEvent:withReplyEvent:)
                          forEventClass:kCoreEventClass andEventID:kAEQuitApplication];
 
+    // avoid adding an "Enter Full Screen" menu item
+    if ( WX_IS_MACOS_AVAILABLE(10, 11) )
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
+    }
+
+    wxTheApp->OSXEnableAutomaticTabbing(false);
+
     wxTheApp->OSXOnWillFinishLaunching();
 }
 
@@ -73,23 +80,37 @@ void wxBell()
     [NSApp stop:nil];
     wxTheApp->OSXOnDidFinishLaunching();
 
-    // We need to activate the application manually if it's not part of a
-    // bundle, otherwise not only it won't come to the foreground, but under
-    // recent macOS versions (10.15+), its menus simply won't work at all.
+    // We may need to activate the application manually in a couple of cases.
     //
     // Note that we have not one but two methods to opt out from this behaviour
     // for compatibility.
     if ( !wxApp::sm_isEmbedded && wxTheApp && wxTheApp->OSXIsGUIApplication() )
     {
+        bool activate = false;
+
+        // If the application is not bundled, we need to do it as otherwise not
+        // only it won't come to the foreground, but under recent macOS
+        // versions (10.15+), its menus simply won't work at all.
         CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
         CFRelease( url ) ;
-        wxString app = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+        wxString app = wxCFStringRef(path).AsString();
         if ( !app.EndsWith(".app") )
         {
             [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];
-            [NSApp activateIgnoringOtherApps: YES];
+            activate = true;
         }
+        else if ( [NSApp activationPolicy] == NSApplicationActivationPolicyAccessory )
+        {
+            // This happens when the application has LSUIElement set in its
+            // Info.plist, which prevents Launch Services from activating it,
+            // meaning that it's not going to get any events unless we activate
+            // it ourselves (see #16156).
+            activate = true;
+        }
+
+        if ( activate )
+            [NSApp activateIgnoringOtherApps: YES];
     }
 }
 
@@ -218,14 +239,14 @@ void wxBell()
          ++i )
     {
         wxTopLevelWindow * const win = static_cast<wxTopLevelWindow *>(*i);
-        wxNonOwnedWindowImpl* winimpl = win ? win->GetNonOwnedPeer() : NULL;
+        wxNonOwnedWindowImpl* winimpl = win ? win->GetNonOwnedPeer() : nullptr;
         WXWindow nswindow = win ? win->GetWXWindow() : nil;
         
         if ( nswindow && [nswindow hidesOnDeactivate] == NO && winimpl)
             winimpl->RestoreWindowLevel();
     }
     if ( wxTheApp )
-        wxTheApp->SetActive( true , NULL ) ;
+        wxTheApp->SetActive( true , nullptr ) ;
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -248,7 +269,7 @@ void wxBell()
 {
     wxUnusedVar(notification);
     if ( wxTheApp )
-        wxTheApp->SetActive( false , NULL ) ;
+        wxTheApp->SetActive( false , nullptr ) ;
 }
 
 @end
@@ -264,7 +285,7 @@ void wxBell()
     {
         sheetFinished = NO;
         resultCode = -1;
-        impl = 0;
+        impl = nullptr;
     }
     return self;
 }
@@ -440,7 +461,7 @@ extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetMainDisplayClientArea()
 {
     NSRect displayRect = [wxOSXGetMenuScreen() visibleFrame];
-    return wxFromNSRect( NULL, displayRect );
+    return wxFromNSRect( nullptr, displayRect );
 }
 
 static NSScreen* wxOSXGetScreenFromDisplay( CGDirectDisplayID ID)
@@ -451,19 +472,19 @@ static NSScreen* wxOSXGetScreenFromDisplay( CGDirectDisplayID ID)
         if ( displayID == ID )
             return screen;
     }
-    return NULL;
+    return nullptr;
 }
 
 extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetDisplayClientArea(CGDirectDisplayID ID)
 {
     NSRect displayRect = [wxOSXGetScreenFromDisplay(ID) visibleFrame];
-    return wxFromNSRect( NULL, displayRect );
+    return wxFromNSRect( nullptr, displayRect );
 }
 
 void wxGetMousePosition( int* x, int* y )
 {
-    wxPoint pt = wxFromNSPoint(NULL, [NSEvent mouseLocation]);
+    wxPoint pt = wxFromNSPoint(nullptr, [NSEvent mouseLocation]);
     if ( x )
         *x = pt.x;
     if ( y )

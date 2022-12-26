@@ -25,7 +25,7 @@
 wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* parent, int maxValue)
     : m_maxValue(maxValue)
 {
-    if ( parent == NULL )
+    if ( parent == nullptr )
     {
         for ( wxWindowList::const_iterator it = wxTopLevelWindows.begin();
               it != wxTopLevelWindows.end();

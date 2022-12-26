@@ -56,7 +56,7 @@
     @style{wxTR_TWIST_BUTTONS}
         Selects alternative style of @c +/@c - buttons and shows rotating
         ("twisting") arrows instead. Currently this style is only implemented
-        under Microsoft Windows Vista and later Windows versions and is ignored
+        in wxMSW and is ignored
         under the other platforms as enabling it is equivalent to using
         wxSystemThemedControl::EnableSystemTheme().
     @style{wxTR_NO_LINES}
@@ -244,7 +244,7 @@ public:
     */
     virtual wxTreeItemId AddRoot(const wxString& text, int image = -1,
                                  int selImage = -1,
-                                 wxTreeItemData* data = NULL);
+                                 wxTreeItemData* data = nullptr);
 
     /**
         Appends an item to the end of the branch identified by @a parent, return
@@ -259,7 +259,7 @@ public:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = NULL);
+                            wxTreeItemData* data = nullptr);
 
     /**
         Sets the buttons image list. The button images assigned with this method
@@ -349,13 +349,23 @@ public:
     virtual void DeleteChildren(const wxTreeItemId& item);
 
     /**
-        Starts editing the label of the given @a item. This function generates a
-        @c EVT_TREE_BEGIN_LABEL_EDIT event which can be vetoed so that no text
-        control will appear for in-place editing.
+        Starts editing the label of the given @a item.
 
-        If the user changed the label (i.e. s/he does not press ESC or leave the
-        text control without changes, a @c EVT_TREE_END_LABEL_EDIT event will be
-        sent which can be vetoed as well.
+        This function generates a @c EVT_TREE_BEGIN_LABEL_EDIT event which can
+        be vetoed to prevent the editing from starting.
+
+        If it does start, a text control, which can be retrieved using
+        GetEditControl(), allowing the user to edit the label interactively is
+        shown. In wxMSW, this text control is created using @a textCtrlClass,
+        however this parameter is currently ignored in the other ports where a
+        plain wxTextCtrl is always used.
+
+        When the editing ends, @c EVT_TREE_END_LABEL_EDIT event is sent and
+        this event can be vetoed as well to prevent the label from changing.
+        Note that this event is sent both when the user accepts (e.g. by
+        pressing Enter) or cancels (e.g. by pressing Escape) and its handler
+        can use wxTreeEvent::IsEditCancelled() to distinguish between these
+        situations.
 
         @see EndEditLabel(), wxTreeEvent
     */
@@ -730,7 +740,7 @@ public:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = NULL);
+                            wxTreeItemData* data = nullptr);
 
     /**
         Inserts an item before one identified
@@ -747,7 +757,7 @@ public:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = NULL);
+                            wxTreeItemData* data = nullptr);
 
     /**
         Returns @true if the given item is in bold state.
@@ -812,7 +822,7 @@ public:
                              const wxString& text,
                              int image = -1,
                              int selImage = -1,
-                             wxTreeItemData* data = NULL);
+                             wxTreeItemData* data = nullptr);
 
     /**
         Scrolls the specified item into view.

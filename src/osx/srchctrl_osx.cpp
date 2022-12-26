@@ -60,7 +60,7 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 void wxSearchCtrl::Init()
 {
 #if wxUSE_MENUS
-    m_menu = 0;
+    m_menu = nullptr;
 #endif
 }
 
@@ -100,7 +100,7 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
 
     if ( m_menu )
     {
-        m_menu->SetInvokingWindow( 0 );
+        m_menu->SetInvokingWindow( nullptr );
     }
 
     delete m_menu;

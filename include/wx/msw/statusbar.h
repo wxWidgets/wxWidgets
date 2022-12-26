@@ -28,7 +28,7 @@ public:
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxStatusBarNameStr))
     {
-        m_pDC = NULL;
+        m_pDC = nullptr;
         (void)Create(parent, id, style, name);
     }
 
@@ -40,39 +40,39 @@ public:
     virtual ~wxStatusBar();
 
     // implement base class methods
-    virtual void SetFieldsCount(int number = 1, const int *widths = NULL) wxOVERRIDE;
-    virtual void SetStatusWidths(int n, const int widths_field[]) wxOVERRIDE;
-    virtual void SetStatusStyles(int n, const int styles[]) wxOVERRIDE;
-    virtual void SetMinHeight(int height) wxOVERRIDE;
-    virtual bool GetFieldRect(int i, wxRect& rect) const wxOVERRIDE;
+    virtual void SetFieldsCount(int number = 1, const int *widths = nullptr) override;
+    virtual void SetStatusWidths(int n, const int widths_field[]) override;
+    virtual void SetStatusStyles(int n, const int styles[]) override;
+    virtual void SetMinHeight(int height) override;
+    virtual bool GetFieldRect(int i, wxRect& rect) const override;
 
-    virtual int GetBorderX() const wxOVERRIDE;
-    virtual int GetBorderY() const wxOVERRIDE;
+    virtual int GetBorderX() const override;
+    virtual int GetBorderY() const override;
 
     // override some wxWindow virtual methods too
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) override;
 
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
-                                    WXLPARAM lParam) wxOVERRIDE;
+                                    WXLPARAM lParam) override;
 
 protected:
     // implement base class pure virtual method
-    virtual void DoUpdateStatusText(int number) wxOVERRIDE;
+    virtual void DoUpdateStatusText(int number) override;
 
     // override some base class virtuals
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const wxOVERRIDE;
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
+    virtual wxSize DoGetBestSize() const override;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
 #if wxUSE_TOOLTIPS
-    virtual bool MSWProcessMessage(WXMSG* pMsg) wxOVERRIDE;
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) wxOVERRIDE;
+    virtual bool MSWProcessMessage(WXMSG* pMsg) override;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) override;
 #endif
 
     // implementation of the public SetStatusWidths()
     void MSWUpdateFieldsWidths();
 
-    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
     // used by DoUpdateStatusText()
     wxClientDC *m_pDC;

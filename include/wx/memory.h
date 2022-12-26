@@ -62,7 +62,7 @@ inline void * operator new (size_t size, wxChar * fileName, int lineNum)
 
 inline void * operator new (size_t size)
 {
-    return wxDebugAlloc(size, NULL, 0, false);
+    return wxDebugAlloc(size, nullptr, 0, false);
 }
 
 inline void operator delete (void * buf)
@@ -73,7 +73,7 @@ inline void operator delete (void * buf)
 #if wxUSE_ARRAY_MEMORY_OPERATORS
 inline void * operator new[] (size_t size)
 {
-    return wxDebugAlloc(size, NULL, 0, false, true);
+    return wxDebugAlloc(size, nullptr, 0, false, true);
 }
 
 inline void * operator new[] (size_t size, wxChar * fileName, int lineNum)
@@ -218,7 +218,7 @@ protected:
     static size_t GetPadding (size_t size) ;
 
     // Traverse the list.
-    static void TraverseList (PmSFV, wxMemStruct *from = NULL);
+    static void TraverseList (PmSFV, wxMemStruct *from = nullptr);
 
     static int debugLevel;
     static bool debugOn;

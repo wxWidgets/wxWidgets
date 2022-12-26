@@ -14,6 +14,7 @@
 #include <QtWidgets/QLabel>
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/icon.h"
     #include "wx/image.h"
 #endif // WX_PRECOMP
@@ -38,7 +39,7 @@ static wxImage ConvertImage( QImage qtImage )
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
     unsigned char *startData = data;
 
-    unsigned char *alpha = NULL;
+    unsigned char *alpha = nullptr;
     if (hasAlpha)
         alpha = (unsigned char *)malloc(sizeof(char) * numPixels);
 
@@ -78,7 +79,7 @@ static QImage ConvertImage( const wxImage &image )
                    ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
 
     unsigned char *data = image.GetData();
-    unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL;
+    unsigned char *alpha = hasAlpha ? image.GetAlpha() : nullptr;
     QRgb colour;
 
     QRgb maskedColour;
@@ -121,7 +122,7 @@ static QImage ConvertImage( const wxImage &image )
 class wxBitmapRefData: public wxGDIRefData
 {
     public:
-        wxBitmapRefData() { m_mask = NULL; }
+        wxBitmapRefData() { m_mask = nullptr; }
 
         wxBitmapRefData( int width, int height, int depth )
         {
@@ -129,13 +130,13 @@ class wxBitmapRefData: public wxGDIRefData
                 m_qtPixmap = QBitmap( width, height );
             else
                 m_qtPixmap = QPixmap( width, height );
-            m_mask = NULL;
+            m_mask = nullptr;
         }
 
         wxBitmapRefData( QPixmap pix )
             : m_qtPixmap(pix)
         {
-            m_mask = NULL;
+            m_mask = nullptr;
         }
 
         virtual ~wxBitmapRefData() { delete m_mask; }
@@ -192,6 +193,11 @@ wxBitmap::wxBitmap(const wxSize& sz, int depth )
     Create(sz, depth);
 }
 
+wxBitmap::wxBitmap(int width, int height, const wxDC& dc)
+{
+    Create(width, height, dc);
+}
+
 // Create a wxBitmap from xpm data
 wxBitmap::wxBitmap(const char* const* bits)
 {
@@ -204,12 +210,22 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale) )
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
-    Qt::ImageConversionFlags flags = 0;
+    Qt::ImageConversionFlags flags;
     if (depth == 1)
         flags = Qt::MonoOnly;
     m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image), flags));
+}
+
+wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+{
+    InitFromImage(image, depth, scale);
+}
+
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    InitFromImage(image, -1, dc.GetContentScaleFactor());
 }
 
 wxBitmap::wxBitmap(const wxCursor& cursor)
@@ -293,7 +309,7 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
     #endif
 
     //Try to save using Qt
-    const char* type_name = NULL;
+    const char* type_name = nullptr;
     switch (type)
     {
         case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
@@ -362,7 +378,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
 wxPalette *wxBitmap::GetPalette() const
 {
     wxMISSING_IMPLEMENTATION( "wxBitmap palettes" );
-    return 0;
+    return nullptr;
 }
 
 void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
@@ -394,7 +410,7 @@ void wxBitmap::SetDepth(int depth)
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    void* bits = NULL;
+    void* bits = nullptr;
 
     wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
 
@@ -422,7 +438,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 
 QPixmap *wxBitmap::GetHandle() const
 {
-    return ( m_refData != NULL ) ? &M_PIXDATA : NULL;
+    return ( m_refData != nullptr ) ? &M_PIXDATA : nullptr;
 }
 
 wxGDIRefData *wxBitmap::CreateGDIRefData() const
@@ -435,7 +451,7 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
     const wxBitmapRefData* oldRef = static_cast<const wxBitmapRefData*>(data);
     wxBitmapRefData *d = new wxBitmapRefData;
     d->m_qtPixmap = oldRef->m_qtPixmap; //.copy();// copy not needed
-    d->m_mask = oldRef->m_mask ? new wxMask(*oldRef->m_mask) : NULL;
+    d->m_mask = oldRef->m_mask ? new wxMask(*oldRef->m_mask) : nullptr;
     return d;
 }
 
@@ -452,13 +468,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject);
 
 wxMask::wxMask()
 {
-    m_qtBitmap = NULL;
+    m_qtBitmap = nullptr;
 }
 
 wxMask::wxMask(const wxMask &mask)
 {
     QBitmap *mask_bmp = mask.GetHandle();
-    m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : NULL;
+    m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : nullptr;
 }
 
 wxMask& wxMask::operator=(const wxMask &mask)
@@ -467,26 +483,26 @@ wxMask& wxMask::operator=(const wxMask &mask)
     {
         delete m_qtBitmap;
         QBitmap *mask_bmp = mask.GetHandle();
-        m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : NULL;
+        m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : nullptr;
     }
     return *this;
 }
 
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
-    m_qtBitmap = NULL;
+    m_qtBitmap = nullptr;
     Create(bitmap, colour);
 }
 
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 {
-    m_qtBitmap = NULL;
+    m_qtBitmap = nullptr;
     Create(bitmap, paletteIndex);
 }
 
 wxMask::wxMask(const wxBitmap& bitmap)
 {
-    m_qtBitmap = NULL;
+    m_qtBitmap = nullptr;
     Create(bitmap);
 }
 
@@ -499,7 +515,7 @@ wxMask::~wxMask()
 void wxMask::FreeData()
 {
     delete m_qtBitmap;
-    m_qtBitmap = NULL;
+    m_qtBitmap = nullptr;
 }
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)

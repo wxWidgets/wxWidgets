@@ -330,7 +330,6 @@ void URITestCase::Unescaping()
     CPPUNIT_ASSERT_EQUAL( unescaped, wxURI::Unescape(escaped) );
 
 
-#if wxUSE_UNICODE
     escaped = "http://ru.wikipedia.org/wiki/"
               "%D0%A6%D0%B5%D0%BB%D0%BE%D0%B5_%D1%87%D0%B8%D1%81%D0%BB%D0%BE";
 
@@ -351,7 +350,6 @@ void URITestCase::Unescaping()
         L"file://\u043C\u043E\u0439\\\u0444\u0430\u0439\u043B",
         unescaped
     );
-#endif // wxUSE_UNICODE
 }
 
 void URITestCase::FileScheme()
@@ -421,7 +419,7 @@ void URITestCase::URLCompat()
         CPPUNIT_ASSERT(urlProblem.GetError() == wxURL_NOERR);
 
         wxInputStream* is = urlProblem.GetInputStream();
-        CPPUNIT_ASSERT(is != NULL);
+        CPPUNIT_ASSERT(is != nullptr);
 
         wxFile fOut(wxT("test.html"), wxFile::write);
         wxASSERT(fOut.IsOpened());
@@ -453,7 +451,7 @@ void URITestCase::URLProxy()
     wxURL::SetDefaultProxy(wxT("fol.singnet.com.sg:8080"));
     wxURL url2(wxT("http://server-name/path/to/file?query_data=value"));
     wxInputStream *data = url2.GetInputStream();
-    CPPUNIT_ASSERT(data != NULL);
+    CPPUNIT_ASSERT(data != nullptr);
 }
 #endif // wxUSE_PROTOCOL_HTTP
 

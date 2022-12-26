@@ -79,7 +79,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -98,9 +97,6 @@ wxFLAGS_MEMBER(wxTR_ROW_LINES)
 wxFLAGS_MEMBER(wxTR_HAS_VARIABLE_ROW_HEIGHT)
 wxFLAGS_MEMBER(wxTR_SINGLE)
 wxFLAGS_MEMBER(wxTR_MULTIPLE)
-#if WXWIN_COMPATIBILITY_2_8
-wxFLAGS_MEMBER(wxTR_EXTENDED)
-#endif
 wxFLAGS_MEMBER(wxTR_DEFAULT_STYLE)
 wxEND_FLAGS( wxTreeCtrlStyle )
 
@@ -144,7 +140,7 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType,
 wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)
 {
-    m_itemOld = 0l;
+    m_itemOld = nullptr;
     m_editCancelled = false;
 }
 

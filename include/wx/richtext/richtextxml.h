@@ -202,10 +202,10 @@ public:
     virtual wxRichTextObject* CreateObjectForXMLName(wxRichTextObject* parent, const wxString& name) const;
 
     /// Can we save using this handler?
-    virtual bool CanSave() const wxOVERRIDE { return true; }
+    virtual bool CanSave() const override { return true; }
 
     /// Can we load using this handler?
-    virtual bool CanLoad() const wxOVERRIDE { return true; }
+    virtual bool CanLoad() const override { return true; }
 
     /// Returns the XML helper object, implementing functionality
     /// that can be reused elsewhere.
@@ -226,8 +226,8 @@ public:
 
 protected:
 #if wxUSE_STREAMS
-    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) wxOVERRIDE;
-    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) wxOVERRIDE;
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) override;
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) override;
 #endif
 
     wxRichTextXMLHelper m_helper;

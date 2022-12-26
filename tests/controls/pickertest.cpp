@@ -32,11 +32,11 @@ class ColourPickerCtrlTestCase : public PickerBaseTestCase,
 public:
     ColourPickerCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxPickerBase *GetBase() const wxOVERRIDE { return m_colour; }
+    virtual wxPickerBase *GetBase() const override { return m_colour; }
 
     CPPUNIT_TEST_SUITE( ColourPickerCtrlTestCase );
         wxPICKER_BASE_TESTS();
@@ -76,11 +76,11 @@ class DirPickerCtrlTestCase : public PickerBaseTestCase,
 public:
     DirPickerCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxPickerBase *GetBase() const wxOVERRIDE { return m_dir; }
+    virtual wxPickerBase *GetBase() const override { return m_dir; }
 
     CPPUNIT_TEST_SUITE( DirPickerCtrlTestCase );
         wxPICKER_BASE_TESTS();
@@ -121,11 +121,11 @@ class FilePickerCtrlTestCase : public PickerBaseTestCase,
 public:
     FilePickerCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxPickerBase *GetBase() const wxOVERRIDE { return m_file; }
+    virtual wxPickerBase *GetBase() const override { return m_file; }
 
     CPPUNIT_TEST_SUITE( FilePickerCtrlTestCase );
         wxPICKER_BASE_TESTS();
@@ -167,11 +167,11 @@ class FontPickerCtrlTestCase : public PickerBaseTestCase,
 public:
     FontPickerCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxPickerBase *GetBase() const wxOVERRIDE { return m_font; }
+    virtual wxPickerBase *GetBase() const override { return m_font; }
 
     CPPUNIT_TEST_SUITE( FontPickerCtrlTestCase );
         wxPICKER_BASE_TESTS();

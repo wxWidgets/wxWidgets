@@ -9,6 +9,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/textentry.h"
+#include "wx/window.h"
+
 
 wxTextEntry::wxTextEntry()
 {
@@ -108,6 +110,5 @@ void wxTextEntry::DoSetValue(const wxString &WXUNUSED(value), int WXUNUSED(flags
 
 wxWindow *wxTextEntry::GetEditableWindow()
 {
-    return NULL;
+    return nullptr;
 }
-

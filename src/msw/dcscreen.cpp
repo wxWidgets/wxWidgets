@@ -27,7 +27,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxMSWDCImpl);
 wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner ) :
     wxMSWDCImpl( owner )
 {
-    m_hDC = (WXHDC) ::GetDC((HWND) NULL);
+    m_hDC = (WXHDC) ::GetDC(nullptr);
 
     // the background mode is only used for text background and is set in
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT

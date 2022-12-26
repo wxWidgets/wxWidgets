@@ -152,9 +152,9 @@ class wxGUIEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
 public:
     virtual wxEventLoopSource*
-    AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags) wxOVERRIDE
+    AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags) override
     {
-        wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
+        wxCHECK_MSG( fd != -1, nullptr, "can't monitor invalid fd" );
 
         int condition = 0;
         if ( flags & wxEVENT_SOURCE_INPUT )
@@ -176,7 +176,7 @@ public:
         g_io_channel_unref(channel);
 
         if ( !sourceId )
-            return NULL;
+            return nullptr;
 
         wxLogTrace(wxTRACE_EVT_SOURCE,
                    "Adding event loop source for fd=%d with GTK id=%u",
@@ -374,12 +374,12 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     //       and then call gtk_main_do_event()!
     //       In particular in this way we also process input from sources like
     //       GIOChannels (this is needed for e.g. wxGUIAppTraits::WaitForChild).
-    gdk_event_handler_set(wxgtk_main_do_event, this, NULL);
+    gdk_event_handler_set(wxgtk_main_do_event, this, nullptr);
     while (Pending())   // avoid false positives from our idle source
         gtk_main_iteration();
 
     wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
-    gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
+    gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, nullptr, nullptr);
     wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);

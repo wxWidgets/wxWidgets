@@ -18,23 +18,23 @@ class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 public:
     wxColourDialog() {}
     wxColourDialog(wxWindow *parent,
-                   const wxColourData *data = NULL);
+                   const wxColourData *data = nullptr);
     virtual ~wxColourDialog() {}
 
-    bool Create(wxWindow *parent, const wxColourData *data = NULL);
+    bool Create(wxWindow *parent, const wxColourData *data = nullptr);
 
     wxColourData &GetColourData() { return m_data; }
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
 protected:
     // implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) override {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
-                              int WXUNUSED(width), int WXUNUSED(height)) wxOVERRIDE {}
+                              int WXUNUSED(width), int WXUNUSED(height)) override {}
 
     // copy data between the dialog and m_colourData:
     void ColourDataToDialog();

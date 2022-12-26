@@ -35,7 +35,7 @@
 // that if one of these menu items is clicked, then a certain function is
 // called.
 enum {
-    PU_ADD_RECORD        = wxID_HIGHEST + 1,
+    PU_ADD_RECORD        = wxID_HIGHEST,
     PU_EDIT_RECORD,
     PU_DELETE_RECORD
 };

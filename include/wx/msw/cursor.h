@@ -27,11 +27,8 @@ public:
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
-#endif
 
-    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+    virtual wxPoint GetHotSpot() const override;
 
     virtual ~wxCursor();
 
@@ -42,7 +39,7 @@ public:
 protected:
     void InitFromStock(wxStockCursor);
 
-    virtual wxGDIImageRefData *CreateData() const wxOVERRIDE;
+    virtual wxGDIImageRefData *CreateData() const override;
 
 private:
 #if wxUSE_IMAGE

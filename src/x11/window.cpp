@@ -63,11 +63,11 @@
 // global variables for this module
 // ----------------------------------------------------------------------------
 
-static wxWindowX11* g_captureWindow = NULL;
+static wxWindowX11* g_captureWindow = nullptr;
 static GC g_eraseGC;
 // the window that is about to be focused after currently focused
 // one looses focus:
-static wxWindow* gs_toBeFocusedWindow = NULL;
+static wxWindow* gs_toBeFocusedWindow = nullptr;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -122,8 +122,8 @@ inline void EnsureValidXWindowSize(wxSize& size)
 void wxWindowX11::Init()
 {
     // X11-specific
-    m_mainWindow = (WXWindow) 0;
-    m_clientWindow = (WXWindow) 0;
+    m_mainWindow = (WXWindow) nullptr;
+    m_clientWindow = (WXWindow) nullptr;
     m_insertIntoMain = false;
     m_updateNcArea = false;
 
@@ -359,7 +359,7 @@ wxWindowX11::~wxWindowX11()
     SendDestroyEvent();
 
     if (g_captureWindow == this)
-        g_captureWindow = NULL;
+        g_captureWindow = nullptr;
 
     if ( DoFindFocus() == this )
         KillFocus();
@@ -372,7 +372,7 @@ wxWindowX11::~wxWindowX11()
         Window xwindow = (Window) m_clientWindow;
         wxDeleteClientWindowFromTable( xwindow );
         XDestroyWindow( wxGlobalDisplay(), xwindow );
-        m_clientWindow = NULL;
+        m_clientWindow = nullptr;
     }
 
     // Destroy the window
@@ -381,7 +381,7 @@ wxWindowX11::~wxWindowX11()
         Window xwindow = (Window) m_mainWindow;
         wxDeleteWindowFromTable( xwindow );
         XDestroyWindow( wxGlobalDisplay(), xwindow );
-        m_mainWindow = NULL;
+        m_mainWindow = nullptr;
     }
 }
 
@@ -410,13 +410,13 @@ void wxWindowX11::SetFocus()
     {
         gs_toBeFocusedWindow = (wxWindow*)this;
         focusedWindow->KillFocus();
-        gs_toBeFocusedWindow = NULL;
+        gs_toBeFocusedWindow = nullptr;
     }
 
 #if 0
     if (GetName() == "scrollBar")
     {
-        char *crash = NULL;
+        char *crash = nullptr;
         *crash = 0;
     }
 #endif
@@ -481,7 +481,7 @@ wxWindow *wxWindowBase::DoFindFocus()
         return win;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // Enabling/disabling handled by event loop, and not sending events
@@ -530,12 +530,12 @@ void wxWindowX11::Lower()
 
 void wxWindowX11::DoCaptureMouse()
 {
-    if ((g_captureWindow != NULL) && (g_captureWindow != this))
+    if ((g_captureWindow != nullptr) && (g_captureWindow != this))
     {
         wxFAIL_MSG(wxT("Trying to capture before mouse released."));
 
         // Core dump now
-        int *tmp = NULL;
+        int *tmp = nullptr;
         (*tmp) = 1;
         return;
     }
@@ -570,7 +570,7 @@ void wxWindowX11::DoCaptureMouse()
                 wxLogDebug( wxT("This is not a viewable window - perhaps not shown yet?") );
             }
 
-            g_captureWindow = NULL;
+            g_captureWindow = nullptr;
             return;
         }
 
@@ -580,7 +580,7 @@ void wxWindowX11::DoCaptureMouse()
 
 void wxWindowX11::DoReleaseMouse()
 {
-    g_captureWindow = NULL;
+    g_captureWindow = nullptr;
 
     if ( !m_winCaptured )
         return;
@@ -675,7 +675,7 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
 
     Display *xdisplay = wxGlobalDisplay();
 
-    GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
+    GC xgc = XCreateGC( xdisplay, xwindow, 0, nullptr );
     XSetGraphicsExposures( xdisplay, xgc, True );
 
     int s_x = 0;
@@ -1071,7 +1071,6 @@ int wxWindowX11::GetCharHeight() const
     wxFont font(GetFont());
     wxCHECK_MSG( font.IsOk(), 0, wxT("valid window font needed") );
 
-#if wxUSE_UNICODE
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
     pango_layout_set_font_description( layout, font.GetNativeFontInfo()->description );
@@ -1081,17 +1080,6 @@ int wxWindowX11::GetCharHeight() const
     g_object_unref( G_OBJECT( layout ) );
 
     return h;
-#else
-    WXFontStructPtr pFontStruct = font.GetFontStruct(1.0, wxGlobalDisplay());
-
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-
-    //  return (overall.ascent + overall.descent);
-    return (ascent + descent);
-#endif
 }
 
 int wxWindowX11::GetCharWidth() const
@@ -1099,7 +1087,6 @@ int wxWindowX11::GetCharWidth() const
     wxFont font(GetFont());
     wxCHECK_MSG( font.IsOk(), 0, wxT("valid window font needed") );
 
-#if wxUSE_UNICODE
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
     pango_layout_set_font_description( layout, font.GetNativeFontInfo()->description );
@@ -1109,16 +1096,6 @@ int wxWindowX11::GetCharWidth() const
     g_object_unref( G_OBJECT( layout ) );
 
     return w;
-#else
-    WXFontStructPtr pFontStruct = font.GetFontStruct(1.0, wxGlobalDisplay());
-
-    int direction, ascent, descent;
-    XCharStruct overall;
-    XTextExtents ((XFontStruct*) pFontStruct, "x", 1, &direction, &ascent,
-        &descent, &overall);
-
-    return overall.width;
-#endif
 }
 
 void wxWindowX11::DoGetTextExtent(const wxString& string,
@@ -1139,7 +1116,6 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
         return;
     }
 
-#if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
 
     PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
@@ -1152,7 +1128,7 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
 
 
     PangoRectangle rect;
-    pango_layout_line_get_extents(line, NULL, &rect);
+    pango_layout_line_get_extents(line, nullptr, &rect);
 
     if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE);
     if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE);
@@ -1164,25 +1140,6 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
     if (externalLeading) (*externalLeading) = 0;  // ??
 
     g_object_unref( G_OBJECT( layout ) );
-#else
-    WXFontStructPtr pFontStruct = fontToUse.GetFontStruct(1.0, wxGlobalDisplay());
-
-    int direction, ascent, descent2;
-    XCharStruct overall;
-    int slen = string.length();
-
-    XTextExtents((XFontStruct*) pFontStruct, (const char*) string.c_str(), slen,
-                 &direction, &ascent, &descent2, &overall);
-
-    if ( x )
-        *x = (overall.width);
-    if ( y )
-        *y = (ascent + descent2);
-    if (descent)
-        *descent = descent2;
-    if (externalLeading)
-        *externalLeading = 0;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1350,7 +1307,7 @@ void wxWindowX11::OnSysColourChanged(wxSysColourChangedEvent& event)
 }
 
 // See handler for InFocus case in app.cpp for details.
-wxWindow* g_GettingFocus = NULL;
+wxWindow* g_GettingFocus = nullptr;
 
 void wxWindowX11::OnInternalIdle()
 {
@@ -1373,7 +1330,7 @@ void wxWindowX11::OnInternalIdle()
         // no point in trying again.
         m_needsInputFocus = false;
     }
-    g_GettingFocus = NULL;
+    g_GettingFocus = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -1398,7 +1355,7 @@ static bool DoAddWindowToTable(wxWindowHash *hash, Window w, wxWindow *win)
 static inline wxWindow *DoGetWindowFromTable(wxWindowHash *hash, Window w)
 {
     wxWindowHash::iterator i = hash->find(w);
-    return i == hash->end() ? NULL : i->second;
+    return i == hash->end() ? nullptr : i->second;
 }
 
 static inline void DoDeleteWindowFromTable(wxWindowHash *hash, Window w)
@@ -1615,12 +1572,8 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             char buf[20];
 
             KeySym keySym;
-            (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
-#if wxUSE_UNICODE
+            (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, nullptr);
             int id = wxUnicodeCharXToWX(keySym);
-#else
-            int id = wxCharCodeXToWX(keySym);
-#endif
             // id may be WXK_xxx code - these are outside ASCII range, so we
             // can't just use toupper() on id.
             // Only change this if we want the raw key that was pressed,
@@ -1635,9 +1588,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
-#if wxUSE_UNICODE
             wxevent.m_uniChar = id;
-#endif
             wxevent.m_keyCode = id;
 
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));
@@ -1810,7 +1761,7 @@ bool wxWinModule::OnInit()
 
     int xscreen = DefaultScreen( xdisplay );
     Window xroot = RootWindow( xdisplay, xscreen );
-    g_eraseGC = XCreateGC( xdisplay, xroot, 0, NULL );
+    g_eraseGC = XCreateGC( xdisplay, xroot, 0, nullptr );
     XSetFillStyle( xdisplay, g_eraseGC, FillSolid );
 
     return true;

@@ -30,17 +30,17 @@ public:
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
-    virtual void SetValue(bool) wxOVERRIDE;
-    virtual bool GetValue() const wxOVERRIDE;
+    virtual void SetValue(bool) override;
+    virtual bool GetValue() const override;
 
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
+    virtual void Command(wxCommandEvent& event) override;
 
     // osx specific event handling common for all osx-ports
 
-    virtual bool        OSXHandleClicked( double timestampsec ) wxOVERRIDE;
+    virtual bool        OSXHandleClicked( double timestampsec ) override;
 protected:
-    void DoSet3StateValue(wxCheckBoxState val) wxOVERRIDE;
-    virtual wxCheckBoxState DoGet3StateValue() const wxOVERRIDE;
+    void DoSet3StateValue(wxCheckBoxState val) override;
+    virtual wxCheckBoxState DoGet3StateValue() const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
@@ -70,10 +70,10 @@ public:
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
-    virtual void SetValue(bool) wxOVERRIDE;
-    virtual bool GetValue() const wxOVERRIDE;
+    virtual void SetValue(bool) override;
+    virtual bool GetValue() const override;
     virtual void SetLabel(const wxBitmap *bitmap);
-    virtual void SetLabel( const wxString & WXUNUSED(name) ) wxOVERRIDE {}
+    virtual void SetLabel( const wxString & WXUNUSED(name) ) override {}
 
     wxDECLARE_DYNAMIC_CLASS(wxBitmapCheckBox);
 };

@@ -147,13 +147,13 @@ class wxOverlayImpl: public wxOverlay::Impl
 public:
     wxOverlayImpl();
     ~wxOverlayImpl();
-    virtual bool IsNative() const wxOVERRIDE;
-    virtual bool IsOk() wxOVERRIDE;
-    virtual void Init(wxDC* dc, int x, int y, int width, int height) wxOVERRIDE;
-    virtual void BeginDrawing(wxDC* dc) wxOVERRIDE;
-    virtual void EndDrawing(wxDC* dc) wxOVERRIDE;
-    virtual void Clear(wxDC* dc) wxOVERRIDE;
-    virtual void Reset() wxOVERRIDE;
+    virtual bool IsNative() const override;
+    virtual bool IsOk() override;
+    virtual void Init(wxDC* dc, int x, int y, int width, int height) override;
+    virtual void BeginDrawing(wxDC* dc) override;
+    virtual void EndDrawing(wxDC* dc) override;
+    virtual void Clear(wxDC* dc) override;
+    virtual void Reset() override;
 
     wxBitmap m_bmpSaved;
     int m_x;
@@ -166,7 +166,7 @@ public:
 
 wxOverlayImpl::wxOverlayImpl()
 {
-     m_window = NULL ;
+     m_window = nullptr ;
      m_x = m_y = m_width = m_height = 0 ;
 }
 
@@ -261,7 +261,7 @@ wxOverlay::wxOverlay()
 {
     m_impl = Create();
 #if defined(wxHAS_GENERIC_OVERLAY) && defined(wxHAS_NATIVE_OVERLAY)
-    if (m_impl == NULL)
+    if (m_impl == nullptr)
         m_impl = new wxOverlayImpl;
 #endif
     m_inDrawing = false;

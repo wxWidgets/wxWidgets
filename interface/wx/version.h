@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_version */
-//@{
+///@{
 
 /**
     This is a macro which evaluates to @true if the current wxWidgets version
@@ -39,5 +39,5 @@
 */
 #define wxCHECK_VERSION_FULL( major, minor, release, subrel )
 
-//@}
+///@}
 

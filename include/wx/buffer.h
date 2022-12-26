@@ -133,7 +133,7 @@ public:
     CharType *release() const
     {
         if ( m_data == GetNullData() )
-            return NULL;
+            return nullptr;
 
         wxASSERT_MSG( m_data->m_owned, wxT("can't release non-owned buffer") );
         wxASSERT_MSG( m_data->m_ref == 1, wxT("can't release shared buffer") );
@@ -141,7 +141,7 @@ public:
         CharType * const p = m_data->Get();
 
         wxScopedCharTypeBuffer *self = const_cast<wxScopedCharTypeBuffer*>(this);
-        self->m_data->Set(NULL, 0);
+        self->m_data->Set(nullptr, 0);
         self->DecRef();
 
         return p;
@@ -176,7 +176,7 @@ protected:
         }
     };
 
-    // placeholder for NULL string, to simplify this code
+    // placeholder for null string, to simplify this code
     static Data *GetNullData()
     {
         return static_cast<Data *>(wxPrivate::GetUntypedNullData());
@@ -252,7 +252,7 @@ protected:
 public:
     typedef T CharType;
 
-    wxCharTypeBuffer(const CharType *str = NULL, size_t len = wxNO_LEN)
+    wxCharTypeBuffer(const CharType *str = nullptr, size_t len = wxNO_LEN)
     {
         if ( str )
         {
@@ -365,7 +365,7 @@ public:
     wxCharBuffer(const wxScopedCharTypeBufferBase& buf)
         : wxCharTypeBufferBase(buf) {}
 
-    wxCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
+    wxCharBuffer(const CharType *str = nullptr) : wxCharTypeBufferBase(str) {}
     wxCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
     wxCharBuffer(const wxCStrData& cstr);
@@ -382,55 +382,47 @@ public:
     wxWCharBuffer(const wxScopedCharTypeBufferBase& buf)
         : wxCharTypeBufferBase(buf) {}
 
-    wxWCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
+    wxWCharBuffer(const CharType *str = nullptr) : wxCharTypeBufferBase(str) {}
     wxWCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
     wxWCharBuffer(const wxCStrData& cstr);
 };
 
-// wxCharTypeBuffer<T> implicitly convertible to T*
-template <typename T>
-class wxWritableCharTypeBuffer : public wxCharTypeBuffer<T>
+// wxCharTypeBuffer<T> implicitly convertible to T*, for char and wchar_t,
+// implemented slightly differently because in one case we must be
+// constructible from a buffer and in another -- from a raw pointer.
+
+class wxWritableCharBuffer : public wxScopedCharTypeBuffer<char>
 {
 public:
-    typedef typename wxScopedCharTypeBuffer<T>::CharType CharType;
+    explicit wxWritableCharBuffer(const wxScopedCharTypeBuffer<char>& src)
+        : wxScopedCharTypeBuffer<char>(src) {}
 
-    wxWritableCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src)
-        : wxCharTypeBuffer<T>(src) {}
-    // FIXME-UTF8: this won't be needed after converting mb_str()/wc_str() to
-    //             always return a buffer
-    //             + we should derive this class from wxScopedCharTypeBuffer
-    //               then
-    wxWritableCharTypeBuffer(const CharType *str = NULL)
-        : wxCharTypeBuffer<T>(str) {}
-
-    operator CharType*() { return this->data(); }
+    operator char*() { return data(); }
 };
 
-typedef wxWritableCharTypeBuffer<char> wxWritableCharBuffer;
-typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
+class wxWritableWCharBuffer : public wxCharTypeBuffer<wchar_t>
+{
+public:
+    explicit wxWritableWCharBuffer(const CharType *str)
+        : wxCharTypeBuffer<wchar_t>(str) {}
+
+    operator wchar_t*() { return data(); }
+};
 
 
-#if wxUSE_UNICODE
-    #define wxWxCharBuffer wxWCharBuffer
+// Compatibility defines, don't use them in the new code.
+#define wxWxCharBuffer wxWCharBuffer
 
-    #define wxMB2WXbuf wxWCharBuffer
-    #define wxWX2MBbuf wxCharBuffer
-    #if wxUSE_UNICODE_WCHAR
-        #define wxWC2WXbuf wxChar*
-        #define wxWX2WCbuf wxChar*
-    #elif wxUSE_UNICODE_UTF8
-        #define wxWC2WXbuf wxWCharBuffer
-        #define wxWX2WCbuf wxWCharBuffer
-    #endif
-#else // ANSI
-    #define wxWxCharBuffer wxCharBuffer
-
-    #define wxMB2WXbuf wxChar*
-    #define wxWX2MBbuf wxChar*
-    #define wxWC2WXbuf wxCharBuffer
+#define wxMB2WXbuf wxWCharBuffer
+#define wxWX2MBbuf wxCharBuffer
+#if wxUSE_UNICODE_WCHAR
+    #define wxWC2WXbuf wxChar*
+    #define wxWX2WCbuf wxChar*
+#elif wxUSE_UNICODE_UTF8
+    #define wxWC2WXbuf wxWCharBuffer
     #define wxWX2WCbuf wxWCharBuffer
-#endif // Unicode/ANSI
+#endif
 
 // ----------------------------------------------------------------------------
 // A class for holding growable data buffers (not necessarily strings)
@@ -448,7 +440,7 @@ public:
     // everything is private as it can only be used by wxMemoryBuffer
 private:
     wxMemoryBufferData(size_t size = wxMemoryBufferData::DefBufSize)
-        : m_data(size ? malloc(size) : NULL), m_size(size), m_len(0), m_ref(0)
+        : m_data(size ? malloc(size) : nullptr), m_size(size), m_len(0), m_ref(0)
     {
     }
     ~wxMemoryBufferData() { free(m_data); }
@@ -483,13 +475,13 @@ private:
 
     void *release()
     {
-        if ( m_data == NULL )
-            return NULL;
+        if ( m_data == nullptr )
+            return nullptr;
 
         wxASSERT_MSG( m_ref == 1, "can't release shared buffer" );
 
         void *p = m_data;
-        m_data = NULL;
+        m_data = nullptr;
         m_len =
         m_size = 0;
 

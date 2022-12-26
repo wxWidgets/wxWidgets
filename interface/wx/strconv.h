@@ -115,7 +115,7 @@ public:
         which it output to @e dst. If the length of the resulting wide
         string is greater than @e dstLen, an error is returned. Note that if
         @a srcLen bytes don't include @c NUL characters, the resulting wide
-        string is not @c NUL-terminated neither.
+        string is not @c NUL-terminated either.
 
         If @a srcLen is @c wxNO_LEN, the function supposes that the string is
         properly (i.e. as necessary for the encoding handled by this
@@ -128,7 +128,7 @@ public:
 
         Example of use of this function:
         @code
-        size_t dstLen = conv.ToWChar(NULL, 0, src);
+        size_t dstLen = conv.ToWChar(nullptr, 0, src);
         if ( dstLen == wxCONV_FAILED )
             ... handle error ...
         wchar_t *dst = new wchar_t[dstLen];
@@ -145,7 +145,7 @@ public:
             Pointer to output buffer of the size of at least @a dstLen or @NULL.
         @param dstLen
             Maximal number of characters to be written to the output buffer if
-            @a dst is non-@NULL, unused otherwise.
+            @a dst is non-null, unused otherwise.
         @param src
             Point to the source string, must not be @NULL.
         @param srcLen
@@ -155,7 +155,7 @@ public:
 
         @return
             The number of characters written (or which would have been written
-            if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
+            if it were non-null) to @a dst or @c wxCONV_FAILED on error.
     */
     virtual size_t ToWChar(wchar_t* dst, size_t dstLen, const char* src,
                            size_t srcLen = wxNO_LEN) const;
@@ -172,7 +172,7 @@ public:
             Pointer to output buffer of the size of at least @a dstLen or @NULL.
         @param dstLen
             Maximal number of characters to be written to the output buffer if
-            @a dst is non-@NULL, unused otherwise.
+            @a dst is non-null, unused otherwise.
         @param src
             Point to the source string, must not be @NULL.
         @param srcLen
@@ -181,10 +181,10 @@ public:
             including the terminating @c NUL character.
 
         @return
-            If @a dst is non-@NULL, the number of characters actually written to
+            If @a dst is non-null, the number of characters actually written to
             it. If @a dst is @NULL, the returned value is at least equal to the
             number of characters that would have been written out if it were
-            non-@NULL, but can be larger than it under the platforms using
+            non-null, but can be larger than it under the platforms using
             UTF-16 as @c wchar_t encoding (this allows a useful optimization in
             the implementation of this function for UTF-32). In any case,
             @c wxCONV_FAILED is returned on conversion error.
@@ -200,7 +200,7 @@ public:
         of allocating the buffer of the necessary size itself. Its parameters
         have the same meaning as for ToWChar(), in particular @a inLen can be
         specified explicitly in which case exactly that many characters are
-        converted and @a outLen receives (if non-@NULL) exactly the
+        converted and @a outLen receives (if non-null) exactly the
         corresponding number of wide characters, whether the last one of them
         is @c NUL or not. However if @c inLen is @c wxNO_LEN, then @c outLen
         doesn't count the trailing @c NUL even if it is always present in this
@@ -231,18 +231,10 @@ public:
      */
     wxWCharBuffer cMB2WC(const wxCharBuffer& buf) const;
 
-    //@{
     /**
-        Converts from multibyte encoding to the current wxChar type (which
-        depends on whether wxUSE_UNICODE is set to 1).
-
-        If wxChar is char, it returns the parameter unaltered. If wxChar is
-        wchar_t, it returns the result in a wxWCharBuffer. The macro wxMB2WXbuf
-        is defined as the correct return type (without const).
+        Converts from multibyte encoding to `wchar_t`.
     */
-    const char* cMB2WX(const char* psz) const;
     wxWCharBuffer cMB2WX(const char* psz) const;
-    //@}
 
     /**
         Converts from Unicode to multibyte encoding by calling FromWChar() and
@@ -275,7 +267,7 @@ public:
      */
     wxCharBuffer cWC2MB(const wxWCharBuffer& buf) const;
 
-    //@{
+    ///@{
     /**
         Converts from Unicode to the current wxChar type.
 
@@ -285,9 +277,9 @@ public:
     */
     const wchar_t* cWC2WX(const wchar_t* psz) const;
     wxCharBuffer cWC2WX(const wchar_t* psz) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Converts from the current wxChar type to multibyte encoding.
 
@@ -297,9 +289,9 @@ public:
     */
     const char* cWX2MB(const wxChar* psz) const;
     wxCharBuffer cWX2MB(const wxChar* psz) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Converts from the current wxChar type to Unicode.
 
@@ -309,7 +301,7 @@ public:
     */
     const wchar_t* cWX2WC(const wxChar* psz) const;
     wxWCharBuffer cWX2WC(const wxChar* psz) const;
-    //@}
+    ///@}
 
     /**
         @deprecated This function is deprecated, please use ToWChar() instead.
@@ -320,13 +312,13 @@ public:
         If @a out is @NULL, only the length of the string which would result
         from the conversion is calculated and returned. Note that this is the
         length and not size, i.e. the returned value does not include the
-        trailing @c NUL. But when the function is called with a non-@NULL @a
+        trailing @c NUL. But when the function is called with a non-null @a
         out buffer, the @a outLen parameter should be one more to allow to
         properly @c NUL-terminate the string.
 
         So to properly use this function you need to write:
         @code
-            size_t lenConv = conv.MB2WC(NULL, in, 0);
+            size_t lenConv = conv.MB2WC(nullptr, in, 0);
             if ( lenConv == wxCONV_FAILED )
                 ... handle error ...
             // allocate 1 more character for the trailing NUL and also pass
@@ -357,7 +349,7 @@ public:
         Converts from Unicode to multibyte encoding.
         The semantics of this function (including the return value meaning) is
         the same as for wxMBConv::MB2WC. Notice that when the function is
-        called with a non-@NULL buffer, the @a n parameter should be the size
+        called with a non-null buffer, the @a n parameter should be the size
         of the buffer and so it should take into account the trailing @c NUL,
         which might take two or four bytes for some encodings (UTF-16 and
         UTF-32) and not one, i.e. GetMBNulLen().

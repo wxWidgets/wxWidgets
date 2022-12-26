@@ -72,6 +72,10 @@
         appearance but not all fonts are available in this quality,
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
+    @flag{msw.window.no-composited}
+        If set to 1, disables the use of composited, i.e. double-buffered,
+        windows by default in wxMSW. This is not recommended, but can be useful
+        for debugging or working around redraw problems in the existing code.
     @endFlagTable
 
 
@@ -111,14 +115,6 @@
         Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on macOS but allows
         the selection of files from any of the supported types. Setting this to 1 shows a wxChoice
         for selection (if there is more than one supported filetype).
-    @endFlagTable
-
-
-    @section sysopt_motif Motif
-
-    @beginFlagTable
-    @flag{motif.largebuttons}
-        If 1, uses a bigger default size for wxButtons.
     @endFlagTable
 
 
@@ -173,12 +169,12 @@ public:
     */
     static bool IsFalse(const wxString& name);
 
-    //@{
+    ///@{
     /**
         Sets an option. The function is case-insensitive to @a name.
     */
     static void SetOption(const wxString& name, const wxString& value);
     static void SetOption(const wxString& name, int value);
-    //@}
+    ///@}
 };
 

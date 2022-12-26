@@ -66,7 +66,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -103,11 +102,11 @@ wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
 
 void wxGaugeBase::InitProgressIndicatorIfNeeded()
 {
-    m_appProgressIndicator = NULL;
+    m_appProgressIndicator = nullptr;
     if ( HasFlag(wxGA_PROGRESS) )
     {
         wxWindow* topParent = wxGetTopLevelParent(this);
-        if ( topParent != NULL )
+        if ( topParent != nullptr )
         {
             m_appProgressIndicator =
                 new wxAppProgressIndicator(topParent, GetRange());

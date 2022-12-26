@@ -22,9 +22,6 @@ class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 public:
     wxCursor() {}
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
-#endif
 #if wxUSE_IMAGE
     wxCursor(const wxImage& image);
     wxCursor(const char* const* xpmData);

@@ -77,13 +77,13 @@ public:
             When item matches an entry, but the entry's string representation
             is not exactly the same (case mismatch, for example), then the
             true item string should be written back to here, if it is not
-            a NULL pointer.
+            @NULL.
 
         @remarks
             Default implementation always return true and does not alter
             trueItem.
     */
-    virtual bool FindItem(const wxString& item, wxString* trueItem=NULL);
+    virtual bool FindItem(const wxString& item, wxString* trueItem = nullptr);
 
     /**
         The derived class may implement this to return adjusted size for the
@@ -792,7 +792,7 @@ public:
     */
     void SetMainControl(wxWindow* win);
 
-    //@{
+    ///@{
     /**
         Attempts to set the control margins. When margins are given as wxPoint,
         x indicates the left and y the top margin. Use -1 to indicate that
@@ -805,7 +805,7 @@ public:
     */
     bool SetMargins(const wxPoint& pt);
     bool SetMargins(wxCoord left, wxCoord top = -1);
-    //@}
+    ///@}
 
     /**
         Set side of the control to which the popup will align itself. Valid

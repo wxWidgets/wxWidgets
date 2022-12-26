@@ -204,10 +204,10 @@ public:
 
         @since 2.9.1
      */
-    //@{
+    ///@{
     void SetBitmapMargins(wxCoord x, wxCoord y);
     void SetBitmapMargins(const wxSize& sz);
-    //@}
+    ///@}
 
     /**
         Set the position at which the bitmap is displayed.

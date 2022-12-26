@@ -163,7 +163,7 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongFromString", "[numform
 
     WX_ASSERT_FAILS_WITH_ASSERT
     (
-        wxNumberFormatter::FromString("123", static_cast<long *>(0))
+        wxNumberFormatter::FromString("123", static_cast<long *>(nullptr))
     );
 
     long l;
@@ -208,7 +208,7 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::LongLongFromString", "[num
 
     WX_ASSERT_FAILS_WITH_ASSERT
     (
-        wxNumberFormatter::FromString("123", static_cast<wxLongLong_t *>(0))
+        wxNumberFormatter::FromString("123", static_cast<wxLongLong_t *>(nullptr))
     );
 
     wxLongLong_t l;
@@ -307,7 +307,7 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleFromString", "[numfo
 
     WX_ASSERT_FAILS_WITH_ASSERT
     (
-        wxNumberFormatter::FromString("123", static_cast<double *>(0))
+        wxNumberFormatter::FromString("123", static_cast<double *>(nullptr))
     );
 
     double d;

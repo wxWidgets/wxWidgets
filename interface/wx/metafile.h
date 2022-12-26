@@ -135,7 +135,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 
 /**
     Given a filename for an existing, valid metafile (as constructed using
@@ -169,5 +169,5 @@ bool wxMakeMetafilePlaceable(const wxString& filename,
                               int maxX, int maxY,
                               float scale = 1.0);
 
-//@}
+///@}
 

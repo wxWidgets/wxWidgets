@@ -80,17 +80,17 @@ class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
 {
     wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
 public:
-    wxSampleMultiButtonEditor() {}
-    virtual ~wxSampleMultiButtonEditor() {}
+    wxSampleMultiButtonEditor() = default;
+    virtual ~wxSampleMultiButtonEditor() = default;
 
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propGrid,
                                            wxPGProperty* property,
                                            const wxPoint& pos,
-                                           const wxSize& sz ) const wxOVERRIDE;
+                                           const wxSize& sz ) const override;
     virtual bool OnEvent( wxPropertyGrid* propGrid,
                           wxPGProperty* property,
                           wxWindow* ctrl,
-                          wxEvent& event ) const wxOVERRIDE;
+                          wxEvent& event ) const override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSampleMultiButtonEditor, wxPGTextCtrlEditor);
@@ -170,12 +170,12 @@ public:
     {
     }
 
-    virtual wxObject* Clone() const wxOVERRIDE
+    virtual wxObject* Clone() const override
     {
         return new wxInvalidWordValidator(m_invalidWord);
     }
 
-    virtual bool Validate(wxWindow* WXUNUSED(parent)) wxOVERRIDE
+    virtual bool Validate(wxWindow* WXUNUSED(parent)) override
     {
         wxTextCtrl* tc = wxDynamicCast(GetWindow(), wxTextCtrl);
         wxCHECK_MSG(tc, true, "validator window must be wxTextCtrl");
@@ -219,11 +219,9 @@ wxVectorProperty::wxVectorProperty( const wxString& label,
     AddPrivateChild( new wxFloatProperty("Z",wxPG_LABEL,value.z) );
 }
 
-wxVectorProperty::~wxVectorProperty() { }
-
 void wxVectorProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( !HasAnyChild() ) return;
     const wxVector3f& vector = wxVector3fRefFromVariant(m_value);
     Item(0)->SetValue( vector.x );
     Item(1)->SetValue( vector.y );
@@ -270,11 +268,9 @@ wxTriangleProperty::wxTriangleProperty( const wxString& label,
     AddPrivateChild( new wxVectorProperty("C",wxPG_LABEL,value.c) );
 }
 
-wxTriangleProperty::~wxTriangleProperty() { }
-
 void wxTriangleProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( !HasAnyChild() ) return;
     const wxTriangle& triangle = wxTriangleRefFromVariant(m_value);
     Item(0)->SetValue( WXVARIANT(triangle.a) );
     Item(1)->SetValue( WXVARIANT(triangle.b) );
@@ -314,7 +310,7 @@ public:
     }
 
     virtual bool DoShowDialog( wxPropertyGrid* WXUNUSED(propGrid),
-                               wxPGProperty* WXUNUSED(property) ) wxOVERRIDE
+                               wxPGProperty* WXUNUSED(property) ) override
     {
         wxString s = ::wxGetSingleChoice("Message",
                                          "Caption",
@@ -350,13 +346,13 @@ public:
     }
 
     // Set editor to have button
-    virtual const wxPGEditor* DoGetEditorClass() const wxOVERRIDE
+    virtual const wxPGEditor* DoGetEditorClass() const override
     {
         return wxPGEditor_TextCtrlAndButton;
     }
 
     // Set what happens on button click
-    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE
+    virtual wxPGEditorDialogAdapter* GetEditorDialog() const override
     {
         return new wxSingleChoiceDialogAdapter(m_choices);
     }
@@ -950,7 +946,6 @@ static const wxString _fs_windowstyle_labels[] = {
     "wxSUNKEN_BORDER",
     "wxRAISED_BORDER",
     "wxNO_BORDER",
-    "wxTRANSPARENT_WINDOW",
     "wxTAB_TRAVERSAL",
     "wxWANTS_CHARS",
     "wxVSCROLL",
@@ -965,7 +960,6 @@ static const long _fs_windowstyle_values[] = {
     wxSUNKEN_BORDER,
     wxRAISED_BORDER,
     wxNO_BORDER,
-    wxTRANSPARENT_WINDOW,
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
     wxVSCROLL,
@@ -1657,11 +1651,11 @@ void FormMain::PopulateWithLibraryConfig ()
     ADD_WX_LIB_CONF( wxUSE_GUI )
 
     ADD_WX_LIB_CONF_GROUP("Compatibility Settings")
-#if defined(WXWIN_COMPATIBILITY_2_8)
-    ADD_WX_LIB_CONF( WXWIN_COMPATIBILITY_2_8 )
-#endif
 #if defined(WXWIN_COMPATIBILITY_3_0)
     ADD_WX_LIB_CONF( WXWIN_COMPATIBILITY_3_0 )
+#endif
+#if defined(WXWIN_COMPATIBILITY_3_2)
+    ADD_WX_LIB_CONF( WXWIN_COMPATIBILITY_3_2 )
 #endif
 #ifdef wxFONT_SIZE_COMPATIBILITY
     ADD_WX_LIB_CONF( wxFONT_SIZE_COMPATIBILITY )
@@ -1760,13 +1754,13 @@ public:
 
     // Return false here to indicate unhandled events should be
     // propagated to manager's parent, as normal.
-    virtual bool IsHandlingAllEvents() const wxOVERRIDE { return false; }
+    virtual bool IsHandlingAllEvents() const override { return false; }
 
 protected:
 
     virtual wxPGProperty* DoInsert( wxPGProperty* parent,
                                     int index,
-                                    wxPGProperty* property ) wxOVERRIDE
+                                    wxPGProperty* property ) override
     {
         return wxPropertyGridPage::DoInsert(parent,index,property);
     }
@@ -1951,11 +1945,11 @@ void FormMain::ReplaceGrid(int style, int extraStyle)
 // -----------------------------------------------------------------------
 
 FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size)
-    : wxFrame((wxFrame *)NULL, -1, title, pos, size,
+    : wxFrame(nullptr, -1, title, pos, size,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
                 wxTAB_TRAVERSAL|wxCLOSE_BOX) )
-    , m_pPropGridManager(NULL)
-    , m_propGrid(NULL)
+    , m_pPropGridManager(nullptr)
+    , m_propGrid(nullptr)
     , m_hasHeader(false)
     , m_labelEditingEnabled(false)
 {
@@ -2196,7 +2190,7 @@ void FormMain::OnInsertPropClick( wxCommandEvent& WXUNUSED(event) )
 {
     wxString propLabel;
 
-    if ( !m_pPropGridManager->GetGrid()->GetRoot()->GetChildCount() )
+    if ( !m_pPropGridManager->GetGrid()->GetRoot()->HasAnyChild() )
     {
         wxMessageBox("No items to relate - first add some with Append.");
         return;
@@ -2262,7 +2256,7 @@ void FormMain::OnInsertCatClick( wxCommandEvent& WXUNUSED(event) )
 {
     wxString propLabel;
 
-    if ( !m_pPropGridManager->GetGrid()->GetRoot()->GetChildCount() )
+    if ( !m_pPropGridManager->GetGrid()->GetRoot()->HasAnyChild() )
     {
         wxMessageBox("No items to relate - first add some with Append.");
         return;
@@ -2307,7 +2301,7 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
     for (;;)
     {
-        if ( p->GetChildCount() == 0 )
+        if ( !p->HasAnyChild() )
             break;
 
         unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
@@ -2713,15 +2707,11 @@ void FormMain::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     wxString msg;
     msg.Printf( "wxPropertyGrid Sample"
-#if wxUSE_UNICODE
   #if defined(wxUSE_UNICODE_UTF8) && wxUSE_UNICODE_UTF8
                 " <utf-8>"
   #else
                 " <unicode>"
   #endif
-#else
-                " <ansi>"
-#endif
 #ifdef __WXDEBUG__
                 " <debug>"
 #else
@@ -3181,7 +3171,7 @@ void FormMain::OnIdle( wxIdleEvent& event )
 {
     /*
     // This code is useful for debugging focus problems
-    static wxWindow* last_focus = (wxWindow*) NULL;
+    static wxWindow* last_focus = nullptr;
 
     wxWindow* cur_focus = ::wxWindow::FindFocus();
 
@@ -3206,10 +3196,10 @@ void FormMain::OnIdle( wxIdleEvent& event )
 wxPGProperty* GetRealRoot(wxPropertyGrid *grid)
 {
     wxPGProperty *property = grid->GetRoot();
-    return property ? grid->GetFirstChild(property) : NULL;
+    return property ? grid->GetFirstChild(property) : nullptr;
 }
 
-void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, int width[3])
+void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
 {
     wxPropertyGridPageState *state = grid->GetState();
 
@@ -3224,9 +3214,9 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
     {
         wxPGProperty* p = root->Item(ii);
 
-        width[0] = wxMax(width[0], state->GetColumnFullWidth(dc, p, 0));
-        width[1] = wxMax(width[1], state->GetColumnFullWidth(dc, p, 1));
-        width[2] = wxMax(width[2], state->GetColumnFullWidth(dc, p, 2));
+        width[0] = wxMax(width[0], state->GetColumnFullWidth(p, 0));
+        width[1] = wxMax(width[1], state->GetColumnFullWidth(p, 1));
+        width[2] = wxMax(width[2], state->GetColumnFullWidth(p, 2));
     }
     for (ii = 0; ii < root->GetChildCount(); ++ii)
     {
@@ -3234,7 +3224,7 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
         if (p->IsExpanded())
         {
             int w[3];
-            GetColumnWidths(dc, grid, p, w);
+            GetColumnWidths(grid, p, w);
             width[0] = wxMax(width[0], w[0]);
             width[1] = wxMax(width[1], w[1]);
             width[2] = wxMax(width[2], w[2]);
@@ -3244,13 +3234,6 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
     width[0] = wxMax(width[0], minWidths[0]);
     width[1] = wxMax(width[1], minWidths[1]);
     width[2] = wxMax(width[2], minWidths[2]);
-}
-
-void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
-{
-    wxClientDC dc(grid);
-    dc.SetFont(grid->GetFont());
-    GetColumnWidths(dc, grid, root, width);
 }
 
 void SetMinSize(wxPropertyGrid *grid)
@@ -3336,7 +3319,7 @@ struct PropertyGridPopup : wxPopupWindow
         Fit();
     }
 
-    void Fit() wxOVERRIDE
+    void Fit() override
     {
         ::SetMinSize(m_grid);
         m_sizer->Fit(m_panel);
@@ -3358,11 +3341,11 @@ wxEND_EVENT_TABLE()
 
 void FormMain::OnShowPopup(wxCommandEvent& WXUNUSED(event))
 {
-    static PropertyGridPopup *popup = NULL;
+    static PropertyGridPopup *popup = nullptr;
     if ( popup )
     {
         delete popup;
-        popup = NULL;
+        popup = nullptr;
         return;
     }
     popup = new PropertyGridPopup(this);

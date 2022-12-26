@@ -28,7 +28,7 @@
             wxLogError(_("Another program instance is already running, aborting."));
 
             delete m_checker; // OnExit() won't be called if we return false
-            m_checker = NULL;
+            m_checker = nullptr;
 
             return false;
         }

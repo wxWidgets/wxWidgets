@@ -20,21 +20,21 @@ public:
     virtual ~wxStandardPaths();
 
     // implement base class pure virtuals
-    virtual wxString GetExecutablePath() const wxOVERRIDE;
-    virtual wxString GetConfigDir() const wxOVERRIDE;
-    virtual wxString GetUserConfigDir() const wxOVERRIDE;
-    virtual wxString GetDataDir() const wxOVERRIDE;
-    virtual wxString GetLocalDataDir() const wxOVERRIDE;
-    virtual wxString GetUserDataDir() const wxOVERRIDE;
-    virtual wxString GetPluginsDir() const wxOVERRIDE;
-    virtual wxString GetResourcesDir() const wxOVERRIDE;
+    virtual wxString GetExecutablePath() const override;
+    virtual wxString GetConfigDir() const override;
+    virtual wxString GetUserConfigDir() const override;
+    virtual wxString GetDataDir() const override;
+    virtual wxString GetLocalDataDir() const override;
+    virtual wxString GetUserDataDir() const override;
+    virtual wxString GetPluginsDir() const override;
+    virtual wxString GetResourcesDir() const override;
     virtual wxString
     GetLocalizedResourcesDir(const wxString& lang,
-                             ResourceCat category = ResourceCat_None) const wxOVERRIDE;
-    virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
+                             ResourceCat category = ResourceCat_None) const override;
+    virtual wxString GetUserDir(Dir userDir) const override;
     virtual wxString MakeConfigFileName(const wxString& basename,
                                         ConfigFileConv conv = ConfigFileConv_Ext
-                                        ) const wxOVERRIDE;
+                                        ) const override;
 
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating

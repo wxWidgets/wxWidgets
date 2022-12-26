@@ -62,14 +62,14 @@ private:
     {
     public:
         virtual ~ImageGraphicsContextLifeCycle() {}
-        virtual wxString GetIdForFileName () const wxOVERRIDE { return "image"; }
-        virtual wxString GetExtensionForFileName () const wxOVERRIDE { return "png"; }
-        virtual bool UseImageComparison() const wxOVERRIDE { return true; }
-        virtual bool PlatformIndependent() const wxOVERRIDE { return false; }
+        virtual wxString GetIdForFileName () const override { return "image"; }
+        virtual wxString GetExtensionForFileName () const override { return "png"; }
+        virtual bool UseImageComparison() const override { return true; }
+        virtual bool PlatformIndependent() const override { return false; }
         virtual wxGraphicsContext *BuildNewContext (wxSize expectedSize,
-            double pointsPerInch, const wxFileName &targetFileName) wxOVERRIDE;
-        virtual void SaveBuiltContext (wxGraphicsContext *&gc) wxOVERRIDE;
-        virtual void CleanUp (wxGraphicsContext *gc) wxOVERRIDE;
+            double pointsPerInch, const wxFileName &targetFileName) override;
+        virtual void SaveBuiltContext (wxGraphicsContext *&gc) override;
+        virtual void CleanUp (wxGraphicsContext *gc) override;
     private:
         wxImage *m_image;
         wxString m_targetFileName;
@@ -81,14 +81,14 @@ private:
     class SvgGraphicsContextLifeCycle: public DrawingTestGCFactory
     {
     public:
-        virtual wxString GetIdForFileName () const wxOVERRIDE { return "svg"; }
-        virtual wxString GetExtensionForFileName () const wxOVERRIDE { return "svg"; }
-        virtual bool UseImageComparison() const wxOVERRIDE { return false; }
-        virtual bool PlatformIndependent() const wxOVERRIDE { return true; }
+        virtual wxString GetIdForFileName () const override { return "svg"; }
+        virtual wxString GetExtensionForFileName () const override { return "svg"; }
+        virtual bool UseImageComparison() const override { return false; }
+        virtual bool PlatformIndependent() const override { return true; }
         virtual wxGraphicsContext *BuildNewContext (wxSize expectedSize,
-            double pointsPerInch, const wxFileName &targetFileName) wxOVERRIDE;
-        virtual void SaveBuiltContext (wxGraphicsContext *&gc) wxOVERRIDE;
-        virtual void CleanUp (wxGraphicsContext *gc) wxOVERRIDE;
+            double pointsPerInch, const wxFileName &targetFileName) override;
+        virtual void SaveBuiltContext (wxGraphicsContext *&gc) override;
+        virtual void CleanUp (wxGraphicsContext *gc) override;
 
     private:
         wxSVGFileDC *m_svgFileDc;

@@ -36,7 +36,7 @@ class WXDLLIMPEXP_CORE wxPickerBase : public wxNavigationEnabled<wxControl>
 {
 public:
     // ctor: text is the associated text control
-    wxPickerBase() : m_text(NULL), m_picker(NULL), m_sizer(NULL)
+    wxPickerBase() : m_text(nullptr), m_picker(nullptr), m_sizer(nullptr)
         { }
     virtual ~wxPickerBase() {}
 
@@ -87,7 +87,7 @@ public:     // public API
     }
 
     bool HasTextCtrl() const
-        { return m_text != NULL; }
+        { return m_text != nullptr; }
     wxTextCtrl *GetTextCtrl()
         { return m_text; }
     wxControl *GetPickerCtrl()
@@ -105,7 +105,7 @@ public:     // public API
 protected:
     // overridden base class methods
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
+    virtual void DoSetToolTip(wxToolTip *tip) override;
 #endif // wxUSE_TOOLTIPS
 
 
@@ -155,7 +155,7 @@ protected:
     void PostCreation();
 
 protected:
-    wxTextCtrl *m_text;     // can be NULL
+    wxTextCtrl *m_text;     // can be null
     wxControl *m_picker;
     wxBoxSizer *m_sizer;
 

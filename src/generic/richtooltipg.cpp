@@ -61,13 +61,16 @@ public:
     wxRichToolTipPopup(wxWindow* parent,
                        const wxString& title,
                        const wxString& message,
-                       const wxIcon& icon,
+                       const wxBitmapBundle& icon,
                        wxTipKind tipKind,
                        const wxFont& titleFont_) :
         m_timer(this)
     {
         Create(parent, wxFRAME_SHAPED);
 
+        // Move to the display where it will be shown,
+        // so below calculations are based on the correct DPI.
+        Move(GetTipPoint(), wxSIZE_ALLOW_MINUS_ONE);
 
         wxBoxSizer* const sizerTitle = new wxBoxSizer(wxHORIZONTAL);
         if ( icon.IsOk() )
@@ -89,7 +92,7 @@ public:
 #ifdef HAVE_MSW_THEME
             // When using themes MSW tooltips use larger bluish version of the
             // normal font.
-            if ( UseTooltipTheme() )
+            if ( wxUxThemeIsActive() )
             {
                 titleFont.MakeLarger();
 
@@ -133,12 +136,12 @@ public:
         wxSizer* sizerText = wrapper.CreateSizer(message, -1 /* No wrapping */);
 
 #ifdef HAVE_MSW_THEME
-        if ( icon.IsOk() && UseTooltipTheme() )
+        if ( icon.IsOk() && wxUxThemeIsActive() )
         {
             // Themed tooltips under MSW align the text with the title, not
             // with the icon, so use a helper horizontal sizer in this case.
             wxBoxSizer* const sizerTextIndent = new wxBoxSizer(wxHORIZONTAL);
-            sizerTextIndent->AddSpacer(icon.GetWidth());
+            sizerTextIndent->AddSpacer(icon.GetPreferredLogicalSizeFor(this).x);
             sizerTextIndent->Add(sizerText,
                                     wxSizerFlags().Border(wxLEFT).Centre());
 
@@ -168,7 +171,7 @@ public:
         {
             // Determine the best colour(s) to use on our own.
 #ifdef HAVE_MSW_THEME
-            if ( UseTooltipTheme() )
+            if ( wxUxThemeIsActive() )
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
 
@@ -264,30 +267,18 @@ public:
     }
 
 protected:
-    virtual void OnDismiss() wxOVERRIDE
+    virtual void OnDismiss() override
     {
         Destroy();
     }
 
 private:
-#ifdef HAVE_MSW_THEME
-    // Returns non-NULL theme only if we're using Win7-style tooltips.
-    static bool UseTooltipTheme()
-    {
-        // Even themed applications under XP still use "classic" tooltips.
-        if ( wxGetWinVersion() <= wxWinVersion_XP )
-            return false;
-        else
-            return wxUxThemeIsActive();
-    }
-#endif // HAVE_MSW_THEME
-
     // For now we just hard code the tip height, would be nice to do something
     // smarter in the future.
     static int GetTipHeight()
     {
 #ifdef HAVE_MSW_THEME
-        if ( UseTooltipTheme() )
+        if ( wxUxThemeIsActive() )
             return 20;
 #endif // HAVE_MSW_THEME
 
@@ -343,7 +334,7 @@ private:
         // The size is the vertical size and the offset is the distance from
         // edge for asymmetric tips, currently hard-coded to be the same as the
         // size.
-        const int tipSize = GetTipHeight();
+        const int tipSize = FromDIP(GetTipHeight());
         const int tipOffset = tipSize;
 
         // The horizontal position of the tip.
@@ -613,7 +604,7 @@ wxRichToolTipGenericImpl::SetBackgroundColour(const wxColour& col,
     m_colEnd = colEnd;
 }
 
-void wxRichToolTipGenericImpl::SetCustomIcon(const wxIcon& icon)
+void wxRichToolTipGenericImpl::SetCustomIcon(const wxBitmapBundle& icon)
 {
     m_icon = icon;
 }
@@ -628,7 +619,7 @@ void wxRichToolTipGenericImpl::SetStandardIcon(int icon)
             // Although we don't use this icon in a list, we need a smallish
             // icon here and not an icon of a typical message box size so use
             // wxART_LIST to get it.
-            m_icon = wxArtProvider::GetIcon
+            m_icon = wxArtProvider::GetBitmapBundle
                      (
                         wxArtProvider::GetMessageBoxIconId(icon),
                         wxART_LIST
@@ -640,7 +631,7 @@ void wxRichToolTipGenericImpl::SetStandardIcon(int icon)
             break;
 
         case wxICON_NONE:
-            m_icon = wxNullIcon;
+            m_icon = wxBitmapBundle();
             break;
     }
 }

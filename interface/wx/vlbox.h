@@ -233,7 +233,7 @@ public:
     */
     virtual void SetItemCount(size_t count);
 
-    //@{
+    ///@{
     /**
         Set the margins: horizontal margin is the distance between the window
         border and the item contents while vertical margin is half of the
@@ -243,7 +243,7 @@ public:
     */
     void SetMargins(const wxPoint& pt);
     void SetMargins(wxCoord x, wxCoord y);
-    //@}
+    ///@}
 
     /**
         Set the selection to the specified item, if it is -1 the selection is

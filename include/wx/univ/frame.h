@@ -38,47 +38,47 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
 
-    virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual wxPoint GetClientAreaOrigin() const override;
+    virtual bool Enable(bool enable = true) override;
 
 #if wxUSE_STATUSBAR
     virtual wxStatusBar* CreateStatusBar(int number = 1,
                                          long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID id = 0,
-                                         const wxString& name = wxASCII_STR(wxStatusLineNameStr)) wxOVERRIDE;
+                                         const wxString& name = wxASCII_STR(wxStatusLineNameStr)) override;
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID id = wxID_ANY,
-                                     const wxString& name = wxASCII_STR(wxToolBarNameStr)) wxOVERRIDE;
+                                     const wxString& name = wxASCII_STR(wxToolBarNameStr)) override;
 #endif // wxUSE_TOOLBAR
 
-    virtual wxSize GetMinSize() const wxOVERRIDE;
+    virtual wxSize GetMinSize() const override;
 
 protected:
     void OnSize(wxSizeEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
-    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
+    virtual void DoGetClientSize(int *width, int *height) const override;
+    virtual void DoSetClientSize(int width, int height) override;
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes
-    virtual void PositionMenuBar() wxOVERRIDE;
-    virtual void DetachMenuBar() wxOVERRIDE;
-    virtual void AttachMenuBar(wxMenuBar *menubar) wxOVERRIDE;
+    virtual void PositionMenuBar() override;
+    virtual void DetachMenuBar() override;
+    virtual void AttachMenuBar(wxMenuBar *menubar) override;
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     // override to update statusbar position when the frame size changes
-    virtual void PositionStatusBar() wxOVERRIDE;
+    virtual void PositionStatusBar() override;
 #endif // wxUSE_MENUS
 
 protected:
 #if wxUSE_TOOLBAR
-    virtual void PositionToolBar() wxOVERRIDE;
+    virtual void PositionToolBar() override;
 #endif // wxUSE_TOOLBAR
 
     wxDECLARE_EVENT_TABLE();

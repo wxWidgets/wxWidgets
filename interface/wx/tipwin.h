@@ -28,7 +28,7 @@ public:
         Constructor. The tip is shown immediately after the window is constructed.
 
         @param parent
-            The parent window, must be non-@NULL
+            The parent window, must be non-null
         @param text
             The text to show, may contain the new line characters
         @param maxLength
@@ -38,13 +38,13 @@ public:
             Simply passed to SetTipWindowPtr() below, please see its
             documentation for the description of this parameter
         @param rectBounds
-            If non-@NULL, passed to SetBoundingRect() below, please see its
+            If non-null, passed to SetBoundingRect() below, please see its
             documentation for the description of this parameter
     */
     wxTipWindow(wxWindow* parent, const wxString& text,
                 wxCoord maxLength = 100,
-                wxTipWindow** windowPtr = NULL,
-                wxRect* rectBounds = NULL);
+                wxTipWindow** windowPtr = nullptr,
+                wxRect* rectBounds = nullptr);
 
     /**
         By default, the tip window disappears when the user clicks the mouse or presses

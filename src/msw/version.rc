@@ -28,13 +28,8 @@
 // http://msdn.microsoft.com/en-us/library/aa381049(VS.85).aspx for the full
 // list of languages and charsets
 #define LANG 0x0409
-#ifdef _UNICODE
-    #define CHARSET 0x4b0
-    #define LANG_WITH_CHARSET "040904b0"
-#else
-    #define CHARSET 0
-    #define LANG_WITH_CHARSET "04090000"
-#endif
+#define CHARSET 0x4b0
+#define LANG_WITH_CHARSET "040904b0"
 
 #ifdef WXMAKINGDLL_BASE
     #define WXLIBDESC "base"
@@ -92,7 +87,7 @@ BEGIN
             VALUE "FileDescription", "wxWidgets " WXLIBDESC " library\0"
             VALUE "FileVersion", wxVERSION_NUM_DOT_STRING "\0"
             VALUE "InternalName", wxSTRINGIZE(WXDLLNAME) "\0"
-            VALUE "LegalCopyright", "Copyright © 1993-2022 wxWidgets development team\0"
+            VALUE "LegalCopyright", "Copyright © 1992-2022 wxWidgets development team\0"
             VALUE "OriginalFilename", wxSTRINGIZE(WXDLLNAME) ".dll\0"
             VALUE "ProductName", "wxWidgets\0"
             VALUE "ProductVersion", wxVERSION_NUM_DOT_STRING "\0"

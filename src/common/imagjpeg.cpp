@@ -175,7 +175,7 @@ CPP_METHODDEF(void) wx_error_exit (j_common_ptr cinfo)
 /*
  * This will replace the standard output_message method when the user
  * wants us to be silent (verbose==false). We must have such method instead of
- * simply using NULL for cinfo->err->output_message because it's called
+ * simply using nullptr for cinfo->err->output_message because it's called
  * unconditionally from within libjpeg when there's "garbage input".
  */
 CPP_METHODDEF(void) wx_ignore_message (j_common_ptr WXUNUSED(cinfo))
@@ -189,7 +189,7 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
 {
     wx_src_ptr src;
 
-    if (cinfo->src == NULL) {    /* first time for this JPEG object? */
+    if (cinfo->src == nullptr) {    /* first time for this JPEG object? */
         cinfo->src = (struct jpeg_source_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(wx_source_mgr));
@@ -197,7 +197,7 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src = (wx_src_ptr) cinfo->src;
     src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
     src->buffer = new JOCTET[JPEG_IO_BUFFER_SIZE];
-    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    src->pub.next_input_byte = nullptr; /* until buffer loaded */
     src->stream = &infile;
 
     src->pub.init_source = wx_init_source;
@@ -231,7 +231,7 @@ static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 
 bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
-    wxCHECK_MSG( image, false, "NULL image pointer" );
+    wxCHECK_MSG( image, false, "null image pointer" );
 
     struct jpeg_decompress_struct cinfo;
     wx_error_mgr jerr;
@@ -399,7 +399,7 @@ static void wx_jpeg_io_dest(j_compress_ptr cinfo, wxOutputStream& outfile)
 {
     wx_dest_ptr dest;
 
-    if (cinfo->dest == NULL) {    /* first time for this JPEG object? */
+    if (cinfo->dest == nullptr) {    /* first time for this JPEG object? */
         cinfo->dest = (struct jpeg_destination_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(wx_destination_mgr));

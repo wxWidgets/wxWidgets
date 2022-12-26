@@ -79,8 +79,8 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
 void wxPropertySheetDialog::Init()
 {
     m_sheetStyle = wxPROPSHEET_DEFAULT;
-    m_innerSizer = NULL;
-    m_bookCtrl = NULL;
+    m_innerSizer = nullptr;
+    m_bookCtrl = nullptr;
     m_sheetOuterBorder = 2;
     m_sheetInnerBorder = 5;
 }
@@ -88,7 +88,6 @@ void wxPropertySheetDialog::Init()
 // Layout the dialog, to be called after pages have been created
 void wxPropertySheetDialog::LayoutDialog(int centreFlags)
 {
-    GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
     if (centreFlags)
         Centre(centreFlags);
@@ -110,7 +109,7 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 {
     int style = wxCLIP_CHILDREN | wxBK_DEFAULT;
 
-    wxBookCtrlBase* bookCtrl = NULL;
+    wxBookCtrlBase* bookCtrl = nullptr;
 
 #if wxUSE_NOTEBOOK
     if (GetSheetStyle() & wxPROPSHEET_NOTEBOOK)

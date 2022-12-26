@@ -38,20 +38,20 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxASCII_STR(wxRadioButtonNameStr) );
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
-    virtual void SetValue(bool val) wxOVERRIDE;
-    virtual bool GetValue() const wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
+    virtual void SetValue(bool val) override;
+    virtual bool GetValue() const override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) override;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
-    virtual void DoEnable(bool enable) wxOVERRIDE;
+    virtual void DoEnable(bool enable) override;
 
 private:
     typedef wxControl base_type;

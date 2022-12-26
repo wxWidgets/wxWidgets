@@ -36,7 +36,7 @@ class WXDLLIMPEXP_BASE const_iterator                                    \
     \
     const_iterator(Node* node, wxHashTable* table)                       \
     : m_node(node), m_table(table) { }                               \
-    const_iterator() : m_node(NULL), m_table(NULL) { }                   \
+    const_iterator() : m_node(nullptr), m_table(nullptr) { }                   \
     value_type operator*() const;                                        \
     itor& operator++();                                                  \
     const itor operator++(int);                                          \
@@ -150,7 +150,7 @@ name##PluginSentinel  m_pluginsentinel
 // The 'this' pointer is always true, so use this version
 // to cast the this pointer and avoid compiler warnings.
 #define wxDynamicCastThis(className) \
-     (IsKindOf(&className::ms_classInfo) ? (className*)this : NULL)
+     (IsKindOf(&className::ms_classInfo) ? (className*)this : nullptr)
 
 template <class T>
 inline T *wxCheckCast(const void *ptr)
@@ -268,7 +268,7 @@ class wxObjectDataPtr
 public:
     typedef T element_type;
 
-    explicit wxObjectDataPtr(T *ptr = NULL) : m_ptr(ptr) {}
+    explicit wxObjectDataPtr(T *ptr = nullptr) : m_ptr(ptr) {}
 
     // copy ctor
     wxObjectDataPtr(const wxObjectDataPtr<T> &tocopy)
@@ -300,18 +300,18 @@ public:
     typedef T *(wxObjectDataPtr<T>::*unspecified_bool_type)() const;
     operator unspecified_bool_type() const
     {
-        return m_ptr ? &wxObjectDataPtr<T>::get : NULL;
+        return m_ptr ? &wxObjectDataPtr<T>::get : nullptr;
     }
 
     T& operator*() const
     {
-        wxASSERT(m_ptr != NULL);
+        wxASSERT(m_ptr != nullptr);
         return *(m_ptr);
     }
 
     T *operator->() const
     {
-        wxASSERT(m_ptr != NULL);
+        wxASSERT(m_ptr != nullptr);
         return get();
     }
 
@@ -325,7 +325,7 @@ public:
     T* release()
     {
         T* const ptr = m_ptr;
-        m_ptr = NULL;
+        m_ptr = nullptr;
         return ptr;
     }
 
@@ -372,8 +372,12 @@ private:
 
 class WXDLLIMPEXP_BASE wxObject
 {
+#if wxUSE_EXTENDED_RTTI
+    wxDECLARE_DYNAMIC_CLASS(wxObject);
+#endif
+
 public:
-    wxObject() { m_refData = NULL; }
+    wxObject() { m_refData = nullptr; }
     virtual ~wxObject() { UnRef(); }
 
     wxObject(const wxObject& other)
@@ -394,12 +398,10 @@ public:
 
     bool IsKindOf(const wxClassInfo *info) const;
 
-    virtual wxClassInfo *GetClassInfo() const;
-
     // Turn on the correct set of new and delete operators
 
 #ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
-    void *operator new ( size_t size, const wxChar *fileName = NULL, int lineNum = 0 );
+    void *operator new ( size_t size, const wxChar *fileName = nullptr, int lineNum = 0 );
 #endif
 
 #ifdef _WX_WANT_DELETE_VOID
@@ -411,7 +413,7 @@ public:
 #endif
 
 #ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
-    void *operator new[] ( size_t size, const wxChar *fileName = NULL, int lineNum = 0 );
+    void *operator new[] ( size_t size, const wxChar *fileName = nullptr, int lineNum = 0 );
 #endif
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID
@@ -440,10 +442,14 @@ public:
     // check if this object references the same data as the other one
     bool IsSameAs(const wxObject& o) const { return m_refData == o.m_refData; }
 
+#if !wxUSE_EXTENDED_RTTI
+    virtual wxClassInfo* GetClassInfo() const;
+
     // RTTI information, usually declared by wxDECLARE_DYNAMIC_CLASS() or
     // similar, but done manually for the hierarchy root. Note that it's public
     // for compatibility reasons, but shouldn't be accessed directly.
     static wxClassInfo ms_classInfo;
+#endif
 
 protected:
     // ensure that our data is not shared with anybody else: if we have no
@@ -465,7 +471,7 @@ protected:
 
 inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
 {
-    return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : NULL;
+    return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : nullptr;
 }
 
 #include "wx/xti2.h"

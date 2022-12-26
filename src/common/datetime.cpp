@@ -91,7 +91,7 @@
 
 template<> void wxStringReadValue(const wxString &s , wxDateTime &data )
 {
-    data.ParseFormat(s,"%Y-%m-%d %H:%M:%S", NULL);
+    data.ParseFormat(s,"%Y-%m-%d %H:%M:%S", nullptr);
 }
 
 template<> void wxStringWriteValue(wxString &s , const wxDateTime &data )
@@ -118,14 +118,14 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 class wxDateTimeHolidaysModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeWorkDays);
 
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxDateTimeHolidayAuthority::ClearAllAuthorities();
         wxDateTimeHolidayAuthority::ms_authorities.clear();
@@ -306,7 +306,7 @@ wxString wxCallStrftime(const wxString& format, const tm* tm)
 static void ReplaceDefaultYearMonthWithCurrent(int *year,
                                                wxDateTime::Month *month)
 {
-    struct tm *tmNow = NULL;
+    struct tm *tmNow = nullptr;
     struct tm tmstruct;
 
     if ( *year == wxDateTime::Inv_Year )
@@ -880,11 +880,12 @@ wxDateTime::Country wxDateTime::GetCountry()
     if ( ms_country == Country_Unknown )
     {
         // try to guess from the time zone name
-        time_t t = time(NULL);
+        time_t t = time(nullptr);
         struct tm tmstruct;
         struct tm *tm = wxLocaltime_r(&t, &tmstruct);
 
         wxString tz = wxCallStrftime(wxS("%Z"), tm);
+        ms_country = USA;
         if ( tz == wxT("WET") || tz == wxT("WEST") ||
                 tz == wxT("BST") || tz == wxT("GMT") )
         {
@@ -897,19 +898,6 @@ wxDateTime::Country wxDateTime::GetCountry()
         else if ( tz == wxT("MSK") || tz == wxT("MSD") )
         {
             ms_country = Russia;
-        }
-        else if ( tz == wxT("AST") || tz == wxT("ADT") ||
-                  tz == wxT("EST") || tz == wxT("EDT") ||
-                  tz == wxT("CST") || tz == wxT("CDT") ||
-                  tz == wxT("MST") || tz == wxT("MDT") ||
-                  tz == wxT("PST") || tz == wxT("PDT") )
-        {
-            ms_country = USA;
-        }
-        else
-        {
-            // well, choose a default one
-            ms_country = USA;
         }
     }
 
@@ -1473,7 +1461,7 @@ const tm* wxTryGetTm(tm& tmstruct, time_t t, const wxDateTime::TimeZone& tz)
         t += (time_t)tz.GetOffset();
 #if !defined(__VMS__) // time is unsigned so avoid warning
         if ( t < 0 )
-            return NULL;
+            return nullptr;
 #endif
         return wxGmtime_r(&t, &tmstruct);
     }
@@ -2063,7 +2051,7 @@ wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)
     for ( Month mon = Jan; mon < Inv_Month; wxNextMonth(mon) )
     {
         // for Dec, we can't compare with gs_cumulatedDays[mon + 1], but we
-        // don't need it neither - because of the CHECK above we know that
+        // don't need it either - because of the CHECK above we know that
         // yday lies in December then
         if ( (mon == Dec) || (yday <= gs_cumulatedDays[isLeap][mon + 1]) )
         {

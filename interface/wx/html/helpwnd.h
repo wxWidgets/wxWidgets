@@ -69,7 +69,7 @@ enum
 class wxHtmlHelpWindow : public wxWindow
 {
 public:
-    wxHtmlHelpWindow(wxHtmlHelpData* data = NULL);
+    wxHtmlHelpWindow(wxHtmlHelpData* data = nullptr);
 
     /**
         Constructor.
@@ -82,7 +82,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
                      int helpStyle = wxHF_DEFAULT_STYLE,
-                     wxHtmlHelpData* data = NULL);
+                     wxHtmlHelpData* data = nullptr);
 
     /**
         Creates the help window. See @ref wxHtmlHelpWindow() "the constructor"

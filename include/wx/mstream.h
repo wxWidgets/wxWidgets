@@ -36,20 +36,20 @@ public:
     }
 
     virtual ~wxMemoryInputStream();
-    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_length; }
-    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+    virtual wxFileOffset GetLength() const override { return m_length; }
+    virtual bool IsSeekable() const override { return true; }
 
-    virtual char Peek() wxOVERRIDE;
-    virtual bool CanRead() const wxOVERRIDE;
+    virtual char Peek() override;
+    virtual bool CanRead() const override;
 
     wxStreamBuffer *GetInputStreamBuffer() const { return m_i_streambuf; }
 
 protected:
     wxStreamBuffer *m_i_streambuf;
 
-    size_t OnSysRead(void *buffer, size_t nbytes) wxOVERRIDE;
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE;
-    wxFileOffset OnSysTell() const wxOVERRIDE;
+    size_t OnSysRead(void *buffer, size_t nbytes) override;
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) override;
+    wxFileOffset OnSysTell() const override;
 
 private:
     // common part of ctors taking wxInputStream
@@ -65,11 +65,11 @@ private:
 class WXDLLIMPEXP_BASE wxMemoryOutputStream : public wxOutputStream
 {
 public:
-    // if data is !NULL it must be allocated with malloc()
-    wxMemoryOutputStream(void *data = NULL, size_t length = 0);
+    // if data is not null it must be allocated with malloc()
+    wxMemoryOutputStream(void *data = nullptr, size_t length = 0);
     virtual ~wxMemoryOutputStream();
-    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_o_streambuf->GetLastAccess(); }
-    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+    virtual wxFileOffset GetLength() const override { return m_o_streambuf->GetLastAccess(); }
+    virtual bool IsSeekable() const override { return true; }
 
     size_t CopyTo(void *buffer, size_t len) const;
 
@@ -79,9 +79,9 @@ protected:
     wxStreamBuffer *m_o_streambuf;
 
 protected:
-    size_t OnSysWrite(const void *buffer, size_t nbytes) wxOVERRIDE;
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE;
-    wxFileOffset OnSysTell() const wxOVERRIDE;
+    size_t OnSysWrite(const void *buffer, size_t nbytes) override;
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) override;
+    wxFileOffset OnSysTell() const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxMemoryOutputStream);
     wxDECLARE_NO_COPY_CLASS(wxMemoryOutputStream);

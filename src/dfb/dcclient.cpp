@@ -96,7 +96,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxDFBDCImpl);
 wxWindowDCImpl::wxWindowDCImpl(wxDC *owner, wxWindow *win)
               : wxDFBDCImpl(owner)
 {
-    InitForWin(win, NULL);
+    InitForWin(win, nullptr);
 }
 
 void wxWindowDCImpl::InitForWin(wxWindow *win, const wxRect *rect)

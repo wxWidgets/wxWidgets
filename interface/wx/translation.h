@@ -38,7 +38,7 @@ public:
     wxTranslations();
 
     /**
-        Returns current translations object, may return NULL.
+        Returns current translations object, may return @NULL.
 
         You must either call this early in app initialization code, or let
         wxLocale do it for you.
@@ -95,8 +95,8 @@ public:
         The language is determined from the preferred UI language or languages
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, macOS) have separate language and regional (= locale) settings.
+        wxLocale::GetSystemLanguage() as operating systems have separate
+        language and regional (i.e. locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -118,8 +118,8 @@ public:
         The language is determined from the preferred UI language or languages
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, macOS) have separate language and regional (= locale) settings.
+        wxLocale::GetSystemLanguage() as operating systems have separate
+        language and regional (i.e. locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -313,7 +313,7 @@ public:
                              additional modifiers (e.g. "fr", "en_GB" or
                              "ca@valencia").
 
-        @return Loaded catalog or NULL on failure.
+        @return Loaded catalog or @NULL on failure.
      */
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang) = 0;
@@ -368,13 +368,15 @@ public:
     Translations are stored in resources as compiled MO files, with type
     set to "MOFILE" (unless you override GetResourceType()) and name
     consisting of the domain, followed by underscore, followed by language
-    identification. For example, the relevant part of .rc file would look
-    like this:
+    identification. Non-alphanumeric characters in language identification
+    should be replaced by '_'. For example, the relevant part of .rc file
+    would look like this:
 
     @code
-    myapp_de     MOFILE   "catalogs/de/myapp.mo"
-    myapp_fr     MOFILE   "catalogs/fr/myapp.mo"
-    myapp_en_GB  MOFILE   "catalogs/en_GB/myapp.mo"
+    myapp_de        MOFILE  "catalogs/de/myapp.mo"
+    myapp_fr        MOFILE  "catalogs/fr/myapp.mo"
+    myapp_en_GB     MOFILE  "catalogs/en_GB/myapp.mo"
+    myapp_sr_latin  MOFILE  "catalogs/sr@latin/myapp.mo"
     @endcode
 
     This class is only available on Windows.
@@ -418,7 +420,7 @@ public:
         @param domain    Catalog's domain. This typically matches
                          the @a filename.
 
-        @return Successfully loaded catalog or NULL on failure.
+        @return Successfully loaded catalog or @NULL on failure.
      */
     static wxMsgCatalog *CreateFromFile(const wxString& filename,
                                         const wxString& domain);
@@ -430,7 +432,7 @@ public:
         @param domain    Catalog's domain. This typically matches
                          the @a filename.
 
-        @return Successfully loaded catalog or NULL on failure.
+        @return Successfully loaded catalog or @NULL on failure.
      */
     static wxMsgCatalog *CreateFromData(const wxScopedCharBuffer& data,
                                         const wxString& domain);
@@ -442,7 +444,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     This macro is identical to _() but for the plural variant of
@@ -520,6 +522,18 @@ public:
     @header{wx/intl.h}
 */
 #define wxTRANSLATE(string)
+
+/**
+    This macro doesn't do anything in the program code -- it simply expands to
+    the value of its argument.
+
+    Similar to wxTRANSLATE(), but with a context argument. Both the context and
+    string need to be string literals. Be sure to use the same context when
+    calling wxGetTranslation().
+
+    @since 3.1.7
+*/
+#define wxTRANSLATE_IN_CONTEXT(context, string)
 
 /**
     This function returns the translation of @a string in the current
@@ -603,5 +617,5 @@ const wxString& wxGetTranslation(const wxString& string,
 */
 const wxString& _(const wxString& string);
 
-//@}
+///@}
 

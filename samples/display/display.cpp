@@ -52,7 +52,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -76,6 +76,8 @@ public:
 
     void OnDisplayChanged(wxDisplayChangedEvent& event);
 #endif // wxUSE_DISPLAY
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnLeftClick(wxMouseEvent& event);
 
@@ -114,7 +116,7 @@ public:
 enum
 {
     // menu items
-    Display_FromPoint = wxID_HIGHEST + 1,
+    Display_FromPoint = wxID_HIGHEST,
     Display_FullScreen,
     Display_ContentProtection_None,
     Display_ContentProtection_Enable,
@@ -153,6 +155,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
 #endif // wxUSE_DISPLAY
+
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_LEFT_UP(MyFrame::OnLeftClick)
 wxEND_EVENT_TABLE()
@@ -198,7 +202,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size, style)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -469,6 +473,15 @@ void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_DISPLAY
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    wxLogStatus(this, "DPI changed: was %d*%d, now %d*%d",
+                event.GetOldDPI().x, event.GetOldDPI().y,
+                event.GetNewDPI().x, event.GetNewDPI().y);
+
+    event.Skip();
+}
 
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {

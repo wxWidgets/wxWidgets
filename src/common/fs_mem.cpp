@@ -102,7 +102,7 @@ wxFSFile * wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs),
 {
     wxMemoryFSHash::const_iterator i = m_Hash.find(GetRightLocation(location));
     if ( i == m_Hash.end() )
-        return NULL;
+        return nullptr;
 
     const wxMemoryFSFile * const obj = i->second;
 

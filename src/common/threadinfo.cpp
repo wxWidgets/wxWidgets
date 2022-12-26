@@ -45,14 +45,14 @@ inline wxAllThreadInfos& GetAllThreadInfos()
 }
 
 // Pointer to the current thread's instance
-inline wxTLS_TYPE_REF(wxThreadSpecificInfo*) GetThisThreadInfo()
+inline wxThreadSpecificInfo*& GetThisThreadInfo()
 {
-    static wxTLS_TYPE(wxThreadSpecificInfo*) s_thisThreadInfo;
+    static wxTHREAD_SPECIFIC_DECL wxThreadSpecificInfo* s_thisThreadInfo;
 
     return s_thisThreadInfo;
 }
 
-#define wxTHIS_THREAD_INFO wxTLS_VALUE(GetThisThreadInfo())
+#define wxTHIS_THREAD_INFO GetThisThreadInfo()
 
 } // anonymous namespace
 
@@ -83,7 +83,7 @@ void wxThreadSpecificInfo::ThreadCleanUp()
         if ( i->get() == wxTHIS_THREAD_INFO )
         {
             GetAllThreadInfos().erase(i);
-            wxTHIS_THREAD_INFO = NULL;
+            wxTHIS_THREAD_INFO = nullptr;
             break;
         }
     }

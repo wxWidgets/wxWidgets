@@ -44,7 +44,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject);
 wxClipboard::wxClipboard()
 {
     m_open = false;
-    m_data = NULL ;
+    m_data = nullptr ;
 }
 
 wxClipboard::~wxClipboard()
@@ -165,7 +165,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 
                 if (dataSize == 0)
                 {
-                    data.SetData( format, 0, 0 );
+                    data.SetData( format, 0, nullptr );
                 }
                 else
                 {

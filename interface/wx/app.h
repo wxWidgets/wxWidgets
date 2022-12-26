@@ -61,7 +61,7 @@ public:
         Note that you should look at wxEvtLoopBase for more event-processing
         documentation.
     */
-    //@{
+    ///@{
 
     /**
         Called by wxWidgets on creation of the application. Override this if you wish
@@ -97,7 +97,7 @@ public:
         by OnRun() and which dispatches all events sent from the native toolkit
         to the application (except when new event loops are temporarily set-up).
         The returned value maybe @NULL. Put initialization code which needs a
-        non-@NULL main event loop into OnEventLoopEnter().
+        non-null main event loop into OnEventLoopEnter().
     */
     wxEventLoopBase* GetMainLoop() const;
 
@@ -126,7 +126,7 @@ public:
      */
     virtual bool UsesEventLoop() const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -136,7 +136,7 @@ public:
         to allow queuing of events even when there's no event loop
         (e.g. in wxAppConsole::OnInit).
     */
-    //@{
+    ///@{
 
     /**
         Process all pending events; it is necessary to call this function to
@@ -185,7 +185,7 @@ public:
     */
     void ResumeProcessingOfPendingEvents();
 
-    //@}
+    ///@}
 
     /**
         Delayed objects destruction.
@@ -195,7 +195,7 @@ public:
         still pending for the same object. In this case the handler may call
         ScheduleForDestruction() instead.
      */
-    //@{
+    ///@{
 
     /**
         Schedule the object for destruction in the near future.
@@ -219,7 +219,7 @@ public:
      */
     bool IsScheduledForDestruction(wxObject *object) const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -268,13 +268,13 @@ public:
     /**
         @name Callbacks for application-wide "events"
     */
-    //@{
+    ///@{
 
     /**
         This function is called when an assert failure occurs, i.e.\ the condition
         specified in wxASSERT() macro evaluated to @false.
 
-        It is only called in debug mode (when @c __WXDEBUG__ is defined) as
+        It is only called in debug mode (when @c \__WXDEBUG__ is defined) as
         asserts are not left in the release code at all.
         The base class version shows the default assert failure dialog box proposing to
         the user to stop the program, continue or ignore all subsequent asserts.
@@ -285,7 +285,7 @@ public:
             the line number in this file where the assert occurred
         @param func
             the name of the function where the assert occurred, may be
-            empty if the compiler doesn't support C99 __FUNCTION__
+            empty if the compiler doesn't support C99 \__FUNCTION__
         @param cond
             the condition of the failed assert in text form
         @param msg
@@ -422,7 +422,7 @@ public:
     */
     virtual int OnRun();
 
-    //@}
+    ///@}
 
 
     /**
@@ -432,7 +432,7 @@ public:
 
         @see overview_exceptions
     */
-    //@{
+    ///@{
 
     /**
         This function is called if an unhandled exception occurs inside the main
@@ -614,13 +614,13 @@ public:
     */
     virtual void RethrowStoredException();
 
-    //@}
+    ///@}
 
 
     /**
         @name Application information
     */
-    //@{
+    ///@{
 
     /**
         Returns the user-readable application name.
@@ -732,7 +732,7 @@ public:
     */
     void SetVendorName(const wxString& name);
 
-    //@}
+    ///@}
 
     /**
         Sets the C locale to the default locale for the current environment.
@@ -789,7 +789,7 @@ public:
 
     In addition to the features provided by wxAppConsole it keeps track of
     the <em>top window</em> (see SetTopWindow()) and adds support for
-    video modes (see SetVideoMode()).
+    video modes (see SetDisplayMode()).
 
     In general, application-wide settings for GUI-only apps are accessible
     from wxApp (or from wxSystemSettings or wxSystemOptions classes).
@@ -1004,7 +1004,7 @@ public:
         first frame or dialog (or better, any wxTopLevelWindow) in its top-level
         window list, when it needs to use the top window.
         If you previously called SetTopWindow() and now you need to restore this
-        automatic behaviour you can call @code wxApp::SetTopWindow(NULL) @endcode.
+        automatic behaviour you can call `wxApp::SetTopWindow(nullptr)`.
 
         @param window
             The new top window.
@@ -1034,7 +1034,7 @@ public:
     /**
         @name GTK-specific functions
     */
-    //@{
+    ///@{
 
     /**
         Disables the printing of various GTK messages.
@@ -1061,12 +1061,31 @@ public:
     */
     static void GTKSuppressDiagnostics(int flags = -1);
 
-    //@}
+    /**
+        Allows wxWidgets to selectively suppress some GTK messages.
+
+        This function can be called to allow wxWidgets to control GTK message
+        logging. You must @e not call it if your application calls the @c
+        g_log_set_writer_func() function itself, as this function can be only
+        called once.
+
+        It is recommended to call this function in your overridden version of
+        wxApp::OnInit() to allow wxWidgets to suppress some spurious GTK error
+        messages, e.g. the ones that happen whenever wxNotebook pages are
+        removed with the current GTK versions.
+
+        @onlyfor{wxgtk}
+
+        @since 3.2.1
+     */
+    static void GTKAllowDiagnosticsControl();
+
+    ///@}
 
     /**
         @name Mac-specific functions
     */
-    //@{
+    ///@{
 
     /**
         Called in response of an "open-application" Apple event.
@@ -1160,7 +1179,7 @@ public:
     */
     void OSXEnableAutomaticTabbing(bool enable);
 
-    //@}
+    ///@}
 
 };
 
@@ -1172,7 +1191,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_rtti */
-//@{
+///@{
 
 /**
     This is used in headers to create a forward declaration of the ::wxGetApp()
@@ -1277,7 +1296,7 @@ public:
  */
 #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 
-//@}
+///@}
 
 
 
@@ -1293,7 +1312,7 @@ wxApp *wxTheApp;
 
 
 /** @addtogroup group_funcmacro_appinitterm */
-//@{
+///@{
 
 /**
     This function doesn't exist in wxWidgets but it is created by using the
@@ -1337,7 +1356,7 @@ bool wxHandleFatalExceptions(bool doIt = true);
 
     If the function returns @false the initialization could not be performed,
     in this case the library cannot be used and wxUninitialize() shouldn't be
-    called neither.
+    called either.
 
     This function may be called several times but wxUninitialize() must be
     called for each successful call to this function.
@@ -1383,7 +1402,7 @@ bool wxYield();
 
     @header{wx/app.h}
 */
-bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
+bool wxSafeYield(wxWindow* win = nullptr, bool onlyIfNeeded = false);
 
 /**
     This function initializes wxWidgets in a platform-dependent way. Use this if you
@@ -1422,16 +1441,16 @@ int wxEntry(int& argc, wxChar** argv);
     @header{wx/app.h}
 */
 int wxEntry(HINSTANCE hInstance,
-            HINSTANCE hPrevInstance = NULL,
-            char* pCmdLine = NULL,
+            HINSTANCE hPrevInstance = nullptr,
+            char* pCmdLine = nullptr,
             int nCmdShow = SW_SHOWNORMAL);
 
-//@}
+///@}
 
 
 
 /** @addtogroup group_funcmacro_procctrl */
-//@{
+///@{
 
 /**
     Exits application after calling wxApp::OnExit.
@@ -1444,10 +1463,10 @@ int wxEntry(HINSTANCE hInstance,
 */
 void wxExit();
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     @def wxDISABLE_DEBUG_SUPPORT()
@@ -1478,5 +1497,5 @@ void wxExit();
     wxDISABLE_ASSERTS_IN_RELEASE_BUILD(); \
     wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
-//@}
+///@}
 

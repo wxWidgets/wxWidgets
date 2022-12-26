@@ -31,11 +31,11 @@ public:
     typedef T element_type;
 
     // Default ctor
-    wxWeakRef() : m_pobj(NULL), m_ptbase(NULL) { }
+    wxWeakRef() : m_pobj(nullptr), m_ptbase(nullptr) { }
 
     // Ctor from the object of this type: this is needed as the template ctor
     // below is not used by at least g++4 when a literal NULL is used
-    wxWeakRef(T *pobj) : m_pobj(NULL), m_ptbase(NULL)
+    wxWeakRef(T *pobj) : m_pobj(nullptr), m_ptbase(nullptr)
     {
         this->Assign(pobj);
     }
@@ -43,14 +43,14 @@ public:
     // When we have the full type here, static_cast<> will always work
     // (or give a straight compiler error).
     template <class TDerived>
-    wxWeakRef(TDerived* pobj) : m_pobj(NULL), m_ptbase(NULL)
+    wxWeakRef(TDerived* pobj) : m_pobj(nullptr), m_ptbase(nullptr)
     {
         this->Assign(pobj);
     }
 
     // We need this copy ctor, since otherwise a default compiler (binary) copy
     // happens (if embedded as an object member).
-    wxWeakRef(const wxWeakRef<T>& wr) : m_pobj(NULL), m_ptbase(NULL)
+    wxWeakRef(const wxWeakRef<T>& wr) : m_pobj(nullptr), m_ptbase(nullptr)
     {
         this->Assign(wr.get());
     }
@@ -78,17 +78,17 @@ public:
         {
             // Remove ourselves from object tracker list
             m_ptbase->RemoveNode(this);
-            m_pobj = NULL;
-            m_ptbase = NULL;
+            m_pobj = nullptr;
+            m_ptbase = nullptr;
         }
     }
 
-    virtual void OnObjectDestroy() wxOVERRIDE
+    virtual void OnObjectDestroy() override
     {
         // Tracked object itself removes us from list of trackers
-        wxASSERT(m_pobj != NULL);
-        m_pobj = NULL;
-        m_ptbase = NULL;
+        wxASSERT(m_pobj != nullptr);
+        m_pobj = nullptr;
+        m_ptbase = nullptr;
     }
 
 protected:
@@ -137,7 +137,7 @@ template <class T>
 class wxWeakRefDynamic : public wxTrackerNode
 {
 public:
-    wxWeakRefDynamic() : m_pobj(NULL) { }
+    wxWeakRefDynamic() : m_pobj(nullptr) { }
 
     wxWeakRefDynamic(T* pobj) : m_pobj(pobj)
     {
@@ -171,15 +171,15 @@ public:
             // Remove ourselves from object tracker list
             wxTrackable *pt = dynamic_cast<wxTrackable*>(m_pobj);
             pt->RemoveNode(this);
-            m_pobj = NULL;
+            m_pobj = nullptr;
         }
     }
 
-    virtual void OnObjectDestroy() wxOVERRIDE
+    virtual void OnObjectDestroy() override
     {
         wxASSERT_MSG(m_pobj, "tracked object should have removed us itself");
 
-        m_pobj = NULL;
+        m_pobj = nullptr;
     }
 
 protected:
@@ -203,7 +203,7 @@ protected:
             else
             {
                 // If the object we want to track does not support wxTackable, then
-                // log a message and keep the NULL object pointer.
+                // log a message and keep the null object pointer.
                 wxFAIL_MSG( "Tracked class should inherit from wxTrackable" );
             }
         }

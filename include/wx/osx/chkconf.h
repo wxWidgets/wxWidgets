@@ -47,12 +47,12 @@
 #endif
 
 /*
- * setting flags according to the platform
+ * platform check
  */
 
-#ifdef __LP64__
-    #if wxOSX_USE_CARBON
-        #error "Carbon does not support 64bit"
+#ifndef __LP64__
+    #if wxOSX_USE_COCOA
+        #error "wxOSX/Cocoa requires building in 64 bits"
     #endif
 #endif
 

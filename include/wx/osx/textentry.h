@@ -34,58 +34,58 @@ public:
     wxTextEntry();
     virtual ~wxTextEntry();
 
-    virtual bool IsEditable() const wxOVERRIDE;
+    virtual bool IsEditable() const override;
 
     // If the return values from and to are the same, there is no selection.
-    virtual void GetSelection(long* from, long* to) const wxOVERRIDE;
+    virtual void GetSelection(long* from, long* to) const override;
 
     // operations
     // ----------
 
     // editing
-    virtual void Clear() wxOVERRIDE;
-    virtual void Remove(long from, long to) wxOVERRIDE;
+    virtual void Clear() override;
+    virtual void Remove(long from, long to) override;
 
     // set the max number of characters which may be entered
     // in a single line text control
-    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
+    virtual void SetMaxLength(unsigned long len) override;
 
-    virtual void ForceUpper() wxOVERRIDE;
+    virtual void ForceUpper() override;
 
     // writing text inserts it at the current position;
     // appending always inserts it at the end
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
+    virtual void WriteText(const wxString& text) override;
 
     // Clipboard operations
-    virtual void Copy() wxOVERRIDE;
-    virtual void Cut() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
 
-    virtual bool CanCopy() const wxOVERRIDE;
-    virtual bool CanCut() const wxOVERRIDE;
-    virtual bool CanPaste() const wxOVERRIDE;
+    virtual bool CanCopy() const override;
+    virtual bool CanCut() const override;
+    virtual bool CanPaste() const override;
 
     // Undo/redo
-    virtual void Undo() wxOVERRIDE;
-    virtual void Redo() wxOVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
-    virtual bool CanUndo() const wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
 
     // Insertion point
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
-    virtual void SetInsertionPointEnd() wxOVERRIDE;
-    virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual wxTextPos GetLastPosition() const wxOVERRIDE;
+    virtual void SetInsertionPoint(long pos) override;
+    virtual void SetInsertionPointEnd() override;
+    virtual long GetInsertionPoint() const override;
+    virtual wxTextPos GetLastPosition() const override;
 
-    virtual void SetSelection(long from, long to) wxOVERRIDE;
-    virtual void SetEditable(bool editable) wxOVERRIDE;
+    virtual void SetSelection(long from, long to) override;
+    virtual void SetEditable(bool editable) override;
 
     virtual bool SendMaxLenEvent();
 
     // set the grayed out hint text
-    virtual bool SetHint(const wxString& hint) wxOVERRIDE;
-    virtual wxString GetHint() const wxOVERRIDE;
+    virtual bool SetHint(const wxString& hint) override;
+    virtual wxString GetHint() const override;
 
     // Implementation
     // --------------
@@ -95,12 +95,12 @@ public:
 
 protected:
 
-    virtual wxString DoGetValue() const wxOVERRIDE;
+    virtual wxString DoGetValue() const override;
 
-    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) wxOVERRIDE;
-    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) override;
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) override;
 
-    // The object providing auto-completions or NULL if none.
+    // The object providing auto-completions or nullptr if none.
     wxTextCompleter *m_completer;
 
     bool  m_editable;

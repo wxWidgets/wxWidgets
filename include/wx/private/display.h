@@ -70,7 +70,7 @@ public:
 
     // return the display for the given window or wxNOT_FOUND
     //
-    // the window pointer must not be NULL (i.e. caller should check it)
+    // the window pointer must not be null (i.e. caller should check it)
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
@@ -79,7 +79,7 @@ public:
 protected:
     // create a new display object
     //
-    // it can return a NULL pointer if the display creation failed
+    // it can return a null pointer if the display creation failed
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
 private:
@@ -169,17 +169,17 @@ public:
 #if wxUSE_DISPLAY
     // no video modes support for us, provide just the stubs
     virtual wxArrayVideoModes
-    GetModes(const wxVideoMode& WXUNUSED(mode)) const wxOVERRIDE
+    GetModes(const wxVideoMode& WXUNUSED(mode)) const override
     {
         return wxArrayVideoModes();
     }
 
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE
+    virtual wxVideoMode GetCurrentMode() const override
     {
         return wxVideoMode();
     }
 
-    virtual bool ChangeMode(const wxVideoMode& WXUNUSED(mode)) wxOVERRIDE
+    virtual bool ChangeMode(const wxVideoMode& WXUNUSED(mode)) override
     {
         return false;
     }
@@ -202,11 +202,11 @@ public:
 class wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
-    virtual unsigned GetCount() wxOVERRIDE { return 1; }
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual unsigned GetCount() override { return 1; }
+    virtual int GetFromPoint(const wxPoint& pt) override;
 
 protected:
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
 
     virtual wxDisplayImpl *CreateSingleDisplay() = 0;
 };

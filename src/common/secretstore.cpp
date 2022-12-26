@@ -25,6 +25,7 @@
 
 #include "wx/log.h"
 #include "wx/translation.h"
+#include "wx/utils.h"
 
 #include "wx/private/secretstore.h"
 
@@ -98,7 +99,7 @@ size_t wxSecretValue::GetSize() const
 
 const void *wxSecretValue::GetData() const
 {
-    return m_impl ? m_impl->GetData() : NULL;
+    return m_impl ? m_impl->GetData() : nullptr;
 }
 
 wxString wxSecretValue::GetAsString(const wxMBConv& conv) const
@@ -114,18 +115,11 @@ wxString wxSecretValue::GetAsString(const wxMBConv& conv) const
            );
 }
 
-#ifndef __WINDOWS__
-
 /* static */
 void wxSecretValue::Wipe(size_t size, void *data)
 {
-    // memset_s() is not present under non-MSW systems anyhow and there doesn't
-    // seem to be any other way to portably ensure that the memory is really
-    // cleared, so just do it in this obvious way.
-    memset(data, 0, size);
+    wxSecureZeroMemory(data, size);
 }
-
-#endif // __WINDOWS__
 
 /* static */
 void wxSecretValue::WipeString(wxString& str)
@@ -203,7 +197,7 @@ wxSecretStore::Load(const wxString& service,
         return false;
 
     wxString err;
-    wxSecretValueImpl* secretImpl = NULL;
+    wxSecretValueImpl* secretImpl = nullptr;
     if ( !m_impl->Load(service, &user, &secretImpl, err) )
     {
         if ( !err.empty() )

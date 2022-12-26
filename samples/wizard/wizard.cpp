@@ -66,7 +66,7 @@ class MyApp : public wxApp
 {
 public:
     // override base class virtuals
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 class MyFrame : public wxFrame
@@ -142,7 +142,7 @@ public:
         SetSizerAndFit(mainSizer);
     }
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE
+    virtual bool TransferDataFromWindow() override
     {
         if ( !m_checkbox->GetValue() )
         {
@@ -309,8 +309,8 @@ public:
     }
 
     // implement wxWizardPage functions
-    virtual wxWizardPage *GetPrev() const wxOVERRIDE { return m_prev; }
-    virtual wxWizardPage *GetNext() const wxOVERRIDE
+    virtual wxWizardPage *GetPrev() const override { return m_prev; }
+    virtual wxWizardPage *GetNext() const override
     {
         return m_checkbox->GetValue() ? m_next->GetNext() : m_next;
     }
@@ -431,7 +431,7 @@ MyWizard::MyWizard(wxFrame *frame, bool useSizer)
 // ----------------------------------------------------------------------------
 
 MyFrame::MyFrame(const wxString& title)
-        :wxFrame((wxFrame *)NULL, wxID_ANY, title,
+        :wxFrame(nullptr, wxID_ANY, title,
                   wxDefaultPosition, wxSize(250, 150))  // small frame
 {
     wxMenu *menuFile = new wxMenu;

@@ -15,19 +15,10 @@
 #include "wx/math.h"
 #include "wx/palette.h"
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
-class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 class WXDLLIMPEXP_FWD_CORE wxBitmapRefData;
-class WXDLLIMPEXP_FWD_CORE wxControl;
-class WXDLLIMPEXP_FWD_CORE wxCursor;
-class WXDLLIMPEXP_FWD_CORE wxDC;
 #if wxUSE_WXDIB
 class WXDLLIMPEXP_FWD_CORE wxDIB;
 #endif
-class WXDLLIMPEXP_FWD_CORE wxIcon;
-class WXDLLIMPEXP_FWD_CORE wxMask;
-class WXDLLIMPEXP_FWD_CORE wxPalette;
-class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // What kind of transparency should a bitmap copied from an icon or cursor
 // have?
@@ -168,7 +159,7 @@ public:
         { return CreateWithDIPSize(wxSize(width, height), scale, depth); }
 
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
-    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
+    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = nullptr) const;
 
     wxBitmapRefData *GetBitmapData() const
         { return (wxBitmapRefData *)m_refData; }
@@ -185,8 +176,6 @@ public:
     wxMask *GetMask() const;
     void SetMask(wxMask *mask);
 
-    // these functions are internal and shouldn't be used, they risk to
-    // disappear in the future
     bool HasAlpha() const;
     void UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
@@ -214,14 +203,14 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_0
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
     bool InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth);
-    void ResetHBITMAP() { InitFromHBITMAP(NULL, 0, 0, 0); }
+    void ResetHBITMAP() { InitFromHBITMAP(nullptr, 0, 0, 0); }
 
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;
 
 protected:
-    virtual wxGDIImageRefData *CreateData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIImageRefData *CreateData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     // creates an uninitialized bitmap, called from Create()s above
     bool DoCreate(int w, int h, int depth, WXHDC hdc);
@@ -285,6 +274,10 @@ public:
     WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
     void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
 
+#if wxUSE_IMAGE
+    bool MSWCreateFromImageMask(const wxImage& image);
+#endif // wxUSE_IMAGE
+
 protected:
     WXHBITMAP m_maskBitmap;
 
@@ -309,14 +302,14 @@ public:
     virtual bool Create(wxGDIImage *image,
                         const void* data,
                         wxBitmapType type,
-                        int width, int height, int depth = 1) wxOVERRIDE;
+                        int width, int height, int depth = 1) override;
     virtual bool Load(wxGDIImage *image,
                       const wxString& name,
                       wxBitmapType type,
-                      int desiredWidth, int desiredHeight) wxOVERRIDE;
+                      int desiredWidth, int desiredHeight) override;
     virtual bool Save(const wxGDIImage *image,
                       const wxString& name,
-                      wxBitmapType type) const wxOVERRIDE;
+                      wxBitmapType type) const override;
 
 
     // make wxBitmapHandler compatible with the wxBitmapHandler interface
@@ -333,7 +326,7 @@ public:
     virtual bool SaveFile(const wxBitmap *bitmap,
                           const wxString& name,
                           wxBitmapType type,
-                          const wxPalette *palette = NULL) const;
+                          const wxPalette *palette = nullptr) const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapHandler);

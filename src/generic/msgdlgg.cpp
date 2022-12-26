@@ -53,7 +53,7 @@ public:
     }
 
 protected:
-    virtual wxWindow *OnCreateLine(const wxString& s) wxOVERRIDE
+    virtual wxWindow *OnCreateLine(const wxString& s) override
     {
         wxWindow * const win = wxTextSizerWrapper::OnCreateLine(s);
 
@@ -96,7 +96,7 @@ wxSizer *wxGenericMessageDialog::CreateMsgDlgButtonSizer()
     {
         wxStdDialogButtonSizer * const sizerStd = new wxStdDialogButtonSizer;
 
-        wxButton *btnDef = NULL;
+        wxButton *btnDef = nullptr;
 
         if ( m_dialogStyle & wxOK )
         {
@@ -217,11 +217,9 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     if ( sizerBtn )
         topsizer->Add(sizerBtn, 0, wxEXPAND | wxALL, 10 );
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
     wxSize size( GetSize() );
     if (size.x < size.y*3/2)
     {

@@ -47,7 +47,7 @@ wxHashTableBase_Node::~wxHashTableBase_Node()
 //
 
 wxHashTableBase::wxHashTableBase()
-    : m_size( 0 ), m_count( 0 ), m_table( NULL ), m_keyType( wxKEY_NONE ),
+    : m_size( 0 ), m_count( 0 ), m_table( nullptr ), m_keyType( wxKEY_NONE ),
       m_deleteContents( false )
 {
 }
@@ -59,7 +59,7 @@ void wxHashTableBase::Create( wxKeyType keyType, size_t size )
     m_table = new wxHashTableBase_Node*[ m_size ];
 
     for( size_t i = 0; i < m_size; ++i )
-        m_table[i] = NULL;
+        m_table[i] = nullptr;
 }
 
 void wxHashTableBase::Clear()
@@ -68,7 +68,7 @@ void wxHashTableBase::Clear()
     {
         Node* end = m_table[i];
 
-        if( end == NULL )
+        if( end == nullptr )
             continue;
 
         Node *curr, *next = end->GetNext();
@@ -84,7 +84,7 @@ void wxHashTableBase::Clear()
         }
         while( curr != end );
 
-        m_table[i] = NULL;
+        m_table[i] = nullptr;
     }
 
     m_count = 0;
@@ -99,7 +99,7 @@ void wxHashTableBase::DoRemoveNode( wxHashTableBase_Node* node )
     if( node->GetNext() == node )
     {
         // single-node chain (common case)
-        m_table[bucket] = NULL;
+        m_table[bucket] = nullptr;
     }
     else
     {
@@ -119,7 +119,7 @@ void wxHashTableBase::DoDestroyNode( wxHashTableBase_Node* node )
 {
     // if it is called from DoRemoveNode, node has already been
     // removed, from other places it does not matter
-    node->m_hashPtr = NULL;
+    node->m_hashPtr = nullptr;
 
     if( m_keyType == wxKEY_STRING )
         delete node->m_key.string;
@@ -137,7 +137,7 @@ void wxHashTableBase::Destroy()
 
 void wxHashTableBase::DoInsertNode( size_t bucket, wxHashTableBase_Node* node )
 {
-    if( m_table[bucket] == NULL )
+    if( m_table[bucket] == nullptr )
     {
         m_table[bucket] = node->m_next = node;
     }
@@ -180,8 +180,8 @@ void* wxHashTableBase::DoGet( long key, long hash ) const
 
     size_t bucket = size_t(hash) % m_size;
 
-    if( m_table[bucket] == NULL )
-        return NULL;
+    if( m_table[bucket] == nullptr )
+        return nullptr;
 
     Node *first = m_table[bucket]->GetNext(),
          *curr = first;
@@ -195,7 +195,7 @@ void* wxHashTableBase::DoGet( long key, long hash ) const
     }
     while( curr != first );
 
-    return NULL;
+    return nullptr;
 }
 
 void* wxHashTableBase::DoGet( const wxString& key, long hash ) const
@@ -204,8 +204,8 @@ void* wxHashTableBase::DoGet( const wxString& key, long hash ) const
 
     size_t bucket = size_t(hash) % m_size;
 
-    if( m_table[bucket] == NULL )
-        return NULL;
+    if( m_table[bucket] == nullptr )
+        return nullptr;
 
     Node *first = m_table[bucket]->GetNext(),
          *curr = first;
@@ -219,7 +219,7 @@ void* wxHashTableBase::DoGet( const wxString& key, long hash ) const
     }
     while( curr != first );
 
-    return NULL;
+    return nullptr;
 }
 
 void wxHashTableBase::DoUnlinkNode( size_t bucket, wxHashTableBase_Node* node,
@@ -229,7 +229,7 @@ void wxHashTableBase::DoUnlinkNode( size_t bucket, wxHashTableBase_Node* node,
         m_table[bucket] = prev;
 
     if( prev == node && prev == node->GetNext() )
-        m_table[bucket] = NULL;
+        m_table[bucket] = nullptr;
     else
         prev->m_next = node->m_next;
 
@@ -243,8 +243,8 @@ void* wxHashTableBase::DoDelete( long key, long hash )
 
     size_t bucket = size_t(hash) % m_size;
 
-    if( m_table[bucket] == NULL )
-        return NULL;
+    if( m_table[bucket] == nullptr )
+        return nullptr;
 
     Node *first = m_table[bucket]->GetNext(),
          *curr = first,
@@ -255,7 +255,7 @@ void* wxHashTableBase::DoDelete( long key, long hash )
         if( curr->m_key.integer == key )
         {
             void* retval = curr->m_value;
-            curr->m_value = NULL;
+            curr->m_value = nullptr;
 
             DoUnlinkNode( bucket, curr, prev );
             delete curr;
@@ -268,7 +268,7 @@ void* wxHashTableBase::DoDelete( long key, long hash )
     }
     while( curr != first );
 
-    return NULL;
+    return nullptr;
 }
 
 void* wxHashTableBase::DoDelete( const wxString& key, long hash )
@@ -277,8 +277,8 @@ void* wxHashTableBase::DoDelete( const wxString& key, long hash )
 
     size_t bucket = size_t(hash) % m_size;
 
-    if( m_table[bucket] == NULL )
-        return NULL;
+    if( m_table[bucket] == nullptr )
+        return nullptr;
 
     Node *first = m_table[bucket]->GetNext(),
          *curr = first,
@@ -289,7 +289,7 @@ void* wxHashTableBase::DoDelete( const wxString& key, long hash )
         if( *curr->m_key.string == key )
         {
             void* retval = curr->m_value;
-            curr->m_value = NULL;
+            curr->m_value = nullptr;
 
             DoUnlinkNode( bucket, curr, prev );
             delete curr;
@@ -302,7 +302,7 @@ void* wxHashTableBase::DoDelete( const wxString& key, long hash )
     }
     while( curr != first );
 
-    return NULL;
+    return nullptr;
 }
 
 long wxHashTableBase::MakeKey( const wxString& str )
@@ -350,7 +350,7 @@ void wxHashTable::GetNextNode( size_t bucketStart )
 {
     for( size_t i = bucketStart; i < m_size; ++i )
     {
-        if( m_table[i] != NULL )
+        if( m_table[i] != nullptr )
         {
             m_curr = ((Node*)m_table[i])->GetNext();
             m_currBucket = i;
@@ -358,13 +358,13 @@ void wxHashTable::GetNextNode( size_t bucketStart )
         }
     }
 
-    m_curr = NULL;
+    m_curr = nullptr;
     m_currBucket = 0;
 }
 
 wxHashTable::Node* wxHashTable::Next()
 {
-    if( m_curr == NULL )
+    if( m_curr == nullptr )
         GetNextNode( 0 );
     else
     {

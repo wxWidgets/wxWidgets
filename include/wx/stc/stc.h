@@ -80,6 +80,13 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_CP_UTF8 65001
 #define wxSTC_IME_WINDOWED 0
 #define wxSTC_IME_INLINE 1
+#define wxSTC_ALPHA_TRANSPARENT 0
+#define wxSTC_ALPHA_OPAQUE 255
+#define wxSTC_ALPHA_NOALPHA 256
+#define wxSTC_CURSORNORMAL -1
+#define wxSTC_CURSORARROW 2
+#define wxSTC_CURSORWAIT 4
+#define wxSTC_CURSORREVERSEARROW 7
 #define wxSTC_MARKER_MAX 31
 #define wxSTC_MARK_CIRCLE 0
 #define wxSTC_MARK_ROUNDRECT 1
@@ -117,6 +124,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MARK_UNDERLINE 29
 #define wxSTC_MARK_RGBAIMAGE 30
 #define wxSTC_MARK_BOOKMARK 31
+#define wxSTC_MARK_VERTICALBOOKMARK 32
 #define wxSTC_MARK_CHARACTER 10000
 
 /// Markers used for outlining column.
@@ -127,6 +135,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MARKNUM_FOLDERSUB 29
 #define wxSTC_MARKNUM_FOLDER 30
 #define wxSTC_MARKNUM_FOLDEROPEN 31
+
+/// SC_MASK_FOLDERS doesn't go in an enumeration as larger than max 32-bit positive integer
 #define wxSTC_MASK_FOLDERS 0xFE000000
 #define wxSTC_MAX_MARGIN 4
 #define wxSTC_MARGIN_SYMBOL 0
@@ -137,8 +147,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MARGIN_RTEXT 5
 #define wxSTC_MARGIN_COLOUR 6
 
-/// Styles in range 32..38 are predefined for parts of the UI and are not used as normal styles.
-/// Style 39 is for future use.
+/// Styles in range 32..39 are predefined for parts of the UI and are not used as normal styles.
 #define wxSTC_STYLE_DEFAULT 32
 #define wxSTC_STYLE_LINENUMBER 33
 #define wxSTC_STYLE_BRACELIGHT 34
@@ -204,10 +213,20 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_INDIC_TEXTFORE 17
 #define wxSTC_INDIC_POINT 18
 #define wxSTC_INDIC_POINTCHARACTER 19
+#define wxSTC_INDIC_GRADIENT 20
+#define wxSTC_INDIC_GRADIENTCENTRE 21
+
+/// INDIC_CONTAINER, INDIC_IME, INDIC_IME_MAX, and INDIC_MAX are indicator numbers,
+/// not IndicatorStyles so should not really be in the INDIC_ enumeration.
+/// They are redeclared in IndicatorNumbers INDICATOR_.
+#define wxSTC_INDIC_CONTAINER 8
 #define wxSTC_INDIC_IME 32
 #define wxSTC_INDIC_IME_MAX 35
 #define wxSTC_INDIC_MAX 35
-#define wxSTC_INDIC_CONTAINER 8
+#define wxSTC_INDICATOR_CONTAINER 8
+#define wxSTC_INDICATOR_IME 32
+#define wxSTC_INDICATOR_IME_MAX 35
+#define wxSTC_INDICATOR_MAX 35
 #define wxSTC_INDICVALUEBIT 0x1000000
 #define wxSTC_INDICVALUEMASK 0xFFFFFF
 #define wxSTC_INDICFLAG_VALUEFORE 1
@@ -217,6 +236,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_IV_LOOKBOTH 3
 
 /// PrintColourMode - use same colours as screen.
+/// with the exception of line number margins, which use a white background
 #define wxSTC_PRINT_NORMAL 0
 
 /// PrintColourMode - invert the light value of each style for printing.
@@ -230,6 +250,10 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 /// PrintColourMode - only the default-background is forced to be white for printing.
 #define wxSTC_PRINT_COLOURONWHITEDEFAULTBG 4
+
+/// PrintColourMode - use same colours as screen, including line number margins.
+#define wxSTC_PRINT_SCREENCOLOURS 5
+#define wxSTC_FIND_NONE 0x0
 #define wxSTC_FIND_WHOLEWORD 0x2
 #define wxSTC_FIND_MATCHCASE 0x4
 #define wxSTC_FIND_WORDSTART 0x00100000
@@ -273,6 +297,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_WRAPINDENT_FIXED 0
 #define wxSTC_WRAPINDENT_SAME 1
 #define wxSTC_WRAPINDENT_INDENT 2
+#define wxSTC_WRAPINDENT_DEEPINDENT 3
 #define wxSTC_CACHE_NONE 0
 #define wxSTC_CACHE_CARET 1
 #define wxSTC_CACHE_PAGE 2
@@ -289,6 +314,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_EFF_QUALITY_LCD_OPTIMIZED 3
 #define wxSTC_MULTIPASTE_ONCE 0
 #define wxSTC_MULTIPASTE_EACH 1
+#define wxSTC_ACCESSIBILITY_DISABLED 0
+#define wxSTC_ACCESSIBILITY_ENABLED 1
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
@@ -296,15 +323,14 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_POPUP_NEVER 0
 #define wxSTC_POPUP_ALL 1
 #define wxSTC_POPUP_TEXT 2
+#define wxSTC_DOCUMENTOPTION_DEFAULT 0
+#define wxSTC_DOCUMENTOPTION_STYLES_NONE 0x1
+#define wxSTC_DOCUMENTOPTION_TEXT_LARGE 0x100
 #define wxSTC_STATUS_OK 0
 #define wxSTC_STATUS_FAILURE 1
 #define wxSTC_STATUS_BADALLOC 2
 #define wxSTC_STATUS_WARN_START 1000
 #define wxSTC_STATUS_WARN_REGEX 1001
-#define wxSTC_CURSORNORMAL -1
-#define wxSTC_CURSORARROW 2
-#define wxSTC_CURSORWAIT 4
-#define wxSTC_CURSORREVERSEARROW 7
 
 /// Constants for use with SetVisiblePolicy, similar to SetCaretPolicy.
 #define wxSTC_VISIBLE_SLOP 0x01
@@ -349,18 +375,20 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_CARETSTICKY_OFF 0
 #define wxSTC_CARETSTICKY_ON 1
 #define wxSTC_CARETSTICKY_WHITESPACE 2
-#define wxSTC_ALPHA_TRANSPARENT 0
-#define wxSTC_ALPHA_OPAQUE 255
-#define wxSTC_ALPHA_NOALPHA 256
 #define wxSTC_CARETSTYLE_INVISIBLE 0
 #define wxSTC_CARETSTYLE_LINE 1
 #define wxSTC_CARETSTYLE_BLOCK 2
+#define wxSTC_CARETSTYLE_OVERSTRIKE_BAR 0
+#define wxSTC_CARETSTYLE_OVERSTRIKE_BLOCK 0x10
+#define wxSTC_CARETSTYLE_INS_MASK 0xF
+#define wxSTC_CARETSTYLE_BLOCK_AFTER 0x100
 #define wxSTC_MARGINOPTION_NONE 0
 #define wxSTC_MARGINOPTION_SUBLINESELECT 1
 #define wxSTC_ANNOTATION_HIDDEN 0
 #define wxSTC_ANNOTATION_STANDARD 1
 #define wxSTC_ANNOTATION_BOXED 2
 #define wxSTC_ANNOTATION_INDENTED 3
+#define wxSTC_UNDO_NONE 0
 #define wxSTC_UNDO_MAY_COALESCE 1
 #define wxSTC_VS_NONE 0
 #define wxSTC_VS_RECTANGULARSELECTION 1
@@ -374,6 +402,9 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// U+2029 Paragraph Separator, and U+0085 Next Line
 #define wxSTC_LINE_END_TYPE_DEFAULT 0
 #define wxSTC_LINE_END_TYPE_UNICODE 1
+#define wxSTC_EOLANNOTATION_HIDDEN 0
+#define wxSTC_EOLANNOTATION_STANDARD 1
+#define wxSTC_EOLANNOTATION_BOXED 2
 
 /// Maximum value of keywordSet parameter of SetKeyWords.
 #define wxSTC_KEYWORDSET_MAX 8
@@ -385,6 +416,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// Type of modification and the action which caused the modification.
 /// These are defined as a bit mask to make it easy to specify which notifications are wanted.
 /// One bit is set from each of SC_MOD_* and SC_PERFORMED_*.
+#define wxSTC_MOD_NONE 0x0
 #define wxSTC_MOD_INSERTTEXT 0x1
 #define wxSTC_MOD_DELETETEXT 0x2
 #define wxSTC_MOD_CHANGESTYLE 0x4
@@ -407,7 +439,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MOD_LEXERSTATE 0x80000
 #define wxSTC_MOD_INSERTCHECK 0x100000
 #define wxSTC_MOD_CHANGETABSTOPS 0x200000
-#define wxSTC_MODEVENTMASKALL 0x3FFFFF
+#define wxSTC_MOD_CHANGEEOLANNOTATION 0x400000
+#define wxSTC_MODEVENTMASKALL 0x7FFFFF
 #define wxSTC_UPDATE_CONTENT 0x1
 #define wxSTC_UPDATE_SELECTION 0x2
 #define wxSTC_UPDATE_V_SCROLL 0x4
@@ -447,6 +480,16 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_AC_TAB 3
 #define wxSTC_AC_NEWLINE 4
 #define wxSTC_AC_COMMAND 5
+
+/// characterSource for SCN_CHARADDED
+/// Direct input characters.
+#define wxSTC_CHARACTERSOURCE_DIRECT_INPUT 0
+
+/// IME (inline mode) or dead key tentative input characters.
+#define wxSTC_CHARACTERSOURCE_TENTATIVE_INPUT 1
+
+/// IME (either inline or windowed mode) full composited string.
+#define wxSTC_CHARACTERSOURCE_IME_RESULT 2
 
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
@@ -569,6 +612,17 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_TEHEX 119
 #define wxSTC_LEX_JSON 120
 #define wxSTC_LEX_EDIFACT 121
+#define wxSTC_LEX_INDENT 122
+#define wxSTC_LEX_MAXIMA 123
+#define wxSTC_LEX_STATA 124
+#define wxSTC_LEX_SAS 125
+#define wxSTC_LEX_NIM 126
+#define wxSTC_LEX_CIL 127
+#define wxSTC_LEX_X12 128
+#define wxSTC_LEX_DATAFLEX 129
+#define wxSTC_LEX_HOLLYWOOD 130
+#define wxSTC_LEX_RAKU 131
+#define wxSTC_LEX_LPEG 999
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -591,8 +645,16 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_P_STRINGEOL 13
 #define wxSTC_P_WORD2 14
 #define wxSTC_P_DECORATOR 15
+#define wxSTC_P_FSTRING 16
+#define wxSTC_P_FCHARACTER 17
+#define wxSTC_P_FTRIPLE 18
+#define wxSTC_P_FTRIPLEDOUBLE 19
 
-/// Lexical states for SCLEX_CPP, SCLEX_BULLANT, SCLEX_COBOL, SCLEX_TACL, SCLEX_TAL
+/// Lexical states for SCLEX_CPP
+/// Lexical states for SCLEX_BULLANT
+/// Lexical states for SCLEX_COBOL
+/// Lexical states for SCLEX_TACL
+/// Lexical states for SCLEX_TAL
 #define wxSTC_C_DEFAULT 0
 #define wxSTC_C_COMMENT 1
 #define wxSTC_C_COMMENTLINE 2
@@ -988,6 +1050,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ERR_GCC_INCLUDED_FROM 22
 #define wxSTC_ERR_ESCSEQ 23
 #define wxSTC_ERR_ESCSEQ_UNKNOWN 24
+#define wxSTC_ERR_GCC_EXCERPT 25
 #define wxSTC_ERR_ES_BLACK 40
 #define wxSTC_ERR_ES_RED 41
 #define wxSTC_ERR_ES_GREEN 42
@@ -1046,6 +1109,10 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_DIFF_DELETED 5
 #define wxSTC_DIFF_ADDED 6
 #define wxSTC_DIFF_CHANGED 7
+#define wxSTC_DIFF_PATCH_ADD 8
+#define wxSTC_DIFF_PATCH_DELETE 9
+#define wxSTC_DIFF_REMOVED_PATCH_ADD 10
+#define wxSTC_DIFF_REMOVED_PATCH_DELETE 11
 
 /// Lexical states for SCLEX_CONF (Apache Configuration Files Lexer)
 #define wxSTC_CONF_DEFAULT 0
@@ -1181,6 +1248,16 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MATLAB_OPERATOR 6
 #define wxSTC_MATLAB_IDENTIFIER 7
 #define wxSTC_MATLAB_DOUBLEQUOTESTRING 8
+
+/// Lexical states for SCLEX_MAXIMA
+#define wxSTC_MAXIMA_OPERATOR 0
+#define wxSTC_MAXIMA_COMMANDENDING 1
+#define wxSTC_MAXIMA_COMMENT 2
+#define wxSTC_MAXIMA_NUMBER 3
+#define wxSTC_MAXIMA_STRING 4
+#define wxSTC_MAXIMA_COMMAND 5
+#define wxSTC_MAXIMA_VARIABLE 6
+#define wxSTC_MAXIMA_UNKNOWN 7
 
 /// Lexical states for SCLEX_SCRIPTOL
 #define wxSTC_SCRIPTOL_DEFAULT 0
@@ -2463,11 +2540,151 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_EDI_UNH 7
 #define wxSTC_EDI_BADSEGMENT 8
 
+/// Lexical states for SCLEX_STATA
+#define wxSTC_STATA_DEFAULT 0
+#define wxSTC_STATA_COMMENT 1
+#define wxSTC_STATA_COMMENTLINE 2
+#define wxSTC_STATA_COMMENTBLOCK 3
+#define wxSTC_STATA_NUMBER 4
+#define wxSTC_STATA_OPERATOR 5
+#define wxSTC_STATA_IDENTIFIER 6
+#define wxSTC_STATA_STRING 7
+#define wxSTC_STATA_TYPE 8
+#define wxSTC_STATA_WORD 9
+#define wxSTC_STATA_GLOBAL_MACRO 10
+#define wxSTC_STATA_MACRO 11
+
+/// Lexical states for SCLEX_SAS
+#define wxSTC_SAS_DEFAULT 0
+#define wxSTC_SAS_COMMENT 1
+#define wxSTC_SAS_COMMENTLINE 2
+#define wxSTC_SAS_COMMENTBLOCK 3
+#define wxSTC_SAS_NUMBER 4
+#define wxSTC_SAS_OPERATOR 5
+#define wxSTC_SAS_IDENTIFIER 6
+#define wxSTC_SAS_STRING 7
+#define wxSTC_SAS_TYPE 8
+#define wxSTC_SAS_WORD 9
+#define wxSTC_SAS_GLOBAL_MACRO 10
+#define wxSTC_SAS_MACRO 11
+#define wxSTC_SAS_MACRO_KEYWORD 12
+#define wxSTC_SAS_BLOCK_KEYWORD 13
+#define wxSTC_SAS_MACRO_FUNCTION 14
+#define wxSTC_SAS_STATEMENT 15
+
+/// Lexical states for SCLEX_NIM
+#define wxSTC_NIM_DEFAULT 0
+#define wxSTC_NIM_COMMENT 1
+#define wxSTC_NIM_COMMENTDOC 2
+#define wxSTC_NIM_COMMENTLINE 3
+#define wxSTC_NIM_COMMENTLINEDOC 4
+#define wxSTC_NIM_NUMBER 5
+#define wxSTC_NIM_STRING 6
+#define wxSTC_NIM_CHARACTER 7
+#define wxSTC_NIM_WORD 8
+#define wxSTC_NIM_TRIPLE 9
+#define wxSTC_NIM_TRIPLEDOUBLE 10
+#define wxSTC_NIM_BACKTICKS 11
+#define wxSTC_NIM_FUNCNAME 12
+#define wxSTC_NIM_STRINGEOL 13
+#define wxSTC_NIM_NUMERROR 14
+#define wxSTC_NIM_OPERATOR 15
+#define wxSTC_NIM_IDENTIFIER 16
+
+/// Lexical states for SCLEX_CIL
+#define wxSTC_CIL_DEFAULT 0
+#define wxSTC_CIL_COMMENT 1
+#define wxSTC_CIL_COMMENTLINE 2
+#define wxSTC_CIL_WORD 3
+#define wxSTC_CIL_WORD2 4
+#define wxSTC_CIL_WORD3 5
+#define wxSTC_CIL_STRING 6
+#define wxSTC_CIL_LABEL 7
+#define wxSTC_CIL_OPERATOR 8
+#define wxSTC_CIL_IDENTIFIER 9
+#define wxSTC_CIL_STRINGEOL 10
+
+/// Lexical states for SCLEX_X12
+#define wxSTC_X12_DEFAULT 0
+#define wxSTC_X12_BAD 1
+#define wxSTC_X12_ENVELOPE 2
+#define wxSTC_X12_FUNCTIONGROUP 3
+#define wxSTC_X12_TRANSACTIONSET 4
+#define wxSTC_X12_SEGMENTHEADER 5
+#define wxSTC_X12_SEGMENTEND 6
+#define wxSTC_X12_SEP_ELEMENT 7
+#define wxSTC_X12_SEP_SUBELEMENT 8
+
+/// Lexical states for SCLEX_DATAFLEX
+#define wxSTC_DF_DEFAULT 0
+#define wxSTC_DF_IDENTIFIER 1
+#define wxSTC_DF_METATAG 2
+#define wxSTC_DF_IMAGE 3
+#define wxSTC_DF_COMMENTLINE 4
+#define wxSTC_DF_PREPROCESSOR 5
+#define wxSTC_DF_PREPROCESSOR2 6
+#define wxSTC_DF_NUMBER 7
+#define wxSTC_DF_HEXNUMBER 8
+#define wxSTC_DF_WORD 9
+#define wxSTC_DF_STRING 10
+#define wxSTC_DF_STRINGEOL 11
+#define wxSTC_DF_SCOPEWORD 12
+#define wxSTC_DF_OPERATOR 13
+#define wxSTC_DF_ICODE 14
+
+/// Lexical states for SCLEX_HOLLYWOOD
+#define wxSTC_HOLLYWOOD_DEFAULT 0
+#define wxSTC_HOLLYWOOD_COMMENT 1
+#define wxSTC_HOLLYWOOD_COMMENTBLOCK 2
+#define wxSTC_HOLLYWOOD_NUMBER 3
+#define wxSTC_HOLLYWOOD_KEYWORD 4
+#define wxSTC_HOLLYWOOD_STDAPI 5
+#define wxSTC_HOLLYWOOD_PLUGINAPI 6
+#define wxSTC_HOLLYWOOD_PLUGINMETHOD 7
+#define wxSTC_HOLLYWOOD_STRING 8
+#define wxSTC_HOLLYWOOD_STRINGBLOCK 9
+#define wxSTC_HOLLYWOOD_PREPROCESSOR 10
+#define wxSTC_HOLLYWOOD_OPERATOR 11
+#define wxSTC_HOLLYWOOD_IDENTIFIER 12
+#define wxSTC_HOLLYWOOD_CONSTANT 13
+#define wxSTC_HOLLYWOOD_HEXNUMBER 14
+
+/// Lexical states for SCLEX_RAKU
+#define wxSTC_RAKU_DEFAULT 0
+#define wxSTC_RAKU_ERROR 1
+#define wxSTC_RAKU_COMMENTLINE 2
+#define wxSTC_RAKU_COMMENTEMBED 3
+#define wxSTC_RAKU_POD 4
+#define wxSTC_RAKU_CHARACTER 5
+#define wxSTC_RAKU_HEREDOC_Q 6
+#define wxSTC_RAKU_HEREDOC_QQ 7
+#define wxSTC_RAKU_STRING 8
+#define wxSTC_RAKU_STRING_Q 9
+#define wxSTC_RAKU_STRING_QQ 10
+#define wxSTC_RAKU_STRING_Q_LANG 11
+#define wxSTC_RAKU_STRING_VAR 12
+#define wxSTC_RAKU_REGEX 13
+#define wxSTC_RAKU_REGEX_VAR 14
+#define wxSTC_RAKU_ADVERB 15
+#define wxSTC_RAKU_NUMBER 16
+#define wxSTC_RAKU_PREPROCESSOR 17
+#define wxSTC_RAKU_OPERATOR 18
+#define wxSTC_RAKU_WORD 19
+#define wxSTC_RAKU_FUNCTION 20
+#define wxSTC_RAKU_IDENTIFIER 21
+#define wxSTC_RAKU_TYPEDEF 22
+#define wxSTC_RAKU_MU 23
+#define wxSTC_RAKU_POSITIONAL 24
+#define wxSTC_RAKU_ASSOCIATIVE 25
+#define wxSTC_RAKU_CALLABLE 26
+#define wxSTC_RAKU_GRAMMAR 27
+#define wxSTC_RAKU_CLASS 28
+
 //}}}
 //----------------------------------------------------------------------
 
 
-#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)
+#if defined(__clang__) || defined(__GNUC__)
     #define wxSTC_STRINGIFY(X) #X
     #define wxSTC_DEPRECATED_MACRO_VALUE(value,msg) \
         _Pragma(wxSTC_STRINGIFY(GCC warning msg)) value
@@ -2479,7 +2696,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // The wxSTC_INDIC{0,1,2,S}_MASK values are no longer used in Scintilla
 
-#if wxCHECK_VISUALC_VERSION(10)
+#if defined(__VISUALC__)
     #pragma deprecated(wxSTC_INDIC0_MASK, wxSTC_INDIC1_MASK, \
                        wxSTC_INDIC2_MASK, wxSTC_INDICS_MASK)
 #endif
@@ -2496,7 +2713,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // The following entries have non-conformant prefixes.
 
-#if wxCHECK_VISUALC_VERSION(10)
+#if defined(__VISUALC__)
     #pragma deprecated(wxSTC_SCMOD_NORM, wxSTC_SCMOD_SHIFT, wxSTC_SCMOD_CTRL, \
                        wxSTC_SCMOD_ALT, wxSTC_SCMOD_SUPER, wxSTC_SCMOD_META, \
                        wxSTC_SCVS_NONE, wxSTC_SCVS_RECTANGULARSELECTION, \
@@ -2891,7 +3108,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
                      const wxString& name = wxSTCNameStr);
-    wxStyledTextCtrl() { m_swx = NULL; }
+    wxStyledTextCtrl() { m_swx = nullptr; }
     ~wxStyledTextCtrl();
 
 #endif
@@ -2943,14 +3160,14 @@ public:
     int GetStyleAt(int pos) const;
 
     // Redoes the next action on the undo history.
-    void Redo() wxOVERRIDE;
+    void Redo() override;
 
     // Choose between collecting actions into the undo
     // history and discarding them.
     void SetUndoCollection(bool collectUndo);
 
     // Select all the text in the document.
-    void SelectAll() wxOVERRIDE;
+    void SelectAll() override;
 
     // Remember the current position in the undo history as the position
     // at which the document was saved.
@@ -2960,13 +3177,19 @@ public:
     wxMemoryBuffer GetStyledText(int startPos, int endPos);
 
     // Are there any redoable actions in the undo history?
-    bool CanRedo() const wxOVERRIDE;
+    bool CanRedo() const override;
 
     // Retrieve the line number at which a particular marker is located.
     int MarkerLineFromHandle(int markerHandle);
 
     // Delete a marker.
     void MarkerDeleteHandle(int markerHandle);
+
+    // Retrieve marker handles of a line
+    int MarkerHandleFromLine(int line, int which);
+
+    // Retrieve marker number of a marker handle
+    int MarkerNumberFromLine(int line, int which);
 
     // Is undo history being collected?
     bool GetUndoCollection() const;
@@ -3006,7 +3229,7 @@ public:
     #ifdef SWIG
     wxString GetCurLine(int* OUTPUT);
 #else
-    wxString GetCurLine(int* linePos=NULL);
+    wxString GetCurLine(int* linePos=nullptr);
 #endif
 
     // Retrieve the position of the last correctly styled character.
@@ -3041,6 +3264,12 @@ public:
     // Retrieve the visible size of a tab.
     int GetTabWidth() const;
 
+    // Set the minimum visual width of a tab.
+    void SetTabMinimumWidth(int pixels);
+
+    // Get the minimum visual width of a tab.
+    int GetTabMinimumWidth() const;
+
     // Clear explicit tabstops on a line.
     void ClearTabStops(int line);
 
@@ -3056,7 +3285,7 @@ public:
     // Is the IME displayed in a window or inline?
     int GetIMEInteraction() const;
 
-    // Choose to display the IME in a winow or inline.
+    // Choose to display the IME in a window or inline.
     void SetIMEInteraction(int imeInteraction);
 
     // Set the symbol used for a particular marker number,
@@ -3287,6 +3516,12 @@ public:
     // Get the set of characters making up words for when moving or selecting by word.
     wxString GetWordChars() const;
 
+    // Set the number of characters to have directly indexed categories
+    void SetCharacterCategoryOptimization(int countCharacters);
+
+    // Get the number of characters to have directly indexed categories
+    int GetCharacterCategoryOptimization() const;
+
     // Start a sequence of actions that is undone and redone as a unit.
     // May be nested.
     void BeginUndoAction();
@@ -3342,16 +3577,6 @@ public:
     // Get the size of the dots used to mark space characters.
     int GetWhitespaceSize() const;
 
-    // Divide each styling byte into lexical class bits (default: 5) and indicator
-    // bits (default: 3). If a lexer requires more than 32 lexical states, then this
-    // is used to expand the possible states.
-    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
-    void SetStyleBits(int bits);
-
-    // Retrieve number of bits in style bytes used to hold the lexical state.
-    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
-    int GetStyleBits() const;
-
     // Used to hold extra styling information for each line.
     void SetLineState(int line, int state);
 
@@ -3373,11 +3598,19 @@ public:
     // Set the colour of the background of the line containing the caret.
     void SetCaretLineBackground(const wxColour& back);
 
+    // Retrieve the caret line frame width.
+    // Width = 0 means this option is disabled.
+    int GetCaretLineFrame() const;
+
+    // Display the caret line framed.
+    // Set width != 0 to enable this option and width = 0 to disable it.
+    void SetCaretLineFrame(int width);
+
     // Set a style to be changeable or not (read only).
     // Experimental feature, currently buggy.
     void StyleSetChangeable(int style, bool changeable);
 
-    // Display an auto-completion list.
+    // Display a auto-completion list.
     // The lengthEntered parameter indicates how many characters before
     // the caret should be used to provide context.
     void AutoCompShow(int lengthEntered, const wxString& itemList);
@@ -3502,6 +3735,9 @@ public:
     // Count characters between two positions.
     int CountCharacters(int start, int end);
 
+    // Count code units between two positions.
+    int CountCodeUnits(int start, int end);
+
     // Show or hide the horizontal scroll bar.
     void SetUseHorizontalScrollBar(bool visible);
 
@@ -3565,7 +3801,7 @@ public:
 
     // Find some text in the document.
     int FindText(int minPos, int maxPos, const wxString& text, int flags=0,
-                 int* findEnd=NULL);
+                 int* findEnd=nullptr);
 
     // On Windows, will draw the document into a display context such as a printer.
     int FormatRange(bool   doDraw,
@@ -3606,7 +3842,7 @@ public:
     // Retrieve a range of text.
     wxString GetTextRange(int startPos, int endPos);
 
-    // Draw the selection in normal style or with selection highlighted.
+    // Draw the selection either highlighted or in normal (non-highlighted) style.
     void HideSelection(bool hide);
 
     // Retrieve the point in the window where a position is displayed.
@@ -3636,28 +3872,28 @@ public:
     void SetReadOnly(bool readOnly);
 
     // Will a paste succeed?
-    bool CanPaste() const wxOVERRIDE;
+    bool CanPaste() const override;
 
     // Are there any undoable actions in the undo history?
-    bool CanUndo() const wxOVERRIDE;
+    bool CanUndo() const override;
 
     // Delete the undo history.
-    void EmptyUndoBuffer() wxOVERRIDE;
+    void EmptyUndoBuffer() override;
 
     // Undo one action in the undo history.
-    void Undo() wxOVERRIDE;
+    void Undo() override;
 
     // Cut the selection to the clipboard.
-    void Cut() wxOVERRIDE;
+    void Cut() override;
 
     // Copy the selection to the clipboard.
-    void Copy() wxOVERRIDE;
+    void Copy() override;
 
     // Paste the contents of the clipboard into the document replacing the selection.
-    void Paste() wxOVERRIDE;
+    void Paste() override;
 
     // Clear the selection.
-    void Clear() wxOVERRIDE;
+    void Clear() override;
 
     // Replace the contents of the document with the argument text.
     void SetText(const wxString& text);
@@ -3694,12 +3930,24 @@ public:
     // Get the position that starts the target.
     int GetTargetStart() const;
 
+    // Sets the virtual space of the target start
+    void SetTargetStartVirtualSpace(int space);
+
+    // Get the virtual space of the target start
+    int GetTargetStartVirtualSpace() const;
+
     // Sets the position that ends the target which is used for updating the
     // document without affecting the scroll position.
     void SetTargetEnd(int end);
 
     // Get the position that ends the target.
     int GetTargetEnd() const;
+
+    // Sets the virtual space of the target end
+    void SetTargetEndVirtualSpace(int space);
+
+    // Get the virtual space of the target end
+    int GetTargetEndVirtualSpace() const;
 
     // Sets both the start and end of the target in one call.
     void SetTargetRange(int start, int end);
@@ -3728,7 +3976,7 @@ public:
 
     // Search for a counted string in the target and set the target to the found
     // range. Text is counted so it can contain NULs.
-    // Returns length of range or -1 for failure in which case target is not moved.
+    // Returns start of found range or -1 for failure in which case target is not moved.
     int SearchInTarget(const wxString& text);
 
     // Set the search flags used by SearchInTarget.
@@ -3817,8 +4065,17 @@ public:
     // Switch a header line between expanded and contracted and show some text after the line.
     void ToggleFoldShowText(int line, const wxString& text);
 
-    // Set the style of fold display text
+    // Set the style of fold display text.
     void FoldDisplayTextSetStyle(int style);
+
+    // Get the style of fold display text.
+    int FoldDisplayTextGetStyle() const;
+
+    // Set the default fold display text.
+    void SetDefaultFoldDisplayText(const wxString& text);
+
+    // Get the default fold display text.
+    wxString GetDefaultFoldDisplayText() const;
 
     // Expand or contract a fold header.
     void FoldLine(int line, int action);
@@ -3952,7 +4209,7 @@ public:
     bool GetUseVerticalScrollBar() const;
 
     // Append a string to the end of the document without changing the selection.
-    void AppendText(const wxString& text) wxOVERRIDE;
+    void AppendText(const wxString& text) override;
 
     // Is drawing done in two phases with backgrounds drawn before foregrounds?
     bool GetTwoPhaseDraw() const;
@@ -4000,6 +4257,12 @@ public:
 
     // Set the other colour used as a chequerboard pattern in the fold margin
     void SetFoldMarginHiColour(bool useSetting, const wxColour& fore);
+
+    // Enable or disable accessibility.
+    void SetAccessibility(int accessibility);
+
+    // Report accessibility status.
+    int GetAccessibility() const;
 
     // Move caret down one line.
     void LineDown();
@@ -4126,6 +4389,9 @@ public:
     // Switch the current line with the previous.
     void LineTranspose();
 
+    // Reverse order of selected lines.
+    void LineReverse();
+
     // Duplicate the current line.
     void LineDuplicate();
 
@@ -4208,6 +4474,9 @@ public:
     // The maxReStyle must be 0 for now. It may be defined in a future release.
     int BraceMatch(int pos, int maxReStyle=0);
 
+    // Similar to BraceMatch, but matching starts at the explicit start position.
+    int BraceMatchNext(int pos, int startPos);
+
     // Are the end of line characters visible?
     bool GetViewEOL() const;
 
@@ -4249,6 +4518,9 @@ public:
     // Clear all vertical edges.
     void MultiEdgeClearAll();
 
+    // Get multi edge positions.
+    int GetMultiEdgeColumn(int which) const;
+
     // Sets the current caret position to be the search anchor.
     void SearchAnchor();
 
@@ -4287,8 +4559,17 @@ public:
     // Release a reference to the document, deleting document if it fades to black.
     void ReleaseDocument(void* docPointer);
 
+    // Get which document options are set.
+    int GetDocumentOptions() const;
+
     // Get which document modification events are sent to the container.
     int GetModEventMask() const;
+
+    // Set whether command events are sent to the container.
+    void SetCommandEvents(bool commandEvents);
+
+    // Get whether command events are sent to the container.
+    bool GetCommandEvents() const;
 
     // Change internal focus flag.
     void SetSTCFocus(bool focus);
@@ -4422,6 +4703,11 @@ public:
     // of characters. Returned value is always between 0 and last position in document.
     int PositionRelative(int pos, int relative);
 
+    // Given a valid document position, return a position that differs in a number
+    // of UTF-16 code units. Returned value is always between 0 and last position in document.
+    // The result may point half way (2 bytes) inside a non-BMP character.
+    int PositionRelativeCodeUnits(int pos, int relative);
+
     // Copy a range of text to the clipboard. Positions are clipped into the document.
     void CopyRange(int start, int end);
 
@@ -4434,6 +4720,9 @@ public:
 
     // Get the mode of the current selection.
     int GetSelectionMode() const;
+
+    // Get whether or not regular caret moves will extend or reduce the selection.
+    bool GetMoveExtendsSelection() const;
 
     // Retrieve the position of the start of the selection at the given line (wxSTC_INVALID_POSITION if no selection on this line).
     int GetLineSelStartPosition(int line);
@@ -4584,10 +4873,10 @@ public:
     // Get the current indicator value
     int GetIndicatorValue() const;
 
-    // Turn an indicator on over a range.
+    // Turn a indicator on over a range.
     void IndicatorFillRange(int start, int lengthFill);
 
-    // Turn an indicator off over a range.
+    // Turn a indicator off over a range.
     void IndicatorClearRange(int start, int lengthClear);
 
     // Are any indicators present at pos?
@@ -4776,7 +5065,7 @@ public:
     void ClearSelections();
 
     // Add a selection
-    int AddSelection(int caret, int anchor);
+    void AddSelection(int caret, int anchor);
 
     // Drop one selection
     void DropSelectionN(int selection);
@@ -4817,8 +5106,14 @@ public:
     // Returns the position at the start of the selection.
     int GetSelectionNStart(int selection) const;
 
+    // Returns the virtual space at the start of the selection.
+    int GetSelectionNStartVirtualSpace(int selection) const;
+
     // Sets the position that ends the selection - this becomes the currentPosition.
     void SetSelectionNEnd(int selection, int caret);
+
+    // Returns the virtual space at the end of the selection.
+    int GetSelectionNEndVirtualSpace(int selection) const;
 
     // Returns the position at the end of the selection.
     int GetSelectionNEnd(int selection) const;
@@ -4853,7 +5148,7 @@ public:
     // Return options for virtual space behaviour.
     int GetVirtualSpaceOptions() const;
 
-    // On GTK+, allow selecting the modifier key to use for mouse-based
+    // On GTK, allow selecting the modifier key to use for mouse-based
     // rectangular selection. Often the window manager requires Alt+Mouse Drag
     // for moving windows.
     // Valid values are wxSTC_KEYMOD_CTRL (default), wxSTC_KEYMOD_ALT, or wxSTC_KEYMOD_SUPER.
@@ -4982,6 +5277,33 @@ public:
     // Remove a character representation.
     void ClearRepresentation(const wxString& encodedCharacter);
 
+    // Set the end of line annotation text for a line
+    void EOLAnnotationSetText(int line, const wxString& text);
+
+    // Get the end of line annotation text for a line
+    wxString EOLAnnotationGetText(int line) const;
+
+    // Set the style number for the end of line annotations for a line
+    void EOLAnnotationSetStyle(int line, int style);
+
+    // Get the style number for the end of line annotations for a line
+    int EOLAnnotationGetStyle(int line) const;
+
+    // Clear the end of annotations from all lines
+    void EOLAnnotationClearAll();
+
+    // Set the visibility for the end of line annotations for a view
+    void EOLAnnotationSetVisible(int visible);
+
+    // Get the visibility for the end of line annotations for a view
+    int EOLAnnotationGetVisible() const;
+
+    // Get the start of the range of style numbers used for end of line annotations
+    void EOLAnnotationSetStyleOffset(int style);
+
+    // Get the start of the range of style numbers used for end of line annotations
+    int EOLAnnotationGetStyleOffset() const;
+
     // Start notifying the container of all key presses and commands.
     void StartRecord();
 
@@ -5019,10 +5341,6 @@ public:
     // Retrieve a "property" value previously set with SetProperty,
     // interpreted as an int AFTER any "$()" variable replacement.
     int GetPropertyInt(const wxString &key, int defaultValue=0) const;
-
-    // Retrieve the number of bits the current lexer needs for styling.
-    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
-    int GetStyleBitsNeeded() const;
 
     // Retrieve the lexing language of the document.
     wxString GetLexerLanguage() const;
@@ -5073,6 +5391,35 @@ public:
 
     // Get the set of base styles that can be extended with sub styles
     wxString GetSubStyleBases() const;
+
+    // Retrieve the number of named styles for the lexer.
+    int GetNamedStyles() const;
+
+    // Retrieve the name of a style.
+    // Result is NUL-terminated.
+    wxString NameOfStyle(int style) const;
+
+    // Retrieve a ' ' separated list of style tags like "literal quoted string".
+    // Result is NUL-terminated.
+    wxString TagsOfStyle(int style) const;
+
+    // Retrieve a description of a style.
+    // Result is NUL-terminated.
+    wxString DescriptionOfStyle(int style) const;
+
+    // Divide each styling byte into lexical class bits (default: 5) and indicator
+    // bits (default: 3). If a lexer requires more than 32 lexical states, then this
+    // is used to expand the possible states.
+    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
+    void SetStyleBits(int bits);
+
+    // Retrieve number of bits in style bytes used to hold the lexical state.
+    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
+    int GetStyleBits() const;
+
+    // Retrieve the number of bits the current lexer needs for styling.
+    wxDEPRECATED_MSG( "This method uses a function deprecated in the Scintilla library." )
+    int GetStyleBitsNeeded() const;
 
     //}}}
     //----------------------------------------------------------------------
@@ -5213,7 +5560,7 @@ public:
 #ifdef SWIG
     wxCharBuffer GetCurLineRaw(int* OUTPUT);
 #else
-    wxCharBuffer GetCurLineRaw(int* linePos=NULL);
+    wxCharBuffer GetCurLineRaw(int* linePos=nullptr);
 #endif
 
     // Retrieve the contents of a line.
@@ -5254,16 +5601,16 @@ public:
     // implement wxTextEntryBase pure virtual methods
     // ----------------------------------------------
 
-    virtual void WriteText(const wxString& text) wxOVERRIDE
+    virtual void WriteText(const wxString& text) override
     {
         ReplaceSelection(text);
     }
 
-    virtual void Remove(long from, long to) wxOVERRIDE
+    virtual void Remove(long from, long to) override
     {
         Replace(from, to, wxString());
     }
-    virtual void Replace(long from, long to, const wxString& text) wxOVERRIDE
+    virtual void Replace(long from, long to, const wxString& text) override
     {
         SetTargetStart((int)from);
         SetTargetEnd((int)to);
@@ -5285,14 +5632,14 @@ public:
 
     */
 
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE
+    virtual void SetInsertionPoint(long pos) override
     {
         SetCurrentPos(int(pos == -1 ? GetLastPosition() : pos));
     }
-    virtual long GetInsertionPoint() const wxOVERRIDE { return GetCurrentPos(); }
-    virtual long GetLastPosition() const wxOVERRIDE { return GetTextLength(); }
+    virtual long GetInsertionPoint() const override { return GetCurrentPos(); }
+    virtual long GetLastPosition() const override { return GetTextLength(); }
 
-    virtual void SetSelection(long from, long to) wxOVERRIDE
+    virtual void SetSelection(long from, long to) override
     {
         if ( from == -1 && to == -1 )
         {
@@ -5305,7 +5652,7 @@ public:
         }
     }
 
-    virtual void SelectNone() wxOVERRIDE
+    virtual void SelectNone() override
     {
         ClearSelections();
     }
@@ -5313,7 +5660,7 @@ public:
 #ifdef SWIG
     void GetSelection(long* OUTPUT, long* OUTPUT) const;
 #else
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE
+    virtual void GetSelection(long *from, long *to) const override
     {
         if ( from )
             *from = GetSelectionStart();
@@ -5333,13 +5680,13 @@ public:
     }
 #endif
 
-    virtual bool IsEditable() const wxOVERRIDE { return !GetReadOnly(); }
-    virtual void SetEditable(bool editable) wxOVERRIDE { SetReadOnly(!editable); }
+    virtual bool IsEditable() const override { return !GetReadOnly(); }
+    virtual void SetEditable(bool editable) override { SetReadOnly(!editable); }
 
     // implement wxTextAreaBase pure virtual methods
     // ---------------------------------------------
 
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE
+    virtual int GetLineLength(long lineNo) const override
     {
         if ( lineNo < 0 || lineNo >= GetNumberOfLines() )
             return -1;
@@ -5347,7 +5694,7 @@ public:
         return static_cast<int>(GetLineText(lineNo).length());
     }
 
-    virtual wxString GetLineText(long lineNo) const wxOVERRIDE
+    virtual wxString GetLineText(long lineNo) const override
     {
         wxString text = GetLine(static_cast<int>(lineNo));
         size_t lastNewLine = text.find_last_not_of(wxS("\r\n"));
@@ -5358,35 +5705,35 @@ public:
             text.clear();
         return text;
     }
-    virtual int GetNumberOfLines() const wxOVERRIDE { return GetLineCount(); }
+    virtual int GetNumberOfLines() const override { return GetLineCount(); }
 
-    virtual bool IsModified() const wxOVERRIDE { return GetModify(); }
-    virtual void MarkDirty() wxOVERRIDE { wxFAIL_MSG("not implemented"); }
-    virtual void DiscardEdits() wxOVERRIDE { SetSavePoint(); }
+    virtual bool IsModified() const override { return GetModify(); }
+    virtual void MarkDirty() override { wxFAIL_MSG("not implemented"); }
+    virtual void DiscardEdits() override { SetSavePoint(); }
 
     virtual bool SetStyle(long WXUNUSED(start), long WXUNUSED(end),
-                          const wxTextAttr& WXUNUSED(style)) wxOVERRIDE
+                          const wxTextAttr& WXUNUSED(style)) override
     {
         wxFAIL_MSG("not implemented");
 
         return false;
     }
 
-    virtual bool GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style)) wxOVERRIDE
+    virtual bool GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style)) override
     {
         wxFAIL_MSG("not implemented");
 
         return false;
     }
 
-    virtual bool SetDefaultStyle(const wxTextAttr& WXUNUSED(style)) wxOVERRIDE
+    virtual bool SetDefaultStyle(const wxTextAttr& WXUNUSED(style)) override
     {
         wxFAIL_MSG("not implemented");
 
         return false;
     }
 
-    virtual long XYToPosition(long x, long y) const wxOVERRIDE
+    virtual long XYToPosition(long x, long y) const override
     {
         long pos = PositionFromLine((int)y);
         if ( pos == -1 )
@@ -5399,7 +5746,7 @@ public:
         return pos;
     }
 
-    virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE
+    virtual bool PositionToXY(long pos, long *x, long *y) const override
     {
         int l = LineFromPosition((int)pos);
         if ( l == -1 )
@@ -5418,11 +5765,11 @@ public:
         return true;
     }
 
-    virtual void ShowPosition(long pos) wxOVERRIDE { GotoPos((int)pos); }
+    virtual void ShowPosition(long pos) override { GotoPos((int)pos); }
 
     using wxWindow::HitTest;
 
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const wxOVERRIDE
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override
     {
         const long l = PositionFromPoint(pt);
         if ( l == -1 )
@@ -5437,7 +5784,7 @@ public:
     // just unhide it
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
-                                            wxTextCoord *row) const wxOVERRIDE
+                                            wxTextCoord *row) const override
     {
         return wxTextAreaBase::HitTest(pt, col, row);
     }
@@ -5455,13 +5802,13 @@ public:
     static wxVersionInfo GetLibraryVersionInfo();
 
 protected:
-    virtual void DoSetValue(const wxString& value, int flags) wxOVERRIDE;
-    virtual wxString DoGetValue() const wxOVERRIDE { return GetText(); }
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
+    virtual void DoSetValue(const wxString& value, int flags) override;
+    virtual wxString DoGetValue() const override { return GetText(); }
+    virtual wxWindow *GetEditableWindow() override { return this; }
 
 #ifndef SWIG
-    virtual bool DoLoadFile(const wxString& file, int fileType) wxOVERRIDE;
-    virtual bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE;
+    virtual bool DoLoadFile(const wxString& file, int fileType) override;
+    virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
@@ -5487,14 +5834,14 @@ protected:
     void OnIdle(wxIdleEvent& evt);
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& evt);
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // Turn notifications from Scintilla into events
     void NotifyChange();
     void NotifyParent(SCNotification* scn);
 
 #ifdef __WXMSW__
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 #endif // __WXMSW__
 
 private:
@@ -5511,7 +5858,6 @@ protected:
     bool                m_lastKeyDownConsumed;
 
     friend class ScintillaWX;
-    friend class Platform;
 #endif // !SWIG
 };
 
@@ -5600,7 +5946,7 @@ public:
     bool GetControl() const;
     bool GetAlt() const;
 
-    virtual wxEvent* Clone() const wxOVERRIDE { return new wxStyledTextEvent(*this); }
+    virtual wxEvent* Clone() const override { return new wxStyledTextEvent(*this); }
 
 #ifndef SWIG
 private:
@@ -5738,42 +6084,42 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define wxStyledTextEventHandler( func ) \
     wxEVENT_HANDLER_CAST( wxStyledTextEventFunction, func )
 
-#define EVT_STC_CHANGE(id, fn)             wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CHANGE,                id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_STYLENEEDED(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_STYLENEEDED,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_CHARADDED(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CHARADDED,             id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_SAVEPOINTREACHED(id, fn)   wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_SAVEPOINTREACHED,      id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_SAVEPOINTLEFT(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_SAVEPOINTLEFT,         id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_ROMODIFYATTEMPT(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ROMODIFYATTEMPT,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_KEY(id, fn)                wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_KEY,                   id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_DOUBLECLICK(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DOUBLECLICK,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_UPDATEUI(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_UPDATEUI,              id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_MODIFIED(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MODIFIED,              id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_MACRORECORD(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MACRORECORD,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_MARGINCLICK(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGINCLICK,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_NEEDSHOWN(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_NEEDSHOWN,             id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_PAINTED(id, fn)            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_PAINTED,               id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_USERLISTSELECTION(id, fn)  wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_USERLISTSELECTION,     id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_URIDROPPED(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_URIDROPPED,            id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_DWELLSTART(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLSTART,            id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_DWELLEND(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLEND,              id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_START_DRAG(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_START_DRAG,            id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_DRAG_OVER(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_DO_DROP(id, fn)            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_ZOOM(id, fn)               wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_HOTSPOT_CLICK(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_HOTSPOT_DCLICK(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_CALLTIP_CLICK(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK,         id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_AUTOCOMP_SELECTION(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_INDICATOR_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_CLICK,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_INDICATOR_RELEASE(id, fn)  wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE,     id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_AUTOCOMP_CANCELLED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CANCELLED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CHAR_DELETED, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_RELEASE_CLICK, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_CLIPBOARD_COPY(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_COPY,        id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_CLIPBOARD_PASTE(id, fn)       wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_PASTE,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_AUTOCOMP_COMPLETED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_COMPLETED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_MARGIN_RIGHT_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGIN_RIGHT_CLICK,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-#define EVT_STC_AUTOCOMP_SELECTION_CHANGE(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
+#define EVT_STC_CHANGE(id, fn)             wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CHANGE,                id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_STYLENEEDED(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_STYLENEEDED,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_CHARADDED(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CHARADDED,             id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_SAVEPOINTREACHED(id, fn)   wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_SAVEPOINTREACHED,      id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_SAVEPOINTLEFT(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_SAVEPOINTLEFT,         id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_ROMODIFYATTEMPT(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ROMODIFYATTEMPT,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_KEY(id, fn)                wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_KEY,                   id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_DOUBLECLICK(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DOUBLECLICK,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_UPDATEUI(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_UPDATEUI,              id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_MODIFIED(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MODIFIED,              id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_MACRORECORD(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MACRORECORD,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_MARGINCLICK(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGINCLICK,           id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_NEEDSHOWN(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_NEEDSHOWN,             id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_PAINTED(id, fn)            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_PAINTED,               id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_USERLISTSELECTION(id, fn)  wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_USERLISTSELECTION,     id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_URIDROPPED(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_URIDROPPED,            id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_DWELLSTART(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLSTART,            id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_DWELLEND(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DWELLEND,              id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_START_DRAG(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_START_DRAG,            id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_DRAG_OVER(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_DO_DROP(id, fn)            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_ZOOM(id, fn)               wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_HOTSPOT_CLICK(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_HOTSPOT_DCLICK(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_CALLTIP_CLICK(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK,         id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_AUTOCOMP_SELECTION(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_INDICATOR_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_CLICK,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_INDICATOR_RELEASE(id, fn)  wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE,     id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_AUTOCOMP_CANCELLED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CANCELLED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_CHAR_DELETED, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_RELEASE_CLICK, id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_CLIPBOARD_COPY(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_COPY,        id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_CLIPBOARD_PASTE(id, fn)       wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_PASTE,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_AUTOCOMP_COMPLETED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_COMPLETED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_MARGIN_RIGHT_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGIN_RIGHT_CLICK,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
+#define EVT_STC_AUTOCOMP_SELECTION_CHANGE(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) nullptr ),
 #endif
 
 #endif // wxUSE_STC

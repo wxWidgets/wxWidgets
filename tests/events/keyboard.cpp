@@ -161,7 +161,6 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                   desc.m_keycode,
                                   ev.GetKeyCode() );
 
-#if wxUSE_UNICODE
     if ( desc.m_keycode < WXK_START )
     {
         // For Latin-1 our key code is the same as Unicode character value.
@@ -176,7 +175,6 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                       0,
                                       (int)ev.GetUnicodeKey() );
     }
-#endif // wxUSE_UNICODE
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong modifiers in " + msg,
                                   desc.m_mods,
@@ -198,8 +196,8 @@ class KeyboardEventTestCase : public CppUnit::TestCase
 public:
     KeyboardEventTestCase() {}
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( KeyboardEventTestCase );

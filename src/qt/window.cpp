@@ -32,6 +32,7 @@
 #include "wx/tooltip.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 
 #define VERT_SCROLLBAR_POSITION 0, 1
@@ -59,7 +60,7 @@ class wxQtScrollArea : public wxQtEventSignalHandler< QScrollArea, wxWindowQt >
 public:
     wxQtScrollArea(wxWindowQt *parent, wxWindowQt *handler);
 
-    bool event(QEvent *e) wxOVERRIDE;
+    bool event(QEvent *e) override;
 };
 
 wxQtScrollArea::wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler )
@@ -179,7 +180,7 @@ void wxQtInternalScrollBar::sliderReleased()
 }
 
 #if wxUSE_ACCEL || defined( Q_MOC_RUN )
-class wxQtShortcutHandler : public QObject, public wxQtSignalHandler< wxWindowQt >
+class wxQtShortcutHandler : public QObject, public wxQtSignalHandler
 {
 
 public:
@@ -190,7 +191,7 @@ public:
 };
 
 wxQtShortcutHandler::wxQtShortcutHandler( wxWindowQt *window )
-    : wxQtSignalHandler< wxWindowQt >( window )
+    : wxQtSignalHandler( window )
 {
 }
 
@@ -198,7 +199,7 @@ void wxQtShortcutHandler::activated()
 {
     int command = sender()->property("wxQt_Command").toInt();
 
-    GetHandler()->QtHandleShortcut( command );
+    static_cast<wxWindowQt*>(GetHandler())->QtHandleShortcut( command );
 }
 #endif // wxUSE_ACCEL
 
@@ -224,7 +225,7 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 /* static */ void wxWindowQt::QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window )
 {
     QVariant variant;
-    qVariantSetValue( variant, window );
+    variant.setValue( window );
     widget->setProperty( WINDOW_POINTER_PROPERTY_NAME, variant );
 }
 
@@ -252,19 +253,19 @@ void wxWindowQt::QtSendSetCursorEvent(wxWindowQt* win, wxPoint posScreen)
         }
 
         w = w->GetParent();
-        if ( w == NULL )
+        if ( w == nullptr )
             break;
     }
     win->SetCursor(wxCursor(wxCURSOR_ARROW));
 }
 
-static wxWindowQt *s_capturedWindow = NULL;
+static wxWindowQt *s_capturedWindow = nullptr;
 
 /* static */ wxWindowQt *wxWindowBase::DoFindFocus()
 {
-    wxWindowQt *window = NULL;
+    wxWindowQt *window = nullptr;
     QWidget *qtWidget = QApplication::focusWidget();
-    if ( qtWidget != NULL )
+    if ( qtWidget != nullptr )
         window = wxWindowQt::QtRetrieveWindowPointer( qtWidget );
 
     return window;
@@ -272,10 +273,10 @@ static wxWindowQt *s_capturedWindow = NULL;
 
 void wxWindowQt::Init()
 {
-    m_horzScrollBar = NULL;
-    m_vertScrollBar = NULL;
+    m_horzScrollBar = nullptr;
+    m_vertScrollBar = nullptr;
 
-    m_qtPicture = NULL;
+    m_qtPicture = nullptr;
     m_qtPainter.reset(new QPainter());
 
     m_mouseInside = false;
@@ -284,8 +285,8 @@ void wxWindowQt::Init()
     m_qtShortcutHandler.reset(new wxQtShortcutHandler(this));
     m_processingShortcut = false;
 #endif
-    m_qtWindow = NULL;
-    m_qtContainer = NULL;
+    m_qtWindow = nullptr;
+    m_qtContainer = nullptr;
 }
 
 wxWindowQt::wxWindowQt()
@@ -308,7 +309,7 @@ wxWindowQt::~wxWindowQt()
 {
     if ( !m_qtWindow )
     {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is null"), GetName());
         return;
     }
 
@@ -327,15 +328,15 @@ wxWindowQt::~wxWindowQt()
     m_qtWindow->blockSignals(true);
 
     if ( s_capturedWindow == this )
-        s_capturedWindow = NULL;
+        s_capturedWindow = nullptr;
 
     DestroyChildren(); // This also destroys scrollbars
 
     if (m_qtWindow)
-        QtStoreWindowPointer( GetHandle(), NULL );
+        QtStoreWindowPointer( GetHandle(), nullptr );
 
 #if wxUSE_DRAG_AND_DROP
-    SetDropTarget(NULL);
+    SetDropTarget(nullptr);
 #endif
 
     delete m_qtWindow;
@@ -349,7 +350,7 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     // that a generic control, like wxPanel, is being created, so we need a very
     // simple control as a base:
 
-    if ( GetHandle() == NULL )
+    if ( GetHandle() == nullptr )
     {
         if ( style & (wxHSCROLL | wxVSCROLL) )
         {
@@ -383,7 +384,7 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
 
 void wxWindowQt::PostCreation(bool generic)
 {
-    if ( m_qtWindow == NULL )
+    if ( m_qtWindow == nullptr )
     {
         // store pointer to the QWidget subclass (to be used in the destructor)
         m_qtWindow = GetHandle();
@@ -413,10 +414,13 @@ void wxWindowQt::PostCreation(bool generic)
 //
 
     // Set the default color so Paint Event default handler clears the DC:
-    wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
-    wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
+    wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().window().color()));
+    wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().windowText().color()));
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
+
+    if ( !IsThisEnabled() )
+        DoEnable(false);
 
     // The window might have been hidden before Create() and it needs to remain
     // hidden in this case, so do it (unfortunately there doesn't seem to be
@@ -445,7 +449,7 @@ bool wxWindowQt::Show( bool show )
     // Show can be called before the underlying window is created:
 
     QWidget *qtWidget = GetHandle();
-    if ( qtWidget == NULL )
+    if ( qtWidget == nullptr )
     {
         return false;
     }
@@ -473,7 +477,8 @@ wxString wxWindowQt::GetLabel() const
 
 void wxWindowQt::DoEnable(bool enable)
 {
-    GetHandle()->setEnabled(enable);
+    if ( GetHandle() )
+        GetHandle()->setEnabled(enable);
 }
 
 void wxWindowQt::SetFocus()
@@ -552,19 +557,43 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
         widget = GetHandle();
     }
 
-    if ( widget != NULL )
+    if ( widget != nullptr )
     {
-        if ( rect != NULL )
+        if ( rect != nullptr )
         {
             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s rect %d %d %d %d"),
                        GetName(),
                        rect->x, rect->y, rect->width, rect->height);
             widget->update( wxQtConvertRect( *rect ));
+
+            wxWindowList& children = GetChildren();
+            if ( !children.empty() )
+            {
+                wxRect parentRect = *rect;
+                ClientToScreen(&parentRect.x, &parentRect.y);
+
+                for ( auto childWin : children )
+                {
+                    wxRect childRect = childWin->GetScreenRect();
+                    childRect.Intersect(parentRect);
+                    if ( !childRect.IsEmpty() )
+                    {
+                        childWin->ScreenToClient(&childRect.x, &childRect.y);
+                        childWin->RefreshRect(childRect);
+                    }
+                }
+            }
         }
         else
         {
             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s"), GetName());
             widget->update();
+
+            wxWindowList& children = GetChildren();
+            for ( auto childWin : children )
+            {
+                childWin->Refresh();
+            }
         }
     }
 }
@@ -611,30 +640,45 @@ int wxWindowQt::GetCharWidth() const
 void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
         int *externalLeading, const wxFont *font ) const
 {
-    QFontMetrics fontMetrics( font != NULL ? font->GetHandle() : GetHandle()->font() );
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
 
-    if ( x != NULL )
-        *x = fontMetrics.width( wxQtConvertString( string ));
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( string.empty() && !descent && !externalLeading )
+        return;
 
-    if ( y != NULL )
+    QFontMetrics fontMetrics( font != nullptr ? font->GetHandle() : GetHandle()->font() );
+
+    if ( x != nullptr )
+        *x = wxQtGetWidthFromMetrics(fontMetrics, wxQtConvertString( string ));
+
+    if ( y != nullptr )
         *y = fontMetrics.height();
 
-    if ( descent != NULL )
+    if ( descent != nullptr )
         *descent = fontMetrics.descent();
 
-    if ( externalLeading != NULL )
+    if ( externalLeading != nullptr )
         *externalLeading = fontMetrics.lineSpacing();
 }
 
 QWidget *wxWindowQt::QtGetClientWidget() const
 {
-    QWidget *qtWidget = NULL;
-    if ( m_qtContainer != NULL )
+    QWidget *qtWidget = nullptr;
+    if ( m_qtContainer != nullptr )
     {
         qtWidget = m_qtContainer->viewport();
     }
 
-    if ( qtWidget == NULL )
+    if ( qtWidget == nullptr )
     {
         // We don't have scrollbars or the QScrollArea has no children
         qtWidget = GetHandle();
@@ -643,11 +687,11 @@ QWidget *wxWindowQt::QtGetClientWidget() const
     return qtWidget;
 }
 
-/* Returns a scrollbar for the given orientation, or NULL if the scrollbar
+/* Returns a scrollbar for the given orientation, or nullptr if the scrollbar
  * has not been previously created and create is false */
 QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 {
-    QScrollBar *scrollBar = NULL;
+    QScrollBar *scrollBar = nullptr;
 
     if ( orientation == wxHORIZONTAL )
         scrollBar = m_horzScrollBar;
@@ -662,7 +706,7 @@ QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
 {
     QScrollArea *scrollArea = QtGetScrollBarsContainer();
-    wxCHECK_MSG( scrollArea, NULL, "Window without scrolling area" );
+    wxCHECK_MSG( scrollArea, nullptr, "Window without scrolling area" );
 
     // Create a new scrollbar if needed
     if ( !scrollBar )
@@ -692,18 +736,19 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
 
     //If not exist, create the scrollbar
     QScrollBar *scrollBar = QtGetScrollBar( orientation );
-    if ( scrollBar == NULL )
+    if ( scrollBar == nullptr )
         scrollBar = QtSetScrollBar( orientation );
 
     // Configure the scrollbar if it exists. If range is zero we can get here with
-    // scrollBar == NULL and it is not a problem
+    // scrollBar == nullptr and it is not a problem
     if ( scrollBar )
     {
         scrollBar->setRange( 0, range - thumbvisible );
         scrollBar->setPageStep( thumbvisible );
-        scrollBar->blockSignals( true );
-        scrollBar->setValue(pos);
-        scrollBar->blockSignals( false );
+        {
+            wxQtEnsureSignalsBlocked blocker(scrollBar);
+            scrollBar->setValue(pos);
+        }
         scrollBar->show();
 
         if ( HasFlag(wxALWAYS_SHOW_SB) && (range == 0) )
@@ -758,7 +803,7 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
     else
         widget = GetHandle();
     // scroll the widget or the specified rect (not children)
-    if ( rect != NULL )
+    if ( rect != nullptr )
         widget->scroll( dx, dy, wxQtConvertRect( *rect ));
     else
         widget->scroll( dx, dy );
@@ -771,7 +816,7 @@ void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
     if ( m_dropTarget == dropTarget )
         return;
 
-    if ( m_dropTarget != NULL )
+    if ( m_dropTarget != nullptr )
     {
         m_dropTarget->Disconnect();
         delete m_dropTarget;
@@ -779,7 +824,7 @@ void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
 
     m_dropTarget = dropTarget;
 
-    if ( m_dropTarget != NULL )
+    if ( m_dropTarget != nullptr )
     {
         m_dropTarget->ConnectTo(m_qtWindow);
     }
@@ -792,7 +837,7 @@ void wxWindowQt::SetWindowStyleFlag( long style )
 
 //    wxMISSING_IMPLEMENTATION( "wxWANTS_CHARS, wxTAB_TRAVERSAL" );
 //    // wxFULL_REPAINT_ON_RESIZE: Qt::WResizeNoErase (marked obsolete)
-//    // wxTRANSPARENT_WINDOW, wxCLIP_CHILDREN: Used in window for
+//    // wxCLIP_CHILDREN: Used in window for
 //    //   performance, apparently not needed.
 //
 //    // wxWANTS_CHARS: Need to reimplement event()
@@ -937,7 +982,7 @@ void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 
 void wxWindowQt::DoCaptureMouse()
 {
-    wxCHECK_RET( GetHandle() != NULL, wxT("invalid window") );
+    wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
     GetHandle()->grabMouse();
     s_capturedWindow = this;
 }
@@ -945,9 +990,9 @@ void wxWindowQt::DoCaptureMouse()
 
 void wxWindowQt::DoReleaseMouse()
 {
-    wxCHECK_RET( GetHandle() != NULL, wxT("invalid window") );
+    wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
     GetHandle()->releaseMouse();
-    s_capturedWindow = NULL;
+    s_capturedWindow = nullptr;
 }
 
 wxWindowQt *wxWindowBase::GetCapture()
@@ -1131,7 +1176,7 @@ bool wxWindowQt::QtSetBackgroundStyle()
     else
         widget = GetHandle();
     // check if the control is created (wxGTK requires calling it before):
-    if ( widget != NULL )
+    if ( widget != nullptr )
     {
         if (m_backgroundStyle == wxBG_STYLE_PAINT)
         {
@@ -1245,7 +1290,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         {
             bool handled;
 
-            if ( m_qtPicture == NULL )
+            if ( m_qtPicture == nullptr )
             {
                 // Real paint event (not for wxClientDC), prepare the background
                 switch ( GetBackgroundStyle() )
@@ -1312,7 +1357,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                 // Data from wxClientDC, paint it
                 m_qtPicture->play( m_qtPainter.get() );
                 // Reset picture
-                m_qtPicture->setData( NULL, 0 );
+                m_qtPicture->setData( nullptr, 0 );
                 handled = true;
             }
 
@@ -1341,7 +1386,12 @@ bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEven
 bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent *event )
 {
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
-    e.SetPosition( wxQtConvertPoint( event->pos() ) );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    QPoint qPt = event->position().toPoint();
+#else
+    QPoint qPt = event->pos();
+#endif
+    e.SetPosition( wxQtConvertPoint( qPt ) );
     e.SetEventObject(this);
 
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
@@ -1381,12 +1431,10 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
     // TODO: m_x, m_y
     e.m_keyCode = wxQtConvertKeyCode( event->key(), event->modifiers() );
 
-#if wxUSE_UNICODE
     if ( event->text().isEmpty() )
         e.m_uniChar = 0;
     else
         e.m_uniChar = event->text().at( 0 ).unicode();
-#endif // wxUSE_UNICODE
 
     e.m_rawCode = event->nativeVirtualKey();
     e.m_rawFlags = event->nativeModifiers();
@@ -1451,7 +1499,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 case Qt::RightButton:
                     wxType = wxEVT_RIGHT_DCLICK;
                     break;
-                case Qt::MidButton:
+                case Qt::MiddleButton:
                     wxType = wxEVT_MIDDLE_DCLICK;
                     break;
                 case Qt::XButton1:
@@ -1475,7 +1523,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 case Qt::RightButton:
                     wxType = wxEVT_RIGHT_DOWN;
                     break;
-                case Qt::MidButton:
+                case Qt::MiddleButton:
                     wxType = wxEVT_MIDDLE_DOWN;
                     break;
                 case Qt::XButton1:
@@ -1499,7 +1547,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 case Qt::RightButton:
                     wxType = wxEVT_RIGHT_UP;
                     break;
-                case Qt::MidButton:
+                case Qt::MiddleButton:
                     wxType = wxEVT_MIDDLE_UP;
                     break;
                 case Qt::XButton1:

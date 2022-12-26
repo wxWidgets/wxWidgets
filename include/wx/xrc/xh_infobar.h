@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxInfoBarXmlHandler : public wxXmlResourceHandler
 
 public:
     wxInfoBarXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     wxShowEffect GetShowEffect(wxString const& param);

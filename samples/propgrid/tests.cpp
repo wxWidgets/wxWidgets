@@ -60,7 +60,7 @@ public:
     {
     }
 
-    virtual wxColour GetColour( int index ) const wxOVERRIDE
+    virtual wxColour GetColour( int index ) const override
     {
         switch (index)
         {
@@ -86,7 +86,7 @@ public:
 
     virtual wxString ColourToString( const wxColour& col,
                                      int index,
-                                     int argFlags = 0 ) const wxOVERRIDE
+                                     int argFlags = 0 ) const override
     {
         if ( index == (int)(m_choices.GetCount()-1) )
             return wxEmptyString;
@@ -94,7 +94,7 @@ public:
         return wxColourProperty::ColourToString(col, index, argFlags);
     }
 
-    virtual int GetCustomColourIndex() const wxOVERRIDE
+    virtual int GetCustomColourIndex() const override
     {
         return m_choices.GetCount()-2;
     }
@@ -326,12 +326,12 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
     pgman->ClearSelection();
 
-    srand((unsigned int)(time(NULL) % UINT_MAX));
+    srand((unsigned int)(time(nullptr) % UINT_MAX));
 
     int failures = 0;
     bool _failed_ = false;
     wxVector<wxString> errorMessages;
-    wxDialog* dlg = NULL;
+    wxDialog* dlg = nullptr;
 
     dlg = new wxDialog(this,wxID_ANY,"wxPropertyGrid Regression Tests",
         wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
@@ -413,7 +413,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
               it.Next() )
         {
             wxPGProperty* p = it.GetProperty();
-            if ( (p->GetParent() != p->GetParentState()->DoGetRoot() && !p->GetParent()->IsExpanded()) )
+            if ( (p->GetParent() != p->GetGrid()->GetRoot() && !p->GetParent()->IsExpanded()) )
                 RT_FAILURE_MSG(wxString::Format("'%s' had collapsed parent (only visible properties expected)",p->GetLabel()))
             else if ( p->HasFlag(wxPG_PROP_HIDDEN) )
                 RT_FAILURE_MSG(wxString::Format("'%s' was hidden (only visible properties expected)",p->GetLabel()))
@@ -587,7 +587,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // in wxPropertyGridInterface functions is intentional.
         // Purpose is to test wxPGPropArgCls ctors.
 
-        //pg = (wxPropertyGrid*) NULL;
+        //pg = nullptr;
 
         wxArrayString test_arrstr_1;
         test_arrstr_1.Add("Apple");
@@ -695,7 +695,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg->SetPropertyValue("DateProperty",dt2);
 #endif
 
-        //pg = (wxPropertyGrid*) NULL;
+        //pg = nullptr;
 
         pgman->SelectPage(0);
 
@@ -1023,33 +1023,74 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(MaxLength)
 
         wxPGProperty* prop1 = pgman->GetProperty("StringProperty");
+        wxString propSetValStr = "12345678901234567890";
+        prop1->SetValueFromString(propSetValStr);
         if ( !prop1->SetMaxLength(10) )
             RT_FAILURE();
         if ( prop1->GetMaxLength() != 10 )
+            RT_FAILURE();
+        wxString propGetValStr = prop1->GetValueAsString();
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
+        prop1->SetValueFromString(propSetValStr);
+        propGetValStr = prop1->GetValueAsString();
+        if ( propGetValStr != propSetValStr )
             RT_FAILURE();
 
         if ( !prop1->SetMaxLength(-1) )
             RT_FAILURE();
         if ( prop1->GetMaxLength() != 0 )
             RT_FAILURE();
+        propGetValStr = prop1->GetValueAsString();
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
 
         wxPGProperty* prop2 = pgman->GetProperty("LongStringProp");
+        propSetValStr = "123456789012345678901234567890";
+        prop2->SetValueFromString(propSetValStr);
         if ( !prop2->SetMaxLength(20) )
             RT_FAILURE();
         if ( prop2->GetMaxLength() != 20 )
             RT_FAILURE();
+        propGetValStr = prop2->GetValueAsString();
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
+        prop2->SetValueFromString(propSetValStr);
+        propGetValStr = prop2->GetValueAsString();
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
 
         wxPGProperty* prop3 = pgman->GetProperty("IntProperty");
-        if ( !prop3->SetMaxLength(30) )
+        const long propSetValInt = 1234567;
+        prop3->SetValueFromInt(propSetValInt);
+        if ( !prop3->SetMaxLength(4) )
             RT_FAILURE();
-        if ( prop3->GetMaxLength() != 30 )
+        if ( prop3->GetMaxLength() != 4 )
+            RT_FAILURE();
+        int propGetValInt = prop3->GetValue().GetLong();
+        if ( propGetValInt != propSetValInt )
+            RT_FAILURE();
+        prop3->SetValueFromInt(propSetValInt);
+        propGetValInt = prop3->GetValue().GetLong();
+        if ( propGetValInt != propSetValInt )
             RT_FAILURE();
 
         wxPGProperty* prop4 = pgman->GetProperty("ArrayStringProperty");
-        if ( !prop4->SetMaxLength(40) )
+        const wxString arrStr[3] { "01234567890", "abcdefghijk", "ABCDEFGHIJK" };
+        wxArrayString propSetValArrStr(WXSIZEOF(arrStr), arrStr);
+        prop4->SetValue(wxVariant(propSetValArrStr));
+        if ( !prop4->SetMaxLength(25) )
             RT_FAILURE();
-        if ( prop4->GetMaxLength() != 40 )
+        if ( prop4->GetMaxLength() != 25 )
             RT_FAILURE();
+        wxArrayString propGetValArrStr = prop4->GetValue().GetArrayString();
+        if ( propGetValArrStr != propSetValArrStr )
+            RT_FAILURE();
+        prop4->SetValueFromString(wxVariant(propSetValArrStr));
+        propGetValStr = prop4->GetValueAsString();
+        if ( propGetValArrStr != propSetValArrStr )
+            RT_FAILURE();
+
 
         wxPGProperty* prop5 = pgman->GetProperty("EnumProperty");
         if ( prop5->SetMaxLength(50) )
@@ -1066,32 +1107,66 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pg = pgman->GetGrid();
 
         wxPGProperty* prop1 = pgman->GetProperty("StringProperty");
-        if ( !pg->SetPropertyMaxLength("StringProperty", 110) )
+        wxString propSetValStr = "12345678901234567890";
+        pg->SetPropertyValue(prop1, propSetValStr);
+        if ( !pg->SetPropertyMaxLength("StringProperty", 15) )
             RT_FAILURE();
-        if ( prop1->GetMaxLength() != 110 )
+        if ( prop1->GetMaxLength() != 15 )
+            RT_FAILURE();
+        wxString propGetValStr = pg->GetPropertyValueAsString(prop1);
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
+        pg->SetPropertyValue(prop1, propSetValStr);
+        propGetValStr = pg->GetPropertyValueAsString(prop1);
+        if ( propGetValStr != propSetValStr )
             RT_FAILURE();
 
         if ( !pg->SetPropertyMaxLength("StringProperty", -1) )
             RT_FAILURE();
         if ( prop1->GetMaxLength() != 0 )
             RT_FAILURE();
+        propGetValStr = pg->GetPropertyValueAsString(prop1);
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
 
         wxPGProperty* prop2 = pgman->GetProperty("LongStringProp");
-        if ( !pg->SetPropertyMaxLength("LongStringProp", 120) )
+        propSetValStr = "123456789012345678901234567890";
+        pg->SetPropertyValue(prop2, propSetValStr);
+        if ( !pg->SetPropertyMaxLength("LongStringProp", 25) )
             RT_FAILURE();
-        if ( prop2->GetMaxLength() != 120 )
+        if ( prop2->GetMaxLength() != 25 )
+            RT_FAILURE();
+        propGetValStr = pg->GetPropertyValueAsString(prop2);
+        if ( propGetValStr != propSetValStr )
+            RT_FAILURE();
+        pg->SetPropertyValue(prop2, propSetValStr);
+        propGetValStr = pg->GetPropertyValueAsString(prop2);
+        if ( propGetValStr != propSetValStr )
             RT_FAILURE();
 
         wxPGProperty* prop3 = pgman->GetProperty("FloatProperty");
-        if ( !pg->SetPropertyMaxLength("FloatProperty", 130) )
+        double propSetValFloat = 1234.567;
+        pg->SetPropertyValue(prop3, propSetValFloat);
+        if ( !pg->SetPropertyMaxLength("FloatProperty", 5) )
             RT_FAILURE();
-        if ( prop3->GetMaxLength() != 130 )
+        if ( prop3->GetMaxLength() != 5 )
+            RT_FAILURE();
+        double propGetValFloat = pg->GetPropertyValueAsDouble(prop3);
+        if ( propGetValFloat != propSetValFloat )
             RT_FAILURE();
 
-        if ( pg->SetPropertyMaxLength("ColourProperty", 140) )
+        if ( !pg->SetPropertyMaxLength("FloatProperty", -1) )
+            RT_FAILURE();
+        if ( prop3->GetMaxLength() != 0 )
+            RT_FAILURE();
+        propGetValFloat = pg->GetPropertyValueAsDouble(prop3);
+        if ( propGetValFloat != propSetValFloat )
             RT_FAILURE();
 
-        if ( pg->SetPropertyMaxLength("BoolProperty", 150) )
+        if ( pg->SetPropertyMaxLength("ColourProperty", 35) )
+            RT_FAILURE();
+
+        if ( pg->SetPropertyMaxLength("BoolProperty", 3) )
             RT_FAILURE();
     }
 
@@ -1130,11 +1205,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_START_TEST(GetPropertyValues)
 
             page1 = pgman->GetPage(0);
-            pg1_values = page1->GetPropertyValues("Page1",NULL,wxPG_KEEP_STRUCTURE);
+            pg1_values = page1->GetPropertyValues("Page1",nullptr,wxPG_KEEP_STRUCTURE);
             page2 = pgman->GetPage(1);
-            pg2_values = page2->GetPropertyValues("Page2",NULL,wxPG_KEEP_STRUCTURE);
+            pg2_values = page2->GetPropertyValues("Page2",nullptr,wxPG_KEEP_STRUCTURE);
             page3 = pgman->GetPage(2);
-            pg3_values = page3->GetPropertyValues("Page3",NULL,wxPG_KEEP_STRUCTURE);
+            pg3_values = page3->GetPropertyValues("Page3",nullptr,wxPG_KEEP_STRUCTURE);
         }
 
         {
@@ -1357,7 +1432,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( pgman->GetPageCount() )
             RT_FAILURE();
 
-        if ( pgman->GetGrid()->GetRoot()->GetChildCount() )
+        if ( pgman->GetGrid()->GetRoot()->HasAnyChild() )
             RT_FAILURE();
 
         // Recreate the original grid
@@ -1368,7 +1443,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->SelectProperty("Label");
         pgman->GetGrid()->Clear();
 
-        if ( pgman->GetGrid()->GetRoot()->GetChildCount() )
+        if ( pgman->GetGrid()->GetRoot()->HasAnyChild() )
             RT_FAILURE();
 
         // Recreate the original grid

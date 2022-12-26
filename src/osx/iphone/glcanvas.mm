@@ -135,8 +135,8 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
 
     // We need a context, otherwise the view will not get an initial
     // Paint Event, making our own samples fail ...
-    WXGLPixelFormat pf = WXGLChoosePixelFormat(NULL, 0, NULL, 0);
-    WXGLContext context = WXGLCreateContext(pf, NULL);
+    WXGLPixelFormat pf = WXGLChoosePixelFormat(nullptr, 0, nullptr, 0);
+    WXGLContext context = WXGLCreateContext(pf, nullptr);
 
     wxUICustomOpenGLView* v = [[wxUICustomOpenGLView alloc] initWithFrame:r context: context ];
 

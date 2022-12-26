@@ -29,6 +29,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/caret.h"
+#include "wx/graphics.h"
 
 // ----------------------------------------------------------------------------
 // global variables for this module
@@ -79,12 +80,12 @@ void wxCaretBase::SetBlinkTime(int milliseconds)
     GtkSettings *settings = gtk_settings_get_default();
     if (millseconds == 0)
     {
-        gtk_settings_set_long_property(settings, "gtk-cursor-blink", gtk_false, NULL);
+        gtk_settings_set_long_property(settings, "gtk-cursor-blink", gtk_false, nullptr);
     }
     else
     {
-        gtk_settings_set_long_property(settings, "gtk-cursor-blink", gtk_true, NULL);
-        gtk_settings_set_long_property(settings, "gtk-cursor-time", milliseconds, NULL);
+        gtk_settings_set_long_property(settings, "gtk-cursor-blink", gtk_true, nullptr);
+        gtk_settings_set_long_property(settings, "gtk-cursor-time", milliseconds, nullptr);
     }
 #endif
 }
@@ -99,8 +100,6 @@ void wxCaret::InitGeneric()
     m_blinkedOut = true;
     m_xOld =
     m_yOld = -1;
-    if (!m_overlay.IsNative() && m_width && m_height)
-        m_bmpUnderCaret.Create(m_width, m_height);
 }
 
 wxCaret::~wxCaret()
@@ -176,8 +175,6 @@ void wxCaret::DoSize()
     {
         // Change bitmap size
         m_bmpUnderCaret.UnRef();
-        if (m_width && m_height)
-            m_bmpUnderCaret.Create(m_width, m_height);
     }
 
     if (countVisible > 0)
@@ -243,13 +240,10 @@ void wxCaret::Refresh()
         return;
     }
 
-    wxMemoryDC dcMem;
-    dcMem.SelectObject(m_bmpUnderCaret);
     if ( m_blinkedOut )
     {
         // restore the old image
-        dcWin.Blit(m_xOld, m_yOld, m_width, m_height,
-                   &dcMem, 0, 0);
+        dcWin.DrawBitmap(m_bmpUnderCaret, m_xOld, m_yOld);
         m_xOld =
         m_yOld = -1;
     }
@@ -257,6 +251,9 @@ void wxCaret::Refresh()
     {
         if ( m_xOld == -1 && m_yOld == -1 )
         {
+            if (!m_bmpUnderCaret.IsOk())
+                m_bmpUnderCaret.Create(m_width, m_height, dcWin);
+            wxMemoryDC dcMem(m_bmpUnderCaret);
             // save the part we're going to overdraw
             dcMem.Blit(0, 0, m_width, m_height,
                        &dcWin, m_x, m_y);
@@ -287,12 +284,38 @@ void wxCaret::DoDraw(wxDC *dc, wxWindow* win)
             brush = *wxWHITE_BRUSH;
         }
     }
-    dc->SetPen( pen );
-    dc->SetBrush(m_hasFocus ? brush : *wxTRANSPARENT_BRUSH);
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsContext* gc = dc->GetGraphicsContext();
+#endif
+    if (m_hasFocus)
+    {
+        dc->SetPen(*wxTRANSPARENT_PEN);
+        dc->SetBrush(brush);
+    }
+    else
+    {
+        pen.SetJoin(wxJOIN_MITER);
+        dc->SetPen(pen);
+        dc->SetBrush(*wxTRANSPARENT_BRUSH);
+#if wxUSE_GRAPHICS_CONTEXT
+        if (gc)
+        {
+            // Draw outline rect so that its outside edges correspond with
+            // those of the solid rect. This is necessary to avoid drawing
+            // outside the solid rect bounds when window content is scaled.
+            gc->EnableOffset(false);
+            gc->DrawRectangle(m_x + 0.5, m_y + 0.5, m_width - 1, m_height - 1);
+            return;
+        }
+#endif
+    }
 
-    // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
-    //     done under wxGTK - no idea why
-    //dc->SetLogicalFunction(wxINVERT);
+#if wxUSE_GRAPHICS_CONTEXT
+    if (gc == nullptr)
+#endif
+    {
+        dc->SetLogicalFunction(wxINVERT);
+    }
 
     dc->DrawRectangle(m_x, m_y, m_width, m_height);
 }

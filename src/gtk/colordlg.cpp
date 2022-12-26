@@ -44,7 +44,7 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 
     m_parent = GetParentForModalDialog(parent, 0);
     GtkWindow * const parentGTK = m_parent ? GTK_WINDOW(m_parent->m_widget)
-                                           : NULL;
+                                           : nullptr;
 
     wxString title(_("Choose colour"));
 #ifdef __WXGTK4__
@@ -53,7 +53,7 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(m_widget), m_data.GetChooseAlpha());
 #else
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
+    m_widget = gtk_color_selection_dialog_new(title.utf8_str());
 
     g_object_ref(m_widget);
 
@@ -127,7 +127,7 @@ void wxColourDialog::ColourDataToDialog()
     wxGtkString pal(gtk_color_selection_palette_to_string(colors, n_colors));
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
-    g_object_set(settings, "gtk-color-palette", pal.c_str(), NULL);
+    g_object_set(settings, "gtk-color-palette", pal.c_str(), nullptr);
     wxGCC_WARNING_RESTORE()
 #endif // !__WXGTK4__
 }
@@ -163,7 +163,7 @@ void wxColourDialog::DialogToColourData()
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
     gchar *pal;
-    g_object_get(settings, "gtk-color-palette", &pal, NULL);
+    g_object_get(settings, "gtk-color-palette", &pal, nullptr);
 
     GdkColor *colors;
     gint n_colors;

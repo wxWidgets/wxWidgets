@@ -34,6 +34,7 @@
 #include "wx/filename.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
+#include "wx/uilocale.h"
 
 // other standard headers
 #include <ctype.h>
@@ -155,9 +156,8 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     wxString nameapp;
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Name[locale name]" first
-    wxLocale *locale = wxGetLocale();
-    if ( locale )
-        nIndex = file.pIndexOf(wxT("Name[")+locale->GetName()+wxT("]="));
+    if ( wxUILocale::GetCurrent().IsSupported() )
+        nIndex = file.pIndexOf(wxT("Name[")+wxUILocale::GetCurrent().GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Name=") );
@@ -168,8 +168,8 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     wxString nameicon, namemini;
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Icon[locale name]" first
-    if ( locale )
-        nIndex = file.pIndexOf(wxT("Icon[")+locale->GetName()+wxT("]="));
+    if ( wxUILocale::GetCurrent().IsSupported() )
+        nIndex = file.pIndexOf(wxT("Icon[")+wxUILocale::GetCurrent().GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Icon=") );
@@ -261,7 +261,7 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
 
        wxString icon = GetIconFromMimeType(mime);
 
-       AddToMimeData(mime, icon, NULL, exts, wxEmptyString, true );
+       AddToMimeData(mime, icon, nullptr, exts, wxEmptyString, true );
     }
 }
 
@@ -706,7 +706,7 @@ wxFileType * wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
     }
 
     if ( !DoAssociation(strType, strIcon, entry, sA_Exts, strDesc) )
-        return NULL;
+        return nullptr;
 
     return GetFileTypeFromMimeType(strType);
 }
@@ -855,11 +855,11 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
 wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
     if (ext.empty() )
-        return NULL;
+        return nullptr;
 
     InitIfNeeded();
 
-    wxFileType* fileTypeFallback = NULL;
+    wxFileType* fileTypeFallback = nullptr;
     size_t count = m_aExtensions.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
@@ -906,7 +906,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mim
 {
     InitIfNeeded();
 
-    wxFileType * fileType = NULL;
+    wxFileType * fileType = nullptr;
     // mime types are not case-sensitive
     wxString mimetype(mimeType);
     mimetype.MakeLower();
@@ -1008,7 +1008,7 @@ void wxMimeTypesManagerImpl::AddMimeTypeInfo(const wxString& strMimeType,
         sTmp = sTmp.BeforeLast(wxT(' '));
     }
 
-    AddToMimeData(strMimeType, strIcon, NULL, sExts, strDesc, true);
+    AddToMimeData(strMimeType, strIcon, nullptr, sExts, strDesc, true);
 }
 
 size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)

@@ -156,7 +156,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("invalid window in wxWindowDCImpl") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = (WXHDC) ::GetWindowDC(GetHwndOf(m_window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -199,7 +199,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = (WXHDC)::GetDC(GetHwndOf(window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -253,7 +253,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner ) :
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
    wxClientDCImpl( owner )
 {
-    wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
+    wxCHECK_RET( window, wxT("null canvas in wxPaintDCImpl ctor") );
 
     using namespace wxMSWImpl;
     wxCHECK_RET( !paintStack.empty(),
@@ -263,7 +263,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
 
     paintStack.top().createdPaintDC = true;
 
-    m_window = window;
+    InitWindow(window);
 
     // do we have a DC for this window in the cache?
     m_hDC = FindDCInCache(m_window);
@@ -275,7 +275,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
         m_hDC = info->GetHDC();
     }
 
-    // Note: at this point m_hDC can be NULL under MicroWindows, when dragging.
+    // Note: at this point m_hDC can be null under MicroWindows, when dragging.
     if (!GetHDC())
         return;
 
@@ -302,7 +302,7 @@ wxPaintDCInfo *wxPaintDCImpl::FindInCache(wxWindow *win)
 {
     PaintDCInfos::const_iterator it = gs_PaintDCInfos.find( win );
 
-    return it != gs_PaintDCInfos.end() ? it->second : NULL;
+    return it != gs_PaintDCInfos.end() ? it->second : nullptr;
 }
 
 /* static */
@@ -352,7 +352,7 @@ wxPaintDCExImpl::wxPaintDCExImpl(wxDC *owner, wxWindow *window, WXHDC dc)
 {
     wxCHECK_RET( dc, wxT("wxPaintDCEx requires an existing device context") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = dc;
 }
 

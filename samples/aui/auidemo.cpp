@@ -39,7 +39,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxDECLARE_APP(MyApp);
@@ -54,7 +54,7 @@ class MyFrame : public wxFrame
 {
     enum
     {
-        ID_CreateTree = wxID_HIGHEST+1,
+        ID_CreateTree = wxID_HIGHEST,
         ID_CreateGrid,
         ID_CreateText,
         ID_CreateHTML,
@@ -120,9 +120,9 @@ private:
     wxTextCtrl* CreateTextCtrl(const wxString& text = wxEmptyString);
     wxGrid* CreateGrid();
     wxTreeCtrl* CreateTreeCtrl();
-    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), NULL));
+    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), nullptr));
     wxPoint GetStartPosition();
-    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = NULL);
+    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = nullptr);
     wxAuiNotebook* CreateNotebook();
 
     wxString GetIntroText();
@@ -183,7 +183,7 @@ public:
     wxSizeReportCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     wxAuiManager* mgr = NULL)
+                     wxAuiManager* mgr = nullptr)
                      : wxControl(parent, id, pos, size, wxNO_BORDER)
     {
         m_mgr = mgr;
@@ -260,7 +260,7 @@ class SettingsPanel : public wxPanel
 {
     enum
     {
-        ID_PaneBorderSize = wxID_HIGHEST+1,
+        ID_PaneBorderSize = wxID_HIGHEST,
         ID_SashSize,
         ID_CaptionSize,
         ID_BackgroundColor,
@@ -561,11 +561,11 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxFrame* frame = new MyFrame(NULL,
+    wxFrame* frame = new MyFrame(nullptr,
                                  wxID_ANY,
                                  "wxAUI Sample Application",
                                  wxDefaultPosition,
-                                 wxWindow::FromDIP(wxSize(800, 600), NULL));
+                                 wxWindow::FromDIP(wxSize(800, 600), nullptr));
     frame->Show();
 
     return true;

@@ -101,7 +101,7 @@ bool wxStaticText::SetFont(const wxFont& font)
 void wxStaticText::WXSetVisibleLabel(const wxString& label)
 {
     m_label = RemoveMnemonics(label);
-    GetPeer()->SetLabel(m_label , GetFont().GetEncoding() );
+    GetPeer()->SetLabel(m_label);
 }
 
 #if wxUSE_MARKUP && wxOSX_USE_COCOA

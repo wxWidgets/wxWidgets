@@ -61,9 +61,9 @@ class MyApp: public wxApp
 public:
     MyApp() { m_setLocale = Locale_Ask; }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
+    virtual bool OnInit() override;
 
 protected:
     // Specifies whether we should use the current locale or not. By default we
@@ -109,7 +109,7 @@ public:
 // ID for the menu commands
 enum
 {
-    INTERNAT_TEST = wxID_HIGHEST + 1,
+    INTERNAT_TEST = wxID_HIGHEST,
     INTERNAT_PLAY,
     INTERNAT_TEST_1,
     INTERNAT_TEST_2,
@@ -207,10 +207,10 @@ bool MyApp::OnInit()
     // it unconditionally for localized programs -- or never do it at all for
     // the other ones.
     const wxLanguageInfo* const
-        langInfo = wxLocale::GetLanguageInfo(wxLANGUAGE_DEFAULT);
+        langInfo = wxUILocale::GetLanguageInfo(wxLANGUAGE_DEFAULT);
     const wxString
         langDesc = langInfo ? langInfo->Description
-                            : wxString("the default system locale");
+                            : wxString("the default system language");
 
     if ( m_setLocale == Locale_Ask )
     {
@@ -284,7 +284,7 @@ bool MyApp::OnInit()
 
 // main frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL,
+       : wxFrame(nullptr,
                  wxID_ANY,
                  _("International wxWidgets App"))
 {
@@ -359,7 +359,31 @@ MyFrame::MyFrame()
                         (
                          _("Current UI locale: %s; C locale: %s"),
                          wxUILocale::GetCurrent().GetName(),
-                         setlocale(LC_ALL, NULL)
+                         setlocale(LC_ALL, nullptr)
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                          _("UI locale name in English: %s"),
+                          wxUILocale::GetCurrent().GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH)
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                          _("... and in the locale language: %s"),
+                          wxUILocale::GetCurrent().GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE)
                         )
                       ),
                   wxSizerFlags().Center().Border());
@@ -528,16 +552,17 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
         return;
 
     s_locale = locale;
-    const wxLanguageInfo * const info = wxLocale::FindLanguageInfo(s_locale);
-    if ( !info )
-    {
-        wxLogError(_("Locale \"%s\" is unknown."), s_locale);
-        return;
-    }
 
-    if ( wxLocale::IsAvailable(info->Language) )
+    wxUILocale uiLocale = wxUILocale::FromTag(s_locale);
+    if (uiLocale.IsSupported())
     {
-        wxLogMessage(_("Locale \"%s\" is available."), s_locale);
+        wxLayoutDirection layout = uiLocale.GetLayoutDirection();
+        wxString strLayout = (layout == wxLayout_RightToLeft) ? "RTL" : "LTR";
+        wxString strLocale = uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE);
+        wxLogMessage(_("Locale \"%s\" is available.\nIdentifier: %s; Layout: %s\nEnglish name: %s\nLocalized name: %s"),
+                     s_locale, uiLocale.GetName(), strLayout,
+                     uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH),
+                     uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE));
     }
     else
     {

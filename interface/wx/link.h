@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_byteorder */
-//@{
+///@{
 
 /**
     This macro can be used in conjunction with the wxFORCE_LINK_MODULE() macro
@@ -35,5 +35,5 @@
 */
 #define wxFORCE_LINK_MODULE( moduleName )
 
-//@}
+///@}
 

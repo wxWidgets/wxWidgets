@@ -95,7 +95,7 @@ public:
             This is an optional window to be used as the parent for the help window.
     */
     wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE,
-                         wxWindow* parentWindow = NULL);
+                         wxWindow* parentWindow = nullptr);
     wxHtmlHelpController(wxWindow* parentWindow, int style = wxHF_DEFAULT_STYLE);
 
 
@@ -259,12 +259,12 @@ public:
     void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
 
     /**
-       Returns the current help frame.  (May be NULL.)
+       Returns the current help frame.  (May be @NULL.)
     */
     wxHtmlHelpFrame* GetFrame();
 
     /**
-       Returns the current help dialog. (May be NULL.)
+       Returns the current help dialog. (May be @NULL.)
     */
     wxHtmlHelpDialog* GetDialog();
 

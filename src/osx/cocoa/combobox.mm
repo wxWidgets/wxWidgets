@@ -48,33 +48,6 @@
     }
 }
 
-- (void) dealloc
-{
-    [fieldEditor release];
-    [super dealloc];
-}
-
-// Over-riding NSComboBox onKeyDown method doesn't work for key events.
-// Ensure that we can use our own wxNSTextFieldEditor to catch key events.
-// See windowWillReturnFieldEditor in nonownedwnd.mm.
-// Key events will be caught and handled via wxNSTextFieldEditor onkey...
-// methods in textctrl.mm.
-
-- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
-{
-    if ( editor != fieldEditor )
-    {
-        [editor retain];
-        [fieldEditor release];
-        fieldEditor = editor;
-    }
-}
-
-- (wxNSTextFieldEditor*) fieldEditor
-{
-    return fieldEditor;
-}
-
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
@@ -99,7 +72,7 @@
     {
         wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
         if ( timpl )
-            timpl->UpdateInternalSelectionFromEditor(fieldEditor);
+            timpl->UpdateInternalSelectionFromEditor(self.WXFieldEditor);
         impl->DoNotifyFocusLost();
     }
 }
@@ -225,7 +198,7 @@ void wxNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     bool reset = false;
     wxEventLoop* const loop = (wxEventLoop*) wxEventLoopBase::GetActive();
 
-    if ( loop != NULL && [event type] == NSLeftMouseDown )
+    if ( loop != nullptr && [event type] == NSLeftMouseDown )
     {
         reset = true;
         loop->OSXUseLowLevelWakeup(true);
@@ -272,7 +245,7 @@ int wxNSComboBoxControl::GetNumberOfItems() const
 
 void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
 {
-    wxCFStringRef itemLabel(  item, m_wxPeer->GetFont().GetEncoding() );
+    wxCFStringRef itemLabel( item );
     NSString* const cocoaStr = itemLabel.AsNSString();
 
     if ( m_wxPeer->HasFlag(wxCB_SORT) )
@@ -316,12 +289,12 @@ void wxNSComboBoxControl::Clear()
 
 wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const
 {
-    return wxCFStringRef::AsString([m_comboBox itemObjectValueAtIndex:pos], m_wxPeer->GetFont().GetEncoding());
+    return wxCFStringRef::AsString([m_comboBox itemObjectValueAtIndex:pos]);
 }
 
 int wxNSComboBoxControl::FindString(const wxString& text) const
 {
-    NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    NSInteger nsresult = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text ).AsNSString()];
 
     int result;
     if (nsresult == NSNotFound)

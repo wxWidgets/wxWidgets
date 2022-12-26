@@ -62,7 +62,7 @@ Other layout classes:
 @section page_class_cat_managedwnd Managed Windows
 
 There are several types of window that are directly controlled by the window
-manager (such as MS Windows, or the Motif Window Manager). Frames and dialogs
+manager (such as MS Windows, or the X11 Window Manager). Frames and dialogs
 are similar in wxWidgets, but only dialogs may be modal.
 
 Related Overviews: @ref overview_cmndlg

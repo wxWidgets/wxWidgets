@@ -71,12 +71,10 @@ public:
     const wxSize& GetInitialSize() const { return m_initialSize; }
     bool GetShowIconic() const { return m_showIconic; }
 
-#if wxUSE_UNICODE
     // Global context for Pango layout. Either use X11
     // or use Xft rendering according to GDK_USE_XFT
     // environment variable
     PangoContext* GetPangoContext();
-#endif
 
     wxXVisualInfo* GetVisualInfo(WXDisplay* WXUNUSED(display))
     {
@@ -84,7 +82,7 @@ public:
         // with multiple display
         return m_visualInfo;
     }
-    virtual void* GetXVisualInfo() { return NULL; }
+    virtual void* GetXVisualInfo() { return nullptr; }
 
 public:
     static long           sm_lastMessageTime;

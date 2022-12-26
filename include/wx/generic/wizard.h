@@ -46,13 +46,13 @@ public:
     virtual ~wxWizard();
 
     // implement base class pure virtuals
-    virtual bool RunWizard(wxWizardPage *firstPage) wxOVERRIDE;
-    virtual wxWizardPage *GetCurrentPage() const wxOVERRIDE;
-    virtual void SetPageSize(const wxSize& size) wxOVERRIDE;
-    virtual wxSize GetPageSize() const wxOVERRIDE;
-    virtual void FitToPage(const wxWizardPage *firstPage) wxOVERRIDE;
-    virtual wxSizer *GetPageAreaSizer() const wxOVERRIDE;
-    virtual void SetBorder(int border) wxOVERRIDE;
+    virtual bool RunWizard(wxWizardPage *firstPage) override;
+    virtual wxWizardPage *GetCurrentPage() const override;
+    virtual void SetPageSize(const wxSize& size) override;
+    virtual wxSize GetPageSize() const override;
+    virtual void FitToPage(const wxWizardPage *firstPage) override;
+    virtual wxSizer *GetPageAreaSizer() const override;
+    virtual void SetBorder(int border) override;
 
     /// set/get bitmap
     wxBitmap GetBitmap() const { return m_bitmap.GetBitmapFor(this); }
@@ -62,7 +62,7 @@ public:
     // -------------------------------
 
     // is the wizard running?
-    bool IsRunning() const { return m_page != NULL; }
+    bool IsRunning() const { return m_page != nullptr; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return false without changing the page if
@@ -74,7 +74,7 @@ public:
     virtual void DoCreateControls();
 
     // Do the adaptation
-    virtual bool DoLayoutAdaptation() wxOVERRIDE;
+    virtual bool DoLayoutAdaptation() override;
 
     // Set/get bitmap background colour
     void SetBitmapBackgroundColour(const wxColour& colour) { m_bitmapBackgroundColour = colour; }
@@ -102,7 +102,7 @@ protected:
     virtual bool ResizeBitmap(wxBitmap& bmp);
 
     // was the dialog really created?
-    bool WasCreated() const { return m_btnPrev != NULL; }
+    bool WasCreated() const { return m_btnPrev != nullptr; }
 
     // event handlers
     void OnCancel(wxCommandEvent& event);
@@ -126,8 +126,8 @@ protected:
     wxPoint m_posWizard;
 
     // wizard state
-    wxWizardPage  *m_page;       // the current page or NULL
-    wxWizardPage  *m_firstpage;  // the page RunWizard started on or NULL
+    wxWizardPage  *m_page;       // the current page or nullptr
+    wxWizardPage  *m_firstpage;  // the page RunWizard started on or nullptr
     wxBitmapBundle m_bitmap;     // the default bitmap to show
 
     // wizard controls

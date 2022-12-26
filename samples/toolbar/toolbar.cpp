@@ -101,7 +101,7 @@ enum Positions
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame
@@ -151,8 +151,10 @@ public:
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
     void OnUpdateToggleHorzText(wxUpdateUIEvent& event);
+    void OnUpdateNeedsToolbar(wxUpdateUIEvent& event)
+        { event.Enable( GetToolBar() != nullptr ); }
     void OnUpdateToggleRadioBtn(wxUpdateUIEvent& event)
-        { event.Enable( m_tbar != NULL ); }
+        { event.Enable( m_tbar != nullptr ); }
 
 private:
     void DoEnablePrint();
@@ -185,7 +187,7 @@ private:
     // the path to the custom bitmap for the test toolbar tool
     wxString            m_pathBmp;
 
-    // the search tool, initially NULL
+    // the search tool, initially nullptr
     wxToolBarToolBase *m_searchTool;
 
     wxDECLARE_EVENT_TABLE();
@@ -206,13 +208,8 @@ enum
     IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
     IDM_TOOLBAR_TOGGLETOOLBARSIZE,
-    IDM_TOOLBAR_TOGGLETOOLBARROWS,
     IDM_TOOLBAR_TOGGLETOOLTIPS,
     IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
-    IDM_TOOLBAR_SHOW_TEXT,
-    IDM_TOOLBAR_SHOW_ICONS,
-    IDM_TOOLBAR_SHOW_BOTH,
-    IDM_TOOLBAR_BG_COL,
     IDM_TOOLBAR_CUSTOM_PATH,
     IDM_TOOLBAR_TOP_ORIENTATION,
     IDM_TOOLBAR_LEFT_ORIENTATION,
@@ -223,18 +220,30 @@ enum
     IDM_TOOLBAR_OTHER_3,
     IDM_TOOLBAR_OTHER_4,
 
+    // items starting from this one must be disabled when there is no toolbar
+    IDM_FIRST_NEEDS_TOOLBAR,
+
+    IDM_TOOLBAR_TOGGLETOOLBARROWS,
+    IDM_TOOLBAR_SHOW_TEXT,
+    IDM_TOOLBAR_SHOW_ICONS,
+    IDM_TOOLBAR_SHOW_BOTH,
+    IDM_TOOLBAR_BG_COL,
+
     // tools menu items
     IDM_TOOLBAR_ENABLEPRINT,
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
     IDM_TOOLBAR_TOGGLESEARCH,
-    IDM_TOOLBAR_TOGGLERADIOBTN1,
-    IDM_TOOLBAR_TOGGLERADIOBTN2,
-    IDM_TOOLBAR_TOGGLERADIOBTN3,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
     IDM_TOOLBAR_INC_TOOL_SPACING,
     IDM_TOOLBAR_DEC_TOOL_SPACING,
+
+    IDM_LAST_NEEDS_TOOLBAR,
+
+    IDM_TOOLBAR_TOGGLERADIOBTN1,
+    IDM_TOOLBAR_TOGGLERADIOBTN2,
+    IDM_TOOLBAR_TOGGLERADIOBTN3,
 
     ID_COMBO = 1000
 };
@@ -290,6 +299,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
     EVT_UPDATE_UI(wxID_CUT, MyFrame::OnUpdateCopyAndCut)
 
+    EVT_UPDATE_UI_RANGE(IDM_FIRST_NEEDS_TOOLBAR,
+                        IDM_LAST_NEEDS_TOOLBAR,
+                        MyFrame::OnUpdateNeedsToolbar)
     EVT_UPDATE_UI_RANGE(IDM_TOOLBAR_TOGGLERADIOBTN1,
                         IDM_TOOLBAR_TOGGLERADIOBTN3,
                         MyFrame::OnUpdateToggleRadioBtn)
@@ -336,16 +348,16 @@ void MyFrame::RecreateToolbar()
     wxToolBarBase *toolBar = GetToolBar();
     long style = toolBar ? toolBar->GetWindowStyle() : TOOLBAR_STYLE;
 
-    if (toolBar && m_searchTool && m_searchTool->GetToolBar() == NULL)
+    if (toolBar && m_searchTool && m_searchTool->GetToolBar() == nullptr)
     {
         // see ~MyFrame()
         toolBar->AddTool(m_searchTool);
     }
-    m_searchTool = NULL;
+    m_searchTool = nullptr;
 
     delete toolBar;
 
-    SetToolBar(NULL);
+    SetToolBar(nullptr);
 
     style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL | wxTB_BOTTOM | wxTB_RIGHT | wxTB_HORZ_LAYOUT);
     switch( m_toolbarPosition )
@@ -426,10 +438,12 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     toolBarBitmaps[Tool_about] = wxBitmapBundle::FromSVG(svg_data, sizeBitmap);
 #endif // wxHAS_SVG
 
-    // Note that there is no need for FromDIP() here, wxMSW will adjust the
-    // size on its own and under the other platforms there is no need for
-    // scaling the coordinates anyhow.
-    toolBar->SetToolBitmapSize(sizeBitmap);
+    // We don't have to call this function at all when using the default bitmap
+    // size (i.e. when m_smallToolbar == true), but it's harmless to do it.
+    //
+    // Note that sizeBitmap is in DIPs, so we need to use FromDIP() to scale it
+    // up for the current DPI, if necessary.
+    toolBar->SetToolBitmapSize(FromDIP(sizeBitmap));
 
     toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
@@ -515,19 +529,19 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                 {
                 }
 
-                wxSize GetDefaultSize() const wxOVERRIDE
+                wxSize GetDefaultSize() const override
                 {
                     return m_sizeDef;
                 }
 
-                wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE
+                wxSize GetPreferredBitmapSizeAtScale(double scale) const override
                 {
                     // We just scale the bitmap to fit the requested size, so
                     // we don't really have any preferences.
                     return m_sizeDef*scale;
                 }
 
-                wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE
+                wxBitmap GetBitmap(const wxSize& size) override
                 {
                     // In this simple implementation we don't bother caching
                     // anything.
@@ -580,15 +594,15 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxToolBar Sample")
+       : wxFrame(nullptr, wxID_ANY, "wxToolBar Sample")
 {
-    m_tbar = NULL;
+    m_tbar = nullptr;
 
     m_smallToolbar = true;
     m_horzText = false;
     m_useCustomDisabled = false;
     m_showTooltips = true;
-    m_searchTool = NULL;
+    m_searchTool = nullptr;
 
     m_rows = 1;
     m_nPrint = 0; // set to 1 in PopulateToolbar()
@@ -768,7 +782,7 @@ void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        // notice that there is no need to call SetToolBar(NULL) here (although
+        // notice that there is no need to call SetToolBar(nullptr) here (although
         // this it is harmless to do and it must be called if you do not delete
         // the toolbar but keep it for later reuse), just delete the toolbar
         // directly and it will reset the associated frame toolbar pointer

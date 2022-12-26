@@ -19,7 +19,7 @@
     </set>
 
     <!-- settings common to mono{dll,lib} below -->
-    <template id="wx_monolib_or_dll" template="wxscintilla_cppflags">
+    <template id="wx_monolib_or_dll" template="wxscintilla_cppflags,webview_additional">
         <define>wxUSE_BASE=1</define>
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>

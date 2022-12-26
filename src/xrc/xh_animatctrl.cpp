@@ -29,7 +29,7 @@ wxAnimationCtrlXmlHandler::wxAnimationCtrlXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
 {
-    wxAnimationCtrlBase *ctrl = NULL;
+    wxAnimationCtrlBase *ctrl = nullptr;
     if ( m_instance )
         ctrl = wxStaticCast(m_instance, wxAnimationCtrlBase);
 
@@ -82,7 +82,7 @@ wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param,
 {
     wxString name = GetFilePath(GetParamNode(param));
     if ( name.empty() )
-        return NULL;
+        return nullptr;
 
     // load the animation from file
     wxScopedPtr<wxAnimation> ani(ctrl ? new wxAnimation(ctrl->CreateAnimation())
@@ -106,7 +106,7 @@ wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param,
             param,
             wxString::Format("cannot create animation from \"%s\"", name)
         );
-        return NULL;
+        return nullptr;
     }
 
     return ani.release();

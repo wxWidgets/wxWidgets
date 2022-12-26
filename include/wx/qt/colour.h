@@ -18,12 +18,12 @@ public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
     wxColour(const QColor& color);
 
-    virtual bool IsOk() const wxOVERRIDE { return m_valid; }
+    virtual bool IsOk() const override { return m_valid; }
 
-    ChannelType Red()   const wxOVERRIDE { return m_red;   }
-    ChannelType Green() const wxOVERRIDE { return m_green; }
-    ChannelType Blue()  const wxOVERRIDE { return m_blue;  }
-    ChannelType Alpha() const wxOVERRIDE { return m_alpha; }
+    ChannelType Red()   const override { return m_red;   }
+    ChannelType Green() const override { return m_green; }
+    ChannelType Blue()  const override { return m_blue;  }
+    ChannelType Alpha() const override { return m_alpha; }
 
     bool operator==(const wxColour& color) const;
     bool operator!=(const wxColour& color) const;
@@ -34,7 +34,7 @@ public:
 
 protected:
     void Init();
-    virtual void InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) wxOVERRIDE;
+    virtual void InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) override;
 
 private:
     ChannelType m_red, m_green, m_blue, m_alpha;

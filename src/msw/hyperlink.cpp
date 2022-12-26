@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_HYPERLINKCTRL && wxUSE_UNICODE
+#if wxUSE_HYPERLINKCTRL
 
 #include "wx/hyperlink.h"
 
@@ -60,9 +60,12 @@ namespace
     {
         // Any "&"s in the text should appear on the screen and not be (mis)
         // interpreted as mnemonics.
-        return wxString::Format("<A HREF=\"%s\">%s</A>",
-                                url,
-                                wxControl::EscapeMnemonics(text));
+        return wxString::Format
+               (
+                "<A HREF=\"%s\">%s</A>",
+                url,
+                wxControl::EscapeMnemonics(text.empty() ? url : text)
+               );
     }
 }
 
@@ -90,8 +93,10 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         return false;
     }
 
-    SetURL( url );
-    SetVisited( false );
+    // Don't call our own version of SetURL() which would try to update the
+    // label of the not yet created window which wouldn't do anything and is
+    // unnecessary anyhow as we're going to set the label when creating it.
+    wxGenericHyperlinkCtrl::SetURL( url );
 
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
@@ -102,13 +107,20 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         return false;
     }
 
-    // Make sure both the label and URL are non-empty strings.
-    SetURL(url.empty() ? label : url);
-    SetLabel(label.empty() ? url : label);
-
     ConnectMenuHandlers();
 
     return true;
+}
+
+wxHyperlinkCtrl::~wxHyperlinkCtrl()
+{
+    if ( m_hWnd )
+    {
+        // Due to https://bugs.winehq.org/show_bug.cgi?id=54066 we have to
+        // reset the font before the native control destroys it.
+        if ( wxIsRunningUnderWine() )
+            ::SendMessage(m_hWnd, WM_SETFONT, 0, FALSE);
+    }
 }
 
 WXDWORD wxHyperlinkCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -150,13 +162,15 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
 
 wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
 {
-    // LM_GETIDEALSIZE only exists under Vista so use the generic version even
-    // when using the native control under XP
-    if ( !HasNativeHyperlinkCtrl() || (wxGetWinVersion() < wxWinVersion_6) )
+    if ( !HasNativeHyperlinkCtrl() )
         return wxGenericHyperlinkCtrl::DoGetBestClientSize();
 
+    // Windows allows to pass 0 as maximum width here, but Wine interprets 0 as
+    // meaning "minimum possible width", so use something that works for both.
+    const WPARAM UNLIMITED_WIDTH = 10000;
+
     SIZE idealSize;
-    ::SendMessage(m_hWnd, LM_GETIDEALSIZE, 0, (LPARAM)&idealSize);
+    ::SendMessage(m_hWnd, LM_GETIDEALSIZE, UNLIMITED_WIDTH, (LPARAM)&idealSize);
 
     return wxSize(idealSize.cx, idealSize.cy);
 }
@@ -183,4 +197,4 @@ bool wxHyperlinkCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
    return wxGenericHyperlinkCtrl::MSWOnNotify(idCtrl, lParam, result);
 }
 
-#endif // wxUSE_HYPERLINKCTRL && wxUSE_UNICODE
+#endif // wxUSE_HYPERLINKCTRL

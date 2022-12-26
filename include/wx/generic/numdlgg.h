@@ -85,7 +85,7 @@ WXDLLIMPEXP_CORE long
                         long value = 0,
                         long min = 0,
                         long max = 100,
-                        wxWindow *parent = NULL,
+                        wxWindow *parent = nullptr,
                         const wxPoint& pos = wxDefaultPosition);
 
 #endif // wxUSE_NUMBERDLG

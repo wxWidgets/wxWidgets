@@ -104,40 +104,40 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual int GetLineLength(wxTextCoord lineNo) const wxOVERRIDE;
-    virtual wxString GetLineText(wxTextCoord lineNo) const wxOVERRIDE;
-    virtual int GetNumberOfLines() const wxOVERRIDE;
+    virtual int GetLineLength(wxTextCoord lineNo) const override;
+    virtual wxString GetLineText(wxTextCoord lineNo) const override;
+    virtual int GetNumberOfLines() const override;
 
-    virtual bool IsModified() const wxOVERRIDE;
-    virtual bool IsEditable() const wxOVERRIDE;
+    virtual bool IsModified() const override;
+    virtual bool IsEditable() const override;
 
-    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
+    virtual void SetMaxLength(unsigned long len) override;
     // If the return values from and to are the same, there is no selection.
-    virtual void GetSelection(wxTextPos* from, wxTextPos* to) const wxOVERRIDE;
+    virtual void GetSelection(wxTextPos* from, wxTextPos* to) const override;
 
     // operations
     // ----------
 
     // editing
-    virtual void Clear() wxOVERRIDE;
-    virtual void Replace(wxTextPos from, wxTextPos to, const wxString& value) wxOVERRIDE;
-    virtual void Remove(wxTextPos from, wxTextPos to) wxOVERRIDE;
+    virtual void Clear() override;
+    virtual void Replace(wxTextPos from, wxTextPos to, const wxString& value) override;
+    virtual void Remove(wxTextPos from, wxTextPos to) override;
 
     // sets/clears the dirty flag
-    virtual void MarkDirty() wxOVERRIDE;
-    virtual void DiscardEdits() wxOVERRIDE;
+    virtual void MarkDirty() override;
+    virtual void DiscardEdits() override;
 
     // writing text inserts it at the current position, appending always
     // inserts it at the end
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
-    virtual void AppendText(const wxString& text) wxOVERRIDE;
+    virtual void WriteText(const wxString& text) override;
+    virtual void AppendText(const wxString& text) override;
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent (logical, i.e. unwrapped) column and line.
-    virtual wxTextPos XYToPosition(wxTextCoord x, wxTextCoord y) const wxOVERRIDE;
+    virtual wxTextPos XYToPosition(wxTextCoord x, wxTextCoord y) const override;
     virtual bool PositionToXY(wxTextPos pos,
-                              wxTextCoord *x, wxTextCoord *y) const wxOVERRIDE;
+                              wxTextCoord *x, wxTextCoord *y) const override;
 
     // wxUniv-specific: find a screen position (in client coordinates) of the
     // given text position or of the caret
@@ -145,28 +145,28 @@ public:
     bool PositionToDeviceXY(wxTextPos pos, wxCoord *x, wxCoord *y) const;
     wxPoint GetCaretPosition() const;
 
-    virtual void ShowPosition(wxTextPos pos) wxOVERRIDE;
+    virtual void ShowPosition(wxTextPos pos) override;
 
     // Clipboard operations
-    virtual void Copy() wxOVERRIDE;
-    virtual void Cut() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
 
     // Undo/redo
-    virtual void Undo() wxOVERRIDE;
-    virtual void Redo() wxOVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
 
-    virtual bool CanUndo() const wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
 
     // Insertion point
-    virtual void SetInsertionPoint(wxTextPos pos) wxOVERRIDE;
-    virtual void SetInsertionPointEnd() wxOVERRIDE;
-    virtual wxTextPos GetInsertionPoint() const wxOVERRIDE;
-    virtual wxTextPos GetLastPosition() const wxOVERRIDE;
+    virtual void SetInsertionPoint(wxTextPos pos) override;
+    virtual void SetInsertionPointEnd() override;
+    virtual wxTextPos GetInsertionPoint() const override;
+    virtual wxTextPos GetLastPosition() const override;
 
-    virtual void SetSelection(wxTextPos from, wxTextPos to) wxOVERRIDE;
-    virtual void SetEditable(bool editable) wxOVERRIDE;
+    virtual void SetSelection(wxTextPos from, wxTextPos to) override;
+    virtual void SetEditable(bool editable) override;
 
     // wxUniv-specific methods
     // -----------------------
@@ -187,10 +187,10 @@ public:
     void RemoveSelection();
     wxString GetSelectionText() const;
 
-    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const wxOVERRIDE;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
-                                            wxTextCoord *row) const wxOVERRIDE;
+                                            wxTextCoord *row) const override;
 
     // find the character at this position in the given line, return value as
     // for HitTest()
@@ -208,7 +208,7 @@ public:
     void ScrollText(wxTextCoord col);
 
     // adjust the DC for horz text control scrolling too
-    virtual void DoPrepareDC(wxDC& dc) wxOVERRIDE;
+    virtual void DoPrepareDC(wxDC& dc) override;
 
     // implementation only from now on
     // -------------------------------
@@ -220,17 +220,17 @@ public:
     // perform an action
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
-                               const wxString& strArg = wxEmptyString) wxOVERRIDE;
+                               const wxString& strArg = wxEmptyString) override;
 
     static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) wxOVERRIDE
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) override
     {
         return GetStdInputHandler(handlerDef);
     }
 
     // override these methods to handle the caret
-    virtual bool SetFont(const wxFont &font) wxOVERRIDE;
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool SetFont(const wxFont &font) override;
+    virtual bool Enable(bool enable = true) override;
 
     // more readable flag testing methods
     bool IsPassword() const { return HasFlag(wxTE_PASSWORD); }
@@ -241,25 +241,25 @@ public:
 
     // override wxScrollHelper method to prevent (auto)scrolling beyond the end
     // of line
-    virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const wxOVERRIDE;
+    virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const override;
 
     // idle processing
-    virtual void OnInternalIdle() wxOVERRIDE;
+    virtual void OnInternalIdle() override;
 
 protected:
     // ensure we have correct default border
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_SUNKEN; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_SUNKEN; }
 
     // override base class methods
-    virtual void DoDrawBorder(wxDC& dc, const wxRect& rect) wxOVERRIDE;
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDrawBorder(wxDC& dc, const wxRect& rect) override;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
     // calc the size from the text extent
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
     // implements Set/ChangeValue()
-    virtual void DoSetValue(const wxString& value, int flags = 0) wxOVERRIDE;
-    virtual wxString DoGetValue() const wxOVERRIDE;
+    virtual void DoSetValue(const wxString& value, int flags = 0) override;
+    virtual wxString DoGetValue() const override;
 
     // common part of all ctors
     void Init();
@@ -334,12 +334,12 @@ protected:
     // start of line) is
     wxTextCoord GetRowInLine(wxTextCoord line,
                              wxTextCoord col,
-                             wxTextCoord *colRowStart = NULL) const;
+                             wxTextCoord *colRowStart = nullptr) const;
 
     // find the number of characters of a line before it wraps
     // (and optionally also the real width of the line)
     size_t GetPartOfWrappedLine(const wxChar* text,
-                                wxCoord *widthReal = NULL) const;
+                                wxCoord *widthReal = nullptr) const;
 
     // get the start and end of the selection for this line: if the line is
     // outside the selection, both will be -1 and false will be returned

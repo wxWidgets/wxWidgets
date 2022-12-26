@@ -35,8 +35,6 @@
 
 using namespace wxMSWMessageDialog;
 
-#ifdef wxHAS_MSW_TASKDIALOG
-
 // ----------------------------------------------------------------------------
 // Constants
 // ----------------------------------------------------------------------------
@@ -79,7 +77,7 @@ public:
         m_skipped = false;
         m_msgChangeElementText = TDM_UPDATE_ELEMENT_TEXT;
         m_notifications = 0;
-        m_parent = NULL;
+        m_parent = nullptr;
     }
 
     wxCriticalSection m_cs;
@@ -161,7 +159,7 @@ public:
 private:
     wxProgressDialogSharedData m_sharedData;
 
-    virtual void* Entry() wxOVERRIDE;
+    virtual void* Entry() override;
 
     static HRESULT CALLBACK TaskDialogCallbackProc(HWND hwnd,
                                                    UINT uNotification,
@@ -184,7 +182,7 @@ public:
     }
 
 protected:
-    virtual void OnNextIteration() wxOVERRIDE
+    virtual void OnNextIteration() override
     {
         wxCriticalSectionLocker locker(m_data.m_cs);
 
@@ -299,7 +297,7 @@ void PerformNotificationUpdates(HWND hwnd,
 
     if ( sharedData->m_notifications & wxSPDD_WINDOW_MOVED )
     {
-        ::SetWindowPos(hwnd, NULL, sharedData->m_winPosition.x, sharedData->m_winPosition.y,
+        ::SetWindowPos(hwnd, nullptr, sharedData->m_winPosition.x, sharedData->m_winPosition.y,
                        -1, -1, // ignored
                        SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSIZE | SWP_NOZORDER);
     }
@@ -382,8 +380,6 @@ void PerformNotificationUpdates(HWND hwnd,
 
 } // anonymous namespace
 
-#endif // wxHAS_MSW_TASKDIALOG
-
 // ============================================================================
 // wxProgressDialog implementation
 // ============================================================================
@@ -394,12 +390,11 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
                                     wxWindow *parent,
                                     int style )
     : wxGenericProgressDialog(),
-      m_taskDialogRunner(NULL),
-      m_sharedData(NULL),
+      m_taskDialogRunner(nullptr),
+      m_sharedData(nullptr),
       m_message(message),
       m_title(title)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         SetTopParent(parent);
@@ -412,14 +407,12 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
 
         return;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     Create(title, message, maximum, parent, style);
 }
 
 wxProgressDialog::~wxProgressDialog()
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( !m_taskDialogRunner )
         return;
 
@@ -472,12 +465,10 @@ wxProgressDialog::~wxProgressDialog()
     ReenableOtherWindows();
 
     delete m_taskDialogRunner;
-#endif // wxHAS_MSW_TASKDIALOG
 }
 
 bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         if ( !DoNativeBeforeUpdate(skip) )
@@ -545,14 +536,12 @@ bool wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
         loop.Run();
         return true;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::Update( value, newmsg, skip );
 }
 
 bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         if ( !DoNativeBeforeUpdate(skip) )
@@ -582,14 +571,12 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 
         return m_sharedData->m_state != Canceled;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::Pulse( newmsg, skip );
 }
 
 void wxProgressDialog::DispatchEvents()
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     // No need for HasNativeTaskDialog() check, we're only called when this is
     // the case.
 
@@ -598,14 +585,10 @@ void wxProgressDialog::DispatchEvents()
     // other user actions while the dialog is shown.
     wxEventLoop::GetActive()->
         YieldFor(wxEVT_CATEGORY_ALL & ~wxEVT_CATEGORY_USER_INPUT);
-#else // !wxHAS_MSW_TASKDIALOG
-    wxFAIL_MSG( "unreachable" );
-#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 }
 
 bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     DispatchEvents();
 
     wxCriticalSectionLocker locker(m_sharedData->m_cs);
@@ -624,19 +607,12 @@ bool wxProgressDialog::DoNativeBeforeUpdate(bool *skip)
         m_timeStop = m_sharedData->m_timeStop;
 
     return m_sharedData->m_state != Canceled;
-#else // !wxHAS_MSW_TASKDIALOG
-    wxUnusedVar(skip);
-    wxFAIL_MSG( "unreachable" );
-
-    return false;
-#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 }
 
 void wxProgressDialog::Resume()
 {
     wxGenericProgressDialog::Resume();
 
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         HWND hwnd;
@@ -668,48 +644,40 @@ void wxProgressDialog::Resume()
         // thread would simply fail.
         ::BringWindowToTop(hwnd);
     }
-#endif // wxHAS_MSW_TASKDIALOG
 }
 
 WXWidget wxProgressDialog::GetHandle() const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_hwnd;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::GetHandle();
 }
 
 int wxProgressDialog::GetValue() const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_value;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::GetValue();
 }
 
 wxString wxProgressDialog::GetMessage() const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
         return m_message;
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::GetMessage();
 }
 
 void wxProgressDialog::SetRange(int maximum)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         SetMaximum(maximum);
@@ -721,14 +689,12 @@ void wxProgressDialog::SetRange(int maximum)
 
         return;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::SetRange( maximum );
 }
 
 bool wxProgressDialog::WasSkipped() const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         if ( !m_sharedData )
@@ -740,27 +706,23 @@ bool wxProgressDialog::WasSkipped() const
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_skipped;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::WasSkipped();
 }
 
 bool wxProgressDialog::WasCancelled() const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         return m_sharedData->m_state == Canceled;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::WasCancelled();
 }
 
 void wxProgressDialog::SetTitle(const wxString& title)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         m_title = title;
@@ -772,24 +734,20 @@ void wxProgressDialog::SetTitle(const wxString& title)
             m_sharedData->m_notifications |= wxSPDD_TITLE_CHANGED;
         }
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::SetTitle(title);
 }
 
 wxString wxProgressDialog::GetTitle() const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
         return m_title;
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::GetTitle();
 }
 
 void wxProgressDialog::SetIcons(const wxIconBundle& icons)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         m_icons = icons; // We can't just call to parent's SetIcons()
@@ -816,14 +774,12 @@ void wxProgressDialog::SetIcons(const wxIconBundle& icons)
 
         return;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::SetIcons(icons);
 }
 
 void wxProgressDialog::DoMoveWindow(int x, int y, int width, int height)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         if ( m_sharedData )
@@ -835,7 +791,6 @@ void wxProgressDialog::DoMoveWindow(int x, int y, int width, int height)
 
         return;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::DoMoveWindow(x, y, width, height);
 }
@@ -844,22 +799,17 @@ wxRect wxProgressDialog::GetTaskDialogRect() const
 {
     wxRect r;
 
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( m_sharedData )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
         r = wxRectFromRECT(wxGetWindowRect(m_sharedData->m_hwnd));
     }
-#else // !wxHAS_MSW_TASKDIALOG
-    wxFAIL_MSG( "unreachable" );
-#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 
     return r;
 }
 
 void wxProgressDialog::DoGetPosition(int *x, int *y) const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         const wxRect r = GetTaskDialogRect();
@@ -870,14 +820,12 @@ void wxProgressDialog::DoGetPosition(int *x, int *y) const
 
         return;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::DoGetPosition(x, y);
 }
 
 void wxProgressDialog::DoGetSize(int *width, int *height) const
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         const wxRect r = GetTaskDialogRect();
@@ -888,14 +836,12 @@ void wxProgressDialog::DoGetSize(int *width, int *height) const
 
         return;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::DoGetSize(width, height);
 }
 
 void wxProgressDialog::Fit()
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         wxCriticalSectionLocker locker(m_sharedData->m_cs);
@@ -906,14 +852,12 @@ void wxProgressDialog::Fit()
         // Don't change the message, but pretend that it did change.
         m_sharedData->m_notifications |= wxSPDD_MESSAGE_CHANGED;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxGenericProgressDialog::Fit();
 }
 
 bool wxProgressDialog::Show(bool show)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
         // The dialog can't be hidden at all and showing it again after it had
@@ -981,14 +925,12 @@ bool wxProgressDialog::Show(bool show)
         // Do not show the underlying dialog.
         return false;
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return wxGenericProgressDialog::Show( show );
 }
 
 void wxProgressDialog::UpdateExpandedInformation(int value)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     unsigned long elapsedTime;
     unsigned long estimatedTime;
     unsigned long remainingTime;
@@ -1041,16 +983,11 @@ void wxProgressDialog::UpdateExpandedInformation(int value)
         m_sharedData->m_expandedInformation = expandedInformation;
         m_sharedData->m_notifications |= wxSPDD_EXPINFO_CHANGED;
     }
-#else // !wxHAS_MSW_TASKDIALOG
-    wxUnusedVar(value);
-#endif // wxHAS_MSW_TASKDIALOG/!wxHAS_MSW_TASKDIALOG
 }
 
 // ----------------------------------------------------------------------------
 // wxProgressDialogTaskRunner and related methods
 // ----------------------------------------------------------------------------
-
-#ifdef wxHAS_MSW_TASKDIALOG
 
 void* wxProgressDialogTaskRunner::Entry()
 {
@@ -1105,10 +1042,10 @@ void* wxProgressDialogTaskRunner::Entry()
 
     TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
     if ( !taskDialogIndirect )
-        return NULL;
+        return nullptr;
 
     int msAns;
-    HRESULT hr = taskDialogIndirect(&tdc, &msAns, NULL, NULL);
+    HRESULT hr = taskDialogIndirect(&tdc, &msAns, nullptr, nullptr);
     if ( FAILED(hr) )
         wxLogApiError( "TaskDialogIndirect", hr );
 
@@ -1116,7 +1053,7 @@ void* wxProgressDialogTaskRunner::Entry()
     // Update(), wake it up so that it checks our status again.
     wxWakeUpIdle();
 
-    return NULL;
+    return nullptr;
 }
 
 // static
@@ -1267,7 +1204,5 @@ wxProgressDialogTaskRunner::TaskDialogCallbackProc
     // Return anything.
     return S_OK;
 }
-
-#endif // wxHAS_MSW_TASKDIALOG
 
 #endif // wxUSE_PROGRESSDLG && wxUSE_THREADS

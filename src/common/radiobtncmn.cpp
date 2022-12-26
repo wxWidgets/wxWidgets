@@ -58,7 +58,6 @@ wxBEGIN_FLAGS( wxRadioButtonStyle )
     // standard window styles
     wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
     wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
     wxFLAGS_MEMBER(wxWANTS_CHARS)
     wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -124,15 +123,15 @@ wxRadioButton* wxRadioButtonBase::GetLastInGroup() const
 wxRadioButton* wxRadioButtonBase::GetPreviousInGroup() const
 {
     if ( HasFlag(wxRB_GROUP) || HasFlag(wxRB_SINGLE) )
-        return NULL;
+        return nullptr;
 
     const wxWindowList& siblings = GetParent()->GetChildren();
     wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
-    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
+    wxCHECK_MSG( nodeThis, nullptr, wxT("radio button not a child of its parent?") );
 
     // Iterate over all previous siblings until we find the next radio button
     wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
-    wxRadioButton *prevBtn = 0;
+    wxRadioButton *prevBtn = nullptr;
     while (nodeBefore)
     {
         prevBtn = wxDynamicCast(nodeBefore->GetData(), wxRadioButton);
@@ -145,7 +144,7 @@ wxRadioButton* wxRadioButtonBase::GetPreviousInGroup() const
     if (!prevBtn || prevBtn->HasFlag(wxRB_SINGLE))
     {
         // no more buttons in group
-        return NULL;
+        return nullptr;
     }
 
     return prevBtn;
@@ -154,15 +153,15 @@ wxRadioButton* wxRadioButtonBase::GetPreviousInGroup() const
 wxRadioButton* wxRadioButtonBase::GetNextInGroup() const
 {
     if ( HasFlag(wxRB_SINGLE) )
-        return NULL;
+        return nullptr;
 
     const wxWindowList& siblings = GetParent()->GetChildren();
     wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
-    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
+    wxCHECK_MSG( nodeThis, nullptr, wxT("radio button not a child of its parent?") );
 
     // Iterate over all previous siblings until we find the next radio button
     wxWindowList::compatibility_iterator nodeNext = nodeThis->GetNext();
-    wxRadioButton *nextBtn = 0;
+    wxRadioButton *nextBtn = nullptr;
     while (nodeNext)
     {
         nextBtn = wxDynamicCast(nodeNext->GetData(), wxRadioButton);
@@ -175,7 +174,7 @@ wxRadioButton* wxRadioButtonBase::GetNextInGroup() const
     if ( !nextBtn || nextBtn->HasFlag(wxRB_GROUP) || nextBtn->HasFlag(wxRB_SINGLE) )
     {
         // no more buttons or the first button of the next group
-        return NULL;
+        return nullptr;
     }
 
     return nextBtn;

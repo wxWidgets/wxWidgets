@@ -41,33 +41,33 @@ public:
                 const wxBitmap& icon = wxNullBitmap,
                 long style = 0);
 
-    void SetArtProvider(wxRibbonArtProvider* art) wxOVERRIDE;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
 
     wxBitmap& GetIcon() {return m_icon;}
-    virtual wxSize GetMinSize() const wxOVERRIDE;
+    virtual wxSize GetMinSize() const override;
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
     void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
 
     bool DismissExpandedPanel();
 
-    virtual bool Realize() wxOVERRIDE;
-    virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual bool Layout() wxOVERRIDE;
-    virtual bool ScrollLines(int lines) wxOVERRIDE;
+    virtual bool Realize() override;
+    virtual bool Show(bool show = true) override;
+    virtual bool Layout() override;
+    virtual bool ScrollLines(int lines) override;
     bool ScrollPixels(int pixels);
     bool ScrollSections(int sections);
 
     wxOrientation GetMajorAxis() const;
 
-    virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
+    virtual void RemoveChild(wxWindowBase *child) override;
 
     void HideIfExpanded();
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestSize() const override;
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
-    void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) override;
     bool DoActualLayout();
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);

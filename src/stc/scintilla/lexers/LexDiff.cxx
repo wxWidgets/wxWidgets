@@ -23,9 +23,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool AtEOL(Accessor &styler, Sci_PositionU i) {
 	return (styler[i] == '\n') ||
@@ -51,8 +49,10 @@ static void ColouriseDiffLine(char *lineBuffer, Sci_Position endLine, Accessor &
 			styler.ColourTo(endLine, SCE_DIFF_POSITION);
 		else if (lineBuffer[3] == '\r' || lineBuffer[3] == '\n')
 			styler.ColourTo(endLine, SCE_DIFF_POSITION);
-		else
+		else if (lineBuffer[3] == ' ')
 			styler.ColourTo(endLine, SCE_DIFF_HEADER);
+		else
+			styler.ColourTo(endLine, SCE_DIFF_DELETED);
 	} else if (0 == strncmp(lineBuffer, "+++ ", 4)) {
 		// I don't know of any diff where "+++ " is a position marker, but for
 		// consistency, do the same as with "--- " and "*** ".
@@ -78,6 +78,14 @@ static void ColouriseDiffLine(char *lineBuffer, Sci_Position endLine, Accessor &
 		styler.ColourTo(endLine, SCE_DIFF_POSITION);
 	} else if (lineBuffer[0] >= '0' && lineBuffer[0] <= '9') {
 		styler.ColourTo(endLine, SCE_DIFF_POSITION);
+	} else if (0 == strncmp(lineBuffer, "++", 2)) {
+		styler.ColourTo(endLine, SCE_DIFF_PATCH_ADD);
+	} else if (0 == strncmp(lineBuffer, "+-", 2)) {
+		styler.ColourTo(endLine, SCE_DIFF_PATCH_DELETE);
+	} else if (0 == strncmp(lineBuffer, "-+", 2)) {
+		styler.ColourTo(endLine, SCE_DIFF_REMOVED_PATCH_ADD);
+	} else if (0 == strncmp(lineBuffer, "--", 2)) {
+		styler.ColourTo(endLine, SCE_DIFF_REMOVED_PATCH_DELETE);
 	} else if (lineBuffer[0] == '-' || lineBuffer[0] == '<') {
 		styler.ColourTo(endLine, SCE_DIFF_DELETED);
 	} else if (lineBuffer[0] == '+' || lineBuffer[0] == '>') {
@@ -124,7 +132,7 @@ static void FoldDiffDoc(Sci_PositionU startPos, Sci_Position length, int, WordLi
 	int nextLevel;
 
 	do {
-		int lineType = styler.StyleAt(curLineStart);
+		const int lineType = styler.StyleAt(curLineStart);
 		if (lineType == SCE_DIFF_COMMAND)
 			nextLevel = SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG;
 		else if (lineType == SCE_DIFF_HEADER)

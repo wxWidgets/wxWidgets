@@ -148,7 +148,7 @@ public:
     */
     virtual wxColour GetColour( int index ) const;
 
-    wxColourPropertyValue GetVal( const wxVariant* pVariant = NULL ) const;
+    wxColourPropertyValue GetVal( const wxVariant* pVariant = nullptr ) const;
 
 protected:
 
@@ -240,7 +240,7 @@ public:
 
     wxImageFileProperty( const wxString& label= wxPG_LABEL,
                          const wxString& name = wxPG_LABEL,
-                         const wxString& value = wxEmptyString);
+                         const wxString& value = wxString());
     virtual ~wxImageFileProperty();
 
     virtual void OnSetValue();
@@ -248,10 +248,6 @@ public:
     virtual wxSize OnMeasureImage( int item ) const;
     virtual void OnCustomPaint( wxDC& dc,
                                 const wxRect& rect, wxPGPaintData& paintdata );
-
-protected:
-    wxBitmap*   m_pBitmap; // final thumbnail area
-    wxImage*    m_pImage; // intermediate thumbnail area
 };
 
 

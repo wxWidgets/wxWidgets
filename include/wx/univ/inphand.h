@@ -86,24 +86,24 @@ public:
 
     virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
-                           bool pressed) wxOVERRIDE
+                           bool pressed) override
     {
         return m_handler ? m_handler->HandleKey(consumer, event, pressed)
                          : false;
     }
 
     virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event) wxOVERRIDE
+                             const wxMouseEvent& event) override
     {
         return m_handler ? m_handler->HandleMouse(consumer, event) : false;
     }
 
-    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event) wxOVERRIDE
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event) override
     {
         return m_handler ? m_handler->HandleMouseMove(consumer, event) : false;
     }
 
-    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event) wxOVERRIDE
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event) override
     {
         return m_handler ? m_handler->HandleFocus(consumer, event) : false;
     }

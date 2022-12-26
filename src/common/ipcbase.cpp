@@ -27,7 +27,7 @@ wxConnectionBase::wxConnectionBase(void *buffer, size_t bytes)
       m_deletebufferwhendone(false),
       m_connected(true)
 {
-  if ( buffer == NULL )
+  if ( buffer == nullptr )
   { // behave like next constructor
     m_buffersize = 0;
     m_deletebufferwhendone = true;
@@ -35,7 +35,7 @@ wxConnectionBase::wxConnectionBase(void *buffer, size_t bytes)
 }
 
 wxConnectionBase::wxConnectionBase()
-    : m_buffer(NULL),
+    : m_buffer(nullptr),
       m_buffersize(0),
       m_deletebufferwhendone(true),
       m_connected(true)
@@ -79,7 +79,6 @@ wxString wxConnectionBase::GetTextFromData(const void* data,
             s = wxString(static_cast<const char *>(data), size);
             break;
 
-#if wxUSE_UNICODE
         // TODO: we should handle both wxIPC_UTF16TEXT and wxIPC_UTF32TEXT here
         //       for inter-platform IPC
         case wxIPC_UNICODETEXT:
@@ -99,7 +98,6 @@ wxString wxConnectionBase::GetTextFromData(const void* data,
 
             s = wxString::FromUTF8(static_cast<const char *>(data), size);
             break;
-#endif // wxUSE_UNICODE
 
         default:
             wxFAIL_MSG( "non-string IPC format in GetTextFromData()" );
@@ -122,6 +120,6 @@ void *wxConnectionBase::GetBufferAtLeast( size_t bytes )
       return m_buffer;
     } // user-supplied buffer, fail
     else
-      return NULL;
+      return nullptr;
   }
 }

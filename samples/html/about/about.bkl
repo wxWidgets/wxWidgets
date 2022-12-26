@@ -15,7 +15,7 @@
         <dstdir>$(BUILDDIR)/data</dstdir>
         <srcdir>$(SRCDIR)/data</srcdir>
         <files>
-            about.htm logo.png
+            about.htm bg.svg logo.png
         </files>
     </wx-data>
 

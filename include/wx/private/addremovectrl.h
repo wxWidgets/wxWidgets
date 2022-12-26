@@ -111,11 +111,11 @@ public:
         : wxAddRemoveImplBase(adaptor, parent, ctrlItems)
     {
         m_btnAdd =
-        m_btnRemove = NULL;
+        m_btnRemove = nullptr;
     }
 
     virtual void SetButtonsToolTips(const wxString& addtip,
-                                    const wxString& removetip) wxOVERRIDE
+                                    const wxString& removetip) override
     {
         m_btnAdd->SetToolTip(addtip);
         m_btnRemove->SetToolTip(removetip);
@@ -145,10 +145,8 @@ protected:
 
 #ifdef __WXOSX__
     #include "wx/osx/private/addremovectrl.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/private/addremovectrl.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/private/addremovectrl.h"
+    #include "wx/gtk/private/addremovectrl.h"
 #else
     #include "wx/generic/private/addremovectrl.h"
 #endif

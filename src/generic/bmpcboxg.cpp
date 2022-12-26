@@ -350,7 +350,7 @@ wxCoord wxBitmapComboBox::OnMeasureItem(size_t item) const
 wxCoord wxBitmapComboBox::OnMeasureItemWidth(size_t item) const
 {
     wxCoord x, y;
-    GetTextExtent(GetString(item), &x, &y, 0, 0);
+    GetTextExtent(GetString(item), &x, &y, nullptr, nullptr);
     x += m_imgAreaWidth;
     return x;
 }

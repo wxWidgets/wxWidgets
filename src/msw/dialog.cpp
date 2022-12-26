@@ -81,7 +81,7 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData)
 void wxDialog::Init()
 {
     m_isShown = false;
-    m_modalData = NULL;
+    m_modalData = nullptr;
     m_hGripper = 0;
 }
 
@@ -233,7 +233,7 @@ void wxDialog::CreateGripper()
                                     GetHwnd(),
                                     0,
                                     wxGetInstance(),
-                                    NULL
+                                    nullptr
                                );
     }
 }
@@ -345,7 +345,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             processed = true;
             if ( HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             {
-                ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
+                ::InvalidateRect(GetHwnd(), nullptr, false /* erase bg */);
             }
             break;
     }

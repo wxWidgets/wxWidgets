@@ -10,9 +10,6 @@
 if(wxUSE_XRC)
     add_executable(wxrc "${wxSOURCE_DIR}/utils/wxrc/wxrc.cpp")
     wx_set_common_target_properties(wxrc)
-    if(wxBUILD_SHARED)
-        target_compile_definitions(wxrc PRIVATE WXUSINGDLL)
-    endif()
     if(wxUSE_XML)
         wx_exe_link_libraries(wxrc wxxml)
     endif()
@@ -33,17 +30,18 @@ if(wxUSE_XRC)
         BUNDLE DESTINATION "bin"
         )
 
-    if(NOT WIN32_MSVC_NAMING)
+    if(NOT WIN32_MSVC_NAMING AND wxBUILD_INSTALL)
         if(IPHONE)
             set(EXE_SUFFIX ".app")
         else()
             set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
         endif()
 
+        # Don't use wx_install() here to preserve escaping.
         install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E create_symlink \
-            ${CMAKE_INSTALL_PREFIX}/bin/${wxrc_output_name}${EXE_SUFFIX} \
-            ${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX} \
+            \"${CMAKE_INSTALL_PREFIX}/bin/${wxrc_output_name}${EXE_SUFFIX}\" \
+            \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX}\" \
             )"
         )
     endif()

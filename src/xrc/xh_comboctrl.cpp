@@ -54,7 +54,7 @@ wxObject *wxComboCtrlXmlHandler::DoCreateResource()
 
         return control;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool wxComboCtrlXmlHandler::CanHandle(wxXmlNode *node)

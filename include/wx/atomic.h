@@ -17,10 +17,7 @@
 // get the value of wxUSE_THREADS configuration flag
 #include "wx/defs.h"
 
-// constraints on the various functions:
-//  - wxAtomicDec must return a zero value if the value is zero once
-//  decremented else it must return any non-zero value (the true value is OK
-//  but not necessary).
+// these functions return the new value, after the operation
 
 #if wxUSE_THREADS
 
@@ -31,9 +28,9 @@
 //     http://bugs.mysql.com/bug.php?id=28456
 //     http://golubenco.org/blog/atomic-operations/
 
-inline void wxAtomicInc (wxUint32 &value)
+inline wxUint32 wxAtomicInc (wxUint32 &value)
 {
-    __sync_fetch_and_add(&value, 1);
+    return __sync_add_and_fetch(&value, 1);
 }
 
 inline wxUint32 wxAtomicDec (wxUint32 &value)
@@ -47,9 +44,9 @@ inline wxUint32 wxAtomicDec (wxUint32 &value)
 // include standard Windows headers
 #include "wx/msw/wrapwin.h"
 
-inline void wxAtomicInc (wxUint32 &value)
+inline wxUint32 wxAtomicInc (wxUint32 &value)
 {
-    InterlockedIncrement ((LONG*)&value);
+    return InterlockedIncrement ((LONG*)&value);
 }
 
 inline wxUint32 wxAtomicDec (wxUint32 &value)
@@ -60,9 +57,9 @@ inline wxUint32 wxAtomicDec (wxUint32 &value)
 #elif defined(__DARWIN__)
 
 #include "libkern/OSAtomic.h"
-inline void wxAtomicInc (wxUint32 &value)
+inline wxUint32 wxAtomicInc (wxUint32 &value)
 {
-    OSAtomicIncrement32 ((int32_t*)&value);
+    return OSAtomicIncrement32 ((int32_t*)&value);
 }
 
 inline wxUint32 wxAtomicDec (wxUint32 &value)
@@ -76,7 +73,7 @@ inline wxUint32 wxAtomicDec (wxUint32 &value)
 
 inline void wxAtomicInc (wxUint32 &value)
 {
-    atomic_add_32 ((uint32_t*)&value, 1);
+    return atomic_add_32_nv ((uint32_t*)&value, 1);
 }
 
 inline wxUint32 wxAtomicDec (wxUint32 &value)
@@ -94,7 +91,7 @@ inline wxUint32 wxAtomicDec (wxUint32 &value)
 #else // else of wxUSE_THREADS
 // if no threads are used we can safely use simple ++/--
 
-inline void wxAtomicInc (wxUint32 &value) { ++value; }
+inline wxUint32 wxAtomicInc (wxUint32 &value) { return ++value; }
 inline wxUint32 wxAtomicDec (wxUint32 &value) { return --value; }
 
 #endif // !wxUSE_THREADS
@@ -120,10 +117,10 @@ public:
 
     wxAtomicInt32& operator=(wxInt32 v) { m_value = v; return *this; }
 
-    void Inc()
+    wxInt32 Inc()
     {
         wxCriticalSectionLocker lock(m_locker);
-        ++m_value;
+        return ++m_value;
     }
 
     wxInt32 Dec()
@@ -137,14 +134,14 @@ private:
     wxCriticalSection m_locker;
 };
 
-inline void wxAtomicInc(wxAtomicInt32 &value) { value.Inc(); }
+inline wxInt32 wxAtomicInc(wxAtomicInt32 &value) { return value.Inc(); }
 inline wxInt32 wxAtomicDec(wxAtomicInt32 &value) { return value.Dec(); }
 
 #else // !wxNEEDS_GENERIC_ATOMIC_OPS
 
 #define wxHAS_ATOMIC_OPS
 
-inline void wxAtomicInc(wxInt32 &value) { wxAtomicInc((wxUint32&)value); }
+inline wxInt32 wxAtomicInc(wxInt32 &value) { return wxAtomicInc((wxUint32&)value); }
 inline wxInt32 wxAtomicDec(wxInt32 &value) { return wxAtomicDec((wxUint32&)value); }
 
 typedef wxInt32 wxAtomicInt32;

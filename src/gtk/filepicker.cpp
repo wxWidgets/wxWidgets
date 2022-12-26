@@ -66,7 +66,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         m_path = path;
         m_message = message;
         m_wildcard = wildcard;
-        if ((m_dialog = CreateDialog()) == NULL)
+        if ((m_dialog = CreateDialog()) == nullptr)
             return false;
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
@@ -78,8 +78,8 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         // Unfortunately there's no way to hook in the 'clicked' event of the GtkFileChooserButton,
         // thus we add grab on m_dialog->m_widget when it's shown and remove it when it's
         // hidden simply using its "show" and "hide" events - clean & simple :)
-        g_signal_connect(m_dialog->m_widget, "show", G_CALLBACK(gtk_grab_add), NULL);
-        g_signal_connect(m_dialog->m_widget, "hide", G_CALLBACK(gtk_grab_remove), NULL);
+        g_signal_connect(m_dialog->m_widget, "show", G_CALLBACK(gtk_grab_add), nullptr);
+        g_signal_connect(m_dialog->m_widget, "hide", G_CALLBACK(gtk_grab_remove), nullptr);
 
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
@@ -248,7 +248,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         SetWindowStyle(style);
         m_message = message;
         m_wildcard = wildcard;
-        if ((m_dialog = CreateDialog()) == NULL)
+        if ((m_dialog = CreateDialog()) == nullptr)
             return false;
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
@@ -260,8 +260,8 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         // Unfortunately there's no way to hook in the 'clicked' event of the GtkFileChooserButton,
         // thus we add grab on m_dialog->m_widget when it's shown and remove it when it's
         // hidden simply using its "show" and "hide" events - clean & simple :)
-        g_signal_connect(m_dialog->m_widget, "show", G_CALLBACK(gtk_grab_add), NULL);
-        g_signal_connect(m_dialog->m_widget, "hide", G_CALLBACK(gtk_grab_remove), NULL);
+        g_signal_connect(m_dialog->m_widget, "show", G_CALLBACK(gtk_grab_add), nullptr);
+        g_signal_connect(m_dialog->m_widget, "hide", G_CALLBACK(gtk_grab_remove), nullptr);
 
 
         // NOTE: we deliberately ignore the given label as GtkFileChooserButton
@@ -271,7 +271,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         SetPath(path);
 
 #ifdef __WXGTK3__
-        if (gtk_check_version(3,8,0) == NULL)
+        if (gtk_check_version(3,8,0) == nullptr)
             g_signal_connect(m_widget, "file_set", G_CALLBACK(file_set), this);
         else
 #endif

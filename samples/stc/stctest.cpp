@@ -66,13 +66,13 @@ class AppBook;
 
 //----------------------------------------------------------------------------
 //! global application name
-wxString *g_appname = NULL;
+wxString *g_appname = nullptr;
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
 //! global print data, to remember settings during the session
-wxPrintData *g_printData = (wxPrintData*) NULL;
-wxPageSetupDialogData *g_pageSetupData = (wxPageSetupDialogData*) NULL;
+wxPrintData *g_printData = nullptr;
+wxPageSetupDialogData *g_pageSetupData = nullptr;
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
@@ -86,10 +86,10 @@ class App: public wxApp {
 
 public:
     //! the main function called during application start
-    virtual bool OnInit () wxOVERRIDE;
+    virtual bool OnInit () override;
 
     //! application exit function
-    virtual int OnExit () wxOVERRIDE;
+    virtual int OnExit () override;
 
 private:
     //! frame window
@@ -278,12 +278,12 @@ wxBEGIN_EVENT_TABLE (AppFrame, wxFrame)
 wxEND_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
-        : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550))
+        : wxFrame (nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(750,550))
 {
     SetIcon(wxICON(sample));
 
     // initialize important variables
-    m_edit = NULL;
+    m_edit = nullptr;
 
     // set icon and background
     SetTitle (*g_appname);
@@ -547,6 +547,34 @@ void AppFrame::CreateMenu ()
     menuAnnotationsStyle->AppendRadioItem(myID_ANNOTATION_STYLE_BOXED, _("&Boxed"));
     menuAnnotations->AppendSubMenu(menuAnnotationsStyle, "&Style");
 
+    // Indicators menu
+    wxMenu* menuIndicators = new wxMenu;
+    menuIndicators->Append(myID_INDICATOR_FILL, _("&Add indicator for selection"));
+    menuIndicators->Append(myID_INDICATOR_CLEAR, _("&Clear indicator for selection"));
+
+    wxMenu* menuIndicatorStyle = new wxMenu;
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_PLAIN, "Plain");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_SQUIGGLE, "Squiggle");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_TT, "TT");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DIAGONAL, "Diagonal");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_STRIKE, "Strike");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_HIDDEN, "Hidden");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_BOX, "Box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_ROUNDBOX, "Round box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_STRAIGHTBOX, "Straight box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DASH, "Dash");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DOTS, "Dots");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_SQUIGGLELOW, "Squiggle low");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_DOTBOX, "Dot box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_SQUIGGLEPIXMAP, "Squiggle pixmap");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_COMPOSITIONTHICK, "Composition thick");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_COMPOSITIONTHIN, "Composition thin");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_FULLBOX, "Full box");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_TEXTFORE, "Text fore");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_POINT, "Point");
+    menuIndicatorStyle->AppendRadioItem(myID_INDICATOR_STYLE_POINTCHARACTER, "Point character");
+    menuIndicators->AppendSubMenu(menuIndicatorStyle, "&Style");
+
     // change case submenu
     wxMenu *menuChangeCase = new wxMenu;
     menuChangeCase->Append (myID_CHANGEUPPER, _("&Upper case"));
@@ -591,6 +619,7 @@ void AppFrame::CreateMenu ()
     m_menuBar->Append (menuEdit, _("&Edit"));
     m_menuBar->Append (menuView, _("&View"));
     m_menuBar->Append (menuAnnotations, _("&Annotations"));
+    m_menuBar->Append (menuIndicators, _("&Indicators"));
     m_menuBar->Append (menuExtra, _("E&xtra"));
     m_menuBar->Append (menuWindow, _("&Window"));
     m_menuBar->Append (menuHelp, _("&Help"));
@@ -636,7 +665,7 @@ AppAbout::AppAbout (wxWindow *parent,
                     style | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER) {
 
     // set timer if any
-    m_timer = NULL;
+    m_timer = nullptr;
     if (milliseconds > 0) {
         m_timer = new wxTimer (this, myID_ABOUTTIMER);
         m_timer->Start (milliseconds, wxTIMER_ONE_SHOT);
@@ -752,7 +781,7 @@ public:
         SetWrapMode(wxSTC_WRAP_WORD);
         SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
     }
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE
+    virtual bool SetFont(const wxFont& font) override
     {
         StyleSetFont(wxSTC_STYLE_DEFAULT, font);
         return wxStyledTextCtrl::SetFont(font);
@@ -811,7 +840,7 @@ void MinimalEditor::OnText(wxStyledTextEvent& event)
 class MinimalEditorFrame : public wxFrame
 {
 public:
-    MinimalEditorFrame() : wxFrame(NULL, wxID_ANY, _("Minimal Editor"))
+    MinimalEditorFrame() : wxFrame(nullptr, wxID_ANY, _("Minimal Editor"))
     {
         MinimalEditor* editor = new MinimalEditor(this);
         editor->SetFont(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));

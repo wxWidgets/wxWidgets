@@ -51,7 +51,7 @@ private:
   void  UuidToCForm();
 
   // function used to set initial state by all ctors
-  void  Init() { m_pszUuid = NULL; m_pszCForm = NULL; }
+  void  Init() { m_pszUuid = nullptr; m_pszCForm = nullptr; }
 
 public:
   // ctors & dtor

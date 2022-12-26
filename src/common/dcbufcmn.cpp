@@ -42,8 +42,8 @@ class wxSharedDCBufferManager : public wxModule
 public:
     wxSharedDCBufferManager() { }
 
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxDELETE(ms_buffer); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxDELETE(ms_buffer); }
 
     static wxBitmap* GetBuffer(wxDC* dc, int w, int h)
     {
@@ -52,7 +52,8 @@ public:
 
         if ( !ms_buffer ||
                 w > ms_buffer->GetLogicalWidth() ||
-                    h > ms_buffer->GetLogicalHeight() )
+                h > ms_buffer->GetLogicalHeight() ||
+                (dc && dc->GetContentScaleFactor() != ms_buffer->GetScaleFactor()) )
         {
             delete ms_buffer;
 
@@ -95,7 +96,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager);
 };
 
-wxBitmap* wxSharedDCBufferManager::ms_buffer = NULL;
+wxBitmap* wxSharedDCBufferManager::ms_buffer = nullptr;
 bool wxSharedDCBufferManager::ms_usingSharedBuffer = false;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule);
@@ -161,7 +162,7 @@ void wxBufferedDC::UnMask()
 
     const wxPoint origin = GetLogicalOrigin();
     m_dc->Blit(-origin.x, -origin.y, width, height, this, -x, -y);
-    m_dc = NULL;
+    m_dc = nullptr;
 
     if ( m_style & wxBUFFER_USES_SHARED_BUFFER )
         wxSharedDCBufferManager::ReleaseBuffer(m_buffer);

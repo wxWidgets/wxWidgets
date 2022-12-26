@@ -453,6 +453,9 @@ public:
         If the user changed the label (i.e. s/he does not press ESC or leave
         the text control without changes, a @c EVT_LIST_END_LABEL_EDIT event
         will be sent which can be vetoed as well.
+
+        Notice that this function should only be called if wxLC_EDIT_LABELS flag
+        is already set on the control. an assertion failure is triggered otherwise.
     */
     wxTextCtrl* EditLabel(long item,
                           wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
@@ -495,7 +498,7 @@ public:
 
         This method allows one to programmatically end editing a list control item
         in place. Usually it will only be called when editing is in progress,
-        i.e. if GetEditControl() returns non-NULL. In particular, do not call
+        i.e. if GetEditControl() returns non-null. In particular, do not call
         it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not
         yet fully created by then, just veto the event in this handler instead
         to prevent the editing from even starting.
@@ -566,6 +569,11 @@ public:
 
     /**
         Returns the number of columns.
+
+        The control can have multiple columns only in wxLC_REPORT mode. In
+        wxLC_LIST mode this function returns 1, as a list is still considered
+        to have a (single) column. In wxLC_SMALL_ICON and wxLC_ICON modes, it
+        returns 0 as there are no columns at all.
     */
     int GetColumnCount() const;
 
@@ -624,6 +632,10 @@ public:
         Gets the number of items that can fit vertically in the visible area of
         the list control (list or report view) or the total number of items in
         the list control (icon or small icon view).
+
+        @note The caller must ensure that there is at least one item in the control
+              to be able to calculate the count per page under wxQt, otherwise 0 will
+              be returned.
     */
     int GetCountPerPage() const;
 
@@ -890,7 +902,7 @@ public:
         and returns a 2-element list (item, flags).
         @endWxPerlOnly
     */
-    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = nullptr) const;
 
     /**
         Returns true if the control is currently using ::wxLC_REPORT style.
@@ -1065,7 +1077,7 @@ public:
         @c wxLIST_AUTOSIZE will resize the column to the length of its longest item.
 
         @c wxLIST_AUTOSIZE_USEHEADER will resize the column to the length of the
-        header (Win32) or 80 pixels (other platforms).
+        header (wxMSW and wxQt) or 80 pixels (other platforms).
 
         In small or normal icon view, @a col must be -1, and the column width is set
         for all columns.
@@ -1449,7 +1461,7 @@ public:
 
         @since 3.1.6
     */
-    int RemoveSortIndicator() const;
+    void RemoveSortIndicator();
 
     /**
         Returns the column that shows the sort indicator.
@@ -2077,14 +2089,14 @@ public:
     */
     void SetColumn(int col);
 
-    //@{
+    ///@{
     /**
         Sets client data for the item.
         Please note that client data is associated with the item and not with subitems.
     */
     void SetData(long data);
     void SetData(void* data);
-    //@}
+    ///@}
 
     /**
         Sets the font for the item.

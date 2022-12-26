@@ -32,9 +32,9 @@ class wxGTK2ArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
     virtual wxIconBundle CreateIconBundle(const wxArtID& id,
-                                          const wxArtClient& client) wxOVERRIDE;
+                                          const wxArtClient& client) override;
 };
 
 /*static*/ void wxArtProvider::InitNativeProvider()
@@ -118,6 +118,9 @@ const wxString wxId2Gtk[] = {
     ART(wxART_FIND,             GTK_STOCK_FIND, "edit-find")
     ART(wxART_FIND_AND_REPLACE, GTK_STOCK_FIND_AND_REPLACE, "edit-find-replace")
     ART(wxART_FULL_SCREEN,      GTK_STOCK_FULLSCREEN, "view-fullscreen")
+    ART(wxART_REFRESH,          GTK_STOCK_REFRESH, "gtk-refresh")
+    ART(wxART_STOP,             GTK_STOCK_STOP, "gtk-stop")
+
     ART(wxART_EDIT,             "accessories-text-editor", "accessories-text-editor")
 };
 
@@ -218,7 +221,7 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GtkIconSet* iconset = gtk_style_context_lookup_icon_set(sc, stockid);
-    GdkPixbuf* pixbuf = NULL;
+    GdkPixbuf* pixbuf = nullptr;
     if (iconset)
         pixbuf = gtk_icon_set_render_icon_pixbuf(iconset, sc, size);
     return pixbuf;
@@ -228,11 +231,11 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
     GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
 
     if (!iconset)
-        return NULL;
+        return nullptr;
 
     return gtk_icon_set_render_icon(iconset, style,
                                     gtk_widget_get_default_direction(),
-                                    GTK_STATE_NORMAL, size, NULL, NULL);
+                                    GTK_STATE_NORMAL, size, nullptr, nullptr);
 #endif
 }
 #endif // !__WXGTK4__
@@ -245,7 +248,7 @@ GdkPixbuf *CreateThemeIcon(const char *iconname, int size)
                iconname,
                size,
                (GtkIconLookupFlags)0,
-               NULL
+               nullptr
            );
 }
 
@@ -306,22 +309,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     if (stocksize == GTK_ICON_SIZE_INVALID)
         stocksize = GTK_ICON_SIZE_BUTTON;
 
-    GdkPixbuf *pixbuf = CreateGtkIcon(stockid.utf8_str(), stocksize, size);
-
-    if (pixbuf && size != wxDefaultSize &&
-        (size.x != gdk_pixbuf_get_width(pixbuf) ||
-         size.y != gdk_pixbuf_get_height(pixbuf)))
-    {
-        GdkPixbuf *p2 = gdk_pixbuf_scale_simple(pixbuf, size.x, size.y,
-                                                GDK_INTERP_BILINEAR);
-        if (p2)
-        {
-            g_object_unref (pixbuf);
-            pixbuf = p2;
-        }
-    }
-
-    return wxBitmap(pixbuf);
+    return wxBitmap(CreateGtkIcon(stockid.utf8_str(), stocksize, size));
 }
 
 wxIconBundle
@@ -388,7 +376,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
 // ----------------------------------------------------------------------------
 
 /*static*/
-wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
+wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& client)
 {
     // Gtk has specific sizes for each client, see artgtk.cpp
     GtkIconSize gtk_size = ArtClientToIconSize(client);

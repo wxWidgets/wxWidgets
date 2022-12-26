@@ -142,7 +142,7 @@ wx_add_sample(stc stctest.cpp edit.cpp prefs.cpp edit.h defsext.h prefs.h
     DATA stctest.cpp NAME stctest LIBRARIES wxstc DEPENDS wxUSE_STC)
 wx_add_sample(svg svgtest.cpp RES svgtest.rc DEPENDS wxUSE_SVG)
 wx_add_sample(taborder)
-wx_add_sample(taskbar tbtest.cpp tbtest.h DEPENDS wxUSE_TASKBARICON)
+wx_add_sample(taskbar tbtest.cpp tbtest.h DATA info.svg DEPENDS wxUSE_TASKBARICON)
 wx_add_sample(text DEPENDS wxUSE_TEXTCTRL)
 wx_add_sample(thread DEPENDS wxUSE_THREADS)
 wx_add_sample(toolbar RES toolbar.rc DEPENDS wxUSE_TOOLBAR)
@@ -153,7 +153,7 @@ wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
 wx_add_sample(webview LIBRARIES wxwebview
-    DATA ../help/doc.zip:doc.zip
+    DATA ../help/doc.zip:doc.zip handler_advanced.html
     NAME webviewsample DEPENDS wxUSE_WEBVIEW)
 if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample wxstc)
@@ -218,7 +218,9 @@ wx_list_add_prefix(WIDGETS_RC_FILES icons/
 wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
     DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png:toucan.png
     )
-wx_add_sample(wizard DEPENDS wxUSE_WIZARDDLG)
+# includes needed by the native widget (like gtk.h)
+target_include_directories(widgets PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+wx_add_sample(wizard DATA wiztest.svg wiztest2.svg DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
 
 wx_list_add_prefix(XRC_RC_FILES rc/
@@ -233,7 +235,7 @@ wx_list_add_prefix(XRC_RC_FILES rc/
     variable.xpm variable.xrc
     variants.xpm variants.xrc
     throbber.gif stop.xpm
-    wxbanner.gif
+    stop_2x.xpm wxbanner.gif
     )
 wx_add_sample(xrc
     xrcdemo.cpp
