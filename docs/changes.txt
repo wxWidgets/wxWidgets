@@ -278,6 +278,7 @@ wxMSW:
 - Queue wxWebViewEdge events to avoid hangs (Tobias Taschner, #23025).
 - Fix getting printer information in the print dialog (Stefan Ziegler, #23068).
 - Fix building samples with clang under MSYS (Maarten Bent, #23057).
+- Fix memory leak when allocating command line arguments (#23081).
 
 wxOSX:
 
