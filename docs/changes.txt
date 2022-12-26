@@ -50,6 +50,10 @@ Changes in behaviour not resulting in compilation errors
   you ever used it under MSW (it never did anything in the other ports), you
   can turn on the native WS_EX_TRANSPARENT extended style if really needed.
 
+- wxSystemAppearance::IsDark() now returns whether this application uses dark
+  mode under MSW, use the new AreAppsDark() or IsSystemDark() to check if the
+  other applications or the system are using dark mode.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
