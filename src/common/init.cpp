@@ -418,7 +418,12 @@ static void DoCommonPostCleanup()
 #endif // wxUSE_LOG
 }
 
-void wxEntryCleanup()
+// for MSW the real wxEntryCleanup() is defined in msw/main.cpp
+#ifndef __WINDOWS__
+    #define wxEntryCleanupReal wxEntryCleanup
+#endif // !__WINDOWS__
+
+void wxEntryCleanupReal()
 {
     DoCommonPreCleanup();
 
