@@ -248,3 +248,8 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
             return false;
     }
 }
+
+bool wxSystemAppearance::IsDark() const
+{
+    return false;
+}
