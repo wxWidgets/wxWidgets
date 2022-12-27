@@ -1510,7 +1510,7 @@ public:
     {
         m_dc.DestroyClippingRegion();
         if ( m_restoreOld )
-            m_dc.SetClippingRegion(m_oldClipRect);
+            m_dc.SetDeviceClippingRegion(m_oldClipRect);
     }
 
 private:
@@ -1518,6 +1518,7 @@ private:
     void Init(const wxRect& r)
     {
         m_restoreOld = m_dc.GetClippingBox(m_oldClipRect);
+        m_oldClipRect = wxRect(m_dc.LogicalToDevice(m_oldClipRect.GetPosition()), m_dc.LogicalToDeviceRel(m_oldClipRect.GetSize()));
         m_dc.SetClippingRegion(r);
     }
 
