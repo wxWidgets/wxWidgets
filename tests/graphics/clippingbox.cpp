@@ -1817,6 +1817,37 @@ static void TwoDevRegionsNonOverlappingNegDim(wxDC& dc, const wxBitmap& bmp, boo
                  0, 0, 0, 0);
 }
 
+static void DcAttributes(wxDC& dc)
+{
+    // Check if wxDC atrributes left unchanged
+    wxFont font = dc.GetFont().Bold().Smaller();
+    wxPen pen(*wxYELLOW, 2);
+    wxBrush brush = *wxBLUE_BRUSH;
+
+    wxDCFontChanger fontChanger(dc, font);
+    wxDCPenChanger penChanger(dc, pen);
+    wxDCBrushChanger brushChanger(dc, brush);
+    wxCoord chWidth = dc.GetCharWidth();
+    wxCoord chHeight = dc.GetCharHeight();
+    wxFontMetrics fm = dc.GetFontMetrics();
+
+    dc.SetClippingRegion(10, 20, 30, 40);
+    dc.DestroyClippingRegion();
+
+    CHECK(dc.GetFont() == font);
+    CHECK(dc.GetPen() == pen);
+    CHECK(dc.GetBrush() == brush);
+    CHECK(dc.GetCharWidth() == chWidth);
+    CHECK(dc.GetCharHeight() == chHeight);
+    wxFontMetrics fm2 = dc.GetFontMetrics();
+    CHECK(fm2.ascent == fm.ascent);
+    CHECK(fm2.averageWidth == fm.averageWidth);
+    CHECK(fm2.descent == fm.descent);
+    CHECK(fm2.externalLeading == fm.externalLeading);
+    CHECK(fm2.height == fm.height);
+    CHECK(fm2.internalLeading == fm.internalLeading);
+}
+
 // Tests specific to wxGCDC
 #if wxUSE_GRAPHICS_CONTEXT
 static void InitialStateWithRotatedGCForDC(wxGCDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
@@ -2198,6 +2229,11 @@ TEST_CASE("ClippingBoxTestCase::wxDC", "[clip][dc]")
     {
         TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
     }
+
+    SECTION("DCAttributes")
+    {
+        DcAttributes(dc);
+    }
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -2535,6 +2571,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC", "[clip][dc][gcdc]")
     SECTION("TwoDevRegionsNonOverlappingNegDim Transform Matrix")
     {
         TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
+    }
+
+    SECTION("DCAttributes")
+    {
+        DcAttributes(dc);
     }
 
     SECTION("InitialStateWithRotatedGCForDC")
@@ -2882,6 +2923,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(GDI+)", "[clip][dc][gcdc][gdiplus]")
         TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
     }
 
+    SECTION("DCAttributes")
+    {
+        DcAttributes(dc);
+    }
+
     SECTION("InitialStateWithRotatedGCForDC")
     {
         InitialStateWithRotatedGCForDC(dc, bmp, dcOrigin);
@@ -3224,6 +3270,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Direct2D)", "[clip][dc][gcdc][direct2d]")
     SECTION("TwoDevRegionsNonOverlappingNegDim Transform Matrix")
     {
         TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
+    }
+
+    SECTION("DCAttributes")
+    {
+        DcAttributes(dc);
     }
 
     SECTION("InitialStateWithRotatedGCForDC")
@@ -3575,6 +3626,11 @@ TEST_CASE("ClippingBoxTestCase::wxGCDC(Cairo)", "[clip][dc][gcdc][cairo]")
         TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
     }
 
+    SECTION("DCAttributes")
+    {
+        DcAttributes(dc);
+    }
+
     SECTION("InitialStateWithRotatedGCForDC")
     {
         InitialStateWithRotatedGCForDC(dc, bmp, dcOrigin);
@@ -3900,6 +3956,11 @@ TEST_CASE("ClippingBoxTestCase::wxSVGFileDC", "[clip][dc][svgdc]")
     SECTION("TwoDevRegionsNonOverlappingNegDim Transform Matrix")
     {
         TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
+    }
+
+    SECTION("DCAttributes")
+    {
+        DcAttributes(dc);
     }
 }
 #endif // wxUSE_SVG
@@ -4251,6 +4312,11 @@ TEST_CASE("ClippingBoxTestCase::wxPaintDC", "[clip][dc][paintdc]")
         SECTION("TwoDevRegionsNonOverlappingNegDim Transform Matrix")
         {
             TwoDevRegionsNonOverlappingNegDim(dc, bmp, true);
+        }
+
+        SECTION("DCAttributes")
+        {
+            DcAttributes(dc);
         }
 
         paintExecuted = true;
