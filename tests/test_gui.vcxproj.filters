@@ -293,6 +293,9 @@
     <ClCompile Include="xml\xrctest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\clipper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="graphics\clippingbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

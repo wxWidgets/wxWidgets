@@ -21,6 +21,7 @@ set(TEST_GUI_SRC
     graphics/measuring.cpp
     graphics/affinematrix.cpp
     graphics/boundingbox.cpp
+    graphics/clipper.cpp
     graphics/clippingbox.cpp
     graphics/coords.cpp
     graphics/graphbitmap.cpp
