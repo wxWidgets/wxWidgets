@@ -37,6 +37,14 @@ public:
     virtual void SetPrintMode(int mode) override { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
+    // MSW-specific function to enable experimental dark mode support.
+    enum
+    {
+        DarkMode_Auto   = 0,  // Use dark mode if the system is using it.
+        DarkMode_Always = 1   // Force using dark mode.
+    };
+    bool MSWEnableDarkMode(int flags = 0);
+
     // implementation only
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);

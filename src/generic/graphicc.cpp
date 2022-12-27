@@ -541,7 +541,7 @@ protected:
 #endif
 #ifdef __WXMSW__
     cairo_surface_t* m_mswSurface;
-    WindowHDC m_mswWindowHDC;
+    ClientHDC m_mswWindowHDC;
     int m_mswStateSavedDC;
 #endif
 #ifdef __WXGTK__

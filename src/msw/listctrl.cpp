@@ -39,7 +39,9 @@
 #include "wx/vector.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/uxtheme.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/keyboard.h"
 
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
@@ -214,34 +216,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
-// wxMSWListHeaderCustomDraw: custom draw helper for the header
-class wxMSWListHeaderCustomDraw : public wxMSWImpl::CustomDraw
-{
-public:
-    wxMSWListHeaderCustomDraw()
-    {
-    }
-
-    // Make this field public to let wxListCtrl update it directly when its
-    // header attributes change.
-    wxItemAttr m_attr;
-
-private:
-    virtual bool HasCustomDrawnItems() const override
-    {
-        // We only exist if the header does need to be custom drawn.
-        return true;
-    }
-
-    virtual const wxItemAttr*
-    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
-    {
-        // We use the same attribute for all items for now.
-        return &m_attr;
-    }
-};
-
-
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
@@ -289,15 +263,30 @@ bool wxListCtrl::Create(wxWindow *parent,
     // this style for them.
     MSWDisableComposited();
 
-    EnableSystemThemeByDefault();
+    const wxVisualAttributes& defAttrs = GetDefaultAttributes();
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        MSWInitHeader();
+
+        // We also need to explicitly set the background colour as the value
+        // returned by GetBackgroundColour() by default doesn't match the
+        // actually used colour neither when using dark mode.
+        SetBackgroundColour(defAttrs.colBg);
+    }
+    else
+    {
+        EnableSystemThemeByDefault();
+    }
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA)
     wxSetCCUnicodeFormat(GetHwnd());
 
     // We must set the default text colour to the system/theme color, otherwise
-    // GetTextColour will always return black
-    SetTextColour(GetDefaultAttributes().colFg);
+    // GetTextColour will always return black even if this is not what is used
+    // by default.
+    SetTextColour(defAttrs.colFg);
 
     if ( InReportView() )
         MSWSetExListStyles();
@@ -358,6 +347,28 @@ void wxListCtrl::MSWSetExListStyles()
     }
 
     ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
+}
+
+void wxListCtrl::MSWInitHeader()
+{
+    // Currently we only need to do something here in dark mode.
+    if ( !wxMSWDarkMode::IsActive() )
+        return;
+
+    // It's not an error if the header doesn't exist.
+    HWND hwndHdr = ListView_GetHeader(GetHwnd());
+    if ( !hwndHdr )
+        return;
+
+    // But if it does, configure it to use dark mode.
+    wxMSWDarkMode::AllowForWindow(hwndHdr, L"ItemsView");
+
+    // It's not clear why do we have to do it, but without using custom drawing
+    // the header text is drawn in black, making it unreadable, so do use it.
+    if ( !m_headerCustomDraw )
+        m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
+
+    m_headerCustomDraw->UseHeaderThemeColors(hwndHdr);
 }
 
 void wxListCtrl::MSWAfterReparent()
@@ -593,9 +604,13 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
         m_windowStyle &= ~(wxHSCROLL | wxVSCROLL);
 
         // if we switched to the report view, set the extended styles for
-        // it too
+        // it too and configure the header which hadn't existed before
         if ( !wasInReportView && InReportView() )
+        {
             MSWSetExListStyles();
+
+            MSWInitHeader();
+        }
 
         Refresh();
     }
@@ -604,6 +619,48 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
+
+bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // There doesn't seem to be any theme that works well here:
+    //  - "Explorer" draws bluish hover highlight rectangle which is not at
+    //    all like the greyish one used by the actual Explorer in dark mode.
+    //  - "DarkMode_Explorer" uses the same selection colours as the light mode
+    //    and doesn't draw hover rectangle at all.
+    //  - "ItemsView", which we use currently, draws the selection and hover as
+    //    expected, but uses light mode scrollbars.
+    support.themeName = L"ItemsView";
+
+    return true;
+}
+
+int wxListCtrl::MSWGetToolTipMessage() const
+{
+    return LVM_GETTOOLTIPS;
+}
+
+wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = GetClassDefaultAttributes(GetWindowVariant());
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Note that we intentionally do not use this window HWND for the
+        // theme, as it doesn't have dark values for it -- but does have them
+        // when we use null window.
+        wxUxThemeHandle theme{HWND(0), L"ItemsView"};
+
+        wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
+        if ( col.IsOk() )
+            attrs.colFg = col;
+
+        col = theme.GetColour(0, TMT_FILLCOLOR);
+        if ( col.IsOk() )
+            attrs.colBg = col;
+    }
+
+    return attrs;
+}
 
 /* static */ wxVisualAttributes
 wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
@@ -667,7 +724,7 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
     else // We do have custom attributes.
     {
         if ( !m_headerCustomDraw )
-            m_headerCustomDraw = new wxMSWListHeaderCustomDraw();
+            m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
         if ( m_headerCustomDraw->m_attr == attr )
         {
@@ -3082,7 +3139,7 @@ static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
         RECT rc = GetCustomDrawnItemRect(nmcd);
 
         // don't use the provided HDC, it's in some strange state by now
-        ::DrawFocusRect(WindowHDC(nmcd.hdr.hwndFrom), &rc);
+        ::DrawFocusRect(ClientHDC(nmcd.hdr.hwndFrom), &rc);
     }
 }
 

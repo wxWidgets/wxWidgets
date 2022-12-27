@@ -59,6 +59,10 @@ Changes in behaviour not resulting in compilation errors
 - Calling wxListCtrl::EditLabel() now asserts if the control doesn't have
   wxLC_EDIT_LABELS style: previously this silently didn't work in wxMSW.
 
+- wxSystemAppearance::IsDark() now returns whether this application uses dark
+  mode under MSW, use the new AreAppsDark() or IsSystemDark() to check if the
+  other applications or the system are using dark mode.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

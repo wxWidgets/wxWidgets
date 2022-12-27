@@ -40,6 +40,7 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/msw/ownerdrawnbutton.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 // ----------------------------------------------------------------------------
@@ -137,6 +138,22 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         return false;
     }
 
+    MSWDarkModeSupport support;
+    if ( wxMSWDarkMode::IsActive() && MSWGetDarkModeSupport(support) )
+    {
+        wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
+
+        if ( support.setForeground )
+            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
+
+        if ( const int msgTT = MSWGetToolTipMessage() )
+        {
+            const HWND hwndTT = (HWND)::SendMessage(GetHwnd(), msgTT, 0, 0);
+            if ( ::IsWindow(hwndTT) )
+                wxMSWDarkMode::AllowForWindow(hwndTT);
+        }
+    }
+
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
     m_labelOrig = label;
@@ -179,6 +196,16 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                        SWP_NOOWNERZORDER |
                        SWP_NOSENDCHANGING);
     }
+
+    return true;
+}
+
+bool wxControl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // This theme works for a few controls (buttons, texts, comboboxes) and
+    // doesn't seem to do any harm for those that don't support it, so use it
+    // by default.
+    support.themeName = L"Explorer";
 
     return true;
 }
@@ -291,6 +318,8 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 {
     HDC hdc = (HDC)pDC;
 
+    wxColour colFg;
+
     WXHBRUSH hbr = 0;
     if ( !colBg.IsOk() )
     {
@@ -325,11 +354,22 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         if ( win )
             hbr = win->MSWGetBgBrush(pDC);
 
-        // if the control doesn't have any bg colour, foreground colour will be
-        // ignored as the return value would be 0 -- so forcefully give it a
-        // non default background brush in this case
-        if ( !hbr && m_hasFgCol )
-            colBg = GetBackgroundColour();
+        if ( !hbr )
+        {
+            if ( wxMSWDarkMode::IsActive() )
+            {
+                colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+                if ( !m_hasFgCol )
+                    colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+            }
+            // if the control doesn't have any bg colour, foreground colour will be
+            // ignored as the return value would be 0 -- so forcefully give it a
+            // non default background brush in this case
+            else if ( m_hasFgCol )
+            {
+                colBg = GetBackgroundColour();
+            }
+        }
     }
 
     // use the background colour override if a valid colour is given: this is
@@ -347,7 +387,9 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     // default just the simple black is used
     if ( hbr )
     {
-        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+        if ( !colFg.IsOk() )
+            colFg = GetForegroundColour();
+        ::SetTextColor(hdc, wxColourToRGB(colFg));
     }
 
     // finally also set the background colour for text drawing: without this,

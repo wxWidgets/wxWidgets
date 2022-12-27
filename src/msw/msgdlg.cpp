@@ -26,6 +26,7 @@
 #include "wx/ptr_scpd.h"
 #include "wx/dynlib.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
 #include "wx/modalhook.h"
@@ -86,10 +87,7 @@ wxMessageDialogMap& HookMap()
 void ScreenRectToClient(HWND hwnd, RECT& rc)
 {
     // map from desktop (i.e. screen) coordinates to ones of this window
-    //
-    // notice that a RECT is laid out as 2 consecutive POINTs so the cast is
-    // valid
-    ::MapWindowPoints(HWND_DESKTOP, hwnd, reinterpret_cast<POINT *>(&rc), 2);
+    wxMapWindowPoints(HWND_DESKTOP, hwnd, &rc);
 }
 
 // set window position to the given rect
@@ -599,6 +597,24 @@ void wxMessageDialog::DoCentre(int dir)
 // Helpers of the wxMSWMessageDialog namespace
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+HRESULT CALLBACK
+wxTaskDialogCallback(HWND hwnd, UINT msg, WPARAM, LPARAM, LONG_PTR)
+{
+    switch ( msg )
+    {
+        case TDN_DIALOG_CONSTRUCTED:
+            wxMSWDarkMode::EnableForTLW(hwnd);
+            break;
+    }
+
+    return S_OK;
+}
+
+} // anonymous namespace
+
 wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
                      : buttons(new TASKDIALOG_BUTTON[MAX_BUTTONS])
 {
@@ -747,6 +763,8 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
         AddTaskDialogButton(tdc, IDHELP, 0 /* not used */, btnHelpLabel);
     }
+
+    tdc.pfCallback = wxTaskDialogCallback;
 }
 
 void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,

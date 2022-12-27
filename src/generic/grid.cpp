@@ -3031,11 +3031,7 @@ void wxGrid::Init()
     m_cellHighlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_cellHighlightPenWidth = 2;
     m_cellHighlightROPenWidth = 1;
-    if ( wxSystemSettings::GetAppearance().IsDark() )
-        m_gridFrozenBorderColour = *wxWHITE;
-    else
-        m_gridFrozenBorderColour = *wxBLACK;
-
+    m_gridFrozenBorderColour = wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
     m_gridFrozenBorderPenWidth = 2;
 
     m_canDragRowMove = false;

@@ -141,6 +141,8 @@ protected:
   // common part of all ctors
   void Init();
 
+  virtual int MSWGetToolTipMessage() const override;
+
   // hides the currently shown page and shows the given one (if not -1) and
   // updates m_selection accordingly
   void UpdateSelection(int selNew);
@@ -180,6 +182,10 @@ protected:
   // these function are used for reducing flicker on notebook resize
   void OnEraseBackground(wxEraseEvent& event);
   void OnPaint(wxPaintEvent& event);
+
+  // Paint the notebook ourselves on the provided DC.
+  void MSWNotebookPaint(wxDC& dc);
+
 
   // true if we have already subclassed our updown control
   bool m_hasSubclassedUpdown;

@@ -58,6 +58,8 @@ protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const override;
 
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+
     // Implement wxMSWOwnerDrawnButtonBase methods.
     virtual int MSWGetButtonStyle() const override;
     virtual void MSWOnButtonResetOwnerDrawn() override;

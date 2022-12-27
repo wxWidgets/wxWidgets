@@ -1181,6 +1181,48 @@ public:
 
     ///@}
 
+    /**
+        @name MSW-specific functions
+    */
+    //@{
+
+    /**
+        Enable experimental dark mode support for MSW applications.
+
+        This function uses @e undocumented, and unsupported by Microsoft,
+        functions to enable dark mode support for the desktop applications
+        under Windows 10 20H1 or later (including all Windows 11 versions).
+
+        Note that dark mode can also be enabled by setting the "msw.dark-mode"
+        @ref wxSystemOptions "system option" via an environment variable from
+        outside the application.
+
+        Known limitations of dark mode support include:
+
+            - wxMessageBox() contents doesn't use dark mode. Consider using
+              wxGenericMessageDialog if dark mode support is more important
+              than using the native dialog.
+            - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
+              use the same (light) background as by default in it.
+            - Toolbar items for which wxToolBar::SetDropdownMenu() was called
+              don't draw the menu drop-down correctly, making it almost
+              invisible.
+
+        @param flags Can include @c wxApp::DarkMode_Always to force enabling
+            dark mode for the application, even if the system doesn't use the
+            dark mode by default. Otherwise dark mode is only used if it is the
+            default mode for the applications on the current system.
+
+        @return @true if dark mode support was enabled, @false if it couldn't
+            be done, most likely because the system doesn't support dark mode.
+
+        @onlyfor{wxmsw}
+
+        @since 3.3.0
+     */
+    bool MSWEnableDarkMode(int flags = 0);
+
+    //@}
 };
 
 

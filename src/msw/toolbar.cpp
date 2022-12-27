@@ -60,6 +60,8 @@
 #include "wx/msw/uxtheme.h"
 #endif
 
+#include "wx/msw/private/darkmode.h"
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -334,6 +336,11 @@ static bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
     return tool->IsToggled();
 }
 
+static COLORREF wxSysColourToRGB(wxSystemColour syscol)
+{
+    return wxColourToRGB(wxSystemSettings::GetColour(syscol));
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -462,6 +469,18 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
         ::SetWindowLong(hwndTTip, GWL_STYLE, styleTTip);
     }
 #endif // wxUSE_TOOLTIPS
+
+    // Change the color scheme when using the dark mode even though MSDN says
+    // that it's not used with comctl32 v6, it actually still is for "3D"
+    // separator above the toolbar, which is drawn partially in white by
+    // default and so looks very ugly in dark mode.
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        COLORSCHEME colScheme{sizeof(COLORSCHEME)};
+        colScheme.clrBtnHighlight =
+        colScheme.clrBtnShadow = wxSysColourToRGB(wxSYS_COLOUR_WINDOW);
+        ::SendMessage(GetHwnd(), TB_SETCOLORSCHEME, 0, (LPARAM)&colScheme);
+    }
 
     return true;
 }
@@ -712,6 +731,22 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     msStyle |= TBSTYLE_TRANSPARENT;
 
     return msStyle;
+}
+
+bool wxToolBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    wxToolBarBase::MSWGetDarkModeSupport(support);
+
+    // This ensures GetForegroundColour(), used in our custom draw code,
+    // returns the correct colour.
+    support.setForeground = true;
+
+    return true;
+}
+
+int wxToolBar::MSWGetToolTipMessage() const
+{
+    return TB_GETTOOLTIPS;
 }
 
 // ----------------------------------------------------------------------------
@@ -1611,7 +1646,7 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
 
 bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                             WXLPARAM lParam,
-                            WXLPARAM *WXUNUSED(result))
+                            WXLPARAM *result)
 {
     LPNMHDR hdr = (LPNMHDR)lParam;
     if ( hdr->code == TBN_DROPDOWN )
@@ -1640,6 +1675,32 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
         return true;
     }
 
+    if ( hdr->code == NM_CUSTOMDRAW )
+    {
+        NMTBCUSTOMDRAW* const nmtbcd = (NMTBCUSTOMDRAW*)lParam;
+        switch ( nmtbcd->nmcd.dwDrawStage )
+        {
+            case CDDS_PREPAINT:
+                if ( !wxMSWDarkMode::IsActive() )
+                    break;
+
+                *result = CDRF_NOTIFYITEMDRAW;
+                return true;
+
+            case CDDS_ITEMPREPAINT:
+                // If we get here, we must have returned CDRF_NOTIFYITEMDRAW
+                // from above, so we're using the dark mode and need to
+                // customize the colours for it.
+                nmtbcd->clrText =
+                nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
+                nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
+
+                *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK;
+                return true;
+        }
+
+        return false;
+    }
 
     if( !HasFlag(wxTB_NO_TOOLTIPS) )
     {
@@ -2103,7 +2164,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
     {
         // erase the dummy separators region ourselves now as nobody painted
         // over them
-        WindowHDC hdc(GetHwnd());
+        ClientHDC hdc(GetHwnd());
         ::SelectClipRgn(hdc, GetHrgnOf(rgnDummySeps));
         MSWDoEraseBackground(hdc);
     }

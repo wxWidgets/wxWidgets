@@ -169,9 +169,14 @@ WXDLLIMPEXP_CORE bool wxUxThemeIsActive();
 class wxUxThemeHandle
 {
 public:
-    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes)
+    wxUxThemeHandle(HWND hwnd, const wchar_t *classes) :
+        m_hTheme{::OpenThemeData(hwnd, classes)}
     {
-        m_hTheme = (HTHEME)::OpenThemeData(GetHwndOf(win), classes);
+    }
+
+    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes) :
+        wxUxThemeHandle(GetHwndOf(win), classes)
+    {
     }
 
     operator HTHEME() const { return m_hTheme; }
@@ -184,8 +189,14 @@ public:
         }
     }
 
+    // Return the colour for the given part, property and state.
+    //
+    // Note that the order of arguments here is _not_ the same as for
+    // GetThemeColor() because we want to default the state.
+    wxColour GetColour(int part, int prop, int state = 0) const;
+
 private:
-    HTHEME m_hTheme;
+    const HTHEME m_hTheme;
 
     wxDECLARE_NO_COPY_CLASS(wxUxThemeHandle);
 };

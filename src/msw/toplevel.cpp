@@ -39,6 +39,7 @@
 #include "wx/tooltip.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 #include "wx/msw/winundef.h"
@@ -509,6 +510,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     // make the keyboard indicators (such as underlines for accelerators and
     // focus rectangles) work under Win2k+
     MSWUpdateUIState(UIS_INITIALIZE);
+
+    wxMSWDarkMode::EnableForTLW(GetHwnd());
 
     return true;
 }

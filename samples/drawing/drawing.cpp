@@ -524,6 +524,13 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_useBuffer = false;
     m_showBBox = false;
     m_sizeDIP = wxSize(0, 0);
+
+    Bind(wxEVT_SYS_COLOUR_CHANGED, [this](wxSysColourChangedEvent& event) {
+        event.Skip();
+
+        if ( m_show == File_ShowSystemColours )
+            Refresh();
+    });
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -1676,21 +1683,31 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     wxCoord x(FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
-    wxString title = "System colours";
+    dc.DrawText("System colours", x, r.y);
+    r.y += 2*lineHeight;
 
     const wxSystemAppearance appearance = wxSystemSettings::GetAppearance();
     const wxString appearanceName = appearance.GetName();
     if ( !appearanceName.empty() )
-        title += wxString::Format(" for \"%s\"", appearanceName);
-    if ( appearance.IsDark() )
-        title += " (using dark system theme)";
-    dc.DrawText(title, x, r.y);
-    r.y += 2*lineHeight;
-    dc.DrawText(wxString::Format("Window background is %s",
-                                 appearance.IsUsingDarkBackground() ? "dark"
-                                                                    : "light"),
-                x, r.y);
-    r.y += 3*lineHeight;
+    {
+        dc.DrawText(wxString::Format("System appearance: %s", appearanceName),
+                    x, r.y);
+        r.y += lineHeight;
+    }
+
+    auto const showDarkOrLight = [&](const char* what, bool dark)
+    {
+        dc.DrawText(wxString::Format("%s: %s", what, dark ? "dark" : "light"),
+                    x, r.y);
+        r.y += 1.5*lineHeight;
+    };
+
+    showDarkOrLight("System", appearance.IsSystemDark());
+    showDarkOrLight("App default", appearance.AreAppsDark());
+    showDarkOrLight("Current app", appearance.IsDark());
+    showDarkOrLight("Background", appearance.IsUsingDarkBackground());
+
+    r.y += lineHeight;
 
     dc.SetPen(*wxTRANSPARENT_PEN);
 

@@ -95,6 +95,15 @@ bool wxStaticBox::Create(wxWindow *parent,
     return true;
 }
 
+bool wxStaticBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // Static boxes don't seem to have any dark mode support, so just set the
+    // foreground colour contrasting with the dark background for them.
+    support.setForeground = true;
+
+    return true;
+}
+
 bool wxStaticBox::ShouldUseCustomPaint() const
 {
     // When not using double buffering, we paint the box ourselves by default

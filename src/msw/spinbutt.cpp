@@ -139,6 +139,13 @@ wxSpinButton::~wxSpinButton()
 {
 }
 
+bool wxSpinButton::MSWShouldUseAutoDarkMode() const
+{
+    // Native control doesn't seem to have any support for dark theme, so
+    // invert it in dark mode -- this is not great, but better than nothing.
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // size calculation
 // ----------------------------------------------------------------------------

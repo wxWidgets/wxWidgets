@@ -386,6 +386,21 @@ inline RECT wxGetClientRect(HWND hwnd)
     return rect;
 }
 
+// Call MapWindowPoints() on a RECT: because a RECT is (intentionally) laid out
+// as 2 consecutive POINTs, the cast below is valid but we still prefer to hide
+// it in this function instead of writing it out in the rest of the code.
+inline void wxMapWindowPoints(HWND hwndFrom, HWND hwndTo, RECT* rc)
+{
+    ::MapWindowPoints(hwndFrom, hwndTo, reinterpret_cast<POINT *>(rc), 2);
+}
+
+// For consistency also provide an overload taking a POINT, even if this one is
+// even more trivial.
+inline void wxMapWindowPoints(HWND hwndFrom, HWND hwndTo, POINT* pt)
+{
+    ::MapWindowPoints(hwndFrom, hwndTo, pt, 1);
+}
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------
@@ -421,38 +436,46 @@ private:
 
 #endif // __WXMSW__
 
-// create an instance of this class and use it as the HDC for screen, will
-// automatically release the DC going out of scope
-class ScreenHDC
+// RAII helper for releasing an HDC in its dtor.
+class AutoHDC
 {
 public:
-    ScreenHDC() { m_hdc = ::GetDC(nullptr);    }
-   ~ScreenHDC() { ::ReleaseDC(nullptr, m_hdc); }
+    ~AutoHDC() { if ( m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
 
     operator HDC() const { return m_hdc; }
 
+protected:
+    AutoHDC(HWND hwnd, HDC hdc) : m_hwnd(hwnd), m_hdc(hdc) { }
+
 private:
+    HWND m_hwnd;
     HDC m_hdc;
 
-    wxDECLARE_NO_COPY_CLASS(ScreenHDC);
+    wxDECLARE_NO_COPY_CLASS(AutoHDC);
 };
 
-// the same as ScreenHDC but for window DCs (and if HWND is null, then exactly
-// the same as it)
-class WindowHDC
+// create an instance of this class and use it as the HDC for screen, will
+// automatically release the DC going out of scope
+class ScreenHDC : public AutoHDC
 {
 public:
-    WindowHDC() : m_hwnd(nullptr), m_hdc(nullptr) { }
-    WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { if ( m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
+    ScreenHDC() : AutoHDC(nullptr, ::GetDC(nullptr)) { }
+};
 
-    operator HDC() const { return m_hdc; }
+// the same as ScreenHDC but for client part of the window (if HWND is null,
+// then it's exactly the same as ScreenHDC)
+class ClientHDC : public AutoHDC
+{
+public:
+    ClientHDC() : AutoHDC(nullptr, nullptr) { }
+    explicit ClientHDC(HWND hwnd) : AutoHDC(hwnd, ::GetDC(hwnd)) { }
+};
 
-private:
-   HWND m_hwnd;
-   HDC m_hdc;
-
-   wxDECLARE_NO_COPY_CLASS(WindowHDC);
+// same as ClientHDC but includes the non-client part of the window
+class WindowHDC : public AutoHDC
+{
+public:
+    explicit WindowHDC(HWND hwnd) : AutoHDC(hwnd, ::GetWindowDC(hwnd)) { }
 };
 
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with

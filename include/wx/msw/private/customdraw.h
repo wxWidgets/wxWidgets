@@ -12,6 +12,7 @@
 
 #include "wx/itemattr.h"
 
+#include "wx/msw/uxtheme.h"
 #include "wx/msw/wrapcctl.h"
 
 namespace wxMSWImpl
@@ -55,5 +56,54 @@ private:
 };
 
 } // namespace wxMSWImpl
+
+// ----------------------------------------------------------------------------
+// wxMSWHeaderCtrlCustomDraw: custom draw helper for header control
+// ----------------------------------------------------------------------------
+
+class wxMSWHeaderCtrlCustomDraw : public wxMSWImpl::CustomDraw
+{
+public:
+    wxMSWHeaderCtrlCustomDraw()
+    {
+    }
+
+    // Set the colours to the ones used by "Header" theme.
+    //
+    // This is required, for unknown reasons, when using dark mode, because
+    // enabling it for the header control changes the background, but not the
+    // foreground, making the text completely unreadable.
+    //
+    // If this is ever fixed in later Windows versions, this function wouldn't
+    // need to be called any more.
+    void UseHeaderThemeColors(HWND hwndHdr)
+    {
+        wxUxThemeHandle theme{hwndHdr, L"Header"};
+
+        m_attr.SetTextColour(theme.GetColour(HP_HEADERITEM, TMT_TEXTCOLOR));
+
+        // Note that TMT_FILLCOLOR doesn't seem to exist in this theme but the
+        // correct background colour is already used in "ItemsView" theme by
+        // default anyhow.
+    }
+
+    // Make this field public to let the control update it directly when its
+    // attributes change.
+    wxItemAttr m_attr;
+
+private:
+    virtual bool HasCustomDrawnItems() const override
+    {
+        // We only exist if the header does need to be custom drawn.
+        return true;
+    }
+
+    virtual const wxItemAttr*
+    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
+    {
+        // We use the same attribute for all items for now.
+        return &m_attr;
+    }
+};
 
 #endif // _WX_MSW_CUSTOMDRAW_H_

@@ -61,6 +61,8 @@ public:
     virtual void SetIncrement(int value) override;
     virtual int  GetIncrement() const override;
 
+    virtual bool MSWShouldUseAutoDarkMode() const override;
+
 protected:
    virtual wxSize DoGetBestSize() const override;
 

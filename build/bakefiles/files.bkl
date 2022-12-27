@@ -1847,6 +1847,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/timectrl.cpp
     src/msw/datecontrols.cpp
     src/generic/activityindicator.cpp
+    src/msw/darkmode.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h

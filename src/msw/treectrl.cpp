@@ -2220,6 +2220,11 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
 // implementation
 // ----------------------------------------------------------------------------
 
+int wxTreeCtrl::MSWGetToolTipMessage() const
+{
+    return TVM_GETTOOLTIPS;
+}
+
 bool wxTreeCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
 {
     if ( msg->message == WM_KEYDOWN )
@@ -3667,7 +3672,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 POINT point;
                 point.x = GET_X_LPARAM(pos);
                 point.y = GET_Y_LPARAM(pos);
-                ::MapWindowPoints(HWND_DESKTOP, GetHwnd(), &point, 1);
+                wxMapWindowPoints(HWND_DESKTOP, GetHwnd(), &point);
                 int htFlags = 0;
                 wxTreeItemId item = HitTest(wxPoint(point.x, point.y), htFlags);
 

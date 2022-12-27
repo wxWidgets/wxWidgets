@@ -172,8 +172,15 @@ public:
     // Return the name if available or empty string otherwise.
     wxString GetName() const;
 
-    // Return true if the current system there is explicitly recognized as
-    // being a dark theme or if the default window background is dark.
+    // Return true if the applications on this system use dark theme by default.
+    bool AreAppsDark() const;
+
+    // Return true if the system elements use dark theme: this can only differ
+    // from AreAppsDark() under MSW where it's possible to configure the system
+    // (taskbar etc) to use a different theme.
+    bool IsSystemDark() const;
+
+    // Return true if this application itself uses a dark theme.
     bool IsDark() const;
 
     // Return true if the background is darker than foreground. This is used by
@@ -220,6 +227,12 @@ public:
 
     // get the object describing the current system appearance
     static wxSystemAppearance GetAppearance();
+
+    // get the first colour for light appearance and the second one for the dark
+    static wxColour SelectLightDark(wxColour colForLight, wxColour colForDark)
+    {
+        return GetAppearance().IsDark() ? colForDark : colForLight;
+    }
 
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);

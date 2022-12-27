@@ -679,4 +679,15 @@ bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* W
 }
 #endif // wxUSE_TOOLTIPS
 
+bool wxStatusBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // This is not documented anywhere but seems to work.
+    //
+    // Note that we should _not_ set the theme name to "Explorer", this ID only
+    // works if we do _not_ do it.
+    support.themeId = L"ExplorerStatusBar";
+
+    return true;
+}
+
 #endif // wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR

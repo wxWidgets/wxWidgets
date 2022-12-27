@@ -39,6 +39,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 
 #include "wx/generic/statusbr.h"
 
@@ -836,6 +837,12 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 {
     WXLRESULT rc = 0;
     bool processed = false;
+
+    if ( GetMenuBar() &&
+          wxMSWDarkMode::HandleMenuMessage(&rc, this, message, wParam, lParam) )
+    {
+        return rc;
+    }
 
     switch ( message )
     {

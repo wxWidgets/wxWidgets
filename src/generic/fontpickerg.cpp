@@ -22,6 +22,10 @@
 
 #if wxUSE_FONTPICKERCTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif // WX_PRECOMP
+
 #include "wx/fontpicker.h"
 
 #include "wx/fontdlg.h"
@@ -68,7 +72,7 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
 void wxGenericFontButton::InitFontData()
 {
     m_data.SetAllowSymbols(true);
-    m_data.SetColour(*wxBLACK);
+    m_data.SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     m_data.EnableEffects(true);
 }
 

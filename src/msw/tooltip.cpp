@@ -34,6 +34,7 @@
 #include "wx/tokenzr.h"
 #include "wx/vector.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 
 #ifndef TTTOOLINFO_V1_SIZE
     #define TTTOOLINFO_V1_SIZE 0x28
@@ -314,6 +315,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
        if ( ms_hwndTT )
        {
            HWND hwnd = (HWND)ms_hwndTT;
+           wxMSWDarkMode::AllowForWindow(hwnd);
            SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0,
                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 

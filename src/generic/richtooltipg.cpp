@@ -96,21 +96,15 @@ public:
             {
                 titleFont.MakeLarger();
 
-                COLORREF c;
-                if ( FAILED(::GetThemeColor
-                                   (
-                                        wxUxThemeHandle(parent, L"TOOLTIP"),
-                                        TTP_BALLOONTITLE,
-                                        0,
-                                        TMT_TEXTCOLOR,
-                                        &c
-                                    )) )
+                wxUxThemeHandle theme(parent, L"TOOLTIP");
+                wxColour c = theme.GetColour(TTP_BALLOONTITLE, TMT_TEXTCOLOR);
+                if ( !c.IsOk() )
                 {
                     // Use the standard value of this colour as fallback.
-                    c = 0x993300;
+                    c.Set(0x00, 0x33, 0x99);
                 }
 
-                labelTitle->SetForegroundColour(wxRGBToColour(c));
+                labelTitle->SetForegroundColour(c);
             }
             else
 #endif // HAVE_MSW_THEME
@@ -175,30 +169,14 @@ public:
             {
                 wxUxThemeHandle hTheme(GetParent(), L"TOOLTIP");
 
-                COLORREF c1, c2;
-                if ( FAILED(::GetThemeColor
-                                   (
-                                        hTheme,
-                                        TTP_BALLOONTITLE,
-                                        0,
-                                        TMT_GRADIENTCOLOR1,
-                                        &c1
-                                    )) ||
-                    FAILED(::GetThemeColor
-                                  (
-                                        hTheme,
-                                        TTP_BALLOONTITLE,
-                                        0,
-                                        TMT_GRADIENTCOLOR2,
-                                        &c2
-                                  )) )
-                {
-                    c1 = 0xffffff;
-                    c2 = 0xf0e5e4;
-                }
+                colStart = hTheme.GetColour(TTP_BALLOONTITLE, TMT_GRADIENTCOLOR1);
+                if ( !colStart.IsOk() )
+                    colStart = wxSystemSettings::SelectLightDark(*wxWHITE, *wxBLACK);
 
-                colStart = wxRGBToColour(c1);
-                colEnd = wxRGBToColour(c2);
+                colEnd = hTheme.GetColour(TTP_BALLOONTITLE, TMT_GRADIENTCOLOR2);
+                if ( !colEnd.IsOk() )
+                    colEnd = wxSystemSettings::SelectLightDark({0xe4, 0xe5, 0xf0},
+                                                               {0x40, 0x40, 0x20});
             }
             else
 #endif // HAVE_MSW_THEME

@@ -208,8 +208,7 @@ void FontPickerCtrlTestCase::ColourSelection()
 {
     wxColour selectedColour(0xFF4269UL);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default font picker color must be black",
-        m_font->GetSelectedColour(), wxColour(*wxBLACK));
+    CHECK( m_font->GetSelectedColour() != selectedColour );
 
     m_font->SetSelectedColour(selectedColour);
 

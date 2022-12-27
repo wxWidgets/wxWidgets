@@ -35,6 +35,7 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 #ifndef HDM_SETBITMAPMARGIN
@@ -48,36 +49,6 @@
 
 // from src/msw/listctrl.cpp
 extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
-
-// ----------------------------------------------------------------------------
-// wxMSWHeaderCtrlCustomDraw: our custom draw helper
-// ----------------------------------------------------------------------------
-
-class wxMSWHeaderCtrlCustomDraw : public wxMSWImpl::CustomDraw
-{
-public:
-    wxMSWHeaderCtrlCustomDraw()
-    {
-    }
-
-    // Make this field public to let wxHeaderCtrl update it directly when its
-    // attributes change.
-    wxItemAttr m_attr;
-
-private:
-    virtual bool HasCustomDrawnItems() const override
-    {
-        // We only exist if the header does need to be custom drawn.
-        return true;
-    }
-
-    virtual const wxItemAttr*
-    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const override
-    {
-        // We use the same attribute for all items for now.
-        return &m_attr;
-    }
-};
 
 // ----------------------------------------------------------------------------
 // wxMSWHeaderCtrl: the native header control
@@ -122,6 +93,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) override;
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
+
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     // This function can be used as event handle for wxEVT_DPI_CHANGED event.
     void WXHandleDPIChanged(wxDPIChangedEvent& event);
@@ -246,6 +219,12 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_HEADER, wxT(""), pos, size) )
         return false;
 
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        m_customDraw = new wxMSWHeaderCtrlCustomDraw();
+        m_customDraw->UseHeaderThemeColors(GetHwnd());
+    }
+
     // special hack for margins when using comctl32.dll v6 or later: the
     // default margin is too big and results in label truncation when the
     // column width is just about right to show it together with the sort
@@ -274,6 +253,13 @@ WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     msStyle |= HDS_HORZ | HDS_BUTTONS | HDS_FULLDRAG | HDS_HOTTRACK;
 
     return msStyle;
+}
+
+bool wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    support.themeName = L"ItemsView";
+
+    return true;
 }
 
 wxMSWHeaderCtrl::~wxMSWHeaderCtrl()
