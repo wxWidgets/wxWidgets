@@ -147,6 +147,20 @@ void wxSpinCtrlQt< int, QSpinBox >::SetRange( int min, int max )
     m_qtSpinBox->setRange( min, max );
 }
 
+// Specializations for QDoubleSpinBox
+template<>
+void wxSpinCtrlQt< double, QDoubleSpinBox >::SetIncrement( double inc )
+{
+    m_qtSpinBox->setSingleStep( inc );
+
+    const int digits = wxSpinCtrlImpl::DetermineDigits(inc);
+
+    // Increase the number of digits, if necessary, to show all numbers that
+    // can be obtained by using the new increment without loss of precision.
+    if ( digits > m_qtSpinBox->decimals() )
+        m_qtSpinBox->setDecimals( digits );
+}
+
 // Define a derived helper class to get access to valueFromText:
 
 template < typename Widget >
@@ -292,7 +306,10 @@ wxSpinCtrlDouble::wxSpinCtrlDouble(wxWindow *parent, wxWindowID id, const wxStri
 : wxSpinCtrlQt< double, QDoubleSpinBox >( parent, id, value, pos, size, style,
         min, max, initial, inc, name )
 {
-    Create( parent, id, value, pos, size, style, min, max, initial, inc, name );
+    if ( Create( parent, id, value, pos, size, style, min, max, initial, inc, name ) )
+    {
+        SetDigits(wxSpinCtrlImpl::DetermineDigits(inc));
+    }
 }
 
 bool wxSpinCtrlDouble::Create(wxWindow *parent, wxWindowID id, const wxString& value,
