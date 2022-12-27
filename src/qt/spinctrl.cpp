@@ -11,6 +11,7 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/spinctrl.h"
+#include "wx/private/spinctrl.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -24,9 +25,9 @@ wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt() :
 }
 
 template< typename T, typename Widget >
-wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt( wxWindow *WXUNUSED(WXUNUSED(parent)), wxWindowID WXUNUSED(WXUNUSED(id)),
-    const wxString& WXUNUSED(WXUNUSED(value)), const wxPoint& WXUNUSED(WXUNUSED(pos)), const wxSize& WXUNUSED(WXUNUSED(size)), long WXUNUSED(WXUNUSED(style)),
-    T WXUNUSED(WXUNUSED(min)), T WXUNUSED(WXUNUSED(max)), T WXUNUSED(WXUNUSED(initial)), T WXUNUSED(WXUNUSED(inc)), const wxString& WXUNUSED(WXUNUSED(name)) )
+wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt( wxWindow *WXUNUSED(parent), wxWindowID WXUNUSED(id),
+    const wxString& WXUNUSED(value), const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size), long WXUNUSED(style),
+    T WXUNUSED(min), T WXUNUSED(max), T WXUNUSED(initial), T WXUNUSED(inc), const wxString& WXUNUSED(name) )
 {
 }
 
@@ -134,6 +135,31 @@ QWidget *wxSpinCtrlQt< T, Widget >::GetHandle() const
     return m_qtSpinBox;
 }
 
+// Specializations for QSpinBox
+template<>
+void wxSpinCtrlQt< int, QSpinBox >::SetRange( int min, int max )
+{
+    // For negative values in the range only base == 10 is allowed
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(min, max, this->GetBase()) )
+        return;
+
+    wxQtEnsureSignalsBlocked blocker(m_qtSpinBox);
+    m_qtSpinBox->setRange( min, max );
+}
+
+// Specializations for QDoubleSpinBox
+template<>
+void wxSpinCtrlQt< double, QDoubleSpinBox >::SetIncrement( double inc )
+{
+    m_qtSpinBox->setSingleStep( inc );
+
+    const int digits = wxSpinCtrlImpl::DetermineDigits(inc);
+
+    // Increase the number of digits, if necessary, to show all numbers that
+    // can be obtained by using the new increment without loss of precision.
+    if ( digits > m_qtSpinBox->decimals() )
+        m_qtSpinBox->setDecimals( digits );
+}
 
 // Define a derived helper class to get access to valueFromText:
 
@@ -230,12 +256,24 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 bool wxSpinCtrl::SetBase(int base)
 {
-    // Currently we only support base 10.
-    if ( base != 10 )
-        return false;
-
     if ( base == m_base )
         return true;
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 2, 0))
+    // Currently we only support base 10 for Qt version < 5.2
+    if ( base != 10 )
+        return false;
+#else // Qt5.2+
+    if ( base != 10 && base != 16 )
+        return false;
+
+    // For negative values in the range only base == 10 is allowed
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(static_cast<int>(GetMin()),
+                                                    static_cast<int>(GetMax()), base) )
+        return false;
+
+    m_qtSpinBox->setDisplayIntegerBase(base);
+#endif
 
     m_base = base;
 
@@ -247,7 +285,7 @@ void wxSpinCtrl::SetValue( const wxString &value )
     // valueFromText can be called if m_qtSpinBox is an instance of the helper class
     wxQtSpinBox * qtSpinBox = dynamic_cast<wxQtSpinBox *> ((QSpinBox *) m_qtSpinBox);
     if (qtSpinBox != nullptr)
-        qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
+        BaseType::SetValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
 //##############################################################################
@@ -268,7 +306,10 @@ wxSpinCtrlDouble::wxSpinCtrlDouble(wxWindow *parent, wxWindowID id, const wxStri
 : wxSpinCtrlQt< double, QDoubleSpinBox >( parent, id, value, pos, size, style,
         min, max, initial, inc, name )
 {
-    Create( parent, id, value, pos, size, style, min, max, initial, inc, name );
+    if ( Create( parent, id, value, pos, size, style, min, max, initial, inc, name ) )
+    {
+        SetDigits(wxSpinCtrlImpl::DetermineDigits(inc));
+    }
 }
 
 bool wxSpinCtrlDouble::Create(wxWindow *parent, wxWindowID id, const wxString& value,
@@ -296,7 +337,7 @@ void wxSpinCtrlDouble::SetValue( const wxString &value )
     // valueFromText can be called if m_qtSpinBox is an instance of the helper class
     wxQtDoubleSpinBox * qtSpinBox = dynamic_cast<wxQtDoubleSpinBox *> ((QDoubleSpinBox *) m_qtSpinBox);
     if (qtSpinBox != nullptr)
-        qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
+        BaseType::SetValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
 
