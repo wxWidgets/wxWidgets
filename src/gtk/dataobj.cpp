@@ -167,6 +167,11 @@ void wxDataFormat::SetId( const wxString& id )
     m_format = gdk_atom_intern( id.ToAscii(), FALSE );
 }
 
+void wxDataFormat::PrepareFormats()
+{
+    // This function is not used any longer, but kept for ABI compatibility.
+}
+
 //-------------------------------------------------------------------------
 // wxDataObject
 //-------------------------------------------------------------------------

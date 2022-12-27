@@ -70,6 +70,8 @@ private:
 
     wxDataFormatId   m_type;
     NativeFormat     m_format;
+
+    void PrepareFormats();
 };
 
 #endif // _WX_GTK_DATAFORM_H
