@@ -11,6 +11,7 @@
 #if wxUSE_SPINCTRL
 
 #include "wx/spinctrl.h"
+#include "wx/private/spinctrl.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -134,6 +135,17 @@ QWidget *wxSpinCtrlQt< T, Widget >::GetHandle() const
     return m_qtSpinBox;
 }
 
+// Specializations for QSpinBox
+template<>
+void wxSpinCtrlQt< int, QSpinBox >::SetRange( int min, int max )
+{
+    // For negative values in the range only base == 10 is allowed
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(min, max, this->GetBase()) )
+        return;
+
+    wxQtEnsureSignalsBlocked blocker(m_qtSpinBox);
+    m_qtSpinBox->setRange( min, max );
+}
 
 // Define a derived helper class to get access to valueFromText:
 
@@ -230,12 +242,24 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 bool wxSpinCtrl::SetBase(int base)
 {
-    // Currently we only support base 10.
-    if ( base != 10 )
-        return false;
-
     if ( base == m_base )
         return true;
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 2, 0))
+    // Currently we only support base 10 for Qt version < 5.2
+    if ( base != 10 )
+        return false;
+#else // Qt5.2+
+    if ( base != 10 && base != 16 )
+        return false;
+
+    // For negative values in the range only base == 10 is allowed
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(static_cast<int>(GetMin()),
+                                                    static_cast<int>(GetMax()), base) )
+        return false;
+
+    m_qtSpinBox->setDisplayIntegerBase(base);
+#endif
 
     m_base = base;
 
