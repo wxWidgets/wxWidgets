@@ -62,17 +62,17 @@ public:
 
     // Create from the given collection of bitmaps (all of which must be valid,
     // but if the vector itself is empty, empty bundle is returned).
-    static wxNODISCARD wxBitmapBundle FromBitmaps(const wxVector<wxBitmap>& bitmaps);
-    static wxNODISCARD wxBitmapBundle FromBitmaps(const wxBitmap& bitmap1,
+    wxNODISCARD static wxBitmapBundle FromBitmaps(const wxVector<wxBitmap>& bitmaps);
+    wxNODISCARD static wxBitmapBundle FromBitmaps(const wxBitmap& bitmap1,
                                       const wxBitmap& bitmap2);
 
     // Create from a single bitmap (this is only useful for compatibility
     // with the existing code). Returns empty bundle if bitmap is invalid.
-    static wxNODISCARD wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
-    static wxNODISCARD wxBitmapBundle FromImage(const wxImage& image);
+    wxNODISCARD static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
+    wxNODISCARD static wxBitmapBundle FromImage(const wxImage& image);
 
     // Create from icon bundle.
-    static wxNODISCARD wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
+    wxNODISCARD static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
 
     // It should be possible to implement SVG rasterizing without raw bitmap
     // support using wxDC::DrawSpline(), but currently we don't do it and so
@@ -81,16 +81,16 @@ public:
     // Create from the SVG data (data is supposed to be in UTF-8 encoding).
     // Notice that the data here is non-const because it can be temporarily
     // modified while parsing it.
-    static wxNODISCARD wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
     // This overload currently makes a copy of the data.
-    static wxNODISCARD wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
     // This overload works for data not terminated with 0
-    static wxNODISCARD wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
 
     // Load SVG image from the given file (must be a local file, not an URL).
-    static wxNODISCARD wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
 
     // Create from SVG image stored as an application resource.
     // On Windows, name must be a resource with RT_RCDATA type.
@@ -101,15 +101,15 @@ public:
 
     // Create from the resources: all existing versions of the bitmap of the
     // form name_2x or name@2x (and also using other factors) will be used.
-    static wxNODISCARD wxBitmapBundle FromResources(const wxString& name);
+    wxNODISCARD static wxBitmapBundle FromResources(const wxString& name);
 
     // Create from files: all existing versions of the bitmap of the
     // form filename_2x or name@2x (and also using other factors) will be used.
-    static wxNODISCARD wxBitmapBundle FromFiles(const wxString& fullpathname);
-    static wxNODISCARD wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
+    wxNODISCARD static wxBitmapBundle FromFiles(const wxString& fullpathname);
+    wxNODISCARD static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
 
     // Create from existing implementation
-    static wxNODISCARD wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
+    wxNODISCARD static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     // Check if bitmap bundle is non-empty.
     wxNODISCARD bool IsOk() const { return m_impl.get() != nullptr; }
@@ -159,14 +159,14 @@ public:
 
     // Get the bitmap size preferred by the majority of the elements of the
     // bundles at the given scale or the scale appropriate for the given window.
-    static wxNODISCARD wxSize
+    wxNODISCARD static wxSize
     GetConsensusSizeFor(double scale, const wxVector<wxBitmapBundle>& bundles);
-    static wxNODISCARD wxSize
+    wxNODISCARD static wxSize
     GetConsensusSizeFor(wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
     // Create wxImageList and fill it with the images from the given bundles in
     // the sizes appropriate for the DPI scaling used for the specified window.
-    static wxNODISCARD wxImageList*
+    wxNODISCARD static wxImageList*
     CreateImageList(wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
 private:
