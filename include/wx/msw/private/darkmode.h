@@ -17,6 +17,7 @@ namespace wxMSWDarkMode
 
 // Return true if the application is using dark mode: note that this will only
 // be the case if wxApp::MSWEnableDarkMode() was called.
+WXDLLIMPEXP_CORE
 bool IsActive();
 
 // Enable dark mode for the given TLW if appropriate.
