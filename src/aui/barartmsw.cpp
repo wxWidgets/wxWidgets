@@ -22,10 +22,12 @@
 #include "wx/aui/framemanager.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 
 wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 {
-    if ( wxUxThemeIsActive() )
+    // Theme colours don't work in dark theme, so don't use them in this case.
+    if ( wxUxThemeIsActive() && !wxMSWDarkMode::IsActive() )
     {
         m_themed = true;
 
