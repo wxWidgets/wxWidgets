@@ -48,13 +48,13 @@
 class wxLibnotifyModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         // We're initialized on demand.
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         if ( notify_is_initted() )
             notify_uninit();
@@ -98,7 +98,7 @@ class wxLibNotifyMsgImpl : public wxNotificationMessageImpl
 public:
     wxLibNotifyMsgImpl(wxNotificationMessageBase* notification) :
         wxNotificationMessageImpl(notification),
-        m_notification(NULL),
+        m_notification(nullptr),
         m_flags(wxICON_INFORMATION)
     {
         if ( !wxLibnotifyModule::Initialize() )
@@ -196,7 +196,7 @@ public:
         return true;
     }
 
-    virtual bool Show(int timeout) wxOVERRIDE
+    virtual bool Show(int timeout) override
     {
         if ( !CreateOrUpdateNotification() )
             return false;
@@ -244,7 +244,7 @@ public:
         return true;
     }
 
-    virtual bool Close() wxOVERRIDE
+    virtual bool Close() override
     {
         wxCHECK_MSG( m_notification, false,
                      wxS("Can't close not shown notification.") );
@@ -260,32 +260,32 @@ public:
         return true;
     }
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE
+    virtual void SetTitle(const wxString& title) override
     {
         m_title = title;
     }
 
-    virtual void SetMessage(const wxString& message) wxOVERRIDE
+    virtual void SetMessage(const wxString& message) override
     {
         m_message = message;
     }
 
-    virtual void SetParent(wxWindow *WXUNUSED(parent)) wxOVERRIDE
+    virtual void SetParent(wxWindow *WXUNUSED(parent)) override
     {
     }
 
-    virtual void SetFlags(int flags) wxOVERRIDE
+    virtual void SetFlags(int flags) override
     {
         m_flags = flags;
     }
 
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
+    virtual void SetIcon(const wxIcon& icon) override
     {
         m_icon = icon;
         CreateOrUpdateNotification();
     }
 
-    virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE
+    virtual bool AddAction(wxWindowID actionid, const wxString &label) override
     {
         if ( !CreateOrUpdateNotification() )
             return false;
@@ -301,7 +301,7 @@ public:
                 labelStr.utf8_str(),
                 &wxLibNotifyMsgImplActionCallback,
                 this,
-                NULL
+                nullptr
             );
 
         return true;

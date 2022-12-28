@@ -569,7 +569,6 @@ public:
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
-            At present this has an effect on Windows and Motif 2.x only.
         @param faceName
             An optional string specifying the face name to be used.
             If it is an empty string, a default face name will be chosen based on the family.
@@ -607,7 +606,6 @@ public:
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
-            At present this has an effect on Windows and Motif 2.x only.
         @param faceName
             An optional string specifying the face name to be used.
             If it is an empty string, a default face name will be chosen based on the family.
@@ -657,7 +655,7 @@ public:
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
        Returns a font with the same face/size as the given one but with normal
@@ -853,7 +851,7 @@ public:
     */
     virtual bool IsOk() const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -863,7 +861,7 @@ public:
         a new font similar to the given one but with its weight, style or size
         changed.
      */
-    //@{
+    ///@{
 
     /**
         Returns a bold version of this font.
@@ -1013,7 +1011,7 @@ public:
      */
     wxFont Scaled(float x) const;
 
-    //@}
+    ///@}
 
     /**
         @name Setters
@@ -1021,7 +1019,7 @@ public:
         These functions internally recreate the native font object with the new
         specified property.
     */
-    //@{
+    ///@{
 
     /**
         Sets the encoding for this font.
@@ -1231,7 +1229,7 @@ public:
     */
     virtual void SetNumericWeight(int weight);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1288,7 +1286,7 @@ public:
      */
     static int GetNumericWeightOf(wxFontWeight weight);
 
-    //@{
+    ///@{
     /**
         This function takes the same parameters as the relative
         @ref wxFont::wxFont "wxFont constructor" and returns a new font
@@ -1323,7 +1321,7 @@ public:
     static wxFont *New(const wxNativeFontInfo& nativeInfo);
     static wxFont *New(const wxString& nativeInfoString);
 
-    //@}
+    ///@}
 };
 
 
@@ -1416,7 +1414,7 @@ wxFontList* wxTheFontList;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Converts string to a wxFont best represented by the given string. Returns
@@ -1437,5 +1435,5 @@ bool wxFromString(const wxString& string, wxFont* font);
 */
 wxString wxToString(const wxFont& font);
 
-//@}
+///@}
 

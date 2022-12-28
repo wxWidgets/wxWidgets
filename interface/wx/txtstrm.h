@@ -467,7 +467,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Writes @c '\\n' to @a stream.
@@ -476,4 +476,4 @@ public:
 */
 wxTextOutputStream& endl(wxTextOutputStream& stream);
 
-//@}
+///@}

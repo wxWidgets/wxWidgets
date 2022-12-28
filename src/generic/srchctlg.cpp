@@ -59,26 +59,16 @@ public:
         InvalidateBestSize();
     }
 
-    virtual wxWindow* GetMainWindowOfCompositeControl() wxOVERRIDE
+    virtual wxWindow* GetMainWindowOfCompositeControl() override
     {
         return m_search;
     }
 
     // provide access to the base class protected methods to wxSearchCtrl which
     // needs to forward to them
-    void DoSetValue(const wxString& value, int flags) wxOVERRIDE
+    void DoSetValue(const wxString& value, int flags) override
     {
         wxTextCtrl::DoSetValue(value, flags);
-    }
-
-    bool DoLoadFile(const wxString& file, int fileType) wxOVERRIDE
-    {
-        return wxTextCtrl::DoLoadFile(file, fileType);
-    }
-
-    bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE
-    {
-        return wxTextCtrl::DoSaveFile(file, fileType);
     }
 
 protected:
@@ -116,7 +106,7 @@ protected:
     // to do this easily and as there is much in that code I don't understand
     // (notably what is the logic for buttons sizing?) I prefer to not touch it
     // at all.
-    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    virtual wxSize DoGetBestSize() const override
     {
         const long flags = GetWindowStyleFlag();
         wxSearchTextCtrl* const self = const_cast<wxSearchTextCtrl*>(this);
@@ -178,15 +168,15 @@ public:
     // control and not give it to the button inside the same control. Besides,
     // the search button can be already activated by pressing "Enter" so there
     // is really no reason for it to be able to get focus from keyboard.
-    virtual bool AcceptsFocusFromKeyboard() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocusFromKeyboard() const override { return false; }
 
-    virtual wxWindow* GetMainWindowOfCompositeControl() wxOVERRIDE
+    virtual wxWindow* GetMainWindowOfCompositeControl() override
     {
         return m_search;
     }
 
 protected:
-    wxSize DoGetBestSize() const wxOVERRIDE
+    wxSize DoGetBestSize() const override
     {
         return wxSize(m_bmp.GetWidth(), m_bmp.GetHeight());
     }
@@ -282,11 +272,11 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 
 void wxSearchCtrl::Init()
 {
-    m_text = NULL;
-    m_searchButton = NULL;
-    m_cancelButton = NULL;
+    m_text = nullptr;
+    m_searchButton = nullptr;
+    m_cancelButton = nullptr;
 #if wxUSE_MENUS
-    m_menu = NULL;
+    m_menu = nullptr;
 #endif // wxUSE_MENUS
 
     m_searchBitmapUser = false;
@@ -347,7 +337,7 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
         // no change
         return;
     }
-    bool hadMenu = (m_menu != NULL);
+    bool hadMenu = (m_menu != nullptr);
     delete m_menu;
     m_menu = menu;
 
@@ -561,36 +551,9 @@ wxString wxSearchCtrl::GetRange(long from, long to) const
     return m_text->GetRange(from, to);
 }
 
-int wxSearchCtrl::GetLineLength(long lineNo) const
-{
-    return m_text->GetLineLength(lineNo);
-}
-wxString wxSearchCtrl::GetLineText(long lineNo) const
-{
-    return m_text->GetLineText(lineNo);
-}
-int wxSearchCtrl::GetNumberOfLines() const
-{
-    return m_text->GetNumberOfLines();
-}
-
-bool wxSearchCtrl::IsModified() const
-{
-    return m_text->IsModified();
-}
 bool wxSearchCtrl::IsEditable() const
 {
     return m_text->IsEditable();
-}
-
-// more readable flag testing methods
-bool wxSearchCtrl::IsSingleLine() const
-{
-    return m_text->IsSingleLine();
-}
-bool wxSearchCtrl::IsMultiLine() const
-{
-    return m_text->IsMultiLine();
 }
 
 // If the return values from and to are the same, there is no selection.
@@ -621,26 +584,6 @@ void wxSearchCtrl::Remove(long from, long to)
     m_text->Remove(from, to);
 }
 
-// load/save the controls contents from/to the file
-bool wxSearchCtrl::LoadFile(const wxString& file)
-{
-    return m_text->LoadFile(file);
-}
-bool wxSearchCtrl::SaveFile(const wxString& file)
-{
-    return m_text->SaveFile(file);
-}
-
-// sets/clears the dirty flag
-void wxSearchCtrl::MarkDirty()
-{
-    m_text->MarkDirty();
-}
-void wxSearchCtrl::DiscardEdits()
-{
-    m_text->DiscardEdits();
-}
-
 // set the max number of characters which may be entered in a single line
 // text control
 void wxSearchCtrl::SetMaxLength(unsigned long len)
@@ -664,58 +607,6 @@ void wxSearchCtrl::AppendText(const wxString& text)
 bool wxSearchCtrl::EmulateKeyPress(const wxKeyEvent& event)
 {
     return m_text->EmulateKeyPress(event);
-}
-
-// text control under some platforms supports the text styles: these
-// methods allow to apply the given text style to the given selection or to
-// set/get the style which will be used for all appended text
-bool wxSearchCtrl::SetStyle(long start, long end, const wxTextAttr& style)
-{
-    return m_text->SetStyle(start, end, style);
-}
-bool wxSearchCtrl::GetStyle(long position, wxTextAttr& style)
-{
-    return m_text->GetStyle(position, style);
-}
-bool wxSearchCtrl::SetDefaultStyle(const wxTextAttr& style)
-{
-    return m_text->SetDefaultStyle(style);
-}
-const wxTextAttr& wxSearchCtrl::GetDefaultStyle() const
-{
-    return m_text->GetDefaultStyle();
-}
-
-// translate between the position (which is just an index in the text ctrl
-// considering all its contents as a single strings) and (x, y) coordinates
-// which represent column and line.
-long wxSearchCtrl::XYToPosition(long x, long y) const
-{
-    return m_text->XYToPosition(x, y);
-}
-bool wxSearchCtrl::PositionToXY(long pos, long *x, long *y) const
-{
-    return m_text->PositionToXY(pos, x, y);
-}
-
-void wxSearchCtrl::ShowPosition(long pos)
-{
-    m_text->ShowPosition(pos);
-}
-
-// find the character at position given in pixels
-//
-// NB: pt is in device coords (not adjusted for the client area origin nor
-//     scrolling)
-wxTextCtrlHitTestResult wxSearchCtrl::HitTest(const wxPoint& pt, long *pos) const
-{
-    return m_text->HitTest(pt, pos);
-}
-wxTextCtrlHitTestResult wxSearchCtrl::HitTest(const wxPoint& pt,
-                                        wxTextCoord *col,
-                                        wxTextCoord *row) const
-{
-    return m_text->HitTest(pt, col, row);
 }
 
 // Clipboard operations
@@ -907,16 +798,6 @@ void wxSearchCtrl::ChangeValue(const wxString& value)
 void wxSearchCtrl::DoSetValue(const wxString& value, int flags)
 {
     m_text->DoSetValue(value, flags);
-}
-
-bool wxSearchCtrl::DoLoadFile(const wxString& file, int fileType)
-{
-    return m_text->DoLoadFile(file, fileType);
-}
-
-bool wxSearchCtrl::DoSaveFile(const wxString& file, int fileType)
-{
-    return m_text->DoSaveFile(file, fileType);
 }
 
 bool wxSearchCtrl::ShouldInheritColours() const

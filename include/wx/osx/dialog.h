@@ -46,18 +46,18 @@ public:
     virtual ~wxDialog();
 
 //    virtual bool Destroy();
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
 
     // return true if we're showing the dialog modally
-    virtual bool IsModal() const wxOVERRIDE;
+    virtual bool IsModal() const override;
 
     // show the dialog modally and return the value passed to EndModal()
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
-    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ShowWindowModal() override;
 
     // may be called to terminate the dialog with the given return code
-    virtual void EndModal(int retCode) wxOVERRIDE;
+    virtual void EndModal(int retCode) override;
 
     static bool OSXHasModalDialogsOpen();
     void OSXBeginModalDialog();
@@ -71,7 +71,7 @@ public:
     // implementation
     // --------------
 
-    wxDialogModality GetModality() const wxOVERRIDE;
+    wxDialogModality GetModality() const override;
 
 #if wxOSX_USE_COCOA
     virtual void ModalFinishedCallback(void* WXUNUSED(panel), int WXUNUSED(returnCode)) {}
@@ -85,7 +85,7 @@ protected:
     void EndWindowModal();
 
     // mac also takes command-period as cancel
-    virtual bool IsEscapeKey(const wxKeyEvent& event) wxOVERRIDE;
+    virtual bool IsEscapeKey(const wxKeyEvent& event) override;
 
 
     wxDialogModality m_modality;

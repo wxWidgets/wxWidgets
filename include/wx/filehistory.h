@@ -100,7 +100,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxFileHistoryBase);
 };
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #include "wx/gtk/filehistory.h"
 #else
     // no platform-specific implementation of wxFileHistory yet

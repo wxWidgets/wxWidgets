@@ -61,7 +61,7 @@ struct WXDLLIMPEXP_BASE wxCrashContext
 {
     // initialize this object with the given information or from the current
     // global exception info which is only valid inside wxApp::OnFatalException
-    wxCrashContext(_EXCEPTION_POINTERS *ep = NULL);
+    wxCrashContext(_EXCEPTION_POINTERS *ep = nullptr);
 
     // get the name for this exception code
     wxString GetExceptionString() const;
@@ -101,10 +101,10 @@ struct WXDLLIMPEXP_BASE wxCrashReport
     // write the exception report to the file, return true if it could be done
     // or false otherwise
     //
-    // if ep pointer is NULL, the global exception info which is valid only
+    // if ep pointer is null, the global exception info which is valid only
     // inside wxApp::OnFatalException() is used
     static bool Generate(int flags = wxCRASH_REPORT_DEFAULT,
-                         _EXCEPTION_POINTERS *ep = NULL);
+                         _EXCEPTION_POINTERS *ep = nullptr);
 
 
     // generate a crash report from outside of wxApp::OnFatalException(), this

@@ -99,7 +99,7 @@ public:
         { return m_verbs.Index(verb) != wxNOT_FOUND; }
 
     // returns empty string and wxNOT_FOUND in idx if no such verb
-    wxString GetCommandForVerb(const wxString& verb, size_t *idx = NULL) const;
+    wxString GetCommandForVerb(const wxString& verb, size_t *idx = nullptr) const;
 
     // get a "verb=command" string
     wxString GetVerbCmd(size_t n) const;
@@ -118,42 +118,18 @@ private:
 class WXDLLIMPEXP_BASE wxFileTypeInfo
 {
 private:
-    void DoVarArgInit(const wxString& mimeType,
-                      const wxString& openCmd,
-                      const wxString& printCmd,
-                      const wxString& desc,
-                      va_list argptr);
+    // Helpers of variadic ctor.
+    void DoAddExts() { }
+    void DoAddExts(std::nullptr_t) { }
 
-    void VarArgInit(const wxString *mimeType,
-                    const wxString *openCmd,
-                    const wxString *printCmd,
-                    const wxString *desc,
-                    // the other parameters form a NULL terminated list of
-                    // extensions
-                    ...);
+    template <typename... Targs>
+    void DoAddExts(const wxString& ext, Targs... extensions)
+    {
+        AddExtension(ext);
+        DoAddExts(extensions...);
+    }
 
 public:
-    // NB: This is a helper to get implicit conversion of variadic ctor's
-    //     fixed arguments into something that can be passed to VarArgInit().
-    //     Do not use, it's used by the ctor only.
-    struct CtorString
-    {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-        CtorString(const char *str) : m_str(str) {}
-#endif
-        CtorString(const wchar_t *str) : m_str(str) {}
-        CtorString(const wxString& str) : m_str(str) {}
-        CtorString(const wxCStrData& str) : m_str(str) {}
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-        CtorString(const wxScopedCharBuffer& str) : m_str(str) {}
-#endif
-        CtorString(const wxScopedWCharBuffer& str) : m_str(str) {}
-
-        operator const wxString*() const { return &m_str; }
-
-        wxString m_str;
-    };
-
     // ctors
 
     // Ctor specifying just the MIME type (which is mandatory), the other
@@ -163,22 +139,21 @@ public:
     {
     }
 
-    // Ctor allowing to specify the values of all fields at once:
-    //
-    // wxFileTypeInfo(const wxString& mimeType,
-    //               const wxString& openCmd,
-    //               const wxString& printCmd,
-    //               const wxString& desc,
-    //               // the other parameters form a list of extensions for this
-    //               // file type and should be terminated with wxNullPtr (not
-    //               // just NULL!)
-    //               ...);
-    WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
-                               4, (const CtorString&,
-                                   const CtorString&,
-                                   const CtorString&,
-                                   const CtorString&),
-                               VarArgInit, VarArgInit)
+    // Ctor allowing to specify the values of all fields at once and also
+    // allowing to specify the list of additional extensions for this file type
+    template <typename... Targs>
+    wxFileTypeInfo(const wxString& mimeType,
+                   const wxString& openCmd,
+                   const wxString& printCmd,
+                   const wxString& description,
+                   Targs... extensions)
+        : m_mimeType{mimeType},
+          m_openCmd{openCmd},
+          m_printCmd{printCmd},
+          m_desc{description}
+    {
+        DoAddExts(extensions...);
+    }
 
         // the array elements correspond to the parameters of the ctor above in
         // the same order
@@ -368,7 +343,7 @@ private:
     wxFileType(const wxFileType&);
     wxFileType& operator=(const wxFileType&);
 
-    // the static container of wxFileType data: if it's not NULL, it means that
+    // the static container of wxFileType data: if it's not null, it means that
     // this object is used as fallback only
     const wxFileTypeInfo *m_info;
 
@@ -435,7 +410,7 @@ public:
 
     // Database lookup: all functions return a pointer to wxFileType object
     // whose methods may be used to query it for the information you're
-    // interested in. If the return value is !NULL, caller is responsible for
+    // interested in. If the return value is not null, caller is responsible for
     // deleting it.
         // get file type from file extension
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
@@ -450,7 +425,7 @@ public:
     // these functions can be used to provide default values for some of the
     // MIME types inside the program itself
     //
-    // The filetypes array should be terminated by either NULL entry or an
+    // The filetypes array should be terminated by either null entry or an
     // invalid wxFileTypeInfo (i.e. the one created with default ctor)
     void AddFallbacks(const wxFileTypeInfo *filetypes);
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
@@ -480,7 +455,7 @@ private:
     // the object working with the system MIME database
     wxMimeTypesManagerImpl *m_impl;
 
-    // if m_impl is NULL, create one
+    // if m_impl is null, create one
     void EnsureImpl();
 
     friend class wxMimeTypeCmnModule;

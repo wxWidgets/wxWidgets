@@ -83,11 +83,11 @@ public:
     wxPostScriptPrintNativeData();
     virtual ~wxPostScriptPrintNativeData();
 
-    virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
-    virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
+    virtual bool TransferTo( wxPrintData &data ) override;
+    virtual bool TransferFrom( const wxPrintData &data ) override;
 
-    virtual bool Ok() const wxOVERRIDE { return IsOk(); }
-    virtual bool IsOk() const wxOVERRIDE { return true; }
+    virtual bool Ok() const override { return IsOk(); }
+    virtual bool IsOk() const override { return true; }
 
     const wxString& GetPrinterCommand() const { return m_printerCommand; }
     const wxString& GetPrinterOptions() const { return m_printerOptions; }
@@ -140,7 +140,7 @@ class WXDLLIMPEXP_CORE wxGenericPrintDialog : public wxPrintDialogBase
 {
 public:
     wxGenericPrintDialog(wxWindow *parent,
-                         wxPrintDialogData* data = NULL);
+                         wxPrintDialogData* data = nullptr);
     wxGenericPrintDialog(wxWindow *parent, wxPrintData* data);
 
     virtual ~wxGenericPrintDialog();
@@ -149,16 +149,16 @@ public:
     void OnRange(wxCommandEvent& event);
     void OnOK(wxCommandEvent& event);
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
-    wxPrintData& GetPrintData() wxOVERRIDE
+    wxPrintData& GetPrintData() override
         { return m_printDialogData.GetPrintData(); }
 
-    wxPrintDialogData& GetPrintDialogData() wxOVERRIDE { return m_printDialogData; }
-    wxDC *GetPrintDC() wxOVERRIDE;
+    wxPrintDialogData& GetPrintDialogData() override { return m_printDialogData; }
+    wxDC *GetPrintDC() override;
 
 public:
 //    wxStaticText*       m_printerMessage;
@@ -193,8 +193,8 @@ public:
 
     void OnPrinter(wxListEvent& event);
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
     virtual wxComboBox *CreatePaperTypeChoice();
 
@@ -222,14 +222,14 @@ private:
 class WXDLLIMPEXP_CORE wxGenericPageSetupDialog : public wxPageSetupDialogBase
 {
 public:
-    wxGenericPageSetupDialog(wxWindow *parent = NULL,
-                             wxPageSetupDialogData* data = NULL);
+    wxGenericPageSetupDialog(wxWindow *parent = nullptr,
+                             wxPageSetupDialogData* data = nullptr);
     virtual ~wxGenericPageSetupDialog();
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData() wxOVERRIDE;
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() override;
 
     void OnPrinter(wxCommandEvent& event);
     wxComboBox *CreatePaperTypeChoice(int* x, int* y);

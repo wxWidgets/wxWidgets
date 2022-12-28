@@ -94,7 +94,9 @@ const char wxFileSelectorDefaultWildcardStr[];
     }
     @endcode
 
-    @remarks
+
+    @section filedialog_filters Wildcard Filters
+
     All implementations of the wxFileDialog provide a wildcard filter. Typing a filename
     containing wildcards (*, ?) in the filename text item, and clicking on Ok, will
     result in only those files matching the pattern being displayed.
@@ -103,13 +105,9 @@ const char wxFileSelectorDefaultWildcardStr[];
     @code
          "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png"
     @endcode
-    It must be noted that wildcard support in the native Motif file dialog is quite
-    limited: only one file type is supported, and it is displayed without the
-    descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
-    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
-    are errors.
+
     On Mac macOS in the open file dialog the filter choice box is not shown by default.
-    Instead all given wildcards are appplied at the same time: So in the above
+    Instead all given wildcards are applied at the same time: So in the above
     example all bmp, gif and png files are displayed. To enforce the
     display of the filter choice set the corresponding wxSystemOptions before calling
     the file open dialog:
@@ -120,6 +118,33 @@ const char wxFileSelectorDefaultWildcardStr[];
     the selected files, on Mac macOS even in this case the dialog shows all files
     matching all file types. The files which does not match the currently selected
     file type are greyed out and are not selectable.
+
+
+    @section filedialog_customize Dialog Customization
+
+    Uniquely among the other standard dialogs, wxFileDialog can be customized
+    by adding extra controls to it. Moreover, there are two ways to do it: the
+    first one is to define a callback function and use SetExtraControlCreator()
+    to tell the dialog to call it, while the second one requires defining a
+    class inheriting from wxFileDialogCustomizeHook and implementing its
+    virtual functions, notably wxFileDialogCustomizeHook::AddCustomControls()
+    where the extra controls have to be created, and finally calling
+    SetCustomizeHook() with this custom hook object.
+
+    The first approach is somewhat simpler and more flexible, as it allows to
+    create any kind of custom controls, but is not supported by the "new style"
+    (where "new" means used since Windows Vista, i.e. circa 2007) file dialogs
+    under MSW. Because of this, calling SetExtraControlCreator() in wxMSW
+    forces the use of old style (Windows XP) dialogs, that may look out of
+    place. The second approach is implemented by the MSW dialogs natively and
+    doesn't suffer from this limitation, so its use is recommended, especially
+    if the few simple control types supported by it (see wxFileDialogCustomize
+    for more information about the supported controls) are sufficient for your
+    needs.
+
+    Both of the approaches to the dialog customization are demonstrated in the
+    @ref page_samples_dialogs, please check it for more details.
+
 
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}
@@ -181,8 +206,6 @@ public:
             The default filename, or the empty string.
         @param wildcard
             A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
-            Note that the native Motif dialog has some limitations with respect to
-            wildcards; see the Remarks section above.
         @param style
             A dialog style. See @c wxFD_* styles for more info.
         @param pos
@@ -206,6 +229,46 @@ public:
         Destructor.
     */
     virtual ~wxFileDialog();
+
+    /**
+        Add a directory to the list of shortcuts shown in the dialog.
+
+        File dialogs on many platforms display a fixed list of directories
+        which can be easily selected by the user. This function allows to add
+        an application-defined directory to this list, which can be convenient
+        for the programs that use specific directories for their files instead
+        of the default user document directory (see wxStandardPaths).
+
+        Currently this function is only implemented in wxMSW and wxGTK and does
+        nothing under the other platforms. Moreover, in wxMSW this function is
+        incompatible with the use of SetExtraControlCreator(), if you need to
+        use this function and customize the dialog contents, please use the
+        newer SetCustomizeHook() instead.
+
+        The @ref page_samples_dialogs "dialogs sample" shows the use of this
+        function by adding two custom shortcuts corresponding to the
+        subdirectories of @c WXWIN environment variable if it is defined.
+
+        @note In wxMSW, the shortcuts appear in a separate section called
+            "Application Links" by default. To change the title of this
+            section, the application can specify a value of the @c
+            FileDescription field of the version information structure in its
+            resource file -- if present, this string will be used as the
+            section title.
+
+        @param directory The full path to the directory, which should exist.
+        @param flags Can be set to @c wxFD_SHORTCUT_BOTTOM (which is also the
+            default behaviour) to add the shortcut after the existing ones,
+            or @c wxFD_SHORTCUT_TOP to add it before them. Support for the
+            latter flag is only available in wxMSW, in wxGTK the shortcuts are
+            always added to the bottom of the list.
+        @return @true on success or @false if shortcut couldn't be added, e.g.
+            because this functionality is not available on the current
+            platform.
+
+        @since 3.3.0
+     */
+    bool AddShortcut(const wxString& directory, int flags = 0);
 
     /**
         Returns the path of the file currently selected in dialog.
@@ -323,6 +386,27 @@ public:
     virtual wxString GetWildcard() const;
 
     /**
+        Set the hook to be used for customizing the dialog contents.
+
+        This function can be called before calling ShowModal() to specify that
+        the dialog contents should be customized using the provided hook. See
+        wxFileDialogCustomizeHook documentation and @ref page_samples_dialogs
+        for the examples of using it.
+
+        @note In order to define a custom hook object, @c wx/filedlgcustomize.h
+            must be included in addition to the usual @c wx/filedlg.h header.
+
+        @param customizeHook The hook object that will be used by the dialog.
+            This object must remain valid at least until ShowModal() returns.
+
+        @return @true if the hook was successfully set or @false if customizing
+            the file dialog is not supported by the current platform.
+
+        @since 3.1.7
+     */
+    bool SetCustomizeHook(wxFileDialogCustomizeHook& customizeHook);
+
+    /**
         Sets the default directory.
     */
     virtual void SetDirectory(const wxString& directory);
@@ -342,6 +426,11 @@ public:
 
         The @c creator function should take pointer to parent window (file dialog)
         and should return a window allocated with operator new.
+
+        @note Using SetExtraControlCreator() in wxMSW forces the use of "old
+            style" (Windows XP-like) file dialogs, instead of the newer
+            (Vista-like) ones and is not recommended for this reason. Prefer to
+            use SetCustomizeHook() instead.
 
         @since 2.9.0
     */
@@ -373,9 +462,6 @@ public:
     /**
         Sets the wildcard, which can contain multiple file types, for example:
         "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
-
-        Note that the native Motif dialog has some limitations with respect to
-        wildcards; see the Remarks section above.
     */
     virtual void SetWildcard(const wxString& wildCard);
 
@@ -393,7 +479,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pops up a file selector box. In Windows, this is the common file selector
@@ -441,7 +527,7 @@ wxString wxFileSelector(const wxString& message,
                         const wxString& default_extension = wxEmptyString,
                         const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                         int flags = 0,
-                        wxWindow* parent = NULL,
+                        wxWindow* parent = nullptr,
                         int x = wxDefaultCoord,
                         int y = wxDefaultCoord);
 
@@ -453,10 +539,10 @@ wxString wxFileSelector(const wxString& message,
 wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
                           const wxString& default_path = wxEmptyString,
                           const wxString& default_filename = wxEmptyString,
-                          int *indexDefaultExtension = NULL,
+                          int *indexDefaultExtension = nullptr,
                           const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                           int flags = 0,
-                          wxWindow *parent = NULL,
+                          wxWindow *parent = nullptr,
                           int x = wxDefaultCoord,
                           int y = wxDefaultCoord);
 
@@ -470,7 +556,7 @@ wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
 wxString wxLoadFileSelector(const wxString& what,
                             const wxString& extension,
                             const wxString& default_name = wxEmptyString,
-                            wxWindow *parent = NULL);
+                            wxWindow *parent = nullptr);
 
 /**
     Shows a file dialog asking the user for a file name for saving a file.
@@ -482,7 +568,7 @@ wxString wxLoadFileSelector(const wxString& what,
 wxString wxSaveFileSelector(const wxString& what,
                             const wxString& extension,
                             const wxString& default_name = wxEmptyString,
-                            wxWindow *parent = NULL);
+                            wxWindow *parent = nullptr);
 
-//@}
+///@}
 

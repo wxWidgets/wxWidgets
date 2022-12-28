@@ -33,8 +33,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxMacPrintDialog, wxPrintDialogBase);
 
 wxMacPrintDialog::wxMacPrintDialog()
 {
-    m_dialogParent = NULL;
-    m_printerDC = NULL;
+    m_dialogParent = nullptr;
+    m_printerDC = nullptr;
     m_destroyDC = true;
 }
 
@@ -46,7 +46,7 @@ wxMacPrintDialog::wxMacPrintDialog( wxWindow *p, wxPrintDialogData *data )
 wxMacPrintDialog::wxMacPrintDialog( wxWindow *p, wxPrintData *data )
 {
     wxPrintDialogData data2;
-    if (data != NULL)
+    if (data != nullptr)
         data2 = *data;
 
     Create( p, &data2 );
@@ -55,10 +55,10 @@ wxMacPrintDialog::wxMacPrintDialog( wxWindow *p, wxPrintData *data )
 bool wxMacPrintDialog::Create( wxWindow *p, wxPrintDialogData *data )
 {
     m_dialogParent = p;
-    m_printerDC = NULL;
+    m_printerDC = nullptr;
     m_destroyDC = true;
 
-    if (data != NULL)
+    if (data != nullptr)
         m_printDialogData = *data;
 
     return true;
@@ -89,7 +89,7 @@ bool wxMacPageSetupDialog::Create( wxWindow *p, wxPageSetupDialogData *data )
 {
     m_dialogParent = p;
 
-    if (data != NULL)
+    if (data != nullptr)
         m_pageSetupData = (*data);
 
     return true;

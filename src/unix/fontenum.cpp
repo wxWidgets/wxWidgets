@@ -73,7 +73,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         return false;
     }
 
-    PangoFontFamily **families = NULL;
+    PangoFontFamily **families = nullptr;
     gint n_families = 0;
     PangoContext* context = wxGetPangoContext();
     pango_context_list_families(context, &families, &n_families);
@@ -81,7 +81,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
     for ( int i = 0; i < n_families; i++ )
     {
-#if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
+#if defined(__WXGTK__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
         if ( !fixedWidthOnly ||
             pango_font_family_is_monospace(families[i]) )
 #endif
@@ -196,7 +196,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
         char *dash = strchr(font + 1, '-');
         char *family = dash + 1;
         dash = strchr(family, '-');
-        *dash = '\0'; // !NULL because Matches() above succeeded
+        *dash = '\0'; // not-null because Matches() above succeeded
         wxString fam(family);
 
         if ( families.Index(fam) == wxNOT_FOUND )
@@ -310,7 +310,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
         char *dash = strchr(font + 1, '-');
         char *familyFont = dash + 1;
         dash = strchr(familyFont, '-');
-        *dash = '\0'; // !NULL because Matches() above succeeded
+        *dash = '\0'; // not-null because Matches() above succeeded
 
         if ( !family.empty() && (family != familyFont) )
         {

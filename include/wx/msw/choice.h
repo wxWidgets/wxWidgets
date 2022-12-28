@@ -28,7 +28,7 @@ public:
              wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = nullptr,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxASCII_STR(wxChoiceNameStr))
@@ -54,7 +54,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxChoiceNameStr));
@@ -67,20 +67,20 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxChoiceNameStr));
 
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
 
-    virtual unsigned int GetCount() const wxOVERRIDE;
-    virtual int GetSelection() const wxOVERRIDE;
-    virtual int GetCurrentSelection() const wxOVERRIDE;
-    virtual void SetSelection(int n) wxOVERRIDE;
+    virtual unsigned int GetCount() const override;
+    virtual int GetSelection() const override;
+    virtual int GetCurrentSelection() const override;
+    virtual void SetSelection(int n) override;
 
-    virtual int FindString(const wxString& s, bool bCase = false) const wxOVERRIDE;
-    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
-    virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
+    virtual int FindString(const wxString& s, bool bCase = false) const override;
+    virtual wxString GetString(unsigned int n) const override;
+    virtual void SetString(unsigned int n, const wxString& s) override;
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
+    virtual wxVisualAttributes GetDefaultAttributes() const override
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -89,18 +89,18 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // MSW only
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
-    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
-    virtual WXHBRUSH MSWControlColor(WXHDC hDC, WXHWND hWnd) wxOVERRIDE;
-    virtual bool MSWShouldPreProcessMessage(WXMSG *pMsg) wxOVERRIDE;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
+    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
+    virtual WXHBRUSH MSWControlColor(WXHDC hDC, WXHWND hWnd) override;
+    virtual bool MSWShouldPreProcessMessage(WXMSG *pMsg) override;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // common part of all ctors
     void Init()
@@ -110,24 +110,26 @@ protected:
         m_heightOwn = wxDefaultCoord;
     }
 
-    virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
-    virtual void DoClear() wxOVERRIDE;
+    virtual void DoDeleteOneItem(unsigned int n) override;
+    virtual void DoClear() override;
 
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
-                              void **clientData, wxClientDataType type) wxOVERRIDE;
+                              void **clientData, wxClientDataType type) override;
 
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
-    virtual void DoSetItemClientData(unsigned int n, void* clientData) wxOVERRIDE;
-    virtual void* DoGetItemClientData(unsigned int n) const wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData) override;
+    virtual void* DoGetItemClientData(unsigned int n) const override;
 
     // MSW implementation
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual void DoGetSize(int *w, int *h) const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual void DoGetSize(int *w, int *h) const override;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
+
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     // Show or hide the popup part of the control.
     void MSWDoPopupOrDismiss(bool show);
@@ -155,7 +157,7 @@ protected:
     int SetHeightSimpleComboBox(int nItems) const;
 
 #if wxUSE_DEFERRED_SIZING
-    virtual void MSWEndDeferWindowPos() wxOVERRIDE;
+    virtual void MSWEndDeferWindowPos() override;
 #endif // wxUSE_DEFERRED_SIZING
 
     // These variables are only used while the drop down is opened.

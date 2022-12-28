@@ -45,7 +45,7 @@ public:
                 const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
 protected:
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxStaticLine);

@@ -1,0 +1,121 @@
+# This manually triggered workflow creates a new draft release.
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  add_release_sources:
+    runs-on: ubuntu-22.04
+    name: Create Release with Source Archives
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Install Required Tools
+        run: |
+            sudo apt-get -q -o=Dpkg::Use-Pty=0 -y install doxygen gettext graphviz
+
+      - name: Create Release Archives
+        run: ./build/tools/release.sh ${{ inputs.version }}
+
+        # This is not very elegant, but we can't update checksums from two
+        # different jobs, so we just append to the release body which then
+        # needs to be edited interactively.
+      - name: Create Archives Checksums
+        working-directory: distrib/release/${{ inputs.version }}
+        run: |
+            printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````' >> ../../../docs/release.md
+            sha1sum * | tee -a ../../../docs/release.md
+
+      - name: Create Draft Release
+        # Note: use a fork of softprops/action-gh-release which includes
+        # https://github.com/softprops/action-gh-release/pull/254 fixing
+        # updating the body of the draft releases. We should replace the SHA-1
+        # with a tag when an upstream release including this fix is made.
+        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        id: create_release
+        with:
+          name: wxWidgets ${{ inputs.version }}
+          body_path: docs/release.md
+          files: |
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.zip
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.7z
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.tar.bz2
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}-headers.7z
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}-docs-html.zip
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}-docs-html.tar.bz2
+          fail_on_unmatched_files: true
+          draft: true
+
+      # We have to store the archive used by the job below as an artifact
+      # because it can't be downloaded from a draft release without
+      # impersonating the same user and I don't know how to do it.
+      - name: Upload Release Archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: wxWidgets-${{ inputs.version }}-source-archive
+          path: distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.zip
+          retention-days: 1
+
+  add_msw_files:
+    needs: add_release_sources
+    runs-on: windows-2022
+    name: Add MSW Files to the Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Release Archive
+        uses: actions/download-artifact@v3
+        with:
+          name: wxWidgets-${{ inputs.version }}-source-archive
+
+      - name: Install Prerequisites
+        run: |
+            choco install -y --no-progress graphviz html-help-workshop
+
+      - name: Create MSW Installer and Help File
+        shell: cmd
+        run: |
+            md distrib\release
+            md distrib\release\${{ inputs.version }}
+            move wxWidgets-${{ inputs.version }}.zip distrib\release\${{ inputs.version }}
+            set "PATH=C:\Program Files (x86)\HTML Help Workshop;%PATH%"
+            build\tools\release.bat ${{ inputs.version }}
+
+      # This doesn't really decrease the file size but .chm files can't be
+      # uploaded to GitHub, while .zip files can.
+      - name: Pack CHM File
+        working-directory: distrib/release/${{ inputs.version }}
+        run: 7z a wxWidgets-${{ inputs.version }}-docs-chm.zip wxWidgets-${{ inputs.version }}.chm
+
+      - name: Create Archives Checksums
+        working-directory: distrib/release/${{ inputs.version }}
+        shell: cmd
+        run: |
+            sha1sum * > ..\..\..\checksums
+            type ..\..\..\checksums
+
+      - name: Add Files to the Release
+        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        with:
+          name: wxWidgets ${{ inputs.version }}
+          body_path: checksums
+          append_body: true
+          files: |
+            distrib/release/${{ inputs.version }}/wxMSW-${{ inputs.version }}-Setup.exe
+            distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}-docs-chm.zip
+          fail_on_unmatched_files: true
+          draft: true

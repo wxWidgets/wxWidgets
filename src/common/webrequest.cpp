@@ -165,28 +165,6 @@ wxFileOffset wxWebRequestImpl::GetBytesExpectedToReceive() const
 namespace
 {
 
-// Functor used with CallAfter() below.
-//
-// TODO-C++11: Replace with a lambda.
-struct StateEventProcessor
-{
-    StateEventProcessor(wxWebRequestImpl& request,
-                        wxWebRequest::State state,
-                        const wxString& failMsg)
-        : m_request(request), m_state(state), m_failMsg(failMsg)
-    {
-    }
-
-    void operator()()
-    {
-        m_request.ProcessStateEvent(m_state, m_failMsg);
-    }
-
-    wxWebRequestImpl& m_request;
-    const wxWebRequest::State m_state;
-    const wxString m_failMsg;
-};
-
 #if wxUSE_LOG_TRACE
 
 // Tiny helper to log states as strings rather than meaningless numbers.
@@ -242,7 +220,10 @@ void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & fail
     }
     else
     {
-        m_handler->CallAfter(StateEventProcessor(*this, state, failMsg));
+        m_handler->CallAfter([this, state, failMsg]()
+            {
+                ProcessStateEvent(state, failMsg);
+            });
     }
 }
 
@@ -556,7 +537,7 @@ wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
 
 wxWebRequestHandle wxWebRequest::GetNativeHandle() const
 {
-    return m_impl ? m_impl->GetNativeHandle() : NULL;
+    return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
 void wxWebRequest::DisablePeerVerify(bool disable)
@@ -641,7 +622,7 @@ void wxWebResponseImpl::Init()
         {
             // Check available disk space
             wxLongLong freeSpace;
-            if ( wxGetDiskSpace(tmpPrefix.GetFullPath(), NULL, &freeSpace) &&
+            if ( wxGetDiskSpace(tmpPrefix.GetFullPath(), nullptr, &freeSpace) &&
                 GetContentLength() > freeSpace )
             {
                 m_request.SetState(wxWebRequest::State_Failed, _("Not enough free disk space for download."));
@@ -853,7 +834,7 @@ wxString wxWebResponse::GetStatusText() const
 
 wxInputStream* wxWebResponse::GetStream() const
 {
-    wxCHECK_IMPL( NULL );
+    wxCHECK_IMPL( nullptr );
 
     return m_impl->GetStream();
 }
@@ -985,7 +966,7 @@ wxWebSession::RegisterFactory(const wxString& backend,
     if ( !factory->Initialize() )
     {
         delete factory;
-        factory = NULL;
+        factory = nullptr;
         return;
     }
 
@@ -1058,17 +1039,17 @@ wxString wxWebSession::GetTempDir() const
 
 bool wxWebSession::IsOpened() const
 {
-    return m_impl.get() != NULL;
+    return m_impl.get() != nullptr;
 }
 
 void wxWebSession::Close()
 {
-    m_impl.reset(NULL);
+    m_impl.reset(nullptr);
 }
 
 wxWebSessionHandle wxWebSession::GetNativeHandle() const
 {
-    return m_impl ? m_impl->GetNativeHandle() : NULL;
+    return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -1082,12 +1063,12 @@ public:
     {
     }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         for ( wxStringWebSessionFactoryMap::iterator it = gs_factoryMap.begin();
               it != gs_factoryMap.end();

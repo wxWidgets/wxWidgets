@@ -120,7 +120,7 @@ public:
         wxIcon icon(wxICON(sample));
 
         // Equivalent to:
-        #if defined(__WXGTK__) || defined(__WXMOTIF__)
+        #if defined(__WXGTK__)
         wxIcon icon(sample_xpm);
         #endif
 

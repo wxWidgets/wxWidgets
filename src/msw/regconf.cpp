@@ -571,7 +571,7 @@ wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
 template <typename T>
 bool wxRegConfig::DoReadValue(const wxString& key, T* pValue) const
 {
-    wxCHECK_MSG( pValue, false, wxT("wxRegConfig::Read(): NULL param") );
+  wxCHECK_MSG( pValue, false, wxT("wxRegConfig::Read(): null param") );
 
   wxConfigPathChanger path(this, key);
 

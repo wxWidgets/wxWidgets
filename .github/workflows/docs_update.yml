@@ -18,14 +18,17 @@ on:
   workflow_dispatch:
 
 
+permissions:
+  contents: read
+
 jobs:
   update:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Update Online Documentation
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install doxygen
         run: |
@@ -42,7 +45,7 @@ jobs:
         run: |
           ./regen.sh php
           if [[ -s doxygen.log ]]; then
-            echo '*** There were warnings during docs generation: ***'
+            echo 'Contents of Doxygen log file follows:'
             echo '-----------------------------------------------------------'
             cat doxygen.log
             echo '-----------------------------------------------------------'

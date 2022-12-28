@@ -161,7 +161,7 @@ public:
     wxLogOutputBest() { }
 
 protected:
-    virtual void DoLogText(const wxString& msg) wxOVERRIDE
+    virtual void DoLogText(const wxString& msg) override
     {
         wxMessageOutputBest().Output(msg);
     }
@@ -458,18 +458,7 @@ void wxLog::DoLogRecord(wxLogLevel level,
                              const wxString& msg,
                              const wxLogRecordInfo& info)
 {
-#if WXWIN_COMPATIBILITY_2_8
-    // call the old DoLog() to ensure that existing custom log classes still
-    // work
-    //
-    // as the user code could have defined it as either taking "const char *"
-    // (in ANSI build) or "const wxChar *" (in ANSI/Unicode), we have no choice
-    // but to call both of them
-    DoLog(level, (const char*)msg.mb_str(), info.timestamp);
-    DoLog(level, (const wchar_t*)msg.wc_str(), info.timestamp);
-#else // !WXWIN_COMPATIBILITY_2_8
     wxUnusedVar(info);
-#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
 
     // Use wxLogFormatter to format the message
     DoLogTextAtLevel(level, m_formatter->Format (level, msg, info));
@@ -492,26 +481,8 @@ void wxLog::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 
 void wxLog::DoLogText(const wxString& WXUNUSED(msg))
 {
-    // in 2.8-compatible build the derived class might override DoLog() or
-    // DoLogString() instead so we can't have this assert there
-#if !WXWIN_COMPATIBILITY_2_8
     wxFAIL_MSG( "must be overridden if it is called" );
-#endif // WXWIN_COMPATIBILITY_2_8
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-void wxLog::DoLog(wxLogLevel WXUNUSED(level), const char *szString, time_t t)
-{
-    DoLogString(szString, t);
-}
-
-void wxLog::DoLog(wxLogLevel WXUNUSED(level), const wchar_t *wzString, time_t t)
-{
-    DoLogString(wzString, t);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // wxLog active target management
@@ -538,7 +509,7 @@ wxLog *wxLog::GetActiveTarget()
 /* static */
 wxLog *wxLog::GetMainThreadActiveTarget()
 {
-    if ( ms_bAutoCreate && ms_pLogger == NULL ) {
+    if ( ms_bAutoCreate && ms_pLogger == nullptr ) {
         // prevent infinite recursion if someone calls wxLogXXX() from
         // wxApp::CreateLogTarget()
         static bool s_bInGetActiveTarget = false;
@@ -546,7 +517,7 @@ wxLog *wxLog::GetMainThreadActiveTarget()
             s_bInGetActiveTarget = true;
 
             // ask the application to create a log target for us
-            if ( wxTheApp != NULL )
+            if ( wxTheApp != nullptr )
                 ms_pLogger = wxTheApp->GetTraits()->CreateLogTarget();
             else
                 ms_pLogger = new wxLogOutputBest;
@@ -562,7 +533,7 @@ wxLog *wxLog::GetMainThreadActiveTarget()
 
 wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
 {
-    if ( ms_pLogger != NULL ) {
+    if ( ms_pLogger != nullptr ) {
         // flush the old messages before changing because otherwise they might
         // get lost later if this target is not restored
         ms_pLogger->Flush();
@@ -912,7 +883,7 @@ void wxLogStderr::DoLogText(const wxString& msg)
 wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv& conv)
     : wxMessageOutputWithConv(conv)
 {
-    if ( ostr == NULL )
+    if ( ostr == nullptr )
         m_ostr = &wxSTD cerr;
     else
         m_ostr = ostr;
@@ -1028,7 +999,7 @@ wxLogInterposerTemp::wxLogInterposerTemp()
 
 bool            wxLog::ms_bRepetCounting = false;
 
-wxLog          *wxLog::ms_pLogger      = NULL;
+wxLog          *wxLog::ms_pLogger      = nullptr;
 bool            wxLog::ms_doLog        = true;
 bool            wxLog::ms_bAutoCreate  = true;
 bool            wxLog::ms_bVerbose     = false;
@@ -1038,10 +1009,6 @@ wxLogLevel      wxLog::ms_logLevel     = wxLOG_Max;  // log everything by defaul
 size_t          wxLog::ms_suspendCount = 0;
 
 wxString        wxLog::ms_timestamp(wxS("%X"));  // time only, no date
-
-#if WXWIN_COMPATIBILITY_2_8
-wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
-#endif // wxDEBUG_LEVEL
 
 // ----------------------------------------------------------------------------
 // stdout error logging helper
@@ -1114,7 +1081,7 @@ wxString wxMSWFormatMessage(DWORD nErrCode, HMODULE hModule)
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             (LPTSTR)&lpMsgBuf,
             0,
-            NULL
+            nullptr
          ) == 0 )
     {
         wxLogDebug(wxS("FormatMessage failed with error 0x%lx"), GetLastError());

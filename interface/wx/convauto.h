@@ -166,12 +166,12 @@ public:
         Return a pointer to the characters that makes up this BOM.
 
         The returned character count is 2, 3 or 4, or undefined if the return
-        value is NULL.
+        value is @NULL.
 
         @param bom
             A valid BOM type, i.e. not wxBOM_Unknown or wxBOM_None.
         @param count
-            A non-@NULL pointer receiving the number of characters in this BOM.
+            A non-null pointer receiving the number of characters in this BOM.
         @return
             Pointer to characters composing the BOM or @NULL if BOM is unknown
             or invalid. Notice that the returned string is not NUL-terminated

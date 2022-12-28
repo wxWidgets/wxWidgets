@@ -8,9 +8,7 @@
 #ifndef EDITMODEL_H
 #define EDITMODEL_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 /**
 */
@@ -20,14 +18,10 @@ public:
 	bool on;
 	int period;
 
-	Caret();
+	Caret() noexcept;
 };
 
 class EditModel {
-	// Private so EditModel objects can not be copied
-	explicit EditModel(const EditModel &);
-	EditModel &operator=(const EditModel &);
-
 public:
 	bool inOverstrike;
 	int xOffset;		///< Horizontal scrolled amount in pixels
@@ -36,20 +30,22 @@ public:
 	SpecialRepresentations reprs;
 	Caret caret;
 	SelectionPosition posDrag;
-	Position braces[2];
+	Sci::Position braces[2];
 	int bracesMatchStyle;
 	int highlightGuideColumn;
 	Selection sel;
 	bool primarySelection;
 
 	enum IMEInteraction { imeWindowed, imeInline } imeInteraction;
+	enum class CharacterSource { directInput, tentativeInput, imeResult };
 
 	int foldFlags;
 	int foldDisplayTextStyle;
-	ContractionState cs;
+	UniqueString defaultFoldDisplayText;
+	std::unique_ptr<IContractionState> pcs;
 	// Hotspot support
 	Range hotspot;
-	int hoverIndicatorPos;
+	Sci::Position hoverIndicatorPos;
 
 	// Wrapping support
 	int wrapWidth;
@@ -57,15 +53,21 @@ public:
 	Document *pdoc;
 
 	EditModel();
+	// Deleted so EditModel objects can not be copied.
+	EditModel(const EditModel &) = delete;
+	EditModel(EditModel &&) = delete;
+	EditModel &operator=(const EditModel &) = delete;
+	EditModel &operator=(EditModel &&) = delete;
 	virtual ~EditModel();
-	virtual int TopLineOfMain() const = 0;
+	virtual Sci::Line TopLineOfMain() const = 0;
 	virtual Point GetVisibleOriginInMain() const = 0;
-	virtual int LinesOnScreen() const = 0;
-	virtual Range GetHotSpotRange() const = 0;
+	virtual Sci::Line LinesOnScreen() const = 0;
+	virtual Range GetHotSpotRange() const noexcept = 0;
+	void SetDefaultFoldDisplayText(const char *text);
+	const char *GetDefaultFoldDisplayText() const noexcept;
+	const char *GetFoldDisplayText(Sci::Line lineDoc) const noexcept;
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

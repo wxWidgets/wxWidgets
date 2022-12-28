@@ -277,7 +277,7 @@ enum wxTextCtrlHitTestResult
 class wxTextAttr
 {
 public:
-    //@{
+    ///@{
     /**
         Constructors.
     */
@@ -287,14 +287,14 @@ public:
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
     wxTextAttr(const wxTextAttr& attr);
-    //@}
+    ///@}
 
     /**
         Applies the attributes in @a style to the original object, but not those
         attributes from @a style that are the same as those in @a compareWith (if passed).
     */
     bool Apply(const wxTextAttr& style,
-               const wxTextAttr* compareWith = NULL);
+               const wxTextAttr* compareWith = nullptr);
 
     /**
         Copies all defined/valid properties from overlay to current object.
@@ -323,7 +323,7 @@ public:
         @name GetXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Returns the alignment flags.
@@ -532,7 +532,7 @@ public:
     */
     const wxString& GetURL() const;
 
-    //@}
+    ///@}
 
 
 
@@ -540,7 +540,7 @@ public:
         @name HasXXX and IsXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Returns @true if the attribute object specifies alignment.
@@ -720,14 +720,14 @@ public:
     */
     bool IsParagraphStyle() const;
 
-    //@}
+    ///@}
 
 
     /**
         @name SetXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
@@ -969,7 +969,7 @@ public:
     */
     void SetURL(const wxString& url);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1389,8 +1389,9 @@ public:
         Delete the undo history.
 
         Currently only implemented in wxMSW (for controls using wxTE_RICH2
-        style only) and wxOSX (for multiline text controls only), does nothing
-        in the other ports or for the controls not using the appropriate styles.
+        style only), wxOSX and wxQt (for multiline text controls only in both
+        of these ports), does nothing in the other ports or for the controls
+        not using the appropriate styles.
 
         @since 3.1.6
     */
@@ -1694,7 +1695,7 @@ public:
 
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
-        If the previous default style didn't set them neither, the global font
+        If the previous default style didn't set them either, the global font
         or colours of the text control itself are used as fall back.
 
         However if the @a style parameter is the default wxTextAttr, then the default
@@ -1764,7 +1765,7 @@ public:
     /**
         @name Mac-specific functions
     */
-    //@{
+    ///@{
 
     /**
         Enable the automatic replacement of new lines characters in a
@@ -1788,9 +1789,9 @@ public:
     */
     void OSXEnableNewLineReplacement(bool enable);
 
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Operator definitions for appending to a text control.
 
@@ -1810,7 +1811,7 @@ public:
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(char c);
     wxTextCtrl& operator<<(wchar_t c);
-    //@}
+    ///@}
 };
 
 
@@ -1884,7 +1885,7 @@ public:
         the default parameter value to the text control @a text.
 
         @param text
-            The text control to append output too, must be non-@NULL
+            The text control to append output too, must be non-null
         @param ostr
             The C++ stream to redirect, cout is used if it is @NULL
     */

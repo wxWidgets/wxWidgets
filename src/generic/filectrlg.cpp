@@ -184,7 +184,7 @@ void wxFileData::ReadData()
     wxStructStat buff;
 
 #if defined(__UNIX__) && !defined(__VMS)
-    const bool hasStat = lstat( m_filePath.fn_str(), &buff ) == 0;
+    const bool hasStat = wxLstat( m_filePath, &buff ) == 0;
     if ( hasStat )
         m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
 #else // no lstat()
@@ -747,7 +747,7 @@ void wxFileListCtrl::OnListEndLabelEdit( wxListEvent &event )
     if ((event.GetLabel().empty()) ||
         (event.GetLabel() == wxT(".")) ||
         (event.GetLabel() == wxT("..")) ||
-        (event.GetLabel().First( wxFILE_SEP_PATH ) != wxNOT_FOUND))
+        (event.GetLabel().Find( wxFILE_SEP_PATH ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();
@@ -893,7 +893,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     this->m_style = style;
     m_inSelected = false;
     m_noSelChgEvent = false;
-    m_check = NULL;
+    m_check = nullptr;
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_OPEN ) ),

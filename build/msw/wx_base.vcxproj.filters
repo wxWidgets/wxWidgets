@@ -219,9 +219,6 @@
     <ClCompile Include="..\..\src\common\string.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\stringimpl.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\common\stringops.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -812,9 +809,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\string.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\stringimpl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\stringops.h">

@@ -61,7 +61,7 @@ public:
     wxCustomBackgroundWindow() { }
 
 protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) wxOVERRIDE
+    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) override
     {
         m_bitmapBg = bmp;
 

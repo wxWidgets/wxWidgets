@@ -8,12 +8,11 @@
 #ifndef LEXERMODULE_H
 #define LEXERMODULE_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 class Accessor;
 class WordList;
+struct LexicalClass;
 
 typedef void (*LexerFunction)(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler);
@@ -21,8 +20,9 @@ typedef ILexer *(*LexerFactoryFunction)();
 
 /**
  * A LexerModule is responsible for lexing and folding a particular language.
- * The class maintains a list of LexerModules which can be searched to find a
+ * The Catalogue class maintains a list of LexerModules which can be searched to find a
  * module appropriate to a particular language.
+ * The ExternalLexerModule subclass holds lexers loaded from DLLs or shared libraries.
  */
 class LexerModule {
 protected:
@@ -31,37 +31,43 @@ protected:
 	LexerFunction fnFolder;
 	LexerFactoryFunction fnFactory;
 	const char * const * wordListDescriptions;
+	const LexicalClass *lexClasses;
+	size_t nClasses;
 
 public:
 	const char *languageName;
-	LexerModule(int language_,
+	LexerModule(
+		int language_,
 		LexerFunction fnLexer_,
-		const char *languageName_=0,
-		LexerFunction fnFolder_=0,
-		const char * const wordListDescriptions_[] = NULL);
-	LexerModule(int language_,
+		const char *languageName_=nullptr,
+		LexerFunction fnFolder_= nullptr,
+		const char * const wordListDescriptions_[]=nullptr,
+		const LexicalClass *lexClasses_=nullptr,
+		size_t nClasses_=0) noexcept;
+	LexerModule(
+		int language_,
 		LexerFactoryFunction fnFactory_,
 		const char *languageName_,
-		const char * const wordListDescriptions_[] = NULL);
-	virtual ~LexerModule() {
-	}
-	int GetLanguage() const { return language; }
+		const char * const wordListDescriptions_[]=nullptr) noexcept;
+	int GetLanguage() const noexcept;
 
 	// -1 is returned if no WordList information is available
-	int GetNumWordLists() const;
-	const char *GetWordListDescription(int index) const;
+	int GetNumWordLists() const noexcept;
+	const char *GetWordListDescription(int index) const noexcept;
+	const LexicalClass *LexClasses() const noexcept;
+	size_t NamedStyles() const noexcept;
 
 	ILexer *Create() const;
 
-	virtual void Lex(Sci_PositionU startPos, Sci_Position length, int initStyle,
+	void Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler) const;
-	virtual void Fold(Sci_PositionU startPos, Sci_Position length, int initStyle,
+	void Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler) const;
 
-	friend class Catalogue;
+	friend class CatalogueModules;
 };
 
-inline int Maximum(int a, int b) {
+inline int Maximum(int a, int b) noexcept {
 	return (a > b) ? a : b;
 }
 
@@ -75,8 +81,12 @@ inline int Maximum(int a, int b) {
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
-#ifdef SCI_NAMESPACE
-}
+// Clang doesn't like omitting braces in array initialization but they just add
+// noise to LexicalClass arrays in lexers
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wmissing-braces"
 #endif
+
+}
 
 #endif

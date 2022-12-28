@@ -73,7 +73,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
@@ -168,7 +168,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxCollapsiblePane sample",
+       : wxFrame(nullptr, wxID_ANY, "wxCollapsiblePane sample",
                  wxDefaultPosition, wxSize(420, 300))
 {
     SetIcon(wxICON(sample));

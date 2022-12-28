@@ -64,7 +64,7 @@ inline wxString NumStr(float f)
 
 // Return the colour representation as HTML-like "#rrggbb" string and also
 // returns its alpha as opacity number in 0..1 range.
-wxString Col2SVG(wxColour c, float* opacity = NULL)
+wxString Col2SVG(wxColour c, float* opacity = nullptr)
 {
     if ( c.Alpha() != wxALPHA_OPAQUE )
     {
@@ -170,7 +170,7 @@ wxString GetPenPattern(const wxPen& pen)
             s = wxS("stroke-dasharray=\"");
             wxDash* dashes;
             int count = pen.GetDashes(&dashes);
-            if ((dashes != NULL) && (count > 0))
+            if ((dashes != nullptr) && (count > 0))
             {
                 for (int i = 0; i < count; ++i)
                 {
@@ -402,7 +402,7 @@ wxSVGBitmapEmbedHandler::ProcessBitmap(const wxBitmap& bmp,
 #if wxUSE_BASE64
     static int sub_images = 0;
 
-    if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
+    if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == nullptr )
         wxImage::AddHandler(new wxPNGHandler);
 
     // write the bitmap as a PNG to a memory stream and Base64 encode
@@ -461,7 +461,7 @@ wxSVGBitmapFileHandler::ProcessBitmap(const wxBitmap& bmp,
 {
     static int sub_images = 0;
 
-    if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == NULL )
+    if ( wxImage::FindHandler(wxBITMAP_TYPE_PNG) == nullptr )
         wxImage::AddHandler(new wxPNGHandler);
 
     // find a suitable file name
@@ -665,7 +665,7 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
 #if wxUSE_SPLINES
 void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
 {
-    wxCHECK_RET(points, "NULL pointer to spline points");
+    wxCHECK_RET(points, "null pointer to spline points");
     wxCHECK_RET(points->size() >= 2, "incomplete list of spline points");
 
     NewGraphicsIfNeeded();

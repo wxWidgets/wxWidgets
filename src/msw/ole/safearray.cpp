@@ -45,17 +45,17 @@ void wxSafeArrayBase::Destroy()
         {
             wxLogApiError(wxS("SafeArrayDestroy()"), hr);
         }
-        m_array = NULL;
+        m_array = nullptr;
     }
 }
 
 SAFEARRAY* wxSafeArrayBase::Detach()
 {
-    wxCHECK_MSG( m_array, NULL, wxS("Uninitialized safe array") );
+    wxCHECK_MSG( m_array, nullptr, wxS("Uninitialized safe array") );
 
     Unlock();
     SAFEARRAY* array = m_array;
-    m_array = NULL;
+    m_array = nullptr;
     return array;
 }
 

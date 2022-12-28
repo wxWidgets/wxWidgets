@@ -25,17 +25,7 @@
 #    if defined(__VISUALC__)
 #        define WXEXPORT __declspec(dllexport)
 #        define WXIMPORT __declspec(dllimport)
-    /*
-        While gcc also supports __declspec(dllexport), it created unusably huge
-        DLL files in gcc 4.[56] (while taking horribly long amounts of time),
-        see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43601. Because of this
-        we rely on binutils auto export/import support which seems to work
-        quite well for 4.5+. However the problem was fixed in 4.7 and later and
-        not exporting everything creates smaller DLLs (~8% size difference), so
-        do use the explicit attributes again for the newer versions.
-     */
-#    elif defined(__GNUC__) && \
-        (!wxCHECK_GCC_VERSION(4, 5) || wxCHECK_GCC_VERSION(4, 7))
+#    elif defined(__GNUC__)
         /*
             __declspec could be used here too but let's use the native
             __attribute__ instead for clarity.

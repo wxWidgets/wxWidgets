@@ -23,13 +23,13 @@ public:
                             const wxString& value = wxEmptyString );
     virtual ~wxAdvImageFileProperty ();
 
-    virtual void OnSetValue() wxOVERRIDE;  // Override to allow image loading.
+    virtual void OnSetValue() override;  // Override to allow image loading.
 
-    virtual bool IntToValue( wxVariant& variant, int number, int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) wxOVERRIDE;
-    virtual wxSize OnMeasureImage( int item ) const wxOVERRIDE;
+    virtual bool IntToValue( wxVariant& variant, int number, int argFlags = 0 ) const override;
+    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) override;
+    virtual wxSize OnMeasureImage( int item ) const override;
     virtual void OnCustomPaint( wxDC& dc,
-                                const wxRect& rect, wxPGPaintData& paintdata ) wxOVERRIDE;
+                                const wxRect& rect, wxPGPaintData& paintdata ) override;
 
     void LoadThumbnails( size_t n );
 
@@ -73,12 +73,12 @@ public:
     wxVectorProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     const wxVector3f& value = wxVector3f() );
-    virtual ~wxVectorProperty();
+    virtual ~wxVectorProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
-                                    wxVariant& childValue ) const wxOVERRIDE;
-    virtual void RefreshChildren() wxOVERRIDE;
+                                    wxVariant& childValue ) const override;
+    virtual void RefreshChildren() override;
 
 protected:
 };
@@ -106,12 +106,12 @@ public:
     wxTriangleProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name = wxPG_LABEL,
                         const wxTriangle& value = wxTriangle() );
-    virtual ~wxTriangleProperty();
+    virtual ~wxTriangleProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
-                                    wxVariant& childValue ) const wxOVERRIDE;
-    virtual void RefreshChildren() wxOVERRIDE;
+                                    wxVariant& childValue ) const override;
+    virtual void RefreshChildren() override;
 
 protected:
 };
@@ -275,7 +275,7 @@ class cxApplication : public wxApp
 {
 public:
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 wxDECLARE_APP(cxApplication);

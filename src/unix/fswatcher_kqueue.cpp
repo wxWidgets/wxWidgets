@@ -62,9 +62,9 @@ public:
         m_service(service)
     {  }
 
-    virtual void OnReadWaiting() wxOVERRIDE;
-    virtual void OnWriteWaiting() wxOVERRIDE;
-    virtual void OnExceptionWaiting() wxOVERRIDE;
+    virtual void OnReadWaiting() override;
+    virtual void OnWriteWaiting() override;
+    virtual void OnExceptionWaiting() override;
 
 protected:
     wxFSWatcherImplKqueue* m_service;
@@ -82,7 +82,7 @@ class wxFSWatcherImplKqueue : public wxFSWatcherImpl
 public:
     wxFSWatcherImplKqueue(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_source(NULL),
+        m_source(nullptr),
         m_kfd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
@@ -99,7 +99,7 @@ public:
         delete m_handler;
     }
 
-    bool Init() wxOVERRIDE
+    bool Init() override
     {
         wxCHECK_MSG( !IsOk(), false,
                      "Kqueue appears to be already initialized" );
@@ -118,7 +118,7 @@ public:
         // create source
         m_source = wxEventLoopBase::AddSourceForFD(m_kfd, m_handler, wxEVENT_SOURCE_INPUT);
 
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
     void Close()
@@ -134,7 +134,7 @@ public:
         wxDELETE(m_source);
     }
 
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryKq> watch) wxOVERRIDE
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryKq> watch) override
     {
         wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
@@ -147,7 +147,7 @@ public:
 
         // TODO more error conditions according to man
         // TODO best deal with the error here
-        int ret = kevent(m_kfd, &event, 1, NULL, 0, NULL);
+        int ret = kevent(m_kfd, &event, 1, nullptr, 0, nullptr);
         if (ret == -1)
         {
             wxLogSysError(_("Unable to add kqueue watch"));
@@ -157,7 +157,7 @@ public:
         return true;
     }
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryKq> watch) wxOVERRIDE
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryKq> watch) override
     {
         wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
@@ -174,7 +174,7 @@ public:
         return true;
     }
 
-    virtual bool RemoveAll() wxOVERRIDE
+    virtual bool RemoveAll() override
     {
         wxFSWatchEntries::iterator it = m_watches.begin();
         for ( ; it != m_watches.end(); ++it )
@@ -196,7 +196,7 @@ public:
         {
             struct kevent event;
             struct timespec timeout = {0, 0};
-            int ret = kevent(m_kfd, NULL, 0, &event, 1, &timeout);
+            int ret = kevent(m_kfd, nullptr, 0, &event, 1, &timeout);
             if (ret == -1)
             {
                 wxLogSysError(_("Unable to get events from kqueue"));
@@ -219,7 +219,7 @@ public:
 
     bool IsOk() const
     {
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
 protected:

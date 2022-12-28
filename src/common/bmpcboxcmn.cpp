@@ -56,7 +56,7 @@ void wxBitmapComboBoxBase::Init()
     m_fontHeight = 0;
     m_imgAreaWidth = 0;
     m_indent = 0;
-    m_usedImgSize = wxSize(-1, -1);
+    m_usedImgSize = wxDefaultSize;
 }
 
 void wxBitmapComboBoxBase::UpdateInternals()
@@ -66,6 +66,15 @@ void wxBitmapComboBoxBase::UpdateInternals()
 
     while ( m_bitmapbundles.size() < GetItemContainer()->GetCount() )
         m_bitmapbundles.push_back( wxBitmapBundle() );
+
+    if ( m_usedImgSize.x != -1 && !m_bitmapbundles.empty() )
+    {
+        m_usedImgSize = wxBitmapBundle::GetConsensusSizeFor
+                        (
+                            GetControl(),
+                            m_bitmapbundles
+                        );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -94,8 +103,7 @@ void wxBitmapComboBoxBase::BCBDoClear()
 {
     m_bitmapbundles.clear();
 
-    m_usedImgSize.x = -1;
-    m_usedImgSize.y = -1;
+    m_usedImgSize = wxDefaultSize;
 
     DetermineIndent();
 }
@@ -117,14 +125,11 @@ bool wxBitmapComboBoxBase::OnAddBitmap(const wxBitmapBundle& bitmap)
     if ( bitmap.IsOk() )
     {
         wxSize bmpDefaultSize = bitmap.GetPreferredLogicalSizeFor(GetControl());
-        int width = bmpDefaultSize.GetWidth();
-        int height = bmpDefaultSize.GetHeight();
 
         if ( m_usedImgSize.x < 0 )
         {
             // If size not yet determined, get it from this image.
-            m_usedImgSize.x = width;
-            m_usedImgSize.y = height;
+            m_usedImgSize = bmpDefaultSize;
 
             // Adjust control size to vertically fit the bitmap
             wxWindow* ctrl = GetControl();
@@ -137,7 +142,7 @@ bool wxBitmapComboBoxBase::OnAddBitmap(const wxBitmapBundle& bitmap)
                 DetermineIndent();
         }
 
-        wxCHECK_MSG( width == m_usedImgSize.x && height == m_usedImgSize.y,
+        wxCHECK_MSG( bmpDefaultSize == m_usedImgSize,
                      false,
                      "you can only add images of same size" );
 
@@ -155,7 +160,7 @@ int wxBitmapComboBoxBase::DetermineIndent()
 
     if ( m_usedImgSize.x > 0 )
     {
-        indent = GetControl()->FromDIP(m_usedImgSize.x)
+        indent = m_usedImgSize.x
             + GetControl()->FromDIP(IMAGE_SPACING_LEFT)
             + GetControl()->FromDIP(IMAGE_SPACING_RIGHT);
         m_imgAreaWidth = indent;

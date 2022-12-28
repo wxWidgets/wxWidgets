@@ -49,18 +49,18 @@ public:
 
   // implement base class pure virtual methods
   virtual const void *Request(const wxString& item,
-                              size_t *size = NULL,
-                              wxIPCFormat format = wxIPC_TEXT) wxOVERRIDE;
-  virtual bool StartAdvise(const wxString& item) wxOVERRIDE;
-  virtual bool StopAdvise(const wxString& item) wxOVERRIDE;
-  virtual bool Disconnect() wxOVERRIDE;
+                              size_t *size = nullptr,
+                              wxIPCFormat format = wxIPC_TEXT) override;
+  virtual bool StartAdvise(const wxString& item) override;
+  virtual bool StopAdvise(const wxString& item) override;
+  virtual bool Disconnect() override;
 
 protected:
-  virtual bool DoExecute(const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
+  virtual bool DoExecute(const void *data, size_t size, wxIPCFormat format) override;
   virtual bool DoPoke(const wxString& item, const void *data, size_t size,
-                      wxIPCFormat format) wxOVERRIDE;
+                      wxIPCFormat format) override;
   virtual bool DoAdvise(const wxString& item, const void *data, size_t size,
-                        wxIPCFormat format) wxOVERRIDE;
+                        wxIPCFormat format) override;
 
 public:
   wxString      m_topicName;
@@ -79,10 +79,10 @@ class WXDLLIMPEXP_BASE wxDDEServer : public wxServerBase
 {
 public:
     wxDDEServer();
-    bool Create(const wxString& server_name) wxOVERRIDE;
+    bool Create(const wxString& server_name) override;
     virtual ~wxDDEServer();
 
-    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) wxOVERRIDE;
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) override;
 
     // Find/delete wxDDEConnection corresponding to the HCONV
     wxDDEConnection *FindConnection(WXHCONV conv);
@@ -107,15 +107,15 @@ public:
     wxDDEClient();
     virtual ~wxDDEClient();
 
-    bool ValidHost(const wxString& host) wxOVERRIDE;
+    bool ValidHost(const wxString& host) override;
 
-    // Call this to make a connection. Returns NULL if cannot.
+    // Call this to make a connection. Returns nullptr if cannot.
     virtual wxConnectionBase *MakeConnection(const wxString& host,
                                              const wxString& server,
-                                             const wxString& topic) wxOVERRIDE;
+                                             const wxString& topic) override;
 
     // Tailor this to return own connection.
-    virtual wxConnectionBase *OnMakeConnection() wxOVERRIDE;
+    virtual wxConnectionBase *OnMakeConnection() override;
 
     // Find/delete wxDDEConnection corresponding to the HCONV
     wxDDEConnection *FindConnection(WXHCONV conv);

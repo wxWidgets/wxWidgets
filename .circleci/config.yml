@@ -1,0 +1,81 @@
+# Config file for CI jobs on CircleCI (circleci.com).
+version: 2.1
+
+jobs:
+  build-fedora:
+    docker:
+      - image: fedora
+    steps:
+      - run:
+          name: Install Git
+          command: dnf install -y git
+
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            echo LD_LIBRARY_PATH=`pwd`/lib >> $BASH_ENV
+
+            # Do _not_ use the CPU count returned by build/tools/proc_count.sh
+            # for building, it is too high (36 logical CPUs) and results in
+            # running out of memory, so limit ourselves to just 2 CPUs we're
+            # supposed to be using in Docker Medium resource class.
+            wxPROC_COUNT=2
+            echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $BASH_ENV
+
+            # Get extra conversions for iconv used by the tests and langpacks
+            # to run the tests using the corresponding locales that would be
+            # skipped otherwise.
+            export WX_EXTRA_PACKAGES='ccache glibc-gconv-extra langpacks-core-de langpacks-core-en langpacks-core-fr langpacks-core-sv'
+            ./build/tools/before_install.sh
+
+            echo "PATH=/usr/lib64/ccache:$PATH" >> $BASH_ENV
+
+      - run:
+          name: Checkout required submodules
+          command: |
+            git submodule update --init 3rdparty/catch 3rdparty/nanosvg
+
+      - restore_cache:
+          name: Restore ccache
+          keys:
+            - ccache-v1-{{ arch }}-{{ .Branch }}
+            - ccache-v1-{{ arch }}
+
+      - run:
+          name: Configure
+          command: ./configure --disable-debug-info
+
+      - run:
+          name: Build libraries
+          command: |
+            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp'
+
+      - run:
+          name: Build tests
+          command: |
+            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp' -C tests
+
+      - run:
+          name: Run tests
+          command: |
+            cd tests
+            WX_TEST_WEBREQUEST_URL="0" ./test
+
+      - run:
+          name: Show ccache statistics
+          when: always
+          command: ccache -vv -s
+
+      - save_cache:
+          name: Save ccache
+          when: always
+          key: ccache-v1-{{ arch }}-{{ .Branch }}-{{ .BuildNum }}
+          paths:
+            - ~/.cache/ccache
+
+workflows:
+  build:
+    jobs:
+      - build-fedora

@@ -103,7 +103,7 @@ public:
     */
     static const wxChar** GetAllEncodingNames(wxFontEncoding encoding);
 
-    //@{
+    ///@{
     /**
         Find an alternative for the given encoding (which is supposed to not be
         available on this system). If successful, return @true and fill info
@@ -122,7 +122,7 @@ public:
                            wxFontEncoding* alt_encoding,
                            const wxString& facename = wxEmptyString,
                            bool interactive = true);
-    //@}
+    ///@}
 
     /**
         Returns the @e n-th supported encoding.

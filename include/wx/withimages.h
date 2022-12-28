@@ -34,7 +34,7 @@ public:
 
     wxWithImages()
     {
-        m_imageList = NULL;
+        m_imageList = nullptr;
         m_ownsImageList = false;
     }
 
@@ -106,7 +106,7 @@ public:
     // Avoid using it if possible.
     void TakeOwnership() { m_ownsImageList = true; }
 
-    // Get pointer (may be NULL) to the associated image list.
+    // Get pointer (may be null) to the associated image list.
     wxImageList* GetImageList() const { return m_imageList; }
 
     // This helper function can be used from OnImagesChanged() if the derived
@@ -127,6 +127,68 @@ public:
         }
 
         return m_imageList;
+    }
+
+    // Return logical size of the image to use or (0, 0) if there are none.
+    wxSize GetImageLogicalSize(const wxWindow* window, int iconIndex) const
+    {
+        wxSize size;
+
+        if ( iconIndex != NO_IMAGE )
+        {
+            if ( !m_images.empty() )
+            {
+                size = m_images.at(iconIndex).GetPreferredLogicalSizeFor(window);
+            }
+            else if ( m_imageList )
+            {
+                // All images in the image list are of the same size.
+                size = m_imageList->GetSize();
+            }
+        }
+
+        return size;
+    }
+
+    // Overload provided to facilitate transition from the existing code using
+    // wxImageList::GetSize() -- don't use it in the new code.
+    void GetImageLogicalSize(const wxWindow* window, int iconIndex,
+                             int& width, int& height) const
+    {
+        const wxSize size = GetImageLogicalSize(window, iconIndex);
+        width = size.x;
+        height = size.y;
+    }
+
+    // Return the bitmap to use at the current DPI of the given window.
+    //
+    // If index == NO_IMAGE, just returns wxNullBitmap.
+    wxBitmap GetImageBitmapFor(const wxWindow* window, int iconIndex) const
+    {
+        wxBitmap bitmap;
+
+        if ( iconIndex != NO_IMAGE )
+        {
+            if ( !m_images.empty() )
+            {
+                bitmap = m_images.at(iconIndex).GetBitmapFor(window);
+            }
+            else if ( m_imageList )
+            {
+                bitmap = m_imageList->GetBitmap(iconIndex);
+            }
+            else
+            {
+                wxFAIL_MSG
+                (
+                    "Image index specified, but there are no images.\n"
+                    "\n"
+                    "Did you forget to call SetImages()?"
+                );
+            }
+        }
+
+        return bitmap;
     }
 
 protected:
@@ -150,7 +212,7 @@ protected:
 
 
     // Return true if we have a valid image list.
-    bool HasImageList() const { return m_imageList != NULL; }
+    bool HasImageList() const { return m_imageList != nullptr; }
 
     // Return the image with the given index from the image list.
     //
@@ -210,7 +272,7 @@ private:
         if ( m_ownsImageList )
         {
             delete m_imageList;
-            m_imageList = NULL;
+            m_imageList = nullptr;
 
             // We don't own it any more.
             m_ownsImageList = false;
@@ -221,7 +283,7 @@ private:
     // The images we use: if this vector is not empty, m_imageList is not used.
     Images m_images;
 
-    // The associated image list or NULL.
+    // The associated image list or nullptr.
     wxImageList* m_imageList;
 
     // False by default, if true then we delete m_imageList.

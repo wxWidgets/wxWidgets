@@ -737,7 +737,7 @@ void DateTimeTestCase::TestTimeFormat()
                 // for those locales it's impossible to pass the test with %p...
                 wxString am, pm;
                 wxDateTime::GetAmPmStrings(&am, &pm);
-                if (am.empty() && pm.empty() && wxStrstr(fmt, "%p") != NULL)
+                if (am.empty() && pm.empty() && wxStrstr(fmt, "%p") != nullptr)
                     continue;
 
                 // what can we recover?
@@ -979,10 +979,8 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "09:07-04:30", true },
         { "19:22+05:45", true },
 
-#if wxUSE_UNICODE
         // Containing minus sign (U+2212) as separator between time and tz.
         { "09:37" "\xe2\x88\x92" "0400", true },
-#endif
 
         // Some invalid ones too.
 
@@ -1436,6 +1434,15 @@ void DateTimeTestCase::TestDateTimeParse()
 
         {
             "2010-01-04 14:30",
+            {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
+            true,
+            "",
+            false
+        },
+
+        {
+            // with 'T' separator
+            "2010-01-04T14:30",
             {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
             true,
             "",

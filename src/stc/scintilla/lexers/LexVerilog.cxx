@@ -31,10 +31,9 @@
 
 #include "OptionSet.h"
 #include "SubStyles.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 namespace {
 	// Use an unnamed namespace to protect the functions and classes from name conflicts
@@ -58,7 +57,11 @@ class LinePPState {
 		return level >= 0 && level < 32;
 	}
 	int maskLevel() const {
-		return 1 << level;
+		if (level >= 0) {
+			return 1 << level;
+		} else {
+			return 1;
+		}
 	}
 public:
 	LinePPState() : state(0), ifTaken(0), level(-1) {
@@ -172,7 +175,7 @@ const char styleSubable[] = {0};
 
 }
 
-class LexerVerilog : public ILexerWithSubStyles {
+class LexerVerilog : public DefaultLexer {
 	CharacterSet setWord;
 	WordList keywords;
 	WordList keywords2;
@@ -213,67 +216,71 @@ class LexerVerilog : public ILexerWithSubStyles {
 
 public:
 	LexerVerilog() :
+		DefaultLexer("verilog", SCLEX_VERILOG),
 		setWord(CharacterSet::setAlphaNum, "._", 0x80, true),
 		subStyles(styleSubable, 0x80, 0x40, activeFlag) {
 		}
 	virtual ~LexerVerilog() {}
-	int SCI_METHOD Version() const {
-		return lvSubStyles;
+	int SCI_METHOD Version() const override {
+		return lvIdentity;
 	}
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
-	const char* SCI_METHOD PropertyNames() {
+	const char* SCI_METHOD PropertyNames() override {
 		return osVerilog.PropertyNames();
 	}
-	int SCI_METHOD PropertyType(const char* name) {
+	int SCI_METHOD PropertyType(const char* name) override {
 		return osVerilog.PropertyType(name);
 	}
-	const char* SCI_METHOD DescribeProperty(const char* name) {
+	const char* SCI_METHOD DescribeProperty(const char* name) override {
 		return osVerilog.DescribeProperty(name);
 	}
-	Sci_Position SCI_METHOD PropertySet(const char* key, const char* val) {
+	Sci_Position SCI_METHOD PropertySet(const char* key, const char* val) override {
 	    return osVerilog.PropertySet(&options, key, val);
 	}
-	const char* SCI_METHOD DescribeWordListSets() {
+	const char * SCI_METHOD PropertyGet(const char *key) override {
+		return osVerilog.PropertyGet(key);
+	}
+	const char* SCI_METHOD DescribeWordListSets() override {
 		return osVerilog.DescribeWordListSets();
 	}
-	Sci_Position SCI_METHOD WordListSet(int n, const char* wl);
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-	void* SCI_METHOD PrivateCall(int, void*) {
+	Sci_Position SCI_METHOD WordListSet(int n, const char* wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void* SCI_METHOD PrivateCall(int, void*) override {
 		return 0;
 	}
-	int SCI_METHOD LineEndTypesSupported() {
+	int SCI_METHOD LineEndTypesSupported() override {
 		return SC_LINE_END_TYPE_UNICODE;
 	}
-	int SCI_METHOD AllocateSubStyles(int styleBase, int numberStyles) {
+	int SCI_METHOD AllocateSubStyles(int styleBase, int numberStyles) override {
 		return subStyles.Allocate(styleBase, numberStyles);
 	}
-	int SCI_METHOD SubStylesStart(int styleBase) {
+	int SCI_METHOD SubStylesStart(int styleBase) override {
 		return subStyles.Start(styleBase);
 	}
-	int SCI_METHOD SubStylesLength(int styleBase) {
+	int SCI_METHOD SubStylesLength(int styleBase) override {
 		return subStyles.Length(styleBase);
 	}
-	int SCI_METHOD StyleFromSubStyle(int subStyle) {
+	int SCI_METHOD StyleFromSubStyle(int subStyle) override {
 		int styleBase = subStyles.BaseStyle(MaskActive(subStyle));
 		int active = subStyle & activeFlag;
 		return styleBase | active;
 	}
-	int SCI_METHOD PrimaryStyleFromStyle(int style) {
+	int SCI_METHOD PrimaryStyleFromStyle(int style) override {
 		return MaskActive(style);
  	}
-	void SCI_METHOD FreeSubStyles() {
+	void SCI_METHOD FreeSubStyles() override {
 		subStyles.Free();
 	}
-	void SCI_METHOD SetIdentifiers(int style, const char *identifiers) {
+	void SCI_METHOD SetIdentifiers(int style, const char *identifiers) override {
 		subStyles.SetIdentifiers(style, identifiers);
 	}
-	int SCI_METHOD DistanceToSecondaryStyles() {
+	int SCI_METHOD DistanceToSecondaryStyles() override {
 		return activeFlag;
 	}
-	const char * SCI_METHOD GetSubStyleBases() {
+	const char * SCI_METHOD GetSubStyleBases() override {
 		return styleSubable;
 	}
 	static ILexer* LexerFactoryVerilog() {

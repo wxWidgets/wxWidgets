@@ -21,19 +21,17 @@ DESTDIR =
 
 ### Targets: ###
 
-all: emulator execmon helpview hhp2cached ifacecheck screenshotgen wxrc
+all: helpview hhp2cached ifacecheck screenshotgen wxrc
 
-install: install_execmon install_ifacecheck install_screenshotgen install_wxrc
+install: install_ifacecheck install_screenshotgen install_wxrc
 
-uninstall: uninstall_execmon uninstall_ifacecheck uninstall_screenshotgen uninstall_wxrc
+uninstall: uninstall_ifacecheck uninstall_screenshotgen uninstall_wxrc
 
-install-strip: install install-strip_execmon install-strip_ifacecheck install-strip_screenshotgen install-strip_wxrc
+install-strip: install install-strip_ifacecheck install-strip_screenshotgen install-strip_wxrc
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	-(cd emulator/src && $(MAKE) clean)
-	-(cd execmon && $(MAKE) clean)
 	-(cd helpview/src && $(MAKE) clean)
 	-(cd hhp2cached && $(MAKE) clean)
 	-(cd ifacecheck/src && $(MAKE) clean)
@@ -42,28 +40,11 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
-	-(cd emulator/src && $(MAKE) distclean)
-	-(cd execmon && $(MAKE) distclean)
 	-(cd helpview/src && $(MAKE) distclean)
 	-(cd hhp2cached && $(MAKE) distclean)
 	-(cd ifacecheck/src && $(MAKE) distclean)
 	-(cd screenshotgen/src && $(MAKE) distclean)
 	-(cd wxrc && $(MAKE) distclean)
-
-emulator: 
-	(cd emulator/src && $(MAKE) all)
-
-execmon: 
-	(cd execmon && $(MAKE) all)
-
-install_execmon: 
-	(cd execmon && $(MAKE) install)
-
-uninstall_execmon: 
-	(cd execmon && $(MAKE) uninstall)
-
-install-strip_execmon: 
-	(cd execmon && $(MAKE) install-strip)
 
 helpview: 
 	(cd helpview/src && $(MAKE) all)
@@ -111,8 +92,7 @@ install-strip_wxrc:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean emulator execmon install_execmon \
-	uninstall_execmon install-strip_execmon helpview hhp2cached ifacecheck \
+.PHONY: all install uninstall clean distclean helpview hhp2cached ifacecheck \
 	install_ifacecheck uninstall_ifacecheck install-strip_ifacecheck \
 	screenshotgen install_screenshotgen uninstall_screenshotgen \
 	install-strip_screenshotgen wxrc install_wxrc uninstall_wxrc \

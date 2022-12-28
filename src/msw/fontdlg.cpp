@@ -101,10 +101,11 @@ int wxFontDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxWindowDisabler disableOthers(this, GetParent());
-
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
-    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : nullptr;
+
+    wxWindowDisabler disableOthers(this, parent);
+
     // It should be OK to always use GDI simulations
     DWORD flags = CF_SCREENFONTS /* | CF_NOSIMULATIONS */ ;
 
@@ -135,7 +136,7 @@ int wxFontDialog::ShowModal()
         // converting LOGFONT height to the value in points shown in the
         // dialog (and this happens even when not using AutoSystemDpiAware),
         // so we need to convert it to standard (not even system, because the
-        // dialog doesn't take it into account neither) DPI.
+        // dialog doesn't take it into account either) DPI.
         logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI
                            (
                                 m_fontData.m_initialFont.GetFractionalPointSize(),

@@ -342,7 +342,7 @@ public:
 
         See @ref configbase_paths
     */
-    //@{
+    ///@{
 
     /**
         Retrieve the current path (always as absolute path).
@@ -358,7 +358,7 @@ public:
     */
     virtual void SetPath(const wxString& strPath) = 0;
 
-    //@}
+    ///@}
 
 
     /**
@@ -366,7 +366,7 @@ public:
 
         See @ref configbase_enumeration
     */
-    //@{
+    ///@{
 
     /**
         Gets the first entry.
@@ -421,7 +421,7 @@ public:
     */
     virtual size_t GetNumberOfGroups(bool bRecursive = false) const = 0;
 
-    //@}
+    ///@}
 
 
     enum EntryType
@@ -436,7 +436,7 @@ public:
     /**
         @name Tests of Existence
     */
-    //@{
+    ///@{
 
     /**
         @return @true if either a group or an entry with a given name exists.
@@ -462,13 +462,13 @@ public:
     */
     virtual bool HasGroup(const wxString& strName) const = 0;
 
-    //@}
+    ///@}
 
 
     /**
         @name Miscellaneous Functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the application name.
@@ -480,7 +480,7 @@ public:
     */
     wxString GetVendorName() const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -488,7 +488,7 @@ public:
 
         See @ref configbase_keyaccess
     */
-    //@{
+    ///@{
 
     /**
         Permanently writes all changes (otherwise, they're only written from
@@ -767,7 +767,7 @@ public:
     */
     bool Write(const wxString& key, T const& buf);
 
-    //@}
+    ///@}
 
 
     /**
@@ -779,7 +779,7 @@ public:
         entry/group with the new name already exists or because the function is
         not supported in this wxConfig implementation.
     */
-    //@{
+    ///@{
 
     /**
         Renames an entry in the current group. The entries names (both the old
@@ -803,7 +803,7 @@ public:
     virtual bool RenameGroup(const wxString& oldName,
                              const wxString& newName) = 0;
 
-    //@}
+    ///@}
 
 
     /**
@@ -813,7 +813,7 @@ public:
         file. DeleteAll() is especially useful if you want to erase all traces
         of your program presence: for example, when you uninstall it.
     */
-    //@{
+    ///@{
 
     /**
         Delete the whole underlying object (disk file, registry key, ...).
@@ -836,7 +836,7 @@ public:
     */
     virtual bool DeleteGroup(const wxString& key) = 0;
 
-    //@}
+    ///@}
 
 
     /**
@@ -866,7 +866,7 @@ public:
         SetExpandEnvVars(@true) just after. Another solution would be to prefix
         the offending symbols with a backslash.
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if we are expanding environment variables in key values.
@@ -895,7 +895,7 @@ public:
     */
     void SetRecordDefaults(bool bDoIt = true);
 
-    //@}
+    ///@}
 
 
     /**

@@ -28,8 +28,8 @@ enum
     @class wxImageList
 
     A wxImageList contains a list of images, which are stored in an unspecified
-    form. Images can have masks for transparent drawing, and can be made from a
-    variety of sources including bitmaps and icons.
+    form. Images can use alpha channel or masks for transparent drawing, and
+    can be made from a variety of sources including bitmaps and icons.
 
     wxImageList is used principally in conjunction with wxTreeCtrl and
     wxListCtrl classes.
@@ -48,6 +48,10 @@ class wxImageList : public wxObject
 public:
     /**
         Default ctor.
+
+        Note that the object created using the default ctor is invalid and
+        calling any methods other than Create() on it will result in an
+        assertion failure.
     */
     wxImageList();
 
@@ -62,7 +66,12 @@ public:
         @param height
             Height of the images in the list.
         @param mask
-            @true if masks should be created for all images.
+            If @true, all images will have masks, with the mask being created
+            from the light grey pixels if not specified otherwise, i.e. if the
+            image doesn't have neither alpha channel nor mask and no mask is
+            explicitly specified when adding it. Note that if an image does
+            have alpha channel or mask, it will always be used, whether this
+            parameter is @true or @false.
         @param initialCount
             The initial size of the list.
 

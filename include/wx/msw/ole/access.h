@@ -32,7 +32,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_CORE wxAccessible : public wxAccessibleBase
 {
 public:
-    wxAccessible(wxWindow *win = NULL);
+    wxAccessible(wxWindow *win = nullptr);
     virtual ~wxAccessible();
 
 // Overridables

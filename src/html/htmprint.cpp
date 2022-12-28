@@ -64,9 +64,9 @@
 
 wxHtmlDCRenderer::wxHtmlDCRenderer() : wxObject()
 {
-    m_DC = NULL;
+    m_DC = nullptr;
     m_Width = m_Height = 0;
-    m_Cells = NULL;
+    m_Cells = nullptr;
     m_ownsCells = false;
     m_Parser.SetFS(&m_FS);
     SetStandardFonts(DEFAULT_PRINT_FONT_SIZE);
@@ -277,7 +277,7 @@ wxHtmlPrintout::CheckFit(const wxSize& pageArea, const wxSize& docArea) const
         wxMessageDialog
             dlg
             (
-                NULL,
+                nullptr,
                 wxString::Format
                 (
                  _("The document \"%s\" doesn't fit on the page "
@@ -438,7 +438,7 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
     else
         ff = fs.OpenFile(htmlfile);
 
-    if (ff == NULL)
+    if (ff == nullptr)
     {
         wxLogError(htmlfile + _(": file does not exist!"));
         return;
@@ -624,7 +624,7 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWin
 {
     m_ParentWindow = parentWindow;
     m_Name = name;
-    m_PrintData = NULL;
+    m_PrintData = nullptr;
     m_PageSetupData = new wxPageSetupDialogData;
 
     m_PageSetupData->EnableMargins(true);
@@ -647,7 +647,7 @@ wxHtmlEasyPrinting::~wxHtmlEasyPrinting()
 
 wxPrintData *wxHtmlEasyPrinting::GetPrintData()
 {
-    if (m_PrintData == NULL)
+    if (m_PrintData == nullptr)
         m_PrintData = new wxPrintData();
     return m_PrintData;
 }
@@ -794,7 +794,7 @@ void wxHtmlEasyPrinting::SetFonts(const wxString& normal_face, const wxString& f
         for (int i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
     }
     else
-        m_FontsSizes = NULL;
+        m_FontsSizes = nullptr;
 }
 
 void wxHtmlEasyPrinting::SetStandardFonts(int size,
@@ -841,8 +841,8 @@ class wxHtmlPrintingModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule);
 public:
     wxHtmlPrintingModule() : wxModule() {}
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { wxHtmlPrintout::CleanUpStatics(); }
+    bool OnInit() override { return true; }
+    void OnExit() override { wxHtmlPrintout::CleanUpStatics(); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlPrintingModule, wxModule);

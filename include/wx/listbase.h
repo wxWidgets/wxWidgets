@@ -171,7 +171,7 @@ typedef wxItemAttr wxListItemAttr;
 class WXDLLIMPEXP_CORE wxListItem : public wxObject
 {
 public:
-    wxListItem() { Init(); m_attr = NULL; }
+    wxListItem() { Init(); m_attr = nullptr; }
     wxListItem(const wxListItem& item)
         : wxObject(),
           m_mask(item.m_mask),
@@ -184,7 +184,7 @@ public:
           m_data(item.m_data),
           m_format(item.m_format),
           m_width(item.m_width),
-          m_attr(NULL)
+          m_attr(nullptr)
     {
         // copy list item attributes
         if ( item.HasAttributes() )
@@ -205,7 +205,7 @@ public:
             m_data = item.m_data;
             m_format = item.m_format;
             m_width = item.m_width;
-            m_attr = item.m_attr ? new wxItemAttr(*item.m_attr) : NULL;
+            m_attr = item.m_attr ? new wxItemAttr(*item.m_attr) : nullptr;
         }
 
         return *this;
@@ -215,7 +215,7 @@ public:
 
     // resetting
     void Clear() { Init(); m_text.clear(); ClearAttributes(); }
-    void ClearAttributes() { if ( m_attr ) { delete m_attr; m_attr = NULL; } }
+    void ClearAttributes() { if ( m_attr ) { delete m_attr; m_attr = nullptr; } }
 
     // setters
     void SetMask(long mask)
@@ -262,7 +262,7 @@ public:
     wxListColumnFormat GetAlign() const { return (wxListColumnFormat)m_format; }
 
     wxItemAttr *GetAttributes() const { return m_attr; }
-    bool HasAttributes() const { return m_attr != NULL; }
+    bool HasAttributes() const { return m_attr != nullptr; }
 
     wxColour GetTextColour() const
         { return HasAttributes() ? m_attr->GetTextColour() : wxNullColour; }
@@ -347,7 +347,7 @@ public:
     void SetNormalImages(const wxVector<wxBitmapBundle>& images);
     void SetSmallImages(const wxVector<wxBitmapBundle>& images);
 
-    // Associate the given (possibly NULL to indicate that no images will be
+    // Associate the given (possibly null to indicate that no images will be
     // used) image list with the control. The ownership of the image list
     // passes to the control, i.e. it will be deleted when the control itself
     // is destroyed.
@@ -359,7 +359,7 @@ public:
     // so it can be shared among several controls.
     virtual void SetImageList(wxImageList* imageList, int which);
 
-    // Return the currently used image list, may be NULL.
+    // Return the currently used image list, may be null.
     virtual wxImageList* GetImageList(int which) const;
 
 
@@ -472,12 +472,12 @@ protected:
     virtual void DoUpdateImages(int which) = 0;
 
     // Overridden methods of the base class.
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
     // these functions are only used for virtual list view controls, i.e. the
     // ones with wxLC_VIRTUAL style
 
-    // return the attribute for the item (may return NULL if none)
+    // return the attribute for the item (may return nullptr if none)
     virtual wxItemAttr* OnGetItemAttr(long item) const;
 
     // return the text for the given column of the given item
@@ -494,7 +494,7 @@ protected:
     // return the icon for the given item and column.
     virtual int OnGetItemColumnImage(long item, long column) const;
 
-    // return the attribute for the given item and column (may return NULL if none)
+    // return the attribute for the given item and column (may return nullptr if none)
     virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
 private:
@@ -562,7 +562,7 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxListEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxListEvent(*this); }
 
 //protected: -- not for backwards compatibility
     int           m_code;

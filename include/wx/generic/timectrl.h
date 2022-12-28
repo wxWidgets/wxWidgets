@@ -48,19 +48,19 @@ public:
                 const wxString& name = wxTimePickerCtrlNameStr);
 
     // Implement pure virtual wxTimePickerCtrlBase methods.
-    virtual void SetValue(const wxDateTime& date) wxOVERRIDE;
-    virtual wxDateTime GetValue() const wxOVERRIDE;
+    virtual void SetValue(const wxDateTime& date) override;
+    virtual wxDateTime GetValue() const override;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
 
 private:
     void Init();
 
     // Return the list of the windows composing this one.
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+    virtual wxWindowList GetCompositeWindowParts() const override;
 
     // Implementation data.
     class wxTimePickerGenericImpl* m_impl;

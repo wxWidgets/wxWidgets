@@ -19,7 +19,7 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef wxHAS_SVG
+#if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL
 
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
@@ -49,19 +49,21 @@
     #pragma warning(push)
     #pragma warning(disable:4456)
     #pragma warning(disable:4702)
-
-    // Also make nanosvg.h compile with older MSVC versions which didn't have
-    // strtoll().
-    #if _MSC_VER < 1800
-        #define strtoll _strtoi64
-    #endif
 #endif
 
-#define NANOSVG_IMPLEMENTATION
-#define NANOSVGRAST_IMPLEMENTATION
-#define NANOSVG_ALL_COLOR_KEYWORDS
-#include "../../3rdparty/nanosvg/src/nanosvg.h"
-#include "../../3rdparty/nanosvg/src/nanosvgrast.h"
+#if !wxUSE_NANOSVG_EXTERNAL || defined(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL)
+    #define NANOSVG_IMPLEMENTATION
+    #define NANOSVGRAST_IMPLEMENTATION
+    #define NANOSVG_ALL_COLOR_KEYWORDS
+#endif
+
+#if wxUSE_NANOSVG_EXTERNAL
+    #include <nanosvg.h>
+    #include <nanosvgrast.h>
+#else
+    #include "../../3rdparty/nanosvg/src/nanosvg.h"
+    #include "../../3rdparty/nanosvg/src/nanosvgrast.h"
+#endif
 
 #ifdef __VISUALC__
     #pragma warning(pop)
@@ -107,9 +109,9 @@ public:
         nsvgDelete(m_svgImage);
     }
 
-    virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
+    virtual wxSize GetDefaultSize() const override;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override;
+    virtual wxBitmap GetBitmap(const wxSize& size) override;
 
 private:
     wxBitmap DoRasterize(const wxSize& size);

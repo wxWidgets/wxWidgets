@@ -204,7 +204,7 @@ int wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
         wxFDIOHandler * const handler = FindHandler(fd);
         if ( !handler )
         {
-            wxFAIL_MSG( wxT("NULL handler in wxSelectDispatcher?") );
+            wxFAIL_MSG( wxT("null handler in wxSelectDispatcher?") );
             continue;
         }
 
@@ -227,7 +227,7 @@ int wxSelectDispatcher::DoSelect(wxSelectSets& sets, int timeout) const
     }
     else // no timeout
     {
-        ptv = NULL;
+        ptv = nullptr;
     }
 
     int ret = sets.Select(m_maxFD + 1, ptv);

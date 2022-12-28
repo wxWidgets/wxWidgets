@@ -307,14 +307,14 @@ wxAcceleratorEntry *wxAcceleratorEntry::Create(const wxString& str)
     {
         // It's ok to pass strings not containing any accelerators at all to
         // this function, wxMenuItem code does it and we should just return
-        // NULL in this case.
-        return NULL;
+        // nullptr in this case.
+        return nullptr;
     }
 
     int flags,
         keyCode;
     if ( !ParseAccel(accelStr, &flags, &keyCode) )
-        return NULL;
+        return nullptr;
 
     return new wxAcceleratorEntry(flags, keyCode);
 }
@@ -380,13 +380,7 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
         if ( n == WXSIZEOF(wxKeyNames) )
         {
             // must be a simple key
-            if (
-#if !wxUSE_UNICODE
-                 // we can't call wxIsalnum() for non-ASCII characters in ASCII
-                 // build as they're only defined for the ASCII range (or EOF)
-                 wxIsascii(code) &&
-#endif // ANSI
-                    wxIsprint(code) )
+            if ( wxIsprint(code) )
             {
                 text << (wxChar)code;
             }

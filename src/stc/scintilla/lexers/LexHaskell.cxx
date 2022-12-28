@@ -26,6 +26,7 @@
 #include <ctype.h>
 
 #include <string>
+#include <vector>
 #include <map>
 
 #include "ILexer.h"
@@ -41,10 +42,9 @@
 #include "CharacterCategory.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 // See https://github.com/ghc/ghc/blob/master/compiler/parser/Lexer.x#L1682
 // Note, letter modifiers are prohibited.
@@ -269,7 +269,7 @@ struct OptionSetHaskell : public OptionSet<OptionsHaskell> {
    }
 };
 
-class LexerHaskell : public ILexer {
+class LexerHaskell : public DefaultLexer {
    bool literate;
    Sci_Position firstImportLine;
    int firstImportIndent;
@@ -390,45 +390,50 @@ class LexerHaskell : public ILexer {
 
 public:
    LexerHaskell(bool literate_)
-      : literate(literate_)
+      : DefaultLexer(literate_ ? "literatehaskell" : "haskell", literate_ ? SCLEX_LITERATEHASKELL : SCLEX_HASKELL)
+	  , literate(literate_)
       , firstImportLine(-1)
       , firstImportIndent(0)
       {}
    virtual ~LexerHaskell() {}
 
-   void SCI_METHOD Release() {
+   void SCI_METHOD Release() override {
       delete this;
    }
 
-   int SCI_METHOD Version() const {
-      return lvOriginal;
+   int SCI_METHOD Version() const override {
+      return lvIdentity;
    }
 
-   const char * SCI_METHOD PropertyNames() {
+   const char * SCI_METHOD PropertyNames() override {
       return osHaskell.PropertyNames();
    }
 
-   int SCI_METHOD PropertyType(const char *name) {
+   int SCI_METHOD PropertyType(const char *name) override {
       return osHaskell.PropertyType(name);
    }
 
-   const char * SCI_METHOD DescribeProperty(const char *name) {
+   const char * SCI_METHOD DescribeProperty(const char *name) override {
       return osHaskell.DescribeProperty(name);
    }
 
-   Sci_Position SCI_METHOD PropertySet(const char *key, const char *val);
+   Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
 
-   const char * SCI_METHOD DescribeWordListSets() {
+   const char * SCI_METHOD PropertyGet(const char *key) override {
+	   return osHaskell.PropertyGet(key);
+   }
+
+   const char * SCI_METHOD DescribeWordListSets() override {
       return osHaskell.DescribeWordListSets();
    }
 
-   Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
+   Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
 
-   void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+   void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-   void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+   void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-   void * SCI_METHOD PrivateCall(int, void *) {
+   void * SCI_METHOD PrivateCall(int, void *) override {
       return 0;
    }
 

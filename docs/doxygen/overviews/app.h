@@ -45,7 +45,7 @@ wxIMPLEMENT_APP(DerivedApp);
 
 bool DerivedApp::OnInit()
 {
-    wxFrame *the_frame = new wxFrame(NULL, ID_MYFRAME, argv[0]);
+    wxFrame *the_frame = new wxFrame(nullptr, ID_MYFRAME, argv[0]);
     ...
     the_frame->Show(true);
 

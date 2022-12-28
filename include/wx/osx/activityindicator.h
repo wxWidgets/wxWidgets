@@ -42,9 +42,9 @@ public:
                 long style = 0,
                 const wxString& name = wxActivityIndicatorNameStr);
 
-    virtual void Start() wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
-    virtual bool IsRunning() const wxOVERRIDE;
+    virtual void Start() override;
+    virtual void Stop() override;
+    virtual bool IsRunning() const override;
 
 private:
     // Common part of all ctors.

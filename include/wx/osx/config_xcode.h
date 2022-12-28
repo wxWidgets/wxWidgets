@@ -22,13 +22,7 @@
 #define wx_USE_NANOX 0
 
 #define HAVE_VA_COPY 1
-#define HAVE_STD_WSTRING 1
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
-  #if !defined(__has_include)
-    #define HAVE_TR1_UNORDERED_MAP 1
-    #define HAVE_TR1_UNORDERED_SET 1
-    #define HAVE_TR1_TYPE_TRAITS 1
-  #endif
   #define HAVE_GCC_ATOMIC_BUILTINS 1
 #endif
 #define HAVE_VISIBILITY 1
@@ -45,7 +39,6 @@
 #define HAVE_CXA_DEMANGLE 1
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_FSYNC 1
-#define HAVE_ROUND 1
 #define HAVE_SCHED_YIELD 1
 #define HAVE_PTHREAD_MUTEXATTR_T 1
 #define HAVE_PTHREAD_MUTEXATTR_SETTYPE_DECL 1
@@ -58,7 +51,6 @@
 #define HAVE_STRNLEN 1
 #define HAVE_STRPTIME 1
 #define HAVE_STRPTIME_DECL 1
-#define HAVE_STRTOULL 1
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
 #define HAVE_VSNPRINTF 1
 #define HAVE_VSSCANF 1
@@ -121,9 +113,9 @@
 
 #define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
 #define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 3.1.7"
+#define PACKAGE_STRING "wxWidgets 3.3.0"
 #define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "3.1.7"
+#define PACKAGE_VERSION "3.3.0"
 
 // for jpeg
 

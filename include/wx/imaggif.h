@@ -37,22 +37,22 @@ public:
         m_extension = wxT("gif");
         m_type = wxBITMAP_TYPE_GIF;
         m_mime = wxT("image/gif");
-        m_hashTable = NULL;
+        m_hashTable = nullptr;
     }
 
 #if wxUSE_STREAMS
     virtual bool LoadFile(wxImage *image, wxInputStream& stream,
-                          bool verbose = true, int index = -1) wxOVERRIDE;
+                          bool verbose = true, int index = -1) override;
     virtual bool SaveFile(wxImage *image, wxOutputStream& stream,
-                          bool verbose=true) wxOVERRIDE;
+                          bool verbose=true) override;
 
     // Save animated gif
     bool SaveAnimation(const wxImageArray& images, wxOutputStream *stream,
         bool verbose = true, int delayMilliSecs = 1000);
 
 protected:
-    virtual int DoGetImageCount(wxInputStream& stream) wxOVERRIDE;
-    virtual bool DoCanRead(wxInputStream& stream) wxOVERRIDE;
+    virtual int DoGetImageCount(wxInputStream& stream) override;
+    virtual bool DoCanRead(wxInputStream& stream) override;
 
     bool DoSaveFile(const wxImage&, wxOutputStream *, bool verbose,
         bool first, int delayMilliSecs, bool loop,

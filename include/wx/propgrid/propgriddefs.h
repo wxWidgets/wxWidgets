@@ -177,12 +177,6 @@ class WXDLLIMPEXP_FWD_CORE wxFont;
 // (for tree buttons)
 //#undef wxPG_ICON_WIDTH
 
-#if WXWIN_COMPATIBILITY_2_8
-    #define wxPG_COMPATIBILITY_1_4      1
-#else
-    #define wxPG_COMPATIBILITY_1_4      0
-#endif
-
 // Set 1 to include advanced properties (wxFontProperty, wxColourProperty, etc.)
 #ifndef wxPG_INCLUDE_ADVPROPS
     #define wxPG_INCLUDE_ADVPROPS           1
@@ -502,11 +496,11 @@ public:\
 \
     const classname &GetValue() const { return m_value; } \
 \
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE; \
+    virtual bool Eq(wxVariantData& data) const override; \
 \
-    virtual wxString GetType() const wxOVERRIDE; \
+    virtual wxString GetType() const override; \
 \
-    virtual wxVariantData* Clone() const wxOVERRIDE { return new classname##VariantData(m_value); } \
+    virtual wxVariantData* Clone() const override { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\

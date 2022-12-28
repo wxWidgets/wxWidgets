@@ -14,7 +14,7 @@ class wxTLWGeometry : public wxTLWGeometryGeneric
 {
     typedef wxTLWGeometryGeneric BaseType;
 public:
-    virtual bool Save(const Serializer& ser) const wxOVERRIDE
+    virtual bool Save(const Serializer& ser) const override
     {
         if ( !wxTLWGeometryGeneric::Save(ser) )
             return false;
@@ -33,7 +33,7 @@ public:
         return true;
     }
 
-    virtual bool Restore(Serializer& ser) wxOVERRIDE
+    virtual bool Restore(Serializer& ser) override
     {
         if ( !wxTLWGeometryGeneric::Restore(ser) )
             return false;
@@ -46,7 +46,7 @@ public:
         return true;
     }
 
-    virtual bool GetFrom(const wxTopLevelWindow* tlw) wxOVERRIDE
+    virtual bool GetFrom(const wxTopLevelWindow* tlw) override
     {
         if ( !wxTLWGeometryGeneric::GetFrom(tlw) )
             return false;
@@ -56,7 +56,7 @@ public:
         return true;
     }
 
-    virtual bool ApplyTo(wxTopLevelWindow* tlw) wxOVERRIDE
+    virtual bool ApplyTo(wxTopLevelWindow* tlw) override
     {
         // Don't overwrite the current decoration size if we already have it.
         if ( !tlw->m_decorSize.left && !tlw->m_decorSize.right &&

@@ -43,7 +43,7 @@ public:
 protected:
     virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return true; }
 
-    void InitFontData(const wxFontData *data = NULL)
+    void InitFontData(const wxFontData *data = nullptr)
         { if ( data ) m_fontData = *data; }
 
     wxFontData m_fontData;
@@ -63,18 +63,13 @@ protected:
 #define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 0
 #endif
 
-#if defined(__WXUNIVERSAL__) || \
-    defined(__WXMOTIF__)     || \
-    defined(__WXGPE__)
-
+#if defined(__WXUNIVERSAL__)
     #include "wx/generic/fontdlgg.h"
     #define wxFontDialog wxGenericFontDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/fontdlg.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/fontdlg.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/fontdlg.h"
+    #include "wx/gtk/fontdlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/fontdlg.h"
 #elif defined(__WXQT__)
@@ -87,7 +82,7 @@ protected:
 
 // get the font from user and return it, returns wxNullFont if the dialog was
 // cancelled
-WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = NULL,
+WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = nullptr,
                                           const wxFont& fontInit = wxNullFont,
                                           const wxString& caption = wxEmptyString);
 

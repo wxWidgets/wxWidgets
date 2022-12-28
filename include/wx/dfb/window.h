@@ -72,7 +72,7 @@ public:
     virtual void WarpPointer(int x, int y);
 
     virtual void Refresh(bool eraseBackground = true,
-                         const wxRect *rect = (const wxRect *) NULL);
+                         const wxRect *rect = nullptr);
     virtual void Update();
 
     virtual bool SetCursor(const wxCursor &cursor);
@@ -105,9 +105,9 @@ protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr) const;
     virtual void DoClientToScreen(int *x, int *y) const;
     virtual void DoScreenToClient(int *x, int *y) const;
     virtual void DoGetPosition(int *x, int *y) const;
@@ -178,7 +178,7 @@ private:
     // don't access it directly)
     wxRect m_rect;
 
-    // overlays for this window (or NULL if it doesn't have any)
+    // overlays for this window (or nullptr if it doesn't have any)
     wxDfbOverlaysList *m_overlays;
 
     friend class wxNonOwnedWindow; // for HandleXXXEvent

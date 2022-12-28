@@ -11,6 +11,7 @@ on:
     - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - '.github/workflows/docs_update.yml'
+    - 'build/cmake/**'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
     - 'docs/**'
@@ -18,19 +19,16 @@ on:
     - 'include/msvc/**'
     - 'include/wx/dfb/**'
     - 'include/wx/gtk/**'
-    - 'include/wx/gtk1/**'
-    - 'include/wx/motif/**'
     - 'include/wx/msw/**'
     - 'include/wx/x11/**'
     - 'locale/**'
     - 'src/dfb/**'
     - 'src/gtk/**'
-    - 'src/gtk1/**'
-    - 'src/motif/**'
     - 'src/msw/**'
     - 'src/x11/**'
     - '*.md'
     - '*.yml'
+    - 'CMakeLists.txt'
     - 'wxwidgets.props'
   pull_request:
     branches: [ master ]
@@ -41,6 +39,7 @@ on:
     - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - '.github/workflows/docs_update.yml'
+    - 'build/cmake/**'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
     - 'docs/**'
@@ -48,20 +47,20 @@ on:
     - 'include/msvc/**'
     - 'include/wx/dfb/**'
     - 'include/wx/gtk/**'
-    - 'include/wx/gtk1/**'
-    - 'include/wx/motif/**'
     - 'include/wx/msw/**'
     - 'include/wx/x11/**'
     - 'locale/**'
     - 'src/dfb/**'
     - 'src/gtk/**'
-    - 'src/gtk1/**'
-    - 'src/motif/**'
     - 'src/msw/**'
     - 'src/x11/**'
     - '*.md'
     - '*.yml'
+    - 'CMakeLists.txt'
     - 'wxwidgets.props'
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
@@ -105,7 +104,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
 

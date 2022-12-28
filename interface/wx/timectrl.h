@@ -76,7 +76,7 @@ public:
         constructor.
 
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param dt
@@ -110,7 +110,7 @@ public:
     /**
         Returns the currently entered time as hours, minutes and seconds.
 
-        All the arguments must be non-@NULL, @false is returned otherwise and
+        All the arguments must be non-null, @false is returned otherwise and
         none of them is modified.
 
         @see SetTime()

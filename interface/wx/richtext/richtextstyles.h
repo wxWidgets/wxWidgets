@@ -506,7 +506,7 @@ public:
     */
     wxRichTextAttr CombineWithParagraphStyle(int indent,
                                          const wxRichTextAttr& paraStyle,
-                                         wxRichTextStyleSheet* styleSheet = NULL);
+                                         wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         This function finds the level (from 0 to 9) whose indentation attribute mostly
@@ -522,7 +522,7 @@ public:
         included in the result.
     */
     wxRichTextAttr GetCombinedStyle(int indent,
-                                wxRichTextStyleSheet* styleSheet = NULL);
+                                wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         This function combines the list style's base attributes and the style for the
@@ -533,7 +533,7 @@ public:
     */
 
     wxRichTextAttr GetCombinedStyleForLevel(int level,
-                                     wxRichTextStyleSheet* styleSheet = NULL);
+                                     wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         Returns the style for the given level. @a level is a number between 0 and 9.

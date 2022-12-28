@@ -33,7 +33,7 @@ public:
     wxPGPropArgCls( const wxString& str )
     {
         m_name = str;
-        m_property = NULL;
+        m_property = nullptr;
         m_isProperty = false;
     }
     wxPGPropArgCls( const wxPGPropArgCls& id )
@@ -47,30 +47,32 @@ public:
     {
         m_name = *str;
         delete str; // we own this string
-        m_property = NULL;
+        m_property = nullptr;
         m_isProperty = false;
     }
     wxPGProperty* GetPtr() const
     {
-        wxCHECK( m_isProperty, NULL );
+        wxCHECK( m_isProperty, nullptr );
         return m_property;
     }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const char* str )
     {
         m_name = str;
-        m_property = NULL;
+        m_property = nullptr;
         m_isProperty = false;
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const wchar_t* str )
     {
         m_name = str;
-        m_property = NULL;
+        m_property = nullptr;
         m_isProperty = false;
     }
-    // This constructor is required for NULL.
+    // This constructor is required for null.
     wxPGPropArgCls( int )
     {
-        m_property = NULL;
+        m_property = nullptr;
         m_isProperty = true;
     }
     wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;
@@ -138,7 +140,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridInterface
 public:
 
     // Destructor.
-    virtual ~wxPropertyGridInterface() { }
+    virtual ~wxPropertyGridInterface() = default;
 
     // Appends property to the list.
     // wxPropertyGrid assumes ownership of the object.
@@ -243,7 +245,7 @@ public:
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
 
-        if ( !p->GetChildCount() || p->HasFlag(wxPG_PROP_AGGREGATE) )
+        if ( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE) )
             return wxNullProperty;
 
         return p->Item(0);
@@ -252,17 +254,17 @@ public:
     // Returns iterator class instance.
     // flags - See wxPG_ITERATOR_FLAGS. Value wxPG_ITERATE_DEFAULT causes
     //   iteration over everything except private child properties.
-    // firstProp - Property to start iteration from. If NULL, then first
+    // firstProp - Property to start iteration from. If nullptr, then first
     //   child of root is used.
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL )
+                                        wxPGProperty* firstProp = nullptr )
     {
         return wxPropertyGridIterator( m_pState, flags, firstProp );
     }
 
     wxPropertyGridConstIterator
     GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                 wxPGProperty* firstProp = NULL ) const
+                 wxPGProperty* firstProp = nullptr ) const
     {
         return wxPropertyGridConstIterator( m_pState, flags, firstProp );
     }
@@ -296,7 +298,7 @@ public:
     }
 
     // Returns pointer to a property with given name (case-sensitive).
-    // If there is no property with such name, NULL pointer is returned.
+    // If there is no property with such name, null pointer is returned.
     // Properties which have non-category, non-root parent
     // cannot be accessed globally by their name. Instead, use
     // "<property>.<subproperty>" instead of "<subproperty>".
@@ -329,36 +331,36 @@ public:
                                                 wxPG_ITERATE_HIDDEN |
                                                 wxPG_ITERATE_CATEGORIES) const;
 
-    // Returns value of given attribute. If none found, returns wxNullVariant.
+    // Returns value of given attribute. If none found, returns null wxVariant.
     wxVariant GetPropertyAttribute( wxPGPropArg id,
                                     const wxString& attrName ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullVariant)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxVariant())
         return p->GetAttribute(attrName);
     }
 
     // Returns pointer of property's nearest parent category. If no category
-    // found, returns NULL.
+    // found, returns nullptr.
     wxPropertyCategory* GetPropertyCategory( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_CONST_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ID_CONST_CALL_PROLOG_RETVAL(nullptr)
         return m_pState->GetPropertyCategory(p);
     }
 
     // Returns client data (void*) of a property.
     void* GetPropertyClientData( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetClientData();
     }
 
     // Returns first property which label matches given string.
-    // NULL if none found. Note that this operation is extremely slow when
+    // nullptr if none found. Note that this operation is extremely slow when
     // compared to GetPropertyByName().
     wxPGProperty* GetPropertyByLabel( const wxString& label ) const;
 
     // Returns pointer to a property with given name (case-sensitive).
-    // If there is no property with such name, @NULL pointer is returned.
+    // If there is no property with such name, null pointer is returned.
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
 
     // Returns child property 'subname' of property 'name'. Same as
@@ -369,21 +371,21 @@ public:
     // Returns property's editor.
     const wxPGEditor* GetPropertyEditor( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetEditorClass();
     }
 
     // Returns help string associated with a property.
     wxString GetPropertyHelpString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxString())
         return p->GetHelpString();
     }
 
-    // Returns property's custom value image (NULL of none).
+    // Returns property's custom value image (nullptr if none).
     wxBitmap* GetPropertyImage( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetValueImage();
     }
 
@@ -412,14 +414,14 @@ public:
     // can pass to any number of SetPropertyValidator.
     wxValidator* GetPropertyValidator( wxPGPropArg id )
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetValidator();
     }
 #endif
 
     // Returns value as wxVariant. To get wxObject pointer from it,
     // you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.
-    // If property value is unspecified, wxNullVariant is returned.
+    // If property value is unspecified, null wxVariant is returned.
     wxVariant GetPropertyValue(wxPGPropArg id);
 
     wxString GetPropertyValueAsString( wxPGPropArg id ) const;
@@ -454,13 +456,13 @@ public:
     // Use wxPG_INC_ATTRIBUTES to include property attributes as well.
     // Each attribute will be stored as list variant named
     // "@<propname>@attr."
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-        wxPGProperty* baseparent = NULL, long flags = 0 ) const
+    wxVariant GetPropertyValues( const wxString& listname = wxString(),
+        wxPGProperty* baseparent = nullptr, long flags = 0 ) const
     {
         return m_pState->DoGetPropertyValues(listname, baseparent, flags);
     }
 
-    // Returns currently selected property. NULL if none.
+    // Returns currently selected property. nullptr if none.
     // When wxPG_EX_MULTIPLE_SELECTION extra style is used, this
     // member function returns the focused property, that is the
     // one which can have active editor.
@@ -596,7 +598,7 @@ public:
     void LimitPropertyEditing( wxPGPropArg id, bool limit = true );
 
     // If state is shown in it's grid, refresh it now.
-    virtual void RefreshGrid( wxPropertyGridPageState* state = NULL );
+    virtual void RefreshGrid( wxPropertyGridPageState* state = nullptr );
 
 #if wxPG_INCLUDE_ADVPROPS
     // Initializes additional property editors (SpinCtrl etc.). Causes
@@ -689,7 +691,7 @@ public:
     // value - Value of attribute.
     // argFlags - Optional. Use wxPG_RECURSE to set the attribute to child
     //   properties recursively.
-    // Setting attribute's value to wxNullVariant will simply remove it
+    // Setting attribute's value to null wxVariant will simply remove it
     // from property's set of attributes.
     void SetPropertyAttribute( wxPGPropArg id,
                                const wxString& attrName,
@@ -754,7 +756,7 @@ public:
     // You can use wxPG_LABEL as text to use default text for column.
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
+                          const wxString& text = wxString(),
                           const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
@@ -776,7 +778,7 @@ public:
     void SetPropertyEditor( wxPGPropArg id, const wxPGEditor* editor )
     {
         wxPG_PROP_ARG_CALL_PROLOG()
-        wxCHECK_RET( editor, wxS("unknown/NULL editor") );
+        wxCHECK_RET( editor, wxS("unknown/null editor") );
         p->SetEditor(editor);
         RefreshProperty(p);
     }
@@ -826,9 +828,8 @@ public:
     void SetPropertyValues( const wxVariantList& list,
                             wxPGPropArg defaultCategory = wxNullProperty )
     {
-        wxPGProperty *p;
-        if ( defaultCategory.HasName() ) p = defaultCategory.GetPtr(this);
-        else p = defaultCategory.GetPtr0();
+        wxPGProperty* p = defaultCategory.HasName() ?
+                          defaultCategory.GetPtr(this) : defaultCategory.GetPtr0();
         m_pState->DoSetPropertyValues(list, p);
     }
 
@@ -906,11 +907,13 @@ public:
         SetPropertyValueString( id, wxString(value) );
     }
 
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     // Sets value (char*) of a property.
     void SetPropertyValue( wxPGPropArg id, const char* value )
     {
         SetPropertyValueString( id, wxString(value) );
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
 
     // Sets value (string) of a property.
     void SetPropertyValue( wxPGPropArg id, const wxString& value )
@@ -1058,15 +1061,13 @@ protected:
     virtual wxVariant GetEditableStateItem( const wxString& name ) const
     {
         wxUnusedVar(name);
-        return wxNullVariant;
+        return wxVariant();
     }
 
     // Returns page state data for given (sub) page (-1 means current page).
     virtual wxPropertyGridPageState* GetPageState( int pageIndex ) const
     {
-        if ( pageIndex <= 0 )
-            return m_pState;
-        return NULL;
+        return pageIndex <= 0 ? m_pState : nullptr;
     }
 
     virtual bool DoSelectPage( int WXUNUSED(index) ) { return true; }
@@ -1090,18 +1091,13 @@ private:
     // Cannot be GetGrid() due to ambiguity issues.
     wxPropertyGrid* GetPropertyGrid()
     {
-        if ( !m_pState )
-            return NULL;
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : nullptr;
     }
 
     // Cannot be GetGrid() due to ambiguity issues.
     const wxPropertyGrid* GetPropertyGrid() const
     {
-        if ( !m_pState )
-            return NULL;
-
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : nullptr;
     }
 };
 

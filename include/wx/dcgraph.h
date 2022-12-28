@@ -39,8 +39,8 @@ public:
 #ifdef __WXMSW__
     // override wxDC virtual functions to provide access to HDC associated with
     // underlying wxGraphicsContext
-    virtual WXHDC AcquireHDC() wxOVERRIDE;
-    virtual void ReleaseHDC(WXHDC hdc) wxOVERRIDE;
+    virtual WXHDC AcquireHDC() override;
+    virtual void ReleaseHDC(WXHDC hdc) override;
 #endif // __WXMSW__
 
 private:
@@ -71,116 +71,116 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual void Clear() wxOVERRIDE;
+    virtual void Clear() override;
 
-    virtual bool StartDoc( const wxString& message ) wxOVERRIDE;
-    virtual void EndDoc() wxOVERRIDE;
+    virtual bool StartDoc( const wxString& message ) override;
+    virtual void EndDoc() override;
 
-    virtual void StartPage() wxOVERRIDE;
-    virtual void EndPage() wxOVERRIDE;
+    virtual void StartPage() override;
+    virtual void EndPage() override;
 
     // flushing the content of this dc immediately onto screen
-    virtual void Flush() wxOVERRIDE;
+    virtual void Flush() override;
 
-    virtual void SetFont(const wxFont& font) wxOVERRIDE;
-    virtual void SetPen(const wxPen& pen) wxOVERRIDE;
-    virtual void SetBrush(const wxBrush& brush) wxOVERRIDE;
-    virtual void SetBackground(const wxBrush& brush) wxOVERRIDE;
-    virtual void SetBackgroundMode(int mode) wxOVERRIDE;
+    virtual void SetFont(const wxFont& font) override;
+    virtual void SetPen(const wxPen& pen) override;
+    virtual void SetBrush(const wxBrush& brush) override;
+    virtual void SetBackground(const wxBrush& brush) override;
+    virtual void SetBackgroundMode(int mode) override;
 
 #if wxUSE_PALETTE
-    virtual void SetPalette(const wxPalette& palette) wxOVERRIDE;
+    virtual void SetPalette(const wxPalette& palette) override;
 #endif
 
-    virtual void DestroyClippingRegion() wxOVERRIDE;
+    virtual void DestroyClippingRegion() override;
 
-    virtual wxCoord GetCharHeight() const wxOVERRIDE;
-    virtual wxCoord GetCharWidth() const wxOVERRIDE;
+    virtual wxCoord GetCharHeight() const override;
+    virtual wxCoord GetCharWidth() const override;
 
-    virtual bool CanDrawBitmap() const wxOVERRIDE;
-    virtual bool CanGetTextExtent() const wxOVERRIDE;
-    virtual int GetDepth() const wxOVERRIDE;
-    virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual bool CanDrawBitmap() const override;
+    virtual bool CanGetTextExtent() const override;
+    virtual int GetDepth() const override;
+    virtual wxSize GetPPI() const override;
 
-    virtual void SetLogicalFunction(wxRasterOperationMode function) wxOVERRIDE;
+    virtual void SetLogicalFunction(wxRasterOperationMode function) override;
 
-    virtual void SetTextForeground(const wxColour& colour) wxOVERRIDE;
-    virtual void SetTextBackground(const wxColour& colour) wxOVERRIDE;
+    virtual void SetTextForeground(const wxColour& colour) override;
+    virtual void SetTextBackground(const wxColour& colour) override;
 
-    virtual void ComputeScaleAndOrigin() wxOVERRIDE;
+    virtual void ComputeScaleAndOrigin() override;
 
-    wxGraphicsContext* GetGraphicsContext() const wxOVERRIDE { return m_graphicContext; }
-    virtual void SetGraphicsContext( wxGraphicsContext* ctx ) wxOVERRIDE;
+    wxGraphicsContext* GetGraphicsContext() const override { return m_graphicContext; }
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx ) override;
 
-    virtual void* GetHandle() const wxOVERRIDE;
+    virtual void* GetHandle() const override;
 
 #if wxUSE_DC_TRANSFORM_MATRIX
-    virtual bool CanUseTransformMatrix() const wxOVERRIDE;
-    virtual bool SetTransformMatrix(const wxAffineMatrix2D& matrix) wxOVERRIDE;
-    virtual wxAffineMatrix2D GetTransformMatrix() const wxOVERRIDE;
-    virtual void ResetTransformMatrix() wxOVERRIDE;
+    virtual bool CanUseTransformMatrix() const override;
+    virtual bool SetTransformMatrix(const wxAffineMatrix2D& matrix) override;
+    virtual wxAffineMatrix2D GetTransformMatrix() const override;
+    virtual void ResetTransformMatrix() override;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     // coordinates conversions and transforms
-    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const wxOVERRIDE;
-    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const wxOVERRIDE;
-    virtual wxSize DeviceToLogicalRel(int x, int y) const wxOVERRIDE;
-    virtual wxSize LogicalToDeviceRel(int x, int y) const wxOVERRIDE;
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const override;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const override;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const override;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const override;
 
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             wxFloodFillStyle style = wxFLOOD_SURFACE) wxOVERRIDE;
+                             wxFloodFillStyle style = wxFLOOD_SURFACE) override;
 
     virtual void DoGradientFillLinear(const wxRect& rect,
         const wxColour& initialColour,
         const wxColour& destColour,
-        wxDirection nDirection = wxEAST) wxOVERRIDE;
+        wxDirection nDirection = wxEAST) override;
 
     virtual void DoGradientFillConcentric(const wxRect& rect,
         const wxColour& initialColour,
         const wxColour& destColour,
-        const wxPoint& circleCenter) wxOVERRIDE;
+        const wxPoint& circleCenter) override;
 
-    virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const wxOVERRIDE;
+    virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const override;
 
-    virtual void DoDrawPoint(wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual void DoDrawPoint(wxCoord x, wxCoord y) override;
 
 #if wxUSE_SPLINES
-    virtual void DoDrawSpline(const wxPointList *points) wxOVERRIDE;
+    virtual void DoDrawSpline(const wxPointList *points) override;
 #endif
 
-    virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) wxOVERRIDE;
+    virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) override;
 
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
         wxCoord x2, wxCoord y2,
-        wxCoord xc, wxCoord yc) wxOVERRIDE;
+        wxCoord xc, wxCoord yc) override;
 
     virtual void DoDrawCheckMark(wxCoord x, wxCoord y,
-        wxCoord width, wxCoord height) wxOVERRIDE;
+        wxCoord width, wxCoord height) override;
 
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
-        double sa, double ea) wxOVERRIDE;
+        double sa, double ea) override;
 
-    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
+    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height) override;
     virtual void DoDrawRoundedRectangle(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height,
-        double radius) wxOVERRIDE;
-    virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
+        double radius) override;
+    virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height) override;
 
-    virtual void DoCrossHair(wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual void DoCrossHair(wxCoord x, wxCoord y) override;
 
-    virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y) override;
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-        bool useMask = false) wxOVERRIDE;
+        bool useMask = false) override;
 
-    virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y) override;
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
-        double angle) wxOVERRIDE;
+        double angle) override;
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                         wxRasterOperationMode rop = wxCOPY, bool useMask = false,
-                        wxCoord xsrcMask = -1, wxCoord ysrcMask = -1) wxOVERRIDE;
+                        wxCoord xsrcMask = -1, wxCoord ysrcMask = -1) override;
 
     virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
                                wxCoord dstWidth, wxCoord dstHeight,
@@ -188,35 +188,35 @@ public:
                                wxCoord xsrc, wxCoord ysrc,
                                wxCoord srcWidth, wxCoord srcHeight,
                                wxRasterOperationMode = wxCOPY, bool useMask = false,
-                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) wxOVERRIDE;
+                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) override;
 
-    virtual void DoGetSize(int *,int *) const wxOVERRIDE;
-    virtual void DoGetSizeMM(int* width, int* height) const wxOVERRIDE;
+    virtual void DoGetSize(int *,int *) const override;
+    virtual void DoGetSizeMM(int* width, int* height) const override;
 
     virtual void DoDrawLines(int n, const wxPoint points[],
-        wxCoord xoffset, wxCoord yoffset) wxOVERRIDE;
+        wxCoord xoffset, wxCoord yoffset) override;
     virtual void DoDrawPolygon(int n, const wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE) wxOVERRIDE;
+                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
     virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
-                                   wxPolygonFillMode fillStyle) wxOVERRIDE;
+                                   wxPolygonFillMode fillStyle) override;
 
-    virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
+    virtual void DoSetDeviceClippingRegion(const wxRegion& region) override;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
-        wxCoord width, wxCoord height) wxOVERRIDE;
-    virtual bool DoGetClippingRect(wxRect& rect) const wxOVERRIDE;
+        wxCoord width, wxCoord height) override;
+    virtual bool DoGetClippingRect(wxRect& rect) const override;
 
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
-        wxCoord *descent = NULL,
-        wxCoord *externalLeading = NULL,
-        const wxFont *theFont = NULL) const wxOVERRIDE;
+        wxCoord *descent = nullptr,
+        wxCoord *externalLeading = nullptr,
+        const wxFont *theFont = nullptr) const override;
 
-    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
+    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
 
 #ifdef __WXMSW__
-    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const wxOVERRIDE;
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const override;
 #endif // __WXMSW__
 
     // update the internal clip box variables
@@ -228,7 +228,10 @@ protected:
     wxGCDCImpl(wxDC* owner, int);
 
 #ifdef __WXOSX__
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Don't use OSXGetOrigin()")
     virtual wxPoint OSXGetOrigin() const { return wxPoint(); }
+#endif // WXWIN_COMPATIBILITY_3_2
 #endif
 
     // scaling variables

@@ -75,6 +75,19 @@ bool wxRadioButton::Create(wxWindow *parent,
     return true;
 }
 
+bool wxRadioButton::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // Weirdly enough, even though radio buttons support dark theme (they
+    // notably change the way they draw the focus rectangle if we set it), they
+    // still use the default black foreground colour in it, making their text
+    // unreadable, so we need to change it manually.
+    wxRadioButtonBase::MSWGetDarkModeSupport(support);
+
+    support.setForeground = true;
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // wxRadioButton functions
 // ----------------------------------------------------------------------------

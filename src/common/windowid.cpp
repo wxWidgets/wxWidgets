@@ -46,7 +46,7 @@ wxUint8 gs_autoIdsRefCount[wxID_AUTO_HIGHEST - wxID_AUTO_LOWEST + 1] = { 0 };
 // freed. The cell storing the count for an ID is freed only when its count
 // gets to zero (not when it goes below ID_COUNTTOOLARGE, so as to avoid
 // degenerate cases)
-wxLongToLongHashMap *gs_autoIdsLargeRefCount = NULL;
+wxLongToLongHashMap *gs_autoIdsLargeRefCount = nullptr;
 
 // this is an optimization used until we wrap around wxID_AUTO_HIGHEST: if this
 // value is < wxID_AUTO_HIGHEST we know that we haven't wrapped yet and so can

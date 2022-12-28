@@ -12,7 +12,7 @@
     A class for performing various debugging and memory tracing operations.
 
     Full functionality (such as printing out objects currently allocated) is
-    only present in a debugging build of wxWidgets, i.e. if the __WXDEBUG__
+    only present in a debugging build of wxWidgets, i.e. if the @c \__WXDEBUG__
     symbol is defined. wxDebugContext and related functions and macros can be
     compiled out by setting wxUSE_DEBUG_CONTEXT to 0 is setup.h
 
@@ -126,7 +126,7 @@ public:
         information about memory allocation. Otherwise, a straight malloc and free
         will be performed by these operators.
 
-        By default, debug mode is on if __WXDEBUG__ is defined. If the application
+        By default, debug mode is on if @c \__WXDEBUG__ is defined. If the application
         uses this function, it should make sure that all object memory allocated
         is deallocated with the same value of debug mode. Otherwise, the delete
         operator might try to look for memory information that does not exist.
@@ -167,7 +167,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 
 /**
     @deprecated Use one of the wxLogTrace() functions or one of the
@@ -219,5 +219,5 @@ void wxTrace(const wxString& format, ...);
 */
 void wxTraceLevel(int level, const wxString& format, ...);
 
-//@}
+///@}
 

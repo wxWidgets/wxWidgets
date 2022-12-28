@@ -202,7 +202,7 @@ void wxAnimationCtrlBase::SetInactiveBitmap(const wxBitmapBundle &bmp)
 void wxAnimation::AddHandler( wxAnimationDecoder *handler )
 {
     // Check for an existing handler of the type being added.
-    if (FindHandler( handler->GetType() ) == 0)
+    if (FindHandler( handler->GetType() ) == nullptr)
     {
         sm_handlers.Append( handler );
     }
@@ -222,7 +222,7 @@ void wxAnimation::AddHandler( wxAnimationDecoder *handler )
 void wxAnimation::InsertHandler( wxAnimationDecoder *handler )
 {
     // Check for an existing handler of the type being added.
-    if (FindHandler( handler->GetType() ) == 0)
+    if (FindHandler( handler->GetType() ) == nullptr)
     {
         sm_handlers.Insert( handler );
     }
@@ -244,7 +244,7 @@ const wxAnimationDecoder *wxAnimation::FindHandler( wxAnimationType animType )
         if (handler->GetType() == animType) return handler;
         node = node->GetNext();
     }
-    return 0;
+    return nullptr;
 }
 
 void wxAnimation::InitStandardHandlers()
@@ -281,8 +281,8 @@ class wxAnimationModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxAnimationModule);
 public:
     wxAnimationModule() {}
-    bool OnInit() wxOVERRIDE { wxAnimation::InitStandardHandlers(); return true; }
-    void OnExit() wxOVERRIDE { wxAnimation::CleanUpHandlers(); }
+    bool OnInit() override { wxAnimation::InitStandardHandlers(); return true; }
+    void OnExit() override { wxAnimation::CleanUpHandlers(); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule);

@@ -78,7 +78,7 @@ public:
         m_notebook->ChangeSelection(page);
     }
 
-     bool ShouldPreventAppExit() const wxOVERRIDE
+     bool ShouldPreventAppExit() const override
      {
          return false;
      }
@@ -96,7 +96,7 @@ public:
         m_title = title;
     }
 
-    virtual void AddPage(wxPreferencesPage* page) wxOVERRIDE
+    virtual void AddPage(wxPreferencesPage* page) override
     {
         m_pages.push_back(wxSharedPtr<wxPreferencesPage>(page));
     }
@@ -155,7 +155,7 @@ public:
             m_win->Destroy();
     }
 
-    virtual void Show(wxWindow* parent) wxOVERRIDE
+    virtual void Show(wxWindow* parent) override
     {
         if ( !m_win )
         {
@@ -173,12 +173,12 @@ public:
         }
     }
 
-    virtual void Dismiss() wxOVERRIDE
+    virtual void Dismiss() override
     {
         if ( m_win )
         {
             m_win->Close(/*force=*/true);
-            m_win = NULL;
+            m_win = nullptr;
         }
     }
 
@@ -199,15 +199,15 @@ class wxModalPreferencesEditorImpl : public wxGenericPreferencesEditorImplBase
 public:
     wxModalPreferencesEditorImpl()
     {
-        m_dlg = NULL;
+        m_dlg = nullptr;
         m_currentPage = -1;
     }
 
-    virtual void Show(wxWindow* parent) wxOVERRIDE
+    virtual void Show(wxWindow* parent) override
     {
         wxScopedPtr<wxGenericPrefsDialog> dlg(CreateDialog(parent));
 
-        // Store it for Dismiss() but ensure that the pointer is reset to NULL
+        // Store it for Dismiss() but ensure that the pointer is reset to nullptr
         // when the dialog is destroyed on leaving this function.
         m_dlg = dlg.get();
         wxON_BLOCK_EXIT_NULL(m_dlg);
@@ -221,12 +221,12 @@ public:
             m_currentPage = dlg->GetSelectedPage();
     }
 
-    virtual void Dismiss() wxOVERRIDE
+    virtual void Dismiss() override
     {
         if ( m_dlg )
         {
             m_dlg->EndModal(wxID_CANCEL);
-            m_dlg = NULL;
+            m_dlg = nullptr;
         }
     }
 

@@ -80,9 +80,9 @@ public:
 
 private:
     // common part of all ctors
-    void Init() { m_impl = NULL; }
+    void Init() { m_impl = nullptr; }
 
-    // do check if another instance is running, called only if m_impl != NULL
+    // do check if another instance is running, called only if m_impl != nullptr
     bool DoIsAnotherRunning() const;
 
     // the implementation details (platform specific)

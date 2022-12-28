@@ -120,7 +120,7 @@ public:
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          int n = 0,
-                         const wxString choices[] = NULL,
+                         const wxString choices[] = nullptr,
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = "comboBox");
@@ -163,7 +163,7 @@ public:
     */
     virtual ~wxOwnerDrawnComboBox();
 
-    //@{
+    ///@{
     /**
         Creates the combobox for two-step construction.
         See wxOwnerDrawnComboBox() for further details.
@@ -197,7 +197,7 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
-    //@}
+    ///@}
 
     /**
         IsEmpty() is not available in this class.

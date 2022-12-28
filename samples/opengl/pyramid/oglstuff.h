@@ -89,7 +89,7 @@ struct shaShas
 {
     GLuint shaId;
     GLenum typeSha; //The type of shader
-    const GLchar* scode; //The NULL terminated GLSL code
+    const GLchar* scode; //The nullptr terminated GLSL code
 };
 
 typedef std::vector<shaShas> shaShas_v;
@@ -293,7 +293,7 @@ private:
 class myOGLManager
 {
 public:
-    myOGLManager(myOGLErrHandler* extErrHnd = NULL);
+    myOGLManager(myOGLErrHandler* extErrHnd = nullptr);
     ~myOGLManager();
 
     // Constants, prototypes and pointers to OGL functions

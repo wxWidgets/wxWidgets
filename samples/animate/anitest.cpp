@@ -100,7 +100,7 @@ bool MyApp::OnInit()
 
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, "Animation Demo",
+    MyFrame* frame = new MyFrame(nullptr, wxID_ANY, "Animation Demo",
                                  wxDefaultPosition, wxSize(500, 400),
                                  wxDEFAULT_FRAME_STYLE);
     frame->Show(true);

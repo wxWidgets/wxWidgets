@@ -29,14 +29,14 @@ public:
     */
     wxUniChar();
 
-    //@{
+    ///@{
     /**
         Create a character from the 8-bit character value @a c using the
         current locale encoding.
     */
     wxUniChar(char c);
     wxUniChar(unsigned char c);
-    //@}
+    ///@}
 
     wxUniChar(int c);
     wxUniChar(unsigned int c);
@@ -72,7 +72,7 @@ public:
 
         @param c
             An output pointer to the value of this Unicode character as a @c
-            char. Must be non-@NULL.
+            char. Must be non-null.
         @return
             @true if the object is an 8 bit char and @a c was filled with its
             value as char or @false otherwise (@a c won't be modified then).
@@ -159,7 +159,7 @@ public:
     */
     static wxUint16 LowSurrogate(wxUint32 value);
 
-    //@{
+    ///@{
     /**
         Conversions to char and wchar_t types: all of those are needed to be
         able to pass wxUniChars to various standard narrow and wide character
@@ -176,9 +176,9 @@ public:
     operator unsigned short int() const;
     operator wxLongLong_t() const;
     operator wxULongLong_t() const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Assignment operators
     */
@@ -195,7 +195,7 @@ public:
     wxUniChar& operator=(unsigned short int c);
     wxUniChar& operator=(wxLongLong_t c);
     wxUniChar& operator=(wxULongLong_t c);
-    //@}
+    ///@}
 };
 
 

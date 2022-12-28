@@ -166,18 +166,18 @@ void wxMetafile::SetWindowsMappingMode(int mm)
 wxMetafileDCImpl::wxMetafileDCImpl(wxDC *owner, const wxString& file)
     : wxMSWDCImpl(owner)
 {
-    m_metaFile = NULL;
+    m_metaFile = nullptr;
     m_minX = 10000;
     m_minY = 10000;
     m_maxX = -10000;
     m_maxY = -10000;
-    //  m_title = NULL;
+    //  m_title = nullptr;
 
     if ( wxFileExists(file) )
         wxRemoveFile(file);
 
     if ( file.empty() )
-        m_hDC = (WXHDC) CreateMetaFile(NULL);
+        m_hDC = (WXHDC) CreateMetaFile(nullptr);
     else
         m_hDC = (WXHDC) CreateMetaFile(file);
 
@@ -201,12 +201,12 @@ wxMetafileDCImpl::wxMetafileDCImpl(wxDC *owner, const wxString& file,
     m_maxY = -10000;
     if ( !file.empty() && wxFileExists(file) )
         wxRemoveFile(file);
-    m_hDC = (WXHDC) CreateMetaFile(file.empty() ? NULL : wxMSW_CONV_LPCTSTR(file));
+    m_hDC = (WXHDC) CreateMetaFile(file.empty() ? nullptr : wxMSW_CONV_LPCTSTR(file));
 
     m_ok = true;
 
-    ::SetWindowOrgEx((HDC) m_hDC,xorg,yorg, NULL);
-    ::SetWindowExtEx((HDC) m_hDC,xext,yext, NULL);
+    ::SetWindowOrgEx((HDC) m_hDC,xorg,yorg, nullptr);
+    ::SetWindowExtEx((HDC) m_hDC,xext,yext, nullptr);
 
     // Actual Windows mapping mode, for future reference.
     m_windowsMappingMode = MM_ANISOTROPIC;
@@ -268,7 +268,7 @@ wxMetafile *wxMetafileDCImpl::Close()
         wx_mf->SetWindowsMappingMode(m_windowsMappingMode);
         return wx_mf;
     }
-    return NULL;
+    return nullptr;
 }
 
 void wxMetafileDCImpl::SetMapMode(wxMappingMode mode)
@@ -480,7 +480,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
     // what DC the picture will be rendered to, use the default display one
     PixelToHIMETRIC(&mfpict->xExt, &mfpict->yExt);
 
-    mfpict->hMF  = CopyMetaFile((HMETAFILE)mf.GetHMETAFILE(), NULL);
+    mfpict->hMF  = CopyMetaFile((HMETAFILE)mf.GetHMETAFILE(), nullptr);
 
     return true;
 }

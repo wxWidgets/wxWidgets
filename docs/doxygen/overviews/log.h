@@ -48,7 +48,7 @@ of arguments or a variable argument list pointer. Here are all of them:
     message. The second form of this function takes the error code explicitly
     as the first argument.
 @li wxLogDebug() is @b the right function for debug output. It only does anything
-    at all in the debug mode (when the preprocessor symbol @c __WXDEBUG__ is
+    at all in the debug mode (when the preprocessor symbol @c \__WXDEBUG__ is
     defined) and expands to nothing in release mode (otherwise).
     Note that under Windows, you must either run the program under debugger or
     use a 3rd party program such as DebugView

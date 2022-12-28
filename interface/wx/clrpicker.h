@@ -45,7 +45,7 @@ wxEventType wxEVT_COLOURPICKER_DIALOG_CANCELLED;
     @event{EVT_COLOURPICKER_CHANGED(id, func)}
            The user changed the colour selected in the control either using the
            button or using text control (see @c wxCLRP_USE_TEXTCTRL; note that
-           in this case the event is fired only if the user’s input is valid,
+           in this case the event is fired only if the user's input is valid,
            i.e. recognizable). When using a popup dialog for changing the
            colour, this event is sent only when the changes in the dialog are
            accepted by the user, unlike @c EVT_COLOURPICKER_CURRENT_CHANGED.
@@ -88,7 +88,7 @@ public:
         Creates a colour picker with the given arguments.
 
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param colour
@@ -120,13 +120,13 @@ public:
     */
     wxColour GetColour() const;
 
-    //@{
+    ///@{
     /**
         Sets the currently selected colour. See wxColour::Set().
     */
     void SetColour(const wxColour& col);
     void SetColour(const wxString& colname);
-    //@}
+    ///@}
 };
 
 

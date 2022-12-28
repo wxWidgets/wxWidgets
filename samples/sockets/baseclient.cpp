@@ -27,7 +27,7 @@
 #include "wx/thread.h"
 
 const wxEventType wxEVT_WORKER = wxNewEventType();
-#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) nullptr ),
 
 const int timeout_val = 1000;
 
@@ -52,7 +52,7 @@ public:
     void setFailed() { m_isFailed = true; }
     bool isFailed() const { return m_isFailed; }
 
-    virtual wxEvent* Clone() const wxOVERRIDE
+    virtual wxEvent* Clone() const override
     {
         return new WorkerEvent(*this);
     }
@@ -94,11 +94,11 @@ private:
     wxString m_host;
     long m_stressWorkers;
 
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnRun() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
-    void OnInitCmdLine(wxCmdLineParser& pParser) wxOVERRIDE;
-    bool OnCmdLineParsed(wxCmdLineParser& pParser) wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnRun() override;
+    virtual int OnExit() override;
+    void OnInitCmdLine(wxCmdLineParser& pParser) override;
+    bool OnCmdLineParsed(wxCmdLineParser& pParser) override;
     void OnWorkerEvent(WorkerEvent& pEvent);
     void OnTimerEvent(wxTimerEvent& pEvent);
 
@@ -127,7 +127,7 @@ class ThreadWorker : public wxThread
 {
 public:
     ThreadWorker(const wxString& p_host, char* p_buf, int p_size);
-    virtual ExitCode Entry() wxOVERRIDE;
+    virtual ExitCode Entry() override;
 private:
     wxString m_host;
     wxSocketClient* m_clientSocket;
@@ -722,7 +722,7 @@ wxThread::ExitCode ThreadWorker::Entry()
     }
     m_clientSocket->Close();
     m_clientSocket->Destroy();
-    m_clientSocket = NULL;
+    m_clientSocket = nullptr;
     delete [] m_outbuf;
     delete [] m_inbuf;
     if (!failed)

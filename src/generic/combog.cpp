@@ -450,7 +450,7 @@ bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 #if defined(__WXOSX__)
 wxTextWidgetImpl * wxGenericComboCtrl::GetTextPeer() const
 {
-    return m_text ? m_text->GetTextPeer() : NULL;
+    return m_text ? m_text->GetTextPeer() : nullptr;
 }
 #endif
 

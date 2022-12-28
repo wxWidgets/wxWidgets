@@ -83,12 +83,12 @@ class ListboxWidgetsPage : public ItemContainerWidgetsPage
 public:
     ListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_lbox; }
-    virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_lbox; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateLbox(); }
+    virtual wxWindow *GetWidget() const override { return m_lbox; }
+    virtual wxItemContainer* GetContainer() const override { return m_lbox; }
+    virtual void RecreateWidget() override { CreateLbox(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -128,7 +128,7 @@ protected:
 
     // read the value of a listbox item index from the given control, return
     // false if it's invalid
-    bool GetValidIndexFromText(const wxTextCtrl *text, int *n = NULL) const;
+    bool GetValidIndexFromText(const wxTextCtrl *text, int *n = nullptr) const;
 
 
     // listbox parameters
@@ -250,16 +250,16 @@ ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
                   : ItemContainerWidgetsPage(book, imaglist, listbox_xpm)
 {
     // init everything
-    m_radioSelMode = (wxRadioBox *)NULL;
-    m_radioListType = (wxRadioBox*)NULL;
+    m_radioSelMode = nullptr;
+    m_radioListType = nullptr;
 
     m_chkVScroll =
     m_chkHScroll =
     m_chkSort =
-    m_chkOwnerDraw = (wxCheckBox *)NULL;
+    m_chkOwnerDraw = nullptr;
 
-    m_lbox = NULL;
-    m_sizerLbox = (wxSizer *)NULL;
+    m_lbox = nullptr;
+    m_sizerLbox = nullptr;
 
 }
 
@@ -391,7 +391,7 @@ void ListboxWidgetsPage::CreateContent()
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
     m_lbox = new wxListBox(this, ListboxPage_Listbox,
                            wxDefaultPosition, wxDefaultSize,
-                           0, NULL,
+                           0, nullptr,
                            wxLB_HSCROLL);
     sizerRight->Add(m_lbox, 1, wxGROW | wxALL, 5);
     sizerRight->SetMinSize(150, 0);

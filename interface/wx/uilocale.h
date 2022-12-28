@@ -116,9 +116,10 @@ public:
 
         In the simplest case, this can be used as following:
         @code
-            const wxUILocale loc(wxLocaleIdent("fr"));
+            const wxUILocale loc(wxLocaleIdent().Language("fr"));
         @endcode
-        see wxLocaleIdent description for more details.
+        see wxLocaleIdent description for more details, including other ways of
+        specifying the locale.
 
         If @a localeId is not recognized or not supported, default ("C") locale
         is used instead. Additionally, if @a localeId is empty (see
@@ -217,7 +218,6 @@ public:
 
     /**
         Adds custom, user-defined language to the database of known languages.
-        This database is used in conjunction with the first form of Init().
     */
     static void AddLanguage(const wxLanguageInfo& info);
 
@@ -270,8 +270,8 @@ public:
     static wxString GetLanguageName(int lang);
 
     /**
-        Returns canonical name (see GetCanonicalName()) of the given language
-        or empty string if this language is unknown.
+        Returns canonical name of the given language or empty string if this
+        language is unknown.
 
         See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
     */

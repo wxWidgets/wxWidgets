@@ -91,7 +91,7 @@ public:
 protected:
     virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
         const wxArtClient& client,
-        const wxSize& size) wxOVERRIDE;
+        const wxSize& size) override;
 
 private:
 
@@ -131,7 +131,7 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
     {
         // Tango does have bookmark-new but no matching bookmark-delete and
         // using mismatching icons would be ugly so we don't provide this one
-        // neither, we should add both of them if Tango ever adds the other one.
+        // either, we should add both of them if Tango ever adds the other one.
         //{ wxART_ADD_BOOKMARK,       BITMAP_DATA(bookmark_new)},
         //{ wxART_DEL_BOOKMARK,       BITMAP_DATA() },
 
@@ -196,6 +196,9 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         { wxART_REFRESH,            BITMAP_DATA(view_refresh)               },
         { wxART_STOP,               BITMAP_DATA(process_stop)               },
 
+        // Note: when adding elements here, try to also add the corresponding
+        //       icon to src/gtk/artgtk.cpp as the GTK art provider is supposed
+        //       to have all the icons the Tango provider has, see configure.in.
     };
 
     #undef BITMAP_DATA

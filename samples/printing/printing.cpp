@@ -49,10 +49,10 @@
 #endif
 
 // Global print data, to remember settings during the session
-wxPrintData *g_printData = NULL;
+wxPrintData *g_printData = nullptr;
 
 // Global page setup data
-wxPageSetupDialogData* g_pageSetupData = NULL;
+wxPageSetupDialogData* g_pageSetupData = nullptr;
 
 
 
@@ -159,11 +159,9 @@ void MyApp::Draw(wxDC&dc)
 
     dc.DrawRotatedText( "This\nis\na multi-line\ntext", dc.FromDIP(170), dc.FromDIP(100), -m_angle/1.5);
 
-#if wxUSE_UNICODE
     const char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
     dc.DrawText( tmp, dc.FromDIP(10), dc.FromDIP(200) );
-#endif
 
     wxPoint points[5];
     points[0].x = 0;
@@ -275,9 +273,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title)
-        : wxFrame(NULL, wxID_ANY, title)
+        : wxFrame(nullptr, wxID_ANY, title)
 {
-    m_canvas = NULL;
+    m_canvas = nullptr;
     m_previewModality = wxPreviewFrame_AppModal;
 
 #if wxUSE_STATUSBAR
@@ -390,10 +388,9 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    wxPreviewFrame *frame =
-        new wxPreviewFrame(preview, this, "Demo Print Preview", wxDefaultPosition, FromDIP(wxSize(600, 700)));
-    frame->Centre(wxBOTH);
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview");
     frame->InitializeWithModality(m_previewModality);
+    frame->Centre(wxBOTH);
     frame->Show();
 }
 
@@ -425,10 +422,9 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
-    wxPreviewFrame *frame =
-        new wxPreviewFrame(preview, this, "Demo Print Preview", wxDefaultPosition, FromDIP(wxSize(600, 700)));
-    frame->Centre(wxBOTH);
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview");
     frame->Initialize();
+    frame->Centre(wxBOTH);
     frame->Show();
 }
 

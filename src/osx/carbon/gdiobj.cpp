@@ -27,10 +27,10 @@ wxFORCE_LINK_THIS_MODULE(gdiobj)
 class wxStockGDIMac: public wxStockGDI, public wxModule
 {
 public:
-    virtual const wxFont* GetFont(Item item) wxOVERRIDE;
+    virtual const wxFont* GetFont(Item item) override;
 
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
 private:
     typedef wxStockGDI super;
@@ -53,7 +53,7 @@ void wxStockGDIMac::OnExit()
 const wxFont* wxStockGDIMac::GetFont(Item item)
 {
     wxFont* font = static_cast<wxFont*>(ms_stockObject[item]);
-    if (font == NULL)
+    if (font == nullptr)
     {
         switch (item)
         {

@@ -59,7 +59,7 @@ class WXDLLIMPEXP_ADV wxFileTipProvider : public wxTipProvider
 public:
     wxFileTipProvider(const wxString& filename, size_t currentTip);
 
-    virtual wxString GetTip() wxOVERRIDE;
+    virtual wxString GetTip() override;
 
 private:
     wxTextFile m_textfile;
@@ -75,7 +75,7 @@ class WXDLLIMPEXP_ADV wxRegTipProvider : public wxTipProvider
 public:
     wxRegTipProvider(const wxString& keyname);
 
-    virtual wxString GetTip() wxOVERRIDE;
+    virtual wxString GetTip() override;
 };
 
 // Empty implementation for now to keep the linker happy

@@ -91,11 +91,11 @@ public:
         m_lineBreak = lineBreak;
     }
 
-    virtual void SetLabel(const wxString& title, wxFontEncoding encoding) wxOVERRIDE
+    virtual void SetLabel(const wxString& title) override
     {
         wxMacAutoreleasePool autoreleasepool;
 
-        wxCFStringRef text( title , encoding );
+        wxCFStringRef text( title );
 
         NSMutableAttributedString *
             attrstring = [[NSMutableAttributedString alloc] initWithString:text.AsNSString()];
@@ -104,7 +104,7 @@ public:
     }
 
 #if wxUSE_MARKUP
-    virtual void SetLabelMarkup( const wxString& markup) wxOVERRIDE
+    virtual void SetLabelMarkup( const wxString& markup) override
     {
         wxMarkupToAttrString toAttr(GetWXPeer()->GetFont(), markup);
 

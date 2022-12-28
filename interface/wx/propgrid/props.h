@@ -47,7 +47,7 @@ class wxStringProperty : public wxPGProperty
 public:
     wxStringProperty( const wxString& label = wxPG_LABEL,
                       const wxString& name = wxPG_LABEL,
-                      const wxString& value = wxEmptyString );
+                      const wxString& value = wxString() );
     virtual ~wxStringProperty();
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
@@ -349,7 +349,7 @@ public:
 
 
 // If set, then selection of choices is static and should not be
-// changed (i.e. returns NULL in GetPropertyChoices).
+// changed (i.e. returns @NULL in GetPropertyChoices).
 #define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
 
 /** @class wxEnumProperty
@@ -368,8 +368,8 @@ class wxEnumProperty : public wxPGProperty
 public:
     wxEnumProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
-                    const wxChar* const* labels = NULL,
-                    const long* values = NULL,
+                    const wxChar* const* labels = nullptr,
+                    const long* values = nullptr,
                     int value = 0 );
 
     wxEnumProperty( const wxString& label,
@@ -458,12 +458,12 @@ public:
                         const wxString& name = wxPG_LABEL,
                         const wxArrayString& labels = wxArrayString(),
                         const wxArrayInt& values = wxArrayInt(),
-                        const wxString& value = wxEmptyString );
+                        const wxString& value = wxString() );
 
     wxEditEnumProperty( const wxString& label,
                         const wxString& name,
                         wxPGChoices& choices,
-                        const wxString& value = wxEmptyString );
+                        const wxString& value = wxString() );
 
     // Special constructor for caching choices (used by derived class)
     wxEditEnumProperty( const wxString& label,
@@ -496,7 +496,7 @@ public:
     wxFlagsProperty( const wxString& label,
                      const wxString& name,
                      const wxChar* const* labels,
-                     const long* values = NULL,
+                     const long* values = nullptr,
                      long value = 0 );
 
     wxFlagsProperty( const wxString& label,
@@ -620,7 +620,7 @@ public:
 
     wxFileProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
-                    const wxString& value = wxEmptyString );
+                    const wxString& value = wxString() );
     virtual ~wxFileProperty ();
 
     virtual void OnSetValue();
@@ -664,7 +664,7 @@ public:
 
     wxLongStringProperty( const wxString& label = wxPG_LABEL,
                           const wxString& name = wxPG_LABEL,
-                          const wxString& value = wxEmptyString );
+                          const wxString& value = wxString() );
     virtual ~wxLongStringProperty();
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
@@ -690,7 +690,7 @@ class wxDirProperty : public wxEditorDialogProperty
 public:
     wxDirProperty( const wxString& label = wxPG_LABEL,
                    const wxString& name = wxPG_LABEL,
-                   const wxString& value = wxEmptyString );
+                   const wxString& value = wxString() );
     virtual ~wxDirProperty();
 
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const;

@@ -32,7 +32,7 @@ wxIMPLEMENT_APP(BombsApp);
 // Called to initialize the program
 bool BombsApp::OnInit()
 {
-    srand((unsigned) time(NULL));
+    srand((unsigned) time(nullptr));
 
     m_frame = new BombsFrame(&m_game);
 
@@ -52,7 +52,7 @@ wxBEGIN_EVENT_TABLE(BombsFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 BombsFrame::BombsFrame(BombsGame *game)
-    : wxFrame(NULL, wxID_ANY, wxT("wxBombs"), wxDefaultPosition,
+    : wxFrame(nullptr, wxID_ANY, wxT("wxBombs"), wxDefaultPosition,
         wxSize(300, 300), wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX)
 {
     m_game = game;
@@ -183,9 +183,9 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
     if(m_easyCorner)
-        msg = wxT("enable");
-    else
         msg = wxT("disable");
+    else
+        msg = wxT("enable");
 
     msg = wxT("Do you really want to ") + msg + wxT(" having\ntop left corner always empty for easier start?");
 
@@ -196,7 +196,12 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
                this
              );
 
-    if(ok!=wxYES)return;
+    if(ok!=wxYES)
+    {
+        // Undo the automatic change to the menu bar, keeping it in sync with the actual option value.
+        GetMenuBar()->Check(bombsID_EASYCORNER, m_easyCorner);
+        return;
+    }
 
     m_easyCorner = !m_easyCorner;
 
@@ -243,7 +248,7 @@ BombsCanvas::BombsCanvas(wxFrame *parent, BombsGame *game)
     m_cellWidth = (sx+3+X_UNIT)/X_UNIT;
     m_cellHeight = (sy+3+Y_UNIT)/Y_UNIT;
     dc.SetMapMode(wxMM_TEXT);
-    m_bmp = NULL;
+    m_bmp = nullptr;
 }
 
 BombsCanvas::~BombsCanvas()
@@ -251,7 +256,7 @@ BombsCanvas::~BombsCanvas()
     if (m_bmp)
     {
         delete m_bmp;
-        m_bmp = NULL;
+        m_bmp = nullptr;
     }
 }
 
@@ -297,7 +302,7 @@ void BombsCanvas::UpdateGridSize()
     if (m_bmp)
     {
         delete m_bmp;
-        m_bmp = NULL;
+        m_bmp = nullptr;
     }
     SetSize(GetGridSizeInPixels());
     Refresh();

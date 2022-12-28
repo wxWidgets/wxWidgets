@@ -67,7 +67,7 @@ public :
     virtual void        SetControlSize( wxWindowVariant variant );
     virtual double      GetContentScaleFactor() const ;
 
-    virtual void        SetNeedsDisplay( const wxRect* where = NULL );
+    virtual void        SetNeedsDisplay( const wxRect* where = nullptr );
     virtual bool        GetNeedsDisplay() const;
 
     virtual bool        CanFocus() const;
@@ -80,7 +80,7 @@ public :
 
     void                SetDefaultButton( bool isDefault );
     void                PerformClick();
-    virtual void        SetLabel(const wxString& title, wxFontEncoding encoding);
+    virtual void        SetLabel(const wxString& title);
 
     void                SetCursor( const wxCursor & cursor );
     void                CaptureMouse();
@@ -109,7 +109,7 @@ public :
 
     void                SetFont(const wxFont & font);
 
-    void                InstallEventHandler( WXWidget control = NULL );
+    void                InstallEventHandler( WXWidget control = nullptr );
     bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }
 
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
@@ -163,7 +163,7 @@ public :
     void GetContentArea( int &left , int &top , int &width , int &height ) const;
     bool SetShape(const wxRegion& region);
 
-    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
+    virtual void SetTitle( const wxString& title ) ;
 
     // Title bar buttons don't exist in iOS.
     virtual bool EnableCloseButton(bool WXUNUSED(enable)) { return false; }
@@ -184,9 +184,9 @@ public :
 
     virtual bool ShowFullScreen(bool show, long style);
 
-    virtual wxContentProtection GetContentProtection() const wxOVERRIDE
+    virtual wxContentProtection GetContentProtection() const override
         {  return wxCONTENT_PROTECTION_NONE; }
-    virtual bool SetContentProtection(wxContentProtection contentProtection) wxOVERRIDE
+    virtual bool SetContentProtection(wxContentProtection contentProtection) override
         { return false; }
 
     virtual void RequestUserAttention(int flags);

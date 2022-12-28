@@ -11,8 +11,9 @@
 
 @tableofcontents
 
-The wxMBConv classes in wxWidgets enable an Unicode-aware application to easily
-convert between Unicode and the variety of 8-bit encoding systems still in use.
+The wxMBConv classes in wxWidgets enable the application to easily convert
+between Unicode and the variety of 8-bit encoding systems if you still need to
+use them.
 
 @see @ref group_class_conv
 
@@ -20,41 +21,20 @@ convert between Unicode and the variety of 8-bit encoding systems still in use.
 
 @section overview_mbconv_need Background: The Need for Conversion
 
-As programs have become more and more globalized, and users are exchanging documents
-across country boundaries as never before, applications need to take into account
-the different letters and symbols in use around the world. It is no longer enough
-to just depend on the default byte-sized character sets that computers have
-traditionally used.
+wxWidgets always uses Unicode internally, for many good reasons already
+abundantly described everywhere. By default is uses UTF-16 under Microsoft
+Windows and UTF-32 under all the other systems, but a special build option can
+be enabled to use UTF-8 for the internal representation.
 
-The Unicode standard is the solution to most tasks involving processing and exchanging
-text in arbitrary languages. Unicode is able to contain the complete set of characters
-used in all languages of the world in one unified global coding system.
+Unless this option is enabled, the most common conversion operation is
+converting between this internal representation and UTF-8. This can be done
+using wxString::utf8_str() and wxString::FromUTF8() functions and, in many
+cases, they are the only conversion-related functions that you will need and
+you can stop reading this document now.
 
-Unicode text can be represented in various encodings, one of the most commonly used
-being UTF-8. UTF-8 along with UTF-7 are so-called "compatibility encodings", which
-exist to facilitate the migration from old 8-bit encodings to Unicode. Despite the
-wide adoption of Unicode, a number of legacy systems out there still depends on the
-old 8-bit encodings.
-
-Sending Unicode data from one Unicode-aware system to another, e.g. through a network
-connection or regular files, is typically done by encoding the data into a multibyte
-encoding; usually UTF-8.
-
-
-@section overview_mbconv_string Background: The wxString Class
-
-@todo rewrite this overview; it's not up2date with wxString changes
-
-If you have compiled wxWidgets in Unicode mode, the wxChar type will become
-identical to wchar_t rather than char, and a wxString stores wxChars. Hence,
-all wxString manipulation in your application will then operate on Unicode
-strings, and almost as easily as working with ordinary char strings (you just
-need to remember to use the wxT() macro to encapsulate any string literals).
-
-But often, your environment doesn't want Unicode strings. You could be sending
-data over a network, or processing a text file for some other application. You
-need a way to quickly convert your easily-handled Unicode data to and from a
-traditional 8-bit encoding. And this is what the wxMBConv classes do.
+But if you need to support conversions to other, legacy, encodings, such as
+Shift-JIS or KOI8-R, you will need to use the conversion classes directly, in
+which case please read on.
 
 
 @section overview_mbconv_classes wxMBConv Classes
@@ -64,7 +44,11 @@ implements standard libc locale conversion). Derived classes include
 wxMBConvLibc, several different wxMBConvUTFxxx classes, and wxCSConv, which
 implement different kinds of conversions. You can also derive your own class
 for your own custom encoding and use it, should you need it. All you need to do
-is override the MB2WC and WC2MB methods.
+is override the `ToWChar()` and `FromWChar()` methods. Note that these methods
+are not used when using these classes, however: even if this would be possible,
+it is more convenient to use the helper `cMB2WC()` and `cWC2MB()` ones wrapping
+them (they read as "convert multi-byte to wide-character" and vice versa,
+respectively).
 
 
 @section overview_mbconv_objects wxMBConv Objects
@@ -73,9 +57,8 @@ Several of the wxWidgets-provided wxMBConv classes have predefined instances
 (wxConvLibc, wxConvFileName, wxConvUTF7, wxConvUTF8, wxConvLocal). You can use
 these predefined objects directly, or you can instantiate your own objects.
 
-A variable, wxConvCurrent, points to the conversion object that the user
-interface is supposed to use, in the case that the user interface is not
-Unicode-based (like with GTK+ 1.2). By default, it points to wxConvLibc or
+A variable, wxConvCurrent, points to the conversion object that is used if the
+conversion is not specified. By default, it points to wxConvLibc or
 wxConvLocal, depending on which works best on the current platform.
 
 
@@ -110,6 +93,9 @@ Example 2: Input in UTF-8 encoding.
 wxString str(input_data, wxConvUTF8);
 @endcode
 
+Note that the same task can be accomplished more clearly by using
+wxString::FromUTF8().
+
 Example 3: Input in KOI8-R. Construction of wxCSConv instance on the fly.
 
 @code
@@ -120,6 +106,11 @@ Example 4: Printing a wxString to stdout in UTF-8 encoding.
 
 @code
 puts(str.mb_str(wxConvUTF8));
+@endcode
+
+Note that the same can be done more easily by using
+@code
+puts(str.utf8_str());
 @endcode
 
 Example 5: Printing a wxString to stdout in custom encoding. Using
@@ -138,47 +129,21 @@ vararg context (like with printf).
 @section overview_mbconv_buffers Converting Buffers
 
 If you have specialized needs, or just don't want to use wxString, you can also
-use the conversion methods of the conversion objects directly. This can even be
-useful if you need to do conversion in a non-Unicode build of wxWidgets;
-converting a string from UTF-8 to the current encoding should be possible by
-doing this:
+use the conversion methods of the conversion objects directly, e.g. you could
+print a wide character buffer to a non-Unicode stdout:
 
 @code
-wxString str(wxConvUTF8.cMB2WC(input_data), *wxConvCurrent);
-@endcode
-
-Here, cMB2WC of the UTF8 object returns a wxWCharBuffer containing a Unicode
-string. The wxString constructor then converts it back to an 8-bit character
-set using the passed conversion object, *wxConvCurrent. (In a Unicode build of
-wxWidgets, the constructor ignores the passed conversion object and retains the
-Unicode data.)
-
-This could also be done by first making a wxString of the original data:
-
-@code
-wxString input_str(input_data);
-wxString str(input_str.wc_str(wxConvUTF8), *wxConvCurrent);
-@endcode
-
-To print a wxChar buffer to a non-Unicode stdout:
-
-@code
-printf("Data: %s\n", (const char*) wxConvCurrent->cWX2MB(unicode_data));
+printf("Data: %s\n", (const char*) wxConvCurrent->cWC2MB(unicode_data));
 @endcode
 
 If you need to do more complex processing on the converted data, you may want
 to store the temporary buffer in a local variable:
 
 @code
-const wxWX2MBbuf tmp_buf = wxConvCurrent->cWX2MB(unicode_data);
+const wxCharBuffer tmp_buf = wxConvCurrent->cWC2MB(unicode_data);
 const char *tmp_str = (const char*) tmp_buf;
 printf("Data: %s\n", tmp_str);
 process_data(tmp_str);
 @endcode
-
-If a conversion had taken place in cWX2MB (i.e. in a Unicode build), the buffer
-will be deallocated as soon as tmp_buf goes out of scope. The macro wxWX2MBbuf
-reflects the correct return value of cWX2MB (either char* or wxCharBuffer),
-except for the const.
 
 */

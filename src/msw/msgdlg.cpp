@@ -26,6 +26,7 @@
 #include "wx/ptr_scpd.h"
 #include "wx/dynlib.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
 #include "wx/modalhook.h"
@@ -86,10 +87,7 @@ wxMessageDialogMap& HookMap()
 void ScreenRectToClient(HWND hwnd, RECT& rc)
 {
     // map from desktop (i.e. screen) coordinates to ones of this window
-    //
-    // notice that a RECT is laid out as 2 consecutive POINTs so the cast is
-    // valid
-    ::MapWindowPoints(HWND_DESKTOP, hwnd, reinterpret_cast<POINT *>(&rc), 2);
+    wxMapWindowPoints(HWND_DESKTOP, hwnd, &rc);
 }
 
 // set window position to the given rect
@@ -131,7 +129,7 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
     {
         // we won't need this hook any longer
         ::UnhookWindowsHookEx(hhook);
-        wnd->m_hook = NULL;
+        wnd->m_hook = nullptr;
         HookMap().erase(tid);
 
         TempHWNDSetter set(wnd, (WXHWND)wParam);
@@ -169,9 +167,9 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // find the static control to replace: normally there are two of them, the
     // icon and the text itself so search for all of them and ignore the icon
     // ones
-    HWND hwndStatic = ::FindWindowEx(GetHwnd(), NULL, wxT("STATIC"), NULL);
+    HWND hwndStatic = ::FindWindowEx(GetHwnd(), nullptr, wxT("STATIC"), nullptr);
     if ( ::GetWindowLong(hwndStatic, GWL_STYLE) & SS_ICON )
-        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, wxT("STATIC"), NULL);
+        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, wxT("STATIC"), nullptr);
 
     if ( !hwndStatic )
     {
@@ -236,9 +234,9 @@ void wxMessageDialog::ReplaceStaticWithEdit()
                         rc.left, rc.top,
                         rc.right - rc.left, rc.bottom - rc.top,
                         GetHwnd(),
-                        NULL,
+                        nullptr,
                         wxGetInstance(),
-                        NULL
+                        nullptr
                       );
 
     if ( !hwndEdit )
@@ -415,7 +413,7 @@ int wxMessageDialog::ShowMessageBox()
 
     // use the top level window as parent if none specified
     m_parent = GetParentForModalDialog();
-    HWND hWnd = m_parent ? GetHwndOf(m_parent) : NULL;
+    HWND hWnd = m_parent ? GetHwndOf(m_parent) : nullptr;
 
 #if wxUSE_INTL
     // native message box always uses the current user locale but the program
@@ -521,7 +519,7 @@ int wxMessageDialog::ShowMessageBox()
     // control with an edit one)
     const DWORD tid = ::GetCurrentThreadId();
     m_hook = ::SetWindowsHookEx(WH_CBT,
-                                &wxMessageDialog::HookFunction, NULL, tid);
+                                &wxMessageDialog::HookFunction, nullptr, tid);
     HookMap()[tid] = this;
 
     // do show the dialog
@@ -540,20 +538,16 @@ int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxWindowDisabler disableOthers(this, GetParent());
+    wxWindowDisabler disableOthers(this, GetParentForModalDialog());
 
-#ifdef wxHAS_MSW_TASKDIALOG
-    if ( HasNativeTaskDialog() )
+    if ( TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc() )
     {
-        TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
-        wxCHECK_MSG( taskDialogIndirect, wxID_CANCEL, wxS("no task dialog?") );
-
         WinStruct<TASKDIALOGCONFIG> tdc;
         wxMSWTaskDialogConfig wxTdc( *this );
         wxTdc.MSWCommonTaskDialogInit( tdc );
 
         int msAns;
-        HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, NULL );
+        HRESULT hr = taskDialogIndirect( &tdc, &msAns, nullptr, nullptr );
         if ( FAILED(hr) )
         {
             wxLogApiError( "TaskDialogIndirect", hr );
@@ -572,7 +566,6 @@ int wxMessageDialog::ShowModal()
 
         return MSWTranslateReturnCode( msAns );
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     return ShowMessageBox();
 }
@@ -591,13 +584,11 @@ long wxMessageDialog::GetEffectiveIcon() const
 
 void wxMessageDialog::DoCentre(int dir)
 {
-#ifdef wxHAS_MSW_TASKDIALOG
     // Task dialog is always centered on its parent window and trying to center
     // it manually doesn't work because its HWND is not created yet so don't
     // even try as this would only result in (debug) error messages.
     if ( HasNativeTaskDialog() )
         return;
-#endif // wxHAS_MSW_TASKDIALOG
 
     wxMessageDialogBase::DoCentre(dir);
 }
@@ -606,7 +597,23 @@ void wxMessageDialog::DoCentre(int dir)
 // Helpers of the wxMSWMessageDialog namespace
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAS_MSW_TASKDIALOG
+namespace
+{
+
+HRESULT CALLBACK
+wxTaskDialogCallback(HWND hwnd, UINT msg, WPARAM, LPARAM, LONG_PTR)
+{
+    switch ( msg )
+    {
+        case TDN_DIALOG_CONSTRUCTED:
+            wxMSWDarkMode::EnableForTLW(hwnd);
+            break;
+    }
+
+    return S_OK;
+}
+
+} // anonymous namespace
 
 wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
                      : buttons(new TASKDIALOG_BUTTON[MAX_BUTTONS])
@@ -662,7 +669,7 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     tdc.pszWindowTitle = caption.t_str();
 
     // use the top level window as parent if none specified
-    tdc.hwndParent = parent ? GetHwndOf(parent) : NULL;
+    tdc.hwndParent = parent ? GetHwndOf(parent) : nullptr;
 
     if ( wxApp::MSWGetDefaultLayout(parent) == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;
@@ -756,6 +763,8 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
         AddTaskDialogButton(tdc, IDHELP, 0 /* not used */, btnHelpLabel);
     }
+
+    tdc.pfCallback = wxTaskDialogCallback;
 }
 
 void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
@@ -789,7 +798,7 @@ wxCRIT_SECT_DECLARE(gs_csTaskDialogIndirect);
 
 TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
 {
-    // Initialize the function pointer to an invalid value different from NULL
+    // Initialize the function pointer to an invalid value different from nullptr
     // to avoid reloading comctl32.dll and trying to resolve it every time
     // we're called if task dialog is not available (notice that this may
     // happen even under Vista+ if we don't use comctl32.dll v6).
@@ -808,19 +817,9 @@ TaskDialogIndirect_t wxMSWMessageDialog::GetTaskDialogIndirectFunc()
     return s_TaskDialogIndirect;
 }
 
-#endif // wxHAS_MSW_TASKDIALOG
-
 bool wxMSWMessageDialog::HasNativeTaskDialog()
 {
-#ifdef wxHAS_MSW_TASKDIALOG
-    if ( wxGetWinVersion() >= wxWinVersion_6 )
-    {
-        if ( wxMSWMessageDialog::GetTaskDialogIndirectFunc() )
-            return true;
-    }
-#endif // wxHAS_MSW_TASKDIALOG
-
-    return false;
+    return wxMSWMessageDialog::GetTaskDialogIndirectFunc() != nullptr;
 }
 
 int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)

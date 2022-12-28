@@ -91,7 +91,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int n = 0,
-                     const wxString choices[] = NULL,
+                     const wxString choices[] = nullptr,
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxBitmapComboBoxNameStr);
@@ -217,6 +217,6 @@ public:
     /**
         Sets the bitmap for the given item.
     */
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+    virtual void SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap);
 };
 

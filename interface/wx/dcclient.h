@@ -61,12 +61,14 @@ public:
 
     @note While wxClientDC may also be used for drawing on the client area of a
     window from outside an EVT_PAINT() handler in some ports, this does @em not
-    work on all platforms (neither wxOSX nor wxGTK with GTK 3 Wayland backend
-    support this, so drawing using wxClientDC simply doesn't have any effect
-    there) and the only portable way of drawing is via wxPaintDC. To redraw a
-    small part of the window, use wxWindow::RefreshRect() to invalidate just
-    this part and check wxWindow::GetUpdateRegion() in the paint event handler
-    to redraw this part only.
+    work on most of the platforms: neither wxOSX nor wxGTK with GTK 3 Wayland
+    backend support this at all, so drawing using wxClientDC simply doesn't
+    have any effect there, while wxMSW doesn't support using it for composited
+    windows, so wxWindow::MSWDisableComposited() must be called to allow it to
+    work. The only supported way of drawing on a window is via wxPaintDC. To
+    redraw a small part of the window, use wxWindow::RefreshRect() to
+    invalidate just this part and check wxWindow::GetUpdateRegion() in the
+    paint event handler to redraw this part only.
 
     wxClientDC objects should normally be constructed as temporary stack
     objects, i.e. don't store a wxClientDC object.

@@ -35,7 +35,7 @@ class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
     // ctor & dtor
-    wxDropTarget(wxDataObject *dataObject = NULL);
+    wxDropTarget(wxDataObject *dataObject = nullptr);
     virtual ~wxDropTarget();
 
     // normally called by wxWindow on window creation/destruction, but might be
@@ -44,8 +44,8 @@ public:
     void Revoke(WXHWND hwnd);
 
     // provide default implementation for base class pure virtuals
-    virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
-    virtual bool GetData() wxOVERRIDE;
+    virtual bool OnDrop(wxCoord x, wxCoord y) override;
+    virtual bool GetData() override;
 
     // Can only be called during OnXXX methods.
     wxDataFormat GetMatchingPair();

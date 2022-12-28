@@ -88,7 +88,7 @@ inline wxEventLoopSource::~wxEventLoopSource() { }
     #include "wx/unix/evtloopsrc.h"
 #endif // __UNIX__
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #include "wx/gtk/evtloopsrc.h"
 #endif
 

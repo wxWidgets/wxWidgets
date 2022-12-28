@@ -90,11 +90,8 @@
         <if cond="BUILD=='debug' and DEBUG_RUNTIME_LIBS=='default'">d</if>
         <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
     </set>
-    <set var="WXUNICODEFLAG">
-        <if cond="UNICODE=='1'">u</if>
-    </set>
     <set var="WX_U_D_SUFFIX">
-        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+        u$(WXDEBUGFLAG)
     </set>
     <set var="WXNAMESUFFIX">
         $(WX_U_D_SUFFIX)$(WX_LIB_FLAVOUR)
@@ -294,10 +291,6 @@
     <set var="NO_VC_CRTDBG">
         <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
         <if cond="FORMAT=='msvc' and BUILD=='release' and DEBUG_FLAG=='1'">__NO_VC_CRTDBG__</if>
-    </set>
-    <set var="UNICODE_DEFINE">
-        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
-        <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
     </set>
 
     <!-- fill for the specific case of the format/compiler -->
@@ -569,7 +562,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <define>$(EXCEPTIONS_DEFINE)</define>
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
-        <define>$(UNICODE_DEFINE)</define>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>
@@ -790,6 +782,42 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
               template="wx_3rdparty_includes_base,wx_dll_b,wx_3rdparty_dependencies_base"
               template_append="msvc_setup_h,wx_append_base_nomono">
         <define>wxUSE_GUI=0</define>
+    </template>
+
+    <!-- additional includes and defines for webview edge -->
+    <set var="webview_additional_include">
+        <if cond="TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/include</if>
+    </set>
+
+    <set var="webview_additional_include_wrl">
+        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">$(TOP_SRCDIR)include/wx/msw/wrl</if>
+    </set>
+
+    <set var="webview_additional_libdirs_arch">
+        <if cond="TARGET_CPU=='amd64'">x64</if>
+        <if cond="TARGET_CPU=='AMD64'">x64</if>
+        <if cond="TARGET_CPU=='arm64'">arm64</if>
+        <if cond="TARGET_CPU=='ARM64'">arm64</if>
+        <if cond="TARGET_CPU=='x64'">x64</if>
+        <if cond="TARGET_CPU=='X64'">x64</if>
+        <if cond="TARGET_CPU=='x86'">x86</if>
+        <if cond="TARGET_CPU=='X86'">x86</if>
+        <if cond="TARGET_CPU==''">x86</if>
+    </set>
+
+    <set var="webview_additional_libdirs">
+        <if cond="IS_MSVC=='1' and TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/$(webview_additional_libdirs_arch)</if>
+    </set>
+
+    <set var="webview_edge_pragma_warning">
+        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">-Wno-unknown-pragmas</if>
+    </set>
+
+    <template id="webview_additional">
+        <include>$(webview_additional_include_wrl)</include>
+        <include>$(webview_additional_include)</include>
+        <lib-path>$(webview_additional_libdirs)</lib-path>
+        <cxxflags>$(webview_edge_pragma_warning)</cxxflags>
     </template>
 
     <!-- =============================================================== -->

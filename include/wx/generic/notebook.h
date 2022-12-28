@@ -126,7 +126,7 @@ public:
 
   // Implementation
 
-  // wxNotebook on Motif uses a generic wxTabView to implement itself.
+  // Obsolete, don't use.
   wxTabView *GetTabView() const { return m_tabView; }
   void SetTabView(wxTabView *v) { m_tabView = v; }
 

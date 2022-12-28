@@ -39,11 +39,7 @@ using namespace std;
 
 struct wxObjectCodeReaderCallback::wxObjectCodeReaderCallbackInternal
 {
-#if wxUSE_UNICODE
     map<int,wstring> m_objectNames;
-#else
-    map<int,string> m_objectNames;
-#endif
 
     void SetObjectName(int objectID, const wxString &name )
     {

@@ -341,17 +341,9 @@ typedef wxUint32 wxDword;
 #endif
 
 /*
-    We can't rely on Windows _W64 being defined as windows.h may not be
-    included so define our own equivalent: this should be used with types
-    like WXLPARAM or WXWPARAM which are 64 bit under Win64 to avoid warnings
-    each time we cast it to a pointer or a handle (which results in hundreds
-    of warnings as Win32 API often passes pointers in them)
+    This macro is obsolete and defined only for compatibility, don't use.
  */
-#if defined(__VISUALC__) && (_MSC_VER < 1800)
-    #define wxW64 __w64
-#else
-    #define wxW64
-#endif
+#define wxW64
 
 /*
    Define signed and unsigned integral types big enough to contain all of long,
@@ -371,7 +363,7 @@ typedef wxUint32 wxDword;
        to wxIntPtr (which we do often as this is what it is defined for) in 32
        bit build with MSVC.
      */
-    typedef wxW64 ssize_t wxIntPtr;
+    typedef ssize_t wxIntPtr;
     typedef size_t wxUIntPtr;
 #else
     /*

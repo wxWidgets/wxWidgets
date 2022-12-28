@@ -525,14 +525,14 @@ public:
         @return The full temporary filepath, or an empty string on error.
     */
     static wxString CreateTempFileName(const wxString& prefix,
-                                       wxFile* fileTemp = NULL);
+                                       wxFile* fileTemp = nullptr);
 
     /**
         This is the same as CreateTempFileName(const wxString &prefix, wxFile *fileTemp)
         but takes a wxFFile parameter instead of wxFile.
     */
     static wxString CreateTempFileName(const wxString& prefix,
-                                       wxFFile* fileTemp = NULL);
+                                       wxFFile* fileTemp = nullptr);
 
 
     /**
@@ -697,7 +697,7 @@ public:
     */
     static wxString GetHomeDir();
 
-    //@{
+    ///@{
     /**
         Returns the representation of the file size in a human-readable form.
 
@@ -731,7 +731,7 @@ public:
                          const wxString& nullsize = _("Not available"),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
-    //@}
+    ///@}
 
     /**
         Return the long form of the path (returns identity on non-Windows platforms).
@@ -1399,7 +1399,7 @@ public:
     */
     bool ShouldFollowLink() const;
 
-    //@{
+    ///@{
     /**
         This function splits a full file name into components: the volume (with the
         first version) path (including the volume in the second version), the base name
@@ -1423,7 +1423,7 @@ public:
                           wxString* path,
                           wxString* name,
                           wxString* ext,
-                          bool* hasExt = NULL,
+                          bool* hasExt = nullptr,
                           wxPathFormat format = wxPATH_NATIVE);
     static void SplitPath(const wxString& fullpath,
                           wxString* volume,
@@ -1436,7 +1436,7 @@ public:
                           wxString* name,
                           wxString* ext,
                           wxPathFormat format = wxPATH_NATIVE);
-    //@}
+    ///@}
 
     /**
         Splits the given @a fullpath into the volume part (which may be empty) and

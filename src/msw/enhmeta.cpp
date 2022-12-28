@@ -54,9 +54,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxEnhMetaFile, wxObject);
 // private functions
 // ----------------------------------------------------------------------------
 
-// we must pass NULL if the string is empty to metafile functions
+// we must pass nullptr if the string is empty to metafile functions
 static inline const wxChar *GetMetaFileName(const wxString& fn)
-    { return !fn ? NULL : wxMSW_CONV_LPCTSTR(fn); }
+    { return !fn ? nullptr : wxMSW_CONV_LPCTSTR(fn); }
 
 // ============================================================================
 // implementation
@@ -70,7 +70,7 @@ wxGDIRefData *wxEnhMetaFile::CreateGDIRefData() const
 {
     wxFAIL_MSG( wxT("must be implemented if used") );
 
-    return NULL;
+    return nullptr;
 }
 
 wxGDIRefData *
@@ -78,7 +78,7 @@ wxEnhMetaFile::CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
 {
     wxFAIL_MSG( wxT("must be implemented if used") );
 
-    return NULL;
+    return nullptr;
 }
 
 void wxEnhMetaFile::Init()
@@ -224,17 +224,17 @@ public:
                          const wxString& description );
     virtual ~wxEnhMetaFileDCImpl();
 
-    wxSize FromDIP(const wxSize& sz) const wxOVERRIDE
+    wxSize FromDIP(const wxSize& sz) const override
     {
         return sz;
     }
 
-    virtual wxSize ToDIP(const wxSize& sz) const wxOVERRIDE
+    virtual wxSize ToDIP(const wxSize& sz) const override
     {
         return sz;
     }
 
-    void SetFont(const wxFont& font) wxOVERRIDE
+    void SetFont(const wxFont& font) override
     {
         wxFont scaledFont = font;
         if (scaledFont.IsOk())
@@ -246,7 +246,7 @@ public:
     wxEnhMetaFile *Close();
 
 protected:
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
 private:
     void Create(HDC hdcRef,
@@ -303,7 +303,7 @@ void wxEnhMetaFileDCImpl::Create(HDC hdcRef,
     else
     {
         // GDI will try to find out the size for us (not recommended)
-        pRect = (LPRECT)NULL;
+        pRect = (LPRECT)nullptr;
     }
 
     m_hDC = (WXHDC)::CreateEnhMetaFile(hdcRef, GetMetaFileName(filename),
@@ -324,14 +324,14 @@ void wxEnhMetaFileDCImpl::DoGetSize(int *width, int *height) const
 
 wxEnhMetaFile *wxEnhMetaFileDCImpl::Close()
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid wxEnhMetaFileDC") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid wxEnhMetaFileDC") );
 
     HENHMETAFILE hMF = ::CloseEnhMetaFile(GetHdc());
     if ( !hMF )
     {
         wxLogLastError(wxT("CloseEnhMetaFile"));
 
-        return NULL;
+        return nullptr;
     }
 
     wxEnhMetaFile *mf = new wxEnhMetaFile;
@@ -377,7 +377,7 @@ wxEnhMetaFile *wxEnhMetaFileDC::Close()
 {
     wxEnhMetaFileDCImpl * const
         impl = static_cast<wxEnhMetaFileDCImpl *>(GetImpl());
-    wxCHECK_MSG( impl, NULL, wxT("no wxEnhMetaFileDC implementation") );
+    wxCHECK_MSG( impl, nullptr, wxT("no wxEnhMetaFileDC implementation") );
 
     return impl->Close();
 }
@@ -430,7 +430,7 @@ bool wxEnhMetaFileDataObject::GetDataHere(const wxDataFormat& format, void *buf)
 
     if ( format == wxDF_ENHMETAFILE )
     {
-        HENHMETAFILE hEMFCopy = ::CopyEnhMetaFile(hEMF, NULL);
+        HENHMETAFILE hEMFCopy = ::CopyEnhMetaFile(hEMF, nullptr);
         if ( !hEMFCopy )
         {
             wxLogLastError(wxT("CopyEnhMetaFile"));
@@ -449,7 +449,7 @@ bool wxEnhMetaFileDataObject::GetDataHere(const wxDataFormat& format, void *buf)
         ScreenHDC hdc;
 
         // first get the buffer size and alloc memory
-        size_t size = ::GetWinMetaFileBits(hEMF, 0, NULL, MM_ANISOTROPIC, hdc);
+        size_t size = ::GetWinMetaFileBits(hEMF, 0, nullptr, MM_ANISOTROPIC, hdc);
         wxCHECK_MSG( size, false, wxT("GetWinMetaFileBits() failed") );
 
         BYTE *bits = (BYTE *)malloc(size);
@@ -508,7 +508,7 @@ bool wxEnhMetaFileDataObject::SetData(const wxDataFormat& format,
         const METAFILEPICT *mfpict = (const METAFILEPICT *)buf;
 
         // first get the buffer size
-        size_t size = ::GetMetaFileBitsEx(mfpict->hMF, 0, NULL);
+        size_t size = ::GetMetaFileBitsEx(mfpict->hMF, 0, nullptr);
         wxCHECK_MSG( size, false, wxT("GetMetaFileBitsEx() failed") );
 
         // then get metafile bits
@@ -556,7 +556,7 @@ bool wxEnhMetaFileSimpleDataObject::GetDataHere(void *buf) const
 
     HENHMETAFILE hEMF = (HENHMETAFILE)m_metafile.GetHENHMETAFILE();
 
-    HENHMETAFILE hEMFCopy = ::CopyEnhMetaFile(hEMF, NULL);
+    HENHMETAFILE hEMFCopy = ::CopyEnhMetaFile(hEMF, nullptr);
     if ( !hEMFCopy )
     {
         wxLogLastError(wxT("CopyEnhMetaFile"));

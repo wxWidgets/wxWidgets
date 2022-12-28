@@ -76,13 +76,13 @@ public:
     */
     wxArrayString(const wxArrayString& array);
 
-    //@{
+    ///@{
     /**
         Constructor from a C string array. Pass a size @a sz and an array @a arr.
     **/
     wxArrayString(size_t sz, const char** arr);
     wxArrayString(size_t sz, const wchar_t** arr);
-    //@}
+    ///@}
 
     /**
         Constructor from a wxString array. Pass a size @a sz and array @a arr.
@@ -167,20 +167,20 @@ public:
 
         @see operator[] for the operator version.
     */
-    //@{
+    ///@{
     wxString& Item(size_t nIndex);
     const wxString& Item(size_t nIndex) const;
-    //@}
+    ///@}
 
     /**
         Returns the last element of the array. Attempt to access the last element of
         an empty array will result in assert failure in debug build, however no checks
         are done in release mode.
     */
-    //@{
+    ///@{
     wxString& Last();
     const wxString& Last() const;
-    //@}
+    ///@}
 
     /**
         Removes the first item matching this value. An assert failure is provoked by
@@ -343,7 +343,7 @@ public:
     void Insert(const wxString& str, size_t nIndex,
                 size_t copies = 1);
 
-    //@{
+    ///@{
     /**
         @warning This function should not be used with sorted array because it could
                  break the order of items and, for example, subsequent calls to Index()
@@ -354,7 +354,7 @@ public:
     */
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction compareFunction);
-    //@}
+    ///@}
 };
 
 /**
@@ -498,13 +498,13 @@ int wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
 // ============================================================================
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     Splits the given wxString object using the separator @a sep and returns the
     result as a wxArrayString.
 
-    If the @a escape character is non-@NULL, then the occurrences of @a sep
+    If the @a escape character is non-null, then the occurrences of @a sep
     immediately prefixed with @a escape are not considered as separators.
     Note that empty tokens will be generated if there are two or more adjacent
     separators.
@@ -520,7 +520,7 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     Concatenate all lines of the given wxArrayString object using the separator
     @a sep and returns the result as a wxString.
 
-    If the @a escape character is non-@NULL, then it's used as prefix for each
+    If the @a escape character is non-null, then it's used as prefix for each
     occurrence of @a sep in the strings contained in @a arr before joining them
     which is necessary in order to be able to recover the original array
     contents from the string later using wxSplit(). The @a escape characters
@@ -543,5 +543,5 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
 wxString wxJoin(const wxArrayString& arr, const wxChar sep,
                 const wxChar escape = '\\');
 
-//@}
+///@}
 

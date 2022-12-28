@@ -111,7 +111,7 @@ bool wxSpinButton::Create(wxWindow *parent,
                        GetHwndOf(parent),
                        m_windowId,
                        wxGetInstance(),
-                       NULL, // no buddy
+                       nullptr, // no buddy
                        m_max, m_min,
                        m_min // initial position
                      );
@@ -137,6 +137,13 @@ bool wxSpinButton::Create(wxWindow *parent,
 
 wxSpinButton::~wxSpinButton()
 {
+}
+
+bool wxSpinButton::MSWShouldUseAutoDarkMode() const
+{
+    // Native control doesn't seem to have any support for dark theme, so
+    // invert it in dark mode -- this is not great, but better than nothing.
+    return true;
 }
 
 // ----------------------------------------------------------------------------

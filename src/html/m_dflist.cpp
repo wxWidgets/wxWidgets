@@ -35,7 +35,7 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
 
         if (tag.GetName() == wxT("DL"))
         {
-            if (m_WParser->GetContainer()->GetFirstChild() != NULL)
+            if (m_WParser->GetContainer()->GetFirstChild() != nullptr)
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -44,7 +44,7 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
 
             ParseInner(tag);
 
-            if (m_WParser->GetContainer()->GetFirstChild() != NULL)
+            if (m_WParser->GetContainer()->GetFirstChild() != nullptr)
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();

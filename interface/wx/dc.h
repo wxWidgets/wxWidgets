@@ -22,7 +22,8 @@
     - wxNO_OP
     - wxCLEAR
     - wxXOR
-    and, in particular, do @em not support the commonly used @c wxINVERT.
+    and only support the commonly used @c wxINVERT when the source colour is
+    white (as it is implemented using wxCOMPOSITION_DIFF composition mode).
 */
 enum wxRasterOperationMode
 {
@@ -201,7 +202,7 @@ public:
     /**
         @name Coordinate conversion functions
     */
-    //@{
+    ///@{
 
     /**
         Convert @e device X coordinate to logical coordinate, using the current
@@ -351,14 +352,14 @@ public:
     */
     wxSize LogicalToDeviceRel(const wxSize& dim) const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Drawing functions
     */
-    //@{
+    ///@{
 
     /**
         Clears the device context using the current background brush.
@@ -513,7 +514,7 @@ public:
     void DrawLabel(const wxString& text, const wxBitmap& bitmap,
                    const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                   int indexAccel = -1, wxRect* rectBounding = NULL);
+                   int indexAccel = -1, wxRect* rectBounding = nullptr);
 
     /**
         @overload
@@ -861,13 +862,13 @@ public:
     */
     void CrossHair(const wxPoint& pt);
 
-    //@}
+    ///@}
 
 
     /**
         @name Clipping region functions
     */
-    //@{
+    ///@{
 
     /**
         Destroys the current clipping region so that none of the DC is clipped.
@@ -884,16 +885,16 @@ public:
         @remarks
         Clipping region is given in logical coordinates.
 
-        @param x If non-@NULL, filled in with the logical horizontal coordinate
+        @param x If non-null, filled in with the logical horizontal coordinate
             of the top left corner of the clipping region if the function
             returns true or 0 otherwise.
-        @param y If non-@NULL, filled in with the logical vertical coordinate
+        @param y If non-null, filled in with the logical vertical coordinate
             of the top left corner of the clipping region if the function
             returns true or 0 otherwise.
-        @param width If non-@NULL, filled in with the width of the clipping
+        @param width If non-null, filled in with the width of the clipping
             region if the function returns true or the device context width
             otherwise.
-        @param height If non-@NULL, filled in with the height of the clipping
+        @param height If non-null, filled in with the height of the clipping
             region if the function returns true or the device context height
             otherwise.
         @return @true if there is a clipping region or @false if there is no
@@ -951,13 +952,13 @@ public:
      */
     void SetDeviceClippingRegion(const wxRegion& region);
 
-    //@}
+    ///@}
 
 
     /**
         @name Text/character extent functions
     */
-    //@{
+    ///@{
 
     /**
         Gets the character height of the currently set font.
@@ -1013,8 +1014,8 @@ public:
     */
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
                                 wxCoord* h,
-                                wxCoord* heightLine = NULL,
-                                const wxFont* font = NULL) const;
+                                wxCoord* heightLine = nullptr,
+                                const wxFont* font = nullptr) const;
     /**
         Gets the dimensions of the string using the currently selected font.
         @a string is the text string to measure.
@@ -1077,9 +1078,9 @@ public:
              GetMultiLineTextExtent()
     */
     void GetTextExtent(const wxString& string, wxCoord* w, wxCoord* h,
-                       wxCoord* descent = NULL,
-                       wxCoord* externalLeading = NULL,
-                       const wxFont* font = NULL) const;
+                       wxCoord* descent = nullptr,
+                       wxCoord* externalLeading = nullptr,
+                       const wxFont* font = nullptr) const;
 
     /**
         @overload
@@ -1091,13 +1092,13 @@ public:
     */
     wxSize GetTextExtent(const wxString& string) const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Text properties functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the current background mode: @c wxBRUSHSTYLE_SOLID or @c wxBRUSHSTYLE_TRANSPARENT.
@@ -1188,13 +1189,13 @@ public:
     */
     void SetLayoutDirection(wxLayoutDirection dir);
 
-    //@}
+    ///@}
 
 
     /**
         @name Bounding box functions
     */
-    //@{
+    ///@{
 
     /**
         Adds the specified point to the bounding box which can be retrieved
@@ -1232,13 +1233,13 @@ public:
     */
     void ResetBoundingBox();
 
-    //@}
+    ///@}
 
 
     /**
         @name Page and document start/end functions
     */
-    //@{
+    ///@{
 
     /**
         Starts a document (only relevant when outputting to a printer).
@@ -1261,13 +1262,13 @@ public:
     */
     void EndPage();
 
-    //@}
+    ///@}
 
 
     /**
         @name Bit-Block Transfer operations (blit)
     */
-    //@{
+    ///@{
 
     /**
         Copy from a source DC to this DC.
@@ -1429,13 +1430,13 @@ public:
                      bool useMask = false,
                      wxCoord xsrcMask = wxDefaultCoord,
                      wxCoord ysrcMask = wxDefaultCoord);
-    //@}
+    ///@}
 
 
     /**
         @name Background/foreground brush and pen
     */
-    //@{
+    ///@{
 
     /**
         Gets the brush used for painting the background.
@@ -1487,7 +1488,7 @@ public:
     */
     void SetPen(const wxPen& pen);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1498,6 +1499,9 @@ public:
             - Text foreground and background colours
             - Background brush
             - Layout direction
+
+        Note that the scaling factor is not considered to be an attribute of
+        wxDC and is @e not copied by this function.
 
         @param dc
             A valid (i.e. its IsOk() must return @true) source device context.
@@ -1750,7 +1754,7 @@ public:
         See the notes about the availability of these functions in the class
         documentation.
     */
-    //@{
+    ///@{
 
     /**
         Check if the use of transformation matrix is supported by the current
@@ -1791,13 +1795,13 @@ public:
     */
     void ResetTransformMatrix();
 
-    //@}
+    ///@}
 
 
     /**
         @name query capabilities
     */
-    //@{
+    ///@{
 
     /**
        Does the DC support drawing bitmaps?
@@ -1809,7 +1813,7 @@ public:
     */
     bool CanGetTextExtent() const;
 
-    //@}
+    ///@}
 
     /**
        Returns a value that can be used as a handle to the native drawing
@@ -1819,7 +1823,7 @@ public:
        For example, on Windows the return value is an HDC, on macOS it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
-       wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
+       wxGraphicsContext::GetNativeContext.  A value of @NULL is returned if
        the DC does not have anything that fits the handle concept.
 
        @since 2.9.5
@@ -1830,7 +1834,7 @@ public:
     /**
        If supported by the platform and the type of DC, fetch the contents of the DC, or a subset of it, as a bitmap.
     */
-    wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
+    wxBitmap GetAsBitmap(const wxRect *subrect = nullptr) const;
 
 
     /**
@@ -1854,7 +1858,7 @@ public:
      */
     void SetLogicalOrigin(wxCoord x, wxCoord y);
 
-    //@{
+    ///@{
     /**
         Return the coordinates of the logical point (0, 0).
 
@@ -1862,7 +1866,7 @@ public:
      */
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
-    //@}
+    ///@}
 
     /**
        If supported by the platform and the @a wxDC implementation, this method
@@ -1921,7 +1925,7 @@ public:
 class wxDCClipper
 {
 public:
-    //@{
+    ///@{
     /**
         Sets the clipping region to the specified region/coordinates.
 
@@ -1930,7 +1934,7 @@ public:
     wxDCClipper(wxDC& dc, const wxRegion& region);
     wxDCClipper(wxDC& dc, const wxRect& rect);
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
-    //@}
+    ///@}
 
     /**
         Destroys the clipping region associated with the DC passed to the ctor.

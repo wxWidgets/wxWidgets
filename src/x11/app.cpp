@@ -47,8 +47,8 @@
 //   global data
 //------------------------------------------------------------------------
 
-wxWindowHash *wxWidgetHashTable = NULL;
-wxWindowHash *wxClientWidgetHashTable = NULL;
+wxWindowHash *wxWidgetHashTable = nullptr;
+wxWindowHash *wxClientWidgetHashTable = nullptr;
 
 static bool g_showIconic = false;
 static wxSize g_initialSize = wxDefaultSize;
@@ -57,8 +57,8 @@ static wxSize g_initialSize = wxDefaultSize;
 // work for focus events which we provoke ourselves (by calling
 // SetFocus()). It will not work for those events, which X11
 // generates itself.
-static wxWindow *g_nextFocus = NULL;
-static wxWindow *g_prevFocus = NULL;
+static wxWindow *g_nextFocus = nullptr;
+static wxWindow *g_prevFocus = nullptr;
 
 //------------------------------------------------------------------------
 // X11 clipboard event handling
@@ -71,7 +71,7 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event);
 
 typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
 
-XErrorHandlerFunc gs_pfnXErrorHandler = 0;
+XErrorHandlerFunc gs_pfnXErrorHandler = nullptr;
 
 static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 {
@@ -107,11 +107,11 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
         {
             if (i < (argCOrig - 1))
             {
-                argV[i++] = NULL;
+                argV[i++] = nullptr;
 
                 displayName = argV[i];
 
-                argV[i] = NULL;
+                argV[i] = nullptr;
                 argC -= 2;
             }
         }
@@ -119,7 +119,7 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
         {
             if (i < (argCOrig - 1))
             {
-                argV[i++] = NULL;
+                argV[i++] = nullptr;
 
                 int w, h;
                 if (wxSscanf(argV[i], wxT("%dx%d"), &w, &h) != 2)
@@ -132,7 +132,7 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
                     g_initialSize = wxSize(w, h);
                 }
 
-                argV[i] = NULL;
+                argV[i] = nullptr;
                 argC -= 2;
             }
         }
@@ -140,14 +140,14 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
         {
             syncDisplay = true;
 
-            argV[i] = NULL;
+            argV[i] = nullptr;
             argC--;
         }
         else if (wxStrcmp( argV[i], wxT("-iconic") ) == 0)
         {
             g_showIconic = true;
 
-            argV[i] = NULL;
+            argV[i] = nullptr;
             argC--;
         }
     }
@@ -183,13 +183,11 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
     if ( !wxAppBase::Initialize(argC, argV) )
         return false;
 
-#if wxUSE_UNICODE
     // Glib's type system required by Pango (deprecated since glib 2.36 but
     // used to be required, so still call it, it's harmless).
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     g_type_init();
     wxGCC_WARNING_RESTORE()
-#endif
 
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
@@ -211,14 +209,14 @@ void wxApp::CleanUp()
 
 wxApp::wxApp()
 {
-    m_mainColormap = NULL;
-    m_topLevelWidget = NULL;
+    m_mainColormap = nullptr;
+    m_topLevelWidget = nullptr;
     m_maxRequestSize = 0;
     m_showIconic = false;
     m_initialSize = wxDefaultSize;
 
 #if !wxUSE_NANOX
-    m_visualInfo = NULL;
+    m_visualInfo = nullptr;
 #endif
 }
 
@@ -274,7 +272,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 {
     XEvent* event = (XEvent*) _event;
 
-    wxWindow* win = NULL;
+    wxWindow* win = nullptr;
     Window window = XEventGetWindow(event);
 #if 0
     Window actualWindow = window;
@@ -628,7 +626,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 {
                     // Ignore this, this can be a spurious FocusIn
                     // caused by a child having its focus set.
-                    g_GettingFocus = NULL;
+                    g_GettingFocus = nullptr;
                     wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s being deliberately ignored"), win->GetName(), win->GetClassInfo()->GetClassName() );
                     return true;
                 }
@@ -637,7 +635,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
                     focusEvent.SetWindow( g_prevFocus );
-                    g_prevFocus = NULL;
+                    g_prevFocus = nullptr;
 
                     return win->HandleWindowEvent(focusEvent);
                 }
@@ -655,7 +653,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                 focusEvent.SetEventObject(win);
                 focusEvent.SetWindow( g_nextFocus );
-                g_nextFocus = NULL;
+                g_nextFocus = nullptr;
                 return win->HandleWindowEvent(focusEvent);
             }
             return false;
@@ -676,7 +674,7 @@ bool wxApp::HandlePropertyChange(WXEvent *WXUNUSED(event))
 
 void wxApp::WakeUpIdle()
 {
-    // TODO: use wxMotif implementation?
+    // TODO:
 
     // Wake up the idle handler processor, even if it is in another thread...
 }
@@ -708,14 +706,12 @@ bool wxApp::OnInitGui()
     return true;
 }
 
-#if wxUSE_UNICODE
-
 #include <pango/pango.h>
 #include <pango/pangoxft.h>
 
 PangoContext* wxApp::GetPangoContext()
 {
-    static PangoContext *s_pangoContext = NULL;
+    static PangoContext *s_pangoContext = nullptr;
     if ( !s_pangoContext )
     {
         Display *dpy = wxGlobalDisplay();
@@ -746,11 +742,10 @@ PangoContext* wxGetPangoContext()
     g_object_ref(context);
     return context;
 }
-#endif // wxUSE_UNICODE
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {
-    if (!display) /* Must be called first with non-NULL display */
+    if (!display) /* Must be called first with non-null display */
         return m_mainColormap;
 
     int defaultScreen = DefaultScreen((Display*) display);
@@ -778,7 +773,7 @@ Window wxGetWindowParent(Window window)
 #else
     unsigned int noChildren = 0;
 #endif
-    Window* children = NULL;
+    Window* children = nullptr;
 
     // #define XQueryTree(d,w,r,p,c,nc)     GrQueryTree(w,p,c,nc)
     int res = 1;

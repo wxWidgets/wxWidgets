@@ -24,8 +24,8 @@ class SliderTestCase : public CppUnit::TestCase
 public:
     SliderTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( SliderTestCase );

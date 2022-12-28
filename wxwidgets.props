@@ -117,6 +117,9 @@
     <Error
       Condition="'$(wxUsingDll)$(wxUsingLib)' == ''"
       Text="wxWidgets libraries not found under &quot;$(MSBuildThisFileDirectory)lib\vc{,$(wxToolsetVersion),$(wxToolsetVerABICompat)}$(wxArchSuffix)_{lib,dll}$(wxCfg)&quot;." />
+    <Error
+      Condition="'$(CharacterSet)' != 'Unicode'"
+      Text="wxWidgets requires using Unicode, please change your project options to enable it." />
   </Target>
 
   <ItemDefinitionGroup>
@@ -126,7 +129,7 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>__WXMSW__;$(wxUsingDllDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(wxLibOrDllDir)\$(wxToolkitPrefix)$(wxSuffix);$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(wxLibOrDllDir)\$(wxToolkitPrefix)u$(wxSuffixDebug);$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalLibraryDirectories>$(wxLibOrDllDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

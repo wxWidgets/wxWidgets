@@ -741,9 +741,9 @@ wxFOR_ALL_GDIPLUS_STATUS_FUNCS(wxDECL_GDIPLUS_FUNC_TYPE)
 // and load gdiplus.dll dynamically, it's not defined in our case resulting in
 // linking errors -- so just provide it ourselves, it doesn't matter where it
 // is and if Cygwin headers are modified to not use it in the future, it's not
-// a big deal neither, we'll just have an unused pointer.
+// a big deal either, we'll just have an unused pointer.
 #if defined(__CYGWIN__) || defined(__MINGW32__)
-void *_GdipStringFormatCachedGenericTypographic = NULL;
+void *_GdipStringFormatCachedGenericTypographic = nullptr;
 #endif // __CYGWIN__ || __MINGW32__
 
 } // extern "C"
@@ -806,7 +806,7 @@ private:
 };
 
 #define wxINIT_GDIPLUS_FUNC(name, params, args) \
-    wxGDIPLUS_FUNC_T(name) wxGdiPlus::name = NULL;
+    wxGDIPLUS_FUNC_T(name) wxGdiPlus::name = nullptr;
 
 wxFOR_ALL_FUNCNAMES(wxINIT_GDIPLUS_FUNC)
 
@@ -858,8 +858,8 @@ bool wxGdiPlus::DoInit()
 class wxGdiPlusModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxGdiPlus::Terminate(); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxGdiPlus::Terminate(); }
 
     wxDECLARE_DYNAMIC_CLASS(wxGdiPlusModule);
 };
@@ -876,7 +876,7 @@ extern "C"
 void* WINGDIPAPI
 GdipAlloc(size_t size)
 {
-    return wxGdiPlus::Initialize() ? wxGdiPlus::Alloc(size) : NULL;
+    return wxGdiPlus::Initialize() ? wxGdiPlus::Alloc(size) : nullptr;
 }
 
 void WINGDIPAPI

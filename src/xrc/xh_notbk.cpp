@@ -26,7 +26,7 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxNotebookXmlHandler, wxXmlResourceHandler);
 
 wxNotebookXmlHandler::wxNotebookXmlHandler()
-                    : m_notebook(NULL)
+                    : m_notebook(nullptr)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_LEFT);

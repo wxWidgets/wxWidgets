@@ -56,6 +56,11 @@ inline void CheckLanguageVariant(wxLocaleIdent& locId)
     }
 }
 
+inline bool IsDefaultCLocale(const wxString& locale)
+{
+    return locale.IsSameAs("C", false) || locale.IsSameAs("POSIX", false);
+}
+
 } // anonymous namespace
 
 
@@ -210,7 +215,7 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
         case 4:
             // Must be an ISO 15924 script.
-            locId.m_script = (*it).Left(1).Upper() + (*it).Mid(2).Lower();
+            locId.m_script = it->Capitalize();
             break;
 
         default:
@@ -258,7 +263,7 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
 wxLocaleIdent& wxLocaleIdent::Language(const wxString& language)
 {
-    if (language.IsSameAs("C", false) || language.IsSameAs("POSIX", false))
+    if (IsDefaultCLocale(language))
     {
         m_language = language.Upper();
     }
@@ -294,7 +299,7 @@ wxLocaleIdent& wxLocaleIdent::Script(const wxString& script)
         script.find_first_not_of(validCharsAlpha) == wxString::npos)
     {
         // Capitalize first character
-        m_script = script.Left(1).Upper() + script.Mid(2).Lower();
+        m_script = script.Capitalize();
     }
     else if (!script.empty())
     {
@@ -469,8 +474,8 @@ bool wxUILocale::UseDefault()
 /* static */
 bool wxUILocale::UseLocaleName(const wxString& localeName)
 {
-    wxUILocaleImpl* impl = NULL;
-    if (localeName.IsSameAs("C", false) || localeName.IsSameAs("POSIX", false))
+    wxUILocaleImpl* impl = nullptr;
+    if (IsDefaultCLocale(localeName))
     {
         impl = wxUILocaleImpl::CreateStdC();
     }
@@ -517,7 +522,7 @@ wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
     if ( localeId.IsEmpty() )
     {
         wxFAIL_MSG( "Locale identifier must be initialized" );
-        m_impl = NULL;
+        m_impl = nullptr;
         return;
     }
 
@@ -545,7 +550,7 @@ wxUILocale& wxUILocale::operator=(const wxUILocale& loc)
 
 bool wxUILocale::IsSupported() const
 {
-    return m_impl != NULL;
+    return m_impl != nullptr;
 }
 
 wxString wxUILocale::GetName() const
@@ -697,7 +702,7 @@ const wxLanguageInfo* wxUILocale::GetLanguageInfo(int lang)
         lang = GetSystemLanguage();
 
     if (lang == wxLANGUAGE_UNKNOWN)
-        return NULL;
+        return nullptr;
 
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     const size_t count = languagesDB.size();
@@ -707,7 +712,7 @@ const wxLanguageInfo* wxUILocale::GetLanguageInfo(int lang)
             return &languagesDB[i];
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /* static */
@@ -741,10 +746,10 @@ wxString wxUILocale::GetLanguageCanonicalName(int lang)
 }
 
 /* static */
-const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
+const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& localeOrig)
 {
-    if (locale.empty())
-        return NULL;
+    if (localeOrig.empty())
+        return nullptr;
 
     CreateLanguagesDB();
 
@@ -752,16 +757,21 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
     // to the entry description in the language database.
     // The locale string may have the form "language[_region][.codeset]".
     // We ignore the "codeset" part here.
+    wxString locale = localeOrig;
+    if (IsDefaultCLocale(locale))
+    {
+        locale = "en_US";
+    }
     wxString region;
     wxString languageOnly = locale.BeforeFirst('.').BeforeFirst('_', &region);
-    wxString language= languageOnly;
+    wxString language = languageOnly;
     if (!region.empty())
     {
         // Construct description consisting of language and region
         language << " (" << region << ")";
     }
 
-    const wxLanguageInfo* infoRet = NULL;
+    const wxLanguageInfo* infoRet = nullptr;
 
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     const size_t count = languagesDB.size();
@@ -798,12 +808,16 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& locale)
 const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
 {
     if (locId.IsEmpty())
-        return NULL;
+        return nullptr;
 
     CreateLanguagesDB();
 
-    const wxLanguageInfo* infoRet = NULL;
+    const wxLanguageInfo* infoRet = nullptr;
     wxString localeTag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
+    if (IsDefaultCLocale(locId.GetLanguage()))
+    {
+        localeTag = "en-US";
+    }
 
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     const size_t count = languagesDB.size();

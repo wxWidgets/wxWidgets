@@ -97,7 +97,7 @@ organized into variables for toolkits, platforms and libraries. The variables
 come in pairs: there's always `FOO_SRC` for source files and `FOO_HDR` for header
 files. Platform or toolkit specific files are grouped together in variable
 with platform or toolkit name in them, e.g. `BASE_WIN32_SRC`, `BASE_UNIX_SRC`,
-`GTK_SRC`, `MOTIF_SRC`.
+`GTK_SRC`.
 
 Note: A side effect of this toolkit-centric organization is that one file may
 be present several times in `files.bkl` in different contexts.

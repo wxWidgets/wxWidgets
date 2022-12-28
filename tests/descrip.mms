@@ -130,7 +130,6 @@ TEST_OBJECTS1=test_ipc.obj,\
 	test_ftp.obj,\
 	test_uris.obj,\
 	test_url.obj,\
-	test_vectors.obj,\
 	test_evtconnection.obj,\
 	test_weakref.obj,\
 	test_xlocale.obj,\
@@ -479,9 +478,6 @@ test_uris.obj : [.uris]uris.cpp
 
 test_url.obj : [.uris]url.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.uris]url.cpp
-
-test_vectors.obj : [.vectors]vectors.cpp 
-	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.vectors]vectors.cpp
 
 test_evtconnection.obj : [.weakref]evtconnection.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.weakref]evtconnection.cpp

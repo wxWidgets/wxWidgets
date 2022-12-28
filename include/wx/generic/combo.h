@@ -68,7 +68,7 @@ public:
 
     void SetCustomPaintWidth( int width );
 
-    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const wxOVERRIDE;
+    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const override;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
@@ -84,22 +84,18 @@ protected:
     // Dummies for platform-specific wxTextEntry implementations
 #if defined(__WXUNIVERSAL__)
     // Looks like there's nothing we need to override here
-#elif defined(__WXMOTIF__)
-    virtual WXWidget GetTextWidget() const { return NULL; }
 #elif defined(__WXGTK__)
-#if defined(__WXGTK20__)
-    virtual GtkEditable *GetEditable() const wxOVERRIDE { return NULL; }
-    virtual GtkEntry *GetEntry() const wxOVERRIDE { return NULL; }
-#endif
+    virtual GtkEditable *GetEditable() const override { return nullptr; }
+    virtual GtkEntry *GetEntry() const override { return nullptr; }
 #elif defined(__WXOSX__)
-    virtual wxTextWidgetImpl * GetTextPeer() const wxOVERRIDE;
+    virtual wxTextWidgetImpl * GetTextPeer() const override;
 #endif
 
     // For better transparent background rendering
-    virtual bool HasTransparentBackground() wxOVERRIDE;
+    virtual bool HasTransparentBackground() override;
 
     // Mandatory virtuals
-    virtual void OnResize() wxOVERRIDE;
+    virtual void OnResize() override;
 
     // Event handlers
     void OnPaintEvent( wxPaintEvent& event );

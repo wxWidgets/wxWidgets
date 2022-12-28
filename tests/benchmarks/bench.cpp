@@ -87,7 +87,7 @@ wxIMPLEMENT_APP_CONSOLE(BenchApp);
 // Bench namespace symbols implementation
 // ============================================================================
 
-Bench::Function *Bench::Function::ms_head = NULL;
+Bench::Function *Bench::Function::ms_head = nullptr;
 
 long Bench::GetNumericParameter(long defVal)
 {
@@ -122,7 +122,7 @@ bool BenchApp::OnInit()
 
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
-    new wxFrame(NULL, wxID_ANY, "Hidden wx benchmark frame");
+    new wxFrame(nullptr, wxID_ANY, "Hidden wx benchmark frame");
 #endif // wxUSE_GUI
 
     return true;

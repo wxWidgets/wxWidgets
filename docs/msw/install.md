@@ -1,7 +1,7 @@
 Installing wxWidgets for Windows       {#plat_msw_install}
 --------------------------------
 
-This is wxWidgets for Microsoft Windows (XP, Vista, 7, 8, 10, 11)
+This is wxWidgets for Microsoft Windows 7 or later (up to 11)
 including both 32 bit and 64 bit versions.
 
 [TOC]
@@ -49,11 +49,9 @@ Microsoft Visual C++ Compilation       {#msw_build_msvs}
 
 ### From the IDE
 
-Ready to use project files are provided for VC++ versions 8, 9,
-10, 11, 12, 14, 15, 16 and 17 (also known as MSVS 2005, 2008, 2010, 2012,
-2013, 2015, 2017, 2019 and 2022 respectively).
+Ready to use project files are provided for VC++ versions 2015, 2017, 2019 and 2022.
 
-Simply open `wx_vcN.sln` (for N=8, 9, 10, 11, 12, 14, 15, 16 or 17) file,
+Simply open `wx_vcN.sln` (for N=14, 15, 16 or 17) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects
@@ -116,9 +114,9 @@ contributors. If the version is out of date, please [create an issue or pull req
 
 
 
-### Special notes for Visual Studio 2010+
+### Special notes for Visual Studio
 
-For Visual Studio 2010+ solutions it is possible to customize the build by
+For Visual Studio solutions it is possible to customize the build by
 creating a `wx_local.props` file in the `build\msw` directory which is used, if it
 exists, by the projects. The settings in that file override the default values
 for the properties such as wxCfg (corresponding to the CFG makefile variable
@@ -131,8 +129,8 @@ of Visual Studio you could change wxCompilerPrefix to include the toolset:
     -    <wxCompilerPrefix>vc</wxCompilerPrefix>
     +    <wxCompilerPrefix>vc$(PlatformToolsetVersion)</wxCompilerPrefix>
 
-Following that example if you are using Visual Studio 2013 and open
-`wx_vc12.sln` it will build using the "vc120" prefix for the build directories
+Following that example if you are using Visual Studio 2015 and open
+`wx_vc14.sln` it will build using the "vc140" prefix for the build directories
 so to allow its build files to coexist with the files produced by the other
 MSVC versions.
 
@@ -143,16 +141,13 @@ updated with it. For example the version information in `wx_setup.props` could
 change and the information in your `wx_local.props` would be outdated. It is
 your responsibility to monitor for such situations.
 
-### Improve debugging for Visual Studio 2012+
+### Improve debugging for Visual Studio
 
-Debug visualizers for Visual Studio 2012+ are provided which makes inspecting
-various wxWidgets classes easier to view while debugging. To use them:
-
-1. Open the folder `%%WXWIN%\misc\msvc`
-2. Open the folder `%%USERPROFILE%\My Documents\Visual Studio 2012\Visualizers`
-   (or the corresponding location for newer versions, e.g. `...2013\Visualizers`)
-3. Copy `wxWidgets.natvis` and `autoexp.inc`
-4. For Visual Studio 2013+ additionally copy `wxWidgets.2013.natvis`
+Debug visualizers which make inspecting various wxWidgets classes easier to view
+while debugging are provided in file `%%WXWIN%\misc\msvc\wxWidgets.natvis`.
+The visualisers can be either added to a project or installed system-wide.
+See the [Visual Studio documentation](https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects)
+for more information.
 
 
 MinGW Compilation               {#msw_build_mingw}
@@ -309,26 +304,15 @@ The full list of the build settings follows:
   Build shared libraries (DLLs). By default, DLLs are not built
   (SHARED=0).
 
-* `UNICODE=0`
-
-  To completely disable Unicode support (default is UNICODE=1). It should not
-  be necessary to do this.
-
-  This option affect name of the library ('u' is appended in the default
-  Unicode build) and the directory where the library and setup.h are stored
-  (ditto).
-
 * `WXUNIV=1`
 
   Build wxUniversal instead of native wxMSW
 
 * `MONOLITHIC=1`
 
-  Starting with version 2.5.1, wxWidgets has the ability to be built as
-  several smaller libraries instead of single big one as used to be the case
-  in 2.4 and older versions. This is called "multilib build" and is the
-  default behaviour of makefiles. You can still build single library
-  ("monolithic build") by setting MONOLITHIC variable to 1.
+  wxWidgets is by default built as several smaller libraries ("multilib build")
+  instead of single big one as used to be the case in its much older versions.
+  You can still build single library ("monolithic build") by setting MONOLITHIC variable to 1.
 
 * `USE_GUI=0`
 
@@ -347,7 +331,7 @@ The full list of the build settings follows:
 
   Links static version of C and C++ runtime libraries into the executable, so
   that the program does not depend on DLLs provided with the compiler (e.g.
-  Visual C++'s msvcrt.dll).
+  Visual C++'s msvcrt.dll). Can be used only with MSVC.
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
 
 * `DEBUG_FLAG=0`
@@ -410,8 +394,8 @@ The full list of the build settings follows:
 * `COMPILER_PREFIX=<string>`
 
   If you build with multiple versions of the same compiler, you can put
-  their outputs into directories like `vc6_lib`, `vc8_lib` etc. instead of
-  `vc_lib` by setting this variable to e.g. `vc6`. This is merely a
+  their outputs into directories like `vc14_lib`, `vc15_lib` etc. instead of
+  `vc_lib` by setting this variable to e.g. `vc15`. This is merely a
   convenience variable, you can achieve the same effect (but different
   directory names) with the CFG option.
 
@@ -429,7 +413,7 @@ The full list of the build settings follows:
 Building Applications Using wxWidgets  {#msw_build_apps}
 =====================================
 
-If you use MSVS 2010 or later IDE for building your project, simply add
+If you use MSVS for building your project, simply add
 `wxwidgets.props` property sheet to (all) your project(s) using wxWidgets
 by using "View|Property Manager" menu item to open the property manager
 window and then selecting "Add Existing Property Sheet..." from the context
@@ -470,11 +454,8 @@ Here is what you need to do:
   be used for debug builds only.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
-  - `_UNICODE` unless you want to use deprecated ANSI build of wxWidgets.
   - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
   - `WXUSINGDLL` if you are using DLL build of wxWidgets.
-* If using MSVC 7 only (i.e. not for later versions), also define
-  `wxUSE_RC_MANIFEST=1` and `WX_CPU_X86`.
 * Add `<wx-lib-dir>` directory described above to the libraries path.
 
 When using MSVC, the libraries are linked automatically using "#pragma
@@ -497,8 +478,8 @@ instructions here are out of date, you can always simply copy a makefile or
 project file from `$WXWIN\samples\minimal` or some other sample and adapt it to
 your application.
 
-If you are not using Visual Studio 2010 or newer please see
-@subpage plat_msw_winxp "Windows XP Support" to enable visual styles in your
+If you are not using Visual Studio please see
+@subpage plat_msw_winxp "Theme Support" to enable visual styles in your
 application.
 
 Advanced Library Configurations        {#msw_advanced}

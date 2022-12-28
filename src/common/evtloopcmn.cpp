@@ -32,7 +32,7 @@ static int gs_eventLoopCount = 0;
 // wxEventLoopBase
 // ----------------------------------------------------------------------------
 
-wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
+wxEventLoopBase *wxEventLoopBase::ms_activeLoop = nullptr;
 
 wxEventLoopBase::wxEventLoopBase()
 {
@@ -190,11 +190,11 @@ wxEventLoopBase::AddSourceForFD(int fd,
     // Delegate to the event loop sources manager defined by it.
     wxEventLoopSourcesManagerBase* const
         manager = wxApp::GetValidTraits().GetEventLoopSourcesManager();
-    wxCHECK_MSG( manager, NULL, wxS("Must have wxEventLoopSourcesManager") );
+    wxCHECK_MSG( manager, nullptr, wxS("Must have wxEventLoopSourcesManager") );
 
     return manager->AddSourceForFD(fd, handler, flags);
 #else // !wxUSE_CONSOLE_EVENTLOOP
-    return NULL;
+    return nullptr;
 #endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
 

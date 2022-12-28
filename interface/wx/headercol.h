@@ -409,7 +409,7 @@ public:
 class wxHeaderColumnSimple : public wxSettableHeaderColumn
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor for a column header.
 
@@ -425,9 +425,9 @@ public:
                          int width = wxCOL_WIDTH_DEFAULT,
                          wxAlignment align = wxALIGN_CENTER,
                          int flags = wxCOL_DEFAULT_FLAGS);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
 
     /// Trivial implementations of the base class pure virtual functions.
 
@@ -448,5 +448,5 @@ public:
     virtual void SetSortOrder(bool ascending);
     virtual bool IsSortOrderAscending() const;
 
-    //@}
+    ///@}
 };

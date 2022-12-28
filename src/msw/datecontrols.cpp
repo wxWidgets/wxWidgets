@@ -51,7 +51,6 @@ bool wxMSWDateControls::CheckInitialization()
         // it's enough to give the error only once
         s_initResult = false;
 
-#if wxUSE_DYNLIB_CLASS
         INITCOMMONCONTROLSEX icex;
         icex.dwSize = sizeof(icex);
         icex.dwICC = ICC_DATE_CLASSES;
@@ -71,7 +70,6 @@ bool wxMSWDateControls::CheckInitialization()
                 s_initResult = (*pfnInitCommonControlsEx)(&icex);
             }
         }
-#endif // wxUSE_DYNLIB_CLASS
     }
 
     return s_initResult != 0;

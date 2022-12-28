@@ -70,7 +70,7 @@ wxBackingFileImpl::wxBackingFileImpl(wxInputStream *stream,
   : m_refcount(1),
     m_stream(stream),
     m_parenterror(wxSTREAM_NO_ERROR),
-    m_buf(NULL),
+    m_buf(nullptr),
     m_bufsize(bufsize),
     m_buflen(0),
     m_prefix(prefix),
@@ -228,7 +228,7 @@ wxBackingFile::wxBackingFile(wxInputStream *stream,
 }
 
 wxBackingFile::wxBackingFile(const wxBackingFile& backer)
-  : m_impl(backer.m_impl ? backer.m_impl->AddRef() : NULL)
+  : m_impl(backer.m_impl ? backer.m_impl->AddRef() : nullptr)
 {
 }
 

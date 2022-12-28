@@ -76,14 +76,6 @@
     <!--                                                            -->
 
 
-    <!--    The unicode define we want.  By default bakefile        -->
-    <!--    makes variables an empty string, so if unicode          -->
-    <!--    is not defined $(UNICODE_DEFINE) would expand           -->
-    <!--    to nothing (literally).                                 -->
-    <set var="WXUNICODE_DEFINE">
-        <if cond="WX_UNICODE=='1'">_UNICODE</if>
-    </set>
-
     <!--    The debug define we need with win32 compilers           -->
     <!--    (on Linux, the wx-config program is used).              -->
     <set var="WXDEBUG_DEFINE">
@@ -246,7 +238,6 @@
 
         <define>$(substituteFromDict(WX_SHARED,{'1':'WXUSINGDLL','0':''}))</define>
 
-        <define>$(WXUNICODE_DEFINE)</define>
         <define>$(WXDEBUG_DEFINE)</define>
         <define>__WXMSW__</define>
 

@@ -70,15 +70,15 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlParser,wxObject);
 
 wxHtmlParser::wxHtmlParser()
     : wxObject(),
-      m_FS(NULL)
+      m_FS(nullptr)
 {
-    m_Source = NULL;
+    m_Source = nullptr;
     m_entitiesParser = new wxHtmlEntitiesParser;
-    m_Tags = NULL;
-    m_CurTag = NULL;
-    m_TextPieces = NULL;
+    m_Tags = nullptr;
+    m_CurTag = nullptr;
+    m_TextPieces = nullptr;
     m_CurTextPiece = 0;
-    m_SavedStates = NULL;
+    m_SavedStates = nullptr;
 }
 
 wxHtmlParser::~wxHtmlParser()
@@ -125,7 +125,7 @@ void wxHtmlParser::SetSource(const wxString& src)
     delete m_Source;
     m_Source = new wxString(src);
     CreateDOMTree();
-    m_CurTag = NULL;
+    m_CurTag = nullptr;
     m_CurTextPiece = 0;
 }
 
@@ -133,7 +133,7 @@ void wxHtmlParser::CreateDOMTree()
 {
     wxHtmlTagsCache cache(*m_Source);
     m_TextPieces = new wxHtmlTextPieces;
-    CreateDOMSubTree(NULL, m_Source->begin(), m_Source->end(), &cache);
+    CreateDOMSubTree(nullptr, m_Source->begin(), m_Source->end(), &cache);
     m_CurTextPiece = 0;
 }
 
@@ -154,7 +154,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
     // and ending tag verbosely. Setting i=end_pos will skip to the very
     // end of this function where text piece is added, bypassing any child
     // tags parsing (CDATA element can't have child elements by definition):
-    if (cur != NULL && wxIsCDATAElement(cur->GetName()))
+    if (cur != nullptr && wxIsCDATAElement(cur->GetName()))
     {
         i = end_pos;
     }
@@ -185,7 +185,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                                         i, end_pos, cache, m_entitiesParser);
                 else
                 {
-                    chd = new wxHtmlTag(NULL, m_Source,
+                    chd = new wxHtmlTag(nullptr, m_Source,
                                         i, end_pos, cache, m_entitiesParser);
                     if (!m_Tags)
                     {
@@ -240,7 +240,7 @@ void wxHtmlParser::DestroyDOMTree()
         delete t1;
         t1 = t2;
     }
-    m_Tags = m_CurTag = NULL;
+    m_Tags = m_CurTag = nullptr;
 
     wxDELETE(m_TextPieces);
 }
@@ -374,11 +374,11 @@ void wxHtmlParser::SetSourceAndSaveState(const wxString& src)
     s->m_nextState = m_SavedStates;
     m_SavedStates = s;
 
-    m_CurTag = NULL;
-    m_Tags = NULL;
-    m_TextPieces = NULL;
+    m_CurTag = nullptr;
+    m_Tags = nullptr;
+    m_TextPieces = nullptr;
     m_CurTextPiece = 0;
-    m_Source = NULL;
+    m_Source = nullptr;
 
     SetSource(src);
 }
@@ -431,34 +431,12 @@ void wxHtmlTagHandler::ParseInnerSource(const wxString& source)
 wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlEntitiesParser, wxObject);
 
 wxHtmlEntitiesParser::wxHtmlEntitiesParser()
-#if !wxUSE_UNICODE
-    : m_conv(NULL), m_encoding(wxFONTENCODING_SYSTEM)
-#endif
 {
 }
 
 wxHtmlEntitiesParser::~wxHtmlEntitiesParser()
 {
-#if !wxUSE_UNICODE
-    delete m_conv;
-#endif
 }
-
-#if !wxUSE_UNICODE
-void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
-{
-    if (encoding == m_encoding)
-        return;
-
-    delete m_conv;
-
-    m_encoding = encoding;
-    if (m_encoding == wxFONTENCODING_SYSTEM)
-        m_conv = NULL;
-    else
-        m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
-}
-#endif // !wxUSE_UNICODE
 
 wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
 {
@@ -515,20 +493,6 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
         output.append(last, end);
     return output;
 }
-
-#if !wxUSE_UNICODE
-wxChar wxHtmlEntitiesParser::GetCharForCode(unsigned code) const
-{
-    char buf[2];
-    wchar_t wbuf[2];
-    wbuf[0] = (wchar_t)code;
-    wbuf[1] = 0;
-    wxMBConv *conv = m_conv ? m_conv : &wxConvLocal;
-    if (conv->WC2MB(buf, wbuf, 2) == (size_t)-1)
-        return '?';
-    return buf[0];
-}
-#endif
 
 struct wxHtmlEntityInfo
 {
@@ -833,7 +797,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
             ENTITY("zeta", 950),
             ENTITY("zwj", 8205),
             ENTITY("zwnj", 8204),
-            {NULL, 0}};
+            {nullptr, 0}};
         #undef ENTITY
         static size_t substitutions_cnt = 0;
 
@@ -863,7 +827,7 @@ wxFSFile *wxHtmlParser::OpenURL(wxHtmlURLType type,
     if (type == wxHTML_URL_IMAGE)
         flags |= wxFS_SEEKABLE;
 
-    return m_FS ? m_FS->OpenFile(url, flags) : NULL;
+    return m_FS ? m_FS->OpenFile(url, flags) : nullptr;
 
 }
 
@@ -877,10 +841,10 @@ class wxMetaTagParser : public wxHtmlParser
 public:
     wxMetaTagParser() { }
 
-    wxObject* GetProduct() wxOVERRIDE { return NULL; }
+    wxObject* GetProduct() override { return nullptr; }
 
 protected:
-    virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE {}
+    virtual void AddText(const wxString& WXUNUSED(txt)) override {}
 
     wxDECLARE_NO_COPY_CLASS(wxMetaTagParser);
 };
@@ -889,8 +853,8 @@ class wxMetaTagHandler : public wxHtmlTagHandler
 {
 public:
     wxMetaTagHandler(wxString *retval) : wxHtmlTagHandler(), m_retval(retval) {}
-    wxString GetSupportedTags() wxOVERRIDE { return wxT("META,BODY"); }
-    bool HandleTag(const wxHtmlTag& tag) wxOVERRIDE;
+    wxString GetSupportedTags() override { return wxT("META,BODY"); }
+    bool HandleTag(const wxHtmlTag& tag) override;
 
 private:
     wxString *m_retval;

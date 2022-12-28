@@ -126,10 +126,10 @@ public:
         unsupported by the native MSW implementation of this class so the use
         of a standard icon is preferred.
      */
-    //@{
+    ///@{
     void SetIcon(int icon = wxICON_INFORMATION);
-    void SetIcon(const wxIcon& icon);
-    //@}
+    void SetIcon(const wxBitmapBundle& icon);
+    ///@}
 
     /**
         Set timeout after which the tooltip should disappear and
@@ -178,7 +178,7 @@ public:
         show the tooltip.
 
         By default the tooltip tip points to the (middle of the) specified
-        window which must be non-@NULL or, if @a rect is non-@NULL, the middle
+        window which must be non-null or, if @a rect is non-@NULL, the middle
         of the specified wxRect.
 
         The coordinates of the @a rect parameter are relative to the given window.
@@ -189,7 +189,7 @@ public:
 
         Parameter @a rect is new since wxWidgets 2.9.5.
      */
-    void ShowFor(wxWindow* win, const wxRect* rect = NULL);
+    void ShowFor(wxWindow* win, const wxRect* rect = nullptr);
 
     /**
         Destructor.

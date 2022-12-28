@@ -28,9 +28,6 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
 
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
-#endif
     virtual ~wxCursor();
 
     void MacInstall() const ;
@@ -39,8 +36,8 @@ public:
     WXHCURSOR GetHCURSOR() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     void InitFromStock(wxStockCursor);

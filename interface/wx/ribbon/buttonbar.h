@@ -487,7 +487,7 @@ public:
     virtual wxRibbonButtonBarButtonBase *GetItem(size_t n) const;
 
     /**
-        Returns the first button having a given id or NULL if none matches.
+        Returns the first button having a given id or @NULL if none matches.
 
         @since 2.9.5
     */
@@ -729,7 +729,7 @@ public:
                 wxRibbonButtonBarButtonState max_size_class);
 
     /**
-        Returns the active item of the button bar or NULL if there is none.
+        Returns the active item of the button bar or @NULL if there is none.
         The active button is the one being clicked.
 
         @since 2.9.5
@@ -737,7 +737,7 @@ public:
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
 
     /**
-        Returns the hovered item of the button bar or NULL if there is none.
+        Returns the hovered item of the button bar or @NULL if there is none.
         The hovered button is the one the mouse is over.
 
         @since 2.9.5
@@ -787,8 +787,8 @@ public:
     */
     wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonButtonBar* bar = NULL,
-                       wxRibbonButtonBarButtonBase* button = NULL);
+                       wxRibbonButtonBar* bar = nullptr,
+                       wxRibbonButtonBarButtonBase* button = nullptr);
 
     /**
         Returns the bar which contains the button which the event relates to.

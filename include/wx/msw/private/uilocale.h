@@ -19,13 +19,6 @@
 #define LOCALE_CUSTOM_UI_DEFAULT 0x1400
 #endif
 
-// Use the specific LCID for the current thread.
-void wxUseLCID(LCID lcid);
-
-// These functions are defined in src/common/intl.cpp
-wxString wxGetInfoFromLCID(LCID lcid, wxLocaleInfo index, wxLocaleCategory cat);
-LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index);
-
 WXDLLIMPEXP_BASE wxString wxTranslateFromUnicodeFormat(const wxString& fmt);
 
 #endif // _WX_MSW_PRIVATE_UILOCALE_H_

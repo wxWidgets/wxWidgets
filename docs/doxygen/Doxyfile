@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 3.1.7
+PROJECT_NUMBER         = 3.3.0
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -140,7 +140,8 @@ ALIASES += header{1}="Include file:^^ \verbatim #include <\1> \endverbatim"
 # some formatting aliases
 ALIASES += true="<span class='literal'>true</span>"
 ALIASES += false="<span class='literal'>false</span>"
-ALIASES += NULL="<span class='literal'>NULL</span>"
+ALIASES += nullptr="<span class='literal'>nullptr</span>"
+ALIASES += NULL="<span class='literal'>nullptr</span>"
 ALIASES += NUL="<span class='literal'>NUL</span>"
 
 # NOTE: these are important as you can't write in the docs
@@ -299,7 +300,6 @@ INPUT                  = mainpages \
                          overviews \
                          ../gtk \
                          ../ios \
-                         ../motif \
                          ../msw \
                          ../osx \
                          ../qt \
@@ -353,11 +353,11 @@ IGNORE_PREFIX          = wx
 GENERATE_HTML          = $(GENERATE_HTML)
 HTML_OUTPUT            = $(WX_HTML_OUTPUT_DIR)
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = custom_header.html
+HTML_HEADER            = $(HTML_HEADER)
 HTML_FOOTER            = custom_footer.html
 HTML_STYLESHEET        =
-HTML_EXTRA_STYLESHEET  = extra_stylesheet.css
-HTML_EXTRA_FILES       = wxwidgets.js
+HTML_EXTRA_STYLESHEET  = $(CUSTOM_THEME_CSS) extra_stylesheet.css
+HTML_EXTRA_FILES       = $(CUSTOM_THEME_JS1) $(CUSTOM_THEME_JS2) wxwidgets.js
 HTML_COLORSTYLE_HUE    = 220 # Default: 220
 HTML_COLORSTYLE_SAT    = 255 # Default: 100
 HTML_COLORSTYLE_GAMMA  = 100 # Default: 80
@@ -371,7 +371,7 @@ HTML_INDEX_NUM_ENTRIES = 100
 #---------------------------------------------------------------------------
 
 GENERATE_DOCSET        = $(GENERATE_DOCSET)
-DOCSET_FEEDNAME        = "wxWidgets 3.1"
+DOCSET_FEEDNAME        = "wxWidgets 3.3"
 DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx31
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
 DOCSET_PUBLISHER_NAME  = wxWidgets
@@ -569,7 +569,7 @@ CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 GRAPHICAL_HIERARCHY    = NO # TODO: Default: YES
 DIRECTORY_GRAPH        = NO # Default: YES
-DOT_IMAGE_FORMAT       = png
+DOT_IMAGE_FORMAT       = $(DOT_IMAGE_FORMAT)
 INTERACTIVE_SVG        = NO
 DOT_PATH               =
 DOTFILE_DIRS           =
@@ -578,7 +578,7 @@ DIAFILE_DIRS           =
 PLANTUML_JAR_PATH      =
 DOT_GRAPH_MAX_NODES    = 150 # Default 50, we currently have 108 for wxObject
 MAX_DOT_GRAPH_DEPTH    = 1000 # Default: 0
-DOT_TRANSPARENT        = NO
+DOT_TRANSPARENT        = yes
 DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES

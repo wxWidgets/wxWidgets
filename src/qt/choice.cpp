@@ -22,7 +22,7 @@ class LexicalSortProxyModel : public QSortFilterProxyModel
 public:
     explicit LexicalSortProxyModel(QObject* owner) : QSortFilterProxyModel(owner) {}
 
-    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const wxOVERRIDE
+    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override
     {
         const QVariant leftData = sourceModel()->data( left );
         const QVariant rightData = sourceModel()->data( right );
@@ -73,7 +73,7 @@ void wxQtChoice::activated(int WXUNUSED(index))
 
 
 wxChoice::wxChoice() :
-    m_qtComboBox(NULL)
+    m_qtComboBox(nullptr)
 {
 }
 
@@ -118,7 +118,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    return Create( parent, id, pos, size, choices.size(), choices.size() ? &choices[ 0 ] : NULL, style,
+    return Create( parent, id, pos, size, choices.size(), choices.size() ? &choices[ 0 ] : nullptr, style,
         validator, name );
 }
 
@@ -161,6 +161,8 @@ unsigned wxChoice::GetCount() const
 
 wxString wxChoice::GetString(unsigned int n) const
 {
+    wxCHECK_MSG(n < GetCount(), wxString(), "invalid index");
+
     return wxQtConvertString( m_qtComboBox->itemText(n) );
 }
 
@@ -172,9 +174,8 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 void wxChoice::SetSelection(int n)
 {
-    m_qtComboBox->blockSignals(true);
+    wxQtEnsureSignalsBlocked blocker(m_qtComboBox);
     m_qtComboBox->setCurrentIndex(n);
-    m_qtComboBox->blockSignals(false);
 }
 
 int wxChoice::GetSelection() const
@@ -232,7 +233,7 @@ int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 
 void wxChoice::DoSetItemClientData(unsigned int n, void *clientData)
 {
-    QVariant variant = qVariantFromValue(clientData);
+    QVariant variant = QVariant::fromValue(clientData);
     m_qtComboBox->setItemData(n, variant);
 }
 

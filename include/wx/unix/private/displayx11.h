@@ -161,7 +161,7 @@ void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
         int actual_format;
         unsigned long nitems;
         unsigned long bytes_after;
-        unsigned char* data = NULL;
+        unsigned char* data = nullptr;
         Status status = XGetWindowProperty(
             display, RootWindowOfScreen(screen), property,
             0, 4, false, XA_CARDINAL,

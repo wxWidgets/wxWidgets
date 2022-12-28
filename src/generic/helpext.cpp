@@ -65,7 +65,7 @@ wxIMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase);
 wxExtHelpController::wxExtHelpController(wxWindow* parentWindow)
                    : wxHelpControllerBase(parentWindow)
 {
-    m_MapList = NULL;
+    m_MapList = nullptr;
     m_NumOfEntries = 0;
     m_BrowserIsNetscape = false;
 
@@ -82,14 +82,6 @@ wxExtHelpController::~wxExtHelpController()
 {
     DeleteList();
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-void wxExtHelpController::SetBrowser(const wxString& browsername, bool isNetscape)
-{
-    m_BrowserName = browsername;
-    m_BrowserIsNetscape = isNetscape;
-}
-#endif
 
 void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
 {
@@ -399,7 +391,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
         if (! showAll)
         {
             compA = k;
-            compA.LowerCase();
+            compA.MakeLower();
         }
 
         while (node)
@@ -410,7 +402,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
             bool testTarget = ! compB.empty();
             if (testTarget && ! showAll)
             {
-                compB.LowerCase();
+                compB.MakeLower();
                 testTarget = compB.Contains(compA);
             }
 

@@ -96,7 +96,7 @@ public:
     // -----
 
     // default, use Open()
-    wxDir() { m_data = NULL; }
+    wxDir() { m_data = nullptr; }
 
     // opens the directory for enumeration, use IsOpened() to test success
     wxDir(const wxString& dir);
@@ -162,7 +162,7 @@ public:
 
 #if wxUSE_LONGLONG
     // returns the size of all directories recursively found in given path
-    static wxULongLong GetTotalSize(const wxString &dir, wxArrayString *filesSkipped = NULL);
+    static wxULongLong GetTotalSize(const wxString &dir, wxArrayString *filesSkipped = nullptr);
 #endif // wxUSE_LONGLONG
 
 

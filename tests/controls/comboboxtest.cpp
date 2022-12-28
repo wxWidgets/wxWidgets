@@ -34,17 +34,17 @@ class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase,
 public:
     ComboBoxTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_combo; }
-    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
+    virtual wxWindow *GetTestWindow() const override { return m_combo; }
 
-    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
 
-    virtual void CheckStringSelection(const char * WXUNUSED(sel)) wxOVERRIDE
+    virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
         // GetStringSelection() is the wxChoice, not wxTextEntry, one and there
@@ -100,7 +100,7 @@ void ComboBoxTestCase::setUp()
 void ComboBoxTestCase::tearDown()
 {
     delete m_combo;
-    m_combo = NULL;
+    m_combo = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -158,7 +158,7 @@ void ComboBoxTestCase::Sort()
 #if !defined(__WXOSX__)
     delete m_combo;
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                             wxDefaultPosition, wxDefaultSize, 0, NULL,
+                             wxDefaultPosition, wxDefaultSize, 0, nullptr,
                              wxCB_SORT);
 
     m_combo->Append("aaa");
@@ -234,7 +234,7 @@ TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")
     class ComboBoxCreator : public TextLikeControlCreator
     {
     public:
-        virtual wxControl* Create(wxWindow* parent, int style) const wxOVERRIDE
+        virtual wxControl* Create(wxWindow* parent, int style) const override
         {
             const wxString choices[] = { "foo", "bar", "baz" };
 

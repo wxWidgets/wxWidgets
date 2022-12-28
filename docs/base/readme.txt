@@ -3,7 +3,7 @@
 
 NB: this file applies to wxBase library only. If you are using a GUI version
     of wxWidgets, please refer to the documentation in the appropriate
-    subdirectory (msw, gtk, motif &c).
+    subdirectory (msw, gtk &c).
 
 
  Welcome to wxBase!

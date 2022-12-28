@@ -20,6 +20,7 @@
 #include "wx/aui/auibook.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/renderer.h"
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
@@ -27,7 +28,7 @@ wxAuiMSWTabArt::wxAuiMSWTabArt()
     m_closeBtnSize = wxDefaultSize;
     m_maxTabHeight = 0;
 
-    m_themed = wxUxThemeIsActive();
+    m_themed = wxUxThemeIsActive() && !wxMSWDarkMode::IsActive();
 }
 
 wxAuiMSWTabArt::~wxAuiMSWTabArt()
@@ -69,7 +70,7 @@ void wxAuiMSWTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
         TABP_PANE,
         0,
         &r,
-        NULL);
+        nullptr);
 }
 
 void wxAuiMSWTabArt::DrawBackground(wxDC& dc,
@@ -109,7 +110,7 @@ void wxAuiMSWTabArt::DrawBackground(wxDC& dc,
         TABP_PANE,
         0,
         &r,
-        NULL);
+        nullptr);
 }
 
 void wxAuiMSWTabArt::DrawTab(wxDC& dc,
@@ -178,7 +179,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     wxCopyRectToRECT(tabRect, tabR);
     ::DrawThemeBackground(hTabTheme, GetHdcOf(dc.GetTempHDC()), TABP_TABITEM,
         tabState,
-        &tabR, NULL);
+        &tabR, nullptr);
 
     // Apparently, in at least some Windows 10 installations the call above
     // does not draw the left edge of the first tab and it needs to be drawn
@@ -192,7 +193,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
                 TABP_TABITEMLEFTEDGE,
                 tabState,
                 &tabR,
-                NULL
+                nullptr
             );
     }
 
@@ -228,18 +229,14 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         else
             btnState = TTCS_NORMAL;
 
-        int offsetY = tabY;
-        if ( wxGetWinVersion() < wxWinVersion_Vista )
-            offsetY++; // WinXP theme needs a little more padding
-
         wxRect rect(tabX + tabWidth - m_closeBtnSize.x - wnd->FromDIP(4),
-            offsetY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
+            tabY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
             m_closeBtnSize.x,
             m_closeBtnSize.y);
 
         RECT btnR;
         wxCopyRectToRECT(rect, btnR);
-        ::DrawThemeBackground(hToolTipTheme, GetHdcOf(dc.GetTempHDC()), TTP_CLOSE, btnState, &btnR, NULL);
+        ::DrawThemeBackground(hToolTipTheme, GetHdcOf(dc.GetTempHDC()), TTP_CLOSE, btnState, &btnR, nullptr);
 
         if ( out_button_rect )
             *out_button_rect = rect;
@@ -253,7 +250,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
 int wxAuiMSWTabArt::GetIndentSize()
 {
     if ( IsThemed() )
-        return wxWindow::FromDIP(3, NULL); // This should be 1 but we can't draw into the border from DrawTab
+        return wxWindow::FromDIP(3, nullptr); // This should be 1 but we can't draw into the border from DrawTab
     else
         return wxAuiGenericTabArt::GetIndentSize();
 }
@@ -267,7 +264,7 @@ int wxAuiMSWTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
 {
     if ( IsThemed() )
     {
-        return wnd->FromDIP(4, NULL);
+        return wnd->FromDIP(4, nullptr);
     }
     else
         return wxAuiGenericTabArt::GetAdditionalBorderSpace(wnd);
@@ -350,7 +347,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
         return;
     }
 
-    const wchar_t* themeId = NULL;
+    const wchar_t* themeId = nullptr;
     int part = 0;
 
     switch (bitmap_id)
@@ -417,7 +414,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
 
     RECT btnR;
     wxCopyRectToRECT(btnRect, btnR);
-    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), part, btnState, &btnR, NULL);
+    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), part, btnState, &btnR, nullptr);
 
     if ( out_rect )
         *out_rect = rect;
@@ -445,12 +442,12 @@ void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& dc)
     wxUxThemeHandle hTooltipTheme(wnd, L"Tooltip");
 
     ::GetThemePartSize(hTooltipTheme, GetHdcOf(dc.GetTempHDC()),
-        TTP_CLOSE, 0, NULL, TS_TRUE, &uxSize);
+        TTP_CLOSE, 0, nullptr, TS_TRUE, &uxSize);
     m_closeBtnSize.Set(uxSize.cx, uxSize.cy);
 
     wxUxThemeHandle hTabTheme(wnd, L"Tab");
     ::GetThemePartSize(hTabTheme, GetHdcOf(dc.GetTempHDC()),
-        TABP_TABITEM, 0, NULL, TS_TRUE, &uxSize);
+        TABP_TABITEM, 0, nullptr, TS_TRUE, &uxSize);
     m_tabSize.Set(uxSize.cx, uxSize.cy);
 }
 

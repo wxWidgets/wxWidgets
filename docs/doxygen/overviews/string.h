@@ -71,7 +71,7 @@ Example:
     // it's a single Unicode code-point encoded as:
     // - a UTF16 surrogate pair under Windows
     // - a UTF8 multiple-bytes sequence under Linux
-    // (without considering the final NULL)
+    // (without considering the final NUL)
 
     wxPrintf("wxString reports a length of %d character(s)", test.length());
         // prints "wxString reports a length of 1 character(s)" on Linux
@@ -88,7 +88,7 @@ Example:
     // they are 3 Unicode code-points encoded as:
     // - 3 UTF16 code units under Windows
     // - 6 UTF8 code units under Linux
-    // (without considering the final NULL)
+    // (without considering the final NUL)
 
     wxPrintf("wxString reports a length of %d character(s)", test2.length());
         // prints "wxString reports a length of 3 character(s)" on Linux
@@ -96,7 +96,7 @@ Example:
 @endcode
 
 To better explain what stated above, consider the second string of the example
-above; it's composed by 3 characters and the final @c NULL:
+above; it's composed by 3 characters and the final @NUL:
 
 @image html overview_wxstring_encoding.png
 
@@ -303,12 +303,12 @@ for (i = s.begin(); i != s.end(); ++i)
 As most programs use character strings, the standard C library provides quite
 a few functions to work with them. Unfortunately, some of them have rather
 counter-intuitive behaviour (like @c strncpy() which doesn't always terminate
-the resulting string with a @NULL) and are in general not very safe (passing
+the resulting string with a @NUL) and are in general not very safe (passing
 @NULL to them will probably lead to program crash). Moreover, some very useful
 functions are not standard at all. This is why in addition to all wxString
 functions, there are also a few global string functions which try to correct
 these problems: wxIsEmpty() verifies whether the string is empty (returning
-@true for @NULL pointers), wxStrlen() also handles @NULL correctly and returns
+@true for @NULL), wxStrlen() also handles @NULL correctly and returns
 0 for them and wxStricmp() is just a platform-independent version of
 case-insensitive string comparison function known either as @c stricmp() or
 @c strcasecmp() on different platforms.
@@ -402,12 +402,9 @@ difference the change to @c EXTRA_ALLOC makes to your program.
 
 @section overview_string_settings wxString Related Compilation Settings
 
-The main option affecting wxString is @c wxUSE_UNICODE which is now always
-defined as @c 1 by default to indicate Unicode support. You may set it to 0 to
-disable Unicode support in wxString and elsewhere in wxWidgets but this is @e
-strongly not recommended.
-
-Another option affecting wxWidgets is @c wxUSE_UNICODE_WCHAR which is also 1 by
+wxString always supports Unicode in wxWidgets 3.3 and later, but it may use
+either UTF-8 or `wchar_t` (which, in turn, may use either UTF-16 or UTF-32)
+internally. It uses the latter if @c wxUSE_UNICODE_WCHAR is set, which is the case by
 default. You may want to set it to 0 and set @c wxUSE_UNICODE_UTF8 to 1 instead
 to use UTF-8 internally. wxString still provides the same API in this case, but
 using UTF-8 has performance implications as explained in @ref

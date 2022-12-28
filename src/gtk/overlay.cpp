@@ -21,12 +21,12 @@ class wxOverlayImpl: public wxOverlay::Impl
 public:
     wxOverlayImpl();
     ~wxOverlayImpl();
-    virtual bool IsOk() wxOVERRIDE;
-    virtual void Init(wxDC* dc, int x, int y, int width, int height) wxOVERRIDE;
-    virtual void BeginDrawing(wxDC* dc) wxOVERRIDE;
-    virtual void EndDrawing(wxDC* dc) wxOVERRIDE;
-    virtual void Clear(wxDC* dc) wxOVERRIDE;
-    virtual void Reset() wxOVERRIDE;
+    virtual bool IsOk() override;
+    virtual void Init(wxDC* dc, int x, int y, int width, int height) override;
+    virtual void BeginDrawing(wxDC* dc) override;
+    virtual void EndDrawing(wxDC* dc) override;
+    virtual void Clear(wxDC* dc) override;
+    virtual void Reset() override;
     void PositionOverlay(GtkWidget* tlw);
 
     GtkWidget* m_overlay;
@@ -38,11 +38,11 @@ public:
 
 wxOverlay::Impl* wxOverlay::Create()
 {
-    if (wxGTKImpl::IsWayland(NULL))
+    if (wxGTKImpl::IsWayland(nullptr))
         return new wxOverlayImpl;
 
     // Use generic
-    return NULL;
+    return nullptr;
 }
 
 extern "C" {
@@ -67,10 +67,10 @@ static gboolean map_event(GtkWidget* widget, GdkEvent*, wxOverlayImpl* overlay)
 
 wxOverlayImpl::wxOverlayImpl()
 {
-    m_overlay = NULL;
-    m_target = NULL;
-    m_surface = NULL;
-    m_cr = NULL;
+    m_overlay = nullptr;
+    m_target = nullptr;
+    m_surface = nullptr;
+    m_cr = nullptr;
 }
 
 wxOverlayImpl::~wxOverlayImpl()
@@ -99,7 +99,7 @@ void wxOverlayImpl::Init(wxDC* dc, int x, int y, int width, int height)
 
     m_target = win->GetConnectWidget();
     GtkWidget* const tlw = gtk_widget_get_toplevel(m_target);
-    if (m_overlay == NULL)
+    if (m_overlay == nullptr)
     {
         // The overlay is a TLW to get "save-under" behavior, which avoids
         // repainting of the underlying window.
@@ -120,7 +120,7 @@ void wxOverlayImpl::Init(wxDC* dc, int x, int y, int width, int height)
     // doesn't work here, so use an input shape that is as small as possible.
     cairo_rectangle_int_t rect = { 0, 0, 1, 1 };
     cairo_region_t* region = cairo_region_create_rectangle(&rect);
-    gtk_widget_input_shape_combine_region(m_overlay, NULL);
+    gtk_widget_input_shape_combine_region(m_overlay, nullptr);
     gtk_widget_input_shape_combine_region(m_overlay, region);
     cairo_region_destroy(region);
 
@@ -163,14 +163,14 @@ void wxOverlayImpl::BeginDrawing(wxDC*)
 
 void wxOverlayImpl::EndDrawing(wxDC* dc)
 {
-    if (m_cr == NULL)
+    if (m_cr == nullptr)
         return;
 
     cairo_pattern_t* pattern = cairo_pop_group(m_cr);
     cairo_pattern_get_surface(pattern, &m_surface);
     cairo_surface_reference(m_surface);
     cairo_pattern_destroy(pattern);
-    m_cr = NULL;
+    m_cr = nullptr;
 
     const wxSize size(dc->GetSize());
     if (m_rect.width < size.x || m_rect.height < size.y)
@@ -198,7 +198,7 @@ void wxOverlayImpl::Reset()
     if (m_surface)
     {
         cairo_surface_destroy(m_surface);
-        m_surface = NULL;
+        m_surface = nullptr;
     }
     if (m_overlay)
         gtk_widget_hide(m_overlay);

@@ -54,7 +54,7 @@ public:
         return true;
     }
 
-    void AddField( const wxString &name, void* initialValue = NULL )
+    void AddField( const wxString &name, void* initialValue = nullptr )
     {
         wxShadowObjectFields::iterator it = m_fields.find( name );
         if (it == m_fields.end())
@@ -71,7 +71,7 @@ public:
         it->second = value;
     }
 
-    void* GetField( const wxString &name, void *defaultValue = NULL )
+    void* GetField( const wxString &name, void *defaultValue = nullptr )
     {
         wxShadowObjectFields::iterator it = m_fields.find( name );
         if (it == m_fields.end())
@@ -180,7 +180,7 @@ public:
     void *GetClientData() const;
 
 protected:
-    bool HasClientDataContainer() const { return m_data.get() != NULL; }
+    bool HasClientDataContainer() const { return m_data.get() != nullptr; }
     void CopyClientDataContainer(const wxSharedClientDataContainer& other)
     {
         m_data = other.m_data;
@@ -192,7 +192,7 @@ private:
     {
     };
 
-    // Helper function that will create m_data if it is currently NULL
+    // Helper function that will create m_data if it is currently null
     wxClientDataContainer *GetValidClientData();
 
     // m_data is shared, not deep copied, when cloned. If you make changes to

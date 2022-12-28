@@ -17,6 +17,8 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
     endif()
 endif()
 
+file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
+
 # https://blog.kitware.com/cmake-and-the-default-build-type/
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(default_build_type "Debug")
@@ -42,7 +44,7 @@ include(build/cmake/policies.cmake NO_POLICY_SCOPE)
 
 # Initialize variables for quick access to wx root dir in sub dirs
 set(wxSOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(wxBINARY_DIR ${CMAKE_BINARY_DIR})
+set(wxBINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
 
 # parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION
@@ -94,6 +96,9 @@ if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")
 endif()
 
 project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(build/cmake/main.cmake)
 

@@ -67,8 +67,8 @@ private:
 
 private:
     // Implement base class functions.
-    virtual wxMemoryInputStream  *DoCreateInStream() wxOVERRIDE;
-    virtual wxMemoryOutputStream *DoCreateOutStream() wxOVERRIDE;
+    virtual wxMemoryInputStream  *DoCreateInStream() override;
+    virtual wxMemoryOutputStream *DoCreateOutStream() override;
 
 private:
     char    m_DataBuffer[DATABUFFER_SIZE];

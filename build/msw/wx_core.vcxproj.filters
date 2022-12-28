@@ -60,6 +60,9 @@
     <ClCompile Include="..\..\src\common\bmpbase.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\bmpbndl.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\bmpbtncmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -160,9 +163,6 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\dummy.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\common\effects.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\event.cpp">
@@ -471,6 +471,9 @@
     <ClCompile Include="..\..\src\generic\bmpcboxg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\bmpsvg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\busyinfo.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -691,6 +694,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\bitmap.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\bmpbndl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\bmpbuttn.cpp">
@@ -1068,14 +1074,8 @@
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\bmpbndl.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\bmpbndl.cpp">
+    <ClCompile Include="..\..\src\msw\darkmode.cpp">
       <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\generic\bmpsvg.cpp">
-      <Filter>Generic Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1127,6 +1127,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\bitmap.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\bmpbndl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\bmpbuttn.h">
@@ -1303,9 +1306,6 @@
     <ClInclude Include="..\..\include\wx\editlbox.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\effects.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\encinfo.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1316,6 +1316,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\filedlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\filedlgcustomize.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\filehistory.h">
@@ -1475,9 +1478,6 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\numdlgg.h">
-      <Filter>Generic Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\generic\panelg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\printps.h">
@@ -1906,9 +1906,6 @@
     <ClInclude Include="..\..\include\wx\msw\palette.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\panel.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\pen.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -2306,9 +2303,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xmlreshandler.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\bmpbndl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
   </ItemGroup>

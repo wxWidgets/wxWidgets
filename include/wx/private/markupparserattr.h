@@ -75,7 +75,7 @@ public:
                              const wxColour& foreground,
                              const wxColour& background)
     {
-        m_attrs.push(Attr(NULL, font, foreground, background));
+        m_attrs.push(Attr(nullptr, font, foreground, background));
     }
 
     // Indicates the change of the font and/or colours used. Any of the
@@ -91,33 +91,33 @@ public:
 
     // Implement all pure virtual methods inherited from the base class in
     // terms of our own ones.
-    virtual void OnBoldStart() wxOVERRIDE { DoChangeFont(&wxFont::Bold); }
-    virtual void OnBoldEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnBoldStart() override { DoChangeFont(&wxFont::Bold); }
+    virtual void OnBoldEnd() override { DoEndAttr(); }
 
-    virtual void OnItalicStart() wxOVERRIDE { DoChangeFont(&wxFont::Italic); }
-    virtual void OnItalicEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnItalicStart() override { DoChangeFont(&wxFont::Italic); }
+    virtual void OnItalicEnd() override { DoEndAttr(); }
 
-    virtual void OnUnderlinedStart() wxOVERRIDE { DoChangeFont(&wxFont::Underlined); }
-    virtual void OnUnderlinedEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnUnderlinedStart() override { DoChangeFont(&wxFont::Underlined); }
+    virtual void OnUnderlinedEnd() override { DoEndAttr(); }
 
-    virtual void OnStrikethroughStart() wxOVERRIDE { DoChangeFont(&wxFont::Strikethrough); }
-    virtual void OnStrikethroughEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnStrikethroughStart() override { DoChangeFont(&wxFont::Strikethrough); }
+    virtual void OnStrikethroughEnd() override { DoEndAttr(); }
 
-    virtual void OnBigStart() wxOVERRIDE { DoChangeFont(&wxFont::Larger); }
-    virtual void OnBigEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnBigStart() override { DoChangeFont(&wxFont::Larger); }
+    virtual void OnBigEnd() override { DoEndAttr(); }
 
-    virtual void OnSmallStart() wxOVERRIDE { DoChangeFont(&wxFont::Smaller); }
-    virtual void OnSmallEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnSmallStart() override { DoChangeFont(&wxFont::Smaller); }
+    virtual void OnSmallEnd() override { DoEndAttr(); }
 
-    virtual void OnTeletypeStart() wxOVERRIDE
+    virtual void OnTeletypeStart() override
     {
         wxFont font(GetFont());
         font.SetFamily(wxFONTFAMILY_TELETYPE);
         DoSetFont(font);
     }
-    virtual void OnTeletypeEnd() wxOVERRIDE { DoEndAttr(); }
+    virtual void OnTeletypeEnd() override { DoEndAttr(); }
 
-    virtual void OnSpanStart(const wxMarkupSpanAttributes& spanAttr) wxOVERRIDE
+    virtual void OnSpanStart(const wxMarkupSpanAttributes& spanAttr) override
     {
         wxFont font(GetFont());
         if ( !spanAttr.m_fontFace.empty() )
@@ -172,7 +172,7 @@ public:
         m_attrs.push(attr);
     }
 
-    virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(spanAttr)) wxOVERRIDE
+    virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(spanAttr)) override
     {
         DoEndAttr();
     }

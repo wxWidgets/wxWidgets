@@ -24,15 +24,15 @@ class wxWebResponseWinHTTP : public wxWebResponseImpl
 public:
     wxWebResponseWinHTTP(wxWebRequestWinHTTP& request);
 
-    wxFileOffset GetContentLength() const wxOVERRIDE { return m_contentLength; }
+    wxFileOffset GetContentLength() const override { return m_contentLength; }
 
-    wxString GetURL() const wxOVERRIDE;
+    wxString GetURL() const override;
 
-    wxString GetHeader(const wxString& name) const wxOVERRIDE;
+    wxString GetHeader(const wxString& name) const override;
 
-    int GetStatus() const wxOVERRIDE;
+    int GetStatus() const override;
 
-    wxString GetStatusText() const wxOVERRIDE;
+    wxString GetStatusText() const override;
 
     bool ReadData();
 
@@ -53,7 +53,7 @@ public:
 
     bool Init();
 
-    void SetCredentials(const wxWebCredentials& cred) wxOVERRIDE;
+    void SetCredentials(const wxWebCredentials& cred) override;
 
 private:
     wxWebRequestWinHTTP& m_request;
@@ -74,30 +74,30 @@ public:
 
     ~wxWebRequestWinHTTP();
 
-    void Start() wxOVERRIDE;
+    void Start() override;
 
-    wxWebResponseImplPtr GetResponse() const wxOVERRIDE
+    wxWebResponseImplPtr GetResponse() const override
         { return m_response; }
 
-    wxWebAuthChallengeImplPtr GetAuthChallenge() const wxOVERRIDE
+    wxWebAuthChallengeImplPtr GetAuthChallenge() const override
         { return m_authChallenge; }
 
-    wxFileOffset GetBytesSent() const wxOVERRIDE { return m_dataWritten; }
+    wxFileOffset GetBytesSent() const override { return m_dataWritten; }
 
-    wxFileOffset GetBytesExpectedToSend() const wxOVERRIDE { return m_dataSize; }
+    wxFileOffset GetBytesExpectedToSend() const override { return m_dataSize; }
 
     void HandleCallback(DWORD dwInternetStatus, LPVOID lpvStatusInformation,
         DWORD dwStatusInformationLength);
 
     HINTERNET GetHandle() const { return m_request; }
 
-    wxWebRequestHandle GetNativeHandle() const wxOVERRIDE
+    wxWebRequestHandle GetNativeHandle() const override
     {
         return (wxWebRequestHandle)GetHandle();
     }
 
 private:
-    void DoCancel() wxOVERRIDE;
+    void DoCancel() override;
 
     wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
@@ -142,13 +142,13 @@ public:
     CreateRequest(wxWebSession& session,
                   wxEvtHandler* handler,
                   const wxString& url,
-                  int id) wxOVERRIDE;
+                  int id) override;
 
-    wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
+    wxVersionInfo GetLibraryVersionInfo() override;
 
     HINTERNET GetHandle() const { return m_handle; }
 
-    wxWebSessionHandle GetNativeHandle() const wxOVERRIDE
+    wxWebSessionHandle GetNativeHandle() const override
     {
         return (wxWebSessionHandle)GetHandle();
     }
@@ -164,12 +164,12 @@ private:
 class wxWebSessionFactoryWinHTTP : public wxWebSessionFactory
 {
 public:
-    wxWebSessionImpl* Create() wxOVERRIDE
+    wxWebSessionImpl* Create() override
     {
         return new wxWebSessionWinHTTP();
     }
 
-    bool Initialize() wxOVERRIDE
+    bool Initialize() override
     {
         return wxWebSessionWinHTTP::Initialize();
     }

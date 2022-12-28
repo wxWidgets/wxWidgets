@@ -16,7 +16,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
+#if WXWIN_COMPATIBILITY_3_0
     #include "wx/dcclient.h"
+#endif // WXWIN_COMPATIBILITY_3_0
     #include "wx/event.h"
     #include "wx/font.h"
     #include "wx/log.h"
@@ -41,7 +43,7 @@ void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags
 
     m_state = state;
     m_baseParent = state->DoGetRoot();
-    if ( !property && m_baseParent->GetChildCount() )
+    if ( !property && m_baseParent->HasAnyChild() )
         property = m_baseParent->Item(0);
 
     m_property = property;
@@ -60,7 +62,7 @@ void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags
 
 void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags, int startPos, int dir  )
 {
-    wxPGProperty* property = NULL;
+    wxPGProperty* property = nullptr;
 
     if ( startPos == wxTOP )
     {
@@ -108,7 +110,7 @@ void wxPropertyGridIteratorBase::Prev()
         property = parent->Item(index);
 
         // Go to last children?
-        if ( property->GetChildCount() &&
+        if ( property->HasAnyChild() &&
              wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) )
         {
             // First child
@@ -120,7 +122,7 @@ void wxPropertyGridIteratorBase::Prev()
         // Up to a parent
         if ( parent == m_baseParent )
         {
-            m_property = NULL;
+            m_property = nullptr;
             return;
         }
         else
@@ -142,7 +144,7 @@ void wxPropertyGridIteratorBase::Next( bool iterateChildren )
     if ( !property )
         return;
 
-    if ( property->GetChildCount() &&
+    if ( property->HasAnyChild() &&
          wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) &&
          iterateChildren )
     {
@@ -165,7 +167,7 @@ void wxPropertyGridIteratorBase::Next( bool iterateChildren )
             // Next sibling of parent
             if ( parent == m_baseParent )
             {
-                m_property = NULL;
+                m_property = nullptr;
             }
             else
             {
@@ -188,29 +190,23 @@ void wxPropertyGridIteratorBase::Next( bool iterateChildren )
 // -----------------------------------------------------------------------
 
 wxPropertyGridPageState::wxPropertyGridPageState()
+    : m_pPropGrid(nullptr)
+    , m_properties(&m_regularArray)
+    , m_abcArray(nullptr)
+    , m_colWidths{wxPG_DEFAULT_SPLITTERX, wxPG_DEFAULT_SPLITTERX}
+    , m_editableColumns{1} // By default, we only have the 'value' column editable
+    , m_columnProportions{1, 1}
+    , m_fSplitterX(wxPG_DEFAULT_SPLITTERX)
+    , m_currentCategory(nullptr)
+    , m_width(0)
+    , m_virtualHeight(0)
+    , m_itemsAdded(false)
+    , m_anyModified(false)
+    , m_vhCalcPending(false)
+    , m_isSplitterPreSet(false)
+    , m_dontCenterSplitter(false)
 {
-    m_pPropGrid = NULL;
     m_regularArray.SetParentState(this);
-    m_properties = &m_regularArray;
-    m_abcArray = NULL;
-    m_currentCategory = NULL;
-    m_width = 0;
-    m_virtualHeight = 0;
-    m_itemsAdded = false;
-    m_anyModified = false;
-    m_vhCalcPending = false;
-    m_colWidths.push_back( wxPG_DEFAULT_SPLITTERX );
-    m_colWidths.push_back( wxPG_DEFAULT_SPLITTERX );
-    m_fSplitterX = wxPG_DEFAULT_SPLITTERX;
-
-    m_columnProportions.push_back(1);
-    m_columnProportions.push_back(1);
-
-    m_isSplitterPreSet = false;
-    m_dontCenterSplitter = false;
-
-    // By default, we only have the 'value' column editable
-    m_editableColumns.push_back(1);
 }
 
 // -----------------------------------------------------------------------
@@ -238,7 +234,7 @@ void wxPropertyGridPageState::InitNonCatMode()
     // to run as expected.
     m_properties = &m_regularArray;
 
-    if ( m_properties->GetChildCount() )
+    if ( m_properties->HasAnyChild() )
     {
         //
         // Prepare m_abcArray
@@ -289,8 +285,8 @@ void wxPropertyGridPageState::DoClear()
         for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
             wxPGProperty* p = m_regularArray.Item(i);
-            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, p);
-            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, p);
+            m_pPropGrid->m_deletedProperties.erase(p);
+            m_pPropGrid->m_removedProperties.erase(p);
         }
 
         m_regularArray.Empty();
@@ -299,7 +295,11 @@ void wxPropertyGridPageState::DoClear()
 
         m_dictName.clear();
 
-        m_currentCategory = NULL;
+        // We need to clear parent grid's m_propHover
+        if ( m_pPropGrid )
+            m_pPropGrid->m_propHover = nullptr;
+
+        m_currentCategory = nullptr;
         m_itemsAdded = false;
 
         m_virtualHeight = 0;
@@ -372,7 +372,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             // If too long, don't set splitter
             if ( timeSinceCreation < 250 )
             {
-                if ( m_properties->GetChildCount() )
+                if ( m_properties->HasAnyChild() )
                 {
                     SetSplitterLeft( false );
                 }
@@ -387,7 +387,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 
     if ( IsDisplayed() )
     {
-        pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)NULL);
+        pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)nullptr);
     }
 }
 
@@ -397,14 +397,14 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 
 wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
 {
-    if ( !m_properties->GetChildCount() )
-        return NULL;
+    if ( !m_properties->HasAnyChild() )
+        return nullptr;
 
     wxPG_ITERATOR_CREATE_MASKS(flags, wxPGProperty::FlagType itemExMask, wxPGProperty::FlagType parentExMask)
 
     // First, get last child of last parent
     wxPGProperty* pwc = m_properties->Last();
-    while ( pwc->GetChildCount() &&
+    while ( pwc->HasAnyChild() &&
             wxPG_ITERATOR_PARENTEXMASK_TEST(pwc, parentExMask) )
         pwc = pwc->Last();
 
@@ -432,7 +432,7 @@ wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProp
             return const_cast<wxPropertyCategory*>(static_cast<const wxPropertyCategory*>(parent));
     } while ( grandparent );
 
-    return NULL;
+    return nullptr;
 }
 
 // -----------------------------------------------------------------------
@@ -461,7 +461,7 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
         if ( p->GetLabel() == label )
             return p;
         // Check children recursively.
-        if ( p->GetChildCount() )
+        if ( p->HasAnyChild() )
         {
             p = BaseGetPropertyByLabel(label, p);
             if ( p )
@@ -469,18 +469,15 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // -----------------------------------------------------------------------
 
 wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByName( const wxString& name ) const
 {
-    wxPGHashMapS2P::const_iterator it;
-    it = m_dictName.find(name);
-    if ( it != m_dictName.end() )
-        return (wxPGProperty*) it->second;
-    return NULL;
+    wxPGHashMapS2P::const_iterator it = m_dictName.find(name);
+    return it != m_dictName.end() ? (wxPGProperty*) it->second : nullptr;
 }
 
 // -----------------------------------------------------------------------
@@ -563,7 +560,7 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
                 p->m_depth = parent->GetDepth() + 1;
             }
 
-            if ( p->GetChildCount() > 0 )
+            if ( p->HasAnyChild() )
             {
                 i = 0;
                 parent = p;
@@ -577,7 +574,7 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 
         i = parent->GetIndexInParent() + 1;
         parent = parent->GetParent();
-    } while ( parent != NULL );
+    } while ( parent != nullptr );
 
     VirtualHeightChanged();
 
@@ -632,7 +629,7 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
         p = m_properties;
 
     // Can only sort items with children
-    if ( !p->GetChildCount() )
+    if ( !p->HasAnyChild() )
         return;
 
     // Never sort children of aggregate properties
@@ -694,7 +691,7 @@ wxPGProperty* wxPropertyGridPageState::DoGetItemAtY( int y ) const
 {
     // Outside?
     if ( y < 0 )
-        return NULL;
+        return nullptr;
 
     unsigned int a = 0;
     return m_properties->GetItemAtY(y, GetGrid()->GetRowHeight(), &a);
@@ -715,6 +712,7 @@ wxPropertyGridPageState::HitTest( const wxPoint&pt ) const
 // -----------------------------------------------------------------------
 
 // Used by SetSplitterLeft() and DotFitColumns()
+#if WXWIN_COMPATIBILITY_3_0
 int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
                                            wxPGProperty* pwc,
                                            unsigned int col,
@@ -730,7 +728,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
         if ( !p->IsCategory() )
         {
             wxString text;
-            p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
+            p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
             dc.GetTextExtent(text, &w, &h);
             if ( col == 0 )
                 w += ( (p->GetDepth()-1) * pg->m_subgroup_extramargin );
@@ -746,10 +744,51 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
                 maxW = w;
         }
 
-        if ( p->GetChildCount() &&
+        if ( p->HasAnyChild() &&
              ( subProps || p->IsCategory() ) )
         {
-            w = GetColumnFitWidth( dc, p, col, subProps );
+            w = GetColumnFitWidth(p, col, subProps );
+
+            if ( w > maxW )
+                maxW = w;
+        }
+    }
+
+    return maxW;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+int wxPropertyGridPageState::GetColumnFitWidth(const wxPGProperty* p, unsigned int col, bool subProps) const
+{
+    const wxPropertyGrid* pg = GetGrid();
+    int maxW = 0;
+
+    for ( unsigned int i = 0; i < p->GetChildCount(); i++ )
+    {
+        int w;
+        wxPGProperty* pc = p->Item(i);
+        if ( !pc->IsCategory() )
+        {
+            wxString text;
+            pc->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
+            int h;
+            pg->GetTextExtent(text, &w, &h);
+            if ( col == 0 )
+                w += ((pc->GetDepth() - 1) * pg->m_subgroup_extramargin);
+
+            // account for the bitmap
+            if ( col == 1 )
+                w += pc->GetImageOffset(pg->GetImageRect(pc, -1).GetWidth());
+
+            w += (wxPG_XBEFORETEXT * 2);
+
+            if ( w > maxW )
+                maxW = w;
+        }
+
+        if ( pc->HasAnyChild() && (subProps || pc->IsCategory()) )
+        {
+            w = GetColumnFitWidth(pc, col, subProps);
 
             if ( w > maxW )
                 maxW = w;
@@ -759,13 +798,14 @@ int wxPropertyGridPageState::GetColumnFitWidth(const wxDC& dc,
     return maxW;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p, unsigned int col)
 {
     if ( p->IsCategory() )
         return 0;
 
     wxString text;
-    p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
+    p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
     int w = dc.GetTextExtent(text).x;
 
     if ( col == 0 )
@@ -776,6 +816,27 @@ int wxPropertyGridPageState::GetColumnFullWidth(const wxDC& dc, wxPGProperty* p,
         w += p->GetImageOffset(m_pPropGrid->GetImageRect(p, -1).GetWidth());
 
     w += (wxPG_XBEFORETEXT*2);
+    return w;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+int wxPropertyGridPageState::GetColumnFullWidth(wxPGProperty* p, unsigned int col) const
+{
+    if ( p->IsCategory() )
+        return 0;
+
+    wxString text;
+    p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)nullptr);
+    int w = GetGrid()->GetTextExtent(text).x;
+
+    if ( col == 0 )
+        w += p->GetDepth() * GetGrid()->m_subgroup_extramargin;
+
+    // account for the bitmap
+    if ( col == 1 )
+        w += p->GetImageOffset(GetGrid()->GetImageRect(p, -1).GetWidth());
+
+    w += (wxPG_XBEFORETEXT * 2);
     return w;
 }
 
@@ -870,10 +931,8 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
 void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 {
     wxPropertyGrid* pg = GetGrid();
-    wxClientDC dc(pg);
-    dc.SetFont(pg->GetFont());
 
-    int maxW = GetColumnFitWidth(dc, m_properties, 0, subProps);
+    int maxW = GetColumnFitWidth(m_properties, 0, subProps);
 
     if ( maxW > 0 )
     {
@@ -887,8 +946,6 @@ void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 {
     wxPropertyGrid* pg = GetGrid();
-    wxClientDC dc(pg);
-    dc.SetFont(pg->GetFont());
 
     int marginWidth = pg->GetMarginWidth();
     int accWid = marginWidth;
@@ -896,7 +953,7 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 
     for ( unsigned int col=0; col < GetColumnCount(); col++ )
     {
-        int fitWid = GetColumnFitWidth(dc, m_properties, col, true);
+        int fitWid = GetColumnFitWidth(m_properties, col, true);
         int colMinWidth = GetColumnMinWidth(col);
         if ( fitWid < colMinWidth )
             fitWid = colMinWidth;
@@ -1193,14 +1250,8 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
         int flags = wxPG_REPORT_ERROR|wxPG_FULL_VALUE|wxPG_PROGRAMMATIC_VALUE;
 
         wxVariant variant = p->GetValueRef();
-        bool res;
 
-        if ( p->GetMaxLength() <= 0 )
-            res = p->StringToValue( variant, value, flags );
-        else
-            res = p->StringToValue( variant, value.Mid(0,p->GetMaxLength()), flags );
-
-        if ( res )
+        if ( p->StringToValue(variant, value, flags) )
         {
             p->SetValue(variant);
             if ( p == m_pPropGrid->GetSelection() && IsDisplayed() )
@@ -1265,7 +1316,7 @@ void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
                 // deselected, then we need to take some extra measures.
                 wxArrayPGProperty sel(m_selection.begin() + 1, m_selection.end());
 
-                wxPGProperty* newFirst = sel.empty()? NULL: sel[0];
+                wxPGProperty* newFirst = sel.empty()? nullptr: sel[0];
 
                 pg->DoSelectProperty(newFirst,
                                      wxPG_SEL_DONT_SEND_EVENT);
@@ -1289,7 +1340,7 @@ bool wxPropertyGridPageState::DoCollapse( wxPGProperty* p )
 {
     wxCHECK_MSG( p, false, wxS("invalid property id") );
 
-    if ( !p->GetChildCount() ) return false;
+    if ( !p->HasAnyChild() ) return false;
 
     if ( !p->IsExpanded() ) return false;
 
@@ -1306,7 +1357,7 @@ bool wxPropertyGridPageState::DoExpand( wxPGProperty* p )
 {
     wxCHECK_MSG( p, false, wxS("invalid property id") );
 
-    if ( !p->GetChildCount() ) return false;
+    if ( !p->HasAnyChild() ) return false;
 
     if ( p->IsExpanded() ) return false;
 
@@ -1357,7 +1408,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
     wxVariantList tempList;
     wxVariant v( tempList, listname );
 
-    if ( pwc->GetChildCount() )
+    if ( pwc->HasAnyChild() )
     {
         if ( flags & wxPG_KEEP_STRUCTURE )
         {
@@ -1366,7 +1417,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
             for ( unsigned int i = 0; i < pwc->GetChildCount(); i++ )
             {
                 wxPGProperty* p = pwc->Item(i);
-                if ( !p->GetChildCount() || p->HasFlag(wxPG_PROP_AGGREGATE) )
+                if ( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE) )
                 {
                     wxVariant variant = p->GetValue();
                     variant.SetName( p->GetBaseName() );
@@ -1390,7 +1441,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                 const wxPGProperty* p = it.GetProperty();
 
                 // Use a trick to ignore wxParentProperty itself, but not its sub-properties.
-                if ( !p->GetChildCount() || p->HasFlag(wxPG_PROP_AGGREGATE) )
+                if ( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE) )
                 {
                     wxVariant variant = p->GetValue();
                     variant.SetName( p->GetName() );
@@ -1423,15 +1474,12 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
         use_category = (wxPropertyCategory*)m_properties;
 
     // Let's iterate over the list of variants.
-    wxVariantList::const_iterator node;
     int numSpecialEntries = 0;
 
     //
     // Second pass for special entries
-    for ( node = list.begin(); node != list.end(); ++node )
+    for ( auto current : list )
     {
-        wxVariant *current = const_cast<wxVariant*>(*node);
-
         // Make sure it is wxVariant.
         wxASSERT( current );
         wxASSERT( wxStrcmp(current->GetClassInfo()->GetClassName(),wxS("wxVariant")) == 0 );
@@ -1456,7 +1504,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                     if ( current->IsType(wxPG_VARIANT_TYPE_LIST) )
                     {
                         DoSetPropertyValues( current->GetList(),
-                                p->IsCategory()?p:(NULL)
+                                p->IsCategory()?p:(nullptr)
                             );
                     }
                     else
@@ -1491,10 +1539,8 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 
     if ( numSpecialEntries )
     {
-        for ( node = list.begin(); node != list.end(); ++node )
+        for ( auto current : list )
         {
-            wxVariant *current = const_cast<wxVariant*>(*node);
-
             const wxString& name = current->GetName();
             if ( !name.empty() )
             {
@@ -1520,11 +1566,8 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                                 wxASSERT( current->IsType(wxPG_VARIANT_TYPE_LIST) );
 
                                 wxVariantList& list2 = current->GetList();
-                                wxVariantList::const_iterator node2;
-
-                                for ( node2 = list2.begin(); node2 != list2.end(); ++node2 )
+                                for ( auto attr : list2 )
                                 {
-                                    wxVariant *attr = const_cast<wxVariant*>(*node2);
                                     foundProp->SetAttribute( attr->GetName(), *attr );
                                 }
                             }
@@ -1567,7 +1610,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 
     // This will allow better behaviour.
     if ( scheduledParent == m_properties )
-        scheduledParent = NULL;
+        scheduledParent = nullptr;
 
     if ( scheduledParent && !scheduledParent->IsCategory() )
     {
@@ -1582,7 +1625,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 
         // Parent of a category must be either root or another category
         // (otherwise Bad Things might happen).
-        wxASSERT_MSG( scheduledParent == NULL ||
+        wxASSERT_MSG( scheduledParent == nullptr ||
                       scheduledParent == m_properties ||
                       scheduledParent->IsCategory(),
                  wxS("Parent of a category must be either root or another category."));
@@ -1615,7 +1658,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
     }
 #endif // wxDEBUG_LEVEL
 
-    // NULL parent == root parent
+    // null parent == root parent
     if ( !scheduledParent )
         scheduledParent = DoGetRoot();
 
@@ -1641,9 +1684,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 
 wxPGProperty* wxPropertyGridPageState::DoAppend( wxPGProperty* property )
 {
-    wxPropertyCategory* cur_cat = m_currentCategory;
-    if ( property->IsCategory() )
-        cur_cat = NULL;
+    wxPropertyCategory* cur_cat = property->IsCategory() ? nullptr : m_currentCategory;
 
     return DoInsert( cur_cat, -1, property );
 }
@@ -1862,7 +1903,7 @@ static wxPGProperty* FindCategoryForProperty(wxPGProperty* cat, wxPGProperty* pr
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 };
 
@@ -1909,7 +1950,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     {
         if (item == m_currentCategory || IsChildCategory(item, m_currentCategory, true))
         {
-            m_currentCategory = NULL;
+            m_currentCategory = nullptr;
         }
     }
 
@@ -1919,17 +1960,11 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         // Prevent adding duplicates to the lists.
         if ( doDelete )
         {
-            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item) )
-                return;
-
-            pg->m_deletedProperties.push_back(item);
+            pg->m_deletedProperties.insert(item);
         }
         else
         {
-            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item) )
-                return;
-
-            pg->m_removedProperties.push_back(item);
+            pg->m_removedProperties.insert(item);
         }
 
         // Rename the property and its children so it won't remain in the way
@@ -1955,7 +1990,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     unsigned int indinparent = item->GetIndexInParent();
 
     // Delete children
-    if ( item->GetChildCount() && !item->HasFlag(wxPG_PROP_AGGREGATE) )
+    if ( item->HasAnyChild() && !item->HasFlag(wxPG_PROP_AGGREGATE) )
     {
         // deleting a category
         item->DeleteChildren();
@@ -2003,34 +2038,25 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 
     // We need to clear parent grid's m_propHover, if it matches item
     if ( pg && pg->m_propHover == item )
-        pg->m_propHover = NULL;
+        pg->m_propHover = nullptr;
 
     // Mark the property as 'unattached'
-    item->m_parentState = NULL;
-    item->m_parent = NULL;
+    item->m_parentState = nullptr;
+    item->m_parent = nullptr;
 
     // We can actually delete it now
     if ( doDelete )
     {
         // Remove the item from both lists of pending operations.
         // (Deleted item cannot be also the subject of further removal.)
-        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_deletedProperties, item);
-        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item),
-                    wxS("Too many occurrences of the item"));
-
-        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
-        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
-                    wxS("Too many occurrences of the item"));
-
+        pg->m_deletedProperties.erase(item);
+        pg->m_removedProperties.erase(item);
         delete item;
     }
     else
     {
         // Remove the item from the list of pending removals.
-        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
-        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
-                    wxS("Too many occurrences of the item"));
-
+        pg->m_removedProperties.erase(item);
         item->OnDetached(this, pg);
     }
 

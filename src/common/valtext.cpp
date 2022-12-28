@@ -119,7 +119,7 @@ wxTextEntry *wxTextValidator::GetTextEntry()
         "or wxComboCtrl"
     );
 
-    return NULL;
+    return nullptr;
 }
 
 // Called when the value in the window must be validated.
@@ -280,14 +280,8 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     if (!m_validatorWindow)
         return;
 
-#if wxUSE_UNICODE
     // We only filter normal, printable characters.
     int keyCode = event.GetUnicodeKey();
-#else // !wxUSE_UNICODE
-    int keyCode = event.GetKeyCode();
-    if ( keyCode > WXK_START )
-        return;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // we don't filter special keys and delete
     if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)

@@ -39,7 +39,7 @@ static GtkWidget* gs_tlw_parent;
 static GtkContainer* ContainerWidget()
 {
     static GtkContainer* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = GTK_CONTAINER(gtk_fixed_new());
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
@@ -52,9 +52,9 @@ static GtkContainer* ContainerWidget()
 static GtkWidget* ScrollBarWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
-        s_widget = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL);
+        s_widget = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, nullptr);
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
 #ifndef __WXGTK3__
@@ -77,13 +77,13 @@ static void style_set(GtkWidget*, GtkStyle*, void*)
 static GtkWidget* ButtonWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = gtk_button_new();
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
         gtk_container_add(ContainerWidget(), s_widget);
         gtk_widget_ensure_style(s_widget);
-        g_signal_connect(s_widget, "style_set", G_CALLBACK(style_set), NULL);
+        g_signal_connect(s_widget, "style_set", G_CALLBACK(style_set), nullptr);
     }
     return s_widget;
 }
@@ -91,7 +91,7 @@ static GtkWidget* ButtonWidget()
 static GtkWidget* ListWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = gtk_tree_view_new_with_model(
             GTK_TREE_MODEL(gtk_list_store_new(1, G_TYPE_INT)));
@@ -105,7 +105,7 @@ static GtkWidget* ListWidget()
 static GtkWidget* TextCtrlWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = gtk_text_view_new();
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
@@ -118,7 +118,7 @@ static GtkWidget* TextCtrlWidget()
 static GtkWidget* MenuItemWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = gtk_menu_item_new();
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
@@ -131,7 +131,7 @@ static GtkWidget* MenuItemWidget()
 static GtkWidget* MenuBarWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = gtk_menu_bar_new();
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
@@ -144,7 +144,7 @@ static GtkWidget* MenuBarWidget()
 static GtkWidget* ToolTipWidget()
 {
     static GtkWidget* s_widget;
-    if (s_widget == NULL)
+    if (s_widget == nullptr)
     {
         s_widget = gtk_window_new(GTK_WINDOW_POPUP);
         g_object_add_weak_pointer(G_OBJECT(s_widget), (void**)&s_widget);
@@ -214,17 +214,17 @@ wxGtkStyleContext::wxGtkStyleContext(double scale)
     : m_path(gtk_widget_path_new())
     , m_scale(int(scale))
 {
-    m_context = NULL;
+    m_context = nullptr;
 }
 
 wxGtkStyleContext& wxGtkStyleContext::Add(GType type, const char* objectName, ...)
 {
-    if (m_context == NULL && type != GTK_TYPE_WINDOW)
+    if (m_context == nullptr && type != GTK_TYPE_WINDOW)
         AddWindow();
 
     gtk_widget_path_append_type(m_path, type);
 #if GTK_CHECK_VERSION(3,20,0)
-    if (gtk_check_version(3,20,0) == NULL)
+    if (gtk_check_version(3,20,0) == nullptr)
         gtk_widget_path_iter_set_object_name(m_path, -1, objectName);
 #endif
     va_list args;
@@ -236,14 +236,14 @@ wxGtkStyleContext& wxGtkStyleContext::Add(GType type, const char* objectName, ..
 
     GtkStyleContext* sc = gtk_style_context_new();
 #if GTK_CHECK_VERSION(3,10,0)
-    if (gtk_check_version(3,10,0) == NULL)
+    if (gtk_check_version(3,10,0) == nullptr)
         gtk_style_context_set_scale(sc, m_scale);
 #endif
     gtk_style_context_set_path(sc, m_path);
     if (m_context)
     {
 #if GTK_CHECK_VERSION(3,4,0)
-        if (gtk_check_version(3,4,0) == NULL)
+        if (gtk_check_version(3,4,0) == nullptr)
             gtk_style_context_set_parent(sc, m_context);
 #endif
         g_object_unref(m_context);
@@ -254,15 +254,15 @@ wxGtkStyleContext& wxGtkStyleContext::Add(GType type, const char* objectName, ..
 
 wxGtkStyleContext& wxGtkStyleContext::Add(const char* objectName)
 {
-    return Add(G_TYPE_NONE, objectName, NULL);
+    return Add(G_TYPE_NONE, objectName, nullptr);
 }
 
 wxGtkStyleContext::~wxGtkStyleContext()
 {
     gtk_widget_path_free(m_path);
-    if (m_context == NULL)
+    if (m_context == nullptr)
         return;
-    if (gtk_check_version(3,16,0) == NULL || gtk_check_version(3,4,0))
+    if (gtk_check_version(3,16,0) == nullptr || gtk_check_version(3,4,0))
     {
         g_object_unref(m_context);
         return;
@@ -275,7 +275,7 @@ wxGtkStyleContext::~wxGtkStyleContext()
         if (parent)
         {
             g_object_ref(parent);
-            gtk_style_context_set_parent(sc, NULL);
+            gtk_style_context_set_parent(sc, nullptr);
         }
         g_object_unref(sc);
         sc = parent;
@@ -285,40 +285,40 @@ wxGtkStyleContext::~wxGtkStyleContext()
 
 wxGtkStyleContext& wxGtkStyleContext::AddButton()
 {
-    return Add(GTK_TYPE_BUTTON, "button", "button", NULL);
+    return Add(GTK_TYPE_BUTTON, "button", "button", nullptr);
 }
 
 wxGtkStyleContext& wxGtkStyleContext::AddCheckButton()
 {
-    return Add(GTK_TYPE_CHECK_BUTTON, "checkbutton", NULL);
+    return Add(GTK_TYPE_CHECK_BUTTON, "checkbutton", nullptr);
 }
 
 #if GTK_CHECK_VERSION(3,10,0)
 wxGtkStyleContext& wxGtkStyleContext::AddHeaderbar()
 {
-    return Add(GTK_TYPE_HEADER_BAR, "headerbar", "titlebar", "header-bar", NULL);
+    return Add(GTK_TYPE_HEADER_BAR, "headerbar", "titlebar", "header-bar", nullptr);
 }
 #endif
 
 wxGtkStyleContext& wxGtkStyleContext::AddLabel()
 {
-    return Add(GTK_TYPE_LABEL, "label", NULL);
+    return Add(GTK_TYPE_LABEL, "label", nullptr);
 }
 
 wxGtkStyleContext& wxGtkStyleContext::AddMenu()
 {
-    return AddWindow("popup").Add(GTK_TYPE_MENU, "menu", "menu", NULL);
+    return AddWindow("popup").Add(GTK_TYPE_MENU, "menu", "menu", nullptr);
 }
 
 wxGtkStyleContext& wxGtkStyleContext::AddMenuItem()
 {
-    return AddMenu().Add(GTK_TYPE_MENU_ITEM, "menuitem", "menuitem", NULL);
+    return AddMenu().Add(GTK_TYPE_MENU_ITEM, "menuitem", "menuitem", nullptr);
 }
 
 wxGtkStyleContext& wxGtkStyleContext::AddTextview(const char* child1, const char* child2)
 {
-    Add(GTK_TYPE_TEXT_VIEW, "textview", "view", NULL);
-    if (child1 && gtk_check_version(3,20,0) == NULL)
+    Add(GTK_TYPE_TEXT_VIEW, "textview", "view", nullptr);
+    if (child1 && gtk_check_version(3,20,0) == nullptr)
     {
         Add(child1);
         if (child2)
@@ -329,7 +329,7 @@ wxGtkStyleContext& wxGtkStyleContext::AddTextview(const char* child1, const char
 
 wxGtkStyleContext& wxGtkStyleContext::AddTreeview()
 {
-    return Add(GTK_TYPE_TREE_VIEW, "treeview", "view", NULL);
+    return Add(GTK_TYPE_TREE_VIEW, "treeview", "view", nullptr);
 }
 
 #if GTK_CHECK_VERSION(3,20,0)
@@ -358,11 +358,11 @@ wxGtkStyleContext& wxGtkStyleContext::AddTreeviewHeaderButton(int pos)
 
 wxGtkStyleContext& wxGtkStyleContext::AddTooltip()
 {
-    wxASSERT(m_context == NULL);
+    wxASSERT(m_context == nullptr);
     GtkWidgetPath* path = m_path;
     gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
 #if GTK_CHECK_VERSION(3,20,0)
-    if (gtk_check_version(3,20,0) == NULL)
+    if (gtk_check_version(3,20,0) == nullptr)
         gtk_widget_path_iter_set_object_name(path, -1, "tooltip");
 #endif
     gtk_widget_path_iter_add_class(path, -1, "background");
@@ -375,16 +375,16 @@ wxGtkStyleContext& wxGtkStyleContext::AddTooltip()
 
 wxGtkStyleContext& wxGtkStyleContext::AddWindow(const char* className2)
 {
-    return Add(GTK_TYPE_WINDOW, "window", "background", className2, NULL);
+    return Add(GTK_TYPE_WINDOW, "window", "background", className2, nullptr);
 }
 
 void wxGtkStyleContext::Bg(wxColour& color, int state) const
 {
     GdkRGBA* rgba;
-    cairo_pattern_t* pattern = NULL;
+    cairo_pattern_t* pattern = nullptr;
     gtk_style_context_set_state(m_context, GtkStateFlags(state));
     gtk_style_context_get(m_context, GtkStateFlags(state),
-        "background-color", &rgba, "background-image", &pattern, NULL);
+        "background-color", &rgba, "background-image", &pattern, nullptr);
     color = wxColour(*rgba);
     gdk_rgba_free(rgba);
 
@@ -457,7 +457,7 @@ void wxGtkStyleContext::Fg(wxColour& color, int state) const
 void wxGtkStyleContext::Border(wxColour& color) const
 {
     GdkRGBA* rgba;
-    gtk_style_context_get(m_context, GTK_STATE_FLAG_NORMAL, "border-color", &rgba, NULL);
+    gtk_style_context_get(m_context, GTK_STATE_FLAG_NORMAL, "border-color", &rgba, nullptr);
     color = wxColour(*rgba);
     gdk_rgba_free(rgba);
 }
@@ -478,7 +478,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     {
         once = true;
         g_signal_connect(gtk_settings_get_default(), "notify::gtk-theme-name",
-            G_CALLBACK(notify_gtk_theme_name), NULL);
+            G_CALLBACK(notify_gtk_theme_name), nullptr);
     }
 
     wxGtkStyleContext sc;
@@ -490,7 +490,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
     case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
 #if GTK_CHECK_VERSION(3,10,0)
-        if (gtk_check_version(3,10,0) == NULL)
+        if (gtk_check_version(3,10,0) == nullptr)
         {
             int state = GTK_STATE_FLAG_NORMAL;
             if (index == wxSYS_COLOUR_INACTIVECAPTION ||
@@ -531,7 +531,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_CAPTIONTEXT:
 #if GTK_CHECK_VERSION(3,10,0)
-        if (gtk_check_version(3,10,0) == NULL)
+        if (gtk_check_version(3,10,0) == nullptr)
         {
             sc.AddHeaderbar().AddLabel().Fg(color);
             break;
@@ -543,7 +543,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
 #if GTK_CHECK_VERSION(3,10,0)
-        if (gtk_check_version(3,10,0) == NULL)
+        if (gtk_check_version(3,10,0) == nullptr)
         {
             sc.AddHeaderbar().AddLabel().Fg(color, GTK_STATE_FLAG_BACKDROP);
             break;
@@ -554,7 +554,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sc.AddLabel().Fg(color, GTK_STATE_FLAG_INSENSITIVE);
         break;
     case wxSYS_COLOUR_HOTLIGHT:
-        sc.Add(GTK_TYPE_LINK_BUTTON, "button", "link", NULL);
+        sc.Add(GTK_TYPE_LINK_BUTTON, "button", "link", nullptr);
         if (wx_is_at_least_gtk3(12))
             sc.Fg(color, GTK_STATE_FLAG_LINK);
 #ifndef __WXGTK4__
@@ -591,7 +591,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sc.AddMenu().Bg(color);
         break;
     case wxSYS_COLOUR_MENUBAR:
-        sc.Add(GTK_TYPE_MENU_BAR, "menubar", "menubar", NULL).Bg(color);
+        sc.Add(GTK_TYPE_MENU_BAR, "menubar", "menubar", nullptr).Bg(color);
         break;
     case wxSYS_COLOUR_MENUHILIGHT:
         sc.AddMenuItem().Bg(color, GTK_STATE_FLAG_PRELIGHT);
@@ -747,10 +747,10 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_HOTLIGHT:
             {
                 GdkColor c = { 0, 0, 0, 0xeeee };
-                if (gtk_check_version(2,10,0) == NULL)
+                if (gtk_check_version(2,10,0) == nullptr)
                 {
-                    GdkColor* linkColor = NULL;
-                    gtk_widget_style_get(ButtonWidget(), "link-color", &linkColor, NULL);
+                    GdkColor* linkColor = nullptr;
+                    gtk_widget_style_get(ButtonWidget(), "link-color", &linkColor, nullptr);
                     if (linkColor)
                     {
                         c = *linkColor;
@@ -797,7 +797,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 {
                     once = true;
                     g_signal_connect(gtk_settings_get_default(), "notify::gtk-font-name",
-                        G_CALLBACK(notify_gtk_font_name), NULL);
+                        G_CALLBACK(notify_gtk_font_name), nullptr);
                 }
                 ContainerWidget();
                 int scale = 1;
@@ -808,7 +808,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 wxGtkStyleContext sc(scale);
                 sc.AddButton().AddLabel();
                 gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
-                    GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+                    GTK_STYLE_PROPERTY_FONT, &info.description, nullptr);
 #else
                 info.description = ButtonStyle()->font_desc;
 #endif
@@ -825,7 +825,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 #endif // wxUSE_FONTENUM
 
 #ifndef __WXGTK3__
-                info.description = NULL;
+                info.description = nullptr;
 #endif
             }
             font = gs_fontSystem;
@@ -841,7 +841,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 }
 
 // helper: return the GtkSettings either for the screen the current window is
-// on or for the default screen if window is NULL
+// on or for the default screen if window is null
 static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
 {
     return window ? gtk_settings_get_for_screen(gdk_window_get_screen(window))
@@ -894,13 +894,13 @@ static int GetScrollbarWidth()
 #else
         wxGtkStyleContext sc;
 #endif
-        sc.Add(GTK_TYPE_SCROLLBAR, "scrollbar", "scrollbar", "vertical", "right", NULL);
+        sc.Add(GTK_TYPE_SCROLLBAR, "scrollbar", "scrollbar", "vertical", "right", nullptr);
 
         gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
 
         sc.Add("contents").Add("trough").Add("slider");
 
-        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL, "min-width", &width, NULL);
+        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL, "min-width", &width, nullptr);
         width += border.left + border.right;
 
         gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
@@ -915,7 +915,7 @@ static int GetScrollbarWidth()
     {
         int slider_width, trough_border;
         gtk_widget_style_get(ScrollBarWidget(),
-            "slider-width", &slider_width, "trough-border", &trough_border, NULL);
+            "slider-width", &slider_width, "trough-border", &trough_border, nullptr);
         width = slider_width + (2 * trough_border);
     }
     return width;
@@ -923,7 +923,7 @@ static int GetScrollbarWidth()
 
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win )
 {
-    GdkWindow *window = NULL;
+    GdkWindow *window = nullptr;
     if (win)
         window = gtk_widget_get_window(win->GetHandle());
 
@@ -946,7 +946,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
                     // In most cases the top extent is the titlebar, so we use the bottom extent
                     // for the heights.
                     int right, bottom;
-                    if (wxGetFrameExtents(window, NULL, &right, NULL, &bottom))
+                    if (wxGetFrameExtents(window, nullptr, &right, nullptr, &bottom))
                     {
                         switch (index)
                         {
@@ -973,14 +973,14 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
         case wxSYS_DCLICK_Y:
             gint dclick_distance;
             g_object_get(GetSettingsForWindowScreen(window),
-                            "gtk-double-click-distance", &dclick_distance, NULL);
+                            "gtk-double-click-distance", &dclick_distance, nullptr);
 
             return dclick_distance * 2;
 
         case wxSYS_DCLICK_MSEC:
             gint dclick;
             g_object_get(GetSettingsForWindowScreen(window),
-                            "gtk-double-click-time", &dclick, NULL);
+                            "gtk-double-click-time", &dclick, nullptr);
             return dclick;
 
         case wxSYS_CARET_ON_MSEC:
@@ -991,7 +991,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
                 g_object_get(GetSettingsForWindowScreen(window),
                                 "gtk-cursor-blink", &should_blink,
                                 "gtk-cursor-blink-time", &blink_time,
-                                NULL);
+                                nullptr);
                 if (!should_blink)
                     return 0;
 
@@ -1008,7 +1008,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
                 g_object_get(GetSettingsForWindowScreen(window),
                                 "gtk-cursor-blink", &should_blink,
                                 "gtk-cursor-blink-timeout", &timeout,
-                                NULL);
+                                nullptr);
                 if (!should_blink)
                     return 0;
 
@@ -1027,7 +1027,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
         case wxSYS_DRAG_Y:
             gint drag_threshold;
             g_object_get(GetSettingsForWindowScreen(window),
-                            "gtk-dnd-drag-threshold", &drag_threshold, NULL);
+                            "gtk-dnd-drag-threshold", &drag_threshold, nullptr);
 
             // The correct thing here would be to double the value
             // since that is what the API wants. But the values
@@ -1086,7 +1086,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
             // Reconsider when we have a way to report to the user on which side it is.
             {
                 int top;
-                if (wxGetFrameExtents(window, NULL, NULL, &top, NULL))
+                if (wxGetFrameExtents(window, nullptr, nullptr, &top, nullptr))
                 {
                     return top; // top frame extent
                 }
@@ -1124,8 +1124,8 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 class wxSystemSettingsModule: public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override;
     wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
 };
 wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
@@ -1137,14 +1137,14 @@ void wxSystemSettingsModule::OnExit()
     if (settings)
     {
         g_signal_handlers_disconnect_by_func(settings,
-            (void*)notify_gtk_theme_name, NULL);
+            (void*)notify_gtk_theme_name, nullptr);
         g_signal_handlers_disconnect_by_func(settings,
-            (void*)notify_gtk_font_name, NULL);
+            (void*)notify_gtk_font_name, nullptr);
     }
 #endif
     if (gs_tlw_parent)
     {
         gtk_widget_destroy(gs_tlw_parent);
-        gs_tlw_parent = NULL;
+        gs_tlw_parent = nullptr;
     }
 }

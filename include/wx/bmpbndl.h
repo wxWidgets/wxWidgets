@@ -45,6 +45,12 @@ public:
     // wxBitmapBundle.
     wxBitmapBundle(const wxImage& image);
 
+    // And another one from XPM data, as it's relatively common to pass it to
+    // various functions that take wxBitmapBundle in the existing code. It is
+    // not formally deprecated, but should be avoided in any new code and can
+    // become deprecated in the future.
+    wxBitmapBundle(const char* const* xpm);
+
     // Default copy ctor and assignment operator and dtor would be ok, but need
     // to be defined out of line, where wxBitmapBundleImpl is fully declared.
 
@@ -106,7 +112,10 @@ public:
     static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     // Check if bitmap bundle is non-empty.
-    bool IsOk() const { return m_impl.get() != NULL; }
+    bool IsOk() const { return m_impl.get() != nullptr; }
+
+    // Clear the bundle contents, IsOk() will return false after doing this.
+    void Clear();
 
     // Get the size of the bitmap represented by this bundle when using the
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
@@ -149,11 +158,11 @@ public:
     // Implementation only from now on.
 
     // Get the bitmap size preferred by the majority of the elements of the
-    // bundles at the scale appropriate for the given scale.
+    // bundles at the given scale or the scale appropriate for the given window.
     static wxSize
-    GetConsensusSizeFor(wxWindow* win,
-                        const wxVector<wxBitmapBundle>& bundles,
-                        const wxSize& sizeDefault);
+    GetConsensusSizeFor(double scale, const wxVector<wxBitmapBundle>& bundles);
+    static wxSize
+    GetConsensusSizeFor(wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
     // Create wxImageList and fill it with the images from the given bundles in
     // the sizes appropriate for the DPI scaling used for the specified window.
@@ -221,6 +230,29 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
 protected:
+    // Standard implementation of GetPreferredBitmapSizeAtScale(): choose the
+    // scale closest to the given one from the available bitmap scales.
+    //
+    // If this function is used, GetNextAvailableScale() must be overridden!
+    wxSize DoGetPreferredSize(double scale) const;
+
+    // Helper for implementing GetBitmap(): if we need to upscale a bitmap,
+    // uses GetNextAvailableScale() to find the index of the best bitmap to
+    // use, where "best" is defined as "using scale which is a divisor of the
+    // given one", as upscaling by an integer factor is strongly preferable.
+    size_t GetIndexToUpscale(const wxSize& size) const;
+
+    // Override this function if DoGetPreferredSize() or GetIndexToUpscale() is
+    // used: it can use the provided parameter as an internal index, it's
+    // guaranteed to be 0 when calling this function for the first time. When
+    // there are no more scales, return 0.
+    //
+    // This function is not pure virtual because it doesn't need to be
+    // implemented if DoGetPreferredSize() is never used, but it will assert if
+    // it's called.
+    virtual double GetNextAvailableScale(size_t& i) const;
+
+
     virtual ~wxBitmapBundleImpl();
 
 public:
@@ -241,5 +273,20 @@ public:
     // on demand and cache it.
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
 };
+
+// ----------------------------------------------------------------------------
+// Allow using wxBitmapBundle in wxVariant
+// ----------------------------------------------------------------------------
+
+#if wxUSE_VARIANT
+
+class WXDLLIMPEXP_FWD_BASE wxVariant;
+
+WXDLLIMPEXP_CORE
+wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant);
+WXDLLIMPEXP_CORE
+wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value);
+
+#endif // wxUSE_VARIANT
 
 #endif // _WX_BMPBNDL_H_

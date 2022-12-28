@@ -52,7 +52,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrintDialog : public wxObject
 {
 public:
-    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = nullptr);
     wxPrintDialog(wxWindow *parent, wxPrintData* data);
     virtual ~wxPrintDialog();
 
@@ -99,7 +99,7 @@ private:
 class WXDLLIMPEXP_CORE wxPageSetupDialog: public wxObject
 {
 public:
-    wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
     virtual ~wxPageSetupDialog();
 
     int ShowModal();

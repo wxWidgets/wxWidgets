@@ -153,7 +153,7 @@ wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
 wx_add_sample(webview LIBRARIES wxwebview
-    DATA ../help/doc.zip:doc.zip
+    DATA ../help/doc.zip:doc.zip handler_advanced.html
     NAME webviewsample DEPENDS wxUSE_WEBVIEW)
 if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample wxstc)

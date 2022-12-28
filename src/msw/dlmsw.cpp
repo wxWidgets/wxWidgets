@@ -18,9 +18,6 @@
 
 #include  "wx/wxprec.h"
 
-
-#if wxUSE_DYNLIB_CLASS
-
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -139,7 +136,7 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(const wxChar* name,
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
-    return (wxDllType)::GetModuleHandle(NULL);
+    return (wxDllType)::GetModuleHandle(nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -236,50 +233,14 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 // Getting the module from an address inside it
 // ----------------------------------------------------------------------------
 
-namespace
-{
-
-// Tries to dynamically load GetModuleHandleEx() from kernel32.dll and call it
-// to get the module handle from the given address. Returns NULL if it fails to
-// either resolve the function (which can only happen on pre-Vista systems
-// normally) or if the function itself failed.
-HMODULE CallGetModuleHandleEx(const void* addr)
-{
-    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCTSTR, HMODULE *);
-    static const GetModuleHandleEx_t INVALID_FUNC_PTR = (GetModuleHandleEx_t)-1;
-
-    static GetModuleHandleEx_t s_pfnGetModuleHandleEx = INVALID_FUNC_PTR;
-    if ( s_pfnGetModuleHandleEx == INVALID_FUNC_PTR )
-    {
-        wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
-
-        wxDL_INIT_FUNC_AW(s_pfn, GetModuleHandleEx, dll);
-
-        // dll object can be destroyed, kernel32.dll won't be unloaded anyhow
-    }
-
-    if ( !s_pfnGetModuleHandleEx )
-        return NULL;
-
-    // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
-    //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
-    HMODULE hmod;
-    if ( !s_pfnGetModuleHandleEx(6, (LPCTSTR)addr, &hmod) )
-        return NULL;
-
-    return hmod;
-}
-
-} // anonymous namespace
-
 /* static */
 void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
 {
-    HMODULE hmod = CallGetModuleHandleEx(addr);
-    if ( !hmod )
+    HMODULE hmod;
+    if ( !::GetModuleHandleEx(0, (LPCTSTR)addr, &hmod) || !hmod )
     {
         wxLogLastError(wxT("GetModuleHandleEx"));
-        return NULL;
+        return nullptr;
     }
 
     if ( path )
@@ -292,7 +253,7 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
             // in principle, MAX_PATH could be unsufficient and we should try
             // increasing the buffer size here.
             wxLogLastError(wxT("GetModuleFromAddress"));
-            return NULL;
+            return nullptr;
         }
 
         libname[MAX_PATH-1] = wxT('\0');
@@ -310,12 +271,11 @@ WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const wxString& name, void *addr)
 {
     // we want to use GetModuleHandleEx() instead of usual GetModuleHandle()
     // because the former works correctly for comctl32.dll while the latter
-    // returns NULL when comctl32.dll version 6 is used under XP (note that
+    // returns nullptr when comctl32.dll version 6 is used under XP (note that
     // GetModuleHandleEx() is only available under XP and later, coincidence?)
-    HMODULE hmod = CallGetModuleHandleEx(addr);
+    HMODULE hmod;
+    if ( !addr || !::GetModuleHandleEx(0, (LPCTSTR)addr, &hmod) || !hmod )
+        hmod = ::GetModuleHandle(name.t_str());
 
-    return hmod ? hmod : ::GetModuleHandle(name.t_str());
+    return hmod;
 }
-
-#endif // wxUSE_DYNLIB_CLASS
-

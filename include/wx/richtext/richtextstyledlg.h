@@ -99,8 +99,8 @@ public:
     void Init();
 
     /// Transfer data from/to window
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
     /// Set/get style sheet
     void SetStyleSheet(wxRichTextStyleSheet* sheet) { m_richTextStyleSheet = sheet; }
@@ -132,7 +132,7 @@ public:
     wxRichTextStyleDefinition* GetSelectedStyleDefinition() const;
 
     /// Apply the style
-    bool ApplyStyle(wxRichTextCtrl* ctrl = NULL);
+    bool ApplyStyle(wxRichTextCtrl* ctrl = nullptr);
 
     /// Should we show tooltips?
     static bool ShowToolTips() { return sm_showToolTips; }

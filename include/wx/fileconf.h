@@ -151,28 +151,28 @@ public:
 #endif // __UNIX__/!__UNIX__
 
   // implement inherited pure virtual functions
-  virtual void SetPath(const wxString& strPath) wxOVERRIDE;
-  virtual const wxString& GetPath() const wxOVERRIDE;
+  virtual void SetPath(const wxString& strPath) override;
+  virtual const wxString& GetPath() const override;
 
-  virtual bool GetFirstGroup(wxString& str, long& lIndex) const wxOVERRIDE;
-  virtual bool GetNextGroup (wxString& str, long& lIndex) const wxOVERRIDE;
-  virtual bool GetFirstEntry(wxString& str, long& lIndex) const wxOVERRIDE;
-  virtual bool GetNextEntry (wxString& str, long& lIndex) const wxOVERRIDE;
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const override;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const override;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const override;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const override;
 
-  virtual size_t GetNumberOfEntries(bool bRecursive = false) const wxOVERRIDE;
-  virtual size_t GetNumberOfGroups(bool bRecursive = false) const wxOVERRIDE;
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const override;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const override;
 
-  virtual bool HasGroup(const wxString& strName) const wxOVERRIDE;
-  virtual bool HasEntry(const wxString& strName) const wxOVERRIDE;
+  virtual bool HasGroup(const wxString& strName) const override;
+  virtual bool HasEntry(const wxString& strName) const override;
 
-  virtual bool Flush(bool bCurrentOnly = false) wxOVERRIDE;
+  virtual bool Flush(bool bCurrentOnly = false) override;
 
-  virtual bool RenameEntry(const wxString& oldName, const wxString& newName) wxOVERRIDE;
-  virtual bool RenameGroup(const wxString& oldName, const wxString& newName) wxOVERRIDE;
+  virtual bool RenameEntry(const wxString& oldName, const wxString& newName) override;
+  virtual bool RenameGroup(const wxString& oldName, const wxString& newName) override;
 
-  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true) wxOVERRIDE;
-  virtual bool DeleteGroup(const wxString& szKey) wxOVERRIDE;
-  virtual bool DeleteAll() wxOVERRIDE;
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true) override;
+  virtual bool DeleteGroup(const wxString& szKey) override;
+  virtual bool DeleteAll() override;
 
   // additional, wxFileConfig-specific, functionality
 #if wxUSE_STREAMS
@@ -189,21 +189,21 @@ public:
   // functions to work with this list
   wxFileConfigLineList *LineListAppend(const wxString& str);
   wxFileConfigLineList *LineListInsert(const wxString& str,
-                           wxFileConfigLineList *pLine);    // NULL => Prepend()
+                           wxFileConfigLineList *pLine);    // nullptr => Prepend()
   void      LineListRemove(wxFileConfigLineList *pLine);
   bool      LineListIsEmpty();
 
 protected:
-  virtual bool DoReadString(const wxString& key, wxString *pStr) const wxOVERRIDE;
-  virtual bool DoReadLong(const wxString& key, long *pl) const wxOVERRIDE;
+  virtual bool DoReadString(const wxString& key, wxString *pStr) const override;
+  virtual bool DoReadLong(const wxString& key, long *pl) const override;
 #if wxUSE_BASE64
-  virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const wxOVERRIDE;
+  virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const override;
 #endif // wxUSE_BASE64
 
-  virtual bool DoWriteString(const wxString& key, const wxString& szValue) wxOVERRIDE;
-  virtual bool DoWriteLong(const wxString& key, long lValue) wxOVERRIDE;
+  virtual bool DoWriteString(const wxString& key, const wxString& szValue) override;
+  virtual bool DoWriteLong(const wxString& key, long lValue) override;
 #if wxUSE_BASE64
-  virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) wxOVERRIDE;
+  virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) override;
 #endif // wxUSE_BASE64
 
 private:

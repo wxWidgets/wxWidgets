@@ -126,7 +126,7 @@ TEST_CASE("BitmapTestCase::Mask", "[bitmap][mask]")
     REQUIRE(bmp.GetMask() == mask);
 
     // copying masks should work
-    wxMask *mask2 = NULL;
+    wxMask *mask2 = nullptr;
     REQUIRE_NOTHROW(mask2 = new wxMask(*mask));
     bmp.SetMask(mask2);
     REQUIRE(bmp.GetMask() == mask2);
@@ -145,7 +145,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
             dc.DrawRectangle(0, 0, bmp.GetWidth(), bmp.GetHeight());
         }
         REQUIRE_FALSE(bmp.HasAlpha());
-        REQUIRE(bmp.GetMask() == NULL);
+        REQUIRE(bmp.GetMask() == nullptr);
 
         wxImage image = bmp.ConvertToImage();
         REQUIRE_FALSE(image.HasAlpha());
@@ -198,7 +198,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
         }
         bmp.SetMask(new wxMask(bmask));
         REQUIRE_FALSE(bmp.HasAlpha());
-        REQUIRE(bmp.GetMask() != NULL);
+        REQUIRE(bmp.GetMask() != nullptr);
         const int numUnmaskedPixels = 8 * 8;
 
         wxImage image = bmp.ConvertToImage();
@@ -288,7 +288,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
             }
         }
         REQUIRE(bmp.HasAlpha() == true);
-        REQUIRE(bmp.GetMask() == NULL);
+        REQUIRE(bmp.GetMask() == nullptr);
 
         wxImage image = bmp.ConvertToImage();
         REQUIRE(image.HasAlpha() == true);
@@ -383,7 +383,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
         }
         bmp.SetMask(new wxMask(bmask));
         REQUIRE(bmp.HasAlpha() == true);
-        REQUIRE(bmp.GetMask() != NULL);
+        REQUIRE(bmp.GetMask() != nullptr);
         const int numUnmaskedPixels = 8 * 8;
 
         wxImage image = bmp.ConvertToImage();
@@ -452,7 +452,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
 
         wxBitmap bmp(img);
         REQUIRE_FALSE(bmp.HasAlpha());
-        REQUIRE(bmp.GetMask() == NULL);
+        REQUIRE(bmp.GetMask() == nullptr);
         REQUIRE(bmp.GetWidth() == img.GetWidth());
         REQUIRE(bmp.GetHeight() == img.GetHeight());
 
@@ -485,7 +485,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
 
         wxBitmap bmp(img);
         REQUIRE_FALSE(bmp.HasAlpha());
-        REQUIRE(bmp.GetMask() != NULL);
+        REQUIRE(bmp.GetMask() != nullptr);
         REQUIRE(bmp.GetWidth() == img.GetWidth());
         REQUIRE(bmp.GetHeight() == img.GetHeight());
 
@@ -531,7 +531,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
 
         wxBitmap bmp(img);
         REQUIRE(bmp.HasAlpha() == true);
-        REQUIRE(bmp.GetMask() == NULL);
+        REQUIRE(bmp.GetMask() == nullptr);
         REQUIRE(bmp.GetWidth() == img.GetWidth());
         REQUIRE(bmp.GetHeight() == img.GetHeight());
 
@@ -576,7 +576,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
 
         wxBitmap bmp(img);
         REQUIRE(bmp.HasAlpha() == true);
-        REQUIRE(bmp.GetMask() != NULL);
+        REQUIRE(bmp.GetMask() != nullptr);
         REQUIRE(bmp.GetWidth() == img.GetWidth());
         REQUIRE(bmp.GetHeight() == img.GetHeight());
 
@@ -634,7 +634,7 @@ TEST_CASE("BitmapTestCase::OverlappingBlit", "[bitmap][blit]")
         dc.DrawLine(0, 0, 10, 10);
         dc.DrawLine(10, 0, 0, 10);
     }
-    REQUIRE(bmp.GetMask() == NULL);
+    REQUIRE(bmp.GetMask() == nullptr);
 
     // Clear to white.
     {
@@ -737,10 +737,10 @@ TEST_CASE("BitmapTestCase::DrawNonAlphaWithMask", "[bitmap][draw][nonalpha][with
         dc.DrawRectangle(w / 2, 0, w / 2, h);
     }
     REQUIRE_FALSE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() == NULL);
+    REQUIRE(bmp.GetMask() == nullptr);
     bmp.SetMask(new wxMask(bmask));
     REQUIRE_FALSE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() != NULL);
+    REQUIRE(bmp.GetMask() != nullptr);
 
     // Drawing the bitmap using mask
     {
@@ -851,7 +851,7 @@ TEST_CASE("BitmapTestCase::DrawAlpha", "[bitmap][draw][alpha]")
         }
     }
     REQUIRE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() == NULL);
+    REQUIRE(bmp.GetMask() == nullptr);
 
     // Drawing the bitmap on 24 bpp RGB target
     wxBitmap bmpOut24(w, h, 24);
@@ -966,10 +966,10 @@ TEST_CASE("BitmapTestCase::DrawAlphaWithMask", "[bitmap][draw][alpha][withmask]"
         }
     }
     REQUIRE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() == NULL);
+    REQUIRE(bmp.GetMask() == nullptr);
     bmp.SetMask(new wxMask(bmask));
     REQUIRE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() != NULL);
+    REQUIRE(bmp.GetMask() != nullptr);
 
     // Drawing the bitmap on 24 bpp RGB target using mask
     {
@@ -1164,7 +1164,7 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlpha", "[bitmap][subbitmap][nonalpha]")
         dc.DrawRectangle(w / 2, h / 2, w / 2, h / 2);
     }
     REQUIRE_FALSE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() == NULL);
+    REQUIRE(bmp.GetMask() == nullptr);
 
     // Get sub bitmap
     wxBitmap subBmp = bmp.GetSubBitmap(wxRect(w/4, h/4, w/2, h/2));
@@ -1173,7 +1173,7 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlpha", "[bitmap][subbitmap][nonalpha]")
     REQUIRE(subBmp.GetHeight() == h/2);
     REQUIRE(subBmp.GetDepth() == bmp.GetDepth());
     REQUIRE(subBmp.HasAlpha() == bmp.HasAlpha());
-    REQUIRE((subBmp.GetMask() == NULL) == (bmp.GetMask() == NULL));
+    REQUIRE((subBmp.GetMask() == nullptr) == (bmp.GetMask() == nullptr));
 
     const int w2 = w / 2;
     const int h2 = h / 2;
@@ -1226,10 +1226,10 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         dc.DrawRectangle(w / 2, h / 2, w / 2, h / 2);
     }
     REQUIRE_FALSE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() == NULL);
+    REQUIRE(bmp.GetMask() == nullptr);
     bmp.SetMask(new wxMask(bmpMask));
     REQUIRE_FALSE(bmp.HasAlpha());
-    REQUIRE(bmp.GetMask() != NULL);
+    REQUIRE(bmp.GetMask() != nullptr);
 
     // Get sub bitmap
     wxBitmap subBmp = bmp.GetSubBitmap(wxRect(w/4, h/4, w/2, h/2));
@@ -1240,7 +1240,7 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
     REQUIRE(subBmp.GetHeight() == h2);
     REQUIRE(subBmp.GetDepth() == bmp.GetDepth());
     REQUIRE(subBmp.HasAlpha() == bmp.HasAlpha());
-    REQUIRE((subBmp.GetMask() == NULL) == (bmp.GetMask() == NULL));
+    REQUIRE((subBmp.GetMask() == nullptr) == (bmp.GetMask() == nullptr));
 
     // Check sub bitmap pixels
     {
@@ -1442,7 +1442,7 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
     REQUIRE(subBmp.GetHeight() == h2);
     REQUIRE(subBmp.GetDepth() == bmp.GetDepth());
     REQUIRE(subBmp.HasAlpha() == bmp.HasAlpha());
-    REQUIRE((subBmp.GetMask() == NULL) == (bmp.GetMask() == NULL));
+    REQUIRE((subBmp.GetMask() == nullptr) == (bmp.GetMask() == nullptr));
 
     // Check sub bitmap pixels
     {
@@ -1600,7 +1600,7 @@ public:
     {
     }
 
-    bool match(const wxBitmap& bmp) const wxOVERRIDE
+    bool match(const wxBitmap& bmp) const override
     {
         const wxImage img(bmp.ConvertToImage());
 
@@ -1617,7 +1617,7 @@ public:
         return true;
     }
 
-    std::string describe() const wxOVERRIDE
+    std::string describe() const override
     {
         return wxString::Format("doesn't have all %s pixels",
                                 m_col.GetAsString()).ToStdString();

@@ -62,8 +62,8 @@ static int      XPos;                           // Startup X position
 static int      YPos;                           // Startup Y position
 static int      pointSize = 12;                 // Font size
 
-static const wxChar   *index_filename = NULL;            // Index filename
-static const wxChar   *data_filename = NULL;             // Data filename
+static const wxChar   *index_filename = nullptr;            // Index filename
+static const wxChar   *data_filename = nullptr;             // Data filename
 static wxChar   error_buf[300];                 // Error message buffer
 static bool     loaded_ok = false;              // Poem loaded ok
 static bool     index_ok = false;               // Index loaded ok
@@ -72,7 +72,7 @@ static bool     paging = false;                 // Are we paging?
 static int      current_page = 0;               // Currently viewed page
 
 // Backing bitmap
-wxBitmap        *backingBitmap = NULL;
+wxBitmap        *backingBitmap = nullptr;
 
 void            PoetryError(const wxChar *, const wxChar *caption=wxT("wxPoem Error"));
 void            PoetryNotify(const wxChar *Msg, const wxChar *caption=wxT("wxPoem"));
@@ -90,7 +90,7 @@ void            FindMax(int *max_thing, int thing);
 
 wxIMPLEMENT_APP(MyApp);
 
-MainWindow *TheMainWindow = NULL;
+MainWindow *TheMainWindow = nullptr;
 
 // Create the fonts
 void MainWindow::CreateFonts()
@@ -110,7 +110,7 @@ MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
      const wxPoint& pos, const wxSize& size, long style):
      wxFrame(frame, id, title, pos, size, style)
 {
-    m_corners[0] = m_corners[1] = m_corners[2] = m_corners[3] = NULL;
+    m_corners[0] = m_corners[1] = m_corners[2] = m_corners[3] = nullptr;
 
     ReadPreferences();
     CreateFonts();
@@ -510,7 +510,7 @@ bool MyApp::OnInit()
 //    randomize();
     pages[0] = 0;
 
-    TheMainWindow = new MainWindow(NULL,
+    TheMainWindow = new MainWindow(nullptr,
                                    wxID_ANY,
                                    wxT("wxPoem"),
                                    wxPoint(XPos, YPos),
@@ -592,7 +592,7 @@ MyCanvas::~MyCanvas()
     // Note: this must be done before the main window/canvas are destroyed
     // or we get an error (no parent window for menu item button)
     delete m_popupMenu;
-    m_popupMenu = NULL;
+    m_popupMenu = nullptr;
 }
 
 // Define the repainting behaviour
@@ -693,13 +693,13 @@ int LoadIndex(const wxChar *file_name)
 
     wxChar buf[100];
 
-    if (file_name == NULL)
+    if (file_name == nullptr)
         return 0;
 
     wxSprintf(buf, wxT("%s.idx"), file_name);
 
     index_file = wxFopen(buf, wxT("r"));
-    if (index_file == NULL)
+    if (index_file == nullptr)
         return 0;
 
     wxFscanf(index_file, wxT("%ld"), &nitems);
@@ -769,7 +769,7 @@ bool LoadPoem(const wxChar *file_name, long position)
     paging = false;
     current_page = 0;
 
-    if (file_name == NULL)
+    if (file_name == nullptr)
     {
       wxSprintf(error_buf, wxT("Error in Poem loading."));
       PoetryError(error_buf);
@@ -779,7 +779,7 @@ bool LoadPoem(const wxChar *file_name, long position)
     wxSprintf(buf, wxT("%s.dat"), file_name);
     data_file = wxFopen(buf, wxT("rb"));
 
-    if (data_file == NULL)
+    if (data_file == nullptr)
     {
       wxSprintf(error_buf, wxT("Data file %s not found."), buf);
       PoetryError(error_buf);

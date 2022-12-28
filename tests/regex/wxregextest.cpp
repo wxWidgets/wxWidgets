@@ -70,13 +70,13 @@ TEST_CASE("wxRegEx::Compile", "[regex][compile]")
 static void
 CheckMatch(const char* pattern,
            const char* text,
-           const char* expected = NULL,
-           int flags = wxRE_DEFAULT)
+           const char* expected = nullptr,
+           int compileFlags = wxRE_DEFAULT,
+           int matchFlags = 0)
 {
-    int compileFlags = flags & ~(wxRE_NOTBOL | wxRE_NOTEOL);
-    int matchFlags = flags & (wxRE_NOTBOL | wxRE_NOTEOL);
-
-    INFO( "Pattern: " << pattern << FlagStr(flags) << ", match: " << text );
+    INFO( "Pattern: "
+            << pattern << FlagStr(static_cast<int>(compileFlags) | matchFlags)
+            << ", match: " << text );
 
     wxRegEx re(pattern, compileFlags);
     if ( !re.IsValid() )
@@ -104,7 +104,7 @@ CheckMatch(const char* pattern,
         CHECK( re.GetMatch(text, i) == tkz.GetNextToken() );
     }
 
-    if ((flags & wxRE_NOSUB) == 0)
+    if ((compileFlags & wxRE_NOSUB) == 0)
         CHECK(re.GetMatchCount() == i);
 }
 
@@ -112,7 +112,7 @@ TEST_CASE("wxRegEx::Match", "[regex][match]")
 {
     // Match tests
     // pattern, text, expected results (match, followed by submatches
-    // tab separated, or NULL for no match expected)
+    // tab separated, or nullptr for no match expected)
 
     CheckMatch("foo", "bar");
     CheckMatch("foo", "foobar", "foo");
@@ -124,8 +124,8 @@ TEST_CASE("wxRegEx::Match", "[regex][match]")
     CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "AA\nbb\nCC");
     CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "AA", wxRE_NEWLINE);
     CheckMatch("^[a-z].*$", "AA\nbb\nCC", "bb", wxRE_NEWLINE);
-    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "CC", wxRE_NEWLINE | wxRE_NOTBOL);
-    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", NULL, wxRE_NEWLINE | wxRE_NOTBOL | wxRE_NOTEOL);
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", "CC", wxRE_NEWLINE, wxRE_NOTBOL);
+    CheckMatch("^[A-Z].*$", "AA\nbb\nCC", nullptr, wxRE_NEWLINE, wxRE_NOTBOL | wxRE_NOTEOL);
     CheckMatch("([[:alpha:]]+) ([[:alpha:]]+) ([[:digit:]]+).* ([[:digit:]]+)$",
         "Fri Jul 13 18:37:52 CEST 2001",
         "Fri Jul 13 18:37:52 CEST 2001\tFri\tJul\t13\t2001");

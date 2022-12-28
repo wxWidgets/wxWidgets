@@ -40,7 +40,7 @@ public:
 
     wxEventFilter()
     {
-        m_next = NULL;
+        m_next = nullptr;
     }
 
     virtual ~wxEventFilter()

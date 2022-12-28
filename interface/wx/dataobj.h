@@ -711,8 +711,7 @@ public:
     providing text on-demand in order to minimize memory consumption when
     offering data in several formats, such as plain text and RTF because by
     default the text is stored in a string in this class, but it might as well
-    be generated when requested. For this, GetTextLength() and GetText() will
-    have to be overridden.
+    be generated when requested, in which case GetText() should be overridden.
 
     Note that if you already have the text inside a string, you will not
     achieve any efficiency gain by overriding these functions because copying
@@ -743,28 +742,26 @@ public:
     virtual wxString GetText() const;
 
     /**
-        Returns the data size. By default, returns the size of the text data
-        set in the constructor or using SetText(). This can be overridden to
-        provide text size data on-demand. It is recommended to return the text
-        length plus 1 for a trailing zero, but this is not strictly required.
+        @deprecated
+
+        Don't use or call this function, it simply returns the length of the
+        text plus one for compatibility purposes.
     */
-    virtual size_t GetTextLength() const;
+    size_t GetTextLength() const;
 
     /**
         Returns 2 under wxMac and wxGTK, where text data coming from the
         clipboard may be provided as ANSI (@c wxDF_TEXT) or as Unicode text
-        (@c wxDF_UNICODETEXT, but only when @c wxUSE_UNICODE==1).
+        (@c wxDF_UNICODETEXT).
 
-        Returns 1 under other platforms (e.g. wxMSW) or when building in ANSI mode
-        (@c wxUSE_UNICODE==0).
+        Returns 1 under other platforms (e.g. wxMSW).
     */
     virtual size_t GetFormatCount(wxDataObject::Direction dir = wxDataObject::Get) const;
 
     /**
         Returns the preferred format supported by this object.
 
-        This is @c wxDF_TEXT or @c wxDF_UNICODETEXT depending on the platform
-        and from the build mode (i.e. from @c wxUSE_UNICODE).
+        This is @c wxDF_TEXT or @c wxDF_UNICODETEXT depending on the platform.
     */
     const wxDataFormat& GetFormat() const;
 

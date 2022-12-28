@@ -150,7 +150,7 @@ MyDllApp::MyDllApp()
 
 void MyDllApp::OnShowWindow(wxThreadEvent& event)
 {
-    wxFrame *f = new MyDllFrame(NULL, event.GetString());
+    wxFrame *f = new MyDllFrame(nullptr, event.GetString());
     f->Show(true);
 }
 
@@ -173,8 +173,8 @@ namespace
 // Critical section that guards everything related to wxWidgets "main" thread
 // startup or shutdown.
 wxCriticalSection gs_wxStartupCS;
-// Handle of wx "main" thread if running, NULL otherwise
-HANDLE gs_wxMainThread = NULL;
+// Handle of wx "main" thread if running, nullptr otherwise
+HANDLE gs_wxMainThread = nullptr;
 
 
 //  wx application startup code -- runs from its own thread
@@ -245,10 +245,10 @@ void run_wx_gui_from_dll(const char *title)
     {
         HANDLE hEvent = CreateEvent
                         (
-                            NULL,  // default security attributes
+                            nullptr,  // default security attributes
                             FALSE, // auto-reset
                             FALSE, // initially non-signaled
-                            NULL   // anonymous
+                            nullptr   // anonymous
                         );
         if ( !hEvent )
             return; // error
@@ -256,12 +256,12 @@ void run_wx_gui_from_dll(const char *title)
         // NB: If your compiler doesn't have _beginthreadex(), use CreateThread()
         gs_wxMainThread = (HANDLE)_beginthreadex
                                   (
-                                      NULL,           // default security
+                                      nullptr,           // default security
                                       0,              // default stack size
                                       &MyAppLauncher,
                                       &hEvent,        // arguments
                                       0,              // create running
-                                      NULL
+                                      nullptr
                                   );
 
         if ( !gs_wxMainThread )
@@ -300,7 +300,7 @@ void wx_dll_cleanup()
     // We must then wait for the thread to actually terminate.
     WaitForSingleObject(gs_wxMainThread, INFINITE);
     CloseHandle(gs_wxMainThread);
-    gs_wxMainThread = NULL;
+    gs_wxMainThread = nullptr;
 }
 
 } // extern "C"

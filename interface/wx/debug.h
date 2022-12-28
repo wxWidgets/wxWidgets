@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     Exits the program immediately.
@@ -143,7 +143,7 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
     default.
 
     It is mostly useful for asserting inside functions called from macros, as
-    by passing the usual @c __FILE__, @c __LINE__ and @c __FUNCTION__ values to
+    by passing the usual @c \__FILE__, @c \__LINE__ and @c \__FUNCTION__ values to
     a function, it's possible to pretend that the assert happens at the
     location of the macro in the source code (which can be useful) instead of
     inside the function itself (which is never useful as these values are
@@ -229,7 +229,7 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
     sometimes desirable to test them at the compile time.
 
     Note that this macro internally declares a struct whose name it tries to
-    make unique by using the @c __LINE__ in it but it may still not work if you
+    make unique by using the @c \__LINE__ in it but it may still not work if you
     use it on the same line in two different source files. In this case you may
     either change the line in which either of them appears on or use the
     wxCOMPILE_TIME_ASSERT2() macro.
@@ -410,5 +410,5 @@ void wxSetDefaultAssertHandler();
 */
 void wxTrap();
 
-//@}
+///@}
 

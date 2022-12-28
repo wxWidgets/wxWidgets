@@ -88,6 +88,18 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+bool wxCheckBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // Just as radio buttons, check boxes have some dark theme support, but we
+    // still need to change their foreground manually to make it readable in
+    // dark mode.
+    wxCheckBoxBase::MSWGetDarkModeSupport(support);
+
+    support.setForeground = true;
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // wxCheckBox geometry
 // ----------------------------------------------------------------------------

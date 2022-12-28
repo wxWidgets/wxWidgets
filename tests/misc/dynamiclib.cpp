@@ -14,9 +14,9 @@
 
 #include "wx/dynlib.h"
 
-#ifdef __UNIX__
+#ifndef __WINDOWS__
+    #include "wx/dir.h"
     #include "wx/filename.h"
-    #include "wx/log.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -28,28 +28,67 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
 #if defined(__WINDOWS__)
     static const char* const LIB_NAME = "kernel32.dll";
     static const char* const FUNC_NAME = "lstrlenA";
-#elif defined(__UNIX__)
-#ifdef __DARWIN__
-    static const char* const LIB_NAME = "/usr/lib/libc.dylib";
-#else
-    // weird: using just libc.so does *not* work!
-    static const char* const LIB_NAME = "/lib/libc.so.6";
-#endif
-    static const char* const FUNC_NAME = "strlen";
-
+#elif defined(__DARWIN__)
     // Under macOS 12+ we can actually load the libc dylib even though the
-    // corresponding file doesn't exist on disk, so skip this check there.
-#ifndef __DARWIN__
-    if ( !wxFileName::Exists(LIB_NAME) )
+    // corresponding file doesn't exist on disk, so we have to handle it
+    // differently.
+    static const char* const LIB_NAME = "/usr/lib/libc.dylib";
+    static const char* const FUNC_NAME = "strlen";
+#else // other Unix
+    static const char* const candidateDirs[] =
     {
-        WARN("Shared library \"" << LIB_NAME << "\" doesn't exist, "
-             "skipping DynamicLibraryTestCase::Load() test.");
+        "/lib/x86_64-linux-gnu",
+        "/lib",
+        "/lib64",
+        "/usr/lib",
+    };
+
+    static const char* const candidateVersions[] = { "6", "7", };
+
+    wxString LIB_NAME;
+    wxArrayString allMatches;
+    for ( size_t n = 0; n < WXSIZEOF(candidateDirs); ++n )
+    {
+        const wxString dir(candidateDirs[n]);
+
+        if ( !wxDir::Exists(dir) )
+            continue;
+
+        for ( size_t m = 0; m < WXSIZEOF(candidateVersions); ++m )
+        {
+            const wxString candidate = wxString::Format
+                                       (
+                                            "%s/libc.so.%s",
+                                            dir, candidateVersions[m]
+                                       );
+
+            if ( wxFileName::Exists(candidate) )
+            {
+                LIB_NAME = candidate;
+                break;
+            }
+        }
+
+        if ( !LIB_NAME.empty() )
+            break;
+
+        wxDir::GetAllFiles(dir, &allMatches, "libc.*", wxDIR_FILES);
+    }
+
+    if ( LIB_NAME.empty() )
+    {
+        WARN("Couldn't find libc.so, skipping DynamicLibrary::Load() test.");
+
+        if ( !allMatches.empty() )
+        {
+            WARN("Possible candidates:\n" << wxJoin(allMatches, '\n'));
+        }
+
         return;
     }
-#endif // !__DARWIN__
-#else
-    #error "don't know how to test wxDllLoader on this platform"
-#endif
+
+    static const char* const FUNC_NAME = "strlen";
+#endif // OS
 
     wxDynamicLibrary lib(LIB_NAME);
     REQUIRE( lib.IsLoaded() );
@@ -73,7 +112,7 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
 #ifdef __WINDOWS__
     SECTION("A/W")
     {
-        static const wxChar *FUNC_NAME_AW = wxT("lstrlen");
+        static const char* const FUNC_NAME_AW = "lstrlen";
 
         typedef int (wxSTDCALL *wxStrlenTypeAorW)(const wxChar *);
         wxStrlenTypeAorW

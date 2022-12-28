@@ -36,6 +36,8 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
+
 #include "wx/evtloop.h"
 #include "wx/scopedptr.h"
 
@@ -81,7 +83,7 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData)
 void wxDialog::Init()
 {
     m_isShown = false;
-    m_modalData = NULL;
+    m_modalData = nullptr;
     m_hGripper = 0;
 }
 
@@ -209,6 +211,10 @@ void wxDialog::SetWindowStyleFlag(long style)
 {
     wxDialogBase::SetWindowStyleFlag(style);
 
+    // Don't do anything if we're setting the style before creating the dialog.
+    if ( !GetHwnd() )
+        return;
+
     if ( HasFlag(wxRESIZE_BORDER) )
         CreateGripper();
     else
@@ -233,8 +239,10 @@ void wxDialog::CreateGripper()
                                     GetHwnd(),
                                     0,
                                     wxGetInstance(),
-                                    NULL
+                                    nullptr
                                );
+
+        wxMSWDarkMode::AllowForWindow((HWND)m_hGripper);
     }
 }
 
@@ -345,8 +353,15 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             processed = true;
             if ( HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             {
-                ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
+                ::InvalidateRect(GetHwnd(), nullptr, false /* erase bg */);
             }
+            break;
+
+        case WM_CTLCOLORDLG:
+            // We need to explicitly set the dark background colour when using
+            // dark mode, otherwise we'd be using the default light background.
+            if ( wxMSWDarkMode::IsActive() )
+                return (WXLRESULT)wxMSWDarkMode::GetBackgroundBrush();
             break;
     }
 

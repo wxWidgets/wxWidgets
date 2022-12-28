@@ -27,7 +27,7 @@
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol);
-IMPLEMENT_PROTOCOL(wxFileProto, wxT("file"), NULL, false)
+IMPLEMENT_PROTOCOL(wxFileProto, wxT("file"), nullptr, false)
 
 wxFileProto::wxFileProto()
            : wxProtocol()
@@ -50,7 +50,7 @@ wxInputStream *wxFileProto::GetInputStream(const wxString& path)
     m_lastError = wxPROTO_NOFILE;
     delete retval;
 
-    return NULL;
+    return nullptr;
 }
 
 #endif // wxUSE_STREAMS && wxUSE_PROTOCOL_FILE

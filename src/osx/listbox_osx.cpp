@@ -108,14 +108,14 @@ wxListBox::~wxListBox()
     m_blockEvents = false;
 
     // make sure no native events get sent to a object in destruction
-    SetPeer(NULL);
+    SetPeer(nullptr);
 
     if ( IsSorted() )
         delete m_strings.sorted;
     else
         delete m_strings.unsorted;
 
-    m_strings.sorted = NULL;
+    m_strings.sorted = nullptr;
 }
 
 void wxListBox::FreeData()
@@ -280,7 +280,7 @@ wxSize wxListBox::DoGetBestSize() const
         lbWidth += cx;
 
         // don't make the listbox too tall (limit height to around 10 items)
-        // but don't make it too small neither
+        // but don't make it too small either
         lbHeight = wxMax( (cy + 4) * wxMin( wxMax( GetCount(), 3 ), 10 ), 70 );
     }
 
@@ -379,7 +379,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         idx = IsSorted() ? m_strings.sorted->Add(item)
                          : (m_strings.unsorted->Insert(item, pos), pos++);
 
-        m_itemsClientData.Insert(NULL, idx);
+        m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
         GetListPeer()->ListInsert(startpos+i);

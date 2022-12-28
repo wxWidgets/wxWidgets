@@ -187,7 +187,7 @@ void wxAnyButton::GTKDoShowBitmap(const wxBitmapBundle& bitmap)
     wxCHECK_RET(bitmap.IsOk(), "invalid bitmap");
 
     GtkWidget* image = gtk_button_get_image(GTK_BUTTON(m_widget));
-    if (image == NULL)
+    if (image == nullptr)
         image = gtk_bin_get_child(GTK_BIN(m_widget));
 
     wxCHECK_RET(WX_GTK_IS_IMAGE(image), "must have image widget");
@@ -222,7 +222,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
                     // This must be the GtkImage created for stock buttons, we
                     // want to replace it with our own wxGtkImage as only it
                     // handles showing appropriately-sized bitmaps in high DPI.
-                    image = NULL;
+                    image = nullptr;
                 }
 
                 if ( image && !bitmap.IsOk() )
@@ -378,7 +378,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
 
 #if GTK_CHECK_VERSION(3,6,0) && !defined(__WXGTK4__)
     // Allow explicitly set bitmaps to be shown regardless of theme setting
-    if (gtk_check_version(3,6,0) == NULL && bitmap.IsOk())
+    if (gtk_check_version(3,6,0) == nullptr && bitmap.IsOk())
         gtk_button_set_always_show_image(GTK_BUTTON(m_widget), true);
 #endif
 

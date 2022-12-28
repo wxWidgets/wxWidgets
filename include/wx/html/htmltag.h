@@ -35,7 +35,7 @@ private:
     wxHtmlTagsCacheData& Cache() { return *m_Cache; }
 
 public:
-    wxHtmlTagsCache() {m_Cache = NULL;}
+    wxHtmlTagsCache() {m_Cache = nullptr;}
     wxHtmlTagsCache(const wxString& source);
     virtual ~wxHtmlTagsCache();
 
@@ -138,21 +138,11 @@ public:
     // bla bla bla <MYTAG> bla bla internal text</MYTAG>* bla bla
     wxString::const_iterator GetEndIter2() const { return m_End2; }
 
-#if WXWIN_COMPATIBILITY_2_8
-    // use GetBeginIter(), GetEndIter1() and GetEndIter2() instead
-    wxDEPRECATED( inline int GetBeginPos() const );
-    wxDEPRECATED( inline int GetEndPos1() const );
-    wxDEPRECATED( inline int GetEndPos2() const );
-#endif // WXWIN_COMPATIBILITY_2_8
-
 private:
     wxString m_Name;
     bool m_hasEnding;
     wxString::const_iterator m_Begin, m_End1, m_End2;
     wxArrayString m_ParamNames, m_ParamValues;
-#if WXWIN_COMPATIBILITY_2_8
-    wxString::const_iterator m_sourceStart;
-#endif
 
     // DOM tree relations:
     wxHtmlTag *m_Next;
@@ -162,16 +152,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlTag);
 };
-
-
-#if WXWIN_COMPATIBILITY_2_8
-inline int wxHtmlTag::GetBeginPos() const { return int(m_Begin - m_sourceStart); }
-inline int wxHtmlTag::GetEndPos1() const { return int(m_End1 - m_sourceStart); }
-inline int wxHtmlTag::GetEndPos2() const { return int(m_End2 - m_sourceStart); }
-#endif // WXWIN_COMPATIBILITY_2_8
-
-
-
 
 #endif // wxUSE_HTML
 

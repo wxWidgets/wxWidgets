@@ -22,7 +22,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    int nStrings = 0,
-                   const wxString *choices = NULL,
+                   const wxString *choices = nullptr,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxASCII_STR(wxListBoxNameStr))
@@ -50,7 +50,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int nStrings = 0,
-                const wxString *choices = NULL,
+                const wxString *choices = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxListBoxNameStr));
@@ -64,19 +64,19 @@ public:
                 const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     // items may be checked
-    bool  IsChecked(unsigned int uiIndex) const wxOVERRIDE;
-    void  Check(unsigned int uiIndex, bool bCheck = true) wxOVERRIDE;
+    bool  IsChecked(unsigned int uiIndex) const override;
+    void  Check(unsigned int uiIndex, bool bCheck = true) override;
 
     // data callbacks
-    virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value ) wxOVERRIDE;
-    virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value ) wxOVERRIDE;
+    virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value ) override;
+    virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value ) override;
 
 protected:
    // override all methods which add/delete items to update m_checks array as
     // well
-    virtual void OnItemInserted(unsigned int pos) wxOVERRIDE;
-    virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
-    virtual void DoClear() wxOVERRIDE;
+    virtual void OnItemInserted(unsigned int pos) override;
+    virtual void DoDeleteOneItem(unsigned int n) override;
+    virtual void DoClear() override;
 
     // the array containing the checked status of the items
     wxArrayInt m_checks;

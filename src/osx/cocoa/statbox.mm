@@ -15,6 +15,21 @@
 #include "wx/statbox.h"
 #include "wx/osx/private.h"
 
+@interface wxNSBoxContentView : NSView
+
+@end
+
+@implementation wxNSBoxContentView
+
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
+@end
+
 @implementation wxNSBox
 
 + (void)initialize
@@ -39,14 +54,14 @@ namespace
         {
         }
 
-        virtual void SetLabel( const wxString& title, wxFontEncoding encoding ) wxOVERRIDE
+        virtual void SetLabel( const wxString& title ) override
         {
             if (title.empty())
                 [GetNSBox() setTitlePosition:NSNoTitle];
             else
                 [GetNSBox() setTitlePosition:NSAtTop];
 
-            wxWidgetCocoaImpl::SetLabel(title, encoding);
+            wxWidgetCocoaImpl::SetLabel(title);
         }
 
     private:
@@ -72,6 +87,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
     NSSize margin = { 0.0, 0.0 };
+    [v setContentView:[[wxNSBoxContentView alloc] init]];
     [v setContentViewMargins: margin];
     [v sizeToFit];
     wxStaticBoxCocoaImpl* c = new wxStaticBoxCocoaImpl( wxpeer, v );

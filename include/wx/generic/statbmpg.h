@@ -35,7 +35,7 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) override
     {
         m_bitmapBundle = bitmap;
         InvalidateBestSize();
@@ -43,13 +43,13 @@ public:
         Refresh();
     }
 
-    virtual void SetScaleMode(ScaleMode scaleMode) wxOVERRIDE
+    virtual void SetScaleMode(ScaleMode scaleMode) override
     {
         m_scaleMode = scaleMode;
         Refresh();
     }
 
-    virtual ScaleMode GetScaleMode() const wxOVERRIDE { return m_scaleMode; }
+    virtual ScaleMode GetScaleMode() const override { return m_scaleMode; }
 
 private:
     void OnPaint(wxPaintEvent& event);

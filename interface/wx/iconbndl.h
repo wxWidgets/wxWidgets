@@ -33,7 +33,7 @@ public:
 
         /// Return the icon of the system icon size if exact size is not found.
         /// May be combined with other non-NONE enum elements to determine what
-        /// happens if the system icon size is not found neither.
+        /// happens if the system icon size is not found either.
         FALLBACK_SYSTEM = 1,
 
         /// Return the icon of closest larger size or, if there is no icon of
@@ -141,7 +141,7 @@ public:
         wxIconBundle::FALLBACK_NONE is given, the function returns an invalid
         icon. If wxIconBundle::FALLBACK_SYSTEM is given, it tries to find the
         icon of standard system size, regardless of the size passed as
-        parameter. Otherwise, or if the icon system size is not found neither,
+        parameter. Otherwise, or if the icon system size is not found either,
         but wxIconBundle::FALLBACK_NEAREST_LARGER flag is specified, the
         function returns the smallest icon of the size larger than the
         requested one or, if this fails too, just the icon closest to the

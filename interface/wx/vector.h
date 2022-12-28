@@ -257,10 +257,10 @@ public:
         either the copies of the given object @a v or @c value_type() objects
         until it becomes of size @a n.
      */
-    //@{
+    ///@{
     void resize(size_type n);
     void resize(size_type n, const value_type& v);
-    //@}
+    ///@}
 
     /**
         Free unused memory allocated by the vector.

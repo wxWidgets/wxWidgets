@@ -59,7 +59,7 @@ public:
 
     // default assignment operator and dtor are ok
 
-    virtual bool IsOk() const wxOVERRIDE { return !m_icons.empty(); }
+    virtual bool IsOk() const override { return !m_icons.empty(); }
 
     wxIconArray m_icons;
 };
@@ -215,7 +215,7 @@ void wxIconBundle::AddIcon(wxInputStream& stream, wxBitmapType type)
 void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
 {
 #ifdef __WXMSW__
-    const void* data = NULL;
+    const void* data = nullptr;
     size_t outLen = 0;
 
     // load the icon directory resource
@@ -249,6 +249,8 @@ void wxIconBundle::AddIcon(const wxString& resourceName, WXHINSTANCE module)
         }
     }
 #else
+    wxUnusedVar(resourceName);
+    wxUnusedVar(module);
     wxLogError(wxS("Loading icons from resources isn't implemented in this toolkit port yet."));
 #endif
 }

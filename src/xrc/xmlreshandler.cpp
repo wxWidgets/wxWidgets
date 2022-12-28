@@ -46,10 +46,13 @@ void wxXmlResourceHandler::AddWindowStyles()
     XRC_ADD_STYLE(wxNO_BORDER);     XRC_ADD_STYLE(wxBORDER_NONE);
     XRC_ADD_STYLE(wxBORDER_DEFAULT);
 
+    // These styles are still recognized for compatibility but don't do
+    // anything any longer.
     XRC_ADD_STYLE(wxTRANSPARENT_WINDOW);
+    XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
+
     XRC_ADD_STYLE(wxWANTS_CHARS);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
-    XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
     XRC_ADD_STYLE(wxFULL_REPAINT_ON_RESIZE);
     XRC_ADD_STYLE(wxVSCROLL);
     XRC_ADD_STYLE(wxHSCROLL);

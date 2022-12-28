@@ -47,10 +47,10 @@ public:
         Stack can be created either empty or initialized with the contents of
         an existing compatible container.
      */
-    //@{
+    ///@{
     wxStack();
     explicit wxStack(const container_type& cont);
-    //@}
+    ///@}
 
     /// Return whether the stack is currently empty.
     bool empty() const;
@@ -61,10 +61,10 @@ public:
     /**
         Return the element on top of the stack.
      */
-    //@{
+    ///@{
     value_type& top();
     const value_type& top();
-    //@}
+    ///@}
 
     /// Adds an element to the stack.
     void push(const value_type& val);

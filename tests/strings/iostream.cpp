@@ -52,7 +52,7 @@ void StringIostreamTestCase::Out()
     s << wxString("hello");
     ASSERT_OSTREAM_EQUAL("hello", s);
 
-#if wxUSE_UNICODE && defined(HAVE_WOSTREAM)
+#if defined(HAVE_WOSTREAM)
     std::wostringstream ws;
     ws << wxString("bye");
     ASSERT_WOSTREAM_EQUAL(L"bye", ws);

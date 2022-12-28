@@ -165,7 +165,7 @@ wxTipWindow::~wxTipWindow()
 {
     if ( m_windowPtr )
     {
-        *m_windowPtr = NULL;
+        *m_windowPtr = nullptr;
     }
     #ifdef __WXGTK__
         if ( m_view->HasCapture() )
@@ -192,8 +192,8 @@ void wxTipWindow::Close()
 {
     if ( m_windowPtr )
     {
-        *m_windowPtr = NULL;
-        m_windowPtr = NULL;
+        *m_windowPtr = nullptr;
+        m_windowPtr = nullptr;
     }
 
     Show(false);

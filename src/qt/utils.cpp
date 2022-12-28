@@ -38,7 +38,7 @@ void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
 {
     state->SetLeftDown( buttons.testFlag( Qt::LeftButton ) );
     state->SetRightDown( buttons.testFlag( Qt::RightButton ) );
-    state->SetMiddleDown( buttons.testFlag( Qt::MidButton ) );
+    state->SetMiddleDown( buttons.testFlag( Qt::MiddleButton ) );
     state->SetAux1Down( buttons.testFlag( Qt::XButton1 ) );
     state->SetAux2Down( buttons.testFlag( Qt::XButton2 ) );
 }
@@ -126,7 +126,7 @@ wxWindow *wxGetActiveWindow()
         node = node->GetPrevious();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )

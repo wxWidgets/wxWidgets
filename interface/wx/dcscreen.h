@@ -80,6 +80,6 @@ public:
                  that this function allows the screen to be refreshed
                  afterwards, may be useful to some applications.
     */
-    static bool StartDrawingOnTop(wxRect* rect = NULL);
+    static bool StartDrawingOnTop(wxRect* rect = nullptr);
 };
 

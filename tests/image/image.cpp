@@ -159,7 +159,13 @@ void ImageTestCase::LoadFromFile()
 {
     wxImage img;
     for (unsigned int i=0; i<WXSIZEOF(g_testfiles); i++)
-        CHECK(img.LoadFile(g_testfiles[i].file));
+    {
+        const wxString file(g_testfiles[i].file);
+        INFO("Loading " << file);
+        CHECK(img.LoadFile(file));
+    }
+
+    CHECK(img.LoadFile("image/bitfields.bmp", wxBITMAP_TYPE_BMP));
 }
 
 void ImageTestCase::LoadFromSocketStream()
@@ -902,7 +908,7 @@ enum
 
 static
 void CompareImage(const wxImageHandler& handler, const wxImage& image,
-    int properties = 0, const wxImage *compareTo = NULL)
+    int properties = 0, const wxImage *compareTo = nullptr)
 {
     wxBitmapType type = handler.GetType();
 
@@ -943,6 +949,10 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
         return;
     }
 
+    unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
+    wxINFO_FMT("Compare test '%s (%d-bit)' for saving",
+               handler.GetExtension(), bitsPerPixel);
+
     wxMemoryInputStream memIn(memOut);
     REQUIRE(memIn.IsOk());
 
@@ -950,10 +960,6 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     REQUIRE(actual.IsOk());
 
     const wxImage *expected = compareTo ? compareTo : &image;
-
-    unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
-    wxINFO_FMT("Compare test '%s (%d-bit)' for saving",
-               handler.GetExtension(), bitsPerPixel);
     CHECK_THAT(actual, RGBSameAs(*expected));
 
 #if wxUSE_PALETTE
@@ -1101,8 +1107,10 @@ void ImageTestCase::SavePNG()
 
 #if wxUSE_LIBTIFF
 static void TestTIFFImage(const wxString& option, int value,
-    const wxImage *compareImage = NULL)
+    const wxImage *compareImage = nullptr)
 {
+    INFO("Using option " << option << "=" << value);
+
     wxImage image;
     if (compareImage)
     {
@@ -1125,13 +1133,9 @@ static void TestTIFFImage(const wxString& option, int value,
     wxImage savedImage(memIn);
     REQUIRE(savedImage.IsOk());
 
-    WX_ASSERT_EQUAL_MESSAGE(("While checking for option %s", option),
-        true, savedImage.HasOption(option));
-
-    WX_ASSERT_EQUAL_MESSAGE(("While testing for %s", option),
-        value, savedImage.GetOptionInt(option));
-
-    WX_ASSERT_EQUAL_MESSAGE(("HasAlpha() not equal"), image.HasAlpha(), savedImage.HasAlpha());
+    CHECK( savedImage.HasOption(option) );
+    CHECK( savedImage.GetOptionInt(option) == value );
+    CHECK( savedImage.HasAlpha() == image.HasAlpha() );
 }
 
 void ImageTestCase::SaveTIFF()
@@ -1333,6 +1337,7 @@ static void CompareBMPImage(const wxString& file1, const wxString& file2)
     wxImage image2(file2);
     REQUIRE( image2.IsOk() );
 
+    INFO("Comparing " << file1 << " and " << file2);
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
 }
 
@@ -1393,7 +1398,7 @@ FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
         const wxImage imageFromFile(file); \
         if ( imageFromFile.IsOk() ) \
         { \
-            INFO("Wrong scaled \"" << file << "\" " << Catch::toString(image)); \
+            INFO("Wrong scaled \"" << file << "\" " << Catch::StringMaker<wxImage>::convert(image)); \
             CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
         } \
         else \
@@ -1467,7 +1472,7 @@ void ImageTestCase::ScaleCompare()
 
 void ImageTestCase::CreateBitmapFromCursor()
 {
-#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
+#if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXX11__
 
     wxImage image("image/wx.png");
     wxCursor cursor(image);
@@ -1641,8 +1646,12 @@ TEST_CASE("wxImage::Paste", "[image][paste]")
     };
 
     // Execute AddHandler() just once.
-    static const bool
-        registeredHandler = (wxImage::AddHandler(new wxPNGHandler()), true);
+    static bool s_registeredHandler = false;
+    if ( !s_registeredHandler )
+    {
+        wxImage::AddHandler(new wxPNGHandler());
+        s_registeredHandler = true;
+    }
 
     SECTION("Paste same size image")
     {
@@ -2265,6 +2274,21 @@ TEST_CASE("wxImage::PNM", "[image][pnm]")
 #endif
 }
 
+namespace
+{
+
+inline ImageRGBMatcher RGBSimilarToFile(const char* name)
+{
+    INFO("Loading file from " << name);
+
+    wxImage expected;
+    REQUIRE(expected.LoadFile(name));
+
+    return ImageRGBMatcher(expected, 1);
+}
+
+} // anonymous namespace
+
 TEST_CASE("wxImage::ChangeColours", "[image]")
 {
     wxImage original;
@@ -2275,43 +2299,35 @@ TEST_CASE("wxImage::ChangeColours", "[image]")
 
     test = original;
     test.RotateHue(0.538);
-    REQUIRE(expected.LoadFile("image/toucan_hue_0.538.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_hue_0.538.png"));
 
     test = original;
     test.ChangeSaturation(-0.41);
-    REQUIRE(expected.LoadFile("image/toucan_sat_-0.41.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_sat_-0.41.png"));
 
     test = original;
     test.ChangeBrightness(-0.259);
-    REQUIRE(expected.LoadFile("image/toucan_bright_-0.259.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_bright_-0.259.png"));
 
     test = original;
     test.ChangeHSV(0.538, -0.41, -0.259);
-    REQUIRE(expected.LoadFile("image/toucan_hsv_0.538_-0.41_-0.259.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_hsv_0.538_-0.41_-0.259.png"));
 
     test = original;
     test = test.ChangeLightness(46);
-    REQUIRE(expected.LoadFile("image/toucan_light_46.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_light_46.png"));
 
     test = original;
     test = test.ConvertToDisabled(240);
-    REQUIRE(expected.LoadFile("image/toucan_dis_240.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_dis_240.png"));
 
     test = original;
     test = test.ConvertToGreyscale();
-    REQUIRE(expected.LoadFile("image/toucan_grey.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_grey.png"));
 
     test = original;
     test = test.ConvertToMono(255, 255, 255);
-    REQUIRE(expected.LoadFile("image/toucan_mono_255_255_255.png", wxBITMAP_TYPE_PNG));
-    CHECK_THAT(test, RGBSameAs(expected));
+    CHECK_THAT(test, RGBSimilarToFile("image/toucan_mono_255_255_255.png"));
 }
 
 TEST_CASE("wxImage::SizeLimits", "[image]")
@@ -2324,6 +2340,28 @@ TEST_CASE("wxImage::SizeLimits", "[image]")
     CHECK( image.GetWidth() == 100000 );
     CHECK( image.GetHeight() == 1 );
 #endif // SIZEOF_VOID_P == 8
+}
+
+// This can be used to test loading an arbitrary image file by setting the
+// environment variable WX_TEST_IMAGE_PATH to point to it.
+TEST_CASE("wxImage::LoadPath", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_IMAGE_PATH", &path) );
+
+    TestLogEnabler enableLogs;
+
+    wxInitAllImageHandlers();
+
+    wxImage image;
+    REQUIRE( image.LoadFile(path) );
+
+    WARN("Image "
+            << image.GetWidth()
+            << "*"
+            << image.GetHeight()
+            << (image.HasAlpha() ? " with alpha" : "")
+            << " loaded");
 }
 
 /*

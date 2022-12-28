@@ -22,14 +22,14 @@ class WXDLLIMPEXP_CORE wxWindowsPrinter : public wxPrinterBase
     wxDECLARE_DYNAMIC_CLASS(wxWindowsPrinter);
 
 public:
-    wxWindowsPrinter(wxPrintDialogData *data = NULL);
+    wxWindowsPrinter(wxPrintDialogData *data = nullptr);
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
-                       bool prompt = true) wxOVERRIDE;
+                       bool prompt = true) override;
 
-    virtual wxDC *PrintDialog(wxWindow *parent) wxOVERRIDE;
-    virtual bool Setup(wxWindow *parent) wxOVERRIDE;
+    virtual wxDC *PrintDialog(wxWindow *parent) override;
+    virtual bool Setup(wxWindow *parent) override;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxWindowsPrinter);
@@ -44,19 +44,19 @@ class WXDLLIMPEXP_CORE wxWindowsPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxWindowsPrintPreview(wxPrintout *printout,
-                          wxPrintout *printoutForPrinting = NULL,
-                          wxPrintDialogData *data = NULL);
+                          wxPrintout *printoutForPrinting = nullptr,
+                          wxPrintDialogData *data = nullptr);
     wxWindowsPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting,
                           wxPrintData *data);
     virtual ~wxWindowsPrintPreview();
 
-    virtual bool Print(bool interactive) wxOVERRIDE;
-    virtual void DetermineScaling() wxOVERRIDE;
+    virtual bool Print(bool interactive) override;
+    virtual void DetermineScaling() override;
 
 protected:
 #if wxUSE_ENH_METAFILE
-    virtual bool RenderPageIntoBitmap(wxBitmap& bmp, int pageNum) wxOVERRIDE;
+    virtual bool RenderPageIntoBitmap(wxBitmap& bmp, int pageNum) override;
 #endif
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPrintPreview);

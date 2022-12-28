@@ -1,5 +1,5 @@
 // Scintilla source code edit control
-/** @file LexABAQUS.cxx
+/** @file LexAbaqus.cxx
  ** Lexer for ABAQUS. Based on the lexer for APDL by Hadar Raz.
  ** By Sergio Lucato.
  ** Sort of completely rewritten by Gertjan Kloosterman
@@ -26,9 +26,7 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAKeywordChar(const int ch) {
 	return (ch < 0x80 && (isalnum(ch) || (ch == '_') || (ch == ' ')));

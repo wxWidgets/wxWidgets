@@ -20,7 +20,7 @@ public:
     virtual ~wxOwnerDrawn() {}
 
     virtual bool OnDrawItem(wxDC& dc, const wxRect& rc,
-                            wxODAction act, wxODStatus stat) wxOVERRIDE;
+                            wxODAction act, wxODStatus stat) override;
 
 protected:
     // get the type of the text to draw in OnDrawItem(), by default is

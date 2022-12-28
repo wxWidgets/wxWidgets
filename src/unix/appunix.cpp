@@ -50,7 +50,7 @@ public:
                                     );
     }
 
-    virtual void OnReadWaiting() wxOVERRIDE
+    virtual void OnReadWaiting() override
     {
         // The base class wxWakeUpPipe::OnReadWaiting() needs to be called in order
         // to read the data out of the wake up pipe and clear it for next time.
@@ -73,7 +73,7 @@ private:
 
 wxAppConsole::wxAppConsole()
 {
-    m_signalWakeUpPipe = NULL;
+    m_signalWakeUpPipe = nullptr;
 }
 
 wxAppConsole::~wxAppConsole()
@@ -129,7 +129,7 @@ void wxAppConsole::CheckSignal()
 
 wxFDIOHandler* wxAppConsole::RegisterSignalWakeUpPipe(wxFDIODispatcher& dispatcher)
 {
-    wxCHECK_MSG( m_signalWakeUpPipe, NULL, "Should be allocated" );
+    wxCHECK_MSG( m_signalWakeUpPipe, nullptr, "Should be allocated" );
 
     // we need a bridge to wxFDIODispatcher
     //
@@ -143,7 +143,7 @@ wxFDIOHandler* wxAppConsole::RegisterSignalWakeUpPipe(wxFDIODispatcher& dispatch
                       fdioHandler.get(),
                       wxFDIO_INPUT
                      ) )
-        return NULL;
+        return nullptr;
 
     return fdioHandler.release();
 }
@@ -173,7 +173,7 @@ bool wxAppConsole::SetSignalHandler(int signal, SignalHandler handler)
     memset(&sa, 0, sizeof(sa));
     sa.sa_handler = (SignalHandler_t)&wxAppConsole::HandleSignal;
     sa.sa_flags = SA_RESTART;
-    int res = sigaction(signal, &sa, 0);
+    int res = sigaction(signal, &sa, nullptr);
     if ( res != 0 )
     {
         wxLogSysError(_("Failed to install signal handler"));

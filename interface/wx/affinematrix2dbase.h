@@ -73,7 +73,7 @@ public:
 
         @param mat2D
             The rotational components of the matrix (upper 2 x 2), must be
-            non-@NULL.
+            non-null.
         @param tr
             The translational components of the matrix, may be @NULL.
     */
@@ -114,7 +114,7 @@ public:
     */
     virtual bool IsIdentity() const = 0;
 
-    //@{
+    ///@{
     /**
         Check that this matrix is identical with @a t.
 
@@ -123,7 +123,7 @@ public:
     */
     virtual bool IsEqual(const wxAffineMatrix2DBase& t) const = 0;
     bool operator==(const wxAffineMatrix2DBase& t) const;
-    //@}
+    ///@}
 
     /**
         Check that this matrix differs from @a t.

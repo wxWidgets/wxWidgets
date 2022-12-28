@@ -23,12 +23,12 @@
 class WXDLLIMPEXP_CORE wxPostScriptPrinter : public wxPrinterBase
 {
 public:
-    wxPostScriptPrinter(wxPrintDialogData *data = NULL);
+    wxPostScriptPrinter(wxPrintDialogData *data = nullptr);
     virtual ~wxPostScriptPrinter();
 
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) wxOVERRIDE;
-    virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
-    virtual bool Setup(wxWindow *parent) wxOVERRIDE;
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) override;
+    virtual wxDC* PrintDialog(wxWindow *parent) override;
+    virtual bool Setup(wxWindow *parent) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPostScriptPrinter);
@@ -43,16 +43,16 @@ class WXDLLIMPEXP_CORE wxPostScriptPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxPostScriptPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting = NULL,
-                             wxPrintDialogData *data = NULL);
+                             wxPrintout *printoutForPrinting = nullptr,
+                             wxPrintDialogData *data = nullptr);
     wxPostScriptPrintPreview(wxPrintout *printout,
                              wxPrintout *printoutForPrinting,
                              wxPrintData *data);
 
     virtual ~wxPostScriptPrintPreview();
 
-    virtual bool Print(bool interactive) wxOVERRIDE;
-    virtual void DetermineScaling() wxOVERRIDE;
+    virtual bool Print(bool interactive) override;
+    virtual void DetermineScaling() override;
 
 private:
     void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);

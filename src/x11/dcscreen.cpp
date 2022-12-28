@@ -45,10 +45,8 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC* owner )
 
     m_isScreenDC = true;
 
-#if wxUSE_UNICODE
     m_context = wxTheApp->GetPangoContext();
     m_fontdesc = wxNORMAL_FONT->GetNativeFontInfo()->description;
-#endif
 
     SetUpDC();
 

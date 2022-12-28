@@ -312,7 +312,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
     // Note: in row/column selection mode, we only need part1 and part2
 
     // Blocks to refresh.
-    wxVectorGridBlockCoords refreshBlocks;
+    wxGridBlockCoordsVector refreshBlocks;
     // Add the deselected block.
     refreshBlocks.push_back(canonicalizedBlock);
 
@@ -882,7 +882,7 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     }
 }
 
-void wxGridSelection::MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
+void wxGridSelection::MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                                       const wxGridBlockCoords& newBlock)
 {
     size_t count = blocks.size();

@@ -28,13 +28,11 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 #ifdef DEBUG_LEX_MODULA
 #define DEBUG_STATE( p, c )\
-		fprintf( stderr, "Unknown state: currentPos = %ud, char = '%c'\n", p, c );
+		fprintf( stderr, "Unknown state: currentPos = %u, char = '%c'\n", static_cast<unsigned int>(p), c );
 #else
 #define DEBUG_STATE( p, c )
 #endif

@@ -53,7 +53,7 @@ wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 
 wxRegion::wxRegion()
 {
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
@@ -74,7 +74,7 @@ wxRegion::wxRegion(const wxRect& r)
 wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
 {
 #warning "implement this"
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxRegion::~wxRegion()

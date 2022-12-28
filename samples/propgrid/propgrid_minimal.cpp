@@ -28,7 +28,7 @@ private:
 
 enum
 {
-    ID_ACTION = wxID_HIGHEST+1
+    ID_ACTION = wxID_HIGHEST
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -69,7 +69,7 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
     }
     else
     {
-        wxLogVerbose("OnPropertyGridChange(NULL)");
+        wxLogVerbose("OnPropertyGridChange(nullptr)");
     }
 }
 

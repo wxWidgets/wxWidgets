@@ -58,6 +58,8 @@ public:
 private:
     const wxBitmap *DoGetPtr(int index) const;
 
+    wxBitmap GetImageListBitmap(const wxBitmap& bitmap) const;
+
     wxVector<wxBitmap> m_images;
     bool m_useMask;
 

@@ -28,13 +28,8 @@
 // http://msdn.microsoft.com/en-us/library/aa381049(VS.85).aspx for the full
 // list of languages and charsets
 #define LANG 0x0409
-#ifdef _UNICODE
-    #define CHARSET 0x4b0
-    #define LANG_WITH_CHARSET "040904b0"
-#else
-    #define CHARSET 0
-    #define LANG_WITH_CHARSET "04090000"
-#endif
+#define CHARSET 0x4b0
+#define LANG_WITH_CHARSET "040904b0"
 
 #ifdef WXMAKINGDLL_BASE
     #define WXLIBDESC "base"

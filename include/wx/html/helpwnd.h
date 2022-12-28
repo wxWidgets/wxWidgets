@@ -79,13 +79,13 @@ class WXDLLIMPEXP_HTML wxHtmlHelpWindow : public wxWindow
     wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpWindow);
 
 public:
-    wxHtmlHelpWindow(wxHtmlHelpData* data = NULL) { Init(data); }
+    wxHtmlHelpWindow(wxHtmlHelpData* data = nullptr) { Init(data); }
     wxHtmlHelpWindow(wxWindow* parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     int style = wxTAB_TRAVERSAL|wxNO_BORDER,
                     int helpStyle = wxHF_DEFAULT_STYLE,
-                    wxHtmlHelpData* data = NULL);
+                    wxHtmlHelpData* data = nullptr);
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -164,7 +164,7 @@ public:
     wxTreeCtrl *GetTreeCtrl() const { return m_ContentsBox; }
 
 protected:
-    void Init(wxHtmlHelpData* data = NULL);
+    void Init(wxHtmlHelpData* data = nullptr);
 
     // Adds items to m_Contents tree control
     void CreateContents();

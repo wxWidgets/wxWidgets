@@ -39,7 +39,7 @@ public:
     */
     wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPanel* panel = NULL);
+                       wxRibbonPanel* panel = nullptr);
 
     /**
         Returns the panel relating to this event.
@@ -268,7 +268,7 @@ public:
         Get the dummy panel of an expanded panel.
 
         Note that this should be called on an expanded panel to get the dummy
-        associated with it - it will return NULL when called on the dummy
+        associated with it - it will return @NULL when called on the dummy
         itself.
 
         @see ShowExpanded()
@@ -280,7 +280,7 @@ public:
         Get the expanded panel of a dummy panel.
 
         Note that this should be called on a dummy panel to get the expanded
-        panel associated with it - it will return NULL when called on the
+        panel associated with it - it will return @NULL when called on the
         expanded panel itself.
 
         @see ShowExpanded()

@@ -17,6 +17,8 @@
 #include "wx/defs.h"
 
 #include "wx/math.h"
+#include "wx/mimetype.h"
+#include "wx/versioninfo.h"
 
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
@@ -39,9 +41,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( MiscTestCase );
         CPPUNIT_TEST( Assert );
-#ifdef HAVE_VARIADIC_MACROS
         CPPUNIT_TEST( CallForEach );
-#endif // HAVE_VARIADIC_MACROS
         CPPUNIT_TEST( Delete );
         CPPUNIT_TEST( StaticCast );
     CPPUNIT_TEST_SUITE_END();
@@ -78,12 +78,11 @@ void MiscTestCase::Assert()
     WX_ASSERT_FAILS_WITH_ASSERT(AssertIfOdd(1));
 
     // doesn't fail any more
-    wxAssertHandler_t oldHandler = wxSetAssertHandler(NULL);
+    wxAssertHandler_t oldHandler = wxSetAssertHandler(nullptr);
     AssertIfOdd(17);
     wxSetAssertHandler(oldHandler);
 }
 
-#ifdef HAVE_VARIADIC_MACROS
 void MiscTestCase::CallForEach()
 {
     #define MY_MACRO(pos, str) s += str;
@@ -95,29 +94,28 @@ void MiscTestCase::CallForEach()
 
     #undef MY_MACRO
 }
-#endif // HAVE_VARIADIC_MACROS
 
 void MiscTestCase::Delete()
 {
     // Allocate some arbitrary memory to get a valid pointer:
     long *pointer = new long;
-    CPPUNIT_ASSERT( pointer != NULL );
+    CPPUNIT_ASSERT( pointer != nullptr );
 
-    // Check that wxDELETE sets the pointer to NULL:
+    // Check that wxDELETE sets the pointer to nullptr:
     wxDELETE( pointer );
-    CPPUNIT_ASSERT( pointer == NULL );
+    CPPUNIT_ASSERT( pointer == nullptr );
 
     // Allocate some arbitrary array to get a valid pointer:
     long *array = new long[ 3 ];
-    CPPUNIT_ASSERT( array != NULL );
+    CPPUNIT_ASSERT( array != nullptr );
 
-    // Check that wxDELETEA sets the pointer to NULL:
+    // Check that wxDELETEA sets the pointer to nullptr:
     wxDELETEA( array );
-    CPPUNIT_ASSERT( array == NULL );
+    CPPUNIT_ASSERT( array == nullptr );
 
     // this results in compilation error, as it should
 #if 0
-    struct SomeUnknownStruct *p = NULL;
+    struct SomeUnknownStruct *p = nullptr;
     wxDELETE(p);
 #endif
 }
@@ -131,7 +129,7 @@ namespace
 // used in WX_ASSERT_FAILS_WITH_ASSERT() in StaticCast() below
 bool IsNull(void *p)
 {
-    return p == NULL;
+    return p == nullptr;
 }
 
 #endif // __WXDEBUG__
@@ -216,4 +214,43 @@ TEST_CASE("wxMulDivInt32", "[math]")
 
     // Check that it doesn't overflow.
     CHECK( wxMulDivInt32((INT_MAX - 1)/2, 200, 100) == INT_MAX - 1 );
+}
+
+#if wxUSE_MIMETYPE
+TEST_CASE("wxFileTypeInfo", "[mime]")
+{
+    SECTION("no extensions")
+    {
+        wxFileTypeInfo fti("binary/*", "", wxString{}, L"plain binary");
+        REQUIRE( fti.GetExtensionsCount() == 0 );
+    }
+
+    SECTION("extension without null at the end")
+    {
+        wxFileTypeInfo fti("image/png", "", wxEmptyString, "PNG image", "png");
+        REQUIRE( fti.GetExtensionsCount() == 1 );
+        CHECK( fti.GetExtensions()[0] == "png" );
+    }
+
+    SECTION("two extensions with null at the end")
+    {
+        wxFileTypeInfo fti("image/jpeg", "", "", "JPEG image",
+                           "jpg", L"jpeg", nullptr);
+        REQUIRE( fti.GetExtensionsCount() == 2 );
+        CHECK( fti.GetExtensions()[0] == "jpg" );
+        CHECK( fti.GetExtensions()[1] == "jpeg" );
+    }
+}
+#endif // wxUSE_MIMETYPE
+
+TEST_CASE("wxVersionInfo", "[version]")
+{
+    wxVersionInfo ver120("test", 1, 2);
+    CHECK( ver120.AtLeast(1, 2) );
+    CHECK( ver120.AtLeast(1, 0) );
+    CHECK( ver120.AtLeast(0, 9) );
+
+    CHECK_FALSE( ver120.AtLeast(1, 2, 1) );
+    CHECK_FALSE( ver120.AtLeast(1, 3) );
+    CHECK_FALSE( ver120.AtLeast(2, 0) );
 }

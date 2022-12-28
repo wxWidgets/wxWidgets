@@ -25,8 +25,8 @@ struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 {
     BitmapProviderDefault(wxWindow* win) : m_win(win) { }
 
-    virtual wxBitmap Get(int scale) const wxOVERRIDE;
-    virtual void Set(const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual wxBitmap Get(int scale) const override;
+    virtual void Set(const wxBitmapBundle& bitmap) override;
 
     wxWindow* const m_win;
 
@@ -54,7 +54,7 @@ void BitmapProviderDefault::Set(const wxBitmapBundle& bitmapBundle)
 struct BitmapProviderDefault: wxGtkImage::BitmapProvider
 {
     BitmapProviderDefault(wxWindow*) { }
-    virtual wxBitmap Get(int /*scale*/) const wxOVERRIDE { return wxBitmap(); }
+    virtual wxBitmap Get(int /*scale*/) const override { return wxBitmap(); }
 };
 
 #endif // __WXGTK3__/!__WXGTK3__
@@ -72,10 +72,10 @@ GType wxGtkImage::Type()
     {
         const GTypeInfo info = {
             sizeof(GtkImageClass),
-            NULL, NULL,
-            wxGtkImageClassInit, NULL, NULL,
-            sizeof(wxGtkImage), 0, NULL,
-            NULL
+            nullptr, nullptr,
+            wxGtkImageClassInit, nullptr, nullptr,
+            sizeof(wxGtkImage), 0, nullptr,
+            nullptr
         };
         type = g_type_register_static(
             GTK_TYPE_IMAGE, "wxGtkImage", &info, GTypeFlags(0));
@@ -85,7 +85,7 @@ GType wxGtkImage::Type()
 
 GtkWidget* wxGtkImage::New(BitmapProvider* provider)
 {
-    wxGtkImage* image = WX_GTK_IMAGE(g_object_new(Type(), NULL));
+    wxGtkImage* image = WX_GTK_IMAGE(g_object_new(Type(), nullptr));
     image->m_provider = provider;
     return GTK_WIDGET(image);
 }
@@ -103,7 +103,7 @@ void wxGtkImage::Set(const wxBitmapBundle& bitmapBundle)
     // different bitmap below.
     wxBitmap bitmap = bitmapBundle.GetBitmap(wxDefaultSize);
 
-    GdkPixbuf* pixbuf = NULL;
+    GdkPixbuf* pixbuf = nullptr;
     if (bitmap.IsOk())
     {
         pixbuf = bitmap.GetPixbuf();
@@ -130,11 +130,16 @@ static gboolean wxGtkImageDraw(GtkWidget* widget, GdkEventExpose* event)
 #endif
     const wxBitmap bitmap(image->m_provider->Get(scale));
 
-#ifndef __WXGTK3__
-    // We rely on GTK to draw default disabled images
     if (!bitmap.IsOk())
+    {
+#ifdef __WXGTK3__
+        // Missing bitmap, just do the default
+        return wxGtkImageParentClass->draw(widget, cr);
+#else
+        // We rely on GTK to draw default disabled images
         return wxGtkImageParentClass->expose_event(widget, event);
 #endif
+    }
 
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);
@@ -160,7 +165,7 @@ static void wxGtkImageFinalize(GObject* object)
 {
     wxGtkImage* image = WX_GTK_IMAGE(object);
     delete image->m_provider;
-    image->m_provider = NULL;
+    image->m_provider = nullptr;
     G_OBJECT_CLASS(wxGtkImageParentClass)->finalize(object);
 }
 

@@ -71,7 +71,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     // has the same numeric value as wxTE_MULTILINE and so attempting to create
     // a dialog for editing multiline text would also prevent it from having a
     // parent which is undesirable. As it is, we can't create a text entry
-    // dialog without a parent which is not ideal neither but is a much less
+    // dialog without a parent which is not ideal either but is a much less
     // important problem.
     if ( !wxDialog::Create(GetParentForModalDialog(parent, 0),
                            wxID_ANY, caption,
@@ -177,13 +177,6 @@ void wxTextEntryDialog::ForceUpper()
 }
 
 #if wxUSE_VALIDATORS
-
-#if WXWIN_COMPATIBILITY_2_8
-void wxTextEntryDialog::SetTextValidator( long style )
-{
-    SetTextValidator((wxTextValidatorStyle)style);
-}
-#endif
 
 void wxTextEntryDialog::SetTextValidator( wxTextValidatorStyle style )
 {

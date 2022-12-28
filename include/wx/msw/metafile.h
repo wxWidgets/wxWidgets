@@ -30,7 +30,7 @@ public:
     wxMetafileRefData();
     virtual ~wxMetafileRefData();
 
-    virtual bool IsOk() const wxOVERRIDE { return m_metafile != 0; }
+    virtual bool IsOk() const override { return m_metafile != 0; }
 
 public:
     WXHANDLE m_metafile;
@@ -69,8 +69,8 @@ public:
     void SetWindowsMappingMode(int mm);
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxMetafile);
@@ -85,12 +85,12 @@ public:
     virtual ~wxMetafileDCImpl();
 
     virtual wxMetafile *Close();
-    virtual void SetMapMode(wxMappingMode mode) wxOVERRIDE;
+    virtual void SetMapMode(wxMappingMode mode) override;
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const wxOVERRIDE;
+                                 wxCoord *descent = nullptr,
+                                 wxCoord *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr) const override;
 
     // Implementation
     wxMetafile *GetMetaFile() const { return m_metaFile; }
@@ -99,7 +99,7 @@ public:
     void SetWindowsMappingMode(int mm) { m_windowsMappingMode = mm; }
 
 protected:
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
     int           m_windowsMappingMode;
     wxMetafile*   m_metaFile;
@@ -174,9 +174,9 @@ public:
         { return m_metafile; }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t len, const void *buf) override;
 
 protected:
     wxMetafile m_metafile;

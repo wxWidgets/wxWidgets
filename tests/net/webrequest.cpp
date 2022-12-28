@@ -116,7 +116,7 @@ public:
         }
     }
 
-    void Notify() wxOVERRIDE
+    void Notify() override
     {
         WARN("Exiting loop on timeout");
         loop.Exit();
@@ -227,6 +227,17 @@ TEST_CASE_METHOD(RequestFixture,
     Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
     Run();
     CHECK( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Get::Header", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/response-headers?freeform=wxWidgets%20works!");
+    Run();
+    CHECK( request.GetResponse().GetHeader("freeform") == "wxWidgets works!" );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -510,13 +521,21 @@ TEST_CASE_METHOD(RequestFixture,
     request.Start();
     RunLoopWithTimeout();
 
-    WARN("Request state " << request.GetState());
+    CHECK( request.GetState() == wxWebRequest::State_Completed );
     wxWebResponse response = request.GetResponse();
     REQUIRE( response.IsOk() );
-    WARN("Status: " << response.GetStatus()
+    WARN("URL: " << response.GetURL() << "\n" <<
+         "Status: " << response.GetStatus()
                     << " (" << response.GetStatusText() << ")\n" <<
          "Body length: " << response.GetContentLength() << "\n" <<
          "Body: " << response.AsString() << "\n");
+
+    // Also show the value of the given header if requested.
+    wxString header;
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_HEADER", &header) )
+    {
+        WARN("Header " << header << ": " << response.GetHeader(header));
+    }
 }
 
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);

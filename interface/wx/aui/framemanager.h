@@ -182,7 +182,7 @@ public:
             Specifies the frame management behaviour and visual effects
             with the ::wxAuiManagerOption's style flags.
     */
-    wxAuiManager(wxWindow* managed_wnd = NULL,
+    wxAuiManager(wxWindow* managed_wnd = nullptr,
                  unsigned int flags = wxAUI_MGR_DEFAULT);
 
     /**

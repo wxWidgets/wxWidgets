@@ -426,11 +426,7 @@ void wxVListBoxComboPopup::OnComboCharEvent( wxKeyEvent& event )
 {
     // unlike in OnComboKeyEvent, wxEVT_CHAR contains meaningful
     // printable character information, so pass it
-#if wxUSE_UNICODE
     const wxChar charcode = event.GetUnicodeKey();
-#else
-    const wxChar charcode = (wxChar)event.GetKeyCode();
-#endif
 
     if ( !HandleKey(event.GetKeyCode(), true, charcode) )
         event.Skip();
@@ -508,11 +504,7 @@ void wxVListBoxComboPopup::OnChar(wxKeyEvent& event)
     {
         // Process partial completion key codes here, but not the arrow keys as
         // the base class will do that for us
-#if wxUSE_UNICODE
         const wxChar charcode = event.GetUnicodeKey();
-#else
-        const wxChar charcode = (wxChar)event.GetKeyCode();
-#endif
         if ( wxIsprint(charcode) )
         {
             OnComboCharEvent(event);
@@ -538,7 +530,7 @@ void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
 
     m_strings.Insert(item,pos);
     if ( (int)m_clientDatas.size() >= pos )
-        m_clientDatas.insert(m_clientDatas.begin()+pos, NULL);
+        m_clientDatas.insert(m_clientDatas.begin()+pos, nullptr);
 
     m_widths.insert(m_widths.begin()+pos, -1);
     m_widthsDirty = true;
@@ -615,7 +607,7 @@ void wxVListBoxComboPopup::SetItemClientData( unsigned int n,
 
 void* wxVListBoxComboPopup::GetItemClientData(unsigned int n) const
 {
-    return n < m_clientDatas.size() ? m_clientDatas[n] : NULL;
+    return n < m_clientDatas.size() ? m_clientDatas[n] : nullptr;
 }
 
 void wxVListBoxComboPopup::Delete( unsigned int item )
@@ -657,7 +649,7 @@ bool wxVListBoxComboPopup::FindItem(const wxString& item, wxString* trueItem)
     int idx = m_strings.Index(item, false);
     if ( idx == wxNOT_FOUND )
         return false;
-    if ( trueItem != NULL )
+    if ( trueItem != nullptr )
         *trueItem = m_strings[idx];
     return true;
 }
@@ -762,7 +754,7 @@ void wxVListBoxComboPopup::CalcWidths()
                     if ( dirtyHandled < 1024 )
                     {
                         wxCoord y;
-                        dc.GetTextExtent(text, &x, &y, 0, 0);
+                        dc.GetTextExtent(text, &x, &y, nullptr, nullptr);
                         x += 4;
                     }
                     else
@@ -942,7 +934,7 @@ bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
     //return Create(parent, id, value, pos, size, chs.GetCount(),
     //              chs.GetStrings(), style, validator, name);
     return Create(parent, id, value, pos, size, 0,
-                  NULL, style, validator, name);
+                  nullptr, style, validator, name);
 }
 
 bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
@@ -1138,7 +1130,7 @@ void wxOwnerDrawnComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 void* wxOwnerDrawnComboBox::DoGetItemClientData(unsigned int n) const
 {
     if ( !m_popupInterface )
-        return NULL;
+        return nullptr;
 
     return GetVListBoxComboPopup()->GetItemClientData(n);
 }

@@ -33,7 +33,7 @@ private:
     int m_CachePos;
 
 public:
-    wx28HtmlTagsCache() : wxObject() {m_CacheSize = 0; m_Cache = NULL;}
+    wx28HtmlTagsCache() : wxObject() {m_CacheSize = 0; m_Cache = nullptr;}
     wx28HtmlTagsCache(const wxString& source);
     virtual ~wx28HtmlTagsCache() {free(m_Cache);}
 

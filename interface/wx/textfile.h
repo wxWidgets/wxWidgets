@@ -193,10 +193,10 @@ public:
         shouldn't add line terminator at the end -- this will be done by
         wxTextFile itself.
     */
-    //@{
+    ///@{
     wxString& GetLine(size_t n);
     const wxString& GetLine(size_t n) const;
-    //@}
+    ///@}
 
     /**
         Get the number of lines in the file.

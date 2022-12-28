@@ -53,14 +53,14 @@ struct wxLanguageInfo
     */
     wxString CanonicalRef;
 
-    //@{
+    ///@{
     /**
         Win32 language identifiers (LANG_xxxx, SUBLANG_xxxx).
 
         @onlyfor{wxmsw}
     */
     wxUint32 WinLang, WinSublang;
-    //@}
+    ///@}
 
     /// Human-readable name of the language in English.
     wxString Description;
@@ -651,7 +651,7 @@ public:
 
 
 /**
-   Get the current locale object (note that it may be NULL!)
+   Get the current locale object (note that it may be @NULL!)
 */
 wxLocale* wxGetLocale();
 

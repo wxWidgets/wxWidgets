@@ -118,7 +118,7 @@ void wxDateTimePickerCtrl::MSWUpdateFormatIfNeeded(bool valid)
 
 void wxDateTimePickerCtrl::MSWUpdateFormat(bool valid)
 {
-    // We just use NULL to reset to the default format when the date is valid,
+    // We just use nullptr to reset to the default format when the date is valid,
     // as the control seems to remember whichever format was used when it was
     // created, i.e. this works both with and without wxDP_SHOWCENTURY.
 
@@ -126,7 +126,7 @@ void wxDateTimePickerCtrl::MSWUpdateFormat(bool valid)
     // wxUSE_UNICODE_UTF8 case, where t_str() doesn't return a pointer.
     const TCHAR* format;
     if ( valid )
-        format = NULL;
+        format = nullptr;
     else
         format = m_nullText.t_str();
 
@@ -169,66 +169,63 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
 {
     wxSize size;
 
-    // Use DTM_GETIDEALSIZE to ask the control itself to compute its ideal size.
-    SIZE idealSize = { 0, 0 };
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    // Use DTM_GETIDEALSIZE to ask the control itself to compute its ideal
+    // size, but we can't use it with DTS_SHOWNONE because handling of
+    // this flag is completely broken (up to at least Window 10 20H2): it's
+    // not just ignored, but we get completely wrong results when this flag
+    // is on, e.g. the returned width is less than the width without it or
+    // much greater than the real value after a DPI change (and growing
+    // with every new change, even when repeatedly switching between the
+    // same DPI values, e.g. dragging a window between 2 monitors with
+    // different scaling). Moreover, note that even without DTS_SHOWNONE,
+    // DTM_GETIDEALSIZE still returns wrong results for the height after a
+    // DPI change, so we never use the vertical component of the value
+    // returned by it.
+    //
+    // Unfortunately, resetting this style doesn't work either, so we have
+    // to create a whole new window just for this, which is pretty wasteful
+    // but seems unavoidable.
+    HWND hwnd;
+    if ( MSWAllowsNone() )
     {
-        // We can't use DTM_GETIDEALSIZE with DTS_SHOWNONE because handling of
-        // this flag is completely broken (up to at least Window 10 20H2): it's
-        // not just ignored, but we get completely wrong results when this flag
-        // is on, e.g. the returned width is less than the width without it or
-        // much greater than the real value after a DPI change (and growing
-        // with every new change, even when repeatedly switching between the
-        // same DPI values, e.g. dragging a window between 2 monitors with
-        // different scaling). Moreover, note that even without DTS_SHOWNONE,
-        // DTM_GETIDEALSIZE still returns wrong results for the height after a
-        // DPI change, so we never use the vertical component of the value
-        // returned by it.
-        //
-        // Unfortunately, resetting this style doesn't work neither, so we have
-        // to create a whole new window just for this, which is pretty wasteful
-        // but seems unavoidable.
-        HWND hwnd;
-        if ( MSWAllowsNone() )
-        {
-            hwnd = ::CreateWindow
-                     (
-                        DATETIMEPICK_CLASS,
-                        wxT(""),
-                        ::GetWindowLong(GetHwnd(), GWL_STYLE) & ~DTS_SHOWNONE,
-                        0, 0, 1, 1,
-                        GetHwndOf(m_parent),
-                        0,
-                        wxGetInstance(),
-                        NULL
-                     );
-            wxCHECK_MSG( hwnd, wxSize(),
-                         wxS("SysDateTimePick32 creation unexpected failed") );
+        hwnd = ::CreateWindow
+                 (
+                    DATETIMEPICK_CLASS,
+                    wxT(""),
+                    ::GetWindowLong(GetHwnd(), GWL_STYLE) & ~DTS_SHOWNONE,
+                    0, 0, 1, 1,
+                    GetHwndOf(m_parent),
+                    0,
+                    wxGetInstance(),
+                    nullptr
+                 );
+        wxCHECK_MSG( hwnd, wxSize(),
+                     wxS("SysDateTimePick32 creation unexpected failed") );
 
-            wxSetWindowFont(hwnd, GetFont());
-        }
-        else
-        {
-            hwnd = GetHwnd();
-        }
-
-        // Also work around https://bugs.winehq.org/show_bug.cgi?id=44680 by
-        // checking for the return value: even if all "real" MSW systems do support
-        // this message, Wine does not, even when it's configured to return Vista
-        // or later version to the application, and returns FALSE for it.
-        if ( ::SendMessage(hwnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
-        {
-            size.x = idealSize.cx;
-            size.y = GetCharHeight();
-        }
-
-        if ( hwnd != GetHwnd() )
-        {
-            ::DestroyWindow(hwnd);
-        }
+        wxSetWindowFont(hwnd, GetFont());
+    }
+    else
+    {
+        hwnd = GetHwnd();
     }
 
-    if ( !idealSize.cx ) // Compute the size ourselves.
+    // Also work around https://bugs.winehq.org/show_bug.cgi?id=44680 by
+    // checking for the return value: even if all "real" MSW systems do support
+    // this message, Wine does not, even when it's configured to return Vista
+    // or later version to the application, and returns FALSE for it.
+    SIZE idealSize = { 0, 0 };
+    if ( ::SendMessage(hwnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
+    {
+        size.x = idealSize.cx;
+        size.y = GetCharHeight();
+    }
+
+    if ( hwnd != GetHwnd() )
+    {
+        ::DestroyWindow(hwnd);
+    }
+
+    if ( !size.x ) // Compute the size ourselves.
     {
         // Use the same native format as the underlying native control.
 #if wxUSE_INTL

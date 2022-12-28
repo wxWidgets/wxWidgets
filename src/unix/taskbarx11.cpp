@@ -20,7 +20,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_TASKBARICON && !defined(__WXGTK20__)
+#if wxUSE_TASKBARICON
 
 #include "wx/taskbar.h"
 
@@ -51,7 +51,7 @@
     {
     public:
         wxTaskBarIconAreaBase()
-            : wxFrame(NULL, wxID_ANY, wxT("systray icon"),
+            : wxFrame(nullptr, wxID_ANY, wxT("systray icon"),
                       wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR |
                       wxSIMPLE_BORDER | wxFRAME_SHAPED) {}
@@ -63,16 +63,7 @@
 // toolkit dependent methods to set properties on helper window:
 // ----------------------------------------------------------------------------
 
-#if defined(__WXGTK__)
-    #ifdef __WXGTK20__
-        #include "wx/gtk/private/wrapgtk.h"
-    #else // GTK+ 1.x
-        #include <gtk/gtk.h>
-    #endif
-    #include <gdk/gdkx.h>
-    #define GetDisplay()        GDK_DISPLAY()
-    #define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
-#elif defined(__WXX11__) || defined(__WXMOTIF__)
+#if defined(__WXX11__)
     #include "wx/x11/privx.h"
     #define GetDisplay()        ((Display*)wxGlobalDisplay())
     #define GetXWindow(wxwin)   ((Window)(wxwin)->GetHandle())
@@ -161,10 +152,6 @@ void wxTaskBarIconArea::SetTrayIcon(const wxBitmapBundle& bmp)
 
 void wxTaskBarIconArea::SetLegacyWMProperties()
 {
-#ifdef __WXGTK__
-    gtk_widget_realize(m_widget);
-#endif
-
     long data[1];
 
     // KDE 2 & KDE 3:
@@ -246,7 +233,7 @@ bool wxTaskBarIconBase::IsAvailable()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler);
 
-wxTaskBarIcon::wxTaskBarIcon() : m_iconWnd(NULL)
+wxTaskBarIcon::wxTaskBarIcon() : m_iconWnd(nullptr)
 {
 }
 
@@ -266,7 +253,7 @@ bool wxTaskBarIcon::IsOk() const
 
 bool wxTaskBarIcon::IsIconInstalled() const
 {
-    return m_iconWnd != NULL;
+    return m_iconWnd != nullptr;
 }
 
 // Destroy event from wxTaskBarIconArea
@@ -274,7 +261,7 @@ void wxTaskBarIcon::OnDestroy(wxWindowDestroyEvent&)
 {
     // prevent crash if wxTaskBarIconArea is destroyed by something else,
     // for example if panel/kicker is killed
-    m_iconWnd = NULL;
+    m_iconWnd = nullptr;
 }
 
 bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
@@ -290,7 +277,7 @@ bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
         else
         {
             m_iconWnd->Destroy();
-            m_iconWnd = NULL;
+            m_iconWnd = nullptr;
             return false;
         }
     }
@@ -303,7 +290,7 @@ bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
     if (!tooltip.empty())
         m_iconWnd->SetToolTip(tooltip);
     else
-        m_iconWnd->SetToolTip(NULL);
+        m_iconWnd->SetToolTip(nullptr);
 #else
     wxUnusedVar(tooltip);
 #endif
@@ -315,7 +302,7 @@ bool wxTaskBarIcon::RemoveIcon()
     if (!m_iconWnd)
         return false;
     m_iconWnd->Destroy();
-    m_iconWnd = NULL;
+    m_iconWnd = nullptr;
     return true;
 }
 

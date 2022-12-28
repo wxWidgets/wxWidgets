@@ -14,9 +14,8 @@
 
 MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CPP="$(CPP)" SHARED="$(SHARED)" \
-	TOOLKIT_VERSION="$(TOOLKIT_VERSION)" WXUNIV="$(WXUNIV)" \
-	UNICODE="$(UNICODE)" BUILD="$(BUILD)" TARGET_CPU="$(TARGET_CPU)" \
-	VISUALSTUDIOVERSION="$(VISUALSTUDIOVERSION)" \
+	TOOLKIT_VERSION="$(TOOLKIT_VERSION)" WXUNIV="$(WXUNIV)" BUILD="$(BUILD)" \
+	TARGET_CPU="$(TARGET_CPU)" VISUALSTUDIOVERSION="$(VISUALSTUDIOVERSION)" \
 	VISUALSTUDIOPLATFORM="$(VISUALSTUDIOPLATFORM)" DEBUG_INFO="$(DEBUG_INFO)" \
 	DEBUG_FLAG="$(DEBUG_FLAG)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
@@ -37,18 +36,12 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_emulator sub_execmon sub_helpview sub_hhp2cached sub_ifacecheck sub_screenshotgen sub_wxrc
+all: sub_helpview sub_hhp2cached sub_ifacecheck sub_screenshotgen sub_wxrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 	-if exist .\*.pch del .\*.pch
-	cd emulator\src
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
-	cd execmon
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
 	cd helpview\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
@@ -63,16 +56,6 @@ clean:
 	cd "$(MAKEDIR)"
 	cd wxrc
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
-
-sub_emulator: 
-	cd emulator\src
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
-
-sub_execmon: 
-	cd execmon
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
 sub_helpview: 

@@ -52,7 +52,7 @@ void wxQtTabWidget::currentChanged(int index)
 
 
 wxNotebook::wxNotebook() :
-    m_qtTabWidget(NULL)
+    m_qtTabWidget(nullptr)
 {
 }
 
@@ -75,7 +75,17 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     m_qtTabWidget = new wxQtTabWidget( parent, this );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    if ( !QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name ) )
+        return false;
+
+    if ( m_windowStyle & wxBK_RIGHT )
+        m_qtTabWidget->setTabPosition( QTabWidget::East );
+    else if ( m_windowStyle & wxBK_LEFT )
+        m_qtTabWidget->setTabPosition( QTabWidget::West );
+    else if ( m_windowStyle & wxBK_BOTTOM )
+        m_qtTabWidget->setTabPosition( QTabWidget::South );
+
+    return true;
 }
 
 void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))
@@ -125,6 +135,19 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
     }
     m_images[n] = imageId;
     return true;
+}
+
+void wxNotebook::OnImagesChanged()
+{
+    if ( HasImages() )
+    {
+        wxImageList* const imageList = GetUpdatedImageListFor(this);
+
+        int width, height;
+        imageList->GetSize(0, width, height);
+        m_qtTabWidget->setIconSize(QSize(width, height));
+        m_qtTabWidget->update();
+    }
 }
 
 bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
@@ -178,15 +201,11 @@ bool wxNotebook::DeleteAllPages()
 
     // Block signals to not receive selection changed updates
     // which are sent by Qt after the selected page was deleted.
-    m_qtTabWidget->blockSignals(true);
+    wxQtEnsureSignalsBlocked blocker(m_qtTabWidget);
 
     // Pages will be deleted one by one in the base class.
     // There's no need to explicitly clear() the Qt control.
-    bool deleted = wxNotebookBase::DeleteAllPages();
-
-    m_qtTabWidget->blockSignals(false);
-
-    return deleted;
+    return wxNotebookBase::DeleteAllPages();
 }
 
 int wxNotebook::SetSelection(size_t page)
@@ -206,13 +225,9 @@ int wxNotebook::ChangeSelection(size_t nPage)
 {
     // ChangeSelection() is not supposed to generate events, unlike
     // SetSelection().
-    m_qtTabWidget->blockSignals(true);
+    wxQtEnsureSignalsBlocked blocker(m_qtTabWidget);
 
-    const int selOld = SetSelection(nPage);
-
-    m_qtTabWidget->blockSignals(false);
-
-    return selOld;
+    return SetSelection(nPage);
 }
 
 wxWindow *wxNotebook::DoRemovePage(size_t page)

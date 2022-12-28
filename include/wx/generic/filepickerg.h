@@ -46,7 +46,7 @@ public:
                pos, size, style, validator, name);
     }
 
-    virtual wxControl *AsControl() wxOVERRIDE { return this; }
+    virtual wxControl *AsControl() override { return this; }
 
 public:     // overridable
 
@@ -57,7 +57,7 @@ public:     // overridable
 
     virtual wxEventType GetEventType() const = 0;
 
-    virtual void SetInitialDirectory(const wxString& dir) wxOVERRIDE;
+    virtual void SetInitialDirectory(const wxString& dir) override;
 
 public:
 
@@ -144,15 +144,15 @@ public:     // overridable
         return filedlgstyle;
     }
 
-    virtual wxDialog *CreateDialog() wxOVERRIDE;
+    virtual wxDialog *CreateDialog() override;
 
-    wxEventType GetEventType() const wxOVERRIDE
+    wxEventType GetEventType() const override
         { return wxEVT_FILEPICKER_CHANGED; }
 
 protected:
-    void UpdateDialogPath(wxDialog *p) wxOVERRIDE
+    void UpdateDialogPath(wxDialog *p) override
         { wxStaticCast(p, wxFileDialog)->SetPath(m_path); }
-    void UpdatePathFromDialog(wxDialog *p) wxOVERRIDE
+    void UpdatePathFromDialog(wxDialog *p) override
         { m_path = wxStaticCast(p, wxFileDialog)->GetPath(); }
 
 private:
@@ -199,15 +199,15 @@ public:     // overridable
         return dirdlgstyle;
     }
 
-    virtual wxDialog *CreateDialog() wxOVERRIDE;
+    virtual wxDialog *CreateDialog() override;
 
-    wxEventType GetEventType() const wxOVERRIDE
+    wxEventType GetEventType() const override
         { return wxEVT_DIRPICKER_CHANGED; }
 
 protected:
-    void UpdateDialogPath(wxDialog *p) wxOVERRIDE
+    void UpdateDialogPath(wxDialog *p) override
         { wxStaticCast(p, wxDirDialog)->SetPath(m_path); }
-    void UpdatePathFromDialog(wxDialog *p) wxOVERRIDE
+    void UpdatePathFromDialog(wxDialog *p) override
         { m_path = wxStaticCast(p, wxDirDialog)->GetPath(); }
 
 private:

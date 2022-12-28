@@ -81,7 +81,7 @@ public:
         @since 2.9.2
 
         @param completer
-            The object to be used for generating completions if non-@NULL. If
+            The object to be used for generating completions if non-null. If
             it is @NULL, auto-completion is disabled. The wxTextEntry object
             takes ownership of this pointer and will delete it in any case
             (i.e. even if this method returns @false).
@@ -148,7 +148,7 @@ public:
         Returns @true if the contents of the clipboard can be pasted into the
         text control.
 
-        On some platforms (Motif, GTK) this is an approximation and returns
+        On some platforms (GTK) this is an approximation and returns
         @true if the control is editable, @false otherwise.
     */
     virtual bool CanPaste() const;
@@ -463,8 +463,8 @@ public:
         Notice that hints are known as <em>cue banners</em> under MSW or
         <em>placeholder strings</em> under macOS.
 
-        @remarks Currently implemented natively on Windows (Vista and later
-            only), macOS and GTK+ (3.2 and later).
+        @remarks Currently implemented natively on Windows, macOS and GTK+ (3.2
+            and later).
 
             For the platforms without native hints support, the implementation
             has several known limitations. Notably, the hint display will not
@@ -497,7 +497,7 @@ public:
      */
     virtual wxString GetHint() const;
 
-    //@{
+    ///@{
     /**
         Attempts to set the control margins. When margins are given as wxPoint,
         x indicates the left and y the top margin. Use -1 to indicate that
@@ -510,7 +510,7 @@ public:
     */
     bool SetMargins(const wxPoint& pt);
     bool SetMargins(wxCoord left, wxCoord top = -1);
-    //@}
+    ///@}
 
     /**
         Returns the margins used by the control. The @c x field of the returned

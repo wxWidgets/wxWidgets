@@ -146,9 +146,7 @@
 // for wxString code, define wxUSE_WXVSNPRINTF to indicate that wx
 // implementation is used no matter what (in UTF-8 build, either *A or *W
 // version may be called):
-#if !wxUSE_UNICODE
-    #define wxUSE_WXVSNPRINTF wxUSE_WXVSNPRINTFA
-#elif wxUSE_UNICODE_WCHAR
+#if wxUSE_UNICODE_WCHAR
     #define wxUSE_WXVSNPRINTF wxUSE_WXVSNPRINTFW
 #elif wxUSE_UTF8_LOCALE_ONLY
     #define wxUSE_WXVSNPRINTF wxUSE_WXVSNPRINTFA
@@ -238,32 +236,44 @@
 // user-friendly wrappers to CRT functions
 // ----------------------------------------------------------------------------
 
-    // FIXME-UTF8: remove this
-#if wxUSE_UNICODE
-    #define wxCRT_PrintfNative wxCRT_PrintfW
-    #define wxCRT_FprintfNative wxCRT_FprintfW
-#else
-    #define wxCRT_PrintfNative wxCRT_PrintfA
-    #define wxCRT_FprintfNative wxCRT_FprintfA
-#endif
-
-
 wxGCC_ONLY_WARNING_SUPPRESS(format-nonliteral)
+wxGCC_ONLY_WARNING_SUPPRESS(format-security)
 
-WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxPrintf, 1, (const wxFormatString&),
-                              wxCRT_PrintfNative, wxCRT_PrintfA)
-inline int wxPrintf(const wxFormatString& s)
+template <typename... Targs>
+int wxPrintf(const wxFormatString& format, Targs... args)
 {
-    return wxPrintf(wxASCII_STR("%s"), s.InputAsString());
+    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+
+#if wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+        if ( wxLocaleIsUtf8 )
+    #endif
+            return wxCRT_PrintfA(format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    return wxCRT_PrintfW(format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 
-WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxFprintf, 2, (FILE*, const wxFormatString&),
-                              wxCRT_FprintfNative, wxCRT_FprintfA)
-inline int wxFprintf(FILE *f, const wxFormatString& s)
+template <typename... Targs>
+int wxFprintf(FILE* fp, const wxFormatString& format, Targs... args)
 {
-    return wxFprintf(f, wxASCII_STR("%s"), s.InputAsString());
+    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+
+#if wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+        if ( wxLocaleIsUtf8 )
+    #endif
+            return wxCRT_FprintfA(fp, format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    return wxCRT_FprintfW(fp, format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 }
 
+wxGCC_ONLY_WARNING_RESTORE(format-security)
 wxGCC_ONLY_WARNING_RESTORE(format-nonliteral)
 
 // va_list versions of printf functions simply forward to the respective
@@ -308,55 +318,72 @@ wxVfprintf(FILE *f, const wxString& format, va_list ap)
 
 #if !wxUSE_UTF8_LOCALE_ONLY
 int WXDLLIMPEXP_BASE wxDoSprintfWchar(char *str, const wxChar *format, ...);
+int WXDLLIMPEXP_BASE wxDoSprintfWchar(wchar_t *str, const wxChar *format, ...);
 #endif
 #if wxUSE_UNICODE_UTF8
 int WXDLLIMPEXP_BASE wxDoSprintfUtf8(char *str, const char *format, ...);
+int WXDLLIMPEXP_BASE wxDoSprintfUtf8(wchar_t *str, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (char*, const wxFormatString&),
-                      wxDoSprintfWchar, wxDoSprintfUtf8)
+
+template <typename CharType, typename... Targs>
+int wxSprintf(CharType* str, const wxFormatString& format, Targs... args)
+{
+    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+
+#if wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+        if ( wxLocaleIsUtf8 )
+    #endif
+            return wxDoSprintfUtf8(str, format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    return wxDoSprintfWchar(str, format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+}
 
 int WXDLLIMPEXP_BASE
 wxVsprintf(char *str, const wxString& format, va_list argptr);
 
 #if !wxUSE_UTF8_LOCALE_ONLY
 int WXDLLIMPEXP_BASE wxDoSnprintfWchar(char *str, size_t size, const wxChar *format, ...);
+int WXDLLIMPEXP_BASE wxDoSnprintfWchar(wchar_t *str, size_t size, const wxChar *format, ...);
 #endif
 #if wxUSE_UNICODE_UTF8
 int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(char *str, size_t size, const char *format, ...);
+int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (char*, size_t, const wxFormatString&),
-                      wxDoSnprintfWchar, wxDoSnprintfUtf8)
+
+template <typename CharType, typename... Targs>
+int wxSnprintf(CharType* str, size_t size, const wxFormatString& format, Targs... args)
+{
+    format.Validate({wxFormatStringSpecifier<Targs>::value...});
+
+#if wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+        if ( wxLocaleIsUtf8 )
+    #endif
+            return wxDoSnprintfUtf8(str, size, format, wxArgNormalizerUtf8<Targs>{args, nullptr, 0}.get()...);
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    return wxDoSnprintfWchar(str, size, format, wxArgNormalizerWchar<Targs>{args, nullptr, 0}.get()...);
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+}
 
 int WXDLLIMPEXP_BASE
 wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr);
 
-#if wxUSE_UNICODE
-
 #if !wxUSE_UTF8_LOCALE_ONLY
-int WXDLLIMPEXP_BASE wxDoSprintfWchar(wchar_t *str, const wxChar *format, ...);
 #endif
 #if wxUSE_UNICODE_UTF8
-int WXDLLIMPEXP_BASE wxDoSprintfUtf8(wchar_t *str, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (wchar_t*, const wxFormatString&),
-                      wxDoSprintfWchar, wxDoSprintfUtf8)
 
 int WXDLLIMPEXP_BASE
 wxVsprintf(wchar_t *str, const wxString& format, va_list argptr);
 
-#if !wxUSE_UTF8_LOCALE_ONLY
-int WXDLLIMPEXP_BASE wxDoSnprintfWchar(wchar_t *str, size_t size, const wxChar *format, ...);
-#endif
-#if wxUSE_UNICODE_UTF8
-int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...);
-#endif
-WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (wchar_t*, size_t, const wxFormatString&),
-                      wxDoSnprintfWchar, wxDoSnprintfUtf8)
-
 int WXDLLIMPEXP_BASE
 wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
-
-#endif // wxUSE_UNICODE
 
 // We can't use wxArgNormalizer<T> for variadic arguments to wxScanf() etc.
 // because they are writable, so instead of providing friendly template

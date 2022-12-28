@@ -34,7 +34,7 @@
 
 // GTK and Mac always have native implementation of the indeterminate mode
 // wxMSW has native implementation only if comctl32.dll >= 6.00
-#if !defined(__WXGTK20__) && !defined(__WXMAC__)
+#if !defined(__WXGTK__) && !defined(__WXMAC__)
     #define wxGAUGE_EMULATE_INDETERMINATE_MODE 1
 #else
     #define wxGAUGE_EMULATE_INDETERMINATE_MODE 0
@@ -55,7 +55,7 @@ public:
 #if wxGAUGE_EMULATE_INDETERMINATE_MODE
         m_nDirection(wxRIGHT),
 #endif
-        m_appProgressIndicator(NULL) { }
+        m_appProgressIndicator(nullptr) { }
 
     virtual ~wxGaugeBase();
 
@@ -84,7 +84,7 @@ public:
     bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     // Deprecated methods not doing anything since a long time.
     wxDEPRECATED_MSG("Remove calls to this method, it doesn't do anything")
@@ -100,7 +100,7 @@ public:
     int GetBezelFace() const { return 0; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // Initialize m_appProgressIndicator if necessary, i.e. if this object has
     // wxGA_PROGRESS style. This method is supposed to be called from the
@@ -128,12 +128,8 @@ protected:
     #include "wx/univ/gauge.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/gauge.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/gauge.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/gauge.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/gauge.h"
+    #include "wx/gtk/gauge.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/gauge.h"
 #elif defined(__WXQT__)

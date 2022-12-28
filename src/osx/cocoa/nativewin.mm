@@ -36,7 +36,7 @@ public:
     wxNativeWidgetCocoaImpl(wxWindowMac* peer, WXWidget w) : wxWidgetCocoaImpl(peer, w)
     {}
 
-    virtual void SetInitialLabel(const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding)) wxOVERRIDE
+    virtual void SetInitialLabel(const wxString& WXUNUSED(title)) override
     {
         // Don't set initial label, because the control was created by the
         // caller and is already fully setup. And some controls (notably
@@ -53,7 +53,7 @@ wxNativeWindow::Create(wxWindow* parent,
                        wxWindowID winid,
                        wxNativeWindowHandle view)
 {
-    wxCHECK_MSG( view, false, wxS("NULL NSView pointer") );
+    wxCHECK_MSG( view, false, wxS("null NSView pointer") );
 
     DontCreatePeer();
 

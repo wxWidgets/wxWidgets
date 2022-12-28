@@ -20,10 +20,6 @@ else()
     set(WIN32_MSVC_NAMING 0)
 endif()
 
-if(WIN32_MSVC_NAMING)
-    # Generator expression to not create different Debug and Release directories
-    set(GEN_EXPR_DIR_FIX "$<1:/>")
-endif()
 
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
@@ -91,37 +87,28 @@ macro(wx_get_flavour flavour prefix)
     endif()
 endmacro()
 
+if(WIN32_MSVC_NAMING)
+    # Generator expression to not create different Debug and Release directories
+    set(GEN_EXPR_DIR "$<1:/>")
+    set(wxINSTALL_INCLUDE_DIR "include")
+else()
+    set(GEN_EXPR_DIR "/")
+    wx_get_flavour(lib_flavour "-")
+    set(wxINSTALL_INCLUDE_DIR "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
+endif()
+
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
     set_target_properties(${target_name} PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+        LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+        ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+        RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
         )
 
     if(wxBUILD_PIC)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-    endif()
-
-    set(common_gcc_clang_compile_options
-        -Wall
-        -Wno-ctor-dtor-privacy
-        -Woverloaded-virtual
-        -Wundef
-        -Wunused-parameter
-    )
-
-    if(WXOSX_COCOA OR WXGTK3)
-        # when building using GTK+ 3 or Cocoa we currently get tons of deprecation
-        # warnings from the standard headers -- disable them as we already know
-        # that they're deprecated but we still have to use them to support older
-        # toolkit versions and leaving this warning enabled prevents seeing any
-        # other ones
-        list(APPEND common_gcc_clang_compile_options
-            -Wno-deprecated-declarations
-        )
     endif()
 
     if(MSVC)
@@ -131,15 +118,38 @@ function(wx_set_common_target_properties target_name)
             set(MSVC_WARNING_LEVEL "/W4")
         endif()
         target_compile_options(${target_name} PRIVATE ${MSVC_WARNING_LEVEL})
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+    elseif(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        set(common_gcc_clang_compile_options
+            -Wall
+            -Wundef
+            -Wunused-parameter
+        )
+        set(common_gcc_clang_cpp_compile_options
+            -Wno-ctor-dtor-privacy
+            -Woverloaded-virtual
+        )
+
+        if(WXOSX_COCOA)
+            # when building using Cocoa we currently get tons of deprecation
+            # warnings from the standard headers -- disable them as we already know
+            # that they're deprecated but we still have to use them to support older
+            # toolkit versions and leaving this warning enabled prevents seeing any
+            # other ones
+            list(APPEND common_gcc_clang_compile_options
+                -Wno-deprecated-declarations
+            )
+        endif()
+
+        if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+            list(APPEND common_gcc_clang_compile_options
+                -Wno-ignored-attributes
+            )
+        endif()
+
         target_compile_options(${target_name} PRIVATE
             ${common_gcc_clang_compile_options}
-            )
-    elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
-        target_compile_options(${target_name} PRIVATE
-            ${common_gcc_clang_compile_options}
-            -Wno-ignored-attributes
-            )
+            $<$<COMPILE_LANGUAGE:CXX>:${common_gcc_clang_cpp_compile_options}>
+        )
     endif()
 
     if(CMAKE_USE_PTHREADS_INIT)
@@ -180,9 +190,7 @@ function(wx_set_target_properties target_name)
     endif()
 
     set(lib_unicode)
-    if(wxUSE_UNICODE)
-        set(lib_unicode "u")
-    endif()
+    set(lib_unicode "u")
 
     set(lib_rls)
     set(lib_dbg)
@@ -204,7 +212,11 @@ function(wx_set_target_properties target_name)
     if(wxCOMPILER_PREFIX)
         wx_string_append(dll_suffix "_${wxCOMPILER_PREFIX}")
     endif()
-    if(wxBUILD_VENDOR AND wxVERSION_IS_DEV)
+    if(WIN32_MSVC_NAMING AND wxARCH_SUFFIX)
+        # This one already includes the leading underscore, so don't add another one.
+        wx_string_append(dll_suffix "${wxARCH_SUFFIX}")
+    endif()
+    if(wxBUILD_VENDOR)
         wx_string_append(dll_suffix "_${wxBUILD_VENDOR}")
     endif()
 
@@ -275,13 +287,6 @@ function(wx_set_target_properties target_name)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
     endif()
 
-    if(wxUSE_UNICODE)
-        if(WIN32)
-            target_compile_definitions(${target_name} PUBLIC UNICODE)
-        endif()
-        target_compile_definitions(${target_name} PUBLIC _UNICODE)
-    endif()
-
     if(WIN32 AND MSVC)
         # Suppress deprecation warnings for standard library calls
         target_compile_definitions(${target_name} PRIVATE
@@ -299,7 +304,7 @@ function(wx_set_target_properties target_name)
             $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
             $<BUILD_INTERFACE:${wxSOURCE_DIR}/include>
             $<INSTALL_INTERFACE:lib/${wxSETUP_HEADER_REL}>
-            $<INSTALL_INTERFACE:include>
+            $<INSTALL_INTERFACE:${wxINSTALL_INCLUDE_DIR}>
         )
 
     if(wxTOOLKIT_INCLUDE_DIRS AND NOT wxTARGET_IS_BASE)
@@ -425,9 +430,9 @@ macro(wx_add_library name)
         endif()
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets
-            LIBRARY DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-            ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
-            RUNTIME DESTINATION "${runtime_dir}/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}"
+            LIBRARY DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            RUNTIME DESTINATION "${runtime_dir}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
@@ -500,7 +505,7 @@ endmacro()
 # Set common properties for a builtin third party library
 function(wx_set_builtin_target_properties target_name)
     set(lib_unicode)
-    if(wxUSE_UNICODE AND target_name STREQUAL "wxregex")
+    if(target_name STREQUAL "wxregex")
         set(lib_unicode "u")
     endif()
 
@@ -521,13 +526,6 @@ function(wx_set_builtin_target_properties target_name)
         OUTPUT_NAME       "${target_name}${lib_unicode}${lib_rls}${lib_flavour}${lib_version}"
         OUTPUT_NAME_DEBUG "${target_name}${lib_unicode}${lib_dbg}${lib_flavour}${lib_version}"
     )
-
-    if(wxUSE_UNICODE)
-        if(WIN32)
-            target_compile_definitions(${target_name} PUBLIC UNICODE)
-        endif()
-        target_compile_definitions(${target_name} PUBLIC _UNICODE)
-    endif()
 
     if(MSVC)
         # we're not interested in deprecation warnings about the use of
@@ -550,7 +548,7 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "lib/${GEN_EXPR_DIR_FIX}${wxPLATFORM_LIB_DIR}")
+        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}")
     endif()
 endfunction()
 
@@ -600,8 +598,7 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
     if(${var_name} STREQUAL "sys")
         # If the sys library can not be found use builtin
         find_package(${lib_name})
-        string(TOUPPER ${lib_name} lib_name_upper)
-        if(NOT ${${lib_name_upper}_FOUND})
+        if(NOT ${lib_name}_FOUND)
             wx_option_force_value(${var_name} builtin)
         endif()
     endif()
@@ -803,7 +800,7 @@ function(wx_add name group)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/samples)
     elseif(group STREQUAL Tests)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/tests)
-        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/include)
+        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/single_include)
         target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 

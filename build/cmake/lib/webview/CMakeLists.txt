@@ -46,11 +46,11 @@ if(APPLE)
 elseif(WXMSW)
     if(wxUSE_WEBVIEW_EDGE)
         # Update the following variables if updating WebView2 SDK
-        set(WEBVIEW2_VERSION "1.0.705.50")
+        set(WEBVIEW2_VERSION "1.0.864.35")
         set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
-        set(WEBVIEW2_SHA256 "6a34bb553e18cfac7297b4031f3eac2558e439f8d16a45945c22945ac404105d")
+        set(WEBVIEW2_SHA256 "542b271732b9d5435c33180eb4d5ea65fcb10aaf39f4d4be5953abe8d4bd1046")
 
-        set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
+        set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
 
         if(NOT EXISTS ${WEBVIEW2_PACKAGE_DIR})
             unset(WEBVIEW2_PACKAGE_DIR CACHE)
@@ -67,11 +67,11 @@ elseif(WXMSW)
             set(WEBVIEW2_PACKAGE_DIR ${WEBVIEW2_DEFAULT_PACKAGE_DIR} CACHE PATH "WebView2 SDK PATH" FORCE)
             file(DOWNLOAD
                 ${WEBVIEW2_URL}
-                ${CMAKE_BINARY_DIR}/webview2.nuget
+                ${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget
                 EXPECTED_HASH SHA256=${WEBVIEW2_SHA256})
             file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
             execute_process(COMMAND
-                "${CMAKE_COMMAND}" -E tar x "${CMAKE_BINARY_DIR}/webview2.nuget"
+                "${CMAKE_COMMAND}" -E tar x "${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget"
                 WORKING_DIRECTORY "${WEBVIEW2_PACKAGE_DIR}"
             )
         endif()
@@ -86,7 +86,9 @@ elseif(WXMSW)
         endif()
 
         if (wxUSE_WEBVIEW_EDGE_STATIC)
-            target_link_directories(wxwebview PUBLIC "${WEBVIEW2_PACKAGE_DIR}/build/native/$(LibrariesArchitecture)/")
+            target_link_directories(wxwebview PUBLIC
+                $<BUILD_INTERFACE:${WEBVIEW2_PACKAGE_DIR}/build/native/$(LibrariesArchitecture)/>
+            )
         else()
             wx_webview_copy_webview2_loader(wxwebview)
         endif()
@@ -116,10 +118,7 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     set_target_properties(wxwebkit2_ext PROPERTIES NO_SONAME 1)
 
     # Change output name to match expected name in webview_webkit2.cpp: webkit2_ext*
-    set(lib_unicode)
-    if(wxUSE_UNICODE)
-        set(lib_unicode "u")
-    endif()
+    set(lib_unicode "u")
 
     set(lib_rls)
     set(lib_dbg)

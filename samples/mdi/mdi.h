@@ -14,7 +14,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Helper class logging menu open/close events.
@@ -62,7 +62,7 @@ class MyCanvas : public wxScrolledWindow,
 {
 public:
     MyCanvas(wxFrame *parent, const wxPoint& pos, const wxSize& size);
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
 
     bool IsDirty() const { return m_dirty; }
 

@@ -358,7 +358,7 @@ void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
         if (tooltip)
             m_buttons[n]->SetToolTip(tooltip->GetTip());
         else
-            m_buttons[n]->SetToolTip(NULL);
+            m_buttons[n]->SetToolTip(nullptr);
     }
 }
 #endif // wxUSE_TOOLTIPS

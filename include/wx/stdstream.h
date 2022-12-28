@@ -30,21 +30,21 @@ public:
     virtual ~wxStdInputStreamBuffer() { }
 
 protected:
-    virtual std::streambuf *setbuf(char *s, std::streamsize n) wxOVERRIDE;
+    virtual std::streambuf *setbuf(char *s, std::streamsize n) override;
     virtual std::streampos seekoff(std::streamoff off,
                                    std::ios_base::seekdir way,
                                    std::ios_base::openmode which =
                                        std::ios_base::in |
-                                       std::ios_base::out) wxOVERRIDE;
+                                       std::ios_base::out) override;
     virtual std::streampos seekpos(std::streampos sp,
                                    std::ios_base::openmode which =
                                        std::ios_base::in |
-                                       std::ios_base::out) wxOVERRIDE;
-    virtual std::streamsize showmanyc() wxOVERRIDE;
-    virtual std::streamsize xsgetn(char *s, std::streamsize n) wxOVERRIDE;
-    virtual int underflow() wxOVERRIDE;
-    virtual int uflow() wxOVERRIDE;
-    virtual int pbackfail(int c = EOF) wxOVERRIDE;
+                                       std::ios_base::out) override;
+    virtual std::streamsize showmanyc() override;
+    virtual std::streamsize xsgetn(char *s, std::streamsize n) override;
+    virtual int underflow() override;
+    virtual int uflow() override;
+    virtual int pbackfail(int c = EOF) override;
 
     // Special work around for VC8/9 (this bug was fixed in VC10 and later):
     // these versions have non-standard _Xsgetn_s() that it being called from
@@ -87,18 +87,18 @@ public:
     virtual ~wxStdOutputStreamBuffer() { }
 
 protected:
-    virtual std::streambuf *setbuf(char *s, std::streamsize n) wxOVERRIDE;
+    virtual std::streambuf *setbuf(char *s, std::streamsize n) override;
     virtual std::streampos seekoff(std::streamoff off,
                                    std::ios_base::seekdir way,
                                    std::ios_base::openmode which =
                                        std::ios_base::in |
-                                       std::ios_base::out) wxOVERRIDE;
+                                       std::ios_base::out) override;
     virtual std::streampos seekpos(std::streampos sp,
                                    std::ios_base::openmode which =
                                        std::ios_base::in |
-                                       std::ios_base::out) wxOVERRIDE;
-    virtual std::streamsize xsputn(const char *s, std::streamsize n) wxOVERRIDE;
-    virtual int overflow(int c) wxOVERRIDE;
+                                       std::ios_base::out) override;
+    virtual std::streamsize xsputn(const char *s, std::streamsize n) override;
+    virtual int overflow(int c) override;
 
     wxOutputStream& m_stream;
 };

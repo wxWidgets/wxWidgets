@@ -34,15 +34,15 @@ public:
            long style = 0,
            const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) wxOVERRIDE {}
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) override {}
     virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {}
 
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     // protect native font of box
-    virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
+    virtual bool SetFont( const wxFont &font ) override;
 };
 
 #endif

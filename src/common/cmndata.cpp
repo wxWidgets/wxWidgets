@@ -73,7 +73,7 @@ wxPrintData::wxPrintData()
     // the default system settings will be used for them
     m_paperId = wxPAPER_NONE;
 
-    m_privData = NULL;
+    m_privData = nullptr;
     m_privDataLen = 0;
 
     m_nativeData = wxPrintFactory::GetFactory()->CreatePrintNativeData();
@@ -82,8 +82,8 @@ wxPrintData::wxPrintData()
 wxPrintData::wxPrintData(const wxPrintData& printData)
     : wxObject()
 {
-    m_nativeData = NULL;
-    m_privData = NULL;
+    m_nativeData = nullptr;
+    m_privData = nullptr;
     (*this) = printData;
 }
 
@@ -352,8 +352,8 @@ void wxPageSetupDialogData::SetPrintData(const wxPrintData& printData)
 // paper id
 void wxPageSetupDialogData::CalculateIdFromPaperSize()
 {
-    wxASSERT_MSG( (wxThePrintPaperDatabase != NULL),
-                  wxT("wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects.") );
+    wxASSERT_MSG( (wxThePrintPaperDatabase != nullptr),
+                  wxT("wxThePrintPaperDatabase should not be null. Do not create global print dialog data objects.") );
 
     wxSize sz = GetPaperSize();
 
@@ -367,8 +367,8 @@ void wxPageSetupDialogData::CalculateIdFromPaperSize()
 // Use paper id in wxPrintData to set this object's paper size
 void wxPageSetupDialogData::CalculatePaperSizeFromId()
 {
-    wxASSERT_MSG( (wxThePrintPaperDatabase != NULL),
-                  wxT("wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects.") );
+    wxASSERT_MSG( (wxThePrintPaperDatabase != nullptr),
+                  wxT("wxThePrintPaperDatabase should not be null. Do not create global print dialog data objects.") );
 
     wxSize sz = wxThePrintPaperDatabase->GetSize(m_printData.GetPaperId());
 

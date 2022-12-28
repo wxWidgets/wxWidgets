@@ -37,7 +37,7 @@ class wxConstraintOp: public wxObject
    {
      opType = typ;
      edge = wxLeft;
-     win = NULL;
+     win = nullptr;
      value = 0;
      margin = 0;
      relationship = wxSameAs;
@@ -54,11 +54,11 @@ class wxConstraintOp: public wxObject
      if (op.lhs)
        lhs = new wxConstraintOp(*op.lhs);
      else
-       lhs = NULL;
+       lhs = nullptr;
      if (op.rhs)
        rhs = new wxConstraintOp(*op.rhs);
      else
-       rhs = NULL;
+       rhs = nullptr;
    }
    ~wxConstraintOp(void)
    {

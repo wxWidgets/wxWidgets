@@ -70,12 +70,12 @@ public:
 
     virtual ~wxUserNotificationMsgImpl()
     {
-        ms_activeNotifications[m_id] = NULL;
+        ms_activeNotifications[m_id] = nullptr;
         ReleaseHandler();
         [m_notif release];
     }
 
-    virtual bool Show(int WXUNUSED(timeout)) wxOVERRIDE
+    virtual bool Show(int WXUNUSED(timeout)) override
     {
         NSUserNotificationCenter* nc = [NSUserNotificationCenter defaultUserNotificationCenter];
         [nc deliverNotification:m_notif];
@@ -83,7 +83,7 @@ public:
         return true;
     }
     
-    virtual bool Close() wxOVERRIDE
+    virtual bool Close() override
     {
         NSUserNotificationCenter* nc = [NSUserNotificationCenter defaultUserNotificationCenter];
         [nc removeDeliveredNotification:m_notif];
@@ -91,34 +91,34 @@ public:
         return true;
     }
     
-    virtual void SetTitle(const wxString& title) wxOVERRIDE
+    virtual void SetTitle(const wxString& title) override
     {
         wxCFStringRef cftitle(title);
         m_notif.title = cftitle.AsNSString();
     }
     
-    virtual void SetMessage(const wxString& message) wxOVERRIDE
+    virtual void SetMessage(const wxString& message) override
     {
         wxCFStringRef cfmsg(message);
         m_notif.informativeText = cfmsg.AsNSString();
     }
     
-    virtual void SetParent(wxWindow *WXUNUSED(parent)) wxOVERRIDE
+    virtual void SetParent(wxWindow *WXUNUSED(parent)) override
     {
     }
     
-    virtual void SetFlags(int WXUNUSED(flags)) wxOVERRIDE
+    virtual void SetFlags(int WXUNUSED(flags)) override
     {
         // On OS X we do not add an icon based on the flags,
         // as this is primarily meant for custom icons
     }
     
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
+    virtual void SetIcon(const wxIcon& icon) override
     {
         m_notif.contentImage = icon.GetNSImage();
     }
     
-    virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE
+    virtual bool AddAction(wxWindowID actionid, const wxString &label) override
     {
         if (m_actions.size() >= 1) // Currently only 1 actions are supported
             return false;

@@ -24,7 +24,7 @@
 //-----------------------------------------------------------------------------
 
 #if !GTK_CHECK_VERSION(3,0,0) && !defined(GTK_DISABLE_DEPRECATED)
-static GtkTooltips *gs_tooltips = NULL;
+static GtkTooltips *gs_tooltips = nullptr;
 #endif
 
 //-----------------------------------------------------------------------------
@@ -36,21 +36,21 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
 wxToolTip::wxToolTip( const wxString &tip )
     : m_text(tip)
 {
-    m_window = NULL;
+    m_window = nullptr;
 }
 
 void wxToolTip::SetTip( const wxString &tip )
 {
     m_text = tip;
     if (m_window)
-        m_window->GTKApplyToolTip(wxGTK_CONV_SYS(m_text));
+        m_window->GTKApplyToolTip(m_text.utf8_str());
 }
 
 void wxToolTip::GTKSetWindow(wxWindow* win)
 {
     wxASSERT(win);
     m_window = win;
-    m_window->GTKApplyToolTip(wxGTK_CONV_SYS(m_text));
+    m_window->GTKApplyToolTip(m_text.utf8_str());
 }
 
 /* static */
@@ -66,7 +66,7 @@ void wxToolTip::GTKApply(GtkWidget* widget, const char* tip)
         if ( !gs_tooltips )
             gs_tooltips = gtk_tooltips_new();
 
-        gtk_tooltips_set_tip(gs_tooltips, widget, tip, NULL);
+        gtk_tooltips_set_tip(gs_tooltips, widget, tip, nullptr);
 #endif
     }
 }
@@ -82,7 +82,7 @@ void wxToolTip::Enable( bool flag )
         GtkSettings* settings = gtk_settings_get_default();
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (settings)
-            gtk_settings_set_long_property(settings, "gtk-enable-tooltips", flag, NULL);
+            gtk_settings_set_long_property(settings, "gtk-enable-tooltips", flag, nullptr);
         wxGCC_WARNING_RESTORE()
     }
     else
@@ -112,7 +112,7 @@ void wxToolTip::SetDelay( long msecs )
         GtkSettings* settings = gtk_settings_get_default();
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (settings)
-            gtk_settings_set_long_property(settings, "gtk-tooltip-timeout", msecs, NULL);
+            gtk_settings_set_long_property(settings, "gtk-tooltip-timeout", msecs, nullptr);
         wxGCC_WARNING_RESTORE()
     }
     else

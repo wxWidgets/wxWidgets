@@ -232,7 +232,7 @@ public:
 
         @since 3.1.0
     */
-    static void* GetModuleFromAddress(const void* addr, wxString* path = NULL);
+    static void* GetModuleFromAddress(const void* addr, wxString* path = nullptr);
 
     /**
         Loads DLL with the given @a name into memory. The @a flags argument can
@@ -268,7 +268,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     When loading a function from a DLL you always have to cast the returned
@@ -293,5 +293,5 @@ public:
 */
 #define wxDYNLIB_FUNCTION(type, name, dynlib)
 
-//@}
+///@}
 

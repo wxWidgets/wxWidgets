@@ -101,7 +101,7 @@
            window manager supports _NET_WM_STATE_SKIP_TASKBAR hint.
     @style{wxFRAME_FLOAT_ON_PARENT}
            The frame will always be on top of its parent (unlike wxSTAY_ON_TOP).
-           A frame created with this style must have a non-@NULL parent.
+           A frame created with this style must have a non-null parent.
     @style{wxFRAME_SHAPED}
            Windows with this style are allowed to have their shape changed
            with the SetShape() method.
@@ -173,7 +173,7 @@ public:
 
         @param parent
             The window parent. This may be, and often is, @NULL. If it is
-            non-@NULL, the frame will be minimized when its parent is minimized
+            non-null, the frame will be minimized when its parent is minimized
             and restored when it is restored (although it will still be
             possible to minimize and restore just this frame itself).
         @param id
@@ -190,11 +190,7 @@ public:
             The window style. See wxFrame class description.
         @param name
             The name of the window. This parameter is used to associate a name with
-            the item, allowing the application user to set Motif resource values for
-            individual windows.
-
-        @remarks For Motif, MWM (the Motif Window Manager) should be running for
-                 any window styles to work (otherwise all styles take effect).
+            the window. This is @e not the same as the title of the window.
 
         @see Create()
     */
@@ -487,7 +483,7 @@ public:
 
         Returns a wxTaskBarButton pointer representing the taskbar button of the
         window under Windows 7 or later. The returned wxTaskBarButton may be
-        used, if non-@c NULL, to access the functionality including thumbnail
+        used, if non-null, to access the functionality including thumbnail
         representations, thumbnail toolbars, notification and status overlays,
         and progress indicators.
 

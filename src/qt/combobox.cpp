@@ -23,8 +23,8 @@ class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
 public:
     wxQtComboBox( wxWindow *parent, wxComboBox *handler );
-    virtual void showPopup() wxOVERRIDE;
-    virtual void hidePopup() wxOVERRIDE;
+    virtual void showPopup() override;
+    virtual void hidePopup() override;
 
     class IgnoreTextChange
     {
@@ -46,6 +46,11 @@ public:
     private:
         wxQtComboBox* m_combo;
     };
+
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
 
 private:
     void activated(int index);
@@ -82,7 +87,9 @@ void wxQtComboBox::activated(int WXUNUSED(index))
 {
     wxComboBox *handler = GetHandler();
     if ( handler )
+    {
         handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    }
 }
 
 void wxQtComboBox::editTextChanged(const QString &text)
@@ -146,7 +153,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    const wxString *pChoices = choices.size() ? &choices[ 0 ] : NULL;
+    const wxString *pChoices = choices.size() ? &choices[ 0 ] : nullptr;
     return Create(parent, id, value, pos, size, choices.size(), pChoices,
                   style, validator, name );
 }
@@ -188,6 +195,20 @@ void wxComboBox::SetActualValue(const wxString &value)
 bool wxComboBox::IsReadOnly() const
 {
     return HasFlag( wxCB_READONLY );
+}
+
+bool wxComboBox::IsEditable() const
+{
+    // Only editable combo boxes have a line edit.
+    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    return lineEdit && !lineEdit->isReadOnly();
+}
+
+void wxComboBox::SetEditable(bool editable)
+{
+    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    if ( lineEdit )
+        lineEdit->setReadOnly(!editable);
 }
 
 void wxComboBox::SetValue(const wxString& value)
@@ -294,7 +315,7 @@ void wxComboBox::SetSelection( long from, long to )
 
     SetInsertionPoint( from );
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != NULL )
+    if ( m_qtComboBox->lineEdit() != nullptr )
     {
         m_qtComboBox->lineEdit()->setSelection( from, to - from );
     }
@@ -322,7 +343,7 @@ long wxComboBox::GetInsertionPoint() const
 void wxComboBox::GetSelection(long* from, long* to) const
 {
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != NULL )
+    if ( m_qtComboBox->lineEdit() != nullptr )
     {
         *from = m_qtComboBox->lineEdit()->selectionStart();
         if ( *from >= 0 )

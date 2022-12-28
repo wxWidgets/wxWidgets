@@ -150,7 +150,7 @@ used to override this.
    typically will, still be used if found.
 
  * `--without-libpng` \n
-   Disables PNG image format code. Don't use neither the system nor the builtin
+   Disables PNG image format code. Use neither the system nor the builtin
    libpng (although GTK itself still uses it).
 
  * `--without-libjpeg` \n
@@ -193,9 +193,6 @@ Some other general compilation options:
  * `--disable-optimise` \n
    Do not optimise the code. Can be useful for debugging but shouldn't be used
    for production builds.
-
- * `--disable-unicode` \n
-   Disable Unicode support. Not recommended.
 
  * `--enable-no_rtti` \n
    Enable compilation without creation of C++ RTTI information in object files.

@@ -52,7 +52,7 @@ public:
     // Create from data
     bool Create(size_t size, const void* data);
 
-    bool IsOk() const { return m_data != NULL; }
+    bool IsOk() const { return m_data != nullptr; }
 
     // Stop playing any sound
     static void Stop();
@@ -64,7 +64,7 @@ public:
     static void SoundStopped(const wxSoundData* data);
 
 protected:
-    bool    DoPlay(unsigned flags) const wxOVERRIDE;
+    bool    DoPlay(unsigned flags) const override;
     void    Init();
 
 private:

@@ -10,10 +10,10 @@
 /**
    A helper class making it possible to use system theme for any control.
 
-   Under MSW, there an alternative theme available for the list and list-like
-   controls since Windows Vista. This theme us used by Windows Explorer list
-   and tree view and so is arguably more familiar to the users than the standard
-   appearance of these controls.
+   Under MSW, there is an alternative theme available for the list and list-like
+   controls. This theme is used by Windows Explorer list and tree view and so
+   is arguably more familiar to the users than the standard appearance of these
+   controls.
 
    This class is used in wxWidgets to enable this system theme in wxTreeCtrl,
    wxListCtrl and wxDataViewCtrl and thus give them the same, familiar look.
@@ -38,7 +38,7 @@
                 EnableSystemTheme();
             }
 
-            void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const wxOVERRIDE
+            void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override
             {
                 wxRendererNative::GetDefault().DrawItemText(this, dc, "Item #x", rect);
             }

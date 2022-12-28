@@ -103,7 +103,7 @@ public:
         Applies the selected style to selection in the given control or the control
         passed to the constructor.
     */
-    bool ApplyStyle(wxRichTextCtrl* ctrl = NULL);
+    bool ApplyStyle(wxRichTextCtrl* ctrl = nullptr);
 
     /**
         Creates the dialog. See the ctor.

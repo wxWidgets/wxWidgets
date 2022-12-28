@@ -34,30 +34,30 @@ public:
                 long style = wxCAL_SHOW_HOLIDAYS,
                 const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
-    virtual bool SetDate(const wxDateTime& date) wxOVERRIDE;
-    virtual wxDateTime GetDate() const wxOVERRIDE;
+    virtual bool SetDate(const wxDateTime& date) override;
+    virtual wxDateTime GetDate() const override;
 
     virtual bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
-                              const wxDateTime& upperdate = wxDefaultDateTime) wxOVERRIDE;
-    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const wxOVERRIDE;
+                              const wxDateTime& upperdate = wxDefaultDateTime) override;
+    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const override;
 
-    virtual bool EnableMonthChange(bool enable = true) wxOVERRIDE;
+    virtual bool EnableMonthChange(bool enable = true) override;
 
-    virtual void Mark(size_t day, bool mark) wxOVERRIDE;
-    virtual void SetHoliday(size_t day) wxOVERRIDE;
+    virtual void Mark(size_t day, bool mark) override;
+    virtual void SetHoliday(size_t day) override;
 
     virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
-                                            wxDateTime *date = NULL,
-                                            wxDateTime::WeekDay *wd = NULL) wxOVERRIDE;
+                                            wxDateTime *date = nullptr,
+                                            wxDateTime::WeekDay *wd = nullptr) override;
 
-    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long style) override;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
 
     void MSWOnClick(wxMouseEvent& event);
     void MSWOnDoubleClick(wxMouseEvent& event);
@@ -73,10 +73,10 @@ private:
     void UpdateFirstDayOfWeek();
 
     // reset holiday information
-    virtual void ResetHolidayAttrs() wxOVERRIDE { m_holidays = 0; }
+    virtual void ResetHolidayAttrs() override { m_holidays = 0; }
 
     // redisplay holidays
-    virtual void RefreshHolidays() wxOVERRIDE { UpdateMarks(); }
+    virtual void RefreshHolidays() override { UpdateMarks(); }
 
 
     // current date, we need to store it instead of simply retrieving it from

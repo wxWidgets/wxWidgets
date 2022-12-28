@@ -16,8 +16,6 @@
 //----------------------------------------------------------------------
 // Utility functions used within wxSTC
 
-#if wxUSE_UNICODE
-
 extern wxString stc2wx(const char* str);
 extern wxString stc2wx(const char* str, size_t len);
 extern wxCharBuffer wx2stc(const wxString& str);
@@ -30,25 +28,5 @@ inline size_t wx2stclen(const wxString& WXUNUSED(str), const wxCharBuffer& buf)
 {
     return buf.length();
 }
-
-#else // not UNICODE
-
-inline wxString stc2wx(const char* str) {
-    return wxString(str);
-}
-inline wxString stc2wx(const char* str, size_t len) {
-    return wxString(str, len);
-}
-inline const char* wx2stc(const wxString& str) {
-    return str.mbc_str();
-}
-
-// As explained above, the buffer argument is only used in Unicode build.
-inline size_t wx2stclen(const wxString& str, const char* WXUNUSED(buf))
-{
-    return str.length();
-}
-
-#endif // UNICODE
 
 #endif // _WX_STC_PRIVATE_H_

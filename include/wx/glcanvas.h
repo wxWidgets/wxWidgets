@@ -94,7 +94,7 @@ public:
     // Accessors
     const int* GetGLAttrs() const
     {
-        return (m_GLValues.empty() || !m_GLValues[0]) ? NULL : &*m_GLValues.begin();
+        return (m_GLValues.empty() || !m_GLValues[0]) ? nullptr : &*m_GLValues.begin();
     }
 
     int GetSize() const { return (int)(m_GLValues.size()); }
@@ -161,11 +161,6 @@ public:
     wxGLAttributes& Samplers(int val);
     wxGLAttributes& FrameBuffersRGB();
     void EndList(); // No more values can be chained
-
-    // This function is undocumented and cannot be chained on purpose!
-    // To keep backwards compatibility with versions before wx3.1 we add here
-    // the default values used in those versions for the case of NULL list.
-    void AddDefaultsForWXBefore31();
 };
 
 // ----------------------------------------------------------------------------
@@ -179,8 +174,8 @@ public:
 //  The derived class should provide a ctor with this signature:
 //
 //  wxGLContext(wxGLCanvas *win,
-//              const wxGLContext *other = NULL,
-//              const wxGLContextAttrs *ctxAttrs = NULL);
+//              const wxGLContext *other = nullptr,
+//              const wxGLContextAttrs *ctxAttrs = nullptr);
 
     // set this context as the current one
     virtual bool SetCurrent(const wxGLCanvas& win) const = 0;
@@ -258,15 +253,6 @@ public:
     // as a parameter
     wxGLContextAttrs& GetGLCTXAttrs() { return m_GLCTXAttrs; }
 
-    // deprecated methods using the implicit wxGLContext
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( wxGLContext* GetContext() const );
-
-    wxDEPRECATED( void SetCurrent() );
-
-    wxDEPRECATED( void OnSize(wxSizeEvent& event) );
-#endif // WXWIN_COMPATIBILITY_2_8
-
 #ifdef __WXUNIVERSAL__
     // resolve the conflict with wxWindowUniv::SetCurrent()
     virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
@@ -274,7 +260,7 @@ public:
 
 protected:
     // override this to implement SetColour() in GL_INDEX_MODE
-    // (currently only implemented in wxX11 and wxMotif ports)
+    // (currently only implemented in wxX11)
     virtual int GetColourIndex(const wxColour& WXUNUSED(col)) { return -1; }
 
     // check if the given extension name is present in the space-separated list
@@ -289,7 +275,7 @@ protected:
     // Return false if an unknown attribute is found.
     static bool ParseAttribList(const int* attribList,
                                 wxGLAttributes& dispAttrs,
-                                wxGLContextAttrs* ctxAttrs = NULL);
+                                wxGLContextAttrs* ctxAttrs = nullptr);
 
 #if wxUSE_PALETTE
     // create default palette if we're not using RGBA mode
@@ -298,10 +284,6 @@ protected:
 
     wxPalette m_palette;
 #endif // wxUSE_PALETTE
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxGLContext *m_glContext;
-#endif // WXWIN_COMPATIBILITY_2_8
 };
 
 // ----------------------------------------------------------------------------
@@ -322,12 +304,10 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/glcanvas.h"
-#elif defined(__WXMOTIF__) || defined(__WXX11__)
+#elif defined(__WXX11__)
     #include "wx/x11/glcanvas.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/glcanvas.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/glcanvas.h"
+    #include "wx/gtk/glcanvas.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/glcanvas.h"
 #elif defined(__WXQT__)
@@ -344,7 +324,7 @@ class WXDLLIMPEXP_GL wxGLApp : public wxGLAppBase
 public:
     wxGLApp() : wxGLAppBase() { }
 
-    virtual bool InitGLVisual(const int *attribList) wxOVERRIDE;
+    virtual bool InitGLVisual(const int *attribList) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGLApp);

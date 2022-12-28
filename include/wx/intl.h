@@ -49,10 +49,6 @@ enum wxLocaleInitFlags
 {
     wxLOCALE_DONT_LOAD_DEFAULT = 0x0000,     // don't load wxwin.mo
     wxLOCALE_LOAD_DEFAULT      = 0x0001      // load wxwin.mo?
-#if WXWIN_COMPATIBILITY_2_8
-   ,wxLOCALE_CONV_ENCODING     = 0x0002      // no longer used, simply remove
-                                             // it from the existing code
-#endif
 };
 
 // NOTE: This class is deprecated, use wxUILocale and wxTranslations instead.
@@ -71,18 +67,11 @@ public:
              const wxString& shortName = wxEmptyString,      // dir prefix (for msg files)
              const wxString& locale = wxEmptyString,     // locale (for setlocale)
              bool bLoadDefault = true                            // preload wxstd.mo?
-#if WXWIN_COMPATIBILITY_2_8
-             ,bool bConvertEncoding = true                      // convert Win<->Unix if necessary?
-#endif
              )
         {
             DoCommonInit();
 
-#if WXWIN_COMPATIBILITY_2_8
-            Init(name, shortName, locale, bLoadDefault, bConvertEncoding);
-#else
             Init(name, shortName, locale, bLoadDefault);
-#endif
         }
 
     wxLocale(int language, // wxLanguage id or custom language
@@ -98,9 +87,6 @@ public:
               const wxString& shortName = wxEmptyString,
               const wxString& locale = wxEmptyString,
               bool bLoadDefault = true
-#if WXWIN_COMPATIBILITY_2_8
-              ,bool bConvertEncoding = true
-#endif
               );
 
         // same as second ctor (returns true on success)
@@ -139,7 +125,7 @@ public:
                               wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT);
 
     // return true if the locale was set successfully
-    bool IsOk() const { return m_pszOldLocale != NULL; }
+    bool IsOk() const { return m_pszOldLocale != nullptr; }
 
     // returns locale name
     const wxString& GetLocale() const { return m_strLocale; }
@@ -183,7 +169,7 @@ public:
 
     // Retrieve the language info struct for the given language
     //
-    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    // Returns nullptr if no info found, pointer must *not* be deleted by caller
     static const wxLanguageInfo *GetLanguageInfo(int lang);
 
     // Returns language name in English or empty string if the language
@@ -198,7 +184,7 @@ public:
     // canonical ISO 2 letter language code ("xx"), a language code followed by
     // the country code ("xx_XX") or a Windows full language name ("Xxxxx...")
     //
-    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    // Returns nullptr if no info found, pointer must *not* be deleted by caller
     static const wxLanguageInfo *FindLanguageInfo(const wxString& locale);
 
     // Add custom language to the list of known languages.
@@ -288,7 +274,7 @@ private:
 // global functions
 // ----------------------------------------------------------------------------
 
-// get the current locale object (note that it may be NULL!)
+// get the current locale object (note that it may be null!)
 extern WXDLLIMPEXP_BASE wxLocale* wxGetLocale();
 
 #endif // wxUSE_INTL

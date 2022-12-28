@@ -11,6 +11,7 @@ on:
     - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - '.github/workflows/docs_update.yml'
+    - 'build/cmake/**'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
     - 'docs/**'
@@ -18,19 +19,16 @@ on:
     - 'include/msvc/**'
     - 'include/wx/dfb/**'
     - 'include/wx/gtk/**'
-    - 'include/wx/gtk1/**'
-    - 'include/wx/motif/**'
     - 'include/wx/msw/**'
     - 'include/wx/x11/**'
     - 'locale/**'
     - 'src/dfb/**'
     - 'src/gtk/**'
-    - 'src/gtk1/**'
-    - 'src/motif/**'
     - 'src/msw/**'
     - 'src/x11/**'
     - '*.md'
     - '*.yml'
+    - 'CMakeLists.txt'
     - 'wxwidgets.props'
   pull_request:
     branches: [ master ]
@@ -41,6 +39,7 @@ on:
     - '.github/workflows/ci_msw.yml'
     - '.github/workflows/ci_msw_cross.yml'
     - '.github/workflows/docs_update.yml'
+    - 'build/cmake/**'
     - 'build/tools/appveyor*.bat'
     - 'distrib/**'
     - 'docs/**'
@@ -48,20 +47,20 @@ on:
     - 'include/msvc/**'
     - 'include/wx/dfb/**'
     - 'include/wx/gtk/**'
-    - 'include/wx/gtk1/**'
-    - 'include/wx/motif/**'
     - 'include/wx/msw/**'
     - 'include/wx/x11/**'
     - 'locale/**'
     - 'src/dfb/**'
     - 'src/gtk/**'
-    - 'src/gtk1/**'
-    - 'src/motif/**'
     - 'src/msw/**'
     - 'src/x11/**'
     - '*.md'
     - '*.yml'
+    - 'CMakeLists.txt'
     - 'wxwidgets.props'
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
@@ -90,28 +89,28 @@ jobs:
           runner: self-hosted
           arch: arm64
           configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug --enable-optimise
-        - name: wxMac macOS 10.15
-          runner: macos-10.15
+        - name: wxMac macOS 11
+          runner: macos-11
           arch: x86_64
           configure_flags: --disable-sys-libs
         - name: wxiOS
-          runner: macos-10.15
+          runner: macos-11
           arch: x86_64
           configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
+          configure_env: PKG_CONFIG_LIBDIR=/dev/null
           xcode_sdk: iphonesimulator
           skip_samples: true
           skip_testing: true
           allow_warnings: true
 
     env:
-      wxCONFIGURE_FLAGS: --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}
       wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
       DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
       NSUnbufferedIO: YES
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
 
@@ -165,7 +164,7 @@ jobs:
 
     - name: Configuring
       run: |
-        wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+        wxCONFIGURE_OPTIONS="--disable-optimise --disable-sys-libs --without-liblzma ${{ matrix.configure_flags }} --prefix=${{ github.workspace }}/localbin_${{ matrix.arch }}"
 
         if [ -n "${{ matrix.xcode_sdk }}" ]; then
           sdk_path=`xcrun --sdk ${{ matrix.xcode_sdk }} --show-sdk-path`
@@ -177,9 +176,9 @@ jobs:
           wxASAN_CXXFLAGS=$wxASAN_CFLAGS
           wxASAN_LDFLAGS="-fsanitize=address"
 
-          ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+          ${{ matrix.configure_env }} ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
         else
-          ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+          ${{ matrix.configure_env }} ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
         fi
         if [ -n "$rc" ]; then
           echo '*** Configuring failed, contents of config.log follows: ***'
@@ -197,6 +196,13 @@ jobs:
       run: |
         make -C tests $wxBUILD_ARGS failtest
         make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+    - name: Setup Python
+      # actions/setup-python broken on self-hosted https://github.com/actions/setup-python/issues/108
+      if: matrix.runner != 'self-hosted'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
     - name: Testing
       if: matrix.skip_testing != true
@@ -222,7 +228,7 @@ jobs:
         # used by std::vector<>::insert().
         export ASAN_OPTIONS='fast_unwind_on_malloc=0 detect_container_overflow=0'
         # Exclude tests that are currently known to fail
-        wx_tests_selection='~[valnum] ~wxPersistTLW ~wxPersistDVC ~wxTopLevel::Show ~wxFont::Weight ~wxFont::NativeFontInfo ~WebView ~RadioButton::Single ~RadioButton::Focus ~wxHtmlPrintout::Pagination ~wxTextCtrl::GetBestSize ~TextCtrlTestCase ~ClippingBoxTestCase::wxClientDC ~wxExecute::RedirectUTF8 ~Ellipsization::NormalCase ~SpinCtrl::* ~SpinCtrlDouble::* ~NotebookTestCase ~SettingsTestCase ~XRC::LoadURL ~Window::Show ~ModalDialogsTestCase ~Button::Click ~Button::Disabled ~wxDVC::GetItemRect ~wxDVC::AppendTextColumn ~Grid::KeyboardSelection ~Grid::CellClick ~Grid::ReorderedColumnsCellClick ~Grid::CellSelect ~wxStyledTextCtrl::AutoComp ~EvtLoopTestCase ~EventPropagationTestCase'
+        wx_tests_selection='~[.] ~[valnum] ~wxPersistTLW ~wxPersistDVC ~wxTopLevel::Show ~wxFont::Weight ~wxFont::NativeFontInfo ~WebView ~RadioButton::Single ~RadioButton::Focus ~wxHtmlPrintout::Pagination ~wxTextCtrl::GetBestSize ~TextCtrlTestCase ~ClippingBoxTestCase::wxClientDC ~wxExecute::RedirectUTF8 ~Ellipsization::NormalCase ~SpinCtrl::* ~SpinCtrlDouble::* ~NotebookTestCase ~SettingsTestCase ~Window::Show ~ModalDialogsTestCase ~Button::Click ~Button::Disabled ~wxDVC::GetItemRect ~wxDVC::AppendTextColumn ~Grid::KeyboardSelection ~Grid::CellClick ~Grid::ReorderedColumnsCellClick ~Grid::CellSelect ~wxStyledTextCtrl::AutoComp ~EvtLoopTestCase ~EventPropagationTestCase'
         ./test_gui $wx_tests_selection
 
     - name: Building samples

@@ -71,7 +71,7 @@ public:
     */
     wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
                      int win_id = 0,
-                     wxRibbonPage* page = NULL);
+                     wxRibbonPage* page = nullptr);
 
     /**
         Returns the page being changed to, or being clicked on.
@@ -289,7 +289,7 @@ public:
     /**
         Get a page by index.
 
-        NULL will be returned if the given index is out of range.
+        @NULL will be returned if the given index is out of range.
     */
     wxRibbonPage* GetPage(int n);
 

@@ -16,8 +16,6 @@
 // wxCmdLineArgsArray: helper class used by wxApp::argv
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-
 // this class is used instead of either "char **" or "wchar_t **" (neither of
 // which would be backwards compatible with all the existing code) for argv
 // field of wxApp
@@ -28,7 +26,7 @@
 class WXDLLIMPEXP_BASE wxCmdLineArgsArray
 {
 public:
-    wxCmdLineArgsArray() { m_argsA = NULL; m_argsW = NULL; }
+    wxCmdLineArgsArray() { m_argsA = nullptr; m_argsW = nullptr; }
 
     template <typename T>
     void Init(int argc, T **argv)
@@ -53,7 +51,7 @@ public:
             for ( size_t n = 0; n < count; n++ )
                 m_argsA[n] = wxStrdup(m_args[n].ToAscii());
 
-            m_argsA[count] = NULL;
+            m_argsA[count] = nullptr;
         }
 
         return m_argsA;
@@ -68,7 +66,7 @@ public:
             for ( size_t n = 0; n < count; n++ )
                 m_argsW[n] = wxStrdup(m_args[n].wc_str());
 
-            m_argsW[count] = NULL;
+            m_argsW[count] = nullptr;
         }
 
         return m_argsW;
@@ -125,7 +123,7 @@ private:
             free(args[n]);
 
         delete [] args;
-        args = NULL;
+        args = nullptr;
     }
 
     void FreeArgs()
@@ -147,8 +145,6 @@ inline bool operator&&(bool cond, const wxCmdLineArgsArray& array)
 {
     return cond && !array.IsEmpty();
 }
-
-#endif // wxUSE_UNICODE
 
 #endif // _WX_CMDARGS_H_
 

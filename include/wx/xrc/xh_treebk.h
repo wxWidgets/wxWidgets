@@ -34,12 +34,12 @@ class WXDLLIMPEXP_XRC wxTreebookXmlHandler : public wxBookCtrlXmlHandlerBase
 
 public:
     wxTreebookXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     virtual void
-    DoAddPage(wxBookCtrlBase* book, size_t n, const PageWithAttrs& page) wxOVERRIDE;
+    DoAddPage(wxBookCtrlBase* book, size_t n, const PageWithAttrs& page) override;
 
     wxTreebook *m_tbk;
 

@@ -181,7 +181,7 @@ void *wxGetSingleChoiceData( const wxString& message,
                                 client_data);
 
     dialog.SetSelection(initialSelection);
-    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : NULL;
+    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : nullptr;
 }
 
 void *wxGetSingleChoiceData( const wxString& message,
@@ -197,7 +197,7 @@ void *wxGetSingleChoiceData( const wxString& message,
     wxSingleChoiceDialog dialog(parent, message, caption, choices, client_data);
 
     dialog.SetSelection(initialSelection);
-    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : NULL;
+    return dialog.ShowModal() == wxID_OK ? dialog.GetSelectionData() : nullptr;
 }
 
 void* wxGetSingleChoiceData( const wxString& message,
@@ -282,50 +282,6 @@ int wxGetSelectedChoices(wxArrayInt& selections,
     selections = dialog.GetSelections();
     return static_cast<int>(selections.GetCount());
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-size_t wxGetMultipleChoices(wxArrayInt& selections,
-                            const wxString& message,
-                            const wxString& caption,
-                            int n, const wxString *choices,
-                            wxWindow *parent,
-                            int x, int y,
-                            bool centre,
-                            int width, int height)
-{
-    int rc = wxGetSelectedChoices(selections, message, caption,
-                                  n, choices,
-                                  parent, x, y, centre, width, height);
-    if ( rc == -1 )
-    {
-        selections.clear();
-        return 0;
-    }
-
-    return rc;
-}
-
-size_t wxGetMultipleChoices(wxArrayInt& selections,
-                            const wxString& message,
-                            const wxString& caption,
-                            const wxArrayString& aChoices,
-                            wxWindow *parent,
-                            int x, int y,
-                            bool centre,
-                            int width, int height)
-{
-    int rc = wxGetSelectedChoices(selections, message, caption,
-                                  aChoices,
-                                  parent, x, y, centre, width, height);
-    if ( rc == -1 )
-    {
-        selections.clear();
-        return 0;
-    }
-
-    return rc;
-}
-#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // wxAnyChoiceDialog

@@ -27,26 +27,26 @@ class WXDLLIMPEXP_ADV wxAnimationGTKImpl : public wxAnimationImpl
 {
 public:
     wxAnimationGTKImpl()
-        : m_pixbuf(NULL) {}
+        : m_pixbuf(nullptr) {}
     ~wxAnimationGTKImpl() { UnRef(); }
 
-    virtual bool IsOk() const wxOVERRIDE
-        { return m_pixbuf != NULL; }
-    virtual bool IsCompatibleWith(wxClassInfo* ci) const wxOVERRIDE;
+    virtual bool IsOk() const override
+        { return m_pixbuf != nullptr; }
+    virtual bool IsCompatibleWith(wxClassInfo* ci) const override;
 
 
     // unfortunately GdkPixbufAnimation does not expose these info:
 
-    virtual unsigned int GetFrameCount() const wxOVERRIDE { return 0; }
-    virtual wxImage GetFrame(unsigned int frame) const wxOVERRIDE;
+    virtual unsigned int GetFrameCount() const override { return 0; }
+    virtual wxImage GetFrame(unsigned int frame) const override;
 
     // we can retrieve the delay for a frame only after building
     // a GdkPixbufAnimationIter...
-    virtual int GetDelay(unsigned int WXUNUSED(frame)) const wxOVERRIDE { return 0; }
-    virtual wxSize GetSize() const wxOVERRIDE;
+    virtual int GetDelay(unsigned int WXUNUSED(frame)) const override { return 0; }
+    virtual wxSize GetSize() const override;
 
-    virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-    virtual bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+    virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
+    virtual bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
 
     // Implementation
 public:     // used by GTK callbacks

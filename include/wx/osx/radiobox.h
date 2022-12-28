@@ -26,7 +26,7 @@ public:
     wxRadioBox();
     wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = nullptr,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
         {
@@ -45,7 +45,7 @@ public:
     virtual ~wxRadioBox();
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = NULL,
+             int n = 0, const wxString choices[] = nullptr,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -56,29 +56,29 @@ public:
              const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     // Enabling
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
-    virtual bool Enable(unsigned int item, bool enable = true) wxOVERRIDE;
-    virtual bool IsItemEnabled(unsigned int item) const wxOVERRIDE;
+    virtual bool Enable(bool enable = true) override;
+    virtual bool Enable(unsigned int item, bool enable = true) override;
+    virtual bool IsItemEnabled(unsigned int item) const override;
 
     // Showing
-    virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual bool Show(unsigned int item, bool show = true) wxOVERRIDE;
-    virtual bool IsItemShown(unsigned int item) const wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
+    virtual bool Show(unsigned int item, bool show = true) override;
+    virtual bool IsItemShown(unsigned int item) const override;
 
     // Specific functions (in wxWidgets2 reference)
-    virtual void SetSelection(int item) wxOVERRIDE;
-    virtual int GetSelection() const wxOVERRIDE;
+    virtual void SetSelection(int item) override;
+    virtual int GetSelection() const override;
 
-    virtual unsigned int GetCount() const wxOVERRIDE { return m_noItems; }
+    virtual unsigned int GetCount() const override { return m_noItems; }
 
-    virtual wxString GetString(unsigned int item) const wxOVERRIDE;
-    virtual void SetString(unsigned int item, const wxString& label) wxOVERRIDE;
+    virtual wxString GetString(unsigned int item) const override;
+    virtual void SetString(unsigned int item, const wxString& label) override;
 
     // protect native font of box
-    virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
+    virtual bool SetFont( const wxFont &font ) override;
 // Other external functions
-    void Command(wxCommandEvent& event) wxOVERRIDE;
-    void SetFocus() wxOVERRIDE;
+    void Command(wxCommandEvent& event) override;
+    void SetFocus() override;
 
 // Other variable access functions
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
@@ -88,7 +88,7 @@ public:
 
 protected:
     // resolve ambiguity in base classes
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
+    virtual wxBorder GetDefaultBorder() const override { return wxRadioBoxBase::GetDefaultBorder(); }
 
     wxRadioButton    *m_radioButtonCycle;
 
@@ -96,10 +96,10 @@ protected:
     int               m_noRowsOrCols;
 
 // Internal functions
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
 
     wxDECLARE_EVENT_TABLE();
 };

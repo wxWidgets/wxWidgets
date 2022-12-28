@@ -39,7 +39,7 @@ bool MyApp::OnInit(void)
         return false;
 
     // Create the main frame window
-    MyFrame* frame = new MyFrame(NULL, wxID_ANY, "wxWidgets Native Dialog Sample", wxDefaultPosition, wxDefaultSize);
+    MyFrame* frame = new MyFrame(nullptr, wxID_ANY, "wxWidgets Native Dialog Sample", wxDefaultPosition, wxDefaultSize);
 
 #if wxUSE_STATUSBAR
     // Give it a status line
@@ -77,7 +77,7 @@ MyFrame::MyFrame(wxWindow* parent, const wxWindowID id, const wxString& title, c
 {
     SetIcon(wxICON(sample));
 
-    panel = NULL;
+    panel = nullptr;
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

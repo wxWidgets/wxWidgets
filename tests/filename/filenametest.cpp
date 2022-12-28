@@ -466,7 +466,16 @@ TEST_CASE("wxFileName::Replace", "[filename]")
 
     // now test ReplaceHomeDir
 
-    wxFileName fn = wxFileName::DirName(wxGetHomeDir());
+    const wxString& homedir = wxGetHomeDir();
+    if ( homedir == "/" )
+    {
+        // These tests assume that HOME is a non-root directory, but this may
+        // not be the case.
+        WARN("Skipping wxFileName::ReplaceHomeDir() tests because HOME=/");
+        return;
+    }
+
+    wxFileName fn = wxFileName::DirName(homedir);
     fn.AppendDir("test1");
     fn.AppendDir("test2");
     fn.AppendDir("test3");
@@ -479,6 +488,16 @@ TEST_CASE("wxFileName::Replace", "[filename]")
     );
 
     CHECK( fn.GetFullPath(wxPATH_UNIX) == "~/test1/test2/test3/some file" );
+
+    // Check that home directory appearing in the middle of the path doesn't
+    // get replaced (this only works under Unix where there are no volumes).
+#ifdef __UNIX__
+    wxFileName fn2(homedir + "/subdir" + homedir + "/subsubdir", "filename");
+    INFO("fn2=" << fn2.GetFullPath());
+
+    fn2.ReplaceHomeDir();
+    CHECK( fn2.GetFullPath() == "~/subdir" + homedir + "/subsubdir/filename" );
+#endif // __UNIX__
 }
 
 TEST_CASE("wxFileName::GetHumanReadable", "[filename]")
@@ -773,9 +792,9 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
 
 #if defined(__UNIX__)
     // We need to create a temporary directory and a temporary link.
-    // Unfortunately we can't use wxFileName::CreateTempFileName() for neither
+    // Unfortunately we can't use wxFileName::CreateTempFileName() for either
     // as it creates plain files, so use tempnam() explicitly instead.
-    char* tn = tempnam(NULL, "wxfn1");
+    char* tn = tempnam(nullptr, "wxfn1");
     const wxString tempdir1 = wxString::From8BitData(tn);
     free(tn);
 
@@ -784,7 +803,7 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
     wxON_BLOCK_EXIT2( static_cast<bool (*)(const wxString&, int)>(wxFileName::Rmdir),
                       tempdir1, static_cast<int>(wxPATH_RMDIR_RECURSIVE) );
 
-    tn = tempnam(NULL, "wxfn2");
+    tn = tempnam(nullptr, "wxfn2");
     const wxString tempdir2 = wxString::From8BitData(tn);
     free(tn);
     CHECK( symlink(tempdir1.c_str(), tempdir2.c_str()) == 0 );
@@ -974,7 +993,7 @@ void CreateShortcut(const wxString& pathFile, const wxString& pathLink)
    HRESULT hr;
 
    wxCOMPtr<IShellLink> sl;
-   hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+   hr = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                          IID_IShellLink, (void **)&sl);
    REQUIRE( SUCCEEDED(hr) );
 

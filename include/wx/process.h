@@ -47,17 +47,17 @@ public:
     // asynchronously and allows the caller to get the streams connected to its
     // std{in|out|err}
     //
-    // on error NULL is returned, in any case the process object will be
+    // on error nullptr is returned, in any case the process object will be
     // deleted automatically when the process terminates and should *not* be
     // deleted by the caller
     static wxProcess *Open(const wxString& cmd, int flags = wxEXEC_ASYNC);
 
 
     // ctors
-    wxProcess(wxEvtHandler *parent = NULL, int nId = wxID_ANY)
+    wxProcess(wxEvtHandler *parent = nullptr, int nId = wxID_ANY)
         { Init(parent, nId, wxPROCESS_DEFAULT); }
 
-    wxProcess(int flags) { Init(NULL, wxID_ANY, flags); }
+    wxProcess(int flags) { Init(nullptr, wxID_ANY, flags); }
 
     virtual ~wxProcess();
 
@@ -90,7 +90,7 @@ public:
     wxOutputStream *GetOutputStream() const { return m_outputStream; }
 
     // close the output stream indicating that nothing more will be written
-    void CloseOutput() { delete m_outputStream; m_outputStream = NULL; }
+    void CloseOutput() { delete m_outputStream; m_outputStream = nullptr; }
 
     // return true if the child process stdout is not closed
     bool IsInputOpened() const;
@@ -173,7 +173,7 @@ public:
     int GetExitCode() const { return m_exitcode; }
 
     // implement the base class pure virtual
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxProcessEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxProcessEvent(*this); }
 
 public:
     int m_pid,

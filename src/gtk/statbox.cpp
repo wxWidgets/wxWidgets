@@ -48,7 +48,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
 {
     const GtkAllocation& a = widget->allocation;
     gtk_paint_flat_box(gtk_widget_get_style(widget), gtk_widget_get_window(widget),
-        GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, widget, "", a.x, a.y, a.width, a.height);
+        GTK_STATE_NORMAL, GTK_SHADOW_NONE, nullptr, widget, "", a.x, a.y, a.width, a.height);
     return false;
 }
 }
@@ -104,7 +104,7 @@ bool wxStaticBox::DoCreate(wxWindow *parent,
 
         m_labelWin = labelWin;
 
-        m_widget = gtk_frame_new(NULL);
+        m_widget = gtk_frame_new(nullptr);
         gtk_frame_set_label_widget(GTK_FRAME(m_widget), labelWidget);
     }
 
@@ -127,7 +127,7 @@ bool wxStaticBox::DoCreate(wxWindow *parent,
     if (!wx_is_at_least_gtk2(12))
     {
         // we connect this signal to perform label-clipping as GTK >= 2.12 does
-        g_signal_connect(m_widget, "size_allocate", G_CALLBACK(size_allocate), NULL);
+        g_signal_connect(m_widget, "size_allocate", G_CALLBACK(size_allocate), nullptr);
     }
 #endif
 
@@ -153,7 +153,7 @@ void wxStaticBox::AddChild( wxWindowBase *child )
 
 void wxStaticBox::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid staticbox") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid staticbox") );
 
     wxCHECK_RET( !m_labelWin, wxS("Doesn't make sense when using label window") );
 
@@ -201,8 +201,8 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     if (label)
     {
         int nat_width;
-        gtk_widget_get_preferred_width(label, NULL, &nat_width);
-        gtk_widget_get_preferred_height_for_width(label, nat_width, borderTop, NULL);
+        gtk_widget_get_preferred_width(label, nullptr, &nat_width);
+        gtk_widget_get_preferred_height_for_width(label, nat_width, borderTop, nullptr);
     }
 #else
     gtk_widget_ensure_style(m_widget);

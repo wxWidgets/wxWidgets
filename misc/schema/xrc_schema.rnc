@@ -172,11 +172,11 @@ builtinWindowClasses =
     | wxCheckListBox
     | wxChoice
     | wxChoicebook
-    | wxCommandLinkButton
     | wxCollapsiblePane
     | wxColourPickerCtrl
     | wxComboBox
     | wxComboCtrl
+    | wxCommandLinkButton
     | wxDataViewCtrl
     | wxDataViewListCtrl
     | wxDataViewTreeCtrl
@@ -227,6 +227,7 @@ builtinWindowClasses =
     | wxStaticBox
     | wxStaticLine
     | wxStaticText
+    | wxStyledTextCtrl
     | wxTextCtrl
     | wxTimePickerCtrl
     | wxToggleButton
@@ -329,6 +330,7 @@ builtinClassesNames =
     | "wxStaticBox"
     | "wxStaticLine"
     | "wxStaticText"
+    | "wxStyledTextCtrl"
     | "wxTextCtrl"
     | "wxTimePickerCtrl"
     | "wxToggleButton"
@@ -430,7 +432,7 @@ stdWindowProperties =
 
 platform =
         attribute platform {
-            xsd:string { pattern = "(win|mac|unix)( *\| *(win|mac|unix))*" }
+            xsd:string { pattern = "(win|mac|msw|unix)( *\| *(win|mac|msw|unix))*" }
         }?
 # shorthand alias for 'platform' for use in properties definitions and
 # elsewhere where 'platform' would be too verbose
@@ -580,6 +582,7 @@ wxAuiNotebook =
         attribute class { "wxAuiNotebook" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
+        [xrc:p="o"] element art-provider {_, ("default" | "simple") }* &
         (wxAuiNotebook_notebookpage | objectRef)*
     }
 
@@ -725,6 +728,11 @@ wxBitmapToggleButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element checked {_, t_bool }*
     }
 
@@ -736,6 +744,11 @@ wxButton =
         stdWindowProperties &
         [xrc:p="o"] element label          {_, t_text }* &
         [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element bitmapposition {_, t_direction }* &
         [xrc:p="o"] element default        {_, t_bool }*
     }
@@ -755,7 +768,7 @@ wxCheckBox =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element checked {_, t_bool }*
+        [xrc:p="o"] element checked       {_, t_integer }*
     }
 
 
@@ -816,9 +829,13 @@ wxCommandLinkButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element note {_, t_text }* &
-        [xrc:p="o"] element bitmap {_, t_bitmap }* &
-        [xrc:p="o"] element default {_, t_bool }*
+        [xrc:p="o"] element note          {_, t_text }* &
+        [xrc:p="o"] element bitmap        {_, t_bitmap }* &
+        [xrc:p="o"] element pressed       {_, t_bitmap }* &
+        [xrc:p="o"] element focus         {_, t_bitmap }* &
+        [xrc:p="o"] element disabled      {_, t_bitmap }* &
+        [xrc:p="o"] element current       {_, t_bitmap }* &
+        [xrc:p="o"] element default       {_, t_bool }*
     }
 
 
@@ -1399,8 +1416,7 @@ wxRichTextCtrl =
         attribute class { "wxRichTextCtrl" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        [xrc:p="o"] element value     {_, t_text }* &
-        [xrc:p="o"] element maxlength {_, t_integer }*
+        [xrc:p="o"] element value {_, t_text }*
     }
 
 
@@ -1508,7 +1524,8 @@ wxSpinCtrlDouble =
         [xrc:p="o"] element value {_, t_float }* &
         [xrc:p="o"] element min   {_, t_float }* &
         [xrc:p="o"] element max   {_, t_float }* &
-        [xrc:p="o"] element inc   {_, t_float}*
+        [xrc:p="o"] element inc   {_, t_float}* &
+        [xrc:p="o"] element digits {_, t_integer}*
     }
 
 
@@ -1582,6 +1599,15 @@ wxStaticText =
     }
 
 
+wxStyledTextCtrl =
+    element object {
+        attribute class { "wxStyledTextCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element wrapmode {_, ("wxSTC_WRAP_NONE" | "wxSTC_WRAP_WORD" | "wxSTC_WRAP_CHAR" | "wxSTC_WRAP_WHITESPACE" ) }*
+    }
+
+
 wxTextCtrl =
     element object {
         attribute class { "wxTextCtrl" } &
@@ -1610,6 +1636,11 @@ wxToggleButton =
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="o"] element checked {_, t_bool }* &
         [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element pressed        {_, t_bitmap }* &
+        [xrc:p="o"] element focus          {_, t_bitmap }* &
+        [xrc:p="o"] element disabled       {_, t_bitmap }* &
+        [xrc:p="o"] element current        {_, t_bitmap }* &
+        [xrc:p="o"] element margins        {_, t_size }* &
         [xrc:p="o"] element bitmapposition {_, t_direction }*
     }
 
@@ -1714,7 +1745,18 @@ wxWizard =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element title  {_, t_text }* &
+        [xrc:p="o"] element border   {_, t_integer }* &
         [xrc:p="o"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element bitmap-placement {_, ("wxWIZARD_VALIGN_TOP" |
+                                                  "wxWIZARD_VALIGN_CENTRE" |
+                                                  "wxWIZARD_VALIGN_BOTTOM" |
+                                                  "wxWIZARD_VALIGN_CENTRE" |
+                                                  "wxWIZARD_HALIGN_LEFT" |
+                                                  "wxWIZARD_HALIGN_CENTRE" |
+                                                  "wxWIZARD_HALIGN_RIGHT" |
+                                                  "wxWIZARD_TILE") }* &
+        [xrc:p="o"] element bitmap-minwidth {_, t_integer }* &
+        [xrc:p="o"] element bitmap-bg   {_, t_colour }* &
         (wxWizardPage_any | objectRef)*
     }
 
@@ -2023,6 +2065,7 @@ wxGridBagSizer =
                                                      "wxFLEX_GROWMODE_ALL") }* &
         [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
         [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element empty_cellsize      {_, t_size }* &
         (wxSizerGB_item | objectRef)*
     }
 

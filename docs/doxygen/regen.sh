@@ -41,11 +41,9 @@ fi
 # Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
-    # Note: remove the hack for Doxygen 1.8.19 below when changing this to a
-    # later version.
-    doxygen_version_required=1.8.17
+    doxygen_version_required=1.9.1
     if [[ $doxygen_version != $doxygen_version_required ]]; then
-        echo "Doxygen version $doxygen_version is not supported."
+        echo "Doxygen version $doxygen_version is not officially supported."
         echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
         exit 1
     fi
@@ -63,6 +61,14 @@ mkdir -p $WX_HTML_OUTPUT_DIR/generic
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
 cp images/generic/*png $WX_HTML_OUTPUT_DIR/generic
+
+# These values are always used here, the corresponding options only exist in
+# order to allow not using them when generating CHM in regen.bat.
+export DOT_IMAGE_FORMAT='svg'
+export HTML_HEADER='custom_header.html'
+export CUSTOM_THEME_CSS='doxygen-awesome-css/doxygen-awesome.css'
+export CUSTOM_THEME_JS1='doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js'
+export CUSTOM_THEME_JS2='doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js'
 
 # Defaults for settings controlled by this script
 export GENERATE_DOCSET="NO"
@@ -233,5 +239,12 @@ fi
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
-topsrcdir=`cd ../.. && pwd`
-sed -i'' -e "s|$topsrcdir/||g" doxygen.log
+if [[ -s doxygen.log ]]; then
+    topsrcdir=`cd ../.. && pwd`
+    sed -i'' -e "s|$topsrcdir/||g" doxygen.log
+
+    echo '*** There were warnings during docs generation ***'
+else
+    # Don't leave empty file lying around.
+    rm doxygen.log
+fi
