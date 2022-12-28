@@ -47,6 +47,8 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
 
+#include "wx/msw/private/darkmode.h"
+
 static const char* TRACE_DARKMODE = "msw-darkmode";
 
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
