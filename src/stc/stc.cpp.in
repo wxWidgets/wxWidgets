@@ -232,6 +232,22 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
 #endif
 
+    // Use colours appropriate for the current system colour theme.
+    auto attr = wxTextCtrl::GetClassDefaultAttributes();
+    StyleSetForeground(wxSTC_STYLE_DEFAULT, attr.colFg);
+    StyleSetBackground(wxSTC_STYLE_DEFAULT, attr.colBg);
+    SetCaretForeground(attr.colFg);
+
+    // We also need to set this one because its foreground is hardcoded as
+    // black in Scintilla sources.
+    StyleSetForeground(wxSTC_STYLE_LINENUMBER, attr.colFg);
+
+    // And foreground for this one is hardcoded as white.
+    StyleSetForeground(wxSTC_STYLE_CALLTIP, attr.colFg);
+
+    SetSelForeground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+    SetSelBackground(true, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+
     return true;
 }
 
