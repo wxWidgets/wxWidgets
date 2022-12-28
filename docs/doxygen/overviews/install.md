@@ -56,7 +56,7 @@ using the following command:
 
     $ git clone --recurse-submodules https://github.com/wxWidgets/wxWidgets.git
 
-Alternatively, you can download the sources from the [downloads page][1].
+Alternatively, you can download the sources from the [downloads page][5].
 Please note that all the source archives in different formats (ZIP, 7z,
 tar.bz2) contain the same files, but use different line ending formats: Unix
 ("LF") for the latter one and DOS ("CR LF") for the two other ones, and it is
@@ -64,6 +64,7 @@ usually preferable to choose the format corresponding to the current platform.
 When downloading the sources with DOS ends of lines, prefer 7z format for much
 smaller file size.
 
+[5]: https://www.wxwidgets.org/downloads/
 
 ### Selecting the build system
 
@@ -223,11 +224,11 @@ launchctl setenv WXWIN /Users/dconnet/devtools/wx/wxWidgets-3.1.5
 
 ### Other IDEs
 
-If you use an IDE with wxWidgets support, such as [Code::Blocks][1] or
-[CodeLite][2], please use the IDE wizards.
+If you use an IDE with wxWidgets support, such as [Code::Blocks][6] or
+[CodeLite][7], please use the IDE wizards.
 
-[1]: https://www.codeblocks.org/
-[2]: https://codelite.org/
+[6]: https://www.codeblocks.org/
+[7]: https://codelite.org/
 
 If you use another IDE, under Unix you should run `wx-config --cxxflags` and
 `wx-config --libs` commands separately and copy-and-paste their output to the

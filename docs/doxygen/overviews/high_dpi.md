@@ -270,11 +270,11 @@ bitmap will be the default bundle size, which must be provided when creating
 this kind of bitmap bundle, as SVG image itself doesn't necessarily contain
 this information.
 
-Note that wxWidgets currently uses [NanoSVG][1] library for SVG support and so
+Note that wxWidgets currently uses [NanoSVG][2] library for SVG support and so
 doesn't support all SVG standard features and you may need to simplify or
 tweak the SVG files to make them appear correctly.
 
-[1]: https://github.com/memononen/nanosvg
+[2]: https://github.com/memononen/nanosvg
 
 wxBitmapBundle and XRC              {#high_dpi_bundle_xrc}
 ----------------------
@@ -317,22 +317,22 @@ MSW                                 {#high_dpi_platform_msw}
 ---
 
 The behaviour of the application when running on a high-DPI display depends on
-the values in its [manifest][1]. You may either use your own manifest, in which
+the values in its [manifest][3]. You may either use your own manifest, in which
 case you need to define the `dpiAware` (for compatibility with older OS
 versions) and `dpiAwareness` (for proper per-monitor DPI support) in it, or
 simply include `wx/msw/wx.rc` from your resource file to use the manifest
 provided by wxWidgets and predefine `wxUSE_DPI_AWARE_MANIFEST` to opt-in into
-[high DPI support][2]: define it as `1` for minimal DPI awareness and `2` for
+[high DPI support][4]: define it as `1` for minimal DPI awareness and `2` for
 full, per-monitor DPI awareness supported by Windows 10 version 1703 or later.
 
-[1]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
-[2]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
+[3]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
+[4]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
 macOS                               {#high_dpi_platform_mac}
 -----
 
 DPI-aware applications must set their `NSPrincipalClass` to `wxNSApplication`
 (or at least `NSApplication`) in their `Info.plist` file. Also see Apple [high
-resolution guidelines][3] for more information.
+resolution guidelines][5] for more information.
 
-[3]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
+[5]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
