@@ -96,7 +96,7 @@ public:
     // On Windows, name must be a resource with RT_RCDATA type.
     // On MacOS, name must be a file with an extension "svg" placed in the
     // "Resources" subdirectory of the application bundle.
-    static wxNODISCARD wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
 #endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the
