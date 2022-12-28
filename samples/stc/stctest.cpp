@@ -762,13 +762,16 @@ public:
         SetMarginType(margin_id_lineno, wxSTC_MARGIN_NUMBER);
         SetMarginWidth(margin_id_lineno, 32);
 
-        MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS, "WHITE", "BLACK");
-        MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS,  "WHITE", "BLACK");
-        MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,     "WHITE", "BLACK");
-        MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED, "WHITE", "BLACK");
-        MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, "WHITE", "BLACK");
-        MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,     "WHITE", "BLACK");
-        MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,     "WHITE", "BLACK");
+        // We intentionally invert foreground and background colours here.
+        const wxColour colFg = StyleGetForeground(wxSTC_STYLE_DEFAULT);
+        const wxColour colBg = StyleGetBackground(wxSTC_STYLE_DEFAULT);
+        MarkerDefine(wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_BOXPLUS,           colBg, colFg);
+        MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_BOXMINUS,          colBg, colFg);
+        MarkerDefine(wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_VLINE,             colBg, colFg);
+        MarkerDefine(wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_BOXPLUSCONNECTED,  colBg, colFg);
+        MarkerDefine(wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, colBg, colFg);
+        MarkerDefine(wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER,           colBg, colFg);
+        MarkerDefine(wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_LCORNER,           colBg, colFg);
 
         SetMarginMask(margin_id_fold, wxSTC_MASK_FOLDERS);
         SetMarginWidth(margin_id_fold, 32);
@@ -788,24 +791,27 @@ public:
     }
     void SetLexerXml()
     {
+        const wxColour colTag = wxSystemSettings::SelectLightDark(*wxBLUE, *wxCYAN);
+        const wxColour colAttr = wxSystemSettings::SelectLightDark(*wxRED, "PINK");
+
         SetLexer(wxSTC_LEX_XML);
-        StyleSetForeground(wxSTC_H_DEFAULT, *wxBLACK);
-        StyleSetForeground(wxSTC_H_TAG, *wxBLUE);
-        StyleSetForeground(wxSTC_H_TAGUNKNOWN, *wxBLUE);
-        StyleSetForeground(wxSTC_H_ATTRIBUTE, *wxRED);
-        StyleSetForeground(wxSTC_H_ATTRIBUTEUNKNOWN, *wxRED);
+
+        // Ensure the correct default background is used for all styles.
+        StyleClearAll();
+
+        StyleSetForeground(wxSTC_H_TAG, colTag);
+        StyleSetForeground(wxSTC_H_TAGUNKNOWN, colTag);
+        StyleSetForeground(wxSTC_H_ATTRIBUTE, colAttr);
+        StyleSetForeground(wxSTC_H_ATTRIBUTEUNKNOWN, colAttr);
         StyleSetBold(wxSTC_H_ATTRIBUTEUNKNOWN, true);
-        StyleSetForeground(wxSTC_H_NUMBER, *wxBLACK);
-        StyleSetForeground(wxSTC_H_DOUBLESTRING, *wxBLACK);
-        StyleSetForeground(wxSTC_H_SINGLESTRING, *wxBLACK);
-        StyleSetForeground(wxSTC_H_OTHER, *wxBLUE);
+        StyleSetForeground(wxSTC_H_OTHER, colTag);
         StyleSetForeground(wxSTC_H_COMMENT, wxColour("GREY"));
-        StyleSetForeground(wxSTC_H_ENTITY, *wxRED);
+        StyleSetForeground(wxSTC_H_ENTITY, colAttr);
         StyleSetBold(wxSTC_H_ENTITY, true);
-        StyleSetForeground(wxSTC_H_TAGEND, *wxBLUE);
-        StyleSetForeground(wxSTC_H_XMLSTART, *wxBLUE);
-        StyleSetForeground(wxSTC_H_XMLEND, *wxBLUE);
-        StyleSetForeground(wxSTC_H_CDATA, *wxRED);
+        StyleSetForeground(wxSTC_H_TAGEND, colTag);
+        StyleSetForeground(wxSTC_H_XMLSTART, colTag);
+        StyleSetForeground(wxSTC_H_XMLEND, colTag);
+        StyleSetForeground(wxSTC_H_CDATA, colAttr);
     }
 protected:
     void OnMarginClick(wxStyledTextEvent&);

@@ -221,82 +221,82 @@ const StyleInfo g_StylePrefs [] = {
 
     // mySTC_TYPE_WORD1
     {"Keyword1",
-     "BLUE", "WHITE",
+     "BLUE", "CYAN",
      "", 10, mySTC_STYLE_BOLD, 0},
 
     // mySTC_TYPE_WORD2
     {"Keyword2",
-     "MIDNIGHT BLUE", "WHITE",
+     "MIDNIGHT BLUE", "LIGHT BLUE",
      "", 10, 0, 0},
 
     // mySTC_TYPE_WORD3
     {"Keyword3",
-     "CORNFLOWER BLUE", "WHITE",
+     "CORNFLOWER BLUE", "LIGHT STEEL BLUE",
      "", 10, 0, 0},
 
     // mySTC_TYPE_WORD4
     {"Keyword4",
-     "CYAN", "WHITE",
+     "CYAN", "MAGENTA",
      "", 10, 0, 0},
 
     // mySTC_TYPE_WORD5
     {"Keyword5",
-     "DARK GREY", "WHITE",
+     "DARK GREY", "LIGHT GREY",
      "", 10, 0, 0},
 
     // mySTC_TYPE_WORD6
     {"Keyword6",
-     "GREY", "WHITE",
+     "GREY", "KHAKI",
      "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT
     {"Comment",
-     "FOREST GREEN", "WHITE",
+     "FOREST GREEN", "LIME GREEN",
      "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_DOC
     {"Comment (Doc)",
-     "FOREST GREEN", "WHITE",
+     "FOREST GREEN", "LIME GREEN",
      "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_LINE
     {"Comment line",
-     "FOREST GREEN", "WHITE",
+     "FOREST GREEN", "LIME GREEN",
      "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_SPECIAL
     {"Special comment",
-     "FOREST GREEN", "WHITE",
+     "FOREST GREEN", "LIME GREEN",
      "", 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_CHARACTER
     {"Character",
-     "KHAKI", "WHITE",
+     "KHAKI", "LIGHT MAGENTA",
      "", 10, 0, 0},
 
     // mySTC_TYPE_CHARACTER_EOL
     {"Character (EOL)",
-     "KHAKI", "WHITE",
+     "KHAKI", "LIGHT MAGENTA",
      "", 10, 0, 0},
 
     // mySTC_TYPE_STRING
     {"String",
-     "BROWN", "WHITE",
+     "BROWN", "YELLOW",
      "", 10, 0, 0},
 
     // mySTC_TYPE_STRING_EOL
     {"String (EOL)",
-     "BROWN", "WHITE",
+     "BROWN", "YELLOW",
      "", 10, 0, 0},
 
     // mySTC_TYPE_DELIMITER
     {"Delimiter",
-     "ORANGE", "WHITE",
+     "ORANGE", "YELLOW GREEN",
      "", 10, 0, 0},
 
     // mySTC_TYPE_PUNCTUATION
     {"Punctuation",
-     "ORANGE", "WHITE",
+     "ORANGE", "YELLOW GREEN",
      "", 10, 0, 0},
 
     // mySTC_TYPE_OPERATOR
@@ -306,12 +306,12 @@ const StyleInfo g_StylePrefs [] = {
 
     // mySTC_TYPE_BRACE
     {"Label",
-     "VIOLET", "WHITE",
+     "VIOLET", "PINK",
      "", 10, 0, 0},
 
     // mySTC_TYPE_COMMAND
     {"Command",
-     "BLUE", "WHITE",
+     "BLUE", "CYAN",
      "", 10, 0, 0},
 
     // mySTC_TYPE_IDENTIFIER
@@ -321,52 +321,52 @@ const StyleInfo g_StylePrefs [] = {
 
     // mySTC_TYPE_LABEL
     {"Label",
-     "VIOLET", "WHITE",
+     "VIOLET", "PINK",
      "", 10, 0, 0},
 
     // mySTC_TYPE_NUMBER
     {"Number",
-     "SIENNA", "WHITE",
+     "SIENNA", "SALMON",
      "", 10, 0, 0},
 
     // mySTC_TYPE_PARAMETER
     {"Parameter",
-     "VIOLET", "WHITE",
+     "VIOLET", "THISTLE",
      "", 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_REGEX
     {"Regular expression",
-     "ORCHID", "WHITE",
+     "ORCHID", "ORANGE",
      "", 10, 0, 0},
 
     // mySTC_TYPE_UUID
     {"UUID",
-     "ORCHID", "WHITE",
+     "ORCHID", "ORANGE",
      "", 10, 0, 0},
 
     // mySTC_TYPE_VALUE
     {"Value",
-     "ORCHID", "WHITE",
+     "ORCHID", "ORANGE",
      "", 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_PREPROCESSOR
     {"Preprocessor",
-     "GREY", "WHITE",
+     "GREY", "LIGHT GREY",
      "", 10, 0, 0},
 
     // mySTC_TYPE_SCRIPT
     {"Script",
-     "DARK GREY", "WHITE",
+     "DARK GREY", "LIGHT GREY",
      "", 10, 0, 0},
 
     // mySTC_TYPE_ERROR
     {"Error",
-     "RED", "WHITE",
+     "RED", "PURPLE",
      "", 10, 0, 0},
 
     // mySTC_TYPE_UNDEFINED
     {"Undefined",
-     "ORANGE", "WHITE",
+     "ORANGE", "ORCHID",
      "", 10, 0, 0}
 
     };
