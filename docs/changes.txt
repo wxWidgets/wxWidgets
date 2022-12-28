@@ -82,6 +82,10 @@ Changes in behaviour which may result in build errors
 - wxOnAssert() overload taking wide character file name was removed. If you
   call it for any reason, please use one of the other overloads instead.
 
+- 64-bit DLLs now use "x64" suffix in their names for all builds, not just
+  the official ones and those using MSVS projects, but also when using
+  makefile.vc or CMake, for consistency.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------
