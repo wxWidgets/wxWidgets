@@ -1051,7 +1051,9 @@ DrawNotebookTab(wxWindow* win,
     // This colour is just an approximation which seems to look acceptable.
     dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
 
-    const int selectedOffset = win->FromDIP(2);
+    // Note that FromDIP() should _not_ be used here, as 2px offset is used
+    // even in high DPI.
+    const int selectedOffset = 2;
     const int labelOffset = 3*selectedOffset;
 
     wxRect rectTab = rectOrig;
