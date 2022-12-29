@@ -25,6 +25,7 @@
     #include "wx/window.h"
     #include "wx/control.h"     // for wxControl::Ellipsize()
     #include "wx/dc.h"
+    #include "wx/dcmemory.h"
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
@@ -37,6 +38,8 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
+
+#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
@@ -927,11 +930,8 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
     return m_rendererNative.GetExpanderSize(win);
 }
 
-void
-wxRendererXP::DrawCollapseButton(wxWindow *win,
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int flags)
+static bool
+DoDrawCollapseButton(wxWindow* win, HDC hdc, RECT r, int flags)
 {
     wxUxThemeHandle hTheme(win, L"TASKDIALOG");
 
@@ -948,20 +948,62 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
         if ( flags & wxCONTROL_EXPANDED )
             state += 3;
 
-        RECT r = ConvertToRECT(dc, rect);
-
         ::DrawThemeBackground
             (
             hTheme,
-            GetHdcOf(dc.GetTempHDC()),
+            hdc,
             TDLG_EXPANDOBUTTON,
             state,
             &r,
             nullptr
             );
+        return true;
+    }
+
+    return false;
+}
+
+void
+wxRendererXP::DrawCollapseButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
+{
+    RECT r = ConvertToRECT(dc, rect);
+
+    // Default theme draws the button on light background which looks very out
+    // of place when using dark mode, so invert it if necessary and fall back
+    // on the generic version if this fails.
+    //
+    // Ideal would be to find the theme drawing the version appropriate for the
+    // dark mode, but it's unknown if there is one providing this.
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        wxBitmap bmp(rect.GetSize());
+
+        bool ok;
+        {
+            wxMemoryDC mdc(bmp);
+            ok = DoDrawCollapseButton(win, GetHdcOf(mdc), r, flags);
+        }
+
+        if ( ok )
+        {
+            wxBitmap bmpInv = wxMSWDarkMode::InvertBitmap(bmp);
+            if ( bmpInv.IsOk() )
+            {
+                dc.DrawBitmap(bmpInv, rect.GetPosition());
+                return;
+            }
+        }
     }
     else
-        m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
+    {
+        if ( DoDrawCollapseButton(win, GetHdcOf(dc.GetTempHDC()), r, flags) )
+            return;
+    }
+
+    m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
 }
 
 wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
