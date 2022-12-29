@@ -366,18 +366,21 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item )
     if (item->IsCheckable())
         item->Check( !item->IsChecked() ) ;
 
+    // A bit counterintuitively, we call OSXAfterMenuEvent() _before_ calling
+    // the user defined handler. This is done to account for the case when this
+    // handler deletes the window, as it can possibly do.
+    if (wxWindow* const w = GetInvokingWindow())
+    {
+        // Let the invoking window update itself if necessary.
+        w->OSXAfterMenuEvent();
+    }
+
     if ( SendEvent( menuid , item->IsCheckable() ? item->IsChecked() : -1 ) )
         processed = true ;
 
     if(!processed)
     {
         processed = item->GetPeer()->DoDefault();  
-    }
-    
-    if (wxWindow* const w = GetInvokingWindow())
-    {
-        // Let the invoking window update itself if necessary.
-        w->OSXAfterMenuEvent();
     }
 
     return processed;
