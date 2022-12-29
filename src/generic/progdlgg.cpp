@@ -210,29 +210,20 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     m_estimated =
     m_remaining = nullptr;
 
-    // also count how many labels we really have
-    size_t nTimeLabels = 0;
-
     wxSizer * const sizerLabels = new wxFlexGridSizer(2);
 
     if ( style & wxPD_ELAPSED_TIME )
     {
-        nTimeLabels++;
-
         m_elapsed = CreateLabel(GetElapsedLabel(), sizerLabels);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
     {
-        nTimeLabels++;
-
         m_estimated = CreateLabel(GetEstimatedLabel(), sizerLabels);
     }
 
     if ( style & wxPD_REMAINING_TIME )
     {
-        nTimeLabels++;
-
         m_remaining = CreateLabel(GetRemainingLabel(), sizerLabels);
     }
     sizerTop->Add(sizerLabels, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
