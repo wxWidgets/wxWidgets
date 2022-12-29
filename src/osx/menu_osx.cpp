@@ -359,7 +359,9 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item )
 
 bool wxMenu::HandleCommandProcess( wxMenuItem* item )
 {
-    int menuid = item ? item->GetId() : 0;
+    wxCHECK_MSG( item, false, "must have a valid item" );
+
+    int menuid = item->GetId();
     bool processed = false;
     if (item->IsCheckable())
         item->Check( !item->IsChecked() ) ;
@@ -367,7 +369,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item )
     if ( SendEvent( menuid , item->IsCheckable() ? item->IsChecked() : -1 ) )
         processed = true ;
 
-    if(!processed && item)
+    if(!processed)
     {
         processed = item->GetPeer()->DoDefault();  
     }
