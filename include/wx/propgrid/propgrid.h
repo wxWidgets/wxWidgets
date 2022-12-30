@@ -22,6 +22,7 @@
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
 
+#include <unordered_map>
 
 #ifndef SWIG
 extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
