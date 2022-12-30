@@ -339,10 +339,6 @@ wxPropertyGridPage::wxPropertyGridPage()
     m_pState = this; // wxPropertyGridInterface to point to State
 }
 
-wxPropertyGridPage::~wxPropertyGridPage()
-{
-}
-
 void wxPropertyGridPage::Clear()
 {
     GetStatePtr()->DoClear();

@@ -3862,9 +3862,7 @@ public:
     {
     }
 
-    virtual ~wxPropertyGridEditorEventForwarder()
-    {
-    }
+    virtual ~wxPropertyGridEditorEventForwarder() = default;
 
 private:
     bool ProcessEvent( wxEvent& event ) override
@@ -6141,10 +6139,6 @@ wxPGStringTokenizer::wxPGStringTokenizer( const wxString& str, wxChar delimiter 
 {
 }
 
-wxPGStringTokenizer::~wxPGStringTokenizer()
-{
-}
-
 bool wxPGStringTokenizer::HasMoreTokens()
 {
     const wxString& str = m_str;
@@ -6219,10 +6213,6 @@ wxPGChoiceEntry::wxPGChoiceEntry()
 // -----------------------------------------------------------------------
 // wxPGChoicesData
 // -----------------------------------------------------------------------
-
-wxPGChoicesData::wxPGChoicesData()
-{
-}
 
 wxPGChoicesData::~wxPGChoicesData()
 {

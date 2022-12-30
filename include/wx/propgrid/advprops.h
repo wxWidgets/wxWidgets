@@ -75,9 +75,7 @@ public:
     {
     }
 
-    virtual ~wxColourPropertyValue()
-    {
-    }
+    virtual ~wxColourPropertyValue() = default;
 
     wxColourPropertyValue( const wxColourPropertyValue& v )
         : wxObject()
@@ -241,7 +239,7 @@ public:
     wxColourProperty( const wxString& label = wxPG_LABEL,
                       const wxString& name = wxPG_LABEL,
                       const wxColour& value = *wxWHITE );
-    virtual ~wxColourProperty();
+    virtual ~wxColourProperty() = default;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
     virtual wxColour GetColour( int index ) const override;
@@ -263,7 +261,7 @@ class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
     wxCursorProperty( const wxString& label= wxPG_LABEL,
                       const wxString& name= wxPG_LABEL,
                       int value = 0 );
-    virtual ~wxCursorProperty();
+    virtual ~wxCursorProperty() = default;
 
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const override;
     virtual wxSize OnMeasureImage( int item ) const override;
@@ -288,7 +286,7 @@ public:
     wxImageFileProperty( const wxString& label= wxPG_LABEL,
                          const wxString& name = wxPG_LABEL,
                          const wxString& value = wxString());
-    virtual ~wxImageFileProperty();
+    virtual ~wxImageFileProperty() = default;
 
     virtual void OnSetValue() override;
 
@@ -332,7 +330,7 @@ public:
                            const wxString& name = wxPG_LABEL,
                            const wxArrayString& value = wxArrayString() );
 
-    virtual ~wxMultiChoiceProperty();
+    virtual ~wxMultiChoiceProperty() = default;
 
     virtual void OnSetValue() override;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
@@ -382,7 +380,7 @@ public:
     wxDateProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     const wxDateTime& value = wxDateTime() );
-    virtual ~wxDateProperty();
+    virtual ~wxDateProperty() = default;
 
     virtual void OnSetValue() override;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;

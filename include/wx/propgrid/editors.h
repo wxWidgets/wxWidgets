@@ -73,7 +73,7 @@ public:
     }
 
     // Destructor.
-    virtual ~wxPGEditor();
+    virtual ~wxPGEditor() = default;
 
     // Returns pointer to the name of the editor. For example,
     // wxPGEditor_TextCtrl has name "TextCtrl". If you don't need to access

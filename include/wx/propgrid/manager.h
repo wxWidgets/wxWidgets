@@ -51,7 +51,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
 public:
 
     wxPropertyGridPage();
-    virtual ~wxPropertyGridPage();
+    virtual ~wxPropertyGridPage() = default;
 
     // Deletes all properties on page.
     virtual void Clear() override;

@@ -2769,12 +2769,6 @@ wxPGRootProperty::wxPGRootProperty( const wxString& name )
     m_depth = 0;
 }
 
-
-wxPGRootProperty::~wxPGRootProperty()
-{
-}
-
-
 // -----------------------------------------------------------------------
 // wxPropertyCategory
 // -----------------------------------------------------------------------
@@ -2801,12 +2795,6 @@ wxPropertyCategory::wxPropertyCategory( const wxString &label, const wxString& n
 {
     Init();
 }
-
-
-wxPropertyCategory::~wxPropertyCategory()
-{
-}
-
 
 wxString wxPropertyCategory::ValueToString( wxVariant& WXUNUSED(value),
                                             int WXUNUSED(argFlags) ) const

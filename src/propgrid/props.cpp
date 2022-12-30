@@ -199,10 +199,6 @@ wxNumericProperty::wxNumericProperty(const wxString& label, const wxString& name
 {
 }
 
-wxNumericProperty::~wxNumericProperty()
-{
-}
-
 bool wxNumericProperty::DoSetAttribute(const wxString& name, wxVariant& value)
 {
     if ( name == wxPG_ATTR_MIN )
@@ -1244,10 +1240,6 @@ int wxEnumProperty::GetIndexForValue( int value ) const
     return -1;
 }
 
-wxEnumProperty::~wxEnumProperty ()
-{
-}
-
 void wxEnumProperty::OnSetValue()
 {
     const wxString valType(m_value.GetType());
@@ -1423,10 +1415,6 @@ wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& n
     : wxEnumProperty(label,name,choices,0)
 {
     SetValue( value );
-}
-
-wxEditEnumProperty::~wxEditEnumProperty()
-{
 }
 
 void wxEditEnumProperty::OnSetValue()
@@ -1623,10 +1611,6 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     {
         m_value = wxPGVariant_Zero;
     }
-}
-
-wxFlagsProperty::~wxFlagsProperty()
-{
 }
 
 void wxFlagsProperty::OnSetValue()
@@ -1905,13 +1889,9 @@ bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
 class WXDLLIMPEXP_PROPGRID wxPGDialogAdapter : public wxPGEditorDialogAdapter
 {
 public:
-    wxPGDialogAdapter() : wxPGEditorDialogAdapter()
-    {
-    }
+    wxPGDialogAdapter() = default;
 
-    virtual ~wxPGDialogAdapter()
-    {
-    }
+    virtual ~wxPGDialogAdapter() = default;
 
     virtual bool DoShowDialog(wxPropertyGrid* pg, wxPGProperty* prop) override
     {
@@ -1938,10 +1918,6 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxEditorDialogProperty, wxPGProperty);
 wxEditorDialogProperty::wxEditorDialogProperty(const wxString& label, const wxString& name)
     : wxPGProperty(label, name)
     , m_dlgStyle(0)
-{
-}
-
-wxEditorDialogProperty::~wxEditorDialogProperty()
 {
 }
 

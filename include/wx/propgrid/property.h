@@ -652,7 +652,7 @@ class WXDLLIMPEXP_PROPGRID wxPGChoicesData : public wxObjectRefData
     friend class wxPGChoices;
 public:
     // Constructor sets m_refCount to 1.
-    wxPGChoicesData();
+    wxPGChoicesData() = default;
 
     void CopyDataFrom( wxPGChoicesData* data );
 
@@ -2085,7 +2085,7 @@ public:
 
     // Constructor.
     wxPGRootProperty( const wxString& name = wxS("<Root>") );
-    virtual ~wxPGRootProperty();
+    virtual ~wxPGRootProperty() = default;
 
     virtual bool StringToValue( wxVariant&, const wxString&, int ) const override
     {
@@ -2109,7 +2109,7 @@ public:
 
     wxPropertyCategory( const wxString& label,
                         const wxString& name = wxPG_LABEL );
-    ~wxPropertyCategory();
+    virtual ~wxPropertyCategory() = default;
 
     int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
