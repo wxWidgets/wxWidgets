@@ -9,10 +9,18 @@
 
 set -e
 
-SUDO=sudo
-
 case $(uname -s) in
     Linux)
+        # Use sudo if it's available or assume root otherwise.
+        if command -v sudo > /dev/null; then
+            SUDO=sudo
+        else
+            if [ `id -u` -ne 0 ]; then
+                echo "Please install sudo or run as root (and not user `id -u`)." >& 2
+                exit 1
+            fi
+        fi
+
         # Debian/Ubuntu
         if [ -f /etc/apt/sources.list ]; then
             # Show information about the repositories and priorities used.
