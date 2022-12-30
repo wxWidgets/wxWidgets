@@ -1049,7 +1049,7 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     int keycode = event.GetKeyCode();
 
     if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
-         || keycode == wxNumberFormatter::GetDecimalSeparator() )
+         || keycode == static_cast<int>(wxNumberFormatter::GetDecimalSeparator()) )
     {
         wxGridCellTextEditor::StartingKey(event);
 
@@ -1186,7 +1186,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
             // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
             if ( wxIsdigit(keycode) ||
                     tolower(keycode) == 'e' ||
-                        keycode == wxNumberFormatter::GetDecimalSeparator() ||
+                        keycode == static_cast<int>(wxNumberFormatter::GetDecimalSeparator()) ||
                             keycode == '+' ||
                                 keycode == '-' )
             {
