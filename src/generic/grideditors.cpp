@@ -855,7 +855,7 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
 
 void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
 {
-    int keycode = event.GetKeyCode();
+    const wxChar keycode = event.GetUnicodeKey();
     if ( !HasRange() )
     {
         if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-')
@@ -1022,7 +1022,7 @@ void wxGridCellFloatEditor::Reset()
 
 void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 {
-    int keycode = event.GetKeyCode();
+    const wxChar keycode = event.GetUnicodeKey();
 
     if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
          || keycode == wxNumberFormatter::GetDecimalSeparator() )
@@ -1156,7 +1156,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 {
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
-        const int keycode = event.GetKeyCode();
+        const wxChar keycode = event.GetUnicodeKey();
         if ( wxIsascii(keycode) )
         {
             // accept digits, 'e' as in '1e+6', also '-', '+', and '.'
@@ -1351,8 +1351,7 @@ bool wxGridCellBoolEditor::IsAcceptedKey(wxKeyEvent& event)
 {
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
-        int keycode = event.GetKeyCode();
-        switch ( keycode )
+        switch ( event.GetUnicodeKey() )
         {
             case WXK_SPACE:
             case '+':
@@ -1366,8 +1365,7 @@ bool wxGridCellBoolEditor::IsAcceptedKey(wxKeyEvent& event)
 
 void wxGridCellBoolEditor::StartingKey(wxKeyEvent& event)
 {
-    int keycode = event.GetKeyCode();
-    switch ( keycode )
+    switch ( event.GetUnicodeKey() )
     {
         case WXK_SPACE:
             CBox()->SetValue(!CBox()->GetValue());
