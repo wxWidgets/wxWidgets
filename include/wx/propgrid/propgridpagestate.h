@@ -162,9 +162,10 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 // Base for wxPropertyGridIterator classes.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridIteratorBase
 {
-public:
+protected:
     wxPropertyGridIteratorBase() = default;
 
+public:
     void Assign( const wxPropertyGridIteratorBase& it );
 
     bool AtEnd() const { return m_property == nullptr; }

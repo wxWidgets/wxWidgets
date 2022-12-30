@@ -181,9 +181,10 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 */
 class wxPropertyGridIteratorBase
 {
-public:
+protected:
     wxPropertyGridIteratorBase();
 
+public:
     void Assign( const wxPropertyGridIteratorBase& it );
 
     bool AtEnd() const;
@@ -232,7 +233,8 @@ public:
     wxPropertyGridIterator( wxPropertyGridPageState* state,
                             int flags, int startPos, int dir = 0 );
     wxPropertyGridIterator( const wxPropertyGridIterator& it );
-    ~wxPropertyGridIterator();};
+    ~wxPropertyGridIterator();
+};
 
 /**
     Const version of wxPropertyGridIterator.
