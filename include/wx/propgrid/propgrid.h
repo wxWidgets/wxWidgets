@@ -1817,12 +1817,13 @@ protected:
                     const wxRect* itemsRect = nullptr );
 
     // Translate wxKeyEvent to wxPG_ACTION_XXX
+    std::pair<int, int> KeyEventToActions(const wxKeyEvent& event) const;
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use single-argument function KeyEventToActions(event)")
     int KeyEventToActions(wxKeyEvent &event, int* pSecond) const;
+#endif // WXWIN_COMPATIBILITY_3_2
 
-    int KeyEventToAction(wxKeyEvent &event) const
-    {
-        return KeyEventToActions(event, nullptr);
-    }
+    int KeyEventToAction(wxKeyEvent& event) const;
 
     void ImprovedClientToScreen( int* px, int* py ) const;
 

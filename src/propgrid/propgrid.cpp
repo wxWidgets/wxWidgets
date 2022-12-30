@@ -3810,6 +3810,7 @@ void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py ) const
     wxASSERT(px && py);
     CalcScrolledPosition(*px, *py, px, py);
     ClientToScreen( px, py );
+
 }
 
 // -----------------------------------------------------------------------
@@ -5497,29 +5498,44 @@ void wxPropertyGrid::OnMouseUpChild( wxMouseEvent &event )
 // wxPropertyGrid keyboard event handling
 // -----------------------------------------------------------------------
 
-int wxPropertyGrid::KeyEventToActions(wxKeyEvent &event, int* pSecond) const
+std::pair<int, int> wxPropertyGrid::KeyEventToActions(const wxKeyEvent& event) const
 {
     // Translates wxKeyEvent to wxPG_ACTION_XXX
 
     int keycode = event.GetKeyCode();
     int modifiers = event.GetModifiers();
 
-    wxASSERT( !(modifiers&~(0xFFFF)) );
+    wxASSERT(!(modifiers & ~(0xFFFF)));
 
     int hashMapKey = (keycode & 0xFFFF) | ((modifiers & 0xFFFF) << 16);
 
     wxPGHashMapI2I::const_iterator it = m_actionTriggers.find(hashMapKey);
 
     if ( it == m_actionTriggers.end() )
-        return 0;
+        return std::make_pair(0, 0);
+
+    wxInt32 actions = it->second;
+    return std::make_pair(actions & 0xFFFF, (actions >> 16) & 0xFFFF);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+int wxPropertyGrid::KeyEventToActions(wxKeyEvent &event, int* pSecond) const
+{
+    // Translates wxKeyEvent to wxPG_ACTION_XXX
+    std::pair<int, int> actions = KeyEventToActions(event);
 
     if ( pSecond )
     {
-        int second = (it->second>>16) & 0xFFFF;
-        *pSecond = second;
+        *pSecond = actions.second;
     }
 
-    return (it->second & 0xFFFF);
+    return actions.first;
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
+int wxPropertyGrid::KeyEventToAction(wxKeyEvent& event) const
+{
+    return KeyEventToActions(event).first;
 }
 
 void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
@@ -5642,8 +5658,9 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         return;
     }
 
-    int secondAction;
-    int action = KeyEventToActions(event, &secondAction);
+    std::pair<int, int> actions = KeyEventToActions(event);
+    int action = actions.first;
+    int secondAction = actions.second;
 
     if ( editorFocused && action == wxPG_ACTION_CANCEL_EDIT )
     {
@@ -5810,8 +5827,7 @@ bool wxPropertyGrid::ButtonTriggerKeyTest( int action, wxKeyEvent& event )
 {
     if ( action == -1 )
     {
-        int secondAction;
-        action = KeyEventToActions(event, &secondAction);
+        action = KeyEventToActions(event).first;
     }
 
     // Does the keycode trigger button?
