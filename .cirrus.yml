@@ -19,7 +19,16 @@ task:
     wxPROC_COUNT=`./build/tools/proc_count.sh`
     echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $CIRRUS_ENV
 
-    WX_EXTRA_PACKAGES='ccache git' wxGTK_VERSION=3 ./build/tools/before_install.sh
+    WX_EXTRA_PACKAGES='ccache git'
+    export WX_EXTRA_PACKAGES
+
+    case "${osname}" in
+      Linux)
+        WX_EXTRA_PACKAGES="$WX_EXTRA_PACKAGES g++ make"
+        ;;
+    esac
+
+    wxGTK_VERSION=3 ./build/tools/before_install.sh
 
     echo "PATH=/usr/local/libexec/ccache:$PATH" >> $CIRRUS_ENV
 
