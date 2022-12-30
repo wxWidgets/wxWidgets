@@ -40,7 +40,13 @@ case $(uname -s) in
                 return $rc
             }
 
-            codename=$(lsb_release --codename --short)
+            # We could install lsb-release package if the command is missing,
+            # but we currently only actually use codename on the systems where
+            # it's guaranteed to be installed, so don't bother doing it for now.
+            if command -v lsb_release > /dev/null; then
+                codename=$(lsb_release --codename --short)
+            fi
+
             if [ "$wxUSE_ASAN" = 1 ]; then
                 # Enable the `-dbgsym` repositories.
                 echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
