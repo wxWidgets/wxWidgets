@@ -1539,7 +1539,7 @@ protected:
     wxPGValidationInfo  m_validationInfo;
 
     // Actions and keys that trigger them.
-    wxPGHashMapI2I      m_actionTriggers;
+    std::unordered_map<int, wxInt32>  m_actionTriggers;
 
     // Appearance of currently active editor.
     wxPGCell            m_editorAppearance;

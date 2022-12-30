@@ -5507,7 +5507,7 @@ std::pair<int, int> wxPropertyGrid::KeyEventToActions(const wxKeyEvent& event) c
 
     int hashMapKey = (keycode & 0xFFFF) | ((modifiers & 0xFFFF) << 16);
 
-    wxPGHashMapI2I::const_iterator it = m_actionTriggers.find(hashMapKey);
+    auto it = m_actionTriggers.find(hashMapKey);
 
     if ( it == m_actionTriggers.end() )
         return std::make_pair(0, 0);
@@ -5542,7 +5542,7 @@ void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
 
     int hashMapKey = (keycode & 0xFFFF) | ((modifiers & 0xFFFF) << 16);
 
-    wxPGHashMapI2I::iterator it = m_actionTriggers.find(hashMapKey);
+    auto it = m_actionTriggers.find(hashMapKey);
 
     if ( it != m_actionTriggers.end() )
     {
@@ -5560,7 +5560,7 @@ void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
 
 void wxPropertyGrid::ClearActionTriggers( int action )
 {
-    wxPGHashMapI2I::iterator it = m_actionTriggers.begin();
+    auto it = m_actionTriggers.begin();
     while ( it != m_actionTriggers.end() )
     {
         if ( it->second == action )
