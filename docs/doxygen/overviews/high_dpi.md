@@ -194,9 +194,9 @@ consideration also the quality might suffer, contours become more blurry, so
 for best results it is recommended to use the images that can be used without
 scaling at the common DPI values, i.e. at least 100% and 200% scaling. If you
 don't want providing several copies of all bitmaps, you can use a single
-vector image in [SVG format][1] instead.
+vector image in [SVG format][] instead.
 
-[1]: https://en.wikipedia.org/wiki/Scalable_Vector_Graphics
+[SVG format]: https://en.wikipedia.org/wiki/Scalable_Vector_Graphics
 
 In either case, you must use wxBitmapBundle class representing several
 different versions of the same bitmap (or even potentially just a single one,
@@ -270,11 +270,11 @@ bitmap will be the default bundle size, which must be provided when creating
 this kind of bitmap bundle, as SVG image itself doesn't necessarily contain
 this information.
 
-Note that wxWidgets currently uses [NanoSVG][1] library for SVG support and so
+Note that wxWidgets currently uses [NanoSVG][] library for SVG support and so
 doesn't support all SVG standard features and you may need to simplify or
 tweak the SVG files to make them appear correctly.
 
-[1]: https://github.com/memononen/nanosvg
+[NanoSVG]: https://github.com/memononen/nanosvg
 
 wxBitmapBundle and XRC              {#high_dpi_bundle_xrc}
 ----------------------
@@ -317,22 +317,23 @@ MSW                                 {#high_dpi_platform_msw}
 ---
 
 The behaviour of the application when running on a high-DPI display depends on
-the values in its [manifest][1]. You may either use your own manifest, in which
-case you need to define the `dpiAware` (for compatibility with older OS
-versions) and `dpiAwareness` (for proper per-monitor DPI support) in it, or
-simply include `wx/msw/wx.rc` from your resource file to use the manifest
-provided by wxWidgets and predefine `wxUSE_DPI_AWARE_MANIFEST` to opt-in into
-[high DPI support][2]: define it as `1` for minimal DPI awareness and `2` for
-full, per-monitor DPI awareness supported by Windows 10 version 1703 or later.
+the values in its [manifest][msw-manifest]. You may either use your own
+manifest, in which case you need to define the `dpiAware` (for compatibility
+with older OS versions) and `dpiAwareness` (for proper per-monitor DPI support)
+in it, or simply include `wx/msw/wx.rc` from your resource file to use the
+manifest provided by wxWidgets and predefine `wxUSE_DPI_AWARE_MANIFEST` to
+opt-in into [high DPI support][msw-highdpi]: define it as `1` for minimal DPI
+awareness and `2` for full, per-monitor DPI awareness supported by Windows 10
+version 1703 or later.
 
-[1]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
-[2]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
+[msw-manifest]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
+[msw-highdpi]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
 macOS                               {#high_dpi_platform_mac}
 -----
 
 DPI-aware applications must set their `NSPrincipalClass` to `wxNSApplication`
 (or at least `NSApplication`) in their `Info.plist` file. Also see Apple [high
-resolution guidelines][3] for more information.
+resolution guidelines][apple-highdpi] for more information.
 
-[3]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
+[apple-highdpi]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
