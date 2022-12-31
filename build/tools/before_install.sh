@@ -98,7 +98,9 @@ case $(uname -s) in
                             libglu1-mesa-dev"
             esac
 
-            pkg_install="$pkg_install $libtoolkit_dev gdb ${WX_EXTRA_PACKAGES}"
+            # Install locales used by our tests to run all the tests instead of
+            # skipping them.
+            pkg_install="$pkg_install $libtoolkit_dev gdb locales-all ${WX_EXTRA_PACKAGES}"
 
             extra_deps="$extra_deps libcurl4-openssl-dev libsecret-1-dev libnotify-dev"
             for pkg in $extra_deps; do
