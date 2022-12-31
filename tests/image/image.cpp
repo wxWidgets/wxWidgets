@@ -170,42 +170,26 @@ void ImageTestCase::LoadFromFile()
 
 void ImageTestCase::LoadFromSocketStream()
 {
-    if (!IsNetworkAvailable())      // implemented in test.cpp
-    {
-        WARN("No network connectivity; skipping the "
-             "ImageTestCase::LoadFromSocketStream test unit.");
+    // This test doesn't work any more even using the IP address below as the
+    // HTTP server now redirects everything to HTTPs, so skip it for now unless
+    // a test URL pointing to a PNG image is defined.
+    wxString urlStr;
+    if ( !wxGetEnv("WX_TEST_IMAGE_URL_PNG", &urlStr) )
         return;
-    }
 
-    // These URLs use the real IP address of www.wxwidgets.org.
-    struct {
-        const char* url;
-        wxBitmapType type;
-    } testData[] =
-    {
-        { "http://173.254.92.22/assets/img/header-logo.png", wxBITMAP_TYPE_PNG },
-        { "http://173.254.92.22/assets/ico/favicon-1.ico", wxBITMAP_TYPE_ICO }
-    };
+    wxURL url(urlStr);
+    REQUIRE( url.GetError() == wxURL_NOERR );
 
-    for (unsigned int i=0; i<WXSIZEOF(testData); i++)
-    {
-        SECTION(std::string("Testing URL ") + testData[i].url)
-        {
-            wxURL url(testData[i].url);
-            REQUIRE( url.GetError() == wxURL_NOERR );
+    wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
+    REQUIRE( in_stream );
+    REQUIRE( in_stream->IsOk() );
 
-            wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
-            REQUIRE( in_stream );
-            REQUIRE( in_stream->IsOk() );
+    wxImage img;
 
-            wxImage img;
-
-            // NOTE: it's important to inform wxImage about the type of the image being
-            //       loaded otherwise it will try to autodetect the format, but that
-            //       requires a seekable stream!
-            CHECK( img.LoadFile(*in_stream, testData[i].type) );
-        }
-    }
+    // NOTE: it's important to inform wxImage about the type of the image being
+    //       loaded otherwise it will try to autodetect the format, but that
+    //       requires a seekable stream!
+    CHECK( img.LoadFile(*in_stream, wxBITMAP_TYPE_PNG) );
 }
 
 void ImageTestCase::LoadFromZipStream()
