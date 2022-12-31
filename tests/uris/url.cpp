@@ -69,8 +69,11 @@ void URLTestCase::GetInputStream()
         return;
     }
 
-    // This is the IP address of the real www.wxwidgets.org server.
-    wxURL url("http://173.254.92.22/assets/img/header-logo.png");
+    // We need a site never redirecting to HTTPs and this one seems better than
+    // the other alternatives such as Microsoft's www.msftconnecttest.com or
+    // Apple's captive.apple.com. IANAs example.com might be another good
+    // choice but it's not clear if it's never going to redirect to HTTPs.
+    wxURL url("http://detectportal.firefox.com/");
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
     wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
@@ -79,7 +82,7 @@ void URLTestCase::GetInputStream()
         // Sometimes the connection fails during CI runs, don't consider this
         // as a fatal error because it happens from time to time and there is
         // nothing we can do about it.
-        WARN("Connection to www.wxwidgets.org failed, skipping the test.");
+        WARN("Connection to HTTP URL failed, skipping the test.");
         return;
     }
 
@@ -89,7 +92,7 @@ void URLTestCase::GetInputStream()
     wxMemoryOutputStream ostream;
     CPPUNIT_ASSERT(in_stream->Read(ostream).GetLastError() == wxSTREAM_EOF);
 
-    CPPUNIT_ASSERT_EQUAL(17334, ostream.GetSize());
+    CPPUNIT_ASSERT_EQUAL(strlen("success\n"), ostream.GetSize());
 }
 
 void URLTestCase::CopyAndAssignment()
