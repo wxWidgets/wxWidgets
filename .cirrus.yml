@@ -48,6 +48,13 @@ task:
 
     echo "PATH=/usr/local/libexec/ccache:$PATH" >> $CIRRUS_ENV
 
+    # Show some information about the system.
+    uname -a
+    c++ --version
+    ccache --version
+    locale
+    locale -a
+
   # Rather than getting all submodules, get just the ones we need, as we can
   # use system libraries instead of the other ones.
   update_submodules_script: |
