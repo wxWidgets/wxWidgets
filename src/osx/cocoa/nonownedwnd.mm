@@ -367,8 +367,8 @@ extern int wxOSXGetIdFromSelector(SEL action );
         wxMenuItemImpl* impl = [nsMenuItem implementation];
         if ( impl )
         {
-            wxMenuItem* menuitem = impl->GetWXPeer();
-            return menuitem->GetMenu()->HandleCommandProcess(menuitem);
+            if ( wxMenuItem* menuitem = impl->GetWXPeer() )
+                return menuitem->GetMenu()->HandleCommandProcess(menuitem);
         }
     }
     // otherwise feed back command into common menubar
