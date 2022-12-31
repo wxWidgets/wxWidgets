@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Fix regression in saving TIFF images that could end up truncated (#23048).
+- Fix long standing bug in parsing wxHTTP responses.
 - Fix wx-config generation in CMake builds (Maarten Bent, #22806).
 - Fix compilation of code using wxTransformMatrix with recent gcc (#22790).
 - Fix memory leak when destroying wxThread (Antti Nietosvaara, #22840).
