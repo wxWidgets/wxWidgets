@@ -105,7 +105,7 @@ It is only added to shared libraries on Windows.
 
 --------------------------------------------------------------------
 
-`$arch` is used only by MSVS solutions. It is empty for 32-bit builds and
+`$arch` is used only when building with MSVC. It is empty for 32-bit builds and
 `'x64'` for 64-bit builds. It is only added to shared libraries.
 
 --------------------------------------------------------------------

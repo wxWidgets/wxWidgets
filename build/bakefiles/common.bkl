@@ -77,7 +77,7 @@
      -->
     <set var="WXCOMPILER">
         <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'">_$(COMPILERORGCC)$(COMPILER_VERSION)$(ARCH_SUFFIX)</if>
-        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(COMPILERORGCC)</if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(COMPILERORGCC)$(ARCH_SUFFIX)</if>
     </set>
 
     <set var="VENDORTAG">
