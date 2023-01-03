@@ -1446,6 +1446,7 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
 
 #define WX_STRING_TO_X_TYPE_START                                           \
     wxCHECK_MSG( pVal, false, wxT("null output pointer") );                  \
+    int errnoWas = errno;                                                   \
     errno = 0;                                                              \
     const wxStringCharType *start = wx_str();                               \
     wxStringCharType *end;
@@ -1455,8 +1456,12 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
 // parse something successfully but not the entire string
 #define WX_STRING_TO_X_TYPE_END                                             \
     if ( end == start || errno == ERANGE )                                  \
+    {                                                                       \
+        errno = errnoWas;                                                   \
         return false;                                                       \
+    }                                                                       \
     *pVal = val;                                                            \
+    errno = errnoWas;                                                       \
     return !*end;
 
 bool wxString::ToInt(int *pVal, int base) const
@@ -1467,7 +1472,10 @@ bool wxString::ToInt(int *pVal, int base) const
     wxLongLong_t lval = wxStrtoll(start, &end, base);
 
     if (lval < INT_MIN || lval > INT_MAX)
+    {
+        errno = errnoWas;
         return false;
+    }
     int val = (int)lval;
 
     WX_STRING_TO_X_TYPE_END
@@ -1480,7 +1488,11 @@ bool wxString::ToUInt(unsigned int *pVal, int base) const
     WX_STRING_TO_X_TYPE_START
     wxULongLong_t lval = wxStrtoull(start, &end, base);
     if (lval > UINT_MAX)
+    {
+        errno = errnoWas;
         return false;
+    }
+
     unsigned int val = (unsigned int)lval;
     WX_STRING_TO_X_TYPE_END
 }
@@ -1759,6 +1771,7 @@ static int DoStringPrintfV(wxString& str,
                            const wxString& format, va_list argptr)
 {
     size_t size = 1024;
+    int errnoWas = errno;
 
     for ( ;; )
     {
@@ -1804,6 +1817,7 @@ static int DoStringPrintfV(wxString& str,
             {
                 // If errno was set to one of the two well-known hard errors
                 // then fail immediately to avoid an infinite loop.
+                errno = errnoWas;
                 return -1;
             }
 
@@ -1819,7 +1833,10 @@ static int DoStringPrintfV(wxString& str,
             static const size_t MAX_BUFFER_SIZE = 128*1024*1024;
 
             if ( size >= MAX_BUFFER_SIZE )
+            {
+                errno = errnoWas;
                 return -1;
+            }
 
             // Note that doubling the size here will never overflow for size
             // less than the limit.
@@ -1840,6 +1857,7 @@ static int DoStringPrintfV(wxString& str,
     // we could have overshot
     str.Shrink();
 
+    errno = errnoWas;
     return str.length();
 }
 
