@@ -558,7 +558,7 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
         // We also allow disabling the use of this style globally by setting
         // a system option if nothing else (i.e. turning it off for individual
         // windows) works.
-        if ( !wxSystemOptions::GetOptionInt("msw.window.no-composited") )
+        if ( wxSystemOptions::GetOptionInt("msw.window.no-composited") )
             break;
 
         // Do enable composition for this window.
