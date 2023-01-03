@@ -77,7 +77,7 @@ Building wxQT on Ubuntu                {#qt_build_ubuntu}
 Install latest Qt5 packages (qt5-default). To build unit tests, libcppunit-dev
 is required. You will need to install other dependencies to compile wxWidgets
 depending on the features you'll want to use (build-essential libjpeg-dev
-libtiff5-dev ubuntu-restricted-extras freeglut3 freeglut3-dev libsdl1.2-dev
+libtiff-dev ubuntu-restricted-extras freeglut3 freeglut3-dev libsdl1.2-dev
 libgstreamer-plugins-base0.10-dev)
 
 

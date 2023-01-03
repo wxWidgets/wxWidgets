@@ -40,7 +40,7 @@ task:
     case "${osname}" in
       Linux)
         WX_EXTRA_PACKAGES="$WX_EXTRA_PACKAGES \
-              g++ libexpat1-dev libjpeg-dev libpng-dev libtiff5-dev make zlib1g-dev"
+              g++ libexpat1-dev libjpeg-dev libpng-dev libtiff-dev make zlib1g-dev"
         ;;
     esac
 
