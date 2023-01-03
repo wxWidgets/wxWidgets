@@ -237,6 +237,7 @@ void IntlTestCase::IsAvailable()
 
 TEST_CASE("wxLocale::Default", "[locale]")
 {
+    INFO("System language: " << wxLocale::GetSystemLanguage());
     CHECK( wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) );
 
     wxLocale loc;

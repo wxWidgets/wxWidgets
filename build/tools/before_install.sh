@@ -9,10 +9,18 @@
 
 set -e
 
-SUDO=sudo
-
 case $(uname -s) in
     Linux)
+        # Use sudo if it's available or assume root otherwise.
+        if command -v sudo > /dev/null; then
+            SUDO=sudo
+        else
+            if [ `id -u` -ne 0 ]; then
+                echo "Please install sudo or run as root (and not user `id -u`)." >& 2
+                exit 1
+            fi
+        fi
+
         # Debian/Ubuntu
         if [ -f /etc/apt/sources.list ]; then
             # Show information about the repositories and priorities used.
@@ -32,7 +40,13 @@ case $(uname -s) in
                 return $rc
             }
 
-            codename=$(lsb_release --codename --short)
+            # We could install lsb-release package if the command is missing,
+            # but we currently only actually use codename on the systems where
+            # it's guaranteed to be installed, so don't bother doing it for now.
+            if command -v lsb_release > /dev/null; then
+                codename=$(lsb_release --codename --short)
+            fi
+
             if [ "$wxUSE_ASAN" = 1 ]; then
                 # Enable the `-dbgsym` repositories.
                 echo "deb http://ddebs.ubuntu.com ${codename} main restricted universe multiverse
@@ -84,7 +98,9 @@ case $(uname -s) in
                             libglu1-mesa-dev"
             esac
 
-            pkg_install="$pkg_install $libtoolkit_dev gdb ${WX_EXTRA_PACKAGES}"
+            # Install locales used by our tests to run all the tests instead of
+            # skipping them.
+            pkg_install="$pkg_install $libtoolkit_dev gdb locales-all ${WX_EXTRA_PACKAGES}"
 
             extra_deps="$extra_deps libcurl4-openssl-dev libsecret-1-dev libnotify-dev"
             for pkg in $extra_deps; do
