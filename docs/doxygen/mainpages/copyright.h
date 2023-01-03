@@ -11,7 +11,7 @@
 
 @section section_copyright wxWidgets Copyrights and Licenses
 
-Copyright (c) 1992-2022 Julian Smart, Vadim Zeitlin, Stefan Csomor, Robert
+Copyright (c) 1992-2023 Julian Smart, Vadim Zeitlin, Stefan Csomor, Robert
 Roebling, and other members of the wxWidgets team, please see the
 acknowledgements section below.
 
