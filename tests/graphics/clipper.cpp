@@ -663,9 +663,6 @@ TEST_CASE("ClipperTestCase::wxSVGFileDC", "[clipper][dc][svgdc]")
 
 TEST_CASE("ClipperTestCase::wxPaintDC", "[clipper][dc][paintdc]")
 {
-#ifdef __WXOSX__
-    WARN("Skipping tests known to fail in wxOSX");
-#else
     // Ensure window is shown and large enough for testing
     wxTheApp->GetTopWindow()->Raise();
     REQUIRE(wxTheApp->GetTopWindow()->IsShown());
@@ -761,5 +758,4 @@ TEST_CASE("ClipperTestCase::wxPaintDC", "[clipper][dc][paintdc]")
     }
 
     CHECK(paintExecuted == true);
-#endif // !__WXOSX__
 }
