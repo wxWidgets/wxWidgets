@@ -35642,7 +35642,6 @@ if test "$wxUSE_MEM_TRACING" = "yes" ; then
 
     $as_echo "#define wxUSE_DEBUG_NEW_ALWAYS 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS memcheck"
 fi
 
 if test "$wxUSE_DMALLOC" = "yes" ; then

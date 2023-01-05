@@ -506,14 +506,6 @@ It replaces the old @c dynamic sample.
 
 @sampledir{mediaplayer}
 
-@section page_samples_memcheck Memory Checking Sample
-
-@sampleabout{memory tracing using wxDebugContext}
-
-@sampledir{memcheck}
-
-@buildwith{wxUSE_MEMORY_TRACING, wxUSE_DEBUG_CONTEXT}
-
 @section page_samples_menu Menu Sample
 
 @sampleabout{wxMenu classes}

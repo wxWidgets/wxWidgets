@@ -333,9 +333,6 @@ clean:
 	cd mfc
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
-	cd memcheck
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
 
 sub_access: 
 	cd access
@@ -780,11 +777,6 @@ sub_xrc:
 
 sub_mfc: 
 	cd mfc
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
-
-sub_memcheck: 
-	cd memcheck
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 
