@@ -16,6 +16,7 @@
 #if wxUSE_ACCEL
 
 #include "wx/object.h"
+#include "wx/string.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
 class WXDLLIMPEXP_FWD_CORE wxMenuItem;
