@@ -39,7 +39,12 @@ wxColour GetColour(wxSystemColour index);
 // Return the background brush to be used by default in dark mode.
 HBRUSH GetBackgroundBrush();
 
-// If dark mode is active, paint the given window using inverted colours.
+// Invert the colours of the given bitmap trying to keep it readable.
+wxBitmap InvertBitmap(const wxBitmap& bmp);
+
+// If dark mode is active, paint the given window using inverted colours by
+// drawing it normally and then applying InvertBitmap() to it.
+//
 // Otherwise just return false without doing anything.
 //
 // This can only be called from WM_PAINT handler for a native control and
