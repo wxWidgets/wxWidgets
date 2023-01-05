@@ -20,17 +20,18 @@ aaaaaaaa ICON "sample.ico"
 // this icon is used with wxFrame::SetIcon()
 sample ICON "sample.ico"
 
-// set this to 1 if you don't want to use manifest resource (manifest resource
-// is needed to enable visual styles on Windows XP - see docs/msw/winxp.txt
-// for more information)
+// set this to 1 if you don't want to use manifest resource provided by wxWidgets.
+// An aplication manifest is needed for the application UI to look properly and other
+// things - see docs/msw/winxp.md for more information)
 #define wxUSE_NO_MANIFEST 0
 
-// To get DPI change events, we need to opt in into per monitor DPI support.
+// to enable full High DPI suppport, we need to opt in into Per-Monitor (V2) DPI awareness,
+// see section Issues/MSW in programming guide High DPI Support in wxWidgets
 #ifndef wxUSE_DPI_AWARE_MANIFEST
 #define wxUSE_DPI_AWARE_MANIFEST 2
 #endif
 
-// this is not always needed but doesn't hurt (except making the executable
-// very slightly larger): this file contains the standard icons, cursors, ...
+// this file contains the standard icons, cursors etc. and also includes the application
+// manifest mentioned above
 #include "wx/msw/wx.rc"
 
