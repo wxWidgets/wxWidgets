@@ -162,9 +162,6 @@
     <ClCompile Include="..\..\src\common\lzmastream.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\memory.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\common\mimecmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>

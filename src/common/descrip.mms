@@ -143,7 +143,6 @@ OBJECTS1=fs_inet.obj,\
 		list.obj,\
 		log.obj,\
 		longlong.obj,\
-		memory.obj,\
 		menucmn.obj,\
 		mimecmn.obj,\
 		module.obj,\
@@ -336,7 +335,6 @@ SOURCES = \
 		listctrlcmn.cpp,\
 		log.cpp,\
 		longlong.cpp,\
-		memory.cpp,\
 		menucmn.cpp,\
 		mimecmn.cpp,\
 		module.cpp,\
@@ -576,7 +574,6 @@ lboxcmn.obj : lboxcmn.cpp
 list.obj : list.cpp
 log.obj : log.cpp
 longlong.obj : longlong.cpp
-memory.obj : memory.cpp
 menucmn.obj : menucmn.cpp
 mimecmn.obj : mimecmn.cpp
 module.obj : module.cpp

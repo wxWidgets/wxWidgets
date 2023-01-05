@@ -169,15 +169,7 @@ typedef pid_t GPid;
 
 #define wxDIALOG_UNIT_COMPATIBILITY   1
 
-#define wxUSE_DEBUG_CONTEXT 1
-
 #define wxUSE_DEBUGREPORT 1
-
-#define wxUSE_MEMORY_TRACING 0
-
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-#define wxUSE_DEBUG_NEW_ALWAYS 1
 
 #define wxUSE_ON_FATAL_EXCEPTION 1
 

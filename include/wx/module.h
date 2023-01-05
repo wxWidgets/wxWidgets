@@ -12,6 +12,7 @@
 #define _WX_MODULE_H_
 
 #include "wx/object.h"
+#include "wx/string.h"
 #include "wx/vector.h"
 
 class wxModule;

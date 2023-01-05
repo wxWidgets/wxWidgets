@@ -138,16 +138,6 @@
 
 
 
-#cmakedefine01 wxUSE_DEBUG_CONTEXT
-
-#cmakedefine01 wxUSE_MEMORY_TRACING
-
-#cmakedefine01 wxUSE_GLOBAL_MEMORY_OPERATORS
-
-#cmakedefine01 wxUSE_DEBUG_NEW_ALWAYS
-
-
-
 #cmakedefine01 wxUSE_EXCEPTIONS
 
 #cmakedefine01 wxUSE_EXTENDED_RTTI

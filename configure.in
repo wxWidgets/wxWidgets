@@ -647,8 +647,6 @@ dnl
 dnl in any case, only set the default value and allow overriding it with an
 
 WX_ARG_ENABLE(debug_gdb,     [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
-WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    obsolete, don't use: use wxDebugContext], wxUSE_DEBUG_CONTEXT)
-WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    obsolete, don't use: create code with memory tracing], wxUSE_MEM_TRACING)
 
 dnl ---------------------------------------------------------------------------
 dnl global compile options
@@ -4795,13 +4793,6 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     if test "$wxUSE_GTK" = 1 ; then
         CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
     fi
-fi
-
-if test "$wxUSE_MEM_TRACING" = "yes" ; then
-    AC_DEFINE(wxUSE_MEMORY_TRACING)
-    AC_DEFINE(wxUSE_GLOBAL_MEMORY_OPERATORS)
-    AC_DEFINE(wxUSE_DEBUG_NEW_ALWAYS)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS memcheck"
 fi
 
 if test "$wxUSE_DMALLOC" = "yes" ; then

@@ -16,7 +16,6 @@
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/hash.h"
-    #include "wx/memory.h"
     #include "wx/crt.h"
 #endif
 
@@ -88,61 +87,6 @@ bool wxObject::IsKindOf(const wxClassInfo *info) const
     const wxClassInfo *thisInfo = GetClassInfo();
     return (thisInfo) ? thisInfo->IsKindOf(info) : false ;
 }
-
-#if wxUSE_MEMORY_TRACING && defined( new )
-    #undef new
-#endif
-
-
-#ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
-void *wxObject::operator new ( size_t size, const wxChar *fileName, int lineNum )
-{
-    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, true);
-}
-#endif
-
-#ifdef _WX_WANT_DELETE_VOID
-void wxObject::operator delete ( void *buf )
-{
-    wxDebugFree(buf);
-}
-#endif
-
-#ifdef _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
-void wxObject::operator delete ( void *buf, const char *_fname, size_t _line )
-{
-    wxDebugFree(buf);
-}
-#endif
-
-#ifdef _WX_WANT_DELETE_VOID_WXCHAR_INT
-void wxObject::operator delete ( void *buf, const wxChar *WXUNUSED(fileName), int WXUNUSED(lineNum) )
-{
-     wxDebugFree(buf);
-}
-#endif
-
-#ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
-void *wxObject::operator new[] ( size_t size, const wxChar* fileName, int lineNum )
-{
-    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, true, true);
-}
-#endif
-
-#ifdef _WX_WANT_ARRAY_DELETE_VOID
-void wxObject::operator delete[] ( void *buf )
-{
-    wxDebugFree(buf, true);
-}
-#endif
-
-#ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
-void wxObject::operator delete[] (void * buf, const wxChar*  WXUNUSED(fileName), int WXUNUSED(lineNum) )
-{
-    wxDebugFree(buf, true);
-}
-#endif
-
 
 // ----------------------------------------------------------------------------
 // wxClassInfo

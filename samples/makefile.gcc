@@ -167,7 +167,6 @@ clean:
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C xrc -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 
 access: 
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) all
@@ -448,9 +447,6 @@ xrc:
 endif
 endif
 
-memcheck: 
-	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
-
 .PHONY: all clean access animate archive artprov aui calendar caret clipboard \
 	collpane combo config console dataview dialogs dialup display dll dnd docview \
 	dragimag drawing erase event except exec font grid help htlbox html image internat \
@@ -459,7 +455,7 @@ memcheck:
 	regtest render ribbon richtext sashtest scroll secretstore shaped sockets sound \
 	splash splitter statbar stc svg taborder taskbar text thread toolbar treelist \
 	treectrl typetest uiaction validate vscroll webview webrequest widgets wizard \
-	wrapsizer xrc memcheck
+	wrapsizer xrc
 
 
 SHELL := $(COMSPEC)

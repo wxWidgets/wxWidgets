@@ -97,15 +97,12 @@
     <subproject id="xrc" template="sub" cond="USE_HTML=='1' and USE_RIBBON=='1'"/>
 
     <!--
-        These samples don't always build (they need non-default wxWidgets
-        configuration or some 3rd party library being installed) so don't build
-        them by default by using "optsub" template instead of "sub" one and
-        some of them also require MSVC compiler so don't use them with the
-        other ones.
+        This sample requires MSVC and doesn't always build even with it as it
+        needs MFC being installed so don't build it by default by using
+        "optsub" template instead of the "sub" one.
      -->
     <if cond="FORMAT[:3] == 'msv'">
         <subproject id="mfc" template="optsub"/>
     </if>
-    <subproject id="memcheck" template="optsub"/>
 
 </makefile>

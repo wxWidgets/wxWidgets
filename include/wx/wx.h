@@ -25,7 +25,6 @@
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/stream.h"
-#include "wx/memory.h"
 #include "wx/math.h"
 #include "wx/stopwatch.h"
 #include "wx/timer.h"

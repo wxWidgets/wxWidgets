@@ -12,6 +12,7 @@
 
 
 #include "wx/encconv.h"
+#include "wx/string.h"
 
 #include <stdlib.h>
 

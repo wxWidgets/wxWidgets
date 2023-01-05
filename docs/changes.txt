@@ -86,6 +86,11 @@ Changes in behaviour which may result in build errors
   the official ones and those using MSVS projects, but also when using
   makefile.vc or CMake, for consistency.
 
+- Support for memory debugging that was previously disabled but could be
+  activated by using wxUSE_MEMORY_TRACING, wxUSE_GLOBAL_MEMORY_OPERATORS etc
+  options was completely removed. Please use address sanitizer or similar
+  tools that are incomparably more useful for this than that legacy code.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------

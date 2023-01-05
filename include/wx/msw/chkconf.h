@@ -149,19 +149,6 @@
 #    define wxUSE_CRASHREPORT 0
 #endif /* compiler doesn't support SEH */
 
-#if defined(__GNUWIN32__)
-    /* These don't work as expected for mingw32 and cygwin32 */
-#   undef  wxUSE_MEMORY_TRACING
-#   define wxUSE_MEMORY_TRACING            0
-
-#   undef  wxUSE_GLOBAL_MEMORY_OPERATORS
-#   define wxUSE_GLOBAL_MEMORY_OPERATORS   0
-
-#   undef  wxUSE_DEBUG_NEW_ALWAYS
-#   define wxUSE_DEBUG_NEW_ALWAYS          0
-
-#endif /* __GNUWIN32__ */
-
 /* MinGW32 doesn't provide wincred.h defining the API needed by this */
 #ifdef __MINGW32_TOOLCHAIN__
     #undef wxUSE_SECRETSTORE

@@ -16,7 +16,12 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/memory.h"
+// This really shouldn't be done here, but keep including this header for
+// compatibility as it used to be included from here in the previous versions
+// of wx and a lot of code would be broken by removing it.
+#ifndef WXBUILDING
+    #include "wx/string.h"
+#endif
 
 #define wxDECLARE_CLASS_INFO_ITERATORS()                                     \
 class WXDLLIMPEXP_BASE const_iterator                                    \
@@ -160,47 +165,6 @@ inline T *wxCheckCast(const void *ptr)
 }
 
 #define wxStaticCast(obj, className) wxCheckCast<className>(obj)
-
-// ----------------------------------------------------------------------------
-// set up memory debugging macros
-// ----------------------------------------------------------------------------
-
-/*
-    Which new/delete operator variants do we want?
-
-    _WX_WANT_NEW_SIZET_WXCHAR_INT             = void *operator new (size_t size, wxChar *fileName = 0, int lineNum = 0)
-    _WX_WANT_DELETE_VOID                      = void operator delete (void * buf)
-    _WX_WANT_DELETE_VOID_WXCHAR_INT           = void operator delete(void *buf, wxChar*, int)
-    _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT       = void *operator new[] (size_t size, wxChar *fileName , int lineNum = 0)
-    _WX_WANT_ARRAY_DELETE_VOID                = void operator delete[] (void *buf)
-    _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT     = void operator delete[] (void* buf, wxChar*, int )
-*/
-
-#if wxUSE_MEMORY_TRACING
-
-// All compilers get these ones
-#define _WX_WANT_NEW_SIZET_WXCHAR_INT
-#define _WX_WANT_DELETE_VOID
-
-#if defined(__VISUALC__)
-    #define _WX_WANT_DELETE_VOID_WXCHAR_INT
-#endif
-
-// Now see who (if anyone) gets the array memory operators
-#if wxUSE_ARRAY_MEMORY_OPERATORS
-
-    // Everyone except Visual C++ (cause problems for VC++ - crashes)
-    #if !defined(__VISUALC__)
-        #define _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
-    #endif
-
-    // Everyone except Visual C++ (cause problems for VC++ - crashes)
-    #if !defined(__VISUALC__)
-        #define _WX_WANT_ARRAY_DELETE_VOID
-    #endif
-#endif // wxUSE_ARRAY_MEMORY_OPERATORS
-
-#endif // wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
 // Compatibility macro aliases DECLARE group
@@ -475,22 +439,6 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
 }
 
 #include "wx/xti2.h"
-
-// ----------------------------------------------------------------------------
-// more debugging macros
-// ----------------------------------------------------------------------------
-
-#if wxUSE_DEBUG_NEW_ALWAYS
-    #define WXDEBUG_NEW new(__TFILE__,__LINE__)
-
-    #if wxUSE_GLOBAL_MEMORY_OPERATORS
-        #define new WXDEBUG_NEW
-    #elif defined(__VISUALC__)
-        // Including this file redefines new and allows leak reports to
-        // contain line numbers
-        #include "wx/msw/msvcrt.h"
-    #endif
-#endif // wxUSE_DEBUG_NEW_ALWAYS
 
 // ----------------------------------------------------------------------------
 // Compatibility macro aliases IMPLEMENT group

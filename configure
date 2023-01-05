@@ -673,7 +673,6 @@ COND_wxUSE_EXPAT_builtin
 COND_WXUNIV_1
 COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
-COND_USE_XRC_1
 COND_USE_XML_1
 COND_USE_WEBVIEW_WEBKIT2_1
 COND_USE_THREADS_1
@@ -1115,8 +1114,6 @@ enable_debug
 enable_debug_flag
 enable_debug_info
 enable_debug_gdb
-enable_debug_cntxt
-enable_mem_tracing
 enable_shared
 enable_cxx11
 with_cxx
@@ -2082,8 +2079,6 @@ Optional Features:
   --disable-debug_flag    disable all debugging support
   --enable-debug_info     generate debug information
   --enable-debug_gdb      create code with extra GDB debugging information
-  --enable-debug_cntxt    obsolete, don't use: use wxDebugContext
-  --enable-mem_tracing    obsolete, don't use: create code with memory tracing
   --disable-shared        create static library instead of shared
   --enable-cxx11          obsolete option doing nothing
   --enable-stl            use standard C++ classes for everything
@@ -5521,64 +5516,6 @@ fi
 
 
           eval "$wx_cv_use_debug_gdb"
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-debug_cntxt was given.
-if test "${enable_debug_cntxt+set}" = set; then :
-  enableval=$enable_debug_cntxt;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=yes'
-                          else
-                            wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=no'
-                          fi
-
-else
-
-                          wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=${'DEFAULT_wxUSE_DEBUG_CONTEXT":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_debug_cntxt"
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-mem_tracing was given.
-if test "${enable_mem_tracing+set}" = set; then :
-  enableval=$enable_mem_tracing;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=yes'
-                          else
-                            wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=no'
-                          fi
-
-else
-
-                          wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=${'DEFAULT_wxUSE_MEM_TRACING":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_mem_tracing"
 
 
 
@@ -35635,16 +35572,6 @@ if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     fi
 fi
 
-if test "$wxUSE_MEM_TRACING" = "yes" ; then
-    $as_echo "#define wxUSE_MEMORY_TRACING 1" >>confdefs.h
-
-    $as_echo "#define wxUSE_GLOBAL_MEMORY_OPERATORS 1" >>confdefs.h
-
-    $as_echo "#define wxUSE_DEBUG_NEW_ALWAYS 1" >>confdefs.h
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS memcheck"
-fi
-
 if test "$wxUSE_DMALLOC" = "yes" ; then
     DMALLOC_LIBS="-ldmallocthcxx"
 fi
@@ -43250,11 +43177,6 @@ EOF
     COND_USE_XML_1="#"
     if test "x$USE_XML" = "x1" ; then
         COND_USE_XML_1=""
-    fi
-
-    COND_USE_XRC_1="#"
-    if test "x$USE_XRC" = "x1" ; then
-        COND_USE_XRC_1=""
     fi
 
     COND_WINDOWS_IMPLIB_1="#"

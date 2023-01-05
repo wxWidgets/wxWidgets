@@ -473,7 +473,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_list.obj \
 	$(OBJS)\monodll_log.obj \
 	$(OBJS)\monodll_longlong.obj \
-	$(OBJS)\monodll_memory.obj \
 	$(OBJS)\monodll_mimecmn.obj \
 	$(OBJS)\monodll_module.obj \
 	$(OBJS)\monodll_mstream.obj \
@@ -639,7 +638,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_list.obj \
 	$(OBJS)\monolib_log.obj \
 	$(OBJS)\monolib_longlong.obj \
-	$(OBJS)\monolib_memory.obj \
 	$(OBJS)\monolib_mimecmn.obj \
 	$(OBJS)\monolib_module.obj \
 	$(OBJS)\monolib_mstream.obj \
@@ -799,7 +797,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_list.obj \
 	$(OBJS)\basedll_log.obj \
 	$(OBJS)\basedll_longlong.obj \
-	$(OBJS)\basedll_memory.obj \
 	$(OBJS)\basedll_mimecmn.obj \
 	$(OBJS)\basedll_module.obj \
 	$(OBJS)\basedll_mstream.obj \
@@ -941,7 +938,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_list.obj \
 	$(OBJS)\baselib_log.obj \
 	$(OBJS)\baselib_longlong.obj \
-	$(OBJS)\baselib_memory.obj \
 	$(OBJS)\baselib_mimecmn.obj \
 	$(OBJS)\baselib_module.obj \
 	$(OBJS)\baselib_mstream.obj \
@@ -7506,9 +7502,6 @@ $(OBJS)\monodll_log.obj: ..\..\src\common\log.cpp
 $(OBJS)\monodll_longlong.obj: ..\..\src\common\longlong.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\longlong.cpp
 
-$(OBJS)\monodll_memory.obj: ..\..\src\common\memory.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\memory.cpp
-
 $(OBJS)\monodll_mimecmn.obj: ..\..\src\common\mimecmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\mimecmn.cpp
 
@@ -10095,9 +10088,6 @@ $(OBJS)\monolib_log.obj: ..\..\src\common\log.cpp
 
 $(OBJS)\monolib_longlong.obj: ..\..\src\common\longlong.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\longlong.cpp
-
-$(OBJS)\monolib_memory.obj: ..\..\src\common\memory.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\memory.cpp
 
 $(OBJS)\monolib_mimecmn.obj: ..\..\src\common\mimecmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\mimecmn.cpp
@@ -12686,9 +12676,6 @@ $(OBJS)\basedll_log.obj: ..\..\src\common\log.cpp
 $(OBJS)\basedll_longlong.obj: ..\..\src\common\longlong.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\longlong.cpp
 
-$(OBJS)\basedll_memory.obj: ..\..\src\common\memory.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\memory.cpp
-
 $(OBJS)\basedll_mimecmn.obj: ..\..\src\common\mimecmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\mimecmn.cpp
 
@@ -13033,9 +13020,6 @@ $(OBJS)\baselib_log.obj: ..\..\src\common\log.cpp
 
 $(OBJS)\baselib_longlong.obj: ..\..\src\common\longlong.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\longlong.cpp
-
-$(OBJS)\baselib_memory.obj: ..\..\src\common\memory.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\memory.cpp
 
 $(OBJS)\baselib_mimecmn.obj: ..\..\src\common\mimecmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\mimecmn.cpp
