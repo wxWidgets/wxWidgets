@@ -125,60 +125,6 @@
 //                         is no overhead if you don't use it
 #define wxUSE_DEBUGREPORT 1
 
-// Generic comment about debugging settings: they are very useful if you don't
-// use any other memory leak detection tools such as Purify/BoundsChecker, but
-// are probably redundant otherwise. Also, Visual C++ CRT has the same features
-// as wxWidgets memory debugging subsystem built in since version 5.0 and you
-// may prefer to use it instead of built in memory debugging code because it is
-// faster and more fool proof.
-//
-// Using VC++ CRT memory debugging is enabled by default in debug build (_DEBUG
-// is defined) if wxUSE_GLOBAL_MEMORY_OPERATORS is *not* enabled (i.e. is 0)
-// and if __NO_VC_CRTDBG__ is not defined.
-
-// The rest of the options in this section are obsolete and not supported,
-// enable them at your own risk.
-
-// If 1, enables wxDebugContext, for writing error messages to file, etc. If
-// __WXDEBUG__ is not defined, will still use the normal memory operators.
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_DEBUG_CONTEXT 0
-
-// If 1, enables debugging versions of wxObject::new and wxObject::delete *IF*
-// __WXDEBUG__ is also defined.
-//
-// WARNING: this code may not work with all architectures, especially if
-// alignment is an issue. This switch is currently ignored for mingw / cygwin
-//
-// Default is 0
-//
-// Recommended setting: 1 if you are not using a memory debugging tool, else 0
-#define wxUSE_MEMORY_TRACING 0
-
-// In debug mode, cause new and delete to be redefined globally.
-// If this causes problems (e.g. link errors which is a common problem
-// especially if you use another library which also redefines the global new
-// and delete), set this to 0.
-// This switch is currently ignored for mingw / cygwin
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-// In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
-// this causes problems (e.g. link errors), set this to 0. You may need to set
-// this to 0 if using templates (at least for VC++). This switch is currently
-// ignored for MinGW/Cygwin.
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_DEBUG_NEW_ALWAYS 0
-
 
 // ----------------------------------------------------------------------------
 // global features

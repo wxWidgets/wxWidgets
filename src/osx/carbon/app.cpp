@@ -29,7 +29,6 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
-    #include "wx/memory.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
 #endif

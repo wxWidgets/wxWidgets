@@ -15,7 +15,6 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
-    #include "wx/memory.h"
     #include "wx/font.h"
 #endif
 

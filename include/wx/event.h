@@ -3583,12 +3583,6 @@ public:
     // Clear table
     void Clear();
 
-#if wxUSE_MEMORY_TRACING
-    // Clear all tables: only used to work around problems in memory tracing
-    // code
-    static void ClearAll();
-#endif // wxUSE_MEMORY_TRACING
-
 protected:
     // Init the hash table with the entries of the static event table.
     void InitHashTable();

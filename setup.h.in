@@ -141,16 +141,6 @@
 
 
 
-#define wxUSE_DEBUG_CONTEXT 0
-
-#define wxUSE_MEMORY_TRACING 0
-
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-#define wxUSE_DEBUG_NEW_ALWAYS 0
-
-
-
 #define wxUSE_EXCEPTIONS    0
 
 #define wxUSE_EXTENDED_RTTI 0

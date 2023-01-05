@@ -91,8 +91,6 @@ library:
 @itemdef{wxUSE_DATETIME, Use wxDateTime and related classes.}
 @itemdef{wxUSE_DBGHELP, Predefine as 0 to avoid using wxDbgHelpDLL and related classes.}
 @itemdef{wxUSE_DC_TRANSFORM_MATRIX, Use wxDC::SetTransformMatrix() and related methods.}
-@itemdef{wxUSE_DEBUG_CONTEXT, Use wxDebugContext class.}
-@itemdef{wxUSE_DEBUG_NEW_ALWAYS, See @ref overview_debugging}
 @itemdef{wxUSE_DEBUGREPORT, Use wxDebugReport class.}
 @itemdef{wxUSE_DIALUP_MANAGER, Use wxDialUpManager and related classes.}
 @itemdef{wxUSE_DIRDLG, Use wxDirDialog class.}
@@ -130,7 +128,6 @@ library:
 @itemdef{wxUSE_GEOMETRY, Use common geometry classes}
 @itemdef{wxUSE_GIF, Use GIF wxImageHandler}
 @itemdef{wxUSE_GLCANVAS, Enables OpenGL support.}
-@itemdef{wxUSE_GLOBAL_MEMORY_OPERATORS, Override global operators @c new and @c delete to use wxWidgets memory leak detection}
 @itemdef{wxUSE_GRAPHICS_CONTEXT, Use wxGraphicsContext and related classes.}
 @itemdef{wxUSE_GRID, Use wxGrid and related classes.}
 @itemdef{wxUSE_HELP, Use wxHelpController and related classes.}
@@ -163,7 +160,6 @@ library:
 @itemdef{wxUSE_MDI, Use wxMDIParentFrame, and wxMDIChildFrame}
 @itemdef{wxUSE_MDI_ARCHITECTURE, Use MDI-based document-view classes.}
 @itemdef{wxUSE_MEDIACTRL, Use wxMediaCtrl.}
-@itemdef{wxUSE_MEMORY_TRACING, Use wxWidgets memory leak detection, not recommended if using another memory debugging tool.}
 @itemdef{wxUSE_MENUS, Use wxMenu and wxMenuItem.}
 @itemdef{wxUSE_MENUBAR, Use wxMenubar.}
 @itemdef{wxUSE_METAFILE, Use wxMetaFile and related classes.}

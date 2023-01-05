@@ -427,10 +427,6 @@ Troubleshooting                        {#x11_troubleshooting}
   argument functions, try putting the gcc fixinclude file paths early in the
   include path.
 
-- If you operator-related compile errors or strange memory problems
-  (for example in deletion of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS
-  and wxUSE_MEMORY_TRACING to 0 in setup.h, and recompile.
-
 - If you get an internal compiler error in gcc, turn off optimisations.
 
 - Some compilers, such as Sun C++, may give a lot of warnings about

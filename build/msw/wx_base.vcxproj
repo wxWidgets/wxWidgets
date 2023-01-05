@@ -517,7 +517,6 @@
     <ClCompile Include="..\..\src\common\list.cpp" />
     <ClCompile Include="..\..\src\common\log.cpp" />
     <ClCompile Include="..\..\src\common\longlong.cpp" />
-    <ClCompile Include="..\..\src\common\memory.cpp" />
     <ClCompile Include="..\..\src\common\mimecmn.cpp" />
     <ClCompile Include="..\..\src\common\module.cpp" />
     <ClCompile Include="..\..\src\common\msgout.cpp" />

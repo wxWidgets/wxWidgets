@@ -872,7 +872,6 @@ ALL_BASE_SOURCES =  \
 	src/common/list.cpp \
 	src/common/log.cpp \
 	src/common/longlong.cpp \
-	src/common/memory.cpp \
 	src/common/mimecmn.cpp \
 	src/common/module.cpp \
 	src/common/mstream.cpp \
@@ -1064,7 +1063,6 @@ MONODLL_OBJECTS =  \
 	monodll_list.o \
 	monodll_log.o \
 	monodll_longlong.o \
-	monodll_memory.o \
 	monodll_mimecmn.o \
 	monodll_module.o \
 	monodll_mstream.o \
@@ -1210,7 +1208,6 @@ MONOLIB_OBJECTS =  \
 	monolib_list.o \
 	monolib_log.o \
 	monolib_longlong.o \
-	monolib_memory.o \
 	monolib_mimecmn.o \
 	monolib_module.o \
 	monolib_mstream.o \
@@ -1340,7 +1337,6 @@ BASEDLL_OBJECTS =  \
 	basedll_list.o \
 	basedll_log.o \
 	basedll_longlong.o \
-	basedll_memory.o \
 	basedll_mimecmn.o \
 	basedll_module.o \
 	basedll_mstream.o \
@@ -1452,7 +1448,6 @@ BASELIB_OBJECTS =  \
 	baselib_list.o \
 	baselib_log.o \
 	baselib_longlong.o \
-	baselib_memory.o \
 	baselib_mimecmn.o \
 	baselib_module.o \
 	baselib_mstream.o \
@@ -14750,9 +14745,6 @@ monodll_log.o: $(srcdir)/src/common/log.cpp $(MONODLL_ODEP)
 monodll_longlong.o: $(srcdir)/src/common/longlong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
 
-monodll_memory.o: $(srcdir)/src/common/memory.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/memory.cpp
-
 monodll_mimecmn.o: $(srcdir)/src/common/mimecmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/mimecmn.cpp
 
@@ -19516,9 +19508,6 @@ monolib_log.o: $(srcdir)/src/common/log.cpp $(MONOLIB_ODEP)
 
 monolib_longlong.o: $(srcdir)/src/common/longlong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
-
-monolib_memory.o: $(srcdir)/src/common/memory.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/memory.cpp
 
 monolib_mimecmn.o: $(srcdir)/src/common/mimecmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/mimecmn.cpp
@@ -24284,9 +24273,6 @@ basedll_log.o: $(srcdir)/src/common/log.cpp $(BASEDLL_ODEP)
 basedll_longlong.o: $(srcdir)/src/common/longlong.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
 
-basedll_memory.o: $(srcdir)/src/common/memory.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/memory.cpp
-
 basedll_mimecmn.o: $(srcdir)/src/common/mimecmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/mimecmn.cpp
 
@@ -24769,9 +24755,6 @@ baselib_log.o: $(srcdir)/src/common/log.cpp $(BASELIB_ODEP)
 
 baselib_longlong.o: $(srcdir)/src/common/longlong.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
-
-baselib_memory.o: $(srcdir)/src/common/memory.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/memory.cpp
 
 baselib_mimecmn.o: $(srcdir)/src/common/mimecmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/mimecmn.cpp

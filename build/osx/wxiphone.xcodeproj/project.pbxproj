@@ -145,7 +145,6 @@
 		522E6CF2A62F34259BCE2DE2 /* tif_flush.c in Sources */ = {isa = PBXBuildFile; fileRef = 305614D19CF23CB2B14A5B2E /* tif_flush.c */; };
 		F016C51053373E658ED4C9A9 /* helpext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF376BC55EA73F5FB7328142 /* helpext.cpp */; };
 		D7F14BDFFB7F369B842AFC13 /* pcre2_config.c in Sources */ = {isa = PBXBuildFile; fileRef = FC6A8FAE9CA63EEB8883B6BD /* pcre2_config.c */; };
-		DC978B60F6DF3176B5B114C3 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5466CC2D6579360E9C665EE5 /* memory.cpp */; };
 		BD49EC50CB363642BDBF25C8 /* mousemanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D037EA567C253DEEA17E822B /* mousemanager.cpp */; };
 		20F10669703137E68318C6FD /* cmndata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0510EE0FB3FF36EF8670ABD1 /* cmndata.cpp */; };
 		427E6AF88CF73D799206E37D /* checkboxcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2F076657431458896115A /* checkboxcmn.cpp */; };
@@ -1569,7 +1568,6 @@
 		D7B3307E56B332769901E99F /* filehistorycmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filehistorycmn.cpp; path = ../../src/common/filehistorycmn.cpp; sourceTree = SOURCE_ROOT; };
 		21A697F65B1E31168F0A7BD7 /* xh_tree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_tree.cpp; path = ../../src/xrc/xh_tree.cpp; sourceTree = SOURCE_ROOT; };
 		5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtloop_cf.cpp; path = ../../src/osx/core/evtloop_cf.cpp; sourceTree = SOURCE_ROOT; };
-		5466CC2D6579360E9C665EE5 /* memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = memory.cpp; path = ../../src/common/memory.cpp; sourceTree = SOURCE_ROOT; };
 		994AF74DF2A13FF09A215853 /* intel_init.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = intel_init.c; path = ../../src/png/intel/intel_init.c; sourceTree = SOURCE_ROOT; };
 		7395814D42CC38F6B8CD81B4 /* gzlib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzlib.c; path = ../../src/zlib/gzlib.c; sourceTree = SOURCE_ROOT; };
 		9DB43FAB1E563B02ACEFF647 /* module.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = module.cpp; path = ../../src/common/module.cpp; sourceTree = SOURCE_ROOT; };
@@ -2139,7 +2137,6 @@
 				552757A901E732CAA8E3F16D /* list.cpp */,
 				EA93D41B11683E758D456531 /* log.cpp */,
 				72D7AF345E563587941BD868 /* longlong.cpp */,
-				5466CC2D6579360E9C665EE5 /* memory.cpp */,
 				2F316F7DD3CB3390A6E50179 /* mimecmn.cpp */,
 				9DB43FAB1E563B02ACEFF647 /* module.cpp */,
 				DC3D1E222FD93A69B1D1366E /* mstream.cpp */,
@@ -3075,7 +3072,6 @@
 				68AC8860B0943C1FAF76D96B /* list.cpp in Sources */,
 				3141FEDED0943BD6A2EF858F /* log.cpp in Sources */,
 				0C7E2D5C22A232368F862A60 /* longlong.cpp in Sources */,
-				DC978B60F6DF3176B5B114C3 /* memory.cpp in Sources */,
 				B59FC7345C383D9099391AC3 /* mimecmn.cpp in Sources */,
 				EC3A1C620D323B5590AABF02 /* module.cpp in Sources */,
 				F38202271C6131908C358DEC /* mstream.cpp in Sources */,
