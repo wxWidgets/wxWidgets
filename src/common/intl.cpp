@@ -684,8 +684,14 @@ const wxLanguageInfo* wxLocale::GetLanguageInfo(int lang)
 {
     // We need to explicitly handle the case "lang == wxLANGUAGE_DEFAULT" here,
     // because wxUILocale::GetLanguageInfo() determines the system language
-    // based on the the preferred UI language while wxLocale uses the default
+    // based on the preferred UI language while wxLocale uses the default
     // user locale for that purpose.
+    //
+    // Note that even though wxUILocale::GetLanguageInfo() seems to do the same
+    // thing as we do here, it actually does _not_ because we're calling our
+    // GetSystemLanguage() which maps to wxUILocale::GetSystemLocale() and not
+    // the function with the same name in that class. This is incredibly
+    // confusing but necessary for backwards compatibility.
     if (lang == wxLANGUAGE_DEFAULT)
         lang = GetSystemLanguage();
     return wxUILocale::GetLanguageInfo(lang);
