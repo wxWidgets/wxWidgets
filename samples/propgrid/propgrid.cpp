@@ -703,12 +703,7 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
     }
     else if ( name == "Password" )
     {
-        static int pwdMode = 0;
-
-        //m_pPropGridManager->SetPropertyAttribute(property, wxPG_STRING_PASSWORD, (long)pwdMode);
-
-        pwdMode++;
-        pwdMode &= 1;
+        // Do something very secret here...
     }
     else
     if ( name == "Font" )
