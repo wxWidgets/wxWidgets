@@ -386,38 +386,63 @@ public:
     {
     }
 
-    ~wxPGValidationInfo()
-    {
-    }
+    ~wxPGValidationInfo() = default;
 
     // Returns failure behaviour which is a combination of
     // wxPG_VFB_XXX flags.
     wxPGVFBFlags GetFailureBehavior() const
-        { return m_failureBehavior; }
+    {
+        return m_failureBehavior;
+    }
 
     // Returns current failure message.
     const wxString& GetFailureMessage() const
-        { return m_failureMessage; }
+    {
+        return m_failureMessage;
+    }
 
     // Returns reference to pending value.
-    wxVariant& GetValue()
+    const wxVariant& GetValue() const
     {
-        wxASSERT(m_pValue);
-        return *m_pValue;
+        return m_value;
     }
 
     // Set validation failure behaviour
     // failureBehavior - Mixture of wxPG_VFB_XXX flags.
     void SetFailureBehavior(wxPGVFBFlags failureBehavior)
-        { m_failureBehavior = failureBehavior; }
+    {
+        m_failureBehavior = failureBehavior;
+    }
 
     // Set current failure message.
     void SetFailureMessage(const wxString& message)
-        { m_failureMessage = message; }
+    {
+        m_failureMessage = message;
+    }
 
 private:
+    void SetValue(const wxVariant& value)
+    {
+        m_value = value;
+    }
+
+    void ClearFailureMessage()
+    {
+        m_failureMessage.clear();
+    }
+
+    void SetFailing(bool isFailing)
+    {
+        m_isFailing = isFailing;
+    }
+
+    bool IsFailing() const
+    {
+        return m_isFailing;
+    }
+
     // Value to be validated.
-    wxVariant*      m_pValue;
+    wxVariant       m_value;
 
     // Message displayed on validation failure.
     wxString        m_failureMessage;
@@ -1307,7 +1332,7 @@ public:
             DoOnValidationFailureReset(property);
             property->ClearFlag(wxPG_PROP_INVALID_VALUE);
         }
-        m_validationInfo.m_failureMessage.clear();
+        m_validationInfo.ClearFailureMessage();
     }
 
     // Override in derived class to display error messages in custom manner

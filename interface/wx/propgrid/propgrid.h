@@ -364,7 +364,7 @@ public:
     /**
         Returns reference to pending value.
     */
-    wxVariant& GetValue();
+    const wxVariant& GetValue() const;
 
     /** Set validation failure behaviour
 

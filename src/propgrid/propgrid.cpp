@@ -2955,8 +2955,8 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     // Returns true if value passes all tests.
     //
 
-    m_validationInfo.m_failureBehavior = m_permanentValidationFailureBehavior;
-    m_validationInfo.m_isFailing = true;
+    m_validationInfo.SetFailureBehavior(m_permanentValidationFailureBehavior);
+    m_validationInfo.SetFailing(true);
 
     //
     // Variant list a special value that cannot be validated
@@ -3088,7 +3088,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
         pendingValue = value;
     }
 
-    m_validationInfo.m_isFailing = false;
+    m_validationInfo.SetFailing(false);
 
     return true;
 }
@@ -3160,7 +3160,7 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
     wxON_BLOCK_EXIT_SET(m_inOnValidationFailure, false);
 
     wxWindow* editor = GetEditorControl();
-    int vfb = m_validationInfo.m_failureBehavior;
+    wxPGVFBFlags vfb = m_validationInfo.GetFailureBehavior();
 
     if ( m_inDoSelectProperty )
     {
@@ -3168,10 +3168,10 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
         // messages, if some were already shown for this property.
         if ( property->HasFlag(wxPG_PROP_INVALID_VALUE) )
         {
-            m_validationInfo.m_failureBehavior =
+            m_validationInfo.SetFailureBehavior(
                 vfb & ~(wxPG_VFB_SHOW_MESSAGE |
                         wxPG_VFB_SHOW_MESSAGEBOX |
-                        wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR);
+                        wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR));
         }
     }
 
@@ -3195,7 +3195,7 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
 
 bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& WXUNUSED(invalidValue) )
 {
-    int vfb = m_validationInfo.m_failureBehavior;
+    wxPGVFBFlags vfb = m_validationInfo.GetFailureBehavior();
 
     if ( vfb & wxPG_VFB_BEEP )
         ::wxBell();
@@ -3239,7 +3239,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
                 wxPG_VFB_SHOW_MESSAGEBOX |
                 wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR) )
     {
-        wxString msg = m_validationInfo.m_failureMessage;
+        wxString msg = m_validationInfo.GetFailureMessage();
 
         if ( msg.empty() )
             msg = _("You have entered invalid value. Press ESC to cancel editing.");
@@ -3281,7 +3281,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
 
 void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
 {
-    int vfb = m_validationInfo.m_failureBehavior;
+    wxPGVFBFlags vfb = m_validationInfo.GetFailureBehavior();
 
     if ( vfb & wxPG_VFB_MARK_CELL )
     {
@@ -3318,7 +3318,7 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
         DoHidePropertyError(property);
     }
 
-    m_validationInfo.m_isFailing = false;
+    m_validationInfo.SetFailing(false);
 }
 
 // -----------------------------------------------------------------------
@@ -3476,8 +3476,8 @@ bool wxPropertyGrid::DoEditorValidate()
     if ( guard.IsInside() )
         return false;
 
-    m_validationInfo.m_failureBehavior = m_permanentValidationFailureBehavior;
-    m_validationInfo.m_isFailing = true;
+    m_validationInfo.SetFailureBehavior(m_permanentValidationFailureBehavior);
+    m_validationInfo.SetFailing(true);
 
     wxPGProperty* selected = GetSelection();
     if ( selected )
@@ -3493,7 +3493,7 @@ bool wxPropertyGrid::DoEditorValidate()
         }
     }
 
-    m_validationInfo.m_isFailing = false;
+    m_validationInfo.SetFailing(false);
 #endif
     return true;
 }
@@ -3643,7 +3643,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
                     // failing and value was not unspecified
                     if ( !valueIsPending &&
                          !pendingValue.IsNull() &&
-                         m_validationInfo.m_isFailing )
+                         m_validationInfo.IsFailing() )
                          valueIsPending = true;
                 }
                 else
@@ -4687,7 +4687,7 @@ bool wxPropertyGrid::SendEvent( wxEventType eventType, wxPGProperty* p,
     {
         wxASSERT( pValue );
         evt.SetCanVeto(true);
-        m_validationInfo.m_pValue = pValue;
+        m_validationInfo.SetValue(pValue ? *pValue : wxVariant());
         evt.SetupValidationInfo();
     }
     else
