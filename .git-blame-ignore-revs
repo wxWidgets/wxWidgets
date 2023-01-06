@@ -7,6 +7,9 @@
 #
 #   git config blame.ignoreRevsFile misc/git/ignore_revs
 
+# Code cleanup: wxPGProperty helper classes, 2023-01-06
+e43190ea796ac3c1d15c18a88bcf7f3f745bd4bc
+
 # Get rid of commented out code, 2022-10-26
 db31a0161503c6ea4cc461f4e10b67830b7d6b52
 
