@@ -237,12 +237,13 @@ void IntlTestCase::IsAvailable()
 
 TEST_CASE("wxLocale::Default", "[locale]")
 {
-    INFO("System language: " << wxLocale::GetSystemLanguage());
-    CHECK( wxLocale::IsAvailable(wxLANGUAGE_DEFAULT) );
+    const int langDef = wxUILocale::GetSystemLanguage();
+    INFO("System language: " << wxUILocale::GetLanguageName(langDef));
+    CHECK( wxLocale::IsAvailable(langDef) );
 
     wxLocale loc;
 
-    REQUIRE( loc.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
+    REQUIRE( loc.Init(langDef, wxLOCALE_DONT_LOAD_DEFAULT) );
 }
 
 // Under MSW and macOS all the locales used below should be supported, but
