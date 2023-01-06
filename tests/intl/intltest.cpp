@@ -435,4 +435,73 @@ TEST_CASE("wxUILocale::FromTag", "[.]")
     WARN("Locale \"" << tag << "\" supported: " << loc.IsSupported() );
 }
 
+namespace
+{
+
+const wxString GetLangName(int lang)
+{
+    switch ( lang )
+    {
+        case wxLANGUAGE_DEFAULT:
+            return "DEFAULT";
+
+        case wxLANGUAGE_UNKNOWN:
+            return "UNKNOWN";
+
+        default:
+            return wxUILocale::GetLanguageName(lang);
+    }
+}
+
+wxString GetLocaleDesc(const char* when)
+{
+    const wxUILocale& curloc = wxUILocale::GetCurrent();
+    const wxLocaleIdent locid = curloc.GetLocaleId();
+
+    // Make the output slightly more readable.
+    wxString decsep = curloc.GetInfo(wxLOCALE_DECIMAL_POINT);
+    if ( decsep == "." )
+        decsep = "point";
+    else if ( decsep == "," )
+        decsep = "comma";
+    else
+        decsep = wxString::Format("UNKNOWN (%s)", decsep);
+
+    return wxString::Format("%s\ncurrent locale:\t%s (decimal separator: %s)",
+                            when,
+                            locid.IsEmpty() ? wxString("NONE") : locid.GetTag(),
+                            decsep);
+}
+
+} // anonymous namespace
+
+// Test to show information about the system locale and the effects of various
+// ways to change the current locale.
+TEST_CASE("wxUILocale::ShowSystem", "[.]")
+{
+    WARN("System locale:\t"
+            << GetLangName(wxUILocale::GetSystemLocale()) << "\n"
+         "System language:\t"
+            << GetLangName(wxUILocale::GetSystemLanguage()));
+
+    WARN(GetLocaleDesc("Before calling any locale functions"));
+
+    wxLocale locDef;
+    CHECK( locDef.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
+    WARN(GetLocaleDesc("After wxLocale::Init(wxLANGUAGE_DEFAULT)"));
+
+    REQUIRE( wxUILocale::UseDefault() );
+    WARN(GetLocaleDesc("After wxUILocale::UseDefault()"));
+
+    wxString preferredLangsStr;
+    const wxVector<wxString> preferredLangs = wxUILocale::GetPreferredUILanguages();
+    for (size_t n = 0; n < preferredLangs.size(); ++n)
+    {
+        if ( !preferredLangsStr.empty() )
+            preferredLangsStr += ", ";
+        preferredLangsStr += preferredLangs[n];
+    }
+    WARN("Preferred UI languages:\n" << preferredLangsStr);
+}
+
 #endif // wxUSE_INTL
