@@ -763,11 +763,36 @@ bool wxLocale::IsAvailable(int lang)
     const wxLanguageInfo *info = wxLocale::GetLanguageInfo(lang);
     if ( !info )
     {
-        // The language is unknown (this normally only happens when we're
-        // passed wxLANGUAGE_DEFAULT), so we can't support it.
-        wxASSERT_MSG( lang == wxLANGUAGE_DEFAULT,
-                      wxS("No info for a valid language?") );
-        return false;
+        // This must be wxLANGUAGE_DEFAULT as otherwise we should have found
+        // the matching entry.
+        wxCHECK_MSG( lang == wxLANGUAGE_DEFAULT, false,
+                     wxS("No info for a valid language?") );
+
+        // For this one, we need to check whether using it later is going to
+        // actually work, i.e. if the CRT supports it.
+        const char* const origLocale = wxSetlocale(LC_ALL, NULL);
+        if ( !origLocale )
+        {
+            // This is not supposed to happen, we should always be able to
+            // query the current locale, but don't crash if it does.
+            return false;
+        }
+
+        // Make a copy of the string because wxSetlocale() call below may
+        // change the buffer to which it points.
+        const wxString origLocaleStr = wxString::FromUTF8(origLocale);
+
+        if ( !wxSetlocale(LC_ALL, "") )
+        {
+            // Locale wasn't changed, so nothing else to do.
+            return false;
+        }
+
+        // We support this locale, but restore the original one before
+        // returning.
+        wxSetlocale(LC_ALL, origLocaleStr.utf8_str());
+
+        return true;
     }
 
     wxString localeTag = info->GetCanonicalWithRegion();
