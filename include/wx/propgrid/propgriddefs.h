@@ -274,12 +274,6 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxString,
                                      wxPGHashMapS2S,
                                      class WXDLLIMPEXP_PROPGRID);
 
-WX_DECLARE_HASH_SET_WITH_DECL(int,
-                              wxIntegerHash,
-                              wxIntegerEqual,
-                              wxPGHashSetInt,
-                              class WXDLLIMPEXP_PROPGRID);
-
 #if WXWIN_COMPATIBILITY_3_0
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
                                   wxBaseArrayPtrVoid,
@@ -675,22 +669,6 @@ protected:
 
 // -----------------------------------------------------------------------
 // wxVector utilities
-
-// Utility to check if specific item is in a vector.
-template<typename T>
-inline bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
-{
-#if wxUSE_STL
-    return std::find(vector.begin(), vector.end(), item) != vector.end();
-#else
-    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
-    {
-        if ( *it == item )
-            return true;
-    }
-    return false;
-#endif // wxUSE_STL/!wxUSE_STL
-}
 
 // Utility to determine the index of the item in the vector.
 template<typename T>

@@ -5676,13 +5676,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
     // Except for TAB, ESC, and any keys specifically dedicated to
     // wxPropertyGrid itself, handle child control events in child control.
-    if ( fromChild &&
-#if WXWIN_COMPATIBILITY_3_0
-         // Deprecated: use a hash set instead.
-         !wxPGItemExistsInVector<int>(m_dedicatedKeys, keycode) )
-#else
-         m_dedicatedKeys.find(keycode) == m_dedicatedKeys.end() )
-#endif
+    if ( fromChild && m_dedicatedKeys.count(keycode) == 0 )
     {
         // Only propagate event if it had modifiers
         if ( !event.HasModifiers() )

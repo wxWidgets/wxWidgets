@@ -23,6 +23,7 @@
 #include "wx/propgrid/propgridiface.h"
 
 #include <unordered_map>
+#include <unordered_set>
 
 #ifndef SWIG
 extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
@@ -667,12 +668,7 @@ public:
     // control.
     void DedicateKey( int keycode )
     {
-#if WXWIN_COMPATIBILITY_3_0
-        // Deprecated: use a hash set instead.
-        m_dedicatedKeys.push_back(keycode);
-#else
         m_dedicatedKeys.insert(keycode);
-#endif
     }
 
     // This static function enables or disables automatic use of
@@ -1543,12 +1539,7 @@ protected:
 #endif
 
     // List of key codes that will not be handed over to editor controls.
-#if WXWIN_COMPATIBILITY_3_0
-    // Deprecated: use a hash set instead.
-    wxVector<int>       m_dedicatedKeys;
-#else
-    wxPGHashSetInt      m_dedicatedKeys;
-#endif
+    std::unordered_set<int> m_dedicatedKeys;
 
     //
     // Temporary values
