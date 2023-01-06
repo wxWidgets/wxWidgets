@@ -6189,61 +6189,6 @@ wxString wxPGStringTokenizer::GetNextToken()
 }
 
 // -----------------------------------------------------------------------
-// wxPGChoiceEntry
-// -----------------------------------------------------------------------
-
-wxPGChoiceEntry::wxPGChoiceEntry()
-    : wxPGCell(), m_value(wxPG_INVALID_VALUE)
-{
-}
-
-// -----------------------------------------------------------------------
-// wxPGChoicesData
-// -----------------------------------------------------------------------
-
-wxPGChoicesData::~wxPGChoicesData()
-{
-    Clear();
-}
-
-void wxPGChoicesData::Clear()
-{
-    m_items.clear();
-}
-
-void wxPGChoicesData::CopyDataFrom( wxPGChoicesData* data )
-{
-    wxASSERT( m_items.empty() );
-
-    m_items = data->m_items;
-}
-
-wxPGChoiceEntry& wxPGChoicesData::Insert( int index,
-                                          const wxPGChoiceEntry& item )
-{
-    wxVector<wxPGChoiceEntry>::iterator it;
-    if ( index == -1 )
-    {
-        it = m_items.end();
-        index = (int) m_items.size();
-    }
-    else
-    {
-        it = m_items.begin() + index;
-    }
-
-    m_items.insert(it, item);
-
-    wxPGChoiceEntry& ownEntry = m_items[index];
-
-    // Need to fix value?
-    if ( ownEntry.GetValue() == wxPG_INVALID_VALUE )
-        ownEntry.SetValue(index);
-
-    return ownEntry;
-}
-
-// -----------------------------------------------------------------------
 // wxPropertyGridEvent
 // -----------------------------------------------------------------------
 

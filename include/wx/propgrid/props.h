@@ -65,8 +65,8 @@ class WXDLLIMPEXP_PROPGRID wxPGInDialogValidator
 {
 public:
     wxPGInDialogValidator()
+        : m_textCtrl(nullptr)
     {
-        m_textCtrl = nullptr;
     }
 
     ~wxPGInDialogValidator()
