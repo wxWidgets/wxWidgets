@@ -5649,9 +5649,9 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         return;
     }
 
-    std::pair<int, int> actions = KeyEventToActions(event);
-    int action = actions.first;
-    int secondAction = actions.second;
+    int action;
+    int secondAction;
+    std::tie(action, secondAction) = KeyEventToActions(event);
 
     if ( editorFocused && action == wxPG_ACTION_CANCEL_EDIT )
     {
