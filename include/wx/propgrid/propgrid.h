@@ -1136,7 +1136,7 @@ public:
     wxString GetCommonValueLabel( unsigned int i ) const
     {
         wxCHECK_MSG( i < m_commonValues.size(), wxString(), "Invalid item index" );
-        return GetCommonValue(i)->GetLabel();
+        return m_commonValues[i]->GetLabel();
     }
 
     // Returns index of common value that will truly change value to

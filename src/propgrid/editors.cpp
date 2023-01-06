@@ -716,8 +716,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         comValIndex = item - choiceCount;
         if ( !p->IsValueUnspecified() || !(flags & wxODCB_PAINTING_CONTROL) )
         {
-            const wxPGCommonValue* cv = GetCommonValue(comValIndex);
-            text = cv->GetLabel();
+            text = GetCommonValueLabel(comValIndex);
         }
     }
     else
