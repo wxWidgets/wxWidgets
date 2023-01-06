@@ -215,9 +215,19 @@ class WXDLLIMPEXP_FWD_PROPGRID wxPGValidationInfo;
 // This is the value placed in wxPGProperty::sm_wxPG_LABEL
 #define wxPG_LABEL_STRING       wxS("@!")
 #if WXWIN_COMPATIBILITY_3_0
-#define wxPG_NULL_BITMAP        wxNullBitmap
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_NULL_BITMAP)
+#endif
+#define wxPG_NULL_BITMAP wxPG_DEPRECATED_MACRO_VALUE(wxNullBitmap,\
+    "wxPG_NULL_BITMAP is deprecated. Use wxNullBitmap instead.")
 #endif // WXWIN_COMPATIBILITY_3_0
-#define wxPG_COLOUR_BLACK       (*wxBLACK)
+#if WXWIN_COMPATIBILITY_3_2
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_COLOUR_BLACK)
+#endif
+#define wxPG_COLOUR_BLACK wxPG_DEPRECATED_MACRO_VALUE((*wxBLACK),\
+    "wxPG_COLOUR_BLACK is deprecated. Use *wxBLACK instead.")
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Convert Red, Green and Blue to a single 32-bit value.
 #define wxPG_COLOUR(R,G,B) ((wxUint32)((R)+((G)<<8)+((B)<<16)))
