@@ -430,4 +430,28 @@ TEST_CASE("wxUILocale::FromTag", "[.]")
     WARN("Locale \"" << tag << "\" supported: " << loc.IsSupported() );
 }
 
+// Test to show information about the system locale.
+TEST_CASE("wxUILocale::ShowSystem", "[.]")
+{
+    WARN("System language: " <<
+        wxUILocale::GetLanguageName(wxUILocale::GetSystemLanguage()));
+    WARN("System locale: " <<
+        wxUILocale::GetLanguageName(wxUILocale::GetSystemLocale()));
+
+    wxString preferredLangsStr;
+    const auto preferredLangs = wxUILocale::GetPreferredUILanguages();
+    for (const auto& lang: preferredLangs)
+    {
+        if ( !preferredLangsStr.empty() )
+            preferredLangsStr += ", ";
+        preferredLangsStr += lang;
+    }
+    WARN("Preferred UI languages: " << preferredLangsStr);
+
+    REQUIRE( wxUILocale::UseDefault() );
+
+    const wxUILocale& loc = wxUILocale::GetCurrent();
+    WARN("Default locale: " << loc.GetLocaleId().GetTag());
+}
+
 #endif // wxUSE_INTL
