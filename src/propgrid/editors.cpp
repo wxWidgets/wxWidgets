@@ -2074,12 +2074,8 @@ wxTextCtrl* wxPropertyGrid::GetEditorTextCtrl() const
 
 wxPGEditor* wxPropertyGridInterface::GetEditorByName( const wxString& editorName )
 {
-    wxPGHashMapS2P::const_iterator it;
-
-    it = wxPGGlobalVars->m_mapEditorClasses.find(editorName);
-    if ( it == wxPGGlobalVars->m_mapEditorClasses.end() )
-        return nullptr;
-    return (wxPGEditor*) it->second;
+    auto it = wxPGGlobalVars->m_mapEditorClasses.find(editorName);
+    return it == wxPGGlobalVars->m_mapEditorClasses.end() ? nullptr : it->second;
 }
 
 // -----------------------------------------------------------------------

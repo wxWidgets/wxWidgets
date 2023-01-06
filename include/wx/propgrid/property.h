@@ -21,6 +21,8 @@
 #include "wx/font.h"
 #include "wx/validate.h"
 
+#include <unordered_map>
+
 // -----------------------------------------------------------------------
 
 #define wxNullProperty  ((wxPGProperty*)nullptr)
@@ -304,12 +306,12 @@ public:
     unsigned int GetCount() const { return (unsigned int) m_map.size(); }
     wxVariant FindValue(const wxString& name) const;
 
-    typedef wxPGHashMapS2P::const_iterator const_iterator;
+    typedef std::unordered_map<wxString, wxVariantData*>::const_iterator const_iterator;
     const_iterator StartIteration() const;
     bool GetNext(const_iterator& it, wxVariant& variant) const;
 
 protected:
-    wxPGHashMapS2P  m_map;
+    std::unordered_map<wxString, wxVariantData*> m_map;
 };
 
 

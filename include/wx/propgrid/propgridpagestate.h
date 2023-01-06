@@ -18,6 +18,7 @@
 #include "wx/propgrid/property.h"
 
 #include <set>
+#include <unordered_map>
 
 // -----------------------------------------------------------------------
 
@@ -610,7 +611,7 @@ protected:
     wxPGRootProperty*           m_abcArray;
 
     // Dictionary for name-based access.
-    wxPGHashMapS2P              m_dictName;
+    std::unordered_map<wxString, wxPGProperty*> m_dictName;
 
     // List of column widths (first column does not include margin).
     wxVector<int>               m_colWidths;

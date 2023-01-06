@@ -58,7 +58,7 @@ public:
     wxString            m_pDefaultImageWildcard;
 
     // Map of editor class instances (keys are name string).
-    wxPGHashMapS2P      m_mapEditorClasses;
+    std::unordered_map<wxString, wxPGEditor*> m_mapEditorClasses;
 
 #if wxUSE_VALIDATORS
     wxVector<wxValidator*>  m_arrValidators; // These wxValidators need to be freed
@@ -2233,7 +2233,7 @@ protected:
     wxVector<wxPGProperty*> m_propHierarchy;
 
     // Hashmap for string-id to wxPGChoicesData mapping.
-    wxPGHashMapS2P          m_dictIdChoices;
+    std::unordered_map<wxString, wxPGChoicesData*> m_dictIdChoices;
 };
 
 // -----------------------------------------------------------------------

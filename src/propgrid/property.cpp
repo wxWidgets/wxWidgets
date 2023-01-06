@@ -3094,19 +3094,19 @@ void wxPGChoices::Free()
 // wxPGAttributeStorage
 // -----------------------------------------------------------------------
 
-static inline void IncDataRef(wxPGHashMapS2P& map)
+static inline void IncDataRef(std::unordered_map<wxString, wxVariantData*>& map)
 {
     for( const auto& it: map )
     {
-        static_cast<wxVariantData*>(it.second)->IncRef();
+        it.second->IncRef();
     }
 }
 
-static inline void DecDataRef(wxPGHashMapS2P& map)
+static inline void DecDataRef(std::unordered_map<wxString, wxVariantData*>& map)
 {
     for ( const auto& it : map )
     {
-        static_cast<wxVariantData*>(it.second)->DecRef();
+        it.second->DecRef();
     }
 }
 
@@ -3137,10 +3137,10 @@ void wxPGAttributeStorage::Set(const wxString& name, const wxVariant& value)
     wxVariantData* data = value.GetData();
 
     // Free old, if any
-    wxPGHashMapS2P::iterator it = m_map.find(name);
+    auto  it = m_map.find(name);
     if ( it != m_map.end() )
     {
-        static_cast<wxVariantData*>(it->second)->DecRef();
+        it->second->DecRef();
 
         if ( !data )
         {
@@ -3160,10 +3160,10 @@ void wxPGAttributeStorage::Set(const wxString& name, const wxVariant& value)
 
 wxVariant wxPGAttributeStorage::FindValue(const wxString& name) const
 {
-    wxPGHashMapS2P::const_iterator it = m_map.find(name);
+    auto it = m_map.find(name);
     if ( it != m_map.end() )
     {
-        wxVariantData* data = static_cast<wxVariantData*>(it->second);
+        wxVariantData* data = it->second;
         data->IncRef();
         return wxVariant(data, it->first);
     }
@@ -3180,7 +3180,7 @@ bool wxPGAttributeStorage::GetNext(const_iterator& it, wxVariant& variant) const
     if ( it == m_map.end() )
         return false;
 
-    wxVariantData* data = static_cast<wxVariantData*>(it->second);
+    wxVariantData* data = it->second;
     data->IncRef();
     variant.SetData(data);
     variant.SetName(it->first);

@@ -476,8 +476,8 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
 
 wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByName( const wxString& name ) const
 {
-    wxPGHashMapS2P::const_iterator it = m_dictName.find(name);
-    return it != m_dictName.end() ? (wxPGProperty*) it->second : nullptr;
+    auto it = m_dictName.find(name);
+    return it != m_dictName.end() ? it->second : nullptr;
 }
 
 // -----------------------------------------------------------------------
@@ -494,7 +494,7 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
         if ( !p->GetBaseName().empty() )
             m_dictName.erase( p->GetBaseName() );
         if ( !newName.empty() )
-            m_dictName[newName] = (void*) p;
+            m_dictName[newName] = p;
     }
 
     p->DoSetName(newName);
@@ -1757,7 +1757,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
     // Only add name to hashmap if parent is root or category
     if ( !property->GetBaseName().empty() &&
         (parentIsCategory || parentIsRoot) )
-        m_dictName[property->GetBaseName()] = (void*) property;
+        m_dictName[property->GetBaseName()] = property;
 
     VirtualHeightChanged();
 

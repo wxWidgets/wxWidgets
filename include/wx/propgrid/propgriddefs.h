@@ -268,17 +268,6 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxString,
                                      wxPGHashMapS2S,
                                      class WXDLLIMPEXP_PROPGRID);
 
-WX_DECLARE_VOIDPTR_HASH_MAP_WITH_DECL(void*,
-                                      wxPGHashMapP2P,
-                                      class WXDLLIMPEXP_PROPGRID);
-
-WX_DECLARE_HASH_MAP_WITH_DECL(wxInt32,
-                              wxInt32,
-                              wxIntegerHash,
-                              wxIntegerEqual,
-                              wxPGHashMapI2I,
-                              class WXDLLIMPEXP_PROPGRID);
-
 WX_DECLARE_HASH_SET_WITH_DECL(int,
                               wxIntegerHash,
                               wxIntegerEqual,

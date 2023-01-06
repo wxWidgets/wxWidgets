@@ -215,7 +215,7 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
     // iterate over all the elements in the class
     for( const auto& vt_it : m_mapEditorClasses )
     {
-        delete static_cast<wxPGEditor*>(vt_it.second);
+        delete vt_it.second;
     }
 
     // Make sure the global pointers have been reset
@@ -6080,7 +6080,7 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
     wxString name = editorName.empty() ? editorClass->GetName() : editorName;
 
     // Existing editor under this name?
-    wxPGHashMapS2P::iterator vt_it = wxPGGlobalVars->m_mapEditorClasses.find(name);
+    auto vt_it = wxPGGlobalVars->m_mapEditorClasses.find(name);
 
     if ( vt_it != wxPGGlobalVars->m_mapEditorClasses.end() )
     {
@@ -6090,10 +6090,10 @@ wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
     }
 
     wxCHECK_MSG( vt_it == wxPGGlobalVars->m_mapEditorClasses.end(),
-                 (wxPGEditor*) vt_it->second,
+                 vt_it->second,
                  wxS("Editor with given name was already registered") );
 
-    wxPGGlobalVars->m_mapEditorClasses[name] = (void*)editorClass;
+    wxPGGlobalVars->m_mapEditorClasses[name] = editorClass;
 
     return editorClass;
 }
@@ -6382,7 +6382,7 @@ wxPropertyGridPopulator::~wxPropertyGridPopulator()
     // Free unused sets of choices
     for( const auto& it : m_dictIdChoices )
     {
-        static_cast<wxPGChoicesData*>(it.second)->DecRef();
+        it.second->DecRef();
     }
 
     if ( m_pg )
@@ -6453,21 +6453,21 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
     if ( choicesString[0] == wxT('@') )
     {
         wxString ids = choicesString.substr(1);
-        wxPGHashMapS2P::iterator it = m_dictIdChoices.find(ids);
+        auto it = m_dictIdChoices.find(ids);
         if ( it == m_dictIdChoices.end() )
             ProcessError(wxString::Format(wxS("No choices defined for id '%s'"),ids));
         else
-            choices.AssignData((wxPGChoicesData*)it->second);
+            choices.AssignData(it->second);
     }
     else
     {
         bool found = false;
         if ( !idString.empty() )
         {
-            wxPGHashMapS2P::iterator it = m_dictIdChoices.find(idString);
+            auto it = m_dictIdChoices.find(idString);
             if ( it != m_dictIdChoices.end() )
             {
-                choices.AssignData((wxPGChoicesData*)it->second);
+                choices.AssignData(it->second);
                 found = true;
             }
         }
