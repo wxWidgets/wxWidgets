@@ -6447,98 +6447,93 @@ void wxPropertyGridPopulator::AddChildren( wxPGProperty* property )
 wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString,
                                                    const wxString& idString )
 {
-    wxPGChoices choices;
-
     // Using id?
     if ( choicesString[0] == wxT('@') )
     {
         wxString ids = choicesString.substr(1);
         auto it = m_dictIdChoices.find(ids);
         if ( it == m_dictIdChoices.end() )
-            ProcessError(wxString::Format(wxS("No choices defined for id '%s'"),ids));
-        else
-            choices.AssignData(it->second);
+        {
+            ProcessError(wxString::Format(wxS("No choices defined for id '%s'"), ids));
+            return wxPGChoices();
+        }
+
+        return wxPGChoices(it->second);
     }
-    else
+
+    if ( !idString.empty() )
     {
-        bool found = false;
-        if ( !idString.empty() )
+        auto it = m_dictIdChoices.find(idString);
+        if ( it != m_dictIdChoices.end() )
         {
-            auto it = m_dictIdChoices.find(idString);
-            if ( it != m_dictIdChoices.end() )
-            {
-                choices.AssignData(it->second);
-                found = true;
-            }
-        }
-
-        if ( !found )
-        {
-            // Parse choices string
-            wxString label;
-            wxString value;
-            int state = 0;
-            bool labelValid = false;
-
-            for ( wxUniChar c : choicesString )
-            {
-                if ( state != 1 )
-                {
-                    if ( c == wxS('"') )
-                    {
-                        if ( labelValid )
-                        {
-                            long l;
-                            if ( !value.ToLong(&l, 0) ) l = wxPG_INVALID_VALUE;
-                            choices.Add(label, l);
-                        }
-                        labelValid = false;
-                        //wxLogDebug(wxS("%s, %s"),label,value);
-                        value.clear();
-                        label.clear();
-                        state = 1;
-                    }
-                    else if ( c == wxS('=') )
-                    {
-                        if ( labelValid )
-                        {
-                            state = 2;
-                        }
-                    }
-                    else if ( state == 2 && (wxIsalnum(c) || c == wxS('x')) )
-                    {
-                        value << c;
-                    }
-                }
-                else
-                {
-                    if ( c == wxS('"') )
-                    {
-                        state = 0;
-                        labelValid = true;
-                    }
-                    else
-                        label << c;
-                }
-            }
-
-            if ( labelValid )
-            {
-                long l;
-                if ( !value.ToLong(&l, 0) ) l = wxPG_INVALID_VALUE;
-                choices.Add(label, l);
-            }
-
-            if ( !choices.IsOk() )
-            {
-                choices.EnsureData();
-            }
-
-            // Assign to id
-            if ( !idString.empty() )
-                m_dictIdChoices[idString] = choices.GetData();
+            return wxPGChoices(it->second);
         }
     }
+
+    // Parse choices string
+    wxPGChoices choices;
+    wxString label;
+    wxString value;
+    int state = 0;
+    bool labelValid = false;
+
+    for ( wxUniChar c : choicesString )
+    {
+        if ( state != 1 )
+        {
+            if ( c == wxS('"') )
+            {
+                if ( labelValid )
+                {
+                    long l;
+                    if ( !value.ToLong(&l, 0) ) l = wxPG_INVALID_VALUE;
+                    choices.Add(label, l);
+                }
+                labelValid = false;
+                //wxLogDebug(wxS("%s, %s"),label,value);
+                value.clear();
+                label.clear();
+                state = 1;
+            }
+            else if ( c == wxS('=') )
+            {
+                if ( labelValid )
+                {
+                    state = 2;
+                }
+            }
+            else if ( state == 2 && (wxIsalnum(c) || c == wxS('x')) )
+            {
+                value << c;
+            }
+        }
+        else
+        {
+            if ( c == wxS('"') )
+            {
+                state = 0;
+                labelValid = true;
+            }
+            else
+                label << c;
+        }
+    }
+
+    if ( labelValid )
+    {
+        long l;
+        if ( !value.ToLong(&l, 0) ) l = wxPG_INVALID_VALUE;
+        choices.Add(label, l);
+    }
+
+    if ( !choices.IsOk() )
+    {
+        choices.EnsureData();
+    }
+
+    // Assign to id
+    if ( !idString.empty() )
+        m_dictIdChoices[idString] = choices.GetData();
 
     return choices;
 }
