@@ -245,14 +245,13 @@ executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
 
 
 Make Parameters                         {#msw_build_make_params}
-================================================================
+----------------------------------------------------------------
 
 NOTE: If you use configure to build the library with MinGW, the
       contents of this section does not apply, just pass the arguments
       to configure directly in this case.
 
-Library configuration
-----------------------------------------------------------------
+### Library configuration
 
 While it is never necessary to do it, you may want to change some of
 the options in the `%%WXWIN%\include\wx\msw\setup.h` file before building
@@ -265,8 +264,7 @@ build options for different configurations too if you edit any
 configuration-specific file.
 
 
-Makefile parameters
-----------------------------------------------------------------
+### Makefile parameters
 
 When building using makefiles, you can specify many build settings
 (unlike when using the project files where you are limited to choosing
@@ -483,7 +481,7 @@ If you are not using Visual Studio please see
 application.
 
 Advanced Library Configurations        {#msw_advanced}
-===============================
+-------------------------------
 Build instructions to less common library configurations using different UI
 backends are available here.
 
