@@ -1458,135 +1458,161 @@ private:
     wxDECLARE_NO_COPY_CLASS(PreserveErrno);
 };
 
-} // anonymous namespace
-
 // The implementation of all the functions below is exactly the same so factor
-// it out. Note that number extraction works correctly on UTF-8 strings, so
+// it out in this template helper taking the function to call to actually
+// perform the conversion to some larger type R and a function to check that
+// the conversion result is in the correct range for the type T.
+//
+// Note that number extraction works correctly on UTF-8 strings, so
 // we can use wxStringCharType and wx_str() for maximum efficiency.
+template <typename R, typename T>
+bool
+ToNumeric(T* pVal,
+          R (*convert)(const wxStringCharType*, wxStringCharType**, int),
+          const wxStringCharType* start,
+          int base,
+          bool (*rangeCheck)(R))
+{
+    wxASSERT_MSG(!base || (base > 1 && base <= 36), wxT("invalid base"));
+    wxCHECK_MSG( pVal, false, wxT("null output pointer") );
 
-#define WX_STRING_TO_X_TYPE_START                                           \
-    wxCHECK_MSG( pVal, false, wxT("null output pointer") );                  \
-    PreserveErrno preserveErrno;                                            \
-    errno = 0;                                                              \
-    const wxStringCharType *start = wx_str();                               \
+    PreserveErrno preserveErrno;
+    errno = 0;
+
     wxStringCharType *end;
 
-// notice that we return false without modifying the output parameter at all if
-// nothing could be parsed but we do modify it and return false then if we did
-// parse something successfully but not the entire string
-#define WX_STRING_TO_X_TYPE_END                                             \
-    if ( end == start || errno == ERANGE )                                  \
-        return false;                                                       \
-    *pVal = val;                                                            \
+    const R res = convert(start, &end, base);
+    if ( rangeCheck && !rangeCheck(res) )
+        return false;
+
+    // notice that we return false without modifying the output parameter at all if
+    // nothing could be parsed but we do modify it and return false then if we did
+    // parse something successfully but not the entire string
+    if ( end == start || errno == ERANGE )
+        return false;
+
+    *pVal = static_cast<T>(res);
     return !*end;
+}
+
+// This is a simplified version which uses the conversion function returning
+// the desired type directly, and hence no range checking function at all.
+template <typename T>
+bool
+ToNumeric(T* pVal,
+          T (*convert)(const wxStringCharType*, wxStringCharType**, int),
+          const wxStringCharType* start,
+          int base = 0)
+{
+    return ToNumeric<T>(pVal, convert, start, base, nullptr);
+}
+
+} // anonymous namespace
 
 bool wxString::ToInt(int *pVal, int base) const
 {
-    wxASSERT_MSG(!base || (base > 1 && base <= 36), wxT("invalid base"));
-
-    WX_STRING_TO_X_TYPE_START
-    wxLongLong_t lval = wxStrtoll(start, &end, base);
-
-    if (lval < INT_MIN || lval > INT_MAX)
-        return false;
-    int val = (int)lval;
-
-    WX_STRING_TO_X_TYPE_END
+    return ToNumeric<wxLongLong_t>
+           (
+            pVal, wxStrtoll, wx_str(), base,
+            [](wxLongLong_t val) { return val >= INT_MIN && val <= INT_MAX; }
+           );
 }
 
 bool wxString::ToUInt(unsigned int *pVal, int base) const
 {
-    wxASSERT_MSG(!base || (base > 1 && base <= 36), wxT("invalid base"));
-
-    WX_STRING_TO_X_TYPE_START
-    wxULongLong_t lval = wxStrtoull(start, &end, base);
-    if (lval > UINT_MAX)
-        return false;
-
-    unsigned int val = (unsigned int)lval;
-    WX_STRING_TO_X_TYPE_END
+    return ToNumeric<wxULongLong_t>
+           (
+            pVal, wxStrtoull, wx_str(), base,
+            [](wxULongLong_t val) { return val <= UINT_MAX; }
+           );
 }
 
 bool wxString::ToLong(long *pVal, int base) const
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
-
-    WX_STRING_TO_X_TYPE_START
-    long val = wxStrtol(start, &end, base);
-    WX_STRING_TO_X_TYPE_END
+    return ToNumeric(pVal, wxStrtol, wx_str(), base);
 }
 
 bool wxString::ToULong(unsigned long *pVal, int base) const
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
-
-    WX_STRING_TO_X_TYPE_START
-    unsigned long val = wxStrtoul(start, &end, base);
-    WX_STRING_TO_X_TYPE_END
+    return ToNumeric(pVal, wxStrtoul, wx_str(), base);
 }
 
 bool wxString::ToLongLong(wxLongLong_t *pVal, int base) const
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
-
-    WX_STRING_TO_X_TYPE_START
-    wxLongLong_t val = wxStrtoll(start, &end, base);
-    WX_STRING_TO_X_TYPE_END
+    return ToNumeric(pVal, wxStrtoll, wx_str(), base);
 }
 
 bool wxString::ToULongLong(wxULongLong_t *pVal, int base) const
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
-
-    WX_STRING_TO_X_TYPE_START
-    wxULongLong_t val = wxStrtoull(start, &end, base);
-    WX_STRING_TO_X_TYPE_END
+    return ToNumeric(pVal, wxStrtoull, wx_str(), base);
 }
 
 bool wxString::ToDouble(double *pVal) const
 {
-    WX_STRING_TO_X_TYPE_START
-    double val = wxStrtod(start, &end);
-    WX_STRING_TO_X_TYPE_END
+    // Use a hack to allow calling wxStrtod() with an unused "base" parameter
+    // for consistency with the other functions.
+    return ToNumeric<double>
+           (
+            pVal,
+            [](const wxStringCharType* start, wxStringCharType** endptr, int)
+            {
+                return wxStrtod(start, endptr);
+            },
+            wx_str()
+           );
 }
 
 #if wxUSE_XLOCALE
 
 bool wxString::ToCLong(long *pVal, int base) const
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
-
-    WX_STRING_TO_X_TYPE_START
+    return ToNumeric<long>
+           (
+            pVal,
+            [](const wxStringCharType* start, wxStringCharType** endptr, int base)
+            {
 #if wxUSE_UNICODE_UTF8 && defined(wxHAS_XLOCALE_SUPPORT)
-    long val = wxStrtol_lA(start, &end, base, wxCLocale);
+                return wxStrtol_lA(start, endptr, base, wxCLocale);
 #else
-    long val = wxStrtol_l(start, &end, base, wxCLocale);
+                return wxStrtol_l(start, endptr, base, wxCLocale);
 #endif
-    WX_STRING_TO_X_TYPE_END
+            },
+            wx_str(), base
+           );
 }
 
 bool wxString::ToCULong(unsigned long *pVal, int base) const
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
-
-    WX_STRING_TO_X_TYPE_START
+    return ToNumeric<unsigned long>
+           (
+            pVal,
+            [](const wxStringCharType* start, wxStringCharType** endptr, int base)
+            {
 #if wxUSE_UNICODE_UTF8 && defined(wxHAS_XLOCALE_SUPPORT)
-    unsigned long val = wxStrtoul_lA(start, &end, base, wxCLocale);
+                return wxStrtoul_lA(start, endptr, base, wxCLocale);
 #else
-    unsigned long val = wxStrtoul_l(start, &end, base, wxCLocale);
+                return wxStrtoul_l(start, endptr, base, wxCLocale);
 #endif
-    WX_STRING_TO_X_TYPE_END
+            },
+            wx_str(), base
+           );
 }
 
 bool wxString::ToCDouble(double *pVal) const
 {
-    WX_STRING_TO_X_TYPE_START
+    return ToNumeric<double>
+           (
+            pVal,
+            [](const wxStringCharType* start, wxStringCharType** endptr, int)
+            {
 #if wxUSE_UNICODE_UTF8 && defined(wxHAS_XLOCALE_SUPPORT)
-    double val = wxStrtod_lA(start, &end, wxCLocale);
+                return wxStrtod_lA(start, endptr, wxCLocale);
 #else
-    double val = wxStrtod_l(start, &end, wxCLocale);
+                return wxStrtod_l(start, endptr, wxCLocale);
 #endif
-    WX_STRING_TO_X_TYPE_END
+            },
+            wx_str()
+           );
 }
 
 #else // wxUSE_XLOCALE
