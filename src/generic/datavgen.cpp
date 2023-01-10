@@ -6450,9 +6450,23 @@ void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
     int last = m_clientArea->GetLastFullyVisibleRow();
     if( row < first )
         m_clientArea->ScrollTo( row, column );
-    else if( row > last )
-        m_clientArea->ScrollTo( row - last + first, column );
-    else
+    else if (row > last)
+    {
+        if (!HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+            m_clientArea->ScrollTo(row - last + first, column);
+        else
+        {
+            // calculate scroll position based on last visible item
+            const int itemStart = m_clientArea->GetLineStart(row);
+            const int itemHeight = m_clientArea->GetLineHeight(row);
+            const int clientHeight = m_clientArea->GetSize().y;
+            int scrollX, scrollY;
+            GetScrollPixelsPerUnit(&scrollX, &scrollY);
+            int scrollPosY = (itemStart + itemHeight - clientHeight) / scrollY;
+            Scroll(-1, scrollPosY + 1); // +1 due to integer division, always show whole item
+        }
+    }
+    else if (row == first)
         m_clientArea->ScrollTo( first, column );
 }
 
