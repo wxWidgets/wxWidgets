@@ -103,6 +103,7 @@ private:
     void OnShowCurrent(wxCommandEvent& event);
     void OnSetNinthCurrent(wxCommandEvent& event);
     void OnChangeNinthTitle(wxCommandEvent& event);
+    void OnEnsureNinthAndSecondColumn(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -450,6 +451,7 @@ enum
     ID_SHOW_CURRENT,
     ID_SET_NINTH_CURRENT,
     ID_CHANGE_NINTH_TITLE,
+    ID_ENSURE_NINTH_SECOND_COLUMN,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -503,6 +505,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_SHOW_CURRENT, MyFrame::OnShowCurrent )
     EVT_BUTTON( ID_SET_NINTH_CURRENT, MyFrame::OnSetNinthCurrent )
     EVT_BUTTON( ID_CHANGE_NINTH_TITLE, MyFrame::OnChangeNinthTitle )
+    EVT_BUTTON( ID_ENSURE_NINTH_SECOND_COLUMN, MyFrame::OnEnsureNinthAndSecondColumn )
 
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
@@ -737,8 +740,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     BuildDataViewCtrl(fifthPanel, Page_VarHeight);
 
+    wxBoxSizer* button_sizer5 = new wxBoxSizer(wxHORIZONTAL);
+    button_sizer5->Add(
+        new wxButton(fifthPanel, ID_ENSURE_NINTH_SECOND_COLUMN,
+            "Make ninth symphony and second column visible"),
+        wxSizerFlags().DoubleBorder());
+
     wxSizer *fifthPanelSz = new wxBoxSizer(wxVERTICAL);
     fifthPanelSz->Add(m_ctrl[Page_VarHeight], 1, wxGROW | wxALL, 5);
+    fifthPanelSz->Add(button_sizer5);
     fifthPanel->SetSizerAndFit(fifthPanelSz);
 
     // page showing the indexed list model
@@ -1560,6 +1570,14 @@ void MyFrame::OnChangeNinthTitle(wxCommandEvent& WXUNUSED(event))
 
     m_music_model->SetValue("Symphony No. 9", item, 0);
     m_music_model->ItemChanged(item);
+}
+
+void MyFrame::OnEnsureNinthAndSecondColumn(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewItem item(m_long_music_model->GetNinthItem());
+    m_ctrl[Page_VarHeight]->Select(item);
+    wxDataViewColumn *col = m_ctrl[Page_VarHeight]->GetColumn(1);
+    m_ctrl[Page_VarHeight]->EnsureVisible(item, col);
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )

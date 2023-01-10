@@ -375,6 +375,7 @@ wxMSW:
 - Fix link error with wxSimplebook in DLL builds (Mark Roszko, #22805).
 - Avoid errors when including wx/msw/msvcrt.h before other wx headers (#23194).
 - Fix drawing owner-drawn menu items with bitmaps (Jacob Gillespie, #23230).
+- Improve ScrollTo() with wxDV_VARIABLE_LINE_HEIGHT (Jens Göpfert, #23102).
 
 wxOSX:
 
