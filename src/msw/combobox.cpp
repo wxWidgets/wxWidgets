@@ -537,7 +537,7 @@ void wxComboBox::MSWRecreate()
         SetSelection(selection);
 
     // If disabled we'll have to disable it again after re-creating
-    if ( !IsEnabled() )
+    if ( !IsThisEnabled() )
         DoEnable(false);
 }
 
