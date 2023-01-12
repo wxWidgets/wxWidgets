@@ -172,6 +172,10 @@ void StringTestCase::Format()
         CPPUNIT_ASSERT_EQUAL( len, wxString::Format(wxT("%s"), s.c_str()).length());
     }
 
+    // wxString::Format() should not modify errno
+    errno = 1234;
+    wxString::Format("abc %d %d", 1, 1);
+    CPPUNIT_ASSERT_EQUAL(1234, errno);
 
     // Positional parameters tests:
     CPPUNIT_ASSERT_EQUAL
