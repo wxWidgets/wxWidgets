@@ -62,6 +62,7 @@ jobs:
         include:
           - name: Ubuntu 18.04 wxGTK 2
             runner: ubuntu-18.04
+            compiler_flags: -std=c++98
             gtk_version: 2
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 2 UTF-8
@@ -71,6 +72,7 @@ jobs:
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK3 static
             runner: ubuntu-18.04
+            compiler_flags: -std=c++98
             configure_flags: --disable-shared
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 STL
@@ -150,7 +152,8 @@ jobs:
               ;;
 
             '')
-              # Assume gcc.
+              # Assume gcc but use the compiler flags if specified.
+              echo 'CXX=g++ ${{ matrix.compiler_flags }}' >> $GITHUB_ENV
               allow_warn_opt="-Wno-error=cpp"
               ;;
 
