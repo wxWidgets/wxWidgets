@@ -6462,8 +6462,8 @@ void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
             const int clientHeight = m_clientArea->GetSize().y;
             int scrollX, scrollY;
             GetScrollPixelsPerUnit(&scrollX, &scrollY);
-            int scrollPosY = (itemStart + itemHeight - clientHeight) / scrollY;
-            Scroll(-1, scrollPosY + 1); // +1 due to integer division, always show whole item
+            int scrollPosY = (itemStart + itemHeight - clientHeight + scrollY - 1) / scrollY;
+            Scroll(-1, scrollPosY);
         }
     }
     else if (row == first)
