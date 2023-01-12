@@ -272,6 +272,7 @@ wxMSW:
 
 - Fix crashes when using wxTextCtrl with MinGW TDM 64 (#22639).
 - Avoid appending extraneous NUL bytes to wxTextDataObject text (#22928).
+- Improve resizing of some windows on DPI change (#23091).
 - Fix glitch in drawing wxStaticBox with a control as label (#22952).
 - Save windows geometry correctly when using Aero Snap (Randalphwa, #22730).
 - Fix generating wxEVT_TEXT_ENTER in wxBitmapComboBox (#16318).
