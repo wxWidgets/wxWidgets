@@ -528,7 +528,7 @@ struct wxArgNormalizerWchar : public wxArgNormalizer<T>
     #define wxArgNormalizerNative wxArgNormalizerUtf8
 #else // wxUSE_UNICODE_WCHAR
     #define wxArgNormalizerNative wxArgNormalizerWchar
-#endif // wxUSE_UNICODE_UTF8 // wxUSE_UNICODE_UTF8
+#endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
 
 
 
