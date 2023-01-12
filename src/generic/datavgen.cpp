@@ -6448,7 +6448,7 @@ void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
 
     int first = m_clientArea->GetFirstVisibleRow();
     int last = m_clientArea->GetLastFullyVisibleRow();
-    if( row < first )
+    if( row <= first )
         m_clientArea->ScrollTo( row, column );
     else if (row > last)
     {
@@ -6466,8 +6466,7 @@ void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
             Scroll(-1, scrollPosY);
         }
     }
-    else if (row == first)
-        m_clientArea->ScrollTo( first, column );
+    // #noelse
 }
 
 void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataViewColumn * column )
