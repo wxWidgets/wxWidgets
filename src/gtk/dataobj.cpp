@@ -39,10 +39,7 @@ class wxGdkAtom
 {
 public:
     // Name is literal, so we don't copy it but just store the pointer.
-    wxGdkAtom(const char* name) : m_name{name} {}
-
-    wxGdkAtom(const wxGdkAtom&) = delete;
-    wxGdkAtom& operator=(const wxGdkAtom&) = delete;
+    wxGdkAtom(const char* name) : m_name(name), m_atom(NULL) {}
 
     operator GdkAtom()
     {
@@ -54,14 +51,16 @@ public:
 
 private:
     const char* const m_name;
-    GdkAtom m_atom = nullptr;
+    GdkAtom m_atom;
+
+    wxDECLARE_NO_COPY_CLASS(wxGdkAtom);
 };
 
-wxGdkAtom g_textAtom    {"UTF8_STRING"};
-wxGdkAtom g_altTextAtom {"STRING"};
-wxGdkAtom g_pngAtom     {"image/png"};
-wxGdkAtom g_fileAtom    {"text/uri-list"};
-wxGdkAtom g_htmlAtom    {"text/html"};
+wxGdkAtom g_textAtom    ("UTF8_STRING");
+wxGdkAtom g_altTextAtom ("STRING");
+wxGdkAtom g_pngAtom     ("image/png");
+wxGdkAtom g_fileAtom    ("text/uri-list");
+wxGdkAtom g_htmlAtom    ("text/html");
 
 } // anonymous namespace
 
