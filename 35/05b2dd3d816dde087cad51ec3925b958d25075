@@ -1,0 +1,1 @@
+wxAll: Preserve errno in wxString methods (Lauri Nurmi, #23113).
