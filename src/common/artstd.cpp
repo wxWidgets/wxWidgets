@@ -232,7 +232,7 @@ wxDefaultArtProvider::CreateBitmapBundle(const wxArtID& id,
     // We currently handle just a single SVG here.
     if ( id == wxART_WX_LOGO )
     {
-        wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
+        wxSize sizeDef = size != wxDefaultSize ? size : GetDIPSizeHint(client);
         if ( sizeDef == wxDefaultSize )
         {
             // We really need some default size here.
