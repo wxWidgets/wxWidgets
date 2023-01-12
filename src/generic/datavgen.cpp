@@ -825,6 +825,7 @@ public:
 
     int GetCountPerPage() const;
     int GetEndOfLastCol() const;
+    int GetColumnStart(int column) const;
     unsigned int GetFirstVisibleRow() const;
     wxDataViewItem GetTopItem() const;
 
@@ -3473,35 +3474,9 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
     // Take care to not divide by 0 if we're somehow called before scrolling
     // parameters are initialized.
     int sy = y ? GetLineStart( rows )/y : -1;
-    int sx = -1;
+    int sx = GetColumnStart(column);
     if( column != -1 && x )
-    {
-        wxRect rect = GetClientRect();
-        int colnum = 0;
-        int x_start, w = 0;
-        int xx, yy, xe;
-        m_owner->CalcUnscrolledPosition( rect.x, rect.y, &xx, &yy );
-        for (x_start = 0; colnum < column; colnum++)
-        {
-            wxDataViewColumn *col = GetOwner()->GetColumnAt(colnum);
-            if (col->IsHidden())
-                continue;      // skip it!
-
-            w = col->GetWidth();
-            x_start += w;
-        }
-
-        int x_end = x_start + w;
-        xe = xx + rect.width;
-        if( x_end > xe )
-        {
-            sx = ( xx + x_end - xe )/x;
-        }
-        if( x_start < xx )
-        {
-            sx = x_start/x;
-        }
-    }
+        sx = sx / x;
     m_owner->Scroll( sx, sy );
 }
 
@@ -3545,6 +3520,40 @@ int wxDataViewMainWindow::GetEndOfLastCol() const
             width += c->GetWidth();
     }
     return width;
+}
+
+int wxDataViewMainWindow::GetColumnStart(int column) const
+{
+    int sx = -1;
+    if (column != -1)
+    {
+        wxRect rect = GetClientRect();
+        int colnum = 0;
+        int x_start, w = 0;
+        int xx, yy, xe;
+        m_owner->CalcUnscrolledPosition(rect.x, rect.y, &xx, &yy);
+        for (x_start = 0; colnum < column; colnum++)
+        {
+            wxDataViewColumn* col = GetOwner()->GetColumnAt(colnum);
+            if (col->IsHidden())
+                continue;      // skip it!
+
+            w = col->GetWidth();
+            x_start += w;
+        }
+
+        int x_end = x_start + w;
+        xe = xx + rect.width;
+        if (x_end > xe)
+        {
+            sx = (xx + x_end - xe);
+        }
+        if (x_start < xx)
+        {
+            sx = x_start;
+        }
+    }
+    return sx;
 }
 
 unsigned int wxDataViewMainWindow::GetFirstVisibleRow() const
@@ -6463,7 +6472,10 @@ void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
             int scrollX, scrollY;
             GetScrollPixelsPerUnit(&scrollX, &scrollY);
             int scrollPosY = (itemStart + itemHeight - clientHeight + scrollY - 1) / scrollY;
-            Scroll(-1, scrollPosY);
+            int scrollPosX = m_clientArea->GetColumnStart(column);
+            if (column != -1 && scrollX)
+                scrollPosX = scrollPosX / scrollX;
+            Scroll(scrollPosX, scrollPosY);
         }
     }
     // #noelse
