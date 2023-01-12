@@ -265,6 +265,7 @@ wxGTK:
 - Fix missing X11 libraries when linking with wxGTK2 statically (#22813).
 - Fix compilation with GTK 3.22.z and z < 25 (#22816).
 - Fix compilation with GTK < 2.21.8 (mkirkham, #22830).
+- Fix display artefacts when using AUI without compositor under X11 (#23135).
 
 wxMSW:
 
