@@ -178,7 +178,7 @@ public:
         m_args->GetDeferral(&m_deferral);
 
         // Create response
-        HRESULT hr = m_env->CreateWebResourceResponse(nullptr, 200, nullptr, nullptr, &m_response);
+        HRESULT hr = m_env->CreateWebResourceResponse(nullptr, 200, L"OK", nullptr, &m_response);
         if (FAILED(hr))
             wxLogApiError("CreateWebResourceResponse", hr);
     }
