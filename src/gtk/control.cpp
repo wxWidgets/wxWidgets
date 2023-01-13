@@ -373,6 +373,13 @@ wxSize wxControl::GTKGetEntryMargins(GtkEntry* entry) const
     GtkStyleContext* sc = gtk_widget_get_style_context(GTK_WIDGET(entry));
     gtk_style_context_get_padding(sc, gtk_style_context_get_state(sc), &border);
 #else
+    if (gtk_entry_get_has_frame(entry))
+    {
+        GtkStyle* style = GTK_WIDGET(entry)->style;
+        size.x += 2 * style->xthickness;
+        size.y += 2 * style->ythickness;
+    }
+
     // Equivalent to the GTK2 private function _gtk_entry_effective_inner_border()
 
     GtkBorder border = { 2, 2, 2, 2 };
