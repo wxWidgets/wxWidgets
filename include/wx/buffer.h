@@ -419,7 +419,7 @@ public:
 #if wxUSE_UNICODE_WCHAR
     #define wxWC2WXbuf wxChar*
     #define wxWX2WCbuf wxChar*
-#elif wxUSE_UNICODE_UTF8
+#else /* wxUSE_UNICODE_UTF8 */
     #define wxWC2WXbuf wxWCharBuffer
     #define wxWX2WCbuf wxWCharBuffer
 #endif

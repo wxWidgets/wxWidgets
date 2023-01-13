@@ -288,12 +288,9 @@ wxGCC_ONLY_WARNING_RESTORE(format-nonliteral)
             if ( wxLocaleIsUtf8 ) return implA args;                 \
             else return implW args
     #endif
-#elif wxUSE_UNICODE_WCHAR
+#else // wxUSE_UNICODE_WCHAR
     #define WX_VARARG_VFOO_IMPL(args, implW, implA)                  \
         return implW args
-#else // ANSI
-    #define WX_VARARG_VFOO_IMPL(args, implW, implA)                  \
-        return implA args
 #endif
 
 inline int
