@@ -91,6 +91,9 @@ Changes in behaviour which may result in build errors
   options was completely removed. Please use address sanitizer or similar
   tools that are incomparably more useful for this than that legacy code.
 
+- wxTEST_DIALOG() macro now must be followed by semicolon, whereas previously
+  it was only supposed to, but it wasn't mandatory to use one after it.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------

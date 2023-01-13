@@ -516,12 +516,13 @@ private:
           method.
  */
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
-    {                                                                          \
+    wxSTATEMENT_MACRO_BEGIN                                                    \
         wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __func__);        \
         wxCALL_FOR_EACH(WX_TEST_IMPL_ADD_EXPECTATION, __VA_ARGS__)             \
         codeToRun;                                                             \
         wx_hook.CheckUnmetExpectations();                                      \
-    }
+    wxSTATEMENT_MACRO_END
+
 
 #endif // !WXBUILDING
 
