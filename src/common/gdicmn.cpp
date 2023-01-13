@@ -778,14 +778,11 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle st
     return brush;
 }
 
-wxFont *wxFontList::FindOrCreateFont(int pointSize,
-                                     wxFontFamily family,
-                                     wxFontStyle style,
-                                     wxFontWeight weight,
-                                     bool underline,
-                                     const wxString& facename,
-                                     wxFontEncoding encoding)
+wxFont *wxFontList::FindOrCreateFont(const wxFontInfo& fontInfo)
 {
+    // info is fontInfo adjusted for platform oddities
+    wxFontInfo info(fontInfo);
+
     // In all ports but wxOSX, the effective family of a font created using
     // wxFONTFAMILY_DEFAULT is wxFONTFAMILY_SWISS so this is what we need to
     // use for comparison.
@@ -793,8 +790,8 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     // In wxOSX the original wxFONTFAMILY_DEFAULT seems to be kept and it uses
     // a different font than wxFONTFAMILY_SWISS anyhow so we just preserve it.
 #ifndef __WXOSX__
-    if ( family == wxFONTFAMILY_DEFAULT )
-        family = wxFONTFAMILY_SWISS;
+    if ( info.GetFamily() == wxFONTFAMILY_DEFAULT )
+        info.Family(wxFONTFAMILY_SWISS);
 #endif // !__WXOSX__
 
     // In wxMSW, creating a font with wxFONTSTYLE_SLANT creates the same font
@@ -805,38 +802,44 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     // between ports here which it would be nice to fix in one way or another
     // (wxGTK supports both as separate styles, so it doesn't suffer from it).
  #ifdef __WXMSW__
-    if ( style == wxFONTSTYLE_SLANT )
-        style = wxFONTSTYLE_ITALIC;
+    if ( info.GetStyle() == wxFONTSTYLE_SLANT )
+        info.Style(wxFONTSTYLE_ITALIC);
  #endif // __WXMSW__
 
     wxFont *font;
     wxList::compatibility_iterator node;
     for (node = list.GetFirst(); node; node = node->GetNext())
     {
+        bool same;
+
         font = (wxFont *)node->GetData();
-        if (
-             font->GetPointSize () == pointSize &&
-             font->GetStyle () == style &&
-             font->GetWeight () == weight &&
-             font->GetUnderlined () == underline )
+
+        if ( info.IsUsingSizeInPixels() )
+            same = font->GetPixelSize() == info.GetPixelSize();
+        else
+            same = font->GetFractionalPointSize() == info.GetFractionalPointSize();
+
+        if ( same &&
+             font->GetStyle () == info.GetStyle() &&
+             font->GetWeight () == info.GetWeight() &&
+             font->GetUnderlined () == info.IsUnderlined() )
         {
             // empty facename matches anything at all: this is bad because
             // depending on which fonts are already created, we might get back
             // a different font if we create it with empty facename, but it is
             // still better than never matching anything in the cache at all
             // in this case
-            bool same;
             const wxString fontFaceName(font->GetFaceName());
 
-            if (facename.empty() || fontFaceName.empty())
-                same = font->GetFamily() == family;
+            if (info.GetFaceName().empty() || fontFaceName.empty())
+                same = font->GetFamily() == info.GetFamily();
             else
-                same = fontFaceName == facename;
+                same = fontFaceName == info.GetFaceName();
 
-            if ( same && (encoding != wxFONTENCODING_DEFAULT) )
+            if ( same && (info.GetEncoding() != wxFONTENCODING_DEFAULT) )
             {
                 // have to match the encoding too
-                same = font->GetEncoding() == encoding;
+                same = font->GetEncoding() == info.GetEncoding();
             }
 
             if ( same )
@@ -848,7 +851,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
 
     // font not found, create the new one
     font = nullptr;
-    wxFont fontTmp(pointSize, family, style, weight, underline, facename, encoding);
+    wxFont fontTmp(info);
     if (fontTmp.IsOk())
     {
         font = new wxFont(fontTmp);

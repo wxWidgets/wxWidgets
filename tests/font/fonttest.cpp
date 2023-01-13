@@ -475,3 +475,36 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
         CHECK( font.GetFractionalPointSize() == sizeUsed );
     }
 }
+
+TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
+{
+    wxFont* font1{nullptr};
+    wxFont* font2{nullptr};
+
+    // test retrieving fonts with fractional point size
+    const double pointSize = 10.5;
+    const wxFontInfo pointSizeInfo(pointSize);
+
+    font1 = wxTheFontList->FindOrCreateFont(pointSizeInfo);
+    REQUIRE(font1);
+    REQUIRE(font1->IsOk());
+    REQUIRE(font1->GetPointSize() == pointSize);
+
+    // font 2 should be font1 from the font list "cache"
+    font2 = wxTheFontList->FindOrCreateFont(pointSizeInfo);
+    REQUIRE(font2 == font1);
+
+
+    // test retrieving fonts with pixel size
+    const wxSize pixelSize(0, 32);
+    const wxFontInfo pixelSizeInfo(pixelSize);
+
+    font1 = wxTheFontList->FindOrCreateFont(pixelSizeInfo);
+    REQUIRE(font1);
+    REQUIRE(font1->IsOk());
+    REQUIRE(font1->GetPixelSize() == pixelSize);
+
+    // font 2 should be font1 from the font list "cache"
+    font2 = wxTheFontList->FindOrCreateFont(pixelSizeInfo);
+    REQUIRE(font2 == font1);
+}
