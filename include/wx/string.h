@@ -2991,6 +2991,12 @@ public:
       m_impl.swap(str.m_impl);
   }
 
+  // non-member swap for ADL
+  friend void swap(wxString& s1, wxString& s2) noexcept
+  {
+      s1.swap(s2);
+  }
+
     // find a substring
   size_t find(const wxString& str, size_t nStart = 0) const
     { return PosFromImpl(m_impl.find(str.m_impl, PosToImpl(nStart))); }
