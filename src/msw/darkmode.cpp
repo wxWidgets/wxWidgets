@@ -319,6 +319,7 @@ wxColour GetColour(wxSystemColour index)
         case wxSYS_COLOUR_MENUHILIGHT:
             return wxColour(0x353535);
 
+        case wxSYS_COLOUR_BTNHIGHLIGHT:
         case wxSYS_COLOUR_HIGHLIGHT:
             return wxColour(0x777777);
 
@@ -328,7 +329,6 @@ wxColour GetColour(wxSystemColour index)
         case wxSYS_COLOUR_3DDKSHADOW:
         case wxSYS_COLOUR_3DLIGHT:
         case wxSYS_COLOUR_ACTIVEBORDER:
-        case wxSYS_COLOUR_BTNHIGHLIGHT:
         case wxSYS_COLOUR_DESKTOP:
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:

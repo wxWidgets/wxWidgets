@@ -30,6 +30,7 @@
 //! wxWidgets headers
 #include "wx/file.h"     // raw file io support
 #include "wx/filename.h" // filename support
+#include "wx/settings.h" // system colours
 
 //! application headers
 #include "defsext.h"     // additional definitions
@@ -167,11 +168,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
                  wxSTC_WRAP_WORD: wxSTC_WRAP_NONE);
     wxFont font(wxFontInfo(10).Family(wxFONTFAMILY_MODERN));
     StyleSetFont (wxSTC_STYLE_DEFAULT, font);
-    StyleSetForeground (wxSTC_STYLE_DEFAULT, *wxBLACK);
-    StyleSetBackground (wxSTC_STYLE_DEFAULT, *wxWHITE);
-    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour ("DARK GREY"));
-    StyleSetBackground (wxSTC_STYLE_LINENUMBER, *wxWHITE);
-    StyleSetForeground(wxSTC_STYLE_INDENTGUIDE, wxColour ("DARK GREY"));
     InitializePrefs (DEFAULT_LANGUAGE);
 
     // set visibility
@@ -179,14 +175,17 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     SetXCaretPolicy (wxSTC_CARET_EVEN|wxSTC_VISIBLE_STRICT|wxSTC_CARET_SLOP, 1);
     SetYCaretPolicy (wxSTC_CARET_EVEN|wxSTC_VISIBLE_STRICT|wxSTC_CARET_SLOP, 1);
 
-    // markers
-    MarkerDefine (wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_DOTDOTDOT, "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_DOTDOTDOT, "BLACK", "WHITE");
-    MarkerDefine (wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, "BLACK", "WHITE");
-    MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
-    MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     "BLACK", "BLACK");
+    // markers: note that some of them are made invisible by using the same
+    // colour for their foreground and background
+    const wxColour colFg = StyleGetForeground(wxSTC_STYLE_DEFAULT);
+    const wxColour colBg = StyleGetBackground(wxSTC_STYLE_DEFAULT);
+    MarkerDefine (wxSTC_MARKNUM_FOLDER,        wxSTC_MARK_DOTDOTDOT, colFg, colFg);
+    MarkerDefine (wxSTC_MARKNUM_FOLDEROPEN,    wxSTC_MARK_ARROWDOWN, colFg, colFg);
+    MarkerDefine (wxSTC_MARKNUM_FOLDERSUB,     wxSTC_MARK_EMPTY,     colFg, colFg);
+    MarkerDefine (wxSTC_MARKNUM_FOLDEREND,     wxSTC_MARK_DOTDOTDOT, colFg, colBg);
+    MarkerDefine (wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, colFg, colBg);
+    MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     colFg, colFg);
+    MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     colFg, colFg);
 
     // annotations
     AnnotationSetVisible(wxSTC_ANNOTATION_BOXED);
@@ -606,6 +605,25 @@ bool Edit::InitializePrefs (const wxString &name) {
 
     // initialize styles
     StyleClearAll();
+
+    const wxColour
+        colAux = wxSystemSettings::SelectLightDark("DARK GREY", "LIGHT GREY");
+
+    // set common styles
+    StyleSetForeground (wxSTC_STYLE_INDENTGUIDE, colAux);
+
+    // set margin for line numbers
+    SetMarginType (m_LineNrID, wxSTC_MARGIN_NUMBER);
+    StyleSetForeground (wxSTC_STYLE_LINENUMBER, colAux);
+    SetMarginWidth (m_LineNrID, 0); // start out not visible
+
+    // annotations style
+    StyleSetBackground(ANNOTATION_STYLE,
+            wxSystemSettings::SelectLightDark(wxColour(244, 220, 220),
+                                              wxColour(100, 100, 100)));
+    StyleSetSizeFractional(ANNOTATION_STYLE,
+            (StyleGetSizeFractional(wxSTC_STYLE_DEFAULT)*4)/5);
+
     LanguageInfo const* curInfo = nullptr;
 
     // determine language
@@ -624,28 +642,12 @@ bool Edit::InitializePrefs (const wxString &name) {
     SetLexer (curInfo->lexer);
     m_language = curInfo;
 
-    // set margin for line numbers
-    SetMarginType (m_LineNrID, wxSTC_MARGIN_NUMBER);
-    StyleSetForeground (wxSTC_STYLE_LINENUMBER, wxColour ("DARK GREY"));
-    StyleSetBackground (wxSTC_STYLE_LINENUMBER, *wxWHITE);
-    SetMarginWidth (m_LineNrID, 0); // start out not visible
-
-    // annotations style
-    StyleSetBackground(ANNOTATION_STYLE, wxColour(244, 220, 220));
-    StyleSetForeground(ANNOTATION_STYLE, *wxBLACK);
-    StyleSetSizeFractional(ANNOTATION_STYLE,
-            (StyleGetSizeFractional(wxSTC_STYLE_DEFAULT)*4)/5);
-
     // default fonts for all styles!
     int Nr;
     for (Nr = 0; Nr < wxSTC_STYLE_LASTPREDEFINED; Nr++) {
         wxFont font(wxFontInfo(10).Family(wxFONTFAMILY_MODERN));
         StyleSetFont (Nr, font);
     }
-
-    // set common styles
-    StyleSetForeground (wxSTC_STYLE_DEFAULT, wxColour ("DARK GREY"));
-    StyleSetForeground (wxSTC_STYLE_INDENTGUIDE, wxColour ("DARK GREY"));
 
     // initialize settings
     if (g_CommonPrefs.syntaxEnable) {
@@ -657,12 +659,10 @@ bool Edit::InitializePrefs (const wxString &name) {
                             .Family(wxFONTFAMILY_MODERN)
                             .FaceName(curType.fontname));
             StyleSetFont (Nr, font);
-            if (curType.foreground.length()) {
-                StyleSetForeground (Nr, wxColour (curType.foreground));
-            }
-            if (curType.background.length()) {
-                StyleSetBackground (Nr, wxColour (curType.background));
-            }
+            StyleSetForeground (Nr, wxSystemSettings::SelectLightDark(
+                                        curType.foreground,
+                                        curType.foregroundDark
+                                ));
             StyleSetBold (Nr, (curType.fontstyle & mySTC_STYLE_BOLD) > 0);
             StyleSetItalic (Nr, (curType.fontstyle & mySTC_STYLE_ITALIC) > 0);
             StyleSetUnderline (Nr, (curType.fontstyle & mySTC_STYLE_UNDERL) > 0);
@@ -684,7 +684,7 @@ bool Edit::InitializePrefs (const wxString &name) {
     // folding
     SetMarginType (m_FoldingID, wxSTC_MARGIN_SYMBOL);
     SetMarginMask (m_FoldingID, wxSTC_MASK_FOLDERS);
-    StyleSetBackground (m_FoldingID, *wxWHITE);
+    StyleSetBackground (m_FoldingID, StyleGetBackground(wxSTC_STYLE_DEFAULT));
     SetMarginWidth (m_FoldingID, 0);
     SetMarginSensitive (m_FoldingID, false);
     if (g_CommonPrefs.foldEnable) {
