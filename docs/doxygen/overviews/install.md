@@ -233,4 +233,4 @@ If you use another IDE, under Unix you should run `wx-config --cxxflags` and
 `wx-config --libs` commands separately and copy-and-paste their output to the
 "Additional preprocessor options" and "Additional linker options" fields in
 your IDE, respectively. Under MSW systems you need to configure the IDE using
-the instructions in the ["manual setup"](@ref msw_build_apps) section.
+the instructions in the [manual setup](@ref msw_build_apps) section.

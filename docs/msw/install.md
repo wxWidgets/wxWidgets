@@ -245,14 +245,13 @@ executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
 
 
 Make Parameters                         {#msw_build_make_params}
-================================================================
+----------------------------------------------------------------
 
 NOTE: If you use configure to build the library with MinGW, the
       contents of this section does not apply, just pass the arguments
       to configure directly in this case.
 
-Library configuration
-----------------------------------------------------------------
+### Library configuration
 
 While it is never necessary to do it, you may want to change some of
 the options in the `%%WXWIN%\include\wx\msw\setup.h` file before building
@@ -265,8 +264,7 @@ build options for different configurations too if you edit any
 configuration-specific file.
 
 
-Makefile parameters
-----------------------------------------------------------------
+### Makefile parameters
 
 When building using makefiles, you can specify many build settings
 (unlike when using the project files where you are limited to choosing
@@ -478,12 +476,42 @@ instructions here are out of date, you can always simply copy a makefile or
 project file from `$WXWIN\samples\minimal` or some other sample and adapt it to
 your application.
 
-If you are not using Visual Studio please see
-@subpage plat_msw_winxp "Theme Support" to enable visual styles in your
-application.
+
+Using a Manifest                       {#msw_manifest}
+----------------
+
+All Windows applications should use a "manifest", which is a special kind of
+Windows resource containing information about the application compatibility,
+required, among else, for the application UI to look correctly instead
+of looking very outdated and different from other native applications.
+MSVS projects automatically generate the manifest and embed it into the final
+executable by default, so you don't need to do anything special when using
+them, however you need to ensure that a manifest specifying the use of the v6
+of the Common Controls Library is included when using another compiler.
+
+The most straightforward way to do this is to include one of the manifests
+provided by wxWidgets in the `include\wx\msw\wx.rc` file. It is sufficient to
+simply include it from your own `.rc` file in order to use a correct manifest
+automatically.
+
+To be precise, wxWidgets offers three manifests, differing only in which
+DPI-awareness mode they use. Which of the three is used depends on the value of
+`wxUSE_DPI_AWARE_MANIFEST` define. See [MSW Platform-Specific Build Issues](@ref high_dpi_platform_msw)
+section of the High DPI overview for more information.
+
+Note that the behaviour described above is customizable and you may define
+`wxUSE_NO_MANIFEST` before including `wx/msw/wx.rc` to prevent including a
+manifest if you prefer to embed it in some other way and so don't want to use
+the wxWidgets-provided or, on the contrary, predefine `wxUSE_RC_MANIFEST=1` to
+force using wxWidgets manifest even with MSVC, where it wouldn't be used by
+default.
+
+More information about application manifests in general is available at
+https://learn.microsoft.com/en-us/windows/win32/controls/cookbook-overview#using-manifests-or-directives-to-ensure-that-visual-styles-can-be-applied-to-applications
+
 
 Advanced Library Configurations        {#msw_advanced}
-===============================
+-------------------------------
 Build instructions to less common library configurations using different UI
 backends are available here.
 
