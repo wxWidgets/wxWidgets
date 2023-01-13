@@ -114,9 +114,11 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
     panel->SetHelpText("An empty panel");
 #endif
 
-    (void) new wxStaticText( panel, wxID_ANY,
-                             "This page intentionally left blank",
-                             wxPoint(10, 10) );
+    wxSizer* const s = new wxBoxSizer(wxVERTICAL);
+    s->Add(new wxStaticText( panel, wxID_ANY,
+                             "This page intentionally left blank" ),
+           wxSizerFlags().Expand().DoubleBorder());
+    panel->SetSizer(s);
 
     return panel;
 }
@@ -143,9 +145,12 @@ wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 #endif
 
     panel->SetBackgroundColour( wxColour( "MAROON" ) );
-    (void) new wxStaticText( panel, wxID_ANY,
-                             "This page has been inserted, not added.",
-                             wxPoint(10, 10) );
+
+    wxSizer* const s = new wxBoxSizer(wxVERTICAL);
+    s->Add(new wxStaticText( panel, wxID_ANY,
+                             "This page has been inserted, not added." ),
+           wxSizerFlags().Expand().DoubleBorder());
+    panel->SetSizer(s);
 
     return panel;
 }
