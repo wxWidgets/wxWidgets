@@ -815,9 +815,17 @@ wxFont *wxFontList::FindOrCreateFont(const wxFontInfo& fontInfo)
         font = (wxFont *)node->GetData();
 
         if ( info.IsUsingSizeInPixels() )
-            same = font->GetPixelSize() == info.GetPixelSize();
+        {
+            // When the width is 0, it means that we don't care about it.
+            if ( info.GetPixelSize().x == 0 )
+                same = font->GetPixelSize().y == info.GetPixelSize().y;
+            else
+                same = font->GetPixelSize() == info.GetPixelSize();
+        }
         else
+        {
             same = font->GetFractionalPointSize() == info.GetFractionalPointSize();
+        }
 
         if ( same &&
              font->GetStyle () == info.GetStyle() &&
