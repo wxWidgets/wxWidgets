@@ -787,12 +787,9 @@ wxFont *wxFontList::FindOrCreateFont(const wxFontInfo& fontInfo)
     // wxFONTFAMILY_DEFAULT is wxFONTFAMILY_SWISS so this is what we need to
     // use for comparison.
     //
-    // In wxOSX the original wxFONTFAMILY_DEFAULT seems to be kept and it uses
-    // a different font than wxFONTFAMILY_SWISS anyhow so we just preserve it.
-#ifndef __WXOSX__
+    // wxOSX is handled specifically below, see there.
     if ( info.GetFamily() == wxFONTFAMILY_DEFAULT )
         info.Family(wxFONTFAMILY_SWISS);
-#endif // !__WXOSX__
 
     // In wxMSW, creating a font with wxFONTSTYLE_SLANT creates the same font
     // as wxFONTSTYLE_ITALIC and its GetStyle() returns the latter, so we must
@@ -840,9 +837,26 @@ wxFont *wxFontList::FindOrCreateFont(const wxFontInfo& fontInfo)
             const wxString fontFaceName(font->GetFaceName());
 
             if (info.GetFaceName().empty() || fontFaceName.empty())
+            {
                 same = font->GetFamily() == info.GetFamily();
+
+                // In wxOSX fonts created using wxFONTFAMILY_DEFAULT can return
+                // either it or wxFONTFAMILY_SWISS from GetFamily(), which is a
+                // bug and needs to be fixed (see #23144), but for now work
+                // around it here.
+#ifdef __WXOSX__
+                if ( !same &&
+                     fontInfo.GetFamily() == wxFONTFAMILY_DEFAULT &&
+                     font->GetFamily() == wxFONTFAMILY_DEFAULT )
+                {
+                    same = true;
+                }
+#endif // __WXOSX__
+            }
             else
+            {
                 same = fontFaceName == info.GetFaceName();
+            }
 
             if ( same && (info.GetEncoding() != wxFONTENCODING_DEFAULT) )
             {
