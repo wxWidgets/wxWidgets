@@ -304,6 +304,7 @@ wxOSX:
 
 - Fix possible crash in menu item event handling (#23040).
 - Fix regression in text drawing when using clipping (#22629).
+- Don't round fractional point size when creating fonts (#23144).
 - Generate wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK (#22833).
 - Fix wxDataViewCtrl::HitTest() (Vojtěch Bubník, #22789).
 - Fix position of the controls in wxStaticBox after resizing it (#22837).
