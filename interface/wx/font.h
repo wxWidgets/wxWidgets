@@ -738,11 +738,11 @@ public:
         the given file even if it is not globally installed on the system.
 
         Under macOS this method actually doesn't do anything other than check
-        for the existence of the file in the "Fonts" subdirectory of the
-        application bundle "Resources" directory. You are responsible for
-        actually making the font file available in this directory and setting
-        @c ATSApplicationFontsPath to @c Fonts value in your @c Info.plist
-        file. See also wxStandardPaths::GetResourcesDir().
+        for the existence of the file and that it is located inside the "Fonts"
+        subdirectory of the application bundle "Resources" directory. You are
+        responsible for actually making the font file available in this
+        directory and setting @c ATSApplicationFontsPath to @c Fonts value in
+        your @c Info.plist file. See also wxStandardPaths::GetResourcesDir().
 
         Under MSW this method must be called before any wxGraphicsContext
         objects have been created, otherwise the private font won't be usable
@@ -757,6 +757,7 @@ public:
         @c wxUSE_PRIVATE_FONTS is always set to 0 under the other platforms,
         making this function unavailable at compile-time.
 
+        @param filename Absolute path of the font file.
         @return @true if the font was added and can now be used.
 
         @since 3.1.1
