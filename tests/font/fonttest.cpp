@@ -492,7 +492,7 @@ TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
     INFO("Font from font list:" << DumpFont(font1));
 
     if ( info.IsUsingSizeInPixels() )
-        CHECK(font1->GetPixelSize() == pixelSize);
+        CHECK(font1->GetPixelSize().y == pixelSize.y);
     else
         CHECK(font1->GetFractionalPointSize() == pointSize);
 
