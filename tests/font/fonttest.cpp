@@ -488,7 +488,7 @@ TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
     font1 = wxTheFontList->FindOrCreateFont(pointSizeInfo);
     REQUIRE(font1);
     REQUIRE(font1->IsOk());
-    REQUIRE(font1->GetPointSize() == pointSize);
+    REQUIRE(font1->GetFractionalPointSize() == pointSize);
 
     // font 2 should be font1 from the font list "cache"
     font2 = wxTheFontList->FindOrCreateFont(pointSizeInfo);
