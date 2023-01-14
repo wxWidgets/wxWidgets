@@ -634,6 +634,11 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
 class WXDLLIMPEXP_CORE wxFontList: public wxGDIObjListBase
 {
 public:
+    // Preferred function that works for any kind of fonts.
+    wxFont *FindOrCreateFont(const wxFontInfo& fontInfo);
+
+    // Non-deprecated but limited older function only working for the fonts
+    // with the integer sizes.
     wxFont *FindOrCreateFont(int pointSize,
                              wxFontFamily family,
                              wxFontStyle style,
@@ -641,7 +646,8 @@ public:
                              bool underline = false,
                              const wxString& face = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-        {   return FindOrCreateFont(wxFontInfo(pointSize)
+        {
+            return FindOrCreateFont(wxFontInfo(pointSize)
                                     .Family(family)
                                     .Style(style).Weight(weight).Underlined(underline)
                                     .FaceName(face).Encoding(encoding));
@@ -654,8 +660,6 @@ public:
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
         { return FindOrCreateFont(pointSize, (wxFontFamily)family, (wxFontStyle)style,
                                   (wxFontWeight)weight, underline, face, encoding); }
-
-    wxFont *FindOrCreateFont(const wxFontInfo& fontInfo);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
