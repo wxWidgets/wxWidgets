@@ -489,6 +489,8 @@ TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
     REQUIRE(font1);
     REQUIRE(font1->IsOk());
 
+    INFO("Font from font list:" << DumpFont(font1));
+
     if ( info.IsUsingSizeInPixels() )
         CHECK(font1->GetPixelSize() == pixelSize);
     else
