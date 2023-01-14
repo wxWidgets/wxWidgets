@@ -872,12 +872,15 @@ wxFont *wxFontList::FindOrCreateFont(const wxFontInfo& fontInfo)
     }
 
     // font not found, create the new one
-    font = nullptr;
-    wxFont fontTmp(info);
-    if (fontTmp.IsOk())
+    font = new wxFont(info);
+    if (font->IsOk())
     {
-        font = new wxFont(fontTmp);
         list.Append(font);
+    }
+    else
+    {
+        delete font;
+        font = nullptr;
     }
 
     return font;
