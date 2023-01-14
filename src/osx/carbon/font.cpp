@@ -346,7 +346,7 @@ void wxFontRefData::Alloc()
         CachedFontEntry& entryNoSize = fontcache[lookupnameNoSize];
         if ( entryNoSize.used )
         {
-            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetPointSize(), nullptr, nullptr);
+            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetFractionalPointSize(), nullptr, nullptr);
             m_ctFontAttributes = entryNoSize.fontAttributes.CreateCopy();
             m_ctFontAttributes.SetValue(kCTFontAttributeName,m_ctFont.get());
             m_cgFont = CTFontCopyGraphicsFont(m_ctFont, nullptr);
@@ -363,7 +363,7 @@ void wxFontRefData::Alloc()
             if ( m_info.GetStyle() != wxFONTSTYLE_NORMAL && m_info.GetCTSlant(m_info.GetCTFontDescriptor()) < 0.01 )
                 remainingTransform = &kSlantTransform;
 
-            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetPointSize(), remainingTransform);
+            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetFractionalPointSize(), remainingTransform);
 
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
