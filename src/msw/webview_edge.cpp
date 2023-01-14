@@ -171,23 +171,28 @@ public:
 class wxWebViewEdgeHandlerResponse : public wxWebViewHandlerResponse
 {
 public:
-    wxWebViewEdgeHandlerResponse(ICoreWebView2WebResourceRequestedEventArgs* args, ICoreWebView2Environment* env):
-        m_env(env),
+    wxWebViewEdgeHandlerResponse(ICoreWebView2WebResourceRequestedEventArgs* args, ICoreWebView2WebResourceResponse* response):
+        m_response(response),
         m_args(args)
     {
-        m_args->GetDeferral(&m_deferral);
-
-        // Create response
-        HRESULT hr = m_env->CreateWebResourceResponse(nullptr, 200, nullptr, nullptr, &m_response);
+        HRESULT hr = m_args->GetDeferral(&m_deferral);
         if (FAILED(hr))
-            wxLogApiError("CreateWebResourceResponse", hr);
+            wxLogApiError("GetDeferral", hr);
     }
 
     void SetReason(const wxString& reason)
-    { m_response->put_ReasonPhrase(reason.wc_str()); }
+    {
+        HRESULT hr = m_response->put_ReasonPhrase(reason.wc_str());
+        if (FAILED(hr))
+            wxLogApiError("put_ReasonPhrase", hr);
+    }
 
     virtual void SetStatus(int status) override
-    { m_response->put_StatusCode(status); }
+    {
+        HRESULT hr = m_response->put_StatusCode(status);
+        if (FAILED(hr))
+            wxLogApiError("put_StatusCode", hr);
+    }
 
     virtual void SetContentType(const wxString& contentType) override
     { SetHeader("Content-Type", contentType); }
@@ -242,10 +247,8 @@ public:
         SendResponse();
     }
 
-    int m_status;
     wxCOMPtr<ICoreWebView2WebResourceResponse> m_response;
     wxCOMPtr<ICoreWebView2Deferral> m_deferral;
-    wxCOMPtr<ICoreWebView2Environment> m_env;
     wxCOMPtr<ICoreWebView2WebResourceRequestedEventArgs> m_args;
 };
 
@@ -580,7 +583,16 @@ HRESULT wxWebViewEdgeImpl::OnWebResourceRequested(ICoreWebView2* WXUNUSED(sender
         return E_INVALIDARG;
     request.SetHandler(handler.get());
 
-    wxSharedPtr<wxWebViewHandlerResponse> resp(new wxWebViewEdgeHandlerResponse(args, m_webViewEnvironment));
+    // Create response
+    wxCOMPtr<ICoreWebView2WebResourceResponse> runtimeResponse;
+    hr = m_webViewEnvironment->CreateWebResourceResponse(nullptr, 200, L"OK", nullptr, &runtimeResponse);
+    if (FAILED(hr))
+    {
+        wxLogApiError("CreateWebResourceResponse", hr);
+        return hr;
+    }
+
+    wxSharedPtr<wxWebViewHandlerResponse> resp(new wxWebViewEdgeHandlerResponse(args, runtimeResponse));
     handler->StartRequest(request, resp);
     return S_OK;
 }
