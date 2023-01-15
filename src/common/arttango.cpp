@@ -209,7 +209,7 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
         if ( entry.id != id )
             continue;
 
-        wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
+        wxSize sizeDef = size != wxDefaultSize ? size : GetDIPSizeHint(client);
         if (sizeDef == wxDefaultSize)
         {
             // We really need some default size here, so keep using the same

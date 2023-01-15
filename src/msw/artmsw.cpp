@@ -276,14 +276,20 @@ wxSize wxArtProvider::GetNativeDIPSizeHint(const wxArtClient& client)
     }
     else if ( client == wxART_FRAME_ICON )
     {
+        // We're supposed to return a DPI-independent value here, but
+        // ::GetSystemMetrics() uses the primary monitor DPI, so undo this by
+        // explicitly dividing by its scale.
         return wxSize(::GetSystemMetrics(SM_CXSMICON),
-                      ::GetSystemMetrics(SM_CYSMICON));
+                      ::GetSystemMetrics(SM_CYSMICON))
+                / wxDisplay().GetScaleFactor();
     }
     else if ( client == wxART_CMN_DIALOG ||
               client == wxART_MESSAGE_BOX )
     {
+        // As above, we need to convert to DIPs explicitly.
         return wxSize(::GetSystemMetrics(SM_CXICON),
-                      ::GetSystemMetrics(SM_CYICON));
+                      ::GetSystemMetrics(SM_CYICON))
+                / wxDisplay().GetScaleFactor();
     }
     else if (client == wxART_BUTTON)
     {

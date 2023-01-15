@@ -191,7 +191,30 @@ protected:
         // ones should just override CreateBitmapBundle() directly), so we only
         // return the original bitmap scale, but hope that perhaps the provider
         // will have other (e.g. x2) scales too, when our GetBitmap() is called.
-        return i++ ? 0.0 : m_bitmapScale;
+        //
+        // We also suppose that the art provider can always return a good (i.e.
+        // not obtained by rescaling) bitmap at scale 1, even if the original
+        // bitmap had a higher scale factor. This is necessary to allow using
+        // bitmaps on a secondary monitor using standard DPI when the primary
+        // monitor uses high DPI, as the art provider always uses the primary
+        // monitor DPI (being global, it can't do anything else).
+        switch ( i++ )
+        {
+            case 0:
+                // As explained above, this is always supported.
+                return 1.0;
+
+            case 1:
+                // If we already have a bitmap in a higher DPI, we can be sure
+                // that we can provide it too.
+                if ( m_bitmapScale != 1.0 )
+                    return m_bitmapScale;
+                wxFALLTHROUGH;
+
+            default:
+                // No other scales supported.
+                return 0.0;
+        }
     }
 
 private:
