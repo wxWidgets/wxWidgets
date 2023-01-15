@@ -475,3 +475,33 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
         CHECK( font.GetFractionalPointSize() == sizeUsed );
     }
 }
+
+TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
+{
+    const double pointSize = 10.5;
+    const wxSize pixelSize(0, 32);
+
+    wxFontInfo info;
+    SECTION("From point size") { info = wxFontInfo{pointSize}; }
+    SECTION("From pixel size") { info = wxFontInfo{pixelSize}; }
+
+    wxFont* const font1 = wxTheFontList->FindOrCreateFont(info);
+    REQUIRE(font1);
+    REQUIRE(font1->IsOk());
+
+    // There is a bug in wxOSX which results in the font size in points being
+    // changed (rounded) by the call to GetPixelSize() inside DumpFont(), so we
+    // can't use it there until #23144 is fixed.
+#ifndef __WXMAC__
+    INFO("Font from font list:" << DumpFont(font1));
+#endif
+
+    if ( info.IsUsingSizeInPixels() )
+        CHECK(font1->GetPixelSize().y == pixelSize.y);
+    else
+        CHECK(font1->GetFractionalPointSize() == pointSize);
+
+    // font 2 should be font1 from the font list "cache"
+    wxFont* const font2 = wxTheFontList->FindOrCreateFont(info);
+    CHECK(font2 == font1);
+}
