@@ -1,0 +1,1 @@
+wxAll (GUI): Fix wxFontList::FindOrCreateFont() for non-integral sizes (PB).
