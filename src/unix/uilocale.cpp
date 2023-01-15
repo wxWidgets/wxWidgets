@@ -760,7 +760,29 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
     // When the preferred UI language is determined, the LANGUAGE environment
     // variable is the primary source of preference.
     // http://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
-    //
+
+    // Since the first item in LANGUAGE is supposed to be equal to LANG resp LC_ALL,
+    // determine the default language based on the locale related environment variables
+    // as the first entry in the list of preferred languages.
+    wxString langFull;
+    wxString modifier;
+    if (GetLocaleFromEnvironment(langFull, modifier))
+    {
+        if (!modifier.empty())
+        {
+            // Locale name with modifier
+            if (const wxLanguageInfo* li = wxUILocale::FindLanguageInfo(langFull + modifier))
+            {
+                preferred.push_back(li->CanonicalName);
+            }
+        }
+        // Locale name without modifier
+        if (const wxLanguageInfo* li = wxUILocale::FindLanguageInfo(langFull))
+        {
+            preferred.push_back(li->CanonicalName);
+        }
+    }
+
     // The LANGUAGE variable may contain a colon separated list of language
     // codes in the order of preference.
     // http://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
@@ -780,25 +802,18 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
             return preferred;
         wxLogTrace(TRACE_I18N, " - LANGUAGE was set, but it didn't contain any languages recognized by the system");
     }
+    else
+    {
+        wxLogTrace(TRACE_I18N, " - LANGUAGE was not set or empty, check LC_ALL, LC_MESSAGES, and LANG");
+    }
 
-    wxLogTrace(TRACE_I18N, " - LANGUAGE was not set or empty, check LC_ALL, LC_MESSAGES, and LANG");
-
-    // first get the string identifying the language from the environment
-    wxString langFull,
-             modifier;
-    if (!GetLocaleFromEnvironment(langFull, modifier))
+    if (preferred.empty())
     {
         // no language specified, treat it as English
         langFull = "en_US";
+        preferred.push_back(langFull);
+        wxLogTrace(TRACE_I18N, " - LC_ALL, LC_MESSAGES, and LANG were not set or empty, use English");
     }
-
-    if (!modifier.empty())
-    {
-        // Locale name with modifier
-        preferred.push_back(langFull + modifier);
-    }
-    // Locale name without modifier
-    preferred.push_back(langFull);
 
     return preferred;
 }
