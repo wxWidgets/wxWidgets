@@ -261,7 +261,12 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
     if ( info.HasFaceName() )
         SetFaceName(info.GetFaceName());
     else
-        SetFamily(info.GetFamily());
+    {
+        wxFontFamily family = info.GetFamily();
+        if (family == wxFONTFAMILY_DEFAULT)
+            family = wxFONTFAMILY_SWISS;
+        SetFamily(family);
+    }
 
     m_info.SetSizeOrDefault(info.GetFractionalPointSize());
     SetNumericWeight(info.GetNumericWeight());
