@@ -508,7 +508,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_SHOW_CURRENT, MyFrame::OnShowCurrent )
     EVT_BUTTON( ID_SET_NINTH_CURRENT, MyFrame::OnSetNinthCurrent )
     EVT_BUTTON( ID_CHANGE_NINTH_TITLE, MyFrame::OnChangeNinthTitle )
-    EVT_BUTTON(ID_ENSURE_NINTH_SECOND_COLUMN, MyFrame::OnEnsureNinthAndSecondColumn)
+    EVT_BUTTON( ID_ENSURE_NINTH_SECOND_COLUMN, MyFrame::OnEnsureNinthAndSecondColumn )
 
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
