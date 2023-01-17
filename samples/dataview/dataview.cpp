@@ -755,7 +755,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     fifthPanelSz->Add(button_sizer5);
     fifthPanel->SetSizerAndFit(fifthPanelSz);
 
-
     // page showing the indexed list model
     // -----------------------------------
 
