@@ -261,7 +261,11 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
         decorSize.right = a.width - a2.width - a2.x;
         decorSize.top = a2.y;
         decorSize.bottom = a.height - a2.height - a2.y;
-        win->GTKUpdateDecorSize(decorSize);
+        if (memcmp(&win->m_decorSize, &decorSize, sizeof(decorSize)) != 0)
+        {
+            win->GTKUpdateDecorSize(decorSize);
+            win->m_clientWidth = 0;
+        }
     }
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
