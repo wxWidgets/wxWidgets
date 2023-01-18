@@ -1534,6 +1534,7 @@ private:
     WXWidget m_view;
     bool m_contextSynthesized;
     CGAffineTransform m_initTransform;
+    CGRect m_initClipBox;
     CGAffineTransform m_windowTransform;
     bool m_invisible;
     int m_stateStackLevel;
@@ -1615,6 +1616,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_width = width;
     m_height = height;
     m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    m_initClipBox = m_cgContext ? CGContextGetClipBoundingBox(m_cgContext) : CGRectNull;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
@@ -1660,6 +1662,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer)
 {
     Init();
     m_initTransform = CGAffineTransformIdentity;
+    m_initClipBox = CGRectNull;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
@@ -1679,6 +1682,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_height = sz.y;
     SetNativeContext((CGContextRef)(win->MacGetCGContextRef()));
     m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+    m_initClipBox = m_cgContext ? CGContextGetClipBoundingBox(m_cgContext) : CGRectNull;
     SetContentScaleFactor(dc.GetContentScaleFactor());
 }
 
@@ -1698,6 +1702,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 
         SetNativeContext((CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()));
         m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+        m_initClipBox = m_cgContext ? CGContextGetClipBoundingBox(m_cgContext) : CGRectNull;
         SetContentScaleFactor(dc.GetContentScaleFactor());
     }
 }
@@ -1720,6 +1725,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
         m_width = w;
         m_height = h;
         m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
+        m_initClipBox = m_cgContext ? CGContextGetClipBoundingBox(m_cgContext) : CGRectNull;
     }
 }
 
@@ -1830,6 +1836,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
             }
 #endif
             m_initTransform = CGContextGetCTM(m_cgContext);
+            m_initClipBox = CGContextGetClipBoundingBox(m_cgContext);
             CGContextConcatCTM( m_cgContext, m_windowTransform );
             CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
             m_contextSynthesized = true;
@@ -2153,17 +2160,29 @@ void wxMacCoreGraphicsContext::ResetClip()
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
         if ( WX_IS_MACOS_OR_IOS_AVAILABLE(10, 13, 11, 0) )
         {
+            // Restore initial transformation
+            CGAffineTransform transform = CGContextGetCTM(m_cgContext);
+            CGAffineTransform transformInv = CGAffineTransformInvert(transform);
+            CGContextConcatCTM(m_cgContext, transformInv);
+            CGContextConcatCTM(m_cgContext, m_initTransform);
+            // Restore initial clipping region
             CGContextResetClip(m_cgContext);
+            CGContextClipToRect(m_cgContext, m_initClipBox);
+            // Restore current transformation
+            transformInv = CGAffineTransformInvert(m_initTransform);
+            CGContextConcatCTM(m_cgContext, transformInv);
+            CGContextConcatCTM(m_cgContext, transform);
         }
         else
 #endif
         {
-            // there is no way for clearing the clip, we can only revert to the stored
-            // state, but then we have to make sure everything else is NOT restored
+            // For macOS < 10.13 there is no way for clearing the clip, we can only
+            // revert to the stored state, but then we have to make sure everything
+            // else is NOT restored.
             // Note: This trick works as expected only if a state with no clipping
-            // path is stored on the top of the stack. It's guaranteed to work only
-            // when no PushState() was called before because in this case a reference
-            // state (initial state without clipping region) is on the top of the stack.
+            // path is stored on the top of the stack. It's not guaranteed to work
+            // when PushState() was called before because in this case a reference
+            // state (initial state without clipping region) is not on the top of the stack.
             wxASSERT_MSG(m_stateStackLevel == 0,
                          "Resetting the clip may not work when PushState() was called before");
             CGAffineTransform transform = CGContextGetCTM( m_cgContext );
