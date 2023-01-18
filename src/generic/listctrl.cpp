@@ -63,30 +63,14 @@ static const int SCROLL_UNIT_X = 15;
 static const int LINE_SPACING = 0;
 
 // extra margins around the text label
-#ifdef __WXGTK__
 static const int EXTRA_WIDTH = 6;
-#else
-static const int EXTRA_WIDTH = 4;
-#endif
-
-#ifdef __WXGTK__
 static const int EXTRA_HEIGHT = 6;
-#else
-static const int EXTRA_HEIGHT = 4;
-#endif
 
 // margin between the window and the items
 static const int EXTRA_BORDER_X = 2;
 static const int EXTRA_BORDER_Y = 2;
 
-#ifdef __WXGTK__
-    // This probably needs to be done
-    // on all platforms as the icons
-    // otherwise nearly touch the border
-    static const int ICON_OFFSET_X = 2;
-#else
-    static const int ICON_OFFSET_X = 0;
-#endif
+static const int ICON_OFFSET_X = 2;
 
 // offset for the header window
 static const int HEADER_OFFSET_X = 0;
