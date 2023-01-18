@@ -40,7 +40,7 @@ struct wxColWidthInfo
     }
 };
 
-WX_DEFINE_ARRAY_PTR(wxColWidthInfo *, ColWidthArray);
+using ColWidthArray = std::vector<wxColWidthInfo>;
 
 //-----------------------------------------------------------------------------
 //  wxListItemData (internal)

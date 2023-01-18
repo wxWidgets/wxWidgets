@@ -1652,7 +1652,6 @@ wxListMainWindow::~wxListMainWindow()
 
     DoDeleteAllItems();
     WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
-    WX_CLEAR_ARRAY(m_aColWidths);
 
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
@@ -3474,20 +3473,20 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             calculator.UpdateWithWidth(ComputeMinHeaderWidth(column));
 
         //  if the cached column width isn't valid then recalculate it
-        wxColWidthInfo* const pWidthInfo = m_aColWidths.Item(col);
-        if ( pWidthInfo->bNeedsUpdate )
+        wxColWidthInfo& widthInfo = m_aColWidths[col];
+        if ( widthInfo.bNeedsUpdate )
         {
             size_t first_visible, last_visible;
             GetVisibleLinesRange(&first_visible, &last_visible);
 
             calculator.ComputeBestColumnWidth(GetItemCount(),
                                               first_visible, last_visible);
-            pWidthInfo->nMaxWidth = calculator.GetMaxWidth();
-            pWidthInfo->bNeedsUpdate = false;
+            widthInfo.nMaxWidth = calculator.GetMaxWidth();
+            widthInfo.bNeedsUpdate = false;
         }
         else
         {
-            calculator.UpdateWithWidth(pWidthInfo->nMaxWidth);
+            calculator.UpdateWithWidth(widthInfo.nMaxWidth);
         }
 
         width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
@@ -3576,11 +3575,11 @@ void wxListMainWindow::SetItem( wxListItem &item )
             //  update the Max Width Cache if needed
             int width = GetItemWidthWithImage(&item);
 
-            wxColWidthInfo* const pWidthInfo = m_aColWidths.Item(item.m_col);
-            if ( width > pWidthInfo->nMaxWidth )
+            wxColWidthInfo& widthInfo = m_aColWidths.at(item.m_col);
+            if ( width > widthInfo.nMaxWidth )
             {
-                pWidthInfo->nMaxWidth = width;
-                pWidthInfo->bNeedsUpdate = true;
+                widthInfo.nMaxWidth = width;
+                widthInfo.bNeedsUpdate = true;
             }
         }
     }
@@ -4313,9 +4312,9 @@ void wxListMainWindow::DeleteItem( long lindex )
             int itemWidth;
             itemWidth = GetItemWidthWithImage(&item);
 
-            wxColWidthInfo *pWidthInfo = m_aColWidths.Item(i);
-            if ( itemWidth >= pWidthInfo->nMaxWidth )
-                pWidthInfo->bNeedsUpdate = true;
+            wxColWidthInfo& widthInfo = m_aColWidths[i];
+            if ( itemWidth >= widthInfo.nMaxWidth )
+                widthInfo.bNeedsUpdate = true;
         }
 
         ResetVisibleLinesRange();
@@ -4386,8 +4385,7 @@ void wxListMainWindow::DeleteColumn( int col )
 
     if ( InReportView() )   //  we only cache max widths when in Report View
     {
-        delete m_aColWidths.Item(col);
-        m_aColWidths.RemoveAt(col);
+        m_aColWidths.erase(m_aColWidths.begin() + col);
     }
 
     // invalidate it as it has to be recalculated
@@ -4399,8 +4397,8 @@ void wxListMainWindow::DoDeleteAllItems()
     // We will need to update all columns if any items are inserted again.
     if ( InReportView() )
     {
-        for ( size_t i = 0; i < m_aColWidths.GetCount(); i++ )
-            m_aColWidths.Item(i)->bNeedsUpdate = true;
+        for ( auto& widthInfo : m_aColWidths )
+            widthInfo.bNeedsUpdate = true;
     }
 
     if ( IsEmpty() )
@@ -4444,7 +4442,7 @@ void wxListMainWindow::DeleteAllItems()
 void wxListMainWindow::DeleteEverything()
 {
     WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
-    WX_CLEAR_ARRAY(m_aColWidths);
+    m_aColWidths.clear();
 
     DeleteAllItems();
 }
@@ -4589,13 +4587,13 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         wxCHECK_RET( col < m_aColWidths.size(), "invalid item column" );
 
         // calculate the width of the item and adjust the max column width
-        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(col);
+        wxColWidthInfo& widthInfo = m_aColWidths[col];
         int width = GetItemWidthWithImage(&item);
         item.SetWidth(width);
-        if (width > pWidthInfo->nMaxWidth)
+        if (width > widthInfo.nMaxWidth)
         {
-            pWidthInfo->nMaxWidth = width;
-            pWidthInfo->bNeedsUpdate = true;
+            widthInfo.nMaxWidth = width;
+            widthInfo.bNeedsUpdate = true;
         }
     }
 
@@ -4642,7 +4640,7 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
             column->SetWidth(ComputeMinHeaderWidth(column));
 
-        wxColWidthInfo *colWidthInfo = new wxColWidthInfo(0, IsVirtual());
+        wxColWidthInfo colWidthInfo(0, IsVirtual());
 
         bool insert = (col >= 0) && ((size_t)col < m_columns.GetCount());
         if ( insert )
@@ -4650,14 +4648,14 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
             wxListHeaderDataList::compatibility_iterator
                 node = m_columns.Item( col );
             m_columns.Insert( node, column );
-            m_aColWidths.Insert( colWidthInfo, col );
+            m_aColWidths.insert( m_aColWidths.begin() + col, colWidthInfo );
             idx = col;
         }
         else
         {
-            idx = m_aColWidths.GetCount();
+            idx = m_aColWidths.size();
             m_columns.Append( column );
-            m_aColWidths.Add( colWidthInfo );
+            m_aColWidths.push_back( colWidthInfo );
         }
 
         if ( !IsVirtual() )
