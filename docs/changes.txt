@@ -296,6 +296,7 @@ wxOSX:
 - Ensure that "Window" menu is inserted before "Help" (#22871).
 - Fix compiling with Xcode 7.3 and macOS 11 SDK (crazbot, #22988).
 - Always call wxTaskBarIcon::GetPopupMenu() (William Lindnilsson, #23008).
+- Add margins around wxListCtrl items to improve appearance (#23155).
 
 
 3.2.1: (released 2022-09-09)
