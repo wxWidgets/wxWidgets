@@ -161,13 +161,11 @@ private:
 //  wxListLineData (internal)
 //-----------------------------------------------------------------------------
 
-WX_DECLARE_LIST(wxListItemData, wxListItemDataList);
-
 class wxListLineData
 {
 public:
     // the list of subitems: only may have more than one item in report mode
-    wxListItemDataList m_items;
+    std::vector<wxListItemData> m_items;
 
     // this is not used in report view
     struct GeometryInfo
@@ -211,7 +209,6 @@ public:
 
     ~wxListLineData()
     {
-        WX_CLEAR_LIST(wxListItemDataList, m_items);
         delete m_gi;
     }
 
@@ -487,8 +484,6 @@ private:
 //  wxListMainWindow (internal)
 //-----------------------------------------------------------------------------
 
-WX_DECLARE_LIST(wxListHeaderData, wxListHeaderDataList);
-
 class wxListMainWindow : public wxWindow
 {
 public:
@@ -649,7 +644,7 @@ public:
     void SetColumnWidth( int col, int width );
     void GetColumn( int col, wxListItem &item ) const;
     int GetColumnWidth( int col ) const;
-    int GetColumnCount() const { return m_columns.GetCount(); }
+    int GetColumnCount() const { return m_columns.size(); }
 
     // returns the sum of the heights of all columns
     int GetHeaderWidth() const;
@@ -796,7 +791,7 @@ protected:
     wxListLineDataArray  m_lines;
 
     // the list of column objects
-    wxListHeaderDataList m_columns;
+    std::vector<wxListHeaderData> m_columns;
 
     // currently focused item or -1
     size_t               m_current;
