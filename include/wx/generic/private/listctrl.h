@@ -50,6 +50,10 @@ class wxListItemData
 {
 public:
     wxListItemData(wxListMainWindow *owner);
+    wxListItemData(const wxListItemData&) = delete;
+    wxListItemData(wxListItemData&&);
+    wxListItemData& operator=(const wxListItemData&) = delete;
+    wxListItemData& operator=(wxListItemData&&);
     ~wxListItemData();
 
     void SetItem( const wxListItem &info );

@@ -107,6 +107,28 @@ WX_DEFINE_LIST(wxListHeaderDataList)
 // wxListItemData
 // ----------------------------------------------------------------------------
 
+wxListItemData::wxListItemData(wxListItemData&& other)
+{
+    m_owner = other.m_owner;
+
+    // Take ownership of the pointers from the other object and reset them.
+    std::swap(m_attr, other.m_attr);
+    std::swap(m_rect, other.m_rect);
+}
+
+wxListItemData& wxListItemData::operator=(wxListItemData&& other)
+{
+    m_image = other.m_image;
+    m_data = other.m_data;
+    m_owner = other.m_owner;
+
+    // Swap them to let our pointers be deleted by the other object if necessary.
+    std::swap(m_attr, other.m_attr);
+    std::swap(m_rect, other.m_rect);
+
+    return *this;
+}
+
 wxListItemData::~wxListItemData()
 {
     // in the virtual list control the attributes are managed by the main
