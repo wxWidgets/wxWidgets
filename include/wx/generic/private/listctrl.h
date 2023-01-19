@@ -90,25 +90,22 @@ public:
 
 public:
     // the item image or -1
-    int m_image;
+    int m_image = -1;
 
     // user data associated with the item
-    wxUIntPtr m_data;
+    wxUIntPtr m_data = 0;
 
     // the item coordinates are not used in report mode; instead this pointer is
     // null and the owner window is used to retrieve the item position and size
-    wxRect *m_rect;
+    wxRect *m_rect = nullptr;
 
     // the list ctrl we are in
     wxListMainWindow *m_owner;
 
     // custom attributes or nullptr
-    wxItemAttr *m_attr;
+    wxItemAttr *m_attr = nullptr;
 
 protected:
-    // common part of all ctors
-    void Init();
-
     wxString m_text;
 };
 

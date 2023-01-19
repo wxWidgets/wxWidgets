@@ -117,23 +117,11 @@ wxListItemData::~wxListItemData()
     delete m_rect;
 }
 
-void wxListItemData::Init()
-{
-    m_image = -1;
-    m_data = 0;
-
-    m_attr = nullptr;
-}
-
 wxListItemData::wxListItemData(wxListMainWindow *owner)
 {
-    Init();
-
     m_owner = owner;
 
-    if ( owner->InReportView() )
-        m_rect = nullptr;
-    else
+    if ( !owner->InReportView() )
         m_rect = new wxRect;
 }
 
