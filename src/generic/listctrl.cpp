@@ -84,6 +84,8 @@ static const int EXTRA_BORDER_Y = 2;
     // on all platforms as the icons
     // otherwise nearly touch the border
     static const int ICON_OFFSET_X = 2;
+#elif __WXMAC__
+    static const int ICON_OFFSET_X = 4;
 #else
     static const int ICON_OFFSET_X = 0;
 #endif

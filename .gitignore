@@ -402,3 +402,6 @@
 /utils/wxrc/wxrc_vc[789].sln
 
 /3rdparty/webview2
+
+# mac os
+.DS_Store/
