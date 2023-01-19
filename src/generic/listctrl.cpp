@@ -409,10 +409,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
 {
     m_owner = owner;
 
-    if ( InReportView() )
-        m_gi = nullptr;
-    else // !report
-        m_gi = new GeometryInfo;
+    SetReportView(InReportView());
 
     m_highlighted = false;
     m_checked = false;

@@ -19,6 +19,8 @@
 #include "wx/timer.h"
 #include "wx/settings.h"
 
+#include <memory>
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -193,8 +195,9 @@ public:
             m_rectIcon.x += (w - m_rectIcon.width) / 2;
             m_rectHighlight.x += (w - m_rectHighlight.width) / 2;
         }
-    }
-    *m_gi;
+    };
+
+    std::unique_ptr<GeometryInfo> m_gi;
 
     // is this item selected? [NB: not used in virtual mode]
     bool m_highlighted;
@@ -206,25 +209,19 @@ public:
 
 public:
     wxListLineData(wxListMainWindow *owner);
+    wxListLineData(const wxListLineData&) = delete;
+    wxListLineData(wxListLineData&& other) = default;
 
-    ~wxListLineData()
-    {
-        delete m_gi;
-    }
+    wxListLineData& operator=(const wxListLineData&) = delete;
+    wxListLineData& operator=(wxListLineData&&) = default;
+
+    ~wxListLineData() = default;
 
     // called by the owner when it toggles report view
     void SetReportView(bool inReportView)
     {
         // we only need m_gi when we're not in report view so update as needed
-        if ( inReportView )
-        {
-            delete m_gi;
-            m_gi = nullptr;
-        }
-        else
-        {
-            m_gi = new GeometryInfo;
-        }
+        m_gi.reset( inReportView ? nullptr : new GeometryInfo );
     }
 
     // are we in report mode?
