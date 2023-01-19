@@ -63,30 +63,14 @@ static const int SCROLL_UNIT_X = 15;
 static const int LINE_SPACING = 0;
 
 // extra margins around the text label
-#ifdef __WXGTK__
 static const int EXTRA_WIDTH = 6;
-#else
-static const int EXTRA_WIDTH = 4;
-#endif
-
-#ifdef __WXGTK__
 static const int EXTRA_HEIGHT = 6;
-#else
-static const int EXTRA_HEIGHT = 4;
-#endif
 
 // margin between the window and the items
 static const int EXTRA_BORDER_X = 2;
 static const int EXTRA_BORDER_Y = 2;
 
-#ifdef __WXGTK__
-    // This probably needs to be done
-    // on all platforms as the icons
-    // otherwise nearly touch the border
-    static const int ICON_OFFSET_X = 2;
-#else
-    static const int ICON_OFFSET_X = 0;
-#endif
+static const int ICON_OFFSET_X = 2;
 
 // offset for the header window
 static const int HEADER_OFFSET_X = 0;
@@ -107,21 +91,31 @@ static const int HEADER_IMAGE_MARGIN_IN_REPORT_MODE = 2;
 // space after a checkbox
 static const int MARGIN_AROUND_CHECKBOX = 5;
 
-
-// ----------------------------------------------------------------------------
-// arrays/list implementations
-// ----------------------------------------------------------------------------
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListItemDataList)
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListHeaderDataList)
-
-
 // ----------------------------------------------------------------------------
 // wxListItemData
 // ----------------------------------------------------------------------------
+
+wxListItemData::wxListItemData(wxListItemData&& other)
+{
+    m_owner = other.m_owner;
+
+    // Take ownership of the pointers from the other object and reset them.
+    std::swap(m_attr, other.m_attr);
+    std::swap(m_rect, other.m_rect);
+}
+
+wxListItemData& wxListItemData::operator=(wxListItemData&& other)
+{
+    m_image = other.m_image;
+    m_data = other.m_data;
+    m_owner = other.m_owner;
+
+    // Swap them to let our pointers be deleted by the other object if necessary.
+    std::swap(m_attr, other.m_attr);
+    std::swap(m_rect, other.m_rect);
+
+    return *this;
+}
 
 wxListItemData::~wxListItemData()
 {
@@ -133,23 +127,11 @@ wxListItemData::~wxListItemData()
     delete m_rect;
 }
 
-void wxListItemData::Init()
-{
-    m_image = -1;
-    m_data = 0;
-
-    m_attr = nullptr;
-}
-
 wxListItemData::wxListItemData(wxListMainWindow *owner)
 {
-    Init();
-
     m_owner = owner;
 
-    if ( owner->InReportView() )
-        m_rect = nullptr;
-    else
+    if ( !owner->InReportView() )
         m_rect = new wxRect;
 }
 
@@ -363,7 +345,7 @@ bool wxListHeaderData::IsHit( int x, int y ) const
     return ((x >= m_xpos) && (x <= m_xpos+m_width) && (y >= m_ypos) && (y <= m_ypos+m_height));
 }
 
-void wxListHeaderData::GetItem( wxListItem& item )
+void wxListHeaderData::GetItem( wxListItem& item ) const
 {
     long mask = item.m_mask;
     if ( !mask )
@@ -427,10 +409,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
 {
     m_owner = owner;
 
-    if ( InReportView() )
-        m_gi = nullptr;
-    else // !report
-        m_gi = new GeometryInfo;
+    SetReportView(InReportView());
 
     m_highlighted = false;
     m_checked = false;
@@ -440,10 +419,9 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
 
 void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
+    wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
-    wxListItemData *item = node->GetData();
+    wxListItemData* const item = &m_items[0];
 
     wxString s;
     wxCoord lw, lh;
@@ -542,10 +520,9 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 
 void wxListLineData::SetPosition( int x, int y, int spacing )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
+    wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
-    wxListItemData *item = node->GetData();
+    wxListItemData* const item = &m_items[0];
 
     switch ( GetMode() )
     {
@@ -610,86 +587,47 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
 void wxListLineData::InitItems( int num )
 {
     for (int i = 0; i < num; i++)
-        m_items.Append( new wxListItemData(m_owner) );
+        m_items.emplace_back( m_owner );
 }
 
 void wxListLineData::SetItem( int index, const wxListItem &info )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    wxCHECK_RET( node, wxT("invalid column index in SetItem") );
-
-    wxListItemData *item = node->GetData();
-    item->SetItem( info );
+    m_items.at(index).SetItem( info );
 }
 
 void wxListLineData::GetItem( int index, wxListItem &info ) const
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    if (node)
-    {
-        wxListItemData *item = node->GetData();
-        item->GetItem( info );
-    }
+    m_items.at(index).GetItem( info );
 }
 
 wxString wxListLineData::GetText(int index) const
 {
-    wxString s;
-
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    if (node)
-    {
-        wxListItemData *item = node->GetData();
-        s = item->GetText();
-    }
-
-    return s;
+    return m_items.at(index).GetText();
 }
 
 void wxListLineData::SetText( int index, const wxString& s )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    if (node)
-    {
-        wxListItemData *item = node->GetData();
-        item->SetText( s );
-    }
+    m_items.at(index).SetText(s);
 }
 
 void wxListLineData::SetImage( int index, int image )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    wxCHECK_RET( node, wxT("invalid column index in SetImage()") );
-
-    wxListItemData *item = node->GetData();
-    item->SetImage(image);
+    m_items.at(index).SetImage(image);
 }
 
 int wxListLineData::GetImage( int index ) const
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    wxCHECK_MSG( node, -1, wxT("invalid column index in GetImage()") );
-
-    wxListItemData *item = node->GetData();
-    return item->GetImage();
+    return m_items.at(index).GetImage();
 }
 
 wxItemAttr *wxListLineData::GetAttr() const
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_MSG( node, nullptr, wxT("invalid column index in GetAttr()") );
-
-    wxListItemData *item = node->GetData();
-    return item->GetAttr();
+    return m_items.at(0).GetAttr();
 }
 
 void wxListLineData::SetAttr(wxItemAttr *attr)
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("invalid column index in SetAttr()") );
-
-    wxListItemData *item = node->GetData();
-    item->SetAttr(attr);
+    m_items.at(0).SetAttr(attr);
 }
 
 void wxListLineData::ApplyAttributes(wxDC *dc,
@@ -772,12 +710,11 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
 
 void wxListLineData::Draw(wxDC *dc, bool current)
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
+    wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
     ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current);
 
-    wxListItemData *item = node->GetData();
+    wxListItemData* const item = &m_items[0];
     if (item->HasImage())
     {
         // centre the image inside our rectangle, this looks nicer when items
@@ -829,12 +766,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     }
 
     size_t col = 0;
-    for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-          node;
-          node = node->GetNext(), col++ )
+    for ( const auto& item : m_items )
     {
-        wxListItemData *item = node->GetData();
-
         int width = m_owner->GetColumnWidth(col);
         if (col == 0 && m_owner->HasCheckBoxes())
             width -= x;
@@ -845,11 +778,11 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         const int wText = width;
         wxDCClipper clipper(*dc, xOld, rect.y, wText, rect.height);
 
-        if ( item->HasImage() )
+        if ( item.HasImage() )
         {
             int ix, iy;
-            m_owner->GetImageSize( item->GetImage(), ix, iy );
-            m_owner->DrawImage( item->GetImage(), dc, xOld, yMid - iy/2 );
+            m_owner->GetImageSize( item.GetImage(), ix, iy );
+            m_owner->DrawImage( item.GetImage(), dc, xOld, yMid - iy/2 );
 
             ix += IMAGE_MARGIN_IN_REPORT_MODE;
 
@@ -857,8 +790,10 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             width -= ix;
         }
 
-        if ( item->HasText() )
-            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, width);
+        if ( item.HasText() )
+            DrawTextFormatted(dc, item.GetText(), col, xOld, yMid, width);
+
+        ++col;
     }
 }
 
@@ -1667,8 +1602,6 @@ wxListMainWindow::~wxListMainWindow()
         m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
 
     DoDeleteAllItems();
-    WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
-    WX_CLEAR_ARRAY(m_aColWidths);
 
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
@@ -1678,10 +1611,9 @@ wxListMainWindow::~wxListMainWindow()
 
 void wxListMainWindow::SetReportView(bool inReportView)
 {
-    const size_t count = m_lines.size();
-    for ( size_t n = 0; n < count; n++ )
+    for ( auto& line : m_lines )
     {
-        m_lines[n]->SetReportView(inReportView);
+        line.SetReportView(inReportView);
     }
 }
 
@@ -1717,22 +1649,21 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
     // control changed as it would have the incorrect number of fields
     // otherwise
     if ( !m_lines.empty() &&
-            m_lines[0]->m_items.GetCount() != (size_t)GetColumnCount() )
+            m_lines[0].m_items.size() != (size_t)GetColumnCount() )
     {
-        self->m_lines.Clear();
+        self->m_lines.clear();
     }
 
     if ( m_lines.empty() )
     {
-        wxListLineData *line = new wxListLineData(self);
-        self->m_lines.push_back(line);
+        self->m_lines.emplace_back(self);
 
         // don't waste extra memory -- there never going to be anything
         // else/more in this array
         self->m_lines.shrink_to_fit();
     }
 
-    return m_lines[0];
+    return &self->m_lines[0];
 }
 
 // ----------------------------------------------------------------------------
@@ -1794,10 +1725,9 @@ wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
 
     int image_x = 0;
     wxListLineData *data = GetLine(line);
-    wxListItemDataList::compatibility_iterator node = data->m_items.GetFirst();
-    if (node)
+    if ( !data->m_items.empty() )
     {
-        wxListItemData *item = node->GetData();
+        wxListItemData *item = &data->m_items[0];
         if ( item->HasImage() )
         {
             int ix, iy;
@@ -3412,11 +3342,10 @@ wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
 
 void wxListMainWindow::SetColumn( int col, const wxListItem &item )
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in SetColumn" );
 
-    wxCHECK_RET( node, wxT("invalid column index in SetColumn") );
-
-    wxListHeaderData *column = node->GetData();
+    wxListHeaderData* const column = &m_columns[col];
     column->SetItem( item );
 
     if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER )
@@ -3444,14 +3373,9 @@ public:
     virtual void UpdateWithRow(int row) override
     {
         wxListLineData *line = m_listmain->GetLine( row );
-        wxListItemDataList::compatibility_iterator n = line->m_items.Item( GetColumn() );
-
-        wxCHECK_RET( n, wxS("no subitem?") );
-
-        wxListItemData* const itemData = n->GetData();
 
         wxListItem item;
-        itemData->GetItem(item);
+        line->m_items.at(GetColumn()).GetItem(item);
 
         UpdateWithWidth(m_listmain->GetItemWidthWithImage(&item));
     }
@@ -3475,10 +3399,10 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
     if ( headerWin )
         headerWin->m_dirty = true;
 
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-    wxCHECK_RET( node, wxT("no column?") );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in SetColumnWidth" );
 
-    wxListHeaderData *column = node->GetData();
+    wxListHeaderData* const column = &m_columns[col];
 
     if ( width == wxLIST_AUTOSIZE_USEHEADER || width == wxLIST_AUTOSIZE )
     {
@@ -3490,20 +3414,20 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             calculator.UpdateWithWidth(ComputeMinHeaderWidth(column));
 
         //  if the cached column width isn't valid then recalculate it
-        wxColWidthInfo* const pWidthInfo = m_aColWidths.Item(col);
-        if ( pWidthInfo->bNeedsUpdate )
+        wxColWidthInfo& widthInfo = m_aColWidths[col];
+        if ( widthInfo.bNeedsUpdate )
         {
             size_t first_visible, last_visible;
             GetVisibleLinesRange(&first_visible, &last_visible);
 
             calculator.ComputeBestColumnWidth(GetItemCount(),
                                               first_visible, last_visible);
-            pWidthInfo->nMaxWidth = calculator.GetMaxWidth();
-            pWidthInfo->bNeedsUpdate = false;
+            widthInfo.nMaxWidth = calculator.GetMaxWidth();
+            widthInfo.bNeedsUpdate = false;
         }
         else
         {
-            calculator.UpdateWithWidth(pWidthInfo->nMaxWidth);
+            calculator.UpdateWithWidth(widthInfo.nMaxWidth);
         }
 
         width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
@@ -3521,7 +3445,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         {
             int margin = GetClientSize().GetX();
             for ( int i = 0; i < col && margin > 0; ++i )
-                margin -= m_columns.Item(i)->GetData()->GetWidth();
+                margin -= m_columns.at(i).GetWidth();
 
             if ( margin > width )
                 width = margin;
@@ -3552,20 +3476,18 @@ int wxListMainWindow::GetHeaderWidth() const
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item ) const
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-    wxCHECK_RET( node, wxT("invalid column index in GetColumn") );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in GetColumn" );
 
-    wxListHeaderData *column = node->GetData();
-    column->GetItem( item );
+    m_columns[col].GetItem( item );
 }
 
 int wxListMainWindow::GetColumnWidth( int col ) const
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-    wxCHECK_MSG( node, 0, wxT("invalid column index") );
+    wxCHECK_MSG( col >= 0 && col < (int)m_columns.size(), 0,
+                 "invalid column index in GetColumnWidth" );
 
-    wxListHeaderData *column = node->GetData();
-    return column->GetWidth();
+    return m_columns[col].GetWidth();
 }
 
 // ----------------------------------------------------------------------------
@@ -3592,11 +3514,11 @@ void wxListMainWindow::SetItem( wxListItem &item )
             //  update the Max Width Cache if needed
             int width = GetItemWidthWithImage(&item);
 
-            wxColWidthInfo* const pWidthInfo = m_aColWidths.Item(item.m_col);
-            if ( width > pWidthInfo->nMaxWidth )
+            wxColWidthInfo& widthInfo = m_aColWidths.at(item.m_col);
+            if ( width > widthInfo.nMaxWidth )
             {
-                pWidthInfo->nMaxWidth = width;
-                pWidthInfo->bNeedsUpdate = true;
+                widthInfo.nMaxWidth = width;
+                widthInfo.bNeedsUpdate = true;
             }
         }
     }
@@ -4316,22 +4238,19 @@ void wxListMainWindow::DeleteItem( long lindex )
         //  mark the Column Max Width cache as dirty if the items in the line
         //  we're deleting contain the Max Column Width
         wxListLineData * const line = GetLine(index);
-        wxListItemDataList::compatibility_iterator n;
         wxListItem      item;
 
-        for (size_t i = 0; i < m_columns.GetCount(); i++)
+        size_t i = 0;
+        for ( const auto& it : line->m_items )
         {
-            n = line->m_items.Item( i );
-            wxListItemData* itemData;
-            itemData = n->GetData();
-            itemData->GetItem(item);
+            it.GetItem(item);
 
             int itemWidth;
             itemWidth = GetItemWidthWithImage(&item);
 
-            wxColWidthInfo *pWidthInfo = m_aColWidths.Item(i);
-            if ( itemWidth >= pWidthInfo->nMaxWidth )
-                pWidthInfo->bNeedsUpdate = true;
+            wxColWidthInfo& widthInfo = m_aColWidths.at(i++);
+            if ( itemWidth >= widthInfo.nMaxWidth )
+                widthInfo.bNeedsUpdate = true;
         }
 
         ResetVisibleLinesRange();
@@ -4346,7 +4265,6 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
     else
     {
-        delete m_lines[index];
         m_lines.erase( m_lines.begin() + index );
     }
 
@@ -4365,21 +4283,17 @@ void wxListMainWindow::DeleteItem( long lindex )
 
 void wxListMainWindow::DeleteColumn( int col )
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-
-    wxCHECK_RET( node, wxT("invalid column index in DeleteColumn()") );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in DeleteColumn()" );
 
     m_dirty = true;
-    delete node->GetData();
-    m_columns.Erase( node );
+    m_columns.erase( m_columns.begin() + col );
 
     if ( !IsVirtual() )
     {
         // update all the items
-        for ( size_t i = 0; i < m_lines.size(); i++ )
+        for ( auto& line : m_lines )
         {
-            wxListLineData * const line = GetLine(i);
-
             // In the following atypical but possible scenario it can be
             // legal to call DeleteColumn() but the items may not have any
             // values for it:
@@ -4391,19 +4305,16 @@ void wxListMainWindow::DeleteColumn( int col )
             //  6. Call DeleteColumn().
             // So we need to check for this as otherwise we would simply crash
             // if this happens.
-            if ( line->m_items.GetCount() <= static_cast<unsigned>(col) )
+            if ( line.m_items.size() <= static_cast<unsigned>(col) )
                 continue;
 
-            wxListItemDataList::compatibility_iterator n = line->m_items.Item( col );
-            delete n->GetData();
-            line->m_items.Erase(n);
+            line.m_items.erase(line.m_items.begin() + col);
         }
     }
 
     if ( InReportView() )   //  we only cache max widths when in Report View
     {
-        delete m_aColWidths.Item(col);
-        m_aColWidths.RemoveAt(col);
+        m_aColWidths.erase(m_aColWidths.begin() + col);
     }
 
     // invalidate it as it has to be recalculated
@@ -4415,8 +4326,8 @@ void wxListMainWindow::DoDeleteAllItems()
     // We will need to update all columns if any items are inserted again.
     if ( InReportView() )
     {
-        for ( size_t i = 0; i < m_aColWidths.GetCount(); i++ )
-            m_aColWidths.Item(i)->bNeedsUpdate = true;
+        for ( auto& widthInfo : m_aColWidths )
+            widthInfo.bNeedsUpdate = true;
     }
 
     if ( IsEmpty() )
@@ -4447,7 +4358,7 @@ void wxListMainWindow::DoDeleteAllItems()
     if ( InReportView() )
         ResetVisibleLinesRange();
 
-    m_lines.Clear();
+    m_lines.clear();
 }
 
 void wxListMainWindow::DeleteAllItems()
@@ -4459,8 +4370,8 @@ void wxListMainWindow::DeleteAllItems()
 
 void wxListMainWindow::DeleteEverything()
 {
-    WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
-    WX_CLEAR_ARRAY(m_aColWidths);
+    m_columns.clear();
+    m_aColWidths.clear();
 
     DeleteAllItems();
 }
@@ -4605,19 +4516,19 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         wxCHECK_RET( col < m_aColWidths.size(), "invalid item column" );
 
         // calculate the width of the item and adjust the max column width
-        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(col);
+        wxColWidthInfo& widthInfo = m_aColWidths[col];
         int width = GetItemWidthWithImage(&item);
         item.SetWidth(width);
-        if (width > pWidthInfo->nMaxWidth)
+        if (width > widthInfo.nMaxWidth)
         {
-            pWidthInfo->nMaxWidth = width;
-            pWidthInfo->bNeedsUpdate = true;
+            widthInfo.nMaxWidth = width;
+            widthInfo.bNeedsUpdate = true;
         }
     }
 
-    wxListLineData *line = new wxListLineData(this);
+    wxListLineData line(this);
 
-    line->SetItem( item.m_col, item );
+    line.SetItem( item.m_col, item );
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         // Reset the buffered height if it's not big enough for the new image.
@@ -4632,7 +4543,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         }
     }
 
-    m_lines.insert( m_lines.begin() + id, line );
+    m_lines.insert( m_lines.begin() + id, std::move(line) );
 
     m_dirty = true;
 
@@ -4654,39 +4565,36 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
     m_dirty = true;
     if ( InReportView() )
     {
-        wxListHeaderData *column = new wxListHeaderData( item );
+        wxListHeaderData column( item );
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
-            column->SetWidth(ComputeMinHeaderWidth(column));
+            column.SetWidth(ComputeMinHeaderWidth(&column));
 
-        wxColWidthInfo *colWidthInfo = new wxColWidthInfo(0, IsVirtual());
+        wxColWidthInfo colWidthInfo(0, IsVirtual());
 
-        bool insert = (col >= 0) && ((size_t)col < m_columns.GetCount());
+        bool insert = (col >= 0) && ((size_t)col < m_columns.size());
         if ( insert )
         {
-            wxListHeaderDataList::compatibility_iterator
-                node = m_columns.Item( col );
-            m_columns.Insert( node, column );
-            m_aColWidths.Insert( colWidthInfo, col );
+            m_columns.insert( m_columns.begin() + col, column );
+            m_aColWidths.insert( m_aColWidths.begin() + col, colWidthInfo );
             idx = col;
         }
         else
         {
-            idx = m_aColWidths.GetCount();
-            m_columns.Append( column );
-            m_aColWidths.Add( colWidthInfo );
+            idx = m_aColWidths.size();
+            m_columns.push_back( column );
+            m_aColWidths.push_back( colWidthInfo );
         }
 
         if ( !IsVirtual() )
         {
             // update all the items
-            for ( size_t i = 0; i < m_lines.size(); i++ )
+            for ( auto& line : m_lines )
             {
-                wxListLineData * const line = GetLine(i);
-                wxListItemData * const data = new wxListItemData(this);
+                auto& items = line.m_items;
                 if ( insert )
-                    line->m_items.Insert(col, data);
+                    items.emplace(items.begin() + col, this);
                 else
-                    line->m_items.Append(data);
+                    items.emplace_back(this);
             }
         }
 
@@ -4732,13 +4640,13 @@ struct wxListLineComparator
     {
     }
 
-    bool operator()(wxListLineData* const& line1,
-                    wxListLineData* const& line2) const
+    bool operator()(const wxListLineData& line1,
+                    const wxListLineData& line2) const
     {
         wxListItem item;
-        line1->GetItem( 0, item );
+        line1.GetItem( 0, item );
         wxUIntPtr data1 = item.m_data;
-        line2->GetItem( 0, item );
+        line2.GetItem( 0, item );
         wxUIntPtr data2 = item.m_data;
         return m_f(data1, data2, m_data) < 0;
     }
@@ -5474,7 +5382,7 @@ bool wxGenericListCtrl::DeleteAllItems()
 
 bool wxGenericListCtrl::DeleteAllColumns()
 {
-    size_t count = m_mainWin->m_columns.GetCount();
+    size_t count = m_mainWin->m_columns.size();
     for ( size_t n = 0; n < count; n++ )
         DeleteColumn( 0 );
     return true;
