@@ -133,7 +133,7 @@ public:
     const wxString& GetText() const { return m_text; }
     void SetText(const wxString& text) { m_text = text; }
 
-    void GetItem( wxListItem &item );
+    void GetItem( wxListItem &item ) const;
 
     bool IsHit( int x, int y ) const;
     int GetImage() const;

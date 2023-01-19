@@ -347,7 +347,7 @@ bool wxListHeaderData::IsHit( int x, int y ) const
     return ((x >= m_xpos) && (x <= m_xpos+m_width) && (y >= m_ypos) && (y <= m_ypos+m_height));
 }
 
-void wxListHeaderData::GetItem( wxListItem& item )
+void wxListHeaderData::GetItem( wxListItem& item ) const
 {
     long mask = item.m_mask;
     if ( !mask )
