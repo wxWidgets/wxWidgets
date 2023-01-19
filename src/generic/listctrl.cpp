@@ -1611,10 +1611,9 @@ wxListMainWindow::~wxListMainWindow()
 
 void wxListMainWindow::SetReportView(bool inReportView)
 {
-    const size_t count = m_lines.size();
-    for ( size_t n = 0; n < count; n++ )
+    for ( auto& line : m_lines )
     {
-        m_lines[n]->SetReportView(inReportView);
+        line.SetReportView(inReportView);
     }
 }
 
@@ -1650,22 +1649,21 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
     // control changed as it would have the incorrect number of fields
     // otherwise
     if ( !m_lines.empty() &&
-            m_lines[0]->m_items.size() != (size_t)GetColumnCount() )
+            m_lines[0].m_items.size() != (size_t)GetColumnCount() )
     {
-        self->m_lines.Clear();
+        self->m_lines.clear();
     }
 
     if ( m_lines.empty() )
     {
-        wxListLineData *line = new wxListLineData(self);
-        self->m_lines.push_back(line);
+        self->m_lines.emplace_back(self);
 
         // don't waste extra memory -- there never going to be anything
         // else/more in this array
         self->m_lines.shrink_to_fit();
     }
 
-    return m_lines[0];
+    return &self->m_lines[0];
 }
 
 // ----------------------------------------------------------------------------
@@ -4267,7 +4265,6 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
     else
     {
-        delete m_lines[index];
         m_lines.erase( m_lines.begin() + index );
     }
 
@@ -4295,10 +4292,8 @@ void wxListMainWindow::DeleteColumn( int col )
     if ( !IsVirtual() )
     {
         // update all the items
-        for ( size_t i = 0; i < m_lines.size(); i++ )
+        for ( auto& line : m_lines )
         {
-            wxListLineData * const line = GetLine(i);
-
             // In the following atypical but possible scenario it can be
             // legal to call DeleteColumn() but the items may not have any
             // values for it:
@@ -4310,10 +4305,10 @@ void wxListMainWindow::DeleteColumn( int col )
             //  6. Call DeleteColumn().
             // So we need to check for this as otherwise we would simply crash
             // if this happens.
-            if ( line->m_items.size() <= static_cast<unsigned>(col) )
+            if ( line.m_items.size() <= static_cast<unsigned>(col) )
                 continue;
 
-            line->m_items.erase(line->m_items.begin() + col);
+            line.m_items.erase(line.m_items.begin() + col);
         }
     }
 
@@ -4363,7 +4358,7 @@ void wxListMainWindow::DoDeleteAllItems()
     if ( InReportView() )
         ResetVisibleLinesRange();
 
-    m_lines.Clear();
+    m_lines.clear();
 }
 
 void wxListMainWindow::DeleteAllItems()
@@ -4531,9 +4526,9 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         }
     }
 
-    wxListLineData *line = new wxListLineData(this);
+    wxListLineData line(this);
 
-    line->SetItem( item.m_col, item );
+    line.SetItem( item.m_col, item );
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         // Reset the buffered height if it's not big enough for the new image.
@@ -4548,7 +4543,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         }
     }
 
-    m_lines.insert( m_lines.begin() + id, line );
+    m_lines.insert( m_lines.begin() + id, std::move(line) );
 
     m_dirty = true;
 
@@ -4593,9 +4588,9 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
         if ( !IsVirtual() )
         {
             // update all the items
-            for ( size_t i = 0; i < m_lines.size(); i++ )
+            for ( auto& line : m_lines )
             {
-                auto& items = GetLine(i)->m_items;
+                auto& items = line.m_items;
                 if ( insert )
                     items.emplace(items.begin() + col, this);
                 else
@@ -4645,13 +4640,13 @@ struct wxListLineComparator
     {
     }
 
-    bool operator()(wxListLineData* const& line1,
-                    wxListLineData* const& line2) const
+    bool operator()(const wxListLineData& line1,
+                    const wxListLineData& line2) const
     {
         wxListItem item;
-        line1->GetItem( 0, item );
+        line1.GetItem( 0, item );
         wxUIntPtr data1 = item.m_data;
-        line2->GetItem( 0, item );
+        line2.GetItem( 0, item );
         wxUIntPtr data2 = item.m_data;
         return m_f(data1, data2, m_data) < 0;
     }

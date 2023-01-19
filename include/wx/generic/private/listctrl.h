@@ -308,19 +308,6 @@ private:
                            int width);
 };
 
-class wxListLineDataArray : public wxVector<wxListLineData*>
-{
-public:
-    void Clear()
-    {
-        for ( size_t n = 0; n < size(); ++n )
-            delete (*this)[n];
-        clear();
-    }
-
-    ~wxListLineDataArray() { Clear(); }
-};
-
 //-----------------------------------------------------------------------------
 //  wxListHeaderWindow (internal)
 //-----------------------------------------------------------------------------
@@ -785,7 +772,7 @@ public:
 protected:
     // the array of all line objects for a non virtual list control (for the
     // virtual list control we only ever use m_lines[0])
-    wxListLineDataArray  m_lines;
+    std::vector<wxListLineData> m_lines;
 
     // the list of column objects
     std::vector<wxListHeaderData> m_columns;
@@ -860,13 +847,15 @@ protected:
     {
         wxASSERT_MSG( n != (size_t)-1, wxT("invalid line index") );
 
+        wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
+
         if ( IsVirtual() )
         {
-            wxConstCast(this, wxListMainWindow)->CacheLineData(n);
+            self->CacheLineData(n);
             n = 0;
         }
 
-        return m_lines[n];
+        return &self->m_lines[n];
     }
 
     // get a dummy line which can be used for geometry calculations and such:
