@@ -2576,6 +2576,10 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
 
+#ifdef __WXOSX__
+    dc.DestroyClippingRegion();
+#endif // __WXOSX__
+
     if ( HasFlag(wxTR_FULL_ROW_HIGHLIGHT) )
     {
         int x, w, h;
