@@ -116,7 +116,7 @@ public:
 
 
     // Non-portable MSW-specific functions.
-#ifdef WXWIN_COMPATIBILITY_3_2
+#if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("Does nothing, don't use")
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     wxDEPRECATED_MSG("Use portable SetFont() instead")
