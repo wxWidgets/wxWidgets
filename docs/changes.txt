@@ -299,6 +299,10 @@ wxOSX:
 - Always call wxTaskBarIcon::GetPopupMenu() (William Lindnilsson, #23008).
 - Add margins around wxListCtrl items to improve appearance (#23155).
 
+wxQt:
+
+- Fix creating wxFont using fractional point size (Ali Kettab, #23163).
+
 
 3.2.1: (released 2022-09-09)
 ----------------------------
