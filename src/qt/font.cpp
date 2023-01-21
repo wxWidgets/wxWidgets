@@ -349,7 +349,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
-    SetFractionalPointSize(info.GetPointSize());
+    SetFractionalPointSize(info.GetFractionalPointSize());
     SetFamily(info.GetFamily());
     SetStyle(info.GetStyle());
     SetNumericWeight(info.GetWeight());
