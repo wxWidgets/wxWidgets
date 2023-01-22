@@ -3384,8 +3384,8 @@ private:
           return wxScopedCharTypeBuffer<T>::CreateNonOwned(m_str, m_len);
       }
 
-      T *m_str;     // pointer to the string data
-      size_t m_len; // length, not size, i.e. in chars and without last NUL
+      T *m_str{nullptr};     // pointer to the string data
+      size_t m_len{0}; // length, not size, i.e. in chars and without last NUL
   };
 
 
