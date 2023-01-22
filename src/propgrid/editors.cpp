@@ -1107,7 +1107,7 @@ bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property
             if ( propGrid->GetUnspecifiedCommonValue() == cmnValIndex )
             {
                 if ( !property->IsValueUnspecified() )
-                    propGrid->SetInternalFlag(wxPG_FL_VALUE_CHANGE_IN_EVENT);
+                    propGrid->SetInternalFlag(wxPropertyGrid::wxPG_FL_VALUE_CHANGE_IN_EVENT);
                 property->SetValueToUnspecified();
                 if ( !cb->HasFlag(wxCB_READONLY) )
                 {
@@ -1616,7 +1616,7 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
 
     if ( !property->IsValueUnspecified() )
     {
-        if ( propGrid->HasInternalFlag(wxPG_FL_ACTIVATION_BY_CLICK) )
+        if ( propGrid->HasInternalFlag(wxPropertyGrid::wxPG_FL_ACTIVATION_BY_CLICK) )
         {
             // Send the event to toggle the value (if mouse cursor is on the item)
             wxPoint point = cb->ScreenToClient(::wxGetMousePosition());
@@ -1628,7 +1628,7 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
         }
     }
 
-    propGrid->SetInternalFlag( wxPG_FL_FIXED_WIDTH_EDITOR );
+    propGrid->SetInternalFlag(wxPropertyGrid::wxPG_FL_FIXED_WIDTH_EDITOR);
 
     return cb;
 }

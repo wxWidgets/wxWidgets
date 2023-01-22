@@ -604,7 +604,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // make this one hideable.
     if (
          ( !parentIsRoot && parent->HasFlag(wxPG_PROP_HIDDEN) ) ||
-         ( propgrid && (propgrid->HasInternalFlag(wxPG_FL_ADDING_HIDEABLES)) )
+         ( propgrid && (propgrid->HasInternalFlag(wxPropertyGrid::wxPG_FL_ADDING_HIDEABLES)) )
        )
         SetFlag( wxPG_PROP_HIDDEN );
 

@@ -1139,7 +1139,7 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
     wxASSERT( propgrid );
 
     // Must only occur when user triggers event
-    if ( !propgrid->HasInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT) )
+    if ( !propgrid->HasInternalFlag(wxPropertyGrid::wxPG_FL_IN_HANDLECUSTOMEDITOREVENT) )
         return res;
 
     wxColourPropertyValue val = GetVal();

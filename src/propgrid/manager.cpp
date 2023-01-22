@@ -39,17 +39,17 @@
 // when using custom controls
 
 #define BEGIN_MOUSE_CAPTURE \
-    if ( !(m_iFlags & wxPG_FL_MOUSE_CAPTURED) ) \
+    if ( !(m_iFlags & wxPG_MAN_FL_MOUSE_CAPTURED) ) \
     { \
         CaptureMouse(); \
-        m_iFlags |= wxPG_FL_MOUSE_CAPTURED; \
+        m_iFlags |= wxPG_MAN_FL_MOUSE_CAPTURED; \
     }
 
 #define END_MOUSE_CAPTURE \
-    if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED ) \
+    if ( m_iFlags & wxPG_MAN_FL_MOUSE_CAPTURED ) \
     { \
         ReleaseMouse(); \
-        m_iFlags &= ~(wxPG_FL_MOUSE_CAPTURED); \
+        m_iFlags &= ~(wxPG_MAN_FL_MOUSE_CAPTURED); \
     }
 
 // -----------------------------------------------------------------------
@@ -571,6 +571,17 @@ private:
 // wxPropertyGridManager
 // -----------------------------------------------------------------------
 
+// Internal flags
+enum wxPGMAN_INTERNAL_FLAGS : long
+{
+    wxPG_MAN_FL_INITIALIZED           = 0x0001,
+    wxPG_MAN_FL_MOUSE_CAPTURED        = 0x0002,
+    // Set if wxPGMan requires redrawing of description text box.
+    wxPG_MAN_FL_DESC_REFRESH_REQUIRED = 0x0004,
+    // Set after page has been inserted to manager
+    wxPG_MAN_FL_PAGE_INSERTED         = 0x0008
+};
+
 // Final default splitter y is client height minus this.
 #define wxPGMAN_DEFAULT_NEGATIVE_SPLITTER_Y         100
 
@@ -689,7 +700,7 @@ constexpr long wxPG_MAN_PASS_FLAGS_MASK = wxPG_WINDOW_STYLE_MASK | wxTAB_TRAVERS
 void wxPropertyGridManager::Init2( int style )
 {
 
-    if ( m_iFlags & wxPG_FL_INITIALIZED )
+    if ( m_iFlags & wxPG_MAN_FL_INITIALIZED )
         return;
 
     m_windowStyle |= (style & wxPG_WINDOW_STYLE_MASK);
@@ -742,7 +753,7 @@ void wxPropertyGridManager::Init2( int style )
 
     m_pPropGrid->SetId(useId);
 
-    m_pPropGrid->SetInternalFlag(wxPG_FL_IN_MANAGER);
+    m_pPropGrid->SetInternalFlag(wxPropertyGrid::wxPG_FL_IN_MANAGER);
 
     m_pState = m_pPropGrid->m_pState;
 
@@ -762,7 +773,7 @@ void wxPropertyGridManager::Init2( int style )
     // Optional initial controls.
     m_width = -12345;
 
-    m_iFlags |= wxPG_FL_INITIALIZED;
+    m_iFlags |= wxPG_MAN_FL_INITIALIZED;
 
 }
 
@@ -935,7 +946,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
         nextPage = m_emptyPage;
     }
 
-    m_iFlags |= wxPG_FL_DESC_REFRESH_REQUIRED;
+    m_iFlags |= wxPG_MAN_FL_DESC_REFRESH_REQUIRED;
 
     m_pPropGrid->SwitchState( nextPage->GetStatePtr() );
 
@@ -1491,7 +1502,7 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
 
     m_splitterY = new_splittery;
 
-    m_iFlags &= ~(wxPG_FL_DESC_REFRESH_REQUIRED);
+    m_iFlags &= ~(wxPG_MAN_FL_DESC_REFRESH_REQUIRED);
 }
 
 // -----------------------------------------------------------------------
@@ -1558,7 +1569,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
         UpdateDescriptionBox( new_splittery, width, height );
     }
 
-    if ( m_iFlags & wxPG_FL_INITIALIZED )
+    if ( m_iFlags & wxPG_MAN_FL_INITIALIZED )
     {
         int pgh = propgridBottomY - propgridY;
         if ( pgh < 0 )
@@ -1833,7 +1844,7 @@ void wxPropertyGridManager::RecreateControls()
     if ( m_windowStyle & wxPG_DESCRIPTION )
     {
         // Has help box.
-        m_pPropGrid->SetInternalFlag(wxPG_FL_NOSTATUSBARHELP);
+        m_pPropGrid->SetInternalFlag(wxPropertyGrid::wxPG_FL_NOSTATUSBARHELP);
 
         if ( !m_pTxtHelpCaption )
         {
@@ -1862,7 +1873,7 @@ void wxPropertyGridManager::RecreateControls()
     else
     {
         // No help box.
-        m_pPropGrid->ClearInternalFlag(wxPG_FL_NOSTATUSBARHELP);
+        m_pPropGrid->ClearInternalFlag(wxPropertyGrid::wxPG_FL_NOSTATUSBARHELP);
 
         if ( m_pTxtHelpCaption )
             m_pTxtHelpCaption->Destroy();
@@ -1928,7 +1939,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         // Categorized mode.
         if ( m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) )
         {
-            if ( !m_pPropGrid->HasInternalFlag(wxPG_FL_CATMODE_AUTO_SORT) )
+            if ( !m_pPropGrid->HasInternalFlag(wxPropertyGrid::wxPG_FL_CATMODE_AUTO_SORT) )
                 m_pPropGrid->m_windowStyle &= ~wxPG_AUTO_SORT;
             m_pPropGrid->EnableCategories( true );
         }
@@ -1939,9 +1950,9 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         if ( !m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) )
         {
             if ( m_pPropGrid->HasFlag(wxPG_AUTO_SORT) )
-                m_pPropGrid->SetInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
+                m_pPropGrid->SetInternalFlag(wxPropertyGrid::wxPG_FL_CATMODE_AUTO_SORT);
             else
-                m_pPropGrid->ClearInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
+                m_pPropGrid->ClearInternalFlag(wxPropertyGrid::wxPG_FL_CATMODE_AUTO_SORT);
 
             m_pPropGrid->m_windowStyle |= wxPG_AUTO_SORT;
             m_pPropGrid->EnableCategories( false );
