@@ -27,15 +27,18 @@
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/editors.h"
 
-#include <float.h>
-#include <limits.h>
+#include <limits>
 
-// MinGW in strict ANSI mode doesn't define those in its limits.h.
-#if defined(wxNEEDS_STRICT_ANSI_WORKAROUNDS) && !defined(LLONG_MAX)
-    #define LLONG_MAX 9223372036854775807LL
-    #define LLONG_MIN (-LLONG_MAX - 1)
-    #define ULLONG_MAX (2ULL*LLONG_MAX + 1)
-#endif
+constexpr double wxPG_DBL_MIN = std::numeric_limits<double>::min();
+constexpr double wxPG_DBL_MAX = std::numeric_limits<double>::max();
+constexpr int wxPG_INT_MIN = std::numeric_limits<int>::min();
+constexpr int wxPG_INT_MAX = std::numeric_limits<int>::max();
+constexpr long wxPG_LONG_MIN = std::numeric_limits<long>::min();
+constexpr long wxPG_LONG_MAX = std::numeric_limits<long>::max();
+constexpr long long wxPG_LLONG_MIN = std::numeric_limits<long long>::min();
+constexpr long long wxPG_LLONG_MAX = std::numeric_limits<long long>::max();
+constexpr unsigned long wxPG_ULONG_MAX = std::numeric_limits<unsigned long>::max();
+constexpr unsigned long long wxPG_ULLONG_MAX = std::numeric_limits<unsigned long long>::max();
 
 // -----------------------------------------------------------------------
 // wxStringProperty
@@ -410,7 +413,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
         wxLongLong_t value64 = 0;
 
         if ( useText.ToLongLong(&value64, 10) &&
-             ( value64 >= INT_MAX || value64 <= INT_MIN )
+             ( value64 >= wxPG_INT_MAX || value64 <= wxPG_INT_MIN )
            )
         {
             bool doChangeValue = isPrevLong;
@@ -464,7 +467,7 @@ bool wxIntProperty::DoValidation( const wxNumericProperty* property,
 {
     return property->DoNumericValidation<wxLongLong>(value,
                                            pValidationInfo,
-                                           mode, wxLongLong(LLONG_MIN), wxLongLong(LLONG_MAX));
+                                           mode, wxLongLong(wxPG_LLONG_MIN), wxLongLong(wxPG_LLONG_MAX));
 }
 
 #if defined(wxLongLong_t)
@@ -474,7 +477,7 @@ bool wxIntProperty::DoValidation( const wxNumericProperty* property,
                                   int mode )
 {
     return property->DoNumericValidation<wxLongLong_t>(value, pValidationInfo,
-                                             mode, LLONG_MIN, LLONG_MAX);
+                                             mode, wxPG_LLONG_MIN, wxPG_LLONG_MAX);
 }
 #endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
@@ -485,7 +488,7 @@ bool wxIntProperty::DoValidation(const wxNumericProperty* property,
                                  int mode)
 {
     return property->DoNumericValidation<long>(value, pValidationInfo,
-                                     mode, LONG_MIN, LONG_MAX);
+                                     mode, wxPG_LONG_MIN, wxPG_LONG_MAX);
 }
 
 bool wxIntProperty::ValidateValue( wxVariant& value,
@@ -685,7 +688,7 @@ bool wxUIntProperty::StringToValue(wxVariant& variant, const wxString& text, int
 
     if ( s.ToULongLong(&value64, (unsigned int)m_realBase) )
     {
-        if ( value64 >= LONG_MAX )
+        if ( value64 >= wxPG_LONG_MAX )
         {
             bool doChangeValue = isPrevLong;
 
@@ -705,7 +708,7 @@ bool wxUIntProperty::StringToValue(wxVariant& variant, const wxString& text, int
     }
 #endif
     unsigned long value32;
-    if ( s.ToULong(&value32, m_realBase) && value32 <= LONG_MAX )
+    if ( s.ToULong(&value32, m_realBase) && value32 <= wxPG_LONG_MAX )
     {
         if ( !isPrevLong || variant != (long)value32 )
         {
@@ -737,7 +740,7 @@ bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   int mode )
 {
     return property->DoNumericValidation<wxULongLong>(value, pValidationInfo,
-                                            mode, wxULongLong(0), wxULongLong(ULLONG_MAX));
+                                            mode, wxULongLong(0), wxULongLong(wxPG_ULLONG_MAX));
 }
 
 #if defined(wxULongLong_t)
@@ -747,7 +750,7 @@ bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   int mode )
 {
     return property->DoNumericValidation<wxULongLong_t>(value, pValidationInfo,
-                                              mode, 0, ULLONG_MAX);
+                                              mode, 0, wxPG_ULLONG_MAX);
 }
 #endif // wxULongLong_t
 #endif // wxUSE_LONGLONG
@@ -758,7 +761,7 @@ bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   int mode)
 {
     return property->DoNumericValidation<long>(value, pValidationInfo,
-                                     mode, 0, ULONG_MAX);
+                                     mode, 0, wxPG_ULONG_MAX);
 }
 
 bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& validationInfo ) const
@@ -980,7 +983,7 @@ bool wxFloatProperty::DoValidation( const wxNumericProperty* property,
                                     int mode )
 {
     return property->DoNumericValidation<double>(value, pValidationInfo,
-                                       mode, DBL_MIN, DBL_MAX);
+                                       mode, wxPG_DBL_MIN, wxPG_DBL_MAX);
 }
 
 bool

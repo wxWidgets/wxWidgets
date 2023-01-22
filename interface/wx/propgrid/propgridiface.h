@@ -71,38 +71,6 @@ wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
 /** @}
 */
 
-/** @section propgrid_misc_data wxPropertyGrid Miscellaneous
-
-    This section describes some miscellaneous values, types and macros.
-    @{
-*/
-
-/**
-    Used to tell wxPGProperty to use label as name as well.
-*/
-#define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
-
-/**
-    This is the value placed in wxPGProperty::sm_wxPG_LABEL
-*/
-#define wxPG_LABEL_STRING       wxS("@!")
-
-#define wxPG_COLOUR_BLACK       (*wxBLACK)
-
-/**
-    Convert Red, Green and Blue to a single 32-bit value.
-*/
-#define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
-
-/**
-    If property is supposed to have custom-painted image, then returning
-    this in OnMeasureImage() will usually be enough.
-*/
-#define wxPG_DEFAULT_IMAGE_SIZE  wxDefaultSize
-
-/** @}
-*/
-
 /**
     @class wxPropertyGridInterface
 

@@ -678,11 +678,10 @@ void wxPropertyGridManager::Init1()
 // -----------------------------------------------------------------------
 
 // These flags are always used in wxPropertyGrid integrated in wxPropertyGridManager.
-#define wxPG_MAN_PROPGRID_FORCED_FLAGS (  wxBORDER_THEME | \
-                                          wxCLIP_CHILDREN)
+constexpr long wxPG_MAN_PROPGRID_FORCED_FLAGS = wxBORDER_THEME | wxCLIP_CHILDREN;
 
 // Which flags can be passed to underlying wxPropertyGrid.
-#define wxPG_MAN_PASS_FLAGS_MASK       (wxPG_WINDOW_STYLE_MASK|wxTAB_TRAVERSAL)
+constexpr long wxPG_MAN_PASS_FLAGS_MASK = wxPG_WINDOW_STYLE_MASK | wxTAB_TRAVERSAL;
 
 //
 // Initialize after parent etc. set
@@ -833,7 +832,7 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
 // -----------------------------------------------------------------------
 
 // Which flags can affect the toolbar
-#define wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK  (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|wxPG_EX_NO_TOOLBAR_DIVIDER)
+constexpr long wxPG_EX_WINDOW_TOOLBAR_STYLE_MASK = wxPG_EX_NO_FLAT_TOOLBAR | wxPG_EX_MODE_BUTTONS | wxPG_EX_NO_TOOLBAR_DIVIDER;
 
 void wxPropertyGridManager::SetExtraStyle( long exStyle )
 {

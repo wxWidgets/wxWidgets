@@ -22,6 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxPoint;
 class WXDLLIMPEXP_FWD_CORE wxSize;
 class WXDLLIMPEXP_FWD_CORE wxFont;
 
+#include <limits>
 #if wxUSE_STD_CONTAINERS
 #include <numeric>
 #endif // wxUSE_STD_CONTAINERS
@@ -262,7 +263,7 @@ typedef wxString wxPGCachedString;
 
 // Used to indicate wxPGChoices::Add etc. that the value is actually not given
 // by the caller.
-#define wxPG_INVALID_VALUE      INT_MAX
+constexpr int wxPG_INVALID_VALUE = std::numeric_limits<int>::max();
 
 // -----------------------------------------------------------------------
 
@@ -362,16 +363,16 @@ enum wxPG_SETVALUE_FLAGS
 //
 // Valid constants for wxPG_UINT_BASE attribute
 // (long because of wxVariant constructor)
-#define wxPG_BASE_OCT                       8L
-#define wxPG_BASE_DEC                       10L
-#define wxPG_BASE_HEX                       16L
-#define wxPG_BASE_HEXL                      32L
+constexpr long wxPG_BASE_OCT  =  8L;
+constexpr long wxPG_BASE_DEC  = 10L;
+constexpr long wxPG_BASE_HEX  = 16L;
+constexpr long wxPG_BASE_HEXL = 32L;
 
 //
 // Valid constants for wxPG_UINT_PREFIX attribute
-#define wxPG_PREFIX_NONE                    0L
-#define wxPG_PREFIX_0x                      1L
-#define wxPG_PREFIX_DOLLAR_SIGN             2L
+constexpr long wxPG_PREFIX_NONE        = 0L;
+constexpr long wxPG_PREFIX_0x          = 1L;
+constexpr long wxPG_PREFIX_DOLLAR_SIGN = 2L;
 
 // -----------------------------------------------------------------------
 // Editor class.

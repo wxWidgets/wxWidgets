@@ -28,7 +28,10 @@ public:
 // Property classes
 // -----------------------------------------------------------------------
 
-#define wxPG_PROP_PASSWORD  wxPG_PROP_CLASS_SPECIFIC_2
+/** If set, enables ::wxTE_PASSWORD on wxStringProperty editor.
+    @hideinitializer
+*/
+constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_CLASS_SPECIFIC_2;
 
 /** @class wxStringProperty
     @ingroup classes
@@ -348,9 +351,12 @@ public:
 
 
 
-// If set, then selection of choices is static and should not be
-// changed (i.e. returns @NULL in GetPropertyChoices).
-#define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
+/** If set, then selection of choices is static and should not be
+    changed (i.e. returns @NULL in GetPropertyChoices).
+    Used by wxSystemColourProperty, wxCursorProperty.
+    @hideinitializer
+*/
+constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
 
 /** @class wxEnumProperty
     @ingroup classes
@@ -595,8 +601,11 @@ protected:
 };
 
 
-// Indicates first bit usable by derived properties.
-#define wxPG_PROP_SHOW_FULL_FILENAME  wxPG_PROP_CLASS_SPECIFIC_1
+/**
+    If set, full path is shownin wxFileProperty.
+    @hideinitializer
+*/
+constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
 
 /** @class wxFileProperty
     @ingroup classes
@@ -648,7 +657,11 @@ protected:
 };
 
 
-#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_1
+/** Flag used in wxLongStringProperty to mark that edit button
+    should be enabled even in the read-only mode.
+    @hideinitializer
+*/
+constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_1;
 
 /** @class wxLongStringProperty
     @ingroup classes
@@ -703,10 +716,15 @@ protected:
 };
 
 
-// wxBoolProperty specific flags
-#define wxPG_PROP_USE_CHECKBOX      wxPG_PROP_CLASS_SPECIFIC_1
-// DCC = Double Click Cycles
-#define wxPG_PROP_USE_DCC           wxPG_PROP_CLASS_SPECIFIC_2
+/** wxBoolProperty, wxFlagsProperty specific flag.
+    @hideinitializer
+*/
+constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_CLASS_SPECIFIC_1;
+/** wxBoolProperty, wxFlagsProperty specific flag.
+    DCC = Double Click Cycles
+    @hideinitializer
+*/
+constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_CLASS_SPECIFIC_2;
 
 
 

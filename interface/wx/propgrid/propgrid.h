@@ -255,12 +255,14 @@ wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_WINDOW_PG_STYLE_MASK|wxPG_EX_WINDOW_PGMAN_ST
 };
 
 /** Combines various styles.
+    @hideinitializer
 */
-#define wxPG_DEFAULT_STYLE          (0)
+constexpr long wxPG_DEFAULT_STYLE = 0L;
 
 /** Combines various styles.
+    @hideinitializer
 */
-#define wxPGMAN_DEFAULT_STYLE       (0)
+constexpr long wxPGMAN_DEFAULT_STYLE = 0L;
 
 /** @}
 */

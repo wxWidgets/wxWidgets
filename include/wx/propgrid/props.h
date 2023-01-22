@@ -88,7 +88,7 @@ private:
 // Property classes
 // -----------------------------------------------------------------------
 
-#define wxPG_PROP_PASSWORD  wxPG_PROP_CLASS_SPECIFIC_2
+constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_CLASS_SPECIFIC_2;
 
 // Basic property with string value.
 // If value "<composed>" is set, then actual value is formed (or composed)
@@ -351,7 +351,7 @@ public:
 
 // If set, then selection of choices is static and should not be
 // changed (i.e. returns nullptr in GetPropertyChoices).
-#define wxPG_PROP_STATIC_CHOICES    wxPG_PROP_CLASS_SPECIFIC_1
+constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
 
 // Represents a single selection from a list of choices
 // You can derive custom properties with choices from this class.
@@ -595,7 +595,7 @@ protected:
 // -----------------------------------------------------------------------
 
 // Indicates first bit usable by derived properties.
-#define wxPG_PROP_SHOW_FULL_FILENAME  wxPG_PROP_CLASS_SPECIFIC_1
+constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
 
 // Like wxLongStringProperty, but the button triggers file selector instead.
 class WXDLLIMPEXP_PROPGRID wxFileProperty : public wxEditorDialogProperty
@@ -634,7 +634,7 @@ protected:
 
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_1
+constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_1;
 
 // Like wxStringProperty, but has a button that triggers a small text
 // editor dialog.
@@ -685,9 +685,9 @@ protected:
 // -----------------------------------------------------------------------
 
 // wxBoolProperty, wxFlagsProperty specific flags
-#define wxPG_PROP_USE_CHECKBOX      wxPG_PROP_CLASS_SPECIFIC_1
+constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_CLASS_SPECIFIC_1;
 // DCC = Double Click Cycles
-#define wxPG_PROP_USE_DCC           wxPG_PROP_CLASS_SPECIFIC_2
+constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_CLASS_SPECIFIC_2;
 
 
 // -----------------------------------------------------------------------

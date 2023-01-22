@@ -26,7 +26,7 @@
 
 // -----------------------------------------------------------------------
 
-#define wxNullProperty  ((wxPGProperty*)nullptr)
+constexpr wxPGProperty* wxNullProperty = nullptr;
 
 
 // Contains information relayed to property's OnCustomPaint.
@@ -416,7 +416,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 };
 
 // Topmost flag.
-#define wxPG_PROP_MAX               wxPG_PROP_AUTO_UNSPECIFIED
+constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 
 // Property with children must have one of these set, otherwise iterators
 // will not work correctly.
@@ -671,7 +671,7 @@ protected:
     virtual ~wxPGChoicesData();
 };
 
-#define wxPGChoicesEmptyData    ((wxPGChoicesData*)nullptr)
+constexpr wxPGChoicesData* wxPGChoicesEmptyData = nullptr;
 
 
 // Helper class for managing choices of wxPropertyGrid properties.

@@ -30,8 +30,9 @@
 #include "wx/propgrid/advprops.h"
 
 #include "wx/odcombo.h"
-
 #include "wx/uilocale.h"
+
+#include <limits>
 
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
@@ -65,6 +66,8 @@
     #define wxPG_CAN_DRAW_CURSOR           0
 #endif
 
+constexpr int wxPG_INT_MIN = std::numeric_limits<int>::min();
+constexpr int wxPG_INT_MAX = std::numeric_limits<int>::max();
 
 // -----------------------------------------------------------------------
 // Value type related
@@ -261,7 +264,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 #endif
         tcSz.Set(sz.x - butWidth - margin, sz.y);
         wnd2->SetSize(pos.x + tcSz.x + margin, pos.y, butWidth, sz.y);
-        wnd2->SetRange(INT_MIN, INT_MAX);
+        wnd2->SetRange(wxPG_INT_MIN, wxPG_INT_MAX);
         wnd2->SetValue(0);
     }
     else

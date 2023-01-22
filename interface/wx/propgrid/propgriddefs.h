@@ -15,7 +15,7 @@
 /** This is the value placed in wxPGProperty::sm_wxPG_LABEL
 */
 #define wxPG_LABEL_STRING       wxS("@!")
-#define wxPG_NULL_BITMAP        wxNullBitmap
+
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
 
 /** Convert Red, Green and Blue to a single 32-bit value.
@@ -54,8 +54,9 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
 /** Used to indicate wxPGChoices::Add() etc that the value is actually not given
     by the caller.
+    @hideinitializer
 */
-#define wxPG_INVALID_VALUE      INT_MAX
+constexpr int wxPG_INVALID_VALUE = std::numeric_limits<int>::max();
 
 // -----------------------------------------------------------------------
 
@@ -181,19 +182,34 @@ enum wxPG_SETVALUE_FLAGS
 
 // -----------------------------------------------------------------------
 
-//
-/** Valid constants for ::wxPG_UINT_BASE attribute
-    (@c long because of wxVariant constructor)
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
 */
-#define wxPG_BASE_OCT                       8L
-#define wxPG_BASE_DEC                       10L
-#define wxPG_BASE_HEX                       16L
-#define wxPG_BASE_HEXL                      32L
+constexpr long wxPG_BASE_OCT =   8L;
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
+*/
+constexpr long wxPG_BASE_DEC =  10L;
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
+*/
+constexpr long wxPG_BASE_HEX =  16L;
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
+*/
+constexpr long wxPG_BASE_HEXL = 32L;
 
-/** Valid constants for ::wxPG_UINT_PREFIX attribute
+/** Constant for ::wxPG_UINT_PREFIX attribute
+    @hideinitializer
 */
-#define wxPG_PREFIX_NONE                    0L
-#define wxPG_PREFIX_0x                      1L
-#define wxPG_PREFIX_DOLLAR_SIGN             2L
+constexpr long wxPG_PREFIX_NONE        = 0L;
+/** Constant for ::wxPG_UINT_PREFIX attribute
+    @hideinitializer
+*/
+constexpr long wxPG_PREFIX_0x          = 1L;
+/** Constant for ::wxPG_UINT_PREFIX attribute
+    @hideinitializer
+*/
+constexpr long wxPG_PREFIX_DOLLAR_SIGN = 2L;
 
 // -----------------------------------------------------------------------

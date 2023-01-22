@@ -6,7 +6,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#define wxNullProperty  nullptr
+/** @hideinitializer */
+constexpr wxPGProperty* wxNullProperty = nullptr;
 
 /** @class wxPGPaintData
 
@@ -383,8 +384,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 };
 
 /** Topmost flag.
+    @hideinitializer
 */
-#define wxPG_PROP_MAX               wxPG_PROP_AUTO_UNSPECIFIED
+constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 
 /** Property with children must have one of these set, otherwise iterators
     will not work correctly.
@@ -2624,9 +2626,9 @@ protected:
     virtual ~wxPGChoicesData();
 };
 
-#define wxPGChoicesEmptyData nullptr
-
-
+/** @hideinitializer
+*/
+constexpr wxPGChoicesData* wxPGChoicesEmptyData = nullptr;
 
 
 /**
