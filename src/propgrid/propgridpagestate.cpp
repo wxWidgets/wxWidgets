@@ -31,7 +31,7 @@
 #include "wx/propgrid/propgridpagestate.h"
 #include "wx/propgrid/propgrid.h"
 
-#include <algorithm>
+#include <numeric>
 
 #define wxPG_DEFAULT_SPLITTERX      110
 
