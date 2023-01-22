@@ -468,7 +468,7 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
     wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
     wxCHECK_RET(prop, "wxDatePickerCtrl editor can only be used with wxDateProperty or derivative.");
 
-    int datePickerStyle = prop->GetDatePickerStyle();
+    long datePickerStyle = prop->GetDatePickerStyle();
     if ( datePickerStyle & wxDP_ALLOWNONE )
         ctrl->SetValue(wxInvalidDateTime);
 }
@@ -670,12 +670,12 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
 
     if ( ind == 0 )
     {
-        font.SetPointSize( childValue.GetLong() );
+        font.SetPointSize( static_cast<int>(childValue.GetLong()) );
     }
     else if ( ind == 1 )
     {
         wxString faceName;
-        int faceIndex = childValue.GetLong();
+        int faceIndex = static_cast<int>(childValue.GetLong());
 
         if ( faceIndex >= 0 )
             faceName = wxPGGlobalVars->m_fontFamilyChoices->GetLabel(faceIndex);
@@ -684,7 +684,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     }
     else if ( ind == 2 )
     {
-        int st = childValue.GetLong();
+        int st = static_cast<int>(childValue.GetLong());
         if ( st != wxFONTSTYLE_NORMAL &&
              st != wxFONTSTYLE_SLANT &&
              st != wxFONTSTYLE_ITALIC )
@@ -693,7 +693,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     }
     else if ( ind == 3 )
     {
-        int wt = childValue.GetLong();
+        int wt = static_cast<int>(childValue.GetLong());
         if ( wt < wxFONTWEIGHT_THIN || wt > wxFONTWEIGHT_MAX )
              wt = wxFONTWEIGHT_NORMAL;
         font.SetWeight( static_cast<wxFontWeight>(wt) );
@@ -704,7 +704,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     }
     else if ( ind == 5 )
     {
-        int fam = childValue.GetLong();
+        int fam = static_cast<int>(childValue.GetLong());
         if ( fam < wxFONTFAMILY_DEFAULT ||
              fam > wxFONTFAMILY_TELETYPE )
              fam = wxFONTFAMILY_DEFAULT;
