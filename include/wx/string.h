@@ -241,7 +241,7 @@ public:
 
 private:
     // the wxString this object was returned for
-    const wxString *m_str;
+    const wxString *m_str{nullptr};
     // Offset into c_str() return value. Note that this is *not* offset in
     // m_str in Unicode characters. Instead, it is index into the
     // char*/wchar_t* buffer returned by c_str(). It's interpretation depends
@@ -280,10 +280,10 @@ public:
     inline void set(const wxString *str, wxStringImpl::iterator *iter)
         { clear(); DoSet(str, nullptr, iter); }
 
-    const wxString *m_str;
-    wxStringImpl::const_iterator *m_citer;
-    wxStringImpl::iterator *m_iter;
-    wxStringIteratorNode *m_prev, *m_next;
+    const wxString *m_str{nullptr};
+    wxStringImpl::const_iterator *m_citer{nullptr};
+    wxStringImpl::iterator *m_iter{nullptr};
+    wxStringIteratorNode *m_prev{nullptr}, *m_next{nullptr};
 
 private:
     inline void clear();
