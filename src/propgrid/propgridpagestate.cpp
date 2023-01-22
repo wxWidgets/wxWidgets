@@ -587,42 +587,17 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 }
 
 // -----------------------------------------------------------------------
-
-static int wxPG_SortFunc_ByFunction(wxPGProperty **pp1, wxPGProperty **pp2)
-{
-    wxPGProperty *p1 = *pp1;
-    wxPGProperty *p2 = *pp2;
-    wxPropertyGrid* pg = p1->GetGrid();
-    wxPGSortCallback sortFunction = pg->GetSortFunction();
-    return sortFunction(pg, p1, p2);
-}
-
-static int wxPG_SortFunc_ByLabel(wxPGProperty **pp1, wxPGProperty **pp2)
-{
-    wxPGProperty *p1 = *pp1;
-    wxPGProperty *p2 = *pp2;
-    return p1->GetLabel().CmpNoCase( p2->GetLabel() );
-}
-
-#if 0
-//
-// For wxVector w/ wxUSE_STL=1, you would use code like this instead:
-//
-
-#include <algorithm>
-
-static bool wxPG_SortFunc_ByFunction(wxPGProperty *p1, wxPGProperty *p2)
+static bool wxPG_SortFunc_ByFunction(wxPGProperty* p1, wxPGProperty* p2)
 {
     wxPropertyGrid* pg = p1->GetGrid();
     wxPGSortCallback sortFunction = pg->GetSortFunction();
     return sortFunction(pg, p1, p2) < 0;
 }
 
-static bool wxPG_SortFunc_ByLabel(wxPGProperty *p1, wxPGProperty *p2)
+static bool wxPG_SortFunc_ByLabel(wxPGProperty* p1, wxPGProperty* p2)
 {
     return p1->GetLabel().CmpNoCase( p2->GetLabel() ) < 0;
 }
-#endif
 
 void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
                                               int flags )

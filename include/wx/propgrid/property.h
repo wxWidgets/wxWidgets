@@ -1938,7 +1938,11 @@ protected:
     void RemoveChild(unsigned int index);
 
     // Sorts children using specified comparison function.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Don't use SortChildren function with argument of 'int (*)(wxPGProperty**, wxPGProperty**)' type. Use 'bool (*)(wxPGProperty*, wxPGProperty*)' argument instead")
     void SortChildren(int (*fCmp)(wxPGProperty**, wxPGProperty**));
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SortChildren(bool (*fCmp)(wxPGProperty*, wxPGProperty*));
 
     void DoEnable( bool enable );
 

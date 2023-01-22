@@ -2393,10 +2393,17 @@ void wxPGProperty::RemoveChild(unsigned int index)
     m_children.erase(m_children.begin()+index);
 }
 
+#if WXWIN_COMPATIBILITY_3_2
 void wxPGProperty::SortChildren(int (*fCmp)(wxPGProperty**, wxPGProperty**))
 {
     wxArray_SortFunction<wxPGProperty*> sf(fCmp);
     std::sort(m_children.begin(), m_children.end(), sf);
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
+void wxPGProperty::SortChildren(bool (*fCmp)(wxPGProperty*, wxPGProperty*))
+{
+    std::sort(m_children.begin(), m_children.end(), fCmp);
 }
 
 void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
