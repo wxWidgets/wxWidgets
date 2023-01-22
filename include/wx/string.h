@@ -265,8 +265,7 @@ private:
 class WXDLLIMPEXP_BASE wxStringIteratorNode
 {
 public:
-    wxStringIteratorNode()
-        : m_str(nullptr), m_citer(nullptr), m_iter(nullptr), m_prev(nullptr), m_next(nullptr) {}
+    wxStringIteratorNode() = default;
     wxStringIteratorNode(const wxString *str,
                           wxStringImpl::const_iterator *citer)
         { DoSet(str, citer, nullptr); }
@@ -280,10 +279,10 @@ public:
     inline void set(const wxString *str, wxStringImpl::iterator *iter)
         { clear(); DoSet(str, nullptr, iter); }
 
-    const wxString *m_str;
-    wxStringImpl::const_iterator *m_citer;
-    wxStringImpl::iterator *m_iter;
-    wxStringIteratorNode *m_prev, *m_next;
+    const wxString *m_str{nullptr};
+    wxStringImpl::const_iterator *m_citer{nullptr};
+    wxStringImpl::iterator *m_iter{nullptr};
+    wxStringIteratorNode *m_prev{nullptr}, *m_next{nullptr};
 
 private:
     inline void clear();
@@ -3362,7 +3361,7 @@ private:
   {
       // notice that there is no need to initialize m_len here as it's unused
       // as long as m_str is null
-      ConvertedBuffer() : m_str(nullptr), m_len(0) {}
+      ConvertedBuffer() = default;
       ~ConvertedBuffer()
           { free(m_str); }
 
@@ -3384,8 +3383,8 @@ private:
           return wxScopedCharTypeBuffer<T>::CreateNonOwned(m_str, m_len);
       }
 
-      T *m_str;     // pointer to the string data
-      size_t m_len; // length, not size, i.e. in chars and without last NUL
+      T *m_str{nullptr};     // pointer to the string data
+      size_t m_len{0}; // length, not size, i.e. in chars and without last NUL
   };
 
 
