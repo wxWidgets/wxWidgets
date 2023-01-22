@@ -2112,7 +2112,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
-    const wxVector<int>& colWidths = state->m_colWidths;
+    const std::vector<int>& colWidths = state->m_colWidths;
     const unsigned int colCount = state->GetColumnCount();
 
     dc.SetFont(normalFont);
@@ -2123,7 +2123,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     //
     // Pre-generate list of visible properties.
-    wxVector<wxPGProperty*> visPropArray;
+    std::vector<wxPGProperty*> visPropArray;
     visPropArray.reserve((m_height/m_lineHeight)+6);
 
     for ( ; !it.AtEnd(); it.Next() )
@@ -2146,7 +2146,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxPGProperty* nextP = visPropArray[0];
 
     // Calculate splitters positions
-    wxVector<int> splitterPos;
+    std::vector<int> splitterPos;
     splitterPos.reserve(colCount);
     int sx = x;
     for ( int cw : colWidths )
@@ -6265,9 +6265,9 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
 
         // Use iterate from the back since it is more likely that the event
         // being destroyed is at the end of the array.
-        wxVector<wxPropertyGridEvent*>& liveEvents = m_pg->m_liveEvents;
+        std::vector<wxPropertyGridEvent*>& liveEvents = m_pg->m_liveEvents;
 
-        for ( wxVector<wxPropertyGridEvent*>::reverse_iterator rit = liveEvents.rbegin(); rit != liveEvents.rend(); ++rit )
+        for ( std::vector<wxPropertyGridEvent*>::reverse_iterator rit = liveEvents.rbegin(); rit != liveEvents.rend(); ++rit )
         {
             if ( *rit == this )
             {

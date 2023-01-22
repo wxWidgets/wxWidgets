@@ -19,6 +19,7 @@
 
 #include <set>
 #include <unordered_map>
+#include <vector>
 
 // -----------------------------------------------------------------------
 
@@ -614,13 +615,13 @@ protected:
     std::unordered_map<wxString, wxPGProperty*> m_dictName;
 
     // List of column widths (first column does not include margin).
-    wxVector<int>               m_colWidths;
+    std::vector<int>            m_colWidths;
 
     // List of indices of columns the user can edit by clicking it.
     std::set<unsigned int>      m_editableColumns;
 
     // Column proportions.
-    wxVector<int>               m_columnProportions;
+    std::vector<int>            m_columnProportions;
 
     double                      m_fSplitterX;
 

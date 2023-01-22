@@ -17,6 +17,8 @@
 
 #include "wx/propgrid/propgrid.h"
 
+#include <vector>
+
 // -----------------------------------------------------------------------
 
 #ifndef SWIG
@@ -536,7 +538,7 @@ protected:
 
     wxPropertyGrid* m_pPropGrid;
 
-    wxVector<wxPropertyGridPage*>   m_arrPages;
+    std::vector<wxPropertyGridPage*> m_arrPages;
 
 #if wxUSE_TOOLBAR
     wxToolBar*      m_pToolbar;

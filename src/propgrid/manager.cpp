@@ -562,7 +562,7 @@ private:
 
     wxPropertyGridManager*          m_manager;
     const wxPropertyGridPage*       m_page;
-    wxVector<wxHeaderColumnSimple*> m_columns;
+    std::vector<wxHeaderColumnSimple*> m_columns;
 };
 
 #endif // wxUSE_HEADERCTRL

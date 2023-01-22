@@ -17,6 +17,8 @@
 
 #include "wx/window.h"
 
+#include <vector>
+
 class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
 class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
 class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;
@@ -488,7 +490,7 @@ protected:
 
     int GenId( int id ) const;
 
-    wxVector<wxWindow*> m_buttons;
+    std::vector<wxWindow*> m_buttons;
     wxSize          m_fullEditorSize;
     int             m_buttonsWidth;
 };

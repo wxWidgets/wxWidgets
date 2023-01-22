@@ -498,7 +498,7 @@ void wxPGChoicesData::CopyDataFrom(wxPGChoicesData* data)
 wxPGChoiceEntry& wxPGChoicesData::Insert(int index,
     const wxPGChoiceEntry& item)
 {
-    wxVector<wxPGChoiceEntry>::iterator it;
+    std::vector<wxPGChoiceEntry>::iterator it;
     if ( index == -1 )
     {
         it = m_items.end();
@@ -808,7 +808,8 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
 {
-    return wxPGItemIndexInVector<wxPGProperty*>(m_children, const_cast<wxPGProperty*>(p));
+    auto it = std::find(m_children.begin(), m_children.end(), p);
+    return it != m_children.end() ? (int)(it - m_children.begin()) : wxNOT_FOUND;
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -2380,7 +2381,11 @@ wxPGProperty* wxPGProperty::InsertChild( int index,
 
 void wxPGProperty::RemoveChild( wxPGProperty* p )
 {
-    wxPGRemoveItemFromVector<wxPGProperty*>(m_children, p);
+    auto it = std::find(m_children.begin(), m_children.end(), p);
+    if ( it != m_children.end() )
+    {
+        m_children.erase(it);
+    }
 }
 
 void wxPGProperty::RemoveChild(unsigned int index)

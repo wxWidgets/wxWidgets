@@ -24,6 +24,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #ifndef SWIG
 extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
@@ -62,7 +63,7 @@ public:
     std::unordered_map<wxString, wxPGEditor*> m_mapEditorClasses;
 
 #if wxUSE_VALIDATORS
-    wxVector<wxValidator*>  m_arrValidators; // These wxValidators need to be freed
+    std::vector<wxValidator*> m_arrValidators; // These wxValidators need to be freed
 #endif
 
     wxPGChoices*        m_fontFamilyChoices;
@@ -1560,7 +1561,7 @@ protected:
 
 #if !WXWIN_COMPATIBILITY_3_0
     // List of editors and their event handlers to be deleted in idle event handler.
-    wxVector<wxObject*> m_deletedEditorObjects;
+    std::vector<wxObject*> m_deletedEditorObjects;
 #endif
 
     // List of key codes that will not be handed over to editor controls.
@@ -1678,15 +1679,15 @@ protected:
     wxPGCell            m_categoryDefaultCell;
 
     // Backup of selected property's cells
-    wxVector<wxPGCell>  m_propCellsBackup;
+    std::vector<wxPGCell> m_propCellsBackup;
 
     // NB: These *cannot* be moved to globals.
 
     // labels when properties use common values
-    wxVector<wxPGCommonValue*>  m_commonValues;
+    std::vector<wxPGCommonValue*> m_commonValues;
 
     // array of live events
-    wxVector<wxPropertyGridEvent*>  m_liveEvents;
+    std::vector<wxPropertyGridEvent*> m_liveEvents;
 
     // Which cv selection really sets value to unspecified?
     int                 m_cvUnspecified;
@@ -2215,7 +2216,7 @@ protected:
     wxPropertyGridPageState*    m_state;
 
     // Tree-hierarchy of added properties (that can have children).
-    wxVector<wxPGProperty*> m_propHierarchy;
+    std::vector<wxPGProperty*> m_propHierarchy;
 
     // Hashmap for string-id to wxPGChoicesData mapping.
     std::unordered_map<wxString, wxPGChoicesData*> m_dictIdChoices;

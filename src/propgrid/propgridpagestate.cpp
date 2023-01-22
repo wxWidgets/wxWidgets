@@ -31,6 +31,8 @@
 #include "wx/propgrid/propgridpagestate.h"
 #include "wx/propgrid/propgrid.h"
 
+#include <algorithm>
+
 #define wxPG_DEFAULT_SPLITTERX      110
 
 // -----------------------------------------------------------------------
@@ -1000,8 +1002,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
                wxS("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"),
                m_width, clientWidth);
 
-
-    int colsWidth = wxPGGetSumVectorItems<int>(m_colWidths, pg->GetMarginWidth());
+    int colsWidth = std::accumulate(m_colWidths.begin(), m_colWidths.end(), pg->GetMarginWidth());
 
     wxLogTrace("propgrid",
                wxS("  HasVirtualWidth: %i  colsWidth: %i"),
@@ -1128,7 +1129,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 {
     // Calculate sum of proportions
-    int psum = wxPGGetSumVectorItems<int>(m_columnProportions, 0);
+    int psum = std::accumulate(m_columnProportions.begin(), m_columnProportions.end(), 0);
     int puwid = (m_pPropGrid->m_width*256) / psum;
     int cpos = 0;
 
