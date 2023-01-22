@@ -31,6 +31,8 @@
 #include "wx/renderer.h"
 #endif
 
+#include <array>
+
 #define PWC_CHILD_SUMMARY_LIMIT         16 // Maximum number of children summarized in a parent property's
                                            // value field.
 
@@ -1952,30 +1954,28 @@ wxVariant wxPGProperty::GetAttributesAsList() const
 
 // Utility flags are excluded.
 // Store the literals in the internal representation for better performance.
-static const struct
-{
-    wxPGProperty::FlagType  m_flag;
-    const wxStringCharType* m_name;
-} gs_propFlagToString[4] =
-{ { wxPG_PROP_DISABLED,  wxS("DISABLED")  },
+static const std::array<std::pair<wxPGProperty::FlagType, const wxStringCharType*>, 4> gs_propFlagToString
+{ {
+  { wxPG_PROP_DISABLED,  wxS("DISABLED")  },
   { wxPG_PROP_HIDDEN,    wxS("HIDDEN")    },
   { wxPG_PROP_NOEDITOR,  wxS("NOEDITOR")  },
-  { wxPG_PROP_COLLAPSED, wxS("COLLAPSED") } };
+  { wxPG_PROP_COLLAPSED, wxS("COLLAPSED") }
+} };
 
 wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
 {
     wxString s;
     const FlagType relevantFlags = m_flags & flagsMask & wxPG_STRING_STORED_FLAGS;
 
-    for ( unsigned int i = 0; i < WXSIZEOF(gs_propFlagToString); i++ )
+    for ( auto& item : gs_propFlagToString )
     {
-        if ( relevantFlags & gs_propFlagToString[i].m_flag )
+        if ( relevantFlags & item.first )
         {
             if ( !s.empty() )
             {
                 s.append(wxS("|"));
             }
-            s.append(gs_propFlagToString[i].m_name);
+            s.append(item.second);
         }
     }
 
@@ -1987,11 +1987,11 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
     FlagType flags = 0;
 
     WX_PG_TOKENIZER1_BEGIN(str, wxS('|'))
-        for ( unsigned int i = 0; i < WXSIZEOF(gs_propFlagToString); i++ )
+        for ( auto& item : gs_propFlagToString )
         {
-            if ( token == gs_propFlagToString[i].m_name )
+            if ( token == item.second )
             {
-                flags |= gs_propFlagToString[i].m_flag;
+                flags |= item.first;
                 break;
             }
         }
