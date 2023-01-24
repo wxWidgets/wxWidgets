@@ -248,6 +248,7 @@ All:
 - Add Serbian translations (Nikola Jović).
 - Fix MT-safety problem in wxZipInputStream (#23054).
 - Fix building all samples in release build with CMake (#23106).
+- Fix using pkg-config when cross-compiling (#22886, #23037, #23171).
 
 All (GUI):
 
