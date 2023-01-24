@@ -1470,6 +1470,16 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
 
     if (HasClientDecor(m_widget))
     {
+        if (m_decorSize.top == 0 && !gtk_widget_get_realized(m_widget) && m_deferShowAllowed)
+        {
+            // shrink m_widget by decoration size before initial show,
+            // so that overall size remains correct
+            const int w = wxMax(m_width  - decorSize.left - decorSize.right,  m_minWidth);
+            const int h = wxMax(m_height - decorSize.top  - decorSize.bottom, m_minHeight);
+            gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+            if (!gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+                gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
+        }
         m_decorSize = decorSize;
         return;
     }
