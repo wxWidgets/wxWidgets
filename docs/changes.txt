@@ -288,6 +288,7 @@ wxMSW:
 - Fix memory leak when allocating command line arguments (#23081).
 - Include wxrc.exe in 64-bit wxMSW MSVC dev archive too (Danny Scott, #23122).
 - Don't disable wxComboBox after recreating it (Oleksandra Yushchenko, #23132).
+- Fix wxJoystick::GetProductName() returning nothing (Maarten Bent, #23172).
 
 wxOSX:
 
