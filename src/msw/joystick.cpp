@@ -436,25 +436,32 @@ wxString wxJoystick::GetProductName() const
     if (joyGetDevCaps(m_joystick, &joyCaps, sizeof(joyCaps)) != JOYERR_NOERROR)
         return wxEmptyString;
 
-    wxRegKey key1(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s\\%s"),
-                   REGSTR_PATH_JOYCONFIG, joyCaps.szRegKey, REGSTR_KEY_JOYCURR));
-
-    if ( key1.Exists() )
+    auto GetNameFromReg = [=](wxRegKey::StdKey root) -> wxString
     {
-        key1.QueryValue(wxString::Format(wxT("Joystick%d%s"),
-                                        m_joystick + 1, REGSTR_VAL_JOYOEMNAME),
-                        str);
-    }
+        wxString result;
+        wxString subKey1 = wxString::Format(wxT("%s\\%s\\%s"), REGSTR_PATH_JOYCONFIG, joyCaps.szRegKey, REGSTR_KEY_JOYCURR);
+        wxRegKey key1(root, subKey1);
 
-    if ( !str.empty() )
-    {
-        wxRegKey key2(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s"),
-                                       REGSTR_PATH_JOYOEM, str.c_str()));
-        if ( key2.Exists() )
+        if ( key1.Exists() )
         {
-            key2.QueryValue(REGSTR_VAL_JOYOEMNAME, str);
+            key1.QueryValue(wxString::Format(wxT("Joystick%d%s"), m_joystick + 1, REGSTR_VAL_JOYOEMNAME), result);
         }
-    }
+
+        if ( !result.empty() )
+        {
+            wxString subKey2 = wxString::Format(wxT("%s\\%s"), REGSTR_PATH_JOYOEM, result.c_str());
+            wxRegKey key2(root, subKey2);
+            if ( key2.Exists() )
+            {
+                key2.QueryValue(REGSTR_VAL_JOYOEMNAME, result);
+            }
+        }
+        return result;
+    };
+
+    str = GetNameFromReg(wxRegKey::HKCU);
+    if (str.empty())
+        str = GetNameFromReg(wxRegKey::HKLM);
 #endif
     return str;
 }
