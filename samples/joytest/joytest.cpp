@@ -22,6 +22,7 @@
 
 #include "wx/sound.h"
 #include "wx/joystick.h"
+#include <wx/dcbuffer.h>
 
 #include "joytest.h"
 
@@ -35,13 +36,6 @@ MyFrame *frame = nullptr;
 
 wxIMPLEMENT_APP(MyApp);
 
-// For drawing lines in a canvas
-long xpos = -1;
-long ypos = -1;
-
-int winNumber = 1;
-
-int nButtons = 0;
 // Initialise this in OnInit, not statically
 bool MyApp::OnInit()
 {
@@ -66,15 +60,14 @@ bool MyApp::OnInit()
 
     // Create the main frame window
 
-    frame = new MyFrame(nullptr, "Joystick Demo", wxDefaultPosition,
-        wxSize(500, 400), wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+    frame = new MyFrame(nullptr, "Joystick Demo");
 
     frame->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(JOYTEST_QUIT, "&Exit");
+    file_menu->Append(wxID_EXIT, "&Exit");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -85,25 +78,37 @@ bool MyApp::OnInit()
 
 #if wxUSE_STATUSBAR
     frame->CreateStatusBar();
-    frame->SetStatusText(wxString::Format("Device [%s] (PID:[%i] MID:[%i]) Ready... # of joysticks:[%i]", stick.GetProductName(), stick.GetProductId(), stick.GetManufacturerId(), wxJoystick::GetNumberJoysticks()));
+    frame->SetStatusText(wxString::Format("Device: %s, PID: %i, MID: %i, # of joysticks: %i",
+        stick.GetProductName(),
+        stick.GetProductId(),
+        stick.GetManufacturerId(),
+        wxJoystick::GetNumberJoysticks())
+    );
 #endif // wxUSE_STATUSBAR
 
+    frame->SetSize(frame->FromDIP(wxSize(500, 400)));
     frame->CenterOnScreen();
     frame->Show(true);
 
     return true;
 }
 
-wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxPanel)
     EVT_JOYSTICK_EVENTS(MyCanvas::OnJoystickEvent)
+    EVT_PAINT(MyCanvas::OnPaint)
+    EVT_SIZE(MyCanvas::OnSize)
 wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
-MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
-    wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER)
+MyCanvas::MyCanvas(wxWindow* parent)
+    : wxPanel(parent, wxID_ANY)
+    , m_pos(wxDefaultPosition)
+    , m_point(wxDefaultPosition)
+    , m_validPoint(false)
 {
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
     m_stick = new wxJoystick(wxJOYSTICK1);
-    nButtons = m_stick->GetNumberButtons();
+    m_nButtons = m_stick->GetNumberButtons();
     m_stick->SetCapture(this, 10);
 }
 
@@ -118,58 +123,13 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
     // We don't have valid (x, y) coordinates for z-move events.
     if ( !event.IsZMove() )
     {
-        wxClientDC dc(this);
+        m_point = event.GetPosition();
+        m_validPoint = true;
 
-        wxPoint pt(event.GetPosition());
-
-        // if negative positions are possible then shift everything up
-        int xmin = wxGetApp().m_minX;
-        int xmax = wxGetApp().m_maxX;
-        int ymin = wxGetApp().m_minY;
-        int ymax = wxGetApp().m_maxY;
-        if (xmin < 0) {
-            xmax += abs(xmin);
-            pt.x += abs(xmin);
+        if (event.IsMove() && event.ButtonIsDown()) {
+            Refresh();
         }
-        if (ymin < 0) {
-            ymax += abs(ymin);
-            pt.y += abs(ymin);
-        }
-
-        // Scale to canvas size
-        int cw, ch;
-        GetSize(&cw, &ch);
-
-        pt.x = (long) (((double)pt.x/(double)xmax) * cw);
-        pt.y = (long) (((double)pt.y/(double)ymax) * ch);
-
-        if (xpos > -1 && ypos > -1 && event.IsMove() && event.ButtonIsDown())
-        {
-            dc.SetPen(*wxBLACK_PEN);
-            dc.DrawLine(xpos, ypos, pt.x, pt.y);
-        }
-
-        xpos = pt.x;
-        ypos = pt.y;
     }
-
-#if wxUSE_STATUSBAR
-    wxString buf;
-    if (event.ButtonDown())
-        buf.Printf("Joystick (%ld, %ld) #%i Fire!", xpos, ypos, event.GetButtonOrdinal());
-    else
-        buf.Printf("Joystick (%ld, %ld)  ", xpos, ypos);
-
-/*
-    for(int i = 0; i < nButtons; ++i)
-    {
-        buf += wxString("[") +
-        ((event.GetButtonState() & (1 << i)) ? "Y" : "N") + wxString("]");
-    }
-*/
-
-    frame->SetStatusText(buf);
-#endif // wxUSE_STATUSBAR
 
 #if wxUSE_SOUND
     if (event.ButtonDown() && wxGetApp().m_fire.IsOk())
@@ -177,15 +137,80 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
         wxGetApp().m_fire.Play();
     }
 #endif // wxUSE_SOUND
+
+#if wxUSE_STATUSBAR
+    wxString buf;
+
+    for (int i = 0; i < m_nButtons; ++i)
+        buf += wxString::Format("%c", (event.GetButtonState() & (1 << i)) ? 0x26AB : 0x26AA);
+
+    buf += wxString::Format("  [%d, %d]", m_pos.x, m_pos.y);
+
+    frame->SetStatusText(buf);
+#endif // wxUSE_STATUSBAR
+}
+
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(evt))
+{
+    wxAutoBufferedPaintDC dc(this);
+
+    if (!m_validPoint)
+    {
+        dc.Clear();
+        return;
+    }
+
+    // if negative positions are possible then shift everything up
+    wxPoint pt(m_point);
+
+    int xmin = wxGetApp().m_minX;
+    int xmax = wxGetApp().m_maxX;
+    int ymin = wxGetApp().m_minY;
+    int ymax = wxGetApp().m_maxY;
+    if (xmin < 0) {
+        xmax += abs(xmin);
+        pt.x += abs(xmin);
+    }
+    if (ymin < 0) {
+        ymax += abs(ymin);
+        pt.y += abs(ymin);
+    }
+
+    // Scale to canvas size
+    wxSize cs = ToDIP(GetClientSize());
+    pt.x = (long)(((double)pt.x / (double)xmax) * (cs.x - 1));
+    pt.y = (long)(((double)pt.y / (double)ymax) * (cs.y - 1));
+
+    if (m_pos == wxDefaultPosition)
+        m_pos = wxPoint(cs.x / 2, cs.y / 2);
+
+    if (m_stick->GetButtonState(0))
+        dc.SetPen(*wxGREEN_PEN);
+    else if (m_stick->GetButtonState(1))
+        dc.SetPen(*wxRED_PEN);
+    else if (m_stick->GetButtonState(2))
+        dc.SetPen(*wxBLUE_PEN);
+    else if (m_stick->GetButtonState(3))
+        dc.SetPen(*wxYELLOW_PEN);
+    else
+        dc.SetPen(*wxBLACK_PEN);
+
+    dc.DrawLine(FromDIP(m_pos), FromDIP(pt));
+
+    m_pos = pt;
+}
+
+void MyCanvas::OnSize(wxSizeEvent& WXUNUSED(evt))
+{
+    m_validPoint = false;
 }
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(JOYTEST_QUIT, MyFrame::OnQuit)
+    EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
-    const wxSize& size, const long style)
-    : wxFrame(parent, wxID_ANY, title, pos, size, style)
+MyFrame::MyFrame(wxFrame *parent, const wxString& title)
+    : wxFrame(parent, wxID_ANY, title)
 {
     canvas = new MyCanvas(this);
 }
