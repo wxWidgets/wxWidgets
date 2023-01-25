@@ -2095,28 +2095,37 @@ dnl When cross-compiling for another system from Linux, don't use .pc files on
 dnl the build system, they are at best useless and can be harmful (e.g. they
 dnl may define options inappropriate for the cross-build, resulting in the
 dnl failure of all the subsequent tests).
-dnl
-dnl However do use .pc files for the host libraries that can be found by the
-dnl host-specific pkg-config if it was found by PKG_PROG_PKG_CONFIG above.
 if test "$build" != "$host"; then
-    case "$PKG_CONFIG" in
-        */$host-pkg-config )
+    dnl Assume that using pkg-config does work when cross-compiling to another
+    dnl Linux system, e.g. when targeting ARM Linux from x86_64 system.
+    case "${host}" in
+        *-linux-*)
             ;;
 
         * )
-            AC_MSG_WARN([Not using native pkg-config when cross-compiling.])
+            dnl But otherwise only do it if a host-specific pkg-config is
+            dnl available as using the build system one is not going to work.
+            case "$PKG_CONFIG" in
+                */$host-pkg-config )
+                    ;;
 
-            dnl pkg.m4 forbids the use of PKG_XXX, so undo it here to avoid autoconf
-            dnl errors.
-            m4_pattern_allow([PKG_CONFIG_LIBDIR])
+                * )
+                    AC_MSG_WARN([Not using native pkg-config when cross-compiling.])
 
-            dnl If pkg-config libdir is already defined, we suppose that they know what
-            dnl they're doing and leave it alone, but if not, set it to a path in which
-            dnl no .pc files will be found.
-            if test -z "$PKG_CONFIG_LIBDIR"; then
-                PKG_CONFIG_LIBDIR=/dev/null
-                export PKG_CONFIG_LIBDIR
-            fi
+                    dnl pkg.m4 forbids the use of PKG_XXX, so undo it here to avoid autoconf
+                    dnl errors.
+                    m4_pattern_allow([PKG_CONFIG_LIBDIR])
+
+                    dnl If pkg-config libdir is already defined, we suppose that they know what
+                    dnl they're doing and leave it alone, but if not, set it to a path in which
+                    dnl no .pc files will be found.
+                    if test -z "$PKG_CONFIG_LIBDIR"; then
+                        PKG_CONFIG_LIBDIR=/dev/null
+                        export PKG_CONFIG_LIBDIR
+                    fi
+                    ;;
+            esac
+            ;;
     esac
 fi
 
