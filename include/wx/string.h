@@ -241,7 +241,7 @@ public:
 
 private:
     // the wxString this object was returned for
-    const wxString *m_str{nullptr};
+    const wxString *m_str;
     // Offset into c_str() return value. Note that this is *not* offset in
     // m_str in Unicode characters. Instead, it is index into the
     // char*/wchar_t* buffer returned by c_str(). It's interpretation depends
@@ -265,8 +265,7 @@ private:
 class WXDLLIMPEXP_BASE wxStringIteratorNode
 {
 public:
-    wxStringIteratorNode()
-        : m_str(nullptr), m_citer(nullptr), m_iter(nullptr), m_prev(nullptr), m_next(nullptr) {}
+    wxStringIteratorNode() = default;
     wxStringIteratorNode(const wxString *str,
                           wxStringImpl::const_iterator *citer)
         { DoSet(str, citer, nullptr); }
@@ -3362,7 +3361,7 @@ private:
   {
       // notice that there is no need to initialize m_len here as it's unused
       // as long as m_str is null
-      ConvertedBuffer() : m_str(nullptr), m_len(0) {}
+      ConvertedBuffer() = default;
       ~ConvertedBuffer()
           { free(m_str); }
 
