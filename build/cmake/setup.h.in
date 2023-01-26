@@ -83,9 +83,6 @@
 /* NanoX (with wxX11) */
 #cmakedefine01 wxUSE_NANOX
 
-/* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
-#undef __Point__
-
 /* MS-DOS with DJGPP */
 #cmakedefine __DOS__ 1
 
