@@ -3854,22 +3854,10 @@ case "${host}" in
     USE_LINUX=1
     $as_echo "#define __LINUX__ 1" >>confdefs.h
 
-    TMP=`uname -m`
-    if test "x$TMP" = "xalpha"; then
-      USE_ALPHA=1
-      $as_echo "#define __ALPHA__ 1" >>confdefs.h
-
-    fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-gnu* | *-*-k*bsd*-gnu )
     USE_GNU=1
-    TMP=`uname -m`
-    if test "x$TMP" = "xalpha"; then
-      USE_ALPHA=1
-      $as_echo "#define __ALPHA__ 1" >>confdefs.h
-
-    fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-irix5* | *-*-irix6* )
@@ -3943,20 +3931,14 @@ case "${host}" in
             CPPFLAGS="-D_NETBSD_SOURCE -D_LIBC $CPPFLAGS"
   ;;
   *-*-osf* )
-    USE_ALPHA=1
     USE_OSF=1
-    $as_echo "#define __ALPHA__ 1" >>confdefs.h
-
     $as_echo "#define __OSF__ 1" >>confdefs.h
 
     DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
-    USE_ALPHA=1
     USE_SVR4=1
-    $as_echo "#define __ALPHA__ 1" >>confdefs.h
-
     $as_echo "#define __SVR4__ 1" >>confdefs.h
 
     DEFAULT_DEFAULT_wxUSE_GTK=1

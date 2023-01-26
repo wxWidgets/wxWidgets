@@ -158,20 +158,10 @@ case "${host}" in
   *-*-linux* )
     USE_LINUX=1
     AC_DEFINE(__LINUX__)
-    TMP=`uname -m`
-    if test "x$TMP" = "xalpha"; then
-      USE_ALPHA=1
-      AC_DEFINE(__ALPHA__)
-    fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-gnu* | *-*-k*bsd*-gnu )
     USE_GNU=1
-    TMP=`uname -m`
-    if test "x$TMP" = "xalpha"; then
-      USE_ALPHA=1
-      AC_DEFINE(__ALPHA__)
-    fi
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-irix5* | *-*-irix6* )
@@ -232,17 +222,13 @@ case "${host}" in
     CPPFLAGS="-D_NETBSD_SOURCE -D_LIBC $CPPFLAGS"
   ;;
   *-*-osf* )
-    USE_ALPHA=1
     USE_OSF=1
-    AC_DEFINE(__ALPHA__)
     AC_DEFINE(__OSF__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
     NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-dgux5* )
-    USE_ALPHA=1
     USE_SVR4=1
-    AC_DEFINE(__ALPHA__)
     AC_DEFINE(__SVR4__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;

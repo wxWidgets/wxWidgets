@@ -123,7 +123,6 @@ typedef pid_t GPid;
 #define __VMS__
 
 #undef __IA64__
-#define __ALPHA__
 
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0

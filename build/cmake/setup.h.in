@@ -79,7 +79,6 @@
 #cmakedefine __VMS__ 1
 
 #cmakedefine __IA64__ 1
-#cmakedefine __ALPHA__ 1
 
 /* NanoX (with wxX11) */
 #cmakedefine01 wxUSE_NANOX

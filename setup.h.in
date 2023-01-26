@@ -82,7 +82,6 @@
 #undef __VMS__
 
 #undef __IA64__
-#undef __ALPHA__
 
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
