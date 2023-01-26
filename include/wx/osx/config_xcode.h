@@ -27,7 +27,6 @@
 #endif
 #define HAVE_VISIBILITY 1
 #define wxHAVE_PTHREAD_CLEANUP 1
-#define CONST_COMPATIBILITY 0
 #define WX_TIMEZONE timezone
 #define WX_SOCKLEN_T socklen_t
 #define SOCKOPTLEN_T socklen_t
