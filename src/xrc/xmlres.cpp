@@ -618,7 +618,10 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
 }
 
 
-static void ProcessPlatformProperty(wxXmlNode *node)
+// This function removes the nodes of the XRC document that are "inactive",
+// i.e. shouldn't be taken into account at all, e.g. because they use a
+// "platform" attribute not matching the current platform.
+static void FilterOurInactiveNodes(wxXmlNode *node)
 {
     wxString s;
     bool isok;
@@ -644,7 +647,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
 
         if (isok)
         {
-            ProcessPlatformProperty(c);
+            FilterOurInactiveNodes(c);
             c = c->GetNext();
         }
         else
@@ -808,7 +811,7 @@ bool wxXmlResource::DoLoadDocument(const wxXmlDocument& doc)
         wxLogWarning("Resource files must have same version number.");
     }
 
-    ProcessPlatformProperty(root);
+    FilterOurInactiveNodes(root);
     PreprocessForIdRanges(root);
     wxIdRangeManager::Get()->FinaliseRanges(root);
 
