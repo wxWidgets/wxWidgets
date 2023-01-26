@@ -1426,21 +1426,6 @@ if test "x$USE_AIX" = "x1"; then
     CPPFLAGS="-D_LINUX_SOURCE_COMPAT $CPPFLAGS"
 fi
 
-dnl This case is for PowerPC OS X vs. everything else
-case "${host}" in
-  powerpc-*-darwin* )
-    AC_MSG_CHECKING([if __POWERPC__ is already defined])
-    AC_TRY_COMPILE([],[#ifndef __POWERPC__
-        choke me for lack of PowerPC
-#endif
-],
-        [AC_MSG_RESULT([yes])],
-        [AC_MSG_RESULT([no])
-        AC_DEFINE(__POWERPC__)
-    ])
-  ;;
-esac
-
 dnl This case is for OS X vs. everything else
 case "${host}" in
   *-*-darwin* )

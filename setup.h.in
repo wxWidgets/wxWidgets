@@ -87,9 +87,6 @@
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
 
-/* PowerPC Darwin & Mac OS X */
-#undef __POWERPC__
-
 /* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
 #undef __Point__
 

@@ -23101,38 +23101,6 @@ if test "x$USE_AIX" = "x1"; then
 fi
 
 case "${host}" in
-  powerpc-*-darwin* )
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if __POWERPC__ is already defined" >&5
-$as_echo_n "checking if __POWERPC__ is already defined... " >&6; }
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-#ifndef __POWERPC__
-        choke me for lack of PowerPC
-#endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-        $as_echo "#define __POWERPC__ 1" >>confdefs.h
-
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  ;;
-esac
-
-case "${host}" in
   *-*-darwin* )
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if CoreFoundation/CFBase.h is usable" >&5
 $as_echo_n "checking if CoreFoundation/CFBase.h is usable... " >&6; }

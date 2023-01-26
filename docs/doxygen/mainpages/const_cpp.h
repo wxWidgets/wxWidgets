@@ -110,7 +110,7 @@ compiler used.
 @itemdef{\__ALPHA__, DEC Alpha architecture}
 @itemdef{\__INTEL__, Intel i386 or compatible}
 @itemdef{\__IA64__, Intel 64 bit architecture}
-@itemdef{\__POWERPC__, Motorola Power PC}
+@itemdef{\__POWERPC__, Motorola Power PC (not supported any longer)}
 @endDefList
 
 
