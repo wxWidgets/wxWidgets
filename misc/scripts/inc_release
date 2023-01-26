@@ -46,9 +46,6 @@ run_sed include/wx/version.h \
     "s/^\(#define wxSUBRELEASE_NUMBER *\) [0-9]\{1,\}$/\1 0/" \
     "/^#define wxVERSION_STRING/s/$ver_for_sed/$ver_string_new/"
 
-run_sed include/wx/osx/config_xcode.h \
-    "/^#define PACKAGE/s/$ver_for_sed/$ver_string_new/"
-
 run_sed samples/minimal/Info_cocoa.plist \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
 
