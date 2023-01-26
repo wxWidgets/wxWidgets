@@ -1517,8 +1517,8 @@ public:
         // We don't use (smaller) images inside a button with a text label but
         // rather toolbar-like bitmap buttons hence use wxART_TOOLBAR and not
         // wxART_BUTTON here.
-        wxBitmap bmp = wxArtProvider::GetBitmap(artId, wxART_TOOLBAR);
-        wxBitmapButton * const btn = new wxBitmapButton(m_parent, btnId, bmp);
+        wxBitmapBundle bb = wxArtProvider::GetBitmapBundle(artId, wxART_TOOLBAR);
+        wxBitmapButton * const btn = new wxBitmapButton(m_parent, btnId, bb);
         btn->SetToolTip(tooltip);
 
         Add(btn);
