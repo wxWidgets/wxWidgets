@@ -127,9 +127,6 @@ typedef pid_t GPid;
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
 
-/* MS-DOS with DJGPP */
-#undef __DOS__
-
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
 #undef __WINDOWS__
