@@ -1130,9 +1130,6 @@
  * boolean, define to the type used by the jpeg library for boolean.  */
 #cmakedefine wxHACK_BOOLEAN
 
-/* Define if the header pbt.h is missing.  */
-#cmakedefine NEED_PBT_H
-
 #endif /* __WIN32__ */
 
 /* --------------------------------------------------------*
