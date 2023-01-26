@@ -709,11 +709,6 @@
 #cmakedefine HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
 /*
- * On GNU systems use re_search instead of regexec, since the latter does a
- * strlen on the search text affecting the performance of some operations.
- */
-#cmakedefine HAVE_RE_SEARCH
-/*
  * Use SDL for audio (Unix)
  */
 #cmakedefine01 wxUSE_LIBSDL
