@@ -169,15 +169,6 @@ typedef pid_t GPid;
 
 #define wxUSE_REPRODUCIBLE_BUILD 1
 
-#ifndef wxUSE_UNICODE
-#if defined( __WXX11__ )
-    #define wxUSE_UNICODE 0
-#else
-    #define wxUSE_UNICODE 1
-#endif
-#endif
-
-
 #define wxUSE_EXCEPTIONS 1
 
 #define wxUSE_EXTENDED_RTTI 0
