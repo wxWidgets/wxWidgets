@@ -37,43 +37,35 @@
 #   include <sys/types.h>
 #endif
 
-// Currently this is not an option as there is no simple way to switch between
-// PCRE and the old regex library implementation at makefile level, so we just
-// always use PCRE and the old code is only kept temporarily in case we decide
-// to revert these changes.
-#define wxUSE_PCRE 1
-
-// WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
-// WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
 // WXREGEX_CONVERT_TO_MB    defined when the regex lib is using chars and
 //                          wxChar is wide, so conversion to UTF-8 must be done
 // wxRegChar                the character type used by the regular expression engine
 //
 
-#if wxUSE_PCRE
-    // Use the same code unit width for PCRE as we use for wxString.
-#   if wxUSE_UNICODE_UTF8
-#       define PCRE2_CODE_UNIT_WIDTH 8
-        typedef char wxRegChar;
-#   elif wxUSE_UNICODE_UTF16
-#       define PCRE2_CODE_UNIT_WIDTH 16
-        typedef wchar_t wxRegChar;
-#   else
-#       define PCRE2_CODE_UNIT_WIDTH 32
-        typedef wchar_t wxRegChar;
-#   endif
-    typedef wxRegChar wxRegErrorChar;
+// Use the same code unit width for PCRE as we use for wxString.
+#if wxUSE_UNICODE_UTF8
+#    define PCRE2_CODE_UNIT_WIDTH 8
+     typedef char wxRegChar;
+#elif wxUSE_UNICODE_UTF16
+#    define PCRE2_CODE_UNIT_WIDTH 16
+     typedef wchar_t wxRegChar;
+#else
+#    define PCRE2_CODE_UNIT_WIDTH 32
+     typedef wchar_t wxRegChar;
+#endif
 
-    // We currently always use PCRE as a static library under MSW.
-#   ifdef __WINDOWS__
-#       define PCRE2_STATIC
-#   endif
+typedef wxRegChar wxRegErrorChar;
 
-#   include <pcre2.h>
+// We currently always use PCRE as a static library under MSW.
+#ifdef __WINDOWS__
+#    define PCRE2_STATIC
+#endif
 
-#   if wxUSE_UNICODE_UTF8
-#       define WXREGEX_CONVERT_TO_MB
-#   endif
+#include <pcre2.h>
+
+#if wxUSE_UNICODE_UTF8
+#    define WXREGEX_CONVERT_TO_MB
+#endif
 
 // There is an existing pcre2posix library which provides regxxx()
 // implementations, but we don't use it because:
@@ -259,40 +251,9 @@ void wx_regfree(regex_t* preg)
 
 } // anonymous namespace
 
-#else // !wxUSE_PCRE
-
-#include <regex.h>
-typedef char wxRegErrorChar;
-#ifdef __REG_NOFRONT
-#   define WXREGEX_USING_BUILTIN
-    typedef wxChar wxRegChar;
-#else
-    typedef char wxRegChar;
-
-#   ifdef HAVE_RE_SEARCH
-#       define WXREGEX_USING_RE_SEARCH
-#   else
-        // We can't use length, so just drop it in this wrapper.
-        inline int
-        wx_regexec(const regex_t* preg, const char* string, size_t,
-                   size_t nmatch, regmatch_t* pmatch, int eflags)
-        {
-            return regexec(preg, string, nmatch, pmatch, eflags);
-        }
-#   endif
-#   define WXREGEX_CONVERT_TO_MB
-#   define wx_regcomp regcomp
-#   define wx_regfree regfree
-#   define wx_regerror regerror
-#endif
-
-#endif // wxUSE_PCRE/!wxUSE_PCRE
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
-
-#ifndef WXREGEX_USING_RE_SEARCH
 
 // the array of offsets for the matches, the usual POSIX regmatch_t array.
 class wxRegExMatches
@@ -322,38 +283,6 @@ public:
 private:
     regmatch_t *m_matches;
 };
-
-#else // WXREGEX_USING_RE_SEARCH
-
-// the array of offsets for the matches, the struct used by the GNU lib
-class wxRegExMatches
-{
-public:
-    typedef re_registers *match_type;
-
-    wxRegExMatches(size_t n)
-    {
-        m_matches.num_regs = n;
-        m_matches.start = new regoff_t[n];
-        m_matches.end = new regoff_t[n];
-    }
-
-    ~wxRegExMatches()
-    {
-        delete [] m_matches.start;
-        delete [] m_matches.end;
-    }
-
-    size_t Start(size_t n) const    { return m_matches.start[n]; }
-    size_t End(size_t n) const      { return m_matches.end[n]; }
-
-    re_registers *get()             { return &m_matches; }
-
-private:
-    re_registers m_matches;
-};
-
-#endif // WXREGEX_USING_RE_SEARCH
 
 // the real implementation of wxRegEx
 class wxRegExImpl
@@ -742,8 +671,6 @@ wxString wxRegEx::ConvertFromBasic(const wxString& bre)
     return ere;
 }
 
-#if wxUSE_PCRE
-
 // Small helper for converting selected PCRE compilation options to string.
 static wxString PCREOptionsToString(int opts)
 {
@@ -1021,25 +948,13 @@ static wxString ConvertWordBoundaries(const wxString& expr)
     return out;
 }
 
-#endif // wxUSE_PCRE
-
 bool wxRegExImpl::Compile(wxString expr, int flags)
 {
     Reinit();
 
-#if wxUSE_PCRE
-#   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
-#elif !defined(WXREGEX_USING_BUILTIN)
-#   define FLAVORS wxRE_BASIC
-#else
-#   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
-    wxASSERT_MSG( (flags & FLAVORS) != FLAVORS,
-                  wxT("incompatible flags in wxRegEx::Compile") );
-#endif
-    wxASSERT_MSG( !(flags & ~(FLAVORS | wxRE_ICASE | wxRE_NOSUB | wxRE_NEWLINE)),
+    wxASSERT_MSG( !(flags & ~(wxRE_ADVANCED | wxRE_BASIC | wxRE_ICASE | wxRE_NOSUB | wxRE_NEWLINE)),
                   wxT("unrecognized flags in wxRegEx::Compile") );
 
-#if wxUSE_PCRE
     // Deal with the directors and embedded options first (this can modify
     // flags).
     expr = ConvertMetasyntax(expr, flags);
@@ -1054,19 +969,11 @@ bool wxRegExImpl::Compile(wxString expr, int flags)
     {
         expr = ConvertWordBoundaries(expr);
     }
-#endif // wxUSE_PCRE
 
     // translate our flags to regcomp() ones
     int flagsRE = 0;
     if ( !(flags & wxRE_BASIC) )
-    {
-#ifdef WXREGEX_USING_BUILTIN
-        if (flags & wxRE_ADVANCED)
-            flagsRE |= REG_ADVANCED;
-        else
-#endif
-            flagsRE |= REG_EXTENDED;
-    }
+        flagsRE |= REG_EXTENDED;
     if ( flags & wxRE_ICASE )
         flagsRE |= REG_ICASE;
     if ( flags & wxRE_NOSUB )
@@ -1082,11 +989,7 @@ bool wxRegExImpl::Compile(wxString expr, int flags)
 #endif
 
     // compile it
-#ifdef WXREGEX_USING_BUILTIN
-    int errorcode = wx_re_comp(&m_RegEx, exprstr, expr.length(), flagsRE);
-#else
     int errorcode = wx_regcomp(&m_RegEx, exprstr, flagsRE);
-#endif
 
     if ( errorcode )
     {
@@ -1131,9 +1034,7 @@ bool wxRegExImpl::Compile(wxString expr, int flags)
                     // like REs (e.g. advanced), and is not valid for POSIX
                     // extended, so ignore them always.
                     if ( cptr[1] != wxT('?')
-#if wxUSE_PCRE
                         && cptr[1] != wxT('*')
-#endif
                             )
                         m_nMatches++;
                 }
@@ -1145,33 +1046,6 @@ bool wxRegExImpl::Compile(wxString expr, int flags)
 
     return IsValid();
 }
-
-#ifdef WXREGEX_USING_RE_SEARCH
-
-// On GNU, regexec is implemented as a wrapper around re_search. re_search
-// requires a length parameter which the POSIX regexec does not have,
-// therefore regexec must do a strlen on the search text each time it is
-// called. This can drastically affect performance when matching is done in
-// a loop along a string, such as during a search and replace. Therefore if
-// re_search is detected by configure, it is used directly.
-//
-static int ReSearch(const regex_t *preg,
-                    const char *text,
-                    size_t len,
-                    re_registers *matches,
-                    int eflags)
-{
-    regex_t *pattern = const_cast<regex_t*>(preg);
-
-    pattern->not_bol = (eflags & REG_NOTBOL) != 0;
-    pattern->not_eol = (eflags & REG_NOTEOL) != 0;
-    pattern->regs_allocated = REGS_FIXED;
-
-    int ret = re_search(pattern, text, len, 0, len, matches);
-    return ret >= 0 ? 0 : REG_NOMATCH;
-}
-
-#endif // WXREGEX_USING_RE_SEARCH
 
 bool wxRegExImpl::Matches(const wxRegChar *str,
                           int flags,
@@ -1188,10 +1062,8 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
         flagsRE |= REG_NOTBOL;
     if ( flags & wxRE_NOTEOL )
         flagsRE |= REG_NOTEOL;
-#if wxUSE_PCRE
     if ( flags & wxRE_NOTEMPTY )
         flagsRE |= REG_NOTEMPTY;
-#endif // wxUSE_PCRE
 
     // allocate matches array if needed
     wxRegExImpl *self = wxConstCast(this, wxRegExImpl);
@@ -1203,13 +1075,7 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
     wxRegExMatches::match_type matches = m_Matches ? m_Matches->get() : nullptr;
 
     // do match it
-#if defined WXREGEX_USING_BUILTIN
-    int rc = wx_re_exec(&self->m_RegEx, str, len, nullptr, m_nMatches, matches, flagsRE);
-#elif defined WXREGEX_USING_RE_SEARCH
-    int rc = ReSearch(&self->m_RegEx, str, len, matches, flagsRE);
-#else
     int rc = wx_regexec(&self->m_RegEx, str, len, m_nMatches, matches, flagsRE);
-#endif
 
     switch ( rc )
     {
