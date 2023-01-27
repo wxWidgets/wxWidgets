@@ -623,13 +623,15 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
 // "platform" attribute not matching the current platform.
 static void FilterOurInactiveNodes(wxXmlNode *node)
 {
+    static const wxString wxXRC_PLATFORM_ATTRIBUTE(wxS("platform"));
+
     wxString s;
 
     wxXmlNode *c = node->GetChildren();
     while (c)
     {
         bool isok = true;
-        if (c->GetAttribute(wxT("platform"), &s))
+        if (c->GetAttribute(wxXRC_PLATFORM_ATTRIBUTE, &s))
         {
             isok = false;
 
