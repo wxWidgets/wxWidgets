@@ -878,6 +878,8 @@ public:
         if (!m_data && m_request.HTTPBody)
             m_data = new wxMemoryInputStream(m_request.HTTPBody.bytes, m_request.HTTPBody.length);
 
+        if (m_data)
+            m_data->SeekI(0);
         return m_data;
     }
 
