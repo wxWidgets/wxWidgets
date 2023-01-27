@@ -1385,20 +1385,11 @@ void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node)
 }
 
 
-class wxXmlSubclassFactories : public wxVector<wxXmlSubclassFactory*>
-{
-    // this is a class so that it can be forward-declared
-};
-
-wxXmlSubclassFactories *wxXmlResource::ms_subclassFactories = nullptr;
+std::vector<std::unique_ptr<wxXmlSubclassFactory>> wxXmlResource::ms_subclassFactories;
 
 /*static*/ void wxXmlResource::AddSubclassFactory(wxXmlSubclassFactory *factory)
 {
-    if (!ms_subclassFactories)
-    {
-        ms_subclassFactories = new wxXmlSubclassFactories;
-    }
-    ms_subclassFactories->push_back(factory);
+    ms_subclassFactories.push_back(std::unique_ptr<wxXmlSubclassFactory>{factory});
 }
 
 class wxXmlSubclassFactoryCXX : public wxXmlSubclassFactory
@@ -1453,10 +1444,9 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
         wxString subclass = node->GetAttribute(wxT("subclass"), wxEmptyString);
         if (!subclass.empty())
         {
-            for (wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin();
-                 i != wxXmlResource::ms_subclassFactories->end(); ++i)
+            for (auto& factory : wxXmlResource::ms_subclassFactories)
             {
-                m_handler->m_instance = (*i)->Create(subclass);
+                m_handler->m_instance = factory->Create(subclass);
                 if (m_handler->m_instance)
                     break;
             }
@@ -3171,15 +3161,7 @@ public:
     {
         delete wxXmlResource::Set(nullptr);
         delete wxIdRangeManager::Set(nullptr);
-        if(wxXmlResource::ms_subclassFactories)
-        {
-            for ( wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin();
-                  i != wxXmlResource::ms_subclassFactories->end(); ++i )
-            {
-                delete *i;
-            }
-            wxDELETE(wxXmlResource::ms_subclassFactories);
-        }
+        wxXmlResource::ms_subclassFactories.clear();
         CleanXRCID_Records();
     }
 };

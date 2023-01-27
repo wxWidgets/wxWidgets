@@ -46,7 +46,6 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 class WXDLLIMPEXP_FWD_XML wxXmlDocument;
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
-class wxXmlSubclassFactories;
 class wxXmlResourceModule;
 class wxXmlResourceDataRecords;
 
@@ -427,7 +426,7 @@ private:
     friend class wxIdRangeManager;
     friend class wxIdRange;
 
-    static wxXmlSubclassFactories *ms_subclassFactories;
+    static std::vector<std::unique_ptr<wxXmlSubclassFactory>> ms_subclassFactories;
 
     // singleton instance:
     static wxXmlResource *ms_instance;
