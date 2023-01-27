@@ -624,16 +624,15 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
 static void FilterOurInactiveNodes(wxXmlNode *node)
 {
     wxString s;
-    bool isok;
 
     wxXmlNode *c = node->GetChildren();
     while (c)
     {
-        isok = false;
-        if (!c->GetAttribute(wxT("platform"), &s))
-            isok = true;
-        else
+        bool isok = true;
+        if (c->GetAttribute(wxT("platform"), &s))
         {
+            isok = false;
+
             wxStringTokenizer tkn(s, wxT(" |"));
 
             while (tkn.HasMoreTokens())
