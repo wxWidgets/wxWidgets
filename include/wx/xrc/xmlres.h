@@ -25,9 +25,10 @@
 #include "wx/icon.h"
 #include "wx/artprov.h"
 #include "wx/colour.h"
-#include "wx/vector.h"
 
 #include "wx/xrc/xmlreshandler.h"
+
+#include <vector>
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
@@ -410,7 +411,7 @@ private:
     long m_version;
 
     int m_flags;
-    wxVector<wxXmlResourceHandler*> m_handlers;
+    std::vector<wxXmlResourceHandler*> m_handlers;
     wxXmlResourceDataRecords *m_data;
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;

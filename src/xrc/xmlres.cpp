@@ -485,9 +485,8 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    for ( wxVector<wxXmlResourceHandler*>::iterator i = m_handlers.begin();
-          i != m_handlers.end(); ++i )
-        delete *i;
+    for ( auto& handler : m_handlers )
+        delete handler;
     m_handlers.clear();
 }
 
@@ -1079,10 +1078,8 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
     }
     else if (node.GetName() == wxT("object"))
     {
-        for ( wxVector<wxXmlResourceHandler*>::iterator h = m_handlers.begin();
-              h != m_handlers.end(); ++h )
+        for ( const auto& handler : m_handlers )
         {
-            wxXmlResourceHandler *handler = *h;
             if (handler->CanHandle(&node))
                 return handler->CreateResource(&node, parent, instance);
         }
