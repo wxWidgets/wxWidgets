@@ -115,6 +115,14 @@ public:
 #endif
     }
 
+    // Make these objects movable because they can't be copied due to the
+    // presence of a unique_ptr member.
+    wxXmlResourceDataRecord(const wxXmlResourceDataRecord&) = delete;
+    wxXmlResourceDataRecord& operator=(const wxXmlResourceDataRecord&) = delete;
+
+    wxXmlResourceDataRecord(wxXmlResourceDataRecord&&) = default;
+    wxXmlResourceDataRecord& operator=(wxXmlResourceDataRecord&&) = default;
+
     ~wxXmlResourceDataRecord() = default;
 
     wxString File;
@@ -122,11 +130,9 @@ public:
 #if wxUSE_DATETIME
     wxDateTime Time;
 #endif
-
-    wxDECLARE_NO_COPY_CLASS(wxXmlResourceDataRecord);
 };
 
-class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
+class wxXmlResourceDataRecords : public std::vector<wxXmlResourceDataRecord>
 {
     // this is a class so that it can be forward-declared
 };
@@ -235,12 +241,11 @@ GetFileNameFromNode(const wxXmlNode *node, const wxXmlResourceDataRecords& files
 
     // NB: 'node' now points to the root of XML document
 
-    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
-          i != files.end(); ++i )
+    for ( const wxXmlResourceDataRecord& rec : files )
     {
-        if ( (*i)->Doc->GetRoot() == node )
+        if ( rec.Doc->GetRoot() == node )
         {
-            return (*i)->File;
+            return rec.File;
         }
     }
 
@@ -287,11 +292,6 @@ wxXmlResource::~wxXmlResource()
 {
     ClearHandlers();
 
-    for ( wxXmlResourceDataRecords::iterator i = m_data->begin();
-          i != m_data->end(); ++i )
-    {
-        delete *i;
-    }
     delete m_data;
 }
 
@@ -401,7 +401,7 @@ bool wxXmlResource::Load(const wxString& filemask_)
             if ( !doc )
                 thisOK = false;
             else
-                Data().push_back(new wxXmlResourceDataRecord(fnd, doc));
+                Data().emplace_back(fnd, doc);
         }
 
         if ( thisOK )
@@ -442,16 +442,15 @@ bool wxXmlResource::Unload(const wxString& filename)
 #if wxUSE_FILESYSTEM
         if ( isArchive )
         {
-            if ( (*i)->File.StartsWith(fnd) )
+            if ( (*i).File.StartsWith(fnd) )
                 unloaded = true;
             // don't break from the loop, we can have other matching files
         }
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
         {
-            if ( (*i)->File == fnd )
+            if ( (*i).File == fnd )
             {
-                delete *i;
                 Data().erase(i);
                 unloaded = true;
 
@@ -672,11 +671,8 @@ bool wxXmlResource::UpdateResources()
 {
     bool rt = true;
 
-    for ( wxXmlResourceDataRecords::iterator i = Data().begin();
-          i != Data().end(); ++i )
+    for ( wxXmlResourceDataRecord& rec : Data() )
     {
-        wxXmlResourceDataRecord* const rec = *i;
-
         // Check if we need to reload this one.
 
         // We never do it if this flag is specified.
@@ -685,14 +681,14 @@ bool wxXmlResource::UpdateResources()
 
         // And we don't do it for the records that were not loaded from a
         // file/URI (or at least not directly) in the first place.
-        if ( !rec->Time.IsValid() )
+        if ( !rec.Time.IsValid() )
             continue;
 
         // Otherwise check its modification time if we can.
 #if wxUSE_DATETIME
-        wxDateTime lastModTime = GetXRCFileModTime(rec->File);
+        wxDateTime lastModTime = GetXRCFileModTime(rec.File);
 
-        if ( lastModTime.IsValid() && lastModTime <= rec->Time )
+        if ( lastModTime.IsValid() && lastModTime <= rec.Time )
 #else // !wxUSE_DATETIME
         // Never reload the file contents: we can't know whether it changed or
         // not in this build configuration and it would be unexpected and
@@ -706,7 +702,7 @@ bool wxXmlResource::UpdateResources()
             continue;
         }
 
-        wxXmlDocument * const doc = DoLoadFile(rec->File);
+        wxXmlDocument * const doc = DoLoadFile(rec.File);
         if ( !doc )
         {
             // Notice that we keep the old XML document: it seems better to
@@ -717,11 +713,11 @@ bool wxXmlResource::UpdateResources()
         }
 
         // Replace the old resource contents with the new one.
-        rec->Doc.reset(doc);
+        rec.Doc.reset(doc);
 
         // And, now that we loaded it successfully, update the last load time.
 #if wxUSE_DATETIME
-        rec->Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
+        rec.Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
 #endif // wxUSE_DATETIME
     }
 
@@ -825,7 +821,7 @@ bool wxXmlResource::LoadDocument(wxXmlDocument* doc, const wxString& name)
         docname = wxString::Format(wxS("<XML document #%lu>"), ++s_xrcDocument);
     }
 
-    Data().push_back(new wxXmlResourceDataRecord(docname, doc, XRCWhence::From_Doc));
+    Data().emplace_back(docname, doc, XRCWhence::From_Doc);
 
     return true;
 }
@@ -926,11 +922,9 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
     // reloading of XRC files
     const_cast<wxXmlResource *>(this)->UpdateResources();
 
-    for ( wxXmlResourceDataRecords::const_iterator f = Data().begin();
-          f != Data().end(); ++f )
+    for ( const wxXmlResourceDataRecord& rec : Data() )
     {
-        wxXmlResourceDataRecord *const rec = *f;
-        wxXmlDocument * const doc = rec->Doc.get();
+        wxXmlDocument * const doc = rec.Doc.get();
         if ( !doc || !doc->GetRoot() )
             continue;
 
@@ -939,7 +933,7 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
         if ( found )
         {
             if ( path )
-                *path = rec->File;
+                *path = rec.File;
 
             return found;
         }
