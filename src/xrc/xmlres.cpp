@@ -39,13 +39,14 @@
 #include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/xml/xml.h"
-#include "wx/hashset.h"
 #include "wx/scopedptr.h"
 #include "wx/config.h"
 #include "wx/platinfo.h"
 
 #include <limits.h>
 #include <locale.h>
+
+#include <unordered_set>
 
 namespace
 {
@@ -130,8 +131,6 @@ class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
     // this is a class so that it can be forward-declared
 };
 
-WX_DECLARE_HASH_SET_PTR(int, wxIntegerHash, wxIntegerEqual, wxHashSetInt);
-
 class wxIdRange // Holds data for a particular rangename
 {
 protected:
@@ -155,7 +154,7 @@ protected:
     unsigned int m_size;
     bool m_item_end_found;
     bool m_finalised;
-    wxHashSetInt m_indices;
+    std::unordered_set<int> m_indices;
 
     friend class wxIdRangeManager;
 };
