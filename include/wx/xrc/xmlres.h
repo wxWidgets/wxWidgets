@@ -28,6 +28,7 @@
 
 #include "wx/xrc/xmlreshandler.h"
 
+#include <memory>
 #include <vector>
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
@@ -411,7 +412,7 @@ private:
     long m_version;
 
     int m_flags;
-    std::vector<wxXmlResourceHandler*> m_handlers;
+    std::vector<std::unique_ptr<wxXmlResourceHandler>> m_handlers;
     wxXmlResourceDataRecords *m_data;
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;

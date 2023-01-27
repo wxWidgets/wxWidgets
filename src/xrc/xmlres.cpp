@@ -469,7 +469,7 @@ void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 {
     wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(handler);
     handler->SetImpl(impl);
-    m_handlers.push_back(handler);
+    m_handlers.push_back(std::unique_ptr<wxXmlResourceHandler>{handler});
     handler->SetParentResource(this);
 }
 
@@ -477,7 +477,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 {
     wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(handler);
     handler->SetImpl(impl);
-    m_handlers.insert(m_handlers.begin(), handler);
+    m_handlers.insert(m_handlers.begin(), std::unique_ptr<wxXmlResourceHandler>{handler});
     handler->SetParentResource(this);
 }
 
@@ -485,8 +485,6 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    for ( auto& handler : m_handlers )
-        delete handler;
     m_handlers.clear();
 }
 
