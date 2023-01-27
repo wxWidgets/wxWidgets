@@ -133,11 +133,19 @@ class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
 
 class wxIdRange // Holds data for a particular rangename
 {
-protected:
+public:
     wxIdRange(const wxXmlNode* node,
               const wxString& rname,
               const wxString& startno,
               const wxString& rsize);
+
+    // Make these objects movable as it should be more efficient to move
+    // m_indices than copy them.
+    wxIdRange(const wxIdRange&) = delete;
+    wxIdRange& operator=(const wxIdRange&) = delete;
+
+    wxIdRange(wxIdRange&&) = default;
+    wxIdRange& operator=(wxIdRange&&) = default;
 
     // Note the existence of an item within the range
     void NoteItem(const wxXmlNode* node, const wxString& item);
@@ -148,21 +156,20 @@ protected:
     wxString GetName() const { return m_name; }
     bool IsFinalised() const { return m_finalised; }
 
-    const wxString m_name;
+private:
+    wxString m_name;
     int m_start;
     int m_end;
     unsigned int m_size;
     bool m_item_end_found;
     bool m_finalised;
     std::unordered_set<int> m_indices;
-
-    friend class wxIdRangeManager;
 };
 
 class wxIdRangeManager
 {
 public:
-    ~wxIdRangeManager();
+    ~wxIdRangeManager() = default;
     // Gets the global resources object or creates one if none exists.
     static wxIdRangeManager *Get();
 
@@ -173,17 +180,12 @@ public:
     // Create a new IDrange from this node
     void AddRange(const wxXmlNode* node);
     // Tell the IdRange that this item exists, and should be pre-allocated an ID
-    void NotifyRangeOfItem(const wxXmlNode* node, const wxString& item) const;
+    void NotifyRangeOfItem(const wxXmlNode* node, const wxString& item);
     // Tells all IDranges that they're now complete, and can create their IDs
-    void FinaliseRanges(const wxXmlNode* node) const;
-    // Searches for a known IdRange matching 'name', returning its index or -1
-    int Find(const wxString& rangename) const;
+    void FinaliseRanges(const wxXmlNode* node);
 
 protected:
-    wxIdRange* FindRangeForItem(const wxXmlNode* node,
-                                const wxString& item,
-                                wxString& value) const;
-    wxVector<wxIdRange*> m_IdRanges;
+    std::vector<wxIdRange> m_IdRanges;
 
 private:
     static wxIdRangeManager *ms_instance;
@@ -1307,16 +1309,6 @@ wxIdRangeManager *wxIdRangeManager::ms_instance = nullptr;
     return old;
 }
 
-wxIdRangeManager::~wxIdRangeManager()
-{
-    for ( wxVector<wxIdRange*>::iterator i = m_IdRanges.begin();
-          i != m_IdRanges.end(); ++i )
-    {
-        delete *i;
-    }
-    m_IdRanges.clear();
-}
-
 void wxIdRangeManager::AddRange(const wxXmlNode* node)
 {
     wxString name = node->GetAttribute("name");
@@ -1332,87 +1324,68 @@ void wxIdRangeManager::AddRange(const wxXmlNode* node)
         return;
     }
 
-    int index = Find(name);
-    if (index == wxNOT_FOUND)
+    for ( auto& idRange : m_IdRanges )
     {
-        wxLogTrace("xrcrange",
-                   "Adding ID range, name=%s start=%s size=%s",
-                   name, start, size);
+        if ( idRange.GetName() == name )
+        {
+            // There was already a range with this name. Let's hope this is
+            // from an Unload()/(re)Load(), not an unintentional duplication
+            wxLogTrace("xrcrange",
+                       "Replacing ID range, name=%s start=%s size=%s",
+                       name, start, size);
 
-        m_IdRanges.push_back(new wxIdRange(node, name, start, size));
-    }
-    else
-    {
-        // There was already a range with this name. Let's hope this is
-        // from an Unload()/(re)Load(), not an unintentional duplication
-        wxLogTrace("xrcrange",
-                   "Replacing ID range, name=%s start=%s size=%s",
-                   name, start, size);
-
-        wxIdRange* oldrange = m_IdRanges.at(index);
-        m_IdRanges.at(index) = new wxIdRange(node, name, start, size);
-        delete oldrange;
-    }
-}
-
-wxIdRange *
-wxIdRangeManager::FindRangeForItem(const wxXmlNode* node,
-                                   const wxString& item,
-                                   wxString& value) const
-{
-    wxString basename = item.BeforeFirst('[');
-    wxCHECK_MSG( !basename.empty(), nullptr,
-                 "an id-range item without a range name" );
-
-    int index = Find(basename);
-    if (index == wxNOT_FOUND)
-    {
-        // Don't assert just because we've found an unexpected foo[123]
-        // Someone might just want such a name, nothing to do with ranges
-        return nullptr;
+            idRange = wxIdRange(node, name, start, size);
+            return;
+        }
     }
 
-    value = item.Mid(basename.Len());
-    if (value.at(value.length()-1)==']')
-    {
-        return m_IdRanges.at(index);
-    }
-    wxXmlResource::Get()->ReportError(node, "a malformed id-range item");
-    return nullptr;
+    wxLogTrace("xrcrange",
+               "Adding ID range, name=%s start=%s size=%s",
+               name, start, size);
+
+    m_IdRanges.emplace_back(node, name, start, size);
 }
 
 void
 wxIdRangeManager::NotifyRangeOfItem(const wxXmlNode* node,
-                                    const wxString& item) const
+                                    const wxString& item)
 {
-    wxString value;
-    wxIdRange* range = FindRangeForItem(node, item, value);
-    if (range)
-        range->NoteItem(node, value);
-}
+    wxString basename = item.BeforeFirst('[');
+    wxCHECK_RET( !basename.empty(), "an id-range item without a range name" );
 
-int wxIdRangeManager::Find(const wxString& rangename) const
-{
-    for ( int i=0; i < (int)m_IdRanges.size(); ++i )
+    for ( auto& idRange : m_IdRanges )
     {
-        if (m_IdRanges.at(i)->GetName() == rangename)
-            return i;
+        if ( idRange.GetName() == basename )
+        {
+            wxString value = item.Mid(basename.Len());
+            if (value.at(value.length()-1)==']')
+            {
+                idRange.NoteItem(node, value);
+            }
+            else
+            {
+                wxXmlResource::Get()->ReportError(node, "a malformed id-range item");
+            }
+
+            // In any case, it's useless to continue.
+            return;
+        }
     }
 
-    return wxNOT_FOUND;
+    // Don't assert just because we've found an unexpected foo[123]
+    // Someone might just want such a name, nothing to do with ranges
 }
 
-void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node) const
+void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node)
 {
-    for ( wxVector<wxIdRange*>::const_iterator i = m_IdRanges.begin();
-          i != m_IdRanges.end(); ++i )
+    for ( auto& idRange : m_IdRanges )
     {
         // Check if this range has already been finalised. Quite possible,
         // as  FinaliseRanges() gets called for each .xrc file loaded
-        if (!(*i)->IsFinalised())
+        if (!idRange.IsFinalised())
         {
-            wxLogTrace("xrcrange", "Finalising ID range %s", (*i)->GetName());
-            (*i)->Finalise(node);
+            wxLogTrace("xrcrange", "Finalising ID range %s", idRange.GetName());
+            idRange.Finalise(node);
         }
     }
 }
