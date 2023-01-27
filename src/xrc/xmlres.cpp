@@ -115,10 +115,10 @@ public:
 #endif
     }
 
-    ~wxXmlResourceDataRecord() {delete Doc;}
+    ~wxXmlResourceDataRecord() = default;
 
     wxString File;
-    wxXmlDocument *Doc;
+    std::unique_ptr<wxXmlDocument> Doc;
 #if wxUSE_DATETIME
     wxDateTime Time;
 #endif
@@ -717,8 +717,7 @@ bool wxXmlResource::UpdateResources()
         }
 
         // Replace the old resource contents with the new one.
-        delete rec->Doc;
-        rec->Doc = doc;
+        rec->Doc.reset(doc);
 
         // And, now that we loaded it successfully, update the last load time.
 #if wxUSE_DATETIME
@@ -931,7 +930,7 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
           f != Data().end(); ++f )
     {
         wxXmlResourceDataRecord *const rec = *f;
-        wxXmlDocument * const doc = rec->Doc;
+        wxXmlDocument * const doc = rec->Doc.get();
         if ( !doc || !doc->GetRoot() )
             continue;
 
