@@ -305,7 +305,7 @@ TEST_CASE("XRC::EnvVarInPath", "[xrc]")
 //
 // Use something like "python3 -m http.server samples/xrc/rc" and set
 // WX_TEST_XRC_URL to http://localhost/menu.xrc to run this test.
-TEST_CASE_METHOD(XrcTestCase, "XRC::LoadURL", "[xrc][.]")
+TEST_CASE_METHOD(XrcTestCase, "XRC::LoadURL", "[.]")
 {
     wxString url;
     REQUIRE( wxGetEnv("WX_TEST_XRC_URL", &url) );
