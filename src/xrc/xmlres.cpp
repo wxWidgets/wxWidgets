@@ -617,6 +617,21 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
     return control->Reparent(container);
 }
 
+// Small helper returning true if any of the tokens in the given string
+// satisfies the given predicate.
+template <typename Pred>
+static bool HasAnyMatchingTokens(const wxString& s, const Pred& pred)
+{
+    wxStringTokenizer tkn(s, wxT(" |"));
+
+    while (tkn.HasMoreTokens())
+    {
+        if ( pred(tkn.GetNextToken()) )
+            return true;
+    }
+
+    return false;
+}
 
 // This function removes the nodes of the XRC document that are "inactive",
 // i.e. shouldn't be taken into account at all, e.g. because they use a
@@ -633,17 +648,9 @@ static void FilterOurInactiveNodes(wxXmlNode *node)
         bool isok = true;
         if (c->GetAttribute(wxXRC_PLATFORM_ATTRIBUTE, &s))
         {
-            isok = false;
-
-            wxStringTokenizer tkn(s, wxT(" |"));
-
-            while (tkn.HasMoreTokens())
-            {
-                isok = wxPlatformId::MatchesCurrent(tkn.GetNextToken());
-
-                if (isok)
-                    break;
-            }
+            isok = HasAnyMatchingTokens(s, [](const wxString& s)
+                        { return wxPlatformId::MatchesCurrent(s); }
+                    );
         }
 
         if (isok)
