@@ -46,7 +46,9 @@
 #include <limits.h>
 #include <locale.h>
 
+#include <memory>
 #include <unordered_set>
+#include <vector>
 
 namespace
 {
@@ -135,6 +137,15 @@ public:
 class wxXmlResourceDataRecords : public std::vector<wxXmlResourceDataRecord>
 {
     // this is a class so that it can be forward-declared
+};
+
+class wxXmlResourceInternal
+{
+public:
+    std::vector<std::unique_ptr<wxXmlResourceHandler>> m_handlers;
+    wxXmlResourceDataRecords m_data;
+
+    static std::vector<std::unique_ptr<wxXmlSubclassFactory>> ms_subclassFactories;
 };
 
 class wxIdRange // Holds data for a particular rangename
@@ -275,7 +286,7 @@ wxXmlResource::wxXmlResource(int flags, const wxString& domain)
 {
     m_flags = flags;
     m_version = -1;
-    m_data = new wxXmlResourceDataRecords;
+    m_internal = new wxXmlResourceInternal;
     SetDomain(domain);
 }
 
@@ -283,7 +294,7 @@ wxXmlResource::wxXmlResource(const wxString& filemask, int flags, const wxString
 {
     m_flags = flags;
     m_version = -1;
-    m_data = new wxXmlResourceDataRecords;
+    m_internal = new wxXmlResourceInternal;
     SetDomain(domain);
     Load(filemask);
 }
@@ -292,7 +303,12 @@ wxXmlResource::~wxXmlResource()
 {
     ClearHandlers();
 
-    delete m_data;
+    delete m_internal;
+}
+
+wxXmlResourceDataRecords& wxXmlResource::Data() const
+{
+    return m_internal->m_data;
 }
 
 void wxXmlResource::SetDomain(const wxString& domain)
@@ -468,7 +484,7 @@ void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 {
     wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(handler);
     handler->SetImpl(impl);
-    m_handlers.push_back(std::unique_ptr<wxXmlResourceHandler>{handler});
+    m_internal->m_handlers.push_back(std::unique_ptr<wxXmlResourceHandler>{handler});
     handler->SetParentResource(this);
 }
 
@@ -476,7 +492,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 {
     wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(handler);
     handler->SetImpl(impl);
-    m_handlers.insert(m_handlers.begin(), std::unique_ptr<wxXmlResourceHandler>{handler});
+    m_internal->m_handlers.insert(m_internal->m_handlers.begin(), std::unique_ptr<wxXmlResourceHandler>{handler});
     handler->SetParentResource(this);
 }
 
@@ -484,7 +500,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    m_handlers.clear();
+    m_internal->m_handlers.clear();
 }
 
 
@@ -1069,7 +1085,7 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
     }
     else if (node.GetName() == wxT("object"))
     {
-        for ( const auto& handler : m_handlers )
+        for ( const auto& handler : m_internal->m_handlers )
         {
             if (handler->CanHandle(&node))
                 return handler->CreateResource(&node, parent, instance);
@@ -1379,11 +1395,12 @@ void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node)
 }
 
 
-std::vector<std::unique_ptr<wxXmlSubclassFactory>> wxXmlResource::ms_subclassFactories;
+std::vector<std::unique_ptr<wxXmlSubclassFactory>>
+wxXmlResourceInternal::ms_subclassFactories;
 
 /*static*/ void wxXmlResource::AddSubclassFactory(wxXmlSubclassFactory *factory)
 {
-    ms_subclassFactories.push_back(std::unique_ptr<wxXmlSubclassFactory>{factory});
+    wxXmlResourceInternal::ms_subclassFactories.push_back(std::unique_ptr<wxXmlSubclassFactory>{factory});
 }
 
 class wxXmlSubclassFactoryCXX : public wxXmlSubclassFactory
@@ -1438,7 +1455,7 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
         wxString subclass = node->GetAttribute(wxT("subclass"), wxEmptyString);
         if (!subclass.empty())
         {
-            for (auto& factory : wxXmlResource::ms_subclassFactories)
+            for (auto& factory : wxXmlResourceInternal::ms_subclassFactories)
             {
                 m_handler->m_instance = factory->Create(subclass);
                 if (m_handler->m_instance)
@@ -3155,7 +3172,7 @@ public:
     {
         delete wxXmlResource::Set(nullptr);
         delete wxIdRangeManager::Set(nullptr);
-        wxXmlResource::ms_subclassFactories.clear();
+        wxXmlResourceInternal::ms_subclassFactories.clear();
         CleanXRCID_Records();
     }
 };
