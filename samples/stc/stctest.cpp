@@ -672,7 +672,10 @@ AppAbout::AppAbout (wxWindow *parent,
     }
 
     // Get version of Scintilla
-    wxVersionInfo vi = wxStyledTextCtrl::GetLibraryVersionInfo();
+    wxString versionInfo = wxString::Format("%s (%s, %s)",
+        APP_VERSION,
+        wxStyledTextCtrl::GetLibraryVersionInfo().GetVersionString(),
+        wxStyledTextCtrl::GetLexerVersionInfo().GetVersionString());
 
     // sets the application title
     SetTitle (_("About .."));
@@ -685,7 +688,7 @@ AppAbout::AppAbout (wxWindow *parent,
                     1, wxEXPAND | wxALIGN_LEFT);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Version: ")),
                     0, wxALIGN_LEFT);
-    aboutinfo->Add (new wxStaticText(this, wxID_ANY, wxString::Format("%s (%s)", APP_VERSION, vi.GetVersionString())),
+    aboutinfo->Add (new wxStaticText(this, wxID_ANY, versionInfo),
                     1, wxEXPAND | wxALIGN_LEFT);
     aboutinfo->Add (new wxStaticText(this, wxID_ANY, _("Licence type: ")),
                     0, wxALIGN_LEFT);

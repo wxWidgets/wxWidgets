@@ -578,7 +578,7 @@
 #define wxSTC_LEX_DATAFLEX 129
 #define wxSTC_LEX_HOLLYWOOD 130
 #define wxSTC_LEX_RAKU 131
-#define wxSTC_LEX_LPEG 999
+#define wxSTC_LEX_FSHARP 132
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2635,6 +2635,28 @@
 #define wxSTC_RAKU_CALLABLE 26
 #define wxSTC_RAKU_GRAMMAR 27
 #define wxSTC_RAKU_CLASS 28
+
+/// Lexical states for SCLEX_FSHARP
+#define wxSTC_FSHARP_DEFAULT 0
+#define wxSTC_FSHARP_KEYWORD 1
+#define wxSTC_FSHARP_KEYWORD2 2
+#define wxSTC_FSHARP_KEYWORD3 3
+#define wxSTC_FSHARP_KEYWORD4 4
+#define wxSTC_FSHARP_KEYWORD5 5
+#define wxSTC_FSHARP_IDENTIFIER 6
+#define wxSTC_FSHARP_QUOT_IDENTIFIER 7
+#define wxSTC_FSHARP_COMMENT 8
+#define wxSTC_FSHARP_COMMENTLINE 9
+#define wxSTC_FSHARP_PREPROCESSOR 10
+#define wxSTC_FSHARP_LINENUM 11
+#define wxSTC_FSHARP_OPERATOR 12
+#define wxSTC_FSHARP_NUMBER 13
+#define wxSTC_FSHARP_CHARACTER 14
+#define wxSTC_FSHARP_STRING 15
+#define wxSTC_FSHARP_VERBATIM 16
+#define wxSTC_FSHARP_QUOTATION 17
+#define wxSTC_FSHARP_ATTRIBUTE 18
+#define wxSTC_FSHARP_FORMAT_SPEC 19
 
 //}}}
 
@@ -5343,17 +5365,6 @@ public:
     void SetLayoutCache(int cacheMode);
 
     /**
-        Is drawing done in two phases with backgrounds drawn before foregrounds?
-    */
-    bool GetTwoPhaseDraw() const;
-
-    /**
-        In twoPhaseDraw mode, drawing is performed in two phases, first the background
-        and then the foreground. This avoids chopping off characters that overlap the next run.
-    */
-    void SetTwoPhaseDraw(bool twoPhase);
-
-    /**
         How many phases is drawing done in?
 
         The return value will be one of the
@@ -5552,6 +5563,26 @@ public:
         Result is NUL-terminated.
     */
     wxString DescriptionOfStyle(int style) const;
+
+    /**
+        Set the lexer from an ILexer*.
+    */
+    void SetILexer(void* ilexer);
+
+    /**
+        Is drawing done in two phases with backgrounds drawn before foregrounds?
+
+        @deprecated
+    */
+    bool GetTwoPhaseDraw() const;
+
+    /**
+        In twoPhaseDraw mode, drawing is performed in two phases, first the background
+        and then the foreground. This avoids chopping off characters that overlap the next run.
+
+        @deprecated
+    */
+    void SetTwoPhaseDraw(bool twoPhase);
 
     //@}
 
