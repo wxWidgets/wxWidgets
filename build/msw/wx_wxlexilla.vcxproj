@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Debug|Win32">
+      <Configuration>DLL Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Debug|x64">
+      <Configuration>DLL Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Release|Win32">
+      <Configuration>DLL Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL Release|x64">
+      <Configuration>DLL Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>wxlexilla</ProjectName>
+    <ProjectGuid>{812EDDEE-840F-4807-A732-8A0B81409F39}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="wx_config.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="wx_setup.props" />
+    <Import Project="wx_local.props" Condition="Exists('wx_local.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(wxOutDir)</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(wxOutDir)</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(wxOutDir)</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(wxOutDir)</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">$(wxOutDir)</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">$(wxOutDir)</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">$(wxOutDir)</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">$(wxOutDir)</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">$(wxIntRootDir)$(ProjectName)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)$(wxSuffixDebug)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)$(wxSuffixDebug)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">$(ProjectName)$(wxSuffixDebug)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">$(ProjectName)$(wxSuffixDebug)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>$(ProjectName)$(wxSuffixDebug)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
+    <TargetName>$(ProjectName)$(wxSuffixDebug)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">
+    <TargetName>$(ProjectName)$(wxSuffixDebug)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)$(wxSuffixDebug)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>$(wxDebugRuntimeLibrary)</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>$(wxDebugRuntimeLibrary)</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>$(wxReleaseRuntimeLibrary)</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <StringPooling>true</StringPooling>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>$(wxReleaseRuntimeLibrary)</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>$(wxDebugRuntimeLibrary)</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>$(wxDebugRuntimeLibrary)</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>$(wxReleaseRuntimeLibrary)</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>$(wxReleaseRuntimeLibrary)</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WXMSW__;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>..\..\src\stc\lexilla\include;..\..\src\stc\lexilla\lexlib;..\..\src\stc\scintilla\include;$(OutDir)$(wxIncSubDir);..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <OutputFile>$(OutDir)wx_$(wxCompilerPrefix)_$(ProjectName).bsc</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\include\wx\msw\genrcdefs.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <CustomBuild Include="..\..\include\wx\msw\setup.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\stc\lexilla\access\LexillaAccess.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\include\Lexilla.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\include\SciLexer.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\Accessor.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\CatalogueModules.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexAccessor.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerBase.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerModule.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerSimple.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\OptionSet.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\PropSetSimple.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\SparseState.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\StringCopy.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\StyleContext.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\SubStyles.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\WordList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\stc\lexilla\access\LexillaAccess.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexA68k.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAbaqus.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAda.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAPDL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAsm.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAsn1.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexASY.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAU3.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAVE.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAVS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexBaan.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexBash.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexBasic.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexBatch.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexBibTeX.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexBullant.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCaml.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCIL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCLW.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCmake.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCOBOL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCoffeeScript.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexConf.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCPP.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCrontab.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCsound.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexCSS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexD.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDataflex.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDiff.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDMAP.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDMIS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexECL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEDIFACT.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEiffel.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexErlang.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexErrorList.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEScript.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexFlagship.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexForth.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexFortran.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexFSharp.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGAP.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGui4Cli.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexHaskell.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexHex.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexHollywood.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexHTML.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexIndent.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexInno.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexJSON.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexKix.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexKVIrc.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexLaTeX.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexLisp.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexLout.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexLua.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMagik.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMake.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMarkdown.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMatlab.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMaxima.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMetapost.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMMIXAL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexModula.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMPT.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMSSQL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMySQL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNim.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNimrod.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNsis.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNull.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexOpal.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexOScript.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPascal.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPB.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPerl.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPLM.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPO.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPOV.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPowerPro.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPowerShell.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexProgress.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexProps.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexPython.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexR.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRaku.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRebol.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRegistry.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRuby.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRust.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSAS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexScriptol.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSmalltalk.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSML.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSorcus.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSpecman.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSpice.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSQL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexStata.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSTTXT.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTACL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTADS3.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTAL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTCL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTCMD.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTeX.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTxt2tags.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVB.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVerilog.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVHDL.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVisualProlog.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexX12.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexYAML.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\Accessor.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerBase.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerModule.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerSimple.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\PropSetSimple.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\StyleContext.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\WordList.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\src\Lexilla.cxx" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
