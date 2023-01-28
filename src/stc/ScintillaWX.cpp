@@ -1446,7 +1446,7 @@ void ScintillaWX::ImeStartComposition() {
             lf.lfFaceName[0] = L'\0';
             if (vs.styles[styleHere].fontName) {
                 const char* fontName = vs.styles[styleHere].fontName;
-                UTF16FromUTF8(fontName, strlen(fontName)+1, lf.lfFaceName, LF_FACESIZE);
+                UTF16FromUTF8(fontName, lf.lfFaceName, LF_FACESIZE);
             }
 
             ::ImmSetCompositionFontW(imc.hIMC, &lf);
