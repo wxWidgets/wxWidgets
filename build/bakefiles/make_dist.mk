@@ -18,6 +18,8 @@ AUIDIR =   $(WXDIR)/src/aui
 RIBBONDIR = $(WXDIR)/src/ribbon
 PROPGRIDDIR = $(WXDIR)/src/propgrid
 STCDIR =   $(WXDIR)/src/stc
+SCINTILLADIR = $(WXDIR)/src/stc/scintilla
+LEXILLADIR = $(WXDIR)/src/stc/lexilla
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
@@ -217,12 +219,13 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(PROPGRIDDIR)/*.cpp $(DISTDIR)/src/propgrid
 
 	mkdir $(DISTDIR)/src/stc
-	mkdir $(DISTDIR)/src/stc/scintilla
-	mkdir $(DISTDIR)/src/stc/scintilla/src
-	mkdir $(DISTDIR)/src/stc/scintilla/include
 	$(CP_P) $(STCDIR)/*.* $(DISTDIR)/src/stc
-	$(CP_P) $(STCDIR)/scintilla/src/* $(DISTDIR)/src/stc/scintilla/src
-	$(CP_P) $(STCDIR)/scintilla/include/* $(DISTDIR)/src/stc/scintilla/include
+
+	mkdir $(DISTDIR)/src/stc/scintilla
+	$(CP_PR) $(SCINTILLADIR)/* $(DISTDIR)/src/stc/scintilla
+
+	mkdir $(DISTDIR)/src/stc/lexilla
+	$(CP_PR) $(LEXILLADIR)/* $(DISTDIR)/src/stc/lexilla
 
 	mkdir $(DISTDIR)/src/png
 	$(CP_PR) $(PNGDIR)/* $(DISTDIR)/src/png
