@@ -771,35 +771,35 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             break;
 #endif
 
-      case SCI_GETDIRECTFUNCTION:
+        case SCI_GETDIRECTFUNCTION:
             return reinterpret_cast<sptr_t>(DirectFunction);
 
-      case SCI_GETDIRECTPOINTER:
+        case SCI_GETDIRECTPOINTER:
             return reinterpret_cast<sptr_t>(this);
 
 #ifdef __WXMSW__
-      // ScintillaWin
-      case WM_IME_STARTCOMPOSITION:
-          // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
-          ImeStartComposition();
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+        // ScintillaWin
+        case WM_IME_STARTCOMPOSITION:
+            // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
+            ImeStartComposition();
+            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 
-      case WM_IME_ENDCOMPOSITION:
-          ImeEndComposition();
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+        case WM_IME_ENDCOMPOSITION:
+            ImeEndComposition();
+            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 
-      case WM_IME_KEYDOWN:
-      case WM_IME_REQUEST:
-      case WM_IME_COMPOSITION:
-      case WM_IME_SETCONTEXT:
-          // These events are forwarded here for future inline IME implementation
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+        case WM_IME_KEYDOWN:
+        case WM_IME_REQUEST:
+        case WM_IME_COMPOSITION:
+        case WM_IME_SETCONTEXT:
+            // These events are forwarded here for future inline IME implementation
+            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 #endif
 
-      default:
-          return ScintillaBase::WndProc(iMessage, wParam, lParam);
-      }
-      return 0;
+        default:
+            return ScintillaBase::WndProc(iMessage, wParam, lParam);
+    }
+    return 0;
 }
 
 
