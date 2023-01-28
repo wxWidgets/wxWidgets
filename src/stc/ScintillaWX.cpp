@@ -39,6 +39,9 @@
 #include "wx/stc/private.h"
 #include "PlatWX.h"
 
+#include "Lexilla.h"
+#include "LexillaAccess.h"
+
 #ifdef __WXMSW__
     #include "wx/msw/private.h" // GetHwndOf()
 #endif
@@ -795,6 +798,29 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             // These events are forwarded here for future inline IME implementation
             return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 #endif
+
+        case SCI_SETLEXER:
+        {
+            int lexLanguage = static_cast<int>(wParam);
+            const char* name = LexerNameFromID(lexLanguage);
+            ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+            stc->SetILexer(pLexer);
+            break;
+        }
+
+        case SCI_SETLEXERLANGUAGE:
+        {
+            const char* name = ConstCharPtrFromSPtr(lParam);
+            ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+            stc->SetILexer(pLexer);
+            break;
+        }
+
+        case SCI_LOADLEXERLIBRARY:
+        {
+            Lexilla::Load(ConstCharPtrFromSPtr(lParam));
+            break;
+        }
 
         default:
             return ScintillaBase::WndProc(iMessage, wParam, lParam);

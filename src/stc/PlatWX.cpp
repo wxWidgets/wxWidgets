@@ -3427,41 +3427,6 @@ void Menu::Show(Point pt, Window &w) {
 
 //----------------------------------------------------------------------
 
-class DynamicLibraryImpl : public DynamicLibrary {
-public:
-    explicit DynamicLibraryImpl(const char *modulePath)
-        : m_dynlib(wxString::FromUTF8(modulePath), wxDL_LAZY) {
-    }
-
-    // Use GetSymbol to get a pointer to the relevant function.
-    virtual Function FindFunction(const char *name) override {
-        if (m_dynlib.IsLoaded()) {
-            bool status;
-            void* fn_address = m_dynlib.GetSymbol(wxString::FromUTF8(name),
-                                                  &status);
-            if(status)
-                return fn_address;
-            else
-                return nullptr;
-        }
-        else
-            return nullptr;
-    }
-
-    virtual bool IsValid() override {
-        return m_dynlib.IsLoaded();
-    }
-
-private:
-    wxDynamicLibrary m_dynlib;
-};
-
-DynamicLibrary *DynamicLibrary::Load(const char *modulePath) {
-    return static_cast<DynamicLibrary *>( new DynamicLibraryImpl(modulePath) );
-}
-
-//----------------------------------------------------------------------
-
 ColourDesired Platform::Chrome() {
     wxColour c;
     c = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
