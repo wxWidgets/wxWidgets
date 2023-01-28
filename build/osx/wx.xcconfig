@@ -11,9 +11,9 @@ OTHER_CPLUSPLUSFLAGS = $(OTHER_CFLAGS) -fvisibility-inlines-hidden -Wno-deprecat
 GCC_PREFIX_HEADER = $(WXROOT)/include/wx/wxprec.h
 GCC_PRECOMPILE_PREFIX_HEADER = YES
 HEADER_SEARCH_PATHS = "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/3rdparty/pcre/src/wx"
-USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include" "$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include" "$(WXROOT)/src/zlib" "$(WXROOT)/src/jpeg" "$(WXROOT)/src/png" "$(WXROOT)/src/expat/expat/lib" "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/stc/scintilla/src" "$(WXROOT)/src/stc/scintilla/include" "$(WXROOT)/src/stc/scintilla/lexlib" "$(WXROOT)/3rdparty/pcre/src/wx"
+USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include" "$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include" "$(WXROOT)/src/zlib" "$(WXROOT)/src/jpeg" "$(WXROOT)/src/png" "$(WXROOT)/src/expat/expat/lib" "$(WXROOT)/src/tiff/libtiff" "$(WXROOT)/src/stc/lexilla/access" "$(WXROOT)/src/stc/lexilla/include" "$(WXROOT)/src/stc/lexilla/lexlib" "$(WXROOT)/src/stc/scintilla/include" "$(WXROOT)/src/stc/scintilla/src" "$(WXROOT)/3rdparty/pcre/src/wx"
 ALWAYS_SEARCH_USER_PATHS = NO
-WX_PREPROCESSOR_DEFINITIONS = WXBUILDING $(WXPLATFORM) __WX__ _FILE_OFFSET_BITS=64 _LARGE_FILES MACOS_CLASSIC __WXMAC_XCODE__=1 SCI_LEXER WX_PRECOMP=1 wxUSE_UNICODE_UTF8=0 wxUSE_UNICODE_WCHAR=1 HAVE_CONFIG_H PNG_NO_CONFIG_H
+WX_PREPROCESSOR_DEFINITIONS = WXBUILDING $(WXPLATFORM) __WX__ _FILE_OFFSET_BITS=64 _LARGE_FILES MACOS_CLASSIC __WXMAC_XCODE__=1 WX_PRECOMP=1 wxUSE_UNICODE_UTF8=0 wxUSE_UNICODE_WCHAR=1 HAVE_CONFIG_H PNG_NO_CONFIG_H
 GCC_PREPROCESSOR_DEFINITIONS = $(WX_PREPROCESSOR_DEFINITIONS)
 GCC_PFE_FILE_C_DIALECTS = c++ objective-c++
 GCC_C_LANGUAGE_STANDARD = gnu99

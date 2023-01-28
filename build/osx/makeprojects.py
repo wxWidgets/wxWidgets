@@ -13,7 +13,8 @@ ProjectFiles._FILE_TYPES['.cxx'] = ('sourcecode.cpp.cpp', 'PBXSourcesBuildPhase'
 from fix_xcode_ids import processFile
 
 bklfiles = ["../bakefiles/files.bkl", "../bakefiles/zlib.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl",
-            "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"]
+            "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/lexilla.bkl",
+            "../bakefiles/expat.bkl"]
 nodes = [
     # xcode group, entries[], targets []
     ["base", ["$(BASE_SRC)"], ["dynamic", "static", "base"]],
@@ -39,6 +40,7 @@ nodes = [
     ["libpng", ["$(wxpng)"], ["dynamic", "static", "wxpng"]],
     ["libregex", ["$(wxregex)"], ["dynamic", "static", "wxregex"]],
     ["libscintilla", ["$(wxscintilla)"], ["dynamic", "static", "wxscintilla"]],
+    ["liblexilla", ["$(wxlexilla)"], ["dynamic", "static", "wxlexilla"]],
     ["libexpat", ["$(wxexpat)"], ["dynamic", "static", "wxexpat"]]
 ]
 
