@@ -911,7 +911,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         m_lastKeyDownConsumed = false;
 
     if (!m_lastKeyDownConsumed && !skip) {
-        int key = evt.GetUnicodeKey();
+        wxChar key = evt.GetUnicodeKey();
         bool keyOk = true;
 
         // if the unicode key code is not really a unicode character (it may

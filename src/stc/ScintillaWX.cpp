@@ -1036,12 +1036,9 @@ void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
 #endif
 
 
-void ScintillaWX::DoAddChar(int key) {
-    wxChar wszChars[2];
-    wszChars[0] = (wxChar)key;
-    wszChars[1] = 0;
-    const wxCharBuffer buf(wx2stc(wszChars));
-    AddCharUTF(buf, buf.length());
+void ScintillaWX::DoAddChar(wxChar key) {
+    const wxCharBuffer buf(wx2stc(key));
+    InsertCharacter(buf, buf.length(), CharacterSource::directInput);
 }
 
 
