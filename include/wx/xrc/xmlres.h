@@ -25,7 +25,6 @@
 #include "wx/icon.h"
 #include "wx/artprov.h"
 #include "wx/colour.h"
-#include "wx/vector.h"
 
 #include "wx/xrc/xmlreshandler.h"
 
@@ -44,9 +43,9 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 class WXDLLIMPEXP_FWD_XML wxXmlDocument;
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XRC wxXmlSubclassFactory;
-class wxXmlSubclassFactories;
 class wxXmlResourceModule;
 class wxXmlResourceDataRecords;
+class wxXmlResourceInternal;
 
 // These macros indicate current version of XML resources (this information is
 // encoded in root node of XRC file as "version" property).
@@ -385,8 +384,7 @@ protected:
 #endif // wxUSE_FILESYSTEM
 
 private:
-    wxXmlResourceDataRecords& Data() { return *m_data; }
-    const wxXmlResourceDataRecords& Data() const { return *m_data; }
+    wxXmlResourceDataRecords& Data() const;
 
     // the real implementation of CreateResFromNode(): this should be only
     // called if node is non-null
@@ -410,8 +408,10 @@ private:
     long m_version;
 
     int m_flags;
-    wxVector<wxXmlResourceHandler*> m_handlers;
-    wxXmlResourceDataRecords *m_data;
+
+    // This object contains all private data of this class.
+    wxXmlResourceInternal* m_internal;
+
 #if wxUSE_FILESYSTEM
     wxFileSystem m_curFileSystem;
     wxFileSystem& GetCurFileSystem() { return m_curFileSystem; }
@@ -424,8 +424,6 @@ private:
     friend class wxXmlResourceModule;
     friend class wxIdRangeManager;
     friend class wxIdRange;
-
-    static wxXmlSubclassFactories *ms_subclassFactories;
 
     // singleton instance:
     static wxXmlResource *ms_instance;

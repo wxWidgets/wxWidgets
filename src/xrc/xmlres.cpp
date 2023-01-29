@@ -39,13 +39,16 @@
 #include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/xml/xml.h"
-#include "wx/hashset.h"
 #include "wx/scopedptr.h"
 #include "wx/config.h"
 #include "wx/platinfo.h"
 
 #include <limits.h>
 #include <locale.h>
+
+#include <memory>
+#include <unordered_set>
+#include <vector>
 
 namespace
 {
@@ -114,31 +117,52 @@ public:
 #endif
     }
 
-    ~wxXmlResourceDataRecord() {delete Doc;}
+    // Make these objects movable because they can't be copied due to the
+    // presence of a unique_ptr member.
+    wxXmlResourceDataRecord(const wxXmlResourceDataRecord&) = delete;
+    wxXmlResourceDataRecord& operator=(const wxXmlResourceDataRecord&) = delete;
+
+    wxXmlResourceDataRecord(wxXmlResourceDataRecord&&) = default;
+    wxXmlResourceDataRecord& operator=(wxXmlResourceDataRecord&&) = default;
+
+    ~wxXmlResourceDataRecord() = default;
 
     wxString File;
-    wxXmlDocument *Doc;
+    std::unique_ptr<wxXmlDocument> Doc;
 #if wxUSE_DATETIME
     wxDateTime Time;
 #endif
-
-    wxDECLARE_NO_COPY_CLASS(wxXmlResourceDataRecord);
 };
 
-class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
+class wxXmlResourceDataRecords : public std::vector<wxXmlResourceDataRecord>
 {
     // this is a class so that it can be forward-declared
 };
 
-WX_DECLARE_HASH_SET_PTR(int, wxIntegerHash, wxIntegerEqual, wxHashSetInt);
+class wxXmlResourceInternal
+{
+public:
+    std::vector<std::unique_ptr<wxXmlResourceHandler>> m_handlers;
+    wxXmlResourceDataRecords m_data;
+
+    static std::vector<std::unique_ptr<wxXmlSubclassFactory>> ms_subclassFactories;
+};
 
 class wxIdRange // Holds data for a particular rangename
 {
-protected:
+public:
     wxIdRange(const wxXmlNode* node,
               const wxString& rname,
               const wxString& startno,
               const wxString& rsize);
+
+    // Make these objects movable as it should be more efficient to move
+    // m_indices than copy them.
+    wxIdRange(const wxIdRange&) = delete;
+    wxIdRange& operator=(const wxIdRange&) = delete;
+
+    wxIdRange(wxIdRange&&) = default;
+    wxIdRange& operator=(wxIdRange&&) = default;
 
     // Note the existence of an item within the range
     void NoteItem(const wxXmlNode* node, const wxString& item);
@@ -149,21 +173,20 @@ protected:
     wxString GetName() const { return m_name; }
     bool IsFinalised() const { return m_finalised; }
 
-    const wxString m_name;
+private:
+    wxString m_name;
     int m_start;
     int m_end;
     unsigned int m_size;
     bool m_item_end_found;
     bool m_finalised;
-    wxHashSetInt m_indices;
-
-    friend class wxIdRangeManager;
+    std::unordered_set<int> m_indices;
 };
 
 class wxIdRangeManager
 {
 public:
-    ~wxIdRangeManager();
+    ~wxIdRangeManager() = default;
     // Gets the global resources object or creates one if none exists.
     static wxIdRangeManager *Get();
 
@@ -174,17 +197,12 @@ public:
     // Create a new IDrange from this node
     void AddRange(const wxXmlNode* node);
     // Tell the IdRange that this item exists, and should be pre-allocated an ID
-    void NotifyRangeOfItem(const wxXmlNode* node, const wxString& item) const;
+    void NotifyRangeOfItem(const wxXmlNode* node, const wxString& item);
     // Tells all IDranges that they're now complete, and can create their IDs
-    void FinaliseRanges(const wxXmlNode* node) const;
-    // Searches for a known IdRange matching 'name', returning its index or -1
-    int Find(const wxString& rangename) const;
+    void FinaliseRanges(const wxXmlNode* node);
 
 protected:
-    wxIdRange* FindRangeForItem(const wxXmlNode* node,
-                                const wxString& item,
-                                wxString& value) const;
-    wxVector<wxIdRange*> m_IdRanges;
+    std::vector<wxIdRange> m_IdRanges;
 
 private:
     static wxIdRangeManager *ms_instance;
@@ -234,12 +252,11 @@ GetFileNameFromNode(const wxXmlNode *node, const wxXmlResourceDataRecords& files
 
     // NB: 'node' now points to the root of XML document
 
-    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
-          i != files.end(); ++i )
+    for ( const wxXmlResourceDataRecord& rec : files )
     {
-        if ( (*i)->Doc->GetRoot() == node )
+        if ( rec.Doc->GetRoot() == node )
         {
-            return (*i)->File;
+            return rec.File;
         }
     }
 
@@ -269,7 +286,7 @@ wxXmlResource::wxXmlResource(int flags, const wxString& domain)
 {
     m_flags = flags;
     m_version = -1;
-    m_data = new wxXmlResourceDataRecords;
+    m_internal = new wxXmlResourceInternal;
     SetDomain(domain);
 }
 
@@ -277,7 +294,7 @@ wxXmlResource::wxXmlResource(const wxString& filemask, int flags, const wxString
 {
     m_flags = flags;
     m_version = -1;
-    m_data = new wxXmlResourceDataRecords;
+    m_internal = new wxXmlResourceInternal;
     SetDomain(domain);
     Load(filemask);
 }
@@ -286,12 +303,12 @@ wxXmlResource::~wxXmlResource()
 {
     ClearHandlers();
 
-    for ( wxXmlResourceDataRecords::iterator i = m_data->begin();
-          i != m_data->end(); ++i )
-    {
-        delete *i;
-    }
-    delete m_data;
+    delete m_internal;
+}
+
+wxXmlResourceDataRecords& wxXmlResource::Data() const
+{
+    return m_internal->m_data;
 }
 
 void wxXmlResource::SetDomain(const wxString& domain)
@@ -400,7 +417,7 @@ bool wxXmlResource::Load(const wxString& filemask_)
             if ( !doc )
                 thisOK = false;
             else
-                Data().push_back(new wxXmlResourceDataRecord(fnd, doc));
+                Data().emplace_back(fnd, doc);
         }
 
         if ( thisOK )
@@ -441,16 +458,15 @@ bool wxXmlResource::Unload(const wxString& filename)
 #if wxUSE_FILESYSTEM
         if ( isArchive )
         {
-            if ( (*i)->File.StartsWith(fnd) )
+            if ( (*i).File.StartsWith(fnd) )
                 unloaded = true;
             // don't break from the loop, we can have other matching files
         }
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
         {
-            if ( (*i)->File == fnd )
+            if ( (*i).File == fnd )
             {
-                delete *i;
                 Data().erase(i);
                 unloaded = true;
 
@@ -468,7 +484,7 @@ void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 {
     wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(handler);
     handler->SetImpl(impl);
-    m_handlers.push_back(handler);
+    m_internal->m_handlers.push_back(std::unique_ptr<wxXmlResourceHandler>{handler});
     handler->SetParentResource(this);
 }
 
@@ -476,7 +492,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 {
     wxXmlResourceHandlerImpl *impl = new wxXmlResourceHandlerImpl(handler);
     handler->SetImpl(impl);
-    m_handlers.insert(m_handlers.begin(), handler);
+    m_internal->m_handlers.insert(m_internal->m_handlers.begin(), std::unique_ptr<wxXmlResourceHandler>{handler});
     handler->SetParentResource(this);
 }
 
@@ -484,10 +500,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    for ( wxVector<wxXmlResourceHandler*>::iterator i = m_handlers.begin();
-          i != m_handlers.end(); ++i )
-        delete *i;
-    m_handlers.clear();
+    m_internal->m_handlers.clear();
 }
 
 
@@ -674,11 +687,8 @@ bool wxXmlResource::UpdateResources()
 {
     bool rt = true;
 
-    for ( wxXmlResourceDataRecords::iterator i = Data().begin();
-          i != Data().end(); ++i )
+    for ( wxXmlResourceDataRecord& rec : Data() )
     {
-        wxXmlResourceDataRecord* const rec = *i;
-
         // Check if we need to reload this one.
 
         // We never do it if this flag is specified.
@@ -687,14 +697,14 @@ bool wxXmlResource::UpdateResources()
 
         // And we don't do it for the records that were not loaded from a
         // file/URI (or at least not directly) in the first place.
-        if ( !rec->Time.IsValid() )
+        if ( !rec.Time.IsValid() )
             continue;
 
         // Otherwise check its modification time if we can.
 #if wxUSE_DATETIME
-        wxDateTime lastModTime = GetXRCFileModTime(rec->File);
+        wxDateTime lastModTime = GetXRCFileModTime(rec.File);
 
-        if ( lastModTime.IsValid() && lastModTime <= rec->Time )
+        if ( lastModTime.IsValid() && lastModTime <= rec.Time )
 #else // !wxUSE_DATETIME
         // Never reload the file contents: we can't know whether it changed or
         // not in this build configuration and it would be unexpected and
@@ -708,7 +718,7 @@ bool wxXmlResource::UpdateResources()
             continue;
         }
 
-        wxXmlDocument * const doc = DoLoadFile(rec->File);
+        wxXmlDocument * const doc = DoLoadFile(rec.File);
         if ( !doc )
         {
             // Notice that we keep the old XML document: it seems better to
@@ -719,12 +729,11 @@ bool wxXmlResource::UpdateResources()
         }
 
         // Replace the old resource contents with the new one.
-        delete rec->Doc;
-        rec->Doc = doc;
+        rec.Doc.reset(doc);
 
         // And, now that we loaded it successfully, update the last load time.
 #if wxUSE_DATETIME
-        rec->Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
+        rec.Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
 #endif // wxUSE_DATETIME
     }
 
@@ -828,7 +837,7 @@ bool wxXmlResource::LoadDocument(wxXmlDocument* doc, const wxString& name)
         docname = wxString::Format(wxS("<XML document #%lu>"), ++s_xrcDocument);
     }
 
-    Data().push_back(new wxXmlResourceDataRecord(docname, doc, XRCWhence::From_Doc));
+    Data().emplace_back(docname, doc, XRCWhence::From_Doc);
 
     return true;
 }
@@ -929,11 +938,9 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
     // reloading of XRC files
     const_cast<wxXmlResource *>(this)->UpdateResources();
 
-    for ( wxXmlResourceDataRecords::const_iterator f = Data().begin();
-          f != Data().end(); ++f )
+    for ( const wxXmlResourceDataRecord& rec : Data() )
     {
-        wxXmlResourceDataRecord *const rec = *f;
-        wxXmlDocument * const doc = rec->Doc;
+        wxXmlDocument * const doc = rec.Doc.get();
         if ( !doc || !doc->GetRoot() )
             continue;
 
@@ -942,7 +949,7 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
         if ( found )
         {
             if ( path )
-                *path = rec->File;
+                *path = rec.File;
 
             return found;
         }
@@ -1078,10 +1085,8 @@ wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
     }
     else if (node.GetName() == wxT("object"))
     {
-        for ( wxVector<wxXmlResourceHandler*>::iterator h = m_handlers.begin();
-              h != m_handlers.end(); ++h )
+        for ( const auto& handler : m_internal->m_handlers )
         {
-            wxXmlResourceHandler *handler = *h;
             if (handler->CanHandle(&node))
                 return handler->CreateResource(&node, parent, instance);
         }
@@ -1308,16 +1313,6 @@ wxIdRangeManager *wxIdRangeManager::ms_instance = nullptr;
     return old;
 }
 
-wxIdRangeManager::~wxIdRangeManager()
-{
-    for ( wxVector<wxIdRange*>::iterator i = m_IdRanges.begin();
-          i != m_IdRanges.end(); ++i )
-    {
-        delete *i;
-    }
-    m_IdRanges.clear();
-}
-
 void wxIdRangeManager::AddRange(const wxXmlNode* node)
 {
     wxString name = node->GetAttribute("name");
@@ -1333,106 +1328,79 @@ void wxIdRangeManager::AddRange(const wxXmlNode* node)
         return;
     }
 
-    int index = Find(name);
-    if (index == wxNOT_FOUND)
+    for ( auto& idRange : m_IdRanges )
     {
-        wxLogTrace("xrcrange",
-                   "Adding ID range, name=%s start=%s size=%s",
-                   name, start, size);
+        if ( idRange.GetName() == name )
+        {
+            // There was already a range with this name. Let's hope this is
+            // from an Unload()/(re)Load(), not an unintentional duplication
+            wxLogTrace("xrcrange",
+                       "Replacing ID range, name=%s start=%s size=%s",
+                       name, start, size);
 
-        m_IdRanges.push_back(new wxIdRange(node, name, start, size));
-    }
-    else
-    {
-        // There was already a range with this name. Let's hope this is
-        // from an Unload()/(re)Load(), not an unintentional duplication
-        wxLogTrace("xrcrange",
-                   "Replacing ID range, name=%s start=%s size=%s",
-                   name, start, size);
-
-        wxIdRange* oldrange = m_IdRanges.at(index);
-        m_IdRanges.at(index) = new wxIdRange(node, name, start, size);
-        delete oldrange;
-    }
-}
-
-wxIdRange *
-wxIdRangeManager::FindRangeForItem(const wxXmlNode* node,
-                                   const wxString& item,
-                                   wxString& value) const
-{
-    wxString basename = item.BeforeFirst('[');
-    wxCHECK_MSG( !basename.empty(), nullptr,
-                 "an id-range item without a range name" );
-
-    int index = Find(basename);
-    if (index == wxNOT_FOUND)
-    {
-        // Don't assert just because we've found an unexpected foo[123]
-        // Someone might just want such a name, nothing to do with ranges
-        return nullptr;
+            idRange = wxIdRange(node, name, start, size);
+            return;
+        }
     }
 
-    value = item.Mid(basename.Len());
-    if (value.at(value.length()-1)==']')
-    {
-        return m_IdRanges.at(index);
-    }
-    wxXmlResource::Get()->ReportError(node, "a malformed id-range item");
-    return nullptr;
+    wxLogTrace("xrcrange",
+               "Adding ID range, name=%s start=%s size=%s",
+               name, start, size);
+
+    m_IdRanges.emplace_back(node, name, start, size);
 }
 
 void
 wxIdRangeManager::NotifyRangeOfItem(const wxXmlNode* node,
-                                    const wxString& item) const
+                                    const wxString& item)
 {
-    wxString value;
-    wxIdRange* range = FindRangeForItem(node, item, value);
-    if (range)
-        range->NoteItem(node, value);
-}
+    wxString basename = item.BeforeFirst('[');
+    wxCHECK_RET( !basename.empty(), "an id-range item without a range name" );
 
-int wxIdRangeManager::Find(const wxString& rangename) const
-{
-    for ( int i=0; i < (int)m_IdRanges.size(); ++i )
+    for ( auto& idRange : m_IdRanges )
     {
-        if (m_IdRanges.at(i)->GetName() == rangename)
-            return i;
+        if ( idRange.GetName() == basename )
+        {
+            wxString value = item.Mid(basename.Len());
+            if (value.at(value.length()-1)==']')
+            {
+                idRange.NoteItem(node, value);
+            }
+            else
+            {
+                wxXmlResource::Get()->ReportError(node, "a malformed id-range item");
+            }
+
+            // In any case, it's useless to continue.
+            return;
+        }
     }
 
-    return wxNOT_FOUND;
+    // Don't assert just because we've found an unexpected foo[123]
+    // Someone might just want such a name, nothing to do with ranges
 }
 
-void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node) const
+void wxIdRangeManager::FinaliseRanges(const wxXmlNode* node)
 {
-    for ( wxVector<wxIdRange*>::const_iterator i = m_IdRanges.begin();
-          i != m_IdRanges.end(); ++i )
+    for ( auto& idRange : m_IdRanges )
     {
         // Check if this range has already been finalised. Quite possible,
         // as  FinaliseRanges() gets called for each .xrc file loaded
-        if (!(*i)->IsFinalised())
+        if (!idRange.IsFinalised())
         {
-            wxLogTrace("xrcrange", "Finalising ID range %s", (*i)->GetName());
-            (*i)->Finalise(node);
+            wxLogTrace("xrcrange", "Finalising ID range %s", idRange.GetName());
+            idRange.Finalise(node);
         }
     }
 }
 
 
-class wxXmlSubclassFactories : public wxVector<wxXmlSubclassFactory*>
-{
-    // this is a class so that it can be forward-declared
-};
-
-wxXmlSubclassFactories *wxXmlResource::ms_subclassFactories = nullptr;
+std::vector<std::unique_ptr<wxXmlSubclassFactory>>
+wxXmlResourceInternal::ms_subclassFactories;
 
 /*static*/ void wxXmlResource::AddSubclassFactory(wxXmlSubclassFactory *factory)
 {
-    if (!ms_subclassFactories)
-    {
-        ms_subclassFactories = new wxXmlSubclassFactories;
-    }
-    ms_subclassFactories->push_back(factory);
+    wxXmlResourceInternal::ms_subclassFactories.push_back(std::unique_ptr<wxXmlSubclassFactory>{factory});
 }
 
 class wxXmlSubclassFactoryCXX : public wxXmlSubclassFactory
@@ -1487,10 +1455,9 @@ wxObject *wxXmlResourceHandlerImpl::CreateResource(wxXmlNode *node, wxObject *pa
         wxString subclass = node->GetAttribute(wxT("subclass"), wxEmptyString);
         if (!subclass.empty())
         {
-            for (wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin();
-                 i != wxXmlResource::ms_subclassFactories->end(); ++i)
+            for (auto& factory : wxXmlResourceInternal::ms_subclassFactories)
             {
-                m_handler->m_instance = (*i)->Create(subclass);
+                m_handler->m_instance = factory->Create(subclass);
                 if (m_handler->m_instance)
                     break;
             }
@@ -3205,15 +3172,7 @@ public:
     {
         delete wxXmlResource::Set(nullptr);
         delete wxIdRangeManager::Set(nullptr);
-        if(wxXmlResource::ms_subclassFactories)
-        {
-            for ( wxXmlSubclassFactories::iterator i = wxXmlResource::ms_subclassFactories->begin();
-                  i != wxXmlResource::ms_subclassFactories->end(); ++i )
-            {
-                delete *i;
-            }
-            wxDELETE(wxXmlResource::ms_subclassFactories);
-        }
+        wxXmlResourceInternal::ms_subclassFactories.clear();
         CleanXRCID_Records();
     }
 };
