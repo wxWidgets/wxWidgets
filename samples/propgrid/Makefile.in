@@ -54,8 +54,7 @@ PROPGRID_OBJECTS =  \
 	$(__propgrid___win32rc) \
 	propgrid_propgrid.o \
 	propgrid_propgrid_minimal.o \
-	propgrid_sampleprops.o \
-	propgrid_tests.o
+	propgrid_sampleprops.o
 
 ### Conditionally set variables: ###
 
@@ -197,9 +196,6 @@ propgrid_propgrid_minimal.o: $(srcdir)/propgrid_minimal.cpp
 
 propgrid_sampleprops.o: $(srcdir)/sampleprops.cpp
 	$(CXXC) -c -o $@ $(PROPGRID_CXXFLAGS) $(srcdir)/sampleprops.cpp
-
-propgrid_tests.o: $(srcdir)/tests.cpp
-	$(CXXC) -c -o $@ $(PROPGRID_CXXFLAGS) $(srcdir)/tests.cpp
 
 
 # Include dependency info, if present:

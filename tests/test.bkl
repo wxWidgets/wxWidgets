@@ -223,6 +223,7 @@
             controls/ownerdrawncomboboxtest.cpp
             controls/pickerbasetest.cpp
             controls/pickertest.cpp
+            controls/propgridtest.cpp
             controls/radioboxtest.cpp
             controls/radiobuttontest.cpp
             controls/rearrangelisttest.cpp
@@ -304,6 +305,7 @@
         <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>
         <wx-lib>html</wx-lib>
+        <wx-lib>propgrid</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>

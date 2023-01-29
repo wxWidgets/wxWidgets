@@ -182,6 +182,9 @@
     <ClCompile Include="events\propagation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controls\propgridtest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\radioboxtest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

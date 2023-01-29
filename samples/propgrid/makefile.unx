@@ -55,8 +55,7 @@ PROPGRID_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS)
 PROPGRID_OBJECTS =  \
 	propgrid_propgrid.o \
 	propgrid_propgrid_minimal.o \
-	propgrid_sampleprops.o \
-	propgrid_tests.o
+	propgrid_sampleprops.o
 
 ### Conditionally set variables: ###
 
@@ -100,9 +99,6 @@ propgrid_propgrid_minimal.o: ./propgrid_minimal.cpp
 	$(CXX) -c -o $@ $(PROPGRID_CXXFLAGS) $(CPPDEPS) $<
 
 propgrid_sampleprops.o: ./sampleprops.cpp
-	$(CXX) -c -o $@ $(PROPGRID_CXXFLAGS) $(CPPDEPS) $<
-
-propgrid_tests.o: ./tests.cpp
 	$(CXX) -c -o $@ $(PROPGRID_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean

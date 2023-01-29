@@ -212,6 +212,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_ownerdrawncomboboxtest.obj \
 	$(OBJS)\test_gui_pickerbasetest.obj \
 	$(OBJS)\test_gui_pickertest.obj \
+	$(OBJS)\test_gui_propgridtest.obj \
 	$(OBJS)\test_gui_radioboxtest.obj \
 	$(OBJS)\test_gui_radiobuttontest.obj \
 	$(OBJS)\test_gui_rearrangelisttest.obj \
@@ -517,6 +518,10 @@ __WXLIB_XRC_p = \
 __WXLIB_HTML_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 !endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_PROPGRID_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid.lib
+!endif
 !if "$(USE_GUI)" == "1"
 __test_allheaders___depname = $(OBJS)\test_allheaders.exe
 !endif
@@ -816,7 +821,7 @@ $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_5) /pdb:"$(OBJS)\test_gui.pdb" $(__DEBUGINFO_51)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_GUI_OBJECTS) $(TEST_GUI_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) imm32.lib $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(TEST_GUI_OBJECTS) $(TEST_GUI_RESOURCES)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) imm32.lib $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_PROPGRID_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
@@ -1290,6 +1295,9 @@ $(OBJS)\test_gui_pickerbasetest.obj: .\controls\pickerbasetest.cpp
 
 $(OBJS)\test_gui_pickertest.obj: .\controls\pickertest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\pickertest.cpp
+
+$(OBJS)\test_gui_propgridtest.obj: .\controls\propgridtest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\propgridtest.cpp
 
 $(OBJS)\test_gui_radioboxtest.obj: .\controls\radioboxtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\radioboxtest.cpp
