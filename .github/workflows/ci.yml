@@ -63,7 +63,11 @@ jobs:
   build:
     runs-on: ${{ matrix.runner }}
     name: ${{ matrix.name }}
-    container: ${{ matrix.container }}
+    container:
+      image: ${{ matrix.container }}
+      # We need to make container privileged just to allow writing to
+      # /proc/sys/kernel/core* files below.
+      options: --privileged
     strategy:
       fail-fast: false
       matrix:
@@ -329,7 +333,15 @@ jobs:
             # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
             wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
+
+          # Configure the system to create core files and create them in the
+          # current directory instead of using apport to handle them, as
+          # Ubuntu does by default (even in a container where apport is not
+          # only not running but not even installed). Also turn off appending
+          # PID to the core files names which is on by default.
           ulimit -c unlimited
+          echo core | sudo tee /proc/sys/kernel/core_pattern
+          echo 0 | sudo tee /proc/sys/kernel/core_uses_pid
 
           # This is exceedingly weird, but for some reason the first test using
           # wxWebView in the build using clang under Ubuntu 20.04 fails (even
