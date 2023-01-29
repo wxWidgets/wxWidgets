@@ -294,6 +294,7 @@ wxMSW:
 - Include wxrc.exe in 64-bit wxMSW MSVC dev archive too (Danny Scott, #23122).
 - Don't disable wxComboBox after recreating it (Oleksandra Yushchenko, #23132).
 - Fix wxJoystick::GetProductName() returning nothing (Maarten Bent, #23172).
+- Work around MSVS 2022 optimizer bug in wxImage::ShrinkBy() (#23164).
 
 wxOSX:
 

@@ -390,11 +390,11 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
                     unsigned char red = pixel[0] ;
                     unsigned char green = pixel[1] ;
                     unsigned char blue = pixel[2] ;
-                    unsigned char alpha = 255  ;
-                    if ( source_alpha )
-                        alpha = *(source_alpha + y_offset + x * xFactor + x1) ;
                     if ( !hasMask || red != maskRed || green != maskGreen || blue != maskBlue )
                     {
+                        unsigned char alpha = 255  ;
+                        if ( source_alpha )
+                            alpha = *(source_alpha + y_offset + x * xFactor + x1) ;
                         if ( alpha > 0 )
                         {
                             avgRed += red ;
