@@ -145,6 +145,9 @@ public:
     std::vector<std::unique_ptr<wxXmlResourceHandler>> m_handlers;
     wxXmlResourceDataRecords m_data;
 
+    // Enabled features.
+    std::unordered_set<wxString> m_features;
+
     static std::vector<std::unique_ptr<wxXmlSubclassFactory>> ms_subclassFactories;
 };
 
@@ -314,6 +317,11 @@ wxXmlResourceDataRecords& wxXmlResource::Data() const
 void wxXmlResource::SetDomain(const wxString& domain)
 {
     m_domain = domain;
+}
+
+void wxXmlResource::EnableFeature(const wxString& feature)
+{
+    m_internal->m_features.insert(feature);
 }
 
 
@@ -636,9 +644,12 @@ static bool HasAnyMatchingTokens(const wxString& s, const Pred& pred)
 // This function removes the nodes of the XRC document that are "inactive",
 // i.e. shouldn't be taken into account at all, e.g. because they use a
 // "platform" attribute not matching the current platform.
-static void FilterOurInactiveNodes(wxXmlNode *node)
+static void
+FilterOurInactiveNodes(wxXmlNode *node,
+                       const std::unordered_set<wxString>& features)
 {
     static const wxString wxXRC_PLATFORM_ATTRIBUTE(wxS("platform"));
+    static const wxString wxXRC_FEATURE_ATTRIBUTE(wxS("feature"));
 
     wxString s;
 
@@ -653,9 +664,16 @@ static void FilterOurInactiveNodes(wxXmlNode *node)
                     );
         }
 
+        if (isok && c->GetAttribute(wxXRC_FEATURE_ATTRIBUTE, &s))
+        {
+            isok = HasAnyMatchingTokens(s, [&](const wxString& s)
+                        { return features.count(s); }
+                    );
+        }
+
         if (isok)
         {
-            FilterOurInactiveNodes(c);
+            FilterOurInactiveNodes(c, features);
             c = c->GetNext();
         }
         else
@@ -819,7 +837,7 @@ bool wxXmlResource::DoLoadDocument(const wxXmlDocument& doc)
         wxLogWarning("Resource files must have same version number.");
     }
 
-    FilterOurInactiveNodes(root);
+    FilterOurInactiveNodes(root, m_internal->m_features);
     PreprocessForIdRanges(root);
     wxIdRangeManager::Get()->FinaliseRanges(root);
 

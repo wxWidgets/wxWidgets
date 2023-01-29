@@ -2853,6 +2853,54 @@ Examples:
 @endcode
 
 
+@section overview_xrcformat_features Feature-specific Content
+
+Similarly to the platform-specific features, but even more flexibly, XRC
+elements can use @c feature attribute. Just as above, the value of this
+attribute is a |-separated list of strings but, unlike platforms, these strings
+don't have any intrinsic meaning and the program must call
+wxXmlResource::EnableFeature() to indicate which features should be considered
+to be enabled.
+
+Any element using the @c feature attribute not including any enabled features
+is ignored when loading the XRC document. Because by default all features are
+disabled, this means that all elements with this attribute are discarded if
+wxXmlResource::EnableFeature() is not called at all.
+
+For example, an educational program might exist in several builds targeting
+different subjects and enable or disable different features in them:
+@code
+<object class="wxNotebook">
+    <object class="notebookpage"> <!-- No feature, so always present -->
+        <label>Overview</label>
+        ...
+    </object>
+    <object class="notebookpage" feature="humanities">
+        <label>History</label>
+        ...
+    </object>
+    <object class="notebookpage" feature="science">
+        <label>Physics</label>
+        ...
+    </object>
+    <object class="notebookpage" feature="science">
+        <label>Chemistry</label>
+        ...
+    </object>
+    <object class="notebookpage" feature="science|humanities">
+        <label>Economics</label>
+        ...
+    </object>
+</object>
+@endcode
+
+By calling
+@code
+    wxXmlResource::Get()->EnableFeature("humanities");
+@endcode
+before loading the XRC document, the program would request loading the first
+two and the last pages only.
+
 
 @section overview_xrcformat_idranges ID Ranges
 

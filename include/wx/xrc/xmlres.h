@@ -305,6 +305,13 @@ public:
     const wxString& GetDomain() const { return m_domain; }
     void SetDomain(const wxString& domain);
 
+    // Add a feature considered to be enabled: this will affect the subsequent
+    // calls to LoadDocument() and related functions and will keep any nodes
+    // using this string in their "feature" attribute (if any).
+    //
+    // Can be called multiple times to enable more than one feature.
+    void EnableFeature(const wxString& feature);
+
 
     // This function returns the wxXmlNode containing the definition of the
     // object with the given name or nullptr.
