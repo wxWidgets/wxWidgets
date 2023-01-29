@@ -32,8 +32,7 @@ PROPGRID_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
 PROPGRID_OBJECTS =  \
 	$(OBJS)\propgrid_propgrid.obj \
 	$(OBJS)\propgrid_propgrid_minimal.obj \
-	$(OBJS)\propgrid_sampleprops.obj \
-	$(OBJS)\propgrid_tests.obj
+	$(OBJS)\propgrid_sampleprops.obj
 PROPGRID_RESOURCES =  \
 	$(OBJS)\propgrid_sample.res
 
@@ -430,7 +429,4 @@ $(OBJS)\propgrid_propgrid_minimal.obj: .\propgrid_minimal.cpp
 
 $(OBJS)\propgrid_sampleprops.obj: .\sampleprops.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRID_CXXFLAGS) .\sampleprops.cpp
-
-$(OBJS)\propgrid_tests.obj: .\tests.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRID_CXXFLAGS) .\tests.cpp
 

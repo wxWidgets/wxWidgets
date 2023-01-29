@@ -140,4 +140,21 @@ protected:
 
 // -----------------------------------------------------------------------
 
+class MyColourProperty : public wxColourProperty
+{
+public:
+    MyColourProperty(const wxString& label = wxPG_LABEL,
+        const wxString& name = wxPG_LABEL,
+        const wxColour& value = *wxWHITE);
+
+    virtual ~MyColourProperty() = default;
+
+    virtual wxColour GetColour(int index) const override;
+
+    virtual wxString ColourToString(const wxColour& col,
+        int index, int argFlags = 0) const override;
+
+    virtual int GetCustomColourIndex() const override;
+};
+
 #endif // _WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_

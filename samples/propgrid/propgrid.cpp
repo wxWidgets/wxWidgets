@@ -403,8 +403,6 @@ enum
     ID_GETVALUES,
     ID_SETVALUES,
     ID_SETVALUES2,
-    ID_RUNTESTFULL,
-    ID_RUNTESTPARTIAL,
     ID_FITCOLUMNS,
     ID_CHANGEFLAGSITEMS,
     ID_TESTINSERTCHOICE,
@@ -537,9 +535,6 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_FITCOLUMNS, FormMain::OnFitColumnsClick )
 
     EVT_MENU( ID_CHANGEFLAGSITEMS, FormMain::OnChangeFlagsPropItemsClick )
-
-    EVT_MENU( ID_RUNTESTFULL, FormMain::OnMisc )
-    EVT_MENU( ID_RUNTESTPARTIAL, FormMain::OnMisc )
 
     EVT_MENU( ID_TESTINSERTCHOICE, FormMain::OnInsertChoice )
     EVT_MENU( ID_TESTDELETECHOICE, FormMain::OnDeleteChoice )
@@ -1738,6 +1733,20 @@ void FormMain::PopulateWithLibraryConfig ()
     pg->SetPropertyAttribute(pid,wxPG_BOOL_USE_CHECKBOX,true,wxPG_RECURSE);
 }
 
+// -----------------------------------------------------------------------
+
+void FormMain::AddTestProperties(wxPropertyGridPage* pg)
+{
+    pg->Append(new MyColourProperty("CustomColourProperty", wxPG_LABEL, *wxGREEN));
+    pg->GetProperty("CustomColourProperty")->SetAutoUnspecified(true);
+    pg->SetPropertyEditor("CustomColourProperty", wxPGEditor_ComboBox);
+
+    pg->SetPropertyHelpString("CustomColourProperty",
+        "This is a MyColourProperty from the sample app. "
+        "It is built by subclassing wxColourProperty.");
+}
+
+// -----------------------------------------------------------------------
 
 //
 // Handle events of the third page here.
@@ -2069,9 +2078,6 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTry->Append(ID_TESTXRC, "Display XRC sample" );
 
     menuFile->Append(ID_RUNMINIMAL, "Run Minimal Sample" );
-    menuFile->AppendSeparator();
-    menuFile->Append(ID_RUNTESTFULL, "Run Tests (full)" );
-    menuFile->Append(ID_RUNTESTPARTIAL, "Run Tests (fast)" );
     menuFile->AppendSeparator();
     menuFile->Append(ID_QUIT, "E&xit\tAlt-X", "Quit this program" );
 
@@ -3067,16 +3073,6 @@ void FormMain::OnMisc ( wxCommandEvent& event )
             m_pPropGridManager->Collapse(selProp);
         }
     }
-    else if ( id == ID_RUNTESTFULL )
-    {
-        // Runs a regression test.
-        RunTests(true);
-    }
-    else if ( id == ID_RUNTESTPARTIAL )
-    {
-        // Runs a regression test.
-        RunTests(false);
-    }
     else if ( id == ID_UNSPECIFY )
     {
         wxPGProperty* prop = m_pPropGridManager->GetSelection();
@@ -3108,6 +3104,64 @@ void FormMain::OnPopulateClick( wxCommandEvent& event )
 
 // -----------------------------------------------------------------------
 
+void FormMain::OnDumpList(wxCommandEvent& WXUNUSED(event))
+{
+    wxVariant values = m_pPropGridManager->GetPropertyValues("list", wxNullProperty, wxPG_INC_ATTRIBUTES);
+    wxString text = "This only tests that wxVariant related routines do not crash.\n";
+
+    wxDialog* dlg = new wxDialog(this, wxID_ANY, "wxVariant Test",
+        wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+
+    for ( size_t i = 0; i < values.GetCount(); i++ )
+    {
+        wxString t;
+        wxVariant& v = values[i];
+
+        wxString strValue = v.GetString();
+
+        if ( v.GetName().EndsWith("@attr") )
+        {
+            text += wxString::Format("Attributes:\n");
+
+            for ( size_t n = 0; n < v.GetCount(); n++ )
+            {
+                wxVariant& a = v[n];
+
+                t.Printf("  attribute %i: name=\"%s\"  (type=\"%s\"  value=\"%s\")\n", (int)n,
+                    a.GetName(), a.GetType(), a.GetString());
+                text += t;
+            }
+        }
+        else
+        {
+            t.Printf("%i: name=\"%s\"  type=\"%s\"  value=\"%s\"\n", (int)i,
+                v.GetName(), v.GetType(), strValue);
+            text += t;
+        }
+    }
+
+    // multi-line text editor dialog
+    const int spacing = 8;
+    wxBoxSizer* topsizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* rowsizer = new wxBoxSizer(wxHORIZONTAL);
+    wxTextCtrl* ed = new wxTextCtrl(dlg, wxID_ANY, text,
+        wxDefaultPosition, wxDefaultSize,
+        wxTE_MULTILINE | wxTE_READONLY);
+    rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
+    topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
+    rowsizer = new wxBoxSizer(wxHORIZONTAL);
+    rowsizer->Add(new wxButton(dlg, wxID_OK, "Ok"),
+        wxSizerFlags(0).CentreHorizontal().CentreVertical().Border(wxBOTTOM | wxLEFT | wxRIGHT, spacing));
+    topsizer->Add(rowsizer, wxSizerFlags().Right());
+
+    dlg->SetSizer(topsizer);
+    topsizer->SetSizeHints(dlg);
+
+    dlg->SetSize(400, 300);
+    dlg->Centre();
+    dlg->ShowModal();
+}
+
 void DisplayMinimalFrame(wxWindow* parent);  // in minimal.cpp
 
 void FormMain::OnRunMinimalClick( wxCommandEvent& WXUNUSED(event) )
@@ -3137,23 +3191,6 @@ bool cxApplication::OnInit()
 
     FormMain* frame = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), frameSize);
     frame->Show(true);
-
-    //
-    // Parse command-line
-    wxApp& app = wxGetApp();
-    if ( app.argc > 1 )
-    {
-        wxString s = app.argv[1];
-        if ( s == "--run-tests" )
-        {
-            //
-            // Run tests
-            bool testResult = frame->RunTests(true);
-
-            if ( testResult )
-                return false;
-        }
-    }
 
     return true;
 }

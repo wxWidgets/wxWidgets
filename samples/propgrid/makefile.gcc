@@ -30,8 +30,7 @@ PROPGRID_OBJECTS =  \
 	$(OBJS)\propgrid_sample_rc.o \
 	$(OBJS)\propgrid_propgrid.o \
 	$(OBJS)\propgrid_propgrid_minimal.o \
-	$(OBJS)\propgrid_sampleprops.o \
-	$(OBJS)\propgrid_tests.o
+	$(OBJS)\propgrid_sampleprops.o
 
 ### Conditionally set variables: ###
 
@@ -219,9 +218,6 @@ $(OBJS)\propgrid_propgrid_minimal.o: ./propgrid_minimal.cpp
 	$(CXX) -c -o $@ $(PROPGRID_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\propgrid_sampleprops.o: ./sampleprops.cpp
-	$(CXX) -c -o $@ $(PROPGRID_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\propgrid_tests.o: ./tests.cpp
 	$(CXX) -c -o $@ $(PROPGRID_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean

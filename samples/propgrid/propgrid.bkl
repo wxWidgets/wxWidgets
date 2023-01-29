@@ -8,7 +8,6 @@
             propgrid.cpp
             propgrid_minimal.cpp
             sampleprops.cpp
-            tests.cpp
         </sources>
         <headers>
             sampleprops.h

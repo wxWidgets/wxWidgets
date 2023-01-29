@@ -115,7 +115,7 @@ wx_add_sample(power)
 wx_add_sample(preferences DEPENDS wxUSE_PREFERENCES_EDITOR)
 wx_add_sample(printing printing.cpp printing.h DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(propgrid propgrid.cpp propgrid_minimal.cpp sampleprops.cpp
-    tests.cpp sampleprops.h propgrid.h LIBRARIES wxpropgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
+    sampleprops.h propgrid.h LIBRARIES wxpropgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
 wx_add_sample(render FOLDER render)
 wx_add_sample(render DLL renddll.cpp NAME renddll FOLDER render)
 wx_add_sample(ribbon ribbondemo.cpp LIBRARIES wxribbon NAME ribbondemo DEPENDS wxUSE_RIBBON)

@@ -233,8 +233,6 @@ public:
 
     void AddTestProperties( wxPropertyGridPage* pg );
 
-    bool RunTests( bool fullTest, bool interactive = false );
-
 private:
     wxDECLARE_EVENT_TABLE();
 };
