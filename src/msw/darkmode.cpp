@@ -92,8 +92,10 @@ namespace wxMSWImpl
 
 // Global pointers of the functions we use: they're not only undocumented, but
 // don't appear in the SDK headers at all.
-BOOL (WINAPI *ShouldAppsUseDarkMode)() = nullptr;
-BOOL (WINAPI *AllowDarkModeForWindow)(HWND hwnd, BOOL allow) = nullptr;
+//
+// Note that, not being public, they use C++ bool type and not Win32 BOOL.
+bool (WINAPI *ShouldAppsUseDarkMode)() = nullptr;
+bool (WINAPI *AllowDarkModeForWindow)(HWND hwnd, bool allow) = nullptr;
 DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
 
 bool InitDarkMode()
@@ -250,7 +252,7 @@ void EnableForTLW(HWND hwnd)
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
-    wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE);
+    wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
 }
 
 void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
@@ -258,7 +260,7 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
     if ( !wxMSWImpl::ShouldUseDarkMode() )
         return;
 
-    if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, TRUE) )
+    if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
         wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
 
     if ( themeName || themeId )
