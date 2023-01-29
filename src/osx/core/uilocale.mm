@@ -150,6 +150,8 @@ wxString
 wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
     NSString* str = nullptr;
+    NSLocale *enLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [enLocale autorelease];
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
@@ -159,7 +161,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str = [m_nsloc localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
                     break;
                 case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    str = [enLocale displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
                     break;
                 default:
                     wxFAIL_MSG("unknown wxLocaleForm");
@@ -172,7 +174,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str = [m_nsloc localizedStringForLanguageCode:[m_nsloc languageCode]];
                     break;
                 case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    str = [enLocale displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
                     break;
                 default:
                      wxFAIL_MSG("unknown wxLocaleForm");
@@ -185,7 +187,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str = [m_nsloc localizedStringForCountryCode:[m_nsloc countryCode]];
                     break;
                 case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    str = [enLocale displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
                     break;
                 default:
                     wxFAIL_MSG("unknown wxLocaleForm");
