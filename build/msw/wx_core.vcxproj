@@ -1516,6 +1516,7 @@
     <ClInclude Include="..\..\include\wx\creddlg.h" />
     <ClInclude Include="..\..\include\wx\generic\creddlgg.h" />
     <ClInclude Include="..\..\include\wx\filedlgcustomize.h" />
+    <ClInclude Include="..\..\include\wx\compositebookctrl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

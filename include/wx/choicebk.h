@@ -15,9 +15,8 @@
 
 #if wxUSE_CHOICEBOOK
 
-#include "wx/bookctrl.h"
+#include "wx/compositebookctrl.h"
 #include "wx/choice.h"
-#include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxChoice;
 
@@ -36,7 +35,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CHOICEBOOK_PAGE_CHANGING, wxBo
 // wxChoicebook
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxChoicebook : public wxNavigationEnabled<wxBookCtrlBase>
+class WXDLLIMPEXP_CORE wxChoicebook : public wxCompositeBookCtrlBase
 {
 public:
     wxChoicebook() { }

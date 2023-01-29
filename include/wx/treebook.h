@@ -15,8 +15,7 @@
 
 #if wxUSE_TREEBOOK
 
-#include "wx/bookctrl.h"
-#include "wx/containr.h"
+#include "wx/compositebookctrl.h"
 #include "wx/treebase.h"        // for wxTreeItemId
 #include "wx/vector.h"
 
@@ -29,7 +28,7 @@ class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 // wxTreebook
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTreebook : public wxNavigationEnabled<wxBookCtrlBase>
+class WXDLLIMPEXP_CORE wxTreebook : public wxCompositeBookCtrlBase
 {
 public:
     // Constructors and such

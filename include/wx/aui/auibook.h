@@ -23,8 +23,7 @@
 
 #include "wx/aui/tabart.h"
 #include "wx/aui/framemanager.h"
-#include "wx/bookctrl.h"
-#include "wx/containr.h"
+#include "wx/compositebookctrl.h"
 
 
 class wxAuiNotebook;
@@ -244,7 +243,7 @@ protected:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiNotebook : public wxNavigationEnabled<wxBookCtrlBase>
+class WXDLLIMPEXP_AUI wxAuiNotebook : public wxCompositeBookCtrlBase
 {
 
 public:
