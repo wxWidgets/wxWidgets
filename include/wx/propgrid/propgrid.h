@@ -113,7 +113,14 @@ public:
     int HasExtraStyle( int style ) const { return (m_extraStyle & style); }
 };
 
-extern WXDLLIMPEXP_DATA_PROPGRID(wxPGGlobalVarsClass*) wxPGGlobalVars;
+// Internal class providing access to the global wxPGGlobalVars instance.
+class WXDLLIMPEXP_PROPGRID wxPGGlobalVarsPtr
+{
+public:
+    wxPGGlobalVarsClass* operator->() const;
+};
+
+extern WXDLLIMPEXP_DATA_PROPGRID(wxPGGlobalVarsPtr) wxPGGlobalVars;
 
 #define wxPGVariant_EmptyString     (wxPGGlobalVars->m_vEmptyString)
 #define wxPGVariant_Zero            (wxPGGlobalVars->m_vZero)
