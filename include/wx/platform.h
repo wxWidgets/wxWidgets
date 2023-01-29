@@ -183,19 +183,6 @@
     #endif
 #endif /* ia64 */
 
-#if defined(_M_MPPC) || defined(__PPC__) || defined(__ppc__)
-    #ifndef __POWERPC__
-        #define __POWERPC__
-    #endif
-#endif /* alpha */
-
-#if defined(_M_ALPHA) || defined(__AXP__)
-    #ifndef __ALPHA__
-        #define __ALPHA__
-    #endif
-#endif /* alpha */
-
-
 /*
    Always define wxUSE_UNICODE as 1 for compatibility.
 

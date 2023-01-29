@@ -107,10 +107,10 @@ Note that not all of these symbols are always defined, it depends on the
 compiler used.
 
 @beginDefList
-@itemdef{\__ALPHA__, DEC Alpha architecture}
+@itemdef{\__ALPHA__, DEC Alpha architecture (not supported any longer)}
 @itemdef{\__INTEL__, Intel i386 or compatible}
 @itemdef{\__IA64__, Intel 64 bit architecture}
-@itemdef{\__POWERPC__, Motorola Power PC}
+@itemdef{\__POWERPC__, Motorola Power PC (not supported any longer)}
 @endDefList
 
 

@@ -79,19 +79,9 @@
 #cmakedefine __VMS__ 1
 
 #cmakedefine __IA64__ 1
-#cmakedefine __ALPHA__ 1
 
 /* NanoX (with wxX11) */
 #cmakedefine01 wxUSE_NANOX
-
-/* PowerPC Darwin & Mac OS X */
-#cmakedefine __POWERPC__ 1
-
-/* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
-#undef __Point__
-
-/* MS-DOS with DJGPP */
-#cmakedefine __DOS__ 1
 
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
@@ -719,11 +709,6 @@
 #cmakedefine HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
 /*
- * On GNU systems use re_search instead of regexec, since the latter does a
- * strlen on the search text affecting the performance of some operations.
- */
-#cmakedefine HAVE_RE_SEARCH
-/*
  * Use SDL for audio (Unix)
  */
 #cmakedefine01 wxUSE_LIBSDL
@@ -785,17 +770,6 @@
  * wxWebKitCtrl
  */
 #cmakedefine01 wxUSE_WEBKIT
-
-/*
- * The const keyword is being introduced more in wxWindows.
- * You can use this setting to maintain backward compatibility.
- * If 0: will use const wherever possible.
- * If 1: will use const only where necessary
- *       for precompiled headers to work.
- * If 2: will be totally backward compatible, but precompiled
- *       headers may not work and program size will be larger.
- */
-#define CONST_COMPATIBILITY 0
 
 /*
  * use the session manager to detect KDE/GNOME
@@ -1155,9 +1129,6 @@
 /* When using an external jpeg library and the Windows headers already define
  * boolean, define to the type used by the jpeg library for boolean.  */
 #cmakedefine wxHACK_BOOLEAN
-
-/* Define if the header pbt.h is missing.  */
-#cmakedefine NEED_PBT_H
 
 #endif /* __WIN32__ */
 

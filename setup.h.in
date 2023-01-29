@@ -82,19 +82,9 @@
 #undef __VMS__
 
 #undef __IA64__
-#undef __ALPHA__
 
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
-
-/* PowerPC Darwin & Mac OS X */
-#undef __POWERPC__
-
-/* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
-#undef __Point__
-
-/* MS-DOS with DJGPP */
-#undef __DOS__
 
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
@@ -722,11 +712,6 @@
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
 /*
- * On GNU systems use re_search instead of regexec, since the latter does a
- * strlen on the search text affecting the performance of some operations.
- */
-#undef HAVE_RE_SEARCH
-/*
  * Use SDL for audio (Unix)
  */
 #define wxUSE_LIBSDL 0
@@ -784,17 +769,6 @@
  * wxWebKitCtrl
  */
 #define wxUSE_WEBKIT 0
-
-/*
- * The const keyword is being introduced more in wxWindows.
- * You can use this setting to maintain backward compatibility.
- * If 0: will use const wherever possible.
- * If 1: will use const only where necessary
- *       for precompiled headers to work.
- * If 2: will be totally backward compatible, but precompiled
- *       headers may not work and program size will be larger.
- */
-#define CONST_COMPATIBILITY 0
 
 /*
  * use the session manager to detect KDE/GNOME
@@ -1154,9 +1128,6 @@
 /* When using an external jpeg library and the Windows headers already define
  * boolean, define to the type used by the jpeg library for boolean.  */
 #undef wxHACK_BOOLEAN
-
-/* Define if the header pbt.h is missing.  */
-#undef NEED_PBT_H
 
 #endif /* __WIN32__ */
 
