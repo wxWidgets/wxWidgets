@@ -2607,7 +2607,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
     GdkKeymap* keymap = gdk_keymap_get_for_display(display);
-    guint state = gdk_keymap_get_modifier_state(keymap);
+
     guint mask = 0;
     switch (key)
     {
@@ -2623,11 +2623,31 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
             mask = GDK_SHIFT_MASK;
             break;
 
+        case WXK_CAPITAL:
+            return gdk_keymap_get_caps_lock_state(keymap) != FALSE;
+
+        case WXK_NUMLOCK:
+            return gdk_keymap_get_num_lock_state(keymap) != FALSE;
+
+#if GTK_CHECK_VERSION(3,18,0)
+        case WXK_SCROLL:
+            if (gtk_check_version(3,18,0) == nullptr)
+                return gdk_keymap_get_scroll_lock_state(keymap) != FALSE;
+            wxFALLTHROUGH;
+#endif // GTK 3.18+
+
         default:
-            wxFAIL_MSG(wxS("Unsupported key, only modifiers can be used"));
+            wxFAIL_MSG(wxString::Format(
+                "Unsupported key %u, the only supported ones are: Ctrl, Alt, "
+                "Shift, Caps Lock, Num Lock and Scroll Lock for GTK 3.18+",
+                key));
+
             return false;
     }
-    return (state & mask) != 0;
+
+    // Mask is set if we get here, so it must be one of the modifier keys.
+    return (gdk_keymap_get_modifier_state(keymap) & mask) != 0;
+
 }
 #endif // wxHAS_GETKEYSTATE_GTK
 
