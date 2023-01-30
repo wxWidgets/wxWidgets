@@ -237,8 +237,12 @@ void wxGenericAboutDialog::AddControl(wxWindow *win)
 
 void wxGenericAboutDialog::AddText(const wxString& text)
 {
-    if ( !text.empty() )
-        AddControl(new wxStaticText(this, wxID_ANY, text));
+    if ( text.empty() )
+        return;
+
+    AddControl(new wxStaticText(this, wxID_ANY, text,
+                                wxDefaultPosition, wxDefaultSize,
+                                wxALIGN_CENTRE));
 }
 
 #if wxUSE_COLLPANE
