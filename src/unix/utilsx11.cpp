@@ -2608,34 +2608,46 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
     GdkKeymap* keymap = gdk_keymap_get_for_display(display);
 
-    if (key == WXK_ALT)
-        return (gdk_keymap_get_modifier_state(keymap) & GDK_MOD1_MASK) != 0;
+    guint mask = 0;
+    switch (key)
+    {
+        case WXK_ALT:
+            mask = GDK_MOD1_MASK;
+            break;
 
-    if (key == WXK_CONTROL)
-        return (gdk_keymap_get_modifier_state(keymap) & GDK_CONTROL_MASK) != 0;
+        case WXK_CONTROL:
+            mask = GDK_CONTROL_MASK;
+            break;
 
-    if (key == WXK_SHIFT)
-        return (gdk_keymap_get_modifier_state(keymap) & GDK_SHIFT_MASK) != 0;
+        case WXK_SHIFT:
+            mask = GDK_SHIFT_MASK;
+            break;
 
-    if (key == WXK_CAPITAL)
-        return gdk_keymap_get_caps_lock_state(keymap) != FALSE;
+        case WXK_CAPITAL:
+            return gdk_keymap_get_caps_lock_state(keymap) != FALSE;
 
-    if (key == WXK_NUMLOCK)
-        return gdk_keymap_get_num_lock_state(keymap) != FALSE;
+        case WXK_NUMLOCK:
+            return gdk_keymap_get_num_lock_state(keymap) != FALSE;
 
-# if GTK_CHECK_VERSION(3,18,0)
-    if (key == WXK_SCROLL && gtk_check_version(3,18,0) == nullptr)
-        return gdk_keymap_get_scroll_lock_state(keymap) != FALSE;
-# endif
+#if GTK_CHECK_VERSION(3,18,0)
+        case WXK_SCROLL:
+            if (gtk_check_version(3,18,0) == nullptr)
+                return gdk_keymap_get_scroll_lock_state(keymap) != FALSE;
+            wxFALLTHROUGH;
+#endif // GTK 3.18+
 
-    wxString err_msg;
-    err_msg.Printf("Unsupported key %u, only supported are: Ctrl Alt Shift Caps Num", (unsigned int)key);
-# if GTK_CHECK_VERSION(3,18,0)
-    if (gtk_check_version(3,18,0) == nullptr)
-        err_msg += " Scroll";
-# endif
-    wxFAIL_MSG(err_msg);
-    return false;
+        default:
+            wxFAIL_MSG(wxString::Format(
+                "Unsupported key %u, the only supported ones are: Ctrl, Alt, "
+                "Shift, Caps Lock, Num Lock and Scroll Lock for GTK 3.18+",
+                key));
+
+            return false;
+    }
+
+    // Mask is set if we get here, so it must be one of the modifier keys.
+    return (gdk_keymap_get_modifier_state(keymap) & mask) != 0;
+
 }
 #endif // wxHAS_GETKEYSTATE_GTK
 
