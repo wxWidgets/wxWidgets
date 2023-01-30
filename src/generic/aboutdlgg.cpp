@@ -149,7 +149,6 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
     m_sizerText->Add(label, wxSizerFlags().Centre().Border());
     m_sizerText->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
-    AddText(info.GetCopyrightToDisplay());
     AddText(info.GetDescription());
 
     if ( info.HasWebSite() )
@@ -185,6 +184,18 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 #endif // wxUSE_COLLPANE
 
     DoAddCustomControls();
+
+    // Separate the copyright from all the rest and use smaller font for it as
+    // is custom.
+    const wxString& copyrightText = info.GetCopyrightToDisplay();
+    if ( !copyrightText.empty() )
+    {
+        m_sizerText->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+        wxFont fontSmall(*wxNORMAL_FONT);
+        fontSmall.SetFractionalPointSize(fontSmall.GetFractionalPointSize() - 1.0);
+        AddText(copyrightText)->SetFont(fontSmall);
+    }
 
 
     wxSizer *sizerIconAndText = new wxBoxSizer(wxHORIZONTAL);
@@ -235,14 +246,17 @@ void wxGenericAboutDialog::AddControl(wxWindow *win)
     AddControl(win, wxSizerFlags().Border(wxDOWN).Centre());
 }
 
-void wxGenericAboutDialog::AddText(const wxString& text)
+wxStaticText* wxGenericAboutDialog::AddText(const wxString& text)
 {
     if ( text.empty() )
-        return;
+        return nullptr;
 
-    AddControl(new wxStaticText(this, wxID_ANY, text,
+    auto *win = new wxStaticText(this, wxID_ANY, text,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxALIGN_CENTRE));
+                                wxALIGN_CENTRE);
+    AddControl(win);
+
+    return win;
 }
 
 #if wxUSE_COLLPANE

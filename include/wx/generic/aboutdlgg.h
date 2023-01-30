@@ -19,6 +19,7 @@
 class WXDLLIMPEXP_FWD_CORE wxAboutDialogInfo;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxSizerFlags;
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
 
 // Under GTK and OS X "About" dialogs are not supposed to be modal, unlike MSW
 // and, presumably, all the other platforms.
@@ -71,7 +72,7 @@ protected:
     void AddControl(wxWindow *win);
 
     // add the text, if it's not empty, to the text sizer contents
-    void AddText(const wxString& text);
+    wxStaticText* AddText(const wxString& text);
 
 #if wxUSE_COLLPANE
     // add a wxCollapsiblePane containing the given text
