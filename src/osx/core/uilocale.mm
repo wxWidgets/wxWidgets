@@ -149,47 +149,31 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 wxString
 wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 {
+    NSLocale* convLocale = nullptr;
+    switch (form)
+    {
+        case wxLOCALE_FORM_NATIVE:
+            convLocale = m_nsloc;
+            break;
+        case wxLOCALE_FORM_ENGLISH:
+            convLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+            break;
+        default:
+            wxFAIL_MSG("unknown wxLocaleForm");
+            return wxString();
+    }
+
     NSString* str = nullptr;
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = [m_nsloc localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = [convLocale localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
             break;
         case wxLOCALE_NAME_LANGUAGE:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = [m_nsloc localizedStringForLanguageCode:[m_nsloc languageCode]];
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
-                    break;
-                default:
-                     wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = [convLocale localizedStringForLanguageCode:[m_nsloc languageCode]];
             break;
         case wxLOCALE_NAME_COUNTRY:
-            switch (form)
-            {
-                case wxLOCALE_FORM_NATIVE:
-                    str = [m_nsloc localizedStringForCountryCode:[m_nsloc countryCode]];
-                    break;
-                case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
-                    break;
-                default:
-                    wxFAIL_MSG("unknown wxLocaleForm");
-            }
+            str = [convLocale localizedStringForCountryCode:[m_nsloc countryCode]];
             break;
     }
     return wxCFStringRef::AsString(str);
