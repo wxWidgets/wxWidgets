@@ -145,7 +145,15 @@ class wxPGGlobalVarsClassManager : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxPGGlobalVarsClassManager);
 public:
     wxPGGlobalVarsClassManager() {}
-    virtual bool OnInit() wxOVERRIDE { wxPGGlobalVars = new wxPGGlobalVarsClass(); return true; }
+    virtual bool OnInit() wxOVERRIDE
+    {
+        // This shouldn't happen, but we can actually be more called more than
+        // once, e.g. wxPython does it, see #23165, and in this case we
+        // shouldn't lose the current state.
+        if ( !wxPGGlobalVars )
+            wxPGGlobalVars = new wxPGGlobalVarsClass();
+        return true;
+    }
     virtual void OnExit() wxOVERRIDE { wxDELETE(wxPGGlobalVars); }
 };
 
