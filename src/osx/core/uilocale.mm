@@ -159,7 +159,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str = [m_nsloc localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
                     break;
                 case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    str = [[NSLocale localeWithLocaleIdentifier:@"en_US"] displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
                     break;
                 default:
                     wxFAIL_MSG("unknown wxLocaleForm");
@@ -172,7 +172,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str = [m_nsloc localizedStringForLanguageCode:[m_nsloc languageCode]];
                     break;
                 case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    str = [[NSLocale localeWithLocaleIdentifier:@"en_US"] displayNameForKey:NSLocaleLanguageCode value:[m_nsloc languageCode]];
                     break;
                 default:
                      wxFAIL_MSG("unknown wxLocaleForm");
@@ -185,7 +185,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
                     str = [m_nsloc localizedStringForCountryCode:[m_nsloc countryCode]];
                     break;
                 case wxLOCALE_FORM_ENGLISH:
-                    str = [m_nsloc displayNameForKey:NSLocaleIdentifier value:[m_nsloc localeIdentifier]];
+                    str = [[NSLocale localeWithLocaleIdentifier:@"en_US"] displayNameForKey:NSLocaleCountryCode value:[m_nsloc countryCode]];
                     break;
                 default:
                     wxFAIL_MSG("unknown wxLocaleForm");
