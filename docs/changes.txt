@@ -261,6 +261,7 @@ All (GUI):
 - Add macros for event tables for missing wxWebView events (PB, #22949).
 - Improve month selection in wxGenericCalendarCtrl (Lauri Nurmi, #22853).
 - Fix maximum length of wxPropertyGrid editors (#23033).
+- Add support for Caps/Num/Scroll Lock to wxGetKeyState() (elfmz, #23195).
 
 wxGTK:
 
