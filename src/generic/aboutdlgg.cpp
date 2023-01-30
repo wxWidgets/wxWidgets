@@ -147,7 +147,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
     label->SetFont(fontBig);
 
     m_sizerText->Add(label, wxSizerFlags().Centre().Border());
-    m_sizerText->AddSpacer(5);
+    m_sizerText->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     AddText(info.GetCopyrightToDisplay());
     AddText(info.GetDescription());
