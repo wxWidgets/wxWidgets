@@ -643,7 +643,9 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 - (void)doCommandBySelector:(SEL)aSelector
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if (impl)
+    if (aSelector != @selector(noop:))
+        [super doCommandBySelector:aSelector];
+    else if (impl)
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
