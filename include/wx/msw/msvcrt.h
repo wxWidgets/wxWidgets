@@ -9,6 +9,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// Note that this file globally redefines "new" keyword breaking the use of
+// placement new in any code parsed after it. If you run into this problem, the
+// solutions are, in order of preference:
+//
+// 1. Don't include this header at all. Use better tools for memory debugging.
+// 2. Predefine __NO_VC_CRTDBG__ before including it (basically the same as 1).
+// 3. Do "#undef new" before and "#define new WXDEBUG_NEW" in your own code
+//    before/after using placement new or before/after including third part
+//    headers using it.
+
 // the goal of this file is to define wxCrtSetDbgFlag() macro which may be
 // used like this:
 //      wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
