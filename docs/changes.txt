@@ -314,6 +314,7 @@ wxOSX:
 - Add margins around wxListCtrl items to improve appearance (#23155).
 - Fix shortcuts handling in wxWebView (#23151).
 - Make wxLOCALE_FORM_ENGLISH actually work (Ulrich Telle, Lauri Nurmi, #23190).
+- Fix "Window" menu item not being translated sometimes (#23204).
 
 wxQt:
 
