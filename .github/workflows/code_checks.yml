@@ -85,8 +85,8 @@ jobs:
 
       - name: Check for C++11 keywords
         run: |
-            git fetch --depth=1 origin master
-            if git diff origin/master \
+            git fetch --depth=1 origin 3.2
+            if git diff origin/3.2 \
                ':!.github/workflows/code_checks.yml' \
                ':!src/stc/scintilla/' \
                | grep -E '(override|noexcept|nullptr[^_])'; then
