@@ -2636,7 +2636,7 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
 
 #if GTK_CHECK_VERSION(3,18,0)
         case WXK_SCROLL:
-            if (gtk_check_version(3,18,0) == nullptr)
+            if (gtk_check_version(3,18,0) == NULL)
                 return gdk_keymap_get_scroll_lock_state(keymap) != FALSE;
             wxFALLTHROUGH;
 #endif // GTK 3.18+
