@@ -31,7 +31,6 @@
     #include "wx/osx/dcmemory.h"
     #include "wx/osx/private.h"
     #include "wx/osx/core/cfdictionary.h"
-    #include "wx/osx/private/available.h"
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
@@ -2150,36 +2149,27 @@ void wxMacCoreGraphicsContext::ResetClip()
 {
     if ( m_cgContext )
     {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
-        if ( WX_IS_MACOS_OR_IOS_AVAILABLE(10, 13, 11, 0) )
-        {
-            CGContextResetClip(m_cgContext);
-        }
-        else
-#endif
-        {
-            // there is no way for clearing the clip, we can only revert to the stored
-            // state, but then we have to make sure everything else is NOT restored
-            // Note: This trick works as expected only if a state with no clipping
-            // path is stored on the top of the stack. It's guaranteed to work only
-            // when no PushState() was called before because in this case a reference
-            // state (initial state without clipping region) is on the top of the stack.
-            wxASSERT_MSG(m_stateStackLevel == 0,
-                         "Resetting the clip may not work when PushState() was called before");
-            CGAffineTransform transform = CGContextGetCTM( m_cgContext );
-            CGContextRestoreGState( m_cgContext );
-            CGContextSaveGState( m_cgContext );
-            CGAffineTransform transformNew = CGContextGetCTM( m_cgContext );
-            transformNew = CGAffineTransformInvert( transformNew ) ;
-            CGContextConcatCTM( m_cgContext, transformNew);
-            CGContextConcatCTM( m_cgContext, transform);
-            // Retain antialiasing mode
-            DoSetAntialiasMode(m_antialias);
-            // Retain interpolation quality
-            DoSetInterpolationQuality(m_interpolation);
-            // Retain composition mode
-            DoSetCompositionMode(m_composition);
-        }
+        // there is no way for clearing the clip, we can only revert to the stored
+        // state, but then we have to make sure everything else is NOT restored
+        // Note: This trick works as expected only if a state with no clipping
+        // path is stored on the top of the stack. It's guaranteed to work only
+        // when no PushState() was called before because in this case a reference
+        // state (initial state without clipping region) is on the top of the stack.
+        wxASSERT_MSG(m_stateStackLevel == 0,
+                     "Resetting the clip may not work when PushState() was called before");
+        CGAffineTransform transform = CGContextGetCTM( m_cgContext );
+        CGContextRestoreGState( m_cgContext );
+        CGContextSaveGState( m_cgContext );
+        CGAffineTransform transformNew = CGContextGetCTM( m_cgContext );
+        transformNew = CGAffineTransformInvert( transformNew ) ;
+        CGContextConcatCTM( m_cgContext, transformNew);
+        CGContextConcatCTM( m_cgContext, transform);
+        // Retain antialiasing mode
+        DoSetAntialiasMode(m_antialias);
+        // Retain interpolation quality
+        DoSetInterpolationQuality(m_interpolation);
+        // Retain composition mode
+        DoSetCompositionMode(m_composition);
     }
     else
     {
