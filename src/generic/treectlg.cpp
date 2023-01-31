@@ -100,8 +100,9 @@ public:
 
 protected:
     void OnChar( wxKeyEvent &event );
-    void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
+
+    void IncreaseSizeForText( const wxString& text );
 
     bool AcceptChanges();
     void Finish( bool setfocus );
@@ -417,7 +418,6 @@ void wxTreeRenameTimer::Notify()
 
 wxBEGIN_EVENT_TABLE(wxTreeTextCtrl,wxTextCtrl)
     EVT_CHAR           (wxTreeTextCtrl::OnChar)
-    EVT_KEY_UP         (wxTreeTextCtrl::OnKeyUp)
     EVT_KILL_FOCUS     (wxTreeTextCtrl::OnKillFocus)
 wxEND_EVENT_TABLE()
 
@@ -441,12 +441,7 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     (void)Create(m_owner, wxID_ANY, m_startValue,
                  rect.GetPosition(), rect.GetSize());
 
-    int w;
-    GetTextExtent(m_startValue, &w, nullptr);
-    const wxSize size(GetSizeFromTextSize(w));
-    rect.y += (rect.height - size.y) / 2;
-    rect.SetSize(size);
-    SetSize(rect);
+    IncreaseSizeForText(m_startValue);
 
     SelectAll();
 }
@@ -536,28 +531,38 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
             break;
 
         default:
+            if ( !m_aboutToFinish )
+            {
+                wxChar ch = event.GetUnicodeKey();
+                if ( ch != WXK_NONE )
+                {
+                    wxString value = GetValue();
+
+                    long from, to;
+                    GetSelection( &from, &to );
+                    if ( from != to )
+                    {
+                        value.Remove( from, to - from );
+                    }
+
+                    IncreaseSizeForText( value + ch );
+                }
+            }
             event.Skip();
     }
 }
 
-void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
+void wxTreeTextCtrl::IncreaseSizeForText( const wxString& text )
 {
-    if ( !m_aboutToFinish )
-    {
-        // auto-grow the textctrl:
-        wxSize parentSize = m_owner->GetSize();
-        wxPoint myPos = GetPosition();
-        wxSize mySize = GetSize();
-        int sx, sy;
-        GetTextExtent(GetValue() + wxT("M"), &sx, &sy);
-        if (myPos.x + sx > parentSize.x)
-            sx = parentSize.x - myPos.x;
-        if (mySize.x > sx)
-            sx = mySize.x;
+    // auto-grow the textctrl:
+    wxSize parentSize = m_owner->GetSize();
+    wxPoint myPos = GetPosition();
+    wxSize mySize = GetSize();
+    int sx = GetSizeFromText(text).x;
+    if (myPos.x + sx > parentSize.x)
+        sx = parentSize.x - myPos.x;
+    if (sx > mySize.x)
         SetSize(sx, wxDefaultCoord);
-    }
-
-    event.Skip();
 }
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
