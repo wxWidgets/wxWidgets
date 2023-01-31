@@ -271,6 +271,7 @@ wxGTK:
 - Fix compilation with GTK < 2.21.8 (mkirkham, #22830).
 - Fix display artefacts when using AUI without compositor under X11 (#23135).
 - Allow selecting and copying text in wxMessageDialog (Ian McInerney, #23039).
+- Fix initial size of top-level window on Wayland (#23041).
 
 wxMSW:
 
