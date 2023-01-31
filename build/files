@@ -983,6 +983,7 @@ GUI_CMN_HDR =
     wx/combo.h
     wx/combobox.h
     wx/commandlinkbutton.h
+    wx/compositebookctrl.h
     wx/compositewin.h
     wx/control.h
     wx/creddlg.h

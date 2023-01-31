@@ -22,9 +22,9 @@
 
 #if wxUSE_BOOKCTRL
 
-#include "wx/imaglist.h"
+#include "wx/compositebookctrl.h"
 
-#include "wx/bookctrl.h"
+#include "wx/imaglist.h"
 
 // ============================================================================
 // implementation
@@ -556,5 +556,11 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBookCtrlEvent, wxNotifyEvent);
+
+// Implement the trivial ctor here to ensure it's emitted here and exported
+// from the DLL instead of having an inline version of it which may result in
+// link errors if it happens to be instantiated both inside and outside of the
+// DLL, see #22805.
+wxCompositeBookCtrlBase::wxCompositeBookCtrlBase() = default;
 
 #endif // wxUSE_BOOKCTRL

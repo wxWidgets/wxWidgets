@@ -15,8 +15,7 @@
 
 #if wxUSE_LISTBOOK
 
-#include "wx/bookctrl.h"
-#include "wx/containr.h"
+#include "wx/compositebookctrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxListView;
 class WXDLLIMPEXP_FWD_CORE wxListEvent;
@@ -36,7 +35,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LISTBOOK_PAGE_CHANGING, wxBook
 // wxListbook
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxListbook : public wxNavigationEnabled<wxBookCtrlBase>
+class WXDLLIMPEXP_CORE wxListbook : public wxCompositeBookCtrlBase
 {
 public:
     wxListbook() { }
