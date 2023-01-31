@@ -271,7 +271,7 @@ public :
                 }
             }
 
-            windowMenu = [[NSMenu alloc] initWithTitle:nsWindowMenuTitle];
+            windowMenu = [[NSMenu alloc] initWithTitle:nsAlternateWindowMenuTitle];
             NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:nsWindowMenuTitle action:nil keyEquivalent:@""];
             [windowMenuItem setSubmenu:windowMenu];
             [windowMenu release];
