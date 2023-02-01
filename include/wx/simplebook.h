@@ -17,6 +17,25 @@
 #include "wx/containr.h"
 #include "wx/vector.h"
 
+// Hack to work around problems with wxNavigationEnabled<wxBookCtrlBase> when
+// using wx as DLL: we want the compiler to see that it's already available in
+// the DLL by including some other DLL exported class using it as the base in
+// order to prevent it from generating a non-DLL-exported instantiation which
+// will conflict with the one in the DLL at the link-time.
+//
+// Find the first available class using wxNavigationEnabled<wxBookCtrlBase> as
+// base, any will do (except for wxAUI one, as this would create a dependency
+// on the AUI library that we can't have here).
+#if wxUSE_CHOICEBOOK
+    #include "wx/choicebk.h"
+#elif wxUSE_LISTBOOK
+    #include "wx/listbook.h"
+#elif wxUSE_TOOLBOOK
+    #include "wx/toolbook.h"
+#elif wxUSE_TREEBOOK
+    #include "wx/treebook.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxSimplebook: a book control without any user-actionable controller.
 // ----------------------------------------------------------------------------
