@@ -2789,6 +2789,10 @@ void wxGrid::InitPixelFields()
     m_defaultRowHeight += 4;
 #endif
 
+    // Scroll by row height to avoid showing partial rows when all heights are
+    // the same.
+    m_yScrollPixelsPerLine = m_defaultRowHeight;
+
     // Don't change the value when called from OnDPIChanged() later if the
     // corresponding label window is hidden, these values should remain zeroes
     // then.
