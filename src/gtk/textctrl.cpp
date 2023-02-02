@@ -2180,10 +2180,9 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
         }
     }
 
-    // Perhaps the user wants something different from CharHeight, or ylen
-    // is used as the height of a multiline text.
-    if ( ylen > 0 )
-        tsize.IncBy(0, ylen - cHeight);
+    // We should always use at least the specified height if it's valid.
+    if ( ylen > tsize.y )
+        tsize.y = ylen;
 
     return tsize;
 }
