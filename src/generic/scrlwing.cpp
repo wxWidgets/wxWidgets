@@ -476,6 +476,17 @@ void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 
 wxWindow *wxTheWindowBeingScrolled;
 
+class CScrolledWindowHolder final
+{
+public:
+    CScrolledWindowHolder(wxWindow *window) {
+        wxTheWindowBeingScrolled = window;
+    }
+    ~CScrolledWindowHolder() {
+        wxTheWindowBeingScrolled = nullptr;
+    }
+};
+
 void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
     int nScrollInc = CalcScrollInc(event);
@@ -487,7 +498,7 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
         return;
     }
 
-    wxTheWindowBeingScrolled = m_win;
+    CScrolledWindowHolder scrolledWindow(m_win);
 
     bool needsRefresh = false;
     int dx = 0,
