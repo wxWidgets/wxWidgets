@@ -333,6 +333,11 @@ public:
     */
     wxWindow* GetPage(size_t page) const;
 
+    /**
+        Returns the sizer containing the control, if any.
+    */
+    wxSizer* GetControlSizer() const;
+
     ///@}
 
 
@@ -359,9 +364,6 @@ public:
     // set/get option to shrink to fit current page
     void SetFitToCurrentPage(bool fit) { m_fitToCurrentPage = fit; }
     bool GetFitToCurrentPage() const { return m_fitToCurrentPage; }
-
-    // returns the sizer containing the control, if any
-    wxSizer* GetControlSizer() const { return m_controlSizer; }
 
     // we do have multiple pages
     virtual bool HasMultiplePages() const { return true; }
