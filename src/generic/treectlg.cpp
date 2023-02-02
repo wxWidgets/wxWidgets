@@ -428,6 +428,11 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     m_owner = owner;
     m_aboutToFinish = false;
 
+    // Create the text hidden to show it with the correct size -- which we
+    // can't determine before creating it.
+    Hide();
+    Create(m_owner, wxID_ANY, m_startValue);
+
     wxRect rect;
     m_owner->GetBoundingRect(m_itemEdited, rect, true);
 
@@ -438,10 +443,20 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     rect.x -= 5;
 #endif // platforms
 
-    (void)Create(m_owner, wxID_ANY, m_startValue,
-                 rect.GetPosition(), rect.GetSize());
+    const wxSize textSize = rect.GetSize();
+    wxSize fullSize = GetSizeFromTextSize(textSize);
+    if ( fullSize.y > textSize.y )
+    {
+        // It's ok to extend the rect to the right horizontally, which happens
+        // when we just change its size without changing its position below,
+        // but when extending it vertically, we need to keep it centered.
+        rect.y -= (fullSize.y - textSize.y + 1) / 2;
+    }
 
-    IncreaseSizeForText(m_startValue);
+    rect.SetSize(fullSize);
+
+    SetSize(rect);
+    Show();
 
     SelectAll();
 }
