@@ -2133,14 +2133,13 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
 
-    wxSize tsize(xlen, 0);
     int cHeight = GetCharHeight();
+    wxSize tsize(xlen, cHeight);
 
     if ( IsSingleLine() )
     {
         if ( HasFlag(wxBORDER_NONE) )
         {
-            tsize.y = cHeight;
 #ifdef __WXGTK3__
             tsize.IncBy(9, 0);
 #else
@@ -2166,7 +2165,6 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
             tsize.IncBy(GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[1])).x + 3, 0);
 
         // height
-        tsize.y = cHeight;
         if ( ylen <= 0 )
         {
             tsize.y = 1 + cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
