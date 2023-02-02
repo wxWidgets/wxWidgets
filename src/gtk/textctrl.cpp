@@ -2150,10 +2150,8 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
         {
             // default height
             tsize.y = GTKGetPreferredSize(m_widget).y;
-            // Add the margins we have previously set, but only the horizontal border
-            // as vertical one has been taken account at GTKGetPreferredSize().
-            // Also get other GTK+ margins.
-            tsize.IncBy( GTKGetEntryMargins(GetEntry()).x, 0);
+            // Add the margins we have previously set.
+            tsize.IncBy( GTKGetEntryMargins(GetEntry()) );
         }
     }
 
