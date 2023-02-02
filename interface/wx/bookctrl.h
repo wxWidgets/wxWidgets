@@ -333,6 +333,21 @@ public:
     */
     wxWindow* GetPage(size_t page) const;
 
+    /**
+        Returns the sizer containing the control for page selection, if any.
+
+        Some derived classes, e.g. wxChoicebook, use a separate control for
+        switching the currently selected page and this function returns the
+        sizer used for positioning this control and the pages themselves inside
+        the book control.
+
+        Note that many classes, notably wxNotebook, do not use any such
+        control, and this function simply returns @NULL for them.
+
+        @return Non-owning pointer to the sizer or @NULL.
+    */
+    wxSizer* GetControlSizer() const;
+
     ///@}
 
 
@@ -359,9 +374,6 @@ public:
     // set/get option to shrink to fit current page
     void SetFitToCurrentPage(bool fit) { m_fitToCurrentPage = fit; }
     bool GetFitToCurrentPage() const { return m_fitToCurrentPage; }
-
-    // returns the sizer containing the control, if any
-    wxSizer* GetControlSizer() const { return m_controlSizer; }
 
     // we do have multiple pages
     virtual bool HasMultiplePages() const { return true; }
