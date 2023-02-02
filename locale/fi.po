@@ -5,8 +5,8 @@
 # Lauri Nurmi <lanurmi@iki.fi>, 2004.
 # Kaj G Backas <kgb@compart.fi>, 2000.
 #
-# HUOM! Jos jatkat suomennosta, ÃLÃ kÃ€ytÃ€ fuzzy-merkittyjÃ€ kohtia
-#       lukematta niitÃ€ lÃ€pi hyvin tarkasti! NiissÃ€ voi olla mitÃ€ vain.
+# HUOM! Jos jatkat suomennosta, ÄLÄ käytä fuzzy-merkittyjä kohtia
+#       lukematta niitä läpi hyvin tarkasti! Niissä voi olla mitä vain.
 #
 msgid ""
 msgstr ""
