@@ -230,7 +230,7 @@ msgstr "&Ikkuna"
 #: ../src/common/accelcmn.cpp:47
 msgctxt "keyboard key"
 msgid "Delete"
-msgstr "Poista"
+msgstr "Delete"
 
 #: ../src/common/accelcmn.cpp:48
 #, fuzzy
@@ -252,7 +252,7 @@ msgstr "Takaisin"
 #: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Insert"
-msgstr "Lisää"
+msgstr "Insert"
 
 #: ../src/common/accelcmn.cpp:51
 #, fuzzy
@@ -313,7 +313,7 @@ msgstr "Vasen"
 #: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Right"
-msgstr "Oikealle"
+msgstr "Oikea"
 
 #: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
@@ -328,7 +328,7 @@ msgstr "Alas"
 #: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
 msgid "Home"
-msgstr "Koti"
+msgstr "Home"
 
 #: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
@@ -361,7 +361,7 @@ msgstr "Vaakasuunta"
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
 msgid "Cancel"
-msgstr "Peruuta"
+msgstr "Cancel"
 
 #: ../src/common/accelcmn.cpp:69
 #, fuzzy
@@ -765,7 +765,7 @@ msgstr "KP_"
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr "EIRKOIS"
+msgstr "ERIKOIS"
 
 #: ../src/common/accelcmn.cpp:343
 msgctxt "keyboard key"
