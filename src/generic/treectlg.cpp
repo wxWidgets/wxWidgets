@@ -453,6 +453,13 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
         rect.y -= (fullSize.y - textSize.y + 1) / 2;
     }
 
+    // Also check that the control fits into the parent window.
+    const int totalWidth = m_owner->GetClientSize().x;
+    if ( rect.x + fullSize.x > totalWidth )
+    {
+        fullSize.x = totalWidth - rect.x;
+    }
+
     rect.SetSize(fullSize);
 
     SetSize(rect);
@@ -570,7 +577,7 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 void wxTreeTextCtrl::IncreaseSizeForText( const wxString& text )
 {
     // auto-grow the textctrl:
-    wxSize parentSize = m_owner->GetSize();
+    wxSize parentSize = m_owner->GetClientSize();
     wxPoint myPos = GetPosition();
     wxSize mySize = GetSize();
     int sx = GetSizeFromText(text).x;
