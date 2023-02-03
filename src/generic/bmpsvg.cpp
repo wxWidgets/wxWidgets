@@ -27,7 +27,7 @@
 // and update the corresponding submodule.
 #ifdef __has_include
     #if ! __has_include("../../3rdparty/nanosvg/src/nanosvg.h")
-        #error You need to run "git submodule update --init 3rdparty/nanosvg".
+        #error You need to run "git submodule update --init 3rdparty/nanosvg" from the wxWidgets directory.
         #undef wxHAS_SVG
     #endif
 #endif // __has_include
