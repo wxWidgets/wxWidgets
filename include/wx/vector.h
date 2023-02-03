@@ -63,6 +63,11 @@ WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
 
 #endif // !wxQSORT_DECLARED
 
+// Fix using placement new in case it was redefined by wx/msw/msvcrt.h.
+#ifdef WXDEBUG_NEW
+    #undef new
+#endif
+
 namespace wxPrivate
 {
 
@@ -714,6 +719,11 @@ inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
 
     return false;
 }
+
+// Redefine if it we undefined it above.
+#ifdef WXDEBUG_NEW
+    #define new WXDEBUG_NEW
+#endif
 
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
