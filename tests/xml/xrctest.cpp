@@ -257,6 +257,33 @@ TEST_CASE("XRC::PathWithFragment", "[xrc][uri]")
     CHECK( !wxXmlResource::Get()->LoadBitmap("bad").IsOk() );
 }
 
+TEST_CASE("XRC::Features", "[xrc]")
+{
+    auto& xrc = *wxXmlResource::Get();
+
+    xrc.EnableFeature("European");
+    xrc.EnableFeature("African");
+
+    // Not all birds are available in all geographic editions of this program.
+    LoadXrcFrom(R"(<?xml version="1.0" ?>
+<resource>
+  <object class="wxFrame" name="pigeon"/> <!-- Those are everywhere -->
+  <object class="wxFrame" name="eagle" feature="American"/>
+  <object class="wxFrame" name="rooster" feature="European"/>
+  <object class="wxFrame" name="swallow" feature="African"/>
+  <object class="wxFrame" name="sparrow" feature="American|European"/>
+  <object class="wxFrame" name="dodo" feature="African|extinct"/>
+</resource>
+    )");
+
+    CHECK( xrc.LoadFrame(nullptr, "pigeon") );
+    CHECK(!xrc.LoadFrame(nullptr, "eagle") );
+    CHECK( xrc.LoadFrame(nullptr, "rooster") );
+    CHECK( xrc.LoadFrame(nullptr, "sparrow") );
+    CHECK( xrc.LoadFrame(nullptr, "swallow") );
+    CHECK( xrc.LoadFrame(nullptr, "dodo") );
+}
+
 TEST_CASE("XRC::EnvVarInPath", "[xrc]")
 {
     wxStringInputStream sis(

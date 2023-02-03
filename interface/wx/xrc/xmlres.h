@@ -132,6 +132,24 @@ public:
     int CompareVersion(int major, int minor, int release, int revision) const;
 
     /**
+        Add a feature considered to be enabled.
+
+        Objects in XRC documents may have a "feature" attribute, as explained
+        in the @ref overview_xrcformat_features. By default, none of the
+        features is enabled and so all objects with this attribute are
+        discarded. Calling this function marks the given feature as being
+        enabled and affects the subsequent calls to LoadDocument() and related
+        functions, which will keep, rather than discard, any nodes using the
+        given @a feature string in their "feature" attribute.
+
+        This function can be called multiple times to enable more than one
+        feature.
+
+        @since 3.3.0
+     */
+    void EnableFeature(const wxString& feature);
+
+    /**
         Returns a string ID corresponding to the given numeric ID.
 
         The string returned is such that calling GetXRCID() with it as
