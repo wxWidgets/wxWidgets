@@ -5,20 +5,20 @@
 # Lauri Nurmi <lanurmi@iki.fi>, 2004.
 # Kaj G Backas <kgb@compart.fi>, 2000.
 #
-# HUOM! Jos jatkat suomennosta, ÃLÃ kÃ€ytÃ€ fuzzy-merkittyjÃ€ kohtia
-#       lukematta niitÃ€ lÃ€pi hyvin tarkasti! NiissÃ€ voi olla mitÃ€ vain.
+# HUOM! Jos jatkat suomennosta, ÄLÄ käytä fuzzy-merkittyjä kohtia
+#       lukematta niitä läpi hyvin tarkasti! Niissä voi olla mitä vain.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-02 08:37+0200\n"
-"PO-Revision-Date: 2012-08-07 13:31+0200\n"
-"Last-Translator: Jani Kinnunen <jani.kinnunen@wippies.fi>\n"
-"Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2023-02-02 22:04+0200\n"
+"Last-Translator: Lauri Nurmi <lanurmi@iki.fi>\n"
+"Language-Team: \n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
@@ -230,7 +230,7 @@ msgstr "&Ikkuna"
 #: ../src/common/accelcmn.cpp:47
 msgctxt "keyboard key"
 msgid "Delete"
-msgstr "Poista"
+msgstr "Delete"
 
 #: ../src/common/accelcmn.cpp:48
 #, fuzzy
@@ -252,7 +252,7 @@ msgstr "Takaisin"
 #: ../src/common/accelcmn.cpp:50
 msgctxt "keyboard key"
 msgid "Insert"
-msgstr "Lisää"
+msgstr "Insert"
 
 #: ../src/common/accelcmn.cpp:51
 #, fuzzy
@@ -313,7 +313,7 @@ msgstr "Vasen"
 #: ../src/common/accelcmn.cpp:59
 msgctxt "keyboard key"
 msgid "Right"
-msgstr "Oikealle"
+msgstr "Oikea"
 
 #: ../src/common/accelcmn.cpp:60
 msgctxt "keyboard key"
@@ -328,7 +328,7 @@ msgstr "Alas"
 #: ../src/common/accelcmn.cpp:62
 msgctxt "keyboard key"
 msgid "Home"
-msgstr "Koti"
+msgstr "Home"
 
 #: ../src/common/accelcmn.cpp:63
 msgctxt "keyboard key"
@@ -361,7 +361,7 @@ msgstr "Vaakasuunta"
 #: ../src/common/accelcmn.cpp:68
 msgctxt "keyboard key"
 msgid "Cancel"
-msgstr "Peruuta"
+msgstr "Cancel"
 
 #: ../src/common/accelcmn.cpp:69
 #, fuzzy
@@ -765,7 +765,7 @@ msgstr "KP_"
 #: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
 msgctxt "keyboard key"
 msgid "SPECIAL"
-msgstr "EIRKOIS"
+msgstr "ERIKOIS"
 
 #: ../src/common/accelcmn.cpp:343
 msgctxt "keyboard key"
@@ -6581,17 +6581,28 @@ msgstr "<Teletype>"
 msgid "File type:"
 msgstr "Teletype"
 
-#: ../src/osx/cocoa/menu.mm:281
-#, fuzzy
+#: ../src/osx/cocoa/menu.mm:243
+msgctxt "macOS menu name"
+msgid "Window"
+msgstr "Ikkuna"
+
+#: ../src/osx/cocoa/menu.mm:260
+msgctxt "macOS menu name"
+msgid "Help"
+msgstr "Ohje"
+
+#: ../src/osx/cocoa/menu.mm:299
+msgctxt "macOS menu item"
 msgid "Minimize"
-msgstr "P&ienennä"
+msgstr "Pienennä"
 
-#: ../src/osx/cocoa/menu.mm:286
-#, fuzzy
+#: ../src/osx/cocoa/menu.mm:304
+msgctxt "macOS menu item"
 msgid "Zoom"
-msgstr "&Lähennä"
+msgstr "Zoomaa"
 
-#: ../src/osx/cocoa/menu.mm:292
+#: ../src/osx/cocoa/menu.mm:310
+msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr ""
 
@@ -6616,59 +6627,54 @@ msgstr ""
 #, c-format
 msgctxt "macOS menu item"
 msgid "About %s"
-msgstr "Tietoja ohjelmasta %s"
+msgstr "Tietoja: %s"
 
 #: ../src/osx/menu_osx.cpp:494
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "About..."
-msgstr "Tietoja"
+msgstr "Tietoja..."
 
 #: ../src/osx/menu_osx.cpp:502
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Preferences..."
-msgstr "&Asetukset"
+msgstr "Asetukset..."
 
 #: ../src/osx/menu_osx.cpp:507
 msgctxt "macOS menu item"
 msgid "Services"
-msgstr ""
+msgstr "Palvelut"
 
 #: ../src/osx/menu_osx.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
-msgstr "Piilota"
+msgstr "Kätke %s"
 
 #: ../src/osx/menu_osx.cpp:517
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Valinta"
+msgstr "Kätke Appi"
 
 #: ../src/osx/menu_osx.cpp:520
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "Piilota muut"
+msgstr "Kätke muut"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Show All"
 msgstr "Näytä kaikki"
 
 #: ../src/osx/menu_osx.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgctxt "macOS menu item"
 msgid "Quit %s"
-msgstr "&Poistu"
+msgstr "Lopeta %s"
 
 #: ../src/osx/menu_osx.cpp:531
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Valinta"
+msgstr "Lopeta Appi"
 
 #: ../src/osx/webview_webkit.mm:285
 #, fuzzy
