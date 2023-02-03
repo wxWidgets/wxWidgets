@@ -45,6 +45,13 @@
     }
     @endcode
 
+    Example of appearance of a simple about dialog:
+    @appearance{about-simple}
+
+    And that of a dialog using a web site link, which results in using the
+    generic version under MSW and Mac:
+    @appearance{about-with-url}
+
     @library{wxcore}
     @category{cmndlg,data}
 

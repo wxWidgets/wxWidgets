@@ -3406,9 +3406,8 @@ static void InitAboutInfoMinimal(wxAboutDialogInfo& info)
                         wxMINOR_VERSION % 2 ? "Development" : "Stable",
                         wxVERSION_NUM_DOT_STRING
                     ));
-    info.SetDescription("This sample shows different wxWidgets dialogs");
-    info.SetCopyright("(C) 1998-2006 wxWidgets dev team");
-    info.AddDeveloper("Vadim Zeitlin");
+    info.SetDescription("This sample shows different wxWidgets dialogs.");
+    info.SetCopyright("(C) 1998-2023 wxWidgets dev team.");
 }
 
 static void InitAboutInfoWebsite(wxAboutDialogInfo& info)
@@ -3422,7 +3421,8 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
 {
     InitAboutInfoWebsite(info);
 
-    // we can add a second developer
+    // we can add several developers one by one
+    info.AddDeveloper("Vadim Zeitlin");
     info.AddDeveloper("A.N. Other");
 
     // or we can add several persons at once like this
@@ -3431,6 +3431,7 @@ static void InitAboutInfoAll(wxAboutDialogInfo& info)
     docwriters.Add("Second One");
 
     info.SetDocWriters(docwriters);
+
     info.SetLicence(wxString::FromAscii(
 "                wxWindows Library Licence, Version 3.1\n"
 "                ======================================\n"
