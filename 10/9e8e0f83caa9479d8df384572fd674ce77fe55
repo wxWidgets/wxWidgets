@@ -1,0 +1,1 @@
+wxAll: Optimize wxString by supporting move operations (Pavel Tyunin, #23215)
