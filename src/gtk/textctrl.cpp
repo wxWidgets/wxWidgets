@@ -2150,8 +2150,16 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
         {
             // default height
             tsize.y = GTKGetPreferredSize(m_widget).y;
+#ifdef __WXGTK3__
             // Add the margins we have previously set.
             tsize.IncBy( GTKGetEntryMargins(GetEntry()) );
+#else
+            // For GTK 2 these margins are too big, so hard code something more
+            // reasonable, this is not great but should be fine considering
+            // that it's very unlikely that GTK 2 is going to evolve, making
+            // this inappropriate.
+            tsize.IncBy(20, 0);
+#endif
         }
     }
 
