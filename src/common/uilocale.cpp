@@ -813,9 +813,12 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
     CreateLanguagesDB();
 
     const wxLanguageInfo* infoRet = NULL;
+
+    wxString lang = locId.GetLanguage();
     wxString localeTag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
-    if (IsDefaultCLocale(locId.GetLanguage()))
+    if (IsDefaultCLocale(lang))
     {
+        lang = wxS("en");
         localeTag = "en-US";
     }
 
@@ -832,7 +835,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
             break;
         }
 
-        if (wxStricmp(localeTag, info->LocaleTag.BeforeFirst(wxS('-'))) == 0)
+        if (wxStricmp(lang, info->LocaleTag.BeforeFirst(wxS('-'))) == 0)
         {
             // a match -- but maybe we'll find an exact one later, so continue
             // looking
