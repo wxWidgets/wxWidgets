@@ -9,6 +9,7 @@
 
 #include "wx/string.h"
 #include "wx/ffile.h"
+#include "wx/arrstr.h"
 
 #include "bench.h"
 #include "htmlparser/htmlpars.h"
@@ -290,6 +291,74 @@ BENCHMARK_FUNC(ReplaceShorter)
 {
     wxString str('x', ASCIISTR_LEN);
     return str.Replace("xx", "y") != 0;
+}
+
+// ----------------------------------------------------------------------------
+// string arrays
+// ----------------------------------------------------------------------------
+
+BENCHMARK_FUNC(ArrStrPushBack)
+{
+    wxArrayString a;
+    for (int i = 0; i < 100; ++i)
+    {
+        a.push_back(wxString(asciistr));
+        a.push_back(wxString(utf8str));
+    }
+    return !a.empty();
+}
+
+BENCHMARK_FUNC(ArrStrInsert)
+{
+    wxArrayString a;
+    for (int i = 0; i < 100; ++i)
+    {
+        a.insert(a.begin(), wxString(asciistr));
+        a.insert(a.begin(), wxString(utf8str));
+    }
+    return !a.empty();
+}
+
+BENCHMARK_FUNC(ArrStrSort)
+{
+    wxArrayString a;
+    a.reserve(100);
+    for (int i = 0; i < 100; ++i)
+        a.push_back(wxString(asciistr + i));
+    a.Sort();
+    return !a.empty();
+}
+
+BENCHMARK_FUNC(VectorStrPushBack)
+{
+    std::vector<wxString> v;
+    for (int i = 0; i < 100; ++i)
+    {
+        v.push_back(wxString(asciistr));
+        v.push_back(wxString(utf8str));
+    }
+    return !v.empty();
+}
+
+BENCHMARK_FUNC(VectorStrInsert)
+{
+    std::vector<wxString> v;
+    for (int i = 0; i < 100; ++i)
+    {
+        v.insert(v.begin(), wxString(asciistr));
+        v.insert(v.begin(), wxString(utf8str));
+    }
+    return !v.empty();
+}
+
+BENCHMARK_FUNC(VectorStrSort)
+{
+    std::vector<wxString> v;
+    v.reserve(100);
+    for (int i = 0; i < 100; ++i)
+        v.push_back(wxString(asciistr + i));
+    std::sort(v.begin(), v.end());
+    return !v.empty();
 }
 
 // ----------------------------------------------------------------------------
