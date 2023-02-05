@@ -734,7 +734,21 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateUserDefault()
 {
+#ifdef HAVE_LOCALE_T
+    // Setting default locale can fail under Unix if LANG or LC_ALL are set to
+    // an unsupported value, so check for this here to let the caller know if
+    // we can't do it.
+    wxLocaleIdent locDef;
+    locale_t loc = TryCreateLocaleWithUTF8(locDef);
+    if ( !loc )
+        return NULL;
+
+    return new wxUILocaleImplUnix(wxLocaleIdent(), loc);
+#else // !HAVE_LOCALE_T
+    // We could temporarily change the locale here to check if it's supported,
+    // but for now don't bother and assume it is.
     return new wxUILocaleImplUnix(wxLocaleIdent());
+#endif // HAVE_LOCALE_T/!HAVE_LOCALE_T
 }
 
 /* static */

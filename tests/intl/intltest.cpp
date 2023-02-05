@@ -499,7 +499,7 @@ TEST_CASE("wxUILocale::ShowSystem", "[.]")
     CHECK( locDef.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
     WARN(GetLocaleDesc("After wxLocale::Init(wxLANGUAGE_DEFAULT)"));
 
-    REQUIRE( wxUILocale::UseDefault() );
+    CHECK( wxUILocale::UseDefault() );
     WARN(GetLocaleDesc("After wxUILocale::UseDefault()"));
 
     wxString preferredLangsStr;
