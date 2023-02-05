@@ -29,8 +29,6 @@ TEST_CASE("StdString::Constructors", "[stdstring]")
              s6(s3, 0, 8),
              s7(s3.begin(), s3.begin() + 8);
     wxString s8(s1, 4, 8);
-    wxString s9(wxString(s1, 8)),
-             s10(wxString(s3), 8);
 
     CHECK( s1 == wxT("abcdefgh") );
     CHECK( s2 == s1 );
@@ -39,14 +37,17 @@ TEST_CASE("StdString::Constructors", "[stdstring]")
     CHECK( s6 == s1 );
     CHECK( s7 == s1 );
     CHECK( s8 == wxT("efgh") );
-    CHECK( s9 == wxT("abcdefgh"));
-    CHECK( s10 == s1 );
 
     const char *pc = s1.c_str();
     CHECK( wxString(pc + 1, pc + 4) == "bcd" );
 
     const wchar_t *pw = s2.c_str();
     CHECK( wxString(pw, pw + 1) == "a" );
+
+    wxString s9(std::move(s1));
+    CHECK( s9 == wxT("abcdefgh"));
+    wxString s10(std::move(s3), 8);
+    CHECK( s10 == wxT("abcdefgh"));
 }
 
 TEST_CASE("StdString::Iterators", "[stdstring]")
