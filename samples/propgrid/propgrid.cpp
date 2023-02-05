@@ -1391,7 +1391,7 @@ void FormMain::PopulateWithExamples ()
         mdc.DrawLine(0, 0, 119, 31);
         mdc.SetTextForeground(*wxBLUE);
         wxFont f = mdc.GetFont();
-        f.SetPixelSize(2 * f.GetPixelSize());
+        f.SetPointSize(2 * f.GetPointSize());
         mdc.SetFont(f);
         mdc.DrawText("x2", 0, 0);
     }
@@ -1946,8 +1946,8 @@ void FormMain::ReplaceGrid(int style, int extraStyle)
 
 // -----------------------------------------------------------------------
 
-FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size)
-    : wxFrame(nullptr, -1, title, pos, size,
+FormMain::FormMain(const wxString& title)
+    : wxFrame(nullptr, -1, title, wxDefaultPosition, wxDefaultSize,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
                 wxTAB_TRAVERSAL|wxCLOSE_BOX) )
     , m_pPropGridManager(nullptr)
@@ -1956,6 +1956,10 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     , m_labelEditingEnabled(false)
 {
     SetIcon(wxICON(sample));
+    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 10) * 4,
+                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 10) * 8);
+    frameSize.x = wxMin(frameSize.x, FromDIP(500));
+    SetSize(frameSize);
     Centre();
 
 #ifdef __WXMAC__
@@ -3184,12 +3188,7 @@ bool cxApplication::OnInit()
     //wxLocale Locale;
     //Locale.Init(wxLANGUAGE_FINNISH);
 
-    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 10) * 4,
-                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 10) * 8);
-    if ( frameSize.x > 500 )
-        frameSize.x = 500;
-
-    FormMain* frame = new FormMain( "wxPropertyGrid Sample", wxPoint(0,0), frameSize);
+    FormMain* frame = new FormMain( "wxPropertyGrid Sample");
     frame->Show(true);
 
     return true;
