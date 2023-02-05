@@ -90,6 +90,7 @@ public:
     virtual bool AreBrowserAcceleratorKeysEnabled() const override;
 
     virtual bool SetUserAgent(const wxString& userAgent) override;
+    virtual wxString GetUserAgent() const override;
 
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
     virtual void RunScriptAsync(const wxString& javascript, void* clientData = nullptr) const override;
