@@ -486,9 +486,11 @@ wxString GetLocaleDesc(const char* when)
 // ways to change the current locale.
 TEST_CASE("wxUILocale::ShowSystem", "[.]")
 {
-    WARN("System locale:\t"
+    WARN("System locale identifier:\t"
+            << wxUILocale::GetSystemLocaleId().GetTag() << "\n"
+         "System locale as language:\t"
             << GetLangName(wxUILocale::GetSystemLocale()) << "\n"
-         "System language:\t"
+         "System language identifier:\t"
             << GetLangName(wxUILocale::GetSystemLanguage()));
 
     WARN(GetLocaleDesc("Before calling any locale functions"));

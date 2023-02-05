@@ -632,6 +632,13 @@ wxUILocale::~wxUILocale()
 }
 
 
+/* static */
+wxLocaleIdent wxUILocale::GetSystemLocaleId()
+{
+    wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());
+    return defaultLocale.GetLocaleId();
+}
+
 /*static*/
 int wxUILocale::GetSystemLanguage()
 {
@@ -677,11 +684,9 @@ int wxUILocale::GetSystemLanguage()
 /*static*/
 int wxUILocale::GetSystemLocale()
 {
-    // Create default wxUILocale
-    wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());
-    const wxLocaleIdent locId = defaultLocale.GetLocaleId();
+    const wxLocaleIdent locId = GetSystemLocaleId();
 
-    // Find corresponding wxLanguageInfo
+    // Find wxLanguageInfo corresponding to the default locale.
     const wxLanguageInfo* defaultLanguage = wxUILocale::FindLanguageInfo(locId);
 
     // Check if it really corresponds to this locale: we could find it via the

@@ -251,6 +251,7 @@ All:
 - Fix building all samples in release build with CMake (#23106).
 - Fix using pkg-config when cross-compiling (#22886, #23037, #23171).
 - Fix compilation problem in wxUILocale code when using musl (Khem Raj, #23050).
+- Add wxUILocale::GetSystemLocaleId() replacing GetSystemLocale() (#23114).
 
 All (GUI):
 
