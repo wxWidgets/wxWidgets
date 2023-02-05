@@ -71,7 +71,7 @@ public:
     wxVector<wxString> m_pendingUserScripts;
     wxVector<wxString> m_userScriptIds;
     wxString m_scriptMsgHandlerName;
-    wxString m_customUserAgent;
+    wxString m_pendingUserAgent;
     wxStringToWebHandlerMap m_handlers;
 
     // WebView Events tokens
@@ -108,6 +108,7 @@ public:
     void UpdateBounds();
 
     ICoreWebView2Settings* GetSettings();
+    ICoreWebView2Settings3* GetSettings3();
 
     void UpdateWebMessageHandler();
 

@@ -998,8 +998,7 @@ public:
         If your first request should already use the custom user agent
         please use two step creation and call SetUserAgent() before Create().
 
-        @note This is not implemented for IE. For Edge SetUserAgent()
-            MUST be called before Create().
+        @note This is not implemented for IE.
 
         @since 3.1.5
     */
