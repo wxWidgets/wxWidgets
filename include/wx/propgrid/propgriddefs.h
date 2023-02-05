@@ -211,10 +211,16 @@ class WXDLLIMPEXP_FWD_PROPGRID wxPGValidationInfo;
 // Some miscellaneous values, types and macros.
 
 // Used to tell wxPGProperty to use label as name as well
-#define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
+#define wxPG_LABEL              (wxPGProperty::sm_labelItem)
 
-// This is the value placed in wxPGProperty::sm_wxPG_LABEL
-#define wxPG_LABEL_STRING       wxS("@!")
+#if WXWIN_COMPATIBILITY_3_2
+// This is the value placed in wxPGProperty::sm_LabelItem
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_LABEL_STRING)
+#endif
+#define wxPG_LABEL_STRING wxPG_DEPRECATED_MACRO_VALUE("@!",\
+    "wxPG_LABEL_STRING is deprecated. Use \"@!\" instead.")
+#endif // WXWIN_COMPATIBILITY_3_2
 #if WXWIN_COMPATIBILITY_3_0
 #ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
 #pragma deprecated(wxPG_NULL_BITMAP)
@@ -596,10 +602,10 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
 
 // Define constants for common wxVariant type strings
 
-#define wxPG_VARIANT_TYPE_STRING        wxPGGlobalVars->m_strstring
-#define wxPG_VARIANT_TYPE_LONG          wxPGGlobalVars->m_strlong
-#define wxPG_VARIANT_TYPE_BOOL          wxPGGlobalVars->m_strbool
-#define wxPG_VARIANT_TYPE_LIST          wxPGGlobalVars->m_strlist
+#define wxPG_VARIANT_TYPE_STRING        wxS("string")
+#define wxPG_VARIANT_TYPE_LONG          wxS("long")
+#define wxPG_VARIANT_TYPE_BOOL          wxS("bool")
+#define wxPG_VARIANT_TYPE_LIST          wxS("list")
 #define wxPG_VARIANT_TYPE_DOUBLE        wxS("double")
 #define wxPG_VARIANT_TYPE_ARRSTRING     wxS("arrstring")
 #if wxUSE_DATETIME

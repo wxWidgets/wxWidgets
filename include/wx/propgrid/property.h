@@ -433,7 +433,7 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 // -----------------------------------------------------------------------
 
 // Helpers to mark macros as deprecated
-#if (defined(__clang__) || defined(__GNUC__)) && !defined(WXBUILDING)
+#if (defined(__clang__) || defined(__GNUC__))
 #define wxPG_STRINGIFY(X) #X
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) \
         _Pragma(wxPG_STRINGIFY(GCC warning msg)) value
@@ -441,7 +441,7 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) value
 #endif // clang || GCC
 
-#if defined(__VISUALC__) && !defined(WXBUILDING)
+#if defined(__VISUALC__)
 #define wxPG_MUST_DEPRECATE_MACRO_NAME
 #endif
 
@@ -596,18 +596,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 // wxColourProperty and its kind: Set to True in order to support editing
 // alpha colour component.
 #define wxPG_COLOUR_HAS_ALPHA               wxS("HasAlpha")
-
-// Redefine attribute macros to use cached strings
-#undef wxPG_ATTR_DEFAULT_VALUE
-#define wxPG_ATTR_DEFAULT_VALUE           wxPGGlobalVars->m_strDefaultValue
-#undef wxPG_ATTR_MIN
-#define wxPG_ATTR_MIN                     wxPGGlobalVars->m_strMin
-#undef wxPG_ATTR_MAX
-#define wxPG_ATTR_MAX                     wxPGGlobalVars->m_strMax
-#undef wxPG_ATTR_UNITS
-#define wxPG_ATTR_UNITS                   wxPGGlobalVars->m_strUnits
-#undef wxPG_ATTR_HINT
-#define wxPG_ATTR_HINT                    wxPGGlobalVars->m_strHint
 
 // -----------------------------------------------------------------------
 
@@ -1852,7 +1840,11 @@ public:
                          wxString* pString,
                          wxPGCell* pCell );
 
-    static wxString*            sm_wxPG_LABEL;
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_BUT_USED_INTERNALLY(static wxString* sm_wxPG_LABEL;)
+#endif // WXWIN_COMPATIBILITY_3_2
+    const static wxString       sm_labelItem;
 
     // This member is public so scripting language bindings
     // wrapper code can access it freely.

@@ -528,7 +528,10 @@ wxPGChoiceEntry& wxPGChoicesData::Insert(int index,
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxPGProperty, wxObject);
 
-wxString* wxPGProperty::sm_wxPG_LABEL = nullptr;
+#if WXWIN_COMPATIBILITY_3_2
+wxString* wxPGProperty::sm_wxPG_LABEL = new wxString("@!");
+#endif // WXWIN_COMPATIBILITY_3_2
+const wxString wxPGProperty::sm_labelItem("@!");
 
 void wxPGProperty::Init()
 {
@@ -558,13 +561,10 @@ void wxPGProperty::Init()
 
 void wxPGProperty::Init( const wxString& label, const wxString& name )
 {
-    // wxPG_LABEL reference can be null if we are called before property
-    // grid has been initialized
-
-    if ( sm_wxPG_LABEL && label != wxPG_LABEL )
+    if ( label != wxPG_LABEL )
         m_label = label;
 
-    if ( sm_wxPG_LABEL && name != wxPG_LABEL )
+    if ( name != wxPG_LABEL )
         DoSetName( name );
     else
         DoSetName( m_label );
@@ -1200,9 +1200,7 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
                                 // called, since variant's value may be set by
                                 // assigning another variant into it, which
                                 // then usually causes name to be copied (i.e.
-                                // usually cleared) as well. wxBoolProperty
-                                // being case in point with its use of
-                                // wxPGVariant_Bool macro as an optimization.
+                                // usually cleared) as well.
                                 variant.SetName(childName);
                                 list.Append(variant);
 
@@ -1608,12 +1606,12 @@ wxVariant wxPGProperty::GetDefaultValue() const
     {
         wxString valueType(value.GetType());
 
-        if ( valueType == wxPG_VARIANT_TYPE_LONG )
-            return wxPGVariant_Zero;
+        if (valueType == wxPG_VARIANT_TYPE_LONG)
+            return wxVariant(0L);
         if ( valueType == wxPG_VARIANT_TYPE_STRING )
-            return wxPGVariant_EmptyString;
+            return wxVariant(wxString());
         if ( valueType == wxPG_VARIANT_TYPE_BOOL )
-            return wxPGVariant_False;
+            return wxVariant(false);
         if ( valueType == wxPG_VARIANT_TYPE_DOUBLE )
             return wxVariant(0.0);
         if ( valueType == wxPG_VARIANT_TYPE_ARRSTRING )

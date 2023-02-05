@@ -9,22 +9,19 @@
 // -----------------------------------------------------------------------
 
 /** Used to tell wxPGProperty to use label as name as well
+    @hideinitializer
 */
-#define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
-
-/** This is the value placed in wxPGProperty::sm_wxPG_LABEL
-*/
-#define wxPG_LABEL_STRING       wxS("@!")
-
-#define wxPG_COLOUR_BLACK       (*wxBLACK)
+#define wxPG_LABEL              (*wxPGProperty::sm_labelItem)
 
 /** Convert Red, Green and Blue to a single 32-bit value.
+    @hideinitializer
 */
 #define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
 
 
 /** If property is supposed to have custom-painted image, then returning
     this in wxPGProperty::OnMeasureImage() will usually be enough.
+    @hideinitializer
 */
 #define wxPG_DEFAULT_IMAGE_SIZE             wxDefaultSize
 

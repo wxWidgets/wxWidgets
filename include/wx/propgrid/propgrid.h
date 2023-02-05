@@ -73,32 +73,40 @@ public:
 
     wxPGChoices         m_boolChoices;
 
+#if WXWIN_COMPATIBILITY_3_2
     // Some shared variants
-#if WXWIN_COMPATIBILITY_3_0
-    wxVariant           m_vEmptyString;
-    wxVariant           m_vZero;
-    wxVariant           m_vMinusOne;
-    wxVariant           m_vTrue;
-    wxVariant           m_vFalse;
-#else
+    wxDEPRECATED_MSG("Use wxVariant(wxString()) instead")
     const wxVariant     m_vEmptyString;
+    wxDEPRECATED_MSG("Use wxVariant(OL) instead")
     const wxVariant     m_vZero;
+    wxDEPRECATED_MSG("Use wxVariant(-1L) instead")
     const wxVariant     m_vMinusOne;
+    wxDEPRECATED_MSG("Use wxVariant(true) instead")
     const wxVariant     m_vTrue;
+    wxDEPRECATED_MSG("Use wxVariant(false) instead")
     const wxVariant     m_vFalse;
-#endif // WXWIN_COMPATIBILITY_3_0
 
     // Cached constant strings
+    wxDEPRECATED_MSG("Use \"string\" instead")
     const wxString      m_strstring;
+    wxDEPRECATED_MSG("Use \"long\" instead")
     const wxString      m_strlong;
+    wxDEPRECATED_MSG("Use \"bool\" instead")
     const wxString      m_strbool;
+    wxDEPRECATED_MSG("Use \"list\" instead")
     const wxString      m_strlist;
 
+    wxDEPRECATED_MSG("Use \"DefaultValue\" instead")
     const wxString      m_strDefaultValue;
+    wxDEPRECATED_MSG("Use \"Min\" instead")
     const wxString      m_strMin;
+    wxDEPRECATED_MSG("Use \"Max\" instead")
     const wxString      m_strMax;
+    wxDEPRECATED_MSG("Use \"Units\" instead")
     const wxString      m_strUnits;
+    wxDEPRECATED_MSG("Use \"Hint\" instead")
     const wxString      m_strHint;
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // If true then some things are automatically translated
     bool                m_autoGetTranslation;
@@ -122,13 +130,28 @@ public:
 
 extern WXDLLIMPEXP_DATA_PROPGRID(wxPGGlobalVarsPtr) wxPGGlobalVars;
 
-#define wxPGVariant_EmptyString     (wxPGGlobalVars->m_vEmptyString)
-#define wxPGVariant_Zero            (wxPGGlobalVars->m_vZero)
-#define wxPGVariant_MinusOne        (wxPGGlobalVars->m_vMinusOne)
-#define wxPGVariant_True            (wxPGGlobalVars->m_vTrue)
-#define wxPGVariant_False           (wxPGGlobalVars->m_vFalse)
-
-#define wxPGVariant_Bool(A)     (A?wxPGVariant_True:wxPGVariant_False)
+#if WXWIN_COMPATIBILITY_3_2
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPGVariant_EmptyString)
+#pragma deprecated(wxPGVariant_Zero)
+#pragma deprecated(wxPGVariant_MinusOne)
+#pragma deprecated(wxPGVariant_True)
+#pragma deprecated(wxPGVariant_False)
+#pragma deprecated(wxPGVariant_Bool)
+#endif
+#define wxPGVariant_EmptyString wxPG_DEPRECATED_MACRO_VALUE(wxVariant(wxString()),\
+    "wxPGVariant_EmptyString is deprecated. Use wxVariant(wxString()) instead.")
+#define wxPGVariant_Zero wxPG_DEPRECATED_MACRO_VALUE(wxVariant(0L),\
+    "wxPGVariant_Zero is deprecated. Use wxVariant(0L) instead.")
+#define wxPGVariant_MinusOne wxPG_DEPRECATED_MACRO_VALUE(wxVariant(-1L),\
+    "wxPGVariant_MinusOne is deprecated. Use wxVariant(-1L) instead.")
+#define wxPGVariant_True wxPG_DEPRECATED_MACRO_VALUE(wxVariant(true),\
+    "wxPGVariant_True is deprecated. Use wxVariant(true) instead.")
+#define wxPGVariant_False wxPG_DEPRECATED_MACRO_VALUE(wxVariant(false),\
+    "wxPGVariant_False is deprecated. Use wxVariant(false) instead.")
+#define wxPGVariant_Bool(A) wxPG_DEPRECATED_MACRO_VALUE(wxVariant(A),\
+    "wxPGVariant_Bool is deprecated. Use wxVariant(A) instead.")
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // When wxPG is loaded dynamically after the application is already running
 // then the built-in module system won't pick this one up.  Add it manually.

@@ -1065,7 +1065,7 @@ wxBoolProperty::wxBoolProperty( const wxString& label, const wxString& name, boo
 {
     m_choices.Assign(wxPGGlobalVars->m_boolChoices);
 
-    SetValue(wxPGVariant_Bool(value));
+    SetValue(wxVariant(value));
 
     m_flags |= wxPG_PROP_USE_DCC;
 }
@@ -1122,7 +1122,7 @@ bool wxBoolProperty::StringToValue( wxVariant& variant, const wxString& text, in
 
     if ( variant != boolValue )
     {
-        variant = wxPGVariant_Bool(boolValue);
+        variant = wxVariant(boolValue);
         return true;
     }
     return false;
@@ -1134,7 +1134,7 @@ bool wxBoolProperty::IntToValue( wxVariant& variant, int value, int ) const
 
     if ( variant != boolValue )
     {
-        variant = wxPGVariant_Bool(boolValue);
+        variant = wxVariant(boolValue);
         return true;
     }
     return false;
@@ -1189,7 +1189,7 @@ wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name,
     if ( choicesCache->IsOk() )
     {
         m_choices.Assign( *choicesCache );
-        m_value = wxPGVariant_Zero;
+        m_value = wxVariant(0L);
     }
     else
     {
@@ -1570,7 +1570,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     }
     else
     {
-        m_value = wxPGVariant_Zero;
+        m_value = wxVariant(0L);
     }
 }
 
@@ -1591,7 +1591,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     }
     else
     {
-        m_value = wxPGVariant_Zero;
+        m_value = wxVariant(0L);
     }
 }
 
@@ -1612,7 +1612,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     }
     else
     {
-        m_value = wxPGVariant_Zero;
+        m_value = wxVariant(0L);
     }
 }
 
@@ -1620,7 +1620,7 @@ void wxFlagsProperty::OnSetValue()
 {
     if ( !m_choices.IsOk() || !GetItemCount() )
     {
-        m_value = wxPGVariant_Zero;
+        m_value = wxVariant(0L);
     }
     else
     {
@@ -1987,7 +1987,7 @@ void wxFileProperty::OnSetValue()
 
     if ( !filename.HasName() )
     {
-        m_value = wxPGVariant_EmptyString;
+        m_value = wxVariant(wxString());
     }
 
     // Find index for extension.
