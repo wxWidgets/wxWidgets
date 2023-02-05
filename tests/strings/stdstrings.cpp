@@ -122,9 +122,9 @@ TEST_CASE("StdString::Append", "[stdstring]")
 
 TEST_CASE("StdString::Assign", "[stdstring]")
 {
-    wxString s1, s2, s3, s4, s5, s6, s7, s8;
+    wxString s1, s2, s3, s4, s5, s6, s7, s8, s9;
 
-    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = wxT("abc");
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = s9 = wxT("abc");
     s1.assign(wxT("def"));
     s2.assign(wxT("defgh"), 3);
     s3.assign(wxString(wxT("abcdef")), 3, 6);
@@ -149,6 +149,21 @@ TEST_CASE("StdString::Assign", "[stdstring]")
 
     s1.assign(s1, 1, 1);
     CHECK( s1 == "e" );
+
+    s9.assign(std::move(s2));
+    CHECK(s9 == wxT("def"));
+    s2 = wxT("qwerty");
+    CHECK(s2 == wxT("qwerty"));
+
+    // Self-assignment
+    wxString& s9ref = s9;
+    s9ref.assign(s9);
+    CHECK(s9 == wxT("def"));
+    // Self-move may change the value, but shouldn't crash
+    // and reassignment should work
+    s9ref.assign(std::move(s9));
+    s9 = "qwerty";
+    CHECK(s9 == wxT("qwerty"));
 }
 
 TEST_CASE("StdString::AssignOp", "[stdstring]")
@@ -176,26 +191,6 @@ TEST_CASE("StdString::AssignOp", "[stdstring]")
     s1 = wxT("qwerty");
     CHECK(s1 == wxT("qwerty"));
 
-    // assign()
-    s6.assign(wxT("def"));
-    CHECK(s6 == wxT("def"));
-
-    s7.assign(s6);
-    CHECK(s7 == wxT("def"));
-
-    pc = s6.c_str();
-    s8.assign(pc);
-    CHECK(s8 == wxT("def"));
-
-    pw = s6.c_str();
-    s9.assign(pw);
-    CHECK(s9 == wxT("def"));
-
-    s10.assign(std::move(s6));
-    CHECK(s10 == wxT("def"));
-    s6 = wxT("qwerty");
-    CHECK(s6 == wxT("qwerty"));
-
     // swap
     s11 = wxT("def");
     std::swap(s11, s12);
@@ -212,14 +207,9 @@ TEST_CASE("StdString::AssignOp", "[stdstring]")
     wxString& s13ref = s13;
     s13ref = s13;
     CHECK(s13 == wxT("abc"));
-    s13ref.assign(s13);
-    CHECK(s13 == wxT("abc"));
     // Self-move may change the value, but shouldn't crash
     // and reassignment should work
     s13ref = std::move(s13);
-    s13 = "def";
-    CHECK(s13 == wxT("def"));
-    s13ref.assign(std::move(s13));
     s13 = "qwerty";
     CHECK(s13 == wxT("qwerty"));
     // Self-swap
