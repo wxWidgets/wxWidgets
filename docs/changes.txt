@@ -321,6 +321,7 @@ wxOSX:
 - Fix shortcuts handling in wxWebView (#23151).
 - Make wxLOCALE_FORM_ENGLISH actually work (Ulrich Telle, Lauri Nurmi, #23190).
 - Fix "Window" menu item not being translated sometimes (#23204).
+- Fix wxLocale::GetCurrent() when the current locale is "C".
 
 wxQt:
 
