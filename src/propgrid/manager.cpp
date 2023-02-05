@@ -1672,21 +1672,6 @@ void wxPropertyGridManager::RecreateControls()
                                        toolBarFlags);
             m_pToolbar->SetToolBitmapSize(FromDIP(wxSize(16, 16)));
 
-        #if defined(__WXMSW__)
-            // Eliminate toolbar flicker on XP
-            // NOTE: Not enabled since it corrupts drawing somewhat.
-
-            /*
-            #ifndef WS_EX_COMPOSITED
-                #define WS_EX_COMPOSITED        0x02000000L
-            #endif
-
-            wxMSWWinExStyleUpdater(GetHwndOf(m_pToolbar))
-                .TurnOn(WS_EX_COMPOSITED);
-            */
-
-        #endif
-
             m_pToolbar->SetCursor ( *wxSTANDARD_CURSOR );
             tbModified = true;
             m_categorizedModeToolId = -1;
