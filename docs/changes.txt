@@ -322,6 +322,7 @@ wxOSX:
 - Make wxLOCALE_FORM_ENGLISH actually work (Ulrich Telle, Lauri Nurmi, #23190).
 - Fix "Window" menu item not being translated sometimes (#23204).
 - Fix wxLocale::GetCurrent() when the current locale is "C".
+- Fix wxLocale::Init(wxLANGUAGE_DEFAULT) with "mixed" locales (#23114).
 
 wxQt:
 
