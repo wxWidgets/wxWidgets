@@ -268,6 +268,7 @@ All (GUI):
 - Update wxOwnerDrawnComboBox best size when adding items (Reza Karimi, #23681).
 - Keep wxProgressDialog size when updating the message (Oleg Samarin, #23727).
 - Fix crash when deleting selected item in wxGenericListCtrl (#23729).
+- Use DIPs for toolbar image sizes in wxPropertyGrid.
 
 wxGTK:
 
