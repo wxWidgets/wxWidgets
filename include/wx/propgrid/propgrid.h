@@ -75,37 +75,23 @@ public:
 
 #if WXWIN_COMPATIBILITY_3_2
     // Some shared variants
-    wxDEPRECATED_MSG("Use wxVariant(wxString()) instead")
-    const wxVariant     m_vEmptyString;
-    wxDEPRECATED_MSG("Use wxVariant(OL) instead")
-    const wxVariant     m_vZero;
-    wxDEPRECATED_MSG("Use wxVariant(-1L) instead")
-    const wxVariant     m_vMinusOne;
-    wxDEPRECATED_MSG("Use wxVariant(true) instead")
-    const wxVariant     m_vTrue;
-    wxDEPRECATED_MSG("Use wxVariant(false) instead")
-    const wxVariant     m_vFalse;
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxVariant     m_vEmptyString;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxVariant     m_vZero;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxVariant     m_vMinusOne;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxVariant     m_vTrue;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxVariant     m_vFalse;)
 
     // Cached constant strings
-    wxDEPRECATED_MSG("Use \"string\" instead")
-    const wxString      m_strstring;
-    wxDEPRECATED_MSG("Use \"long\" instead")
-    const wxString      m_strlong;
-    wxDEPRECATED_MSG("Use \"bool\" instead")
-    const wxString      m_strbool;
-    wxDEPRECATED_MSG("Use \"list\" instead")
-    const wxString      m_strlist;
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strstring;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strlong;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strbool;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strlist;)
 
-    wxDEPRECATED_MSG("Use \"DefaultValue\" instead")
-    const wxString      m_strDefaultValue;
-    wxDEPRECATED_MSG("Use \"Min\" instead")
-    const wxString      m_strMin;
-    wxDEPRECATED_MSG("Use \"Max\" instead")
-    const wxString      m_strMax;
-    wxDEPRECATED_MSG("Use \"Units\" instead")
-    const wxString      m_strUnits;
-    wxDEPRECATED_MSG("Use \"Hint\" instead")
-    const wxString      m_strHint;
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strDefaultValue;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strMin;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strMax;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strUnits;)
+    wxDEPRECATED_BUT_USED_INTERNALLY(const wxString      m_strHint;)
 #endif // WXWIN_COMPATIBILITY_3_2
 
     // If true then some things are automatically translated
