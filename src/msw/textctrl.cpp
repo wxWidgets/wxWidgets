@@ -2555,10 +2555,9 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
         hText += EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) - cy;
     }
 
-    // Perhaps the user wants something different from CharHeight, or ylen
-    // is used as the height of a multiline text.
-    if ( ylen > 0 )
-        hText += ylen - GetCharHeight();
+    // We should always use at least the specified height if it's valid.
+    if ( ylen > hText )
+        hText = ylen;
 
     return wxSize(wText, hText);
 }
