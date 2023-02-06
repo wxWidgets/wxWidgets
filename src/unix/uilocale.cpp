@@ -272,11 +272,11 @@ locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
 locale_t TryCreateMatchingLocale(wxLocaleIdent& locId)
 {
     locale_t loc = TryCreateLocaleWithUTF8(locId);
-    if ( !loc )
+    if ( !loc && locId.GetRegion().empty() )
     {
-        // Try to find a variant of this locale available on this system: first
-        // of all, using just the language, without the territory, typically
-        // does _not_ work under Linux, so try adding one if we don't have it.
+        // Try to find a variant of this locale available on this system: as
+        // using just the language, without the territory, typically does _not_
+        // work under Linux, we try adding one if we don't have it.
         const wxString lang = locId.GetLanguage();
 
         const wxLanguageInfos& infos = wxGetLanguageInfos();
