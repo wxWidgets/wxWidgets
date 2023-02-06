@@ -1,0 +1,1 @@
+wxMSW: Allow setting wxWebViewEdge UA after creation (Tobias Taschner, #23225).
