@@ -693,10 +693,14 @@ int wxUILocale::GetSystemLocale()
     // fallback on the language, which is something that it generally makes
     // sense for FindLanguageInfo() to do, but in this case we really need the
     // locale.
-    if ( defaultLanguage &&
-            locId.GetTag(wxLOCALE_TAGTYPE_BCP47) == defaultLanguage->LocaleTag )
+    if ( defaultLanguage )
     {
-        return defaultLanguage->Language;
+        // We have to handle the "C" locale specially as its name is different
+        // from the "en-US" tag found for it, but we do still want to return
+        // English for it.
+        const wxString tag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
+        if ( tag == defaultLanguage->LocaleTag || IsDefaultCLocale(tag) )
+            return defaultLanguage->Language;
     }
 
     return wxLANGUAGE_UNKNOWN;
