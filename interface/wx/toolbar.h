@@ -594,6 +594,11 @@ public:
         usually unnecessary to call either this function or
         SetToolBitmapSize() at all.
 
+        This function returns the size in logical pixels, for consistency with
+        SetToolBitmapSize() which takes size in logical pixels. See @ref
+        overview_high_dpi for more information about the different pixel types
+        and how to convert between them.
+
         @remarks Note that this is the size of the bitmap you pass to AddTool(),
             and not the eventual size of the tool button.
 
