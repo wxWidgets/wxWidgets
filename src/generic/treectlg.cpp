@@ -103,6 +103,8 @@ protected:
     void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
+    void IncreaseSizeForText( const wxString& text );
+
     bool AcceptChanges();
     void Finish( bool setfocus );
 
@@ -428,6 +430,11 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     m_owner = owner;
     m_aboutToFinish = false;
 
+    // Create the text hidden to show it with the correct size -- which we
+    // can't determine before creating it.
+    Hide();
+    Create(m_owner, wxID_ANY, m_startValue);
+
     wxRect rect;
     m_owner->GetBoundingRect(m_itemEdited, rect, true);
 
@@ -442,8 +449,27 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     rect.height += 4;
 #endif // platforms
 
-    (void)Create(m_owner, wxID_ANY, m_startValue,
-                 rect.GetPosition(), rect.GetSize());
+    const wxSize textSize = rect.GetSize();
+    wxSize fullSize = GetSizeFromTextSize(textSize);
+    if ( fullSize.y > textSize.y )
+    {
+        // It's ok to extend the rect to the right horizontally, which happens
+        // when we just change its size without changing its position below,
+        // but when extending it vertically, we need to keep it centered.
+        rect.y -= (fullSize.y - textSize.y + 1) / 2;
+    }
+
+    // Also check that the control fits into the parent window.
+    const int totalWidth = m_owner->GetClientSize().x;
+    if ( rect.x + fullSize.x > totalWidth )
+    {
+        fullSize.x = totalWidth - rect.x;
+    }
+
+    rect.SetSize(fullSize);
+
+    SetSize(rect);
+    Show();
 
     SelectAll();
 }
@@ -533,28 +559,55 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
             break;
 
         default:
+            if ( !m_aboutToFinish )
+            {
+#if wxUSE_UNICODE
+                wxChar ch = event.GetUnicodeKey();
+#else
+                wxChar ch = event.m_keyCode < 256 &&
+                                event.m_keyCode >= 0 &&
+                                    wxIsprint(event.m_keyCode)
+                                ? (wxChar)event.m_keyCode
+                                : WXK_NONE;
+#endif
+                if ( ch != WXK_NONE )
+                {
+                    wxString value = GetValue();
+
+                    long from, to;
+                    GetSelection( &from, &to );
+                    if ( from != to )
+                    {
+                        value.Remove( from, to - from );
+                    }
+
+                    IncreaseSizeForText( value + ch );
+                }
+            }
             event.Skip();
     }
 }
 
 void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 {
-    if ( !m_aboutToFinish )
-    {
-        // auto-grow the textctrl:
-        wxSize parentSize = m_owner->GetSize();
-        wxPoint myPos = GetPosition();
-        wxSize mySize = GetSize();
-        int sx, sy;
-        GetTextExtent(GetValue() + wxT("M"), &sx, &sy);
-        if (myPos.x + sx > parentSize.x)
-            sx = parentSize.x - myPos.x;
-        if (mySize.x > sx)
-            sx = mySize.x;
-        SetSize(sx, wxDefaultCoord);
-    }
-
+    // This function is only preserved in 3.2 branch to avoid warnings from the
+    // ABI compatibility checked, as this class (wrongly) uses public visibility
+    // there, even though it's not public at all -- and so we can't remove any
+    // of its functions, even if they're not needed any longer.
     event.Skip();
+}
+
+void wxTreeTextCtrl::IncreaseSizeForText( const wxString& text )
+{
+    // auto-grow the textctrl:
+    wxSize parentSize = m_owner->GetClientSize();
+    wxPoint myPos = GetPosition();
+    wxSize mySize = GetSize();
+    int sx = GetSizeFromText(text).x;
+    if (myPos.x + sx > parentSize.x)
+        sx = parentSize.x - myPos.x;
+    if (sx > mySize.x)
+        SetSize(sx, wxDefaultCoord);
 }
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )

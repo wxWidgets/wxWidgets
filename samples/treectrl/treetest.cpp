@@ -291,7 +291,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_DecSpacing, "Reduce spacing by 5 points\tCtrl-R");
 
     item_menu->Append(TreeTest_Dump, "&Dump item children");
-    item_menu->Append(TreeTest_Rename, "&Rename item...");
+    item_menu->Append(TreeTest_Rename, "&Rename item...\tF2");
 
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_SetBold, "Make item &bold");
