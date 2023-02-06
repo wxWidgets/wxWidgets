@@ -240,14 +240,14 @@ public :
     virtual NSMenu* MacCreateOrFindWindowMenu()
     {
         NSString* nsWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName, wxStrip_Menu));
-        NSString* nsAlternateWindowMenuTitle = wxNSStringWithWxString(wxGETTEXT_IN_CONTEXT("macOS menu name", "Window"));
+        NSString* nsTranslatedWindowMenuTitle = wxNSStringWithWxString(wxGETTEXT_IN_CONTEXT("macOS menu name", "Window"));
 
         NSMenu* windowMenu = nil;
 
         for (NSMenuItem* topmenu in [m_osxMenu itemArray])
         {
             if ([[topmenu title] isEqualToString:nsWindowMenuTitle] ||
-                [[topmenu title] isEqualToString:nsAlternateWindowMenuTitle])
+                [[topmenu title] isEqualToString:nsTranslatedWindowMenuTitle])
             {
                 windowMenu = [topmenu submenu];
                 break;
@@ -257,7 +257,7 @@ public :
         if ( windowMenu == nil )
         {
             NSString* nsHelpMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macHelpMenuTitleName, wxStrip_Menu));
-            NSString* nsAlternateHelpTitle = wxNSStringWithWxString(wxGETTEXT_IN_CONTEXT("macOS menu name", "Help"));
+            NSString* nsTranslatedHelpTitle = wxNSStringWithWxString(wxGETTEXT_IN_CONTEXT("macOS menu name", "Help"));
 
             NSMenuItem* helpMenu = nil;
             NSInteger numberOfMenus = [m_osxMenu numberOfItems];
@@ -265,13 +265,13 @@ public :
             {
                 NSMenuItem* lastMenu = [m_osxMenu itemAtIndex:numberOfMenus-1];
                 if ([[lastMenu title] isEqualToString:nsHelpMenuTitle] ||
-                    [[lastMenu title] isEqualToString:nsAlternateHelpTitle])
+                    [[lastMenu title] isEqualToString:nsTranslatedHelpTitle])
                 {
                     helpMenu = lastMenu;
                 }
             }
 
-            windowMenu = [[NSMenu alloc] initWithTitle:nsAlternateWindowMenuTitle];
+            windowMenu = [[NSMenu alloc] initWithTitle:nsTranslatedWindowMenuTitle];
             NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:nsWindowMenuTitle action:nil keyEquivalent:@""];
             [windowMenuItem setSubmenu:windowMenu];
             [windowMenu release];
