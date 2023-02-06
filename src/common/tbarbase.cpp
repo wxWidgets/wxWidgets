@@ -486,7 +486,7 @@ void wxToolBarBase::AdjustToolBitmapSize()
         // We want to round 1.5 down to 1, but 1.75 up to 2.
         int scaleFactorRoundedDown =
             static_cast<int>(ceil(2*GetDPIScaleFactor())) / 2;
-        sizeNeeded = m_requestedBitmapSize*scaleFactorRoundedDown;
+        sizeNeeded = FromPhys(m_requestedBitmapSize*scaleFactorRoundedDown);
     }
     else // Determine the best size to use from the bitmaps we have.
     {
