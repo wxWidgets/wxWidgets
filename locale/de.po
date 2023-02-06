@@ -8,18 +8,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1.6\n"
+"Project-Id-Version: wxWidgets 3.3.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-04-09 12:47+0200\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"PO-Revision-Date: 2023-02-06 17:46+0100\n"
+"Last-Translator: Ulrich Telle <ulrich@telle-online.eu>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ../include/wx/defs.h:2592
 msgid "All files (*.*)|*.*"
@@ -1108,35 +1108,33 @@ msgstr "&Speichern"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "Änderungen &Verwerfen"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Nicht speichern"
+msgstr "Nicht schließen"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Möchten Sie die Änderungen nach %s speichern?"
+msgstr "Möchten Sie die Änderungen vor dem Schließen nach %s speichern?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Der Text konnte nicht gespeichert werden."
+msgstr "Das Dokument muss geschlossen werden."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Speichern %s fehlgeschlagen, wollen Sie es erneut versuchen?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Erneut versuchen"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Änderungen verwerfen"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -2217,6 +2215,8 @@ msgstr "DIB-Header: Kodierung entspricht nicht der Bittiefe."
 #, c-format
 msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
 msgstr ""
+"BMP: Kopfeintrag hat das Attribut biClrUsed=%d wobei Attribut biBitCount=%d "
+"ist."
 
 #: ../src/common/imagbmp.cpp:1279
 msgid "Error in reading image DIB."
@@ -3946,9 +3946,8 @@ msgid "libcurl could not be initialized"
 msgstr "libcurl konnte nicht initialisiert werden"
 
 #: ../src/common/webview.cpp:334
-#, fuzzy
 msgid "RunScriptAsync not supported"
-msgstr "Umwandlung in Zeichenkette wird nicht unterstützt"
+msgstr "RunScriptAsync wird nicht unterstützt"
 
 #: ../src/common/webview.cpp:345 ../src/msw/webview_ie.cpp:1063
 #, c-format
@@ -6516,34 +6515,29 @@ msgid "File type:"
 msgstr "Dateityp:"
 
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Fenster"
 
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Hilfe"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Minimieren"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
-msgstr "Vergrößern"
+msgstr "Zoomen"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
-msgstr "Alles nach vorne bringen"
+msgstr "Alle nach vorne bringen"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6592,10 +6586,9 @@ msgid "Hide %s"
 msgstr "%s ausblenden"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Anwendung"
+msgstr "Anwendung ausblenden"
 
 #: ../src/osx/menu_osx.cpp:525
 msgctxt "macOS menu item"
@@ -6614,10 +6607,9 @@ msgid "Quit %s"
 msgstr "%s beenden"
 
 #: ../src/osx/menu_osx.cpp:536
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Anwendung"
+msgstr "Anwendung beenden"
 
 #: ../src/osx/webview_webkit.mm:316
 msgid "Printing is not supported by the system web control"
@@ -6865,174 +6857,146 @@ msgid "White"
 msgstr "Weiß"
 
 #: ../src/propgrid/advprops.cpp:1642
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "Standard"
 
 #: ../src/propgrid/advprops.cpp:1643
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Pfeil"
 
 #: ../src/propgrid/advprops.cpp:1644
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Rechts-Pfeil"
 
 #: ../src/propgrid/advprops.cpp:1645
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Leer"
 
 # Sieht aus wie das innere Feld bei Darts
 #: ../src/propgrid/advprops.cpp:1646
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
-msgstr "Bullseye"
+msgstr "Zielscheibe"
 
 #: ../src/propgrid/advprops.cpp:1647
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Zeichen"
 
 #: ../src/propgrid/advprops.cpp:1648
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Kreuz"
 
 #: ../src/propgrid/advprops.cpp:1649
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Hand"
 
 #: ../src/propgrid/advprops.cpp:1650
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "Profilstahl"
 
 #: ../src/propgrid/advprops.cpp:1651
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Links-Taste"
 
 #: ../src/propgrid/advprops.cpp:1652
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Lupe"
 
 #: ../src/propgrid/advprops.cpp:1653
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Mittlere Taste"
 
 #: ../src/propgrid/advprops.cpp:1654
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Kein Eintrag"
 
 #: ../src/propgrid/advprops.cpp:1655
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Pinsel"
 
 #: ../src/propgrid/advprops.cpp:1656
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Stift"
 
 #: ../src/propgrid/advprops.cpp:1657
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "Punkt links"
 
 #: ../src/propgrid/advprops.cpp:1658
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "Punkt rechts"
 
 #: ../src/propgrid/advprops.cpp:1659
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "Fragepfeil"
 
 #: ../src/propgrid/advprops.cpp:1660
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Rechts-Taste"
 
 # Ein Cursor für die Größenänderung, dessen Pfeile von NO nach SW zeigen
 #: ../src/propgrid/advprops.cpp:1661
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Größenänderung NO-SW"
 
 # Ein Cursor für die Größenänderung, dessen Pfeile von Norden nach Süden zeigen
 #: ../src/propgrid/advprops.cpp:1662
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Größenänderung N-S"
 
 # Ein Cursor für die Größenänderung, dessen Pfeile von NW nach SO zeigen
 #: ../src/propgrid/advprops.cpp:1663
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Größenänderung NW-SO"
 
 # Ein Cursor für die Größenänderung, dessen Pfeile von W nach O zeigen
 #: ../src/propgrid/advprops.cpp:1664
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Größenänderung W-O"
 
 #: ../src/propgrid/advprops.cpp:1665
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Größenänderung"
 
 #: ../src/propgrid/advprops.cpp:1666
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "Sprühdose"
 
 #: ../src/propgrid/advprops.cpp:1667
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "﻿Warten"
 
 #: ../src/propgrid/advprops.cpp:1668
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "Uhr"
 
 #: ../src/propgrid/advprops.cpp:1669
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Wartepfeil"
