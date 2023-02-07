@@ -489,12 +489,7 @@ TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
     REQUIRE(font1);
     REQUIRE(font1->IsOk());
 
-    // There is a bug in wxOSX which results in the font size in points being
-    // changed (rounded) by the call to GetPixelSize() inside DumpFont(), so we
-    // can't use it there until #23144 is fixed.
-#ifndef __WXMAC__
     INFO("Font from font list:" << DumpFont(font1));
-#endif
 
     if ( info.IsUsingSizeInPixels() )
         CHECK(font1->GetPixelSize().y == pixelSize.y);
