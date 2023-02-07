@@ -47,17 +47,15 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     return wxGetEnv(name, value) && !value->empty();
 }
 
-// Get locale information from the appropriate environment variable: the output
+// Get locale information from the specified environment variable: the output
 // variables are filled with the locale part (xx_XX) and the modifier is filled
 // with the optional part following "@".
 //
 // Return false if there is no locale information in the environment variables
 // or if it is just "C" or "POSIX".
-bool GetLocaleFromEnvironment(wxString& langFull, wxString& modifier)
+bool GetLocaleFromEnvVar(const char* var, wxString& langFull, wxString& modifier)
 {
-    if (!wxGetNonEmptyEnvVar(wxS("LC_ALL"), &langFull) &&
-        !wxGetNonEmptyEnvVar(wxS("LC_MESSAGES"), &langFull) &&
-        !wxGetNonEmptyEnvVar(wxS("LANG"), &langFull))
+    if ( !wxGetNonEmptyEnvVar(var, &langFull) )
     {
         return false;
     }
@@ -479,7 +477,8 @@ wxUILocaleImplUnix::InitLocaleNameAndCodeset() const
         // This must be the default locale.
         wxString locName,
                  modifier;
-        if ( !GetLocaleFromEnvironment(locName, modifier) )
+        if ( !GetLocaleFromEnvVar("LC_ALL", locName, modifier) &&
+                !GetLocaleFromEnvVar("LANG", locName, modifier) )
         {
             // This is the default locale if nothing is specified.
             locName = "en_US";
@@ -784,7 +783,15 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
     // as the first entry in the list of preferred languages.
     wxString langFull;
     wxString modifier;
-    if (GetLocaleFromEnvironment(langFull, modifier))
+
+    // Check LC_ALL first, as it's supposed to override everything else, then
+    // for LC_MESSAGES because this is the variable defining the translations
+    // language and so must correspond to the language the user wants to use
+    // and, otherwise, fall back on LANG which is the normal way to specify
+    // both the locale and the language.
+    if ( GetLocaleFromEnvVar("LC_ALL", langFull, modifier) ||
+            GetLocaleFromEnvVar("LC_MESSAGES", langFull, modifier) ||
+                GetLocaleFromEnvVar("LANG", langFull, modifier) )
     {
         if (!modifier.empty())
         {
