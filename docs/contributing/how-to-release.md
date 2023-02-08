@@ -27,6 +27,10 @@ Instructions:
 See also `build/elfabi/check_all.sh` which checks the ABI of the newly built
 libraries and is simpler to use if there is no need to update the ABI files.
 
+Finally, please note that this check is currently run by a GitHub Actions
+workflow on the 3.2 branch, so normally any ABI breakage should be detected
+automatically.
+
 ### Checking under MSW systems.
 
 Manually check compatibility by building the widgets samples from the old tree
@@ -40,11 +44,8 @@ course.
 
 ## Pre-Release Steps
 
-Start by copying all the changes since the previous release to the change log
-file as explained in the comment there.
-
-Then update the files below. You can run `build/tools/pre-release.sh` to do
-the straightforward changes like updating the dates and checksums
+See below for the files to update. You can run `build/tools/pre-release.sh` to
+do the straightforward changes like updating the dates and checksums
 automatically, but please also review and update the contents of the README
 and announcement text.
 
