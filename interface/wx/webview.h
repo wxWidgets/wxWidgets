@@ -1668,6 +1668,16 @@ public:
         @since 3.1.6
     */
     bool IsError() const;
+
+    /**
+        Returns true if the navigation target is the main frame. Only valid
+        for events of type @c wxEVT_WEBVIEW_NAVIGATING
+
+        @note This is only available with the macOS and the Edge backend.
+
+        @since 3.3.0
+    */
+    bool IsTargetMainFrame() const;
 };
 
 

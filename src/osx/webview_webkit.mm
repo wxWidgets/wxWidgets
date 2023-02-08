@@ -851,6 +851,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                          webKitWindow->GetId(),
                          wxCFStringRef::AsString( url ), "", navFlags);
 
+    if (navigationAction.targetFrame && navigationAction.targetFrame.isMainFrame)
+        event.SetInt(1);
+
     if (webKitWindow && webKitWindow->GetEventHandler())
         webKitWindow->GetEventHandler()->ProcessEvent(event);
 
