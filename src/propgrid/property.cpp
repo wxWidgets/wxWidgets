@@ -529,7 +529,7 @@ wxPGChoiceEntry& wxPGChoicesData::Insert(int index,
 wxIMPLEMENT_ABSTRACT_CLASS(wxPGProperty, wxObject);
 
 #if WXWIN_COMPATIBILITY_3_2
-wxString* wxPGProperty::sm_wxPG_LABEL = new wxString("@!");
+wxString* wxPGProperty::sm_wxPG_LABEL = nullptr;
 #endif // WXWIN_COMPATIBILITY_3_2
 const wxString wxPGProperty::sm_labelItem("@!");
 

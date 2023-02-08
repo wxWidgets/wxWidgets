@@ -204,6 +204,10 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     , m_extraStyle(0)
     , m_warnings(0)
 {
+#if WXWIN_COMPATIBILITY_3_2
+    wxPGProperty::sm_wxPG_LABEL = new wxString("@!");
+#endif // WXWIN_COMPATIBILITY_3_2
+
     /* TRANSLATORS: Name of Boolean false value */
     m_boolChoices.Add(_("False"));
     /* TRANSLATORS: Name of Boolean true value */
