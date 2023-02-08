@@ -89,6 +89,7 @@ jobs:
             if git diff origin/3.2 \
                ':!.github/workflows/code_checks.yml' \
                ':!src/stc/scintilla/' \
+               | sed 's@//.*@@' \
                | grep -E '(override|noexcept|nullptr[^_])'; then
               echo "::error ::Please use C++98 equivalents of the C++11 keywords in this branch."
               exit 1
