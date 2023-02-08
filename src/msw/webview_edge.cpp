@@ -273,6 +273,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_NavigationCompleted(m_navigationCompletedToken);
         m_webView->remove_SourceChanged(m_sourceChangedToken);
         m_webView->remove_NavigationStarting(m_navigationStartingToken);
+        m_webView->remove_FrameNavigationStarting(m_frameNavigationStartingToken);
         m_webView->remove_NewWindowRequested(m_newWindowRequestedToken);
         m_webView->remove_DocumentTitleChanged(m_documentTitleChangedToken);
         m_webView->remove_DOMContentLoaded(m_DOMContentLoadedToken);
@@ -373,6 +374,16 @@ void wxWebViewEdgeImpl::UpdateBounds()
 
 HRESULT wxWebViewEdgeImpl::OnNavigationStarting(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NavigationStartingEventArgs* args)
 {
+    return HandleNavigationStarting(args, true);
+}
+
+HRESULT wxWebViewEdgeImpl::OnFrameNavigationStarting(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NavigationStartingEventArgs* args)
+{
+    return HandleNavigationStarting(args, false);
+}
+
+HRESULT wxWebViewEdgeImpl::HandleNavigationStarting(ICoreWebView2NavigationStartingEventArgs* args, bool mainFrame)
+{
     wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD
     m_isBusy = true;
     wxString evtURL;
@@ -382,6 +393,8 @@ HRESULT wxWebViewEdgeImpl::OnNavigationStarting(ICoreWebView2* WXUNUSED(sender),
 
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING, m_ctrl->GetId(), evtURL, wxString());
     event.SetEventObject(m_ctrl);
+    if (mainFrame)
+        event.SetInt(1);
     m_ctrl->HandleWindowEvent(event);
 
     if (!event.IsAllowed())
@@ -626,6 +639,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2NavigationStartingEventHandler>(
             this, &wxWebViewEdgeImpl::OnNavigationStarting).Get(),
         &m_navigationStartingToken);
+    m_webView->add_FrameNavigationStarting(
+        Callback<ICoreWebView2NavigationStartingEventHandler>(
+            this, &wxWebViewEdgeImpl::OnFrameNavigationStarting).Get(),
+        &m_frameNavigationStartingToken);
     m_webView->add_SourceChanged(
         Callback<ICoreWebView2SourceChangedEventHandler>(
             this, &wxWebViewEdgeImpl::OnSourceChanged).Get(),

@@ -897,7 +897,7 @@ void WebFrame::OnNavigationRequest(wxWebViewEvent& evt)
     }
 
     wxLogMessage("%s", "Navigation request to '" + evt.GetURL() + "' (target='" +
-    evt.GetTarget() + "')");
+    evt.GetTarget() + "')" + ((evt.IsTargetMainFrame()) ? " mainFrame" : ""));
 
     //If we don't want to handle navigation then veto the event and navigation
     //will not take place, we also need to stop the loading animation

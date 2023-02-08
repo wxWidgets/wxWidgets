@@ -336,6 +336,7 @@ public:
     {}
 
     bool IsError() const { return GetInt() == 0; }
+    bool IsTargetMainFrame() const { return GetInt() == 1; }
 
     const wxString& GetURL() const { return m_url; }
     const wxString& GetTarget() const { return m_target; }
