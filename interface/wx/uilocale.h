@@ -289,7 +289,7 @@ public:
               by the operating system (for example, Windows 7 and below), the user's
               default @em locale will be used.
 
-        @see wxTranslations::GetBestTranslation().
+        @see wxTranslations::GetBestTranslation(), GetSystemLocaleId().
     */
     static int GetSystemLanguage();
 
@@ -297,7 +297,8 @@ public:
         Tries to detect the user's default locale setting.
 
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the locale-guessing
-        algorithm failed.
+        algorithm failed or if the locale can't be described using solely a
+        language constant. Consider using GetSystemLocaleId() in this case.
 
         @note This function works with @em locales and returns the user's default
               locale. This may be, and usually is, the same as their preferred UI
@@ -308,7 +309,19 @@ public:
 
         @see wxTranslations::GetBestTranslation().
     */
-    static int GetSystemLocale();};
+    static int GetSystemLocale();
+
+    /**
+        Return the description of the default system locale.
+
+        This function can always represent the system locale, even when using
+        a language and region pair that doesn't correspond to any of the
+        predefined ::wxLanguage constants, such as e.g. "fr-DE", which means
+        French language used with German locale settings.
+
+        @since 3.3.0
+     */
+};
 
 /**
     Return the format to use for formatting user-visible dates.

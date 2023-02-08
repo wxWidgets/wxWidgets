@@ -653,8 +653,14 @@ const wxLanguageInfo* wxLocale::GetLanguageInfo(int lang)
 {
     // We need to explicitly handle the case "lang == wxLANGUAGE_DEFAULT" here,
     // because wxUILocale::GetLanguageInfo() determines the system language
-    // based on the the preferred UI language while wxLocale uses the default
+    // based on the preferred UI language while wxLocale uses the default
     // user locale for that purpose.
+    //
+    // Note that even though wxUILocale::GetLanguageInfo() seems to do the same
+    // thing as we do here, it actually does _not_ because we're calling our
+    // GetSystemLanguage() which maps to wxUILocale::GetSystemLocale() and not
+    // the function with the same name in that class. This is incredibly
+    // confusing but necessary for backwards compatibility.
     if (lang == wxLANGUAGE_DEFAULT)
         lang = GetSystemLanguage();
     return wxUILocale::GetLanguageInfo(lang);
@@ -726,11 +732,36 @@ bool wxLocale::IsAvailable(int lang)
     const wxLanguageInfo *info = wxLocale::GetLanguageInfo(lang);
     if ( !info )
     {
-        // The language is unknown (this normally only happens when we're
-        // passed wxLANGUAGE_DEFAULT), so we can't support it.
-        wxASSERT_MSG( lang == wxLANGUAGE_DEFAULT,
-                      wxS("No info for a valid language?") );
-        return false;
+        // This must be wxLANGUAGE_DEFAULT as otherwise we should have found
+        // the matching entry.
+        wxCHECK_MSG( lang == wxLANGUAGE_DEFAULT, false,
+                     wxS("No info for a valid language?") );
+
+        // For this one, we need to check whether using it later is going to
+        // actually work, i.e. if the CRT supports it.
+        const char* const origLocale = wxSetlocale(LC_ALL, nullptr);
+        if ( !origLocale )
+        {
+            // This is not supposed to happen, we should always be able to
+            // query the current locale, but don't crash if it does.
+            return false;
+        }
+
+        // Make a copy of the string because wxSetlocale() call below may
+        // change the buffer to which it points.
+        const wxString origLocaleStr = wxString::FromUTF8(origLocale);
+
+        if ( !wxSetlocale(LC_ALL, "") )
+        {
+            // Locale wasn't changed, so nothing else to do.
+            return false;
+        }
+
+        // We support this locale, but restore the original one before
+        // returning.
+        wxSetlocale(LC_ALL, origLocaleStr.utf8_str());
+
+        return true;
     }
 
     wxString localeTag = info->GetCanonicalWithRegion();

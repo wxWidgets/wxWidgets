@@ -63,6 +63,12 @@ Changes in behaviour not resulting in compilation errors
   mode under MSW, use the new AreAppsDark() or IsSystemDark() to check if the
   other applications or the system are using dark mode.
 
+- wxUILocale::IsSupported() now returns false for unavailable locales under
+  Unix systems without trying to fall back on another locale using the same
+  language in a different region, e.g. it doesn't use fr_FR if fr_BE is not
+  available. If any locale using the given language is acceptable, the region
+  must be left empty, e.g. just "fr" would use any available "fr_XX".
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

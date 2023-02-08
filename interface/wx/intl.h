@@ -526,13 +526,15 @@ public:
     /**
         Tries to detect the user's default locale setting.
 
-        Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
-        algorithm failed.
+        @note This function is somewhat misleading, as it uses the default
+        system locale to determine its return value, and not just the system
+        language. It is preserved for backwards compatibility, but to actually
+        get the language, and not locale, used by the system by default, call
+        wxUILocale::GetSystemLanguage() instead.
 
-        @note This function works with @em locales and returns the user's default
-              locale. This may be, and usually is, the same as their preferred UI
-              language, but it's not the same thing. Use wxTranslation to obtain
-              @em language information.
+        Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the locale
+        is not recognized, as can notably happen when combining any language
+        with a region where this language is not typically spoken.
 
         @see wxTranslations::GetBestTranslation().
     */

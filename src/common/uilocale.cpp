@@ -632,6 +632,13 @@ wxUILocale::~wxUILocale()
 }
 
 
+/* static */
+wxLocaleIdent wxUILocale::GetSystemLocaleId()
+{
+    wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());
+    return defaultLocale.GetLocaleId();
+}
+
 /*static*/
 int wxUILocale::GetSystemLanguage()
 {
@@ -677,12 +684,26 @@ int wxUILocale::GetSystemLanguage()
 /*static*/
 int wxUILocale::GetSystemLocale()
 {
-    // Create default wxUILocale
-    wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());
+    const wxLocaleIdent locId = GetSystemLocaleId();
 
-    // Find corresponding wxLanguageInfo
-    const wxLanguageInfo* defaultLanguage = wxUILocale::FindLanguageInfo(defaultLocale.GetLocaleId());
-    return defaultLanguage ? defaultLanguage->Language : wxLANGUAGE_UNKNOWN;
+    // Find wxLanguageInfo corresponding to the default locale.
+    const wxLanguageInfo* defaultLanguage = wxUILocale::FindLanguageInfo(locId);
+
+    // Check if it really corresponds to this locale: we could find it via the
+    // fallback on the language, which is something that it generally makes
+    // sense for FindLanguageInfo() to do, but in this case we really need the
+    // locale.
+    if ( defaultLanguage )
+    {
+        // We have to handle the "C" locale specially as its name is different
+        // from the "en-US" tag found for it, but we do still want to return
+        // English for it.
+        const wxString tag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
+        if ( tag == defaultLanguage->LocaleTag || IsDefaultCLocale(tag) )
+            return defaultLanguage->Language;
+    }
+
+    return wxLANGUAGE_UNKNOWN;
 }
 
 /* static */
@@ -813,9 +834,12 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
     CreateLanguagesDB();
 
     const wxLanguageInfo* infoRet = nullptr;
+
+    wxString lang = locId.GetLanguage();
     wxString localeTag = locId.GetTag(wxLOCALE_TAGTYPE_BCP47);
-    if (IsDefaultCLocale(locId.GetLanguage()))
+    if (IsDefaultCLocale(lang))
     {
+        lang = wxS("en");
         localeTag = "en-US";
     }
 
@@ -832,7 +856,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
             break;
         }
 
-        if (wxStricmp(localeTag, info->LocaleTag.BeforeFirst(wxS('-'))) == 0)
+        if (wxStricmp(lang, info->LocaleTag.BeforeFirst(wxS('-'))) == 0)
         {
             // a match -- but maybe we'll find an exact one later, so continue
             // looking

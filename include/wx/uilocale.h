@@ -158,12 +158,18 @@ public:
     // its dtor is not virtual.
     ~wxUILocale();
 
+    // Return the locale ID representing the default system locale, which would
+    // be set is UseDefault() is called.
+    static wxLocaleIdent GetSystemLocaleId();
+
     // Try to get user's (or OS's) preferred language setting.
     // Return wxLANGUAGE_UNKNOWN if the language-guessing algorithm failed
+    // Prefer using GetSystemLocaleId() above.
     static int GetSystemLanguage();
 
     // Try to get user's (or OS's) default locale setting.
     // Return wxLANGUAGE_UNKNOWN if the locale-guessing algorithm failed
+    // Prefer using GetSystemLocaleId() above.
     static int GetSystemLocale();
 
     // Try to retrieve a list of user's (or OS's) preferred UI languages.
