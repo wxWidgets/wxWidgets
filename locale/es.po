@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.1\n"
+"Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-06-29 09:27+0200\n"
+"PO-Revision-Date: 2023-02-08 12:20+0100\n"
 "Last-Translator: Miguel Giménez <tecnico@solener.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: es\n"
@@ -11,12 +11,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ../include/wx/defs.h:2592
 msgid "All files (*.*)|*.*"
-msgstr "Todos los archivos (*.*)|*"
+msgstr "Todos los archivos (*.*)|*.*"
 
 #: ../include/wx/defs.h:2595
 msgid "All files (*)|*"
@@ -1098,35 +1098,33 @@ msgstr "&Guardar"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Descartar cambios"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "No guardar"
+msgstr "&No cerrar"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "¿Desea guardar los cambios hechos a %s?"
+msgstr "¿Desea guardar los cambios hechos a %s antes de cerrarlo?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "El texto no pudo guardarse."
+msgstr "El documento debe cerrarse."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Fallo al guardar %s, ¿quiere reintentarlo?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Reintentar"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Descartar cambios"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -5061,7 +5059,7 @@ msgstr "< &Atrás"
 
 #: ../src/gtk/aboutdlg.cpp:204
 msgid "translator-credits"
-msgstr "Andriy Byelikov https://github.com/andriybyelikov"
+msgstr "Miguel Giménez, Andriy Byelikov https://github.com/andriybyelikov"
 
 #: ../src/gtk/app.cpp:468
 msgid ""
@@ -6459,31 +6457,26 @@ msgid "File type:"
 msgstr "Tipo de archivo:"
 
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Ventana"
 
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Ayuda"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Minimizar"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Acercar"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Traer todo al primer plano"
