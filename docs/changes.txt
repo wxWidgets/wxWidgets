@@ -251,6 +251,8 @@ All:
 - Fix building all samples in release build with CMake (#23106).
 - Fix using pkg-config when cross-compiling (#22886, #23037, #23171).
 - Fix compilation problem in wxUILocale code when using musl (Khem Raj, #23050).
+- Add wxUILocale::GetSystemLocaleId() replacing GetSystemLocale() (#23114).
+- Fail when setting unsupported "mixed" locale under Unix (#23218).
 
 All (GUI):
 
@@ -320,6 +322,8 @@ wxOSX:
 - Fix shortcuts handling in wxWebView (#23151).
 - Make wxLOCALE_FORM_ENGLISH actually work (Ulrich Telle, Lauri Nurmi, #23190).
 - Fix "Window" menu item not being translated sometimes (#23204).
+- Fix wxLocale::GetCurrent() when the current locale is "C".
+- Fix wxLocale::Init(wxLANGUAGE_DEFAULT) with "mixed" locales (#23114).
 
 wxQt:
 

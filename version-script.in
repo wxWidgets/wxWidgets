@@ -26,6 +26,7 @@
 # public symbols added in 3.2.2 (please keep in alphabetical order):
 @WX_VERSION_TAG@.2 {
     extern "C++" {
+        "wxUILocale::GetSystemLocaleId";
         "wxWithImages::GetImageLogicalSize";
         "wxWithImages::GetImageBitmapFor";
     };
