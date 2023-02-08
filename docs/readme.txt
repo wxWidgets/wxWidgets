@@ -48,7 +48,7 @@ and also improving locale-related code under Mac and Unix systems:
 
 - wxUILocale::UseDefault() works for locales using different language and
   region under Mac and fails when used for unsupported locale under Unix.
-- New wxUILocale::GetSystemLocaleId() allows to retrive such locales IDs.
+- New wxUILocale::GetSystemLocaleId() allows to retrieve such locales IDs.
 - wxUILocale::GetCurrent() works currently for "C" locale under Mac.
 
 Some other user-visible enhancements made in this release:
