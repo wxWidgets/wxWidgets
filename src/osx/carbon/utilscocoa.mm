@@ -289,6 +289,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage
 
 namespace
 {
+#if wxOSX_USE_COCOA
     NSCompositingOperation wxOSXNSCompositionFromWXComposition( wxCompositionMode composition )
     {
         NSCompositingOperation mode = NSCompositingOperationSourceOver;
@@ -340,6 +341,7 @@ namespace
 
         return mode;
     }
+#endif
 } // anonymous namespace
 
 void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
