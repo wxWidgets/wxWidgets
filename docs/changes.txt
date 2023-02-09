@@ -239,6 +239,10 @@ All:
 
 - Add move ctor and assignment to wxString (Pavel Tyunin, #23224).
 
+wxOSX:
+
+- Respect composition mode when drawing bitmaps (#23240).
+
 
 3.2.2: (released 2023-02-08)
 ----------------------------
