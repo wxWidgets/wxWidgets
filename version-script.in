@@ -22,6 +22,9 @@
 # released with the generic branch version due to the final wildcard below,
 # and once released its version cannot be changed.
 
+# When adding a new section here, don't forget to modify the version in
+# build/bakefiles/version.bkl to indicate that new APIs have been added and
+# rebake!
 
 # public symbols added in 3.2.2 (please keep in alphabetical order):
 @WX_VERSION_TAG@.2 {
