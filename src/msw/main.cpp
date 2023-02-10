@@ -193,7 +193,11 @@ int wxEntry(int& argc, wxChar **argv)
 WXDLLIMPEXP_BASE void wxMSWCommandLineInit();
 WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup();
 WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc();
+#if wxUSE_UNICODE
 WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv();
+#else
+WXDLLIMPEXP_BASE char** wxMSWCommandLineGetArgv();
+#endif
 
 #if wxUSE_BASE
 
@@ -245,7 +249,9 @@ WXDLLIMPEXP_BASE void wxMSWCommandLineInit()
 
 WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup()
 {
+#if wxUSE_UNICODE
     wxArgs.Cleanup();
+#endif
 }
 
 WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc()
@@ -253,7 +259,11 @@ WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc()
     return wxArgs.argc;
 }
 
+#if wxUSE_UNICODE
 WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv()
+#else
+WXDLLIMPEXP_BASE char** wxMSWCommandLineGetArgv()
+#endif
 {
     return wxArgs.argv;
 }
