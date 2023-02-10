@@ -347,6 +347,14 @@ namespace
 void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
                                           CGContextRef    inContext,
                                           const CGRect *  inBounds,
+                                          WXImage      inImage)
+{
+    wxOSXDrawNSImage(inContext, inBounds, inImage, wxCOMPOSITION_OVER);
+}
+
+void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
+                                          CGContextRef    inContext,
+                                          const CGRect *  inBounds,
                                           WXImage      inImage,
                                           wxCompositionMode composition)
 {
