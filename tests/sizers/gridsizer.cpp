@@ -179,3 +179,37 @@ TEST_CASE_METHOD(GridSizerTestCase,
         m_sizer->Add(10, 10, wxSizerFlags().Expand().Centre())
     );
 }
+
+TEST_CASE_METHOD(GridSizerTestCase,
+                 "wxGridSizer::GrowMode",
+                 "[grid-sizer][sizer]")
+{
+    wxVector<wxWindow*> children;
+    for ( int n = 0; n < 4; n++ )
+    {
+        children.push_back(new wxWindow(m_win, wxID_ANY));
+    }
+
+    // Proportions of growable columns should be respected.
+    m_sizer->AddGrowableCol(0, 1);
+    m_sizer->AddGrowableCol(1, 4);
+
+    // However proportions of growable rows should not because we use
+    // wxFLEX_GROWMODE_ALL which tells the sizer to grow all rows uniformly.
+    m_sizer->AddGrowableRow(0, 1);
+    m_sizer->AddGrowableRow(1, 4);
+
+    m_sizer->SetFlexibleDirection(wxHORIZONTAL);
+    m_sizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_ALL);
+
+    // Make both dimensions divisible by 5 to avoid dealing with extra pixels.
+    m_win->SetClientSize(100, 100);
+
+    SetChildren(children, wxSizerFlags().Expand());
+
+    // Check that we have different widths but same heights for all children.
+    CHECK( children[0]->GetSize() == wxSize(20, 50) );
+    CHECK( children[1]->GetSize() == wxSize(80, 50) );
+    CHECK( children[2]->GetSize() == wxSize(20, 50) );
+    CHECK( children[3]->GetSize() == wxSize(80, 50) );
+}

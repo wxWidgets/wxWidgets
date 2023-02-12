@@ -2104,16 +2104,23 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& origina
     }
 #endif // wxDEBUG_LEVEL
 
+    // Use growable columns proportions if we are flexible in this direction.
+    const wxArrayInt* const growableColsProportions =
+        (m_flexDirection & wxHORIZONTAL) || (m_growMode == wxFLEX_GROWMODE_SPECIFIED)
+            ? &m_growableColsProportions
+            : nullptr;
 
-    if ( (m_flexDirection & wxHORIZONTAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )
+    // And do anything at all with the columns if we're either flexible or must
+    // resize all columns uniformly (otherwise we use wxFLEX_GROWMODE_NONE and
+    // there is nothing to do).
+    if ( growableColsProportions || (m_growMode == wxFLEX_GROWMODE_ALL) )
     {
         DoAdjustForGrowables
         (
             sz.x - minSize.x,
             m_growableCols,
             m_colWidths,
-            m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableColsProportions
-                                                    : nullptr
+            growableColsProportions
         );
 
         // This gives nested objects that benefit from knowing one size
@@ -2141,13 +2148,18 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& origina
                 sz.x - minSize.x,
                 m_growableCols,
                 m_colWidths,
-                m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableColsProportions
-                                                        : nullptr
+                growableColsProportions
             );
         }
     }
 
-    if ( (m_flexDirection & wxVERTICAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )
+    // Same as above but for the rows.
+    const wxArrayInt* const growableRowsProportions =
+        (m_flexDirection & wxVERTICAL) || (m_growMode == wxFLEX_GROWMODE_SPECIFIED)
+            ? &m_growableRowsProportions
+            : nullptr;
+
+    if ( growableRowsProportions || (m_growMode == wxFLEX_GROWMODE_ALL) )
     {
         // pass nullptr instead of proportions if the grow mode is ALL as we
         // should treat all rows as having proportion of 1 then
@@ -2156,8 +2168,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& origina
             sz.y - minSize.y,
             m_growableRows,
             m_rowHeights,
-            m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableRowsProportions
-                                                    : nullptr
+            growableRowsProportions
         );
     }
 }
