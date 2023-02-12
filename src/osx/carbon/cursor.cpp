@@ -17,9 +17,9 @@
     #include "wx/icon.h"
     #include "wx/image.h"
 #endif // WX_PRECOMP
-
+#include "wx/filename.h"
 #include "wx/xpmdecod.h"
-
+#include "wx/stdpaths.h"
 #include "wx/osx/private.h"
 
 
@@ -278,7 +278,27 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
 #if wxOSX_USE_COCOA
-        wxFAIL_MSG( wxT("Not implemented") );
+        wxImage image;
+        wxFileName fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png";
+        image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_PNG );
+        if( image.IsOk() )
+        {
+            image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX ) ;
+            image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY ) ;
+        }
+        else
+        {
+            fileName = wxFileName( wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".cur" );
+            image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_CUR );
+        }
+        if( image.IsOk() )
+        {
+            m_refData->DecRef();
+            m_refData = nullptr;
+            InitFromImage( image );
+        }
+        else
+            wxLogError( "Neither PNG nor CUR cursor image found in Resources" );
 #endif
     }
     else
