@@ -344,6 +344,7 @@ namespace
 #endif
 } // anonymous namespace
 
+#if wxOSX_USE_COCOA
 void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
                                           CGContextRef    inContext,
                                           const CGRect *  inBounds,
@@ -351,6 +352,7 @@ void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
 {
     wxOSXDrawNSImage(inContext, inBounds, inImage, wxCOMPOSITION_OVER);
 }
+#endif
 
 void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
                                           CGContextRef    inContext,
