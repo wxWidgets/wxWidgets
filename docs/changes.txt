@@ -239,6 +239,10 @@ All:
 
 - Add move ctor and assignment to wxString (Pavel Tyunin, #23224).
 
+All (GUI):
+
+- Fix wxFLEX_GROWMODE_ALL in wxFlexGridSizer with proportions (#23253).
+
 wxOSX:
 
 - Respect composition mode when drawing bitmaps (#23240).
