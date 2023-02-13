@@ -258,8 +258,21 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
     // Enable redirection handling
     curl_easy_setopt(m_handle, CURLOPT_FOLLOWLOCATION, 1L);
     // Limit redirect to HTTP
-    curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS,
-        CURLPROTO_HTTP | CURLPROTO_HTTPS);
+    #if CURL_AT_LEAST_VERSION(7, 85, 0)
+    if ( wxWebSessionCURL::CurlRuntimeAtLeastVersion(7, 85, 0) )
+    {
+        curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+    }
+    else
+    #endif // curl >= 7.85
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+        curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS,
+            CURLPROTO_HTTP | CURLPROTO_HTTPS);
+
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+    }
     // Enable all supported authentication methods
     curl_easy_setopt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     curl_easy_setopt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
