@@ -232,6 +232,13 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.2.1: (released 2023-02-13)
+------------------------------
+
+This hotfix corrects a regression in 3.2.2 which resulted in not drawing any
+icons for the non-root item of wxGenericTreeCtrl in this release (see #23255).
+
+
 3.2.2: (released 2023-02-08)
 ----------------------------
 
