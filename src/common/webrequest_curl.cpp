@@ -105,10 +105,16 @@ wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
         else
     #endif
         {
+            // We know that these constants are deprecated, but we still need
+            // to use them with this old version.
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
             curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSFUNCTION,
                              wxCURLProgress);
             curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSDATA,
                              static_cast<void*>(this));
+
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
         }
 
     // Have curl call the progress callback.
