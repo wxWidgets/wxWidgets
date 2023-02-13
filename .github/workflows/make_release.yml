@@ -35,7 +35,7 @@ jobs:
       - name: Create Archives Checksums
         working-directory: distrib/release/${{ inputs.version }}
         run: |
-            printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````' >> ../../../docs/release.md
+            printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````\n' >> ../../../docs/release.md
             sha1sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
