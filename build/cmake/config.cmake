@@ -145,7 +145,7 @@ function(wx_write_config)
 
     set(WX_RELEASE ${wxMAJOR_VERSION}.${wxMINOR_VERSION})
     set(WX_VERSION ${wxVERSION})
-    set(WX_SUBVERSION ${wxVERSION}.0)
+    set(WX_SUBVERSION ${wxVERSION}.1)
     set(WX_FLAVOUR)
     set(TOOLKIT_DIR ${wxBUILD_TOOLKIT})
     set(TOOLKIT_VERSION)
