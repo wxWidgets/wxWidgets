@@ -109,7 +109,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        uses: vadz/action-gh-release@4c1f6af6e1a4dbfc4691427d2822c34374d558a2
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
