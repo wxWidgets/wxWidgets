@@ -194,7 +194,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                     "\n"
                     "This is the minimal wxWidgets sample\n"
                     "running under %s.",
-                    wxVERSION_STRING,
+                    wxGetLibraryVersionInfo().GetVersionString(),
                     wxGetOsDescription()
                  ),
                  "About wxWidgets minimal sample",
