@@ -8,7 +8,6 @@
 #include "wx/wxprec.h"
 
 #include "wx/private/overlay.h"
-#include "wx/nativewin.h"
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/msw/dc.h"
@@ -16,7 +15,7 @@
 
 namespace // anonymous
 {
-class wxOverlayWindow : public wxNativeContainerWindow
+class wxOverlayWindow : public wxWindow
 {
 public:
     static wxWindow* New(const wxRect& rect)
@@ -64,7 +63,15 @@ public:
         }
 
         auto overlayWin = new wxOverlayWindow(hwnd);
+
+        // Let the object know that it's currently hidden (because we
+        // intentionally don't use WS_VISIBLE when creating it to avoid
+        // stealing activation from the parent window).
+        overlayWin->wxWindowBase::Show(false);
+
+        // And show it using SWP_NOACTIVATE flag now.
         overlayWin->Show(true);
+
         return overlayWin;
     }
 
@@ -98,8 +105,23 @@ public:
 
     virtual bool Destroy() override
     {
-        HWND hwnd = GetHandle();
+        // Save the HWND and reset it in the object itself as we delete it
+        // manually below.
+        const HWND hwnd = GetHandle();
+        m_hWnd = nullptr;
 
+        // This window must be deleted manually because it's not owned by any
+        // other one, so do it here and handle the rest of the destruction in a
+        // static function which won't (even accidentally) access the already
+        // destroyed object.
+        delete this;
+
+        return DoDestroy(hwnd);
+    }
+
+private:
+    static bool DoDestroy(HWND hwnd)
+    {
         if ( hwnd && !::DestroyWindow(hwnd) )
         {
             wxLogLastError(wxS("DestroyWindow() in wxOverlayWindow::Destroy()"));
@@ -114,8 +136,11 @@ public:
         return true;
     }
 
-private:
-    wxOverlayWindow(HWND hwnd) : wxNativeContainerWindow(hwnd) {}
+    explicit wxOverlayWindow(HWND hwnd)
+    {
+        m_hWnd = hwnd;
+    }
+
     ~wxOverlayWindow() = default;
 };
 } // anonymous namespace
