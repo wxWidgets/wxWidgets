@@ -141,10 +141,10 @@ void wxOverlayImpl::Clear(wxDC* WXUNUSED(dc))
 {
     wxCHECK_RET( IsOk(), wxS("overlay not initialized") );
 
-    // doesn't work with non double buffered m_window
-    // m_memDC.SetBackground(*wxTRANSPARENT_BRUSH);
-
-    m_memDC.SetBackground(wxBrush(wxTransparentColour));
+    // Note that the colour used here is the same one that we specify as
+    // LWA_COLORKEY when creating the layered window, so it is actually
+    // transparent.
+    m_memDC.SetBackground(*wxBLACK);
     m_memDC.Clear();
 }
 
