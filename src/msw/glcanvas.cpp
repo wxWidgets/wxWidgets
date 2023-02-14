@@ -641,11 +641,6 @@ wxEND_EVENT_TABLE()
 // wxGLCanvas construction
 // ----------------------------------------------------------------------------
 
-void wxGLCanvas::Init()
-{
-    m_hDC = nullptr;
-}
-
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxGLAttributes& dispAttrs,
                        wxWindowID id,
@@ -655,8 +650,6 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxString& name,
                        const wxPalette& palette)
 {
-    Init();
-
     (void)Create(parent, dispAttrs, id, pos, size, style, name, palette);
 }
 
@@ -669,8 +662,6 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxString& name,
                        const wxPalette& palette)
 {
-    Init();
-
     (void)Create(parent, id, pos, size, style, name, attribList, palette);
 }
 

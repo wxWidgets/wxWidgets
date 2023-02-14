@@ -465,7 +465,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const wxString& name,
                         const wxPalette& WXUNUSED(palette))
 {
-    m_glFormat = nullptr;
     // Don't allow an empty list
     if ( !dispAttrs.GetGLAttrs() )
     {
