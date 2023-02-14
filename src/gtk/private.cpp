@@ -227,21 +227,6 @@ GtkWidget* GetSplitterWidget(wxOrientation orient)
     return widget;
 }
 
-GtkWidget * GetTextEntryWidget()
-{
-    static GtkWidget *s_button = nullptr;
-
-    if ( !s_button )
-    {
-        s_button = gtk_entry_new();
-        g_object_add_weak_pointer(G_OBJECT(s_button), (void**)&s_button);
-        gtk_container_add(GetContainer(), s_button);
-        gtk_widget_realize( s_button );
-    }
-
-    return s_button;
-}
-
 GtkWidget *GetTreeWidget()
 {
     static GtkWidget *s_tree = nullptr;

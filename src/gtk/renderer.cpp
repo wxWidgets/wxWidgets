@@ -971,7 +971,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow*, wxDC& dc, const wxRect& rect, int fl
     gtk_render_background(sc, drawable, rect.x, rect.y, rect.width, rect.height);
     gtk_render_frame(sc, drawable, rect.x, rect.y, rect.width, rect.height);
 #else
-    GtkWidget* entry = wxGTKPrivate::GetTextEntryWidget();
+    GtkWidget* entry = wxGTKPrivate::GetEntryWidget();
 
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
