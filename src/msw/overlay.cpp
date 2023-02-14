@@ -116,15 +116,15 @@ public:
 
 private:
     wxOverlayWindow(HWND hwnd) : wxNativeContainerWindow(hwnd) {}
-    ~wxOverlayWindow() {}
+    ~wxOverlayWindow() = default;
 };
 } // anonymous namespace
 
 class wxOverlayImpl : public wxOverlay::Impl
 {
 public:
-    wxOverlayImpl() { }
-    ~wxOverlayImpl() { }
+    wxOverlayImpl() = default;
+    ~wxOverlayImpl() = default;
 
     virtual bool IsNative() const override { return true; }
     virtual void Reset() override;
@@ -148,7 +148,7 @@ public:
     // which will eventually be drawn on the overlay window.
     wxBitmap    m_bitmap;
     wxMemoryDC  m_memDC;    // for memory dc construction only.
-    WXHDC       m_hdc;      // the original HDC
+    WXHDC       m_hdc = 0;  // the original HDC
 
     wxDECLARE_NO_COPY_CLASS(wxOverlayImpl);
 };
