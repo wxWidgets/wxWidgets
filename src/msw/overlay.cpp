@@ -43,7 +43,7 @@ public:
                         exStyle,
                         GetOverlayWindowClass(),
                         nullptr,
-                        WS_POPUP | WS_VISIBLE,
+                        WS_POPUP,
                         pos.x, pos.y,
                         size.x, size.y,
                         (HWND)nullptr,
@@ -63,7 +63,9 @@ public:
             wxLogLastError(wxS("SetLayeredWindowAttributes() in wxOverlayWindow::Create()"));
         }
 
-        return new wxOverlayWindow(hwnd);
+        auto overlayWin = new wxOverlayWindow(hwnd);
+        overlayWin->Show(true);
+        return overlayWin;
     }
 
     static const wxChar* GetOverlayWindowClass()
