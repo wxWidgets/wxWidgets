@@ -20,19 +20,6 @@ class wxOverlayWindow : public wxWindow
 public:
     static wxWindow* New(const wxRect& rect)
     {
-        WNDCLASS wndclass;
-        wxZeroMemory(wndclass);
-
-        wndclass.lpfnWndProc   = ::DefWindowProc;
-        wndclass.hInstance     = wxGetInstance();
-        wndclass.lpszClassName = GetOverlayWindowClass();
-
-        if ( !::RegisterClass(&wndclass) )
-        {
-            wxLogLastError(wxS("RegisterClass() in wxOverlayWindow::Create()"));
-            return nullptr;
-        }
-
         const wxPoint pos = rect.GetPosition();
         const wxSize size = rect.GetSize();
         WXDWORD exStyle = WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE;
@@ -40,7 +27,7 @@ public:
         HWND hwnd = ::CreateWindowEx
                       (
                         exStyle,
-                        GetOverlayWindowClass(),
+                        GetMSWClassName(0),
                         nullptr,
                         WS_POPUP,
                         pos.x, pos.y,
@@ -73,11 +60,6 @@ public:
         overlayWin->Show(true);
 
         return overlayWin;
-    }
-
-    static const wxChar* GetOverlayWindowClass()
-    {
-        return wxS("wxOverlayWindow");
     }
 
     virtual bool Show(bool show) override
@@ -126,11 +108,6 @@ private:
         {
             wxLogLastError(wxS("DestroyWindow() in wxOverlayWindow::Destroy()"));
             return false;
-        }
-
-        if ( !::UnregisterClass(GetOverlayWindowClass(), wxGetInstance()) )
-        {
-            wxLogLastError(wxS("UnregisterClass() in wxOverlayWindow::Destroy()"));
         }
 
         return true;
