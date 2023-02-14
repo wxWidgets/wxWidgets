@@ -15,84 +15,42 @@
 
 namespace // anonymous
 {
-class wxOverlayWindow : public wxWindow
+
+wxWindow* wxCreateOverlayWindow(const wxRect& rect)
 {
-public:
-    static wxWindow* New(const wxRect& rect)
+    auto overlayWin = new wxWindow();
+
+    overlayWin->MSWCreate
+                (
+                    overlayWin->GetMSWClassName(0),
+                    nullptr, // No title
+                    rect.GetPosition(),
+                    rect.GetSize(),
+                    WS_POPUP,
+                    WS_EX_LAYERED |
+                    WS_EX_TRANSPARENT |
+                    WS_EX_NOACTIVATE
+                );
+
+    if ( !::SetLayeredWindowAttributes(GetHwndOf(overlayWin), 0, 128,
+                                       LWA_COLORKEY | LWA_ALPHA) )
     {
-        const wxPoint pos = rect.GetPosition();
-        const wxSize size = rect.GetSize();
-        WXDWORD exStyle = WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE;
-
-        HWND hwnd = ::CreateWindowEx
-                      (
-                        exStyle,
-                        GetMSWClassName(0),
-                        nullptr,
-                        WS_POPUP,
-                        pos.x, pos.y,
-                        size.x, size.y,
-                        (HWND)nullptr,
-                        (HMENU)nullptr,
-                        wxGetInstance(),
-                        (LPVOID)nullptr
-                      );
-
-        if ( !hwnd )
-        {
-            wxLogLastError(wxS("CreateWindowEx() in wxOverlayWindow::Create()"));
-            return nullptr;
-        }
-
-        if ( !::SetLayeredWindowAttributes(hwnd, 0, 128, LWA_COLORKEY|LWA_ALPHA) )
-        {
-            wxLogLastError(wxS("SetLayeredWindowAttributes() in wxOverlayWindow::Create()"));
-        }
-
-        auto overlayWin = new wxOverlayWindow(hwnd);
-
-        // Let the object know that it's currently hidden (because we
-        // intentionally don't use WS_VISIBLE when creating it to avoid
-        // stealing activation from the parent window).
-        overlayWin->wxWindowBase::Show(false);
-
-        // And show it using SWP_NOACTIVATE flag now.
-        overlayWin->Show(true);
-
-        return overlayWin;
+        wxLogLastError(wxS("SetLayeredWindowAttributes()"));
     }
 
-    virtual bool Show(bool show) override
-    {
-        if ( !GetHandle() || !wxWindowBase::Show(show) )
-            return false;
+    // We intentionally don't use WS_VISIBLE when creating this window to avoid
+    // stealing activation from the parent, so show it using SWP_NOACTIVATE now.
+    ::SetWindowPos(GetHwndOf(overlayWin), nullptr, 0, 0, 0, 0,
+                   SWP_NOSIZE |
+                   SWP_NOMOVE |
+                   SWP_NOREDRAW |
+                   SWP_NOOWNERZORDER |
+                   SWP_NOACTIVATE |
+                   SWP_SHOWWINDOW);
 
-        if ( show )
-        {
-            ::SetWindowPos(GetHandle(), nullptr, 0, 0, 0, 0,
-                           SWP_NOSIZE |
-                           SWP_NOMOVE |
-                           SWP_NOREDRAW |
-                           SWP_NOOWNERZORDER |
-                           SWP_NOACTIVATE |
-                           SWP_SHOWWINDOW);
-        }
-        else
-        {
-            ::ShowWindow(GetHandle(), SW_HIDE);
-        }
+    return overlayWin;
+}
 
-        return true;
-    }
-
-private:
-    explicit wxOverlayWindow(HWND hwnd)
-    {
-        m_hWnd = hwnd;
-    }
-
-    ~wxOverlayWindow() = default;
-};
 } // anonymous namespace
 
 class wxOverlayImpl : public wxOverlay::Impl
@@ -145,7 +103,7 @@ void wxOverlayImpl::Init(wxDC* dc, int , int , int , int )
 
     m_bitmap.CreateWithDIPSize(m_rect.GetSize(), m_window->GetDPIScaleFactor());
 
-    m_overlayWindow = wxOverlayWindow::New(m_rect);
+    m_overlayWindow = wxCreateOverlayWindow(m_rect);
 }
 
 void wxOverlayImpl::BeginDrawing(wxDC* dc)
