@@ -199,18 +199,24 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 
 
     wxSizer *sizerIconAndText = new wxBoxSizer(wxHORIZONTAL);
+
+    wxSizerFlags flagsText = wxSizerFlags(1).Expand();
 #if wxUSE_STATBMP
     wxIcon icon = info.GetIcon();
     if ( icon.IsOk() )
     {
         sizerIconAndText->Add(new wxStaticBitmap(this, wxID_ANY, icon),
                                 wxSizerFlags().Border(wxRIGHT));
+
+        // Add a border to the right of the text to make the layout slightly
+        // more symmetrical.
+        flagsText.DoubleBorder(wxRIGHT);
     }
 #endif // wxUSE_STATBMP
-    sizerIconAndText->Add(m_sizerText, wxSizerFlags(1).Expand());
+    sizerIconAndText->Add(m_sizerText, flagsText);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(sizerIconAndText, wxSizerFlags(1).Expand().Border());
+    sizerTop->Add(sizerIconAndText, wxSizerFlags(1).Expand().DoubleBorder());
 
 // Mac typically doesn't use OK buttons just for dismissing dialogs.
 #if !defined(__WXMAC__)
