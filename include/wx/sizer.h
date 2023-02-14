@@ -1074,6 +1074,8 @@ public:
 protected:
     wxStaticBox   *m_staticBox;
 
+    virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item) override;
+
 private:
     wxDECLARE_CLASS(wxStaticBoxSizer);
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxSizer);

@@ -2780,6 +2780,36 @@ wxStaticBoxSizer::~wxStaticBoxSizer()
         m_staticBox->WXDestroyWithoutChildren();
 }
 
+wxSizerItem* wxStaticBoxSizer::DoInsert(size_t index, wxSizerItem* item)
+{
+    if ( wxWindow* const win = item->GetWindow() )
+    {
+        // Warn if the window is not a child of the static box, which it really
+        // should be, even if we still support using the box parent as parent
+        // too for compatibility.
+        if ( !m_staticBox->IsDescendant(win) )
+        {
+            wxLogDebug("Element %s of wxStaticBoxSizer should be created "
+                       "as child of its wxStaticBox and not of %s.",
+                       wxDumpWindow(win),
+                       wxDumpWindow(win->GetParent()));
+
+#ifdef __WXMSW__
+            // Additionally, under MSW the windows inside a static box are not
+            // drawn at all when compositing is used, so we have to disable it.
+            //
+            // An alternative could be to Reparent() the window to the static
+            // box, but it might break the existing code and as we only allow
+            // this for compatibility in the first place, it seems better not
+            // to risk it.
+            m_staticBox->MSWDisableComposited();
+#endif // __WXMSW__
+        }
+    }
+
+    return wxBoxSizer::DoInsert(index, item);
+}
+
 void wxStaticBoxSizer::RepositionChildren(const wxSize& minSize)
 {
     int top_border, other_border;
