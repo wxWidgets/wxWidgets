@@ -81,8 +81,6 @@ public:
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 
 private:
-
-//    wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
 };
 
