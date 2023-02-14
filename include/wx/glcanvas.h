@@ -165,7 +165,7 @@ public:
     // instead of in port-specific files.
     wxGLAttributes& Defaults()
     {
-        return RGBA().Depth(16).DoubleBuffer().SampleBuffers(1).Samplers(4);
+        return RGBA().Depth(16).DoubleBuffer();
     }
 };
 
