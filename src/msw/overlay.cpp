@@ -85,34 +85,7 @@ public:
         return true;
     }
 
-    virtual bool Destroy() override
-    {
-        // Save the HWND and reset it in the object itself as we delete it
-        // manually below.
-        const HWND hwnd = GetHandle();
-        m_hWnd = nullptr;
-
-        // This window must be deleted manually because it's not owned by any
-        // other one, so do it here and handle the rest of the destruction in a
-        // static function which won't (even accidentally) access the already
-        // destroyed object.
-        delete this;
-
-        return DoDestroy(hwnd);
-    }
-
 private:
-    static bool DoDestroy(HWND hwnd)
-    {
-        if ( hwnd && !::DestroyWindow(hwnd) )
-        {
-            wxLogLastError(wxS("DestroyWindow() in wxOverlayWindow::Destroy()"));
-            return false;
-        }
-
-        return true;
-    }
-
     explicit wxOverlayWindow(HWND hwnd)
     {
         m_hWnd = hwnd;
