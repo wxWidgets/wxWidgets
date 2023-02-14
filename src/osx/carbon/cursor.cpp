@@ -279,16 +279,15 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
     {
 #if wxOSX_USE_COCOA
         wxImage image;
-        wxFileName fileName = wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png";
-        image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_PNG );
-        if( image.IsOk() )
+        wxFileName fileName( wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".png" );
+        if( image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_PNG ) )
         {
             image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX ) ;
             image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY ) ;
         }
         else
         {
-            fileName = wxFileName( wxStandardPaths::Get().GetResourcesDir() + "/" + cursor_file + ".cur" );
+            fileName.SetExt( ".cur" );
             image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_CUR );
         }
         if( image.IsOk() )
