@@ -1077,6 +1077,11 @@ protected:
     virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item) override;
 
 private:
+    // Set to true if any items _not_ using the associated static box as parent
+    // are added to this sizer: this is still supported for backwards
+    // compatibility but is not recommended.
+    bool m_hasNonBoxChildren = false;
+
     wxDECLARE_CLASS(wxStaticBoxSizer);
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxSizer);
 };

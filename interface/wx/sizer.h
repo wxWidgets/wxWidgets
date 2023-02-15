@@ -1944,8 +1944,12 @@ public:
 
     Note that since wxWidgets 2.9.1 you are strongly encouraged to create the windows
     which are added to wxStaticBoxSizer as children of wxStaticBox itself and
-    failure to do so will result in warning messages in debug builds. Please see
-    wxStaticBox documentation for more details.
+    failure to do so will result in warning messages in debug builds, even if
+    creating them using the static box parent as parent still works too (but
+    note that items using different parents can't be used inside the same
+    sizer, i.e. all of them should be children either of the box itself or of
+    its parent and an assert will be triggered if this is not the case).
+    Please see wxStaticBox documentation for more details.
 
     Example of use of this class:
     @code
