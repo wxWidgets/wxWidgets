@@ -1431,12 +1431,15 @@ wxVersionInfo wxGetLibraryVersionInfo()
                             QT_VERSION_STR);
 #endif // __WXQT__
 
+    const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
+
     return wxVersionInfo(wxS("wxWidgets"),
                          wxMAJOR_VERSION,
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1992-2023 wxWidgets team"));
+                         wxString::Format(wxS("Copyright %s 1992-2023 wxWidgets team"),
+                                          copyrightSign));
 }
 
 void wxInfoMessageBox(wxWindow* parent)
