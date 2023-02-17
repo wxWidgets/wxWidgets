@@ -117,7 +117,7 @@ const char* wxLanguageInfo::TrySetLocale() const
     // Prefer to use the locale names instead of locale identifiers if
     // supported, both at the OS level (LOCALE_SNAME) and by the CRT (check by
     // calling setlocale()).
-    const char* const retloc = wxSetlocale(LC_ALL, LocaleTag);
+    const char* const retloc = wxSetlocale(LC_ALL, GetCanonicalWithRegion());
     if ( retloc )
         return retloc;
 
