@@ -244,6 +244,10 @@ All (GUI):
 - Fix wxFLEX_GROWMODE_ALL in wxFlexGridSizer with proportions (#23253).
 - Fix wxEditorDialogProperty in wxPropertyGrid (#23272).
 
+wxMSW:
+
+- Fix setting locale for wxLANGUAGE_UKRAINIAN (Ulrich Telle, #23210).
+
 wxOSX:
 
 - Respect composition mode when drawing bitmaps (#23240).

@@ -126,7 +126,7 @@ const char* wxLanguageInfo::TrySetLocale() const
     // CRT (check by calling setlocale()).
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
-        locale = LocaleTag;
+        locale = GetCanonicalWithRegion();
         const char* const retloc = wxSetlocale(LC_ALL, locale);
         if ( retloc )
             return retloc;
