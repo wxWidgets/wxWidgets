@@ -32,6 +32,8 @@ wxWindow* wxCreateOverlayWindow(const wxRect& rect)
                     WS_EX_NOACTIVATE
                 );
 
+    overlayWin->SetBackgroundStyle(wxBG_STYLE_PAINT);
+
     if ( !::SetLayeredWindowAttributes(GetHwndOf(overlayWin), 0, 128,
                                        LWA_COLORKEY | LWA_ALPHA) )
     {
