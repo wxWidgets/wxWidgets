@@ -1965,7 +1965,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         if ( DoSelectPage(index) )
         {
             // Event dispatching must be last.
-            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, (wxPGProperty*)nullptr );
+            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, wxNullProperty );
         }
         else
         {

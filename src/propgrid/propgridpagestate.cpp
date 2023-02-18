@@ -389,7 +389,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 
     if ( IsDisplayed() )
     {
-        pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)nullptr);
+        pg->SendEvent(wxEVT_PG_COLS_RESIZED, wxNullProperty);
     }
 }
 
