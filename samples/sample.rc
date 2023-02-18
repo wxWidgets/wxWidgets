@@ -17,6 +17,8 @@
 // starting with "a"
 aaaaaaaa ICON "sample.ico"
 
+horse    CURSOR "horse.cur"
+
 // this icon is used with wxFrame::SetIcon()
 sample ICON "sample.ico"
 
