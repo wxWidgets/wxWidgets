@@ -867,11 +867,8 @@ void wxSizer::SetContainingWindow(wxWindow *win)
 
     // set the same window for all nested sizers as well, they also are in the
     // same window
-    for ( wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-          node;
-          node = node->GetNext() )
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem *const item = node->GetData();
         wxSizer *const sizer = item->GetSizer();
 
         if ( sizer )
@@ -995,11 +992,8 @@ bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
     wxASSERT_MSG( oldwin, wxT("Replacing null window") );
     wxASSERT_MSG( newwin, wxT("Replacing with null window") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetWindow() == oldwin)
         {
             item->AssignWindow(newwin);
@@ -1011,8 +1005,6 @@ bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
             if (item->GetSizer()->Replace( oldwin, newwin, true ))
                 return true;
         }
-
-        node = node->GetNext();
     }
 
     return false;
@@ -1023,11 +1015,8 @@ bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
     wxASSERT_MSG( oldsz, wxT("Replacing null sizer") );
     wxASSERT_MSG( newsz, wxT("Replacing with null sizer") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetSizer() == oldsz)
         {
             item->AssignSizer(newsz);
@@ -1038,8 +1027,6 @@ bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
             if (item->GetSizer()->Replace( oldsz, newsz, true ))
                 return true;
         }
-
-        node = node->GetNext();
     }
 
     return false;
@@ -1071,14 +1058,10 @@ bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
 void wxSizer::Clear( bool delete_windows )
 {
     // First clear the ContainingSizer pointers
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->IsWindow())
             item->GetWindow()->SetContainingSizer( nullptr );
-        node = node->GetNext();
     }
 
     // Destroy the windows if needed
@@ -1091,13 +1074,9 @@ void wxSizer::Clear( bool delete_windows )
 
 void wxSizer::DeleteWindows()
 {
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         item->DeleteWindows();
-        node = node->GetNext();
     }
 }
 
@@ -1247,33 +1226,25 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
 
     // Is it our immediate child?
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetWindow() == window)
         {
             item->SetMinSize( width, height );
             return true;
         }
-        node = node->GetNext();
     }
 
     // No?  Search any subsizers we own then
 
-    node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if ( item->GetSizer() &&
              item->GetSizer()->DoSetItemMinSize( window, width, height ) )
         {
             // A child sizer found the requested windw, exit.
             return true;
         }
-        node = node->GetNext();
     }
 
     return false;
@@ -1285,33 +1256,25 @@ bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
 
     // Is it our immediate child?
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetSizer() == sizer)
         {
             item->GetSizer()->DoSetMinSize( width, height );
             return true;
         }
-        node = node->GetNext();
     }
 
     // No?  Search any subsizers we own then
 
-    node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if ( item->GetSizer() &&
              item->GetSizer()->DoSetItemMinSize( sizer, width, height ) )
         {
             // A child found the requested sizer, exit.
             return true;
         }
-        node = node->GetNext();
     }
 
     return false;
@@ -1343,11 +1306,8 @@ wxSizerItem* wxSizer::GetItem( wxWindow *window, bool recursive )
 {
     wxASSERT_MSG( window, wxT("GetItem for null window") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetWindow() == window)
         {
             return item;
@@ -1358,8 +1318,6 @@ wxSizerItem* wxSizer::GetItem( wxWindow *window, bool recursive )
             if (subitem)
                 return subitem;
         }
-
-        node = node->GetNext();
     }
 
     return nullptr;
@@ -1369,11 +1327,8 @@ wxSizerItem* wxSizer::GetItem( wxSizer *sizer, bool recursive )
 {
     wxASSERT_MSG( sizer, wxT("GetItem for null sizer") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem *item = node->GetData();
-
         if (item->GetSizer() == sizer)
         {
             return item;
@@ -1384,8 +1339,6 @@ wxSizerItem* wxSizer::GetItem( wxSizer *sizer, bool recursive )
             if (subitem)
                 return subitem;
         }
-
-        node = node->GetNext();
     }
 
     return nullptr;
@@ -1405,11 +1358,8 @@ wxSizerItem* wxSizer::GetItemById( int id, bool recursive )
     // This gets a sizer item by the id of the sizer item
     // and NOT the id of a window if the item is a window.
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetId() == id)
         {
             return item;
@@ -1420,8 +1370,6 @@ wxSizerItem* wxSizer::GetItemById( int id, bool recursive )
             if (subitem)
                 return subitem;
         }
-
-        node = node->GetNext();
     }
 
     return nullptr;
@@ -1468,22 +1416,18 @@ bool wxSizer::Show( size_t index, bool show)
 
 void wxSizer::ShowItems( bool show )
 {
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        node->GetData()->Show( show );
-        node = node->GetNext();
+        item->Show( show );
     }
 }
 
 bool wxSizer::AreAnyItemsShown() const
 {
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        if ( node->GetData()->IsShown() )
+        if ( item->IsShown() )
             return true;
-        node = node->GetNext();
     }
 
     return false;
@@ -1491,16 +1435,12 @@ bool wxSizer::AreAnyItemsShown() const
 
 bool wxSizer::IsShown( wxWindow *window ) const
 {
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetWindow() == window)
         {
             return item->IsShown();
         }
-        node = node->GetNext();
     }
 
     wxFAIL_MSG( wxT("IsShown failed to find sizer item") );
@@ -1510,16 +1450,12 @@ bool wxSizer::IsShown( wxWindow *window ) const
 
 bool wxSizer::IsShown( wxSizer *sizer ) const
 {
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( const wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
-
         if (item->GetSizer() == sizer)
         {
             return item->IsShown();
         }
-        node = node->GetNext();
     }
 
     wxFAIL_MSG( wxT("IsShown failed to find sizer item") );
@@ -1689,44 +1625,32 @@ wxSize wxGridSizer::CalcMin()
     int w = 0;
     int h = 0;
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
         wxSize           sz( item->CalcMin() );
 
         w = wxMax( w, sz.x );
         h = wxMax( h, sz.y );
-
-        node = node->GetNext();
     }
 
     // In case we have a nested sizer with a two step algo , give it
     // a chance to adjust to that (we give it width component)
-    node = m_children.GetFirst();
     bool didChangeMinSize = false;
-    while (node)
+    for ( wxSizerItem* item: m_children )
     {
-        wxSizerItem     *item = node->GetData();
         didChangeMinSize |= item->InformFirstDirection( wxHORIZONTAL, w, -1 );
-
-        node = node->GetNext();
     }
 
     // And redo iteration in case min size changed
     if( didChangeMinSize )
     {
-        node = m_children.GetFirst();
         w = h = 0;
-        while (node)
+        for ( const wxSizerItem* item: m_children )
         {
-            wxSizerItem     *item = node->GetData();
             wxSize           sz( item->GetMinSizeWithBorder() );
 
             w = wxMax( w, sz.x );
             h = wxMax( h, sz.y );
-
-            node = node->GetNext();
         }
     }
 
@@ -2738,13 +2662,9 @@ wxBoxSizer::InformFirstDirection(int direction, int size, int availableOtherDir)
 
     bool didUse = false;
 
-    for ( wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-          node;
-          node = node->GetNext() )
+    for ( wxSizerItem* item: m_children )
     {
-        didUse |= node->GetData()->InformFirstDirection(direction,
-                                                        size,
-                                                        availableOtherDir);
+        didUse |= item->InformFirstDirection(direction, size, availableOtherDir);
     }
 
     return didUse;
@@ -2793,12 +2713,8 @@ wxStaticBoxSizer::~wxStaticBoxSizer()
 
 bool wxStaticBoxSizer::CheckForNonBoxChildren(wxSizer* sizer) const
 {
-    for ( wxSizerItemList::compatibility_iterator node = sizer->GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
+    for ( const wxSizerItem* item: sizer->GetChildren() )
     {
-        wxSizerItem *const item = node->GetData();
-
         if ( wxWindow* const win = item->GetWindow() )
         {
             if ( CheckIfNonBoxChild(win) )
