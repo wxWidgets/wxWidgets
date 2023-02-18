@@ -28,6 +28,7 @@
 #include "wx/stopwatch.h"
 #include "wx/tooltip.h"
 #include "wx/wupdlock.h"
+#include "wx/stdpaths.h"
 
 class WindowTestCase
 {
@@ -148,6 +149,16 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 
     CHECK(m_window->GetCursor().IsOk());
 
+    wxCursor resCursor1( "horse" );
+    CHECK( resCursor1.IsOk() );
+#ifdef __WXOSX__
+    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
+    wxCursor resCursor2( "horse" );
+    CHECK( resCursor2.IsOk() );
+    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.cur" );
+    wxCursor resCursor3( "horse" );
+    CHECK( resCursor3.IsOk() );
+#endif
 #if wxUSE_CARET
     CHECK(!m_window->GetCaret());
 
