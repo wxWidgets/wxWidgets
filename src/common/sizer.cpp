@@ -1619,9 +1619,9 @@ void wxGridSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
 
             SetItemBounds(*i, x, y, w, h);
 
-            x = x + w + m_hgap;
+            x += w + m_hgap;
         }
-        y = y + h + m_vgap;
+        y += h + m_vgap;
     }
 }
 
