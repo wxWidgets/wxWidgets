@@ -1595,8 +1595,8 @@ int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
 
 void wxGridSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
 {
-    int nitems, nrows, ncols;
-    if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
+    int nrows, ncols;
+    if ( CalcRowsCols(nrows, ncols) == 0 )
         return;
 
     wxSize sz( GetSize() );
@@ -1605,19 +1605,20 @@ void wxGridSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
     int w = (sz.x - (ncols - 1) * m_hgap) / ncols;
     int h = (sz.y - (nrows - 1) * m_vgap) / nrows;
 
+    wxSizerItemList::const_iterator i = m_children.begin();
+    const wxSizerItemList::const_iterator end = m_children.end();
+
     int y = pt.y;
     for (int r = 0; r < nrows; r++)
     {
         int x = pt.x;
-        for (int c = 0; c < ncols; c++)
+        for (int c = 0; c < ncols; c++, ++i)
         {
-            int i = r * ncols + c;
-            if (i < nitems)
-            {
-                wxSizerItemList::compatibility_iterator node = m_children.Item( i );
+            if ( i == end )
+                return;
 
-                SetItemBounds( node->GetData(), x, y, w, h);
-            }
+            SetItemBounds(*i, x, y, w, h);
+
             x = x + w + m_hgap;
         }
         y = y + h + m_vgap;
