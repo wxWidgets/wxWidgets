@@ -1605,8 +1605,6 @@ void wxGridSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
             {
                 wxSizerItemList::compatibility_iterator node = m_children.Item( i );
 
-                wxASSERT_MSG( node, wxT("Failed to find SizerItemList node") );
-
                 SetItemBounds( node->GetData(), x, y, w, h);
             }
             y = y + h + m_vgap;
