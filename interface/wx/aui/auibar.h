@@ -703,6 +703,14 @@ public:
     bool SetFont(const wxFont& font);
 
 
+    ///@{
+    /**
+        Add a new tool to the toolbar.
+
+        This function works similarly to the corresponding wxToolBar::AddTool()
+        overloads, but notice that there is currently no support for @a
+        client_data in this class, i.e. this parameter is simply ignored.
+     */
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
@@ -725,6 +733,7 @@ public:
                  wxObject* client_data = nullptr,
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString);
+    ///@}
 
     wxAuiToolBarItem* AddLabel(int toolId,
                   const wxString& label = wxEmptyString,
