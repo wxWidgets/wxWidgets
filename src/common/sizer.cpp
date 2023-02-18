@@ -2780,56 +2780,74 @@ wxStaticBoxSizer::~wxStaticBoxSizer()
         m_staticBox->WXDestroyWithoutChildren();
 }
 
-wxSizerItem* wxStaticBoxSizer::DoInsert(size_t index, wxSizerItem* item)
+bool wxStaticBoxSizer::CheckForNonBoxChildren(wxSizer* sizer) const
 {
-    if ( wxWindow* const win = item->GetWindow() )
+    for ( wxSizerItemList::compatibility_iterator node = sizer->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        // Warn if the window is not a child of the static box, which it really
-        // should be, even if we still support using the box parent as parent
-        // too for compatibility.
-        if ( !m_staticBox->IsDescendant(win) )
-        {
-            m_hasNonBoxChildren = true;
+        wxSizerItem *const item = node->GetData();
 
-            wxLogDebug("Element %s of wxStaticBoxSizer should be created "
-                       "as child of its wxStaticBox and not of %s.",
-                       wxDumpWindow(win),
-                       wxDumpWindow(win->GetParent()));
+        if ( wxWindow* const win = item->GetWindow() )
+        {
+            if ( CheckIfNonBoxChild(win) )
+                return true;
+        }
+        else if ( wxSizer* const subsizer = item->GetSizer() )
+        {
+            if ( CheckForNonBoxChildren(subsizer) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool wxStaticBoxSizer::CheckIfNonBoxChild(wxWindow* win) const
+{
+    if ( m_staticBox->IsDescendant(win) )
+        return false;
+
+    // Warn if the window is not a child of the static box, which it really
+    // should be, even if we still support using the box parent as parent
+    // too for compatibility.
+    wxLogDebug("Element %s of wxStaticBoxSizer should be created "
+               "as child of its wxStaticBox and not of %s.",
+               wxDumpWindow(win),
+               wxDumpWindow(win->GetParent()));
 
 #ifdef __WXMSW__
-            // Additionally, under MSW the windows inside a static box are not
-            // drawn at all when compositing is used, so we have to disable it.
-            //
-            // An alternative could be to Reparent() the window to the static
-            // box, but it might break the existing code and as we only allow
-            // this for compatibility in the first place, it seems better not
-            // to risk it.
-            m_staticBox->MSWDisableComposited();
+    // Additionally, under MSW the windows inside a static box are not
+    // drawn at all when compositing is used, so we have to disable it.
+    //
+    // An alternative could be to Reparent() the window to the static
+    // box, but it might break the existing code and as we only allow
+    // this for compatibility in the first place, it seems better not
+    // to risk it.
+    m_staticBox->MSWDisableComposited();
 #endif // __WXMSW__
-        }
 
-        // Also check for the non-supported scenario in which both windows
-        // using box as their parent and the ones using its parent are used:
-        // this won't work correctly because the latter ones won't use the
-        // required offset and so won't be laid out correctly, see the code
-        // dealing with m_position in RepositionChildren() below.
-        if ( m_hasNonBoxChildren && !m_staticBox->GetChildren().empty() )
+    return true;
+}
+
+wxSizerItem* wxStaticBoxSizer::DoInsert(size_t index, wxSizerItem* item)
+{
+    // Check if we have any non-box children unless we already know that we do.
+    if ( !m_hasNonBoxChildren )
+    {
+        if ( wxWindow* const win = item->GetWindow() )
         {
-            wxASSERT_MSG
-            (
-                !m_hasNonBoxChildren,
-                "All items of wxStaticBoxSizer must use the same parent.\n"
-                "\n"
-                "It is strongly recommended to use the associated static box "
-                "as the parent for all of them, but if not, all items must "
-                "use the containing window as parent.\n"
-                "\n"
-                "Mixing items using different parents inside the same sizer "
-                "is NOT supported."
-            );
-
-            // One assert is enough, so reset it to avoid giving it again.
-            m_hasNonBoxChildren = false;
+            // We can check immediately if we have any non-box children and
+            // it's better to do it here, for example to allow putting a
+            // breakpoint on wxLogDebug() message above and immediately seeing
+            // where the item is inserted from, if it's not clear otherwise.
+            m_hasNonBoxChildren = CheckIfNonBoxChild(win);
+        }
+        else if ( item->IsSizer() )
+        {
+            // We can't check immediately as elements can be added to the child
+            // sizer after adding it to this one, so schedule a check for later.
+            m_hasNonBoxChildren = -1;
         }
     }
 
@@ -2848,7 +2866,11 @@ void wxStaticBoxSizer::RepositionChildren(const wxSize& minSize)
     m_size.y -= top_border + other_border;
 
     wxPoint old_pos( m_position );
-    if (m_staticBox->GetChildren().GetCount() > 0)
+
+    if ( m_hasNonBoxChildren == -1 )
+        m_hasNonBoxChildren = CheckForNonBoxChildren(this);
+
+    if ( !m_hasNonBoxChildren )
     {
 #if defined( __WXGTK__ )
         // if the wxStaticBox has created a wxPizza to contain its children
@@ -2876,6 +2898,30 @@ void wxStaticBoxSizer::RepositionChildren(const wxSize& minSize)
         // case we need to position them with coordinates relative to our common parent
         m_position.x += other_border;
         m_position.y += top_border;
+
+        // Also check for the non-supported scenario in which both windows
+        // using box as their parent and the ones using its parent are used:
+        // this won't work correctly because the latter ones won't use the
+        // required offset and so won't be laid out correctly, see the code
+        // dealing with m_position in RepositionChildren() below.
+        if ( !m_staticBox->GetChildren().empty() )
+        {
+            wxASSERT_MSG
+            (
+                !m_hasNonBoxChildren,
+                "All items of wxStaticBoxSizer must use the same parent.\n"
+                "\n"
+                "It is strongly recommended to use the associated static box "
+                "as the parent for all of them, but if not, all items must "
+                "use the containing window as parent.\n"
+                "\n"
+                "Mixing items using different parents inside the same sizer "
+                "is NOT supported."
+            );
+
+            // One assert is enough, so reset it to avoid giving it again.
+            m_hasNonBoxChildren = false;
+        }
     }
 
     wxBoxSizer::RepositionChildren(minSize);

@@ -1077,10 +1077,17 @@ protected:
     virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item) override;
 
 private:
-    // Set to true if any items _not_ using the associated static box as parent
-    // are added to this sizer: this is still supported for backwards
-    // compatibility but is not recommended.
-    bool m_hasNonBoxChildren = false;
+    // Return true if we have any by recursively examining all children of this
+    // sizer.
+    bool CheckForNonBoxChildren(wxSizer* sizer) const;
+
+    // Return true if this particular window is not a child of the static box.
+    bool CheckIfNonBoxChild(wxWindow* win) const;
+
+    // Set to 1 if any items _not_ using the associated static box as parent
+    // are added to this sizer, to 0 if there are none and to -1 if we have to
+    // check whether there are any.
+    int m_hasNonBoxChildren = 0;
 
     wxDECLARE_CLASS(wxStaticBoxSizer);
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxSizer);
