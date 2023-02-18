@@ -858,6 +858,22 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
     return guard.Release();
 }
 
+wxSizerItemList::compatibility_iterator wxSizer::GetChildNode(size_t index) const
+{
+    wxCHECK_MSG
+    (
+        index < m_children.GetCount(),
+        {},
+        wxString::Format
+        (
+            "Invalid sizer item child index %zu, sizer has only %zu elements.",
+            index, m_children.GetCount()
+        )
+    );
+
+    return m_children.Item( index );
+}
+
 void wxSizer::SetContainingWindow(wxWindow *win)
 {
     if ( win == m_containingWindow )
@@ -910,13 +926,11 @@ bool wxSizer::Remove( wxSizer *sizer )
 
 bool wxSizer::Remove( int index )
 {
-    wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
-                 false,
-                 wxT("Remove index is out of range") );
+    wxCHECK_MSG( index >= 0, false, wxT("Index must be positive") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.Item( index );
-
-    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
+    const auto node = GetChildNode(static_cast<size_t>(index));
+    if ( !node )
+        return false;
 
     delete node->GetData();
     m_children.Erase( node );
@@ -969,13 +983,11 @@ bool wxSizer::Detach( wxWindow *window )
 
 bool wxSizer::Detach( int index )
 {
-    wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
-                 false,
-                 wxT("Detach index is out of range") );
+    wxCHECK_MSG( index >= 0, false, wxT("Index must be positive") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.Item( index );
-
-    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
+    const auto node = GetChildNode(static_cast<size_t>(index));
+    if ( !node )
+        return false;
 
     wxSizerItem *item = node->GetData();
 
@@ -1034,12 +1046,11 @@ bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
 
 bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
 {
-    wxCHECK_MSG( old < m_children.GetCount(), false, wxT("Replace index is out of range") );
     wxCHECK_MSG( newitem, false, wxT("Replacing with null item") );
 
-    wxSizerItemList::compatibility_iterator node = m_children.Item( old );
-
-    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
+    auto node = GetChildNode(old);
+    if ( !node )
+        return false;
 
     wxSizerItem *item = node->GetData();
     node->SetData(newitem);
@@ -1282,9 +1293,9 @@ bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
 
 bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
 {
-    wxSizerItemList::compatibility_iterator node = m_children.Item( index );
-
-    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
+    const auto node = GetChildNode(index);
+    if ( !node )
+        return false;
 
     wxSizerItem     *item = node->GetData();
 
@@ -1346,11 +1357,11 @@ wxSizerItem* wxSizer::GetItem( wxSizer *sizer, bool recursive )
 
 wxSizerItem* wxSizer::GetItem( size_t index )
 {
-    wxCHECK_MSG( index < m_children.GetCount(),
-                 nullptr,
-                 wxT("GetItem index is out of range") );
+    const auto node = GetChildNode(index);
+    if ( !node )
+        return nullptr;
 
-    return m_children.Item( index )->GetData();
+    return node->GetData();
 }
 
 wxSizerItem* wxSizer::GetItemById( int id, bool recursive )
@@ -1465,11 +1476,11 @@ bool wxSizer::IsShown( wxSizer *sizer ) const
 
 bool wxSizer::IsShown( size_t index ) const
 {
-    wxCHECK_MSG( index < m_children.GetCount(),
-                 false,
-                 wxT("IsShown index is out of range") );
+    const auto node = GetChildNode(index);
+    if ( !node )
+        return false;
 
-    return m_children.Item( index )->GetData()->IsShown();
+    return node->GetData()->IsShown();
 }
 
 
