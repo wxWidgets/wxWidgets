@@ -539,14 +539,21 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
 {
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+
+    // Optionally use this pen to draw a border which has less contrast in dark
+    // mode than the default white box which is "too shiny"
+    wxPen penBorder;
     if ( wxMSWDarkMode::IsActive() )
     {
-        // draw grey border which has less contrast in dark mode than the default
-        // white box which is "too shiny"
+        penBorder = wxMSWDarkMode::GetBorderPen();
+    }
+
+    if ( penBorder.IsOk() )
+    {
         const wxRect clientRect = GetClientRect();
         wxRect rect = clientRect;
         wxDCBrushChanger brushChanger(dc, *wxTRANSPARENT_BRUSH);
-        wxDCPenChanger penChanger(dc, *wxGREY_PEN);
+        wxDCPenChanger penChanger(dc, penBorder);
         if ( !m_labelWin && !GetLabel().empty() )
         {
             // if the control has a font, use it

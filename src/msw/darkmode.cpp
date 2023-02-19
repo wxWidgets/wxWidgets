@@ -330,6 +330,15 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
     return wxColour();
 }
 
+wxPen wxDarkModeSettings::GetBorderPen()
+{
+    // Use a darker pen than the default white one by default. There doesn't
+    // seem to be any standard colour to use for it, Windows itself uses both
+    // 0x666666 and 0x797979 for the borders in the "Colours" control panel
+    // window, so it doesn't seem like anybody cares about consistency here.
+    return *wxGREY_PEN;
+}
+
 // ----------------------------------------------------------------------------
 // Supporting functions for the rest of wxMSW code
 // ----------------------------------------------------------------------------
@@ -384,6 +393,11 @@ void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
 wxColour GetColour(wxSystemColour index)
 {
     return wxDarkModeModule::GetSettings().GetColour(index);
+}
+
+wxPen GetBorderPen()
+{
+    return wxDarkModeModule::GetSettings().GetBorderPen();
 }
 
 HBRUSH GetBackgroundBrush()
@@ -695,6 +709,11 @@ void AllowForWindow(HWND WXUNUSED(hwnd), const wchar_t* WXUNUSED(themeClass))
 wxColour GetColour(wxSystemColour WXUNUSED(index))
 {
     return wxColour();
+}
+
+wxPen GetBorderPen()
+{
+    return wxPen{};
 }
 
 HBRUSH GetBackgroundBrush()

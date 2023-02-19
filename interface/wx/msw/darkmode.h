@@ -59,4 +59,16 @@ public:
         wxWidgets versions.
      */
     virtual wxColour GetColour(wxSystemColour index);
+
+    /**
+        Get the pen to use for drawing wxStaticBox border in dark mode.
+
+        Returning an invalid pen indicates that the default border drawn by the
+        system should be used, which doesn't look very well in dark mode but
+        shouldn't result in any problems worse than cosmetic ones.
+
+        The base class version returns a grey pen, which looks better than the
+        default white one.
+     */
+    virtual wxPen GetBorderPen();
 };

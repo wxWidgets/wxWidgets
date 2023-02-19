@@ -36,6 +36,9 @@ void AllowForWindow(HWND hwnd,
 // colour if it isn't.
 wxColour GetColour(wxSystemColour index);
 
+// Get the pen to use for drawing the border, see wxDarkModeSettings.
+wxPen GetBorderPen();
+
 // Return the background brush to be used by default in dark mode.
 HBRUSH GetBackgroundBrush();
 

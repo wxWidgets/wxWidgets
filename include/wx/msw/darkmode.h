@@ -25,6 +25,13 @@ public:
     // Get the colour to use for the given system colour when dark mode is on.
     virtual wxColour GetColour(wxSystemColour index);
 
+    // Get the pen to use for drawing wxStaticBox border in dark mode.
+    //
+    // Returning an invalid pen indicates that the default border drawn by the
+    // system should be used, which doesn't look very well in dark mode but
+    // shouldn't result in any problems worse than cosmetic ones.
+    virtual wxPen GetBorderPen();
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxDarkModeSettings);
 };
