@@ -18,6 +18,8 @@
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridpagestate.h"
 
+#include <type_traits>
+
 // -----------------------------------------------------------------------
 // wxPropertyGrid Validation Failure behaviour Flags
 enum class wxPGVFBFlags : int
