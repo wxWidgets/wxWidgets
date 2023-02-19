@@ -576,7 +576,7 @@ public:
     wxDEPRECATED_MSG("use HideProperty with flags argument as wxPGPropertyValuesFlags")
     bool HideProperty(wxPGPropArg id, bool hide, int flags)
     {
-        HideProperty(id, hide, static_cast<wxPGPropertyValuesFlags>(flags));
+        return HideProperty(id, hide, static_cast<wxPGPropertyValuesFlags>(flags));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
     bool HideProperty(wxPGPropArg id, bool hide = true,
