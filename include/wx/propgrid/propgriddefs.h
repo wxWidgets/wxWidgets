@@ -26,7 +26,6 @@ class WXDLLIMPEXP_FWD_CORE wxFont;
 #if wxUSE_STD_CONTAINERS
 #include <numeric>
 #endif // wxUSE_STD_CONTAINERS
-#include <type_traits>
 
 // -----------------------------------------------------------------------
 
@@ -324,19 +323,17 @@ enum class wxPGPropertyValuesFlags : int
 
 constexpr wxPGPropertyValuesFlags operator|(wxPGPropertyValuesFlags a, wxPGPropertyValuesFlags b)
 {
-    return static_cast<wxPGPropertyValuesFlags>(static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(a)
-        | static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(b));
+    return static_cast<wxPGPropertyValuesFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 constexpr wxPGPropertyValuesFlags operator&(wxPGPropertyValuesFlags a, wxPGPropertyValuesFlags b)
 {
-    return static_cast<wxPGPropertyValuesFlags>(static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(a)
-        & static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(b));
+    return static_cast<wxPGPropertyValuesFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 constexpr bool operator!(wxPGPropertyValuesFlags a)
 {
-    return static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(a) == 0;
+    return static_cast<int>(a) == 0;
 }
 
 #if WXWIN_COMPATIBILITY_3_2
@@ -401,8 +398,7 @@ enum class wxPGSetValueFlags : int
 
 constexpr wxPGSetValueFlags operator|(wxPGSetValueFlags a, wxPGSetValueFlags b)
 {
-    return static_cast<wxPGSetValueFlags>(static_cast<std::underlying_type_t<wxPGSetValueFlags>>(a)
-        | static_cast<std::underlying_type_t<wxPGSetValueFlags>>(b));
+    return static_cast<wxPGSetValueFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 constexpr wxPGSetValueFlags operator|=(wxPGSetValueFlags& a, wxPGSetValueFlags b)
@@ -412,13 +408,12 @@ constexpr wxPGSetValueFlags operator|=(wxPGSetValueFlags& a, wxPGSetValueFlags b
 
 constexpr wxPGSetValueFlags operator&(wxPGSetValueFlags a, wxPGSetValueFlags b)
 {
-    return static_cast<wxPGSetValueFlags>(static_cast<std::underlying_type_t<wxPGSetValueFlags>>(a)
-        & static_cast<std::underlying_type_t<wxPGSetValueFlags>>(b));
+    return static_cast<wxPGSetValueFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 constexpr bool operator!(wxPGSetValueFlags a)
 {
-    return static_cast<std::underlying_type_t<wxPGSetValueFlags>>(a) == 0;
+    return static_cast<int>(a) == 0;
 }
 
 #if WXWIN_COMPATIBILITY_3_2
