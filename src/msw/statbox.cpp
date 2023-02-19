@@ -42,6 +42,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 namespace
@@ -538,7 +539,42 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
 void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
 {
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // draw grey border which has less contrast in dark mode than the default
+        // white box which is "too shiny"
+        const wxRect clientRect = GetClientRect();
+        wxRect rect = clientRect;
+        wxDCBrushChanger brushChanger(dc, *wxTRANSPARENT_BRUSH);
+        wxDCPenChanger penChanger(dc, *wxGREY_PEN);
+        if ( !m_labelWin && !GetLabel().empty() )
+        {
+            // if the control has a font, use it
+            wxDCFontChanger fontChanger(dc);
+            if ( GetFont().IsOk() )
+            {
+                dc.SetFont(GetFont());
+            }
+
+            // Make sure that the label is vertically aligned with the border
+            wxCoord width, height;
+
+            // Use "Tp" as our sampling text to get the
+            // maximum height from the current font
+            dc.GetTextExtent(L"Tp", &width, &height);
+
+            // adjust the border height & Y coordinate
+            int offsetFromTop = (height / 2) + LABEL_VERT_BORDER;
+            rect.SetTop(offsetFromTop);
+            rect.SetHeight(rect.GetHeight() - offsetFromTop);
+        }
+
+        dc.DrawRectangle(rect);
+    }
+    else
+    {
+        MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
+    }
 
 #if wxUSE_UXTHEME
     // when using XP themes, neither setting the text colour nor transparent
