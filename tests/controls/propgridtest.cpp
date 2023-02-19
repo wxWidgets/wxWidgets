@@ -588,7 +588,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         }
         REQUIRE(propertiesPageLast == propertiesPageLastInit);
 
-        int countAllProperties = 0;
+        size_t countAllProperties = 0;
         for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
         {
             countAllProperties++;
@@ -650,7 +650,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         }
         REQUIRE(propertiesPageFirst == propertiesPageFirstInit);
 
-        int countAllProperties = 0;
+        size_t countAllProperties = 0;
         for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
         {
             countAllProperties++;
