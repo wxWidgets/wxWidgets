@@ -319,7 +319,7 @@ static void PopulateWithExamples(wxPropertyGridManager* pgManager)
     combinedFlags.Add(WXSIZEOF(flags_prop_labels), flags_prop_labels, flags_prop_values);
     pg->Append(new wxFlagsProperty("FlagsProperty", wxPG_LABEL,
                    combinedFlags, wxTheApp->GetTopWindow()->GetWindowStyle() ) );
-    pg->SetPropertyAttribute("FlagsProperty", wxPG_BOOL_USE_CHECKBOX, true, wxPG_RECURSE);
+    pg->SetPropertyAttribute("FlagsProperty", wxPG_BOOL_USE_CHECKBOX, true, wxPGPropertyValuesFlags::Recurse);
 
     wxArrayString tchoices;
     tchoices.Add("Cabbage");
@@ -431,8 +431,8 @@ static wxPropertyGridManager* CreateGrid(int style, int extraStyle)
     pgManager->SetExtraStyle(extraStyle);
 
     // This is the default validation failure behaviour
-    pgManager->SetValidationFailureBehavior(wxPG_VFB_MARK_CELL |
-        wxPG_VFB_SHOW_MESSAGEBOX);
+    pgManager->SetValidationFailureBehavior(wxPGVFBFlags::MarkCell |
+        wxPGVFBFlags::ShowMessageBox);
 
     wxPropertyGrid* pg = pgManager->GetGrid();
     // Set somewhat different unspecified value appearance
@@ -1139,9 +1139,9 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     SECTION("GetPropertyValues")
     {
         wxPropertyGridPage* page1 = pgManager->GetPage(0);
-        wxVariant pg1_values = page1->GetPropertyValues("Page1", nullptr, wxPG_KEEP_STRUCTURE);
+        wxVariant pg1_values = page1->GetPropertyValues("Page1", nullptr, wxPGPropertyValuesFlags::KeepStructure);
         wxPropertyGridPage* page2 = pgManager->GetPage(1);
-        wxVariant pg2_values = page2->GetPropertyValues("Page2", nullptr, wxPG_KEEP_STRUCTURE);
+        wxVariant pg2_values = page2->GetPropertyValues("Page2", nullptr, wxPGPropertyValuesFlags::KeepStructure);
         SUCCEED();
 
         SECTION("SetPropertyValues")
@@ -1332,13 +1332,13 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
         pgManager->Freeze();
         // Set custom colours.
-        pg->SetPropertyTextColour("Appearance", wxColour(255, 0, 0), wxPG_DONT_RECURSE);
+        pg->SetPropertyTextColour("Appearance", wxColour(255, 0, 0), wxPGPropertyValuesFlags::DontRecurse);
         pg->SetPropertyBackgroundColour("Appearance", wxColour(255, 255, 183));
         pg->SetPropertyTextColour("Appearance", wxColour(255, 0, 183));
-        pg->SetPropertyTextColour("PositionCategory", wxColour(0, 255, 0), wxPG_DONT_RECURSE);
+        pg->SetPropertyTextColour("PositionCategory", wxColour(0, 255, 0), wxPGPropertyValuesFlags::DontRecurse);
         pg->SetPropertyBackgroundColour("PositionCategory", wxColour(255, 226, 190));
         pg->SetPropertyTextColour("PositionCategory", wxColour(255, 0, 190));
-        pg->SetPropertyTextColour("Environment", wxColour(0, 0, 255), wxPG_DONT_RECURSE);
+        pg->SetPropertyTextColour("Environment", wxColour(0, 0, 255), wxPGPropertyValuesFlags::DontRecurse);
         pg->SetPropertyBackgroundColour("Environment", wxColour(208, 240, 175));
         pg->SetPropertyTextColour("Environment", wxColour(255, 255, 255));
         pg->SetPropertyBackgroundColour("More Examples", wxColour(172, 237, 255));

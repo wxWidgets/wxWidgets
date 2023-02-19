@@ -289,37 +289,71 @@ WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
 
 // -----------------------------------------------------------------------
 
-enum wxPG_PROPERTYVALUES_FLAGS
+enum class wxPGPropertyValuesFlags : int
 {
-// Flag for wxPropertyGridInterface::SetProperty* functions,
-// wxPropertyGridInterface::HideProperty(), etc.
-// Apply changes only for the property in question.
-wxPG_DONT_RECURSE                 = 0x00000000,
+    // Flag for wxPropertyGridInterface::SetProperty* functions,
+    // wxPropertyGridInterface::HideProperty(), etc.
+    // Apply changes only for the property in question.
+    DontRecurse      = 0x00000000,
 
-// Flag for wxPropertyGridInterface::GetPropertyValues().
-// Use this flag to retain category structure; each sub-category
-// will be its own wxVariantList of wxVariant.
-wxPG_KEEP_STRUCTURE               = 0x00000010,
+    // Flag for wxPropertyGridInterface::GetPropertyValues().
+    // Use this flag to retain category structure; each sub-category
+    // will be its own wxVariantList of wxVariant.
+    KeepStructure    = 0x00000010,
 
-// Flag for wxPropertyGridInterface::SetProperty* functions,
-// wxPropertyGridInterface::HideProperty(), etc.
-// Apply changes recursively for the property and all its children.
-wxPG_RECURSE                      = 0x00000020,
+    // Flag for wxPropertyGridInterface::SetProperty* functions,
+    // wxPropertyGridInterface::HideProperty(), etc.
+    // Apply changes recursively for the property and all its children.
+    Recurse          = 0x00000020,
 
-// Flag for wxPropertyGridInterface::GetPropertyValues().
-// Use this flag to include property attributes as well.
-wxPG_INC_ATTRIBUTES               = 0x00000040,
+    // Flag for wxPropertyGridInterface::GetPropertyValues().
+    // Use this flag to include property attributes as well.
+    IncAttributes    = 0x00000040,
 
-// Used when first starting recursion.
-wxPG_RECURSE_STARTS               = 0x00000080,
+    // Used when first starting recursion.
+    RecurseStarts    = 0x00000080,
 
-// Force value change.
-wxPG_FORCE                        = 0x00000100,
+    // Force value change.
+    Force            = 0x00000100,
 
-// Only sort categories and their immediate children.
-// Sorting done by wxPG_AUTO_SORT option uses this.
-wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
+    // Only sort categories and their immediate children.
+    // Sorting done by wxPG_AUTO_SORT option uses this.
+    SortTopLevelOnly = 0x00000200
 };
+
+constexpr wxPGPropertyValuesFlags operator|(wxPGPropertyValuesFlags a, wxPGPropertyValuesFlags b)
+{
+    return static_cast<wxPGPropertyValuesFlags>(static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(a)
+        | static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(b));
+}
+
+constexpr wxPGPropertyValuesFlags operator&(wxPGPropertyValuesFlags a, wxPGPropertyValuesFlags b)
+{
+    return static_cast<wxPGPropertyValuesFlags>(static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(a)
+        & static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(b));
+}
+
+constexpr bool operator!(wxPGPropertyValuesFlags a)
+{
+    return static_cast<std::underlying_type_t<wxPGPropertyValuesFlags>>(a) == 0;
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::DontRecurse instead")
+constexpr wxPGPropertyValuesFlags wxPG_DONT_RECURSE { wxPGPropertyValuesFlags::DontRecurse };
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::KeepStructure instead")
+constexpr wxPGPropertyValuesFlags wxPG_KEEP_STRUCTURE { wxPGPropertyValuesFlags::KeepStructure };
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::Recurse instead")
+constexpr wxPGPropertyValuesFlags wxPG_RECURSE { wxPGPropertyValuesFlags::Recurse };
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::IncAttributes instead")
+constexpr wxPGPropertyValuesFlags wxPG_INC_ATTRIBUTES { wxPGPropertyValuesFlags::IncAttributes };
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::RecurseStarts instead")
+constexpr wxPGPropertyValuesFlags wxPG_RECURSE_STARTS { wxPGPropertyValuesFlags::RecurseStarts };
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::Force instead")
+constexpr wxPGPropertyValuesFlags wxPG_FORCE { wxPGPropertyValuesFlags::Force };
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::SortTopLevelOnly instead")
+constexpr wxPGPropertyValuesFlags wxPG_SORT_TOP_LEVEL_ONLY { wxPGPropertyValuesFlags::SortTopLevelOnly };
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 
@@ -356,13 +390,46 @@ enum wxPG_MISC_ARG_FLAGS
 // -----------------------------------------------------------------------
 
 // wxPGProperty::SetValue() flags
-enum wxPG_SETVALUE_FLAGS
+enum class wxPGSetValueFlags : int
 {
-    wxPG_SETVAL_REFRESH_EDITOR      = 0x0001,
-    wxPG_SETVAL_AGGREGATED          = 0x0002,
-    wxPG_SETVAL_FROM_PARENT         = 0x0004,
-    wxPG_SETVAL_BY_USER             = 0x0008  // Set if value changed by user
+    RefreshEditor = 0x0001,
+    Aggregated    = 0x0002,
+    FromParent    = 0x0004,
+    ByUser        = 0x0008  // Set if value changed by user
 };
+
+constexpr wxPGSetValueFlags operator|(wxPGSetValueFlags a, wxPGSetValueFlags b)
+{
+    return static_cast<wxPGSetValueFlags>(static_cast<std::underlying_type_t<wxPGSetValueFlags>>(a)
+        | static_cast<std::underlying_type_t<wxPGSetValueFlags>>(b));
+}
+
+constexpr wxPGSetValueFlags operator|=(wxPGSetValueFlags& a, wxPGSetValueFlags b)
+{
+    return a = a | b;
+}
+
+constexpr wxPGSetValueFlags operator&(wxPGSetValueFlags a, wxPGSetValueFlags b)
+{
+    return static_cast<wxPGSetValueFlags>(static_cast<std::underlying_type_t<wxPGSetValueFlags>>(a)
+        & static_cast<std::underlying_type_t<wxPGSetValueFlags>>(b));
+}
+
+constexpr bool operator!(wxPGSetValueFlags a)
+{
+    return static_cast<std::underlying_type_t<wxPGSetValueFlags>>(a) == 0;
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGSetValueFlags::RefreshEditor instead")
+constexpr wxPGSetValueFlags wxPG_SETVAL_REFRESH_EDITOR { wxPGSetValueFlags::RefreshEditor };
+wxDEPRECATED_MSG("use wxPGSetValueFlags::Aggregated instead")
+constexpr wxPGSetValueFlags wxPG_SETVAL_AGGREGATED { wxPGSetValueFlags::Aggregated };
+wxDEPRECATED_MSG("use wxPGSetValueFlags::FromParent instead")
+constexpr wxPGSetValueFlags wxPG_SETVAL_FROM_PARENT { wxPGSetValueFlags::FromParent };
+wxDEPRECATED_MSG("use wxPGSetValueFlags::ByUser instead")
+constexpr wxPGSetValueFlags wxPG_SETVAL_BY_USER { wxPGSetValueFlags::ByUser };
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 

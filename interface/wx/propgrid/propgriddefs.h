@@ -57,50 +57,50 @@ constexpr int wxPG_INVALID_VALUE = std::numeric_limits<int>::max();
 
 // -----------------------------------------------------------------------
 
-enum wxPG_GETPROPERTYVALUES_FLAGS
+enum class wxPGPropertyValuesFlags : int
 {
-/** Flag for wxPropertyGridInterface::SetProperty* functions,
-    wxPropertyGridInterface::HideProperty(), etc.
-    Apply changes only for the property in question.
-    @hideinitializer
-*/
-wxPG_DONT_RECURSE                 = 0x00000000,
+    /** Flag for wxPropertyGridInterface::SetProperty* functions,
+        wxPropertyGridInterface::HideProperty(), etc.
+        Apply changes only for the property in question.
+        @hideinitializer
+    */
+    DontRecurse      = 0x00000000,
 
-/** Flag for wxPropertyGridInterface::GetPropertyValues().
-    Use this flag to retain category structure; each sub-category
-    will be its own wxVariantList of wxVariant.
-    @hideinitializer
-*/
-wxPG_KEEP_STRUCTURE               = 0x00000010,
+    /** Flag for wxPropertyGridInterface::GetPropertyValues().
+        Use this flag to retain category structure; each sub-category
+        will be its own wxVariantList of wxVariant.
+        @hideinitializer
+    */
+    KeepStructure    = 0x00000010,
 
-/** Flag for wxPropertyGridInterface::SetProperty* functions,
-    wxPropertyGridInterface::HideProperty(), etc.
-    Apply changes recursively for the property and all its children.
-    @hideinitializer
-*/
-wxPG_RECURSE                      = 0x00000020,
+    /** Flag for wxPropertyGridInterface::SetProperty* functions,
+        wxPropertyGridInterface::HideProperty(), etc.
+        Apply changes recursively for the property and all its children.
+        @hideinitializer
+    */
+    Recurse          = 0x00000020,
 
-/** Flag for wxPropertyGridInterface::GetPropertyValues().
-    Use this flag to include property attributes as well.
-    @hideinitializer
-*/
-wxPG_INC_ATTRIBUTES               = 0x00000040,
+    /** Flag for wxPropertyGridInterface::GetPropertyValues().
+        Use this flag to include property attributes as well.
+        @hideinitializer
+    */
+    IncAttributes    = 0x00000040,
 
-/** Used when first starting recursion.
-    @hideinitializer
-*/
-wxPG_RECURSE_STARTS               = 0x00000080,
+    /** Used when first starting recursion.
+        @hideinitializer
+    */
+    RecurseStarts    = 0x00000080,
 
-/** Force value change.
-    @hideinitializer
-*/
-wxPG_FORCE                        = 0x00000100,
+    /** Force value change.
+        @hideinitializer
+    */
+    Force            = 0x00000100,
 
-/** Only sort categories and their immediate children.
-    Sorting done by ::wxPG_AUTO_SORT option uses this.
-    @hideinitializer
-*/
-wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
+    /** Only sort categories and their immediate children.
+        Sorting done by ::wxPG_AUTO_SORT option uses this.
+        @hideinitializer
+    */
+    SortTopLevelOnly = 0x00000200
 };
 
 // -----------------------------------------------------------------------
@@ -157,24 +157,27 @@ enum wxPG_MISC_ARG_FLAGS
 
 /** wxPGProperty::SetValue() flags
 */
-enum wxPG_SETVALUE_FLAGS
+enum class wxPGSetValueFlags : int
 {
     /**
         @hideinitializer
     */
-    wxPG_SETVAL_REFRESH_EDITOR      = 0x0001,
+    RefreshEditor = 0x0001,
+
     /**
         @hideinitializer
     */
-    wxPG_SETVAL_AGGREGATED          = 0x0002,
+    Aggregated    = 0x0002,
+
     /**
         @hideinitializer
     */
-    wxPG_SETVAL_FROM_PARENT         = 0x0004,
+    FromParent    = 0x0004,
+
     /** Set if value changed by user
         @hideinitializer
     */
-    wxPG_SETVAL_BY_USER             = 0x0008
+    ByUser        = 0x0008
 };
 
 // -----------------------------------------------------------------------

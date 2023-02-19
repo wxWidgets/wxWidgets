@@ -366,14 +366,12 @@ void wxPropertyGridPage::SetSplitterPosition( int splitterPos, int col )
     if ( pg->GetState() == this )
         pg->SetSplitterPosition(splitterPos);
     else
-        DoSetSplitterPosition(splitterPos, col, false);
+        DoSetSplitterPosition(splitterPos, col, wxPGSplitterPositionFlags::Null);
 }
 
-void wxPropertyGridPage::DoSetSplitterPosition( int pos,
-                                                int splitterColumn,
-                                                int flags )
+void wxPropertyGridPage::DoSetSplitterPosition(int pos, int splitterColumn, wxPGSplitterPositionFlags flags )
 {
-    if ( (flags & wxPG_SPLITTER_ALL_PAGES) && m_manager->GetPageCount() )
+    if ( !!(flags & wxPGSplitterPositionFlags::AllPages) && m_manager->GetPageCount() )
         m_manager->SetSplitterPosition( pos, splitterColumn );
     else
         wxPropertyGridPageState::DoSetSplitterPosition( pos,
@@ -515,8 +513,8 @@ private:
         x += colWidth;
 
         pg->DoSetSplitterPosition(x, col,
-                                  wxPG_SPLITTER_REFRESH |
-                                  wxPG_SPLITTER_FROM_EVENT);
+                                  wxPGSplitterPositionFlags::Refresh |
+                                  wxPGSplitterPositionFlags::FromEvent);
     }
 
     void OnResizing(wxHeaderCtrlEvent& evt)
@@ -528,7 +526,7 @@ private:
         OnColumWidthsChanged();
 
         wxPropertyGrid* pg = m_manager->GetGrid();
-        pg->SendEvent(wxEVT_PG_COL_DRAGGING, nullptr, nullptr, 0,
+        pg->SendEvent(wxEVT_PG_COL_DRAGGING, nullptr, nullptr, wxPGSelectPropertyFlags::Null,
                       (unsigned int)col);
     }
 
@@ -546,7 +544,7 @@ private:
             evt.Veto();
         // Allow application to veto dragging
         else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
-                                nullptr, nullptr, 0,
+                                nullptr, nullptr, wxPGSelectPropertyFlags::Null,
                                 (unsigned int)col) )
             evt.Veto();
     }
@@ -556,7 +554,7 @@ private:
         int col = evt.GetColumn();
         wxPropertyGrid* pg = m_manager->GetGrid();
         pg->SendEvent(wxEVT_PG_COL_END_DRAG,
-                      nullptr, nullptr, 0,
+                      nullptr, nullptr, wxPGSelectPropertyFlags::Null,
                       (unsigned int)col);
     }
 
@@ -2319,7 +2317,7 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     {
         wxPropertyGridPage* page = GetPage(i);
         page->DoSetSplitterPosition( pos, splitterColumn,
-                                     wxPG_SPLITTER_REFRESH );
+                                     wxPGSplitterPositionFlags::Refresh );
     }
 
 #if wxUSE_HEADERCTRL

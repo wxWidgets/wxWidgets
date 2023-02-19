@@ -653,7 +653,7 @@ void FormMain::OnPropertyGridChanging( wxPropertyGridEvent& event )
 
             // Since we ask a question, it is better if we omit any validation
             // failure behaviour.
-            event.SetValidationFailureBehavior(0);
+            event.SetValidationFailureBehavior(wxPGVFBFlags::Null);
         }
     }
 }
@@ -1730,7 +1730,7 @@ void FormMain::PopulateWithLibraryConfig ()
     ADD_WX_LIB_CONF( wxUSE_XML )
 
     // Set them to use check box.
-    pg->SetPropertyAttribute(pid,wxPG_BOOL_USE_CHECKBOX,true,wxPG_RECURSE);
+    pg->SetPropertyAttribute(pid,wxPG_BOOL_USE_CHECKBOX,true, wxPGPropertyValuesFlags::Recurse);
 }
 
 // -----------------------------------------------------------------------
@@ -1905,8 +1905,8 @@ void FormMain::CreateGrid( int style, int extraStyle )
     pgman->SetExtraStyle(extraStyle);
 
     // This is the default validation failure behaviour
-    m_pPropGridManager->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL |
-                                                      wxPG_VFB_SHOW_MESSAGEBOX );
+    m_pPropGridManager->SetValidationFailureBehavior( wxPGVFBFlags::MarkCell |
+                                                      wxPGVFBFlags::ShowMessageBox );
 
     m_pPropGridManager->GetGrid()->SetVerticalSpacing( 2 );
 
@@ -2562,7 +2562,8 @@ FormMain::OnSetBackgroundColour( wxCommandEvent& event )
 
     if ( col.IsOk() )
     {
-        int flags = (event.GetId()==ID_SETBGCOLOURRECUR) ? wxPG_RECURSE : 0;
+        wxPGPropertyValuesFlags flags = (event.GetId()==ID_SETBGCOLOURRECUR)
+                            ? wxPGPropertyValuesFlags::Recurse : wxPGPropertyValuesFlags::DontRecurse;
         pg->SetPropertyBackgroundColour(prop, col, flags);
     }
 }
@@ -2637,7 +2638,7 @@ void FormMain::OnTestReplaceClick( wxCommandEvent& WXUNUSED(event) )
         m_pPropGridManager->SetPropertyAttribute( newId,
                                               wxPG_BOOL_USE_CHECKBOX,
                                               true,
-                                              wxPG_RECURSE );
+                                              wxPGPropertyValuesFlags::Recurse );
         m_pPropGridManager->SelectProperty(newId);
     }
     else
@@ -2811,13 +2812,13 @@ void FormMain::OnCatColours( wxCommandEvent& event )
     if ( event.IsChecked() )
     {
         // Set custom colours.
-        pg->SetPropertyTextColour( "Appearance", wxColour(255,0,0), wxPG_DONT_RECURSE );
+        pg->SetPropertyTextColour( "Appearance", wxColour(255,0,0), wxPGPropertyValuesFlags::DontRecurse );
         pg->SetPropertyBackgroundColour( "Appearance", wxColour(255,255,183) );
         pg->SetPropertyTextColour( "Appearance", wxColour(255,0,183) );
-        pg->SetPropertyTextColour( "PositionCategory", wxColour(0,255,0), wxPG_DONT_RECURSE );
+        pg->SetPropertyTextColour( "PositionCategory", wxColour(0,255,0), wxPGPropertyValuesFlags::DontRecurse );
         pg->SetPropertyBackgroundColour( "PositionCategory", wxColour(255,226,190) );
         pg->SetPropertyTextColour( "PositionCategory", wxColour(255,0,190) );
-        pg->SetPropertyTextColour( "Environment", wxColour(0,0,255), wxPG_DONT_RECURSE );
+        pg->SetPropertyTextColour( "Environment", wxColour(0,0,255), wxPGPropertyValuesFlags::DontRecurse);
         pg->SetPropertyBackgroundColour( "Environment", wxColour(208,240,175) );
         pg->SetPropertyTextColour( "Environment", wxColour(255,255,255) );
         pg->SetPropertyBackgroundColour( "More Examples", wxColour(172,237,255) );
@@ -2827,12 +2828,12 @@ void FormMain::OnCatColours( wxCommandEvent& event )
     {
         // Revert to original.
         pg->SetPropertyColoursToDefault( "Appearance" );
-        pg->SetPropertyColoursToDefault( "Appearance", wxPG_RECURSE );
+        pg->SetPropertyColoursToDefault( "Appearance", wxPGPropertyValuesFlags::Recurse );
         pg->SetPropertyColoursToDefault( "PositionCategory" );
-        pg->SetPropertyColoursToDefault( "PositionCategory", wxPG_RECURSE );
+        pg->SetPropertyColoursToDefault( "PositionCategory", wxPGPropertyValuesFlags::Recurse );
         pg->SetPropertyColoursToDefault( "Environment" );
-        pg->SetPropertyColoursToDefault( "Environment", wxPG_RECURSE );
-        pg->SetPropertyColoursToDefault( "More Examples", wxPG_RECURSE );
+        pg->SetPropertyColoursToDefault( "Environment", wxPGPropertyValuesFlags::Recurse );
+        pg->SetPropertyColoursToDefault( "More Examples", wxPGPropertyValuesFlags::Recurse );
     }
     m_pPropGridManager->Thaw();
     m_pPropGridManager->Refresh();
@@ -3048,7 +3049,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     {
         m_storedValues = m_pPropGridManager->GetGrid()->GetPropertyValues("Test",
                                                                       m_pPropGridManager->GetGrid()->GetRoot(),
-                                                                      wxPG_KEEP_STRUCTURE|wxPG_INC_ATTRIBUTES);
+                                   wxPGPropertyValuesFlags::KeepStructure|wxPGPropertyValuesFlags::IncAttributes);
     }
     else if ( id == ID_SETVALUES )
     {
@@ -3110,7 +3111,7 @@ void FormMain::OnPopulateClick( wxCommandEvent& event )
 
 void FormMain::OnDumpList(wxCommandEvent& WXUNUSED(event))
 {
-    wxVariant values = m_pPropGridManager->GetPropertyValues("list", wxNullProperty, wxPG_INC_ATTRIBUTES);
+    wxVariant values = m_pPropGridManager->GetPropertyValues("list", wxNullProperty, wxPGPropertyValuesFlags::IncAttributes);
     wxString text = "This only tests that wxVariant related routines do not crash.\n";
 
     wxDialog* dlg = new wxDialog(this, wxID_ANY, "wxVariant Test",

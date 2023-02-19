@@ -276,7 +276,7 @@ public:
 
         @return Returns @true if value was actually updated.
     */
-    bool CommitChangesFromEditor( wxUint32 flags = 0 );
+    bool CommitChangesFromEditor(wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null);
 
     /**
         Two step creation. Whenever the control is created without any parameters,

@@ -1504,8 +1504,15 @@ public:
     // Hides or reveals the property.
     // hide - true for hide, false for reveal.
     // flags - By default changes are applied recursively. Set this
-    //   parameter to wxPG_DONT_RECURSE to prevent this.
-    bool Hide( bool hide, int flags = wxPG_RECURSE );
+    //   parameter to wxPGPropertyValuesFlags::DontRecurse to prevent this.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use Hide with flags argument as wxPGPropertyValuesFlags")
+    bool Hide(bool hide, int flags)
+    {
+        return Hide(hide, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    bool Hide(bool hide, wxPGPropertyValuesFlags = wxPGPropertyValuesFlags::Recurse);
 
     // Returns true if property has visible children.
     bool IsExpanded() const
@@ -1546,25 +1553,47 @@ public:
 
     // Sets property's background colour.
     // colour - Background colour to use.
-    // flags - Default is wxPG_RECURSE which causes colour to be set recursively.
+    // flags - Default is wxPGPropertyValuesFlags::Recurse which causes colour to be set recursively.
     //   Omit this flag to only set colour for the property in question
     //   and not any of its children.
-    void SetBackgroundColour( const wxColour& colour,
-                              int flags = wxPG_RECURSE );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetBackgroundColour with flags argument as wxPGPropertyValuesFlags")
+    void SetBackgroundColour(const wxColour& colour, int flags)
+    {
+        SetBackgroundColour(colour, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetBackgroundColour(const wxColour& colour,
+                             wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     // Sets property's text colour.
     // colour - Text colour to use.
-    // flags - Default is wxPG_RECURSE which causes colour to be set recursively.
+    // flags - Default is wxPGPropertyValuesFlags::Recurse which causes colour to be set recursively.
     // Omit this flag to only set colour for the property in question
     // and not any of its children.
-    void SetTextColour( const wxColour& colour,
-                        int flags = wxPG_RECURSE );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetTextColour with flags argument as wxPGPropertyValuesFlags")
+    void SetTextColour(const wxColour& colour, int flags)
+    {
+        SetTextColour(colour, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetTextColour(const wxColour& colour,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     // Sets property's default text and background colours.
-    // flags - Default is wxPG_RECURSE which causes colours to be set recursively.
+    // flags - Default is wxPGPropertyValuesFlags::Recurse
+    //   which causes colours to be set recursively.
     //   Omit this flag to only set colours for the property in question
     //   and not any of its children.
-    void SetDefaultColours(int flags = wxPG_RECURSE);
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetDefaultColours with wxPGPropertyValuesFlags argument")
+    void SetDefaultColours(int flags)
+    {
+        SetDefaultColours(static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetDefaultColours(wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     // Set default value of a property. Synonymous to
     // SetAttribute("DefaultValue", value);
@@ -1618,10 +1647,17 @@ public:
     // SetValueInEvent() instead.
     // pList - Pointer to list variant that contains child values. Used to
     //   indicate which children should be marked as modified.
-    // flags - Various flags (for instance, wxPG_SETVAL_REFRESH_EDITOR, which
-    //   is enabled by default).
-    void SetValue( wxVariant value, wxVariant* pList = nullptr,
-                   int flags = wxPG_SETVAL_REFRESH_EDITOR );
+    // flags - Various flags (for instance, wxPGSetValueFlags::RefreshEditor,
+    //  which is enabled by default).
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetValue with flags argument as wxPGSetValueFlags")
+    void SetValue(wxVariant value, wxVariant* pList, int flags)
+    {
+        SetValue(value, pList, static_cast<wxPGSetValueFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetValue(wxVariant value, wxVariant* pList = nullptr,
+                  wxPGSetValueFlags flags = wxPGSetValueFlags::RefreshEditor);
 
     // Set wxBitmap in front of the value. This bitmap may be ignored
     // by custom cell renderers.
@@ -1685,7 +1721,7 @@ public:
     void SetValueToUnspecified()
     {
         wxVariant val;  // Create null variant
-        SetValue(val, nullptr, wxPG_SETVAL_REFRESH_EDITOR);
+        SetValue(val, nullptr, wxPGSetValueFlags::RefreshEditor);
     }
 
     // Helper function (for wxPython bindings and such) for settings protected
@@ -1905,7 +1941,7 @@ protected:
                                   const wxVariantList* valueOverrides = nullptr,
                                   wxPGHashMapS2S* childResults = nullptr ) const;
 
-    bool DoHide( bool hide, int flags );
+    bool DoHide( bool hide, wxPGPropertyValuesFlags flags );
 
     void DoSetName(const wxString& str) { m_name = str; }
 
