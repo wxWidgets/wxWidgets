@@ -199,8 +199,8 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     wxCursor resCursor1( "horse" );
     CHECK( resCursor1.IsOk() );
 #else
-    wxCursor cursor( (const char *) horse, 32, 32, 16, 0, nullptr, wxWHITE, wxBLACK );
-    CHECK( cursor.IsOk() );
+    wxCursor rresCursor1( (const char *) horse, 32, 32, 16, 0, nullptr, wxWHITE, wxBLACK );
+    CHECK( rresCursor1.IsOk() );
 #endif
 #ifdef __WXOSX__
     wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
