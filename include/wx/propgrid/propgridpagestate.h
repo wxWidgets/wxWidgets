@@ -95,7 +95,7 @@ constexpr bool operator!(wxPGSelectPropertyFlags a)
 
 // -----------------------------------------------------------------------
 
-// DoSetSplitterPosition() flags
+// DoSetSplitter() flags
 
 enum class wxPGSplitterPositionFlags : int
 {
@@ -472,16 +472,18 @@ public:
 
     // This needs to be overridden in grid used the manager so that splitter
     // changes can be propagated to other pages.
+    virtual void DoSetSplitter(int pos,
+                               int splitterColumn = 0,
+                               wxPGSplitterPositionFlags
+                                flags = wxPGSplitterPositionFlags::Null);
+
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use DoSetSplitterPosition with flags argument as wxPGSplitterPositionFlags")
+    wxDEPRECATED_MSG("use DoSetSplitter() taking wxPGSplitterPositionFlags")
     virtual void DoSetSplitterPosition(int pos, int splitterColumn, int flags)
     {
-        DoSetSplitterPosition(pos, splitterColumn, static_cast<wxPGSplitterPositionFlags>(flags));
+        DoSetSplitter(pos, splitterColumn, static_cast<wxPGSplitterPositionFlags>(flags));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
-    virtual void DoSetSplitterPosition(int pos,
-                                       int splitterColumn = 0,
-             wxPGSplitterPositionFlags flags = wxPGSplitterPositionFlags::Null);
 
     bool EnableCategories( bool enable );
 

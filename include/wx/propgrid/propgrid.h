@@ -956,7 +956,7 @@ public:
     // than desired splitter position, especially when sizers are being used.
     void SetSplitterPosition( int newXPos, int col = 0 )
     {
-        DoSetSplitterPosition(newXPos, col, wxPGSplitterPositionFlags::Refresh);
+        DoSetSplitter(newXPos, col, wxPGSplitterPositionFlags::Refresh);
     }
 
     // Sets the property sorting function.
@@ -1774,9 +1774,9 @@ protected:
     void DoSetSelection( const wxArrayPGProperty& newSelection,
                          wxPGSelectPropertyFlags selFlags = wxPGSelectPropertyFlags::Null );
 
-    void DoSetSplitterPosition( int newxpos,
-                                int splitterIndex = 0,
-                                wxPGSplitterPositionFlags flags = wxPGSplitterPositionFlags::Refresh );
+    void DoSetSplitter( int newxpos,
+                        int splitterIndex = 0,
+                        wxPGSplitterPositionFlags flags = wxPGSplitterPositionFlags::Refresh );
 
     bool DoAddToSelection( wxPGProperty* prop,
                            wxPGSelectPropertyFlags selFlags = wxPGSelectPropertyFlags::Null );

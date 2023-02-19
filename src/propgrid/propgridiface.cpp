@@ -1094,7 +1094,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                             long pos = 0;
                             values[n].ToLong(&pos);
                             if ( pos > 0 )
-                                pageState->DoSetSplitterPosition(pos, n);
+                                pageState->DoSetSplitter(pos, n);
                         }
                     }
                 }

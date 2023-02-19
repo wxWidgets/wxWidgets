@@ -129,17 +129,9 @@ public:
 protected:
 
     // Propagate to other pages
-#if WXWIN_COMPATIBILITY_3_2
-    // TODO: Fix and enable deprecation message
-    // wxDEPRECATED_MSG("use DoSetSplitterPosition with flags argument as wxPGSplitterPositionFlags")
-    virtual void DoSetSplitterPosition(int pos, int splitterColumn, int flags) override
-    {
-        DoSetSplitterPosition(pos, splitterColumn, static_cast<wxPGSplitterPositionFlags>(flags));
-    }
-#endif // WXWIN_COMPATIBILITY_3_2
-    virtual void DoSetSplitterPosition(int pos,
-                                       int splitterColumn = 0,
-          wxPGSplitterPositionFlags flags = wxPGSplitterPositionFlags::Refresh) override;
+    virtual void DoSetSplitter(int pos,
+                               int splitterColumn,
+                               wxPGSplitterPositionFlags flags) override;
 
     // Page label (may be referred as name in some parts of documentation).
     // Can be set in constructor, or passed in

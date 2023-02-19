@@ -2783,9 +2783,9 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
 
 // Call to SetSplitterPosition will always disable splitter auto-centering
 // if parent window is shown.
-void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
-                                            int splitterIndex,
-                                            wxPGSplitterPositionFlags flags )
+void wxPropertyGrid::DoSetSplitter( int newxpos,
+                                    int splitterIndex,
+                                    wxPGSplitterPositionFlags flags )
 {
     if ( newxpos < wxPG_DRAG_MARGIN )
         return;
@@ -2793,7 +2793,7 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
     if ( !!(flags & wxPGSplitterPositionFlags::FromEvent) )
         m_pState->m_dontCenterSplitter = true;
 
-    m_pState->DoSetSplitterPosition(newxpos, splitterIndex, flags);
+    m_pState->DoSetSplitter(newxpos, splitterIndex, flags);
 
     if ( !!(flags & wxPGSplitterPositionFlags::Refresh) )
     {
@@ -5001,10 +5001,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
             if ( newSplitterX != splitterX )
             {
                 // Move everything
-                DoSetSplitterPosition(newSplitterX,
-                                      m_draggedSplitter,
-                                      wxPGSplitterPositionFlags::Refresh |
-                                      wxPGSplitterPositionFlags::FromEvent);
+                DoSetSplitter(newSplitterX,
+                              m_draggedSplitter,
+                              wxPGSplitterPositionFlags::Refresh |
+                              wxPGSplitterPositionFlags::FromEvent);
 
                 SendEvent(wxEVT_PG_COLS_RESIZED, wxNullProperty);
                 SendEvent(wxEVT_PG_COL_DRAGGING,

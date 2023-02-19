@@ -380,7 +380,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
                 }
                 else
                 {
-                    DoSetSplitterPosition( newWidth / 2 );
+                    DoSetSplitter( newWidth / 2 );
                     m_isSplitterPreSet = false;
                 }
             }
@@ -869,8 +869,8 @@ void wxPropertyGridPageState::PropagateColSizeDec( int column,
     wxASSERT( decrease == 0 );
 }
 
-void wxPropertyGridPageState::DoSetSplitterPosition(int newXPos, int splitterColumn,
-                                                    wxPGSplitterPositionFlags flags )
+void wxPropertyGridPageState::DoSetSplitter(int newXPos, int splitterColumn,
+                                            wxPGSplitterPositionFlags flags )
 {
     int adjust = newXPos - DoGetSplitterPosition(splitterColumn);
     int otherColumn = splitterColumn + 1;
@@ -912,7 +912,7 @@ void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
     if ( maxW > 0 )
     {
         maxW += pg->GetMarginWidth();
-        DoSetSplitterPosition( maxW );
+        DoSetSplitter( maxW );
     }
 
     m_dontCenterSplitter = true;
@@ -1084,8 +1084,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
                 }
             }
 
-            DoSetSplitterPosition((int)splitterX, 0,
-                                  wxPGSplitterPositionFlags::FromAutoCenter);
+            DoSetSplitter((int)splitterX, 0,
+                          wxPGSplitterPositionFlags::FromAutoCenter);
 
             m_fSplitterX = splitterX; // needed to retain accuracy
         }
@@ -1111,8 +1111,7 @@ void wxPropertyGridPageState::ResetColumnSizes(wxPGSplitterPositionFlags setSpli
     {
         int cwid = (puwid*m_columnProportions[i]) / 256;
         cpos += cwid;
-        DoSetSplitterPosition(cpos, (int)i,
-                              setSplitterFlags);
+        DoSetSplitter(cpos, (int)i, setSplitterFlags);
     }
 }
 

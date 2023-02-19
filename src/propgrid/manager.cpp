@@ -366,17 +366,15 @@ void wxPropertyGridPage::SetSplitterPosition( int splitterPos, int col )
     if ( pg->GetState() == this )
         pg->SetSplitterPosition(splitterPos);
     else
-        DoSetSplitterPosition(splitterPos, col, wxPGSplitterPositionFlags::Null);
+        DoSetSplitter(splitterPos, col, wxPGSplitterPositionFlags::Null);
 }
 
-void wxPropertyGridPage::DoSetSplitterPosition(int pos, int splitterColumn, wxPGSplitterPositionFlags flags )
+void wxPropertyGridPage::DoSetSplitter(int pos, int splitterColumn, wxPGSplitterPositionFlags flags )
 {
     if ( !!(flags & wxPGSplitterPositionFlags::AllPages) && m_manager->GetPageCount() )
         m_manager->SetSplitterPosition( pos, splitterColumn );
     else
-        wxPropertyGridPageState::DoSetSplitterPosition( pos,
-                                                        splitterColumn,
-                                                        flags );
+        wxPropertyGridPageState::DoSetSplitter( pos, splitterColumn, flags );
 }
 
 // -----------------------------------------------------------------------
@@ -512,9 +510,9 @@ private:
 
         x += colWidth;
 
-        pg->DoSetSplitterPosition(x, col,
-                                  wxPGSplitterPositionFlags::Refresh |
-                                  wxPGSplitterPositionFlags::FromEvent);
+        pg->DoSetSplitter(x, col,
+                          wxPGSplitterPositionFlags::Refresh |
+                          wxPGSplitterPositionFlags::FromEvent);
     }
 
     void OnResizing(wxHeaderCtrlEvent& evt)
@@ -2316,8 +2314,8 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
-        page->DoSetSplitterPosition( pos, splitterColumn,
-                                     wxPGSplitterPositionFlags::Refresh );
+        page->DoSetSplitter( pos, splitterColumn,
+                             wxPGSplitterPositionFlags::Refresh );
     }
 
 #if wxUSE_HEADERCTRL
@@ -2332,7 +2330,8 @@ void wxPropertyGridManager::SetPageSplitterPosition( int page,
                                                      int pos,
                                                      int column )
 {
-    GetPage(page)->DoSetSplitterPosition( pos, column );
+    GetPage(page)->DoSetSplitter( pos, column,
+                                  wxPGSplitterPositionFlags::Refresh );
 
 #if wxUSE_HEADERCTRL
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
