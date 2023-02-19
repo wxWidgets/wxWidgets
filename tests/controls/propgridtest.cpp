@@ -500,13 +500,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 #endif // wxGTK
     std::unique_ptr<wxPropertyGridManager> pgManager(CreateGrid(-1, -1));
 
-    SECTION("GetIterator")
+    SECTION("Iterator")
     {
         // Basic iterator tests
 
-        int count;
-
-        count = 0;
+        int count = 0;
         for ( auto it = pgManager->GetVIterator(wxPG_ITERATE_PROPERTIES); !it.AtEnd(); it.Next() )
         {
             wxPGProperty* p = it.GetProperty();
@@ -550,6 +548,130 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         }
 
         INFO(wxString::Format("GetVIterator(wxPG_ITERATE_VISIBLE) -> %i entries", count).c_str());
+    }
+
+    SECTION("Iterator_DeleteFirstPageThenLast")
+    {
+        // Get all properties from first page
+        wxPGVIterator it;
+        wxPropertyGridPage* pageFirst = pgManager->GetPage(0);
+        std::vector<wxString> propertiesPageFirstInit;
+        for ( it = pageFirst->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            propertiesPageFirstInit.push_back(it.GetProperty()->GetName());
+        }
+
+        // Get all properties from last page
+        wxPropertyGridPage* pageLast = pgManager->GetPage(pgManager->GetPageCount() - 1);
+        std::vector<wxString> propertiesPageLastInit;
+        for ( it = pageLast->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            propertiesPageLastInit.push_back(it.GetProperty()->GetName());
+        }
+
+        int countAllPropertiesInit = 0;
+        for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            countAllPropertiesInit++;
+        }
+
+        // Delete all properties from first page
+        pageFirst->Clear();
+
+        it = pageFirst->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL));
+        REQUIRE(it.AtEnd());
+
+        std::vector<wxString> propertiesPageLast;
+        for ( it = pageLast->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            propertiesPageLast.push_back(it.GetProperty()->GetName());
+        }
+        REQUIRE(propertiesPageLast == propertiesPageLastInit);
+
+        int countAllProperties = 0;
+        for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            countAllProperties++;
+        }
+        REQUIRE(countAllProperties == countAllPropertiesInit - propertiesPageFirstInit.size());
+
+        // Delete all properties from last page
+        pageLast->Clear();
+
+        it = pageFirst->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL));
+        REQUIRE(it.AtEnd());
+
+        it = pageLast->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL));
+        REQUIRE(it.AtEnd());
+
+        countAllProperties = 0;
+        for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            countAllProperties++;
+        }
+        REQUIRE(countAllProperties == countAllPropertiesInit - propertiesPageFirstInit.size() - propertiesPageLastInit.size());
+    }
+
+    SECTION("Iterator_DeleteLastPageThenFirst")
+    {
+        // Get all properties from first page
+        wxPGVIterator it;
+        wxPropertyGridPage* pageFirst = pgManager->GetPage(0);
+        std::vector<wxString> propertiesPageFirstInit;
+        for ( it = pageFirst->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            propertiesPageFirstInit.push_back(it.GetProperty()->GetName());
+        }
+
+        // Get all properties from last page
+        wxPropertyGridPage* pageLast = pgManager->GetPage(pgManager->GetPageCount() - 1);
+        std::vector<wxString> propertiesPageLastInit;
+        for ( it = pageLast->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            propertiesPageLastInit.push_back(it.GetProperty()->GetName());
+        }
+
+        int countAllPropertiesInit = 0;
+        for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            countAllPropertiesInit++;
+        }
+
+        // Delete all properties from last page
+        pageLast->Clear();
+
+        it = pageLast->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL));
+        REQUIRE(it.AtEnd());
+
+        std::vector<wxString> propertiesPageFirst;
+        for ( it = pageFirst->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            propertiesPageFirst.push_back(it.GetProperty()->GetName());
+        }
+        REQUIRE(propertiesPageFirst == propertiesPageFirstInit);
+
+        int countAllProperties = 0;
+        for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            countAllProperties++;
+        }
+        REQUIRE(countAllProperties == countAllPropertiesInit - propertiesPageLastInit.size());
+
+        // Delete all properties from first page
+        pageFirst->Clear();
+
+        it = pageFirst->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL));
+        REQUIRE(it.AtEnd());
+
+        it = pageLast->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL));
+        REQUIRE(it.AtEnd());
+
+        countAllProperties = 0;
+        for ( it = pgManager->GetVIterator(wxPG_ITERATOR_FLAGS_ALL | wxPG_IT_CHILDREN(wxPG_ITERATOR_FLAGS_ALL)); !it.AtEnd(); it.Next() )
+        {
+            countAllProperties++;
+        }
+        REQUIRE(countAllProperties == countAllPropertiesInit - propertiesPageFirstInit.size() - propertiesPageLastInit.size());
     }
 
     SECTION("SelectProperty")
