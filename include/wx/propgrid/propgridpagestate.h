@@ -73,8 +73,7 @@ constexpr wxPGSelectPropertyFlags wxPG_SEL_NO_REFRESH{ wxPGSelectPropertyFlags::
 
 constexpr wxPGSelectPropertyFlags operator|(wxPGSelectPropertyFlags a, wxPGSelectPropertyFlags b)
 {
-    return static_cast<wxPGSelectPropertyFlags>(static_cast<std::underlying_type_t<wxPGSelectPropertyFlags>>(a)
-        | static_cast<std::underlying_type_t<wxPGSelectPropertyFlags>>(b));
+    return static_cast<wxPGSelectPropertyFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 constexpr wxPGSelectPropertyFlags operator|=(wxPGSelectPropertyFlags& a, wxPGSelectPropertyFlags b)
@@ -84,13 +83,12 @@ constexpr wxPGSelectPropertyFlags operator|=(wxPGSelectPropertyFlags& a, wxPGSel
 
 constexpr wxPGSelectPropertyFlags operator&(wxPGSelectPropertyFlags a, wxPGSelectPropertyFlags b)
 {
-    return static_cast<wxPGSelectPropertyFlags>(static_cast<std::underlying_type_t<wxPGSelectPropertyFlags>>(a)
-        & static_cast<std::underlying_type_t<wxPGSelectPropertyFlags>>(b));
+    return static_cast<wxPGSelectPropertyFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 constexpr bool operator!(wxPGSelectPropertyFlags a)
 {
-    return static_cast<std::underlying_type_t<wxPGSelectPropertyFlags>>(a) == 0;
+    return static_cast<int>(a) == 0;
 }
 
 // -----------------------------------------------------------------------
@@ -108,19 +106,17 @@ enum class wxPGSplitterPositionFlags : int
 
 constexpr wxPGSplitterPositionFlags operator&(wxPGSplitterPositionFlags a, wxPGSplitterPositionFlags b)
 {
-    return static_cast<wxPGSplitterPositionFlags>(static_cast<std::underlying_type_t<wxPGSplitterPositionFlags>>(a)
-        & static_cast<std::underlying_type_t<wxPGSplitterPositionFlags>>(b));
+    return static_cast<wxPGSplitterPositionFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 constexpr wxPGSplitterPositionFlags operator|(wxPGSplitterPositionFlags a, wxPGSplitterPositionFlags b)
 {
-    return static_cast<wxPGSplitterPositionFlags>(static_cast<std::underlying_type_t<wxPGSplitterPositionFlags>>(a)
-        | static_cast<std::underlying_type_t<wxPGSplitterPositionFlags>>(b));
+    return static_cast<wxPGSplitterPositionFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 constexpr bool operator!(wxPGSplitterPositionFlags a)
 {
-    return static_cast<std::underlying_type_t<wxPGSplitterPositionFlags>>(a) == 0;
+    return static_cast<int>(a) == 0;
 }
 
 #if WXWIN_COMPATIBILITY_3_2
