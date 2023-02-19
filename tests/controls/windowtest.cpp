@@ -199,10 +199,14 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     wxCursor resCursor1( "horse" );
     CHECK( resCursor1.IsOk() );
 #else
-    wxCursor rresCursor1( (const char *) horse, 32, 32, 16, 0, nullptr, wxWHITE, wxBLACK );
-    CHECK( rresCursor1.IsOk() );
+    wxCursor resCursor1( (const char *) horse, 32, 32, 16, 0, nullptr, wxWHITE, wxBLACK );
+    CHECK( resCursor1.IsOk() );
 #endif
 #ifdef __WXOSX__
+    // For OSX crsor is created by first checing for png image.
+    // If its not found, cur image is tried
+    // So we need to check if both cases are successful, as well as
+    // no png/cur file at all
     wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
     wxCursor resCursor2( "horse" );
     CHECK( resCursor2.IsOk() );
