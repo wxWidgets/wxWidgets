@@ -330,6 +330,27 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
     return wxColour();
 }
 
+wxColour wxDarkModeSettings::GetMenuColour(wxMenuColour which)
+{
+    switch ( which )
+    {
+        case wxMenuColour::StandardFg:
+            return wxColour(0xffffff);
+
+        case wxMenuColour::StandardBg:
+            return wxColour(0x6d6d6d);
+
+        case wxMenuColour::DisabledFg:
+            return wxColour(0x414141);
+
+        case wxMenuColour::HotBg:
+            return wxColour(0x2b2b2b);
+    }
+
+    wxFAIL_MSG( "unreachable" );
+    return wxColour();
+}
+
 wxPen wxDarkModeSettings::GetBorderPen()
 {
     // Use a darker pen than the default white one by default. There doesn't
@@ -510,14 +531,15 @@ struct MenuBarDrawMenuItem
     MenuBarMenuItem mbmi;
 };
 
-constexpr COLORREF COL_STANDARD = 0xffffff;
-constexpr COLORREF COL_DISABLED = 0x6d6d6d;
-constexpr COLORREF COL_MENU_HOT = 0x414141;
+wxColour GetMenuColour(wxMenuColour which)
+{
+    return wxDarkModeModule::GetSettings().GetMenuColour(which);
+}
 
-HBRUSH GetMenuBrush()
+HBRUSH GetMenuBrush(wxMenuColour which = wxMenuColour::StandardBg)
 {
     wxBrush* const brush =
-        wxTheBrushList->FindOrCreateBrush(GetColour(wxSYS_COLOUR_MENU));
+        wxTheBrushList->FindOrCreateBrush(GetMenuColour(which));
 
     return brush ? GetHbrushOf(*brush) : 0;
 }
@@ -621,9 +643,11 @@ HandleMenuMessage(WXLRESULT* result,
 
                 HBRUSH hbr = 0;
                 int partState = 0;
+                wxMenuColour colText = wxMenuColour::StandardFg;
                 if ( itemState & ODS_INACTIVE )
                 {
                     partState = MBI_DISABLED;
+                    colText = wxMenuColour::DisabledFg;
                 }
                 else if ( (itemState & ODS_GRAYED) && (itemState & ODS_HOTLIGHT) )
                 {
@@ -632,15 +656,13 @@ HandleMenuMessage(WXLRESULT* result,
                 else if ( itemState & ODS_GRAYED )
                 {
                     partState = MBI_DISABLED;
+                    colText = wxMenuColour::DisabledFg;
                 }
                 else if ( itemState & (ODS_HOTLIGHT | ODS_SELECTED) )
                 {
                     partState = MBI_HOT;
 
-                    auto* const
-                        brush = wxTheBrushList->FindOrCreateBrush(COL_MENU_HOT);
-                    if ( brush )
-                        hbr = GetHbrushOf(*brush);
+                    hbr = GetMenuBrush(wxMenuColour::HotBg);
                 }
                 else
                 {
@@ -660,9 +682,7 @@ HandleMenuMessage(WXLRESULT* result,
                 DTTOPTS textOpts;
                 textOpts.dwSize = sizeof(textOpts);
                 textOpts.dwFlags = DTT_TEXTCOLOR;
-                textOpts.crText = itemState & (ODS_INACTIVE | ODS_GRAYED)
-                                    ? COL_DISABLED
-                                    : COL_STANDARD;
+                textOpts.crText = wxColourToRGB(GetMenuColour(colText));
 
                 DWORD drawTextFlags = DT_CENTER | DT_SINGLELINE | DT_VCENTER;
                 if ( itemState & ODS_NOACCEL)

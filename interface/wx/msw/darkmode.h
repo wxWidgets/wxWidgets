@@ -8,6 +8,26 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Constants used with wxDarkModeSettings::GetMenuColour().
+
+    @since 3.3.0
+ */
+enum class wxMenuColour
+{
+    /// Text colour used for the normal items in dark mode.
+    StandardFg,
+
+    /// Standard menu background colour.
+    StandardBg,
+
+    /// Foreground colour for the disabled items.
+    DisabledFg,
+
+    /// Background colour used for the item over which mouse is hovering.
+    HotBg
+};
+
+/**
     Allows to customize some of the settings used in MSW dark mode.
 
     An object of this class may be passed to wxApp::MSWEnableDarkMode() to
@@ -57,8 +77,25 @@ public:
         used in dark mode. As the rest of dark mode support, their exact values
         are not documented and are subject to change in the future Windows or
         wxWidgets versions.
+
+        @see GetMenuColour()
      */
     virtual wxColour GetColour(wxSystemColour index);
+
+    /**
+        Get the colour to use for the menu bar in the given state.
+
+        Currently the colours used by the menus in the menu bar in dark mode
+        don't correspond to any of wxSystemColour values and this separate
+        function is used for customizing them instead of GetColour().
+
+        Note that the colours returned by this function only affect the top
+        level menus, the colours of the menu items inside them can be
+        customized in the usual way using wxOwnerDrawn::SetTextColour().
+
+        The returned colour must be valid.
+     */
+    virtual wxColour GetMenuColour(wxMenuColour which);
 
     /**
         Get the pen to use for drawing wxStaticBox border in dark mode.

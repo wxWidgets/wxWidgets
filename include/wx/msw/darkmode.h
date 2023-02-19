@@ -12,6 +12,15 @@
 
 #include "wx/settings.h"
 
+// Constants used with wxDarkModeSettings::GetMenuColour().
+enum class wxMenuColour
+{
+    StandardFg,
+    StandardBg,
+    DisabledFg,
+    HotBg
+};
+
 // ----------------------------------------------------------------------------
 // wxDarkModeSettings: allows to customize some of dark mode settings
 // ----------------------------------------------------------------------------
@@ -24,6 +33,10 @@ public:
 
     // Get the colour to use for the given system colour when dark mode is on.
     virtual wxColour GetColour(wxSystemColour index);
+
+    // Menu items don't use any of the standard colours, but are defined by
+    // this function.
+    virtual wxColour GetMenuColour(wxMenuColour which);
 
     // Get the pen to use for drawing wxStaticBox border in dark mode.
     //
