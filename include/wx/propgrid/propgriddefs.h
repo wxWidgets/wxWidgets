@@ -401,7 +401,7 @@ constexpr wxPGSetValueFlags operator|(wxPGSetValueFlags a, wxPGSetValueFlags b)
     return static_cast<wxPGSetValueFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-constexpr wxPGSetValueFlags operator|=(wxPGSetValueFlags& a, wxPGSetValueFlags b)
+inline wxPGSetValueFlags operator|=(wxPGSetValueFlags& a, wxPGSetValueFlags b)
 {
     return a = a | b;
 }

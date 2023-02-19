@@ -76,7 +76,7 @@ constexpr wxPGSelectPropertyFlags operator|(wxPGSelectPropertyFlags a, wxPGSelec
     return static_cast<wxPGSelectPropertyFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-constexpr wxPGSelectPropertyFlags operator|=(wxPGSelectPropertyFlags& a, wxPGSelectPropertyFlags b)
+inline wxPGSelectPropertyFlags operator|=(wxPGSelectPropertyFlags& a, wxPGSelectPropertyFlags b)
 {
     return a = a | b;
 }
