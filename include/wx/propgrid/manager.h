@@ -130,7 +130,8 @@ protected:
 
     // Propagate to other pages
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use DoSetSplitterPosition with flags argument as wxPGSplitterPositionFlags")
+    // TODO: Fix and enable deprecation message
+    // wxDEPRECATED_MSG("use DoSetSplitterPosition with flags argument as wxPGSplitterPositionFlags")
     virtual void DoSetSplitterPosition(int pos, int splitterColumn, int flags) override
     {
         DoSetSplitterPosition(pos, splitterColumn, static_cast<wxPGSplitterPositionFlags>(flags));
