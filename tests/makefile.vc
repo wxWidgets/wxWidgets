@@ -1137,8 +1137,8 @@ $(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
-$(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\samples\sample.rc
+$(OBJS)\test_gui_sample.res: .\..\test\test.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\test\test.rc
 
 $(OBJS)\test_gui_asserthelper.obj: .\asserthelper.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\asserthelper.cpp
@@ -1458,8 +1458,8 @@ $(OBJS)\test_gui_xrctest.obj: .\xml\xrctest.cpp
 $(OBJS)\test_allheaders_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
-$(OBJS)\test_allheaders_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\samples\sample.rc
+$(OBJS)\test_allheaders_sample.res: .\..\test\test.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_0)  $(__TARGET_CPU_COMPFLAG_p_0) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) /i . $(__DLLFLAG_p_0)  /i .\..\samples /d NOPCH /i .\..\3rdparty\catch\single_include /d _CONSOLE .\..\test\test.rc
 
 $(OBJS)\test_allheaders_asserthelper.obj: .\asserthelper.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_ALLHEADERS_CXXFLAGS) .\asserthelper.cpp
