@@ -44,10 +44,13 @@
 #include "wx/dynlib.h"
 #include "wx/module.h"
 
+#include "wx/msw/darkmode.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
 
 #include "wx/msw/private/darkmode.h"
+
+#include <memory>
 
 static const char* TRACE_DARKMODE = "msw-darkmode";
 
@@ -168,8 +171,23 @@ public:
     virtual bool OnInit() override { return true; }
     virtual void OnExit() override
     {
+        ms_settings.reset();
+
         ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
         ms_dllDWM.Unload();
+    }
+
+    // Takes ownership of the provided pointer.
+    static void SetSettings(wxDarkModeSettings* settings)
+    {
+        ms_settings.reset(settings);
+    }
+
+    // Returns the currently used settings: may only be called when the dark
+    // mode is on.
+    static wxDarkModeSettings& GetSettings()
+    {
+        return *ms_settings;
     }
 
     static DwmSetWindowAttribute_t GetDwmSetWindowAttribute()
@@ -187,12 +205,15 @@ private:
     static wxDynamicLibrary ms_dllDWM;
     static DwmSetWindowAttribute_t ms_pfnDwmSetWindowAttribute;
 
+    static std::unique_ptr<wxDarkModeSettings> ms_settings;
+
     wxDECLARE_DYNAMIC_CLASS(wxDarkModeModule);
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDarkModeModule, wxModule);
 
 wxDynamicLibrary wxDarkModeModule::ms_dllDWM;
+std::unique_ptr<wxDarkModeSettings> wxDarkModeModule::ms_settings;
 
 DwmSetWindowAttribute_t
 wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
@@ -201,7 +222,7 @@ wxDarkModeModule::ms_pfnDwmSetWindowAttribute = (DwmSetWindowAttribute_t)-1;
 // Public API
 // ----------------------------------------------------------------------------
 
-bool wxApp::MSWEnableDarkMode(int flags)
+bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
 {
     if ( !wxMSWImpl::InitDarkMode() )
         return false;
@@ -220,61 +241,23 @@ bool wxApp::MSWEnableDarkMode(int flags)
 
     gs_appMode = mode;
 
+    // Set up the settings to use, allocating a default one if none specified.
+    if ( !settings )
+        settings = new wxDarkModeSettings();
+
+    wxDarkModeModule::SetSettings(settings);
+
     return true;
 }
 
 // ----------------------------------------------------------------------------
-// Supporting functions for the rest of wxMSW code
+// Default wxDarkModeSettings implementation
 // ----------------------------------------------------------------------------
 
-namespace wxMSWDarkMode
-{
+// Implemented here to ensure that it's generated inside the DLL.
+wxDarkModeSettings::~wxDarkModeSettings() = default;
 
-bool IsActive()
-{
-    return wxMSWImpl::ShouldUseDarkMode();
-}
-
-void EnableForTLW(HWND hwnd)
-{
-    // Nothing to do, dark mode support not enabled or dark mode is not used.
-    if ( !wxMSWImpl::ShouldUseDarkMode() )
-        return;
-
-    BOOL useDarkMode = TRUE;
-    HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
-                 (
-                    hwnd,
-                    DWMWA_USE_IMMERSIVE_DARK_MODE,
-                    &useDarkMode,
-                    sizeof(useDarkMode)
-                 );
-    if ( FAILED(hr) )
-        wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
-
-    wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
-}
-
-void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
-{
-    if ( !wxMSWImpl::ShouldUseDarkMode() )
-        return;
-
-    if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
-        wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
-
-    if ( themeName || themeId )
-    {
-        HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
-        if ( FAILED(hr) )
-        {
-            wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
-                                           hwnd, themeName, themeId), hr);
-        }
-    }
-}
-
-wxColour GetColour(wxSystemColour index)
+wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
 {
     // This is not great at all, but better than using light mode colours that
     // are not appropriate for the dark mode.
@@ -345,6 +328,62 @@ wxColour GetColour(wxSystemColour index)
 
     wxFAIL_MSG( "unreachable" );
     return wxColour();
+}
+
+// ----------------------------------------------------------------------------
+// Supporting functions for the rest of wxMSW code
+// ----------------------------------------------------------------------------
+
+namespace wxMSWDarkMode
+{
+
+bool IsActive()
+{
+    return wxMSWImpl::ShouldUseDarkMode();
+}
+
+void EnableForTLW(HWND hwnd)
+{
+    // Nothing to do, dark mode support not enabled or dark mode is not used.
+    if ( !wxMSWImpl::ShouldUseDarkMode() )
+        return;
+
+    BOOL useDarkMode = TRUE;
+    HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
+                 (
+                    hwnd,
+                    DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    &useDarkMode,
+                    sizeof(useDarkMode)
+                 );
+    if ( FAILED(hr) )
+        wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
+
+    wxMSWImpl::AllowDarkModeForWindow(hwnd, true);
+}
+
+void AllowForWindow(HWND hwnd, const wchar_t* themeName, const wchar_t* themeId)
+{
+    if ( !wxMSWImpl::ShouldUseDarkMode() )
+        return;
+
+    if ( wxMSWImpl::AllowDarkModeForWindow(hwnd, true) )
+        wxLogTrace(TRACE_DARKMODE, "Allow dark mode for %p failed", hwnd);
+
+    if ( themeName || themeId )
+    {
+        HRESULT hr = ::SetWindowTheme(hwnd, themeName, themeId);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxString::Format("SetWindowTheme(%p, %s, %s)",
+                                           hwnd, themeName, themeId), hr);
+        }
+    }
+}
+
+wxColour GetColour(wxSystemColour index)
+{
+    return wxDarkModeModule::GetSettings().GetColour(index);
 }
 
 HBRUSH GetBackgroundBrush()
@@ -630,7 +669,9 @@ HandleMenuMessage(WXLRESULT* result,
 
 #else // !wxUSE_DARK_MODE
 
-bool wxApp::MSWEnableDarkMode(int WXUNUSED(flags))
+bool
+wxApp::MSWEnableDarkMode(int WXUNUSED(flags),
+                         wxDarkModeSettings* WXUNUSED(settings))
 {
     return false;
 }

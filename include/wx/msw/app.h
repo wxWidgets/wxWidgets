@@ -17,6 +17,7 @@
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxApp;
+class WXDLLIMPEXP_FWD_CORE wxDarkModeSettings;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_BASE wxLog;
 
@@ -38,12 +39,16 @@ public:
     virtual int GetPrintMode() const { return m_printMode; }
 
     // MSW-specific function to enable experimental dark mode support.
+    //
+    // If settings are specified, the function takes ownership of the pointer,
+    // otherwise the defaults are used.
     enum
     {
         DarkMode_Auto   = 0,  // Use dark mode if the system is using it.
         DarkMode_Always = 1   // Force using dark mode.
     };
-    bool MSWEnableDarkMode(int flags = 0);
+    bool
+    MSWEnableDarkMode(int flags = 0, wxDarkModeSettings* settings = nullptr);
 
     // implementation only
     void OnIdle(wxIdleEvent& event);

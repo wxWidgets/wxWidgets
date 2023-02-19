@@ -3150,6 +3150,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/datectrl.h \
 	wx/msw/calctrl.h \
 	wx/generic/activityindicator.h \
+	wx/msw/darkmode.h \
 	wx/msw/checklst.h \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
