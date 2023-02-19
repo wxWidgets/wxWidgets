@@ -1,0 +1,1 @@
+All (GUI): Fix wxPGVIterator used in wxPropertyGridManager (#23273).
