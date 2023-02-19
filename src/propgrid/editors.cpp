@@ -1386,7 +1386,7 @@ constexpr wxSimpleCheckBoxStates operator|(wxSimpleCheckBoxStates a, wxSimpleChe
     return static_cast<wxSimpleCheckBoxStates>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-constexpr wxSimpleCheckBoxStates operator|=(wxSimpleCheckBoxStates& a, wxSimpleCheckBoxStates b)
+inline wxSimpleCheckBoxStates operator|=(wxSimpleCheckBoxStates& a, wxSimpleCheckBoxStates b)
 {
     return a = a | b;
 }
@@ -1396,7 +1396,7 @@ constexpr wxSimpleCheckBoxStates operator^(wxSimpleCheckBoxStates a, wxSimpleChe
     return static_cast<wxSimpleCheckBoxStates>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
-constexpr wxSimpleCheckBoxStates operator^=(wxSimpleCheckBoxStates& a, wxSimpleCheckBoxStates b)
+inline wxSimpleCheckBoxStates operator^=(wxSimpleCheckBoxStates& a, wxSimpleCheckBoxStates b)
 {
     return a = a ^ b;
 }
