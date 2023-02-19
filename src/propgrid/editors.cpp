@@ -1378,14 +1378,12 @@ enum class wxSimpleCheckBoxStates : int
 
 constexpr wxSimpleCheckBoxStates operator&(wxSimpleCheckBoxStates a, wxSimpleCheckBoxStates b)
 {
-    return static_cast<wxSimpleCheckBoxStates>(static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(a)
-        & static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(b));
+    return static_cast<wxSimpleCheckBoxStates>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 constexpr wxSimpleCheckBoxStates operator|(wxSimpleCheckBoxStates a, wxSimpleCheckBoxStates b)
 {
-    return static_cast<wxSimpleCheckBoxStates>(static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(a)
-        | static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(b));
+    return static_cast<wxSimpleCheckBoxStates>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 constexpr wxSimpleCheckBoxStates operator|=(wxSimpleCheckBoxStates& a, wxSimpleCheckBoxStates b)
@@ -1395,8 +1393,7 @@ constexpr wxSimpleCheckBoxStates operator|=(wxSimpleCheckBoxStates& a, wxSimpleC
 
 constexpr wxSimpleCheckBoxStates operator^(wxSimpleCheckBoxStates a, wxSimpleCheckBoxStates b)
 {
-    return static_cast<wxSimpleCheckBoxStates>(static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(a)
-        ^ static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(b));
+    return static_cast<wxSimpleCheckBoxStates>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
 constexpr wxSimpleCheckBoxStates operator^=(wxSimpleCheckBoxStates& a, wxSimpleCheckBoxStates b)
@@ -1406,7 +1403,7 @@ constexpr wxSimpleCheckBoxStates operator^=(wxSimpleCheckBoxStates& a, wxSimpleC
 
 constexpr bool operator!(wxSimpleCheckBoxStates a)
 {
-    return static_cast<std::underlying_type_t<wxSimpleCheckBoxStates>>(a) == 0;
+    return static_cast<int>(a) == 0;
 }
 
 const int wxSCB_SETVALUE_CYCLE = 2;

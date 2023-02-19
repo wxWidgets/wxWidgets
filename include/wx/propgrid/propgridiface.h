@@ -56,24 +56,22 @@ enum class wxPGVFBFlags : int
 
 constexpr wxPGVFBFlags operator|(wxPGVFBFlags a, wxPGVFBFlags b)
 {
-    return static_cast<wxPGVFBFlags>(static_cast<std::underlying_type_t<wxPGVFBFlags>>(a)
-        | static_cast<std::underlying_type_t<wxPGVFBFlags>>(b));
+    return static_cast<wxPGVFBFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 constexpr wxPGVFBFlags operator&(wxPGVFBFlags a, wxPGVFBFlags b)
 {
-    return static_cast<wxPGVFBFlags>(static_cast<std::underlying_type_t<wxPGVFBFlags>>(a)
-        & static_cast<std::underlying_type_t<wxPGVFBFlags>>(b));
+    return static_cast<wxPGVFBFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 constexpr wxPGVFBFlags operator~(wxPGVFBFlags a)
 {
-    return static_cast<wxPGVFBFlags>(~static_cast<std::underlying_type_t<wxPGVFBFlags>>(a));
+    return static_cast<wxPGVFBFlags>(~static_cast<int>(a));
 }
 
 constexpr bool operator!(wxPGVFBFlags a)
 {
-    return static_cast<std::underlying_type_t<wxPGVFBFlags>>(a) == 0;
+    return static_cast<int>(a) == 0;
 }
 
 #if WXWIN_COMPATIBILITY_3_2
