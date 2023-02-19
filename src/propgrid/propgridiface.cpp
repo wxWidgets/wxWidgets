@@ -887,6 +887,7 @@ public:
     }
     virtual ~wxPGVIteratorBase_State() = default;
     virtual void Next() override { m_it.Next(); }
+    virtual bool AtEnd() const override { return m_it.AtEnd(); }
 };
 
 wxPGVIterator wxPropertyGridInterface::GetVIterator( int flags ) const

@@ -2349,9 +2349,15 @@ class wxPGVIteratorBase_Manager : public wxPGVIteratorBase
 {
 public:
     wxPGVIteratorBase_Manager( wxPropertyGridManager* manager, int flags )
-        : m_manager(manager), m_flags(flags), m_curPage(0)
+        : m_manager(manager), m_flags(flags)
     {
-        m_it.Init(manager->GetPage(0), flags);
+        // Start with first non-empty page
+        for ( m_curPage = 0; m_curPage < m_manager->GetPageCount(); m_curPage++ )
+        {
+            m_it.Init(m_manager->GetPage(m_curPage), m_flags);
+            if ( !m_it.AtEnd() )
+                break;
+        }
     }
     virtual ~wxPGVIteratorBase_Manager() = default;
     virtual void Next() override
@@ -2361,11 +2367,21 @@ public:
         // Next page?
         if ( m_it.AtEnd() )
         {
+            // Skip empty pages
             m_curPage++;
-            if ( m_curPage < m_manager->GetPageCount() )
-                m_it.Init( m_manager->GetPage(m_curPage), m_flags );
+            for ( ; m_curPage < m_manager->GetPageCount(); m_curPage++ )
+            {
+                m_it.Init(m_manager->GetPage(m_curPage), m_flags);
+                if ( !m_it.AtEnd() )
+                    break;
+            }
         }
     }
+    virtual bool AtEnd() const override
+    {
+        return m_it.AtEnd() && m_curPage == m_manager->GetPageCount();
+    }
+
 private:
     wxPropertyGridManager*  m_manager;
     int                     m_flags;

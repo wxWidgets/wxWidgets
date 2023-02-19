@@ -391,6 +391,7 @@ class WXDLLIMPEXP_PROPGRID wxPGVIteratorBase : public wxObjectRefData
 public:
     wxPGVIteratorBase() = default;
     virtual void Next() = 0;
+    virtual bool AtEnd() const = 0;
 protected:
     virtual ~wxPGVIteratorBase() = default;
 
@@ -424,7 +425,7 @@ public:
         return *this;
     }
     void Next() { m_pIt->Next(); }
-    bool AtEnd() const { return m_pIt->m_it.AtEnd(); }
+    bool AtEnd() const { return m_pIt->AtEnd(); }
     wxPGProperty* GetProperty() const { return m_pIt->m_it.GetProperty(); }
 protected:
     wxPGVIteratorBase*  m_pIt;
