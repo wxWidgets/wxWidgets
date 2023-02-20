@@ -398,13 +398,34 @@ public:
     bool IsSticky() const;
 
     /**
-
+        Associates a number with the item
+        @param UserData Number to associate
+        @sa GetUserData()
     */
-    void SetUserData(long l);
-    /**
+    void SetUserData(long UserData);
 
+    /**
+        Get number associated with the item
+        @return Associated number
+        @sa SetUserData()
     */
     long GetUserData() const;
+
+    /**
+        Associates a wxObject with the item
+        @param ClientData Pointer to the wxObject
+        @sa GetClientData()
+        @since 3.3.0
+    */
+    void SetClientData(wxObject* ClientData);
+
+    /**
+        Get wxObject associated with the item
+        @return Pointer to the associated wxObject
+        @sa SetClientData()
+        @since 3.3.0
+    */
+    wxObject* GetClientData() const;
 
     /**
 
@@ -806,6 +827,24 @@ public:
     void SetMargins(const wxSize& size);
     void SetMargins(int x, int y);
     void SetMargins(int left, int right, int top, int bottom);
+
+    /**
+        Associates a wxObject with the item identified by Id
+        @param Id Identifier of the desired item
+        @param ClientData Pointer to the wxObject
+        @sa GetToolClientData()
+        @since 3.3.0
+    */
+    void SetToolClientData (int Id, wxObject* ClientData);
+
+    /**
+        Get wxObject associated with the item identified by Id
+        @param Id Identifier of the desired item
+        @return Pointer to the associated wxObject
+        @sa SetToolClientData()
+        @since 3.3.0
+    */
+    wxObject* GetToolClientData(int Id) const;
 
     void SetToolBitmapSize(const wxSize& size);
     wxSize GetToolBitmapSize() const;
