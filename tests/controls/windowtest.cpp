@@ -30,6 +30,7 @@
 #include "wx/wupdlock.h"
 #include "wx/stdpaths.h"
 
+#ifdef __WXGTK__
 /* horse.cur - 326 bytes */
 static const unsigned char horse[] =
 {
@@ -75,6 +76,7 @@ static const unsigned char horse[] =
     0x0f, 0xff, 0xff, 0xff, 0xef,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
+#endif
 
 class WindowTestCase
 {
