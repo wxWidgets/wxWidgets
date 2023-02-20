@@ -985,7 +985,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            wxItemKind kind,
                            const wxString& shortHelpString,
                            const wxString& longHelpString,
-                           wxObject* WXUNUSED(client_data))
+                           wxObject* client_data)
 {
     wxAuiToolBarItem item;
     item.m_window = nullptr;
@@ -1004,6 +1004,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.m_sizerItem = nullptr;
     item.m_minSize = wxDefaultSize;
     item.m_userData = 0;
+    item.m_clientData = client_data;
     item.m_sticky = false;
 
     if (item.m_toolId == wxID_ANY)
@@ -1258,6 +1259,24 @@ wxAuiToolBarItem* wxAuiToolBar::FindToolByIndex(int idx) const
         return nullptr;
 
     return &(m_items[idx]);
+}
+
+void wxAuiToolBar::SetToolClientData (int tool_id, wxObject *client_data)
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item)
+        return;
+
+    item->m_clientData = client_data;
+}
+
+wxObject* wxAuiToolBar::GetToolClientData(int tool_id) const
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item)
+        return nullptr;
+
+    return item->m_clientData;
 }
 
 void wxAuiToolBar::SetToolBitmapSize(const wxSize& WXUNUSED(size))
