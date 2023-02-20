@@ -29,6 +29,8 @@ class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasImpl
 {
     typedef wxGLCanvasImpl BaseType;
 public:
+    wxGLCanvas() = default;
+
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
                wxWindowID id = wxID_ANY,
