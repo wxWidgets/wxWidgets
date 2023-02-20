@@ -1084,10 +1084,9 @@ private:
     // Return true if this particular window is not a child of the static box.
     bool CheckIfNonBoxChild(wxWindow* win) const;
 
-    // Set to 1 if any items _not_ using the associated static box as parent
-    // are added to this sizer, to 0 if there are none and to -1 if we have to
-    // check whether there are any.
-    int m_hasNonBoxChildren = 0;
+    // Set to true if there are any items _not_ using the associated static box
+    // as parent in this sizer (either directly in it or in its child sizers).
+    bool m_hasNonBoxChildren = false;
 
     wxDECLARE_CLASS(wxStaticBoxSizer);
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxSizer);
