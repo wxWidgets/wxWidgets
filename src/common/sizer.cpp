@@ -2832,23 +2832,21 @@ bool wxStaticBoxSizer::CheckIfNonBoxChild(wxWindow* win) const
 
 wxSizerItem* wxStaticBoxSizer::DoInsert(size_t index, wxSizerItem* item)
 {
-    // Check if we have any non-box children unless we already know that we do.
-    if ( !m_hasNonBoxChildren )
+    if ( wxWindow* const win = item->GetWindow() )
     {
-        if ( wxWindow* const win = item->GetWindow() )
-        {
-            // We can check immediately if we have any non-box children and
-            // it's better to do it here, for example to allow putting a
-            // breakpoint on wxLogDebug() message above and immediately seeing
-            // where the item is inserted from, if it's not clear otherwise.
-            m_hasNonBoxChildren = CheckIfNonBoxChild(win);
-        }
-        else if ( item->IsSizer() )
-        {
-            // We can't check immediately as elements can be added to the child
-            // sizer after adding it to this one, so schedule a check for later.
+        // We can check immediately if we have any non-box children and
+        // it's better to do it here, for example to allow putting a
+        // breakpoint on wxLogDebug() message above and immediately seeing
+        // where the item is inserted from, if it's not clear otherwise.
+        if ( CheckIfNonBoxChild(win) )
+            m_hasNonBoxChildren = 1;
+    }
+    else if ( item->IsSizer() )
+    {
+        // We can't check immediately as elements can be added to the child
+        // sizer after adding it to this one, so schedule a check for later.
+        if ( !m_hasNonBoxChildren )
             m_hasNonBoxChildren = -1;
-        }
     }
 
     return wxBoxSizer::DoInsert(index, item);
