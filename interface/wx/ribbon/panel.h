@@ -71,7 +71,7 @@ wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
     it is recommended that ribbon and non ribbon controls are not mixed in one
     panel.
 
-    @sa wxRibbonPage
+    @see wxRibbonPage
 
     @beginStyleTable
     @style{wxRIBBON_PANEL_DEFAULT_STYLE}

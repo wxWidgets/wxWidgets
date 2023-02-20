@@ -410,7 +410,7 @@ public:
         @param rect
             The rectangle within which to draw.
 
-        @sa GetPageBackgroundRedrawArea
+        @see GetPageBackgroundRedrawArea
     */
     virtual void DrawPageBackground(
                         wxDC& dc,
@@ -800,7 +800,7 @@ public:
             The offset where the client rectangle begins within the panel (may
             be @NULL).
 
-        @sa GetPanelClientSize()
+        @see GetPanelClientSize()
     */
     virtual wxSize GetPanelSize(
                         wxDC& dc,
@@ -823,7 +823,7 @@ public:
             The offset where the returned client size begins within the given
             @a size (may be @NULL).
 
-        @sa GetPanelSize()
+        @see GetPanelSize()
     */
     virtual wxSize GetPanelClientSize(
                         wxDC& dc,
@@ -860,7 +860,7 @@ public:
         @param client_size
             The client size.
 
-        @sa GetGalleryClientSize()
+        @see GetGalleryClientSize()
     */
     virtual wxSize GetGallerySize(
                         wxDC& dc,

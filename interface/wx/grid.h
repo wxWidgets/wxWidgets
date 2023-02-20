@@ -4374,14 +4374,14 @@ public:
         needs to be saved. The widths can be later restored using
         SetColSizes().
 
-        @sa wxGridSizesInfo, GetRowSizes()
+        @see wxGridSizesInfo, GetRowSizes()
      */
     wxGridSizesInfo GetColSizes() const;
 
     /**
         Get size information for all row at once.
 
-        @sa wxGridSizesInfo, GetColSizes()
+        @see wxGridSizesInfo, GetColSizes()
      */
     wxGridSizesInfo GetRowSizes() const;
 
@@ -4391,14 +4391,14 @@ public:
         This is usually called with wxGridSizesInfo object previously returned
         by GetColSizes().
 
-        @sa SetRowSizes()
+        @see SetRowSizes()
      */
     void SetColSizes(const wxGridSizesInfo& sizeInfo);
 
     /**
         Restore all rows sizes.
 
-        @sa SetColSizes()
+        @see SetColSizes()
      */
     void SetRowSizes(const wxGridSizesInfo& sizeInfo);
 
