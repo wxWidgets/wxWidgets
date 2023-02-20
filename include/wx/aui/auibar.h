@@ -249,8 +249,8 @@ private:
     bool m_active;               // true if the item is currently active
     bool m_dropDown;             // true if the item has a dropdown button
     bool m_sticky;               // overrides button states if true (always active)
-    long m_userData;             // user-specified data
-    wxObject* m_clientData;      // client data
+    long m_userData;             // number associated with the item
+    wxObject* m_clientData;      // pointer to a wxObject associated with the item
     int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
@@ -566,7 +566,7 @@ public:
     void SetMargins(int x, int y) { SetMargins(x, x, y, y); }
     void SetMargins(int left, int right, int top, int bottom);
 
-    void SetToolClientData (int tool_id, wxObject *client_data);
+    void SetToolClientData (int tool_id, wxObject* client_data);
     wxObject* GetToolClientData(int tool_id) const;
 
     void SetToolBitmapSize(const wxSize& size);
