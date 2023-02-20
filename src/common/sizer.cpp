@@ -2867,8 +2867,30 @@ void wxStaticBoxSizer::RepositionChildren(const wxSize& minSize)
 
     wxPoint old_pos( m_position );
 
-    if ( m_hasNonBoxChildren == -1 )
-        m_hasNonBoxChildren = CheckForNonBoxChildren(this);
+    switch ( m_hasNonBoxChildren )
+    {
+        case 0:
+            // We didn't have any sibling children so far, but if we don't have
+            // any real children neither, chances are that they could have been
+            // added, so check for this: but if we do have real children, don't
+            // bother doing anything as this would result in extra overhead for
+            // every re-layout.
+            if ( !m_staticBox->GetChildren().empty() )
+                break;
+
+            wxFALLTHROUGH;
+
+        case -1:
+            // We don't know yet, check.
+            m_hasNonBoxChildren = CheckForNonBoxChildren(this);
+            break;
+
+        case 1:
+            // We already know that we have some and we don't support replacing
+            // the existing sibling children with real children, so don't
+            // bother doing anything.
+            break;
+    }
 
     if ( !m_hasNonBoxChildren )
     {
