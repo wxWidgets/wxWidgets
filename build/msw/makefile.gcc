@@ -1939,6 +1939,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_access.o \
 	$(OBJS)\monodll_msw_bmpbndl.o \
+	$(OBJS)\monodll_overlay.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_filepickerg.o \
@@ -2287,6 +2288,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_access.o \
 	$(OBJS)\monodll_msw_bmpbndl.o \
+	$(OBJS)\monodll_overlay.o \
 	$(OBJS)\monodll_generic_accel.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
@@ -2791,6 +2793,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_access.o \
 	$(OBJS)\monolib_msw_bmpbndl.o \
+	$(OBJS)\monolib_overlay.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_filepickerg.o \
@@ -3139,6 +3142,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_access.o \
 	$(OBJS)\monolib_msw_bmpbndl.o \
+	$(OBJS)\monolib_overlay.o \
 	$(OBJS)\monolib_generic_accel.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
@@ -3522,6 +3526,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_access.o \
 	$(OBJS)\coredll_msw_bmpbndl.o \
+	$(OBJS)\coredll_overlay.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_filepickerg.o \
@@ -3870,6 +3875,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_access.o \
 	$(OBJS)\coredll_msw_bmpbndl.o \
+	$(OBJS)\coredll_overlay.o \
 	$(OBJS)\coredll_generic_accel.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
@@ -4210,6 +4216,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_access.o \
 	$(OBJS)\corelib_msw_bmpbndl.o \
+	$(OBJS)\corelib_overlay.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_filepickerg.o \
@@ -4558,6 +4565,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_access.o \
 	$(OBJS)\corelib_msw_bmpbndl.o \
+	$(OBJS)\corelib_overlay.o \
 	$(OBJS)\corelib_generic_accel.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
@@ -8501,6 +8509,11 @@ $(OBJS)\monodll_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_overlay.o: ../../src/msw/overlay.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11088,6 +11101,11 @@ $(OBJS)\monolib_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_overlay.o: ../../src/msw/overlay.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13636,6 +13654,11 @@ $(OBJS)\coredll_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_overlay.o: ../../src/msw/overlay.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -15385,6 +15408,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_msw_bmpbndl.o: ../../src/msw/bmpbndl.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_overlay.o: ../../src/msw/overlay.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
