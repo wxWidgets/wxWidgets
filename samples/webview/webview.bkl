@@ -14,6 +14,7 @@
         <wx-lib>base</wx-lib>
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
+            <sys-lib>$(LIB_LEXILLA)</sys-lib>
         </if>
     </exe>
 

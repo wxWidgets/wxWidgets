@@ -30,3 +30,11 @@
 	path = 3rdparty/nanosvg
 	url = https://github.com/wxWidgets/nanosvg
 	branch = wx
+[submodule "src/stc/scintilla"]
+	path = src/stc/scintilla
+	url = https://github.com/wxWidgets/scintilla.git
+	branch = wx
+[submodule "src/stc/lexilla"]
+	path = src/stc/lexilla
+	url = https://github.com/wxWidgets/lexilla.git
+	branch = wx

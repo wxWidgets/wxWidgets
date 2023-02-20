@@ -571,6 +571,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_0
 
     static wxVersionInfo GetLibraryVersionInfo();
+    static wxVersionInfo GetLexerVersionInfo();
 
 protected:
     virtual void DoSetValue(const wxString& value, int flags) override;
