@@ -2824,7 +2824,7 @@ bool wxStaticBoxSizer::CheckIfNonBoxChild(wxWindow* win) const
     // box, but it might break the existing code and as we only allow
     // this for compatibility in the first place, it seems better not
     // to risk it.
-    m_staticBox->MSWDisableComposited();
+    win->MSWDisableComposited();
 #endif // __WXMSW__
 
     return true;
