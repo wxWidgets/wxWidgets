@@ -106,13 +106,18 @@ bool wxStaticBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 
 bool wxStaticBox::ShouldUseCustomPaint() const
 {
-    // When not using double buffering, we paint the box ourselves by default
-    // because using the standard control default WM_PAINT handler results in
-    // awful flicker. However this can be disabled by setting a system option
-    // which can be useful if the application paints on the box itself (which
-    // should be avoided, but some existing code does it).
-    return !IsDoubleBuffered() &&
-            !wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint"));
+    // We currently always custom paint the box because we can't rely on double
+    // buffering remaining on even if it is on now, i.e. IsDoubleBuffered()
+    // could return true right but WS_EX_COMPOSITED could get turned off later
+    // because MSWDisableComposited() is called and this would make default
+    // WM_PAINT not work correctly any longer. A probably better solution would
+    // be to notify all windows from MSWDisableComposited() when the double
+    // buffered status changes.
+    //
+    // Still allow be disabling this by setting a system option which can be
+    // useful if the application paints on the box itself (which should be
+    // avoided, but some existing code does it).
+    return !wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint"));
 }
 
 void wxStaticBox::UseCustomPaint()
