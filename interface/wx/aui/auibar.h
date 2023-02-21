@@ -739,8 +739,7 @@ public:
         Add a new tool to the toolbar.
 
         This function works similarly to the corresponding wxToolBar::AddTool()
-        overloads, but notice that there is currently no support for @a
-        client_data in this class, i.e. this parameter is simply ignored.
+        overloads. Note that before 3.3.0 the @a client_data parameter was not used.
      */
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
