@@ -106,18 +106,13 @@ bool wxStaticBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 
 bool wxStaticBox::ShouldUseCustomPaint() const
 {
-    // We currently always custom paint the box because we can't rely on double
-    // buffering remaining on even if it is on now, i.e. IsDoubleBuffered()
-    // could return true right but WS_EX_COMPOSITED could get turned off later
-    // because MSWDisableComposited() is called and this would make default
-    // WM_PAINT not work correctly any longer. A probably better solution would
-    // be to notify all windows from MSWDisableComposited() when the double
-    // buffered status changes.
-    //
-    // Still allow be disabling this by setting a system option which can be
-    // useful if the application paints on the box itself (which should be
-    // avoided, but some existing code does it).
-    return !wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint"));
+    // When not using double buffering, we paint the box ourselves by default
+    // because using the standard control default WM_PAINT handler results in
+    // awful flicker. However this can be disabled by setting a system option
+    // which can be useful if the application paints on the box itself (which
+    // should be avoided, but some existing code does it).
+    return !IsDoubleBuffered() &&
+            !wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint"));
 }
 
 void wxStaticBox::UseCustomPaint()
@@ -127,12 +122,22 @@ void wxStaticBox::UseCustomPaint()
     // means we don't need to do anything.
     if ( GetBackgroundStyle() != wxBG_STYLE_PAINT )
     {
+        wxMSWWinExStyleUpdater(GetHwnd()).TurnOff(WS_EX_TRANSPARENT);
+
         Bind(wxEVT_PAINT, &wxStaticBox::OnPaint, this);
 
         // Our OnPaint() completely erases our background, so don't do it in
         // WM_ERASEBKGND too to avoid flicker.
         SetBackgroundStyle(wxBG_STYLE_PAINT);
     }
+}
+
+void wxStaticBox::MSWOnDisabledComposited()
+{
+    // We need to enable custom painting if we're not using compositing any
+    // longer, as otherwise the window is not drawn correctly due to it using
+    // WS_EX_TRANSPARENT and thus not redrawing its background.
+    UseCustomPaint();
 }
 
 bool wxStaticBox::Create(wxWindow* parent,
