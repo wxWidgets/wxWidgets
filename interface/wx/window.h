@@ -593,6 +593,30 @@ public:
     virtual void AddChild(wxWindow* child);
 
     /**
+        Invoke the given functor for all children of the given window
+        recursively.
+
+        This function calls @a functor for the window itself and then for all
+        of its children, recursively.
+
+        Example of using it for implementing a not very smart translation
+        function:
+        @code
+        void MyFrame::OnTranslate(wxCommandEvent&) {
+            CallForEachChild([](wxWindow* win) {
+                wxString rest;
+                if ( win->GetLabel().StartsWith("Hello ", &rest) )
+                    win->SetLabel("Bonjour " + rest);
+            });
+        }
+        @endcode
+
+        @since 3.3.0
+     */
+    template <typename T>
+    void CallForEachChild(const T& functor);
+
+    /**
         Destroys all children of a window. Called automatically by the destructor.
     */
     bool DestroyChildren();

@@ -784,6 +784,10 @@ public:
     // needed just for extended runtime
     const wxWindowList& GetWindowChildren() const { return GetChildren() ; }
 
+        // call the specified functor for all children, recursively
+    template <typename T>
+    void CallForEachChild(const T& fn);
+
         // get the window before/after this one in the parents children list,
         // returns nullptr if this is the first/last window
     wxWindow *GetPrevSibling() const { return DoGetSibling(OrderBefore); }
@@ -2055,6 +2059,15 @@ private:
 inline wxWindow *wxWindowBase::GetGrandParent() const
 {
     return m_parent ? m_parent->GetParent() : nullptr;
+}
+
+template <typename T>
+void wxWindowBase::CallForEachChild(const T& fn)
+{
+    fn(static_cast<wxWindow*>(this));
+
+    for ( auto& child : GetChildren() )
+        child->CallForEachChild(fn);
 }
 
 // ----------------------------------------------------------------------------
