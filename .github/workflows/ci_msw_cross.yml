@@ -53,6 +53,7 @@ on:
       - 'wxwidgets.props'
       - 'CMakeLists.txt'
 
+# Ensure we have at most a single build running for the given PR.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
