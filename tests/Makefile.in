@@ -891,7 +891,7 @@ test_drawing_fonttest.o: $(srcdir)/drawing/fonttest.cpp $(TEST_DRAWING_ODEP)
 test_drawingplugin_pluginsample.o: $(srcdir)/drawing/pluginsample.cpp
 	$(CXXC) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(srcdir)/drawing/pluginsample.cpp
 
-test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
+test_gui_sample_rc.o: $(srcdir)/../test/test.rc $(TEST_GUI_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/single_include
 
 test_gui_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_GUI_ODEP)
@@ -1209,7 +1209,7 @@ test_gui_setsize.o: $(srcdir)/window/setsize.cpp $(TEST_GUI_ODEP)
 test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/xml/xrctest.cpp
 
-test_allheaders_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_ALLHEADERS_ODEP)
+test_allheaders_sample_rc.o: $(srcdir)/../test/test.rc $(TEST_ALLHEADERS_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/single_include
 
 test_allheaders_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_ALLHEADERS_ODEP)
