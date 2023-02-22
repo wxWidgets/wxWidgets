@@ -387,8 +387,17 @@ void wxFontRefData::Alloc()
                 }
             }
 
-            m_info = wxNativeFontInfo();
+            // Preserve the fields not represented by CTFont.
+            const bool wasUnderlined = m_info.GetUnderlined();
+            const bool wasStrikethrough = m_info.GetStrikethrough();
+
             m_info.InitFromFont(m_ctFont);
+
+            // Restore them as they were reset by InitFromFont().
+            if ( wasUnderlined )
+                m_info.SetUnderlined(wasUnderlined);
+            if ( wasStrikethrough )
+                m_info.SetStrikethrough(wasStrikethrough);
 
             entryWithSize.font = m_ctFont;
             entryWithSize.cgFont = m_cgFont;

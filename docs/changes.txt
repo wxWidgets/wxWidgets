@@ -250,6 +250,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix underlined fonts sometimes appearing without underline (#23264).
 - Respect composition mode when drawing bitmaps (#23240).
 
 
