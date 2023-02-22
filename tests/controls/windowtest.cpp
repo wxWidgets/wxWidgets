@@ -198,6 +198,10 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     CHECK(m_window->GetCursor().IsOk());
 
 #ifndef __WXGTK__
+// According to documentation cursors on X/GTK are different than in Windows/OSX.
+// On X/GTK, using the constructor with wxString parameter is loading the cursor
+// from the external file and not creating it from embedded bits/resources
+// Therefore different path are used for creating embedded cursors
     wxCursor resCursor1( "horse" );
     CHECK( resCursor1.IsOk() );
 #else
