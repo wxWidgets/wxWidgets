@@ -39426,6 +39426,24 @@ fi
 
 USE_STC=0
 if test "$wxUSE_STC" = "yes"; then
+   if ! test -f "$srcdir/src/stc/scintilla/include/Scintilla.h" ; then
+       as_fn_error $? "
+   The required Scintilla header not found. You probably need to run
+
+       git submodule update --init src/stc/scintilla
+
+   to fix this." "$LINENO" 5
+   fi
+
+   if ! test -f "$srcdir/src/stc/lexilla/include/Lexilla.h" ; then
+       as_fn_error $? "
+   The required Lexilla header not found. You probably need to run
+
+       git submodule update --init src/stc/lexilla
+
+   to fix this." "$LINENO" 5
+   fi
+
    $as_echo "#define wxUSE_STC 1" >>confdefs.h
 
    USE_STC=1
