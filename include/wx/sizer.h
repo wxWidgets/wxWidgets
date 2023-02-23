@@ -770,6 +770,9 @@ protected:
     virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item);
 
 private:
+    // Get the child item with the given index and assert if there is none.
+    wxSizerItemList::compatibility_iterator GetChildNode(size_t index) const;
+
     wxDECLARE_CLASS(wxSizer);
 };
 
