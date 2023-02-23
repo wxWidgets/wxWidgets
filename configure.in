@@ -6777,6 +6777,24 @@ fi
 
 USE_STC=0
 if test "$wxUSE_STC" = "yes"; then
+   if ! test -f "$srcdir/src/stc/scintilla/include/Scintilla.h" ; then
+       AC_MSG_ERROR([
+   The required Scintilla header not found. You probably need to run
+
+       git submodule update --init src/stc/scintilla
+
+   to fix this.])
+   fi
+
+   if ! test -f "$srcdir/src/stc/lexilla/include/Lexilla.h" ; then
+       AC_MSG_ERROR([
+   The required Lexilla header not found. You probably need to run
+
+       git submodule update --init src/stc/lexilla
+
+   to fix this.])
+   fi
+
    AC_DEFINE(wxUSE_STC)
    USE_STC=1
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS stc"
