@@ -146,7 +146,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
     fontBig.SetWeight(wxFONTWEIGHT_BOLD);
     label->SetFont(fontBig);
 
-    m_sizerText->Add(label, wxSizerFlags().Centre().Border());
+    m_sizerText->Add(label, wxSizerFlags().Border(wxTOP|wxDOWN));
     m_sizerText->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     AddText(info.GetDescription());
@@ -206,7 +206,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
     if ( icon.IsOk() )
     {
         sizerIconAndText->Add(new wxStaticBitmap(this, wxID_ANY, icon),
-                                wxSizerFlags().Border(wxRIGHT));
+                                wxSizerFlags().DoubleBorder(wxRIGHT));
 
         // Add a border to the right of the text to make the layout slightly
         // more symmetrical.
@@ -249,7 +249,7 @@ void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
 
 void wxGenericAboutDialog::AddControl(wxWindow *win)
 {
-    AddControl(win, wxSizerFlags().Border(wxDOWN).Centre());
+    AddControl(win, wxSizerFlags().Border(wxDOWN));
 }
 
 wxStaticText* wxGenericAboutDialog::AddText(const wxString& text)
@@ -257,9 +257,7 @@ wxStaticText* wxGenericAboutDialog::AddText(const wxString& text)
     if ( text.empty() )
         return nullptr;
 
-    auto *win = new wxStaticText(this, wxID_ANY, text,
-                                wxDefaultPosition, wxDefaultSize,
-                                wxALIGN_CENTRE);
+    auto *win = new wxStaticText(this, wxID_ANY, text);
     AddControl(win);
 
     return win;
