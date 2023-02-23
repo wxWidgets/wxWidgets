@@ -44,6 +44,8 @@ public:
     virtual bool IsCollapsed() const override
         { return m_collapsed; }
 
+    virtual bool HasTransparentBackground() override { return true; }
+
 protected:
 
     virtual wxSize DoGetBestClientSize() const override;
