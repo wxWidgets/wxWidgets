@@ -1,0 +1,1 @@
+wxMSW: Fix background of wxCollapsiblePane inside wxNotebook (#23274).
