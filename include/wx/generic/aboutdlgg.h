@@ -85,6 +85,9 @@ private:
     void OnOK(wxCommandEvent& event);
 #endif // !wxUSE_MODAL_ABOUT_DIALOG
 
+    // The panel containing the dialog contents.
+    wxPanel *m_contents = nullptr;
+
     wxSizer *m_sizerText = nullptr;
 };
 
