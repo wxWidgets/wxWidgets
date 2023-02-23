@@ -102,6 +102,14 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
     ret.Replace("(c)", copyrightSign);
     ret.Replace("(C)", copyrightSign);
 
+#ifdef __WXMSW__
+    // Under MSW the dialogs typically show only "(C)" and "Copyright (C)", but
+    // under other platforms dialogs do use the word "Copyright" too, so to
+    // make it simpler to do the right thing under all platforms, remove the
+    // extra word here.
+    ret.Replace("Copyright " + copyrightSign, copyrightSign);
+#endif // __WXMSW__
+
     return ret;
 }
 
