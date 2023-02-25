@@ -251,6 +251,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix initial width of empty wxTextCtrl (#23295).
 - Fix underlined fonts sometimes appearing without underline (#23264).
 - Respect composition mode when drawing bitmaps (#23240).
 - Fix background colour of shaped windows, e.g. wxRichToolTip (#23296).
