@@ -258,7 +258,9 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     // only set the native background color if the toplevel window's
     // background is not supposed to be transparent, otherwise the
     // transparency is lost
-    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT)
+    // we cannot set the background color on a shaped toplevel window
+    // otherwise we loose the shape and end up with a rectangular background
+    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT && GetShape().IsEmpty() )
     {
         if ( m_nowpeer )
             return m_nowpeer->SetBackgroundColour(c);
