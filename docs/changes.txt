@@ -365,6 +365,7 @@ wxMSW:
 - Work around MSVS 2022 optimizer bug in wxImage::ShrinkBy() (#23164).
 - Fix link error with wxSimplebook in DLL builds (Mark Roszko, #22805).
 - Avoid errors when including wx/msw/msvcrt.h before other wx headers (#23194).
+- Fix drawing owner-drawn menu items with bitmaps (Jacob Gillespie, #23230).
 
 wxOSX:
 
