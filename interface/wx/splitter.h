@@ -352,7 +352,10 @@ public:
         Sets the sash position.
 
         @param position
-            The sash position in pixels.
+            The sash position in pixels.\n
+            Note that a position of @c 0 will set the sash to the middle of the window.\n
+            A negative value will "wrap around" the sash's position. For example, @c -10
+            will place the sash at @c 10 units from right of the splitter window.
         @param redraw
             If @true, resizes the panes and redraws the sash and border.
 
