@@ -87,7 +87,7 @@ public:
     virtual bool LoadFile(const wxString& file = wxT("")) override;
     virtual bool DisplaySection(int sectionNo) override;
     virtual bool DisplaySection(const wxString& section) override { return Display(section); }
-    virtual bool DisplayBlock(long blockNo) override { return DisplaySection(blockNo); }
+    virtual bool DisplayBlock(long blockNo) override { return DisplaySection(static_cast<int>(blockNo)); }
     virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos) override;
 
     virtual void SetFrameParameters(const wxString& titleFormat,

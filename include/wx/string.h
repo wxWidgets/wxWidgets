@@ -553,7 +553,7 @@ private:
           c->Reset();
 
           // and remember the last used element
-          LastUsedCacheElement() = c - cacheBegin;
+          LastUsedCacheElement() = static_cast<unsigned int>(c - cacheBegin);
       }
 
       return c;
