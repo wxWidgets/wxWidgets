@@ -146,6 +146,10 @@ public:
         any occurrences of @c "(C)" in @a copyright will be replaced by the
         copyright symbol (circled C) automatically, which means that you can avoid
         using this symbol in the program source code which can be problematic,
+
+        Also note that under MSW platform the word "Copyright" itself will be
+        removed from the string if it is followed by the copyright symbol, to
+        follow the platform convention.
     */
     void SetCopyright(const wxString& copyright);
 
