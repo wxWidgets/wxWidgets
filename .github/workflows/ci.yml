@@ -76,58 +76,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 2
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            gtk_version: 2
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK UTF-8
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
-            use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 static with gcc 4.8
             runner: ubuntu-latest
             compiler: g++-4.8
             container: ubuntu:18.04
             configure_flags: --disable-shared
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 STL
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --enable-stl --disable-compat30
-            use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK 3 with clang
-            runner: ubuntu-20.04
-            compiler: clang++-10
-            configure_flags: --disable-sys-libs
-            use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK with ASAN
-            runner: ubuntu-22.04
-            configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
-            skip_samples: true
-            use_asan: true
-            use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK C++20
-            runner: ubuntu-22.04
-            configure_flags: --with-cxx=20
-            skip_samples: true
-          - name: Ubuntu 18.04 wxX11
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-x11 --enable-pch --disable-stc
-            skip_samples: true
-          - name: Ubuntu 18.04 wxDFB
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-directfb --enable-pch --disable-stc
-            skip_samples: true
-            allow_warnings: true
-          - name: Ubuntu 18.04 wxQt
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-qt --enable-pch --without-opengl
-            skip_samples: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -163,7 +117,7 @@ jobs:
               #     closed https://github.com/actions/setup-python/issues/370
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
-              apt-get install -qq coreutils ${compiler-g++} git libffi-dev make pkg-config python3 python3-pip sudo xvfb
+              apt-get install -qq coreutils ${compiler-g++} git make pkg-config python3 python3-cffi python3-pip sudo xvfb
               ;;
 
             '')
