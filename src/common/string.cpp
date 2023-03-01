@@ -229,7 +229,7 @@ void wxString::PosLenToImpl(size_t pos, size_t len,
             // going beyond the end of the string, just as std::string does
             const const_iterator e(end());
             const_iterator i(b);
-            while ( len && i <= e )
+            while ( len && i < e )
             {
                 ++i;
                 --len;
