@@ -240,6 +240,7 @@ All:
 - Add move ctor and assignment to wxString (Pavel Tyunin, #23224).
 - Enable large file support in Unix CMake builds (Maarten Bent, #22750).
 - Update Georgian translations (NorwayFun, #22673).
+- Don't use invalid iterator in wxString in UTF-8 build (Ian Day, #23305).
 
 All (GUI):
 
