@@ -340,6 +340,15 @@ TEST_CASE("wxArrayString", "[dynarray]")
     CHECK( a7.size() == 1 );
 
     wxCLANG_WARNING_RESTORE(self-assign-overloaded)
+
+    wxArrayString a8( { wxT("dog"), wxT("human"), wxT("condor"), wxT("thermit"), wxT("alligator") } );
+    CHECK( a8.size() == 5 );
+    CHECK( a8[1] == "human" );
+    CHECK( a8[4] == "alligator" );
+
+    a8 = { wxT("Foo") };
+    CHECK( a8.size() == 1 );
+    CHECK( a8[0] == "Foo" );
 }
 
 TEST_CASE("wxSortedArrayString", "[dynarray]")
@@ -623,6 +632,9 @@ TEST_CASE("wxDynArray::" #name, "[dynarray]")                                 \
     CHECK( b.Index( 5 ) == 2 );                                      \
     CHECK( b.Index( 6 ) == wxNOT_FOUND );                            \
     CHECK( b.Index( 17 ) == 3 );                                     \
+                                                                     \
+    wxArray##name c( { 1, 2, 3, 4, 5 } );                            \
+    CHECK( c.size() == 5 );                                          \
 }
 
 TestArrayOf(UShort)

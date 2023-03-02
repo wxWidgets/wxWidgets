@@ -272,6 +272,14 @@ public:
     wxObjArray(const wxObjArray& array);
 
     /**
+        Constructs the container with the contents of the initializer_list @list.
+
+        @since 3.2.2
+    */
+    template<typename T>
+    wxArray(std::initializer_list<T> list);
+
+    /**
         Performs a shallow array copy (i.e.\ doesn't copy the objects pointed to
         even if the source array contains the items of pointer type).
     */
