@@ -272,9 +272,9 @@ public:
     wxObjArray(const wxObjArray& array);
 
     /**
-        Constructs the container with the contents of the initializer_list @list.
+        Constructs the container with the contents of the initializer_list @a list.
 
-        @since 3.2.2
+        @since 3.2.3
     */
     template<typename T>
     wxArray(std::initializer_list<T> list);

@@ -16,9 +16,7 @@
 #include "wx/dynarray.h"
 
 #include <vector>
-#include "wx/beforestd.h"
 #include <initializer_list>
-#include "wx/afterstd.h"
 
 // these functions are only used in STL build now but we define them in any
 // case for compatibility with the existing code outside of the library which
@@ -84,8 +82,8 @@ public:
     wxArrayString(size_t sz, const char** a);
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
-    template<typename _IList>
-    wxArrayString(std::initializer_list<_IList> list) : wxArrayStringBase(list) { }
+    template<typename U>
+    wxArrayString(std::initializer_list<U> list) : wxArrayStringBase(list) { }
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
@@ -188,8 +186,8 @@ public:
     // copy ctor
   wxArrayString(const wxArrayString& array);
     // list constructor
-  template<typename _IList>
-  wxArrayString(std::initializer_list<_IList> list) { Init(false); assign(list.begin(), list.end()); }
+  template<typename U>
+  wxArrayString(std::initializer_list<U> list) { Init(false); assign(list.begin(), list.end()); }
     // assignment operator
   wxArrayString& operator=(const wxArrayString& src);
     // not virtual, this class should not be derived from

@@ -15,9 +15,7 @@
 
 #include "wx/vector.h"
 
-#include "wx/beforestd.h"
 #include <initializer_list>
-#include "wx/afterstd.h"
 
 /*
   This header defines legacy dynamic arrays and object arrays (i.e. arrays
@@ -109,8 +107,8 @@ public:
         : base_vec(first, last)
     { }
 
-    template<typename _IList>
-    wxBaseArray(std::initializer_list<_IList> list) : base_vec(list) {}
+    template<typename U>
+    wxBaseArray(std::initializer_list<U> list) : base_vec(list.begin(), list.end()) {}
 
     void Empty() { this->clear(); }
     void Clear() { this->clear(); }
@@ -522,8 +520,8 @@ private:
         name(size_t n, Base::const_reference v) : Base(n, v) { }              \
         template <class InputIterator>                                        \
         name(InputIterator first, InputIterator last) : Base(first, last) { } \
-        template<typename _IList>                                             \
-        name(std::initializer_list<_IList> list) : Base(list) { }             \
+        template<typename U>                                                  \
+        name(std::initializer_list<U> list) : Base(list.begin(), list.end()) { } \
     }
 
 

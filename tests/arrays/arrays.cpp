@@ -346,9 +346,13 @@ TEST_CASE("wxArrayString", "[dynarray]")
     CHECK( a8[1] == "human" );
     CHECK( a8[4] == "alligator" );
 
-    a8 = { wxT("Foo") };
+    a8 = { wxT("Foo") };    // Test operator=
     CHECK( a8.size() == 1 );
     CHECK( a8[0] == "Foo" );
+
+    // Same test with std::initializer_list<std::string>
+    wxArrayString a9( { std::string("dog"), std::string("human"), std::string("condor"), std::string("thermit"), std::string("alligator") } );
+    CHECK( a9.size() == 5 );
 }
 
 TEST_CASE("wxSortedArrayString", "[dynarray]")
@@ -633,8 +637,8 @@ TEST_CASE("wxDynArray::" #name, "[dynarray]")                                 \
     CHECK( b.Index( 6 ) == wxNOT_FOUND );                            \
     CHECK( b.Index( 17 ) == 3 );                                     \
                                                                      \
-    wxArray##name c( { 1, 2, 3, 4, 5 } );                            \
-    CHECK( c.size() == 5 );                                          \
+    wxArray##name c({1,2,3});                                        \
+    CHECK(c.size() == 3);                                            \
 }
 
 TestArrayOf(UShort)
