@@ -147,10 +147,8 @@ public:
     }
 
 private:
-    bool ParseDateTime(const wxString& s, wxDateTime* pDt)
+    bool ParseDateTime(const wxString& s, wxDateTime* pDt) const
     {
-        wxASSERT(pDt);
-
         pDt->ParseFormat(s, m_format);
         if ( !pDt->IsValid() )
             return false;
