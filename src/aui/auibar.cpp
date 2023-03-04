@@ -2244,7 +2244,7 @@ void wxAuiToolBar::DoIdleUpdate()
             if (evt.GetSetChecked())
             {
                 // make sure we aren't checking an item that can't be
-                if (item->m_kind != wxAUI_TB_ITEM_CHECK && item->m_kind != wxAUI_TB_ITEM_RADIO)
+                if (!item->CanBeToggled())
                     continue;
 
                 bool is_checked = (item->m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
@@ -2670,7 +2670,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
             wxCommandEvent e(wxEVT_MENU, m_actionItem->m_toolId);
             e.SetEventObject(this);
 
-            if (hitItem->m_kind == wxAUI_TB_ITEM_CHECK || hitItem->m_kind == wxAUI_TB_ITEM_RADIO)
+            if (hitItem->CanBeToggled())
             {
                 const bool toggle = !(m_actionItem->m_state & wxAUI_BUTTON_STATE_CHECKED);
 
