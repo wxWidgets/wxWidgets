@@ -258,6 +258,7 @@ private:
 
         if ( m_combo )
         {
+#if wxUSE_VALIDATORS
             wxString allowedChars = wxS("0123456789");
 
             const wxChar *p2 = m_format.c_str();
@@ -269,11 +270,10 @@ private:
                     allowedChars << (*p2++); // append char
             }
 
-    #if wxUSE_VALIDATORS
             wxTextValidator tv(wxFILTER_INCLUDE_CHAR_LIST);
             tv.SetCharIncludes(allowedChars);
             m_combo->SetValidator(tv);
-    #endif
+#endif // wxUSE_VALIDATORS
 
             if ( GetDate().IsValid() )
                 m_combo->SetText(GetDate().Format(m_format));
