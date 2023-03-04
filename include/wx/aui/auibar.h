@@ -141,7 +141,9 @@ public:
         m_alignment = wxALIGN_CENTER;
     }
 
-    void Assign(const wxAuiToolBarItem& c)
+    virtual ~wxAuiToolBarItem() {}
+
+    virtual void Assign(const wxAuiToolBarItem& c)
     {
         m_window = c.m_window;
         m_label = c.m_label;
@@ -166,60 +168,60 @@ public:
     }
 
 
-    void SetWindow(wxWindow* w) { m_window = w; }
-    wxWindow* GetWindow() { return m_window; }
+    virtual void SetWindow(wxWindow* w) { m_window = w; }
+    virtual wxWindow* GetWindow() { return m_window; }
 
-    void SetId(int newId) { m_toolId = newId; }
-    int GetId() const { return m_toolId; }
+    virtual void SetId(int newId) { m_toolId = newId; }
+    virtual int GetId() const { return m_toolId; }
 
-    void SetKind(int newKind) { m_kind = newKind; }
-    int GetKind() const { return m_kind; }
+    virtual void SetKind(int newKind) { m_kind = newKind; }
+    virtual int GetKind() const { return m_kind; }
 
-    void SetState(int newState) { m_state = newState; }
-    int GetState() const { return m_state; }
+    virtual void SetState(int newState) { m_state = newState; }
+    virtual int GetState() const { return m_state; }
 
-    void SetSizerItem(wxSizerItem* s) { m_sizerItem = s; }
-    wxSizerItem* GetSizerItem() const { return m_sizerItem; }
+    virtual void SetSizerItem(wxSizerItem* s) { m_sizerItem = s; }
+    virtual wxSizerItem* GetSizerItem() const { return m_sizerItem; }
 
-    void SetLabel(const wxString& s) { m_label = s; }
-    const wxString& GetLabel() const { return m_label; }
+    virtual void SetLabel(const wxString& s) { m_label = s; }
+    virtual const wxString& GetLabel() const { return m_label; }
 
-    void SetBitmap(const wxBitmapBundle& bmp) { m_bitmap = bmp; }
-    const wxBitmapBundle& GetBitmapBundle() const { return m_bitmap; }
-    wxBitmap GetBitmapFor(wxWindow* wnd) const { return m_bitmap.GetBitmapFor(wnd); }
-    wxBitmap GetBitmap() const { return GetBitmapFor(m_window); }
+    virtual void SetBitmap(const wxBitmapBundle& bmp) { m_bitmap = bmp; }
+    virtual const wxBitmapBundle& GetBitmapBundle() const { return m_bitmap; }
+    virtual wxBitmap GetBitmapFor(wxWindow* wnd) const { return m_bitmap.GetBitmapFor(wnd); }
+    virtual wxBitmap GetBitmap() const { return GetBitmapFor(m_window); }
 
-    void SetDisabledBitmap(const wxBitmapBundle& bmp) { m_disabledBitmap = bmp; }
-    const wxBitmapBundle& GetDisabledBitmapBundle() const { return m_disabledBitmap; }
-    wxBitmap GetDisabledBitmapFor(wxWindow* wnd) const { return m_disabledBitmap.GetBitmapFor(wnd); }
-    wxBitmap GetDisabledBitmap() const { return GetBitmapFor(m_window); }
+    virtual void SetDisabledBitmap(const wxBitmapBundle& bmp) { m_disabledBitmap = bmp; }
+    virtual const wxBitmapBundle& GetDisabledBitmapBundle() const { return m_disabledBitmap; }
+    virtual wxBitmap GetDisabledBitmapFor(wxWindow* wnd) const { return m_disabledBitmap.GetBitmapFor(wnd); }
+    virtual wxBitmap GetDisabledBitmap() const { return GetBitmapFor(m_window); }
 
     // Return the bitmap for the current state, normal or disabled.
-    wxBitmap GetCurrentBitmapFor(wxWindow* wnd) const;
+    virtual wxBitmap GetCurrentBitmapFor(wxWindow* wnd) const;
 
-    void SetHoverBitmap(const wxBitmapBundle& bmp) { m_hoverBitmap = bmp; }
-    const wxBitmapBundle& GetHoverBitmapBundle() const { return m_hoverBitmap; }
-    wxBitmap GetHoverBitmap() const { return m_hoverBitmap.GetBitmapFor(m_window); }
+    virtual void SetHoverBitmap(const wxBitmapBundle& bmp) { m_hoverBitmap = bmp; }
+    virtual const wxBitmapBundle& GetHoverBitmapBundle() const { return m_hoverBitmap; }
+    virtual wxBitmap GetHoverBitmap() const { return m_hoverBitmap.GetBitmapFor(m_window); }
 
-    void SetShortHelp(const wxString& s) { m_shortHelp = s; }
-    const wxString& GetShortHelp() const { return m_shortHelp; }
+    virtual void SetShortHelp(const wxString& s) { m_shortHelp = s; }
+    virtual const wxString& GetShortHelp() const { return m_shortHelp; }
 
-    void SetLongHelp(const wxString& s) { m_longHelp = s; }
-    const wxString& GetLongHelp() const { return m_longHelp; }
+    virtual void SetLongHelp(const wxString& s) { m_longHelp = s; }
+    virtual const wxString& GetLongHelp() const { return m_longHelp; }
 
-    void SetMinSize(const wxSize& s) { m_minSize = s; }
-    const wxSize& GetMinSize() const { return m_minSize; }
+    virtual void SetMinSize(const wxSize& s) { m_minSize = s; }
+    virtual const wxSize& GetMinSize() const { return m_minSize; }
 
-    void SetSpacerPixels(int s) { m_spacerPixels = s; }
-    int GetSpacerPixels() const { return m_spacerPixels; }
+    virtual void SetSpacerPixels(int s) { m_spacerPixels = s; }
+    virtual int GetSpacerPixels() const { return m_spacerPixels; }
 
-    void SetProportion(int p) { m_proportion = p; }
-    int GetProportion() const { return m_proportion; }
+    virtual void SetProportion(int p) { m_proportion = p; }
+    virtual int GetProportion() const { return m_proportion; }
 
-    void SetActive(bool b) { m_active = b; }
-    bool IsActive() const { return m_active; }
+    virtual void SetActive(bool b) { m_active = b; }
+    virtual bool IsActive() const { return m_active; }
 
-    void SetHasDropDown(bool b)
+    virtual void SetHasDropDown(bool b)
     {
         wxCHECK_RET( !b || m_kind == wxAUI_TB_ITEM_NORMAL,
                      wxS("Only normal tools can have drop downs") );
@@ -227,26 +229,26 @@ public:
         m_dropDown = b;
     }
 
-    bool HasDropDown() const { return m_dropDown; }
+    virtual bool HasDropDown() const { return m_dropDown; }
 
-    void SetSticky(bool b) { m_sticky = b; }
-    bool IsSticky() const { return m_sticky; }
+    virtual void SetSticky(bool b) { m_sticky = b; }
+    virtual bool IsSticky() const { return m_sticky; }
 
-    void SetUserData(long l) { m_userData = l; }
-    long GetUserData() const { return m_userData; }
+    virtual void SetUserData(long l) { m_userData = l; }
+    virtual long GetUserData() const { return m_userData; }
 
-    void SetClientData(wxObject* l) { m_clientData = l; }
-    wxObject* GetClientData() const { return m_clientData; }
+    virtual void SetClientData(wxObject* l) { m_clientData = l; }
+    virtual wxObject* GetClientData() const { return m_clientData; }
 
-    void SetAlignment(int l) { m_alignment = l; }
-    int GetAlignment() const { return m_alignment; }
+    virtual void SetAlignment(int l) { m_alignment = l; }
+    virtual int GetAlignment() const { return m_alignment; }
 
-    bool CanBeToggled() const
+    virtual bool CanBeToggled() const
     {
         return m_kind == wxAUI_TB_ITEM_CHECK || m_kind == wxAUI_TB_ITEM_RADIO;
     }
 
-private:
+protected:
 
     wxWindow* m_window;          // item's associated window
     wxString m_label;            // label displayed on the item

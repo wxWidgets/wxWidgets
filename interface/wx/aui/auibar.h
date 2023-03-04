@@ -252,6 +252,9 @@ wxEventType wxEVT_AUITOOLBAR_BEGIN_DRAG;
     tooltip text which is popped up when the mouse pointer enters the tool and the long
     help string for the applications status bar (currently not implemented).
 
+    Note, since 3.3.0 wxAuiToolBarItem has a virtual destructor and virtual methods,
+    and therefore can be inherited from.
+
     @library{wxaui}
     @category{aui}
 */
@@ -265,37 +268,46 @@ public:
     wxAuiToolBarItem();
 
     /**
+       Default destructor
+
+       @since 3.3.0
+    */
+    virtual ~wxAuiToolBarItem();
+
+    /**
       Assigns the properties of the wxAuiToolBarItem "c" to this.
     */
-    wxAuiToolBarItem(const wxAuiToolBarItem& c);
+    virtual wxAuiToolBarItem(const wxAuiToolBarItem& c);
 
     /**
        Assigns the properties of the wxAuiToolBarItem "c" to this, returning a pointer to this.
     */
-    wxAuiToolBarItem& operator=(const wxAuiToolBarItem& c);
+    virtual wxAuiToolBarItem& operator=(const wxAuiToolBarItem& c);
 
     /**
       Assigns the properties of the wxAuiToolBarItem "c" to this.
     */
-    void Assign(const wxAuiToolBarItem& c);
+    virtual void Assign(const wxAuiToolBarItem& c);
 
     /**
       Assigns a window to the toolbar item.
     */
-    void SetWindow(wxWindow* w);
+    virtual void SetWindow(wxWindow* w);
+
     /**
       Returns the wxWindow* associated to the toolbar item.
     */
-    wxWindow* GetWindow();
+    virtual wxWindow* GetWindow();
 
     /**
       Sets the toolbar item identifier.
     */
-    void SetId(int new_id);
+    virtual void SetId(int new_id);
+
     /**
       Returns the toolbar item identifier.
     */
-    int GetId() const;
+    virtual int GetId() const;
 
     /**
       Sets the wxAuiToolBarItem kind, must be a value from #wxAuiToolBarItemKind.
@@ -304,7 +316,7 @@ public:
             @c wxITEM_CHECK, @c wxITEM_RADIO or @c wxITEM_SEPARATOR. For 3.3.0 and later,
             kind is a #wxAuiToolBarItemKind.
     */
-    void SetKind(int new_kind);
+    virtual void SetKind(int new_kind);
 
     /**
       Returns the toolbar item kind.
@@ -315,139 +327,153 @@ public:
 
       @return a #wxAuiToolBarItemKind value saying the kind of item the tool is.
     */
-    int GetKind() const;
+    virtual int GetKind() const;
 
     /**
       Set the current state of the toolbar item.
 
       @param new_state is an or'd combination of flags from wxAuiPaneButtonState
     */
-    void SetState(int new_state);
+    virtual void SetState(int new_state);
+
     /**
       Gets the current state of the toolbar item.
 
       @return an or'd combination of flags from wxAuiPaneButtonState representing the current state
     */
-    int GetState() const;
+    virtual int GetState() const;
 
     /**
 
     */
-    void SetSizerItem(wxSizerItem* s);
-    /**
-
-    */
-    wxSizerItem* GetSizerItem() const;
+    virtual void SetSizerItem(wxSizerItem* s);
 
     /**
 
     */
-    void SetLabel(const wxString& s);
-    /**
-
-    */
-    const wxString& GetLabel() const;
+    virtual wxSizerItem* GetSizerItem() const;
 
     /**
 
     */
-    void SetBitmap(const wxBitmapBundle& bmp);
-    /**
-
-    */
-    wxBitmap GetBitmap() const;
+    virtual void SetLabel(const wxString& s);
 
     /**
 
     */
-    void SetDisabledBitmap(const wxBitmapBundle& bmp);
-    /**
-
-    */
-    wxBitmap GetDisabledBitmap() const;
+    virtual const wxString& GetLabel() const;
 
     /**
 
     */
-    void SetHoverBitmap(const wxBitmapBundle& bmp);
-    /**
-
-    */
-    wxBitmap GetHoverBitmap() const;
+    virtual void SetBitmap(const wxBitmapBundle& bmp);
 
     /**
 
     */
-    void SetShortHelp(const wxString& s);
-    /**
-
-    */
-    const wxString& GetShortHelp() const;
+    virtual wxBitmap GetBitmap() const;
 
     /**
 
     */
-    void SetLongHelp(const wxString& s);
-    /**
-
-    */
-    const wxString& GetLongHelp() const;
+    virtual void SetDisabledBitmap(const wxBitmapBundle& bmp);
 
     /**
 
     */
-    void SetMinSize(const wxSize& s);
-    /**
-
-    */
-    const wxSize& GetMinSize() const;
+    virtual wxBitmap GetDisabledBitmap() const;
 
     /**
 
     */
-    void SetSpacerPixels(int s);
-    /**
-
-    */
-    int GetSpacerPixels() const;
+    virtual void SetHoverBitmap(const wxBitmapBundle& bmp);
 
     /**
 
     */
-    void SetProportion(int p);
-    /**
-
-    */
-    int GetProportion() const;
+    virtual wxBitmap GetHoverBitmap() const;
 
     /**
 
     */
-    void SetActive(bool b);
+    virtual void SetShortHelp(const wxString& s);
+
     /**
 
     */
-    bool IsActive() const;
+    virtual const wxString& GetShortHelp() const;
+
+    /**
+
+    */
+    virtual void SetLongHelp(const wxString& s);
+
+    /**
+
+    */
+    virtual const wxString& GetLongHelp() const;
+
+    /**
+
+    */
+    virtual void SetMinSize(const wxSize& s);
+
+    /**
+
+    */
+    virtual const wxSize& GetMinSize() const;
+
+    /**
+
+    */
+    virtual void SetSpacerPixels(int s);
+
+    /**
+
+    */
+    virtual int GetSpacerPixels() const;
+
+    /**
+
+    */
+    virtual void SetProportion(int p);
+
+    /**
+
+    */
+    virtual int GetProportion() const;
+
+    /**
+
+    */
+    virtual void SetActive(bool b);
+
+    /**
+
+    */
+    virtual bool IsActive() const;
 
     /**
         Set whether this tool has a drop down button.
 
         This is only valid for wxITEM_NORMAL tools.
     */
-    void SetHasDropDown(bool b);
+    virtual void SetHasDropDown(bool b);
+
     /**
         Returns whether the toolbar item has an associated drop down button.
     */
-    bool HasDropDown() const;
+    virtual bool HasDropDown() const;
 
     /**
 
     */
-    void SetSticky(bool b);
+    virtual void SetSticky(bool b);
+
     /**
 
     */
-    bool IsSticky() const;
+    virtual bool IsSticky() const;
 
     /**
         Associates a number with the item.
@@ -456,7 +482,7 @@ public:
 
         @see GetUserData()
     */
-    void SetUserData(long userData);
+    virtual void SetUserData(long userData);
 
     /**
         Get number associated with the item.
@@ -465,7 +491,7 @@ public:
 
         @see SetUserData()
     */
-    long GetUserData() const;
+    virtual long GetUserData() const;
 
     /**
         Associates a wxObject with the item.
@@ -476,7 +502,7 @@ public:
 
         @since 3.3.0
     */
-    void SetClientData(wxObject* clientData);
+    virtual void SetClientData(wxObject* clientData);
 
     /**
         Get wxObject associated with the item.
@@ -487,23 +513,24 @@ public:
 
         @since 3.3.0
     */
-    wxObject* GetClientData() const;
+    virtual wxObject* GetClientData() const;
 
     /**
 
     */
-    void SetAlignment(int l);
+    virtual void SetAlignment(int l);
+
     /**
 
     */
-    int GetAlignment() const;
+    virtual int GetAlignment() const;
 
     /**
         Returns whether the toolbar item can be toggled.
 
         @since 3.1.5
      */
-    bool CanBeToggled() const;
+    virtual bool CanBeToggled() const;
 };
 
 /**
