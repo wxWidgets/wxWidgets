@@ -82,6 +82,51 @@ enum wxAuiToolBarStyle
 };
 
 /**
+    Possible values for the kind of a wxAuiToolBarItem
+
+    @since 3.3.0
+    @library{wxaui}
+    @category{aui}
+ */
+enum wxAuiToolBarItemKind
+{
+    /**
+      Normal AUI toolbar item.
+     */
+    wxAUI_TB_ITEM_NORMAL = wxITEM_NORMAL,
+
+    /**
+      Checkable AUI toolbar item.
+     */
+    wxAUI_TB_ITEM_CHECK = wxITEM_CHECK,
+
+    /**
+      Radio button AUI toolbar item.
+     */
+    wxAUI_TB_ITEM_RADIO = wxITEM_RADIO,
+
+    /**
+      Separator item for an AUI toolbar.
+     */
+    wxAUI_TB_ITEM_SEPARATOR = wxITEM_SEPARATOR,
+
+    /**
+      AUI Toolbar item containing a generic control.
+     */
+    wxAUI_TB_ITEM_CONTROL = wxITEM_MAX,
+
+    /**
+      Text label item for an AUI toolbar.
+     */
+    wxAUI_TB_ITEM_LABEL,
+
+    /**
+      Empty space for an AUI toolbar.
+     */
+    wxAUI_TB_ITEM_SPACER
+};
+
+/**
     wxAuiToolBarArtSetting
 
     @library{wxaui}
@@ -201,11 +246,11 @@ wxEventType wxEVT_AUITOOLBAR_BEGIN_DRAG;
     See also @ref wxAuiToolBar and @ref overview_aui.
 
     It has a unique id (except for the separators which always have id = -1), the
-    style (telling whether it is a normal button, separator or a control), the
-    state (toggled or not, enabled or not) and short and long help strings. The
-    default implementations use the short help string for the tooltip text which
-    is popped up when the mouse pointer enters the tool and the long help string
-    for the applications status bar (currently not implemented).
+    style (a value from #wxAuiToolBarItemKind telling whether it is a normal button,
+    separator or a control), the state (toggled or not, enabled or not) and short and
+    long help strings. The default implementations use the short help string for the
+    tooltip text which is popped up when the mouse pointer enters the tool and the long
+    help string for the applications status bar (currently not implemented).
 
     @library{wxaui}
     @category{aui}
@@ -253,15 +298,22 @@ public:
     int GetId() const;
 
     /**
-      Sets the wxAuiToolBarItem kind.
+      Sets the wxAuiToolBarItem kind, must be a value from #wxAuiToolBarItemKind.
+
+      @note Before 3.3.0, the kind parameter was a #wxItemKind of either @c wxITEM_NORMAL,
+            @c wxITEM_CHECK, @c wxITEM_RADIO or @c wxITEM_SEPARATOR. For 3.3.0 and later,
+            kind is a #wxAuiToolBarItemKind.
     */
     void SetKind(int new_kind);
 
     /**
       Returns the toolbar item kind.
 
-      @return one of @c wxITEM_NORMAL, @c wxITEM_CHECK or @c wxITEM_RADIO,
-      @c wxITEM_SEPARATOR, @c wxITEM_CONTROL, @c wxITEM_SPACER, @c wxITEM_LABEL,
+      @note Before 3.3.0, the kind parameter was a #wxItemKind of either @c wxITEM_NORMAL,
+            @c wxITEM_CHECK, @c wxITEM_RADIO or @c wxITEM_SEPARATOR. For 3.3.0 and later,
+            kind is a #wxAuiToolBarItemKind.
+
+      @return a #wxAuiToolBarItemKind value saying the kind of item the tool is.
     */
     int GetKind() const;
 
@@ -752,18 +804,22 @@ public:
 
         This function works similarly to the corresponding wxToolBar::AddTool()
         overloads. Note that before 3.3.0 the @a client_data parameter was not used.
+
+        Before 3.3.0, the kind parameter was a #wxItemKind of either @c wxITEM_NORMAL,
+        @c wxITEM_CHECK, @c wxITEM_RADIO or @c wxITEM_SEPARATOR. For 3.3.0 and later, kind
+        is a #wxAuiToolBarItemKind.
      */
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
                  const wxString& short_help_string = wxEmptyString,
-                 wxItemKind kind = wxITEM_NORMAL);
+                 int kind = wxAUI_TB_ITEM_NORMAL);
 
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
                  const wxBitmapBundle& disabled_bitmap,
-                 wxItemKind kind,
+                 int kind,
                  const wxString& short_help_string,
                  const wxString& long_help_string,
                  wxObject* client_data);

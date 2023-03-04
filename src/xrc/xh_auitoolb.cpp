@@ -56,13 +56,13 @@ wxObject *wxAuiToolBarXmlHandler::DoCreateResource()
             return nullptr;
         }
 
-        wxItemKind kind = wxITEM_NORMAL;
+        wxAuiToolBarItemKind kind = wxAUI_TB_ITEM_NORMAL;
         if (GetBool(wxS("radio")))
-            kind = wxITEM_RADIO;
+            kind = wxAUI_TB_ITEM_RADIO;
 
         if (GetBool(wxS("toggle")))
         {
-            if ( kind != wxITEM_NORMAL )
+            if ( kind != wxAUI_TB_ITEM_NORMAL )
             {
                 ReportParamError
                 (
@@ -71,7 +71,7 @@ wxObject *wxAuiToolBarXmlHandler::DoCreateResource()
                 );
             }
 
-            kind = wxITEM_CHECK;
+            kind = wxAUI_TB_ITEM_CHECK;
         }
 #if wxUSE_MENUS
         // check whether we have dropdown tag inside

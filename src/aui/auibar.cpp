@@ -56,15 +56,6 @@ wxIMPLEMENT_CLASS(wxAuiToolBar, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiToolBarEvent, wxEvent);
 
 
-// missing wxITEM_* items
-enum
-{
-    wxITEM_CONTROL = wxITEM_MAX,
-    wxITEM_LABEL,
-    wxITEM_SPACER
-};
-
-
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
@@ -766,7 +757,7 @@ int wxAuiGenericToolBarArt::ShowDropDown(wxWindow* wnd,
 
     for (wxAuiToolBarItem* item : items)
     {
-        if (item->GetKind() == wxITEM_NORMAL)
+        if (item->GetKind() == wxAUI_TB_ITEM_NORMAL)
         {
             wxString text = item->GetShortHelp();
             if (text.empty())
@@ -781,7 +772,7 @@ int wxAuiGenericToolBarArt::ShowDropDown(wxWindow* wnd,
             menuPopup.Append(m);
             items_added++;
         }
-        else if (item->GetKind() == wxITEM_SEPARATOR)
+        else if (item->GetKind() == wxAUI_TB_ITEM_SEPARATOR)
         {
             if (items_added > 0)
                 menuPopup.AppendSeparator();
@@ -977,7 +968,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            const wxString& label,
                            const wxBitmapBundle& bitmap,
                            const wxBitmapBundle& disabledBitmap,
-                           wxItemKind kind,
+                           int kind,
                            const wxString& shortHelpString,
                            const wxString& longHelpString,
                            wxObject* client_data)
@@ -1019,7 +1010,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
     item->m_toolId = control->GetId();
     item->m_state = 0;
     item->m_proportion = 0;
-    item->m_kind = wxITEM_CONTROL;
+    item->m_kind = wxAUI_TB_ITEM_CONTROL;
     item->m_sizerItem = nullptr;
     item->m_minSize = control->GetEffectiveMinSize();
     item->m_userData = 0;
@@ -1047,7 +1038,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item->m_toolId = tool_id;
     item->m_state = 0;
     item->m_proportion = 0;
-    item->m_kind = wxITEM_LABEL;
+    item->m_kind = wxAUI_TB_ITEM_LABEL;
     item->m_sizerItem = nullptr;
     item->m_minSize = min_size;
     item->m_userData = 0;
@@ -1068,7 +1059,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
     item->m_toolId = -1;
     item->m_state = 0;
     item->m_proportion = 0;
-    item->m_kind = wxITEM_SEPARATOR;
+    item->m_kind = wxAUI_TB_ITEM_SEPARATOR;
     item->m_sizerItem = nullptr;
     item->m_minSize = wxDefaultSize;
     item->m_userData = 0;
@@ -1091,7 +1082,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
     item->m_toolId = -1;
     item->m_state = 0;
     item->m_proportion = 0;
-    item->m_kind = wxITEM_SPACER;
+    item->m_kind = wxAUI_TB_ITEM_SPACER;
     item->m_sizerItem = nullptr;
     item->m_minSize = wxDefaultSize;
     item->m_userData = 0;
@@ -1114,7 +1105,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
     item->m_toolId = -1;
     item->m_state = 0;
     item->m_proportion = proportion;
-    item->m_kind = wxITEM_SPACER;
+    item->m_kind = wxAUI_TB_ITEM_SPACER;
     item->m_sizerItem = nullptr;
     item->m_minSize = wxDefaultSize;
     item->m_userData = 0;
@@ -1548,7 +1539,7 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 
     if ( tool && tool->CanBeToggled() )
     {
-        if (tool->m_kind == wxITEM_RADIO)
+        if (tool->m_kind == wxAUI_TB_ITEM_RADIO)
         {
             int idx, count;
             idx = GetToolIndex(tool_id);
@@ -1559,13 +1550,13 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
                 int i;
                 for (i = idx + 1; i < count; ++i)
                 {
-                    if (m_items[i]->m_kind != wxITEM_RADIO)
+                    if (m_items[i]->m_kind != wxAUI_TB_ITEM_RADIO)
                         break;
                     m_items[i]->m_state &= ~wxAUI_BUTTON_STATE_CHECKED;
                 }
                 for (i = idx - 1; i >= 0; i--)
                 {
-                    if (m_items[i]->m_kind != wxITEM_RADIO)
+                    if (m_items[i]->m_kind != wxAUI_TB_ITEM_RADIO)
                         break;
                     m_items[i]->m_state &= ~wxAUI_BUTTON_STATE_CHECKED;
                 }
@@ -1573,7 +1564,7 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 
             tool->m_state |= wxAUI_BUTTON_STATE_CHECKED;
         }
-         else if (tool->m_kind == wxITEM_CHECK)
+         else if (tool->m_kind == wxAUI_TB_ITEM_CHECK)
         {
             if (state == true)
                 tool->m_state |= wxAUI_BUTTON_STATE_CHECKED;
@@ -1963,7 +1954,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
         switch (item->m_kind)
         {
-            case wxITEM_LABEL:
+            case wxAUI_TB_ITEM_LABEL:
             {
                 wxSize size = m_art->GetLabelSize(dc, this, *item);
                 sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
@@ -1976,9 +1967,9 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 break;
             }
 
-            case wxITEM_CHECK:
-            case wxITEM_NORMAL:
-            case wxITEM_RADIO:
+            case wxAUI_TB_ITEM_CHECK:
+            case wxAUI_TB_ITEM_NORMAL:
+            case wxAUI_TB_ITEM_RADIO:
             {
                 wxSize size = m_art->GetToolSize(dc, this, *item);
                 sizerItem = sizer->Add(size.x + (m_toolBorderPadding*2),
@@ -1992,7 +1983,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 break;
             }
 
-            case wxITEM_SEPARATOR:
+            case wxAUI_TB_ITEM_SEPARATOR:
             {
                 if (horizontal)
                     sizerItem = sizer->Add(separatorSize, 1, 0, wxEXPAND);
@@ -2006,14 +1997,14 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 break;
             }
 
-            case wxITEM_SPACER:
+            case wxAUI_TB_ITEM_SPACER:
                 if (item->m_proportion > 0)
                     sizerItem = sizer->AddStretchSpacer(item->m_proportion);
                 else
                     sizerItem = sizer->Add(item->m_spacerPixels, 1);
                 break;
 
-            case wxITEM_CONTROL:
+            case wxAUI_TB_ITEM_CONTROL:
             {
                 wxSizerItem* ctrl_m_sizerItem;
 
@@ -2253,7 +2244,7 @@ void wxAuiToolBar::DoIdleUpdate()
             if (evt.GetSetChecked())
             {
                 // make sure we aren't checking an item that can't be
-                if (item->m_kind != wxITEM_CHECK && item->m_kind != wxITEM_RADIO)
+                if (item->m_kind != wxAUI_TB_ITEM_CHECK && item->m_kind != wxAUI_TB_ITEM_RADIO)
                     continue;
 
                 bool is_checked = (item->m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
@@ -2476,7 +2467,7 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
         switch ( item->m_kind )
         {
-            case wxITEM_NORMAL:
+            case wxAUI_TB_ITEM_NORMAL:
                 // draw a regular or dropdown button
                 if (!item->m_dropDown)
                     m_art->DrawButton(dc, this, *item, item_rect);
@@ -2484,23 +2475,23 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
                     m_art->DrawDropDownButton(dc, this, *item, item_rect);
                 break;
 
-            case wxITEM_CHECK:
-            case wxITEM_RADIO:
+            case wxAUI_TB_ITEM_CHECK:
+            case wxAUI_TB_ITEM_RADIO:
                 // draw a toggle button
                 m_art->DrawButton(dc, this, *item, item_rect);
                 break;
 
-            case wxITEM_SEPARATOR:
+            case wxAUI_TB_ITEM_SEPARATOR:
                 // draw a separator
                 m_art->DrawSeparator(dc, this, item_rect);
                 break;
 
-            case wxITEM_LABEL:
+            case wxAUI_TB_ITEM_LABEL:
                 // draw a text label only
                 m_art->DrawLabel(dc, this, *item, item_rect);
                 break;
 
-            case wxITEM_CONTROL:
+            case wxAUI_TB_ITEM_CONTROL:
                 // draw the control's label
                 m_art->DrawControlLabel(dc, this, *item, item_rect);
                 break;
@@ -2679,7 +2670,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
             wxCommandEvent e(wxEVT_MENU, m_actionItem->m_toolId);
             e.SetEventObject(this);
 
-            if (hitItem->m_kind == wxITEM_CHECK || hitItem->m_kind == wxITEM_RADIO)
+            if (hitItem->m_kind == wxAUI_TB_ITEM_CHECK || hitItem->m_kind == wxAUI_TB_ITEM_RADIO)
             {
                 const bool toggle = !(m_actionItem->m_state & wxAUI_BUTTON_STATE_CHECKED);
 
@@ -2836,7 +2827,7 @@ void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
 
     if (m_actionItem && hitItem == m_actionItem)
     {
-        if (hitItem->m_kind == wxITEM_NORMAL)
+        if (hitItem->m_kind == wxAUI_TB_ITEM_NORMAL)
         {
             wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_MIDDLE_CLICK, m_actionItem->m_toolId);
             e.SetEventObject(this);

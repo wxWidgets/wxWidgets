@@ -771,11 +771,11 @@ MyFrame::MyFrame(wxWindow* parent,
     wxAuiToolBarItemList append_items;
 
     wxAuiToolBarItem* item1 = new wxAuiToolBarItem();
-    item1->SetKind(wxITEM_SEPARATOR);
+    item1->SetKind(wxAUI_TB_ITEM_SEPARATOR);
     append_items.Append(item1);
 
     wxAuiToolBarItem* item2 = new wxAuiToolBarItem();
-    item2->SetKind(wxITEM_NORMAL);
+    item2->SetKind(wxAUI_TB_ITEM_NORMAL);
     item2->SetId(ID_CustomizeToolbar);
     item2->SetLabel(_("Customize..."));
     append_items.Append(item2);
@@ -798,11 +798,11 @@ MyFrame::MyFrame(wxWindow* parent,
     append_items.clear();
 
     item1 = new wxAuiToolBarItem();
-    item1->SetKind(wxITEM_SEPARATOR);
+    item1->SetKind(wxAUI_TB_ITEM_SEPARATOR);
     append_items.Append(item1);
 
     item2 = new wxAuiToolBarItem();
-    item2->SetKind(wxITEM_NORMAL);
+    item2->SetKind(wxAUI_TB_ITEM_NORMAL);
     item2->SetId(ID_CustomizeToolbar);
     item2->SetLabel(_("Customize..."));
     append_items.Append(item2);
@@ -833,11 +833,11 @@ MyFrame::MyFrame(wxWindow* parent,
     append_items.clear();
 
     item1 = new wxAuiToolBarItem();
-    item1->SetKind(wxITEM_SEPARATOR);
+    item1->SetKind(wxAUI_TB_ITEM_SEPARATOR);
     append_items.Append(item1);
 
     item2 = new wxAuiToolBarItem();
-    item2->SetKind(wxITEM_NORMAL);
+    item2->SetKind(wxAUI_TB_ITEM_NORMAL);
     item2->SetId(ID_CustomizeToolbar);
     item2->SetLabel(_("Customize..."));
     append_items.Append(item2);
@@ -845,18 +845,18 @@ MyFrame::MyFrame(wxWindow* parent,
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
     wxBitmapBundle tb3_bmp1 = wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
-    tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
-    tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
-    tb3->AddTool(ID_SampleItem+18, "Check 3", tb3_bmp1, "Check 3", wxITEM_CHECK);
-    tb3->AddTool(ID_SampleItem+19, "Check 4", tb3_bmp1, "Check 4", wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxAUI_TB_ITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxAUI_TB_ITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+18, "Check 3", tb3_bmp1, "Check 3", wxAUI_TB_ITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+19, "Check 4", tb3_bmp1, "Check 4", wxAUI_TB_ITEM_CHECK);
     tb3->AddSeparator();
-    tb3->AddTool(ID_SampleItem+20, "Radio 1", tb3_bmp1, "Radio 1", wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+21, "Radio 2", tb3_bmp1, "Radio 2", wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+22, "Radio 3", tb3_bmp1, "Radio 3", wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+20, "Radio 1", tb3_bmp1, "Radio 1", wxAUI_TB_ITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+21, "Radio 2", tb3_bmp1, "Radio 2", wxAUI_TB_ITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+22, "Radio 3", tb3_bmp1, "Radio 3", wxAUI_TB_ITEM_RADIO);
     tb3->AddSeparator();
-    tb3->AddTool(ID_SampleItem+23, "Radio 1 (Group 2)", tb3_bmp1, "Radio 1 (Group 2)", wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+24, "Radio 2 (Group 2)", tb3_bmp1, "Radio 2 (Group 2)", wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+25, "Radio 3 (Group 2)", tb3_bmp1, "Radio 3 (Group 2)", wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+23, "Radio 1 (Group 2)", tb3_bmp1, "Radio 1 (Group 2)", wxAUI_TB_ITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+24, "Radio 2 (Group 2)", tb3_bmp1, "Radio 2 (Group 2)", wxAUI_TB_ITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+25, "Radio 3 (Group 2)", tb3_bmp1, "Radio 3 (Group 2)", wxAUI_TB_ITEM_RADIO);
     tb3->SetCustomOverflowItems(prepend_items, append_items);
     tb3->Realize();
 
@@ -866,11 +866,11 @@ MyFrame::MyFrame(wxWindow* parent,
     append_items.clear();
 
     item1 = new wxAuiToolBarItem();
-    item1->SetKind(wxITEM_SEPARATOR);
+    item1->SetKind(wxAUI_TB_ITEM_SEPARATOR);
     append_items.Append(item1);
 
     item2 = new wxAuiToolBarItem();
-    item2->SetKind(wxITEM_NORMAL);
+    item2->SetKind(wxAUI_TB_ITEM_NORMAL);
     item2->SetId(ID_CustomizeToolbar);
     item2->SetLabel(_("Customize..."));
     append_items.Append(item2);
@@ -906,11 +906,11 @@ MyFrame::MyFrame(wxWindow* parent,
     append_items.clear();
 
     item1 = new wxAuiToolBarItem();
-    item1->SetKind(wxITEM_SEPARATOR);
+    item1->SetKind(wxAUI_TB_ITEM_SEPARATOR);
     append_items.Append(item1);
 
     item2 = new wxAuiToolBarItem();
-    item2->SetKind(wxITEM_NORMAL);
+    item2->SetKind(wxAUI_TB_ITEM_NORMAL);
     item2->SetId(ID_CustomizeToolbar);
     item2->SetLabel(_("Customize..."));
     append_items.Append(item2);

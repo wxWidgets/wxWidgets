@@ -45,6 +45,22 @@ enum wxAuiToolBarStyle
     wxAUI_TB_DEFAULT_STYLE = 0
 };
 
+enum wxAuiToolBarItemKind
+{
+    // The wxITEM_* values used to be used for these item types,
+    // so preserve the value associated with the item type for
+    // better compatibility.
+    wxAUI_TB_ITEM_NORMAL    = wxITEM_NORMAL,
+    wxAUI_TB_ITEM_CHECK     = wxITEM_CHECK,
+    wxAUI_TB_ITEM_RADIO     = wxITEM_RADIO,
+    wxAUI_TB_ITEM_SEPARATOR = wxITEM_SEPARATOR,
+
+    // These are specific to the AUI toolbar
+    wxAUI_TB_ITEM_CONTROL = wxITEM_MAX,
+    wxAUI_TB_ITEM_LABEL,
+    wxAUI_TB_ITEM_SPACER
+};
+
 enum wxAuiToolBarArtSetting
 {
     wxAUI_TBART_SEPARATOR_SIZE = 0,
@@ -114,7 +130,7 @@ public:
         m_sizerItem = nullptr;
         m_spacerPixels = 0;
         m_toolId = 0;
-        m_kind = wxITEM_NORMAL;
+        m_kind = wxAUI_TB_ITEM_NORMAL;
         m_state = 0;  // normal, enabled
         m_proportion = 0;
         m_active = true;
@@ -205,7 +221,7 @@ public:
 
     void SetHasDropDown(bool b)
     {
-        wxCHECK_RET( !b || m_kind == wxITEM_NORMAL,
+        wxCHECK_RET( !b || m_kind == wxAUI_TB_ITEM_NORMAL,
                      wxS("Only normal tools can have drop downs") );
 
         m_dropDown = b;
@@ -227,7 +243,7 @@ public:
 
     bool CanBeToggled() const
     {
-        return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO;
+        return m_kind == wxAUI_TB_ITEM_CHECK || m_kind == wxAUI_TB_ITEM_RADIO;
     }
 
 private:
@@ -502,7 +518,7 @@ public:
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
                  const wxString& shortHelpString = wxEmptyString,
-                 wxItemKind kind = wxITEM_NORMAL)
+                 int kind = wxAUI_TB_ITEM_NORMAL)
     {
         return AddTool(toolId,
                 label,
@@ -518,7 +534,7 @@ public:
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
                  const wxBitmapBundle& disabledBitmap,
-                 wxItemKind kind,
+                 int kind,
                  const wxString& shortHelpString,
                  const wxString& longHelpString,
                  wxObject* clientData);
@@ -535,7 +551,7 @@ public:
                 wxEmptyString,
                 bitmap,
                 disabledBitmap,
-                toggle ? wxITEM_CHECK : wxITEM_NORMAL,
+                toggle ? wxAUI_TB_ITEM_CHECK : wxAUI_TB_ITEM_NORMAL,
                 shortHelpString,
                 longHelpString,
                 clientData);
