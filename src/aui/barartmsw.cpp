@@ -445,7 +445,7 @@ void wxAuiMSWToolBarArt::SetElementSize(int elementId, int size)
 }
 
 int wxAuiMSWToolBarArt::ShowDropDown(wxWindow* wnd,
-    const wxAuiToolBarItemArray& items)
+    const wxAuiToolBarItemList& items)
 {
     return wxAuiGenericToolBarArt::ShowDropDown(wnd, items);
 }

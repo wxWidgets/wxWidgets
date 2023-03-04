@@ -76,7 +76,7 @@ public:
     virtual void SetElementSize(int elementId, int size) override;
 
     virtual int ShowDropDown(wxWindow* wnd,
-        const wxAuiToolBarItemArray& items) override;
+        const wxAuiToolBarItemList& items) override;
 
 private:
     bool m_themed;

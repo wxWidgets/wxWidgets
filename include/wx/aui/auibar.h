@@ -255,7 +255,9 @@ private:
 };
 
 #ifndef SWIG
+// wxAuiToolBarItemArray is deprecated but kept for backwards compatibility
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiToolBarItem, wxAuiToolBarItemArray, WXDLLIMPEXP_AUI);
+WX_DECLARE_EXPORTED_LIST(wxAuiToolBarItem, wxAuiToolBarItemList);
 #endif
 
 
@@ -345,7 +347,7 @@ public:
 
     virtual int ShowDropDown(
                          wxWindow* wnd,
-                         const wxAuiToolBarItemArray& items) = 0;
+                         const wxAuiToolBarItemList& items) = 0;
 
     // Provide opportunity for subclasses to recalculate colours
     virtual void UpdateColoursFromSystem() {}
@@ -433,7 +435,7 @@ public:
     virtual void SetElementSize(int elementId, int size) override;
 
     virtual int ShowDropDown(wxWindow* wnd,
-                             const wxAuiToolBarItemArray& items) override;
+                             const wxAuiToolBarItemList& items) override;
 
     virtual void UpdateColoursFromSystem() override;
 
@@ -494,11 +496,23 @@ public:
     bool SetFont(const wxFont& font) override;
 
 
+    wxAuiToolBarItem* AddTool(wxAuiToolBarItem* item);
+
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
                  const wxString& shortHelpString = wxEmptyString,
-                 wxItemKind kind = wxITEM_NORMAL);
+                 wxItemKind kind = wxITEM_NORMAL)
+    {
+        return AddTool(toolId,
+                label,
+                bitmap,
+                wxBitmapBundle(),
+                kind,
+                shortHelpString,
+                wxEmptyString,
+                nullptr);
+    }
 
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
@@ -560,6 +574,7 @@ public:
     bool GetToolFits(int toolId) const;
     wxRect GetToolRect(int toolId) const;
     bool GetToolFitsByIndex(int toolId) const;
+    bool GetToolBarItemFits(wxAuiToolBarItem* item) const;
     bool GetToolBarFits() const;
 
     void SetMargins(const wxSize& size) { SetMargins(size.x, size.x, size.y, size.y); }
@@ -617,8 +632,12 @@ public:
     wxString GetToolLongHelp(int toolId) const;
     void SetToolLongHelp(int toolId, const wxString& helpString);
 
+    // Preserved for API compatibility, shouldn't be used
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);
+
+    void SetCustomOverflowItems(const wxAuiToolBarItemList& prepend,
+                                const wxAuiToolBarItemList& append);
 
     // get size of hint rectangle for a particular dock location
     wxSize GetHintSize(int dockDirection) const;
@@ -668,7 +687,7 @@ protected: // handlers
 
 protected:
 
-    wxAuiToolBarItemArray m_items;      // array of toolbar items
+    wxAuiToolBarItemList m_items;       // Toolbar items
     wxAuiToolBarArt* m_art;             // art provider
     wxBoxSizer* m_sizer;                // main sizer for toolbar
     wxAuiToolBarItem* m_actionItem;    // item that's being acted upon (pressed)
@@ -678,8 +697,8 @@ protected:
     wxSizerItem* m_overflowSizerItem;
     wxSize m_absoluteMinSize;
     wxPoint m_actionPos;               // position of left-mouse down
-    wxAuiToolBarItemArray m_customOverflowPrepend;
-    wxAuiToolBarItemArray m_customOverflowAppend;
+    wxAuiToolBarItemList m_customOverflowPrepend;
+    wxAuiToolBarItemList m_customOverflowAppend;
 
     int m_buttonWidth;
     int m_buttonHeight;

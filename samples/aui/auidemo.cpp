@@ -766,17 +766,19 @@ MyFrame::MyFrame(wxWindow* parent,
 
 
     // prepare a few custom overflow elements for the toolbars' overflow buttons
+    // The toolbar takes ownership of the pointers to these items
+    wxAuiToolBarItemList prepend_items;
+    wxAuiToolBarItemList append_items;
 
-    wxAuiToolBarItemArray prepend_items;
-    wxAuiToolBarItemArray append_items;
-    wxAuiToolBarItem item;
-    item.SetKind(wxITEM_SEPARATOR);
-    append_items.Add(item);
-    item.SetKind(wxITEM_NORMAL);
-    item.SetId(ID_CustomizeToolbar);
-    item.SetLabel(_("Customize..."));
-    append_items.Add(item);
+    wxAuiToolBarItem* item1 = new wxAuiToolBarItem();
+    item1->SetKind(wxITEM_SEPARATOR);
+    append_items.Append(item1);
 
+    wxAuiToolBarItem* item2 = new wxAuiToolBarItem();
+    item2->SetKind(wxITEM_NORMAL);
+    item2->SetId(ID_CustomizeToolbar);
+    item2->SetLabel(_("Customize..."));
+    append_items.Append(item2);
 
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -790,6 +792,20 @@ MyFrame::MyFrame(wxWindow* parent,
     tb1->SetCustomOverflowItems(prepend_items, append_items);
     tb1->Realize();
 
+    // Create new overflow menu items because each toolbar needs its own items to own.
+    // Don't delete the ones we had before, since the toolbar now owns those.
+    prepend_items.clear();
+    append_items.clear();
+
+    item1 = new wxAuiToolBarItem();
+    item1->SetKind(wxITEM_SEPARATOR);
+    append_items.Append(item1);
+
+    item2 = new wxAuiToolBarItem();
+    item2->SetKind(wxITEM_NORMAL);
+    item2->SetId(ID_CustomizeToolbar);
+    item2->SetLabel(_("Customize..."));
+    append_items.Append(item2);
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
@@ -811,6 +827,20 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->EnableTool(ID_SampleItem+6, false);
     tb2->Realize();
 
+    // Create new overflow menu items because each toolbar needs its own items to own.
+    // Don't delete the ones we had before, since the toolbar now owns those.
+    prepend_items.clear();
+    append_items.clear();
+
+    item1 = new wxAuiToolBarItem();
+    item1->SetKind(wxITEM_SEPARATOR);
+    append_items.Append(item1);
+
+    item2 = new wxAuiToolBarItem();
+    item2->SetKind(wxITEM_NORMAL);
+    item2->SetId(ID_CustomizeToolbar);
+    item2->SetLabel(_("Customize..."));
+    append_items.Append(item2);
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
@@ -830,6 +860,20 @@ MyFrame::MyFrame(wxWindow* parent,
     tb3->SetCustomOverflowItems(prepend_items, append_items);
     tb3->Realize();
 
+    // Create new overflow menu items because each toolbar needs its own items to own.
+    // Don't delete the ones we had before, since the toolbar now owns those.
+    prepend_items.clear();
+    append_items.clear();
+
+    item1 = new wxAuiToolBarItem();
+    item1->SetKind(wxITEM_SEPARATOR);
+    append_items.Append(item1);
+
+    item2 = new wxAuiToolBarItem();
+    item2->SetKind(wxITEM_NORMAL);
+    item2->SetId(ID_CustomizeToolbar);
+    item2->SetLabel(_("Customize..."));
+    append_items.Append(item2);
 
     wxAuiToolBar* tb4 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE |
@@ -856,6 +900,20 @@ MyFrame::MyFrame(wxWindow* parent,
     tb4->AddControl(choice);
     tb4->Realize();
 
+    // Create new overflow menu items because each toolbar needs its own items to own.
+    // Don't delete the ones we had before, since the toolbar now owns those.
+    prepend_items.clear();
+    append_items.clear();
+
+    item1 = new wxAuiToolBarItem();
+    item1->SetKind(wxITEM_SEPARATOR);
+    append_items.Append(item1);
+
+    item2 = new wxAuiToolBarItem();
+    item2->SetKind(wxITEM_NORMAL);
+    item2->SetId(ID_CustomizeToolbar);
+    item2->SetLabel(_("Customize..."));
+    append_items.Append(item2);
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);

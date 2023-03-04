@@ -539,9 +539,15 @@ public:
     virtual int GetElementSize(int element_id) = 0;
     virtual void SetElementSize(int element_id, int size) = 0;
 
+    /**
+     * @note Until 3.3.0, the second argument was of type @c wxAuiToolBarItemArray,
+     *       which contained an array of the toolbar item objects. Now the argument
+     *       is of type @c wxAuiToolBarItenList and contains a list of pointers to
+     *       the toolbar items.
+     */
     virtual int ShowDropDown(
                          wxWindow* wnd,
-                         const wxAuiToolBarItemArray& items) = 0;
+                         const wxAuiToolBarItemList& items) = 0;
 };
 
 
@@ -630,8 +636,14 @@ public:
     virtual int GetElementSize(int element);
     virtual void SetElementSize(int element_id, int size);
 
+    /**
+     * @note Until 3.3.0, the second argument was of type @c wxAuiToolBarItemArray,
+     *       which contained an array of the toolbar item objects. Now the argument
+     *       is of type @c wxAuiToolBarItenList and contains a list of pointers to
+     *       the toolbar items.
+     */
     virtual int ShowDropDown(wxWindow* wnd,
-                             const wxAuiToolBarItemArray& items);
+                             const wxAuiToolBarItemList& items);
 };
 
 
@@ -763,6 +775,15 @@ public:
                  wxObject* client_data = nullptr,
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString);
+
+    /**
+       Add a tool to the toolbar.
+
+       Note that the toolbar takes ownership of @c item.
+
+       @since 3.3.0
+     */
+    wxAuiToolBarItem* AddTool(wxAuiToolBarItem* item);
     ///@}
 
     wxAuiToolBarItem* AddLabel(int toolId,
@@ -841,6 +862,11 @@ public:
     wxRect GetToolRect(int toolId) const;
     bool GetToolFitsByIndex(int toolId) const;
     bool GetToolBarFits() const;
+
+    /**
+        @since 3.3.0
+     */
+    bool GetToolBarItemFits(wxAuiToolBarItem* item) const;
 
     void SetMargins(const wxSize& size);
     void SetMargins(int x, int y);
@@ -943,6 +969,17 @@ public:
       @param append are the items to show after any overflow items
 
       @note The toolbar must have the @c wxAUI_TB_OVERFLOW style.
+
+      @since 3.3.0
+     */
+    void SetCustomOverflowItems(const wxAuiToolBarItemList& prepend,
+                                const wxAuiToolBarItemList& append);
+
+    /**
+      @deprecated This function is deprecated since version 3.3.0 and
+                  provided for backwards compatibility only. Use the
+                  @c wxAuiToolBarItemList version of @c wxAuiToolBar::SetCustomOverflowItems
+                  instead.
      */
     void SetCustomOverflowItems(const wxAuiToolBarItemArray& prepend,
                                 const wxAuiToolBarItemArray& append);
