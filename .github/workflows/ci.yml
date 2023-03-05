@@ -108,10 +108,11 @@ jobs:
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK C++20
+          - name: Ubuntu 22.04 wxGTK UTF-8 C++20
             runner: ubuntu-22.04
-            configure_flags: --with-cxx=20
-            skip_samples: true
+            configure_flags: --with-cxx=20 --enable-utf8 --enable-utf8only
+            use_asan: true
+            use_xvfb: true
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-latest
             container: ubuntu:18.04
