@@ -17,7 +17,8 @@ from fileinput import FileInput
 sys.dont_write_bytecode = True
 from gen_docs import categoriesList,buildDocs
 
-IFACE         = os.path.abspath('./scintilla/include/Scintilla.iface')
+IFACE1        = os.path.abspath('./scintilla/include/Scintilla.iface')
+IFACE2        = os.path.abspath('./lexilla/include/LexicalStyles.iface')
 HDR_SCN       = os.path.abspath('./scintilla/include/Scintilla.h')
 H_TEMPLATE    = os.path.abspath('./stc.h.in')
 IH_TEMPLATE   = os.path.abspath('./stc.interface.h.in')
@@ -1177,6 +1178,13 @@ methodOverrideMap = {
          return stc2wx(buf);'''
     ),
 
+    'SetILexer' :
+    (0,
+     'void %s(void* ilexer);',
+     '''void %s(void* ilexer) {
+         SendMsg(%s, 0, (sptr_t)ilexer);'''
+    ),
+
     '' : ('', 0, 0),
 
     }
@@ -1220,8 +1228,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     icat = 'Basics'
 
     # parse iface file
-    fi = FileInput(iface)
-    for line in fi:
+    for line in iface:
         line = line[:-1]
         if line[:2] == '##' or line == '':
             #curDocStrings = []
@@ -1601,7 +1608,7 @@ def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
 def main(args):
     # TODO: parse command line args to replace default input/output files???
 
-    if not os.path.exists(IFACE):
+    if not os.path.exists(IFACE1):
         print('Please run this script from src/stc subdirectory.')
         sys.exit(1)
 
@@ -1609,8 +1616,12 @@ def main(args):
     msgcodes = {}
     processHeader(HDR_SCN, msgcodes)
 
+    i1_lines = open(IFACE1).readlines()
+    i2_lines = open(IFACE2).readlines()
+    iface = i1_lines + i2_lines
+
     # Now just do it
-    processIface(IFACE, H_TEMPLATE, CPP_TEMPLATE, IH_TEMPLATE, H_DEST, CPP_DEST, DOCSTR_DEST, IH_DEST, msgcodes)
+    processIface(iface, H_TEMPLATE, CPP_TEMPLATE, IH_TEMPLATE, H_DEST, CPP_DEST, DOCSTR_DEST, IH_DEST, msgcodes)
 
 
 

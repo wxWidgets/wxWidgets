@@ -1079,6 +1079,7 @@
     <ClCompile Include="..\..\src\common\bmpcboxcmn.cpp" />
     <ClCompile Include="..\..\src\generic\rowheightcache.cpp" />
     <ClCompile Include="..\..\src\generic\creddlgg.cpp" />
+    <ClCompile Include="..\..\src\msw\overlay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">

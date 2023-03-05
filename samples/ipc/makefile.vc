@@ -344,6 +344,9 @@ __WXLIB_CORE_p = \
 !if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
 !endif
+!if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
+__LIB_LEXILLA_IF_MONO_p = wxlexilla$(WXDEBUGFLAG).lib
+!endif
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
@@ -527,14 +530,14 @@ clean:
 !if "$(USE_GUI)" == "1"
 $(OBJS)\ipcclient.exe: $(IPCCLIENT_OBJECTS) $(OBJS)\ipcclient_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_4) /pdb:"$(OBJS)\ipcclient.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(IPCCLIENT_OBJECTS) $(IPCCLIENT_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(IPCCLIENT_OBJECTS) $(IPCCLIENT_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\ipcserver.exe: $(IPCSERVER_OBJECTS) $(OBJS)\ipcserver_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_4) /pdb:"$(OBJS)\ipcserver.pdb" $(__DEBUGINFO_18)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(IPCSERVER_OBJECTS) $(IPCSERVER_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(IPCSERVER_OBJECTS) $(IPCSERVER_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 !endif
 

@@ -786,6 +786,15 @@ class wxGLCanvas : public wxWindow
 {
 public:
     /**
+        Default constructor not creating the window.
+
+        Create() must be used to actually create it later.
+
+        @since 3.3.0
+     */
+    wxGLCanvas();
+
+    /**
         Creates a window with the given parameters. Notice that you need to
         create and use a wxGLContext to output to this window.
 

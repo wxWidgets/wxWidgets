@@ -35,7 +35,7 @@ jobs:
       - run:
           name: Checkout required submodules
           command: |
-            git submodule update --init 3rdparty/catch 3rdparty/nanosvg
+            git submodule update --init 3rdparty/catch 3rdparty/nanosvg src/stc/scintilla src/stc/lexilla
 
       - restore_cache:
           name: Restore ccache

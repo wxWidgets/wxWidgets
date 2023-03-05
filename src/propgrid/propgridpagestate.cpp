@@ -380,7 +380,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
                 }
                 else
                 {
-                    DoSetSplitterPosition( newWidth / 2 );
+                    DoSetSplitter( newWidth / 2 );
                     m_isSplitterPreSet = false;
                 }
             }
@@ -389,7 +389,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 
     if ( IsDisplayed() )
     {
-        pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)nullptr);
+        pg->SendEvent(wxEVT_PG_COLS_RESIZED, wxNullProperty);
     }
 }
 
@@ -599,8 +599,7 @@ static bool wxPG_SortFunc_ByLabel(wxPGProperty* p1, wxPGProperty* p2)
     return p1->GetLabel().CmpNoCase( p2->GetLabel() ) < 0;
 }
 
-void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
-                                              int flags )
+void wxPropertyGridPageState::DoSortChildren(wxPGProperty* p, wxPGPropertyValuesFlags flags)
 {
     if ( !p )
         p = m_properties;
@@ -613,7 +612,7 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
     if ( p->HasFlag(wxPG_PROP_AGGREGATE) )
         return;
 
-    if ( (flags & wxPG_SORT_TOP_LEVEL_ONLY)
+    if ( !!(flags & wxPGPropertyValuesFlags::SortTopLevelOnly)
          && !p->IsCategory() && !p->IsRoot() )
         return;
 
@@ -625,7 +624,7 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
     // Fix indices
     p->FixIndicesOfChildren();
 
-    if ( flags & wxPG_RECURSE )
+    if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
     {
         // Apply sort recursively
         for ( unsigned int i=0; i<p->GetChildCount(); i++ )
@@ -635,9 +634,9 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridPageState::DoSort( int flags )
+void wxPropertyGridPageState::DoSort(wxPGPropertyValuesFlags flags)
 {
-    DoSortChildren( m_properties, flags | wxPG_RECURSE );
+    DoSortChildren( m_properties, flags | wxPGPropertyValuesFlags::Recurse );
 
     // We used to sort categories as well here also if in non-categorized
     // mode, but doing would naturally cause child indices to become
@@ -655,7 +654,7 @@ bool wxPropertyGridPageState::PrepareAfterItemsAdded()
     m_itemsAdded = false;
 
     if ( pg->HasFlag(wxPG_AUTO_SORT) )
-        DoSort(wxPG_SORT_TOP_LEVEL_ONLY);
+        DoSort(wxPGPropertyValuesFlags::SortTopLevelOnly);
 
     return true;
 }
@@ -870,9 +869,8 @@ void wxPropertyGridPageState::PropagateColSizeDec( int column,
     wxASSERT( decrease == 0 );
 }
 
-void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
-                                                     int splitterColumn,
-                                                     int flags )
+void wxPropertyGridPageState::DoSetSplitter(int newXPos, int splitterColumn,
+                                            wxPGSplitterPositionFlags flags )
 {
     int adjust = newXPos - DoGetSplitterPosition(splitterColumn);
     int otherColumn = splitterColumn + 1;
@@ -894,8 +892,8 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
     if ( splitterColumn == 0 )
         m_fSplitterX = (double) newXPos;
 
-    if ( !(flags & wxPG_SPLITTER_FROM_AUTO_CENTER) &&
-         !(flags & wxPG_SPLITTER_FROM_EVENT) )
+    if ( !(flags & wxPGSplitterPositionFlags::FromAutoCenter) &&
+         !(flags & wxPGSplitterPositionFlags::FromEvent) )
     {
         // Don't allow initial splitter auto-positioning after this.
         m_isSplitterPreSet = true;
@@ -914,7 +912,7 @@ void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
     if ( maxW > 0 )
     {
         maxW += pg->GetMarginWidth();
-        DoSetSplitterPosition( maxW );
+        DoSetSplitter( maxW );
     }
 
     m_dontCenterSplitter = true;
@@ -1086,8 +1084,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
                 }
             }
 
-            DoSetSplitterPosition((int)splitterX, 0,
-                                  wxPG_SPLITTER_FROM_AUTO_CENTER);
+            DoSetSplitter((int)splitterX, 0,
+                          wxPGSplitterPositionFlags::FromAutoCenter);
 
             m_fSplitterX = splitterX; // needed to retain accuracy
         }
@@ -1096,12 +1094,12 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             //
             // Generic re-center code
             //
-            ResetColumnSizes(wxPG_SPLITTER_FROM_AUTO_CENTER);
+            ResetColumnSizes(wxPGSplitterPositionFlags::FromAutoCenter);
         }
     }
 }
 
-void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
+void wxPropertyGridPageState::ResetColumnSizes(wxPGSplitterPositionFlags setSplitterFlags)
 {
     // Calculate sum of proportions
     int psum = std::accumulate(m_columnProportions.begin(), m_columnProportions.end(), 0);
@@ -1113,8 +1111,7 @@ void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
     {
         int cwid = (puwid*m_columnProportions[i]) / 256;
         cpos += cwid;
-        DoSetSplitterPosition(cpos, (int)i,
-                              setSplitterFlags);
+        DoSetSplitter(cpos, (int)i, setSplitterFlags);
     }
 }
 
@@ -1295,7 +1292,7 @@ void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
                 wxPGProperty* newFirst = sel.empty()? nullptr: sel[0];
 
                 pg->DoSelectProperty(newFirst,
-                                     wxPG_SEL_DONT_SEND_EVENT);
+                                     wxPGSelectPropertyFlags::DontSendEvent);
 
                 m_selection = sel;
 
@@ -1346,7 +1343,7 @@ bool wxPropertyGridPageState::DoExpand( wxPGProperty* p )
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGridPageState::DoSelectProperty( wxPGProperty* p, unsigned int flags )
+bool wxPropertyGridPageState::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags flags )
 {
     if ( IsDisplayed() )
         return m_pPropGrid->DoSelectProperty( p, flags );
@@ -1357,7 +1354,7 @@ bool wxPropertyGridPageState::DoSelectProperty( wxPGProperty* p, unsigned int fl
 
 // -----------------------------------------------------------------------
 
-bool wxPropertyGridPageState::DoHideProperty( wxPGProperty* p, bool hide, int flags )
+bool wxPropertyGridPageState::DoHideProperty(wxPGProperty* p, bool hide, wxPGPropertyValuesFlags flags)
 {
     p->DoHide(hide, flags);
     VirtualHeightChanged();
@@ -1371,9 +1368,9 @@ bool wxPropertyGridPageState::DoHideProperty( wxPGProperty* p, bool hide, int fl
 
 // Returns list of wxVariant objects (non-categories and non-sub-properties only).
 // Never includes sub-properties (unless they are parented by wxParentProperty).
-wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname,
+wxVariant wxPropertyGridPageState::DoGetPropertyValues(const wxString& listname,
                                                     wxPGProperty* baseparent,
-                                                    long flags ) const
+                                                    wxPGPropertyValuesFlags flags) const
 {
     wxPGProperty* pwc = baseparent;
 
@@ -1386,7 +1383,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
 
     if ( pwc->HasAnyChild() )
     {
-        if ( flags & wxPG_KEEP_STRUCTURE )
+        if ( !!(flags & wxPGPropertyValuesFlags::KeepStructure) )
         {
             wxASSERT( !pwc->HasFlag(wxPG_PROP_AGGREGATE) );
 
@@ -1401,9 +1398,9 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                 }
                 else
                 {
-                    v.Append( DoGetPropertyValues(p->GetBaseName(),p,flags|wxPG_KEEP_STRUCTURE) );
+                    v.Append( DoGetPropertyValues(p->GetBaseName(),p,flags|wxPGPropertyValuesFlags::KeepStructure) );
                 }
-                if ( (flags & wxPG_INC_ATTRIBUTES) && p->GetAttributes().GetCount() )
+                if ( !!(flags & wxPGPropertyValuesFlags::IncAttributes) && p->GetAttributes().GetCount() )
                     v.Append( p->GetAttributesAsList() );
             }
         }
@@ -1422,7 +1419,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                     wxVariant variant = p->GetValue();
                     variant.SetName( p->GetName() );
                     v.Append( variant );
-                    if ( (flags & wxPG_INC_ATTRIBUTES) && p->GetAttributes().GetCount() )
+                    if ( !!(flags & wxPGPropertyValuesFlags::IncAttributes) && p->GetAttributes().GetCount() )
                         v.Append( p->GetAttributesAsList() );
                 }
             }
@@ -1757,7 +1754,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
 void wxPropertyGridPageState::DoRemoveChildrenFromSelection(wxPGProperty* p,
                                                             bool recursive,
-                                                            int selFlags)
+                                                            wxPGSelectPropertyFlags selFlags)
 {
     wxPropertyGrid* pg = GetGrid();
 
@@ -1906,7 +1903,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         if ( pg && IsDisplayed() )
         {
             pg->DoRemoveFromSelection(item,
-                wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
+                wxPGSelectPropertyFlags::Deleting|wxPGSelectPropertyFlags::NoValidate);
         }
         else
         {
@@ -1917,7 +1914,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     if ( item->IsChildSelected(true) )
     {
         DoRemoveChildrenFromSelection(item, true,
-                wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
+            wxPGSelectPropertyFlags::Deleting|wxPGSelectPropertyFlags::NoValidate);
     }
 
     // If deleted category or its sub-category is

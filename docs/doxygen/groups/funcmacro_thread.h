@@ -20,7 +20,7 @@ overhead of using the critical section is not needed. To solve this problem,
 the wxCRITICAL_SECTION() macro may be used to create and use the critical
 section only when needed.
 
-@sa wxThread, wxMutex, @ref overview_thread
+@see wxThread, wxMutex, @ref overview_thread
 
 Related class group: @ref group_class_threading
 

@@ -553,6 +553,10 @@ public:
     // incompatible with this style.
     void MSWDisableComposited();
 
+    // This function is called for all child windows when compositing is
+    // disabled for their parent.
+    virtual void MSWOnDisabledComposited() { }
+
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
 

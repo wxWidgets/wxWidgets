@@ -516,10 +516,7 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     {
 #ifdef __WXGTK3__
         //TODO: wxBORDER_RAISED/wxBORDER_SUNKEN
-        GtkStyleContext* sc;
-        if (win->HasFlag(wxHSCROLL | wxVSCROLL))
-            sc = gtk_widget_get_style_context(wxGTKPrivate::GetTreeWidget());
-        else
+        GtkStyleContext*
             sc = gtk_widget_get_style_context(wxGTKPrivate::GetEntryWidget());
 
         gtk_render_frame(sc, cr, x, y, w, h);

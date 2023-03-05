@@ -1706,9 +1706,9 @@ public:
 
         @param flags
             By default changes are applied recursively. Set this parameter to
-            ::wxPG_DONT_RECURSE to prevent this.
+            wxPGPropertyValuesFlags::DontRecurse to prevent this.
     */
-    bool Hide( bool hide, int flags = wxPG_RECURSE );
+    bool Hide(bool hide, wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Returns index of given child property. wxNOT_FOUND if
@@ -1852,7 +1852,8 @@ public:
             Background colour to use.
 
         @param flags
-            Default is ::wxPG_RECURSE which causes colour to be set recursively.
+            Default is wxPGPropertyValuesFlags::Recurse which causes colour
+            to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
 
@@ -1860,8 +1861,8 @@ public:
         Unlike wxPropertyGridInterface::SetPropertyBackgroundColour(),
         this does not automatically update the display.
     */
-    void SetBackgroundColour( const wxColour& colour,
-                              int flags = wxPG_RECURSE );
+    void SetBackgroundColour(const wxColour& colour,
+                             wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Sets editor for a property.
@@ -2002,7 +2003,8 @@ public:
             Text colour to use.
 
         @param flags
-            Default is ::wxPG_RECURSE which causes colour to be set recursively.
+            Default is wxPGPropertyValuesFlags::Recurse which causes colour
+            to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
 
@@ -2010,14 +2012,15 @@ public:
         Unlike wxPropertyGridInterface::SetPropertyTextColour(),
         this does not automatically update the display.
     */
-    void SetTextColour( const wxColour& colour,
-                        int flags = wxPG_RECURSE );
+    void SetTextColour(const wxColour& colour,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Sets property's default text and background colours.
 
         @param flags
-            Default is ::wxPG_RECURSE which causes colours to be set recursively.
+            Default is wxPGPropertyValuesFlags::Recurse which
+            causes colours to be set recursively.
             Omit this flag to only set colours for the property in question
             and not any of its children.
 
@@ -2027,7 +2030,7 @@ public:
 
         @since 3.1.0
     */
-    void SetDefaultColours(int flags = wxPG_RECURSE);
+    void SetDefaultColours(wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /** Sets wxValidator for a property */
     void SetValidator( const wxValidator& validator );
@@ -2049,11 +2052,11 @@ public:
             Pointer to list variant that contains child values. Used to indicate
             which children should be marked as modified. Usually you just use @NULL.
         @param flags
-            ::wxPG_SETVAL_REFRESH_EDITOR is set by default, to refresh editor
+            wxPGSetValueFlags::RefreshEditor is set by default, to refresh editor
             and redraw properties.
     */
-    void SetValue( wxVariant value, wxVariant* pList = nullptr,
-                   int flags = wxPG_SETVAL_REFRESH_EDITOR );
+    void SetValue(wxVariant value, wxVariant* pList = nullptr,
+                  wxPGSetValueFlags flags = wxPGSetValueFlags::RefreshEditor );
 
     /**
         Set wxBitmap taken from wxBitmapBundle in front of the value.

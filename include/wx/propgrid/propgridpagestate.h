@@ -23,6 +23,114 @@
 
 // -----------------------------------------------------------------------
 
+enum class wxPGSelectPropertyFlags : int
+{
+    // No flags
+    Null          = 0,
+    // Focuses to created editor
+    Focus         = 0x0001,
+    // Forces deletion and recreation of editor
+    Force         = 0x0002,
+    // For example, doesn't cause EnsureVisible
+    Nonvisible    = 0x0004,
+    // Do not validate editor's value before selecting
+    NoValidate    = 0x0008,
+    // Property being deselected is about to be deleted
+    Deleting      = 0x0010,
+    // Property's values was set to unspecified by the user
+    SetUnspec     = 0x0020,
+    // Property's event handler changed the value
+    DialogVal     = 0x0040,
+    // Set to disable sending of wxEVT_PG_SELECTED event
+    DontSendEvent = 0x0080,
+    // Don't make any graphics updates
+    NoRefresh     = 0x0100
+};
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Null instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_NONE{ wxPGSelectPropertyFlags::Null };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Focus instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_FOCUS{wxPGSelectPropertyFlags::Focus };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Force instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_FORCE{ wxPGSelectPropertyFlags::Force };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Nonvisible instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_NONVISIBLE{ wxPGSelectPropertyFlags::Nonvisible };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoValidate instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_NOVALIDATE{ wxPGSelectPropertyFlags::NoValidate };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Deleting instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_DELETING{wxPGSelectPropertyFlags::Deleting };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::SetUnspec instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_SETUNSPEC{ wxPGSelectPropertyFlags::SetUnspec };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DialogVal instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_DIALOGVAL{ wxPGSelectPropertyFlags::DialogVal };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DontSendEvent instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_DONT_SEND_EVENT{ wxPGSelectPropertyFlags::DontSendEvent };
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoRefresh instead")
+constexpr wxPGSelectPropertyFlags wxPG_SEL_NO_REFRESH{ wxPGSelectPropertyFlags::NoRefresh };
+#endif // WXWIN_COMPATIBILITY_3_2
+
+constexpr wxPGSelectPropertyFlags operator|(wxPGSelectPropertyFlags a, wxPGSelectPropertyFlags b)
+{
+    return static_cast<wxPGSelectPropertyFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+inline wxPGSelectPropertyFlags operator|=(wxPGSelectPropertyFlags& a, wxPGSelectPropertyFlags b)
+{
+    return a = a | b;
+}
+
+constexpr wxPGSelectPropertyFlags operator&(wxPGSelectPropertyFlags a, wxPGSelectPropertyFlags b)
+{
+    return static_cast<wxPGSelectPropertyFlags>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+constexpr bool operator!(wxPGSelectPropertyFlags a)
+{
+    return static_cast<int>(a) == 0;
+}
+
+// -----------------------------------------------------------------------
+
+// DoSetSplitter() flags
+
+enum class wxPGSplitterPositionFlags : int
+{
+    Null           = 0,
+    Refresh        = 0x0001,
+    AllPages       = 0x0002,
+    FromEvent      = 0x0004,
+    FromAutoCenter = 0x0008
+};
+
+constexpr wxPGSplitterPositionFlags operator&(wxPGSplitterPositionFlags a, wxPGSplitterPositionFlags b)
+{
+    return static_cast<wxPGSplitterPositionFlags>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+constexpr wxPGSplitterPositionFlags operator|(wxPGSplitterPositionFlags a, wxPGSplitterPositionFlags b)
+{
+    return static_cast<wxPGSplitterPositionFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+constexpr bool operator!(wxPGSplitterPositionFlags a)
+{
+    return static_cast<int>(a) == 0;
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::Refresh instead")
+constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_REFRESH { wxPGSplitterPositionFlags::Refresh };
+wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::AllPages instead")
+constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_ALL_PAGES { wxPGSplitterPositionFlags::AllPages };
+wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromEvent instead")
+constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_EVENT { wxPGSplitterPositionFlags::FromEvent };
+wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromAutoCenter instead")
+constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_AUTO_CENTER { wxPGSplitterPositionFlags::FromAutoCenter };
+#endif // WXWIN_COMPATIBILITY_3_2
+
+// -----------------------------------------------------------------------
+
 // A return value from wxPropertyGrid::HitTest(),
 // contains all you need to know about an arbitrary location on the grid.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridHitTestResult
@@ -279,6 +387,7 @@ class WXDLLIMPEXP_PROPGRID wxPGVIteratorBase : public wxObjectRefData
 public:
     wxPGVIteratorBase() = default;
     virtual void Next() = 0;
+    virtual bool AtEnd() const = 0;
 protected:
     virtual ~wxPGVIteratorBase() = default;
 
@@ -312,7 +421,7 @@ public:
         return *this;
     }
     void Next() { m_pIt->Next(); }
-    bool AtEnd() const { return m_pIt->m_it.AtEnd(); }
+    bool AtEnd() const { return m_pIt->AtEnd(); }
     wxPGProperty* GetProperty() const { return m_pIt->m_it.GetProperty(); }
 protected:
     wxPGVIteratorBase*  m_pIt;
@@ -358,9 +467,18 @@ public:
 
     // This needs to be overridden in grid used the manager so that splitter
     // changes can be propagated to other pages.
-    virtual void DoSetSplitterPosition( int pos,
-                                        int splitterColumn = 0,
-                                        int flags = 0 );
+    virtual void DoSetSplitter(int pos,
+                               int splitterColumn = 0,
+                               wxPGSplitterPositionFlags
+                                flags = wxPGSplitterPositionFlags::Null);
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use DoSetSplitter() taking wxPGSplitterPositionFlags")
+    virtual void DoSetSplitterPosition(int pos, int splitterColumn, int flags)
+    {
+        DoSetSplitter(pos, splitterColumn, static_cast<wxPGSplitterPositionFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     bool EnableCategories( bool enable );
 
@@ -483,9 +601,8 @@ protected:
         return m_columnProportions[column];
     }
 
-    wxVariant DoGetPropertyValues(const wxString& listname,
-        wxPGProperty* baseparent,
-        long flags) const;
+    wxVariant DoGetPropertyValues(const wxString& listname, wxPGProperty* baseparent,
+                                  wxPGPropertyValuesFlags flags) const;
 
     wxPGProperty* DoGetRoot() const { return m_properties; }
 
@@ -503,7 +620,7 @@ protected:
         p->SetFlagRecursively(wxPG_PROP_NOEDITOR, limit);
     }
 
-    bool DoSelectProperty(wxPGProperty* p, unsigned int flags = 0);
+    bool DoSelectProperty(wxPGProperty* p, wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null);
 
     // Base append.
     wxPGProperty* DoAppend(wxPGProperty* property);
@@ -531,7 +648,7 @@ protected:
 
     // Unselect sub-properties.
     void DoRemoveChildrenFromSelection(wxPGProperty* p, bool recursive,
-                                       int selFlags);
+                                       wxPGSelectPropertyFlags selFlags);
 
     // Mark sub-properties as being deleted.
     void DoMarkChildrenAsDeleted(wxPGProperty* p, bool recursive);
@@ -544,7 +661,7 @@ protected:
     // so it won't remain in the way of the user code.
     void DoInvalidateChildrenNames(wxPGProperty* p, bool recursive);
 
-    bool DoHideProperty(wxPGProperty* p, bool hide, int flags = wxPG_RECURSE);
+    bool DoHideProperty(wxPGProperty* p, bool hide, wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     bool DoSetPropertyValueString(wxPGProperty* p, const wxString& value);
 
@@ -554,8 +671,8 @@ protected:
     void DoSetPropertyValues(const wxVariantList& list,
                              wxPGProperty* default_category);
 
-    void DoSortChildren(wxPGProperty* p, int flags = 0);
-    void DoSort(int flags = 0);
+    void DoSortChildren(wxPGProperty* p, wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
+    void DoSort(wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     // widthChange is non-client.
     void OnClientWidthChange(int newWidth, int widthChange, bool fromOnResize = false);
@@ -585,7 +702,14 @@ protected:
 
     void SetColumnCount(int colCount);
 
-    void ResetColumnSizes(int setSplitterFlags);
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use ResetColumnSizes with wxPGSplitterPositionFlags argument")
+    void ResetColumnSizes(int setSplitterFlags)
+    {
+        ResetColumnSizes(static_cast<wxPGSplitterPositionFlags>(setSplitterFlags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void ResetColumnSizes(wxPGSplitterPositionFlags setSplitterFlags);
 
     bool PrepareAfterItemsAdded();
 

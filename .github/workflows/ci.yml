@@ -56,6 +56,10 @@ on:
         required: false
         default: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -155,9 +159,12 @@ jobs:
               #   - Python can't be installed using the action as usual because
               #     it installs an ABI-incompatible version, see (wrongly, IMO)
               #     closed https://github.com/actions/setup-python/issues/370
+              #   - And python3-cffi can't be installed by pip because it can't
+              #     be built from source with gcc 4.8 any longer (its build
+              #     script uses -Wdate-time option unknown to this compiler).
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
-              apt-get install -qq coreutils ${compiler-g++} git make pkg-config python3 python3-pip sudo xvfb
+              apt-get install -qq coreutils ${compiler-g++} git make pkg-config python3 python3-cffi python3-pip sudo xvfb
               ;;
 
             '')

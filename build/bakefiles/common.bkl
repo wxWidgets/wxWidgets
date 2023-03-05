@@ -529,6 +529,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <include file="tiff.bkl"/>
     <include file="expat.bkl"/>
     <include file="scintilla.bkl"/>
+    <include file="lexilla.bkl"/>
 
 
     <!-- =============================================================== -->
@@ -649,6 +650,9 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <set var="LIB_SCINTILLA_IF_MONO">
         <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_SCINTILLA)</if>
     </set>
+    <set var="LIB_LEXILLA_IF_MONO">
+        <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_LEXILLA)</if>
+    </set>
     <template id="wx_append_base" template_append="wx_append_base_nomono">
         <!-- Always link against the full wx library in monolithic build and
              also against the PNG one as core code references it for Tango
@@ -660,6 +664,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <!-- Always link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
         <sys-lib>$(LIB_SCINTILLA_IF_MONO)</sys-lib>
+        <sys-lib>$(LIB_LEXILLA_IF_MONO)</sys-lib>
     </template>
 
 
@@ -752,6 +757,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
         <depends>wxscintilla</depends>
+        <depends>wxlexilla</depends>
     </template>
 
     <template id="wx_3rdparty_includes_base">

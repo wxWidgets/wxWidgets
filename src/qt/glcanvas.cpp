@@ -317,16 +317,6 @@ wxGLAttributes& wxGLAttributes::PlatformDefaults()
     return *this;
 }
 
-wxGLAttributes& wxGLAttributes::Defaults()
-{
-    RGBA().DoubleBuffer();
-//    if ( wxGLCanvasX11::GetGLXVersion() < 13 )
-//        Depth(1).MinRGBA(1, 1, 1, 0);
-//    else
-        Depth(16).SampleBuffers(1).Samplers(4);
-    return *this;
-}
-
 
 //---------------------------------------------------------------------------
 // wxGlContext

@@ -427,12 +427,6 @@ wxGLAttributes& wxGLAttributes::PlatformDefaults()
     return *this;
 }
 
-wxGLAttributes& wxGLAttributes::Defaults()
-{
-    RGBA().DoubleBuffer().Depth(16).SampleBuffers(1).Samplers(4);
-    return *this;
-}
-
 
 // ============================================================================
 // wxGLContext implementation

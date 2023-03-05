@@ -3311,7 +3311,7 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
         wxWindow* peer = GetWXPeer();
         if ( peer->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
         {
-            wxTopLevelWindow* toplevel = wxDynamicCast(peer,wxTopLevelWindow);
+            wxNonOwnedWindow* toplevel = dynamic_cast<wxNonOwnedWindow*>(peer);
 
             if ( toplevel == nullptr || toplevel->GetShape().IsEmpty() )
                 [targetView setBackgroundColor:

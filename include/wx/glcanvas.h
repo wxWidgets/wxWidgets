@@ -156,11 +156,17 @@ public:
     wxGLAttributes& Stencil(int val);
     wxGLAttributes& MinAcumRGBA(int mRed, int mGreen, int mBlue, int mAlpha);
     wxGLAttributes& PlatformDefaults();
-    wxGLAttributes& Defaults();
     wxGLAttributes& SampleBuffers(int val);
     wxGLAttributes& Samplers(int val);
     wxGLAttributes& FrameBuffersRGB();
     void EndList(); // No more values can be chained
+
+    // This function is the same for all ports and so is implemented here
+    // instead of in port-specific files.
+    wxGLAttributes& Defaults()
+    {
+        return RGBA().Depth(16).DoubleBuffer();
+    }
 };
 
 // ----------------------------------------------------------------------------
