@@ -10,6 +10,7 @@
     <include file="../build/bakefiles/common_samples.bkl"/>
 
     <template id="wx_test">
+        <win32-res>$(WXTOPDIR)test/test.rc</win32-res>
         <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
