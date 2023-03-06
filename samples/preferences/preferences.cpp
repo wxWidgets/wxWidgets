@@ -16,7 +16,6 @@
 #include "wx/app.h"
 #include "wx/config.h"
 #include "wx/panel.h"
-#include "wx/scopedptr.h"
 #include "wx/menu.h"
 #include "wx/checkbox.h"
 #include "wx/listbox.h"
@@ -24,6 +23,8 @@
 #include "wx/sizer.h"
 #include "wx/artprov.h"
 #include "wx/frame.h"
+
+#include <memory>
 
 // This struct combines the settings edited in the preferences dialog.
 struct MySettings
@@ -57,7 +58,7 @@ public:
 
 private:
     class MyFrame* m_frame;
-    wxScopedPtr<wxPreferencesEditor> m_prefEditor;
+    std::unique_ptr<wxPreferencesEditor> m_prefEditor;
     MySettings m_settings;
 };
 

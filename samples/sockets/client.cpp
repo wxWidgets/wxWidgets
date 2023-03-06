@@ -28,7 +28,8 @@
 #include "wx/url.h"
 #include "wx/sstream.h"
 #include "wx/thread.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // --------------------------------------------------------------------------
 // resources
@@ -590,7 +591,7 @@ void DoDownload(const wxString& urlname)
 
     // Try to get the input stream (connects to the given URL)
     wxLogMessage("Establishing connection to \"%s\"...", urlname);
-    const wxScopedPtr<wxInputStream> data(url.GetInputStream());
+    const std::unique_ptr<wxInputStream> data(url.GetInputStream());
     if ( !data.get() )
     {
         wxLogError("Failed to retrieve URL \"%s\"", urlname);
