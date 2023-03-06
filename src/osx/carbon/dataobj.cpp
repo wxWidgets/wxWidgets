@@ -32,6 +32,8 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/datatransfer.h"
 
+#include <memory>
+
 static CFStringRef kUTTypeTraditionalMacText = CFSTR("com.apple.traditional-mac-plain-text");
 
 static wxString privateUTIPrefix = "org.wxwidgets.private.";
@@ -423,7 +425,7 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
             
             for ( size_t itemIndex = 0; itemIndex < itemCount && !transferred; ++itemIndex)
             {
-                wxScopedPtr<const wxOSXDataSourceItem> sitem(source->GetItem(itemIndex));
+                std::unique_ptr<const wxOSXDataSourceItem> sitem(source->GetItem(itemIndex));
                 
                 wxDataFormat::NativeFormat nativeFormat = sitem->AvailableType(typesarray);
                 CFDataRef flavorData = sitem->DoGetData(nativeFormat);

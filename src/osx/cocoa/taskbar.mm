@@ -19,10 +19,11 @@
     #include "wx/dcclient.h"
 #endif
 
-#include "wx/scopedptr.h"
 #include "wx/taskbar.h"
 
 #include "wx/osx/private.h"
+
+#include <memory>
 
 class wxTaskBarIconWindow;
 
@@ -105,7 +106,7 @@ protected:
 private:
     wxTaskBarIconDockImpl();
     wxMenu             *m_pMenu;
-    wxScopedPtr<wxMenu> m_menuDeleter;
+    std::unique_ptr<wxMenu> m_menuDeleter;
 };
 
 class wxTaskBarIconCustomStatusItemImpl;
