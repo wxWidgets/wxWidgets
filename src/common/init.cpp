@@ -296,13 +296,10 @@ bool wxEntryStart(int& argc, wxChar **argv)
     wxAppPtr app(wxTheApp);
     if ( !app.get() )
     {
-        // if not, he might have used wxIMPLEMENT_APP() to give us a
-        // function to create it
-        wxAppInitializerFunction fnCreate = wxApp::GetInitializerFunction();
-
-        if ( fnCreate )
+        // if they didn't, we should normally have the initializer function set
+        // up by wxIMPLEMENT_APP(), so use it to create one now
+        if ( auto fnCreate = wxApp::GetInitializerFunction() )
         {
-            // he did, try to create the custom wxApp object
             app.Set((*fnCreate)());
         }
     }
