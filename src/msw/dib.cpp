@@ -39,6 +39,7 @@
 #include "wx/file.h"
 #include "wx/quantize.h"
 #include "wx/scopedarray.h"
+#include "wx/scopedptr.h"
 
 #include <stdio.h>
 #include <stdlib.h>
