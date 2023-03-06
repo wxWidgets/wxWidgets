@@ -320,7 +320,7 @@ bench_tls.o: $(srcdir)/tls.cpp
 bench_printfbench.o: $(srcdir)/printfbench.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/printfbench.cpp
 
-bench_gui_sample_rc.o: $(srcdir)/../../test/test.rc
+bench_gui_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 bench_gui_bench.o: $(srcdir)/bench.cpp
@@ -332,7 +332,7 @@ bench_gui_display.o: $(srcdir)/display.cpp
 bench_gui_image.o: $(srcdir)/image.cpp
 	$(CXXC) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(srcdir)/image.cpp
 
-bench_graphics_sample_rc.o: $(srcdir)/../../test/test.rc
+bench_graphics_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 bench_graphics_graphics.o: $(srcdir)/graphics.cpp
