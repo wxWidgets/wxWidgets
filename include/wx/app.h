@@ -476,6 +476,10 @@ public:
     wxCmdLineArgsArray argv;
 
 protected:
+    // This function must be called at the end of wxApp ctor to indicate that
+    // wx part of the object is fully constructed.
+    void WXAppConstructed();
+
     // delete all objects in wxPendingDelete list
     //
     // called from ProcessPendingEvents()
@@ -531,6 +535,11 @@ protected:
     // flag modified by Suspend/ResumeProcessingOfPendingEvents()
     bool m_bDoPendingEventProcessing = true;
 
+private:
+    // flag set to true at the end of wxApp ctor, call WXAppConstructed() to
+    // set it
+    bool m_fullyConstructed = false;
+
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
     // the application object is a singleton anyhow, there is no sense in
@@ -541,8 +550,11 @@ protected:
 #if defined(__UNIX__) && !defined(__WINDOWS__)
     #include "wx/unix/app.h"
 #else
-    // this has to be a class and not a typedef as we forward declare it
-    class wxAppConsole : public wxAppConsoleBase { };
+    class wxAppConsole : public wxAppConsoleBase
+    {
+    public:
+        wxAppConsole() { WXAppConstructed(); }
+    };
 #endif
 
 // ----------------------------------------------------------------------------

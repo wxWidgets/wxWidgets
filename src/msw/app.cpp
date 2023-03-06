@@ -817,6 +817,8 @@ if you believe not using the manifest should remain supported.
             );
         }
     }
+
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()

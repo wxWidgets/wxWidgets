@@ -138,10 +138,6 @@ wxAppConsoleBase::wxAppConsoleBase()
 
 #ifdef __WXDEBUG__
     SetTraceMasks();
-    // SetTraceMasks call can cause an apptraits to be
-    // created, but since we are still in the constructor the wrong kind will
-    // be created for GUI apps.  Destroy it so it can be created again later.
-    wxDELETE(m_traits);
 #endif
 
     wxEvtHandler::AddFilter(this);
@@ -162,8 +158,29 @@ wxAppConsoleBase::~wxAppConsoleBase()
 // initialization/cleanup
 // ----------------------------------------------------------------------------
 
+void wxAppConsoleBase::WXAppConstructed()
+{
+    // Note that we can (and will) be called multiple times for the GUI apps as
+    // wxAppConsole ctor has to call this function itself too in case it's
+    // actually a console app, so don't assert that it's currently false.
+    m_fullyConstructed = true;
+
+    // We're called at the end of wxApp ctor execution, i.e. before the
+    // user-defined wxApp-derived class was fully constructed, so its possibly
+    // overridden CreateTraits() couldn't have been called yet, which means
+    // that if we have already initialized our m_traits, we did it wrongly, and
+    // need to reset it.
+    if ( m_traits )
+    {
+        delete m_traits;
+        m_traits = nullptr;
+    }
+}
+
 bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
+    wxASSERT_MSG( m_fullyConstructed, "Forgot to call WXAppConstructed()?" );
+
 #if defined(__WINDOWS__)
     SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 #endif

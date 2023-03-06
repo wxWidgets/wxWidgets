@@ -20,6 +20,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 wxApp::wxApp()
 {
     m_qtArgc = 0;
+
+    WXAppConstructed();
 }
 
 
