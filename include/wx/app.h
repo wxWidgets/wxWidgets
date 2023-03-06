@@ -502,13 +502,13 @@ protected:
              m_appDisplayName,    // app display name ("My Application")
              m_className;         // class name
 
-    // the class defining the application behaviour, nullptr initially and created
-    // by GetTraits() when first needed
-    wxAppTraits *m_traits;
+    // allows customizing the application behaviour, created by GetTraits()
+    // when first needed
+    wxAppTraits *m_traits = nullptr;
 
     // the main event loop of the application (may be null if the loop hasn't
     // been started yet or has already terminated)
-    wxEventLoopBase *m_mainLoop;
+    wxEventLoopBase *m_mainLoop = nullptr;
 
 
     // pending events management vars:
@@ -529,7 +529,7 @@ protected:
 #endif
 
     // flag modified by Suspend/ResumeProcessingOfPendingEvents()
-    bool m_bDoPendingEventProcessing;
+    bool m_bDoPendingEventProcessing = true;
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 

@@ -134,10 +134,6 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopBase)
 
 wxAppConsoleBase::wxAppConsoleBase()
 {
-    m_traits = nullptr;
-    m_mainLoop = nullptr;
-    m_bDoPendingEventProcessing = true;
-
     ms_appInstance = reinterpret_cast<wxAppConsole *>(this);
 
 #ifdef __WXDEBUG__
