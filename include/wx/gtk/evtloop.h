@@ -16,6 +16,8 @@
 
 typedef union  _GdkEvent        GdkEvent;
 
+#include <vector>
+
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
@@ -28,7 +30,7 @@ public:
     virtual void WakeUp() override;
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
-        { m_arrGdkEvents.Add(ev); }
+        { m_queuedGdkEvents.push_back(ev); }
 
 protected:
     virtual int DoRun() override;
@@ -38,8 +40,8 @@ private:
     // the exit code of this event loop
     int m_exitcode;
 
-    // used to temporarily store events in DoYield()
-    wxArrayPtrVoid m_arrGdkEvents;
+    // used to temporarily store events processed in DoYieldFor()
+    std::vector<GdkEvent*> m_queuedGdkEvents;
 
     wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };
