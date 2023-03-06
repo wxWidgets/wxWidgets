@@ -66,7 +66,6 @@ public:
     wxDummyConsoleApp() { }
 
     virtual int OnRun() override { wxFAIL_MSG( wxT("unreachable code") ); return 0; }
-    virtual bool DoYield(bool, long) { return true; }
 
     wxDECLARE_NO_COPY_CLASS(wxDummyConsoleApp);
 };
