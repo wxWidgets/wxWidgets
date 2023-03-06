@@ -5251,13 +5251,20 @@ else
         x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
-            dnl check if the compiler accepts -mthreads
+            dnl check if the compiler is gcc and accepts -mthreads (clang just
+            dnl ignores this option but it doesn't need it, so explicitly fail
+            dnl the test for it)
             AC_CACHE_CHECK([if compiler supports -mthreads],
                 wx_cv_cflags_mthread,
                 [
                     CFLAGS_OLD="$CFLAGS"
                     CFLAGS="-mthreads $CFLAGS"
-                    AC_TRY_COMPILE([], [],
+                    AC_TRY_COMPILE([],
+                        [
+#ifdef __clang__
+#error no
+#endif
+                        ],
                         wx_cv_cflags_mthread=yes,
                         wx_cv_cflags_mthread=no
                     )

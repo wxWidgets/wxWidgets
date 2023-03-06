@@ -37171,7 +37171,7 @@ else
         x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports -mthreads" >&5
+                                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports -mthreads" >&5
 $as_echo_n "checking if compiler supports -mthreads... " >&6; }
 if ${wx_cv_cflags_mthread+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -37185,6 +37185,10 @@ else
 int
 main ()
 {
+
+#ifdef __clang__
+#error no
+#endif
 
   ;
   return 0;
