@@ -18,7 +18,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/list.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // --------------------------------------------------------------------------
 // test class
@@ -243,7 +244,7 @@ void ElementsListNode::DeleteData()
 TEST_CASE("wxWindowList::Find", "[list]")
 {
     ListElement* const el = new ListElement(17);
-    wxScopedPtr<ListElementBase> elb(el);
+    std::unique_ptr<ListElementBase> elb(el);
 
     ElementsList l;
     l.Append(el);

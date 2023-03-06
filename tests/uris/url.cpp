@@ -19,8 +19,9 @@
 
 #include "wx/url.h"
 #include "wx/mstream.h"
-#include "wx/scopedptr.h"
 #include "wx/utils.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // test class
@@ -76,7 +77,7 @@ void URLTestCase::GetInputStream()
     wxURL url("http://detectportal.firefox.com/");
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
-    wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
+    std::unique_ptr<wxInputStream> in_stream(url.GetInputStream());
     if ( !in_stream && IsAutomaticTest() )
     {
         // Sometimes the connection fails during CI runs, don't consider this

@@ -24,11 +24,12 @@
 #include "wx/filefn.h"
 #include "wx/fswatcher.h"
 #include "wx/log.h"
-#include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
 #include "wx/vector.h"
 
 #include "testfile.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // local functions
@@ -347,7 +348,7 @@ protected:
     EventGenerator& eg;
     wxEventLoop m_loop;    // loop reference
 
-    wxScopedPtr<wxFileSystemWatcher> m_watcher;
+    std::unique_ptr<wxFileSystemWatcher> m_watcher;
 
     int m_eventTypes;  // Which event-types to watch. Normally all of them
 
