@@ -35,4 +35,4 @@ sample ICON "sample.ico"
 
 // this file contains the standard icons, cursors etc. and also includes the application
 // manifest mentioned above
-#include "wx/msw/wx.rc"
+#include "../include/wx/msw/wx.rc"
