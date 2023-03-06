@@ -160,26 +160,25 @@ wxAppConsoleBase::~wxAppConsoleBase()
 
 void wxAppConsoleBase::WXAppConstructed()
 {
-    // Note that we can (and will) be called multiple times for the GUI apps as
-    // wxAppConsole ctor has to call this function itself too in case it's
-    // actually a console app, so don't assert that it's currently false.
-    m_fullyConstructed = true;
+    wxASSERT_MSG( !m_fullyConstructed, "must be called only once" );
 
-    // We're called at the end of wxApp ctor execution, i.e. before the
-    // user-defined wxApp-derived class was fully constructed, so its possibly
-    // overridden CreateTraits() couldn't have been called yet, which means
-    // that if we have already initialized our m_traits, we did it wrongly, and
-    // need to reset it.
-    if ( m_traits )
-    {
-        delete m_traits;
-        m_traits = nullptr;
-    }
+    m_fullyConstructed = true;
 }
 
 bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
-    wxASSERT_MSG( m_fullyConstructed, "Forgot to call WXAppConstructed()?" );
+    if ( IsGUI() )
+    {
+        // GUI wxApp code must call WXAppConstructed() at the very end.
+        wxASSERT_MSG( m_fullyConstructed, "Forgot to call WXAppConstructed()?" );
+    }
+    else // console application
+    {
+        // wxAppConsole doesn't call WXAppConstructed() as otherwise it would
+        // be called twice when it's used as base class of a GUI wxApp, so call
+        // it ourselves here.
+        WXAppConstructed();
+    }
 
 #if defined(__WINDOWS__)
     SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
@@ -319,8 +318,12 @@ wxAppTraits *wxAppConsoleBase::CreateTraits()
 
 wxAppTraits *wxAppConsoleBase::GetTraits()
 {
-    // FIXME-MT: protect this with a CS?
-    if ( !m_traits )
+    // Check for m_fullyConstructed to prevent constructing wrong traits
+    // object: if it is false, it means that the object of the user-defined
+    // wxApp-derived class hasn't been fully constructed yet, and so its
+    // possibly overridden CreateTraits() wouldn't be called if we called it
+    // now, so avoid doing it.
+    if ( !m_traits && m_fullyConstructed )
     {
         m_traits = CreateTraits();
 

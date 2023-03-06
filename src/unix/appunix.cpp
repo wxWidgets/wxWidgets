@@ -74,8 +74,6 @@ private:
 wxAppConsole::wxAppConsole()
 {
     m_signalWakeUpPipe = nullptr;
-
-    WXAppConstructed();
 }
 
 wxAppConsole::~wxAppConsole()

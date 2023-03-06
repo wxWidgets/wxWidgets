@@ -550,11 +550,8 @@ private:
 #if defined(__UNIX__) && !defined(__WINDOWS__)
     #include "wx/unix/app.h"
 #else
-    class wxAppConsole : public wxAppConsoleBase
-    {
-    public:
-        wxAppConsole() { WXAppConstructed(); }
-    };
+    // this has to be a class and not a typedef as we forward declare it
+    class wxAppConsole : public wxAppConsoleBase { };
 #endif
 
 // ----------------------------------------------------------------------------
