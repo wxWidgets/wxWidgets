@@ -4240,11 +4240,9 @@ dnl flush the cache
 AC_CACHE_SAVE
 
 dnl ---------------------------------------------------------------------------
-dnl thread support for Unix (for Win32 and OS/2 see past
-dnl                          the next matching "else")
+dnl thread support for Unix (other platforms don't need anything special)
 dnl ---------------------------------------------------------------------------
 
-dnl under MSW (except mingw32) we always have thread support
 if test "$TOOLKIT" != "MSW"; then
 
     dnl the code below:
@@ -4623,37 +4621,6 @@ if test "$TOOLKIT" != "MSW"; then
             AC_DEFINE(HAVE_ABI_FORCEDUNWIND)
         fi
       fi
-    fi
-dnl from if !MSW
-else
-    if test "$wxUSE_THREADS" = "yes" ; then
-      case "${host}" in
-        x86_64-*-mingw* )
-        ;;
-        *-*-mingw32* )
-            dnl check if the compiler accepts -mthreads
-            AC_CACHE_CHECK([if compiler supports -mthreads],
-                wx_cv_cflags_mthread,
-                [
-                    CFLAGS_OLD="$CFLAGS"
-                    CFLAGS="-mthreads $CFLAGS"
-                    AC_TRY_COMPILE([], [],
-                        wx_cv_cflags_mthread=yes,
-                        wx_cv_cflags_mthread=no
-                    )
-                ]
-            )
-
-            if test "$wx_cv_cflags_mthread" = "yes"; then
-                dnl it does, use it
-                WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -mthreads"
-                LDFLAGS="$LDFLAGS -mthreads"
-            else
-                dnl it doesn't
-                CFLAGS="$CFLAGS_OLD"
-            fi
-        ;;
-      esac
     fi
 fi
 
