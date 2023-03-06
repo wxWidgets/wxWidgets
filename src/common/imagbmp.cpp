@@ -30,12 +30,13 @@
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/anidecod.h"
 #include "wx/private/icondir.h"
 
 // For memcpy
 #include <string.h>
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -269,10 +270,10 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     }
 
 #if wxUSE_PALETTE
-    wxScopedPtr<wxPalette> palette; // entries for quantized images
+    std::unique_ptr<wxPalette> palette; // entries for quantized images
 #endif // wxUSE_PALETTE
     wxScopedArray<wxUint8> rgbquad; // for the RGBQUAD bytes for the colormap
-    wxScopedPtr<wxImage> q_image;   // destination for quantized image
+    std::unique_ptr<wxImage> q_image;   // destination for quantized image
 
     // if <24bpp use quantization to reduce colors for *some* of the formats
     if ( (format == wxBMP_1BPP) || (format == wxBMP_4BPP) ||

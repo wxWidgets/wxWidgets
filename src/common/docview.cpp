@@ -55,7 +55,6 @@
 #include "wx/stdpaths.h"
 #include "wx/vector.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/except.h"
 
@@ -67,6 +66,8 @@
 #else
     #include "wx/wfstream.h"
 #endif
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // wxWidgets macros
@@ -880,7 +881,7 @@ wxDocTemplate::~wxDocTemplate()
 wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 {
     // InitDocument() is supposed to delete the document object if its
-    // initialization fails so don't use wxScopedPtr<> here: this is fragile
+    // initialization fails so don't use unique_ptr<> here: this is fragile
     // but unavoidable because the default implementation uses CreateView()
     // which may -- or not -- create a wxView and if it does create it and its
     // initialization fails then the view destructor will delete the document
@@ -924,7 +925,7 @@ wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 {
-    wxScopedPtr<wxView> view(DoCreateView());
+    std::unique_ptr<wxView> view(DoCreateView());
     if ( !view )
         return nullptr;
 

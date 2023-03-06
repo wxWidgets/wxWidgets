@@ -24,7 +24,8 @@
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"
-    #include "wx/scopedptr.h"
+
+    #include <memory>
 #endif // wxUSE_ACCEL
 
 #include "wx/stockitem.h"
@@ -1433,7 +1434,7 @@ void GtkAccel::Init(const wxAcceleratorEntry* entry)
 
 GtkAccel::GtkAccel(const wxMenuItem* item)
 {
-    wxScopedPtr<wxAcceleratorEntry> accel(item->GetAccel());
+    std::unique_ptr<wxAcceleratorEntry> accel(item->GetAccel());
     Init(accel.get());
 
 #ifndef __WXGTK4__

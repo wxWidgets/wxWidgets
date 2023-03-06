@@ -15,7 +15,9 @@
 
 #if wxUSE_GRID
 
-#include "wx/scopedptr.h"
+#if wxUSE_VALIDATORS
+    #include <memory>
+#endif
 
 class wxGridCellEditorEvtHandler : public wxEvtHandler
 {
@@ -102,7 +104,7 @@ protected:
 private:
     size_t                   m_maxChars;        // max number of chars allowed
 #if wxUSE_VALIDATORS
-    wxScopedPtr<wxValidator> m_validator;
+    std::unique_ptr<wxValidator> m_validator;
 #endif
     wxString                 m_value;
 };

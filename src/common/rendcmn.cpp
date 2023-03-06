@@ -28,8 +28,6 @@
 #include "wx/apptrait.h"
 #include "wx/renderer.h"
 
-#include "wx/scopedptr.h"
-
 #if wxUSE_DYNLIB_CLASS
     #include "wx/dynlib.h"
 #endif // wxUSE_DYNLIB_CLASS
@@ -38,7 +36,7 @@
 // wxRendererPtr: auto pointer holding the global renderer
 // ----------------------------------------------------------------------------
 
-typedef wxScopedPtr<wxRendererNative> wxRendererPtrBase;
+using wxRendererPtrBase = std::unique_ptr<wxRendererNative>;
 
 class wxRendererPtr : public wxRendererPtrBase
 {

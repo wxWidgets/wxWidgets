@@ -45,7 +45,6 @@
 #include "wx/apptrait.h"
 
 #include "wx/process.h"
-#include "wx/scopedptr.h"
 #include "wx/thread.h"
 
 #include "wx/cmdline.h"
@@ -62,6 +61,8 @@
 #include "wx/evtloop.h"
 #include "wx/mstream.h"
 #include "wx/private/fdioeventloopsourcehandler.h"
+
+#include <memory>
 
 #include <pwd.h>
 #include <sys/wait.h>       // waitpid()
@@ -546,12 +547,12 @@ int BlockUntilChildExit(wxExecuteData& execData)
 
     // Do register all the FDs we want to monitor here: first, the one used to
     // handle the signals asynchronously.
-    wxScopedPtr<wxFDIOHandler>
+    std::unique_ptr<wxFDIOHandler>
         signalHandler(wxTheApp->RegisterSignalWakeUpPipe(dispatcher));
 
 #if wxUSE_STREAMS
     // And then the two for the child output and error streams if necessary.
-    wxScopedPtr<wxFDIOHandler>
+    std::unique_ptr<wxFDIOHandler>
         stdoutHandler,
         stderrHandler;
     if ( execData.IsRedirected() )
@@ -622,7 +623,7 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
 #endif // __DARWIN__
 
     // this struct contains all information which we use for housekeeping
-    wxScopedPtr<wxExecuteData> execDataPtr(new wxExecuteData);
+    std::unique_ptr<wxExecuteData> execDataPtr(new wxExecuteData);
     wxExecuteData& execData = *execDataPtr;
 
     execData.m_flags = flags;
@@ -1570,7 +1571,7 @@ wxAppTraits::RunLoopUntilChildExit(wxExecuteData& execData,
 
 #if wxUSE_STREAMS
     // Monitor the child streams if necessary.
-    wxScopedPtr<wxEventLoopSourceHandler>
+    std::unique_ptr<wxEventLoopSourceHandler>
         stdoutHandler,
         stderrHandler;
     if ( execData.IsRedirected() )

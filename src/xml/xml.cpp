@@ -25,8 +25,9 @@
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/strconv.h"
-#include "wx/scopedptr.h"
 #include "wx/versioninfo.h"
+
+#include <memory>
 
 #include "expat.h" // from Expat
 
@@ -1139,7 +1140,7 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
     if ( !IsOk() )
         return false;
 
-    wxScopedPtr<wxMBConv> convMem, convFile;
+    std::unique_ptr<wxMBConv> convMem, convFile;
 
     convFile.reset(new wxCSConv(GetFileEncoding()));
 

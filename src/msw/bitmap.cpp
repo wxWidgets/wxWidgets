@@ -36,7 +36,6 @@
 #endif
 
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
 
@@ -47,6 +46,8 @@
 #ifdef wxHAS_RAW_BITMAP
     #include "wx/rawbmp.h"
 #endif
+
+#include <memory>
 
 // missing from mingw32 header
 #ifndef CLR_INVALID
@@ -634,7 +635,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon, wxBitmapTransparency transp)
 
 bool wxBitmap::CopyFromDIB(const wxDIB& dib)
 {
-    wxScopedPtr<wxBitmapRefData> newData(new wxBitmapRefData);
+    std::unique_ptr<wxBitmapRefData> newData(new wxBitmapRefData);
     newData->CopyFromDIB(dib);
     if ( !newData->IsOk() )
         return false;

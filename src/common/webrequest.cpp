@@ -113,13 +113,13 @@ void wxWebRequestImpl::SetData(const wxString& text, const wxString& contentType
 {
     m_dataText = text.mb_str(conv);
 
-    wxScopedPtr<wxInputStream>
+    std::unique_ptr<wxInputStream>
         stream(new wxMemoryInputStream(m_dataText, m_dataText.length()));
     SetData(stream, contentType);
 }
 
 bool
-wxWebRequestImpl::SetData(wxScopedPtr<wxInputStream>& dataStream,
+wxWebRequestImpl::SetData(std::unique_ptr<wxInputStream>& dataStream,
                           const wxString& contentType,
                           wxFileOffset dataSize)
 {
@@ -431,7 +431,7 @@ wxWebRequest::SetData(wxInputStream* dataStream,
                       wxFileOffset dataSize)
 {
     // Ensure that the stream is destroyed even we return below.
-    wxScopedPtr<wxInputStream> streamPtr(dataStream);
+    std::unique_ptr<wxInputStream> streamPtr(dataStream);
 
     wxCHECK_IMPL( false );
 

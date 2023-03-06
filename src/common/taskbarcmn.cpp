@@ -22,7 +22,7 @@
     #include "wx/menu.h"
 #endif
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
 
@@ -46,7 +46,7 @@ wxEND_EVENT_TABLE()
 
 void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
 {
-    wxScopedPtr<wxMenu> menuDeleter;
+    std::unique_ptr<wxMenu> menuDeleter;
     wxMenu *menu = GetPopupMenu();
     if ( !menu )
     {

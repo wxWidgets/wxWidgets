@@ -10,7 +10,7 @@
 
 #include "wx/qt/dc.h"
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 class QPicture;
 
@@ -39,7 +39,7 @@ public:
 
     ~wxClientDCImpl();
 private:
-    wxScopedPtr<QPicture> m_pict;
+    std::unique_ptr<QPicture> m_pict;
 
     wxDECLARE_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);

@@ -32,8 +32,8 @@
 #include "wx/vector.h"
 #include "wx/listimpl.cpp"
 #include "wx/private/window.h"
-#include "wx/scopedptr.h"
 
+#include <memory>
 
 //---------------------------------------------------------------------------
 
@@ -832,7 +832,7 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
         }
 
     private:
-        wxScopedPtr<wxSizerItem> m_item;
+        std::unique_ptr<wxSizerItem> m_item;
     };
 
     ContainingSizerGuard guard( item );
@@ -1527,7 +1527,7 @@ wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
 wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
 {
     // Ensure that the item will be deleted in case of exception.
-    wxScopedPtr<wxSizerItem> scopedItem( item );
+    std::unique_ptr<wxSizerItem> scopedItem( item );
 
     // if only the number of columns or the number of rows is specified for a
     // sizer, arbitrarily many items can be added to it but if both of them are

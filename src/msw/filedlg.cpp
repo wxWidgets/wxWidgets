@@ -41,7 +41,6 @@
 
 #include "wx/dynlib.h"
 #include "wx/filename.h"
-#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
@@ -66,6 +65,8 @@
 
     #include "wx/msw/private/cotaskmemptr.h"
 #endif // wxUSE_IFILEOPENDIALOG
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -579,7 +580,7 @@ public:
 
         // We pass the ID of the first control that will be added to the
         // combobox as the ctor argument.
-        wxScopedPtr<wxFileDialogChoiceImplFDC>
+        std::unique_ptr<wxFileDialogChoiceImplFDC>
             impl(new wxFileDialogChoiceImplFDC(m_fdc, m_lastId, m_lastAuxId - 1));
 
         for ( size_t i = 0; i < n; ++i )
@@ -1162,7 +1163,7 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
     // Extra controls do not handle per-monitor DPI, fall back to system DPI
     // so entire file-dialog is resized.
-    wxScopedPtr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
+    std::unique_ptr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
     if ( of->Flags & OFN_ENABLEHOOK )
         dpiAwareness.reset(new wxMSWImpl::AutoSystemDpiAware());
 

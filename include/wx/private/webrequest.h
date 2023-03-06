@@ -12,9 +12,10 @@
 
 #include "wx/ffile.h"
 #include "wx/hashmap.h"
-#include "wx/scopedptr.h"
 
 #include "wx/private/refcountermt.h"
+
+#include <memory>
 
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
 
@@ -63,7 +64,7 @@ public:
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    bool SetData(wxScopedPtr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+    bool SetData(std::unique_ptr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     void SetStorage(wxWebRequest::Storage storage) { m_storage = storage; }
 
@@ -111,7 +112,7 @@ protected:
     wxWebRequest::Storage m_storage;
     wxWebRequestHeaderMap m_headers;
     wxFileOffset m_dataSize;
-    wxScopedPtr<wxInputStream> m_dataStream;
+    std::unique_ptr<wxInputStream> m_dataStream;
     bool m_peerVerifyDisabled;
 
     wxWebRequestImpl(wxWebSession& session,
@@ -204,7 +205,7 @@ private:
 
     wxMemoryBuffer m_readBuffer;
     mutable wxFFile m_file;
-    mutable wxScopedPtr<wxInputStream> m_stream;
+    mutable std::unique_ptr<wxInputStream> m_stream;
 
     wxDECLARE_NO_COPY_CLASS(wxWebResponseImpl);
 };

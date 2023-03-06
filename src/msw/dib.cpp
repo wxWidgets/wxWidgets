@@ -39,12 +39,13 @@
 #include "wx/file.h"
 #include "wx/quantize.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <memory.h>
+
+#include <memory>
 
 #include "wx/msw/dib.h"
 
@@ -676,7 +677,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
         {
             return false;
         }
-        wxScopedPtr<wxPalette> palette(tempPalette);
+        std::unique_ptr<wxPalette> palette(tempPalette);
         eightBitData.reset(tempEightBitData);
 
         // use palette's colors in result bitmap

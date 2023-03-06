@@ -34,7 +34,6 @@
 #include "wx/filename.h"
 #include "wx/dir.h"
 
-#include "wx/scopedptr.h"
 #include "wx/tokenzr.h"
 
 // there are just too many of those...
@@ -47,6 +46,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+
+#include <memory>
 
 #if defined(__WXMAC__)
     #include  "wx/osx/private.h"  // includes mac headers
@@ -669,7 +670,7 @@ bool wxDirExists(const wxString& pathName)
 
 // Get first file name matching given wild card.
 
-static wxScopedPtr<wxDir> gs_dir;
+static std::unique_ptr<wxDir> gs_dir;
 static wxString gs_dirPath;
 
 wxString wxFindFirstFile(const wxString& spec, int flags)

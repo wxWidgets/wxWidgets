@@ -35,8 +35,9 @@
 #endif // wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/dynlib.h"
-#include "wx/scopedptr.h"
 #include "wx/msw/missing.h"
+
+#include <memory>
 
 // ============================================================================
 // wxNonOwnedWindow implementation
@@ -91,7 +92,7 @@ public:
     {
         // Create the region corresponding to this path and set it as windows
         // shape.
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(win));
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(win));
         Region gr(static_cast<GraphicsPath*>(m_path.GetNativePath()));
         win->SetShape(
             wxRegion(
@@ -117,7 +118,7 @@ private:
         event.Skip();
 
         wxPaintDC dc(m_win);
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
         context->SetPen(wxPen(*wxLIGHT_GREY, 2));
         context->StrokePath(m_path);
     }
