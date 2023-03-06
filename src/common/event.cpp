@@ -45,10 +45,7 @@
 #include "wx/thread.h"
 
 #if wxUSE_BASE
-    #include "wx/scopedptr.h"
-
-    wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
-    wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+    #include <memory>
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
@@ -1341,7 +1338,7 @@ void wxEvtHandler::ProcessPendingEvents()
         }
     }
 
-    wxEventPtr event(pEvent);
+    std::unique_ptr<wxEvent> event(pEvent);
 
     // it's important we remove event from list before processing it, else a
     // nested event loop, for example from a modal dialog, might process the

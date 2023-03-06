@@ -21,7 +21,8 @@
 #include "wx/language.h"
 #include "wx/hashmap.h"
 #include "wx/strconv.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // ============================================================================
 // global decls
@@ -75,7 +76,7 @@ class WXDLLIMPEXP_FWD_BASE wxTranslationsLoader;
 class WXDLLIMPEXP_FWD_BASE wxLocale;
 
 class wxPluralFormsCalculator;
-wxDECLARE_SCOPED_PTR(wxPluralFormsCalculator, wxPluralFormsCalculatorPtr)
+using wxPluralFormsCalculatorPtr = std::unique_ptr<wxPluralFormsCalculator>;
 
 // ----------------------------------------------------------------------------
 // wxMsgCatalog corresponds to one loaded message catalog.
@@ -86,7 +87,7 @@ class WXDLLIMPEXP_BASE wxMsgCatalog
 public:
     // Ctor is protected, because CreateFromXXX functions must be used,
     // but destruction should be unrestricted
-    ~wxMsgCatalog() = default;
+    ~wxMsgCatalog();
 
     // load the catalog from disk or from data; caller is responsible for
     // deleting them if not null
@@ -103,9 +104,7 @@ public:
     const wxString *GetString(const wxString& sz, unsigned n = UINT_MAX, const wxString& ct = wxEmptyString) const;
 
 protected:
-    wxMsgCatalog(const wxString& domain)
-        : m_pNext(nullptr), m_domain(domain)
-    {}
+    wxMsgCatalog(const wxString& domain);
 
 private:
     // variable pointing to the next element in a linked list (or nullptr)

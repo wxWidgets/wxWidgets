@@ -24,9 +24,10 @@
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/mstream.h"
-#include "wx/scopedptr.h"
 #include "wx/wfstream.h"
 #include "zlib.h"
+
+#include <memory>
 
 // value for the 'version needed to extract' field (20 means 2.0)
 enum {
@@ -1571,10 +1572,6 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
-// leave the default wxZipEntryPtr free for users
-wxDECLARE_SCOPED_PTR(wxZipEntry, wxZipEntryPtr_)
-wxDEFINE_SCOPED_PTR (wxZipEntry, wxZipEntryPtr_)
-
 // constructor
 //
 wxZipInputStream::wxZipInputStream(wxInputStream& stream,
@@ -1805,7 +1802,7 @@ wxZipEntry *wxZipInputStream::GetNextEntry()
     if (!IsOk())
         return nullptr;
 
-    wxZipEntryPtr_ entry(new wxZipEntry(m_entry));
+    std::unique_ptr<wxZipEntry> entry(new wxZipEntry(m_entry));
     entry->m_backlink = m_weaklinks->AddEntry(entry.get(), entry->GetKey());
     return entry.release();
 }
@@ -2224,7 +2221,7 @@ bool wxZipOutputStream::PutNextDirEntry(
 bool wxZipOutputStream::CopyEntry(wxZipEntry *entry,
                                   wxZipInputStream& inputStream)
 {
-    wxZipEntryPtr_ e(entry);
+    std::unique_ptr<wxZipEntry> e(entry);
 
     return
         inputStream.DoOpen(e.get(), true) &&
@@ -2394,7 +2391,7 @@ bool wxZipOutputStream::CloseCompressor(wxOutputStream *comp)
 void wxZipOutputStream::CreatePendingEntry(const void *buffer, size_t size)
 {
     wxASSERT(IsOk() && m_pending && !m_comp);
-    wxZipEntryPtr_ spPending(m_pending);
+    std::unique_ptr<wxZipEntry> spPending(m_pending);
     m_pending = nullptr;
 
     Buffer bufs[] = {
@@ -2435,7 +2432,7 @@ void wxZipOutputStream::CreatePendingEntry(const void *buffer, size_t size)
 void wxZipOutputStream::CreatePendingEntry()
 {
     wxASSERT(IsOk() && m_pending && !m_comp);
-    wxZipEntryPtr_ spPending(m_pending);
+    std::unique_ptr<wxZipEntry> spPending(m_pending);
     m_pending = nullptr;
     m_lasterror = wxSTREAM_WRITE_ERROR;
 

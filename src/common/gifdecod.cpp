@@ -23,8 +23,9 @@
 #include <string.h>
 #include "wx/gifdecod.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
+
+#include <memory>
 
 enum
 {
@@ -64,10 +65,6 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
-
-wxDECLARE_SCOPED_PTR(GIFImage, GIFImagePtr)
-wxDEFINE_SCOPED_PTR(GIFImage, GIFImagePtr)
-
 
 //---------------------------------------------------------------------------
 // GIFImage constructor
@@ -782,7 +779,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             case GIF_MARKER_SEP:
             {
                 // allocate memory for IMAGEN struct
-                GIFImagePtr pimg(new GIFImage());
+                std::unique_ptr<GIFImage> pimg(new GIFImage());
 
                 wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
 

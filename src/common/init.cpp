@@ -30,7 +30,6 @@
 #include "wx/init.h"
 #include "wx/atomic.h"
 
-#include "wx/scopedptr.h"
 #include "wx/except.h"
 
 #if defined(__WINDOWS__)
@@ -55,6 +54,8 @@
     #include <locale.h>
 #endif
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -72,13 +73,10 @@ public:
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
 // pointer it holds in its dtor but also resets the global application pointer
-wxDECLARE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
-wxDEFINE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
-
-class wxAppPtr : public wxAppPtrBase
+class wxAppPtr : public std::unique_ptr<wxAppConsole>
 {
 public:
-    explicit wxAppPtr(wxAppConsole *ptr = nullptr) : wxAppPtrBase(ptr) { }
+    explicit wxAppPtr(wxAppConsole *ptr) : std::unique_ptr<wxAppConsole>(ptr) { }
     ~wxAppPtr()
     {
         if ( get() )

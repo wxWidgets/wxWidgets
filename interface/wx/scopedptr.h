@@ -8,6 +8,11 @@
 /**
     @class wxScopedPtr
 
+    Deprecated equivalent of standard @c unique_ptr template class.
+
+    Please don't use this class, and especially its macro-based versions, in
+    the new code.
+
     This is a simple scoped smart pointer implementation that is similar to
     the Boost smart pointers (see http://www.boost.org) but rewritten
     to use macros instead.

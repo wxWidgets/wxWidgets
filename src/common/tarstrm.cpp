@@ -22,7 +22,6 @@
 
 #include "wx/buffer.h"
 #include "wx/datetime.h"
-#include "wx/scopedptr.h"
 #include "wx/filename.h"
 #include "wx/thread.h"
 
@@ -33,6 +32,7 @@
 #include <grp.h>
 #endif
 
+#include <memory>
 
 /////////////////////////////////////////////////////////////////////////////
 // constants
@@ -629,8 +629,6 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
-wxDEFINE_SCOPED_PTR_TYPE(wxTarEntry)
-
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
  :  wxArchiveInputStream(stream, conv)
@@ -672,7 +670,7 @@ wxTarEntry *wxTarInputStream::GetNextEntry()
     if (!IsOk())
         return nullptr;
 
-    wxTarEntryPtr entry(new wxTarEntry);
+    std::unique_ptr<wxTarEntry> entry(new wxTarEntry);
 
     entry->SetMode(GetHeaderNumber(TAR_MODE));
     entry->SetUserId(GetHeaderNumber(TAR_UID));
@@ -1088,7 +1086,7 @@ wxTarOutputStream::~wxTarOutputStream()
 
 bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 {
-    wxTarEntryPtr e(entry);
+    std::unique_ptr<wxTarEntry> e(entry);
 
     if (!CloseEntry())
         return false;
