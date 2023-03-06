@@ -366,19 +366,15 @@ void wxPropertyGridPage::SetSplitterPosition( int splitterPos, int col )
     if ( pg->GetState() == this )
         pg->SetSplitterPosition(splitterPos);
     else
-        DoSetSplitterPosition(splitterPos, col, false);
+        DoSetSplitter(splitterPos, col, wxPGSplitterPositionFlags::Null);
 }
 
-void wxPropertyGridPage::DoSetSplitterPosition( int pos,
-                                                int splitterColumn,
-                                                int flags )
+void wxPropertyGridPage::DoSetSplitter(int pos, int splitterColumn, wxPGSplitterPositionFlags flags )
 {
-    if ( (flags & wxPG_SPLITTER_ALL_PAGES) && m_manager->GetPageCount() )
+    if ( !!(flags & wxPGSplitterPositionFlags::AllPages) && m_manager->GetPageCount() )
         m_manager->SetSplitterPosition( pos, splitterColumn );
     else
-        wxPropertyGridPageState::DoSetSplitterPosition( pos,
-                                                        splitterColumn,
-                                                        flags );
+        wxPropertyGridPageState::DoSetSplitter( pos, splitterColumn, flags );
 }
 
 // -----------------------------------------------------------------------
@@ -514,9 +510,9 @@ private:
 
         x += colWidth;
 
-        pg->DoSetSplitterPosition(x, col,
-                                  wxPG_SPLITTER_REFRESH |
-                                  wxPG_SPLITTER_FROM_EVENT);
+        pg->DoSetSplitter(x, col,
+                          wxPGSplitterPositionFlags::Refresh |
+                          wxPGSplitterPositionFlags::FromEvent);
     }
 
     void OnResizing(wxHeaderCtrlEvent& evt)
@@ -528,7 +524,7 @@ private:
         OnColumWidthsChanged();
 
         wxPropertyGrid* pg = m_manager->GetGrid();
-        pg->SendEvent(wxEVT_PG_COL_DRAGGING, nullptr, nullptr, 0,
+        pg->SendEvent(wxEVT_PG_COL_DRAGGING, nullptr, nullptr, wxPGSelectPropertyFlags::Null,
                       (unsigned int)col);
     }
 
@@ -546,7 +542,7 @@ private:
             evt.Veto();
         // Allow application to veto dragging
         else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
-                                nullptr, nullptr, 0,
+                                nullptr, nullptr, wxPGSelectPropertyFlags::Null,
                                 (unsigned int)col) )
             evt.Veto();
     }
@@ -556,7 +552,7 @@ private:
         int col = evt.GetColumn();
         wxPropertyGrid* pg = m_manager->GetGrid();
         pg->SendEvent(wxEVT_PG_COL_END_DRAG,
-                      nullptr, nullptr, 0,
+                      nullptr, nullptr, wxPGSelectPropertyFlags::Null,
                       (unsigned int)col);
     }
 
@@ -1965,7 +1961,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         if ( DoSelectPage(index) )
         {
             // Event dispatching must be last.
-            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, (wxPGProperty*)nullptr );
+            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, wxNullProperty );
         }
         else
         {
@@ -2318,8 +2314,8 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
-        page->DoSetSplitterPosition( pos, splitterColumn,
-                                     wxPG_SPLITTER_REFRESH );
+        page->DoSetSplitter( pos, splitterColumn,
+                             wxPGSplitterPositionFlags::Refresh );
     }
 
 #if wxUSE_HEADERCTRL
@@ -2334,7 +2330,8 @@ void wxPropertyGridManager::SetPageSplitterPosition( int page,
                                                      int pos,
                                                      int column )
 {
-    GetPage(page)->DoSetSplitterPosition( pos, column );
+    GetPage(page)->DoSetSplitter( pos, column,
+                                  wxPGSplitterPositionFlags::Refresh );
 
 #if wxUSE_HEADERCTRL
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
@@ -2351,9 +2348,15 @@ class wxPGVIteratorBase_Manager : public wxPGVIteratorBase
 {
 public:
     wxPGVIteratorBase_Manager( wxPropertyGridManager* manager, int flags )
-        : m_manager(manager), m_flags(flags), m_curPage(0)
+        : m_manager(manager), m_flags(flags)
     {
-        m_it.Init(manager->GetPage(0), flags);
+        // Start with first non-empty page
+        for ( m_curPage = 0; m_curPage < m_manager->GetPageCount(); m_curPage++ )
+        {
+            m_it.Init(m_manager->GetPage(m_curPage), m_flags);
+            if ( !m_it.AtEnd() )
+                break;
+        }
     }
     virtual ~wxPGVIteratorBase_Manager() = default;
     virtual void Next() override
@@ -2363,11 +2366,21 @@ public:
         // Next page?
         if ( m_it.AtEnd() )
         {
+            // Skip empty pages
             m_curPage++;
-            if ( m_curPage < m_manager->GetPageCount() )
-                m_it.Init( m_manager->GetPage(m_curPage), m_flags );
+            for ( ; m_curPage < m_manager->GetPageCount(); m_curPage++ )
+            {
+                m_it.Init(m_manager->GetPage(m_curPage), m_flags);
+                if ( !m_it.AtEnd() )
+                    break;
+            }
         }
     }
+    virtual bool AtEnd() const override
+    {
+        return m_it.AtEnd() && m_curPage == m_manager->GetPageCount();
+    }
+
 private:
     wxPropertyGridManager*  m_manager;
     int                     m_flags;

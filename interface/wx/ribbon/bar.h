@@ -132,8 +132,8 @@ public:
     After all pages have been created, and all controls and panels placed on
     those pages, Realize() must be called.
 
-    @sa wxRibbonPage
-    @sa wxRibbonPanel
+    @see wxRibbonPage
+    @see wxRibbonPanel
 
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}

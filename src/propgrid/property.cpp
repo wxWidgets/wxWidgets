@@ -1422,11 +1422,11 @@ bool wxPGProperty::OnEvent( wxPropertyGrid*, wxWindow*, wxEvent& )
 }
 
 
-void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
+void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlags flags )
 {
     // If auto unspecified values are not wanted (via window or property style),
     // then get default value instead of null wxVariant.
-    if ( value.IsNull() && (flags & wxPG_SETVAL_BY_USER) &&
+    if ( value.IsNull() && !!(flags & wxPGSetValueFlags::ByUser) &&
          !UsesAutoUnspecified() )
     {
         value = GetDefaultValue();
@@ -1457,7 +1457,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         }
 
         if ( HasFlag( wxPG_PROP_AGGREGATE) )
-            flags |= wxPG_SETVAL_AGGREGATED;
+            flags |= wxPGSetValueFlags::Aggregated;
 
         if ( pList && !pList->IsNull() )
         {
@@ -1481,15 +1481,15 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                     //wxLogDebug(wxS("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName(),childValue.GetType());
                     if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
                     {
-                        if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPG_SETVAL_AGGREGATED) )
+                        if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPGSetValueFlags::Aggregated) )
                         {
                             wxVariant listRefCopy = childValue;
-                            child->SetValue(childValue, &listRefCopy, flags|wxPG_SETVAL_FROM_PARENT);
+                            child->SetValue(childValue, &listRefCopy, flags| wxPGSetValueFlags::FromParent);
                         }
                         else
                         {
                             wxVariant oldVal = child->GetValue();
-                            child->SetValue(oldVal, &childValue, flags|wxPG_SETVAL_FROM_PARENT);
+                            child->SetValue(oldVal, &childValue, flags| wxPGSetValueFlags::FromParent);
                         }
                     }
                     else if ( child->GetValue() != childValue )
@@ -1497,8 +1497,8 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                         // For aggregate properties, we will trust RefreshChildren()
                         // to update child values.
                         if ( !HasFlag(wxPG_PROP_AGGREGATE) )
-                            child->SetValue(childValue, nullptr, flags|wxPG_SETVAL_FROM_PARENT);
-                        if ( flags & wxPG_SETVAL_BY_USER )
+                            child->SetValue(childValue, nullptr, flags| wxPGSetValueFlags::FromParent);
+                        if ( !!(flags & wxPGSetValueFlags::ByUser) )
                             child->SetFlag(wxPG_PROP_MODIFIED);
                     }
                 }
@@ -1518,7 +1518,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             OnSetValue();
         }
 
-        if ( flags & wxPG_SETVAL_BY_USER )
+        if ( !!(flags & wxPGSetValueFlags::ByUser) )
             SetFlag(wxPG_PROP_MODIFIED);
 
         if ( HasFlag(wxPG_PROP_AGGREGATE) )
@@ -1540,16 +1540,16 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         if ( AreChildrenComponents() )
         {
             for ( unsigned int i = 0; i < GetChildCount(); i++ )
-                Item(i)->SetValue(value, nullptr, flags|wxPG_SETVAL_FROM_PARENT);
+                Item(i)->SetValue(value, nullptr, flags| wxPGSetValueFlags::FromParent);
         }
     }
 
-    if ( !(flags & wxPG_SETVAL_FROM_PARENT) )
+    if ( !(flags & wxPGSetValueFlags::FromParent) )
         UpdateParentValues();
 
     //
     // Update editor control.
-    if ( flags & wxPG_SETVAL_REFRESH_EDITOR )
+    if ( !!(flags & wxPGSetValueFlags::RefreshEditor) )
     {
         wxPropertyGrid* pg = GetGridIfDisplayed();
         if ( pg )
@@ -1774,11 +1774,10 @@ wxPGCell& wxPGProperty::GetOrCreateCell( unsigned int column )
     return m_cells[column];
 }
 
-void wxPGProperty::SetBackgroundColour( const wxColour& colour,
-                                        int flags )
+void wxPGProperty::SetBackgroundColour(const wxColour& colour, wxPGPropertyValuesFlags flags)
 {
     wxPGProperty* firstProp = this;
-    bool recursively = (flags & wxPG_RECURSE) != 0;
+    bool recursively = !!(flags & wxPGPropertyValuesFlags::Recurse);
 
     //
     // If category is tried to set recursively, skip it and only
@@ -1810,11 +1809,10 @@ void wxPGProperty::SetBackgroundColour( const wxColour& colour,
                      recursively );
 }
 
-void wxPGProperty::SetTextColour( const wxColour& colour,
-                                  int flags )
+void wxPGProperty::SetTextColour(const wxColour& colour, wxPGPropertyValuesFlags flags)
 {
     wxPGProperty* firstProp = this;
-    bool recursively = (flags & wxPG_RECURSE) != 0;
+    bool recursively = !!(flags & wxPGPropertyValuesFlags::Recurse);
 
     //
     // If category is tried to set recursively, skip it and only
@@ -1846,10 +1844,10 @@ void wxPGProperty::SetTextColour( const wxColour& colour,
                      recursively );
 }
 
-void wxPGProperty::SetDefaultColours(int flags)
+void wxPGProperty::SetDefaultColours(wxPGPropertyValuesFlags flags)
 {
     wxPGProperty* firstProp = this;
-    bool recursively = (flags & wxPG_RECURSE) != 0;
+    bool recursively = !!(flags & wxPGPropertyValuesFlags::Recurse);
 
     // If category is tried to set recursively, skip it and only
     // affect the children.
@@ -2130,7 +2128,7 @@ bool wxPGProperty::SetChoices( const wxPGChoices& choices )
     if ( isSelected )
     {
         // Recreate editor
-        pg->DoSelectProperty(this, wxPG_SEL_FORCE);
+        pg->DoSelectProperty(this, wxPGSelectPropertyFlags::Force);
     }
 
     return true;
@@ -2156,7 +2154,7 @@ const wxPGEditor* wxPGProperty::GetEditorClass() const
     return editor;
 }
 
-bool wxPGProperty::Hide( bool hide, int flags )
+bool wxPGProperty::Hide( bool hide, wxPGPropertyValuesFlags flags )
 {
     wxPropertyGrid* pg = GetGrid();
     if ( pg )
@@ -2165,14 +2163,14 @@ bool wxPGProperty::Hide( bool hide, int flags )
     return DoHide( hide, flags );
 }
 
-bool wxPGProperty::DoHide( bool hide, int flags )
+bool wxPGProperty::DoHide( bool hide, wxPGPropertyValuesFlags flags )
 {
     ChangeFlag(wxPG_PROP_HIDDEN, hide);
 
-    if ( flags & wxPG_RECURSE )
+    if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
     {
         for ( unsigned int i = 0; i < GetChildCount(); i++ )
-            Item(i)->DoHide(hide, flags | wxPG_RECURSE_STARTS);
+            Item(i)->DoHide(hide, flags | wxPGPropertyValuesFlags::RecurseStarts);
     }
 
     return true;
@@ -2199,7 +2197,7 @@ bool wxPGProperty::RecreateEditor()
     wxPGProperty* selected = pg->GetSelection();
     if ( this == selected )
     {
-        pg->DoSelectProperty(this, wxPG_SEL_FORCE);
+        pg->DoSelectProperty(this, wxPGSelectPropertyFlags::Force);
         return true;
     }
     return false;

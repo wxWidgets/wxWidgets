@@ -366,9 +366,9 @@ public:
 
         @note This operation also changes the name in the pane information!
 
-        @sa LoadPerspective
-        @sa SavePaneInfo().
-        @sa SavePerspective
+        @see LoadPerspective
+        @see SavePaneInfo()
+        @see SavePerspective
     */
     void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo& pane);
 
@@ -386,9 +386,9 @@ public:
         @param update      If update is @true, wxAuiManager::Update() is automatically invoked,
                            thus realizing the specified perspective on screen.
 
-        @sa LoadPaneInfo
-        @sa LoadPerspective
-        @sa SavePerspective
+        @see LoadPaneInfo
+        @see LoadPerspective
+        @see SavePerspective
     */
     bool LoadPerspective(const wxString& perspective,
                          bool update = true);
@@ -417,9 +417,9 @@ public:
                     the string. Information about the pointers to UI elements stored
                     in the pane are not serialized.
 
-        @sa LoadPaneInfo
-        @sa LoadPerspective
-        @sa SavePerspective
+        @see LoadPaneInfo
+        @see LoadPerspective
+        @see SavePerspective
     */
     wxString SavePaneInfo(const wxAuiPaneInfo& pane);
 
@@ -427,9 +427,9 @@ public:
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
 
-        @sa LoadPerspective
-        @sa LoadPaneInfo
-        @sa SavePaneInfo
+        @see LoadPerspective
+        @see LoadPaneInfo
+        @see SavePaneInfo
     */
     wxString SavePerspective();
 

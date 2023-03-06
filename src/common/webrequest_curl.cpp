@@ -105,10 +105,16 @@ wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
         else
     #endif
         {
+            // We know that these constants are deprecated, but we still need
+            // to use them with this old version.
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
             curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSFUNCTION,
                              wxCURLProgress);
             curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSDATA,
                              static_cast<void*>(this));
+
+            wxGCC_WARNING_RESTORE(deprecated-declarations)
         }
 
     // Have curl call the progress callback.
@@ -252,8 +258,21 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
     // Enable redirection handling
     curl_easy_setopt(m_handle, CURLOPT_FOLLOWLOCATION, 1L);
     // Limit redirect to HTTP
-    curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS,
-        CURLPROTO_HTTP | CURLPROTO_HTTPS);
+    #if CURL_AT_LEAST_VERSION(7, 85, 0)
+    if ( wxWebSessionCURL::CurlRuntimeAtLeastVersion(7, 85, 0) )
+    {
+        curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+    }
+    else
+    #endif // curl >= 7.85
+    {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+        curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS,
+            CURLPROTO_HTTP | CURLPROTO_HTTPS);
+
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
+    }
     // Enable all supported authentication methods
     curl_easy_setopt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     curl_easy_setopt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
@@ -448,9 +467,9 @@ public:
 
     SocketPoller(wxEvtHandler*);
     ~SocketPoller();
-    bool StartPolling(wxSOCKET_T, int);
-    void StopPolling(wxSOCKET_T);
-    void ResumePolling(wxSOCKET_T);
+    bool StartPolling(curl_socket_t, int);
+    void StopPolling(curl_socket_t);
+    void ResumePolling(curl_socket_t);
 
 private:
     SocketPollerImpl* m_impl;
@@ -462,9 +481,9 @@ class SocketPollerImpl
 {
 public:
     virtual ~SocketPollerImpl(){}
-    virtual bool StartPolling(wxSOCKET_T, int) = 0;
-    virtual void StopPolling(wxSOCKET_T) = 0;
-    virtual void ResumePolling(wxSOCKET_T) = 0;
+    virtual bool StartPolling(curl_socket_t, int) = 0;
+    virtual void StopPolling(curl_socket_t) = 0;
+    virtual void ResumePolling(curl_socket_t) = 0;
 
     static SocketPollerImpl* Create(wxEvtHandler*);
 };
@@ -479,16 +498,16 @@ SocketPoller::~SocketPoller()
     delete m_impl;
 }
 
-bool SocketPoller::StartPolling(wxSOCKET_T sock, int pollAction)
+bool SocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 {
     return m_impl->StartPolling(sock, pollAction);
 }
-void SocketPoller::StopPolling(wxSOCKET_T sock)
+void SocketPoller::StopPolling(curl_socket_t sock)
 {
     m_impl->StopPolling(sock);
 }
 
-void SocketPoller::ResumePolling(wxSOCKET_T sock)
+void SocketPoller::ResumePolling(curl_socket_t sock)
 {
     m_impl->ResumePolling(sock);
 }
@@ -500,16 +519,16 @@ class WinSock1SocketPoller: public SocketPollerImpl
 public:
     WinSock1SocketPoller(wxEvtHandler*);
     virtual ~WinSock1SocketPoller();
-    virtual bool StartPolling(wxSOCKET_T, int) override;
-    virtual void StopPolling(wxSOCKET_T) override;
-    virtual void ResumePolling(wxSOCKET_T) override;
+    virtual bool StartPolling(curl_socket_t, int) override;
+    virtual void StopPolling(curl_socket_t) override;
+    virtual void ResumePolling(curl_socket_t) override;
 
 private:
     static LRESULT CALLBACK MsgProc(HWND hwnd, WXUINT uMsg, WXWPARAM wParam,
                                     WXLPARAM lParam);
     static const WXUINT SOCKET_MESSAGE;
 
-    WX_DECLARE_HASH_SET(wxSOCKET_T, wxIntegerHash, wxIntegerEqual, SocketSet);
+    WX_DECLARE_HASH_SET(curl_socket_t, wxIntegerHash, wxIntegerEqual, SocketSet);
 
     SocketSet m_polledSockets;
     WXHWND m_hwnd;
@@ -572,7 +591,7 @@ WinSock1SocketPoller::~WinSock1SocketPoller()
     WSACleanup();
 }
 
-bool WinSock1SocketPoller::StartPolling(wxSOCKET_T sock, int pollAction)
+bool WinSock1SocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 {
     StopPolling(sock);
 
@@ -597,7 +616,7 @@ bool WinSock1SocketPoller::StartPolling(wxSOCKET_T sock, int pollAction)
     return true;
 }
 
-void WinSock1SocketPoller::StopPolling(wxSOCKET_T sock)
+void WinSock1SocketPoller::StopPolling(curl_socket_t sock)
 {
     SocketSet::iterator it = m_polledSockets.find(sock);
 
@@ -609,7 +628,7 @@ void WinSock1SocketPoller::StopPolling(wxSOCKET_T sock)
     }
 }
 
-void WinSock1SocketPoller::ResumePolling(wxSOCKET_T WXUNUSED(sock))
+void WinSock1SocketPoller::ResumePolling(curl_socket_t WXUNUSED(sock))
 {
 }
 
@@ -650,11 +669,11 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
             // socket with activity is given by wParam.
             LONG_PTR userData = GetWindowLongPtr(hwnd, GWLP_USERDATA);
             wxEvtHandler* hndlr = reinterpret_cast<wxEvtHandler*>(userData);
-            wxSOCKET_T sock = wParam;
+            curl_socket_t sock = wParam;
 
             wxThreadEvent* event =
                 new wxThreadEvent(wxEVT_SOCKET_POLLER_RESULT);
-            event->SetPayload<wxSOCKET_T>(sock);
+            event->SetPayload<curl_socket_t>(sock);
             event->SetInt(pollResult);
 
             if ( wxThread::IsMain() )
@@ -688,7 +707,7 @@ SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
 class SocketPollerSourceHandler: public wxEventLoopSourceHandler
 {
 public:
-    SocketPollerSourceHandler(wxSOCKET_T, wxEvtHandler*);
+    SocketPollerSourceHandler(curl_socket_t, wxEvtHandler*);
 
     void OnReadWaiting() override;
     void OnWriteWaiting() override;
@@ -696,11 +715,11 @@ public:
     ~SocketPollerSourceHandler(){}
 private:
     void SendEvent(int);
-    wxSOCKET_T m_socket;
+    curl_socket_t m_socket;
     wxEvtHandler* m_handler;
 };
 
-SocketPollerSourceHandler::SocketPollerSourceHandler(wxSOCKET_T sock,
+SocketPollerSourceHandler::SocketPollerSourceHandler(curl_socket_t sock,
                                                      wxEvtHandler* hndlr)
 {
     m_socket = sock;
@@ -725,7 +744,7 @@ void SocketPollerSourceHandler::OnExceptionWaiting()
 void SocketPollerSourceHandler::SendEvent(int result)
 {
     wxThreadEvent event(wxEVT_SOCKET_POLLER_RESULT);
-    event.SetPayload<wxSOCKET_T>(m_socket);
+    event.SetPayload<curl_socket_t>(m_socket);
     event.SetInt(result);
     m_handler->ProcessEvent(event);
 }
@@ -737,12 +756,12 @@ class SourceSocketPoller: public SocketPollerImpl
 public:
     SourceSocketPoller(wxEvtHandler*);
     ~SourceSocketPoller();
-    bool StartPolling(wxSOCKET_T, int) override;
-    void StopPolling(wxSOCKET_T) override;
-    void ResumePolling(wxSOCKET_T) override;
+    bool StartPolling(curl_socket_t, int) override;
+    void StopPolling(curl_socket_t) override;
+    void ResumePolling(curl_socket_t) override;
 
 private:
-    WX_DECLARE_HASH_MAP(wxSOCKET_T, wxEventLoopSource*, wxIntegerHash,\
+    WX_DECLARE_HASH_MAP(curl_socket_t, wxEventLoopSource*, wxIntegerHash,\
                         wxIntegerEqual, SocketDataMap);
 
     void CleanUpSocketSource(wxEventLoopSource*);
@@ -787,7 +806,7 @@ static int SocketPoller2EventSource(int pollAction)
     return eventSourceFlag;
 }
 
-bool SourceSocketPoller::StartPolling(wxSOCKET_T sock, int pollAction)
+bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 {
     SocketDataMap::iterator it = m_socketData.find(sock);
     wxEventLoopSourceHandler* srcHandler = nullptr;
@@ -837,7 +856,7 @@ bool SourceSocketPoller::StartPolling(wxSOCKET_T sock, int pollAction)
     return socketIsPolled;
 }
 
-void SourceSocketPoller::StopPolling(wxSOCKET_T sock)
+void SourceSocketPoller::StopPolling(curl_socket_t sock)
 {
     SocketDataMap::iterator it = m_socketData.find(sock);
 
@@ -848,7 +867,7 @@ void SourceSocketPoller::StopPolling(wxSOCKET_T sock)
     }
 }
 
-void SourceSocketPoller::ResumePolling(wxSOCKET_T WXUNUSED(sock))
+void SourceSocketPoller::ResumePolling(curl_socket_t WXUNUSED(sock))
 {
 }
 

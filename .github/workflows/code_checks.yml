@@ -56,8 +56,7 @@ jobs:
                 ':!**/Info*.plist*' \
                 ':!**/*.sln' \
                 ':!**/*.vcproj' \
-                ':!**/*.xpm' \
-                ':!src/stc/scintilla/'
+                ':!**/*.xpm'
 
 
   check-mixed-eol:
@@ -89,7 +88,6 @@ jobs:
             git fetch --depth=1 origin master
             if git diff origin/master \
                ':!.github/workflows/code_checks.yml' \
-               ':!src/stc/scintilla/' \
                | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^_@]NULL)'; then
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1

@@ -374,6 +374,9 @@ __WXLIB_MONO_p = \
 !if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
 !endif
+!if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
+__LIB_LEXILLA_IF_MONO_p = wxlexilla$(WXDEBUGFLAG).lib
+!endif
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
@@ -409,7 +412,7 @@ clean:
 
 $(OBJS)\minimal.exe: $(MINIMAL_OBJECTS) $(OBJS)\minimal_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\minimal.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
-	$(MINIMAL_OBJECTS) $(MINIMAL_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(MINIMAL_OBJECTS) $(MINIMAL_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 
 $(OBJS)\minimal_sample.res: .\..\..\samples\sample.rc

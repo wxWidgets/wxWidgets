@@ -770,6 +770,9 @@ protected:
     virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item);
 
 private:
+    // Get the child item with the given index and assert if there is none.
+    wxSizerItemList::compatibility_iterator GetChildNode(size_t index) const;
+
     wxDECLARE_CLASS(wxSizer);
 };
 
@@ -1074,7 +1077,20 @@ public:
 protected:
     wxStaticBox   *m_staticBox;
 
+    virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item) override;
+
 private:
+    // Return true if we have any by recursively examining all children of this
+    // sizer.
+    bool CheckForNonBoxChildren(wxSizer* sizer) const;
+
+    // Return true if this particular window is not a child of the static box.
+    bool CheckIfNonBoxChild(wxWindow* win) const;
+
+    // Set to true if there are any items _not_ using the associated static box
+    // as parent in this sizer (either directly in it or in its child sizers).
+    bool m_hasNonBoxChildren = false;
+
     wxDECLARE_CLASS(wxStaticBoxSizer);
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxSizer);
 };

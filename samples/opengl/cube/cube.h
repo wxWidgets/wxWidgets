@@ -65,7 +65,7 @@ private:
 class TestGLCanvas : public wxGLCanvas
 {
 public:
-    TestGLCanvas(wxWindow *parent, int *attribList = nullptr);
+    TestGLCanvas(wxWindow *parent, bool useStereo);
 
 private:
     void OnPaint(wxPaintEvent& event);

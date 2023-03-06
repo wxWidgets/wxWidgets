@@ -1597,7 +1597,11 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
         wxString defExt =
             wildFilters[m_filterIndex].BeforeFirst(';').AfterFirst('.');
         if ( !defExt.empty() && defExt != wxS("*") )
-            fileDialog->SetDefaultExtension(defExt.wc_str());
+        {
+            hr = fileDialog->SetDefaultExtension(defExt.wc_str());
+            if ( FAILED(hr) )
+                wxLogApiError(wxS("IFileDialog::SetDefaultExtension"), hr);
+        }
     }
 
     if ( !m_dir.empty() )

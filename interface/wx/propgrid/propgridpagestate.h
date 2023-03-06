@@ -349,9 +349,9 @@ public:
         This needs to be overridden in grid used the manager so that splitter
         changes can be propagated to other pages.
     */
-    virtual void DoSetSplitterPosition( int pos,
-                                        int splitterColumn = 0,
-                                        int flags = 0 );
+    virtual void DoSetSplitter( int pos,
+                                int splitterColumn = 0,
+                                wxPGSplitterPositionFlags flags = 0 );
 
     bool EnableCategories( bool enable );
 

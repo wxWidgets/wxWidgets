@@ -39,6 +39,9 @@
 #include "wx/stc/private.h"
 #include "PlatWX.h"
 
+#include "Lexilla.h"
+#include "LexillaAccess.h"
+
 #ifdef __WXMSW__
     #include "wx/msw/private.h" // GetHwndOf()
 #endif
@@ -771,35 +774,58 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             break;
 #endif
 
-      case SCI_GETDIRECTFUNCTION:
+        case SCI_GETDIRECTFUNCTION:
             return reinterpret_cast<sptr_t>(DirectFunction);
 
-      case SCI_GETDIRECTPOINTER:
+        case SCI_GETDIRECTPOINTER:
             return reinterpret_cast<sptr_t>(this);
 
 #ifdef __WXMSW__
-      // ScintillaWin
-      case WM_IME_STARTCOMPOSITION:
-          // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
-          ImeStartComposition();
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+        // ScintillaWin
+        case WM_IME_STARTCOMPOSITION:
+            // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
+            ImeStartComposition();
+            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 
-      case WM_IME_ENDCOMPOSITION:
-          ImeEndComposition();
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+        case WM_IME_ENDCOMPOSITION:
+            ImeEndComposition();
+            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 
-      case WM_IME_KEYDOWN:
-      case WM_IME_REQUEST:
-      case WM_IME_COMPOSITION:
-      case WM_IME_SETCONTEXT:
-          // These events are forwarded here for future inline IME implementation
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+        case WM_IME_KEYDOWN:
+        case WM_IME_REQUEST:
+        case WM_IME_COMPOSITION:
+        case WM_IME_SETCONTEXT:
+            // These events are forwarded here for future inline IME implementation
+            return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
 #endif
 
-      default:
-          return ScintillaBase::WndProc(iMessage, wParam, lParam);
-      }
-      return 0;
+        case SCI_SETLEXER:
+        {
+            int lexLanguage = static_cast<int>(wParam);
+            const char* name = LexerNameFromID(lexLanguage);
+            ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+            stc->SetILexer(pLexer);
+            break;
+        }
+
+        case SCI_SETLEXERLANGUAGE:
+        {
+            const char* name = ConstCharPtrFromSPtr(lParam);
+            ILexer5* pLexer = name ? CreateLexer(name) : nullptr;
+            stc->SetILexer(pLexer);
+            break;
+        }
+
+        case SCI_LOADLEXERLIBRARY:
+        {
+            Lexilla::Load(ConstCharPtrFromSPtr(lParam));
+            break;
+        }
+
+        default:
+            return ScintillaBase::WndProc(iMessage, wParam, lParam);
+    }
+    return 0;
 }
 
 
@@ -1036,12 +1062,9 @@ void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
 #endif
 
 
-void ScintillaWX::DoAddChar(int key) {
-    wxChar wszChars[2];
-    wszChars[0] = (wxChar)key;
-    wszChars[1] = 0;
-    const wxCharBuffer buf(wx2stc(wszChars));
-    AddCharUTF(buf, buf.length());
+void ScintillaWX::DoAddChar(wxChar key) {
+    const wxCharBuffer buf(wx2stc(key));
+    InsertCharacter(buf, buf.length(), CharacterSource::directInput);
 }
 
 
@@ -1446,7 +1469,7 @@ void ScintillaWX::ImeStartComposition() {
             lf.lfFaceName[0] = L'\0';
             if (vs.styles[styleHere].fontName) {
                 const char* fontName = vs.styles[styleHere].fontName;
-                UTF16FromUTF8(fontName, strlen(fontName)+1, lf.lfFaceName, LF_FACESIZE);
+                UTF16FromUTF8(fontName, lf.lfFaceName, LF_FACESIZE);
             }
 
             ::ImmSetCompositionFontW(imc.hIMC, &lf);

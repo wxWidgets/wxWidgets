@@ -128,10 +128,10 @@ public:
 
 protected:
 
-    // Propagate to other pages.
-    virtual void DoSetSplitterPosition( int pos,
-                                        int splitterColumn = 0,
-                                        int flags = wxPG_SPLITTER_REFRESH ) override;
+    // Propagate to other pages
+    virtual void DoSetSplitter(int pos,
+                               int splitterColumn,
+                               wxPGSplitterPositionFlags flags) override;
 
     // Page label (may be referred as name in some parts of documentation).
     // Can be set in constructor, or passed in
@@ -216,7 +216,14 @@ public:
 
     // Forces updating the value of property from the editor control.
     // Returns true if DoPropertyChanged was actually called.
-    bool CommitChangesFromEditor( wxUint32 flags = 0 )
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use CommitChangesFromEditor with wxPGSelectPropertyFlags argument")
+    bool CommitChangesFromEditor(wxUint32 flags)
+    {
+        return CommitChangesFromEditor(static_cast<wxPGSelectPropertyFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    bool CommitChangesFromEditor(wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null)
     {
         return m_pPropGrid->CommitChangesFromEditor(flags);
     }
@@ -426,9 +433,9 @@ public:
     bool SelectProperty( wxPGPropArg id, bool focus = false )
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        unsigned int flags = wxPG_SEL_DONT_SEND_EVENT;
+        wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::DontSendEvent;
         if ( focus )
-            flags |= wxPG_SEL_FOCUS;
+            flags |= wxPGSelectPropertyFlags::Focus;
 
         return p->GetParentState()->DoSelectProperty(p, flags);
     }

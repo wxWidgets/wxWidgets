@@ -122,12 +122,22 @@ void wxStaticBox::UseCustomPaint()
     // means we don't need to do anything.
     if ( GetBackgroundStyle() != wxBG_STYLE_PAINT )
     {
+        wxMSWWinExStyleUpdater(GetHwnd()).TurnOff(WS_EX_TRANSPARENT);
+
         Bind(wxEVT_PAINT, &wxStaticBox::OnPaint, this);
 
         // Our OnPaint() completely erases our background, so don't do it in
         // WM_ERASEBKGND too to avoid flicker.
         SetBackgroundStyle(wxBG_STYLE_PAINT);
     }
+}
+
+void wxStaticBox::MSWOnDisabledComposited()
+{
+    // We need to enable custom painting if we're not using compositing any
+    // longer, as otherwise the window is not drawn correctly due to it using
+    // WS_EX_TRANSPARENT and thus not redrawing its background.
+    UseCustomPaint();
 }
 
 bool wxStaticBox::Create(wxWindow* parent,

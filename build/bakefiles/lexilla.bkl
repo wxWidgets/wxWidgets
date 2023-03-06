@@ -1,0 +1,176 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <set var="LIB_LEXILLA">
+          wxlexilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="LIB_LEXILLA">
+            wxlexilla$(WXDEBUGFLAG)$(HOST_SUFFIX)
+        </set>
+    </if>
+
+    <template id="wxlexilla_cppflags">
+        <include>$(TOP_SRCDIR)src/stc/lexilla/access</include>
+        <include>$(TOP_SRCDIR)src/stc/lexilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/lexilla/lexlib</include>
+        <include>$(TOP_SRCDIR)src/stc/lexilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
+    </template>
+
+    <set var="wxlexilla_usingdll">
+        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL</if>
+    </set>
+
+    <lib id="wxlexilla" template="3rdparty_lib,wxlexilla_cppflags,msvc_setup_h"
+         cond="USE_STC=='1' and BUILDING_LIB=='1'">
+        <if cond="FORMAT!='autoconf'">
+            <include>$(SETUPHDIR)</include>
+            <include>$(TOP_SRCDIR)include</include>
+        </if>
+        <define>$(wxlexilla_usingdll)</define>
+        <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
+        <define>$(DEBUG_DEFINE)</define>
+        <dirname>$(LIBDIRNAME)</dirname>
+        <sources>
+            src/stc/lexilla/access/LexillaAccess.cxx
+            src/stc/lexilla/lexers/LexA68k.cxx
+            src/stc/lexilla/lexers/LexAPDL.cxx
+            src/stc/lexilla/lexers/LexASY.cxx
+            src/stc/lexilla/lexers/LexAU3.cxx
+            src/stc/lexilla/lexers/LexAVE.cxx
+            src/stc/lexilla/lexers/LexAVS.cxx
+            src/stc/lexilla/lexers/LexAbaqus.cxx
+            src/stc/lexilla/lexers/LexAda.cxx
+            src/stc/lexilla/lexers/LexAsm.cxx
+            src/stc/lexilla/lexers/LexAsn1.cxx
+            src/stc/lexilla/lexers/LexBaan.cxx
+            src/stc/lexilla/lexers/LexBash.cxx
+            src/stc/lexilla/lexers/LexBasic.cxx
+            src/stc/lexilla/lexers/LexBatch.cxx
+            src/stc/lexilla/lexers/LexBibTeX.cxx
+            src/stc/lexilla/lexers/LexBullant.cxx
+            src/stc/lexilla/lexers/LexCIL.cxx
+            src/stc/lexilla/lexers/LexCLW.cxx
+            src/stc/lexilla/lexers/LexCOBOL.cxx
+            src/stc/lexilla/lexers/LexCPP.cxx
+            src/stc/lexilla/lexers/LexCSS.cxx
+            src/stc/lexilla/lexers/LexCaml.cxx
+            src/stc/lexilla/lexers/LexCmake.cxx
+            src/stc/lexilla/lexers/LexCoffeeScript.cxx
+            src/stc/lexilla/lexers/LexConf.cxx
+            src/stc/lexilla/lexers/LexCrontab.cxx
+            src/stc/lexilla/lexers/LexCsound.cxx
+            src/stc/lexilla/lexers/LexD.cxx
+            src/stc/lexilla/lexers/LexDMAP.cxx
+            src/stc/lexilla/lexers/LexDMIS.cxx
+            src/stc/lexilla/lexers/LexDataflex.cxx
+            src/stc/lexilla/lexers/LexDiff.cxx
+            src/stc/lexilla/lexers/LexECL.cxx
+            src/stc/lexilla/lexers/LexEDIFACT.cxx
+            src/stc/lexilla/lexers/LexEScript.cxx
+            src/stc/lexilla/lexers/LexEiffel.cxx
+            src/stc/lexilla/lexers/LexErlang.cxx
+            src/stc/lexilla/lexers/LexErrorList.cxx
+            src/stc/lexilla/lexers/LexFSharp.cxx
+            src/stc/lexilla/lexers/LexFlagship.cxx
+            src/stc/lexilla/lexers/LexForth.cxx
+            src/stc/lexilla/lexers/LexFortran.cxx
+            src/stc/lexilla/lexers/LexGAP.cxx
+            src/stc/lexilla/lexers/LexGui4Cli.cxx
+            src/stc/lexilla/lexers/LexHTML.cxx
+            src/stc/lexilla/lexers/LexHaskell.cxx
+            src/stc/lexilla/lexers/LexHex.cxx
+            src/stc/lexilla/lexers/LexHollywood.cxx
+            src/stc/lexilla/lexers/LexIndent.cxx
+            src/stc/lexilla/lexers/LexInno.cxx
+            src/stc/lexilla/lexers/LexJSON.cxx
+            src/stc/lexilla/lexers/LexKVIrc.cxx
+            src/stc/lexilla/lexers/LexKix.cxx
+            src/stc/lexilla/lexers/LexLaTeX.cxx
+            src/stc/lexilla/lexers/LexLisp.cxx
+            src/stc/lexilla/lexers/LexLout.cxx
+            src/stc/lexilla/lexers/LexLua.cxx
+            src/stc/lexilla/lexers/LexMMIXAL.cxx
+            src/stc/lexilla/lexers/LexMPT.cxx
+            src/stc/lexilla/lexers/LexMSSQL.cxx
+            src/stc/lexilla/lexers/LexMagik.cxx
+            src/stc/lexilla/lexers/LexMake.cxx
+            src/stc/lexilla/lexers/LexMarkdown.cxx
+            src/stc/lexilla/lexers/LexMatlab.cxx
+            src/stc/lexilla/lexers/LexMaxima.cxx
+            src/stc/lexilla/lexers/LexMetapost.cxx
+            src/stc/lexilla/lexers/LexModula.cxx
+            src/stc/lexilla/lexers/LexMySQL.cxx
+            src/stc/lexilla/lexers/LexNim.cxx
+            src/stc/lexilla/lexers/LexNimrod.cxx
+            src/stc/lexilla/lexers/LexNsis.cxx
+            src/stc/lexilla/lexers/LexNull.cxx
+            src/stc/lexilla/lexers/LexOScript.cxx
+            src/stc/lexilla/lexers/LexOpal.cxx
+            src/stc/lexilla/lexers/LexPB.cxx
+            src/stc/lexilla/lexers/LexPLM.cxx
+            src/stc/lexilla/lexers/LexPO.cxx
+            src/stc/lexilla/lexers/LexPOV.cxx
+            src/stc/lexilla/lexers/LexPS.cxx
+            src/stc/lexilla/lexers/LexPascal.cxx
+            src/stc/lexilla/lexers/LexPerl.cxx
+            src/stc/lexilla/lexers/LexPowerPro.cxx
+            src/stc/lexilla/lexers/LexPowerShell.cxx
+            src/stc/lexilla/lexers/LexProgress.cxx
+            src/stc/lexilla/lexers/LexProps.cxx
+            src/stc/lexilla/lexers/LexPython.cxx
+            src/stc/lexilla/lexers/LexR.cxx
+            src/stc/lexilla/lexers/LexRaku.cxx
+            src/stc/lexilla/lexers/LexRebol.cxx
+            src/stc/lexilla/lexers/LexRegistry.cxx
+            src/stc/lexilla/lexers/LexRuby.cxx
+            src/stc/lexilla/lexers/LexRust.cxx
+            src/stc/lexilla/lexers/LexSAS.cxx
+            src/stc/lexilla/lexers/LexSML.cxx
+            src/stc/lexilla/lexers/LexSQL.cxx
+            src/stc/lexilla/lexers/LexSTTXT.cxx
+            src/stc/lexilla/lexers/LexScriptol.cxx
+            src/stc/lexilla/lexers/LexSmalltalk.cxx
+            src/stc/lexilla/lexers/LexSorcus.cxx
+            src/stc/lexilla/lexers/LexSpecman.cxx
+            src/stc/lexilla/lexers/LexSpice.cxx
+            src/stc/lexilla/lexers/LexStata.cxx
+            src/stc/lexilla/lexers/LexTACL.cxx
+            src/stc/lexilla/lexers/LexTADS3.cxx
+            src/stc/lexilla/lexers/LexTAL.cxx
+            src/stc/lexilla/lexers/LexTCL.cxx
+            src/stc/lexilla/lexers/LexTCMD.cxx
+            src/stc/lexilla/lexers/LexTeX.cxx
+            src/stc/lexilla/lexers/LexTxt2tags.cxx
+            src/stc/lexilla/lexers/LexVB.cxx
+            src/stc/lexilla/lexers/LexVHDL.cxx
+            src/stc/lexilla/lexers/LexVerilog.cxx
+            src/stc/lexilla/lexers/LexVisualProlog.cxx
+            src/stc/lexilla/lexers/LexX12.cxx
+            src/stc/lexilla/lexers/LexYAML.cxx
+            src/stc/lexilla/lexlib/Accessor.cxx
+            <!-- src/stc/lexilla/lexlib/CharacterCategory.cxx -->
+            <!-- src/stc/lexilla/lexlib/CharacterSet.cxx -->
+            src/stc/lexilla/lexlib/DefaultLexer.cxx
+            src/stc/lexilla/lexlib/LexerBase.cxx
+            src/stc/lexilla/lexlib/LexerModule.cxx
+            src/stc/lexilla/lexlib/LexerNoExceptions.cxx
+            src/stc/lexilla/lexlib/LexerSimple.cxx
+            src/stc/lexilla/lexlib/PropSetSimple.cxx
+            src/stc/lexilla/lexlib/StyleContext.cxx
+            src/stc/lexilla/lexlib/WordList.cxx
+            src/stc/lexilla/src/Lexilla.cxx
+        </sources>
+    </lib>
+
+    <!-- used to conditionally link against wxlexilla only if it's enabled -->
+    <set var="wxlexilla_library_link">
+        <if cond="USE_STC=='1' and BUILDING_LIB=='1'">wxlexilla</if>
+    </set>
+
+</makefile>

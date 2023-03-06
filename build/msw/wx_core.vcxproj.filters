@@ -942,6 +942,9 @@
     <ClCompile Include="..\..\src\msw\ole\uuid.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\overlay.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\ownerdrw.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>

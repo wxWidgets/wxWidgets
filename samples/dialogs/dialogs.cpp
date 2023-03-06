@@ -3407,7 +3407,7 @@ static void InitAboutInfoMinimal(wxAboutDialogInfo& info)
                         wxVERSION_NUM_DOT_STRING
                     ));
     info.SetDescription("This sample shows different wxWidgets dialogs.");
-    info.SetCopyright("(C) 1998-2023 wxWidgets dev team.");
+    info.SetCopyright("Copyright (C) 1998-2023 wxWidgets dev team.");
 }
 
 static void InitAboutInfoWebsite(wxAboutDialogInfo& info)
