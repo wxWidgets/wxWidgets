@@ -1,0 +1,1 @@
+All: Accept std::initializer_list in wxArray ctor (Lotendan, #23309).
