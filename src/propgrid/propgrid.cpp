@@ -3189,9 +3189,9 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
         if ( property->HasFlag(wxPG_PROP_INVALID_VALUE) )
         {
             m_validationInfo.SetFailureBehavior(
-                vfb & ~(wxPGVFBFlags::ShowMessage |
+                vfb & (~(wxPGVFBFlags::ShowMessage |
                         wxPGVFBFlags::ShowMessageBox |
-                        wxPGVFBFlags::ShowMessageOnStatusBar));
+                        wxPGVFBFlags::ShowMessageOnStatusBar)));
         }
     }
 
@@ -3303,7 +3303,7 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
 {
     wxPGVFBFlags vfb = m_validationInfo.GetFailureBehavior();
 
-    if ( !(vfb & wxPGVFBFlags::MarkCell) )
+    if ( !!(vfb & wxPGVFBFlags::MarkCell) )
     {
         // Revert cells
         property->m_cells = m_propCellsBackup;
@@ -3322,7 +3322,7 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
     }
 
 #if wxUSE_STATUSBAR
-    if ( !(vfb & wxPGVFBFlags::ShowMessageOnStatusBar) )
+    if ( !!(vfb & wxPGVFBFlags::ShowMessageOnStatusBar) )
     {
         if ( !wxPGGlobalVars->m_offline )
         {
@@ -3333,7 +3333,7 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
     }
 #endif
 
-    if ( !(vfb & wxPGVFBFlags::ShowMessage) )
+    if ( !!(vfb & wxPGVFBFlags::ShowMessage) )
     {
         DoHidePropertyError(property);
     }
