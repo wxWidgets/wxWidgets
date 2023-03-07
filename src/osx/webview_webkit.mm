@@ -110,6 +110,86 @@ wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
     return wxVersionInfo("WKWebView", verMaj, verMin, verMicro);
 }
 
+//-----------------------------------------------------------------------------
+// wxWebViewWindowInfoWebKit
+//-----------------------------------------------------------------------------
+
+class wxWebViewWindowInfoWebKit: public wxWebViewWindowInfo
+{
+public:
+    wxWebViewWindowInfoWebKit(WKWebViewConfiguration* configuration,
+                                 WKNavigationAction* navigationAction,
+                                 WKWindowFeatures* windowFeatures):
+        m_configuration(configuration),
+        m_navigationAction(navigationAction),
+        m_windowFeatures(windowFeatures)
+    {
+
+    }
+
+    virtual wxPoint GetPosition() const override
+    {
+        wxPoint pos(-1, -1);
+        if (m_windowFeatures.y)
+            pos.y = m_windowFeatures.y.intValue;
+        if (m_windowFeatures.x)
+            pos.x = m_windowFeatures.x.intValue;
+
+        return pos;
+    }
+
+    virtual wxSize GetSize() const override
+    {
+        wxSize size(-1, -1);
+        if (m_windowFeatures.height)
+            size.y = m_windowFeatures.height.intValue;
+        if (m_windowFeatures.width)
+            size.x = m_windowFeatures.width.intValue;
+        return size;
+    }
+
+    virtual bool ShouldDisplayMenuBar() const override
+    {
+        if (m_windowFeatures.menuBarVisibility)
+            return m_windowFeatures.menuBarVisibility.boolValue;
+        else
+            return true;
+    }
+
+    virtual bool ShouldDisplayStatusBar() const override
+    {
+        if (m_windowFeatures.statusBarVisibility)
+            return m_windowFeatures.statusBarVisibility.boolValue;
+        else
+            return true;
+    }
+
+    virtual bool ShouldDisplayToolBar() const override
+    {
+        if (m_windowFeatures.toolbarsVisibility)
+            return m_windowFeatures.toolbarsVisibility.boolValue;
+        else
+            return true;
+    }
+
+    virtual bool ShouldDisplayScrollBars() const override
+    {
+        return true;
+    }
+
+    virtual wxWebView* CreateChildWebView() override
+    {
+        m_childWebView = new wxWebViewWebKit(this);
+        return m_childWebView;
+    }
+
+    wxWebView* m_childWebView = nullptr;
+    WKWebViewConfiguration* m_configuration;
+    WKNavigationAction* m_navigationAction;
+    WKWindowFeatures* m_windowFeatures;
+};
+
+
 // ----------------------------------------------------------------------------
 // creation/destruction
 // ----------------------------------------------------------------------------
@@ -130,9 +210,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
-    WKWebViewConfiguration* webViewConfig = (WKWebViewConfiguration*) m_webViewConfiguration;
+    WKWebViewConfiguration* webViewConfig = (m_parentWindowInfo) ?
+        m_parentWindowInfo->m_configuration : (WKWebViewConfiguration*) m_webViewConfiguration;
 
-    if (!m_handlers.empty())
+    if (!m_handlers.empty() && !m_parentWindowInfo)
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
         if ( WX_IS_MACOS_AVAILABLE(10, 13) )
@@ -154,9 +235,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     MacPostControlCreate(pos, size);
 
-    // WKWebView configuration is only used during creation
-    [m_webViewConfiguration release];
-    m_webViewConfiguration = nil;
+    if (!m_parentWindowInfo)
+    {
+        // WKWebView configuration is only used during creation
+        [m_webViewConfiguration release];
+        m_webViewConfiguration = nil;
+    }
 
     if (!m_customUserAgent.empty())
         SetUserAgent(m_customUserAgent);
@@ -178,45 +262,51 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     [m_webView setUIDelegate:uiDelegate];
 
-    // Implement javascript fullscreen interface with user script and message handler
-    AddUserScript("\
-        document.__wxToggleFullscreen = function (elem) { \
-            if (!document.__wxStylesAdded) { \
-                function createClass(name,rules) { \
-                    var style= document.createElement('style'); style.type = 'text/css'; \
-                    document.getElementsByTagName('head')[0].appendChild(style); \
-                    style.sheet.addRule(name, rules); \
+    if (!m_parentWindowInfo)
+    {
+        // Implement javascript fullscreen interface with user script and message handler
+        AddUserScript("\
+            document.__wxToggleFullscreen = function (elem) { \
+                if (!document.__wxStylesAdded) { \
+                    function createClass(name,rules) { \
+                        var style= document.createElement('style'); style.type = 'text/css'; \
+                        document.getElementsByTagName('head')[0].appendChild(style); \
+                        style.sheet.addRule(name, rules); \
+                    } \
+                    createClass(\"body.wxfullscreen\", \"padding: 0; margin: 0; height: 100%;\"); \
+                    createClass(\".wxfullscreen\", \"position: fixed; overflow: hidden; z-index: 1000; left: 0; top: 0; bottom: 0; right: 0;\"); \
+                    createClass(\".wxfullscreenelem\", \"width: 100% !important; height: 100% !important; padding-top: 0 !important;\"); \
+                    document.__wxStylesAdded = true; \
                 } \
-                createClass(\"body.wxfullscreen\", \"padding: 0; margin: 0; height: 100%;\"); \
-                createClass(\".wxfullscreen\", \"position: fixed; overflow: hidden; z-index: 1000; left: 0; top: 0; bottom: 0; right: 0;\"); \
-                createClass(\".wxfullscreenelem\", \"width: 100% !important; height: 100% !important; padding-top: 0 !important;\"); \
-                document.__wxStylesAdded = true; \
-            } \
-            if (elem) { \
-                elem.classList.add(\"wxfullscreen\"); \
-                elem.classList.add(\"wxfullscreenelem\"); \
-                document.body.classList.add(\"wxfullscreen\"); \
-            } else if (document.webkitFullscreenElement) { \
-                document.webkitFullscreenElement.classList.remove(\"wxfullscreen\"); \
-                document.webkitFullscreenElement.classList.remove(\"wxfullscreenelem\"); \
-                document.body.classList.remove(\"wxfullscreen\"); \
-            } \
-            document.webkitFullscreenElement = elem; \
-            window.webkit.messageHandlers.__wxfullscreen.postMessage((elem) ? 1: 0); \
-            document.dispatchEvent(new Event('webkitfullscreenchange')); \
-            if (document.onwebkitfullscreenchange) document.onwebkitfullscreenchange(); \
-        }; \
-        Element.prototype.webkitRequestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
-        document.webkitExitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
-        document.onwebkitfullscreenchange = null; \
-        document.webkitFullscreenEnabled = true; \
-    ");
-    [m_webView.configuration.userContentController addScriptMessageHandler:
-        [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
+                if (elem) { \
+                    elem.classList.add(\"wxfullscreen\"); \
+                    elem.classList.add(\"wxfullscreenelem\"); \
+                    document.body.classList.add(\"wxfullscreen\"); \
+                } else if (document.webkitFullscreenElement) { \
+                    document.webkitFullscreenElement.classList.remove(\"wxfullscreen\"); \
+                    document.webkitFullscreenElement.classList.remove(\"wxfullscreenelem\"); \
+                    document.body.classList.remove(\"wxfullscreen\"); \
+                } \
+                document.webkitFullscreenElement = elem; \
+                window.webkit.messageHandlers.__wxfullscreen.postMessage((elem) ? 1: 0); \
+                document.dispatchEvent(new Event('webkitfullscreenchange')); \
+                if (document.onwebkitfullscreenchange) document.onwebkitfullscreenchange(); \
+            }; \
+            Element.prototype.webkitRequestFullscreen = function() {document.__wxToggleFullscreen(this);}; \
+            document.webkitExitFullscreen = function() {document.__wxToggleFullscreen(undefined);}; \
+            document.onwebkitfullscreenchange = null; \
+            document.webkitFullscreenEnabled = true; \
+        ");
+        [m_webView.configuration.userContentController addScriptMessageHandler:
+            [[WebViewScriptMessageHandler alloc] initWithWxWindow:this] name:@"__wxfullscreen"];
+    }
 
     m_UIDelegate = uiDelegate;
 
-    LoadURL(strURL);
+    if (m_parentWindowInfo)
+        [m_webView loadRequest:m_parentWindowInfo->m_navigationAction.request];
+    else
+        LoadURL(strURL);
     return true;
 }
 
@@ -1013,15 +1103,21 @@ WX_API_AVAILABLE_MACOS(10, 13)
         wxWEBVIEW_NAV_ACTION_USER :
         wxWEBVIEW_NAV_ACTION_OTHER;
 
+    wxWebViewWindowInfoWebKit windowInfo(configuration, navigationAction, windowFeatures);
+
     wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                          webKitWindow->GetId(),
                          wxCFStringRef::AsString( navigationAction.request.URL.absoluteString ),
                          "", navFlags);
+    event.SetClientData(&windowInfo);
 
     if (webKitWindow && webKitWindow->GetEventHandler())
         webKitWindow->GetEventHandler()->ProcessEvent(event);
 
-    return nil;
+    if (windowInfo.m_childWebView)
+        return (WKWebView*) windowInfo.m_childWebView->GetNativeBackend();
+    else
+        return nil;
 }
 
 - (void)webViewDidClose:(WKWebView *)webView

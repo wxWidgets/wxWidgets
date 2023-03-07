@@ -252,6 +252,114 @@ public:
     wxCOMPtr<ICoreWebView2WebResourceRequestedEventArgs> m_args;
 };
 
+// wxWebViewNewWindowInfoEdge
+
+class wxWebViewNewWindowInfoEdge : public wxWebViewWindowInfo
+{
+public:
+    wxWebViewNewWindowInfoEdge(wxWebViewEdgeImpl* impl, ICoreWebView2NewWindowRequestedEventArgs* args):
+        m_impl(impl),
+        m_args(args)
+    {
+        m_args->get_WindowFeatures(&m_windowFeatures);
+    }
+
+    virtual wxPoint GetPosition() const override
+    {
+        wxPoint result(-1, -1);
+        BOOL hasPosition;
+        if (SUCCEEDED(m_windowFeatures->get_HasPosition(&hasPosition)) && hasPosition)
+        {
+            UINT32 x, y;
+            if (SUCCEEDED(m_windowFeatures->get_Left(&x)) &&
+                SUCCEEDED(m_windowFeatures->get_Top(&y)))
+                result = wxPoint(x, y);
+        }
+        return result;
+    }
+
+    virtual wxSize GetSize() const override
+    {
+        wxSize result(-1, -1);
+        BOOL hasSize;
+        if (SUCCEEDED(m_windowFeatures->get_HasSize(&hasSize)) && hasSize)
+        {
+            UINT32 width, height;
+            if (SUCCEEDED(m_windowFeatures->get_Width(&width)) &&
+                SUCCEEDED(m_windowFeatures->get_Height(&height)))
+                result = wxSize(width, height);
+        }
+        return result;
+    }
+
+    virtual bool ShouldDisplayMenuBar() const override
+    {
+        BOOL result;
+        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayMenuBar(&result)))
+            return result;
+        else
+            return true;
+    }
+
+    virtual bool ShouldDisplayStatusBar() const override
+    {
+        BOOL result;
+        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayStatus(&result)))
+            return result;
+        else
+            return true;
+    }
+    virtual bool ShouldDisplayToolBar() const override
+    {
+        BOOL result;
+        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayToolbar(&result)))
+            return result;
+        else
+            return true;
+    }
+
+    virtual bool ShouldDisplayScrollBars() const override
+    {
+        BOOL result;
+        if (SUCCEEDED(m_windowFeatures->get_ShouldDisplayScrollBars(&result)))
+            return result;
+        else
+            return true;
+    }
+
+    virtual wxWebView* CreateChildWebView() override
+    {
+        return m_impl->CreateChildWebView(
+            std::make_shared<wxWebViewEdgeParentWindowInfo>(m_impl, m_args));
+    }
+
+private:
+    wxWebViewEdgeImpl* m_impl;
+    wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_args;
+    wxCOMPtr<ICoreWebView2WindowFeatures> m_windowFeatures;
+};
+
+class wxWebViewEdgeParentWindowInfo
+{
+public:
+    wxWebViewEdgeParentWindowInfo(wxWebViewEdgeImpl* impl,
+        ICoreWebView2NewWindowRequestedEventArgs* args):
+        m_impl(impl),
+        m_args(args)
+    {
+        HRESULT hr = m_args->GetDeferral(&m_deferral);
+        if (FAILED(hr))
+            wxLogApiError("GetDeferral", hr);
+    }
+
+    virtual ~wxWebViewEdgeParentWindowInfo() = default;
+
+    wxWebViewEdgeImpl* m_impl;
+    wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_args;
+    wxCOMPtr<ICoreWebView2Deferral> m_deferral;
+};
+
+
 #define wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD \
     m_inEventCallback = true; \
     wxON_BLOCK_EXIT_SET(m_inEventCallback, false);
@@ -299,19 +407,34 @@ bool wxWebViewEdgeImpl::Create()
 
     wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 
-    HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
-        ms_browserExecutableDir.wc_str(),
-        userDataPath.wc_str(),
-        m_webViewEnvironmentOptions,
-        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
-            &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
-    if (FAILED(hr))
+    if (m_parentWindowInfo)
     {
-        wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
-        return false;
+        OnEnvironmentCreated(S_OK, m_parentWindowInfo->m_impl->m_webViewEnvironment);
+        return true;
     }
     else
-        return true;
+    {
+        HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
+            ms_browserExecutableDir.wc_str(),
+            userDataPath.wc_str(),
+            m_webViewEnvironmentOptions,
+            Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
+                &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
+        if (FAILED(hr))
+        {
+            wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
+            return false;
+        }
+        else
+            return true;
+    }
+}
+
+wxWebViewEdge* wxWebViewEdgeImpl::CreateChildWebView(std::shared_ptr<wxWebViewEdgeParentWindowInfo> parentWindowInfo)
+{
+    wxWebViewEdge* childWebView = new wxWebViewEdge();
+    childWebView->m_impl->m_parentWindowInfo = parentWindowInfo;
+    return childWebView;
 }
 
 HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
@@ -494,6 +617,7 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
 
 HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender), ICoreWebView2NewWindowRequestedEventArgs* args)
 {
+    wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD
     wxCoTaskMemPtr<wchar_t> uri;
     wxString evtURL;
     if (SUCCEEDED(args->get_Uri(&uri)))
@@ -504,8 +628,10 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender),
     if (SUCCEEDED(args->get_IsUserInitiated(&isUserInitiated)) && isUserInitiated)
         navFlags = wxWEBVIEW_NAV_ACTION_USER;
 
-    wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString(), navFlags);
-    m_ctrl->GetEventHandler()->AddPendingEvent(evt);
+    wxWebViewNewWindowInfoEdge windowInfo(this, args);
+    wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString(), navFlags, "");
+    evt.SetClientData(&windowInfo);
+    m_ctrl->HandleWindowEvent(evt);
     args->put_Handled(true);
     return S_OK;
 }
@@ -732,6 +858,17 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
             it != m_pendingUserScripts.end(); ++it)
             m_ctrl->AddUserScript(*it);
         m_pendingUserScripts.clear();
+    }
+
+    if (m_parentWindowInfo)
+    {
+        if (FAILED(m_parentWindowInfo->m_args->put_NewWindow(baseWebView)))
+            wxLogApiError("WebView2::WebViewCreated (put_NewWindow)", hr);
+        if (FAILED(m_parentWindowInfo->m_deferral->Complete()))
+            wxLogApiError("WebView2::WebViewCreated (Complete)", hr);
+        m_parentWindowInfo.reset();
+
+        return S_OK;
     }
 
     if (!m_pendingURL.empty())

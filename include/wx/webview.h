@@ -323,6 +323,27 @@ private:
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
 
+class WXDLLIMPEXP_WEBVIEW wxWebViewWindowInfo
+{
+public:
+    virtual ~wxWebViewWindowInfo() = default;
+
+    virtual wxPoint GetPosition() const = 0;
+
+    virtual wxSize GetSize() const = 0;
+
+    virtual bool ShouldDisplayMenuBar() const = 0;
+
+    virtual bool ShouldDisplayStatusBar() const = 0;
+
+    virtual bool ShouldDisplayToolBar() const = 0;
+
+    virtual bool ShouldDisplayScrollBars() const = 0;
+
+    virtual wxWebView* CreateChildWebView() = 0;
+};
+
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 {
 public:
@@ -343,6 +364,7 @@ public:
 
     wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
     const wxString& GetMessageHandler() const { return m_messageHandler; }
+    wxWebViewWindowInfo* GetTargetWindowInfo() const { return (wxWebViewWindowInfo*)m_clientData; }
 
     virtual wxEvent* Clone() const override { return new wxWebViewEvent(*this); }
 private:
