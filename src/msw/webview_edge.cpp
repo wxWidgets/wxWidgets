@@ -280,6 +280,7 @@ wxWebViewEdgeImpl::~wxWebViewEdgeImpl()
         m_webView->remove_ContainsFullScreenElementChanged(m_containsFullScreenElementChangedToken);
         m_webView->remove_WebMessageReceived(m_webMessageReceivedToken);
         m_webView->remove_WebResourceRequested(m_webResourceRequestedToken);
+        m_webView->remove_WindowCloseRequested(m_windowCloseRequestedToken);
     }
 }
 
@@ -509,6 +510,13 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender),
     return S_OK;
 }
 
+HRESULT wxWebViewEdgeImpl::OnWindowCloseRequested(ICoreWebView2* WXUNUSED(sender), IUnknown* WXUNUSED(args))
+{
+    wxWebViewEvent evt(wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED, m_ctrl->GetId(), m_ctrl->GetCurrentURL(), "");
+    m_ctrl->GetEventHandler()->AddPendingEvent(evt);
+    return S_OK;
+}
+
 HRESULT wxWebViewEdgeImpl::OnDocumentTitleChanged(ICoreWebView2* WXUNUSED(sender), IUnknown* WXUNUSED(args))
 {
     wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
@@ -675,6 +683,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         Callback<ICoreWebView2WebResourceRequestedEventHandler>(
             this, &wxWebViewEdgeImpl::OnWebResourceRequested).Get(),
         &m_webResourceRequestedToken);
+    m_webView->add_WindowCloseRequested(
+        Callback<ICoreWebView2WindowCloseRequestedEventHandler>(
+            this, &wxWebViewEdgeImpl::OnWindowCloseRequested).Get(),
+        &m_windowCloseRequestedToken);
 
     // Register handlers
     for (wxStringToWebHandlerMap::iterator it = m_handlers.begin(); it != m_handlers.end(); it++)

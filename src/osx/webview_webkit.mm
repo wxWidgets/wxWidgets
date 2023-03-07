@@ -1024,6 +1024,15 @@ WX_API_AVAILABLE_MACOS(10, 13)
     return nil;
 }
 
+- (void)webViewDidClose:(WKWebView *)webView
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED,
+                         webKitWindow->GetId(), "", "");
+
+    if (webKitWindow && webKitWindow->GetEventHandler())
+        webKitWindow->GetEventHandler()->ProcessEvent(event);
+}
+
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message
     initiatedByFrame:(WKFrameInfo *)frame
     completionHandler:(void (^)())completionHandler

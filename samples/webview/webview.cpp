@@ -118,6 +118,7 @@ public:
     void OnFullScreenChanged(wxWebViewEvent& evt);
     void OnScriptMessage(wxWebViewEvent& evt);
     void OnScriptResult(wxWebViewEvent& evt);
+    void OnWindowCloseRequested(wxWebViewEvent& evt);
     void OnSetPage(wxCommandEvent& evt);
     void OnViewSourceRequest(wxCommandEvent& evt);
     void OnViewTextRequest(wxCommandEvent& evt);
@@ -581,6 +582,7 @@ WebFrame::WebFrame(const wxString& url) :
     Bind(wxEVT_WEBVIEW_FULLSCREEN_CHANGED, &WebFrame::OnFullScreenChanged, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, &WebFrame::OnScriptMessage, this, m_browser->GetId());
     Bind(wxEVT_WEBVIEW_SCRIPT_RESULT, &WebFrame::OnScriptResult, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED, &WebFrame::OnWindowCloseRequested, this, m_browser->GetId());
 
     // Connect the menu events
     Bind(wxEVT_MENU, &WebFrame::OnSetPage, this, setPage->GetId());
@@ -979,6 +981,11 @@ void WebFrame::OnScriptResult(wxWebViewEvent& evt)
         wxLogError("Async script execution failed: %s", evt.GetString());
     else
         wxLogMessage("Async script result received; value = %s", evt.GetString());
+}
+
+void WebFrame::OnWindowCloseRequested(wxWebViewEvent& evt)
+{
+    wxLogMessage("Window close requested");
 }
 
 void WebFrame::OnSetPage(wxCommandEvent& WXUNUSED(evt))

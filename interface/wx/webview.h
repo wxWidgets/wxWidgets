@@ -708,6 +708,10 @@ public:
        Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
+    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+       Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
+       a window is requested to be closed.
+       only available in wxWidgets 3.3.0 or later.
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
@@ -1600,6 +1604,10 @@ public:
        Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
+    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+       Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
+       a window is requested to be closed.
+       only available in wxWidgets 3.3.0 or later.
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.

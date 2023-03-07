@@ -85,6 +85,7 @@ public:
     EventRegistrationToken m_containsFullScreenElementChangedToken = { };
     EventRegistrationToken m_webMessageReceivedToken = { };
     EventRegistrationToken m_webResourceRequestedToken = { };
+    EventRegistrationToken m_windowCloseRequestedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
@@ -98,6 +99,7 @@ public:
     HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
     HRESULT OnWebResourceRequested(ICoreWebView2* sender, ICoreWebView2WebResourceRequestedEventArgs* args);
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
+    HRESULT OnWindowCloseRequested(ICoreWebView2* sender, IUnknown* args);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
