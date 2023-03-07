@@ -14,6 +14,8 @@
 #include "wx/graphics.h"
 #include "wx/dcmemory.h"
 
+#include <memory>
+
 static void InitState(wxGraphicsContext* gc);
 static void InvertMatrix(wxGraphicsContext* gc);
 static void Concat1(wxGraphicsContext* gc);
@@ -26,7 +28,7 @@ TEST_CASE("GraphicsMatrixTestCase::DefaultRenderer", "[graphmatrix][default]")
     wxMemoryDC dc(bmp);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDefaultRenderer();
     REQUIRE(rend);
-    wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
+    std::unique_ptr<wxGraphicsContext> gc(rend->CreateContext(dc));
     REQUIRE(gc.get());
 
     SECTION("InitState")
@@ -64,7 +66,7 @@ TEST_CASE("GraphicsMatrixTestCase::GDIPlusRenderer", "[graphmatrix][gdiplus]")
     wxMemoryDC dc(bmp);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetGDIPlusRenderer();
     REQUIRE(rend);
-    wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
+    std::unique_ptr<wxGraphicsContext> gc(rend->CreateContext(dc));
     REQUIRE(gc.get());
 
     SECTION("InitState")
@@ -101,7 +103,7 @@ TEST_CASE("GraphicsMatrixTestCase::Direct2DRenderer", "[graphmatrix][direct2d]")
     wxMemoryDC dc(bmp);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetDirect2DRenderer();
     REQUIRE(rend);
-    wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
+    std::unique_ptr<wxGraphicsContext> gc(rend->CreateContext(dc));
     REQUIRE(gc.get());
 
     SECTION("InitState")
@@ -140,7 +142,7 @@ TEST_CASE("GraphicsMatrixTestCase::CairoRenderer", "[graphmatrix][cairo]")
     wxMemoryDC dc(bmp);
     wxGraphicsRenderer* rend = wxGraphicsRenderer::GetCairoRenderer();
     REQUIRE(rend);
-    wxScopedPtr<wxGraphicsContext> gc(rend->CreateContext(dc));
+    std::unique_ptr<wxGraphicsContext> gc(rend->CreateContext(dc));
     REQUIRE(gc.get());
 
     SECTION("InitState")

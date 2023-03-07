@@ -30,7 +30,8 @@
 #include "wx/dataview.h"
 #include "wx/renderer.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // Constants
@@ -486,7 +487,7 @@ wxTreeListModel::InsertItem(Node* parent,
         dvc->SetIndent(dvc->GetIndent());
     }
 
-    wxScopedPtr<Node>
+    std::unique_ptr<Node>
         newItem(new Node(parent, text, imageClosed, imageOpened, data));
 
     // If we have no children at all, then inserting as last child is the same

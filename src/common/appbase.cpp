@@ -74,6 +74,8 @@
     #include "wx/recguard.h"
 #endif // wxDEBUG_LEVEL
 
+#include <memory>
+
 // wxABI_VERSION can be defined when compiling applications but it should be
 // left undefined when compiling the library itself, it is then set to its
 // default value in version.h
@@ -134,18 +136,10 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopBase)
 
 wxAppConsoleBase::wxAppConsoleBase()
 {
-    m_traits = nullptr;
-    m_mainLoop = nullptr;
-    m_bDoPendingEventProcessing = true;
-
     ms_appInstance = reinterpret_cast<wxAppConsole *>(this);
 
 #ifdef __WXDEBUG__
     SetTraceMasks();
-    // SetTraceMasks call can cause an apptraits to be
-    // created, but since we are still in the constructor the wrong kind will
-    // be created for GUI apps.  Destroy it so it can be created again later.
-    wxDELETE(m_traits);
 #endif
 
     wxEvtHandler::AddFilter(this);
@@ -166,8 +160,28 @@ wxAppConsoleBase::~wxAppConsoleBase()
 // initialization/cleanup
 // ----------------------------------------------------------------------------
 
+void wxAppConsoleBase::WXAppConstructed()
+{
+    wxASSERT_MSG( !m_fullyConstructed, "must be called only once" );
+
+    m_fullyConstructed = true;
+}
+
 bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
+    if ( IsGUI() )
+    {
+        // GUI wxApp code must call WXAppConstructed() at the very end.
+        wxASSERT_MSG( m_fullyConstructed, "Forgot to call WXAppConstructed()?" );
+    }
+    else // console application
+    {
+        // wxAppConsole doesn't call WXAppConstructed() as otherwise it would
+        // be called twice when it's used as base class of a GUI wxApp, so call
+        // it ourselves here.
+        WXAppConstructed();
+    }
+
 #if defined(__WINDOWS__)
     SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 #endif
@@ -306,8 +320,12 @@ wxAppTraits *wxAppConsoleBase::CreateTraits()
 
 wxAppTraits *wxAppConsoleBase::GetTraits()
 {
-    // FIXME-MT: protect this with a CS?
-    if ( !m_traits )
+    // Check for m_fullyConstructed to prevent constructing wrong traits
+    // object: if it is false, it means that the object of the user-defined
+    // wxApp-derived class hasn't been fully constructed yet, and so its
+    // possibly overridden CreateTraits() wouldn't be called if we called it
+    // now, so avoid doing it.
+    if ( !m_traits && m_fullyConstructed )
     {
         m_traits = CreateTraits();
 
@@ -381,7 +399,7 @@ bool wxAppConsoleBase::Yield(bool onlyIfNeeded)
     if ( loop )
        return loop->Yield(onlyIfNeeded);
 
-    wxScopedPtr<wxEventLoopBase> tmpLoop(CreateMainLoop());
+    std::unique_ptr<wxEventLoopBase> tmpLoop(CreateMainLoop());
     return tmpLoop->Yield(onlyIfNeeded);
 }
 

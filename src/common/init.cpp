@@ -30,7 +30,6 @@
 #include "wx/init.h"
 #include "wx/atomic.h"
 
-#include "wx/scopedptr.h"
 #include "wx/except.h"
 
 #if defined(__WINDOWS__)
@@ -55,6 +54,8 @@
     #include <locale.h>
 #endif
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -66,20 +67,16 @@ public:
     wxDummyConsoleApp() { }
 
     virtual int OnRun() override { wxFAIL_MSG( wxT("unreachable code") ); return 0; }
-    virtual bool DoYield(bool, long) { return true; }
 
     wxDECLARE_NO_COPY_CLASS(wxDummyConsoleApp);
 };
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
 // pointer it holds in its dtor but also resets the global application pointer
-wxDECLARE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
-wxDEFINE_SCOPED_PTR(wxAppConsole, wxAppPtrBase)
-
-class wxAppPtr : public wxAppPtrBase
+class wxAppPtr : public std::unique_ptr<wxAppConsole>
 {
 public:
-    explicit wxAppPtr(wxAppConsole *ptr = nullptr) : wxAppPtrBase(ptr) { }
+    explicit wxAppPtr(wxAppConsole *ptr) : std::unique_ptr<wxAppConsole>(ptr) { }
     ~wxAppPtr()
     {
         if ( get() )
@@ -296,13 +293,10 @@ bool wxEntryStart(int& argc, wxChar **argv)
     wxAppPtr app(wxTheApp);
     if ( !app.get() )
     {
-        // if not, he might have used wxIMPLEMENT_APP() to give us a
-        // function to create it
-        wxAppInitializerFunction fnCreate = wxApp::GetInitializerFunction();
-
-        if ( fnCreate )
+        // if they didn't, we should normally have the initializer function set
+        // up by wxIMPLEMENT_APP(), so use it to create one now
+        if ( auto fnCreate = wxApp::GetInitializerFunction() )
         {
-            // he did, try to create the custom wxApp object
             app.Set((*fnCreate)());
         }
     }

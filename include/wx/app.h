@@ -476,6 +476,10 @@ public:
     wxCmdLineArgsArray argv;
 
 protected:
+    // This function must be called at the end of wxApp ctor to indicate that
+    // wx part of the object is fully constructed.
+    void WXAppConstructed();
+
     // delete all objects in wxPendingDelete list
     //
     // called from ProcessPendingEvents()
@@ -502,13 +506,13 @@ protected:
              m_appDisplayName,    // app display name ("My Application")
              m_className;         // class name
 
-    // the class defining the application behaviour, nullptr initially and created
-    // by GetTraits() when first needed
-    wxAppTraits *m_traits;
+    // allows customizing the application behaviour, created by GetTraits()
+    // when first needed
+    wxAppTraits *m_traits = nullptr;
 
     // the main event loop of the application (may be null if the loop hasn't
     // been started yet or has already terminated)
-    wxEventLoopBase *m_mainLoop;
+    wxEventLoopBase *m_mainLoop = nullptr;
 
 
     // pending events management vars:
@@ -529,7 +533,12 @@ protected:
 #endif
 
     // flag modified by Suspend/ResumeProcessingOfPendingEvents()
-    bool m_bDoPendingEventProcessing;
+    bool m_bDoPendingEventProcessing = true;
+
+private:
+    // flag set to true at the end of wxApp ctor, call WXAppConstructed() to
+    // set it
+    bool m_fullyConstructed = false;
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 

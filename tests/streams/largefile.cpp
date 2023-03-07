@@ -29,8 +29,9 @@
 #endif
 
 #include "wx/filename.h"
-#include "wx/scopedptr.h"
 #include "wx/wfstream.h"
+
+#include <memory>
 
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
@@ -116,7 +117,7 @@ void LargeFileTest::runTest()
 
     // write a large file
     {
-        wxScopedPtr<wxOutputStream> out(MakeOutStream(tmpfile.m_name));
+        std::unique_ptr<wxOutputStream> out(MakeOutStream(tmpfile.m_name));
 
         // write 'A's at [ 0x7fffffbf, 0x7fffffff [
         pos = 0x7fffffff - size;
@@ -150,7 +151,7 @@ void LargeFileTest::runTest()
 
     // read the large file back
     {
-        wxScopedPtr<wxInputStream> in(MakeInStream(tmpfile.m_name));
+        std::unique_ptr<wxInputStream> in(MakeInStream(tmpfile.m_name));
         char buf[size];
 
         if (haveLFS) {
@@ -214,7 +215,7 @@ protected:
 
 wxInputStream *LargeFileTest_wxFile::MakeInStream(const wxString& name) const
 {
-    wxScopedPtr<wxFileInputStream> in(new wxFileInputStream(name));
+    std::unique_ptr<wxFileInputStream> in(new wxFileInputStream(name));
     CPPUNIT_ASSERT(in->IsOk());
     return in.release();
 }
@@ -246,7 +247,7 @@ protected:
 
 wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const
 {
-    wxScopedPtr<wxFFileInputStream> in(new wxFFileInputStream(name));
+    std::unique_ptr<wxFFileInputStream> in(new wxFFileInputStream(name));
     CPPUNIT_ASSERT(in->IsOk());
     return in.release();
 }

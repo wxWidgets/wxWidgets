@@ -31,6 +31,8 @@
 
 #if wxUSE_EVENTLOOP_SOURCE
 
+#include <memory>
+
 namespace
 {
 
@@ -76,7 +78,7 @@ public:
     {
         wxCHECK_MSG( fd != -1, nullptr, "can't monitor invalid fd" );
 
-        wxScopedPtr<wxCFEventLoopSource>
+        std::unique_ptr<wxCFEventLoopSource>
             source(new wxCFEventLoopSource(handler, flags));
 
         CFSocketContext context = { 0, source.get(), nullptr, nullptr, nullptr };

@@ -43,7 +43,6 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/fontmap.h"
-#include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
 #include "wx/version.h"
 #include "wx/private/threadinfo.h"
@@ -55,6 +54,8 @@
     #include "wx/msw/wrapwin.h"
     #include "wx/msw/missing.h"
 #endif
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -383,22 +384,7 @@ bool wxPluralFormsScanner::nextToken()
 
 class wxPluralFormsNode;
 
-// NB: Can't use wxDEFINE_SCOPED_PTR_TYPE because wxPluralFormsNode is not
-//     fully defined yet:
-class wxPluralFormsNodePtr
-{
-public:
-    wxPluralFormsNodePtr(wxPluralFormsNode *p = nullptr) : m_p(p) {}
-    ~wxPluralFormsNodePtr();
-    wxPluralFormsNode& operator*() const { return *m_p; }
-    wxPluralFormsNode* operator->() const { return m_p; }
-    wxPluralFormsNode* get() const { return m_p; }
-    wxPluralFormsNode* release();
-    void reset(wxPluralFormsNode *p);
-
-private:
-    wxPluralFormsNode *m_p;
-};
+using wxPluralFormsNodePtr = std::unique_ptr<wxPluralFormsNode>;
 
 class wxPluralFormsNode
 {
@@ -415,26 +401,6 @@ private:
     wxPluralFormsToken m_token;
     wxPluralFormsNodePtr m_nodes[3];
 };
-
-wxPluralFormsNodePtr::~wxPluralFormsNodePtr()
-{
-    delete m_p;
-}
-wxPluralFormsNode* wxPluralFormsNodePtr::release()
-{
-    wxPluralFormsNode *p = m_p;
-    m_p = nullptr;
-    return p;
-}
-void wxPluralFormsNodePtr::reset(wxPluralFormsNode *p)
-{
-    if (p != m_p)
-    {
-        delete m_p;
-        m_p = p;
-    }
-}
-
 
 void wxPluralFormsNode::setNode(unsigned i, wxPluralFormsNode* n)
 {
@@ -517,8 +483,6 @@ private:
     wxPluralFormsToken::Number m_nplurals;
     wxPluralFormsNodePtr m_plural;
 };
-
-wxDEFINE_SCOPED_PTR(wxPluralFormsCalculator, wxPluralFormsCalculatorPtr)
 
 void wxPluralFormsCalculator::init(wxPluralFormsToken::Number nplurals,
                                 wxPluralFormsNode* plural)
@@ -1121,7 +1085,7 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv = nullptr;
 
-    wxScopedPtr<wxMBConv> inputConvPtr; // just to delete inputConv if needed
+    std::unique_ptr<wxMBConv> inputConvPtr; // just to delete inputConv if needed
 
     if ( !m_charset.empty() )
     {
@@ -1183,11 +1147,18 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
 // wxMsgCatalog class
 // ----------------------------------------------------------------------------
 
+wxMsgCatalog::wxMsgCatalog(const wxString& domain)
+    : m_pNext(nullptr), m_domain(domain)
+{
+}
+
+wxMsgCatalog::~wxMsgCatalog() = default;
+
 /* static */
 wxMsgCatalog *wxMsgCatalog::CreateFromFile(const wxString& filename,
                                            const wxString& domain)
 {
-    wxScopedPtr<wxMsgCatalog> cat(new wxMsgCatalog(domain));
+    std::unique_ptr<wxMsgCatalog> cat(new wxMsgCatalog(domain));
 
     wxMsgCatalogFile file;
 
@@ -1204,7 +1175,7 @@ wxMsgCatalog *wxMsgCatalog::CreateFromFile(const wxString& filename,
 wxMsgCatalog *wxMsgCatalog::CreateFromData(const wxScopedCharBuffer& data,
                                            const wxString& domain)
 {
-    wxScopedPtr<wxMsgCatalog> cat(new wxMsgCatalog(domain));
+    std::unique_ptr<wxMsgCatalog> cat(new wxMsgCatalog(domain));
 
     wxMsgCatalogFile file;
 

@@ -21,7 +21,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/platinfo.h"
-#include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 
 #if wxUSE_CLIPBOARD
@@ -38,6 +37,8 @@
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
+
+#include <memory>
 
 static const int TEXT_HEIGHT = 200;
 
@@ -1319,7 +1320,7 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     {
         wxSize operator()(const wxString& text) const
         {
-            wxScopedPtr<wxTextCtrl>
+            std::unique_ptr<wxTextCtrl>
                 t(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, text,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE));
@@ -1388,7 +1389,7 @@ TEST_CASE("wxTextCtrl::LongPaste", "[wxTextCtrl][clipboard][paste]")
         return;
     }
 
-    wxScopedPtr<wxTextCtrl>
+    std::unique_ptr<wxTextCtrl>
         text(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, wxString(),
                             wxDefaultPosition, wxDefaultSize, style));
 
@@ -1431,7 +1432,7 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
 
     EventCounter updated(parent, wxEVT_TEXT);
 
-    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "Hello"));
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "Hello"));
 
     // Creating the control shouldn't result in any wxEVT_TEXT events.
     CHECK( updated.GetCount() == 0 );
@@ -1471,7 +1472,7 @@ TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
     INFO("wxTextCtrl with style " << style);
 
     wxWindow* const parent = wxTheApp->GetTopWindow();
-    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "",
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, "",
                                                 wxDefaultPosition,
                                                 wxDefaultSize,
                                                 style));
@@ -1494,7 +1495,7 @@ TEST_CASE("wxTextCtrl::EmptyUndoBuffer", "[wxTextCtrl][undo]")
         return;
     }
 
-    wxScopedPtr<wxTextCtrl> text(new wxTextCtrl(wxTheApp->GetTopWindow(),
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(wxTheApp->GetTopWindow(),
                                                 wxID_ANY, "",
                                                 wxDefaultPosition,
                                                 wxDefaultSize,

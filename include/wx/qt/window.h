@@ -9,6 +9,8 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
+#include <memory>
+
 class QShortcut;
 template < class T > class QList;
 
@@ -243,13 +245,13 @@ private:
     bool QtSetBackgroundStyle();
 
     QPicture *m_qtPicture;                                   // not owned
-    wxScopedPtr<QPainter> m_qtPainter;                       // always allocated
+    std::unique_ptr<QPainter> m_qtPainter;                   // always allocated
 
     bool m_mouseInside;
 
 #if wxUSE_ACCEL
     wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
-    wxScopedPtr<wxQtShortcutHandler> m_qtShortcutHandler;    // always allocated
+    std::unique_ptr<wxQtShortcutHandler> m_qtShortcutHandler; // always allocated
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL
 

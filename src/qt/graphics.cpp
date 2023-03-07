@@ -29,10 +29,11 @@
 #endif
 
 #include "wx/graphics.h"
-#include "wx/scopedptr.h"
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
+
+#include <memory>
 
 namespace
 {
@@ -1064,7 +1065,7 @@ protected:
 
 private:
     // This pointer may be empty if we don't own m_qtPainter.
-    wxScopedPtr<QPainter> m_ownedPainter;
+    std::unique_ptr<QPainter> m_ownedPainter;
 
     wxDECLARE_NO_COPY_CLASS(wxQtGraphicsContext);
 };

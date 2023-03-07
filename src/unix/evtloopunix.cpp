@@ -30,7 +30,6 @@
 #endif
 
 #include "wx/apptrait.h"
-#include "wx/scopedptr.h"
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/unix/private/timer.h"
@@ -44,6 +43,8 @@
 #if wxUSE_EVENTLOOP_SOURCE
     #include "wx/evtloopsrc.h"
 #endif // wxUSE_EVENTLOOP_SOURCE
+
+#include <memory>
 
 // ===========================================================================
 // wxEventLoop implementation
@@ -61,7 +62,7 @@ wxConsoleEventLoop::wxConsoleEventLoop()
     m_wakeupSource = nullptr;
 
     // Create the pipe.
-    wxScopedPtr<wxWakeUpPipeMT> wakeupPipe(new wxWakeUpPipeMT);
+    std::unique_ptr<wxWakeUpPipeMT> wakeupPipe(new wxWakeUpPipeMT);
     const int pipeFD = wakeupPipe->GetReadFd();
     if ( pipeFD == wxPipe::INVALID_FD )
         return;
@@ -119,7 +120,7 @@ public:
         // we need a bridge to wxFDIODispatcher
         //
         // TODO: refactor the code so that only wxEventLoopSourceHandler is used
-        wxScopedPtr<wxFDIOHandler>
+        std::unique_ptr<wxFDIOHandler>
             fdioHandler(new wxFDIOEventLoopSourceHandler(handler));
 
         if ( !wxFDIODispatcher::Get()->RegisterFD(fd, fdioHandler.get(), flags) )

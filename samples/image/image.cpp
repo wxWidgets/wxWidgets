@@ -24,7 +24,6 @@
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
-#include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 #include "wx/versioninfo.h"
 #include "wx/artprov.h"
@@ -47,6 +46,8 @@
 #endif
 
 #include "canvas.h"
+
+#include <memory>
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -1270,7 +1271,7 @@ private:
 
         // Use wxGraphicsContext if available for alpha support.
 #if wxUSE_GRAPHICS_CONTEXT
-        wxScopedPtr<wxGraphicsContext> const
+        std::unique_ptr<wxGraphicsContext> const
             gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc));
 
         gc->DrawBitmap(m_bitmap, 0, 0, sizeWin.x, sizeWin.y);
@@ -1409,7 +1410,7 @@ private:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
-        wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+        std::unique_ptr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
         wxGraphicsBitmap gb(gc->CreateBitmapFromImage(m_image));
 
         gc->SetFont(*wxNORMAL_FONT, *wxBLACK);

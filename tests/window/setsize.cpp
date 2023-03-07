@@ -19,7 +19,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 #include "asserthelper.h"
 #include "waitforpaint.h"
@@ -52,7 +52,7 @@ protected:
 
 TEST_CASE("wxWindow::SetSize", "[window][size]")
 {
-    wxScopedPtr<wxWindow> w(new MyWindow(wxTheApp->GetTopWindow()));
+    std::unique_ptr<wxWindow> w(new MyWindow(wxTheApp->GetTopWindow()));
 
     SECTION("Simple")
     {
@@ -73,7 +73,7 @@ TEST_CASE("wxWindow::SetSize", "[window][size]")
 
 TEST_CASE("wxWindow::GetBestSize", "[window][size][best-size]")
 {
-    wxScopedPtr<wxWindow> w(new MyWindow(wxTheApp->GetTopWindow()));
+    std::unique_ptr<wxWindow> w(new MyWindow(wxTheApp->GetTopWindow()));
 
     CHECK( wxSize(50, 250) == w->GetBestSize() );
 
@@ -86,7 +86,7 @@ TEST_CASE("wxWindow::GetBestSize", "[window][size][best-size]")
 
 TEST_CASE("wxWindow::MovePreservesSize", "[window][size][move]")
 {
-    wxScopedPtr<wxWindow>
+    std::unique_ptr<wxWindow>
         w(new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "Test child frame"));
 
     // Unfortunately showing the window is asynchronous, at least when using

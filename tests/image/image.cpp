@@ -31,10 +31,10 @@
 #include "wx/wfstream.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
-#include "wx/scopedptr.h"
 
 #include "testimage.h"
 
+#include <memory>
 
 #define CHECK_EQUAL_COLOUR_RGB(c1, c2) \
     CHECK( (int)c1.Red()   == (int)c2.Red() ); \
@@ -180,7 +180,7 @@ void ImageTestCase::LoadFromSocketStream()
     wxURL url(urlStr);
     REQUIRE( url.GetError() == wxURL_NOERR );
 
-    wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
+    std::unique_ptr<wxInputStream> in_stream(url.GetInputStream());
     REQUIRE( in_stream );
     REQUIRE( in_stream->IsOk() );
 

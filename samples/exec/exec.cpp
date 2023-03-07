@@ -52,7 +52,6 @@
 #include "wx/numdlg.h"
 #include "wx/textdlg.h"
 #include "wx/ffile.h"
-#include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 
 #include "wx/process.h"
@@ -62,6 +61,8 @@
 #ifdef __WINDOWS__
     #include "wx/dde.h"
 #endif // __WINDOWS__
+
+#include <memory>
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -1121,7 +1122,7 @@ void MyFrame::OnShowCommandForExt(wxCommandEvent& WXUNUSED(event))
 
     s_ext = ext;
 
-    wxScopedPtr<wxFileType>
+    std::unique_ptr<wxFileType>
         ft(wxTheMimeTypesManager->GetFileTypeFromExtension(ext));
     if ( !ft )
     {

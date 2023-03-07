@@ -22,7 +22,8 @@
 #if wxUSE_FILESYSTEM
 
 #include "wx/fs_mem.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -196,7 +197,7 @@ TEST_CASE("wxFileSystem::MemoryFSHandler", "[filesys][memoryfshandler][find]")
         }
 
     private:
-        wxScopedPtr<wxMemoryFSHandler> const m_handler;
+        std::unique_ptr<wxMemoryFSHandler> const m_handler;
     } autoMemoryFSHandler;
 
     wxMemoryFSHandler::AddFile("foo.txt", "foo contents");

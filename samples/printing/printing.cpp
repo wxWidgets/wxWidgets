@@ -35,7 +35,8 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
     #include "wx/graphics.h"
-    #include "wx/scopedptr.h"
+
+    #include <memory>
 #endif
 
 #ifdef __WXMAC__
@@ -212,7 +213,7 @@ void MyApp::Draw(wxDC&dc)
         dc.DrawBitmap( m_bitmap, dc.FromDIP(10), dc.FromDIP(10) );
 
 #if wxUSE_GRAPHICS_CONTEXT
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::CreateFromUnknownDC(dc));
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsContext::CreateFromUnknownDC(dc));
 
     if (gc)
     {

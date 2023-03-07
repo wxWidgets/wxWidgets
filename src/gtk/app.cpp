@@ -308,6 +308,8 @@ wxApp::wxApp()
 {
     m_isInAssert = false;
     m_idleSourceId = 0;
+
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()

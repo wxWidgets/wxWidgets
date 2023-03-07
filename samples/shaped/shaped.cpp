@@ -36,9 +36,10 @@
 #include "wx/dcclient.h"
 #include "wx/graphics.h"
 #include "wx/image.h"
-#include "wx/scopedptr.h"
 #include "wx/sizer.h"
 #include "wx/slider.h"
+
+#include <memory>
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -539,7 +540,7 @@ SeeThroughFrame::Create(wxWindow* parent)
 void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxPaintDC dc(this);
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
 
     // Draw 3 bands: one opaque, one semi-transparent and one transparent.
     const wxSize size = GetClientSize();

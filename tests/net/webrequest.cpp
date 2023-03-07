@@ -23,6 +23,8 @@
 #include "wx/filename.h"
 #include "wx/wfstream.h"
 
+#include <memory>
+
 // This test uses httpbin service and by default uses the mirror at the
 // location below, which seems to be more reliable than the main site at
 // https://httpbin.org. Any other mirror, including a local one, which can be
@@ -394,7 +396,7 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     Create("/put");
-    wxScopedPtr<wxInputStream> is(new wxFileInputStream("horse.png"));
+    std::unique_ptr<wxInputStream> is(new wxFileInputStream("horse.png"));
     REQUIRE( is->IsOk() );
 
     request.SetData(is.release(), "image/png");

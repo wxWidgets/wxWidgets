@@ -27,6 +27,9 @@
 #ifndef _WX_SCOPED_PTR_H_
 #define _WX_SCOPED_PTR_H_
 
+// Everything in this file is deprecated and must not be used any longer,
+// simply use std::unique_ptr<> instead.
+
 #include "wx/defs.h"
 #include "wx/checkeddelete.h"
 

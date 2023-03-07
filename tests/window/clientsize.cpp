@@ -18,7 +18,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 #include "asserthelper.h"
 #include "waitforpaint.h"
@@ -44,7 +44,7 @@ TEST_CASE("wxWindow::ClientWindowSizeRoundTrip", "[window][client-size]")
 
 TEST_CASE("wxWindow::MinClientSize", "[window][client-size]")
 {
-    wxScopedPtr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY,
+    std::unique_ptr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY,
                                          wxDefaultPosition, wxDefaultSize,
                                          wxBORDER_THEME));
     w->SetSize(wxSize(1,1));
@@ -59,9 +59,9 @@ TEST_CASE("wxWindow::SetClientSize", "[window][client-size]")
     // Under wxGTK2 we need to have two children (at least) because if there
     // is exactly one child its size is set to fill the whole parent frame
     // and the window cannot be resized - see wxTopLevelWindowBase::Layout().
-    wxScopedPtr<wxWindow> w0(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    std::unique_ptr<wxWindow> w0(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
 #endif // wxGTK 2
-    wxScopedPtr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    std::unique_ptr<wxWindow> w(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
 
     wxRect reqSize = wxTheApp->GetTopWindow()->GetClientRect();
     reqSize.Deflate(25);

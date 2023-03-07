@@ -26,6 +26,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
 {
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()

@@ -17,7 +17,6 @@
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
-#include "wx/scopedptr.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -25,6 +24,8 @@
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
+
+#include <memory>
 
 class wxRibbonToolBarToolBase
 {
@@ -242,7 +243,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertTool(
     wxASSERT(bitmap.IsOk());
 
     // Create the wxRibbonToolBarToolBase with parameters
-    wxScopedPtr<wxRibbonToolBarToolBase> tool(new wxRibbonToolBarToolBase);
+    std::unique_ptr<wxRibbonToolBarToolBase> tool(new wxRibbonToolBarToolBase);
     tool->id = tool_id;
     tool->bitmap = bitmap;
     if(bitmap_disabled.IsOk())

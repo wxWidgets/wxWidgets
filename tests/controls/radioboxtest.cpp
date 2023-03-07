@@ -16,8 +16,9 @@
     #include "wx/radiobox.h"
 #endif // WX_PRECOMP
 
-#include "wx/scopedptr.h"
 #include "wx/tooltip.h"
+
+#include <memory>
 
 class RadioBoxTestCase
 {
@@ -195,7 +196,7 @@ TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::SetString", "[radiobox]")
 
 TEST_CASE("RadioBox::NoItems", "[radiobox]")
 {
-    wxScopedPtr<wxRadioBox>
+    std::unique_ptr<wxRadioBox>
         radio(new wxRadioBox(wxTheApp->GetTopWindow(), wxID_ANY, "Empty",
                              wxDefaultPosition, wxDefaultSize,
                              0, nullptr,

@@ -20,7 +20,7 @@
 
 #include "wx/msw/regconf.h"
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // test class
@@ -33,39 +33,38 @@ TEST_CASE("wxRegConfig::ReadWrite", "[regconfig][config][registry]")
 
     // NOTE: we use wxCONFIG_USE_LOCAL_FILE explicitly to test wxRegConfig
     //       with something different from the default value wxCONFIG_USE_GLOBAL_FILE
-    wxScopedPtr<wxConfigBase> config(new wxRegConfig(app, vendor, "", "",
-                                                     wxCONFIG_USE_LOCAL_FILE));
+    wxRegConfig config(app, vendor, "", "", wxCONFIG_USE_LOCAL_FILE);
 
     // test writing
-    config->SetPath("/group1");
-    CHECK( config->Write("entry1", "foo") );
-    config->SetPath("/group2");
-    CHECK( config->Write("entry1", "bar") );
+    config.SetPath("/group1");
+    CHECK( config.Write("entry1", "foo") );
+    config.SetPath("/group2");
+    CHECK( config.Write("entry1", "bar") );
 
-    CHECK( config->Write("int32", 1234567) );
+    CHECK( config.Write("int32", 1234567) );
 
     // Note that type of wxLL(0x8000000000000008) literal is somehow unsigned
     // long long with MinGW, not sure if it's a bug or not, but work around it
     // by specifying the type explicitly.
     const wxLongLong_t val64 = wxLL(0x8000000000000008);
-    CHECK( config->Write("int64", val64) );
+    CHECK( config.Write("int64", val64) );
 
     // test reading
     wxString str;
     long dummy;
 
-    config->SetPath("/");
-    CHECK( config->GetFirstGroup(str, dummy) );
+    config.SetPath("/");
+    CHECK( config.GetFirstGroup(str, dummy) );
     CHECK( str == "group1" );
-    CHECK( config->Read("group1/entry1", "INVALID DEFAULT") == "foo" );
-    CHECK( config->GetNextGroup(str, dummy) );
+    CHECK( config.Read("group1/entry1", "INVALID DEFAULT") == "foo" );
+    CHECK( config.GetNextGroup(str, dummy) );
     CHECK( str == "group2" );
-    CHECK( config->Read("group2/entry1", "INVALID DEFAULT") == "bar" );
+    CHECK( config.Read("group2/entry1", "INVALID DEFAULT") == "bar" );
 
-    CHECK( config->ReadLong("group2/int32", 0) == 1234567 );
-    CHECK( config->ReadLongLong("group2/int64", 0) == val64 );
+    CHECK( config.ReadLong("group2/int32", 0) == 1234567 );
+    CHECK( config.ReadLongLong("group2/int64", 0) == val64 );
 
-    config->DeleteAll();
+    config.DeleteAll();
 }
 
 TEST_CASE("wxRegKey::DeleteFromRedirectedView", "[registry][64bits]")

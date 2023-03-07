@@ -17,11 +17,12 @@
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
-#include "wx/scopedptr.h"
 
 #include "asserthelper.h"
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
+
+#include <memory>
 
 class NotebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
@@ -128,7 +129,7 @@ TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
     wxNotebook* const
         notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
                                   wxDefaultPosition, wxSize(400, 200));
-    wxScopedPtr<wxNotebook> cleanup(notebook);
+    std::unique_ptr<wxNotebook> cleanup(notebook);
 
     CHECK( notebook->GetSelection() == wxNOT_FOUND );
 
@@ -172,7 +173,7 @@ void NotebookTestCase::GetTabRect()
 {
     wxNotebook *notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
                                           wxDefaultPosition, wxSize(400, 200));
-    wxScopedPtr<wxNotebook> cleanup(notebook);
+    std::unique_ptr<wxNotebook> cleanup(notebook);
 
     notebook->AddPage(new wxPanel(notebook), "Page");
 
@@ -217,7 +218,7 @@ void NotebookTestCase::GetTabRect()
 
 void NotebookTestCase::HitTestFlags()
 {
-    wxScopedPtr<wxNotebook> notebook;
+    std::unique_ptr<wxNotebook> notebook;
 
 #if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
     long style = 0;

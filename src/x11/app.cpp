@@ -217,6 +217,8 @@ wxApp::wxApp()
 #if !wxUSE_NANOX
     m_visualInfo = nullptr;
 #endif
+
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()

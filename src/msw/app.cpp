@@ -644,6 +644,45 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     callBaseCleanup.Dismiss();
 
+    if ( !wxSystemOptions::GetOptionInt("msw.no-manifest-check") )
+    {
+        if ( GetComCtl32Version() < 610 )
+        {
+            // Check if we have wx resources in this program: this is not
+            // mandatory, but recommended and could be the simplest way to
+            // resolve the problem when not using MSVC.
+            wxString maybeNoResources;
+            if ( !::LoadIcon(wxGetInstance(), wxT("wxICON_AAA")) )
+            {
+                maybeNoResources = " (unless you don't include wx/msw/wx.rc "
+                    "from your resource file intentionally, you should do it "
+                    "and use the manifest defined in it)";
+            }
+
+            wxMessageBox
+            (
+                wxString::Format(R"(WARNING!
+
+This application doesn't use a correct manifest specifying
+the use of Common Controls Library v6%s.
+
+This is deprecated and won't be supported in the future
+wxWidgets versions, however for now you can still set
+"msw.no-manifest-check" system option to 1 (see
+https://docs.wxwidgets.org/latest/classwx_system_options.html
+for how to do it) to skip this check.
+
+Please use the appropriate manifest when building the
+application as described at
+https://docs.wxwidgets.org/latest/plat_msw_install.html#msw_manifest
+or contact us by posting to wx-dev@googlegroups.com
+if you believe not using the manifest should remain supported.
+)", maybeNoResources),
+                "wxWidgets Warning"
+            );
+        }
+    }
+
     return true;
 }
 
@@ -779,44 +818,7 @@ wxApp::wxApp()
 {
     m_printMode = wxPRINT_WINDOWS;
 
-    if ( !wxSystemOptions::GetOptionInt("msw.no-manifest-check") )
-    {
-        if ( GetComCtl32Version() < 610 )
-        {
-            // Check if we have wx resources in this program: this is not
-            // mandatory, but recommended and could be the simplest way to
-            // resolve the problem when not using MSVC.
-            wxString maybeNoResources;
-            if ( !::LoadIcon(wxGetInstance(), wxT("wxICON_AAA")) )
-            {
-                maybeNoResources = " (unless you don't include wx/msw/wx.rc "
-                    "from your resource file intentionally, you should do it "
-                    "and use the manifest defined in it)";
-            }
-
-            wxMessageBox
-            (
-                wxString::Format(R"(WARNING!
-
-This application doesn't use a correct manifest specifying
-the use of Common Controls Library v6%s.
-
-This is deprecated and won't be supported in the future
-wxWidgets versions, however for now you can still set
-"msw.no-manifest-check" system option to 1 (see
-https://docs.wxwidgets.org/latest/classwx_system_options.html
-for how to do it) to skip this check.
-
-Please use the appropriate manifest when building the
-application as described at
-https://docs.wxwidgets.org/latest/plat_msw_install.html#msw_manifest
-or contact us by posting to wx-dev@googlegroups.com
-if you believe not using the manifest should remain supported.
-)", maybeNoResources),
-                "wxWidgets Warning"
-            );
-        }
-    }
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()
