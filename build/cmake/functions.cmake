@@ -140,6 +140,14 @@ function(wx_set_common_target_properties target_name)
             )
         endif()
 
+        if(APPLE)
+            # Xcode automatically adds -Wshorten-64-to-32 to C++ flags
+            # and it causes a lot of warnings in wx code
+            list(APPEND common_gcc_clang_compile_options
+                -Wno-shorten-64-to-32
+            )
+        endif()
+
         if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
             list(APPEND common_gcc_clang_compile_options
                 -Wno-ignored-attributes
