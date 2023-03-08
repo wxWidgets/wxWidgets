@@ -54,6 +54,8 @@
 namespace
 {
 
+#if wxUSE_VALIDATORS
+
 class DateValidator : public wxValidator
 {
 public:
@@ -107,6 +109,8 @@ public:
 private:
     const wxString m_format;
 };
+
+#endif // wxUSE_VALIDATORS
 
 } // anonymous namespace
 
