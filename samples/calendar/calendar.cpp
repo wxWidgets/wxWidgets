@@ -39,6 +39,7 @@
 
 #include "wx/calctrl.h"
 #include "wx/splitter.h"
+#include "wx/uilocale.h"
 
 #if wxUSE_DATEPICKCTRL
     #include "wx/datectrl.h"
@@ -68,7 +69,6 @@
 class MyApp : public wxApp
 {
 public:
-    MyApp();
     // override base class virtuals
     // ----------------------------
 
@@ -76,9 +76,6 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() override;
-
-private:
-    wxLocale m_locale;
 };
 
 class MyPanel : public wxPanel
@@ -382,18 +379,15 @@ wxIMPLEMENT_APP(MyApp);
 // the application class
 // ----------------------------------------------------------------------------
 
-MyApp::MyApp() :
-    // Locale affects on the language used in the calendar, and may affect
-    // on the first day of the week.
-    m_locale(wxLANGUAGE_DEFAULT)
-{
-}
-
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
+    // Locale affects on the language used in the calendar, and may affect
+    // the first day of the week, so set it before creating the controls.
+    wxUILocale::UseDefault();
 
     // Create the main application window
     MyFrame *frame = new MyFrame("Calendar wxWidgets sample"

@@ -468,10 +468,12 @@ wxString GetLocaleDesc(const char* when)
     else
         decsep = wxString::Format("UNKNOWN (%s)", decsep);
 
-    return wxString::Format("%s\ncurrent locale:\t%s (decimal separator: %s)",
+    return wxString::Format("%s\ncurrent locale:\t%s "
+                            "(decimal separator: %s, date format=%s)",
                             when,
                             locid.IsEmpty() ? wxString("NONE") : locid.GetTag(),
-                            decsep);
+                            decsep,
+                            curloc.GetInfo(wxLOCALE_SHORT_DATE_FMT));
 }
 
 } // anonymous namespace
