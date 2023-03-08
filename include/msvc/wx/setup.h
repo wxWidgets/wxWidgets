@@ -186,6 +186,7 @@
         #endif
         #if wxUSE_STC && !defined(wxNO_STC_LIB)
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("lexilla"))
         #endif
     #endif // !defined(WXUSINGDLL)
 
