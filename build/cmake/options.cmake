@@ -56,6 +56,11 @@ if(NOT MSVC OR MSVC_VERSION GREATER 1800)
               ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17 20)
 endif()
 
+if(UNIX)
+    wx_option(wxBUILD_LARGEFILE_SUPPORT "support for large files")
+    mark_as_advanced(wxBUILD_LARGEFILE_SUPPORT)
+endif()
+
 if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
