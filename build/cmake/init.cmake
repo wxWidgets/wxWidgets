@@ -341,6 +341,10 @@ if(UNIX)
             wx_option_force_value(wxUSE_LIBICONV OFF)
         endif()
     endif()
+
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        set(HAVE_LARGEFILE_SUPPORT ON)
+    endif()
 endif(UNIX)
 
 if(wxUSE_GUI)

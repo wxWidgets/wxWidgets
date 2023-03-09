@@ -45,6 +45,7 @@ endif()
 if(UNIX)
     wx_setup_definition(wxUSE_UNIX)
     wx_setup_definition(__UNIX__)
+    list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_FILE_OFFSET_BITS=64)
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -345,6 +346,10 @@ if(UNIX)
     # TODO
 
     wx_check_funcs(fdopen)
+
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        wx_check_funcs(fseeko)
+    endif()
 
     if(wxUSE_TARSTREAM)
         wx_check_funcs(sysconf)

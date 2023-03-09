@@ -152,6 +152,10 @@ function(wx_set_common_target_properties target_name)
         )
     endif()
 
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        target_compile_definitions(${target_name} PUBLIC "-D_FILE_OFFSET_BITS=64")
+    endif()
+
     if(CMAKE_USE_PTHREADS_INIT)
         target_compile_options(${target_name} PRIVATE "-pthread")
         # clang++.exe: warning: argument unused during compilation: '-pthread' [-Wunused-command-line-argument]
