@@ -114,7 +114,9 @@ Your *CMakeLists.txt* would look like this:
 ...
 
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
-include(${wxWidgets_USE_FILE})
+if(wxWidgets_USE_FILE) # not defined in CONFIG mode
+    include(${wxWidgets_USE_FILE})
+endif()
 add_executable(myapp myapp.cpp)
 target_link_libraries(myapp ${wxWidgets_LIBRARIES})
 ~~~
