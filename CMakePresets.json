@@ -1,0 +1,91 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "common",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/cmake/output/${presetName}"
+        },
+        {
+            "name": "with_samples",
+            "hidden": true,
+            "cacheVariables": {
+                "wxBUILD_SAMPLES": "ALL"
+            }
+        },
+        {
+            "name": "msw_base",
+            "description": "Base configuration for MSW",
+            "hidden": true,
+            "inherits": "common",
+            "cacheVariables": {
+                "wxUSE_WEBVIEW_EDGE": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "msw_vc17_samples",
+            "inherits": [
+                "with_samples",
+                "msw_base"
+            ],
+            "displayName": "MSW Visual Studio 2022 (with Samples)",
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "msw_vc17",
+            "inherits": "msw_base",
+            "displayName": "MSW Visual Studio 2022",
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "osx_base",
+            "hidden": true,
+            "description": "Base configuration for OSX",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "osx_xcode_samples",
+            "inherits": [
+                "with_samples",
+                "osx_base"
+            ],
+            "displayName": "macOS Xcode (with Samples)",
+            "generator": "Xcode"
+        },
+        {
+            "name": "osx_xcode",
+            "inherits": "osx_base",
+            "displayName": "macOS Xcode",
+            "generator": "Xcode"
+        },
+        {
+            "name": "osx_make_samples",
+            "inherits": [
+                "with_samples",
+                "osx_base"
+            ],
+            "displayName": "macOS Make (with Samples)",
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "osx_make",
+            "inherits": "osx_base",
+            "displayName": "macOS Make",
+            "generator": "Unix Makefiles"
+        }
+    ]
+}
