@@ -22,12 +22,10 @@
 #include "wx/dcbuffer.h"
 #include "wx/odcombo.h"
 
-// This define is necessary to prevent macro clearing
-#define __wxPG_SOURCE_FILE__
-
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/editors.h"
 #include "wx/propgrid/props.h"
+#include "wx/propgrid/private.h"
 
 #if wxPG_USE_RENDERER_NATIVE
     #include "wx/renderer.h"

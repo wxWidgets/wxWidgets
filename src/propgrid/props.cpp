@@ -26,6 +26,8 @@
 
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/editors.h"
+#include "wx/propgrid/props.h"
+#include "wx/propgrid/private.h"
 
 #include <limits>
 

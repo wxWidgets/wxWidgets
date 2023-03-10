@@ -3054,6 +3054,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/propgrid/propgridiface.h
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
+    wx/propgrid/private.h
 </set>
 
 <!-- ====================================================================== -->

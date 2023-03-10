@@ -2839,6 +2839,7 @@ set(PROPGRID_HDR
     wx/propgrid/propgridiface.h
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
+    wx/propgrid/private.h
 )
 
 set(RICHTEXT_SRC

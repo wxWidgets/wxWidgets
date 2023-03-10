@@ -48,16 +48,6 @@ struct wxPGPaintData
 };
 
 
-// space between vertical sides of a custom image
-#define wxPG_CUSTOM_IMAGE_SPACINGY      1
-
-// space between caption and selection rectangle,
-#define wxPG_CAPRECTXMARGIN             2
-
-// horizontally and vertically
-#define wxPG_CAPRECTYMARGIN             1
-
-
 // Base class for wxPropertyGrid cell renderers.
 class WXDLLIMPEXP_PROPGRID wxPGCellRenderer : public wxObjectRefData
 {

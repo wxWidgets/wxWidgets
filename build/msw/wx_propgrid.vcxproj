@@ -503,6 +503,7 @@
     <ClInclude Include="..\..\include\wx\propgrid\propgridiface.h" />
     <ClInclude Include="..\..\include\wx\propgrid\propgridpagestate.h" />
     <ClInclude Include="..\..\include\wx\propgrid\props.h" />
+    <ClInclude Include="..\..\include\wx\propgrid\private.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,10 +24,8 @@
 #include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
 #include "wx/headerctrl.h" // for wxPGHeaderCtrl
 
-// This define is necessary to prevent macro clearing
-#define __wxPG_SOURCE_FILE__
-
 #include "wx/propgrid/manager.h"
+#include "wx/propgrid/private.h"
 
 
 #define wxPG_MAN_ALTERNATE_BASE_ID          11249 // Needed for wxID_ANY madness
