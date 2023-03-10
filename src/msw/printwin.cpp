@@ -170,6 +170,12 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         maxPageNum = m_printDialogData.GetToPage();
     }
 
+    if (m_printDialogData.GetEnableCurrentPage() && m_printDialogData.GetSelectCurrentPage())
+    {
+        minPageNum = m_printDialogData.GetCurrentPage();
+        maxPageNum = minPageNum;
+    }
+
     // The dc we get from the PrintDialog will do multiple copies without help
     // if the device supports it. Loop only if we have created a dc from our
     // own m_printDialogData or the device does not support multiple copies.
