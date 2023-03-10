@@ -907,7 +907,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd->hInstance = nullptr;
     pd->lphPropertyPages = nullptr;
     pd->lpCallback = nullptr;
- 
+
     if ( data.GetAllPages() )
         pd->Flags |= PD_ALLPAGES;
     if ( data.GetSelection() )
@@ -990,7 +990,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     data.EnableSelection( ((pd->Flags & PD_NOSELECTION) != PD_NOSELECTION) );
     data.EnablePageNumbers( ((pd->Flags & PD_NOPAGENUMS) != PD_NOPAGENUMS) );
     data.EnableHelp( ((pd->Flags & PD_SHOWHELP) == PD_SHOWHELP) );
-   
+
 #if(WINVER >= 0x0500)
     data.SetSelectCurrentPage(((pd->Flags & PD_CURRENTPAGE) == PD_CURRENTPAGE));
     data.EnableCurrentPage(((pd->Flags & PD_NOCURRENTPAGE) != PD_NOCURRENTPAGE));
