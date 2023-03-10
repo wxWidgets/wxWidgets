@@ -178,12 +178,15 @@ wxPrintDialogData::wxPrintDialogData()
     m_printMinPage = 0;
     m_printMaxPage = 0;
     m_printNoCopies = 1;
+    m_printCurrentPage = 0;
     m_printAllPages = false;
     m_printCollate = false;
     m_printToFile = false;
     m_printSelection = false;
     m_printEnableSelection = false;
     m_printEnablePageNumbers = true;
+    m_printEnableCurrentPage = false;
+    m_printSelectCurrentPage = false;
 
     wxPrintFactory* factory = wxPrintFactory::GetFactory();
     m_printEnablePrintToFile = ! factory->HasOwnPrintToFile();
@@ -205,6 +208,7 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printMinPage = 1;
     m_printMaxPage = 9999;
     m_printNoCopies = 1;
+    m_printCurrentPage = 0;
     // On Mac the Print dialog always defaults to "All Pages"
 #ifdef __WXMAC__
     m_printAllPages = true;
@@ -218,6 +222,8 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printEnablePageNumbers = true;
     m_printEnablePrintToFile = true;
     m_printEnableHelp = false;
+    m_printEnableCurrentPage = false;
+    m_printSelectCurrentPage = false;
 }
 
 wxPrintDialogData::~wxPrintDialogData()
@@ -231,6 +237,7 @@ void wxPrintDialogData::operator=(const wxPrintDialogData& data)
     m_printMinPage = data.m_printMinPage;
     m_printMaxPage = data.m_printMaxPage;
     m_printNoCopies = data.m_printNoCopies;
+    m_printCurrentPage = data.m_printCurrentPage;
     m_printAllPages = data.m_printAllPages;
     m_printCollate = data.m_printCollate;
     m_printToFile = data.m_printToFile;
@@ -239,6 +246,8 @@ void wxPrintDialogData::operator=(const wxPrintDialogData& data)
     m_printEnablePageNumbers = data.m_printEnablePageNumbers;
     m_printEnableHelp = data.m_printEnableHelp;
     m_printEnablePrintToFile = data.m_printEnablePrintToFile;
+    m_printEnableCurrentPage = data.m_printEnableCurrentPage;
+    m_printSelectCurrentPage = data.m_printSelectCurrentPage;
     m_printData = data.m_printData;
 }
 
