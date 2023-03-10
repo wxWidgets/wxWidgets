@@ -162,6 +162,7 @@ public:
     int GetNoCopies() const { return m_printNoCopies; }
     bool GetAllPages() const { return m_printAllPages; }
     bool GetSelection() const { return m_printSelection; }
+    bool GetCurrentPage() const { return m_printCurrentPage; }
     bool GetCollate() const { return m_printCollate; }
     bool GetPrintToFile() const { return m_printToFile; }
 
@@ -172,16 +173,19 @@ public:
     void SetNoCopies(int v) { m_printNoCopies = v; }
     void SetAllPages(bool flag) { m_printAllPages = flag; }
     void SetSelection(bool flag) { m_printSelection = flag; }
+    void SetCurrentPage(bool flag) { m_printCurrentPage = flag; }
     void SetCollate(bool flag) { m_printCollate = flag; }
     void SetPrintToFile(bool flag) { m_printToFile = flag; }
 
     void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; }
     void EnableSelection(bool flag) { m_printEnableSelection = flag; }
+    void EnableCurrentPage(bool flag) { m_printEnableCurrentPage = flag; }
     void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; }
     void EnableHelp(bool flag) { m_printEnableHelp = flag; }
 
     bool GetEnablePrintToFile() const { return m_printEnablePrintToFile; }
     bool GetEnableSelection() const { return m_printEnableSelection; }
+    bool GetEnableCurrentPage() const { return m_printEnableCurrentPage; }
     bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; }
     bool GetEnableHelp() const { return m_printEnableHelp; }
 
@@ -205,7 +209,9 @@ private:
     bool            m_printCollate;
     bool            m_printToFile;
     bool            m_printSelection;
+    bool            m_printCurrentPage;
     bool            m_printEnableSelection;
+    bool            m_printEnableCurrentPage;
     bool            m_printEnablePageNumbers;
     bool            m_printEnableHelp;
     bool            m_printEnablePrintToFile;

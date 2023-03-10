@@ -351,6 +351,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
     printDialogData.EnableSelection(true);
     printDialogData.EnablePageNumbers(true);
+    printDialogData.EnableCurrentPage(true);
     printDialogData.SetMinPage(1);
     printDialogData.SetMaxPage(2);
     printDialogData.SetFromPage(1);
@@ -548,7 +549,14 @@ void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *
     *selPageFrom = 1;
     *selPageTo = 2;
 
-    if (m_printDlgData->GetSelection())
+    // check if the user just wants to print the current page and if so,
+    // we say, that page 1 is the current page in this example.
+    if (m_printDlgData->GetCurrentPage())
+    {
+        *selPageFrom = 1;
+        *selPageTo = 1;
+    }
+    else if (m_printDlgData->GetSelection())
     {
         // if the user wants to print the selection, we could set the range via
         // selPageFrom and selPageTo, but if the pages are not consecutive, we

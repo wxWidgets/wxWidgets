@@ -710,6 +710,9 @@ public:
         and IsPageSelected() is called later to query whether the page is
         selected and so should be printed.
 
+        If the user chose to print the current page, then @a pageFrom and
+        @a pageTo should be both set to the current page number.
+
         By default this returns (1, 32000) for the page minimum and maximum values, and
         (1, 1) for the required page range.
 

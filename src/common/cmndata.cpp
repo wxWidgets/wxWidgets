@@ -182,7 +182,9 @@ wxPrintDialogData::wxPrintDialogData()
     m_printCollate = false;
     m_printToFile = false;
     m_printSelection = false;
+    m_printCurrentPage = false;
     m_printEnableSelection = false;
+    m_printEnableCurrentPage = false;
     m_printEnablePageNumbers = true;
 
     wxPrintFactory* factory = wxPrintFactory::GetFactory();
@@ -214,7 +216,9 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printCollate = false;
     m_printToFile = false;
     m_printSelection = false;
+    m_printCurrentPage = false;
     m_printEnableSelection = false;
+    m_printEnableCurrentPage = false;
     m_printEnablePageNumbers = true;
     m_printEnablePrintToFile = true;
     m_printEnableHelp = false;
@@ -235,7 +239,9 @@ void wxPrintDialogData::operator=(const wxPrintDialogData& data)
     m_printCollate = data.m_printCollate;
     m_printToFile = data.m_printToFile;
     m_printSelection = data.m_printSelection;
+    m_printCurrentPage = data.m_printCurrentPage;
     m_printEnableSelection = data.m_printEnableSelection;
+    m_printEnableCurrentPage = data.m_printEnableCurrentPage;
     m_printEnablePageNumbers = data.m_printEnablePageNumbers;
     m_printEnableHelp = data.m_printEnableHelp;
     m_printEnablePrintToFile = data.m_printEnablePrintToFile;

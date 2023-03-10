@@ -164,7 +164,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     int minPageNum = minPage, maxPageNum = maxPage;
 
-    if ( m_printDialogData.GetSelection() )
+    if ( m_printDialogData.GetCurrentPage() || m_printDialogData.GetSelection() )
     {
         minPageNum = fromPage;
         maxPageNum = toPage;
