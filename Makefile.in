@@ -4006,6 +4006,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/propgrid/propgridiface.h \
 	wx/propgrid/propgridpagestate.h \
 	wx/propgrid/props.h \
+	wx/propgrid/private.h \
 	wx/ribbon/art.h \
 	wx/ribbon/art_internal.h \
 	wx/ribbon/bar.h \

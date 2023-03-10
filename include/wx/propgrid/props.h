@@ -88,8 +88,6 @@ private:
 // Property classes
 // -----------------------------------------------------------------------
 
-constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_CLASS_SPECIFIC_2;
-
 // Basic property with string value.
 // If value "<composed>" is set, then actual value is formed (or composed)
 // from values of child properties.
@@ -681,14 +679,6 @@ public:
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) override;
 };
-
-// -----------------------------------------------------------------------
-
-// wxBoolProperty, wxFlagsProperty specific flags
-constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_CLASS_SPECIFIC_1;
-// DCC = Double Click Cycles
-constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_CLASS_SPECIFIC_2;
-
 
 // -----------------------------------------------------------------------
 

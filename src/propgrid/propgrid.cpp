@@ -46,12 +46,9 @@
     #include "wx/settings.h"
 #endif
 
-
-// This define is necessary to prevent macro clearing
-#define __wxPG_SOURCE_FILE__
-
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/editors.h"
+#include "wx/propgrid/private.h"
 
 #if wxPG_USE_RENDERER_NATIVE
     #include "wx/renderer.h"
@@ -69,7 +66,7 @@
 // recommended to use either custom or native rendering).
 // If you want them, get wxTreeMultiCtrl by Jorgen Bodde,
 // and copy xpm files from archive to wxPropertyGrid src directory
-// (and also comment/undef wxPG_ICON_WIDTH in propGrid.h
+// (and also comment/undef wxPG_ICON_WIDTH in private.h
 // and set wxPG_USE_RENDERER_NATIVE to 0).
 #ifndef wxPG_ICON_WIDTH
   #if defined(__WXMAC__)
@@ -92,10 +89,6 @@
                                           // but causes normal combobox to spill out under MSW
 #define wxPG_DEFAULT_CURSOR             wxNullCursor
 #define wxPG_PIXELS_PER_UNIT            m_lineHeight
-
-#ifdef wxPG_ICON_WIDTH
-  #define m_iconHeight m_iconWidth
-#endif
 
 //#define wxPG_TOOLTIP_DELAY              1000
 
@@ -253,6 +246,15 @@ void wxPropertyGridInitGlobalsIfNeeded()
 // wxPropertyGrid
 // -----------------------------------------------------------------------
 
+#ifndef wxPG_ICON_WIDTH
+namespace
+{
+    // create two bitmap nodes for drawing
+    static wxBitmap s_expandbmp(expand_xpm);
+    static wxBitmap s_collbmp(collapse_xpm);
+}
+#endif
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxPropertyGrid, wxControl);
 
 wxBEGIN_EVENT_TABLE(wxPropertyGrid, wxControl)
@@ -387,6 +389,7 @@ void wxPropertyGrid::Init1()
     m_iconHeight = 11;
 #else
     m_iconWidth = wxPG_ICON_WIDTH;
+    m_iconHeight = wxPG_ICON_WIDTH;
 #endif
 
     m_gutterWidth = wxPG_GUTTER_MIN;
@@ -444,14 +447,10 @@ void wxPropertyGrid::Init2()
     GetClientSize(&m_width,&m_height);
 
 #ifndef wxPG_ICON_WIDTH
-    // create two bitmap nodes for drawing
-    m_expandbmp = wxBitmap(expand_xpm);
-    m_collbmp = wxBitmap(collapse_xpm);
-
     // calculate average font height for bitmap centering
 
-    m_iconWidth = m_expandbmp.GetWidth();
-    m_iconHeight = m_expandbmp.GetHeight();
+    m_iconWidth = s_expandbmp.GetWidth();
+    m_iconHeight = s_expandbmp.GetHeight();
 #endif
 
     m_curcursor = wxCURSOR_ARROW;
@@ -1961,7 +1960,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     #elif wxPG_ICON_WIDTH
         //
     #else
-        bmp = m_collbmp;
+        bmp = s_collbmp;
     #endif
 
     }
@@ -1978,7 +1977,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
         int _x = r.x+(m_iconWidth/2);
         dc.DrawLine(_x,r.y+2,_x,r.y+m_iconWidth-2);
     #else
-        bmp = m_expandbmp;
+        bmp = s_expandbmp;
     #endif
     }
 

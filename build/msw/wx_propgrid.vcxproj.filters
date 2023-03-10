@@ -83,6 +83,9 @@
     <ClInclude Include="..\..\include\wx\propgrid\props.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\propgrid\private.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\include\wx\msw\setup.h">

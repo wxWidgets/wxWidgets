@@ -25,11 +25,9 @@
     #include "wx/validate.h"
 #endif
 
-// This define is necessary to prevent macro clearing
-#define __wxPG_SOURCE_FILE__
-
 #include "wx/propgrid/propgridpagestate.h"
 #include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/private.h"
 
 #include <numeric>
 

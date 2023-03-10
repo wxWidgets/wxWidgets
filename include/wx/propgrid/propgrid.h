@@ -468,11 +468,6 @@ enum wxPG_KEYBOARD_ACTIONS
 
 // -----------------------------------------------------------------------
 
-#if !defined(__wxPG_SOURCE_FILE__)
-    // Reduce compile time, but still include in user app
-    #include "wx/propgrid/props.h"
-#endif
-
 // -----------------------------------------------------------------------
 
 // wxPropertyGrid is a specialized grid for editing properties
@@ -1393,10 +1388,6 @@ protected:
     virtual wxSize DoGetBestSize() const override;
     virtual void DoEnable(bool enable) override;
 
-#ifndef wxPG_ICON_WIDTH
-    wxBitmap            m_expandbmp, m_collbmp;
-#endif
-
     wxCursor            m_cursorSizeWE;
 
     // wxWindow pointers to editor control(s).
@@ -1449,12 +1440,9 @@ protected:
     // This is also calculated in the gutter
     int                 m_iconWidth;
 
-#ifndef wxPG_ICON_WIDTH
-
     // The image height of the [+] icon.
     // This is calculated as minimal size and to align
     int                 m_iconHeight;
-#endif
 
     // Current cursor id.
     int                 m_curcursor;
@@ -1875,9 +1863,6 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
-// Events used only internally
-wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
-wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 
 #else
     enum {

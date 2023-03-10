@@ -19,6 +19,7 @@
     #include "wx/colour.h"
     #include "wx/font.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
     #include "wx/validate.h"
 #endif
 
