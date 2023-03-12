@@ -522,3 +522,107 @@ BENCHMARK_FUNC(ParseHTML)
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// conversions between strings and numbers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+const struct ToDoubleData
+{
+    const char *str;
+    double value;
+    bool ok;
+} toDoubleData[] =
+{
+    { "1", 1, true },
+    { "1.23", 1.23, true },
+    { ".1", .1, true },
+    { "1.", 1, true },
+    { "1..", 0, false },
+    { "0", 0, true },
+    { "a", 0, false },
+    { "12345", 12345, true },
+    { "-1", -1, true },
+    { "--1", 0, false },
+    { "-3E-5", -3E-5, true },
+    { "-3E-abcde5", 0, false },
+};
+
+} // anonymous namespace
+
+BENCHMARK_FUNC(StringToDouble)
+{
+    double d = 0.;
+    for ( const auto& data : toDoubleData )
+    {
+        if ( wxString(data.str).ToDouble(&d) != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StringToCDouble)
+{
+    double d = 0.;
+    for ( const auto& data : toDoubleData )
+    {
+        if ( wxString(data.str).ToCDouble(&d) != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(Strtod)
+{
+    double d = 0.;
+    char* end = nullptr;
+    for ( const auto& data : toDoubleData )
+    {
+        d = strtod(data.str, &end);
+
+        if ( (end && *end == '\0') != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+#if wxCHECK_CXX_STD(201703L)
+
+#include <charconv>
+
+#ifdef __cpp_lib_to_chars
+BENCHMARK_FUNC(StdFromChars)
+{
+    double d = 0.;
+    for ( const auto& data : toDoubleData )
+    {
+        const auto end = data.str + strlen(data.str);
+        const auto res = std::from_chars(data.str, end, d);
+
+        if ( (res.ptr == end && res.ec == std::errc{}) != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+#endif // __cpp_lib_to_chars
+
+#endif // C++17
