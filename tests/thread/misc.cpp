@@ -143,6 +143,7 @@ public:
         m_mutex->Unlock();
 
         //wxPrintf(wxT("Thread %lu finished to wait, exiting.\n"), GetId());
+        gs_cond.Post();
 
         return nullptr;
     }
@@ -389,29 +390,29 @@ void MiscThreadTestCase::TestThreadConditions()
     }
 
     // wait until all threads run
-    // NOTE: main thread is waiting for the other threads to start
     size_t nRunning = 0;
     while ( nRunning < WXSIZEOF(threads) )
     {
         CPPUNIT_ASSERT_EQUAL( wxSEMA_NO_ERROR, gs_cond.Wait() );
 
         nRunning++;
-
-        // note that main thread is already running
     }
 
     wxMilliSleep(500);
 
-#if 1
     // now wake one of them up
     CPPUNIT_ASSERT_EQUAL( wxCOND_NO_ERROR, condition.Signal() );
-#endif
 
-    wxMilliSleep(200);
+    CPPUNIT_ASSERT_EQUAL( wxSEMA_NO_ERROR, gs_cond.Wait() );
+    size_t nFinished = 1;
 
     // wake all the (remaining) threads up, so that they can exit
     CPPUNIT_ASSERT_EQUAL( wxCOND_NO_ERROR, condition.Broadcast() );
 
-    // give them time to terminate (dirty!)
-    wxMilliSleep(500);
+    while ( nFinished < WXSIZEOF(threads) )
+    {
+        CPPUNIT_ASSERT_EQUAL( wxSEMA_NO_ERROR, gs_cond.Wait() );
+
+        nFinished++;
+    }
 }
