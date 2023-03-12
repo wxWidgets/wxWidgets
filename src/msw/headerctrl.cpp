@@ -660,7 +660,7 @@ wxMSWHeaderCtrlCustomDraw* wxMSWHeaderCtrl::GetCustomDraw()
     // custom font, the native control handles the font just fine on its own,
     // so if our custom colours were reset, don't bother with custom drawing
     // any longer.
-    if ( !m_hasBgCol && !m_hasFgCol )
+    if ( !m_hasBgCol && !m_hasFgCol && !wxMSWDarkMode::IsActive() )
     {
         if ( m_customDraw )
         {
