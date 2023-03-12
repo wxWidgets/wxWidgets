@@ -37,13 +37,16 @@ __CRT_UUID_DECL(ICoreWebView2ExecuteScriptCompletedHandler, 0x49511172, 0xcc67, 
 __CRT_UUID_DECL(ICoreWebView2NavigationCompletedEventHandler, 0xd33a35bf, 0x1c49, 0x4f98, 0x93,0xab, 0x00,0x6e,0x05,0x33,0xfe,0x1c);
 __CRT_UUID_DECL(ICoreWebView2NavigationStartingEventHandler, 0x9adbe429, 0xf36d, 0x432b, 0x9d,0xdc, 0xf8,0x88,0x1f,0xbd,0x76,0xe3);
 __CRT_UUID_DECL(ICoreWebView2NewWindowRequestedEventHandler, 0xd4c185fe, 0xc81c, 0x4989, 0x97,0xaf, 0x2d,0x3f,0xa7,0xab,0x56,0x51);
+__CRT_UUID_DECL(ICoreWebView2Settings3, 0xfdb5ab74, 0xaf33, 0x4854, 0x84,0xf0,0x0a,0x63,0x1d,0xeb,0x5e,0xba);
 __CRT_UUID_DECL(ICoreWebView2SourceChangedEventHandler, 0x3c067f9f, 0x5388, 0x4772, 0x8b,0x48, 0x79,0xf7,0xef,0x1a,0xb3,0x7c);
 __CRT_UUID_DECL(ICoreWebView2WebMessageReceivedEventHandler, 0x57213f19, 0x00e6, 0x49fa, 0x8e,0x07, 0x89,0x8e,0xa0,0x1e,0xcb,0xd2);
 __CRT_UUID_DECL(ICoreWebView2WebResourceRequestedEventHandler, 0xab00b74c, 0x15f1, 0x4646, 0x80, 0xe8, 0xe7, 0x63, 0x41, 0xd2, 0x5d, 0x71);
-__CRT_UUID_DECL(ICoreWebView2Settings3, 0xfdb5ab74, 0xaf33, 0x4854, 0x84,0xf0,0x0a,0x63,0x1d,0xeb,0x5e,0xba);
+__CRT_UUID_DECL(ICoreWebView2WindowCloseRequestedEventHandler, 0x5c19e9e0,0x092f,0x486b, 0xaf,0xfa,0xca,0x82,0x31,0x91,0x30,0x39);
 #endif
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
+
+class wxWebViewEdgeParentWindowInfo;
 
 class wxWebViewEdgeImpl
 {
@@ -53,12 +56,15 @@ public:
 
     bool Create();
 
+    wxWebViewEdge* CreateChildWebView(std::shared_ptr<wxWebViewEdgeParentWindowInfo> parentWindowInfo);
+
     wxWebViewEdge* m_ctrl;
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2_2> m_webView;
     wxCOMPtr<ICoreWebView2Controller> m_webViewController;
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
+    std::shared_ptr<wxWebViewEdgeParentWindowInfo> m_parentWindowInfo;
 
     bool m_initialized;
     bool m_isBusy;
@@ -85,6 +91,7 @@ public:
     EventRegistrationToken m_containsFullScreenElementChangedToken = { };
     EventRegistrationToken m_webMessageReceivedToken = { };
     EventRegistrationToken m_webResourceRequestedToken = { };
+    EventRegistrationToken m_windowCloseRequestedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
@@ -98,6 +105,7 @@ public:
     HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
     HRESULT OnWebResourceRequested(ICoreWebView2* sender, ICoreWebView2WebResourceRequestedEventArgs* args);
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
+    HRESULT OnWindowCloseRequested(ICoreWebView2* sender, IUnknown* args);
 
     HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);

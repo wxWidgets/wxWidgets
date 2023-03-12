@@ -120,6 +120,8 @@ private:
     void OnTopLevelParentIconized(wxIconizeEvent& event);
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewEdge);
+
+    friend class wxWebViewEdgeImpl;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryEdge : public wxWebViewFactory

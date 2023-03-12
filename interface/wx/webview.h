@@ -162,6 +162,91 @@ enum wxWebViewIE_EmulationLevel
 };
 
 /**
+    A class describing the window information for a new child window.
+    This class is available via wxWebViewEvent::GetTargetWindowInfo()
+    while handling @c wxEVT_WEBVIEW_NEWWINDOW.
+
+    If the new window should be created use CreateChildWebView() while
+    processing the event. This will ensure that the new web view is
+    accessible from JavaScript within the originating wxWebView.
+
+
+    @since 3.3.0
+*/
+class WXDLLIMPEXP_WEBVIEW wxWebViewWindowInfo
+{
+public:
+    /**
+        Returns the position of the new window if specified by
+        a @c window.open() call.
+    */
+    virtual wxPoint GetPosition() const = 0;
+
+    /**
+        Returns the size of the new window if specified by
+        a @c window.open() call.
+    */
+    virtual wxSize GetSize() const = 0;
+
+    /**
+        Returns @true if the target window is expected to display
+        a menu bar as specified by a @c window.open() call.
+    */
+    virtual bool ShouldDisplayMenuBar() const = 0;
+
+    /**
+        Returns @true if the target window is expected to display
+        a status bar as specified by a @c window.open() call.
+    */
+    virtual bool ShouldDisplayStatusBar() const = 0;
+
+    /**
+        Returns @true if the target window is expected to display
+        a tool bar as specified by a @c window.open() call.
+    */
+    virtual bool ShouldDisplayToolBar() const = 0;
+
+    /**
+        Returns @true if the target window is expected to display
+        scroll bars as specified by a @c window.open() call.
+    */
+    virtual bool ShouldDisplayScrollBars() const = 0;
+
+    /**
+        Create a new child web view for the target window.
+
+        This @b must be created in the event handler for @c wxEVT_WEBVIEW_NEWWINDOW
+        and wxWebView::Create() @b must be called directly.
+
+        The requested URL will be loaded automatically in the new child web view.
+
+        Sample C++ code handling the event:
+        @code
+            // Bind handler
+            m_webView->Bind(wxEVT_WEBVIEW_NEWWINDOW, [](wxWebViewEvent& evt) {
+                // Get target window info
+                wxWebViewWindowInfo* info = evt.GetTargetWindowInfo();
+                // Create a top level window for the child web view
+                wxWindow* win = new wxWindow(this, wxID_ANY, info->GetPosition(), info->GetSize());
+                wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+                // Create the child web view
+                wxWebView* childWebView = info->CreateChildWebView();
+                // Place the child web view into the window
+                childWebView->Create(win, wxID_ANY);
+                sizer->Add(childWebView, 1, wxEXPAND);
+            });
+        @endcode
+
+        Sample JavaScript opening a new window:
+        @code
+            window.open("http://www.wxwidgets.org", "newWindow", "width=400,height=400");
+        @endcode
+
+    */
+    virtual wxWebView* CreateChildWebView() = 0;
+};
+
+/**
     @class wxWebViewHandlerRequest
 
     A class giving access to various parameters of a webview request.
@@ -532,7 +617,7 @@ public:
 /**
     @class wxWebView
 
-    This control may be used to render web (HTML / CSS / javascript) documents.
+    This control may be used to render web (HTML / CSS / JavaScript) documents.
     It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Internet Explorer or Edge on MSW and
@@ -707,7 +792,12 @@ public:
     @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
        Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
-       happen, for example to load the page in a new window or tab.
+       happen, for example to load the page in a new window or tab. For usage
+       details see wxWebViewWindowInfo::CreateChildWebView().
+    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+       Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
+       a window is requested to be closed.
+       only available in wxWidgets 3.3.0 or later.
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
@@ -1120,13 +1210,13 @@ public:
             });
         @endcode
 
-        Sample javascript sending a script message:
+        Sample JavaScript sending a script message:
         @code
             // Send sample message body
             window.wx_msg.postMessage('This is a message body');
         @endcode
 
-        @param name Name of the message handler that can be used from javascript
+        @param name Name of the message handler that can be used from JavaScript
         @return @true if the handler could be added, @false if it could not be added.
 
         @see RemoveScriptMessageHandler()
@@ -1153,7 +1243,7 @@ public:
     /**
         Injects the specified script into the webpage's content.
 
-        @param javascript The javascript code to add.
+        @param javascript The JavaScript code to add.
         @param injectionTime Specifies when the script will be executed.
         @return Returns true if the script was added successfully.
 
@@ -1599,7 +1689,12 @@ public:
     @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
        Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
-       happen, for example to load the page in a new window or tab.
+       happen, for example to load the page in a new window or tab. For usage
+       details see wxWebViewWindowInfo::CreateChildWebView().
+    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+       Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
+       a window is requested to be closed.
+       only available in wxWidgets 3.3.0 or later.
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
        Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
@@ -1660,6 +1755,17 @@ public:
         @since 3.1.5
     */
     const wxString& GetMessageHandler() const;
+
+    /**
+        Get information about the target window. Only valid for events of type
+        @c wxEVT_WEBVIEW_NEWWINDOW
+
+        @note This is only available with the macOS and the Edge backend.
+
+        @see wxWebViewWindowInfo
+        @since 3.3.0
+    */
+    wxWebViewWindowInfo* GetTargetWindowInfo() const;
 
     /**
         Returns true the script execution failed. Only valid for events of type

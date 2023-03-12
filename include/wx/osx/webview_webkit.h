@@ -27,12 +27,18 @@
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
+class wxWebViewWindowInfoWebKit;
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 
-    wxWebViewWebKit() { Init(); }
+    wxWebViewWebKit(wxWebViewWindowInfoWebKit* parentWindowInfo = nullptr)
+    {
+        m_parentWindowInfo = parentWindowInfo;
+        Init();
+    }
     wxWebViewWebKit(wxWindow *parent,
                     wxWindowID winID = wxID_ANY,
                     const wxString& strURL = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -118,6 +124,7 @@ private:
     OSXWebViewPtr m_webView;
     wxStringToWebHandlerMap m_handlers;
     wxString m_customUserAgent;
+    wxWebViewWindowInfoWebKit* m_parentWindowInfo = nullptr;
 
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
