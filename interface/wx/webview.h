@@ -168,7 +168,7 @@ enum wxWebViewIE_EmulationLevel
 
     If the new window should be created use CreateChildWebView() while
     processing the event. This will ensure that the new web view is
-    accessible from java script within the originating wxWebView.
+    accessible from JavaScript within the originating wxWebView.
 
 
     @since 3.3.0
@@ -237,7 +237,7 @@ public:
             });
         @endcode
 
-        Sample javascript opening a new window:
+        Sample JavaScript opening a new window:
         @code
             window.open("http://www.wxwidgets.org", "newWindow", "width=400,height=400");
         @endcode
@@ -617,7 +617,7 @@ public:
 /**
     @class wxWebView
 
-    This control may be used to render web (HTML / CSS / javascript) documents.
+    This control may be used to render web (HTML / CSS / JavaScript) documents.
     It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Internet Explorer or Edge on MSW and
@@ -1210,13 +1210,13 @@ public:
             });
         @endcode
 
-        Sample javascript sending a script message:
+        Sample JavaScript sending a script message:
         @code
             // Send sample message body
             window.wx_msg.postMessage('This is a message body');
         @endcode
 
-        @param name Name of the message handler that can be used from javascript
+        @param name Name of the message handler that can be used from JavaScript
         @return @true if the handler could be added, @false if it could not be added.
 
         @see RemoveScriptMessageHandler()
@@ -1243,7 +1243,7 @@ public:
     /**
         Injects the specified script into the webpage's content.
 
-        @param javascript The javascript code to add.
+        @param javascript The JavaScript code to add.
         @param injectionTime Specifies when the script will be executed.
         @return Returns true if the script was added successfully.
 
