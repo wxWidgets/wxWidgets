@@ -101,15 +101,6 @@ if(NOT wxBUILD_COMPATIBILITY STREQUAL "NONE")
     endif()
 endif()
 
-if(wxUSE_NO_RTTI)
-    if(MSVC)
-        add_compile_options("/GR-")
-    elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
-        wx_string_append(CMAKE_CXX_FLAGS " -fno-rtti")
-    endif()
-    add_definitions("-DwxNO_RTTI")
-endif()
-
 # Build wxBUILD_FILE_ID used for config and setup path
 #TODO: build different id for WIN32
 set(wxBUILD_FILE_ID "${wxBUILD_TOOLKIT}${wxBUILD_WIDGETSET}-")
@@ -340,6 +331,10 @@ if(UNIX)
             message(WARNING "iconv not found")
             wx_option_force_value(wxUSE_LIBICONV OFF)
         endif()
+    endif()
+
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        set(HAVE_LARGEFILE_SUPPORT ON)
     endif()
 endif(UNIX)
 
