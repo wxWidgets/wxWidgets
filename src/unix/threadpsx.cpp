@@ -1583,6 +1583,10 @@ wxThreadError wxThread::Delete(ExitCode *rc, wxThreadWait WXUNUSED(waitMode))
     // anything at all).
     OnDelete();
 
+    // If it's currently paused, we need to resume it first.
+    if ( state == STATE_PAUSED )
+        m_internal->Resume();
+
     m_critsect.Leave();
 
     switch ( state )
@@ -1598,12 +1602,6 @@ wxThreadError wxThread::Delete(ExitCode *rc, wxThreadWait WXUNUSED(waitMode))
         case STATE_EXITED:
             // nothing to do
             break;
-
-        case STATE_PAUSED:
-            // resume the thread first
-            m_internal->Resume();
-
-            wxFALLTHROUGH;
 
         default:
             if ( !isDetached )
