@@ -1954,6 +1954,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/datectrl.h
     wx/msw/calctrl.h
     wx/generic/activityindicator.h
+    wx/msw/darkmode.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->

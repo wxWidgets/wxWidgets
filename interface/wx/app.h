@@ -1212,6 +1212,8 @@ public:
             dark mode for the application, even if the system doesn't use the
             dark mode by default. Otherwise dark mode is only used if it is the
             default mode for the applications on the current system.
+        @param settings If specified, allows to customize dark mode appearance.
+            Please see wxDarkModeSettings documentation for more information.
 
         @return @true if dark mode support was enabled, @false if it couldn't
             be done, most likely because the system doesn't support dark mode.
@@ -1220,7 +1222,8 @@ public:
 
         @since 3.3.0
      */
-    bool MSWEnableDarkMode(int flags = 0);
+    bool
+    MSWEnableDarkMode(int flags = 0, wxDarkModeSettings* settings = nullptr);
 
     //@}
 };

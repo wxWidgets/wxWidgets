@@ -1844,6 +1844,7 @@ set(MSW_HDR
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
     wx/generic/activityindicator.h
+    wx/msw/darkmode.h
 )
 
 set(MSW_RSC

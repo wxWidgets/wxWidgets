@@ -1741,6 +1741,9 @@
     <ClInclude Include="..\..\include\wx\msw\custombgwin.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\darkmode.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\datectrl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
