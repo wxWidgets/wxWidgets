@@ -27,7 +27,6 @@
 
 #include "wx/thread.h"
 #include "wx/except.h"
-#include "wx/scopeguard.h"
 
 #include "wx/private/threadinfo.h"
 
@@ -839,11 +838,6 @@ void *wxPthreadStart(void *ptr)
 
 void *wxThreadInternal::PthreadStart(wxThread *thread)
 {
-    // Ensure that we clean up thread-specific data before exiting the thread
-    // and do it as late as possible as wxLog calls can recreate it and may
-    // happen until the very end.
-    wxON_BLOCK_EXIT0(wxThreadSpecificInfo::ThreadCleanUp);
-
     wxThreadInternal *pthread = thread->m_internal;
 
     wxLogTrace(TRACE_THREADS, wxT("Thread %p started."), THR_ID(pthread));
@@ -1740,6 +1734,11 @@ void wxThread::Exit(ExitCode status)
         OnExit();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+
+    // Clean up thread-specific data before exiting the thread (we do it as
+    // late as possible as wxLog calls can recreate it and may happen until the
+    // very end).
+    wxThreadSpecificInfo::ThreadCleanUp();
 
     // delete C++ thread object if this is a detached thread - user is
     // responsible for doing this for joinable ones
