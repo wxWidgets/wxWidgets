@@ -1575,9 +1575,15 @@ wxThreadError wxThread::Delete(ExitCode *rc, wxThreadWait WXUNUSED(waitMode))
     // ask the thread to stop
     m_internal->SetCancelFlag();
 
-    m_critsect.Leave();
-
+    // Normally we should never call out while holding the lock (on m_critsect
+    // in this case), but we can't do it later because as soon as we unlock it,
+    // this object may be destroyed as the thread executing its Entry() may
+    // call TestDestroy() and decide to exit at any moment, so we have to do it
+    // now and hope that OnDelete() doesn't do anything stupid (or, preferably,
+    // anything at all).
     OnDelete();
+
+    m_critsect.Leave();
 
     switch ( state )
     {
