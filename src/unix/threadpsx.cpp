@@ -1774,6 +1774,8 @@ bool wxThread::TestDestroy()
 
     m_critsect.Enter();
 
+    const bool wasCancelled = m_internal->WasCancelled();
+
     if ( m_internal->GetState() == STATE_PAUSED )
     {
         m_internal->SetReallyPaused(true);
@@ -1791,7 +1793,7 @@ bool wxThread::TestDestroy()
         m_critsect.Leave();
     }
 
-    return m_internal->WasCancelled();
+    return wasCancelled;
 }
 
 wxThread::~wxThread()
