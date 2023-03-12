@@ -51,9 +51,10 @@ enum class wxMenuColour
                 case wxSYS_COLOUR_BTNFACE:
                     // Default colour used here is 0x202020.
                     return wxColour(0x402020);
-            }
 
-            return wxDarkModeSettings::GetColour(index);
+                default:
+                    return wxDarkModeSettings::GetColour(index);
+            }
         }
     };
 
