@@ -635,6 +635,11 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
     *toPage = 1;
 }
 
+bool wxPrintout::IsPageSelected(int WXUNUSED(page))
+{
+    return false;
+}
+
 bool wxPrintout::SetUp(wxDC& dc)
 {
     wxCHECK_MSG( dc.IsOk(), false, "should have a valid DC to set up" );
