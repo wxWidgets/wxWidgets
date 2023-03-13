@@ -799,10 +799,10 @@ wxWindowsPrintDialog::~wxWindowsPrintDialog()
         GlobalFree(pd->hDevMode);
 
     if (pd && pd->lpPageRanges)
-        GlobalFree(pd->lpPageRanges);
+        delete pd->lpPageRanges;
 
     if ( pd )
-        GlobalFree(pd);
+        delete pd;
 
     if (m_destroyDC && m_printerDC)
         delete m_printerDC;
@@ -863,9 +863,8 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     if (pd)
         return false;
 
-    pd = (LPPRINTDLGEX) GlobalAlloc(GPTR, sizeof(PRINTDLGEX));
-    if (!pd)
-        return false;
+    pd = new PRINTDLGEX;
+    memset(pd, 0, sizeof(PRINTDLGEX));
 
     m_printDlg = (void*) pd;
 
@@ -878,61 +877,53 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd->hDevNames = static_cast<HGLOBAL>(native_data->GetDevNames());
     native_data->SetDevNames(nullptr);
 
-    pd->hDC = nullptr;
+    pd->lStructSize = sizeof(PRINTDLGEX);
     pd->nStartPage = START_PAGE_GENERAL;
-    pd->nMinPage = (DWORD)data.GetMinPage();
-    pd->nMaxPage = (DWORD)data.GetMaxPage();
-    pd->nCopies = (DWORD)data.GetNoCopies();
+    pd->nMinPage = (DWORD) data.GetMinPage();
+    pd->nMaxPage = (DWORD) data.GetMaxPage();
+    pd->nCopies = (DWORD) data.GetNoCopies();
 
-    // currently only one page range is supported
-    pd->nPageRanges = 1;
-    pd->nMaxPageRanges = 1;
-    pd->lpPageRanges = (LPPRINTPAGERANGE) GlobalAlloc(GPTR, 1 * sizeof(PRINTPAGERANGE));
-    if (pd->lpPageRanges)
+    // Required only if PD_NOPAGENUMS flag is not set.
+    // Currently only one page range is supported.
+    if (data.GetEnablePageNumbers())
     {
+        pd->nPageRanges = 1;
+        pd->nMaxPageRanges = 1;
+        pd->lpPageRanges = new PRINTPAGERANGE[1];
         pd->lpPageRanges[0].nFromPage = (DWORD)data.GetFromPage();
         pd->lpPageRanges[0].nToPage = (DWORD)data.GetToPage();
     }
-    else
-    {
-        pd->nPageRanges = 0;
-        pd->nMaxPageRanges = 0;
-        pd->Flags |= PD_NOPAGENUMS;
-    }
 
     pd->Flags = PD_RETURNDC;
-    pd->lStructSize = sizeof(PRINTDLGEX);
-
-    pd->hwndOwner = nullptr;
-    pd->hInstance = nullptr;
-    pd->lphPropertyPages = nullptr;
-    pd->lpCallback = nullptr;
 
     if ( data.GetAllPages() )
         pd->Flags |= PD_ALLPAGES;
-    if ( data.GetSelection() )
-        pd->Flags |= PD_SELECTION;
+
     if ( data.GetCollate() )
         pd->Flags |= PD_COLLATE;
-    if ( data.GetPrintToFile() )
-        pd->Flags |= PD_PRINTTOFILE;
-    if ( !data.GetEnablePrintToFile() )
-        pd->Flags |= PD_DISABLEPRINTTOFILE;
-    if ( !data.GetEnableSelection() )
-        pd->Flags |= PD_NOSELECTION;
-    if ( !data.GetEnablePageNumbers() )
-        pd->Flags |= PD_NOPAGENUMS;
-    else if ( (!data.GetAllPages()) && (!data.GetSelection()) && (data.GetFromPage() != 0) && (data.GetToPage() != 0))
-        pd->Flags |= PD_PAGENUMS;
-    if ( data.GetEnableHelp() )
+
+    if (data.GetEnableHelp())
         pd->Flags |= PD_SHOWHELP;
 
-#if(WINVER >= 0x0500)
+    if (!data.GetEnablePrintToFile())
+        pd->Flags |= PD_DISABLEPRINTTOFILE;
+    else if (data.GetPrintToFile())
+        pd->Flags |= PD_PRINTTOFILE;
+
+    if (!data.GetEnableSelection())
+        pd->Flags |= PD_NOSELECTION;
+    else if (data.GetSelection())
+        pd->Flags |= PD_SELECTION;
+
     if (!data.GetEnableCurrentPage())
         pd->Flags |= PD_NOCURRENTPAGE;
-    if (data.GetSelectCurrentPage())
+    else if(data.GetCurrentPage())
         pd->Flags |= PD_CURRENTPAGE;
-#endif
+
+    if (!data.GetEnablePageNumbers())
+        pd->Flags |= PD_NOPAGENUMS;
+    else if ((!data.GetAllPages()) && (!data.GetSelection()) && (!data.GetCurrentPage()) && (data.GetFromPage() != 0) && (data.GetToPage() != 0))
+        pd->Flags |= PD_PAGENUMS;
 
     return true;
 }
@@ -982,19 +973,18 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     data.SetMaxPage( pd->nMaxPage );
     data.SetNoCopies( pd->nCopies );
 
-    data.SetAllPages( (((pd->Flags & PD_PAGENUMS) != PD_PAGENUMS) && ((pd->Flags & PD_SELECTION) != PD_SELECTION)) );
+    data.SetAllPages( ((pd->Flags & (PD_PAGENUMS | PD_SELECTION | PD_CURRENTPAGE)) == 0) );
     data.SetSelection( ((pd->Flags & PD_SELECTION) == PD_SELECTION) );
+    data.SetCurrentPage(((pd->Flags & PD_CURRENTPAGE) == PD_CURRENTPAGE));
+
     data.SetCollate( ((pd->Flags & PD_COLLATE) == PD_COLLATE) );
     data.SetPrintToFile( ((pd->Flags & PD_PRINTTOFILE) == PD_PRINTTOFILE) );
+
     data.EnablePrintToFile( ((pd->Flags & PD_DISABLEPRINTTOFILE) != PD_DISABLEPRINTTOFILE) );
     data.EnableSelection( ((pd->Flags & PD_NOSELECTION) != PD_NOSELECTION) );
+    data.EnableCurrentPage(((pd->Flags & PD_NOCURRENTPAGE) != PD_NOCURRENTPAGE));
     data.EnablePageNumbers( ((pd->Flags & PD_NOPAGENUMS) != PD_NOPAGENUMS) );
     data.EnableHelp( ((pd->Flags & PD_SHOWHELP) == PD_SHOWHELP) );
-
-#if(WINVER >= 0x0500)
-    data.SetSelectCurrentPage(((pd->Flags & PD_CURRENTPAGE) == PD_CURRENTPAGE));
-    data.EnableCurrentPage(((pd->Flags & PD_NOCURRENTPAGE) != PD_NOCURRENTPAGE));
-#endif
 
     return true;
 }
