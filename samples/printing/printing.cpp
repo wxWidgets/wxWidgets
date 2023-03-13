@@ -356,9 +356,21 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
     wxPrintDialogData printDialogData(* g_printData);
+    printDialogData.EnableSelection(true);
+    printDialogData.EnablePageNumbers(true);
+    printDialogData.EnableCurrentPage(true);
+    printDialogData.SetMinPage(1);
+    printDialogData.SetMaxPage(2);
+    printDialogData.SetFromPage(1);
+    printDialogData.SetToPage(2);
+    printDialogData.SetAllPages(true);
 
     wxPrinter printer(&printDialogData);
-    MyPrintout printout(this, "My printout");
+
+    // wxPrinter copies printDialogData intrnally, so we have to pass this instance
+    // in order to evalute users inputs.
+    MyPrintout printout(this, &printer.GetPrintDialogData(), "My printout");
+
     if (!printer.Print(this, &printout, true /*prompt*/))
     {
         if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
@@ -381,7 +393,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview =
-        new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
+        new wxPrintPreview(new MyPrintout(this, &printDialogData), new MyPrintout(this, &printDialogData), &printDialogData);
     if (!preview->IsOk())
     {
         delete preview;
@@ -541,11 +553,34 @@ void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *
     *maxPage = 2;
     *selPageFrom = 1;
     *selPageTo = 2;
+
+    // check if the user just wants to print the current page and if so,
+    // we say, that page 1 is the current page in this example.
+    if (m_printDlgData->GetCurrentPage())
+    {
+        *selPageFrom = 1;
+        *selPageTo = 1;
+    }
+    else if (m_printDlgData->GetSelection())
+    {
+        // if the user wants to print the selection, we could set the range via
+        // selPageFrom and selPageTo, but if the pages are not consecutive, we
+        // set selPageFrom and selPageTo to the maximum range and we use
+        // IsPageSelected() to tell the printing system which page is selected.
+
+        // in our example below, only page 2 is selected.
+    }
 }
 
 bool MyPrintout::HasPage(int pageNum)
 {
     return (pageNum == 1 || pageNum == 2);
+}
+
+bool MyPrintout::IsPageSelected(int pageNum)
+{
+    // to demonstrate selection, we just simulate selection of page 2
+    return pageNum == 2;
 }
 
 void MyPrintout::DrawPageOne()
