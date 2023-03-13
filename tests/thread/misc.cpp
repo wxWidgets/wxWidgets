@@ -19,6 +19,9 @@
 #include "wx/thread.h"
 #include "wx/utils.h"
 
+#include <memory>
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -194,8 +197,6 @@ private:
     int m_i;
 };
 
-WX_DEFINE_ARRAY_PTR(wxThread *, ArrayThreads);
-
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -277,18 +278,19 @@ void MiscThreadTestCase::TestSemaphore()
     static const int SEM_LIMIT = 3;
 
     wxSemaphore sem(SEM_LIMIT, SEM_LIMIT);
-    ArrayThreads threads;
+    std::vector<std::unique_ptr<MySemaphoreThread>> threads;
 
     for ( int i = 0; i < 3*SEM_LIMIT; i++ )
     {
-        threads.Add(new MySemaphoreThread(i, &sem));
-        CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, threads.Last()->Run() );
+        std::unique_ptr<MySemaphoreThread> t{new MySemaphoreThread(i, &sem)};
+        CPPUNIT_ASSERT_EQUAL( wxTHREAD_NO_ERROR, t->Run() );
+
+        threads.push_back(std::move(t));
     }
 
-    for ( size_t n = 0; n < threads.GetCount(); n++ )
+    for ( auto& t : threads )
     {
-        CPPUNIT_ASSERT_EQUAL( 0, (wxUIntPtr)threads[n]->Wait() );
-        delete threads[n];
+        CPPUNIT_ASSERT_EQUAL( 0, (wxUIntPtr)t->Wait() );
     }
 }
 
