@@ -164,16 +164,15 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     int minPageNum = minPage, maxPageNum = maxPage;
 
-    if ( !(m_printDialogData.GetAllPages() || m_printDialogData.GetSelection()) )
+    if (m_printDialogData.GetCurrentPage() || m_printDialogData.GetSelection())
+    {
+        minPageNum = fromPage;
+        maxPageNum = toPage;
+    }
+    else if ( !m_printDialogData.GetAllPages() )
     {
         minPageNum = m_printDialogData.GetFromPage();
         maxPageNum = m_printDialogData.GetToPage();
-    }
-
-    if (m_printDialogData.GetEnableCurrentPage() && m_printDialogData.GetSelectCurrentPage())
-    {
-        minPageNum = m_printDialogData.GetCurrentPage();
-        maxPageNum = minPageNum;
     }
 
     // The dc we get from the PrintDialog will do multiple copies without help
@@ -204,6 +203,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
               pn <= maxPageNum && printout->HasPage(pn);
               pn++ )
         {
+            // allow non-consecutive selected pages
+            if (m_printDialogData.GetSelection() && !printout->IsPageSelected(pn))
+                continue;
+
             win->SetProgress(pn - minPageNum + 1,
                              maxPageNum - minPageNum + 1,
                              copyCount, maxCopyCount);
