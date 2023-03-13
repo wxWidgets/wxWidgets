@@ -60,7 +60,11 @@ class DateValidator : public wxValidator
 {
 public:
     explicit DateValidator(const wxString& format) : m_format(format) {}
-    DateValidator(const DateValidator& val) = default;
+    DateValidator(const DateValidator& val)
+        : wxValidator(val),
+          m_format(val.m_format)
+    {
+    }
 
     virtual wxObject *Clone() const wxOVERRIDE
     {
