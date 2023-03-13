@@ -564,7 +564,11 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         wxRect rect = clientRect;
         wxDCBrushChanger brushChanger(dc, *wxTRANSPARENT_BRUSH);
         wxDCPenChanger penChanger(dc, penBorder);
-        if ( !m_labelWin && !GetLabel().empty() )
+
+        // Note that we want to to do this even if our label is empty because
+        // this ensures that the border appears at the same position for the
+        // boxes with and without labels.
+        if ( !m_labelWin )
         {
             // if the control has a font, use it
             wxDCFontChanger fontChanger(dc);
