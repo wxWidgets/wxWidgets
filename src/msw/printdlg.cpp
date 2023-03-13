@@ -892,6 +892,10 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
         pd->lpPageRanges = new PRINTPAGERANGE[1];
         pd->lpPageRanges[0].nFromPage = (DWORD)data.GetFromPage();
         pd->lpPageRanges[0].nToPage = (DWORD)data.GetToPage();
+
+        // PrintDlgEx returns E_INVALIDARG if nFromPage is greater than nToPage
+        if (pd->lpPageRanges[0].nToPage < pd->lpPageRanges[0].nFromPage)
+            pd->lpPageRanges[0].nToPage = pd->lpPageRanges[0].nFromPage;
     }
 
     pd->Flags = PD_RETURNDC;
