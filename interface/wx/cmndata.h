@@ -490,6 +490,13 @@ public:
     void EnableSelection(bool flag);
 
     /**
+        Enables or disables the "Current Page" radio button.
+
+        @since 3.3.0
+    */
+    void EnableCurrentPage(bool flag);
+
+    /**
         Returns @true if the user requested that all pages be printed.
     */
     bool GetAllPages() const;
@@ -534,6 +541,14 @@ public:
         (where "selection" is a concept specific to the application).
     */
     bool GetSelection() const;
+
+    /**
+        Returns @true if the user requested that the current page be printed
+        (where "current page" is a concept specific to the application).
+
+        @since 3.3.0
+    */
+    bool GetCurrentPage() const;
 
     /**
         Returns the @e "print to" page number, as entered by the user.
@@ -589,6 +604,15 @@ public:
         all.
     */
     void SetSelection(bool flag);
+
+    /**
+        Selects the "Current Page" radio button. The effect of printing the
+        current page depends on how the application implements this command, if at
+        all.
+
+        @since 3.3.0
+    */
+    void SetCurrentPage(bool flag);
 
     /**
         @deprecated This function has been deprecated since version 2.5.4.
