@@ -87,7 +87,11 @@ class MyPrintout: public wxPrintout
 {
 public:
     MyPrintout(MyFrame* frame, wxPrintDialogData* printDlgData, const wxString& title = "My printout")
-        : wxPrintout(title), m_frame(frame), m_printDlgData(printDlgData) {}
+        : wxPrintout(title)
+    {
+        m_frame = frame;
+        m_printDlgData = printDlgData;
+    }
 
     virtual bool OnPrintPage(int page) override;
     virtual bool HasPage(int page) override;
