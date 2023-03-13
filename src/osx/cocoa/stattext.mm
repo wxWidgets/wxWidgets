@@ -157,7 +157,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     [v setBezeled:NO];
     [v setBordered:NO];
 
-    NSLineBreakMode linebreak = NSLineBreakByClipping;
+    NSLineBreakMode linebreak = NSLineBreakByWordWrapping;
     if ( style & wxST_ELLIPSIZE_MASK )
     {
         if ( style & wxST_ELLIPSIZE_MIDDLE )

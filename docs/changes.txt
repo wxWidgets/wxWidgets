@@ -399,6 +399,7 @@ wxOSX:
 - Fix wxLocale::GetCurrent() when the current locale is "C".
 - Fix wxLocale::Init(wxLANGUAGE_DEFAULT) with "mixed" locales (#23114).
 - Fix setting Chinese locales (#23209).
+- Wrap wxStaticText contents (#23341).
 
 wxQt:
 
