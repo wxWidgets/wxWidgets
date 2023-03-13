@@ -705,6 +705,13 @@ public:
         and maximum page values that the user can select, and the required page range to
         be printed.
 
+        If the user has decided to print only selected pages, then pageFrom and pageTo are
+        used to limit the page range and IsPageSelected() is used to query whether the page
+        is selected.
+
+        If the user only wants to print the current page, then pageFrom and pageTo are used
+        to set the current page by setting pageFrom = pageTo.
+
         By default this returns (1, 32000) for the page minimum and maximum values, and
         (1, 1) for the required page range.
 
@@ -772,6 +779,14 @@ public:
         HasPage behaves as if the document has only one page.
     */
     virtual bool HasPage(int pageNum);
+
+    /**
+        Should be overridden to return @true if this page is selected, or @false
+        if not. The default implementation always returns @false.
+
+        @since 3.3.0
+    */
+    virtual bool IsPageSelected(int pageNum);
 
     /**
         Returns @true if the printout is currently being used for previewing.
