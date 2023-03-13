@@ -62,12 +62,12 @@ public:
     explicit DateValidator(const wxString& format) : m_format(format) {}
     DateValidator(const DateValidator& val) = default;
 
-    virtual wxObject *Clone() const override
+    virtual wxObject *Clone() const wxOVERRIDE
     {
         return new DateValidator(*this);
     }
 
-    virtual bool Validate(wxWindow *parent) override
+    virtual bool Validate(wxWindow *parent) wxOVERRIDE
     {
         // We can only be used with wxComboCtrl, so just a static_cast<> would
         // be safe, but use checked cast to notice any problems in debug build.
@@ -103,8 +103,8 @@ public:
     }
 
     // We don't transfer any data, this validator is used only for validation.
-    virtual bool TransferFromWindow() override { return true; }
-    virtual bool TransferToWindow() override { return true; }
+    virtual bool TransferFromWindow() wxOVERRIDE { return true; }
+    virtual bool TransferToWindow() wxOVERRIDE { return true; }
 
 private:
     const wxString m_format;
