@@ -160,36 +160,34 @@ public:
     int GetMinPage() const { return m_printMinPage; }
     int GetMaxPage() const { return m_printMaxPage; }
     int GetNoCopies() const { return m_printNoCopies; }
-    int GetCurrentPage() const { return m_printCurrentPage; }
     bool GetAllPages() const { return m_printAllPages; }
     bool GetSelection() const { return m_printSelection; }
     bool GetCollate() const { return m_printCollate; }
     bool GetPrintToFile() const { return m_printToFile; }
+    bool GetCurrentPage() const { return m_printCurrentPage; }
 
     void SetFromPage(int v) { m_printFromPage = v; }
     void SetToPage(int v) { m_printToPage = v; }
     void SetMinPage(int v) { m_printMinPage = v; }
     void SetMaxPage(int v) { m_printMaxPage = v; }
     void SetNoCopies(int v) { m_printNoCopies = v; }
-    void SetCurrentPage(int v) { m_printCurrentPage = v; }
     void SetAllPages(bool flag) { m_printAllPages = flag; }
     void SetSelection(bool flag) { m_printSelection = flag; }
     void SetCollate(bool flag) { m_printCollate = flag; }
     void SetPrintToFile(bool flag) { m_printToFile = flag; }
-    void SetSelectCurrentPage(bool flag) { m_printSelectCurrentPage = flag; }
+    void SetCurrentPage(bool flag) { m_printCurrentPage = flag; }
 
     void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; }
     void EnableSelection(bool flag) { m_printEnableSelection = flag; }
     void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; }
-    void EnableHelp(bool flag) { m_printEnableHelp = flag; }
     void EnableCurrentPage(bool flag) { m_printEnableCurrentPage = flag; }
+    void EnableHelp(bool flag) { m_printEnableHelp = flag; }
 
     bool GetEnablePrintToFile() const { return m_printEnablePrintToFile; }
     bool GetEnableSelection() const { return m_printEnableSelection; }
+    bool GetEnableCurrentPage() const { return m_printEnableCurrentPage; }
     bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; }
     bool GetEnableHelp() const { return m_printEnableHelp; }
-    bool GetEnableCurrentPage() const { return m_printEnableCurrentPage; }
-    bool GetSelectCurrentPage() const { return m_printSelectCurrentPage; }
 
     // Is this data OK for showing the print dialog?
     bool Ok() const { return IsOk(); }
@@ -207,17 +205,16 @@ private:
     int             m_printMinPage;
     int             m_printMaxPage;
     int             m_printNoCopies;
-    int             m_printCurrentPage;
     bool            m_printAllPages;
+    bool            m_printSelection;
+    bool            m_printCurrentPage;
     bool            m_printCollate;
     bool            m_printToFile;
-    bool            m_printSelection;
     bool            m_printEnableSelection;
     bool            m_printEnablePageNumbers;
+    bool            m_printEnableCurrentPage;
     bool            m_printEnableHelp;
     bool            m_printEnablePrintToFile;
-    bool            m_printEnableCurrentPage;
-    bool            m_printSelectCurrentPage;
     wxPrintData     m_printData;
 
 private:
