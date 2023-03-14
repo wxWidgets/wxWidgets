@@ -705,7 +705,7 @@ public:
         and maximum page values that the user can select, and the required page range to
         be printed.
 
-        If the user has decided to print only selected pages, then pageFrom and pageTo are
+        If the user has decided to print only selected pages, then @a pageFrom and @a pageTo are
         used to limit the page range and IsPageSelected() is used to query whether the page
         is selected.
 
