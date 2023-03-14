@@ -144,6 +144,22 @@ private:
     wxString m_virtualHost;
 };
 
+class wxWebViewConfigurationImpl;
+
+class WXDLLIMPEXP_WEBVIEW wxWebViewConfiguration
+{
+public:
+    explicit wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl);
+    void* GetNativeConfiguration() const;
+
+    const wxString& GetBackend() const { return m_backend; }
+
+    wxWebViewConfigurationImpl* GetImpl() const { return m_impl.get(); }
+private:
+    wxString m_backend;
+    std::shared_ptr<wxWebViewConfigurationImpl> m_impl;
+};
+
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[];
@@ -155,6 +171,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewFactory : public wxObject
 {
 public:
     virtual wxWebView* Create() = 0;
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& WXUNUSED(config)) { return Create(); }
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
                               const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -164,6 +181,7 @@ public:
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
     virtual bool IsAvailable() { return true; }
     virtual wxVersionInfo GetVersionInfo() { return wxVersionInfo(); }
+    virtual wxWebViewConfiguration CreateConfiguration();
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
@@ -190,6 +208,7 @@ public:
     // Factory methods allowing the use of custom factories registered with
     // RegisterFactory
     static wxWebView* New(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
+    static wxWebView* New(const wxWebViewConfiguration& config);
     static wxWebView* New(wxWindow* parent,
                           wxWindowID id,
                           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -203,6 +222,7 @@ public:
                                 wxSharedPtr<wxWebViewFactory> factory);
     static bool IsBackendAvailable(const wxString& backend);
     static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
+    static wxWebViewConfiguration NewConfiguration(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
 
     // General methods
     virtual void EnableContextMenu(bool enable = true)
@@ -297,7 +317,6 @@ public:
 
     //Get the pointer to the underlying native engine.
     virtual void* GetNativeBackend() const = 0;
-    virtual void* GetNativeConfiguration() const { return nullptr; }
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT);
 
