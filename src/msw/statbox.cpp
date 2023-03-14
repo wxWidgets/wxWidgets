@@ -165,7 +165,10 @@ bool wxStaticBox::Create(wxWindow* parent,
 void wxStaticBox::PositionLabelWindow()
 {
     m_labelWin->SetSize(m_labelWin->GetBestSize());
-    m_labelWin->Move(FromDIP(LABEL_HORZ_OFFSET), 0);
+
+    // Note that we intentionally don't use FromDIP() with the label offset
+    // here, see comment in PaintForeground() where it is also used.
+    m_labelWin->Move(LABEL_HORZ_OFFSET, 0);
 }
 
 wxWindowList wxStaticBox::GetCompositeWindowParts() const
@@ -253,7 +256,9 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         *borderTop = 2*FromDIP(CHILDREN_OFFSET);
     }
 
-    *borderTop += FromDIP(LABEL_VERT_BORDER);
+    // Intentionally don't scale this one by DPI, as it's not scaled when it is
+    // actually used in the drawing code, see comments there.
+    *borderTop += LABEL_VERT_BORDER;
 
     *borderOther = FromDIP(CHILDREN_OFFSET);
 }
@@ -402,7 +407,7 @@ void wxStaticBox::MSWGetRegionWithoutSelf(WXHRGN hRgn, int w, int h)
         // the background of the gap between the label window and the box
         // frame.
         const wxRect labelRect = m_labelWin->GetRect();
-        const int gap = FromDIP(LABEL_HORZ_BORDER);
+        const int gap = LABEL_HORZ_BORDER;
 
         SubtractRectFromRgn(hrgn, 0, 0, labelRect.GetLeft() - gap, borderTop);
         SubtractRectFromRgn(hrgn, labelRect.GetRight() + gap, 0, w, borderTop);
