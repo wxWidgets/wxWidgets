@@ -21,6 +21,7 @@
     #include <wx/valnum.h>
     #include <wx/tokenzr.h>
     #include <wx/settings.h>
+    #include <wx/clipbrd.h>
 #endif
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -162,12 +163,15 @@ void LogFrame::OnRestart(wxCommandEvent& WXUNUSED(event))
 void LogFrame::OnMenu(wxDataViewEvent& WXUNUSED(event))
 {
     wxMenu menu;
-    menu.Append(1, "Clear");
-    Bind(wxEVT_MENU, &LogFrame::OnClearLog, this, 1);
+    menu.Append(ID_CLEAR, "Clear");
+    Bind(wxEVT_MENU, &LogFrame::OnClearLog, this, ID_CLEAR);
     menu.AppendSeparator();
-    wxMenuItem* check = menu.AppendCheckItem(2, "Always show last");
+    menu.Append(ID_COPY, "Copy selected");
+    Bind(wxEVT_MENU, &LogFrame::OnCopySelectedLog, this, ID_COPY);
+    menu.AppendSeparator();
+    wxMenuItem* check = menu.AppendCheckItem(ID_TRACK, "Always show last");
     check->Check(m_auto_refresh);
-    Bind(wxEVT_MENU, &LogFrame::OnShowLast, this, 2);
+    Bind(wxEVT_MENU, &LogFrame::OnShowLast, this, ID_TRACK);
     PopupMenu(&menu);
 }
 
@@ -175,6 +179,26 @@ void LogFrame::OnClearLog(wxCommandEvent& event)
 {
     m_tree_model->Clear();
     m_tree_model->Reset();
+}
+
+void LogFrame::OnCopySelectedLog(wxCommandEvent& event)
+{
+    if (wxTheClipboard->Open())
+    {
+        wxDataViewItemArray selected;
+        int count = m_tree_ctrl->GetSelections(selected);
+        wxString text;
+        text.Alloc(1024);
+        for (int i = 0; i < count; i++)
+        {
+            wxVariant data;
+            m_tree_model->GetValue(data, selected[i], 0);
+            if (!text.IsEmpty()) text.Append("\n");
+            text.Append(data.GetString());
+        }
+        wxTheClipboard->SetData(new wxTextDataObject(text));
+        wxTheClipboard->Close();
+    }
 }
 
 void LogFrame::OnRefresh(wxTimerEvent& event)

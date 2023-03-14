@@ -39,6 +39,10 @@ wxDECLARE_APP(LogServerApp);
 // Define a new frame
 class LogFrame : public wxFrame
 {
+    const wxWindowIDRef ID_CLEAR = wxWindow::NewControlId();
+    const wxWindowIDRef ID_COPY = wxWindow::NewControlId();
+    const wxWindowIDRef ID_TRACK = wxWindow::NewControlId();
+
     public:
         LogFrame(wxFrame *frame, const wxString& title);
         LogDataModel* GetDataModel() { return m_tree_model; }
@@ -57,6 +61,7 @@ class LogFrame : public wxFrame
         void OnRestart(wxCommandEvent &event);
         void OnMenu(wxDataViewEvent& WXUNUSED(event));
         void OnClearLog(wxCommandEvent& event);
+        void OnCopySelectedLog(wxCommandEvent& event);
         void OnRefresh(wxTimerEvent& event);
         void OnShowLast(wxCommandEvent& event);
 };
