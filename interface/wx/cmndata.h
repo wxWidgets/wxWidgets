@@ -545,7 +545,8 @@ public:
     /**
         Returns @true if the user requested that the current page be printed
         (where "current page" is a concept specific to the application).
-
+        It only makes sense to call this function if EnableCurrentPage() had been
+        called before, otherwise it always returns @false.
         @since 3.3.0
     */
     bool GetCurrentPage() const;
