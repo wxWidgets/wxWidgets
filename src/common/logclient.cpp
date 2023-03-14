@@ -13,6 +13,7 @@
 #ifndef WX_PRECOMP
     #include "wx/hashmap.h"
     #include "wx/ipc.h"
+    #include "wx/datetime.h"
 #endif // WX_PRECOMP
 
 #include "wx/logclient.h"
