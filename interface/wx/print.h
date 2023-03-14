@@ -709,8 +709,7 @@ public:
         used to limit the page range and IsPageSelected() is used to query whether the page
         is selected.
 
-        If the user only wants to print the current page, then pageFrom and pageTo are used
-        to set the current page by setting pageFrom = pageTo.
+        If the user only wants to print the current page, then @a pageFrom and @a pageTo are both set to the current page number.
 
         By default this returns (1, 32000) for the page minimum and maximum values, and
         (1, 1) for the required page range.
