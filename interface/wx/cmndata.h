@@ -607,9 +607,12 @@ public:
     void SetSelection(bool flag);
 
     /**
-        Selects the "Current Page" radio button. The effect of printing the
-        current page depends on how the application implements this command, if at
-        all.
+        Selects the "Current Page" radio button when the dialog is initially shown.
+        
+        If this button is selected when the dialog is accepted, only the current
+        page (as defined by the application) should be printed.
+        
+        This only function can only be called if EnableCurrentPage() is called as well.
 
         @since 3.3.0
     */
