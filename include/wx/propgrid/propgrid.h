@@ -2157,6 +2157,12 @@ protected:
 
 // -----------------------------------------------------------------------
 
-#endif
+#ifndef WXBUILDING
+// This really shouldn't be done here, but keep including this header
+// for compatibility because user apps can be broken by removing it.
+#include "wx/propgrid/props.h"
+#endif // !WXBUILDING
+
+#endif // wxUSE_PROPGRID
 
 #endif // _WX_PROPGRID_PROPGRID_H_
