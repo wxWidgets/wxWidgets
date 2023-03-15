@@ -91,6 +91,18 @@ wxDEPRECATED_MSG("use wxPGVFBFlags::Default instead")
 constexpr wxPGVFBFlags wxPG_VFB_DEFAULT{ wxPGVFBFlags::Default };
 wxDEPRECATED_MSG("use wxPGVFBFlags::Undefined instead")
 constexpr wxPGVFBFlags wxPG_VFB_UNDEFINED{ wxPGVFBFlags::Undefined };
+
+wxDEPRECATED_MSG("use wxPGVFBFlags instead")
+constexpr bool operator==(wxPGVFBFlags a, int b)
+{
+    return static_cast<int>(a) == b;
+}
+
+wxDEPRECATED_MSG("use wxPGVFBFlags instead")
+constexpr bool operator!=(wxPGVFBFlags a, int b)
+{
+    return static_cast<int>(a) != b;
+}
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------

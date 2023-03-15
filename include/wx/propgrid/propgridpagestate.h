@@ -68,6 +68,18 @@ wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DontSendEvent instead")
 constexpr wxPGSelectPropertyFlags wxPG_SEL_DONT_SEND_EVENT{ wxPGSelectPropertyFlags::DontSendEvent };
 wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoRefresh instead")
 constexpr wxPGSelectPropertyFlags wxPG_SEL_NO_REFRESH{ wxPGSelectPropertyFlags::NoRefresh };
+
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags instead")
+constexpr bool operator==(wxPGSelectPropertyFlags a, int b)
+{
+    return static_cast<int>(a) == b;
+}
+
+wxDEPRECATED_MSG("use wxPGSelectPropertyFlags instead")
+constexpr bool operator!=(wxPGSelectPropertyFlags a, int b)
+{
+    return static_cast<int>(a) != b;
+}
 #endif // WXWIN_COMPATIBILITY_3_2
 
 constexpr wxPGSelectPropertyFlags operator|(wxPGSelectPropertyFlags a, wxPGSelectPropertyFlags b)
@@ -127,6 +139,18 @@ wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromEvent instead")
 constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_EVENT { wxPGSplitterPositionFlags::FromEvent };
 wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromAutoCenter instead")
 constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_AUTO_CENTER { wxPGSplitterPositionFlags::FromAutoCenter };
+
+wxDEPRECATED_MSG("use wxPGSplitterPositionFlags instead")
+constexpr bool operator==(wxPGSplitterPositionFlags a, int b)
+{
+    return static_cast<int>(a) == b;
+}
+
+wxDEPRECATED_MSG("use wxPGSplitterPositionFlags instead")
+constexpr bool operator!=(wxPGSplitterPositionFlags a, int b)
+{
+    return static_cast<int>(a) != b;
+}
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------

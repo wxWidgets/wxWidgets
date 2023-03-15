@@ -202,6 +202,18 @@ wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::Force instead")
 constexpr wxPGPropertyValuesFlags wxPG_FORCE { wxPGPropertyValuesFlags::Force };
 wxDEPRECATED_MSG("use wxPGPropertyValuesFlags::SortTopLevelOnly instead")
 constexpr wxPGPropertyValuesFlags wxPG_SORT_TOP_LEVEL_ONLY { wxPGPropertyValuesFlags::SortTopLevelOnly };
+
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags instead")
+constexpr bool operator==(wxPGPropertyValuesFlags a, int b)
+{
+    return static_cast<int>(a) == b;
+}
+
+wxDEPRECATED_MSG("use wxPGPropertyValuesFlags instead")
+constexpr bool operator!=(wxPGPropertyValuesFlags a, int b)
+{
+    return static_cast<int>(a) != b;
+}
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
@@ -276,6 +288,18 @@ wxDEPRECATED_MSG("use wxPGSetValueFlags::FromParent instead")
 constexpr wxPGSetValueFlags wxPG_SETVAL_FROM_PARENT { wxPGSetValueFlags::FromParent };
 wxDEPRECATED_MSG("use wxPGSetValueFlags::ByUser instead")
 constexpr wxPGSetValueFlags wxPG_SETVAL_BY_USER { wxPGSetValueFlags::ByUser };
+
+wxDEPRECATED_MSG("use wxPGSetValueFlags instead")
+constexpr bool operator==(wxPGSetValueFlags a, int b)
+{
+    return static_cast<int>(a) == b;
+}
+
+wxDEPRECATED_MSG("use wxPGSetValueFlags instead")
+constexpr bool operator!=(wxPGSetValueFlags a, int b)
+{
+    return static_cast<int>(a) != b;
+}
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
