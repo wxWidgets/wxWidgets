@@ -15,6 +15,8 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewConfigurationImpl
 public:
     virtual ~wxWebViewConfigurationImpl() = default;
     virtual void* GetNativeConfiguration() const { return nullptr; }
+    virtual void SetDataPath(const wxString& WXUNUSED(path)) {}
+    virtual wxString GetDataPath() const { return wxString{}; }
 };
 
 #endif // _WX_PRIVATE_WEBVIEW_H_

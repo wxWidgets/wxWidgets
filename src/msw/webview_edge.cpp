@@ -260,6 +260,7 @@ class wxWebViewConfigurationImplEdge : public wxWebViewConfigurationImpl
 public:
     wxWebViewConfigurationImplEdge()
     {
+        m_dataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 #ifdef __VISUALC__
         m_webViewEnvironmentOptions = Make<CoreWebView2EnvironmentOptions>().Get();
         m_webViewEnvironmentOptions->put_Language(wxUILocale::GetCurrent().GetLocaleId().GetName().wc_str());
@@ -271,7 +272,11 @@ public:
         return m_webViewEnvironmentOptions;
     }
 
+    virtual void SetDataPath(const wxString& path) override { m_dataPath = path;}
+    virtual wxString GetDataPath() const override { return m_dataPath; }
+
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
+    wxString m_dataPath;
 };
 
 // wxWebViewNewWindowInfoEdge
@@ -431,8 +436,6 @@ bool wxWebViewEdgeImpl::Create()
     m_historyEnabled = true;
     m_historyPosition = -1;
 
-    wxString userDataPath = wxStandardPaths::Get().GetUserLocalDataDir();
-
     if (m_parentWindowInfo)
     {
         OnEnvironmentCreated(S_OK, m_parentWindowInfo->m_impl->m_webViewEnvironment);
@@ -442,7 +445,7 @@ bool wxWebViewEdgeImpl::Create()
     {
         HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
             ms_browserExecutableDir.wc_str(),
-            userDataPath.wc_str(),
+            m_config.GetDataPath().wc_str(),
             (ICoreWebView2EnvironmentOptions*) m_config.GetNativeConfiguration(),
             Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
                 &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());

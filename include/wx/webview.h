@@ -151,6 +151,8 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewConfiguration
 public:
     explicit wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl);
     void* GetNativeConfiguration() const;
+    void SetDataPath(const wxString& path);
+    wxString GetDataPath() const;
 
     const wxString& GetBackend() const { return m_backend; }
 

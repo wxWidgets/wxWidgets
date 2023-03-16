@@ -76,6 +76,16 @@ void* wxWebViewConfiguration::GetNativeConfiguration() const
     return m_impl->GetNativeConfiguration();
 }
 
+void wxWebViewConfiguration::SetDataPath(const wxString &path)
+{
+    m_impl->SetDataPath(path);
+}
+
+wxString wxWebViewConfiguration::GetDataPath() const
+{
+    return m_impl->GetDataPath();
+}
+
 // wxWebViewHandlerRequest
 wxString wxWebViewHandlerRequest::GetDataString(const wxMBConv& conv) const
 {

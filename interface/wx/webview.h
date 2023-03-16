@@ -273,6 +273,9 @@ public:
         Additional instances of wxWebView must be created using the same
         wxWebViewConfiguration instance.
 
+        All settings @b must be set before creating a new web view with
+        wxWebView::New().
+
         The return value needs to be down-casted to the appropriate type
         depending on the platform: under macOS, it's a
         <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
@@ -312,6 +315,28 @@ public:
         Returns the backend identifier for which this configuration was created.
     */
     wxString GetBackend() const;
+
+    /**
+        Set the data path for the webview.
+
+        This is the path where the webview stores its data, such as cookies,
+        local storage, etc.
+        @param path The path to the data directory.
+
+        @note This is only used by the Edge backend.
+    */
+    void SetDataPath(const wxString& path);
+
+    /**
+        Returns the data path for the webview.
+
+        This is the path where the webview stores its data, such as cookies,
+        local storage, etc.
+        @return The path to the data directory.
+
+        @note This is only used by the Edge backend.
+    */
+    wxString GetDataPath() const;
 };
 
 
