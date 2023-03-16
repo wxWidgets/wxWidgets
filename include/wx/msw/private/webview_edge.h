@@ -113,6 +113,8 @@ public:
 
     HRESULT HandleNavigationStarting(ICoreWebView2NavigationStartingEventArgs* args, bool mainFrame);
 
+    void SendErrorEventForAPI(const wxString& api, HRESULT errorCode);
+
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
     bool m_historyLoadingFromList;

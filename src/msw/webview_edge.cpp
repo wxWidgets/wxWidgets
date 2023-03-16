@@ -556,6 +556,18 @@ HRESULT wxWebViewEdgeImpl::HandleNavigationStarting(ICoreWebView2NavigationStart
     return S_OK;
 }
 
+void wxWebViewEdgeImpl::SendErrorEventForAPI(const wxString& api, HRESULT errorCode)
+{
+    wxLogApiError(api, errorCode);
+
+    wxWebViewEvent event(wxEVT_WEBVIEW_ERROR, m_ctrl->GetId(), wxString(), wxString());
+    event.SetEventObject(m_ctrl);
+    event.SetInt(wxWEBVIEW_NAV_ERR_OTHER);
+    event.SetString(wxSysErrorMsgStr(errorCode));
+
+    m_ctrl->GetEventHandler()->AddPendingEvent(event);
+}
+
 HRESULT wxWebViewEdgeImpl::OnSourceChanged(ICoreWebView2 * WXUNUSED(sender), ICoreWebView2SourceChangedEventArgs * args)
 {
     BOOL isNewDocument;
@@ -773,7 +785,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
 {
     if (FAILED(result))
     {
-        wxLogApiError("WebView2::WebViewCreated", result);
+        SendErrorEventForAPI("WebView2::WebViewCreated", result);
         return result;
     }
 
@@ -781,13 +793,13 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     HRESULT hr = webViewController->get_CoreWebView2(&baseWebView);
     if (FAILED(hr))
     {
-        wxLogApiError("WebView2::WebViewCreated (get_CoreWebView2)", hr);
+        SendErrorEventForAPI("WebView2::WebViewCreated (get_CoreWebView2)", hr);
         return result;
     }
     hr = baseWebView->QueryInterface(IID_PPV_ARGS(&m_webView));
     if (FAILED(hr))
     {
-        wxLogApiError("WebView2::WebViewCreated (QueryInterface)", hr);
+        SendErrorEventForAPI("WebView2::WebViewCreated (QueryInterface)", hr);
         return result;
     }
 
@@ -892,9 +904,9 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (m_parentWindowInfo)
     {
         if (FAILED(m_parentWindowInfo->m_args->put_NewWindow(baseWebView)))
-            wxLogApiError("WebView2::WebViewCreated (put_NewWindow)", hr);
+            SendErrorEventForAPI("WebView2::WebViewCreated (put_NewWindow)", hr);
         if (FAILED(m_parentWindowInfo->m_deferral->Complete()))
-            wxLogApiError("WebView2::WebViewCreated (Complete)", hr);
+            SendErrorEventForAPI("WebView2::WebViewCreated (Complete)", hr);
         m_parentWindowInfo.reset();
 
         return S_OK;
