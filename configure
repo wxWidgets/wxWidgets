@@ -43239,7 +43239,11 @@ dedup_flags()
 {
     printf "%s " "$@" |
         awk 'BEGIN { RS=" "; ORS=" " }
-            { if ($0=="-arch" || $0=="-framework" || !seen[$0]++) print }'
+        {
+            if ($0=="") next
+            if ($0=="-arch" || $0=="-framework") { x=$0; next }
+            if (x!="") x=x " " $0; else x=$0; if (!seen[x]++) print x; x=""
+        }'
 }
 
 WX_CPPFLAGS=`dedup_flags "$CPPFLAGS"`
