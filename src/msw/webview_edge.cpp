@@ -258,7 +258,8 @@ public:
 class wxWebViewConfigurationImplEdge : public wxWebViewConfigurationImpl
 {
 public:
-    wxWebViewConfigurationImplEdge()
+    wxWebViewConfigurationImplEdge(ICoreWebView2Environment* environment = nullptr):
+        m_webViewEnvironment(environment)
     {
         m_dataPath = wxStandardPaths::Get().GetUserLocalDataDir();
 #ifdef __VISUALC__
@@ -275,9 +276,49 @@ public:
     virtual void SetDataPath(const wxString& path) override { m_dataPath = path;}
     virtual wxString GetDataPath() const override { return m_dataPath; }
 
+    bool CreateOrGetEnvironment(wxWebViewEdgeImpl* impl)
+    {
+        if (!m_webViewEnvironment)
+        {
+            m_webViewsWaitingForEnvironment.push_back(impl);
+            HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
+                ms_browserExecutableDir.wc_str(),
+                GetDataPath().wc_str(),
+                m_webViewEnvironmentOptions,
+                Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
+                    &wxWebViewConfigurationImplEdge::OnEnvironmentCreated).Get());
+            if (FAILED(hr))
+            {
+                wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
+                return false;
+            }
+            else
+                return true;
+        }
+        else
+        {
+            impl->EnvironmentAvailable(m_webViewEnvironment);
+            return true;
+        }
+    }
+
+    HRESULT OnEnvironmentCreated(HRESULT WXUNUSED(result), ICoreWebView2Environment* environment)
+    {
+        m_webViewEnvironment = environment;
+        for (auto impl : m_webViewsWaitingForEnvironment)
+            impl->EnvironmentAvailable(m_webViewEnvironment);
+        m_webViewsWaitingForEnvironment.clear();
+        return S_OK;
+    }
+
+    static wxString ms_browserExecutableDir;
+    std::vector<wxWebViewEdgeImpl*> m_webViewsWaitingForEnvironment;
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
+    wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxString m_dataPath;
 };
+
+wxString wxWebViewConfigurationImplEdge::ms_browserExecutableDir;
 
 // wxWebViewNewWindowInfoEdge
 
@@ -357,7 +398,7 @@ public:
     virtual wxWebView* CreateChildWebView() override
     {
         return m_impl->CreateChildWebView(
-            std::make_shared<wxWebViewEdgeParentWindowInfo>(m_impl, m_args));
+            std::make_shared<wxWebViewEdgeParentWindowInfo>(m_args));
     }
 
 private:
@@ -369,9 +410,7 @@ private:
 class wxWebViewEdgeParentWindowInfo
 {
 public:
-    wxWebViewEdgeParentWindowInfo(wxWebViewEdgeImpl* impl,
-        ICoreWebView2NewWindowRequestedEventArgs* args):
-        m_impl(impl),
+    wxWebViewEdgeParentWindowInfo(ICoreWebView2NewWindowRequestedEventArgs* args):
         m_args(args)
     {
         HRESULT hr = m_args->GetDeferral(&m_deferral);
@@ -381,7 +420,6 @@ public:
 
     virtual ~wxWebViewEdgeParentWindowInfo() = default;
 
-    wxWebViewEdgeImpl* m_impl;
     wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_args;
     wxCOMPtr<ICoreWebView2Deferral> m_deferral;
 };
@@ -390,8 +428,6 @@ public:
 #define wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD \
     m_inEventCallback = true; \
     wxON_BLOCK_EXIT_SET(m_inEventCallback, false);
-
-wxString wxWebViewEdgeImpl::ms_browserExecutableDir;
 
 wxWebViewEdgeImpl::wxWebViewEdgeImpl(wxWebViewEdge* webview, const wxWebViewConfiguration& config):
     m_ctrl(webview),
@@ -436,45 +472,24 @@ bool wxWebViewEdgeImpl::Create()
     m_historyEnabled = true;
     m_historyPosition = -1;
 
-    if (m_parentWindowInfo)
-    {
-        OnEnvironmentCreated(S_OK, m_parentWindowInfo->m_impl->m_webViewEnvironment);
-        return true;
-    }
-    else
-    {
-        HRESULT hr = wxCreateCoreWebView2EnvironmentWithOptions(
-            ms_browserExecutableDir.wc_str(),
-            m_config.GetDataPath().wc_str(),
-            (ICoreWebView2EnvironmentOptions*) m_config.GetNativeConfiguration(),
-            Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(this,
-                &wxWebViewEdgeImpl::OnEnvironmentCreated).Get());
-        if (FAILED(hr))
-        {
-            wxLogApiError("CreateWebView2EnvironmentWithOptions", hr);
-            return false;
-        }
-        else
-            return true;
-    }
+    return static_cast<wxWebViewConfigurationImplEdge*>(m_config.GetImpl())->
+        CreateOrGetEnvironment(this);
 }
 
 wxWebViewEdge* wxWebViewEdgeImpl::CreateChildWebView(std::shared_ptr<wxWebViewEdgeParentWindowInfo> parentWindowInfo)
 {
-    wxWebViewEdge* childWebView = new wxWebViewEdge();
+    wxWebViewEdge* childWebView = new wxWebViewEdge(m_config);
     childWebView->m_impl->m_parentWindowInfo = parentWindowInfo;
     return childWebView;
 }
 
-HRESULT wxWebViewEdgeImpl::OnEnvironmentCreated(
-    HRESULT WXUNUSED(result), ICoreWebView2Environment* environment)
+void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environment)
 {
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
     m_webViewEnvironment->CreateCoreWebView2Controller(
         m_ctrl->GetHWND(),
         Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
             this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
-    return S_OK;
 }
 
 bool wxWebViewEdgeImpl::Initialize()
@@ -496,7 +511,7 @@ bool wxWebViewEdgeImpl::Initialize()
     // Check if a Edge browser can be found by the loader DLL
     wxCoTaskMemPtr<wchar_t> versionStr;
     HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
-        ms_browserExecutableDir.wc_str(), &versionStr);
+        wxWebViewConfigurationImplEdge::ms_browserExecutableDir.wc_str(), &versionStr);
     if (FAILED(hr) || !versionStr)
     {
         wxLogApiError("GetCoreWebView2BrowserVersionInfo", hr);
@@ -1369,7 +1384,7 @@ void* wxWebViewEdge::GetNativeBackend() const
 
 void wxWebViewEdge::MSWSetBrowserExecutableDir(const wxString & path)
 {
-    wxWebViewEdgeImpl::ms_browserExecutableDir = path;
+    wxWebViewConfigurationImplEdge::ms_browserExecutableDir = path;
 }
 
 bool wxWebViewEdge::RunScript(const wxString& javascript, wxString* output) const
@@ -1528,7 +1543,7 @@ wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
     {
         wxCoTaskMemPtr<wchar_t> nativeVersionStr;
         HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
-            wxWebViewEdgeImpl::ms_browserExecutableDir.wc_str(), &nativeVersionStr);
+            wxWebViewConfigurationImplEdge::ms_browserExecutableDir.wc_str(), &nativeVersionStr);
         if (SUCCEEDED(hr) && nativeVersionStr)
         {
             wxStringTokenizer tk(wxString(nativeVersionStr), ". ");

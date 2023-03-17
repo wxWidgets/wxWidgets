@@ -108,7 +108,7 @@ public:
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
     HRESULT OnWindowCloseRequested(ICoreWebView2* sender, IUnknown* args);
 
-    HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
+    void EnvironmentAvailable(ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
 
     HRESULT HandleNavigationStarting(ICoreWebView2NavigationStartingEventArgs* args, bool mainFrame);
@@ -130,8 +130,6 @@ public:
 #if !wxUSE_WEBVIEW_EDGE_STATIC
     static wxDynamicLibrary ms_loaderDll;
 #endif
-    static wxString ms_browserExecutableDir;
-
     static bool Initialize();
 
     static void Uninitialize();
