@@ -348,6 +348,7 @@ wxGTK:
 - Improve size and behaviour of in-place editor in wxTreeCtrl (taler21, #23001).
 - Also improve size compuation of wxTextCtrl (Alex Shvartzkop, #23610).
 - Fix missing borders for scrollable windows, e.g. wxListCtrl (#23236).
+- Fix TAB navigation in wxPropertyGrid (Adrian Lopez, #23354).
 
 wxMSW:
 
