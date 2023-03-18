@@ -162,6 +162,8 @@ protected:
     static bool IsAlpha(char c);
     static bool IsDigit(char c);
     static bool IsEndPath(char c);
+    static bool IsPCharNCNE(char c);
+    static bool IsPCharNE(char c);
 
     wxString m_scheme;
     wxString m_path;
