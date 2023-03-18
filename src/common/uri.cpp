@@ -727,7 +727,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
             m_fields |= wxURI_QUERY;
         }
     }
-    else 
+    else
     {
         // if (R.path starts-with "/") then
         //     T.path = remove_dot_segments(R.path);
@@ -859,7 +859,7 @@ bool wxURI::ParseIPv4address(const char*& uri)
              )
             )
           ) || ((uri - uriOrig >= 2) && (*uriOrig == '0')) // leading 0
-         ) 
+         )
         {
             return false;
         }
@@ -1102,5 +1102,3 @@ bool wxURI::IsPCharNE(char c)
 {
     return IsPCharNCNE(c) || c == ':';
 }
-
-
