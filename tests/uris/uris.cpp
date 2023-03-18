@@ -173,6 +173,26 @@ void URITestCase::IPv4()
 
 void URITestCase::IPv6()
 {
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa:aa:aa:192.168.1.100]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa:aa:aa:aa:aa]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa::192.168.1.100]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
+    URI_ASSERT_HOSTTYPE_EQUAL
+    (
+        "http://user:password@[aa:aa:aa:aa::aa:aa]:5050/path",
+        wxURI_IPV6ADDRESS
+    );
     URI_ASSERT_IPV6_TEST("[aa:aa:aa:aa:aa:aa:192.168.1.100]", "aa:aa:aa:aa:aa:aa:192.168.1.100");
     URI_ASSERT_IPV6_TEST("[aa:aa:aa:aa:aa:aa:aa:aa]", "aa:aa:aa:aa:aa:aa:aa:aa");
     URI_ASSERT_IPV6_TEST("[aa:aa:aa:aa::192.168.1.100]", "aa:aa:aa:aa::192.168.1.100");
@@ -323,6 +343,9 @@ void URITestCase::ComplexResolving()
     URI_TEST_RESOLVE(".g"	  ,"http://a/b/c/.g")
     URI_TEST_RESOLVE("g.."	  ,"http://a/b/c/g..")
     URI_TEST_RESOLVE("..g"	  ,"http://a/b/c/..g")
+    // github issue #3350
+    masteruri = "file:doc.chm#xchm:/d/e";
+    URI_TEST_RESOLVE("/a/b/c.jpg"	  ,"file:///a/b/c.jpg")
 }
 
 void URITestCase::ReallyComplexResolving()

@@ -654,8 +654,11 @@ wxArrayString wxURI::SplitInSegments(const wxString& path)
 
 void wxURI::Resolve(const wxURI& base, int flags)
 {
-    wxASSERT_MSG(!base.IsReference(),
-                "wxURI to inherit from must not be a reference!");
+    // RFC Deviation: Files don't need to have a server so that raw file paths
+    // can work correctly.
+    wxASSERT_MSG((!base.IsReference()
+        || base.GetScheme().CompareTo(wxT("file"), wxString::ignoreCase) == 0),
+        "wxURI to inherit from must not be a reference!");
 
     // If we aren't being strict, enable the older (pre-RFC2396) loophole that
     // allows this uri to inherit other properties from the base uri - even if
@@ -727,7 +730,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
             m_fields |= wxURI_QUERY;
         }
     }
-    else 
+    else
     {
         // if (R.path starts-with "/") then
         //     T.path = remove_dot_segments(R.path);
@@ -859,7 +862,7 @@ bool wxURI::ParseIPv4address(const char*& uri)
              )
             )
           ) || ((uri - uriOrig >= 2) && (*uriOrig == '0')) // leading 0
-         ) 
+         )
         {
             return false;
         }
@@ -1102,5 +1105,3 @@ bool wxURI::IsPCharNE(char c)
 {
     return IsPCharNCNE(c) || c == ':';
 }
-
-
