@@ -15,6 +15,7 @@
 #include "wx/webview.h"
 #include "wx/filesys.h"
 #include "wx/mstream.h"
+#include "wx/private/webview.h"
 
 #if defined(__WXOSX__)
 #include "wx/osx/webview_webkit.h"
@@ -54,6 +55,36 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDEFINE_EVENT( wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
+
+// wxWebViewConfigurationDefault
+class wxWebViewConfigurationImplDefault : public wxWebViewConfigurationImpl
+{
+public:
+    virtual void* GetNativeConfiguration() const override
+    {
+        return nullptr;
+    }
+};
+
+// wxWebViewConfiguration
+wxWebViewConfiguration::wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl):
+    m_backend(backend), m_impl(impl)
+{ }
+
+void* wxWebViewConfiguration::GetNativeConfiguration() const
+{
+    return m_impl->GetNativeConfiguration();
+}
+
+void wxWebViewConfiguration::SetDataPath(const wxString &path)
+{
+    m_impl->SetDataPath(path);
+}
+
+wxString wxWebViewConfiguration::GetDataPath() const
+{
+    return m_impl->GetDataPath();
+}
 
 // wxWebViewHandlerRequest
 wxString wxWebViewHandlerRequest::GetDataString(const wxMBConv& conv) const
@@ -371,6 +402,17 @@ wxWebView* wxWebView::New(const wxString& backend)
 }
 
 // static
+wxWebView* wxWebView::New(const wxWebViewConfiguration& config)
+{
+    wxStringWebViewFactoryMap::iterator iter = FindFactory(config.GetBackend());
+
+    if(iter == m_factoryMap.end())
+        return nullptr;
+    else
+        return (*iter).second->CreateWithConfig(config);
+}
+
+// static
 wxWebView* wxWebView::New(wxWindow* parent, wxWindowID id, const wxString& url,
                           const wxPoint& pos, const wxSize& size,
                           const wxString& backend, long style,
@@ -409,6 +451,15 @@ wxVersionInfo wxWebView::GetBackendVersionInfo(const wxString& backend)
         return iter->second->GetVersionInfo();
     else
         return wxVersionInfo();
+}
+
+wxWebViewConfiguration wxWebView::NewConfiguration(const wxString& backend)
+{
+    wxStringWebViewFactoryMap::iterator iter = FindFactory(backend);
+    if (iter != m_factoryMap.end())
+        return iter->second->CreateConfiguration();
+    else
+        return wxWebViewConfiguration(backend, new wxWebViewConfigurationImplDefault);
 }
 
 // static
@@ -456,6 +507,11 @@ void wxWebView::InitFactoryMap()
         RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>
                                                        (new wxWebViewFactoryWebKit));
 #endif
+}
+
+wxWebViewConfiguration wxWebViewFactory::CreateConfiguration()
+{
+    return wxWebViewConfiguration(wxWebViewBackendDefault, new wxWebViewConfigurationImplDefault);
 }
 
 #endif // wxUSE_WEBVIEW

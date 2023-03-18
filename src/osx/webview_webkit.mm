@@ -26,6 +26,7 @@
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/private/available.h"
 #include "wx/private/jsscriptwrapper.h"
+#include "wx/private/webview.h"
 
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
@@ -44,8 +45,6 @@
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
 wxBEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 wxEND_EVENT_TABLE()
@@ -100,6 +99,30 @@ wxEND_EVENT_TABLE()
 @end
 
 //-----------------------------------------------------------------------------
+// wxWebViewConfigurationImplWebKit
+//-----------------------------------------------------------------------------
+class wxWebViewConfigurationImplWebKit: public wxWebViewConfigurationImpl
+{
+public:
+    wxWebViewConfigurationImplWebKit(WKWebViewConfiguration* config):
+        m_webViewConfiguration([config retain])
+    {
+    }
+
+    ~wxWebViewConfigurationImplWebKit()
+    {
+        [m_webViewConfiguration release];
+    }
+
+    virtual void* GetNativeConfiguration() const override
+    {
+        return m_webViewConfiguration;
+    }
+
+    WKWebViewConfiguration* m_webViewConfiguration;
+};
+
+//-----------------------------------------------------------------------------
 // wxWebViewFactoryWebKit
 //-----------------------------------------------------------------------------
 
@@ -108,6 +131,12 @@ wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
     int verMaj, verMin, verMicro;
     wxGetOsVersion(&verMaj, &verMin, &verMicro);
     return wxVersionInfo("WKWebView", verMaj, verMin, verMicro);
+}
+
+wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
+{
+    return wxWebViewConfiguration(wxWebViewBackendWebKit,
+        new wxWebViewConfigurationImplWebKit([[WKWebViewConfiguration alloc] init]));
 }
 
 //-----------------------------------------------------------------------------
@@ -179,7 +208,8 @@ public:
 
     virtual wxWebView* CreateChildWebView() override
     {
-        m_childWebView = new wxWebViewWebKit(this);
+        m_childWebView = new wxWebViewWebKit(wxWebViewConfiguration(wxWebViewBackendWebKit,
+            new wxWebViewConfigurationImplWebKit(m_configuration)), this);
         return m_childWebView;
     }
 
@@ -194,9 +224,10 @@ public:
 // creation/destruction
 // ----------------------------------------------------------------------------
 
-void wxWebViewWebKit::Init()
+wxWebViewWebKit::wxWebViewWebKit(const wxWebViewConfiguration& config, wxWebViewWindowInfoWebKit* parentWindowInfo):
+    m_configuration(config),
+    m_parentWindowInfo(parentWindowInfo)
 {
-    m_webViewConfiguration = [[WKWebViewConfiguration alloc] init];
 }
 
 bool wxWebViewWebKit::Create(wxWindow *parent,
@@ -210,8 +241,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
-    WKWebViewConfiguration* webViewConfig = (m_parentWindowInfo) ?
-        m_parentWindowInfo->m_configuration : (WKWebViewConfiguration*) m_webViewConfiguration;
+    WKWebViewConfiguration* webViewConfig = (WKWebViewConfiguration*) m_configuration.GetNativeConfiguration();
 
     if (!m_handlers.empty() && !m_parentWindowInfo)
     {
@@ -234,13 +264,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     SetPeer(new wxWidgetCocoaImpl( this, m_webView ));
 
     MacPostControlCreate(pos, size);
-
-    if (!m_parentWindowInfo)
-    {
-        // WKWebView configuration is only used during creation
-        [m_webViewConfiguration release];
-        m_webViewConfiguration = nil;
-    }
 
     if (!m_customUserAgent.empty())
         SetUserAgent(m_customUserAgent);

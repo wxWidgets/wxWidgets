@@ -407,11 +407,6 @@ public:
 
     ~wxThreadInternal()
     {
-        Free();
-    }
-
-    void Free()
-    {
         if ( m_hThread )
         {
             if ( !::CloseHandle(m_hThread) )
@@ -684,8 +679,6 @@ wxThreadError wxThreadInternal::Kill()
         return wxTHREAD_MISC_ERROR;
     }
 
-    Free();
-
     return wxTHREAD_NO_ERROR;
 }
 
@@ -712,10 +705,11 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     // as Delete() (which calls us) is always safe to call we need to consider
     // all possible states
     {
-        wxCriticalSectionLocker lock(cs);
+    wxCriticalSectionLocker lock(cs);
 
-        if ( m_state == STATE_NEW )
-        {
+    switch ( m_state )
+    {
+        case STATE_NEW:
             if ( shouldDelete )
             {
                 // WinThreadStart() will see it and terminate immediately, no
@@ -732,12 +726,34 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             }
             //else: shouldResume is correctly set to false here, wait until
             //      someone else runs the thread and it finishes
-        }
-        else // running, paused, cancelled or even exited
-        {
-            shouldResume = m_state == STATE_PAUSED;
-        }
+            break;
+
+        case STATE_RUNNING:
+            // Nothing special to do, just wait for the thread to exit.
+            break;
+
+        case STATE_PAUSED:
+            shouldResume = true;
+            break;
+
+        case STATE_CANCELED:
+            // No need to cancel it again.
+            shouldDelete = false;
+            break;
+
+        case STATE_EXITED:
+            // We don't need to wait for the thread to exit if it already did,
+            // but doing it does no harm neither and it's a rare case not worth
+            // optimizing for.
+            //
+            // Just ensure we don't call OnDelete() again as we may have
+            // already done it (unfortunately we have no way of knowing if we
+            // did, but it seems better not to do it at all rather than do it
+            // twice).
+            threadToDelete = nullptr;
+            break;
     }
+    } // release cs
 
     // resume the thread if it is paused
     if ( shouldResume )
@@ -854,10 +870,6 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 
     if ( pRc )
         *pRc = wxUIntToPtr(rc);
-
-    // we don't need the thread handle any more in any case
-    Free();
-
 
     return rc == THREAD_ERROR_EXIT ? wxTHREAD_MISC_ERROR : wxTHREAD_NO_ERROR;
 }
@@ -1221,8 +1233,6 @@ bool wxThread::SetNameForCurrent(const wxString &name)
 void wxThread::Exit(ExitCode status)
 {
     wxThreadInternal::DoThreadOnExit(this);
-
-    m_internal->Free();
 
     if ( IsDetached() )
     {

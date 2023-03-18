@@ -17,6 +17,12 @@ const char wxMessageBoxCaptionStr[] = "Message";
     This class represents a dialog that shows a single or multi-line message,
     with a choice of OK, Yes, No and Cancel buttons.
 
+    Note about icons: while this dialog defines a number of icon-related
+    styles, the actual icon may or not appear depending on the current platform
+    UI conventions. For example, default GTK theme doesn't use any icons at all
+    in the message dialogs while macOS does use an icon, but it uses the
+    application icon for the informational dialogs.
+
     @beginStyleTable
     @style{wxOK}
         Puts an Ok button in the message box. May be combined with @c wxCANCEL.

@@ -247,6 +247,100 @@ public:
 };
 
 /**
+    @class wxWebViewConfiguration
+
+    This class allows access to web view configuration options and settings,
+    that have to be specified before placing a webview in a window with
+    wxWebView::Create().
+
+    @since 3.3.0
+    @library{wxwebview}
+    @category{webview}
+
+    @see wxWebView::NewConfiguration()
+ */
+class WXDLLIMPEXP_WEBVIEW wxWebViewConfiguration
+{
+public:
+    /**
+        Return the pointer to the native configuration used during creation of
+        a wxWebView.
+
+        When using two-step creation this method can be used to customize
+        configuration options not available via GetNativeBackend()
+        after using Create().
+
+        Additional instances of wxWebView must be created using the same
+        wxWebViewConfiguration instance.
+
+        All settings @b must be set before creating a new web view with
+        wxWebView::New().
+
+        The return value needs to be down-casted to the appropriate type
+        depending on the platform: under macOS, it's a
+        <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
+        pointer, under Windows with Edge it's a pointer to
+        <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
+        With other backends/platforms it's not implemented.
+
+        The following pseudo code shows how to use this method with two-step
+        creation to set no user action requirement to play video in a
+        web view:
+        @code
+            #if defined(__WXMSW__)
+            #include "webview2EnvironmentOptions.h"
+            #elif defined(__WXOSX__)
+            #import "WebKit/WebKit.h"
+            #endif
+
+            wxWebViewConfiguration config = wxWebView::NewConfiguration();
+
+            #if defined(__WXMSW__)
+            ICoreWebView2EnvironmentOptions* webViewOptions =
+                (ICoreWebView2EnvironmentOptions*) config->GetNativeConfiguration();
+            webViewOptions->put_AdditionalBrowserArguments("--autoplay-policy=no-user-gesture-required");
+            #elif defined(__WXOSX__)
+            WKWebViewConfiguration* webViewConfiguration =
+                (WKWebViewConfiguration*) config->GetNativeConfiguration();
+            webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+            #endif
+
+            wxWebView* webView = wxWebView::New(config);
+            webView->Create(this, wxID_ANY, "https://www.wxwidgets.org");
+        @endcode
+    */
+    virtual void* GetNativeConfiguration() const { return nullptr; }
+
+    /**
+        Returns the backend identifier for which this configuration was created.
+    */
+    wxString GetBackend() const;
+
+    /**
+        Set the data path for the webview.
+
+        This is the path where the webview stores its data, such as cookies,
+        local storage, etc.
+        @param path The path to the data directory.
+
+        @note This is only used by the Edge backend.
+    */
+    void SetDataPath(const wxString& path);
+
+    /**
+        Returns the data path for the webview.
+
+        This is the path where the webview stores its data, such as cookies,
+        local storage, etc.
+        @return The path to the data directory.
+
+        @note This is only used by the Edge backend.
+    */
+    wxString GetDataPath() const;
+};
+
+
+/**
     @class wxWebViewHandlerRequest
 
     A class giving access to various parameters of a webview request.
@@ -451,6 +545,18 @@ public:
     virtual wxWebView* Create() = 0;
 
     /**
+        Function to create a new wxWebView with two-step creation
+        with a wxWebViewConfiguration, wxWebView::Create should be
+        called on the returned object.
+
+        @return the created wxWebView
+        @since 3.3.0
+
+        @see CreateConfiguration()
+    */
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config);
+
+    /**
         Function to create a new wxWebView with parameters.
         @param parent Parent window for the control
         @param id ID of this control
@@ -487,6 +593,14 @@ public:
         @since 3.1.5
     */
     virtual wxVersionInfo GetVersionInfo();
+
+    /**
+        Create a wxWebViewConfiguration object for wxWebView instances
+        created by this factory.
+
+        @since 3.3.0
+    */
+    virtual wxWebViewConfiguration CreateConfiguration();
 };
 
 /**
@@ -848,6 +962,16 @@ public:
     static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
 
     /**
+        Factory function to create a new wxWebView with two-step creation,
+        wxWebView::Create should be called on the returned object.
+
+        @param config a configuration object create with NewConfiguration().
+        @return The created wxWebView
+        @since 3.3.0
+     */
+    static wxWebView* New(const wxWebViewConfiguration& config);
+
+    /**
         Factory function to create a new wxWebView using a wxWebViewFactory.
         @param parent Parent window for the control
         @param id ID of this control
@@ -907,6 +1031,13 @@ public:
     static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxWebViewBackendDefault);
 
     /**
+        Create a new wxWebViewConfiguration object.
+
+        @since 3.3.0
+    */
+    static wxWebViewConfiguration NewConfiguration(const wxString& backend = wxWebViewBackendDefault);
+
+    /**
         Get the title of the current web page, or its URL/path if title is not
         available.
     */
@@ -944,48 +1075,6 @@ public:
         @since 2.9.5
      */
     virtual void* GetNativeBackend() const = 0;
-
-    /**
-        Return the pointer to the native configuration used during creation of
-        this control.
-
-        When using two-step creation this method can be used to customize
-        configuration options not available via GetNativeBackend()
-        after using Create().
-
-        The return value needs to be down-casted to the appropriate type
-        depending on the platform: under macOS, it's a
-        <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
-        pointer, under Windows with Edge it's a pointer to
-        <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
-        With other backends/platforms it's not implemented.
-
-        The following pseudo code shows how to use this method with two-step
-        creation to set no user action requirement to play video in a
-        web view:
-        @code
-            #if defined(__WXMSW__)
-            #include "webview2.h"
-            #elif defined(__WXOSX__)
-            #import "WebKit/WebKit.h"
-            #endif
-
-            wxWebView* webView = wxWebView::New();
-            #if defined(__WXMSW__)
-            ICoreWebView2EnvironmentOptions* webViewOptions =
-                (ICoreWebView2EnvironmentOptions*) webView->GetNativeConfiguration();
-            webViewOptions->put_AdditionalBrowserArguments("--autoplay-policy=no-user-gesture-required");
-            #elif defined(__WXOSX__)
-            WKWebViewConfiguration* webViewConfiguration =
-                (WKWebViewConfiguration*) webView->GetNativeConfiguration();
-            webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
-            #endif
-            webView->Create(this, wxID_ANY, "https://www.wxwidgets.org");
-        @endcode
-
-        @since 3.3.0
-    */
-   virtual void* GetNativeConfiguration() const;
 
     /**
         Get the HTML source code of the currently displayed document.
