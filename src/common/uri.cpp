@@ -384,7 +384,7 @@ const char* wxURI::ParseAuthority(const char* uri)
     // Evidence shows us that users expect us to parse the
     // server component in the case of [server][#fragment].
     // Otherwise they don't want us to parse the server at all
-    // for file uris. 
+    // for file uris.
     if (m_scheme == "file") // RFC 8089 allows for leading "//" with file
     { // look for [server][#fragment] case
         bool serverfragmentfound = false;
