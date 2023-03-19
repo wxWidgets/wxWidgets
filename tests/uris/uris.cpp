@@ -345,7 +345,7 @@ void URITestCase::ComplexResolving()
     URI_TEST_RESOLVE("..g"	  ,"http://a/b/c/..g")
     // github issue #3350
     masteruri = "file:doc.chm#xchm:/d/e";
-    URI_TEST_RESOLVE("/a/b/c.jpg"	  ,"file:///a/b/c.jpg")
+    URI_TEST_RESOLVE("/a/b/c.jpg"	  ,"file://doc.chm/a/b/c.jpg")
 }
 
 void URITestCase::ReallyComplexResolving()
