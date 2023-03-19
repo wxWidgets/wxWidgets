@@ -325,7 +325,7 @@ void MyFrame::OpenConnection(wxSockAddress::Family family)
   wxString hostname = wxGetTextFromUser(
     _("Enter the address of the wxSocket demo server:"),
     _("Connect ..."),
-    _("localhost"));
+    "localhost");
   if ( hostname.empty() )
     return;
 
