@@ -590,7 +590,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             dc.GetTextExtent(L"Tp", &width, &height);
 
             // adjust the border height & Y coordinate
-            int offsetFromTop = (height / 2) + LABEL_VERT_BORDER;
+            const int offsetFromTop = height / 2;
             rect.SetTop(offsetFromTop);
             rect.SetHeight(rect.GetHeight() - offsetFromTop);
         }
