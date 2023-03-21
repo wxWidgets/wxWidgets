@@ -353,6 +353,16 @@ wxgtk_webview_webkit_script_message_received(WebKitUserContentManager *WXUNUSED(
     webKitCtrl->HandleWindowEvent(event);
 }
 
+static void wxgtk_webview_webkit_close (WebKitWebView *WXUNUSED(web_view),
+                                        wxWebViewWebKit *webKitCtrl)
+{
+    wxWebViewEvent event(wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED,
+                         webKitCtrl->GetId(),
+                         webKitCtrl->GetCurrentURL(),
+                         "");
+    webKitCtrl->HandleWindowEvent(event);
+}
+
 static gboolean
 wxgtk_webview_webkit_decide_policy(WebKitWebView *web_view,
                                    WebKitPolicyDecision *decision,
@@ -692,6 +702,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     g_signal_connect(m_web_view, "leave-fullscreen",
                      G_CALLBACK(wxgtk_webview_webkit_leave_fullscreen), this);
+
+    g_signal_connect(m_web_view, "close",
+                     G_CALLBACK(wxgtk_webview_webkit_close), this);
 
     WebKitFindController* findctrl = webkit_web_view_get_find_controller(m_web_view);
     g_signal_connect(findctrl, "counted-matches",
