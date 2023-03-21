@@ -349,6 +349,7 @@ wxGTK:
 - Also improve size compuation of wxTextCtrl (Alex Shvartzkop, #23610).
 - Fix missing borders for scrollable windows, e.g. wxListCtrl (#23236).
 - Fix TAB navigation in wxPropertyGrid (Adrian Lopez, #23354).
+- Fix GSource leak when using wxIdleEvent::RequestMore() (#23364).
 
 wxMSW:
 
