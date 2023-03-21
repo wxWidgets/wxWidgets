@@ -254,6 +254,7 @@ All (GUI):
 wxGTK:
 
 - Dramatically optimize adding many items to wxChoice (Ian McInerney, #23443).
+- Improve document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
 
 wxMSW:
 
