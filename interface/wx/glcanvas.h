@@ -887,6 +887,19 @@ public:
                const wxString& name = "GLCanvas",
                const wxPalette& palette = wxNullPalette);
 
+
+    /**
+       Re-creates EGLSurface. To be used after a reparent or other
+       changes that may invalidate the EGL drawing surface.
+
+       Only available when wxUSE_GLCANVAS_EGL is enabled.
+
+       @return @true if surface is successfully recreated
+
+       @since 3.2.3
+    */
+    bool CreateSurface();
+
     /**
         Determines if a canvas having the specified attributes is available.
         This only applies for visual attributes, not rendering context attributes.

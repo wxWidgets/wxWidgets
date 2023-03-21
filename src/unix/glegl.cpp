@@ -458,6 +458,12 @@ bool wxGLCanvasEGL::CreateSurface()
         return false;
     }
 
+    if ( m_surface != EGL_NO_SURFACE )
+    {
+        eglDestroySurface(m_surface, m_display);
+        m_surface = EGL_NO_SURFACE;
+    }
+
     GdkWindow *window = GTKGetDrawingWindow();
 #ifdef GDK_WINDOWING_X11
     if (wxGTKImpl::IsX11(window))
