@@ -583,11 +583,10 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             }
 
             // Make sure that the label is vertically aligned with the border
-            wxCoord width, height;
-
+            //
             // Use "Tp" as our sampling text to get the
             // maximum height from the current font
-            dc.GetTextExtent(L"Tp", &width, &height);
+            const wxCoord height = dc.GetTextExtent(L"Tp").y;
 
             // adjust the border height & Y coordinate
             const int offsetFromTop = height / 2;
