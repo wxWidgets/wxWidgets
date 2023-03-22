@@ -76,11 +76,7 @@ wxPrintData::wxPrintData()
     m_nativeData = wxPrintFactory::GetFactory()->CreatePrintNativeData();
 }
 
-wxPrintData::wxPrintData(const wxPrintData& printData)
-    : wxObject()
-{
-    (*this) = printData;
-}
+wxPrintData::wxPrintData(const wxPrintData&) = default;
 
 void wxPrintData::SetPrivData( char *privData, int len )
 {
@@ -107,32 +103,7 @@ void wxPrintData::ConvertFromNative()
     m_nativeData->TransferTo( *this ) ;
 }
 
-wxPrintData& wxPrintData::operator=(const wxPrintData& data)
-{
-    if ( &data == this )
-        return *this;
-
-    m_printNoCopies = data.m_printNoCopies;
-    m_printCollate = data.m_printCollate;
-    m_printOrientation = data.m_printOrientation;
-    m_printOrientationReversed = data.m_printOrientationReversed;
-    m_printerName = data.m_printerName;
-    m_colour = data.m_colour;
-    m_duplexMode = data.m_duplexMode;
-    m_printQuality = data.m_printQuality;
-    m_paperId = data.m_paperId;
-    m_paperSize = data.m_paperSize;
-    m_bin = data.m_bin;
-    m_media = data.m_media;
-    m_printMode = data.m_printMode;
-    m_filename = data.m_filename;
-
-    m_nativeData = data.m_nativeData;
-
-    m_privData = data.m_privData;
-
-    return *this;
-}
+wxPrintData& wxPrintData::operator=(const wxPrintData&) = default;
 
 // Is this data OK for showing the print dialog?
 bool wxPrintData::IsOk() const
