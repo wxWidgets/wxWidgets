@@ -73,9 +73,6 @@ wxPrintData::wxPrintData()
     // the default system settings will be used for them
     m_paperId = wxPAPER_NONE;
 
-    m_privData = nullptr;
-    m_privDataLen = 0;
-
     m_nativeData = wxPrintFactory::GetFactory()->CreatePrintNativeData();
 }
 
@@ -83,18 +80,19 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
     : wxObject()
 {
     m_nativeData = nullptr;
-    m_privData = nullptr;
     (*this) = printData;
 }
 
 void wxPrintData::SetPrivData( char *privData, int len )
 {
-    wxDELETEA(m_privData);
-    m_privDataLen = len;
-    if (m_privDataLen > 0)
+    if (len > 0)
     {
-        m_privData = new char[m_privDataLen];
-        memcpy( m_privData, privData, m_privDataLen );
+        m_privData.resize(len);
+        memcpy( &m_privData[0], privData, len );
+    }
+    else
+    {
+        m_privData.clear();
     }
 }
 
@@ -103,8 +101,6 @@ wxPrintData::~wxPrintData()
     m_nativeData->m_ref--;
     if (m_nativeData->m_ref == 0)
         delete m_nativeData;
-
-    delete[] m_privData;
 }
 
 void wxPrintData::ConvertToNative()
@@ -148,13 +144,7 @@ wxPrintData& wxPrintData::operator=(const wxPrintData& data)
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;
 
-    wxDELETEA(m_privData);
-    m_privDataLen = data.GetPrivDataLen();
-    if (m_privDataLen > 0)
-    {
-        m_privData = new char[m_privDataLen];
-        memcpy( m_privData, data.GetPrivData(), m_privDataLen );
-    }
+    m_privData = data.m_privData;
 
     return *this;
 }

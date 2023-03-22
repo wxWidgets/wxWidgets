@@ -21,6 +21,8 @@
 #include "wx/stream.h"
 #endif
 
+#include <vector>
+
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 
 /*
@@ -101,8 +103,9 @@ public:
 
     wxPrintData& operator=(const wxPrintData& data);
 
-    char* GetPrivData() const { return m_privData; }
-    int GetPrivDataLen() const { return m_privDataLen; }
+    char* GetPrivData() { return m_privData.empty() ? nullptr : &m_privData[0]; }
+    const char* GetPrivData() const { return m_privData.empty() ? nullptr : &m_privData[0]; }
+    int GetPrivDataLen() const { return static_cast<int>(m_privData.size()); }
     void SetPrivData( char *privData, int len );
 
 
@@ -131,8 +134,7 @@ private:
 
     wxString        m_filename;
 
-    char* m_privData;
-    int   m_privDataLen;
+    std::vector<char> m_privData;
 
     wxPrintNativeDataBase  *m_nativeData;
 
