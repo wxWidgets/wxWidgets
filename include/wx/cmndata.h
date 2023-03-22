@@ -232,9 +232,8 @@ class WXDLLIMPEXP_CORE wxPageSetupDialogData: public wxObject
 {
 public:
     wxPageSetupDialogData();
-    wxPageSetupDialogData(const wxPageSetupDialogData& dialogData);
+    wxPageSetupDialogData(const wxPageSetupDialogData& dialogData) = default;
     wxPageSetupDialogData(const wxPrintData& printData);
-    virtual ~wxPageSetupDialogData();
 
     wxSize GetPaperSize() const { return m_paperSize; }
     wxPaperSize GetPaperId() const { return m_printData.GetPaperId(); }
@@ -284,7 +283,7 @@ public:
     // Use paper id in wxPrintData to set this object's paper size
     void CalculatePaperSizeFromId();
 
-    wxPageSetupDialogData& operator=(const wxPageSetupDialogData& data);
+    wxPageSetupDialogData& operator=(const wxPageSetupDialogData& data) = default;
     wxPageSetupDialogData& operator=(const wxPrintData& data);
 
     wxPrintData& GetPrintData() { return m_printData; }
@@ -297,13 +296,13 @@ private:
     wxPoint         m_minMarginBottomRight;
     wxPoint         m_marginTopLeft;
     wxPoint         m_marginBottomRight;
-    bool            m_defaultMinMargins;
-    bool            m_enableMargins;
-    bool            m_enableOrientation;
-    bool            m_enablePaper;
-    bool            m_enablePrinter;
-    bool            m_getDefaultInfo; // Equiv. to PSD_RETURNDEFAULT
-    bool            m_enableHelp;
+    bool            m_defaultMinMargins = false;
+    bool            m_enableMargins = true;
+    bool            m_enableOrientation = true;
+    bool            m_enablePaper = true;
+    bool            m_enablePrinter = true;
+    bool            m_getDefaultInfo = false; // Equiv. to PSD_RETURNDEFAULT
+    bool            m_enableHelp = false;
     wxPrintData     m_printData;
 
 private:
