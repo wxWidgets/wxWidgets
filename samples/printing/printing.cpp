@@ -291,25 +291,18 @@ MyFrame::MyFrame(const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(wxID_PRINT, "&Print...",                 "Print");
-    file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",    "Page setup");
+    file_menu->Append(wxID_PRINT, "&Print...\tCtrl+P", "Show \"Print\" dialog");
+    file_menu->Append(WXPRINT_PAGE_SETUP, "Page &Setup...\tCtrl+S", "Page setup");
 #ifdef __WXMAC__
     file_menu->Append(WXPRINT_PAGE_MARGINS, "Page Margins...", "Page margins");
 #endif
-    file_menu->Append(wxID_PREVIEW, "Print Pre&view",          "Preview");
+    file_menu->Append(wxID_PREVIEW, "Pre&view\tCtrl+V", "Show print preview");
 
     wxMenu * const menuModalKind = new wxMenu;
     menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_APP, "&App modal");
     menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_WIN, "&Window modal");
     menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_NON, "&Not modal");
     file_menu->AppendSubMenu(menuModalKind, "Preview frame &modal kind");
-#if wxUSE_ACCEL
-    // Accelerators
-    wxAcceleratorEntry entries[1];
-    entries[0].Set(wxACCEL_CTRL, (int) 'V', wxID_PREVIEW);
-    wxAcceleratorTable accel(1, entries);
-    SetAcceleratorTable(accel);
-#endif
 
 #if wxUSE_POSTSCRIPT
     file_menu->AppendSeparator();
