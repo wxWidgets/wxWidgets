@@ -288,10 +288,7 @@ wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxPrintNativeDataBase, wxObject);
 
-wxPrintNativeDataBase::wxPrintNativeDataBase()
-{
-    m_ref = 1;
-}
+wxPrintNativeDataBase::~wxPrintNativeDataBase() = default;
 
 //----------------------------------------------------------------------------
 // wxPrintFactoryModule

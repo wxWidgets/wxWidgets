@@ -79,7 +79,6 @@ wxPrintData::wxPrintData()
 wxPrintData::wxPrintData(const wxPrintData& printData)
     : wxObject()
 {
-    m_nativeData = nullptr;
     (*this) = printData;
 }
 
@@ -96,12 +95,7 @@ void wxPrintData::SetPrivData( char *privData, int len )
     }
 }
 
-wxPrintData::~wxPrintData()
-{
-    m_nativeData->m_ref--;
-    if (m_nativeData->m_ref == 0)
-        delete m_nativeData;
-}
+wxPrintData::~wxPrintData() = default;
 
 void wxPrintData::ConvertToNative()
 {
@@ -133,16 +127,7 @@ wxPrintData& wxPrintData::operator=(const wxPrintData& data)
     m_printMode = data.m_printMode;
     m_filename = data.m_filename;
 
-    // UnRef old m_nativeData
-    if (m_nativeData)
-    {
-        m_nativeData->m_ref--;
-        if (m_nativeData->m_ref == 0)
-            delete m_nativeData;
-    }
-    // Set Ref new one
-    m_nativeData = data.GetNativeData();
-    m_nativeData->m_ref++;
+    m_nativeData = data.m_nativeData;
 
     m_privData = data.m_privData;
 

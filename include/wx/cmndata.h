@@ -113,7 +113,7 @@ public:
     void ConvertToNative();
     void ConvertFromNative();
     // Holds the native print data
-    wxPrintNativeDataBase *GetNativeData() const { return m_nativeData; }
+    wxPrintNativeDataBase *GetNativeData() const { return m_nativeData.get(); }
 
 private:
     wxPrintBin      m_bin;
@@ -136,7 +136,7 @@ private:
 
     std::vector<char> m_privData;
 
-    wxPrintNativeDataBase  *m_nativeData;
+    wxObjectDataPtr<wxPrintNativeDataBase> m_nativeData;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrintData);
