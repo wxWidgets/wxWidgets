@@ -101,13 +101,10 @@ public:
 
     // Paints property category selection rectangle.
 #if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_MSG("Use DrawCaptionSelectionRect(wxWindow*, wxDC&, ...) instead")
+    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("Use DrawCaptionSelectionRect(wxWindow*, wxDC&, ...) instead")
     virtual void DrawCaptionSelectionRect( wxDC& dc,
                                            int x, int y,
-                                           int w, int h ) const
-    {
-        DrawCaptionSelectionRect(nullptr, dc, x, y, w, h);
-    }
+                                           int w, int h ) const;
 #endif // WXWIN_COMPATIBILITY_3_0
     virtual void DrawCaptionSelectionRect(wxWindow *win, wxDC& dc,
                                           int x, int y, int w, int h) const;
