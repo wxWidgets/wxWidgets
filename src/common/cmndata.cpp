@@ -54,25 +54,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject);
 // ----------------------------------------------------------------------------
 
 wxPrintData::wxPrintData()
-    : m_paperSize(wxDefaultSize)
 {
-    m_bin = wxPRINTBIN_DEFAULT;
-    m_media = wxPRINTMEDIA_DEFAULT;
-    m_printMode = wxPRINT_MODE_PRINTER;
-    m_printOrientation = wxPORTRAIT;
-    m_printOrientationReversed = false;
-    m_printNoCopies = 1;
-    m_printCollate = false;
-
-    // New, 24/3/99
-    m_colour = true;
-    m_duplexMode = wxDUPLEX_SIMPLEX;
-    m_printQuality = wxPRINT_QUALITY_HIGH;
-
-    // we intentionally don't initialize paper id and size at all, like this
-    // the default system settings will be used for them
-    m_paperId = wxPAPER_NONE;
-
     m_nativeData = wxPrintFactory::GetFactory()->CreatePrintNativeData();
 }
 

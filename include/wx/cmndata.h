@@ -116,21 +116,24 @@ public:
     wxPrintNativeDataBase *GetNativeData() const { return m_nativeData.get(); }
 
 private:
-    wxPrintBin      m_bin;
-    int             m_media;
-    wxPrintMode     m_printMode;
+    wxPrintBin      m_bin = wxPRINTBIN_DEFAULT;
+    int             m_media = wxPRINTMEDIA_DEFAULT;
+    wxPrintMode     m_printMode = wxPRINT_MODE_PRINTER;
 
-    int             m_printNoCopies;
-    wxPrintOrientation m_printOrientation;
-    bool            m_printOrientationReversed;
-    bool            m_printCollate;
+    int             m_printNoCopies = 1;
+    wxPrintOrientation m_printOrientation = wxPORTRAIT;
+    bool            m_printOrientationReversed = false;
+    bool            m_printCollate = false;
 
     wxString        m_printerName;
-    bool            m_colour;
-    wxDuplexMode    m_duplexMode;
-    wxPrintQuality  m_printQuality;
-    wxPaperSize     m_paperId;
-    wxSize          m_paperSize;
+    bool            m_colour = true;
+    wxDuplexMode    m_duplexMode = wxDUPLEX_SIMPLEX;
+    wxPrintQuality  m_printQuality = wxPRINT_QUALITY_HIGH;
+
+    // we intentionally don't initialize paper id and size at all, like this
+    // the default system settings will be used for them
+    wxPaperSize     m_paperId = wxPAPER_NONE;
+    wxSize          m_paperSize = wxDefaultSize;
 
     wxString        m_filename;
 
