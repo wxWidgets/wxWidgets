@@ -423,7 +423,11 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 // -----------------------------------------------------------------------
 
 // Helpers to mark macros as deprecated
-#if (defined(__clang__) || defined(__GNUC__))
+//
+// Note that we don't do it when building wx itself if 3.0 compatibility is on,
+// as these macros are still used in our own code in this case.
+#if (defined(__clang__) || defined(__GNUC__)) && \
+        (!defined(WXBUILDING) || !WXWIN_COMPATIBILITY_3_0)
 #define wxPG_STRINGIFY(X) #X
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) \
         _Pragma(wxPG_STRINGIFY(GCC warning msg)) value
