@@ -698,13 +698,6 @@ void wxPropertyGridInterface::SetPropertyTextColour(wxPGPropArg id, const wxColo
 
 // -----------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_3_0
-void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id)
-{
-    SetPropertyColoursToDefault(id, wxPGPropertyValuesFlags::DontRecurse);
-}
-#endif // WXWIN_COMPATIBILITY_3_0
-
 void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, wxPGPropertyValuesFlags flags)
 {
     wxPG_PROP_ARG_CALL_PROLOG()

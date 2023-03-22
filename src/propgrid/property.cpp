@@ -98,19 +98,11 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
     }
 }
 
-#if WXWIN_COMPATIBILITY_3_0
-void wxPGCellRenderer::DrawCaptionSelectionRect(wxDC& dc,
-                                                int x, int y, int w, int h) const
-{
-    wxPGDrawFocusRect(nullptr, dc, x, y, w, h);
-}
-#else
 void wxPGCellRenderer::DrawCaptionSelectionRect(wxWindow* win, wxDC& dc,
                                                 int x, int y, int w, int h) const
 {
     wxPGDrawFocusRect(win, dc, x, y, w, h);
 }
-#endif // WXWIN_COMPATIBILITY_3_0/!WXWIN_COMPATIBILITY_3_0
 
 int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPropertyGrid* propGrid, const wxPGCell& cell, int flags ) const
 {
@@ -305,11 +297,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                 imageOffset += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
             }
 
-#if WXWIN_COMPATIBILITY_3_0
-            DrawCaptionSelectionRect( dc,
-#else
             DrawCaptionSelectionRect( const_cast<wxPropertyGrid*>(propertyGrid), dc,
-#endif // WXWIN_COMPATIBILITY_3_0
                                       rect.x+wxPG_XBEFORETEXT-wxPG_CAPRECTXMARGIN+imageOffset,
                                       rect.y-wxPG_CAPRECTYMARGIN+1,
                                       ((wxPropertyCategory*)property)->GetTextExtent(propertyGrid,
