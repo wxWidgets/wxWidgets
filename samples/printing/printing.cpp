@@ -370,6 +370,8 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
     // instance in order to evaluate users inputs.
     MyPrintout printout(this, &printer.GetPrintDialogData(), "My printout");
 
+    SetStatusText(""); // clear previous "cancelled" message, if any
+
     if (!printer.Print(this, &printout, true /*prompt*/))
     {
         if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
@@ -378,7 +380,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            wxLogMessage("You canceled printing");
+            wxLogStatus("You canceled printing");
         }
     }
     else
