@@ -95,7 +95,7 @@ jobs:
           - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --enable-stl --disable-compat30
+            configure_flags: --enable-stl --enable-compat30
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-20.04
@@ -104,7 +104,7 @@ jobs:
             use_xvfb: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
-            configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
+            configure_flags: --disable-compat32 --disable-sys-libs --disable-webview
             skip_samples: true
             use_asan: true
             use_xvfb: true
