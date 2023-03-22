@@ -151,7 +151,7 @@ class WXDLLIMPEXP_CORE wxPrintDialogData: public wxObject
 {
 public:
     wxPrintDialogData();
-    wxPrintDialogData(const wxPrintDialogData& dialogData);
+    wxPrintDialogData(const wxPrintDialogData& dialogData) = default;
     wxPrintDialogData(const wxPrintData& printData);
     virtual ~wxPrintDialogData();
 
@@ -196,25 +196,25 @@ public:
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
-    void operator=(const wxPrintDialogData& data);
+    wxPrintDialogData& operator=(const wxPrintDialogData& data) = default;
     void operator=(const wxPrintData& data); // Sets internal m_printData member
 
 private:
-    int             m_printFromPage;
-    int             m_printToPage;
-    int             m_printMinPage;
-    int             m_printMaxPage;
-    int             m_printNoCopies;
-    bool            m_printAllPages;
-    bool            m_printCollate;
-    bool            m_printToFile;
-    bool            m_printSelection;
-    bool            m_printCurrentPage;
-    bool            m_printEnableSelection;
-    bool            m_printEnableCurrentPage;
-    bool            m_printEnablePageNumbers;
-    bool            m_printEnableHelp;
-    bool            m_printEnablePrintToFile;
+    int             m_printFromPage = 0;
+    int             m_printToPage = 0;
+    int             m_printMinPage = 0;
+    int             m_printMaxPage = 0;
+    int             m_printNoCopies = 1;
+    bool            m_printAllPages = false;
+    bool            m_printCollate = false;
+    bool            m_printToFile = false;
+    bool            m_printSelection = false;
+    bool            m_printCurrentPage = false;
+    bool            m_printEnableSelection = false;
+    bool            m_printEnableCurrentPage = false;
+    bool            m_printEnablePageNumbers = true;
+    bool            m_printEnableHelp = false;
+    bool            m_printEnablePrintToFile = true;
     wxPrintData     m_printData;
 
 private:

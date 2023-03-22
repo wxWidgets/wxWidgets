@@ -173,30 +173,9 @@ bool wxPrintData::IsOk() const
 
 wxPrintDialogData::wxPrintDialogData()
 {
-    m_printFromPage = 0;
-    m_printToPage = 0;
-    m_printMinPage = 0;
-    m_printMaxPage = 0;
-    m_printNoCopies = 1;
-    m_printAllPages = false;
-    m_printCollate = false;
-    m_printToFile = false;
-    m_printSelection = false;
-    m_printCurrentPage = false;
-    m_printEnableSelection = false;
-    m_printEnableCurrentPage = false;
-    m_printEnablePageNumbers = true;
-
     wxPrintFactory* factory = wxPrintFactory::GetFactory();
-    m_printEnablePrintToFile = ! factory->HasOwnPrintToFile();
-
-    m_printEnableHelp = false;
-}
-
-wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData& dialogData)
-    : wxObject()
-{
-    (*this) = dialogData;
+    if ( factory->HasOwnPrintToFile() )
+        m_printEnablePrintToFile = false;
 }
 
 wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
@@ -206,46 +185,14 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printToPage = 0;
     m_printMinPage = 1;
     m_printMaxPage = 9999;
-    m_printNoCopies = 1;
     // On Mac the Print dialog always defaults to "All Pages"
 #ifdef __WXMAC__
     m_printAllPages = true;
-#else
-    m_printAllPages = false;
 #endif
-    m_printCollate = false;
-    m_printToFile = false;
-    m_printSelection = false;
-    m_printCurrentPage = false;
-    m_printEnableSelection = false;
-    m_printEnableCurrentPage = false;
-    m_printEnablePageNumbers = true;
-    m_printEnablePrintToFile = true;
-    m_printEnableHelp = false;
 }
 
 wxPrintDialogData::~wxPrintDialogData()
 {
-}
-
-void wxPrintDialogData::operator=(const wxPrintDialogData& data)
-{
-    m_printFromPage = data.m_printFromPage;
-    m_printToPage = data.m_printToPage;
-    m_printMinPage = data.m_printMinPage;
-    m_printMaxPage = data.m_printMaxPage;
-    m_printNoCopies = data.m_printNoCopies;
-    m_printAllPages = data.m_printAllPages;
-    m_printCollate = data.m_printCollate;
-    m_printToFile = data.m_printToFile;
-    m_printSelection = data.m_printSelection;
-    m_printCurrentPage = data.m_printCurrentPage;
-    m_printEnableSelection = data.m_printEnableSelection;
-    m_printEnableCurrentPage = data.m_printEnableCurrentPage;
-    m_printEnablePageNumbers = data.m_printEnablePageNumbers;
-    m_printEnableHelp = data.m_printEnableHelp;
-    m_printEnablePrintToFile = data.m_printEnablePrintToFile;
-    m_printData = data.m_printData;
 }
 
 void wxPrintDialogData::operator=(const wxPrintData& data)
