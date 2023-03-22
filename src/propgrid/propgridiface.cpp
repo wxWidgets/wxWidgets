@@ -701,9 +701,26 @@ void wxPropertyGridInterface::SetPropertyTextColour(wxPGPropArg id, const wxColo
 #if WXWIN_COMPATIBILITY_3_0
 void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id)
 {
-    SetPropertyColoursToDefault(id, wxPGPropertyValuesFlags::DontRecurse);
+    SetPropertyColoursToDefault(id, static_cast<int>(wxPGPropertyValuesFlags::DontRecurse));
 }
-#endif // WXWIN_COMPATIBILITY_3_0
+
+void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, int flags)
+{
+    wxPG_PROP_ARG_CALL_PROLOG()
+    p->SetDefaultColours(static_cast<wxPGPropertyValuesFlags>(flags));
+
+    // Redraw the control
+    wxPropertyGrid* pg = m_pState->GetGrid();
+    if ( pg == p->GetGrid() )
+    {
+        if ( flags & static_cast<int>(wxPGPropertyValuesFlags::Recurse) )
+            pg->DrawItemAndChildren(p);
+        else
+            pg->DrawItem(p);
+    }
+}
+
+#else // !WXWIN_COMPATIBILITY_3_0
 
 void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, wxPGPropertyValuesFlags flags)
 {
@@ -720,6 +737,8 @@ void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, wxPGPr
             pg->DrawItem(p);
     }
 }
+
+#endif // WXWIN_COMPATIBILITY_3_0/!WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 
