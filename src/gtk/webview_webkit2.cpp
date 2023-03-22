@@ -120,7 +120,10 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     WebKitNavigationAction* action = webkit_navigation_policy_decision_get_navigation_action(navigation_decision);
     WebKitURIRequest* request = webkit_navigation_action_get_request(action);
     const gchar* uri = webkit_uri_request_get_uri(request);
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     wxString target = webkit_navigation_policy_decision_get_frame_name(navigation_decision);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     //If m_creating is true then we are the result of a new window
     //and so we need to send the event and veto the load
@@ -288,7 +291,10 @@ wxgtk_webview_webkit_new_window(WebKitPolicyDecision *decision,
     WebKitURIRequest* request = webkit_navigation_action_get_request(action);
     const gchar* uri = webkit_uri_request_get_uri(request);
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     wxString target = webkit_navigation_policy_decision_get_frame_name(navigation_decision);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
     wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                                        webKitCtrl->GetId(),
                                        wxString( uri, wxConvUTF8 ),
@@ -1264,6 +1270,8 @@ static void wxgtk_run_javascript_cb(GObject *,
 
 void wxWebViewWebKit::ProcessJavaScriptResult(GAsyncResult *res, wxWebKitRunScriptParams* params) const
 {
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     wxGtkError error;
     wxWebKitJavascriptResult js_result
                              (
@@ -1274,6 +1282,8 @@ void wxWebViewWebKit::ProcessJavaScriptResult(GAsyncResult *res, wxWebKitRunScri
                                     error.Out()
                                 )
                              );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     if ( js_result )
     {
@@ -1300,11 +1310,13 @@ void wxWebViewWebKit::RunScriptAsync(const wxString& javascript, void* clientDat
     params->webKitCtrl = this;
     params->clientData = clientData;
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     webkit_web_view_run_javascript(m_web_view,
                                    wrapJS.GetWrappedCode().utf8_str(),
                                    nullptr,
                                    wxgtk_run_javascript_cb,
                                    params);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 bool wxWebViewWebKit::AddScriptMessageHandler(const wxString& name)
