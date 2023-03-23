@@ -196,23 +196,6 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     wxString target = webkit_navigation_policy_decision_get_frame_name(navigation_decision);
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-    //If m_creating is true then we are the result of a new window
-    //and so we need to send the event and veto the load
-    if(webKitCtrl->m_creating)
-    {
-        webKitCtrl->m_creating = false;
-        wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
-                             webKitCtrl->GetId(),
-                             wxString(uri, wxConvUTF8),
-                             target);
-        event.SetEventObject(webKitCtrl);
-
-        webKitCtrl->HandleWindowEvent(event);
-
-        webkit_policy_decision_ignore(decision);
-        return TRUE;
-    }
-
     webKitCtrl->m_busy = true;
 
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
@@ -354,32 +337,6 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
 }
 
 static gboolean
-wxgtk_webview_webkit_new_window(WebKitPolicyDecision *decision,
-                                wxWebViewWebKit *webKitCtrl)
-{
-    WebKitNavigationPolicyDecision* navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION(decision);
-    WebKitNavigationAction* action = webkit_navigation_policy_decision_get_navigation_action(navigation_decision);
-    WebKitURIRequest* request = webkit_navigation_action_get_request(action);
-    const gchar* uri = webkit_uri_request_get_uri(request);
-
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    wxString target = webkit_navigation_policy_decision_get_frame_name(navigation_decision);
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
-
-    wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
-                                       webKitCtrl->GetId(),
-                                       wxString( uri, wxConvUTF8 ),
-                                       target);
-    event.SetEventObject(webKitCtrl);
-
-    webKitCtrl->HandleWindowEvent(event);
-
-    //We always want the user to handle this themselves
-    webkit_policy_decision_ignore(decision);
-    return TRUE;
-}
-
-static gboolean
 wxgtk_webview_webkit_enter_fullscreen(WebKitWebView *WXUNUSED(web_view),
                                       wxWebViewWebKit *webKitCtrl)
 {
@@ -465,8 +422,6 @@ wxgtk_webview_webkit_decide_policy(WebKitWebView *web_view,
     {
         case WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION:
             return wxgtk_webview_webkit_navigation(web_view, decision, webKitCtrl);
-        case WEBKIT_POLICY_DECISION_TYPE_NEW_WINDOW_ACTION:
-            return wxgtk_webview_webkit_new_window(decision, webKitCtrl);
         default:
             return FALSE;
     }
@@ -862,7 +817,6 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     m_extension = nullptr;
     m_busy = false;
     m_guard = false;
-    m_creating = false;
     FindClear();
 
     bool isChildWebView = m_web_view != nullptr;
