@@ -929,7 +929,7 @@ public:
        window features are available for the new window. For usage
        details see wxWebViewWindowFeatures.
        only available in wxWidgets 3.3.0 or later.
-    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+    @event{EVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
        Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
        a window is requested to be closed.
        only available in wxWidgets 3.3.0 or later.
@@ -945,7 +945,7 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         AddScriptMessageHandler().
-    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+    @event{EVT_WEBVIEW_SCRIPT_RESULT(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
         only available in wxWidgets 3.1.6 or later. For usage details see
         RunScriptAsync().
@@ -1806,7 +1806,7 @@ public:
        window features are available for the new window. For usage
        details see wxWebViewWindowFeatures.
        only available in wxWidgets 3.3.0 or later.
-    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+    @event{EVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
        Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
        a window is requested to be closed.
        only available in wxWidgets 3.3.0 or later.
@@ -1822,7 +1822,7 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         wxWebView::AddScriptMessageHandler().
-    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+    @event{EVT_WEBVIEW_SCRIPT_RESULT(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
         only available in wxWidgets 3.1.6 or later. For usage details see
         wxWebView::RunScriptAsync().
@@ -1912,3 +1912,4 @@ wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
 wxEventType wxEVT_WEBVIEW_FULLSCREEN_CHANGED;
 wxEventType wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED;
 wxEventType wxEVT_WEBVIEW_SCRIPT_RESULT;
+wxEventType wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED;
