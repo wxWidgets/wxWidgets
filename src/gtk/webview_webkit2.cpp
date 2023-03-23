@@ -144,6 +144,23 @@ public:
     WebKitWindowProperties *m_properties;
 };
 
+wxWebViewNavigationActionFlags wxGetNavigationActionFlags(WebKitNavigationAction* navigation)
+{
+    wxWebViewNavigationActionFlags flags;
+    switch (webkit_navigation_action_get_navigation_type(navigation))
+    {
+        case WEBKIT_NAVIGATION_TYPE_LINK_CLICKED:
+        case WEBKIT_NAVIGATION_TYPE_FORM_SUBMITTED:
+        case WEBKIT_NAVIGATION_TYPE_FORM_RESUBMITTED:
+            flags = wxWEBVIEW_NAV_ACTION_USER;
+            break;
+        default:
+            flags = wxWEBVIEW_NAV_ACTION_OTHER;
+            break;
+    }
+    return flags;
+}
+
 // ----------------------------------------------------------------------------
 // GTK callbacks
 // ----------------------------------------------------------------------------
@@ -201,7 +218,8 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
                          wxString( uri, wxConvUTF8 ),
-                         target);
+                         target,
+                         wxGetNavigationActionFlags(action));
     event.SetEventObject(webKitCtrl);
 
     webKitCtrl->HandleWindowEvent(event);
@@ -518,7 +536,8 @@ wxgtk_webview_webkit_create_webview(WebKitWebView *web_view,
     wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                          webKitCtrl->GetId(),
                          url,
-                         "");
+                         "",
+                         wxGetNavigationActionFlags(navigation_action));
     event.SetEventObject(webKitCtrl);
     webKitCtrl->HandleWindowEvent(event);
 
