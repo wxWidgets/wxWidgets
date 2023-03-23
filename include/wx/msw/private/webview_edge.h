@@ -46,7 +46,7 @@ __CRT_UUID_DECL(ICoreWebView2WindowCloseRequestedEventHandler, 0x5c19e9e0,0x092f
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
-class wxWebViewEdgeParentWindowInfo;
+class wxWebViewWindowFeaturesEdge;
 
 class wxWebViewEdgeImpl
 {
@@ -57,15 +57,15 @@ public:
 
     bool Create();
 
-    wxWebViewEdge* CreateChildWebView(std::shared_ptr<wxWebViewEdgeParentWindowInfo> parentWindowInfo);
-
     wxWebViewEdge* m_ctrl;
     wxWebViewConfiguration m_config;
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2_2> m_webView;
     wxCOMPtr<ICoreWebView2Controller> m_webViewController;
-    std::shared_ptr<wxWebViewEdgeParentWindowInfo> m_parentWindowInfo;
+
+    wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_newWindowArgs;
+    wxCOMPtr<ICoreWebView2Deferral> m_newWindowDeferral;
 
     bool m_initialized;
     bool m_isBusy;

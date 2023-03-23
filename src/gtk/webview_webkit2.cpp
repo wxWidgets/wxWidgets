@@ -88,6 +88,62 @@ bool wxGetStringFromJSResult(WebKitJavascriptResult* js_result, wxString* output
     return true;
 }
 
+//-----------------------------------------------------------------------------
+// wxWebViewWindowFeaturesWebKit
+//-----------------------------------------------------------------------------
+class wxWebViewWindowFeaturesWebKit : public wxWebViewWindowFeatures
+{
+public:
+    wxWebViewWindowFeaturesWebKit(wxWebView* webViewCtrl, WebKitWebView *web_view):
+        wxWebViewWindowFeatures(webViewCtrl)
+    {
+        m_properties = webkit_web_view_get_window_properties(web_view);
+        webkit_window_properties_get_geometry(m_properties, &m_geometry);
+        // Treat 0 as -1 to indicate that the value is not set
+        if (m_geometry.width == 0)
+            m_geometry.width = -1;
+        if (m_geometry.height == 0)
+            m_geometry.height = -1;
+        if (m_geometry.x == 0)
+            m_geometry.x = -1;
+        if (m_geometry.y == 0)
+            m_geometry.y = -1;
+    }
+
+    virtual wxPoint GetPosition() const override
+    {
+        return wxPoint(m_geometry.x, m_geometry.y);
+    }
+
+    virtual wxSize GetSize() const override
+    {
+        return wxSize(m_geometry.width, m_geometry.height);
+    }
+
+    virtual bool ShouldDisplayMenuBar() const override
+    {
+        return webkit_window_properties_get_toolbar_visible(m_properties);
+    }
+
+    virtual bool ShouldDisplayStatusBar() const override
+    {
+        return webkit_window_properties_get_statusbar_visible(m_properties);
+    }
+
+    virtual bool ShouldDisplayToolBar() const override
+    {
+        return webkit_window_properties_get_toolbar_visible(m_properties);
+    }
+
+    virtual bool ShouldDisplayScrollBars() const override
+    {
+        return webkit_window_properties_get_scrollbars_visible(m_properties);
+    }
+
+    GdkRectangle m_geometry;
+    WebKitWindowProperties *m_properties;
+};
+
 // ----------------------------------------------------------------------------
 // GTK callbacks
 // ----------------------------------------------------------------------------
@@ -378,6 +434,27 @@ static void wxgtk_webview_webkit_close (WebKitWebView *WXUNUSED(web_view),
     webKitCtrl->HandleWindowEvent(event);
 }
 
+class wxReadyToShowParams
+{
+public:
+    wxWebViewWebKit* childWebView;
+    wxWebViewWebKit* parentWebView;
+};
+
+static void wxgtk_webview_webkit_ready_to_show (WebKitWebView *web_view,
+                                                wxReadyToShowParams *params)
+{
+    wxWebViewWindowFeaturesWebKit features(params->childWebView, web_view);
+    wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW_FEATURES,
+                         params->parentWebView->GetId(),
+                         params->childWebView->GetCurrentURL(),
+                         "");
+    event.SetEventObject(params->parentWebView);
+    event.SetClientData(&features);
+    params->parentWebView->HandleWindowEvent(event);
+    delete params;
+}
+
 static gboolean
 wxgtk_webview_webkit_decide_policy(WebKitWebView *web_view,
                                    WebKitPolicyDecision *decision,
@@ -478,13 +555,25 @@ wxgtk_webview_webkit_context_menu(WebKitWebView *,
 
 static WebKitWebView*
 wxgtk_webview_webkit_create_webview(WebKitWebView *web_view,
-                                    WebKitNavigationAction *,
+                                    WebKitNavigationAction *navigation_action,
                                     wxWebViewWebKit *webKitCtrl)
 {
-    //As we do not know the uri being loaded at this point allow the load to
-    //continue and catch it in navigation-policy-decision-requested
-    webKitCtrl->m_creating = true;
-    return web_view;
+    auto request = webkit_navigation_action_get_request(navigation_action);
+    wxString url = wxString::FromUTF8(webkit_uri_request_get_uri(request));
+    wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
+                         webKitCtrl->GetId(),
+                         url,
+                         "");
+    event.SetEventObject(webKitCtrl);
+    webKitCtrl->HandleWindowEvent(event);
+
+    if ( event.IsAllowed() )
+    {
+        wxWebView* childWebView = new wxWebViewWebKit(web_view, webKitCtrl);
+        return (WebKitWebView*)childWebView->GetNativeBackend();
+    }
+    else
+        return nullptr;
 }
 
 static void
@@ -738,6 +827,21 @@ wxWebViewWebKit::wxWebViewWebKit():
     m_extension = nullptr;
 }
 
+wxWebViewWebKit::wxWebViewWebKit(WebKitWebView* parentWebView, wxWebViewWebKit* parentWebViewCtrl):
+    m_config(parentWebViewCtrl->m_config)
+{
+    m_web_view = (WebKitWebView*) webkit_web_view_new_with_related_view(parentWebView);
+    m_dbusServer = nullptr;
+    m_extension = nullptr;
+
+    wxReadyToShowParams* params = new wxReadyToShowParams();
+    params->childWebView = this;
+    params->parentWebView = parentWebViewCtrl;
+
+    g_signal_connect(m_web_view, "ready-to-show",
+                     G_CALLBACK(wxgtk_webview_webkit_ready_to_show), params);
+}
+
 wxWebViewWebKit::wxWebViewWebKit(const wxWebViewConfiguration &config):
     m_config(config)
 {
@@ -754,13 +858,14 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    m_web_view = nullptr;
     m_dbusServer = nullptr;
     m_extension = nullptr;
     m_busy = false;
     m_guard = false;
     m_creating = false;
     FindClear();
+
+    bool isChildWebView = m_web_view != nullptr;
 
     // We currently unconditionally impose scrolling in both directions as it's
     // necessary to show arbitrary pages.
@@ -779,6 +884,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                      G_CALLBACK(wxgtk_initialize_web_extensions),
                      m_dbusServer);
 
+    if (!isChildWebView)
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new_with_context(WEBKIT_WEB_CONTEXT(m_config.GetNativeConfiguration())));
 #else
@@ -825,7 +931,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     PostCreation(size);
 
     /* Open a webpage */
-    webkit_web_view_load_uri(m_web_view, url.utf8_str());
+    if (!isChildWebView)
+        webkit_web_view_load_uri(m_web_view, url.utf8_str());
 
     // last to avoid getting signal too early
     g_signal_connect(m_web_view, "load-changed",

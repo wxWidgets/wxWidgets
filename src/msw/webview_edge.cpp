@@ -320,13 +320,13 @@ public:
 
 wxString wxWebViewConfigurationImplEdge::ms_browserExecutableDir;
 
-// wxWebViewNewWindowInfoEdge
+// wxWebViewWindowFeaturesEdge
 
-class wxWebViewNewWindowInfoEdge : public wxWebViewWindowInfo
+class wxWebViewWindowFeaturesEdge : public wxWebViewWindowFeatures
 {
 public:
-    wxWebViewNewWindowInfoEdge(wxWebViewEdgeImpl* impl, ICoreWebView2NewWindowRequestedEventArgs* args):
-        m_impl(impl),
+    wxWebViewWindowFeaturesEdge(wxWebView* childWebView, ICoreWebView2NewWindowRequestedEventArgs* args):
+        wxWebViewWindowFeatures(childWebView),
         m_args(args)
     {
         m_args->get_WindowFeatures(&m_windowFeatures);
@@ -395,35 +395,10 @@ public:
             return true;
     }
 
-    virtual wxWebView* CreateChildWebView() override
-    {
-        return m_impl->CreateChildWebView(
-            std::make_shared<wxWebViewEdgeParentWindowInfo>(m_args));
-    }
-
 private:
-    wxWebViewEdgeImpl* m_impl;
     wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_args;
     wxCOMPtr<ICoreWebView2WindowFeatures> m_windowFeatures;
 };
-
-class wxWebViewEdgeParentWindowInfo
-{
-public:
-    wxWebViewEdgeParentWindowInfo(ICoreWebView2NewWindowRequestedEventArgs* args):
-        m_args(args)
-    {
-        HRESULT hr = m_args->GetDeferral(&m_deferral);
-        if (FAILED(hr))
-            wxLogApiError("GetDeferral", hr);
-    }
-
-    virtual ~wxWebViewEdgeParentWindowInfo() = default;
-
-    wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_args;
-    wxCOMPtr<ICoreWebView2Deferral> m_deferral;
-};
-
 
 #define wxWEBVIEW_EDGE_EVENT_HANDLER_METHOD \
     m_inEventCallback = true; \
@@ -474,13 +449,6 @@ bool wxWebViewEdgeImpl::Create()
 
     return static_cast<wxWebViewConfigurationImplEdge*>(m_config.GetImpl())->
         CreateOrGetEnvironment(this);
-}
-
-wxWebViewEdge* wxWebViewEdgeImpl::CreateChildWebView(std::shared_ptr<wxWebViewEdgeParentWindowInfo> parentWindowInfo)
-{
-    wxWebViewEdge* childWebView = new wxWebViewEdge(m_config);
-    childWebView->m_impl->m_parentWindowInfo = parentWindowInfo;
-    return childWebView;
 }
 
 void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environment)
@@ -684,11 +652,24 @@ HRESULT wxWebViewEdgeImpl::OnNewWindowRequested(ICoreWebView2* WXUNUSED(sender),
     if (SUCCEEDED(args->get_IsUserInitiated(&isUserInitiated)) && isUserInitiated)
         navFlags = wxWEBVIEW_NAV_ACTION_USER;
 
-    wxWebViewNewWindowInfoEdge windowInfo(this, args);
-    wxWebViewEvent evt(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString(), navFlags, "");
-    evt.SetClientData(&windowInfo);
-    m_ctrl->HandleWindowEvent(evt);
+    wxWebViewEvent newWindowEvent(wxEVT_WEBVIEW_NEWWINDOW, m_ctrl->GetId(), evtURL, wxString(), navFlags, "");
+    m_ctrl->HandleWindowEvent(newWindowEvent);
     args->put_Handled(true);
+
+    if (newWindowEvent.IsAllowed())
+    {
+        wxWebViewEdge* childWebView = new wxWebViewEdge(m_config);
+        childWebView->m_impl->m_newWindowArgs = args;
+        HRESULT hr = args->GetDeferral(&childWebView->m_impl->m_newWindowDeferral);
+        if (FAILED(hr))
+            wxLogApiError("GetDeferral", hr);
+
+        wxWebViewWindowFeaturesEdge windowFeatures(childWebView, args);
+        wxWebViewEvent featuresEvent(wxEVT_WEBVIEW_NEWWINDOW_FEATURES, m_ctrl->GetId(), evtURL, wxString(), navFlags, "");
+        featuresEvent.SetClientData(&windowFeatures);
+        m_ctrl->HandleWindowEvent(featuresEvent);
+    }
+
     return S_OK;
 }
 
@@ -916,13 +897,14 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
         m_pendingUserScripts.clear();
     }
 
-    if (m_parentWindowInfo)
+    if (m_newWindowArgs)
     {
-        if (FAILED(m_parentWindowInfo->m_args->put_NewWindow(baseWebView)))
+        if (FAILED(m_newWindowArgs->put_NewWindow(baseWebView)))
             SendErrorEventForAPI("WebView2::WebViewCreated (put_NewWindow)", hr);
-        if (FAILED(m_parentWindowInfo->m_deferral->Complete()))
+        if (FAILED(m_newWindowDeferral->Complete()))
             SendErrorEventForAPI("WebView2::WebViewCreated (Complete)", hr);
-        m_parentWindowInfo.reset();
+        m_newWindowArgs.reset();
+        m_newWindowDeferral.reset();
 
         return S_OK;
     }

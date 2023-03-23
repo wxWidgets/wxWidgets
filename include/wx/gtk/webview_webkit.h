@@ -35,6 +35,7 @@ public:
     wxWebViewWebKit();
 
 #if wxUSE_WEBVIEW_WEBKIT2
+    wxWebViewWebKit(WebKitWebView* parentWebView, wxWebViewWebKit* parentWebViewCtrl);
     wxWebViewWebKit(const wxWebViewConfiguration& config);
 #endif
 
