@@ -140,15 +140,17 @@ wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
 }
 
 //-----------------------------------------------------------------------------
-// wxWebViewWindowInfoWebKit
+// wxWebViewWindowFeaturesWebKit
 //-----------------------------------------------------------------------------
 
-class wxWebViewWindowInfoWebKit: public wxWebViewWindowInfo
+class wxWebViewWindowFeaturesWebKit: public wxWebViewWindowFeatures
 {
 public:
-    wxWebViewWindowInfoWebKit(WKWebViewConfiguration* configuration,
-                                 WKNavigationAction* navigationAction,
-                                 WKWindowFeatures* windowFeatures):
+    wxWebViewWindowFeaturesWebKit(wxWebView* childWebView,
+                                    WKWebViewConfiguration* configuration,
+                                    WKNavigationAction* navigationAction,
+                                    WKWindowFeatures* windowFeatures):
+        wxWebViewWindowFeatures(childWebView),
         m_configuration(configuration),
         m_navigationAction(navigationAction),
         m_windowFeatures(windowFeatures)
@@ -206,14 +208,6 @@ public:
         return true;
     }
 
-    virtual wxWebView* CreateChildWebView() override
-    {
-        m_childWebView = new wxWebViewWebKit(wxWebViewConfiguration(wxWebViewBackendWebKit,
-            new wxWebViewConfigurationImplWebKit(m_configuration)), this);
-        return m_childWebView;
-    }
-
-    wxWebView* m_childWebView = nullptr;
     WKWebViewConfiguration* m_configuration;
     WKNavigationAction* m_navigationAction;
     WKWindowFeatures* m_windowFeatures;
@@ -224,9 +218,9 @@ public:
 // creation/destruction
 // ----------------------------------------------------------------------------
 
-wxWebViewWebKit::wxWebViewWebKit(const wxWebViewConfiguration& config, wxWebViewWindowInfoWebKit* parentWindowInfo):
+wxWebViewWebKit::wxWebViewWebKit(const wxWebViewConfiguration& config, WX_NSObject request):
     m_configuration(config),
-    m_parentWindowInfo(parentWindowInfo)
+    m_request(request)
 {
 }
 
@@ -240,10 +234,12 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     DontCreatePeer();
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
 
+    bool isChildWebView = m_request != nil;
+
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     WKWebViewConfiguration* webViewConfig = (WKWebViewConfiguration*) m_configuration.GetNativeConfiguration();
 
-    if (!m_handlers.empty() && !m_parentWindowInfo)
+    if (!m_handlers.empty() && !isChildWebView)
     {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
         if ( WX_IS_MACOS_AVAILABLE(10, 13) )
@@ -285,7 +281,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     [m_webView setUIDelegate:uiDelegate];
 
-    if (!m_parentWindowInfo)
+    if (!isChildWebView)
     {
         // Implement javascript fullscreen interface with user script and message handler
         AddUserScript("\
@@ -326,8 +322,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     m_UIDelegate = uiDelegate;
 
-    if (m_parentWindowInfo)
-        [m_webView loadRequest:m_parentWindowInfo->m_navigationAction.request];
+    if (m_request)
+        [m_webView loadRequest:(NSURLRequest*)m_request];
     else
         LoadURL(strURL);
     return true;
@@ -1126,19 +1122,31 @@ WX_API_AVAILABLE_MACOS(10, 13)
         wxWEBVIEW_NAV_ACTION_USER :
         wxWEBVIEW_NAV_ACTION_OTHER;
 
-    wxWebViewWindowInfoWebKit windowInfo(configuration, navigationAction, windowFeatures);
 
-    wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
+    wxWebViewEvent newWinEvent(wxEVT_WEBVIEW_NEWWINDOW,
                          webKitWindow->GetId(),
                          wxCFStringRef::AsString( navigationAction.request.URL.absoluteString ),
                          "", navFlags);
-    event.SetClientData(&windowInfo);
 
     if (webKitWindow && webKitWindow->GetEventHandler())
-        webKitWindow->GetEventHandler()->ProcessEvent(event);
+        webKitWindow->GetEventHandler()->ProcessEvent(newWinEvent);
 
-    if (windowInfo.m_childWebView)
-        return (WKWebView*) windowInfo.m_childWebView->GetNativeBackend();
+    if (newWinEvent.IsAllowed())
+    {
+        wxWebView* childWebView = new wxWebViewWebKit(wxWebViewConfiguration(wxWebViewBackendWebKit,
+            new wxWebViewConfigurationImplWebKit(configuration)), navigationAction.request);
+        wxWebViewWindowFeaturesWebKit childWindowFeatures(childWebView, configuration, navigationAction, windowFeatures);
+
+        wxWebViewEvent featuresEvent(wxEVT_WEBVIEW_NEWWINDOW_FEATURES,
+                         webKitWindow->GetId(),
+                         wxCFStringRef::AsString( navigationAction.request.URL.absoluteString ),
+                         "", navFlags);
+        featuresEvent.SetClientData(&childWindowFeatures);
+        if (webKitWindow && webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent(featuresEvent);
+
+        return (WKWebView*) childWebView->GetNativeBackend();
+    }
     else
         return nil;
 }

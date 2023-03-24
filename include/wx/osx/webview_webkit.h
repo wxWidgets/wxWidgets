@@ -27,13 +27,12 @@
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
-class wxWebViewWindowInfoWebKit;
 class wxWebViewConfigurationImplWebKit;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
-    explicit wxWebViewWebKit(const wxWebViewConfiguration& config, wxWebViewWindowInfoWebKit* parentWindowInfo = nullptr);
+    explicit wxWebViewWebKit(const wxWebViewConfiguration& config, WX_NSObject request = nullptr);
 
     bool Create(wxWindow *parent,
                 wxWindowID winID = wxID_ANY,
@@ -109,7 +108,7 @@ private:
     OSXWebViewPtr m_webView;
     wxStringToWebHandlerMap m_handlers;
     wxString m_customUserAgent;
-    wxWebViewWindowInfoWebKit* m_parentWindowInfo = nullptr;
+    WX_NSObject m_request;
 
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;

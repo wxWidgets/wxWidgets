@@ -344,10 +344,14 @@ private:
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
 
-class WXDLLIMPEXP_WEBVIEW wxWebViewWindowInfo
+class WXDLLIMPEXP_WEBVIEW wxWebViewWindowFeatures
 {
 public:
-    virtual ~wxWebViewWindowInfo() = default;
+    wxWebViewWindowFeatures(wxWebView* childWebView);
+
+    virtual ~wxWebViewWindowFeatures();
+
+    wxWebView* GetChildWebView() const;
 
     virtual wxPoint GetPosition() const = 0;
 
@@ -361,9 +365,10 @@ public:
 
     virtual bool ShouldDisplayScrollBars() const = 0;
 
-    virtual wxWebView* CreateChildWebView() = 0;
+protected:
+    mutable bool m_childWebViewWasUsed;
+    std::unique_ptr<wxWebView> m_childWebView;
 };
-
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 {
@@ -385,7 +390,7 @@ public:
 
     wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
     const wxString& GetMessageHandler() const { return m_messageHandler; }
-    wxWebViewWindowInfo* GetTargetWindowInfo() const { return (wxWebViewWindowInfo*)m_clientData; }
+    wxWebViewWindowFeatures* GetTargetWindowFeatures() const { return (wxWebViewWindowFeatures*)m_clientData; }
 
     virtual wxEvent* Clone() const override { return new wxWebViewEvent(*this); }
 private:
@@ -402,6 +407,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NAVIGATED, wxWebVie
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW_FEATURES, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);

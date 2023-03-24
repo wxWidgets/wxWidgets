@@ -50,6 +50,7 @@ wxDEFINE_EVENT( wxEVT_WEBVIEW_NAVIGATED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
+wxDEFINE_EVENT( wxEVT_WEBVIEW_NEWWINDOW_FEATURES, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
@@ -84,6 +85,24 @@ void wxWebViewConfiguration::SetDataPath(const wxString &path)
 wxString wxWebViewConfiguration::GetDataPath() const
 {
     return m_impl->GetDataPath();
+}
+
+// wxWebViewWindowFeatures
+wxWebViewWindowFeatures::wxWebViewWindowFeatures(wxWebView * childWebView):
+    m_childWebViewWasUsed(false),
+    m_childWebView(childWebView)
+{ }
+
+wxWebViewWindowFeatures::~wxWebViewWindowFeatures()
+{
+    if (m_childWebViewWasUsed)
+        m_childWebView.release();
+}
+
+wxWebView *wxWebViewWindowFeatures::GetChildWebView() const
+{
+    m_childWebViewWasUsed = true;
+    return m_childWebView.get();
 }
 
 // wxWebViewHandlerRequest
