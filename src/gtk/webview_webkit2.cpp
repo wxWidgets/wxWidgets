@@ -38,6 +38,16 @@
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
 
+// Function to check webkit version at runtime
+bool wx_check_webkit_version(int major, int minor, int micro)
+{
+    const unsigned int version = webkit_get_major_version() * 10000 +
+                                 webkit_get_minor_version() * 100 +
+                                 webkit_get_micro_version();
+    const unsigned int required = major * 10000 + minor * 100 + micro;
+    return version >= required;
+}
+
 // Helper function to get string from Webkit JS result
 bool wxGetStringFromJSResult(WebKitJavascriptResult* js_result, wxString* output)
 {
