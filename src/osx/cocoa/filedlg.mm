@@ -125,6 +125,15 @@ void wxFileDialog::Create(
 
 wxFileDialog::~wxFileDialog()
 {
+    if ( m_extraControl ) {
+        DestroyExtraControl();
+        // if this is set, then m_filterPanel points to the same instance
+        // so no need to delete that one as well
+    }
+    else if ( m_filterPanel ) {
+        m_filterPanel->Destroy();
+        m_filterPanel = nullptr;
+    }
 }
 
 bool wxFileDialog::SupportsExtraControl() const
