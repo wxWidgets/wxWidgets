@@ -277,11 +277,16 @@ public:
         wxWebView::New().
 
         The return value needs to be down-casted to the appropriate type
-        depending on the platform: under macOS, it's a
-        <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
-        pointer, under Windows with Edge it's a pointer to
-        <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
-        With other backends/platforms it's not implemented.
+        depending on the platform:
+            - macOS:
+              <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
+              pointer,
+            - Windows with Edge:
+              <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
+            - WebKitGTK:
+              <a href="https://webkitgtk.org/reference/webkit2gtk/stable/class.WebContext.html">WebKitWebContext</a>
+              pointer.
+            - With other backends/platforms it's not implemented.
 
         The following pseudo code shows how to use this method with two-step
         creation to set no user action requirement to play video in a
@@ -323,7 +328,7 @@ public:
         local storage, etc.
         @param path The path to the data directory.
 
-        @note This is only used by the Edge backend.
+        @note This is only used by the Edge and WebKit2GTK+ backend.
     */
     void SetDataPath(const wxString& path);
 
@@ -334,7 +339,7 @@ public:
         local storage, etc.
         @return The path to the data directory.
 
-        @note This is only used by the Edge backend.
+        @note This is only used by the Edge and WebKit2GTK+ backend.
     */
     wxString GetDataPath() const;
 };

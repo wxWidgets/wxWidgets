@@ -23,6 +23,7 @@
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
 #include "wx/stockitem.h"
+#include "wx/private/webview.h"
 #include "wx/gtk/webview_webkit.h"
 #include "wx/gtk/control.h"
 #include "wx/gtk/private.h"
@@ -37,6 +38,10 @@
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
 #include <JavaScriptCore/JSStringRef.h>
+
+#if WEBKIT_CHECK_VERSION(2, 10, 0)
+#define wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+#endif
 
 // Function to check webkit version at runtime
 bool wx_check_webkit_version(int major, int minor, int micro)
@@ -629,6 +634,76 @@ wxgtk_authorize_authenticated_peer_cb(GDBusAuthObserver *,
 } // extern "C"
 
 //-----------------------------------------------------------------------------
+// wxWebViewConfigurationImplWebKit
+//-----------------------------------------------------------------------------
+class wxWebViewConfigurationImplWebKit : public wxWebViewConfigurationImpl
+{
+public:
+
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+    wxString GetDataPath() const override
+    {
+        GetOrCreateContext();
+        if (m_websiteDataManager)
+            return webkit_website_data_manager_get_base_data_directory(m_websiteDataManager);
+        else
+            return wxString{};
+    }
+
+    void SetDataPath(const wxString& path) override
+    {
+        wxASSERT_MSG(!m_webContext, "Cannot set data path after web context has been created");
+        m_dataPath = path;
+    }
+#endif
+
+    virtual void* GetNativeConfiguration() const override
+    {
+        return GetOrCreateContext();
+    }
+
+private:
+    wxString m_dataPath;
+    mutable WebKitWebContext* m_webContext = nullptr;
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+    mutable WebKitWebsiteDataManager* m_websiteDataManager = nullptr;
+#endif
+
+    WebKitWebContext* GetOrCreateContext() const
+    {
+        if (m_webContext)
+            return m_webContext;
+
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+        if (wx_check_webkit_version(2, 10, 0))
+        {
+            gchar* cachePath = nullptr;
+            gchar* dataPath = nullptr;
+            if (!m_dataPath.empty())
+            {
+                wxFileName configCachePath = wxFileName::DirName(m_dataPath);
+                configCachePath.AppendDir("cache");
+                cachePath = g_strdup(configCachePath.GetPath().utf8_str());
+                wxFileName configDataPath = wxFileName::DirName(m_dataPath);
+                configDataPath.AppendDir("data");
+                dataPath = g_strdup(configDataPath.GetPath().utf8_str());
+            }
+
+            m_websiteDataManager = webkit_website_data_manager_new(
+                "base-cache-directory", cachePath,
+                "base-data-directory", dataPath,
+                nullptr);
+            m_webContext = webkit_web_context_new_with_website_data_manager(m_websiteDataManager);
+        }
+        else
+#endif
+            m_webContext = webkit_web_context_get_default();
+        return m_webContext;
+    }
+
+};
+
+//-----------------------------------------------------------------------------
 // wxWebViewFactoryWebKit
 //-----------------------------------------------------------------------------
 
@@ -638,13 +713,33 @@ wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
         webkit_get_minor_version(), webkit_get_micro_version());
 }
 
+wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
+{
+    return wxWebViewConfiguration(wxWebViewBackendWebKit,
+        new wxWebViewConfigurationImplWebKit());
+}
+
+wxWebView* wxWebViewFactoryWebKit::CreateWithConfig(const wxWebViewConfiguration& config)
+{
+    return new wxWebViewWebKit(config);
+}
+
 //-----------------------------------------------------------------------------
 // wxWebViewWebKit
 //-----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
-wxWebViewWebKit::wxWebViewWebKit()
+wxWebViewWebKit::wxWebViewWebKit():
+    m_config(wxWebViewBackendWebKit, new wxWebViewConfigurationImplWebKit)
+{
+    m_web_view = nullptr;
+    m_dbusServer = nullptr;
+    m_extension = nullptr;
+}
+
+wxWebViewWebKit::wxWebViewWebKit(const wxWebViewConfiguration &config):
+    m_config(config)
 {
     m_web_view = nullptr;
     m_dbusServer = nullptr;
@@ -679,12 +774,16 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     }
 
     SetupWebExtensionServer();
-    g_signal_connect(webkit_web_context_get_default(),
+    g_signal_connect(m_config.GetNativeConfiguration(),
                      "initialize-web-extensions",
                      G_CALLBACK(wxgtk_initialize_web_extensions),
                      m_dbusServer);
 
-    m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+        m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new_with_context(WEBKIT_WEB_CONTEXT(m_config.GetNativeConfiguration())));
+#else
+        m_web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
+#endif
     GTKCreateScrolledWindowWith(GTK_WIDGET(m_web_view));
     g_object_ref(m_widget);
 
@@ -744,7 +843,7 @@ wxWebViewWebKit::~wxWebViewWebKit()
     {
         g_dbus_server_stop(m_dbusServer);
         g_signal_handlers_disconnect_by_data(
-            webkit_web_context_get_default(), m_dbusServer);
+            m_config.GetNativeConfiguration(), m_dbusServer);
     }
     g_clear_object(&m_dbusServer);
     g_clear_object(&m_extension);
@@ -1396,7 +1495,7 @@ void wxWebViewWebKit::RemoveAllUserScripts()
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
     m_handlerList.push_back(handler);
-    WebKitWebContext* context = webkit_web_context_get_default();
+    WebKitWebContext* context = static_cast<WebKitWebContext*>(m_config.GetNativeConfiguration());
     webkit_web_context_register_uri_scheme(context, handler->GetName().utf8_str(),
                                            (WebKitURISchemeRequestCallback)wxgtk_webview_webkit_uri_scheme_request_cb,
                                            this, nullptr);
