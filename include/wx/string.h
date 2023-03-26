@@ -447,8 +447,8 @@ private:
       unsigned lastUsed;
   };
 
-  static wxTHREAD_SPECIFIC_DECL Cache ms_cache;
-  static Cache& GetCache() { return ms_cache; }
+  // Implemented out of line because per-thread variable can't be DLL exported.
+  static Cache& GetCache();
 
   static Cache::Element *GetCacheBegin() { return GetCache().cached; }
   static Cache::Element *GetCacheEnd() { return GetCacheBegin() + Cache::SIZE; }

@@ -75,7 +75,12 @@ const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
 const wxChar WXDLLIMPEXP_BASE *wxEmptyString = wxT("");
 #if wxUSE_STRING_POS_CACHE
 
-wxTHREAD_SPECIFIC_DECL wxString::Cache wxString::ms_cache;
+/* static */
+wxString::Cache& wxString::GetCache()
+{
+    static wxTHREAD_SPECIFIC_DECL Cache s_cache;
+    return s_cache;
+}
 
 // gdb seems to be unable to display thread-local variables correctly, at least
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
