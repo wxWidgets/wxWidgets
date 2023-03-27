@@ -2071,6 +2071,13 @@ static int DoStringPrintfV(wxString& str,
         // options.
         if ( len < 0 )
         {
+            // When vswprintf() returns an error, it can leave invalid bytes in
+            // the buffer, e.g. using "%c" with an invalid character results in
+            // U+FFFFFFFF in the buffer, which would trigger an assert when we
+            // try to copy it back to wxString as UTF-8 in "tmp" buffer dtor,
+            // so ensure we don't try to do it.
+            buf[0] = L'\0';
+
             // assume it only returns error if there is not enough space, but
             // as we don't know how much we need, double the current size of
             // the buffer
