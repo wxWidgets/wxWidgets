@@ -274,6 +274,7 @@ public:
     ~wxStringIteratorNode()
         { clear(); }
 
+    inline void clear();
     inline void set(const wxString *str, wxStringImpl::const_iterator *citer)
         { clear(); DoSet(str, citer, nullptr); }
     inline void set(const wxString *str, wxStringImpl::iterator *iter)
@@ -285,7 +286,6 @@ public:
     wxStringIteratorNode *m_prev{nullptr}, *m_next{nullptr};
 
 private:
-    inline void clear();
     inline void DoSet(const wxString *str,
                       wxStringImpl::const_iterator *citer,
                       wxStringImpl::iterator *iter);
@@ -1213,15 +1213,23 @@ public:
     { assign(std::move(str), nLength); }
 
 
-#if wxUSE_STRING_POS_CACHE
+#if wxUSE_UNICODE_UTF8
   ~wxString()
   {
+#if wxUSE_STRING_POS_CACHE
       // we need to invalidate our cache entry as another string could be
       // recreated at the same address (unlikely, but still possible, with the
       // heap-allocated strings but perfectly common with stack-allocated ones)
       InvalidateCache();
-  }
 #endif // wxUSE_STRING_POS_CACHE
+
+      // We also need to clear any still existing iterators pointing into this
+      // string, as otherwise clearing them later, when they're destroyed,
+      // would try to use a dangling string pointer stored in them.
+      while ( m_iterators.ptr )
+          m_iterators.ptr->clear();
+  }
+#endif // wxUSE_UNICODE_UTF8
 
   #if wxUSE_UNICODE_WCHAR
     wxString(const std::wstring& str) : m_impl(str) {}
