@@ -1049,7 +1049,17 @@ public:
       // This is logically equivalent to strlen(str.mb_str()) but avoids
       // actually converting the string to multibyte and just computes the
       // length that it would have after conversion.
+
+      // Note that in UTF-8 build we need to use the actual wide character
+      // buffer length and not the string length, as it may be different when
+      // using surrogates, but in wchar_t build they're the same by definition
+      // and we can avoid creating an extra buffer.
+#if wxUSE_UNICODE_UTF8
+      const wxScopedWCharBuffer wbuf(str.wc_str());
+      const size_t ofs = wxConvLibc.FromWChar(NULL, 0, wbuf.data(), wbuf.length());
+#else // wxUSE_UNICODE_WCHAR
       const size_t ofs = wxConvLibc.FromWChar(NULL, 0, str.wc_str(), str.length());
+#endif
       return ofs == wxCONV_FAILED ? 0 : static_cast<ptrdiff_t>(ofs);
   }
 
