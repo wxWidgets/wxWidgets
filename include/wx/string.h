@@ -1685,7 +1685,7 @@ public:
     // conversions with (possible) format conversions: have to return a
     // buffer with temporary data
     //
-    // the functions defined (in either Unicode or ANSI) mode are mb_str() to
+    // All builds of the library define the same functions: mb_str() to
     // return an ANSI (multibyte) string, wc_str() to return a wide string and
     // fn_str() to return a string which should be used with the OS APIs
     // accepting the file names. The return value is always the same, but the
