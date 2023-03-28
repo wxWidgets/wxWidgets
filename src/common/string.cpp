@@ -1899,16 +1899,12 @@ static int DoStringPrintfV(wxString& str,
 
 int wxString::PrintfV(const wxString& format, va_list argptr)
 {
-#if wxUSE_UNICODE_UTF8
-    typedef wxStringTypeBuffer<char> Utf8Buffer;
-#endif
-
 #if wxUSE_UTF8_LOCALE_ONLY
-    return DoStringPrintfV<Utf8Buffer>(*this, format, argptr);
+    return DoStringPrintfV<wxUTF8StringBuffer>(*this, format, argptr);
 #else
     #if wxUSE_UNICODE_UTF8
     if ( wxLocaleIsUtf8 )
-        return DoStringPrintfV<Utf8Buffer>(*this, format, argptr);
+        return DoStringPrintfV<wxUTF8StringBuffer>(*this, format, argptr);
     else
         // wxChar* version
         return DoStringPrintfV<wxStringBuffer>(*this, format, argptr);

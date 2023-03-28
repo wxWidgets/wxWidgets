@@ -3557,6 +3557,8 @@ private:
 
   friend class WXDLLIMPEXP_FWD_BASE wxStringIteratorNode;
   friend class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
+  friend class wxUTF8StringBuffer;
+  friend class wxUTF8StringBufferLength;
 #endif // wxUSE_UNICODE_UTF8
 
   friend class WXDLLIMPEXP_FWD_BASE wxCStrData;
@@ -3802,8 +3804,89 @@ typedef wxStringInternalBufferLength          wxStringBufferLength;
 #endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF8
-typedef wxStringInternalBuffer                wxUTF8StringBuffer;
-typedef wxStringInternalBufferLength          wxUTF8StringBufferLength;
+
+// Special implementation of buffer classes for UTF-8 build which exploit the
+// fact that we can write directly to std::string used by wxString, avoiding an
+// extra copy which could be significant for long strings.
+
+namespace wxPrivate
+{
+
+class wxUTF8StringBufferBase
+{
+public:
+    using CharType = char;
+
+    ~wxUTF8StringBufferBase()
+    {
+        // This class works only with UTF-8 strings, so we need to check if the
+        // string has valid contents. Note that it isn't an error if it
+        // doesn't, as it can happen that the function we use this buffer with
+        // (e.g. vsnprintf()) writes something invalid into the provided buffer
+        // in some cases.
+        if ( !wxStringOperations::IsValidUtf8String(m_str.c_str()) )
+            m_str.clear();
+    }
+
+    operator char*() const { return const_cast<char*>(m_str.c_str()); }
+
+protected:
+    explicit wxUTF8StringBufferBase(std::string& str, size_t size)
+        : m_str{str}
+    {
+        m_str.resize(size);
+    }
+
+    std::string& m_str;
+
+    wxDECLARE_NO_COPY_CLASS(wxUTF8StringBufferBase);
+};
+
+} // wxPrivate
+
+class wxUTF8StringBuffer : public wxPrivate::wxUTF8StringBufferBase
+{
+public:
+    wxUTF8StringBuffer(wxString& str, size_t size)
+        : wxPrivate::wxUTF8StringBufferBase{str.m_impl, size}
+    {
+    }
+
+    ~wxUTF8StringBuffer()
+    {
+        // This class works only with NUL-terminated strings, so we need to
+        // resize the string to have the correct length.
+        m_str.resize(strlen(m_str.c_str()));
+    }
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxUTF8StringBuffer);
+};
+
+class wxUTF8StringBufferLength : public wxPrivate::wxUTF8StringBufferBase
+{
+public:
+    wxUTF8StringBufferLength(wxString& str, size_t size)
+        : wxPrivate::wxUTF8StringBufferBase{str.m_impl, size}
+    {
+    }
+
+    ~wxUTF8StringBufferLength()
+    {
+        wxASSERT_MSG( m_lenSet, "forgot to call SetLength()" );
+
+        m_str.resize(m_len);
+    }
+
+    void SetLength(size_t length) { m_len = length; m_lenSet = true; }
+
+protected:
+    size_t m_len = 0;
+    bool m_lenSet = false;
+
+    wxDECLARE_NO_COPY_CLASS(wxUTF8StringBufferLength);
+};
+
 #else // wxUSE_UNICODE_WCHAR
 
 // Note about inlined dtors in the classes below: this is done not for
