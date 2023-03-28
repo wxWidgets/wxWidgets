@@ -90,14 +90,12 @@ namespace Catch
         {
             std::string s;
             s.reserve(wxs.length());
-            for ( wxString::const_iterator i = wxs.begin();
-                  i != wxs.end();
-                  ++i )
+            for ( auto c : wxs )
             {
-                if ( !iswprint(*i) )
-                    s += wxString::Format(wxASCII_STR("\\u%04X"), *i).ToAscii();
+                if ( !iswprint(c) )
+                    s += wxString::Format(wxASCII_STR("\\u%04X"), c).ToAscii();
                 else
-                    s += *i;
+                    s += c;
             }
 
             return s;
