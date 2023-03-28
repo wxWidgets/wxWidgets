@@ -95,7 +95,7 @@ jobs:
             skip_samples: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
-            configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
+            configure_flags: --disable-compat30 --disable-sys-libs
             skip_samples: true
             use_asan: true
             use_xvfb: true
@@ -271,6 +271,17 @@ jobs:
 
       - name: Building
         run: |
+          if [ ${{ matrix.use_asan }} ]; then
+            # This is a horrible hack needed to prevent ASAN from being used
+            # for the WebKit extension shared library: this wouldn't work
+            # because this library is loaded in a separate WebKit process not
+            # using ASAN. This should really be fixed at makefile level, but
+            # for now just work around the problem here by manually building
+            # this library without ASAN: get the compile and link commands
+            # (the only ones that should contain ASAN flags) and filter these
+            # flags out from them before running them.
+            /bin/sh -xc "`make -n install_webkit2_ext | sed -n -e 's/-fsanitize=address//gp'`"
+          fi
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
       - name: Building tests
