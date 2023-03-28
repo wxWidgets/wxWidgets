@@ -1753,7 +1753,7 @@ int wxString::DoPrintfUtf8(const char *format, ...)
     va_list argptr;
     va_start(argptr, format);
 
-    int iLen = PrintfV(format, argptr);
+    int iLen = PrintfV(wxString::FromUTF8(format), argptr);
 
     va_end(argptr);
 
