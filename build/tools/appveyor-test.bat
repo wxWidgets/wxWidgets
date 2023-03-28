@@ -8,9 +8,12 @@ goto %TOOLSET%
 
 :msbuild
 PATH=C:\projects\wxwidgets\lib\vc_x64_dll;%PATH%
-.\vc_x64_mswudll\test.exe
+if "%CONFIGURATION%"=="DLL Release" set suffix=dll
+if "%CONFIGURATION%"=="DLL Debug" set suffix=ddll
+if "%CONFIGURATION%"=="Debug" set suffix=d
+.\vc_x64_mswu%suffix%\test.exe
 if %errorlevel% NEQ 0 goto :error
-.\vc_x64_mswudll\test_gui.exe
+.\vc_x64_mswu%suffix%\test_gui.exe
 goto :eof
 
 :nmake
