@@ -40,6 +40,15 @@ macro(wx_get_dependencies var lib)
                 else()
                     get_target_property(dep_name ${dep} OUTPUT_NAME)
                 endif()
+                if(NOT dep_name)
+                    # imported target
+                    set(prop_suffix)
+                    if (CMAKE_BUILD_TYPE)
+                        string(TOUPPER "${CMAKE_BUILD_TYPE}" prop_suffix)
+                        set(prop_suffix "_${prop_suffix}")
+                    endif()
+                    get_target_property(dep_name ${dep} LOCATION${prop_suffix})
+                endif()
             else()
                 # For the value like $<$<CONFIG:DEBUG>:LIB_PATH>
                 # Or $<$<NOT:$<CONFIG:DEBUG>>:LIB_PATH>
