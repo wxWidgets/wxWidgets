@@ -1368,7 +1368,7 @@ public:
   size_type capacity() const { return m_impl.capacity(); }
   void reserve(size_t sz) { m_impl.reserve(sz); }
 
-  void shrink_to_fit() { Shrink(); }
+  void shrink_to_fit() { m_impl.shrink_to_fit(); }
 
   void resize(size_t nSize, wxUniChar ch = wxT('\0'))
   {
@@ -2241,8 +2241,7 @@ public:
     // only works if the data of this string is not shared
   bool Alloc(size_t nLen) { reserve(nLen); return capacity() >= nLen; }
     // minimize the string's memory
-    // only works if the data of this string is not shared
-  bool Shrink();
+  bool Shrink() { shrink_to_fit(); return true; }
 
   // wxWidgets version 1 compatibility functions
 

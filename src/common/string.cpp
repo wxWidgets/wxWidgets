@@ -514,14 +514,6 @@ const char *wxString::AsChar(const wxMBConv& conv) const
     return m_convertedToChar.m_str;
 }
 
-// shrink to minimal size (releasing extra memory)
-bool wxString::Shrink()
-{
-  wxString tmp(begin(), end());
-  swap(tmp);
-  return true;
-}
-
 // ---------------------------------------------------------------------------
 // data access
 // ---------------------------------------------------------------------------
