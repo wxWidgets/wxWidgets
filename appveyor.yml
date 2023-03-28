@@ -81,7 +81,7 @@ build_script: c:\projects\wxwidgets\build\tools\appveyor.bat
 before_test:
 - ps: |
     Write-Output "Getting and launching httpbin."
-    $env:PATH = "C:\Python35;C:\Python35\Scripts;" + $env:PATH
+    $env:PATH = "C:\Python38;C:\Python38\Scripts;" + $env:PATH
     pip.exe --disable-pip-version-check install httpbin
     Start-Job -Name wx_httpbin { python.exe -m httpbin.core 2>&1 > c:\projects\wxwidgets\httpbin.log }
     Start-Sleep -Seconds 5
