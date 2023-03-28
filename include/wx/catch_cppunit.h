@@ -89,7 +89,8 @@ namespace Catch
         static std::string convert(const wxString& wxs)
         {
             std::string s;
-            s.reserve(wxs.length());
+            s.reserve(wxs.length() + 2);
+            s += '"';
             for ( auto c : wxs )
             {
                 if ( c >= 128 || !iswprint(c) )
@@ -97,6 +98,7 @@ namespace Catch
                 else
                     s += c;
             }
+            s += '"';
 
             return s;
         }
