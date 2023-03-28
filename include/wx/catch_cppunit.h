@@ -92,7 +92,7 @@ namespace Catch
             s.reserve(wxs.length());
             for ( auto c : wxs )
             {
-                if ( !iswprint(c) )
+                if ( c >= 128 || !iswprint(c) )
                     s += wxString::Format(wxASCII_STR("\\u%04X"), c).ToAscii();
                 else
                     s += c;
