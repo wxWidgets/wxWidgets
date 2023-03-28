@@ -251,6 +251,7 @@ All (GUI):
 wxMSW:
 
 - Fix setting locale for wxLANGUAGE_UKRAINIAN (Ulrich Telle, #23210).
+- Don't reset custom wxToolBar background on system colour change (#23386).
 
 wxOSX:
 
