@@ -159,8 +159,8 @@ public:
 class WXDLLIMPEXP_CORE wxPrintNativeDataBase: public wxObject
 {
 public:
-    wxPrintNativeDataBase();
-    virtual ~wxPrintNativeDataBase() {}
+    wxPrintNativeDataBase() = default;
+    virtual ~wxPrintNativeDataBase();
 
     virtual bool TransferTo( wxPrintData &data ) = 0;
     virtual bool TransferFrom( const wxPrintData &data ) = 0;
@@ -172,7 +172,14 @@ public:
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const = 0;
 
-    int  m_ref;
+    // Internal implementation details, do not use.
+
+    // For historical reasons, this class doesn't use wxRefCounter, but provides
+    // the same methods, so that it could still be used with wxObjectDataPtr.
+    void IncRef() { m_ref++; }
+    void DecRef() { if ( !--m_ref) delete this; }
+
+    int  m_ref = 1;
 
 private:
     wxDECLARE_CLASS(wxPrintNativeDataBase);
@@ -278,6 +285,7 @@ public:
     virtual bool HasPage(int page);
     virtual bool OnPrintPage(int page) = 0;
     virtual void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
+    virtual bool IsPageSelected(int page);
 
     virtual wxString GetTitle() const { return m_printoutTitle; }
 

@@ -288,10 +288,7 @@ wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxPrintNativeDataBase, wxObject);
 
-wxPrintNativeDataBase::wxPrintNativeDataBase()
-{
-    m_ref = 1;
-}
+wxPrintNativeDataBase::~wxPrintNativeDataBase() = default;
 
 //----------------------------------------------------------------------------
 // wxPrintFactoryModule
@@ -633,6 +630,11 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
     *maxPage = DEFAULT_MAX_PAGES;
     *fromPage = 1;
     *toPage = 1;
+}
+
+bool wxPrintout::IsPageSelected(int WXUNUSED(page))
+{
+    return false;
 }
 
 bool wxPrintout::SetUp(wxDC& dc)
