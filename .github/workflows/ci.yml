@@ -345,12 +345,10 @@ jobs:
           ulimit -c unlimited
 
           # This is exceedingly weird, but for some reason the first test using
-          # wxWebView in the build using clang under Ubuntu 20.04 fails (even
-          # if the timeout in the test is increased), so run it before really
-          # running the tests -- then they will succeed.
-          if [ '${{ matrix.compiler }}' = 'clang++-10' ]; then
-            xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView >/dev/null 2>&1 || echo 'First wxWebView test failure ignored.'
-          fi
+          # wxWebView sometimes fails (even if the timeout in the test is
+          # increased), so run it before really running the tests -- then they
+          # will succeed.
+          xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView >/dev/null 2>&1 || echo 'First wxWebView test failure ignored.'
 
           /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
           if [ -n "$rc" ]; then
