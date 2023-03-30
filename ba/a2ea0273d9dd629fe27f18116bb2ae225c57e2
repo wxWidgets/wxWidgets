@@ -1,0 +1,1 @@
+wxMSW: Fix AUI tab close button size on DPI change (Kumazuma, #23400).
