@@ -614,12 +614,9 @@ private:
 class MyRawBitmapFrame : public wxFrame
 {
 public:
-    enum
-    {
-        BORDER = 15,
-        SIZE = 150,
-        REAL_SIZE = SIZE - 2*BORDER
-    };
+    static const int BORDER = 15;
+    static const int SIZE = 150;
+    static const int REAL_SIZE = SIZE - 2*BORDER;
 
     MyRawBitmapFrame(wxFrame *parent)
         : wxFrame(parent, wxID_ANY, "Raw bitmaps (how exciting)"),
