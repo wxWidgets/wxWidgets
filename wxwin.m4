@@ -222,11 +222,11 @@ AC_DEFUN([WX_CONFIG_CHECK],
 
     WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
     wx_config_major_version=`echo $WX_VERSION | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+           sed -r 's/^([[0-9]]+)\.([[0-9]]+)\.([[0-9]]+)(.*)$/\1/'`
     wx_config_minor_version=`echo $WX_VERSION | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+           sed -r 's/^([[0-9]]+)\.([[0-9]]+)\.([[0-9]]+)(.*)$/\2/'`
     wx_config_micro_version=`echo $WX_VERSION | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+           sed -r 's/^([[0-9]]+)\.([[0-9]]+)\.([[0-9]]+)(.*)$/\3/'`
 
     wx_requested_major_version=`echo $min_wx_version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
