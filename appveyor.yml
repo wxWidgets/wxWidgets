@@ -28,6 +28,7 @@ skip_commits:
     - include/wx/x11/
     - src/x11/
     - '**/*.md'
+    - .circleci/
     - .github/ISSUE_TEMPLATE/
     - .github/workflows/
     - build/tools/before_install.sh
