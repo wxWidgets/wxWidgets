@@ -8,7 +8,7 @@ env:
   CCACHE_DIR: /tmp/ccache
 
 task:
-  skip: "changesIncludeOnly('appveyor.yml','CMakeLists.txt','.github/**','docs/**','interface/**','include/wx/{msw,osx,qt}/**','src/{msw,osx,qt}/**','build/{cmake,msw,osx}/**','locale/**')"
+  skip: "changesIncludeOnly('appveyor.yml','CMakeLists.txt','.circleci/**','.github/**','docs/**','interface/**','include/wx/{msw,osx,qt}/**','src/{msw,osx,qt}/**','build/{cmake,msw,osx}/**','locale/**')"
   matrix:
     - name: Cirrus CI / FreeBSD 13 wxGTK 3
       freebsd_instance:
