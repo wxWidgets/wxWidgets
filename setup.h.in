@@ -1246,6 +1246,9 @@
 /* Define if setpriority() is available. */
 #undef HAVE_SETPRIORITY
 
+/* Define if xkbcommon is available */
+#undef HAVE_XKBCOMMON
+
 /* Define if xlocale.h header file exists. */
 #undef HAVE_XLOCALE_H
 

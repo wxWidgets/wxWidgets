@@ -5689,6 +5689,25 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl xkbcommon library for key code translations in wxGTK
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_GTK" = 1; then
+    if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
+        PKG_CHECK_MODULES(XKBCOMMON, [xkbcommon],
+            [
+                CFLAGS="$XKBCOMMON_CFLAGS $CFLAGS"
+                CXXFLAGS="$XKBCOMMON_CFLAGS $CXXFLAGS"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XKBCOMMON_LIBS"
+                AC_DEFINE(HAVE_XKBCOMMON)
+            ],
+            [
+                AC_MSG_WARN([libxkbcommon not found, key codes in key events may be incorrect])
+            ]
+        )
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl Secret storage
 dnl ---------------------------------------------------------------------------
 

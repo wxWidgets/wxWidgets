@@ -253,6 +253,7 @@ All (GUI):
 
 wxGTK:
 
+- Fix key codes with Shift/on non-US keyboards (Ivan Sorokin, #17643, #23379).
 - Dramatically optimize adding many items to wxChoice (Ian McInerney, #23443).
 - Improve document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
 - Fix loading WebKit2 extension when using wxWebView (Scott Talbert, #23497).
