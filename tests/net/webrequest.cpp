@@ -187,11 +187,14 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/bytes/65536");
+    // limit to 2048, with larger sizes the go-httpbin response
+    // does not include a content-length header
+    const int size = 2048;
+    Create(wxString::Format("/bytes/%d", size));
     Run();
-    CHECK( request.GetResponse().GetContentLength() == 65536 );
-    CHECK( request.GetBytesExpectedToReceive() == 65536 );
-    CHECK( request.GetBytesReceived() == 65536 );
+    CHECK( request.GetResponse().GetContentLength() == size );
+    CHECK( request.GetBytesExpectedToReceive() == size );
+    CHECK( request.GetBytesReceived() == size );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -229,7 +232,9 @@ TEST_CASE_METHOD(RequestFixture,
 
     Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
     Run();
-    CHECK( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
+    // convert to c_str() and back to remove any trailing \0
+    wxString str(request.GetResponse().AsString().c_str());
+    CHECK( str == "The quick brown fox jumps over the lazy dog" );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -264,7 +269,8 @@ TEST_CASE_METHOD(RequestFixture,
     pos += strlen(expectedKey);
 
     // There may, or not, be a space after it.
-    while ( wxIsspace(response[pos]) )
+    // And the value may be returned in an array.
+    while ( wxIsspace(response[pos]) || response[pos] == '[' )
         pos++;
 
     const char* expectedValue = "\"3.14159265358979323\"";
