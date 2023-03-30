@@ -101,13 +101,10 @@ public:
 
     // Paints property category selection rectangle.
 #if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_MSG("Use DrawCaptionSelectionRect(wxWindow*, wxDC&, ...) instead")
+    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("Use DrawCaptionSelectionRect(wxWindow*, wxDC&, ...) instead")
     virtual void DrawCaptionSelectionRect( wxDC& dc,
                                            int x, int y,
-                                           int w, int h ) const
-    {
-        DrawCaptionSelectionRect(nullptr, dc, x, y, w, h);
-    }
+                                           int w, int h ) const;
 #endif // WXWIN_COMPATIBILITY_3_0
     virtual void DrawCaptionSelectionRect(wxWindow *win, wxDC& dc,
                                           int x, int y, int w, int h) const;
@@ -425,7 +422,11 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 // -----------------------------------------------------------------------
 
 // Helpers to mark macros as deprecated
-#if (defined(__clang__) || defined(__GNUC__))
+//
+// Note that we don't do it when building wx itself if 3.0 compatibility is on,
+// as these macros are still used in our own code in this case.
+#if (defined(__clang__) || defined(__GNUC__)) && \
+        (!defined(WXBUILDING) || !WXWIN_COMPATIBILITY_3_0)
 #define wxPG_STRINGIFY(X) #X
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) \
         _Pragma(wxPG_STRINGIFY(GCC warning msg)) value
@@ -525,9 +526,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
 #if WXWIN_COMPATIBILITY_3_0
-#ifdef WXBUILDING
-#define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
-#else
 #ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
 #pragma deprecated(wxPG_FILE_DIALOG_TITLE)
 #endif
@@ -535,7 +533,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 // Sets a specific title for the dir dialog.
 #define wxPG_FILE_DIALOG_TITLE wxPG_DEPRECATED_MACRO_VALUE(wxS("DialogTitle"),\
     "wxPG_FILE_DIALOG_TITLE is deprecated. Use wxPG_DIALOG_TITLE instead.")
-#endif // WXBUILDING/!WXBUILDING
 #endif // WXWIN_COMPATIBILITY_3_0
 
 // Specific to wxFileProperty and derivatives, long, default is 0.
@@ -543,9 +540,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
 #if WXWIN_COMPATIBILITY_3_0
-#ifdef WXBUILDING
-#define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
-#else
 #ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
 #pragma deprecated(wxPG_DIR_DIALOG_MESSAGE)
 #endif
@@ -553,7 +547,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 // Sets a specific message for the dir dialog.
 #define wxPG_DIR_DIALOG_MESSAGE wxPG_DEPRECATED_MACRO_VALUE(wxS("DialogMessage"),\
     "wxPG_DIR_DIALOG_MESSAGE is deprecated. Use wxPG_DIALOG_TITLE instead.")
-#endif // WXBUILDING/!WXBUILDING
 #endif // WXWIN_COMPATIBILITY_3_0
 
 // wxArrayStringProperty's string delimiter character. If this is
