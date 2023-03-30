@@ -64,6 +64,12 @@ jobs:
             WX_TEST_WEBREQUEST_URL="0" ./test
 
       - run:
+          name: Run GUI tests using Xvfb
+          command: |
+            cd tests
+            xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection
+
+      - run:
           name: Show ccache statistics
           when: always
           command: ccache -vv -s
