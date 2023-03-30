@@ -5,6 +5,7 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
+    - '.circleci/**'
     - '.github/ISSUE_TEMPLATE/**'
     - '.github/workflows/ci.yml'
     - '.github/workflows/ci_cmake.yml'
@@ -33,6 +34,7 @@ on:
   pull_request:
     branches: [ master ]
     paths-ignore:
+    - '.circleci/**'
     - '.github/ISSUE_TEMPLATE/**'
     - '.github/workflows/ci.yml'
     - '.github/workflows/ci_cmake.yml'
