@@ -74,7 +74,7 @@ case $(uname -s) in
                             extra_deps='libwebkit2gtk-4.0-dev libgspell-1-dev'
                             ;;
                         2)  libtoolkit_dev=libgtk2.0-dev
-                            extra_deps='libwebkitgtk-dev'
+                            extra_deps='libwebkitgtk-dev libxkbcommon-dev'
                             ;;
                         *)  echo 'Please specify wxGTK_VERSION explicitly.' >&2
                             exit 1
