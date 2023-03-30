@@ -824,11 +824,19 @@ struct wxArgNormalizerUtf8<const std::string&>
 #ifdef __cpp_lib_string_view
 template<>
 struct wxArgNormalizerUtf8<const std::string_view&>
-    : public wxArgNormalizerUtf8<const char*>
 {
     wxArgNormalizerUtf8(const std::string_view& v,
                         const wxFormatString *fmt, unsigned index)
-        : wxArgNormalizerUtf8<const char*>(v.data(), fmt, index) {}
+        : m_str{v}
+    {
+        wxASSERT_ARG_TYPE( fmt, index, wxFormatString::Arg_String );
+    }
+
+    const char* get() const { return m_str.c_str(); }
+
+    // We need to store this string to ensure that we use a NUL-terminated
+    // buffer, i.e. we can't use string_view data directly.
+    const std::string m_str;
 };
 #endif // __cpp_lib_string_view
 

@@ -119,6 +119,11 @@
 #cmakedefine01 wxUSE_REPRODUCIBLE_BUILD
 
 
+#cmakedefine01 wxUSE_UNICODE_UTF8
+
+#cmakedefine01 wxUSE_UTF8_LOCALE_ONLY
+
+
 
 #cmakedefine01 wxUSE_ON_FATAL_EXCEPTION
 
@@ -590,9 +595,6 @@
  */
 #cmakedefine01 wxUSE_SELECT_DISPATCHER
 #cmakedefine01 wxUSE_EPOLL_DISPATCHER
-
-#cmakedefine01 wxUSE_UNICODE_UTF8
-#cmakedefine01 wxUSE_UTF8_LOCALE_ONLY
 
 /*
    Use GStreamer for Unix.

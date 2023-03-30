@@ -633,6 +633,13 @@ bool TestApp::OnInit()
     cout << " as " << wxGetUserId()
          << std::endl;
 
+    // Optionally allow executing the tests in the locale specified by the
+    // standard environment variable, this is especially useful to use UTF-8
+    // for all tests by just setting WX_TEST_LOCALE=C.
+    wxString testLoc;
+    if ( wxGetEnv(wxASCII_STR("WX_TEST_LOCALE"), &testLoc) )
+        wxSetlocale(LC_ALL, testLoc);
+
 #if wxUSE_GUI
     // create a parent window to be used as parent for the GUI controls
     new wxTestableFrame();

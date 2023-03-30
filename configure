@@ -2086,8 +2086,8 @@ Optional Features:
   --disable-std_iostreams  disable use of standard C++ stream classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
  --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString
-  --enable-utf8           use UTF-8 representation for strings (Unix only)
-  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
+  --enable-utf8           use UTF-8 representation for strings
+  --enable-utf8only       only support UTF-8 locales in UTF-8 build
   --enable-extended_rtti  use extended RTTI (XTI)
   --disable-optimise      compile without optimisations
   --enable-profile        create code with profiling information

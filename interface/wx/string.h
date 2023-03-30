@@ -1422,7 +1422,7 @@ public:
         wxStringBuffer and wxStringBufferLength classes may be very useful when working
         with some external API which requires the caller to provide a writable buffer.
 
-        See also the reserve() and resize() STL-like functions.
+        See also the reserve(), resize() and shrink_to_fit() STL-like functions.
     */
     ///@{
 
@@ -1467,6 +1467,9 @@ public:
 
     /**
         Minimizes the string's memory.
+
+        Please note that this method does the same thing as the standard
+        shrink_to_fit() one and shouldn't be used in new code.
 
         This can be useful after a call to Alloc() if too much memory were
         preallocated.

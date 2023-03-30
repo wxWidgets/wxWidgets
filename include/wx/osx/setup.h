@@ -85,6 +85,54 @@
 #define wxUSE_REPRODUCIBLE_BUILD 0
 
 // ----------------------------------------------------------------------------
+// wxString encoding settings
+// ----------------------------------------------------------------------------
+
+// If set to 1, wxString uses UTF-8 internally instead of UTF-32 (Unix) or
+// UTF-16 (MSW).
+//
+// This option can be set to 1 if you want to avoid the overhead of converting
+// between wchar_t encoding (UTF-32 or UTF-16) used by wxString by default and
+// UTF-8, i.e. it makes functions such as wxString::FromUTF8() and utf8_str()
+// much more efficient and constant time, as they don't perform any conversion
+// any longer, which is especially interesting in wxGTK where these functions
+// are used every time a GTK function is called. But this is compensated by
+// making all the non-UTF-8 functions less efficient, notably requiring a
+// conversion when passing any string to Win32 API.
+//
+// Moreover, accessing strings by character index becomes, in general, a O(N)
+// iteration, where N is the index, so only enable this option if you don't use
+// index access for arbitrary characters (unless it is done inside a loop
+// consecutively for all characters as this special access pattern is optimized
+// by caching the last accessed index -- but using iterate, or range for loop,
+// is still better even in this case), as otherwise you may observe significant
+// slowdown in your program performance.
+//
+// Default is 0
+//
+// Recommended setting: 0 but can be set to 1 for optimization purposes and if
+// you're sure that you're not using loops using indices to iterate over
+// strings in your code.
+#define wxUSE_UNICODE_UTF8 0
+
+// If set to 1, assume that all narrow strings use UTF-8.
+//
+// By default, wxWidgets assumes that all "char*" strings use the encoding of
+// the current locale, which is commonly, but not always, UTF-8 under Unix but
+// rarely UTF-8 under MSW. This option tells the library that all strings
+// always use UTF-8, avoiding the need to perform any conversions between them
+// and wxString internal representation when wxUSE_UNICODE_UTF8 is set to 1.
+//
+// In fact, using this option only makes sense when wxUSE_UNICODE_UTF8==1 and
+// it must not be enabled without the other option.
+//
+// Default is 0
+//
+// Recommended setting: 0 but can be set to 1 if your program is always run in
+// an UTF-8 locale.
+#define wxUSE_UTF8_LOCALE_ONLY 0
+
+// ----------------------------------------------------------------------------
 // debugging settings
 // ----------------------------------------------------------------------------
 
