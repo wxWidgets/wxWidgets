@@ -29,6 +29,8 @@ skip_commits:
     - build/tools/httpbin.sh
 
 environment:
+  GOVERSION: "1.22.1"
+  GOPATH: c:\gopath
   matrix:
   - TOOLSET: msbuild
     CONFIGURATION: DLL Release
@@ -83,15 +85,21 @@ before_build:
 build_script: c:\projects\wxwidgets\build\tools\appveyor.bat
 
 before_test:
+- cmd: |
+    echo Getting and launching httpbin.
+    rmdir %GOROOT% /s /q
+    mkdir %GOROOT%
+    appveyor DownloadFile https://go.dev/dl/go%GOVERSION%.windows-amd64.msi
+    msiexec /i go%GOVERSION%.windows-amd64.msi INSTALLDIR="%GOROOT%" /q
+    go version
+    go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+    set PATH=%PATH%;%GOPATH%\bin
 - ps: |
-    Write-Output "Getting and launching httpbin."
-    $env:PATH = "C:\Python38;C:\Python38\Scripts;" + $env:PATH
-    pip.exe --disable-pip-version-check install Flask==2.0.3 Werkzeug==2.0.3 httpbin
-    Start-Job -Name wx_httpbin { python.exe -m httpbin.core 2>&1 > c:\projects\wxwidgets\httpbin.log }
+    Start-Job -Name wx_httpbin { go-httpbin -host 127.0.0.1 -port 8081 2>&1 > c:\projects\wxwidgets\httpbin.log }
     Start-Sleep -Seconds 5
-    curl.exe --silent --show-error http://127.0.0.1:5000/ip > $null
+    curl.exe --silent --show-error http://127.0.0.1:8081/ip > $null
     if ($lastExitCode -eq "0") {
-        $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:5000"
+        $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
     }
     else {
         Write-Error "Disabling wxWebRequest tests as launching httpbin failed, log follows:"

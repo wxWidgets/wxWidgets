@@ -150,10 +150,11 @@ jobs:
                 cmake --build . --target install
             fi
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Go
+        if: matrix.cmake_tests != 'OFF'
+        uses: actions/setup-go@v5
         with:
-          python-version: '3.10'
+          go-version: '1'
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
