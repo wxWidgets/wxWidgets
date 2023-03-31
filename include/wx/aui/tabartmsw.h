@@ -74,6 +74,8 @@ public:
         const wxAuiNotebookPageArray& pages,
         const wxSize& requiredBmpSize) override;
 
+    void UpdateDpi() override;
+
 private:
     bool m_themed;
     wxSize m_closeBtnSize;

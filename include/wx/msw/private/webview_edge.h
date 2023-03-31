@@ -46,25 +46,26 @@ __CRT_UUID_DECL(ICoreWebView2WindowCloseRequestedEventHandler, 0x5c19e9e0,0x092f
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
-class wxWebViewEdgeParentWindowInfo;
+class wxWebViewWindowFeaturesEdge;
 
 class wxWebViewEdgeImpl
 {
 public:
+    explicit wxWebViewEdgeImpl(wxWebViewEdge* webview, const wxWebViewConfiguration& config);
     explicit wxWebViewEdgeImpl(wxWebViewEdge* webview);
     ~wxWebViewEdgeImpl();
 
     bool Create();
 
-    wxWebViewEdge* CreateChildWebView(std::shared_ptr<wxWebViewEdgeParentWindowInfo> parentWindowInfo);
-
     wxWebViewEdge* m_ctrl;
+    wxWebViewConfiguration m_config;
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2_2> m_webView;
     wxCOMPtr<ICoreWebView2Controller> m_webViewController;
-    wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
-    std::shared_ptr<wxWebViewEdgeParentWindowInfo> m_parentWindowInfo;
+
+    wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_newWindowArgs;
+    wxCOMPtr<ICoreWebView2Deferral> m_newWindowDeferral;
 
     bool m_initialized;
     bool m_isBusy;
@@ -107,10 +108,12 @@ public:
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
     HRESULT OnWindowCloseRequested(ICoreWebView2* sender, IUnknown* args);
 
-    HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
+    void EnvironmentAvailable(ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
 
     HRESULT HandleNavigationStarting(ICoreWebView2NavigationStartingEventArgs* args, bool mainFrame);
+
+    void SendErrorEventForAPI(const wxString& api, HRESULT errorCode);
 
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
@@ -127,8 +130,6 @@ public:
 #if !wxUSE_WEBVIEW_EDGE_STATIC
     static wxDynamicLibrary ms_loaderDll;
 #endif
-    static wxString ms_browserExecutableDir;
-
     static bool Initialize();
 
     static void Uninitialize();

@@ -832,19 +832,14 @@ public:
     // id - Property name or pointer.
     // flags - Default is wxPGPropertyValuesFlags::DontRecurse which causes colour to be reset
     //   only for the property in question (for backward compatibility).
-#if WXWIN_COMPATIBILITY_3_0
-    void SetPropertyColoursToDefault(wxPGPropArg id);
-    void SetPropertyColoursToDefault(wxPGPropArg id, int flags);
-#else
-#if WXWIN_COMPATIBILITY_3_2
+#if WXWIN_COMPATIBILITY_3_0 || WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use SetPropertyColoursToDefault with flags argument as wxPGPropertyValuesFlags")
     void SetPropertyColoursToDefault(wxPGPropArg id, int flags)
     {
         SetPropertyColoursToDefault(id, static_cast<wxPGPropertyValuesFlags>(flags));
     }
-#endif // WXWIN_COMPATIBILITY_3_2
+#endif // WXWIN_COMPATIBILITY_3_0 || WXWIN_COMPATIBILITY_3_2
     void SetPropertyColoursToDefault(wxPGPropArg id, wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
-#endif // WXWIN_COMPATIBILITY_3_0
 
     // Sets text colour of a property.
     // id - Property name or pointer.

@@ -458,5 +458,9 @@ bool wxAuiMSWTabArt::IsThemed() const
         !(m_flags & wxAUI_NB_BOTTOM); // Native theme does not support bottom tabs
 }
 
+void wxAuiMSWTabArt::UpdateDpi()
+{
+    m_closeBtnSize = wxDefaultSize;
+}
 
 #endif // wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)

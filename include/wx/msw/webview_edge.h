@@ -25,6 +25,8 @@ public:
 
     wxWebViewEdge();
 
+    explicit wxWebViewEdge(const wxWebViewConfiguration& config);
+
     wxWebViewEdge(wxWindow* parent,
         wxWindowID id,
         const wxString& url = wxWebViewDefaultURLStr,
@@ -103,7 +105,6 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) override;
 
     virtual void* GetNativeBackend() const override;
-    virtual void* GetNativeConfiguration() const override;
 
     static void MSWSetBrowserExecutableDir(const wxString& path);
 
@@ -128,6 +129,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryEdge : public wxWebViewFactory
 {
 public:
     virtual wxWebView* Create() override { return new wxWebViewEdge; }
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override;
     virtual wxWebView* Create(wxWindow* parent,
         wxWindowID id,
         const wxString& url = wxWebViewDefaultURLStr,
@@ -140,6 +142,7 @@ public:
     }
     virtual bool IsAvailable() override;
     virtual wxVersionInfo GetVersionInfo() override;
+    virtual wxWebViewConfiguration CreateConfiguration() override;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_EDGE && defined(__WXMSW__)

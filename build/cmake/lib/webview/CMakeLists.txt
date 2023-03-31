@@ -12,10 +12,10 @@ function(wx_webview_copy_webview2_loader target)
         return()
     endif()
 
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set(WEBVIEW2_ARCH x86)
+    if(wxPLATFORM_ARCH)
+        set(WEBVIEW2_ARCH ${wxPLATFORM_ARCH})
     else()
-        set(WEBVIEW2_ARCH x64)
+        set(WEBVIEW2_ARCH x86)
     endif()
 
     add_custom_command(TARGET ${target} POST_BUILD

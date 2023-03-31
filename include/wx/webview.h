@@ -144,6 +144,24 @@ private:
     wxString m_virtualHost;
 };
 
+class wxWebViewConfigurationImpl;
+
+class WXDLLIMPEXP_WEBVIEW wxWebViewConfiguration
+{
+public:
+    explicit wxWebViewConfiguration(const wxString& backend, wxWebViewConfigurationImpl* impl);
+    void* GetNativeConfiguration() const;
+    void SetDataPath(const wxString& path);
+    wxString GetDataPath() const;
+
+    const wxString& GetBackend() const { return m_backend; }
+
+    wxWebViewConfigurationImpl* GetImpl() const { return m_impl.get(); }
+private:
+    wxString m_backend;
+    std::shared_ptr<wxWebViewConfigurationImpl> m_impl;
+};
+
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewNameStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewDefaultURLStr[];
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[];
@@ -155,6 +173,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewFactory : public wxObject
 {
 public:
     virtual wxWebView* Create() = 0;
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& WXUNUSED(config)) { return Create(); }
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
                               const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -164,6 +183,7 @@ public:
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
     virtual bool IsAvailable() { return true; }
     virtual wxVersionInfo GetVersionInfo() { return wxVersionInfo(); }
+    virtual wxWebViewConfiguration CreateConfiguration();
 };
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
@@ -190,6 +210,7 @@ public:
     // Factory methods allowing the use of custom factories registered with
     // RegisterFactory
     static wxWebView* New(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
+    static wxWebView* New(const wxWebViewConfiguration& config);
     static wxWebView* New(wxWindow* parent,
                           wxWindowID id,
                           const wxString& url = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -203,6 +224,7 @@ public:
                                 wxSharedPtr<wxWebViewFactory> factory);
     static bool IsBackendAvailable(const wxString& backend);
     static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
+    static wxWebViewConfiguration NewConfiguration(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
 
     // General methods
     virtual void EnableContextMenu(bool enable = true)
@@ -297,7 +319,6 @@ public:
 
     //Get the pointer to the underlying native engine.
     virtual void* GetNativeBackend() const = 0;
-    virtual void* GetNativeConfiguration() const { return nullptr; }
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT);
 
@@ -323,10 +344,14 @@ private:
     wxDECLARE_ABSTRACT_CLASS(wxWebView);
 };
 
-class WXDLLIMPEXP_WEBVIEW wxWebViewWindowInfo
+class WXDLLIMPEXP_WEBVIEW wxWebViewWindowFeatures
 {
 public:
-    virtual ~wxWebViewWindowInfo() = default;
+    wxWebViewWindowFeatures(wxWebView* childWebView);
+
+    virtual ~wxWebViewWindowFeatures();
+
+    wxWebView* GetChildWebView() const;
 
     virtual wxPoint GetPosition() const = 0;
 
@@ -340,9 +365,10 @@ public:
 
     virtual bool ShouldDisplayScrollBars() const = 0;
 
-    virtual wxWebView* CreateChildWebView() = 0;
+protected:
+    mutable bool m_childWebViewWasUsed;
+    std::unique_ptr<wxWebView> m_childWebView;
 };
-
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 {
@@ -364,7 +390,7 @@ public:
 
     wxWebViewNavigationActionFlags GetNavigationAction() const { return m_actionFlags; }
     const wxString& GetMessageHandler() const { return m_messageHandler; }
-    wxWebViewWindowInfo* GetTargetWindowInfo() const { return (wxWebViewWindowInfo*)m_clientData; }
+    wxWebViewWindowFeatures* GetTargetWindowFeatures() const { return (wxWebViewWindowFeatures*)m_clientData; }
 
     virtual wxEvent* Clone() const override { return new wxWebViewEvent(*this); }
 private:
@@ -381,6 +407,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NAVIGATED, wxWebVie
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_ERROR, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW, wxWebViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NEWWINDOW_FEATURES, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);

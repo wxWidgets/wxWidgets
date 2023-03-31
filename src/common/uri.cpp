@@ -286,7 +286,10 @@ bool wxURI::operator==(const wxURI& uri) const
 // ---------------------------------------------------------------------------
 // IsReference
 //
-// if there is no authority or scheme, it is a reference
+// if there is no authority or scheme, it is a reference.
+// May be needed to have an RFC Deviation here where file doesn't need to
+// have a server so that raw file paths work as users expect. I.E.:
+// return !HasScheme() || (!HasServer() && m_scheme != wxT("file"));
 // ---------------------------------------------------------------------------
 
 bool wxURI::IsReference() const
@@ -296,8 +299,6 @@ bool wxURI::IsReference() const
 
 // ---------------------------------------------------------------------------
 // IsRelative
-//
-// FIXME: may need refinement
 // ---------------------------------------------------------------------------
 
 bool wxURI::IsRelative() const
@@ -372,33 +373,55 @@ const char* wxURI::ParseAuthority(const char* uri)
 {
     // URI			 = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
     // hier-part	 = "//" authority path-abempty
-    if ( uri[0] == '/' && uri[1] == '/' )
+    bool leadswithdoubleslash = uri[0] == '/' && uri[1] == '/';
+    if(leadswithdoubleslash)
     {
         //skip past the two slashes
         uri += 2;
+    }
 
-        // ############# DEVIATION FROM RFC #########################
-        // Don't parse the server component for file URIs
+    // ############# DEVIATION FROM RFC #########################
+    // Evidence shows us that users expect us to parse the
+    // server component in the case of [server][#fragment].
+    // Otherwise they don't want us to parse the server at all
+    // for file uris.
+    if (m_scheme == "file") // RFC 8089 allows for leading "//" with file
+    { // look for [server][#fragment] case
+        bool serverfragmentfound = false;
+        const char* uristart = uri;
+        uri = ParseServer(uri);
+        if(HasServer())
+        {
+            uri = ParseFragment(uri);
+            serverfragmentfound = HasFragment();
+        }
+        if(!serverfragmentfound)
+        { // nope... clear fields, return to point after opening slashes
+            uri = uristart;
+            m_server.erase();
+            m_fields &= ~wxURI_SERVER;
+        }
+    }
+    else if(leadswithdoubleslash)
+    { // normal RFC-based authority parsing
         // authority	 = [ userinfo "@" ] host [ ":" port ]
-        if (m_scheme != "file") // RFC 8089 allows for leading "//" with file
-        { // file-hier-part = ( "//" auth-path ) / local-path
-            const char* uristart = uri;
-            uri = ParseUserInfo(uri);
+        // file-hier-part = ( "//" auth-path ) / local-path
+        const char* uristart = uri;
+        uri = ParseUserInfo(uri);
+        uri = ParseServer(uri);
+        if (!HasServer() && HasUserInfo()) // in practice this case doesn't happen without scheme-based parsing
+        { // userinfo can't exist without host, backtrack and reparse
+            m_userinfo.erase();
+            m_fields &= ~wxURI_USERINFO;
+            uri = uristart;
             uri = ParseServer(uri);
-            if (!HasServer() && HasUserInfo()) // in practice this case doesn't happen without scheme-based parsing
-            { // userinfo can't exist without host, backtrack and reparse
-                m_userinfo.erase();
-                m_fields &= ~wxURI_USERINFO;
-                uri = uristart;
-                uri = ParseServer(uri);
-            }
-            uri = ParsePort(uri);
-            if (!HasServer()) // in practice this case doesn't happen without scheme-based parsing
-            {
-                m_port.erase(); // port can't exist without host
-                m_fields &= ~wxURI_PORT;
-                uri = uristart - 2; // nothing found, skip to before the leading "//"
-            }
+        }
+        uri = ParsePort(uri);
+        if (!HasServer()) // in practice this case doesn't happen without scheme-based parsing
+        {
+            m_port.erase(); // port can't exist without host
+            m_fields &= ~wxURI_PORT;
+            uri = uristart - 2; // nothing found, skip to before the leading "//"
         }
     }
 
@@ -654,10 +677,7 @@ wxArrayString wxURI::SplitInSegments(const wxString& path)
 
 void wxURI::Resolve(const wxURI& base, int flags)
 {
-    // RFC Deviation: Files don't need to have a server so that raw file paths
-    // can work correctly.
-    wxASSERT_MSG((!base.IsReference()
-        || base.GetScheme().CompareTo(wxT("file"), wxString::ignoreCase) == 0),
+    wxASSERT_MSG((!base.IsReference()),
         "wxURI to inherit from must not be a reference!");
 
     // If we aren't being strict, enable the older (pre-RFC2396) loophole that
@@ -805,6 +825,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
     }
 
     //T.fragment = R.fragment;
+    // (done implicitly)
 }
 
 // ---------------------------------------------------------------------------

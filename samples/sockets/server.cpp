@@ -381,12 +381,12 @@ void MyFrame::Test3(wxSocketBase *sock)
 
 void MyFrame::OnServerEvent(wxSocketEvent& event)
 {
-  wxString s = _("OnServerEvent: ");
+  wxString s = "OnServerEvent: ";
   wxSocketBase *sock;
 
   switch(event.GetSocketEvent())
   {
-    case wxSOCKET_CONNECTION : s.Append(_("wxSOCKET_CONNECTION\n")); break;
+    case wxSOCKET_CONNECTION : s.Append("wxSOCKET_CONNECTION\n"); break;
     default                  : s.Append(_("Unexpected event !\n")); break;
   }
 
@@ -428,14 +428,14 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
-  wxString s = _("OnSocketEvent: ");
+  wxString s = "OnSocketEvent: ";
   wxSocketBase *sock = event.GetSocket();
 
   // First, print a message
   switch(event.GetSocketEvent())
   {
-    case wxSOCKET_INPUT : s.Append(_("wxSOCKET_INPUT\n")); break;
-    case wxSOCKET_LOST  : s.Append(_("wxSOCKET_LOST\n")); break;
+    case wxSOCKET_INPUT : s.Append("wxSOCKET_INPUT\n"); break;
+    case wxSOCKET_LOST  : s.Append("wxSOCKET_LOST\n"); break;
     default             : s.Append(_("Unexpected event !\n")); break;
   }
 

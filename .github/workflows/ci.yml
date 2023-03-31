@@ -95,7 +95,7 @@ jobs:
           - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --enable-stl --disable-compat30
+            configure_flags: --enable-stl --enable-compat30
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-20.04
@@ -104,14 +104,15 @@ jobs:
             use_xvfb: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
-            configure_flags: --disable-compat30 --disable-sys-libs --disable-webview
+            configure_flags: --disable-compat32 --disable-sys-libs
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK C++20
+          - name: Ubuntu 22.04 wxGTK UTF-8 C++20
             runner: ubuntu-22.04
-            configure_flags: --with-cxx=20
-            skip_samples: true
+            configure_flags: --with-cxx=20 --enable-utf8 --enable-utf8only
+            use_asan: true
+            use_xvfb: true
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-latest
             container: ubuntu:18.04
@@ -276,6 +277,17 @@ jobs:
 
       - name: Building
         run: |
+          if [ ${{ matrix.use_asan }} ]; then
+            # This is a horrible hack needed to prevent ASAN from being used
+            # for the WebKit extension shared library: this wouldn't work
+            # because this library is loaded in a separate WebKit process not
+            # using ASAN. This should really be fixed at makefile level, but
+            # for now just work around the problem here by manually building
+            # this library without ASAN: get the compile and link commands
+            # (the only ones that should contain ASAN flags) and filter these
+            # flags out from them before running them.
+            /bin/sh -xc "`make -n install_webkit2_ext | sed -n -e 's/-fsanitize=address//gp'`"
+          fi
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
       - name: Building tests
@@ -351,12 +363,10 @@ jobs:
           echo 0 | sudo tee /proc/sys/kernel/core_uses_pid
 
           # This is exceedingly weird, but for some reason the first test using
-          # wxWebView in the build using clang under Ubuntu 20.04 fails (even
-          # if the timeout in the test is increased), so run it before really
-          # running the tests -- then they will succeed.
-          if [ '${{ matrix.compiler }}' = 'clang++-10' ]; then
-            xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView >/dev/null 2>&1 || echo 'First wxWebView test failure ignored.'
-          fi
+          # wxWebView sometimes fails (even if the timeout in the test is
+          # increased), so run it before really running the tests -- then they
+          # will succeed.
+          xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView >/dev/null 2>&1 || echo 'First wxWebView test failure ignored.'
 
           /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
           if [ -n "$rc" ]; then

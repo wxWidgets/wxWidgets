@@ -296,6 +296,18 @@ for (i = s.begin(); i != s.end(); ++i)
 }
 @endcode
 
+or, even simpler, range for loop:
+@code
+wxString s = "hello";
+for ( auto c : s )
+{
+    // do something with "c"
+}
+@endcode
+
+@note wxString iterators have unusual proxy-like semantics and can be used to
+    modify the string even when @e not using references, i.e. with just @c
+    auto, as in the example above.
 
 
 @section overview_string_related String Related Functions and Classes

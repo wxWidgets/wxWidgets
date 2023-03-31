@@ -67,6 +67,7 @@ jobs:
           - configuration: 'DLL Debug'
             platform: 'x64'
             vsversion: 2022
+            use_utf8: true
           - configuration: 'Debug'
             platform: 'Win32'
             vsversion: 2019
@@ -81,14 +82,18 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Configure to use STL
-        if: matrix.use_stl
+      - name: Configure build options
         working-directory: include/wx/msw
         run: |
-            $txt = Get-Content setup.h
-            Write-Output $txt |
-            %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL 1"} |
-            Set-Content setup.h
+            $use_stl = "${{ matrix.use_stl }}" ? 1 : 0
+            $use_utf8 = "${{ matrix.use_utf8 }}" ? 1 : 0
+            if ( $use_stl -or $use_utf8 ) {
+              $txt = Get-Content setup.h
+              Write-Output $txt |
+              %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $use_stl"} |
+              %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
+              Set-Content setup.h
+            }
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.1.3

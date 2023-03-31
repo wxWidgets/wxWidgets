@@ -291,25 +291,18 @@ MyFrame::MyFrame(const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(wxID_PRINT, "&Print...",                 "Print");
-    file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",    "Page setup");
+    file_menu->Append(wxID_PRINT, "&Print...\tCtrl+P", "Show \"Print\" dialog");
+    file_menu->Append(WXPRINT_PAGE_SETUP, "Page &Setup...\tCtrl+S", "Page setup");
 #ifdef __WXMAC__
     file_menu->Append(WXPRINT_PAGE_MARGINS, "Page Margins...", "Page margins");
 #endif
-    file_menu->Append(wxID_PREVIEW, "Print Pre&view",          "Preview");
+    file_menu->Append(wxID_PREVIEW, "Pre&view\tCtrl+V", "Show print preview");
 
     wxMenu * const menuModalKind = new wxMenu;
     menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_APP, "&App modal");
     menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_WIN, "&Window modal");
     menuModalKind->AppendRadioItem(WXPRINT_FRAME_MODAL_NON, "&Not modal");
     file_menu->AppendSubMenu(menuModalKind, "Preview frame &modal kind");
-#if wxUSE_ACCEL
-    // Accelerators
-    wxAcceleratorEntry entries[1];
-    entries[0].Set(wxACCEL_CTRL, (int) 'V', wxID_PREVIEW);
-    wxAcceleratorTable accel(1, entries);
-    SetAcceleratorTable(accel);
-#endif
 
 #if wxUSE_POSTSCRIPT
     file_menu->AppendSeparator();
@@ -356,9 +349,23 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
     wxPrintDialogData printDialogData(* g_printData);
+    printDialogData.EnableSelection(true);
+    printDialogData.EnablePageNumbers(true);
+    printDialogData.EnableCurrentPage(true);
+    printDialogData.SetMinPage(1);
+    printDialogData.SetMaxPage(2);
+    printDialogData.SetFromPage(1);
+    printDialogData.SetToPage(2);
+    printDialogData.SetAllPages(true);
 
     wxPrinter printer(&printDialogData);
-    MyPrintout printout(this, "My printout");
+
+    // wxPrinter copies printDialogData internally, so we have to pass this
+    // instance in order to evaluate users inputs.
+    MyPrintout printout(this, &printer.GetPrintDialogData(), "My printout");
+
+    SetStatusText(""); // clear previous "cancelled" message, if any
+
     if (!printer.Print(this, &printout, true /*prompt*/))
     {
         if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
@@ -367,7 +374,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            wxLogMessage("You canceled printing");
+            wxLogStatus("You canceled printing");
         }
     }
     else
@@ -381,7 +388,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview =
-        new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
+        new wxPrintPreview(new MyPrintout(this, &printDialogData), new MyPrintout(this, &printDialogData), &printDialogData);
     if (!preview->IsOk())
     {
         delete preview;
@@ -412,7 +419,7 @@ void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
 
     wxPostScriptPrinter printer(&printDialogData);
-    MyPrintout printout(this, "My printout");
+    MyPrintout printout(this, &printer.GetPrintDialogData(), "My printout");
     printer.Print(this, &printout, true/*prompt*/);
 
     (*g_printData) = printer.GetPrintDialogData().GetPrintData();
@@ -422,7 +429,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 {
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
-    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
+    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this, &printDialogData), new MyPrintout(this, &printDialogData), &printDialogData);
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview");
     frame->Initialize();
     frame->Centre(wxBOTH);
@@ -541,11 +548,34 @@ void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *
     *maxPage = 2;
     *selPageFrom = 1;
     *selPageTo = 2;
+
+    // check if the user just wants to print the current page and if so,
+    // we say, that page 1 is the current page in this example.
+    if (m_printDlgData->GetCurrentPage())
+    {
+        *selPageFrom = 1;
+        *selPageTo = 1;
+    }
+    else if (m_printDlgData->GetSelection())
+    {
+        // if the user wants to print the selection, we could set the range via
+        // selPageFrom and selPageTo, but if the pages are not consecutive, we
+        // set selPageFrom and selPageTo to the maximum range and we use
+        // IsPageSelected() to tell the printing system which page is selected.
+
+        // in our example below, only page 2 is selected.
+    }
 }
 
 bool MyPrintout::HasPage(int pageNum)
 {
     return (pageNum == 1 || pageNum == 2);
+}
+
+bool MyPrintout::IsPageSelected(int pageNum)
+{
+    // to demonstrate selection, we just simulate selection of page 2
+    return pageNum == 2;
 }
 
 void MyPrintout::DrawPageOne()
