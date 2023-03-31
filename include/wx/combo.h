@@ -442,6 +442,9 @@ public:
     // common code to be called on popup hide/dismiss
     void OnPopupDismiss(bool generateEvent);
 
+    // called if popup is destroyed not by wxComboCtrl itself
+    void OnPopupDestroy();
+
     // PopupShown states
     enum
     {

@@ -982,7 +982,6 @@ void wxOwnerDrawnComboBox::DoSetPopupControl(wxComboPopup* popup)
     if ( !GetVListBoxComboPopup()->GetCount() )
     {
         GetVListBoxComboPopup()->Populate(m_initChs);
-        m_initChs.Clear();
     }
 }
 
