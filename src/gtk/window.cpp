@@ -1068,7 +1068,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             // to match wx behavoir on MSW
             if (islower(key_code)) { key_code = toupper(key_code); }
 
-            force_uni = true;
+            if (!isalpha(key_code)) { force_uni = true; }
         }
     }
 #endif
