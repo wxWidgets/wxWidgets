@@ -1350,14 +1350,14 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             }
         }
 
-        if ( gdk_keyval_to_unicode(gdk_event->keyval) )
+        if ( key_code || gdk_keyval_to_unicode(gdk_event->keyval) )
         {
             wxKeyEvent eventChar(wxEVT_CHAR, event);
 
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
 
             eventChar.m_keyCode = key_code;
-            eventChar.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
+            eventChar.m_uniChar = gdk_keyval_to_unicode(key_code ? key_code : gdk_event->keyval);
 
             AdjustCharEventKeyCodes(eventChar);
 
