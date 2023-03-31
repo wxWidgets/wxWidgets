@@ -1121,6 +1121,9 @@
 /* Define if you have kqueu_xxx() functions. */
 #undef wxHAS_KQUEUE
 
+/* Define if xkbcommon is available */
+#undef HAVE_XKBCOMMON
+
 /* -------------------------------------------------------------------------
    Win32 adjustments section
    ------------------------------------------------------------------------- */
