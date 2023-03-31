@@ -163,8 +163,7 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
 
     if ( desc.m_keycode < WXK_START )
     {
-        // For Latin-1 uppercase version of our key code
-        // is the same as uppercase version of Unicode character value.
+        // For Latin-1 our key code is the same as Unicode character value.
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong Unicode key in " + msg,
                                       (char)desc.m_keycode,
                                       (char)ev.GetUnicodeKey() );
