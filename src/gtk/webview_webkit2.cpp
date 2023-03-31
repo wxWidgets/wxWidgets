@@ -631,7 +631,7 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
 
             for ( size_t n = 0; n < WXSIZEOF(directories); ++n )
             {
-                if ( !TrySetWebExtensionsDirectory(context, directories[n]) )
+                if ( TrySetWebExtensionsDirectory(context, directories[n]) )
                     break;
             }
         }
