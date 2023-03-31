@@ -232,9 +232,11 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         // With WebKit SelectAll() sends a request to perform the selection to
         // another process via proxy and there doesn't seem to be any way to
         // wait until this request is actually handled, so loop here for some a
-        // bit before giving up.
-        for ( wxStopWatch sw; !m_browser->HasSelection() && sw.Time() < 50; )
-            wxMilliSleep(1);
+        // bit before giving up.  Avoid calling HasSelection() right away
+        // without wxYielding a bit because this seems to cause the extension
+        // to hang with webkit 2.40.0+.
+        for ( wxStopWatch sw; sw.Time() < 50; )
+            wxYield();
 #endif // wxUSE_WEBVIEW_WEBKIT2
 
         CHECK(m_browser->HasSelection());
