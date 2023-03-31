@@ -684,41 +684,78 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
         default:
             // any other signal means "terminate"
             {
-                wxFindByPidParams params;
-                params.pid = (DWORD)pid;
-
-                // EnumWindows() has nice semantics: it returns 0 if it found
-                // something or if an error occurred and non zero if it
-                // enumerated all the window
-                if ( !::EnumWindows(wxEnumFindByPidProc, (LPARAM)&params) )
+                // Send WM_QUIT to each thread of the process in WIN32, as in
+                // other operating systems, there is no "main" thread of a
+                // process. The only light way to terminate a thread in WIN32
+                // is to send it a message. Naturally it has to have a message
+                // loop in one of those threads to get the message.
+                DWORD dwToolhelpFlags = TH32CS_SNAPPROCESS | TH32CS_SNAPTHREAD;
+                HANDLE hSnapshot =
+                    ::CreateToolhelp32Snapshot(dwToolhelpFlags, 0);
+                if ( hSnapshot != INVALID_HANDLE_VALUE )
                 {
-                    // did we find any window?
-                    if ( params.hwnd )
+                    THREADENTRY32 te32;
+                    wxZeroMemory(te32);
+                    te32.dwSize = sizeof(THREADENTRY32);
+                    if(::Thread32First(hSnapshot, &te32))
                     {
-                        // tell the app to close
-                        //
-                        // NB: this is the harshest way, the app won't have an
-                        //     opportunity to save any files, for example, but
-                        //     this is probably what we want here. If not we
-                        //     can also use SendMesageTimeout(WM_CLOSE)
-                        if ( !::PostMessage(params.hwnd, WM_QUIT, 0, 0) )
+                        do
                         {
-                            wxLogLastError(wxT("PostMessage(WM_QUIT)"));
-                        }
+                            // Make sure it is from pid, our target process
+                            if( te32.th32OwnerProcessID
+                                != static_cast<DWORD>(pid) )
+                                continue;
+
+                            // Check if the process is still running, as we
+                            // don't want to post a message to a dead process
+                            if( ::WaitForSingleObject(hProcess, 0)
+                                == WAIT_OBJECT_0 )
+                            {
+                                // It's dead. Break out - we're done.
+                                break;
+                            }
+
+                            // Windows sends a WM_QUIT to all process threads
+                            // with a message loop when the user asks to end it
+                            // from the taskbar etc., which is what we are doing.
+                            //
+                            // It also sends WM_ENDSESSION and a whole lot of
+                            // other messages. WM_QUIT is the main one that
+                            // every process is _supposed_ to implement.
+                            //
+                            // NB: This is the harshest way, the app won't have an
+                            //     opportunity to save any files, for example, but
+                            //     this is probably what we want here.
+                            //
+                            // NB: Modern WPF and related processes use caching
+                            //     process pools and other techiniques which
+                            //     this will not work with this method as wxKill
+                            //     is supposed to only kill a singular process.
+                            if ( !::PostThreadMessage(te32.th32ThreadID,
+                                                      WM_QUIT, 0, 0) )
+                            {
+                                wxLogLastError(wxT("PostThreadMessage(WM_QUIT)"));
+                            }
+                        } while(::Thread32Next(hSnapshot, &te32));
                     }
-                    else // it was an error then
+                    else
                     {
-                        wxLogLastError(wxT("EnumWindows"));
+                        if ( krc )
+                            *krc = wxKILL_ERROR;
 
                         ok = false;
+
+                        wxLogLastError(wxT("Thread32First"));
                     }
                 }
-                else // no windows for this PID
+                else
                 {
                     if ( krc )
                         *krc = wxKILL_ERROR;
 
                     ok = false;
+
+                    wxLogLastError(wxT("CreateToolhelp32Snapshot"));
                 }
             }
     }
