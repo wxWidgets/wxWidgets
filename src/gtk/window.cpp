@@ -1039,7 +1039,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                static_cast<unsigned long>(keysym));
 
     long key_code = 0;
-    bool force_uni = 0;
 
 #ifdef wxHAS_XKB
     if (gdk_keyval_to_unicode(gdk_event->keyval))
@@ -1067,9 +1066,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             // if key_code is Latin char, it should be in upper register
             // to match wx behavoir on MSW
             if (islower(key_code)) { key_code = toupper(key_code); }
-
-            // for Latin keys lets keep unicodekey uppercase for compatibility reasons
-            if (!wxIsAsciiKeysym(keysym)) { force_uni = true; }
         }
     }
 #endif
@@ -1166,7 +1162,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     event.m_keyCode = key_code;
 
-    event.m_uniChar = gdk_keyval_to_unicode(force_uni ? gdk_event->keyval : (key_code ? key_code : gdk_event->keyval));
+    event.m_uniChar = gdk_keyval_to_unicode(key_code ? key_code : gdk_event->keyval);
 
     if ( !event.m_uniChar && event.m_keyCode <= WXK_DELETE )
     {
@@ -1356,8 +1352,15 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
 
-            eventChar.m_keyCode = key_code;
-            eventChar.m_uniChar = gdk_keyval_to_unicode(key_code ? key_code : gdk_event->keyval);
+            if (eventChar.ControlDown() && isalpha(event.m_keyCode)) {
+                // ctrl+latin_char, AdjustCharEventKeyCodes() need, let's use latin values
+                eventChar.m_keyCode = event.m_keyCode;
+                eventChar.m_uniChar = event.m_uniChar;
+            } else {
+                // use unicode values
+                eventChar.m_keyCode = 0;
+                eventChar.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
+            }
 
             AdjustCharEventKeyCodes(eventChar);
 
