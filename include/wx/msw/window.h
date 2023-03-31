@@ -749,6 +749,9 @@ private:
     // common part of all ctors
     void Init();
 
+    // common part of UnsubclassWin() and DissociateHandle()
+    WXHWND DoDetachHWND();
+
     // the (non-virtual) handlers for the events
     bool HandleMove(int x, int y);
     bool HandleMoving(wxRect& rect);
