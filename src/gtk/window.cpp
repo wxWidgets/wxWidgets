@@ -1062,7 +1062,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         xkb_state_key_get_utf8(g_state, gdk_event->hardware_keycode, key_code_str, sizeof(key_code_str));
         if (strlen(key_code_str) == 1)
         {
-            key_code = islower(key_code_str[0]) ? toupper(key_code_str[0]) : key_code_str[0];
+            key_code = key_code_str[0];
             force_uni = true;
         }
     }
@@ -1118,9 +1118,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 // got one
                 key_code = keysymNormalized ? keysymNormalized : keysym;
 
-                // it key_code is Latin char, it should be in upper register though
-                // to match wx behavoir on MSW
-                if (isalpha(key_code)) { key_code = toupper(key_code); }
             }
             else
 #endif // GDK_WINDOWING_X11
@@ -1160,6 +1157,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     }
 
     wxLogTrace(TRACE_KEYS, wxT("\t-> wxKeyCode %ld"), key_code);
+
+    // it key_code is Latin char, it should be in upper register
+    // to match wx behavoir on MSW
+    if (islower(key_code)) { key_code = toupper(key_code); }
 
     event.m_keyCode = key_code;
 
