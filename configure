@@ -946,6 +946,8 @@ GSPELL_LIBS
 GSPELL_CFLAGS
 LIBSECRET_LIBS
 LIBSECRET_CFLAGS
+XKBCOMMON_LIBS
+XKBCOMMON_CFLAGS
 LIBICONV
 CXXFLAGS_VISIBILITY
 CFLAGS_VISIBILITY
@@ -1415,6 +1417,8 @@ WAYLAND_EGL_CFLAGS
 WAYLAND_EGL_LIBS
 MesaGL_CFLAGS
 MesaGL_LIBS
+XKBCOMMON_CFLAGS
+XKBCOMMON_LIBS
 LIBSECRET_CFLAGS
 LIBSECRET_LIBS
 GSPELL_CFLAGS
@@ -2446,6 +2450,10 @@ Some influential environment variables:
   MesaGL_CFLAGS
               C compiler flags for MesaGL, overriding pkg-config
   MesaGL_LIBS linker flags for MesaGL, overriding pkg-config
+  XKBCOMMON_CFLAGS
+              C compiler flags for XKBCOMMON, overriding pkg-config
+  XKBCOMMON_LIBS
+              linker flags for XKBCOMMON, overriding pkg-config
   LIBSECRET_CFLAGS
               C compiler flags for LIBSECRET, overriding pkg-config
   LIBSECRET_LIBS
@@ -35831,6 +35839,88 @@ $as_echo "$as_me: WARNING: wxFileSystemWatcher disabled due to --disable-threads
     else
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxFileSystemWatcher won't be available on this platform" >&5
 $as_echo "$as_me: WARNING: wxFileSystemWatcher won't be available on this platform" >&2;}
+    fi
+fi
+
+if test "$wxUSE_GTK" = 1; then
+    if test "$USE_WIN32" != 1 ; then
+        if test "$USE_DARWIN" != 1 ; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for XKBCOMMON" >&5
+$as_echo_n "checking for XKBCOMMON... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$XKBCOMMON_CFLAGS"; then
+        pkg_cv_XKBCOMMON_CFLAGS="$XKBCOMMON_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xkbcommon\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "xkbcommon") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_XKBCOMMON_CFLAGS=`$PKG_CONFIG --cflags "xkbcommon" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$XKBCOMMON_LIBS"; then
+        pkg_cv_XKBCOMMON_LIBS="$XKBCOMMON_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xkbcommon\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "xkbcommon") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_XKBCOMMON_LIBS=`$PKG_CONFIG --libs "xkbcommon" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        XKBCOMMON_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "xkbcommon"`
+        else
+	        XKBCOMMON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xkbcommon"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$XKBCOMMON_PKG_ERRORS" >&5
+
+	have_xkbcommon=no
+
+elif test $pkg_failed = untried; then
+	have_xkbcommon=no
+
+else
+	XKBCOMMON_CFLAGS=$pkg_cv_XKBCOMMON_CFLAGS
+	XKBCOMMON_LIBS=$pkg_cv_XKBCOMMON_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+
+$as_echo "#define HAVE_XKBCOMMON 1" >>confdefs.h
+ have_xkbcommon=yes
+
+fi
+        fi
     fi
 fi
 

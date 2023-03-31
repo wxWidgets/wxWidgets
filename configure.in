@@ -5014,6 +5014,22 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl xkbcommon library for key code translations on Linux/BSD
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_GTK" = 1; then
+    if test "$USE_WIN32" != 1 ; then
+        if test "$USE_DARWIN" != 1 ; then
+            PKG_CHECK_MODULES(XKBCOMMON, [xkbcommon],
+                [
+                    AC_DEFINE(HAVE_XKBCOMMON, 1, [Define if libxkbcommon is available]) have_xkbcommon=yes
+                ],
+                    have_xkbcommon=no
+            )
+        fi
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl Secret storage
 dnl ---------------------------------------------------------------------------
 
