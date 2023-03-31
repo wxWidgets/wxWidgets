@@ -1117,6 +1117,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 // use the normalized, i.e. lower register, keysym if we've
                 // got one
                 key_code = keysymNormalized ? keysymNormalized : keysym;
+
+                // it key_code is Latin char, it should be in upper register though
+                // to match wx behavoir on MSW
+                if (isalpha(key_code)) { key_code = toupper(key_code); }
             }
             else
 #endif // GDK_WINDOWING_X11
