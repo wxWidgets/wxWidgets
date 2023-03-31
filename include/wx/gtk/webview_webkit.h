@@ -34,15 +34,10 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 public:
     wxWebViewWebKit();
 
-    wxWebViewWebKit(wxWindow *parent,
-           wxWindowID id = wxID_ANY,
-           const wxString& url = wxWebViewDefaultURLStr,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxString& name = wxASCII_STR(wxWebViewNameStr))
-    {
-        Create(parent, id, url, pos, size, style, name);
-    }
+#if wxUSE_WEBVIEW_WEBKIT2
+    wxWebViewWebKit(WebKitWebView* parentWebView, wxWebViewWebKit* parentWebViewCtrl);
+    wxWebViewWebKit(const wxWebViewConfiguration& config);
+#endif
 
     virtual bool Create(wxWindow *parent,
            wxWindowID id = wxID_ANY,
@@ -200,6 +195,7 @@ private:
     //Used for webkit2 extension
     GDBusServer *m_dbusServer;
     GDBusProxy *m_extension;
+    wxWebViewConfiguration m_config;
 #endif
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
@@ -216,9 +212,18 @@ public:
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) override
-    { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
+    {
+        std::unique_ptr<wxWebView> webView(new wxWebViewWebKit);
+        if (webView->Create(parent, id, url, pos, size, style, name))
+            return webView.release();
+        else
+            return nullptr;
+    }
+
 #if wxUSE_WEBVIEW_WEBKIT2
     virtual wxVersionInfo GetVersionInfo() override;
+    virtual wxWebViewConfiguration CreateConfiguration() override;
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override;
 #endif
 };
 

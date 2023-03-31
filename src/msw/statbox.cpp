@@ -165,7 +165,10 @@ bool wxStaticBox::Create(wxWindow* parent,
 void wxStaticBox::PositionLabelWindow()
 {
     m_labelWin->SetSize(m_labelWin->GetBestSize());
-    m_labelWin->Move(FromDIP(LABEL_HORZ_OFFSET), 0);
+
+    // Note that we intentionally don't use FromDIP() with the label offset
+    // here, see comment in PaintForeground() where it is also used.
+    m_labelWin->Move(LABEL_HORZ_OFFSET, 0);
 }
 
 wxWindowList wxStaticBox::GetCompositeWindowParts() const
@@ -253,7 +256,9 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         *borderTop = 2*FromDIP(CHILDREN_OFFSET);
     }
 
-    *borderTop += FromDIP(LABEL_VERT_BORDER);
+    // Intentionally don't scale this one by DPI, as it's not scaled when it is
+    // actually used in the drawing code, see comments there.
+    *borderTop += LABEL_VERT_BORDER;
 
     *borderOther = FromDIP(CHILDREN_OFFSET);
 }
@@ -402,7 +407,7 @@ void wxStaticBox::MSWGetRegionWithoutSelf(WXHRGN hRgn, int w, int h)
         // the background of the gap between the label window and the box
         // frame.
         const wxRect labelRect = m_labelWin->GetRect();
-        const int gap = FromDIP(LABEL_HORZ_BORDER);
+        const int gap = LABEL_HORZ_BORDER;
 
         SubtractRectFromRgn(hrgn, 0, 0, labelRect.GetLeft() - gap, borderTop);
         SubtractRectFromRgn(hrgn, labelRect.GetRight() + gap, 0, w, borderTop);
@@ -564,7 +569,11 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
         wxRect rect = clientRect;
         wxDCBrushChanger brushChanger(dc, *wxTRANSPARENT_BRUSH);
         wxDCPenChanger penChanger(dc, penBorder);
-        if ( !m_labelWin && !GetLabel().empty() )
+
+        // Note that we want to to do this even if our label is empty because
+        // this ensures that the border appears at the same position for the
+        // boxes with and without labels.
+        if ( !m_labelWin )
         {
             // if the control has a font, use it
             wxDCFontChanger fontChanger(dc);
@@ -574,14 +583,13 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
             }
 
             // Make sure that the label is vertically aligned with the border
-            wxCoord width, height;
-
+            //
             // Use "Tp" as our sampling text to get the
             // maximum height from the current font
-            dc.GetTextExtent(L"Tp", &width, &height);
+            const wxCoord height = dc.GetTextExtent(L"Tp").y;
 
             // adjust the border height & Y coordinate
-            int offsetFromTop = (height / 2) + LABEL_VERT_BORDER;
+            const int offsetFromTop = height / 2;
             rect.SetTop(offsetFromTop);
             rect.SetHeight(rect.GetHeight() - offsetFromTop);
         }
@@ -598,7 +606,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
     // background mode changes anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
-    if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin )
+    if ( m_hasFgCol && wxUxThemeIsActive() && !m_labelWin && !GetLabel().empty() )
     {
         // draw over the text in default colour in our colour
         HDC hdc = GetHdcOf(*impl);
@@ -703,7 +711,10 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // draw the entire box in a memory DC
     wxMemoryDC memdc(&dc);
-    wxBitmap bitmap(rc.right, rc.bottom);
+
+    const double scale = dc.GetContentScaleFactor();
+    wxBitmap bitmap;
+    bitmap.CreateWithDIPSize(rc.right / scale, rc.bottom / scale, scale);
     memdc.SelectObject(bitmap);
 
     PaintBackground(memdc, rc);

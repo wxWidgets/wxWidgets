@@ -99,18 +99,35 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
 }
 
 #if WXWIN_COMPATIBILITY_3_0
-void wxPGCellRenderer::DrawCaptionSelectionRect(wxDC& dc,
-                                                int x, int y, int w, int h) const
+
+// This is ugly, but we need to know whether our version of this function was
+// called or not, so we set this global variable to true before calling it and
+// then reset it to false if the base class version was used.
+//
+// To make things even worse, we also use this variable to check if we're
+// called from our own code (in which case we just need to reset it) or from
+// the application (in which case we actually need to draw something).
+namespace
 {
-    wxPGDrawFocusRect(nullptr, dc, x, y, w, h);
+bool wxPGCellRendererDrawCaptionSelectionRectFlag = false;
 }
-#else
+
+void wxPGCellRenderer::DrawCaptionSelectionRect( wxDC& dc,
+                                       int x, int y,
+                                       int w, int h ) const
+{
+    if ( wxPGCellRendererDrawCaptionSelectionRectFlag )
+        wxPGCellRendererDrawCaptionSelectionRectFlag = false;
+    else
+        wxPGDrawFocusRect(nullptr, dc, x, y, w, h);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
 void wxPGCellRenderer::DrawCaptionSelectionRect(wxWindow* win, wxDC& dc,
                                                 int x, int y, int w, int h) const
 {
     wxPGDrawFocusRect(win, dc, x, y, w, h);
 }
-#endif // WXWIN_COMPATIBILITY_3_0/!WXWIN_COMPATIBILITY_3_0
 
 int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPropertyGrid* propGrid, const wxPGCell& cell, int flags ) const
 {
@@ -305,17 +322,34 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                 imageOffset += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
             }
 
-#if WXWIN_COMPATIBILITY_3_0
-            DrawCaptionSelectionRect( dc,
-#else
-            DrawCaptionSelectionRect( const_cast<wxPropertyGrid*>(propertyGrid), dc,
-#endif // WXWIN_COMPATIBILITY_3_0
-                                      rect.x+wxPG_XBEFORETEXT-wxPG_CAPRECTXMARGIN+imageOffset,
+            const wxRect rectCaption( rect.x+wxPG_XBEFORETEXT-wxPG_CAPRECTXMARGIN+imageOffset,
                                       rect.y-wxPG_CAPRECTYMARGIN+1,
                                       ((wxPropertyCategory*)property)->GetTextExtent(propertyGrid,
                                                                                      propertyGrid->GetCaptionFont())
                                       +(wxPG_CAPRECTXMARGIN*2),
                                       propertyGrid->GetFontHeight()+(wxPG_CAPRECTYMARGIN*2) );
+
+#if WXWIN_COMPATIBILITY_3_0
+            wxPGCellRendererDrawCaptionSelectionRectFlag = true;
+            DrawCaptionSelectionRect( dc,
+                                      rectCaption.x, rectCaption.y,
+                                      rectCaption.width, rectCaption.height );
+            if ( wxPGCellRendererDrawCaptionSelectionRectFlag )
+            {
+                // This means that the user-defined overridden version of the
+                // function was called -- because the base class one was not.
+                // So just reset the flag and don't do anything else.
+                wxPGCellRendererDrawCaptionSelectionRectFlag = false;
+            }
+            else
+                // This means that our own version was called, so we now need
+                // to call the other overload, to use the user-defined version
+                // if any or to just draw the rectangle in the base class
+                // version otherwise.
+#endif // WXWIN_COMPATIBILITY_3_0
+            DrawCaptionSelectionRect( const_cast<wxPropertyGrid*>(propertyGrid), dc,
+                                      rectCaption.x, rectCaption.y,
+                                      rectCaption.width, rectCaption.height );
         }
     }
 

@@ -75,7 +75,12 @@ const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
 const wxChar WXDLLIMPEXP_BASE *wxEmptyString = wxT("");
 #if wxUSE_STRING_POS_CACHE
 
-wxTHREAD_SPECIFIC_DECL wxString::Cache wxString::ms_cache;
+/* static */
+wxString::Cache& wxString::GetCache()
+{
+    static wxTHREAD_SPECIFIC_DECL Cache s_cache;
+    return s_cache;
+}
 
 // gdb seems to be unable to display thread-local variables correctly, at least
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
@@ -229,7 +234,7 @@ void wxString::PosLenToImpl(size_t pos, size_t len,
             // going beyond the end of the string, just as std::string does
             const const_iterator e(end());
             const_iterator i(b);
-            while ( len && i <= e )
+            while ( len && i < e )
             {
                 ++i;
                 --len;
@@ -507,14 +512,6 @@ const char *wxString::AsChar(const wxMBConv& conv) const
         return nullptr;
 
     return m_convertedToChar.m_str;
-}
-
-// shrink to minimal size (releasing extra memory)
-bool wxString::Shrink()
-{
-  wxString tmp(begin(), end());
-  swap(tmp);
-  return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -1756,7 +1753,7 @@ int wxString::DoPrintfUtf8(const char *format, ...)
     va_list argptr;
     va_start(argptr, format);
 
-    int iLen = PrintfV(format, argptr);
+    int iLen = PrintfV(wxString::FromUTF8(format), argptr);
 
     va_end(argptr);
 
@@ -1847,6 +1844,13 @@ static int DoStringPrintfV(wxString& str,
         // options.
         if ( len < 0 )
         {
+            // When vswprintf() returns an error, it can leave invalid bytes in
+            // the buffer, e.g. using "%c" with an invalid character results in
+            // U+FFFFFFFF in the buffer, which would trigger an assert when we
+            // try to copy it back to wxString as UTF-8 in "tmp" buffer dtor,
+            // so ensure we don't try to do it.
+            buf[0] = L'\0';
+
             // assume it only returns error if there is not enough space, but
             // as we don't know how much we need, double the current size of
             // the buffer
@@ -1895,16 +1899,12 @@ static int DoStringPrintfV(wxString& str,
 
 int wxString::PrintfV(const wxString& format, va_list argptr)
 {
-#if wxUSE_UNICODE_UTF8
-    typedef wxStringTypeBuffer<char> Utf8Buffer;
-#endif
-
 #if wxUSE_UTF8_LOCALE_ONLY
-    return DoStringPrintfV<Utf8Buffer>(*this, format, argptr);
+    return DoStringPrintfV<wxUTF8StringBuffer>(*this, format, argptr);
 #else
     #if wxUSE_UNICODE_UTF8
     if ( wxLocaleIsUtf8 )
-        return DoStringPrintfV<Utf8Buffer>(*this, format, argptr);
+        return DoStringPrintfV<wxUTF8StringBuffer>(*this, format, argptr);
     else
         // wxChar* version
         return DoStringPrintfV<wxStringBuffer>(*this, format, argptr);

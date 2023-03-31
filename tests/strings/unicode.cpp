@@ -441,16 +441,16 @@ void UnicodeTestCase::Iteration()
     // verify the string was decoded correctly:
     {
         size_t idx = 0;
-        for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i, ++idx )
+        for ( auto c : text )
         {
-            CPPUNIT_ASSERT( *i == textUTF16[idx] );
+            CPPUNIT_ASSERT( c == textUTF16[idx++] );
         }
     }
 
     // overwrite the string with something that is shorter in UTF-8:
     {
-        for ( wxString::iterator i = text.begin(); i != text.end(); ++i )
-            *i = 'x';
+        for ( auto c : text )
+            c = 'x';
     }
 
     // restore the original text now:
@@ -459,9 +459,9 @@ void UnicodeTestCase::Iteration()
         wxString::const_iterator end2 = text.end();
 
         size_t idx = 0;
-        for ( wxString::iterator i = text.begin(); i != text.end(); ++i, ++idx )
+        for ( auto c : text )
         {
-            *i = textUTF16[idx];
+            c = textUTF16[idx++];
 
             CPPUNIT_ASSERT( end1 == text.end() );
             CPPUNIT_ASSERT( end2 == text.end() );
@@ -474,9 +474,9 @@ void UnicodeTestCase::Iteration()
     // and verify it again:
     {
         size_t idx = 0;
-        for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i, ++idx )
+        for ( auto c : text )
         {
-            CPPUNIT_ASSERT( *i == textUTF16[idx] );
+            CPPUNIT_ASSERT( c == textUTF16[idx++] );
         }
     }
 }

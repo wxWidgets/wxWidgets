@@ -17,8 +17,9 @@
 
 #include "wx/tls.h"
 #include "wx/thread.h"
-#include "wx/sharedptr.h"
-#include "wx/vector.h"
+
+#include <memory>
+#include <vector>
 
 namespace
 {
@@ -36,7 +37,8 @@ inline wxCriticalSection& GetAllThreadInfosCS()
     return s_csAllThreadInfos;
 }
 
-typedef wxVector< wxSharedPtr<wxThreadSpecificInfo> > wxAllThreadInfos;
+using wxAllThreadInfos = std::vector<std::unique_ptr<wxThreadSpecificInfo>>;
+
 inline wxAllThreadInfos& GetAllThreadInfos()
 {
     static wxAllThreadInfos s_allThreadInfos;
@@ -64,7 +66,7 @@ wxThreadSpecificInfo& wxThreadSpecificInfo::Get()
         wxTHIS_THREAD_INFO = new wxThreadSpecificInfo;
         wxCriticalSectionLocker lock(GetAllThreadInfosCS());
         GetAllThreadInfos().push_back(
-                wxSharedPtr<wxThreadSpecificInfo>(wxTHIS_THREAD_INFO));
+                std::unique_ptr<wxThreadSpecificInfo>(wxTHIS_THREAD_INFO));
     }
     return *wxTHIS_THREAD_INFO;
 }

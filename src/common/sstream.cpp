@@ -127,10 +127,23 @@ wxStringOutputStream::wxStringOutputStream(wxString *pString, wxMBConv& conv)
     // length anyhow in this case.
 #if wxUSE_UNICODE_UTF8
     if ( conv.IsUTF8() )
+    {
         m_pos = m_str->utf8_length();
+    }
     else
-#endif // wxUSE_UNICODE_UTF8
-        m_pos = m_conv.FromWChar(nullptr, 0, m_str->wc_str(), m_str->length());
+    {
+        // Note that we can't just use wxString::length() because it may return
+        // a different value from the buffer length when wchar_t uses UTF-16
+        // (i.e. MSW) and the string contains any surrogates.
+        const wxScopedWCharBuffer wbuf(m_str->wc_str());
+        m_pos = m_conv.FromWChar(nullptr, 0, wbuf.data(), wbuf.length());
+    }
+#else // !wxUSE_UNICODE_UTF8
+    // When using wchar_t for internal representation, the string length and
+    // the length of the buffer returned by wc_str() are one and the same, so
+    // we can avoid creating a temporary buffer, unlike in UTF-8 case above.
+    m_pos = m_conv.FromWChar(nullptr, 0, m_str->wc_str(), m_str->length());
+#endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
 }
 
 // ----------------------------------------------------------------------------

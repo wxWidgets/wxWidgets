@@ -73,7 +73,7 @@ jobs:
       matrix:
         include:
           - name: wxMSW 64 bits
-            configure_flags: --enable-stl --disable-compat30
+            configure_flags: --enable-stl --disable-compat32
           - name: wxMSW 32 bits
             triplet: i686-w64-mingw32
     env:
@@ -100,14 +100,12 @@ jobs:
 
           case "${HOST_TRIPLET}" in
             x86_64-w64-mingw32)
-              packages="$packages g++-mingw-w64-x86-64 wine64 xvfb"
-              winerun=wine64
+              packages="$packages g++-mingw-w64-x86-64 wine wine64 xvfb"
               ;;
 
             i686-w64-mingw32)
               dpkg --add-architecture i386
               packages="$packages g++-mingw-w64-i686 wine32 libgl1:i386 xvfb:i386"
-              winerun=wine
               ;;
 
             *)
@@ -119,7 +117,7 @@ jobs:
           apt-get -q -o=Dpkg::Use-Pty=0 update
           apt-get -q -o=Dpkg::Use-Pty=0 -y install $packages
 
-          echo "wxTEST_RUNNER=${winerun}" >> $GITHUB_ENV
+          echo "wxTEST_RUNNER=wine" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3

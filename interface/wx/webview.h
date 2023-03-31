@@ -163,19 +163,63 @@ enum wxWebViewIE_EmulationLevel
 
 /**
     A class describing the window information for a new child window.
-    This class is available via wxWebViewEvent::GetTargetWindowInfo()
-    while handling @c wxEVT_WEBVIEW_NEWWINDOW.
 
-    If the new window should be created use CreateChildWebView() while
-    processing the event. This will ensure that the new web view is
-    accessible from JavaScript within the originating wxWebView.
+    An object of this class can be obtained using wxWebViewEvent::GetTargetWindowFeatures()
+    while handling @c wxEVT_WEBVIEW_NEWWINDOW_FEATURES.
 
+    If a @c wxEVT_WEBVIEW_NEWWINDOW is not vetoed, a @c wxEVT_WEBVIEW_NEWWINDOW_FEATURES
+    event will be sent to the application. The application can then create a new
+    window and call wxWebViewEvent::GetTargetWindowInfo() to get this class providing
+    information about the new window. A new child web view will be available
+    via GetChildWebView(). The application can then place the child web view into
+    the new window by calling wxWebView::Create() on the child web view.
+
+    Sample JavaScript opening a new window:
+    @code
+        window.open("http://www.wxwidgets.org", "newWindow", "width=400,height=400");
+    @endcode
+
+    Sample C++ code handling a new window request:
+    @code
+        // Bind new window handler
+        m_webView->Bind(wxEVT_WEBVIEW_NEWWINDOW, [](wxWebViewEvent& evt) {
+            if (evt.GetURL() == "http://badwebsite.com")
+                evt.Veto(); // Disallow new window for badwebsite.com
+            else
+                evt.Skip(); // Allow new window for all other websites
+        });
+
+        // Bind new window features handler
+        m_webView->Bind(wxEVT_WEBVIEW_NEWWINDOW_FEATURES, [](wxWebViewEvent& evt) {
+            // Get target window features
+            wxWebViewWindowFeatures* features = evt.GetTargetWindowFeatures();
+            // Create a top level window for the child web view
+            wxWindow* win = new wxWindow(this, wxID_ANY, features->GetPosition(), features->GetSize());
+            wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+            win->SetSizer(sizer);
+            // Get the child web view
+            wxWebView* childWebView = features->GetChildWebView();
+            // Place the child web view into the window
+            childWebView->Create(win, wxID_ANY);
+            sizer->Add(childWebView, 1, wxEXPAND);
+        }
+    @endcode
 
     @since 3.3.0
 */
-class WXDLLIMPEXP_WEBVIEW wxWebViewWindowInfo
+class WXDLLIMPEXP_WEBVIEW wxWebViewWindowFeatures
 {
 public:
+    /**
+        Get the child web view for the target window.
+
+        This is available in the event handler for @c wxEVT_WEBVIEW_NEWWINDOW_FEATURES
+        and wxWebView::Create() @b must be called on the child web view directly.
+
+        The requested URL will be loaded automatically in the child web view.
+    */
+    wxWebView* GetChildWebView();
+
     /**
         Returns the position of the new window if specified by
         a @c window.open() call.
@@ -211,40 +255,106 @@ public:
         scroll bars as specified by a @c window.open() call.
     */
     virtual bool ShouldDisplayScrollBars() const = 0;
+};
+
+/**
+    @class wxWebViewConfiguration
+
+    This class allows access to web view configuration options and settings,
+    that have to be specified before placing a webview in a window with
+    wxWebView::Create().
+
+    @since 3.3.0
+    @library{wxwebview}
+    @category{webview}
+
+    @see wxWebView::NewConfiguration()
+ */
+class WXDLLIMPEXP_WEBVIEW wxWebViewConfiguration
+{
+public:
+    /**
+        Return the pointer to the native configuration used during creation of
+        a wxWebView.
+
+        When using two-step creation this method can be used to customize
+        configuration options not available via GetNativeBackend()
+        after using Create().
+
+        Additional instances of wxWebView must be created using the same
+        wxWebViewConfiguration instance.
+
+        All settings @b must be set before creating a new web view with
+        wxWebView::New().
+
+        The return value needs to be down-casted to the appropriate type
+        depending on the platform:
+            - macOS:
+              <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
+              pointer,
+            - Windows with Edge:
+              <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
+            - WebKitGTK:
+              <a href="https://webkitgtk.org/reference/webkit2gtk/stable/class.WebContext.html">WebKitWebContext</a>
+              pointer.
+            - With other backends/platforms it's not implemented.
+
+        The following pseudo code shows how to use this method with two-step
+        creation to set no user action requirement to play video in a
+        web view:
+        @code
+            #if defined(__WXMSW__)
+            #include "webview2EnvironmentOptions.h"
+            #elif defined(__WXOSX__)
+            #import "WebKit/WebKit.h"
+            #endif
+
+            wxWebViewConfiguration config = wxWebView::NewConfiguration();
+
+            #if defined(__WXMSW__)
+            ICoreWebView2EnvironmentOptions* webViewOptions =
+                (ICoreWebView2EnvironmentOptions*) config->GetNativeConfiguration();
+            webViewOptions->put_AdditionalBrowserArguments("--autoplay-policy=no-user-gesture-required");
+            #elif defined(__WXOSX__)
+            WKWebViewConfiguration* webViewConfiguration =
+                (WKWebViewConfiguration*) config->GetNativeConfiguration();
+            webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+            #endif
+
+            wxWebView* webView = wxWebView::New(config);
+            webView->Create(this, wxID_ANY, "https://www.wxwidgets.org");
+        @endcode
+    */
+    virtual void* GetNativeConfiguration() const { return nullptr; }
 
     /**
-        Create a new child web view for the target window.
-
-        This @b must be created in the event handler for @c wxEVT_WEBVIEW_NEWWINDOW
-        and wxWebView::Create() @b must be called directly.
-
-        The requested URL will be loaded automatically in the new child web view.
-
-        Sample C++ code handling the event:
-        @code
-            // Bind handler
-            m_webView->Bind(wxEVT_WEBVIEW_NEWWINDOW, [](wxWebViewEvent& evt) {
-                // Get target window info
-                wxWebViewWindowInfo* info = evt.GetTargetWindowInfo();
-                // Create a top level window for the child web view
-                wxWindow* win = new wxWindow(this, wxID_ANY, info->GetPosition(), info->GetSize());
-                wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-                // Create the child web view
-                wxWebView* childWebView = info->CreateChildWebView();
-                // Place the child web view into the window
-                childWebView->Create(win, wxID_ANY);
-                sizer->Add(childWebView, 1, wxEXPAND);
-            });
-        @endcode
-
-        Sample JavaScript opening a new window:
-        @code
-            window.open("http://www.wxwidgets.org", "newWindow", "width=400,height=400");
-        @endcode
-
+        Returns the backend identifier for which this configuration was created.
     */
-    virtual wxWebView* CreateChildWebView() = 0;
+    wxString GetBackend() const;
+
+    /**
+        Set the data path for the webview.
+
+        This is the path where the webview stores its data, such as cookies,
+        local storage, etc.
+        @param path The path to the data directory.
+
+        @note This is only used by the Edge and WebKit2GTK+ backend.
+    */
+    void SetDataPath(const wxString& path);
+
+    /**
+        Returns the data path for the webview.
+
+        This is the path where the webview stores its data, such as cookies,
+        local storage, etc.
+        @return The path to the data directory.
+
+        @note This is only used by the Edge and WebKit2GTK+ backend.
+    */
+    wxString GetDataPath() const;
 };
+
 
 /**
     @class wxWebViewHandlerRequest
@@ -451,6 +561,18 @@ public:
     virtual wxWebView* Create() = 0;
 
     /**
+        Function to create a new wxWebView with two-step creation
+        with a wxWebViewConfiguration, wxWebView::Create should be
+        called on the returned object.
+
+        @return the created wxWebView
+        @since 3.3.0
+
+        @see CreateConfiguration()
+    */
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config);
+
+    /**
         Function to create a new wxWebView with parameters.
         @param parent Parent window for the control
         @param id ID of this control
@@ -487,6 +609,14 @@ public:
         @since 3.1.5
     */
     virtual wxVersionInfo GetVersionInfo();
+
+    /**
+        Create a wxWebViewConfiguration object for wxWebView instances
+        created by this factory.
+
+        @since 3.3.0
+    */
+    virtual wxWebViewConfiguration CreateConfiguration();
 };
 
 /**
@@ -793,8 +923,13 @@ public:
        Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab. For usage
-       details see wxWebViewWindowInfo::CreateChildWebView().
-    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+       details see wxWebViewWindowFeatures.
+    @event{EVT_WEBVIEW_NEWWINDOW_FEATURES(id, func)}
+       Process a @c wxEVT_WEBVIEW_NEWWINDOW_FEATURES event, generated when
+       window features are available for the new window. For usage
+       details see wxWebViewWindowFeatures.
+       only available in wxWidgets 3.3.0 or later.
+    @event{EVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
        Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
        a window is requested to be closed.
        only available in wxWidgets 3.3.0 or later.
@@ -810,7 +945,7 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         AddScriptMessageHandler().
-    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+    @event{EVT_WEBVIEW_SCRIPT_RESULT(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
         only available in wxWidgets 3.1.6 or later. For usage details see
         RunScriptAsync().
@@ -846,6 +981,16 @@ public:
         @since 2.9.5
      */
     static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
+
+    /**
+        Factory function to create a new wxWebView with two-step creation,
+        wxWebView::Create should be called on the returned object.
+
+        @param config a configuration object create with NewConfiguration().
+        @return The created wxWebView
+        @since 3.3.0
+     */
+    static wxWebView* New(const wxWebViewConfiguration& config);
 
     /**
         Factory function to create a new wxWebView using a wxWebViewFactory.
@@ -907,6 +1052,13 @@ public:
     static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxWebViewBackendDefault);
 
     /**
+        Create a new wxWebViewConfiguration object.
+
+        @since 3.3.0
+    */
+    static wxWebViewConfiguration NewConfiguration(const wxString& backend = wxWebViewBackendDefault);
+
+    /**
         Get the title of the current web page, or its URL/path if title is not
         available.
     */
@@ -944,48 +1096,6 @@ public:
         @since 2.9.5
      */
     virtual void* GetNativeBackend() const = 0;
-
-    /**
-        Return the pointer to the native configuration used during creation of
-        this control.
-
-        When using two-step creation this method can be used to customize
-        configuration options not available via GetNativeBackend()
-        after using Create().
-
-        The return value needs to be down-casted to the appropriate type
-        depending on the platform: under macOS, it's a
-        <a href="https://developer.apple.com/documentation/webkit/wkwebviewconfiguration">WKWebViewConfiguration</a>
-        pointer, under Windows with Edge it's a pointer to
-        <a href="https://docs.microsoft.com/en-us/microsoft-edge/webview2/reference/win32/icorewebview2environmentoptions">ICoreWebView2EnvironmentOptions</a>.
-        With other backends/platforms it's not implemented.
-
-        The following pseudo code shows how to use this method with two-step
-        creation to set no user action requirement to play video in a
-        web view:
-        @code
-            #if defined(__WXMSW__)
-            #include "webview2.h"
-            #elif defined(__WXOSX__)
-            #import "WebKit/WebKit.h"
-            #endif
-
-            wxWebView* webView = wxWebView::New();
-            #if defined(__WXMSW__)
-            ICoreWebView2EnvironmentOptions* webViewOptions =
-                (ICoreWebView2EnvironmentOptions*) webView->GetNativeConfiguration();
-            webViewOptions->put_AdditionalBrowserArguments("--autoplay-policy=no-user-gesture-required");
-            #elif defined(__WXOSX__)
-            WKWebViewConfiguration* webViewConfiguration =
-                (WKWebViewConfiguration*) webView->GetNativeConfiguration();
-            webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
-            #endif
-            webView->Create(this, wxID_ANY, "https://www.wxwidgets.org");
-        @endcode
-
-        @since 3.3.0
-    */
-   virtual void* GetNativeConfiguration() const;
 
     /**
         Get the HTML source code of the currently displayed document.
@@ -1690,8 +1800,13 @@ public:
        Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab. For usage
-       details see wxWebViewWindowInfo::CreateChildWebView().
-    @event{wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
+       details see wxWebViewWindowFeatures.
+    @event{EVT_WEBVIEW_NEWWINDOW_FEATURES(id, func)}
+       Process a @c wxEVT_WEBVIEW_NEWWINDOW_FEATURES event, generated when
+       window features are available for the new window. For usage
+       details see wxWebViewWindowFeatures.
+       only available in wxWidgets 3.3.0 or later.
+    @event{EVT_WEBVIEW_WINDOW_CLOSE_REQUESTED(id, func)}
        Process a @c wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED event, generated when
        a window is requested to be closed.
        only available in wxWidgets 3.3.0 or later.
@@ -1707,7 +1822,7 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event
         only available in wxWidgets 3.1.5 or later. For usage details see
         wxWebView::AddScriptMessageHandler().
-    @event{wxEVT_WEBVIEW_SCRIPT_RESULT(id, func)}
+    @event{EVT_WEBVIEW_SCRIPT_RESULT(id, func)}
         Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
         only available in wxWidgets 3.1.6 or later. For usage details see
         wxWebView::RunScriptAsync().
@@ -1758,14 +1873,14 @@ public:
 
     /**
         Get information about the target window. Only valid for events of type
-        @c wxEVT_WEBVIEW_NEWWINDOW
+        @c wxEVT_WEBVIEW_NEWWINDOW_FEATURES
 
-        @note This is only available with the macOS and the Edge backend.
+        @note This function is not implemented and always returns @NULL when using WebKit1 or Internet Explorer backend.
 
-        @see wxWebViewWindowInfo
+        @see wxWebViewWindowFeatures
         @since 3.3.0
     */
-    wxWebViewWindowInfo* GetTargetWindowInfo() const;
+    wxWebViewWindowFeatures* GetTargetWindowFeatures() const;
 
     /**
         Returns true the script execution failed. Only valid for events of type
@@ -1792,7 +1907,9 @@ wxEventType wxEVT_WEBVIEW_NAVIGATED;
 wxEventType wxEVT_WEBVIEW_LOADED;
 wxEventType wxEVT_WEBVIEW_ERROR;
 wxEventType wxEVT_WEBVIEW_NEWWINDOW;
+wxEventType wxEVT_WEBVIEW_NEWWINDOW_FEATURES;
 wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;
 wxEventType wxEVT_WEBVIEW_FULLSCREEN_CHANGED;
 wxEventType wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED;
 wxEventType wxEVT_WEBVIEW_SCRIPT_RESULT;
+wxEventType wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED;

@@ -108,10 +108,13 @@ GetMSWAccessFlags(wxRegKey::AccessMode mode, wxRegKey::WOW64ViewMode viewMode);
 static wxString GetFullName(const wxRegKey *pKey);
 static wxString GetFullName(const wxRegKey *pKey, const wxString& szValue);
 
-// returns "value" argument of wxRegKey methods converted into a value that can
-// be passed to win32 registry functions; specifically, converts empty string
-// to nullptr
-static inline const wxChar *RegValueStr(const wxString& szValue);
+// Returns a (wide char) pointer to the string contents or null for an empty
+// string.
+//
+// Unfortunately this needs to be a macro to ensure that the temporary buffer
+// returned by t_str() in UTF-8 build lives long enough.
+#define RegValueStr(szValue) \
+    ((szValue).empty() ? nullptr : static_cast<const wchar_t*>(szValue.t_str()))
 
 // Return the user-readable name of the given REG_XXX type constant.
 static wxString GetTypeString(DWORD dwType)
@@ -1587,11 +1590,6 @@ inline void RemoveTrailingSeparator(wxString& str)
 {
   if ( !str.empty() && str.Last() == REG_SEPARATOR )
     str.Truncate(str.Len() - 1);
-}
-
-inline const wxChar *RegValueStr(const wxString& szValue)
-{
-    return szValue.empty() ? nullptr : szValue.t_str();
 }
 
 #endif // wxUSE_REGKEY

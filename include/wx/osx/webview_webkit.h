@@ -27,28 +27,13 @@
 
 WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
 
-class wxWebViewWindowInfoWebKit;
+class wxWebViewConfigurationImplWebKit;
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewWebKit : public wxWebView
 {
 public:
-    wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
+    explicit wxWebViewWebKit(const wxWebViewConfiguration& config, WX_NSObject request = nullptr);
 
-    wxWebViewWebKit(wxWebViewWindowInfoWebKit* parentWindowInfo = nullptr)
-    {
-        m_parentWindowInfo = parentWindowInfo;
-        Init();
-    }
-    wxWebViewWebKit(wxWindow *parent,
-                    wxWindowID winID = wxID_ANY,
-                    const wxString& strURL = wxASCII_STR(wxWebViewDefaultURLStr),
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize, long style = 0,
-                    const wxString& name = wxASCII_STR(wxWebViewNameStr))
-    {
-        Init();
-        Create(parent, winID, strURL, pos, size, style, name);
-    }
     bool Create(wxWindow *parent,
                 wxWindowID winID = wxID_ANY,
                 const wxString& strURL = wxASCII_STR(wxWebViewDefaultURLStr),
@@ -112,7 +97,6 @@ public:
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) override;
 
     virtual void* GetNativeBackend() const override { return m_webView; }
-    virtual void* GetNativeConfiguration() const override { return m_webViewConfiguration; }
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) override;
@@ -120,11 +104,11 @@ protected:
     wxDECLARE_EVENT_TABLE();
 
 private:
-    WX_NSObject m_webViewConfiguration;
+    wxWebViewConfiguration m_configuration;
     OSXWebViewPtr m_webView;
     wxStringToWebHandlerMap m_handlers;
     wxString m_customUserAgent;
-    wxWebViewWindowInfoWebKit* m_parentWindowInfo = nullptr;
+    WX_NSObject m_request;
 
     WX_NSObject m_navigationDelegate;
     WX_NSObject m_UIDelegate;
@@ -135,7 +119,8 @@ private:
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory
 {
 public:
-    virtual wxWebView* Create() override { return new wxWebViewWebKit; }
+    virtual wxWebView* Create() override { return CreateWithConfig(CreateConfiguration()); }
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override { return new wxWebViewWebKit(config); }
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
                               const wxString& url = wxWebViewDefaultURLStr,
@@ -143,8 +128,15 @@ public:
                               const wxSize& size = wxDefaultSize,
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) override
-    { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
+    {
+        auto webView = CreateWithConfig(CreateConfiguration());
+        if (webView->Create(parent, id, url, pos, size, style, name))
+            return webView;
+        else
+            return nullptr;
+    }
     virtual wxVersionInfo GetVersionInfo() override;
+    virtual wxWebViewConfiguration CreateConfiguration() override;
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT
