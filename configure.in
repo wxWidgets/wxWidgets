@@ -5024,9 +5024,8 @@ if test "$wxUSE_GTK" = 1; then
                     CFLAGS="$XKBCOMMON_CFLAGS $CFLAGS"
                     CXXFLAGS="$XKBCOMMON_CFLAGS $CXXFLAGS"
                     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XKBCOMMON_LIBS"
-                    AC_DEFINE(HAVE_XKBCOMMON, 1, [Define if libxkbcommon is available]) have_xkbcommon=yes
-                ],
-                    have_xkbcommon=no
+                    AC_DEFINE(HAVE_XKBCOMMON)
+                ]
             )
         fi
     fi
