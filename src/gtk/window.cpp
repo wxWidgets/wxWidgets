@@ -1032,7 +1032,8 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     long key_code = 0;
 
 #if defined (GDK_WINDOWING_X11) || defined (GDK_WINDOWING_WAYLAND)
-    if (gdk_keyval_to_unicode(gdk_event->keyval)) {
+    if (gdk_keyval_to_unicode(gdk_event->keyval))
+    {
 
         // is event has corresponding unicode char, this is probably
         // char key press. let us set key_code to character
@@ -1040,13 +1041,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         // (just as wx on Windows do)
 
         xkb_context *ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-        struct xkb_rule_names names = {
-            .rules = NULL,
-            .model = NULL,
-            .layout = "us",
-            .variant = NULL,
-            .options = NULL
-        };
+        struct xkb_rule_names names = {0};
+        names.layout = "us";
+
         xkb_keymap *keymap = xkb_keymap_new_from_names(ctx, &names, XKB_KEYMAP_COMPILE_NO_FLAGS);
         xkb_state *state = xkb_state_new(keymap);
 
@@ -1054,7 +1051,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
         char key_code_str[64];
         xkb_state_key_get_utf8(state, keycode, key_code_str, sizeof(key_code_str));
-        key_code = toupper(key_code_str[0]);
+        if (strlen(key_code_str) == 1)
+        {
+            key_code = islower(key_code_str[0]) ? toupper(key_code_str[0]) : key_code_str[0];
+        }
 
         xkb_state_unref(state);
         xkb_keymap_unref(keymap);
@@ -1062,7 +1062,8 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     }
 #endif
 
-    if ( !key_code ) {
+    if ( !key_code )
+    {
         key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
     }
 
