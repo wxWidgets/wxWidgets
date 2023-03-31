@@ -541,8 +541,7 @@ void wxListCtrl::DeleteEditControl()
 {
     if ( m_textCtrl )
     {
-        m_textCtrl->UnsubclassWin();
-        m_textCtrl->SetHWND(0);
+        m_textCtrl->DissociateHandle();
         wxDELETE(m_textCtrl);
     }
 }
