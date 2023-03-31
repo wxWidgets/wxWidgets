@@ -1348,17 +1348,17 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         {
             wxKeyEvent eventChar(wxEVT_CHAR, event);
 
-            wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
-
             if (eventChar.ControlDown() && isalpha(event.m_keyCode)) {
                 // ctrl+latin_char, AdjustCharEventKeyCodes() need, let's use latin values
                 eventChar.m_keyCode = event.m_keyCode;
                 eventChar.m_uniChar = event.m_uniChar;
             } else {
                 // use unicode values
-                eventChar.m_keyCode = 0;
+                eventChar.m_keyCode = key_code;
                 eventChar.m_uniChar = gdk_keyval_to_unicode(gdk_event->keyval);
             }
+
+            wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), eventChar.m_keyCode);
 
             AdjustCharEventKeyCodes(eventChar);
 
