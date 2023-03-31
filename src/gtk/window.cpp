@@ -1068,7 +1068,8 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             // to match wx behavoir on MSW
             if (islower(key_code)) { key_code = toupper(key_code); }
 
-            if (!isalpha(key_code)) { force_uni = true; }
+            // for Latin keys lets keep unicodekey uppercase for compatibility reasons
+            if (!wxIsAsciiKeysym(keysym)) { force_uni = true; }
         }
     }
 #endif
