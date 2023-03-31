@@ -36,7 +36,7 @@
 #elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
     #define COMMAND_STDERR "cmd.exe /c \"type nonexistentfile\""
-    #define ASYNC_COMMAND "notepad"
+    #define ASYNC_COMMAND "mspaint"
     #define SHELL_COMMAND "echo hi > nul:"
     #define COMMAND_NO_OUTPUT COMMAND " > nul:"
 #else
