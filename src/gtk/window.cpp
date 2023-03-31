@@ -1158,7 +1158,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     wxLogTrace(TRACE_KEYS, wxT("\t-> wxKeyCode %ld"), key_code);
 
-    // it key_code is Latin char, it should be in upper register
+    // if key_code is Latin char, it should be in upper register
     // to match wx behavoir on MSW
     if (islower(key_code)) { key_code = toupper(key_code); }
 
