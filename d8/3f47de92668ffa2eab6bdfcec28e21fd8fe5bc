@@ -1,0 +1,1 @@
+wxGTK: Fix wxKeyEvent::GetKeyCode() in non-US layouts (Ivan Sorokin, #23379).
