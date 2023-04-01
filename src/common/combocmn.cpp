@@ -346,6 +346,46 @@ protected:
     virtual void OnDismiss() override;
 #endif
 
+#ifdef __WXMSW__
+    virtual bool MSWHandleMessage(WXLRESULT *result,
+                                  WXUINT message,
+                                  WXWPARAM wParam,
+                                  WXLPARAM lParam) override
+    {
+        // This is a workaround for a MSW-specific problem: popup windows are
+        // created with the TLW and not the combobox itself as their parent and
+        // so if the TLW gets destroyed, they're destroyed together with it,
+        // but the associated wxComboCtrl may survive if it gets reparented to
+        // something else, which is exactly what happens when it's used inside
+        // a wxAUI pane. And if this wxComboCtrl is opened again later, it
+        // tries to use the existing popup whose HWND had been destroyed, which
+        // doesn't work at all.
+        //
+        // To prevent this from happening, we delete the popup if this happens
+        // to force recreating it later.
+        if ( message == WM_DESTROY && !m_isBeingDeleted )
+        {
+            m_combo->OnPopupDestroy();
+
+            // We can't delete it immediately because this object is used after
+            // this function returns, so do it slightly later.
+            wxWindow* const self = this;
+            m_combo->CallAfter([self]()
+            {
+                // Before really deleting it, reset the HWND which had been
+                // already destroyed, to prevent us from trying to destroy it
+                // again (which would just fail with an error).
+                self->DissociateHandle();
+
+                delete self;
+            });
+        }
+
+        return wxComboPopupWindowBase::MSWHandleMessage(result, message,
+                                                        wParam, lParam);
+    }
+#endif // __WXMSW__
+
 private:
     // This is the same as our parent, but has the right type, so that we can
     // avoid using casts later.
@@ -2360,6 +2400,14 @@ void wxComboCtrlBase::HidePopup(bool generateEvent)
     m_winPopup->Hide();
 
     OnPopupDismiss(generateEvent);
+}
+
+void wxComboCtrlBase::OnPopupDestroy()
+{
+    m_winPopup = nullptr;
+
+    delete m_popupInterface;
+    m_popupInterface = nullptr;
 }
 
 // ----------------------------------------------------------------------------

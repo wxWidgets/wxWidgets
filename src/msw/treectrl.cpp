@@ -2008,16 +2008,10 @@ void wxTreeCtrl::DeleteTextCtrl()
 {
     if ( m_textCtrl )
     {
-        // the HWND corresponding to this control is deleted by the tree
-        // control itself and we don't know when exactly this happens, so check
-        // if the window still exists before calling UnsubclassWin()
-        if ( !::IsWindow(GetHwndOf(m_textCtrl)) )
-        {
-            m_textCtrl->SetHWND(0);
-        }
-
-        m_textCtrl->UnsubclassWin();
-        m_textCtrl->SetHWND(0);
+        // the HWND corresponding to this control is destroyed by the tree
+        // control itself, so call DissociateHandle() to prevent the dtor from
+        // destroying the window again
+        m_textCtrl->DissociateHandle();
         wxDELETE(m_textCtrl);
 
         m_idEdited.Unset();
