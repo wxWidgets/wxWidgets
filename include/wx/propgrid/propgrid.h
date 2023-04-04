@@ -35,6 +35,7 @@ class wxPGComboBox;
 #if wxUSE_STATUSBAR
 class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 #endif
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 // -----------------------------------------------------------------------
 // Global variables
