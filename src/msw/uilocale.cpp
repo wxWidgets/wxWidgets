@@ -456,7 +456,7 @@ public:
             {
                 // Use the default user locale for Windows 7 resp Windows 8.x and below
                 wchar_t buf[LOCALE_NAME_MAX_LENGTH];
-                if (!ms_GetUserDefaultLocaleName(buf, LOCALE_NAME_MAX_LENGTH))
+                if (ms_GetUserDefaultLocaleName(buf, LOCALE_NAME_MAX_LENGTH))
                 {
                     preferred.push_back(buf);
                 }
