@@ -20,7 +20,6 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/wxcrtvararg.h"
-    #include "wx/intl.h"
     #include "wx/log.h"
 #endif
 
@@ -1748,30 +1747,31 @@ bool wxString::ToCDouble(double *pVal) const
 {
     // See the explanations in FromCDouble() below for the reasons for all this.
 
-    // Create a copy of this string using the decimal point instead of whatever
-    // separator the current locale uses.
-#if wxUSE_INTL
-    wxString sep = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT,
-                                                    wxLOCALE_CAT_NUMBER);
-    if ( sep == "." )
-    {
-        // We can avoid an unnecessary string copy in this case.
-        return ToDouble(pVal);
-    }
-#else // !wxUSE_INTL
-    // We don't know what the current separator is so it might even be a point
-    // already, try to parse the string as a double:
+    // Try parsing using the current locale separator.
     if ( ToDouble(pVal) )
     {
-        // It must have been the point, nothing else to do.
+        if ( find(',') != npos )
+        {
+            // Can't be a valid number in C locale.
+            return false;
+        }
+
+        // Either current decimal separator is the point or this string doesn't
+        // contain any decimal separator at all, in either case the result must
+        // be correct and we don't have anything else to do.
         return true;
     }
 
-    // Try to guess the separator, using the most common alternative value.
-    wxString sep(",");
-#endif // wxUSE_INTL/!wxUSE_INTL
+    // Try to replace the separator with the only alternative value.
+    const size_t posPeriod = find('.');
+    if ( posPeriod == npos )
+    {
+        // No separator at all, so no need to retry with an alternative one.
+        return false;
+    }
+
     wxString cstr(*this);
-    cstr.Replace(".", sep);
+    cstr[posPeriod] = ',';
 
     return cstr.ToDouble(pVal);
 }
@@ -1807,31 +1807,18 @@ wxString wxString::FromCDouble(double val, int precision)
 {
     wxCHECK_MSG( precision >= -1, wxString(), "Invalid negative precision" );
 
-    // Unfortunately there is no good way to get the number directly in the C
-    // locale. Some platforms provide special functions to do this (e.g.
-    // _sprintf_l() in MSVS or sprintf_l() in BSD systems), but some systems we
-    // still support don't have them and it doesn't seem worth it to have two
-    // different ways to do the same thing. Also, in principle, using the
-    // standard C++ streams should allow us to do it, but some implementations
-    // of them are horribly broken and actually change the global C locale,
-    // thus randomly affecting the results produced in other threads, when
-    // imbue() stream method is called (for the record, the latest libstdc++
-    // version included in OS X does it and so seem to do the versions
-    // currently included in Android NDK and both FreeBSD and OpenBSD), so we
-    // can't do this either and are reduced to this hack.
+    // Without std::to_chars() there is no portable way to get the number
+    // directly in the C locale and while some platforms provide special
+    // functions to do this (e.g. _sprintf_l() in MSVS or sprintf_l() in BSD
+    // systems), some systems we still support don't have them, so just use
+    // the hack below and replace any occurrences of a comma (which is the only
+    // alternative decimal separator that can be really used) with a period.
 
     wxString s = FromDouble(val, precision);
-#if wxUSE_INTL
-    wxString sep = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT,
-                                                    wxLOCALE_CAT_NUMBER);
-#else // !wxUSE_INTL
-    // As above, this is the most common alternative value. Notice that here it
-    // doesn't matter if we guess wrongly and the current separator is already
-    // ".": we'll just waste a call to Replace() in this case.
-    wxString sep(",");
-#endif // wxUSE_INTL/!wxUSE_INTL
+    const size_t posComma = s.find(',');
+    if ( posComma != npos )
+        s[posComma] = '.';
 
-    s.Replace(sep, ".");
     return s;
 }
 
