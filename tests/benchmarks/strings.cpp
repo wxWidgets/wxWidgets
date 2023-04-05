@@ -551,6 +551,21 @@ const struct ToDoubleData
     { "-3E-abcde5", 0, false },
 };
 
+const struct FromDoubleData
+{
+    double value;
+    int prec;
+    const char *str;
+} fromDoubleData[] =
+{
+    { 1.23,             -1, "1.23" },
+    { -0.45678,         -1, "-0.45678" },
+    { 1.2345678,         0, "1" },
+    { 1.2345678,         1, "1.2" },
+    { 1.2345678,         2, "1.23" },
+    { 1.2345678,         3, "1.235" },
+};
+
 } // anonymous namespace
 
 BENCHMARK_FUNC(StringToDouble)
@@ -583,6 +598,30 @@ BENCHMARK_FUNC(StringToCDouble)
     return true;
 }
 
+BENCHMARK_FUNC(StringFromDouble)
+{
+    for ( const auto& data : fromDoubleData )
+    {
+        const wxString& s = wxString::FromDouble(data.value, data.prec);
+        if ( wxStrcmp(s.utf8_str(), data.str) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StringFromCDouble)
+{
+    for ( const auto& data : fromDoubleData )
+    {
+        const wxString& s = wxString::FromCDouble(data.value, data.prec);
+        if ( wxStrcmp(s.utf8_str(), data.str) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
 BENCHMARK_FUNC(Strtod)
 {
     double d = 0.;
@@ -595,6 +634,29 @@ BENCHMARK_FUNC(Strtod)
             return false;
 
         if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(PrintfDouble)
+{
+    char buf[64];
+    for ( const auto& data : fromDoubleData )
+    {
+        if ( data.prec == -1 )
+        {
+            if ( !snprintf(buf, sizeof(buf), "%g", data.value) )
+                return false;
+        }
+        else
+        {
+            if ( !snprintf(buf, sizeof(buf), "%.*f", data.prec, data.value) )
+                return false;
+        }
+
+        if ( strcmp(buf, data.str) != 0 )
             return false;
     }
 
@@ -618,6 +680,34 @@ BENCHMARK_FUNC(StdFromChars)
             return false;
 
         if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StdToChars)
+{
+    char buf[64];
+    std::to_chars_result res;
+    for ( const auto& data : fromDoubleData )
+    {
+        if ( data.prec == -1 )
+        {
+            res = std::to_chars(buf, buf + sizeof(buf), data.value);
+        }
+        else
+        {
+            res = std::to_chars(buf, buf + sizeof(buf), data.value,
+                                std::chars_format::fixed, data.prec);
+        }
+
+        if ( res.ec != std::errc{} )
+            return false;
+
+        *res.ptr = '\0';
+
+        if ( strcmp(buf, data.str) != 0 )
             return false;
     }
 
