@@ -4254,10 +4254,20 @@ void wxStringIteratorNode::DoSet(const wxString *str,
     m_str = str;
     if ( str )
     {
+        // When compiling with optimizations gcc considers "this" pointers used
+        // below dangling, even if this is really not the case.
+#if wxCHECK_GCC_VERSION(12,1)
+        wxGCC_ONLY_WARNING_SUPPRESS(dangling-pointer)
+#endif
+
         m_next = str->m_iterators.ptr;
         const_cast<wxString*>(m_str)->m_iterators.ptr = this;
         if ( m_next )
             m_next->m_prev = this;
+
+#if wxCHECK_GCC_VERSION(12,1)
+        wxGCC_ONLY_WARNING_RESTORE(dangling-pointer)
+#endif
     }
     else
     {
