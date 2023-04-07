@@ -15,12 +15,12 @@
 // first icon in the executable and the icons are sorted both by their order
 // and alphabetically (!), so put this icon first and give it a name
 // starting with "a"
-aaaaaaaa ICON "sample.ico"
+aaaaaaaa ICON "../samples/sample.ico"
 
 horse    CURSOR "horse.cur"
 
 // this icon is used with wxFrame::SetIcon()
-sample ICON "sample.ico"
+sample ICON "../samples/sample.ico"
 
 // set this to 1 if you don't want to use manifest resource provided by wxWidgets.
 // An aplication manifest is needed for the application UI to look properly and other
@@ -35,4 +35,4 @@ sample ICON "sample.ico"
 
 // this file contains the standard icons, cursors etc. and also includes the application
 // manifest mentioned above
-#include "../include/wx/msw/wx.rc"
+#include "wx/msw/wx.rc"
