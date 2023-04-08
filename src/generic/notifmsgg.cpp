@@ -470,7 +470,6 @@ bool wxGenericNotificationMessageImpl::Show(int timeout)
         timeout = GetDefaultTimeout();
     }
 
-    SetActive(true);
     m_window->Set(timeout);
 
     m_window->ShowWithEffect(wxSHOW_EFFECT_BLEND);
@@ -484,8 +483,6 @@ bool wxGenericNotificationMessageImpl::Close()
         return false;
 
     m_window->Hide();
-
-    SetActive(false);
 
     return true;
 }
