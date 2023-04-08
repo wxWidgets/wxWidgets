@@ -167,7 +167,7 @@ public:
 
   // constructors and destructor
     // default ctor
-  wxArrayString() { Init(false); }
+  wxArrayString() = default;
     // if autoSort is true, the array is always sorted (in alphabetical order)
     //
     // NB: the reason for using int and not bool is that like this we can avoid
@@ -176,7 +176,11 @@ public:
     //     wouldn't be needed if the 'explicit' keyword was supported by all
     //     compilers, or if this was protected ctor for wxSortedArrayString,
     //     but we're stuck with it now.
-  explicit wxArrayString(int autoSort) { Init(autoSort != 0); }
+  explicit wxArrayString(int autoSort)
+  {
+      if ( autoSort )
+          m_autoSort = true;
+  }
     // C string array ctor
   wxArrayString(size_t sz, const char** a);
   wxArrayString(size_t sz, const wchar_t** a);
@@ -186,10 +190,10 @@ public:
   wxArrayString(const wxArrayString& array);
     // list constructor
   template<typename U>
-  wxArrayString(std::initializer_list<U> list) { Init(false); assign(list.begin(), list.end()); }
+  wxArrayString(std::initializer_list<U> list) { assign(list.begin(), list.end()); }
     // ctor from a std::vector
   template<typename U>
-  wxArrayString(const std::vector<U>& vec) { Init(false); assign(vec.begin(), vec.end()); }
+  wxArrayString(const std::vector<U>& vec) { assign(vec.begin(), vec.end()); }
     // assignment operator
   wxArrayString& operator=(const wxArrayString& src);
     // not virtual, this class should not be derived from
@@ -335,8 +339,8 @@ public:
   };
 
   wxArrayString(const_iterator first, const_iterator last)
-    { Init(false); assign(first, last); }
-  wxArrayString(size_type n, const_reference v) { Init(false); assign(n, v); }
+    { assign(first, last); }
+  wxArrayString(size_type n, const_reference v) { assign(n, v); }
 
   template <class Iterator>
   void assign(Iterator first, Iterator last)
@@ -393,10 +397,9 @@ public:
   }
 
 protected:
-  void Init(bool autoSort);             // common part of all ctors
   void Copy(const wxArrayString& src);  // copies the contents of another array
 
-  CompareFunction m_compareFunction;    // set only from wxSortedArrayString
+  CompareFunction m_compareFunction = nullptr; // set only from wxSortedArrayString
 
 private:
   // Allocate the new buffer big enough to hold m_nCount + nIncrement items and
@@ -409,12 +412,12 @@ private:
   // the string should be inserted and if it's false return wxNOT_FOUND.
   size_t BinarySearch(const wxString& str, bool lowerBound) const;
 
-  size_t  m_nSize,    // current size of the array
-          m_nCount;   // current number of elements
+  size_t  m_nSize = 0,    // current size of the array
+          m_nCount = 0;   // current number of elements
 
-  wxString *m_pItems; // pointer to data
+  wxString *m_pItems = nullptr; // pointer to data
 
-  bool    m_autoSort; // if true, keep the array always sorted
+  bool    m_autoSort = false; // if true, keep the array always sorted
 };
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxArrayString
