@@ -133,6 +133,9 @@ ALIASES += onlyfor{2}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;
 ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports.</div>       \xmlonly <onlyfor>\1,\2,\3</onlyfor> \endxmlonly"
 ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>       \xmlonly <onlyfor>\1,\2,\3,\4</onlyfor> \endxmlonly"
 
+# similar to standard @since but keeps everything on the same line:
+ALIASES += since_wx{1}="Available since wxWidgets version \1."
+
 # Use this in grouped global functions, and macros since they
 # wouldn't otherwise indicate what header they are defined in.
 ALIASES += header{1}="Include file:^^ \verbatim #include <\1> \endverbatim"
