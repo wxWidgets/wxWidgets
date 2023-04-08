@@ -65,10 +65,8 @@ inline int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, cons
 #if wxUSE_STD_CONTAINERS
 
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
-WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
-                                  wxARRAY_DUMMY_BASE, WXDLLIMPEXP_BASE);
 
-class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
+class WXDLLIMPEXP_BASE wxArrayString : public wxBaseArray<wxString>
 {
 public:
     // type of function used by wxArrayString::Sort()
@@ -80,17 +78,17 @@ public:
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);
     template<typename U>
-    wxArrayString(std::initializer_list<U> list) : wxArrayStringBase(list) { }
+    wxArrayString(std::initializer_list<U> list) : wxBaseArray<wxString>(list) { }
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction function);
-    void Sort(CMPFUNCwxString function) { wxArrayStringBase::Sort(function); }
+    void Sort(CMPFUNCwxString function) { wxBaseArray<wxString>::Sort(function); }
 
     size_t Add(const wxString& string, size_t copies = 1)
     {
-        wxArrayStringBase::Add(string, copies);
+        wxBaseArray<wxString>::Add(string, copies);
         return size() - copies;
     }
 };
