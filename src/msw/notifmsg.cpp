@@ -144,6 +144,7 @@ protected:
     // the icon is only destroyed when it reaches 0.
     static wxTaskBarIcon *ms_icon;
     static int ms_refCountIcon;
+
 private:
     wxString m_title;
     wxString m_message;
@@ -151,9 +152,16 @@ private:
     wxIcon m_icon;
     wxWindow* m_parent;
 
+    // Event handler not using this object which is called when the icon is
+    // dismissed even if it happens after this object was destroyed.
+    static void OnIconDismiss(wxTaskBarIconEvent& event);
+
+    // These event handlers are only used until this object is destroyed.
     void OnTimeout(wxTaskBarIconEvent& event);
     void OnClick(wxTaskBarIconEvent& event);
 
+    // Called when the icon is hidden and Unbind()s event handlers using this
+    // object from ms_icon.
     void OnIconHidden();
 };
 
@@ -184,19 +192,23 @@ wxTaskBarIcon *wxBalloonNotifMsgImpl::UseTaskBarIcon(wxTaskBarIcon *icon)
 
 wxBalloonNotifMsgImpl::~wxBalloonNotifMsgImpl()
 {
+    // Ensure no event handlers using this object remain bound.
+    OnIconHidden();
 }
 
 void wxBalloonNotifMsgImpl::OnIconHidden()
 {
-    SetActive(false);
     if ( ms_icon )
     {
         ms_icon->Unbind(wxEVT_TASKBAR_BALLOON_CLICK, &wxBalloonNotifMsgImpl::OnClick, this);
         ms_icon->Unbind(wxEVT_TASKBAR_BALLOON_TIMEOUT, &wxBalloonNotifMsgImpl::OnTimeout, this);
     }
+}
 
-    if ( IsUsingOwnIcon() )
-        wxBalloonNotifMsgImpl::ReleaseIcon();
+/* static */
+void wxBalloonNotifMsgImpl::OnIconDismiss(wxTaskBarIconEvent& WXUNUSED(event))
+{
+    wxBalloonNotifMsgImpl::ReleaseIcon();
 }
 
 void wxBalloonNotifMsgImpl::OnTimeout(wxTaskBarIconEvent& WXUNUSED(event))
@@ -252,6 +264,14 @@ void wxBalloonNotifMsgImpl::SetUpIcon(wxWindow *win)
         }
 
         ms_icon->SetIcon(icon);
+
+        // Ensure that the icon is dismissed when the timeout expires or it is
+        // clicked even if this object itself is destroyed before this happens
+        // (as is usually the case for the "fire and forget" notifications): we
+        // need a separate event handler for this, in addition to the
+        // event handlers using this object bound when showing the icon.
+        ms_icon->Bind(wxEVT_TASKBAR_BALLOON_CLICK, &wxBalloonNotifMsgImpl::OnIconDismiss);
+        ms_icon->Bind(wxEVT_TASKBAR_BALLOON_TIMEOUT, &wxBalloonNotifMsgImpl::OnIconDismiss);
     }
 }
 
@@ -302,7 +322,6 @@ wxBalloonNotifMsgImpl::Show(int timeout)
     {
         ms_icon->Bind(wxEVT_TASKBAR_BALLOON_CLICK, &wxBalloonNotifMsgImpl::OnClick, this);
         ms_icon->Bind(wxEVT_TASKBAR_BALLOON_TIMEOUT, &wxBalloonNotifMsgImpl::OnTimeout, this);
-        SetActive(true);
     }
 
     return res;
