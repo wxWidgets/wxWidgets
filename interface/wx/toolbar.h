@@ -352,7 +352,7 @@ public:
 
         @remarks
             wxMac: labels are only displayed if wxWidgets is built with @c
-            wxMAC_USE_NATIVE_TOOLBAR set to 1
+            wxOSX_USE_NATIVE_TOOLBAR set to 1 (which is the default).
     */
     virtual wxToolBarToolBase* AddControl(wxControl* control,
                                           const wxString& label = wxEmptyString);
