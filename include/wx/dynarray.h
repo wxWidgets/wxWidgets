@@ -110,6 +110,9 @@ public:
     template<typename U>
     wxBaseArray(std::initializer_list<U> list) : base_vec(list.begin(), list.end()) {}
 
+    wxBaseArray(const std::vector<T>& vec) : base_vec(vec) { }
+    wxBaseArray(std::vector<T>&& vec) : base_vec(std::move(vec)) { }
+
     void Empty() { this->clear(); }
     void Clear() { this->clear(); }
     void Alloc(size_t uiSize) { this->reserve(uiSize); }

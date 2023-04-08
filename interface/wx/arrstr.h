@@ -98,6 +98,30 @@ public:
     wxArrayString(std::initializer_list<T> list);
 
     /**
+        Constructs the container with the contents of the vector @a vec.
+
+        Template parameter `T` must be convertible to wxString, i.e. it can be
+        wxString itself or `std::string`, `std::wstring` etc.
+
+        @since 3.3.0
+    */
+    template<typename T>
+    wxArrayString(const std::vector<T>& vec);
+
+    /**
+        Constructs the container with the contents of the vector @a vec.
+
+        When using @ref overview_container_std, this constructor is more
+        efficient than the overload taking const reference to the vector.
+        Otherwise it is identical to the other overload, see its documentation
+        for more details.
+
+        @since 3.3.0
+    */
+    template<typename T>
+    wxArrayString(std::vector<T>&& vec);
+
+    /**
         Destructor frees memory occupied by the array strings. For performance
         reasons it is not virtual, so this class should not be derived from.
     */

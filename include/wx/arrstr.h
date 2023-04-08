@@ -79,6 +79,10 @@ public:
     wxArrayString(size_t sz, const wxString* a);
     template<typename U>
     wxArrayString(std::initializer_list<U> list) : wxBaseArray<wxString>(list) { }
+    wxArrayString(const std::vector<wxString>& vec) : wxBaseArray<wxString>(vec) { }
+    wxArrayString(std::vector<wxString>&& vec) : wxBaseArray<wxString>(std::move(vec)) { }
+    template<typename U>
+    wxArrayString(const std::vector<U>& vec) : wxBaseArray<wxString>(vec.begin(), vec.end()) { }
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
@@ -183,6 +187,9 @@ public:
     // list constructor
   template<typename U>
   wxArrayString(std::initializer_list<U> list) { Init(false); assign(list.begin(), list.end()); }
+    // ctor from a std::vector
+  template<typename U>
+  wxArrayString(const std::vector<U>& vec) { Init(false); assign(vec.begin(), vec.end()); }
     // assignment operator
   wxArrayString& operator=(const wxArrayString& src);
     // not virtual, this class should not be derived from

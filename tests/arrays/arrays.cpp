@@ -355,6 +355,25 @@ TEST_CASE("wxArrayString", "[dynarray]")
     CHECK( a9.size() == 5 );
 }
 
+TEST_CASE("wxArrayString::FromVector", "[dynarray][vector]")
+{
+    SECTION("wxString")
+    {
+        std::vector<wxString> vec{"first", "second"};
+        wxArrayString a(vec);
+        REQUIRE( a.size() == 2 );
+        CHECK( a[1] == "second" );
+    }
+
+    SECTION("string")
+    {
+        std::vector<std::string> vec{"third", "fourth"};
+        wxArrayString a(vec);
+        REQUIRE( a.size() == 2 );
+        CHECK( a[1] == "fourth" );
+    }
+}
+
 TEST_CASE("wxSortedArrayString", "[dynarray]")
 {
     wxSortedArrayString a;
