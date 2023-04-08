@@ -32,10 +32,30 @@
                                     countries);
     @endcode
 
+    When using a wxWidgets function returning an object of this class, you can
+    either use it as if it were a `std::vector<wxString>`, as this class has
+    all vector methods, or actually convert it to such vector using its
+    AsVector(), e.g.
 
-    If you do use this class directly, it's recommended to prefer using its
-    `std::vector<wxString>`-like methods instead of the legacy wxArray-like
-    ones.
+    @code
+    wxArrayString files;
+    wxDir::GetAllFiles("/some/path", &files);
+
+    // Can use the usual accessors:
+    if ( !files.empty() ) {
+        auto first = files[0];
+        auto total = files.size();
+        ...
+    }
+
+    // Can iterate over it like over a vector, too.
+    for ( const wxString& file: files ) {
+        ...
+    }
+
+    // Or can just convert it to the "real" vector:
+    const std::vector<wxString>& vec = files.AsVector();
+    @endcode
 
     @library{wxbase}
     @category{containers}
@@ -134,6 +154,25 @@ public:
         adding a known number of items consecutively.
     */
     void Alloc(size_t nCount);
+
+    /**
+        Constructs a std::vector containing the same strings as this array.
+
+        In @ref overview_container_std, this function actually returns a const
+        reference to this object itself, without making a copy, but in the
+        default/compatible build, it has to copy all the strings, making it
+        expensive to call for big arrays.
+
+        Note that using it like this:
+        @code
+        const std::vector<wxString>& vec = array.AsVector();
+        @endcode
+        works in all builds as long as you don't need to modify the returned
+        vector and doesn't impose any extra overhead in the STL build.
+
+        @since 3.3.0
+    */
+    std::vector<wxString> AsVector() const;
 
     /**
         Clears the array contents and frees memory.

@@ -95,6 +95,8 @@ public:
         wxBaseArray<wxString>::Add(string, copies);
         return size() - copies;
     }
+
+    const std::vector<wxString>& AsVector() const { return *this; }
 };
 
 // Unlike all the other sorted arrays, this one uses a comparison function
@@ -240,6 +242,8 @@ public:
   }
   const wxString& Last() const { return const_cast<wxArrayString*>(this)->Last(); }
 
+    // get all items as a vector
+  std::vector<wxString> AsVector() const;
 
   // item management
     // Search the element in the array, starting from the beginning if

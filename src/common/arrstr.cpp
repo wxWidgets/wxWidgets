@@ -150,6 +150,14 @@ wxArrayString& wxArrayString::operator=(const wxArrayString& src)
   return *this;
 }
 
+std::vector<wxString> wxArrayString::AsVector() const
+{
+    if ( !m_pItems )
+        return {};
+
+    return std::vector<wxString>{m_pItems, m_pItems + m_nCount};
+}
+
 void wxArrayString::Copy(const wxArrayString& src)
 {
   if ( src.m_nCount > ARRAY_DEFAULT_INITIAL_SIZE )
