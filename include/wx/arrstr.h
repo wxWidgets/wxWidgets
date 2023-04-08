@@ -15,9 +15,6 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
-#include <vector>
-#include <initializer_list>
-
 // these functions are only used in STL build now but we define them in any
 // case for compatibility with the existing code outside of the library which
 // could be using them
