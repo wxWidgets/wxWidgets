@@ -9,8 +9,6 @@
 #ifndef WX_ARCHIVETEST_INCLUDED
 #define WX_ARCHIVETEST_INCLUDED 1
 
-#define WX_TEST_ARCHIVE_ITERATOR
-
 #include "wx/archive.h"
 #include "wx/wfstream.h"
 
