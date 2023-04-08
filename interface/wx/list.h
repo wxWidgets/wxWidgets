@@ -9,7 +9,9 @@
     The wxList<T> class provides linked list functionality.
 
     This class has been rewritten to be type safe and to provide the full API of
-    the STL std::list container and should be used like it.
+    the STL std::list container and should be used like it if you use it at
+    all, which is not recommended in the new code.
+
     The exception is that wxList<T> actually stores pointers and therefore its
     iterators return pointers and not references to the actual objects in the list
     (see example below) and @e value_type is defined as @e T*.
@@ -28,7 +30,7 @@
     that originated from the old wxList class and which can still be used alternatively
     for the same class.
 
-    Note that if you compile wxWidgets in STL mode (@c wxUSE_STL defined as 1)
+    Note that if you use @ref overview_container_std of wxWidgets,
     then wxList<T> will actually derive from @c std::list and just add a legacy
     compatibility layer for the old wxList class.
 
