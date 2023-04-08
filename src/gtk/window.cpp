@@ -1413,9 +1413,12 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         {
             wxKeyEvent eventChar(wxEVT_CHAR, event);
 
-            if ( event.ControlDown() && isalpha(event.m_keyCode) )
+            // Check for the special case of Ctrl+letter, see comment before
+            // AdjustCharEventKeyCodes().
+            if ( event.ControlDown() &&
+                    ((event.m_keyCode >= 'a' && event.m_keyCode <= 'z') ||
+                     (event.m_keyCode >= 'A' && event.m_keyCode <= 'Z')) )
             {
-                // Ctrl+letter is handled specially by AdjustCharEventKeyCodes().
                 eventChar.m_keyCode = event.m_keyCode;
                 eventChar.m_uniChar = event.m_uniChar;
             }
