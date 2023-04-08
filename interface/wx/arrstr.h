@@ -8,42 +8,34 @@
 /**
     @class wxArrayString
 
-    wxArrayString is an efficient container for storing wxString objects.
+    wxArrayString is a legacy class similar to std::vector<wxString>.
 
-    It has the same features as all wxArray classes, i.e. it dynamically expands
-    when new items are added to it (so it is as easy to use as a linked list),
-    but the access time to the elements is constant, instead of being linear in
-    number of elements as in the case of linked lists. It is also very size
-    efficient and doesn't take more space than a C array @e wxString[] type
-    (wxArrayString uses its knowledge of internals of wxString class to achieve this).
-
-    This class is used in the same way as other dynamic arrays(), except that no
-    ::WX_DEFINE_ARRAY declaration is needed for it.
-    When a string is added or inserted in the array, a copy of the string is created,
-    so the original string may be safely deleted (e.g. if it was a @e wxChar *
-    pointer the memory it was using can be freed immediately after this).
-    In general, there is no need to worry about string memory deallocation when using
-    this class - it will always free the memory it uses itself.
-
-    The references returned by wxArrayString::Item, wxArrayString::Last or
-    wxArrayString::operator[] are not constant, so the array elements may
-    be modified in place like this:
+    This class shouldn't normally be used in the new code, but is still needed
+    when passing multiple items to various functions in wxWidgets API, notably
+    the constructors of various GUI control classes. Usually, even in this case
+    it doesn't need to be used explicitly, as wxArrayString will be implicitly
+    created if you use either an initializer list or a vector of strings, e.g.
+    you can just pass either of those instead of wxArrayString, for example
 
     @code
-    array.Last().MakeUpper();
+        // wxListBox ctor is documented as taking wxArrayString but you can
+        // pass an initializer_list to it directly:
+        auto listbox = new wxListBox(parent, wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize,
+                                     { "some", "items", "for", "the", "listbox" });
+
+        // Similarly, if you already have a vector filled with strings
+        // elsewhere in your program, you can just pass it instead:
+        std::vector<std::string> countries = GetListOfCountries();
+        auto choices = new wxChoice(parent, wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    countries);
     @endcode
 
-    @note None of the methods of wxArrayString is virtual including its
-          destructor, so this class should not be used as a base class.
 
-    Although this is not true strictly speaking, this class may be considered as
-    a specialization of wxArray class for the wxString member data: it is not
-    implemented like this, but it does have all of the wxArray functions.
-
-    It also has the full set of <tt>std::vector<wxString></tt> compatible
-    methods, including nested @c iterator and @c const_iterator classes which
-    should be used in the new code for forward compatibility with the future
-    wxWidgets versions.
+    If you do use this class directly, it's recommended to prefer using its
+    `std::vector<wxString>`-like methods instead of the legacy wxArray-like
+    ones.
 
     @library{wxbase}
     @category{containers}
