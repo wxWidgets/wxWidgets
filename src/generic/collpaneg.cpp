@@ -78,8 +78,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
     // create children and lay them out using a wxBoxSizer
     // (so that we automatically get RTL features)
-    m_pButton = new wxCollapsibleHeaderCtrl(this, wxID_ANY, label, wxPoint(0, 0),
-                             wxDefaultSize);
+    m_pButton = new wxCollapsibleHeaderCtrl(this, wxID_ANY, label, wxPoint(0, 0));
 
     m_sz->Add(m_pButton, wxSizerFlags().Border(wxALL, GetBorder()));
 

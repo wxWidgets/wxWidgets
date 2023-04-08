@@ -60,6 +60,8 @@ private:
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
+    wxGLCanvas() = default;
+
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
                wxWindowID id = wxID_ANY,
@@ -126,10 +128,9 @@ protected:
                               long style,
                   const wxString& name);
 
-    WXGLPixelFormat m_glFormat;
+    WXGLPixelFormat m_glFormat = nullptr;
     wxGLAttributes m_GLAttrs;
 
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
 };
 

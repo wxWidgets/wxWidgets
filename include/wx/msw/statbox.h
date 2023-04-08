@@ -70,6 +70,8 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const override { return false; }
 
+    virtual void MSWOnDisabledComposited() override;
+
 protected:
     virtual wxSize DoGetBestSize() const override;
 

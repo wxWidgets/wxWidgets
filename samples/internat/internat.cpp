@@ -415,8 +415,8 @@ MyFrame::MyFrame()
     grid->HideRowLabels();
 
     grid->SetColLabelValue(0, _("Number"));
-    grid->SetColFormatFloat(0);
-    grid->SetCellValue(0, 0, wxNumberFormatter::ToString(3.14159265, -1));
+    grid->SetColFormatFloat(0, -1 /* width */, 5 /* we only use 5 digits below */);
+    grid->SetCellValue(0, 0, wxNumberFormatter::ToString(3.14159, -1));
 
     grid->SetColLabelValue(1, _("Date"));
     grid->SetColFormatDate(1);

@@ -34,6 +34,8 @@ public:
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
+    wxGLCanvas() = default;
+
     explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
@@ -79,8 +81,6 @@ public:
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 
 private:
-
-//    wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
 };
 

@@ -47,6 +47,8 @@ private:
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
+    wxGLCanvas() = default;
+
     explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
@@ -115,9 +117,6 @@ public:
 #endif // wxUSE_PALETTE
 
 protected:
-    // common part of all ctors
-    void Init();
-
     // the real window creation function, Create() may reuse it twice as we may
     // need to create an OpenGL window to query the available extensions and
     // then potentially delete and recreate it with another pixel format
@@ -133,7 +132,7 @@ protected:
 
 
     // HDC for this window, we keep it all the time
-    HDC m_hDC;
+    HDC m_hDC = nullptr;
 
 private:
     wxDECLARE_EVENT_TABLE();

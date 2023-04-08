@@ -63,7 +63,6 @@ WXDLLIMPEXP_CORE GtkWidget *GetHeaderButtonWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetNotebookWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetRadioButtonWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetSplitterWidget(wxOrientation orient = wxHORIZONTAL);
-WXDLLIMPEXP_CORE GtkWidget *GetTextEntryWidget();
 WXDLLIMPEXP_CORE GtkWidget *GetTreeWidget();
 
 } // wxGTKPrivate

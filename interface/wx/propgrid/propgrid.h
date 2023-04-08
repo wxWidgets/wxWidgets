@@ -274,26 +274,34 @@ constexpr long wxPGMAN_DEFAULT_STYLE = 0L;
     @{
 */
 
-enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
+/**
+    wxPropertyGrid Validation Failure behaviour Flags
+*/
+enum class wxPGVFBFlags : int
 {
+/**
+    @hideinitializer
+*/
+    Null                   = 0,
+
 /**
     Prevents user from leaving property unless value is valid. If this
     behaviour flag is not used, then value change is instead cancelled.
     @hideinitializer
 */
-wxPG_VFB_STAY_IN_PROPERTY           = 0x01,
+    StayInProperty         = 0x0001,
 
 /**
     Calls wxBell() on validation failure.
     @hideinitializer
 */
-wxPG_VFB_BEEP                       = 0x02,
+    Beep                   = 0x0002,
 
 /**
     Cell with invalid value will be marked (with red colour).
     @hideinitializer
 */
-wxPG_VFB_MARK_CELL                  = 0x04,
+    MarkCell               = 0x0004,
 
 /**
     Display a text message explaining the situation.
@@ -305,41 +313,38 @@ wxPG_VFB_MARK_CELL                  = 0x04,
     using wxMessageBox.
     @hideinitializer
 */
-wxPG_VFB_SHOW_MESSAGE               = 0x08,
+    ShowMessage            = 0x0008,
 
 /**
-    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    Similar to SHOW_MESSAGE, except always displays the
     message using wxMessageBox.
     @hideinitializer
 */
-wxPG_VFB_SHOW_MESSAGEBOX            = 0x10,
+    ShowMessageBox         = 0x0010,
 
 /**
-    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    Similar to SHOW_MESSAGE, except always displays the
     message on the status bar (when present - you can reimplement
     wxPropertyGrid::GetStatusBar() in a derived class to specify
     this yourself).
     @hideinitializer
 */
-wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR  = 0x20,
+    ShowMessageOnStatusBar = 0x0020,
 
 /**
     Defaults.
     @hideinitializer
 */
-wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
-                                      wxPG_VFB_SHOW_MESSAGEBOX,
+    Default = MarkCell | ShowMessageBox,
+
+/**
+    @hideinitializer
+*/
+    Undefined              = 0x0040
 };
 
 /** @}
 */
-
-/**
-    Having this as define instead of wxByte typedef makes things easier for
-    wxPython bindings (ignoring and redefining it in SWIG interface file
-    seemed rather tricky)
-*/
-#define wxPGVFBFlags unsigned char
 
 /**
     @class wxPGValidationInfo
@@ -610,7 +615,7 @@ public:
 
         @return Returns @true if anything was changed.
     */
-    virtual bool CommitChangesFromEditor( wxUint32 flags = 0 );
+    virtual bool CommitChangesFromEditor(wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null);
 
     /**
         Two step creation. Whenever the control is created without any
@@ -640,7 +645,7 @@ public:
         enable.
 
         @remarks This functions deselects selected property, if any. Validation
-                failure option ::wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+                failure option wxPGVFBFlags::StayInProperty is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool EnableCategories( bool enable );
@@ -1430,7 +1435,7 @@ public:
 
     /**
         Sets custom failure message for this time only. Only applies if
-        ::wxPG_VFB_SHOW_MESSAGE is set in validation failure flags.
+        wxPGVFBFlags::ShowMessage is set in validation failure flags.
     */
     void SetValidationFailureMessage( const wxString& message );
 

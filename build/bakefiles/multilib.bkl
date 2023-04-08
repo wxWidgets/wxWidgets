@@ -383,8 +383,9 @@
     <!--                            STC                                   -->
     <!-- ================================================================ -->
 
-    <template id="stc_base" template="wxscintilla_cppflags">
+    <template id="stc_base" template="wxscintilla_cppflags,wxlexilla_cppflags">
         <library>wxscintilla</library>
+        <library>wxlexilla</library>
     </template>
 
     <dll id="stcdll" template="wx_dll,stc_base"

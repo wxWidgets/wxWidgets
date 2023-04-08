@@ -165,11 +165,6 @@ wxEND_EVENT_TABLE()
 wxIMPLEMENT_CLASS(wxStyledTextCtrl, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent);
 
-#ifdef LINK_LEXERS
-// forces the linking of the lexer modules
-int Scintilla_LinkLexers();
-#endif
-
 //----------------------------------------------------------------------
 // Constructor and Destructor
 
@@ -198,9 +193,6 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                            wxDefaultValidator, name))
         return false;
 
-#ifdef LINK_LEXERS
-    Scintilla_LinkLexers();
-#endif
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = false;
@@ -2580,19 +2572,6 @@ bool wxStyledTextCtrl::GetUseVerticalScrollBar() const
 void wxStyledTextCtrl::AppendText(const wxString& text) {
                     const wxWX2MBbuf buf = wx2stc(text);
                     SendMsg(SCI_APPENDTEXT, wx2stclen(text, buf), (sptr_t)(const char*)buf);
-}
-
-// Is drawing done in two phases with backgrounds drawn before foregrounds?
-bool wxStyledTextCtrl::GetTwoPhaseDraw() const
-{
-    return SendMsg(SCI_GETTWOPHASEDRAW, 0, 0) != 0;
-}
-
-// In twoPhaseDraw mode, drawing is performed in two phases, first the background
-// and then the foreground. This avoids chopping off characters that overlap the next run.
-void wxStyledTextCtrl::SetTwoPhaseDraw(bool twoPhase)
-{
-    SendMsg(SCI_SETTWOPHASEDRAW, twoPhase, 0);
 }
 
 // How many phases is drawing done in?
@@ -5016,6 +4995,11 @@ wxString wxStyledTextCtrl::DescriptionOfStyle(int style) const {
          return stc2wx(buf);
 }
 
+// Set the lexer from an ILexer*.
+void wxStyledTextCtrl::SetILexer(void* ilexer) {
+         SendMsg(SCI_SETILEXER, 0, (sptr_t)ilexer);
+}
+
 // Divide each styling byte into lexical class bits (default: 5) and indicator
 // bits (default: 3). If a lexer requires more than 32 lexical states, then this
 // is used to expand the possible states.
@@ -5034,6 +5018,19 @@ int wxStyledTextCtrl::GetStyleBits() const
 int wxStyledTextCtrl::GetStyleBitsNeeded() const
 {
     return SendMsg(SCI_GETSTYLEBITSNEEDED, 0, 0);
+}
+
+// Is drawing done in two phases with backgrounds drawn before foregrounds?
+bool wxStyledTextCtrl::GetTwoPhaseDraw() const
+{
+    return SendMsg(SCI_GETTWOPHASEDRAW, 0, 0) != 0;
+}
+
+// In twoPhaseDraw mode, drawing is performed in two phases, first the background
+// and then the foreground. This avoids chopping off characters that overlap the next run.
+void wxStyledTextCtrl::SetTwoPhaseDraw(bool twoPhase)
+{
+    SendMsg(SCI_SETTWOPHASEDRAW, twoPhase, 0);
 }
 
 //}}}
@@ -5665,7 +5662,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         m_lastKeyDownConsumed = false;
 
     if (!m_lastKeyDownConsumed && !skip) {
-        int key = evt.GetUnicodeKey();
+        wxChar key = evt.GetUnicodeKey();
         bool keyOk = true;
 
         // if the unicode key code is not really a unicode character (it may
@@ -6048,7 +6045,12 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 21, 1, "Scintilla 3.21.1");
+    return wxVersionInfo("Scintilla", 5, 0, 0, "Scintilla 5.0.0");
+}
+
+/*static*/ wxVersionInfo wxStyledTextCtrl::GetLexerVersionInfo()
+{
+    return wxVersionInfo("Lexilla", 5, 0, 1, "Lexilla 5.0.1");
 }
 
 #endif // wxUSE_STC

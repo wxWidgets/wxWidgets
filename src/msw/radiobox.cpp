@@ -172,8 +172,11 @@ bool wxRadioBox::Create(wxWindow *parent,
     int borderTop, borderOther;
     GetBordersForSizer(&borderTop, &borderOther);
 
-    sizerBox->AddSpacer(borderTop);
-    sizerBox->Add(sizerButtons, wxSizerFlags().Border(wxLEFT, borderOther));
+    if ( borderTop > borderOther )
+        sizerBox->AddSpacer(borderTop - borderOther);
+
+    borderOther += wxSizerFlags::GetDefaultBorder();
+    sizerBox->Add(sizerButtons, wxSizerFlags().Border(wxALL, borderOther));
 
     SetSizer(sizerBox);
 

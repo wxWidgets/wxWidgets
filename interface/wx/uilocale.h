@@ -319,8 +319,9 @@ public:
         predefined ::wxLanguage constants, such as e.g. "fr-DE", which means
         French language used with German locale settings.
 
-        @since 3.3.0
+        @since 3.2.2
      */
+    static wxLocaleIdent GetSystemLocaleId();
 };
 
 /**

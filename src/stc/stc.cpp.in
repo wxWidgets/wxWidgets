@@ -165,11 +165,6 @@ wxEND_EVENT_TABLE()
 wxIMPLEMENT_CLASS(wxStyledTextCtrl, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent);
 
-#ifdef LINK_LEXERS
-// forces the linking of the lexer modules
-int Scintilla_LinkLexers();
-#endif
-
 //----------------------------------------------------------------------
 // Constructor and Destructor
 
@@ -198,9 +193,6 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                            wxDefaultValidator, name))
         return false;
 
-#ifdef LINK_LEXERS
-    Scintilla_LinkLexers();
-#endif
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = false;
@@ -919,7 +911,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         m_lastKeyDownConsumed = false;
 
     if (!m_lastKeyDownConsumed && !skip) {
-        int key = evt.GetUnicodeKey();
+        wxChar key = evt.GetUnicodeKey();
         bool keyOk = true;
 
         // if the unicode key code is not really a unicode character (it may
@@ -1302,7 +1294,12 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 21, 1, "Scintilla 3.21.1");
+    return wxVersionInfo("Scintilla", 5, 0, 0, "Scintilla 5.0.0");
+}
+
+/*static*/ wxVersionInfo wxStyledTextCtrl::GetLexerVersionInfo()
+{
+    return wxVersionInfo("Lexilla", 5, 0, 1, "Lexilla 5.0.1");
 }
 
 #endif // wxUSE_STC

@@ -1764,6 +1764,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/evtloop.cpp
     src/msw/ole/access.cpp
     src/msw/bmpbndl.cpp
+    src/msw/overlay.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h

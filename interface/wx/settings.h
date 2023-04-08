@@ -115,9 +115,6 @@ enum wxSystemColour
      */
     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT,
 
-    wxSYS_COLOUR_MAX
-
-
 
     // synonyms:
 

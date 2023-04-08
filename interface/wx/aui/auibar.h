@@ -398,13 +398,44 @@ public:
     bool IsSticky() const;
 
     /**
+        Associates a number with the item.
 
+        @param userData Number to associate
+
+        @see GetUserData()
     */
-    void SetUserData(long l);
-    /**
+    void SetUserData(long userData);
 
+    /**
+        Get number associated with the item.
+
+        @return Associated number
+
+        @see SetUserData()
     */
     long GetUserData() const;
+
+    /**
+        Associates a wxObject with the item.
+
+        @param clientData Pointer to the wxObject
+
+        @see GetClientData()
+
+        @since 3.3.0
+    */
+    void SetClientData(wxObject* clientData);
+
+    /**
+        Get wxObject associated with the item.
+
+        @return Pointer to the associated wxObject
+
+        @see SetClientData()
+
+        @since 3.3.0
+    */
+    wxObject* GetClientData() const;
 
     /**
 
@@ -703,6 +734,13 @@ public:
     bool SetFont(const wxFont& font);
 
 
+    ///@{
+    /**
+        Add a new tool to the toolbar.
+
+        This function works similarly to the corresponding wxToolBar::AddTool()
+        overloads. Note that before 3.3.0 the @a client_data parameter was not used.
+     */
     wxAuiToolBarItem* AddTool(int toolId,
                  const wxString& label,
                  const wxBitmapBundle& bitmap,
@@ -725,6 +763,7 @@ public:
                  wxObject* client_data = nullptr,
                  const wxString& short_help_string = wxEmptyString,
                  const wxString& long_help_string = wxEmptyString);
+    ///@}
 
     wxAuiToolBarItem* AddLabel(int toolId,
                   const wxString& label = wxEmptyString,
@@ -806,6 +845,30 @@ public:
     void SetMargins(const wxSize& size);
     void SetMargins(int x, int y);
     void SetMargins(int left, int right, int top, int bottom);
+
+    /**
+        Associates a wxObject with the item identified by id.
+
+        @param toolId Identifier of the desired item
+        @param clientData Pointer to the wxObject
+
+        @see GetToolClientData()
+
+        @since 3.3.0
+    */
+    void SetToolClientData(int toolId, wxObject* clientData);
+
+    /**
+        Get wxObject associated with the item identified by id.
+
+        @param toolId Identifier of the desired item
+        @return Pointer to the associated wxObject
+
+        @see SetToolClientData()
+
+        @since 3.3.0
+    */
+    wxObject* GetToolClientData(int toolId) const;
 
     void SetToolBitmapSize(const wxSize& size);
     wxSize GetToolBitmapSize() const;
