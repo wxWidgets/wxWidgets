@@ -171,10 +171,8 @@ public:
     the menu bar in a wxFrame.
 
     You may create a toolbar that is managed by a frame calling
-    wxFrame::CreateToolBar(). Under Pocket PC, you should always use this
-    function for creating the toolbar to be managed by the frame, so that
-    wxWidgets can use a combined menubar and toolbar. Where you manage your
-    own toolbars, create wxToolBar as usual.
+    wxFrame::CreateToolBar(). Where you manage your own toolbars,
+    create wxToolBar as usual.
 
     There are several different types of tools you can add to a toolbar.
     These types are controlled by the ::wxItemKind enumeration.
@@ -354,7 +352,7 @@ public:
 
         @remarks
             wxMac: labels are only displayed if wxWidgets is built with @c
-            wxMAC_USE_NATIVE_TOOLBAR set to 1
+            wxOSX_USE_NATIVE_TOOLBAR set to 1 (which is the default).
     */
     virtual wxToolBarToolBase* AddControl(wxControl* control,
                                           const wxString& label = wxEmptyString);
@@ -843,7 +841,7 @@ public:
     /**
         Sets the dropdown menu for the tool given by its @e id. The tool itself
         will delete the menu when it's no longer needed. Only supported under
-        GTK+ und MSW.
+        GTK+ and MSW.
 
         If you define a EVT_TOOL_DROPDOWN() handler in your program, you must
         call wxEvent::Skip() from it or the menu won't be displayed.
