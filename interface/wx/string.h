@@ -1390,10 +1390,10 @@ public:
         @code
         wxString str;
 
-        str.Printf(wxT("%d %d %d"), 1, 2, 3);
+        str.Printf("%d %d %d", 1, 2, 3);
         // str now contains "1 2 3"
 
-        str.Printf(wxT("%2$d %3$d %1$d"), 1, 2, 3);
+        str.Printf("%2$d %3$d %1$d", 1, 2, 3);
         // str now contains "2 3 1"
         @endcode
 

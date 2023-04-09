@@ -3101,7 +3101,7 @@ public:
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
-    virtual wxString GetXMLNodeName() const { return wxT("paragraphlayout"); }
+    virtual wxString GetXMLNodeName() const { return "paragraphlayout"; }
 
     virtual bool AcceptsFocus() const { return true; }
 
@@ -3692,7 +3692,7 @@ public:
 
     virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    virtual wxString GetXMLNodeName() const { return wxT("textbox"); }
+    virtual wxString GetXMLNodeName() const { return "textbox"; }
 
     virtual bool CanEditProperties() const { return true; }
 
@@ -3777,7 +3777,7 @@ public:
 
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position = wxPoint(0,0), const wxSize& parentSize = wxDefaultSize, wxArrayInt* partialExtents = nullptr) const;
 
-    virtual wxString GetXMLNodeName() const { return wxT("field"); }
+    virtual wxString GetXMLNodeName() const { return "field"; }
 
     virtual bool CanEditProperties() const;
 
@@ -3800,8 +3800,8 @@ public:
 
 // Accessors
 
-    void SetFieldType(const wxString& fieldType) { GetProperties().SetProperty(wxT("FieldType"), fieldType); }
-    wxString GetFieldType() const { return GetProperties().GetPropertyString(wxT("FieldType")); }
+    void SetFieldType(const wxString& fieldType) { GetProperties().SetProperty("FieldType", fieldType); }
+    wxString GetFieldType() const { return GetProperties().GetPropertyString("FieldType"); }
 
 // Operations
 
@@ -4351,7 +4351,7 @@ public:
 
     virtual void CalculateRange(long start, long& end);
 
-    virtual wxString GetXMLNodeName() const { return wxT("paragraph"); }
+    virtual wxString GetXMLNodeName() const { return "paragraph"; }
 
 // Accessors
 
@@ -4566,7 +4566,7 @@ public:
     virtual bool ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler);
 #endif
 
-    virtual wxString GetXMLNodeName() const { return wxT("text"); }
+    virtual wxString GetXMLNodeName() const { return "text"; }
 
 // Accessors
 
@@ -4833,7 +4833,7 @@ public:
     // Images can be floatable (optionally).
     virtual bool IsFloatable() const { return true; }
 
-    virtual wxString GetXMLNodeName() const { return wxT("image"); }
+    virtual wxString GetXMLNodeName() const { return "image"; }
 
 // Accessors
 
@@ -5734,7 +5734,7 @@ public:
 
     virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    virtual wxString GetXMLNodeName() const { return wxT("cell"); }
+    virtual wxString GetXMLNodeName() const { return "cell"; }
 
     virtual bool CanEditProperties() const { return true; }
 
@@ -5832,7 +5832,7 @@ public:
 
     virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
-    virtual wxString GetXMLNodeName() const { return wxT("table"); }
+    virtual wxString GetXMLNodeName() const { return "table"; }
 
     virtual bool Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style);
 

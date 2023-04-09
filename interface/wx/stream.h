@@ -887,7 +887,7 @@ public:
         const wxFilterClassFactory *factory = wxFilterClassFactory::GetFirst();
 
         while (factory) {
-            list << factory->GetProtocol() << wxT("\n");
+            list << factory->GetProtocol() << "\n";
             factory = factory->GetNext();
         }
         @endcode
@@ -917,7 +917,7 @@ public:
         const wxChar *const *p;
 
         for (p = factory->GetProtocols(wxSTREAM_FILEEXT); *p; p++)
-            list << *p << wxT("\n");
+            list << *p << "\n";
         @endcode
     */
     virtual const wxChar * const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const = 0;
