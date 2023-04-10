@@ -163,11 +163,7 @@ bool wxCommandProcessor::Undo()
 bool wxCommandProcessor::Redo()
 {
     wxCommand *redoCommand = nullptr;
-    wxList::compatibility_iterator redoNode
-#if !wxUSE_STD_CONTAINERS
-        = nullptr          // just to avoid warnings
-#endif // !wxUSE_STD_CONTAINERS
-        ;
+    wxList::compatibility_iterator redoNode;
 
     if ( m_currentCommand )
     {
