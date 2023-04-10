@@ -179,9 +179,9 @@ enum wxLanguage
     wxLANGUAGE_DARI_AFGHANISTAN,
     wxLANGUAGE_DIVEHI,
     wxLANGUAGE_DIVEHI_MALDIVES,
-    wxLANGUAGE_DOGRI,                   ///< @since_wx{3.3.1}
-    wxLANGUAGE_DOGRI_DEVANAGARI,        ///< @since_wx{3.3.1}
-    wxLANGUAGE_DOGRI_DEVANAGARI_INDIA,  ///< @since_wx{3.3.1}
+    wxLANGUAGE_DOGRI,                       ///< @since_wx{3.3.1}
+    wxLANGUAGE_DOGRI_DEVANAGARI,            ///< @since_wx{3.3.1}
+    wxLANGUAGE_DOGRI_DEVANAGARI_INDIA,      ///< @since_wx{3.3.1}
     wxLANGUAGE_DUALA,
     wxLANGUAGE_DUALA_CAMEROON,
     wxLANGUAGE_DUTCH,
@@ -618,9 +618,9 @@ enum wxLanguage
     wxLANGUAGE_NGIEMBOON_CAMEROON,
     wxLANGUAGE_NGOMBA,
     wxLANGUAGE_NGOMBA_CAMEROON,
-    wxLANGUAGE_NIGERIAN_PIDGIN,                 ///< @since_wx{3.3.1}
-    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN,           ///< @since_wx{3.3.1}
-    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN_NIGERIA,   ///< @since_wx{3.3.1}
+    wxLANGUAGE_NIGERIAN_PIDGIN,             ///< @since_wx{3.3.1}
+    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN,       ///< @since_wx{3.3.1}
+    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN_NIGERIA,///< @since_wx{3.3.1}
     wxLANGUAGE_NKO,
     wxLANGUAGE_NKO_GUINEA,
     wxLANGUAGE_NORTHERN_LURI,

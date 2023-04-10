@@ -10,6 +10,47 @@ import os
 import string
 import sys
 
+# This hardcoded table contains the versions when the given language was added
+# to wxWidgets and is used to generate the appropriate notes in the docs.
+vertable = {
+    'wxLANGUAGE_DOGRI': '3.3.1',
+    'wxLANGUAGE_DOGRI_DEVANAGARI': '3.3.1',
+    'wxLANGUAGE_DOGRI_DEVANAGARI_INDIA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_BURKINA_FASO': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_CAMEROON': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_GAMBIA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_GHANA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_GUINEA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_GUINEA_BISSAU': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_LIBERIA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_MAURITANIA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_NIGER': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_NIGERIA': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_SENEGAL': '3.3.1',
+    'wxLANGUAGE_FULAH_ADLAM_SIERRA_LEONE': '3.3.1',
+    'wxLANGUAGE_IRISH_UNITED_KINGDOM': '3.3.1',
+    'wxLANGUAGE_KANURI_LATIN_NIGERIA': '3.3.1',
+    'wxLANGUAGE_KASHMIRI_ARABIC': '3.3.1',
+    'wxLANGUAGE_KASHMIRI_ARABIC_INDIA': '3.3.1',
+    'wxLANGUAGE_KURDISH_ARABIC_IRAN': '3.3.1',
+    'wxLANGUAGE_LATIN_VATICAN_CITY': '3.3.1',
+    'wxLANGUAGE_MAITHILI': '3.3.1',
+    'wxLANGUAGE_MAITHILI_INDIA': '3.3.1',
+    'wxLANGUAGE_MALAY_INDONESIA': '3.3.1',
+    'wxLANGUAGE_MANIPURI_BENGALI': '3.3.1',
+    'wxLANGUAGE_NIGERIAN_PIDGIN': '3.3.1',
+    'wxLANGUAGE_NIGERIAN_PIDGIN_LATIN': '3.3.1',
+    'wxLANGUAGE_NIGERIAN_PIDGIN_LATIN_NIGERIA': '3.3.1',
+    'wxLANGUAGE_SANTALI': '3.3.1',
+    'wxLANGUAGE_SANTALI_OL_CHIKI': '3.3.1',
+    'wxLANGUAGE_SANTALI_OL_CHIKI_INDIA': '3.3.1',
+    'wxLANGUAGE_SUNDANESE_LATIN': '3.3.1',
+    'wxLANGUAGE_SUNDANESE_LATIN_INDONESIA': '3.3.1',
+    'wxLANGUAGE_UZBEK_ARABIC': '3.3.1',
+    'wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN': '3.3.1',
+}
+
 def ReadScriptTable():
     scripttable = []
     try:
@@ -40,7 +81,8 @@ def ReadTable():
     return table
 
 
-def WriteEnum(f, table, scripttable):
+# Kind may be "include" or "interface".
+def WriteEnum(f, table, scripttable, kind = 'include'):
    f.write("""
 /**
     The languages supported by wxLocale.
@@ -58,10 +100,16 @@ enum wxLanguage
 
 """);
    knownLangs = []
+   output = ''
    for i in table:
-       if i[0] not in knownLangs:
-          f.write('    %s,\n' % i[0])
-          knownLangs.append(i[0])
+       lang = i[0]
+       if lang not in knownLangs:
+          output += '    %s,' % lang
+          if kind == 'interface' and lang in vertable:
+              output += '%s///< @since_wx{%s}' % (' ' * (39 - len(lang)), vertable[lang])
+          output += '\n'
+          knownLangs.append(lang)
+   f.write(output)
    f.write("""
     /// For custom, user-defined languages.
     wxLANGUAGE_USER_DEFINED,
@@ -246,5 +294,5 @@ def ReplaceGeneratedPartOfFile(fname, func):
 table = ReadTable()
 scripttable = ReadScriptTable()
 ReplaceGeneratedPartOfFile('include/wx/language.h', WriteEnum)
-ReplaceGeneratedPartOfFile('interface/wx/language.h', WriteEnum)
+ReplaceGeneratedPartOfFile('interface/wx/language.h', lambda f, table, scripttable: WriteEnum(f, table, scripttable, 'interface'))
 ReplaceGeneratedPartOfFile('src/common/languageinfo.cpp', WriteTable)
