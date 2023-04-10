@@ -497,9 +497,7 @@ public:
     @class wxArchiveIterator
 
     An input iterator template class that can be used to transfer an archive's
-    catalogue to a container. It is only available if wxUSE_STL is set to 1
-    in setup.h, and the uses for it outlined below require a compiler which
-    supports member templates.
+    catalogue to a container.
 
     @code
     template<class Arc, class T = typename Arc::entry_type*>
