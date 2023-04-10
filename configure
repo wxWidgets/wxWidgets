@@ -2086,7 +2086,7 @@ Optional Features:
   --disable-shared        create static library instead of shared
   --enable-cxx11          obsolete option doing nothing
   --enable-stl            use standard C++ classes for everything
-  --enable-std_containers use standard C++ container classes
+  --disable-std_containers disable use of standard C++ container classes
   --disable-std_iostreams  disable use of standard C++ stream classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
  --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString
@@ -4023,8 +4023,6 @@ esac
 
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
-DEFAULT_wxUSE_STD_CONTAINERS=no
-
 DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBCURL=auto
 DEFAULT_wxUSE_LIBGNOMEVFS=no
@@ -5578,11 +5576,8 @@ fi
 
           eval "$wx_cv_use_stl"
 
-if test "$wxUSE_STL" = "yes"; then
-    DEFAULT_wxUSE_STD_CONTAINERS=yes
-fi
 
-          enablestring=
+          enablestring=disable
           defaultval=
           if test -z "$defaultval"; then
               if test x"$enablestring" = xdisable; then

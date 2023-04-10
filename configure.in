@@ -310,8 +310,6 @@ dnl wxUSE_ALL_FEATURES which is the only which has to be set to "yes" by
 dnl default)
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
-DEFAULT_wxUSE_STD_CONTAINERS=no
-
 dnl libraries disabled by default or requiring some special handling
 DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBCURL=auto
@@ -642,10 +640,7 @@ WX_ARG_DISABLE(shared,     [  --disable-shared        create static library inst
 AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          obsolete option doing nothing])
 AC_ARG_WITH(cxx,           [  --with-cxx=11|14|17|20  use the given C++ dialect], [wxWITH_CXX="$withval"])
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
-if test "$wxUSE_STL" = "yes"; then
-    DEFAULT_wxUSE_STD_CONTAINERS=yes
-fi
-WX_ARG_ENABLE(std_containers,[  --enable-std_containers use standard C++ container classes], wxUSE_STD_CONTAINERS)
+WX_ARG_DISABLE(std_containers,[  --disable-std_containers disable use of standard C++ container classes], wxUSE_STD_CONTAINERS)
 WX_ARG_DISABLE(std_iostreams,[  --disable-std_iostreams  disable use of standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unsafe_conv_in_wxstring,     [ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString], wxUSE_UNSAFE_WXSTRING_CONV)

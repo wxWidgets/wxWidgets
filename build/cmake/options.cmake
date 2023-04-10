@@ -84,7 +84,7 @@ wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 wx_option(wxUSE_STD_IOSTREAM "use standard C++ streams" ON)
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
-wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)
+wx_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON)
 
 wx_option(wxUSE_UNICODE_UTF8 "use UTF-8 representation for strings" OFF)
 wx_dependent_option(wxUSE_UTF8_LOCALE_ONLY "only support UTF-8 locales in UTF-8 build" ON "wxUSE_UNICODE_UTF8" OFF)
