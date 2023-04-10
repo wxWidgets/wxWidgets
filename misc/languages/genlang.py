@@ -51,6 +51,32 @@ vertable = {
     'wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN': '3.3.0',
 }
 
+# Another hardcoded table containing language constants that are synonyms for
+# the other ones.
+synonyms = {
+    'wxLANGUAGE_AZERI': 'wxLANGUAGE_AZERBAIJANI',
+    'wxLANGUAGE_AZERI_CYRILLIC': 'wxLANGUAGE_AZERBAIJANI_CYRILLIC',
+    'wxLANGUAGE_AZERI_LATIN': 'wxLANGUAGE_AZERBAIJANI_LATIN',
+    'wxLANGUAGE_BENGALI': 'wxLANGUAGE_BANGLA',
+    'wxLANGUAGE_BENGALI_BANGLADESH': 'wxLANGUAGE_BANGLA_BANGLADESH',
+    'wxLANGUAGE_BENGALI_INDIA': 'wxLANGUAGE_BANGLA_INDIA',
+    'wxLANGUAGE_BHUTANI': 'wxLANGUAGE_DZONGKHA',
+    'wxLANGUAGE_CHINESE_SIMPLIFIED': 'wxLANGUAGE_CHINESE_CHINA',
+    'wxLANGUAGE_CHINESE_TRADITIONAL': 'wxLANGUAGE_CHINESE_TAIWAN',
+    'wxLANGUAGE_CHINESE_MACAU': 'wxLANGUAGE_CHINESE_MACAO',
+    'wxLANGUAGE_KANURI_NIGERIA': 'wxLANGUAGE_KANURI_LATIN_NIGERIA',
+    'wxLANGUAGE_KASHMIRI_PERSO_ARABIC': 'wxLANGUAGE_KASHMIRI_ARABIC',
+    'wxLANGUAGE_KASHMIRI_PERSO_ARABIC_INDIA': 'wxLANGUAGE_KASHMIRI_ARABIC_INDIA',
+    'wxLANGUAGE_KERNEWEK': 'wxLANGUAGE_CORNISH',
+    'wxLANGUAGE_KURDISH_PERSO_ARABIC_IRAN': 'wxLANGUAGE_KURDISH_ARABIC_IRAN',
+    'wxLANGUAGE_MALAY_BRUNEI_DARUSSALAM': 'wxLANGUAGE_MALAY_BRUNEI',
+    'wxLANGUAGE_ORIYA': 'wxLANGUAGE_ODIA',
+    'wxLANGUAGE_ORIYA_INDIA': 'wxLANGUAGE_ODIA_INDIA',
+    'wxLANGUAGE_SPANISH_MODERN': 'wxLANGUAGE_SPANISH',
+    'wxLANGUAGE_UZBEK_PERSO_ARABIC': 'wxLANGUAGE_UZBEK_ARABIC',
+    'wxLANGUAGE_UZBEK_PERSO_ARABIC_AFGHANISTAN': 'wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN',
+}
+
 def ReadScriptTable():
     scripttable = []
     try:
@@ -103,40 +129,38 @@ enum wxLanguage
               output += '%s///< @since_wx{%s}' % (' ' * (39 - len(lang)), vertable[lang])
           output += '\n'
           knownLangs.append(lang)
-   f.write(output)
-   f.write("""
+   output += """
     /// For custom, user-defined languages.
     wxLANGUAGE_USER_DEFINED,
+"""
 
-    /// Synonyms.
-    wxLANGUAGE_AZERI = wxLANGUAGE_AZERBAIJANI,
-    wxLANGUAGE_AZERI_CYRILLIC = wxLANGUAGE_AZERBAIJANI_CYRILLIC,
-    wxLANGUAGE_AZERI_LATIN = wxLANGUAGE_AZERBAIJANI_LATIN,
-    wxLANGUAGE_BENGALI = wxLANGUAGE_BANGLA,
-    wxLANGUAGE_BENGALI_BANGLADESH = wxLANGUAGE_BANGLA_BANGLADESH,
-    wxLANGUAGE_BENGALI_INDIA = wxLANGUAGE_BANGLA_INDIA,
-    wxLANGUAGE_BHUTANI = wxLANGUAGE_DZONGKHA,
-    wxLANGUAGE_CHINESE_SIMPLIFIED = wxLANGUAGE_CHINESE_CHINA,
-    wxLANGUAGE_CHINESE_TRADITIONAL = wxLANGUAGE_CHINESE_TAIWAN,
-    wxLANGUAGE_CHINESE_MACAU = wxLANGUAGE_CHINESE_MACAO,
-    wxLANGUAGE_KANURI_NIGERIA = wxLANGUAGE_KANURI_LATIN_NIGERIA,
-    wxLANGUAGE_KASHMIRI_PERSO_ARABIC = wxLANGUAGE_KASHMIRI_ARABIC,
-    wxLANGUAGE_KASHMIRI_PERSO_ARABIC_INDIA = wxLANGUAGE_KASHMIRI_ARABIC_INDIA,
-    wxLANGUAGE_KERNEWEK = wxLANGUAGE_CORNISH,
-    wxLANGUAGE_KURDISH_PERSO_ARABIC_IRAN  = wxLANGUAGE_KURDISH_ARABIC_IRAN,
-    wxLANGUAGE_MALAY_BRUNEI_DARUSSALAM = wxLANGUAGE_MALAY_BRUNEI,
-    wxLANGUAGE_ORIYA = wxLANGUAGE_ODIA,
-    wxLANGUAGE_ORIYA_INDIA = wxLANGUAGE_ODIA_INDIA,
-    wxLANGUAGE_SPANISH_MODERN = wxLANGUAGE_SPANISH,
-    wxLANGUAGE_UZBEK_PERSO_ARABIC = wxLANGUAGE_UZBEK_ARABIC,
-    wxLANGUAGE_UZBEK_PERSO_ARABIC_AFGHANISTAN = wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN,
+   if kind == 'include':
+      output += '\n    /// Synonyms.'
 
+   output += '\n'
+
+   for lang in synonyms:
+      output += '    %s' % lang
+      if kind == 'include':
+         output += ' = %s,\n' % synonyms[lang]
+      elif kind == 'interface':
+         output += ',%s///< Synonym for %s.\n' % (' ' * (39 - len(lang)), synonyms[lang])
+      else:
+        print("Unknown kind of generated enum")
+        raise
+
+   if kind == 'include':
+      output += """
     /// Obsolete synonym.
     wxLANGUAGE_CAMBODIAN = wxLANGUAGE_KHMER
-};
+"""
+   elif kind == 'interface':
+      output += """
+    wxLANGUAGE_CAMBODIAN                    ///< Obsolete synonym for wxLANGUAGE_KHMER.
+"""
 
-""")
-
+   output += '};\n\n'
+   f.write(output)
 
 def WriteTable(f, table, scripttable):
    sctable = ''
