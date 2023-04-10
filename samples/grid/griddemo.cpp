@@ -2809,10 +2809,10 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     }
     else if ( grid->IsSelection() && grid->GetSelectionBlockTopLeft().Count() )
     {
-        wxGridCellCoordsArray cells = grid->GetSelectionBlockTopLeft();
+        wxGridCellCoordsVector cells = grid->GetSelectionBlockTopLeft();
         if ( grid->GetSelectionBlockBottomRight().Count() )
         {
-            cells.Add( grid->GetSelectionBlockBottomRight()[ 0 ] );
+            cells.push_back( grid->GetSelectionBlockBottomRight()[ 0 ] );
             topLeft.Set( cells[ 0 ].GetRow(),
                             cells[ 0 ].GetCol() );
             bottomRight.Set( cells[ 1 ].GetRow(),

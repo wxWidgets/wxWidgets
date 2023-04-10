@@ -120,10 +120,6 @@ const int GRID_TEXT_MARGIN = 1;
 
 } // anonymous namespace
 
-#include "wx/arrimpl.cpp"
-
-WX_DEFINE_OBJARRAY(wxGridCellCoordsArray)
-
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -1798,8 +1794,6 @@ wxGridTableMessage::wxGridTableMessage( wxGridTableBase *table, int id,
 // created by wxGrid if you don't specify an alternative table class.
 //
 
-WX_DEFINE_OBJARRAY(wxGridStringArray)
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxGridStringTable, wxGridTableBase);
 
 wxGridStringTable::wxGridStringTable()
@@ -2258,7 +2252,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     m_owner->PrepareDCFor( dc, this );
     wxRegion reg = GetUpdateRegion();
 
-    wxGridCellCoordsArray dirtyCells = m_owner->CalcCellsExposed( reg , this );
+    wxGridCellCoordsVector dirtyCells = m_owner->CalcCellsExposed( reg , this );
     m_owner->DrawGridCellArea( dc, dirtyCells );
 
     m_owner->DrawGridSpace( dc, this );
@@ -2454,7 +2448,7 @@ wxGrid::SetRenderScale(wxDC& dc,
 void wxGrid::GetRenderSizes( const wxGridCellCoords& topLeft,
                              const wxGridCellCoords& bottomRight,
                              wxPoint& pointOffSet, wxSize& sizeGrid,
-                             wxGridCellCoordsArray& renderCells,
+                             wxGridCellCoordsVector& renderCells,
                              wxArrayInt& arrayCols, wxArrayInt& arrayRows ) const
 {
     pointOffSet.x = 0;
@@ -2475,7 +2469,7 @@ void wxGrid::GetRenderSizes( const wxGridCellCoords& topLeft,
         {
             for ( row = topLeft.GetRow(); row <= bottomRight.GetRow(); row++ )
             {
-                renderCells.Add( wxGridCellCoords( row, col ));
+                renderCells.emplace_back( row, col );
                 arrayRows.Add( row ); // column labels rendered in DrawColLabels
             }
             arrayCols.Add( col ); // row labels rendered in DrawRowLabels
@@ -6317,13 +6311,13 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 // exposed cells (usually set from the update region by
 // CalcExposedCells)
 //
-void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
+void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsVector& cells )
 {
     if ( !m_numRows || !m_numCols )
         return;
 
-    int i, numCells = cells.GetCount();
-    wxGridCellCoordsArray redrawCells;
+    int i, numCells = cells.size();
+    wxGridCellCoordsVector redrawCells;
 
     for ( i = numCells - 1; i >= 0; i-- )
     {
@@ -6347,7 +6341,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
 
             if (!marked)
             {
-                int count = redrawCells.GetCount();
+                int count = redrawCells.size();
                 for (int j = 0; j < count; j++)
                 {
                     if ( cell == redrawCells[j] )
@@ -6358,7 +6352,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                 }
 
                 if (!marked)
-                    redrawCells.Add( cell );
+                    redrawCells.push_back( cell );
             }
 
             // don't bother drawing this cell
@@ -6372,12 +6366,13 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
             {
                 // find a cell in this row to leave already marked for repaint
                 int left = col;
-                for (int k = 0; k < int(redrawCells.GetCount()); k++)
-                    if ((redrawCells[k].GetCol() < left) &&
-                        (redrawCells[k].GetRow() == row))
+                for ( const auto& cell: redrawCells )
+                {
+                    if ((cell.GetCol() < left) && (cell.GetRow() == row))
                     {
-                        left = redrawCells[k].GetCol();
+                        left = cell.GetCol();
                     }
+                }
 
                 if (left == col)
                     left = 0; // oh well
@@ -6396,12 +6391,12 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
 
                         if ( attr->CanOverflow() )
                         {
-                            wxGridCellCoords cell(row + l, j);
+                            wxGridCellCoords cellOver(row + l, j);
                             bool marked = false;
 
-                            for (int k = 0; k < numCells; k++)
+                            for ( const auto& cell: cells )
                             {
-                                if ( cell == cells[k] )
+                                if ( cellOver == cell )
                                 {
                                     marked = true;
                                     break;
@@ -6410,17 +6405,16 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
 
                             if (!marked)
                             {
-                                int count = redrawCells.GetCount();
-                                for (int k = 0; k < count; k++)
+                                for ( const auto& cell: redrawCells )
                                 {
-                                    if ( cell == redrawCells[k] )
+                                    if ( cellOver == cell )
                                     {
                                         marked = true;
                                         break;
                                     }
                                 }
                                 if (!marked)
-                                    redrawCells.Add( cell );
+                                    redrawCells.push_back( cellOver );
                             }
                         }
                         break;
@@ -6432,7 +6426,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         DrawCell( dc, cells[i] );
     }
 
-    numCells = redrawCells.GetCount();
+    numCells = redrawCells.size();
 
     for ( i = numCells - 1; i >= 0; i-- )
     {
@@ -6581,7 +6575,7 @@ void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
                  rect.x + rect.width, rect.y + rect.height);
 }
 
-void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
+void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells)
 {
     // This if block was previously in wxGrid::OnPaint but that doesn't
     // seem to get called under wxGTK - MB
@@ -6600,11 +6594,8 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
 
     // if the active cell was repainted, repaint its highlight too because it
     // might have been damaged by the grid lines
-    size_t count = cells.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( auto cell: cells )
     {
-        wxGridCellCoords cell = cells[n];
-
         // If we are using attributes, then we may have just exposed another
         // cell in a partially-visible merged cluster of cells. If the "anchor"
         // (upper left) cell of this merged cluster is the cell indicated by
@@ -10811,10 +10802,7 @@ wxGridBlockCoordsVector wxGrid::GetSelectedColBlocks() const
 wxGridCellCoordsArray wxGrid::GetSelectedCells() const
 {
     if (!m_selection)
-    {
-        wxGridCellCoordsArray a;
-        return a;
-    }
+        return {};
 
     return m_selection->GetCellSelection();
 }
@@ -10822,10 +10810,7 @@ wxGridCellCoordsArray wxGrid::GetSelectedCells() const
 wxGridCellCoordsArray wxGrid::GetSelectionBlockTopLeft() const
 {
     if (!m_selection)
-    {
-        wxGridCellCoordsArray a;
-        return a;
-    }
+        return {};
 
     return m_selection->GetBlockSelectionTopLeft();
 }
@@ -10833,10 +10818,7 @@ wxGridCellCoordsArray wxGrid::GetSelectionBlockTopLeft() const
 wxGridCellCoordsArray wxGrid::GetSelectionBlockBottomRight() const
 {
     if (!m_selection)
-    {
-        wxGridCellCoordsArray a;
-        return a;
-    }
+        return {};
 
     return m_selection->GetBlockSelectionBottomRight();
 }

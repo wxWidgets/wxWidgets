@@ -1191,10 +1191,13 @@ extern WXDLLIMPEXP_CORE wxGridCellCoords  wxGridNoCellCoords;
 extern WXDLLIMPEXP_CORE wxGridBlockCoords wxGridNoBlockCoords;
 extern WXDLLIMPEXP_CORE wxRect            wxGridNoCellRect;
 
-// An array of cell coords...
-//
-WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
-                              class WXDLLIMPEXP_CORE);
+// Define a vector used for passing cell coordinates to the grid.
+using wxGridCellCoordsVector = std::vector<wxGridCellCoords>;
+
+// Legacy array of cell coordinates that we still return from wxGrid functions
+// for compatibility. As it inherits from wxGridCellCoordsVector, it can also
+// be passed to the functions taking cell coordinates on input.
+using wxGridCellCoordsArray = wxBaseArray<wxGridCellCoords>;
 
 // ----------------------------------------------------------------------------
 // Grid table classes
@@ -1621,13 +1624,13 @@ public:
 
     bool IsFrozen() const;
 
-    void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
+    void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsVector& cells );
     void DrawGridSpace( wxDC& dc, wxGridWindow *gridWindow );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines();
     void DrawAllGridWindowLines( wxDC& dc, const wxRegion & reg , wxGridWindow *gridWindow);
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells);
+    void DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells);
     void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow );
     void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
 
@@ -2979,7 +2982,7 @@ private:
     void GetRenderSizes( const wxGridCellCoords& topLeft,
                          const wxGridCellCoords& bottomRight,
                          wxPoint& pointOffSet, wxSize& sizeGrid,
-                         wxGridCellCoordsArray& renderCells,
+                         wxGridCellCoordsVector& renderCells,
                          wxArrayInt& arrayCols, wxArrayInt& arrayRows ) const;
 
     // Helper of Render(): set the scale to draw the cells at the right size.
