@@ -35,7 +35,7 @@ def ReadTable():
 
     for i in f.readlines():
         ispl = i.split()
-        table.append((ispl[0], ispl[1], ispl[2], ispl[3], ispl[4], ispl[5], ispl[6], string.join(ispl[7:])))
+        table.append((ispl[0], ispl[1], ispl[2], ispl[3], ispl[4], ispl[5], ispl[6], ' '.join(ispl[7:])))
     f.close()
     return table
 
@@ -120,7 +120,7 @@ def WriteTable(f, table, scripttable):
        elif (i[6] == "RTL"):
            ilayout = "wxLayout_RightToLeft"
        else:
-           print "ERROR: Invalid value for the layout direction";
+           print("ERROR: Invalid value for the layout direction")
        lngtable += '    { %-60s %-17s, %-28s, %-15s, %-4s, %-4s, %s, %s },\n' % \
                      ((i[0]+','), ibcp47, ican, icanbase, ilang, isublang, ilayout, i[7])
 
@@ -218,13 +218,13 @@ def ReplaceGeneratedPartOfFile(fname, func):
     for l in fin.readlines():
         if l == '// --- --- --- generated code begins here --- --- ---\n':
             if betweenBeginAndEnd or afterEnd:
-                print 'Unexpected starting comment.'
+                print('Unexpected starting comment.')
             betweenBeginAndEnd = 1
             fout.write(l)
             func(fout, table, scripttable)
         elif l == '// --- --- --- generated code ends here --- --- ---\n':
             if not betweenBeginAndEnd:
-                print 'End comment found before the starting one?'
+                print('End comment found before the starting one?')
                 break
 
             betweenBeginAndEnd = 0
@@ -234,7 +234,7 @@ def ReplaceGeneratedPartOfFile(fname, func):
             fout.write(l)
 
     if not afterEnd:
-        print 'Failed to process %s.' % fname
+        print('Failed to process %s.' % fname)
         os.remove(fnameNew)
         sys.exit(1)
 
