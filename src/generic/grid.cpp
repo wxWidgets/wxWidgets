@@ -1809,17 +1809,10 @@ wxGridStringTable::wxGridStringTable()
 }
 
 wxGridStringTable::wxGridStringTable( int numRows, int numCols )
-        : wxGridTableBase()
+        : wxGridTableBase(),
+          m_data(numRows, ColData(numCols))
 {
     m_numCols = numCols;
-
-    m_data.Alloc( numRows );
-
-    wxArrayString sa;
-    sa.Alloc( numCols );
-    sa.Add( wxEmptyString, numCols );
-
-    m_data.Add( sa, numRows );
 }
 
 wxString wxGridStringTable::GetValue( int row, int col )
@@ -1843,22 +1836,10 @@ void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 
 void wxGridStringTable::Clear()
 {
-    int numRows;
-    numRows = m_data.GetCount();
-    if ( numRows > 0 )
+    for ( auto& colData : m_data )
     {
-        int numCols;
-        numCols = m_data[0].GetCount();
-
-        int row;
-        for ( row = 0; row < numRows; row++ )
-        {
-            int col;
-            for ( col = 0; col < numCols; col++ )
-            {
-                m_data[row][col].clear();
-            }
-        }
+        for ( auto& cell : colData )
+            cell.clear();
     }
 }
 
@@ -1869,10 +1850,7 @@ bool wxGridStringTable::InsertRows( size_t pos, size_t numRows )
         return AppendRows( numRows );
     }
 
-    wxArrayString sa;
-    sa.Alloc( m_numCols );
-    sa.Add( wxEmptyString, m_numCols );
-    m_data.Insert( sa, pos, numRows );
+    m_data.insert( m_data.begin() + pos, numRows, ColData(m_numCols) );
 
     if ( GetView() )
     {
@@ -1887,14 +1865,7 @@ bool wxGridStringTable::InsertRows( size_t pos, size_t numRows )
 
 bool wxGridStringTable::AppendRows( size_t numRows )
 {
-    wxArrayString sa;
-    if ( m_numCols > 0 )
-    {
-        sa.Alloc( m_numCols );
-        sa.Add( wxEmptyString, m_numCols );
-    }
-
-    m_data.Add( sa, numRows );
+    m_data.insert( m_data.end(), numRows, ColData(m_numCols) );
 
     if ( GetView() )
     {
@@ -1908,7 +1879,7 @@ bool wxGridStringTable::AppendRows( size_t numRows )
 
 bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 {
-    size_t curNumRows = m_data.GetCount();
+    size_t curNumRows = m_data.size();
 
     if ( pos >= curNumRows )
     {
@@ -1930,11 +1901,12 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
 
     if ( numRows >= curNumRows )
     {
-        m_data.Clear();
+        m_data.clear();
     }
     else
     {
-        m_data.RemoveAt( pos, numRows );
+        const auto first = m_data.begin() + pos;
+        m_data.erase( first, first + numRows );
     }
 
     if ( GetView() )
@@ -1963,12 +1935,9 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
             m_colLabels[i] = wxGridTableBase::GetColLabelValue( i );
     }
 
-    for ( size_t row = 0; row < m_data.size(); row++ )
+    for ( auto& colData: m_data )
     {
-        for ( size_t col = pos; col < pos + numCols; col++ )
-        {
-            m_data[row].Insert( wxEmptyString, col );
-        }
+        colData.insert( colData.begin() + pos, numCols, {} );
     }
 
     m_numCols += numCols;
@@ -1986,9 +1955,9 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
 
 bool wxGridStringTable::AppendCols( size_t numCols )
 {
-    for ( size_t row = 0; row < m_data.size(); row++ )
+    for ( auto& colData: m_data )
     {
-        m_data[row].Add( wxEmptyString, numCols );
+        colData.insert( colData.end(), numCols, {} );
     }
 
     m_numCols += numCols;
@@ -2005,9 +1974,6 @@ bool wxGridStringTable::AppendCols( size_t numCols )
 
 bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
 {
-    size_t row;
-
-    size_t curNumRows = m_data.GetCount();
     size_t curNumCols = m_numCols;
 
     if ( pos >= curNumCols )
@@ -2045,18 +2011,19 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
 
     if ( numCols >= curNumCols )
     {
-        for ( row = 0; row < curNumRows; row++ )
+        for ( auto& colData: m_data )
         {
-            m_data[row].Clear();
+            colData.clear();
         }
 
         m_numCols = 0;
     }
     else // something will be left
     {
-        for ( row = 0; row < curNumRows; row++ )
+        for ( auto& colData: m_data )
         {
-            m_data[row].RemoveAt( colID, numCols );
+            const auto first = colData.begin() + colID;
+            colData.erase( first, first + numCols );
         }
 
         m_numCols -= numCols;

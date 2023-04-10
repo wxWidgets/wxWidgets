@@ -1376,10 +1376,10 @@ private:
 // ------ wxGridStringArray
 // A 2-dimensional array of strings for data values
 //
-
-WX_DECLARE_OBJARRAY_WITH_DECL(wxArrayString, wxGridStringArray,
-                              class WXDLLIMPEXP_CORE);
-
+// This is defined for compatibility only: even if it was never part of wx API,
+// it is still used outside of it, even if it's not used by wxGridStringTable
+// itself any longer.
+using wxGridStringArray = wxBaseArray<wxArrayString>;
 
 
 // ------ wxGridStringTable
@@ -1419,7 +1419,10 @@ public:
     wxString GetCornerLabelValue() const override;
 
 private:
-    wxGridStringArray m_data;
+    // This used to be a wxGridStringArray, but we don't really need it, just a
+    // vector of vectors, storing columns data for each row, is enough.
+    using ColData = std::vector<wxString>;
+    std::vector<ColData> m_data;
 
     // notice that while we don't need to store the number of our rows as it's
     // always equal to the size of m_data array, we do need to store the number
