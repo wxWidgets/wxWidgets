@@ -460,3 +460,19 @@ public:
     void SetData(T* data);
 };
 
+/**
+    This macro declares a new legacy linked list container named @a name and
+    containing pointers to the objects of type @e T.
+
+    You must use the WX_DEFINE_LIST() macro to define the class declared by
+    this macro.
+*/
+#define WX_DECLARE_LIST(T, name)
+
+/**
+    This macro define a new legacy linked list container named @a name.
+
+    You must use WX_DECLARE_LIST() macro to declare the list class before
+    defining it.
+*/
+#define WX_DEFINE_LIST(T, name)
