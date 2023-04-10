@@ -18,12 +18,15 @@
 #include "wx/animdecod.h"
 #include "wx/dynarray.h"
 
-#include <vector>
-
 
 class /*WXDLLIMPEXP_CORE*/ wxANIFrameInfo;      // private implementation detail
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxImage, wxImageArray);
+// For compatibility purposes, provide wxImageArray class mimicking the legacy
+// dynamic array which used to be required by wxGIFHandler::SaveAnimation():
+// now we just take a vector of images there, but we want to keep the existing
+// code using wxImageArray working (and keep it declared here because this is
+// where it used to be, even if this doesn't make much sense).
+using wxImageArray = wxBaseArray<wxImage>;
 
 // --------------------------------------------------------------------------
 // wxANIDecoder class
@@ -63,7 +66,7 @@ private:
     // frames stored as wxImage(s): ANI files are meant to be used mostly for animated
     // cursors and thus they do not use any optimization to encode differences between
     // two frames: they are just a list of images to display sequentially.
-    wxImageArray m_images;
+    std::vector<wxImage> m_images;
 
     // the info about each image stored in m_images.
     // NB: m_info.GetCount() may differ from m_images.GetCount()!
