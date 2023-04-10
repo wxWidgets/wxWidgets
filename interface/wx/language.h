@@ -179,9 +179,9 @@ enum wxLanguage
     wxLANGUAGE_DARI_AFGHANISTAN,
     wxLANGUAGE_DIVEHI,
     wxLANGUAGE_DIVEHI_MALDIVES,
-    wxLANGUAGE_DOGRI,                       ///< @since_wx{3.3.1}
-    wxLANGUAGE_DOGRI_DEVANAGARI,            ///< @since_wx{3.3.1}
-    wxLANGUAGE_DOGRI_DEVANAGARI_INDIA,      ///< @since_wx{3.3.1}
+    wxLANGUAGE_DOGRI,                       ///< @since_wx{3.3.0}
+    wxLANGUAGE_DOGRI_DEVANAGARI,            ///< @since_wx{3.3.0}
+    wxLANGUAGE_DOGRI_DEVANAGARI_INDIA,      ///< @since_wx{3.3.0}
     wxLANGUAGE_DUALA,
     wxLANGUAGE_DUALA_CAMEROON,
     wxLANGUAGE_DUTCH,
@@ -377,19 +377,19 @@ enum wxLanguage
     wxLANGUAGE_FRIULIAN,
     wxLANGUAGE_FRIULIAN_ITALY,
     wxLANGUAGE_FULAH,
-    wxLANGUAGE_FULAH_ADLAM,                 ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_BURKINA_FASO,    ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_CAMEROON,        ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_GAMBIA,          ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_GHANA,           ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_GUINEA,          ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_GUINEA_BISSAU,   ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_LIBERIA,         ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_MAURITANIA,      ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_NIGER,           ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_NIGERIA,         ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_SENEGAL,         ///< @since_wx{3.3.1}
-    wxLANGUAGE_FULAH_ADLAM_SIERRA_LEONE,    ///< @since_wx{3.3.1}
+    wxLANGUAGE_FULAH_ADLAM,                 ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_BURKINA_FASO,    ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_CAMEROON,        ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_GAMBIA,          ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_GHANA,           ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_GUINEA,          ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_GUINEA_BISSAU,   ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_LIBERIA,         ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_MAURITANIA,      ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_NIGER,           ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_NIGERIA,         ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_SENEGAL,         ///< @since_wx{3.3.0}
+    wxLANGUAGE_FULAH_ADLAM_SIERRA_LEONE,    ///< @since_wx{3.3.0}
     wxLANGUAGE_FULAH_LATIN,
     wxLANGUAGE_FULAH_LATIN_BURKINA_FASO,
     wxLANGUAGE_FULAH_LATIN_CAMEROON,
@@ -459,7 +459,7 @@ enum wxLanguage
     wxLANGUAGE_INUPIAK,
     wxLANGUAGE_IRISH,
     wxLANGUAGE_IRISH_IRELAND,
-    wxLANGUAGE_IRISH_UNITED_KINGDOM,        ///< @since_wx{3.3.1}
+    wxLANGUAGE_IRISH_UNITED_KINGDOM,        ///< @since_wx{3.3.0}
     wxLANGUAGE_ITALIAN,
     wxLANGUAGE_ITALIAN_ITALY,
     wxLANGUAGE_ITALIAN_SAN_MARINO,
@@ -488,10 +488,10 @@ enum wxLanguage
     wxLANGUAGE_KANNADA_INDIA,
     wxLANGUAGE_KANURI,
     wxLANGUAGE_KANURI_LATIN,
-    wxLANGUAGE_KANURI_LATIN_NIGERIA,        ///< @since_wx{3.3.1}
+    wxLANGUAGE_KANURI_LATIN_NIGERIA,        ///< @since_wx{3.3.0}
     wxLANGUAGE_KASHMIRI,
-    wxLANGUAGE_KASHMIRI_ARABIC,             ///< @since_wx{3.3.1}
-    wxLANGUAGE_KASHMIRI_ARABIC_INDIA,       ///< @since_wx{3.3.1}
+    wxLANGUAGE_KASHMIRI_ARABIC,             ///< @since_wx{3.3.0}
+    wxLANGUAGE_KASHMIRI_ARABIC_INDIA,       ///< @since_wx{3.3.0}
     wxLANGUAGE_KASHMIRI_DEVANAGARI,
     wxLANGUAGE_KASHMIRI_DEVANAGARI_INDIA,
     wxLANGUAGE_KASHMIRI_INDIA,
@@ -520,7 +520,7 @@ enum wxLanguage
     wxLANGUAGE_KOYRA_CHIINI,
     wxLANGUAGE_KOYRA_CHIINI_MALI,
     wxLANGUAGE_KURDISH,
-    wxLANGUAGE_KURDISH_ARABIC_IRAN,         ///< @since_wx{3.3.1}
+    wxLANGUAGE_KURDISH_ARABIC_IRAN,         ///< @since_wx{3.3.0}
     wxLANGUAGE_KWASIO,
     wxLANGUAGE_KWASIO_CAMEROON,
     wxLANGUAGE_LAKOTA,
@@ -530,7 +530,7 @@ enum wxLanguage
     wxLANGUAGE_LAOTHIAN,
     wxLANGUAGE_LAOTHIAN_LAOS,
     wxLANGUAGE_LATIN,
-    wxLANGUAGE_LATIN_VATICAN_CITY,          ///< @since_wx{3.3.1}
+    wxLANGUAGE_LATIN_VATICAN_CITY,          ///< @since_wx{3.3.0}
     wxLANGUAGE_LATIN_WORLD,
     wxLANGUAGE_LATVIAN,
     wxLANGUAGE_LATVIAN_LATVIA,
@@ -558,8 +558,8 @@ enum wxLanguage
     wxLANGUAGE_MACEDONIAN_NORTH_MACEDONIA,
     wxLANGUAGE_MACHAME,
     wxLANGUAGE_MACHAME_TANZANIA,
-    wxLANGUAGE_MAITHILI,                    ///< @since_wx{3.3.1}
-    wxLANGUAGE_MAITHILI_INDIA,              ///< @since_wx{3.3.1}
+    wxLANGUAGE_MAITHILI,                    ///< @since_wx{3.3.0}
+    wxLANGUAGE_MAITHILI_INDIA,              ///< @since_wx{3.3.0}
     wxLANGUAGE_MAKHUWA_MEETTO,
     wxLANGUAGE_MAKHUWA_MEETTO_MOZAMBIQUE,
     wxLANGUAGE_MAKONDE,
@@ -570,13 +570,13 @@ enum wxLanguage
     wxLANGUAGE_MALAYALAM,
     wxLANGUAGE_MALAYALAM_INDIA,
     wxLANGUAGE_MALAY_BRUNEI,
-    wxLANGUAGE_MALAY_INDONESIA,             ///< @since_wx{3.3.1}
+    wxLANGUAGE_MALAY_INDONESIA,             ///< @since_wx{3.3.0}
     wxLANGUAGE_MALAY_MALAYSIA,
     wxLANGUAGE_MALAY_SINGAPORE,
     wxLANGUAGE_MALTESE,
     wxLANGUAGE_MALTESE_MALTA,
     wxLANGUAGE_MANIPURI,
-    wxLANGUAGE_MANIPURI_BENGALI,            ///< @since_wx{3.3.1}
+    wxLANGUAGE_MANIPURI_BENGALI,            ///< @since_wx{3.3.0}
     wxLANGUAGE_MANIPURI_INDIA,
     wxLANGUAGE_MANX,
     wxLANGUAGE_MANX_ISLE_OF_MAN,
@@ -618,9 +618,9 @@ enum wxLanguage
     wxLANGUAGE_NGIEMBOON_CAMEROON,
     wxLANGUAGE_NGOMBA,
     wxLANGUAGE_NGOMBA_CAMEROON,
-    wxLANGUAGE_NIGERIAN_PIDGIN,             ///< @since_wx{3.3.1}
-    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN,       ///< @since_wx{3.3.1}
-    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN_NIGERIA,///< @since_wx{3.3.1}
+    wxLANGUAGE_NIGERIAN_PIDGIN,             ///< @since_wx{3.3.0}
+    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN,       ///< @since_wx{3.3.0}
+    wxLANGUAGE_NIGERIAN_PIDGIN_LATIN_NIGERIA,///< @since_wx{3.3.0}
     wxLANGUAGE_NKO,
     wxLANGUAGE_NKO_GUINEA,
     wxLANGUAGE_NORTHERN_LURI,
@@ -724,9 +724,9 @@ enum wxLanguage
     wxLANGUAGE_SANGU_TANZANIA,
     wxLANGUAGE_SANSKRIT,
     wxLANGUAGE_SANSKRIT_INDIA,
-    wxLANGUAGE_SANTALI,                     ///< @since_wx{3.3.1}
-    wxLANGUAGE_SANTALI_OL_CHIKI,            ///< @since_wx{3.3.1}
-    wxLANGUAGE_SANTALI_OL_CHIKI_INDIA,      ///< @since_wx{3.3.1}
+    wxLANGUAGE_SANTALI,                     ///< @since_wx{3.3.0}
+    wxLANGUAGE_SANTALI_OL_CHIKI,            ///< @since_wx{3.3.0}
+    wxLANGUAGE_SANTALI_OL_CHIKI_INDIA,      ///< @since_wx{3.3.0}
     wxLANGUAGE_SCOTS_GAELIC,
     wxLANGUAGE_SCOTS_GAELIC_UK,
     wxLANGUAGE_SENA,
@@ -814,8 +814,8 @@ enum wxLanguage
     wxLANGUAGE_STANDARD_MOROCCAN_TAMAZIGHT_TIFINAGH,
     wxLANGUAGE_STANDARD_MOROCCAN_TAMAZIGHT_TIFINAGH_MOROCCO,
     wxLANGUAGE_SUNDANESE,
-    wxLANGUAGE_SUNDANESE_LATIN,             ///< @since_wx{3.3.1}
-    wxLANGUAGE_SUNDANESE_LATIN_INDONESIA,   ///< @since_wx{3.3.1}
+    wxLANGUAGE_SUNDANESE_LATIN,             ///< @since_wx{3.3.0}
+    wxLANGUAGE_SUNDANESE_LATIN_INDONESIA,   ///< @since_wx{3.3.0}
     wxLANGUAGE_SWAHILI,
     wxLANGUAGE_SWAHILI_CONGO_DRC,
     wxLANGUAGE_SWAHILI_KENYA,
@@ -885,8 +885,8 @@ enum wxLanguage
     wxLANGUAGE_URDU_INDIA,
     wxLANGUAGE_URDU_PAKISTAN,
     wxLANGUAGE_UZBEK,
-    wxLANGUAGE_UZBEK_ARABIC,                ///< @since_wx{3.3.1}
-    wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN,    ///< @since_wx{3.3.1}
+    wxLANGUAGE_UZBEK_ARABIC,                ///< @since_wx{3.3.0}
+    wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN,    ///< @since_wx{3.3.0}
     wxLANGUAGE_UZBEK_CYRILLIC,
     wxLANGUAGE_UZBEK_CYRILLIC_UZBEKISTAN,
     wxLANGUAGE_UZBEK_LATIN,
