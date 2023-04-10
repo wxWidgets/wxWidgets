@@ -493,7 +493,7 @@ wxObject *MyControlXmlHandler::DoCreateResource()
     //                        const wxString &theTitle, const wxFont &titleFont,
     //                        const wxPoint &pos, const wxSize &size,
     //                        long style = MYCONTROL_DEFAULT_STYLE,
-    //                        const wxString &name = wxT("MyControl"));
+    //                        const wxString &name = "MyControl");
     //
     // Then the XRC for your component should look like:
     //
@@ -512,12 +512,12 @@ wxObject *MyControlXmlHandler::DoCreateResource()
     //
     // And the code to read your custom tags from the XRC file is just:
     control->Create(m_parentAsWindow, GetID(),
-                    GetBitmap(wxT("first-bitmap")),
-                    GetPosition(wxT("first-pos")),
-                    GetBitmap(wxT("second-bitmap")),
-                    GetPosition(wxT("second-pos")),
-                    GetText(wxT("the-title")),
-                    GetFont(wxT("title-font")),
+                    GetBitmap("first-bitmap"),
+                    GetPosition("first-pos"),
+                    GetBitmap("second-bitmap"),
+                    GetPosition("second-pos"),
+                    GetText("the-title"),
+                    GetFont("title-font"),
                     GetPosition(), GetSize(), GetStyle(), GetName());
 
     SetupWindow(control);
@@ -529,7 +529,7 @@ bool MyControlXmlHandler::CanHandle(wxXmlNode *node)
 {
     // this function tells XRC system that this handler can parse
     // the <object class="MyControl"> tags
-    return IsOfClass(node, wxT("MyControl"));
+    return IsOfClass(node, "MyControl");
 }
 @endcode
 

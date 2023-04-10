@@ -26,7 +26,7 @@ Here is an example of wxTextValidator usage.
 
 @code
 wxTextCtrl *txt1 = new wxTextCtrl(
-    this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, 0,
+    this, -1, "", wxDefaultPosition, wxDefaultSize, 0,
     wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
 @endcode
 

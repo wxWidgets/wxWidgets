@@ -56,7 +56,7 @@ enum
         m_embeddedHtmlHelp.SetHelpWindow(m_embeddedHelpWindow);
         m_embeddedHelpWindow->Create(this, wxID_ANY, wxDefaultPosition, GetClientSize(),
                                      wxTAB_TRAVERSAL|wxBORDER_NONE, wxHF_DEFAULT_STYLE);
-        m_embeddedHtmlHelp.AddBook(wxFileName(wxT("doc.zip")));
+        m_embeddedHtmlHelp.AddBook(wxFileName("doc.zip"));
     @endcode
 
     You should pass the style wxHF_EMBEDDED to the style parameter of

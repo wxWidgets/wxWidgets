@@ -9,21 +9,20 @@
 ///@{
 
 /**
-    This macro can be used with character and string literals (in other words,
-    @c 'x' or @c "foo") to automatically convert them to wide strings in Unicode
-    builds of wxWidgets. This macro simply returns the value passed to it
-    without changes in ASCII build. In fact, its definition is:
+    Macro taking a literal string and expanding into a wide string.
+
+    This macro should not be used in the new code any more as it is simply
+    equivalent to using `L` string prefix now, i.e. its simplified definition
+    could be just
 
     @code
-    #ifdef UNICODE
-    #   define wxT(x)  L##x
-    #else // !Unicode
-    #   define wxT(x)  x
-    #endif
+    #define wxT(x)  L##x
     @endcode
 
-    Note that since wxWidgets 2.9.0 you shouldn't use wxT() anymore in your
-    program sources (it was previously required if you wanted to support Unicode).
+    It used to be required when converting literal strings to wxString in
+    wxWidgets versions prior to 2.9.0, and so can be found in a lot of existing
+    code, but can be simply removed in any code using more recent versions of
+    wxWidgets.
 
     @see @ref overview_unicode, wxS()
 
@@ -32,25 +31,11 @@
 #define wxT(string)
 
 /**
-    Compatibility macro which expands to wxT() in wxWidgets 2 only.
+    Obsolete macro which simply expands to its argument.
 
-    This macro can be used in code which needs to compile with both
-    wxWidgets 2 and 3 versions, in places where the wx2 API requires a Unicode string
-    (in Unicode build) but the wx3 API only accepts a standard narrow
-    string, as in e.g. wxCmdLineEntryDesc structure objects initializers.
-
-    Example of use:
-    @code
-    const wxCmdLineEntryDesc cmdLineDesc[] =
-    {
-        { wxCMD_LINE_SWITCH, wxT_2("q"), wxT_2("quiet"),
-          wxT_2("Don't output verbose messages") },
-        wxCMD_LINE_DESC_END
-    };
-    @endcode
-
-    Without @c wxT_2 the code above wouldn't compile with wxWidgets 2, but using @c
-    wxT instead, it wouldn't compile with wxWidgets 3.
+    This macro could be used in the code which needed to compile with both
+    wxWidgets 2 and 3 versions in some rare circumstances. It is still provided
+    for compatibility but serves no purpose any longer.
 
     @see wxT()
 

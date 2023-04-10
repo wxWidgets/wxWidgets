@@ -112,7 +112,7 @@ English using message catalogs:
 @li Specify the source code language and charset as arguments to
     wxLocale::AddCatalog. For example:
     @code
-    locale.AddCatalog(wxT("myapp"), wxLANGUAGE_GERMAN, wxT("iso-8859-1"));
+    locale.AddCatalog("myapp", wxLANGUAGE_GERMAN, "iso-8859-1");
     @endcode
 
 

@@ -99,7 +99,7 @@ wxString::FromUTF8().
 Example 3: Input in KOI8-R. Construction of wxCSConv instance on the fly.
 
 @code
-wxString str(input_data, wxCSConv(wxT("koi8-r")));
+wxString str(input_data, wxCSConv("koi8-r"));
 @endcode
 
 Example 4: Printing a wxString to stdout in UTF-8 encoding.
