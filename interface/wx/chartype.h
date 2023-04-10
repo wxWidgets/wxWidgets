@@ -31,25 +31,11 @@
 #define wxT(string)
 
 /**
-    Compatibility macro which expands to wxT() in wxWidgets 2 only.
+    Obsolete macro which simply expands to its argument.
 
-    This macro can be used in code which needs to compile with both
-    wxWidgets 2 and 3 versions, in places where the wx2 API requires a Unicode string
-    (in Unicode build) but the wx3 API only accepts a standard narrow
-    string, as in e.g. wxCmdLineEntryDesc structure objects initializers.
-
-    Example of use:
-    @code
-    const wxCmdLineEntryDesc cmdLineDesc[] =
-    {
-        { wxCMD_LINE_SWITCH, wxT_2("q"), wxT_2("quiet"),
-          wxT_2("Don't output verbose messages") },
-        wxCMD_LINE_DESC_END
-    };
-    @endcode
-
-    Without @c wxT_2 the code above wouldn't compile with wxWidgets 2, but using @c
-    wxT instead, it wouldn't compile with wxWidgets 3.
+    This macro could be used in the code which needed to compile with both
+    wxWidgets 2 and 3 versions in some rare circumstances. It is still provided
+    for compatibility but serves no purpose any longer.
 
     @see wxT()
 
