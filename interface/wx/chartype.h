@@ -9,21 +9,20 @@
 ///@{
 
 /**
-    This macro can be used with character and string literals (in other words,
-    @c 'x' or @c "foo") to automatically convert them to wide strings in Unicode
-    builds of wxWidgets. This macro simply returns the value passed to it
-    without changes in ASCII build. In fact, its definition is:
+    Macro taking a literal string and expanding into a wide string.
+
+    This macro should not be used in the new code any more as it is simply
+    equivalent to using `L` string prefix now, i.e. its simplified definition
+    could be just
 
     @code
-    #ifdef UNICODE
-    #   define wxT(x)  L##x
-    #else // !Unicode
-    #   define wxT(x)  x
-    #endif
+    #define wxT(x)  L##x
     @endcode
 
-    Note that since wxWidgets 2.9.0 you shouldn't use wxT() anymore in your
-    program sources (it was previously required if you wanted to support Unicode).
+    It used to be required when converting literal strings to wxString in
+    wxWidgets versions prior to 2.9.0, and so can be found in a lot of existing
+    code, but can be simply removed in any code using more recent versions of
+    wxWidgets.
 
     @see @ref overview_unicode, wxS()
 
