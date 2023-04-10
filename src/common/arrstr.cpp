@@ -31,25 +31,16 @@
 
 wxArrayString::wxArrayString(size_t sz, const char** a)
 {
-#if !wxUSE_STD_CONTAINERS
-    Init(false);
-#endif
     assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 {
-#if !wxUSE_STD_CONTAINERS
-    Init(false);
-#endif
     assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wxString* a)
 {
-#if !wxUSE_STD_CONTAINERS
-    Init(false);
-#endif
     assign(a, a + sz);
 }
 
@@ -130,20 +121,11 @@ int wxSortedArrayString::Index(const wxString& str,
 #define   ARRAY_DEFAULT_INITIAL_SIZE    (16)
 #endif
 
-// ctor
-void wxArrayString::Init(bool autoSort)
-{
-  m_nSize  =
-  m_nCount = 0;
-  m_pItems = nullptr;
-  m_compareFunction = nullptr;
-  m_autoSort = autoSort;
-}
-
 // copy ctor
 wxArrayString::wxArrayString(const wxArrayString& src)
 {
-  Init(src.m_autoSort);
+  if ( src.m_autoSort )
+      m_autoSort = true;
 
   *this = src;
 }
@@ -166,6 +148,14 @@ wxArrayString& wxArrayString::operator=(const wxArrayString& src)
   m_autoSort = src.m_autoSort;
 
   return *this;
+}
+
+std::vector<wxString> wxArrayString::AsVector() const
+{
+    if ( !m_pItems )
+        return {};
+
+    return std::vector<wxString>{m_pItems, m_pItems + m_nCount};
 }
 
 void wxArrayString::Copy(const wxArrayString& src)

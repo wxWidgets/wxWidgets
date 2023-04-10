@@ -79,7 +79,6 @@ void wxType::SetTypeFromString(const wxString& t)
     m_strType.Replace(" ,", ",");
 
     // ADHOC-FIX
-    m_strType.Replace("_wxArraywxArrayStringBase", "wxString");
     m_strType.Replace("ExitCode", "void*");     // used in wxThread stuff
 
     m_strType = m_strType.Strip(wxString::both);
