@@ -18,10 +18,11 @@
 #include "wx/animdecod.h"
 #include "wx/dynarray.h"
 
+#include <vector>
+
 
 class /*WXDLLIMPEXP_CORE*/ wxANIFrameInfo;      // private implementation detail
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxANIFrameInfo, wxANIFrameInfoArray);
 WX_DECLARE_EXPORTED_OBJARRAY(wxImage, wxImageArray);
 
 // --------------------------------------------------------------------------
@@ -66,7 +67,7 @@ private:
 
     // the info about each image stored in m_images.
     // NB: m_info.GetCount() may differ from m_images.GetCount()!
-    wxANIFrameInfoArray m_info;
+    std::vector<wxANIFrameInfo> m_info;
 
     // this is the wxCURHandler used to load the ICON chunk of the ANI files
     static wxCURHandler sm_handler;
