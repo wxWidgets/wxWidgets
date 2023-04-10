@@ -23,9 +23,6 @@ class WXDLLIMPEXP_FWD_CORE wxSize;
 class WXDLLIMPEXP_FWD_CORE wxFont;
 
 #include <limits>
-#if wxUSE_STD_CONTAINERS
-#include <numeric>
-#endif // wxUSE_STD_CONTAINERS
 
 // -----------------------------------------------------------------------
 
