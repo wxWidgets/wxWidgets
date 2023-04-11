@@ -30,7 +30,8 @@
 #include "wx/recguard.h"
 
 #include "wx/arrimpl.cpp"
-#include "wx/listimpl.cpp"
+
+#include <list>
 
 // uncomment this line to visually show the extent of the selection
 //#define DEBUG_HTML_SELECTION
@@ -139,14 +140,17 @@ private:
 
 
 //-----------------------------------------------------------------------------
-// our private arrays:
+// our private containers:
 //-----------------------------------------------------------------------------
 
 WX_DECLARE_OBJARRAY(wxHtmlHistoryItem, wxHtmlHistoryArray);
 WX_DEFINE_OBJARRAY(wxHtmlHistoryArray)
 
-WX_DECLARE_LIST(wxHtmlProcessor, wxHtmlProcessorList);
-WX_DEFINE_LIST(wxHtmlProcessorList)
+class wxHtmlProcessorList : public std::list<std::unique_ptr<wxHtmlProcessor>>
+{
+public:
+    wxHtmlProcessorList() = default;
+};
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindowMouseHelper
@@ -289,8 +293,6 @@ void wxHtmlWindow::CleanUpStatics()
 {
     wxDELETE(m_DefaultFilter);
     WX_CLEAR_LIST(wxList, m_Filters);
-    if (m_GlobalProcessors)
-        WX_CLEAR_LIST(wxHtmlProcessorList, *m_GlobalProcessors);
     wxDELETE(m_GlobalProcessors);
     wxDELETE(ms_cursorLink);
     wxDELETE(ms_cursorText);
@@ -366,11 +368,6 @@ wxHtmlWindow::~wxHtmlWindow()
     delete m_selection;
 
     delete m_Cell;
-
-    if ( m_Processors )
-    {
-        WX_CLEAR_LIST(wxHtmlProcessorList, *m_Processors);
-    }
 
     delete m_Parser;
     delete m_FS;
@@ -450,34 +447,35 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     // pass HTML through registered processors:
     if (m_Processors || m_GlobalProcessors)
     {
-        wxHtmlProcessorList::compatibility_iterator nodeL, nodeG;
+        const wxHtmlProcessorList::iterator end;
+        wxHtmlProcessorList::iterator nodeL, nodeG;
 
         if ( m_Processors )
-            nodeL = m_Processors->GetFirst();
+            nodeL = m_Processors->begin();
         if ( m_GlobalProcessors )
-            nodeG = m_GlobalProcessors->GetFirst();
+            nodeG = m_GlobalProcessors->begin();
 
         // VS: there are two lists, global and local, both of them sorted by
         //     priority. Since we have to go through _both_ lists with
         //     decreasing priority, we "merge-sort" the lists on-line by
         //     processing that one of the two heads that has higher priority
         //     in every iteration
-        while (nodeL || nodeG)
+        while (nodeL != end || nodeG != end)
         {
             int prL, prG;
-            prL = (nodeL) ? nodeL->GetData()->GetPriority() : -1;
-            prG = (nodeG) ? nodeG->GetData()->GetPriority() : -1;
+            prL = nodeL != end ? (*nodeL)->GetPriority() : -1;
+            prG = nodeG != end ? (*nodeG)->GetPriority() : -1;
             if (prL > prG)
             {
-                if (nodeL->GetData()->IsEnabled())
-                    newsrc = nodeL->GetData()->Process(newsrc);
-                nodeL = nodeL->GetNext();
+                if ((*nodeL)->IsEnabled())
+                    newsrc = (*nodeL)->Process(newsrc);
+                ++nodeL;
             }
             else // prL <= prG
             {
-                if (nodeG->GetData()->IsEnabled())
-                    newsrc = nodeG->GetData()->Process(newsrc);
-                nodeG = nodeG->GetNext();
+                if ((*nodeG)->IsEnabled())
+                    newsrc = (*nodeG)->Process(newsrc);
+                ++nodeG;
             }
         }
     }
@@ -897,17 +895,20 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
     {
         m_Processors = new wxHtmlProcessorList;
     }
-    wxHtmlProcessorList::compatibility_iterator node;
 
-    for (node = m_Processors->GetFirst(); node; node = node->GetNext())
+    std::unique_ptr<wxHtmlProcessor> processorPtr{processor};
+
+    wxHtmlProcessorList::iterator node;
+
+    for (node = m_Processors->begin(); node != m_Processors->end(); ++node)
     {
-        if (processor->GetPriority() > node->GetData()->GetPriority())
+        if (processor->GetPriority() > (*node)->GetPriority())
         {
-            m_Processors->Insert(node, processor);
+            m_Processors->insert(node, std::move(processorPtr));
             return;
         }
     }
-    m_Processors->Append(processor);
+    m_Processors->push_back(std::move(processorPtr));
 }
 
 /*static */ void wxHtmlWindow::AddGlobalProcessor(wxHtmlProcessor *processor)
@@ -916,17 +917,20 @@ void wxHtmlWindow::AddProcessor(wxHtmlProcessor *processor)
     {
         m_GlobalProcessors = new wxHtmlProcessorList;
     }
-    wxHtmlProcessorList::compatibility_iterator node;
 
-    for (node = m_GlobalProcessors->GetFirst(); node; node = node->GetNext())
+    std::unique_ptr<wxHtmlProcessor> processorPtr{processor};
+
+    wxHtmlProcessorList::iterator node;
+
+    for (node = m_GlobalProcessors->begin(); node != m_GlobalProcessors->end(); ++node)
     {
-        if (processor->GetPriority() > node->GetData()->GetPriority())
+        if (processor->GetPriority() > (*node)->GetPriority())
         {
-            m_GlobalProcessors->Insert(node, processor);
+            m_GlobalProcessors->insert(node, std::move(processorPtr));
             return;
         }
     }
-    m_GlobalProcessors->Append(processor);
+    m_GlobalProcessors->push_back(std::move(processorPtr));
 }
 
 
