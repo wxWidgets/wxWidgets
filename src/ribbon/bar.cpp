@@ -26,10 +26,7 @@
 #include "wx/msw/private.h"
 #endif
 
-#include "wx/arrimpl.cpp"
 #include "wx/imaglist.h"
-
-WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray)
 
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
