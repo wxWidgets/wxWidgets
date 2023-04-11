@@ -16,7 +16,7 @@
 
 #ifndef WX_PRECOMP
     #if defined(__WXMSW__)
-        #include "wx/msw/wrapcdlg.h"
+        #include "wx/msw/wrapwin.h" // for DMPAPER_XXX constants
     #endif // MSW
     #include "wx/utils.h"
     #include "wx/settings.h"
@@ -28,13 +28,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef __WXMSW__
-    #ifndef __WIN32__
-        #include <print.h>
-    #endif
-#endif
- // End __WXMSW__
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject);
 
