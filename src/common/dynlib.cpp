@@ -38,10 +38,6 @@
 #include "wx/filename.h"        // for SplitPath()
 #include "wx/platinfo.h"
 
-#include "wx/arrimpl.cpp"
-
-WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
-
 // ============================================================================
 // implementation
 // ============================================================================

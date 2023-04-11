@@ -202,9 +202,7 @@ private:
     friend class wxDynamicLibraryDetailsCreator;
 };
 
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetails,
-                                  wxDynamicLibraryDetailsArray,
-                                  WXDLLIMPEXP_BASE);
+using wxDynamicLibraryDetailsArray = wxBaseArray<wxDynamicLibraryDetails>;
 
 // ----------------------------------------------------------------------------
 // wxDynamicLibrary: represents a handle to a DLL/shared object

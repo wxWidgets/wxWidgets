@@ -97,26 +97,26 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(const wxChar* name,
 {
     EnumModulesProcParams *params = (EnumModulesProcParams *)data;
 
-    wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
+    wxDynamicLibraryDetails details;
 
     // fill in simple properties
-    details->m_name = name;
-    details->m_address = wxUIntToPtr(base);
-    details->m_length = size;
+    details.m_name = name;
+    details.m_address = wxUIntToPtr(base);
+    details.m_length = size;
 
     // to get the version, we first need the full path
     const HMODULE hmod = wxDynamicLibrary::MSWGetModuleHandle
                          (
-                            details->m_name,
-                            details->m_address
+                            details.m_name,
+                            details.m_address
                          );
     if ( hmod )
     {
         wxString fullname = wxGetFullModuleName(hmod);
         if ( !fullname.empty() )
         {
-            details->m_path = fullname;
-            details->m_version = GetFileVersion(fullname);
+            details.m_path = fullname;
+            details.m_version = GetFileVersion(fullname);
         }
     }
 

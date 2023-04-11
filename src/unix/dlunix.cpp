@@ -131,14 +131,14 @@ class wxDynamicLibraryDetailsCreator
 {
 public:
     // create a new wxDynamicLibraryDetails from the given data
-    static wxDynamicLibraryDetails *
+    static wxDynamicLibraryDetails
     New(void *start, void *end, const wxString& path)
     {
-        wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
-        details->m_path = path;
-        details->m_name = path.AfterLast(wxT('/'));
-        details->m_address = start;
-        details->m_length = (char *)end - (char *)start;
+        wxDynamicLibraryDetails details;
+        details.m_path = path;
+        details.m_name = path.AfterLast(wxT('/'));
+        details.m_address = start;
+        details.m_length = (char *)end - (char *)start;
 
         // try to extract the library version from its name
         const size_t posExt = path.rfind(wxT(".so"));
@@ -147,7 +147,7 @@ public:
             if ( path.c_str()[posExt + 3] == wxT('.') )
             {
                 // assume "libfoo.so.x.y.z" case
-                details->m_version.assign(path, posExt + 4, wxString::npos);
+                details.m_version.assign(path, posExt + 4, wxString::npos);
             }
             else
             {
@@ -156,7 +156,7 @@ public:
                 {
                     // assume "libbar-x.y.z.so" case
                     posDash++;
-                    details->m_version.assign(path, posDash, posExt - posDash);
+                    details.m_version.assign(path, posDash, posExt - posDash);
                 }
             }
         }
