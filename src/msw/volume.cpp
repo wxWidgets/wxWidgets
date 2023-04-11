@@ -35,7 +35,6 @@
 
 #include "wx/dir.h"
 #include "wx/dynlib.h"
-#include "wx/arrimpl.cpp"
 
 // some compilers require including <windows.h> before <shellapi.h> so do it
 // even if this is not necessary with most of them
@@ -567,10 +566,7 @@ int wxFSVolumeBase::GetFlags() const
 
 void wxFSVolume::InitIcons()
 {
-    m_icons.Alloc(wxFS_VOL_ICO_MAX);
-    wxIcon null;
-    for (int idx = 0; idx < wxFS_VOL_ICO_MAX; idx++)
-        m_icons.Add(null);
+    m_icons.resize(wxFS_VOL_ICO_MAX);
 }
 
 //=============================================================================
@@ -580,7 +576,7 @@ void wxFSVolume::InitIcons()
 
 wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 {
-    wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.GetCount(), wxNullIcon,
+    wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.size(), wxNullIcon,
                  wxT("wxFSIconType::GetIcon(): invalid icon index") );
 
 #ifdef __WXMSW__
@@ -619,7 +615,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
         }
         else
         {
-            m_icons[type].CreateFromHICON((WXHICON)fi.hIcon);
+            const_cast<wxIcon&>(m_icons[type]).CreateFromHICON((WXHICON)fi.hIcon);
         }
     }
 

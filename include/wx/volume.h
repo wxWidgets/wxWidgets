@@ -106,7 +106,8 @@ protected:
 #if wxUSE_GUI
 
 #include "wx/icon.h"
-#include "wx/iconbndl.h" // only for wxIconArray
+
+#include <vector>
 
 enum wxFSIconType
 {
@@ -130,7 +131,7 @@ private:
     void InitIcons();
 
     // the different icons for this volume (created on demand)
-    wxIconArray m_icons;
+    std::vector<wxIcon> m_icons;
 };
 
 #else // !wxUSE_GUI
