@@ -14,6 +14,8 @@
 
 #include "wx/private/timer.h"
 
+#include <list>
+
 // the type used for milliseconds is large enough for microseconds too but
 // introduce a synonym for it to avoid confusion
 typedef wxMilliClock_t wxUsecClock_t;
@@ -67,7 +69,7 @@ struct wxTimerSchedule
 };
 
 // the linked list of all active timers, we keep it sorted by expiration time
-WX_DECLARE_LIST(wxTimerSchedule, wxTimerList);
+using wxTimerList = std::list<wxTimerSchedule>;
 
 // ----------------------------------------------------------------------------
 // wxTimerScheduler: class responsible for updating all timers
@@ -118,13 +120,11 @@ public:
 private:
     // ctor and dtor are private, this is a singleton class only created by
     // Get() and destroyed by Shutdown()
-    wxTimerScheduler() { }
-    ~wxTimerScheduler();
+    wxTimerScheduler() = default;
+    ~wxTimerScheduler() = default;
 
     // add the given timer schedule to the list in the right place
-    //
-    // we take ownership of the pointer "s" which must be heap-allocated
-    void DoAddTimer(wxTimerSchedule *s);
+    void DoAddTimer(const wxTimerSchedule& s);
 
 
     // the list of all currently active timers sorted by expiration
