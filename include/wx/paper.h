@@ -15,7 +15,8 @@
 #include "wx/event.h"
 #include "wx/cmndata.h"
 #include "wx/intl.h"
-#include "wx/hashmap.h"
+
+#include <vector>
 
 /*
  * Paper type: see defs.h for wxPaperSize enum.
@@ -65,10 +66,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxPrintPaperType);
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxPrintPaperType*, wxStringToPrintPaperTypeHashMap);
-
-class WXDLLIMPEXP_FWD_CORE wxPrintPaperTypeList;
-
 class WXDLLIMPEXP_CORE wxPrintPaperDatabase
 {
 public:
@@ -109,8 +106,15 @@ public:
     wxPrintPaperType* Item(size_t index) const;
     size_t GetCount() const;
 private:
-    wxStringToPrintPaperTypeHashMap* m_map;
-    wxPrintPaperTypeList* m_list;
+    // Helper used by the existing functions to keep returning non-const
+    // pointers for compatibility.
+    static wxPrintPaperType* AsNonConstPtr(const wxPrintPaperType& paperType)
+    {
+        return const_cast<wxPrintPaperType*>(&paperType);
+    }
+
+    std::vector<wxPrintPaperType> m_paperTypes;
+
     //wxDECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase);
 };
 
