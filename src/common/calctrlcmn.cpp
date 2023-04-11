@@ -182,10 +182,9 @@ bool wxCalendarCtrlBase::SetHolidayAttrs()
     wxDateTimeArray hol;
     wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
 
-    const size_t count = hol.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( const auto dt : hol )
     {
-        SetHoliday(hol[n].GetDay());
+        SetHoliday(dt.GetDay());
     }
 
     return true;
