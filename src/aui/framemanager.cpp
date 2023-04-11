@@ -43,8 +43,6 @@
 WX_CHECK_BUILD_OPTIONS("wxAUI")
 
 #include "wx/arrimpl.cpp"
-WX_DECLARE_OBJARRAY(wxRect, wxAuiRectArray);
-WX_DEFINE_OBJARRAY(wxAuiRectArray)
 WX_DEFINE_OBJARRAY(wxAuiDockUIPartArray)
 WX_DEFINE_OBJARRAY(wxAuiDockInfoArray)
 WX_DEFINE_OBJARRAY(wxAuiPaneInfoArray)
@@ -2623,7 +2621,7 @@ void wxAuiManager::Update()
 
     // keep track of the old window rectangles so we can
     // refresh those windows whose rect has changed
-    wxAuiRectArray old_pane_rects;
+    std::vector<wxRect> old_pane_rects;
     for (i = 0; i < pane_count; ++i)
     {
         wxRect r;
@@ -2632,7 +2630,7 @@ void wxAuiManager::Update()
         if (p.window && p.IsShown() && p.IsDocked())
             r = p.rect;
 
-        old_pane_rects.Add(r);
+        old_pane_rects.push_back(r);
     }
 
 
