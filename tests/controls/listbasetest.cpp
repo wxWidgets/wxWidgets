@@ -448,6 +448,11 @@ void ListBaseTestCase::Visible()
 {
     wxListCtrl* const list = GetList();
 
+    // On Fedora, the window size isn't figured out completely yet, so yield
+    // so that the count per page will be calculated correctly.
+    wxYield();
+    wxYield();
+
     list->InsertColumn(0, "Column 0");
     list->InsertItem(0, wxString::Format("string 0"));
 
