@@ -18,8 +18,6 @@
     #if defined(__WXMSW__)
         #include "wx/msw/wrapwin.h" // for DMPAPER_XXX constants
     #endif // MSW
-    #include "wx/utils.h"
-    #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/module.h"
 #endif
