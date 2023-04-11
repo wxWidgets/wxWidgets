@@ -250,11 +250,10 @@ void wxGUIEventLoop::OnNextIteration()
 // Yield to incoming messages
 // ----------------------------------------------------------------------------
 
-#include <wx/arrimpl.cpp>
-WX_DEFINE_OBJARRAY(wxMSGArray);
-
 void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 {
+    std::vector<MSG> msgsToProcess;
+
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
     MSG msg;
@@ -396,7 +395,7 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
         {
             // remove the message and store it
             ::GetMessage(&msg, nullptr, 0, 0);
-            m_arrMSG.Add(msg);
+            msgsToProcess.push_back(msg);
         }
     }
 
@@ -404,11 +403,8 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 
     // put back unprocessed events in the queue
     DWORD id = GetCurrentThreadId();
-    for (size_t i=0; i<m_arrMSG.GetCount(); i++)
+    for ( const auto& m : msgsToProcess )
     {
-        PostThreadMessage(id, m_arrMSG[i].message,
-                          m_arrMSG[i].wParam, m_arrMSG[i].lParam);
+        PostThreadMessage(id, m.message, m.wParam, m.lParam);
     }
-
-    m_arrMSG.Clear();
 }

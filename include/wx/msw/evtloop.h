@@ -11,16 +11,12 @@
 #ifndef _WX_MSW_EVTLOOP_H_
 #define _WX_MSW_EVTLOOP_H_
 
-#include "wx/dynarray.h"
-#include "wx/msw/wrapwin.h"
 #include "wx/window.h"
 #include "wx/msw/evtloopconsole.h" // for wxMSWEventLoopBase
 
 // ----------------------------------------------------------------------------
 // wxEventLoop
 // ----------------------------------------------------------------------------
-
-WX_DECLARE_EXPORTED_OBJARRAY(MSG, wxMSGArray);
 
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxMSWEventLoopBase
 {
@@ -62,9 +58,6 @@ private:
     // check if the given window is a child of ms_winCritical (which must be
     // non null)
     static bool IsChildOfCriticalWindow(wxWindowMSW *win);
-
-    // array of messages used for temporary storage by YieldFor()
-    wxMSGArray m_arrMSG;
 
     // critical window or nullptr
     static wxWindowMSW *ms_winCritical;
