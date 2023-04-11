@@ -15,7 +15,6 @@
 #include "wx/zipstrm.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hashmap.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
@@ -28,6 +27,7 @@
 #include "zlib.h"
 
 #include <memory>
+#include <unordered_map>
 
 // value for the 'version needed to extract' field (20 means 2.0)
 enum {
@@ -670,9 +670,6 @@ static void Unique(wxZipMemory*& zm, size_t size)
 /////////////////////////////////////////////////////////////////////////////
 // Collection of weak references to entries
 
-WX_DECLARE_HASH_MAP(long, wxZipEntry*, wxIntegerHash,
-                    wxIntegerEqual, wxOffsetZipEntryMap_);
-
 class wxZipWeakLinks
 {
 public:
@@ -684,33 +681,29 @@ public:
         { RemoveEntry(key); if (--m_ref == 0) delete this; }
 
     wxZipWeakLinks *AddEntry(wxZipEntry *entry, wxFileOffset key);
-    void RemoveEntry(wxFileOffset key)
-        { m_entries.erase(wx_truncate_cast(key_type, key)); }
+    void RemoveEntry(wxFileOffset key) { m_entries.erase(key); }
     wxZipEntry *GetEntry(wxFileOffset key) const;
     bool IsEmpty() const { return m_entries.empty(); }
 
 private:
     ~wxZipWeakLinks() { wxASSERT(IsEmpty()); }
 
-    typedef wxOffsetZipEntryMap_::key_type key_type;
-
     int m_ref;
-    wxOffsetZipEntryMap_ m_entries;
+    std::unordered_map<wxFileOffset, wxZipEntry*> m_entries;
 
     wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(wxZipWeakLinks)
 };
 
 wxZipWeakLinks *wxZipWeakLinks::AddEntry(wxZipEntry *entry, wxFileOffset key)
 {
-    m_entries[wx_truncate_cast(key_type, key)] = entry;
+    m_entries[key] = entry;
     m_ref++;
     return this;
 }
 
 wxZipEntry *wxZipWeakLinks::GetEntry(wxFileOffset key) const
 {
-    wxOffsetZipEntryMap_::const_iterator it =
-        m_entries.find(wx_truncate_cast(key_type, key));
+    auto it = m_entries.find(key);
     return it != m_entries.end() ?  it->second : nullptr;
 }
 
