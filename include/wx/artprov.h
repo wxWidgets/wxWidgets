@@ -17,8 +17,8 @@
 #include "wx/iconbndl.h"
 #include "wx/bmpbndl.h"
 
-class WXDLLIMPEXP_FWD_CORE wxArtProvidersList;
-class WXDLLIMPEXP_FWD_CORE wxArtProviderCache;
+class wxArtProvidersList;
+class wxArtProviderCache;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class wxArtProviderModule;

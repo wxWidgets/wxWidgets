@@ -27,13 +27,15 @@
     #include "wx/window.h"
 #endif
 
-// ===========================================================================
-// implementation
-// ===========================================================================
+#include <list>
+#include <memory>
 
-#include "wx/listimpl.cpp"
-WX_DECLARE_LIST(wxArtProvider, wxArtProvidersList);
-WX_DEFINE_LIST(wxArtProvidersList)
+using wxArtProviderPtr = std::unique_ptr<wxArtProvider>;
+class wxArtProvidersList : public std::list<wxArtProviderPtr>
+{
+public:
+    using std::list<wxArtProviderPtr>::list;
+};
 
 // ----------------------------------------------------------------------------
 // Cache class - stores already requested bitmaps
@@ -43,7 +45,7 @@ WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmapBundle, wxArtProviderBitmapBundlesHash);
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxIconBundle, wxArtProviderIconBundlesHash);
 
-class WXDLLEXPORT wxArtProviderCache
+class wxArtProviderCache
 {
 public:
     bool GetBitmap(const wxString& full_id, wxBitmap* bmp);
@@ -241,10 +243,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = nullptr;
 // wxArtProvider ctors/dtor
 // ----------------------------------------------------------------------------
 
-wxArtProvider::~wxArtProvider()
-{
-    Remove(this);
-}
+wxArtProvider::~wxArtProvider() = default;
 
 // ----------------------------------------------------------------------------
 // wxArtProvider operations on provider stack
@@ -264,13 +263,13 @@ wxArtProvider::~wxArtProvider()
 /*static*/ void wxArtProvider::Push(wxArtProvider *provider)
 {
     CommonAddingProvider();
-    sm_providers->Insert(provider);
+    sm_providers->push_front(wxArtProviderPtr(provider));
 }
 
 /*static*/ void wxArtProvider::PushBack(wxArtProvider *provider)
 {
     CommonAddingProvider();
-    sm_providers->Append(provider);
+    sm_providers->push_back(wxArtProviderPtr(provider));
 }
 
 /*static*/ bool wxArtProvider::Pop()
@@ -278,7 +277,7 @@ wxArtProvider::~wxArtProvider()
     wxCHECK_MSG( sm_providers, false, wxT("no wxArtProvider exists") );
     wxCHECK_MSG( !sm_providers->empty(), false, wxT("wxArtProviders stack is empty") );
 
-    delete sm_providers->GetFirst()->GetData();
+    sm_providers->pop_front();
     sm_cache->Clear();
     return true;
 }
@@ -287,7 +286,16 @@ wxArtProvider::~wxArtProvider()
 {
     wxCHECK_MSG( sm_providers, false, wxT("no wxArtProvider exists") );
 
-    if ( sm_providers->DeleteObject(provider) )
+    // Unfortunately remove() doesn't return the number of the removed elements
+    // until C++20, so check whether it did anything manually.
+    const auto oldSize = sm_providers->size();
+
+    sm_providers->remove_if([provider](const wxArtProviderPtr& p)
+    {
+        return p.get() == provider;
+    });
+
+    if ( sm_providers->size() != oldSize )
     {
         sm_cache->Clear();
         return true;
@@ -308,9 +316,6 @@ wxArtProvider::~wxArtProvider()
 {
     if ( sm_providers )
     {
-        while ( !sm_providers->empty() )
-            delete *sm_providers->begin();
-
         wxDELETE(sm_providers);
         wxDELETE(sm_cache);
     }
@@ -416,10 +421,8 @@ wxArtProvider::RescaleOrResizeIfNeeded(wxBitmap& bmp, const wxSize& sizeNeeded)
     wxBitmap bmp;
     if ( !sm_cache->GetBitmap(hashId, &bmp) )
     {
-        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-             node; node = node->GetNext())
+        for (const auto& provider : *sm_providers)
         {
-            wxArtProvider* const provider = node->GetData();
             bmp = provider->CreateBitmap(id, client, size);
             if ( bmp.IsOk() )
                 break;
@@ -481,10 +484,8 @@ wxBitmapBundle wxArtProvider::GetBitmapBundle(const wxArtID& id,
 
     if ( !sm_cache->GetBitmapBundle(hashId, &bitmapbundle) )
     {
-        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-             node; node = node->GetNext())
+        for (const auto& provider : *sm_providers)
         {
-            wxArtProvider* const provider = node->GetData();
             bitmapbundle = provider->CreateBitmapBundle(id, client, size);
             if ( bitmapbundle.IsOk() )
                 break;
@@ -546,10 +547,9 @@ wxIconBundle wxArtProvider::DoGetIconBundle(const wxArtID& id, const wxArtClient
     wxIconBundle iconbundle;
     if ( !sm_cache->GetIconBundle(hashId, &iconbundle) )
     {
-        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-             node; node = node->GetNext())
+        for (const auto& provider : *sm_providers)
         {
-            iconbundle = node->GetData()->CreateIconBundle(id, client);
+            iconbundle = provider->CreateIconBundle(id, client);
             if ( iconbundle.IsOk() )
                 break;
         }
@@ -607,9 +607,8 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
 
 /*static*/ wxSize wxArtProvider::GetDIPSizeHint(const wxArtClient& client)
 {
-    wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
-    if (node)
-        return node->GetData()->DoGetSizeHint(client);
+    if ( !sm_providers->empty() )
+        return sm_providers->front()->DoGetSizeHint(client);
 
     return GetNativeDIPSizeHint(client);
 }
