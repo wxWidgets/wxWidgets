@@ -254,9 +254,7 @@ private:
     int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
-#ifndef SWIG
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiToolBarItem, wxAuiToolBarItemArray, WXDLLIMPEXP_AUI);
-#endif
+using wxAuiToolBarItemArray = wxBaseArray<wxAuiToolBarItem>;
 
 
 

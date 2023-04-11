@@ -36,10 +36,6 @@
 #include "wx/osx/private.h"
 #endif
 
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxAuiToolBarItemArray)
-
-
 wxDEFINE_EVENT( wxEVT_AUITOOLBAR_TOOL_DROPDOWN, wxAuiToolBarEvent );
 wxDEFINE_EVENT( wxEVT_AUITOOLBAR_OVERFLOW_CLICK, wxAuiToolBarEvent );
 wxDEFINE_EVENT( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEvent );
@@ -1258,7 +1254,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindToolByIndex(int idx) const
     if (idx >= (int)m_items.size())
         return nullptr;
 
-    return &(m_items[idx]);
+    return const_cast<wxAuiToolBarItem*>(&(m_items[idx]));
 }
 
 void wxAuiToolBar::SetToolClientData (int tool_id, wxObject *client_data)

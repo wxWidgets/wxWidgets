@@ -455,6 +455,17 @@ public:
 };
 
 /**
+    A vector of AUI toolbar items.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxAuiToolBarItem objects in the application code.
+*/
+class wxAuiToolBarItemArray : public std::vector<wxAuiToolBarItem>
+{
+};
+
+/**
     @class wxAuiToolBarArt
 
     wxAuiToolBarArt is part of the wxAUI class framework.
