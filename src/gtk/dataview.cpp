@@ -3218,9 +3218,6 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
 } // extern "C"
 
-#include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxDataViewColumnList)
-
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell,
                                     unsigned int model_column, int width,
                                     wxAlignment align, int flags )
@@ -4723,8 +4720,6 @@ wxDataViewCtrl::~wxDataViewCtrl()
             GTKDisconnect(selection);
     }
 
-    m_cols.Clear();
-
     delete m_internal;
 }
 
@@ -4732,8 +4727,6 @@ void wxDataViewCtrl::Init()
 {
     m_treeview = nullptr;
     m_internal = nullptr;
-
-    m_cols.DeleteContents( true );
 
     m_uniformRowHeight = -1;
 }
@@ -4903,7 +4896,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::AppendColumn(col))
         return false;
 
-    m_cols.Append( col );
+    m_cols.push_back( wxDataViewColumnPtr(col) );
 
     if (gtk_tree_view_column_get_sizing( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) ) !=
            GTK_TREE_VIEW_COLUMN_FIXED)
@@ -4922,7 +4915,7 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::PrependColumn(col))
         return false;
 
-    m_cols.Insert( col );
+    m_cols.insert( m_cols.begin(), wxDataViewColumnPtr(col) );
 
     if (gtk_tree_view_column_get_sizing( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) ) !=
            GTK_TREE_VIEW_COLUMN_FIXED)
@@ -4941,7 +4934,7 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::InsertColumn(pos,col))
         return false;
 
-    m_cols.Insert( pos, col );
+    m_cols.insert( m_cols.begin() + pos, wxDataViewColumnPtr(col) );
 
     if (gtk_tree_view_column_get_sizing( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) ) !=
            GTK_TREE_VIEW_COLUMN_FIXED)
@@ -4957,7 +4950,7 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
 
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
-    return m_cols.GetCount();
+    return m_cols.size();
 }
 
 wxDataViewColumn* wxDataViewCtrl::GTKColumnToWX(GtkTreeViewColumn *gtk_col) const
@@ -4965,13 +4958,11 @@ wxDataViewColumn* wxDataViewCtrl::GTKColumnToWX(GtkTreeViewColumn *gtk_col) cons
     if ( !gtk_col )
         return nullptr;
 
-    wxDataViewColumnList::const_iterator iter;
-    for (iter = m_cols.begin(); iter != m_cols.end(); ++iter)
+    for (const auto& col : m_cols)
     {
-        wxDataViewColumn *col = *iter;
         if (GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) == gtk_col)
         {
-            return col;
+            return col.get();
         }
     }
 
@@ -4992,22 +4983,30 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
     gtk_tree_view_remove_column( GTK_TREE_VIEW(m_treeview),
                                  GTK_TREE_VIEW_COLUMN(column->GetGtkHandle()) );
 
-    m_cols.DeleteObject( column );
+    int n = 0;
+    for (const auto& col : m_cols)
+    {
+        if (col.get() == column)
+        {
+            m_cols.erase(m_cols.begin() + n);
+            break;
+        }
+
+        ++n;
+    }
 
     return true;
 }
 
 bool wxDataViewCtrl::ClearColumns()
 {
-    wxDataViewColumnList::iterator iter;
-    for (iter = m_cols.begin(); iter != m_cols.end(); ++iter)
+    for (const auto& col : m_cols)
     {
-        wxDataViewColumn *col = *iter;
         gtk_tree_view_remove_column( GTK_TREE_VIEW(m_treeview),
                                      GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) );
     }
 
-    m_cols.Clear();
+    m_cols.clear();
 
     return true;
 }
