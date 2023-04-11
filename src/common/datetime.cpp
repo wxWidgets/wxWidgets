@@ -2174,16 +2174,9 @@ void wxDateTime::UseEffectiveWeekDayFlags(WeekFlags &flags) const
 // wxDateTimeHolidayAuthority and related classes
 // ============================================================================
 
-#include "wx/arrimpl.cpp"
-
-WX_DEFINE_OBJARRAY(wxDateTimeArray)
-
 static int wxCMPFUNC_CONV
-wxDateTimeCompareFunc(wxDateTime **first, wxDateTime **second)
+wxDateTimeCompareFunc(wxDateTime dt1, wxDateTime dt2)
 {
-    wxDateTime dt1 = **first,
-               dt2 = **second;
-
     return dt1 == dt2 ? 0 : dt1 < dt2 ? -1 : +1;
 }
 
