@@ -29,8 +29,6 @@
 #include "wx/clipbrd.h"
 #include "wx/recguard.h"
 
-#include "wx/arrimpl.cpp"
-
 #include <list>
 
 // uncomment this line to visually show the extent of the selection
@@ -140,11 +138,14 @@ private:
 
 
 //-----------------------------------------------------------------------------
-// our private containers:
+// our private containers: they have to be classes as they're forward-declared
 //-----------------------------------------------------------------------------
 
-WX_DECLARE_OBJARRAY(wxHtmlHistoryItem, wxHtmlHistoryArray);
-WX_DEFINE_OBJARRAY(wxHtmlHistoryArray)
+class wxHtmlHistoryArray : public std::vector<wxHtmlHistoryItem>
+{
+public:
+    wxHtmlHistoryArray() = default;
+};
 
 class wxHtmlProcessorList : public std::list<std::unique_ptr<wxHtmlProcessor>>
 {
@@ -646,16 +647,18 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
     if (m_HistoryOn) // add this page to history there:
     {
-        int c = m_History->GetCount() - (m_HistoryPos + 1);
+        int c = m_History->size() - (m_HistoryPos + 1);
 
         if (m_HistoryPos < 0 ||
             (*m_History)[m_HistoryPos].GetPage() != m_OpenedPage ||
             (*m_History)[m_HistoryPos].GetAnchor() != m_OpenedAnchor)
         {
             m_HistoryPos++;
-            for (int i = 0; i < c; i++)
-                m_History->RemoveAt(m_HistoryPos);
-            m_History->Add(new wxHtmlHistoryItem(m_OpenedPage, m_OpenedAnchor));
+
+            const auto first = m_History->begin() + m_HistoryPos;
+            m_History->erase(first, first + c);
+
+            m_History->emplace_back(m_OpenedPage, m_OpenedAnchor);
         }
     }
 
@@ -857,7 +860,7 @@ bool wxHtmlWindow::HistoryForward()
     wxString a, l;
 
     if (m_HistoryPos == -1) return false;
-    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return false;
+    if (m_HistoryPos >= (int)m_History->size() - 1)return false;
 
     m_OpenedPage.clear(); // this will disable adding new entry into history in LoadPage()
 
@@ -878,14 +881,14 @@ bool wxHtmlWindow::HistoryForward()
 bool wxHtmlWindow::HistoryCanForward()
 {
     if (m_HistoryPos == -1) return false;
-    if (m_HistoryPos >= (int)m_History->GetCount() - 1)return false;
+    if (m_HistoryPos >= (int)m_History->size() - 1)return false;
     return true ;
 }
 
 
 void wxHtmlWindow::HistoryClear()
 {
-    m_History->Empty();
+    m_History->clear();
     m_HistoryPos = -1;
 }
 
