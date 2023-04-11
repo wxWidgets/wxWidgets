@@ -34,12 +34,8 @@
 
 #include "wx/tooltip.h"
 #if wxUSE_THREADS
-    // define the list of MSG strutures
-    WX_DECLARE_LIST(MSG, wxMsgList);
-
-    #include "wx/listimpl.cpp"
-
-    WX_DEFINE_LIST(wxMsgList)
+    #include <list>
+    using wxMsgList = std::list<MSG>;
 #endif // wxUSE_THREADS
 
 // ============================================================================
@@ -189,8 +185,7 @@ bool wxGUIEventLoop::Dispatch()
         // the message will be processed twice
         if ( !wxIsWaitingForThread() || msg.message != WM_COMMAND )
         {
-            MSG* pMsg = new MSG(msg);
-            s_aSavedMessages.Append(pMsg);
+            s_aSavedMessages.push_back(msg);
         }
 
         return true;
@@ -206,16 +201,9 @@ bool wxGUIEventLoop::Dispatch()
         {
             s_hadGuiLock = true;
 
-            wxMsgList::compatibility_iterator node = s_aSavedMessages.GetFirst();
-            while (node)
+            for ( ; !s_aSavedMessages.empty(); s_aSavedMessages.pop_front() )
             {
-                MSG* pMsg = node->GetData();
-                s_aSavedMessages.Erase(node);
-
-                ProcessMessage(pMsg);
-                delete pMsg;
-
-                node = s_aSavedMessages.GetFirst();
+                ProcessMessage(&s_aSavedMessages.front());
             }
         }
     }
