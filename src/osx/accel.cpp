@@ -21,14 +21,6 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject);
 
 // ----------------------------------------------------------------------------
-// wxAccelList: a list of wxAcceleratorEntries
-// ----------------------------------------------------------------------------
-
-WX_DECLARE_LIST(wxAcceleratorEntry, wxAccelList);
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxAccelList)
-
-// ----------------------------------------------------------------------------
 // wxAccelRefData: the data used by wxAcceleratorTable
 // ----------------------------------------------------------------------------
 
@@ -36,23 +28,12 @@ class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {
     friend class wxAcceleratorTable;
 public:
-    wxAcceleratorRefData();
-    virtual ~wxAcceleratorRefData();
+    wxAcceleratorRefData() = default;
 
-    wxAccelList m_accels;
+    std::vector<wxAcceleratorEntry> m_accels;
 };
 
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
-
-wxAcceleratorRefData::wxAcceleratorRefData()
-    : m_accels()
-{
-}
-
-wxAcceleratorRefData::~wxAcceleratorRefData()
-{
-    WX_CLEAR_LIST( wxAccelList, m_accels );
-}
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
@@ -74,7 +55,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
         int keycode = entries[i].GetKeyCode();
         int command = entries[i].GetCommand();
         if ((keycode >= (int)'a') && (keycode <= (int)'z')) keycode = (int)toupper( (char)keycode );
-        M_ACCELDATA->m_accels.Append( new wxAcceleratorEntry( flag, keycode, command ) );
+        M_ACCELDATA->m_accels.emplace_back( flag, keycode, command );
     }
 }
 
@@ -87,19 +68,16 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 {
     if (!IsOk()) return -1;
 
-    wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
-    while (node)
+    for ( const auto& entry : M_ACCELDATA->m_accels )
     {
-        wxAcceleratorEntry *entry = node->GetData();
-        if ((event.m_keyCode == entry->GetKeyCode()) &&
-           (((entry->GetFlags() & wxACCEL_RAW_CTRL) != 0) == event.RawControlDown()) &&
-           (((entry->GetFlags() & wxACCEL_SHIFT) != 0) == event.ShiftDown()) &&
-           (((entry->GetFlags() & wxACCEL_ALT) != 0) == event.AltDown()) &&
-           (((entry->GetFlags() & wxACCEL_CTRL) != 0) == event.ControlDown()))
+        if ((event.m_keyCode == entry.GetKeyCode()) &&
+           (((entry.GetFlags() & wxACCEL_RAW_CTRL) != 0) == event.RawControlDown()) &&
+           (((entry.GetFlags() & wxACCEL_SHIFT) != 0) == event.ShiftDown()) &&
+           (((entry.GetFlags() & wxACCEL_ALT) != 0) == event.AltDown()) &&
+           (((entry.GetFlags() & wxACCEL_CTRL) != 0) == event.ControlDown()))
         {
-            return entry->GetCommand();
+            return entry.GetCommand();
         }
-        node = node->GetNext();
     }
 
     return -1;
