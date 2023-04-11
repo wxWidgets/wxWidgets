@@ -49,7 +49,7 @@ typedef wxMenuItemList::compatibility_iterator wxMenuItemIter;
 // wxMenuInfo contains all extra information about top level menus we need
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuInfo
+class wxMenuInfo
 {
 public:
     // ctor
@@ -109,10 +109,6 @@ private:
     int m_indexAccel;
     bool m_isEnabled;
 };
-
-#include "wx/arrimpl.cpp"
-
-WX_DEFINE_OBJARRAY(wxMenuInfoArray);
 
 // ----------------------------------------------------------------------------
 // wxPopupMenuWindow: a popup window showing a menu
@@ -1734,6 +1730,11 @@ void wxMenuBar::Init()
     m_shouldShowMenu = false;
 }
 
+wxMenuBar::wxMenuBar(long WXUNUSED(style))
+{
+    Init();
+}
+
 wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long WXUNUSED(style))
 {
     Init();
@@ -1809,8 +1810,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     menu->SetTitle( title );
 
-    wxMenuInfo *info = new wxMenuInfo(title);
-    m_menuInfos.Insert(info, pos);
+    m_menuInfos.insert(m_menuInfos.begin() + pos, wxMenuInfo(title));
 
     RefreshAllItemsAfter(pos);
 
@@ -1844,7 +1844,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
     if ( menuOld )
     {
-        m_menuInfos.RemoveAt(pos);
+        m_menuInfos.erase(m_menuInfos.begin() + pos);
 
         // this doesn't happen too often, so don't try to be too smart - just
         // refresh everything
@@ -1857,6 +1857,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 // ----------------------------------------------------------------------------
 // wxMenuBar top level menus access
 // ----------------------------------------------------------------------------
+
+size_t wxMenuBar::GetCount() const
+{
+    return m_menuInfos.size();
+}
 
 wxCoord wxMenuBar::GetItemWidth(size_t pos) const
 {
