@@ -453,6 +453,17 @@ public:
     bool active;          // true if the page is currently active
 };
 
+/**
+    A vector of AUI notebook pages.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxAuiNotebookPage objects in the application code.
+*/
+class wxAuiNotebookPageArray : public std::vector<wxAuiNotebookPage>
+{
+};
+
 
 /**
     @class wxAuiTabContainerButton
@@ -477,6 +488,18 @@ public:
     wxBitmapBundle disBitmap;
     /// button's hit rectangle
     wxRect rect;
+};
+
+
+/**
+    A vector of AUI tab buttons.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxAuiTabContainerButton objects in the application code.
+*/
+class wxAuiTabContainerButtonArray : public std::vector<wxAuiTabContainerButton>
+{
 };
 
 
