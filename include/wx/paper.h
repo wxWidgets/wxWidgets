@@ -114,8 +114,6 @@ private:
     }
 
     std::vector<wxPrintPaperType> m_paperTypes;
-
-    //wxDECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxPrintPaperDatabase*) wxThePrintPaperDatabase;

@@ -37,7 +37,6 @@
  // End __WXMSW__
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject);
-// wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList);
 
 /*
  * Paper size database for all platforms
