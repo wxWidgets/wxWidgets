@@ -128,13 +128,11 @@ class wxAuiDockInfo;
 class wxAuiDockArt;
 class wxAuiManagerEvent;
 
-#ifndef SWIG
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockInfo, wxAuiDockInfoArray, WXDLLIMPEXP_AUI);
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockUIPart, wxAuiDockUIPartArray, WXDLLIMPEXP_AUI);
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiPaneInfo, wxAuiPaneInfoArray, WXDLLIMPEXP_AUI);
-WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiPaneInfo*, wxAuiPaneInfoPtrArray, class WXDLLIMPEXP_AUI);
-WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiDockInfo*, wxAuiDockInfoPtrArray, class WXDLLIMPEXP_AUI);
-#endif // SWIG
+using wxAuiDockUIPartArray = wxBaseArray<wxAuiDockUIPart>;
+using wxAuiDockInfoArray = wxBaseArray<wxAuiDockInfo>;
+using wxAuiPaneInfoArray = wxBaseArray<wxAuiPaneInfo>;
+using wxAuiDockInfoPtrArray = wxBaseArray<wxAuiDockInfo*>;
+using wxAuiPaneInfoPtrArray = wxBaseArray<wxAuiPaneInfo*>;
 
 extern WXDLLIMPEXP_AUI wxAuiDockInfo wxAuiNullDockInfo;
 extern WXDLLIMPEXP_AUI wxAuiPaneInfo wxAuiNullPaneInfo;
@@ -614,6 +612,11 @@ protected:
     wxByte m_hintFadeMax;       // maximum value of hint fade
 
     void* m_reserved;
+
+private:
+    // Return the index in m_uiParts corresponding to the current value of
+    // m_actionPart. If m_actionPart is null, returns wxNOT_FOUND.
+    int GetActionPartIndex() const;
 
 #ifndef SWIG
     wxDECLARE_EVENT_TABLE();
