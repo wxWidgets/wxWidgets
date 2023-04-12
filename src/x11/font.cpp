@@ -524,13 +524,6 @@ bool wxFont::GetStrikethrough() const
     return M_FONTDATA->m_nativeFontInfo.GetStrikethrough();
 }
 
-#if defined( __WXX11__ ) && ( wxUSE_PANGO == 0 )
-bool wxNativeFontInfo::GetStrikethrough() const
-{
-   return false;
-}
-#endif
-
 wxFontEncoding wxFont::GetEncoding() const
 {
     wxCHECK_MSG( IsOk(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
@@ -622,7 +615,6 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
     M_FONTDATA->SetNativeFontInfo( info );
 }
 
-#if wxUSE_PANGO
 // Although we don't use this function yet, but we must create it here.
 // first, for the prepare the unicode drawing support in wxUniv/x11 port.
 // If we use pango to draw the text, then we must set some attributes
@@ -651,4 +643,3 @@ bool wxFont::SetPangoAttrs(PangoLayout* layout) const
 
     return true;
 }
-#endif

@@ -27,9 +27,7 @@
 // Include common declarations
 #include "wx/x11/privx.h"
 
-#if wxUSE_PANGO
 #include <pango/pango.h>
-#endif
 
 class WXDLLIMPEXP_FWD_CORE wxMouseEvent;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
