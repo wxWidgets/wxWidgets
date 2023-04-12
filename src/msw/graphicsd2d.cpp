@@ -74,6 +74,8 @@
 #include "wx/stack.h"
 #include "wx/sharedptr.h"
 
+#include <list>
+
 // This must be the last header included to only affect the DEFINE_GUID()
 // occurrences below but not any GUIDs declared in the standard files included
 // above.
@@ -670,12 +672,6 @@ public:
 // A Direct2D resource manager handles the device-dependent
 // resource holders attached to it by requesting them to
 // release their resources when the API invalidates.
-// NOTE: We're using a list because we expect to have multiple
-// insertions but very rarely a traversal (if ever).
-WX_DECLARE_LIST(wxManagedResourceHolder, wxManagedResourceListType);
-#include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxManagedResourceListType);
-
 class wxD2DResourceManager: public wxD2DContextSupplier
 {
 public:
@@ -691,16 +687,15 @@ public:
 
     void ReleaseResources()
     {
-        wxManagedResourceListType::iterator it;
-        for (it = m_resources.begin(); it != m_resources.end(); ++it)
+        for (const auto& resource : m_resources )
         {
-            (*it)->ReleaseResource();
+            resource->ReleaseResource();
         }
 
         // Check that all resources were released
-        for (it = m_resources.begin(); it != m_resources.end(); ++it)
+        for (const auto& resource : m_resources )
         {
-            wxCHECK_RET(!(*it)->IsResourceAcquired(), "One or more device-dependent resources failed to release");
+            wxCHECK_RET(!resource->IsResourceAcquired(), "One or more device-dependent resources failed to release");
         }
     }
 
@@ -714,7 +709,9 @@ public:
     }
 
 private:
-    wxManagedResourceListType m_resources;
+    // NOTE: We're using a list because we expect to have multiple
+    // insertions but very rarely a traversal (if ever).
+    std::list<wxManagedResourceHolder*> m_resources;
 };
 
 // A Direct2D resource holder manages device dependent resources
