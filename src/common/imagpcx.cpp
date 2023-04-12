@@ -15,7 +15,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
-    #include "wx/list.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/palette.h"

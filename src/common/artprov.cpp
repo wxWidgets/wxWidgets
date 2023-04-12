@@ -19,7 +19,6 @@
 #include "wx/artprov.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/log.h"
     #include "wx/image.h"
     #include "wx/module.h"

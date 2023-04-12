@@ -17,7 +17,6 @@
 #include "wx/msw/private/timer.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/intl.h"

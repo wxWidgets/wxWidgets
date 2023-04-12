@@ -23,7 +23,6 @@
 #include "wx/brush.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
