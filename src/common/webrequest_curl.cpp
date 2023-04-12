@@ -27,11 +27,14 @@
 #include "wx/evtloop.h"
 
 #ifdef __WINDOWS__
-    #include "wx/hashset.h"
     #include "wx/msw/wrapwin.h"
+
+    #include <unordered_set>
 #else
     #include "wx/evtloopsrc.h"
     #include "wx/evtloop.h"
+
+    #include <unordered_map>
 #endif
 
 
@@ -528,7 +531,7 @@ private:
                                     WXLPARAM lParam);
     static const WXUINT SOCKET_MESSAGE;
 
-    WX_DECLARE_HASH_SET(curl_socket_t, wxIntegerHash, wxIntegerEqual, SocketSet);
+    using SocketSet = std::unordered_set<curl_socket_t>;
 
     SocketSet m_polledSockets;
     WXHWND m_hwnd;
@@ -761,8 +764,7 @@ public:
     void ResumePolling(curl_socket_t) override;
 
 private:
-    WX_DECLARE_HASH_MAP(curl_socket_t, wxEventLoopSource*, wxIntegerHash,\
-                        wxIntegerEqual, SocketDataMap);
+    using SocketDataMap = std::unordered_map<curl_socket_t, wxEventLoopSource*>;
 
     void CleanUpSocketSource(wxEventLoopSource*);
 
