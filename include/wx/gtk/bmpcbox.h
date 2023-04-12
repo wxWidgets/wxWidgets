@@ -130,7 +130,6 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
     virtual void GTKCreateComboBoxWidget() override;
-    virtual void GTKInsertComboBoxTextItem( unsigned int n, const wxString& text ) override;
 
     virtual wxSize DoGetBestSize() const override;
 

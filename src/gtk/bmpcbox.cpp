@@ -285,20 +285,6 @@ int wxBitmapComboBox::Insert(const wxString& item, const wxBitmapBundle& bitmap,
     return n;
 }
 
-void wxBitmapComboBox::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
-{
-    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-    GtkTreeModel *model = gtk_combo_box_get_model( combobox );
-    GtkListStore *store = GTK_LIST_STORE( model );
-    GtkTreeIter iter;
-
-    gtk_list_store_insert( store, &iter, n );
-
-    wxGtkValue value( G_TYPE_STRING );
-    g_value_set_string( value, text.utf8_str() );
-    gtk_list_store_set_value( store, &iter, m_stringCellIndex, value );
-}
-
 // ----------------------------------------------------------------------------
 // wxTextEntry interface override
 // ----------------------------------------------------------------------------

@@ -105,10 +105,6 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) override;
 
-    // in derived classes, implement this to insert list store entry
-    // with all items default except text
-    virtual void GTKInsertComboBoxTextItem( unsigned int n, const wxString& text );
-
 private:
     void Init();
 
