@@ -318,8 +318,9 @@ wxRecursionGuardFlag g_inSizeAllocate = 0;
 
 #ifdef wxGTK_HAS_GESTURES_SUPPORT
 
-#include "wx/hashmap.h"
 #include "wx/private/extfield.h"
+
+#include <unordered_map>
 
 namespace
 {
@@ -359,9 +360,7 @@ public:
     GtkGesture* m_long_press_gesture;
 };
 
-WX_DECLARE_HASH_MAP(wxWindow*, wxWindowGesturesData*,
-                    wxPointerHash, wxPointerEqual,
-                    wxWindowGesturesMap);
+using wxWindowGesturesMap = std::unordered_map<wxWindow*, wxWindowGesturesData*>;
 
 typedef wxExternalField<wxWindow,
                         wxWindowGesturesData,
