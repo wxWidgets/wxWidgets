@@ -171,6 +171,16 @@ wxPGGlobalVarsClass* wxPGGlobalVarsPtr::operator->() const
     return g_PGGlobalVars;
 }
 
+bool wxPGGlobalVarsPtr::operator!() const
+{
+    return !g_PGGlobalVars;
+}
+
+wxPGGlobalVarsPtr::operator bool() const
+{
+    return !!g_PGGlobalVars;
+}
+
 wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     : m_fontFamilyChoices(nullptr)
     , m_defaultRenderer(new wxPGDefaultRenderer())
