@@ -42,6 +42,8 @@
 #endif
 
 #include <memory>
+#include <unordered_map>
+
 #include "PlatWX.h"
 #include "wx/stc/stc.h"
 #include "wx/stc/private.h"
@@ -2406,7 +2408,7 @@ public:
     const wxColour& GetCurrentTextColour() const;
 
 private:
-    WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, ImgList);
+    using ImgList = std::unordered_map<int, wxBitmap>;
 
     int      m_desiredVisibleRows;
     ImgList  m_imgList;
