@@ -21,7 +21,6 @@
 #ifndef WX_PRECOMP
     #include "wx/list.h"
     #include "wx/log.h"
-    #include "wx/hashmap.h"
     #include "wx/image.h"
     #include "wx/module.h"
     #include "wx/window.h"
@@ -29,6 +28,7 @@
 
 #include <list>
 #include <memory>
+#include <unordered_map>
 
 using wxArtProviderPtr = std::unique_ptr<wxArtProvider>;
 class wxArtProvidersList : public std::list<wxArtProviderPtr>
@@ -41,9 +41,9 @@ public:
 // Cache class - stores already requested bitmaps
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmapBundle, wxArtProviderBitmapBundlesHash);
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxIconBundle, wxArtProviderIconBundlesHash);
+using wxArtProviderBitmapsHash = std::unordered_map<wxString, wxBitmap>;
+using wxArtProviderBitmapBundlesHash = std::unordered_map<wxString, wxBitmapBundle>;
+using wxArtProviderIconBundlesHash = std::unordered_map<wxString, wxIconBundle>;
 
 class wxArtProviderCache
 {
