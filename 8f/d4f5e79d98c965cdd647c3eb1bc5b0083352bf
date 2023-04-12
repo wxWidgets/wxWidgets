@@ -1,0 +1,1 @@
+All: Make wxString {To,From}CDouble() faster and more robust (#23287).
