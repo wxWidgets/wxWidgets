@@ -16,9 +16,10 @@
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
-#include "wx/hashmap.h"
 #include "wx/evtloop.h"
 #include "wx/dfb/private.h"
+
+#include <unordered_map>
 
 #define TRACE_EVENTS "events"
 #define TRACE_PAINT  "paint"
@@ -28,9 +29,7 @@
 // ============================================================================
 
 // mapping of DirectFB windows to wxTLWs:
-WX_DECLARE_HASH_MAP(DFBWindowID, wxNonOwnedWindow*,
-                    wxIntegerHash, wxIntegerEqual,
-                    wxDfbWindowsMap);
+using wxDfbWindowsMap = std::unordered_map<DFBWindowID, wxNonOwnedWindow*>;
 static wxDfbWindowsMap gs_dfbWindowsMap;
 
 // ============================================================================
