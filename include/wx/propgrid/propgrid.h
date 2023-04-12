@@ -113,6 +113,8 @@ class WXDLLIMPEXP_PROPGRID wxPGGlobalVarsPtr
 {
 public:
     wxPGGlobalVarsClass* operator->() const;
+    bool operator!() const;
+    explicit operator bool() const;
 };
 
 extern WXDLLIMPEXP_DATA_PROPGRID(wxPGGlobalVarsPtr) wxPGGlobalVars;
