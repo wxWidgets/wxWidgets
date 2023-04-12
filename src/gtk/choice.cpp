@@ -139,17 +139,6 @@ bool wxChoice::GTKHandleFocusOut()
     return wxChoiceBase::GTKHandleFocusOut();
 }
 
-void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
-{
-    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-    GtkTreeModel *model = gtk_combo_box_get_model( combobox );
-    GtkListStore *store = GTK_LIST_STORE( model );
-    GtkTreeIter iter;
-
-    gtk_list_store_insert_with_values(store, &iter, n, m_stringCellIndex,
-                                      text.utf8_str().data(), -1);
-}
-
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                             unsigned int pos,
                             void **clientData, wxClientDataType type)
@@ -163,6 +152,10 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 
     int n = wxNOT_FOUND;
 
+    GtkTreeIter iter;
+    GtkTreeModel *model = gtk_combo_box_get_model( GTK_COMBO_BOX( m_widget ) );
+    GtkListStore *store = GTK_LIST_STORE( model );
+
     gtk_widget_freeze_child_notify(m_widget);
 
     for ( int i = 0; i < count; ++i )
@@ -173,7 +166,8 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         if (m_strings)
             n = m_strings->Add(items[i]);
 
-        GTKInsertComboBoxTextItem( n, items[i] );
+        gtk_list_store_insert_with_values(store, &iter, n, m_stringCellIndex,
+                                          items[i].utf8_str().data(), -1);
 
         m_clientData.Insert( nullptr, n );
         AssignNewItemClientData(n, clientData, i, type);
