@@ -2779,7 +2779,6 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK2=
     WXGTK3=
     WXGTK4=
 
@@ -2875,8 +2874,7 @@ if test "$wxUSE_GUI" = "yes"; then
             3)      WXGTK3=1
                     TOOLKIT_VERSION=3
                     ;;
-            2.0)    WXGTK2=1
-                    TOOLKIT_VERSION=2
+            2.0)    TOOLKIT_VERSION=2
                     ;;
             *)      AC_MSG_ERROR([
 The development files for GTK+ were not found. Please
@@ -4706,9 +4704,9 @@ if test "$wxUSE_GTK" = 1 ; then
     if test "$WXGTK3" = 1 ; then
         AC_DEFINE_UNQUOTED(__WXGTK3__, 1)
     fi
-    if test "$WXGTK2" = 1 ; then
-      AC_DEFINE_UNQUOTED(__WXGTK20__,1)
-    fi
+    dnl Note that this is intentionally defined for GTK 3 (and later) too, as
+    dnl it was originally used to distinguish between GTK 1 and 2.
+    AC_DEFINE_UNQUOTED(__WXGTK20__,1)
 fi
 
 if test "$WXQT" = 1 ; then

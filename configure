@@ -26696,7 +26696,6 @@ if test "$wxUSE_GUI" = "yes"; then
 
     GUI_TK_LIBRARY=
 
-    WXGTK2=
     WXGTK3=
     WXGTK4=
 
@@ -27686,8 +27685,7 @@ $as_echo "$wx_cv_lib_gtk" >&6; }
             3)      WXGTK3=1
                     TOOLKIT_VERSION=3
                     ;;
-            2.0)    WXGTK2=1
-                    TOOLKIT_VERSION=2
+            2.0)    TOOLKIT_VERSION=2
                     ;;
             *)      as_fn_error $? "
 The development files for GTK+ were not found. Please
@@ -35454,12 +35452,10 @@ _ACEOF
 _ACEOF
 
     fi
-    if test "$WXGTK2" = 1 ; then
-      cat >>confdefs.h <<_ACEOF
+            cat >>confdefs.h <<_ACEOF
 #define __WXGTK20__ 1
 _ACEOF
 
-    fi
 fi
 
 if test "$WXQT" = 1 ; then
