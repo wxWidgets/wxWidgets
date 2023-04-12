@@ -43,7 +43,6 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/headerctrl.h"
-#include "wx/hashset.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
@@ -58,10 +57,6 @@ const char wxGridNameStr[] = "grid";
 
 // Required for wxIs... functions
 #include <ctype.h>
-
-WX_DECLARE_HASH_SET_WITH_DECL_PTR(int, wxIntegerHash, wxIntegerEqual,
-                                  wxGridFixedIndicesSet, class WXDLLIMPEXP_ADV);
-
 
 // ----------------------------------------------------------------------------
 // globals
@@ -103,10 +98,6 @@ namespace
 // scroll line size
 const size_t GRID_SCROLL_LINE_X = 15;
 const size_t GRID_SCROLL_LINE_Y = GRID_SCROLL_LINE_X;
-
-// the size of hash tables used a bit everywhere (the max number of elements
-// in these hash tables is the number of rows/columns)
-const int GRID_HASH_SIZE = 100;
 
 // the minimal distance in pixels the mouse needs to move to start a drag
 // operation
@@ -2662,9 +2653,6 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
     if (!wxScrolledCanvas::Create(parent, id, pos, size,
                                   style | wxWANTS_CHARS, name))
         return false;
-
-    m_colMinWidths = wxLongToLongHashMap(GRID_HASH_SIZE);
-    m_rowMinHeights = wxLongToLongHashMap(GRID_HASH_SIZE);
 
     Create();
     SetInitialSize(size);
@@ -10056,8 +10044,7 @@ void wxGrid::SetColMinimalWidth( int col, int width )
 {
     if (width > GetColMinimalAcceptableWidth())
     {
-        wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)col;
-        m_colMinWidths[key] = width;
+        m_colMinWidths[col] = width;
     }
 }
 
@@ -10065,25 +10052,22 @@ void wxGrid::SetRowMinimalHeight( int row, int width )
 {
     if (width > GetRowMinimalAcceptableHeight())
     {
-        wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)row;
-        m_rowMinHeights[key] = width;
+        m_rowMinHeights[row] = width;
     }
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
 {
-    wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)col;
-    wxLongToLongHashMap::const_iterator it = m_colMinWidths.find(key);
+    const auto it = m_colMinWidths.find(col);
 
-    return it != m_colMinWidths.end() ? (int)it->second : m_minAcceptableColWidth;
+    return it != m_colMinWidths.end() ? it->second : m_minAcceptableColWidth;
 }
 
 int wxGrid::GetRowMinimalHeight(int row) const
 {
-    wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)row;
-    wxLongToLongHashMap::const_iterator it = m_rowMinHeights.find(key);
+    const auto it = m_rowMinHeights.find(row);
 
-    return it != m_rowMinHeights.end() ? (int)it->second : m_minAcceptableRowHeight;
+    return it != m_rowMinHeights.end() ? it->second : m_minAcceptableRowHeight;
 }
 
 void wxGrid::SetColMinimalAcceptableWidth( int width )

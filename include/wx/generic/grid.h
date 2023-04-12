@@ -15,11 +15,11 @@
 
 #if wxUSE_GRID
 
-#include "wx/hashmap.h"
-
 #include "wx/scrolwin.h"
 
 #include <iterator>
+#include <unordered_map>
+#include <unordered_set>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -113,7 +113,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 class WXDLLIMPEXP_FWD_CORE wxDatePickerCtrl;
 #endif
 
-class wxGridFixedIndicesSet;
+using wxGridFixedIndicesSet = std::unordered_set<int>;
 
 class wxGridOperations;
 class wxGridRowOperations;
@@ -1459,8 +1459,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // hash map to store positions as the keys and sizes as the values
-WX_DECLARE_HASH_MAP_WITH_DECL( unsigned, int, wxIntegerHash, wxIntegerEqual,
-                               wxUnsignedToIntHashMap, class WXDLLIMPEXP_CORE );
+using wxUnsignedToIntHashMap = std::unordered_map<unsigned, int>;
 
 struct WXDLLIMPEXP_CORE wxGridSizesInfo
 {
@@ -2547,8 +2546,8 @@ protected:
 
     // if a column has a minimal width, it will be the value for it in this
     // hash table
-    wxLongToLongHashMap m_colMinWidths,
-                        m_rowMinHeights;
+    std::unordered_map<int, int> m_colMinWidths,
+                                 m_rowMinHeights;
 
     // get the minimal width of the given column/row
     int GetColMinimalWidth(int col) const;
