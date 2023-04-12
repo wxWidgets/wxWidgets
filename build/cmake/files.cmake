@@ -1594,7 +1594,6 @@ set(MSW_LOWLEVEL_SRC
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
-    src/msw/gdiobj.cpp
     src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/graphicsd2d.cpp
