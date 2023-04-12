@@ -12,7 +12,6 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
-#include "wx/hashmap.h"
 #include "wx/utils.h"
 #if defined( __cplusplus ) && defined( __VMS )
 #pragma message disable nosimpint
@@ -31,6 +30,8 @@
 #include <pango/pango.h>
 #endif
 
+#include <unordered_map>
+
 class WXDLLIMPEXP_FWD_CORE wxMouseEvent;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -40,7 +41,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 // corresponding to the window for this widget
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_HASH_MAP(Window, wxWindow *, wxIntegerHash, wxIntegerEqual, wxWindowHash);
+using wxWindowHash = std::unordered_map<Window, wxWindow*>;
 
 // these hashes are defined in app.cpp
 extern wxWindowHash *wxWidgetHashTable;
