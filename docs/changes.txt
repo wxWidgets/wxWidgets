@@ -251,6 +251,10 @@ All (GUI):
   using names for the months in short date format (#23310).
 - Fix wx-config output when using NanoSVG library (#23373).
 
+wxGTK:
+
+- Dramatically optimize adding many items to wxChoice (Ian McInerney, #23443).
+
 wxMSW:
 
 - Fix setting locale for wxLANGUAGE_UKRAINIAN (Ulrich Telle, #23210).

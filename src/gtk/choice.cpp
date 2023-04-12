@@ -141,11 +141,13 @@ bool wxChoice::GTKHandleFocusOut()
 
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
-#ifdef __WXGTK3__
-    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(m_widget), n, wxGTK_CONV(text));
-#else
-    gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n, wxGTK_CONV( text ) );
-#endif
+    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
+    GtkTreeModel *model = gtk_combo_box_get_model( combobox );
+    GtkListStore *store = GTK_LIST_STORE( model );
+    GtkTreeIter iter;
+
+    gtk_list_store_insert_with_values(store, &iter, n, m_stringCellIndex,
+                                      wxGTK_CONV(text).data(), -1);
 }
 
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
@@ -161,6 +163,8 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 
     int n = wxNOT_FOUND;
 
+    gtk_widget_freeze_child_notify(m_widget);
+
     for ( int i = 0; i < count; ++i )
     {
         n = pos + i;
@@ -174,6 +178,9 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         m_clientData.Insert( NULL, n );
         AssignNewItemClientData(n, clientData, i, type);
     }
+
+    gtk_widget_thaw_child_notify(m_widget);
+
 
     InvalidateBestSize();
 
