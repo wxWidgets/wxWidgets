@@ -19,10 +19,19 @@
 
 #include "wx/buffer.h"
 #include "wx/language.h"
-#include "wx/hashmap.h"
 #include "wx/strconv.h"
 
+// This is a hack, but this header used to include wx/hashmap.h which, in turn,
+// included wx/wxcrt.h and it turns out quite some existing code relied on it
+// by using the CRT wrapper functions declared there without explicitly
+// including that header, so keep including it from here to let it continue to
+// compile.
+#include "wx/wxcrt.h"
+
 #include <memory>
+#include <unordered_map>
+
+using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
 
 // ============================================================================
 // global decls
@@ -111,7 +120,7 @@ private:
     wxMsgCatalog *m_pNext;
     friend class wxTranslations;
 
-    wxStringToStringHashMap m_messages; // all messages in the catalog
+    wxTranslationsHashMap   m_messages; // all messages in the catalog
     wxString                m_domain;   // name of the domain
 
     wxPluralFormsCalculatorPtr m_pluralFormsCalculator;
@@ -195,7 +204,7 @@ private:
     // In addition to keeping all the catalogs in the linked list, we also
     // store them in a hash map indexed by the domain name to allow finding
     // them by name efficiently.
-    WX_DECLARE_HASH_MAP(wxString, wxMsgCatalog *, wxStringHash, wxStringEqual, wxMsgCatalogMap);
+    using wxMsgCatalogMap = std::unordered_map<wxString, wxMsgCatalog*>;
     wxMsgCatalogMap m_catalogMap;
 };
 
