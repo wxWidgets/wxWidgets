@@ -18,7 +18,6 @@
 #ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/list.h"
-    #include "wx/hash.h"
 #endif
 
 #include "wx/xti.h"

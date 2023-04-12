@@ -17,7 +17,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
-    #include "wx/hash.h"
     #include "wx/event.h"
 #endif
 

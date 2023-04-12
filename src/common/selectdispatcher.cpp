@@ -25,7 +25,6 @@
 #include "wx/unix/private.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/log.h"
     #include "wx/intl.h"
 #endif

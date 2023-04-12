@@ -24,7 +24,6 @@
     #include "wx/module.h"
     #include "wx/app.h"
     #include "wx/list.h"
-    #include "wx/hashmap.h"
     #include "wx/event.h"
 #endif
 

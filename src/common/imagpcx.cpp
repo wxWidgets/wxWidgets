@@ -19,7 +19,6 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/palette.h"
-    #include "wx/hash.h"
     #include "wx/module.h"
 #endif
 

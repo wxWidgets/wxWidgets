@@ -30,7 +30,6 @@
 #include "wx/vlbox.h"
 #include "wx/sizer.h"
 #include "wx/renderer.h"
-#include "wx/hashset.h"
 #include "wx/dcclient.h"
 #include "wx/wupdlock.h"
 
