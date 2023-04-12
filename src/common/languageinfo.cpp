@@ -28,18 +28,19 @@
     #include "wx/msw/private.h"
 #endif
 
+#include <unordered_map>
+
 // ----------------------------------------------------------------------------
 // default languages table & initialization
 // ----------------------------------------------------------------------------
 
 // Hash maps to look up language script aliases from script names and vice versa
-#include "wx/hashmap.h"
-static wxStringToStringHashMap gs_scmap_name2alias;
-static wxStringToStringHashMap gs_scmap_alias2name;
+static std::unordered_map<wxString, wxString> gs_scmap_name2alias;
+static std::unordered_map<wxString, wxString> gs_scmap_alias2name;
 
 /* static */ wxString wxUILocale::GetScriptAliasFromName(const wxString& scriptName)
 {
-    wxStringToStringHashMap::iterator scIter = gs_scmap_name2alias.find(scriptName);
+    const auto scIter = gs_scmap_name2alias.find(scriptName);
     if (scIter != gs_scmap_name2alias.end())
         return scIter->second;
     else
@@ -48,7 +49,7 @@ static wxStringToStringHashMap gs_scmap_alias2name;
 
 /* static */ wxString wxUILocale::GetScriptNameFromAlias(const wxString& scriptAlias)
 {
-    wxStringToStringHashMap::iterator scIter = gs_scmap_alias2name.find(scriptAlias);
+    const auto scIter = gs_scmap_alias2name.find(scriptAlias);
     if (scIter != gs_scmap_alias2name.end())
         return scIter->second;
     else
