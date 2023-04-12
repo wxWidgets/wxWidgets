@@ -136,8 +136,7 @@ public:
         Horizontal and vertical resolution are returned in @c x and @c y
         components of the wxSize object respectively.
 
-        If the resolution information is not available, returns @code wxSize(0,
-        0) @endcode.
+        If the resolution information is not available, returns `wxSize(0, 0)`.
 
         @since 3.1.2
      */
