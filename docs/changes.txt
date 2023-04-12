@@ -90,6 +90,14 @@ Changes in behaviour which may result in build errors
 - wxMotif and wxGTK1 ports have been removed, please use wxWidgets 3.2 if you
   still need them.
 
+- Several private container classes that never made part of wxWidgets public
+  API have been removed. If you used any of them (e.g. wxSimpleDataObjectList)
+  in your code, please switch to using std::vector<> or std::list<> instead.
+  Some other legacy "object array" classes (e.g. wxImageArray) still exist, but
+  are now similar to std::vector<> containing the objects -- they remain mostly
+  compatible with the previous wxWidgets versions, but now compare values, and
+  not pointers, in their Index() member function.
+
 - Generic wxSearchCtrl doesn't provide methods that make sense only for
   multiline text controls any longer, for consistency with the other ports.
 
