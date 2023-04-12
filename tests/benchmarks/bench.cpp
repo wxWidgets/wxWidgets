@@ -20,6 +20,7 @@
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/stopwatch.h"
+#include "wx/uilocale.h"
 
 #if wxUSE_GUI
     #include "wx/frame.h"
@@ -116,6 +117,9 @@ bool BenchApp::OnInit()
 {
     if ( !BenchAppBase::OnInit() )
         return false;
+
+    // Some benchmarks are locale-sensitive, so use the current locale.
+    wxUILocale::UseDefault();
 
     wxPrintf("wxWidgets benchmarking program\n"
              "Build: %s\n", WX_BUILD_OPTIONS_SIGNATURE);

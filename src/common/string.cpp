@@ -20,7 +20,6 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/wxcrtvararg.h"
-    #include "wx/intl.h"
     #include "wx/log.h"
 #endif
 
@@ -1560,7 +1559,119 @@ bool wxString::ToDouble(double *pVal) const
            );
 }
 
-#if wxUSE_XLOCALE
+// There are several possibilities for implementing the conversion functions
+// always using "C" locale:
+//
+//  1. Preferred one: use C++17 <charconv>, this is the fastest way to do it.
+//  2. Use <xlocale.h> if it's available.
+//  3. Use standard locale-dependent C functions and adjust them for the
+//     current locale (slowest and the least robust).
+
+// Check if C++17 <charconv> is available.
+#if wxCHECK_CXX_STD(201703L)
+#include <charconv>
+#endif
+
+// Now check if the functions we need are present in it (normally they ought
+// to if the compiler claims to support C++17, but it doesn't hurt to check).
+#ifdef __cpp_lib_to_chars
+
+bool wxString::ToCLong(long *pVal, int base) const
+{
+    wxCHECK_MSG( pVal, false, "null output pointer" );
+
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    // from_chars() doesn't recognize base==0 and doesn't recognize "0x" prefix
+    // even if base 16 is explicitly specified, so adjust the input to use the
+    // form it supports.
+    if ( buf.length() > 1 && *start == '0' )
+    {
+        ++start;
+        if ( *start == 'x' || *start == 'X' )
+        {
+            ++start;
+            if ( base == 0 )
+                base = 16;
+            else if ( base != 16 )
+                return false;
+        }
+        else
+        {
+            if ( base == 0 )
+                base = 8;
+        }
+    }
+
+    if ( base == 0 )
+        base = 10;
+
+    const auto res = std::from_chars(start, end, *pVal, base);
+
+    return res.ec == std::errc{} && res.ptr == end;
+}
+
+bool wxString::ToCULong(unsigned long *pVal, int base) const
+{
+    // We intentionally don't use std::from_chars() here because this function
+    // is supposed to be compatible with strtoul() and so _succeed_ for "-1",
+    // for example, instead of returning an error as from_chars() (much more
+    // logically) does.
+
+    wxCHECK_MSG( pVal, false, "null output pointer" );
+
+    long l;
+    if ( !ToCLong(&l, base) )
+        return false;
+
+    *pVal = static_cast<unsigned long>(l);
+
+    return true;
+}
+
+bool wxString::ToCDouble(double *pVal) const
+{
+    wxCHECK_MSG( pVal, false, "null output pointer" );
+
+    const wxScopedCharBuffer& buf = utf8_str();
+    const auto start = buf.data();
+    const auto end = start + buf.length();
+    const auto res = std::from_chars(start, end, *pVal);
+
+    return res.ec == std::errc{} && res.ptr == end;
+}
+
+wxString wxString::FromCDouble(double val, int precision)
+{
+    wxCHECK_MSG( precision >= -1, wxString(), "Invalid negative precision" );
+
+    // 64 digits is more than enough for any double.
+    char buf[64];
+    const auto start = buf;
+    const auto end = buf + sizeof(buf);
+
+    std::to_chars_result res;
+
+    // Note that we must explicitly specify the precision to remain compatible
+    // with the behaviour of sprintf("%g"): by default, the result would be the
+    // shortest string avoiding precision loss, but "%g" is supposed to
+    // truncate, so use its default precision explicitly to achieve this here.
+    if ( precision == -1 )
+        res = std::to_chars(start, end, val, std::chars_format::general, 6);
+    else
+        res = std::to_chars(start, end, val, std::chars_format::fixed, precision);
+
+    if ( res.ec != std::errc{} )
+        return {};
+
+    *res.ptr = '\0';
+
+    return wxString::FromAscii(buf);
+}
+
+#elif wxUSE_XLOCALE
 
 bool wxString::ToCLong(long *pVal, int base) const
 {
@@ -1636,30 +1747,31 @@ bool wxString::ToCDouble(double *pVal) const
 {
     // See the explanations in FromCDouble() below for the reasons for all this.
 
-    // Create a copy of this string using the decimal point instead of whatever
-    // separator the current locale uses.
-#if wxUSE_INTL
-    wxString sep = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT,
-                                                    wxLOCALE_CAT_NUMBER);
-    if ( sep == "." )
-    {
-        // We can avoid an unnecessary string copy in this case.
-        return ToDouble(pVal);
-    }
-#else // !wxUSE_INTL
-    // We don't know what the current separator is so it might even be a point
-    // already, try to parse the string as a double:
+    // Try parsing using the current locale separator.
     if ( ToDouble(pVal) )
     {
-        // It must have been the point, nothing else to do.
+        if ( find(',') != npos )
+        {
+            // Can't be a valid number in C locale.
+            return false;
+        }
+
+        // Either current decimal separator is the point or this string doesn't
+        // contain any decimal separator at all, in either case the result must
+        // be correct and we don't have anything else to do.
         return true;
     }
 
-    // Try to guess the separator, using the most common alternative value.
-    wxString sep(",");
-#endif // wxUSE_INTL/!wxUSE_INTL
+    // Try to replace the separator with the only alternative value.
+    const size_t posPeriod = find('.');
+    if ( posPeriod == npos )
+    {
+        // No separator at all, so no need to retry with an alternative one.
+        return false;
+    }
+
     wxString cstr(*this);
-    cstr.Replace(".", sep);
+    cstr[posPeriod] = ',';
 
     return cstr.ToDouble(pVal);
 }
@@ -1688,38 +1800,29 @@ wxString wxString::FromDouble(double val, int precision)
     return wxString::Format(format, val);
 }
 
+#ifndef __cpp_lib_to_chars
+
 /* static */
 wxString wxString::FromCDouble(double val, int precision)
 {
     wxCHECK_MSG( precision >= -1, wxString(), "Invalid negative precision" );
 
-    // Unfortunately there is no good way to get the number directly in the C
-    // locale. Some platforms provide special functions to do this (e.g.
-    // _sprintf_l() in MSVS or sprintf_l() in BSD systems), but some systems we
-    // still support don't have them and it doesn't seem worth it to have two
-    // different ways to do the same thing. Also, in principle, using the
-    // standard C++ streams should allow us to do it, but some implementations
-    // of them are horribly broken and actually change the global C locale,
-    // thus randomly affecting the results produced in other threads, when
-    // imbue() stream method is called (for the record, the latest libstdc++
-    // version included in OS X does it and so seem to do the versions
-    // currently included in Android NDK and both FreeBSD and OpenBSD), so we
-    // can't do this either and are reduced to this hack.
+    // Without std::to_chars() there is no portable way to get the number
+    // directly in the C locale and while some platforms provide special
+    // functions to do this (e.g. _sprintf_l() in MSVS or sprintf_l() in BSD
+    // systems), some systems we still support don't have them, so just use
+    // the hack below and replace any occurrences of a comma (which is the only
+    // alternative decimal separator that can be really used) with a period.
 
     wxString s = FromDouble(val, precision);
-#if wxUSE_INTL
-    wxString sep = wxUILocale::GetCurrent().GetInfo(wxLOCALE_DECIMAL_POINT,
-                                                    wxLOCALE_CAT_NUMBER);
-#else // !wxUSE_INTL
-    // As above, this is the most common alternative value. Notice that here it
-    // doesn't matter if we guess wrongly and the current separator is already
-    // ".": we'll just waste a call to Replace() in this case.
-    wxString sep(",");
-#endif // wxUSE_INTL/!wxUSE_INTL
+    const size_t posComma = s.find(',');
+    if ( posComma != npos )
+        s[posComma] = '.';
 
-    s.Replace(sep, ".");
     return s;
 }
+
+#endif // !__cpp_lib_to_chars
 
 // ---------------------------------------------------------------------------
 // formatted output

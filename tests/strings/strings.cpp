@@ -668,6 +668,10 @@ TEST_CASE("StringToLong", "[wxString]")
         if ( ld.flags & (Number_LongLong | Number_Unsigned) )
             continue;
 
+        INFO("Checking test case #" << (n + 1) << ": "
+             "\"" << wxString{ld.str} << "\" "
+             "(flags=" << ld.flags << ", base=" << ld.base << ")");
+
         // NOTE: unless you're using some exotic locale, ToCLong and ToLong
         //       should behave the same for our test data set:
 
@@ -701,6 +705,10 @@ TEST_CASE("StringToULong", "[wxString]")
 
         if ( ld.flags & (Number_LongLong | Number_Signed) )
             continue;
+
+        INFO("Checking test case #" << (n + 1) << ": "
+             "\"" << wxString{ld.str} << "\" "
+             "(flags=" << ld.flags << ", base=" << ld.base << ")");
 
         // NOTE: unless you're using some exotic locale, ToCLong and ToLong
         //       should behave the same for our test data set:
