@@ -98,14 +98,12 @@ struct FileInfo
 
 using FileInfoMap = std::unordered_map<wxString, FileInfo>;
 
-// Cygwin bug (?) destructor for global s_fileInfo is called twice...
 static FileInfoMap& GetFileInfoMap()
 {
     static FileInfoMap s_fileInfo(25);
 
     return s_fileInfo;
 }
-#define s_fileInfo (GetFileInfoMap())
 
 } // anonymous namespace
 
@@ -187,7 +185,7 @@ static unsigned GetBasicFlags(const wxChar* filename)
     //------------------
     // Flags are cached.
     //------------------
-    s_fileInfo[filename] = FileInfo(flags, type);
+    GetFileInfoMap()[filename] = FileInfo(flags, type);
 
     return flags;
 } // GetBasicFlags
@@ -302,7 +300,7 @@ static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc,
                         // Volumes on disconnected servers, however, will correctly show as unmounted.
                         FilteredAdd(list, filename.t_str(), flagsSet, flagsUnset&~wxFS_VOL_MOUNTED);
                         if (scope == RESOURCE_GLOBALNET)
-                            s_fileInfo[filename].m_flags &= ~wxFS_VOL_MOUNTED;
+                            GetFileInfoMap()[filename].m_flags &= ~wxFS_VOL_MOUNTED;
                     }
                 }
             }
@@ -386,7 +384,7 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
                 if (flagsUnset & wxFS_VOL_MOUNTED)
                     list.RemoveAt(iList);
                 else
-                    s_fileInfo[list[iList]].m_flags |= wxFS_VOL_MOUNTED;
+                    GetFileInfoMap()[list[iList]].m_flags |= wxFS_VOL_MOUNTED;
 
             }
 
@@ -540,8 +538,8 @@ wxFSVolumeKind wxFSVolumeBase::GetKind() const
     if (!m_isOk)
         return wxFS_VOL_OTHER;
 
-    FileInfoMap::iterator itr = s_fileInfo.find(m_volName);
-    if (itr == s_fileInfo.end())
+    FileInfoMap::iterator itr = GetFileInfoMap().find(m_volName);
+    if (itr == GetFileInfoMap().end())
         return wxFS_VOL_OTHER;
 
     return itr->second.m_type;
@@ -557,8 +555,8 @@ int wxFSVolumeBase::GetFlags() const
     if (!m_isOk)
         return -1;
 
-    FileInfoMap::iterator itr = s_fileInfo.find(m_volName);
-    if (itr == s_fileInfo.end())
+    FileInfoMap::iterator itr = GetFileInfoMap().find(m_volName);
+    if (itr == GetFileInfoMap().end())
         return -1;
 
     return itr->second.m_flags;
