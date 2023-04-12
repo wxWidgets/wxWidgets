@@ -117,33 +117,12 @@ public:
 
     // Implementation
 
-#if wxUSE_PANGO
     // Set Pango attributes in the specified layout. Currently only
     // underlined and strike-through attributes are handled by this function.
     //
     // If neither of them is specified, returns false, otherwise sets up the
     // attributes and returns true.
     bool SetPangoAttrs(PangoLayout* layout) const;
-#else
-    // Find an existing, or create a new, XFontStruct
-    // based on this wxFont and the given scale. Append the
-    // font to list in the private data for future reference.
-
-    // TODO This is a fairly basic implementation, that doesn't
-    // allow for different facenames, and also doesn't do a mapping
-    // between 'standard' facenames (e.g. Arial, Helvetica, Times Roman etc.)
-    // and the fonts that are available on a particular system.
-    // Maybe we need to scan the user's machine to build up a profile
-    // of the fonts and a mapping file.
-
-    // Return font struct, and optionally the font list
-    wxXFont *GetInternalFont(double scale = 1.0,
-        WXDisplay* display = nullptr) const;
-
-    // Helper function for convenient access of the above.
-    WXFontStructPtr GetFontStruct(double scale = 1.0,
-        WXDisplay* display = nullptr) const;
-#endif
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
