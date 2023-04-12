@@ -29,7 +29,6 @@
     #endif
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/hashmap.h"
     #include "wx/filefn.h"
 #endif // WX_PRECOMP
 
@@ -44,6 +43,8 @@
 #include "wx/msw/missing.h"
 
 #if wxUSE_BASE
+
+#include <unordered_map>
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Dynamic library function defs.
@@ -75,6 +76,9 @@ static WNetCloseEnumPtr s_pWNetCloseEnum;
 
 static wxInterlockedArg_t s_cancelSearch = FALSE;
 
+namespace
+{
+
 struct FileInfo
 {
     FileInfo(unsigned flag=0, wxFSVolumeKind type=wxFS_VOL_OTHER) :
@@ -91,7 +95,9 @@ struct FileInfo
     unsigned m_flags;
     wxFSVolumeKind m_type;
 };
-WX_DECLARE_STRING_HASH_MAP(FileInfo, FileInfoMap);
+
+using FileInfoMap = std::unordered_map<wxString, FileInfo>;
+
 // Cygwin bug (?) destructor for global s_fileInfo is called twice...
 static FileInfoMap& GetFileInfoMap()
 {
@@ -100,6 +106,8 @@ static FileInfoMap& GetFileInfoMap()
     return s_fileInfo;
 }
 #define s_fileInfo (GetFileInfoMap())
+
+} // anonymous namespace
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Local helper functions.
