@@ -56,7 +56,6 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/hashmap.h"
 #include "wx/popupwin.h"
 #include "wx/power.h"
 #include "wx/scopeguard.h"
@@ -121,6 +120,8 @@
     #define MAPVK_VK_TO_CHAR 2
 #endif
 
+#include <unordered_map>
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -158,17 +159,11 @@ struct MouseEventInfoDummy
 } gs_lastMouseEvent;
 
 // hash containing the registered handlers for the custom messages
-WX_DECLARE_HASH_MAP(int, wxWindow::MSWMessageHandler,
-                    wxIntegerHash, wxIntegerEqual,
-                    MSWMessageHandlers);
-
+using MSWMessageHandlers = std::unordered_map<int, wxWindow::MSWMessageHandler>;
 MSWMessageHandlers gs_messageHandlers;
 
 // hash containing all our windows, it uses HWND keys and wxWindow* values
-WX_DECLARE_HASH_MAP(HWND, wxWindow *,
-                    wxPointerHash, wxPointerEqual,
-                    WindowHandles);
-
+using WindowHandles = std::unordered_map<HWND, wxWindow*>;
 WindowHandles gs_windowHandles;
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
@@ -176,10 +171,7 @@ WindowHandles gs_windowHandles;
 // temporary override for WM_ERASEBKGND processing: we don't store this in
 // wxWindow itself as we don't need it during most of the time so don't
 // increase the size of all window objects unnecessarily
-WX_DECLARE_HASH_MAP(wxWindow *, wxWindow *,
-                    wxPointerHash, wxPointerEqual,
-                    EraseBgHooks);
-
+using EraseBgHooks = std::unordered_map<wxWindow*, wxWindow*>;
 EraseBgHooks gs_eraseBgHooks;
 
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
