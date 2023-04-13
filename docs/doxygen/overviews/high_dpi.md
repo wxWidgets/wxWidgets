@@ -307,7 +307,7 @@ programs involves doing at least the following:
 Platform-Specific Build Issues      {#high_dpi_platform_specific}
 ==============================
 
-Generally speaking, all systems handle applications not specifically marked as
+Some platforms handle applications not specifically marked as
 being "DPI-aware" by emulating low-resolution display for them and scaling them
 up, resulting in blurry graphics and fonts, but globally preserving the
 application appearance. For the best results, the application needs to be
@@ -337,3 +337,15 @@ DPI-aware applications must set their `NSPrincipalClass` to `wxNSApplication`
 resolution guidelines][apple-highdpi] for more information.
 
 [apple-highdpi]: https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
+
+GTK                                 {#high_dpi_platform_gtk}
+---
+
+GTK 3 doesn't require anything special to be done and, in fact, doesn't support
+scaling the application up automatically, i.e. all applications are DPI-aware.
+However wxGTK only supports integer scaling factors currently and fractional
+scales are rounded to the closest integer.
+
+Older GTK 2 doesn't support application-level DPI-awareness at all and only
+supports scaling them up globally on high DPI displays by setting `GDK_SCALE`
+or `GDK_DPI_SCALE` environment variables.
