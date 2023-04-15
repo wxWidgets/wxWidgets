@@ -1497,14 +1497,12 @@ public:
     bool Shrink();
 
     /**
-        Returns a deep copy of the string.
+        Returns a copy of the string.
 
-        That is, the returned string is guaranteed to not share data with this
-        string when using reference-counted wxString implementation.
-
-        This method is primarily useful for passing strings between threads
-        (because wxString is not thread-safe). Unlike creating a copy using
-        @c wxString(c_str()), Clone() handles embedded NULs correctly.
+        This method is obsolete as wxString doesn't use reference-counted
+        implementation any longer and so all string copies are deep and
+        assignment operator or copy constructor can be used instead of this
+        function.
 
         @since 2.9.0
      */
