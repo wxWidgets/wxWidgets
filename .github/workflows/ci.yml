@@ -94,10 +94,10 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --disable-shared
             use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 STL
+          - name: Ubuntu 18.04 wxGTK 3 compatible 3.0
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --enable-stl --enable-compat30
+            configure_flags: --enable-compat30
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-20.04

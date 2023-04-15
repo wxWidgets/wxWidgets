@@ -62,18 +62,6 @@
 // Recommended setting: 0
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
-// Provide unsafe implicit conversions in wxString to "const char*" or
-// "std::string" (depending on wxUSE_STD_STRING_CONV_IN_WXSTRING value).
-//
-// Default is 1 but only for compatibility reasons, it is recommended to set
-// this to 0 because converting wxString to a narrow (non-Unicode) string may
-// fail unless a locale using UTF-8 encoding is used, which is never the case
-// under MSW, for example, hence such conversions can result in silent data
-// loss.
-//
-// Recommended setting: 0
-#define wxUSE_UNSAFE_WXSTRING_CONV 1
-
 // If set to 1, enables "reproducible builds", i.e. build output should be
 // exactly the same if the same build is redone again. As using __DATE__ and
 // __TIME__ macros clearly makes the build irreproducible, setting this option
@@ -279,15 +267,6 @@
 // Interoperability with the standard library.
 // ----------------------------------------------------------------------------
 
-// Set wxUSE_STL to 1 to enable maximal interoperability with the standard
-// library, even at the cost of backwards compatibility.
-//
-// Default is 0
-//
-// Recommended setting: 1 for new code bases and if compatibility with the
-// official build of the library is not important, 0 otherwise.
-#define wxUSE_STL 0
-
 // Use standard C++ containers to implement all wx container classes.
 //
 // Default is 1.
@@ -306,24 +285,51 @@
 //
 // Recommended setting: 1.
 #define wxUSE_STD_IOSTREAM  1
-// Make wxString as much interchangeable with std::[w]string as possible, in
-// particular allow implicit conversion of wxString to either of these classes.
-// This comes at a price (or a benefit, depending on your point of view) of not
-// allowing implicit conversion to "const char *" and "const wchar_t *".
+
+// ----------------------------------------------------------------------------
+// wxString-related options
+// ----------------------------------------------------------------------------
+
+// Provide unsafe implicit conversions in wxString to "const char*" or
+// "std::string" (depending on wxUSE_STD_STRING_CONV_IN_WXSTRING value).
 //
-// Because a lot of existing code relies on these conversions, this option is
-// disabled by default but can be enabled for your build if you don't care
-// about compatibility.
+// Default is 1 for compatibility reasons, it is recommended to set
+// this to 0 because converting wxString to a narrow (non-Unicode) string may
+// fail unless a locale using UTF-8 encoding is used, which is never the case
+// under MSW, for example, hence such conversions can result in silent data
+// loss.
+//
+// Recommended setting: 1 to remain compatible with the official builds of
+// wxWidgets, but define wxNO_UNSAFE_WXSTRING_CONV when compiling the
+// application code to effectively disallow using these conversions.
+#define wxUSE_UNSAFE_WXSTRING_CONV 1
+
+// Define implicit conversions of wxString to "const wchar_t*" and "const
+// char*" if wxUSE_UNSAFE_WXSTRING_CONV is also enabled.
+//
+// Default is 1.
+//
+// Recommended setting: 1 to remain compatible with the official builds of
+// wxWidgets but may be set to 0 to prevent any accidental conversions from
+// happening.
+#define wxUSE_CHAR_CONV_IN_WXSTRING 1
+
+// Define implicit conversions of wxString to std::wstring and std::string if
+// wxUSE_UNSAFE_WXSTRING_CONV is also enabled.
 //
 // Note that wxString can always be constructed from std::[w]string, whether
 // this option is turned on or off, it only enables implicit conversion in the
 // other direction.
 //
-// Default is 0 if wxUSE_STL has its default value or 1 if it is enabled.
+// If this setting is changed to 1, wxUSE_CHAR_CONV_IN_WXSTRING must be set to
+// 0 as setting both of them to 1 will result in ambiguities due to having too
+// many implicit conversions defined.
 //
-// Recommended setting: 0 to remain compatible with the official builds of
-// wxWidgets.
-#define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
+// Default is 0.
+//
+// Recommended setting: 0, use wxString::ToStdWstring() and ToStdString() or,
+// preferably, utf8_string() explicitly instead.
+#define wxUSE_STD_STRING_CONV_IN_WXSTRING 0
 
 // ----------------------------------------------------------------------------
 // non GUI features selection

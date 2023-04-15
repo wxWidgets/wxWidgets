@@ -82,10 +82,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: wxMac ARM C++11 STL
+        - name: wxMac ARM with ASAN
           runner: self-hosted
           arch: arm64
-          configure_flags: --with-cxx=11 --enable-stl
           use_asan: true
         - name: wxMac Intel C++17
           runner: self-hosted

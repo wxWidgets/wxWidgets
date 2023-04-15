@@ -114,8 +114,6 @@
 
 #cmakedefine01 wxDIALOG_UNIT_COMPATIBILITY
 
-#cmakedefine01 wxUSE_UNSAFE_WXSTRING_CONV
-
 #cmakedefine01 wxUSE_REPRODUCIBLE_BUILD
 
 
@@ -154,12 +152,16 @@
 #cmakedefine01 wxUSE_PRINTF_POS_PARAMS
 
 
-#cmakedefine01 wxUSE_STL
-
 #cmakedefine01 wxUSE_STD_CONTAINERS
 
 #cmakedefine01 wxUSE_STD_IOSTREAM
-#define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
+
+
+#cmakedefine01 wxUSE_UNSAFE_WXSTRING_CONV
+
+#cmakedefine01 wxUSE_CHAR_CONV_IN_WXSTRING
+
+#cmakedefine01 wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 
 #cmakedefine01 wxUSE_LONGLONG

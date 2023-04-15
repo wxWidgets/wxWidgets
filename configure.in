@@ -639,9 +639,10 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
 AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          obsolete option doing nothing])
 AC_ARG_WITH(cxx,           [  --with-cxx=11|14|17|20  use the given C++ dialect], [wxWITH_CXX="$withval"])
-WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
+WX_ARG_ENABLE(stl,         [  --enable-stl            obsolete option doing nothing], wxUSE_STL)
 WX_ARG_DISABLE(std_containers,[  --disable-std_containers disable use of standard C++ container classes], wxUSE_STD_CONTAINERS)
 WX_ARG_DISABLE(std_iostreams,[  --disable-std_iostreams  disable use of standard C++ stream classes], wxUSE_STD_IOSTREAM)
+WX_ARG_DISABLE(char_conv_in_wxstring, [ --disable-char_conv_in_wxstring     disable implicit conversion to const wchar_t/char* in wxString], wxUSE_CHAR_CONV_IN_WXSTRING)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unsafe_conv_in_wxstring,     [ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString], wxUSE_UNSAFE_WXSTRING_CONV)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings], wxUSE_UNICODE_UTF8)
@@ -5088,7 +5089,7 @@ dnl Register non-GUI class options for makefiles and setup.h
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_STL" = "yes"; then
-  AC_DEFINE(wxUSE_STL)
+  AC_MSG_WARN([--enable-stl option is not needed any more and can be simply removed])
 fi
 
 if test "$wxUSE_EXTENDED_RTTI" = "yes"; then
@@ -5388,6 +5389,10 @@ fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_STD_IOSTREAM)
+fi
+
+if test "$wxUSE_CHAR_CONV_IN_WXSTRING" = "yes"; then
+  AC_DEFINE(wxUSE_CHAR_CONV_IN_WXSTRING)
 fi
 
 if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
@@ -8178,7 +8183,6 @@ echo "                                       wxWidgets 3.0      ${WXWIN_COMPATIB
 echo "                                       wxWidgets 3.2      ${WXWIN_COMPATIBILITY_3_2:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
-echo "                                       STL                ${wxUSE_STL}"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"

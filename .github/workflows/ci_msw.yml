@@ -76,7 +76,6 @@ jobs:
           - configuration: 'DLL Release'
             platform: 'x64'
             vsversion: 2019
-            use_stl: true
 
     steps:
       - name: Checkout
@@ -87,12 +86,10 @@ jobs:
       - name: Configure build options
         working-directory: include/wx/msw
         run: |
-            $use_stl = "${{ matrix.use_stl }}" ? 1 : 0
             $use_utf8 = "${{ matrix.use_utf8 }}" ? 1 : 0
-            if ( $use_stl -or $use_utf8 ) {
+            if ( $use_utf8 ) {
               $txt = Get-Content setup.h
               Write-Output $txt |
-              %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $use_stl"} |
               %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
               Set-Content setup.h
             }
