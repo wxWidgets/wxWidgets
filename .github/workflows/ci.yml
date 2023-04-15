@@ -104,6 +104,10 @@ jobs:
             compiler: clang++-10
             configure_flags: --disable-sys-libs
             use_xvfb: true
+          - name: Ubuntu 22.04 wxGTK with wx containers
+            runner: ubuntu-22.04
+            configure_flags: --enable-compat30 --disable-std_containers
+            use_xvfb: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
             configure_flags: --disable-compat32 --disable-sys-libs

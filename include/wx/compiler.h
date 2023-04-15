@@ -80,8 +80,15 @@
         #if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 4)
             #error "This clang version is not supported any longer (at least clang 3.4 required)."
         #endif
-    #elif !wxCHECK_GCC_VERSION(4, 8)
-        #error "This gcc version is not supported any longer (at least gcc 4.8 required)."
+    #else
+        #if !wxCHECK_GCC_VERSION(4, 8)
+            #error "This gcc version is not supported any longer (at least gcc 4.8 required, gcc 6 or later recommended)."
+        #endif
+
+        /* Define a special symbol used to work around 4.8 problems. */
+        #if __GNUC__ == 4 && __GNUC_MINOR__ == 8
+            #define wxGCC_4_8
+        #endif
     #endif
 #else
     #define wxCHECK_GCC_VERSION( major, minor ) 0

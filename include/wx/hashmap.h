@@ -14,16 +14,22 @@
 #include "wx/string.h"
 #include "wx/wxcrt.h"
 
-#if wxUSE_STD_CONTAINERS
+// wxUSE_STD_CONTAINERS can't be used with gcc 4.8 due to a bug in its standard
+// library (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56278) which was fixed
+// a very long time ago but is still present in the latest available versions
+// of this compiler in Ubuntu and RHEL, so don't use the standard class with it.
+#if !wxUSE_STD_CONTAINERS || defined(wxGCC_4_8)
+    #define wxNEEDS_WX_HASH_MAP
+#endif
+
+#ifndef wxNEEDS_WX_HASH_MAP
 
 #include <unordered_map>
 
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
     typedef std::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
 
-#else // !wxUSE_STD_CONTAINERS
-
-#define wxNEEDS_WX_HASH_MAP
+#else // wxNEEDS_WX_HASH_MAP
 
 #include <stddef.h>             // for ptrdiff_t
 

@@ -10,7 +10,8 @@
 
     wxArrayString is a legacy class similar to std::vector<wxString>.
 
-    This class shouldn't normally be used in the new code, but is still needed
+    As all the other legacy @ref overview_container "container classes",
+    this class shouldn't normally be used in the new code, but is still needed
     when passing multiple items to various functions in wxWidgets API, notably
     the constructors of various GUI control classes. Usually, even in this case
     it doesn't need to be used explicitly, as wxArrayString will be implicitly
@@ -123,8 +124,10 @@ public:
     /**
         Constructs the container with the contents of the vector @a vec.
 
-        When using @ref overview_container_std, this constructor is more
-        efficient than the overload taking const reference to the vector.
+        In the default build, in which wxArrayString is implemented using
+        `std::vector<>` internally, this constructor is more efficient than the
+        overload taking const reference to the vector, as it reuses the
+        existing vector data instead of copying it.
         Otherwise it is identical to the other overload, see its documentation
         for more details.
 
@@ -158,17 +161,18 @@ public:
     /**
         Constructs a std::vector containing the same strings as this array.
 
-        In @ref overview_container_std, this function actually returns a const
-        reference to this object itself, without making a copy, but in the
-        default/compatible build, it has to copy all the strings, making it
-        expensive to call for big arrays.
+        In the default build configuration, this function returns a const
+        reference to this object itself, without making a copy. But when using
+        the legacy implementation of wxArrayString not based on `std::vector`,
+        it has to copy all the strings, making it expensive to call for big
+        arrays.
 
         Note that using it like this:
         @code
         const std::vector<wxString>& vec = array.AsVector();
         @endcode
-        works in all builds as long as you don't need to modify the returned
-        vector and doesn't impose any extra overhead in the STL build.
+        works in all build variants as long as you don't need to modify the
+        returned vector and doesn't impose any extra overhead.
 
         @since 3.3.0
     */

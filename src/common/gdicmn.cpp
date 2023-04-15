@@ -954,14 +954,3 @@ wxSize wxGetDisplayPPI()
 {
     return wxDisplay().GetPPI();
 }
-
-wxResourceCache::~wxResourceCache ()
-{
-    wxList::compatibility_iterator node = GetFirst ();
-    while (node) {
-        wxObject *item = (wxObject *)node->GetData();
-        delete item;
-
-        node = node->GetNext ();
-    }
-}
