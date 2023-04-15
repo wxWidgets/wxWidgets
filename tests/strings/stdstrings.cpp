@@ -614,7 +614,7 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 
     wxString s4("hello");
 
-#if wxUSE_STD_STRING_CONV_IN_WXSTRING && wxUSE_UNSAFE_WXSTRING_CONV
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING && !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s5 = s4;
 #else
     std::string s5 = s4.ToStdString();
@@ -629,7 +629,7 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
     CHECK( s6 == L"hello" );
 
 #if wxUSE_STD_STRING_CONV_IN_WXSTRING
-#if wxUSE_UNSAFE_WXSTRING_CONV
+#if !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s7(s4);
     CHECK( s7 == "hello" );
 #endif

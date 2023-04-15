@@ -1020,7 +1020,7 @@ TEST_CASE("StringCStrDataImplicitConversion", "[wxString]")
 
 #if wxUSE_CHAR_CONV_IN_WXSTRING
     CHECK( CheckStrConstWChar(s, s) );
-#if wxUSE_UNSAFE_WXSTRING_CONV
+#ifndef wxNO_UNSAFE_WXSTRING_CONV
     CHECK( CheckStrConstChar(s, s) );
 #endif
 #endif
