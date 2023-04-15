@@ -33,9 +33,8 @@
     wxString tries to be similar to both @c std::string and @c std::wstring and
     can mostly be used as either class. It provides practically all of the
     methods of these classes, which behave exactly the same as in the standard
-    C++, and so are not documented here (please see any standard library
-    documentation, for example http://en.cppreference.com/w/cpp/string for more
-    details).
+    C++, and so are not documented here (please see documentation at
+    https://en.cppreference.com/w/cpp/string/basic_string for this).
 
     In addition to these standard methods, wxString adds functions dealing with
     the conversions between different string encodings, described below, as
@@ -57,23 +56,46 @@
         - ASCII string guaranteed to contain only 7 bit characters using
         wxString::FromAscii().
         - Narrow @c char* string in the current locale encoding using implicit
-        wxString::wxString(const char*) constructor.
+        wxString::wxString(const char*) constructor or using more explicit
+        wxString::wxString(const char*, const wxMBConv&) constructor passing it
+        wxConvLibc as the second argument.
         - Narrow @c char* string in UTF-8 encoding using wxString::FromUTF8().
         - Narrow @c char* string in the given encoding using
         wxString::wxString(const char*, const wxMBConv&) constructor passing a
         wxCSConv corresponding to the encoding as the second argument.
-        - Standard @c std::string using implicit wxString::wxString(const
-        std::string&) constructor. Notice that this constructor supposes that
-        the string contains data in the current locale encoding, use FromUTF8()
-        or the constructor taking wxMBConv if this is not the case.
-        - Wide @c wchar_t* string using implicit wxString::wxString(const
-        wchar_t*) constructor.
-        - Standard @c std::wstring using implicit wxString::wxString(const
-        std::wstring&) constructor.
+        - Standard @c std::string using implicit
+        wxString::wxString(const std::string&) constructor.
+        Notice that this constructor supposes that the string contains data in
+        the current locale encoding, use FromUTF8() if the string contains
+        UTF-8-encoded data instead.
+        - Wide @c wchar_t* string using implicit
+        wxString::wxString(const wchar_t*) constructor.
+        - Standard @c std::wstring using implicit
+        wxString::wxString(const std::wstring&) constructor.
 
     Notice that many of the constructors are implicit, meaning that you don't
     even need to write them at all to pass the existing string to some
-    wxWidgets function taking a wxString.
+    wxWidgets function taking a wxString. This is convenient, but can also be
+    dangerous when constructing wxString from `char*` or `std::string` if it
+    doesn't have the expected encoding, as the resulting string will be empty
+    if the conversion from the current locale encoding fails. If you want to
+    disable all such conversions at compile-time, you may predefine
+    `wxNO_IMPLICIT_WXSTRING_ENCODING` when compiling the application code and
+    the corresponding conversions become inaccessible, i.e.
+    @code
+        wxString s;
+        // s = "world"; does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+        s = wxString::FromAscii("world"); // Always compiles
+        s = wxASCII_STR("world"); // shorthand for the above
+        s = wxString::FromUTF8("world"); // Always compiles
+        s = wxString("world", wxConvLibc); // Always compiles, explicit encoding
+        s = wxASCII_STR("Grüße"); // Always compiles but s may be empty!
+    @endcode
+
+    The only case in which such conversions are fully safe is when the library
+    is compiled with `wxUSE_UTF8_LOCALE_ONLY` option set to 1, as all the
+    strings are assumed to be in UTF-8 encoding then.
+
 
     Similarly, wxString can be converted to:
         - ASCII string using wxString::ToAscii(). This is a potentially
@@ -89,19 +111,45 @@
         of the returned string is specified with a wxMBConv object, so this
         conversion is potentially destructive as well. To ensure that there is
         no data loss, use @c wxConvUTF8 conversion or wxString::utf8_string().
-        - Wide C string using wxString::wc_str().
+        - Wide C string using implicit conversion or wxString::wc_str()
+        explicitly.
         - Standard @c std::wstring using wxString::ToStdWstring().
 
-    @note If you built wxWidgets with @c wxUSE_STL set to 1, the implicit
-        conversions to both narrow and wide C strings are disabled and replaced
-        with implicit conversions to @c std::string and @c std::wstring.
 
-    Please notice that the conversions marked as "potentially destructive"
-    above can result in loss of data if their result is not checked, so you
-    need to verify that converting the contents of a non-empty Unicode string
-    to a non-UTF-8 multibyte encoding results in non-empty string. The simplest
-    and best way to ensure that the conversion never fails is to always use
-    UTF-8.
+    As above, defining `wxNO_IMPLICIT_WXSTRING_ENCODING` when compiling
+    application code prevents the implicit use of the current locale encoding
+    and disables implicit conversions to `char*` and `std::string` as well as
+    using mb_str() and ToStdString() without explicitly specifying the
+    encoding:
+    @code
+        const char *c;
+        // c = s.c_str();  does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+        // c = s.mb_str(); does not compile with wxNO_IMPLICIT_WXSTRING_ENCODING
+        c = s.ToAscii(); // Always compiles, encoding may fail
+        c = s.ToUTF8(); // Always compiles, encoding never fails
+        c = s.utf8_str(); // Alias for the above
+        c = s.mb_str(wxConvLibc); // Always compiles, explicit encoding, but
+                                  // conversion may fail!
+    @endcode
+
+    However, if completely disabling conversions to narrow strings by defining
+    `wxNO_IMPLICIT_WXSTRING_ENCODING` is undesirable, it is also possible to
+    disable implicit conversions by predefining `wxNO_UNSAFE_WXSTRING_CONV`
+    instead, i.e. with this symbol defined implicit conversion to `const char*`
+    becomes unavailable -- but explicit conversions using c_str() and mb_str()
+    still work.
+
+    Finally, please note that implicit conversion to both `const char*` and
+    `const wchar_t*` may be entirely disabled by setting the build option
+    `wxUSE_CHAR_CONV_IN_WXSTRING` to 0. Unlike with `wxNO_XXX` constants, this
+    option requires rebuilding the library after changing its value.
+
+
+    To summarize, the safest way to use wxString is to always define
+    `wxNO_IMPLICIT_WXSTRING_ENCODING` in the application compilation options to
+    disable all implicit uses of encoding and specify it explicitly, typically
+    by using utf8_str() or utf8_string() and FromUTF8() for conversions, for
+    every operation.
 
 
     @section string_gotchas Traps for the unwary
@@ -245,13 +293,11 @@
 
     @section string_performance Performance characteristics
 
-    wxString uses @c std::basic_string internally to store its content (unless
-    this is not supported by the compiler or disabled specifically when
-    building wxWidgets) and it therefore inherits many features from @c
-    std::basic_string. In particular, most modern implementations of @c
-    std::basic_string are thread-safe and don't use reference counting (making
-    copying large strings potentially expensive) and so wxString has the same
-    characteristics.
+    wxString uses @c std::basic_string internally to store its content and it
+    therefore inherits many features from the standard class. In particular,
+    most implementations of @c std::basic_string use small string optimization,
+    meaning that they avoid allocating heap memory for short strings, and this
+    is also true for wxString.
 
     By default, wxString uses @c std::basic_string specialized for the
     platform-dependent @c wchar_t type, meaning that it is not memory-efficient
@@ -690,6 +736,8 @@ public:
     /**
         Converts the string to an 8-bit string in ISO-8859-1 encoding in the
         form of a wxCharBuffer.
+
+        @note It is not recommended to use wxString for storing binary data.
 
         This is a convenience method useful when storing binary data in
         wxString. It should be used @em only for this purpose. It is only valid
@@ -1765,8 +1813,14 @@ public:
 
     ///@{
     /**
-        Converts given buffer of binary data from 8-bit string to wxString. In
-        Unicode build, the string is interpreted as being in ISO-8859-1
+        Converts given buffer of binary data from 8-bit string to wxString.
+
+        @note Using `std::vector<wxUint8>` is both simpler and more efficient
+        than using wxString for storing binary data. See also more specialized
+        classes provided by wxWidgets for working with binary data, such as
+        wxMemoryBuffer and wxMemoryOutputStream and wxMemoryInputStream.
+
+        In Unicode build, the string is interpreted as being in ISO-8859-1
         encoding. The version without @e len parameter takes NUL-terminated
         data.
 

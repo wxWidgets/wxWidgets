@@ -185,7 +185,7 @@ UTF-16 without support for surrogate characters) is used as @c wchar_t is 2
 bytes on this platform. Under Unix systems, including macOS, UCS-4 (also
 known as UTF-32) is used by default, however it is also possible to build
 wxWidgets to use UTF-8 internally by passing @c \--enable-utf8 option to
-configure.
+configure or setting `wxUSE_UNICODE_UTF8` to 1 in `wx/setup.h`.
 
 The interface provided by wxString is the same independently of the format used
 internally. However different formats have specific advantages and
