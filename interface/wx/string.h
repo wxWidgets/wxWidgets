@@ -530,36 +530,6 @@ public:
     wxUniCharRef GetWritableChar(size_t n);
 
     /**
-        Returns a writable buffer of at least @a len bytes.
-
-        It returns a pointer to a new memory block, and the existing data will not be copied.
-        Call UngetWriteBuf() as soon as possible to put the string back into a reasonable state.
-
-        This method is deprecated, please use wxStringBuffer or wxStringBufferLength instead.
-    */
-    wxStringCharType* GetWriteBuf(size_t len);
-
-    /**
-        Puts the string back into a reasonable state (in which it can be used
-        normally), after GetWriteBuf() was called.
-
-        The version of the function without the @a len parameter will calculate the
-        new string length itself assuming that the string is terminated by the first
-        @c NUL character in it while the second one will use the specified length
-        and thus is the only version which should be used with the strings with
-        embedded @c NULs (it is also slightly more efficient as @c strlen()
-        doesn't have to be called).
-
-        This method is deprecated, please use wxStringBuffer or wxStringBufferLength instead.
-    */
-    void UngetWriteBuf();
-
-    /**
-        @overload
-    */
-    void UngetWriteBuf(size_t len);
-
-    /**
         Sets the character at position @e n.
     */
     void SetChar(size_t n, wxUniChar ch);
@@ -1975,9 +1945,8 @@ wxString wxEmptyString;
 /**
     @class wxStringBufferLength
 
-    This tiny class allows you to conveniently access the wxString internal buffer
-    as a writable pointer without any risk of forgetting to restore the string to
-    the usable state later, and allows the user to set the internal length of the string.
+    This helper class allows you to conveniently access the wxString internal buffer
+    as a writable pointer and requires explicitly specifying the actual length.
 
     For example, assuming you have a low-level OS function called
     @c "int GetMeaningOfLifeAsString(char *)" copying the value in the provided
@@ -1986,19 +1955,21 @@ wxString wxEmptyString;
 
     @code
         wxString theAnswer;
-        wxStringBufferLength theAnswerBuffer(theAnswer, 1024);
-        int nLength = GetMeaningOfLifeAsString(theAnswerBuffer);
-        theAnswerBuffer.SetLength(nLength);
+        {
+            wxStringBufferLength theAnswerBuffer(theAnswer, 1024);
+            int nLength = GetMeaningOfLifeAsString(theAnswerBuffer);
+            theAnswerBuffer.SetLength(nLength);
+        } // The buffer is destroyed here, allowing the string to be used.
         if ( theAnswer != "42" )
             wxLogError("Something is very wrong!");
     @endcode
 
-    Note that the exact usage of this depends on whether or not wxUSE_STL is
-    enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty
-    character buffer, and if wxUSE_STL is disabled, it uses GetWriteBuf() from
-    wxString, keeping the same buffer wxString uses intact. In other words,
-    relying on wxStringBuffer containing the old wxString data is not a good
-    idea if you want to build your program both with and without wxUSE_STL.
+    Note that the string can't be used in any way while a buffer associated
+    with it exists, the buffer must be destroyed to allow using the string
+    again.
+
+    If possible, this class uses the internal wxString storage directly,
+    however this may not be the case depending on wxWidgets build options.
 
     Note that wxStringBuffer::SetLength @b must be called before
     wxStringBufferLength destructs.
@@ -2012,15 +1983,11 @@ public:
     /**
         Constructs a writable string buffer object associated with the given string
         and containing enough space for at least @a len characters.
-
-        Basically, this is equivalent to calling wxString::GetWriteBuf and
-        saving the result.
     */
     wxStringBufferLength(wxString& str, size_t len);
 
     /**
-        Restores the string passed to the constructor to the usable state by calling
-        wxString::UngetWriteBuf on it.
+        Restores the string passed to the constructor to the usable state.
     */
     ~wxStringBufferLength();
 
@@ -2043,27 +2010,11 @@ public:
 /**
     @class wxStringBuffer
 
-    This tiny class allows you to conveniently access the wxString internal buffer
-    as a writable pointer without any risk of forgetting to restore the string
-    to the usable state later.
+    This helper class allows you to conveniently access the wxString internal buffer
+    as a writable pointer and automatically determines its length.
 
-    For example, assuming you have a low-level OS function called
-    @c "GetMeaningOfLifeAsString(char *)" returning the value in the provided
-    buffer (which must be writable, of course) you might call it like this:
-
-    @code
-        wxString theAnswer;
-        GetMeaningOfLifeAsString(wxStringBuffer(theAnswer, 1024));
-        if ( theAnswer != "42" )
-            wxLogError("Something is very wrong!");
-    @endcode
-
-    Note that the exact usage of this depends on whether or not @c wxUSE_STL is
-    enabled. If @c wxUSE_STL is enabled, wxStringBuffer creates a separate empty
-    character buffer, and if @c wxUSE_STL is disabled, it uses GetWriteBuf() from
-    wxString, keeping the same buffer wxString uses intact. In other words,
-    relying on wxStringBuffer containing the old wxString data is not a good
-    idea if you want to build your program both with and without @c wxUSE_STL.
+    This class is similar to wxStringBufferLength, but sets the length of the
+    buffer automatically, by assuming that the string is NUL-terminated.
 
     @library{wxbase}
     @category{data}
@@ -2074,14 +2025,11 @@ public:
     /**
         Constructs a writable string buffer object associated with the given string
         and containing enough space for at least @a len characters.
-        Basically, this is equivalent to calling wxString::GetWriteBuf() and
-        saving the result.
     */
     wxStringBuffer(wxString& str, size_t len);
 
     /**
-        Restores the string passed to the constructor to the usable state by calling
-        wxString::UngetWriteBuf() on it.
+        Restores the string passed to the constructor to the usable state.
     */
     ~wxStringBuffer();
 
