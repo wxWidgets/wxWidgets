@@ -106,6 +106,15 @@ TEST_CASE("StringFormatUnicode", "[wxString]")
     wxString expected(fmt);
     expected.Replace("%i", "1");
     CHECK( s == expected );
+
+    // Repeat exactly the same after creating a wxLocale
+    // object, and ensure formatting Unicode strings still works.
+    wxLocale l(wxLANGUAGE_DEFAULT);
+
+    wxString s2 = wxString::Format(fmt, 1, 1);
+    wxString expected2(fmt);
+    expected2.Replace("%i", "1");
+    CHECK( s2 == expected2 );
 }
 
 TEST_CASE("StringConstructors", "[wxString]")
