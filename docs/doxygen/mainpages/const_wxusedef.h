@@ -27,8 +27,9 @@ This table summarizes some of the global build features affecting the entire
 library:
 
 @beginDefList
-@itemdef{wxUSE_STL, Container classes and wxString are implemented using
-    standard classes and provide the same standard API.}
+@itemdef{wxUSE_STD_CONTAINERS, Container classes are implemented using
+    standard classes (while still providing some compatibility with legacy
+    wxWidgets container classes).}
 @itemdef{wxUSE_UNICODE, Always defined as 1 in wxWidgets 3.3 and later, only
     exists for compatibility.}
 @itemdef{wxUSE_UNICODE_WCHAR, wxString uses wchar_t buffer for internal storage
