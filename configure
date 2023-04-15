@@ -1122,7 +1122,6 @@ with_cxx
 enable_stl
 enable_std_containers
 enable_std_iostreams
-enable_char_conv_in_wxstring
 enable_std_string_conv_in_wxstring
 enable_unsafe_conv_in_wxstring
 enable_utf8
@@ -2089,7 +2088,6 @@ Optional Features:
   --enable-stl            obsolete option doing nothing
   --disable-std_containers disable use of standard C++ container classes
   --disable-std_iostreams  disable use of standard C++ stream classes
- --disable-char_conv_in_wxstring     disable implicit conversion to const wchar_t/char* in wxString
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
  --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString
   --enable-utf8           use UTF-8 representation for strings
@@ -5635,35 +5633,6 @@ fi
 
 
           eval "$wx_cv_use_std_iostreams"
-
-
-          enablestring=disable
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-char_conv_in_wxstring was given.
-if test "${enable_char_conv_in_wxstring+set}" = set; then :
-  enableval=$enable_char_conv_in_wxstring;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_char_conv_in_wxstring='wxUSE_CHAR_CONV_IN_WXSTRING=yes'
-                          else
-                            wx_cv_use_char_conv_in_wxstring='wxUSE_CHAR_CONV_IN_WXSTRING=no'
-                          fi
-
-else
-
-                          wx_cv_use_char_conv_in_wxstring='wxUSE_CHAR_CONV_IN_WXSTRING=${'DEFAULT_wxUSE_CHAR_CONV_IN_WXSTRING":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_char_conv_in_wxstring"
 
 
           enablestring=
@@ -37461,11 +37430,6 @@ fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   $as_echo "#define wxUSE_STD_IOSTREAM 1" >>confdefs.h
-
-fi
-
-if test "$wxUSE_CHAR_CONV_IN_WXSTRING" = "yes"; then
-  $as_echo "#define wxUSE_CHAR_CONV_IN_WXSTRING 1" >>confdefs.h
 
 fi
 

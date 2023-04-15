@@ -90,7 +90,6 @@ wx_dependent_option(wxUSE_UTF8_LOCALE_ONLY "only support UTF-8 locales in UTF-8 
 if(NOT WIN32)
     wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
 endif()
-wx_option(wxUSE_CHAR_CONV_IN_WXSTRING "provide implicit conversions to const wchar_t* and const char* in wxString" ON)
 wx_option(wxUSE_STD_STRING_CONV_IN_WXSTRING "provide implicit conversions to std::wstring and std::string in wxString" OFF)
 wx_option(wxUSE_UNSAFE_WXSTRING_CONV "provide unsafe implicit conversions in wxString to const char* or std::string")
 wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)

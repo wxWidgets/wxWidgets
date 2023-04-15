@@ -139,17 +139,20 @@
     becomes unavailable -- but explicit conversions using c_str() and mb_str()
     still work.
 
-    Finally, please note that implicit conversion to both `const char*` and
-    `const wchar_t*` may be entirely disabled by setting the build option
-    `wxUSE_CHAR_CONV_IN_WXSTRING` to 0. Unlike with `wxNO_XXX` constants, this
-    option requires rebuilding the library after changing its value.
+    Finally, please note that implicit conversion to both `const char*` (which
+    is unsafe for the reasons explained above) and to `const wchar_t*` (which
+    is safe from this point of view, but may still be considered dangerous, as
+    any implicit conversion) may be entirely disabled by defining
+    `wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR` when building the application.
 
 
     To summarize, the safest way to use wxString is to always define
     `wxNO_IMPLICIT_WXSTRING_ENCODING` in the application compilation options to
     disable all implicit uses of encoding and specify it explicitly, typically
     by using utf8_str() or utf8_string() and FromUTF8() for conversions, for
-    every operation.
+    every operation. If this is impossible, for example because it would
+    require too many changes to the existing code, consider defining
+    `wxNO_UNSAFE_WXSTRING_CONV` to at least disable implicit unsafe conversions.
 
 
     @section string_gotchas Traps for the unwary

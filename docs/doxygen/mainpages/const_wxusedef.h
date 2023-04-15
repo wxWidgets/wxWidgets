@@ -43,7 +43,7 @@ library:
     available.}
 @itemdef{wxUSE_UNSAFE_WXSTRING_CONV, Defined as 1 by default for compatibility,
     but can be set to 0 to globally disable unsafe implicit conversions in
-    wxString class. See @ref overview_string_settings for more details.}
+    wxString class. See @ref string_conv for more details.}
 @endDefList
 
 

@@ -159,8 +159,6 @@
 
 #cmakedefine01 wxUSE_UNSAFE_WXSTRING_CONV
 
-#cmakedefine01 wxUSE_CHAR_CONV_IN_WXSTRING
-
 #cmakedefine01 wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 

@@ -1018,7 +1018,7 @@ TEST_CASE("StringCStrDataImplicitConversion", "[wxString]")
     CHECK( CheckStrConstWChar(s, s.c_str()) );
     CHECK( CheckStrConstChar(s, s.c_str()) );
 
-#if wxUSE_CHAR_CONV_IN_WXSTRING
+#ifndef wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR
     CHECK( CheckStrConstWChar(s, s) );
 #ifndef wxNO_UNSAFE_WXSTRING_CONV
     CHECK( CheckStrConstChar(s, s) );

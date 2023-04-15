@@ -98,6 +98,14 @@ class WXDLLIMPEXP_FWD_BASE wxString;
     #endif
 #endif // wxUSE_UNSAFE_WXSTRING_CONV
 
+// enabling implicit conversions to std::[w]string is incompatible with having
+// implicit conversions to char*/wchar_t*.
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
+    #ifndef wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR
+        #define wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR
+    #endif
+#endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
+
 namespace wxPrivate
 {
     template <typename T> struct wxStringAsBufHelper;
@@ -1540,7 +1548,7 @@ public:
     // implicit conversion to wxCStrData
     operator wxCStrData() const { return c_str(); }
 
-#if wxUSE_CHAR_CONV_IN_WXSTRING
+#if !defined(wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR)
     operator const wchar_t*() const { return c_str(); }
 
 #if !defined(wxNO_UNSAFE_WXSTRING_CONV)
@@ -1551,7 +1559,7 @@ public:
     operator const void*() const { return c_str(); }
 #endif // !defined(wxNO_UNSAFE_WXSTRING_CONV)
 
-#endif // wxUSE_CHAR_CONV_IN_WXSTRING
+#endif // !defined(wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR)
 
     // identical to c_str(), for MFC compatibility
     const wxCStrData GetData() const { return c_str(); }

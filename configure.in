@@ -642,7 +642,6 @@ AC_ARG_WITH(cxx,           [  --with-cxx=11|14|17|20  use the given C++ dialect]
 WX_ARG_ENABLE(stl,         [  --enable-stl            obsolete option doing nothing], wxUSE_STL)
 WX_ARG_DISABLE(std_containers,[  --disable-std_containers disable use of standard C++ container classes], wxUSE_STD_CONTAINERS)
 WX_ARG_DISABLE(std_iostreams,[  --disable-std_iostreams  disable use of standard C++ stream classes], wxUSE_STD_IOSTREAM)
-WX_ARG_DISABLE(char_conv_in_wxstring, [ --disable-char_conv_in_wxstring     disable implicit conversion to const wchar_t/char* in wxString], wxUSE_CHAR_CONV_IN_WXSTRING)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unsafe_conv_in_wxstring,     [ --disable-unsafe_conv_in_wxstring        disable unsafe implicit conversions in wxString], wxUSE_UNSAFE_WXSTRING_CONV)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings], wxUSE_UNICODE_UTF8)
@@ -5389,10 +5388,6 @@ fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_STD_IOSTREAM)
-fi
-
-if test "$wxUSE_CHAR_CONV_IN_WXSTRING" = "yes"; then
-  AC_DEFINE(wxUSE_CHAR_CONV_IN_WXSTRING)
 fi
 
 if test "$wxUSE_STD_STRING_CONV_IN_WXSTRING" = "yes"; then
