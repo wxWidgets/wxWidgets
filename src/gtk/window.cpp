@@ -1281,9 +1281,13 @@ bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
 // Adjust wxEVT_CHAR event key code fields. This function takes care of two
 // conventions:
 // (a) Ctrl-letter key presses generate key codes in range 1..26
-// (b) Unicode key codes are same as key codes for the codes in 1..255 range
-void AdjustCharEventKeyCodes(wxKeyEvent& event)
+// (b) Unicode key codes are same as key codes for the codes in ASCII range
+//
+// Return true if the key code was modified.
+bool AdjustCharEventKeyCodes(wxKeyEvent& event)
 {
+    bool modified = false;
+
     const int code = event.m_keyCode;
 
     // Check for (a) above.
@@ -1300,7 +1304,10 @@ void AdjustCharEventKeyCodes(wxKeyEvent& event)
 #if wxUSE_UNICODE
         // Adjust the Unicode equivalent in the same way too.
         if ( event.m_keyCode != code )
+        {
             event.m_uniChar = event.m_keyCode;
+            modified = true;
+        }
 #endif // wxUSE_UNICODE
     }
 
@@ -1309,8 +1316,13 @@ void AdjustCharEventKeyCodes(wxKeyEvent& event)
     //
     // FIXME: Should we do it for key codes up to 255?
     if ( !event.m_uniChar && code < WXK_DELETE )
+    {
         event.m_uniChar = code;
+        modified = true;
+    }
 #endif // wxUSE_UNICODE
+
+    return modified;
 }
 
 } // anonymous namespace
@@ -1430,18 +1442,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         {
             wxKeyEvent eventChar(wxEVT_CHAR, event);
 
-            // Check for the special case of Ctrl+letter, see comment before
-            // AdjustCharEventKeyCodes().
-            if ( event.ControlDown() &&
-                    ((event.m_keyCode >= 'a' && event.m_keyCode <= 'z') ||
-                     (event.m_keyCode >= 'A' && event.m_keyCode <= 'Z')) )
-            {
-                eventChar.m_keyCode = event.m_keyCode;
-#if wxUSE_UNICODE
-                eventChar.m_uniChar = event.m_uniChar;
-#endif // wxUSE_UNICODE
-            }
-            else
+            if ( !AdjustCharEventKeyCodes(eventChar) )
             {
                 // use Unicode values
                 eventChar.m_keyCode = key_code;
@@ -1451,8 +1452,6 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             }
 
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), eventChar.m_keyCode);
-
-            AdjustCharEventKeyCodes(eventChar);
 
             ret = win->HandleWindowEvent(eventChar);
         }
