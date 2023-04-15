@@ -396,6 +396,12 @@ bool wxLocale::DoCommonPostInit(bool success,
             t->AddStdCatalog();
     }
 
+#if defined(__WXOSX__)
+    // LC_CTYPE is set in DoCommonPreInit() (see init.cpp). Set it again here,
+    // in case its value was changed/lost during wxLocale initialization.
+    setlocale(LC_CTYPE, "UTF-8");
+#endif // defined(__WXOSX__)
+
     return success;
 }
 
