@@ -1,12 +1,13 @@
 Run the genlang.py script from the top level wxWidgets directory to
 update include/wx/language.h (wxLanguage enum), interface/wx/language.h
 (its documentation) and src/common/languageinfo.cpp (conversion tables)
-with the data from langtabl.txt and scripttabl.txt.
+with the data from langtabl.txt, synonymtabl.txt, and scripttabl.txt.
 
 langtabl.txt contains a tabular list of language entries. Each entry
 contains
 
 - a symbolic language identifier used in enum wxLanguage,
+- a wxWidgets version when the entry was first introduced (a hyphen if not known)
 - a BCP 47-like locale identifier,
 - a Unix locale identifier,
 - a Unix locale identifier including a region id (if the default Unix
@@ -24,5 +25,70 @@ to convert between script code used in BCP 47-like identifiers and
 script modifiers used in Unix locale names. The data in (2) can be used
 to update scripttabl.txt if necessary.
 
+synonymtabl.txt contains a list of aliases for symbolic language identifiers.
+This list is used to generate specific entries in wxLanguage enumeration.
+
+Note: None of the files langtabl.txt, synonymtabl.txt, and scripttabl.txt should be
+edited manually. Instead these files should be regenerated under Windows 11 or
+above.
+
+Windows provides an extensive list of locales. This list is used to regenerate
+the files langtabl.txt, synonymtabl.txt, and scripttabl.txt. The subdirectory
+util contains the C source of a small utility application that queries Windows
+for a list of known locales.
+
+2 additional tools are required to perform the regeneration process:
+
+1) SQLite3 shell
+   Precompiled binaries can be downloaded from https://www.sqlite.org/download.html.
+   The download link is under the heading "Precompiled Binaries for Windows" and
+   looks like "sqlite-tools-win32-x86-3xxyyzz.zip" (where xx, yy, zz denote the
+   current SQLite version). Alternatively, the SQLite shell can be compiled from
+   sources - the archive "sqlite-amalgamation-3xxyyzz.zip" contains the required
+   source files.
+
+2) Lua shell
+   Precompiled binaries are available at https://luabinaries.sourceforge.net/.
+   Download lua-x.y.z_Win32_bin.zip or lua-x.y.z_Win64_bin.zip (where x, y, z denotes
+   the lua version) from the download page. Rename the executable luaxy.exe to
+   luashell.exe or adjust the batch file mklangtablnew.bat accordingly.
+
+The regeneration process consists of the following steps:
+
+1) Regenerate the list of known Windows locales (optional)
+   This step is usually only required when a new major Windows version is published.
+   The utility showlocales should be invoked from a command prompt as follows:
+
+     showlocales > win-locale-table-win.txt
+
+   The resulting file win-locale-table-win.txt has to be placed into subdirectory
+   data/windows.
+
+2) Update the Unicode data files (optional)
+   This step is only required when the Unicode data were actually updated.
+   To perform this step execute the batch file getunicodefiles.bat, located in the
+   data subdirectory.
+
+3) Regenerate langtabl.txt, synonymtabl.txt, and scripttabl.txt
+   To perform this step execute the batch file mklangtablnew.bat, located in the
+   data subdirectory. The new versions will be placed in the data directory.
+
+4) Check resulting new files langtabl.txt, synonymtabl.txt, and scripttabl.txt
+   The messages from step 3 issued by the batch file and the resulting files should
+   be carefully checked. If no errors occurred, the batch file replacetables.bat
+   can be executed.
+
+5) Run the Python script genlang.py from the top level wxWidgets directory.
+
+6) Commit the changes.
+
+Notes:
+1) Do not perform the regeneration process for older wxWidgets versions.
+   The scripts expect the data table files in a new format that was first introduced
+   in version 3.3.0.
+2) If you need to add locales not present in the list of known Windows locales, then
+   they should be added at the end of the script win_genlocaletable.lua.
+
+Footnotes
 (1) used on Windows only, deprecated by Microsoft
 (2) http://www.unicode.org/iso15924/iso15924-codes.html
