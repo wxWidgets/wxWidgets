@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 
-// All of the LCTYPES new to Windows Vista 
+// All of the LCTYPES new to Windows Vista
 LCTYPE winLocaleTypes[] =
 {
   LOCALE_SNAME,                   // Tag identifying the locale
@@ -18,7 +18,7 @@ LCTYPE winLocaleTypes[] =
   LOCALE_SNATIVECOUNTRYNAME       // Native country name
 };
 
-// Strings so we can print out the LCTYPES 
+// Strings so we can print out the LCTYPES
 LPCWSTR winLocaleTypeNames[] =
 {
   L"LOCALE_SNAME",                   // Tag identifying the locale
@@ -35,7 +35,7 @@ LPCWSTR winLocaleTypeNames[] =
   L"LOCALE_SNATIVECOUNTRYNAME"       // Native country name
 };
 
-// Callback for EnumSystemLocalesEx() 
+// Callback for EnumSystemLocalesEx()
 #define BUFFER_SIZE 512
 BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
 {
@@ -49,13 +49,13 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
   int iResult;
   int i;
 
-  // Loop through all specified LCTYPES and do GetLocaleInfoEx on them 
+  // Loop through all specified LCTYPES and do GetLocaleInfoEx on them
   for (i = 0; i < sizeof(winLocaleTypes) / sizeof(winLocaleTypes[0]); i++)
   {
-    // Get this LCTYPE result for this locale 
+    // Get this LCTYPE result for this locale
     iResult = GetLocaleInfoEx(pStr, winLocaleTypes[i], wcBuffer, BUFFER_SIZE);
 
-    // If it succeeds, print it out 
+    // If it succeeds, print it out
     if (i != 0) printf("|");
     if (iResult > 0)
     {
