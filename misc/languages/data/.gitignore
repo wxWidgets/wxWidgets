@@ -1,0 +1,12 @@
+# Ignore temporary files that are generated in course of
+# regenerating the lists of known languages, scripts, and synonyms
+
+# exclude 
+*.db3
+*.txt
+
+# exclude everything
+temp/*
+
+# exception to the rule
+!temp/.gitkeep
