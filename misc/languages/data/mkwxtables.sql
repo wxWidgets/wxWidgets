@@ -69,12 +69,12 @@ update win_localetable set wxlocidold = '-' where wxlocidold is null;
 select printf('%-55s %-9s %-14s %-25s %-14s %-4s %-4s %s "%s","%s"',
               w.wxname, ifnull(x.wxversion,@wxversion), w.locid, w.wxlocid, w.wxlocidold,
               w.idlang, w.idsublang, w.layout, w.englishdisplay, w.nativedisplayhex)
-  from win_localetable w left join wx_langmap x on w.wxlocid = x.wxlangid order by w.wxname; 
+  from win_localetable w left join wx_langmap x on w.wxlocid = x.wxlangid order by w.wxname;
 .output stdout
 
 -- Generate new list of script mappings
 .output scripttabl.txt
-select printf('%-4s %s', sctag, lower(scalias)) from uni_scriptmap where scalias <> '-' order by sctag; 
+select printf('%-4s %s', sctag, lower(scalias)) from uni_scriptmap where scalias <> '-' order by sctag;
 .output stdout
 
 -- Generate new list of wxLANGUAGE synonyms
@@ -84,5 +84,5 @@ insert into wx_synonyms
     where wl.wxnameold <> '-' and wl.wxname <> wl.wxnameold;
 delete from wx_synonyms where wxnamesyn in (select wxname from win_localetable);
 .output synonymtabl.txt
-select printf('%-55s %-55s %-14s %-9s', wxnamesyn, wxnameprim, winlocid, wxversion) from wx_synonyms order by wxnamesyn;
+select printf('%-55s %-55s %-14s %s', wxnamesyn, wxnameprim, winlocid, wxversion) from wx_synonyms order by wxnamesyn;
 .output stdout

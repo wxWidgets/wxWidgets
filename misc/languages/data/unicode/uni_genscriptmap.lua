@@ -42,7 +42,7 @@ for line in io.lines(codeFileName) do
     scalias = values[5]
     scage = values[6]
     scdate = values[7]
-    
+
     scname = scname:gsub("'", "''")
     if scalias == "" then
       scalias = "-"

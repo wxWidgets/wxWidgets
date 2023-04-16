@@ -1,11 +1,11 @@
 # Ignore temporary files that are generated in course of
 # regenerating the lists of known languages, scripts, and synonyms
 
-# exclude 
+# exclude database and data files
 *.db3
 *.txt
 
-# exclude everything
+# exclude everything in temp
 temp/*
 
 # exception to the rule

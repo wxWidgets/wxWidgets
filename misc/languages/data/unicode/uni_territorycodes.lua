@@ -39,7 +39,7 @@ for line in io.lines(codeFileName) do
     -- 3 ISO3166 Alpha-3
     -- 4 internet
     -- 5 FIPS-10
-    
+
     iso2 = values[1]
     iso3 = values[3]
 
@@ -52,7 +52,7 @@ for line in io.lines(codeFileName) do
   else
     if line == "# Deprecated codes" then
       break
-    end      
+    end
   end
 end
 print("Number of countries=" .. count)

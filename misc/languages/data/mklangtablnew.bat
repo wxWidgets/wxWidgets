@@ -3,7 +3,7 @@ rem Batch script to regenerate the list of known locales
 rem Create a copy of the current lists
 copy ..\langtabl.txt temp\langtabl_current.txt
 copy ..\scripttabl.txt temp\scripttabl_current.txt
-copy ..\synonymtabl.txt temp\synonymtabl_current.txt 
+copy ..\synonymtabl.txt temp\synonymtabl_current.txt
 
 rem Generate lists based on Unicode data
 luashell unicode\uni_territorycodes.lua

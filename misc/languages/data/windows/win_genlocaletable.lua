@@ -327,7 +327,7 @@ for line in io.lines(codeFileName) do
     end
 --    print('-- ' .. locidnew .. ' ' .. WXNAME .. ' ' .. mappedwxname)
 
-    -- Force columnar output by appending blank characters    
+    -- Force columnar output by appending blank characters
     SWXNAME = string.format("%-55s", WXNAME)
     slocid =  string.format("%-14s", locidnew)
     sidlang = string.format("%-4s", idlang)

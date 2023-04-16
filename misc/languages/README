@@ -51,7 +51,7 @@ for a list of known locales.
    Precompiled binaries are available at https://luabinaries.sourceforge.net/.
    Download lua-x.y.z_Win32_bin.zip or lua-x.y.z_Win64_bin.zip (where x, y, z denotes
    the lua version) from the download page. Rename the executable luaxy.exe to
-   luashell.exe or adjust the batch file mklangtablnew.bat accordingly.   
+   luashell.exe or adjust the batch file mklangtablnew.bat accordingly.
 
 The regeneration process consists of the following steps:
 

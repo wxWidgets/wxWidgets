@@ -29,10 +29,10 @@ LPCWSTR winLocaleTypeNames[] =
   L"LOCALE_SISO3166CTRYNAME2",
   L"LOCALE_SINTLSYMBOL",             // Currency symbol ISO
   L"LOCALE_IREADINGLAYOUT",          // Layout direction 0=LTR, 1=RTL, 2=TTB-RTL or LTR, 3=TTB-LTR
-  L"LOCALE_ILANGUAGE",                // Numeric language code
+  L"LOCALE_ILANGUAGE",               // Numeric language code
   L"LOCALE_SNATIVEDISPLAYNAME",      // Native locale name (example: "Deutsch (Deutschland)"
   L"LOCALE_SNATIVELANGUAGENAME",     // Native language name
-  L"LOCALE_SNATIVECOUNTRYNAME"      // Native country name
+  L"LOCALE_SNATIVECOUNTRYNAME"       // Native country name
 };
 
 // Callback for EnumSystemLocalesEx() 
@@ -66,7 +66,7 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
     {
       //wprintf(L"  %s had error %d\n", NewTypeNames[i], GetLastError());
     }
-  } 
+  }
   printf("\n");
 
   return (TRUE);
@@ -75,7 +75,7 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
 int main(int argc, char* argv[])
 {
   UNREFERENCED_PARAMETER(argc);
-  // Enumerate the known locales and report on them 
+  // Enumerate the known locales and report on them
   // LOCALE_ALL = LOCALE_WINDOWS | LOCALE_SUPPLEMENTAL | LOCALE_ALTERNATE_SORTS | LOCALE_NEUTRALDATA
   EnumSystemLocalesEx( MyFuncLocaleEx, LOCALE_WINDOWS, (LPARAM)argv, NULL);
 }
