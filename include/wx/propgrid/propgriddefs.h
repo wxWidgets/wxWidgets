@@ -16,13 +16,13 @@
 #if wxUSE_PROPGRID
 
 #include "wx/colour.h"
-#include "wx/hashset.h"
 
 class WXDLLIMPEXP_FWD_CORE wxPoint;
 class WXDLLIMPEXP_FWD_CORE wxSize;
 class WXDLLIMPEXP_FWD_CORE wxFont;
 
 #include <limits>
+#include <unordered_map>
 
 // -----------------------------------------------------------------------
 
@@ -125,9 +125,7 @@ WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxPGProperty*, wxArrayPGProperty,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxString,
-                                     wxPGHashMapS2S,
-                                     class WXDLLIMPEXP_PROPGRID);
+using wxPGHashMapS2S = std::unordered_map<wxString, wxString>;
 
 #if WXWIN_COMPATIBILITY_3_0
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
