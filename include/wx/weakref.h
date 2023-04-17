@@ -31,11 +31,11 @@ public:
     typedef T element_type;
 
     // Default ctor
-    wxWeakRef() : m_pobj(nullptr), m_ptbase(nullptr) { }
+    wxWeakRef() = default;
 
     // Ctor from the object of this type: this is needed as the template ctor
     // below is not used by at least g++4 when a literal NULL is used
-    wxWeakRef(T *pobj) : m_pobj(nullptr), m_ptbase(nullptr)
+    wxWeakRef(T *pobj)
     {
         this->Assign(pobj);
     }
@@ -43,14 +43,14 @@ public:
     // When we have the full type here, static_cast<> will always work
     // (or give a straight compiler error).
     template <class TDerived>
-    wxWeakRef(TDerived* pobj) : m_pobj(nullptr), m_ptbase(nullptr)
+    wxWeakRef(TDerived* pobj)
     {
         this->Assign(pobj);
     }
 
     // We need this copy ctor, since otherwise a default compiler (binary) copy
     // happens (if embedded as an object member).
-    wxWeakRef(const wxWeakRef<T>& wr) : m_pobj(nullptr), m_ptbase(nullptr)
+    wxWeakRef(const wxWeakRef<T>& wr)
     {
         this->Assign(wr.get());
     }
@@ -124,8 +124,8 @@ protected:
         }
     }
 
-    T *m_pobj;
-    wxTrackable *m_ptbase;
+    T *m_pobj = nullptr;
+    wxTrackable *m_ptbase = nullptr;
 };
 
 
@@ -137,7 +137,7 @@ template <class T>
 class wxWeakRefDynamic : public wxTrackerNode
 {
 public:
-    wxWeakRefDynamic() : m_pobj(nullptr) { }
+    wxWeakRefDynamic() = default;
 
     wxWeakRefDynamic(T* pobj) : m_pobj(pobj)
     {
@@ -209,7 +209,7 @@ protected:
         }
     }
 
-    T *m_pobj;
+    T *m_pobj = nullptr;
 };
 
 #endif // RTTI enabled
