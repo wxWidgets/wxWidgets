@@ -732,7 +732,6 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent,
 void wxTreeCtrl::Init()
 {
     m_textCtrl = nullptr;
-    m_hasAnyAttr = false;
 #if wxUSE_DRAGIMAGE
     m_dragImage = nullptr;
 #endif
@@ -853,14 +852,10 @@ wxTreeCtrl::~wxTreeCtrl()
 {
     m_isBeingDeleted = true;
 
-    // delete any attributes
-    if ( m_hasAnyAttr )
-    {
-        m_attrs.clear();
-
-        // prevent TVN_DELETEITEM handler from deleting the attributes again!
-        m_hasAnyAttr = false;
-    }
+    // delete any attributes: it's important to do it explicitly before calling
+    // DeleteAllItems() to prevent TVN_DELETEITEM handler from deleting the
+    // attributes again!
+    m_attrs.clear();
 
     DeleteTextCtrl();
 
@@ -1207,8 +1202,6 @@ wxItemAttr* wxTreeCtrl::DoGetAttrPtr(const wxTreeItemId& item)
     const auto it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
-        m_hasAnyAttr = true;
-
         attr = new wxItemAttr;
         m_attrs[item.m_pItem] = std::unique_ptr<wxItemAttr>(attr);
     }
@@ -3335,10 +3328,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = tv->itemOld.hItem;
 
-                if ( m_hasAnyAttr )
-                {
-                    m_attrs.erase(tv->itemOld.hItem);
-                }
+                m_attrs.erase(tv->itemOld.hItem);
             }
             break;
 
@@ -3530,8 +3520,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     case CDDS_PREPAINT:
                         // if we've got any items with non standard attributes,
                         // notify us before painting each item
-                        *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
-                                               : CDRF_DODEFAULT;
+                        *result = m_attrs.empty() ? CDRF_DODEFAULT
+                                                  : CDRF_NOTIFYITEMDRAW;
 
                         // windows in TreeCtrl use one-based index for item state images,
                         // 0 indexed image is not being used, we're using zero-based index,
