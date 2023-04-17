@@ -197,7 +197,7 @@ private:
 // constants
 // ----------------------------------------------------------------------------
 
-const int ID_TOOLBAR = 500;
+const int ID_TOOLBAR = wxID_HIGHEST;
 
 static const long TOOLBAR_STYLE = wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT;
 
