@@ -306,6 +306,10 @@ private:
     bool MSWDeleteItem(const wxTreeItemId& item);
 
 
+    // Return guaranteed non-null non-owning pointer to the attribute for the
+    // given item.
+    wxItemAttr* DoGetAttrPtr(const wxTreeItemId& item);
+
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
 
