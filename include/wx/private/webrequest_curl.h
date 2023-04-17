@@ -17,9 +17,10 @@
 #include "wx/thread.h"
 #include "wx/vector.h"
 #include "wx/timer.h"
-#include "wx/hashmap.h"
 
 #include "curl/curl.h"
+
+#include <unordered_map>
 
 class wxWebRequestCURL;
 class wxWebResponseCURL;
@@ -171,11 +172,8 @@ private:
     void StopActiveTransfer(CURL*);
     void RemoveActiveSocket(CURL*);
 
-    WX_DECLARE_HASH_MAP(CURL*, wxWebRequestCURL*, wxPointerHash, \
-                        wxPointerEqual, TransferSet);
-
-    WX_DECLARE_HASH_MAP(CURL*, curl_socket_t, wxPointerHash, \
-                        wxPointerEqual, CurlSocketMap);
+    using TransferSet = std::unordered_map<CURL*, wxWebRequestCURL*>;
+    using CurlSocketMap = std::unordered_map<CURL*, curl_socket_t>;
 
     TransferSet m_activeTransfers;
     CurlSocketMap m_activeSockets;

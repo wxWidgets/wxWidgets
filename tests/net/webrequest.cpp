@@ -24,6 +24,7 @@
 #include "wx/wfstream.h"
 
 #include <memory>
+#include <unordered_map>
 
 // This test uses httpbin service and by default uses the mirror at the
 // location below, which seems to be more reliable than the main site at
@@ -540,7 +541,7 @@ TEST_CASE_METHOD(RequestFixture,
     }
 }
 
-WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
+using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
 
 namespace wxPrivate
 {
