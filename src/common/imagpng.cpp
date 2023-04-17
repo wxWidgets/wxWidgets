@@ -35,6 +35,8 @@
 // For memcpy
 #include <string.h>
 
+#include <unordered_map>
+
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -452,7 +454,7 @@ wxPNGHandler::LoadFile(wxImage *image,
 // SaveFile() palette helpers
 // ----------------------------------------------------------------------------
 
-typedef wxLongToLongHashMap PaletteMap;
+using PaletteMap = std::unordered_map<unsigned long, long>;
 
 static unsigned long PaletteMakeKey(const png_color_8& clr)
 {
