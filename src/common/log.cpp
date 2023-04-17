@@ -152,9 +152,11 @@ PreviousLogInfo gs_prevLog;
 namespace
 {
 
-inline wxStringToNumHashMap& GetComponentLevels()
+using ComponentLevelsMap = std::unordered_map<wxString, wxLogLevel>;
+
+inline ComponentLevelsMap& GetComponentLevels()
 {
-    static wxStringToNumHashMap s_componentLevels;
+    static ComponentLevelsMap s_componentLevels;
     return s_componentLevels;
 }
 
@@ -612,13 +614,12 @@ wxLogLevel wxLog::GetComponentLevel(const wxString& componentOrig)
     // Make a copy before modifying it in the loop.
     wxString component = componentOrig;
 
-    const wxStringToNumHashMap& componentLevels = GetComponentLevels();
+    const auto& componentLevels = GetComponentLevels();
     while ( !component.empty() )
     {
-        wxStringToNumHashMap::const_iterator
-            it = componentLevels.find(component);
+        const auto it = componentLevels.find(component);
         if ( it != componentLevels.end() )
-            return static_cast<wxLogLevel>(it->second);
+            return it->second;
 
         component = component.BeforeLast('/');
     }
