@@ -1018,10 +1018,9 @@ TEST_CASE("StringCStrDataImplicitConversion", "[wxString]")
     CHECK( CheckStrConstWChar(s, s.c_str()) );
     CHECK( CheckStrConstChar(s, s.c_str()) );
 
-    // implicit conversion of wxString is not available in STL build
-#if !wxUSE_STL
+#ifndef wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR
     CHECK( CheckStrConstWChar(s, s) );
-#if wxUSE_UNSAFE_WXSTRING_CONV
+#ifndef wxNO_UNSAFE_WXSTRING_CONV
     CHECK( CheckStrConstChar(s, s) );
 #endif
 #endif

@@ -75,7 +75,7 @@ jobs:
       matrix:
         include:
           - name: wxMSW 64 bits
-            configure_flags: --enable-stl --disable-compat32
+            configure_flags: --disable-compat32
           - name: wxMSW 32 bits
             triplet: i686-w64-mingw32
     env:

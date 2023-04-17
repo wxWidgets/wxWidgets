@@ -90,7 +90,21 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 #error wxNO_IMPLICIT_WXSTRING_ENCODING cannot be used in UTF-8 only builds
 #endif
 
-#endif
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+#if !wxUSE_UNSAFE_WXSTRING_CONV
+    #ifndef wxNO_UNSAFE_WXSTRING_CONV
+        #define wxNO_UNSAFE_WXSTRING_CONV
+    #endif
+#endif // wxUSE_UNSAFE_WXSTRING_CONV
+
+// enabling implicit conversions to std::[w]string is incompatible with having
+// implicit conversions to char*/wchar_t*.
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
+    #ifndef wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR
+        #define wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR
+    #endif
+#endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 namespace wxPrivate
 {
@@ -1287,9 +1301,9 @@ public:
     // they conflict with the implicit conversions to "const char/wchar_t *"
     // which we use for backwards compatibility but do provide them if
     // explicitly requested.
-#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+#if !defined(wxNO_UNSAFE_WXSTRING_CONV)
   operator wxStringToStdStringRetType() const { return ToStdString(); }
-#endif // wxUSE_UNSAFE_WXSTRING_CONV
+#endif // !wxNO_UNSAFE_WXSTRING_CONV
   operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
 #endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
@@ -1298,8 +1312,6 @@ public:
 
   wxString Clone() const
   {
-      // make a deep copy of the string, i.e. the returned string will have
-      // ref count = 1 with refcounted implementation
       return wxString::FromImpl(wxStringImpl(m_impl.c_str(), m_impl.length()));
   }
 
@@ -1536,24 +1548,18 @@ public:
     // implicit conversion to wxCStrData
     operator wxCStrData() const { return c_str(); }
 
-    // the first two operators conflict with operators for conversion to
-    // std::string and they must be disabled if those conversions are enabled;
-    // the next one only makes sense if conversions to char* are also defined
-    // and not defining it in STL build also helps us to get more clear error
-    // messages for the code which relies on implicit conversion to char* in
-    // STL build
-#if !wxUSE_STD_STRING_CONV_IN_WXSTRING
+#if !defined(wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR)
     operator const wchar_t*() const { return c_str(); }
 
-#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+#if !defined(wxNO_UNSAFE_WXSTRING_CONV)
     operator const char*() const { return c_str(); }
     // implicit conversion to untyped pointer for compatibility with previous
     // wxWidgets versions: this is the same as conversion to const char * so it
     // may fail!
     operator const void*() const { return c_str(); }
-#endif // wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
+#endif // !defined(wxNO_UNSAFE_WXSTRING_CONV)
 
-#endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING
+#endif // !defined(wxNO_IMPLICIT_WXSTRING_CONV_TO_PTR)
 
     // identical to c_str(), for MFC compatibility
     const wxCStrData GetData() const { return c_str(); }

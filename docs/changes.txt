@@ -92,6 +92,11 @@ Changes in behaviour which may result in build errors
   the existing code. Alternatively, explicitly set wxUSE_STD_CONTAINERS=0 when
   compiling the library to preserve full compatibility with the old versions.
 
+- wxUSE_STL option doesn't exist any longer, standard library is always used.
+  However previously setting wxUSE_STL=1 enabled implicit conversion from
+  wxString to std::[w]string which are not enabled by default now, please set
+  wxUSE_STD_STRING_CONV_IN_WXSTRING=1 explicitly if you need them.
+
 - wxMotif and wxGTK1 ports have been removed, please use wxWidgets 3.2 if you
   still need them.
 

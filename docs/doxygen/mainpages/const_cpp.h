@@ -339,12 +339,11 @@ more details.
          with old wxWidgets versions. Changing it is not recommended.}
 @itemdef{wxUSE_UNSAFE_WXSTRING_CONV,
          this option determines if unsafe implicit conversions of wxString to
-         @c char* or @c std::string (depending on whether @c wxUSE_STL is 0 or
-         1) are defined. It is set to 1 by default for compatibility reasons,
-         however it is recommended to set it to 0 for the new projects. See
-         also @c wxNO_UNSAFE_WXSTRING_CONV below for an alternative way of
-         disabling these unsafe conversions not requiring rebuilding the
-         library.}
+         @c char* or @c std::string (depending on whether
+         @c wxUSE_STD_STRING_CONV_IN_WXSTRING is 0 or 1) are defined.
+         It is set to 1 by default for compatibility reasons, but you may set
+         @c wxNO_UNSAFE_WXSTRING_CONV described below to disable these unsafe
+         unsafe conversions without rebuilding the library.}
 @endDefList
 
 @section page_cppconst_miscellaneous Miscellaneous

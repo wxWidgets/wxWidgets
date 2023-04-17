@@ -614,30 +614,29 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 
     wxString s4("hello");
 
-    // notice that implicit wxString -> std::string conversion is only
-    // available in wxUSE_STL case, because it conflicts with conversion to
-    // const char*/wchar_t*
-#if wxUSE_STL && wxUSE_UNSAFE_WXSTRING_CONV
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING && !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s5 = s4;
 #else
     std::string s5 = s4.ToStdString();
 #endif
     CHECK( s5 == "hello" );
 
-#if wxUSE_STL
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
     std::wstring s6 = s4;
 #else
     std::wstring s6 = s4.ToStdWstring();
 #endif
     CHECK( s6 == L"hello" );
 
-#if wxUSE_UNSAFE_WXSTRING_CONV
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
+#if !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s7(s4);
     CHECK( s7 == "hello" );
 #endif
 
     std::wstring s8(s4);
     CHECK( s8 == L"hello" );
+#endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
     std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
     wxString s10 = wxString::FromUTF8(s9);

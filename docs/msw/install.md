@@ -385,8 +385,8 @@ The full list of the build settings follows:
   different setup.h settings coexisting in same tree. The value of
   this option is appended to the build directories names. This is
   useful for building the library in some non-default configuration,
-  e.g. you could change `wxUSE_STL` to 1 in `%%WXWIN%\include\wx\msw\setup.h` and
-  then build with `CFG=-stl`. Alternatively, you could build with e.g.
+  e.g. you could change `wxUSE_STD_CONTAINERS` to 0 in `%%WXWIN%\include\wx\msw\setup.h` and
+  then build with `CFG=-nonstd`. Alternatively, you could build with e.g.
   `RUNTIME_LIBS=static CFG=-mt` when using MSVC.
 
 * `COMPILER_PREFIX=<string>`
