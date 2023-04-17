@@ -334,7 +334,8 @@ wxList wxFileSystem::m_Handlers;
 
 wxFileSystem::~wxFileSystem()
 {
-    WX_CLEAR_HASH_MAP(wxFSHandlerHash, m_LocalHandlers)
+    for ( const auto& kv : m_LocalHandlers )
+        delete kv.second;
 }
 
 
