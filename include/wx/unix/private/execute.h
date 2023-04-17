@@ -11,13 +11,14 @@
 #define _WX_UNIX_EXECUTE_H
 
 #include "wx/app.h"
-#include "wx/hashmap.h"
 #include "wx/process.h"
 
 #if wxUSE_STREAMS
     #include "wx/unix/pipe.h"
     #include "wx/private/streamtempinput.h"
 #endif
+
+#include <unordered_map>
 
 class wxEventLoopBase;
 
@@ -92,8 +93,7 @@ private:
     // All currently running child processes indexed by their PID.
     //
     // Notice that the container doesn't own its elements.
-    WX_DECLARE_HASH_MAP(int, wxExecuteData*, wxIntegerHash, wxIntegerEqual,
-                        ChildProcessesData);
+    using ChildProcessesData = std::unordered_map<int, wxExecuteData*>;
     static ChildProcessesData ms_childProcesses;
 
     wxDECLARE_NO_COPY_CLASS(wxExecuteData);

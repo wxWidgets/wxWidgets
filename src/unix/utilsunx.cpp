@@ -1675,11 +1675,9 @@ void wxExecuteData::OnSomeChildExited(int WXUNUSED(sig))
     // Make a copy of the list before iterating over it to avoid problems due
     // to deleting entries from it in the process.
     const ChildProcessesData allChildProcesses = ms_childProcesses;
-    for ( ChildProcessesData::const_iterator it = allChildProcesses.begin();
-          it != allChildProcesses.end();
-          ++it )
+    for ( const auto& kv : allChildProcesses )
     {
-        const int pid = it->first;
+        const int pid = kv.first;
 
         // Check whether this child exited.
         int exitcode;
@@ -1689,7 +1687,7 @@ void wxExecuteData::OnSomeChildExited(int WXUNUSED(sig))
         // And handle its termination if it did.
         //
         // Notice that this will implicitly remove it from ms_childProcesses.
-        it->second->OnExit(exitcode);
+        kv.second->OnExit(exitcode);
     }
 }
 
