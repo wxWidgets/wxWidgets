@@ -1,6 +1,0 @@
-#include "wxcocoa.xcconfig"
-
-// make symbols visible by default
-
-OTHER_CFLAGS = -Wall -Wundef -fno-strict-aliasing -fno-common
-PRODUCT_NAME = $(TARGET_NAME)
