@@ -15,7 +15,6 @@
  * Includes
  */
 
-#include "wx/hashmap.h"
 #include "wx/richtext/richtextbuffer.h"
 #include "wx/richtext/richtextstyles.h"
 
@@ -217,12 +216,12 @@ public:
         Call with XML node name, C++ class name so that wxRTC can read in the node.
         If you add a custom object, call this.
     */
-    static void RegisterNodeName(const wxString& nodeName, const wxString& className) { sm_nodeNameToClassMap[nodeName] = className; }
+    static void RegisterNodeName(const wxString& nodeName, const wxString& className);
 
     /**
         Cleans up the mapping between node name and C++ class.
     */
-    static void ClearNodeToClassMap() { sm_nodeNameToClassMap.clear(); }
+    static void ClearNodeToClassMap();
 
 protected:
 #if wxUSE_STREAMS
@@ -231,8 +230,6 @@ protected:
 #endif
 
     wxRichTextXMLHelper m_helper;
-
-    static wxStringToStringHashMap sm_nodeNameToClassMap;
 };
 
 #endif
