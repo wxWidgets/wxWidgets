@@ -637,7 +637,7 @@ void wxWebResponseImpl::Init()
 
 wxString wxWebResponseImpl::GetMimeType() const
 {
-    return GetHeader("Mime-Type");
+    return GetHeader("Content-Type");
 }
 
 wxInputStream * wxWebResponseImpl::GetStream() const
