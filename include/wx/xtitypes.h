@@ -17,12 +17,12 @@
 #if wxUSE_EXTENDED_RTTI
 
 #include "wx/string.h"
-#include "wx/hashmap.h"
 #include "wx/arrstr.h"
 #include "wx/flags.h"
 #include "wx/intl.h"
 #include "wx/log.h"
 #include <typeinfo>
+#include <unordered_map>
 
 class WXDLLIMPEXP_BASE wxClassInfo;
 
@@ -299,7 +299,7 @@ enum wxTypeKind
 class WXDLLIMPEXP_BASE wxAny;
 class WXDLLIMPEXP_BASE wxTypeInfo;
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxTypeInfo*, wxTypeInfoMap, class WXDLLIMPEXP_BASE );
+using wxTypeInfo = std::unordered_map<wxString, wxTypeInfo*>;
 
 class WXDLLIMPEXP_BASE wxTypeInfo
 {
