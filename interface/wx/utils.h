@@ -253,7 +253,7 @@ wxVersionInfo wxGetLibraryVersionInfo();
 
     @header{wx/utils.h}
 */
-typedef wxStringToStringHashMap wxEnvVariableHashMap;
+using wxEnvVariableHashMap = std::unordered_map<wxString, wxString>;
 
 /**
     This is a macro defined as @c getenv() or its wide char version in Unicode
