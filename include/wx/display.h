@@ -21,7 +21,7 @@
     #include "wx/dynarray.h"
     #include "wx/vidmode.h"
 
-    WX_DECLARE_EXPORTED_OBJARRAY(wxVideoMode, wxArrayVideoModes);
+    using wxArrayVideoModes = wxBaseArray<wxVideoMode>;
 
     // default, uninitialized, video mode object
     extern WXDLLIMPEXP_DATA_CORE(const wxVideoMode) wxDefaultVideoMode;

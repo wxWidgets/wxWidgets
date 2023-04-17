@@ -23,7 +23,6 @@
 #include "wx/window.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/log.h"
     #include "wx/app.h"
     #include "wx/utils.h"

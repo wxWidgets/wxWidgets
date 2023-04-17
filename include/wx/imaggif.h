@@ -11,6 +11,8 @@
 
 #include "wx/image.h"
 
+#include <vector>
+
 
 //-----------------------------------------------------------------------------
 // wxGIFHandler
@@ -26,7 +28,6 @@
 
 struct wxRGB;
 struct GifHashTableType;
-class WXDLLIMPEXP_FWD_CORE wxImageArray; // anidecod.h
 
 class WXDLLIMPEXP_CORE wxGIFHandler : public wxImageHandler
 {
@@ -47,7 +48,7 @@ public:
                           bool verbose=true) override;
 
     // Save animated gif
-    bool SaveAnimation(const wxImageArray& images, wxOutputStream *stream,
+    bool SaveAnimation(const std::vector<wxImage>& images, wxOutputStream *stream,
         bool verbose = true, int delayMilliSecs = 1000);
 
 protected:

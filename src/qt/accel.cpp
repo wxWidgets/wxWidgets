@@ -9,18 +9,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/accel.h"
-#include "wx/list.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
 #include <QtWidgets/QShortcut>
-
-// ----------------------------------------------------------------------------
-// wxAccelList: a list of wxAcceleratorEntries
-// ----------------------------------------------------------------------------
-
-WX_DECLARE_LIST(wxAcceleratorEntry, wxAccelList);
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxAccelList)
 
 // ----------------------------------------------------------------------------
 // wxAccelRefData: the data used by wxAcceleratorTable
@@ -39,12 +30,7 @@ class wxAccelRefData : public wxObjectRefData
         {
         }
 
-        virtual ~wxAccelRefData()
-        {
-            WX_CLEAR_LIST(wxAccelList, m_accels);
-        }
-
-        wxAccelList m_accels;
+        std::vector<wxAcceleratorEntry> m_accels;
 };
 
 // macro which can be used to access wxAccelRefData from wxAcceleratorTable
@@ -57,13 +43,13 @@ class wxAccelRefData : public wxObjectRefData
 
 wxIMPLEMENT_DYNAMIC_CLASS( wxAcceleratorTable, wxObject );
 
-QShortcut *ConvertAccelerator( wxAcceleratorEntry *e, QWidget *parent )
+QShortcut *ConvertAccelerator( const wxAcceleratorEntry& e, QWidget *parent )
 {
     // TODO: Not all keys have the same string representation in wx and qt
-    QShortcut *s = new QShortcut( wxQtConvertString( e->ToString() ), parent );
+    QShortcut *s = new QShortcut( wxQtConvertString( e.ToString() ), parent );
 
     // Set a property to save wx Command to send when activated
-    s->setProperty( "wxQt_Command", e->GetCommand() );
+    s->setProperty( "wxQt_Command", e.GetCommand() );
 
     return s;
 }
@@ -78,7 +64,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
     for ( int i = 0; i < n; i++ )
     {
-        M_ACCELDATA->m_accels.Append( new wxAcceleratorEntry( entries[i] ) );
+        M_ACCELDATA->m_accels.emplace_back( entries[i] );
     }
 }
 
@@ -86,10 +72,9 @@ wxVector<QShortcut*> wxAcceleratorTable::ConvertShortcutTable( QWidget *parent )
 {
     wxVector<QShortcut*> shortcuts;
 
-    for ( wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
-          node; node = node->GetNext() )
+    for ( const auto& accel : M_ACCELDATA->m_accels )
     {
-        shortcuts.push_back(ConvertAccelerator(node->GetData(), parent));
+        shortcuts.push_back(ConvertAccelerator(accel, parent));
     }
 
     return shortcuts;

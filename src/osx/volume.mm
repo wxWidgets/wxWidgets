@@ -28,8 +28,6 @@
     #endif
 #endif // WX_PRECOMP
 
-#include "wx/arrimpl.cpp"
-
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/core/cfstring.h"
 

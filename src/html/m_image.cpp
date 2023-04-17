@@ -39,11 +39,6 @@ FORCE_LINK_ME(m_image)
 
 
 
-WX_DECLARE_OBJARRAY(int, CoordArray);
-#include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(CoordArray)
-
-
 // ---------------------------------------------------------------------------
 // wxHtmlImageMapAreaCell
 //                  0-width, 0-height cell that represents single area in
@@ -55,7 +50,7 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
     public:
         enum celltype { CIRCLE, RECT, POLY };
     protected:
-        CoordArray coords;
+        std::vector<int> coords;
         celltype type;
         int radius;
     public:
@@ -82,10 +77,10 @@ wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype
     type = t;
     while ((i = x.Find( ',' )) != wxNOT_FOUND)
     {
-        coords.Add( (int)(pixel_scale * (double)wxAtoi( x.Left( i ).c_str())) );
+        coords.push_back( (int)(pixel_scale * (double)wxAtoi( x.Left( i ).c_str())) );
         x = x.Mid( i + 1 );
     }
-    coords.Add( (int)(pixel_scale * (double)wxAtoi( x.c_str())) );
+    coords.push_back( (int)(pixel_scale * (double)wxAtoi( x.c_str())) );
 }
 
 wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
@@ -93,7 +88,7 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
     switch (type)
     {
         case RECT:
-            if ( coords.GetCount() == 4 )
+            if ( coords.size() == 4 )
             {
                 int l, t, r, b;
 
@@ -108,7 +103,7 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
             }
             break;
         case CIRCLE:
-            if ( coords.GetCount() == 3 )
+            if ( coords.size() == 3 )
             {
                 int l, t, r;
                 double  d;
@@ -124,12 +119,12 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
             }
             break;
         case POLY:
-             if (coords.GetCount() >= 6)
+             if (coords.size() >= 6)
              {
                  int intersects = 0;
                  int wherex = x;
                  int wherey = y;
-                 int totalv = coords.GetCount() / 2;
+                 int totalv = coords.size() / 2;
                  int totalc = totalv * 2;
                  int xval = coords[totalc - 2];
                  int yval = coords[totalc - 1];

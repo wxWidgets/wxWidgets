@@ -34,10 +34,6 @@
 #include "wx/osx/private.h"
 #endif
 
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
-WX_DEFINE_OBJARRAY(wxAuiTabContainerButtonArray)
-
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEvent);
@@ -866,8 +862,11 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
     wxAuiTabContainerButton* btn = nullptr;
     if (ButtonHitTest(x, y, &btn) && !(btn->curState & wxAUI_BUTTON_STATE_DISABLED))
     {
-        if (m_buttons.Index(*btn) != wxNOT_FOUND)
-            return false;
+        for ( const auto& button : m_buttons )
+        {
+            if ( btn == &button )
+                return false;
+        }
     }
 
     size_t i, page_count = m_pages.GetCount();

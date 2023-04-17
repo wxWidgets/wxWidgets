@@ -40,7 +40,7 @@
 //     class which explains it but it still would be nice to do something
 //     about this one day
 
-class wxGtkNotebookPage: public wxObject
+class wxGtkNotebookPage
 {
 public:
     GtkWidget* m_box;
@@ -49,9 +49,6 @@ public:
     int m_imageIndex;
 };
 
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxGtkNotebookPagesList)
 
 extern "C" {
 static void event_after(GtkNotebook*, GdkEvent*, wxNotebook*);
@@ -231,7 +228,7 @@ int wxNotebook::GetPageImage( size_t page ) const
 
 wxGtkNotebookPage* wxNotebook::GetNotebookPage( int page ) const
 {
-    return m_pagesData.Item(page)->GetData();
+    return const_cast<wxGtkNotebookPage*>(&m_pagesData.at(page));
 }
 
 int wxNotebook::DoSetSelection( size_t page, int flags )
@@ -445,9 +442,7 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     wxASSERT_MSG(GetPage(page) == client, wxT("pages changed during delete"));
     wxNotebookBase::DoRemovePage(page);
 
-    wxGtkNotebookPage* p = GetNotebookPage(page);
-    m_pagesData.DeleteObject(p);
-    delete p;
+    m_pagesData.erase(m_pagesData.begin() + page);
 
     return client;
 }
@@ -475,10 +470,10 @@ bool wxNotebook::InsertPage( size_t position,
 
     GtkNotebook *notebook = GTK_NOTEBOOK(m_widget);
 
-    wxGtkNotebookPage* pageData = new wxGtkNotebookPage;
-
     m_pages.insert(m_pages.begin() + position, win);
-    m_pagesData.Insert(position, pageData);
+    m_pagesData.insert(m_pagesData.begin() + position, wxGtkNotebookPage());
+
+    wxGtkNotebookPage* const pageData = &m_pagesData[position];
 
     // set the label image and text
     // this must be done before adding the page, as GetPageText

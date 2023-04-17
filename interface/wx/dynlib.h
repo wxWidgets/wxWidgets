@@ -56,6 +56,14 @@ public:
 };
 
 
+/**
+    A vector of wxDynamicLibraryDetails.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxDynamicLibraryDetails objects in the application code.
+*/
+using wxDynamicLibraryDetailsArray = std::vector<wxDynamicLibraryDetails>;
 
 /**
     Dynamic library category used with wxDynamicLibrary::CanonicalizeName().

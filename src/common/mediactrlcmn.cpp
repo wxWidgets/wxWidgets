@@ -24,7 +24,6 @@
 #if wxUSE_MEDIACTRL
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/log.h"
 #endif
 

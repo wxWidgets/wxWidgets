@@ -15,8 +15,6 @@
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
-#include "wx/list.h"
-#include "wx/dlist.h"
 #include "wx/string.h"
 #include "wx/frame.h"
 #include "wx/filehistory.h"
@@ -25,6 +23,8 @@
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/print.h"
 #endif
+
+#include <list>
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxDocument;
@@ -218,8 +218,7 @@ protected:
 
 private:
     // list of all documents whose m_documentParent is this one
-    typedef wxDList<wxDocument> DocsList;
-    DocsList m_childDocuments;
+    std::list<wxDocument*> m_childDocuments;
 
     wxDECLARE_ABSTRACT_CLASS(wxDocument);
     wxDECLARE_NO_COPY_CLASS(wxDocument);

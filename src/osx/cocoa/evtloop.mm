@@ -31,9 +31,10 @@
 #include "wx/log.h"
 #include "wx/scopeguard.h"
 #include "wx/vector.h"
-#include "wx/hashmap.h"
 
 #include "wx/osx/private.h"
+
+#include <unordered_map>
 
 struct wxModalSessionStackElement
 {
@@ -43,8 +44,7 @@ struct wxModalSessionStackElement
 
 typedef wxVector<wxModalSessionStackElement> wxModalSessionStack;
 
-WX_DECLARE_HASH_MAP(wxGUIEventLoop*, wxModalSessionStack*, wxPointerHash, wxPointerEqual,
-                    wxModalSessionStackMap);
+using wxModalSessionStackMap = std::unordered_map<wxGUIEventLoop*, wxModalSessionStack*>;
 
 static wxModalSessionStackMap gs_modalSessionStackMap;
 

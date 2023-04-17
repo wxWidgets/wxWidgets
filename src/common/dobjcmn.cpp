@@ -24,14 +24,6 @@
 #include "wx/textbuf.h"
 
 // ----------------------------------------------------------------------------
-// lists
-// ----------------------------------------------------------------------------
-
-#include "wx/listimpl.cpp"
-
-WX_DEFINE_LIST(wxSimpleDataObjectList)
-
-// ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
 
@@ -87,23 +79,15 @@ wxDataObjectComposite::wxDataObjectComposite()
     m_receivedFormat = wxFormatInvalid;
 }
 
-wxDataObjectComposite::~wxDataObjectComposite()
-{
-    WX_CLEAR_LIST( wxSimpleDataObjectList, m_dataObjects );
-}
+wxDataObjectComposite::~wxDataObjectComposite() = default;
 
 wxDataObjectSimple *
 wxDataObjectComposite::GetObject(const wxDataFormat& format, wxDataObjectBase::Direction dir) const
 {
-    wxSimpleDataObjectList::compatibility_iterator node = m_dataObjects.GetFirst();
-
-    while ( node )
+    for ( const auto& dataObj : m_dataObjects )
     {
-        wxDataObjectSimple *dataObj = node->GetData();
-
         if (dataObj->IsSupported(format,dir))
-          return dataObj;
-        node = node->GetNext();
+          return dataObj.get();
     }
     return nullptr;
 }
@@ -111,9 +95,9 @@ wxDataObjectComposite::GetObject(const wxDataFormat& format, wxDataObjectBase::D
 void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
 {
     if ( preferred )
-        m_preferred = m_dataObjects.GetCount();
+        m_preferred = m_dataObjects.size();
 
-    m_dataObjects.Append( dataObject );
+    m_dataObjects.push_back(std::unique_ptr<wxDataObjectSimple>(dataObject));
 }
 
 wxDataFormat wxDataObjectComposite::GetReceivedFormat() const
@@ -124,13 +108,10 @@ wxDataFormat wxDataObjectComposite::GetReceivedFormat() const
 wxDataFormat
 wxDataObjectComposite::GetPreferredFormat(Direction WXUNUSED(dir)) const
 {
-    wxSimpleDataObjectList::compatibility_iterator node = m_dataObjects.Item( m_preferred );
+    wxCHECK_MSG( m_preferred < m_dataObjects.size(), wxFormatInvalid,
+                 wxT("no preferred format") );
 
-    wxCHECK_MSG( node, wxFormatInvalid, wxT("no preferred format") );
-
-    wxDataObjectSimple* dataObj = node->GetData();
-
-    return dataObj->GetFormat();
+    return m_dataObjects[m_preferred]->GetFormat();
 }
 
 #if defined(__WXMSW__)
@@ -179,9 +160,8 @@ size_t wxDataObjectComposite::GetFormatCount(Direction dir) const
     // NOTE: some wxDataObjectSimple objects may return a number greater than 1
     //       from GetFormatCount(): this is the case of e.g. wxTextDataObject
     //       under wxMac and wxGTK
-    wxSimpleDataObjectList::compatibility_iterator node;
-    for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
-        n += node->GetData()->GetFormatCount(dir);
+    for ( const auto& dataObj : m_dataObjects )
+        n += dataObj->GetFormatCount(dir);
 
     return n;
 }
@@ -190,15 +170,14 @@ void wxDataObjectComposite::GetAllFormats(wxDataFormat *formats,
                                           Direction dir) const
 {
     size_t index(0);
-    wxSimpleDataObjectList::compatibility_iterator node;
 
-    for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
+    for ( const auto& dataObj : m_dataObjects )
     {
         // NOTE: some wxDataObjectSimple objects may return more than 1 format
         //       from GetAllFormats(): this is the case of e.g. wxTextDataObject
         //       under wxMac and wxGTK
-        node->GetData()->GetAllFormats(formats+index, dir);
-        index += node->GetData()->GetFormatCount(dir);
+        dataObj->GetAllFormats(formats+index, dir);
+        index += dataObj->GetFormatCount(dir);
     }
 }
 

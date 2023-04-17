@@ -29,7 +29,6 @@
     #include "wx/log.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/hashmap.h"
     #include "wx/module.h"
 #endif // WX_PRECOMP
 
@@ -49,7 +48,6 @@
 #include "wx/scopedptr.h"
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
-#include "wx/hashset.h"
 #include "wx/uilocale.h"
 
 #include "wx/private/uilocale.h"

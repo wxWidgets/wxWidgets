@@ -21,14 +21,14 @@
 #if wxUSE_DYNAMIC_LOADER
 
 #include "wx/dynlib.h"
-#include "wx/hashmap.h"
 #include "wx/module.h"
+
+#include <unordered_map>
 
 class WXDLLIMPEXP_FWD_BASE wxPluginLibrary;
 
+using wxDLManifest = std::unordered_map<wxString, wxPluginLibrary*>;
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxPluginLibrary *, wxDLManifest,
-                                     class WXDLLIMPEXP_BASE);
 typedef wxDLManifest wxDLImports;
 
 // ---------------------------------------------------------------------------
@@ -128,7 +128,7 @@ public:
         return m_entry->GetSymbol( symbol, success );
     }
 
-    static void CreateManifest() { ms_manifest = new wxDLManifest(wxKEY_STRING); }
+    static void CreateManifest() { ms_manifest = new wxDLManifest(); }
     static void ClearManifest() { delete ms_manifest; ms_manifest = nullptr; }
 
 private:

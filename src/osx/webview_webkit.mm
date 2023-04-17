@@ -28,7 +28,6 @@
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/webview.h"
 
-#include "wx/hashmap.h"
 #include "wx/filesys.h"
 #include "wx/msgdlg.h"
 #include "wx/mstream.h"

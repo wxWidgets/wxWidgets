@@ -33,10 +33,6 @@
 
 #include "dxfrenderer.h"
 
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(DXFEntityList)
-WX_DEFINE_LIST(DXFLayerList)
-
 // Conversion table from AutoCAD ACI colours to RGB values
 static const struct { unsigned char r, g, b; } aci_to_rgb[256] = {
 /*   0 */ {255, 255, 255},
@@ -341,31 +337,16 @@ DXFRenderer::~DXFRenderer()
 void DXFRenderer::Clear()
 {
     m_loaded = false;
-    {
-        for (DXFLayerList::compatibility_iterator node = m_layers.GetFirst(); node; node = node->GetNext())
-        {
-            DXFLayer *current = node->GetData();
-            delete current;
-        }
-    }
-    m_layers.Clear();
-    {
-        for (DXFEntityList::compatibility_iterator node = m_entities.GetFirst(); node; node = node->GetNext())
-        {
-            DXFEntity *current = node->GetData();
-            delete current;
-        }
-        m_entities.Clear();
-    }
+    m_layers.clear();
+    m_entities.clear();
 }
 
 int DXFRenderer::GetLayerColour(const wxString& layer) const
 {
-    for (DXFLayerList::compatibility_iterator node = m_layers.GetFirst(); node; node = node->GetNext())
+    for (const auto& current : m_layers)
     {
-        DXFLayer *current = node->GetData();
-        if (current->name == layer)
-            return current->colour;
+        if (current.name == layer)
+            return current.colour;
     }
     return 7;   // white
 }
@@ -406,10 +387,10 @@ bool DXFRenderer::ParseTables(wxInputStream& stream)
             // flush layer
             if (!layer.name.IsEmpty() && layer.colour != -1)
             {
-                DXFLayer *p = new DXFLayer;
-                p->name = layer.name;
-                p->colour = layer.colour;
-                m_layers.Append(p);
+                DXFLayer p;
+                p.name = layer.name;
+                p.colour = layer.colour;
+                m_layers.push_back(p);
             }
             layer = DXFLayer();
             inlayer = false;
@@ -466,31 +447,31 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             // flush entity
             if (state == 1) // 3DFACE
             {
-                DXFFace *p = new DXFFace;
-                p->v0 = v[0];
-                p->v1 = v[1];
-                p->v2 = v[2];
-                p->v3 = v[3];
-                p->CalculateNormal();
+                DXFFace p;
+                p.v0 = v[0];
+                p.v1 = v[1];
+                p.v2 = v[2];
+                p.v3 = v[3];
+                p.CalculateNormal();
                 if (colour != -1)
-                    p->colour = colour;
+                    p.colour = colour;
                 else
-                    p->colour = GetLayerColour(layer);
-                m_entities.Append(p);
+                    p.colour = GetLayerColour(layer);
+                m_entities.push_back(p);
                 colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }
             else if (state == 2) // LINE
             {
-                DXFLine *p = new DXFLine;
-                p->v0 = v[0];
-                p->v1 = v[1];
+                DXFLine p;
+                p.v0 = v[0];
+                p.v1 = v[1];
                 if (colour != -1)
-                    p->colour = colour;
+                    p.colour = colour;
                 else
-                    p->colour = GetLayerColour(layer);
-                m_entities.Append(p);
+                    p.colour = GetLayerColour(layer);
+                m_entities.push_back(p);
                 colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
@@ -594,9 +575,9 @@ void DXFRenderer::NormalizeEntities()
     // calculate current min and max boundings of object
     DXFVector minv(10e20f, 10e20f, 10e20f);
     DXFVector maxv(-10e20f, -10e20f, -10e20f);
-    for (DXFEntityList::compatibility_iterator node = m_entities.GetFirst(); node; node = node->GetNext())
+    for (auto& entity : m_entities)
     {
-        DXFEntity *p = node->GetData();
+        DXFEntity *p = &entity;
         if (p->type == DXFEntity::Line)
         {
             DXFLine *line = (DXFLine *)p;
@@ -629,9 +610,9 @@ void DXFRenderer::NormalizeEntities()
     // rescale object down to [-5,5]
     DXFVector span(maxv.x - minv.x, maxv.y - minv.y, maxv.z - minv.z);
     float factor = mymin(mymin(10.0f / span.x, 10.0f / span.y), 10.0f / span.z);
-    for (DXFEntityList::compatibility_iterator node2 = m_entities.GetFirst(); node2; node2 = node2->GetNext())
+    for (auto& entity : m_entities)
     {
-        DXFEntity *p = node2->GetData();
+        DXFEntity *p = &entity;
         if (p->type == DXFEntity::Line)
         {
             DXFLine *line = (DXFLine *)p;
@@ -662,9 +643,9 @@ void DXFRenderer::Render() const
     if (!m_loaded)
         return;
 
-    for (DXFEntityList::compatibility_iterator node = m_entities.GetFirst(); node; node = node->GetNext())
+    for (const auto& entity : m_entities)
     {
-        DXFEntity *p = node->GetData();
+        const DXFEntity *p = &entity;
         wxColour c = ACIColourToRGB(p->colour);
         if (p->type == DXFEntity::Line)
         {

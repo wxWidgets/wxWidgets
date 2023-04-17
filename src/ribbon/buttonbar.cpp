@@ -241,24 +241,17 @@ public:
     long state;
 };
 
-WX_DECLARE_OBJARRAY(wxRibbonButtonBarButtonInstance, wxArrayRibbonButtonBarButtonInstance);
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayRibbonButtonBarButtonInstance)
-
 class wxRibbonButtonBarLayout
 {
 public:
     wxSize overall_size;
-    wxArrayRibbonButtonBarButtonInstance buttons;
+    std::vector<wxRibbonButtonBarButtonInstance> buttons;
 
     void CalculateOverallSize()
     {
         overall_size = wxSize(0, 0);
-        size_t btn_count = buttons.Count();
-        size_t btn_i;
-        for(btn_i = 0; btn_i < btn_count; ++btn_i)
+        for ( auto& instance : buttons )
         {
-            wxRibbonButtonBarButtonInstance& instance = buttons.Item(btn_i);
             wxSize size = instance.base->sizes[instance.size].size;
             int right = instance.position.x + size.GetWidth();
             int bottom = instance.position.y + size.GetHeight();
@@ -280,11 +273,8 @@ public:
         {
             return nullptr;
         }
-        size_t btn_count = buttons.Count();
-        size_t btn_i;
-        for(btn_i = 0; btn_i < btn_count; ++btn_i)
+        for ( auto& instance : buttons )
         {
-            wxRibbonButtonBarButtonInstance& instance = buttons.Item(btn_i);
             if(instance.base == inst->base)
             {
                 return &instance;
@@ -933,11 +923,8 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
 
-    size_t btn_count = layout->buttons.Count();
-    size_t btn_i;
-    for(btn_i = 0; btn_i < btn_count; ++btn_i)
+    for ( auto& button : layout->buttons )
     {
-        wxRibbonButtonBarButtonInstance& button = layout->buttons.Item(btn_i);
         wxRibbonButtonBarButtonBase* base = button.base;
         wxRect rect(button.position + m_layout_offset, base->sizes[button.size].size);
 
@@ -1100,7 +1087,7 @@ void wxRibbonButtonBar::MakeLayouts()
                 }
                 cursor.x += size.GetWidth();
             }
-            layout->buttons.Add(instance);
+            layout->buttons.push_back(instance);
         }
         layout->overall_size.SetHeight(available_height);
         layout->overall_size.SetWidth(cursor.x + stacked_width);
@@ -1156,7 +1143,7 @@ void wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
                                       large_size.GetWidth());
 
         // Top button in column: add column width to available width
-        if(original->buttons.Item(btn_i).position.y == 0)
+        if(original->buttons.at(btn_i).position.y == 0)
         {
             t_available_width += original_column_width;
             original_column_width = 0;
@@ -1203,12 +1190,12 @@ void wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
 
     wxRibbonButtonBarLayout* layout = new wxRibbonButtonBarLayout;
     WX_APPEND_ARRAY(layout->buttons, original->buttons);
-    wxPoint cursor(layout->buttons.Item(btn_i).position);
+    wxPoint cursor(layout->buttons.at(btn_i).position);
 
     cursor.y = 0;
     for(; btn_i <= first_btn; ++btn_i)
     {
-        wxRibbonButtonBarButtonInstance& instance = layout->buttons.Item(btn_i);
+        wxRibbonButtonBarButtonInstance& instance = layout->buttons.at(btn_i);
         if(instance.size > target_size)
         {
             instance.base->GetSmallerSize(&instance.size,
@@ -1223,7 +1210,7 @@ void wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
     // Adjust x coords of buttons right of shrinked column
     for(; btn_i < btn_count; ++btn_i)
     {
-        wxRibbonButtonBarButtonInstance& instance = layout->buttons.Item(btn_i);
+        wxRibbonButtonBarButtonInstance& instance = layout->buttons.at(btn_i);
         instance.position.x -= x_adjust;
     }
 
@@ -1258,11 +1245,8 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
     long new_hovered_state = 0;
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
-    size_t btn_count = layout->buttons.Count();
-    size_t btn_i;
-    for(btn_i = 0; btn_i < btn_count; ++btn_i)
+    for ( auto& instance : layout->buttons )
     {
-        wxRibbonButtonBarButtonInstance& instance = layout->buttons.Item(btn_i);
         wxRibbonButtonBarButtonSizeInfo& size = instance.base->sizes[instance.size];
         wxRect btn_rect;
         btn_rect.SetTopLeft(m_layout_offset + instance.position);
@@ -1360,11 +1344,8 @@ void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
     m_active_button = nullptr;
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
-    size_t btn_count = layout->buttons.Count();
-    size_t btn_i;
-    for(btn_i = 0; btn_i < btn_count; ++btn_i)
+    for ( auto& instance : layout->buttons )
     {
-        wxRibbonButtonBarButtonInstance& instance = layout->buttons.Item(btn_i);
         wxRibbonButtonBarButtonSizeInfo& size = instance.base->sizes[instance.size];
         wxRect btn_rect;
         btn_rect.SetTopLeft(m_layout_offset + instance.position);
@@ -1511,12 +1492,8 @@ int wxRibbonButtonBar::GetItemId(wxRibbonButtonBarButtonBase *item) const
 wxRect wxRibbonButtonBar::GetItemRect(int button_id)const
 {
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
-    size_t btn_count = layout->buttons.Count();
-    size_t btn_i;
-
-    for (btn_i = 0; btn_i < btn_count; ++btn_i)
+    for ( auto& instance : layout->buttons )
     {
-        wxRibbonButtonBarButtonInstance& instance = layout->buttons.Item(btn_i);
         wxRibbonButtonBarButtonBase* button = instance.base;
 
         if (button->id == button_id)

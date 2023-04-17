@@ -15,11 +15,11 @@
 
 #if wxUSE_GRID
 
-#include "wx/hashmap.h"
-
 #include "wx/scrolwin.h"
 
 #include <iterator>
+#include <unordered_map>
+#include <unordered_set>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -113,7 +113,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 class WXDLLIMPEXP_FWD_CORE wxDatePickerCtrl;
 #endif
 
-class wxGridFixedIndicesSet;
+using wxGridFixedIndicesSet = std::unordered_set<int>;
 
 class wxGridOperations;
 class wxGridRowOperations;
@@ -1191,10 +1191,13 @@ extern WXDLLIMPEXP_CORE wxGridCellCoords  wxGridNoCellCoords;
 extern WXDLLIMPEXP_CORE wxGridBlockCoords wxGridNoBlockCoords;
 extern WXDLLIMPEXP_CORE wxRect            wxGridNoCellRect;
 
-// An array of cell coords...
-//
-WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
-                              class WXDLLIMPEXP_CORE);
+// Define a vector used for passing cell coordinates to the grid.
+using wxGridCellCoordsVector = std::vector<wxGridCellCoords>;
+
+// Legacy array of cell coordinates that we still return from wxGrid functions
+// for compatibility. As it inherits from wxGridCellCoordsVector, it can also
+// be passed to the functions taking cell coordinates on input.
+using wxGridCellCoordsArray = wxBaseArray<wxGridCellCoords>;
 
 // ----------------------------------------------------------------------------
 // Grid table classes
@@ -1376,10 +1379,10 @@ private:
 // ------ wxGridStringArray
 // A 2-dimensional array of strings for data values
 //
-
-WX_DECLARE_OBJARRAY_WITH_DECL(wxArrayString, wxGridStringArray,
-                              class WXDLLIMPEXP_CORE);
-
+// This is defined for compatibility only: even if it was never part of wx API,
+// it is still used outside of it, even if it's not used by wxGridStringTable
+// itself any longer.
+using wxGridStringArray = wxBaseArray<wxArrayString>;
 
 
 // ------ wxGridStringTable
@@ -1419,7 +1422,10 @@ public:
     wxString GetCornerLabelValue() const override;
 
 private:
-    wxGridStringArray m_data;
+    // This used to be a wxGridStringArray, but we don't really need it, just a
+    // vector of vectors, storing columns data for each row, is enough.
+    using ColData = std::vector<wxString>;
+    std::vector<ColData> m_data;
 
     // notice that while we don't need to store the number of our rows as it's
     // always equal to the size of m_data array, we do need to store the number
@@ -1453,8 +1459,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // hash map to store positions as the keys and sizes as the values
-WX_DECLARE_HASH_MAP_WITH_DECL( unsigned, int, wxIntegerHash, wxIntegerEqual,
-                               wxUnsignedToIntHashMap, class WXDLLIMPEXP_CORE );
+using wxUnsignedToIntHashMap = std::unordered_map<unsigned, int>;
 
 struct WXDLLIMPEXP_CORE wxGridSizesInfo
 {
@@ -1618,13 +1623,13 @@ public:
 
     bool IsFrozen() const;
 
-    void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
+    void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsVector& cells );
     void DrawGridSpace( wxDC& dc, wxGridWindow *gridWindow );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines();
     void DrawAllGridWindowLines( wxDC& dc, const wxRegion & reg , wxGridWindow *gridWindow);
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells);
+    void DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells);
     void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow );
     void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
 
@@ -2541,8 +2546,8 @@ protected:
 
     // if a column has a minimal width, it will be the value for it in this
     // hash table
-    wxLongToLongHashMap m_colMinWidths,
-                        m_rowMinHeights;
+    std::unordered_map<int, int> m_colMinWidths,
+                                 m_rowMinHeights;
 
     // get the minimal width of the given column/row
     int GetColMinimalWidth(int col) const;
@@ -2976,7 +2981,7 @@ private:
     void GetRenderSizes( const wxGridCellCoords& topLeft,
                          const wxGridCellCoords& bottomRight,
                          wxPoint& pointOffSet, wxSize& sizeGrid,
-                         wxGridCellCoordsArray& renderCells,
+                         wxGridCellCoordsVector& renderCells,
                          wxArrayInt& arrayCols, wxArrayInt& arrayRows ) const;
 
     // Helper of Render(): set the scale to draw the cells at the right size.

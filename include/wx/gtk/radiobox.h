@@ -11,12 +11,9 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_FWD_CORE wxGTKRadioButtonInfo;
+#include <vector>
 
-#include "wx/list.h"
-
-WX_DECLARE_EXPORTED_LIST(wxGTKRadioButtonInfo, wxRadioBoxButtonsInfoList);
-
+class wxGTKRadioButtonInfo;
 
 //-----------------------------------------------------------------------------
 // wxRadioBox
@@ -27,7 +24,7 @@ class WXDLLIMPEXP_CORE wxRadioBox : public wxControl,
 {
 public:
     // ctors and dtor
-    wxRadioBox() { }
+    wxRadioBox();
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
@@ -38,10 +35,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
-    {
-        Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
-    }
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
@@ -52,10 +46,7 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxASCII_STR(wxRadioBoxNameStr))
-    {
-        Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
-    }
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -129,7 +120,7 @@ public:
     virtual void GTKApplyToolTip(const char* tip) override;
 #endif // wxUSE_TOOLTIPS
 
-    wxRadioBoxButtonsInfoList   m_buttonsInfo;
+    std::vector<wxGTKRadioButtonInfo> m_buttonsInfo;
 
 protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }

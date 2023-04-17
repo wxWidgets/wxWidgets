@@ -109,10 +109,19 @@ public:
 };
 
 
-#ifndef SWIG
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiNotebookPage, wxAuiNotebookPageArray, WXDLLIMPEXP_AUI);
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiTabContainerButton, wxAuiTabContainerButtonArray, WXDLLIMPEXP_AUI);
-#endif
+// These legacy classes can't be just typedefs as they can be (and are)
+// forward-declared in the existing code.
+class wxAuiNotebookPageArray : public wxBaseArray<wxAuiNotebookPage>
+{
+public:
+    using wxBaseArray<wxAuiNotebookPage>::wxBaseArray;
+};
+
+class wxAuiTabContainerButtonArray : public wxBaseArray<wxAuiTabContainerButton>
+{
+public:
+    using wxBaseArray<wxAuiTabContainerButton>::wxBaseArray;
+};
 
 
 class WXDLLIMPEXP_AUI wxAuiTabContainer

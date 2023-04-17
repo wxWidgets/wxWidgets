@@ -450,9 +450,7 @@ private:
     size_t m_timestamp;
 };
 
-WX_DECLARE_OBJARRAY(wxWrappedLineData, wxArrayWrappedLinesData);
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayWrappedLinesData);
+using wxArrayWrappedLinesData = wxBaseArray<wxWrappedLineData>;
 
 struct wxTextWrappedData : public wxTextMultiLineData
 {
@@ -733,7 +731,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
         if ( !(style & wxHSCROLL) )
         {
-            WData().m_linesData.Add(new wxWrappedLineData);
+            WData().m_linesData.push_back({});
             WData().InvalidateLinesBelow(0);
         }
 
@@ -928,7 +926,7 @@ void wxTextCtrl::InsertLine(wxTextCoord line, const wxString& text)
     MData().m_lines.Insert(text, line);
     if ( WrapLines() )
     {
-        WData().m_linesData.Insert(new wxWrappedLineData, line);
+        WData().m_linesData.Insert({}, line);
 
         // invalidate everything below it
         WData().InvalidateLinesBelow(line);
@@ -2692,7 +2690,7 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
     for ( wxTextCoord line = lineFirst; line <= lineLast; line++ )
     {
         // set the starting row for this line
-        wxWrappedLineData& lineData = WData().m_linesData[line];
+        auto& lineData = const_cast<wxWrappedLineData&>(WData().m_linesData[line]);
         lineData.m_rowFirst = rowCur;
 
         // had the line been already broken into rows?

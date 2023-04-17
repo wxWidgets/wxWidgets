@@ -22,7 +22,6 @@
 #include "wx/evtloop.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/module.h"

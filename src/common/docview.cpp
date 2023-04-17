@@ -153,10 +153,9 @@ bool wxDocument::CanClose()
     // When the parent document closes, its children must be closed as well as
     // they can't exist without the parent, so ask them too.
 
-    DocsList::const_iterator it = m_childDocuments.begin();
-    for ( DocsList::const_iterator end = m_childDocuments.end(); it != end; ++it )
+    for ( auto& childDoc : m_childDocuments )
     {
-        if ( !(*it)->OnSaveModified() )
+        if ( !childDoc->OnSaveModified() )
         {
             // Leave the parent document opened if a child can't close.
             return false;

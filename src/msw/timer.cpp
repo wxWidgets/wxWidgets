@@ -17,31 +17,33 @@
 #include "wx/msw/private/timer.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/hashmap.h"
     #include "wx/module.h"
 #endif
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"
 
+#include <unordered_map>
+
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 // define a hash containing all the timers: it is indexed by timer id and
 // contains the corresponding timer
-WX_DECLARE_HASH_MAP(WPARAM, wxMSWTimerImpl *, wxIntegerHash, wxIntegerEqual,
-                    wxTimerMap);
+using wxTimerMap = std::unordered_map<WPARAM, wxMSWTimerImpl*>;
 
 // instead of using a global here, wrap it in a static function as otherwise it
 // could have been used before being initialized if a timer object were created
 // globally
-static wxTimerMap& TimerMap()
+wxTimerMap& TimerMap()
 {
     static wxTimerMap s_timerMap;
 
@@ -64,7 +66,7 @@ UINT_PTR GetNewTimerId(wxMSWTimerImpl *t)
     return lastTimerId;
 }
 
-
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // private functions

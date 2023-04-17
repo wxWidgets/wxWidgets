@@ -15,7 +15,6 @@
 #include "wx/module.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif

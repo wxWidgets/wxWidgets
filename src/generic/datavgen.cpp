@@ -41,8 +41,6 @@
 #include "wx/dcbuffer.h"
 #include "wx/icon.h"
 #include "wx/itemattr.h"
-#include "wx/list.h"
-#include "wx/listimpl.cpp"
 #include "wx/imaglist.h"
 #include "wx/headerctrl.h"
 #include "wx/dnd.h"

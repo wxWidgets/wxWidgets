@@ -20,8 +20,10 @@
 
 #include "wx/string.h"
 #include "wx/bitmap.h"
-#include "wx/list.h"
 #include "wx/arrstr.h"
+
+#include <memory>
+#include <vector>
 
 // ============================================================================
 /*
@@ -248,8 +250,6 @@ private:
 // wxDataObject directly.
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_LIST(wxDataObjectSimple, wxSimpleDataObjectList);
-
 class WXDLLIMPEXP_CORE wxDataObjectComposite : public wxDataObject
 {
 public:
@@ -291,8 +291,8 @@ public:
 #endif
 
 private:
-    // the list of all (simple) data objects whose formats we support
-    wxSimpleDataObjectList m_dataObjects;
+    // all (simple) data objects whose formats we support
+    std::vector<std::unique_ptr<wxDataObjectSimple>> m_dataObjects;
 
     // the index of the preferred one (0 initially, so by default the first
     // one is the preferred)

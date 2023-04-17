@@ -100,7 +100,9 @@ private:
     bool m_bEllipsized;
 };
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxStatusBarPane, wxStatusBarPaneArray);
+// This is preserved for compatibility, but is not supposed to be used by the
+// application code, consider wxStatusBar::m_panes to be a std::vector instead.
+using wxStatusBarPaneArray = wxBaseArray<wxStatusBarPane>;
 
 // ----------------------------------------------------------------------------
 // wxStatusBar: a window near the bottom of the frame used for status info
@@ -119,7 +121,7 @@ public:
     // set the number of fields and call SetStatusWidths(widths) if widths are
     // given
     virtual void SetFieldsCount(int number = 1, const int *widths = nullptr);
-    int GetFieldsCount() const { return (int)m_panes.GetCount(); }
+    int GetFieldsCount() const { return static_cast<int>(m_panes.size()); }
 
     // field text
     // ----------
@@ -145,7 +147,7 @@ public:
     virtual void SetStatusWidths(int n, const int widths[]);
 
     int GetStatusWidth(int n) const
-        { return m_panes[n].GetWidth(); }
+        { return m_panes.at(n).GetWidth(); }
 
     // field styles
     // ------------
@@ -154,7 +156,7 @@ public:
     virtual void SetStatusStyles(int n, const int styles[]);
 
     int GetStatusStyle(int n) const
-        { return m_panes[n].GetStyle(); }
+        { return m_panes.at(n).GetStyle(); }
 
     // geometry
     // --------
@@ -176,7 +178,7 @@ public:
     // -------------
 
     const wxStatusBarPane& GetField(int n) const
-        { return m_panes[n]; }
+        { return m_panes.at(n); }
 
     // wxWindow overrides:
 

@@ -32,9 +32,6 @@
 
 #if wxUSE_DISPLAY
 
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayVideoModes)
-
 const wxVideoMode wxDefaultVideoMode;
 
 #endif // wxUSE_DISPLAY

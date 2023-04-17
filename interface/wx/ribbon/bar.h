@@ -111,6 +111,16 @@ public:
     bool shown;
 };
 
+/**
+    A vector of wxRibbonPageTabInfo.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxRibbonPageTabInfo objects in the application code.
+*/
+class wxRibbonPageTabInfoArray : public std::vector<wxRibbonPageTabInfoArray>
+{
+};
 
 
 /**

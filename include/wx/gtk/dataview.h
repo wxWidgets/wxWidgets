@@ -9,7 +9,8 @@
 #ifndef _WX_GTKDATAVIEWCTRL_H_
 #define _WX_GTKDATAVIEWCTRL_H_
 
-#include "wx/list.h"
+#include <memory>
+#include <vector>
 
 class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlInternal;
 
@@ -92,9 +93,6 @@ private:
 
     void Init(wxAlignment align, int flags, int width);
 };
-
-WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
-                          class WXDLLIMPEXP_CORE);
 
 // ---------------------------------------------------------
 // wxDataViewCtrl
@@ -235,7 +233,10 @@ private:
 
     GtkWidget               *m_treeview;
     wxDataViewCtrlInternal  *m_internal;
-    wxDataViewColumnList     m_cols;
+
+    using wxDataViewColumnPtr = std::unique_ptr<wxDataViewColumn>;
+    std::vector<wxDataViewColumnPtr> m_cols;
+
     wxDataViewItem           m_ensureVisibleDefered;
 
     // By default this is set to -1 and the height of the rows is determined by

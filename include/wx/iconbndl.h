@@ -19,7 +19,9 @@
 
 class WXDLLIMPEXP_FWD_BASE wxInputStream;
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
+// This declaration is preserved solely for backwards compatibility, this type
+// is not used by wxWidgets itself.
+using wxIconArray = wxBaseArray<wxIcon>;
 
 // Load icons of multiple sizes from files or resources (MSW-only).
 class WXDLLIMPEXP_CORE wxIconBundle : public wxGDIObject

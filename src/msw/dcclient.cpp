@@ -25,7 +25,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
-    #include "wx/hashmap.h"
     #include "wx/log.h"
     #include "wx/window.h"
 #endif
@@ -34,6 +33,8 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/paint.h"
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // local data structures
@@ -128,9 +129,7 @@ private:
 // all of them because we can't call BeginPaint() more than once. So we cache
 // the first HDC created for the window in this map and then reuse it later if
 // needed. And, of course, remove it from the map when the painting is done.
-WX_DECLARE_HASH_MAP(wxWindow *, wxPaintDCInfo *,
-                    wxPointerHash, wxPointerEqual,
-                    PaintDCInfos);
+using PaintDCInfos = std::unordered_map<wxWindow*, wxPaintDCInfo*>;
 
 PaintDCInfos gs_PaintDCInfos;
 

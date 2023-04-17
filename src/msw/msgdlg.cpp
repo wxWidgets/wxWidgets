@@ -20,7 +20,6 @@
     #include "wx/intl.h"
     #include "wx/utils.h"
     #include "wx/msw/private.h"
-    #include "wx/hashmap.h"
 #endif
 
 #include "wx/ptr_scpd.h"
@@ -45,14 +44,6 @@ using namespace wxMSWMessageDialog;
 
 wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 
-// there can potentially be one message box per thread so we use a hash map
-// with thread ids as keys and (currently shown) message boxes as values
-//
-// TODO: replace this with wxTLS once it's available
-WX_DECLARE_HASH_MAP(unsigned long, wxMessageDialog *,
-                    wxIntegerHash, wxIntegerEqual,
-                    wxMessageDialogMap);
-
 // the order in this array is the one in which buttons appear in the
 // message box
 const wxMessageDialog::ButtonAccessors wxMessageDialog::ms_buttons[] =
@@ -66,12 +57,9 @@ const wxMessageDialog::ButtonAccessors wxMessageDialog::ms_buttons[] =
 namespace
 {
 
-wxMessageDialogMap& HookMap()
-{
-    static wxMessageDialogMap s_Map;
-
-    return s_Map;
-}
+// Different threads could potentially show message boxes at the same time, so
+// remember the window showing it in a thread-specific variable.
+thread_local wxMessageDialog* gs_currentDialog = nullptr;
 
 /*
     All this code is used for adjusting the message box layout when we mess
@@ -114,13 +102,9 @@ void MoveWindowToScreenRect(HWND hwnd, RECT rc)
 WXLRESULT wxCALLBACK
 wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // Find the thread-local instance of wxMessageDialog
-    const DWORD tid = ::GetCurrentThreadId();
-    wxMessageDialogMap::iterator node = HookMap().find(tid);
-    wxCHECK_MSG( node != HookMap().end(), false,
-                    wxT("bogus thread id in wxMessageDialog::Hook") );
-
-    wxMessageDialog *  const wnd = node->second;
+    // Get the thread-local instance of wxMessageDialog
+    wxMessageDialog *  const wnd = gs_currentDialog;
+    wxCHECK_MSG( wnd, false, "No valid wxMessageDialog?" );
 
     const HHOOK hhook = (HHOOK)wnd->m_hook;
     const LRESULT rc = ::CallNextHookEx(hhook, code, wParam, lParam);
@@ -130,7 +114,7 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
         // we won't need this hook any longer
         ::UnhookWindowsHookEx(hhook);
         wnd->m_hook = nullptr;
-        HookMap().erase(tid);
+        gs_currentDialog = nullptr;
 
         TempHWNDSetter set(wnd, (WXHWND)wParam);
 
@@ -520,7 +504,7 @@ int wxMessageDialog::ShowMessageBox()
     const DWORD tid = ::GetCurrentThreadId();
     m_hook = ::SetWindowsHookEx(WH_CBT,
                                 &wxMessageDialog::HookFunction, nullptr, tid);
-    HookMap()[tid] = this;
+    gs_currentDialog = this;
 
     // do show the dialog
     const int msAns = MessageBox

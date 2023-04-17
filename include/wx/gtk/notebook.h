@@ -10,14 +10,13 @@
 #ifndef _WX_GTKNOTEBOOK_H_
 #define _WX_GTKNOTEBOOK_H_
 
+#include <vector>
+
 //-----------------------------------------------------------------------------
 // internal class
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_CORE wxGtkNotebookPage;
-
-#include "wx/list.h"
-WX_DECLARE_LIST(wxGtkNotebookPage, wxGtkNotebookPagesList);
+class wxGtkNotebookPage;
 
 //-----------------------------------------------------------------------------
 // wxNotebook
@@ -112,9 +111,6 @@ public:
     // helper function
     wxGtkNotebookPage* GetNotebookPage(int page) const;
 
-    // the additional page data (the pages themselves are in m_pages array)
-    wxGtkNotebookPagesList m_pagesData;
-
     // we need to store the old selection since there
     // is no other way to know about it at the time
     // of the change selection event
@@ -133,6 +129,9 @@ protected:
 private:
     // the padding set by SetPadding()
     int m_padding;
+
+    // the additional page data (the pages themselves are in m_pages array)
+    std::vector<wxGtkNotebookPage> m_pagesData;
 
     void Init();
     virtual void AddChildGTK(wxWindowGTK* child) override;
