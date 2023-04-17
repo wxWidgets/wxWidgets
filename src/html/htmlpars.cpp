@@ -86,8 +86,6 @@ wxHtmlParser::~wxHtmlParser()
     while (RestoreState()) {}
     DestroyDOMTree();
 
-    WX_CLEAR_ARRAY(m_HandlersStack);
-    WX_CLEAR_HASH_SET(wxHtmlTagHandlersSet, m_HandlersSet);
     delete m_entitiesParser;
     delete m_Source;
 }
@@ -331,7 +329,7 @@ void wxHtmlParser::AddTagHandler(wxHtmlTagHandler *handler)
     while (tokenizer.HasMoreTokens())
         m_HandlersHash[tokenizer.GetNextToken()] = handler;
 
-    m_HandlersSet.insert(handler);
+    m_HandlersSet.insert(std::unique_ptr<wxHtmlTagHandler>(handler));
 
     handler->SetParser(this);
 }
@@ -341,7 +339,9 @@ void wxHtmlParser::PushTagHandler(wxHtmlTagHandler *handler, const wxString& tag
     wxStringTokenizer tokenizer(tags, wxT(", "));
     wxString key;
 
-    m_HandlersStack.push_back(new wxHtmlTagHandlersHash(m_HandlersHash));
+    m_HandlersStack.push(std::unique_ptr<wxHtmlTagHandlersHash>(
+        new wxHtmlTagHandlersHash(m_HandlersHash))
+    );
 
     while (tokenizer.HasMoreTokens())
     {
@@ -355,10 +355,8 @@ void wxHtmlParser::PopTagHandler()
     wxCHECK_RET( !m_HandlersStack.empty(),
                  "attempt to remove HTML tag handler from empty stack" );
 
-    wxHtmlTagHandlersHash *prev = m_HandlersStack.back();
-    m_HandlersStack.pop_back();
-    m_HandlersHash = *prev;
-    delete prev;
+    m_HandlersHash = *m_HandlersStack.top();
+    m_HandlersStack.pop();
 }
 
 void wxHtmlParser::SetSourceAndSaveState(const wxString& src)
