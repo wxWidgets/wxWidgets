@@ -28,6 +28,7 @@
 #include "wx/protocol/http.h"
 #include "wx/sckstrm.h"
 #include "wx/thread.h"
+#include "wx/wxcrt.h"
 
 
 // ----------------------------------------------------------------------------
@@ -227,12 +228,11 @@ wxHTTP::SetPostText(const wxString& contentType,
 
 void wxHTTP::SendHeaders()
 {
-    typedef wxStringToStringHashMap::iterator iterator;
     wxString buf;
 
-    for (iterator it = m_headers.begin(), en = m_headers.end(); it != en; ++it )
+    for ( const auto& kv : m_headers )
     {
-        buf.Printf(wxT("%s: %s\r\n"), it->first.c_str(), it->second.c_str());
+        buf.Printf("%s: %s\r\n", kv.first, kv.second);
 
         const wxWX2MBbuf cbuf = buf.mb_str();
         Write(cbuf, strlen(cbuf));
