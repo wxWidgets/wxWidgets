@@ -15,10 +15,10 @@
 
 #include "wx/filesys.h"
 
-#include "wx/hashmap.h"
+#include <memory>
+#include <unordered_map>
 
 class wxMemoryFSFile;
-WX_DECLARE_STRING_HASH_MAP(wxMemoryFSFile *, wxMemoryFSHash);
 
 #if wxUSE_GUI
     #include "wx/bitmap.h"
@@ -59,7 +59,13 @@ protected:
     // error and returns false if it does exist
     static bool CheckDoesntExist(const wxString& filename);
 
+    // add the given object to m_Hash, taking ownership of the pointer
+    static void DoAddFile(const wxString& filename, wxMemoryFSFile* file);
+
+private:
     // the hash map indexed by the names of the files stored in the memory FS
+    using wxMemoryFSHash =
+        std::unordered_map<wxString, std::unique_ptr<wxMemoryFSFile>>;
     static wxMemoryFSHash m_Hash;
 
     // the file name currently being searched for, i.e. the argument of the
