@@ -27,6 +27,13 @@ typedef unsigned long wxLogLevel;
 
 #include "wx/string.h"
 
+// This is a hack, but this header used to include wx/hashmap.h which, in turn,
+// included wx/wxcrt.h and it turns out quite some existing code relied on it
+// by using the CRT wrapper functions declared there without explicitly
+// including that header, so keep including it from here to let it continue to
+// compile.
+#include "wx/wxcrt.h"
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -44,13 +51,14 @@ class WXDLLIMPEXP_FWD_BASE wxObject;
 #include <time.h>   // for time_t
 
 #include "wx/dynarray.h"
-#include "wx/hashmap.h"
 #include "wx/msgout.h"
 #include "wx/time.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif // wxUSE_THREADS
+
+#include <unordered_map>
 
 // wxUSE_LOG_DEBUG enables the debug log messages
 #ifndef wxUSE_LOG_DEBUG
@@ -236,7 +244,7 @@ public:
         if ( !m_data )
             return false;
 
-        const wxStringToNumHashMap::const_iterator it = m_data->numValues.find(key);
+        const auto it = m_data->numValues.find(key);
         if ( it == m_data->numValues.end() )
             return false;
 
@@ -250,7 +258,7 @@ public:
         if ( !m_data )
             return false;
 
-        const wxStringToStringHashMap::const_iterator it = m_data->strValues.find(key);
+        const auto it = m_data->strValues.find(key);
         if ( it == m_data->strValues.end() )
             return false;
 
@@ -272,8 +280,8 @@ private:
     // sink (e.g. wxLogSysError() uses this to pass the error code)
     struct ExtraData
     {
-        wxStringToNumHashMap numValues;
-        wxStringToStringHashMap strValues;
+        std::unordered_map<wxString, wxUIntPtr> numValues;
+        std::unordered_map<wxString, wxString> strValues;
     };
 
     // nullptr if not used
