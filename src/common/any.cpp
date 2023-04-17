@@ -23,10 +23,9 @@
 
 #include "wx/vector.h"
 #include "wx/module.h"
-#include "wx/hashmap.h"
-#include "wx/hashset.h"
 
 #include <memory>
+#include <unordered_map>
 
 using namespace wxPrivate;
 
@@ -36,11 +35,13 @@ using namespace wxPrivate;
 // wxAnyValueTypeGlobals
 //-------------------------------------------------------------------------
 
-WX_DECLARE_HASH_MAP(wxAnyValueType*,
-                    wxVariantDataFactory,
-                    wxPointerHash,
-                    wxPointerEqual,
-                    wxAnyTypeToVariantDataFactoryMap);
+namespace
+{
+
+using wxAnyTypeToVariantDataFactoryMap =
+    std::unordered_map<const wxAnyValueType*, wxVariantDataFactory>;
+
+} // anonymous namespace
 
 //
 // Helper class to manage global variables related to type conversion
@@ -64,16 +65,10 @@ public:
 
     // Find wxVariantData factory function for given value type,
     // (or compatible, if possible)
-    wxVariantDataFactory FindVariantDataFactory(const wxAnyValueType* type_)
+    wxVariantDataFactory FindVariantDataFactory(const wxAnyValueType* type)
     {
-        // Ideally we'd have the hash map of type 'const wxAnyValueType*',
-        // but WX_DECLARE_HASH_MAP() has some trouble with it.
-        wxAnyValueType* type = const_cast<wxAnyValueType*>(type_);
-
-        wxAnyTypeToVariantDataFactoryMap& anyToVariant = m_anyToVariant;
-        wxAnyTypeToVariantDataFactoryMap::const_iterator it;
-        it = anyToVariant.find(type);
-        if ( it != anyToVariant.end() )
+        auto it = m_anyToVariant.find(type);
+        if ( it != m_anyToVariant.end() )
             return it->second;
 
         // Not found, handle pre-registrations
@@ -89,23 +84,23 @@ public:
                 // now been properly initialized, so remove the
                 // pre-registration entry and move data to anyToVarian
                 // map.
-                anyToVariant[assocType] = reg->GetFactory();
+                m_anyToVariant[assocType] = reg->GetFactory();
                 m_anyToVariantRegs.erase( m_anyToVariantRegs.begin() + i );
             }
         }
 
         // Then try again
-        it = anyToVariant.find(type);
-        if ( it != anyToVariant.end() )
+        it = m_anyToVariant.find(type);
+        if ( it != m_anyToVariant.end() )
             return it->second;
 
         // Finally, attempt to find a compatible type
-        for ( it = anyToVariant.begin(); it != anyToVariant.end(); ++it )
+        for ( auto& kv : m_anyToVariant )
         {
-            if ( type->IsSameType(it->first) )
+            if ( type->IsSameType(kv.first) )
             {
-                wxVariantDataFactory f = it->second;
-                anyToVariant[type] = f;
+                wxVariantDataFactory f = kv.second;
+                m_anyToVariant[type] = f;
                 return f;
             }
         }
