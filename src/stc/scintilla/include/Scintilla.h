@@ -28,6 +28,15 @@ int Scintilla_LinkLexers(void);
 
 // Include header that defines basic numeric types.
 #if defined(_MSC_VER)
+
+
+#ifndef wxNO_INTTYPES_H
+// When compile with clang 16.0.0.0 on Windows, We are have errors
+// unknown type name 'uintptr_t' and unknown type name 'intptr_t'
+// witout #include <inttypes.h>
+#include <inttypes.h>
+#endif
+
 // Older releases of MSVC did not have stdint.h.
 #include <stddef.h>
 #elif defined( __VMS )
