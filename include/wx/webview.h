@@ -30,6 +30,8 @@
     #error "wxWebView not implemented on this platform."
 #endif
 
+#include <unordered_map>
+
 class wxFSFile;
 class wxFileSystem;
 class wxWebView;
@@ -186,7 +188,7 @@ public:
     virtual wxWebViewConfiguration CreateConfiguration();
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewFactory>, wxStringWebViewFactoryMap);
+using wxStringWebViewFactoryMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewFactory>>;
 
 class WXDLLIMPEXP_WEBVIEW wxWebView : public wxControl
 {
