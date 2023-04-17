@@ -16,7 +16,8 @@
 #include "wx/stream.h"
 #include "wx/datetime.h"
 #include "wx/filename.h"
-#include "wx/hashmap.h"
+
+#include <unordered_map>
 
 class WXDLLIMPEXP_FWD_BASE wxFSFile;
 class WXDLLIMPEXP_FWD_BASE wxFileSystemHandler;
@@ -165,7 +166,7 @@ enum wxFileSystemOpenFlags
     wxFS_SEEKABLE = 4   // Returned stream will be seekable
 };
 
-WX_DECLARE_VOIDPTR_HASH_MAP_WITH_DECL(wxFileSystemHandler*, wxFSHandlerHash, class WXDLLIMPEXP_BASE);
+using wxFSHandlerHash = std::unordered_map<void*, wxFileSystemHandler*>;
 
 class WXDLLIMPEXP_BASE wxFileSystem : public wxObject
 {
