@@ -1185,11 +1185,8 @@ wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
     return it == m_attrs.end() ? wxNullFont : it->second->GetFont();
 }
 
-void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
-                                   const wxColour& col)
+wxItemAttr* wxTreeCtrl::DoGetAttrPtr(const wxTreeItemId& item)
 {
-    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
-
     wxItemAttr *attr;
     wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
@@ -1204,7 +1201,15 @@ void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
         attr = it->second;
     }
 
-    attr->SetTextColour(col);
+    return attr;
+}
+
+void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
+                                   const wxColour& col)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    DoGetAttrPtr(item)->SetTextColour(col);
 
     RefreshItem(item);
 }
@@ -1214,21 +1219,7 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    wxItemAttr *attr;
-    wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
-    if ( it == m_attrs.end() )
-    {
-        m_hasAnyAttr = true;
-
-        m_attrs[item.m_pItem] =
-        attr = new wxItemAttr;
-    }
-    else // already in the hash
-    {
-        attr = it->second;
-    }
-
-    attr->SetBackgroundColour(col);
+    DoGetAttrPtr(item)->SetBackgroundColour(col);
 
     RefreshItem(item);
 }
@@ -1237,23 +1228,9 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    wxItemAttr *attr;
-    wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
-    if ( it == m_attrs.end() )
-    {
-        m_hasAnyAttr = true;
-
-        m_attrs[item.m_pItem] =
-        attr = new wxItemAttr;
-    }
-    else // already in the hash
-    {
-        attr = it->second;
-    }
-
     wxFont f = font;
     f.WXAdjustToPPI(GetDPI());
-    attr->SetFont(f);
+    DoGetAttrPtr(item)->SetFont(f);
 
     // Reset the item's text to ensure that the bounding rect will be adjusted
     // for the new font.
