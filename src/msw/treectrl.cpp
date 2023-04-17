@@ -856,7 +856,7 @@ wxTreeCtrl::~wxTreeCtrl()
     // delete any attributes
     if ( m_hasAnyAttr )
     {
-        WX_CLEAR_HASH_MAP(wxMapTreeAttr, m_attrs);
+        m_attrs.clear();
 
         // prevent TVN_DELETEITEM handler from deleting the attributes again!
         m_hasAnyAttr = false;
@@ -1181,7 +1181,7 @@ wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
 
-    wxMapTreeAttr::const_iterator it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.m_pItem);
     return it == m_attrs.end() ? wxNullColour : it->second->GetTextColour();
 }
 
@@ -1189,7 +1189,7 @@ wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
 
-    wxMapTreeAttr::const_iterator it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.m_pItem);
     return it == m_attrs.end() ? wxNullColour : it->second->GetBackgroundColour();
 }
 
@@ -1197,24 +1197,24 @@ wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullFont, wxT("invalid tree item") );
 
-    wxMapTreeAttr::const_iterator it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.m_pItem);
     return it == m_attrs.end() ? wxNullFont : it->second->GetFont();
 }
 
 wxItemAttr* wxTreeCtrl::DoGetAttrPtr(const wxTreeItemId& item)
 {
     wxItemAttr *attr;
-    wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
-        m_attrs[item.m_pItem] =
         attr = new wxItemAttr;
+        m_attrs[item.m_pItem] = std::unique_ptr<wxItemAttr>(attr);
     }
     else
     {
-        attr = it->second;
+        attr = it->second.get();
     }
 
     return attr;
@@ -2258,10 +2258,10 @@ void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     wxTreeCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
 
-    for ( wxMapTreeAttr::const_iterator it = m_attrs.begin(); it != m_attrs.end(); ++it )
+    for ( const auto& kv : m_attrs )
     {
-        if ( it->second->HasFont() )
-            SetItemFont(it->first, it->second->GetFont());
+        if ( kv.second->HasFont() )
+            SetItemFont(kv.first, kv.second->GetFont());
     }
 }
 
@@ -3337,12 +3337,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 if ( m_hasAnyAttr )
                 {
-                    wxMapTreeAttr::iterator it = m_attrs.find(tv->itemOld.hItem);
-                    if ( it != m_attrs.end() )
-                    {
-                        delete it->second;
-                        m_attrs.erase(it);
-                    }
+                    m_attrs.erase(tv->itemOld.hItem);
                 }
             }
             break;
@@ -3583,7 +3578,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     case CDDS_ITEMPREPAINT:
                         {
-                            wxMapTreeAttr::iterator
+                            const auto
                                 it = m_attrs.find((void *)nmcd.dwItemSpec);
 
                             if ( it == m_attrs.end() )
@@ -3593,7 +3588,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                 break;
                             }
 
-                            wxItemAttr * const attr = it->second;
+                            wxItemAttr * const attr = it->second.get();
 
                             wxTreeViewItem tvItem((void *)nmcd.dwItemSpec,
                                                   TVIF_STATE, TVIS_DROPHILITED);
