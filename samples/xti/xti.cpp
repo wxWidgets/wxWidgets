@@ -328,7 +328,7 @@ void RegisterFrameRTTI()
 
 wxDynamicObject* CreateFrameRTTI()
 {
-    int baseID = 100;
+    int baseID = wxID_HIGHEST;
     wxAny Params[10];
 
     // the class is now part of XTI internal table so that we can
