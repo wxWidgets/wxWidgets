@@ -135,12 +135,15 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
         m_ninth = nullptr;
 
     // first remove the node from the parent's array of children;
-    // NOTE: MyMusicTreeModelNodePtrArray is only an array of _pointers_
-    //       thus removing the node from it doesn't result in freeing it
-    node->GetParent()->GetChildren().Remove( node );
-
-    // free the node
-    delete node;
+    auto& siblings = node->GetParent()->GetChildren();
+    for ( auto it = siblings.begin(); it != siblings.end(); ++it )
+    {
+        if ( it->get() == node )
+        {
+            siblings.erase(it);
+            break;
+        }
+    }
 
     // notify control
     ItemDeleted( parent, item );
@@ -151,12 +154,7 @@ void MyMusicTreeModel::Clear()
     m_classical = nullptr;
     m_ninth     = nullptr;
 
-    while (!m_root->GetChildren().IsEmpty())
-    {
-        MyMusicTreeModelNode* node = m_root->GetNthChild(0);
-        m_root->GetChildren().Remove(node);
-        delete node;
-    }
+    m_root->GetChildren().clear();
 
     Cleared();
 }
@@ -320,14 +318,12 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
         return 0;
     }
 
-    unsigned int count = node->GetChildren().GetCount();
-    for (unsigned int pos = 0; pos < count; pos++)
+    for ( const auto& child : node->GetChildren() )
     {
-        MyMusicTreeModelNode *child = node->GetChildren().Item( pos );
-        array.Add( wxDataViewItem( (void*) child ) );
+        array.Add( wxDataViewItem( child.get() ) );
     }
 
-    return count;
+    return array.size();
 }
 
 
@@ -514,7 +510,7 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 
         case Col_Custom:
             {
-                IntToStringMap::const_iterator it = m_customColValues.find(row);
+                const auto it = m_customColValues.find(row);
                 if ( it != m_customColValues.end() )
                     variant = it->second;
                 else
