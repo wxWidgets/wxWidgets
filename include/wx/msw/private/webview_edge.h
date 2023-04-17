@@ -14,7 +14,8 @@
 #include "wx/dynlib.h"
 #endif
 #include "wx/msw/private/comptr.h"
-#include "wx/hashmap.h"
+
+#include <unordered_map>
 
 #include <WebView2.h>
 
@@ -44,7 +45,7 @@ __CRT_UUID_DECL(ICoreWebView2WebResourceRequestedEventHandler, 0xab00b74c, 0x15f
 __CRT_UUID_DECL(ICoreWebView2WindowCloseRequestedEventHandler, 0x5c19e9e0,0x092f,0x486b, 0xaf,0xfa,0xca,0x82,0x31,0x91,0x30,0x39);
 #endif
 
-WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
+using wxStringToWebHandlerMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewHandler>>;
 
 class wxWebViewWindowFeaturesEdge;
 

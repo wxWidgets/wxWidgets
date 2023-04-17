@@ -21,11 +21,13 @@
 
 #include "wx/osx/core/objcid.h"
 
+#include <unordered_map>
+
 // ----------------------------------------------------------------------------
 // Web Kit Control
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxWebViewHandler>, wxStringToWebHandlerMap);
+using wxStringToWebHandlerMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewHandler>>;
 
 class wxWebViewConfigurationImplWebKit;
 
