@@ -310,9 +310,6 @@ private:
     // the hash storing the items attributes (indexed by item ids)
     std::unordered_map<void*, std::unique_ptr<wxItemAttr>> m_attrs;
 
-    // true if the hash above is not empty
-    bool m_hasAnyAttr;
-
 #if wxUSE_DRAGIMAGE
     // used for dragging
     wxDragImage *m_dragImage;
