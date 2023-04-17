@@ -32,6 +32,7 @@
     #include "wx/math.h"
 #endif
 
+#include <unordered_map>
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGDIObject, wxObject);
 
@@ -259,6 +260,27 @@ wxRealPoint::wxRealPoint(const wxPoint& pt)
 // wxColourDatabase
 // ============================================================================
 
+// Due to a bug mentioned in wx/hashmap.h we have to use aggregation here and
+// define a simple accessor function below.
+//
+// FIXME-GCC-4.8: Remove this and just inherit from std::unordered_map<>.
+class wxStringToColourHashMap
+{
+public:
+    std::unordered_map<wxString, wxColour> m_colours;
+};
+
+namespace
+{
+
+inline std::unordered_map<wxString, wxColour>&
+GetColours(wxStringToColourHashMap* map)
+{
+    return map->m_colours;
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxColourDatabase ctor/dtor
 // ----------------------------------------------------------------------------
@@ -271,12 +293,7 @@ wxColourDatabase::wxColourDatabase ()
 
 wxColourDatabase::~wxColourDatabase ()
 {
-    if ( m_map )
-    {
-        WX_CLEAR_HASH_MAP(wxStringToColourHashMap, *m_map);
-
-        delete m_map;
-    }
+    delete m_map;
 }
 
 // Colour database stuff
@@ -375,7 +392,7 @@ void wxColourDatabase::Initialize()
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
-        (*m_map)[cc.name] = new wxColour(cc.r, cc.g, cc.b);
+        GetColours(m_map)[cc.name] = wxColour(cc.r, cc.g, cc.b);
     }
 }
 
@@ -400,16 +417,17 @@ void wxColourDatabase::AddColour(const wxString& name, const wxColour& colour)
         colNameAlt.clear();
     }
 
-    wxStringToColourHashMap::iterator it = m_map->find(colName);
-    if ( it == m_map->end() && !colNameAlt.empty() )
-        it = m_map->find(colNameAlt);
-    if ( it != m_map->end() )
+    auto& map = GetColours(m_map);
+    auto it = map.find(colName);
+    if ( it == map.end() && !colNameAlt.empty() )
+        it = map.find(colNameAlt);
+    if ( it != map.end() )
     {
-        *(it->second) = colour;
+        it->second = colour;
     }
     else // new colour
     {
-        (*m_map)[colName] = new wxColour(colour);
+        map[colName] = wxColour(colour);
     }
 }
 
@@ -425,11 +443,12 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     if ( !colNameAlt.Replace(wxT("GRAY"), wxT("GREY")) )
         colNameAlt.clear();
 
-    wxStringToColourHashMap::iterator it = m_map->find(colName);
-    if ( it == m_map->end() && !colNameAlt.empty() )
-        it = m_map->find(colNameAlt);
-    if ( it != m_map->end() )
-        return *(it->second);
+    const auto& map = GetColours(m_map);
+    auto it = map.find(colName);
+    if ( it == map.end() && !colNameAlt.empty() )
+        it = map.find(colNameAlt);
+    if ( it != map.end() )
+        return it->second;
 
     // we did not find any result in existing colours:
     // we won't use wxString -> wxColour conversion because the
@@ -444,12 +463,10 @@ wxString wxColourDatabase::FindName(const wxColour& colour) const
     wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
     self->Initialize();
 
-    typedef wxStringToColourHashMap::iterator iterator;
-
-    for ( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
+    for ( const auto& kv : GetColours(m_map) )
     {
-        if ( *(it->second) == colour )
-            return it->first;
+        if ( kv.second == colour )
+            return kv.first;
     }
 
     return wxEmptyString;
@@ -460,13 +477,13 @@ wxVector<wxString> wxColourDatabase::GetAllNames() const
     wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
     self->Initialize();
 
+    const auto& map = GetColours(m_map);
+
     wxVector<wxString> names;
-    names.reserve(m_map->size());
+    names.reserve(map.size());
 
-    typedef wxStringToColourHashMap::iterator iterator;
-
-    for ( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
-        names.push_back(it->first);
+    for ( const auto& kv : map )
+        names.push_back(kv.first);
 
     return names;
 }
