@@ -14,9 +14,10 @@
 #if wxUSE_FS_ARCHIVE
 
 #include "wx/filesys.h"
-#include "wx/hashmap.h"
 
-WX_DECLARE_STRING_HASH_MAP(int, wxArchiveFilenameHashMap);
+#include <unordered_map>
+
+using wxArchiveFilenameHashMap = std::unordered_map<wxString, int>;
 
 //---------------------------------------------------------------------------
 // wxArchiveFSHandler
