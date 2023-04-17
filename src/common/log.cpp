@@ -149,7 +149,16 @@ PreviousLogInfo gs_prevLog;
 // map containing all components for which log level was explicitly set
 //
 // NB: all accesses to it must be protected by GetLevelsCS() critical section
-WX_DEFINE_GLOBAL_VAR(wxStringToNumHashMap, ComponentLevels);
+namespace
+{
+
+inline wxStringToNumHashMap& GetComponentLevels()
+{
+    static wxStringToNumHashMap s_componentLevels;
+    return s_componentLevels;
+}
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxLogOutputBest: wxLog wrapper around wxMessageOutputBest
