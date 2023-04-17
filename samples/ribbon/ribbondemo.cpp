@@ -327,7 +327,7 @@ MyFrame::MyFrame()
         print_tool = toolbar->AddHybridTool(wxID_PRINT, wxArtProvider::GetBitmap(wxART_PRINT, wxART_OTHER, wxSize(16, 15)),
                                 "This is the Print button tooltip\ndemonstrating a tooltip");
         toolbar->SetRows(2, 3);
-        
+
         size_t tool_pos = toolbar->GetToolPos(wxID_PRINT);
         if (toolbar->GetToolCount() != (tool_pos+1))
         {
