@@ -280,7 +280,7 @@ public:
 
         Before sending a request or after a failed request this will return
         an invalid response object, i.e. such that wxWebResponse::IsOk()
-        returns @NULL.
+        returns @c false.
     */
     wxWebResponse GetResponse() const;
 
