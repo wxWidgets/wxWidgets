@@ -171,7 +171,7 @@ public:
                     m_className +
                     wxT("(") +
                         *m_ancestorClassNames.begin() +
-                        wxT(" *parent=NULL){\n") +
+                        wxT(" *parent=nullptr){\n") +
                     wxT("  InitWidgetsFromXRC((wxWindow *)parent);\n")
                     wxT(" }\n")
                     wxT("};\n")
@@ -180,7 +180,7 @@ public:
         else
         {
             file.Write(m_className + wxT("(){\n") +
-                       wxT("  InitWidgetsFromXRC(NULL);\n")
+                       wxT("  InitWidgetsFromXRC(nullptr);\n")
                        wxT(" }\n")
                        wxT("};\n"));
 
