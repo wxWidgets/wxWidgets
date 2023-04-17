@@ -711,6 +711,24 @@ bool wxTreeTraversal::Traverse(const wxTreeItemId& root, bool recursively)
 // construction and destruction
 // ----------------------------------------------------------------------------
 
+wxTreeCtrl::wxTreeCtrl()
+{
+    Init();
+}
+
+wxTreeCtrl::wxTreeCtrl(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    Init();
+
+    Create(parent, id, pos, size, style, validator, name);
+}
+
 void wxTreeCtrl::Init()
 {
     m_textCtrl = nullptr;
@@ -741,8 +759,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    Init();
-
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
         style |= wxBORDER_SUNKEN;
 
