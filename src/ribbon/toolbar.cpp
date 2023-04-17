@@ -426,6 +426,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(size_t pos)const
         {
             return nullptr;
         }
+        pos -= tool_count+1;
     }
     return nullptr;
 }
