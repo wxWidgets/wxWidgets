@@ -15,9 +15,11 @@
 class WXDLLIMPEXP_FWD_BASE wxLog;
 
 #if wxUSE_INTL
-#include "wx/hashset.h"
-WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual,
-                    wxLocaleUntranslatedStrings);
+#include "wx/string.h"
+
+#include <unordered_set>
+
+using wxLocaleUntranslatedStrings = std::unordered_set<wxString>;
 #endif
 
 
