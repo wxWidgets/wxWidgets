@@ -20,7 +20,9 @@
 #include "wx/textctrl.h"
 #include "wx/dynarray.h"
 #include "wx/treebase.h"
-#include "wx/hashmap.h"
+
+#include <memory>
+#include <unordered_map>
 
 #ifdef __GNUWIN32__
     // Cygwin windows.h defines these identifiers
@@ -33,9 +35,7 @@ class  WXDLLIMPEXP_FWD_CORE wxImageList;
 class  WXDLLIMPEXP_FWD_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
-// hash storing attributes for our items
 class wxItemAttr;
-WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxItemAttr *, wxMapTreeAttr);
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrl
@@ -308,7 +308,7 @@ private:
     wxItemAttr* DoGetAttrPtr(const wxTreeItemId& item);
 
     // the hash storing the items attributes (indexed by item ids)
-    wxMapTreeAttr m_attrs;
+    std::unordered_map<void*, std::unique_ptr<wxItemAttr>> m_attrs;
 
     // true if the hash above is not empty
     bool m_hasAnyAttr;
