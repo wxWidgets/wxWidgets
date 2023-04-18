@@ -26,6 +26,12 @@ int Scintilla_LinkLexers(void);
 }
 #endif
 
+
+#if defined(_WIN32) and defined(__clang__)
+//  types  'uintptr_t' 'intptr_t' not exists in clang include\stddef.h
+	#include <stdint.h>
+#endif
+
 // Include header that defines basic numeric types.
 #if defined(_MSC_VER)
 // Older releases of MSVC did not have stdint.h.

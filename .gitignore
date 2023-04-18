@@ -1,4 +1,8 @@
 # /
+# !!! because  the ./build dir is used in the wxWidgets project as a place for persistent files !!!
+# /temp can be used as a generic temporary directory for a custom build, e.g.
+# "cmake --build /my_folder/wxWidgets/temp/build --config Debug --target all" etc...
+/temp
 /.gdb_history
 /config.cache
 /configarg.cache
@@ -422,3 +426,7 @@
 /utils/wxrc/wxrc_vc[789].sln
 
 /3rdparty/webview2
+
+
+# exclude personal project settings for MS vsCode IDE
+.vscode

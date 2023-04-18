@@ -92,7 +92,11 @@ BEGIN
             VALUE "FileDescription", "wxWidgets " WXLIBDESC " library\0"
             VALUE "FileVersion", wxVERSION_NUM_DOT_STRING "\0"
             VALUE "InternalName", wxSTRINGIZE(WXDLLNAME) "\0"
-            VALUE "LegalCopyright", "Copyright © 1992-2023 wxWidgets development team\0"
+#ifdef _UNICODE
+            VALUE "LegalCopyright", "Copyright " L"\xa9 " "1992-2023 wxWidgets development team\0"
+#else
+            VALUE "LegalCopyright", "Copyright ï¿½ 1992-2023 wxWidgets development team\0"
+#endif
             VALUE "OriginalFilename", wxSTRINGIZE(WXDLLNAME) ".dll\0"
             VALUE "ProductName", "wxWidgets\0"
             VALUE "ProductVersion", wxVERSION_NUM_DOT_STRING "\0"

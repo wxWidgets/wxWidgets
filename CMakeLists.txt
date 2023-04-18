@@ -97,6 +97,16 @@ endif()
 
 project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
 
+if (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    # by default msys2 convert option  /implib:../myLib.lib  incorrect as implib;myLib.lib 
+    message(STATUS " !!! enventory variable MSYS2_ARG_CONV_EXCL is: [$ENV{MSYS2_ARG_CONV_EXCL}] mast by [/implib:] see https://www.msys2.org/docs/filesystem-paths/" COMMENT "set MSYS2_ARG_CONV_EXCL=/implib" )
+    # by default CMake with llvm-rc create file with .rc.res.res extension instead of .rc.res. CMake bug?
+    set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER>  <DEFINES> -i ${CMAKE_SOURCE_DIR}/include -i ${CMAKE_SOURCE_DIR}/samples -fo <OBJECT> <SOURCE>")
+    # clang++: error: no such file or directory: 'CMakeFiles/wxbase.dir/__/__/__/__/src/msw/version.rc.res'
+    #                             but exists file CMakeFiles\wxbase.dir\__\__\__\__\src\msw\version.rc.res.res
+endif()
+
+
 include(build/cmake/main.cmake)
 
 # Set the default startup project for Visual Studio
