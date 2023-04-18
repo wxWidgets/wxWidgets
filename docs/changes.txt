@@ -335,6 +335,7 @@ All (GUI):
 - Fix maximum length of wxPropertyGrid editors (#23033).
 - Add support for Caps/Num/Scroll Lock to wxGetKeyState() (elfmz, #23195).
 - Fix wxToolBar::GetToolBitmapSize() in high DPI under non-MSW (#23222).
+- Fix wxRibbonToolBar::GetToolByPos() and DeleteToolByPos() (mcorino, #23457).
 
 wxGTK:
 

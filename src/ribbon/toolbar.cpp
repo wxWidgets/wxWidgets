@@ -385,6 +385,7 @@ bool wxRibbonToolBar::DeleteToolByPos(size_t pos)
             }
             return true;
         }
+        pos -= tool_count+1;
     }
     return false;
 }
@@ -425,6 +426,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::GetToolByPos(size_t pos)const
         {
             return NULL;
         }
+        pos -= tool_count+1;
     }
     return NULL;
 }
