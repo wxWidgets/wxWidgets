@@ -637,6 +637,14 @@ void wxWebResponseImpl::Init()
 
 wxString wxWebResponseImpl::GetMimeType() const
 {
+    wxString contentType( GetContentType() );
+    const auto separatorPosition = contentType.find(';');
+    return (separatorPosition != wxString::npos) ?
+        contentType.substr(0, separatorPosition) : contentType;
+}
+
+wxString wxWebResponseImpl::GetContentType() const
+{
     return GetHeader("Content-Type");
 }
 
@@ -816,6 +824,13 @@ wxString wxWebResponse::GetMimeType() const
     wxCHECK_IMPL( wxString() );
 
     return m_impl->GetMimeType();
+}
+
+wxString wxWebResponse::GetContentType() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetContentType();
 }
 
 int wxWebResponse::GetStatus() const

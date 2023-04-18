@@ -589,8 +589,17 @@ public:
 
     /**
         Returns the MIME type of the response (if available).
+
+        This can be a value such as "text/html".
     */
     wxString GetMimeType() const;
+
+    /**
+        Returns the content type of the response (if available).
+
+        This can be a value such as "text/html; charset=utf-8".
+    */
+    wxString GetContentType() const
 
     /**
         Returns the status code returned by the server.
