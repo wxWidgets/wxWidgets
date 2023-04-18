@@ -27,6 +27,7 @@
 
 #include "wx/scopedarray.h"
 #include "wx/dynlib.h"
+#include "wx/wxcrt.h"
 
 #ifndef LOCALE_NAME_USER_DEFAULT
     #define LOCALE_NAME_USER_DEFAULT nullptr
