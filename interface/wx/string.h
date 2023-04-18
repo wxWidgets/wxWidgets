@@ -113,7 +113,8 @@
         no data loss, use @c wxConvUTF8 conversion or wxString::utf8_string().
         - Wide C string using implicit conversion or wxString::wc_str()
         explicitly.
-        - Standard @c std::wstring using wxString::ToStdWstring().
+        - Standard @c std::wstring using wxString::ToStdWstring() or its
+        synonym wxString::wc_string().
 
 
     As above, defining `wxNO_IMPLICIT_WXSTRING_ENCODING` when compiling
@@ -479,7 +480,7 @@ public:
     /**
        Constructs a string from @a str.
 
-       @see ToStdWstring()
+       @see ToStdWstring(), wc_string()
     */
     wxString(const std::wstring& str);
 
@@ -720,6 +721,21 @@ public:
     const wxWX2WCbuf wc_str() const;
 
     /**
+        Returns the strings contents as a wide character string.
+
+        This is a somewhat more readable synonym for ToStdWstring().
+
+        The return type of this function is actually `const std::wstring&` in
+        wxWidgets builds using `wxUSE_UNICODE_WCHAR==1` (which is the default),
+        i.e. in this build there is no copying of string contents, however a
+        temporary copy of the string is returned in `wxUSE_UNICODE_UTF8==1`
+        build.
+
+        @since 3.3.0
+     */
+    std::wstring wc_string() const;
+
+    /**
         Returns an object with string data that is implicitly convertible to
         @c char* pointer. Note that changes to the returned buffer may or may
         not be lost (depending on the build) and so this function is only usable for
@@ -798,7 +814,15 @@ public:
         Unlike ToStdString(), there is no danger of data loss when using this
         function.
 
+        Note that the return type of this function is actually `const
+        std::wstring&` in wxWidgets builds using `wxUSE_UNICODE_WCHAR==1`
+        (which is the default), i.e. in this build there is no copying of
+        string contents, however a temporary copy of the string is returned in
+        `wxUSE_UNICODE_UTF8==1` build.
+
         @since 2.9.1
+
+        @see wc_string()
     */
     std::wstring ToStdWstring() const;
 
