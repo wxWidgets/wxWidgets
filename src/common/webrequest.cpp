@@ -640,7 +640,12 @@ void wxWebResponseImpl::Init()
 
 wxString wxWebResponseImpl::GetMimeType() const
 {
-    return GetHeader("Mime-Type");
+    return GetContentType().BeforeFirst(';');
+}
+
+wxString wxWebResponseImpl::GetContentType() const
+{
+    return GetHeader("Content-Type");
 }
 
 wxInputStream * wxWebResponseImpl::GetStream() const
@@ -819,6 +824,13 @@ wxString wxWebResponse::GetMimeType() const
     wxCHECK_IMPL( wxString() );
 
     return m_impl->GetMimeType();
+}
+
+wxString wxWebResponse::GetContentType() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetContentType();
 }
 
 int wxWebResponse::GetStatus() const

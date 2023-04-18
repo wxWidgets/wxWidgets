@@ -168,6 +168,8 @@ public:
 
     virtual wxString GetMimeType() const;
 
+    virtual wxString GetContentType() const;
+
     virtual int GetStatus() const = 0;
 
     virtual wxString GetStatusText() const = 0;
