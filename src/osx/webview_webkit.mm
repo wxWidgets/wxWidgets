@@ -243,10 +243,10 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_13
         if ( WX_IS_MACOS_AVAILABLE(10, 13) )
         {
-            for (wxStringToWebHandlerMap::iterator it = m_handlers.begin(); it != m_handlers.end(); it++)
+            for (const auto& kv : m_handlers)
             {
-                [webViewConfig setURLSchemeHandler:[[WebViewCustomProtocol alloc] initWithHandler:it->second.get()]
-                                            forURLScheme:wxCFStringRef(it->first).AsNSString()];
+                [webViewConfig setURLSchemeHandler:[[WebViewCustomProtocol alloc] initWithHandler:kv.second.get()]
+                                            forURLScheme:wxCFStringRef(kv.first).AsNSString()];
             }
         }
         else

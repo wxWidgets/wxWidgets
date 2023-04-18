@@ -18,7 +18,6 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
-#include "wx/hashmap.h"
 #include "wx/versioninfo.h"
 #include "wx/meta/implicitconversion.h"
 
@@ -38,12 +37,21 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 // needed for wxOperatingSystemId, wxLinuxDistributionInfo
 #include "wx/platinfo.h"
 
+// This is a hack, but this header used to include wx/hashmap.h which, in turn,
+// included wx/wxcrt.h and it turns out quite some existing code relied on it
+// by using the CRT wrapper functions declared there without explicitly
+// including that header, so keep including it from here to let it continue to
+// compile.
+#include "wx/wxcrt.h"
+
 #if defined(__X__)
     #include <dirent.h>
     #include <unistd.h>
 #endif
 
 #include <stdio.h>
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // Forward declaration
@@ -366,7 +374,7 @@ enum
 };
 
 // Map storing environment variables.
-typedef wxStringToStringHashMap wxEnvVariableHashMap;
+using wxEnvVariableHashMap = std::unordered_map<wxString, wxString>;
 
 // Used to pass additional parameters for child process to wxExecute(). Could
 // be extended with other fields later.

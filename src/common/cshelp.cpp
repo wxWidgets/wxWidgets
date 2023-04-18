@@ -308,39 +308,33 @@ wxString wxHelpProvider::GetHelpTextMaybeAtPoint(wxWindowBase *window)
 // wxSimpleHelpProvider
 // ----------------------------------------------------------------------------
 
-#define WINHASH_KEY(w) wxPtrToUInt(w)
-
 wxString wxSimpleHelpProvider::GetHelp(const wxWindowBase *window)
 {
-    wxSimpleHelpProviderHashMap::iterator it = m_hashWindows.find(WINHASH_KEY(window));
+    const auto it = m_hashWindows.find(window);
+    if ( it != m_hashWindows.end() )
+        return it->second;
 
-    if ( it == m_hashWindows.end() )
-    {
-        it = m_hashIds.find(window->GetId());
-        if ( it == m_hashIds.end() )
-            return wxEmptyString;
-    }
+    const auto it2 = m_hashIds.find(window->GetId());
+    if ( it2 != m_hashIds.end() )
+        return it2->second;
 
-    return it->second;
+    return {};
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
 {
-    m_hashWindows.erase(WINHASH_KEY(window));
-    m_hashWindows[WINHASH_KEY(window)] = text;
+    m_hashWindows[window] = text;
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 {
-    wxSimpleHelpProviderHashMap::key_type key = (wxSimpleHelpProviderHashMap::key_type)id;
-    m_hashIds.erase(key);
-    m_hashIds[key] = text;
+    m_hashIds[id] = text;
 }
 
 // removes the association
 void wxSimpleHelpProvider::RemoveHelp(wxWindowBase* window)
 {
-    m_hashWindows.erase(WINHASH_KEY(window));
+    m_hashWindows.erase(window);
 }
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)

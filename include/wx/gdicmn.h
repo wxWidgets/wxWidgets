@@ -19,7 +19,6 @@
 #include "wx/list.h"
 #include "wx/string.h"
 #include "wx/fontenc.h"
-#include "wx/hashmap.h"
 #include "wx/math.h"
 
 // ---------------------------------------------------------------------------
@@ -904,7 +903,7 @@ protected:
     wxList list;
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxColour*, wxStringToColourHashMap);
+class wxStringToColourHashMap;
 
 class WXDLLIMPEXP_CORE wxColourDatabase
 {

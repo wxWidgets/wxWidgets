@@ -21,17 +21,17 @@
 #include <unistd.h>
 #include "wx/private/fswatcher.h"
 
+#include <unordered_map>
+
 // ============================================================================
 // wxFSWatcherImpl implementation & helper wxFSWSourceHandler implementation
 // ============================================================================
 
 // inotify watch descriptor => wxFSWatchEntry* map
-WX_DECLARE_HASH_MAP(int, wxFSWatchEntry*, wxIntegerHash, wxIntegerEqual,
-                                              wxFSWatchEntryDescriptors);
+using wxFSWatchEntryDescriptors = std::unordered_map<int, wxFSWatchEntry*>;
 
 // inotify event cookie => inotify_event* map
-WX_DECLARE_HASH_MAP(int, inotify_event*, wxIntegerHash, wxIntegerEqual,
-                                                      wxInotifyCookies);
+using wxInotifyCookies = std::unordered_map<int, inotify_event*>;
 
 /**
  * Helper class encapsulating inotify mechanism

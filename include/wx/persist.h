@@ -11,12 +11,12 @@
 #define _WX_PERSIST_H_
 
 #include "wx/string.h"
-#include "wx/hashmap.h"
 #include "wx/confbase.h"
 
-class wxPersistentObject;
+#include <memory>
+#include <unordered_map>
 
-WX_DECLARE_VOIDPTR_HASH_MAP(wxPersistentObject *, wxPersistentObjectsMap);
+class wxPersistentObject;
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -159,9 +159,11 @@ protected:
 
 
 private:
+    using wxPersistentObjectPtr = std::unique_ptr<wxPersistentObject>;
+
     // map with the registered objects as keys and associated
     // wxPersistentObjects as values
-    wxPersistentObjectsMap m_persistentObjects;
+    std::unordered_map<void*, wxPersistentObjectPtr> m_persistentObjects;
 
     // true if we should restore/save the settings (it doesn't make much sense
     // to use this class when both of them are false but setting one of them to

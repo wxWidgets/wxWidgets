@@ -8,18 +8,17 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/hashmap.h"
-#include "wx/vector.h"
-
-WX_DECLARE_HASH_MAP(unsigned, wxString, wxIntegerHash, wxIntegerEqual,
-                    IntToStringMap);
+#include <memory>
+#include <unordered_map>
+#include <vector>
 
 // ----------------------------------------------------------------------------
 // MyMusicTreeModelNode: a node inside MyMusicTreeModel
 // ----------------------------------------------------------------------------
 
 class MyMusicTreeModelNode;
-WX_DEFINE_ARRAY_PTR( MyMusicTreeModelNode*, MyMusicTreeModelNodePtrArray );
+using MyMusicTreeModelNodePtr = std::unique_ptr<MyMusicTreeModelNode>;
+using MyMusicTreeModelNodePtrArray = std::vector<MyMusicTreeModelNodePtr>;
 
 class MyMusicTreeModelNode
 {
@@ -49,16 +48,7 @@ public:
         m_container = true;
     }
 
-    ~MyMusicTreeModelNode()
-    {
-        // free all our children nodes
-        size_t count = m_children.GetCount();
-        for (size_t i = 0; i < count; i++)
-        {
-            MyMusicTreeModelNode *child = m_children[i];
-            delete child;
-        }
-    }
+    ~MyMusicTreeModelNode() = default;
 
     bool IsContainer() const
         { return m_container; }
@@ -68,13 +58,13 @@ public:
     MyMusicTreeModelNodePtrArray& GetChildren()
         { return m_children; }
     MyMusicTreeModelNode* GetNthChild( unsigned int n )
-        { return m_children.Item( n ); }
+        { return m_children.at( n ).get(); }
     void Insert( MyMusicTreeModelNode* child, unsigned int n)
-        { m_children.Insert( child, n); }
+        { m_children.insert( m_children.begin() + n, MyMusicTreeModelNodePtr(child) ); }
     void Append( MyMusicTreeModelNode* child )
-        { m_children.Add( child ); }
+        { m_children.push_back( MyMusicTreeModelNodePtr(child) ); }
     unsigned int GetChildCount() const
-        { return m_children.GetCount(); }
+        { return m_children.size(); }
 
 public:     // public to avoid getters/setters
     wxString                m_title;
@@ -87,7 +77,7 @@ public:     // public to avoid getters/setters
     // needs to know in advance if a node is or _will be_ a container.
     // Thus implementing:
     //   bool IsContainer() const
-    //    { return m_children.GetCount()>0; }
+    //    { return !m_children.empty(); }
     // doesn't work with wxGTK when MyMusicTreeModel::AddToClassical is called
     // AND the classical node was removed (a new node temporary without children
     // would be added to the control)
@@ -223,10 +213,10 @@ public:
                                 unsigned int row, unsigned int col ) override;
 
 private:
-    wxVector<bool>   m_toggleColValues;
+    std::vector<bool>   m_toggleColValues;
     wxArrayString    m_textColValues;
     wxArrayString    m_iconColValues;
-    IntToStringMap   m_customColValues;
+    std::unordered_map<unsigned, wxString> m_customColValues;
     wxBitmapBundle   m_icon[2];
 };
 

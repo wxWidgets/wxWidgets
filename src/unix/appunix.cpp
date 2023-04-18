@@ -115,15 +115,13 @@ void wxAppConsole::HandleSignal(int signal)
 
 void wxAppConsole::CheckSignal()
 {
-    for ( SignalHandlerHash::iterator it = m_signalHandlerHash.begin();
-          it != m_signalHandlerHash.end();
-          ++it )
+    for ( const auto& kv : m_signalHandlerHash )
     {
-        int sig = it->first;
+        int sig = kv.first;
         if ( sigismember(&m_signalsCaught, sig) )
         {
             sigdelset(&m_signalsCaught, sig);
-            (it->second)(sig);
+            (kv.second)(sig);
         }
     }
 }

@@ -20,7 +20,9 @@
 #include "wx/textctrl.h"
 #include "wx/dynarray.h"
 #include "wx/treebase.h"
-#include "wx/hashmap.h"
+
+#include <memory>
+#include <unordered_map>
 
 #ifdef __GNUWIN32__
     // Cygwin windows.h defines these identifiers
@@ -33,9 +35,7 @@ class  WXDLLIMPEXP_FWD_CORE wxImageList;
 class  WXDLLIMPEXP_FWD_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
-// hash storing attributes for our items
 class wxItemAttr;
-WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxItemAttr *, wxMapTreeAttr);
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrl
@@ -46,17 +46,14 @@ class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 public:
     // creation
     // --------
-    wxTreeCtrl() { Init(); }
+    wxTreeCtrl();
 
     wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr))
-    {
-        Create(parent, id, pos, size, style, validator, name);
-    }
+               const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
 
     virtual ~wxTreeCtrl();
 
@@ -306,11 +303,12 @@ private:
     bool MSWDeleteItem(const wxTreeItemId& item);
 
 
-    // the hash storing the items attributes (indexed by item ids)
-    wxMapTreeAttr m_attrs;
+    // Return guaranteed non-null non-owning pointer to the attribute for the
+    // given item.
+    wxItemAttr* DoGetAttrPtr(const wxTreeItemId& item);
 
-    // true if the hash above is not empty
-    bool m_hasAnyAttr;
+    // the hash storing the items attributes (indexed by item ids)
+    std::unordered_map<void*, std::unique_ptr<wxItemAttr>> m_attrs;
 
 #if wxUSE_DRAGIMAGE
     // used for dragging

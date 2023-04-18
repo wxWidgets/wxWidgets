@@ -11,13 +11,13 @@
 #define _WX_PRIVATE_WEBREQUEST_H_
 
 #include "wx/ffile.h"
-#include "wx/hashmap.h"
 
 #include "wx/private/refcountermt.h"
 
 #include <memory>
+#include <unordered_map>
 
-WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
+using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
 
 // Default buffer size when a fixed-size buffer must be used.
 const int wxWEBREQUEST_BUFFER_SIZE = 64 * 1024;

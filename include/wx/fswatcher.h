@@ -19,7 +19,8 @@
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/dir.h"
-#include "wx/hashmap.h"
+
+#include <unordered_map>
 
 #define wxTRACE_FSWATCHER "fswatcher"
 
@@ -279,7 +280,7 @@ protected:
     int m_refcount;
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxFSWatchInfo, wxFSWatchInfoMap);
+using wxFSWatchInfoMap = std::unordered_map<wxString, wxFSWatchInfo>;
 
 /**
  * Encapsulation of platform-specific file system event mechanism
