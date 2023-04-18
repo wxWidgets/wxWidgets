@@ -4,9 +4,14 @@
 # exclude database and data files
 *.db3
 *.txt
+*.bak
 
 # exclude everything in temp
-temp/*
+temp/**
 
 # exception to the rule
 !temp/.gitkeep
+
+# exceptions: downloaded and generated data files 
+!unicode/*.txt
+!windows/*.txt
