@@ -1265,6 +1265,7 @@ public:
   #if wxUSE_UNICODE_WCHAR
     #define wxStringToStdWstringRetType const std::wstring&
     const std::wstring& ToStdWstring() const { return m_impl; }
+    const std::wstring& wc_string() const { return m_impl; }
   #else // wxUSE_UNICODE_UTF8
     // wxStringImpl is either not std::string or needs conversion
     #define wxStringToStdWstringRetType std::wstring
@@ -1272,6 +1273,10 @@ public:
     {
         wxScopedWCharBuffer buf(wc_str());
         return std::wstring(buf.data(), buf.length());
+    }
+    std::wstring wc_string() const
+    {
+        return ToStdWstring();
     }
   #endif
 

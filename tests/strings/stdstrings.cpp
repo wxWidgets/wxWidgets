@@ -628,6 +628,8 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 #endif
     CHECK( s6 == L"hello" );
 
+    CHECK( s4.wc_string() == L"hello" );
+
 #if wxUSE_STD_STRING_CONV_IN_WXSTRING
 #if !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s7(s4);
