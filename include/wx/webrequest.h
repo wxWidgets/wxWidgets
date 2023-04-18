@@ -104,7 +104,7 @@ public:
 
     wxString GetMimeType() const;
 
-    wxString GetContentType() const
+    wxString GetContentType() const;
 
     int GetStatus() const;
 
