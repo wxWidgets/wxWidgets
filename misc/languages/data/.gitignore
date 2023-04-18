@@ -12,6 +12,6 @@ temp/**
 # exception to the rule
 !temp/.gitkeep
 
-# exceptions: downloaded and generated data files 
+# exceptions: downloaded and generated data files
 !unicode/*.txt
 !windows/*.txt
