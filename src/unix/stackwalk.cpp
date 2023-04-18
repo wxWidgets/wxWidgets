@@ -308,7 +308,7 @@ struct ModuleInfo
     {
     }
 
-    // Name of the file containing this address, may be NULL.
+    // Name of the file containing this address, may be null.
     const char* name;
 
     // Difference between the address in the file and in memory.
@@ -322,7 +322,7 @@ ModuleInfo GetModuleInfoFromAddr(void* addr)
     if ( !dladdr1(addr, &info, (void**)&lm, RTLD_DL_LINKMAP) )
     {
         // Probably not worth spamming the user with even debug errors.
-        return ModuleInfo(NULL, 0);
+        return ModuleInfo(nullptr, 0);
     }
 
     return ModuleInfo(info.dli_fname, lm->l_addr);
