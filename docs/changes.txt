@@ -260,6 +260,7 @@ wxMSW:
 - Fix setting locale for wxLANGUAGE_UKRAINIAN (Ulrich Telle, #23210).
 - Don't reset custom wxToolBar background on system colour change (#23386).
 - Fix wxUILocale::GetPreferredUILanguages() under < 10 (Brian Nixon, #23416).
+- Fix building with LLVM clang (Sergey Khalyutn, Maarten Bent, #23464).
 
 wxOSX:
 

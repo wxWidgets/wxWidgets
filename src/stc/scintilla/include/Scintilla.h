@@ -27,7 +27,10 @@ int Scintilla_LinkLexers(void);
 #endif
 
 // Include header that defines basic numeric types.
-#if defined(_MSC_VER)
+//
+// Explicitly test for clang because we need to include stdint.h for it and not
+// MSVC-specific stddef.h, but clang may predefine _MSC_VER.
+#if defined(_MSC_VER) && !defined(__clang__)
 // Older releases of MSVC did not have stdint.h.
 #include <stddef.h>
 #elif defined( __VMS )
