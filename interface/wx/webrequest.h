@@ -598,6 +598,8 @@ public:
         Returns the content type of the response (if available).
 
         This can be a value such as "text/html; charset=utf-8".
+
+        @since 3.3.0
     */
     wxString GetContentType() const
 
