@@ -637,10 +637,7 @@ void wxWebResponseImpl::Init()
 
 wxString wxWebResponseImpl::GetMimeType() const
 {
-    wxString contentType( GetContentType() );
-    const auto separatorPosition = contentType.find(';');
-    return (separatorPosition != wxString::npos) ?
-        contentType.substr(0, separatorPosition) : contentType;
+    return GetContentType().BeforeFirst(';');
 }
 
 wxString wxWebResponseImpl::GetContentType() const
