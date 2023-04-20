@@ -12,3 +12,6 @@ bitsadmin /transfer wxDownloadJob /download /priority normal https://www.unicode
 
 rem Download ISO 3166 (list of territories)
 bitsadmin /transfer wxDownloadJob /download /priority normal https://github.com/unicode-org/cldr/raw/main/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/territory_codes.txt %workdir%\unicode\territory_codes.txt
+
+luashell removewhitespace.lua unicode/iso15924.txt
+luashell removewhitespace.lua unicode/territory_codes.txt
