@@ -1,0 +1,1 @@
+wxMSW: Fix build issues with llvm clang (Sergey Khalyutn, Maarten Bent, #23468).
