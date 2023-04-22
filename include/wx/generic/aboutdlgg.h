@@ -17,6 +17,7 @@
 #include "wx/dialog.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAboutDialogInfo;
+class WXDLLIMPEXP_FWD_CORE wxPanel;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxSizerFlags;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
