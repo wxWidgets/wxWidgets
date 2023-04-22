@@ -1652,18 +1652,57 @@ MSW_LOWLEVEL_SRC =
     src/msw/window.cpp
 
 MSW_LOWLEVEL_HDR =
+    wx/msw/app.h
+    wx/msw/appprogress.h
+    wx/msw/bitmap.h
+    wx/msw/brush.h
+    wx/msw/caret.h
+    wx/msw/clipbrd.h
+    wx/msw/colour.h
+    wx/msw/ctrlsub.h
+    wx/msw/cursor.h
+    wx/msw/darkmode.h
+    wx/msw/dc.h
+    wx/msw/dcclient.h
+    wx/msw/dcmemory.h
+    wx/msw/dcprint.h
+    wx/msw/dcscreen.h
+    wx/msw/dib.h
+    wx/msw/enhmeta.h
     wx/msw/evtloop.h
+    wx/msw/font.h
+    wx/msw/icon.h
+    wx/msw/init.h
+    wx/msw/gdiimage.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/htmlhelp.h
     wx/msw/joystick.h
+    wx/msw/minifram.h
     wx/msw/nonownedwnd.h
+    wx/msw/ole/access.h
     wx/msw/ole/activex.h
+    wx/msw/ole/comimpl.h
+    wx/msw/ole/dataform.h
+    wx/msw/ole/dataobj.h
+    wx/msw/ole/dataobj2.h
+    wx/msw/ole/dropsrc.h
+    wx/msw/ole/droptgt.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/safearray.h
+    wx/msw/palette.h
+    wx/msw/pen.h
     wx/msw/popupwin.h
+    wx/msw/printdlg.h
+    wx/msw/printwin.h
+    wx/msw/region.h
     wx/msw/sound.h
     wx/msw/taskbar.h
     wx/msw/taskbarbutton.h
+    wx/msw/tooltip.h
+    wx/msw/toplevel.h
     wx/msw/uxtheme.h
+    wx/msw/window.h
 
 MSW_SRC =
     src/generic/activityindicator.cpp
@@ -1740,48 +1779,28 @@ MSW_HDR =
     wx/generic/fontpickerg.h
     wx/msw/accel.h
     wx/msw/anybutton.h
-    wx/msw/app.h
-    wx/msw/appprogress.h
-    wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
     wx/msw/bmpcbox.h
-    wx/msw/brush.h
     wx/msw/button.h
     wx/msw/calctrl.h
-    wx/msw/caret.h
     wx/msw/checkbox.h
     wx/msw/choice.h
-    wx/msw/clipbrd.h
     wx/msw/colordlg.h
-    wx/msw/colour.h
     wx/msw/combo.h
     wx/msw/combobox.h
     wx/msw/commandlinkbutton.h
     wx/msw/control.h
-    wx/msw/ctrlsub.h
-    wx/msw/cursor.h
     wx/msw/custombgwin.h
-    wx/msw/darkmode.h
     wx/msw/datectrl.h
     wx/msw/datetimectrl.h
-    wx/msw/dc.h
-    wx/msw/dcclient.h
-    wx/msw/dcmemory.h
-    wx/msw/dcprint.h
-    wx/msw/dcscreen.h
     wx/msw/dialog.h
-    wx/msw/dib.h
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
-    wx/msw/enhmeta.h
     wx/msw/filedlg.h
-    wx/msw/font.h
     wx/msw/frame.h
     wx/msw/gauge.h
-    wx/msw/gdiimage.h
     wx/msw/headerctrl.h
     wx/msw/hyperlink.h
-    wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
     wx/msw/init.h
@@ -1791,31 +1810,16 @@ MSW_HDR =
     wx/msw/menu.h
     wx/msw/menuitem.h
     wx/msw/metafile.h
-    wx/msw/minifram.h
     wx/msw/missing.h
     wx/msw/msgdlg.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
-    wx/msw/ole/access.h
-    wx/msw/ole/comimpl.h
-    wx/msw/ole/dataform.h
-    wx/msw/ole/dataobj.h
-    wx/msw/ole/dataobj2.h
-    wx/msw/ole/dropsrc.h
-    wx/msw/ole/droptgt.h
-    wx/msw/ole/oleutils.h
-    wx/msw/ole/safearray.h
     wx/msw/ownerdrawnbutton.h
     wx/msw/ownerdrw.h
-    wx/msw/palette.h
-    wx/msw/pen.h
-    wx/msw/printdlg.h
-    wx/msw/printwin.h
     wx/msw/progdlg.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
     wx/msw/rcdefs.h
-    wx/msw/region.h
     wx/msw/richmsgdlg.h
     wx/msw/rt/utils.h
     wx/msw/scrolbar.h
@@ -1832,10 +1836,7 @@ MSW_HDR =
     wx/msw/tglbtn.h
     wx/msw/timectrl.h
     wx/msw/toolbar.h
-    wx/msw/tooltip.h
-    wx/msw/toplevel.h
     wx/msw/treectrl.h
-    wx/msw/window.h
 
 MSW_RSC =
     # Resources must be installed together with headers:

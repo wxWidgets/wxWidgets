@@ -1658,6 +1658,45 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/taskbar.h
     wx/msw/evtloop.h
     wx/msw/taskbarbutton.h
+    wx/msw/gdiimage.h
+    wx/msw/font.h
+    wx/msw/ole/safearray.h
+    wx/msw/colour.h
+    wx/msw/ole/access.h
+    wx/msw/clipbrd.h
+    wx/msw/app.h
+    wx/msw/ole/oleutils.h
+    wx/msw/dcscreen.h
+    wx/msw/dcclient.h
+    wx/msw/icon.h
+    wx/msw/toplevel.h
+    wx/msw/darkmode.h
+    wx/msw/tooltip.h
+    wx/msw/dcprint.h
+    wx/msw/ole/dataform.h
+    wx/msw/region.h
+    wx/msw/dib.h
+    wx/msw/ole/droptgt.h
+    wx/msw/enhmeta.h
+    wx/msw/ole/comimpl.h
+    wx/msw/palette.h
+    wx/msw/minifram.h
+    wx/msw/window.h
+    wx/msw/bitmap.h
+    wx/msw/pen.h
+    wx/msw/printwin.h
+    wx/msw/printdlg.h
+    wx/msw/dcmemory.h
+    wx/msw/appprogress.h
+    wx/msw/caret.h
+    wx/msw/ole/dataobj2.h
+    wx/msw/dc.h
+    wx/msw/ole/dataobj.h
+    wx/msw/brush.h
+    wx/msw/cursor.h
+    wx/msw/ole/dropsrc.h
+    wx/msw/init.h
+    wx/msw/ctrlsub.h
 )
 
 set(MSW_DESKTOP_LOWLEVEL_SRC
@@ -1747,41 +1786,22 @@ set(MSW_HDR
     wx/generic/fontpickerg.h
     wx/msw/accel.h
     wx/msw/anybutton.h
-    wx/msw/app.h
-    wx/msw/appprogress.h
-    wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
-    wx/msw/brush.h
     wx/msw/button.h
-    wx/msw/caret.h
     wx/msw/checkbox.h
     wx/msw/choice.h
-    wx/msw/clipbrd.h
     wx/msw/colordlg.h
-    wx/msw/colour.h
     wx/msw/combo.h
     wx/msw/combobox.h
     wx/msw/control.h
-    wx/msw/ctrlsub.h
-    wx/msw/cursor.h
     wx/msw/custombgwin.h
-    wx/msw/dc.h
-    wx/msw/dcclient.h
-    wx/msw/dcmemory.h
-    wx/msw/dcprint.h
-    wx/msw/dcscreen.h
     wx/msw/dialog.h
-    wx/msw/dib.h
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
-    wx/msw/enhmeta.h
     wx/msw/filedlg.h
-    wx/msw/font.h
     wx/msw/frame.h
     wx/msw/gauge.h
-    wx/msw/gdiimage.h
     wx/msw/headerctrl.h
-    wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
     wx/msw/init.h
@@ -1791,30 +1811,15 @@ set(MSW_HDR
     wx/msw/menu.h
     wx/msw/menuitem.h
     wx/msw/metafile.h
-    wx/msw/minifram.h
     wx/msw/missing.h
     wx/msw/msgdlg.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
-    wx/msw/ole/access.h
-    wx/msw/ole/comimpl.h
-    wx/msw/ole/dataform.h
-    wx/msw/ole/dataobj.h
-    wx/msw/ole/dataobj2.h
-    wx/msw/ole/dropsrc.h
-    wx/msw/ole/droptgt.h
-    wx/msw/ole/oleutils.h
-    wx/msw/ole/safearray.h
     wx/msw/ownerdrw.h
     wx/msw/ownerdrawnbutton.h
-    wx/msw/palette.h
-    wx/msw/pen.h
-    wx/msw/printdlg.h
-    wx/msw/printwin.h
     wx/msw/progdlg.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
-    wx/msw/region.h
     wx/msw/rcdefs.h
     wx/msw/richmsgdlg.h
     wx/msw/rt/utils.h
@@ -1831,10 +1836,7 @@ set(MSW_HDR
     wx/msw/textctrl.h
     wx/msw/textentry.h
     wx/msw/tglbtn.h
-    wx/msw/tooltip.h
-    wx/msw/toplevel.h
     wx/msw/treectrl.h
-    wx/msw/window.h
     wx/msw/calctrl.h
     wx/msw/bmpcbox.h
     wx/msw/datectrl.h
@@ -1843,7 +1845,6 @@ set(MSW_HDR
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
     wx/generic/activityindicator.h
-    wx/msw/darkmode.h
 )
 
 set(MSW_RSC
