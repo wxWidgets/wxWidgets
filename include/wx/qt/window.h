@@ -148,6 +148,8 @@ public:
     virtual void SetAcceleratorTable( const wxAcceleratorTable& accel ) override;
 #endif // wxUSE_ACCEL
 
+    virtual bool EnableTouchEvents(int eventsMask) override;
+
     // wxQt implementation internals:
 
     // Caller maintains ownership of pict - window will NOT delete it
@@ -222,8 +224,6 @@ protected:
     // overridden in wxFrame to use its central widget rather than the frame
     // itself.
     virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
-
-    virtual bool EnableTouchEvents(int eventsMask) override;
 
     QWidget *m_qtWindow;
 
