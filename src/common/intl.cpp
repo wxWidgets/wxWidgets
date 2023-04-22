@@ -52,6 +52,7 @@
 #include "wx/hashset.h"
 #include "wx/uilocale.h"
 
+#include "wx/private/localeset.h"
 #include "wx/private/uilocale.h"
 
 #ifdef __WIN32__
@@ -396,11 +397,8 @@ bool wxLocale::DoCommonPostInit(bool success,
             t->AddStdCatalog();
     }
 
-#if defined(__WXOSX__)
-    // LC_CTYPE is set in DoCommonPreInit() (see init.cpp). Set it again here,
-    // in case its value was changed/lost during wxLocale initialization.
-    setlocale(LC_CTYPE, "UTF-8");
-#endif // defined(__WXOSX__)
+    // Do this again here in case LC_CTYPE was changed by setlocale().
+    wxEnsureLocaleIsCompatibleWithCRT();
 
     return success;
 }
