@@ -1765,6 +1765,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/bmpbndl.cpp
     src/msw/overlay.cpp
     src/msw/darkmode.cpp
+    src/msw/appprogress.cpp
+    src/msw/taskbarbutton.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -1778,6 +1780,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/sound.h
     wx/msw/joystick.h
     wx/msw/evtloop.h
+    wx/msw/taskbarbutton.h
 </set>
 
 <set var="MSW_SRC" hints="files">
@@ -1789,7 +1792,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
-    src/msw/appprogress.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1831,7 +1833,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/statusbar.cpp
     src/msw/statline.cpp
     src/msw/stattext.cpp
-    src/msw/taskbarbutton.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
@@ -1935,7 +1936,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
-    wx/msw/taskbarbutton.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h

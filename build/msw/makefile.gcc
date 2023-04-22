@@ -1940,6 +1940,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_bmpbndl.o \
 	$(OBJS)\monodll_overlay.o \
 	$(OBJS)\monodll_darkmode.o \
+	$(OBJS)\monodll_appprogress.o \
+	$(OBJS)\monodll_taskbarbutton.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_filepickerg.o \
@@ -1948,7 +1950,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_msw_accel.o \
 	$(OBJS)\monodll_msw_anybutton.o \
-	$(OBJS)\monodll_appprogress.o \
 	$(OBJS)\monodll_artmsw.o \
 	$(OBJS)\monodll_msw_bmpbuttn.o \
 	$(OBJS)\monodll_msw_button.o \
@@ -1990,7 +1991,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statusbar.o \
 	$(OBJS)\monodll_msw_statline.o \
 	$(OBJS)\monodll_msw_stattext.o \
-	$(OBJS)\monodll_taskbarbutton.o \
 	$(OBJS)\monodll_msw_toolbar.o \
 	$(OBJS)\monodll_msw_textctrl.o \
 	$(OBJS)\monodll_textentry.o \
@@ -2288,6 +2288,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_bmpbndl.o \
 	$(OBJS)\monodll_overlay.o \
 	$(OBJS)\monodll_darkmode.o \
+	$(OBJS)\monodll_appprogress.o \
+	$(OBJS)\monodll_taskbarbutton.o \
 	$(OBJS)\monodll_generic_accel.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
@@ -2793,6 +2795,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_bmpbndl.o \
 	$(OBJS)\monolib_overlay.o \
 	$(OBJS)\monolib_darkmode.o \
+	$(OBJS)\monolib_appprogress.o \
+	$(OBJS)\monolib_taskbarbutton.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_filepickerg.o \
@@ -2801,7 +2805,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_msw_accel.o \
 	$(OBJS)\monolib_msw_anybutton.o \
-	$(OBJS)\monolib_appprogress.o \
 	$(OBJS)\monolib_artmsw.o \
 	$(OBJS)\monolib_msw_bmpbuttn.o \
 	$(OBJS)\monolib_msw_button.o \
@@ -2843,7 +2846,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statusbar.o \
 	$(OBJS)\monolib_msw_statline.o \
 	$(OBJS)\monolib_msw_stattext.o \
-	$(OBJS)\monolib_taskbarbutton.o \
 	$(OBJS)\monolib_msw_toolbar.o \
 	$(OBJS)\monolib_msw_textctrl.o \
 	$(OBJS)\monolib_textentry.o \
@@ -3141,6 +3143,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_bmpbndl.o \
 	$(OBJS)\monolib_overlay.o \
 	$(OBJS)\monolib_darkmode.o \
+	$(OBJS)\monolib_appprogress.o \
+	$(OBJS)\monolib_taskbarbutton.o \
 	$(OBJS)\monolib_generic_accel.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
@@ -3525,6 +3529,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_bmpbndl.o \
 	$(OBJS)\coredll_overlay.o \
 	$(OBJS)\coredll_darkmode.o \
+	$(OBJS)\coredll_appprogress.o \
+	$(OBJS)\coredll_taskbarbutton.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_filepickerg.o \
@@ -3533,7 +3539,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_msw_accel.o \
 	$(OBJS)\coredll_msw_anybutton.o \
-	$(OBJS)\coredll_appprogress.o \
 	$(OBJS)\coredll_artmsw.o \
 	$(OBJS)\coredll_msw_bmpbuttn.o \
 	$(OBJS)\coredll_msw_button.o \
@@ -3575,7 +3580,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statusbar.o \
 	$(OBJS)\coredll_msw_statline.o \
 	$(OBJS)\coredll_msw_stattext.o \
-	$(OBJS)\coredll_taskbarbutton.o \
 	$(OBJS)\coredll_msw_toolbar.o \
 	$(OBJS)\coredll_msw_textctrl.o \
 	$(OBJS)\coredll_textentry.o \
@@ -3873,6 +3877,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_bmpbndl.o \
 	$(OBJS)\coredll_overlay.o \
 	$(OBJS)\coredll_darkmode.o \
+	$(OBJS)\coredll_appprogress.o \
+	$(OBJS)\coredll_taskbarbutton.o \
 	$(OBJS)\coredll_generic_accel.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
@@ -4214,6 +4220,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_bmpbndl.o \
 	$(OBJS)\corelib_overlay.o \
 	$(OBJS)\corelib_darkmode.o \
+	$(OBJS)\corelib_appprogress.o \
+	$(OBJS)\corelib_taskbarbutton.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_filepickerg.o \
@@ -4222,7 +4230,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_msw_accel.o \
 	$(OBJS)\corelib_msw_anybutton.o \
-	$(OBJS)\corelib_appprogress.o \
 	$(OBJS)\corelib_artmsw.o \
 	$(OBJS)\corelib_msw_bmpbuttn.o \
 	$(OBJS)\corelib_msw_button.o \
@@ -4264,7 +4271,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statusbar.o \
 	$(OBJS)\corelib_msw_statline.o \
 	$(OBJS)\corelib_msw_stattext.o \
-	$(OBJS)\corelib_taskbarbutton.o \
 	$(OBJS)\corelib_msw_toolbar.o \
 	$(OBJS)\corelib_msw_textctrl.o \
 	$(OBJS)\corelib_textentry.o \
@@ -4562,6 +4568,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_bmpbndl.o \
 	$(OBJS)\corelib_overlay.o \
 	$(OBJS)\corelib_darkmode.o \
+	$(OBJS)\corelib_appprogress.o \
+	$(OBJS)\corelib_taskbarbutton.o \
 	$(OBJS)\corelib_generic_accel.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
@@ -7369,9 +7377,6 @@ $(OBJS)\monodll_msw_accel.o: ../../src/msw/accel.cpp
 $(OBJS)\monodll_msw_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_appprogress.o: ../../src/msw/appprogress.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7493,9 +7498,6 @@ $(OBJS)\monodll_msw_statline.o: ../../src/msw/statline.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_msw_stattext.o: ../../src/msw/stattext.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_msw_toolbar.o: ../../src/msw/toolbar.cpp
@@ -8503,6 +8505,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_darkmode.o: ../../src/msw/darkmode.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_appprogress.o: ../../src/msw/appprogress.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9958,9 +9970,6 @@ $(OBJS)\monolib_msw_accel.o: ../../src/msw/accel.cpp
 $(OBJS)\monolib_msw_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_appprogress.o: ../../src/msw/appprogress.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10082,9 +10091,6 @@ $(OBJS)\monolib_msw_statline.o: ../../src/msw/statline.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msw_stattext.o: ../../src/msw/stattext.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msw_toolbar.o: ../../src/msw/toolbar.cpp
@@ -11092,6 +11098,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_darkmode.o: ../../src/msw/darkmode.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_appprogress.o: ../../src/msw/appprogress.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12970,9 +12986,6 @@ $(OBJS)\coredll_msw_accel.o: ../../src/msw/accel.cpp
 $(OBJS)\coredll_msw_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_appprogress.o: ../../src/msw/appprogress.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13094,9 +13107,6 @@ $(OBJS)\coredll_msw_statline.o: ../../src/msw/statline.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_msw_stattext.o: ../../src/msw/stattext.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_msw_toolbar.o: ../../src/msw/toolbar.cpp
@@ -13642,6 +13652,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_darkmode.o: ../../src/msw/darkmode.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_appprogress.o: ../../src/msw/appprogress.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14725,9 +14745,6 @@ $(OBJS)\corelib_msw_accel.o: ../../src/msw/accel.cpp
 $(OBJS)\corelib_msw_anybutton.o: ../../src/msw/anybutton.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_appprogress.o: ../../src/msw/appprogress.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_artmsw.o: ../../src/msw/artmsw.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14849,9 +14866,6 @@ $(OBJS)\corelib_msw_statline.o: ../../src/msw/statline.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msw_stattext.o: ../../src/msw/stattext.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msw_toolbar.o: ../../src/msw/toolbar.cpp
@@ -15397,6 +15411,16 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_darkmode.o: ../../src/msw/darkmode.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_appprogress.o: ../../src/msw/appprogress.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

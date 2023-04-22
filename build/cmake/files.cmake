@@ -1641,6 +1641,8 @@ set(MSW_LOWLEVEL_SRC
     src/msw/bmpbndl.cpp
     src/msw/overlay.cpp
     src/msw/darkmode.cpp
+    src/msw/appprogress.cpp
+    src/msw/taskbarbutton.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -1655,6 +1657,7 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/helpwin.h
     wx/msw/taskbar.h
     wx/msw/evtloop.h
+    wx/msw/taskbarbutton.h
 )
 
 set(MSW_DESKTOP_LOWLEVEL_SRC
@@ -1678,7 +1681,6 @@ set(MSW_SRC
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
-    src/msw/appprogress.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1722,7 +1724,6 @@ set(MSW_SRC
     src/msw/statline.cpp
     src/msw/stattext.cpp
     src/msw/systhemectrl.cpp
-    src/msw/taskbarbutton.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
@@ -1826,7 +1827,6 @@ set(MSW_HDR
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
-    wx/msw/taskbarbutton.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h

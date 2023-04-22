@@ -1582,6 +1582,7 @@ MSW_LOWLEVEL_SRC =
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
     src/msw/app.cpp
+    src/msw/appprogress.cpp
     src/msw/bitmap.cpp
     src/msw/bmpbndl.cpp
     src/msw/brush.cpp
@@ -1640,6 +1641,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/settings.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
+    src/msw/taskbarbutton.cpp
     src/msw/textmeasure.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
@@ -1660,6 +1662,7 @@ MSW_LOWLEVEL_HDR =
     wx/msw/popupwin.h
     wx/msw/sound.h
     wx/msw/taskbar.h
+    wx/msw/taskbarbutton.h
     wx/msw/uxtheme.h
 
 MSW_SRC =
@@ -1672,7 +1675,6 @@ MSW_SRC =
     src/generic/statusbr.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
-    src/msw/appprogress.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/bmpcbox.cpp
@@ -1723,7 +1725,6 @@ MSW_SRC =
     src/msw/stattext.cpp
     src/msw/statusbar.cpp
     src/msw/systhemectrl.cpp
-    src/msw/taskbarbutton.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
@@ -1826,7 +1827,6 @@ MSW_HDR =
     wx/msw/statline.h
     wx/msw/stattext.h
     wx/msw/statusbar.h
-    wx/msw/taskbarbutton.h
     wx/msw/textctrl.h
     wx/msw/textentry.h
     wx/msw/tglbtn.h
