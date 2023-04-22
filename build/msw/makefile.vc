@@ -2229,7 +2229,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gdiplus.obj \
 	$(OBJS)\monodll_graphics.obj \
 	$(OBJS)\monodll_icon.obj \
-	$(OBJS)\monodll_imaglist.obj \
 	$(OBJS)\monodll_minifram.obj \
 	$(OBJS)\monodll_nonownedwnd.obj \
 	$(OBJS)\monodll_comimpl.obj \
@@ -2340,6 +2339,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_timectrl.obj \
 	$(OBJS)\monodll_datecontrols.obj \
 	$(OBJS)\monodll_activityindicator.obj \
+	$(OBJS)\monodll_msw_imaglist.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2575,7 +2575,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gdiplus.obj \
 	$(OBJS)\monodll_graphics.obj \
 	$(OBJS)\monodll_icon.obj \
-	$(OBJS)\monodll_imaglist.obj \
 	$(OBJS)\monodll_minifram.obj \
 	$(OBJS)\monodll_nonownedwnd.obj \
 	$(OBJS)\monodll_comimpl.obj \
@@ -2672,6 +2671,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_topluniv.obj \
 	$(OBJS)\monodll_winuniv.obj \
 	$(OBJS)\monodll_activityindicator.obj \
+	$(OBJS)\monodll_generic_imaglist.obj \
 	$(OBJS)\monodll_gtk.obj \
 	$(OBJS)\monodll_metal.obj \
 	$(OBJS)\monodll_mono.obj \
@@ -3084,7 +3084,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gdiplus.obj \
 	$(OBJS)\monolib_graphics.obj \
 	$(OBJS)\monolib_icon.obj \
-	$(OBJS)\monolib_imaglist.obj \
 	$(OBJS)\monolib_minifram.obj \
 	$(OBJS)\monolib_nonownedwnd.obj \
 	$(OBJS)\monolib_comimpl.obj \
@@ -3195,6 +3194,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_timectrl.obj \
 	$(OBJS)\monolib_datecontrols.obj \
 	$(OBJS)\monolib_activityindicator.obj \
+	$(OBJS)\monolib_msw_imaglist.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -3430,7 +3430,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gdiplus.obj \
 	$(OBJS)\monolib_graphics.obj \
 	$(OBJS)\monolib_icon.obj \
-	$(OBJS)\monolib_imaglist.obj \
 	$(OBJS)\monolib_minifram.obj \
 	$(OBJS)\monolib_nonownedwnd.obj \
 	$(OBJS)\monolib_comimpl.obj \
@@ -3527,6 +3526,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_topluniv.obj \
 	$(OBJS)\monolib_winuniv.obj \
 	$(OBJS)\monolib_activityindicator.obj \
+	$(OBJS)\monolib_generic_imaglist.obj \
 	$(OBJS)\monolib_gtk.obj \
 	$(OBJS)\monolib_metal.obj \
 	$(OBJS)\monolib_mono.obj \
@@ -3868,7 +3868,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_gdiplus.obj \
 	$(OBJS)\coredll_graphics.obj \
 	$(OBJS)\coredll_icon.obj \
-	$(OBJS)\coredll_imaglist.obj \
 	$(OBJS)\coredll_minifram.obj \
 	$(OBJS)\coredll_nonownedwnd.obj \
 	$(OBJS)\coredll_comimpl.obj \
@@ -3979,6 +3978,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_timectrl.obj \
 	$(OBJS)\coredll_datecontrols.obj \
 	$(OBJS)\coredll_activityindicator.obj \
+	$(OBJS)\coredll_msw_imaglist.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -4214,7 +4214,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_gdiplus.obj \
 	$(OBJS)\coredll_graphics.obj \
 	$(OBJS)\coredll_icon.obj \
-	$(OBJS)\coredll_imaglist.obj \
 	$(OBJS)\coredll_minifram.obj \
 	$(OBJS)\coredll_nonownedwnd.obj \
 	$(OBJS)\coredll_comimpl.obj \
@@ -4311,6 +4310,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_topluniv.obj \
 	$(OBJS)\coredll_winuniv.obj \
 	$(OBJS)\coredll_activityindicator.obj \
+	$(OBJS)\coredll_generic_imaglist.obj \
 	$(OBJS)\coredll_gtk.obj \
 	$(OBJS)\coredll_metal.obj \
 	$(OBJS)\coredll_mono.obj \
@@ -4557,7 +4557,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_gdiplus.obj \
 	$(OBJS)\corelib_graphics.obj \
 	$(OBJS)\corelib_icon.obj \
-	$(OBJS)\corelib_imaglist.obj \
 	$(OBJS)\corelib_minifram.obj \
 	$(OBJS)\corelib_nonownedwnd.obj \
 	$(OBJS)\corelib_comimpl.obj \
@@ -4668,6 +4667,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_timectrl.obj \
 	$(OBJS)\corelib_datecontrols.obj \
 	$(OBJS)\corelib_activityindicator.obj \
+	$(OBJS)\corelib_msw_imaglist.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4903,7 +4903,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_gdiplus.obj \
 	$(OBJS)\corelib_graphics.obj \
 	$(OBJS)\corelib_icon.obj \
-	$(OBJS)\corelib_imaglist.obj \
 	$(OBJS)\corelib_minifram.obj \
 	$(OBJS)\corelib_nonownedwnd.obj \
 	$(OBJS)\corelib_comimpl.obj \
@@ -5000,6 +4999,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_topluniv.obj \
 	$(OBJS)\corelib_winuniv.obj \
 	$(OBJS)\corelib_activityindicator.obj \
+	$(OBJS)\corelib_generic_imaglist.obj \
 	$(OBJS)\corelib_gtk.obj \
 	$(OBJS)\corelib_metal.obj \
 	$(OBJS)\corelib_mono.obj \
@@ -8002,6 +8002,9 @@ $(OBJS)\monodll_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\monodll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
+$(OBJS)\monodll_msw_imaglist.obj: ..\..\src\msw\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\imaglist.cpp
+
 $(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -8145,6 +8148,9 @@ $(OBJS)\monodll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 
 $(OBJS)\monodll_winuniv.obj: ..\..\src\univ\winuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\winuniv.cpp
+
+$(OBJS)\monodll_generic_imaglist.obj: ..\..\src\generic\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\imaglist.cpp
 
 $(OBJS)\monodll_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\themes\gtk.cpp
@@ -8743,11 +8749,6 @@ $(OBJS)\monodll_graphics.obj: ..\..\src\msw\graphics.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_icon.obj: ..\..\src\msw\icon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\icon.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\imaglist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -10595,6 +10596,9 @@ $(OBJS)\monolib_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\monolib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
+$(OBJS)\monolib_msw_imaglist.obj: ..\..\src\msw\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\imaglist.cpp
+
 $(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -10738,6 +10742,9 @@ $(OBJS)\monolib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 
 $(OBJS)\monolib_winuniv.obj: ..\..\src\univ\winuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\winuniv.cpp
+
+$(OBJS)\monolib_generic_imaglist.obj: ..\..\src\generic\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\imaglist.cpp
 
 $(OBJS)\monolib_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\themes\gtk.cpp
@@ -11336,11 +11343,6 @@ $(OBJS)\monolib_graphics.obj: ..\..\src\msw\graphics.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_icon.obj: ..\..\src\msw\icon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\icon.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\imaglist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13611,6 +13613,9 @@ $(OBJS)\coredll_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\coredll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
+$(OBJS)\coredll_msw_imaglist.obj: ..\..\src\msw\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\imaglist.cpp
+
 $(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -13755,6 +13760,9 @@ $(OBJS)\coredll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 $(OBJS)\coredll_winuniv.obj: ..\..\src\univ\winuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\winuniv.cpp
 
+$(OBJS)\coredll_generic_imaglist.obj: ..\..\src\generic\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\imaglist.cpp
+
 $(OBJS)\coredll_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\themes\gtk.cpp
 
@@ -13890,11 +13898,6 @@ $(OBJS)\coredll_graphics.obj: ..\..\src\msw\graphics.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_icon.obj: ..\..\src\msw\icon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\icon.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\imaglist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15370,6 +15373,9 @@ $(OBJS)\corelib_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\corelib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
+$(OBJS)\corelib_msw_imaglist.obj: ..\..\src\msw\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\imaglist.cpp
+
 $(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -15514,6 +15520,9 @@ $(OBJS)\corelib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 $(OBJS)\corelib_winuniv.obj: ..\..\src\univ\winuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\winuniv.cpp
 
+$(OBJS)\corelib_generic_imaglist.obj: ..\..\src\generic\imaglist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\imaglist.cpp
+
 $(OBJS)\corelib_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\themes\gtk.cpp
 
@@ -15649,11 +15658,6 @@ $(OBJS)\corelib_graphics.obj: ..\..\src\msw\graphics.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_icon.obj: ..\..\src\msw\icon.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\icon.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_imaglist.obj: ..\..\src\msw\imaglist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\imaglist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

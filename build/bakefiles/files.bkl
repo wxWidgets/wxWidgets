@@ -1334,7 +1334,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="XWIN_LOWLEVEL_SRC" hints="files">
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -1346,7 +1345,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
     wx/unix/sound.h
@@ -1360,7 +1358,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="GTK_WIN32_SRC" hints="files">
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
@@ -1378,7 +1375,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="GTK_WIN32_HDR" hints="files">
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
@@ -1540,6 +1536,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/bmpcbox.cpp
     src/gtk/animate.cpp
     src/gtk/srchctrl.cpp
+    src/generic/imaglist.cpp
 </set>
 <set var="GTK2_SRC" hints="files">
     $(GTK_SRC)
@@ -1608,6 +1605,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dataview.h
     wx/gtk/dvrenderer.h
     wx/gtk/srchctrl.h
+    wx/generic/imaglist.h
 </set>
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
@@ -1721,7 +1719,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/icon.cpp
-    src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
     src/msw/ole/comimpl.cpp
@@ -1888,6 +1885,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/timectrl.cpp
     src/msw/datecontrols.cpp
     src/generic/activityindicator.cpp
+    src/msw/imaglist.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2015,7 +2013,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
-    src/generic/imaglist.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2045,7 +2042,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
-    wx/generic/imaglist.h
     wx/generic/mask.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
@@ -2461,6 +2457,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
     src/generic/activityindicator.cpp
+    src/generic/imaglist.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
     wx/generic/accel.h
@@ -2519,6 +2516,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/toplevel.h
     wx/univ/window.h
     wx/generic/activityindicator.h
+    wx/generic/imaglist.h
 </set>
 
 <!-- ====================================================================== -->

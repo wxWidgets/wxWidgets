@@ -1243,7 +1243,6 @@ UNIX_SRC =
 XWIN_LOWLEVEL_SRC =
     src/common/taskbarcmn.cpp
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -1254,7 +1253,6 @@ XWIN_LOWLEVEL_SRC =
 
 XWIN_LOWLEVEL_HDR =
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/joystick.h
     wx/unix/sound.h
@@ -1266,7 +1264,6 @@ XWIN_LOWLEVEL_HDR =
 GTK_WIN32_SRC =
     src/common/taskbarcmn.cpp
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/msw/dialup.cpp
     src/msw/dib.cpp
     src/msw/display.cpp
@@ -1282,7 +1279,6 @@ GTK_WIN32_SRC =
     src/unix/fontutil.cpp
 GTK_WIN32_HDR =
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/msw/dib.h
     wx/msw/joystick.h
     wx/msw/ole/automtn.h
@@ -1371,6 +1367,7 @@ GTK_SRC =
     src/generic/fdrepdlg.cpp
     # Needed as long as we support GTK+ < 2.6
     src/generic/filepickerg.cpp
+    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -1441,6 +1438,7 @@ GTK_HDR =
     wx/generic/activityindicator.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
+    wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/gtk/accel.h
@@ -1612,7 +1610,6 @@ MSW_LOWLEVEL_SRC =
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
     src/msw/icon.cpp
-    src/msw/imaglist.cpp
     src/msw/joystick.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
@@ -1738,6 +1735,7 @@ MSW_SRC =
     src/msw/gauge.cpp
     src/msw/headerctrl.cpp
     src/msw/hyperlink.cpp
+    src/msw/imaglist.cpp
     src/msw/iniconf.cpp
     src/msw/listbox.cpp
     src/msw/listctrl.cpp
@@ -1891,7 +1889,6 @@ DFB_LOWLEVEL_SRC =
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
-    src/generic/imaglist.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -1919,7 +1916,6 @@ DFB_LOWLEVEL_HDR =
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
-    wx/generic/imaglist.h
     wx/generic/mask.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
@@ -2270,6 +2266,7 @@ UNIV_SRC =
     src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
+    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
     src/generic/prntdlgg.cpp
@@ -2322,6 +2319,7 @@ UNIV_HDR =
     wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
+    wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/mdig.h
     wx/generic/statusbr.h

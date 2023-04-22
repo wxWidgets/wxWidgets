@@ -1227,7 +1227,6 @@ set(UNIX_SRC
 
 set(XWIN_LOWLEVEL_SRC
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -1240,7 +1239,6 @@ set(XWIN_LOWLEVEL_SRC
 
 set(XWIN_LOWLEVEL_HDR
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
     wx/unix/sound.h
@@ -1249,7 +1247,6 @@ set(XWIN_LOWLEVEL_HDR
 
 set(GTK_WIN32_SRC
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
@@ -1268,7 +1265,6 @@ set(GTK_WIN32_SRC
 
 set(GTK_WIN32_HDR
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
@@ -1424,6 +1420,7 @@ set(GTK_SRC
     src/gtk/bmpcbox.cpp
     src/gtk/hyperlink.cpp
     src/gtk/srchctrl.cpp
+    src/generic/imaglist.cpp
 )
 
 set(GTK2_SRC
@@ -1494,6 +1491,7 @@ set(GTK_HDR
     wx/gtk/activityindicator.h
     wx/gtk/hyperlink.h
     wx/gtk/srchctrl.h
+    wx/generic/imaglist.h
 )
 
 set(GTK2_HDR
@@ -1598,7 +1596,6 @@ set(MSW_LOWLEVEL_SRC
     src/msw/graphics.cpp
     src/msw/graphicsd2d.cpp
     src/msw/icon.cpp
-    src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
     src/msw/ole/comimpl.cpp
@@ -1777,6 +1774,7 @@ set(MSW_SRC
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
+    src/msw/imaglist.cpp
 )
 
 set(MSW_HDR
@@ -1901,7 +1899,6 @@ set(DFB_LOWLEVEL_SRC
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
-    src/generic/imaglist.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -1931,7 +1928,6 @@ set(DFB_LOWLEVEL_HDR
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
-    wx/generic/imaglist.h
     wx/generic/mask.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
@@ -2327,6 +2323,7 @@ set(UNIV_SRC
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
     src/generic/activityindicator.cpp
+    src/generic/imaglist.cpp
 )
 
 set(UNIV_HDR
@@ -2386,6 +2383,7 @@ set(UNIV_HDR
     wx/univ/toplevel.h
     wx/univ/window.h
     wx/generic/activityindicator.h
+    wx/generic/imaglist.h
 )
 
 set(MEDIA_CMN_SRC

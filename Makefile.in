@@ -2372,7 +2372,6 @@ COND_PLATFORM_WIN32_1_QT_PLATFORM_HDR =  \
 @COND_PLATFORM_WIN32_1@QT_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_QT_PLATFORM_HDR)
 COND_PLATFORM_MACOSX_1_GTK_PLATFORM_HDR =  \
 	wx/generic/caret.h \
-	wx/generic/imaglist.h \
 	wx/unix/fontutil.h \
 	wx/unix/utilsx11.h \
 	wx/unix/sound.h \
@@ -2380,7 +2379,6 @@ COND_PLATFORM_MACOSX_1_GTK_PLATFORM_HDR =  \
 @COND_PLATFORM_MACOSX_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_MACOSX_1_GTK_PLATFORM_HDR)
 COND_PLATFORM_UNIX_1_GTK_PLATFORM_HDR =  \
 	wx/generic/caret.h \
-	wx/generic/imaglist.h \
 	wx/unix/fontutil.h \
 	wx/unix/utilsx11.h \
 	wx/unix/sound.h \
@@ -2388,7 +2386,6 @@ COND_PLATFORM_UNIX_1_GTK_PLATFORM_HDR =  \
 @COND_PLATFORM_UNIX_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_GTK_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 	wx/generic/caret.h \
-	wx/generic/imaglist.h \
 	wx/msw/ole/automtn.h \
 	wx/msw/ole/comimpl.h \
 	wx/msw/ole/oleutils.h \
@@ -2753,7 +2750,6 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/colour.h \
 	wx/generic/icon.h \
-	wx/generic/imaglist.h \
 	wx/generic/mask.h \
 	wx/dfb/app.h \
 	wx/dfb/bitmap.h \
@@ -2920,7 +2916,6 @@ COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
 @COND_TOOLKIT_OSX_IPHONE@LOWLEVEL_HDR = 
 COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
-	wx/generic/imaglist.h \
 	wx/unix/fontutil.h \
 	wx/unix/utilsx11.h \
 	wx/unix/sound.h \
@@ -3019,6 +3014,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/dataview.h \
 	wx/gtk/dvrenderer.h \
 	wx/gtk/srchctrl.h \
+	wx/generic/imaglist.h \
 	wx/generic/fontdlgg.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
@@ -3082,7 +3078,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
 	wx/gtk/dvrenderer.h \
-	wx/gtk/srchctrl.h
+	wx/gtk/srchctrl.h \
+	wx/generic/imaglist.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR =  \
 	wx/generic/fdrepdlg.h \
@@ -3145,7 +3142,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR =  \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
 	wx/gtk/dvrenderer.h \
-	wx/gtk/srchctrl.h
+	wx/gtk/srchctrl.h \
+	wx/generic/imaglist.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR)
 COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -3599,7 +3597,8 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/univ/toolbar.h \
 	wx/univ/toplevel.h \
 	wx/univ/window.h \
-	wx/generic/activityindicator.h
+	wx/generic/activityindicator.h \
+	wx/generic/imaglist.h
 @COND_USE_GUI_1_WXUNIV_1@GUI_CORE_HEADERS = $(COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS)
 COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/affinematrix2dbase.h \
@@ -4613,6 +4612,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_topluniv.o \
 	monodll_winuniv.o \
 	monodll_generic_activityindicator.o \
+	monodll_generic_imaglist.o \
 	monodll_gtk.o \
 	monodll_metal.o \
 	monodll_mono.o \
@@ -4827,7 +4827,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
 	monodll_generic_colour.o \
 	monodll_generic_icon.o \
-	monodll_generic_imaglist.o \
 	monodll_mask.o \
 	monodll_generic_textmeasure.o \
 	monodll_dfb_app.o \
@@ -4998,7 +4997,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_gdiplus.o \
 	monodll_msw_graphics.o \
 	monodll_msw_icon.o \
-	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
 	monodll_msw_nonownedwnd.o \
 	monodll_comimpl.o \
@@ -5051,7 +5049,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_OSX_IPHONE@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
-	monodll_generic_imaglist.o \
 	monodll_unix_dialup.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
@@ -5155,6 +5152,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_bmpcbox.o \
 	monodll_animate.o \
 	monodll_gtk_srchctrl.o \
+	monodll_generic_imaglist.o \
 	monodll_generic_activityindicator.o \
 	monodll_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
@@ -5220,7 +5218,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
 	monodll_animate.o \
-	monodll_gtk_srchctrl.o
+	monodll_gtk_srchctrl.o \
+	monodll_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5284,7 +5283,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS =  \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
 	monodll_animate.o \
-	monodll_gtk_srchctrl.o
+	monodll_gtk_srchctrl.o \
+	monodll_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_clrpickerg.o \
@@ -5352,6 +5352,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_timectrl.o \
 	monodll_datecontrols.o \
 	monodll_generic_activityindicator.o \
+	monodll_msw_imaglist.o \
 	monodll_msw_checklst.o \
 	monodll_msw_fdrepdlg.o \
 	monodll_msw_fontdlg.o
@@ -5555,7 +5556,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_caret.o \
 	monodll_generic_colour.o \
 	monodll_generic_icon.o \
-	monodll_generic_imaglist.o \
 	monodll_mask.o \
 	monodll_generic_textmeasure.o \
 	monodll_dfb_app.o \
@@ -5726,7 +5726,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_gdiplus.o \
 	monodll_msw_graphics.o \
 	monodll_msw_icon.o \
-	monodll_msw_imaglist.o \
 	monodll_msw_minifram.o \
 	monodll_msw_nonownedwnd.o \
 	monodll_comimpl.o \
@@ -5779,7 +5778,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_caret.o \
-	monodll_generic_imaglist.o \
 	monodll_unix_dialup.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
@@ -6374,6 +6372,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_topluniv.o \
 	monolib_winuniv.o \
 	monolib_generic_activityindicator.o \
+	monolib_generic_imaglist.o \
 	monolib_gtk.o \
 	monolib_metal.o \
 	monolib_mono.o \
@@ -6588,7 +6587,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_caret.o \
 	monolib_generic_colour.o \
 	monolib_generic_icon.o \
-	monolib_generic_imaglist.o \
 	monolib_mask.o \
 	monolib_generic_textmeasure.o \
 	monolib_dfb_app.o \
@@ -6759,7 +6757,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_gdiplus.o \
 	monolib_msw_graphics.o \
 	monolib_msw_icon.o \
-	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
 	monolib_msw_nonownedwnd.o \
 	monolib_comimpl.o \
@@ -6812,7 +6809,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS_17)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_caret.o \
-	monolib_generic_imaglist.o \
 	monolib_unix_dialup.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
@@ -6916,6 +6912,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_bmpcbox.o \
 	monolib_animate.o \
 	monolib_gtk_srchctrl.o \
+	monolib_generic_imaglist.o \
 	monolib_generic_activityindicator.o \
 	monolib_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
@@ -6981,7 +6978,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
 	monolib_animate.o \
-	monolib_gtk_srchctrl.o
+	monolib_gtk_srchctrl.o \
+	monolib_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -7045,7 +7043,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
 	monolib_animate.o \
-	monolib_gtk_srchctrl.o
+	monolib_gtk_srchctrl.o \
+	monolib_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_clrpickerg.o \
@@ -7113,6 +7112,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_timectrl.o \
 	monolib_datecontrols.o \
 	monolib_generic_activityindicator.o \
+	monolib_msw_imaglist.o \
 	monolib_msw_checklst.o \
 	monolib_msw_fdrepdlg.o \
 	monolib_msw_fontdlg.o
@@ -7316,7 +7316,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_caret.o \
 	monolib_generic_colour.o \
 	monolib_generic_icon.o \
-	monolib_generic_imaglist.o \
 	monolib_mask.o \
 	monolib_generic_textmeasure.o \
 	monolib_dfb_app.o \
@@ -7487,7 +7486,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_gdiplus.o \
 	monolib_msw_graphics.o \
 	monolib_msw_icon.o \
-	monolib_msw_imaglist.o \
 	monolib_msw_minifram.o \
 	monolib_msw_nonownedwnd.o \
 	monolib_comimpl.o \
@@ -7540,7 +7538,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS_17)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_caret.o \
-	monolib_generic_imaglist.o \
 	monolib_unix_dialup.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
@@ -8287,6 +8284,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_topluniv.o \
 	coredll_winuniv.o \
 	coredll_generic_activityindicator.o \
+	coredll_generic_imaglist.o \
 	coredll_gtk.o \
 	coredll_metal.o \
 	coredll_mono.o \
@@ -8501,7 +8499,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_caret.o \
 	coredll_generic_colour.o \
 	coredll_generic_icon.o \
-	coredll_generic_imaglist.o \
 	coredll_mask.o \
 	coredll_generic_textmeasure.o \
 	coredll_dfb_app.o \
@@ -8672,7 +8669,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_gdiplus.o \
 	coredll_msw_graphics.o \
 	coredll_msw_icon.o \
-	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
 	coredll_msw_nonownedwnd.o \
 	coredll_comimpl.o \
@@ -8725,7 +8721,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_caret.o \
-	coredll_generic_imaglist.o \
 	coredll_unix_dialup.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
@@ -8829,6 +8824,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_bmpcbox.o \
 	coredll_animate.o \
 	coredll_gtk_srchctrl.o \
+	coredll_generic_imaglist.o \
 	coredll_generic_activityindicator.o \
 	coredll_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
@@ -8894,7 +8890,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
 	coredll_animate.o \
-	coredll_gtk_srchctrl.o
+	coredll_gtk_srchctrl.o \
+	coredll_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -8958,7 +8955,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
 	coredll_animate.o \
-	coredll_gtk_srchctrl.o
+	coredll_gtk_srchctrl.o \
+	coredll_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_clrpickerg.o \
@@ -9026,6 +9024,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_timectrl.o \
 	coredll_datecontrols.o \
 	coredll_generic_activityindicator.o \
+	coredll_msw_imaglist.o \
 	coredll_msw_checklst.o \
 	coredll_msw_fdrepdlg.o \
 	coredll_msw_fontdlg.o
@@ -9229,7 +9228,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_caret.o \
 	coredll_generic_colour.o \
 	coredll_generic_icon.o \
-	coredll_generic_imaglist.o \
 	coredll_mask.o \
 	coredll_generic_textmeasure.o \
 	coredll_dfb_app.o \
@@ -9400,7 +9398,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_gdiplus.o \
 	coredll_msw_graphics.o \
 	coredll_msw_icon.o \
-	coredll_msw_imaglist.o \
 	coredll_msw_minifram.o \
 	coredll_msw_nonownedwnd.o \
 	coredll_comimpl.o \
@@ -9453,7 +9450,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_caret.o \
-	coredll_generic_imaglist.o \
 	coredll_unix_dialup.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
@@ -9776,6 +9772,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_topluniv.o \
 	corelib_winuniv.o \
 	corelib_generic_activityindicator.o \
+	corelib_generic_imaglist.o \
 	corelib_gtk.o \
 	corelib_metal.o \
 	corelib_mono.o \
@@ -9990,7 +9987,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_caret.o \
 	corelib_generic_colour.o \
 	corelib_generic_icon.o \
-	corelib_generic_imaglist.o \
 	corelib_mask.o \
 	corelib_generic_textmeasure.o \
 	corelib_dfb_app.o \
@@ -10161,7 +10157,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_gdiplus.o \
 	corelib_msw_graphics.o \
 	corelib_msw_icon.o \
-	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
 	corelib_msw_nonownedwnd.o \
 	corelib_comimpl.o \
@@ -10214,7 +10209,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_caret.o \
-	corelib_generic_imaglist.o \
 	corelib_unix_dialup.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
@@ -10318,6 +10312,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_bmpcbox.o \
 	corelib_animate.o \
 	corelib_gtk_srchctrl.o \
+	corelib_generic_imaglist.o \
 	corelib_generic_activityindicator.o \
 	corelib_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
@@ -10383,7 +10378,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
 	corelib_animate.o \
-	corelib_gtk_srchctrl.o
+	corelib_gtk_srchctrl.o \
+	corelib_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -10447,7 +10443,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
 	corelib_animate.o \
-	corelib_gtk_srchctrl.o
+	corelib_gtk_srchctrl.o \
+	corelib_generic_imaglist.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_clrpickerg.o \
@@ -10515,6 +10512,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_timectrl.o \
 	corelib_datecontrols.o \
 	corelib_generic_activityindicator.o \
+	corelib_msw_imaglist.o \
 	corelib_msw_checklst.o \
 	corelib_msw_fdrepdlg.o \
 	corelib_msw_fontdlg.o
@@ -10718,7 +10716,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_caret.o \
 	corelib_generic_colour.o \
 	corelib_generic_icon.o \
-	corelib_generic_imaglist.o \
 	corelib_mask.o \
 	corelib_generic_textmeasure.o \
 	corelib_dfb_app.o \
@@ -10889,7 +10886,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_gdiplus.o \
 	corelib_msw_graphics.o \
 	corelib_msw_icon.o \
-	corelib_msw_imaglist.o \
 	corelib_msw_minifram.o \
 	corelib_msw_nonownedwnd.o \
 	corelib_comimpl.o \
@@ -10942,7 +10938,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_caret.o \
-	corelib_generic_imaglist.o \
 	corelib_unix_dialup.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
@@ -12275,7 +12270,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
-	monodll_generic_imaglist.o \
 	monodll_unix_dialup.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
@@ -12287,7 +12281,6 @@ COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__GTK_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
-	monodll_generic_imaglist.o \
 	monodll_unix_dialup.o \
 	monodll_unix_fontenum.o \
 	monodll_unix_fontutil.o \
@@ -12299,7 +12292,6 @@ COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@__GTK_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
-	monodll_generic_imaglist.o \
 	monodll_automtn.o \
 	monodll_comimpl.o \
 	monodll_oleutils.o \
@@ -12412,7 +12404,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0 =  \
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_0 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 	monolib_generic_caret.o \
-	monolib_generic_imaglist.o \
 	monolib_unix_dialup.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
@@ -12424,7 +12415,6 @@ COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 @COND_PLATFORM_MACOSX_1@__GTK_PLATFORM_SRC_OBJECTS_27 = $(COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_27)
 COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 	monolib_generic_caret.o \
-	monolib_generic_imaglist.o \
 	monolib_unix_dialup.o \
 	monolib_unix_fontenum.o \
 	monolib_unix_fontutil.o \
@@ -12436,7 +12426,6 @@ COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 @COND_PLATFORM_UNIX_1@__GTK_PLATFORM_SRC_OBJECTS_27 = $(COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_27)
 COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 	monolib_generic_caret.o \
-	monolib_generic_imaglist.o \
 	monolib_automtn.o \
 	monolib_comimpl.o \
 	monolib_oleutils.o \
@@ -12548,7 +12537,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8 =  \
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_8 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	coredll_generic_caret.o \
-	coredll_generic_imaglist.o \
 	coredll_unix_dialup.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
@@ -12560,7 +12548,6 @@ COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 @COND_PLATFORM_MACOSX_1@__GTK_PLATFORM_SRC_OBJECTS_1_4 = $(COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_4)
 COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	coredll_generic_caret.o \
-	coredll_generic_imaglist.o \
 	coredll_unix_dialup.o \
 	coredll_unix_fontenum.o \
 	coredll_unix_fontutil.o \
@@ -12572,7 +12559,6 @@ COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 @COND_PLATFORM_UNIX_1@__GTK_PLATFORM_SRC_OBJECTS_1_4 = $(COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_1_4)
 COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	coredll_generic_caret.o \
-	coredll_generic_imaglist.o \
 	coredll_automtn.o \
 	coredll_comimpl.o \
 	coredll_oleutils.o \
@@ -12684,7 +12670,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9 =  \
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_9 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_2_2 =  \
 	corelib_generic_caret.o \
-	corelib_generic_imaglist.o \
 	corelib_unix_dialup.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
@@ -12696,7 +12681,6 @@ COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_2_2 =  \
 @COND_PLATFORM_MACOSX_1@__GTK_PLATFORM_SRC_OBJECTS_2_2 = $(COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_2_2)
 COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_2_2 =  \
 	corelib_generic_caret.o \
-	corelib_generic_imaglist.o \
 	corelib_unix_dialup.o \
 	corelib_unix_fontenum.o \
 	corelib_unix_fontutil.o \
@@ -12708,7 +12692,6 @@ COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_2_2 =  \
 @COND_PLATFORM_UNIX_1@__GTK_PLATFORM_SRC_OBJECTS_2_2 = $(COND_PLATFORM_UNIX_1___GTK_PLATFORM_SRC_OBJECTS_2_2)
 COND_PLATFORM_WIN32_1___GTK_PLATFORM_SRC_OBJECTS_2_2 =  \
 	corelib_generic_caret.o \
-	corelib_generic_imaglist.o \
 	corelib_automtn.o \
 	corelib_comimpl.o \
 	corelib_oleutils.o \
@@ -15337,6 +15320,9 @@ monodll_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONODLL_ODEP)
 monodll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+monodll_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
+
 monodll_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -16561,48 +16547,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -17388,9 +17332,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_icon.o: $(srcdir)/src/msw/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
@@ -18426,6 +18367,27 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monodll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
@@ -20101,6 +20063,9 @@ monolib_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONOLIB_ODEP)
 monolib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+monolib_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
+
 monolib_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -21325,48 +21290,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
 
@@ -22152,9 +22075,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_icon.o: $(srcdir)/src/msw/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
@@ -23190,6 +23110,27 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monolib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
@@ -25546,6 +25487,9 @@ coredll_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(COREDLL_ODEP)
 coredll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+coredll_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
+
 coredll_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -26187,48 +26131,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -27015,9 +26917,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_icon.o: $(srcdir)/src/msw/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
@@ -28053,6 +27952,27 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@coredll_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
@@ -29281,6 +29201,9 @@ corelib_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(CORELIB_ODEP)
 corelib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+corelib_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
+
 corelib_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -29922,48 +29845,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_unix_dialup.o: $(srcdir)/src/unix/dialup.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/dialup.cpp
@@ -30750,9 +30631,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_icon.o: $(srcdir)/src/msw/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/icon.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_imaglist.o: $(srcdir)/src/msw/imaglist.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/imaglist.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_minifram.o: $(srcdir)/src/msw/minifram.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/minifram.cpp
@@ -31788,6 +31666,27 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_gtk_srchctrl.o: $(srcdir)/src/gtk/srchctrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/srchctrl.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@corelib_generic_imaglist.o: $(srcdir)/src/generic/imaglist.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/imaglist.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
