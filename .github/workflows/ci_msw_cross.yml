@@ -78,6 +78,9 @@ jobs:
             configure_flags: --disable-compat32
           - name: wxMSW 32 bits
             triplet: i686-w64-mingw32
+          - name: wxMSW/Univ
+            configure_flags: --enable-universal --disable-compat32 --disable-debug --disable-optimise
+            minimal: true
     env:
       wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
 
@@ -169,17 +172,26 @@ jobs:
         run: |
           make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
+      - name: Install and test
+        run: |
+          make install
+          make -C samples/minimal -f makefile.unx "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
+
+
       - name: Build samples
+        if: matrix.minimal != true
         run: |
           make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS" samples
 
       - name: Build tests
+        if: matrix.minimal != true
         working-directory: tests
         run: |
           make $wxMAKE_ARGS failtest
           make $wxMAKE_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
 
       - name: Launch Xvfb
+        if: matrix.minimal != true
         run: |
           echo 'Launching Xvfb...'
           mkdir /tmp/.X11-unix
@@ -209,6 +221,7 @@ jobs:
           echo 'DISPLAY=:10' >> $GITHUB_ENV
 
       - name: Run non-GUI tests
+        if: matrix.minimal != true
         working-directory: tests
         run: |
           # Some tests are currently failing under Wine while they pass under
@@ -236,6 +249,7 @@ jobs:
           $wxTEST_RUNNER ./test.exe "${excluded_tests[@]}"
 
       - name: Run GUI tests
+        if: matrix.minimal != true
         working-directory: tests
         run: |
           # Same as for the non-GUI test above, except many more GUI tests fail
