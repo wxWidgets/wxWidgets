@@ -2272,6 +2272,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_msw_bmpbndl.obj \
 	$(OBJS)\monodll_overlay.obj \
+	$(OBJS)\monodll_darkmode.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
@@ -2339,7 +2340,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_timectrl.obj \
 	$(OBJS)\monodll_datecontrols.obj \
 	$(OBJS)\monodll_activityindicator.obj \
-	$(OBJS)\monodll_darkmode.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2618,6 +2618,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_msw_bmpbndl.obj \
 	$(OBJS)\monodll_overlay.obj \
+	$(OBJS)\monodll_darkmode.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -3124,6 +3125,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_msw_bmpbndl.obj \
 	$(OBJS)\monolib_overlay.obj \
+	$(OBJS)\monolib_darkmode.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
@@ -3191,7 +3193,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_timectrl.obj \
 	$(OBJS)\monolib_datecontrols.obj \
 	$(OBJS)\monolib_activityindicator.obj \
-	$(OBJS)\monolib_darkmode.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -3470,6 +3471,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_msw_bmpbndl.obj \
 	$(OBJS)\monolib_overlay.obj \
+	$(OBJS)\monolib_darkmode.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3905,6 +3907,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_msw_bmpbndl.obj \
 	$(OBJS)\coredll_overlay.obj \
+	$(OBJS)\coredll_darkmode.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
@@ -3972,7 +3975,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_timectrl.obj \
 	$(OBJS)\coredll_datecontrols.obj \
 	$(OBJS)\coredll_activityindicator.obj \
-	$(OBJS)\coredll_darkmode.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -4251,6 +4253,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_msw_bmpbndl.obj \
 	$(OBJS)\coredll_overlay.obj \
+	$(OBJS)\coredll_darkmode.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -4591,6 +4594,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_msw_bmpbndl.obj \
 	$(OBJS)\corelib_overlay.obj \
+	$(OBJS)\corelib_darkmode.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
@@ -4658,7 +4662,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_timectrl.obj \
 	$(OBJS)\corelib_datecontrols.obj \
 	$(OBJS)\corelib_activityindicator.obj \
-	$(OBJS)\corelib_darkmode.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4937,6 +4940,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_msw_bmpbndl.obj \
 	$(OBJS)\corelib_overlay.obj \
+	$(OBJS)\corelib_darkmode.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -7996,9 +8000,6 @@ $(OBJS)\monodll_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\monodll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
-$(OBJS)\monodll_darkmode.obj: ..\..\src\msw\darkmode.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\darkmode.cpp
-
 $(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -8955,6 +8956,11 @@ $(OBJS)\monodll_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_overlay.obj: ..\..\src\msw\overlay.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\overlay.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_darkmode.obj: ..\..\src\msw\darkmode.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\darkmode.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -10583,9 +10589,6 @@ $(OBJS)\monolib_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\monolib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
-$(OBJS)\monolib_darkmode.obj: ..\..\src\msw\darkmode.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\darkmode.cpp
-
 $(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -11542,6 +11545,11 @@ $(OBJS)\monolib_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_overlay.obj: ..\..\src\msw\overlay.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\overlay.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_darkmode.obj: ..\..\src\msw\darkmode.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\darkmode.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13593,9 +13601,6 @@ $(OBJS)\coredll_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\coredll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
-$(OBJS)\coredll_darkmode.obj: ..\..\src\msw\darkmode.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\darkmode.cpp
-
 $(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -14090,6 +14095,11 @@ $(OBJS)\coredll_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_overlay.obj: ..\..\src\msw\overlay.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\overlay.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_darkmode.obj: ..\..\src\msw\darkmode.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\darkmode.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15346,9 +15356,6 @@ $(OBJS)\corelib_timectrl.obj: ..\..\src\msw\timectrl.cpp
 $(OBJS)\corelib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
 
-$(OBJS)\corelib_darkmode.obj: ..\..\src\msw\darkmode.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\darkmode.cpp
-
 $(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -15843,6 +15850,11 @@ $(OBJS)\corelib_msw_bmpbndl.obj: ..\..\src\msw\bmpbndl.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_overlay.obj: ..\..\src\msw\overlay.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\overlay.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_darkmode.obj: ..\..\src\msw\darkmode.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\darkmode.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

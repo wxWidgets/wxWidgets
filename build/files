@@ -1589,6 +1589,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/clipbrd.cpp
     src/msw/colour.cpp
     src/msw/cursor.cpp
+    src/msw/darkmode.cpp
     src/msw/data.cpp
     src/msw/dc.cpp
     src/msw/dcclient.cpp
@@ -1685,7 +1686,6 @@ MSW_SRC =
     src/msw/commandlinkbutton.cpp
     src/msw/control.cpp
     src/msw/customdraw.cpp
-    src/msw/darkmode.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
     src/msw/datetimectrl.cpp
