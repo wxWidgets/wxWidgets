@@ -221,6 +221,7 @@ library:
 @itemdef{wxUSE_STATUSBAR, Use wxStatusBar class.}
 @itemdef{wxUSE_STC, Use wxStyledTextCtrl.}
 @itemdef{wxUSE_STDPATHS, Use wxStandardPaths class.}
+@itemdef{wxUSE_STD_IOSTREAM, Use standard stream classes in addition to or, in wxDocument, instead of, wx streams.}
 @itemdef{wxUSE_STOPWATCH, Use wxStopWatch class.}
 @itemdef{wxUSE_STREAMS, Enable stream classes.}
 @itemdef{wxUSE_SVG, Use wxSVGFileDC class.}
