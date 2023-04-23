@@ -33,10 +33,6 @@
     #include <stat.h>
 #endif
 
-#if wxUSE_STD_IOSTREAM
-    #include <fstream>
-#endif
-
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 #include "wx/thread.h"
