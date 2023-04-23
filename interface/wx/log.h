@@ -790,8 +790,9 @@ public:
 
     This class can be used to redirect the log messages to a C++ stream.
 
-    Please note that this class is only available if wxWidgets was compiled with
-    the standard iostream library support (@c wxUSE_STD_IOSTREAM must be on).
+    @note
+        This class is not available if `wxUSE_STD_IOSTREAM` is set to 0 (which
+        is done by `--disable-std_iostreams` option when using configure).
 
     @library{wxbase}
     @category{logging}
