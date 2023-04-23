@@ -50,7 +50,8 @@
 #include <stdlib.h>
 
 #if defined(__WINDOWS__)
-    #include "wx/msw/private.h" // includes windows.h
+    // This header includes <windows.h> and declares wxMSWFormatMessage().
+    #include "wx/msw/private.h"
 #endif
 
 #undef wxLOG_COMPONENT
