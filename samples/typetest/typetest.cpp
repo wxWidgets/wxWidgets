@@ -115,7 +115,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( "Writing to ofstream and wxFileOutputStream:\n" );
 
-    wxSTD ofstream std_file_output( "test_std.dat" );
+    std::ofstream std_file_output( "test_std.dat" );
     wxFileOutputStream file_output( file_name );
     wxBufferedOutputStream buf_output( file_output );
     wxTextOutputStream text_output( buf_output );
@@ -155,7 +155,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( "\nReading from ifstream:\n" );
 
-    wxSTD ifstream std_file_input( "test_std.dat" );
+    std::ifstream std_file_input( "test_std.dat" );
 
     std_file_input >> si;
     tmp.Printf( "Signed int: %d\n", si );

@@ -67,8 +67,8 @@ public:
     { }
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& WXUNUSED(str)) const { return false; }
-    virtual bool Read(wxSTD istream& WXUNUSED(str)) { return false; }
+    virtual bool Write(std::ostream& WXUNUSED(str)) const { return false; }
+    virtual bool Read(std::istream& WXUNUSED(str)) { return false; }
 #endif
     virtual bool Write(wxString& WXUNUSED(str)) const { return false; }
     virtual bool Read(wxString& WXUNUSED(str)) { return false; }

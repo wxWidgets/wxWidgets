@@ -1060,7 +1060,7 @@ void TextWidgetsPage::OnStreamRedirector(wxCommandEvent& WXUNUSED(event))
 #if wxHAS_TEXT_WINDOW_STREAM
     wxStreamToTextRedirector redirect(m_text);
     wxString str( "Outputed to cout, appears in wxTextCtrl!" );
-    wxSTD cout << str << wxSTD endl;
+    std::cout << str << std::endl;
 #else
     wxMessageBox("This wxWidgets build does not support wxStreamToTextRedirector");
 #endif

@@ -742,7 +742,7 @@ private:
 
 class WXDLLIMPEXP_CORE wxTextCtrlBase : public wxControl,
 #if wxHAS_TEXT_WINDOW_STREAM
-                                   public wxSTD streambuf,
+                                   public std::streambuf,
 #endif
                                    public wxTextAreaBase,
                                    public wxTextEntry
@@ -965,12 +965,12 @@ private:
 
 public:
     wxStreamToTextRedirector(wxTextCtrl *text)
-        : m_ostr(wxSTD cout)
+        : m_ostr(std::cout)
     {
         Init(text);
     }
 
-    wxStreamToTextRedirector(wxTextCtrl *text, wxSTD ostream *ostr)
+    wxStreamToTextRedirector(wxTextCtrl *text, std::ostream *ostr)
         : m_ostr(*ostr)
     {
         Init(text);
@@ -983,10 +983,10 @@ public:
 
 private:
     // the stream we're redirecting
-    wxSTD ostream&   m_ostr;
+    std::ostream&   m_ostr;
 
     // the old streambuf (before we changed it)
-    wxSTD streambuf *m_sbufOld;
+    std::streambuf *m_sbufOld;
 };
 
 #endif // wxHAS_TEXT_WINDOW_STREAM
