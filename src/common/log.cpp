@@ -891,11 +891,11 @@ void wxLogStderr::DoLogText(const wxString& msg)
 
 #if wxUSE_STD_IOSTREAM
 #include "wx/ioswrap.h"
-wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv& conv)
+wxLogStream::wxLogStream(std::ostream *ostr, const wxMBConv& conv)
     : wxMessageOutputWithConv(conv)
 {
     if ( ostr == nullptr )
-        m_ostr = &wxSTD cerr;
+        m_ostr = &std::cerr;
     else
         m_ostr = ostr;
 }
