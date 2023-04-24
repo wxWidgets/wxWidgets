@@ -1566,9 +1566,14 @@ bool wxString::ToDouble(double *pVal) const
 //  3. Use standard locale-dependent C functions and adjust them for the
 //     current locale (slowest and the least robust).
 
-// Check if C++17 <charconv> is available.
-#if wxCHECK_CXX_STD(201703L)
-#include <charconv>
+// Check if C++17 <charconv> is available: even though normally it should be
+// available in any compiler claiming C++17 support, there are actually some
+// compilers (e.g. gcc 7) that don't have it, so do it in this way instead:
+#ifdef __has_include
+    #if __has_include(<charconv>)
+        // This should define __cpp_lib_to_chars checked below.
+        #include <charconv>
+    #endif
 #endif
 
 // Now check if the functions we need are present in it (normally they ought
