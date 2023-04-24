@@ -1568,7 +1568,10 @@ bool wxString::ToDouble(double *pVal) const
 
 // Check if C++17 <charconv> is available.
 #if wxCHECK_CXX_STD(201703L)
+// "__has_include" is neccessary to support gcc 7.x and clang 5-6 (see bug #23484)
+#if __has_include("charconv")
 #include <charconv>
+#endif
 #endif
 
 // Now check if the functions we need are present in it (normally they ought
