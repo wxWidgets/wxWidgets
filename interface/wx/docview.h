@@ -1430,18 +1430,36 @@ public:
     */
     virtual bool IsModified() const;
 
-    ///@{
     /**
-        Override this function and call it from your own LoadObject() before
-        streaming your own data. LoadObject() is called by the framework
-        automatically when the document contents need to be loaded.
+        Override this function to load the object data from the provided stream.
 
-        @note This version of LoadObject() may not exist depending on how
-              wxWidgets was configured.
+        LoadObject() is called by the framework automatically when the document
+        contents need to be loaded by default.
+
+        Note that if @a stream is in the failed state when this function
+        returns, i.e. its `failbit` is set, it indicates that loading the
+        object failed and an error is given. As `failbit` may be set by trying
+        to read after reaching the end of the stream, you may need to call
+        `stream.clear()` to reset it if necessary.
+
+        @note This overload of LoadObject() is not available if
+            `wxUSE_STD_IOSTREAM` is set to 0 (which is done by
+            `--disable-std_iostreams` option when using configure).
     */
-    virtual istream& LoadObject(istream& stream);
+    virtual std::istream& LoadObject(std::istream& stream);
+
+    /**
+        Override this function to load the object data from the provided stream.
+
+        @overload
+
+        @note This overload of LoadObject() is only available if
+            `wxUSE_STD_IOSTREAM` is set to 0 (which is done by
+            `--disable-std_iostreams` option when using configure). Otherwise,
+            i.e. in the default build of the library, only the overload taking
+            `std::istream` exists.
+     */
     virtual wxInputStream& LoadObject(wxInputStream& stream);
-    ///@}
 
     /**
         Call with @true to mark the document as modified since the last save,
@@ -1587,18 +1605,30 @@ public:
     */
     virtual bool Revert();
 
-    ///@{
     /**
-        Override this function and call it from your own SaveObject() before
-        streaming your own data. SaveObject() is called by the framework
-        automatically when the document contents need to be saved.
+        Override this function to save the object data into the provided stream.
 
-        @note This version of SaveObject() may not exist depending on how
-              wxWidgets was configured.
+        SaveObject() is called by the framework automatically when the document
+        contents need to be saved by default.
+
+        @note This overload of SaveObject() is not available if
+            `wxUSE_STD_IOSTREAM` is set to 0 (which is done by
+            `--disable-std_iostreams` option when using configure).
     */
-    virtual ostream& SaveObject(ostream& stream);
+    virtual std::ostream& SaveObject(std::ostream& stream);
+
+    /**
+        Override this function to load the object data from the provided stream.
+
+        @overload
+
+        @note This overload of SaveObject() is only available if
+            `wxUSE_STD_IOSTREAM` is set to 0 (which is done by
+            `--disable-std_iostreams` option when using configure). Otherwise,
+            i.e. in the default build of the library, only the overload taking
+            `std::ostream` exists.
+     */
     virtual wxOutputStream& SaveObject(wxOutputStream& stream);
-    ///@}
 
     /**
         Sets the command processor to be used for this document. The document
