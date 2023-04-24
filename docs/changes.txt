@@ -262,6 +262,7 @@ wxMSW:
 - Don't reset custom wxToolBar background on system colour change (#23386).
 - Fix wxUILocale::GetPreferredUILanguages() under < 10 (Brian Nixon, #23416).
 - Fix building with LLVM clang (Sergey Khalyutn, Maarten Bent, #23464).
+- Fix discrepancy between GDI and Direct2D in high DPI (Kumazuma, #23486).
 
 wxOSX:
 
