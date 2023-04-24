@@ -3546,6 +3546,7 @@ protected:
             wxFAIL_MSG("Could not create Direct2D render target");
         }
 
+        renderTarget->SetDpi(96.f, 96.f);
         renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
         m_nativeResource = renderTarget;
