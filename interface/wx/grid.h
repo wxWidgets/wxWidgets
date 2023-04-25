@@ -4737,7 +4737,7 @@ public:
 
         @since 3.3.0
      */
-    void EnableRowResize(int row)l
+    void EnableRowResize(int row);
 
     /**
         Returns the column ID of the specified column position.
