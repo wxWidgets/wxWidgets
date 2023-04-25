@@ -386,7 +386,9 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(RBUTTON)
         WXK_(CANCEL)
         WXK_(MBUTTON)
-        WXK_(CLEAR)
+#ifdef __WXMSW__
+        WXK_(NUMPAD_CENTER) // = WXK_CLEAR on MSW
+#endif
         WXK_(SHIFT)
         WXK_(ALT)
         WXK_(CONTROL)
@@ -464,7 +466,9 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(NUMPAD_PAGEUP)
         WXK_(NUMPAD_PAGEDOWN)
         WXK_(NUMPAD_END)
-        WXK_(NUMPAD_BEGIN)
+#ifndef __WXMSW__
+        WXK_(NUMPAD_CENTER) // = WXK_NUMPAD_BEGIN on non-MSW
+#endif
         WXK_(NUMPAD_INSERT)
         WXK_(NUMPAD_DELETE)
         WXK_(NUMPAD_EQUAL)
