@@ -6370,11 +6370,11 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
         BYTE keyboardState[256] = {0};
         wchar_t unicodeChar[2] = {0};
         int result = ToUnicode(MapVirtualKey(HIWORD(lParam) & 0xFF, MAPVK_VSC_TO_VK),
-                           HIWORD(lParam) & 0xFF,
-                           keyboardState,
-                           unicodeChar,
-                           1,
-                           0);
+                               HIWORD(lParam) & 0xFF,
+                               keyboardState,
+                               unicodeChar,
+                               1,
+                               0);
         if (result > 0)
         {
             bool ShiftPressed = (GetKeyState(VK_LSHIFT) & 0x8000) != 0 || (GetKeyState(VK_RSHIFT) & 0x8000) != 0;
