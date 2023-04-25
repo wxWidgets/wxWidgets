@@ -1290,7 +1290,6 @@ bool AdjustCharEventKeyCodes(wxKeyEvent& event)
         // Adjust the Unicode equivalent in the same way too.
         if ( event.m_keyCode != code )
         {
-            event.m_uniChar = event.m_keyCode;
             modified = true;
         }
     }
@@ -1428,6 +1427,9 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             {
                 // use Unicode values
                 eventChar.m_keyCode = key_code;
+                eventChar.m_uniChar = uniChar;
+            } else if (event.ControlDown()) {
+                // for Ctrl+Letters use unicode values also
                 eventChar.m_uniChar = uniChar;
             }
 
