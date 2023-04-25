@@ -876,7 +876,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KEY_KP_Begin:
-            key_code = WXK_NUMPAD_CENTER;
+            key_code = WXK_NUMPAD_BEGIN;
             break;
 
         case GDK_KEY_KP_Insert:

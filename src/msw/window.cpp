@@ -6645,7 +6645,7 @@ const struct wxKeyMapping
     { VK_CANCEL,        WXK_CANCEL },
     { VK_BACK,          WXK_BACK },
     { VK_TAB,           WXK_TAB },
-    { VK_CLEAR,         WXK_NUMPAD_CENTER },
+    { VK_CLEAR,         WXK_CLEAR },
     { VK_SHIFT,         WXK_SHIFT },
     { VK_CONTROL,       WXK_CONTROL },
     { VK_MENU ,         WXK_ALT },

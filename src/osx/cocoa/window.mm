@@ -312,7 +312,7 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
                         retval = WXK_HOME;
                         break;
                     case NSBeginFunctionKey  :
-                        retval = WXK_NUMPAD_CENTER;
+                        retval = WXK_NUMPAD_BEGIN;
                         break;
                     case NSEndFunctionKey  :
                         retval = WXK_END;
