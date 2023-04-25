@@ -161,7 +161,7 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                   desc.m_keycode,
                                   ev.GetKeyCode() );
 
-    if ( desc.m_keycode < WXK_START )
+    if ( desc.m_keycode > 26 && desc.m_keycode < WXK_START )
     {
         // For Latin-1 our key code is the same as Unicode character value.
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong Unicode key in " + msg,
