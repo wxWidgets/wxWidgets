@@ -6364,6 +6364,37 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
         //      as WXK_NONE and use GetUnicodeKey() to access the character.
     }
 
+    // for Ctrl+letters let's detect corresponding Unicode char
+    if (event.m_controlDown && event.m_keyCode <= 26)
+    {
+        BYTE keyboardState[256] = {0};
+        wchar_t unicodeChar[2] = {0};
+        int result = ToUnicode(MapVirtualKey(HIWORD(lParam) & 0xFF, MAPVK_VSC_TO_VK),
+                           HIWORD(lParam) & 0xFF,
+                           keyboardState,
+                           unicodeChar,
+                           1,
+                           0);
+        if (result > 0)
+        {
+            bool ShiftPressed = (GetKeyState(VK_LSHIFT) & 0x8000) != 0 || (GetKeyState(VK_RSHIFT) & 0x8000) != 0;
+            bool capsLockEnabled = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+
+            if ((!capsLockEnabled && ShiftPressed) || (capsLockEnabled && !ShiftPressed))
+            {
+                CharUpperBuffW((LPWSTR)&unicodeChar, 1);
+            }
+
+            event.m_uniChar = unicodeChar[0];
+        }
+    }
+
+    // set keycode to zero for non-ascii characters to match GTK backend behavior
+    if (event.m_uniChar && event.m_keyCode > 127)
+    {
+        event.m_keyCode = 0;
+    }
+
     // the alphanumeric keys produced by pressing AltGr+something on European
     // keyboards have both Ctrl and Alt modifiers which may confuse the user
     // code as, normally, keys with Ctrl and/or Alt don't result in anything
