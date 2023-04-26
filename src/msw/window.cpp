@@ -874,6 +874,11 @@ bool wxWindowMSW::SetFont(const wxFont& font)
     return true;
 }
 
+bool wxWindowMSW::IsTransparentBackgroundSupported(wxString* WXUNUSED(reason)) const
+{
+    return true;
+}
+
 bool wxWindowMSW::SetCursor(const wxCursor& cursor)
 {
     if ( !wxWindowBase::SetCursor(cursor) )
@@ -1656,6 +1661,12 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
             *exstyle |= WS_EX_CONTROLPARENT;
         }
 #endif // __WXUNIVERSAL__
+
+        // Set this style when background style is set to transparent. Don't
+        // apply it to toplevel windows, since it will make events (like mouse
+        // clicks) fall through the window.
+        if ( GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT && !IsTopLevel() )
+            *exstyle |= WS_EX_TRANSPARENT;
     }
 
     return style;

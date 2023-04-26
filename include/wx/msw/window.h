@@ -115,6 +115,8 @@ public:
     virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont( const wxFont &font ) override;
 
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
+
     virtual int GetCharHeight() const override;
     virtual int GetCharWidth() const override;
 
