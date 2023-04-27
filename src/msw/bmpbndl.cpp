@@ -223,8 +223,13 @@ wxBitmapBundleImplRC::AddBitmap(const ResourceInfo& info,
     wxASSERT_MSG
     (
         bitmap.GetSize() == sizeExpected,
-        wxString::Format(wxS("Bitmap \"%s\" should have size %d*%d."),
-                         info.name, sizeExpected.x, sizeExpected.y)
+        wxString::Format
+        (
+            wxS("Bitmap \"%s\" is of size %d*%d but should be %d*%d."),
+            info.name,
+            bitmap.GetWidth(), bitmap.GetHeight(),
+            sizeExpected.x, sizeExpected.y
+        )
     );
 
     if ( sizeNeeded != sizeExpected )
