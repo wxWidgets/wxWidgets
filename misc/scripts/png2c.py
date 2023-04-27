@@ -37,7 +37,7 @@ for path in sys.argv[1:]:
 
         # Allow only filenames that make sense as C variable names
         if not(m):
-                print("Skipped file (unsuitable filename): " + filename)
+                print("Skipped file (unsuitable filename): " + filename, file=sys.stderr)
                 continue
 
         # Read PNG file as character array
