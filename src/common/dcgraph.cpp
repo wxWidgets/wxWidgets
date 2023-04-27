@@ -1006,6 +1006,8 @@ void wxGCDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         // Match raster-based wxDC implementations, which draw the line
         // along the inside edge of the solid rectangle
         OffsetDisabler offsetDisabler(m_graphicContext);
+        if (w < 0) { w = -w; x -= w; }
+        if (h < 0) { h = -h; y -= h; }
         m_graphicContext->DrawRectangle(x + 0.5, y + 0.5, w - 1, h - 1);
     }
     else
@@ -1033,6 +1035,8 @@ void wxGCDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     if (m_pen.IsNonTransparent() && m_pen.GetWidth() == 1)
     {
         OffsetDisabler offsetDisabler(m_graphicContext);
+        if (w < 0) { w = -w; x -= w; }
+        if (h < 0) { h = -h; y -= h; }
         m_graphicContext->DrawRoundedRectangle(x + 0.5, y + 0.5, w - 1, h - 1, radius);
     }
     else
