@@ -25,6 +25,9 @@ if len(sys.argv) < 2:
 
 r = re.compile("^([a-zA-Z._][a-zA-Z._0-9]*)[.][pP][nN][gG]$")
 
+# Automatically replace some symbols in the filenames.
+sanitize = str.maketrans('-@', '__')
+
 with_size = 0
 size_suffix = ''
 for path in sys.argv[1:]:
@@ -32,7 +35,7 @@ for path in sys.argv[1:]:
             with_size = 1
             continue
 
-        filename = os.path.basename(path).replace('-','_')
+        filename = os.path.basename(path).translate(sanitize)
         m = r.match(filename)
 
         # Allow only filenames that make sense as C variable names
