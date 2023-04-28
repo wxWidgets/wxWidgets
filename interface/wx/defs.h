@@ -1116,7 +1116,7 @@ enum wxKeyCode
 
     /**
         The central key of numeric pad ("5") has different names in different OSes.
-        So we use WXK_NUMPAD_CENTER synonim for it to avoid confusion.
+        So we use WXK_NUMPAD_CENTER synonym for it to avoid confusion.
 
         @since 3.3.0
      */
