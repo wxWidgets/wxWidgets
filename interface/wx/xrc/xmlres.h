@@ -809,8 +809,10 @@ protected:
 
     /**
         Gets the position (may be in dialog units).
+
+        The @a windowToUse argument is only available since wxWidgets 3.3.0.
     */
-    wxPoint GetPosition(const wxString& param = "pos");
+    wxPoint GetPosition(const wxString& param = "pos", wxWindow* windowToUse = nullptr);
 
     /**
         Gets the size (may be in dialog units).

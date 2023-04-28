@@ -2385,9 +2385,10 @@ wxSize wxXmlResourceHandlerImpl::GetSize(const wxString& param,
 
 
 
-wxPoint wxXmlResourceHandlerImpl::GetPosition(const wxString& param)
+wxPoint wxXmlResourceHandlerImpl::GetPosition(const wxString& param,
+                                              wxWindow *windowToUse)
 {
-    return ParseValueInPixels(this, param, wxDefaultPosition);
+    return ParseValueInPixels(this, param, wxDefaultPosition, windowToUse);
 }
 
 
