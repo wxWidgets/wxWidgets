@@ -156,7 +156,7 @@ static wxStrCacheStatsDumper s_showCacheStats;
 
 #include <iostream>
 
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
+std::ostream& operator<<(std::ostream& os, const wxCStrData& str)
 {
 #if !wxUSE_UNICODE_UTF8
     return os << wxConvWhateverWorks.cWX2MB(str);
@@ -165,17 +165,17 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 #endif
 }
 
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
+std::ostream& operator<<(std::ostream& os, const wxString& str)
 {
     return os << str.c_str();
 }
 
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxScopedCharBuffer& str)
+std::ostream& operator<<(std::ostream& os, const wxScopedCharBuffer& str)
 {
     return os << str.data();
 }
 
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxScopedWCharBuffer& str)
+std::ostream& operator<<(std::ostream& os, const wxScopedWCharBuffer& str)
 {
     // There is no way to write wide character data to std::ostream directly,
     // but we need to define this operator for compatibility, as we provided it
@@ -186,17 +186,17 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxScopedWCharBuffer& str)
 
 #if defined(HAVE_WOSTREAM)
 
-wxSTD wostream& operator<<(wxSTD wostream& wos, const wxString& str)
+std::wostream& operator<<(std::wostream& wos, const wxString& str)
 {
     return wos << str.wc_str();
 }
 
-wxSTD wostream& operator<<(wxSTD wostream& wos, const wxCStrData& str)
+std::wostream& operator<<(std::wostream& wos, const wxCStrData& str)
 {
     return wos << str.AsWChar();
 }
 
-wxSTD wostream& operator<<(wxSTD wostream& wos, const wxScopedWCharBuffer& str)
+std::wostream& operator<<(std::wostream& wos, const wxScopedWCharBuffer& str)
 {
     return wos << str.data();
 }

@@ -50,7 +50,8 @@
 #include <stdlib.h>
 
 #if defined(__WINDOWS__)
-    #include "wx/msw/private.h" // includes windows.h
+    // This header includes <windows.h> and declares wxMSWFormatMessage().
+    #include "wx/msw/private.h"
 #endif
 
 #undef wxLOG_COMPONENT
@@ -890,11 +891,11 @@ void wxLogStderr::DoLogText(const wxString& msg)
 
 #if wxUSE_STD_IOSTREAM
 #include "wx/ioswrap.h"
-wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv& conv)
+wxLogStream::wxLogStream(std::ostream *ostr, const wxMBConv& conv)
     : wxMessageOutputWithConv(conv)
 {
     if ( ostr == nullptr )
-        m_ostr = &wxSTD cerr;
+        m_ostr = &std::cerr;
     else
         m_ostr = ostr;
 }
