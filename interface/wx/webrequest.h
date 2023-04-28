@@ -63,7 +63,7 @@
         // Start the request
         request.Start();
     @endcode
-    
+
     The location of where files are downloaded can also be defined prior to any request
     by passing unique IDs to `wxWebSession::GetDefault().CreateRequest()` and processing
     them in your @c wxEVT_WEBREQUEST_STATE handler. For example, create a map of IDs with
