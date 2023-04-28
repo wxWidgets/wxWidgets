@@ -63,6 +63,15 @@
         // Start the request
         request.Start();
     @endcode
+    
+    The location of where files are downloaded can also be defined prior to any request
+    by passing unique IDs to `wxWebSession::GetDefault().CreateRequest()` and processing
+    them in your @c wxEVT_WEBREQUEST_STATE handler. For example, create a map of IDs with
+    their respective download paths prior to creating any requests. For each call to
+    `wxWebSession::GetDefault().CreateRequest()`, pass in the webpath to download and an ID
+    from your map. Then, in your @c wxEVT_WEBREQUEST_STATE handler, get the ID from the
+    @c wxWebRequestEvent object and look it up from your ID map. Here, you can access the
+    download path that you assigned to this ID and proceed to save the file to that location.
 
     @section apple_http macOS and iOS App Transport Security
 
