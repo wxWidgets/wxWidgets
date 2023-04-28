@@ -6385,7 +6385,11 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
                 CharUpperBuffW((LPWSTR)&unicodeChar, 1);
             }
 
-            event.m_uniChar = unicodeChar[0];
+            if (( unicodeChar[0] < 'a' || unicodeChar[0] > 'z' ) &&
+                ( unicodeChar[0] < 'A' || unicodeChar[0] > 'Z' )) {
+
+                event.m_uniChar = unicodeChar[0];
+            }
         }
     }
 

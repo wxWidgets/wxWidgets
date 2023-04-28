@@ -1428,9 +1428,20 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                 // use Unicode values
                 eventChar.m_keyCode = key_code;
                 eventChar.m_uniChar = uniChar;
+
             } else if (event.ControlDown()) {
-                // for Ctrl+Letters use unicode values also
-                eventChar.m_uniChar = uniChar;
+
+                if (( uniChar < 'a' || uniChar > 'z' ) &&
+                    ( uniChar < 'A' || uniChar > 'Z' )) {
+
+                    // for Ctrl+NonLatinLetters use Unicode values also
+                    eventChar.m_uniChar = uniChar;
+
+                } else {
+
+                    // use keycode (1..26) value for Unicode field to mimic MSW behavior
+                    eventChar.m_uniChar = eventChar.m_keyCode;
+                }
             }
 
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), eventChar.m_keyCode);

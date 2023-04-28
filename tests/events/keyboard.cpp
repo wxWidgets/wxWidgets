@@ -163,14 +163,10 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
 
     if ( desc.m_keycode < WXK_START )
     {
-        // Do not perform this test for Ctrl+A..Z as Unicode character should differ
-        if (desc.m_keycode > 26)
-        {
-            // For Latin-1 our key code is the same as Unicode character value.
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong Unicode key in " + msg,
-                                          (char)desc.m_keycode,
-                                          (char)ev.GetUnicodeKey() );
-        }
+        // For Latin-1 our key code is the same as Unicode character value.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong Unicode key in " + msg,
+                                      (char)desc.m_keycode,
+                                      (char)ev.GetUnicodeKey() );
     }
     else // Special key
     {

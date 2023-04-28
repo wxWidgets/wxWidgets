@@ -1403,6 +1403,9 @@ enum wxKeyCategoryFlags
     to 31.
     Since version 2.9.2, the enum values @c WXK_CONTROL_A - @c WXK_CONTROL_Z
     can be used instead of the non-descriptive constant values 1-26.
+    Since version 3.3.0, if non-US/English keyboard layout is selected,
+    Unicode field of char events contains original Unicode character
+    as it would be without Control.
 
     Finally, modifier keys only generate key events but no char events at all.
     The modifiers keys are @c WXK_SHIFT, @c WXK_CONTROL, @c WXK_ALT and various
