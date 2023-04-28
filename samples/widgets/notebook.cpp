@@ -33,8 +33,6 @@
     #include "wx/radiobox.h"
     #include "wx/statbox.h"
     #include "wx/textctrl.h"
-
-    #include "wx/dynarray.h"
 #endif
 
 #include "wx/sizer.h"

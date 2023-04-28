@@ -106,7 +106,7 @@ private:
     // structure describing a registry key/value
     class TreeNode : public wxTreeItemData
     {
-        WX_DEFINE_ARRAY_PTR(TreeNode *, TreeChildren);
+        using TreeChildren = std::vector<TreeNode*>;
     public:
         RegTreeCtrl  *m_pTree;      // must be non-null
         TreeNode     *m_pParent;    // nullptr only for the root node
@@ -601,7 +601,7 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(
     // add it to the list of parent's children
     if ( pParent != nullptr )
     {
-        pParent->m_aChildren.Add(pNewNode);
+        pParent->m_aChildren.push_back(pNewNode);
     }
 
     if ( pNewNode->IsKey() )
@@ -979,7 +979,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 bool RegTreeCtrl::TreeNode::OnExpand()
 {
     // we add children only once
-    if ( !m_aChildren.IsEmpty() )
+    if ( !m_aChildren.empty() )
     {
         // we've been already expanded
         return true;
@@ -1124,11 +1124,11 @@ void RegTreeCtrl::TreeNode::Refresh()
 
 bool RegTreeCtrl::TreeNode::DeleteChild(TreeNode *child)
 {
-    int index = m_aChildren.Index(child);
-    wxCHECK_MSG( index != wxNOT_FOUND, false,
+    const auto iter = std::find(m_aChildren.begin(), m_aChildren.end(), child);
+    wxCHECK_MSG( iter != m_aChildren.end(), false,
                  "our child in tree should be in m_aChildren" );
 
-    m_aChildren.RemoveAt((size_t)index);
+    m_aChildren.erase(iter);
 
     bool ok;
     if ( child->IsKey() )
@@ -1157,14 +1157,12 @@ bool RegTreeCtrl::TreeNode::DeleteChild(TreeNode *child)
 void RegTreeCtrl::TreeNode::DestroyChildren()
 {
     // destroy all children
-    size_t nCount = m_aChildren.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
+    for ( auto child : m_aChildren )
     {
-        wxTreeItemId lId = m_aChildren[n]->Id();
-        m_pTree->Delete(lId);
+        m_pTree->Delete(child->Id());
     }
 
-    m_aChildren.Empty();
+    m_aChildren.clear();
 }
 
 RegTreeCtrl::TreeNode::~TreeNode()
@@ -1196,9 +1194,8 @@ void RegTreeCtrl::TreeNode::SetRegistryView(wxRegKey::WOW64ViewMode viewMode)
     m_viewMode = viewMode;
 
     // Update children with new view.
-    size_t nCount = m_aChildren.GetCount();
-    for (size_t n = 0; n < nCount; n++)
-        m_aChildren[n]->SetRegistryView(viewMode);
+    for ( auto child : m_aChildren )
+        child->SetRegistryView(viewMode);
 }
 
 // ----------------------------------------------------------------------------

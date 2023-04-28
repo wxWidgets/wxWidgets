@@ -63,6 +63,7 @@
 #endif // __WINDOWS__
 
 #include <memory>
+#include <vector>
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -87,10 +88,10 @@ public:
 
 // Define an array of process pointers used by MyFrame
 class MyPipedProcess;
-WX_DEFINE_ARRAY_PTR(MyPipedProcess *, MyPipedProcessesArray);
+using MyPipedProcessesArray = std::vector<MyPipedProcess*>;
 
 class MyProcess;
-WX_DEFINE_ARRAY_PTR(MyProcess *, MyProcessesArray);
+using MyProcessesArray = std::vector<MyProcess*>;
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
@@ -541,9 +542,9 @@ MyFrame::~MyFrame()
     // any processes left until now must be deleted manually: normally this is
     // done when the associated process terminates but it must be still running
     // if this didn't happen until now
-    for ( size_t n = 0; n < m_allAsync.size(); n++ )
+    for ( auto process : m_allAsync )
     {
-        delete m_allAsync[n];
+        delete process;
     }
 }
 
@@ -1266,10 +1267,9 @@ void MyFrame::OnDDERequest(wxCommandEvent& WXUNUSED(event))
 // input polling
 void MyFrame::OnIdle(wxIdleEvent& event)
 {
-    size_t count = m_running.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( auto process : m_running )
     {
-        if ( m_running[n]->HasInput() )
+        if ( process->HasInput() )
         {
             event.RequestMore();
         }
@@ -1294,14 +1294,14 @@ void MyFrame::OnProcessTerminated(MyPipedProcess *process)
 
 void MyFrame::OnAsyncTermination(MyProcess *process)
 {
-    m_allAsync.Remove(process);
+    m_allAsync.erase(std::find(m_allAsync.begin(), m_allAsync.end(), process));
 
     delete process;
 }
 
 void MyFrame::AddPipedProcess(MyPipedProcess *process)
 {
-    if ( m_running.IsEmpty() )
+    if ( m_running.empty() )
     {
         // we want to start getting the timer events to ensure that a
         // steady stream of idle events comes in -- otherwise we
@@ -1310,15 +1310,15 @@ void MyFrame::AddPipedProcess(MyPipedProcess *process)
     }
     //else: the timer is already running
 
-    m_running.Add(process);
-    m_allAsync.Add(process);
+    m_running.push_back(process);
+    m_allAsync.push_back(process);
 }
 
 void MyFrame::RemovePipedProcess(MyPipedProcess *process)
 {
-    m_running.Remove(process);
+    m_running.erase(std::find(m_running.begin(), m_running.end(), process));
 
-    if ( m_running.IsEmpty() )
+    if ( m_running.empty() )
     {
         // we don't need to get idle events all the time any more
         m_timerIdleWakeUp.Stop();
