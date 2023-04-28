@@ -223,6 +223,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     wxRegion rgnUpdate = scrollbar->GetUpdateRegion();
 
     {
+#if wxUSE_LOG_TRACE
         wxRect rectUpdate = rgnUpdate.GetBox();
         wxLogTrace(wxT("scrollbar"),
                    wxT("%s redraw: update box is (%d, %d)-(%d, %d)"),
@@ -231,6 +232,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                    rectUpdate.GetTop(),
                    rectUpdate.GetRight(),
                    rectUpdate.GetBottom());
+#endif // wxUSE_LOG_TRACE
 
 #if 0 //def WXDEBUG_SCROLLBAR
         static bool s_refreshDebug = false;

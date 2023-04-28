@@ -1334,7 +1334,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="XWIN_LOWLEVEL_SRC" hints="files">
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -1346,7 +1345,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
     wx/unix/sound.h
@@ -1360,7 +1358,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="GTK_WIN32_SRC" hints="files">
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
@@ -1378,7 +1375,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="GTK_WIN32_HDR" hints="files">
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
@@ -1540,6 +1536,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/bmpcbox.cpp
     src/gtk/animate.cpp
     src/gtk/srchctrl.cpp
+    src/generic/imaglist.cpp
 </set>
 <set var="GTK2_SRC" hints="files">
     $(GTK_SRC)
@@ -1608,6 +1605,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dataview.h
     wx/gtk/dvrenderer.h
     wx/gtk/srchctrl.h
+    wx/generic/imaglist.h
 </set>
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
@@ -1721,7 +1719,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/icon.cpp
-    src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
     src/msw/ole/comimpl.cpp
@@ -1764,6 +1761,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/access.cpp
     src/msw/bmpbndl.cpp
     src/msw/overlay.cpp
+    src/msw/darkmode.cpp
+    src/msw/appprogress.cpp
+    src/msw/taskbarbutton.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -1777,6 +1777,46 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/sound.h
     wx/msw/joystick.h
     wx/msw/evtloop.h
+    wx/msw/taskbarbutton.h
+    wx/msw/gdiimage.h
+    wx/msw/dib.h
+    wx/msw/ole/droptgt.h
+    wx/msw/icon.h
+    wx/msw/toplevel.h
+    wx/msw/darkmode.h
+    wx/msw/dcprint.h
+    wx/msw/tooltip.h
+    wx/msw/ole/dataform.h
+    wx/msw/region.h
+    wx/msw/clipbrd.h
+    wx/msw/app.h
+    wx/msw/ole/oleutils.h
+    wx/msw/dcscreen.h
+    wx/msw/dcclient.h
+    wx/msw/font.h
+    wx/msw/ole/safearray.h
+    wx/msw/colour.h
+    wx/msw/ole/access.h
+    wx/msw/ole/dataobj2.h
+    wx/msw/dc.h
+    wx/msw/brush.h
+    wx/msw/ole/dataobj.h
+    wx/msw/cursor.h
+    wx/msw/ole/dropsrc.h
+    wx/msw/printwin.h
+    wx/msw/printdlg.h
+    wx/msw/dcmemory.h
+    wx/msw/appprogress.h
+    wx/msw/caret.h
+    wx/msw/window.h
+    wx/msw/bitmap.h
+    wx/msw/pen.h
+    wx/msw/enhmeta.h
+    wx/msw/ole/comimpl.h
+    wx/msw/palette.h
+    wx/msw/minifram.h
+    wx/msw/ctrlsub.h
+    wx/msw/init.h
 </set>
 
 <set var="MSW_SRC" hints="files">
@@ -1788,7 +1828,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
-    src/msw/appprogress.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1830,7 +1869,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/statusbar.cpp
     src/msw/statline.cpp
     src/msw/stattext.cpp
-    src/msw/taskbarbutton.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
@@ -1847,7 +1885,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/timectrl.cpp
     src/msw/datecontrols.cpp
     src/generic/activityindicator.cpp
-    src/msw/darkmode.cpp
+    src/msw/imaglist.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1856,41 +1894,22 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontpickerg.h
     wx/msw/accel.h
     wx/msw/anybutton.h
-    wx/msw/app.h
-    wx/msw/appprogress.h
-    wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
-    wx/msw/brush.h
     wx/msw/button.h
-    wx/msw/caret.h
     wx/msw/checkbox.h
     wx/msw/choice.h
-    wx/msw/clipbrd.h
     wx/msw/colordlg.h
-    wx/msw/colour.h
     wx/msw/combo.h
     wx/msw/combobox.h
     wx/msw/control.h
-    wx/msw/ctrlsub.h
-    wx/msw/cursor.h
     wx/msw/custombgwin.h
-    wx/msw/dc.h
-    wx/msw/dcclient.h
-    wx/msw/dcmemory.h
-    wx/msw/dcprint.h
-    wx/msw/dcscreen.h
     wx/msw/dialog.h
-    wx/msw/dib.h
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
-    wx/msw/enhmeta.h
     wx/msw/filedlg.h
-    wx/msw/font.h
     wx/msw/frame.h
     wx/msw/gauge.h
-    wx/msw/gdiimage.h
     wx/msw/headerctrl.h
-    wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
     wx/msw/init.h
@@ -1900,30 +1919,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/menu.h
     wx/msw/menuitem.h
     wx/msw/metafile.h
-    wx/msw/minifram.h
     wx/msw/missing.h
     wx/msw/msgdlg.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
-    wx/msw/ole/access.h
-    wx/msw/ole/comimpl.h
-    wx/msw/ole/dataform.h
-    wx/msw/ole/dataobj.h
-    wx/msw/ole/dataobj2.h
-    wx/msw/ole/dropsrc.h
-    wx/msw/ole/droptgt.h
-    wx/msw/ole/oleutils.h
-    wx/msw/ole/safearray.h
     wx/msw/ownerdrw.h
     wx/msw/ownerdrawnbutton.h
-    wx/msw/palette.h
-    wx/msw/pen.h
-    wx/msw/printdlg.h
-    wx/msw/printwin.h
     wx/msw/progdlg.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
-    wx/msw/region.h
     wx/msw/rcdefs.h
     wx/msw/richmsgdlg.h
     wx/msw/scrolbar.h
@@ -1935,15 +1939,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
-    wx/msw/taskbarbutton.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h
     wx/msw/tglbtn.h
-    wx/msw/tooltip.h
-    wx/msw/toplevel.h
     wx/msw/treectrl.h
-    wx/msw/window.h
     wx/msw/rt/utils.h
     wx/msw/hyperlink.h
     wx/msw/bmpcbox.h
@@ -1953,7 +1953,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/datectrl.h
     wx/msw/calctrl.h
     wx/generic/activityindicator.h
-    wx/msw/darkmode.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2014,7 +2013,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
-    src/generic/imaglist.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2044,7 +2042,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
-    wx/generic/imaglist.h
     wx/generic/mask.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
@@ -2460,6 +2457,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
     src/generic/activityindicator.cpp
+    src/generic/imaglist.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
     wx/generic/accel.h
@@ -2518,6 +2516,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/toplevel.h
     wx/univ/window.h
     wx/generic/activityindicator.h
+    wx/generic/imaglist.h
 </set>
 
 <!-- ====================================================================== -->

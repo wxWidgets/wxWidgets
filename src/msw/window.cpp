@@ -1709,7 +1709,7 @@ void wxWindowMSW::MSWAfterReparent()
 
 void wxWindowMSW::MSWDisableComposited()
 {
-    for ( wxWindow* win = this; win; win = win->GetParent() )
+    for ( auto win = this; win; win = win->GetParent() )
     {
         // We never set WS_EX_COMPOSITED on TLWs, and we shouldn't recurse into
         // different windows, so we can stop here.

@@ -1227,7 +1227,6 @@ set(UNIX_SRC
 
 set(XWIN_LOWLEVEL_SRC
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
@@ -1240,7 +1239,6 @@ set(XWIN_LOWLEVEL_SRC
 
 set(XWIN_LOWLEVEL_HDR
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
     wx/unix/sound.h
@@ -1249,7 +1247,6 @@ set(XWIN_LOWLEVEL_HDR
 
 set(GTK_WIN32_SRC
     src/generic/caret.cpp
-    src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
@@ -1268,7 +1265,6 @@ set(GTK_WIN32_SRC
 
 set(GTK_WIN32_HDR
     wx/generic/caret.h
-    wx/generic/imaglist.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
@@ -1424,6 +1420,7 @@ set(GTK_SRC
     src/gtk/bmpcbox.cpp
     src/gtk/hyperlink.cpp
     src/gtk/srchctrl.cpp
+    src/generic/imaglist.cpp
 )
 
 set(GTK2_SRC
@@ -1494,6 +1491,7 @@ set(GTK_HDR
     wx/gtk/activityindicator.h
     wx/gtk/hyperlink.h
     wx/gtk/srchctrl.h
+    wx/generic/imaglist.h
 )
 
 set(GTK2_HDR
@@ -1598,7 +1596,6 @@ set(MSW_LOWLEVEL_SRC
     src/msw/graphics.cpp
     src/msw/graphicsd2d.cpp
     src/msw/icon.cpp
-    src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
     src/msw/ole/comimpl.cpp
@@ -1640,6 +1637,9 @@ set(MSW_LOWLEVEL_SRC
     src/msw/ole/access.cpp
     src/msw/bmpbndl.cpp
     src/msw/overlay.cpp
+    src/msw/darkmode.cpp
+    src/msw/appprogress.cpp
+    src/msw/taskbarbutton.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -1654,6 +1654,46 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/helpwin.h
     wx/msw/taskbar.h
     wx/msw/evtloop.h
+    wx/msw/taskbarbutton.h
+    wx/msw/gdiimage.h
+    wx/msw/font.h
+    wx/msw/ole/safearray.h
+    wx/msw/colour.h
+    wx/msw/ole/access.h
+    wx/msw/clipbrd.h
+    wx/msw/app.h
+    wx/msw/ole/oleutils.h
+    wx/msw/dcscreen.h
+    wx/msw/dcclient.h
+    wx/msw/icon.h
+    wx/msw/toplevel.h
+    wx/msw/darkmode.h
+    wx/msw/tooltip.h
+    wx/msw/dcprint.h
+    wx/msw/ole/dataform.h
+    wx/msw/region.h
+    wx/msw/dib.h
+    wx/msw/ole/droptgt.h
+    wx/msw/enhmeta.h
+    wx/msw/ole/comimpl.h
+    wx/msw/palette.h
+    wx/msw/minifram.h
+    wx/msw/window.h
+    wx/msw/bitmap.h
+    wx/msw/pen.h
+    wx/msw/printwin.h
+    wx/msw/printdlg.h
+    wx/msw/dcmemory.h
+    wx/msw/appprogress.h
+    wx/msw/caret.h
+    wx/msw/ole/dataobj2.h
+    wx/msw/dc.h
+    wx/msw/ole/dataobj.h
+    wx/msw/brush.h
+    wx/msw/cursor.h
+    wx/msw/ole/dropsrc.h
+    wx/msw/init.h
+    wx/msw/ctrlsub.h
 )
 
 set(MSW_DESKTOP_LOWLEVEL_SRC
@@ -1677,7 +1717,6 @@ set(MSW_SRC
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
-    src/msw/appprogress.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1721,7 +1760,6 @@ set(MSW_SRC
     src/msw/statline.cpp
     src/msw/stattext.cpp
     src/msw/systhemectrl.cpp
-    src/msw/taskbarbutton.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
@@ -1736,7 +1774,7 @@ set(MSW_SRC
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
-    src/msw/darkmode.cpp
+    src/msw/imaglist.cpp
 )
 
 set(MSW_HDR
@@ -1746,41 +1784,22 @@ set(MSW_HDR
     wx/generic/fontpickerg.h
     wx/msw/accel.h
     wx/msw/anybutton.h
-    wx/msw/app.h
-    wx/msw/appprogress.h
-    wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
-    wx/msw/brush.h
     wx/msw/button.h
-    wx/msw/caret.h
     wx/msw/checkbox.h
     wx/msw/choice.h
-    wx/msw/clipbrd.h
     wx/msw/colordlg.h
-    wx/msw/colour.h
     wx/msw/combo.h
     wx/msw/combobox.h
     wx/msw/control.h
-    wx/msw/ctrlsub.h
-    wx/msw/cursor.h
     wx/msw/custombgwin.h
-    wx/msw/dc.h
-    wx/msw/dcclient.h
-    wx/msw/dcmemory.h
-    wx/msw/dcprint.h
-    wx/msw/dcscreen.h
     wx/msw/dialog.h
-    wx/msw/dib.h
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
-    wx/msw/enhmeta.h
     wx/msw/filedlg.h
-    wx/msw/font.h
     wx/msw/frame.h
     wx/msw/gauge.h
-    wx/msw/gdiimage.h
     wx/msw/headerctrl.h
-    wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
     wx/msw/init.h
@@ -1790,30 +1809,15 @@ set(MSW_HDR
     wx/msw/menu.h
     wx/msw/menuitem.h
     wx/msw/metafile.h
-    wx/msw/minifram.h
     wx/msw/missing.h
     wx/msw/msgdlg.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
-    wx/msw/ole/access.h
-    wx/msw/ole/comimpl.h
-    wx/msw/ole/dataform.h
-    wx/msw/ole/dataobj.h
-    wx/msw/ole/dataobj2.h
-    wx/msw/ole/dropsrc.h
-    wx/msw/ole/droptgt.h
-    wx/msw/ole/oleutils.h
-    wx/msw/ole/safearray.h
     wx/msw/ownerdrw.h
     wx/msw/ownerdrawnbutton.h
-    wx/msw/palette.h
-    wx/msw/pen.h
-    wx/msw/printdlg.h
-    wx/msw/printwin.h
     wx/msw/progdlg.h
     wx/msw/radiobox.h
     wx/msw/radiobut.h
-    wx/msw/region.h
     wx/msw/rcdefs.h
     wx/msw/richmsgdlg.h
     wx/msw/rt/utils.h
@@ -1826,15 +1830,11 @@ set(MSW_HDR
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
-    wx/msw/taskbarbutton.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h
     wx/msw/tglbtn.h
-    wx/msw/tooltip.h
-    wx/msw/toplevel.h
     wx/msw/treectrl.h
-    wx/msw/window.h
     wx/msw/calctrl.h
     wx/msw/bmpcbox.h
     wx/msw/datectrl.h
@@ -1843,7 +1843,6 @@ set(MSW_HDR
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
     wx/generic/activityindicator.h
-    wx/msw/darkmode.h
 )
 
 set(MSW_RSC
@@ -1900,7 +1899,6 @@ set(DFB_LOWLEVEL_SRC
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
-    src/generic/imaglist.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -1930,7 +1928,6 @@ set(DFB_LOWLEVEL_HDR
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
-    wx/generic/imaglist.h
     wx/generic/mask.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
@@ -2326,6 +2323,7 @@ set(UNIV_SRC
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
     src/generic/activityindicator.cpp
+    src/generic/imaglist.cpp
 )
 
 set(UNIV_HDR
@@ -2385,6 +2383,7 @@ set(UNIV_HDR
     wx/univ/toplevel.h
     wx/univ/window.h
     wx/generic/activityindicator.h
+    wx/generic/imaglist.h
 )
 
 set(MEDIA_CMN_SRC

@@ -52,7 +52,9 @@
 
 #include <memory>
 
+#if wxUSE_LOG_TRACE
 static const char* TRACE_DARKMODE = "msw-darkmode";
+#endif // wxUSE_LOG_TRACE
 
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 
