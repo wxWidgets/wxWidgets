@@ -31,8 +31,7 @@
     This class is fully implemented only under the platforms where xlocale POSIX
     API or equivalent is available. Currently the xlocale API is available under
     most of the recent Unix systems (including Linux, various BSD and macOS) and
-    Microsoft Visual C++ standard library provides a similar API starting from
-    version 8 (Visual Studio 2005).
+    Microsoft Visual C++ standard library provides a similar API.
 
     If neither POSIX API nor Microsoft proprietary equivalent are available, this
     class is still available but works in degraded mode: the only supported locale
