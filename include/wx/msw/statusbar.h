@@ -18,8 +18,6 @@
 #include <memory>
 #include <vector>
 
-class WXDLLIMPEXP_FWD_CORE wxClientDC;
-
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
@@ -30,7 +28,6 @@ public:
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxStatusBarNameStr))
     {
-        m_pDC = nullptr;
         (void)Create(parent, id, style, name);
     }
 
@@ -52,8 +49,6 @@ public:
     virtual int GetBorderY() const override;
 
     // override some wxWindow virtual methods too
-    virtual bool SetFont(const wxFont& font) override;
-
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam) override;
@@ -75,11 +70,6 @@ protected:
 
     // implementation of the public SetStatusWidths()
     void MSWUpdateFieldsWidths();
-
-    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
-
-    // used by DoUpdateStatusText()
-    wxClientDC *m_pDC;
 
 private:
     struct MSWBorders
