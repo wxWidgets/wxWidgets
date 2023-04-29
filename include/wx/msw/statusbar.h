@@ -13,8 +13,10 @@
 
 #if wxUSE_NATIVE_STATUSBAR
 
-#include "wx/vector.h"
 #include "wx/tooltip.h"
+
+#include <memory>
+#include <vector>
 
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
 
@@ -79,11 +81,6 @@ protected:
     // used by DoUpdateStatusText()
     wxClientDC *m_pDC;
 
-#if wxUSE_TOOLTIPS
-    // the tooltips used when wxSTB_SHOW_TIPS is given
-    wxVector<wxToolTip*> m_tooltips;
-#endif
-
 private:
     struct MSWBorders
     {
@@ -106,6 +103,11 @@ private:
 
     // return the various status bar metrics
     static const MSWMetrics& MSWGetMetrics();
+
+#if wxUSE_TOOLTIPS
+    // the tooltips used when wxSTB_SHOW_TIPS is given
+    std::vector<std::unique_ptr<wxToolTip>> m_tooltips;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar);
 };

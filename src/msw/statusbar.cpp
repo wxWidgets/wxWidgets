@@ -147,14 +147,6 @@ wxStatusBar::~wxStatusBar()
     // occupy
     PostSizeEventToParent();
 
-#if wxUSE_TOOLTIPS
-    // delete existing tooltips
-    for (size_t i=0; i<m_tooltips.size(); i++)
-    {
-        wxDELETE(m_tooltips[i]);
-    }
-#endif // wxUSE_TOOLTIPS
-
     wxDELETE(m_pDC);
 }
 
@@ -177,13 +169,10 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
 
 #if wxUSE_TOOLTIPS
     // reset all current tooltips
-    for (size_t i=0; i<m_tooltips.size(); i++)
-    {
-        wxDELETE(m_tooltips[i]);
-    }
+    m_tooltips.clear();
 
     // shrink/expand the array:
-    m_tooltips.resize(nFields, nullptr);
+    m_tooltips.resize(nFields);
 #endif // wxUSE_TOOLTIPS
 
     wxStatusBarBase::SetFieldsCount(nFields, widths);
@@ -344,14 +333,14 @@ void wxStatusBar::DoUpdateStatusText(int nField)
             else
             {
                 // delete the tooltip associated with this pane; it's not needed anymore
-                wxDELETE(m_tooltips[nField]);
+                m_tooltips[nField].reset();
             }
         }
         else
         {
             // create a new tooltip for this pane if needed
             if (GetField(nField).IsEllipsized())
-                m_tooltips[nField] = new wxToolTip(this, nField, GetStatusText(nField), rc);
+                m_tooltips[nField].reset(new wxToolTip(this, nField, GetStatusText(nField), rc));
             //else: leave m_tooltips[nField]==nullptr
         }
     }
