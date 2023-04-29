@@ -668,7 +668,7 @@ protected:
         Gets a dimension (may be in dialog units).
     */
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
-                         wxWindow* windowToUse = 0);
+                         wxWindow* windowToUse = nullptr);
 
     /**
         Gets a direction.
@@ -809,13 +809,15 @@ protected:
 
     /**
         Gets the position (may be in dialog units).
+
+        The @a windowToUse argument is only available since wxWidgets 3.3.0.
     */
-    wxPoint GetPosition(const wxString& param = "pos");
+    wxPoint GetPosition(const wxString& param = "pos", wxWindow* windowToUse = nullptr);
 
     /**
         Gets the size (may be in dialog units).
     */
-    wxSize GetSize(const wxString& param = "size", wxWindow* windowToUse = 0);
+    wxSize GetSize(const wxString& param = "size", wxWindow* windowToUse = nullptr);
 
     /**
         Gets style flags from text in form "flag | flag2| flag3 |..."

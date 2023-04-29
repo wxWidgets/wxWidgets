@@ -79,7 +79,8 @@ public:
                                const wxColour& defaultv = wxNullColour) = 0;
     virtual wxSize GetSize(const wxString& param = wxT("size"),
                            wxWindow *windowToUse = nullptr) = 0;
-    virtual wxPoint GetPosition(const wxString& param = wxT("pos")) = 0;
+    virtual wxPoint GetPosition(const wxString& param = wxT("pos"),
+                                wxWindow *windowToUse = nullptr) = 0;
     virtual wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                                  wxWindow *windowToUse = nullptr) = 0;
     virtual wxSize GetPairInts(const wxString& param) = 0;
@@ -309,9 +310,10 @@ protected:
     {
         return GetImpl()->GetSize(param, windowToUse);
     }
-    wxPoint GetPosition(const wxString& param = wxT("pos"))
+    wxPoint GetPosition(const wxString& param = wxT("pos"),
+                        wxWindow *windowToUse = nullptr)
     {
-        return GetImpl()->GetPosition(param);
+        return GetImpl()->GetPosition(param, windowToUse);
     }
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                          wxWindow *windowToUse = nullptr)
