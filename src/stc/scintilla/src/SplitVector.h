@@ -9,6 +9,13 @@
 #ifndef SPLITVECTOR_H
 #define SPLITVECTOR_H
 
+#ifdef __GNUC__
+#if __GNUC__ >= 13
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
+#endif
+
 #ifdef SCI_NAMESPACE
 namespace Scintilla {
 #endif
@@ -291,6 +298,12 @@ public:
 
 #ifdef SCI_NAMESPACE
 }
+#endif
+
+#ifdef __GNUC__
+#if __GNUC__ >= 13
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 #endif
