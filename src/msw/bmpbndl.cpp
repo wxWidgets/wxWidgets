@@ -223,8 +223,13 @@ wxBitmapBundleImplRC::AddBitmap(const ResourceInfo& info,
     wxASSERT_MSG
     (
         bitmap.GetSize() == sizeExpected,
-        wxString::Format(wxS("Bitmap \"%s\" should have size %d*%d."),
-                         info.name, sizeExpected.x, sizeExpected.y)
+        wxString::Format
+        (
+            wxS("Bitmap \"%s\" is of size %d*%d but should be %d*%d."),
+            info.name,
+            bitmap.GetWidth(), bitmap.GetHeight(),
+            sizeExpected.x, sizeExpected.y
+        )
     );
 
     if ( sizeNeeded != sizeExpected )
@@ -324,6 +329,24 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
     wxBitmap bitmap(name, wxBITMAP_TYPE_PNG_RESOURCE);
     if ( !bitmap.IsOk() )
         return wxBitmapBundle();
+
+    // It's not an error to not have any other bitmaps, but it's rather useless
+    // to use this class if there is only one version of the bitmap in the
+    // resources, so try to warn the developer about it because it could be
+    // just due to a typo in the name in the resource file or something similar.
+    if ( resourceInfos.size() == 1 )
+    {
+        // If you get this message and want to avoid it, you can either:
+        //
+        // - Add name_2x RCDATA resource containing the PNG to your resources.
+        // - Stop using wxBitmapBundle::FromResources() and use FromBitmap()
+        //   instead, e.g. use wxBITMAP_PNG() rather than wxBITMAP_BUNDLE_2().
+        wxLogDebug
+        (
+            wxS("No higher resolution bitmaps for \"%s\" found in the resources."),
+            name
+        );
+    }
 
     // Sort the resources in the order of increasing sizes to simplify the code
     // of wxBitmapBundleImplRC::GetBitmap().
