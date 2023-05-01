@@ -184,8 +184,6 @@ bool wxSlider::Create(wxWindow *parent,
         SetSize(size);
     }
 
-    Bind(wxEVT_DPI_CHANGED, &wxSlider::OnDPIChanged, this);
-
     return true;
 }
 
@@ -649,13 +647,14 @@ void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
     }
 }
 
-void wxSlider::OnDPIChanged(wxDPIChangedEvent& event)
+void wxSlider::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& event)
 {
+    // We need to update the thumb before processing wxEVT_DPI_CHANGED in the
+    // user code, as it may update the slider size, which wouldn't work
+    // correctly if it still used the old thumb length.
     int thumbLen = GetThumbLength();
 
     SetThumbLength(event.ScaleX(thumbLen));
-
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
