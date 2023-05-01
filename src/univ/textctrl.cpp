@@ -785,7 +785,7 @@ wxTextCtrl::~wxTextCtrl()
 
 void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 {
-    if ( value != GetValue() )
+    if ( value != DoGetValue() )
     {
         EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
 

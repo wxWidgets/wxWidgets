@@ -274,6 +274,10 @@ wxOSX:
 - Fix background colour of shaped windows, e.g. wxRichToolTip (#23296).
 - Fix memory leak in wxFileDialog using custom controls (#23304).
 
+wxUniv:
+
+- Fix resetting the hint in wxTextCtrl when it gets focus (Kvaz1r, #23511).
+
 
 3.2.2: (released 2023-02-08)
 ----------------------------
