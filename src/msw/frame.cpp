@@ -948,7 +948,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
-void wxFrame::MSWBeforeDPIChangedEvent(const wxSize& WXUNUSED(newDPI))
+void wxFrame::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
 {
 #if wxUSE_STATUSBAR
     // If this frame uses a status bar, we need to adjust its height here

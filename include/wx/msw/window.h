@@ -607,8 +607,12 @@ protected:
 
     // Also called from MSWUpdateOnDPIChange() but, unlike the function above,
     // this one is called after updating all the children and just before
-    // generating the wxDPIChangedEvent to be processed by the application.
-    virtual void MSWBeforeDPIChangedEvent(const wxSize& WXUNUSED(newDPI)) { }
+    // letting the application handle the given wxDPIChangedEvent (whose
+    // Scale() functions may be useful for the overridden versions).
+    virtual void
+    MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
+    {
+    }
 
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from

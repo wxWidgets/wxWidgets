@@ -131,7 +131,7 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const override;
     virtual void DoSetClientSize(int width, int height) override;
 
-    virtual void MSWBeforeDPIChangedEvent(const wxSize& newDPI) override;
+    virtual void MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& event) override;
 
 #if wxUSE_MENUS_NATIVE
     // perform MSW-specific action when menubar is changed
