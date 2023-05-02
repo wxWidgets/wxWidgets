@@ -3129,7 +3129,12 @@ public:
 
     // Scale the value by the ratio between new and old DPIs carried by this
     // event.
+    wxPoint Scale(wxPoint pt) const;
     wxSize Scale(wxSize sz) const;
+    wxRect Scale(wxRect r) const
+    {
+        return wxRect(Scale(r.GetPosition()), Scale(r.GetSize()));
+    }
 
     int ScaleX(int x) const { return Scale(wxSize(x, -1)).x; }
     int ScaleY(int y) const { return Scale(wxSize(-1, y)).y; }

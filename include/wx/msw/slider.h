@@ -123,8 +123,8 @@ protected:
     WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd) override;
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
+    virtual void MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& event) override;
 
-    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // the labels windows, if any
     wxSubwindows  *m_labels;

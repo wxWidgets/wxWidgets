@@ -5030,6 +5030,11 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 
     wxDPIChangedEvent event(oldDPI, newDPI);
     event.SetEventObject(this);
+
+    // Another hook to give the derived window a chance to update itself after
+    // updating all the children, but before the user-defined event handler.
+    MSWBeforeDPIChangedEvent(event);
+
     return HandleWindowEvent(event);
 }
 
