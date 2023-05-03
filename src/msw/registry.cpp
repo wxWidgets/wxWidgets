@@ -114,7 +114,7 @@ static wxString GetFullName(const wxRegKey *pKey, const wxString& szValue);
 // Unfortunately this needs to be a macro to ensure that the temporary buffer
 // returned by t_str() in UTF-8 build lives long enough.
 #define RegValueStr(szValue) \
-    ((szValue).empty() ? NULL : static_cast<const wchar_t*>(szValue.t_str()))
+    ((szValue).empty() ? NULL : static_cast<const wxChar*>(szValue.t_str()))
 
 // Return the user-readable name of the given REG_XXX type constant.
 static wxString GetTypeString(DWORD dwType)
