@@ -286,6 +286,11 @@ wxGCC_ONLY_WARNING_RESTORE(format-nonliteral)
         return implA args
 #endif
 
+// In non-Unicode build we get suggestions for using gnu_printf format
+// attribute, but it doesn't work in Unicode build, so don't bother with it and
+// just disable the warning.
+wxGCC_ONLY_WARNING_SUPPRESS(suggest-attribute=format)
+
 inline int
 wxVprintf(const wxString& format, va_list ap)
 {
@@ -299,6 +304,8 @@ wxVfprintf(FILE *f, const wxString& format, va_list ap)
     WX_VARARG_VFOO_IMPL((f, wxFormatString(format), ap),
                         wxCRT_VfprintfW, wxCRT_VfprintfA);
 }
+
+wxGCC_ONLY_WARNING_RESTORE(suggest-attribute=format)
 
 #undef WX_VARARG_VFOO_IMPL
 
