@@ -393,13 +393,13 @@ bool wxXmlResource::Load(const wxString& filemask_)
 
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
-#   define wxXmlFindFirst  fsys.FindFirst(filemask, wxFILE)
-#   define wxXmlFindNext   fsys.FindNext()
+    auto const wxXmlFindFirst = [&]() { return fsys.FindFirst(filemask, wxFILE); };
+    auto const wxXmlFindNext = [&]() { return fsys.FindNext(); };
 #else
-#   define wxXmlFindFirst  wxFindFirstFile(filemask, wxFILE)
-#   define wxXmlFindNext   wxFindNextFile()
+    auto const wxXmlFindFirst = [&]() { return wxFindFirstFile(filemask, wxFILE); };
+    auto const wxXmlFindNext = [&]() { return wxFindNextFile(); };
 #endif
-    wxString fnd = wxXmlFindFirst;
+    wxString fnd = wxXmlFindFirst();
     if ( fnd.empty() )
     {
         // Some file system handlers (e.g. wxInternetFSHandler) just don't
@@ -432,10 +432,8 @@ bool wxXmlResource::Load(const wxString& filemask_)
         else
             allOK = false;
 
-        fnd = wxXmlFindNext;
+        fnd = wxXmlFindNext();
     }
-#   undef wxXmlFindFirst
-#   undef wxXmlFindNext
 
     if ( !anyOK )
     {
