@@ -66,31 +66,29 @@ TEST_CASE("FTP", "[net][.]")
     SECTION("List")
     {
         // test CWD
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
+        REQUIRE( ftp.ChDir(directory) );
 
         // test NLIST and LIST
         wxArrayString files;
-        CPPUNIT_ASSERT( ftp.GetFilesList(files) );
-        CPPUNIT_ASSERT( ftp.GetDirList(files) );
-
-        CPPUNIT_ASSERT( ftp.ChDir(wxT("..")) );
+        CHECK( ftp.GetFilesList(files) );
+        CHECK( ftp.GetDirList(files) );
     }
 
     SECTION("Download")
     {
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
+        REQUIRE( ftp.ChDir(directory) );
 
         // test RETR
         wxInputStream *in1 = ftp.GetInputStream("bloordyblop");
-        CPPUNIT_ASSERT( in1 == nullptr );
+        CHECK( in1 == nullptr );
         delete in1;
 
         wxInputStream *in2 = ftp.GetInputStream(valid_filename);
-        CPPUNIT_ASSERT( in2 != nullptr );
+        CHECK( in2 != nullptr );
 
         size_t size = in2->GetSize();
         wxChar *data = new wxChar[size];
-        CPPUNIT_ASSERT( in2->Read(data, size).GetLastError() == wxSTREAM_NO_ERROR );
+        CHECK( in2->Read(data, size).GetLastError() == wxSTREAM_NO_ERROR );
 
         delete [] data;
         delete in2;
@@ -98,26 +96,26 @@ TEST_CASE("FTP", "[net][.]")
 
     SECTION("FileSize")
     {
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
+        REQUIRE( ftp.ChDir(directory) );
 
-        CPPUNIT_ASSERT( ftp.FileExists(valid_filename) );
+        REQUIRE( ftp.FileExists(valid_filename) );
 
         int size = ftp.GetFileSize(valid_filename);
-        CPPUNIT_ASSERT( size != -1 );
+        CHECK( size != -1 );
     }
 
     SECTION("Pwd")
     {
-        CPPUNIT_ASSERT_EQUAL( "/", ftp.Pwd() );
+        CHECK( ftp.Pwd()  == "/" );
 
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
-        CPPUNIT_ASSERT_EQUAL( directory, ftp.Pwd() );
+        REQUIRE( ftp.ChDir(directory) );
+        CHECK( ftp.Pwd()  == directory );
     }
 
     SECTION("Misc")
     {
-        CPPUNIT_ASSERT( ftp.SendCommand(wxT("STAT")) == '2' );
-        CPPUNIT_ASSERT( ftp.SendCommand(wxT("HELP SITE")) == '2' );
+        CHECK( ftp.SendCommand(wxT("STAT")) == '2' );
+        CHECK( ftp.SendCommand(wxT("HELP SITE")) == '2' );
     }
 
     SECTION("Upload")
@@ -131,12 +129,12 @@ TEST_CASE("FTP", "[net][.]")
         // upload a file
         static const wxChar *file1 = wxT("test1");
         wxOutputStream *out = ftp.GetOutputStream(file1);
-        CPPUNIT_ASSERT( out != nullptr );
-        CPPUNIT_ASSERT( out->Write("First hello", 11).GetLastError() == wxSTREAM_NO_ERROR );
+        REQUIRE( out != nullptr );
+        CHECK( out->Write("First hello", 11).GetLastError() == wxSTREAM_NO_ERROR );
         delete out;
 
         // send a command to check the remote file
-        CPPUNIT_ASSERT( ftp.SendCommand(wxString(wxT("STAT ")) + file1) == '2' );
-        CPPUNIT_ASSERT( ftp.GetLastResult() == "11" );
+        REQUIRE( ftp.SendCommand(wxString(wxT("STAT ")) + file1) == '2' );
+        CHECK( ftp.GetLastResult() == "11" );
     }
 }
