@@ -73,7 +73,11 @@ TEST_CASE("FTP", "[net][.]")
         // test NLIST and LIST
         wxArrayString files;
         CHECK( ftp.GetFilesList(files) );
-        CHECK( ftp.GetDirList(files) );
+
+        wxArrayString dirs;
+        CHECK( ftp.GetDirList(dirs) );
+
+        CHECK( files.size() == dirs.size() );
     }
 
     SECTION("Download")
