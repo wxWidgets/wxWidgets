@@ -244,6 +244,13 @@ jobs:
           # Wine WinHTTP implementations seems buggy, there are many errors.
           excluded_tests+=('~[webrequest]')
 
+          case "$wxCONFIGURE_FLAGS" in
+            *--disable-unicode*)
+              # Regex tests require Unicode, skip them in this build.
+              excluded_tests+=('~wxRegEx::*' '~regex::*')
+              ;;
+          esac
+
           $wxTEST_RUNNER ./test.exe "${excluded_tests[@]}"
 
       - name: Run GUI tests
