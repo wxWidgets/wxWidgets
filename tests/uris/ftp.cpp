@@ -19,6 +19,8 @@
 
 #include <wx/protocol/ftp.h>
 
+#include <memory>
+
 // For this to run, the following environment variables need to be defined:
 //
 //  - WX_FTP_TEST_HOST: the host to use for testing (e.g. ftp.example.com)
@@ -79,19 +81,15 @@ TEST_CASE("FTP", "[net][.]")
         REQUIRE( ftp.ChDir(directory) );
 
         // test RETR
-        wxInputStream *in1 = ftp.GetInputStream("bloordyblop");
-        CHECK( in1 == nullptr );
-        delete in1;
+        std::unique_ptr<wxInputStream> in1(ftp.GetInputStream("bloordyblop"));
+        CHECK( !in1 );
 
-        wxInputStream *in2 = ftp.GetInputStream(valid_filename);
-        CHECK( in2 != nullptr );
+        std::unique_ptr<wxInputStream> in2(ftp.GetInputStream(valid_filename));
+        CHECK( in2 );
 
         size_t size = in2->GetSize();
-        wxChar *data = new wxChar[size];
-        CHECK( in2->Read(data, size).GetLastError() == wxSTREAM_NO_ERROR );
-
-        delete [] data;
-        delete in2;
+        std::vector<unsigned char> data(size);
+        CHECK( in2->Read(&data[0], size).GetLastError() == wxSTREAM_NO_ERROR );
     }
 
     SECTION("FileSize")
@@ -128,10 +126,9 @@ TEST_CASE("FTP", "[net][.]")
 
         // upload a file
         static const wxChar *file1 = wxT("test1");
-        wxOutputStream *out = ftp.GetOutputStream(file1);
-        REQUIRE( out != nullptr );
+        std::unique_ptr<wxOutputStream> out(ftp.GetOutputStream(file1));
+        REQUIRE( out );
         CHECK( out->Write("First hello", 11).GetLastError() == wxSTREAM_NO_ERROR );
-        delete out;
 
         // send a command to check the remote file
         REQUIRE( ftp.SendCommand(wxString(wxT("STAT ")) + file1) == '2' );
