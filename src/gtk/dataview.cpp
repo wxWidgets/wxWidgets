@@ -3224,10 +3224,18 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
-    cell->GtkSetCurrentItem(item);
-
     // Cells without values shouldn't be rendered at all.
-    const bool visible = cell->PrepareForItem(wx_model, item, column);
+    const bool visible = wx_model->HasValue(item, column);
+    if ( visible )
+    {
+        cell->GtkSetCurrentItem(item);
+
+        // Ignore the return value of PrepareForItem() here, if it returns
+        // false because GetValue() didn't return anything, we still want to
+        // keep this cell visible, as otherwise it wouldn't be possible to edit
+        // it neither, and we do want to allow editing empty cells.
+        cell->PrepareForItem(wx_model, item, column);
+    }
 
     wxGtkValue gvalue( G_TYPE_BOOLEAN );
     g_value_set_boolean( gvalue, visible );
