@@ -618,7 +618,7 @@ protected:
     // OnGetLineHeight instead (backwards compatible name)
     // note that we don't need to forward OnGetUnitSize() as it is already
     // forwarded to OnGetRowHeight() in wxVarVScrollHelper
-    virtual wxCoord OnGetRowHeight(size_t n) const;
+    virtual wxCoord OnGetRowHeight(size_t n) const wxOVERRIDE;
 
     // this function doesn't have to be overridden but it may be useful to do
     // it if calculating the lines heights is a relatively expensive operation
@@ -638,7 +638,7 @@ protected:
 
     // forwards the calls from base class pure virtual function to pure virtual
     // OnGetLinesHint instead (backwards compatible name)
-    void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const;
+    void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const wxOVERRIDE;
 };
 
 #else // !WXWIN_COMPATIBILITY_2_8

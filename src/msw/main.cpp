@@ -197,7 +197,7 @@ int wxEntry(int& argc, wxChar **argv)
 WXDLLIMPEXP_BASE void wxMSWCommandLineInit();
 WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup();
 WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc();
-WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv();
+WXDLLIMPEXP_BASE wxChar** wxMSWCommandLineGetArgv();
 
 #if wxUSE_BASE
 
@@ -227,11 +227,6 @@ struct wxMSWCommandLineArguments
             argc = 0;
         }
     }
-
-    ~wxMSWCommandLineArguments()
-    {
-        Cleanup();
-    }
 #else // !wxUSE_UNICODE
     void Init()
     {
@@ -256,7 +251,7 @@ struct wxMSWCommandLineArguments
         argv[argc] = NULL;
     }
 
-    ~wxMSWCommandLineArguments()
+    void Cleanup()
     {
         if ( !argc )
             return;
@@ -270,6 +265,11 @@ struct wxMSWCommandLineArguments
         argc = 0;
     }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+    ~wxMSWCommandLineArguments()
+    {
+        Cleanup();
+    }
 
     int argc;
     wxChar **argv;
@@ -296,7 +296,7 @@ WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc()
     return wxArgs.argc;
 }
 
-WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv()
+WXDLLIMPEXP_BASE wxChar** wxMSWCommandLineGetArgv()
 {
     return wxArgs.argv;
 }

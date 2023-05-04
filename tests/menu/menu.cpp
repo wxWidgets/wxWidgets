@@ -90,7 +90,7 @@ private:
         CPPUNIT_TEST( EnableTop );
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
-#if wxUSE_INTL
+#if wxUSE_INTL && wxUSE_UNICODE
         CPPUNIT_TEST( TranslatedMnemonics );
 #endif // wxUSE_INTL
         CPPUNIT_TEST( RadioItems );
@@ -106,7 +106,7 @@ private:
     void EnableTop();
     void Count();
     void Labels();
-#if wxUSE_INTL
+#if wxUSE_INTL && wxUSE_UNICODE
     void TranslatedMnemonics();
 #endif // wxUSE_INTL
     void RadioItems();
@@ -376,7 +376,7 @@ void MenuTestCase::Labels()
     CPPUNIT_ASSERT_EQUAL( "Foo", wxMenuItem::GetLabelText("&Foo\tCtrl-F") );
 }
 
-#if wxUSE_INTL
+#if wxUSE_INTL && wxUSE_UNICODE
 
 static wxString
 GetTranslatedString(const wxTranslations& trans, const wxString& s)
