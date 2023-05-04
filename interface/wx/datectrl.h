@@ -14,7 +14,7 @@ enum
     /// a spin control-like date picker (not supported in generic version)
     wxDP_SPIN = 1,
 
-    /// a combobox-like date picker (not supported in mac version)
+    /// a combobox-like date picker (not supported on macOS <10.15.4)
     wxDP_DROPDOWN = 2,
 
     /// always show century in the default date display (otherwise it depends on
@@ -45,8 +45,8 @@ enum
            style is not supported by the generic version.
     @style{wxDP_DROPDOWN}
            Creates a control with a month calendar drop-down part from which
-           the user can select a date. This style is not supported in OSX/Cocoa
-           native version.
+           the user can select a date. In OSX/Cocoa native version this
+           style is supported on macOS 10.15.4 and later.
     @style{wxDP_DEFAULT}
            Creates a control with the style that is best supported for the
            current platform (currently wxDP_SPIN under Windows and OSX/Cocoa
