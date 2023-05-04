@@ -242,6 +242,7 @@ All:
 - Update Georgian translations (NorwayFun, #22673).
 - Don't use invalid iterator in wxString in UTF-8 build (Ian Day, #23305).
 - Fix wrong description for some languages (Ulrich Telle, #23419).
+- Fix infinite loop in wxFTP::GetFilesList() (#23519).
 
 All (GUI):
 
