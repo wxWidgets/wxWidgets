@@ -270,6 +270,7 @@ wxMSW:
 
 wxOSX:
 
+- Add support for wxDP_DROPDOWN under macOS 10.15.4+ (Lauri Nurmi, #23520).
 - Fix initial width of empty wxTextCtrl (#23295).
 - Fix underlined fonts sometimes appearing without underline (#23264).
 - Respect composition mode when drawing bitmaps (#23240).
