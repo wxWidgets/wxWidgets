@@ -542,7 +542,7 @@ bool MyPrintout::OnBeginDocument(int startPage, int endPage)
     return true;
 }
 
-void MyPrintout::GetPageInfo(int *minPage, int *maxPage, std::vector<wxPrintPageRange>* pageRanges)
+void MyPrintout::GetPageInfoRanges(int *minPage, int *maxPage, std::vector<wxPrintPageRange>* pageRanges)
 {
     if(minPage)
         *minPage = 1;
