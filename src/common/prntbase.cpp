@@ -532,13 +532,13 @@ wxPrintAbortDialog::wxPrintAbortDialog(wxWindow *parent,
     mainSizer->Add(new wxStaticText(this, wxID_ANY, _("Please wait while printing...")),
                    wxSizerFlags().Expand().DoubleBorder());
 
-    wxFlexGridSizer *gridSizer = new wxFlexGridSizer(2, wxSize(20, 0));
+    wxFlexGridSizer *gridSizer = new wxFlexGridSizer(2, FromDIP(wxSize(20, 0)));
     gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Document:")));
     gridSizer->AddGrowableCol(1);
     gridSizer->Add(new wxStaticText(this, wxID_ANY, documentTitle));
     gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Progress:")));
     m_progress = new wxStaticText(this, wxID_ANY, _("Preparing"));
-    m_progress->SetMinSize(wxSize(250, -1));
+    m_progress->SetMinSize(FromDIP(wxSize(250, -1)));
     gridSizer->Add(m_progress);
     mainSizer->Add(gridSizer, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
 
