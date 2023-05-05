@@ -146,6 +146,24 @@ private:
 };
 
 /*
+ * wxPrintPageRange
+ * Contains a range of pages to be printed.
+ */
+
+class WXDLLIMPEXP_CORE wxPrintPageRange
+{
+public:
+    int fromPage = 0;
+    int toPage = 0;
+
+    wxPrintPageRange() : fromPage(0), toPage(0) { }
+    wxPrintPageRange(int fromPage, int toPage) : fromPage(fromPage), toPage(toPage) { }
+
+    // check if both components are set/initialized
+    bool IsFullySpecified() const { return fromPage > 0 && toPage > 0; }
+};
+
+/*
  * wxPrintDialogData
  * Encapsulates information displayed and edited in the printer dialog box.
  * Contains a wxPrintData object which is filled in according to the values retrieved
@@ -201,6 +219,10 @@ public:
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
+    wxVector<wxPrintPageRange>& GetPageRanges() { return m_printPageRanges; }
+    void SetMaxPageRanges(int maxPageRanges) { m_maxPageRanges = maxPageRanges; }
+    int GetMaxPageRanges() { return m_maxPageRanges; }
+
     wxPrintDialogData& operator=(const wxPrintDialogData& data) = default;
     void operator=(const wxPrintData& data); // Sets internal m_printData member
 
@@ -221,6 +243,9 @@ private:
     bool            m_printEnableHelp = false;
     bool            m_printEnablePrintToFile = true;
     wxPrintData     m_printData;
+
+    int m_maxPageRanges = 64;
+    wxVector<wxPrintPageRange> m_printPageRanges;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrintDialogData);
