@@ -573,7 +573,7 @@ void MyPrintout::GetPageInfo(int *minPage, int *maxPage, std::vector<wxPrintPage
         else
         {
             // else print ranges has been selected and here we return the user selected ranges.
-            pageRanges = m_printDlgData->GetPageRanges();
+            *pageRanges = m_printDlgData->GetPageRanges();
         }
     }
 }
