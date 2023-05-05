@@ -912,7 +912,6 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
                 pd->lpPageRanges[i].nToPage = toPage;
             }
         }
-        
     }
 
     pd->Flags = PD_RETURNDC;
