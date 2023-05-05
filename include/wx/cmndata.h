@@ -221,7 +221,7 @@ public:
 
     wxVector<wxPrintPageRange>& GetPageRanges() { return m_printPageRanges; }
     void SetMaxPageRanges(int maxPageRanges) { m_maxPageRanges = maxPageRanges; }
-    int GetMaxPageRanges() { return m_maxPageRanges; }
+    int GetMaxPageRanges() const { return m_maxPageRanges; }
 
     wxPrintDialogData& operator=(const wxPrintDialogData& data) = default;
     void operator=(const wxPrintData& data); // Sets internal m_printData member
