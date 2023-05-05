@@ -654,7 +654,7 @@ public:
     /**
         Sets the @e "max page ranges" number. This value is used as a limit for the page ranges.
         No more page ranges can be defined in the print dialog.
-        
+
         @since 3.3.0
     */
     void SetMaxRanges(int maxRanges);
