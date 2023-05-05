@@ -150,7 +150,7 @@ private:
  * Contains a range of pages to be printed.
  */
 
-class WXDLLIMPEXP_CORE wxPrintPageRange
+class wxPrintPageRange
 {
 public:
     int fromPage = 0;
