@@ -661,9 +661,9 @@ public:
 
     /**
         Returns the @e "max page ranges" number.
-        
+
         @see SetMaxRanges()
-        
+
         @since 3.3.0
     */
     int GetMaxRanges();
