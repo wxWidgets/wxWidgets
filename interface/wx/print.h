@@ -723,7 +723,7 @@ public:
         be printed.
 
         If the user chose to print only selected pages or the current page in the MSW printing
-        dialog, then @a pageRanges are used to specifiy the pages to print.
+        dialog, then @a pageRanges are used to specify the pages to print.
 
         If the user chose to print the current page, then @a pageRanges should contain one range
         and the range values are both set to the current page number.
