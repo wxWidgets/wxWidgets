@@ -245,7 +245,7 @@ private:
     wxPrintData     m_printData;
 
     int m_maxPageRanges = 64;
-    wxVector<wxPrintPageRange> m_printPageRanges;
+    std::vector<wxPrintPageRange> m_printPageRanges;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrintDialogData);
