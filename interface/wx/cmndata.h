@@ -673,7 +673,7 @@ public:
         If this vector is empty, then there is only one page range defined by @e "print from"
         and @e "print to". If you want to use and allow more then one page range, you have to use
         this vector. Just add the ranges to be printed to this vector.
-        
+
         @since 3.3.0
     */
     wxVector<wxPrintPageRange>& GetPageRanges();
