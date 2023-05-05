@@ -125,10 +125,12 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     printout->OnPreparePrinting();
 
-    // Get some parameters from the printout, if defined
-    int fromPage = 0, toPage = 0;
+    // Get some parameters from the printout, if defined.
+    // pageRanges is used for printing current page and selected pages,
+    // because this can not be specified via the print dialog.
     int minPage = 0, maxPage = 0;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    std::vector<wxPrintPageRange> pageRanges;
+    printout->GetPageInfo(&minPage, &maxPage, &pageRanges);
 
     if (maxPage == 0)
     {
@@ -162,41 +164,28 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     sm_lastError = wxPRINTER_NO_ERROR;
 
-    int minPageNum = minPage, maxPageNum = maxPage;
-    int totalPageCnt = -1;
-
     if ( m_printDialogData.GetCurrentPage() || m_printDialogData.GetSelection() )
     {
-        if (fromPage > 0 && toPage > 0)
-        {
-            minPageNum = fromPage;
-            maxPageNum = toPage;
-        }
-        totalPageCnt = maxPageNum - minPageNum + 1;
+        // do nothing here, just print the page ranges
     }
-    else if ( !m_printDialogData.GetAllPages() )
+    else if(m_printDialogData.GetAllPages())
     {
-        if (m_printDialogData.GetFromPage() > 0 && m_printDialogData.GetToPage() > 0)
-        {
-            minPageNum = m_printDialogData.GetFromPage();
-            maxPageNum = m_printDialogData.GetToPage();
-            totalPageCnt = maxPageNum - minPageNum + 1;
-        }
-
-        if (!m_printDialogData.GetPageRanges().empty())
-        {
-            totalPageCnt = 0;
-            for (const wxPrintPageRange& range : m_printDialogData.GetPageRanges())
-            {
-                minPageNum = std::min(minPageNum, range.fromPage);
-                maxPageNum = std::max(maxPageNum, range.toPage);
-                totalPageCnt += range.toPage - range.fromPage + 1;
-            }
-        }
+        pageRanges.clear(); // we print all pages
+        pageRanges.push_back(wxPrintPageRange(minPage, maxPage));
     }
     else
     {
-        totalPageCnt = maxPageNum - minPageNum + 1;
+        // if the user has selected the page ranges option in the print dailog,
+        // we have to use the ranges which comes from the print dialog data and
+        // not the data from the printout.
+        pageRanges = m_printDialogData.GetPageRanges();
+    }
+
+    // calculate totalPageCnt from ranges
+    int totalPageCnt = 0;
+    for (const wxPrintPageRange& range : pageRanges)
+    {
+        totalPageCnt += range.toPage - range.fromPage + 1;
     }
 
     // The dc we get from the PrintDialog will do multiple copies without help
@@ -209,63 +198,50 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
                              ? m_printDialogData.GetNoCopies() : 1;
     for ( int copyCount = 1; copyCount <= maxCopyCount; copyCount++ )
     {
-        if ( !printout->OnBeginDocument(minPageNum, maxPageNum) )
+        if ( !printout->OnBeginDocument(minPage, maxPage) )
         {
             wxLogError(_("Could not start printing."));
             sm_lastError = wxPRINTER_ERROR;
             break;
         }
+
         if (sm_abortIt)
         {
             sm_lastError = wxPRINTER_CANCELLED;
             break;
         }
 
-        int pn;
+        // number of pages printed
         int printCnt = 0;
 
-        for ( pn = minPageNum;
-              pn <= maxPageNum && printout->HasPage(pn);
-              pn++ )
+        for (const wxPrintPageRange& range : pageRanges)
         {
-            // allow non-consecutive selected pages
-            if ( m_printDialogData.GetSelection() && !printout->IsPageSelected(pn) )
-                continue;
+            printCnt += 1;
 
-            // check ranges, skip pages not in range
-            if (!m_printDialogData.GetAllPages() && !m_printDialogData.GetPageRanges().empty())
+            for (int pn = range.fromPage; pn <= range.toPage; pn++)
             {
-                bool inRanges = false;
-                for (const wxPrintPageRange& range : m_printDialogData.GetPageRanges())
+                if (!printout->HasPage(pn))
                 {
-                    if (range.fromPage <= pn && range.toPage >= pn)
-                    {
-                        inRanges = true;
-                        break;
-                    }
+                    continue;
                 }
 
-                if (!inRanges)
-                    continue;
-            }
+                win->SetProgress(printCnt, totalPageCnt, copyCount, maxCopyCount);
 
-            printCnt += 1;
-            win->SetProgress(printCnt, totalPageCnt, copyCount, maxCopyCount);
+                if (sm_abortIt)
+                {
+                    sm_lastError = wxPRINTER_CANCELLED;
+                    break;
+                }
 
-            if ( sm_abortIt )
-            {
-                sm_lastError = wxPRINTER_CANCELLED;
-                break;
-            }
+                dc->StartPage();
+                bool cont = printout->OnPrintPage(pn);
+                dc->EndPage();
 
-            dc->StartPage();
-            bool cont = printout->OnPrintPage(pn);
-            dc->EndPage();
-
-            if ( !cont )
-            {
-                sm_lastError = wxPRINTER_CANCELLED;
-                break;
+                if (!cont)
+                {
+                    sm_lastError = wxPRINTER_CANCELLED;
+                    break;
+                }
             }
         }
 

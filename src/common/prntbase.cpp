@@ -626,15 +626,30 @@ bool wxPrintout::HasPage(int page)
 
 void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toPage)
 {
-    *minPage = 1;
-    *maxPage = DEFAULT_MAX_PAGES;
-    *fromPage = 1;
-    *toPage = 1;
+    if(minPage)
+        *minPage = 1;
+
+    if(maxPage)
+        *maxPage = DEFAULT_MAX_PAGES;
+
+    if(fromPage)
+        *fromPage = 1;
+
+    if(toPage)
+        *toPage = 1;
 }
 
-bool wxPrintout::IsPageSelected(int WXUNUSED(page))
+void wxPrintout::GetPageInfo(int* minPage, int* maxPage, std::vector<wxPrintPageRange>* pageRanges)
 {
-    return false;
+    int fromPage = 0;
+    int toPage = 0;
+
+    GetPageInfo(minPage, maxPage, &fromPage, &toPage);
+
+    if (pageRanges) {
+        pageRanges->clear();
+        pageRanges->push_back(wxPrintPageRange(fromPage, toPage));
+    }
 }
 
 bool wxPrintout::SetUp(wxDC& dc)

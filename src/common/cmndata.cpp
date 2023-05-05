@@ -109,8 +109,6 @@ wxPrintDialogData::wxPrintDialogData()
 wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     : m_printData(printData)
 {
-    m_printFromPage = 1;
-    m_printToPage = 0;
     m_printMinPage = 1;
     m_printMaxPage = 9999;
     // On Mac the Print dialog always defaults to "All Pages"
@@ -126,6 +124,32 @@ wxPrintDialogData::~wxPrintDialogData()
 void wxPrintDialogData::operator=(const wxPrintData& data)
 {
     m_printData = data;
+}
+
+void wxPrintDialogData::SetFromPage(int v)
+{
+    if (m_printPageRanges.empty())
+        m_printPageRanges.push_back(wxPrintPageRange());
+
+    m_printPageRanges[0].fromPage = v;
+}
+
+void wxPrintDialogData::SetToPage(int v)
+{
+    if (m_printPageRanges.empty())
+        m_printPageRanges.push_back(wxPrintPageRange());
+
+    m_printPageRanges[0].toPage = v;
+}
+
+int wxPrintDialogData::GetFromPage() const
+{
+    return m_printPageRanges.empty() ? 0 : m_printPageRanges[0].fromPage;
+}
+
+int wxPrintDialogData::GetToPage() const
+{
+    return m_printPageRanges.empty() ? 0 : m_printPageRanges[0].toPage;
 }
 
 // ----------------------------------------------------------------------------
