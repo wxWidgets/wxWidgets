@@ -399,12 +399,17 @@ bool wxXmlResource::Load(const wxString& filemask_)
     auto const wxXmlFindFirst = [&]() { return wxFindFirstFile(filemask, wxFILE); };
     auto const wxXmlFindNext = [&]() { return wxFindNextFile(); };
 #endif
+    bool onlyThis = false;
     wxString fnd = wxXmlFindFirst();
     if ( fnd.empty() )
     {
         // Some file system handlers (e.g. wxInternetFSHandler) just don't
         // implement FindFirst() at all, try using the original path as is.
         fnd = filemask;
+
+        // Don't try calling FindNext() if FindFirst() failed, just try loading
+        // from this file.
+        onlyThis = true;
     }
 
     while (!fnd.empty())
@@ -431,6 +436,9 @@ bool wxXmlResource::Load(const wxString& filemask_)
             anyOK = true;
         else
             allOK = false;
+
+        if ( onlyThis )
+            break;
 
         fnd = wxXmlFindNext();
     }
