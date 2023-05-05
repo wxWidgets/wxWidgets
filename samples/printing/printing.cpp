@@ -542,40 +542,45 @@ bool MyPrintout::OnBeginDocument(int startPage, int endPage)
     return true;
 }
 
-void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
+void MyPrintout::GetPageInfo(int *minPage, int *maxPage, std::vector<wxPrintPageRange>* pageRanges)
 {
-    *minPage = 1;
-    *maxPage = 2;
-    *selPageFrom = 1;
-    *selPageTo = 2;
+    if(minPage)
+        *minPage = 1;
 
-    // check if the user just wants to print the current page and if so,
-    // we say, that page 1 is the current page in this example.
-    if (m_printDlgData->GetCurrentPage())
-    {
-        *selPageFrom = 1;
-        *selPageTo = 1;
-    }
-    else if (m_printDlgData->GetSelection())
-    {
-        // if the user wants to print the selection, we could set the range via
-        // selPageFrom and selPageTo, but if the pages are not consecutive, we
-        // set selPageFrom and selPageTo to the maximum range and we use
-        // IsPageSelected() to tell the printing system which page is selected.
+    if(maxPage)
+        *maxPage = 2;
 
-        // in our example below, only page 2 is selected.
+    if(pageRanges)
+    {
+        if (m_printDlgData->GetCurrentPage())
+        {
+            // if the user just wants to print the current page,
+            // we say, that page 1 is the current page in this example.
+            pageRanges->push_back(wxPrintPageRange(1, 1));
+        }
+        else if (m_printDlgData->GetSelection())
+        {
+            // if the user wants to print the selection, we set the ranges
+            // of the selected pages. In our example, only page 2 is selected.
+            pageRanges->push_back(wxPrintPageRange(2, 2));
+        }
+        else if (m_printDlgData->GetAllPages())
+        {
+            // if the user wants to print all pages, we set the range of
+            // all pages, in our case page 1 and 2.
+            pageRanges->push_back(wxPrintPageRange(1, 2));
+        }
+        else
+        {
+            // else print ranges has been selected and here we return the user selected ranges.
+            pageRanges = m_printDlgData->GetPageRanges();
+        }
     }
 }
 
 bool MyPrintout::HasPage(int pageNum)
 {
     return (pageNum == 1 || pageNum == 2);
-}
-
-bool MyPrintout::IsPageSelected(int pageNum)
-{
-    // to demonstrate selection, we just simulate selection of page 2
-    return pageNum == 2;
 }
 
 void MyPrintout::DrawPageOne()
