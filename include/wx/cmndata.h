@@ -156,7 +156,7 @@ public:
     int fromPage = 0;
     int toPage = 0;
 
-    wxPrintPageRange() : fromPage(0), toPage(0) { }
+    wxPrintPageRange() = default;
     wxPrintPageRange(int _fromPage, int _toPage) : fromPage(_fromPage), toPage(_toPage) { }
 
     // check if both components are set/initialized
