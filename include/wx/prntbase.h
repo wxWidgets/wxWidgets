@@ -288,7 +288,7 @@ public:
     virtual void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
 
     // the default implementation of this new method uses the older GetPageInfo method above
-    virtual void GetPageInfo(int* minPage, int* maxPage, std::vector<wxPrintPageRange>* pageRanges);
+    virtual void GetPageInfoRanges(int* minPage, int* maxPage, std::vector<wxPrintPageRange>* pageRanges);
 
     virtual wxString GetTitle() const { return m_printoutTitle; }
 

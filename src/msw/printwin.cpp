@@ -130,7 +130,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     // because this can not be specified via the print dialog.
     int minPage = 0, maxPage = 0;
     std::vector<wxPrintPageRange> pageRanges;
-    printout->GetPageInfo(&minPage, &maxPage, &pageRanges);
+    printout->GetPageInfoRanges(&minPage, &maxPage, &pageRanges);
 
     if (maxPage == 0)
     {

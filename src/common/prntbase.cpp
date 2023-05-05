@@ -639,7 +639,7 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
         *toPage = 1;
 }
 
-void wxPrintout::GetPageInfo(int* minPage, int* maxPage, std::vector<wxPrintPageRange>* pageRanges)
+void wxPrintout::GetPageInfoRanges(int* minPage, int* maxPage, std::vector<wxPrintPageRange>* pageRanges)
 {
     int fromPage = 0;
     int toPage = 0;
