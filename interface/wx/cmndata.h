@@ -650,7 +650,7 @@ public:
         Assigns another print dialog data object to this object.
     */
     void operator =(const wxPrintDialogData& data);
-        
+
     /**
         Sets the @e "max page ranges" number. This value is used as a limit for the page ranges.
         No more page ranges can be defined in the print dialog.
@@ -658,7 +658,7 @@ public:
         @since 3.3.0
     */
     void SetMaxRanges(int maxRanges);
-    
+
     /**
         Returns the @e "max page ranges" number.
         
@@ -667,7 +667,7 @@ public:
         @since 3.3.0
     */
     int GetMaxRanges();
-    
+
     /**
         Returns the @e "page ranges" vector. This vector contains the page ranges to be printed.
         If this vector is empty, then there is only one page range defined by @e "print from"
