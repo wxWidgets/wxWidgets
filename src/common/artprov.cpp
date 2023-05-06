@@ -242,7 +242,11 @@ wxArtProviderCache *wxArtProvider::sm_cache = nullptr;
 // wxArtProvider ctors/dtor
 // ----------------------------------------------------------------------------
 
-wxArtProvider::~wxArtProvider() = default;
+wxArtProvider::~wxArtProvider()
+{
+    if ( sm_providers )
+        Remove(this);
+}
 
 // ----------------------------------------------------------------------------
 // wxArtProvider operations on provider stack
@@ -285,19 +289,19 @@ wxArtProvider::~wxArtProvider() = default;
 {
     wxCHECK_MSG( sm_providers, false, wxT("no wxArtProvider exists") );
 
-    // Unfortunately remove() doesn't return the number of the removed elements
-    // until C++20, so check whether it did anything manually.
-    const auto oldSize = sm_providers->size();
-
-    sm_providers->remove_if([provider](const wxArtProviderPtr& p)
+    for ( auto it = sm_providers->begin(); it != sm_providers->end(); ++it )
     {
-        return p.get() == provider;
-    });
+        if ( it->get() == provider )
+        {
+            // We must not delete the provider here, the caller is responsible
+            // for doing it.
+            it->release();
 
-    if ( sm_providers->size() != oldSize )
-    {
-        sm_cache->Clear();
-        return true;
+            sm_providers->erase(it);
+
+            sm_cache->Clear();
+            return true;
+        }
     }
 
     return false;
@@ -315,6 +319,16 @@ wxArtProvider::~wxArtProvider() = default;
 {
     if ( sm_providers )
     {
+        // Just deleting sm_providers wouldn't work correctly because this
+        // would delete wxArtProvider objects in it which would try to remove
+        // themselves from the list in their dtor, so do it two steps instead:
+        // first clear sm_providers without deleting the objects to ensure that
+        // they don't change it while they're being destroyed, and then
+        // actually destroy them.
+        wxArtProvidersList providers;
+        providers.swap(*sm_providers);
+        providers.clear();
+
         wxDELETE(sm_providers);
         wxDELETE(sm_cache);
     }
