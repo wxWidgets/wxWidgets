@@ -254,7 +254,7 @@ private:
     int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
-using wxAuiToolBarItemArray = wxBaseArray<wxAuiToolBarItem>;
+using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
 
 
 
