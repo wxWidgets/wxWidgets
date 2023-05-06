@@ -271,12 +271,25 @@ private:
 // _WX_DECLARE_OBJARRAY: an array for pointers to type T with owning semantics
 // ----------------------------------------------------------------------------
 
+// Trivial default implementation of the traits used by wxBaseObjectArray.
+// It can only be used if the class T is complete.
+template <typename T>
+class wxDefaultBaseObjectArrayTraits
+{
+public:
+    static T* Clone(const T& value) { return new T{value}; }
+    static void Free(T* p) { delete p; }
+};
+
 // This class must be able to be declared with incomplete types, so it doesn't
 // actually use type T in its definition, and relies on a helper template
 // parameter, which is declared by WX_DECLARE_OBJARRAY() and defined by
 // WX_DEFINE_OBJARRAY(), for providing a way to create and destroy objects of
 // type T
-template <typename T, typename Traits>
+//
+// If the class T happens to be complete, Traits can be left unspecified and a
+// trivial implementation using copy ctor directly is used.
+template <typename T, typename Traits = wxDefaultBaseObjectArrayTraits<T>>
 class wxBaseObjectArray : private wxBaseArray<T*>
 {
     typedef wxBaseArray<T*> base;
