@@ -98,7 +98,7 @@ public:
     virtual bool OnPrintPage(int page) override;
     virtual bool HasPage(int page) override;
     virtual bool OnBeginDocument(int startPage, int endPage) override;
-    virtual void GetPageInfoRanges(int *minPage, int *maxPage, std::vector<wxPrintPageRange>* pageRanges) override;
+    virtual std::vector<wxPrintPageRange> GetPageInfoRanges(int *minPage, int *maxPage) override;
 
     void DrawPageOne();
     void DrawPageTwo();
