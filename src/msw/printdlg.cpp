@@ -885,7 +885,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     // Currently only one page range is supported.
     if ( data.GetEnablePageNumbers() )
     {
-        wxVector<wxPrintPageRange>& ranges = data.GetPageRanges();
+        wxVector<wxPrintPageRange> ranges = data.GetPageRanges();
         if (ranges.empty()) {
             pd->nPageRanges = 1;
             pd->nMaxPageRanges = std::max((DWORD)data.GetMaxPageRanges(), pd->nPageRanges);
@@ -982,17 +982,14 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 
     if ( pd->lpPageRanges )
     {
-        data.SetFromPage(pd->lpPageRanges[0].nFromPage);
-        data.SetToPage(pd->lpPageRanges[0].nToPage);
-
-        wxVector<wxPrintPageRange>& ranges = data.GetPageRanges();
-        ranges.clear();
+        wxVector<wxPrintPageRange> ranges;
         for (DWORD i = 0; i < pd->nPageRanges; i++)
         {
             int fromPage = pd->lpPageRanges[i].nFromPage;
             int toPage = pd->lpPageRanges[i].nToPage;
             ranges.push_back(wxPrintPageRange(fromPage, toPage));
         }
+        data.SetPageRanges(ranges);
     }
 
     data.SetMinPage( pd->nMinPage );

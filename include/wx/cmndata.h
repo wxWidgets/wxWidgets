@@ -232,8 +232,7 @@ public:
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
     void SetPageRanges(const std::vector<wxPrintPageRange>& pageRanges) { m_printPageRanges = pageRanges; }
-    const wxVector<wxPrintPageRange>& GetPageRanges() const { return m_printPageRanges; }
-    wxVector<wxPrintPageRange>& GetPageRanges() { return m_printPageRanges; }
+    wxVector<wxPrintPageRange> GetPageRanges() const { return m_printPageRanges; }
 
     void SetMaxPageRanges(int maxPageRanges) { m_maxPageRanges = maxPageRanges; }
     int GetMaxPageRanges() const { return m_maxPageRanges; }

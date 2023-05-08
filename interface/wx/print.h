@@ -723,9 +723,9 @@ public:
         be printed.
 
         If the user chose to print only selected pages or the current page in the MSW printing
-        dialog, then @a pageRanges are used to specify the pages to print.
+        dialog, then the returned page ranges are used to specify the pages to print.
 
-        If the user chose to print the current page, then @a pageRanges should contain one range
+        If the user chose to print the current page, then the returned ranges should contain one range
         and the range values are both set to the current page number.
 
         By default this returns (1, 32000) for the page minimum and maximum values, and
@@ -734,9 +734,12 @@ public:
         @a minPage must be greater than zero and @a maxPage must be greater
         than @a minPage.
 
+        The default implementation uses GetPageInfo() and returns one page range based on 
+        pageFrom and pageTo.
+
         @since 3.3.0.
     */
-    virtual void GetPageInfoRanges(int* minPage, int* maxPage, wxVector<wxPrintPageRange>* pageRanges);
+    virtual wxVector<wxPrintPageRange> GetPageInfoRanges(int* minPage, int* maxPage);
 
     /**
         Returns the size of the printer page in millimetres.

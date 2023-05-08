@@ -129,8 +129,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     // pageRanges is used for printing current page and selected pages,
     // because this can not be specified via the print dialog.
     int minPage = 0, maxPage = 0;
-    std::vector<wxPrintPageRange> pageRanges;
-    printout->GetPageInfoRanges(&minPage, &maxPage, &pageRanges);
+    std::vector<wxPrintPageRange> pageRanges = printout->GetPageInfoRanges(&minPage, &maxPage);
 
     if (maxPage == 0)
     {
