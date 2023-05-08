@@ -734,7 +734,7 @@ public:
         @a minPage must be greater than zero and @a maxPage must be greater
         than @a minPage.
 
-        The default implementation uses GetPageInfo() and returns one page range based on 
+        The default implementation uses GetPageInfo() and returns one page range based on
         pageFrom and pageTo.
 
         @since 3.3.0.
