@@ -640,11 +640,7 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
     return FindDisplayFromHMONITOR(::MonitorFromWindow(GetHwndOf(window),
                                                         MONITOR_DEFAULTTONULL));
 #else
-    const wxSize halfsize = window->GetSize() / 2;
-    wxPoint pt = window->GetScreenPosition();
-    pt.x += halfsize.x;
-    pt.y += halfsize.y;
-    return GetFromPoint(pt);
+    return GetFromRect(window->GetScreenRect());
 #endif
 }
 
