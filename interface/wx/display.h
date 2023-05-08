@@ -99,6 +99,12 @@ public:
         given rectangle or @c wxNOT_FOUND if the rectangle doesn't intersect
         any display.
 
+        Note that usually the returned display will be the same display which
+        contains the center of the rectangle, but this is not always the case,
+        as rectangle might be partly visible even if its center is off screen,
+        and in this case GetFromPoint() would returns @c wxNOT_FOUND, but this
+        function would return a valid display.
+
         @param rect
             The rectangle to check.
 
