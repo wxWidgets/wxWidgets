@@ -736,7 +736,7 @@ public:
 
         @since 3.3.0.
     */
-    virtual void GetPageInfo(int* minPage, int* maxPage, wxVector<wxPrintPageRange>* pageRanges);
+    virtual void GetPageInfoRanges(int* minPage, int* maxPage, wxVector<wxPrintPageRange>* pageRanges);
 
     /**
         Returns the size of the printer page in millimetres.
