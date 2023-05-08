@@ -106,6 +106,11 @@ wxDisplay::wxDisplay(const wxWindow* window)
     return Factory().GetFromPoint(pt);
 }
 
+/* static */ int wxDisplay::GetFromRect(const wxRect& rect)
+{
+    return Factory().GetFromRect(rect);
+}
+
 /* static */ int wxDisplay::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, wxT("invalid window") );
@@ -241,6 +246,12 @@ wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
     return nullptr;
 }
 
+int wxDisplayFactory::GetFromRect(const wxRect& r)
+{
+    // consider that the window belongs to the display containing its centre
+    return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
+}
+
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, "window can't be null" );
@@ -252,9 +263,7 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
     if ( !window->GetHandle() )
         return wxNOT_FOUND;
 
-    // consider that the window belongs to the display containing its centre
-    const wxRect r(window->GetScreenRect());
-    return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
+    return GetFromRect(window->GetScreenRect());
 }
 
 // ============================================================================

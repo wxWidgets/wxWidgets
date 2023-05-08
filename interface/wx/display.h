@@ -95,6 +95,18 @@ public:
     static int GetFromPoint(const wxPoint& pt);
 
     /**
+        Returns the index of the display with biggest intersection with the
+        given rectangle or @c wxNOT_FOUND if the rectangle doesn't intersect
+        any display.
+
+        @param rect
+            The rectangle to check.
+
+        @since 3.3.0
+    */
+    static int GetFromRect(const wxRect& rect);
+
+    /**
         Returns the index of the display on which the given window lies.
 
         If the window is on more than one display it gets the display that
