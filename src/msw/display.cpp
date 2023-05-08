@@ -180,6 +180,7 @@ public:
     virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
     virtual unsigned GetCount() override { return unsigned(m_displays.size()); }
     virtual int GetFromPoint(const wxPoint& pt) override;
+    virtual int GetFromRect(const wxRect& rect) override;
     virtual int GetFromWindow(const wxWindow *window) override;
 
     void InvalidateCache() override
@@ -608,7 +609,7 @@ wxDisplayImpl *wxDisplayFactoryMSW::CreateDisplay(unsigned n)
     return new wxDisplayMSW(n, m_displays[n]);
 }
 
-// helper for GetFromPoint() and GetFromWindow()
+// helper for all GetFromXXX() functions
 int wxDisplayFactoryMSW::FindDisplayFromHMONITOR(HMONITOR hmon) const
 {
     if ( hmon )
@@ -632,6 +633,14 @@ int wxDisplayFactoryMSW::GetFromPoint(const wxPoint& pt)
 
     return FindDisplayFromHMONITOR(::MonitorFromPoint(pt2,
                                                        MONITOR_DEFAULTTONULL));
+}
+
+int wxDisplayFactoryMSW::GetFromRect(const wxRect& rect)
+{
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+    return FindDisplayFromHMONITOR(::MonitorFromRect(&rc,
+                                                      MONITOR_DEFAULTTONULL));
 }
 
 int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
