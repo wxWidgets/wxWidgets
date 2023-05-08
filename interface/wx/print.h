@@ -711,8 +711,8 @@ public:
         @a minPage must be greater than zero and @a maxPage must be greater
         than @a minPage.
 
-        @deprecated
-        The newer method that support multiple ranges should be used instead.
+        This function allows to indicate only a single range of pages to print,
+        consider overriding GetPageInfoRanges() to return multiple ranges.
     */
     virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
                              int* pageTo);
