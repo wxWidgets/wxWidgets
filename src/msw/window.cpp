@@ -2313,11 +2313,12 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
                 // of the window position sufficient for keeping it on the
                 // current display, so keep things simple and preserve the
                 // position of its center horizontally.
-                proposedRect.x += widthWin/2 - proposedRect.width/2;
+                const wxRect currentRect = wxRectFromRECT(rectWin);
+                proposedRect.MakeCenteredIn(currentRect, wxHORIZONTAL);
                 if ( wxDisplay::GetFromRect(proposedRect) != currentDisplay )
                 {
                     // And if this isn't sufficient, then vertically too.
-                    proposedRect.y += heightWin/2 - proposedRect.height/2;
+                    proposedRect.MakeCenteredIn(currentRect, wxVERTICAL);
                 }
             }
         }
