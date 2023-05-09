@@ -6368,6 +6368,12 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
     if (event.m_controlDown && event.m_keyCode <= 26)
     {
         BYTE keyboardState[256] = {0};
+        GetKeyboardState(keyboardState);
+        // we should ignore Control keys state to get Unicode char
+        keyboardState[VK_CONTROL] = 0;
+        keyboardState[VK_LCONTROL] = 0;
+        keyboardState[VK_RCONTROL] = 0;
+
         wchar_t unicodeChar[2] = {0};
         int result = ToUnicode(MapVirtualKey(HIWORD(lParam) & 0xFF, MAPVK_VSC_TO_VK),
                                HIWORD(lParam) & 0xFF,
@@ -6377,14 +6383,6 @@ wxWindowMSW::CreateCharEvent(wxEventType evType,
                                0);
         if (result > 0)
         {
-            bool ShiftPressed = (GetKeyState(VK_LSHIFT) & 0x8000) != 0 || (GetKeyState(VK_RSHIFT) & 0x8000) != 0;
-            bool capsLockEnabled = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
-
-            if ((!capsLockEnabled && ShiftPressed) || (capsLockEnabled && !ShiftPressed))
-            {
-                CharUpperBuffW((LPWSTR)&unicodeChar, 1);
-            }
-
             if (( unicodeChar[0] < 'a' || unicodeChar[0] > 'z' ) &&
                 ( unicodeChar[0] < 'A' || unicodeChar[0] > 'Z' )) {
 
