@@ -31,6 +31,10 @@ TEST_CASE("wxRect::CentreIn", "[rect]")
 
     CHECK( R(0, 0, 10, 10).CentreIn(R(0, 0, 100, 100)) == R(45, 45, 10, 10) );
     CHECK( R(0, 0, 20, 20).CentreIn(R(0, 0, 10, 10)) == R(-5, -5, 20, 20) );
+
+    R r(-10, -10, 20, 20);
+    r.MakeCenteredIn(R(0, 0, 100, 100), wxHORIZONTAL);
+    CHECK( r == R(40, -10, 20, 20) );
 }
 
 TEST_CASE("wxRect::InflateDeflate", "[rect]")
