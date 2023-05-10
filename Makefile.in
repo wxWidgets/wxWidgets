@@ -902,7 +902,6 @@ ALL_BASE_SOURCES =  \
 	src/common/tarstrm.cpp \
 	src/common/textbuf.cpp \
 	src/common/textfile.cpp \
-	src/common/threadinfo.cpp \
 	src/common/time.cpp \
 	src/common/timercmn.cpp \
 	src/common/timerimpl.cpp \
@@ -1108,7 +1107,6 @@ MONODLL_OBJECTS =  \
 	monodll_tarstrm.o \
 	monodll_textbuf.o \
 	monodll_textfile.o \
-	monodll_threadinfo.o \
 	monodll_time.o \
 	monodll_timercmn.o \
 	monodll_timerimpl.o \
@@ -1268,7 +1266,6 @@ MONOLIB_OBJECTS =  \
 	monolib_tarstrm.o \
 	monolib_textbuf.o \
 	monolib_textfile.o \
-	monolib_threadinfo.o \
 	monolib_time.o \
 	monolib_timercmn.o \
 	monolib_timerimpl.o \
@@ -1397,7 +1394,6 @@ BASEDLL_OBJECTS =  \
 	basedll_tarstrm.o \
 	basedll_textbuf.o \
 	basedll_textfile.o \
-	basedll_threadinfo.o \
 	basedll_time.o \
 	basedll_timercmn.o \
 	basedll_timerimpl.o \
@@ -1508,7 +1504,6 @@ BASELIB_OBJECTS =  \
 	baselib_tarstrm.o \
 	baselib_textbuf.o \
 	baselib_textfile.o \
-	baselib_threadinfo.o \
 	baselib_time.o \
 	baselib_timercmn.o \
 	baselib_timerimpl.o \
@@ -14888,9 +14883,6 @@ monodll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONODLL_ODEP)
 monodll_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
-monodll_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
-
 monodll_time.o: $(srcdir)/src/common/time.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/time.cpp
 
@@ -19630,9 +19622,6 @@ monolib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONOLIB_ODEP)
 
 monolib_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
-
-monolib_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
 
 monolib_time.o: $(srcdir)/src/common/time.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/time.cpp
@@ -24374,9 +24363,6 @@ basedll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASEDLL_ODEP)
 basedll_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
-basedll_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
-
 basedll_time.o: $(srcdir)/src/common/time.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/time.cpp
 
@@ -24856,9 +24842,6 @@ baselib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASELIB_ODEP)
 
 baselib_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
-
-baselib_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
 
 baselib_time.o: $(srcdir)/src/common/time.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/time.cpp
