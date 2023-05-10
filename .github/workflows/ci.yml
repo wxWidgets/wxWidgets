@@ -312,7 +312,7 @@ jobs:
           if [ ${{ matrix.use_asan }} ]; then
             # Work around spurious crashes by running the test again.
             # See https://github.com/google/sanitizers/issues/1353
-            if fgrep -q 'LeakSanitizer has encountered a fatal error' test.out; then
+            if grep -qF 'LeakSanitizer has encountered a fatal error' test.out; then
                 echo '+++ Rerunning the tests once again after LeakSanitizer crash +++'
                 unset rc
                 ./test || rc=$?
@@ -354,7 +354,7 @@ jobs:
 
           /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
           if [ -n "$rc" ]; then
-            if fgrep -q '(core dumped)' test_gui.out; then
+            if grep -qF '(core dumped)' test_gui.out; then
                 echo '*** Test crashed, trying to get more information ***'
                 gdb --quiet --core=core -ex 'where' -ex 'thread apply all bt' -ex 'q' ./test_gui
             fi

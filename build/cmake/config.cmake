@@ -102,9 +102,6 @@ function(wx_write_config)
     set(libdir "\${exec_prefix}/lib")
     set(bindir "\${exec_prefix}/bin")
 
-    find_program(EGREP egrep)
-    mark_as_advanced(EGREP)
-
     if(wxBUILD_MONOLITHIC)
         set(MONOLITHIC 1)
     else()

@@ -40,7 +40,7 @@ cat _tmp6 | sort +2 > _tmp4
 cat _tmp4 | while read i ; do
     code=`echo $i | cut -c1-6`
     fallb=`echo $i | cut -c8-29`
-    cat _tmp4 | fgrep "$fallb" | cut -c1-6 | (read i ; 
+    cat _tmp4 | grep -F "$fallb" | cut -c1-6 | (read i ;
         echo "$code	$i" >> _tmp5)
 done
 
@@ -54,7 +54,7 @@ cat _tmp6 | sort +2 > _tmp4
 cat _tmp4 | while read i ; do
     code=`echo $i | cut -c1-6`
     fallb=`echo $i | cut -c8-27`
-    cat _tmp4 | fgrep "$fallb" | cut -c1-6 | (read i ; 
+    cat _tmp4 | grep -F "$fallb" | cut -c1-6 | (read i ;
         echo "$code	$i" >> _tmp5)
 done
 
