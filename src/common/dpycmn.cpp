@@ -106,6 +106,11 @@ wxDisplay::wxDisplay(const wxWindow* window)
     return Factory().GetFromPoint(pt);
 }
 
+/* static */ int wxDisplay::GetFromRect(const wxRect& rect)
+{
+    return Factory().GetFromRect(rect);
+}
+
 /* static */ int wxDisplay::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, wxT("invalid window") );
@@ -241,6 +246,34 @@ wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
     return nullptr;
 }
 
+int wxDisplayFactory::GetFromRect(const wxRect& r)
+{
+    int display = wxNOT_FOUND;
+
+    // Find the display with the biggest intersection with the given window.
+    //
+    // Note that just using GetFromPoint() with the center of the rectangle is
+    // not correct in general, as the center might lie outside of the visible
+    // area, while the rectangle itself could be partially visible. Moreover,
+    // in some exotic (L-shaped) display layouts, the center might not actually
+    // be on the display containing the biggest part of the rectangle even if
+    // it is visible.
+    int biggestOverlapArea = 0;
+    const unsigned count = GetCount();
+    for ( unsigned n = 0; n < count; ++n )
+    {
+        const auto overlap = GetDisplay(n)->GetGeometry().Intersect(r);
+        const int overlapArea = overlap.width * overlap.height;
+        if ( overlapArea > biggestOverlapArea )
+        {
+            biggestOverlapArea = overlapArea;
+            display = n;
+        }
+    }
+
+    return display;
+}
+
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, "window can't be null" );
@@ -252,9 +285,7 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
     if ( !window->GetHandle() )
         return wxNOT_FOUND;
 
-    // consider that the window belongs to the display containing its centre
-    const wxRect r(window->GetScreenRect());
-    return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
+    return GetFromRect(window->GetScreenRect());
 }
 
 // ============================================================================
