@@ -243,6 +243,7 @@ All:
 - Don't use invalid iterator in wxString in UTF-8 build (Ian Day, #23305).
 - Fix wrong description for some languages (Ulrich Telle, #23419).
 - Fix infinite loop in wxFTP::GetFilesList() (#23519).
+- Fix memory leak when using wx from non-wx threads (Antti Nietosvaara, #23535).
 - Use grep instead of fgrep and egrep in makefiles/scripts (#23537).
 
 All (GUI):

@@ -122,6 +122,111 @@ static bool gs_waitingForThread = false;
 // Windows implementation of thread and related classes
 // ============================================================================
 
+// Create a wrapper class for storing wxThreadSpecificInfo
+// using FLS or TLS api. Preferably we want to use FLS
+// since it supports freeing the created objects automatically
+// on thread exit. However, this is only supported from
+// Windows Vista and newer, so TLS is used as a fallback.
+// Note that with TLS we need to clean up the objects
+// manually in wxThreadInternal::WinThreadStart, and
+// if the running thread is not a wxThread, the objects
+// will not be freed until program exit. As mentioned,
+// this will only affect Windows XP.
+class wxThreadSpecificInfoTLS
+{
+private:
+    typedef DWORD(WINAPI *AllocCallback_t)(void (WINAPI*)(void*));
+    AllocCallback_t AllocCallback;
+
+    typedef DWORD(WINAPI *Alloc_t)();
+    Alloc_t Alloc;
+
+    typedef BOOL(WINAPI *Free_t)(DWORD);
+    Free_t Free;
+
+    typedef void* (WINAPI *GetValue_t)(DWORD);
+    GetValue_t GetValue;
+
+    typedef BOOL(WINAPI *SetValue_t)(DWORD, void*);
+    SetValue_t SetValue;
+
+    DWORD m_idx;
+
+    static void WINAPI DeleteThreadSpecificInfo(void* ptr)
+    {
+        delete static_cast<wxThreadSpecificInfo*>(ptr);
+    }
+
+    static const wxThreadSpecificInfoTLS& Instance()
+    {
+        static wxThreadSpecificInfoTLS s_instance;
+        return s_instance;
+    }
+
+    wxThreadSpecificInfoTLS():
+        AllocCallback(reinterpret_cast<AllocCallback_t>(GetProcAddress(GetModuleHandle(_T("kernel32.dll")), "FlsAlloc"))),
+        Alloc(NULL),
+        Free(reinterpret_cast<Free_t>(GetProcAddress(GetModuleHandle(_T("kernel32.dll")), "FlsFree"))),
+        GetValue(reinterpret_cast<GetValue_t>(GetProcAddress(GetModuleHandle(_T("kernel32.dll")), "FlsGetValue"))),
+        SetValue(reinterpret_cast<SetValue_t>(GetProcAddress(GetModuleHandle(_T("kernel32.dll")), "FlsSetValue")))
+    {
+        if (AllocCallback && Free && GetValue && SetValue)
+        {
+            // FLS API was available, so use it to free objects automatically
+            m_idx = AllocCallback(&DeleteThreadSpecificInfo);
+        }
+        else
+        {
+            // FLS API was not available (Windows XP?), so use TLS as fallback
+            AllocCallback = NULL;
+            Alloc = reinterpret_cast<Alloc_t>(TlsAlloc);
+            Free = reinterpret_cast<Free_t>(TlsFree);
+            GetValue = reinterpret_cast<GetValue_t>(TlsGetValue);
+            SetValue = reinterpret_cast<SetValue_t>(TlsSetValue);
+            m_idx = Alloc();
+        }
+    }
+
+public:
+    static wxThreadSpecificInfo* Get()
+    {
+        return static_cast<wxThreadSpecificInfo*>(Instance().GetValue(Instance().m_idx));
+    }
+
+    // wxThreadSpecificInfo will try to delete info when thread ends
+    static bool Set(wxThreadSpecificInfo* info)
+    {
+        return Instance().SetValue(Instance().m_idx, info);
+    }
+
+    static void CleanUp()
+    {
+        if (!Instance().AllocCallback)
+        {
+            // FLS API was not available, which means that objects will not be freed automatically.
+            delete Get();
+            Set(NULL);
+        }
+    }
+};
+
+wxThreadSpecificInfo& wxThreadSpecificInfo::Get()
+{
+    wxThreadSpecificInfo* info = wxThreadSpecificInfoTLS::Get();
+    if (!info)
+    {
+        info = new wxThreadSpecificInfo;
+        if (!wxThreadSpecificInfoTLS::Set(info))
+        {
+            // This will crash, but we'd leak memory otherwise which
+            // could be even worse and less immediately discoverable.
+            delete info;
+            info = NULL;
+        }
+    }
+    return *info;
+}
+
 // ----------------------------------------------------------------------------
 // wxCriticalSection
 // ----------------------------------------------------------------------------
@@ -587,7 +692,9 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 
     // Do this as the very last thing to ensure that thread-specific info is
     // not recreated any longer.
-    wxThreadSpecificInfo::ThreadCleanUp();
+    // Note thatg this is necessary only if the wxThreadSpecificInfoTLS cannot
+    // perform the cleanup automatically. That is, with Windows XP or older.
+    wxThreadSpecificInfoTLS::CleanUp();
 
     return rc;
 }
