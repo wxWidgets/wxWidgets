@@ -268,6 +268,7 @@ wxMSW:
 - Fix wxUILocale::GetPreferredUILanguages() under < 10 (Brian Nixon, #23416).
 - Fix building with LLVM clang (Sergey Khalyutn, Maarten Bent, #23464).
 - Fix discrepancy between GDI and Direct2D in high DPI (Kumazuma, #23486).
+- Fix wxTreeCtrl::ScrollTo() with hidden root item (#23534).
 
 wxOSX:
 

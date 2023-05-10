@@ -2013,7 +2013,18 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 {
-    if ( !TreeView_SelectSetFirstVisible(GetHwnd(), HITEM(item)) )
+    HTREEITEM htItem = HITEM(item);
+
+    if ( IsHiddenRoot(item) )
+    {
+        // Calling TreeView_SelectSetFirstVisible() with the invisible root
+        // item would simply crash (#23534), so don't do this. However also
+        // don't just assert and return as this works in the generic version,
+        // so do the same thing as it does here, and scroll to the top item.
+        htItem = TreeView_GetChild(GetHwnd(), htItem);
+    }
+
+    if ( !TreeView_SelectSetFirstVisible(GetHwnd(), htItem) )
     {
         wxLogLastError(wxT("TreeView_SelectSetFirstVisible"));
     }
