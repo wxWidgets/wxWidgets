@@ -465,7 +465,6 @@ set(BASE_CMN_SRC
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
-    src/common/threadinfo.cpp
     src/common/time.cpp
     src/common/timercmn.cpp
     src/common/timerimpl.cpp

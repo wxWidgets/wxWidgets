@@ -38,7 +38,6 @@
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
-#include "wx/private/threadinfo.h"
 #include "wx/crt.h"
 #include "wx/vector.h"
 
@@ -368,6 +367,8 @@ wxLog::OnLog(wxLogLevel level, const wxString& msg, time_t t)
     OnLog(level, msg, info);
 }
 
+thread_local wxLog* tl_threadLogger = nullptr;
+
 /* static */
 void
 wxLog::OnLog(wxLogLevel level,
@@ -388,7 +389,7 @@ wxLog::OnLog(wxLogLevel level,
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
-        logger = wxThreadInfo.logger;
+        logger = tl_threadLogger;
         if ( !logger )
         {
             if ( ms_pLogger )
@@ -506,7 +507,7 @@ wxLog *wxLog::GetActiveTarget()
     if ( !wxThread::IsMain() )
     {
         // check if we have a thread-specific log target
-        wxLog * const logger = wxThreadInfo.logger;
+        wxLog * const logger = tl_threadLogger;
 
         // the code below should be only executed for the main thread as
         // CreateLogTarget() is not meant for auto-creating log targets for
@@ -563,11 +564,11 @@ wxLog *wxLog::SetThreadActiveTarget(wxLog *logger)
 {
     wxASSERT_MSG( !wxThread::IsMain(), "use SetActiveTarget() for main thread" );
 
-    wxLog * const oldLogger = wxThreadInfo.logger;
+    wxLog * const oldLogger = tl_threadLogger;
     if ( oldLogger )
         oldLogger->Flush();
 
-    wxThreadInfo.logger = logger;
+    tl_threadLogger = logger;
 
     return oldLogger;
 }
@@ -776,17 +777,19 @@ void wxLog::FlushThreadMessages()
     }
 }
 
+thread_local bool tl_threadLoggingDisabled = false;
+
 /* static */
 bool wxLog::IsThreadLoggingEnabled()
 {
-    return !wxThreadInfo.loggingDisabled;
+    return !tl_threadLoggingDisabled;
 }
 
 /* static */
 bool wxLog::EnableThreadLogging(bool enable)
 {
-    const bool wasEnabled = !wxThreadInfo.loggingDisabled;
-    wxThreadInfo.loggingDisabled = !enable;
+    const bool wasEnabled = !tl_threadLoggingDisabled;
+    tl_threadLoggingDisabled = !enable;
     return wasEnabled;
 }
 
