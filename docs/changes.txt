@@ -283,6 +283,7 @@ wxMSW:
 - Fix wxTreeCtrl::ScrollTo() with hidden root item (#23534).
 - Fix hang in wxFileDialog if COINIT_MULTITHREADED was used (#23578).
 - Fix handling of RLE-compressed bitmaps (Brian Nixon, #23573).
+- Fix wxWindow::GetTextExtent() with given font in high DPI (#23542).
 
 wxOSX:
 
