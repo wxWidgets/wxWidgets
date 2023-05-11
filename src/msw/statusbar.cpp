@@ -35,6 +35,8 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
+
 #include "wx/tooltip.h"
 #include <windowsx.h>
 
@@ -658,6 +660,35 @@ bool wxStatusBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     support.themeId = L"ExplorerStatusBar";
 
     return true;
+}
+
+wxVisualAttributes wxStatusBar::GetDefaultAttributes() const
+{
+    return GetClassDefaultAttributes(GetWindowVariant());
+}
+
+/* static */
+wxVisualAttributes
+wxStatusBar::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attrs =
+        wxStatusBarBase::GetClassDefaultAttributes(variant);
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // It looks like we don't have to use a valid HWND here.
+        wxUxThemeHandle theme{HWND(0), L"ExplorerStatusBar"};
+
+        wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
+        if ( col.IsOk() )
+            attrs.colFg = col;
+
+        col = theme.GetColour(0, TMT_FILLCOLOR);
+        if ( col.IsOk() )
+            attrs.colBg = col;
+    }
+
+    return attrs;
 }
 
 #endif // wxUSE_STATUSBAR && wxUSE_NATIVE_STATUSBAR
