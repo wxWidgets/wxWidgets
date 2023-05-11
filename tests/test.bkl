@@ -22,6 +22,10 @@
             <precomp-headers>on</precomp-headers>
             <precomp-headers-file>testprec_$(id)</precomp-headers-file>
         </if>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include> 
+            <res-include>$(TOP_SRCDIR)include</res-include> 
+        </if>
     </template>
 
     <exe id="test" template="wx_sample_console,wx_test"
