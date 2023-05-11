@@ -1,0 +1,1 @@
+wxMSW: Implement support for wxBG_STYLE_TRANSPARENT (Maarten Bent, #23412).
