@@ -107,7 +107,7 @@ void wxGenericHyperlinkCtrl::Init()
     m_visited = false;
 
     // colours
-    m_normalColour = *wxBLUE;
+    m_normalColour = wxColour(0x00, 0x00, 0xee);
     m_hoverColour = *wxRED;
     m_visitedColour = wxColour("#551a8b");
 }
