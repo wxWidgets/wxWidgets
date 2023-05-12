@@ -100,6 +100,17 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
+namespace
+{
+
+wxColour GetLinkColour()
+{
+    // see https://html.spec.whatwg.org/multipage/rendering.html#phrasing-content-3
+    return wxColour(0x00, 0x00, 0xee);
+}
+
+} // anonymous namespace
+
 void wxGenericHyperlinkCtrl::Init()
 {
     m_rollover = false;
@@ -107,7 +118,7 @@ void wxGenericHyperlinkCtrl::Init()
     m_visited = false;
 
     // colours
-    m_normalColour = wxColour(0x00, 0x00, 0xee);
+    m_normalColour = GetLinkColour();
     m_hoverColour = *wxRED;
     m_visitedColour = wxColour("#551a8b");
 }
