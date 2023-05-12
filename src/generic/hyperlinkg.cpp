@@ -137,6 +137,20 @@ wxSize wxGenericHyperlinkCtrl::DoGetBestClientSize() const
     return dc.GetTextExtent(GetLabel());
 }
 
+wxVisualAttributes wxGenericHyperlinkCtrl::GetDefaultAttributes() const
+{
+    return GetClassDefaultAttributes(GetWindowVariant());
+}
+
+/* static */
+wxVisualAttributes
+wxGenericHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    auto attrs = wxHyperlinkCtrlBase::GetClassDefaultAttributes(variant);
+    attrs.colFg = GetLinkColour();
+    return attrs;
+}
+
 
 void wxGenericHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 {
