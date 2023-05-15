@@ -52,6 +52,17 @@ public:
 
     virtual void SetLabel(const wxString &label) override;
 
+    // Colours used by the native control can't be changed, but they can be
+    // retrieved.
+    virtual wxColour GetHoverColour() const override;
+    virtual wxColour GetNormalColour() const override;
+    virtual wxColour GetVisitedColour() const override;
+
+    // overridden/inherited wxWindow methods
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
 protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
     virtual wxSize DoGetBestClientSize() const override;

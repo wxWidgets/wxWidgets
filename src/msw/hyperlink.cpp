@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/settings.h"
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
@@ -158,6 +159,49 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     m_labelOrig = label;
     wxWindow::SetLabel( GetLabelForSysLink(label, GetURL()) );
     InvalidateBestSize();
+}
+
+wxColour wxHyperlinkCtrl::GetHoverColour() const
+{
+    if ( !HasNativeHyperlinkCtrl() )
+        return wxGenericHyperlinkCtrl::GetHoverColour();
+
+    // Native control doesn't use special colour on hover.
+    return GetNormalColour();
+}
+
+wxColour wxHyperlinkCtrl::GetNormalColour() const
+{
+    if ( !HasNativeHyperlinkCtrl() )
+        return wxGenericHyperlinkCtrl::GetNormalColour();
+
+    return GetClassDefaultAttributes().colFg;
+}
+
+wxColour wxHyperlinkCtrl::GetVisitedColour() const
+{
+    if ( !HasNativeHyperlinkCtrl() )
+        return wxGenericHyperlinkCtrl::GetVisitedColour();
+
+    // Native control doesn't show visited links differently.
+    return GetNormalColour();
+}
+
+wxVisualAttributes wxHyperlinkCtrl::GetDefaultAttributes() const
+{
+    return GetClassDefaultAttributes(GetWindowVariant());
+}
+
+/* static */
+wxVisualAttributes
+wxHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    auto attrs = wxGenericHyperlinkCtrl::GetClassDefaultAttributes(variant);
+
+    if ( HasNativeHyperlinkCtrl() )
+        attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+
+    return attrs;
 }
 
 wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
