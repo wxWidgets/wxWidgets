@@ -130,7 +130,6 @@ class wxAuiManagerEvent;
 
 using wxAuiDockUIPartArray = wxBaseArray<wxAuiDockUIPart>;
 using wxAuiDockInfoArray = wxBaseArray<wxAuiDockInfo>;
-using wxAuiPaneInfoArray = wxBaseArray<wxAuiPaneInfo>;
 using wxAuiDockInfoPtrArray = wxBaseArray<wxAuiDockInfo*>;
 using wxAuiPaneInfoPtrArray = wxBaseArray<wxAuiPaneInfo*>;
 
@@ -392,6 +391,13 @@ public:
 
     bool IsValid() const;
 };
+
+
+// Note that this one must remain a wxBaseObjectArray, i.e. store pointers to
+// heap-allocated objects, as it is returned by wxAuiManager::GetPane() and the
+// existing code expects these pointers to remain valid even if the array is
+// modified.
+using wxAuiPaneInfoArray = wxBaseObjectArray<wxAuiPaneInfo>;
 
 
 
