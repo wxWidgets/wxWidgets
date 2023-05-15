@@ -48,11 +48,18 @@ TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Colour",
     CHECK(m_hyperlink->GetNormalColour().IsOk());
     CHECK(m_hyperlink->GetVisitedColour().IsOk());
 
-    // Changing hover colour doesn't work in wxMSW.
-#ifndef __WXMSW__
+    // Changing hover colour doesn't work in wxMSW and Wine doesn't seem to
+    // implement either LM_SETITEM or LM_GETITEM correctly, so skip this there.
+#ifdef __WXMSW__
+    if ( wxIsRunningUnderWine() )
+    {
+        WARN("Skipping testing wxHyperlinkCtrl colours under Wine.");
+        return;
+    }
+#else // __WXMSW__
     m_hyperlink->SetHoverColour(*wxGREEN);
     CHECK( m_hyperlink->GetHoverColour() == *wxGREEN );
-#endif // !__WXMSW__
+#endif // __WXMSW__/!__WXMSW__
 
     m_hyperlink->SetNormalColour(*wxRED);
     CHECK( m_hyperlink->GetNormalColour() == *wxRED );
