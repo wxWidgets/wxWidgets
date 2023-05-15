@@ -293,7 +293,7 @@ public:
     wxWizard::Create function. Then you should add all pages you want the wizard to
     show and call wxWizard::RunWizard().
 
-    Note that wxWizard inherits from wxDialog ans so, unlike most other
+    Note that wxWizard inherits from wxDialog and so, unlike most other
     wxWidgets classes, but like modal dialog objects, wxWizard _can_ be created
     on the stack, i.e. does _not_ need to be heap-allocated, so that typically
     you would use like this:
