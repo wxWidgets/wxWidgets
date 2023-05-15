@@ -108,6 +108,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         return false;
     }
 
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+    {
+        // Override the colour used by default by the native control with the
+        // colour appropriate for the dark mode, as the default one doesn't
+        // have enough contrast in it.
+        SetNormalColour(GetClassDefaultAttributes().colFg);
+    }
+
     ConnectMenuHandlers();
 
     return true;
@@ -243,7 +251,7 @@ wxHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 {
     auto attrs = wxGenericHyperlinkCtrl::GetClassDefaultAttributes(variant);
 
-    if ( HasNativeHyperlinkCtrl() )
+    if ( HasNativeHyperlinkCtrl() && !wxSystemSettings::GetAppearance().IsDark() )
         attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
 
     return attrs;
