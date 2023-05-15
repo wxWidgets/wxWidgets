@@ -48,12 +48,16 @@ TEST_CASE_METHOD(HyperlinkCtrlTestCase, "wxHyperlinkCtrl::Colour",
     CHECK(m_hyperlink->GetNormalColour().IsOk());
     CHECK(m_hyperlink->GetVisitedColour().IsOk());
 
+    // Changing hover colour doesn't work in wxMSW.
+#ifndef __WXMSW__
     m_hyperlink->SetHoverColour(*wxGREEN);
-    m_hyperlink->SetNormalColour(*wxRED);
-    m_hyperlink->SetVisitedColour(*wxBLUE);
-
     CHECK( m_hyperlink->GetHoverColour() == *wxGREEN );
+#endif // !__WXMSW__
+
+    m_hyperlink->SetNormalColour(*wxRED);
     CHECK( m_hyperlink->GetNormalColour() == *wxRED );
+
+    m_hyperlink->SetVisitedColour(*wxBLUE);
     CHECK( m_hyperlink->GetVisitedColour() == *wxBLUE );
 #endif
 }
