@@ -81,6 +81,10 @@
     #include <locale.h>
 #endif
 
+#ifdef __DARWIN__
+    #include "wx/osx/cocoa/private.h"
+#endif
+
 #include "wx/datetime.h"
 
 // ----------------------------------------------------------------------------
@@ -782,7 +786,11 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
     wxInitTm(tm);
     tm.tm_mon = month;
 
+#ifdef __DARWIN__
+    return wxOSXEmulateStrftime(flags == Name_Abbr ? wxS("%b") : wxS("%B"), &tm);
+#else
     return wxCallStrftime(flags == Name_Abbr ? wxS("%b") : wxS("%B"), &tm);
+#endif
 #else // !wxHAS_STRFTIME
     return GetEnglishMonthName(month, flags);
 #endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
@@ -830,7 +838,11 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     (void)mktime(&tm);
 
     // ... and call strftime()
+#ifdef __DARWIN__
+    return wxOSXEmulateStrftime(flags == Name_Abbr ? wxS("%a") : wxS("%A"), &tm);
+#else
     return wxCallStrftime(flags == Name_Abbr ? wxS("%a") : wxS("%A"), &tm);
+#endif
 #else // !wxHAS_STRFTIME
     return GetEnglishWeekDayName(wday, flags);
 #endif // wxHAS_STRFTIME/!wxHAS_STRFTIME

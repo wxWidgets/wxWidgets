@@ -583,5 +583,7 @@ private:
 
 #endif // wxUSE_GUI
 
+wxString wxOSXEmulateStrftime(const wxString& format, const tm* tm);
+
 #endif
     // _WX_PRIVATE_COCOA_H_

@@ -629,3 +629,61 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
 #endif // wxUSE_GUI
 
+static wxString wxRunNSDateFormatter(const wxString &icuFmt, const tm *tm)
+{
+    NSString *icuFmtNS = [[NSString alloc] initWithUTF8String:icuFmt.ToUTF8()];
+
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    dateFormatter.dateFormat = icuFmtNS;
+
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDate* date = [calendar
+                    dateWithEra:1
+                    year:1900 + tm->tm_year
+                    month:1 + tm->tm_mon
+                    day:tm->tm_mday
+                    hour:tm->tm_hour
+                    minute:tm->tm_min
+                    second:tm->tm_sec
+                    nanosecond:0];
+
+    wxString ret([[dateFormatter stringFromDate:date] UTF8String], wxConvUTF8);
+    [dateFormatter release];
+    [icuFmtNS release];
+
+    return ret;
+}
+
+wxString wxOSXEmulateStrftime(const wxString& format, const tm* tm)
+{
+    // TODO: This function currently emulates strftime() enough to
+    // fulfil the needs of the generic wxCalendarCtrl, but not much
+    // beyond that.
+
+    wxString f(format);
+
+    struct {
+        wxString strf;
+        wxString icu;
+    } repl[] = {
+        { "%A", "cccc" },
+        { "%a", "ccc" },
+        { "%b", "LL" },
+        { "%B", "LLLL" },
+        { "%d", "dd" },
+        { "%H", "HH" },
+        { "%M", "mm" },
+        { "%m", "MM" },
+        { "%S", "ss" },
+        { "%y", "yy" },
+        { "%Y", "yyyy" },
+    };
+
+    for (auto & r : repl)
+    {
+        f.Replace(r.strf, r.icu, true);
+    }
+
+    return wxRunNSDateFormatter(f, tm);
+}
