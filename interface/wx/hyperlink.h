@@ -142,6 +142,10 @@ public:
     /**
         Returns the colour used to print the label of the hyperlink when the mouse is
         over the control.
+
+        In native wxMSW version of this control hover colour is always the same
+        as normal colour, i.e. the control doesn't change its appearance when
+        the mouse hovers over it.
     */
     virtual wxColour GetHoverColour() const;
 
@@ -172,6 +176,8 @@ public:
     /**
         Sets the colour used to print the label of the hyperlink when the mouse is over
         the control.
+
+        Changing this colour is not supported in the native wxMSW version.
     */
     virtual void SetHoverColour(const wxColour& colour);
 
