@@ -161,6 +161,35 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     InvalidateBestSize();
 }
 
+bool wxHyperlinkCtrl::MSWAreCustomColoursEnabled() const
+{
+    LITEM litem = { 0 };
+    litem.mask = LIF_ITEMINDEX | LIF_STATE;
+    litem.stateMask = LIS_DEFAULTCOLORS;
+    if ( !::SendMessage(GetHwnd(), LM_GETITEM, 0, (LPARAM)&litem) )
+    {
+        wxLogDebug("LM_GETITEM(LIS_DEFAULTCOLORS) unexpectedly failed");
+        return false;
+    }
+
+    return (litem.state & LIS_DEFAULTCOLORS) != 0;
+}
+
+void wxHyperlinkCtrl::MSWEnableCustomColours()
+{
+    // By default, the native control ignores the colours we set for it, so we
+    // need to explicitly enable this for them to be used.
+    if ( !MSWAreCustomColoursEnabled() )
+    {
+        LITEM litem = { 0 };
+        litem.mask = LIF_ITEMINDEX | LIF_STATE;
+        litem.state =
+        litem.stateMask = LIS_DEFAULTCOLORS;
+        if ( !::SendMessage(GetHwnd(), LM_SETITEM, 0, (LPARAM)&litem) )
+            wxLogDebug("LM_SETITEM(LIS_DEFAULTCOLORS) unexpectedly failed");
+    }
+}
+
 wxColour wxHyperlinkCtrl::GetHoverColour() const
 {
     if ( !HasNativeHyperlinkCtrl() )
@@ -172,19 +201,35 @@ wxColour wxHyperlinkCtrl::GetHoverColour() const
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
-    if ( !HasNativeHyperlinkCtrl() )
+    if ( !HasNativeHyperlinkCtrl() || MSWAreCustomColoursEnabled() )
         return wxGenericHyperlinkCtrl::GetNormalColour();
 
     return GetClassDefaultAttributes().colFg;
 }
 
+void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
+{
+    if ( HasNativeHyperlinkCtrl() )
+        MSWEnableCustomColours();
+
+    wxGenericHyperlinkCtrl::SetNormalColour(colour);
+}
+
 wxColour wxHyperlinkCtrl::GetVisitedColour() const
 {
-    if ( !HasNativeHyperlinkCtrl() )
+    if ( !HasNativeHyperlinkCtrl() || MSWAreCustomColoursEnabled() )
         return wxGenericHyperlinkCtrl::GetVisitedColour();
 
     // Native control doesn't show visited links differently.
     return GetNormalColour();
+}
+
+void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
+{
+    if ( HasNativeHyperlinkCtrl() )
+        MSWEnableCustomColours();
+
+    wxGenericHyperlinkCtrl::SetVisitedColour(colour);
 }
 
 wxVisualAttributes wxHyperlinkCtrl::GetDefaultAttributes() const

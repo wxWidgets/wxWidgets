@@ -52,11 +52,15 @@ public:
 
     virtual void SetLabel(const wxString &label) override;
 
-    // Colours used by the native control can't be changed, but they can be
-    // retrieved.
+    // Native control doesn't change appearance on hover, so we don't support
+    // changing hover colour.
     virtual wxColour GetHoverColour() const override;
+
     virtual wxColour GetNormalColour() const override;
+    virtual void SetNormalColour(const wxColour &colour) override;
+
     virtual wxColour GetVisitedColour() const override;
+    virtual void SetVisitedColour(const wxColour &colour) override;
 
     // overridden/inherited wxWindow methods
     virtual wxVisualAttributes GetDefaultAttributes() const override;
@@ -69,6 +73,9 @@ protected:
 
 private:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
+
+    bool MSWAreCustomColoursEnabled() const;
+    void MSWEnableCustomColours();
 
     wxDECLARE_DYNAMIC_CLASS( wxHyperlinkCtrl );
 };
