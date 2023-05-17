@@ -471,7 +471,6 @@ bool wxGLCanvasEGL::CreateSurface()
         m_xwindow = GDK_WINDOW_XID(window);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
                                                    &m_xwindow, nullptr);
-        m_readyToDraw = true;
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
@@ -635,11 +634,17 @@ void wxGLCanvasEGL::FreeDefaultConfig()
 
 bool wxGLCanvasEGL::SwapBuffers()
 {
-    // Under Wayland, if eglSwapBuffers() is called before the wl_surface has
-    // been realized, it will deadlock.  Thus, we need to avoid swapping before
-    // this has happened.
-    if ( !m_readyToDraw )
-        return false;
+#ifdef GDK_WINDOWING_WAYLAND
+    GdkWindow* const window = GTKGetDrawingWindow();
+    if (wxGTKImpl::IsWayland(window))
+    {
+        // Under Wayland, if eglSwapBuffers() is called before the wl_surface has
+        // been realized, it will deadlock.  Thus, we need to avoid swapping before
+        // this has happened.
+        if ( !m_readyToDraw )
+            return false;
+    }
+#endif // GDK_WINDOWING_WAYLAND
 
     return eglSwapBuffers(m_display, m_surface);
 }
