@@ -46,12 +46,7 @@ TEST_CASE("FTP", "[net][.]")
     const wxString user = wxGetenv("WX_FTP_TEST_USER");
     const wxString password = wxGetenv("WX_FTP_TEST_PASS");
 
-    class SocketInit
-    {
-    public:
-        SocketInit() { wxSocketBase::Initialize(); }
-        ~SocketInit() { wxSocketBase::Shutdown(); }
-    } socketInit;
+    wxSocketInitializer socketInit;
 
     // wxFTP cannot be a static variable as its ctor needs to access
     // wxWidgets internals after it has been initialized

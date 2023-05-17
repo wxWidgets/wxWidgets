@@ -27,11 +27,11 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class URLTestCase : public CppUnit::TestCase
+class URLTestCase : public CppUnit::TestCase, private wxSocketInitializer
 {
 public:
-    URLTestCase();
-    ~URLTestCase();
+    URLTestCase() = default;
+    ~URLTestCase() = default;
 
 private:
     CPPUNIT_TEST_SUITE( URLTestCase );
@@ -51,16 +51,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( URLTestCase );
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( URLTestCase, "URLTestCase" );
 
-
-URLTestCase::URLTestCase()
-{
-    wxSocketBase::Initialize();
-}
-
-URLTestCase::~URLTestCase()
-{
-    wxSocketBase::Shutdown();
-}
 
 void URLTestCase::GetInputStream()
 {

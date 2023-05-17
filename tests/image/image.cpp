@@ -76,7 +76,6 @@ class ImageTestCase : public CppUnit::TestCase
 {
 public:
     ImageTestCase();
-    ~ImageTestCase();
 
 private:
     CPPUNIT_TEST_SUITE( ImageTestCase );
@@ -129,8 +128,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ImageTestCase, "ImageTestCase" );
 
 ImageTestCase::ImageTestCase()
 {
-    wxSocketBase::Initialize();
-
     // the formats we're going to test:
     wxImage::AddHandler(new wxICOHandler);
     wxImage::AddHandler(new wxXPMHandler);
@@ -148,11 +145,6 @@ ImageTestCase::ImageTestCase()
 #if wxUSE_LIBTIFF
     wxImage::AddHandler(new wxTIFFHandler);
 #endif // wxUSE_LIBTIFF
-}
-
-ImageTestCase::~ImageTestCase()
-{
-    wxSocketBase::Shutdown();
 }
 
 void ImageTestCase::LoadFromFile()
@@ -176,6 +168,8 @@ void ImageTestCase::LoadFromSocketStream()
     wxString urlStr;
     if ( !wxGetEnv("WX_TEST_IMAGE_URL_PNG", &urlStr) )
         return;
+
+    wxSocketInitializer socketInit;
 
     wxURL url(urlStr);
     REQUIRE( url.GetError() == wxURL_NOERR );
