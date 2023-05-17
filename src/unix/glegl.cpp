@@ -41,6 +41,8 @@
 
 #include <memory>
 
+constexpr const char* TRACE_EGL = "glegl";
+
 // ----------------------------------------------------------------------------
 // wxGLContextAttrs: OpenGL rendering context attributes
 // ----------------------------------------------------------------------------
@@ -424,6 +426,8 @@ static void wl_frame_callback_handler(void* data,
                                       struct wl_callback *,
                                       uint32_t)
 {
+    wxLogTrace(TRACE_EGL, "In frame callback handler");
+
     wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
     glc->m_readyToDraw = true;
     g_clear_pointer(&glc->m_wlFrameCallbackHandler, wl_callback_destroy);
@@ -647,6 +651,7 @@ bool wxGLCanvasEGL::SwapBuffers()
             // Trying to draw on a hidden window is useless and can actually be
             // harmful if the compositor blocks in eglSwapBuffers() in this
             // case, so avoid it.
+            wxLogTrace(TRACE_EGL, "Not drawing hidden window");
             return false;
         }
     }
@@ -658,7 +663,10 @@ bool wxGLCanvasEGL::SwapBuffers()
         // this would be inefficient at best and could result in a deadlock at
         // worst if we're called before the window is realized.
         if ( !m_readyToDraw )
+        {
+            wxLogTrace(TRACE_EGL, "Not ready to draw yet");
             return false;
+        }
 
         // Ensure that we redraw again when the frame becomes ready.
         m_readyToDraw = false;
@@ -668,6 +676,8 @@ bool wxGLCanvasEGL::SwapBuffers()
                                  &wl_frame_listener, this);
     }
 #endif // GDK_WINDOWING_WAYLAND
+
+    wxLogTrace(TRACE_EGL, "Swapping buffers");
 
     return eglSwapBuffers(m_display, m_surface);
 }
