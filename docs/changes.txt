@@ -253,6 +253,7 @@ All (GUI):
 - Fix entering dates in wxGenericDatePicker in nb_NO and other locales
   using names for the months in short date format (#23310).
 - Fix wx-config output when using NanoSVG library (#23373).
+- Fix bug modifying shared images in wxImage::Clear() (#23555).
 
 wxGTK:
 
