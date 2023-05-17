@@ -507,6 +507,10 @@ bool wxGLCanvasEGL::CreateSurface()
                                  &wl_frame_listener, this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
+
+        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
+        // callback to know when we should draw ourselves already.
+        eglSwapInterval(m_display, 0);
     }
 #endif
 
@@ -638,11 +642,18 @@ bool wxGLCanvasEGL::SwapBuffers()
     GdkWindow* const window = GTKGetDrawingWindow();
     if (wxGTKImpl::IsWayland(window))
     {
-        // Under Wayland, if eglSwapBuffers() is called before the wl_surface has
-        // been realized, it will deadlock.  Thus, we need to avoid swapping before
-        // this has happened.
+        // Under Wayland, we must not draw before we're actually ready to, as
+        // this would be inefficient at best and could result in a deadlock at
+        // worst if we're called before the window is realized.
         if ( !m_readyToDraw )
             return false;
+
+        // Ensure that we redraw again when the frame becomes ready.
+        m_readyToDraw = false;
+        wl_surface* surface = gdk_wayland_window_get_wl_surface(window);
+        m_wlFrameCallbackHandler = wl_surface_frame(surface);
+        wl_callback_add_listener(m_wlFrameCallbackHandler,
+                                 &wl_frame_listener, this);
     }
 #endif // GDK_WINDOWING_WAYLAND
 
