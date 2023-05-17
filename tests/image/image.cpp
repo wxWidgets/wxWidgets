@@ -68,68 +68,25 @@ struct testData {
 };
 
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class ImageTestCase : public CppUnit::TestCase
+class ImageHandlersInit
 {
 public:
-    ImageTestCase();
-    ~ImageTestCase();
+    ImageHandlersInit();
 
 private:
-    CPPUNIT_TEST_SUITE( ImageTestCase );
-        CPPUNIT_TEST( LoadFromSocketStream );
-        CPPUNIT_TEST( LoadFromZipStream );
-        CPPUNIT_TEST( LoadFromFile );
-        CPPUNIT_TEST( SizeImage );
-        CPPUNIT_TEST( CompareLoadedImage );
-        CPPUNIT_TEST( CompareSavedImage );
-        CPPUNIT_TEST( SavePNG );
-#if wxUSE_LIBTIFF
-        CPPUNIT_TEST( SaveTIFF );
-#endif // wxUSE_LIBTIFF
-        CPPUNIT_TEST( ReadCorruptedTGA );
-#if wxUSE_GIF
-        CPPUNIT_TEST( SaveAnimatedGIF );
-        CPPUNIT_TEST( GIFComment );
-#endif // wxUSE_GIF
-        CPPUNIT_TEST( DibPadding );
-        CPPUNIT_TEST( BMPFlippingAndRLECompression );
-        CPPUNIT_TEST( ScaleCompare );
-        CPPUNIT_TEST( CreateBitmapFromCursor );
-    CPPUNIT_TEST_SUITE_END();
+    static bool ms_initialized;
 
-    void LoadFromSocketStream();
-    void LoadFromZipStream();
-    void LoadFromFile();
-    void SizeImage();
-    void CompareLoadedImage();
-    void CompareSavedImage();
-    void SavePNG();
-#if wxUSE_LIBTIFF
-    void SaveTIFF();
-#endif // wxUSE_LIBTIFF
-    void ReadCorruptedTGA();
-#if wxUSE_GIF
-    void SaveAnimatedGIF();
-    void GIFComment();
-#endif // wxUSE_GIF
-    void DibPadding();
-    void BMPFlippingAndRLECompression();
-    void ScaleCompare();
-    void CreateBitmapFromCursor();
-
-    wxDECLARE_NO_COPY_CLASS(ImageTestCase);
+    wxDECLARE_NO_COPY_CLASS(ImageHandlersInit);
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION( ImageTestCase );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ImageTestCase, "ImageTestCase" );
+bool ImageHandlersInit::ms_initialized = false;
 
-ImageTestCase::ImageTestCase()
+ImageHandlersInit::ImageHandlersInit()
 {
-    wxSocketBase::Initialize();
+    if ( ms_initialized )
+        return;
+
+    ms_initialized = true;
 
     // the formats we're going to test:
     wxImage::AddHandler(new wxICOHandler);
@@ -150,12 +107,7 @@ ImageTestCase::ImageTestCase()
 #endif // wxUSE_LIBTIFF
 }
 
-ImageTestCase::~ImageTestCase()
-{
-    wxSocketBase::Shutdown();
-}
-
-void ImageTestCase::LoadFromFile()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromFile", "[image]")
 {
     wxImage img;
     for (unsigned int i=0; i<WXSIZEOF(g_testfiles); i++)
@@ -168,7 +120,7 @@ void ImageTestCase::LoadFromFile()
     CHECK(img.LoadFile("image/bitfields.bmp", wxBITMAP_TYPE_BMP));
 }
 
-void ImageTestCase::LoadFromSocketStream()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromSocketStream", "[image]")
 {
     // This test doesn't work any more even using the IP address below as the
     // HTTP server now redirects everything to HTTPs, so skip it for now unless
@@ -192,7 +144,7 @@ void ImageTestCase::LoadFromSocketStream()
     CHECK( img.LoadFile(*in_stream, wxBITMAP_TYPE_PNG) );
 }
 
-void ImageTestCase::LoadFromZipStream()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadFromZipStream", "[image]")
 {
     for (unsigned int i=0; i<WXSIZEOF(g_testfiles); i++)
     {
@@ -242,7 +194,7 @@ void ImageTestCase::LoadFromZipStream()
     }
 }
 
-void ImageTestCase::SizeImage()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SizeImage", "[image]")
 {
    // Test the wxImage::Size() function which takes a rectangle from source and
    // places it in a new image at a given position. This test checks, if the
@@ -852,7 +804,7 @@ void ImageTestCase::SizeImage()
    }
 }
 
-void ImageTestCase::CompareLoadedImage()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::CompareLoadedImage", "[image]")
 {
     wxImage expected8("horse.xpm");
     REQUIRE( expected8.IsOk() );
@@ -978,7 +930,7 @@ static void SetAlpha(wxImage *image)
     }
 }
 
-void ImageTestCase::CompareSavedImage()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::CompareSavedImage", "[image]")
 {
     wxImage expected24("horse.png");
     REQUIRE( expected24.IsOk() );
@@ -1017,7 +969,7 @@ void ImageTestCase::CompareSavedImage()
     }
 }
 
-void ImageTestCase::SavePNG()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SavePNG", "[image]")
 {
     wxImage expected24("horse.png");
     REQUIRE( expected24.IsOk() );
@@ -1122,7 +1074,7 @@ static void TestTIFFImage(const wxString& option, int value,
     CHECK( savedImage.HasAlpha() == image.HasAlpha() );
 }
 
-void ImageTestCase::SaveTIFF()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SaveTIFF", "[image]")
 {
     TestTIFFImage(wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, 1);
     TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 1);
@@ -1145,7 +1097,7 @@ void ImageTestCase::SaveTIFF()
 }
 #endif // wxUSE_LIBTIFF
 
-void ImageTestCase::ReadCorruptedTGA()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ReadCorruptedTGA", "[image]")
 {
     static unsigned char corruptTGA[18+1+3] =
     {
@@ -1183,7 +1135,7 @@ void ImageTestCase::ReadCorruptedTGA()
 
 #if wxUSE_GIF
 
-void ImageTestCase::SaveAnimatedGIF()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SaveAnimatedGIF", "[image]")
 {
 #if wxUSE_PALETTE
     wxImage image("horse.gif");
@@ -1233,7 +1185,7 @@ static void TestGIFComment(const wxString& comment)
     CHECK( image.GetOption(wxIMAGE_OPTION_GIF_COMMENT) == comment );
 }
 
-void ImageTestCase::GIFComment()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::GIFComment", "[image]")
 {
     // Test reading a comment.
     wxImage image("horse.gif");
@@ -1296,7 +1248,7 @@ void ImageTestCase::GIFComment()
 
 #endif // wxUSE_GIF
 
-void ImageTestCase::DibPadding()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::DibPadding", "[image]")
 {
     /*
     There used to be an error with calculating the DWORD aligned scan line
@@ -1325,7 +1277,7 @@ static void CompareBMPImage(const wxString& file1, const wxString& file2)
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
 }
 
-void ImageTestCase::BMPFlippingAndRLECompression()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPFlippingAndRLECompression", "[image]")
 {
     CompareBMPImage("image/horse_grey.bmp", "image/horse_grey_flipped.bmp");
 
@@ -1391,7 +1343,7 @@ FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
         } \
     }
 
-void ImageTestCase::ScaleCompare()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ScaleCompare", "[image]")
 {
     wxImage original;
     REQUIRE(original.LoadFile("horse.bmp"));
@@ -1454,7 +1406,7 @@ void ImageTestCase::ScaleCompare()
                                "image/cross_nearest_neighb_256x256.png");
 }
 
-void ImageTestCase::CreateBitmapFromCursor()
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::CreateBitmapFromCursor", "[image]")
 {
 #if !defined __WXOSX_IPHONE__ && !defined __WXDFB__ && !defined __WXMOTIF__ && !defined __WXX11__
 
@@ -1540,7 +1492,7 @@ static void LoadMalformedImageWithException(const wxString& file,
 #endif
 }
 
-TEST_CASE("wxImage::BMP", "[image][bmp]")
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMP", "[image][bmp]")
 {
     SECTION("Load malformed bitmaps")
     {
@@ -1554,7 +1506,7 @@ TEST_CASE("wxImage::BMP", "[image][bmp]")
     }
 }
 
-TEST_CASE("wxImage::Paste", "[image][paste]")
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::Paste", "[image][paste]")
 {
     const static char* squares_xpm[] =
     {
@@ -2049,7 +2001,7 @@ TEST_CASE("wxImage::RGBtoHSV", "[image][rgb][hsv]")
     }
 }
 
-TEST_CASE("wxImage::Clipboard", "[image][clipboard]")
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::Clipboard", "[image][clipboard]")
 {
 #if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
     wxInitAllImageHandlers();
@@ -2244,7 +2196,7 @@ TEST_CASE("wxImage::XPM", "[image][xpm]")
    CHECK( wxIcon(dummy_xpm).IsOk() );
 }
 
-TEST_CASE("wxImage::PNM", "[image][pnm]")
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::PNM", "[image][pnm]")
 {
 #if wxUSE_PNM
     wxImage::AddHandler(new wxPNMHandler);
@@ -2273,7 +2225,7 @@ inline ImageRGBMatcher RGBSimilarToFile(const char* name)
 
 } // anonymous namespace
 
-TEST_CASE("wxImage::ChangeColours", "[image]")
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ChangeColours", "[image]")
 {
     wxImage original;
     REQUIRE(original.LoadFile("image/toucan.png", wxBITMAP_TYPE_PNG));
@@ -2356,14 +2308,12 @@ TEST_CASE("wxImage::SizeLimits", "[image]")
 
 // This can be used to test loading an arbitrary image file by setting the
 // environment variable WX_TEST_IMAGE_PATH to point to it.
-TEST_CASE("wxImage::LoadPath", "[.]")
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadPath", "[.]")
 {
     wxString path;
     REQUIRE( wxGetEnv("WX_TEST_IMAGE_PATH", &path) );
 
     TestLogEnabler enableLogs;
-
-    wxInitAllImageHandlers();
 
     wxImage image;
     REQUIRE( image.LoadFile(path) );
