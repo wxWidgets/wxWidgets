@@ -20,6 +20,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/log.h"
 #include "wx/uilocale.h"
 #include "wx/private/uilocale.h"
 
@@ -86,13 +87,44 @@ public:
         // Surprisingly, localeWithLocaleIdentifier: always succeeds, even for
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
-        static wxCFRef<CFArrayRef>
-            all((CFArrayRef)[[NSLocale availableLocaleIdentifiers] retain]);
+        bool isAvailable = false;
+        for ( id nsLocId in [NSLocale availableLocaleIdentifiers] )
+        {
+            // We can't simply compare the names here because the list returned
+            // by NSLocale is incomplete and doesn't contain all synonyms, e.g.
+            // it only contains "zh_Hant_TW" but not "zh_TW" itself, so we need
+            // to do our own matching.
+            auto strId = wxCFStringRef::AsString(nsLocId);
 
-        wxCFStringRef cfName(locId.GetName());
-        if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
+            // Currently FromTag() doesn't deal with "lang_script_region"
+            // format and only supports "lang-script_region", but can parse
+            // both "lang_region" and "lang-region" correctly, so ensure we
+            // pass it something it can deal with.
+            strId.Replace("_", "-", false /* only the first one */);
+
+            const auto availId = wxLocaleIdent::FromTag(strId);
+            if ( availId.IsEmpty() )
+            {
+                wxLogDebug("Failed to parse locale identifier \"%s\"", strId);
+                continue;
+            }
+
+            // We ignore the other components because we consider that locale
+            // creation will succeed even if they don't match exactly, but the
+            // language and the region must match (even though the latter one
+            // might be empty).
+            if ( availId.GetLanguage() == locId.GetLanguage() &&
+                    availId.GetRegion() == locId.GetRegion() )
+            {
+                isAvailable = true;
+                break;
+            }
+        }
+
+        if ( !isAvailable )
             return NULL;
 
+        wxCFStringRef cfName(locId.GetName());
         auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
         if ( !nsloc )
             return NULL;

@@ -386,6 +386,7 @@ wxOSX:
 - Fix "Window" menu item not being translated sometimes (#23204).
 - Fix wxLocale::GetCurrent() when the current locale is "C".
 - Fix wxLocale::Init(wxLANGUAGE_DEFAULT) with "mixed" locales (#23114).
+- Fix setting Chinese locales (#23209).
 
 wxQt:
 
