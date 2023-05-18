@@ -638,8 +638,20 @@ void wxGLCanvasEGL::FreeDefaultConfig()
 
 bool wxGLCanvasEGL::SwapBuffers()
 {
-#ifdef GDK_WINDOWING_WAYLAND
     GdkWindow* const window = GTKGetDrawingWindow();
+#ifdef GDK_WINDOWING_X11
+    if (wxGTKImpl::IsX11(window))
+    {
+        if ( !IsShownOnScreen() )
+        {
+            // Trying to draw on a hidden window is useless and can actually be
+            // harmful if the compositor blocks in eglSwapBuffers() in this
+            // case, so avoid it.
+            return false;
+        }
+    }
+#endif // GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_WAYLAND
     if (wxGTKImpl::IsWayland(window))
     {
         // Under Wayland, we must not draw before we're actually ready to, as
