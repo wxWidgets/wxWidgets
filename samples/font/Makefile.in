@@ -180,8 +180,9 @@ font$(EXEEXT): $(FONT_OBJECTS) $(__font___win32rc)
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns font.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/../tests/horse.png font.app/Contents/Resources/horse.png
-@COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/../tests/horse.cur font.app/Contents/Resources/horse.cur
+@COND_PLATFORM_MACOSX_1@	
+@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.png font.app/Contents/Resources/horse.png
+@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.cur font.app/Contents/Resources/horse.cur
 @COND_PLATFORM_MACOSX_1@	mkdir -p font.app/Contents/Resources/Fonts
 @COND_PLATFORM_MACOSX_1@	cp -f $(srcdir)/wxprivate.ttf font.app/Contents/Resources/Fonts
 

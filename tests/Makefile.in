@@ -521,8 +521,9 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns test_gui.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/../tests/horse.png test_gui.app/Contents/Resources/horse.png
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/../tests/horse.cur test_gui.app/Contents/Resources/horse.cur
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f ../tests/horse.png test_gui.app/Contents/Resources/horse.png
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f ../tests/horse.cur test_gui.app/Contents/Resources/horse.cur
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@test_gui_bundle: $(____test_gui_BUNDLE_TGT_REF_DEP)
 
@@ -556,8 +557,9 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns test_allheaders.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/../tests/horse.png test_allheaders.app/Contents/Resources/horse.png
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/../tests/horse.cur test_allheaders.app/Contents/Resources/horse.cur
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f ../tests/horse.png test_allheaders.app/Contents/Resources/horse.png
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f ../tests/horse.cur test_allheaders.app/Contents/Resources/horse.cur
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@test_allheaders_bundle: $(____test_allheaders_BUNDLE_TGT_REF_DEP)
 
