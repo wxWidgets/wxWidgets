@@ -9,7 +9,14 @@
 
     <include file="../build/bakefiles/common_samples.bkl"/>
 
+    <set var="BUNDLE_RESOURCES">$(TOP_SRCDIR)tests/horse.png $(TOP_SRCDIR)include/wx/msw/bullseye.cur</set>
+
     <template id="wx_test">
+        <win32-res>$(WXTOPDIR)tests/test.rc</win32-res>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
+        </if>
         <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">

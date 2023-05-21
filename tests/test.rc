@@ -1,0 +1,38 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        test/test.rc
+// Purpose:     a standard MSW .rc file for the wxWidgets tests
+// Author:      Igor Korot
+// Modified by:
+// Created:     31.05.23
+// Copyright:   
+// Licence:     wxWidgets licence
+/////////////////////////////////////////////////////////////////////////////
+
+// this minimal resource file is all what is needed for most of the wxWidgets
+// tests
+
+// note that the icon used by the Explorer (i.e. the programs icon) is the
+// first icon in the executable and the icons are sorted both by their order
+// and alphabetically (!), so put this icon first and give it a name
+// starting with "a"
+aaaaaaaa ICON "../samples/sample.ico"
+
+horse    CURSOR "horse.cur"
+
+// this icon is used with wxFrame::SetIcon()
+sample ICON "../samples/sample.ico"
+
+// set this to 1 if you don't want to use manifest resource provided by wxWidgets.
+// An aplication manifest is needed for the application UI to look properly and other
+// things - see docs/msw/install.md for more information)
+#define wxUSE_NO_MANIFEST 0
+
+// to enable full High DPI suppport, we need to opt in into Per-Monitor (V2) DPI awareness,
+// see section Issues/MSW in programming guide High DPI Support in wxWidgets
+#ifndef wxUSE_DPI_AWARE_MANIFEST
+#define wxUSE_DPI_AWARE_MANIFEST 2
+#endif
+
+// this file contains the standard icons, cursors etc. and also includes the application
+// manifest mentioned above
+#include "../include/wx/msw/wx.rc"
