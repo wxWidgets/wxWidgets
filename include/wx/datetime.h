@@ -298,7 +298,7 @@ public:
     // ------------------------------------------------------------------------
 
         // Describes the form of the month or week-day name.
-    class WXDLLIMPEXP_BASE NameForm
+    class NameForm
     {
     public:
         // Ctor is non-explicit for compatibility.
