@@ -216,7 +216,7 @@ public:
     {
         Name_Full = 0x01,       ///< return full name
         Name_Abbr = 0x02,       ///< return abbreviated name
-        Name_Shortest = 0x03    ///< return shortest name
+        Name_Shortest = 0x03    ///< return shortest name @since_wx 3.3.0
     };
 
     /**
