@@ -81,8 +81,8 @@
     #include <locale.h>
 #endif
 
-#include "wx/uilocale.h"
 #include "wx/datetime.h"
+#include "wx/uilocale.h"
 
 // ----------------------------------------------------------------------------
 // wxXTI
