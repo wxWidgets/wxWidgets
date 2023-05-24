@@ -489,14 +489,19 @@ public:
         if (idx == -1)
             return wxString();
 
-        if (form.GetContext() == wxDateTime::Context_Standalone)
+        auto lctype = monthNameIndex[idx][month];
+        switch ( form.GetContext() )
         {
-            return DoGetInfo(monthNameIndex[idx][month]);
+            case wxDateTime::Context_Standalone:
+                // Nothing else needed.
+                break;
+
+            case wxDateTime::Context_Formatting:
+                lctype |= LOCALE_RETURN_GENITIVE_NAMES;
+                break;
         }
-        else
-        {
-            return DoGetInfo(monthNameIndex[idx][month] | LOCALE_RETURN_GENITIVE_NAMES);
-        }
+
+        return DoGetInfo(lctype);
     }
 
     wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override
