@@ -311,8 +311,8 @@ public:
         NameForm& Formatting() { m_context = Context_Formatting; return *this; }
         NameForm& Standalone() { m_context = Context_Standalone; return *this; }
 
-        NameFlags GetFlags() { return m_flags; }
-        NameContext GetContext() { return m_context; }
+        NameFlags GetFlags() const { return m_flags; }
+        NameContext GetContext() const { return m_context; }
 
     private:
         NameFlags m_flags;
