@@ -63,7 +63,6 @@ inline bool IsDefaultCLocale(const wxString& locale)
 
 } // anonymous namespace
 
-
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -585,6 +584,22 @@ wxString wxUILocale::GetLocalizedName(wxLocaleName name, wxLocaleForm form) cons
     return m_impl->GetLocalizedName(name, form);
 }
 
+wxString wxUILocale::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetMonthName(month, form);
+}
+
+wxString wxUILocale::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetWeekDayName(weekday, form);
+}
+
 wxLayoutDirection wxUILocale::GetLayoutDirection() const
 {
     if (!m_impl)
@@ -870,6 +885,26 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
     }
 
     return infoRet;
+}
+
+int wxUILocaleImpl::ArrayIndexFromFlag(wxDateTime::NameFlags flags)
+{
+  switch (flags)
+    {
+        case wxDateTime::Name_Full:
+            return 0;
+
+        case wxDateTime::Name_Abbr:
+            return 1;
+
+        case wxDateTime::Name_Shortest:
+            return 2;
+
+        default:
+            wxFAIL_MSG("unknown wxDateTime::NameFlags value");
+    }
+
+    return -1;
 }
 
 #endif // wxUSE_INTL
