@@ -280,7 +280,18 @@ public:
         /// Set the flag for shortest month or weekday names.
         NameForm& Shortest();
 
-        /// Set the context for date formatting.
+        /**
+            Set the context for date formatting.
+            
+            In some languages, month and day names have different forms depending
+            on whether they're used on their own, e.g. as names of the months in the
+            calendar, or as part of a date representation.
+            
+            Use this function if you need to localize a date format or in another 
+            similar context.
+
+            @see Standalone()
+        */
         NameForm& Formatting();
 
         /// Set the context for standalone use.
