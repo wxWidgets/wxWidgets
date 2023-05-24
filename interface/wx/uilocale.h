@@ -220,7 +220,7 @@ public:
         Gets the full (default), abbreviated or shortest name of the given week day.
 
         This function returns the name in the current locale, use
-        GetEnglishWeekDayName() to get the untranslated name if necessary.
+        wxDateTime::GetEnglishWeekDayName() to get the untranslated name if necessary.
 
         @param weekday
             One of wxDateTime::Sun, ..., wxDateTime::Sat values.
