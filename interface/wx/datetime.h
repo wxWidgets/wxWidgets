@@ -277,10 +277,10 @@ public:
         NameForm& Standalone();
 
         /// Return the flags describing the requested name length.
-        NameFlags GetFlags() { return m_flags; }
+        NameFlags GetFlags() const;
 
         /// Return the context of name usage.
-        NameContext GetContext() { return m_context; }
+        NameContext GetContext() const;
     };
 
     /**
