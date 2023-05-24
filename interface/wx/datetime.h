@@ -253,8 +253,9 @@ public:
         formatting a date. It contains attributes for the requested name
         length and the formatting context. It is used as a parameter to
         the GetWeekDayName() and GetMonthName() functions.
+        @since 3.3.0
      */
-    class WXDLLIMPEXP_BASE NameForm
+    class NameForm
     {
     public:
         /// Constructor for a name form.
