@@ -212,6 +212,7 @@ public:
             Example: wxNameForm().Abbr().Standalone()
 
         @see GetWeekDayName()
+        @since 3.3.0
     */
     wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form = {});
 
