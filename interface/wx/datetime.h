@@ -221,6 +221,7 @@ public:
 
     /**
         Context for name use in GetWeekDayName() and GetMonthName() functions.
+        @since 3.3.0
     */
     enum NameContext
     {
