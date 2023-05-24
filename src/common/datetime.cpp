@@ -755,7 +755,7 @@ int NameArrayIndexFromFlag(wxDateTime::NameFlags flags)
 } // anonymous namespace
 
 /* static */
-wxString wxDateTime::GetEnglishMonthName(Month month, NameForm form)
+wxString wxDateTime::GetEnglishMonthName(Month month, const NameForm& form)
 {
     wxCHECK_MSG( month != Inv_Month, wxEmptyString, "invalid month" );
 
@@ -777,18 +777,18 @@ wxString wxDateTime::GetEnglishMonthName(Month month, NameForm form)
 }
 
 /* static */
-wxString wxDateTime::GetMonthName(wxDateTime::Month month,
-                                  wxDateTime::NameForm form)
+wxString wxDateTime::GetMonthName(Month month,
+                                  const NameForm& form)
 {
-  wxCHECK_MSG(month != Inv_Month, wxEmptyString, wxT("invalid month"));
+    wxCHECK_MSG(month != Inv_Month, wxEmptyString, wxT("invalid month"));
     wxString name = wxUILocale::GetCurrent().GetMonthName(month, form);
-    if (name.IsEmpty())
-      name = GetEnglishMonthName(month, form);
+    if (name.empty())
+        name = GetEnglishMonthName(month, form);
     return name;
 }
 
 /* static */
-wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameForm form)
+wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, const NameForm& form)
 {
     wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday") );
 
@@ -808,13 +808,13 @@ wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameForm form)
 }
 
 /* static */
-wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
-                                    wxDateTime::NameForm form)
+wxString wxDateTime::GetWeekDayName(WeekDay wday,
+                                    const NameForm& form)
 {
     wxCHECK_MSG(wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday"));
     wxString name = wxUILocale::GetCurrent().GetWeekDayName(wday, form);
     if (name.empty())
-      name = GetEnglishWeekDayName(wday, form);
+        name = GetEnglishWeekDayName(wday, form);
     return name;
 }
 

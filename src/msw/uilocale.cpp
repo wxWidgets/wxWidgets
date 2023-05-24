@@ -520,14 +520,19 @@ public:
         if (idx == -1)
             return wxString();
 
-        if (form.GetContext() == wxDateTime::Context_Standalone)
+        auto lctype = weekdayNameIndex[idx][weekday];
+        switch ( form.GetContext() )
         {
-            return DoGetInfo(weekdayNameIndex[idx][weekday]);
+            case wxDateTime::Context_Standalone:
+                // Nothing else needed.
+                break;
+
+            case wxDateTime::Context_Formatting:
+                lctype |= LOCALE_RETURN_GENITIVE_NAMES;
+                break;
         }
-        else
-        {
-            return DoGetInfo(weekdayNameIndex[idx][weekday] | LOCALE_RETURN_GENITIVE_NAMES);
-        }
+
+        return DoGetInfo(lctype);
     }
 
     wxLayoutDirection GetLayoutDirection() const override

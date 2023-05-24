@@ -889,7 +889,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
 
 int wxUILocaleImpl::ArrayIndexFromFlag(wxDateTime::NameFlags flags)
 {
-  switch (flags)
+    switch (flags)
     {
         case wxDateTime::Name_Full:
             return 0;

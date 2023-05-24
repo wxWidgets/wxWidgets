@@ -448,16 +448,16 @@ public:
 
         // get the standard English full (default), abbreviated or shortest month name
     static wxString GetEnglishMonthName(Month month,
-                                        NameForm form = {});
+                                        const NameForm& form = {});
 
         // get the full (default), abbreviated or shortest weekday name in the current
         // locale, returns empty string on error
     static wxString GetWeekDayName(WeekDay weekday,
-                                   NameForm form = {});
+                                   const NameForm& form = {});
 
         // get the standard English full (default), abbreviated or shortest weekday name
     static wxString GetEnglishWeekDayName(WeekDay weekday,
-                                          NameForm form = {});
+                                          const NameForm& form = {});
 
         // get the AM and PM strings in the current locale (may be empty)
     static void GetAmPmStrings(wxString *am, wxString *pm);
