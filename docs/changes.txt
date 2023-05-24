@@ -254,6 +254,7 @@ All (GUI):
   using names for the months in short date format (#23310).
 - Fix wx-config output when using NanoSVG library (#23373).
 - Fix bug modifying shared images in wxImage::Clear() (#23555).
+- Add EVT_FULLSCREEN event macro (Christian Beier, #23566).
 
 wxGTK:
 
