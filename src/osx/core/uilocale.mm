@@ -127,7 +127,7 @@ public:
           return nullptr;
 
         wxCFStringRef cfName(locId.GetName());
-        
+
 //        if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
 //            return nullptr;
 
@@ -286,7 +286,7 @@ wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFo
     df.locale = m_nsloc;
 
     NSArray* weekdayNames = nullptr;
-    
+
     if (form.GetContext() == wxDateTime::Context_Standalone)
     {
         switch (idx)
