@@ -444,7 +444,7 @@ public:
         // get the full (default), abbreviated or shortest month name in the current
         // locale, returns empty string on error
     static wxString GetMonthName(Month month,
-                                 NameForm form = {});
+                                 const NameForm& form = {});
 
         // get the standard English full (default), abbreviated or shortest month name
     static wxString GetEnglishMonthName(Month month,
