@@ -813,7 +813,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
 {
     wxCHECK_MSG(wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday"));
     wxString name = wxUILocale::GetCurrent().GetWeekDayName(wday, form);
-    if (name.IsEmpty())
+    if (name.empty())
       name = GetEnglishWeekDayName(wday, form);
     return name;
 }
