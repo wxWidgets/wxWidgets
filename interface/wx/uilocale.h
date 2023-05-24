@@ -201,7 +201,7 @@ public:
         Gets the full (default), abbreviated or shortest name of the given month.
 
         This function returns the name in the current locale, use
-        GetEnglishMonthName() to get the untranslated name if necessary.
+        wxDateTime::GetEnglishMonthName() to get the untranslated name if necessary.
 
         @param month
             One of wxDateTime::Jan, ..., wxDateTime::Dec values.
