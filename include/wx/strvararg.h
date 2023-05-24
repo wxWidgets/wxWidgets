@@ -207,9 +207,17 @@ public:
         Arg_Unknown     = 0x8000     // unrecognized specifier (likely error)
     };
 
+#if wxDEBUG_LEVEL
     // Validate all format string parameters at once: the vector contains the
     // format specifiers corresponding to the actually given arguments.
     void Validate(const std::vector<int>& argTypes) const;
+#else
+    // Also provide a trivial implementation of Validate() doing nothing in
+    // this case.
+    inline void Validate(const std::vector<int>& WXUNUSED(argTypes)) const
+    {
+    }
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
     // returns the type of format specifier for n-th variadic argument (this is
     // not necessarily n-th format specifier if positional specifiers are used);
@@ -351,13 +359,6 @@ struct wxFormatStringArgumentFinder<wxWCharBuffer>
     #define wxASSERT_ARG_TYPE(fmt, index, expected_mask)                      \
         wxUnusedVar(fmt);                                                     \
         wxUnusedVar(index)
-
-    // Also provide a trivial implementation of Validate() doing nothing in
-    // this case.
-    inline void
-    wxFormatString::Validate(const std::vector<int>& WXUNUSED(argTypes)) const
-    {
-    }
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
 
