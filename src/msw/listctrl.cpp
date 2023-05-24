@@ -3016,7 +3016,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // custom draw stuff
 // ----------------------------------------------------------------------------
 
-static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
+namespace
+{
+
+RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
     RECT rc;
     wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_BOUNDS, rc);
@@ -3031,7 +3034,6 @@ static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     return rc;
 }
 
-static
 bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
@@ -3131,7 +3133,7 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
     return true;
 }
 
-static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
+void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 {
     if ( nmcd.uItemState & CDIS_FOCUS )
     {
@@ -3143,7 +3145,7 @@ static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 }
 
 // pLVCD->clrText and clrTextBk should contain the colours to use
-static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3222,9 +3224,9 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     HandleItemPostpaint(nmcd);
 }
 
-static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
-                                   LPNMLVCUSTOMDRAW pLVCD,
-                                   wxItemAttr *attr)
+WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
+                            LPNMLVCUSTOMDRAW pLVCD,
+                            wxItemAttr *attr)
 {
     if ( !attr )
     {
@@ -3279,6 +3281,8 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
 
     return CDRF_DODEFAULT;
 }
+
+} // anonymous namespace
 
 WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 {
