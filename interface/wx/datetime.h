@@ -258,7 +258,17 @@ public:
     class NameForm
     {
     public:
-        /// Constructor for a name form.
+        /**
+            Constructor for a name form.
+
+            Initializes this object to use the given form of the name (full by
+            default) in the formatting context.
+
+            Note that this constructor is _not_ explicit, to allow the existing
+            code which passes wxDateTime::NameFlags to various functions now
+            taking NameForm to work. Please beware of the implicit conversions
+            here.
+         */
         NameForm(NameFlags flags = Name_Full) : m_flags(flags) {}
 
         /// Set the flag for full month or weekday names.
