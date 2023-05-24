@@ -236,7 +236,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
     // wouldn't be much better as we'd still need a hack for it in GetName()
     // because the locale names are always converted to lower case, while we
     // really want to return "C" rather than "c" as the name of this one.
-    return new wxUILocaleImplCF([NSLocale systemLocale]);
+    return new wxUILocaleImplCF([NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]);
 }
 
 /* static */
