@@ -30,6 +30,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
+#import <Foundation/NSDateFormatter.h>
 
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
@@ -137,6 +138,9 @@ public:
     wxLocaleIdent GetLocaleId() const override;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const override;
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const override;
+    wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override;
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override;
+
     wxLayoutDirection GetLayoutDirection() const override;
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const override;
@@ -215,6 +219,96 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
             break;
     }
     return wxCFStringRef::AsString(str);
+}
+
+wxString
+wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
+{
+    NSDateFormatter* df = [NSDateFormatter new];
+    df.locale = m_nsloc;
+
+    NSArray* monthNames = nullptr;
+
+    if (form.GetContext() == wxDateTime::Context_Standalone)
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                monthNames = [df veryShortStandaloneMonthSymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                monthNames = [df shortStandaloneMonthSymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                monthNames = [df standaloneMonthSymbols];
+                break;
+        }
+    }
+    else
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                monthNames = [df veryShortMonthSymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                monthNames = [df shortMonthSymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                monthNames = [df monthSymbols];
+                break;
+        }
+    }
+
+    NSString* monthName = [monthNames objectAtIndex:(month)];
+    return wxCFStringRef::AsString(monthName);
+}
+
+wxString
+wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
+{
+    NSDateFormatter* df = [NSDateFormatter new];
+    df.locale = m_nsloc;
+
+    NSArray* weekdayNames = nullptr;
+
+    if (form.GetContext() == wxDateTime::Context_Standalone)
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                weekdayNames = [df veryShortStandaloneWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                weekdayNames = [df shortStandaloneWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                weekdayNames = [df standaloneWeekdaySymbols];
+                break;
+        }
+    }
+    else
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                weekdayNames = [df veryShortWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                weekdayNames = [df shortWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                weekdayNames = [df weekdaySymbols];
+                break;
+        }
+    }
+
+    NSString* weekdayName = [weekdayNames objectAtIndex:(weekday)];
+    return wxCFStringRef::AsString(weekdayName);
 }
 
 wxLayoutDirection
