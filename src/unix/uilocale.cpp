@@ -25,7 +25,6 @@
     #include <langinfo.h>
 #endif
 
-#include "wx/datetime.h"
 #include "wx/uilocale.h"
 #include "wx/private/uilocale.h"
 

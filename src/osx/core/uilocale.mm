@@ -88,8 +88,6 @@ public:
         // Surprisingly, localeWithLocaleIdentifier: always succeeds, even for
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
-//        static wxCFRef<CFArrayRef>
-//            all((CFArrayRef)[[NSLocale availableLocaleIdentifiers] retain]);
         bool isAvailable = false;
         for ( id nsLocId in [NSLocale availableLocaleIdentifiers] )
         {
@@ -127,10 +125,6 @@ public:
           return nullptr;
 
         wxCFStringRef cfName(locId.GetName());
-
-//        if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
-//            return nullptr;
-
         auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
         if ( !nsloc )
             return nullptr;
@@ -229,10 +223,6 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 wxString
 wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
 {
-    const int idx = ArrayIndexFromFlag(form.GetFlags());
-    if (idx == -1)
-        return wxString();
-
     NSDateFormatter* df = [NSDateFormatter new];
     df.locale = m_nsloc;
 
@@ -240,15 +230,15 @@ wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm for
 
     if (form.GetContext() == wxDateTime::Context_Standalone)
     {
-        switch (idx)
+        switch ( form.GetFlags() )
         {
-            case 2:
+            case wxDateTime::Name_Shortest:
                 monthNames = [df veryShortStandaloneMonthSymbols];
                 break;
-            case 1:
+            case wxDateTime::Name_Abbr:
                 monthNames = [df shortStandaloneMonthSymbols];
                 break;
-            case 0:
+            case wxDateTime::Name_Full:
             default:
                 monthNames = [df standaloneMonthSymbols];
                 break;
@@ -256,15 +246,15 @@ wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm for
     }
     else
     {
-        switch (idx)
+        switch ( form.GetFlags() )
         {
-            case 2:
+            case wxDateTime::Name_Shortest:
                 monthNames = [df veryShortMonthSymbols];
                 break;
-            case 1:
-               monthNames = [df shortMonthSymbols];
-               break;
-            case 0:
+            case wxDateTime::Name_Abbr:
+                monthNames = [df shortMonthSymbols];
+                break;
+            case wxDateTime::Name_Full:
             default:
                 monthNames = [df monthSymbols];
                 break;
@@ -278,10 +268,6 @@ wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm for
 wxString
 wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
 {
-    const int idx = ArrayIndexFromFlag(form.GetFlags());
-    if (idx == -1)
-        return wxString();
-
     NSDateFormatter* df = [NSDateFormatter new];
     df.locale = m_nsloc;
 
@@ -289,15 +275,15 @@ wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFo
 
     if (form.GetContext() == wxDateTime::Context_Standalone)
     {
-        switch (idx)
+        switch ( form.GetFlags() )
         {
-            case 2:
+            case wxDateTime::Name_Shortest:
                 weekdayNames = [df veryShortStandaloneWeekdaySymbols];
                 break;
-            case 1:
+            case wxDateTime::Name_Abbr:
                 weekdayNames = [df shortStandaloneWeekdaySymbols];
                 break;
-            case 0:
+            case wxDateTime::Name_Full:
             default:
                 weekdayNames = [df standaloneWeekdaySymbols];
                 break;
@@ -305,15 +291,15 @@ wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFo
     }
     else
     {
-        switch (idx)
+        switch ( form.GetFlags() )
         {
-            case 2:
+            case wxDateTime::Name_Shortest:
                 weekdayNames = [df veryShortWeekdaySymbols];
                 break;
-            case 1:
+            case wxDateTime::Name_Abbr:
                 weekdayNames = [df shortWeekdaySymbols];
                 break;
-            case 0:
+            case wxDateTime::Name_Full:
             default:
                 weekdayNames = [df weekdaySymbols];
                 break;
