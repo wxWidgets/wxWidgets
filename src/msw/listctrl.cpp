@@ -621,14 +621,20 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 
 bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    // There doesn't seem to be any theme that works well here:
+    // There doesn't seem to be any theme that works well out of the box:
+    //
     //  - "Explorer" draws bluish hover highlight rectangle which is not at
     //    all like the greyish one used by the actual Explorer in dark mode.
+    //    It also draws vertical separator lines, unlike the Explorer itself,
+    //    which wouldn't be too bad if they were not misaligned with the
+    //    separators drawn in the header, when it is used, which looks ugly.
     //  - "DarkMode_Explorer" uses the same selection colours as the light mode
     //    and doesn't draw hover rectangle at all.
-    //  - "ItemsView", which we use currently, draws the selection and hover as
-    //    expected, but uses light mode scrollbars.
-    support.themeName = L"ItemsView";
+    //  - "ItemsView" draws the selection and hover as expected, but uses light
+    //    mode scrollbars and also misaligned vertical separators.
+    //
+    // We currently use DarkMode_Explorer and override selection drawing.
+    support.themeName = L"DarkMode_Explorer";
 
     return true;
 }
@@ -3057,12 +3063,12 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
         RECT rc2;
         wxGetListCtrlSubItemRect(hwndList, item, 1, LVIR_BOUNDS, rc2);
         rc.right = rc2.left;
-        rc.left += 4;
     }
-    else // not first subitem
-    {
-        rc.left += 6;
-    }
+
+    // This mysterious offset is necessary for the owner drawn items to align
+    // with the non-owner-drawn ones. Note that it's intentionally *not* scaled
+    // by DPI factor because it doesn't seem to depend on the resolution.
+    rc.left += 6;
 
     // get the image and text to draw
     wxChar text[512];
@@ -3135,6 +3141,11 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 
 void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 {
+    // The control seems to always draw its own focus rectangle when not using
+    // dark mode, so don't draw another one.
+    if ( !wxMSWDarkMode::IsActive() )
+        return;
+
     if ( nmcd.uItemState & CDIS_FOCUS )
     {
         RECT rc = GetCustomDrawnItemRect(nmcd);
@@ -3143,8 +3154,20 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     }
 }
 
+// Flags for HandleItemPaint()
+enum
+{
+    Paint_Default       = 0,
+    Paint_OnlySelected  = 1
+};
+
+// This function is normally called only if we use custom colours, but it's
+// also called when using dark mode to draw the item if it's selected. In this
+// case, Paint_OnlySelected is used and we do nothing and return false if the
+// item is not selected.
+//
 // pLVCD->clrText and clrTextBk should contain the colours to use
-void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3185,25 +3208,31 @@ void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
-        int syscolFg, syscolBg;
+        wxSystemColour syscolFg, syscolBg;
         if ( ::GetFocus() == hwndList )
         {
-            syscolFg = COLOR_HIGHLIGHTTEXT;
-            syscolBg = COLOR_HIGHLIGHT;
+            syscolFg = wxSYS_COLOUR_HIGHLIGHTTEXT;
+            syscolBg = wxSYS_COLOUR_HIGHLIGHT;
         }
         else // selected but unfocused
         {
-            syscolFg = COLOR_WINDOWTEXT;
-            syscolBg = COLOR_BTNFACE;
+            syscolFg = wxSYS_COLOUR_WINDOWTEXT;
+            syscolBg = wxSYS_COLOUR_BTNFACE;
 
             // don't grey out the icon in this case either
             nmcd.uItemState &= ~CDIS_SELECTED;
         }
 
-        pLVCD->clrText = ::GetSysColor(syscolFg);
-        pLVCD->clrTextBk = ::GetSysColor(syscolBg);
+        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(syscolFg));
+        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(syscolBg));
     }
-    //else: not selected, use normal colours from pLVCD
+    else // not selected
+    {
+        if ( flags & Paint_OnlySelected )
+            return false;
+
+        // Continue and use normal colours from pLVCD
+    }
 
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
@@ -3221,6 +3250,8 @@ void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     }
 
     HandleItemPostpaint(nmcd);
+
+    return true;
 }
 
 WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
@@ -3229,6 +3260,15 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
 {
     if ( !attr )
     {
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            // We need to always paint selected items ourselves as they come
+            // out completely wrong in DarkMode_Explorer theme, see the comment
+            // before MSWGetDarkModeSupport().
+            if ( HandleItemPaint(pLVCD, nullptr, Paint_OnlySelected) )
+                return CDRF_SKIPDEFAULT;
+        }
+
         // nothing to do for this item
         return CDRF_DODEFAULT;
     }
@@ -3295,7 +3335,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             //
             // for virtual controls, always suppose that we have attributes as
             // there is no way to check for this
-            if ( IsVirtual() || m_hasAnyAttr )
+            if ( IsVirtual() || m_hasAnyAttr || wxMSWDarkMode::IsActive() )
                 return CDRF_NOTIFYITEMDRAW;
             break;
 
