@@ -159,7 +159,8 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     // Make sure we don't extract the region identifier erroneously as a sortorder identifier
     {
         wxString tagTemp = tagMain.BeforeLast('_', &tagRest);
-        if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
+        if (tagTemp.length() > 0 && tagRest.length() > 4 &&
+            locId.m_modifier.empty() && locId.m_charset.empty())
         {
             // Windows sortorder found
             locId.SortOrder(tagRest);
