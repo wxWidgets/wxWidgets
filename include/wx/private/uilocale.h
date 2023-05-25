@@ -90,7 +90,6 @@ public:
     virtual wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const = 0;
     virtual wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const = 0;
     virtual wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const = 0;
-
     virtual wxLayoutDirection GetLayoutDirection() const = 0;
     virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
                                int flags) const = 0;

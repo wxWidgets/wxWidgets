@@ -108,6 +108,13 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
     wxLocaleIdent locId;
 
+    // 0. Check for special locale identifiers "C" and "POSIX"
+    if (IsDefaultCLocale(tag))
+    {
+        locId.Language(tag);
+        return locId;
+    }
+
     // 1. Handle platform-dependent cases
 
     // 1a. Check for modifier in POSIX tag
@@ -151,7 +158,7 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     //
     // Make sure we don't extract the region identifier erroneously as a sortorder identifier
     {
-        wxString tagTemp = tagMain.BeforeFirst('_', &tagRest);
+        wxString tagTemp = tagMain.BeforeLast('_', &tagRest);
         if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
         {
             // Windows sortorder found
@@ -525,7 +532,14 @@ wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
         return;
     }
 
-    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    if (IsDefaultCLocale(localeId.GetLanguage()))
+    {
+        m_impl = wxUILocaleImpl::CreateStdC();
+    }
+    else
+    {
+        m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    }
 }
 
 wxUILocale::wxUILocale(const wxUILocale& loc)
