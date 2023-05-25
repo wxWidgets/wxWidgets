@@ -1396,7 +1396,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <border>5</border>
                                 <object class="wxToolBar">
                                     <style>wxTB_FLAT|wxTB_NODIVIDER</style>
-                                    <bg>#bbbbff</bg>
+                                    <bg>#bbbbff|dark:#ffbbbb</bg>
                                     <margins>2,2</margins>
                                     <object class="tool" name="New">
                                         <bitmap stock_id="wxART_NEW"/>
