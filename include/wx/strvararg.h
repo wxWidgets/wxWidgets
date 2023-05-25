@@ -214,7 +214,7 @@ public:
 #else
     // Also provide a trivial implementation of Validate() doing nothing in
     // this case.
-    inline void Validate(const std::vector<int>& WXUNUSED(argTypes)) const
+    void Validate(const std::vector<int>& WXUNUSED(argTypes)) const
     {
     }
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
