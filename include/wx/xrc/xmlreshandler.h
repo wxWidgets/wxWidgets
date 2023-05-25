@@ -76,7 +76,8 @@ public:
     virtual long GetLong(const wxString& param, long defaultv = 0) = 0;
     virtual float GetFloat(const wxString& param, float defaultv = 0) = 0;
     virtual wxColour GetColour(const wxString& param,
-                               const wxColour& defaultv = wxNullColour) = 0;
+                               const wxColour& defaultLight = wxNullColour,
+                               const wxColour& defaultDark = wxNullColour) = 0;
     virtual wxSize GetSize(const wxString& param = wxT("size"),
                            wxWindow *windowToUse = nullptr) = 0;
     virtual wxPoint GetPosition(const wxString& param = wxT("pos"),
@@ -301,9 +302,10 @@ protected:
         return GetImpl()->GetFloat(param, defaultv);
     }
     wxColour GetColour(const wxString& param,
-                       const wxColour& defaultv = wxNullColour)
+                       const wxColour& defaultLight = wxNullColour,
+                       const wxColour& defaultDark = wxNullColour)
     {
-        return GetImpl()->GetColour(param, defaultv);
+        return GetImpl()->GetColour(param, defaultLight, defaultDark);
     }
     wxSize GetSize(const wxString& param = wxT("size"),
                    wxWindow *windowToUse = nullptr)
