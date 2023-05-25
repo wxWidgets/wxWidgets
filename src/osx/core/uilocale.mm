@@ -97,12 +97,6 @@ public:
             // to do our own matching.
             auto strId = wxCFStringRef::AsString(nsLocId);
 
-            // Currently FromTag() doesn't deal with "lang_script_region"
-            // format and only supports "lang-script_region", but can parse
-            // both "lang_region" and "lang-region" correctly, so ensure we
-            // pass it something it can deal with.
-            strId.Replace("_", "-", false /* only the first one */);
-
             const auto availId = wxLocaleIdent::FromTag(strId);
             if ( availId.IsEmpty() )
             {
@@ -110,16 +104,28 @@ public:
                 continue;
             }
 
-            // We ignore the other components because we consider that locale
-            // creation will succeed even if they don't match exactly, but the
-            // language and the region must match (even though the latter one
-            // might be empty).
-            if ( availId.GetLanguage() == locId.GetLanguage() &&
-                    availId.GetRegion() == locId.GetRegion() )
+            // The following conditions have to be checked:
+            //   - The language must always match.
+            //   - The script must match, if it given, otherwise the region must
+            //     match (even though it might be empty).
+            //   - If script and region are both given, they must both match.
+            if ( availId.GetLanguage() == locId.GetLanguage() )
             {
-                isAvailable = true;
-                break;
+                if ( !locId.GetScript().empty() )
+                {
+                    isAvailable = availId.GetScript() == locId.GetScript();
+                    if ( isAvailable && !locId.GetRegion().empty() )
+                    {
+                        isAvailable = availId.GetRegion() == locId.GetRegion();
+                    }
+                }
+                else
+                {
+                    isAvailable = availId.GetRegion() == locId.GetRegion();
+                }
             }
+            if ( isAvailable )
+                break;
         }
         if ( !isAvailable )
           return nullptr;
