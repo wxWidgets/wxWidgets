@@ -109,6 +109,13 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
     wxLocaleIdent locId;
 
+    // 0. Check for special locale identifiers "C" and "POSIX"
+    if (IsDefaultCLocale(tag))
+    {
+        locId.Language(tag);
+        return locId;
+    }
+
     // 1. Handle platform-dependent cases
 
     // 1a. Check for modifier in POSIX tag
@@ -526,7 +533,14 @@ wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
         return;
     }
 
-    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    if (IsDefaultCLocale(localeId.GetLanguage()))
+    {
+        m_impl = wxUILocaleImpl::CreateStdC();
+    }
+    else
+    {
+        m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    }
 }
 
 wxUILocale::wxUILocale(const wxUILocale& loc)

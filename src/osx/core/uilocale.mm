@@ -166,7 +166,7 @@ wxUILocaleImplCF::GetName() const
     wxString name = wxCFStringRef::AsString([m_nsloc localeIdentifier]);
 
     // Check for the special case of the "empty" system locale, see CreateStdC()
-    if ( name.empty() )
+    if ( name.empty() || name.IsSameAs("en_US_POSIX") )
         name = "C";
 
     return name;
