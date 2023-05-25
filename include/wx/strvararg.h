@@ -208,12 +208,13 @@ public:
     };
 
 #if wxDEBUG_LEVEL
-    // Validate all format string parameters at once: the vector contains the
-    // format specifiers corresponding to the actually given arguments.
+    // Debugging implementation of Validate that will ralidate all format string
+    // parameters at once: the vector contains the format specifiers
+    // corresponding to the actually given arguments.
     void Validate(const std::vector<int>& argTypes) const;
 #else
-    // Also provide a trivial implementation of Validate() doing nothing in
-    // this case.
+    // Alternately, provide a trivial implementation of Validate() doing nothing
+    // in the non-debug case.
     void Validate(const std::vector<int>& WXUNUSED(argTypes)) const
     {
     }
