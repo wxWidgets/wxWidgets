@@ -55,6 +55,12 @@
 #ifndef WINVER
     #define WINVER 0x0600
 #endif
+#ifndef _UNICODE
+#    define _UNICODE
+#endif
+#ifndef UNICODE
+#    define UNICODE
+#endif
 
 #include "stdafx.h"
 
