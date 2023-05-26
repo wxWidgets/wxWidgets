@@ -297,6 +297,7 @@ wxEND_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, -1, pos, size)
 {
+    MSWDisableComposited();
 }
 
 // Define the repainting behaviour
