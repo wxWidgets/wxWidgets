@@ -514,8 +514,8 @@ struct BMPDesc
 
 // Read the data in BMP format into the given image.
 //
-// The stream must be positioned at the start of the palette data for the
-// bitmaps using palettes or at the start of the bitmap data otherwise.
+// The stream must be positioned at the start of the bitmap data
+// (i.e., after any palette data)
 bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                  wxInputStream& stream, bool verbose)
 {

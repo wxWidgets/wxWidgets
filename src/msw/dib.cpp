@@ -418,6 +418,8 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, const void *bits
                 break;
 
             case BI_RGB:
+            case BI_RLE8:
+            case BI_RLE4:
                 // biClrUsed has the number of colors but it may be not initialized at
                 // all
                 numColors = pbmih->biClrUsed;
