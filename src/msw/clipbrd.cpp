@@ -240,6 +240,8 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                             numColors = 3;
                             break;
                         case BI_RGB:
+                        case BI_RLE8:
+                        case BI_RLE4:
                             numColors = ds.dsBmih.biClrUsed;
                             if ( !numColors )
                             {
