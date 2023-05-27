@@ -92,7 +92,10 @@ enum wxDialogLayoutAdaptationMode
 
     @beginStyleTable
     @style{wxCAPTION}
-           Puts a caption on the dialog box.
+           Shows the title bar, containing the window title, for this window.
+           Note that this style is implicitly enabled by wxMINIMIZE_BOX,
+           wxMAXIMIZE_BOX and wxCLOSE_BOX on most systems as the corresponding
+           buttons couldn't be shown if the window had no title bar at all.
     @style{wxDEFAULT_DIALOG_STYLE}
            Equivalent to a combination of wxCAPTION, wxCLOSE_BOX and
            wxSYSTEM_MENU (the last one is not used under Unix).
@@ -101,11 +104,14 @@ enum wxDialogLayoutAdaptationMode
     @style{wxSYSTEM_MENU}
            Display a system menu.
     @style{wxCLOSE_BOX}
-           Displays a close box on the frame.
+           Displays a close box on the frame. This style implicitly enables
+           wxCAPTION too.
     @style{wxMAXIMIZE_BOX}
-           Displays a maximize box on the dialog.
+           Displays a maximize box on the dialog.  This style implicitly enables
+           wxCAPTION too.
     @style{wxMINIMIZE_BOX}
-           Displays a minimize box on the dialog.
+           Displays a minimize box on the dialog. This style implicitly enables
+           wxCAPTION too.
     @style{wxTHICK_FRAME}
            Display a thick frame around the window.
     @style{wxSTAY_ON_TOP}
