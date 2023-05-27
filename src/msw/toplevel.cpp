@@ -130,7 +130,9 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     else
         msflags |= WS_POPUP;
 
-    if ( style & wxCAPTION )
+    // We need to use WS_CAPTION to show any of the minimize/maximize/close
+    // buttons, so enable it if any of these styles is specified.
+    if ( style & (wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCLOSE_BOX) )
         msflags |= WS_CAPTION;
     else
         msflags |= WS_POPUP;
