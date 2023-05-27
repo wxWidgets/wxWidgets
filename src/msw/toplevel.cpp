@@ -155,8 +155,6 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( style & (wxSYSTEM_MENU | wxCLOSE_BOX) )
         msflags |= WS_SYSMENU;
 
-    // NB: under CE these 2 styles are not supported currently, we should
-    //     call Minimize()/Maximize() "manually" if we want to support them
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
 
