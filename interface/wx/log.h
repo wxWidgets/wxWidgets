@@ -494,6 +494,11 @@ public:
 
         Notice that the current time stamp is only used by the default log
         formatter and custom formatters may ignore this format.
+
+        The default time stamp is `%X`, i.e. locale-dependent time
+        representation.
+
+        @see SetTimestamp()
     */
     static const wxString& GetTimestamp();
 
