@@ -512,6 +512,11 @@ public:
         formatter and custom formatters may ignore this format. You can also
         define a custom wxLogFormatter to customize the time stamp handling
         beyond changing its format.
+
+        In addition to calling this function explicitly, it can also be called
+        implicitly by wxWidgets if `WXLOG_TIME_FORMAT` environment variable is
+        set, see @ref overview_envvars "overview of the environment variables"
+        affecting wxWidgets programs.
     */
     static void SetTimestamp(const wxString& format);
 

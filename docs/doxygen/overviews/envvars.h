@@ -13,6 +13,14 @@ This section describes all environment variables that affect execution of
 wxWidgets programs.
 
 @beginDefList
+@itemdef{WXLOG_TIME_FORMAT,
+         If set, the contents of this variable is set as the initial timestamp
+         used for logging, i.e. passed to wxLog::SetTimestamp(), on program
+         startup. For example, this can be used to enable milliseconds in the
+         timestamps by setting `WXLOG_TIME_FORMAT=%H:%M:%S.%l` or it could also
+         be used to use ISO 8601 timestamp format instead of the default
+         locale-dependent format. This variable is only used since wxWidgets
+         3.3.0.}
 @itemdef{WXTRACE,
         This variable can be set to a comma-separated list of trace masks used in
         wxLogTrace calls; wxLog::AddTraceMask is called for every mask

@@ -1240,6 +1240,10 @@ static void LINKAGEMODE SetTraceMasks()
         while ( tkn.HasMoreTokens() )
             wxLog::AddTraceMask(tkn.GetNextToken());
     }
+
+    wxString ts;
+    if ( wxGetEnv("WXLOG_TIME_FORMAT", &ts) )
+        wxLog::SetTimestamp(ts);
 #endif // wxUSE_LOG
 }
 
