@@ -271,6 +271,13 @@ public:
         Process a @c wxEVT_TOOL_DROPDOWN event. If unhandled,
         displays the default dropdown menu set using
         wxToolBar::SetDropdownMenu().
+    @event{EVT_TB_CUSTOMIZE(id)
+        Process a @c wxEVT_TB_CUSTOMIZE event. Under MSW and OSX
+        it will display native customization dialogs. On GTK it will
+        be generic.
+        In order for this event to happen you need to double click the
+        toolbar on MSW and right click + context menu selection on OSX/GTK
+        This event is implemented @since 3.3.0
     @endEventTable
 
     The toolbar class emits menu commands in the same way that a frame menubar

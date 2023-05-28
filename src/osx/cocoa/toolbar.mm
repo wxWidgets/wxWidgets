@@ -187,7 +187,7 @@ public:
        if ( m_toolbarItem )
         {
             [m_toolbarItem setLabel:l.AsNSString()];
-
+            [m_toolbarItem setPaletteLabel:l.AsNSString()];
             [m_toolbarItem setToolTip:sh.AsNSString()];
         }
 #endif
@@ -343,6 +343,7 @@ private:
 
 - (id)initWithIdentifier:(NSString *)identifier;
 - (void) dealloc;
+- (void)runCustomizationPalette:(id)sender;
 
 @end
 
@@ -470,6 +471,22 @@ private:
 {
     [toolbarDelegate release];
     [super dealloc];
+}
+
+- (void)runCustomizationPalette:(id)sender;
+{
+    long value;
+    auto tbid = [self identifier];
+    auto ident = wxCFStringRef::AsString( tbid );
+//    value = (long) ident;
+    ident.ToLong( &value, 16 );
+    wxToolBar *tb = (wxToolBar *) value;
+    wxCommandEvent evt( wxEVT_TB_CUSTOMIZE );
+    evt.SetEventObject( tb );
+    if( tb->HandleWindowEvent( evt ) )
+        return;
+    else
+        [super runCustomizationPalette:sender];
 }
 
 @end
@@ -710,6 +727,8 @@ bool wxToolBar::Create(
         wxString identifier = wxString::Format( wxT("%p"), this );
         wxCFStringRef cfidentifier(identifier);
         NSToolbar* tb =  [[wxNSToolbar alloc] initWithIdentifier:cfidentifier.AsNSString()];
+        [tb setAllowsUserCustomization:YES];
+        [tb setAutosavesConfiguration:YES];
 
         m_macToolbar = tb ;
 
