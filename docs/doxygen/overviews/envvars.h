@@ -14,10 +14,10 @@ wxWidgets programs.
 
 @beginDefList
 @itemdef{WXTRACE,
-        (Debug build only.)
         This variable can be set to a comma-separated list of trace masks used in
         wxLogTrace calls; wxLog::AddTraceMask is called for every mask
-        in the list during wxWidgets initialization.}
+        in the list during wxWidgets initialization. It only has an effect if
+        debug logging is enabled, see wxLogTrace().}
 @itemdef{WXPREFIX,
         (Unix only.)
         Overrides installation prefix. Normally, the prefix
