@@ -88,7 +88,9 @@ public:
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
-                                          const wxString& longHelp = wxEmptyString) override;
+                                          const wxString& longHelp = wxEmptyString,
+                                          bool available = true) override;
+    
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
 

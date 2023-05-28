@@ -71,7 +71,8 @@ protected:
                                           wxItemKind kind,
                                           wxObject *clientData,
                                           const wxString& shortHelp,
-                                          const wxString& longHelp) override;
+                                          const wxString& longHelp,
+                                          bool available = true) override;
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
 

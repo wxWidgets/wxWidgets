@@ -160,11 +160,12 @@ wxToolBarToolBase *wxToolBarBase::DoAddTool(int toolid,
                                             const wxString& longHelp,
                                             wxObject *clientData,
                                             wxCoord WXUNUSED(xPos),
-                                            wxCoord WXUNUSED(yPos))
+                                            wxCoord WXUNUSED(yPos),
+                                            bool available)
 {
     InvalidateBestSize();
     return InsertTool(GetToolsCount(), toolid, label, bitmap, bmpDisabled,
-                      kind, shortHelp, longHelp, clientData);
+                      kind, shortHelp, longHelp, clientData, available);
 }
 
 wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
@@ -175,13 +176,13 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
                                              wxItemKind kind,
                                              const wxString& shortHelp,
                                              const wxString& longHelp,
-                                             wxObject *clientData)
+                                             wxObject *clientData, bool available)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), nullptr,
                  wxT("invalid position in wxToolBar::InsertTool()") );
 
     return DoInsertNewTool(pos, CreateTool(toolid, label, bitmap, bmpDisabled, kind,
-                                           clientData, shortHelp, longHelp));
+                                           clientData, shortHelp, longHelp, available));
 }
 
 wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)

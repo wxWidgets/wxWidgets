@@ -301,10 +301,10 @@ public:
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString,
-                               wxObject *clientData = nullptr)
+                               wxObject *clientData = nullptr, bool available = true)
     {
         return DoAddTool(toolid, label, bitmap, bmpDisabled, kind,
-                         shortHelp, longHelp, clientData);
+                         shortHelp, longHelp, clientData, available);
     }
 
     // the most common AddTool() version
@@ -312,9 +312,9 @@ public:
                                const wxString& label,
                                const wxBitmapBundle& bitmap,
                                const wxString& shortHelp = wxEmptyString,
-                               wxItemKind kind = wxITEM_NORMAL)
+                               wxItemKind kind = wxITEM_NORMAL, bool available = true)
     {
-        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp);
+        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp, wxEmptyString, nullptr, available);
     }
 
     // add a check tool, i.e. a tool which can be toggled
@@ -324,10 +324,10 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = nullptr)
+                                    wxObject *clientData = nullptr, bool available = true)
     {
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
-                       shortHelp, longHelp, clientData);
+                       shortHelp, longHelp, clientData, available);
     }
 
     // add a radio tool, i.e. a tool which can be toggled and releases any
@@ -338,10 +338,10 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = nullptr)
+                                    wxObject *clientData = nullptr, bool available = true)
     {
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_RADIO,
-                       shortHelp, longHelp, clientData);
+                       shortHelp, longHelp, clientData, available);
     }
 
 
@@ -357,7 +357,8 @@ public:
                                     wxItemKind kind = wxITEM_NORMAL,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = nullptr
+                                    wxObject *clientData = nullptr,
+                                    bool available = true
                                );
 
     virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
@@ -526,7 +527,7 @@ public:
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
-                                          const wxString& longHelp = wxEmptyString) = 0;
+                                          const wxString& longHelp = wxEmptyString, bool available = true) = 0;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) = 0;
@@ -577,7 +578,8 @@ protected:
                                    const wxString& longHelp = wxEmptyString,
                                    wxObject *clientData = nullptr,
                                    wxCoord xPos = wxDefaultCoord,
-                                   wxCoord yPos = wxDefaultCoord
+                                   wxCoord yPos = wxDefaultCoord,
+                                   bool available = true
                                );
 
     // the tool is not yet inserted into m_tools list when this function is

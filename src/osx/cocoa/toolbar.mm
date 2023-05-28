@@ -478,7 +478,6 @@ private:
     long value;
     auto tbid = [self identifier];
     auto ident = wxCFStringRef::AsString( tbid );
-//    value = (long) ident;
     ident.ToLong( &value, 16 );
     wxToolBar *tb = (wxToolBar *) value;
     wxCommandEvent evt( wxEVT_TB_CUSTOMIZE );
@@ -676,7 +675,8 @@ wxToolBarToolBase *wxToolBar::CreateTool(
     wxItemKind kind,
     wxObject *clientData,
     const wxString& shortHelp,
-    const wxString& longHelp )
+    const wxString& longHelp,
+    bool available)
 {
     return new wxToolBarTool(
         this, id, label, bmpNormal, bmpDisabled, kind,

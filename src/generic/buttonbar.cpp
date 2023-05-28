@@ -266,7 +266,8 @@ wxToolBarToolBase *wxButtonToolBar::CreateTool(int id,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
-                                         const wxString& longHelp)
+                                         const wxString& longHelp,
+                                         bool available)
 {
     return new wxButtonToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
                              clientData, shortHelp, longHelp);
