@@ -83,7 +83,8 @@ public:
         wxItemKind kind,
         wxObject *clientData,
         const wxString& shortHelp,
-        const wxString& longHelp );
+        const wxString& longHelp,
+        bool available);
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
         : wxToolBarToolBase(tbar, control, label)
@@ -321,9 +322,14 @@ private:
 @interface wxNSToolbarDelegate : NSObject <NSToolbarDelegate>
 {
     bool m_isSelectable;
+    std::vector<NSToolbarItemIdentifier> m_default, m_allowed;
 }
 
 - (void)setSelectable:(bool) value;
+
+- (void)insertDefaultIdentifier:(NSToolbarItemIdentifier) ident;
+
+- (void)insertAllowedIdentifier:(NSToolbarItemIdentifier) ident;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag;
 
@@ -409,16 +415,27 @@ private:
     m_isSelectable = true;
 }
 
+- (void)insertDefaultIdentifier:(NSToolbarItemIdentifier) ident
+{
+    m_default.push_back( ident );
+}
+
+- (void)insertAllowedIdentifier:(NSToolbarItemIdentifier) ident
+{
+    m_allowed.push_back( ident );
+}
+
+
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
-    wxUnusedVar(toolbar);
-    return nil;
+    auto array = [NSArray arrayWithObjects:&m_default[0] count:m_default.size()];;
+    return [NSArray arrayWithObjects:&m_default[0] count:m_default.size()];;
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
 {
-    wxUnusedVar(toolbar);
-    return nil;
+    auto array = [NSArray arrayWithObjects:&m_allowed[0] count:m_allowed.size()];;
+    return [NSArray arrayWithObjects:&m_allowed[0] count:m_allowed.size()];;
 }
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
@@ -655,7 +672,8 @@ wxToolBarTool::wxToolBarTool(
     wxItemKind kind,
     wxObject *clientData,
     const wxString& shortHelp,
-    const wxString& longHelp )
+    const wxString& longHelp,
+    bool available)
     :
     wxToolBarToolBase(
         tbar, id, label, bmpNormal, bmpDisabled, kind,
@@ -680,7 +698,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(
 {
     return new wxToolBarTool(
         this, id, label, bmpNormal, bmpDisabled, kind,
-        clientData, shortHelp, longHelp );
+        clientData, shortHelp, longHelp, available );
 }
 
 wxToolBarToolBase *
@@ -1245,6 +1263,12 @@ bool wxToolBar::Realize()
                     {
                         cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
                         nsItemId = cfidentifier.AsNSString();
+                        auto handler = [refTB delegate];
+                        [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:nsItemId];
+                        if( tool->IsAvailable() )
+                        {
+                            [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:nsItemId];
+                        }
                     }
                     
                     [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
