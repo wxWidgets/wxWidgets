@@ -71,7 +71,7 @@ private:
 
     bool m_loaded;
     std::vector<DXFLayer> m_layers;
-    std::vector<DXFEntity> m_entities;
+    std::vector<DXFEntity*> m_entities;
 };
 
 #endif // !_DXFRENDERER_H_
