@@ -447,7 +447,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             // flush entity
             if (state == 1) // 3DFACE
             {
-                auto p = std::make_unique<DXFFace>();
+                std::unique_ptr<DXFFace> p(new DXFFace);
                 p->v0 = v[0];
                 p->v1 = v[1];
                 p->v2 = v[2];
@@ -464,7 +464,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             }
             else if (state == 2) // LINE
             {
-                auto p = std::make_unique<DXFLine>();
+                std::unique_ptr<DXFLine> p(new DXFLine);
                 p->v0 = v[0];
                 p->v1 = v[1];
                 if (colour != -1)
@@ -581,7 +581,7 @@ void DXFRenderer::NormalizeEntities()
         {
             DXFLine *line = (DXFLine *)entity.get();
             const DXFVector *v[2] = { &line->v0, &line->v1 };
-            for (int i = 0; i < 2; ++i) 
+            for (int i = 0; i < 2; ++i)
             {
                 minv.x = mymin(v[i]->x, minv.x);
                 minv.y = mymin(v[i]->y, minv.y);
