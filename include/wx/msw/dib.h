@@ -64,7 +64,7 @@ public:
     bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
-    ~wxDIB();
+    inline ~wxDIB();
 
 
     // operations
@@ -192,10 +192,10 @@ public:
 
 private:
     // common part of all ctors
-    void Init();
+    inline void Init();
 
     // free resources
-    void Free();
+    inline void Free();
 
     // initialize the contents from the provided DDB (Create() must have been
     // already called)
@@ -271,8 +271,6 @@ inline wxDIB::~wxDIB()
     Free();
 }
 
-#endif
-    // wxUSE_WXDIB
+#endif // wxUSE_WXDIB
 
 #endif // _WX_MSW_DIB_H_
-
