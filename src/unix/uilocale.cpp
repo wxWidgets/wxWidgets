@@ -275,7 +275,7 @@ locale_t TryCreateLocaleWithUTF8(wxLocaleIdent& locId)
 locale_t TryCreateMatchingLocale(wxLocaleIdent& locId)
 {
     locale_t loc = TryCreateLocaleWithUTF8(locId);
-    if ( !loc && locId.GetRegion().empty() )
+    if ( !loc )
     {
         // Try to find a variant of this locale available on this system: as
         // using just the language, without the territory, typically does _not_
