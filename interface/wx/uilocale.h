@@ -209,9 +209,9 @@ public:
             Either wxDateTime::Name_Full (default) or wxDateTime::Name_Abbr.
 
         @see GetWeekDayName()
-        @since 3.3.0
+        @since 3.2.3
     */
-    wxString GetMonthName(wxDateTime::Month month, wxDateTime::flags = wxDateTime::Name_Full);
+    wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags = wxDateTime::Name_Full);
 
     /**
         Gets the full (default) or abbreviated name of the given week day.
@@ -225,6 +225,7 @@ public:
             Either wxDateTime::Name_Full (default) or wxDateTime::Name_Abbr.
 
         @see GetMonthName()
+        @since 3.2.3
     */
     wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags = wxDateTime::Name_Full);
 

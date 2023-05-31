@@ -129,7 +129,7 @@ public:
         }
 
         if ( !isAvailable )
-            return nullptr;
+            return NULL;
 
         wxCFStringRef cfName(locId.GetName());
         auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];

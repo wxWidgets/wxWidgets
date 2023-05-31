@@ -148,6 +148,14 @@ public:
     // Query the locale for the specified localized name.
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
 
+    // Query the layout direction of the current locale.
+    wxLayoutDirection GetLayoutDirection() const;
+
+    // Compares two strings in the order defined by this locale.
+    int CompareStrings(const wxString& lhs, const wxString& rhs,
+                       int flags = wxCompare_CaseSensitive) const;
+
+#if wxABI_VERSION >= 30203
     // Get the full (default) or abbreviated localized month name
     // returns empty string on error
     wxString GetMonthName(wxDateTime::Month month,
@@ -157,13 +165,7 @@ public:
     // returns empty string on error
     wxString GetWeekDayName(wxDateTime::WeekDay weekday,
                             wxDateTime::NameFlags flags = wxDateTime::Name_Full) const;
-
-    // Query the layout direction of the current locale.
-    wxLayoutDirection GetLayoutDirection() const;
-
-    // Compares two strings in the order defined by this locale.
-    int CompareStrings(const wxString& lhs, const wxString& rhs,
-                       int flags = wxCompare_CaseSensitive) const;
+#endif // wxABI_VERSION >= 3.2.3
 
     // Note that this class is not supposed to be used polymorphically, hence
     // its dtor is not virtual.
