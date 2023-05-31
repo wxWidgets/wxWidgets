@@ -88,11 +88,11 @@ public:
     virtual wxLocaleIdent GetLocaleId() const = 0;
     virtual wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const = 0;
     virtual wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const = 0;
-    virtual wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const = 0;
-    virtual wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const = 0;
     virtual wxLayoutDirection GetLayoutDirection() const = 0;
     virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
                                int flags) const = 0;
+    virtual wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const = 0;
+    virtual wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const = 0;
 
     virtual ~wxUILocaleImpl() { }
 };
