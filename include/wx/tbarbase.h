@@ -366,7 +366,7 @@ public:
                                );
 
     virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
-    virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
+    virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool, bool available = true);
 
     // add an arbitrary control to the toolbar (notice that the control will be
     // deleted by the toolbar and that it will also adjust its position/size)
@@ -374,11 +374,12 @@ public:
     // the label is optional and, if specified, will be shown near the control
     // NB: the control should have toolbar as its parent
     virtual wxToolBarToolBase *
-    AddControl(wxControl *control, const wxString& label = wxEmptyString);
+    AddControl(wxControl *control, const wxString& label = wxEmptyString, bool available = true);
 
     virtual wxToolBarToolBase *
     InsertControl(size_t pos, wxControl *control,
-                  const wxString& label = wxEmptyString);
+                  const wxString& label = wxEmptyString,
+                  bool available = true);
 
     // get the control with the given id or return nullptr
     virtual wxControl *FindControl( int toolid );
@@ -588,7 +589,7 @@ protected:
 
     // the tool is not yet inserted into m_tools list when this function is
     // called and will only be added to it if this function succeeds
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) = 0;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool, bool available = true) = 0;
 
     // the tool is still in m_tools list when this function is called, it will
     // only be deleted from it if it succeeds
@@ -621,9 +622,9 @@ protected:
     void AdjustToolBitmapSize();
 
     // calls InsertTool() and deletes the tool if inserting it failed
-    wxToolBarToolBase *DoInsertNewTool(size_t pos, wxToolBarToolBase *tool)
+    wxToolBarToolBase *DoInsertNewTool(size_t pos, wxToolBarToolBase *tool, bool available = true)
     {
-        if ( !InsertTool(pos, tool) )
+        if ( !InsertTool(pos, tool, available) )
         {
             delete tool;
             return nullptr;

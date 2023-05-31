@@ -109,7 +109,7 @@ protected:
 #ifdef __WXOSX_COCOA__
     virtual void DoGetPosition(int*x, int *y) const override;
 #endif
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool, bool available) override;
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
 
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;

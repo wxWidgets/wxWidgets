@@ -1473,8 +1473,9 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
         tool->UpdateToggleImage( toggle );
 }
 
-bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
+bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase, bool available)
 {
+    auto handler = [(wxNSToolbar *)m_macToolbar delegate];
     wxToolBarTool *tool = static_cast< wxToolBarTool*>(toolBase );
     if (tool == nullptr)
         return false;
@@ -1520,6 +1521,8 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
                     NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:nsItemId];
                     tool->SetToolbarItemRef( item );
+                    [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:nsItemId];
+                    [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:nsItemId];
                 }
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
@@ -1553,6 +1556,11 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                     wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                     [item setImplementation:tool];
                     tool->SetToolbarItemRef( item );
+                    [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:cfidentifier.AsNSString()];
+                    if( tool->IsAvailable() )
+                    {
+                        [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:cfidentifier.AsNSString()];
+                    }
                 }
 
 #endif // wxOSX_USE_NATIVE_TOOLBAR
@@ -1582,6 +1590,11 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                 [item setImplementation:tool];
                 tool->SetToolbarItemRef( item );
+                [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:cfidentifier.AsNSString()];
+                if( tool->IsAvailable() )
+                {
+                    [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:cfidentifier.AsNSString()];
+                }
            }
 #else
             // right now there's nothing to do here

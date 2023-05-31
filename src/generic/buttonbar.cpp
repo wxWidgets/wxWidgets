@@ -232,7 +232,7 @@ void wxButtonToolBar::SetToolShortHelp(int id, const wxString& help)
 }
 
 bool wxButtonToolBar::DoInsertTool(size_t WXUNUSED(pos),
-                             wxToolBarToolBase * WXUNUSED(tool))
+                             wxToolBarToolBase * WXUNUSED(tool), bool WXUNUSED(available))
 {
     return true;
 }
