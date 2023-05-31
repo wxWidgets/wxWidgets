@@ -33,7 +33,9 @@
 // initialize/cleanup OLE
 // ----------------------------------------------------------------------------
 
-// call OleInitialize() or CoInitialize[Ex]() depending on the platform
+// Simple wrapper for OleInitialize().
+//
+// Avoid using it directly, use wxOleInitializer instead.
 //
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
