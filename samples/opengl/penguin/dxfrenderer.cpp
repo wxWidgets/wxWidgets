@@ -338,8 +338,6 @@ void DXFRenderer::Clear()
 {
     m_loaded = false;
     m_layers.clear();
-    for (auto e : m_entities )
-        delete e;
     m_entities.clear();
 }
 
@@ -449,7 +447,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             // flush entity
             if (state == 1) // 3DFACE
             {
-                DXFFace* p = new DXFFace;
+                auto p = std::make_unique<DXFFace>();
                 p->v0 = v[0];
                 p->v1 = v[1];
                 p->v2 = v[2];
@@ -459,21 +457,21 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
                     p->colour = colour;
                 else
                     p->colour = GetLayerColour(layer);
-                m_entities.push_back(p);
+                m_entities.push_back(std::move(p));
                 colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }
             else if (state == 2) // LINE
             {
-                DXFLine* p = new DXFLine;
+                auto p = std::make_unique<DXFLine>();
                 p->v0 = v[0];
                 p->v1 = v[1];
                 if (colour != -1)
                     p->colour = colour;
                 else
                     p->colour = GetLayerColour(layer);
-                m_entities.push_back(p);
+                m_entities.push_back(std::move(p));
                 colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
@@ -581,9 +579,9 @@ void DXFRenderer::NormalizeEntities()
     {
         if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)entity;
+            DXFLine *line = (DXFLine *)entity.get();
             const DXFVector *v[2] = { &line->v0, &line->v1 };
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < 2; ++i) 
             {
                 minv.x = mymin(v[i]->x, minv.x);
                 minv.y = mymin(v[i]->y, minv.y);
@@ -594,7 +592,7 @@ void DXFRenderer::NormalizeEntities()
             }
         } else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)entity;
+            DXFFace *face = (DXFFace *)entity.get();
             const DXFVector *v[4] = { &face->v0, &face->v1, &face->v2, &face->v3 };
             for (int i = 0; i < 4; ++i)
             {
@@ -615,7 +613,7 @@ void DXFRenderer::NormalizeEntities()
     {
         if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)entity;
+            DXFLine *line = (DXFLine *)entity.get();
             DXFVector *v[2] = { &line->v0, &line->v1 };
             for (int i = 0; i < 2; ++i)
             {
@@ -625,7 +623,7 @@ void DXFRenderer::NormalizeEntities()
             }
         } else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)entity;
+            DXFFace *face = (DXFFace *)entity.get();
             DXFVector *v[4] = { &face->v0, &face->v1, &face->v2, &face->v3 };
             for (int i = 0; i < 4; ++i)
             {
@@ -648,7 +646,7 @@ void DXFRenderer::Render() const
         wxColour c = ACIColourToRGB(entity->colour);
         if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)entity;
+            DXFLine *line = (DXFLine *)entity.get();
             glBegin(GL_LINES);
             glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glVertex3f(line->v0.x, line->v0.y, line->v0.z);
@@ -657,7 +655,7 @@ void DXFRenderer::Render() const
         }
         else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)entity;
+            DXFFace *face = (DXFFace *)entity.get();
             glBegin(GL_TRIANGLES);
             glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glNormal3f(face->n.x, face->n.y, face->n.z);
