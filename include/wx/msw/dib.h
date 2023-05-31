@@ -233,8 +233,8 @@ private:
 
 
     // DIBs can't be copied
-    wxDIB(const wxDIB&);
-    wxDIB& operator=(const wxDIB&);
+    wxDIB(const wxDIB&) = delete;
+    wxDIB& operator=(const wxDIB&) = delete;
 };
 
 #endif
