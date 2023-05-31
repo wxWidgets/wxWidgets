@@ -32,6 +32,11 @@
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 
+#if defined(__WXMSW__)
+#include "wx/scopedarray.h"
+#include "wx/msw/dib.h"
+#endif
+
 #include "testimage.h"
 
 #include <memory>
@@ -1340,6 +1345,72 @@ void ImageTestCase::BMPFlippingAndRLECompression()
                     "image/rle8-delta-320x240-expected.bmp");
 }
 
+// This tests wxDIB::ConvertToBitmap(), which only exists for MSW and
+// which assumes the target is little-endian (matching the file format)
+#if defined(__WXMSW__) && wxBYTE_ORDER == wxLITTLE_ENDIAN
+
+static wxImage ImageFromBMPFile(const wxString& filename)
+{
+    wxFile file(filename);
+
+    // Read the BMP file header
+    const size_t hdrLen = 14;
+    char hdr[hdrLen];
+    ssize_t cbRead = file.Read(hdr, hdrLen);
+    REQUIRE((size_t)cbRead == hdrLen);
+    REQUIRE(hdr[0] == 'B');
+    REQUIRE(hdr[1] == 'M');
+    wxUint32 ofstDeclared = *(const wxUint32*)&hdr[10];
+
+    // Now read the data
+    size_t dataLen = file.Length() - hdrLen;
+    wxScopedArray<unsigned char> buf(dataLen);
+    cbRead = file.Read(buf.get(), dataLen);
+    REQUIRE((size_t)cbRead == dataLen);
+
+    // Check there is no gap in the file between the end of the header
+    // and the start of the pixel data. If there is, we can't tell
+    // wxDIB::ConvertToBitmap() about it because we need to test its
+    // code path where bits==nullptr, so we just have to fail the test
+    const BITMAPINFO* pbmi = reinterpret_cast<const BITMAPINFO*>(buf.get());
+    wxUint32 nColors = pbmi->bmiHeader.biClrUsed
+        ? pbmi->bmiHeader.biClrUsed
+        : (pbmi->bmiHeader.biBitCount <= 8
+            ? 1 << pbmi->bmiHeader.biBitCount
+            : 0);
+    wxUint32 cbColorTable = nColors * sizeof(RGBQUAD);
+    size_t ofstComputed = hdrLen + pbmi->bmiHeader.biSize + cbColorTable;
+    REQUIRE(ofstComputed == ofstDeclared);
+
+    // All good; now make an image out of it
+    AutoHBITMAP ahbmp(wxDIB::ConvertToBitmap(pbmi));
+    wxDIB dib(ahbmp);
+    REQUIRE(dib.IsOk());
+    wxImage image(dib.ConvertToImage());
+    return image;
+}
+
+// Compare the results of loading a BMP via wxBMPHandler
+// and via Windows' own conversion (CreateDIBitmap())
+static void CompareBMPImageLoad(const wxString& filename)
+{
+    wxImage image1 = ImageFromBMPFile(filename);
+    REQUIRE( image1.IsOk() );
+
+    wxImage image2(filename);
+    REQUIRE( image2.IsOk() );
+
+    INFO("Comparing loading methods for " << filename);
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
+}
+
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
+{
+    CompareBMPImageLoad("image/horse_rle8.bmp");
+    CompareBMPImageLoad("image/horse_rle4.bmp");
+}
+
+#endif // defined(__WXMSW__) && wxBYTE_ORDER == wxLITTLE_ENDIAN
 
 static int
 FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
