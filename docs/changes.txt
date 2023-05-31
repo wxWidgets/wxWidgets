@@ -273,6 +273,7 @@ wxMSW:
 - Fix building with LLVM clang (Sergey Khalyutn, Maarten Bent, #23464).
 - Fix discrepancy between GDI and Direct2D in high DPI (Kumazuma, #23486).
 - Fix wxTreeCtrl::ScrollTo() with hidden root item (#23534).
+- Fix hang in wxFileDialog if COINIT_MULTITHREADED was used (#23578).
 
 wxOSX:
 
