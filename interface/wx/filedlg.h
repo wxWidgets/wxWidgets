@@ -146,6 +146,12 @@ const char wxFileSelectorDefaultWildcardStr[];
     @ref page_samples_dialogs, please check it for more details.
 
 
+    @note New style file dialogs can only be used in wxMSW when the apartment,
+        COM threading model is used. This is the case by default, but if the
+        application initializes COM on its own using multi-threaded model, old
+        style dialogs are used, at least when they must have a parent, as the
+        new style dialog doesn't support this threading model.
+
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}
            Equivalent to @c wxFD_OPEN.
