@@ -151,7 +151,9 @@ int wxDirDialog::ShowModal()
     // Use IFileDialog under new enough Windows, it's more user-friendly.
     int rc;
 #if wxUSE_IFILEOPENDIALOG
-    rc = ShowIFileOpenDialog(hWndParent);
+    rc = wxMSWImpl::wxIFileDialog::CanBeUsedWithAnOwner()
+                        ? ShowIFileOpenDialog(hWndParent)
+                        : wxID_NONE;
 
     if ( rc == wxID_NONE )
 #endif // wxUSE_IFILEOPENDIALOG
@@ -261,6 +263,36 @@ int wxDirDialog::ShowIFileOpenDialog(WXHWND owner)
 
 namespace wxMSWImpl
 {
+
+/* static */
+bool wxIFileDialog::CanBeUsedWithAnOwner()
+{
+    // Calling IFileDialog::Show() with a non-null owner simply hangs inside a
+    // multi-thread COM apartment, so we can't use it in this case, see #23578.
+
+    // Call this function just to check in which apartment we are: it will
+    // return S_OK if COINIT_APARTMENTTHREADED had been used for the first
+    // COM initialization and an error if not.
+    const HRESULT hr = ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+
+    // This just undoes the call above, COM remains initialized.
+    ::CoUninitialize();
+
+    switch ( hr )
+    {
+        case RPC_E_CHANGED_MODE:
+            return false;
+
+        case S_OK:
+        case S_FALSE:
+            return true;
+
+        default:
+            // This is not supposed to happen at all.
+            wxLogDebug("Unexpected CoInitialize() return value: %08x", hr);
+            return false;
+    }
+}
 
 wxIFileDialog::wxIFileDialog(const CLSID& clsid)
 {

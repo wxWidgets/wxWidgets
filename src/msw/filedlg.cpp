@@ -1233,23 +1233,10 @@ int wxFileDialog::ShowModal()
         canUseIFileDialog = false;
 
     /*
-        We also can't use it if we're in a multi-threaded COM apartment _and_
-        have a parent, as IFileDialog::Show() simply hangs in this case, see
-        #23578.
+        We also can't use it if we have a parent in some cases.
      */
-    if ( hWndParent )
-    {
-        // Call this function just to check in which apartment we are: it will
-        // return S_OK if COINIT_APARTMENTTHREADED had been used for the first
-        // COM initialization and an error if not.
-        const HRESULT hr = ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-
-        if ( hr == RPC_E_CHANGED_MODE )
-            canUseIFileDialog = false;
-
-        // This just undoes the call above, COM remains initialized.
-        ::CoUninitialize();
-    }
+    if ( hWndParent && !wxMSWImpl::wxIFileDialog::CanBeUsedWithAnOwner() )
+        canUseIFileDialog = false;
 
     if ( canUseIFileDialog )
     {
