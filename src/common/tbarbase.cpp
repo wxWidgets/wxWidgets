@@ -191,12 +191,12 @@ wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)
 }
 
 wxToolBarToolBase *
-wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
+wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool, bool available)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), nullptr,
                  wxT("invalid position in wxToolBar::InsertTool()") );
 
-    if ( !tool || !DoInsertTool(pos, tool) )
+    if ( !tool || !DoInsertTool(pos, tool, available) )
     {
         return nullptr;
     }
@@ -208,15 +208,16 @@ wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
 }
 
 wxToolBarToolBase *
-wxToolBarBase::AddControl(wxControl *control, const wxString& label)
+wxToolBarBase::AddControl(wxControl *control, const wxString& label, bool available)
 {
-    return InsertControl(GetToolsCount(), control, label);
+    return InsertControl(GetToolsCount(), control, label, available);
 }
 
 wxToolBarToolBase *
 wxToolBarBase::InsertControl(size_t pos,
                              wxControl *control,
-                             const wxString& label)
+                             const wxString& label,
+                             bool available)
 {
     wxCHECK_MSG( control, nullptr,
                  wxT("toolbar: can't insert null control") );
@@ -224,7 +225,7 @@ wxToolBarBase::InsertControl(size_t pos,
     wxCHECK_MSG( control->GetParent() == this, nullptr,
                  wxT("control must have toolbar as parent") );
 
-    return DoInsertNewTool(pos, CreateTool(control, label));
+    return DoInsertNewTool(pos, CreateTool(control, label), available);
 }
 
 wxControl *wxToolBarBase::FindControl( int toolid )
