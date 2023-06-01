@@ -493,7 +493,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     // ...and run the parser on it:
     wxClientDC dc(this);
     dc.SetMapMode(wxMM_TEXT);
-    SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetBackgroundImage(wxNullBitmap);
 
     double pixelScale = 1.0;
