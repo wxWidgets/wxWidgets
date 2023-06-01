@@ -1263,12 +1263,6 @@ bool wxToolBar::Realize()
                     {
                         cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
                         nsItemId = cfidentifier.AsNSString();
-                        auto handler = [refTB delegate];
-                        [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:nsItemId];
-                        if( tool->IsAvailable() )
-                        {
-                            [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:nsItemId];
-                        }
                     }
                     
                     [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
