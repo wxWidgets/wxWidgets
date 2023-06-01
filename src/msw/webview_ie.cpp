@@ -996,7 +996,7 @@ bool wxWebViewIE::MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level)
 
     wxRegKey key(wxRegKey::HKCU, IE_EMULATION_KEY);
     // Check the existence of the key and create it if it does not exist
-    if ( !key.Exists() || !key.Create() )
+    if ( !key.Exists() && !key.Create() )
     {
         wxLogWarning(_("Failed to find web view emulation level in the registry"));
         return false;
