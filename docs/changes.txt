@@ -235,6 +235,10 @@ Changes in behaviour which may result in build errors
 3.2.4: (released 2024-??-??)
 ----------------------------
 
+wxMSW:
+
+- Fix MSVS warning about redundant "const" in wx/itemid.h (#23590).
+
 
 3.2.3: (released 2023-10-10)
 ----------------------------
