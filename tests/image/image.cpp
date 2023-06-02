@@ -1331,12 +1331,20 @@ static wxImage ImageFromBMPFile(const wxString& filename)
     // wxDIB::ConvertToBitmap() about it because we need to test its
     // code path where bits==nullptr, so we just have to fail the test
     const BITMAPINFO* pbmi = reinterpret_cast<const BITMAPINFO*>(&buf[0]);
-    wxUint32 nColors = pbmi->bmiHeader.biClrUsed
-        ? pbmi->bmiHeader.biClrUsed
-        : (pbmi->bmiHeader.biBitCount <= 8
-            ? 1 << pbmi->bmiHeader.biBitCount
-            : 0);
-    wxUint32 cbColorTable = nColors * sizeof(RGBQUAD);
+    wxUint32 numColors = 0;
+    if ( pbmi->bmiHeader.biCompression == BI_BITFIELDS )
+    {
+        if ( pbmi->bmiHeader.biSize == sizeof(BITMAPINFOHEADER) )
+            numColors = 3;
+    }
+    else
+    {
+        if ( pbmi->bmiHeader.biClrUsed )
+            numColors = pbmi->bmiHeader.biClrUsed;
+        else if ( pbmi->bmiHeader.biBitCount <= 8 )
+            numColors = 1 << pbmi->bmiHeader.biBitCount;
+    }
+    wxUint32 cbColorTable = numColors * sizeof(RGBQUAD);
     size_t ofstComputed = hdrLen + pbmi->bmiHeader.biSize + cbColorTable;
     REQUIRE(ofstComputed == ofstDeclared);
 
@@ -1350,7 +1358,7 @@ static wxImage ImageFromBMPFile(const wxString& filename)
 
 // Compare the results of loading a BMP via wxBMPHandler
 // and via Windows' own conversion (CreateDIBitmap())
-static void CompareBMPImageLoad(const wxString& filename)
+static void CompareBMPImageLoad(const wxString& filename, int properties = 0)
 {
     wxImage image1 = ImageFromBMPFile(filename);
     REQUIRE( image1.IsOk() );
@@ -1359,11 +1367,17 @@ static void CompareBMPImageLoad(const wxString& filename)
     REQUIRE( image2.IsOk() );
 
     INFO("Comparing loading methods for " << filename);
-    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP), image1, 0, &image2);
+    CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP),
+        image1, properties, &image2);
 }
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
 {
+    CompareBMPImageLoad("image/bitfields.bmp");
+    // We would check the alpha on this one, but at the moment it fails
+    // because of the way CompareImage() saves and reloads images,
+    // which for BMPs does not preserve the alpha channel
+    CompareBMPImageLoad("image/bitfields-alpha.bmp"/*, wxIMAGE_HAVE_ALPHA*/);
     CompareBMPImageLoad("image/horse_grey.bmp");
     CompareBMPImageLoad("image/horse_rle8.bmp");
     CompareBMPImageLoad("image/horse_rle4.bmp");
