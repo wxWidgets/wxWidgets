@@ -263,6 +263,7 @@ wxGTK:
 - Improve document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
 - Fix loading WebKit2 extension when using wxWebView (Scott Talbert, #23497).
 - Fix editing cells without values in wxDataViewCtrl (#23523).
+- Fix uninitialized wxKeyEvent::m_isRepeat (jolz, #23593).
 
 wxMSW:
 

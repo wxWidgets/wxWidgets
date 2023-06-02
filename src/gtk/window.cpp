@@ -1087,6 +1087,8 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = gdk_event->hardware_keycode;
 
+    event.m_isRepeat = false; // Detecting key repeat not implemented.
+
     event.SetEventObject( win );
 }
 
