@@ -416,7 +416,10 @@ void wxQtDCImpl::Clear()
     int width, height;
     DoGetSize(&width, &height);
 
-    m_qtPainter->eraseRect(QRect(0, 0, width, height));
+    m_qtPainter->eraseRect( DeviceToLogicalX(0),
+                            DeviceToLogicalY(0),
+                            DeviceToLogicalXRel(width),
+                            DeviceToLogicalYRel(height) );
 }
 
 void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
