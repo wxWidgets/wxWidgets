@@ -546,7 +546,11 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     // destroy existing here instead of:
     image->Destroy();
-    image->Create(width, height);
+    // It's important to clear the image because bitmaps do not necessarily
+    // specify every pixel explicitly: the RLE delta escape sequence allows
+    // offsetting the current pixel position, so there is an implicit
+    // background colour. Windows sets it to black, so match that here.
+    image->Create(width, height, true);
 
     unsigned char *ptr = image->GetData();
 
@@ -668,23 +672,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             gbits = 8;
             bbits = 8;
         }
-    }
-
-    /*
-     * Reading the image data
-     */
-    unsigned char *data = ptr;
-
-    /* set the whole image to the background color */
-    if ( bpp < 16 && (desc.comp == BI_RLE4 || desc.comp == BI_RLE8) )
-    {
-        for (int i = 0; i < width * height; i++)
-        {
-            *ptr++ = cmap[0].r;
-            *ptr++ = cmap[0].g;
-            *ptr++ = cmap[0].b;
-        }
-        ptr = data;
     }
 
     int linesize = ((width * bpp + 31) / 32) * 4;

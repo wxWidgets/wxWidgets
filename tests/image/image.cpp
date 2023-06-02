@@ -1367,6 +1367,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
     CompareBMPImageLoad("image/horse_grey.bmp");
     CompareBMPImageLoad("image/horse_rle8.bmp");
     CompareBMPImageLoad("image/horse_rle4.bmp");
+    CompareBMPImageLoad("image/rle8-delta-320x240.bmp");
+    CompareBMPImageLoad("image/rle4-delta-320x240.bmp");
 }
 
 #endif // CAN_LOAD_BITMAP_DIRECTLY
