@@ -571,17 +571,12 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         // resizing. It is possible to send this message to any window.
         if ( wParam == HTBOTTOMRIGHT )
         {
-            wxWindow *win;
-
-            for ( win = GetParent(); win; win = win->GetParent() )
+            if ( wxWindow *win = wxGetTopLevelParent(this) )
             {
-                if ( win->IsTopLevel() )
-                {
-                    SendMessage(GetHwndOf(win), WM_NCLBUTTONDOWN,
-                                wParam, lParam);
+                SendMessage(GetHwndOf(win), WM_NCLBUTTONDOWN,
+                            wParam, lParam);
 
-                    return 0;
-                }
+                return 0;
             }
         }
     }
