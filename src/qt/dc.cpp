@@ -422,6 +422,53 @@ void wxQtDCImpl::Clear()
                             DeviceToLogicalYRel(height) );
 }
 
+void wxQtDCImpl::UpdateClipBox()
+{
+    if ( m_clippingRegion.IsEmpty() )
+    {
+        int dcwidth, dcheight;
+        DoGetSize(&dcwidth, &dcheight);
+
+        m_qtPainter->setClipRect(DeviceToLogicalX(0),
+                                 DeviceToLogicalY(0),
+                                 DeviceToLogicalXRel(dcwidth),
+                                 DeviceToLogicalYRel(dcheight),
+                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
+    }
+
+    /* Note: Qt states that QPainter::clipRegion() may be slow, so we
+     *       keep the region manually, which should be faster. A comment in
+     *       QPainter::clipBoundingRect() source says: This is not 100% precise,
+     *       but it fits within the guarantee and it is reasonably fast.
+     */
+    m_clippingRegion.QtSetRegion(
+        QRegion(m_qtPainter->clipBoundingRect().toRect()) );
+
+    wxRect clipRect = m_clippingRegion.GetBox();
+
+    m_clipX1 = clipRect.GetLeft();
+    m_clipX2 = clipRect.GetRight() + 1;
+    m_clipY1 = clipRect.GetTop();
+    m_clipY2 = clipRect.GetBottom() + 1;
+
+    m_isClipBoxValid = true;
+}
+
+bool wxQtDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+    // Check if we should try to retrieve the clipping region possibly not set
+    // by our SetClippingRegion() but preset or modified by application: this
+    // can happen when wxDC logical coordinates are transformed with
+    // SetDeviceOrigin(), SetLogicalOrigin(), SetUserScale(), SetLogicalScale().
+    if ( !m_isClipBoxValid )
+    {
+        wxQtDCImpl *self = wxConstCast(this, wxQtDCImpl);
+        self->UpdateClipBox();
+    }
+
+    return wxDCImpl::DoGetClippingRect(rect);
+}
+
 void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
                                  wxCoord width, wxCoord height)
 {
@@ -517,6 +564,8 @@ void wxQtDCImpl::DestroyClippingRegion()
 
     if (m_qtPainter->isActive())
         m_qtPainter->setClipping( false );
+
+    m_isClipBoxValid = false;
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -884,4 +933,6 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
 
     // Apply transform to QPainter, overwriting the previous one
     m_qtPainter->setWorldTransform(t, false);
+
+    m_isClipBoxValid = false;
 }
