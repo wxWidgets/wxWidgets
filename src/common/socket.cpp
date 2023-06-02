@@ -689,7 +689,12 @@ int wxSocketImpl::RecvDgram(void *buffer, int size)
                                   0, &from.addr, &fromlen) );
 
     if ( ret == SOCKET_ERROR )
-        return SOCKET_ERROR;
+    {
+        if ( GetLastError() == wxSOCKET_MSGSIZE )
+            ret = size;
+        else
+            return SOCKET_ERROR;
+    }
 
     m_peer = wxSockAddressImpl(from.addr, fromlen);
     if ( !m_peer.IsOk() )

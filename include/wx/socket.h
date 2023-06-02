@@ -74,7 +74,8 @@ enum wxSocketError
     wxSOCKET_WOULDBLOCK,
     wxSOCKET_TIMEDOUT,
     wxSOCKET_MEMERR,
-    wxSOCKET_OPTERR
+    wxSOCKET_OPTERR,
+    wxSOCKET_MSGSIZE
 };
 
 // socket options/flags bit masks

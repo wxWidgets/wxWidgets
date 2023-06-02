@@ -298,6 +298,9 @@ wxSocketError wxSocketImplMSW::GetLastError() const
         case WSAEWOULDBLOCK:
             return wxSOCKET_WOULDBLOCK;
 
+        case WSAEMSGSIZE:
+            return wxSOCKET_MSGSIZE;
+
         default:
             return wxSOCKET_IOERR;
     }
