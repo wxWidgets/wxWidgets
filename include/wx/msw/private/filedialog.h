@@ -36,6 +36,11 @@ namespace wxMSWImpl
 class wxIFileDialog
 {
 public:
+    // Return true if we can use IFileDialog with an owner: this is
+    // unfortunately not always the case, as IFileDialog requires using
+    // apartment threading model in this case.
+    static bool CanBeUsedWithAnOwner();
+
     // Create the dialog of the specified type.
     //
     // CLSID must be either CLSID_FileOpenDialog or CLSID_FileSaveDialog.
