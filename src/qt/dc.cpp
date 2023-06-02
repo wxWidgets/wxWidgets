@@ -85,16 +85,7 @@ void wxQtDCImpl::QtPreparePainter( )
 
         if (m_clipping)
         {
-            wxRegionIterator ri(m_clippingRegion);
-            bool append = false;
-            while (ri.HaveRects())
-            {
-                wxRect r = ri.GetRect();
-                m_qtPainter->setClipRect( r.x, r.y, r.width, r.height,
-                                          append ? Qt::IntersectClip : Qt::ReplaceClip );
-                append = true;
-                ++ri;
-            }
+            m_qtPainter->setClipRegion( m_clippingRegion.GetHandle() );
         }
     }
     else
