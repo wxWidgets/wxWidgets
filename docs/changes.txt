@@ -262,6 +262,7 @@ All:
 All (GUI):
 
 - Fix wxCaret position in scrolled windows (#26282).
+- Correct loading of `BI_BITFIELDS` bitmaps (Brian Nixon, #23601).
 
 wxGTK:
 
