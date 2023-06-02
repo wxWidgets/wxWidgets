@@ -1,0 +1,1 @@
+wxMSW: Turn wxCAPTION on automatically if required by other styles (#23575).
