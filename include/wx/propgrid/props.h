@@ -632,7 +632,7 @@ protected:
 
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_1;
+constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_2;
 
 // Like wxStringProperty, but has a button that triggers a small text
 // editor dialog.
