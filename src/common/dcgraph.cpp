@@ -452,7 +452,7 @@ void wxGCDCImpl::DoSetDeviceClippingRegion( const wxRegion &region )
 void wxGCDCImpl::DestroyClippingRegion()
 {
     m_graphicContext->ResetClip();
-#if !defined(__WXOSX__) && !defined(__WXMSW__) && !defined(__WXGTK__)
+#if !defined(__WXOSX__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXQT__)
     // currently the clip eg of a window extends to the area between the scrollbars
     // so we must explicitly make sure it only covers the area we want it to draw
     int width, height ;
