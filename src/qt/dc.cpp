@@ -880,7 +880,7 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
     t.scale( m_scaleX * m_signX, m_scaleY * m_signY );
 
     // Finally, logical origin
-    t.translate( m_logicalOriginX, m_logicalOriginY );
+    t.translate( -m_logicalOriginX, -m_logicalOriginY );
 
     // Apply transform to QPainter, overwriting the previous one
     m_qtPainter->setWorldTransform(t, false);
