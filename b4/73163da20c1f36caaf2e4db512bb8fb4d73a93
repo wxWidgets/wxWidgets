@@ -1,0 +1,1 @@
+wxAll (GUI): Fix default background of RLE bitmaps (Brian Nixon, #23599).
