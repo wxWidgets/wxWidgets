@@ -239,6 +239,7 @@ All:
 
 - Add move ctor and assignment operator to wxString (Pavel Tyunin, #23224).
 - Enable large file support in Unix CMake builds (Maarten Bent, #22750).
+- Make wxSocket::Peek() work with UDP too (Brian Nixon, #23594, #23604).
 - Update Georgian translations (NorwayFun, #22673).
 - Don't use invalid iterator in wxString in UTF-8 build (Ian Day, #23305).
 - Fix wrong description for some languages (Ulrich Telle, #23419).
