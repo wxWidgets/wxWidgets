@@ -302,4 +302,21 @@ void SocketTestCase::UrlTest()
     CPPUNIT_ASSERT_EQUAL( wxSTREAM_EOF, in->Read(out).GetLastError() );
 }
 
+TEST_CASE("wxDatagramSocket::SendPeek", "[socket][dgram]")
+{
+    wxIPV4address addr;
+    addr.LocalHost();
+    addr.Service(19898);// Arbitrary port number
+    wxDatagramSocket sock(addr);
+    unsigned int sendbuf[4] = {1, 2, 3, 4};
+    unsigned int recvbuf[1] = {0};
+    sock.SendTo(addr, sendbuf, sizeof(sendbuf));
+    sock.Peek(recvbuf, sizeof(recvbuf));
+    CHECK(!sock.Error());
+    CHECK(recvbuf[0] == sendbuf[0]);
+    sock.Read(recvbuf, sizeof(recvbuf));
+    CHECK(!sock.Error());
+    CHECK(recvbuf[0] == sendbuf[0]);
+}
+
 #endif // wxUSE_SOCKETS
