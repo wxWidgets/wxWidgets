@@ -121,6 +121,9 @@
     <ClCompile Include="streams\iostreams.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\dgramsocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="net\ipc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -374,6 +374,9 @@ test_pathlist.obj : [.misc]pathlist.cpp
 test_typeinfotest.obj : [.misc]typeinfotest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.misc]typeinfotest.cpp
 
+test_dgramsocket.obj : [.net]dgramsocket.cpp 
+	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.net]dgramsocket.cpp
+
 test_ipc.obj : [.net]ipc.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.net]ipc.cpp
 

@@ -987,6 +987,9 @@ $(OBJS)\test_pathlist.obj: .\misc\pathlist.cpp
 $(OBJS)\test_typeinfotest.obj: .\misc\typeinfotest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\misc\typeinfotest.cpp
 
+$(OBJS)\test_dgramsocket.obj: .\net\dgramsocket.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\dgramsocket.cpp
+
 $(OBJS)\test_ipc.obj: .\net\ipc.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\net\ipc.cpp
 

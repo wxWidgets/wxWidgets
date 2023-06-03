@@ -523,6 +523,7 @@
     <ClCompile Include="misc\module.cpp" />
     <ClCompile Include="misc\pathlist.cpp" />
     <ClCompile Include="misc\typeinfotest.cpp" />
+    <ClCompile Include="net\dgramsocket.cpp" />
     <ClCompile Include="net\ipc.cpp" />
     <ClCompile Include="net\socket.cpp" />
     <ClCompile Include="net\webrequest.cpp" />

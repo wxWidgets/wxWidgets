@@ -50,6 +50,7 @@ set(TEST_SRC
     misc/module.cpp
     misc/pathlist.cpp
     misc/typeinfotest.cpp
+    net/dgramsocket.cpp
     net/ipc.cpp
     net/socket.cpp
     net/webrequest.cpp

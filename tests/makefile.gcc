@@ -694,6 +694,9 @@ $(OBJS)\test_pathlist.o: ./misc/pathlist.cpp
 $(OBJS)\test_typeinfotest.o: ./misc/typeinfotest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_dgramsocket.o: ./net/dgramsocket.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_ipc.o: ./net/ipc.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
