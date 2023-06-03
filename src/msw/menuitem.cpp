@@ -958,25 +958,19 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             if ( ::IsThemeBackgroundPartiallyTransparent(hTheme,
                     MENU_POPUPITEM, state) )
             {
-                ::DrawThemeBackground(hTheme, hdc,
-                                           MENU_POPUPBACKGROUND,
-                                           0, &rect, nullptr);
+                hTheme.DrawBackground(hdc, rect, MENU_POPUPBACKGROUND);
             }
 
-            ::DrawThemeBackground(hTheme, hdc, MENU_POPUPGUTTER,
-                                       0, &rcGutter, nullptr);
+            hTheme.DrawBackground(hdc, rcGutter, MENU_POPUPGUTTER);
 
             if ( IsSeparator() )
             {
                 rcSeparator.left = rcGutter.right;
-                ::DrawThemeBackground(hTheme, hdc, MENU_POPUPSEPARATOR,
-                                           0, &rcSeparator, nullptr);
+                hTheme.DrawBackground(hdc, rcSeparator, MENU_POPUPSEPARATOR);
                 return true;
             }
 
-            ::DrawThemeBackground(hTheme, hdc, MENU_POPUPITEM,
-                                       state, &rcSelection, nullptr);
-
+            hTheme.DrawBackground(hdc, rcSelection, MENU_POPUPITEM, state);
         }
         else
 #endif // wxUSE_UXTHEME
@@ -1192,8 +1186,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
                                                     ? MCB_DISABLED
                                                     : MCB_NORMAL;
 
-        ::DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECKBACKGROUND,
-                                   stateCheckBg, &rcBg, nullptr);
+        hTheme.DrawBackground(hdc, rcBg, MENU_POPUPCHECKBACKGROUND, stateCheckBg);
 
         POPUPCHECKSTATES stateCheck;
         if ( GetKind() == wxITEM_CHECK )
@@ -1207,8 +1200,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
                                                : MC_BULLETNORMAL;
         }
 
-        ::DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECK,
-                                   stateCheck, rc, nullptr);
+        hTheme.DrawBackground(hdc, *rc, MENU_POPUPCHECK, stateCheck);
     }
     else
 #endif // wxUSE_UXTHEME

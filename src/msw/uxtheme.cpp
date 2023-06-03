@@ -82,6 +82,29 @@ wxColour wxUxThemeHandle::GetColour(int part, int prop, int state) const
 
     return wxRGBToColour(col);
 }
+
+void
+wxUxThemeHandle::DrawBackground(HDC hdc, const RECT& rc, int part, int state)
+{
+    HRESULT hr = ::DrawThemeBackground(m_hTheme, hdc, part, state, &rc, nullptr);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("DrawThemeBackground(%i, %i)", part, state),
+            hr
+        );
+    }
+}
+
+void
+wxUxThemeHandle::DrawBackground(HDC hdc, const wxRect& rect, int part, int state)
+{
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    DrawBackground(hdc, rc, part, state);
+}
+
 #else
 bool wxUxThemeIsActive()
 {

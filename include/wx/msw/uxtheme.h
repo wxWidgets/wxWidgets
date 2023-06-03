@@ -166,7 +166,7 @@ WXDLLIMPEXP_CORE bool wxUxThemeIsActive();
 // wxUxThemeHandle: encapsulates ::Open/CloseThemeData()
 // ----------------------------------------------------------------------------
 
-class wxUxThemeHandle
+class WXDLLIMPEXP_CORE wxUxThemeHandle
 {
 public:
     // For all factory functions, HWND doesn't need to be valid and may be
@@ -217,6 +217,11 @@ public:
     // Note that the order of arguments here is _not_ the same as for
     // GetThemeColor() because we want to default the state.
     wxColour GetColour(int part, int prop, int state = 0) const;
+
+    // Draw theme background: if the caller already has a RECT, it can be
+    // provided directly, otherwise wxRect is converted to it.
+    void DrawBackground(HDC hdc, const RECT& rc, int part, int state = 0);
+    void DrawBackground(HDC hdc, const wxRect& rect, int part, int state = 0);
 
 private:
     static const int STD_DPI = 96;

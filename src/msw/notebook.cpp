@@ -1674,15 +1674,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
 
     {
         SelectInHDC selectBmp(hDCMem, hBmp);
-        ::DrawThemeBackground
-                                (
-                                    theme,
-                                    hDCMem,
-                                    9 /* TABP_PANE */,
-                                    0,
-                                    &rc,
-                                    nullptr
-                                );
+        theme.DrawBackground(hDCMem, rc, 9 /* TABP_PANE */);
     } // deselect bitmap from the memory HDC before using it
 
     return (WXHBRUSH)::CreatePatternBrush(hBmp);
@@ -1743,15 +1735,8 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
                                         &rc,
                                         &rc
                                     );
-            ::DrawThemeBackground
-                                    (
-                                        theme,
-                                        (HDC) hDC,
-                                        9 /* TABP_PANE */,
-                                        0,
-                                        &rc,
-                                        nullptr
-                                    );
+
+            theme.DrawBackground((HDC) hDC, rc, 9 /* TABP_PANE */);
             return true;
         }
     }

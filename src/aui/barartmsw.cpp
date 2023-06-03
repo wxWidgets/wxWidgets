@@ -77,18 +77,13 @@ void wxAuiMSWToolBarArt::DrawBackground(
 {
     if ( m_themed )
     {
-        RECT r;
-        wxCopyRectToRECT(rect, r);
-
         wxUxThemeHandle hTheme(wnd, L"Rebar");
 
-        ::DrawThemeBackground(
-            hTheme,
+        hTheme.DrawBackground(
             GetHdcOf(dc.GetTempHDC()),
-            RP_BACKGROUND,
-            0,
-            &r,
-            nullptr);
+            rect,
+            RP_BACKGROUND
+        );
     }
     else
         wxAuiGenericToolBarArt::DrawBackground(dc, wnd, rect);
@@ -111,9 +106,6 @@ void wxAuiMSWToolBarArt::DrawButton(
 {
     if ( m_themed )
     {
-        RECT r;
-        wxCopyRectToRECT(rect, r);
-
         wxUxThemeHandle hTheme(wnd, L"Toolbar");
 
         int btnState;
@@ -131,13 +123,12 @@ void wxAuiMSWToolBarArt::DrawButton(
         else
             btnState = TS_NORMAL;
 
-        ::DrawThemeBackground(
-            hTheme,
+        hTheme.DrawBackground(
             GetHdcOf(dc.GetTempHDC()),
+            rect,
             TP_BUTTON,
-            btnState,
-            &r,
-            nullptr);
+            btnState
+        );
 
         int textWidth = 0, textHeight = 0;
 
@@ -237,11 +228,6 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
             dc.GetTextExtent(item.GetLabel(), &textWidth, &ty);
         }
 
-        RECT btnR;
-        wxCopyRectToRECT(buttonRect, btnR);
-        RECT dropDownR;
-        wxCopyRectToRECT(dropDownRect, dropDownR);
-
         int btnState;
         if ( item.GetState() & wxAUI_BUTTON_STATE_DISABLED )
             btnState = TS_DISABLED;
@@ -252,21 +238,23 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
         else
             btnState = TS_NORMAL;
 
-        ::DrawThemeBackground(
-            hTheme,
-            GetHdcOf(dc.GetTempHDC()),
-            TP_SPLITBUTTON,
-            btnState,
-            &btnR,
-            nullptr);
+        {
+        auto tempHDC = dc.GetTempHDC();
 
-        ::DrawThemeBackground(
-            hTheme,
-            GetHdcOf(dc.GetTempHDC()),
+        hTheme.DrawBackground(
+            GetHdcOf(tempHDC),
+            buttonRect,
+            TP_SPLITBUTTON,
+            btnState
+        );
+
+        hTheme.DrawBackground(
+            GetHdcOf(tempHDC),
+            dropDownRect,
             TP_SPLITBUTTONDROPDOWN,
-            btnState,
-            &dropDownR,
-            nullptr);
+            btnState
+        );
+        } // End of tempHDC scope.
 
         const wxBitmap& bmp = item.GetCurrentBitmapFor(wnd);
         if ( !bmp.IsOk() )
@@ -332,18 +320,13 @@ void wxAuiMSWToolBarArt::DrawSeparator(
 {
     if ( m_themed )
     {
-        RECT r;
-        wxCopyRectToRECT(rect, r);
-
         wxUxThemeHandle hTheme(wnd, L"Toolbar");
 
-        ::DrawThemeBackground(
-            hTheme,
+        hTheme.DrawBackground(
             GetHdcOf(dc.GetTempHDC()),
-            (m_flags & wxAUI_TB_VERTICAL) ? TP_SEPARATORVERT : TP_SEPARATOR,
-            0,
-            &r,
-            nullptr);
+            rect,
+            (m_flags & wxAUI_TB_VERTICAL) ? TP_SEPARATORVERT : TP_SEPARATOR
+        );
     }
     else
         wxAuiGenericToolBarArt::DrawSeparator(dc, wnd, rect);
@@ -356,18 +339,13 @@ void wxAuiMSWToolBarArt::DrawGripper(
 {
     if ( m_themed )
     {
-        RECT r;
-        wxCopyRectToRECT(rect, r);
-
         wxUxThemeHandle hTheme(wnd, L"Rebar");
 
-        ::DrawThemeBackground(
-            hTheme,
+        hTheme.DrawBackground(
             GetHdcOf(dc.GetTempHDC()),
-            (m_flags & wxAUI_TB_VERTICAL) ? RP_GRIPPERVERT : RP_GRIPPER,
-            0,
-            &r,
-            nullptr);
+            rect,
+            (m_flags & wxAUI_TB_VERTICAL) ? RP_GRIPPERVERT : RP_GRIPPER
+        );
     }
     else
         wxAuiGenericToolBarArt::DrawGripper(dc, wnd, rect);
@@ -381,26 +359,22 @@ void wxAuiMSWToolBarArt::DrawOverflowButton(
 {
     if ( m_themed )
     {
-        RECT r;
-        wxCopyRectToRECT(rect, r);
-
         wxUxThemeHandle hTheme(wnd, L"Rebar");
 
         int chevState;
         if ( state & wxAUI_BUTTON_STATE_PRESSED )
             chevState = CHEVS_PRESSED;
         else if ( state & wxAUI_BUTTON_STATE_HOVER )
-                chevState = CHEVS_HOT;
+            chevState = CHEVS_HOT;
         else
             chevState = CHEVS_NORMAL;
 
-        ::DrawThemeBackground(
-            hTheme,
+        hTheme.DrawBackground(
             GetHdcOf(dc.GetTempHDC()),
+            rect,
             (m_flags & wxAUI_TB_VERTICAL) ? RP_CHEVRONVERT : RP_CHEVRON,
-            chevState,
-            &r,
-            nullptr);
+            chevState
+        );
     }
     else
         wxAuiGenericToolBarArt::DrawOverflowButton(dc, wnd, rect, state);
