@@ -653,7 +653,7 @@ wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
         // Note that we intentionally do not use this window HWND for the
         // theme, as it doesn't have dark values for it -- but does have them
         // when we use null window.
-        wxUxThemeHandle theme{HWND(0), L"ItemsView"};
+        auto theme = wxUxThemeHandle::NewAtStdDPI(L"ItemsView");
 
         wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
         if ( col.IsOk() )
