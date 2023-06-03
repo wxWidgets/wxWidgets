@@ -2279,7 +2279,7 @@ public:
     wxUint32      m_rawFlags;
 
     // Indicates whether the key event is a repeat
-    bool          m_isRepeat;
+    bool          m_isRepeat = false;
 
 private:
     // Set the event to propagate if necessary, i.e. if it's of wxEVT_CHAR_HOOK
@@ -2288,8 +2288,6 @@ private:
     {
         if ( m_eventType == wxEVT_CHAR_HOOK )
             m_propagationLevel = wxEVENT_PROPAGATE_MAX;
-
-        m_allowNext = false;
     }
 
     // Copy only the event data present in this class, this is used by
@@ -2315,11 +2313,11 @@ private:
     // If this flag is true, the normal key events should still be generated
     // even if wxEVT_CHAR_HOOK had been handled. By default it is false as
     // handling wxEVT_CHAR_HOOK suppresses all the subsequent events.
-    bool m_allowNext;
+    bool m_allowNext = false;
 
     // If true, m_x and m_y were already initialized. If false, try to get them
     // when they're requested.
-    bool m_hasPosition;
+    bool m_hasPosition = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxKeyEvent);
 };
