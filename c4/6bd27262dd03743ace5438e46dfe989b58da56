@@ -1,0 +1,1 @@
+wxAll (GUI): Fix loading some bitmaps using BI_BITFIELDS (Brian Nixon, #23601).
