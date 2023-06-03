@@ -428,21 +428,14 @@ int wxAuiMSWTabArt::GetBestTabCtrlSize(wxWindow* wnd,
     return wxAuiGenericTabArt::GetBestTabCtrlSize(wnd, pages, requiredBmp_size);
 }
 
-void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& dc)
+void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& WXUNUSED(dc))
 {
-    SIZE uxSize;
-
     // Borrow close button from tooltip (best fit on various backgrounds)
     wxUxThemeHandle hTooltipTheme(wnd, L"Tooltip");
-
-    ::GetThemePartSize(hTooltipTheme, GetHdcOf(dc.GetTempHDC()),
-        TTP_CLOSE, 0, nullptr, TS_TRUE, &uxSize);
-    m_closeBtnSize.Set(uxSize.cx, uxSize.cy);
+    m_closeBtnSize = hTooltipTheme.GetTrueSize(TTP_CLOSE);
 
     wxUxThemeHandle hTabTheme(wnd, L"Tab");
-    ::GetThemePartSize(hTabTheme, GetHdcOf(dc.GetTempHDC()),
-        TABP_TABITEM, 0, nullptr, TS_TRUE, &uxSize);
-    m_tabSize.Set(uxSize.cx, uxSize.cy);
+    m_tabSize = hTabTheme.GetTrueSize(TABP_TABITEM);
 }
 
 bool wxAuiMSWTabArt::IsThemed() const

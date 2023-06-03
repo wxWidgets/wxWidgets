@@ -846,9 +846,7 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
     {
         if (::IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
         {
-            SIZE checkSize;
-            if (::GetThemePartSize(hTheme, nullptr, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &checkSize) == S_OK)
-                return wxSize(checkSize.cx, checkSize.cy);
+            return hTheme.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL);
         }
     }
     return m_rendererNative.GetCheckBoxSize(win, flags);
@@ -863,9 +861,7 @@ wxSize wxRendererXP::GetCheckMarkSize(wxWindow* win)
     {
         if (::IsThemePartDefined(hTheme, MENU_POPUPCHECK, 0))
         {
-            SIZE checkSize;
-            if (::GetThemePartSize(hTheme, nullptr, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, nullptr, TS_DRAW, &checkSize) == S_OK)
-                return wxSize(checkSize.cx, checkSize.cy);
+            return hTheme.GetDrawSize(MENU_POPUPCHECK, MC_CHECKMARKNORMAL);
         }
     }
     return m_rendererNative.GetCheckMarkSize(win);
@@ -880,11 +876,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
         {
-            SIZE expSize;
-            if (::GetThemePartSize(hTheme, nullptr, TVP_GLYPH, GLPS_CLOSED, nullptr,
-                                   TS_DRAW, &expSize) == S_OK)
-                return wxSize(expSize.cx, expSize.cy);
-
+            return hTheme.GetDrawSize(TVP_GLYPH, GLPS_CLOSED);
         }
     }
 
@@ -968,19 +960,10 @@ wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
 
     if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
-        SIZE s;
-        ::GetThemePartSize(hTheme,
-            GetHdcOf(dc.GetTempHDC()),
-            TDLG_EXPANDOBUTTON,
-            TDLGEBS_NORMAL,
-            nullptr,
-            TS_TRUE,
-            &s);
-
-        return wxSize(s.cx, s.cy);
+        return hTheme.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL);
     }
-    else
-        return m_rendererNative.GetCollapseButtonSize(win, dc);
+
+    return m_rendererNative.GetCollapseButtonSize(win, dc);
 }
 
 void

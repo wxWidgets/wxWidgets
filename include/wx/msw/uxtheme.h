@@ -218,6 +218,21 @@ public:
     // GetThemeColor() because we want to default the state.
     wxColour GetColour(int part, int prop, int state = 0) const;
 
+    // Return the size of a theme element, either "as is" (TS_TRUE size) or as
+    // it would be used for drawing (TS_DRAW size).
+    //
+    // For now we don't allow specifying the HDC or rectangle as they don't
+    // seem to be useful.
+    wxSize GetTrueSize(int part, int state = 0) const
+    {
+        return DoGetSize(part, state, TS_TRUE);
+    }
+
+    wxSize GetDrawSize(int part, int state = 0) const
+    {
+        return DoGetSize(part, state, TS_DRAW);
+    }
+
     // Draw theme background: if the caller already has a RECT, it can be
     // provided directly, otherwise wxRect is converted to it.
     void DrawBackground(HDC hdc, const RECT& rc, int part, int state = 0);
@@ -232,6 +247,9 @@ private:
         m_hTheme{DoOpenThemeData(hwnd, classes, dpi)}
     {
     }
+
+    wxSize DoGetSize(int part, int state, THEMESIZE ts) const;
+
 
     // This is almost, but not quite, const: it's only reset in move ctor.
     HTHEME m_hTheme;

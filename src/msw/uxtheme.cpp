@@ -83,6 +83,23 @@ wxColour wxUxThemeHandle::GetColour(int part, int prop, int state) const
     return wxRGBToColour(col);
 }
 
+wxSize wxUxThemeHandle::DoGetSize(int part, int state, THEMESIZE ts) const
+{
+    SIZE size;
+    HRESULT hr = ::GetThemePartSize(m_hTheme, nullptr, part, state, nullptr, ts,
+                                    &size);
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(
+            wxString::Format("GetThemePartSize(%i, %i)", part, state),
+            hr
+        );
+        return {};
+    }
+
+    return wxSize{size.cx, size.cy};
+}
+
 void
 wxUxThemeHandle::DrawBackground(HDC hdc, const RECT& rc, int part, int state)
 {

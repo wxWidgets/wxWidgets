@@ -35,31 +35,19 @@ wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
         wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
         wxUxThemeHandle hTheme(window, L"Rebar");
 
-        SIZE overflowSize;
-        ::GetThemePartSize(hTheme, nullptr, RP_CHEVRON, 0,
-            nullptr, TS_TRUE, &overflowSize);
-        m_overflowSize = overflowSize.cx;
+        m_overflowSize = hTheme.GetTrueSize(RP_CHEVRON).x;
 
-        SIZE gripperSize;
-        ::GetThemePartSize(hTheme, nullptr, RP_GRIPPER, 0,
-            nullptr, TS_TRUE, &gripperSize);
-        m_gripperSize = gripperSize.cx;
+        m_gripperSize = hTheme.GetTrueSize(RP_GRIPPER).x;
 
         wxUxThemeHandle hThemeToolbar(window, L"Toolbar");
 
-        SIZE seperatorSize;
-        ::GetThemePartSize(hThemeToolbar, nullptr, TP_SEPARATOR, 0,
-            nullptr, TS_TRUE, &seperatorSize);
-        m_separatorSize = seperatorSize.cx;
+        m_separatorSize = hThemeToolbar.GetTrueSize(TP_SEPARATOR).x;
 
         // TP_DROPDOWNBUTTON is only 7px, too small to fit the dropdown arrow,
         // use 14px instead.
         m_dropdownSize = window->FromDIP(14);
 
-        SIZE buttonSize;
-        ::GetThemePartSize(hThemeToolbar, nullptr, TP_BUTTON, 0,
-            nullptr, TS_TRUE, &buttonSize);
-        m_buttonSize.Set(buttonSize.cx, buttonSize.cy);
+        m_buttonSize = hThemeToolbar.GetTrueSize(TP_BUTTON);
     }
     else
         m_themed = false;
