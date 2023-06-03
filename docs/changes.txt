@@ -285,6 +285,7 @@ wxOSX:
 - Respect composition mode when drawing bitmaps (#23240).
 - Fix background colour of shaped windows, e.g. wxRichToolTip (#23296).
 - Fix memory leak in wxFileDialog using custom controls (#23304).
+- Restore setting C-level locale when using wxLocale (#23557).
 
 wxUniv:
 
