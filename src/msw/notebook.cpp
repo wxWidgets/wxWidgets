@@ -1651,7 +1651,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     RECT rcBg;
     ::GetThemeBackgroundContentRect(theme,
                                     (HDC) hDC,
-                                    9, /* TABP_PANE */
+                                    TABP_PANE,
                                     0,
                                     &rc,
                                     &rcBg);
@@ -1663,7 +1663,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
                             (
                                 theme,
                                 (HDC) hDC,
-                                9 /* TABP_PANE */,
+                                TABP_PANE,
                                 0,
                                 &rcBg,
                                 &rc
@@ -1674,7 +1674,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
 
     {
         SelectInHDC selectBmp(hDCMem, hBmp);
-        theme.DrawBackground(hDCMem, rc, 9 /* TABP_PANE */);
+        theme.DrawBackground(hDCMem, rc, TABP_PANE);
     } // deselect bitmap from the memory HDC before using it
 
     return (WXHBRUSH)::CreatePatternBrush(hBmp);
@@ -1730,13 +1730,13 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
                                     (
                                         theme,
                                         (HDC) hDC,
-                                        9 /* TABP_PANE */,
+                                        TABP_PANE,
                                         0,
                                         &rc,
                                         &rc
                                     );
 
-            theme.DrawBackground((HDC) hDC, rc, 9 /* TABP_PANE */);
+            theme.DrawBackground((HDC) hDC, rc, TABP_PANE);
             return true;
         }
     }
