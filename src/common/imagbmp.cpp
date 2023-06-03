@@ -546,11 +546,13 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     // destroy existing here instead of:
     image->Destroy();
-    // It's important to clear the image because bitmaps do not necessarily
-    // specify every pixel explicitly: the RLE delta escape sequence allows
-    // offsetting the current pixel position, so there is an implicit
-    // background colour. Windows sets it to black, so match that here.
-    image->Create(width, height, true);
+    // RLE-compressed bitmaps do not necessarily specify every pixel explicitly,
+    // as the delta escape sequence allows offsetting the current pixel position.
+    // They have an implicit black background, which we get by clearing the image
+    // on creation. Otherwise there is no point clearing, because we are going to
+    // set every pixel from the source data anyway.
+    bool clear = desc.comp == BI_RLE4 || desc.comp == BI_RLE8;
+    image->Create(width, height, clear);
 
     unsigned char *ptr = image->GetData();
 
