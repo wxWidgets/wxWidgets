@@ -683,7 +683,7 @@ HandleMenuMessage(WXLRESULT* result,
                 if ( itemState & ODS_NOACCEL)
                     drawTextFlags |= DT_HIDEPREFIX;
 
-                wxUxThemeHandle menuTheme(GetHwndOf(w), L"Menu");
+                wxUxThemeHandle menuTheme(w, L"Menu");
                 ::DrawThemeTextEx(menuTheme, dis.hDC, MENU_BARITEM, partState,
                                   buf, mii.cch, drawTextFlags, rcItem,
                                   &textOpts);
