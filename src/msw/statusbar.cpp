@@ -670,7 +670,7 @@ wxStatusBar::GetClassDefaultAttributes(wxWindowVariant variant)
     if ( wxMSWDarkMode::IsActive() )
     {
         // It looks like we don't have to use a valid HWND here.
-        wxUxThemeHandle theme{HWND(0), L"ExplorerStatusBar"};
+        auto theme = wxUxThemeHandle::NewAtStdDPI(L"ExplorerStatusBar");
 
         wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
         if ( col.IsOk() )
