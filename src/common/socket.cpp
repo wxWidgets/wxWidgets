@@ -1162,7 +1162,7 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
     if ( usePeekbuf )
     {
         // Allocate our own buffer
-        peekbuf.reserve(DGRAM_MIN_READ);
+        peekbuf.resize(DGRAM_MIN_READ);
         readbuf = &peekbuf[0];
         readbytes = DGRAM_MIN_READ;
     }
