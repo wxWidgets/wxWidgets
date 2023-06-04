@@ -3154,20 +3154,13 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     }
 }
 
-// Flags for HandleItemPaint()
-enum
-{
-    Paint_Default       = 0,
-    Paint_OnlySelected  = 1
-};
-
 // This function is normally called only if we use custom colours, but it's
-// also called when using dark mode to draw the item if it's selected. In this
-// case, Paint_OnlySelected is used and we do nothing and return false if the
-// item is not selected.
+// also called when using dark mode as we have to draw the selected item
+// ourselves when using it, and if we do this, we have to paint all the items
+// for consistency.
 //
 // pLVCD->clrText and clrTextBk should contain the colours to use
-bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
+void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3226,18 +3219,12 @@ bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
         pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(syscolFg));
         pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(syscolBg));
     }
-    else // not selected
-    {
-        if ( flags & Paint_OnlySelected )
-            return false;
-
-        // Continue and use normal colours from pLVCD
-    }
+    //else: not selected, use normal colours from pLVCD
 
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
 
-    ::SetTextColor(hdc, pLVCD->clrText);
+    COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
     ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
@@ -3249,26 +3236,33 @@ bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
         HandleSubItemPrepaint(pLVCD, hfont, colCount);
     }
 
-    HandleItemPostpaint(nmcd);
+    ::SetTextColor(hdc, colTextOld);
 
-    return true;
+    HandleItemPostpaint(nmcd);
 }
 
 WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
                             LPNMLVCUSTOMDRAW pLVCD,
                             wxItemAttr *attr)
 {
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We need to always paint selected items ourselves as they come
+        // out completely wrong in DarkMode_Explorer theme, see the comment
+        // before MSWGetDarkModeSupport().
+        pLVCD->clrText = attr && attr->HasTextColour()
+                            ? wxColourToRGB(attr->GetTextColour())
+                            : wxColourToRGB(listctrl->GetTextColour());
+        pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
+                            ? wxColourToRGB(attr->GetBackgroundColour())
+                            : wxColourToRGB(listctrl->GetBackgroundColour());
+
+        HandleItemPaint(pLVCD, nullptr);
+        return CDRF_SKIPDEFAULT;
+    }
+
     if ( !attr )
     {
-        if ( wxMSWDarkMode::IsActive() )
-        {
-            // We need to always paint selected items ourselves as they come
-            // out completely wrong in DarkMode_Explorer theme, see the comment
-            // before MSWGetDarkModeSupport().
-            if ( HandleItemPaint(pLVCD, nullptr, Paint_OnlySelected) )
-                return CDRF_SKIPDEFAULT;
-        }
-
         // nothing to do for this item
         return CDRF_DODEFAULT;
     }
