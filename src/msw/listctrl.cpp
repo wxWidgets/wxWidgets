@@ -257,12 +257,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    // LISTVIEW doesn't redraw correctly when WS_EX_COMPOSITED is used by
-    // either the control itself (which never happens now, see our overridden
-    // SetDoubleBuffered()) or even by any of its parents, so we must reset
-    // this style for them.
-    MSWDisableComposited();
-
     const wxVisualAttributes& defAttrs = GetDefaultAttributes();
 
     if ( wxMSWDarkMode::IsActive() )
@@ -373,14 +367,7 @@ void wxListCtrl::MSWInitHeader()
 
 void wxListCtrl::MSWAfterReparent()
 {
-    // We did it for the original parent in our Create(), but we need to do it
-    // here for the new one.
-    MSWDisableComposited();
-
-    // Ideally we'd re-enable WS_EX_COMPOSITED for the old parent, but this is
-    // difficult to do correctly, as we'd need to track the number of list
-    // controls under it instead of just turning it on/off, so for now we don't
-    // do it.
+    // This is not used any more, to be removed.
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -3355,7 +3342,10 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
     return CDRF_DODEFAULT;
 }
 
-// Necessary for drawing hrules and vrules, if specified
+// We need to draw the control ourselves to make it work with WS_EX_COMPOSITED:
+// by default, it's not redrawn correctly, apparently due to some optimizations
+// used internally, but creating wxPaintDC ourselves seems to be sufficient to
+// avoid them, so we do it even if we don't draw anything on it ourselves.
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
     const int itemCount = GetItemCount();
@@ -3376,15 +3366,12 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             needToErase = true;
     }
 
-    if ( !(needToDraw || needToErase) )
-    {
-        event.Skip();
-        return;
-    }
-
     wxPaintDC dc(this);
 
     wxListCtrlBase::OnPaint(event);
+
+    if ( !needToDraw && !needToErase )
+        return;
 
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
