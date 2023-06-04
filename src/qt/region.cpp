@@ -25,8 +25,28 @@ public:
     {
     }
 
-    wxRegionRefData( QRect r ) : m_qtRegion( r )
+    wxRegionRefData( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
     {
+        // Rectangle needs to be defined in the canonical form,
+        // with (x,y) pointing to the top-left corner of the box
+        // and with non-negative width and height.
+        // Notice that we would simply use QRect::normalized() here,
+        // but we don't, because the normalized rectangle is an off-by-one
+        // (width or height) for some inputs! which wx doesn't expect.
+
+        if ( w < 0 )
+        {
+            w = -w;
+            x -= (w - 1);
+        }
+
+        if ( h < 0 )
+        {
+            h = -h;
+            y -= (h - 1);
+        }
+
+        m_qtRegion = QRegion( QRect{x, y, w, h} );
     }
 
     wxRegionRefData( QBitmap b ) : m_qtRegion ( b )
@@ -62,18 +82,20 @@ wxRegion::wxRegion()
 
 wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
-    m_refData = new wxRegionRefData( QRect( x, y, w, h ) );
+    m_refData = new wxRegionRefData( x, y, w, h );
 }
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
-    m_refData = new wxRegionRefData( QRect( wxQtConvertPoint( topLeft ),
-                                           wxQtConvertPoint( bottomRight ) ) );
+    m_refData = new wxRegionRefData( topLeft.x,
+                                     topLeft.y,
+                                     bottomRight.x - topLeft.x,
+                                     bottomRight.y - topLeft.y );
 }
 
 wxRegion::wxRegion(const wxRect& rect)
 {
-    m_refData = new wxRegionRefData( wxQtConvertRect( rect ) );
+    m_refData = new wxRegionRefData( rect.x, rect.y, rect.width, rect.height );
 }
 
 wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
@@ -94,7 +116,7 @@ wxRegion::wxRegion(const wxBitmap& bmp)
     if ( bmp.GetMask() != nullptr )
         m_refData = new wxRegionRefData( *bmp.GetMask()->GetHandle() );
     else
-        m_refData = new wxRegionRefData( QRect( 0, 0, bmp.GetWidth(), bmp.GetHeight() ) );
+        m_refData = new wxRegionRefData( 0, 0, bmp.GetWidth(), bmp.GetHeight() );
 }
 
 wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
@@ -304,7 +326,7 @@ bool wxRegion::DoUnionWithRect(const wxRect& rect)
 {
     if ( m_refData == nullptr )
     {
-        m_refData = new wxRegionRefData(wxQtConvertRect(rect));
+        m_refData = new wxRegionRefData(rect.x, rect.y, rect.width, rect.height);
         return true;
     }
 

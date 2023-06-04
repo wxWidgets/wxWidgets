@@ -533,11 +533,10 @@ protected:
 #ifdef __WXMAC__
     static wxPoint MacAdjustCgContextOrigin(CGContextRef cg);
 #endif // __WXMAC__
-    
+
 #ifdef __WXQT__
     QPainter* m_qtPainter;
-    QImage* m_qtImage;
-    cairo_surface_t* m_qtSurface;
+    QImage    m_qtImage;
 #endif
 #ifdef __WXMSW__
     cairo_surface_t* m_mswSurface;
@@ -2077,14 +2076,21 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #ifdef __WXQT__
     m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
-    m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    m_qtImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
-    m_qtImage->fill(Qt::transparent);
-    m_qtSurface = cairo_image_surface_create_for_data(m_qtImage->bits(),
+    m_qtImage.fill(Qt::transparent);
+    cairo_surface_t* qtSurface = cairo_image_surface_create_for_data(m_qtImage.bits(),
                                                       CAIRO_FORMAT_ARGB32,
                                                       width, height,
-                                                      m_qtImage->bytesPerLine());
-    Init( cairo_create( m_qtSurface ) );
+                                                      m_qtImage.bytesPerLine());
+
+    Init( cairo_create( qtSurface ) );
+    cairo_surface_destroy( qtSurface );
+
+    // Transfer transformation settings from source DC to Cairo context on our own.
+    ApplyTransformFromDC(dc);
+
+    m_qtPainter->setWorldMatrixEnabled(false);
 #endif
 }
 
@@ -2284,14 +2290,21 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #ifdef __WXQT__
     m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
-    m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    m_qtImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
-    m_qtImage->fill(Qt::transparent);
-    m_qtSurface = cairo_image_surface_create_for_data(m_qtImage->bits(),
+    m_qtImage.fill(Qt::transparent);
+    cairo_surface_t* qtSurface = cairo_image_surface_create_for_data(m_qtImage.bits(),
                                                       CAIRO_FORMAT_ARGB32,
                                                       width, height,
-                                                      m_qtImage->bytesPerLine());
-    Init( cairo_create( m_qtSurface ) );
+                                                      m_qtImage.bytesPerLine());
+
+    Init( cairo_create( qtSurface ) );
+    cairo_surface_destroy( qtSurface );
+
+    // Transfer transformation settings from source DC to Cairo context on our own.
+    ApplyTransformFromDC(dc);
+
+    m_qtPainter->setWorldMatrixEnabled(false);
 #endif
 }
 
@@ -2393,8 +2406,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 {
 #ifdef __WXQT__
     m_qtPainter = nullptr;
-    m_qtImage = nullptr;
-    m_qtSurface = nullptr;
 #endif
 #ifdef __WXMSW__
     m_mswSurface = nullptr;
@@ -2460,8 +2471,6 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
 {
 #ifdef __WXQT__
     m_qtPainter = nullptr;
-    m_qtImage = nullptr;
-    m_qtSurface = nullptr;
 #endif
 #ifdef __WXMSW__
     m_mswSurface = nullptr;
@@ -2501,13 +2510,12 @@ wxCairoContext::~wxCairoContext()
     }
 #endif // __WXMAC__
 #ifdef __WXQT__
-    if ( m_qtPainter != nullptr )
+    if ( m_context && m_qtPainter->isActive() )
     {
         // draw the internal buffered image to the widget
-        cairo_surface_flush(m_qtSurface);
-        m_qtPainter->drawImage( 0,0, *m_qtImage );
-        delete m_qtImage;
-        cairo_surface_destroy( m_qtSurface );
+        cairo_surface_flush( cairo_get_target(m_context) );
+        m_qtPainter->drawImage( 0,0, m_qtImage );
+        m_qtPainter->setWorldMatrixEnabled(true);
     }
 #endif
 
@@ -2849,10 +2857,10 @@ void wxCairoContext::Flush()
     }
 #endif
 #ifdef __WXQT__
-    if ( m_qtSurface )
+    if ( m_context && m_qtPainter->isActive() )
     {
-        cairo_surface_flush(m_qtSurface);
-        m_qtPainter->drawImage( 0,0, *m_qtImage );
+        cairo_surface_flush( cairo_get_target(m_context) );
+        m_qtPainter->drawImage( 0,0, m_qtImage );
     }
 #endif
 }
