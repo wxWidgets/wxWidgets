@@ -3362,7 +3362,21 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const bool drawHRules = HasFlag(wxLC_HRULES);
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
-    if (!InReportView() || !(drawHRules || drawVRules) || !itemCount)
+    // Check if we need to do anything ourselves: either draw the rules or, in
+    // case of using dark mode under Windows 11, erase the unwanted separator
+    // lines drawn below the items by default, which are ugly because they
+    // don't align with the separators drawn by the header control.
+    bool needToDraw = false,
+         needToErase = false;
+    if ( InReportView() )
+    {
+        if ( (drawHRules || drawVRules) && itemCount )
+            needToDraw = true;
+        else if ( wxMSWDarkMode::IsActive() && wxGetWinVersion() >= wxWinVersion_11 )
+            needToErase = true;
+    }
+
+    if ( !(needToDraw || needToErase) )
     {
         event.Skip();
         return;
@@ -3375,10 +3389,6 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
 
-    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
-    dc.SetPen(pen);
-    dc.SetBrush(* wxTRANSPARENT_BRUSH);
-
     wxSize clientSize = GetClientSize();
 
     const int countPerPage = GetCountPerPage();
@@ -3390,6 +3400,21 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
+
+    if ( needToErase )
+    {
+        wxRect lastRect;
+        GetItemRect(bottom, lastRect);
+
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(GetBackgroundColour());
+        dc.DrawRectangle(0, lastRect.y, clientSize.x, clientSize.y - lastRect.y);
+        return;
+    }
+
+    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     if (drawHRules)
     {
