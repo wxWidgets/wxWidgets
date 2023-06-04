@@ -215,7 +215,18 @@ public:
     enum NameFlags
     {
         Name_Full = 0x01,       ///< return full name
-        Name_Abbr = 0x02        ///< return abbreviated name
+        Name_Abbr = 0x02,       ///< return abbreviated name
+        Name_Shortest = 0x03    ///< return shortest name @since_wx{3.3.0}
+    };
+
+    /**
+        Context for name use in GetWeekDayName() and GetMonthName() functions.
+        @since 3.3.0
+    */
+    enum NameContext
+    {
+        Context_Formatting,      ///< name for use in date formatting context
+        Context_Standalone       ///< name for use in standalone context
     };
 
     /**
@@ -235,6 +246,63 @@ public:
         Sunday_First     ///< week starts with a Sunday
     };
 
+    /**
+        Class representing a name form.
+
+        This class describes the form of month or weekday names used in
+        formatting a date. It contains attributes for the requested name
+        length and the formatting context. It is used as a parameter to
+        the GetWeekDayName() and GetMonthName() functions.
+        @since 3.3.0
+     */
+    class NameForm
+    {
+    public:
+        /**
+            Constructor for a name form.
+
+            Initializes this object to use the given form of the name (full by
+            default) in the formatting context.
+
+            Note that this constructor is _not_ explicit, to allow the existing
+            code which passes wxDateTime::NameFlags to various functions now
+            taking NameForm to work. Please beware of the implicit conversions
+            here.
+         */
+        NameForm(NameFlags flags = Name_Full) : m_flags(flags) {}
+
+        /// Set the flag for full month or weekday names.
+        NameForm& Full();
+
+        /// Set the flag for abbreviated month or weekday names.
+        NameForm& Abbr();
+
+        /// Set the flag for shortest month or weekday names.
+        NameForm& Shortest();
+
+        /**
+            Set the context for date formatting.
+
+            In some languages, month and day names have different forms depending
+            on whether they're used on their own, e.g. as names of the months in the
+            calendar, or as part of a date representation.
+
+            Use this function if you need to localize a date format or in another
+            similar context.
+
+            @see Standalone()
+        */
+        NameForm& Formatting();
+
+        /// Set the context for standalone use.
+        NameForm& Standalone();
+
+        /// Return the flags describing the requested name length.
+        NameFlags GetFlags() const;
+
+        /// Return the context of name usage.
+        NameContext GetContext() const;
+    };
 
     /**
         Class representing a time zone.
@@ -1394,55 +1462,64 @@ public:
     /**
         Return the standard English name of the given month.
 
-        This function always returns "January" or "Jan" for January, use
+        This function always returns "January", "Jan" or "JA" for January, use
         GetMonthName() to retrieve the name of the month in the users current
         locale.
 
         @param month
             One of wxDateTime::Jan, ..., wxDateTime::Dec values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetEnglishWeekDayName()
 
         @since 2.9.0
      */
     static wxString GetEnglishMonthName(Month month,
-                                        NameFlags flags = Name_Full);
+                                        NameForm form = {});
 
     /**
         Return the standard English name of the given week day.
 
-        This function always returns "Monday" or "Mon" for Monday, use
-        GetWeekDayName() to retrieve the name of the month in the users current
+        This function always returns "Monday", "Mon" or "Mo" for Monday, use
+        GetWeekDayName() to retrieve the name of the month in the user's current
         locale.
 
         @param weekday
             One of wxDateTime::Sun, ..., wxDateTime::Sat values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetEnglishMonthName()
 
         @since 2.9.0
      */
     static wxString GetEnglishWeekDayName(WeekDay weekday,
-                                          NameFlags flags = Name_Full);
+                                          NameFlags form = {});
 
     /**
-        Gets the full (default) or abbreviated name of the given month.
+        Gets the full (default), abbreviated or shortest name of the given month.
 
         This function returns the name in the current locale, use
         GetEnglishMonthName() to get the untranslated name if necessary.
 
         @param month
             One of wxDateTime::Jan, ..., wxDateTime::Dec values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetWeekDayName()
     */
-    static wxString GetMonthName(Month month, NameFlags flags = Name_Full);
+    static wxString GetMonthName(Month month, NameFlags form = {});
 
     /**
         Returns the number of days in the given year. The only supported value
@@ -1478,27 +1555,30 @@ public:
     static tm* GetTmNow();
 
     /**
-        Gets the full (default) or abbreviated name of the given week day.
+        Gets the full (default), abbreviated or shortest name of the given week day.
 
         This function returns the name in the current locale, use
         GetEnglishWeekDayName() to get the untranslated name if necessary.
 
         @param weekday
             One of wxDateTime::Sun, ..., wxDateTime::Sat values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetMonthName()
     */
     static wxString GetWeekDayName(WeekDay weekday,
-                                   NameFlags flags = Name_Full);
+                                   NameForm form = {});
 
     /**
         Returns @true if DST was used in the given year (the current one by
         default) in the given country.
     */
     static bool IsDSTApplicable(int year = Inv_Year,
-                                  Country country = Country_Default);
+                                Country country = Country_Default);
 
     /**
          Acquires the first weekday of a week based on locale and/or OS settings.

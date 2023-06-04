@@ -228,6 +228,10 @@ void wxImage::Destroy()
 
 void wxImage::Clear(unsigned char value)
 {
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
+
+    AllocExclusive();
+
     memset(M_IMGDATA->m_data, value, M_IMGDATA->m_width*M_IMGDATA->m_height*3);
 }
 

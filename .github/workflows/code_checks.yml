@@ -48,7 +48,7 @@ jobs:
                 ':!config.guess' \
                 ':!config.sub' \
                 ':!configure' \
-                ':!descrip.mms' \
+                ':!**/descrip.mms' \
                 ':!install-sh' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!**/*akefile*' \

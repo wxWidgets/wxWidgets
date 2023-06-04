@@ -28,8 +28,6 @@
 #include "wx/thread.h"
 #include "wx/except.h"
 
-#include "wx/private/threadinfo.h"
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dynarray.h"
@@ -1738,11 +1736,6 @@ void wxThread::Exit(ExitCode status)
         OnExit();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
-
-    // Clean up thread-specific data before exiting the thread (we do it as
-    // late as possible as wxLog calls can recreate it and may happen until the
-    // very end).
-    wxThreadSpecificInfo::ThreadCleanUp();
 
     // delete C++ thread object if this is a detached thread - user is
     // responsible for doing this for joinable ones

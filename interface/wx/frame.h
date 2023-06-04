@@ -61,29 +61,31 @@
     @style{wxICONIZE}
            Display the frame iconized (minimized). Windows only.
     @style{wxCAPTION}
-           Puts a caption on the frame. Notice that this flag is required by
-           wxMINIMIZE_BOX, wxMAXIMIZE_BOX and wxCLOSE_BOX on most systems as
-           the corresponding buttons cannot be shown if the window has no title
-           bar at all. I.e. if wxCAPTION is not specified those styles would be
-           simply ignored.
+           Shows the title bar, containing the window title, for this window.
+           Note that this style is implicitly enabled by wxMINIMIZE_BOX,
+           wxMAXIMIZE_BOX and wxCLOSE_BOX on most systems as the corresponding
+           buttons couldn't be shown if the window had no title bar at all.
     @style{wxMINIMIZE}
            Identical to wxICONIZE. Windows only.
     @style{wxMINIMIZE_BOX}
-           Displays a minimize box on the frame.
+           Displays a minimize box on the frame. This style implicitly enables
+           wxCAPTION too.
     @style{wxMAXIMIZE}
            Displays the frame maximized. Windows and GTK+ only.
     @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame. Notice that under wxGTK
            wxRESIZE_BORDER must be used as well or this style is ignored.
+           This style implicitly enables wxCAPTION too.
     @style{wxCLOSE_BOX}
-           Displays a close box on the frame.
+           Displays a close box on the frame. This style implicitly enables
+           wxCAPTION too.
     @style{wxSTAY_ON_TOP}
            Stay on top of all other windows, see also wxFRAME_FLOAT_ON_PARENT.
     @style{wxSYSTEM_MENU}
            Displays a system menu containing the list of various windows
            commands in the window title bar. Unlike wxMINIMIZE_BOX,
-           wxMAXIMIZE_BOX and wxCLOSE_BOX styles this style can be used without
-           wxCAPTION, at least under Windows, and makes the system menu
+           wxMAXIMIZE_BOX and wxCLOSE_BOX styles this style doesn't turn on
+           wxCAPTION under MSW and if it's not specified, makes the system menu
            available without showing it on screen in this case. However it is
            recommended to only use it together with wxCAPTION for consistent
            behaviour under all platforms.

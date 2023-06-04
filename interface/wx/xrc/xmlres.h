@@ -654,10 +654,16 @@ protected:
     bool GetBool(const wxString& param, bool defaultv = false);
 
     /**
-        Gets colour in HTML syntax (\#RRGGBB).
+        Gets colour from the given parameter.
+
+        If the colour is not specified, returns @a defaultLight or @a
+        defaultDark if the application is using dark mode.
+
+        Parameter @a defaultDark is only available since wxWidgets 3.3.0.
     */
     wxColour GetColour(const wxString& param,
-                       const wxColour& defaultColour = wxNullColour);
+                       const wxColour& defaultLight = wxNullColour,
+                       const wxColour& defaultDark = wxNullColour);
 
     /**
         Returns the current file system.

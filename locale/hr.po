@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-08-05 00:46+0200\n"
+"PO-Revision-Date: 2023-05-14 14:24+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.0\n"
 
 #: ../include/wx/defs.h:2592
@@ -1102,35 +1102,33 @@ msgstr "&Spremi"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Odbaci promjene"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Nemoj spremiti"
+msgstr "&Nemoj zatvoriti"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Želiš li spremiti promjene u %s?"
+msgstr "Želiš li spremiti promjene u %s prije zatvaranja?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Nije bilo moguće spremiti tekst."
+msgstr "Dokument se mora zatvoriti."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Spremanje %s nije uspjelo. Želiš li pokušati ponovo?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Pokušaj ponovo"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Odbaci promjene"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -5054,7 +5052,7 @@ msgstr "< &Natrag"
 
 #: ../src/gtk/aboutdlg.cpp:204
 msgid "translator-credits"
-msgstr "Milo Ivir <mail@milotype.de>, 2019., 2021."
+msgstr "Milo Ivir <mail@milotype.de>"
 
 #: ../src/gtk/app.cpp:468
 msgid ""
@@ -5120,7 +5118,7 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
-"Trenutačno se ne podržava wxGLCanvas na Waylandu i X11. Možda je moguće\n"
+"wxGLCanvas se trenutačno se ne podržava na Waylandu i X11. Možda je moguće\n"
 "zaobići taj problem postavljanjem varijable okruženja GDK_BACKEND=x11 prije\n"
 "pokretanja programa."
 
@@ -6445,31 +6443,26 @@ msgid "File type:"
 msgstr "Vrsta datoteke:"
 
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
-msgstr "Window"
+msgstr "Prozor"
 
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Pomoć"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Smanji"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Zumiraj"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Postavi sve naprijed"
@@ -6487,8 +6480,8 @@ msgstr "Font-datoteka „%s” ne postoji."
 #: ../src/osx/fontutil.cpp:89
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory "
-"\"%s\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
+"\"."
 msgstr ""
 "Font-datoteka „%s” se ne može koristiti, jer se ne nalazi u mapi fontova "
 "„%s”."
@@ -8887,7 +8880,7 @@ msgstr "&Veličina"
 
 #: ../src/univ/themes/win32.cpp:3749
 msgid "Mi&nimize"
-msgstr "Mi&nimiraj"
+msgstr "Sma&nji"
 
 #: ../src/univ/themes/win32.cpp:3751
 msgid "Ma&ximize"

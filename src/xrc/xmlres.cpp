@@ -1780,12 +1780,43 @@ static wxColour GetSystemColour(const wxString& name)
     return wxNullColour;
 }
 
-wxColour wxXmlResourceHandlerImpl::GetColour(const wxString& param, const wxColour& defaultv)
+wxColour
+wxXmlResourceHandlerImpl::GetColour(const wxString& param,
+                                    const wxColour& defaultLight,
+                                    const wxColour& defaultDark)
 {
-    wxString v = GetParamValue(param);
+    const wxString& values = GetParamValue(param);
 
-    if ( v.empty() )
-        return defaultv;
+    if ( values.empty() )
+        return wxSystemSettings::SelectLightDark(defaultLight, defaultDark);
+
+    wxStringTokenizer tk(values, "|");
+    wxString v = tk.GetNextToken();
+
+    while ( tk.HasMoreTokens() )
+    {
+        wxString altCol = tk.GetNextToken();
+        wxString altV;
+        if ( altCol.StartsWith("dark:", &altV) )
+        {
+            if ( wxSystemSettings::GetAppearance().IsDark() )
+                v = altV;
+            //else: just ignore it, it's valid but not used
+        }
+        else
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format
+                (
+                    "unrecognized alternative colour specification \"%s\"",
+                    altCol
+                )
+            );
+            return wxNullColour;
+        }
+    }
 
     wxColour clr;
 

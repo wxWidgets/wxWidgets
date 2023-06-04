@@ -82,6 +82,7 @@
 #endif
 
 #include "wx/datetime.h"
+#include "wx/uilocale.h"
 
 // ----------------------------------------------------------------------------
 // wxXTI
@@ -725,20 +726,24 @@ namespace
 {
 
 // helper function used by GetEnglish/WeekDayName(): returns 0 if flags is
-// Name_Full and 1 if it is Name_Abbr or -1 if the flags is incorrect (and
-// asserts in this case)
+// Name_Full, 1 if it is Name_Abbr, and 2 if it isName_Shortest,
+// or -1 if the flags is incorrect (and asserts in this case)
 //
 // the return value of this function is used as an index into 2D array
 // containing full names in its first row and abbreviated ones in the 2nd one
+// and very short ones in the 3rd row
 int NameArrayIndexFromFlag(wxDateTime::NameFlags flags)
 {
-    switch ( flags )
+  switch ( flags )
     {
-        case wxDateTime::Name_Full:
+      case wxDateTime::Name_Full:
             return 0;
 
         case wxDateTime::Name_Abbr:
             return 1;
+
+        case wxDateTime::Name_Shortest:
+            return 2;
 
         default:
             wxFAIL_MSG( "unknown wxDateTime::NameFlags value" );
@@ -750,19 +755,21 @@ int NameArrayIndexFromFlag(wxDateTime::NameFlags flags)
 } // anonymous namespace
 
 /* static */
-wxString wxDateTime::GetEnglishMonthName(Month month, NameFlags flags)
+wxString wxDateTime::GetEnglishMonthName(Month month, const NameForm& form)
 {
     wxCHECK_MSG( month != Inv_Month, wxEmptyString, "invalid month" );
 
-    static const char *const monthNames[2][MONTHS_IN_YEAR] =
+    static const char *const monthNames[3][MONTHS_IN_YEAR] =
     {
         { "January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December" },
         { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" },
+        { "JA", "FE", "MR", "AL", "MA", "JN",
+          "JL", "AU", "SE", "OC", "NO", "DE" }
     };
 
-    const int idx = NameArrayIndexFromFlag(flags);
+    const int idx = NameArrayIndexFromFlag(form.GetFlags());
     if ( idx == -1 )
         return wxString();
 
@@ -770,37 +777,30 @@ wxString wxDateTime::GetEnglishMonthName(Month month, NameFlags flags)
 }
 
 /* static */
-wxString wxDateTime::GetMonthName(wxDateTime::Month month,
-                                  wxDateTime::NameFlags flags)
+wxString wxDateTime::GetMonthName(Month month,
+                                  const NameForm& form)
 {
-#ifdef wxHAS_STRFTIME
-    wxCHECK_MSG( month != Inv_Month, wxEmptyString, wxT("invalid month") );
-
-    // notice that we must set all the fields to avoid confusing libc (GNU one
-    // gets confused to a crash if we don't do this)
-    tm tm;
-    wxInitTm(tm);
-    tm.tm_mon = month;
-
-    return wxCallStrftime(flags == Name_Abbr ? wxS("%b") : wxS("%B"), &tm);
-#else // !wxHAS_STRFTIME
-    return GetEnglishMonthName(month, flags);
-#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
+    wxCHECK_MSG(month != Inv_Month, wxEmptyString, wxT("invalid month"));
+    wxString name = wxUILocale::GetCurrent().GetMonthName(month, form);
+    if (name.empty())
+        name = GetEnglishMonthName(month, form);
+    return name;
 }
 
 /* static */
-wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
+wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, const NameForm& form)
 {
     wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday") );
 
-    static const char *const weekdayNames[2][DAYS_PER_WEEK] =
+    static const char *const weekdayNames[3][DAYS_PER_WEEK] =
     {
         { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
           "Saturday" },
         { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
+        { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" }
     };
 
-    const int idx = NameArrayIndexFromFlag(flags);
+    const int idx = NameArrayIndexFromFlag(form.GetFlags());
     if ( idx == -1 )
         return wxString();
 
@@ -808,32 +808,14 @@ wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
 }
 
 /* static */
-wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
-                                    wxDateTime::NameFlags flags)
+wxString wxDateTime::GetWeekDayName(WeekDay wday,
+                                    const NameForm& form)
 {
-#ifdef wxHAS_STRFTIME
-    wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday") );
-
-    // take some arbitrary Sunday (but notice that the day should be such that
-    // after adding wday to it below we still have a valid date, e.g. don't
-    // take 28 here!)
-    tm tm;
-    wxInitTm(tm);
-    tm.tm_mday = 21;
-    tm.tm_mon = Nov;
-    tm.tm_year = 99;
-
-    // and offset it by the number of days needed to get the correct wday
-    tm.tm_mday += wday;
-
-    // call mktime() to normalize it...
-    (void)mktime(&tm);
-
-    // ... and call strftime()
-    return wxCallStrftime(flags == Name_Abbr ? wxS("%a") : wxS("%A"), &tm);
-#else // !wxHAS_STRFTIME
-    return GetEnglishWeekDayName(wday, flags);
-#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
+    wxCHECK_MSG(wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday"));
+    wxString name = wxUILocale::GetCurrent().GetWeekDayName(wday, form);
+    if (name.empty())
+        name = GetEnglishWeekDayName(wday, form);
+    return name;
 }
 
 /* static */

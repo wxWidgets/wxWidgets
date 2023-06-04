@@ -23,7 +23,9 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/msw/darkmode.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 bool wxStaticText::Create(wxWindow *parent,
@@ -143,6 +145,50 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     // we need to refresh the window after changing its size as the standard
     // control doesn't always update itself properly
     Refresh();
+}
+
+bool
+wxStaticText::MSWHandleMessage(WXLRESULT *result,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+    if ( wxStaticTextBase::MSWHandleMessage(result, message, wParam, lParam) )
+        return true;
+
+    switch ( message )
+    {
+        case WM_PAINT:
+            // We only customize drawing of disabled labels in dark mode.
+            if ( IsEnabled() || !wxMSWDarkMode::IsActive() )
+                break;
+
+            // For them, the default "greying out" of the text for the disabled
+            // controls looks ugly and unreadable in dark mode, so we draw it
+            // as normal text but use a different colour for it.
+            //
+            // We could alternatively make the control owner-drawn, which would
+            // be slightly cleaner, but would require more effort.
+            wxMSWWinStyleUpdater updateStyle(GetHwnd());
+            updateStyle.TurnOff(WS_DISABLED).Apply();
+
+            // Don't use Get/SetForegroundColour() here as they do more than we
+            // need, we just want to change m_foregroundColour temporarily
+            // without any side effects.
+            const auto colFgOrig = m_foregroundColour;
+            wxDarkModeSettings darkModeSettings;
+            m_foregroundColour = darkModeSettings.GetMenuColour(wxMenuColour::DisabledFg);
+
+            *result = MSWDefWindowProc(WM_PAINT, wParam, lParam);
+
+            updateStyle.TurnOn(WS_DISABLED).Apply();
+            if ( m_hasFgCol )
+                m_foregroundColour = colFgOrig;
+
+            return true;
+    }
+
+    return false;
 }
 
 void wxStaticText::SetLabel(const wxString& label)
