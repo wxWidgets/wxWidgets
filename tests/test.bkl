@@ -11,7 +11,10 @@
 
     <template id="wx_test">
         <win32-res>$(WXTOPDIR)tests/test.rc</win32-res>
-        <res-include>$(TOP_SRCDIR)include</res-include>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
+        </if>
         <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
