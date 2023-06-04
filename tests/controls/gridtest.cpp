@@ -1793,6 +1793,165 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellAttribute", "[attr][cell][grid]")
     }
 }
 
+namespace SetTable_ClearAttrCache
+{
+
+static unsigned int drawCount1;
+
+class Renderer1 : public wxGridCellRenderer
+{
+public:
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected) override
+    {
+        ++drawCount1;
+        wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
+    }
+
+    virtual wxSize GetBestSize(wxGrid& /*grid*/,
+                               wxGridCellAttr& /*attr*/,
+                               wxDC& /*dc*/,
+                               int /*row*/, int /*col*/) override
+        { return wxSize(111, 111); }
+
+    virtual wxGridCellRenderer *Clone() const override
+        { return new Renderer1(*this); }
+};
+
+class Attr1 : public wxGridCellAttr
+{
+public:
+    Attr1()
+    {
+        SetRenderer(new Renderer1);
+    }
+};
+
+static unsigned int drawCount2;
+
+class Renderer2 : public wxGridCellRenderer
+{
+public:
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected) override
+    {
+        ++drawCount2;
+        wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
+    }
+
+    virtual wxSize GetBestSize(wxGrid& /*grid*/,
+                               wxGridCellAttr& /*attr*/,
+                               wxDC& /*dc*/,
+                               int /*row*/, int /*col*/) override
+        { return wxSize(222, 222); }
+
+    virtual wxGridCellRenderer *Clone() const override
+        { return new Renderer2(*this); }
+};
+
+class Attr2 : public wxGridCellAttr
+{
+public:
+    Attr2()
+    {
+        SetRenderer(new Renderer2);
+    }
+};
+
+class AttrProvider : public wxGridCellAttrProvider
+{
+public:
+    AttrProvider(wxGridCellAttr* attr_)
+        : attr(attr_)
+    {
+    }
+
+    ~AttrProvider()
+    {
+        attr->DecRef();
+    }
+
+    virtual wxGridCellAttr *GetAttr(int /*row*/, int /*col*/,
+                                    wxGridCellAttr::wxAttrKind  /*kind*/ ) const override
+    {
+        attr->IncRef();
+        return attr;
+    }
+protected:
+    wxGridCellAttr* attr;
+};
+
+class GridTable1 : public wxGridTableBase
+{
+public:
+    GridTable1()
+    {
+        SetAttrProvider(new AttrProvider(new Attr1));
+    }
+
+    virtual int GetNumberRows() override { return 1; }
+    virtual int GetNumberCols() override { return 1; }
+    virtual wxString GetValue( int /*row*/, int /*col*/ ) override { return wxS("1"); }
+    virtual void SetValue( int /*row*/, int /*col*/, const wxString& /*value*/ ) override { }
+};
+
+class GridTable2 : public wxGridTableBase
+{
+public:
+    GridTable2()
+    {
+        SetAttrProvider(new AttrProvider(new Attr2));
+    }
+
+    virtual int GetNumberRows() override { return 2; }
+    virtual int GetNumberCols() override { return 2; }
+    virtual wxString GetValue( int /*row*/, int /*col*/ ) override { return wxS("2"); }
+    virtual void SetValue( int /*row*/, int /*col*/, const wxString& /*value*/ ) override { }
+};
+
+} // namespace SetTable_ClearAttrCache
+
+TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
+{
+    // Set up tables of different custom types, each with its
+    // own custom renderer. Switch the grid between them and
+    // check that the correct renderer is called each time
+    // (testing that the grid's attrCache isn't reusing stale values)
+
+    // Fails on OSX (renderer hasn't been called by the time the checks are done?)
+#if !defined(__WXOSX__)
+    using namespace SetTable_ClearAttrCache;
+
+    GridTable1 table1;
+    GridTable2 table2;
+
+    drawCount1 = drawCount2 = 0;
+    m_grid->SetTable(&table2);
+    m_grid->Refresh();
+    m_grid->Update();
+    CHECK(drawCount1 == 0);
+    CHECK(drawCount2 == 2*2);
+
+    drawCount1 = drawCount2 = 0;
+    m_grid->SetTable(&table1);
+    m_grid->Refresh();
+    m_grid->Update();
+    CHECK(drawCount1 == 1*1);
+    CHECK(drawCount2 == 0);
+
+    // Remove the grid table before our local objects go out of scope
+    m_grid->SetTable(nullptr);
+#endif // !__WXOSX__
+}
+
 #define CHECK_MULTICELL() CHECK_THAT( *m_grid, HasMulticellOnly(multi) )
 
 #define CHECK_NO_MULTICELL() CHECK_THAT( *m_grid, HasEmptyGrid() )
