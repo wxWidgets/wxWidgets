@@ -194,19 +194,21 @@ TEST_CASE_METHOD(WindowTestCase, "Window::FocusEvent", "[window]")
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 {
+    wxInitAllImageHandlers();
     wxCursor cursor(wxCURSOR_CHAR);
     m_window->SetCursor(cursor);
 
     CHECK(m_window->GetCursor().IsOk());
 
-#ifndef __WXGTK__
+#ifdef __WXMSW__
     // According to documentation cursors on X/GTK are different than in Windows/OSX.
     // On X/GTK, using the constructor with wxString parameter is loading the cursor
     // from the external file and not creating it from embedded bits/resources
     // Therefore different path are used for creating embedded cursors
     wxCursor resCursor1( "horse" );
     CHECK( resCursor1.IsOk() );
-#else
+#endif
+#ifdef __WXGTK__
     wxCursor resCursor1( (const char *) horse, 32, 32, 16, 0, nullptr, wxWHITE, wxBLACK );
     CHECK( resCursor1.IsOk() );
 #endif
@@ -217,10 +219,10 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     // no png/cur file at all
     wxCursor resCursor2( "horse" );
     CHECK( resCursor2.IsOk() );
-    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
+//    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
     wxCursor resCursor3( "horse" );
     CHECK( resCursor3.IsOk() );
-    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.cur" );
+//    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.cur" );
 #endif
 #if wxUSE_CARET
     CHECK(!m_window->GetCaret());
