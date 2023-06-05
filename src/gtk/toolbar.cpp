@@ -218,6 +218,14 @@ static void arrow_toggled(GtkToggleButton* button, wxToolBarTool* tool)
 }
 }
 
+extern "C"
+{
+static gboolean context_menu(GtkToolbar *self, gint x, gint y, gint button, gpointer user_data)
+{
+    return TRUE;
+}
+}
+
 //-----------------------------------------------------------------------------
 // "button_press_event" from dropdown menu button
 //-----------------------------------------------------------------------------
@@ -372,7 +380,8 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelpString,
-                                         const wxString& longHelpString)
+                                         const wxString& longHelpString,
+                                         bool  available)
 {
     return new wxToolBarTool(this, id, text, bitmap1, bitmap2, kind,
                              clientData, shortHelpString, longHelpString);
@@ -462,6 +471,7 @@ bool wxToolBar::Create( wxWindow *parent,
     wxGCC_WARNING_RESTORE()
 #endif // !__WXGTK4__
     g_object_ref(m_widget);
+    g_signal_connect( m_toolbar, "popup-context-menu", G_CALLBACK( context_menu ), nullptr );
     gtk_widget_show(GTK_WIDGET(m_toolbar));
 
     m_parent->DoAddChild( this );
@@ -534,7 +544,7 @@ bool wxToolBar::Realize()
     return true;
 }
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase, bool available)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 

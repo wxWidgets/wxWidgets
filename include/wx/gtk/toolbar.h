@@ -62,7 +62,8 @@ public:
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = nullptr,
                                           const wxString& shortHelpString = wxEmptyString,
-                                          const wxString& longHelpString = wxEmptyString) override;
+                                          const wxString& longHelpString = wxEmptyString,
+                                          bool  available = true) override;
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
 
@@ -79,7 +80,7 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool, bool availabe) override;
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
 
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;
