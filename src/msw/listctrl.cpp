@@ -365,11 +365,6 @@ void wxListCtrl::MSWInitHeader()
     m_headerCustomDraw->UseHeaderThemeColors(hwndHdr);
 }
 
-void wxListCtrl::MSWAfterReparent()
-{
-    // This is not used any more, to be removed.
-}
-
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD wstyle = wxListCtrlBase::MSWGetStyle(style, exstyle);
