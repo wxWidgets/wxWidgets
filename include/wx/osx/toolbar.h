@@ -90,7 +90,7 @@ public:
                                           const wxString& shortHelp = wxEmptyString,
                                           const wxString& longHelp = wxEmptyString,
                                           bool available = true) override;
-    
+
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
 
