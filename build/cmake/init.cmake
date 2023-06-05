@@ -614,7 +614,19 @@ if(wxUSE_GUI)
             wx_option_force_value(wxUSE_CAIRO OFF)
         endif()
     endif()
-endif()
+
+    if(WXGTK AND NOT APPLE AND NOT WIN32)
+        find_package(XKBCommon)
+        if(XKBCOMMON_FOUND)
+            list(APPEND wxTOOLKIT_INCLUDE_DIRS ${XKBCOMMON_INCLUDE_DIRS})
+            list(APPEND wxTOOLKIT_LIBRARIES ${XKBCOMMON_LIBRARIES})
+            set(HAVE_XKBCOMMON ON)
+        else()
+            message(STATUS "libxkbcommon not found, key codes in key events may be incorrect")
+        endif()
+    endif()
+
+endif(wxUSE_GUI)
 
 # test if precompiled headers are supported using the cotire test project
 if(DEFINED wxBUILD_PRECOMP_PREV AND NOT wxBUILD_PRECOMP STREQUAL wxBUILD_PRECOMP_PREV)
