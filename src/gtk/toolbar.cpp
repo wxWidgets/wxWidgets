@@ -220,13 +220,8 @@ static void arrow_toggled(GtkToggleButton* button, wxToolBarTool* tool)
 
 extern "C"
 {
-static gboolean context_menu(GtkToolbar *self, gint x, gint y, gint button, gpointer user_data)
+static gboolean context_menu(GtkToolbar *WXUNUSED(self), gint WXUNUSED(x), gint WXUNUSED(y), gint WXUNUSED(button), gpointer WXUNUSED(user_data))
 {
-    self = self;
-    x = x;
-    y = y;
-    button = button;
-    user_data = user_data;
     return TRUE;
 }
 }
@@ -386,9 +381,8 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          wxObject *clientData,
                                          const wxString& shortHelpString,
                                          const wxString& longHelpString,
-                                         bool  available)
+                                         bool  WXUNUSED(available))
 {
-    available = available;
     return new wxToolBarTool(this, id, text, bitmap1, bitmap2, kind,
                              clientData, shortHelpString, longHelpString);
 }
@@ -550,9 +544,8 @@ bool wxToolBar::Realize()
     return true;
 }
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase, bool available)
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase, bool WXUNUSED(available))
 {
-    available = available;
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     GSList* radioGroup;
