@@ -262,7 +262,8 @@ void wxToolBar::SetToolShortHelp(int id, const wxString& help)
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
-                             wxToolBarToolBase * WXUNUSED(tool))
+                             wxToolBarToolBase * WXUNUSED(tool),
+                             bool WXUNUSED(available))
 {
     // recalculate the toolbar geometry before redrawing it the next time
     m_needsLayout = true;
@@ -318,7 +319,8 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
-                                         const wxString& longHelp)
+                                         const wxString& longHelp,
+                                         bool WXUNUSED(available))
 {
     return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
                              clientData, shortHelp, longHelp);
