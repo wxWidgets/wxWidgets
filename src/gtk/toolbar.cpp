@@ -222,6 +222,11 @@ extern "C"
 {
 static gboolean context_menu(GtkToolbar *self, gint x, gint y, gint button, gpointer user_data)
 {
+    self = self;
+    x = x;
+    y = y;
+    button = button;
+    user_data = user_data;
     return TRUE;
 }
 }
@@ -383,6 +388,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& longHelpString,
                                          bool  available)
 {
+    available = available;
     return new wxToolBarTool(this, id, text, bitmap1, bitmap2, kind,
                              clientData, shortHelpString, longHelpString);
 }
@@ -546,6 +552,7 @@ bool wxToolBar::Realize()
 
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase, bool available)
 {
+    available = available;
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 
     GSList* radioGroup;
