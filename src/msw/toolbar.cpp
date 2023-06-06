@@ -359,6 +359,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& longHelp,
                                          bool availale)
 {
+    available = available;
     return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
                              clientData, shortHelp, longHelp);
 }
@@ -758,6 +759,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
                              wxToolBarToolBase *tool,
                              bool available)
 {
+    available = available;
     // We might be inserting back a tool previously removed from the toolbar,
     // make sure to reset its "to be deleted" flag to ensure that we do take it
     // into account during our layout even in this case.
