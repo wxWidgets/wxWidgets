@@ -357,7 +357,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
                                          const wxString& longHelp,
-                                         bool availale)
+                                         bool available)
 {
     available = available;
     return new wxToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
