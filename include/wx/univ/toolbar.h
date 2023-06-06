@@ -82,7 +82,7 @@ protected:
     void Init();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool, bool available) override;
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
 
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;
@@ -96,7 +96,8 @@ protected:
                                           wxItemKind kind,
                                           wxObject *clientData,
                                           const wxString& shortHelp,
-                                          const wxString& longHelp) override;
+                                          const wxString& longHelp,
+                                          bool available) override;
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
 
