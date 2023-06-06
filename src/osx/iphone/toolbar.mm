@@ -66,7 +66,8 @@ public:
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelp,
-                  const wxString& longHelp );
+                  const wxString& longHelp,
+                  bool available);
     
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label);
     
@@ -112,12 +113,14 @@ wxToolBarTool::wxToolBarTool(
                              wxItemKind kind,
                              wxObject *clientData,
                              const wxString& shortHelp,
-                             const wxString& longHelp )
+                             const wxString& longHelp,
+                             bool available)
 :
 wxToolBarToolBase(
                   tbar, id, label, bmpNormal, bmpDisabled, kind,
                   clientData, shortHelp, longHelp )
 {
+    available = available;
     Init();
     UIBarButtonItem* bui = [UIBarButtonItem alloc];
     UIBarButtonItemStyle style = UIBarButtonItemStylePlain;
@@ -188,11 +191,12 @@ wxToolBarToolBase *wxToolBar::CreateTool(
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
-                                         const wxString& longHelp )
+                                         const wxString& longHelp,
+                                         bool available)
 {
     return new wxToolBarTool(
                              this, id, label, bmpNormal, bmpDisabled, kind,
-                             clientData, shortHelp, longHelp );
+                             clientData, shortHelp, longHelp, available );
 }
 
 wxToolBarToolBase *
@@ -345,8 +349,9 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
      */
 }
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase, bool available)
 {
+    available = available;
     wxToolBarTool *tool = static_cast< wxToolBarTool*>(toolBase );
     if (tool == nullptr)
         return false;
