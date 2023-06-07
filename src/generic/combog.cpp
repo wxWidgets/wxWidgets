@@ -206,6 +206,11 @@ bool wxGenericComboCtrl::HasTransparentBackground()
 #endif
 }
 
+void wxGenericComboCtrl::PaintTextArea(wxDC& dc, const wxRect& rect)
+{
+    wxComboPopup::DefaultPaintComboControl(this, dc, rect);
+}
+
 void wxGenericComboCtrl::OnResize()
 {
 
@@ -327,7 +332,7 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         if ( m_popupInterface )
             m_popupInterface->PaintComboControl(dc, tcRect);
         else
-            wxComboPopup::DefaultPaintComboControl(this, dc, tcRect);
+            PaintTextArea(dc, tcRect);
     }
 
     delete dcPtr;

@@ -144,6 +144,11 @@ void wxComboCtrl::OnResize()
     PositionTextCtrl();
 }
 
+void wxComboCtrl::PaintTextArea(wxDC& dc, const wxRect& rect)
+{
+    wxComboPopup::DefaultPaintComboControl(this, dc, rect);
+}
+
 // Draws non-XP GUI dotted line around the focus area
 static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 {
@@ -518,7 +523,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         if ( m_popupInterface )
             m_popupInterface->PaintComboControl(dc,rectTextField);
         else
-            wxComboPopup::DefaultPaintComboControl(this,dc,rectTextField);
+            PaintTextArea(dc, rectTextField);
     }
 
     delete dcPtr;

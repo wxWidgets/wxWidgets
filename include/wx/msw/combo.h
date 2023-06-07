@@ -83,6 +83,10 @@ protected:
     // Dummy method - we override all functions that call this
     virtual WXHWND GetEditHWND() const wxOVERRIDE { return NULL; }
 
+    // Virtual method to allow a custom representation of the
+    // PaintTextArea while no popup is open.
+    virtual void PaintTextArea(wxDC& dc, const wxRect& rect);
+
     // customization
     virtual void OnResize() wxOVERRIDE;
     virtual wxCoord GetNativeTextIndent() const wxOVERRIDE;

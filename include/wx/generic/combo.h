@@ -98,6 +98,10 @@ protected:
     // For better transparent background rendering
     virtual bool HasTransparentBackground() wxOVERRIDE;
 
+    // Virtual method to allow a custom representation of the
+    // PaintTextArea while no popup is open.
+    virtual void PaintTextArea(wxDC& dc, const wxRect& rect);
+
     // Mandatory virtuals
     virtual void OnResize() wxOVERRIDE;
 
