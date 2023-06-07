@@ -2307,7 +2307,7 @@ Optional Features:
   --enable-metafile       use wxMetaFile
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
-  --enable-uiactionsim    use wxUIActionSimulator (experimental)
+  --enable-uiactionsim    use wxUIActionSimulator
   --enable-dctransform    use wxDC::SetTransformMatrix and related
   --enable-webviewwebkit  use wxWebView WebKit backend
   --disable-glcanvasegl   disable wxGLCanvas EGL backend
