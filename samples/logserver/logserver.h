@@ -7,6 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxUSE_DDE_FOR_IPC 0
+
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

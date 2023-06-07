@@ -8,6 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxUSE_DDE_FOR_IPC 0
+
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
@@ -116,10 +118,11 @@ void wxLogClient::DoLogRecord(wxLogLevel level, const wxString& msg,
 {
     if (m_client)
     {
+        wxCriticalSectionLocker lock(synchro);
         wxDateTime ts(info.timestamp);
         wxString packet(wxString::Format("%s\r%.8X\r%s", msg,
                                          m_client->GetMessageColour(level),
                                          ts.FormatTime()));
-        m_client->GetConnection()->Poke(wxEmptyString, packet);
+        m_client->GetConnection()->Poke("LOGPACKET", packet);
     }
 }

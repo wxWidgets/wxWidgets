@@ -147,7 +147,9 @@ void LogFrame::OnClose(wxCloseEvent& event)
 void LogFrame::OnSize(wxSizeEvent& event)
 {
     unsigned ts_col_width = m_tree_ctrl->GetTextExtent("Timestamp").GetWidth() + 24;
-    msg_col->SetMinWidth(FromDIP(m_tree_ctrl->GetClientRect().GetWidth() - ts_col_width) - 4);
+    unsigned min = FromDIP(m_tree_ctrl->GetClientRect().GetWidth() - ts_col_width) - 4;
+    msg_col->SetMinWidth(min);
+    msg_col->SetWidth(min);
     event.Skip();
 }
 
