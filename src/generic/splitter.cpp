@@ -452,7 +452,11 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
     }
     else
     {
-        wxFAIL_MSG(wxT("should have a top level parent!"));
+        // the error below was removed so that a splitter can be used with other
+        // types of windows besides TLW (such as a wxPopupTransientWindow).
+        // Since nowhere else is this code is a TLW looked for I don't see a
+        // problem with this.
+        //wxFAIL_MSG(wxT("should have a top level parent!"));
 
         iconized = false;
     }
