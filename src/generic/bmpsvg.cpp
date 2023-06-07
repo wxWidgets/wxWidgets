@@ -173,25 +173,58 @@ wxBitmap wxBitmapBundleImplSVG::GetBitmap(const wxSize& size)
             {
                 wxAlphaPixelData::Iterator ptr(data);
                 // Go through all the bitmap data
-                for (int i = m_cachedBitmap.GetWidth() * m_cachedBitmap.GetHeight(); i > 0; i--, ++ptr)
+                for (int y = 0; y < m_cachedBitmap.GetHeight(); ++y)
                 {
-                    unsigned char r = ptr.Red();
-                    unsigned char g = ptr.Green();
-                    unsigned char b = ptr.Blue();
-                    // If selected, invert just the greys on the bitmap. The idea is that the picture
-                    // on the bitmap will have a monochromatic outline, which will be inverted, while
-                    // keeping the colours intact.
-                    if (m_post & wxBitmapBundle::FromSVGInvertGreys)
+                    ptr.MoveTo(data, 0, y);
+                    for (int x = 0; x < m_cachedBitmap.GetWidth(); ++x)
                     {
-                        if ((r == g) && (g == b))
+                        unsigned char r = ptr.Red();
+                        unsigned char g = ptr.Green();
+                        unsigned char b = ptr.Blue();
+                        unsigned char a = ptr.Alpha();
+                        // The RGB bytes extract above are always alpha premultiplied, except on wxGTK.
+                        // So that operation has to be undo prior to processing.
+                        #ifndef __WXGTK__
+                        r = (a != 0) ? r * 255u / a : 0;
+                        g = (a != 0) ? g * 255u / a : 0;
+                        b = (a != 0) ? b * 255u / a : 0;
+                        #endif
+                        // If selected, invert just the greys on the bitmap. The idea is that the picture
+                        // on the bitmap will have a monochromatic outline, which will be inverted, while
+                        // keeping the colours intact.
+                        bool modify = false;
+                        if (m_post & wxBitmapBundle::FromSVGInvertGreys)
                         {
-                            ptr.Red() = 255 - r;
-                            ptr.Green() = 255 - g;
-                            ptr.Blue() = 255 - b;
+                            if ((r == g) && (g == b))
+                            {
+                                r = 255 - r;
+                                g = 255 - g;
+                                b = 255 - b;
+                                modify = true;
+                            }
                         }
+                        // If selected, dim the colours by tweaking the alpha channel to 50 %
+                        if (m_post & wxBitmapBundle::FromSVGDim)
+                        {
+                            a /= 2;
+                            modify = true;
+                        }
+                        // Redo the alpha premultiplication, if needed and not on wxGTK
+                        if (modify)
+                        {
+                            #ifndef __WXGTK__
+                            ptr.Red()   = r * a / 255u;
+                            ptr.Green() = g * a / 255u;
+                            ptr.Blue()  = b * a / 255u;
+                            #else
+                            ptr.Red()   = r;
+                            ptr.Green() = g;
+                            ptr.Blue()  = b;
+                            #endif
+                            ptr.Alpha() = a;
+                        }
+                        ++ptr;
                     }
-                    // If selected, dim the colours by tweaking the alpha channel to 33.3%
-                    if (m_post & wxBitmapBundle::FromSVGDim) ptr.Alpha() = ptr.Alpha() / 3;
                 }
             }
         }
@@ -229,9 +262,17 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
         for ( int x = 0; x < size.x; ++x )
         {
             const unsigned char a = src[3];
+            // in wxGTK the alpha premultiplication is not necessary, as its
+            // assumed that bitmap data is stored without it
+            #ifndef __WXGTK__
             dst.Red()   = src[0] * a / 255;
             dst.Green() = src[1] * a / 255;
             dst.Blue()  = src[2] * a / 255;
+            #else
+            dst.Red()   = src[0];
+            dst.Green() = src[1];
+            dst.Blue()  = src[2];
+            #endif
             dst.Alpha() = a;
 
             ++dst;
