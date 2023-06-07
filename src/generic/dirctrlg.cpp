@@ -827,8 +827,9 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2.Replace(wxT("\\"), wxString(wxFILE_SEP_PATH));
     path2.Replace(wxT("/"), wxString(wxFILE_SEP_PATH));
 
-    // Append a separator to foil bogus substring matching
-    path2 += wxString(wxFILE_SEP_PATH);
+    // Append a separator to foil bogus substring matching, if needed
+    if (!wxEndsWithPathSeparator(path2))
+        path2 += wxString(wxFILE_SEP_PATH);
 
     // In MSW case is not significant
 #if defined(__WINDOWS__)
