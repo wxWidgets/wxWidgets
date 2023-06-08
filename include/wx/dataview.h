@@ -553,6 +553,8 @@ private:
 #define wxDV_ROW_LINES               0x0010     // alternating colour in rows
 #define wxDV_VARIABLE_LINE_HEIGHT    0x0020     // variable line height
 
+#define wxDV_PREVENT_SEARCH          0x0040     // On wxGTK, prevent interactive search
+
 class WXDLLIMPEXP_CORE wxDataViewCtrlBase: public wxSystemThemedControl<wxControl>
 {
 public:

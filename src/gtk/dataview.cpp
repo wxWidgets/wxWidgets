@@ -4818,6 +4818,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     GTKScrolledWindowSetBorder(m_widget, style);
 
     m_treeview = gtk_tree_view_new();
+    if (style & wxDV_PREVENT_SEARCH)
+        gtk_tree_view_set_enable_search((GtkTreeView*)m_treeview, FALSE);
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
 
     m_focusWidget = GTK_WIDGET(m_treeview);
