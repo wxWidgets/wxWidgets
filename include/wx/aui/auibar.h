@@ -62,12 +62,20 @@ enum wxAuiToolBarToolTextOrientation
     wxAUI_TBTOOL_TEXT_BOTTOM = 3
 };
 
-enum wxAuiToolBarDropDownDisplay
+enum wxAuiPaneButtonState
 {
-    wxAUI_TBTOOL_DROPDOWN_SHOW_NONE = 0,
-    wxAUI_TBTOOL_DROPDOWN_SHOW_ARROW_ONLY = 1,
-    wxAUI_TBTOOL_DROPDOWN_SHOW_BUTTON_ONLY = 2,
-    wxAUI_TBTOOL_DROPDOWN_SHOW_NORMAL = 3,
+    wxAUI_BUTTON_STATE_NORMAL               = 0,
+    wxAUI_BUTTON_STATE_HOVER                = 1 << 1,
+    wxAUI_BUTTON_STATE_PRESSED              = 1 << 2,
+    wxAUI_BUTTON_STATE_DISABLED             = 1 << 3,
+    wxAUI_BUTTON_STATE_HIDDEN               = 1 << 4,
+    wxAUI_BUTTON_STATE_CHECKED              = 1 << 5,
+    wxAUI_BUTTON_STATE_BUTTON_DISABLED      = 1 << 6,
+    wxAUI_BUTTON_STATE_DROPDOWN_DISABLED    = 1 << 7,
+    wxAUI_BUTTON_STATE_SPLIT                = 1 << 8,
+    wxAUI_BUTTON_STATE_CACHED               = 1 << 9,
+    wxAUI_BUTTON_STATE_BUTTON_WAS_OFF       = 1 << 10,
+    wxAUI_BUTTON_STATE_DROPDOWN_WAS_OFF     = 1 << 11
 };
 
 
@@ -128,7 +136,6 @@ public:
         m_toolId = 0;
         m_kind = wxITEM_NORMAL;
         m_state = 0;  // normal, enabled
-        m_show = wxAUI_TBTOOL_DROPDOWN_SHOW_NORMAL;
         m_proportion = 0;
         m_active = true;
         m_dropDown = true;
@@ -152,7 +159,6 @@ public:
         m_toolId = c.m_toolId;
         m_kind = c.m_kind;
         m_state = c.m_state;
-        m_show = c.m_show;
         m_proportion = c.m_proportion;
         m_active = c.m_active;
         m_dropDown = c.m_dropDown;
@@ -221,9 +227,57 @@ public:
                      wxS("Only normal tools can have drop downs") );
 
         m_dropDown = b;
+        if (!b) m_state &= ~wxAUI_BUTTON_STATE_SPLIT;
     }
 
     bool HasDropDown() const { return m_dropDown; }
+
+    void SetSplitState(bool b)
+    {
+        wxCHECK_RET( !b || (m_dropDown && m_kind == wxITEM_NORMAL),
+                     wxS("Only normal tools with drop downs can have a split state") );
+
+        m_state = (m_state & ~wxAUI_BUTTON_STATE_SPLIT) | (b ? wxAUI_BUTTON_STATE_SPLIT : 0);
+    }
+
+    void SetButtonEnabled(bool b)
+    {
+        wxCHECK_RET( m_dropDown && m_kind == wxITEM_NORMAL,
+                     wxS("Only normal tools with drop downs can have a split state") );
+
+        m_state = (m_state & ~wxAUI_BUTTON_STATE_BUTTON_DISABLED) |
+                  (b ? 0 : wxAUI_BUTTON_STATE_BUTTON_DISABLED);
+    }
+
+    void SetDropDownEnabled(bool b)
+    {
+        wxCHECK_RET( m_dropDown && m_kind == wxITEM_NORMAL,
+                     wxS("Only normal tools with drop downs can have a split state") );
+
+        m_state = (m_state & ~wxAUI_BUTTON_STATE_DROPDOWN_DISABLED) |
+                  (b ? 0 : wxAUI_BUTTON_STATE_DROPDOWN_DISABLED);
+    }
+
+    bool IsButtonEnabled() const { return !((m_state & wxAUI_BUTTON_STATE_DISABLED) ||
+                                           ((m_state & wxAUI_BUTTON_STATE_SPLIT) &&
+                                            (m_state & wxAUI_BUTTON_STATE_BUTTON_DISABLED))); }
+
+    bool IsDropDownEnabled() const { return !((m_state & wxAUI_BUTTON_STATE_DISABLED) ||
+                                             ((m_state & wxAUI_BUTTON_STATE_SPLIT) &&
+                                              (m_state & wxAUI_BUTTON_STATE_DROPDOWN_DISABLED))); }
+
+    void CacheToolState()
+    {
+        ClearToolStateCache();
+        m_state |= wxAUI_BUTTON_STATE_CACHED |
+                   ((m_state & wxAUI_BUTTON_STATE_BUTTON_DISABLED) ? wxAUI_BUTTON_STATE_BUTTON_WAS_OFF : 0) |
+                   ((m_state & wxAUI_BUTTON_STATE_DROPDOWN_DISABLED) ? wxAUI_BUTTON_STATE_DROPDOWN_WAS_OFF : 0);
+    }
+
+    void ClearToolStateCache()
+    {
+        m_state &= ~(wxAUI_BUTTON_STATE_CACHED | wxAUI_BUTTON_STATE_BUTTON_WAS_OFF | wxAUI_BUTTON_STATE_DROPDOWN_WAS_OFF);
+    }
 
     void SetSticky(bool b) { m_sticky = b; }
     bool IsSticky() const { return m_sticky; }
@@ -238,9 +292,6 @@ public:
     {
         return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO;
     }
-
-    void SetButtonDropDownVisibility(wxAuiToolBarDropDownDisplay l) { m_show = l; }
-    wxAuiToolBarDropDownDisplay GetButtonDropDownVisibility() const { return m_show; }
 
 private:
 
@@ -257,7 +308,6 @@ private:
     int m_toolId;                       // item's id
     int m_kind;                         // item's kind
     int m_state;                        // state
-    wxAuiToolBarDropDownDisplay m_show; // which parts of a button with dropdown to show; ignore otherwise
     int m_proportion;                   // proportion
     bool m_active;                      // true if the item is currently active
     bool m_dropDown;                    // true if the item has a dropdown button
@@ -603,6 +653,12 @@ public:
     void SetToolDropDown(int toolId, bool dropdown);
     bool GetToolDropDown(int toolId) const;
 
+    void SetToolSplitState(int toolId, bool b);
+    void SetToolButtonEnabled(int toolId, bool b);
+    void SetDropDownEnabled(int toolId, bool b);
+    bool GetToolButtonEnabled(int toolId) const;
+    bool GetToolDropDownEnabled(int toolId) const;
+
     void SetToolBorderPadding(int padding);
     int  GetToolBorderPadding() const;
 
@@ -645,6 +701,8 @@ public:
 
     // Override to call DoIdleUpdate().
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) wxOVERRIDE;
+
+    void RefreshHover();
 
 protected:
     void Init();

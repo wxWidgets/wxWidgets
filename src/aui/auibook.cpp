@@ -18,6 +18,7 @@
 #if wxUSE_AUI
 
 #include "wx/aui/auibook.h"
+#include "wx/aui/auibar.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"

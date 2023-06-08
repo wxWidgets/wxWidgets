@@ -120,8 +120,7 @@ wxBitmap wxAuiToolBarItem::GetCurrentBitmapFor(wxWindow* wnd) const
     if (!m_bitmap.IsOk())
         return wxNullBitmap;
 
-    if ((m_state & wxAUI_BUTTON_STATE_DISABLED) || (m_show == wxAUI_TBTOOL_DROPDOWN_SHOW_NONE) ||
-        ((m_show == wxAUI_TBTOOL_DROPDOWN_SHOW_ARROW_ONLY) && (m_state & wxAUI_BUTTON_STATE_HOVER)))
+    if (!IsButtonEnabled())
     {
         if (m_disabledBitmap.IsOk())
             return m_disabledBitmap.GetBitmapFor(wnd);
@@ -280,7 +279,6 @@ void wxAuiGenericToolBarArt::DrawLabel(
     dc.DrawText(item.GetLabel(), textX, textY);
     dc.DestroyClippingRegion();
 }
-
 
 void wxAuiGenericToolBarArt::DrawButton(
                                     wxDC& dc,
@@ -486,8 +484,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
         return;
 
     wxBitmapBundle dropbmp;
-    if ((item.GetState() & wxAUI_BUTTON_STATE_DISABLED) ||
-        !(item.GetButtonDropDownVisibility() & wxAUI_TBTOOL_DROPDOWN_SHOW_ARROW_ONLY))
+    if (!item.IsDropDownEnabled())
     {
         dropbmp = m_disabledButtonDropDownBmp;
     }
@@ -501,7 +498,7 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
 
     // set the item's text color based on if it is disabled
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
-    if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
+    if (item.IsButtonEnabled())
     {
         dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     }
@@ -1334,6 +1331,41 @@ bool wxAuiToolBar::GetToolDropDown(int tool_id) const
         return false;
 
     return item->HasDropDown();
+}
+
+void wxAuiToolBar::SetToolSplitState(int tool_id, bool b)
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item) return;
+    item->SetSplitState(b);
+}
+
+void wxAuiToolBar::SetToolButtonEnabled(int tool_id, bool b)
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item) return;
+    item->SetButtonEnabled(b);
+}
+
+void wxAuiToolBar::SetDropDownEnabled(int tool_id, bool b)
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item) return;
+    item->SetDropDownEnabled(b);
+}
+
+bool wxAuiToolBar::GetToolButtonEnabled(int tool_id) const
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item) return false;
+    return item->IsButtonEnabled();
+}
+
+bool wxAuiToolBar::GetToolDropDownEnabled(int tool_id) const
+{
+    wxAuiToolBarItem* item = FindTool(tool_id);
+    if (!item) return false;
+    return item->IsDropDownEnabled();
 }
 
 void wxAuiToolBar::SetToolSticky(int tool_id, bool sticky)
@@ -2334,7 +2366,6 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     m_sizer->SetDimension(0, 0, x, y);
 
     Refresh(false);
-    Update();
 
     // idle events aren't sent while user is resizing frame (why?),
     // but resizing toolbar here causes havoc,
@@ -2433,6 +2464,13 @@ void wxAuiToolBar::UpdateWindowUI(long flags)
     }
 
     wxControl::UpdateWindowUI(flags);
+}
+
+void wxAuiToolBar::RefreshHover()
+{
+    wxPoint cursor_pos_after_evt = ScreenToClient(wxGetMousePosition());
+    SetHoverItem(FindToolByPosition(cursor_pos_after_evt.x, cursor_pos_after_evt.y));
+    Refresh();
 }
 
 void wxAuiToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
@@ -2659,19 +2697,26 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         const bool dropDownHit = m_actionItem->m_dropDown &&
                                  mouse_x >= (rect.x+rect.width-dropdownWidth) &&
                                  mouse_x < (rect.x+rect.width);
-        // If the click was on an area of a drop down button tool that is masked by the
-        // 'm_show' variable abort the processing, as if the tool is disabled.
-        if ((m_actionItem->m_kind == wxITEM_NORMAL) && (m_actionItem->m_dropDown))
+        // if the click was on an area of a drop down button tool that is disabled
+        // and was not clicked previously abort the processing.
+        if ((m_actionItem->m_kind == wxITEM_NORMAL) && m_actionItem->m_dropDown)
         {
-            if ((dropDownHit && (m_actionItem->m_show == wxAUI_TBTOOL_DROPDOWN_SHOW_BUTTON_ONLY)) ||
-                (!dropDownHit && (m_actionItem->m_show == wxAUI_TBTOOL_DROPDOWN_SHOW_ARROW_ONLY)) ||
-                (m_actionItem->m_show == wxAUI_TBTOOL_DROPDOWN_SHOW_NONE))
+            bool dd_disabled = (m_actionItem->GetState() & wxAUI_BUTTON_STATE_CACHED) ?
+                               (m_actionItem->GetState() & wxAUI_BUTTON_STATE_DROPDOWN_WAS_OFF) :
+                               !m_actionItem->IsDropDownEnabled();
+            bool btn_disabled = (m_actionItem->GetState() & wxAUI_BUTTON_STATE_CACHED) ?
+                                (m_actionItem->GetState() & wxAUI_BUTTON_STATE_BUTTON_WAS_OFF) :
+                                !m_actionItem->IsButtonEnabled();
+            // clear the cached tool state
+            m_actionItem->ClearToolStateCache();
+            if ((dropDownHit && dd_disabled) || (!dropDownHit && btn_disabled))
             {
                 m_actionPos = wxPoint(-1,-1);
                 m_actionItem = NULL;
                 return;
             }
         }
+
         e.SetDropDownClicked(dropDownHit);
 
         e.SetClickPoint(evt.GetPosition());
@@ -2683,7 +2728,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
         if(!GetEventHandler()->ProcessEvent(e) || e.GetSkipped())
             CaptureMouse();
-        else if (m_windowStyle & wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN)
+        else if ((m_windowStyle & wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN) && !dropDownHit)
             m_droppedItem = m_actionItem;
 
         if(dropDownHit)
@@ -2693,9 +2738,8 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         }
 
         // Ensure hovered item is really ok, as mouse may have moved during
-        //  event processing
-        wxPoint cursor_pos_after_evt = ScreenToClient(wxGetMousePosition());
-        SetHoverItem(FindToolByPosition(cursor_pos_after_evt.x, cursor_pos_after_evt.y));
+        // event processing
+        RefreshHover();
 
         DoIdleUpdate();
     }
@@ -2766,8 +2810,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
             // Ensure hovered item is really ok, as mouse may have moved during
             // event processing
-            wxPoint cursor_pos_after_evt = ScreenToClient(wxGetMousePosition());
-            SetHoverItem(FindToolByPosition(cursor_pos_after_evt.x, cursor_pos_after_evt.y));
+            RefreshHover();
 
             DoIdleUpdate();
         }

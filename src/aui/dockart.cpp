@@ -25,6 +25,7 @@
 #include "wx/aui/dockart.h"
 #include "wx/aui/auibook.h"
 #include "wx/aui/tabart.h"
+#include "wx/aui/auibar.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

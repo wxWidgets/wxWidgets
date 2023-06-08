@@ -30,6 +30,7 @@
 #include "wx/aui/auibook.h"
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
+#include "wx/aui/auibar.h"
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"

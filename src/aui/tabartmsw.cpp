@@ -21,6 +21,7 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/renderer.h"
+#include "wx/aui/auibar.h"
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {

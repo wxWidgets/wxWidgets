@@ -84,16 +84,6 @@ enum wxAuiPaneDockArtGradients
     wxAUI_GRADIENT_HORIZONTAL = 2
 };
 
-enum wxAuiPaneButtonState
-{
-    wxAUI_BUTTON_STATE_NORMAL   = 0,
-    wxAUI_BUTTON_STATE_HOVER    = 1 << 1,
-    wxAUI_BUTTON_STATE_PRESSED  = 1 << 2,
-    wxAUI_BUTTON_STATE_DISABLED = 1 << 3,
-    wxAUI_BUTTON_STATE_HIDDEN   = 1 << 4,
-    wxAUI_BUTTON_STATE_CHECKED  = 1 << 5
-};
-
 enum wxAuiButtonId
 {
     wxAUI_BUTTON_CLOSE = 101,
