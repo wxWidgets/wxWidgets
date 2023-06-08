@@ -460,6 +460,9 @@ private:
     // Object using for header custom drawing if necessary, may be NULL.
     wxMSWListHeaderCustomDraw* m_headerCustomDraw;
 
+    // Flag set inside OnCustomDraw when the selection status of an item
+    // is being tweaked to allow alternate selection colours.
+    bool m_tweeking_selection;
 
     wxDECLARE_DYNAMIC_CLASS(wxListCtrl);
     wxDECLARE_EVENT_TABLE();
@@ -467,3 +470,4 @@ private:
 };
 
 #endif // _WX_LISTCTRL_H_
+

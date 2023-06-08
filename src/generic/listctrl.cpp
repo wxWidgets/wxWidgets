@@ -710,12 +710,16 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
     if ( highlighted )
     {
 #ifdef __WXMAC__
-        if ( hasFocus )
+        if ( static_cast<wxListCtrl*>(listctrl)->IsEnabledAlternateSelectedColours() )
+            colText = static_cast<wxListCtrl*>(listctrl)->GetAlternateSelectedTextColour();
+        else if ( hasFocus )
             colText = *wxWHITE;
         else
             colText = *wxBLACK;
 #else
-        if ( hasFocus )
+        if ( static_cast<wxListCtrl*>(listctrl)->IsEnabledAlternateSelectedColours() )
+            colText = static_cast<wxListCtrl*>(listctrl)->GetAlternateSelectedTextColour();
+        else if ( hasFocus )
             colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         else
             colText = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
@@ -742,13 +746,25 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
     {
         // Use the renderer method to ensure that the selected items use the
         // native look.
-        int flags = wxCONTROL_SELECTED;
-        if ( hasFocus )
-            flags |= wxCONTROL_FOCUSED;
-        if (current)
-           flags |= wxCONTROL_CURRENT;
-        wxRendererNative::Get().
-            DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
+        int flags = 0;
+        if ( !static_cast<wxListCtrl*>(listctrl)->IsEnabledAlternateSelectedColours() )
+            flags = wxCONTROL_SELECTED;
+        else
+            dc->SetBrush( static_cast<wxListCtrl*>(listctrl)->GetAlternateSelectedBackgroundColour() );
+        if ( flags )
+        {
+            if ( hasFocus )
+                flags |= wxCONTROL_FOCUSED;
+            if (current)
+            flags |= wxCONTROL_CURRENT;
+            wxRendererNative::Get().
+                DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
+        }
+        else
+        {
+            dc->SetPen(*wxTRANSPARENT_PEN);
+            dc->DrawRectangle(rectHL);
+        }
     }
     else if ( attr && attr->HasBackgroundColour() )
     {

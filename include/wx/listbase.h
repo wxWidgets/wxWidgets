@@ -332,7 +332,7 @@ private:
 class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
-    wxListCtrlBase() { }
+    wxListCtrlBase() : m_altSelColours(false) { }
 
     // Image-related methods.
     // ----------------------
@@ -416,7 +416,6 @@ public:
     virtual wxArrayInt GetColumnsOrder() const = 0;
     virtual bool SetColumnsOrder(const wxArrayInt& orders) = 0;
 
-
     // Other miscellaneous accessors.
     // ------------------------------
 
@@ -434,6 +433,14 @@ public:
     void EnableAlternateRowColours(bool enable = true);
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
+
+    // Alternate colours for selected items
+    void EnableAlternateSelectedColours(bool enable = true);
+    bool IsEnabledAlternateSelectedColours() { return m_altSelColours; }
+    void SetAlternateSelectedTextColour(const wxColour& colour) { m_altSelText = colour; }
+    void SetAlternateSelectedBackgroundColour(const wxColour& colour) { m_altSelBack = colour; }
+    wxColour GetAlternateSelectedTextColour() { return m_altSelText; }
+    wxColour GetAlternateSelectedBackgroundColour() { return m_altSelBack; }
 
     virtual void ExtendRulesAndAlternateColour(bool WXUNUSED(extend) = true) { }
 
@@ -504,6 +511,11 @@ private:
 
     // user defined color to draw row lines, may be invalid
     wxItemAttr m_alternateRowColour;
+
+    // Text and background alternate colors for use on selected items
+    bool m_altSelColours;
+    wxColour m_altSelText;
+    wxColour m_altSelBack;
 };
 
 // ----------------------------------------------------------------------------

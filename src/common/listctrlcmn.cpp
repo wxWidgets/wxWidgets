@@ -242,6 +242,12 @@ void wxListCtrlBase::EnableAlternateRowColours(bool enable)
     }
 }
 
+void wxListCtrlBase::EnableAlternateSelectedColours(bool enable)
+{
+    m_altSelColours = enable;
+    Refresh();
+}
+
 wxItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
 {
     return (m_alternateRowColour.GetBackgroundColour().IsOk() && (item % 2))

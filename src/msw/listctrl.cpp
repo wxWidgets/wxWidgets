@@ -284,6 +284,8 @@ void wxListCtrl::Init()
     m_hasAnyAttr = false;
 
     m_headerCustomDraw = NULL;
+
+    m_tweeking_selection = false;
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -2525,7 +2527,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                 event.m_itemIndex = iItem;
                             }
 
-                            eventType = stNew & LVIS_SELECTED
+                            // If the control is using alternate selection colours the
+                            // use of the selection toggling hack on OnCustomDraw causes
+                            // the issuing of LVM_ITEMCHANGED notifications, which must
+                            // be discarded.
+
+                            if (!m_tweeking_selection)
+                                eventType = stNew & LVIS_SELECTED
                                             ? wxEVT_LIST_ITEM_SELECTED
                                             : wxEVT_LIST_ITEM_DESELECTED;
                         }
@@ -3231,8 +3239,10 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
 
 WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 {
+    static bool is_highlighted = false;
     LPNMLVCUSTOMDRAW pLVCD = (LPNMLVCUSTOMDRAW)lParam;
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
+    const HWND hwndList = nmcd.hdr.hwndFrom;
     switch ( nmcd.dwDrawStage )
     {
         case CDDS_PREPAINT:
@@ -3241,15 +3251,43 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             //
             // for virtual controls, always suppose that we have attributes as
             // there is no way to check for this
-            if ( IsVirtual() || m_hasAnyAttr )
+            //
+            // also force custom painting if alternate selection colours are set
+            if ( IsVirtual() || m_hasAnyAttr || IsEnabledAlternateSelectedColours() )
                 return CDRF_NOTIFYITEMDRAW;
             break;
 
         case CDDS_ITEMPREPAINT:
-            // get a message for each subitem
-            return CDRF_NOTIFYITEMDRAW;
+            // if alternate selection colours are set change them
+            if ( IsEnabledAlternateSelectedColours() )
+            {
+                int row = nmcd.dwItemSpec;
+                is_highlighted = ListView_GetItemState( hwndList, row, LVIS_SELECTED ) != 0;
+                if ( is_highlighted )
+                {
+                    // If the item is hot (mouse hovering on it) do not change colours
+                    if ( ListView_GetHotItem( hwndList ) != row )
+                    {
+                        // Set the alternate colours
+                        pLVCD->clrText = GetAlternateSelectedTextColour().GetRGB();
+                        pLVCD->clrTextBk = GetAlternateSelectedBackgroundColour().GetRGB();
+                        // Deselect the item to prevent Windows from changing the colours back
+                        m_tweeking_selection = true;
+                        ListView_SetItemState( hwndList, row, 0, LVIS_SELECTED );
+                    }
+                }
+                // request item post-paint notifications, so...
+                return CDRF_NEWFONT | CDRF_NOTIFYPOSTPAINT;
+            }
+            if ( InReportView() )
+            {
+                // get a message for each subitem and after paint
+                return CDRF_NOTIFYITEMDRAW | CDRF_NOTIFYPOSTPAINT;
+            }
+            break;
 
         case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
+        {
             const int item = nmcd.dwItemSpec;
             const int column = pLVCD->iSubItem;
 
@@ -3261,7 +3299,17 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             if ( column < 0 || column >= GetColumnCount() )
                 break;
 
+            // if alternate selection colours are set override whatever
+            // attributes are set for the cell
+            if ( IsEnabledAlternateSelectedColours() ) break;
             return HandleItemPrepaint(this, pLVCD, DoGetItemColumnAttr(item, column));
+        }
+        case CDDS_ITEMPOSTPAINT:
+            // Restore the selection if needed
+            if ( is_highlighted && m_tweeking_selection )
+                ListView_SetItemState(hwndList, nmcd.dwItemSpec, LVIS_SELECTED, LVIS_SELECTED);
+            m_tweeking_selection = false;
+            break;
     }
 
     return CDRF_DODEFAULT;
