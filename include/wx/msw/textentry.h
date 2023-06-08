@@ -12,6 +12,10 @@
 
 class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
 
+#if wxUSE_OLE
+    class wxKeyEvent;
+#endif
+
 // ----------------------------------------------------------------------------
 // wxTextEntry: common part of wxComboBox and (single line) wxTextCtrl
 // ----------------------------------------------------------------------------
@@ -128,4 +132,3 @@ private:
 #define wxHAS_NATIVE_TEXT_FORCEUPPER
 
 #endif // _WX_MSW_TEXTENTRY_H_
-
