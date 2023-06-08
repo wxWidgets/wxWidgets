@@ -67,6 +67,7 @@ public:
         m_item = item;
     }
 
+    void SetCommand(int command) { m_command = command; }
     void SetMenuItem(wxMenuItem *item) { m_item = item; }
 
     int GetFlags() const { return m_flags; }
