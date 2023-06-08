@@ -40,6 +40,7 @@ protected:
                              const wxLogRecordInfo& info) wxOVERRIDE;
 private:
     wxIPCClient* m_client;
+    wxCriticalSection synchro;
 
     wxDECLARE_NO_COPY_CLASS(wxLogClient);
 };
