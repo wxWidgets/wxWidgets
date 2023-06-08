@@ -436,22 +436,21 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     wxRect rect;
     m_owner->GetBoundingRect(m_itemEdited, rect, true);
 
-    // corrects position and size for better appearance
-#ifdef __WXMSW__
-    rect.x -= 5;
-#elif defined(__WXGTK__)
-    rect.x -= 5;
-#endif // platforms
-
     const wxSize textSize = rect.GetSize();
     wxSize fullSize = GetSizeFromTextSize(textSize);
+
+    // Ensure that the text field covers tree item.
+    fullSize.x = wxMax(fullSize.x, textSize.x + 5);
+
+    // Correct position for better appearance.
+#ifdef __WXMSW__
+    rect.x -= 5;
+#else
+    rect.x -= (fullSize.x - textSize.x) / 2;
+#endif
+
     if ( fullSize.y > textSize.y )
-    {
-        // It's ok to extend the rect to the right horizontally, which happens
-        // when we just change its size without changing its position below,
-        // but when extending it vertically, we need to keep it centered.
-        rect.y -= (fullSize.y - textSize.y + 1) / 2;
-    }
+        rect.y -= (fullSize.y - textSize.y) / 2;
 
     // Also check that the control fits into the parent window.
     const int totalWidth = m_owner->GetClientSize().x;
