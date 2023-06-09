@@ -271,7 +271,7 @@ public:
         Process a @c wxEVT_TOOL_DROPDOWN event. If unhandled,
         displays the default dropdown menu set using
         wxToolBar::SetDropdownMenu().
- @event{EVT_TB_CUSTOMIZE(id)}
+    @event{EVT_TB_CUSTOMIZE(id)}
         Process a @c wxEVT_TB_CUSTOMIZE event. Under MSW and OSX
         it will display native customization dialogs. On GTK it will
         be generic.

@@ -69,12 +69,11 @@ public:
                       wxItemKind kind = wxITEM_NORMAL,
                       wxObject *clientData = nullptr,
                       const wxString& shortHelpString = wxEmptyString,
-                      const wxString& longHelpString = wxEmptyString,
-                      bool available = true)
+                      const wxString& longHelpString = wxEmptyString)
         : m_label(label),
           m_shortHelpString(shortHelpString),
           m_longHelpString(longHelpString),
-          m_available(available)
+          m_available(true)
     {
         Init
         (
@@ -147,6 +146,7 @@ public:
     bool CanBeToggled() const
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
     bool IsAvailable() const { return m_available; }
+    void MarkAvailable(bool available) { m_available = available; }
 
     // attributes
     wxBitmapBundle GetNormalBitmapBundle() const { return m_bmpNormal; }
