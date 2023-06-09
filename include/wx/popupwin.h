@@ -111,6 +111,8 @@ public:
     // Override to implement delayed destruction of this window.
     virtual bool Destroy() wxOVERRIDE;
 
+    // get the mouse state when the popup is dismissed
+    wxMouseState& GetMouseStateOnDismiss() { return m_stateOnDismiss; }
 protected:
     // this is called when the popup is disappeared because of anything
     // else but direct call to Dismiss()
@@ -119,9 +121,12 @@ protected:
     // dismiss and notify the derived class
     void DismissAndNotify()
     {
+        m_stateOnDismiss = wxGetMouseState();
         Dismiss();
         OnDismiss();
     }
+private:
+    wxMouseState m_stateOnDismiss;
 };
 
 #ifdef __WXMSW__
