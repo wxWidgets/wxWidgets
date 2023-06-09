@@ -266,6 +266,9 @@ public:
     wxItemAttr *GetAttr() const;
     void SetAttr(wxItemAttr *attr);
 
+    void SetGeometry(const GeometryInfo& gi);
+    GeometryInfo* GetGeometry() { return m_gi; }
+
     // return true if the highlighting really changed
     bool Highlight( bool on );
 
@@ -279,7 +282,7 @@ public:
     }
 
     // draw the line on the given DC in icon/list mode
-    void Draw( wxDC *dc, bool current );
+    void Draw( wxDC *dc, bool current, bool highlighted );
 
     // the same in report mode: it needs more parameters as we don't store
     // everything in the item in report mode
@@ -325,6 +328,8 @@ public:
 
     ~wxListLineDataArray() { Clear(); }
 };
+
+class wxListLineVirtualGeometryArray : public wxVector<wxListLineData::GeometryInfo> {};
 
 //-----------------------------------------------------------------------------
 //  wxListHeaderWindow (internal)
@@ -792,6 +797,13 @@ protected:
     // the array of all line objects for a non virtual list control (for the
     // virtual list control we only ever use m_lines[0])
     wxListLineDataArray  m_lines;
+
+    // the array of all geometry info for lines when using wxLC_VIRTUAL and other
+    // than wxLC_REPORT as style. This has to be separated from the wxListLineData
+    // objects because when using wxLC_VIRTUAL only one object of that type ever
+    // exists, since they're created on demand, and therefore the results from
+    // the positioning code have to be stored elsewhere.
+    wxListLineVirtualGeometryArray m_virt_geo;
 
     // the list of column objects
     wxListHeaderDataList m_columns;

@@ -690,6 +690,11 @@ void wxListLineData::SetAttr(wxItemAttr *attr)
     item->SetAttr(attr);
 }
 
+void wxListLineData::SetGeometry(const GeometryInfo& gi)
+{
+    m_gi = new GeometryInfo(gi);
+}
+
 void wxListLineData::ApplyAttributes(wxDC *dc,
                                      const wxRect& rectHL,
                                      bool highlighted,
@@ -784,12 +789,12 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
 #endif
 }
 
-void wxListLineData::Draw(wxDC *dc, bool current)
+void wxListLineData::Draw(wxDC *dc, bool current, bool highlighted)
 {
     wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, wxT("no subitems at all??") );
 
-    ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current);
+    ApplyAttributes(dc, m_gi->m_rectHighlight, highlighted, current);
 
     wxListItemData *item = node->GetData();
     if (item->HasImage())
@@ -1707,6 +1712,11 @@ void wxListMainWindow::CacheLineData(size_t line)
     wxListLineData *ld = GetDummyLine();
 
     size_t countCol = GetColumnCount();
+    // decouples the quantity of defined headers from the actual data columns count
+    // (note that a data column is not the same as a visual column; a wxLC_LIST has
+    // one data column but multiple visible columns)
+    if ((listctrl->GetWindowStyleFlag() & wxLC_MASK_TYPE) != wxLC_REPORT)
+        countCol = 1;
     for ( size_t col = 0; col < countCol; col++ )
     {
         ld->SetText(col, listctrl->OnGetItemText(line, col));
@@ -1719,6 +1729,11 @@ void wxListMainWindow::CacheLineData(size_t line)
     }
 
     ld->SetAttr(listctrl->OnGetItemAttr(line));
+
+    // Copy the geometry info into this temporary object, if any exists
+    // (has to be checked because this code is called from within the
+    // code that sets the geometry info
+    if (line < m_virt_geo.size()) ld->SetGeometry(m_virt_geo[line]);
 }
 
 wxListLineData *wxListMainWindow::GetDummyLine() const
@@ -1726,13 +1741,20 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
     wxASSERT_MSG( !IsEmpty(), wxT("invalid line index") );
     wxASSERT_MSG( IsVirtual(), wxT("GetDummyLine() shouldn't be called") );
 
+    wxGenericListCtrl *listctrl = GetListCtrl();
     wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
 
+    size_t countCol = GetColumnCount();
+    // decouples the quantity of defined headers from the actual data columns count
+    // (note that a data column is not the same as a visual column; a wxLC_LIST has
+    // one data column but multiple visible columns)
+    if ((listctrl->GetWindowStyleFlag() & wxLC_MASK_TYPE) != wxLC_REPORT)
+        countCol = 1;
     // we need to recreate the dummy line if the number of columns in the
     // control changed as it would have the incorrect number of fields
     // otherwise
     if ( !m_lines.empty() &&
-            m_lines[0]->m_items.GetCount() != (size_t)GetColumnCount() )
+            m_lines[0]->m_items.GetCount() != countCol )
     {
         self->m_lines.Clear();
     }
@@ -2076,6 +2098,8 @@ void wxListMainWindow::RefreshSelected()
     }
 }
 
+#include <wx/log.h>
+
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
@@ -2241,10 +2265,11 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
     else // !report
     {
-        size_t count = GetItemCount();
-        for ( size_t i = 0; i < count; i++ )
+        // Recalculate the visible item range, if needed
+        GetVisibleLinesRange(NULL, NULL);
+        for ( size_t i = m_lineFrom; i <= m_lineTo; i++ )
         {
-            GetLine(i)->Draw( &dc, i == m_current );
+            GetLine(i)->Draw( &dc, i == m_current, IsHighlighted(i) );
         }
     }
 
@@ -4101,12 +4126,18 @@ void wxListMainWindow::RecalculatePositions()
 
             wxCoord widthMax = 0;
 
+            // clear the geometry data stored (if the styles are not wxLC_REPORT
+            // or don't include wxLC_VIRTUAL there will be no data stored)
+            m_virt_geo.clear();
             size_t i;
             for ( i = 0; i < count; i++ )
             {
                 wxListLineData *line = GetLine(i);
                 line->CalculateSize( &dc, iconSpacing );
                 line->SetPosition( x, y, iconSpacing );
+                // when using wxLC_VIRTUAL the 'line' object is a temporary one.
+                // so copy the geometry position into a persistent array
+                if ( IsVirtual() ) m_virt_geo.push_back(*line->GetGeometry());
 
                 wxSize sizeLine = GetLineSize(i);
 
@@ -4130,7 +4161,10 @@ void wxListMainWindow::RecalculatePositions()
                 for ( i = 0; i < count; i++ )
                 {
                     wxListLineData *line = GetLine(i);
-                    line->m_gi->ExtendWidth(widthMax);
+                    if ( IsVirtual() )
+                        m_virt_geo[i].ExtendWidth(widthMax);
+                    else
+                        line->m_gi->ExtendWidth(widthMax);
                 }
             }
 
@@ -4174,12 +4208,18 @@ void wxListMainWindow::RecalculatePositions()
                 m_linesPerPage = 0;
                 int currentlyVisibleLines = 0;
 
+                // clear the geometry data stored (if the styles are not wxLC_REPORT
+                // or don't include wxLC_VIRTUAL there will be no data stored)
+                m_virt_geo.clear();
                 for (size_t i = 0; i < count; i++)
                 {
                     currentlyVisibleLines++;
                     wxListLineData *line = GetLine( i );
                     line->CalculateSize( &dc, iconSpacing );
                     line->SetPosition( x, y, iconSpacing );
+                    // when using wxLC_VIRTUAL the 'line' object is a temporary one.
+                    // so copy the geometry position into a persistent array
+                    if ( IsVirtual() ) m_virt_geo.push_back(*line->GetGeometry());
 
                     wxSize sizeLine = GetLineSize( i );
 
@@ -4204,7 +4244,10 @@ void wxListMainWindow::RecalculatePositions()
                             size_t firstRowLine = i - currentlyVisibleLines + 1;
                             for (size_t j = firstRowLine; j <= i; j++)
                             {
-                                GetLine(j)->m_gi->ExtendWidth(maxWidthInThisRow);
+                                if ( IsVirtual() )
+                                    m_virt_geo[j].ExtendWidth(maxWidthInThisRow);
+                                else
+                                    GetLine(j)->m_gi->ExtendWidth(maxWidthInThisRow);
                             }
                         }
 
@@ -4815,36 +4858,120 @@ int wxListMainWindow::GetCountPerPage() const
 
 void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 {
-    wxASSERT_MSG( InReportView(), wxT("this is for report mode only") );
-
     if ( m_lineFrom == (size_t)-1 )
     {
         size_t count = GetItemCount();
         if ( count )
         {
-            m_lineFrom = GetListCtrl()->GetScrollPos(wxVERTICAL);
+            if ( InReportView() )
+            {
+                m_lineFrom = GetListCtrl()->GetScrollPos(wxVERTICAL);
 
-            // this may happen if SetScrollbars() hadn't been called yet
-            if ( m_lineFrom >= count )
-                m_lineFrom = count - 1;
+                // this may happen if SetScrollbars() hadn't been called yet
+                if ( m_lineFrom >= count )
+                    m_lineFrom = count - 1;
 
-            // we redraw one extra line but this is needed to make the redrawing
-            // logic work when there is a fractional number of lines on screen
-            m_lineTo = m_lineFrom + m_linesPerPage;
-            if ( m_lineTo >= count )
+                // we redraw one extra line but this is needed to make the redrawing
+                // logic work when there is a fractional number of lines on screen
+                m_lineTo = m_lineFrom + m_linesPerPage;
+                if ( m_lineTo >= count )
+                    m_lineTo = count - 1;
+            }
+            else // !report
+            {
+                // calculate the virtual range visible on the control
+                int ini;
+                int fin;
+                if ( HasFlag(wxLC_ALIGN_TOP) )
+                {
+                    ini = GetListCtrl()->GetScrollPos(wxVERTICAL) * SCROLL_UNIT_X;
+                    fin = GetSize().y + ini;
+                }
+                else
+                {
+                    ini = GetListCtrl()->GetScrollPos(wxHORIZONTAL) * SCROLL_UNIT_X;
+                    fin = GetSize().x + ini;
+                }
+                // look for the first item that is visible
+                size_t i = 0;
+                if ( HasFlag(wxLC_ALIGN_TOP) )
+                {
+                    for (; i < count; i++)
+                    {
+                        wxRect item;
+                        if (IsVirtual()) item = m_virt_geo[i].m_rectAll;
+                        else             item = GetLine(i)->m_gi->m_rectAll;
+                        if (((item.GetTop() >= ini) && (item.GetTop() <= fin)) ||
+                            ((item.GetBottom() >= ini) && (item.GetBottom() <= fin)))
+                        {
+                            m_lineFrom = i;
+                            break;
+                        }
+                    }
+                    if (i < count)
+                    {
+                        // look for the last item that is visible
+                        for (i = count - 1; i >= m_lineFrom; i--)
+                        {
+                            wxRect item;
+                            if (IsVirtual()) item = m_virt_geo[i].m_rectAll;
+                            else             item = GetLine(i)->m_gi->m_rectAll;
+                            if (((item.GetTop() >= ini) && (item.GetTop() <= fin)) ||
+                                ((item.GetBottom() >= ini) && (item.GetBottom() <= fin)))
+                            {
+                                m_lineTo = i;
+                                goto FoundLimits;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (; i < count; i++)
+                    {
+                        wxRect item;
+                        if (IsVirtual()) item = m_virt_geo[i].m_rectAll;
+                        else             item = GetLine(i)->m_gi->m_rectAll;
+                        if (((item.GetLeft() >= ini) && (item.GetLeft() <= fin)) ||
+                            ((item.GetRight() >= ini) && (item.GetRight() <= fin)))
+                        {
+                            m_lineFrom = i;
+                            break;
+                        }
+                    }
+                    if (i < count)
+                    {
+                        // look for the last item that is visible
+                        for (i = count - 1; i >= m_lineFrom; i--)
+                        {
+                            wxRect item;
+                            if (IsVirtual()) item = m_virt_geo[i].m_rectAll;
+                            else             item = GetLine(i)->m_gi->m_rectAll;
+                            if (((item.GetLeft() >= ini) && (item.GetLeft() <= fin)) ||
+                                ((item.GetRight() >= ini) && (item.GetRight() <= fin)))
+                            {
+                                m_lineTo = i;
+                                goto FoundLimits;
+                            }
+                        }
+                    }
+                }
+                // If nothing is visible
+                m_lineFrom = 0;
                 m_lineTo = count - 1;
+            }
         }
         else // empty control
         {
             m_lineFrom = 0;
             m_lineTo = (size_t)-1;
         }
+
+        FoundLimits:
+        wxASSERT_MSG( IsEmpty() ||
+                    (m_lineFrom <= m_lineTo && m_lineTo < count),
+                    wxT("GetVisibleLinesRange() returns incorrect result") );
     }
-
-    wxASSERT_MSG( IsEmpty() ||
-                  (m_lineFrom <= m_lineTo && m_lineTo < GetItemCount()),
-                  wxT("GetVisibleLinesRange() returns incorrect result") );
-
     if ( from )
         *from = m_lineFrom;
     if ( to )
@@ -5130,15 +5257,12 @@ bool wxGenericListCtrl::IsAscendingSortIndicator() const
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )
 {
-    wxASSERT_MSG( !(style & wxLC_VIRTUAL),
-                  wxT("wxLC_VIRTUAL can't be [un]set") );
-
     long flag = GetWindowStyle();
 
     if (add)
     {
         if (style & wxLC_MASK_TYPE)
-            flag &= ~(wxLC_MASK_TYPE | wxLC_VIRTUAL);
+            flag &= ~wxLC_MASK_TYPE;
         if (style & wxLC_MASK_ALIGN)
             flag &= ~wxLC_MASK_ALIGN;
         if (style & wxLC_MASK_SORT)
@@ -5186,9 +5310,9 @@ void wxGenericListCtrl::SetWindowStyleFlag( long flag )
             m_mainWin->SetReportView(inReportView);
         }
 
-        // m_mainWin->DeleteEverything();  wxMSW doesn't do that
-
         CreateOrDestroyHeaderWindowAsNeeded();
+
+        m_mainWin->RecalculatePositions();
 
         GetSizer()->Layout();
     }
@@ -5644,6 +5768,9 @@ bool wxGenericListCtrl::SortItems( wxListCtrlCompare fn, wxIntPtr data )
 void wxGenericListCtrl::OnSize(wxSizeEvent& event)
 {
     if (!m_mainWin) return;
+
+    // Reset the cached visual range
+    m_mainWin->ResetVisibleLinesRange();
 
     // We need to override OnSize so that our scrolled
     // window a) does call Layout() to use sizers for
