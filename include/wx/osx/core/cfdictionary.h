@@ -58,6 +58,14 @@ public:
      */
     wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon&) = default;
 
+    /*! @method     operator=
+        @abstract   Assigns the other ref's pointer to us when the otherRef is the same type.
+        @param otherRef The other ref holder to copy.
+        @discussion The incoming pointer is retained, the original pointer is released, and this object
+                    is made to point to the new pointer.
+    */
+    wxCFDictionaryRefCommon& operator=(const wxCFDictionaryRefCommon&) = default;
+
     wxCFTypeRef GetValue(const void* key)
     {
         CFTypeRef val = CFDictionaryGetValue(this->m_ptr, key);
