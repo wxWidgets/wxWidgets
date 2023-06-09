@@ -3522,7 +3522,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
     const int& m_eventType;
 
 private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxEventTableEntry);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxEventTableEntry);
 };
 
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
