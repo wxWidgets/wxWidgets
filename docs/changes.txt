@@ -338,6 +338,7 @@ wxGTK:
 - Allow selecting and copying text in wxMessageDialog (Ian McInerney, #23039).
 - Fix initial size of top-level window on Wayland (#23041).
 - Improve size and behaviour of in-place editor in wxTreeCtrl (taler21, #23001).
+- Also improve size compuation of wxTextCtrl (Alex Shvartzkop, #23610).
 
 wxMSW:
 
