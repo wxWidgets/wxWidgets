@@ -31,7 +31,9 @@ wxIMPLEMENT_CLASS(wxURL, wxURI);
 wxProtoInfo *wxURL::ms_protocols = nullptr;
 
 // Enforce linking of protocol classes:
+#if wxUSE_PROTOCOL_FILE
 USE_PROTOCOL(wxFileProto)
+#endif
 
 #if wxUSE_PROTOCOL_HTTP
 USE_PROTOCOL(wxHTTP)
