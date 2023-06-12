@@ -91,10 +91,6 @@ EOF
 [ $# -gt 0 ] || usage 1
 
 
-# Contentious tools determined by configure.
-EGREP="@EGREP@"
-
-
 # For the people who know what they want, or think they do:
 # Divide the valid arguments into functional groups for later examination,
 # then parse all command line arguments completely, deferring action on
@@ -524,11 +520,11 @@ fi
 # find_eligible_delegates _mask
 # Outputs all the config files installed which match the
 # (extended regex) _mask passed as an argument.
-find_eligible_delegates() { echo "$installed_configs" | $EGREP "$1" 2> /dev/null; }
+find_eligible_delegates() { echo "$installed_configs" | grep -E "$1" 2> /dev/null; }
 
 # user_mask_fits _config
 # Returns true if the string _config satisfies the user specified mask.
-user_mask_fits()          { echo "$1" | $EGREP "$configmask" > /dev/null 2>&1; }
+user_mask_fits()          { echo "$1" | grep -E "$configmask" > /dev/null 2>&1; }
 
 # count_fields _word
 # Returns the number of IFS split fields in _word
@@ -677,7 +673,7 @@ find_best_legacy_config()
     if [ -n "$_legacy_configs" ]; then
         _legacy_mask=`get_legacy_mask`
         for d in $_legacy_configs; do
-            if echo $d | $EGREP $_legacy_mask > /dev/null 2>&1 ; then
+            if echo $d | grep -E $_legacy_mask > /dev/null 2>&1 ; then
                 echo "$d"
                 return
             fi
