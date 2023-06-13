@@ -640,7 +640,7 @@ std::vector<wxPrintPageRange> wxPrintout::GetPageInfoRanges(int* minPage, int* m
     GetPageInfo(minPage, maxPage, &fromPage, &toPage);
 
     std::vector<wxPrintPageRange> ranges;
-    ranges.push_back(wxPrintPageRange{ fromPage, toPage });
+    ranges.emplace_back(fromPage, toPage);
     return ranges;
 }
 

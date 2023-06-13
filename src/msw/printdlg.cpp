@@ -987,7 +987,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
         {
             int fromPage = pd->lpPageRanges[i].nFromPage;
             int toPage = pd->lpPageRanges[i].nToPage;
-            ranges.push_back(wxPrintPageRange{ fromPage, toPage });
+            ranges.emplace_back(fromPage, toPage);
         }
         data.SetPageRanges(ranges);
     }
