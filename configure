@@ -41837,6 +41837,86 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WEBKIT_LIBS"; then
+        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit2gtk-4.1"`
+        else
+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit2gtk-4.1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$WEBKIT_PKG_ERRORS" >&5
+
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&5
+$as_echo "$as_me: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&2;}
+
+elif test $pkg_failed = untried; then
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&5
+$as_echo "$as_me: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&2;}
+
+else
+	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                                    USE_WEBVIEW_WEBKIT2=1
+                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
+                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+
+fi
+                if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
+$as_echo_n "checking for WEBKIT... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$WEBKIT_CFLAGS"; then
+        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
   ac_status=$?
@@ -41887,13 +41967,13 @@ fi
 	echo "$WEBKIT_PKG_ERRORS" >&5
 
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
-$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&5
+$as_echo "$as_me: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&2;}
 
 elif test $pkg_failed = untried; then
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk not found, falling back to webkitgtk" >&5
-$as_echo "$as_me: WARNING: webkit2gtk not found, falling back to webkitgtk" >&2;}
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&5
+$as_echo "$as_me: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&2;}
 
 else
 	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
@@ -41901,11 +41981,12 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                    USE_WEBVIEW_WEBKIT2=1
-                                    CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
-                                    EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                        USE_WEBVIEW_WEBKIT2=1
+                                        CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
+                                        EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
 
 fi
+                fi
             fi
             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
                 webkitgtk=webkit-1.0
