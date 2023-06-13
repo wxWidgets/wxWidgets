@@ -1598,10 +1598,13 @@ public:
         {
             eventsMask &= ~wxTOUCH_PAN_GESTURES;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
             m_panGestureRecognizer =
             [[NSPanGestureRecognizer alloc] initWithTarget:m_view action: @selector(handlePanGesture:)];
             if ( !class_respondsToSelector(cls, @selector(handlePanGesture:)) )
                 class_addMethod(cls, @selector(handlePanGesture:), (IMP) wxOSX_panGestureEvent, "v@:@" );
+#pragma clang diagnostic pop
             [m_view addGestureRecognizer:m_panGestureRecognizer];
         }
         else
@@ -1613,6 +1616,8 @@ public:
         {
             eventsMask &= ~wxTOUCH_ZOOM_GESTURE;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
             m_magnificationGestureRecognizer =
             [[NSMagnificationGestureRecognizer alloc] initWithTarget:m_view action: @selector(handleZoomGesture:)];
             if ( !class_respondsToSelector(cls, @selector(handleZoomGesture:)) )
