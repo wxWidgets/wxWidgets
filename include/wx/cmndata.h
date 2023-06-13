@@ -150,11 +150,14 @@ private:
  * Contains a range of pages to be printed.
  */
 
-struct wxPrintPageRange
+class wxPrintPageRange
 {
 public:
     int fromPage = 0;
     int toPage = 0;
+
+    wxPrintPageRange() = default;
+    wxPrintPageRange(int _fromPage, int _toPage) : fromPage(_fromPage), toPage(_toPage) { }
 
     // check if both components are set/initialized
     bool IsFullySpecified() const { return fromPage > 0 && toPage > 0; }
