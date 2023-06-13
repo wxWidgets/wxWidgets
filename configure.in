@@ -7529,15 +7529,27 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
             if test "$WXGTK3" = 1; then
                 PKG_CHECK_MODULES([WEBKIT],
-                                  [webkit2gtk-4.0],
+                                  [webkit2gtk-4.1],
                                   [
                                     USE_WEBVIEW_WEBKIT2=1
                                     CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                                   ],
                                   [
-                                    AC_MSG_WARN([webkit2gtk not found, falling back to webkitgtk])
+                                    AC_MSG_WARN([webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0])
                                   ])
+                if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                    PKG_CHECK_MODULES([WEBKIT],
+                                      [webkit2gtk-4.0],
+                                      [
+                                        USE_WEBVIEW_WEBKIT2=1
+                                        CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
+                                        EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                      ],
+                                      [
+                                        AC_MSG_WARN([webkit2gtk-4.0 not found, falling back to webkitgtk])
+                                      ])
+                fi
             fi
             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
                 webkitgtk=webkit-1.0
