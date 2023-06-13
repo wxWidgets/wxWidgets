@@ -626,17 +626,10 @@ bool wxPrintout::HasPage(int page)
 
 void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toPage)
 {
-    if(minPage)
-        *minPage = 1;
-
-    if(maxPage)
-        *maxPage = DEFAULT_MAX_PAGES;
-
-    if(fromPage)
-        *fromPage = 1;
-
-    if(toPage)
-        *toPage = 1;
+    *minPage = 1;
+    *maxPage = DEFAULT_MAX_PAGES;
+    *fromPage = 1;
+    *toPage = 1;
 }
 
 std::vector<wxPrintPageRange> wxPrintout::GetPageInfoRanges(int* minPage, int* maxPage)
