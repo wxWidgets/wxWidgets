@@ -1602,6 +1602,10 @@ outlineView:(NSOutlineView*)outlineView
     const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:row]);
 
     const NSInteger col = [self clickedColumn];
+
+    if ( col == -1)
+      return; // even if row != -1 an invalid column value may occur (e.g. by clicking to the very left or right of the dataview)
+
     wxDataViewColumn* const dvCol = implementation->GetColumn(col);
 
     // Check if we need to activate a custom renderer first.
