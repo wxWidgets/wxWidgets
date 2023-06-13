@@ -170,7 +170,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     else if(m_printDialogData.GetAllPages())
     {
         pageRanges.clear(); // we print all pages
-        pageRanges.push_back(wxPrintPageRange(minPage, maxPage));
+        pageRanges.push_back(wxPrintPageRange{ minPage, maxPage });
     }
     else
     {
