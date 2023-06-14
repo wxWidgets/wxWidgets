@@ -5545,21 +5545,21 @@ if test "$ac_cv_func_gettimeofday" = "yes"; then
                 gettimeofday(&tv, NULL);
             ],
             wx_cv_func_gettimeofday_has_2_args=yes,
-            AC_TRY_COMPILE(
-                [
-                    #include <sys/time.h>
-                    #include <unistd.h>
-                ],
-                [
-                    struct timeval tv;
-                    gettimeofday(&tv);
-                ],
-                wx_cv_func_gettimeofday_has_2_args=no,
-                [
-                    AC_MSG_WARN([failed to determine number of gettimeofday() arguments])
-                    wx_cv_func_gettimeofday_has_2_args=unknown
-                ]
-            )
+            [AC_TRY_COMPILE(
+                 [
+                     #include <sys/time.h>
+                     #include <unistd.h>
+                 ],
+                 [
+                     struct timeval tv;
+                     gettimeofday(&tv);
+                 ],
+                 wx_cv_func_gettimeofday_has_2_args=no,
+                 [
+                     AC_MSG_WARN([failed to determine number of gettimeofday() arguments])
+                     wx_cv_func_gettimeofday_has_2_args=unknown
+                 ]
+            )]
         )
     ])
 
