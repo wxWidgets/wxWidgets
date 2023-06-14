@@ -1705,17 +1705,12 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
 
     ::SetParent(hWndChild, hWndParent);
 
-    MSWAfterReparent();
-
-    return true;
-}
-
-void wxWindowMSW::MSWAfterReparent()
-{
     if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         EnsureParentHasControlParentStyle(GetParent());
     }
+
+    return true;
 }
 
 void wxWindowMSW::MSWDisableComposited()
@@ -3970,7 +3965,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     }
 
                     // Draw the border
-                    ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, nullptr);
+                    hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, nState);
                 }
             }
             break;

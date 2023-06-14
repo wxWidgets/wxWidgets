@@ -300,7 +300,7 @@ private:
     // wrapper around DrawThemeBackground() translating flags to NORMAL/HOT/
     // PUSHED/DISABLED states (and so suitable for drawing anything
     // button-like)
-    void DoDrawButtonLike(HTHEME htheme,
+    void DoDrawButtonLike(wxUxThemeHandle& hTheme,
                           int part,
                           wxDC& dc,
                           const wxRect& rect,
@@ -644,16 +644,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
     else
         state = CBXS_NORMAL;
 
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                CP_DROPDOWNBUTTON,
-                                state,
-                                &r,
-                                nullptr
-                            );
-
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, CP_DROPDOWNBUTTON, state);
 }
 
 int
@@ -681,15 +672,8 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
         state = HIS_HOT;
     else
         state = HIS_NORMAL;
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                HP_HEADERITEM,
-                                state,
-                                &r,
-                                nullptr
-                            );
+
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, HP_HEADERITEM, state);
 
     // NOTE: Using the theme to draw HP_HEADERSORTARROW doesn't do anything.
     // Why?  If this can be fixed then draw the sort arrows using the theme
@@ -718,15 +702,8 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
     RECT r = ConvertToRECT(dc, rect);
 
     int state = flags & wxCONTROL_EXPANDED ? GLPS_OPENED : GLPS_CLOSED;
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                TVP_GLYPH,
-                                state,
-                                &r,
-                                nullptr
-                            );
+
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, TVP_GLYPH, state);
 }
 
 bool
@@ -764,21 +741,13 @@ wxRendererXP::DoDrawCheckMark(int kind,
     if ( flags & wxCONTROL_DISABLED )
         state = MC_CHECKMARKDISABLED;
 
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                kind,
-                                state,
-                                &r,
-                                nullptr
-                            );
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, kind, state);
 
     return true;
 }
 
 void
-wxRendererXP::DoDrawButtonLike(HTHEME htheme,
+wxRendererXP::DoDrawButtonLike(wxUxThemeHandle& hTheme,
                                int part,
                                wxDC& dc,
                                const wxRect& rect,
@@ -820,15 +789,7 @@ wxRendererXP::DoDrawButtonLike(HTHEME htheme,
     else if ( part == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
         state = PBS_DEFAULTED;
 
-    ::DrawThemeBackground
-                            (
-                                htheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                part,
-                                state,
-                                &r,
-                                nullptr
-                            );
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, part, state);
 }
 
 void
@@ -885,9 +846,7 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
     {
         if (::IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
         {
-            SIZE checkSize;
-            if (::GetThemePartSize(hTheme, nullptr, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, nullptr, TS_DRAW, &checkSize) == S_OK)
-                return wxSize(checkSize.cx, checkSize.cy);
+            return hTheme.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL);
         }
     }
     return m_rendererNative.GetCheckBoxSize(win, flags);
@@ -902,9 +861,7 @@ wxSize wxRendererXP::GetCheckMarkSize(wxWindow* win)
     {
         if (::IsThemePartDefined(hTheme, MENU_POPUPCHECK, 0))
         {
-            SIZE checkSize;
-            if (::GetThemePartSize(hTheme, nullptr, MENU_POPUPCHECK, MC_CHECKMARKNORMAL, nullptr, TS_DRAW, &checkSize) == S_OK)
-                return wxSize(checkSize.cx, checkSize.cy);
+            return hTheme.GetDrawSize(MENU_POPUPCHECK, MC_CHECKMARKNORMAL);
         }
     }
     return m_rendererNative.GetCheckMarkSize(win);
@@ -919,11 +876,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
         {
-            SIZE expSize;
-            if (::GetThemePartSize(hTheme, nullptr, TVP_GLYPH, GLPS_CLOSED, nullptr,
-                                   TS_DRAW, &expSize) == S_OK)
-                return wxSize(expSize.cx, expSize.cy);
-
+            return hTheme.GetDrawSize(TVP_GLYPH, GLPS_CLOSED);
         }
     }
 
@@ -948,15 +901,8 @@ DoDrawCollapseButton(wxWindow* win, HDC hdc, RECT r, int flags)
         if ( flags & wxCONTROL_EXPANDED )
             state += 3;
 
-        ::DrawThemeBackground
-            (
-            hTheme,
-            hdc,
-            TDLG_EXPANDOBUTTON,
-            state,
-            &r,
-            nullptr
-            );
+        hTheme.DrawBackground(hdc, r, TDLG_EXPANDOBUTTON, state);
+
         return true;
     }
 
@@ -1014,19 +960,10 @@ wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
 
     if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
-        SIZE s;
-        ::GetThemePartSize(hTheme,
-            GetHdcOf(dc.GetTempHDC()),
-            TDLG_EXPANDOBUTTON,
-            TDLGEBS_NORMAL,
-            nullptr,
-            TS_TRUE,
-            &s);
-
-        return wxSize(s.cx, s.cy);
+        return hTheme.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL);
     }
-    else
-        return m_rendererNative.GetCollapseButtonSize(win, dc);
+
+    return m_rendererNative.GetCollapseButtonSize(win, dc);
 }
 
 void
@@ -1046,7 +983,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
         if ( ::IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
             ::DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
 
-        ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), LVP_LISTITEM, itemState, &rc, 0);
+        hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), rc, LVP_LISTITEM, itemState);
     }
     else
     {
@@ -1292,13 +1229,11 @@ void wxRendererXP::DrawGauge(wxWindow* win,
 
     RECT r = ConvertToRECT(dc, rect);
 
-    ::DrawThemeBackground(
-        hTheme,
+    hTheme.DrawBackground(
         GetHdcOf(dc.GetTempHDC()),
-        flags & wxCONTROL_SPECIAL ? PP_BARVERT : PP_BAR,
-        0,
-        &r,
-        nullptr);
+        r,
+        flags & wxCONTROL_SPECIAL ? PP_BARVERT : PP_BAR
+    );
 
     RECT contentRect;
     ::GetThemeBackgroundContentRect(
@@ -1325,13 +1260,11 @@ void wxRendererXP::DrawGauge(wxWindow* win,
                                           max);
     }
 
-    ::DrawThemeBackground(
-        hTheme,
+    hTheme.DrawBackground(
         GetHdcOf(dc.GetTempHDC()),
-        flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK,
-        0,
-        &contentRect,
-        nullptr);
+        contentRect,
+        flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK
+    );
 }
 
 // ----------------------------------------------------------------------------

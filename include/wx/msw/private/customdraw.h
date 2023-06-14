@@ -78,7 +78,7 @@ public:
     // need to be called any more.
     void UseHeaderThemeColors(HWND hwndHdr)
     {
-        wxUxThemeHandle theme{hwndHdr, L"Header"};
+        auto theme = wxUxThemeHandle::NewAtStdDPI(hwndHdr, L"Header");
 
         m_attr.SetTextColour(theme.GetColour(HP_HEADERITEM, TMT_TEXTCOLOR));
 

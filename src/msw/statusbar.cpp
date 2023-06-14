@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/custompaint.h"
 #include "wx/msw/private/darkmode.h"
 
 #include "wx/tooltip.h"
@@ -203,7 +204,7 @@ void wxStatusBar::MSWUpdateFieldsWidths()
 
     // update the field widths in the native control:
 
-    int *pWidths = new int[count];
+    std::vector<int> pWidths(count);
 
     int nCurPos = 0;
     int i;
@@ -218,7 +219,7 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     // separator line just before it.
     pWidths[count - 1] += gripWidth;
 
-    if ( !StatusBar_SetParts(GetHwnd(), count, pWidths) )
+    if ( !StatusBar_SetParts(GetHwnd(), count, &pWidths[0]) )
     {
         wxLogLastError("StatusBar_SetParts");
     }
@@ -228,8 +229,6 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     {
         DoUpdateStatusText(i);
     }
-
-    delete [] pWidths;
 }
 
 void wxStatusBar::DoUpdateStatusText(int nField)
@@ -573,17 +572,12 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         // resizing. It is possible to send this message to any window.
         if ( wParam == HTBOTTOMRIGHT )
         {
-            wxWindow *win;
-
-            for ( win = GetParent(); win; win = win->GetParent() )
+            if ( wxWindow *win = wxGetTopLevelParent(this) )
             {
-                if ( win->IsTopLevel() )
-                {
-                    SendMessage(GetHwndOf(win), WM_NCLBUTTONDOWN,
-                                wParam, lParam);
+                SendMessage(GetHwndOf(win), WM_NCLBUTTONDOWN,
+                            wParam, lParam);
 
-                    return 0;
-                }
+                return 0;
             }
         }
     }
@@ -604,6 +598,51 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             }
         }
     }
+
+#if wxUSE_UXTHEME
+    // We need to paint the size grip ourselves in dark mode as the default one
+    // is simply invisible.
+    if ( nMsg == WM_PAINT &&
+            (::GetWindowLong(GetHwnd(), GWL_STYLE) & SBARS_SIZEGRIP) &&
+                wxMSWDarkMode::IsActive() )
+    {
+        wxMSWImpl::CustomPaint
+        (
+            GetHwnd(),
+            [this](HWND hwnd, WPARAM wParam)
+            {
+                m_oldWndProc(hwnd, WM_PAINT, wParam, 0);
+            },
+            [this](const wxBitmap& bmpOrig)
+            {
+                wxBitmap bmp(bmpOrig);
+                wxMemoryDC dc(bmp);
+
+                // Note that we must _not_ open theme data for this window: it
+                // uses "ExplorerStatusBar" theme which doesn't draw SP_GRIPPER
+                // correctly (which is why we have to draw it ourselves).
+                auto theme = wxUxThemeHandle::NewAtDPI(0, L"Status", GetDPI().y);
+                if ( !theme )
+                    return bmp;
+
+                const wxRect rectTotal(bmp.GetSize());
+
+                const wxSize sizeGrip = theme.GetDrawSize(SP_GRIPPER);
+
+                // Draw the grip in the lower right corner of the window.
+                //
+                // TODO-RTL: Is this correct for RTL layout?
+                wxRect rect(sizeGrip);
+                rect.x = rectTotal.width - sizeGrip.x;
+                rect.y = rectTotal.height - sizeGrip.y;
+
+                theme.DrawBackground(dc.GetHDC(), rect, SP_GRIPPER);
+
+                return bmp;
+            }
+        );
+    }
+#endif // wxUSE_UXTHEME
 
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }
@@ -653,7 +692,8 @@ bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* W
 
 bool wxStatusBar::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 {
-    // This is not documented anywhere but seems to work.
+    // This is not documented anywhere but seems to work (except for the size
+    // grip which we draw ourselves in our WM_PAINT handler).
     //
     // Note that we should _not_ set the theme name to "Explorer", this ID only
     // works if we do _not_ do it.
@@ -677,7 +717,7 @@ wxStatusBar::GetClassDefaultAttributes(wxWindowVariant variant)
     if ( wxMSWDarkMode::IsActive() )
     {
         // It looks like we don't have to use a valid HWND here.
-        wxUxThemeHandle theme{HWND(0), L"ExplorerStatusBar"};
+        auto theme = wxUxThemeHandle::NewAtStdDPI(L"ExplorerStatusBar");
 
         wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
         if ( col.IsOk() )

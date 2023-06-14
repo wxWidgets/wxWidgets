@@ -257,12 +257,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    // LISTVIEW doesn't redraw correctly when WS_EX_COMPOSITED is used by
-    // either the control itself (which never happens now, see our overridden
-    // SetDoubleBuffered()) or even by any of its parents, so we must reset
-    // this style for them.
-    MSWDisableComposited();
-
     const wxVisualAttributes& defAttrs = GetDefaultAttributes();
 
     if ( wxMSWDarkMode::IsActive() )
@@ -369,18 +363,6 @@ void wxListCtrl::MSWInitHeader()
         m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
     m_headerCustomDraw->UseHeaderThemeColors(hwndHdr);
-}
-
-void wxListCtrl::MSWAfterReparent()
-{
-    // We did it for the original parent in our Create(), but we need to do it
-    // here for the new one.
-    MSWDisableComposited();
-
-    // Ideally we'd re-enable WS_EX_COMPOSITED for the old parent, but this is
-    // difficult to do correctly, as we'd need to track the number of list
-    // controls under it instead of just turning it on/off, so for now we don't
-    // do it.
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -653,7 +635,7 @@ wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
         // Note that we intentionally do not use this window HWND for the
         // theme, as it doesn't have dark values for it -- but does have them
         // when we use null window.
-        wxUxThemeHandle theme{HWND(0), L"ItemsView"};
+        auto theme = wxUxThemeHandle::NewAtStdDPI(L"ItemsView");
 
         wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
         if ( col.IsOk() )
@@ -3154,20 +3136,13 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     }
 }
 
-// Flags for HandleItemPaint()
-enum
-{
-    Paint_Default       = 0,
-    Paint_OnlySelected  = 1
-};
-
 // This function is normally called only if we use custom colours, but it's
-// also called when using dark mode to draw the item if it's selected. In this
-// case, Paint_OnlySelected is used and we do nothing and return false if the
-// item is not selected.
+// also called when using dark mode as we have to draw the selected item
+// ourselves when using it, and if we do this, we have to paint all the items
+// for consistency.
 //
 // pLVCD->clrText and clrTextBk should contain the colours to use
-bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
+void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3226,18 +3201,12 @@ bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
         pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(syscolFg));
         pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(syscolBg));
     }
-    else // not selected
-    {
-        if ( flags & Paint_OnlySelected )
-            return false;
-
-        // Continue and use normal colours from pLVCD
-    }
+    //else: not selected, use normal colours from pLVCD
 
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
 
-    ::SetTextColor(hdc, pLVCD->clrText);
+    COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
     ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
@@ -3249,26 +3218,33 @@ bool HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int flags = 0)
         HandleSubItemPrepaint(pLVCD, hfont, colCount);
     }
 
-    HandleItemPostpaint(nmcd);
+    ::SetTextColor(hdc, colTextOld);
 
-    return true;
+    HandleItemPostpaint(nmcd);
 }
 
 WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
                             LPNMLVCUSTOMDRAW pLVCD,
                             wxItemAttr *attr)
 {
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We need to always paint selected items ourselves as they come
+        // out completely wrong in DarkMode_Explorer theme, see the comment
+        // before MSWGetDarkModeSupport().
+        pLVCD->clrText = attr && attr->HasTextColour()
+                            ? wxColourToRGB(attr->GetTextColour())
+                            : wxColourToRGB(listctrl->GetTextColour());
+        pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
+                            ? wxColourToRGB(attr->GetBackgroundColour())
+                            : wxColourToRGB(listctrl->GetBackgroundColour());
+
+        HandleItemPaint(pLVCD, nullptr);
+        return CDRF_SKIPDEFAULT;
+    }
+
     if ( !attr )
     {
-        if ( wxMSWDarkMode::IsActive() )
-        {
-            // We need to always paint selected items ourselves as they come
-            // out completely wrong in DarkMode_Explorer theme, see the comment
-            // before MSWGetDarkModeSupport().
-            if ( HandleItemPaint(pLVCD, nullptr, Paint_OnlySelected) )
-                return CDRF_SKIPDEFAULT;
-        }
-
         // nothing to do for this item
         return CDRF_DODEFAULT;
     }
@@ -3361,29 +3337,39 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
     return CDRF_DODEFAULT;
 }
 
-// Necessary for drawing hrules and vrules, if specified
+// We need to draw the control ourselves to make it work with WS_EX_COMPOSITED:
+// by default, it's not redrawn correctly, apparently due to some optimizations
+// used internally, but creating wxPaintDC ourselves seems to be sufficient to
+// avoid them, so we do it even if we don't draw anything on it ourselves.
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
     const int itemCount = GetItemCount();
     const bool drawHRules = HasFlag(wxLC_HRULES);
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
-    if (!InReportView() || !(drawHRules || drawVRules) || !itemCount)
+    // Check if we need to do anything ourselves: either draw the rules or, in
+    // case of using dark mode under Windows 11, erase the unwanted separator
+    // lines drawn below the items by default, which are ugly because they
+    // don't align with the separators drawn by the header control.
+    bool needToDraw = false,
+         needToErase = false;
+    if ( InReportView() )
     {
-        event.Skip();
-        return;
+        if ( (drawHRules || drawVRules) && itemCount )
+            needToDraw = true;
+        else if ( wxMSWDarkMode::IsActive() && wxGetWinVersion() >= wxWinVersion_11 )
+            needToErase = true;
     }
 
     wxPaintDC dc(this);
 
     wxListCtrlBase::OnPaint(event);
 
+    if ( !needToDraw && !needToErase )
+        return;
+
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
-
-    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
-    dc.SetPen(pen);
-    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     wxSize clientSize = GetClientSize();
 
@@ -3396,6 +3382,21 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
+
+    if ( needToErase )
+    {
+        wxRect lastRect;
+        GetItemRect(bottom, lastRect);
+
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(GetBackgroundColour());
+        dc.DrawRectangle(0, lastRect.y, clientSize.x, clientSize.y - lastRect.y);
+        return;
+    }
+
+    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     if (drawHRules)
     {

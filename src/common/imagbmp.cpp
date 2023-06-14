@@ -546,7 +546,13 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     // destroy existing here instead of:
     image->Destroy();
-    image->Create(width, height);
+    // RLE-compressed bitmaps do not necessarily specify every pixel explicitly,
+    // as the delta escape sequence allows offsetting the current pixel position.
+    // They have an implicit black background, which we get by clearing the image
+    // on creation. Otherwise there is no point clearing, because we are going to
+    // set every pixel from the source data anyway.
+    bool clear = desc.comp == BI_RLE4 || desc.comp == BI_RLE8;
+    image->Create(width, height, clear);
 
     unsigned char *ptr = image->GetData();
 
@@ -680,23 +686,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             gbits = 8;
             bbits = 8;
         }
-    }
-
-    /*
-     * Reading the image data
-     */
-    unsigned char *data = ptr;
-
-    /* set the whole image to the background color */
-    if ( bpp < 16 && (desc.comp == BI_RLE4 || desc.comp == BI_RLE8) )
-    {
-        for (int i = 0; i < width * height; i++)
-        {
-            *ptr++ = cmap[0].r;
-            *ptr++ = cmap[0].g;
-            *ptr++ = cmap[0].b;
-        }
-        ptr = data;
     }
 
     int linesize = ((width * bpp + 31) / 32) * 4;

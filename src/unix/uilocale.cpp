@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/uilocale.h"
+#include "wx/private/glibc.h"
 #include "wx/private/uilocale.h"
 
 #include "wx/unix/private/uilocale.h"
@@ -709,8 +710,9 @@ wxUILocaleImplUnix::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
 wxString
 wxUILocaleImplUnix::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
 {
-#if defined(HAVE_LANGINFO_H)
-#if defined(__LINUX__) && defined(__GLIBC__)
+    // This really should be a configure/CMake test, but for now the only
+    // environment known to provide _NL_WALTMON_xxx is Linux with glibc 2.27+.
+#if defined(__LINUX__) && wxCHECK_GLIBC_VERSION(2, 27)
     static int monthNameIndex[6][12] =
     {
         // Formatting context
@@ -749,8 +751,8 @@ wxUILocaleImplUnix::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm f
         idx += 3;
 
     return wxString(GetLangInfoWide(monthNameIndex[idx][month]));
-#else // !__LINUX__ || !__GLIBC__
-    // If system is not Linux-like or does not have GLIBC, fall back
+#elif defined(HAVE_LANGINFO_H)
+    // If system is not Linux-like or doesn't have new enough GLIBC, fall back
     // to LC_TIME symbols that should be defined according to POSIX.
     static int monthNameIndex[3][12] =
     {
@@ -774,11 +776,10 @@ wxUILocaleImplUnix::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm f
         return wxString();
 
     return wxString(GetLangInfo(monthNameIndex[idx][month]), wxCSConv(GetCodeSet()));
-#endif //  __LINUX__ && __GLIBC__ / !__LINUX__ || !__GLIBC__
 #else // !HAVE_LANGINFO_H
     // If HAVE_LANGINFO_H is not available, fall back to English names.
     return wxDateTime::GetEnglishMonthName(month, form);
-#endif // HAVE_LANGINFO_H && __LINUX__/!HAVE_LANGINFO_H || !__LINUX__
+#endif // HAVE_LANGINFO_H
 }
 
 wxString
