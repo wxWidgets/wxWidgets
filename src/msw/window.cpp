@@ -6727,6 +6727,7 @@ const struct wxKeyMapping
     { VK_SUBTRACT,      WXK_NUMPAD_SUBTRACT },
     { VK_DECIMAL,       WXK_NUMPAD_DECIMAL },
     { VK_DIVIDE,        WXK_NUMPAD_DIVIDE },
+    { VK_RETURN,        WXK_NUMPAD_ENTER },
 
     { VK_F1,            WXK_F1 },
     { VK_F2,            WXK_F2 },
