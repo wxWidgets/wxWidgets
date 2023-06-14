@@ -278,7 +278,7 @@ public:
         In order for this event to happen you need to double click the
         toolbar on MSW and right click + context menu selection on OSX/GTK
         By default all added tools are displayed.
- 
+
         This event is implemented @since 3.3.0
     @endEventTable
 
@@ -887,7 +887,7 @@ public:
         @see GetMargins(), wxSize
     */
     void SetMargins(const wxSize& size);
-    
+
     /**
         Return whether the tool is displayed by default or not
         By default all tools are displayed.
