@@ -288,6 +288,7 @@ wxOSX:
 - Fix memory leak in wxFileDialog using custom controls (#23304).
 - Restore setting C-level locale when using wxLocale (#23557).
 - Check column for wxEVT_DATAVIEW_ITEM_ACTIVATED (Hartwig Wiesmann, #23636).
+- Fix spurious -Wundeclared-selector with Xcode 14 (Hartwig Wiesmann, #23639).
 - Recognize macOS 14 Sonoma in wxGetOsDescription() (Tobias Taschner, #23615).
 
 wxUniv:

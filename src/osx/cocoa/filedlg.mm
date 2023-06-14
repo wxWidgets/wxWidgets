@@ -446,10 +446,13 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     {
         [accView removeFromSuperview];
         [panel setAccessoryView:accView];
+
+        wxCLANG_WARNING_SUPPRESS(undeclared-selector)
         if ([panel respondsToSelector:@selector(setAccessoryViewDisclosed)])
         {
             [(id)panel setAccessoryViewDisclosed:YES];
         }
+        wxCLANG_WARNING_RESTORE(undeclared-selector)
     }
     else
     {
