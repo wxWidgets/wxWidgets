@@ -88,8 +88,7 @@ public:
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
-                                          const wxString& longHelp = wxEmptyString,
-                                          bool available = true) override;
+                                          const wxString& longHelp = wxEmptyString) override;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
@@ -109,7 +108,7 @@ protected:
 #ifdef __WXOSX_COCOA__
     virtual void DoGetPosition(int*x, int *y) const override;
 #endif
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool, bool available) override;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
 
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;

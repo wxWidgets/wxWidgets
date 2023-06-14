@@ -232,7 +232,7 @@ void wxButtonToolBar::SetToolShortHelp(int id, const wxString& help)
 }
 
 bool wxButtonToolBar::DoInsertTool(size_t WXUNUSED(pos),
-                             wxToolBarToolBase * WXUNUSED(tool), bool WXUNUSED(available))
+                             wxToolBarToolBase * WXUNUSED(tool))
 {
     return true;
 }
@@ -266,8 +266,7 @@ wxToolBarToolBase *wxButtonToolBar::CreateTool(int id,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
-                                         const wxString& longHelp,
-                                         bool WXUNUSED(available))
+                                         const wxString& longHelp)
 {
     return new wxButtonToolBarTool(this, id, label, bmpNormal, bmpDisabled, kind,
                              clientData, shortHelp, longHelp);

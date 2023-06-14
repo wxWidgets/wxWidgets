@@ -277,6 +277,7 @@ public:
         be generic.
         In order for this event to happen you need to double click the
         toolbar on MSW and right click + context menu selection on OSX/GTK
+        By default all added tools are displayed.
         This event is implemented @since 3.3.0
     @endEventTable
 
@@ -885,6 +886,26 @@ public:
         @see GetMargins(), wxSize
     */
     void SetMargins(const wxSize& size);
+    
+    /**
+        Return whether the tool is displayed by default or not
+     
+        By default all tools are displayed.
+     
+        @since 3.3
+    */
+    bool IsAvailable() const;
+    
+    /**
+        Calling this function with the parameter set to false will not add the tool to the toolbar
+        by default.
+     
+        @param available
+            Whether add the tool by default to the toolbar or not.
+     
+        @since 3.3
+    */
+    void MarkAvailable(bool available);
     ///@}
 
     /**

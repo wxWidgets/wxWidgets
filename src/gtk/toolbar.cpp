@@ -380,8 +380,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelpString,
-                                         const wxString& longHelpString,
-                                         bool  WXUNUSED(available))
+                                         const wxString& longHelpString)
 {
     return new wxToolBarTool(this, id, text, bitmap1, bitmap2, kind,
                              clientData, shortHelpString, longHelpString);
@@ -544,7 +543,7 @@ bool wxToolBar::Realize()
     return true;
 }
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase, bool WXUNUSED(available))
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
 

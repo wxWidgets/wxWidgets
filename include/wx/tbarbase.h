@@ -305,10 +305,10 @@ public:
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString,
-                               wxObject *clientData = nullptr, bool available = true)
+                               wxObject *clientData = nullptr)
     {
         return DoAddTool(toolid, label, bitmap, bmpDisabled, kind,
-                         shortHelp, longHelp, clientData, available);
+                         shortHelp, longHelp, clientData);
     }
 
     // the most common AddTool() version
@@ -316,9 +316,9 @@ public:
                                const wxString& label,
                                const wxBitmapBundle& bitmap,
                                const wxString& shortHelp = wxEmptyString,
-                               wxItemKind kind = wxITEM_NORMAL, bool available = true)
+                               wxItemKind kind = wxITEM_NORMAL)
     {
-        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp, wxEmptyString, nullptr, available);
+        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp, wxEmptyString, nullptr);
     }
 
     // add a check tool, i.e. a tool which can be toggled
@@ -328,10 +328,10 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = nullptr, bool available = true)
+                                    wxObject *clientData = nullptr)
     {
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
-                       shortHelp, longHelp, clientData, available);
+                       shortHelp, longHelp, clientData);
     }
 
     // add a radio tool, i.e. a tool which can be toggled and releases any
@@ -342,10 +342,10 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxBitmapBundle(),
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = nullptr, bool available = true)
+                                    wxObject *clientData = nullptr)
     {
         return AddTool(toolid, label, bitmap, bmpDisabled, wxITEM_RADIO,
-                       shortHelp, longHelp, clientData, available);
+                       shortHelp, longHelp, clientData);
     }
 
 
@@ -361,12 +361,11 @@ public:
                                     wxItemKind kind = wxITEM_NORMAL,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = nullptr,
-                                    bool available = true
+                                    wxObject *clientData = nullptr
                                );
 
     virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
-    virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool, bool available = true);
+    virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
 
     // add an arbitrary control to the toolbar (notice that the control will be
     // deleted by the toolbar and that it will also adjust its position/size)
@@ -374,12 +373,11 @@ public:
     // the label is optional and, if specified, will be shown near the control
     // NB: the control should have toolbar as its parent
     virtual wxToolBarToolBase *
-    AddControl(wxControl *control, const wxString& label = wxEmptyString, bool available = true);
+    AddControl(wxControl *control, const wxString& label = wxEmptyString);
 
     virtual wxToolBarToolBase *
     InsertControl(size_t pos, wxControl *control,
-                  const wxString& label = wxEmptyString,
-                  bool available = true);
+                  const wxString& label = wxEmptyString);
 
     // get the control with the given id or return nullptr
     virtual wxControl *FindControl( int toolid );
@@ -532,7 +530,7 @@ public:
                                           wxItemKind kind = wxITEM_NORMAL,
                                           wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
-                                          const wxString& longHelp = wxEmptyString, bool available = true) = 0;
+                                          const wxString& longHelp = wxEmptyString) = 0;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) = 0;
@@ -583,13 +581,12 @@ protected:
                                    const wxString& longHelp = wxEmptyString,
                                    wxObject *clientData = nullptr,
                                    wxCoord xPos = wxDefaultCoord,
-                                   wxCoord yPos = wxDefaultCoord,
-                                   bool available = true
+                                   wxCoord yPos = wxDefaultCoord
                                );
 
     // the tool is not yet inserted into m_tools list when this function is
     // called and will only be added to it if this function succeeds
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool, bool available = true) = 0;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) = 0;
 
     // the tool is still in m_tools list when this function is called, it will
     // only be deleted from it if it succeeds
@@ -622,9 +619,9 @@ protected:
     void AdjustToolBitmapSize();
 
     // calls InsertTool() and deletes the tool if inserting it failed
-    wxToolBarToolBase *DoInsertNewTool(size_t pos, wxToolBarToolBase *tool, bool available = true)
+    wxToolBarToolBase *DoInsertNewTool(size_t pos, wxToolBarToolBase *tool)
     {
-        if ( !InsertTool(pos, tool, available) )
+        if ( !InsertTool(pos, tool) )
         {
             delete tool;
             return nullptr;

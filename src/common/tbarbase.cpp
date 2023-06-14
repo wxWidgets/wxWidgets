@@ -160,12 +160,11 @@ wxToolBarToolBase *wxToolBarBase::DoAddTool(int toolid,
                                             const wxString& longHelp,
                                             wxObject *clientData,
                                             wxCoord WXUNUSED(xPos),
-                                            wxCoord WXUNUSED(yPos),
-                                            bool available)
+                                            wxCoord WXUNUSED(yPos))
 {
     InvalidateBestSize();
     return InsertTool(GetToolsCount(), toolid, label, bitmap, bmpDisabled,
-                      kind, shortHelp, longHelp, clientData, available);
+                      kind, shortHelp, longHelp, clientData);
 }
 
 wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
@@ -176,13 +175,13 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
                                              wxItemKind kind,
                                              const wxString& shortHelp,
                                              const wxString& longHelp,
-                                             wxObject *clientData, bool available)
+                                             wxObject *clientData)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), nullptr,
                  wxT("invalid position in wxToolBar::InsertTool()") );
 
     return DoInsertNewTool(pos, CreateTool(toolid, label, bitmap, bmpDisabled, kind,
-                                           clientData, shortHelp, longHelp, available));
+                                           clientData, shortHelp, longHelp));
 }
 
 wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)
@@ -191,12 +190,12 @@ wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)
 }
 
 wxToolBarToolBase *
-wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool, bool available)
+wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), nullptr,
                  wxT("invalid position in wxToolBar::InsertTool()") );
 
-    if ( !tool || !DoInsertTool(pos, tool, available) )
+    if ( !tool || !DoInsertTool(pos, tool) )
     {
         return nullptr;
     }
@@ -208,16 +207,15 @@ wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool, bool available)
 }
 
 wxToolBarToolBase *
-wxToolBarBase::AddControl(wxControl *control, const wxString& label, bool available)
+wxToolBarBase::AddControl(wxControl *control, const wxString& label)
 {
-    return InsertControl(GetToolsCount(), control, label, available);
+    return InsertControl(GetToolsCount(), control, label);
 }
 
 wxToolBarToolBase *
 wxToolBarBase::InsertControl(size_t pos,
                              wxControl *control,
-                             const wxString& label,
-                             bool available)
+                             const wxString& label)
 {
     wxCHECK_MSG( control, nullptr,
                  wxT("toolbar: can't insert null control") );
@@ -225,7 +223,7 @@ wxToolBarBase::InsertControl(size_t pos,
     wxCHECK_MSG( control->GetParent() == this, nullptr,
                  wxT("control must have toolbar as parent") );
 
-    return DoInsertNewTool(pos, CreateTool(control, label), available);
+    return DoInsertNewTool(pos, CreateTool(control, label));
 }
 
 wxControl *wxToolBarBase::FindControl( int toolid )
