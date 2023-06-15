@@ -232,7 +232,7 @@ executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
    NOTE: For parallel builds, i.e. using `-jN` make option, please run
          the make command first without the `-jN` option and with `setup_h`
          target specified, e.g. `mingw32-make ... setup_h`. Only after that
-         run the make command with the same wxWidgets build options but now 
+         run the make command with the same wxWidgets build options but now
          with the `-jN` option and without `setup_h` target, e.g. `mingw32-make -j4 ...`.
          All this is necessary to work around the bug in the makefile.
 
