@@ -256,6 +256,7 @@ All (GUI):
 - Fix bug modifying shared images in wxImage::Clear() (#23555).
 - Add EVT_FULLSCREEN event macro (Christian Beier, #23566).
 - Clear old attributes when changing wxGrid table (Brian Nixon, #23607).
+- Fix background colour of wxVListBox (Maarten Bent, #23641).
 
 wxGTK:
 
