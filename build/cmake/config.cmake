@@ -40,14 +40,25 @@ macro(wx_get_dependencies var lib)
                 else()
                     get_target_property(dep_name ${dep} OUTPUT_NAME)
                 endif()
-                if(NOT dep_name)
-                    # imported target
+
+                # imported target
+                if(CMAKE_VERSION VERSION_GREATER "3.18")
+                    # CMake <= 3.18 only allows a few properties to be checked, not LOCATION, see
+                    # https://cmake.org/cmake/help/v3.18/manual/cmake-buildsystem.7.html#interface-libraries
                     set(prop_suffix)
                     if (CMAKE_BUILD_TYPE)
                         string(TOUPPER "${CMAKE_BUILD_TYPE}" prop_suffix)
                         set(prop_suffix "_${prop_suffix}")
                     endif()
-                    get_target_property(dep_name ${dep} LOCATION${prop_suffix})
+                    if(NOT dep_name AND prop_suffix)
+                        get_target_property(dep_name ${dep} LOCATION${prop_suffix})
+                    endif()
+                    if(NOT dep_name)
+                        get_target_property(dep_name ${dep} LOCATION)
+                    endif()
+                endif()
+                if(NOT dep_name)
+                    get_target_property(dep_name ${dep} IMPORTED_LIBNAME)
                 endif()
             else()
                 # For the value like $<$<CONFIG:DEBUG>:LIB_PATH>

@@ -154,10 +154,14 @@ function(wx_set_common_target_properties target_name)
             )
         endif()
 
-        target_compile_options(${target_name} PRIVATE
-            ${common_gcc_clang_compile_options}
-            $<$<COMPILE_LANGUAGE:CXX>:${common_gcc_clang_cpp_compile_options}>
-        )
+        # Using $<COMPILE_LANGUAGE:CXX> breaks cotire:
+        # Evaluation file to be written multiple times with different content.
+        if(NOT USE_COTIRE)
+            target_compile_options(${target_name} PRIVATE
+                ${common_gcc_clang_compile_options}
+                $<$<COMPILE_LANGUAGE:CXX>:${common_gcc_clang_cpp_compile_options}>
+            )
+        endif()
     endif()
 
     if(wxUSE_NO_RTTI)

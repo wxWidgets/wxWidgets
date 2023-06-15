@@ -671,5 +671,7 @@ if((wxBUILD_PRECOMP STREQUAL "ON" AND CMAKE_VERSION VERSION_LESS "3.16") OR (wxB
     if(NOT RESULT_VAR)
         message(WARNING "precompiled header (PCH) test failed, it will be turned off")
         wx_option_force_value(wxBUILD_PRECOMP OFF)
+    else()
+        set(USE_COTIRE ON)
     endif()
 endif()
