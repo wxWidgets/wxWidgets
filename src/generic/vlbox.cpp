@@ -418,14 +418,19 @@ wxVListBox::DoDrawSolidBackground(const wxColour& col,
 void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 {
     // use wxRendererNative for more native look unless we use custom bg colour
-    if ( !DoDrawSolidBackground(m_colBgSel, dc, rect, n) )
+    if ( DoDrawSolidBackground(m_colBgSel, dc, rect, n) )
+        return;
+
+    const bool isSelected = IsSelected(n),
+               isCurrent = IsCurrent(n);
+    if ( isSelected || isCurrent )
     {
         int flags = 0;
-        if ( IsSelected(n) )
+        if ( isSelected )
             flags |= wxCONTROL_SELECTED;
-        if ( IsCurrent(n) )
+        if ( isCurrent )
             flags |= wxCONTROL_CURRENT;
-        if ( wxWindow::FindFocus() == const_cast<wxVListBox*>(this) )
+        if ( HasFocus() )
             flags |= wxCONTROL_FOCUSED;
 
         wxRendererNative::Get().DrawItemSelectionRect(
