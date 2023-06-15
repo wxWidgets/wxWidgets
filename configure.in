@@ -3616,8 +3616,8 @@ AC_CACHE_CHECK([if size_t is unsigned int],
 if test "$wx_cv_size_t_is_uint" = "yes"; then
     AC_DEFINE(wxSIZE_T_IS_UINT)
 else
-    AC_CACHE_CHECK([if size_t is unsigned long],
-        wx_cv_size_t_is_ulong,
+    AC_CACHE_CHECK([if size_t is unsigned long], [
+        wx_cv_size_t_is_ulong, [
         AC_TRY_COMPILE([#include <stddef.h>],
             [
                 return 0; }
@@ -3629,15 +3629,16 @@ else
             wx_cv_size_t_is_ulong=no,
             wx_cv_size_t_is_ulong=yes
         )
-    )
+    )]
 
     if test "$wx_cv_size_t_is_ulong" = "yes"; then
         AC_DEFINE(wxSIZE_T_IS_ULONG)
     fi
+    ]
 fi
 
 AC_CACHE_CHECK([if wchar_t is separate type],
-    wx_cv_wchar_t_is_separate_type,
+    wx_cv_wchar_t_is_separate_type, [
     AC_TRY_COMPILE([#include <wchar.h>],
         [
             return 0; }
@@ -3652,7 +3653,7 @@ AC_CACHE_CHECK([if wchar_t is separate type],
         wx_cv_wchar_t_is_separate_type=yes,
         wx_cv_wchar_t_is_separate_type=no
     )
-)
+)]
 
 if test "$wx_cv_wchar_t_is_separate_type" = "yes"; then
     AC_DEFINE(wxWCHAR_T_IS_REAL_TYPE, 1)
@@ -3955,7 +3956,7 @@ AC_CHECK_FUNCS(mkstemp mktemp, break)
 dnl get the library function to use for wxGetDiskSpace(): prefer POSIX
 dnl statvfs() if it exists, but fall back to Linux/BSD-specific statfs() if
 dnl necessary.
-AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs,
+AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs, [
     AC_TRY_COMPILE(
         [
             #include <stddef.h>
@@ -3966,7 +3967,7 @@ AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs,
         ],
         wx_cv_func_statvfs=yes,
         wx_cv_func_statvfs=no
-    )
+    )]
 )
 
 if test "$wx_cv_func_statvfs" = "yes"; then
@@ -3977,7 +3978,7 @@ if test "$wx_cv_func_statvfs" = "yes"; then
     dnl
     dnl for this check C++ compiler has to be used as passing incompatible
     dnl pointers is just a warning and not an error in C
-    AC_CACHE_CHECK(for statvfs argument type, wx_cv_type_statvfs_t,
+    AC_CACHE_CHECK([for statvfs argument type], wx_cv_type_statvfs_t, [
         AC_LANG_PUSH(C++)
         AC_TRY_COMPILE(
             [
@@ -4010,7 +4011,7 @@ if test "$wx_cv_func_statvfs" = "yes"; then
                 )
             ]
         )
-        AC_LANG_POP()
+        AC_LANG_POP()]
     )
 
     if test "$wx_cv_type_statvfs_t" != "unknown"; then
@@ -4022,7 +4023,7 @@ else
 fi
 
 if test "$wx_cv_type_statvfs_t" = "unknown"; then
-    AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
+    AC_CACHE_CHECK([for statfs], wx_cv_func_statfs, [
         AC_TRY_COMPILE(
             [
                  #if defined(__BSD__)
@@ -4042,12 +4043,12 @@ if test "$wx_cv_type_statvfs_t" = "unknown"; then
             ],
              wx_cv_func_statfs=yes,
              wx_cv_func_statfs=no
-        )
+        )]
     )
 
     if test "$wx_cv_func_statfs" = "yes"; then
         dnl check whether we have its dcelaration too: some systems (AIX 4) lack it
-        AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
+        AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl, [
             AC_LANG_PUSH(C++)
             AC_TRY_COMPILE(
                 [
@@ -4065,7 +4066,7 @@ if test "$wx_cv_type_statvfs_t" = "unknown"; then
                 wx_cv_func_statfs_decl=yes,
                 wx_cv_func_statfs_decl=no
             )
-            AC_LANG_POP()
+            AC_LANG_POP()]
         )
 
         if test "$wx_cv_func_statfs_decl" = "yes"; then
@@ -5761,7 +5762,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 size_t len;
                                 getsockname(0, 0, &len);
                             ],
-                            wx_cv_type_getsockname3=size_t,
+                            wx_cv_type_getsockname3=size_t, [
                             AC_TRY_COMPILE(
                                 [
                                     #include <sys/types.h>
@@ -5773,7 +5774,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 ],
                                 wx_cv_type_getsockname3=int,
                                 wx_cv_type_getsockname3=unknown
-                            )
+                            )]
                         )
 
                         CFLAGS="$CFLAGS_OLD"
@@ -5818,7 +5819,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 size_t len;
                                 getsockopt(0, 0, 0, 0, &len);
                             ],
-                            wx_cv_type_getsockopt5=size_t,
+                            wx_cv_type_getsockopt5=size_t, [
                             AC_TRY_COMPILE(
                                 [
                                     #include <sys/types.h>
@@ -5830,7 +5831,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 ],
                                 wx_cv_type_getsockopt5=int,
                                 wx_cv_type_getsockopt5=unknown
-                            )
+                            )]
                         )
                     ]
                 )
