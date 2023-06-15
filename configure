@@ -627,6 +627,9 @@ enable_option_checking=fatal
 ac_subst_vars='subdirs_extra
 LTLIBOBJS
 LIBOBJS
+CATCH2_LIBS
+CATCH2_CFLAGS
+WX_TEST_CXXFLAGS
 RESCOMP
 DLLTOOL
 GCC
@@ -1041,7 +1044,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1093,6 +1095,7 @@ enable_nanox
 with_libpng
 with_libjpeg
 with_libtiff
+with_catch2
 with_libjbig
 with_libxpm
 with_libiconv
@@ -1446,7 +1449,9 @@ WEBKIT_LIBS
 CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
-GST_LIBS'
+GST_LIBS
+CATCH2_CFLAGS
+CATCH2_LIBS'
 ac_subdirs_all='src/expat/expat'
 
 # Initialize some variables set by options.
@@ -1485,7 +1490,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1738,15 +1742,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1884,7 +1879,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -2037,7 +2032,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2365,6 +2359,7 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
+  --with-catch2           use catch2 (testing framework)
   --without-libjbig       don't use libjbig in libtiff even if available
   --with-libxpm           use libxpm (XPM file format)
   --with-libiconv         use libiconv (character conversion)
@@ -2500,6 +2495,9 @@ Some influential environment variables:
   CAIRO_LIBS  linker flags for CAIRO, overriding pkg-config
   GST_CFLAGS  C compiler flags for GST, overriding pkg-config
   GST_LIBS    linker flags for GST, overriding pkg-config
+  CATCH2_CFLAGS
+              C compiler flags for CATCH2, overriding pkg-config
+  CATCH2_LIBS linker flags for CATCH2, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -3858,6 +3856,7 @@ SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
+WX_TEST_CXXFLAGS=
 
 case "${host}" in
   *-hp-hpux* )
@@ -4735,6 +4734,42 @@ fi
 
 
           eval "$wx_cv_use_libtiff"
+
+
+
+# Check whether --with-catch2 was given.
+if test "${with_catch2+set}" = set; then :
+  withval=$with_catch2;
+                        if test "$withval" = yes; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=yes'
+                        elif test "$withval" = no; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=no'
+                        elif test "$withval" = sys; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=sys'
+                        elif test "$withval" = builtin; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=builtin'
+                        else
+                          as_fn_error $? "Invalid value for --with-catch2: should be yes, no, sys, or builtin" "$LINENO" 5
+                        fi
+
+else
+
+                        if test "DEFAULT_wxUSE_CATCH2" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_catch2="wxUSE_CATCH2=$value"
+
+fi
+
+
+          eval "$wx_cv_use_catch2"
 
 
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
@@ -43241,6 +43276,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
 set x ${MAKE-make}
@@ -43312,23 +43348,122 @@ fi
 if test "$wxUSE_TESTS_SUBDIR" != "no"; then
         SUBDIRS="$SUBDIRS tests"
 
+       if test "$wxUSE_CATCH2" != "builtin"; then
+        if test -n "$PKG_CONFIG"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CATCH2" >&5
+$as_echo_n "checking for CATCH2... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CATCH2_CFLAGS"; then
+        pkg_cv_CATCH2_CFLAGS="$CATCH2_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"catch2 < 3\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "catch2 < 3") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CATCH2_CFLAGS=`$PKG_CONFIG --cflags "catch2 < 3" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CATCH2_LIBS"; then
+        pkg_cv_CATCH2_LIBS="$CATCH2_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"catch2 < 3\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "catch2 < 3") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CATCH2_LIBS=`$PKG_CONFIG --libs "catch2 < 3" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CATCH2_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "catch2 < 3"`
+        else
+	        CATCH2_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "catch2 < 3"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CATCH2_PKG_ERRORS" >&5
+
+
+                if test "$wxUSE_CATCH2" = "sys"; then
+                    as_fn_error $? "system catch2 library not found! \
+Use --with-catch2=builtin to use built-in version" "$LINENO" 5
+                else
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system catch2 library not found, \
+will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system catch2 library not found, \
+will use built-in instead" >&2;}
+                    wxUSE_CATCH2=builtin
+                fi
+elif test $pkg_failed = untried; then
+
+                if test "$wxUSE_CATCH2" = "sys"; then
+                    as_fn_error $? "system catch2 library not found! \
+Use --with-catch2=builtin to use built-in version" "$LINENO" 5
+                else
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system catch2 library not found, \
+will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system catch2 library not found, \
+will use built-in instead" >&2;}
+                    wxUSE_CATCH2=builtin
+                fi
+else
+	CATCH2_CFLAGS=$pkg_cv_CATCH2_CFLAGS
+	CATCH2_LIBS=$pkg_cv_CATCH2_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system catch2 library not found, will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system catch2 library not found, will use built-in instead" >&2;}
+            wxUSE_CATCH2=builtin
+        fi
+    fi
+    if test "$wxUSE_CATCH2" = "builtin"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch2/catch.hpp exists" >&5
 $as_echo_n "checking whether catch2/catch.hpp exists... " >&6; }
-    if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp" ; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-        as_fn_error $? "
-    CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp couldn't be found.
+            as_fn_error $? "
+    CATCH2 (C++ Automated Test Cases in Headers) is required, but the file
+    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp cannot be found.
 
     You might need to run
 
         git submodule update --init 3rdparty/catch
 
     to fix this." "$LINENO" 5
-    else
+        fi
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+        WX_TEST_CXXFLAGS="-I$wx_top_builddir/3rdparty/catch/single_include $WX_TEST_CXXFLAGS"
     fi
 fi
 

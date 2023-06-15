@@ -138,6 +138,7 @@ SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
+WX_TEST_CXXFLAGS=
 
 dnl to support a new system, you need to add its canonical name (as determined
 dnl by config.sub or specified by the configure command line) to this "case"
@@ -512,6 +513,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(catch2,    [  --with-catch2           use catch2 (testing framework)], wxUSE_CATCH2)
 
 dnl We don't provide built-in version of this library, so if the use of system
 dnl libraries is explicitly disabled, we can't use it at all.
@@ -2055,6 +2057,7 @@ else
 fi
 
 dnl Find pkg-config outside of any conditional.  Done before any PKG_* call.
+dnl This sets the PKG_CONFIG variable.
 PKG_PROG_PKG_CONFIG
 
 dnl When cross-compiling for another system from Linux, don't use .pc files on
@@ -7953,6 +7956,8 @@ AC_SUBST(DLLTOOL)
 AC_SUBST(RESCOMP)
 AC_SUBST(WINDRES)
 
+dnl CXXFLAGS for the tests binaries
+AC_SUBST(WX_TEST_CXXFLAGS)
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this macro is required if SUBDIRS variable is used in Makefile.am
@@ -8022,21 +8027,41 @@ if test "$wxUSE_TESTS_SUBDIR" != "no"; then
     dnl Configure tests directory
     SUBDIRS="$SUBDIRS tests"
 
-    dnl Check for catch (C++ Automated Test Cases in Headers) availability.
-    AC_MSG_CHECKING([whether catch2/catch.hpp exists])
-    if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp" ; then
-        AC_MSG_RESULT([no])
-        AC_MSG_ERROR([
-    CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp couldn't be found.
+   dnl Check for catch (C++ Automated Test Cases in Headers) availability.
+    if test "$wxUSE_CATCH2" != "builtin"; then
+        if test -n "$PKG_CONFIG"; then
+            dnl TODO: Support catch2 version 3, which does not
+            dnl ship a catch2/catch.hpp header anymore.
+            PKG_CHECK_MODULES([CATCH2], [catch2 < 3],, [
+                if test "$wxUSE_CATCH2" = "sys"; then
+                    AC_MSG_ERROR([system catch2 library not found! \
+Use --with-catch2=builtin to use built-in version])
+                else
+                    AC_MSG_WARN([system catch2 library not found, \
+will use built-in instead])
+                    wxUSE_CATCH2=builtin
+                fi])
+        else
+            AC_MSG_WARN([system catch2 library not found, will use built-in instead])
+            wxUSE_CATCH2=builtin
+        fi
+    fi
+    if test "$wxUSE_CATCH2" = "builtin"; then
+        AC_MSG_CHECKING([whether catch2/catch.hpp exists])
+        if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp"; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    CATCH2 (C++ Automated Test Cases in Headers) is required, but the file
+    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp cannot be found.
 
     You might need to run
 
         git submodule update --init 3rdparty/catch
 
     to fix this.])
-    else
+        fi
         AC_MSG_RESULT([yes])
+        WX_TEST_CXXFLAGS="-I$wx_top_builddir/3rdparty/catch/single_include $WX_TEST_CXXFLAGS"
     fi
 fi
 

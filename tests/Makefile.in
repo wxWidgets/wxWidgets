@@ -43,6 +43,7 @@ EXTRALIBS_WEBVIEW = @EXTRALIBS_WEBVIEW@
 WX_CPPFLAGS = @WX_CPPFLAGS@
 WX_CXXFLAGS = @WX_CXXFLAGS@
 WX_LDFLAGS = @WX_LDFLAGS@
+WX_TEST_CXXFLAGS = @WX_TEST_CXXFLAGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_CXXFLAGS = @SAMPLES_CXXFLAGS@
@@ -57,8 +58,8 @@ LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
-	-DwxUSE_GUI=0 -I$(top_srcdir)/3rdparty/catch/single_include $(WX_CXXFLAGS) \
-	$(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	-DwxUSE_GUI=0 $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(WX_TEST_CXXFLAGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
 	test_anytest.o \
@@ -150,9 +151,8 @@ TEST_ODEP =  $(_____pch_testprec_test_testprec_h_gch___depname)
 TEST_DRAWING_CXXFLAGS = $(__test_drawing_PCH_INC) $(WX_CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	-I$(top_srcdir)/3rdparty/catch/single_include $(WX_CXXFLAGS) \
-	$(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) \
+	$(WX_TEST_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_DRAWING_OBJECTS =  \
 	test_drawing_test.o \
 	test_drawing_drawing.o \
@@ -170,8 +170,8 @@ TEST_DRAWINGPLUGIN_OBJECTS =  \
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../samples -I$(top_srcdir)/3rdparty/catch/single_include \
-	$(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir)/../samples $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) \
+	$(WX_TEST_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
 	test_gui_asserthelper.o \
@@ -283,9 +283,8 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 TEST_ALLHEADERS_CXXFLAGS = $(__test_allheaders_PCH_INC) $(WX_CPPFLAGS) \
 	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
-	-I$(top_srcdir)/3rdparty/catch/single_include $(WX_CXXFLAGS) \
-	$(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples $(WX_CXXFLAGS) \
+	$(SAMPLES_CXXFLAGS) $(WX_TEST_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_ALLHEADERS_OBJECTS =  \
 	$(__test_allheaders___win32rc) \
 	test_allheaders_asserthelper.o \
@@ -332,6 +331,7 @@ TEST_ALLHEADERS_ODEP = \
 @COND_MONOLITHIC_1_USE_STC_1@	= $(__LIB_SCINTILLA_p)
 @COND_MONOLITHIC_1_USE_STC_1@__LIB_LEXILLA_IF_MONO_p_1 = $(__LIB_LEXILLA_p)
 @COND_USE_GUI_1@__test_gui___depname = test_gui$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_bundle___depname \
@@ -346,7 +346,6 @@ TEST_ALLHEADERS_ODEP = \
 @COND_TOOLKIT_OSX_COCOA@	= $(__test_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_IPHONE@____test_gui_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__test_gui_app_Contents_PkgInfo___depname)
-@COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
 @COND_GCC_PCH_1@__test_gui_PCH_INC = -I./.pch/testprec_test_gui
 @COND_ICC_PCH_1@__test_gui_PCH_INC = $(ICC_PCH_USE_SWITCH) \
 @COND_ICC_PCH_1@	./.pch/testprec_test_gui/testprec.h.gch
@@ -374,6 +373,8 @@ COND_MONOLITHIC_0___WXLIB_PROPGRID_p = \
 @COND_MONOLITHIC_1_USE_STC_1@	= $(__LIB_SCINTILLA_p)
 @COND_MONOLITHIC_1_USE_STC_1@__LIB_LEXILLA_IF_MONO_p_2 = $(__LIB_LEXILLA_p)
 @COND_USE_GUI_1@__test_allheaders___depname = test_allheaders$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__test_allheaders___win32rc = \
+@COND_PLATFORM_WIN32_1@	test_allheaders_sample_rc.o
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_allheaders_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_allheaders.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_allheaders_bundle___depname \
@@ -391,8 +392,6 @@ COND_MONOLITHIC_0___WXLIB_PROPGRID_p = \
 @COND_TOOLKIT_OSX_IPHONE@____test_allheaders_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= \
 @COND_TOOLKIT_OSX_IPHONE@	$(__test_allheaders_app_Contents_PkgInfo___depname)
-@COND_PLATFORM_WIN32_1@__test_allheaders___win32rc = \
-@COND_PLATFORM_WIN32_1@	test_allheaders_sample_rc.o
 @COND_GCC_PCH_1@__test_allheaders_PCH_INC = \
 @COND_GCC_PCH_1@	-I./.pch/testprec_test_allheaders
 @COND_ICC_PCH_1@__test_allheaders_PCH_INC = \
@@ -903,7 +902,7 @@ test_drawingplugin_pluginsample.o: $(srcdir)/drawing/pluginsample.cpp
 	$(CXXC) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(srcdir)/drawing/pluginsample.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/single_include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 test_gui_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/asserthelper.cpp
@@ -1221,7 +1220,7 @@ test_gui_xrctest.o: $(srcdir)/xml/xrctest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/xml/xrctest.cpp
 
 test_allheaders_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_ALLHEADERS_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/3rdparty/catch/single_include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 test_allheaders_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_ALLHEADERS_ODEP)
 	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/asserthelper.cpp

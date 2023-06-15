@@ -10,9 +10,14 @@
     <include file="../build/bakefiles/common_samples.bkl"/>
 
     <template id="wx_test">
-        <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
-
+        <if cond="FORMAT=='autoconf'">
+            <cxxflags>$(WX_TEST_CXXFLAGS)</cxxflags>
+        </if>
+        <if cond="FORMAT!='autoconf'">
+            <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
+        </if>
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
+
             <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
                 <sources>dummy.cpp</sources>
                 <precomp-headers-gen>dummy.cpp</precomp-headers-gen>
