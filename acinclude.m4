@@ -285,8 +285,8 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                         fi
                       ],
                       [
-                        if test "DEFAULT_$3" = no; then
-                            value=no
+                        if test -n "${DEFAULT_$3}"; then
+                            value=${DEFAULT_$3}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then

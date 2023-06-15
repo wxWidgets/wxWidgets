@@ -340,6 +340,9 @@ DEFAULT_wxUSE_OFFICIAL_BUILD=no
 dnl Always default to no. Only special cases require this.
 DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
+dnl Prefer to use built-in CATCH library, there are no real drawbacks to it.
+DEFAULT_wxUSE_CATCH2=builtin
+
 dnl ===========================
 dnl deal with configure options
 dnl ===========================
@@ -512,6 +515,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(catch2,    [  --with-catch2           use CATCH2 (testing framework)], wxUSE_CATCH2)
 
 dnl We don't provide built-in version of this library, so if the use of system
 dnl libraries is explicitly disabled, we can't use it at all.
@@ -8217,22 +8221,44 @@ if test "$wxUSE_TESTS_SUBDIR" != "no"; then
     dnl Configure tests directory
     SUBDIRS="$SUBDIRS tests"
 
+    if test "$wxUSE_CATCH2" = "no"; then
+        AC_MSG_ERROR([CATCH is required for building tests, use --disable-tests option to disable them])
+    fi
+
     dnl Check for catch (C++ Automated Test Cases in Headers) availability.
-    AC_MSG_CHECKING([whether catch2/catch.hpp exists])
-    if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp" ; then
-        AC_MSG_RESULT([no])
-        AC_MSG_ERROR([
-    CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp couldn't be found.
+    if test "$wxUSE_CATCH2" != "builtin"; then
+        dnl TODO: Support catch2 version 3, which does not
+        dnl ship a catch2/catch.hpp header anymore.
+        PKG_CHECK_MODULES([CATCH2], [catch2 < 3],, [
+            if test "$wxUSE_CATCH2" = "sys"; then
+                AC_MSG_ERROR([system catch2 library not found! \
+Use --with-catch2=builtin to use built-in version])
+            else
+                AC_MSG_WARN([system catch2 library not found, \
+will use built-in instead])
+                wxUSE_CATCH2=builtin
+            fi])
+    fi
+
+    if test "$wxUSE_CATCH2" = "builtin"; then
+        AC_MSG_CHECKING([whether catch2/catch.hpp exists])
+        if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp"; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    CATCH2 (C++ Automated Test Cases in Headers) is required, but the file
+    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp cannot be found.
 
     You might need to run
 
         git submodule update --init 3rdparty/catch
 
     to fix this.])
-    else
+        fi
         AC_MSG_RESULT([yes])
+        CATCH2_CFLAGS="-I$wx_top_builddir/3rdparty/catch/single_include"
     fi
+
+    AC_SUBST(CATCH2_CFLAGS)
 fi
 
 for subdir in $SUBDIRS; do
