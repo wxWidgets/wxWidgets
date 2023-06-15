@@ -230,9 +230,11 @@ executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
    for more details.
 
    NOTE: For parallel builds, i.e. using `-jN` make option, please run
-         `mingw32-make -jN ... setup_h` first and then rerun the full
-         make command without `setup_h` at the end to work around a bug
-         in the current makefiles.
+         the make command first without the `-jN` option and with `setup_h`
+         target specified, e.g. `mingw32-make ... setup_h`. Only after that
+         run the make command with the same wxWidgets build options but now
+         with the `-jN` option and without `setup_h` target, e.g. `mingw32-make -j4 ...`.
+         All this is necessary to work around the bug in the makefile.
 
 2. To verify your build, change the directory to `samples\minimal` and
    run the same mingw32-make command (with the same parameters there),
