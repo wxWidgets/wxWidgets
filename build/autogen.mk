@@ -22,14 +22,35 @@ BAKEFILE_GEN=bakefile_gen
 all: configure
 
 BAKEFILES=\
-  build/bakefiles/wx.bkl \
+  build/bakefiles/build_cfg.bkl \
   build/bakefiles/common.bkl \
+  build/bakefiles/common_samples.bkl \
+  build/bakefiles/common_samples_intree.bkl \
+  build/bakefiles/common_samples_outoftree.bkl \
+  build/bakefiles/config.bkl \
+  build/bakefiles/expat.bkl \
   build/bakefiles/files.bkl \
+  build/bakefiles/jpeg.bkl \
+  build/bakefiles/lexilla.bkl \
+  build/bakefiles/mac_bundles.bkl \
   build/bakefiles/monolithic.bkl \
   build/bakefiles/multilib.bkl \
   build/bakefiles/opengl.bkl \
   build/bakefiles/plugins.bkl \
-  build/bakefiles/build_cfg.bkl
+  build/bakefiles/plugins_deps.bkl \
+  build/bakefiles/png.bkl \
+  build/bakefiles/regex.bkl \
+  build/bakefiles/scintilla.bkl \
+  build/bakefiles/tiff.bkl \
+  build/bakefiles/version.bkl \
+  build/bakefiles/wx.bkl \
+  build/bakefiles/wxpresets/libsample/libsample.bkl \
+  build/bakefiles/wxpresets/presets/wx.bkl \
+  build/bakefiles/wxpresets/presets/wx_unix.bkl \
+  build/bakefiles/wxpresets/presets/wx_win32.bkl \
+  build/bakefiles/wxpresets/presets/wx_xrc.bkl \
+  build/bakefiles/zlib.bkl \
+  tests/test.bkl
 
 # Run bakefile-gen (which generates everything) whenever a bakefile is newer
 # than Makefile.in or autoconf_inc.m4.
