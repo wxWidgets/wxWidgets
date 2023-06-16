@@ -71,11 +71,9 @@ ACLOCAL_SOURCES = \
   build/aclocal/ax_subdirs_configure.m4 \
   build/aclocal/bakefile-lang.m4 \
   build/aclocal/bakefile.m4 \
-  build/aclocal/gst-element-check.m4 \
   build/aclocal/gtk-2.0.m4 \
   build/aclocal/gtk-3.0.m4 \
   build/aclocal/gtk-4.0.m4 \
-  build/aclocal/gtk.m4 \
   build/aclocal/pkg.m4 \
   build/aclocal/sdl.m4 \
   build/aclocal/visibility.m4
