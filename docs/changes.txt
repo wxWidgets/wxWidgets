@@ -126,6 +126,10 @@ Changes in behaviour which may result in build errors
 - wxTEST_DIALOG() macro now must be followed by semicolon, whereas previously
   it was only supposed to, but it wasn't mandatory to use one after it.
 
+- wxWindow::GetDefaultBorderForControl() is not virtual any longer and will
+  be completely removed in the future. If you overrode this function, don't
+  do it any longer. If you call it, replace it with wxBORDER_THEME constant.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------

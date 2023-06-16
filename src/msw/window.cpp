@@ -1547,11 +1547,6 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 }
 
-wxBorder wxWindowMSW::GetDefaultBorderForControl() const
-{
-    return wxBORDER_THEME;
-}
-
 wxBorder wxWindowMSW::GetDefaultBorder() const
 {
     return wxWindowBase::GetDefaultBorder();

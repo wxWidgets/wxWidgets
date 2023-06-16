@@ -616,11 +616,6 @@ protected:
     {
     }
 
-    // this allows you to implement standard control borders without
-    // repeating the code in different classes that are not derived from
-    // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const override;
-
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const override;
 
