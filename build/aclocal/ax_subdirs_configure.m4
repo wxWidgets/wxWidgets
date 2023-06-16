@@ -38,8 +38,12 @@
 #   arguments' expect their arguments to be of the form --option-name=value.
 #
 #   This macro aims to remain as close as possible to the AC_CONFIG_SUBDIRS
-#   macro. It corrects the paths for '--cache-file' and '--srcdir' and adds
-#   '--disable-option-checking' and '--silent' if necessary.
+#   macro. It corrects the paths for '--srcdir' and adds
+#   '--disable-option-checking' and '--silent' if necessary. However, it
+#   does not change the '--cache-file' argument: typically, configure
+#   scripts run with different arguments will not be able to share the same
+#   cache. If you wish to share a single cache, you should give an absolute
+#   path to '--cache-file'.
 #
 #   This macro also sets the output variable subdirs_extra to the list of
 #   directories recorded with AX_SUBDIRS_CONFIGURE. This variable can be
@@ -147,7 +151,7 @@
 #   You should have received a copy of the GNU General Public License along
 #   with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#serial 5
+#serial 6
 
 AC_DEFUN([AX_SUBDIRS_CONFIGURE],
 [
@@ -317,16 +321,9 @@ AC_DEFUN([AX_SUBDIRS_CONFIGURE],
           if test "$silent" = yes; then
             ax_sub_configure_args="--silent $ax_sub_configure_args"
           fi
-          # Make the cache file name correct relative to the subdirectory.
-          case $cache_file in
-            [[\\/]]* | ?:[[\\/]]* )
-              ax_sub_cache_file=$cache_file ;;
-            *) # Relative name.
-              ax_sub_cache_file=$ac_top_build_prefix$cache_file ;;
-          esac
 
-          AC_MSG_NOTICE([running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file])
-          eval "\$SHELL \"$ax_sub_configure\" $ax_sub_configure_args --cache-file=\"$ax_sub_cache_file\"" \
+          AC_MSG_NOTICE([running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$cache_file])
+          eval "\$SHELL \"$ax_sub_configure\" $ax_sub_configure_args --cache-file=\"$cache_file\"" \
               || AC_MSG_ERROR([$ax_sub_configure failed for $ax_dir])
         fi
 

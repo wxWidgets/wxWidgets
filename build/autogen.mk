@@ -64,7 +64,7 @@ configure: configure.in aclocal.m4 autoconf_inc.m4
 	$(AUTOCONF)
 
 ACLOCAL_SOURCES = \
-  build/aclocal/ac_raf_func_which_getservbyname_r.m4 \
+  build/aclocal/ax_func_which_getservbyname_r.m4 \
   build/aclocal/atomic_builtins.m4 \
   build/aclocal/ax_cxx_compile_stdcxx.m4 \
   build/aclocal/ax_func_which_gethostbyname_r.m4 \

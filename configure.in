@@ -4571,9 +4571,8 @@ dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
       dnl I'm tempted to just not do this test which is taking much time and
       dnl do something similar as for gethostbyaddr_r, but OTOH the macro
       dnl doing the test already exists, so using it is easy enough.     - SN
-      AC_raf_FUNC_WHICH_GETSERVBYNAME_R
-      if test "x$ac_cv_func_which_getservbyname_r" = "xno" -o \
-              "x$ac_cv_func_which_getservbyname_r" = "xunknown" ; then
+      AX_FUNC_WHICH_GETSERVBYNAME_R
+      if test "$ax_cv_func_which_getservbyname_r" = "no"; then
           AC_CHECK_FUNCS(getservbyname,[ AC_DEFINE(HAVE_GETSERVBYNAME) ],
               [
                   dnl Under HaikuOS it is not yet detected
