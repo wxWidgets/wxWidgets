@@ -23,5 +23,5 @@ Example:
 cp /usr/share/aclocal/bakefile*.m4 build/aclocal/
 make -f build/autogen.mk
 
-Please don't forget to commit updated .m4 files as well as updated aclocal.m4,
-configure, and Makefile.in files to wxWidgets.
+Please don't forget to commit the updated configure and
+Makefile.in files to wxWidgets.

@@ -18,6 +18,7 @@ AC_INIT([wxWidgets], [3.3.0], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
+AC_CONFIG_MACRO_DIR([build/aclocal])
 
 dnl sets build, host variables and the same with _alias
 AC_CANONICAL_BUILD

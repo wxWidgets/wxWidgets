@@ -16,17 +16,10 @@
 ACLOCAL=aclocal
 AUTOCONF=autoconf
 BAKEFILE_GEN=bakefile_gen
-AUTOHACKS_PREPEND_INCLUDE_DIR=build/autoconf_prepend-include
 
 # configure depends on everything else so this will build everything.
 .PHONY: all
 all: configure
-
-.PHONY: autoconf_m4f
-
-# Invoke make on wxAutohacks dir, but don't fail if it's not present
-autoconf_m4f:
-	-make -C $(AUTOHACKS_PREPEND_INCLUDE_DIR)
 
 BAKEFILES=\
   build/bakefiles/wx.bkl \
@@ -46,18 +39,21 @@ autoconf_inc.m4 Makefile.in: $(BAKEFILES)
 	$(BAKEFILE_GEN) -f autoconf
 
 # Run configure whenever configure.in, aclocal.m4 or autoconf_inc.m4 is updated
-# Depend on our custom autoconf.m4f
-configure: configure.in aclocal.m4 autoconf_inc.m4 autoconf_m4f
-	$(AUTOCONF) -B $(AUTOHACKS_PREPEND_INCLUDE_DIR)
+configure: configure.in aclocal.m4 autoconf_inc.m4
+	$(AUTOCONF)
 
 ACLOCAL_SOURCES = \
   build/aclocal/ac_raf_func_which_getservbyname_r.m4 \
   build/aclocal/atomic_builtins.m4 \
+  build/aclocal/ax_cxx_compile_stdcxx.m4 \
   build/aclocal/ax_func_which_gethostbyname_r.m4 \
+  build/aclocal/ax_subdirs_configure.m4 \
   build/aclocal/bakefile-lang.m4 \
   build/aclocal/bakefile.m4 \
   build/aclocal/gst-element-check.m4 \
   build/aclocal/gtk-2.0.m4 \
+  build/aclocal/gtk-3.0.m4 \
+  build/aclocal/gtk-4.0.m4 \
   build/aclocal/gtk.m4 \
   build/aclocal/pkg.m4 \
   build/aclocal/sdl.m4 \
