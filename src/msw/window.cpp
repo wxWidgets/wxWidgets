@@ -1559,7 +1559,10 @@ wxBorder wxWindowMSW::TranslateBorder(wxBorder border) const
             if ( wxUxThemeIsActive() )
                 return wxBORDER_THEME;
         }
-        return wxBORDER_SUNKEN;
+
+        // In dark mode the standard sunken border is too bright, so prefer
+        // using a simple(r) and darker border instead.
+        return wxMSWDarkMode::IsActive() ? wxBORDER_SIMPLE : wxBORDER_SUNKEN;
     }
 #endif
     return border;
