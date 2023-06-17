@@ -7633,7 +7633,7 @@ case "$wxUSE_REGEX" in
         ;;
 esac
 if test "$wxUSE_STC" = "yes" ; then
-    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
+    wxconfig_3rdparty="scintilla lexilla $wxconfig_3rdparty"
 fi
 case "$wxUSE_EXPAT" in
     builtin)
