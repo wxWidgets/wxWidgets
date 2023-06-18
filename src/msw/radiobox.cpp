@@ -105,12 +105,18 @@ class wxRadioBoxButton : public wxRadioButton
 {
 public:
     wxRadioBoxButton(wxRadioBox* box, int i, const wxString& text)
+        : m_index{i}
     {
         // We need wxWANTS_CHARS to get the arrow key events and we also must
         // make the first button start of the group.
         Create(box, wxID_ANY, text, wxDefaultPosition, wxDefaultSize,
                (i == 0 ? wxRB_GROUP : 0) | wxWANTS_CHARS);
     }
+
+    int GetIndex() const { return m_index; }
+
+private:
+    const int m_index;
 };
 
 } // anonymous namespace
@@ -281,20 +287,9 @@ wxWindowList wxRadioBox::GetCompositeWindowParts() const
 
 void wxRadioBox::WXOnRadioButton(wxCommandEvent& event)
 {
-    // Find the button which was clicked.
-    auto sender = event.GetEventObject();
-    const unsigned int n = GetCount();
-    for ( unsigned int i = 0; i < n; i++ )
-    {
-        if ( sender == m_radioButtons[i] )
-        {
-            m_selectedButton = i;
-            SendNotificationEvent();
-            return;
-        }
-    }
-
-    wxFAIL_MSG("alien button clicked");
+    auto button = wxStaticCast(event.GetEventObject(), wxRadioBoxButton);
+    m_selectedButton = button->GetIndex();
+    SendNotificationEvent();
 }
 
 void wxRadioBox::Command(wxCommandEvent & event)
