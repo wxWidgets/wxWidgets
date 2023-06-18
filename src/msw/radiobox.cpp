@@ -36,6 +36,8 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
+#include "wx/msw/wrapwin.h"
+
 // TODO: wxCONSTRUCTOR
 #if 0 // wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxRadioBoxStyle )
@@ -107,13 +109,35 @@ public:
     wxRadioBoxButton(wxRadioBox* box, int i, const wxString& text)
         : m_index{i}
     {
-        // We need wxWANTS_CHARS to get the arrow key events and we also must
-        // make the first button start of the group.
+        // We must make the first button start of the group.
         Create(box, wxID_ANY, text, wxDefaultPosition, wxDefaultSize,
-               (i == 0 ? wxRB_GROUP : 0) | wxWANTS_CHARS);
+               i == 0 ? wxRB_GROUP : 0);
     }
 
     int GetIndex() const { return m_index; }
+
+    virtual bool MSWShouldPreProcessMessage(WXMSG* msg) override
+    {
+        // We want to get the events for the cursor movement keys, as we use
+        // them to navigate inside the radio box.
+        //
+        // Note that we don't use wxWANTS_CHARS to get them, as this would also
+        // give us key events for TAB and other keys that we don't use and
+        // which should keep working for keyboard navigation.
+        if ( msg->message == WM_KEYDOWN )
+        {
+            switch ( msg->wParam )
+            {
+                case VK_UP:
+                case VK_LEFT:
+                case VK_DOWN:
+                case VK_RIGHT:
+                    return false;
+            }
+        }
+
+        return true;
+    }
 
 private:
     const int m_index;
