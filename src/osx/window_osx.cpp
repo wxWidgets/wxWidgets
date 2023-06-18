@@ -408,19 +408,6 @@ bool wxWindowMac::Create(wxWindowMac *parent,
             m_peer->UseClippingView(m_clipChildren);
     }
 
-#ifndef __WXUNIVERSAL__
-    // Don't give scrollbars to wxControls unless they ask for them
-    if ( (! IsKindOf(CLASSINFO(wxControl))
-#if wxUSE_STATUSBAR
-        && ! IsKindOf(CLASSINFO(wxStatusBar))
-#endif
-        )
-         || (IsKindOf(CLASSINFO(wxControl)) && ((style & wxHSCROLL) || (style & wxVSCROLL))))
-    {
-        MacCreateScrollBars( style ) ;
-    }
-#endif
-
     wxWindowCreateEvent event((wxWindow*)this);
     GetEventHandler()->AddPendingEvent(event);
 
@@ -448,6 +435,22 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
     {
         SetPosition(pos);
     }
+
+#ifndef __WXUNIVERSAL__
+    const long style = GetWindowStyle();
+
+    // Don't give scrollbars to wxControls unless they ask for them
+    if ( (! IsKindOf(CLASSINFO(wxControl))
+#if wxUSE_STATUSBAR
+        && ! IsKindOf(CLASSINFO(wxStatusBar))
+#endif
+        )
+         || (IsKindOf(CLASSINFO(wxControl)) && ((style & wxHSCROLL) || (style & wxVSCROLL))))
+    {
+        MacCreateScrollBars( style ) ;
+    }
+#endif
+
 }
 
 void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
