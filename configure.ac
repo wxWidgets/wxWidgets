@@ -4,7 +4,7 @@ AC_PREREQ(2.58)
 
 dnl ---------------------------------------------------------------------------
 dnl
-dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
+dnl Top-level configure.ac for wxWidgets by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
@@ -4627,7 +4627,7 @@ dnl to gethostbyname_r/gethostbyaddr_r  and getservbyname_r
 
 dnl AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GETADDRINFO), [
     dnl no getaddrinfo, so check for gethostbyname_r and
-    dnl related functions (taken from python's configure.in)
+    dnl related functions (taken from python's configure.ac)
     dnl sigh -- gethostbyname_r is a mess; it can have 3, 5 or 6 arguments
       AX_FUNC_WHICH_GETHOSTBYNAME_R
       if test "x$ac_cv_func_which_gethostbyname_r" = "xno" -o \

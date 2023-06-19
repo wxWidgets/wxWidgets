@@ -415,7 +415,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="SAMPLES_CXXFLAGS"/>
         <option name="USE_WEBVIEW_WEBKIT2"/>
 
-        <!-- see configure.in; it's required by some samples on Mac OS X -->
+        <!-- see configure.ac; it's required by some samples on Mac OS X -->
         <option name="HEADER_PAD_OPTION"/>
 
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>

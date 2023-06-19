@@ -16,7 +16,7 @@ instructions there.
 Here is the list of files that need to be updated:
 
 - build/bakefiles/version.bkl {C:R:A}          [NOT UPDATED AUTOMATICALLY]
-- configure.in
+- configure.ac
 - build/osx/wxvers.xcconfig
 - docs/changes.txt
 - docs/readme.txt (date needs manual editing)  [NOT UPDATED AUTOMATICALLY]
