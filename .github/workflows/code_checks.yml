@@ -50,6 +50,8 @@ jobs:
                 ':!configure' \
                 ':!**/descrip.mms' \
                 ':!install-sh' \
+                ':!build/autogen.mk' \
+                ':!build/bakefiles/make_dist.mk' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
