@@ -24,11 +24,6 @@ WXDLLIMPEXP_CORE bool wxCloseClipboard();
 
 // get/set data
 WXDLLIMPEXP_CORE bool wxEmptyClipboard();
-#if !wxUSE_OLE
-WXDLLIMPEXP_CORE bool wxSetClipboardData(wxDataFormat dataFormat,
-                                    const void *data,
-                                    int width = 0, int height = 0);
-#endif // !wxUSE_OLE
 
 // clipboard formats
 WXDLLIMPEXP_CORE bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
