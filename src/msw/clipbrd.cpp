@@ -60,9 +60,12 @@
 // old-style clipboard functions using Windows API
 // ---------------------------------------------------------------------------
 
-static bool gs_wxClipboardIsOpen = false;
 static int gs_htmlcfid = 0;
 static int gs_pngcfid = 0;
+
+#ifdef WXWIN_COMPATIBILITY_3_2
+
+static bool gs_wxClipboardIsOpen = false;
 
 bool wxOpenClipboard()
 {
@@ -120,6 +123,13 @@ bool wxIsClipboardOpened()
 {
   return gs_wxClipboardIsOpen;
 }
+
+bool wxClipboardOpen()
+{
+  return gs_wxClipboardIsOpen;
+}
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
