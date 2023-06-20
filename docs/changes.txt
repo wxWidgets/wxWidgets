@@ -271,6 +271,7 @@ wxGTK:
 wxMSW:
 
 - Fix (deprecated) build without Unicode support broken in 3.2.2 (#23516).
+- Fix crash when using wxBitmapDataObject in wxDataObjectComposite (#23564).
 - Fix setting locale for wxLANGUAGE_UKRAINIAN (Ulrich Telle, #23210).
 - Don't reset custom wxToolBar background on system colour change (#23386).
 - Fix wxUILocale::GetPreferredUILanguages() under < 10 (Brian Nixon, #23416).
