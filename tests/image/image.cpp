@@ -849,7 +849,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::CompareLoadedImage", "[image]")
 enum
 {
     wxIMAGE_HAVE_ALPHA = (1 << 0),
-    wxIMAGE_HAVE_PALETTE = (1 << 1)
+    wxIMAGE_HAVE_PALETTE = (1 << 1),
+    wxIMAGE_HAVE_DELTA_RLE_BITMAP = (1 << 2)
 };
 
 static
@@ -1356,19 +1357,37 @@ static wxImage ImageFromBMPFile(const wxString& filename)
     return dib.ConvertToImage();
 }
 
-// Compare the results of loading a BMP via wxBMPHandler
-// and via Windows' own conversion (CreateDIBitmap())
+// Compare the results of loading a BMP using:
+//  1. Windows' own conversion (GDI CreateDIBitmap() via wxDIB::ConvertToBitmap())
+//  2. wxBMPHandler via wxImage::LoadFile()
+//  3. wxBMPFileHandler via wxBitmap::LoadFile()
 static void CompareBMPImageLoad(const wxString& filename, int properties = 0)
 {
+    INFO("Comparing loading methods for " << filename);
+
     wxImage image1 = ImageFromBMPFile(filename);
     REQUIRE( image1.IsOk() );
 
     wxImage image2(filename);
     REQUIRE( image2.IsOk() );
 
-    INFO("Comparing loading methods for " << filename);
+    wxBitmap bitmap3(filename, wxBITMAP_TYPE_BMP);
+    REQUIRE( bitmap3.IsOk() );
+    wxImage image3(bitmap3.ConvertToImage());
+    REQUIRE( image3.IsOk() );
+
+    // It is impossible (in general) for both of these
+    // tests to pass on delta-RLE bitmaps. See #23638
+    if ( !(properties & wxIMAGE_HAVE_DELTA_RLE_BITMAP) )
+    {
+        INFO("wxDIB::ConvertToBitmap vs wxImage::LoadFile");
+        CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP),
+            image1, properties, &image2);
+    }
+
+    INFO("wxBitmap::LoadFile vs wxImage::LoadFile");
     CompareImage(*wxImage::FindHandler(wxBITMAP_TYPE_BMP),
-        image1, properties, &image2);
+        image3, properties, &image2);
 }
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
@@ -1381,8 +1400,10 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
     CompareBMPImageLoad("image/horse_grey.bmp");
     CompareBMPImageLoad("image/horse_rle8.bmp");
     CompareBMPImageLoad("image/horse_rle4.bmp");
-    CompareBMPImageLoad("image/rle8-delta-320x240.bmp");
-    CompareBMPImageLoad("image/rle4-delta-320x240.bmp");
+    CompareBMPImageLoad("image/rle8-delta-320x240.bmp",
+        wxIMAGE_HAVE_DELTA_RLE_BITMAP);
+    CompareBMPImageLoad("image/rle4-delta-320x240.bmp",
+        wxIMAGE_HAVE_DELTA_RLE_BITMAP);
 }
 
 #endif // CAN_LOAD_BITMAP_DIRECTLY

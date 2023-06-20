@@ -546,12 +546,9 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     // destroy existing here instead of:
     image->Destroy();
-    // RLE-compressed bitmaps do not necessarily specify every pixel explicitly,
-    // as the delta escape sequence allows offsetting the current pixel position.
-    // They have an implicit black background, which we get by clearing the image
-    // on creation. Otherwise there is no point clearing, because we are going to
-    // set every pixel from the source data anyway.
-    bool clear = desc.comp == BI_RLE4 || desc.comp == BI_RLE8;
+    // In most cases we will set every pixel explicitly, so there
+    // is no point clearing (but see exception for RLE below)
+    bool clear = false;
     image->Create(width, height, clear);
 
     unsigned char *ptr = image->GetData();
@@ -685,6 +682,24 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             rbits = 8;
             gbits = 8;
             bbits = 8;
+        }
+    }
+
+    // RLE-compressed bitmaps do not necessarily specify every pixel explicitly,
+    // as the delta escape sequence allows offsetting the current pixel position.
+    // They therefore have an implicit background, which is either:
+    //  1. The colour of the first entry in the colour table
+    //     (as done by LoadImage() with LR_CREATEDIBSECTION)
+    //  2. Black (as done by functions like LoadBitmap() and CreateDIBitmap())
+    // wxWidgets has historically implemented (1). See #23638
+    if ( desc.comp == BI_RLE4 || desc.comp == BI_RLE8 )
+    {
+        unsigned char* pPix = ptr;
+        while ( pPix < ptr + width * height * 3 )
+        {
+            *pPix++ = cmap[0].r;
+            *pPix++ = cmap[0].g;
+            *pPix++ = cmap[0].b;
         }
     }
 
