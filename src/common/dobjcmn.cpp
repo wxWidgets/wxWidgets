@@ -437,6 +437,18 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 namespace wxMSWClip
 {
 
+const char* const START_HTML_HEADER = "StartHTML:";
+const size_t START_HTML_HEADER_LEN = strlen(START_HTML_HEADER);
+
+const char* const END_HTML_HEADER = "EndHTML:";
+const size_t END_HTML_HEADER_LEN = strlen(END_HTML_HEADER);
+
+const char* const START_FRAGMENT_HEADER = "StartFragment:";
+const size_t START_FRAGMENT_HEADER_LEN = strlen(START_FRAGMENT_HEADER);
+
+const char* const END_FRAGMENT_HEADER = "EndFragment:";
+const size_t END_FRAGMENT_HEADER_LEN = strlen(END_FRAGMENT_HEADER);
+
 // Return the extra size needed by HTML data in addition to the length of the
 // HTML fragment itself.
 int GetExtraDataSize()
@@ -474,21 +486,21 @@ void FillFromHTML(char* buffer, const char* html)
     // necessary header information. Note, wsprintf() truncates the
     // string when you overwrite it so you follow up with code to replace
     // the 0 appended at the end with a '\r'...
-    char *ptr = strstr(buffer, "StartHTML");
-    sprintf(ptr+10, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
-    *(ptr+10+8) = '\r';
+    char *ptr = strstr(buffer, START_HTML_HEADER);
+    sprintf(ptr+START_HTML_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
+    *(ptr+START_HTML_HEADER_LEN+8) = '\r';
 
-    ptr = strstr(buffer, "EndHTML");
-    sprintf(ptr+8, "%08u", (unsigned)strlen(buffer));
-    *(ptr+8+8) = '\r';
+    ptr = strstr(buffer, END_HTML_HEADER);
+    sprintf(ptr+END_HTML_HEADER_LEN, "%08u", (unsigned)strlen(buffer));
+    *(ptr+END_HTML_HEADER_LEN+8) = '\r';
 
-    ptr = strstr(buffer, "StartFragment");
-    sprintf(ptr+14, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
-    *(ptr+14+8) = '\r';
+    ptr = strstr(buffer, START_FRAGMENT_HEADER);
+    sprintf(ptr+START_FRAGMENT_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
+    *(ptr+START_FRAGMENT_HEADER_LEN+8) = '\r';
 
-    ptr = strstr(buffer, "EndFragment");
-    sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
-    *(ptr+12+8) = '\r';
+    ptr = strstr(buffer, END_FRAGMENT_HEADER);
+    sprintf(ptr+END_FRAGMENT_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
+    *(ptr+END_FRAGMENT_HEADER_LEN+8) = '\r';
 }
 
 // Extract just the HTML fragment part from CF_HTML data, modifying the
