@@ -437,6 +437,9 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 namespace wxMSWClip
 {
 
+const char* const VERSION_HEADER = "Version:";
+const size_t VERSION_HEADER_LEN = strlen(VERSION_HEADER);
+
 const char* const START_HTML_HEADER = "StartHTML:";
 const size_t START_HTML_HEADER_LEN = strlen(START_HTML_HEADER);
 
@@ -515,21 +518,37 @@ void FillFromHTML(char* buffer, const char* html)
     *(ptr+END_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
 }
 
-// Extract just the HTML fragment part from CF_HTML data, modifying the
-// provided string in place.
-void ExtractHTML(wxString& html)
+// Extract just the HTML fragment part from CF_HTML data.
+wxString ExtractHTML(const char* buffer, size_t len)
 {
-    int fragmentStart = html.rfind("StartFragment");
-    int fragmentEnd = html.rfind("EndFragment");
-
-    if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
+    // Sanity check.
+    if ( len < VERSION_HEADER_LEN ||
+            wxCRT_StrnicmpA(buffer, VERSION_HEADER, VERSION_HEADER_LEN) != 0 )
     {
-        int startCommentEnd = html.find("-->", fragmentStart) + 3;
-        int endCommentStart = html.rfind("<!--", fragmentEnd);
-
-        if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
-            html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
+        // This doesn't look like CF_HTML at all, don't do anything.
+        return wxString();
     }
+
+    const char* ptr = strstr(buffer, START_FRAGMENT_HEADER);
+    if ( !ptr )
+        return wxString();
+
+    ptr += START_FRAGMENT_HEADER_LEN;
+
+    const int start = atoi(ptr);
+    if ( start < 0 || (unsigned)start >= len )
+        return wxString();
+
+    ptr = strstr(ptr, END_FRAGMENT_HEADER);
+    if ( !ptr )
+        return wxString();
+
+    ptr += END_FRAGMENT_HEADER_LEN;
+    const int end = atoi(ptr);
+    if ( end < 0 || end < start || (unsigned)end >= len )
+        return wxString();
+
+    return wxString::FromUTF8(buffer + start, end - start);
 }
 
 } // anonymous namespace
@@ -579,13 +598,14 @@ bool wxHTMLDataObject::SetData(size_t len, const void *buf)
     if ( buf == nullptr )
         return false;
 
-    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    wxString html = wxString::FromUTF8(static_cast<const char*>(buf), len);
+    const char* const buffer = static_cast<const char*>(buf);
 
 #ifdef __WXMSW__
     // To be consistent with other platforms, we only add the Fragment part
     // of the Windows HTML clipboard format to the data object.
-    wxMSWClip::ExtractHTML(html);
+    wxString html = wxMSWClip::ExtractHTML(buffer, len);
+#else
+    wxString html = wxString::FromUTF8(buffer, len);
 #endif // __WXMSW__
 
     SetHTML( html );

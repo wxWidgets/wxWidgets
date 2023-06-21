@@ -92,6 +92,18 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
     CHECK( dobj2.GetURL() == url );
 }
 
+// This disabled by default test allows to check that we retrieve HTML data
+// from the system clipboard correctly.
+TEST_CASE("GUI::ShowHTML", "[.]")
+{
+    wxClipboardLocker lockClip;
+
+    wxHTMLDataObject dobj;
+    REQUIRE( wxTheClipboard->GetData(dobj) );
+
+    WARN("Clipboard contents:\n---start---\n" << dobj.GetHTML() << "\n---end--");
+}
+
 TEST_CASE("GUI::DataFormatCompare", "[guifuncs][dataformat]")
 {
     const wxDataFormat df(wxDF_TEXT);
