@@ -511,7 +511,9 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     toolBar->AddStretchableSpace();
     toolBar->AddTool(wxID_HELP, "Help", toolBarBitmaps[Tool_help], "Help button", wxITEM_CHECK);
 
-    toolBar->AddTool(wxID_ABOUT, "About", toolBarBitmaps[Tool_about], "About");
+    wxToolBarToolBase *tool = new wxToolBarToolBase( toolBar, wxID_ABOUT, "About", toolBarBitmaps[Tool_about], toolBarBitmaps[Tool_about] );
+    tool->MarkAvailable( false );
+    toolBar->AddTool( tool );
 
     if ( !m_pathBmp.empty() )
     {

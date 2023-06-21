@@ -93,6 +93,7 @@ public:
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
 
+    void *GetMacToolbar() { return m_macToolbar; };
 protected:
     // common part of all ctors
     void Init();

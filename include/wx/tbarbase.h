@@ -95,7 +95,8 @@ public:
     wxToolBarToolBase(wxToolBarBase *tbar,
                       wxControl *control,
                       const wxString& label)
-        : m_label(label)
+        : m_label(label),
+          m_available(true)
     {
         Init(tbar, wxTOOL_STYLE_CONTROL, control->GetId(), wxITEM_MAX);
 
@@ -146,7 +147,7 @@ public:
     bool CanBeToggled() const
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
     bool IsAvailable() const { return m_available; }
-    void MarkAvailable(bool available) { m_available = available; }
+    virtual void MarkAvailable(bool available) { m_available = available; }
 
     // attributes
     wxBitmapBundle GetNormalBitmapBundle() const { return m_bmpNormal; }

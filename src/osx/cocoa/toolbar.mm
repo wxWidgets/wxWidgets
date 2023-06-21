@@ -91,6 +91,7 @@ public:
         Init();
         if (control != nullptr)
             SetControlHandle( (WXWidget) control->GetHandle() );
+        m_tb = tbar;
     }
 
     virtual ~wxToolBarTool()
@@ -147,8 +148,11 @@ public:
         else if ( IsButton() )
         {
             // curSize = GetToolBar()->GetToolSize();
-            NSRect best = [(wxNSToolBarButton*)m_controlHandle frame];
-            curSize = wxSize(best.size.width, best.size.height);
+            if( m_available )
+            {
+                NSRect best = [(wxNSToolBarButton*)m_controlHandle frame];
+                curSize = wxSize(best.size.width, best.size.height);
+            }
         }
         else
         {
@@ -194,31 +198,33 @@ public:
         if ( IsButton() )
         {
             NSButton* const btn = (NSButton*)m_controlHandle;
-
-            [btn setTitle:l.AsNSString()];
-
-            if ( style & wxTB_NOICONS )
-                [btn setImagePosition:NSNoImage];
-            else if ( style & wxTB_TEXT )
-                [btn setImagePosition:NSImageAbove];
-            else
-                [btn setImagePosition:NSImageOnly];
-
-            if ( (style & (wxTB_NOICONS | wxTB_TEXT)) != 0 )
+            if( m_available )
             {
-                [btn sizeToFit];
-            }
-            else if (tbar)
-            {
-                wxSize toolsize = tbar->GetToolSize();
-                NSRect frame = [m_controlHandle frame];
-                frame.size.width = toolsize.x;
-                frame.size.height = toolsize.y + 2;
-                [btn setFrame:frame];
+                [btn setTitle:l.AsNSString()];
+
+                if ( style & wxTB_NOICONS )
+                    [btn setImagePosition:NSNoImage];
+                else if ( style & wxTB_TEXT )
+                    [btn setImagePosition:NSImageAbove];
+                else
+                    [btn setImagePosition:NSImageOnly];
+
+                if ( (style & (wxTB_NOICONS | wxTB_TEXT)) != 0 )
+                {
+                    [btn sizeToFit];
+                }
+                else if (tbar)
+                {
+                    wxSize toolsize = tbar->GetToolSize();
+                    NSRect frame = [m_controlHandle frame];
+                    frame.size.width = toolsize.x;
+                    frame.size.height = toolsize.y + 2;
+                    [btn setFrame:frame];
+                }
             }
         }
 
-        if ( m_controlHandle )
+        if ( m_controlHandle && m_available )
         {
             [m_controlHandle setToolTip:sh.AsNSString()];
         }
@@ -241,7 +247,7 @@ public:
 #if wxOSX_USE_NATIVE_TOOLBAR
     void SetToolbarItemRef( NSToolbarItem* ref )
     {
-        if ( m_toolbarItem )
+        if ( m_toolbarItem && m_available )
             [m_toolbarItem release];
 
         m_toolbarItem = ref;
@@ -266,6 +272,19 @@ public:
     {
         wxToolBarToolBase::SetLabel(label);
         UpdateLabel();
+    }
+
+    virtual void MarkAvailable(bool available) override
+    {
+        m_available = available;
+        auto handler = [(NSToolbar *)m_tb->GetMacToolbar() delegate];
+/*        wxString identifier = wxString::Format(wxT("%ld"), (long) this);
+        wxCFStringRef cfidentifier( identifier );
+        [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:cfidentifier.AsNSString()];
+        if( available )
+        {
+            [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:cfidentifier.AsNSString()];
+        }*/
     }
 
     virtual bool SetShortHelp(const wxString& help) override
@@ -294,7 +313,7 @@ private:
     wxCoord     m_x;
     wxCoord     m_y;
     wxBitmap    m_alternateBitmap;
-
+    wxToolBar  *m_tb;
 #if wxOSX_USE_NATIVE_TOOLBAR
     NSToolbarItem* m_toolbarItem;
     // position in its toolbar, -1 means not inserted
@@ -578,7 +597,7 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
     int mac_x = position.x;
     int mac_y = position.y;
 
-    if ( IsButton() )
+    if ( IsButton() && IsAvailable() )
     {
         NSRect frame = [m_controlHandle frame];
         if ( frame.origin.x != mac_x || frame.origin.y != mac_y )
@@ -588,7 +607,7 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
             [m_controlHandle setFrame:frame];
         }
     }
-    else if ( IsControl() )
+    else if ( IsControl() && IsAvailable() )
     {
         // embedded native controls are moved by the OS
 #if wxOSX_USE_NATIVE_TOOLBAR
@@ -598,7 +617,7 @@ void wxToolBarTool::SetPosition( const wxPoint& position )
             GetControl()->Move( position );
         }
     }
-    else
+    else if( IsAvailable() )
     {
         NSRect frame = [m_controlHandle frame];
         if ( frame.origin.x != mac_x || frame.origin.y != mac_y )
@@ -678,6 +697,7 @@ wxToolBarTool::wxToolBarTool(
         clientData, shortHelp, longHelp )
 {
     Init();
+    m_tb = tbar;
 }
 
 #pragma mark -
@@ -1239,7 +1259,7 @@ bool wxToolBar::Realize()
                             wxToolBarTool *tool2 = (wxToolBarTool*) node2->GetData();
                             
                             const long idx = tool2->GetIndex();
-                            if ( idx != -1 )
+                            if ( idx != -1 && tool2->IsAvailable() )
                             {
                                 [refTB removeItemAtIndex:idx];
                                 tool2->SetIndex(-1);
@@ -1261,12 +1281,14 @@ bool wxToolBar::Realize()
                         cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
                         nsItemId = cfidentifier.AsNSString();
                     }
-                    
-                    [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
-                    tool->SetIndex( currentPosition );
+                    if( tool->IsAvailable() )
+                    {
+                        [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
+                        tool->SetIndex( currentPosition );
+                    }
                 }
-                
-                currentPosition++;
+                if( tool->IsAvailable() )
+                    currentPosition++;
             }
         }
         node = node->GetNext();
@@ -1526,8 +1548,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
         case wxTOOL_STYLE_BUTTON:
             {
-                wxASSERT( tool->GetControlHandle() == nullptr );
-
                 wxNSToolBarButton* v = [[wxNSToolBarButton alloc] initWithFrame:toolrect];
 
                 [v setBezelStyle:NSSmallSquareBezelStyle];
@@ -1556,7 +1576,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #endif // wxOSX_USE_NATIVE_TOOLBAR
                 tool->SetControlHandle( controlHandle );
-                if ( !(style & wxTB_NOICONS) )
+                if ( !(style & wxTB_NOICONS) && tool->IsAvailable() )
                     tool->UpdateImages();
                 tool->UpdateLabel();
                 
@@ -1603,7 +1623,8 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
         wxASSERT_MSG( container != nullptr, wxT("No valid Mac container control") );
 
 //        SetControlVisibility( controlHandle, true, true );
-        [container addSubview:controlHandle];
+        if( tool->IsAvailable() )
+            [container addSubview:controlHandle];
     }
 
     // nothing special to do here - we relayout in Realize() later
@@ -1742,6 +1763,7 @@ void wxToolBar::OSXSelectTool(int toolId)
     wxCFStringRef cfidentifier(identifier);
     [(NSToolbar*)m_macToolbar setSelectedItemIdentifier:cfidentifier.AsNSString()];
 }
+
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
 #endif // wxUSE_TOOLBAR
