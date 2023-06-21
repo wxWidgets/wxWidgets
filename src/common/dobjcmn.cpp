@@ -471,11 +471,11 @@ void FillFromHTML(char* buffer, const char* html)
         "StartFragment:00000000\r\n"
         "EndFragment:00000000\r\n"
         "<html><body>\r\n"
-        "<!--StartFragment -->\r\n");
+        "<!--StartFragment -->");
 
     // Append the HTML...
     strcat(buffer, html);
-    strcat(buffer, "\r\n");
+
     // Finish up the HTML format...
     strcat(buffer,
         "<!--EndFragment-->\r\n"
