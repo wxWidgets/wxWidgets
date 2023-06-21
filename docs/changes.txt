@@ -258,6 +258,7 @@ All (GUI):
 - Clear old attributes when changing wxGrid table (Brian Nixon, #23607).
 - Fix background colour of wxVListBox (Maarten Bent, #23641).
 - Fix return value of wxAuiToolBarItem::GetDisabledBitmap() (taler21, #23666).
+- Fix buffer overflow in wxHTMLDataObject::GetDataHere() (mcorino, #23660).
 
 wxGTK:
 

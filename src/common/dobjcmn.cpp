@@ -524,7 +524,7 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
     sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
     *(ptr+12+8) = '\r';
 #else
-    strcpy(buffer, html);
+    memcpy(buffer, html, html.length());
 #endif // __WXMSW__
 
     return true;
