@@ -452,48 +452,57 @@ const size_t START_FRAGMENT_HEADER_LEN = strlen(START_FRAGMENT_HEADER);
 const char* const END_FRAGMENT_HEADER = "EndFragment:";
 const size_t END_FRAGMENT_HEADER_LEN = strlen(END_FRAGMENT_HEADER);
 
-// Return the extra size needed by HTML data in addition to the length of the
-// HTML fragment itself.
-int GetExtraDataSize()
-{
-    // This more than covers the extra contents added by FillFromHTML() below.
-    return 400;
-}
-
-// Wrap HTML data with the extra information needed by CF_HTML and copy
-// everything into the provided buffer assumed to be of sufficient size.
-void FillFromHTML(char* buffer, const char* html)
-{
-    // add the extra info that the MSW clipboard format requires.
-
-        // Create a template string for the HTML header...
-    strcpy(buffer,
+const char* const CF_HTML_PREAMBLE =
         "Version:0.9\r\n"
         "StartHTML:00000000\r\n"
         "EndHTML:00000000\r\n"
         "StartFragment:00000000\r\n"
-        "EndFragment:00000000\r\n");
+        "EndFragment:00000000\r\n"
+        ;
+const size_t CF_HTML_PREAMBLE_LEN = strlen(CF_HTML_PREAMBLE);
 
-    const size_t startHTML = strlen(buffer);
-
-    strcat(buffer,
+const char* const CF_HTML_WRAP_START =
         "<html><body>\r\n"
-        "<!--StartFragment -->");
+        "<!--StartFragment -->"
+        ;
+const size_t CF_HTML_WRAP_START_LEN = strlen(CF_HTML_WRAP_START);
 
-    const size_t startFragment = strlen(buffer);
-
-    // Append the HTML...
-    strcat(buffer, html);
-
-    const size_t endFragment = strlen(buffer);
-
-    // Finish up the HTML format...
-    strcat(buffer,
+const char* const CF_HTML_WRAP_END =
         "<!--EndFragment-->\r\n"
         "</body>\r\n"
-        "</html>");
+        "</html>"
+        ;
+const size_t CF_HTML_WRAP_END_LEN = strlen(CF_HTML_WRAP_END);
 
-    const size_t endHTML = strlen(buffer);
+
+// Return the extra size needed by HTML data in addition to the length of the
+// HTML fragment itself.
+int GetExtraDataSize()
+{
+    // +1 is for the trailing NUL.
+    return CF_HTML_PREAMBLE_LEN + CF_HTML_WRAP_START_LEN + CF_HTML_WRAP_END_LEN + 1;
+}
+
+// Wrap HTML data with the extra information needed by CF_HTML and copy
+// everything into the provided buffer assumed to be of sufficient size.
+void FillFromHTML(char* buffer, const char* html, size_t lenHTML)
+{
+    // add the extra info that the MSW clipboard format requires.
+
+        // Create a template string for the HTML header...
+    strcpy(buffer, CF_HTML_PREAMBLE);
+    const size_t startHTML = CF_HTML_PREAMBLE_LEN;
+
+    strcat(buffer, CF_HTML_WRAP_START);
+    const size_t startFragment = startHTML + CF_HTML_WRAP_START_LEN;
+
+    // Append the HTML...
+    strncat(buffer, html, lenHTML);
+    const size_t endFragment = startFragment + lenHTML;
+
+    // Finish up the HTML format...
+    strcat(buffer, CF_HTML_WRAP_END);
+    const size_t endHTML = endFragment + CF_HTML_WRAP_END_LEN;
 
     // Now go back and write out the necessary header information.
     //
@@ -585,7 +594,7 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
     char* const buffer = static_cast<char*>(buf);
 
 #ifdef __WXMSW__
-    wxMSWClip::FillFromHTML(buffer, html);
+    wxMSWClip::FillFromHTML(buffer, html, html.length());
 #else
     memcpy(buffer, html, html.length());
 #endif // __WXMSW__
