@@ -469,12 +469,20 @@ void FillFromHTML(char* buffer, const char* html)
         "StartHTML:00000000\r\n"
         "EndHTML:00000000\r\n"
         "StartFragment:00000000\r\n"
-        "EndFragment:00000000\r\n"
+        "EndFragment:00000000\r\n");
+
+    const size_t startHTML = strlen(buffer);
+
+    strcat(buffer,
         "<html><body>\r\n"
         "<!--StartFragment -->");
 
+    const size_t startFragment = strlen(buffer);
+
     // Append the HTML...
     strcat(buffer, html);
+
+    const size_t endFragment = strlen(buffer);
 
     // Finish up the HTML format...
     strcat(buffer,
@@ -482,26 +490,28 @@ void FillFromHTML(char* buffer, const char* html)
         "</body>\r\n"
         "</html>");
 
-    // Now go back, calculate all the lengths, and write out the
-    // necessary header information. Note, wsprintf() truncates the
-    // string when you overwrite it so you follow up with code to replace
-    // the 0 appended at the end with a '\r'...
+    const size_t endHTML = strlen(buffer);
+
+    // Now go back and write out the necessary header information.
+    //
+    // Note, wsprintf() truncates the string when you overwrite it so you
+    // follow up with code to replace the 0 appended at the end with a '\r'.
     const size_t OFFSET_LEN = 8; // All offsets are formatted using 8 digits.
 
     char *ptr = strstr(buffer, START_HTML_HEADER);
-    sprintf(ptr+START_HTML_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
+    sprintf(ptr+START_HTML_HEADER_LEN, "%08zu", startHTML);
     *(ptr+START_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
 
     ptr = strstr(buffer, END_HTML_HEADER);
-    sprintf(ptr+END_HTML_HEADER_LEN, "%08u", (unsigned)strlen(buffer));
+    sprintf(ptr+END_HTML_HEADER_LEN, "%08zu", endHTML);
     *(ptr+END_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
 
     ptr = strstr(buffer, START_FRAGMENT_HEADER);
-    sprintf(ptr+START_FRAGMENT_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
+    sprintf(ptr+START_FRAGMENT_HEADER_LEN, "%08zu", startFragment);
     *(ptr+START_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
 
     ptr = strstr(buffer, END_FRAGMENT_HEADER);
-    sprintf(ptr+END_FRAGMENT_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
+    sprintf(ptr+END_FRAGMENT_HEADER_LEN, "%08zu", endFragment);
     *(ptr+END_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
 }
 
