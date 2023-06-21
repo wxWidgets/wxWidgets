@@ -486,21 +486,23 @@ void FillFromHTML(char* buffer, const char* html)
     // necessary header information. Note, wsprintf() truncates the
     // string when you overwrite it so you follow up with code to replace
     // the 0 appended at the end with a '\r'...
+    const size_t OFFSET_LEN = 8; // All offsets are formatted using 8 digits.
+
     char *ptr = strstr(buffer, START_HTML_HEADER);
     sprintf(ptr+START_HTML_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
-    *(ptr+START_HTML_HEADER_LEN+8) = '\r';
+    *(ptr+START_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
 
     ptr = strstr(buffer, END_HTML_HEADER);
     sprintf(ptr+END_HTML_HEADER_LEN, "%08u", (unsigned)strlen(buffer));
-    *(ptr+END_HTML_HEADER_LEN+8) = '\r';
+    *(ptr+END_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
 
     ptr = strstr(buffer, START_FRAGMENT_HEADER);
     sprintf(ptr+START_FRAGMENT_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
-    *(ptr+START_FRAGMENT_HEADER_LEN+8) = '\r';
+    *(ptr+START_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
 
     ptr = strstr(buffer, END_FRAGMENT_HEADER);
     sprintf(ptr+END_FRAGMENT_HEADER_LEN, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
-    *(ptr+END_FRAGMENT_HEADER_LEN+8) = '\r';
+    *(ptr+END_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
 }
 
 // Extract just the HTML fragment part from CF_HTML data, modifying the
