@@ -429,38 +429,26 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 // wxHTMLDataObject
 // ----------------------------------------------------------------------------
 
-size_t wxHTMLDataObject::GetDataSize() const
-{
-    // Ensure that the temporary string returned by GetHTML() is kept alive for
-    // as long as we need it here.
-    const wxString& htmlStr = GetHTML();
-    const wxScopedCharBuffer buffer(htmlStr.utf8_str());
-
-    size_t size = buffer.length();
-
 #ifdef __WXMSW__
-    // On Windows we need to add some stuff to the string to satisfy
-    // its clipboard format requirements.
-    size += 400;
-#endif
 
-    return size;
+// Helper functions for MSW CF_HTML format, see MSDN for more information:
+//
+// https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format
+namespace wxMSWClip
+{
+
+// Return the extra size needed by HTML data in addition to the length of the
+// HTML fragment itself.
+int GetExtraDataSize()
+{
+    // This more than covers the extra contents added by FillFromHTML() below.
+    return 400;
 }
 
-bool wxHTMLDataObject::GetDataHere(void *buf) const
+// Wrap HTML data with the extra information needed by CF_HTML and copy
+// everything into the provided buffer assumed to be of sufficient size.
+void FillFromHTML(char* buffer, const char* html)
 {
-    if ( !buf )
-        return false;
-
-    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    const wxString& htmlStr = GetHTML();
-    const wxScopedCharBuffer html(htmlStr.utf8_str());
-    if ( !html )
-        return false;
-
-    char* const buffer = static_cast<char*>(buf);
-
-#ifdef __WXMSW__
     // add the extra info that the MSW clipboard format requires.
 
         // Create a template string for the HTML header...
@@ -501,24 +489,12 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
     ptr = strstr(buffer, "EndFragment");
     sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
     *(ptr+12+8) = '\r';
-#else
-    strcpy(buffer, html);
-#endif // __WXMSW__
-
-    return true;
 }
 
-bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
+// Extract just the HTML fragment part from CF_HTML data, modifying the
+// provided string in place.
+void ExtractHTML(wxString& html)
 {
-    if ( buf == nullptr )
-        return false;
-
-    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    wxString html = wxString::FromUTF8(static_cast<const char*>(buf));
-
-#ifdef __WXMSW__
-    // To be consistent with other platforms, we only add the Fragment part
-    // of the Windows HTML clipboard format to the data object.
     int fragmentStart = html.rfind("StartFragment");
     int fragmentEnd = html.rfind("EndFragment");
 
@@ -530,6 +506,62 @@ bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
         if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
             html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
     }
+}
+
+} // anonymous namespace
+
+#endif // __WXMSW__
+
+size_t wxHTMLDataObject::GetDataSize() const
+{
+    // Ensure that the temporary string returned by GetHTML() is kept alive for
+    // as long as we need it here.
+    const wxString& htmlStr = GetHTML();
+    const wxScopedCharBuffer buffer(htmlStr.utf8_str());
+
+    size_t size = buffer.length();
+
+#ifdef __WXMSW__
+    size += wxMSWClip::GetExtraDataSize();
+#endif
+
+    return size;
+}
+
+bool wxHTMLDataObject::GetDataHere(void *buf) const
+{
+    if ( !buf )
+        return false;
+
+    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
+    const wxString& htmlStr = GetHTML();
+    const wxScopedCharBuffer html(htmlStr.utf8_str());
+    if ( !html )
+        return false;
+
+    char* const buffer = static_cast<char*>(buf);
+
+#ifdef __WXMSW__
+    wxMSWClip::FillFromHTML(buffer, html);
+#else
+    memcpy(buffer, html, html.length());
+#endif // __WXMSW__
+
+    return true;
+}
+
+bool wxHTMLDataObject::SetData(size_t len, const void *buf)
+{
+    if ( buf == nullptr )
+        return false;
+
+    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
+    wxString html = wxString::FromUTF8(static_cast<const char*>(buf), len);
+
+#ifdef __WXMSW__
+    // To be consistent with other platforms, we only add the Fragment part
+    // of the Windows HTML clipboard format to the data object.
+    wxMSWClip::ExtractHTML(html);
 #endif // __WXMSW__
 
     SetHTML( html );
