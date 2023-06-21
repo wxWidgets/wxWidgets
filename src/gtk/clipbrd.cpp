@@ -587,6 +587,15 @@ void wxClipboard::Clear()
         // it will free our data
         SetSelectionOwner(false);
     }
+    else
+    {
+        // We need to free our data directly to avoid leaking memory.
+        delete m_dataPrimary;
+        m_dataPrimary = nullptr;
+
+        delete m_dataClipboard;
+        m_dataClipboard = nullptr;
+    }
 
     m_targetRequested = nullptr;
     m_formatSupported = false;
