@@ -326,6 +326,7 @@ public:
     }
 };
 
+#if wxUSE_RADIOBTN
 class wxFileDialogRadioButtonImplFDC
     : public wxFileDialogImplFDC<wxFileDialogRadioButtonImpl>
 {
@@ -366,6 +367,7 @@ public:
 private:
     const DWORD m_item;
 };
+#endif // wxUSE_RADIOBTN
 
 class wxFileDialogChoiceImplFDC
     : public wxFileDialogImplFDC<wxFileDialogChoiceImpl>
@@ -534,6 +536,7 @@ public:
         return new wxFileDialogCheckBoxImplFDC(m_fdc, m_lastId);
     }
 
+#if wxUSE_RADIOBTN
     wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) override
     {
         HRESULT hr;
@@ -568,6 +571,7 @@ public:
 
         return impl;
     }
+#endif // wxUSE_RADIOBTN
 
     wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) override
     {
