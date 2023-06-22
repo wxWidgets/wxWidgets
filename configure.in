@@ -3890,28 +3890,6 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
         AC_MSG_WARN([No POSIX signal functions on this system, wxApp::OnFatalException will not be called])
         wxUSE_ON_FATAL_EXCEPTION=no
     fi
-
-    if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
-      AC_CACHE_CHECK([for sa_handler type], wx_cv_type_sa_handler,
-      [
-        dnl C compiler happily compiles the code even if there is type mismatch
-        AC_LANG_PUSH(C++)
-        AC_TRY_COMPILE([#include <signal.h>],
-                     [
-                        extern void testSigHandler(int);
-
-                        struct sigaction sa;
-                        sa.sa_handler = testSigHandler;
-                     ], [
-                        wx_cv_type_sa_handler=int
-                     ], [
-                        wx_cv_type_sa_handler=void
-                     ])
-        AC_LANG_POP()
-      ])
-
-      AC_DEFINE_UNQUOTED(wxTYPE_SA_HANDLER, $wx_cv_type_sa_handler)
-    fi
 fi
 
 dnl backtrace() and backtrace_symbols() for wxStackWalker

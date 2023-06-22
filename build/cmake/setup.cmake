@@ -200,23 +200,6 @@ if(UNIX)
         endif()
     endif()
 
-    if(wxUSE_ON_FATAL_EXCEPTION)
-        wx_check_cxx_source_compiles(
-            "return 0; }
-            extern void testSigHandler(int) { };
-            int foo() {
-            struct sigaction sa;
-            sa.sa_handler = testSigHandler;"
-            wxTYPE_SA_HANDLER_IS_INT
-            signal.h
-            )
-        if(wxTYPE_SA_HANDLER_IS_INT)
-            set(wxTYPE_SA_HANDLER int)
-        else()
-            set(wxTYPE_SA_HANDLER void)
-        endif()
-    endif()
-
     # backtrace() and backtrace_symbols() for wxStackWalker
     if(wxUSE_STACKWALKER)
         wx_check_cxx_source_compiles("
