@@ -791,9 +791,6 @@
 /* The type of statvfs(2) argument */
 #cmakedefine WX_STATFS_T @WX_STATFS_T@
 
-/* The signal handler prototype */
-#define wxTYPE_SA_HANDLER @wxTYPE_SA_HANDLER@
-
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
 #cmakedefine WX_GETTIMEOFDAY_NO_TZ 1

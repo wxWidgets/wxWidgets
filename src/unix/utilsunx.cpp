@@ -1470,7 +1470,7 @@ bool wxUnsetEnv(const wxString& variable)
 #include <signal.h>
 
 extern "C" {
-static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+static void wxFatalSignalHandler(int WXUNUSED(signal))
 {
     if ( wxTheApp )
     {

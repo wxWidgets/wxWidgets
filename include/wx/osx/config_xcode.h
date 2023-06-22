@@ -31,7 +31,6 @@
 #define WX_SOCKLEN_T socklen_t
 #define SOCKOPTLEN_T socklen_t
 #define WX_STATFS_T struct statfs
-#define wxTYPE_SA_HANDLER int
 #define WX_GMTOFF_IN_TM 1
 #define HAVE_PW_GECOS 1
 #define HAVE_DLOPEN 1
