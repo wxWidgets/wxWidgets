@@ -448,8 +448,17 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     // pass HTML through registered processors:
     if (m_Processors || m_GlobalProcessors)
     {
-        const wxHtmlProcessorList::iterator end;
         wxHtmlProcessorList::iterator nodeL, nodeG;
+
+        const auto isNodeLValid = [&nodeL, this]()
+        {
+            return m_Processors && nodeL != m_Processors->end();
+        };
+
+        const auto isNodeGValid = [&nodeG]()
+        {
+            return m_GlobalProcessors && nodeG != m_GlobalProcessors->end();
+        };
 
         if ( m_Processors )
             nodeL = m_Processors->begin();
@@ -461,11 +470,11 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
         //     decreasing priority, we "merge-sort" the lists on-line by
         //     processing that one of the two heads that has higher priority
         //     in every iteration
-        while (nodeL != end || nodeG != end)
+        while (isNodeLValid() || isNodeGValid())
         {
             int prL, prG;
-            prL = nodeL != end ? (*nodeL)->GetPriority() : -1;
-            prG = nodeG != end ? (*nodeG)->GetPriority() : -1;
+            prL = isNodeLValid() ? (*nodeL)->GetPriority() : -1;
+            prG = isNodeGValid() ? (*nodeG)->GetPriority() : -1;
             if (prL > prG)
             {
                 if ((*nodeL)->IsEnabled())
@@ -484,7 +493,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     // ...and run the parser on it:
     wxClientDC dc(this);
     dc.SetMapMode(wxMM_TEXT);
-    SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetBackgroundImage(wxNullBitmap);
 
     double pixelScale = 1.0;

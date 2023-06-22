@@ -2603,8 +2603,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             const wxColour bgColour = m_owner->GetBackgroundColour();
 
             // Depending on the background, alternate row color
-            // will be 3% more dark or 50% brighter.
-            int alpha = bgColour.GetRGB() > 0x808080 ? 97 : 150;
+            // will be 3% more dark or 10% brighter -- because 3% brighter
+            // would be unnoticeable.
+            int alpha = bgColour.GetRGB() > 0x808080 ? 97 : 110;
             altRowColour = bgColour.ChangeLightness(alpha);
         }
 

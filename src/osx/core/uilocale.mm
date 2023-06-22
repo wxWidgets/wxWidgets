@@ -20,6 +20,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/log.h"
 #include "wx/uilocale.h"
 #include "wx/private/uilocale.h"
 
@@ -29,6 +30,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
+#import <Foundation/NSDateFormatter.h>
 
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
@@ -86,13 +88,50 @@ public:
         // Surprisingly, localeWithLocaleIdentifier: always succeeds, even for
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
-        static wxCFRef<CFArrayRef>
-            all((CFArrayRef)[[NSLocale availableLocaleIdentifiers] retain]);
+        bool isAvailable = false;
+        for ( id nsLocId in [NSLocale availableLocaleIdentifiers] )
+        {
+            // We can't simply compare the names here because the list returned
+            // by NSLocale is incomplete and doesn't contain all synonyms, e.g.
+            // it only contains "zh_Hant_TW" but not "zh_TW" itself, so we need
+            // to do our own matching.
+            auto strId = wxCFStringRef::AsString(nsLocId);
 
-        wxCFStringRef cfName(locId.GetName());
-        if ( ![(NSArray*)all.get() containsObject: cfName.AsNSString()] )
+            const auto availId = wxLocaleIdent::FromTag(strId);
+            if ( availId.IsEmpty() )
+            {
+                wxLogDebug("Failed to parse locale identifier \"%s\"", strId);
+                continue;
+            }
+
+            // The following conditions have to be checked:
+            //   - The language must always match.
+            //   - The script must match, if it given, otherwise the region must
+            //     match (even though it might be empty).
+            //   - If script and region are both given, they must both match.
+            if ( availId.GetLanguage() == locId.GetLanguage() )
+            {
+                if ( !locId.GetScript().empty() )
+                {
+                    isAvailable = availId.GetScript() == locId.GetScript();
+                    if ( isAvailable && !locId.GetRegion().empty() )
+                    {
+                        isAvailable = availId.GetRegion() == locId.GetRegion();
+                    }
+                }
+                else
+                {
+                    isAvailable = availId.GetRegion() == locId.GetRegion();
+                }
+            }
+            if ( isAvailable )
+                break;
+        }
+
+        if ( !isAvailable )
             return nullptr;
 
+        wxCFStringRef cfName(locId.GetName());
         auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
         if ( !nsloc )
             return nullptr;
@@ -105,6 +144,9 @@ public:
     wxLocaleIdent GetLocaleId() const override;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const override;
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const override;
+    wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override;
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override;
+
     wxLayoutDirection GetLayoutDirection() const override;
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const override;
@@ -134,7 +176,7 @@ wxUILocaleImplCF::GetName() const
     wxString name = wxCFStringRef::AsString([m_nsloc localeIdentifier]);
 
     // Check for the special case of the "empty" system locale, see CreateStdC()
-    if ( name.empty() )
+    if ( name.empty() || name.IsSameAs("en_US_POSIX") )
         name = "C";
 
     return name;
@@ -185,6 +227,96 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     return wxCFStringRef::AsString(str);
 }
 
+wxString
+wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
+{
+    NSDateFormatter* df = [NSDateFormatter new];
+    df.locale = m_nsloc;
+
+    NSArray* monthNames = nullptr;
+
+    if (form.GetContext() == wxDateTime::Context_Standalone)
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                monthNames = [df veryShortStandaloneMonthSymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                monthNames = [df shortStandaloneMonthSymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                monthNames = [df standaloneMonthSymbols];
+                break;
+        }
+    }
+    else
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                monthNames = [df veryShortMonthSymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                monthNames = [df shortMonthSymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                monthNames = [df monthSymbols];
+                break;
+        }
+    }
+
+    NSString* monthName = [monthNames objectAtIndex:(month)];
+    return wxCFStringRef::AsString(monthName);
+}
+
+wxString
+wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
+{
+    NSDateFormatter* df = [NSDateFormatter new];
+    df.locale = m_nsloc;
+
+    NSArray* weekdayNames = nullptr;
+
+    if (form.GetContext() == wxDateTime::Context_Standalone)
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                weekdayNames = [df veryShortStandaloneWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                weekdayNames = [df shortStandaloneWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                weekdayNames = [df standaloneWeekdaySymbols];
+                break;
+        }
+    }
+    else
+    {
+        switch ( form.GetFlags() )
+        {
+            case wxDateTime::Name_Shortest:
+                weekdayNames = [df veryShortWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Abbr:
+                weekdayNames = [df shortWeekdaySymbols];
+                break;
+            case wxDateTime::Name_Full:
+            default:
+                weekdayNames = [df weekdaySymbols];
+                break;
+        }
+    }
+
+    NSString* weekdayName = [weekdayNames objectAtIndex:(weekday)];
+    return wxCFStringRef::AsString(weekdayName);
+}
+
 wxLayoutDirection
 wxUILocaleImplCF::GetLayoutDirection() const
 {
@@ -204,7 +336,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
     // wouldn't be much better as we'd still need a hack for it in GetName()
     // because the locale names are always converted to lower case, while we
     // really want to return "C" rather than "c" as the name of this one.
-    return new wxUILocaleImplCF([NSLocale systemLocale]);
+    return new wxUILocaleImplCF([NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]);
 }
 
 /* static */

@@ -106,7 +106,6 @@
 		DDC71B80D562303690FDBE4C /* appcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F01DDE448E4C3983ACCE67FD /* appcmn.cpp */; };
 		5417332FE2DB3CD3A647B15D /* cursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1F491B8A8376E8E2E8182 /* cursor.cpp */; };
 		02BB539E2AD63C078DA776B0 /* uiaction_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6359B01A7B35F6B710ACF8 /* uiaction_osx.cpp */; };
-		B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE40B073C95D3A7497952D8F /* threadinfo.cpp */; };
 		795613831EC8332A83FF26E7 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7E99B35A98D30818120B002 /* string.cpp */; };
 		6978D7A20DA93A329DDD1383 /* socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40CE02524DD4385AB2C3DF95 /* socket.cpp */; };
 		DD1B139EA5AD3F6DB92C0FA8 /* EditModel.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E685D81FB9FF3081B6C5C321 /* EditModel.cxx */; };
@@ -1811,7 +1810,6 @@
 		6E855AB3AB08325980871AB4 /* xh_sizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_sizer.cpp; path = ../../src/xrc/xh_sizer.cpp; sourceTree = SOURCE_ROOT; };
 		A54B80C17F823CB5900AD2E8 /* framecmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = framecmn.cpp; path = ../../src/common/framecmn.cpp; sourceTree = SOURCE_ROOT; };
 		9E8BF36D3A7C309482CBA9EC /* tipwin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tipwin.cpp; path = ../../src/generic/tipwin.cpp; sourceTree = SOURCE_ROOT; };
-		DE40B073C95D3A7497952D8F /* threadinfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = threadinfo.cpp; path = ../../src/common/threadinfo.cpp; sourceTree = SOURCE_ROOT; };
 		81A30C745CA73E30B788B408 /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = image.cpp; path = ../../src/common/image.cpp; sourceTree = SOURCE_ROOT; };
 		1CABAEA3B48333CB88B40F08 /* LexTCMD.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTCMD.cxx; path = ../../src/stc/lexilla/lexers/LexTCMD.cxx; sourceTree = SOURCE_ROOT; };
 		6EDDEEEC981133E8BA6A3998 /* jcapimin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jcapimin.c; path = ../../src/jpeg/jcapimin.c; sourceTree = SOURCE_ROOT; };
@@ -2646,7 +2644,6 @@
 				C0F7BBD216853E718C9F23D9 /* tarstrm.cpp */,
 				701B84EE7C043B539FF5195A /* textbuf.cpp */,
 				0903EE9B3793303285FF96E3 /* textfile.cpp */,
-				DE40B073C95D3A7497952D8F /* threadinfo.cpp */,
 				5B9586328A1F3C4BA0390AA5 /* time.cpp */,
 				7195E665E0F233839B967FC9 /* timercmn.cpp */,
 				0401B7302088357BB6B7F16F /* timerimpl.cpp */,
@@ -3102,7 +3099,6 @@
 				9FB1E1763EFA334CA0C07C49 /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2D /* textfile.cpp in Sources */,
-				B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C623 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002D /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E0719 /* timerimpl.cpp in Sources */,

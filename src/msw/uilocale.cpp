@@ -201,6 +201,16 @@ public:
         return str;
     }
 
+    wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override
+    {
+        return wxDateTime::GetEnglishMonthName(month, form);
+    }
+
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override
+    {
+        return wxDateTime::GetEnglishWeekDayName(weekday, form);
+    }
+
     wxLayoutDirection GetLayoutDirection() const override
     {
         return wxLayout_Default;
@@ -455,6 +465,74 @@ public:
         }
 
         return str;
+    }
+
+    wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override
+    {
+        static LCTYPE monthNameIndex[3][12] =
+        {
+            { LOCALE_SMONTHNAME1,  LOCALE_SMONTHNAME2,  LOCALE_SMONTHNAME3,
+              LOCALE_SMONTHNAME4,  LOCALE_SMONTHNAME5,  LOCALE_SMONTHNAME6,
+              LOCALE_SMONTHNAME7,  LOCALE_SMONTHNAME8,  LOCALE_SMONTHNAME9,
+              LOCALE_SMONTHNAME10, LOCALE_SMONTHNAME11, LOCALE_SMONTHNAME12 },
+            { LOCALE_SABBREVMONTHNAME1,  LOCALE_SABBREVMONTHNAME2,  LOCALE_SABBREVMONTHNAME3,
+              LOCALE_SABBREVMONTHNAME4,  LOCALE_SABBREVMONTHNAME5,  LOCALE_SABBREVMONTHNAME6,
+              LOCALE_SABBREVMONTHNAME7,  LOCALE_SABBREVMONTHNAME8,  LOCALE_SABBREVMONTHNAME9,
+              LOCALE_SABBREVMONTHNAME10, LOCALE_SABBREVMONTHNAME11, LOCALE_SABBREVMONTHNAME12 },
+            { LOCALE_SABBREVMONTHNAME1,  LOCALE_SABBREVMONTHNAME2,  LOCALE_SABBREVMONTHNAME3,
+              LOCALE_SABBREVMONTHNAME4,  LOCALE_SABBREVMONTHNAME5,  LOCALE_SABBREVMONTHNAME6,
+              LOCALE_SABBREVMONTHNAME7,  LOCALE_SABBREVMONTHNAME8,  LOCALE_SABBREVMONTHNAME9,
+              LOCALE_SABBREVMONTHNAME10, LOCALE_SABBREVMONTHNAME11, LOCALE_SABBREVMONTHNAME12 }
+        };
+
+        const int idx = ArrayIndexFromFlag(form.GetFlags());
+        if (idx == -1)
+            return wxString();
+
+        auto lctype = monthNameIndex[idx][month];
+        switch ( form.GetContext() )
+        {
+            case wxDateTime::Context_Standalone:
+                // Nothing else needed.
+                break;
+
+            case wxDateTime::Context_Formatting:
+                lctype |= LOCALE_RETURN_GENITIVE_NAMES;
+                break;
+        }
+
+        return DoGetInfo(lctype);
+    }
+
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override
+    {
+        static LCTYPE weekdayNameIndex[3][12] =
+        {
+            { LOCALE_SDAYNAME7, LOCALE_SDAYNAME1, LOCALE_SDAYNAME2, LOCALE_SDAYNAME3,
+              LOCALE_SDAYNAME4, LOCALE_SDAYNAME5, LOCALE_SDAYNAME6 },
+            { LOCALE_SABBREVDAYNAME7, LOCALE_SABBREVDAYNAME1, LOCALE_SABBREVDAYNAME2, LOCALE_SABBREVDAYNAME3,
+              LOCALE_SABBREVDAYNAME4, LOCALE_SABBREVDAYNAME5, LOCALE_SABBREVDAYNAME6 },
+            { LOCALE_SSHORTESTDAYNAME7, LOCALE_SSHORTESTDAYNAME1, LOCALE_SSHORTESTDAYNAME2, LOCALE_SSHORTESTDAYNAME3,
+              LOCALE_SSHORTESTDAYNAME4, LOCALE_SSHORTESTDAYNAME5, LOCALE_SSHORTESTDAYNAME6 }
+        };
+
+        const int idx = ArrayIndexFromFlag(form.GetFlags());
+        if (idx == -1)
+            return wxString();
+
+        auto lctype = weekdayNameIndex[idx][weekday];
+        switch ( form.GetContext() )
+        {
+            case wxDateTime::Context_Standalone:
+                // Nothing else needed.
+                break;
+
+            case wxDateTime::Context_Formatting:
+                lctype |= LOCALE_RETURN_GENITIVE_NAMES;
+                break;
+        }
+
+        return DoGetInfo(lctype);
     }
 
     wxLayoutDirection GetLayoutDirection() const override

@@ -876,7 +876,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KEY_KP_Begin:
-            key_code = isChar ? WXK_HOME : WXK_NUMPAD_BEGIN;
+            key_code = WXK_NUMPAD_BEGIN;
             break;
 
         case GDK_KEY_KP_Insert:
@@ -1077,6 +1077,8 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
 
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = gdk_event->hardware_keycode;
+
+    event.m_isRepeat = false; // Detecting key repeat not implemented.
 
     event.SetEventObject( win );
 }

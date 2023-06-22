@@ -999,7 +999,7 @@ WX_ARG_FEATURE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JO
 WX_ARG_FEATURE(metafile,    [  --enable-metafile       use wxMetaFile], wxUSE_METAFILE)
 WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
-WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
+WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator], wxUSE_UIACTIONSIMULATOR)
 WX_ARG_FEATURE(dctransform,  [  --enable-dctransform    use wxDC::SetTransformMatrix and related], wxUSE_DC_TRANSFORM_MATRIX)
 WX_ARG_FEATURE(webviewwebkit,[  --enable-webviewwebkit  use wxWebView WebKit backend], wxUSE_WEBVIEW_WEBKIT)
 WX_ARG_FEATURE(glcanvasegl,  [  --disable-glcanvasegl   disable wxGLCanvas EGL backend], wxUSE_GLCANVAS_EGL)
@@ -6846,15 +6846,27 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
             if test "$WXGTK3" = 1; then
                 PKG_CHECK_MODULES([WEBKIT],
-                                  [webkit2gtk-4.0],
+                                  [webkit2gtk-4.1],
                                   [
                                     USE_WEBVIEW_WEBKIT2=1
                                     CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
                                     EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                                   ],
                                   [
-                                    AC_MSG_WARN([webkit2gtk not found, falling back to webkitgtk])
+                                    AC_MSG_WARN([webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0])
                                   ])
+                if test "$USE_WEBVIEW_WEBKIT2" = 0; then
+                    PKG_CHECK_MODULES([WEBKIT],
+                                      [webkit2gtk-4.0],
+                                      [
+                                        USE_WEBVIEW_WEBKIT2=1
+                                        CXXFLAGS="$CXXFLAGS $WEBKIT_CFLAGS"
+                                        EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
+                                      ],
+                                      [
+                                        AC_MSG_WARN([webkit2gtk-4.0 not found, falling back to webkitgtk])
+                                      ])
+                fi
             fi
             if test "$USE_WEBVIEW_WEBKIT2" = 0; then
                 webkitgtk=webkit-1.0
@@ -7621,7 +7633,7 @@ case "$wxUSE_REGEX" in
         ;;
 esac
 if test "$wxUSE_STC" = "yes" ; then
-    wxconfig_3rdparty="scintilla $wxconfig_3rdparty"
+    wxconfig_3rdparty="scintilla lexilla $wxconfig_3rdparty"
 fi
 case "$wxUSE_EXPAT" in
     builtin)

@@ -265,11 +265,19 @@ public:
         // flags for GetWeekDayName and GetMonthName
     enum NameFlags
     {
-        Name_Full = 0x01,       // return full name
-        Name_Abbr = 0x02        // return abbreviated name
+        Name_Full = 0x01,        // return full name
+        Name_Abbr = 0x02,        // return abbreviated name
+        Name_Shortest = 0x03     // return shortest name
     };
 
-        // flags for GetWeekOfYear and GetWeekOfMonth
+    // context for GetWeekDayName and GetMonthName
+    enum NameContext
+    {
+        Context_Formatting,      // return name for date formatting context
+        Context_Standalone       // return name for standalone context
+    };
+
+    // flags for GetWeekOfYear and GetWeekOfMonth
     enum WeekFlags
     {
         Default_First,   // Sunday_First for US, Monday_First for the rest
@@ -288,6 +296,28 @@ public:
 
     // helper classes
     // ------------------------------------------------------------------------
+
+        // Describes the form of the month or week-day name.
+    class NameForm
+    {
+    public:
+        // Ctor is non-explicit for compatibility.
+        NameForm(NameFlags flags = Name_Full) : m_flags(flags) {}
+
+        // Chainable methods allowing to set various fields.
+        NameForm& Full() { m_flags = Name_Full; return *this; }
+        NameForm& Abbr() { m_flags = Name_Abbr; return *this; }
+        NameForm& Shortest() { m_flags = Name_Shortest; return *this; }
+        NameForm& Formatting() { m_context = Context_Formatting; return *this; }
+        NameForm& Standalone() { m_context = Context_Standalone; return *this; }
+
+        NameFlags GetFlags() const { return m_flags; }
+        NameContext GetContext() const { return m_context; }
+
+    private:
+        NameFlags m_flags;
+        NameContext m_context = Context_Formatting;
+    };
 
         // a class representing a time zone: basically, this is just an offset
         // (in seconds) from GMT
@@ -411,23 +441,23 @@ public:
                                         Calendar cal = Gregorian);
 
 
-        // get the full (default) or abbreviated month name in the current
+        // get the full (default), abbreviated or shortest month name in the current
         // locale, returns empty string on error
     static wxString GetMonthName(Month month,
-                                 NameFlags flags = Name_Full);
+                                 const NameForm& form = {});
 
-        // get the standard English full (default) or abbreviated month name
+        // get the standard English full (default), abbreviated or shortest month name
     static wxString GetEnglishMonthName(Month month,
-                                        NameFlags flags = Name_Full);
+                                        const NameForm& form = {});
 
-        // get the full (default) or abbreviated weekday name in the current
+        // get the full (default), abbreviated or shortest weekday name in the current
         // locale, returns empty string on error
     static wxString GetWeekDayName(WeekDay weekday,
-                                   NameFlags flags = Name_Full);
+                                   const NameForm& form = {});
 
-        // get the standard English full (default) or abbreviated weekday name
+        // get the standard English full (default), abbreviated or shortest weekday name
     static wxString GetEnglishWeekDayName(WeekDay weekday,
-                                          NameFlags flags = Name_Full);
+                                          const NameForm& form = {});
 
         // get the AM and PM strings in the current locale (may be empty)
     static void GetAmPmStrings(wxString *am, wxString *pm);

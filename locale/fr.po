@@ -1104,35 +1104,33 @@ msgstr "&Enregistrer"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Ne pas enregistrer"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Ne pas enregistrer"
+msgstr "Ne p&as fermer"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Faut-il enregistrer les modifications vers %s ?"
+msgstr "Voulez-vous enregistrer les modifications vers %s ?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Le texte n'a pas pu être enregistré."
+msgstr "Le document doit être fermé."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "L'enregistrement de %s a échoué, voulez-vous réessayer ?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Réessayer"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Ne pas enregistrer"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -3940,9 +3938,8 @@ msgid "libcurl could not be initialized"
 msgstr "libcurl n'a pas pu être initialisé"
 
 #: ../src/common/webview.cpp:334
-#, fuzzy
 msgid "RunScriptAsync not supported"
-msgstr "Conversion des chaînes non gérée"
+msgstr "RunScriptAsync non supporté"
 
 #: ../src/common/webview.cpp:345 ../src/msw/webview_ie.cpp:1063
 #, c-format
@@ -9966,13 +9963,11 @@ msgstr "Échec de la création de %s « %s »."
 #~ msgid "Print preview"
 #~ msgstr "Aperçu avant impression"
 
-#, fuzzy
 #~ msgid "&Preview..."
-#~ msgstr " Aperçu"
+#~ msgstr " Aperçu..."
 
-#, fuzzy
 #~ msgid "Preview..."
-#~ msgstr " Aperçu"
+#~ msgstr " Aperçu..."
 
 #, fuzzy
 #~ msgid "The vertical offset relative to the paragraph."

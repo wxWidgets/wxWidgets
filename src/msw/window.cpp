@@ -874,6 +874,11 @@ bool wxWindowMSW::SetFont(const wxFont& font)
     return true;
 }
 
+bool wxWindowMSW::IsTransparentBackgroundSupported(wxString* WXUNUSED(reason)) const
+{
+    return true;
+}
+
 bool wxWindowMSW::SetCursor(const wxCursor& cursor)
 {
     if ( !wxWindowBase::SetCursor(cursor) )
@@ -1656,6 +1661,12 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
             *exstyle |= WS_EX_CONTROLPARENT;
         }
 #endif // __WXUNIVERSAL__
+
+        // Set this style when background style is set to transparent. Don't
+        // apply it to toplevel windows, since it will make events (like mouse
+        // clicks) fall through the window.
+        if ( GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT && !IsTopLevel() )
+            *exstyle |= WS_EX_TRANSPARENT;
     }
 
     return style;
@@ -1694,17 +1705,12 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
 
     ::SetParent(hWndChild, hWndParent);
 
-    MSWAfterReparent();
-
-    return true;
-}
-
-void wxWindowMSW::MSWAfterReparent()
-{
     if ( wxHasWindowExStyle(this, WS_EX_CONTROLPARENT) )
     {
         EnsureParentHasControlParentStyle(GetParent());
     }
+
+    return true;
 }
 
 void wxWindowMSW::MSWDisableComposited()
@@ -2277,6 +2283,10 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         const int widthWin = rectWin.right - rectWin.left,
                   heightWin = rectWin.bottom - rectWin.top;
 
+        wxRect proposedRect(rectWin.left, rectWin.top,
+                            width + widthWin - rectClient.right,
+                            height + heightWin - rectClient.bottom);
+
         if ( IsTopLevel() )
         {
             // toplevel window's coordinates are mirrored if the TLW is a child of another
@@ -2288,8 +2298,34 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
             if ( tlwParent && (::GetWindowLong(tlwParent, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) != 0 )
             {
                 const int diffWidth = width - (rectClient.right - rectClient.left);
-                rectWin.left -= diffWidth;
-                rectWin.right -= diffWidth;
+                proposedRect.x -= diffWidth;
+            }
+
+            // Another complication with TLWs is that changing their size may
+            // change the monitor they are on, even without changing their
+            // position. This is unexpected and especially so if the new
+            // monitor uses a different DPI scaling and so moving the window to
+            // it changes its size -- which may result in an infinite recursion
+            // if the window calls SetClientSize() when DPI changes.
+            //
+            // So ensure that the window stays on the same monitor, adjusting
+            // its position if necessary.
+            const int currentDisplay =
+                wxDisplay::GetFromWindow(static_cast<const wxWindow*>(this));
+            if ( currentDisplay != wxNOT_FOUND &&
+                    wxDisplay::GetFromRect(proposedRect) != currentDisplay )
+            {
+                // It's not obvious how to determine the smallest modification
+                // of the window position sufficient for keeping it on the
+                // current display, so keep things simple and preserve the
+                // position of its center horizontally.
+                const wxRect currentRect = wxRectFromRECT(rectWin);
+                proposedRect.MakeCenteredIn(currentRect, wxHORIZONTAL);
+                if ( wxDisplay::GetFromRect(proposedRect) != currentDisplay )
+                {
+                    // And if this isn't sufficient, then vertically too.
+                    proposedRect.MakeCenteredIn(currentRect, wxVERTICAL);
+                }
             }
         }
         else
@@ -2300,6 +2336,8 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
             if ( parent )
             {
                 ::ScreenToClient(GetHwndOf(parent), (POINT *)&rectWin);
+                proposedRect.x = rectWin.left;
+                proposedRect.y = rectWin.top;
             }
         }
 
@@ -2307,9 +2345,9 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         // and not defer it here as otherwise the value returned by
         // GetClient/WindowRect() wouldn't change as the window wouldn't be
         // really resized
-        MSWMoveWindowToAnyPosition(GetHwnd(), rectWin.left, rectWin.top,
-                                   width + widthWin - rectClient.right,
-                                   height + heightWin - rectClient.bottom, true);
+        MSWMoveWindowToAnyPosition(GetHwnd(), proposedRect.x, proposedRect.y,
+                                   proposedRect.width, proposedRect.height,
+                                   true);
     }
 }
 
@@ -3927,7 +3965,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     }
 
                     // Draw the border
-                    ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, nullptr);
+                    hTheme.DrawBackground(GetHdcOf(*impl), rcBorder, EP_EDITTEXT, nState);
                 }
             }
             break;

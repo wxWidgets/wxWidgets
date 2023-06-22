@@ -49,6 +49,11 @@ public:
     virtual int GetBorderY() const override;
 
     // override some wxWindow virtual methods too
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam) override;

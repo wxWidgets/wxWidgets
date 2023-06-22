@@ -141,7 +141,7 @@ void wxGenericCalendarCtrl::Init()
     wxDateTime::WeekDay wd;
     for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
     {
-        m_weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr);
+        m_weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::NameForm().Abbr().Standalone());
     }
 
     for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
@@ -263,7 +263,7 @@ void wxGenericCalendarCtrl::CreateMonthChoice()
     wxDateTime::Month m;
     for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
     {
-        m_choiceMonth->Append(wxDateTime::GetMonthName(m));
+        m_choiceMonth->Append(wxDateTime::GetMonthName(m, wxDateTime::NameForm().Full().Standalone()));
     }
 
     m_choiceMonth->SetSelection(GetDate().GetMonth());

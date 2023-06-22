@@ -98,7 +98,6 @@ class socketStream :
 {
 public:
     socketStream();
-    virtual ~socketStream();
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -159,6 +158,8 @@ private:
     wxThread *m_writeThread,
              *m_readThread;
 
+    wxSocketInitializer m_socketInit;
+
     static wxSocketFlags ms_flags;
 };
 
@@ -171,13 +172,6 @@ socketStream::socketStream()
 
     m_writeThread =
     m_readThread = nullptr;
-
-    wxSocketBase::Initialize();
-}
-
-socketStream::~socketStream()
-{
-    wxSocketBase::Shutdown();
 }
 
 void socketStream::setUp()

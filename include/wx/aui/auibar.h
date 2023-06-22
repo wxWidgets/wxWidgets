@@ -98,7 +98,7 @@ private:
     int m_toolId;
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiToolBarEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxAuiToolBarEvent);
 };
 
 
@@ -254,7 +254,7 @@ private:
     int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
-using wxAuiToolBarItemArray = wxBaseArray<wxAuiToolBarItem>;
+using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
 
 
 

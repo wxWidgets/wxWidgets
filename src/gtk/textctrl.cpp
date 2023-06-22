@@ -2138,29 +2138,11 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     if ( IsSingleLine() )
     {
-        if ( HasFlag(wxBORDER_NONE) )
-        {
-#ifdef __WXGTK3__
-            tsize.IncBy(9, 0);
-#else
-            tsize.IncBy(4, 0);
-#endif // GTK3
-        }
-        else
-        {
-            // default height
-            tsize.y = GTKGetPreferredSize(m_widget).y;
-#ifdef __WXGTK3__
-            // Add the margins we have previously set.
-            tsize.IncBy( GTKGetEntryMargins(GetEntry()) );
-#else
-            // For GTK 2 these margins are too big, so hard code something more
-            // reasonable, this is not great but should be fine considering
-            // that it's very unlikely that GTK 2 is going to evolve, making
-            // this inappropriate.
-            tsize.IncBy(20, 0);
-#endif
-        }
+        // Default height
+        tsize.y = GTKGetPreferredSize(m_widget).y;
+
+        // Add padding + border size
+        tsize.x += GTKGetEntryMargins(GetEntry()).x;
     }
 
     //multiline

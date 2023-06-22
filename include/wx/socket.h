@@ -315,6 +315,21 @@ private:
 };
 
 
+// ----------------------------------------------------------------------------
+// wxSocketInitializer: trivial RAII helper for sockets initialization/shutdown
+// ----------------------------------------------------------------------------
+
+class wxSocketInitializer
+{
+public:
+    wxSocketInitializer() { wxSocketBase::Initialize(); }
+    ~wxSocketInitializer() { wxSocketBase::Shutdown(); }
+
+    wxSocketInitializer(const wxSocketInitializer&) = delete;
+    wxSocketInitializer& operator=(const wxSocketInitializer&) = delete;
+};
+
+
 // --------------------------------------------------------------------------
 // wxSocketServer
 // --------------------------------------------------------------------------

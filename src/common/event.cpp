@@ -751,7 +751,6 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 
     m_x =
     m_y = wxDefaultCoord;
-    m_hasPosition = false;
 
     InitPropagation();
 }

@@ -48,8 +48,10 @@ jobs:
                 ':!config.guess' \
                 ':!config.sub' \
                 ':!configure' \
-                ':!descrip.mms' \
+                ':!**/descrip.mms' \
                 ':!install-sh' \
+                ':!build/autogen.mk' \
+                ':!build/bakefiles/make_dist.mk' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
@@ -88,7 +90,7 @@ jobs:
             git fetch --depth=1 origin master
             if git diff origin/master \
                ':**.h' ':**.cpp' \
-               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^"_@]NULL[^"_])'; then
+               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^"_@A-Za-z0-9]NULL[^"_A-Za-z0-9])'; then
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1
             fi

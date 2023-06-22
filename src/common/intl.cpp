@@ -448,8 +448,16 @@ bool wxLocale::Init(int lang, int flags)
     }
 
     // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
-    // the other platforms we still have to do it here.
-#if defined(__WIN32__) || defined(__WXOSX__)
+    // the other platforms we still have to do it.
+#if defined(__WXOSX__)
+    // Locale-related environment variables are typically not set at all under
+    // macOS, so don't rely on them unless we really have no other choice, i.e.
+    // we don't recognize the locale ourselves.
+    if ( !(info ? info->TrySetLocale() : wxSetlocale(LC_ALL, "")) )
+    {
+        ok = false;
+    }
+#elif defined(__WIN32__)
 
     // We prefer letting the CRT to set its locale on its own when using
     // default locale, as it does a better job of it than we do. We also have

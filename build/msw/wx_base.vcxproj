@@ -540,7 +540,6 @@
     <ClCompile Include="..\..\src\common\tarstrm.cpp" />
     <ClCompile Include="..\..\src\common\textbuf.cpp" />
     <ClCompile Include="..\..\src\common\textfile.cpp" />
-    <ClCompile Include="..\..\src\common\threadinfo.cpp" />
     <ClCompile Include="..\..\src\common\time.cpp" />
     <ClCompile Include="..\..\src\common\timercmn.cpp" />
     <ClCompile Include="..\..\src\common\timerimpl.cpp" />

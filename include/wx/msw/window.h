@@ -115,6 +115,8 @@ public:
     virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont( const wxFont &font ) override;
 
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
+
     virtual int GetCharHeight() const override;
     virtual int GetCharWidth() const override;
 
@@ -629,11 +631,6 @@ protected:
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;
 #endif // wxUSE_MENUS_NATIVE
-
-    // Called by Reparent() after the window parent changes, i.e. GetParent()
-    // returns the new parent inside this function.
-    virtual void MSWAfterReparent();
-
 
     // the window handle
     WXHWND                m_hWnd;

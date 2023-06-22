@@ -494,6 +494,11 @@ public:
 
         Notice that the current time stamp is only used by the default log
         formatter and custom formatters may ignore this format.
+
+        The default time stamp is `%X`, i.e. locale-dependent time
+        representation.
+
+        @see SetTimestamp()
     */
     static const wxString& GetTimestamp();
 
@@ -507,6 +512,11 @@ public:
         formatter and custom formatters may ignore this format. You can also
         define a custom wxLogFormatter to customize the time stamp handling
         beyond changing its format.
+
+        In addition to calling this function explicitly, it can also be called
+        implicitly by wxWidgets if `WXLOG_TIME_FORMAT` environment variable is
+        set, see @ref overview_envvars "overview of the environment variables"
+        affecting wxWidgets programs.
     */
     static void SetTimestamp(const wxString& format);
 
@@ -1448,10 +1458,12 @@ void wxVLogError(const char* formatString, va_list argPtr);
     do the same thing for log messages of any level, and not just the tracing
     ones.
 
-    Like wxLogDebug(), trace functions only do something in debug builds and
-    expand to nothing in the release one. The reason for making it a separate
-    function is that usually there are a lot of trace messages, so it might
-    make sense to separate them from other debug messages.
+    Like wxLogDebug(), trace functions are disabled at compile time if
+    wxWidgets is compiled without debugging support, i.e. with `wxDEBUG_LEVEL`
+    set to 0 see @ref overview_debugging "Debugging overview" for more details).
+    The reason for having a separate function for tracing messages is that
+    usually there are a lot of them and so it may be useful to separate them
+    from the other debug messages.
 
     Trace messages can be separated into different categories; these functions in facts
     only log the message if the given @a mask is currently enabled in wxLog.
@@ -1510,9 +1522,13 @@ void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
 /** @addtogroup group_funcmacro_log */
 ///@{
 /**
-    The right functions for debug output. They only do something in debug mode
-    (when the preprocessor symbol @c \__WXDEBUG__ is defined) and expand to
-    nothing in release mode (otherwise).
+    The function to use for debugging output.
+
+    In addition to not producing any output if the current log level is not
+    high enough, just as all the other logging function, this function does
+    nothing at all, and is not even present in the final executable code, if
+    wxWidgets was compiled without debugging support, i.e. `wxDEBUG_LEVEL` is 0
+    (see @ref overview_debugging "Debugging overview" for more details).
 
     @header{wx/log.h}
 */

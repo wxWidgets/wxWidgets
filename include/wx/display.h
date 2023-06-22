@@ -67,6 +67,10 @@ public:
     // it doesn't belong to any display
     static int GetFromPoint(const wxPoint& pt);
 
+    // find the display which has the biggest intersection with the given
+    // rectangle or wxNOT_FOUND if the rectangle doesn't intersect any display
+    static int GetFromRect(const wxRect& rect);
+
     // find the display where the given window lies, return wxNOT_FOUND if it
     // is not shown at all
     static int GetFromWindow(const wxWindow *window);
