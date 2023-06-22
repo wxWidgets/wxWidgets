@@ -682,18 +682,25 @@ int wxGtkPrintDialog::ShowModal()
     GtkPrintSettings * settings = native->GetPrintConfig();
 
     // We have to restore pages to print here because they're stored in a wxPrintDialogData and ConvertToNative only works for wxPrintData.
-    int fromPage = m_printDialogData.GetFromPage();
-    int toPage = m_printDialogData.GetToPage();
     if (m_printDialogData.GetSelection() || m_printDialogData.GetCurrentPage())
         gtk_print_settings_set_print_pages(settings, GTK_PRINT_PAGES_CURRENT);
-    else if (m_printDialogData.GetAllPages())
+    else if (m_printDialogData.GetAllPages() || m_printDialogData.GetPageRanges().empty())
         gtk_print_settings_set_print_pages(settings, GTK_PRINT_PAGES_ALL);
-    else {
+    else
+    {
         gtk_print_settings_set_print_pages(settings, GTK_PRINT_PAGES_RANGES);
-        GtkPageRange range;
-        range.start = fromPage - 1;
-        range.end = (toPage >= fromPage) ? toPage - 1 : fromPage - 1;
-        gtk_print_settings_set_page_ranges(settings, &range, 1);
+
+        const auto& pageRanges = m_printDialogData.GetPageRanges();
+
+        const auto numRanges = pageRanges.size();
+        std::vector<GtkPageRange> ranges(numRanges);
+        for ( size_t i = 0; i < numRanges; i++ )
+        {
+            ranges[i].start = pageRanges[i].fromPage - 1;
+            ranges[i].end = pageRanges[i].toPage - 1;
+        }
+
+        gtk_print_settings_set_page_ranges(settings, &ranges[0], numRanges);
     }
 
     GtkPrintOperation * const printOp = native->GetPrintJob();
@@ -894,30 +901,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         return false;
     }
 
-    // Let's correct the PageInfo just in case the app gives wrong values.
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-
-    if (minPage < 1) minPage = 1;
-    if (maxPage < 1) maxPage = 9999;
-    if (maxPage < minPage) maxPage = minPage;
-
-    m_printDialogData.SetMinPage(minPage);
-    m_printDialogData.SetMaxPage(maxPage);
-    if (fromPage != 0)
-    {
-        if (fromPage < minPage) fromPage = minPage;
-        else if (fromPage > maxPage) fromPage = maxPage;
-        m_printDialogData.SetFromPage(fromPage);
-    }
-    if (toPage != 0)
-    {
-        m_printDialogData.SetToPage(toPage);
-        if (toPage > maxPage) toPage = maxPage;
-        else if (toPage < minPage) toPage = minPage;
-    }
-
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
 
@@ -992,35 +975,34 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     m_printDialogData.SetNoCopies(printdata.GetNoCopies());
     m_printDialogData.SetPrintToFile(printdata.GetPrinterName() == "Print to File");
 
+    wxPrintPageRanges pageRanges;
     switch (gtk_print_settings_get_print_pages(newSettings))
     {
         case GTK_PRINT_PAGES_CURRENT:
             m_printDialogData.SetSelection( true );
             break;
         case GTK_PRINT_PAGES_RANGES:
-            {// wxWidgets doesn't support multiple ranges, so we can only save the first one even if the user wants to print others.
-            // For example, the user enters "1-3;5-7" in the dialog: pages 1-3 and 5-7 will be correctly printed when the user
-            // will hit "OK" button. However we can only save 1-3 in the print data.
+            {
             gint num_ranges = 0;
             GtkPageRange* range;
             range = gtk_print_settings_get_page_ranges (newSettings, &num_ranges);
-            if (num_ranges >= 1)
+
+            std::unique_ptr<GtkPageRange, void (*)(void*)>
+                rangePtrDeleter(range, g_free);
+
+            pageRanges.resize(num_ranges);
+            for ( auto& pageRange : pageRanges )
             {
-                m_printDialogData.SetFromPage( range[0].start );
-                m_printDialogData.SetToPage( range[0].end );
-                g_free(range);
+                pageRange.fromPage = range->start + 1;
+                pageRange.toPage = range->end + 1;
+                ++range;
             }
-            else {
-                m_printDialogData.SetAllPages( true );
-                m_printDialogData.SetFromPage( 0 );
-                m_printDialogData.SetToPage( 9999 );
+            m_printDialogData.SetPageRanges(pageRanges);
+            break;
             }
-            break;}
         case GTK_PRINT_PAGES_ALL:
         default:
             m_printDialogData.SetAllPages( true );
-            m_printDialogData.SetFromPage( 0 );
-            m_printDialogData.SetToPage( 9999 );
             break;
     }
 
@@ -1049,64 +1031,21 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined.
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    const auto allPages = printout->GetPagesInfo(pageRanges);
 
-    if (maxPage == 0)
+    if (!allPages.IsValid())
     {
         sm_lastError = wxPRINTER_ERROR;
-        wxFAIL_MSG("wxPrintout::GetPageInfo gives a null maxPage.");
         return;
     }
 
+    gtk_print_operation_set_n_pages(operation, allPages.GetNumberOfPages());
+
     printout->OnBeginPrinting();
-
-    int numPages = 0;
-
-    // If we're not previewing we need to calculate the number of pages to print.
-    // If we're previewing, Gtk Print will render every pages without wondering about the page ranges the user may
-    // have defined in the dialog. So the number of pages is the maximum available.
-    if (!printout->IsPreview())
-    {
-        GtkPrintSettings * settings = gtk_print_operation_get_print_settings (operation);
-        switch (gtk_print_settings_get_print_pages(settings))
-        {
-            case GTK_PRINT_PAGES_CURRENT:
-                numPages = 1;
-                break;
-            case GTK_PRINT_PAGES_RANGES:
-                {gint num_ranges = 0;
-                GtkPageRange* range;
-                int i;
-                range = gtk_print_settings_get_page_ranges (settings, &num_ranges);
-                for (i=0; i<num_ranges; i++)
-                {
-                    if (range[i].end < range[i].start) range[i].end = range[i].start;
-                    if (range[i].start < minPage-1) range[i].start = minPage-1;
-                    if (range[i].end > maxPage-1) range[i].end = maxPage-1;
-                    if (range[i].start > maxPage-1) range[i].start = maxPage-1;
-                    numPages += range[i].end - range[i].start + 1;
-                }
-                if (range)
-                {
-                    gtk_print_settings_set_page_ranges(settings, range, 1);
-                    g_free(range);
-                }
-                break;}
-            case GTK_PRINT_PAGES_ALL:
-            default:
-                numPages = maxPage - minPage + 1;
-                break;
-        }
-    }
-    else numPages = maxPage - minPage + 1;
-
-    gtk_print_operation_set_n_pages(operation, numPages);
 }
 
 void wxGtkPrinter::DrawPage(wxPrintout *printout,
-                            GtkPrintOperation *operation,
+                            GtkPrintOperation * WXUNUSED(operation),
                             GtkPrintContext * WXUNUSED(context),
                             int page_nr)
 {
@@ -1116,52 +1055,20 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
     if (sm_lastError != wxPRINTER_NO_ERROR)
         return;
 
-    int fromPage, toPage, minPage, maxPage, startPage, endPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    const int minPage = m_printDialogData.GetMinPage();
+    const int maxPage = m_printDialogData.GetMaxPage();
 
-    int numPageToDraw = page_nr + minPage;
-    if (numPageToDraw < minPage) numPageToDraw = minPage;
-    if (numPageToDraw > maxPage) numPageToDraw = maxPage;
-
-    GtkPrintSettings * settings = gtk_print_operation_get_print_settings (operation);
-    switch (gtk_print_settings_get_print_pages(settings))
+    if(page_nr == 0)
     {
-        case GTK_PRINT_PAGES_CURRENT:
-            g_object_get(G_OBJECT(operation), "current-page", &startPage, nullptr);
-            endPage = startPage;
-            break;
-        case GTK_PRINT_PAGES_RANGES:
-            {gint num_ranges = 0;
-            GtkPageRange* range;
-            range = gtk_print_settings_get_page_ranges (settings, &num_ranges);
-            // We don't need to verify these values as it has already been done in wxGtkPrinter::BeginPrint.
-            if (num_ranges >= 1)
-            {
-                startPage = range[0].start + 1;
-                endPage = range[0].end + 1;
-                g_free(range);
-            }
-            else {
-                startPage = minPage;
-                endPage = maxPage;
-            }
-            break;}
-        case GTK_PRINT_PAGES_ALL:
-        default:
-            startPage = minPage;
-            endPage = maxPage;
-            break;
-    }
-
-    if(numPageToDraw == startPage)
-    {
-        if (!printout->OnBeginDocument(startPage, endPage))
+        if (!printout->OnBeginDocument(minPage, maxPage))
         {
             wxLogError(_("Could not start printing."));
             sm_lastError = wxPRINTER_ERROR;
             return;
         }
     }
+
+    const int numPageToDraw = minPage + page_nr;
 
     // The app can render the page numPageToDraw.
     if (printout->HasPage(numPageToDraw))
@@ -1172,7 +1079,7 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
     }
 
 
-    if(numPageToDraw == endPage)
+    if(numPageToDraw == maxPage)
     {
         printout->OnEndDocument();
     }

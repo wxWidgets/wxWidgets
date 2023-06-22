@@ -611,31 +611,25 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    wxPrintPageRanges ranges = m_printDialogData.GetPageRanges();
+    const auto all = printout->GetPagesInfo(ranges);
 
-    if (maxPage == 0)
+    if ( !all.IsValid() )
     {
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
 
+    if ( ranges.empty() )
+    {
+        // Not having any ranges to print is equivalent to printing all pages.
+        ranges.push_back(all);
+    }
+
     // Only set min and max, because from and to will be
     // set by the user if prompted for the print dialog above
-    m_printDialogData.SetMinPage(minPage);
-    m_printDialogData.SetMaxPage(maxPage);
-
-    // Set from and to pages if bypassing the print dialog
-    if ( !prompt )
-    {
-        m_printDialogData.SetFromPage(fromPage);
-        
-        if( m_printDialogData.GetAllPages() )
-            m_printDialogData.SetToPage(maxPage);
-        else
-            m_printDialogData.SetToPage(toPage);
-    }
+    m_printDialogData.SetMinPage(all.fromPage);
+    m_printDialogData.SetMaxPage(all.toPage);
 
     wxPrintingGuard guard(printout);
 
@@ -644,25 +638,29 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
     {
         wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
+        sm_lastError = wxPRINTER_ERROR;
         return false;
     }
 
-    int pn;
-    for (pn = m_printDialogData.GetFromPage();
-        (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
-        pn++)
+    for ( const wxPrintPageRange& range : ranges )
     {
-        if (sm_abortIt)
+        for ( int pn = range.fromPage; pn <= range.toPage; pn++ )
         {
-                break;
-        }
-        else
-        {
-            wxPrintingPageGuard pageGuard(*dc);
-            if ( !printout->OnPrintPage(pn) )
+            if ( !printout->HasPage(pn) )
+                continue;
+
+            if (sm_abortIt)
             {
-                sm_lastError = wxPRINTER_CANCELLED;
                 break;
+            }
+            else
+            {
+                wxPrintingPageGuard pageGuard(*dc);
+                if ( !printout->OnPrintPage(pn) )
+                {
+                    sm_lastError = wxPRINTER_CANCELLED;
+                    break;
+                }
             }
         }
     }

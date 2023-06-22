@@ -105,8 +105,6 @@ wxPrintDialogData::wxPrintDialogData()
 wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     : m_printData(printData)
 {
-    m_printFromPage = 1;
-    m_printToPage = 0;
     m_printMinPage = 1;
     m_printMaxPage = 9999;
     // On Mac the Print dialog always defaults to "All Pages"
@@ -122,6 +120,56 @@ wxPrintDialogData::~wxPrintDialogData()
 void wxPrintDialogData::operator=(const wxPrintData& data)
 {
     m_printData = data;
+}
+
+void wxPrintDialogData::SetFromPage(int v)
+{
+    switch ( m_printPageRanges.size() )
+    {
+        case 0:
+            m_printPageRanges.push_back(wxPrintPageRange());
+            wxFALLTHROUGH;
+
+        case 1:
+            m_printPageRanges[0].fromPage = v;
+            break;
+
+        default:
+            wxFAIL_MSG("Can't set \"from\" page when multiple ranges are used");
+    }
+}
+
+void wxPrintDialogData::SetToPage(int v)
+{
+    switch ( m_printPageRanges.size() )
+    {
+        case 0:
+            m_printPageRanges.push_back(wxPrintPageRange());
+            wxFALLTHROUGH;
+
+        case 1:
+            m_printPageRanges[0].toPage = v;
+            break;
+
+        default:
+            wxFAIL_MSG("Can't set \"to\" page when multiple ranges are used");
+    }
+}
+
+int wxPrintDialogData::GetFromPage() const
+{
+    // Unlike in the setters above, don't assert even if we have multiple
+    // ranges to avoid breaking existing code which had been written before
+    // support for multiple ranges was added. Just return the value
+    // corresponding to the start of the first range.
+    return m_printPageRanges.empty() ? 0 : m_printPageRanges.front().fromPage;
+}
+
+int wxPrintDialogData::GetToPage() const
+{
+    // As above, try to gracefully degrade to the single range case by
+    // returning the end of the last range.
+    return m_printPageRanges.empty() ? 0 : m_printPageRanges.back().toPage;
 }
 
 // ----------------------------------------------------------------------------
