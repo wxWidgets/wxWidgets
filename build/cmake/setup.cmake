@@ -82,6 +82,12 @@ if(wxBUILD_SHARED)
     endif()
 endif() # wxBUILD_SHARED
 
+if(MSVC)
+    set(DISABLE_ALL_WARNINGS "/w")
+else()
+    set(DISABLE_ALL_WARNINGS "-w")
+endif()
+
 # wx_check_cxx_source_compiles(<code> <var> [headers...])
 function(wx_check_cxx_source_compiles code res_var)
     set(src)
@@ -96,7 +102,12 @@ function(wx_check_cxx_source_compiles code res_var)
         endif()
     endforeach()
     set(src "${src}\n\nint main(int argc, char* argv[]) {\n ${code}\nreturn 0; }")
+    # We're not interested in any warnings that can arise in the test, which is
+    # especially important if -Werror is globally in effect.
+    cmake_push_check_state()
+    set(CMAKE_REQUIRED_FLAGS ${DISABLE_ALL_WARNINGS})
     check_cxx_source_compiles("${src}" ${res_var})
+    cmake_pop_check_state()
 endfunction()
 
 # wx_check_cxx_source_compiles(<code> <var> [headers...])
