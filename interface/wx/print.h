@@ -375,6 +375,13 @@ public:
     virtual wxPrintout* GetPrintoutForPrinting() const;
 
     /**
+        Gets the current percentage zoom level of the preview canvas.
+
+        @see SetZoom()
+    */
+    virtual int GetZoom() const;
+
+    /**
         Returns @true if the wxPrintPreview is valid, @false otherwise.
 
         It could return @false if there was a problem initializing the printer
@@ -430,6 +437,8 @@ public:
 
     /**
         Sets the percentage preview zoom, and refreshes the preview canvas accordingly.
+
+        @see GetZoom()
     */
     virtual void SetZoom(int percent);
 };
