@@ -3782,6 +3782,44 @@ public:
 };
 
 
+/**
+    @class wxDataViewCheckIconText
+
+    wxDataViewCheckIconText is used by wxDataViewCheckIconTextRenderer for data
+    transfer.
+
+    This class can be converted to and from a wxVariant.
+
+    @library{wxcore}
+    @category{dvc}
+*/
+class wxDataViewCheckIconText : public wxDataViewIconText
+{
+public:
+    //@{
+    /**
+        Constructor.
+    */
+    wxDataViewCheckIconText(
+        const wxString& text = wxEmptyString,
+        const wxBitmapBundle& icon = wxBitmapBundle(),
+        wxCheckBoxState checkedState = wxCHK_UNDETERMINED
+        );
+    wxDataViewCheckIconText(const wxDataViewCheckIconText& other);
+    //@}
+
+    /**
+        Sets the checked state.
+    */
+    void SetCheckedState(wxCheckBoxState state);
+
+    /**
+        Gets the checked state.
+    */
+    wxCheckBoxState GetCheckedState() const;
+};
+
+
 
 /**
     @class wxDataViewEvent
