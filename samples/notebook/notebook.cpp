@@ -326,7 +326,7 @@ MyFrame::MyFrame()
     menuType->AppendRadioItem(ID_BOOK_TREEBOOK,   "&Treebook\tCtrl-4");
 #endif
 #if wxUSE_TOOLBOOK
-    menuType->AppendRadioItem(ID_BOOK_TOOLBOOK,   "T&oolbook\tCtrl-5");
+    menuType->AppendRadioItem(ID_BOOK_TOOLBOOK,   "&Toolbook\tCtrl-5");
 #endif
 #if wxUSE_AUI
     menuType->AppendRadioItem(ID_BOOK_AUINOTEBOOK,   "&AuiNotebook\tCtrl-6");
