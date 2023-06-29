@@ -302,6 +302,15 @@
 #       endif
 #   endif
 
+#   if wxUSE_CLIPBOARD
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_CLIPBOARD requires wxUSE_OLE"
+#       else
+#           undef wxUSE_CLIPBOARD
+#           define wxUSE_CLIPBOARD 0
+#       endif
+#   endif
+
 #   if wxUSE_DRAG_AND_DROP
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_DRAG_AND_DROP requires wxUSE_OLE"
