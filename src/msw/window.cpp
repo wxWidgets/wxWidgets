@@ -1547,31 +1547,25 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
     }
 }
 
-wxBorder wxWindowMSW::GetDefaultBorderForControl() const
-{
-    return wxBORDER_THEME;
-}
-
-wxBorder wxWindowMSW::GetDefaultBorder() const
-{
-    return wxWindowBase::GetDefaultBorder();
-}
-
 // Translate wxBORDER_THEME (and other border styles if necessary) to the value
 // that makes most sense for this Windows environment
-wxBorder wxWindowMSW::TranslateBorder(wxBorder border) const
+wxBorder wxWindowMSW::DoTranslateBorder(wxBorder border) const
 {
-#if wxUSE_UXTHEME
     if (border == wxBORDER_THEME)
     {
+#if wxUSE_UXTHEME
         if (CanApplyThemeBorder())
         {
             if ( wxUxThemeIsActive() )
                 return wxBORDER_THEME;
         }
-        return wxBORDER_SUNKEN;
+#endif // wxUSE_UXTHEME
+
+        // In dark mode the standard sunken border is too bright, so prefer
+        // using a simple(r) and darker border instead.
+        return wxMSWDarkMode::IsActive() ? wxBORDER_SIMPLE : wxBORDER_SUNKEN;
     }
-#endif
+
     return border;
 }
 
@@ -1608,7 +1602,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxHSCROLL )
         style |= WS_HSCROLL;
 
-    const wxBorder border = TranslateBorder(GetBorder(flags));
+    const wxBorder border = DoTranslateBorder(GetBorder(flags));
 
     // After translation, border is now optimized for the specific version of Windows
     // and theme engine presence.
@@ -3858,8 +3852,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         // If we want the default themed border then we need to draw it ourselves
         case WM_NCCALCSIZE:
             {
-                const wxBorder border = TranslateBorder(GetBorder());
-                if (wxUxThemeIsActive() && border == wxBORDER_THEME)
+                if (DoTranslateBorder(GetBorder()) == wxBORDER_THEME)
                 {
                     // first ask the widget to calculate the border size
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3918,8 +3911,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_NCPAINT:
             {
-                const wxBorder border = TranslateBorder(GetBorder());
-                if (wxUxThemeIsActive() && border == wxBORDER_THEME)
+                if (DoTranslateBorder(GetBorder()) == wxBORDER_THEME)
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
