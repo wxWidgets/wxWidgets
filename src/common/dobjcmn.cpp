@@ -429,6 +429,141 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 // wxHTMLDataObject
 // ----------------------------------------------------------------------------
 
+#ifdef __WXMSW__
+
+// Helper functions for MSW CF_HTML format, see MSDN for more information:
+//
+// https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format
+namespace wxMSWClip
+{
+
+const char* const VERSION_HEADER = "Version:";
+const size_t VERSION_HEADER_LEN = strlen(VERSION_HEADER);
+
+const char* const START_HTML_HEADER = "StartHTML:";
+const size_t START_HTML_HEADER_LEN = strlen(START_HTML_HEADER);
+
+const char* const END_HTML_HEADER = "EndHTML:";
+const size_t END_HTML_HEADER_LEN = strlen(END_HTML_HEADER);
+
+const char* const START_FRAGMENT_HEADER = "StartFragment:";
+const size_t START_FRAGMENT_HEADER_LEN = strlen(START_FRAGMENT_HEADER);
+
+const char* const END_FRAGMENT_HEADER = "EndFragment:";
+const size_t END_FRAGMENT_HEADER_LEN = strlen(END_FRAGMENT_HEADER);
+
+const char* const CF_HTML_PREAMBLE =
+        "Version:0.9\r\n"
+        "StartHTML:00000000\r\n"
+        "EndHTML:00000000\r\n"
+        "StartFragment:00000000\r\n"
+        "EndFragment:00000000\r\n"
+        ;
+const size_t CF_HTML_PREAMBLE_LEN = strlen(CF_HTML_PREAMBLE);
+
+const char* const CF_HTML_WRAP_START =
+        "<html><body>\r\n"
+        "<!--StartFragment -->"
+        ;
+const size_t CF_HTML_WRAP_START_LEN = strlen(CF_HTML_WRAP_START);
+
+const char* const CF_HTML_WRAP_END =
+        "<!--EndFragment-->\r\n"
+        "</body>\r\n"
+        "</html>"
+        ;
+const size_t CF_HTML_WRAP_END_LEN = strlen(CF_HTML_WRAP_END);
+
+
+// Return the extra size needed by HTML data in addition to the length of the
+// HTML fragment itself.
+int GetExtraDataSize()
+{
+    // +1 is for the trailing NUL.
+    return CF_HTML_PREAMBLE_LEN + CF_HTML_WRAP_START_LEN + CF_HTML_WRAP_END_LEN + 1;
+}
+
+// Wrap HTML data with the extra information needed by CF_HTML and copy
+// everything into the provided buffer assumed to be of sufficient size.
+void FillFromHTML(char* buffer, const char* html, size_t lenHTML)
+{
+    // add the extra info that the MSW clipboard format requires.
+
+        // Create a template string for the HTML header...
+    strcpy(buffer, CF_HTML_PREAMBLE);
+    const size_t startHTML = CF_HTML_PREAMBLE_LEN;
+
+    strcat(buffer, CF_HTML_WRAP_START);
+    const size_t startFragment = startHTML + CF_HTML_WRAP_START_LEN;
+
+    // Append the HTML...
+    strncat(buffer, html, lenHTML);
+    const size_t endFragment = startFragment + lenHTML;
+
+    // Finish up the HTML format...
+    strcat(buffer, CF_HTML_WRAP_END);
+    const size_t endHTML = endFragment + CF_HTML_WRAP_END_LEN;
+
+    // Now go back and write out the necessary header information.
+    //
+    // Note, wsprintf() truncates the string when you overwrite it so you
+    // follow up with code to replace the 0 appended at the end with a '\r'.
+    const size_t OFFSET_LEN = 8; // All offsets are formatted using 8 digits.
+
+    char *ptr = strstr(buffer, START_HTML_HEADER);
+    sprintf(ptr+START_HTML_HEADER_LEN, "%08zu", startHTML);
+    *(ptr+START_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
+
+    ptr = strstr(buffer, END_HTML_HEADER);
+    sprintf(ptr+END_HTML_HEADER_LEN, "%08zu", endHTML);
+    *(ptr+END_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
+
+    ptr = strstr(buffer, START_FRAGMENT_HEADER);
+    sprintf(ptr+START_FRAGMENT_HEADER_LEN, "%08zu", startFragment);
+    *(ptr+START_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
+
+    ptr = strstr(buffer, END_FRAGMENT_HEADER);
+    sprintf(ptr+END_FRAGMENT_HEADER_LEN, "%08zu", endFragment);
+    *(ptr+END_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
+}
+
+// Extract just the HTML fragment part from CF_HTML data.
+wxString ExtractHTML(const char* buffer, size_t len)
+{
+    // Sanity check.
+    if ( len < VERSION_HEADER_LEN ||
+            wxCRT_StrnicmpA(buffer, VERSION_HEADER, VERSION_HEADER_LEN) != 0 )
+    {
+        // This doesn't look like CF_HTML at all, don't do anything.
+        return wxString();
+    }
+
+    const char* ptr = strstr(buffer, START_FRAGMENT_HEADER);
+    if ( !ptr )
+        return wxString();
+
+    ptr += START_FRAGMENT_HEADER_LEN;
+
+    const int start = atoi(ptr);
+    if ( start < 0 || (unsigned)start >= len )
+        return wxString();
+
+    ptr = strstr(ptr, END_FRAGMENT_HEADER);
+    if ( !ptr )
+        return wxString();
+
+    ptr += END_FRAGMENT_HEADER_LEN;
+    const int end = atoi(ptr);
+    if ( end < 0 || end < start || (unsigned)end >= len )
+        return wxString();
+
+    return wxString::FromUTF8(buffer + start, end - start);
+}
+
+} // anonymous namespace
+
+#endif // __WXMSW__
+
 size_t wxHTMLDataObject::GetDataSize() const
 {
     // Ensure that the temporary string returned by GetHTML() is kept alive for
@@ -439,9 +574,7 @@ size_t wxHTMLDataObject::GetDataSize() const
     size_t size = buffer.length();
 
 #ifdef __WXMSW__
-    // On Windows we need to add some stuff to the string to satisfy
-    // its clipboard format requirements.
-    size += 400;
+    size += wxMSWClip::GetExtraDataSize();
 #endif
 
     return size;
@@ -461,75 +594,27 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
     char* const buffer = static_cast<char*>(buf);
 
 #ifdef __WXMSW__
-    // add the extra info that the MSW clipboard format requires.
-
-        // Create a template string for the HTML header...
-    strcpy(buffer,
-        "Version:0.9\r\n"
-        "StartHTML:00000000\r\n"
-        "EndHTML:00000000\r\n"
-        "StartFragment:00000000\r\n"
-        "EndFragment:00000000\r\n"
-        "<html><body>\r\n"
-        "<!--StartFragment -->\r\n");
-
-    // Append the HTML...
-    strcat(buffer, html);
-    strcat(buffer, "\r\n");
-    // Finish up the HTML format...
-    strcat(buffer,
-        "<!--EndFragment-->\r\n"
-        "</body>\r\n"
-        "</html>");
-
-    // Now go back, calculate all the lengths, and write out the
-    // necessary header information. Note, wsprintf() truncates the
-    // string when you overwrite it so you follow up with code to replace
-    // the 0 appended at the end with a '\r'...
-    char *ptr = strstr(buffer, "StartHTML");
-    sprintf(ptr+10, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
-    *(ptr+10+8) = '\r';
-
-    ptr = strstr(buffer, "EndHTML");
-    sprintf(ptr+8, "%08u", (unsigned)strlen(buffer));
-    *(ptr+8+8) = '\r';
-
-    ptr = strstr(buffer, "StartFragment");
-    sprintf(ptr+14, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
-    *(ptr+14+8) = '\r';
-
-    ptr = strstr(buffer, "EndFragment");
-    sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
-    *(ptr+12+8) = '\r';
+    wxMSWClip::FillFromHTML(buffer, html, html.length());
 #else
-    strcpy(buffer, html);
+    memcpy(buffer, html, html.length());
 #endif // __WXMSW__
 
     return true;
 }
 
-bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
+bool wxHTMLDataObject::SetData(size_t len, const void *buf)
 {
     if ( buf == nullptr )
         return false;
 
-    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    wxString html = wxString::FromUTF8(static_cast<const char*>(buf));
+    const char* const buffer = static_cast<const char*>(buf);
 
 #ifdef __WXMSW__
     // To be consistent with other platforms, we only add the Fragment part
     // of the Windows HTML clipboard format to the data object.
-    int fragmentStart = html.rfind("StartFragment");
-    int fragmentEnd = html.rfind("EndFragment");
-
-    if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
-    {
-        int startCommentEnd = html.find("-->", fragmentStart) + 3;
-        int endCommentStart = html.rfind("<!--", fragmentEnd);
-
-        if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
-            html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
-    }
+    wxString html = wxMSWClip::ExtractHTML(buffer, len);
+#else
+    wxString html = wxString::FromUTF8(buffer, len);
 #endif // __WXMSW__
 
     SetHTML( html );
