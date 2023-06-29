@@ -1078,7 +1078,7 @@ size_t wxBitmapDataObject::GetDataSize() const
     // because the size of the bitmap without the alpha channel is different.
     RemoveAlphaIfNecessary(bmp);
 
-    return wxDIB::ConvertFromBitmap(nullptr, GetHbitmapOf(GetBitmap()));
+    return wxDIB::ConvertFromBitmap(nullptr, GetHbitmapOf(bmp));
 #else
     return 0;
 #endif
