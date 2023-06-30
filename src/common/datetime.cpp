@@ -776,10 +776,12 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
     wxCHECK_MSG(month != Inv_Month, wxEmptyString, wxT("invalid month"));
+#if wxUSE_INTL
     wxString name = wxUILocale::GetCurrent().GetMonthName(month, flags);
-    if (name.empty())
-        name = GetEnglishMonthName(month, flags);
-    return name;
+    if (!name.empty())
+        return name;
+#endif // wxUSE_INTL
+    return GetEnglishMonthName(month, flags);
 }
 
 /* static */
@@ -806,10 +808,12 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
     wxCHECK_MSG(wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday"));
+#if wxUSE_INTL
     wxString name = wxUILocale::GetCurrent().GetWeekDayName(wday, flags);
-    if (name.empty())
-        name = GetEnglishWeekDayName(wday, flags);
-    return name;
+    if (!name.empty())
+        return name;
+#endif // wxUSE_INTL
+    return GetEnglishWeekDayName(wday, flags);
 }
 
 /* static */
