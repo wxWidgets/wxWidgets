@@ -159,6 +159,19 @@ public:
 
     void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
+
+    /**
+     Mark the tool to be not visible
+     
+     By default all tools and controls in the toolbar are visible.
+     If you want, you can mark the tool/control not visible by default
+     When you do that user will be able to go to the customization
+     dialog and add the tool/control at a later time.
+     When you want that you pass "false" to this function.
+     
+     @since 3.3.0
+     */
+    void MarkAvailable(bool available);
 };
 
 
