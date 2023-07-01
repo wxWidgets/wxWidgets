@@ -237,7 +237,7 @@ Changes in behaviour which may result in build errors
 
 All:
 
-- Add move ctor and assignment to wxString (Pavel Tyunin, #23224).
+- Add move ctor and assignment operator to wxString (Pavel Tyunin, #23224).
 - Enable large file support in Unix CMake builds (Maarten Bent, #22750).
 - Update Georgian translations (NorwayFun, #22673).
 - Don't use invalid iterator in wxString in UTF-8 build (Ian Day, #23305).
@@ -264,7 +264,7 @@ wxGTK:
 
 - Fix key codes with Shift/on non-US keyboards (Ivan Sorokin, #17643, #23379).
 - Dramatically optimize adding many items to wxChoice (Ian McInerney, #23443).
-- Improve document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
+- Improve and document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
 - Fix loading WebKit2 extension when using wxWebView (Scott Talbert, #23497).
 - Fix editing cells without values in wxDataViewCtrl (#23523).
 - Fix uninitialized wxKeyEvent::m_isRepeat (jolz, #23593).
@@ -275,7 +275,7 @@ wxMSW:
 - Fix crash when using wxBitmapDataObject in wxDataObjectComposite (#23564).
 - Fix setting locale for wxLANGUAGE_UKRAINIAN (Ulrich Telle, #23210).
 - Don't reset custom wxToolBar background on system colour change (#23386).
-- Fix wxUILocale::GetPreferredUILanguages() under < 10 (Brian Nixon, #23416).
+- Fix wxUILocale::GetPreferredUILanguages() with OS < 10 (Brian Nixon, #23416).
 - Fix building with LLVM clang (Sergey Khalyutn, Maarten Bent, #23464).
 - Fix discrepancy between GDI and Direct2D in high DPI (Kumazuma, #23486).
 - Fix wxTreeCtrl::ScrollTo() with hidden root item (#23534).
@@ -379,7 +379,7 @@ wxOSX:
 - Fix possible crash in menu item event handling (#23040).
 - Fix regression in text drawing when using clipping (#22629).
 - Don't round fractional point size when creating fonts (#23144).
-- Do round size returned by wxFont::GetPixelS().
+- Do round size returned by wxFont::GetPixelSize().
 - Map wxFONTFAMILY_DEFAULT to wxFONTFAMILY_SWISS as in the other ports (#23158).
 - Generate wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK (#22833).
 - Fix wxDataViewCtrl::HitTest() (Vojtěch Bubník, #22789).
