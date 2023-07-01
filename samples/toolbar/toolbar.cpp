@@ -470,6 +470,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         combo->Append("combobox with extremely, extremely, extremely, extremely long label");
         combo->Append("in a");
         combo->Append("toolbar");
+        combo->MarkAvailable( false );
         toolBar->AddControl(combo, "Combo Label");
     }
 #endif // USE_CONTROLS_IN_TOOLBAR

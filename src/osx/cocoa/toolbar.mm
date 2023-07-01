@@ -277,14 +277,6 @@ public:
     virtual void MarkAvailable(bool available) override
     {
         m_available = available;
-        auto handler = [(NSToolbar *)m_tb->GetMacToolbar() delegate];
-/*        wxString identifier = wxString::Format(wxT("%ld"), (long) this);
-        wxCFStringRef cfidentifier( identifier );
-        [(wxNSToolbarDelegate *)handler insertAllowedIdentifier:cfidentifier.AsNSString()];
-        if( available )
-        {
-            [(wxNSToolbarDelegate *)handler insertDefaultIdentifier:cfidentifier.AsNSString()];
-        }*/
     }
 
     virtual bool SetShortHelp(const wxString& help) override
@@ -1556,7 +1548,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 [v setBordered:NO];
                 [v setButtonType: ( tool->CanBeToggled() ? NSToggleButton : NSMomentaryPushInButton )];
                 [v setImplementation:tool];
-                
+                [v setImage:tool->GetBitmap().OSXGetImage()];
                 controlHandle = v;
 
 #if wxOSX_USE_NATIVE_TOOLBAR
@@ -1576,7 +1568,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #endif // wxOSX_USE_NATIVE_TOOLBAR
                 tool->SetControlHandle( controlHandle );
-                if ( !(style & wxTB_NOICONS) && tool->IsAvailable() )
+                if ( !(style & wxTB_NOICONS) )
                     tool->UpdateImages();
                 tool->UpdateLabel();
                 

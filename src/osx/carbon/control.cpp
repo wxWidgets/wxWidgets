@@ -58,7 +58,7 @@ bool wxControl::Create( wxWindow *parent,
     if (rval)
         SetValidator( validator );
 #endif
-
+    m_available = true;
     return rval;
 }
 
