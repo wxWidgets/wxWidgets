@@ -161,8 +161,8 @@ public:
     wxMenu *GetDropdownMenu() const;
 
     /**
-     Mark the tool to be not visible
-     
+     Mark the tool to be not visible.
+
      By default all tools and controls in the toolbar are visible.
      If you want, you can mark the tool/control not visible by default
      When you do that user will be able to go to the customization
