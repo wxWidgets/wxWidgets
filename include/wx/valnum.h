@@ -101,8 +101,9 @@ private:
     // this function.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const = 0;
 
-    // NormalizeString the contents of the string if it's a valid number, return
-    // empty string otherwise.
+    // Return the canonical form of the number corresponding to the contents of
+    // the string: if the input string is invalid, return a string representing
+    // some valid value.
     virtual wxString NormalizeString(const wxString& s) const = 0;
 
 
@@ -239,8 +240,23 @@ protected:
     virtual wxString NormalizeString(const wxString& s) const override
     {
         LongestValueType value;
-        return BaseValidator::FromString(s, &value) ? NormalizeValue(value)
-                                                    : wxString();
+        if ( !BaseValidator::FromString(s, &value) )
+        {
+            // We don't have any valid number at all, just arbitrarily decide
+            // to return the minimum value.
+            value = static_cast<LongestValueType>(m_min);
+        }
+        else if ( !this->IsInRange(value) )
+        {
+            // We do have a value, but it's out of range: clamp it to the
+            // closest limit.
+            if ( value > static_cast<LongestValueType>(m_max) )
+                value = static_cast<LongestValueType>(m_max);
+            else
+                value = static_cast<LongestValueType>(m_min);
+        }
+
+        return NormalizeValue(value);
     }
 
     virtual bool CanBeNegative() const override { return m_min < 0; }
