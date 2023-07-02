@@ -173,6 +173,13 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
         return;
     }
 
+    if ( event.GetModifiers() & ~wxMOD_SHIFT )
+    {
+        // Keys using modifiers other than Shift don't change the number, so
+        // ignore them.
+        return;
+    }
+
     // Check if this character is allowed in the current state.
     wxString val;
     int pos;
