@@ -46,7 +46,7 @@ public:
 
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
-    void MarkAvailable(bool available) { m_available = available; };
+    void MarkAvailable(bool available) { m_available = available; }
     bool IsAvailable() const { return m_available; }
     // set label with mnemonics
     virtual void SetLabel(const wxString& label) override
