@@ -55,6 +55,8 @@ protected:
 
 private:
     typedef wxControl base_type;
+    // Only used by wxRB_SINGLE
+    GtkWidget *m_hidden_radio_button = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 };
