@@ -260,6 +260,7 @@ All (GUI):
 - Fix return value of wxAuiToolBarItem::GetDisabledBitmap() (taler21, #23666).
 - Fix buffer overflow in wxHTMLDataObject::GetDataHere() (mcorino, #23660).
 - Fix crash when loading some mal-formed GIFs (PB, #23409).
+- Relax checks on character entry in numeric validators (#12968, #23561).
 
 wxGTK:
 
