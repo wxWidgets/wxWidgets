@@ -33,9 +33,10 @@
            When this style is used, no other radio buttons will be turned off
            automatically when this button is turned on and such behaviour will
            need to be implemented manually, in the event handler for this
-           button. This style is currently only supported in wxMSW, in the
-           other ports it can be specified, but single radio buttons can't be
-           turned off, making them not very useful.
+           button. This style is currently only supported in wxMSW and wxGTK
+           (since version 3.3.0). In the other ports it can be specified, but
+           single radio buttons can't be turned off, making them not very
+           useful.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
