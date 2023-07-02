@@ -199,7 +199,20 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
     if ( !control )
         return;
 
-    const wxString& valueNorm = NormalizeString(control->GetValue());
+    // Notice that only wxTextCtrl (and not wxTextEntry) has
+    // IsModified()/MarkDirty() methods hence the need for dynamic cast.
+    wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+    const bool wasModified = text ? text->IsModified() : false;
+
+    const wxString& value = control->GetValue();
+
+    // If the control is currently empty and it hasn't been modified by the
+    // user at all, leave it empty because just giving it focus and taking it
+    // away again shouldn't change the value.
+    if ( value.empty() && !wasModified )
+        return;
+
+    const wxString& valueNorm = NormalizeString(value);
     if ( control->GetValue() == valueNorm )
     {
         // Don't do anything at all if the value doesn't really change, even if
@@ -209,17 +222,11 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
         return;
     }
 
-    // When we change the control value below, its "modified" status is reset
-    // so we need to explicitly keep it marked as modified if it was so in the
-    // first place.
-    //
-    // Notice that only wxTextCtrl (and not wxTextEntry) has
-    // IsModified()/MarkDirty() methods hence the need for dynamic cast.
-    wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
-    const bool wasModified = text ? text->IsModified() : false;
-
     control->ChangeValue(valueNorm);
 
+    // When we changed the control value above, its "modified" status was reset
+    // so we need to explicitly keep it marked as modified if it was so in the
+    // first place.
     if ( wasModified )
         text->MarkDirty();
 }
