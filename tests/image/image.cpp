@@ -1257,6 +1257,14 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::GIFComment", "[image]")
 #endif //wxUSE_PALETTE
 }
 
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BadGIF", "[image][gif][error]")
+{
+    wxImage image("image/bad_truncated.gif");
+    REQUIRE( image.IsOk() );
+
+    CHECK( image.GetSize() == wxSize(1200, 800) );
+}
+
 #endif // wxUSE_GIF
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::DibPadding", "[image]")

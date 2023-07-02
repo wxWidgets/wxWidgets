@@ -305,8 +305,9 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
              * an end-of-image symbol (ab_fin) they come up with
              * a zero-length subblock!! We catch this here so
              * that the decoder sees an ab_fin code.
+             * We also need to check if the file doesn't end unexpectedly.
              */
-            if (m_restbyte == 0)
+            if (stream.Eof() || m_restbyte == 0)
             {
                 code = ab_fin;
                 break;
@@ -860,7 +861,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
                 // get initial code size from first byte in raster data
                 bits = stream.GetC();
-                if (bits == 0)
+                if (stream.Eof() || bits <= 0)
                     return wxGIF_INVFORMAT;
 
                 // decode image

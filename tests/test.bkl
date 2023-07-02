@@ -409,6 +409,8 @@
 
             width-times-height-overflow.bmp
             width_height_32_bit_overflow.pgm
+
+            bad_truncated.gif
         </files>
     </wx-data>
 
