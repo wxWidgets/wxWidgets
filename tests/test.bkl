@@ -352,6 +352,10 @@
     <wx-data id="data-images">
         <srcdir>$(SRCDIR)/image</srcdir>
         <dstdir>image</dstdir>
+        <!--
+            Don't forget to update build/cmake/tests/gui/CMakeLists.txt when
+            adding new files here!
+         -->
         <files>
             bitfields.bmp
             bitfields-alpha.bmp
