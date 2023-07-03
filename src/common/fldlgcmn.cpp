@@ -145,6 +145,7 @@ void wxFileDialogCheckBox::SetValue(bool value)
     GetImpl()->SetValue(value);
 }
 
+#if wxUSE_RADIOBTN
 wxFileDialogRadioButton::wxFileDialogRadioButton(wxFileDialogRadioButtonImpl* impl)
     : wxFileDialogCustomControl(impl)
 {
@@ -172,6 +173,7 @@ void wxFileDialogRadioButton::SetValue(bool value)
 {
     GetImpl()->SetValue(value);
 }
+#endif // wxUSE_RADIOBTN
 
 wxFileDialogChoice::wxFileDialogChoice(wxFileDialogChoiceImpl* impl)
     : wxFileDialogCustomControl(impl)
@@ -280,11 +282,13 @@ wxFileDialogCustomize::AddCheckBox(const wxString& label)
     return StoreAndReturn(new wxFileDialogCheckBox(m_impl->AddCheckBox(label)));
 }
 
+#if wxUSE_RADIOBTN
 wxFileDialogRadioButton*
 wxFileDialogCustomize::AddRadioButton(const wxString& label)
 {
     return StoreAndReturn(new wxFileDialogRadioButton(m_impl->AddRadioButton(label)));
 }
+#endif // wxUSE_RADIOBTN
 
 wxFileDialogChoice*
 wxFileDialogCustomize::AddChoice(size_t n, const wxString* strings)
@@ -444,6 +448,7 @@ private:
     wxEvtHandler* m_handler;
 };
 
+#if wxUSE_RADIOBTN
 class RadioButtonImpl : public ControlImplBase<wxFileDialogRadioButtonImpl>
 {
 public:
@@ -495,6 +500,7 @@ private:
 
     wxEvtHandler* m_handler;
 };
+#endif // wxUSE_RADIOBTN
 
 class ChoiceImpl : public ControlImplBase<wxFileDialogChoiceImpl>
 {
@@ -648,6 +654,7 @@ public:
         return AddToLayoutAndReturn<CheckBoxImpl>(label);
     }
 
+#if wxUSE_RADIOBTN
     wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) override
     {
         RadioButtonImpl* const impl = AddToLayoutAndReturn<RadioButtonImpl>(label);
@@ -661,6 +668,7 @@ public:
 
         return impl;
     }
+#endif // wxUSE_RADIOBTN
 
     wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) override
     {
