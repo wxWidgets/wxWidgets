@@ -263,6 +263,7 @@ All (GUI):
 - Fix crash when loading some mal-formed GIFs (PB, #23409).
 - Relax checks on character entry in numeric validators (#12968, #23561).
 - Fix wxRibbonToolBar::GetToolByPos() and DeleteToolByPos() (mcorino, #23457).
+- Update wxOwnerDrawnComboBox best size when adding items (Reza Karimi, #23681).
 
 wxGTK:
 
