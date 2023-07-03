@@ -1104,6 +1104,7 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
             AssignNewItemClientData(n, clientData, i, type);
         }
 
+        InvalidateBestSize();
         return n;
     }
     else
@@ -1113,7 +1114,8 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
             GetVListBoxComboPopup()->Insert(items[i], pos);
             AssignNewItemClientData(pos, clientData, i, type);
         }
-
+        
+        InvalidateBestSize();
         return pos - 1;
     }
 }
