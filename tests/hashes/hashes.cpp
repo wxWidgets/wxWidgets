@@ -497,6 +497,8 @@ struct MyStruct
 class MyHash
 {
 public:
+    MyHash() = default;
+    MyHash(const MyHash&) = default;
     unsigned long operator()(const MyStruct& s) const
         { return m_dummy(s.ptr); }
     MyHash& operator=(const MyHash&) { return *this; }
@@ -507,6 +509,8 @@ private:
 class MyEqual
 {
 public:
+    MyEqual() = default;
+    MyEqual(const MyEqual&) = default;
     bool operator()(const MyStruct& s1, const MyStruct& s2) const
         { return s1.ptr == s2.ptr; }
     MyEqual& operator=(const MyEqual&) { return *this; }
