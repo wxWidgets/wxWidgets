@@ -59,6 +59,7 @@ wxMask::wxMask()
 }
 
 wxMask::wxMask(const wxMask& mask)
+    : wxObject()
 {
     m_display = mask.m_display;
     if ( !mask.m_bitmap )
@@ -285,6 +286,7 @@ wxBitmapRefData::wxBitmapRefData()
 }
 
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
+    : wxGDIRefData()
 {
     m_pixmap = 0;
     m_bitmap = 0;

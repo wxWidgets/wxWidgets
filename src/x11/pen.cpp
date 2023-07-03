@@ -37,6 +37,7 @@ public:
     }
 
     wxPenRefData( const wxPenRefData& data )
+        : wxGDIRefData()
     {
         m_style = data.m_style;
         m_width = data.m_width;

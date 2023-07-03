@@ -39,6 +39,7 @@ public:
     }
 
     wxRegionRefData(const wxRegionRefData& refData)
+        : wxGDIRefData()
     {
         m_region = XCreateRegion();
         XUnionRegion( refData.m_region, m_region, m_region );

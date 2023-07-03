@@ -361,6 +361,7 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
 }
 
 wxRegionIterator::wxRegionIterator(const wxRegionIterator& ri)
+    : wxObject()
 {
     m_qtRects = new QVector< QRect >( *ri.m_qtRects );
     m_pos = ri.m_pos;
