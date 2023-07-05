@@ -295,6 +295,7 @@ wxMSW:
 - Improve ScrollTo() with wxDV_VARIABLE_LINE_HEIGHT (Jens Göpfert, #23102).
 - Fix libraries names in Arch64 CMake build (Tobias Taschner, #23347).
 - Fix using wxComboCtrl with AUI floating pane as parent (#23399).
+- Fix wrong wxWindowsPrintNativeData initialization (Stefan Ziegler, #23685).
 
 wxOSX:
 

@@ -423,8 +423,13 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     // this replaces the PrintDlg function which creates the DEVMODE filled only with data from default printer.
     if ( !m_devMode && !printerName.IsEmpty() )
     {
+        // ensure that we have a printer object here, otherwise we are unable to determine m_devMode
+        WinPrinter fallbackPrinter;
+        if (!printer)
+            printer = &fallbackPrinter;
+
         // Open printer
-        if ( printer && printer->Open( printerName ) == TRUE )
+        if ( printer->Open( printerName ) == TRUE )
         {
             DWORD dwNeeded, dwRet;
 
@@ -468,7 +473,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         }
     }
 
-    if ( !m_devMode )
+    if ( !m_devMode && printerName.IsEmpty() )
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
         PRINTDLG pd;
