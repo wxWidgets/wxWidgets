@@ -429,7 +429,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
             printer = &fallbackPrinter;
 
         // Open printer
-        if ( printer && printer->Open( printerName ) == TRUE )
+        if ( printer->Open( printerName ) == TRUE )
         {
             DWORD dwNeeded, dwRet;
 
