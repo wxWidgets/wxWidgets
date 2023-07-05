@@ -425,9 +425,8 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     {
         // ensure that we have a printer object here, otherwise we are unable to determine m_devMode
         WinPrinter fallbackPrinter;
-        if (!printer) {
+        if (!printer)
             printer = &fallbackPrinter;
-        }
 
         // Open printer
         if ( printer && printer->Open( printerName ) == TRUE )
