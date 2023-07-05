@@ -473,7 +473,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         }
     }
 
-    if ( !m_devMode && printerName.IsEmpty())
+    if ( !m_devMode && printerName.IsEmpty() )
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
         PRINTDLG pd;
