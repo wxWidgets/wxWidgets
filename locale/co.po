@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022.
+# Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-05-13 19:16+0200\n"
+"PO-Revision-Date: 2023-07-07 01:15+0200\n"
 "Last-Translator: Patriccollu di Santa Maria è Sichè <https://github.com/"
 "Patriccollu/Lingua_Corsa-Infurmatica/#readme>\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.3.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../include/wx/defs.h:2592
@@ -1108,35 +1108,33 @@ msgstr "&Arregistrà"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Scartà i cambiamenti"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Ùn arregistrà micca"
+msgstr "Ùn chjode &micca"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Vulete arregistrà i cambiamenti ver di %s ?"
+msgstr "Vulete arregistrà i cambiamenti ver di %s nanzu a chjusura ?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "U testu ùn pò micca esse arregistratu."
+msgstr "U ducumentu deve esse chjosu."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Fiascu di l’arregistramentu di %s ; vulete pruvà torna ?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Pruvà torna"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Scartà i cambiamenti"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -3198,7 +3196,7 @@ msgstr "Impussibule di truvà una currispundenza à l’espressione regulare : 
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr ""
-"U mutore di rinforzu « %s » hà una versione %d.%d incumpatibile è ùn pò "
+"U mutore di restituzione « %s » hà una versione %d.%d incumpatibile è ùn pò "
 "micca esse caricatu."
 
 #: ../src/common/secretstore.cpp:162
@@ -5167,7 +5165,7 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
-"Attualmente, wxGLCanvas hè accettatu solu nant’à Wayland è X11.  \n"
+"Attualmente, wxGLCanvas hè accettatu solu nant’à Wayland è X11.\n"
 "Si pò circurtà què definiscendu a variabile d’ambiente\n"
 "GDK_BACKEND=x11 nanzu di lancià u vostru prugramma."
 
@@ -6532,31 +6530,26 @@ msgid "File type:"
 msgstr "Tipu di schedariu :"
 
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Finestra"
 
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Aiutu"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Minimizà"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Ingrandamentu"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Tuttu mette di fronte"
@@ -6608,10 +6601,9 @@ msgid "Hide %s"
 msgstr "Piattà %s"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Appiecazione"
+msgstr "Piattà l’appiecazione"
 
 #: ../src/osx/menu_osx.cpp:525
 msgctxt "macOS menu item"
@@ -6630,10 +6622,9 @@ msgid "Quit %s"
 msgstr "Esce di %s"
 
 #: ../src/osx/menu_osx.cpp:536
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Appiecazione"
+msgstr "Esce di l'appiecazione"
 
 #: ../src/osx/webview_webkit.mm:316
 msgid "Printing is not supported by the system web control"
@@ -9186,7 +9177,7 @@ msgstr "Nisunu sonu"
 
 #: ../src/unix/sound.cpp:365
 msgid "Unable to play sound asynchronously."
-msgstr "Impussibule di riproduce u sonu di manera sincrona."
+msgstr "Impussibule di riproduce u sonu di manera asincrona."
 
 #: ../src/unix/sound.cpp:459
 #, c-format
