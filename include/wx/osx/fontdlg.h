@@ -30,22 +30,17 @@
 
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
-class WXDLLIMPEXP_CORE wxFontDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxFontDialog : public wxFontDialogBase
 {
 public:
-    wxFontDialog();
-    wxFontDialog(wxWindow *parent);
-    wxFontDialog(wxWindow *parent, const wxFontData& data);
+    wxFontDialog() : wxFontDialogBase() { /* must be Create()d later */ }
+    wxFontDialog(wxWindow *parent)
+        : wxFontDialogBase(parent) { Create(parent); }
+    wxFontDialog(wxWindow *parent, const wxFontData& data)
+        : wxFontDialogBase(parent, data) { Create(parent, data); }
     virtual ~wxFontDialog();
 
-    bool Create(wxWindow *parent);
-    bool Create(wxWindow *parent, const wxFontData& data);
-
     int ShowModal() override;
-    wxFontData& GetFontData() { return m_fontData; }
-
-protected:
-    wxFontData m_fontData;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFontDialog);
 };
