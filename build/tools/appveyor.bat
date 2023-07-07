@@ -19,6 +19,7 @@ goto :eof
 
 :nmake
 cd build\msw
+dir "C:\Program Files (x86)\"
 call "C:\Program Files (x86)\Microsoft Visual Studio %VS%\VC\vcvarsall.bat" %ARCH%
 nmake -f makefile.vc BUILD=%BUILD%
 cd ..\..\tests
