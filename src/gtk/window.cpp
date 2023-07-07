@@ -248,7 +248,7 @@ public:
         if ( !m_state )
         {
             m_ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-            struct xkb_rule_names names = {0};
+            xkb_rule_names names{};
             names.layout = "us";
             m_keymap = xkb_keymap_new_from_names(m_ctx, &names, XKB_KEYMAP_COMPILE_NO_FLAGS);
             m_state = xkb_state_new(m_keymap);

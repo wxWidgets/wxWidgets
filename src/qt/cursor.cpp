@@ -50,7 +50,8 @@ class wxCursorRefData: public wxGDIRefData
 {
 public:
     wxCursorRefData() {}
-    wxCursorRefData( const wxCursorRefData& data ) : m_qtCursor(data.m_qtCursor) {}
+    wxCursorRefData( const wxCursorRefData& data )
+        : wxGDIRefData(), m_qtCursor(data.m_qtCursor) {}
     wxCursorRefData( QCursor &c ) : m_qtCursor(c) {}
 
     QCursor m_qtCursor;

@@ -1392,7 +1392,10 @@ wxThreadError wxThread::Run()
 
 void wxThread::SetPriority(unsigned int prio)
 {
-    wxCHECK_RET( wxPRIORITY_MIN <= prio && prio <= wxPRIORITY_MAX,
+    // Don't compare with wxPRIORITY_MIN as long as it is 0, as the comparison
+    // would be always true.
+    static_assert( wxPRIORITY_MIN == 0, "update the check below" );
+    wxCHECK_RET( /* wxPRIORITY_MIN <= prio && */ prio <= wxPRIORITY_MAX,
                  wxT("invalid thread priority") );
 
     wxCriticalSectionLocker lock(m_critsect);
