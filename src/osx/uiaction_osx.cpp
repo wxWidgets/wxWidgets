@@ -154,6 +154,8 @@ bool wxUIActionSimulatorOSXImpl::MouseDown(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    ::usleep(useconds_t(10 * 1000));
     
     return true;
 }
@@ -177,6 +179,8 @@ bool wxUIActionSimulatorOSXImpl::MouseMove(long x, long y)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    ::usleep(useconds_t(10 * 1000));
     
     return true;
 }
@@ -195,6 +199,8 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    ::usleep(useconds_t(10 * 1000));
     
     return true;
 }
@@ -224,6 +230,8 @@ bool wxUIActionSimulatorOSXImpl::MouseDblClick(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    ::usleep(useconds_t(10 * 1000));
     
     return true;
 }
@@ -264,6 +272,9 @@ bool wxUIActionSimulatorOSXImpl::MouseDragDrop(long x1, long y1, long x2, long y
     if (loop)
         loop->SetShouldWaitForEvent(true);
     
+
+    ::usleep(useconds_t(10 * 1000));
+
     return true;
 }
 
@@ -281,6 +292,8 @@ wxUIActionSimulatorOSXImpl::DoKey(int keycode, int WXUNUSED(modifiers), bool isD
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    ::usleep(useconds_t(10 * 1000));
 
     return true;
 }
