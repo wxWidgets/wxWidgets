@@ -42,6 +42,7 @@ public:
     bool Create(wxWindow *parent, const wxFontData& data);
 
     int ShowModal() override;
+    const wxFontData& GetFontData() const { return m_fontData; }
     wxFontData& GetFontData() { return m_fontData; }
 
 protected:
