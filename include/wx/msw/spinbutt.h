@@ -69,6 +69,8 @@ protected:
    virtual void NormalizeValue();
 
 private:
+    void OnPaint(wxPaintEvent& event);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinButton);
 };
 
