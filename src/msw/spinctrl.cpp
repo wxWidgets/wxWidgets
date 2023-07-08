@@ -283,7 +283,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // the border is only used for the text control part
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-        style |= wxBORDER_SUNKEN;
+        style |= DoTranslateBorder(wxBORDER_THEME);
 
     SetWindowStyle(style);
 
