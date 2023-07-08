@@ -10,6 +10,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTDLG
+
 // ===========================================================================
 // declarations
 // ===========================================================================
@@ -285,3 +287,5 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     [theFPDelegate release];
     return retval ;
 }
+
+#endif
