@@ -48,7 +48,6 @@ public:
     virtual void SetRange(int minVal, int maxVal) override;
 
     // implementation
-    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) override;

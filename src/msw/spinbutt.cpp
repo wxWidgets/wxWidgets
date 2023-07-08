@@ -289,12 +289,6 @@ bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *
     return processed;
 }
 
-bool wxSpinButton::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD WXUNUSED(id))
-{
-    // No command messages
-    return false;
-}
-
 void wxSpinButton::SetIncrement(int value)
 {
     UDACCEL accel;
