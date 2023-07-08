@@ -31,6 +31,7 @@
 #include "wx/spinbutt.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 
 #ifndef UDM_SETRANGE32
     #define UDM_SETRANGE32 (WM_USER+111)
@@ -174,13 +175,16 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 void wxSpinButton::OnPaint(wxPaintEvent& event)
 {
-    // We need to always paint this control explicitly instead of letting
-    // DefWndProc() do it, as this avoids whichever optimization the latter
-    // function does when WS_EX_COMPOSITED is on that result in not drawing
-    // parts of the control at all (see #23656).
-    wxPaintDC dc(this);
+    if ( !wxMSWDarkMode::PaintIfNecessary(GetHwnd(), m_oldWndProc) )
+    {
+        // We need to always paint this control explicitly instead of letting
+        // DefWndProc() do it, as this avoids whichever optimization the latter
+        // function does when WS_EX_COMPOSITED is on that result in not drawing
+        // parts of the control at all (see #23656).
+        wxPaintDC dc(this);
 
-    wxSpinButtonBase::OnPaint(event);
+        wxSpinButtonBase::OnPaint(event);
+    }
 }
 
 // ----------------------------------------------------------------------------
