@@ -47,8 +47,6 @@ MyMusicTreeModel::MyMusicTreeModel()
     m_classical->Append( new MyMusicTreeModelNode( m_classical, "German Requiem",
                                                    "Johannes Brahms", 1868 ) );
     m_root->Append( m_classical );
-
-    m_classicalMusicIsKnownToControl = false;
 }
 
 wxString MyMusicTreeModel::GetTitle( const wxDataViewItem &item ) const
@@ -100,14 +98,10 @@ void MyMusicTreeModel::AddToClassical( const wxString &title, const wxString &ar
         new MyMusicTreeModelNode( m_classical, title, artist, year );
     m_classical->Append( child_node );
 
-    // FIXME: what's m_classicalMusicIsKnownToControl for?
-    if (m_classicalMusicIsKnownToControl)
-    {
-        // notify control
-        wxDataViewItem child( (void*) child_node );
-        wxDataViewItem parent( (void*) m_classical );
-        ItemAdded( parent, child );
-    }
+    // notify control
+    wxDataViewItem child( (void*) child_node );
+    wxDataViewItem parent( (void*) m_classical );
+    ItemAdded( parent, child );
 }
 
 void MyMusicTreeModel::Delete( const wxDataViewItem &item )
@@ -305,12 +299,6 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
     {
         array.Add( wxDataViewItem( (void*) m_root ) );
         return 1;
-    }
-
-    if (node == m_classical)
-    {
-        MyMusicTreeModel* model = const_cast<MyMusicTreeModel*>(this);
-        model->m_classicalMusicIsKnownToControl = true;
     }
 
     if (node->GetChildCount() == 0)
