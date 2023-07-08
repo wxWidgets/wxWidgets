@@ -24,12 +24,14 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #if wxUSE_SPINBTN
 
 #include "wx/spinbutt.h"
 
+#include "wx/msw/dc.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
 
@@ -175,7 +177,89 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 void wxSpinButton::OnPaint(wxPaintEvent& event)
 {
-    if ( !wxMSWDarkMode::PaintIfNecessary(GetHwnd(), m_oldWndProc) )
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Unfortunately PaintIfNecessary() can't be used here as we need to
+        // handle the extra border below, so duplicate what it does here.
+        const RECT rc = wxGetClientRect(GetHwnd());
+        const wxSize size{rc.right - rc.left, rc.bottom - rc.top};
+
+        if ( size == wxSize() )
+            return;
+
+        wxBitmap bmp(size);
+        {
+            wxMemoryDC mdc(bmp);
+
+            ::CallWindowProc(m_oldWndProc,
+                             GetHwnd(), WM_PAINT, (WPARAM)GetHdcOf(mdc), 0);
+        }
+
+#if wxUSE_IMAGE
+        // When using a buddy control, the spin button tries to mimic being a
+        // part of it by adding an extra border, not used for standalone
+        // controls. This doesn't work very well even in light mode in modern
+        // Windows (it was apparently done for the classic 3D appearance and
+        // never updated since then), but looks completely horrible in dark
+        // mode, so we must get rid of this border by overdrawing it.
+        const bool drawBorder = ::SendMessage(GetHwnd(), UDM_GETBUDDY, 0, 0);
+        wxImage::RGBValue border;
+        if ( drawBorder )
+        {
+            const auto col = wxMSWDarkMode::GetBorderPen().GetColour();
+            border.red = col.GetRed();
+            border.green = col.GetGreen();
+            border.blue = col.GetBlue();
+        }
+
+        wxImage image = bmp.ConvertToImage();
+
+        const int width = image.GetWidth();
+        const int height = image.GetHeight();
+        unsigned char *data = image.GetData();
+        unsigned char *alpha = image.GetAlpha();
+        for ( int y = 0; y < height; ++y )
+        {
+            for ( int x = 0; x < width; ++x )
+            {
+                wxImage::RGBValue rgb(data[0], data[1], data[2]);
+
+                if ( drawBorder &&
+                        (y == 0 || y == height - 1 || x == width - 1) )
+                {
+                    rgb = border;
+                    if ( alpha )
+                        *alpha = wxALPHA_OPAQUE;
+                }
+                else
+                {
+                    // This uses a slightly different formula than the one in
+                    // InvertBitmapPixel() because the one there results in the
+                    // lines being too bright.
+                    auto hsv = wxImage::RGBtoHSV(rgb);
+                    hsv.value = 1.0 - hsv.value;
+                    rgb = wxImage::HSVtoRGB(hsv);
+                }
+
+                data[0] = rgb.red;
+                data[1] = rgb.green;
+                data[2] = rgb.blue;
+                data += 3;
+
+                if ( alpha )
+                    alpha++;
+            }
+        }
+
+        bmp = wxBitmap(image);
+#endif // wxUSE_IMAGE
+
+        PAINTSTRUCT ps;
+        wxDCTemp dc(::BeginPaint(GetHwnd(), &ps), size);
+        dc.DrawBitmap(bmp, 0, 0);
+        ::EndPaint(GetHwnd(), &ps);
+    }
+    else
     {
         // We need to always paint this control explicitly instead of letting
         // DefWndProc() do it, as this avoids whichever optimization the latter
