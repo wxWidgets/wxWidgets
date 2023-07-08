@@ -1,0 +1,1 @@
+wxOSX: Add missing const wxFontDialog::GetFontData() (Martin Corino, #23691).
