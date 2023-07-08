@@ -40,8 +40,6 @@
 #include "wx/fontutil.h"
 #include "wx/modalhook.h"
 
-#if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 #include "wx/osx/private.h"
@@ -655,7 +653,5 @@ wxFontFamily FontFamilyStringToInt(const wxChar *family)
 }
 
 #endif // !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
-
-#endif // wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
 #endif // wxUSE_FONTDLG
