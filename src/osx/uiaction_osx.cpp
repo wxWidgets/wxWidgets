@@ -140,7 +140,7 @@ private:
     // give the system some time to process (it seems to need it)
     void wait_for_events()
     {
-    	::usleep(delay_);
+       ::usleep(delay_);
     }
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorOSXImpl);
