@@ -166,7 +166,7 @@ wxSize wxSpinButton::DoGetBestSize() const
 }
 
 // ----------------------------------------------------------------------------
-// Attributes
+// value and range
 // ----------------------------------------------------------------------------
 
 int wxSpinButton::GetValue() const
@@ -231,6 +231,10 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     }
 }
 
+// ----------------------------------------------------------------------------
+// event generation
+// ----------------------------------------------------------------------------
+
 bool wxSpinButton::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
                                WXWORD WXUNUSED(pos), WXHWND control)
 {
@@ -288,6 +292,10 @@ bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *
 
     return processed;
 }
+
+// ----------------------------------------------------------------------------
+// increment
+// ----------------------------------------------------------------------------
 
 void wxSpinButton::SetIncrement(int value)
 {
