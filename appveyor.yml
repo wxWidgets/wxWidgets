@@ -29,6 +29,7 @@ skip_commits:
     - build/tools/httpbin.sh
 
 environment:
+  APPVEYOR_RDP_PASSWORD: Password123!
   matrix:
   #- TOOLSET: msbuild
   #  CONFIGURATION: DLL Release
@@ -48,7 +49,7 @@ environment:
   - TOOLSET: nmake
     VS: '9.0'
     BUILD: debug
-    ARCH: amd64
+    ARCH: x86
     wxUSE_WEBVIEW_EDGE: 1
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
   #- TOOLSET: cmake
@@ -110,3 +111,6 @@ test_script: c:\projects\wxwidgets\build\tools\appveyor-test.bat
 after_test:
 - ps: |
     Stop-Job -Name wx_httpbin
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
