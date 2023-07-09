@@ -25,8 +25,14 @@
 
     class WXDLLIMPEXP_CORE wxSearchCtrlBaseBaseClass
         : public wxCompositeWindow< wxNavigationEnabled<wxControl> >,
-          public wxTextEntryBase
+          public wxTextEntry
     {
+#if defined(__WXMSW__)
+    private:
+        // implement this to return the HWND of the EDIT control
+        // can return nullptr here as this TextEntry is just a proxy
+        virtual WXHWND GetEditHWND() const override  { return nullptr; }
+#endif
     };
 #elif defined(__WXMAC__)
     // search control was introduced in Mac OS X 10.3 Panther
