@@ -84,6 +84,9 @@ SEARCH_CTRL_TEST_CASE("wxSearchCtrl::ChangeValue", "[wxSearchCtrl][text]")
 
 SEARCH_CTRL_TEST_CASE("wxSearchCtrl::SetValue", "[wxSearchCtrl][set_value]")
 {
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+  m_search->Clear();
+#endif
   CHECK( m_search->IsEmpty() );
 
   m_search->SetValue("foo");
