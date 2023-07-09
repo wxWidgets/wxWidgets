@@ -31,7 +31,7 @@
     private:
         // implement this to return the HWND of the EDIT control
         // can return nullptr here as this TextEntry is just a proxy
-        virtual WXHWND GetEditHWND() const override  { return nullptr; }
+        virtual WXHWND GetEditHWND() const override  { wxFAIL_MSG("unreachable"); return nullptr; }
 #endif
     };
 #elif defined(__WXMAC__)
