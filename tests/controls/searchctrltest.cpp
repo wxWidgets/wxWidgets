@@ -77,6 +77,9 @@ SEARCH_CTRL_TEST_CASE("wxSearchCtrl::ChangeValue", "[wxSearchCtrl][text]")
 
     m_search->ChangeValue("foo");
     CHECK( m_search->GetValue() == "foo" );
+
+    m_search->Clear();
+    CHECK( m_search->GetValue() == "" );
 }
 
 SEARCH_CTRL_TEST_CASE("wxSearchCtrl::SetValue", "[wxSearchCtrl][set_value]")
