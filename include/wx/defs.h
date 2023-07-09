@@ -163,6 +163,12 @@
 #   endif
 #endif
 
+/* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
+/* when using Windows sockets. */
+#if defined(__CYGWIN__) && defined(__WINDOWS__)
+#define __USE_W32_SOCKETS
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  wxWidgets version and compatibility defines */
 /*  ---------------------------------------------------------------------------- */
