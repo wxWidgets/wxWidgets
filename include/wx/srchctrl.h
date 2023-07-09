@@ -27,7 +27,7 @@
         : public wxCompositeWindow< wxNavigationEnabled<wxControl> >,
           public wxTextEntry
     {
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     private:
         // implement this to return the HWND of the EDIT control
         // can return nullptr here as this TextEntry is just a proxy
