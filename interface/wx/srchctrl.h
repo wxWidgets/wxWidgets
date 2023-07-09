@@ -15,9 +15,9 @@
     generically for all the other platforms.
 
     Please note that this class provides many wxTextCtrl-like methods, but does
-    _not_ necessarily derive from wxTextCtrl in all ports (although it does in
-    the generic version). Only the methods defined in wxTextEntry interface
-    class are guaranteed to be available under all platforms.
+    _not_ necessarily derive from wxTextCtrl in all ports (it actually only does
+    so in the MacOSX version currently). Only the methods defined in the wxTextEntry
+    interface class are guaranteed to be available under all platforms.
 
     @beginStyleTable
     @style{wxTE_PROCESS_TAB}
