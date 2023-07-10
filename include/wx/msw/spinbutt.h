@@ -48,7 +48,6 @@ public:
     virtual void SetRange(int minVal, int maxVal) override;
 
     // implementation
-    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) override;
@@ -61,8 +60,6 @@ public:
     virtual void SetIncrement(int value) override;
     virtual int  GetIncrement() const override;
 
-    virtual bool MSWShouldUseAutoDarkMode() const override;
-
 protected:
    virtual wxSize DoGetBestSize() const override;
 
@@ -70,6 +67,8 @@ protected:
    virtual void NormalizeValue();
 
 private:
+    void OnPaint(wxPaintEvent& event);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinButton);
 };
 
