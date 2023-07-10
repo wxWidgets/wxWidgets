@@ -315,6 +315,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix missing key events for ⌘+⎇+Letter combinations (#23671).
 - Add support for wxDP_DROPDOWN under macOS 10.15.4+ (Lauri Nurmi, #23520).
 - Fix initial width of empty wxTextCtrl (#23295).
 - Fix underlined fonts sometimes appearing without underline (#23264).

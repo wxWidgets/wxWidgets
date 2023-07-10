@@ -2169,6 +2169,7 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
                 wxKeyEvent wxevent(wxEVT_KEY_DOWN);
                 SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
                 result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
+                SetKeyDownSent();
             }
 
             // ...and wxEVT_CHAR.
@@ -3888,6 +3889,15 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
             [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
         else
             [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+
+        if ( IsInNativeKeyDown() && !WasKeyDownSent())
+        {
+            wxLogTrace(TRACE_KEYS, "Emulating missing key down event");
+
+            wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+            SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
+            GetWXPeer()->OSXHandleKeyEvent(wxevent);
+        }
         return true;
     }
     else
