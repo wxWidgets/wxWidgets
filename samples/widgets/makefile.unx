@@ -220,5 +220,14 @@ widgets_widgets.o: ./widgets.cpp
 .PHONY: all install uninstall clean
 
 
+widgets_native_wrapper.o: ./native_wrapper.mm ./native.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(OBJCXXFLAGS) ./native_wrapper.mm
+
+ifeq ($(WX_PORT),osx_cocoa)
+WIDGETS_OBJECTS += widgets_native_wrapper.o
+
+widgets: widgets_native_wrapper.o
+endif
+
 # Dependencies tracking:
 -include ./*.d
