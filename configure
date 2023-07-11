@@ -25977,7 +25977,7 @@ else
 $as_echo "yes" >&6; }
 
                 TIFF_LINK=$LIBTIFF_LIBS
-                CFLAGS="$LIBTIFF_CFLAGS $CFLAGS"
+                CXXFLAGS="$LIBTIFF_CFLAGS $CXXFLAGS"
 
 fi
 

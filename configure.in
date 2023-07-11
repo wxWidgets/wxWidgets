@@ -2480,12 +2480,10 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
     AC_DEFINE(wxUSE_LIBTIFF)
 
     if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
-        dnl First try using pkg-config as it's the most reliable way to detect
-        dnl libtiff.
         PKG_CHECK_MODULES(LIBTIFF, [libtiff-4],
             [
                 TIFF_LINK=$LIBTIFF_LIBS
-                CFLAGS="$LIBTIFF_CFLAGS $CFLAGS"
+                CXXFLAGS="$LIBTIFF_CFLAGS $CXXFLAGS"
             ],
             [
                 AC_MSG_RESULT([not found via pkg-config])
