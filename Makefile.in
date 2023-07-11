@@ -2334,16 +2334,16 @@ COND_wxUSE_EXPAT_builtin___wxexpat___depname = \
 COND_USE_STC_1___wxscintilla___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxscintilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_USE_STC_1@__wxscintilla___depname = $(COND_USE_STC_1___wxscintilla___depname)
-@COND_SHARED_0_USE_STC_1@__install_wxscintilla___depname \
-@COND_SHARED_0_USE_STC_1@	= install_wxscintilla
-@COND_SHARED_0_USE_STC_1@__uninstall_wxscintilla___depname \
-@COND_SHARED_0_USE_STC_1@	= uninstall_wxscintilla
+@COND_USE_STC_1@__install_wxscintilla___depname \
+@COND_USE_STC_1@	= install_wxscintilla
+@COND_USE_STC_1@__uninstall_wxscintilla___depname \
+@COND_USE_STC_1@	= uninstall_wxscintilla
 COND_USE_STC_1___wxlexilla___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxlexilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_USE_STC_1@__wxlexilla___depname = $(COND_USE_STC_1___wxlexilla___depname)
-@COND_SHARED_0_USE_STC_1@__install_wxlexilla___depname = install_wxlexilla
-@COND_SHARED_0_USE_STC_1@__uninstall_wxlexilla___depname \
-@COND_SHARED_0_USE_STC_1@	= uninstall_wxlexilla
+@COND_USE_STC_1@__install_wxlexilla___depname = install_wxlexilla
+@COND_USE_STC_1@__uninstall_wxlexilla___depname \
+@COND_USE_STC_1@	= uninstall_wxlexilla
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) \
 @COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
@@ -13037,24 +13037,24 @@ distclean: clean
 @COND_USE_STC_1@	$(AR) $(AROPTIONS) $@ $(WXSCINTILLA_OBJECTS)
 @COND_USE_STC_1@	$(RANLIB) $@
 
-@COND_SHARED_0_USE_STC_1@install_wxscintilla: $(__wxscintilla___depname)
-@COND_SHARED_0_USE_STC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_SHARED_0_USE_STC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wxscintilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+@COND_USE_STC_1@install_wxscintilla: $(__wxscintilla___depname)
+@COND_USE_STC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_USE_STC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wxscintilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
-@COND_SHARED_0_USE_STC_1@uninstall_wxscintilla: 
-@COND_SHARED_0_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxscintilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+@COND_USE_STC_1@uninstall_wxscintilla: 
+@COND_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxscintilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 
 @COND_USE_STC_1@$(LIBDIRNAME)/$(LIBPREFIX)wxlexilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT): $(WXLEXILLA_OBJECTS)
 @COND_USE_STC_1@	rm -f $@
 @COND_USE_STC_1@	$(AR) $(AROPTIONS) $@ $(WXLEXILLA_OBJECTS)
 @COND_USE_STC_1@	$(RANLIB) $@
 
-@COND_SHARED_0_USE_STC_1@install_wxlexilla: $(__wxlexilla___depname)
-@COND_SHARED_0_USE_STC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
-@COND_SHARED_0_USE_STC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wxlexilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
+@COND_USE_STC_1@install_wxlexilla: $(__wxlexilla___depname)
+@COND_USE_STC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
+@COND_USE_STC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wxlexilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT) $(DESTDIR)$(libdir)
 
-@COND_SHARED_0_USE_STC_1@uninstall_wxlexilla: 
-@COND_SHARED_0_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxlexilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
+@COND_USE_STC_1@uninstall_wxlexilla: 
+@COND_USE_STC_1@	rm -f $(DESTDIR)$(libdir)/$(LIBPREFIX)wxlexilla$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 
 @COND_MONOLITHIC_1_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(MONODLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxlexilla___depname) $(__monodll___win32rc) $(__wxscintilla_library_link_DEP) $(__wxlexilla_library_link_DEP)
 @COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(__wx_0) $(__wx_0)    -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(WXMACVERSION_CMD)  $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_MEDIA) $(EXTRALIBS_STC) $(PLUGIN_ADV_EXTRALIBS) $(EXTRALIBS_WEBVIEW) $(__wxscintilla_library_link_LIBR_1) $(__wxlexilla_library_link_LIBR_1) $(LIBS)
