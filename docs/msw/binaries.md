@@ -7,8 +7,8 @@ Supported Compilers
 -------------------
 We provide pre-built binary files for the following compilers:
 
-* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2
-  (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
+* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1, 14.2 and 14.3
+  (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017, 2019 and 2022 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
 * [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 10.3.0.
 * [MSYS2](https://www.msys2.org/) MinGW 12.2.0.
@@ -22,7 +22,7 @@ and architecture: as different versions of MSVC compiler are not binary
 compatible, you should select the files with the correct
 `vc80`, `vc90`, `vc100`, `vc110`, `vc120`, or `vc14x`
 suffix depending on whether you use
-Visual Studio 2005, 2008, 2010, 2012, 2013, or 2015/2017/2019 respectively (the Visual Studio 2015/2017/2019 compilers are binary compatible).
+Visual Studio 2005, 2008, 2010, 2012, 2013, or 2015/2017/2019/2022 respectively (the Visual Studio 2015/2017/2019/2022 compilers are binary compatible).
 You also need to decide whether you use the `x64` files for 64-bit development
 or the ones without this suffix for the still more common 32-bit builds. After
 determining the combination of suffixes you need, you should download the
