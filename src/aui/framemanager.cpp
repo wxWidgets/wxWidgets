@@ -4573,8 +4573,14 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             if (HasLiveResize())
             {
                 m_frame->ReleaseMouse();
-                DoEndResizeAction(event);
-                m_frame->CaptureMouse();
+                // If the resize failed do not re-capture the mouse.
+                // This can happen if a dock has a fixed pane as its last docked pane
+                // and an attempt is made to resize it using the sizer of the previous
+                // pane. The resize would fail and the m_action variable would be
+                // cleared, preventing the release of the mouse later on and the
+                // processing of any further mouse motion events.
+                if (DoEndResizeAction(event))
+                    m_frame->CaptureMouse();
             }
             else
             {
