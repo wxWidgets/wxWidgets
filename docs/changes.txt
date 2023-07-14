@@ -246,6 +246,7 @@ All:
 - Fix infinite loop in wxFTP::GetFilesList() (#23519).
 - Fix memory leak when using wx from non-wx threads (Antti Nietosvaara, #23535).
 - Use grep instead of fgrep and egrep in makefiles/scripts (#23537).
+- Use /etc/os-release if lsb_release isn't available (Scott Talbert, #23712).
 
 All (GUI):
 
