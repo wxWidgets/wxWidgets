@@ -1883,10 +1883,8 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     if (pane.IsFixed())
     {
         if (min_size == wxDefaultSize)
-        {
             min_size = pane.best_size;
-            pane_proportion = 0;
-        }
+        pane_proportion = 0;
     }
 
     if (min_size != wxDefaultSize)
