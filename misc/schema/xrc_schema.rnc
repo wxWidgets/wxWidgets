@@ -430,7 +430,9 @@ stdWindowProperties =
         [xrc:p="o"] element ownfont {_, t_font }* &
         [xrc:p="o"] element help    {_, t_text }*
 
+# hack: add "feature" to "platform" because it also can be used on any element
 platform =
+        attribute feature  { t_string }? &
         attribute platform {
             xsd:string { pattern = "(win|mac|msw|unix)( *\| *(win|mac|msw|unix))*" }
         }?
