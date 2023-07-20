@@ -98,7 +98,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 penguin: $(PENGUIN_OBJECTS)
-	$(CXX) -o $@ $(PENGUIN_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs gl,core,base`
+	$(CXX) -o $@ $(PENGUIN_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs gl,core,base` -lGL -lGLU
 
 penguin_penguin.o: ./penguin.cpp
 	$(CXX) -c -o $@ $(PENGUIN_CXXFLAGS) $(CPPDEPS) $<

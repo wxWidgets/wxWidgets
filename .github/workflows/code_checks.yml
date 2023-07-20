@@ -52,7 +52,10 @@ jobs:
                 ':!install-sh' \
                 ':!build/autogen.mk' \
                 ':!build/bakefiles/make_dist.mk' \
+                ':!build/bakefiles/scintilla.bkl' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
+                ':!samples/widgets/widgets.bkl' \
+                ':!tests/test.bkl' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
                 ':!**/Info*.plist*' \
