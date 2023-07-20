@@ -120,6 +120,7 @@ jobs:
             configure_flags: --with-cxx=20 --enable-utf8 --enable-utf8only
             use_asan: true
             use_xvfb: true
+            build_out_of_tree_samples: true
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-latest
             container: ubuntu:18.04
@@ -400,3 +401,12 @@ jobs:
         run: |
           make -C samples/minimal -f makefile.unx clean
           make -C samples/minimal -f makefile.unx $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Building samples out of tree
+        if: matrix.build_out_of_tree_samples
+        run: |
+          make -C samples clean
+          for f in $(find samples -name makefile.unx); do
+              mv $f $(dirname $f)/Makefile
+          done
+          make -C samples -k $wxBUILD_ARGS
