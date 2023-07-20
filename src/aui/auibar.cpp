@@ -28,6 +28,7 @@
 #include "wx/image.h"
 #include "wx/settings.h"
 #include "wx/menu.h"
+#include "wx/renderer.h"
 
 #include "wx/aui/auibar.h"
 #include "wx/aui/framemanager.h"
@@ -332,36 +333,14 @@ void wxAuiGenericToolBarArt::DrawButton(
                  (textHeight/2);
     }
 
-
-    if (!(item.GetState() & wxAUI_BUTTON_STATE_DISABLED))
-    {
-        if (item.GetState() & wxAUI_BUTTON_STATE_PRESSED)
-        {
-            dc.SetPen(wxPen(m_highlightColour));
-            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 20 : 150)));
-            dc.DrawRectangle(rect);
-        }
-        else if ((item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky())
-        {
-            dc.SetPen(wxPen(m_highlightColour));
-            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
-
-            // draw an even lighter background for checked item hovers (since
-            // the hover background is the same color as the check background)
-            if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
-                dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 50 : 180)));
-
-            dc.DrawRectangle(rect);
-        }
-        else if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
-        {
-            // it's important to put this code in an else statement after the
-            // hover, otherwise hovers won't draw properly for checked items
-            dc.SetPen(wxPen(m_highlightColour));
-            dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
-            dc.DrawRectangle(rect);
-        }
-    }
+    int flags = 0;
+    if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
+        flags = wxCONTROL_DISABLED;
+    else if (item.GetState() & (wxAUI_BUTTON_STATE_PRESSED | wxAUI_BUTTON_STATE_CHECKED))
+        flags = wxCONTROL_PRESSED;
+    else if ((item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky())
+        flags = wxCONTROL_CURRENT;
+    wxRendererNative::Get().DrawToolbarButton(wnd, dc, rect, flags);
 
     if ( bmp.IsOk() )
         dc.DrawBitmap(bmp, bmpX, bmpY, true);
@@ -453,32 +432,15 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     }
 
 
-    if (item.GetState() & wxAUI_BUTTON_STATE_PRESSED)
-    {
-        dc.SetPen(wxPen(m_highlightColour));
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 10 : 140)));
-        dc.DrawRectangle(buttonRect);
-
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
-        dc.DrawRectangle(dropDownRect);
-    }
-    else if (item.GetState() & wxAUI_BUTTON_STATE_HOVER ||
-             item.IsSticky())
-    {
-        dc.SetPen(wxPen(m_highlightColour));
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
-        dc.DrawRectangle(buttonRect);
-        dc.DrawRectangle(dropDownRect);
-    }
-    else if (item.GetState() & wxAUI_BUTTON_STATE_CHECKED)
-    {
-        // Notice that this branch must come after the hover one to ensure the
-        // correct appearance when the mouse hovers over a checked item.m_
-        dc.SetPen(wxPen(m_highlightColour));
-        dc.SetBrush(wxBrush(m_highlightColour.ChangeLightness(IsThemeDark() ? 40 : 170)));
-        dc.DrawRectangle(buttonRect);
-        dc.DrawRectangle(dropDownRect);
-    }
+    int flags = 0;
+    if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
+        flags = wxCONTROL_DISABLED;
+    else if (item.GetState() & (wxAUI_BUTTON_STATE_PRESSED | wxAUI_BUTTON_STATE_CHECKED))
+        flags = wxCONTROL_PRESSED;
+    else if ((item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky())
+        flags = wxCONTROL_CURRENT;
+    wxRendererNative::Get().DrawToolbarButton(wnd, dc, buttonRect, flags);
+    wxRendererNative::Get().DrawToolbarButton(wnd, dc, dropDownRect, flags);
 
     if (!bmp.IsOk())
         return;
