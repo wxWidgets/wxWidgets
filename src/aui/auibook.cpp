@@ -188,6 +188,7 @@ bool wxAuiTabContainer::AddPage(wxWindow* page,
     page_info = info;
     page_info.window = page;
     page_info.hover = false;
+    page_info.info = 0;
 
     m_pages.Add(page_info);
 
@@ -208,6 +209,7 @@ bool wxAuiTabContainer::InsertPage(wxWindow* page,
     page_info = info;
     page_info.window = page;
     page_info.hover = false;
+    page_info.info = 0;
 
     if (idx >= m_pages.GetCount())
         m_pages.Add(page_info);
@@ -1994,6 +1996,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     info.caption = caption;
     info.bitmap = bitmap;
     info.active = false;
+    info.info = 0;
 
     // if there are currently no tabs, the first added
     // tab must be active
@@ -2271,6 +2274,42 @@ wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
     return page_info.bitmap.GetBitmap(page_info.bitmap.GetDefaultSize());
+}
+
+bool wxAuiNotebook::SetPageInfo(size_t page_idx, int info)
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return false;
+
+    // update our own tab catalog
+    wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    page_info.info = info;
+
+    // tab height might have changed
+    UpdateTabCtrlHeight();
+
+    // update what's on screen
+    wxAuiTabCtrl* ctrl;
+    int ctrl_idx;
+    if (FindTab(page_info.window, &ctrl, &ctrl_idx))
+    {
+        wxAuiNotebookPage& page_info = ctrl->GetPage(ctrl_idx);
+        page_info.info = info;
+        ctrl->Refresh();
+        ctrl->Update();
+    }
+
+    return true;
+}
+
+int wxAuiNotebook::GetPageInfo(size_t page_idx) const
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return 0;
+
+    // update our own tab catalog
+    const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    return page_info.info;
 }
 
 // GetSelection() returns the index of the currently active page

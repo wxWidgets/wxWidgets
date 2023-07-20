@@ -95,6 +95,7 @@ public:
     wxRect rect;          // tab's hit rectangle
     bool active;          // true if the page is currently active
     bool hover;           // true if mouse hovering over tab
+    int info;             // holds any information needed for client code
 };
 
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
@@ -306,6 +307,9 @@ public:
 
     bool SetPageBitmap(size_t page, const wxBitmapBundle& bitmap);
     wxBitmap GetPageBitmap(size_t pageIdx) const;
+
+    bool SetPageInfo(size_t page, int info);
+    int GetPageInfo(size_t pageIdx) const;
 
     int SetSelection(size_t newPage) wxOVERRIDE;
     int GetSelection() const wxOVERRIDE;
