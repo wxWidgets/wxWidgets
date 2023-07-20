@@ -86,6 +86,7 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --enable-cxx11 --enable-stl --disable-compat30
             use_xvfb: true
+            build_out_of_tree_samples: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-20.04
             compiler: clang++-10
@@ -374,3 +375,12 @@ jobs:
         run: |
           make -C samples/minimal -f makefile.unx clean
           make -C samples/minimal -f makefile.unx $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Building samples out of tree
+        if: matrix.build_out_of_tree_samples
+        run: |
+          make -C samples clean
+          for f in $(find samples -name makefile.unx); do
+              mv $f $(dirname $f)/Makefile
+          done
+          make -C samples -k $wxBUILD_ARGS
