@@ -1,0 +1,1 @@
+wxAll (GUI): Derive wxSearchCtrl from wxTextEntry in all ports (Martin Corino, #23686).
