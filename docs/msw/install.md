@@ -329,9 +329,10 @@ The full list of the build settings follows:
 
 * `RUNTIME_LIBS=static`
 
-  Links static version of C and C++ runtime libraries into the executable, so
-  that the program does not depend on DLLs provided with the compiler (e.g.
-  Visual C++'s msvcrt.dll). Can be used only with MSVC.
+  (VC++ only.) Links static version of C and C++ runtime libraries into the
+  executable, so that the program does not depend on DLLs provided with the
+  compiler.
+
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
 
 * `DEBUG_FLAG=0`
