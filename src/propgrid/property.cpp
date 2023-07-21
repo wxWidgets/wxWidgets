@@ -138,7 +138,7 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPropert
 
     // Draw Background, but only if not rendering in control
     // (as control already has rendered correct background).
-    if ( !(flags & (Control|ChoicePopup)) )
+    if ( !(flags & (Control|ChoicePopup|Hovered)) )
         dc.DrawRectangle(rect);
 
     // Use cell font, if provided

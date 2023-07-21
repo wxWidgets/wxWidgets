@@ -370,7 +370,8 @@ void wxPropertyGrid::Init1()
     m_iconWidth = wxPG_ICON_WIDTH;
 #endif
 
-    m_gutterWidth = wxPG_GUTTER_MIN;
+    if (m_windowStyle & wxPG_NO_GUTTER) m_gutterWidth = 0;
+    else m_gutterWidth = wxPG_GUTTER_MIN;
     m_subgroup_extramargin = 10;
 
     m_lineHeight = 0;
@@ -1283,7 +1284,9 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
-    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
+    wxSize sz = wxRendererNative::Get().GetExpanderSize((wxWindow*)this);
+    m_iconWidth = sz.x;
+    m_iconHeight = sz.y;
 #elif wxPG_ICON_WIDTH
     // scale icon
     m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
@@ -1292,9 +1295,17 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 
 #endif
 
-    m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
-    if ( m_gutterWidth < wxPG_GUTTER_MIN )
-        m_gutterWidth = wxPG_GUTTER_MIN;
+    if (m_windowStyle & wxPG_NO_GUTTER)
+    {
+        m_gutterWidth = 0;
+        m_subgroup_extramargin = m_iconWidth;
+    }
+    else
+    {
+        m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
+        if ( m_gutterWidth < wxPG_GUTTER_MIN )
+            m_gutterWidth = wxPG_GUTTER_MIN;
+    }
 
     int vdiv = 6;
     if ( vspacing <= 1 ) vdiv = 12;
@@ -2082,18 +2093,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                  itemsRect->GetBottom(),
                  wxS("invalid y values") );
 
-    /*
-    wxLogDebug(wxS(" -> DoDrawItems(\"%s\" -> \"%s\"")
-               wxS(" %i -> %i height=%i (ch=%i), itemsRect = 0x%lX %i,%i %ix%i)"),
-        firstItem->GetLabel(),
-        lastItem->GetLabel(),
-        firstItemTopY, lastItemBottomY,
-        (int)(lastItemBottomY - firstItemTopY),
-        (int)m_height,
-        (unsigned long)&itemsRect,
-        itemsRect->x, itemsRect->y, itemsRect->width, itemsRect->height );
-    */
-
     long windowStyle = m_windowStyle;
 
     int x = m_marginWidth;
@@ -2115,16 +2114,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     // pen that has same colour as text
     wxPen outlinepen(m_colPropFore,1,wxPENSTYLE_SOLID);
-
-    //
-    // Clear margin with background colour
-    //
-    dc.SetBrush( marginBrush );
-    if ( !(windowStyle & wxPG_HIDE_MARGIN) )
-    {
-        dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle(-1,firstItemTopY-1,x+2,lastItemBottomY-firstItemTopY+2);
-    }
 
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
@@ -2194,6 +2183,17 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         int textMarginHere = x;
         int renderFlags = 0;
 
+        bool isSelected = state->DoIsPropertySelected(p);
+
+        if (windowStyle & wxPG_HOVER_HIGHLIGHT)
+        {
+            // Update the render flags if the row is hovered on
+            if ((y == m_propHoverY) && (m_propHover != nullptr) && !p->IsCategory() && !isSelected)
+            {
+                renderFlags |= wxPGCellRenderer::Hovered | wxPGCellRenderer::DontUseCellBgCol;
+            }
+        }
+
         int greyDepth = m_marginWidth;
         if ( !(windowStyle & wxPG_HIDE_CATEGORIES) )
             greyDepth += (((int)p->m_depthBgCol)-1) * m_subgroup_extramargin;
@@ -2204,58 +2204,75 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             textMarginHere += ((p->GetDepth()-1)*m_subgroup_extramargin);
         }
 
-        // Paint margin area
-        dc.SetBrush(marginBrush);
-        dc.SetPen(marginPen);
-        dc.DrawRectangle( 0, y, greyDepth, lh );
+        // Paint margin area, unless the row is hovered on. In that case paint the full width
+        if (renderFlags & wxPGCellRenderer::Hovered)
+        {
+            wxRendererNative::Get().DrawTreeItemBackground((wxWindow*)this, dc, wxRect(0, y, GetClientSize().x - 1, lh), wxCONTROL_CURRENT);
+        }
+        else
+        {
+            // Clear margin with background colour
+            dc.SetBrush( marginBrush );
+            if ( !(windowStyle & wxPG_HIDE_MARGIN) )
+            {
+                dc.SetPen( *wxTRANSPARENT_PEN );
+                dc.DrawRectangle(0, y, x, lh);
+            }
+            dc.SetBrush(marginBrush);
+            dc.SetPen(marginPen);
+            dc.DrawRectangle( 0, y, greyDepth, lh );
+        }
 
         dc.SetPen( linepen );
 
         int y2 = y + lh;
 
+        // If the row is hovered do not draw the lines
+        if (!(renderFlags & wxPGCellRenderer::Hovered))
+        {
+
 #ifdef __WXMSW__
-        // Margin Edge
-        // Modified by JACS to not draw a margin if wxPG_HIDE_MARGIN is specified, since it
-        // looks better, at least under Windows when we have a themed border (the themed-window-specific
-        // whitespace between the real border and the propgrid margin exacerbates the double-border look).
+            // Margin Edge
+            // Modified by JACS to not draw a margin if wxPG_HIDE_MARGIN is specified, since it
+            // looks better, at least under Windows when we have a themed border (the themed-window-specific
+            // whitespace between the real border and the propgrid margin exacerbates the double-border look).
 
-        // Is this or its parent themed?
-        bool suppressMarginEdge = (GetWindowStyle() & wxPG_HIDE_MARGIN) &&
-            (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME) ||
-            (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_NONE) && ((GetParent()->GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME)));
-        if (suppressMarginEdge)
-        {
-            // Blank out the margin edge
-            dc.SetPen(wxPen(GetBackgroundColour()));
-            dc.DrawLine( greyDepth, y, greyDepth, y2 );
-            dc.SetPen( linepen );
-        }
-        else
+            // Is this or its parent themed?
+            bool suppressMarginEdge = (GetWindowStyle() & wxPG_HIDE_MARGIN) &&
+                (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME) ||
+                (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_NONE) && ((GetParent()->GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME)));
+            if (suppressMarginEdge)
+            {
+                // Blank out the margin edge
+                dc.SetPen(wxPen(GetBackgroundColour()));
+                dc.DrawLine( greyDepth, y, greyDepth, y2 );
+                dc.SetPen( linepen );
+            }
+            else
 #endif // __WXMSW__
-        {
-            dc.DrawLine(greyDepth, y, greyDepth, y2);
+            {
+                dc.DrawLine(greyDepth, y, greyDepth, y2);
+            }
+
+            // Splitters
+            for (unsigned int i = firstCol; i <= lastCol; i++)
+            {
+                dc.DrawLine(splitterPos[i], y, splitterPos[i], y2);
+            }
+
+            // Horizontal Line, below
+            //   (not if both this and next is category caption)
+            if ( p->IsCategory() &&
+                 nextP && nextP->IsCategory() )
+                dc.SetPen(m_colCapBack);
+
+            dc.DrawLine(greyDepth, y2 - 1, cellX, y2 - 1);
         }
-
-        // Splitters
-        for (unsigned int i = firstCol; i <= lastCol; i++)
-        {
-            dc.DrawLine(splitterPos[i], y, splitterPos[i], y2);
-        }
-
-        // Horizontal Line, below
-        //   (not if both this and next is category caption)
-        if ( p->IsCategory() &&
-             nextP && nextP->IsCategory() )
-            dc.SetPen(m_colCapBack);
-
-        dc.DrawLine(greyDepth, y2 - 1, cellX, y2 - 1);
 
         //
         // Need to override row colours?
         wxColour rowFgCol;
         wxColour rowBgCol;
-
-        bool isSelected = state->DoIsPropertySelected(p);
 
         if ( !isSelected )
         {
@@ -2302,9 +2319,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         if ( HasInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL) )
             renderFlags = renderFlags & ~wxPGCellRenderer::DontUseCellColours;
 
-        //
-        // Fill additional margin area with background colour of first cell
-        if ( greyDepth < textMarginHere )
+        // Fill additional margin area with background colour of first cell, if not hovered
+        if ( (greyDepth < textMarginHere) && !(renderFlags & wxPGCellRenderer::Hovered) )
         {
             if ( !(renderFlags & wxPGCellRenderer::DontUseCellBgCol) )
             {
@@ -2485,19 +2501,23 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             }
 
             dc.DestroyClippingRegion();
+
         }
         while ( ci > firstCol );
 
         if ( fontChanged )
             dc.SetFont(normalFont);
 
+        if ( !(renderFlags & wxPGCellRenderer::Hovered) )
+        {
+            // Clear empty space beyond the right edge of the grid
+            dc.SetPen(wxPen(m_colEmptySpace));
+            dc.SetBrush(wxBrush(m_colEmptySpace));
+            dc.DrawRectangle(cellX, y, viewRightEdge - cellX + 1, lh);
+        }
+
         y += lh;
     }
-
-    // Clear empty space beyond the right edge of the grid
-    dc.SetPen(wxPen(m_colEmptySpace));
-    dc.SetBrush(wxBrush(m_colEmptySpace));
-    dc.DrawRectangle(cellX, firstItemTopY, viewRightEdge - cellX + 1, lastItemBottomY - firstItemTopY);
 
     return y - 1;
 }
@@ -5037,6 +5057,8 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
             // Send hover event
             SendEvent( wxEVT_PG_HIGHLIGHTED, m_propHover );
+
+            if (m_windowStyle & wxPG_HOVER_HIGHLIGHT) Refresh();
         }
 
 #if wxUSE_TOOLTIPS
@@ -5420,7 +5442,9 @@ void wxPropertyGrid::OnMouseEntry( wxMouseEvent &event )
                     wxPropertyGrid::HandleMouseUp ( -1, 10000, event );
             }
         }
+        m_propHover = nullptr;
     }
+    if (m_windowStyle & wxPG_HOVER_HIGHLIGHT) Refresh();
 
     event.Skip();
 }

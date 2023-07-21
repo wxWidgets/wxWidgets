@@ -87,7 +87,10 @@ public:
         DontUseCellFgCol    = 0x00100000,
         DontUseCellBgCol    = 0x00200000,
         DontUseCellColours  = DontUseCellFgCol |
-                              DontUseCellBgCol
+                              DontUseCellBgCol,
+
+        // We are painting a highlighted row due to mouse hover
+        Hovered             = 0x00400000
     };
 
     // Returns true if rendered something in the foreground

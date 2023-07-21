@@ -205,11 +205,18 @@ wxPG_DESCRIPTION                    = 0x00002000,
 // property grid. Recommended if you use a header.
 wxPG_NO_INTERNAL_BORDER             = 0x00004000,
 
+// Highlight the row hovered on
+wxPG_HOVER_HIGHLIGHT                = 0x00008000,
+
+// Do not use gutters around the expander bitmap
+wxPG_NO_GUTTER                      = 0x00010000,
+
 // A mask which can be used to filter (out) all styles.
 wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
                          wxPG_SPLITTER_AUTO_CENTER|wxPG_TOOLTIPS|wxPG_HIDE_MARGIN|
                          wxPG_STATIC_SPLITTER|wxPG_LIMITED_EDITING|wxPG_TOOLBAR|
-                         wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER
+                         wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER|wxPG_HOVER_HIGHLIGHT|
+                         wxPG_NO_GUTTER
 };
 
 #if wxPG_COMPATIBILITY_1_4
@@ -1515,7 +1522,7 @@ protected:
     // This is also calculated in the gutter
     int                 m_iconWidth;
 
-#ifndef wxPG_ICON_WIDTH
+#if !defined(wxPG_ICON_WIDTH) || wxPG_USE_RENDERER_NATIVE
 
     // The image height of the [+] icon.
     // This is calculated as minimal size and to align
