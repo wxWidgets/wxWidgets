@@ -2997,7 +2997,15 @@ void wxWindowGTK::PostCreation()
 
     // focus handling
 
-    if (!GTK_IS_WINDOW(m_widget))
+    // Check for GTKNeedsParent() || IsTopLevel() is a hack: it catches the
+    // case of wxMenuBar, which isn't supposed to generate any focus events,
+    // and which is the only non-TLW which returns false from this function.
+    //
+    // The TLW check overlaps with !GTK_IS_WINDOW() check, but it's not 100%
+    // obvious if GTK_IS_WINDOW() and wxWindow::IsTopLevel() are really exactly
+    // equivalent, so for now ensure we don't change the existing check which
+    // only used !GTK_IS_WINDOW().
+    if (!GTK_IS_WINDOW(m_widget) && (GTKNeedsParent() || IsTopLevel()))
     {
         if (m_focusWidget == nullptr)
             m_focusWidget = m_widget;
