@@ -76,6 +76,11 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) wxOVERRIDE;
 
+    virtual void DrawTreeItemBackground(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0) wxOVERRIDE;
+
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -158,6 +163,21 @@ public:
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
                               int flags = 0,
                               wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE;
+
+    virtual void DrawToolbarButton(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE;
+
+    virtual void DrawTabControlBackground(wxWindow* win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0) wxOVERRIDE;
+
+    virtual void DrawTabControlTab(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
@@ -552,6 +572,24 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
         dc.DrawLine(xMiddle, yMiddle - halfHeight,
                     xMiddle, yMiddle + halfHeight + 1);
     }
+}
+
+// draw the background
+void
+wxRendererGeneric::DrawTreeItemBackground(wxWindow * WXUNUSED(win),
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags)
+{
+    if (flags & wxCONTROL_CURRENT)
+    {
+        wxColour highclr = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        wxDCPenChanger penChanger(dc, wxPen(highclr));
+        wxDCBrushChanger brushChanger(dc, wxBrush(highclr.ChangeLightness(wxSystemSettings::GetAppearance().IsDark() ? 40 : 170)));
+        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+        return;
+    }
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 }
 
 // ----------------------------------------------------------------------------
@@ -1008,6 +1046,191 @@ wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
         setTextFg.Set(textColour);
     wxDCTextBgColourChanger setTextBg(dc, wxTransparentColour);
     dc.DrawLabel(paintText, rect, align);
+}
+
+// draw a skeleton toolbar button (just the background and the frame)
+void wxRendererGeneric::DrawToolbarButton(wxWindow* WXUNUSED(win), wxDC& dc,
+                                          const wxRect& rect, int flags)
+{
+    wxColour high = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    bool dark = wxSystemSettings::GetAppearance().IsDark();
+    wxDCPenChanger(dc, wxPen(high));
+    if (!(flags & wxCONTROL_DISABLED))
+    {
+        if (flags & wxCONTROL_PRESSED)
+        {
+            wxDCBrushChanger(dc, wxBrush(high.ChangeLightness(dark ? 20 : 150)));
+            dc.DrawRectangle(rect);
+        }
+        else if (flags & wxCONTROL_CURRENT)
+        {
+            // draw an even lighter background for checked item hovers (since
+            // the hover background is the same color as the check background)
+            wxDCBrushChanger(dc, wxBrush(high.ChangeLightness((dark ? 40 : 170) + ((flags & wxCONTROL_CHECKED) ? 10 : 0))));
+            dc.DrawRectangle(rect);
+        }
+        else if (flags & wxCONTROL_CHECKED)
+        {
+            // it's important to put this code in an else statement after the
+            // hover, otherwise hovers won't draw properly for checked items
+            wxDCBrushChanger(dc, wxBrush(high.ChangeLightness(dark ? 40 : 170)));
+            dc.DrawRectangle(rect);
+        }
+    }
+}
+
+void wxRendererGeneric::DrawTabControlBackground(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
+{
+    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    // the baseColour is too pale to use as our base colour, so darken it a bit --
+    if ((255-baseColour.Red()) +
+        (255-baseColour.Green()) +
+        (255-baseColour.Blue()) < 60)
+    {
+        baseColour = baseColour.ChangeLightness(92);
+    }
+    wxColor borderColour = baseColour.ChangeLightness(75);
+
+    // draw background using arbitrary hard-coded, but at least adapted to dark
+    // mode, gradient
+    int topLightness, bottomLightness;
+    if (wxSystemSettings::GetAppearance().IsUsingDarkBackground())
+    {
+        topLightness = 110;
+        bottomLightness = 90;
+    }
+    else
+    {
+        topLightness = 90;
+        bottomLightness = 170;
+    }
+
+    wxColor top_color    = baseColour.ChangeLightness(topLightness);
+    wxColor bottom_color = baseColour.ChangeLightness(bottomLightness);
+    wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
+    dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
+
+    // draw base lines
+
+    wxDCPenChanger(dc, wxPen(borderColour));
+    wxDCBrushChanger(dc, wxBrush(baseColour));
+    dc.DrawRectangle(0, rect.GetHeight() - 4, rect.GetWidth(), 4);
+}
+
+void wxRendererGeneric::DrawTabControlTab(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int flags)
+{
+    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    // the baseColour is too pale to use as our base colour, so darken it a bit --
+    if ((255-baseColour.Red()) +
+        (255-baseColour.Green()) +
+        (255-baseColour.Blue()) < 60)
+    {
+        baseColour = baseColour.ChangeLightness(92);
+    }
+    wxColor borderColour = baseColour.ChangeLightness(75);
+
+    dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height - 3);
+    // create points that will make the tab outline
+    wxPoint border_points[6];
+    border_points[0] = wxPoint(rect.x,                  rect.y + rect.height - 4);
+    border_points[1] = wxPoint(rect.x,                  rect.y + 2);
+    border_points[2] = wxPoint(rect.x + 2,              rect.y);
+    border_points[3] = wxPoint(rect.x + rect.width - 2, rect.y);
+    border_points[4] = wxPoint(rect.x + rect.width,     rect.y + 2);
+    border_points[5] = wxPoint(rect.x + rect.width,     rect.y + rect.height - 4);
+
+    bool isdark = wxSystemSettings::GetAppearance().IsUsingDarkBackground();
+
+    // draw active tab
+    if (flags & wxCONTROL_SELECTED)
+    {
+        // draw base background color
+        wxRect r(rect.x, rect.y, rect.width, rect.height);
+        {
+            wxDCPenChanger(dc, wxPen(baseColour));
+            wxDCBrushChanger(dc, wxBrush(baseColour));
+            dc.DrawRectangle(r.x + 1, r.y + 1, r.width - 1, r.height - 4);
+        }
+
+        // this white helps fill out the gradient at the top of the tab
+        wxColor gradient = *wxWHITE;
+        if (isdark)
+        {
+            //dark mode, we go darker
+            gradient = baseColour.ChangeLightness(70);
+        }
+
+        {
+            wxDCPenChanger(dc, wxPen(gradient));
+            wxDCBrushChanger(dc, wxBrush(gradient));
+            dc.DrawRectangle(r.x + 2, r.y + 1, r.width - 3, r.height - 4);
+        }
+
+        // these two points help the rounded corners appear more antialiased
+        {
+            wxDCPenChanger(dc, wxPen(baseColour));
+            dc.DrawPoint(r.x + 2, r.y + 1);
+            dc.DrawPoint(r.x + r.width - 2, r.y + 1);
+        }
+
+        // set rectangle down a bit for gradient drawing
+        r.SetHeight(r.GetHeight() / 2);
+        r.x += 2;
+        r.width -= 3;
+        r.y += r.height;
+        r.y -= 2;
+
+        // draw gradient background
+        dc.GradientFillLinear(r, baseColour, gradient, wxNORTH);
+    }
+    // draw inactive tab
+    else
+    {
+        wxRect r(rect.x, rect.y + 1, rect.width, rect.height - 3);
+
+        // start the gradient up a bit and leave the inside border inset
+        // by a pixel for a 3D look.  Only the top half of the inactive
+        // tab will have a slight gradient
+        r.x += 3;
+        r.y++;
+        r.width -= 4;
+        r.height /= 2;
+        r.height--;
+
+        // draw top gradient fill for glossy look
+        wxColor top_color = baseColour;
+        wxColor bottom_color = top_color.ChangeLightness(160);
+        if (isdark)
+        {
+            // dark mode, we go darker
+            top_color = baseColour.ChangeLightness(70);
+            bottom_color = baseColour;
+        }
+        dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
+
+        r.y += r.height;
+        r.y--;
+
+        // draw bottom fill for glossy look
+        dc.GradientFillLinear(r, baseColour, baseColour, wxSOUTH);
+    }
+
+    // draw tab outline
+    wxDCPenChanger(dc, wxPen(borderColour));
+    wxDCBrushChanger(dc, *wxTRANSPARENT_BRUSH);
+    dc.DrawPolygon(WXSIZEOF(border_points), border_points);
+
+    // there are two horizontal grey lines at the bottom of the tab control,
+    // this gets rid of the top one of those lines in the tab control
+    if (flags & wxCONTROL_SELECTED)
+    {
+        wxDCPenChanger(dc, wxPen(baseColour));
+        dc.DrawLine(border_points[0].x + 1,
+                    border_points[0].y,
+                    border_points[5].x,
+                    border_points[5].y);
+    }
+    dc.DestroyClippingRegion();
 }
 
 // ----------------------------------------------------------------------------

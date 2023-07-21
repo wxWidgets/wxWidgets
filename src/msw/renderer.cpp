@@ -221,6 +221,10 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags = 0) wxOVERRIDE;
+    virtual void DrawTreeItemBackground(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0) wxOVERRIDE;
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -314,6 +318,21 @@ public:
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
                               int flags = 0,
                               wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE;
+
+    virtual void DrawToolbarButton(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE;
+
+    virtual void DrawTabControlBackground(wxWindow* win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0) wxOVERRIDE;
+
+    virtual void DrawTabControlTab(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
@@ -727,7 +746,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                  const wxRect& rect,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW");
     if ( !hTheme )
     {
         m_rendererNative.DrawTreeItemButton(win, dc, rect, flags);
@@ -748,6 +767,22 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                 &r,
                                 NULL
                             );
+}
+
+void
+wxRendererXP::DrawTreeItemBackground(wxWindow *win,
+                                     wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags)
+{
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTreeItemBackground(win, dc, rect, flags);
+        return;
+    }
+
+    DoDrawButtonLike(hTheme, TVP_TREEITEM, dc, rect, flags);
 }
 
 bool
@@ -935,7 +970,7 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::TREEVIEW;TREEVIEW");
     if ( hTheme )
     {
         if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
@@ -1349,6 +1384,66 @@ void wxRendererXP::DrawGauge(wxWindow* win,
         0,
         &contentRect,
         NULL);
+}
+
+// draw a skeleton toolbar button (just the background and the frame)
+void wxRendererXP::DrawToolbarButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    wxUxThemeHandle hTheme(win, L"TOOLBAR");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawToolbarButton(win, dc, rect, flags);
+        return;
+    }
+
+    RECT r = ConvertToRECT(dc, rect);
+
+    int state = TS_NORMAL;
+    if (flags & wxCONTROL_DISABLED)     state = TS_DISABLED;
+    else if (flags & wxCONTROL_PRESSED) state = TS_PRESSED;
+    else if (flags & wxCONTROL_CHECKED) state = (flags & wxCONTROL_CURRENT) ? TS_HOTCHECKED : TS_CHECKED;
+    else if (flags & wxCONTROL_CURRENT) state = (flags & wxCONTROL_CHECKED) ? TS_HOTCHECKED : TS_HOT;
+    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), TP_BUTTON, state, &r, NULL);
+}
+
+void wxRendererXP::DrawTabControlBackground(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    wxUxThemeHandle hTheme(win, L"TAB");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTabControlBackground(win, dc, rect, flags);
+        return;
+    }
+
+    RECT r = ConvertToRECT(dc, rect);
+    ::InflateRect(&r, 1, 1);
+    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), TABP_PANE, 0, &r, NULL);
+}
+
+void wxRendererXP::DrawTabControlTab(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    wxUxThemeHandle hTheme(win, L"TAB");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTabControlTab(win, dc, rect, flags);
+        return;
+    }
+
+    RECT r = ConvertToRECT(dc, rect);
+
+    // Non-selected tabs are rendered as vertically smaller
+    if (!(flags & wxCONTROL_SELECTED))
+    {
+        r.top = 2;
+        r.bottom -= 1;
+    }
+
+    int state = TIS_NORMAL;
+    if (flags & wxCONTROL_DISABLED)      state = TIS_DISABLED;
+    else if (flags & wxCONTROL_SELECTED) state = TIS_SELECTED;
+    else if (flags & wxCONTROL_CURRENT)  state = TIS_HOT;
+    else if (flags & wxCONTROL_FOCUSED)  state = TIS_FOCUSED;
+    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), TABP_TABITEM, state, &r, NULL);
 }
 
 // ----------------------------------------------------------------------------

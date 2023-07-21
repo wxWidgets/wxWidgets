@@ -73,6 +73,12 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) wxOVERRIDE;
 
+    // draw the background of a tree control item
+    virtual void DrawTreeItemBackground(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0) wxOVERRIDE;
+
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -130,6 +136,21 @@ public:
                                 int flags=0) wxOVERRIDE;
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) wxOVERRIDE;
+
+    virtual void DrawToolbarButton(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE;
+
+    virtual void DrawTabControlBackground(wxWindow* win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0) wxOVERRIDE;
+
+    virtual void DrawTabControlTab(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE;
 
     virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) wxOVERRIDE;
 
@@ -363,6 +384,52 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED_IN_GTK3(win),
         flags & wxCONTROL_EXPANDED ? GTK_EXPANDER_EXPANDED
                                    : GTK_EXPANDER_COLLAPSED
     );
+#endif
+}
+
+// draw the background using the TreeView theme config
+void
+wxRendererGTK::DrawTreeItemBackground(wxWindow* WXUNUSED_IN_GTK3(win),
+                                      wxDC& dc, const wxRect& rect, int flags)
+{
+#ifdef __WXGTK3__
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
+    if (drawable == NULL) return;
+
+    GtkWidgetPath* path = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "treeview");
+    gtk_widget_path_iter_add_class(path, -1, "view");
+    GtkStyleContext* treeview_context = gtk_style_context_new ();
+    gtk_style_context_set_path(treeview_context, path);
+    gtk_style_context_set_parent(treeview_context, nullptr);
+    gtk_widget_path_unref(path);
+
+    path = gtk_widget_path_copy(gtk_style_context_get_path(treeview_context));
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "treeview");
+    gtk_widget_path_iter_add_class(path, -1, "view");
+    GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_DISABLED)             state = GTK_STATE_FLAG_INSENSITIVE;
+    else if (flags & wxCONTROL_FOCUSED)         state = GTK_STATE_FLAG_FOCUSED;
+    else if (flags & wxCONTROL_PRESSED)         state = GTK_STATE_FLAG_ACTIVE;
+    else if (flags & wxCONTROL_CURRENT)         state = GTK_STATE_FLAG_PRELIGHT;
+    else if (flags & wxCONTROL_SELECTED)        state = GTK_STATE_FLAG_SELECTED;
+    else if (flags & wxCONTROL_CHECKED)         state = GTK_STATE_FLAG_CHECKED;
+    else if (flags & wxCONTROL_UNDETERMINED)    state = GTK_STATE_FLAG_INCONSISTENT;
+    if (state != 0)
+        gtk_widget_path_iter_set_state (path, -1, state);
+    GtkStyleContext* tv_hover_context = gtk_style_context_new();
+    gtk_style_context_set_path(tv_hover_context, path);
+    gtk_style_context_set_parent(tv_hover_context, treeview_context);
+    gtk_style_context_set_state(tv_hover_context, gtk_widget_path_iter_get_state(path, -1));
+    gtk_widget_path_unref(path);
+    gtk_render_background(tv_hover_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(tv_hover_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    g_object_unref(tv_hover_context);
+    g_object_unref(treeview_context);
+#else
+    #warning Missing implementation
 #endif
 }
 
@@ -1172,5 +1239,137 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow*, wxDC& dc, const wxRect& rect, int
         dc.LogicalToDeviceY(rect.y),
         rect.width, rect.height
     );
+#endif
+}
+
+// draw a skeleton toolbar button (just the background and the frame)
+void wxRendererGTK::DrawToolbarButton(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int flags)
+{
+#ifdef __WXGTK3__
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
+    if (drawable == NULL) return;
+
+    GtkWidgetPath* path = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "button");
+    gtk_widget_path_iter_add_class(path, -1, "flat");
+    GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_DISABLED)             state = GTK_STATE_FLAG_INSENSITIVE;
+    else if (flags & wxCONTROL_FOCUSED)         state = GTK_STATE_FLAG_FOCUSED;
+    else if (flags & wxCONTROL_PRESSED)         state = GTK_STATE_FLAG_ACTIVE;
+    else if (flags & wxCONTROL_CURRENT)         state = GTK_STATE_FLAG_PRELIGHT;
+    else if (flags & wxCONTROL_SELECTED)        state = GTK_STATE_FLAG_SELECTED;
+    else if (flags & wxCONTROL_CHECKED)         state = GTK_STATE_FLAG_CHECKED;
+    else if (flags & wxCONTROL_UNDETERMINED)    state = GTK_STATE_FLAG_INCONSISTENT;
+    if (state != 0)
+        gtk_widget_path_iter_set_state (path, -1, state);
+
+    GtkStyleContext* toolbutton_context = gtk_style_context_new ();
+    gtk_style_context_set_path(toolbutton_context, path);
+    gtk_style_context_set_parent(toolbutton_context, nullptr);
+    gtk_style_context_set_state(toolbutton_context, gtk_widget_path_iter_get_state(path, -1));
+    gtk_widget_path_unref(path);
+    gtk_render_background(toolbutton_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(toolbutton_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    g_object_unref(toolbutton_context);
+#else
+    #warning Missing implementation
+#endif
+}
+
+void wxRendererGTK::DrawTabControlBackground(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
+{
+#ifdef __WXGTK3__
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
+    if (drawable == NULL) return;
+
+    // Get "notebook.frame"
+    GtkWidgetPath* path = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "notebook");
+    gtk_widget_path_iter_add_class(path, -1, "frame");
+    GtkStyleContext* frame_context = gtk_style_context_new ();
+    gtk_style_context_set_path(frame_context, path);
+    gtk_style_context_set_parent(frame_context, nullptr);
+    gtk_widget_path_unref(path);
+
+    // Get "header.top"
+    path = gtk_widget_path_copy(gtk_style_context_get_path(frame_context));
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "header");
+    gtk_widget_path_iter_add_class(path, -1, "top");
+    GtkStyleContext* top_context = gtk_style_context_new();
+    gtk_style_context_set_path(top_context, path);
+    gtk_style_context_set_parent(top_context, frame_context);
+    gtk_widget_path_unref (path);
+    gtk_render_background(top_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(top_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    g_object_unref(top_context);
+    g_object_unref(frame_context);
+#else
+    #warning Missing implementation
+#endif
+}
+
+void wxRendererGTK::DrawTabControlTab(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int flags)
+{
+#ifdef __WXGTK3__
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
+    if (drawable == NULL) return;
+
+    // Get "notebook.frame"
+    GtkWidgetPath* path = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "notebook");
+    gtk_widget_path_iter_add_class(path, -1, "frame");
+    GtkStyleContext* frame_context = gtk_style_context_new ();
+    gtk_style_context_set_path(frame_context, path);
+    gtk_style_context_set_parent(frame_context, nullptr);
+    gtk_widget_path_unref(path);
+
+    // Get "header.top"
+    path = gtk_widget_path_copy(gtk_style_context_get_path(frame_context));
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "header");
+    gtk_widget_path_iter_add_class(path, -1, "top");
+    GtkStyleContext* top_context = gtk_style_context_new();
+    gtk_style_context_set_path(top_context, path);
+    gtk_style_context_set_parent(top_context, frame_context);
+    gtk_widget_path_unref(path);
+
+    // Get "tabs"
+    path = gtk_widget_path_copy(gtk_style_context_get_path(top_context));
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "tabs");
+    GtkStyleContext* tabs_context = gtk_style_context_new();
+    gtk_style_context_set_path(tabs_context, path);
+    gtk_style_context_set_parent(tabs_context, top_context);
+    gtk_widget_path_unref(path);
+
+    // Get "tab:<state>"
+    path = gtk_widget_path_copy(gtk_style_context_get_path(tabs_context));
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "tab");
+    GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
+    if (flags & wxCONTROL_DISABLED)             state = GTK_STATE_FLAG_INSENSITIVE;
+    else if (flags & wxCONTROL_FOCUSED)         state = GTK_STATE_FLAG_FOCUSED;
+    else if (flags & wxCONTROL_SELECTED)        state = GTK_STATE_FLAG_CHECKED;
+    else if (flags & wxCONTROL_CURRENT)         state = GTK_STATE_FLAG_PRELIGHT;
+    else if (flags & wxCONTROL_UNDETERMINED)    state = GTK_STATE_FLAG_INCONSISTENT;
+    if (state != 0)
+        gtk_widget_path_iter_set_state (path, -1, state);
+    GtkStyleContext* tab_context = gtk_style_context_new();
+    gtk_style_context_set_path(tab_context, path);
+    gtk_style_context_set_parent(tab_context, tabs_context);
+    gtk_style_context_set_state(tab_context, gtk_widget_path_iter_get_state(path, -1));
+    gtk_widget_path_unref(path);
+    gtk_render_background(tab_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    gtk_render_frame(tab_context, drawable, rect.x, rect.y, rect.width, rect.height);
+    g_object_unref(tab_context);
+    g_object_unref(tabs_context);
+    g_object_unref(top_context);
+    g_object_unref(frame_context);
+#else
+    #warning Missing implementation
 #endif
 }

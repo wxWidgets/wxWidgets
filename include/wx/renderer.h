@@ -218,6 +218,12 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) = 0;
 
+    // draw the background of a tree control item
+    virtual void DrawTreeItemBackground(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0) = 0;
+
     // draw the border for sash window: this border must be such that the sash
     // drawn by DrawSash() blends into it well
     virtual void DrawSplitterBorder(wxWindow *win,
@@ -373,6 +379,24 @@ public:
                               int flags = 0,
                               wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) = 0;
 
+    // Draw a skeleton wxAuiToolbar button
+    virtual void DrawToolbarButton(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) = 0;
+
+    // Draw a tab control background
+    virtual void DrawTabControlBackground(wxWindow* win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0) = 0;
+
+    // Draw a tab control skeleton tab
+    virtual void DrawTabControlTab(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) = 0;
+
     // geometry functions
     // ------------------
 
@@ -463,6 +487,12 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) wxOVERRIDE
         { m_rendererNative.DrawTreeItemButton(win, dc, rect, flags); }
+
+    virtual void DrawTreeItemBackground(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0) wxOVERRIDE
+        { m_rendererNative.DrawTreeItemBackground(win, dc, rect, flags); }
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
@@ -588,6 +618,24 @@ public:
                               int flags = 0,
                               wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE
         { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags, ellipsizeMode); }
+
+    virtual void DrawToolbarButton(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE
+        { m_rendererNative.DrawToolbarButton(win, dc, rect, flags); }
+
+    virtual void DrawTabControlBackground(wxWindow* win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags = 0) wxOVERRIDE
+        { m_rendererNative.DrawTabControlBackground(win, dc, rect, flags); }
+
+    virtual void DrawTabControlTab(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags = 0) wxOVERRIDE
+        { m_rendererNative.DrawTabControlTab(win, dc, rect, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE
         { return m_rendererNative.GetSplitterParams(win); }
