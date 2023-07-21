@@ -661,12 +661,16 @@ wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
     EVT_MENU(wxID_UNDO, wxTextCtrl::OnUndo)
     EVT_MENU(wxID_REDO, wxTextCtrl::OnRedo)
+    EVT_MENU(wxID_CLEAR, wxTextCtrl::OnDelete)
+    EVT_MENU(wxID_SELECTALL, wxTextCtrl::OnSelectAll)
 
     EVT_UPDATE_UI(wxID_CUT, wxTextCtrl::OnUpdateCut)
     EVT_UPDATE_UI(wxID_COPY, wxTextCtrl::OnUpdateCopy)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+    EVT_UPDATE_UI(wxID_CLEAR, wxTextCtrl::OnUpdateDelete)
+    EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 
     // wxTE_AUTO_URL wxTextUrl support. Currently only creates
     // wxTextUrlEvent in the same cases as wxMSW, more can be added here.
@@ -2122,6 +2126,16 @@ void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
     Redo();
 }
 
+void wxTextCtrl::OnDelete(wxCommandEvent& WXUNUSED(event))
+{
+    RemoveSelection();
+}
+
+void wxTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))
+{
+    SelectAll();
+}
+
 void wxTextCtrl::OnUpdateCut(wxUpdateUIEvent& event)
 {
     event.Enable( CanCut() );
@@ -2145,6 +2159,16 @@ void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
 void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
+}
+
+void wxTextCtrl::OnUpdateDelete(wxUpdateUIEvent& event)
+{
+    event.Enable( HasSelection() && IsEditable() );
+}
+
+void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable( !IsEmpty() );
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const

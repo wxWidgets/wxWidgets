@@ -112,12 +112,16 @@ public:
     void OnPaste(wxCommandEvent& event);
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
+    void OnDelete(wxCommandEvent& event);
+    void OnSelectAll(wxCommandEvent& event);
 
     void OnUpdateCut(wxUpdateUIEvent& event);
     void OnUpdateCopy(wxUpdateUIEvent& event);
     void OnUpdatePaste(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
+    void OnUpdateDelete(wxUpdateUIEvent& event);
+    void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
     bool SetFont(const wxFont& font) wxOVERRIDE;
     bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
