@@ -1061,6 +1061,8 @@ private:
     // Id m_editorCtrl is non-NULL, pointer to the associated renderer.
     wxDataViewRenderer* m_editorRenderer;
 
+    // row that is hovered over
+    int m_hovered_row;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDataViewMainWindow);
     wxDECLARE_EVENT_TABLE();
@@ -2130,6 +2132,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_count = -1;
     m_underMouse = NULL;
 
+    m_hovered_row = -1;
+
     UpdateDisplay();
 }
 
@@ -2806,6 +2810,23 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxDataViewColumn * const
         expander = GetExpanderColumnOrFirstOne(GetOwner());
 
+    // Draw the background on hover
+    if (m_owner->HasFlag(wxDV_HOVER_HIGHLIGHT))
+    {
+        if ((m_hovered_row >= (int)item_start) && (m_hovered_row < (int)item_last))
+        {
+            wxRect row_rect(x_start, first_line_start, x_last - x_start, 0);
+            int line_height = GetLineHeight(item_start);
+            for (unsigned int item = item_start; (item < item_last) && ((int)item != m_hovered_row); item++)
+            {
+                row_rect.y += line_height;
+                line_height = GetLineHeight(item);
+            }
+            row_rect.height = line_height;
+            wxRendererNative::Get().DrawTreeItemBackground(this, dc, row_rect, wxCONTROL_CURRENT);
+        }
+    }
+
     // redraw all cells for all rows which must be repainted and all columns
     wxRect cell_rect;
     cell_rect.x = x_start;
@@ -2857,13 +2878,18 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             int state = 0;
             if (selected)
                 state |= wxDATAVIEW_CELL_SELECTED;
+            if ( m_owner->HasFlag(wxDV_HOVER_HIGHLIGHT) )
+            {
+                if ((int)item == m_hovered_row)
+                    state |= wxDATAVIEW_CELL_PRELIT;
+            }
 
             cell->SetState(state);
             if (hasValue)
                 hasValue = cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
-            if ( !selected )
+            if ( state == 0 )
                 DrawCellBackground( cell, dc, cell_rect );
 
             // deal with the expander
@@ -5041,6 +5067,22 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     const unsigned int current = GetLineAt( y );
     const wxDataViewItem item = GetItemByRow(current);
+    if (m_owner->HasFlag(wxDV_HOVER_HIGHLIGHT))
+    {
+        // set the hover position
+        if (event.Moving())
+        {
+            m_hovered_row = current;
+            Refresh();
+            return;
+        }
+        else if (event.Leaving())
+        {
+            m_hovered_row = -1;
+            Refresh();
+            if (m_dragCount == 0) return;
+        }
+    }
 
     if(event.ButtonDown())
     {

@@ -554,6 +554,7 @@ private:
 #define wxDV_VARIABLE_LINE_HEIGHT    0x0020     // variable line height
 
 #define wxDV_PREVENT_SEARCH          0x0040     // On wxGTK, prevent interactive search
+#define wxDV_HOVER_HIGHLIGHT         0x0080     // Not on wxGTK, highlight the hovered item
 
 class WXDLLIMPEXP_CORE wxDataViewCtrlBase: public wxSystemThemedControl<wxControl>
 {
