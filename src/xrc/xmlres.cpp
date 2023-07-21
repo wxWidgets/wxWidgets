@@ -1890,7 +1890,7 @@ wxBitmap LoadBitmapFromFS(wxXmlResourceHandlerImpl* impl,
     wxImage img(*(fsfile->GetStream()));
     delete fsfile;
 #else
-    wxImage img(name);
+    wxImage img(path);
 #endif
 
     if (!img.IsOk())
