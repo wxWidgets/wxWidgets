@@ -182,6 +182,8 @@ private:
     wxGauge *m_gauge;
     // the message displayed
     wxStaticText *m_msg;
+    // the message width in pixels. If the new width is greater, the dialog grows
+    unsigned m_msgWidth;
     // displayed elapsed, estimated, remaining time
     wxStaticText *m_elapsed,
                  *m_estimated,

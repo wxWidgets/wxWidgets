@@ -82,6 +82,7 @@ void wxGenericProgressDialog::Init()
 
     m_gauge = nullptr;
     m_msg = nullptr;
+    m_msgWidth = 0;
     m_elapsed =
     m_estimated =
     m_remaining = nullptr;
@@ -778,15 +779,17 @@ void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
 {
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {
-        const wxSize sizeOld = m_msg->GetSize();
-
         m_msg->SetLabel(newmsg);
 
-        if ( m_msg->GetSize().x > sizeOld.x )
+        const unsigned newWidth = m_msg->GetSize().x;
+
+        // Prevent shrinking the dialog when the message becomes shorter
+        if ( newWidth > m_msgWidth )
         {
             // Resize the dialog to fit its new, longer contents instead of
             // just truncating it.
             Fit();
+	    m_msgWidth = newWidth;
         }
 
         // allow the window to repaint:
