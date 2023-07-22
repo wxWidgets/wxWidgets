@@ -277,6 +277,7 @@ wxGTK:
 - Fix missing borders for scrollable windows, e.g. wxListCtrl (#23236).
 - Fix TAB navigation in wxPropertyGrid (Adrian Lopez, #23354).
 - Fix GSource leak when using wxIdleEvent::RequestMore() (#23364).
+- Allow using libwebkit2gtk-4.1 and libsoup-3.0 (Scott Talbert, #23630).
 
 wxMSW:
 
