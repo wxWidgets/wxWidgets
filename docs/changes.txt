@@ -264,6 +264,7 @@ All (GUI):
 - Relax checks on character entry in numeric validators (#12968, #23561).
 - Fix wxRibbonToolBar::GetToolByPos() and DeleteToolByPos() (mcorino, #23457).
 - Update wxOwnerDrawnComboBox best size when adding items (Reza Karimi, #23681).
+- Keep wxProgressDialog size when updating the message (Oleg Samarin, #23727).
 
 wxGTK:
 
