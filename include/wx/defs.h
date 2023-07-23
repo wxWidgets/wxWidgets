@@ -205,6 +205,29 @@
     #define wxCHECK_CXX_STD(ver) 0
 #endif
 
+/*
+    Macro for checking if the given standard C++17 header is available.
+
+    Unfortunately we can't rely on __has_include() with MSVC, even for the
+    versions implementing it, because it "helpfully" gives a warning (STL4038)
+    about C++17 headers contents not being available when not using C++17.
+ */
+#if defined(_MSVC_LANG)
+    #if _MSVC_LANG >= 201703L
+        // It looks like all C++17 standard headers are available in MSVS 2017
+        // so don't bother using __has_include().
+        #define wxHAS_CXX17_HEADER(header) 1
+    #else
+        #define wxHAS_CXX17_HEADER(header) 0
+    #endif
+#else
+    #ifdef __has_include
+        #define wxHAS_CXX17_HEADER(header) __has_include(header)
+    #else
+        #define wxHAS_CXX17_HEADER(header) 0
+    #endif
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  check for native bool type and TRUE/FALSE constants */
 /*  ---------------------------------------------------------------------------- */
