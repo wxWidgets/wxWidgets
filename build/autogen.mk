@@ -59,8 +59,8 @@ autoconf_inc.m4 Makefile.in: $(BAKEFILES)
 	cd build/bakefiles && \
 	$(BAKEFILE_GEN) -f autoconf
 
-# Run configure whenever configure.in, aclocal.m4 or autoconf_inc.m4 is updated
-configure: configure.in aclocal.m4 autoconf_inc.m4
+# Run configure whenever configure.ac, aclocal.m4 or autoconf_inc.m4 is updated
+configure: configure.ac aclocal.m4 autoconf_inc.m4
 	$(AUTOCONF)
 
 ACLOCAL_SOURCES = \
@@ -74,6 +74,6 @@ ACLOCAL_SOURCES = \
   build/aclocal/visibility.m4
 
 # Run aclocal whenever acinclude or one of our local m4s is updated.
-aclocal.m4: configure.in acinclude.m4 $(ACLOCAL_SOURCES)
+aclocal.m4: configure.ac acinclude.m4 $(ACLOCAL_SOURCES)
 	$(ACLOCAL) -I build/aclocal
 

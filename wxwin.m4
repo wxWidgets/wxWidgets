@@ -37,7 +37,7 @@ dnl ===========================================================================
 
 
 dnl ---------------------------------------------------------------------------
-dnl Macros for wxWidgets detection. Typically used in configure.in as:
+dnl Macros for wxWidgets detection. Typically used in configure.ac as:
 dnl
 dnl     AC_ARG_ENABLE(...)
 dnl     AC_ARG_WITH(...)

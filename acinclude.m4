@@ -1,6 +1,6 @@
 dnl ---------------------------------------------------------------------------
 dnl
-dnl Macros for configure.in for wxWindows by Robert Roebling, Phil Blecker,
+dnl Macros for configure.ac for wxWindows by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.

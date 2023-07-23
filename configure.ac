@@ -3,7 +3,7 @@ AC_PREREQ(2.58)
 
 dnl ---------------------------------------------------------------------------
 dnl
-dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
+dnl Top-level configure.ac for wxWidgets by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.

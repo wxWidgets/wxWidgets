@@ -43083,7 +43083,7 @@ EOF
 
 
     if test "$BAKEFILE_AUTOCONF_INC_M4_VERSION" = "" ; then
-        as_fn_error $? "No version found in autoconf_inc.m4 - bakefile macro was changed to take additional argument, perhaps configure.in wasn't updated (see the documentation)?" "$LINENO" 5
+        as_fn_error $? "No version found in autoconf_inc.m4 - bakefile macro was changed to take additional argument, perhaps configure.ac wasn't updated (see the documentation)?" "$LINENO" 5
     fi
 
     if test "$BAKEFILE_BAKEFILE_M4_VERSION" != "$BAKEFILE_AUTOCONF_INC_M4_VERSION" ; then

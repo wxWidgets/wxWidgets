@@ -27,7 +27,7 @@ dnl
 
 dnl ---------------------------------------------------------------------------
 dnl Lots of compiler & linker detection code contained here was taken from
-dnl wxWidgets configure.in script (see https://www.wxwidgets.org)
+dnl wxWidgets configure script (see https://www.wxwidgets.org)
 dnl ---------------------------------------------------------------------------
 
 
@@ -658,7 +658,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
 dnl ---------------------------------------------------------------------------
 dnl AC_BAKEFILE([autoconf_inc.m4 inclusion])
 dnl
-dnl To be used in configure.in of any project using Bakefile-generated mks
+dnl To be used in configure.ac of any project using Bakefile-generated mks
 dnl
 dnl Behaviour can be modified by setting following variables:
 dnl    BAKEFILE_CHECK_BASICS    set to "no" if you don't want bakefile to
@@ -716,7 +716,7 @@ AC_DEFUN([AC_BAKEFILE],
     $1
 
     if test "$BAKEFILE_AUTOCONF_INC_M4_VERSION" = "" ; then
-        AC_MSG_ERROR([No version found in autoconf_inc.m4 - bakefile macro was changed to take additional argument, perhaps configure.in wasn't updated (see the documentation)?])
+        AC_MSG_ERROR([No version found in autoconf_inc.m4 - bakefile macro was changed to take additional argument, perhaps configure.ac wasn't updated (see the documentation)?])
     fi
 
     if test "$BAKEFILE_BAKEFILE_M4_VERSION" != "$BAKEFILE_AUTOCONF_INC_M4_VERSION" ; then
