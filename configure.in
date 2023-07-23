@@ -2633,7 +2633,7 @@ if test "$wxUSE_EXPAT" != "no"; then
         dnl Expat requires C99 compiler, so define wxCFLAGS_C99 variable which
         dnl is used when compiling it in our makefiles.
         save_CC="$CC"
-        AC_PROG_CC_C99
+        AC_PROG_CC
         CC="$save_CC"
 
         dnl Note that we need just the flags, not the full CC value including
