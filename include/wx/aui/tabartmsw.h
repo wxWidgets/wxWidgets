@@ -36,8 +36,14 @@ public:
         const wxRect& inRect,
         int closeButtonState,
         wxRect* outTabRect,
-        wxRect* outButtonRect,
         int* xExtent) wxOVERRIDE;
+
+    void DrawTabContent(wxDC& dc,
+        wxWindow* wnd,
+        const wxAuiNotebookPage& pane,
+        const wxRect& inRect,
+        int closeButtonState,
+        wxRect* outButtonRect) wxOVERRIDE;
 
     void DrawButton(
         wxDC& dc,

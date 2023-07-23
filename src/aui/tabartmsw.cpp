@@ -119,12 +119,11 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     const wxRect& in_rect,
     int close_button_state,
     wxRect* out_tab_rect,
-    wxRect* out_button_rect,
     int* x_extent)
 {
     if ( !IsThemed() )
     {
-        wxAuiGenericTabArt::DrawTab(dc, wnd, page, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+        wxAuiGenericTabArt::DrawTab(dc, wnd, page, in_rect, close_button_state, out_tab_rect, x_extent);
         return;
     }
 
@@ -197,6 +196,58 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
             );
     }
 
+    // draw focus rectangle
+    if ( page.active && (wnd->FindFocus() == wnd) )
+    {
+        wxRect focusRect = tabRect;
+        focusRect.Deflate(wnd->FromDIP(2));
+
+        wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
+    }
+
+    *out_tab_rect = wxRect(tabX, tabY, tabWidth, tabHeight);
+
+    dc.DestroyClippingRegion();
+}
+
+void wxAuiMSWTabArt::DrawTabContent(wxDC& dc,
+    wxWindow* wnd,
+    const wxAuiNotebookPage& page,
+    const wxRect& in_rect,
+    int close_button_state,
+    wxRect* out_button_rect)
+{
+    if ( !IsThemed() )
+    {
+        wxAuiGenericTabArt::DrawTabContent(dc, wnd, page, in_rect, close_button_state, out_button_rect);
+        return;
+    }
+
+    wxCoord tabHeight = in_rect.height;
+    wxCoord tabWidth = in_rect.width;
+    wxCoord tabX = in_rect.x;
+    wxCoord tabY = in_rect.y - ((m_flags & wxAUI_NB_BOTTOM) ? wnd->FromDIP(3) : 0);
+
+    if (!page.active)
+    {
+        tabY += wnd->FromDIP(2);
+        tabHeight -= wnd->FromDIP(2);
+    }
+    else
+    {
+        tabX -= wnd->FromDIP(2);
+        tabWidth += wnd->FromDIP(4);
+        tabHeight += 2;
+    }
+
+    int clipWidth = tabWidth;
+    if ( tabX + clipWidth > in_rect.x + in_rect.width )
+        clipWidth = (in_rect.x + in_rect.width) - tabX;
+    dc.SetClippingRegion(tabX - wnd->FromDIP(2), tabY, clipWidth + wnd->FromDIP(4), tabHeight);
+
+    // draw tab
+    wxRect tabRect(tabX, tabY, tabWidth, tabHeight);
+
     wxRect textRect = tabRect;
     if ( !page.active )
         textRect.Offset(0, wnd->FromDIP(1));
@@ -206,15 +257,6 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     dc.SetFont(wnd->GetFont());
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     dc.DrawLabel(page.caption, page.bitmap.GetBitmapFor(wnd), textRect, wxALIGN_CENTRE);
-
-    // draw focus rectangle
-    if ( page.active && (wnd->FindFocus() == wnd) )
-    {
-        wxRect focusRect = tabRect;
-        focusRect.Deflate(wnd->FromDIP(2));
-
-        wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
-    }
 
     // draw close button
     if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
@@ -245,9 +287,6 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         if ( out_button_rect )
             *out_button_rect = rect;
     }
-
-    *out_tab_rect = wxRect(tabX, tabY, tabWidth, tabHeight);
-
     dc.DestroyClippingRegion();
 }
 
