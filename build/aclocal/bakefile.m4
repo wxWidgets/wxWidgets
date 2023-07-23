@@ -600,7 +600,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
         if test "x$GCC" = "xyes"; then
             dnl test if we have gcc-3.4:
             AC_MSG_CHECKING([if the compiler supports precompiled headers])
-            AC_TRY_COMPILE([],
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
                 [
                     #if !defined(__GNUC__) || !defined(__GNUC_MINOR__)
                         There is no PCH support
@@ -614,7 +614,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                        ( defined(__INTEL_COMPILER) )
                         There is no PCH support
                     #endif
-                ],
+                ])],
                 [
                     AC_MSG_RESULT([yes])
                     GCC_PCH=1

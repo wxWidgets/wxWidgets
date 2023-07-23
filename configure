@@ -23004,6 +23004,7 @@ else
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "$error_message
 See \`config.log' for more details" "$LINENO" 5; }
+
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -23103,7 +23104,6 @@ $as_echo_n "checking if CoreFoundation/CFBase.h is usable... " >&6; }
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <CoreFoundation/CFBase.h>
-
 int
 main ()
 {
@@ -32414,6 +32414,7 @@ else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+                    [
                         #include <stdio.h>
 
                         int main (void)
@@ -32424,7 +32425,7 @@ else
                                 exit (0);
                             exit (1);
                         }
-
+                    ]
 _ACEOF
 if ac_fn_cxx_try_run "$LINENO"; then :
   wx_cv_func_snprintf_pos_params=no
@@ -32849,6 +32850,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 int
 main ()
 {
+
 
                     void *trace[1];
                     char **messages;
@@ -35043,6 +35045,7 @@ int
 main ()
 {
 
+
                 char *name;
                 char *proto;
                 struct servent *se, *res;
@@ -35064,6 +35067,7 @@ else
 int
 main ()
 {
+
 
                         char *name;
                         char *proto;
@@ -36245,6 +36249,13 @@ $as_echo "no" >&6; }
           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+int
+main ()
+{
+
+  ;
+  return 0;
+}[
 #include <stdio.h>
 #include "SDL.h"
 
@@ -36252,14 +36263,7 @@ int main(int argc, char *argv[])
 { return 0; }
 #undef  main
 #define main K_and_R_C_main
-
-int
-main ()
-{
- return 0;
-  ;
-  return 0;
-}
+],      return 0; )
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
    echo "*** The test program compiled, but did not run. This usually means"
@@ -36509,6 +36513,13 @@ $as_echo "no" >&6; }
           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+int
+main ()
+{
+
+  ;
+  return 0;
+}[
 #include <stdio.h>
 #include "SDL.h"
 
@@ -36516,14 +36527,7 @@ int main(int argc, char *argv[])
 { return 0; }
 #undef  main
 #define main K_and_R_C_main
-
-int
-main ()
-{
- return 0;
-  ;
-  return 0;
-}
+],      return 0; )
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
    echo "*** The test program compiled, but did not run. This usually means"
@@ -40606,7 +40610,6 @@ if ${ac_cv_cxxflags_gcc_option__Woverloaded_virtual+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_cv_cxxflags_gcc_option__Woverloaded_virtual="no, unknown"
-
  ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
