@@ -7,4 +7,4 @@ VOLUME /wx
 
 WORKDIR /wx
 
-CMD ["autoconf", "-B", "build/autoconf_prepend-include"]
+CMD ["autoconf"]

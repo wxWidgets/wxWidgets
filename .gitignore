@@ -13,9 +13,6 @@
 
 # /build/
 
-# /build/autoconf_prepend-include/autoconf/
-/build/autoconf_prepend-include/autoconf/autoconf.m4f
-
 # /build/bakefiles/
 /build/bakefiles/.bakefile_gen.state
 /build/bakefiles/Bakefiles.local.bkgen
