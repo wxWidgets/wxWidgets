@@ -56,9 +56,7 @@ ACLOCAL_SOURCES = \
   build/aclocal/ax_func_which_gethostbyname_r.m4 \
   build/aclocal/bakefile-lang.m4 \
   build/aclocal/bakefile.m4 \
-  build/aclocal/gst-element-check.m4 \
   build/aclocal/gtk-2.0.m4 \
-  build/aclocal/gtk.m4 \
   build/aclocal/pkg.m4 \
   build/aclocal/sdl.m4 \
   build/aclocal/visibility.m4
