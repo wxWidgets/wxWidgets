@@ -2787,24 +2787,8 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     if test "$wxUSE_GTK" = 1; then
-        dnl GTK+ test program must be compiled with C compiler
-        AC_MSG_CHECKING([for GTK+ version])
-
-        gtk_version_cached=1
         AC_CACHE_VAL(wx_cv_lib_gtk,
             [
-                dnl stupid GTK+ AM macros produce their own messages, so we
-                dnl have to pass to the next line
-                gtk_version_cached=0
-                AC_MSG_RESULT()
-
-                dnl we must link against lgthread unless the user
-                dnl used --disable-threads
-                GTK_MODULES=
-                if test "$wxUSE_THREADS" = "yes"; then
-                    GTK_MODULES=gthread
-                fi
-
                 if test -z "$wxGTK_VERSION"; then
                     wxGTK_VERSION=any
                 fi
@@ -2812,27 +2796,17 @@ if test "$wxUSE_GUI" = "yes"; then
                 dnl detect GTK2
                 wx_cv_lib_gtk=
 
-                dnl The gthread.pc that ships with Solaris returns '-mt',
-                dnl it's correct for Sun CC, but gcc requires '-pthreads'.
-                dnl So disable the compile check and remove the -mt below.
-                case "${host}" in
-                    *-*-solaris2* )
-                        if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                            enable_gtktest=no
-                        fi
-                esac
-
                 if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
-                    AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
+                    PKG_CHECK_MODULES(GTK, gtk+-3.0, wx_cv_lib_gtk=3)
                 fi
                 if test -z "$wx_cv_lib_gtk"; then
                     if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
-                        AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                        PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.6.0], wx_cv_lib_gtk=2.0)
                     fi
                 fi
                 if test -z "$wx_cv_lib_gtk"; then
                     if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
-                        AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
+                        PKG_CHECK_MODULES(GTK, gtk4, wx_cv_lib_gtk=4)
                     fi
                 fi
 
@@ -2845,19 +2819,21 @@ if test "$wxUSE_GUI" = "yes"; then
                         GTK_LIBS="$GTK_LIBS -lX11"
                     fi
 
+                    dnl we must link against lgthread unless the user
+                    dnl used --disable-threads
+                    if test "$wxUSE_THREADS" = "yes"; then
+                        PKG_CHECK_MODULES(GTHREAD, gthread-2.0)
+                    fi
+
                     dnl we need to cache GTK_CFLAGS and GTK_LIBS for the
                     dnl subsequent runs
-                    wx_cv_cflags_gtk=$GTK_CFLAGS
-                    wx_cv_libs_gtk=$GTK_LIBS
+                    wx_cv_cflags_gtk="$GTK_CFLAGS $GTHREAD_CFLAGS"
+                    wx_cv_libs_gtk="$GTK_LIBS $GTHREAD_LIBS"
                 fi
             ]
         )
 
-        dnl if it wasn't cached, the messages from AM_PATH_GTK() above are
-        dnl enough
-        if test "$gtk_version_cached" = 1; then
-            AC_MSG_RESULT($wx_cv_lib_gtk)
-        fi
+        AC_MSG_CHECKING([for GTK version to use])
 
         case "$wx_cv_lib_gtk" in
             4)      WXGTK4=1
@@ -2876,6 +2852,8 @@ installed, where VER is 2, 3 or 4.
                             ])
                     ;;
         esac
+
+        AC_MSG_RESULT([GTK $TOOLKIT_VERSION])
 
         if test "$WXGTK3" = 1; then
             AC_DEFINE(__WXGTK220__)
