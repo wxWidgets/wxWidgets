@@ -246,7 +246,11 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wnd->FromDIP(100);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
+    int tot_width;
+    if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_RIGHT))
+        tot_width = (int)tab_ctrl_size.y - GetIndentSize() - wnd->FromDIP(4);
+    else
+        tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
         tot_width -= m_activeCloseBmp.GetPreferredLogicalSizeFor(wnd).x;
@@ -266,7 +270,10 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wxMin(m_fixedTabWidth, wnd->FromDIP(220));
 
-    m_tabCtrlHeight = tab_ctrl_size.y;
+    if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_RIGHT))
+        m_tabCtrlHeight = tab_ctrl_size.x;
+    else
+        m_tabCtrlHeight = tab_ctrl_size.y;
 }
 
 
@@ -302,36 +309,13 @@ void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
 
     wxColor top_color    = m_baseColour.ChangeLightness(topLightness);
     wxColor bottom_color = m_baseColour.ChangeLightness(bottomLightness);
-    wxRect r;
-
-   if (m_flags &wxAUI_NB_BOTTOM)
-       r = wxRect(rect.x, rect.y, rect.width+2, rect.height);
-   // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-   // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-   else //for wxAUI_NB_TOP
-       r = wxRect(rect.x, rect.y, rect.width+2, rect.height-3);
-
+    wxRect r(rect.x, rect.y, rect.width + 2, rect.height - 3);
     dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
 
-
-   // draw base lines
-
-   dc.SetPen(m_borderPen);
-   int y = rect.GetHeight();
-   int w = rect.GetWidth();
-
-   if (m_flags &wxAUI_NB_BOTTOM)
-   {
-       dc.SetBrush(wxBrush(bottom_color));
-       dc.DrawRectangle(-1, 0, w+2, 4);
-   }
-   // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-   // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-   else //for wxAUI_NB_TOP
-   {
-       dc.SetBrush(m_baseColourBrush);
-       dc.DrawRectangle(-1, y-4, w+2, 4);
-   }
+    // draw base lines
+    dc.SetPen(m_borderPen);
+    dc.SetBrush(m_baseColourBrush);
+    dc.DrawRectangle(-1, rect.GetHeight() - 4, rect.GetWidth() + 2, 4);
 }
 
 
@@ -350,24 +334,8 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                                  const wxRect& in_rect,
                                  int close_button_state,
                                  wxRect* out_tab_rect,
-                                 wxRect* out_button_rect,
                                  int* x_extent)
 {
-    wxCoord normal_textx, normal_texty;
-    wxCoord selected_textx, selected_texty;
-    wxCoord texty;
-
-    // if the caption is empty, measure some temporary text
-    wxString caption = page.caption;
-    if (caption.empty())
-        caption = wxT("Xj");
-
-    dc.SetFont(m_selectedFont);
-    dc.GetTextExtent(caption, &selected_textx, &selected_texty);
-
-    dc.SetFont(m_normalFont);
-    dc.GetTextExtent(caption, &normal_textx, &normal_texty);
-
     // figure out the size of the tab
     wxSize tab_size = GetTabSize(dc,
                                  wnd,
@@ -376,81 +344,28 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                                  page.active,
                                  close_button_state,
                                  x_extent);
+    if (tab_size.x > in_rect.width)
+    {
+        *out_tab_rect = wxRect(-1, -1, -1, -1);
+        return;
+    }
 
     wxCoord tab_height = m_tabCtrlHeight - 3;
     wxCoord tab_width = tab_size.x;
-    wxCoord tab_x = in_rect.x;
+    wxCoord tab_x = in_rect.x - ((m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) ? tab_size.x : 0);
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
 
-
-    caption = page.caption;
-
-
-    // select pen, brush and font for the tab to be drawn
-
-    if (page.active)
-    {
-        dc.SetFont(m_selectedFont);
-        texty = selected_texty;
-    }
-    else
-    {
-        dc.SetFont(m_normalFont);
-        texty = normal_texty;
-    }
-
-
-    // create points that will make the tab outline
-
-    int clip_width = tab_width;
-    if (tab_x + clip_width > in_rect.x + in_rect.width)
-        clip_width = (in_rect.x + in_rect.width) - tab_x;
-
-/*
-    wxPoint clip_points[6];
-    clip_points[0] = wxPoint(tab_x,              tab_y+tab_height-3);
-    clip_points[1] = wxPoint(tab_x,              tab_y+2);
-    clip_points[2] = wxPoint(tab_x+2,            tab_y);
-    clip_points[3] = wxPoint(tab_x+clip_width-1, tab_y);
-    clip_points[4] = wxPoint(tab_x+clip_width+1, tab_y+2);
-    clip_points[5] = wxPoint(tab_x+clip_width+1, tab_y+tab_height-3);
-
-    // FIXME: these ports don't provide wxRegion ctor from array of points
-#if !defined(__WXDFB__)
-    // set the clipping region for the tab --
-    wxRegion clipping_region(WXSIZEOF(clip_points), clip_points);
-    dc.SetClippingRegion(clipping_region);
-#endif // !wxDFB && !wxCocoa
-*/
     // since the above code above doesn't play well with WXDFB or WXCOCOA,
     // we'll just use a rectangle for the clipping region for now --
-    dc.SetClippingRegion(tab_x, tab_y, clip_width+1, tab_height-3);
-
+    dc.SetClippingRegion(tab_x, tab_y, tab_width+1, tab_height-3);
 
     wxPoint border_points[6];
-    if (m_flags &wxAUI_NB_BOTTOM)
-    {
-        border_points[0] = wxPoint(tab_x,             tab_y);
-        border_points[1] = wxPoint(tab_x,             tab_y+tab_height-6);
-        border_points[2] = wxPoint(tab_x+2,           tab_y+tab_height-4);
-        border_points[3] = wxPoint(tab_x+tab_width-2, tab_y+tab_height-4);
-        border_points[4] = wxPoint(tab_x+tab_width,   tab_y+tab_height-6);
-        border_points[5] = wxPoint(tab_x+tab_width,   tab_y);
-    }
-    else //if (m_flags & wxAUI_NB_TOP) {}
-    {
-        border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
-        border_points[1] = wxPoint(tab_x,             tab_y+2);
-        border_points[2] = wxPoint(tab_x+2,           tab_y);
-        border_points[3] = wxPoint(tab_x+tab_width-2, tab_y);
-        border_points[4] = wxPoint(tab_x+tab_width,   tab_y+2);
-        border_points[5] = wxPoint(tab_x+tab_width,   tab_y+tab_height-4);
-    }
-    // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-    // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-
-    int drawn_tab_yoff = border_points[1].y;
-    int drawn_tab_height = border_points[0].y - border_points[1].y;
+    border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
+    border_points[1] = wxPoint(tab_x,             tab_y+2);
+    border_points[2] = wxPoint(tab_x+2,           tab_y);
+    border_points[3] = wxPoint(tab_x+tab_width-2, tab_y);
+    border_points[4] = wxPoint(tab_x+tab_width,   tab_y+2);
+    border_points[5] = wxPoint(tab_x+tab_width,   tab_y+tab_height-4);
 
     bool isdark = wxSystemSettings::GetAppearance().IsUsingDarkBackground();
 
@@ -498,7 +413,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     else
     {
         // draw inactive tab
-
         wxRect r(tab_x, tab_y+1, tab_width, tab_height-3);
 
         // start the gradient up a bit and leave the inside border inset
@@ -540,18 +454,67 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     // this gets rid of the top one of those lines in the tab control
     if (page.active)
     {
-        if (m_flags &wxAUI_NB_BOTTOM)
-            dc.SetPen(wxPen(m_baseColour.ChangeLightness(170)));
-        // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-        // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-        else //for wxAUI_NB_TOP
-            dc.SetPen(m_baseColourPen);
+        dc.SetPen(m_baseColourPen);
         dc.DrawLine(border_points[0].x+1,
                     border_points[0].y,
                     border_points[5].x,
                     border_points[5].y);
     }
 
+    *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
+
+    dc.DestroyClippingRegion();
+}
+
+void wxAuiGenericTabArt::DrawTabContent(wxDC& dc,
+                                        wxWindow* wnd,
+                                        const wxAuiNotebookPage& page,
+                                        const wxRect& in_rect,
+                                        int close_button_state,
+                                        wxRect* out_button_rect)
+{
+    wxCoord normal_textx, normal_texty;
+    wxCoord selected_textx, selected_texty;
+    wxCoord texty;
+
+    // if the caption is empty, measure some temporary text
+    wxString caption = page.caption;
+    if (caption.empty())
+        caption = wxT("Xj");
+
+    dc.SetFont(m_normalFont);
+    dc.GetTextExtent(caption, &normal_textx, &normal_texty);
+
+    dc.SetFont(m_selectedFont);
+    dc.GetTextExtent(caption, &selected_textx, &selected_texty);
+
+    wxCoord tab_height = in_rect.height;
+    wxCoord tab_width = in_rect.width;
+    wxCoord tab_x = in_rect.x;
+    wxCoord tab_y = in_rect.y - ((m_flags & wxAUI_NB_BOTTOM) ? wnd->FromDIP(3) : 0);
+
+    caption = page.caption;
+
+    // select pen, brush and font for the tab to be drawn
+    if (page.active)
+    {
+        dc.SetFont(m_selectedFont);
+        texty = selected_texty;
+    }
+    else
+    {
+        dc.SetFont(m_normalFont);
+        texty = normal_texty;
+    }
+
+    // since the above code above doesn't play well with WXDFB or WXCOCOA,
+    // we'll just use a rectangle for the clipping region for now --
+    dc.SetClippingRegion(tab_x, tab_y, tab_width + 1, tab_height - 3);
+
+    int drawn_tab_yoff = tab_y + 2;
+    int drawn_tab_height = tab_y + tab_height - 4 - tab_y + 2;
+
+    wxColor back_color = m_baseColour;
 
     int text_offset;
     int bitmap_offset = 0;
@@ -589,14 +552,10 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 
         const wxBitmap bmp = bb.GetBitmapFor(wnd);
 
-        int offsetY = tab_y-1;
-        if (m_flags & wxAUI_NB_BOTTOM)
-            offsetY = 1;
-
         wxRect rect(tab_x + tab_width - bmp.GetLogicalWidth() - wnd->FromDIP(1),
-                    offsetY + (tab_height/2) - (bmp.GetLogicalHeight()/2),
+                    drawn_tab_yoff + (drawn_tab_height/2) - (bmp.GetLogicalHeight()/2),
                     bmp.GetLogicalWidth(),
-                    tab_height);
+                    bmp.GetLogicalHeight());
 
         IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, close_button_state);
         dc.DrawBitmap(bmp, rect.x, rect.y, true);
@@ -649,8 +608,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
     }
 #endif // !__WXOSX__
-
-    *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
 
     dc.DestroyClippingRegion();
 }
@@ -778,22 +735,36 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
 
     rect = in_rect;
 
-    if (orientation == wxLEFT)
+    if (orientation & wxLEFT)
     {
-        rect.SetX(in_rect.x);
+        int recoil = (m_flags & (wxAUI_NB_BOTTOM | wxAUI_NB_LEFT)) ? bmp.GetLogicalWidth() : 0;
+        rect.SetX(in_rect.x - recoil);
         rect.SetY(((in_rect.y + in_rect.height)/2) - (bmp.GetLogicalHeight()/2));
         rect.SetWidth(bmp.GetLogicalWidth());
         rect.SetHeight(bmp.GetLogicalHeight());
     }
     else
     {
-        rect = wxRect(in_rect.x + in_rect.width - bmp.GetLogicalWidth(),
+        int recoil = (m_flags & (wxAUI_NB_BOTTOM | wxAUI_NB_LEFT)) ? 0 : bmp.GetLogicalWidth();
+        rect = wxRect(in_rect.x + in_rect.width - recoil,
                       ((in_rect.y + in_rect.height)/2) - (bmp.GetLogicalHeight()/2),
                       bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
     }
-
     IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, button_state);
-    dc.DrawBitmap(bmp, rect.x, rect.y, true);
+
+    if (m_flags & (wxAUI_NB_BOTTOM | wxAUI_NB_LEFT))
+    {
+        // Convert the bitmap into a wxImage
+        wxImage img = bmp.ConvertToImage();
+        // Process the image
+        wxImage rimg;
+        if (m_flags & wxAUI_NB_LEFT)  rimg = img.Mirror();
+        else                          rimg = img.Rotate180();
+        // Copy the processed image to be drawn
+        wxBitmap temp(rimg, 32);
+        dc.DrawBitmap(temp, rect.x, rect.y, true);
+    }
+    else dc.DrawBitmap(bmp, rect.x, rect.y, true);
 
     *out_rect = rect;
 }
@@ -1057,24 +1028,8 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                                 const wxRect& in_rect,
                                 int close_button_state,
                                 wxRect* out_tab_rect,
-                                wxRect* out_button_rect,
                                 int* x_extent)
 {
-    wxCoord normal_textx, normal_texty;
-    wxCoord selected_textx, selected_texty;
-    wxCoord textx, texty;
-
-    // if the caption is empty, measure some temporary text
-    wxString caption = page.caption;
-    if (caption.empty())
-        caption = wxT("Xj");
-
-    dc.SetFont(m_selectedFont);
-    dc.GetTextExtent(caption, &selected_textx, &selected_texty);
-
-    dc.SetFont(m_normalFont);
-    dc.GetTextExtent(caption, &normal_textx, &normal_texty);
-
     // figure out the size of the tab
     wxSize tab_size = GetTabSize(dc,
                                  wnd,
@@ -1089,30 +1044,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     wxCoord tab_x = in_rect.x;
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
 
-    caption = page.caption;
-
-    // select pen, brush and font for the tab to be drawn
-
-    if (page.active)
-    {
-        dc.SetPen(m_selectedBkPen);
-        dc.SetBrush(m_selectedBkBrush);
-        dc.SetFont(m_selectedFont);
-        textx = selected_textx;
-        texty = selected_texty;
-    }
-    else
-    {
-        dc.SetPen(m_normalBkPen);
-        dc.SetBrush(m_normalBkBrush);
-        dc.SetFont(m_normalFont);
-        textx = normal_textx;
-        texty = normal_texty;
-    }
-
-
     // -- draw line --
-
     wxPoint points[7];
     points[0].x = tab_x;
     points[0].y = tab_y + tab_height - 1;
@@ -1133,10 +1065,61 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     dc.DrawPolygon(WXSIZEOF(points) - 1, points);
 
     dc.SetPen(*wxGREY_PEN);
-
-    //dc.DrawLines(active ? WXSIZEOF(points) - 1 : WXSIZEOF(points), points);
     dc.DrawLines(WXSIZEOF(points), points);
 
+    *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
+
+    dc.DestroyClippingRegion();
+}
+
+void wxAuiSimpleTabArt::DrawTabContent(wxDC& dc,
+                                       wxWindow* wnd,
+                                       const wxAuiNotebookPage& page,
+                                       const wxRect& in_rect,
+                                       int close_button_state,
+                                       wxRect* out_button_rect)
+{
+    wxCoord normal_textx, normal_texty;
+    wxCoord selected_textx, selected_texty;
+    wxCoord textx, texty;
+
+    // if the caption is empty, measure some temporary text
+    wxString caption = page.caption;
+    if (caption.empty())
+        caption = wxT("Xj");
+
+    dc.SetFont(m_selectedFont);
+    dc.GetTextExtent(caption, &selected_textx, &selected_texty);
+
+    dc.SetFont(m_normalFont);
+    dc.GetTextExtent(caption, &normal_textx, &normal_texty);
+
+    wxCoord tab_height = in_rect.height;
+    wxCoord tab_width = in_rect.width;
+    wxCoord tab_x = in_rect.x;
+    wxCoord tab_y = in_rect.y - ((m_flags & wxAUI_NB_BOTTOM) ? wnd->FromDIP(3) : 0);;
+
+    caption = page.caption;
+
+    // select pen, brush and font for the tab to be drawn
+    if (page.active)
+    {
+        dc.SetPen(m_selectedBkPen);
+        dc.SetBrush(m_selectedBkBrush);
+        dc.SetFont(m_selectedFont);
+        textx = selected_textx;
+        texty = selected_texty;
+    }
+    else
+    {
+        dc.SetPen(m_normalBkPen);
+        dc.SetBrush(m_normalBkBrush);
+        dc.SetFont(m_normalFont);
+        textx = normal_textx;
+        texty = normal_texty;
+    }
+
+    dc.SetClippingRegion(in_rect);
 
     int text_offset;
 
@@ -1195,8 +1178,6 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
     }
 #endif // !__WXOSX__
-
-    *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
 
     dc.DestroyClippingRegion();
 }

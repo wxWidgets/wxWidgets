@@ -393,8 +393,6 @@ void wxAuiTabContainer::RemoveButton(int id)
     }
 }
 
-
-
 size_t wxAuiTabContainer::GetTabOffset() const
 {
     return m_tabOffset;
@@ -404,9 +402,6 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 {
     m_tabOffset = offset;
 }
-
-
-
 
 // Render() renders the tab catalog to the specified DC
 // It is a virtual function and can be overridden to
@@ -423,26 +418,12 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     size_t page_count = m_pages.GetCount();
     size_t button_count = m_buttons.GetCount();
 
-#if wxALWAYS_NATIVE_DOUBLE_BUFFER
-    wxDC& dc = *raw_dc;
-#else
-    wxMemoryDC dc;
-
-    // use the same layout direction as the window DC uses to ensure that the
-    // text is rendered correctly
-    dc.SetLayoutDirection(raw_dc->GetLayoutDirection());
-
-    wxBitmap bmp;
-    // create off-screen bitmap
-    bmp.Create(m_rect.GetWidth(), m_rect.GetHeight(),*raw_dc);
-    dc.SelectObject(bmp);
-
-    if (!dc.IsOk())
-        return;
-#endif
+    // since all drawing has to be done to a off-screen bitmap anyway to support
+    // drawing native tabs (which can only be drawn for the top orientation) the
+    // old buffering code was removed.
 
     // ensure we show as many tabs as possible
-    while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, &dc, wnd))
+    while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, raw_dc, wnd))
         --m_tabOffset;
 
     // find out if size of tabs is larger than can be
@@ -461,9 +442,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
             close_button = true;
         }
 
-
         int x_extent = 0;
-        wxSize size = m_art->GetTabSize(dc,
+        wxSize size = m_art->GetTabSize(*raw_dc,
                             wnd,
                             page.caption,
                             page.bitmap,
@@ -538,77 +518,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
     }
 
-
-
-    // draw background
-    m_art->DrawBackground(dc, wnd, m_rect);
-
-    // draw buttons
-    int left_buttons_width = 0;
-    int right_buttons_width = 0;
-
-    // draw the buttons on the right side
-    int offset = m_rect.x + m_rect.width;
-    for (i = 0; i < button_count; ++i)
-    {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
-
-        if (button.location != wxRIGHT)
-            continue;
-        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
-            continue;
-
-        wxRect button_rect = m_rect;
-        button_rect.SetY(1);
-        button_rect.SetWidth(offset);
-
-        m_art->DrawButton(dc,
-                          wnd,
-                          button_rect,
-                          button.id,
-                          button.curState,
-                          wxRIGHT,
-                          &button.rect);
-
-        offset -= button.rect.GetWidth();
-        right_buttons_width += button.rect.GetWidth();
-    }
-
-
-
-    offset = 0;
-
-    // draw the buttons on the left side
-
-    for (i = 0; i < button_count; ++i)
-    {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
-
-        if (button.location != wxLEFT)
-            continue;
-        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
-            continue;
-
-        wxRect button_rect(offset, 1, 1000, m_rect.height);
-
-        m_art->DrawButton(dc,
-                          wnd,
-                          button_rect,
-                          button.id,
-                          button.curState,
-                          wxLEFT,
-                          &button.rect);
-
-        offset += button.rect.GetWidth();
-        left_buttons_width += button.rect.GetWidth();
-    }
-
-    offset = left_buttons_width;
-
-    if (offset == 0)
-        offset += m_art->GetIndentSize();
-
-
     // prepare the tab-close-button array
     // make sure tab button entries which aren't used are marked as hidden
     for (i = page_count; i < m_tabCloseButtons.GetCount(); ++i)
@@ -624,24 +533,146 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         m_tabCloseButtons.Add(tempbtn);
     }
 
-
     // buttons before the tab offset must be set to hidden
     for (i = 0; i < m_tabOffset; ++i)
     {
         m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
     }
 
+    // make sure to deactivate buttons which are off the screen to the right
+    for (++i; i < m_tabCloseButtons.GetCount(); ++i)
+    {
+        m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
+    }
+
+    // Since the native drawn parts are always drawn with the longer edge on top,
+    // some compositing and a two pass rendering strategy are required to allow
+    // placing the tabs on sides other than on top.
+    // In the first pass the tab control background, the tab frames and the lateral
+    // buttons are drawn into the bitmap. In the second pass the contents of the tabs
+    // are drawn into it. The algorithm has to draw into an off-screen bitmap as:
+    //
+    // Tabs at top:
+    // - Draw the first pass from left to right.
+    // - Draw the second pass from left to right.
+    // - Draw the off-screen bitmap into the passed-in DC.
+    //
+    // Tabs at right:
+    // - Draw the first pass from left to right.
+    // - Draw the second pass from left to right.
+    // - Draw the off-screen bitmap into the passed-in DC rotated 90º clockwise.
+    //
+    // Tabs at left:
+    // - Draw the first pass from right to left, swap the button locations and mirror
+    //   the individual buttons about the vertical axis.
+    // - Draw the second pass from right to left.
+    // - Draw the off-screen bitmap into the passed-in DC rotated 90º counter-clockwise.
+    //
+    // Tabs at bottom:
+    // - Draw the first pass from right to left, swapping the button locations and
+    //   rotate the individual buttons 180º.
+    // - Rotate the off-screen bitmap 180º.
+    // - Draw the second pass from left to right.
+    // - Draw the off-screen bitmap into the passed-in DC.
+
+    // Allocate a off-screen bitmap for being drawn upon
+    wxSize bmp_sz;
+    if (m_flags & (wxAUI_NB_TOP | wxAUI_NB_BOTTOM))
+        bmp_sz = wxSize(m_rect.GetWidth(), m_rect.GetHeight());
+    else if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_RIGHT))
+        bmp_sz = wxSize(m_rect.GetHeight(), m_rect.GetWidth());
+    #ifdef __WXMSW__
+    // The bitmap cannot have an alpha channel, as that is not supported by MSW GDI
+    wxBitmap* bmp = new wxBitmap(bmp_sz, 24);
+    #else
+    wxBitmap* bmp = new wxBitmap(bmp_sz, 32);
+    #endif
+    wxMemoryDC bmp_dc;
+    bmp_dc.SelectObject(*bmp);
+
+    // FIRST PASS
+
+    // draw background into off-screen bitmap
+    m_art->DrawBackground(bmp_dc, wnd, wxRect(0, 0, bmp_sz.x, bmp_sz.y));
+
+    // Draw buttons next to the tabs. The 'pre' set is placed before the first visible
+    // tab while the 'pos' set is placed after the last visible tab.
+    // The algorithm works like this:
+    //
+    // Tabs on top - 'pre' set is composed of wxLEFT-located buttons, placed from offset=0;
+    //               'pos' set is composed of wxRIGHT-located buttons, placed from offset=right margin.
+    // Tabs on right - 'pre' set is composed of wxLEFT-located buttons, placed from offset=0;
+    //                 'pos' set is composed of wxRIGHT-located buttons, placed from offset=right margin.
+    // Tabs on left - 'pre' set is composed of wxLEFT-located buttons, placed from offset=right margin;
+    //                'pos' set is composed of wxRIGHT-located buttons, placed from offset=0;
+    //                the bitmaps have to be mirrored along the vertical axis.
+    // Tabs on bottom - 'pre' set is composed of wxLEFT-located buttons, placed from offset=right margin;
+    //                  'pos' set is composed of wxRIGHT-located buttons, placed from offset=0;
+    //                  the bitmaps have to be rotated 180º.
+
+    int pre_buttons_width = 0;
+    int pos_buttons_width = 0;
+    // draw the buttons on the 'pos' set
+    int offset = m_rect.x + bmp_sz.x;
+    if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) offset = 0;
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+
+        if (button.location != wxRIGHT)
+            continue;
+        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
+            continue;
+
+        wxRect button_rect(0, 1, offset, bmp_sz.y);
+        m_art->DrawButton(bmp_dc,
+                          wnd,
+                          button_rect,
+                          button.id,
+                          button.curState,
+                          wxRIGHT,
+                          &button.rect);
+
+        if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) offset += button.rect.GetWidth();
+        else offset -= button.rect.GetWidth();
+        pos_buttons_width += button.rect.GetWidth();
+    }
+
+    // draw the buttons on the 'pre' set
+    offset = 0;
+    if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) offset = m_rect.x + bmp_sz.x;
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+
+        if (button.location != wxLEFT)
+            continue;
+        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
+            continue;
+
+        wxRect button_rect(offset, 1, 0, bmp_sz.y);
+        m_art->DrawButton(bmp_dc,
+                          wnd,
+                          button_rect,
+                          button.id,
+                          button.curState,
+                          wxLEFT,
+                          &button.rect);
+
+        if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) offset -= button.rect.GetWidth();
+        else offset += button.rect.GetWidth();
+        pre_buttons_width += button.rect.GetWidth();
+    }
 
     // draw the tabs
+    offset = pre_buttons_width;
+    if (offset == 0) offset = m_art->GetIndentSize();
 
-    size_t active = 999;
-    int active_offset = 0;
+    int active = -1;
     wxRect active_rect;
 
     int x_extent = 0;
-    wxRect rect = m_rect;
-    rect.y = 0;
-    rect.height = m_rect.height;
+    wxRect rect(0, 0, 0, bmp_sz.y);
 
     for (i = m_tabOffset; i < page_count; ++i)
     {
@@ -665,62 +696,141 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
 
         rect.x = offset;
-        rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
-
+        if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) rect.x = m_rect.x + bmp_sz.x - offset;
+        rect.width = bmp_sz.x - pos_buttons_width - offset - wnd->FromDIP(2);
         if (rect.width <= 0)
+        {
+            page.rect = wxRect(-1, -1, -1, -1);
             break;
+        }
 
-        m_art->DrawTab(dc,
+        m_art->DrawTab(bmp_dc,
                        wnd,
                        page,
                        rect,
                        tab_button.curState,
                        &page.rect,
-                       &tab_button.rect,
                        &x_extent);
 
         if (page.active)
         {
             active = i;
-            active_offset = offset;
             active_rect = rect;
         }
-
         offset += x_extent;
     }
 
-
-    // make sure to deactivate buttons which are off the screen to the right
-    for (++i; i < m_tabCloseButtons.GetCount(); ++i)
-    {
-        m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
-    }
-
-
     // draw the active tab again so it stands in the foreground
-    if (active >= m_tabOffset && active < m_pages.GetCount())
+    if (active >= (int)m_tabOffset && active < (int)m_pages.GetCount())
     {
         wxAuiNotebookPage& page = m_pages.Item(active);
 
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(active);
 
-        rect.x = active_offset;
-        m_art->DrawTab(dc,
+        m_art->DrawTab(bmp_dc,
                        wnd,
                        page,
                        active_rect,
                        tab_button.curState,
                        &page.rect,
-                       &tab_button.rect,
                        &x_extent);
     }
 
+    // ROTATION ON BOTTOM
 
-#if !wxALWAYS_NATIVE_DOUBLE_BUFFER
-    raw_dc->Blit(m_rect.x, m_rect.y,
-                 m_rect.GetWidth(), m_rect.GetHeight(),
-                 &dc, 0, 0);
-#endif
+    if (m_flags & wxAUI_NB_BOTTOM)
+    {
+        bmp_dc.SelectObject(wxNullBitmap);
+        // Convert the bitmap into a wxImage
+        wxImage img = bmp->ConvertToImage();
+        delete bmp;
+        // Rotate the image 180º
+        wxImage rimg = img.Rotate180();
+        // Write it back to the off-screen bitmap
+        #ifdef __WXMSW__
+        // The bitmap cannot have an alpha channel, as that is not supported by MSW GDI
+        bmp = new wxBitmap(rimg, 24);
+        #else
+        bmp = new wxBitmap(rimg, 32);
+        #endif
+        bmp_dc.SelectObject(*bmp);
+    }
+
+    // SECOND PASS
+
+    // draw the tab contents
+    offset = pre_buttons_width;
+    if (offset == 0) offset = m_art->GetIndentSize();
+
+    for (i = m_tabOffset; i < page_count; ++i)
+    {
+        wxAuiNotebookPage& page = m_pages.Item(i);
+        wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
+
+        if (page.rect.width <= 0) break;
+
+        wxRect rect(page.rect);
+        if (m_flags & wxAUI_NB_BOTTOM) rect.x = bmp_sz.x - rect.x - rect.width;
+        m_art->DrawTabContent(bmp_dc,
+                              wnd,
+                              page,
+                              rect,
+                              tab_button.curState,
+                              &tab_button.rect);
+    }
+
+    bmp_dc.SelectObject(wxNullBitmap);
+    if (m_flags & (wxAUI_NB_TOP | wxAUI_NB_BOTTOM))
+    {
+        raw_dc->DrawBitmap(*bmp, 0, 0);
+    }
+    else if (m_flags & (wxAUI_NB_RIGHT | wxAUI_NB_LEFT))
+    {
+        // Convert the bitmap into a wxImage
+        wxImage img = bmp->ConvertToImage();
+        delete bmp;
+        // Rotate the image clockwise
+        wxImage rimg = img.Rotate90(m_flags & wxAUI_NB_RIGHT);
+        // Create a bitmap from it
+        wxBitmap bmp_final(rimg, *raw_dc);
+        // Draw it into the DC with the correct orientation
+        raw_dc->DrawBitmap(bmp_final, 0, 0);
+    }
+}
+
+// Calculate the correct coordinates of a rectangle encompassing a tab or button.
+// Note that this method returns rectangles to be matched against mouse positions,
+// which are relative to the tab control dimensions :
+//
+// On top/bottom:   0 < X < width, 0 < Y < tab control height
+// On right/left:   0 < X < tab_control_height, 0 < Y < height
+//
+wxRect wxAuiTabContainer::CalculateActualRect(const wxRect& rect, bool close_btn) const
+{
+    if (m_flags & wxAUI_NB_BOTTOM)
+    {
+        // If the tabs are on the bottom the coordinates of tabs and non-closure buttons
+        // need to be mirrored horizontally. The coordinates of closure buttons need no
+        // transformation as they're calculated relative to an already rotated bitmap.
+        if (close_btn)
+            return rect;
+        else
+            return wxRect(m_rect.width - rect.x - rect.width,
+                          rect.y, rect.width, rect.height);
+    }
+    else if (m_flags & wxAUI_NB_LEFT)
+    {
+        // If the tabs are on the left the coordinates
+        // need to be mirrored vertically cross-axis
+        return wxRect(rect.y, m_rect.height - rect.x - rect.width, rect.height, rect.width);
+    }
+    else if (m_flags & wxAUI_NB_RIGHT)
+    {
+        // If the tabs are on the right the coordinates need to be axis swapped
+        return wxRect(rect.y, rect.x, rect.height, rect.width);
+    }
+    // If the tabs are on top no transformation is needed
+    return rect;
 }
 
 // Is the tab visible?
@@ -759,47 +869,27 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     if (tabPage < tabOffset)
         return false;
 
-    // draw buttons
-    int left_buttons_width = 0;
-    int right_buttons_width = 0;
-
-    // calculate size of the buttons on the right side
-    int offset = m_rect.x + m_rect.width;
+    // calculate size of the buttons sets
+    int pre_buttons_width = 0;
+    int pos_buttons_width = 0;
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
 
-        if (button.location != wxRIGHT)
-            continue;
         if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
             continue;
-
-        offset -= button.rect.GetWidth();
-        right_buttons_width += button.rect.GetWidth();
+        if (button.location == wxRIGHT)
+            pos_buttons_width += button.rect.GetWidth();
+        if (button.location == wxLEFT)
+            pre_buttons_width += button.rect.GetWidth();
     }
 
-    offset = 0;
+    int offset = pre_buttons_width;
+    if (offset == 0) offset = m_art->GetIndentSize();
 
-    // calculate size of the buttons on the left side
-    for (i = 0; i < button_count; ++i)
-    {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
-
-        if (button.location != wxLEFT)
-            continue;
-        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
-            continue;
-
-        offset += button.rect.GetWidth();
-        left_buttons_width += button.rect.GetWidth();
-    }
-
-    offset = left_buttons_width;
-
-    if (offset == 0)
-        offset += m_art->GetIndentSize();
-
-    wxRect rect = m_rect;
+    int width;
+    if (m_flags & (wxAUI_NB_TOP | wxAUI_NB_BOTTOM))      width = m_rect.GetWidth();
+    else if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_RIGHT)) width = m_rect.GetHeight();
 
     // See if the given page is visible at the given tab offset (effectively scroll position)
     for (i = tabOffset; i < page_count; ++i)
@@ -807,9 +897,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         wxAuiNotebookPage& page = m_pages.Item(i);
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
-        rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
-
-        if (rect.width <= 0)
+        if ((width - pos_buttons_width - offset - wnd->FromDIP(2)) <= 0)
             return false; // haven't found the tab, and we've run out of space, so return false
 
         int x_extent = 0;
@@ -827,10 +915,8 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         {
             // If not all of the tab is visible, and supposing there's space to display it all,
             // we could do better so we return false.
-            if (((m_rect.width - right_buttons_width - offset - wnd->FromDIP(2)) <= 0) && ((m_rect.width - right_buttons_width - left_buttons_width) > x_extent))
-                return false;
-            else
-                return true;
+            return ((width - pos_buttons_width - offset - wnd->FromDIP(2)) > 0) ||
+                   ((width - pos_buttons_width - pre_buttons_width) <= x_extent);
         }
     }
 
@@ -874,18 +960,15 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
     }
 
     size_t i, page_count = m_pages.GetCount();
-
     for (i = m_tabOffset; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
-        if (page.rect.Contains(x,y))
+        if (CalculateActualRect(page.rect, false).Contains(x,y))
         {
-            if (hit)
-                *hit = page.window;
+            if (hit) *hit = page.window;
             return true;
         }
     }
-
     return false;
 }
 
@@ -897,18 +980,14 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     if (!m_rect.Contains(x,y))
         return false;
 
-    size_t i, button_count;
-
-
-    button_count = m_buttons.GetCount();
+    size_t i, button_count = m_buttons.GetCount();
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
-        if (button.rect.Contains(x,y) &&
+        if (CalculateActualRect(button.rect, false).Contains(x,y) &&
             !(button.curState & wxAUI_BUTTON_STATE_HIDDEN ))
         {
-            if (hit)
-                *hit = &button;
+            if (hit) *hit = &button;
             return true;
         }
     }
@@ -917,19 +996,16 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_tabCloseButtons.Item(i);
-        if (button.rect.Contains(x,y) &&
+        if (CalculateActualRect(button.rect, true).Contains(x,y) &&
             !(button.curState & (wxAUI_BUTTON_STATE_HIDDEN |
                                    wxAUI_BUTTON_STATE_DISABLED)))
         {
-            if (hit)
-                *hit = &button;
+            if (hit) *hit = &button;
             return true;
         }
     }
-
     return false;
 }
-
 
 
 // the utility function ShowWnd() is the same as show,
@@ -984,8 +1060,6 @@ void wxAuiTabContainer::DoShowHide()
 
 
 // -- wxAuiTabCtrl class implementation --
-
-
 
 wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_PAINT(wxAuiTabCtrl::OnPaint)
@@ -1053,7 +1127,11 @@ void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
 {
     wxSize s = evt.GetSize();
-    wxRect r(0, 0, s.GetWidth(), s.GetHeight());
+    wxRect r;
+    if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_RIGHT))
+        r = wxRect(0, 0, s.GetHeight(), s.GetWidth());
+    else
+        r = wxRect(0, 0, s.GetWidth(), s.GetHeight());
     SetRect(r);
 }
 
@@ -1571,14 +1649,24 @@ public:
             m_tabs->SetSize     (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
             m_tabs->SetRect     (wxRect(0, 0, m_rect.width, m_tabCtrlHeight));
         }
-        else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+        else if (m_tabs->GetFlags() & wxAUI_NB_TOP)
         {
             m_tab_rect = wxRect (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
             m_tabs->SetSize     (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
-            m_tabs->SetRect     (wxRect(0, 0,        m_rect.width, m_tabCtrlHeight));
+            m_tabs->SetRect     (wxRect(0, 0, m_rect.width, m_tabCtrlHeight));
         }
-        // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
-        // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
+        else if (m_tabs->GetFlags() & wxAUI_NB_LEFT)
+        {
+            m_tab_rect = wxRect (m_rect.x, m_rect.y, m_tabCtrlHeight, m_rect.height);
+            m_tabs->SetSize     (m_rect.x, m_rect.y, m_tabCtrlHeight, m_rect.height);
+            m_tabs->SetRect     (wxRect(0, 0, m_tabCtrlHeight, m_rect.height));
+        }
+        else if (m_tabs->GetFlags() & wxAUI_NB_RIGHT)
+        {
+            m_tab_rect = wxRect (m_rect.x + m_rect.width - m_tabCtrlHeight, m_rect.y, m_tabCtrlHeight, m_rect.height);
+            m_tabs->SetSize     (m_rect.x + m_rect.width - m_tabCtrlHeight, m_rect.y, m_tabCtrlHeight, m_rect.height);
+            m_tabs->SetRect     (wxRect(0, 0, m_tabCtrlHeight, m_rect.height));
+        }
 
         m_tabs->Refresh();
         m_tabs->Update();
@@ -1591,16 +1679,26 @@ public:
             wxAuiNotebookPage& page = pages.Item(i);
             int border_space = m_tabs->GetArtProvider()->GetAdditionalBorderSpace(page.window);
 
-            int height = m_rect.height - m_tabCtrlHeight - border_space;
-            if ( height < 0 )
+            int height;
+            int width;
+            if (m_tabs->GetFlags() & (wxAUI_NB_TOP | wxAUI_NB_BOTTOM))
             {
-                // avoid passing negative height to wxWindow::SetSize(), this
-                // results in assert failures/GTK+ warnings
-                height = 0;
+                height = m_rect.height - m_tabCtrlHeight - border_space;
+                // avoid passing negative width/ height to wxWindow::SetSize(),
+                // this results in assert failures/GTK+ warnings
+                if (height < 0) height = 0;
+                width = m_rect.width - 2 * border_space;
+                if (width < 0) width = 0;
             }
-            int width = m_rect.width - 2 * border_space;
-            if (width < 0)
-                width = 0;
+            else if (m_tabs->GetFlags() & (wxAUI_NB_LEFT | wxAUI_NB_RIGHT))
+            {
+                height = m_rect.height - 2 * border_space;
+                // avoid passing negative width/ height to wxWindow::SetSize(),
+                // this results in assert failures/GTK+ warnings
+                if (height < 0) height = 0;
+                width = m_rect.width - m_tabCtrlHeight - border_space;
+                if (width < 0) width = 0;
+            }
 
             if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
             {
@@ -1609,15 +1707,27 @@ public:
                                      width,
                                      height);
             }
-            else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+            else if (m_tabs->GetFlags() & wxAUI_NB_TOP)
             {
                 page.window->SetSize(m_rect.x + border_space,
                                      m_rect.y + m_tabCtrlHeight,
                                      width,
                                      height);
             }
-            // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
-            // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
+            else if (m_tabs->GetFlags() & wxAUI_NB_LEFT)
+            {
+                page.window->SetSize(m_rect.x + m_tabCtrlHeight,
+                                     m_rect.y + border_space,
+                                     width,
+                                     height);
+            }
+            else if (m_tabs->GetFlags() & wxAUI_NB_RIGHT)
+            {
+                page.window->SetSize(m_rect.x + border_space,
+                                     m_rect.y + border_space,
+                                     width,
+                                     height);
+            }
         }
     }
 

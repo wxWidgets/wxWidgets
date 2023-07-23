@@ -101,6 +101,8 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
+        ID_NotebookAlignLeft,
+        ID_NotebookAlignRight,
         ID_SpinControl,
 
         ID_SampleItem,
@@ -613,6 +615,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookAlignLeft,     MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookAlignRight,  MyFrame::OnTabAlignment)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -744,6 +748,8 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendSeparator();
     notebook_menu->AppendRadioItem(ID_NotebookAlignTop, _("Tab Top Alignment"));
     notebook_menu->AppendRadioItem(ID_NotebookAlignBottom, _("Tab Bottom Alignment"));
+    notebook_menu->AppendRadioItem(ID_NotebookAlignLeft, _("Tab Left Alignment"));
+    notebook_menu->AppendRadioItem(ID_NotebookAlignRight, _("Tab Right Alignment"));
     notebook_menu->AppendSeparator();
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabMove, _("Allow Tab Move"));
     notebook_menu->AppendCheckItem(ID_NotebookAllowTabExternalMove, _("Allow External Tab Move"));
@@ -1575,11 +1581,15 @@ void MyFrame::OnTabAlignment(wxCommandEvent &evt)
             wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
 
             long style = nb->GetWindowStyleFlag();
-            style &= ~(wxAUI_NB_TOP | wxAUI_NB_BOTTOM);
+            style &= ~(wxAUI_NB_TOP | wxAUI_NB_BOTTOM | wxAUI_NB_LEFT | wxAUI_NB_RIGHT);
             if (evt.GetId() == ID_NotebookAlignTop)
                 style |= wxAUI_NB_TOP;
             else if (evt.GetId() == ID_NotebookAlignBottom)
                 style |= wxAUI_NB_BOTTOM;
+            else if (evt.GetId() == ID_NotebookAlignLeft)
+                style |= wxAUI_NB_LEFT;
+            else if (evt.GetId() == ID_NotebookAlignRight)
+                style |= wxAUI_NB_RIGHT;
             nb->SetWindowStyleFlag(style);
 
             nb->Refresh();

@@ -33,7 +33,6 @@ class wxAuiNotebookPageArray;
 class wxWindow;
 class wxDC;
 
-
 // tab art class
 
 class WXDLLIMPEXP_AUI wxAuiTabArt
@@ -68,12 +67,18 @@ public:
 
     virtual void DrawTab(wxDC& dc,
                          wxWindow* wnd,
-                         const wxAuiNotebookPage& pane,
+                         const wxAuiNotebookPage& page,
                          const wxRect& inRect,
                          int closeButtonState,
                          wxRect* outTabRect,
-                         wxRect* outButtonRect,
                          int* xExtent) = 0;
+
+    virtual void DrawTabContent(wxDC& dc,
+                                wxWindow* wnd,
+                                const wxAuiNotebookPage& page,
+                                const wxRect& inRect,
+                                int closeButtonState,
+                                wxRect* outButtonRect) = 0;
 
     virtual void DrawButton(
                          wxDC& dc,
@@ -148,12 +153,18 @@ public:
 
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
-                 const wxAuiNotebookPage& pane,
+                 const wxAuiNotebookPage& page,
                  const wxRect& inRect,
                  int closeButtonState,
                  wxRect* outTabRect,
-                 wxRect* outButtonRect,
                  int* xExtent) wxOVERRIDE;
+
+    void DrawTabContent(wxDC& dc,
+                        wxWindow* wnd,
+                        const wxAuiNotebookPage& page,
+                        const wxRect& inRect,
+                        int closeButtonState,
+                        wxRect* outButtonRect) wxOVERRIDE;
 
     void DrawButton(
                  wxDC& dc,
@@ -251,12 +262,18 @@ public:
 
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
-                 const wxAuiNotebookPage& pane,
+                 const wxAuiNotebookPage& page,
                  const wxRect& inRect,
                  int closeButtonState,
                  wxRect* outTabRect,
-                 wxRect* outButtonRect,
                  int* xExtent) wxOVERRIDE;
+
+    void DrawTabContent(wxDC& dc,
+                        wxWindow* wnd,
+                        const wxAuiNotebookPage& page,
+                        const wxRect& inRect,
+                        int closeButtonState,
+                        wxRect* outButtonRect) wxOVERRIDE;
 
     void DrawButton(
                  wxDC& dc,

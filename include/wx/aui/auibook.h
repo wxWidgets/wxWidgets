@@ -33,8 +33,8 @@ class wxAuiNotebook;
 enum wxAuiNotebookOption
 {
     wxAUI_NB_TOP                 = 1 << 0,
-    wxAUI_NB_LEFT                = 1 << 1,  // not implemented yet
-    wxAUI_NB_RIGHT               = 1 << 2,  // not implemented yet
+    wxAUI_NB_LEFT                = 1 << 1,
+    wxAUI_NB_RIGHT               = 1 << 2,
     wxAUI_NB_BOTTOM              = 1 << 3,
     wxAUI_NB_TAB_SPLIT           = 1 << 4,
     wxAUI_NB_TAB_MOVE            = 1 << 5,
@@ -162,6 +162,8 @@ public:
 
     size_t GetTabOffset() const;
     void SetTabOffset(size_t offset);
+
+    wxRect CalculateActualRect(const wxRect& rect, bool close_btn) const;
 
     // Is the tab visible?
     bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
