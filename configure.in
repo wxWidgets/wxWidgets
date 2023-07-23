@@ -7299,6 +7299,10 @@ dnl ---------------------------------------------------------------------------
 dnl wxStyledTextCtrl
 dnl ---------------------------------------------------------------------------
 
+for lib in scintilla lexilla; do
+    WXCONFIG_STC_LIBS="$WXCONFIG_STC_LIBS -lwx${lib}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+done
+
 if test "$wxUSE_MSW" = 1 ; then
     EXTRALIBS_STC="-limm32"
 fi
@@ -7608,9 +7612,6 @@ case "$wxUSE_REGEX" in
         WXCONFIG_LIBS="$PCRE_LINK $WXCONFIG_LIBS"
         ;;
 esac
-if test "$wxUSE_STC" = "yes" ; then
-    wxconfig_3rdparty="scintilla lexilla $wxconfig_3rdparty"
-fi
 case "$wxUSE_EXPAT" in
     builtin)
         wxconfig_3rdparty="expat $wxconfig_3rdparty"
@@ -7947,6 +7948,7 @@ AC_SUBST(WX_CXXFLAGS)
 AC_SUBST(WXCONFIG_CXXFLAGS)
 
 AC_SUBST(WXCONFIG_LIBS)
+AC_SUBST(WXCONFIG_STC_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
 AC_SUBST(WX_LDFLAGS)
 AC_SUBST(WXCONFIG_LDFLAGS)

@@ -1033,7 +1033,7 @@ ldlibs_gl="@OPENGL_LIBS@"
 ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_media="@EXTRALIBS_MEDIA@"
 ldlibs_xml="@EXTRALIBS_XML@"
-ldlibs_stc="@EXTRALIBS_STC@"
+ldlibs_stc="@WXCONFIG_STC_LIBS@ @EXTRALIBS_STC@"
 ldlibs_webview="@EXTRALIBS_WEBVIEW@"
 
 

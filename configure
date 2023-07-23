@@ -643,6 +643,7 @@ WXCONFIG_LDFLAGS_GUI
 WXCONFIG_LDFLAGS
 WX_LDFLAGS
 WXCONFIG_RPATH
+WXCONFIG_STC_LIBS
 WXCONFIG_LIBS
 WXCONFIG_CXXFLAGS
 WX_CXXFLAGS
@@ -40615,6 +40616,10 @@ $as_echo "$as_me: WARNING: GStreamer not available... disabling wxMediaCtrl" >&2
 fi
 
 
+for lib in scintilla lexilla; do
+    WXCONFIG_STC_LIBS="$WXCONFIG_STC_LIBS -lwx${lib}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+done
+
 if test "$wxUSE_MSW" = 1 ; then
     EXTRALIBS_STC="-limm32"
 fi
@@ -40928,9 +40933,6 @@ case "$wxUSE_REGEX" in
         WXCONFIG_LIBS="$PCRE_LINK $WXCONFIG_LIBS"
         ;;
 esac
-if test "$wxUSE_STC" = "yes" ; then
-    wxconfig_3rdparty="scintilla lexilla $wxconfig_3rdparty"
-fi
 case "$wxUSE_EXPAT" in
     builtin)
         wxconfig_3rdparty="expat $wxconfig_3rdparty"
@@ -43374,6 +43376,7 @@ OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
+
 
 
 
