@@ -374,20 +374,21 @@ protected:
 
             // We can't delete it immediately because this object is used after
             // this function returns, so do it slightly later.
-            wxWindow* const self = this;
-            m_combo->CallAfter([self]()
-            {
-                // Before really deleting it, reset the HWND which had been
-                // already destroyed, to prevent us from trying to destroy it
-                // again (which would just fail with an error).
-                self->DissociateHandle();
-
-                delete self;
-            });
+            m_combo->CallAfter(&wxComboPopupWindow::DeleteSelf);
         }
 
         return wxComboPopupWindowBase::MSWHandleMessage(result, message,
                                                         wParam, lParam);
+    }
+
+    void DeleteSelf()
+    {
+        // Before really deleting it, reset the HWND which had been
+        // already destroyed, to prevent us from trying to destroy it
+        // again (which would just fail with an error).
+        DissociateHandle();
+
+        delete this;
     }
 #endif // __WXMSW__
 
