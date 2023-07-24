@@ -1703,6 +1703,10 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     {
         Delete(children[n]);
     }
+
+    // Refresh update the "+" button which otherwise can remain displayed.
+    if ( !IsHiddenRoot(item) )
+        wxTreeView_RefreshItem(GetHwnd(), HITEM(item));
 }
 
 void wxTreeCtrl::DeleteAllItems()
