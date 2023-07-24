@@ -1533,10 +1533,24 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     tvIns.item.lParam = (LPARAM)param;
     tvIns.item.mask = mask;
 
+    // Without this, the tree doesn't show a "+" button when we add the first
+    // child, at least after removing the children previously (see #23718).
+    const bool refreshFirstChild =
+            !IsHiddenRoot(parent) &&
+                !TreeView_GetChild(GetHwnd(), HITEM(parent));
+
     HTREEITEM id = TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
     {
         wxLogLastError(wxT("TreeView_InsertItem"));
+    }
+
+    if ( refreshFirstChild )
+    {
+        TVGetItemRectParam param2;
+
+        wxTreeView_GetItemRect(GetHwnd(), HITEM(parent), param2, FALSE);
+        ::InvalidateRect(GetHwnd(), &param2.rect, FALSE);
     }
 
     // associate the application tree item with Win32 tree item handle
