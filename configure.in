@@ -2235,9 +2235,9 @@ if test "$wxUSE_ZLIB" != "no" ; then
 
         if test "x$ZLIB_LINK" = "x" ; then
             if test "$wxUSE_ZLIB" = "sys" ; then
-                AC_MSG_ERROR([zlib library not found or too old! Use --with-zlib=builtin to use built-in version])
+                AC_MSG_ERROR([system zlib library not found or too old! Use --with-zlib=builtin to use built-in version])
             else
-                AC_MSG_WARN([zlib library not found or too old, will use built-in instead])
+                AC_MSG_WARN([system zlib library not found or too old, will use built-in instead])
                 wxUSE_ZLIB=builtin
             fi
         else

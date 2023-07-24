@@ -25316,10 +25316,10 @@ fi
 
         if test "x$ZLIB_LINK" = "x" ; then
             if test "$wxUSE_ZLIB" = "sys" ; then
-                as_fn_error $? "zlib library not found or too old! Use --with-zlib=builtin to use built-in version" "$LINENO" 5
+                as_fn_error $? "system zlib library not found or too old! Use --with-zlib=builtin to use built-in version" "$LINENO" 5
             else
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: zlib library not found or too old, will use built-in instead" >&5
-$as_echo "$as_me: WARNING: zlib library not found or too old, will use built-in instead" >&2;}
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system zlib library not found or too old, will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system zlib library not found or too old, will use built-in instead" >&2;}
                 wxUSE_ZLIB=builtin
             fi
         else
