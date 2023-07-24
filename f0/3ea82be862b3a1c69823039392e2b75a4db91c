@@ -1,0 +1,1 @@
+wxAll: Support constructing wxString from std::string_view (Ian McInerney, #23711).
