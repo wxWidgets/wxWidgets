@@ -46,12 +46,10 @@
 #include <utility>
 
 // Check if C++17 <string_view> is available
-#ifdef __has_include
-    #if __has_include(<string_view>)
-        #include <string_view>
-        #ifdef __cpp_lib_string_view
-            #define wxHAS_STD_STRING_VIEW
-        #endif
+#if wxHAS_CXX17_INCLUDE(<string_view>)
+    #include <string_view>
+    #ifdef __cpp_lib_string_view
+        #define wxHAS_STD_STRING_VIEW
     #endif
 #endif
 

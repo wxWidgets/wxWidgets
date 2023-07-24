@@ -205,6 +205,15 @@
     #define wxCHECK_CXX_STD(ver) 0
 #endif
 
+/**
+ * C++ header checks
+ */
+#if defined(__has_include)
+    #define wxHAS_CXX17_INCLUDE(header) (wxCHECK_CXX_STD(201703L) && __has_include(header))
+#else
+    #define wxHAS_CXX17_INCLUDE(header) 0
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  check for native bool type and TRUE/FALSE constants */
 /*  ---------------------------------------------------------------------------- */

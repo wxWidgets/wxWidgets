@@ -691,4 +691,4 @@ TEST_CASE("StdString::View", "[stdstring]")
 
     CHECK( "" == wxString::FromUTF8(strViewInvalidUTF) );
 }
-#endif
+#endif // wxHAS_STD_STRING_VIEW
