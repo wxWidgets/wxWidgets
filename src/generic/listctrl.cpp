@@ -4320,6 +4320,9 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
     else
     {
+        if ( m_lines[index]->IsHighlighted() )
+            UpdateSelectionCount(false);
+
         delete m_lines[index];
         m_lines.erase( m_lines.begin() + index );
     }

@@ -265,6 +265,7 @@ All (GUI):
 - Fix wxRibbonToolBar::GetToolByPos() and DeleteToolByPos() (mcorino, #23457).
 - Update wxOwnerDrawnComboBox best size when adding items (Reza Karimi, #23681).
 - Keep wxProgressDialog size when updating the message (Oleg Samarin, #23727).
+- Fix crash when deleting selected item in wxGenericListCtrl (#23729).
 
 wxGTK:
 
