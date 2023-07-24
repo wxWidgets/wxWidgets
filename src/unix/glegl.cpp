@@ -41,6 +41,8 @@
 
 #include <memory>
 
+constexpr const char* TRACE_EGL = "glegl";
+
 // ----------------------------------------------------------------------------
 // wxGLContextAttrs: OpenGL rendering context attributes
 // ----------------------------------------------------------------------------
@@ -424,6 +426,8 @@ static void wl_frame_callback_handler(void* data,
                                       struct wl_callback *,
                                       uint32_t)
 {
+    wxLogTrace(TRACE_EGL, "In frame callback handler");
+
     wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
     glc->m_readyToDraw = true;
     g_clear_pointer(&glc->m_wlFrameCallbackHandler, wl_callback_destroy);
@@ -471,7 +475,6 @@ bool wxGLCanvasEGL::CreateSurface()
         m_xwindow = GDK_WINDOW_XID(window);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
                                                    &m_xwindow, nullptr);
-        m_readyToDraw = true;
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
@@ -508,6 +511,10 @@ bool wxGLCanvasEGL::CreateSurface()
                                  &wl_frame_listener, this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
+
+        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
+        // callback to know when we should draw ourselves already.
+        eglSwapInterval(m_display, 0);
     }
 #endif
 
@@ -635,11 +642,42 @@ void wxGLCanvasEGL::FreeDefaultConfig()
 
 bool wxGLCanvasEGL::SwapBuffers()
 {
-    // Under Wayland, if eglSwapBuffers() is called before the wl_surface has
-    // been realized, it will deadlock.  Thus, we need to avoid swapping before
-    // this has happened.
-    if ( !m_readyToDraw )
-        return false;
+    GdkWindow* const window = GTKGetDrawingWindow();
+#ifdef GDK_WINDOWING_X11
+    if (wxGTKImpl::IsX11(window))
+    {
+        if ( !IsShownOnScreen() )
+        {
+            // Trying to draw on a hidden window is useless and can actually be
+            // harmful if the compositor blocks in eglSwapBuffers() in this
+            // case, so avoid it.
+            wxLogTrace(TRACE_EGL, "Not drawing hidden window");
+            return false;
+        }
+    }
+#endif // GDK_WINDOWING_X11
+#ifdef GDK_WINDOWING_WAYLAND
+    if (wxGTKImpl::IsWayland(window))
+    {
+        // Under Wayland, we must not draw before we're actually ready to, as
+        // this would be inefficient at best and could result in a deadlock at
+        // worst if we're called before the window is realized.
+        if ( !m_readyToDraw )
+        {
+            wxLogTrace(TRACE_EGL, "Not ready to draw yet");
+            return false;
+        }
+
+        // Ensure that we redraw again when the frame becomes ready.
+        m_readyToDraw = false;
+        wl_surface* surface = gdk_wayland_window_get_wl_surface(window);
+        m_wlFrameCallbackHandler = wl_surface_frame(surface);
+        wl_callback_add_listener(m_wlFrameCallbackHandler,
+                                 &wl_frame_listener, this);
+    }
+#endif // GDK_WINDOWING_WAYLAND
+
+    wxLogTrace(TRACE_EGL, "Swapping buffers");
 
     return eglSwapBuffers(m_display, m_surface);
 }
