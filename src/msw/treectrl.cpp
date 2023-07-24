@@ -166,6 +166,16 @@ wxTreeView_GetItemRect(HWND hwnd,
                         (LPARAM)&param) == TRUE;
 }
 
+inline void
+wxTreeView_RefreshItem(HWND hwnd,
+                       HTREEITEM hItem)
+{
+    TVGetItemRectParam param;
+
+    wxTreeView_GetItemRect(hwnd, hItem, param, FALSE);
+    ::InvalidateRect(hwnd, &param.rect, FALSE);
+}
+
 } // anonymous namespace
 
 // wrappers for TreeView_GetItem/TreeView_SetItem
@@ -1547,10 +1557,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
 
     if ( refreshFirstChild )
     {
-        TVGetItemRectParam param2;
-
-        wxTreeView_GetItemRect(GetHwnd(), HITEM(parent), param2, FALSE);
-        ::InvalidateRect(GetHwnd(), &param2.rect, FALSE);
+        wxTreeView_RefreshItem(GetHwnd(), HITEM(parent));
     }
 
     // associate the application tree item with Win32 tree item handle
