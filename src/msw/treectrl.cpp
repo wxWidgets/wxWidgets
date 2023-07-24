@@ -1547,15 +1547,9 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     tvIns.item.lParam = (LPARAM)param;
     tvIns.item.mask = mask;
 
-    // apparently some Windows versions (2000 and XP are reported to do this)
-    // sometimes don't refresh the tree after adding the first child and so we
-    // need this to make the "[+]" appear
-    //
-    // don't use this hack below for the children of hidden root nor for modern
-    // MSW versions as it would just unnecessarily slow down the item insertion
-    // at best
+    // Without this, the tree doesn't show a "+" button when we add the first
+    // child, at least after removing the children previously (see #23718).
     const bool refreshFirstChild =
-        (wxGetWinVersion() < wxWinVersion_Vista) &&
             !IsHiddenRoot(parent) &&
                 !TreeView_GetChild(GetHwnd(), HITEM(parent));
 

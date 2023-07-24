@@ -325,6 +325,7 @@ wxMSW:
 - Fix position of wxStaticBox label after DPI change (Maarten Bent, #23740).
 - Fix background colour of empty cells in wxDataViewCtrl (#23708).
 - Fix possible (even if rare) crash in printer progress dialog (#23927).
+- Fix "+" button not appearing in wxTreeCtrl after adding a child (#23718).
 
 wxOSX:
 
