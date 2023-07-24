@@ -44,6 +44,15 @@
 #include "wx/beforestd.h"
 #include <string>
 #include <utility>
+
+// Check if C++17 <string_view> is available
+#if wxHAS_CXX17_INCLUDE(<string_view>)
+    #include <string_view>
+    #ifdef __cpp_lib_string_view
+        #define wxHAS_STD_STRING_VIEW
+    #endif
+#endif
+
 #include "wx/afterstd.h"
 
 // by default we cache the mapping of the positions in UTF-8 string to the byte
@@ -1253,9 +1262,19 @@ public:
         { assign(str.c_str(), str.length()); }
   #endif
 
+#ifdef wxHAS_STD_STRING_VIEW
+    wxString(std::wstring_view view)
+        { assign(view.data(), view.length()); }
+#endif  // wxHAS_STD_STRING_VIEW
+
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
   wxString(const std::string& str)
       { assign(str.c_str(), str.length()); }
+
+    #ifdef wxHAS_STD_STRING_VIEW
+        wxString(std::string_view view)
+            { assign(view.data(), view.length()); }
+    #endif  // wxHAS_STD_STRING_VIEW
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
   // Also always provide explicit conversions to std::[w]string in any case,
@@ -1699,6 +1718,14 @@ public:
     std::string utf8_string() const { return ToStdString(wxMBConvUTF8()); }
     const wxScopedCharBuffer utf8_str() const { return mb_str(wxMBConvUTF8()); }
 #endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
+
+// Conversion from std::string_view is the same for both of the two cases above
+#ifdef wxHAS_STD_STRING_VIEW
+    static wxString FromUTF8Unchecked(std::string_view view)
+      { return FromUTF8Unchecked(view.data(), view.length()); }
+    static wxString FromUTF8(std::string_view view)
+      { return FromUTF8(view.data(), view.length()); }
+#endif // wxHAS_STD_STRING_VIEW
 
     const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
 

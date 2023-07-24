@@ -1546,6 +1546,17 @@ typedef double wxDouble;
 #define wxCHECK_CXX_STD(stdver)
 
 /**
+    Returns @true if the compiler is using the C++17 standard and the header @a header exists.
+    This is designed to guard inclusion of C++17 standard library headers, since MSVC will warn
+    if a header for a newer C++ standard is included when compiling for an older standard.
+
+    @since 3.3.0
+
+    @header{wx/defs.h}
+*/
+#define wxHAS_CXX17_INCLUDE(header)
+
+/**
     This macro can be used in a class declaration to disable the generation of
     default assignment operator.
 
