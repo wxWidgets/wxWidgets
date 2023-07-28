@@ -164,7 +164,7 @@ Then from the build/bakesfiles directory run
 
 and from the root directory run
 
-        autoconf -B build/autoconf_prepend-include
+        autoconf
 
 or, if you're not using Debian Stable version of autoconf, see the instructions
 in `build/tools/autoconf/README.md` for regenerating configure on a different

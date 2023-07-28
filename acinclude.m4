@@ -1,6 +1,6 @@
 dnl ---------------------------------------------------------------------------
 dnl
-dnl Macros for configure.in for wxWindows by Robert Roebling, Phil Blecker,
+dnl Macros for configure.ac for wxWindows by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
@@ -258,18 +258,18 @@ AC_DEFUN([WX_C_BIGENDIAN],
 [AC_CACHE_CHECK([whether byte ordering is bigendian], ac_cv_c_bigendian,
 [ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
-AC_TRY_COMPILE([#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/param.h>], [
 #if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
  bogus endian macros
-#endif], [# It does; now see whether it defined to BIG_ENDIAN or not.
-AC_TRY_COMPILE([#include <sys/types.h>
+#endif])], [# It does; now see whether it defined to BIG_ENDIAN or not.
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/param.h>], [
 #if BYTE_ORDER != BIG_ENDIAN
  not big endian
-#endif], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
+#endif])], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
 if test $ac_cv_c_bigendian = unknown; then
-AC_TRY_RUN([main () {
+AC_RUN_IFELSE([AC_LANG_SOURCE([[main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
   {
@@ -278,7 +278,7 @@ AC_TRY_RUN([main () {
   } u;
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
-}], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=unknown])
+}]])], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=unknown])
 fi])
 if test $ac_cv_c_bigendian = unknown; then
   AC_MSG_WARN([Assuming little-endian target machine - this may be overridden by adding the line "ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}" to config.cache file])
@@ -567,20 +567,20 @@ AC_DEFUN([AM_ICONV],
   AC_CACHE_CHECK(for iconv, am_cv_func_iconv, [
     am_cv_func_iconv="no, consider installing GNU libiconv"
     am_cv_lib_iconv=no
-    AC_TRY_LINK([#include <stdlib.h>
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
 #include <iconv.h>],
       [iconv_t cd = iconv_open("","");
        iconv(cd,NULL,NULL,NULL,NULL);
-       iconv_close(cd);],
+       iconv_close(cd);])],
       am_cv_func_iconv=yes)
     if test "$am_cv_func_iconv" != yes; then
       am_save_LIBS="$LIBS"
       LIBS="$LIBS -liconv"
-      AC_TRY_LINK([#include <stdlib.h>
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
 #include <iconv.h>],
         [iconv_t cd = iconv_open("","");
          iconv(cd,NULL,NULL,NULL,NULL);
-         iconv_close(cd);],
+         iconv_close(cd);])],
         am_cv_lib_iconv=yes
         am_cv_func_iconv=yes)
       LIBS="$am_save_LIBS"
@@ -589,7 +589,7 @@ AC_DEFUN([AM_ICONV],
   if test "$am_cv_func_iconv" = yes; then
     AC_DEFINE(HAVE_ICONV, 1, [Define if you have the iconv() function.])
     AC_CACHE_CHECK([if iconv needs const], wx_cv_func_iconv_const,
-      AC_TRY_COMPILE([
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
 #include <stdlib.h>
 #include <iconv.h>
 extern
@@ -602,7 +602,7 @@ size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, si
 size_t iconv();
 #endif
         ],
-        [],
+        [])],
         wx_cv_func_iconv_const="no",
         wx_cv_func_iconv_const="yes"
       )
@@ -645,9 +645,9 @@ define(WX_SYS_LARGEFILE_MACRO_VALUE,
 [
     AC_CACHE_CHECK([for $1 value needed for large files], [$3],
         [
-          AC_TRY_COMPILE([#define $1 $2
+          AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#define $1 $2
                           #include <sys/types.h>],
-                         WX_SYS_LARGEFILE_TEST,
+                         WX_SYS_LARGEFILE_TEST)],
                          [$3=$2],
                          [$3=no])
         ]

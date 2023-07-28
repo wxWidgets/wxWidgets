@@ -75,7 +75,7 @@ compatibility is maintained between point releases (those with the same
 major.minor number).
 
 A known break in binary compatibility should be addressed by updating
-the library soname (see the notes in configure.in for details on this).
+the library soname (see the notes in configure.ac for details on this).
 
 --------------------------------------------------------------------
 

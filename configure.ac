@@ -1,10 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
-
-AC_PREREQ(2.58)
+AC_PREREQ(2.69)
 
 dnl ---------------------------------------------------------------------------
 dnl
-dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
+dnl Top-level configure.ac for wxWidgets by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
@@ -1325,12 +1324,13 @@ version or omitting it entirely."
 
     AC_LANG_PUSH(C)
     AC_MSG_CHECKING([if C compiler ($CC) works with SDK/version options])
-    AC_TRY_LINK([],[],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([$error_message])])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([],[])],[AC_MSG_RESULT([yes])],[AC_MSG_FAILURE([$error_message])]
+    )
     AC_LANG_POP()
 
     AC_LANG_PUSH(C++)
     AC_MSG_CHECKING([if C++ compiler ($CXX) works with SDK/version options])
-    AC_TRY_LINK(
+    AC_LINK_IFELSE([AC_LANG_PROGRAM(
         [
             #include <Availability.h>
         ],
@@ -1345,7 +1345,7 @@ version or omitting it entirely."
             #elif !defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
             #error unrecognized platform
             #endif
-        ],
+        ])],
         [AC_MSG_RESULT([yes])],
         [AC_MSG_FAILURE([$error_message])]
     )
@@ -1411,14 +1411,14 @@ dnl This case is for OS X vs. everything else
 case "${host}" in
   *-*-darwin* )
     AC_MSG_CHECKING([if CoreFoundation/CFBase.h is usable])
-    AC_TRY_COMPILE([#include <CoreFoundation/CFBase.h>
-],[],
+    AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM([#include <CoreFoundation/CFBase.h>],[])],
         [AC_MSG_RESULT([yes])],
         [AC_MSG_RESULT([no])
         AC_MSG_CHECKING([if __CF_USE_FRAMEWORK_INCLUDES__ is required])
-        AC_TRY_COMPILE([#define __CF_USE_FRAMEWORK_INCLUDES__
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#define __CF_USE_FRAMEWORK_INCLUDES__
 #include <CoreFoundation/CFBase.h>
-        ],[],
+        ],[])],
         [AC_MSG_RESULT([yes])
         dnl We must use -D so source files that don't include wx/setup.h
         dnl but do include CFBase will work.
@@ -1443,13 +1443,13 @@ case "${host}" in
         dnl headers and libraries, so it's Windows-like in this case
         AC_CACHE_CHECK([if -mno-cygwin is in effect], wx_cv_nocygwin,
             [
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [],
                     [
                         #ifdef __MINGW32__
                             choke me
                         #endif
-                    ],
+                    ])],
                     wx_cv_nocygwin=no,
                     wx_cv_nocygwin=yes
                 )
@@ -1693,13 +1693,13 @@ if test -n "$LARGEFILE_CPPFLAGS"; then
             wx_cv_STDC_EXT_required,
             [
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [],
                     [
                         #ifndef __STDC_EXT__
                             choke me
                         #endif
-                    ],
+                    ])],
                     wx_cv_STDC_EXT_required=no,
                     wx_cv_STDC_EXT_required=yes
                 )
@@ -1758,12 +1758,12 @@ if test "x$SGICC" = "xyes"; then
     AC_CACHE_CHECK([if cc version is 7.4.4 or greater],
         wx_cv_prog_sgicc744,
         [
-            AC_TRY_COMPILE([],
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
                 [
                     #if _SGI_COMPILER_VERSION >= 744
                     chock me: mipsPro is 7.4.4 or later
                     #endif
-                ],
+                ])],
                 wx_cv_prog_sgicc744=no,
                 wx_cv_prog_sgicc744=yes
             )
@@ -1779,12 +1779,12 @@ if test "x$SGICXX" = "xyes"; then
         wx_cv_prog_sgicxx744,
         [
             AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE([],
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
                 [
                     #if _SGI_COMPILER_VERSION >= 744
                     chock me: mipsPro is 7.4.4 or later
                     #endif
-                ],
+                ])],
                 wx_cv_prog_sgicxx744=no,
                 wx_cv_prog_sgicxx744=yes
             )
@@ -2200,9 +2200,9 @@ if test "$wxUSE_ZLIB" != "no" ; then
         dnl has anything more ancient (1.1.3 was released in July 1998)
         dnl anyhow
         AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
-            [AC_TRY_RUN(
+            [AC_RUN_IFELSE(
                 dnl zlib.h defines ZLIB_VERSION="x.y.z"
-                [
+                [AC_LANG_SOURCE([[
                     #include <zlib.h>
                     #include <stdio.h>
                     #include <stdlib.h>
@@ -2218,7 +2218,7 @@ if test "$wxUSE_ZLIB" != "no" ; then
                                  ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
                         return 0;
                     }
-                ],
+                ]])],
                 ac_cv_header_zlib_h=`cat conftestval`,
                 ac_cv_header_zlib_h=no,
                 dnl cross-compiling: don't have an answer, try later
@@ -2286,9 +2286,9 @@ if test "$wxUSE_LIBPNG" != "no" ; then
         dnl libpng version 0.9 is known to not work, if an even newer
         dnl version is required, just bump it up in the test below
         AC_CACHE_CHECK([for png.h > 0.90], ac_cv_header_png_h,
-            [AC_TRY_RUN(
+            [AC_RUN_IFELSE(
                 dnl png.h defines PNG_LIBPNG_VER=number
-                [
+                [AC_LANG_SOURCE([[
                     #include <png.h>
                     #include <stdio.h>
                     #include <stdlib.h>
@@ -2301,7 +2301,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                                  PNG_LIBPNG_VER > 90 ? "yes" : "no");
                         return 0;
                     }
-                ],
+                ]])],
                 ac_cv_header_png_h=`cat conftestval`,
                 ac_cv_header_png_h=no,
                 dnl cross-compiling: test (later) if we have any png.h
@@ -2364,14 +2364,14 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
         dnl a compiler warning which configure considers as an error...
         AC_MSG_CHECKING(for jpeglib.h)
         AC_CACHE_VAL(ac_cv_header_jpeglib_h,
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                     #undef HAVE_STDLIB_H
                     #include <stdio.h>
                     #include <jpeglib.h>
                 ],
                 [
-                ],
+                ])],
                 ac_cv_header_jpeglib_h=yes,
                 ac_cv_header_jpeglib_h=no
             )
@@ -2590,7 +2590,7 @@ if test "$wxUSE_EXPAT" != "no"; then
                 wx_cv_expat_is_not_broken,
                 [
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE([#include <expat.h>],[],
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <expat.h>],[])],
                     wx_cv_expat_is_not_broken=yes,
                     wx_cv_expat_is_not_broken=no
                 )
@@ -2633,7 +2633,7 @@ if test "$wxUSE_EXPAT" != "no"; then
         dnl Expat requires C99 compiler, so define wxCFLAGS_C99 variable which
         dnl is used when compiling it in our makefiles.
         save_CC="$CC"
-        AC_PROG_CC_C99
+        AC_PROG_CC
         CC="$save_CC"
 
         dnl Note that we need just the flags, not the full CC value including
@@ -2787,24 +2787,8 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 
     if test "$wxUSE_GTK" = 1; then
-        dnl GTK+ test program must be compiled with C compiler
-        AC_MSG_CHECKING([for GTK+ version])
-
-        gtk_version_cached=1
         AC_CACHE_VAL(wx_cv_lib_gtk,
             [
-                dnl stupid GTK+ AM macros produce their own messages, so we
-                dnl have to pass to the next line
-                gtk_version_cached=0
-                AC_MSG_RESULT()
-
-                dnl we must link against lgthread unless the user
-                dnl used --disable-threads
-                GTK_MODULES=
-                if test "$wxUSE_THREADS" = "yes"; then
-                    GTK_MODULES=gthread
-                fi
-
                 if test -z "$wxGTK_VERSION"; then
                     wxGTK_VERSION=any
                 fi
@@ -2812,27 +2796,17 @@ if test "$wxUSE_GUI" = "yes"; then
                 dnl detect GTK2
                 wx_cv_lib_gtk=
 
-                dnl The gthread.pc that ships with Solaris returns '-mt',
-                dnl it's correct for Sun CC, but gcc requires '-pthreads'.
-                dnl So disable the compile check and remove the -mt below.
-                case "${host}" in
-                    *-*-solaris2* )
-                        if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                            enable_gtktest=no
-                        fi
-                esac
-
                 if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
-                    AM_PATH_GTK_3_0(, wx_cv_lib_gtk=3, , $GTK_MODULES)
+                    PKG_CHECK_MODULES(GTK, gtk+-3.0, wx_cv_lib_gtk=3)
                 fi
                 if test -z "$wx_cv_lib_gtk"; then
                     if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
-                        AM_PATH_GTK_2_0(2.6.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
+                        PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.6.0], wx_cv_lib_gtk=2.0)
                     fi
                 fi
                 if test -z "$wx_cv_lib_gtk"; then
                     if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
-                        AM_PATH_GTK_4_0(, wx_cv_lib_gtk=4, , $GTK_MODULES)
+                        PKG_CHECK_MODULES(GTK, gtk4, wx_cv_lib_gtk=4)
                     fi
                 fi
 
@@ -2845,19 +2819,21 @@ if test "$wxUSE_GUI" = "yes"; then
                         GTK_LIBS="$GTK_LIBS -lX11"
                     fi
 
+                    dnl we must link against lgthread unless the user
+                    dnl used --disable-threads
+                    if test "$wxUSE_THREADS" = "yes"; then
+                        PKG_CHECK_MODULES(GTHREAD, gthread-2.0)
+                    fi
+
                     dnl we need to cache GTK_CFLAGS and GTK_LIBS for the
                     dnl subsequent runs
-                    wx_cv_cflags_gtk=$GTK_CFLAGS
-                    wx_cv_libs_gtk=$GTK_LIBS
+                    wx_cv_cflags_gtk="$GTK_CFLAGS $GTHREAD_CFLAGS"
+                    wx_cv_libs_gtk="$GTK_LIBS $GTHREAD_LIBS"
                 fi
             ]
         )
 
-        dnl if it wasn't cached, the messages from AM_PATH_GTK() above are
-        dnl enough
-        if test "$gtk_version_cached" = 1; then
-            AC_MSG_RESULT($wx_cv_lib_gtk)
-        fi
+        AC_MSG_CHECKING([for GTK version to use])
 
         case "$wx_cv_lib_gtk" in
             4)      WXGTK4=1
@@ -2877,6 +2853,8 @@ installed, where VER is 2, 3 or 4.
                     ;;
         esac
 
+        AC_MSG_RESULT([GTK $TOOLKIT_VERSION])
+
         if test "$WXGTK3" = 1; then
             AC_DEFINE(__WXGTK220__)
             AC_DEFINE(__WXGTK218__)
@@ -2894,14 +2872,14 @@ installed, where VER is 2, 3 or 4.
             dnl gtk/gtk.h from them.
 
             AC_CACHE_CHECK([if GTK+ is version >= 2.20], wx_cv_gtk220, [
-                AC_TRY_COMPILE([
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
                                 #include <gtk/gtk.h>
                                ],
                                [
                                 #if !GTK_CHECK_VERSION(2,20,0)
                                 Not GTK+ 2.20
                                 #endif
-                               ],
+                               ])],
                                wx_cv_gtk220=yes,
                                wx_cv_gtk220=no
                                )
@@ -2912,14 +2890,14 @@ installed, where VER is 2, 3 or 4.
                 wx_cv_gtk218=yes
             else
                 AC_CACHE_CHECK([if GTK+ is version >= 2.18], wx_cv_gtk218, [
-                    AC_TRY_COMPILE([
+                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
                                     #include <gtk/gtk.h>
                                    ],
                                    [
                                     #if !GTK_CHECK_VERSION(2,18,0)
                                     Not GTK+ 2.18
                                     #endif
-                                   ],
+                                   ])],
                                    wx_cv_gtk218=yes,
                                    wx_cv_gtk218=no
                                    )
@@ -2931,14 +2909,14 @@ installed, where VER is 2, 3 or 4.
                 wx_cv_gtk210=yes
             else
                 AC_CACHE_CHECK([if GTK+ is version >= 2.10], wx_cv_gtk210, [
-                    AC_TRY_COMPILE([
+                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
                                     #include <gtk/gtk.h>
                                    ],
                                    [
                                     #if !GTK_CHECK_VERSION(2,10,0)
                                     Not GTK+ 2.10
                                     #endif
-                                   ],
+                                   ])],
                                    wx_cv_gtk210=yes,
                                    wx_cv_gtk210=no
                                    )
@@ -2961,14 +2939,14 @@ installed, where VER is 2, 3 or 4.
         AC_CACHE_CHECK([for GDK Wayland backend], wx_cv_gdk_wayland, [
             save_CFLAGS=$CFLAGS
             CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
-            AC_TRY_COMPILE([
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
                             #include <gdk/gdk.h>
                            ],
                            [
                             #ifndef GDK_WINDOWING_WAYLAND
                             Not GDK Windowing Wayland
                             #endif
-                           ],
+                           ])],
                            wx_cv_gdk_wayland=yes,
                            wx_cv_gdk_wayland=no
                            )
@@ -3073,14 +3051,14 @@ installed, where VER is 2, 3 or 4.
                         save_CFLAGS=$CFLAGS
                         CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
-                        AC_TRY_COMPILE(
+                        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                             [
                                 #include <X11/xpm.h>
                             ],
                             [
                                 int version;
                                 version = XpmLibraryVersion();
-                            ],
+                            ])],
                             wx_cv_x11_xpm_h=yes,
                             wx_cv_x11_xpm_h=no
                         )
@@ -3112,7 +3090,7 @@ installed, where VER is 2, 3 or 4.
             CFLAGS="$TOOLKIT_INCLUDE $CFLAGS"
 
             AC_MSG_CHECKING([for X11/extensions/shape.h])
-            AC_TRY_COMPILE([
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
                             #include <X11/Xlib.h>
                             #include <X11/extensions/shape.h>
                            ],
@@ -3120,7 +3098,7 @@ installed, where VER is 2, 3 or 4.
                             int dummy1, dummy2;
                             XShapeQueryExtension((Display*)NULL,
                                                  (int*)NULL, (int*)NULL);
-                           ],
+                           ])],
                            [
                             AC_DEFINE(HAVE_XSHAPE)
                             AC_MSG_RESULT([found])
@@ -3471,8 +3449,8 @@ if test "$wxUSE_SHARED" = "yes"; then
         saveLdflags="$LDFLAGS"
         LDFLAGS="$saveLdflags -Wl,-rpath,/"
         AC_MSG_CHECKING([if the linker accepts -rpath])
-        AC_TRY_LINK(
-            [],[],
+        AC_LINK_IFELSE([AC_LANG_PROGRAM(
+            [],[])],
             [
                 AC_MSG_RESULT([yes])
                 SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
@@ -3481,8 +3459,8 @@ if test "$wxUSE_SHARED" = "yes"; then
                 AC_MSG_RESULT([no])
                 AC_MSG_CHECKING([if the linker accepts -R])
                 LDFLAGS="$saveLdflags -Wl,-R,/"
-                AC_TRY_LINK(
-                    [],[],
+                AC_LINK_IFELSE([AC_LANG_PROGRAM(
+                    [],[])],
                     [
                         AC_MSG_RESULT([yes])
                         SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
@@ -3591,20 +3569,20 @@ AC_LANG_PUSH(C++) dnl tests below use overloaded functions and so need C++
 AC_CACHE_CHECK([if size_t is unsigned int],
     wx_cv_size_t_is_uint,
     [
-    dnl an obvious check like AC_TRY_COMPILE[struct Foo { ... };] doesn't work
+    dnl an obvious check like AC_COMPILE_IFELSE[struct Foo { ... };] doesn't work
     dnl with egcs (at least) up to 1.1.1 as it allows you to compile duplicate
     dnl methods in a local class (i.e. class inside a function) declaration
     dnl without any objections!!
     dnl
     dnl hence the hack below: we must have Foo at global scope!
-    AC_TRY_COMPILE([#include <stddef.h>],
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stddef.h>],
         [
             return 0; }
 
             struct Foo { void foo(size_t); void foo(unsigned int); };
 
             int bar() {
-        ],
+        ])],
         wx_cv_size_t_is_uint=no,
         wx_cv_size_t_is_uint=yes
     )
@@ -3616,14 +3594,14 @@ if test "$wx_cv_size_t_is_uint" = "yes"; then
 else
     AC_CACHE_CHECK([if size_t is unsigned long],
         wx_cv_size_t_is_ulong,
-        AC_TRY_COMPILE([#include <stddef.h>],
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <stddef.h>],
             [
                 return 0; }
 
                 struct Foo { void foo(size_t); void foo(unsigned long); };
 
                 int bar() {
-            ],
+            ])],
             wx_cv_size_t_is_ulong=no,
             wx_cv_size_t_is_ulong=yes
         )
@@ -3636,7 +3614,7 @@ fi
 
 AC_CACHE_CHECK([if wchar_t is separate type],
     wx_cv_wchar_t_is_separate_type,
-    AC_TRY_COMPILE([#include <wchar.h>],
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <wchar.h>],
         [
             return 0; }
 
@@ -3646,7 +3624,7 @@ AC_CACHE_CHECK([if wchar_t is separate type],
                          void foo(unsigned long); };
 
             int bar() {
-        ],
+        ])],
         wx_cv_wchar_t_is_separate_type=yes,
         wx_cv_wchar_t_is_separate_type=no
     )
@@ -3667,12 +3645,12 @@ dnl ---------------------------------------------------------------------------
 dnl does passwd struct has the pw_gecos field?
 AC_CACHE_CHECK([for pw_gecos in struct passwd], wx_cv_struct_pw_gecos,
     [
-        AC_TRY_COMPILE([#include <pwd.h>],
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <pwd.h>],
              [
                 char *p;
                 struct passwd *pw;
                 p = pw->pw_gecos;
-             ],
+             ])],
              [
                 wx_cv_struct_pw_gecos=yes
              ],
@@ -3749,7 +3727,7 @@ if test "$wx_cv_func_vsnprintf" = "yes"; then
     dnl may have one taking a "char *" format instead of "const char *"
     AC_CACHE_CHECK([if vsnprintf declaration is broken], wx_cv_func_broken_vsnprintf_decl,
         [
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                     #include <stdio.h>
                     #include <stdarg.h>
@@ -3759,7 +3737,7 @@ if test "$wx_cv_func_vsnprintf" = "yes"; then
                     va_list ap;
                     const char *fmt = "%s";
                     vsnprintf(buf, 10u, fmt, ap);
-                ],
+                ])],
                 wx_cv_func_broken_vsnprintf_decl=no,
                 wx_cv_func_broken_vsnprintf_decl=yes
             )
@@ -3780,7 +3758,7 @@ if test "$wx_cv_func_snprintf" = "yes"; then
         dnl     family and they all fallback to the same implementation
         AC_CACHE_CHECK([if snprintf supports positional arguments], wx_cv_func_snprintf_pos_params,
             [
-                AC_TRY_RUN(
+                AC_RUN_IFELSE([AC_LANG_SOURCE([[
                     [
                         #include <stdio.h>
 
@@ -3792,7 +3770,7 @@ if test "$wx_cv_func_snprintf" = "yes"; then
                                 exit (0);
                             exit (1);
                         }
-                    ],
+                    ]]])],
                     wx_cv_func_snprintf_pos_params=no,
                     wx_cv_func_snprintf_pos_params=yes,
                     dnl be pessimistic when cross-compiling
@@ -3817,7 +3795,7 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
     dnl happens at least under HP-UX 11.31, see #15638).
     AC_CACHE_CHECK([if vsscanf() declaration is broken], wx_cv_func_broken_vsscanf_decl,
         [
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                     #include <stdio.h>
                     #include <stdarg.h>
@@ -3826,7 +3804,7 @@ if test "$wx_cv_func_vsscanf" = "yes"; then
                     const char *buf;
                     va_list args;
                     vsscanf(buf, "%s", args);
-                ],
+                ])],
                 wx_cv_func_broken_vsscanf_decl=no,
                 wx_cv_func_broken_vsscanf_decl=yes
             )
@@ -3859,8 +3837,8 @@ dnl MinGW has a vswprintf with a different prototype, and
 dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
 dnl finds it even if it is not declared in some versions...
 AC_MSG_CHECKING([for _vsnwprintf])
-AC_TRY_COMPILE([#include <wchar.h>],
-               [&_vsnwprintf;],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <wchar.h>],
+               [&_vsnwprintf;])],
                [AC_MSG_RESULT([yes])
                 AC_DEFINE(HAVE__VSNWPRINTF)],
                [AC_MSG_RESULT([no])]);
@@ -3895,13 +3873,13 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     AC_CACHE_CHECK([for backtrace()], wx_cv_func_backtrace,
         [
             AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE([#include <execinfo.h>],
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <execinfo.h>], [
                 [
                     void *trace[1];
                     char **messages;
                     backtrace(trace, 1);
                     messages = backtrace_symbols(trace, 1);
-                ],
+                ]])],
                 wx_cv_func_backtrace=yes,
                 wx_cv_func_backtrace=no
             )
@@ -3920,11 +3898,11 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
             AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
                 [
                     AC_LANG_PUSH(C++)
-                    AC_TRY_LINK([#include <cxxabi.h>],
+                    AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <cxxabi.h>],
                         [
                             int rc;
                             __cxxabiv1::__cxa_demangle("foo", 0, 0, &rc);
-                        ],
+                        ])],
                         wx_cv_func_cxa_demangle=yes,
                         wx_cv_func_cxa_demangle=no
                     )
@@ -3954,14 +3932,14 @@ dnl get the library function to use for wxGetDiskSpace(): prefer POSIX
 dnl statvfs() if it exists, but fall back to Linux/BSD-specific statfs() if
 dnl necessary.
 AC_CACHE_CHECK(for statvfs, wx_cv_func_statvfs,
-    AC_TRY_COMPILE(
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
         [
             #include <stddef.h>
             #include <sys/statvfs.h>
         ],
         [
             statvfs("/", NULL);
-        ],
+        ])],
         wx_cv_func_statvfs=yes,
         wx_cv_func_statvfs=no
     )
@@ -3977,7 +3955,7 @@ if test "$wx_cv_func_statvfs" = "yes"; then
     dnl pointers is just a warning and not an error in C
     AC_CACHE_CHECK(for statvfs argument type, wx_cv_type_statvfs_t,
         AC_LANG_PUSH(C++)
-        AC_TRY_COMPILE(
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
             [
                 #include <sys/statvfs.h>
             ],
@@ -3988,10 +3966,10 @@ if test "$wx_cv_func_statvfs" = "yes"; then
                 l = fs.f_bsize;
                 l += fs.f_blocks;
                 l += fs.f_bavail;
-            ],
+            ])],
             wx_cv_type_statvfs_t=statvfs_t,
             [
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [
                         #include <sys/statvfs.h>
                     ],
@@ -4002,7 +3980,7 @@ if test "$wx_cv_func_statvfs" = "yes"; then
                         l = fs.f_bsize;
                         l += fs.f_blocks;
                         l += fs.f_bavail;
-                    ],
+                    ])],
                     wx_cv_type_statvfs_t="struct statvfs",
                     wx_cv_type_statvfs_t="unknown"
                 )
@@ -4021,7 +3999,7 @@ fi
 
 if test "$wx_cv_type_statvfs_t" = "unknown"; then
     AC_CACHE_CHECK(for statfs, wx_cv_func_statfs,
-        AC_TRY_COMPILE(
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
             [
                  #if defined(__BSD__)
                  #include <sys/param.h>
@@ -4037,7 +4015,7 @@ if test "$wx_cv_type_statvfs_t" = "unknown"; then
                  l = fs.f_bsize;
                  l += fs.f_blocks;
                  l += fs.f_bavail;
-            ],
+            ])],
              wx_cv_func_statfs=yes,
              wx_cv_func_statfs=no
         )
@@ -4047,7 +4025,7 @@ if test "$wx_cv_type_statvfs_t" = "unknown"; then
         dnl check whether we have its dcelaration too: some systems (AIX 4) lack it
         AC_CACHE_CHECK(for statfs declaration, wx_cv_func_statfs_decl,
             AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                      #if defined(__BSD__)
                      #include <sys/param.h>
@@ -4059,7 +4037,7 @@ if test "$wx_cv_type_statvfs_t" = "unknown"; then
                 [
                     struct statfs fs;
                     statfs("", &fs);
-                ],
+                ])],
                 wx_cv_func_statfs_decl=yes,
                 wx_cv_func_statfs_decl=no
             )
@@ -4309,7 +4287,7 @@ if test "$TOOLKIT" != "MSW"; then
 
         case "${host}" in
             *-*-qnx*)
-                dnl -lpthread works, i.e. AC_TRY_LINK() would pass, but results
+                dnl -lpthread works, i.e. AC_LINK_IFELSE() would pass, but results
                 dnl in warnings and is not needed under QNX so try without it
                 dnl first
                 THREAD_OPTS="none pthread"
@@ -4348,8 +4326,8 @@ if test "$TOOLKIT" != "MSW"; then
               LIBS="$THREADS_LINK $LIBS"
               CFLAGS="$THREADS_CFLAGS $CFLAGS"
 
-              AC_TRY_LINK([#include <pthread.h>],
-                          [pthread_create(0,0,0,0);],
+              AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <pthread.h>],
+                          [pthread_create(0,0,0,0);])],
                           THREADS_OK=yes)
 
               LIBS="$save_LIBS"
@@ -4436,14 +4414,14 @@ if test "$TOOLKIT" != "MSW"; then
         dnl function and not give a warning even if it's unavailable, so use
         dnl the C++ one for this test
         AC_LANG_PUSH(C++)
-        AC_TRY_COMPILE([#include <pthread.h>
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <pthread.h>
                void ThreadCleanupFunc(void *p);
             ],
             [
                 void *p;
                 pthread_cleanup_push(ThreadCleanupFunc, p);
                 pthread_cleanup_pop(0);
-            ], [
+            ])], [
                wx_cv_func_pthread_cleanup=yes
             ], [
                wx_cv_func_pthread_cleanup=no
@@ -4518,11 +4496,11 @@ if test "$TOOLKIT" != "MSW"; then
 
       AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,
       [
-        AC_TRY_COMPILE([#include <pthread.h>],
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <pthread.h>],
             [
                pthread_mutexattr_t attr;
                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-            ],
+            ])],
             wx_cv_type_pthread_mutexattr_t=yes,
             wx_cv_type_pthread_mutexattr_t=no
         )
@@ -4535,11 +4513,11 @@ if test "$TOOLKIT" != "MSW"; then
         dnl present in some systems' headers
         AC_CACHE_CHECK([for pthread_mutexattr_settype declaration],
                        wx_cv_func_pthread_mutexattr_settype_decl, [
-                       AC_TRY_COMPILE([#include <pthread.h>],
+                       AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <pthread.h>],
                            [
                                pthread_mutexattr_t attr;
                                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-                           ],
+                           ])],
                            wx_cv_func_pthread_mutexattr_settype_decl=yes,
                            wx_cv_func_pthread_mutexattr_settype_decl=no
                        )
@@ -4552,10 +4530,10 @@ if test "$TOOLKIT" != "MSW"; then
         AC_CACHE_CHECK([for PTHREAD_RECURSIVE_MUTEX_INITIALIZER],
                        wx_cv_type_pthread_rec_mutex_init,
         [
-            AC_TRY_COMPILE([#include <pthread.h>],
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <pthread.h>],
                 [
                     pthread_mutex_t attr = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
-                ], [
+                ])], [
                     wx_cv_type_pthread_rec_mutex_init=yes
                 ], [
                     wx_cv_type_pthread_rec_mutex_init=no
@@ -4575,10 +4553,10 @@ if test "$TOOLKIT" != "MSW"; then
             wx_cv_type_abi_forced_unwind,
             [
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE([#include <cxxabi.h>],
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <cxxabi.h>],
                     [
                         void foo(abi::__forced_unwind&);
-                    ],
+                    ])],
                     wx_cv_type_abi_forced_unwind=yes,
                     wx_cv_type_abi_forced_unwind=no
                 )
@@ -5090,24 +5068,24 @@ if test "$USE_UNIX" = 1 ; then
     dnl redefines ioctl as oss_ioctrl inside it and so we also need to test
     dnl whether we need -lossaudio at link-time
     AC_CACHE_CHECK([for SNDCTL_DSP_SPEED in sys/soundcard.h], ac_cv_header_sys_soundcard, [
-        AC_TRY_LINK([
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([
                 #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
             ],
             [
                 ioctl(0, SNDCTL_DSP_SPEED, 0);
-            ],
+            ])],
             ac_cv_header_sys_soundcard=yes,
             [
                 saveLibs="$LIBS"
                 LIBS="$saveLibs -lossaudio"
-                AC_TRY_LINK([
+                AC_LINK_IFELSE([AC_LANG_PROGRAM([
                         #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
                     ],
                     [
                         ioctl(0, SNDCTL_DSP_SPEED, 0);
-                    ],
+                    ])],
                     ac_cv_header_sys_soundcard=yes,
                     [
                         LIBS="$saveLibs"
@@ -5418,7 +5396,7 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
     AC_CACHE_CHECK([for locale_t], wx_cv_type_locale_t,
     [
         AC_LANG_PUSH(C++)
-        AC_TRY_COMPILE(
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
         [
         #ifdef HAVE_XLOCALE_H
         #include <xlocale.h>
@@ -5431,7 +5409,7 @@ if test "$wxUSE_XLOCALE" = "yes" ; then
         strtod_l(NULL, NULL, t);
         strtol_l(NULL, NULL, 0, t);
         strtoul_l(NULL, NULL, 0, t);
-        ],
+        ])],
         wx_cv_type_locale_t=yes,
         wx_cv_type_locale_t=no
         )
@@ -5533,7 +5511,7 @@ if test "$ac_cv_func_gettimeofday" = "yes"; then
                    wx_cv_func_gettimeofday_has_2_args,
     [
         dnl on some _really_ old systems it takes only 1 argument
-        AC_TRY_COMPILE(
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
             [
                 #include <sys/time.h>
                 #include <unistd.h>
@@ -5541,9 +5519,9 @@ if test "$ac_cv_func_gettimeofday" = "yes"; then
             [
                 struct timeval tv;
                 gettimeofday(&tv, NULL);
-            ],
+            ])],
             wx_cv_func_gettimeofday_has_2_args=yes,
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                     #include <sys/time.h>
                     #include <unistd.h>
@@ -5551,7 +5529,7 @@ if test "$ac_cv_func_gettimeofday" = "yes"; then
                 [
                     struct timeval tv;
                     gettimeofday(&tv);
-                ],
+                ])],
                 wx_cv_func_gettimeofday_has_2_args=no,
                 [
                     AC_MSG_WARN([failed to determine number of gettimeofday() arguments])
@@ -5573,38 +5551,38 @@ if test "$wxUSE_DATETIME" = "yes"; then
                    wx_cv_var_timezone,
                    [
                         AC_LANG_PUSH(C++)
-                        AC_TRY_COMPILE(
+                        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                             [
                                 #include <time.h>
                             ],
                             [
                                 int tz;
                                 tz = timezone;
-                            ],
+                            ])],
                             [
                                 wx_cv_var_timezone=timezone
                             ],
                             [
-                                AC_TRY_COMPILE(
+                                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                                     [
                                         #include <time.h>
                                     ],
                                     [
                                         int tz;
                                         tz = _timezone;
-                                    ],
+                                    ])],
                                     [
                                         wx_cv_var_timezone=_timezone
                                     ],
                                     [
-                                        AC_TRY_COMPILE(
+                                        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                                             [
                                                 #include <time.h>
                                             ],
                                             [
                                                 int tz;
                                                 tz = __timezone;
-                                            ],
+                                            ])],
                                             [
                                                 wx_cv_var_timezone=__timezone
                                             ],
@@ -5634,14 +5612,14 @@ if test "$wxUSE_DATETIME" = "yes"; then
         AC_CACHE_CHECK(for tm_gmtoff in struct tm,
                        wx_cv_struct_tm_has_gmtoff,
         [
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                     #include <time.h>
                 ],
                 [
                     struct tm tm;
                     tm.tm_gmtoff++;
-                ],
+                ])],
                 [
                     wx_cv_struct_tm_has_gmtoff=yes
                 ],
@@ -5657,14 +5635,14 @@ if test "$wxUSE_DATETIME" = "yes"; then
     AC_CACHE_CHECK([for _NL_TIME_FIRST_WEEKDAY in langinfo.h],
                    wx_cv_have_nl_time_first_weekday,
     [
-        AC_TRY_COMPILE(
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [
                      #define _GNU_SOURCE
                      #include <langinfo.h>
                 ],
                 [
                      _NL_TIME_FIRST_WEEKDAY;
-                ],
+                ])],
                 [
                      wx_cv_have_nl_time_first_weekday=yes
                 ],
@@ -5728,7 +5706,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                        wx_cv_type_getsockname3,
             [
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [
                         #include <sys/types.h>
                         #include <sys/socket.h>
@@ -5736,7 +5714,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                     [
                         socklen_t len;
                         getsockname(0, 0, &len);
-                    ],
+                    ])],
                     wx_cv_type_getsockname3=socklen_t,
                     [
                         dnl the compiler will compile the version with size_t
@@ -5750,7 +5728,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                             CFLAGS="-Werror $CFLAGS"
                         fi
 
-                        AC_TRY_COMPILE(
+                        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                             [
                                 #include <sys/types.h>
                                 #include <sys/socket.h>
@@ -5758,9 +5736,9 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                             [
                                 size_t len;
                                 getsockname(0, 0, &len);
-                            ],
+                            ])],
                             wx_cv_type_getsockname3=size_t,
-                            AC_TRY_COMPILE(
+                            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                                 [
                                     #include <sys/types.h>
                                     #include <sys/socket.h>
@@ -5768,7 +5746,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 [
                                     int len;
                                     getsockname(0, 0, &len);
-                                ],
+                                ])],
                                 wx_cv_type_getsockname3=int,
                                 wx_cv_type_getsockname3=unknown
                             )
@@ -5796,7 +5774,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                 dnl converting between incompatible pointer types in C.
                 dnl So this test needs to be done in C++ mode.
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [
                         #include <sys/types.h>
                         #include <sys/socket.h>
@@ -5804,10 +5782,10 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                     [
                         socklen_t len;
                         getsockopt(0, 0, 0, 0, &len);
-                    ],
+                    ])],
                     wx_cv_type_getsockopt5=socklen_t,
                     [
-                        AC_TRY_COMPILE(
+                        AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                             [
                                 #include <sys/types.h>
                                 #include <sys/socket.h>
@@ -5815,9 +5793,9 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                             [
                                 size_t len;
                                 getsockopt(0, 0, 0, 0, &len);
-                            ],
+                            ])],
                             wx_cv_type_getsockopt5=size_t,
-                            AC_TRY_COMPILE(
+                            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                                 [
                                     #include <sys/types.h>
                                     #include <sys/socket.h>
@@ -5825,7 +5803,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                                 [
                                     int len;
                                     getsockopt(0, 0, 0, 0, &len);
-                                ],
+                                ])],
                                 wx_cv_type_getsockopt5=int,
                                 wx_cv_type_getsockopt5=unknown
                             )
@@ -5850,7 +5828,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
             [whether we have sockaddr_in6],
             [wx_cv_type_sockaddr_in6],
             [
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [
                         #include <sys/types.h>
                         #include <sys/socket.h>
@@ -5858,7 +5836,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                     ],
                     [
                         struct sockaddr_in6 sa6;
-                    ],
+                    ])],
                     wx_cv_type_sockaddr_in6=yes,
                     wx_cv_type_sockaddr_in6=no
                 )
@@ -7056,7 +7034,7 @@ if test "$USE_WIN32" = 1 ; then
                 dnl we need just the header, not the library, as we load the
                 dnl DLL dynamically anyhow during run-time
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [#include <windows.h>
                      #include <imagehlp.h>],
                     [
@@ -7066,7 +7044,7 @@ if test "$USE_WIN32" = 1 ; then
                         #if API_VERSION_NUMBER < 9
                         #error API_VERSION_NUMBER at least 9 required.
                         #endif
-                    ],
+                    ])],
                     wx_cv_lib_debughlp=yes,
                     wx_cv_lib_debughlp=no
                 )
@@ -7138,12 +7116,12 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
                 dnl we need just the header, not the library, as we load the
                 dnl GDI+ DLL dynamically anyhow during run-time
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [#include <windows.h>
                      #include <gdiplus.h>],
                     [
                         using namespace Gdiplus;
-                    ],
+                    ])],
                     wx_cv_lib_gdiplus=yes,
                     wx_cv_lib_gdiplus=no
                 )
@@ -7158,14 +7136,14 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
             [
                 dnl same as above, we need to test only for the headers
                 AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                     [#include <windows.h>
                      #include <d2d1.h>
                      #include <dwrite.h>
                     ],
                     [
                         ID2D1Factory* factory = NULL;
-                    ],
+                    ])],
                     wx_cv_lib_direct2d=yes,
                     wx_cv_lib_direct2d=no
                 )
@@ -7266,7 +7244,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
             old_CPPFLAGS="$CPPFLAGS"
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
             AC_MSG_CHECKING([if AVKit is available])
-            AC_TRY_COMPILE(
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
                 [#include "AvailabilityMacros.h"],
                 [
                     #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
@@ -7274,7 +7252,7 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
                     #else
                         choke me
                     #endif
-                ],
+                ])],
                 [GST_LIBS="$GST_LIBS -weak_framework AVKit"; AC_MSG_RESULT(yes)],
                 AC_MSG_RESULT(no)
             )

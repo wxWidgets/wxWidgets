@@ -27,7 +27,7 @@ Successfully tagged autoconf-for-wx:latest
 
 ## Run
 
-Use the following command to update `configure` from `configure.in`:
+Use the following command to update `configure` from `configure.ac`:
 
 ```shell
 $ docker run -v `pwd`:/wx --rm autoconf-for-wx
