@@ -160,8 +160,15 @@
         <wx-lib>base</wx-lib>
     </module>
 
+    <template id="stc_append">
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+            <sys-lib>$(LIB_SCINTILLA)</sys-lib>
+            <sys-lib>$(LIB_LEXILLA)</sys-lib>
+        </if>
+    </template>
+
     <exe id="test_gui" template="wx_sample,wx_test"
-                       template_append="wx_append"
+                       template_append="stc_append,wx_append"
          cond="USE_GUI=='1'">
 
         <!-- link against GUI libraries, but be a console app: -->
@@ -293,12 +300,11 @@
             Can't use <wx-lib> here as it doesn't work with conditionally
             defined variables, so fall back <sys-lib> as we must not link with
             inexisting webview library to be able to run tests even if
-            wxWebView or wxSTC is not available.
+            wxWebView is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
-        <sys-lib>$(WXLIB_STC)</sys-lib>
-        <ldlibs>$(EXTRALIBS_STC)</ldlibs>
+        <wx-lib>stc</wx-lib>
         <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
@@ -312,7 +318,7 @@
     </exe>
 
     <exe id="test_allheaders" template="wx_sample,wx_test"
-                              template_append="wx_append"
+                              template_append="stc_append,wx_append"
          cond="USE_GUI=='1'">
         <!-- link against GUI libraries, but be a console app: -->
         <app-type>console</app-type>
@@ -327,12 +333,11 @@
             Can't use <wx-lib> here as it doesn't work with conditionally
             defined variables, so fall back <sys-lib> as we must not link with
             inexisting webview library to be able to run tests even if
-            wxWebView or wxSTC is not available.
+            wxWebView is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
-        <sys-lib>$(WXLIB_STC)</sys-lib>
-        <ldlibs>$(EXTRALIBS_STC)</ldlibs>
+        <wx-lib>stc</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
