@@ -3,7 +3,9 @@
 
     <if cond="FORMAT=='autoconf'">
         <set var="LIB_SCINTILLA">
-          wxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            <if cond="USE_STC=='1'">
+              wxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
         </set>
     </if>
     <if cond="FORMAT!='autoconf'">
