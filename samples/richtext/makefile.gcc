@@ -158,8 +158,11 @@ endif
 endif
 ifeq ($(MONOLITHIC),1)
 ifeq ($(USE_STC),1)
-__LIB_LEXILLA_IF_MONO_p = -lwxlexilla$(WXDEBUGFLAG)
+__LIB_LEXILLA_IF_MONO_p = $(__LIB_LEXILLA_p)
 endif
+endif
+ifeq ($(USE_STC),1)
+__LIB_LEXILLA_p = -lwxlexilla$(WXDEBUGFLAG)
 endif
 ifeq ($(USE_GUI),1)
 __LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
