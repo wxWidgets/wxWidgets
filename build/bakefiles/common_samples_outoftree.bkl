@@ -37,9 +37,11 @@
     </define-rule>
 
 
-    <!-- empty stubs for things that don't make sense for makefile.unx: -->
+    <!-- Define templates used by the samples -->
     <template id="wx_append"/>
-    <template id="wx_append_base"/>
+    <template id="wx_append_base">
+        <cxxflags>-DwxUSE_GUI=0</cxxflags>
+    </template>
 
     <define-rule name="wx-data" pseudo="1">
         <define-tag name="files"/>
