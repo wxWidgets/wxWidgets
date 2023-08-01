@@ -82,6 +82,7 @@
 #endif
 
 #include "wx/datetime.h"
+#include "wx/uilocale.h"
 
 // ----------------------------------------------------------------------------
 // wxXTI
@@ -773,19 +774,11 @@ wxString wxDateTime::GetEnglishMonthName(Month month, NameFlags flags)
 wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
-#ifdef wxHAS_STRFTIME
-    wxCHECK_MSG( month != Inv_Month, wxEmptyString, wxT("invalid month") );
-
-    // notice that we must set all the fields to avoid confusing libc (GNU one
-    // gets confused to a crash if we don't do this)
-    tm tm;
-    wxInitTm(tm);
-    tm.tm_mon = month;
-
-    return wxCallStrftime(flags == Name_Abbr ? wxS("%b") : wxS("%B"), &tm);
-#else // !wxHAS_STRFTIME
-    return GetEnglishMonthName(month, flags);
-#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
+    wxCHECK_MSG(month != Inv_Month, wxEmptyString, wxT("invalid month"));
+    wxString name = wxUILocale::GetCurrent().GetMonthName(month, flags);
+    if (name.empty())
+        name = GetEnglishMonthName(month, flags);
+    return name;
 }
 
 /* static */
@@ -811,29 +804,11 @@ wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
 wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
-#ifdef wxHAS_STRFTIME
-    wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday") );
-
-    // take some arbitrary Sunday (but notice that the day should be such that
-    // after adding wday to it below we still have a valid date, e.g. don't
-    // take 28 here!)
-    tm tm;
-    wxInitTm(tm);
-    tm.tm_mday = 21;
-    tm.tm_mon = Nov;
-    tm.tm_year = 99;
-
-    // and offset it by the number of days needed to get the correct wday
-    tm.tm_mday += wday;
-
-    // call mktime() to normalize it...
-    (void)mktime(&tm);
-
-    // ... and call strftime()
-    return wxCallStrftime(flags == Name_Abbr ? wxS("%a") : wxS("%A"), &tm);
-#else // !wxHAS_STRFTIME
-    return GetEnglishWeekDayName(wday, flags);
-#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
+    wxCHECK_MSG(wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday"));
+    wxString name = wxUILocale::GetCurrent().GetWeekDayName(wday, flags);
+    if (name.empty())
+        name = GetEnglishWeekDayName(wday, flags);
+    return name;
 }
 
 /* static */

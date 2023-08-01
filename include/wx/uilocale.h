@@ -14,6 +14,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/datetime.h"
 #include "wx/localedefs.h"
 #include "wx/string.h"
 #include "wx/vector.h"
@@ -153,6 +154,18 @@ public:
     // Compares two strings in the order defined by this locale.
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags = wxCompare_CaseSensitive) const;
+
+#if wxABI_VERSION >= 30203
+    // Get the full (default) or abbreviated localized month name
+    // returns empty string on error
+    wxString GetMonthName(wxDateTime::Month month,
+                          wxDateTime::NameFlags flags = wxDateTime::Name_Full) const;
+
+    // Get the full (default) or abbreviated localized weekday name
+    // returns empty string on error
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday,
+                            wxDateTime::NameFlags flags = wxDateTime::Name_Full) const;
+#endif // wxABI_VERSION >= 3.2.3
 
     // Note that this class is not supposed to be used polymorphically, hence
     // its dtor is not virtual.

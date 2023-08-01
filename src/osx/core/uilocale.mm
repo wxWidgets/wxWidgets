@@ -30,6 +30,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
+#import <Foundation/NSDateFormatter.h>
 
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
@@ -147,6 +148,9 @@ public:
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const wxOVERRIDE;
 
+    wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const;
+    wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const;
+
 private:
     NSLocale* const m_nsloc;
 
@@ -172,7 +176,7 @@ wxUILocaleImplCF::GetName() const
     wxString name = wxCFStringRef::AsString([m_nsloc localeIdentifier]);
 
     // Check for the special case of the "empty" system locale, see CreateStdC()
-    if ( name.empty() )
+    if ( name.empty() || name.IsSameAs("en_US_POSIX") )
         name = "C";
 
     return name;
@@ -223,6 +227,52 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     return wxCFStringRef::AsString(str);
 }
 
+wxString
+wxUILocaleImplCF::DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
+{
+    NSDateFormatter* df = [NSDateFormatter new];
+    df.locale = m_nsloc;
+
+    NSArray* monthNames = NULL;
+
+    switch ( flags )
+    {
+        case wxDateTime::Name_Abbr:
+            monthNames = [df shortMonthSymbols];
+            break;
+        case wxDateTime::Name_Full:
+        default:
+            monthNames = [df monthSymbols];
+            break;
+    }
+
+    NSString* monthName = [monthNames objectAtIndex:(month)];
+    return wxCFStringRef::AsString(monthName);
+}
+
+wxString
+wxUILocaleImplCF::DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const
+{
+    NSDateFormatter* df = [NSDateFormatter new];
+    df.locale = m_nsloc;
+
+    NSArray* weekdayNames = NULL;
+
+    switch ( flags )
+    {
+        case wxDateTime::Name_Abbr:
+            weekdayNames = [df shortWeekdaySymbols];
+            break;
+        case wxDateTime::Name_Full:
+        default:
+            weekdayNames = [df weekdaySymbols];
+            break;
+    }
+
+    NSString* weekdayName = [weekdayNames objectAtIndex:(weekday)];
+    return wxCFStringRef::AsString(weekdayName);
+}
+
 wxLayoutDirection
 wxUILocaleImplCF::GetLayoutDirection() const
 {
@@ -242,7 +292,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
     // wouldn't be much better as we'd still need a hack for it in GetName()
     // because the locale names are always converted to lower case, while we
     // really want to return "C" rather than "c" as the name of this one.
-    return new wxUILocaleImplCF([NSLocale systemLocale]);
+    return new wxUILocaleImplCF([NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]);
 }
 
 /* static */
@@ -268,6 +318,18 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
         preferred.push_back(wxCFStringRef::AsString(preferredLangs[j]));
 
     return preferred;
+}
+
+wxString
+wxUILocaleImpl::GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
+{
+    return static_cast<const wxUILocaleImplCF*>(this)->DoGetMonthName(month, flags);
+}
+
+wxString
+wxUILocaleImpl::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const
+{
+    return static_cast<const wxUILocaleImplCF*>(this)->DoGetWeekDayName(weekday, flags);
 }
 
 int

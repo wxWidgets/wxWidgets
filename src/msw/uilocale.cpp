@@ -76,6 +76,10 @@
 #define LOCALE_IREADINGLAYOUT         0x00000070
 #endif
 
+#ifndef LOCALE_RETURN_GENITIVE_NAMES
+#define LOCALE_RETURN_GENITIVE_NAMES  0x10000000
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -153,10 +157,21 @@ wxString wxLocaleIdent::GetName() const
 }
 
 // ----------------------------------------------------------------------------
+// Base class for MSW implementations
+// ----------------------------------------------------------------------------
+
+class wxUILocaleImplMSW : public wxUILocaleImpl
+{
+public:
+    virtual wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const = 0;
+    virtual wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const = 0;
+};
+
+// ----------------------------------------------------------------------------
 // Standard C wxUILocale implementation for MSW
 // ----------------------------------------------------------------------------
 
-class wxUILocaleImplStdC : public wxUILocaleImpl
+class wxUILocaleImplStdC : public wxUILocaleImplMSW
 {
 public:
 
@@ -210,6 +225,17 @@ public:
         return str;
     }
 
+    wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const wxOVERRIDE
+    {
+        return wxDateTime::GetEnglishMonthName(month, flags);
+    }
+
+    wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const wxOVERRIDE
+
+    {
+        return wxDateTime::GetEnglishWeekDayName(weekday, flags);
+    }
+
     wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
         return wxLayout_Default;
@@ -241,7 +267,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // TODO-XP: Replace with wxUILocaleImplName when we don't support XP any longer.
-class wxUILocaleImplLCID : public wxUILocaleImpl
+class wxUILocaleImplLCID : public wxUILocaleImplMSW
 {
 public:
     explicit wxUILocaleImplLCID(LCID lcid)
@@ -341,6 +367,52 @@ public:
         return str;
     }
 
+    wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const wxOVERRIDE
+    {
+        static LCTYPE monthNameIndex[2][12] =
+        {
+            { LOCALE_SMONTHNAME1,  LOCALE_SMONTHNAME2,  LOCALE_SMONTHNAME3,
+              LOCALE_SMONTHNAME4,  LOCALE_SMONTHNAME5,  LOCALE_SMONTHNAME6,
+              LOCALE_SMONTHNAME7,  LOCALE_SMONTHNAME8,  LOCALE_SMONTHNAME9,
+              LOCALE_SMONTHNAME10, LOCALE_SMONTHNAME11, LOCALE_SMONTHNAME12 },
+            { LOCALE_SABBREVMONTHNAME1,  LOCALE_SABBREVMONTHNAME2,  LOCALE_SABBREVMONTHNAME3,
+              LOCALE_SABBREVMONTHNAME4,  LOCALE_SABBREVMONTHNAME5,  LOCALE_SABBREVMONTHNAME6,
+              LOCALE_SABBREVMONTHNAME7,  LOCALE_SABBREVMONTHNAME8,  LOCALE_SABBREVMONTHNAME9,
+              LOCALE_SABBREVMONTHNAME10, LOCALE_SABBREVMONTHNAME11, LOCALE_SABBREVMONTHNAME12 }
+        };
+
+        const int idx = ArrayIndexFromFlag(flags);
+        if (idx == -1)
+            return wxString();
+
+        // Return names in standalone context
+        // Note: Windows versions below 7 don't support LOCALE_RETURN_GENITIVE_NAMES
+        LCTYPE lctype = monthNameIndex[idx][month] /*| LOCALE_RETURN_GENITIVE_NAMES*/;
+
+        return DoGetInfo(lctype);
+    }
+
+    wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const wxOVERRIDE
+    {
+        static LCTYPE weekdayNameIndex[2][12] =
+        {
+            { LOCALE_SDAYNAME7, LOCALE_SDAYNAME1, LOCALE_SDAYNAME2, LOCALE_SDAYNAME3,
+              LOCALE_SDAYNAME4, LOCALE_SDAYNAME5, LOCALE_SDAYNAME6 },
+            { LOCALE_SABBREVDAYNAME7, LOCALE_SABBREVDAYNAME1, LOCALE_SABBREVDAYNAME2, LOCALE_SABBREVDAYNAME3,
+              LOCALE_SABBREVDAYNAME4, LOCALE_SABBREVDAYNAME5, LOCALE_SABBREVDAYNAME6 }
+        };
+
+        const int idx = ArrayIndexFromFlag(flags);
+        if (idx == -1)
+            return wxString();
+
+        // Return names in standalone context
+        // Note: Windows versions below 7 don't support LOCALE_RETURN_GENITIVE_NAMES
+        LCTYPE lctype = weekdayNameIndex[idx][weekday] /*| LOCALE_RETURN_GENITIVE_NAMES*/;
+
+        return DoGetInfo(lctype);
+    }
+
     wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
         return wxLayout_Default;
@@ -378,7 +450,7 @@ private:
 // Name-based wxUILocale implementation for MSW
 // ----------------------------------------------------------------------------
 
-class wxUILocaleImplName : public wxUILocaleImpl
+class wxUILocaleImplName : public wxUILocaleImplMSW
 {
 public:
     // TODO-XP: Get rid of this function and all the code branches handling the
@@ -691,6 +763,52 @@ public:
         return str;
     }
 
+    wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const wxOVERRIDE
+    {
+        static LCTYPE monthNameIndex[2][12] =
+        {
+            { LOCALE_SMONTHNAME1,  LOCALE_SMONTHNAME2,  LOCALE_SMONTHNAME3,
+              LOCALE_SMONTHNAME4,  LOCALE_SMONTHNAME5,  LOCALE_SMONTHNAME6,
+              LOCALE_SMONTHNAME7,  LOCALE_SMONTHNAME8,  LOCALE_SMONTHNAME9,
+              LOCALE_SMONTHNAME10, LOCALE_SMONTHNAME11, LOCALE_SMONTHNAME12 },
+            { LOCALE_SABBREVMONTHNAME1,  LOCALE_SABBREVMONTHNAME2,  LOCALE_SABBREVMONTHNAME3,
+              LOCALE_SABBREVMONTHNAME4,  LOCALE_SABBREVMONTHNAME5,  LOCALE_SABBREVMONTHNAME6,
+              LOCALE_SABBREVMONTHNAME7,  LOCALE_SABBREVMONTHNAME8,  LOCALE_SABBREVMONTHNAME9,
+              LOCALE_SABBREVMONTHNAME10, LOCALE_SABBREVMONTHNAME11, LOCALE_SABBREVMONTHNAME12 }
+        };
+
+        const int idx = ArrayIndexFromFlag(flags);
+        if (idx == -1)
+            return wxString();
+
+        // Return names in formatting context
+        // Drop OR with LOCALE_RETURN_GENITIVE_NAMES, if standalone context is wanted
+        LCTYPE lctype = monthNameIndex[idx][month] | LOCALE_RETURN_GENITIVE_NAMES;
+
+        return DoGetInfo(lctype);
+    }
+
+    wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const wxOVERRIDE
+    {
+        static LCTYPE weekdayNameIndex[2][12] =
+        {
+            { LOCALE_SDAYNAME7, LOCALE_SDAYNAME1, LOCALE_SDAYNAME2, LOCALE_SDAYNAME3,
+              LOCALE_SDAYNAME4, LOCALE_SDAYNAME5, LOCALE_SDAYNAME6 },
+            { LOCALE_SABBREVDAYNAME7, LOCALE_SABBREVDAYNAME1, LOCALE_SABBREVDAYNAME2, LOCALE_SABBREVDAYNAME3,
+              LOCALE_SABBREVDAYNAME4, LOCALE_SABBREVDAYNAME5, LOCALE_SABBREVDAYNAME6 }
+        };
+
+        const int idx = ArrayIndexFromFlag(flags);
+        if (idx == -1)
+            return wxString();
+
+        // Return names in formatting context
+        // Drop OR with LOCALE_RETURN_GENITIVE_NAMES, if standalone context is wanted
+        LCTYPE lctype = weekdayNameIndex[idx][weekday] | LOCALE_RETURN_GENITIVE_NAMES;
+
+        return DoGetInfo(lctype);
+    }
+
     wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
         if (wxGetWinVersion() >= wxWinVersion_7)
@@ -854,6 +972,18 @@ wxUILocaleImpl* wxUILocaleImpl::CreateForLocale(const wxLocaleIdent& locId)
 wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
     return wxUILocaleImplName::GetPreferredUILanguages();
+}
+
+wxString
+wxUILocaleImpl::GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
+{
+    return static_cast<const wxUILocaleImplMSW*>(this)->DoGetMonthName(month, flags);
+}
+
+wxString
+wxUILocaleImpl::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const
+{
+    return static_cast<const wxUILocaleImplMSW*>(this)->DoGetWeekDayName(weekday, flags);
 }
 
 #endif // wxUSE_INTL

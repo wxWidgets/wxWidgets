@@ -26,6 +26,14 @@
 # build/bakefiles/version.bkl to indicate that new APIs have been added and
 # rebake!
 
+# public symbols added in 3.2.3 (please keep in alphabetical order):
+@WX_VERSION_TAG@.3 {
+    extern "C++" {
+        "wxUILocale::GetMonthName";
+        "wxUILocale::GetWeekDayName";
+    };
+};
+
 # public symbols added in 3.2.2 (please keep in alphabetical order):
 @WX_VERSION_TAG@.2 {
     extern "C++" {
