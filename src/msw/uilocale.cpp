@@ -77,6 +77,10 @@
 #define LOCALE_IREADINGLAYOUT         0x00000070
 #endif
 
+#ifndef LOCALE_RETURN_GENITIVE_NAMES
+#define LOCALE_RETURN_GENITIVE_NAMES  0x10000000
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
