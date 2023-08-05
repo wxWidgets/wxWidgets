@@ -366,6 +366,11 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
+void wxStaticBox::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
+{
+    PositionLabelWindow();
+}
+
 // ----------------------------------------------------------------------------
 // static box drawing
 // ----------------------------------------------------------------------------
