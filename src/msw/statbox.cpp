@@ -98,6 +98,8 @@ bool wxStaticBox::Create(wxWindow *parent,
         SetBackgroundStyle(wxBG_STYLE_PAINT);
     }
 
+    Bind(wxEVT_DPI_CHANGED, &wxStaticBox::OnDPIChanged, this);
+
     return true;
 }
 
@@ -304,6 +306,11 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+void wxStaticBox::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    PositionLabelWindow();
 }
 
 // ----------------------------------------------------------------------------

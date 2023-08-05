@@ -93,6 +93,8 @@ protected:
     void OnPaint(wxPaintEvent& event);
 
 private:
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     void PositionLabelWindow();
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox);

@@ -302,6 +302,7 @@ wxMSW:
 - Fix libraries names in Arch64 CMake build (Tobias Taschner, #23347).
 - Fix using wxComboCtrl with AUI floating pane as parent (#23399).
 - Fix wrong wxWindowsPrintNativeData initialization (Stefan Ziegler, #23685).
+- Fix position of wxStaticBox label after DPI change (Maarten Bent, #23740).
 
 wxOSX:
 
