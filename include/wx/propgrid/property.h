@@ -329,7 +329,7 @@ wxPG_PROP_CUSTOMIMAGE               = 0x0008,
 // dialog and choice are ok).
 wxPG_PROP_NOEDITOR                  = 0x0010,
 
-// Property is collapsed, ie. it's children are hidden.
+// Property is collapsed, ie. its children are hidden.
 wxPG_PROP_COLLAPSED                 = 0x0020,
 
 // If property is selected, then indicates that validation failed for pending
@@ -1521,7 +1521,7 @@ public:
     // Useful in SetAttribute etc. Returns true if actually did anything.
     bool RecreateEditor();
 
-    // If property's editor is active, then update it's value.
+    // If property's editor is active, then update its value.
     void RefreshEditor();
 
     // Sets an attribute for this property.

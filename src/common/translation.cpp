@@ -947,7 +947,7 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
 {
 }
 
-// open disk file and read in it's contents
+// open disk file and read in its contents
 bool wxMsgCatalogFile::LoadFile(const wxString& filename,
                                 wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
