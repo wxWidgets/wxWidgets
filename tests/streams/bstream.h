@@ -253,9 +253,17 @@ protected:
         while (stream_in.IsOk())
         {
             char peekChar = stream_in.Peek();
+            size_t peekLastRead = stream_in.LastRead();
+
             char getChar = stream_in.GetC();
+
+            // Peek and GetC should retrieve the same 0 or 1 characters.
+            CPPUNIT_ASSERT_EQUAL(peekLastRead, stream_in.LastRead());
+
             if (stream_in.LastRead() == 1)
+            {
                 CPPUNIT_ASSERT_EQUAL(getChar, peekChar);
+            }
         }
     }
 
