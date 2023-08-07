@@ -760,7 +760,7 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
         case SIZE_RESTORED:
         case SIZE_MAXIMIZED:
             // only do it it if we were iconized before, otherwise resizing the
-            // parent frame has a curious side effect of bringing it under it's
+            // parent frame has a curious side effect of bringing it under its
             // children
             if ( m_showCmd != SW_MINIMIZE )
                 break;
