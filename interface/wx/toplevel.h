@@ -192,7 +192,7 @@ public:
 
     /**
         Returns a pointer to the button which is the default for this window, or
-        @c @NULL. The default button is the one activated by pressing the Enter
+        @NULL. The default button is the one activated by pressing the Enter
         key.
     */
     wxWindow* GetDefaultItem() const;
@@ -246,7 +246,7 @@ public:
         @param iconize
             If @true, iconizes the window; if @false, shows and restores it.
 
-        @see IsIconized(), Restore()(), wxIconizeEvent.
+        @see IsIconized(), Restore(), wxIconizeEvent.
     */
     virtual void Iconize(bool iconize = true);
 

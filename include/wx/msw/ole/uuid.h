@@ -37,7 +37,7 @@
 typedef unsigned char uchar;
 
 // ------------------------------------------------------------------
-// a class to store UUID and it's string representation
+// a class to store UUID and its string representation
 // ------------------------------------------------------------------
 
 // uses RPC functions to create/convert Universally Unique Identifiers

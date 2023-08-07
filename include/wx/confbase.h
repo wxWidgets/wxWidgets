@@ -139,7 +139,7 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) const = 0;
   virtual bool GetNextEntry (wxString& str, long& lIndex) const = 0;
     // get number of entries/subgroups in the current group, with or without
-    // it's subgroups
+    // its subgroups
   virtual size_t GetNumberOfEntries(bool bRecursive = false) const = 0;
   virtual size_t GetNumberOfGroups(bool bRecursive = false) const = 0;
 
