@@ -2911,6 +2911,7 @@ wxGrid::SetTable(wxGridTableBase *table,
     }
 
     InvalidateBestSize();
+    m_currentCellCoords = wxGridNoCellCoords;
 
     return m_created;
 }
