@@ -69,7 +69,7 @@ void wxSystemSettings::SetScreenType( wxSystemScreenType screen )
 // ----------------------------------------------------------------------------
 
 // wxMSW has its own implementation of these functions.
-#if !defined(__WXMSW__)
+#if !defined(__WXMSW__) && !defined(__WXGTK3__) && !defined(__WXGTK__)
 
 bool wxSystemAppearance::AreAppsDark() const
 {
@@ -81,7 +81,7 @@ bool wxSystemAppearance::IsSystemDark() const
     return IsDark();
 }
 
-#endif // !__WXMSW__
+#endif // !__WXMSW__ && !__WXGTK3__ && !__WXGTK__
 
 #if !defined(__WXOSX__)
 

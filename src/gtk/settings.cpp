@@ -25,6 +25,22 @@
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/value.h"
+#include "wx/gtk/private/error.h"
+
+// xdg-desktop-portal provides a DBus interface for dark mode
+// https://flatpak.github.io/xdg-desktop-portal/#gdbus-org.freedesktop.portal.Settings
+#define FDO_PORTAL_DESKTOP_BUS_NAME "org.freedesktop.portal.Desktop"
+#define FDO_PORTAL_DESKTOP_OBJECT_PATH "/org/freedesktop/portal/desktop"
+#define FDO_PORTAL_DESKTOP_SETTINGS_INTERFACE "org.freedesktop.portal.Settings"
+
+enum ColorScheme
+{
+    FDO_COLOR_DEFAULT,
+    FDO_COLOR_PREFER_DARK,
+    FDO_COLOR_PREFER_LIGHT
+};
+
+
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
@@ -839,6 +855,55 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 
     return font;
 }
+
+#if defined(__WXGTK3__) || defined(__WXGTK__)
+bool wxSystemAppearance::IsSystemDark() const
+{
+    GVariant *out = nullptr;
+    GVariant *child = nullptr;
+    GVariant *ret = nullptr;
+    wxGtkError error;
+
+    bool isDark = IsDark();
+
+    GDBusProxy *proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
+        G_DBUS_PROXY_FLAGS_NONE,
+        nullptr,
+        FDO_PORTAL_DESKTOP_BUS_NAME,
+        FDO_PORTAL_DESKTOP_OBJECT_PATH,
+        FDO_PORTAL_DESKTOP_SETTINGS_INTERFACE,
+        nullptr,
+        error.Out());
+
+    if (proxy)
+    {
+        ret = g_dbus_proxy_call_sync(proxy, "Read",
+            g_variant_new ("(ss)", "org.freedesktop.appearance", "color-scheme"),
+            G_DBUS_CALL_FLAGS_NONE, G_MAXINT, nullptr, nullptr);
+
+        if (ret)
+        {
+            g_variant_get(ret, "(v)", &child);
+            g_variant_get(child, "v", &out);
+
+            if (g_variant_get_uint32(out) == FDO_COLOR_PREFER_DARK)
+                isDark = true;
+        }
+    }
+
+    g_variant_unref (child);
+    g_variant_unref (ret);
+    g_variant_unref (out);
+    g_clear_object(&proxy);
+
+    return isDark;
+}
+
+bool wxSystemAppearance::AreAppsDark() const
+{
+    return IsSystemDark();
+}
+#endif // __WXGTK3__ || __WXGTK__
 
 // helper: return the GtkSettings either for the screen the current window is
 // on or for the default screen if window is null

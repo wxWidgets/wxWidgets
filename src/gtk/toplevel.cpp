@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/app.h"     // GetAppDisplayName()
+    #include "wx/settings.h"
     #include "wx/icon.h"
     #include "wx/log.h"
 #endif
@@ -895,6 +896,12 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // old colours etc.
     g_signal_connect_after(gtk_settings_get_default(), "notify::gtk-theme-name",
         G_CALLBACK(notify_gtk_theme_name), this);
+
+#ifdef __WXGTK3__
+    GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(m_widget));
+    g_object_set(settings, "gtk-application-prefer-dark-theme",
+        wxSystemSettings::GetAppearance().IsSystemDark(), nullptr);
+#endif
 
     return true;
 }
