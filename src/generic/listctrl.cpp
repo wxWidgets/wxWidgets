@@ -1450,6 +1450,7 @@ bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
             EndEdit( End_Accept );
             break;
 
