@@ -53,7 +53,7 @@ bool wxDfbCheckReturn(DFBResult code);
 #define WXDFB_DEFINE_EVENT_WRAPPER(T)                                       \
     struct wx##T                                                            \
     {                                                                       \
-        wx##T() {}                                                          \
+        wx##T() = default;                                                  \
         wx##T(const T& event) : m_event(event) {}                           \
                                                                             \
         operator T&() { return m_event; }                                   \
