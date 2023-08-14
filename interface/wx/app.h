@@ -1199,14 +1199,20 @@ public:
 
         Known limitations of dark mode support include:
 
-            - wxMessageBox() contents doesn't use dark mode. Consider using
-              wxGenericMessageDialog if dark mode support is more important
-              than using the native dialog.
+            - Anything based on TaskDialog() Win32 API doesn't support dark mode:
+              wxMessageBox(), wxMessageDialog, wxRichMessageDialog, wxProgressDialog
+              and simple (i.e. without hyperlink or licence) wxAboutBox(). Consider
+              using generic versions (e.g. wxGenericMessageDialog or wxGenericProgressDialog)
+              if dark mode support is more important than using the native dialog.
+            - The following dialogs wrapping common windows dialogs don't support
+              dark mode: wxColourDialog, wxFindReplaceDialog, wxFontDialog,
+              wxPageSetupDialog, wxPrintDialog.
             - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
               use the same (light) background as by default in it.
             - Toolbar items for which wxToolBar::SetDropdownMenu() was called
               don't draw the menu drop-down correctly, making it almost
               invisible.
+            - Calling wxMenu::Break() will result in the menu being light.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the
