@@ -1200,7 +1200,7 @@ public:
         Known limitations of dark mode support include:
 
             - wxMessageBox(), wxMessageDialog and wxRichMessageDialog don't
-              suport dark mode. Consider using wxGenericMessageDialog if dark
+              support dark mode. Consider using wxGenericMessageDialog if dark
               mode support is more important than using the native dialog.
             - wxProgressDialog doesn't support dark mode. Consider using
               wxGenericProgressDialog if dark mode support is more important
