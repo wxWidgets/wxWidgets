@@ -223,7 +223,7 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
 
     if ( wxSystemSettings::GetAppearance().IsDark() )
         colour.Set(90, 90, 90); // dark grey
-    
+
     if (rect.Contains(event.GetPosition()))
     {
         colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
