@@ -193,7 +193,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(evt))
     else if (m_stick->GetButtonState(3))
         dc.SetPen(*wxYELLOW_PEN);
     else
-        dc.SetPen(*wxBLACK_PEN);
+        dc.SetPen(*wxCYAN_PEN);
 
     dc.DrawLine(FromDIP(m_pos), FromDIP(pt));
 
