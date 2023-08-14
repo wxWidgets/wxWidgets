@@ -1199,12 +1199,11 @@ public:
 
         Known limitations of dark mode support include:
 
-            - wxMessageBox(), wxMessageDialog and wxRichMessageDialog don't
-              support dark mode. Consider using wxGenericMessageDialog if dark
-              mode support is more important than using the native dialog.
-            - wxProgressDialog doesn't support dark mode. Consider using
-              wxGenericProgressDialog if dark mode support is more important
-              than using the dialog based on the native task dialog.
+            - Anything based on TaskDialog() Win32 API doesn't support dark mode:
+              wxMessageBox(), wxMessageDialog, wxRichMessageDialog, wxProgressDialog
+              and simple (i.e. without hyperlink or licence) wxAboutBox(). Consider
+              using generic versions (e.g. wxGenericMessageDialog or wxGenericProgressDialog)
+              if dark mode support is more important than using the native dialog.
             - The following dialogs wrapping common windows dialogs don't support
               dark mode: wxColourDialog, wxFindReplaceDialog, wxFontDialog,
               wxPageSetupDialog, wxPrintDialog.
