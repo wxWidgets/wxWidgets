@@ -109,8 +109,13 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
                                               wxBORDER_NONE |
                                               wxPU_CONTAINS_CONTROLS )
 {
+    wxColour colour(*wxLIGHT_GREY);
+
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+        colour.Set(90, 90, 90); // dark grey
+
     m_panel = new wxScrolledWindow( this, wxID_ANY );
-    m_panel->SetBackgroundColour( *wxLIGHT_GREY );
+    m_panel->SetBackgroundColour(colour);
 
     // Keep this code to verify if mouse events work, they're required if
     // you're making a control like a combobox where the items are highlighted
@@ -216,6 +221,9 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
     rect.SetWidth(1000000);
     wxColour colour(*wxLIGHT_GREY);
 
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+        colour.Set(90, 90, 90); // dark grey
+    
     if (rect.Contains(event.GetPosition()))
     {
         colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
