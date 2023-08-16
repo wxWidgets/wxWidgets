@@ -1810,6 +1810,9 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
 /// This takes a _caret_ position.
 bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
 {
+    if (!m_verticalScrollbarEnabled)
+        return false;
+
     wxRichTextLine* line = GetVisibleLineForCaretPosition(position);
 
     if (!line)

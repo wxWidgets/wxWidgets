@@ -160,9 +160,6 @@ private:
     MyMusicTreeModelNode*   m_pop;
     MyMusicTreeModelNode*   m_classical;
     MyMusicTreeModelNode*   m_ninth;
-
-    // ??
-    bool                    m_classicalMusicIsKnownToControl;
 };
 
 

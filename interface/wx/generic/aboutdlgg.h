@@ -71,8 +71,10 @@ protected:
         This virtual method may be overridden to add more controls to the
         dialog.
 
-        Use the protected AddControl(), AddText() and AddCollapsiblePane()
-        methods to add custom controls.
+        The custom controls should be created with GetCustomControlParent() as
+        parent and then can be passed to the protected AddControl() method.
+        AddText() and AddCollapsiblePane() methods can also be used to add
+        simple static custom controls.
 
         This method is called during the dialog creation and you don't need to
         call it, only to override it.
@@ -106,6 +108,15 @@ protected:
         Add a wxCollapsiblePane containing the given text.
     */
     void AddCollapsiblePane(const wxString& title, const wxString& text);
+
+    /**
+        Return the parent to use for custom controls.
+
+        See DoAddCustomControls().
+
+        @since 3.3.0
+     */
+    wxWindow* GetCustomControlParent() const;
 };
 
 /**

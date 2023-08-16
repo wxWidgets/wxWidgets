@@ -295,7 +295,7 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
     #define wxFAIL_COND_MSG_AT(cond, msg, file, line, func)                   \
         wxSTATEMENT_MACRO_BEGIN                                               \
             if ( wxTheAssertHandler &&                                        \
-                    (wxOnAssert(file, line, func, #cond, msg),                \
+                    (wxOnAssert(file, line, func, cond, msg),                 \
                      wxTrapInAssert) )                                        \
             {                                                                 \
                 wxTrapInAssert = false;                                       \

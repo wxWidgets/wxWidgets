@@ -342,7 +342,7 @@ protected:
     virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
 
     bool                MacHasScrollBarCorner() const;
-    void                MacCreateScrollBars( long style ) ;
+    void                MacCreateScrollBars( ) ;
     void                MacRepositionScrollBars() ;
 
     // implement the base class pure virtuals

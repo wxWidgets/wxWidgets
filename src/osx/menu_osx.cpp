@@ -505,8 +505,8 @@ static wxMenu *CreateAppleMenu()
     if ( wxApp::s_macPreferencesMenuItemId != wxID_NONE )
     {
         appleMenu->Append( wxApp::s_macPreferencesMenuItemId,
-                           wxGETTEXT_IN_CONTEXT("macOS menu item", "Preferences...")
-                           + "\tCtrl+," );
+                           wxString::Format("%s\tCtrl+,",
+                                            wxGETTEXT_IN_CONTEXT("macOS menu item", "Preferences...")) );
         appleMenu->AppendSeparator();
     }
 
@@ -523,7 +523,8 @@ static wxMenu *CreateAppleMenu()
         hideLabel = wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Application");
     appleMenu->Append( wxID_OSX_HIDE, hideLabel + "\tCtrl+H" );
     appleMenu->Append( wxID_OSX_HIDEOTHERS,
-                       wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Others")+"\tAlt+Ctrl+H" );
+                       wxString::Format("%s\tAlt+Ctrl+H",
+                                        wxGETTEXT_IN_CONTEXT("macOS menu item", "Hide Others")) );
     appleMenu->Append( wxID_OSX_SHOWALL,
                        wxGETTEXT_IN_CONTEXT("macOS menu item", "Show All") );
     appleMenu->AppendSeparator();

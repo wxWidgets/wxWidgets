@@ -433,7 +433,15 @@ TEST_CASE("wxUILocale::FromTag", "[.]")
     REQUIRE( !locId.IsEmpty() );
 
     const wxUILocale loc(locId);
-    WARN("Locale \"" << tag << "\" supported: " << loc.IsSupported() );
+    WARN("Locale \"" << tag << "\":\n"
+         "language:\t" << locId.GetLanguage() << "\n"
+         "region:\t" << locId.GetRegion() << "\n"
+         "script:\t" << locId.GetScript() << "\n"
+         "charset:\t" << locId.GetCharset() << "\n"
+         "modifier:\t" << locId.GetModifier() << "\n"
+         "extension:\t" << locId.GetExtension() << "\n"
+         "sort order:\t" << locId.GetSortorder() << "\n"
+         "supported:\t" << (loc.IsSupported() ? "yes" : "no"));
 }
 
 namespace

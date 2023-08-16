@@ -221,6 +221,7 @@ library:
 @itemdef{wxUSE_STATUSBAR, Use wxStatusBar class.}
 @itemdef{wxUSE_STC, Use wxStyledTextCtrl.}
 @itemdef{wxUSE_STDPATHS, Use wxStandardPaths class.}
+@itemdef{wxUSE_STD_IOSTREAM, Use standard stream classes in addition to or, in wxDocument, instead of, wx streams.}
 @itemdef{wxUSE_STOPWATCH, Use wxStopWatch class.}
 @itemdef{wxUSE_STREAMS, Enable stream classes.}
 @itemdef{wxUSE_SVG, Use wxSVGFileDC class.}
@@ -322,7 +323,6 @@ library:
 manifest from wxWidgets RC file. See also wxUSE_RC_MANIFEST.}
 @itemdef{wxUSE_OLE, Enables OLE helper routines.}
 @itemdef{wxUSE_OLE_AUTOMATION, Enable OLE automation utilities.}
-@itemdef{wxUSE_OLE_CLIPBOARD, Use OLE clipboard.}
 @itemdef{wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW, Use PS printing in wxMSW.}
 @itemdef{wxUSE_PS_PRINTING, See src/msw/dcprint.cpp file.}
 @itemdef{wxUSE_RC_MANIFEST, Include manifest for common controls library v6

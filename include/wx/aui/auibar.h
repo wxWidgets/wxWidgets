@@ -98,7 +98,7 @@ private:
     int m_toolId;
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiToolBarEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxAuiToolBarEvent);
 };
 
 
@@ -176,7 +176,7 @@ public:
     void SetDisabledBitmap(const wxBitmapBundle& bmp) { m_disabledBitmap = bmp; }
     const wxBitmapBundle& GetDisabledBitmapBundle() const { return m_disabledBitmap; }
     wxBitmap GetDisabledBitmapFor(wxWindow* wnd) const { return m_disabledBitmap.GetBitmapFor(wnd); }
-    wxBitmap GetDisabledBitmap() const { return GetBitmapFor(m_window); }
+    wxBitmap GetDisabledBitmap() const { return GetDisabledBitmapFor(m_window); }
 
     // Return the bitmap for the current state, normal or disabled.
     wxBitmap GetCurrentBitmapFor(wxWindow* wnd) const;
@@ -254,7 +254,7 @@ private:
     int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
-using wxAuiToolBarItemArray = wxBaseArray<wxAuiToolBarItem>;
+using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
 
 
 

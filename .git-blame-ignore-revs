@@ -5,7 +5,7 @@
 # It's supported by Git 2.23 or later and to use it by default for all the
 # future git-blame invocations, run the following command:
 #
-#   git config blame.ignoreRevsFile misc/git/ignore_revs
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 # Get rid of obsoleted comments, 2023-02-05
 2df05fb915516e0563578e34aec45980be51b1f4

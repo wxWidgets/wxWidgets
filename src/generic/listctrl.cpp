@@ -1450,6 +1450,7 @@ bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
             EndEdit( End_Accept );
             break;
 
@@ -4265,7 +4266,10 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
     else
     {
-        m_lines.erase( m_lines.begin() + index );
+        auto const iter =  m_lines.begin() + index;
+        if ( iter->IsHighlighted() )
+            UpdateSelectionCount(false);
+        m_lines.erase(iter);
     }
 
     // we need to refresh the (vert) scrollbar as the number of items changed

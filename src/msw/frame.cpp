@@ -947,3 +947,15 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 
     return pt;
 }
+
+void wxFrame::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
+{
+#if wxUSE_STATUSBAR
+    // If this frame uses a status bar, we need to adjust its height here
+    // before executing the user-defined wxEVT_DPI_CHANGED handler which may
+    // want to change the client size of the frame (e.g. using wxSizer::Fit()),
+    // because otherwise this wouldn't work correctly because the status bar
+    // would still have its old height, corresponding to the old DPI.
+    PositionStatusBar();
+#endif // wxUSE_STATUSBAR
+}

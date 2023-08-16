@@ -429,7 +429,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         // Draw the control background (including the border)
         if ( m_widthCustomBorder > 0 )
         {
-            ::DrawThemeBackground( hTheme, hDc, comboBoxPart, bgState, rUseForBg, nullptr );
+            hTheme.DrawBackground(hDc, *rUseForBg, comboBoxPart, bgState);
         }
         else
         {
@@ -462,7 +462,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
             else
                 butPart = CP_DROPDOWNBUTTONLEFT;
 
-            ::DrawThemeBackground( hTheme, hDc, butPart, butState, &rButton, nullptr );
+            hTheme.DrawBackground(hDc, rButton, butPart, butState);
         }
         else if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
         {

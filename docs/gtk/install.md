@@ -11,7 +11,8 @@ The simplest case                      {#gtk_simple}
 -------------------
 
 If you compile wxWidgets on Linux for the first time and don't like to read
-install instructions just do the following in wxWidgets directory:
+install instructions just [get the sources](@ref install_get_sources) and do
+the following in wxWidgets directory:
 
     $ mkdir buildgtk
     $ cd buildgtk

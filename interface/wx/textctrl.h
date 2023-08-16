@@ -1850,12 +1850,8 @@ public:
     ostream object to a wxTextCtrl instead.
 
     @note
-        Some compilers and/or build configurations don't support multiply
-        inheriting wxTextCtrl from @c std::streambuf in which case this class is
-        not compiled in.
-        You also must have @c wxUSE_STD_IOSTREAM option on (i.e. set to 1) in your
-        @c setup.h to be able to use it. Under Unix, specify @c \--enable-std_iostreams
-        switch when running configure for this.
+        This class is not available if `wxUSE_STD_IOSTREAM` is set to 0 (which
+        is done by `--disable-std_iostreams` option when using configure).
 
     Example of usage:
 

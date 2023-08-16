@@ -135,6 +135,14 @@ private:
     // This class has no public ctors, use Get() instead.
     wxUIActionSimulatorOSXImpl() { }
 
+    const useconds_t delay_ = 10 * 1000;
+
+    // give the system some time to process (it seems to need it)
+    void wait_for_events()
+    {
+       ::usleep(delay_);
+    }
+
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorOSXImpl);
 };
 
@@ -154,6 +162,8 @@ bool wxUIActionSimulatorOSXImpl::MouseDown(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -177,6 +187,8 @@ bool wxUIActionSimulatorOSXImpl::MouseMove(long x, long y)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -195,6 +207,8 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -224,6 +238,8 @@ bool wxUIActionSimulatorOSXImpl::MouseDblClick(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -264,6 +280,9 @@ bool wxUIActionSimulatorOSXImpl::MouseDragDrop(long x1, long y1, long x2, long y
     if (loop)
         loop->SetShouldWaitForEvent(true);
     
+
+    wait_for_events();
+
     return true;
 }
 
@@ -281,6 +300,8 @@ wxUIActionSimulatorOSXImpl::DoKey(int keycode, int WXUNUSED(modifiers), bool isD
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
 
     return true;
 }

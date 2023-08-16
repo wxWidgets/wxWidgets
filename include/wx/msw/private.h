@@ -1007,6 +1007,7 @@ enum wxWinVersion
     wxWinVersion_8_1 = 0x603,
 
     wxWinVersion_10 = 0x1000,
+    wxWinVersion_11 = 0x1001,
 
     // Any version we can't recognize will be later than the last currently
     // known one, so give it a value greater than any in the known range.

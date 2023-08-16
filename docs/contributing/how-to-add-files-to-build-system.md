@@ -180,11 +180,11 @@ d) Modify multilib.bkl to add files to multilib build: add foolib and foodll
 
 e) Regenerate all makefiles (don't forget to run autoconf)
 
-f) Update configure.in and wx-config.in to contain information about
+f) Update configure.ac and wx-config.in to contain information about
    the library and needed linker flags:
-   * Add "foo" to `BUILT_WX_LIBS` in configure.in.
+   * Add "foo" to `BUILT_WX_LIBS` in configure.ac.
    * If appropriate, but it rarely is, so normally this should _not_ be done,
-     add "foo" to either `STD_BASE_LIBS` or `STD_GUI_LIBS` in configure.in.
+     add "foo" to either `STD_BASE_LIBS` or `STD_GUI_LIBS` in configure.ac.
    * If wxFoo links against additional libraries, add necessary linker
      flags and libraries to ldflags_foo and ldlibs_foo variables in
      wx-config.in (both are optional).

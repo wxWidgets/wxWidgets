@@ -252,6 +252,8 @@ wxIMPLEMENT_APP_CONSOLE(XmlResApp);
 
 int XmlResApp::OnRun()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
         { wxCMD_LINE_SWITCH, "h", "help",  "show help message", wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
@@ -274,6 +276,8 @@ int XmlResApp::OnRun()
 
         wxCMD_LINE_DESC_END
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
 

@@ -101,8 +101,9 @@ private:
     // this function.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const = 0;
 
-    // NormalizeString the contents of the string if it's a valid number, return
-    // empty string otherwise.
+    // Return the canonical form of the number corresponding to the contents of
+    // the string: if the input string is invalid, return a string representing
+    // some valid value.
     virtual wxString NormalizeString(const wxString& s) const = 0;
 
 
@@ -239,8 +240,23 @@ protected:
     virtual wxString NormalizeString(const wxString& s) const override
     {
         LongestValueType value;
-        return BaseValidator::FromString(s, &value) ? NormalizeValue(value)
-                                                    : wxString();
+        if ( !BaseValidator::FromString(s, &value) )
+        {
+            // We don't have any valid number at all, just arbitrarily decide
+            // to return the minimum value.
+            value = static_cast<LongestValueType>(m_min);
+        }
+        else if ( !this->IsInRange(value) )
+        {
+            // We do have a value, but it's out of range: clamp it to the
+            // closest limit.
+            if ( value > static_cast<LongestValueType>(m_max) )
+                value = static_cast<LongestValueType>(m_max);
+            else
+                value = static_cast<LongestValueType>(m_min);
+        }
+
+        return NormalizeValue(value);
     }
 
     virtual bool CanBeNegative() const override { return m_min < 0; }
@@ -272,7 +288,7 @@ private:
     // Minimal and maximal values accepted (inclusive).
     ValueType m_min, m_max;
 
-    wxDECLARE_NO_ASSIGN_CLASS(wxNumValidator);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxNumValidator);
 };
 
 } // namespace wxPrivate
@@ -318,7 +334,7 @@ protected:
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const override;
 
 private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidatorBase);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxIntegerValidatorBase);
 };
 
 // Validator for integer numbers. It can actually work with any integer type
@@ -381,7 +397,7 @@ public:
     }
 
 private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidator);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxIntegerValidator);
 };
 
 // Helper function for creating integer validators which allows to avoid
@@ -442,7 +458,7 @@ private:
     // Factor applied for the displayed the value.
     double m_factor;
 
-    wxDECLARE_NO_ASSIGN_CLASS(wxFloatingPointValidatorBase);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxFloatingPointValidatorBase);
 };
 
 // Validator for floating point numbers. It can be used with float, double or

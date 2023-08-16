@@ -1579,7 +1579,6 @@
 		CD35A576FD363FD49C3AC4B4 /* LexAda.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 375E7A99FF4C38FA9E223772 /* LexAda.cxx */; };
 		F80C2290D67B345F9CF60085 /* dpycmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A37E3D1FB4FB31AFAE88665A /* dpycmn.cpp */; };
 		FECC98B53C0F3106AB04E6A0 /* tif_fax3.c in Sources */ = {isa = PBXBuildFile; fileRef = 30FD1048328234E59D319863 /* tif_fax3.c */; };
-		B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE40B073C95D3A7497952D8F /* threadinfo.cpp */; };
 		8B38C6C416BA3A51B37F60C5 /* statlinecmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 292C08C0A1203654ABAA2CB1 /* statlinecmn.cpp */; };
 		5B5B8DF915D438AA9FCEB3A0 /* imagall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8FFDFB4D208F37569AC548B0 /* imagall.cpp */; };
 		9744994E8A813AA6938A7CE4 /* textcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DFD4F32E48039C3B9A66355 /* textcmn.cpp */; };
@@ -1742,7 +1741,6 @@
 		01D4C5F2147F3942A7CE91AB /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21D /* icon.cpp */; };
 		AD4A533C4E1633598A6D5C71 /* textentrycmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5F63BF9430CE371DA04AC900 /* textentrycmn.cpp */; };
 		8966F77CC97B3ED780C8F138 /* xh_bmpcbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8826A683573F35EA9789612C /* xh_bmpcbox.cpp */; };
-		B20B7313102232A4B3E01ABB /* threadinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE40B073C95D3A7497952D8F /* threadinfo.cpp */; };
 		894D43C8F224394FB3171F28 /* jcapimin.c in Sources */ = {isa = PBXBuildFile; fileRef = 6EDDEEEC981133E8BA6A3998 /* jcapimin.c */; };
 		7625D908B2CD34C78243BA8F /* settcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABE3DC4AA47D39ACA83F27C0 /* settcmn.cpp */; };
 		3ED6F4B64C283232A79423CF /* dircmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC9B6DFBF2F73917A99361C5 /* dircmn.cpp */; };
@@ -2984,7 +2982,6 @@
 		6A081BF19747385CB4C18781 /* radiobut_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FFCB72168FD31DE86A1B674 /* radiobut_osx.cpp */; };
 		41943A8F82723027A151A46A /* fileconf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61DA2A4C0D143CBE804BB8A1 /* fileconf.cpp */; };
 		9CA687845B3F30CCA44A89D2 /* choicbkg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09F8B0818C3A3248A26EE05D /* choicbkg.cpp */; };
-		B20B7313102232A4B3E01ABC /* threadinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE40B073C95D3A7497952D8F /* threadinfo.cpp */; };
 		EEB0B28903693C7E9D071931 /* glcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E08A51FA8D8A361681B07295 /* glcmn.cpp */; };
 		CB078622E90F33BE9D131136 /* buttonbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5612DBC4125B379DA2B28824 /* buttonbar.cpp */; };
 /* End PBXBuildFile section */
@@ -4119,7 +4116,6 @@
 		8FFDFB4D208F37569AC548B0 /* imagall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagall.cpp; path = ../../src/common/imagall.cpp; sourceTree = SOURCE_ROOT; };
 		BFA50405234C30EEA3F77F17 /* filepickercmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filepickercmn.cpp; path = ../../src/common/filepickercmn.cpp; sourceTree = SOURCE_ROOT; };
 		E9D416E57FEB3F0B95734FF6 /* dirdlgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dirdlgg.cpp; path = ../../src/generic/dirdlgg.cpp; sourceTree = SOURCE_ROOT; };
-		DE40B073C95D3A7497952D8F /* threadinfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = threadinfo.cpp; path = ../../src/common/threadinfo.cpp; sourceTree = SOURCE_ROOT; };
 		8E6F9D4319F639BE89E5A82F /* ScintillaWX.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ScintillaWX.cpp; path = ../../src/stc/ScintillaWX.cpp; sourceTree = SOURCE_ROOT; };
 		F7440859617F3B47AF4D3817 /* valgen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = valgen.cpp; path = ../../src/common/valgen.cpp; sourceTree = SOURCE_ROOT; };
 		E8BD1489D95E3FD78B200B1B /* commandlinkbuttong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = commandlinkbuttong.cpp; path = ../../src/generic/commandlinkbuttong.cpp; sourceTree = SOURCE_ROOT; };
@@ -6390,7 +6386,6 @@
 				C0F7BBD216853E718C9F23D9 /* tarstrm.cpp */,
 				701B84EE7C043B539FF5195A /* textbuf.cpp */,
 				0903EE9B3793303285FF96E3 /* textfile.cpp */,
-				DE40B073C95D3A7497952D8F /* threadinfo.cpp */,
 				5B9586328A1F3C4BA0390AA5 /* time.cpp */,
 				7195E665E0F233839B967FC9 /* timercmn.cpp */,
 				0401B7302088357BB6B7F16F /* timerimpl.cpp */,
@@ -7904,7 +7899,6 @@
 				9FB1E1763EFA334CA0C07C4A /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5423 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2E /* textfile.cpp in Sources */,
-				B20B7313102232A4B3E01ABC /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C624 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002E /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E071B /* timerimpl.cpp in Sources */,
@@ -8626,7 +8620,6 @@
 				9FB1E1763EFA334CA0C07C4B /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5424 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2D /* textfile.cpp in Sources */,
-				B20B7313102232A4B3E01ABB /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C623 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002D /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E071A /* timerimpl.cpp in Sources */,
@@ -9822,7 +9815,6 @@
 				9FB1E1763EFA334CA0C07C49 /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2F /* textfile.cpp in Sources */,
-				B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C625 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002F /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E0719 /* timerimpl.cpp in Sources */,

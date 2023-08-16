@@ -148,6 +148,7 @@ set(TEST_GUI_DATA
     horse.tif
     horse.xpm
     image/bitfields.bmp
+    image/bitfields-alpha.bmp
     image/8bpp-colorsused-large.bmp
     image/8bpp-colorsused-negative.bmp
     image/rle4-delta-320x240.bmp
@@ -196,6 +197,7 @@ set(TEST_GUI_DATA
     image/toucan_mono_255_255_255.png
     image/width-times-height-overflow.bmp
     image/width_height_32_bit_overflow.pgm
+    image/bad_truncated.gif
     intl/ja/internat.mo
     intl/ja/internat.po
     )

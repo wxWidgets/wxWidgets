@@ -60,6 +60,8 @@
 #include "wx/evtloop.h"
 #include "wx/mstream.h"
 #include "wx/private/fdioeventloopsourcehandler.h"
+#include "wx/config.h"
+#include "wx/filename.h"
 
 #include <memory>
 
@@ -1140,6 +1142,23 @@ wxString wxGetNativeCpuArchitectureName()
 #ifdef __LINUX__
 
 static bool
+wxGetValuesFromOSRelease(const wxString& filename, wxLinuxDistributionInfo& ret)
+{
+    if ( !wxFileName::Exists(filename) )
+    {
+        return false;
+    }
+
+    wxFileConfig fc(wxEmptyString, wxEmptyString, wxEmptyString, filename);
+    ret.Id = fc.Read(wxS("ID"), wxEmptyString).Capitalize();
+    ret.Description = fc.Read(wxS("PRETTY_NAME"), wxEmptyString);
+    ret.Release = fc.Read(wxS("VERSION_ID"), wxEmptyString);
+    ret.CodeName = fc.Read(wxS("VERSION_CODENAME"), wxEmptyString);
+
+    return true;
+}
+
+static bool
 wxGetValueFromLSBRelease(const wxString& arg, const wxString& lhs, wxString* rhs)
 {
     // lsb_release seems to just read a global file which is always in UTF-8
@@ -1152,6 +1171,17 @@ wxGetValueFromLSBRelease(const wxString& arg, const wxString& lhs, wxString* rhs
 wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 {
     wxLinuxDistributionInfo ret;
+
+    // Read /etc/os-release and fall back to /usr/lib/os-release per below
+    // https://www.freedesktop.org/software/systemd/man/os-release.html
+    if ( wxGetValuesFromOSRelease(wxS("/etc/os-release"), ret) )
+    {
+        return ret;
+    }
+    if ( wxGetValuesFromOSRelease(wxS("/usr/lib/os-release"), ret) )
+    {
+        return ret;
+    }
 
     if ( !wxGetValueFromLSBRelease(wxS("--id"), wxS("Distributor ID:\t"),
                                    &ret.Id) )
@@ -1470,7 +1500,7 @@ bool wxUnsetEnv(const wxString& variable)
 #include <signal.h>
 
 extern "C" {
-static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+static void wxFatalSignalHandler(int WXUNUSED(signal))
 {
     if ( wxTheApp )
     {

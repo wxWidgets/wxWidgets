@@ -777,7 +777,8 @@ public:
 
         It is safe to call this function multiple times (only the first call
         does anything) but you must call Shutdown() exactly once for every call
-        to Initialize().
+        to Initialize(), see wxSocketInitializer which ensures that this is the
+        case.
 
         This function should only be called from the main thread.
 
@@ -794,7 +795,8 @@ public:
         every successful call to Initialize().
 
         This function should only be called from the main thread, just as
-        Initialize().
+        Initialize() and usually shouldn't be called explicitly at all as it's
+        safer to use wxSocketInitializer.
      */
     static void Shutdown();
 
@@ -1424,6 +1426,31 @@ public:
     ///@}
 };
 
+/**
+    @class wxSocketInitializer
+
+    Class initializing sockets in its ctor and shutting them down in its dtor.
+
+    This is a simple RAII wrapper around wxSocketBase::Initialize() and
+    wxSocketBase::Shutdown().
+
+    @since 3.3.0
+ */
+class wxSocketInitializer
+{
+public:
+    /// Calls wxSocketBase::Initialize().
+    wxSocketInitializer();
+
+    /// Calls wxSocketBase::Shutdown().
+    ~wxSocketInitializer();
+
+    /// Can't be copied.
+    wxSocketInitializer(const wxSocketInitializer&) = delete;
+
+    /// Can't be assigned.
+    wxSocketInitializer& operator=(const wxSocketInitializer&) = delete;
+};
 
 
 /**

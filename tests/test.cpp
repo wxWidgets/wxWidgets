@@ -419,14 +419,11 @@ static bool DoCheckConnection()
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
 
-    wxSocketBase::Initialize();
+    wxSocketInitializer socketInit;
 
     wxIPV4address addr;
     if (!addr.Hostname(0xadfe5c16) || !addr.Service(wxASCII_STR("www")))
-    {
-        wxSocketBase::Shutdown();
         return false;
-    }
 
     const char* const
         HTTP_GET = "GET / HTTP /1.1\r\nHost: www.wxwidgets.org\r\n\r\n";
@@ -435,8 +432,6 @@ static bool DoCheckConnection()
     sock.SetTimeout(10);    // 10 secs
     bool online = sock.Connect(addr) &&
                     (sock.Write(HTTP_GET, strlen(HTTP_GET)), sock.WaitForRead(1));
-
-    wxSocketBase::Shutdown();
 
     return online;
 }

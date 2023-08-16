@@ -307,6 +307,8 @@ public:
         centred in both directions but if @a dir includes only @c wxVERTICAL or
         only @c wxHORIZONTAL, then it is only centered in this direction while
         the other component of its position remains unchanged.
+
+        @see MakeCenteredIn()
     */
     wxRect CentreIn(const wxRect& r, int dir = wxBOTH) const;
     wxRect CenterIn(const wxRect& r, int dir = wxBOTH) const;
@@ -474,6 +476,20 @@ public:
         equal to 0 and @false otherwise.
     */
     bool IsEmpty() const;
+
+    /**
+        Center this rectangle inside the given rectangle @a r.
+
+        By default, rectangle is centred in both directions but if @a dir
+        includes only @c wxVERTICAL or only @c wxHORIZONTAL, then it is only
+        centered in this direction while the other component of its position
+        remains unchanged.
+
+        @see CenterIn()
+
+        @since 3.3.0
+     */
+    void MakeCenteredIn(const wxRect& r, int dir = wxBOTH);
 
     ///@{
     /**

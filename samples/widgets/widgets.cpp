@@ -293,9 +293,6 @@ private:
 };
 #endif // USE_LOG
 
-// array of pages
-WX_DEFINE_ARRAY_PTR(WidgetsPage *, ArrayWidgetsPage);
-
 // ----------------------------------------------------------------------------
 // misc macros
 // ----------------------------------------------------------------------------
@@ -572,6 +569,7 @@ void WidgetsFrame::InitBook()
     WidgetsBookCtrl *books[MAX_PAGES];
 #endif
 
+    using ArrayWidgetsPage = std::vector<WidgetsPage*>;
     ArrayWidgetsPage pages[MAX_PAGES];
     wxArrayString labels[MAX_PAGES];
 
@@ -609,7 +607,7 @@ void WidgetsFrame::InitBook()
                                  books[cat]
 #endif
                                  , imageList);
-            pages[cat].Add(page);
+            pages[cat].push_back(page);
 
             labels[cat].Add(info->GetLabel());
             if ( cat == ALL_PAGE )
@@ -645,7 +643,7 @@ void WidgetsFrame::InitBook()
 #endif
 
         // now do add them
-        size_t count = pages[cat].GetCount();
+        size_t count = pages[cat].size();
         for ( size_t n = 0; n < count; n++ )
         {
 #if USE_TREEBOOK

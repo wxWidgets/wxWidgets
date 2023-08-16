@@ -127,8 +127,17 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
         sock->Peek(pBuf, LINE_BUF);
 
         size_t nRead = sock->LastCount();
-        if ( !nRead && sock->Error() )
+        if ( !nRead )
+        {
+            // If we didn't read anything, it must mean either an error or EOF,
+            // but as we don't have any specific error code for the latter,
+            // just return the generic error in either case.
+            //
+            // Note that we can't return wxPROTO_NOERR from here because wxFTP
+            // relies on the function returning some error to exit the loop
+            // when retrieving the list of files.
             return wxPROTO_NETERR;
+        }
 
         // look for "\r\n" paying attention to a special case: "\r\n" could
         // have been split by buffer boundary, so check also for \r at the end

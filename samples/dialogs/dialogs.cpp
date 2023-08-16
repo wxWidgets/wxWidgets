@@ -3486,9 +3486,11 @@ public:
     // add some custom controls
     virtual void DoAddCustomControls() override
     {
-        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+        const auto parent = GetCustomControlParent();
+
+        AddControl(new wxStaticLine(parent), wxSizerFlags().Expand());
         AddText("Some custom text");
-        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+        AddControl(new wxStaticLine(parent), wxSizerFlags().Expand());
     }
 };
 

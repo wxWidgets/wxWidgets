@@ -272,6 +272,12 @@ void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
     wxCHECK_RET( m_sizerText, wxT("can only be called after Create()") );
     wxASSERT_MSG( win, wxT("can't add null window to about dialog") );
 
+    // Reparent the windows created with the dialog itself as parent under
+    // m_contents to keep the existing code written before m_contents
+    // introduction working.
+    if ( win->GetParent() == this )
+        win->Reparent(m_contents);
+
     m_sizerText->Add(win, flags);
 }
 

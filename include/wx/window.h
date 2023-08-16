@@ -1838,10 +1838,13 @@ protected:
     // specified) border for the window class
     virtual wxBorder GetDefaultBorder() const;
 
-    // this allows you to implement standard control borders without
-    // repeating the code in different classes that are not derived from
-    // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const { return wxBORDER_THEME; }
+    // Don't override this function any longer (it used to be virtual but isn't
+    // any more) as it's not called by wxWidgets any more and don't call it
+    // yourself, just use wxBORDER_THEME instead.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Just use wxBORDER_THEME instead")
+    wxBorder GetDefaultBorderForControl() const { return wxBORDER_THEME; }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // Get the default size for the new window if no explicit size given. TLWs
     // have their own default size so this is just for non top-level windows.

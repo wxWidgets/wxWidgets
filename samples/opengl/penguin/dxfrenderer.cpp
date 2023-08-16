@@ -447,31 +447,31 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             // flush entity
             if (state == 1) // 3DFACE
             {
-                DXFFace p;
-                p.v0 = v[0];
-                p.v1 = v[1];
-                p.v2 = v[2];
-                p.v3 = v[3];
-                p.CalculateNormal();
+                std::unique_ptr<DXFFace> p(new DXFFace);
+                p->v0 = v[0];
+                p->v1 = v[1];
+                p->v2 = v[2];
+                p->v3 = v[3];
+                p->CalculateNormal();
                 if (colour != -1)
-                    p.colour = colour;
+                    p->colour = colour;
                 else
-                    p.colour = GetLayerColour(layer);
-                m_entities.push_back(p);
+                    p->colour = GetLayerColour(layer);
+                m_entities.push_back(std::move(p));
                 colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }
             else if (state == 2) // LINE
             {
-                DXFLine p;
-                p.v0 = v[0];
-                p.v1 = v[1];
+                std::unique_ptr<DXFLine> p(new DXFLine);
+                p->v0 = v[0];
+                p->v1 = v[1];
                 if (colour != -1)
-                    p.colour = colour;
+                    p->colour = colour;
                 else
-                    p.colour = GetLayerColour(layer);
-                m_entities.push_back(p);
+                    p->colour = GetLayerColour(layer);
+                m_entities.push_back(std::move(p));
                 colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
@@ -577,10 +577,9 @@ void DXFRenderer::NormalizeEntities()
     DXFVector maxv(-10e20f, -10e20f, -10e20f);
     for (auto& entity : m_entities)
     {
-        DXFEntity *p = &entity;
-        if (p->type == DXFEntity::Line)
+        if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)p;
+            DXFLine *line = (DXFLine *)entity.get();
             const DXFVector *v[2] = { &line->v0, &line->v1 };
             for (int i = 0; i < 2; ++i)
             {
@@ -591,9 +590,9 @@ void DXFRenderer::NormalizeEntities()
                 maxv.y = mymax(v[i]->y, maxv.y);
                 maxv.z = mymax(v[i]->z, maxv.z);
             }
-        } else if (p->type == DXFEntity::Face)
+        } else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)p;
+            DXFFace *face = (DXFFace *)entity.get();
             const DXFVector *v[4] = { &face->v0, &face->v1, &face->v2, &face->v3 };
             for (int i = 0; i < 4; ++i)
             {
@@ -612,10 +611,9 @@ void DXFRenderer::NormalizeEntities()
     float factor = mymin(mymin(10.0f / span.x, 10.0f / span.y), 10.0f / span.z);
     for (auto& entity : m_entities)
     {
-        DXFEntity *p = &entity;
-        if (p->type == DXFEntity::Line)
+        if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)p;
+            DXFLine *line = (DXFLine *)entity.get();
             DXFVector *v[2] = { &line->v0, &line->v1 };
             for (int i = 0; i < 2; ++i)
             {
@@ -623,9 +621,9 @@ void DXFRenderer::NormalizeEntities()
                 v[i]->y -= minv.y + span.y/2; v[i]->y *= factor;
                 v[i]->z -= minv.z + span.z/2; v[i]->z *= factor;
             }
-        } else if (p->type == DXFEntity::Face)
+        } else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)p;
+            DXFFace *face = (DXFFace *)entity.get();
             DXFVector *v[4] = { &face->v0, &face->v1, &face->v2, &face->v3 };
             for (int i = 0; i < 4; ++i)
             {
@@ -645,20 +643,19 @@ void DXFRenderer::Render() const
 
     for (const auto& entity : m_entities)
     {
-        const DXFEntity *p = &entity;
-        wxColour c = ACIColourToRGB(p->colour);
-        if (p->type == DXFEntity::Line)
+        wxColour c = ACIColourToRGB(entity->colour);
+        if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)p;
+            DXFLine *line = (DXFLine *)entity.get();
             glBegin(GL_LINES);
             glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glVertex3f(line->v0.x, line->v0.y, line->v0.z);
             glVertex3f(line->v1.x, line->v1.y, line->v1.z);
             glEnd();
         }
-        else if (p->type == DXFEntity::Face)
+        else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)p;
+            DXFFace *face = (DXFFace *)entity.get();
             glBegin(GL_TRIANGLES);
             glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glNormal3f(face->n.x, face->n.y, face->n.z);

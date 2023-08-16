@@ -45,9 +45,9 @@
 // We have to include this one first in order to check for wxUSE_XXX below.
 #include "wx/setup.h"
 
-// Normally this is done in include/wx/msw/gccpriv.h included from wx/defs.h,
-// but as we don't include it here, we need to do it manually to avoid warnings
-// inside the standard headers included from catch.hpp.
+// Normally this is done in wx/defs.h, but as we don't include it here, we need
+// to do it manually to avoid warnings inside the standard headers included
+// from catch.hpp.
 #if defined(__CYGWIN__) && defined(__WINDOWS__)
     #define __USE_W32_SOCKETS
 #endif

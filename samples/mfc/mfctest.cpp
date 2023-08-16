@@ -55,6 +55,12 @@
 #ifndef WINVER
     #define WINVER 0x0600
 #endif
+#ifndef _UNICODE
+#    define _UNICODE
+#endif
+#ifndef UNICODE
+#    define UNICODE
+#endif
 
 #include "stdafx.h"
 
@@ -171,9 +177,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, char *, int)
 
 CMainWindow::CMainWindow()
 {
-    LoadAccelTable( "MainAccelTable" );
-    Create( nullptr, "Hello Foundation Application",
-        WS_OVERLAPPEDWINDOW, rectDefault, nullptr, "MainMenu" );
+    LoadAccelTable( L"MainAccelTable" );
+    Create( nullptr, L"Hello Foundation Application",
+        WS_OVERLAPPEDWINDOW, rectDefault, nullptr, L"MainMenu" );
 
     // Create a container representing the MFC window in wxWidgets window
     // hierarchy.
@@ -204,7 +210,7 @@ void CMainWindow::OnPaint()
 
 void CMainWindow::OnAbout()
 {
-    CDialog about( "AboutBox", this );
+    CDialog about( L"AboutBox", this );
     about.DoModal();
 }
 
@@ -291,6 +297,7 @@ wxEND_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, -1, pos, size)
 {
+    MSWDisableComposited();
 }
 
 // Define the repainting behaviour

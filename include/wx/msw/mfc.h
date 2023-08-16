@@ -94,6 +94,12 @@ public:
     // Override this to provide messages pre-processing for wxWidgets windows.
     BOOL PreTranslateMessage(MSG *msg) override
     {
+        // As reported in issue #23574, wxGUIEventLoop::PreProcessMessage()
+        // is always returning true, so try BaseApp::PreTranslateMessage()
+        // and hope it doesn't always report true
+        if (BaseApp::PreTranslateMessage(msg))
+            return TRUE;
+
         // Use the current event loop if there is one, or just fall back to the
         // standard one otherwise, but make sure we pre-process messages in any
         // case as otherwise many things would break (e.g. keyboard
@@ -103,10 +109,7 @@ public:
         wxGUIEventLoop evtLoopStd;
         if ( !evtLoop )
             evtLoop = &evtLoopStd;
-        if ( evtLoop->PreProcessMessage(msg) )
-            return TRUE;
-
-        return BaseApp::PreTranslateMessage(msg);
+        return evtLoop->PreProcessMessage(msg);
     }
 
     BOOL OnIdle(LONG lCount) override

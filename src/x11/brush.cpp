@@ -32,6 +32,7 @@ public:
     }
 
     wxBrushRefData( const wxBrushRefData& data )
+        : wxGDIRefData()
     {
         m_style = data.m_style;
         m_stipple = data.m_stipple;
