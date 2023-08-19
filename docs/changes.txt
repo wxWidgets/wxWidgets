@@ -322,6 +322,7 @@ wxOSX:
 wxUniv:
 
 - Fix resetting the hint in wxTextCtrl when it gets focus (Kvaz1r, #23511).
+- Fix creating wxRadioBox without any items (Kvaz1r, #23784).
 
 
 3.2.2.1: (released 2023-02-13)
