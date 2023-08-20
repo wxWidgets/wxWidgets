@@ -62,7 +62,7 @@ long ScoreFile::CalcCheck(const wxString& name, int p1, int p2, int p3)
 
     for(i = 0; i < max; ++i )
     {
-        check = (check << 1) ^ (long)name[i];
+        check = (check << 1) ^ (long)(wxUniChar::value_type)name[i];
         check = ((check >> 23) ^ check) & 0xFFFFFF;
     }
     check = (check << 1) ^ (long)p1;

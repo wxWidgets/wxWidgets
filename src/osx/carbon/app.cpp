@@ -827,7 +827,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
 
     long keyval = wxMacTranslateKey(keychar, keycode) ;
     if ( keyval == keychar && ( event.GetEventType() == wxEVT_KEY_UP || event.GetEventType() == wxEVT_KEY_DOWN ) )
-        keyval = wxToupper( keyval ) ;
+        keyval = (wxUniChar::value_type) wxToupper( (wxUniChar::value_type)keyval ) ;
 
     // Check for NUMPAD keys.  For KEY_UP/DOWN events we need to use the
     // WXK_NUMPAD constants, but for the CHAR event we want to use the
