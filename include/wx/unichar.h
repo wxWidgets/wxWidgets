@@ -33,11 +33,11 @@ public:
 
     // Create the character from 8bit character value encoded in the current
     // locale's charset.
-    wxUniChar(char c) { m_value = From8bit(c); }
-    wxUniChar(unsigned char c) { m_value = From8bit((char)c); }
+    wxUniChar(char c) : m_value(From8bit(c)) {}
+    wxUniChar(unsigned char c) : m_value(From8bit((char)c)) {}
 
 #define wxUNICHAR_DEFINE_CTOR(type) \
-    wxUniChar(type c) { m_value = (value_type)c; }
+    wxUniChar(type c) : m_value(c) {}
     wxDO_FOR_INT_TYPES(wxUNICHAR_DEFINE_CTOR)
 #undef wxUNICHAR_DEFINE_CTOR
 
