@@ -38,10 +38,6 @@ private:
         CPPUNIT_TEST( UnsignedShortCompare );
         CPPUNIT_TEST( IntCompare );
         CPPUNIT_TEST( UnsignedIntCompare );
-        CPPUNIT_TEST( LongCompare );
-        CPPUNIT_TEST( UnsignedLongCompare );
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( wxLongLongCompare ); )
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( wxULongLongCompare ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( WideCharCompare ); )
         CPPUNIT_TEST( UniCharAssignmentOperator );
         CPPUNIT_TEST( UniCharRefAssignmentOperator );
@@ -51,10 +47,6 @@ private:
         CPPUNIT_TEST( UnsignedShortAssignmentOperator );
         CPPUNIT_TEST( IntAssignmentOperator );
         CPPUNIT_TEST( UnsignedIntAssignmentOperator );
-        CPPUNIT_TEST( LongAssignmentOperator );
-        CPPUNIT_TEST( UnsignedLongAssignmentOperator );
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( wxLongLongAssignmentOperator ); )
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( wxULongLongAssignmentOperator ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( WideCharAssignmentOperator ); )
         CPPUNIT_TEST( CharParenOperator );
         CPPUNIT_TEST( UnsignedCharParenOperator );
@@ -62,10 +54,6 @@ private:
         CPPUNIT_TEST( UnsignedShortParenOperator );
         CPPUNIT_TEST( IntParenOperator );
         CPPUNIT_TEST( UnsignedIntParenOperator );
-        CPPUNIT_TEST( LongParenOperator );
-        CPPUNIT_TEST( UnsignedLongParenOperator );
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( wxLongLongParenOperator ); )
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( wxULongLongParenOperator ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( WideCharParenOperator ); )
         CPPUNIT_TEST(RefUniCharAssignmentOperator);
         CPPUNIT_TEST(RefUniCharRefAssignmentOperator);
@@ -74,29 +62,17 @@ private:
         CPPUNIT_TEST( RefUnsignedShortAssignmentOperator );
         CPPUNIT_TEST( RefIntAssignmentOperator );
         CPPUNIT_TEST( RefUnsignedIntAssignmentOperator );
-        CPPUNIT_TEST( RefLongAssignmentOperator );
-        CPPUNIT_TEST( RefUnsignedLongAssignmentOperator );
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxLongLongAssignmentOperator ); )
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxULongLongAssignmentOperator ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( RefWideCharAssignmentOperator ); )
         CPPUNIT_TEST(RefCharParenOperator);
         CPPUNIT_TEST( RefShortParenOperator );
         CPPUNIT_TEST( RefUnsignedShortParenOperator );
         CPPUNIT_TEST( RefIntParenOperator );
         CPPUNIT_TEST( RefUnsignedIntParenOperator );
-        CPPUNIT_TEST( RefLongParenOperator );
-        CPPUNIT_TEST( RefUnsignedLongParenOperator );
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxLongLongParenOperator ); )
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxULongLongParenOperator ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( RefWideCharParenOperator ); )
         CPPUNIT_TEST( RefShortCompare );
         CPPUNIT_TEST( RefUnsignedShortCompare );
         CPPUNIT_TEST( RefIntCompare );
         CPPUNIT_TEST( RefUnsignedIntCompare );
-        CPPUNIT_TEST( RefLongCompare );
-        CPPUNIT_TEST( RefUnsignedLongCompare );
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxLongLongCompare ); )
-        wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxULongLongCompare ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( RefWideCharCompare ); )
         CPPUNIT_TEST( StringCompareIntl );
     CPPUNIT_TEST_SUITE_END();
@@ -109,10 +85,6 @@ private:
     void UnsignedShortCompare();
     void IntCompare();
     void UnsignedIntCompare();
-    void LongCompare();
-    void UnsignedLongCompare();
-    wxIF_LONG_LONG_TYPE( void wxLongLongCompare(); )
-    wxIF_LONG_LONG_TYPE( void wxULongLongCompare(); )
     wxIF_WCHAR_T_TYPE( void WideCharCompare(); )
     void UniCharAssignmentOperator();
     void UniCharRefAssignmentOperator();
@@ -122,10 +94,6 @@ private:
     void UnsignedShortAssignmentOperator();
     void IntAssignmentOperator();
     void UnsignedIntAssignmentOperator();
-    void LongAssignmentOperator();
-    void UnsignedLongAssignmentOperator();
-    wxIF_LONG_LONG_TYPE( void wxLongLongAssignmentOperator(); )
-    wxIF_LONG_LONG_TYPE( void wxULongLongAssignmentOperator(); )
     wxIF_WCHAR_T_TYPE( void WideCharAssignmentOperator(); )
     void CharParenOperator();
     void UnsignedCharParenOperator();
@@ -133,10 +101,6 @@ private:
     void UnsignedShortParenOperator();
     void IntParenOperator();
     void UnsignedIntParenOperator();
-    void LongParenOperator();
-    void UnsignedLongParenOperator();
-    wxIF_LONG_LONG_TYPE( void wxLongLongParenOperator(); )
-    wxIF_LONG_LONG_TYPE( void wxULongLongParenOperator(); )
     wxIF_WCHAR_T_TYPE( void WideCharParenOperator(); )
     void RefUniCharAssignmentOperator();
     void RefUniCharRefAssignmentOperator();
@@ -146,10 +110,6 @@ private:
     void RefUnsignedShortAssignmentOperator();
     void RefIntAssignmentOperator();
     void RefUnsignedIntAssignmentOperator();
-    void RefLongAssignmentOperator();
-    void RefUnsignedLongAssignmentOperator();
-    wxIF_LONG_LONG_TYPE( void RefwxLongLongAssignmentOperator(); )
-    wxIF_LONG_LONG_TYPE( void RefwxULongLongAssignmentOperator(); )
     wxIF_WCHAR_T_TYPE( void RefWideCharAssignmentOperator(); )
     void RefCharParenOperator();
     void RefUnsignedCharParenOperator();
@@ -157,19 +117,11 @@ private:
     void RefUnsignedShortParenOperator();
     void RefIntParenOperator();
     void RefUnsignedIntParenOperator();
-    void RefLongParenOperator();
-    void RefUnsignedLongParenOperator();
-    wxIF_LONG_LONG_TYPE( void RefwxLongLongParenOperator(); )
-    wxIF_LONG_LONG_TYPE( void RefwxULongLongParenOperator(); )
     wxIF_WCHAR_T_TYPE( void RefWideCharParenOperator(); )
     void RefShortCompare();
     void RefUnsignedShortCompare();
     void RefIntCompare();
     void RefUnsignedIntCompare();
-    void RefLongCompare();
-    void RefUnsignedLongCompare();
-    wxIF_LONG_LONG_TYPE( void RefwxLongLongCompare(); )
-    wxIF_LONG_LONG_TYPE( void RefwxULongLongCompare(); )
     wxIF_WCHAR_T_TYPE( void RefWideCharCompare(); )
 
     wxDECLARE_NO_COPY_CLASS(UniCharTestCase);
@@ -455,46 +407,6 @@ void UniCharTestCase::UnsignedIntCompare()
     wxUNICHAR_TEST_INT_COMPARE
 }
 
-void UniCharTestCase::LongCompare()
-{
-    long aVal = 2;
-    long bVal = 3;
-    long cVal = 1;
-
-    wxUNICHAR_TEST_INT_COMPARE
-}
-
-void UniCharTestCase::UnsignedLongCompare()
-{
-    unsigned long aVal = 2;
-    unsigned long bVal = 3;
-    unsigned long cVal = 1;
-
-    wxUNICHAR_TEST_INT_COMPARE
-}
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-void UniCharTestCase::wxLongLongCompare()
-{
-    wxLongLong_t aVal = 2;
-    wxLongLong_t bVal = 3;
-    wxLongLong_t cVal = 1;
-
-    wxUNICHAR_TEST_INT_COMPARE
-}
-
-void UniCharTestCase::wxULongLongCompare()
-{
-    wxULongLong_t aVal = 2;
-    wxULongLong_t bVal = 3;
-    wxULongLong_t cVal = 1;
-
-    wxUNICHAR_TEST_INT_COMPARE
-}
-
-#endif
-
 #if wxWCHAR_T_IS_REAL_TYPE
 
 void UniCharTestCase::WideCharCompare()
@@ -576,38 +488,6 @@ void UniCharTestCase::UnsignedIntAssignmentOperator()
     wxUNICHAR_TEST_ASSIGNMENT_OPERATOR
 }
 
-void UniCharTestCase::LongAssignmentOperator()
-{
-    long bVal = 2;
-
-    wxUNICHAR_TEST_ASSIGNMENT_OPERATOR
-}
-
-void UniCharTestCase::UnsignedLongAssignmentOperator()
-{
-    unsigned long bVal = 2;
-
-    wxUNICHAR_TEST_ASSIGNMENT_OPERATOR
-}
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-void UniCharTestCase::wxLongLongAssignmentOperator()
-{
-    wxLongLong_t bVal = 2;
-
-    wxUNICHAR_TEST_ASSIGNMENT_OPERATOR
-}
-
-void UniCharTestCase::wxULongLongAssignmentOperator()
-{
-    wxULongLong_t bVal = 2;
-
-    wxUNICHAR_TEST_ASSIGNMENT_OPERATOR
-}
-
-#endif
-
 #if wxWCHAR_T_IS_REAL_TYPE
 
 void UniCharTestCase::WideCharAssignmentOperator()
@@ -681,50 +561,6 @@ void UniCharTestCase::UnsignedIntParenOperator()
     aVal = (unsigned int) b;
     CPPUNIT_ASSERT(aVal == bVal);
 }
-
-void UniCharTestCase::LongParenOperator()
-{
-    long aVal;
-    long bVal = 2;
-    wxUniChar b(bVal);
-
-    aVal = (long) b;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-void UniCharTestCase::UnsignedLongParenOperator()
-{
-    unsigned long aVal;
-    unsigned long bVal = 2;
-    wxUniChar b(bVal);
-
-    aVal = (unsigned long) b;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-void UniCharTestCase::wxLongLongParenOperator()
-{
-    wxLongLong_t aVal;
-    wxLongLong_t bVal = 2;
-    wxUniChar b(bVal);
-
-    aVal = (wxLongLong_t) b;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-void UniCharTestCase::wxULongLongParenOperator()
-{
-    wxULongLong_t aVal;
-    wxULongLong_t bVal = 2;
-    wxUniChar b(bVal);
-
-    aVal = (wxULongLong_t) b;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-#endif
 
 #if wxWCHAR_T_IS_REAL_TYPE
 
@@ -832,53 +668,6 @@ void UniCharTestCase::RefUnsignedIntAssignmentOperator()
     CPPUNIT_ASSERT(bRef == b);
 }
 
-void UniCharTestCase::RefLongAssignmentOperator()
-{
-    wxString dummyStr('0');
-    wxUniCharRef bRef = dummyStr[0];
-
-    long b = 2;
-    bRef = b;
-
-    CPPUNIT_ASSERT(bRef == b);
-}
-
-void UniCharTestCase::RefUnsignedLongAssignmentOperator()
-{
-    wxString dummyStr('0');
-    wxUniCharRef bRef = dummyStr[0];
-
-    unsigned long b = 2;
-    bRef = b;
-
-    CPPUNIT_ASSERT(bRef == b);
-}
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-void UniCharTestCase::RefwxLongLongAssignmentOperator()
-{
-    wxString dummyStr('0');
-    wxUniCharRef bRef = dummyStr[0];
-
-    wxLongLong_t b = 2;
-    bRef = b;
-
-    CPPUNIT_ASSERT(bRef == b);
-}
-void UniCharTestCase::RefwxULongLongAssignmentOperator()
-{
-    wxString dummyStr('0');
-    wxUniCharRef bRef = dummyStr[0];
-
-    unsigned long b = 2;
-    bRef = b;
-
-    CPPUNIT_ASSERT(bRef == b);
-}
-
-#endif
-
 #if wxWCHAR_T_IS_REAL_TYPE
 
 void UniCharTestCase::RefWideCharAssignmentOperator()
@@ -972,66 +761,6 @@ void UniCharTestCase::RefUnsignedIntParenOperator()
     CPPUNIT_ASSERT(aVal == bVal);
 }
 
-void UniCharTestCase::RefLongParenOperator()
-{
-    long aVal;
-    long bVal = 2;
-    wxUniChar b(bVal);
-
-    wxString dummyStr("0");
-    wxUniCharRef bRef = dummyStr[0];
-    bRef = b;
-
-    aVal = (long) bRef;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-void UniCharTestCase::RefUnsignedLongParenOperator()
-{
-    unsigned long aVal;
-    unsigned long bVal = 2;
-    wxUniChar b(bVal);
-
-    wxString dummyStr("0");
-    wxUniCharRef bRef = dummyStr[0];
-    bRef = b;
-
-    aVal = (unsigned long) bRef;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-void UniCharTestCase::RefwxLongLongParenOperator()
-{
-    wxLongLong_t aVal;
-    wxLongLong_t bVal = 2;
-    wxUniChar b(bVal);
-
-    wxString dummyStr("0");
-    wxUniCharRef bRef = dummyStr[0];
-    bRef = b;
-
-    aVal = (wxLongLong_t) bRef;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-void UniCharTestCase::RefwxULongLongParenOperator()
-{
-    wxULongLong_t aVal;
-    wxULongLong_t bVal = 2;
-    wxUniChar b(bVal);
-
-    wxString dummyStr("0");
-    wxUniCharRef bRef = dummyStr[0];
-    bRef = b;
-
-    aVal = (wxULongLong_t) bRef;
-    CPPUNIT_ASSERT(aVal == bVal);
-}
-
-#endif
-
 #if wxWCHAR_T_IS_REAL_TYPE
 
 void UniCharTestCase::RefWideCharParenOperator()
@@ -1044,7 +773,7 @@ void UniCharTestCase::RefWideCharParenOperator()
     wxUniCharRef bRef = dummyStr[0];
     bRef = b;
 
-    aVal = (wxLongLong_t) bRef;
+    aVal = (wxUniChar::value_type) bRef;
     CPPUNIT_ASSERT(aVal == bVal);
 }
 
@@ -1097,46 +826,6 @@ void UniCharTestCase::RefUnsignedIntCompare()
 
     wxUNICHARREF_TEST_INT_COMPARE
 }
-
-void UniCharTestCase::RefLongCompare()
-{
-    long aVal = 2;
-    long bVal = 3;
-    long cVal = 1;
-
-    wxUNICHARREF_TEST_INT_COMPARE
-}
-
-void UniCharTestCase::RefUnsignedLongCompare()
-{
-    unsigned long aVal = 2;
-    unsigned long bVal = 3;
-    unsigned long cVal = 1;
-
-    wxUNICHARREF_TEST_INT_COMPARE
-}
-
-#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-
-void UniCharTestCase::RefwxLongLongCompare()
-{
-    wxLongLong_t aVal = 2;
-    wxLongLong_t bVal = 3;
-    wxLongLong_t cVal = 1;
-
-    wxUNICHARREF_TEST_INT_COMPARE
-}
-
-void UniCharTestCase::RefwxULongLongCompare()
-{
-    wxULongLong_t aVal = 2;
-    wxULongLong_t bVal = 3;
-    wxULongLong_t cVal = 1;
-
-    wxUNICHARREF_TEST_INT_COMPARE
-}
-
-#endif
 
 #if wxWCHAR_T_IS_REAL_TYPE
 
