@@ -37,7 +37,7 @@ All C++11 compilers are supported including but not limited to:
 
 - Microsoft Visual C++ 2015 or later (up to 2022).
 - g++ 4.8 or later (up to 12), including MinGW/MinGW-64/TDM under Windows.
-- Clang (up to 14).
+- Clang (up to 16).
 
 Please use [3.2 branch](https://github.com/wxWidgets/wxWidgets/tree/3.2) if
 you must use wxWidgets with a C++98 compiler or support Windows XP.
