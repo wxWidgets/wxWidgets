@@ -532,15 +532,37 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             if (flagVerbose)
                 wxPrintf(wxT("adding     %s...\n"), fullname);
 
-            wxString filename = GetInternalFileName(n->GetContent(), flist);
-            n->SetContent(filename);
-
-            if (flist.Index(filename) == wxNOT_FOUND)
-                flist.Add(filename);
-
             wxFileInputStream sin(fullname);
-            wxFileOutputStream sout(parOutputPath + wxFILE_SEP_PATH + filename);
-            sin.Read(sout); // copy the stream
+            if (!sin)
+            {
+                // Note that the full name was already given in the error
+                // message logged by wxFileInputStream itself, so don't repeat
+                // it here.
+                wxLogError("Failed to read file referenced by \"%s\" at %d",
+                           node->GetName(), node->GetLineNumber());
+                retCode = 1;
+            }
+            else
+            {
+                wxString filename = GetInternalFileName(n->GetContent(), flist);
+
+                // Copy the entire stream to the output file.
+                wxFileOutputStream sout(parOutputPath + wxFILE_SEP_PATH + filename);
+                if ( sin.Read(sout).GetLastError() != wxSTREAM_EOF || !sout )
+                {
+                    wxLogError("Failed to save \"%s\" referenced by \"%s\" at %d"
+                               " to a temporary file",
+                               fullname, node->GetName(), node->GetLineNumber());
+                    retCode = 1;
+                }
+                else
+                {
+                    n->SetContent(filename);
+
+                    if (flist.Index(filename) == wxNOT_FOUND)
+                        flist.Add(filename);
+                }
+            }
         }
 
         // subnodes:
