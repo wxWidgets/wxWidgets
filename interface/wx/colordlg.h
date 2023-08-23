@@ -27,7 +27,7 @@
 
         wxColourData data;
         data.SetColour(initialColourToUse);
-        wxColourData dlg(this, &data);
+        wxColourDialog dlg(this, &data);
         dlg.Bind(wxEVT_COLOUR_CHANGED, [](wxColourDialogEvent& event) {
                     Redraw(event.GetColour());
                  });
