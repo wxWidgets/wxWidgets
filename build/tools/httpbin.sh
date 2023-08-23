@@ -8,12 +8,19 @@ httpbin_launch() {
 
     echo 'Launching httpbin...'
 
+    # Get Ubuntu codename if it exists
+    if command -v lsb_release > /dev/null; then
+        codename=$(lsb_release --codename --short)
+    fi
+
     # Installing Flask 2.1.0 and its dependency Werkzeug 2.1.0 results
     # in failures when trying to run httpbin, so stick to an older but
     # working version.
     pip_explicit_deps='Flask==2.0.3 Werkzeug==2.0.3'
 
-    python3 -m pip install $pip_explicit_deps httpbin --user
+    if "$codename" != "bionic"; then
+        python3 -m pip install $pip_explicit_deps httpbin --user
+    fi
     python3 -m httpbin.core --port 50500 2>&1 >httpbin.log &
     WX_TEST_WEBREQUEST_URL="http://localhost:50500"
 }
