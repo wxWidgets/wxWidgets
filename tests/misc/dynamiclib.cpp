@@ -46,7 +46,7 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
         "/usr/lib",
     };
 
-    static const char* const candidateVersions[] = { "6", "7", };
+    static const char* const candidateVersions[] = { "6", "7", "6.1", "0.3", "0.1" };
 
     wxString LIB_NAME;
     wxArrayString allMatches;
