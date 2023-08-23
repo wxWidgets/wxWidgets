@@ -13,7 +13,7 @@ httpbin_launch() {
     # working version.
     pip_explicit_deps='Flask==2.0.3 Werkzeug==2.0.3'
 
-    python3 -m pip install $pip_explicit_deps httpbin --user
+    python3 -m pip install $pip_explicit_deps 'httpbin==0.7.0' --user
     python3 -m httpbin.core --port 50500 2>&1 >httpbin.log &
     WX_TEST_WEBREQUEST_URL="http://localhost:50500"
 }
