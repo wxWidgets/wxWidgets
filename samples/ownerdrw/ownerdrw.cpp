@@ -345,8 +345,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
         {
             pListBox->GetItem(ui)->SetBackgroundColour(wxColor(0, 0, 0));
         }
-        else
-        if ( ui == 5 ) // black on dark gray is barely visible
+        else if ( ui == 5 ) // black on dark grey is barely visible
         {
             pListBox->GetItem(ui)->SetBackgroundColour(*wxYELLOW);
         }
