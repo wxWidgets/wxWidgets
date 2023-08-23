@@ -1743,10 +1743,11 @@ wxImage::Paste(const wxImage & image, int x, int y,
                         alpha_target_data[i] = (unsigned char)((result_alpha * 255) + 0.5f);
                         for (int c = 3 * i; c < 3 * (i + 1); c++)
                         {
-                            target_data[c] =
-                                (unsigned char)(((source_data[c] * source_alpha +
-                                    target_data[c] * light_left) /
-                                result_alpha) + 0.5f);
+                            float target_value =
+                                ((source_data[c] * source_alpha + target_data[c] * light_left) /
+                                result_alpha) + 0.5f;
+                            target_data[c] = wxFinite(target_value) ? (unsigned char)target_value
+                                                                    : 0;
                         }
                     }
                 }
