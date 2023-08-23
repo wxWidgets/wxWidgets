@@ -91,10 +91,18 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 // Include manifest file for common controls library v6 required to use themes.
 //
 // Predefining wxUSE_NO_MANIFEST as 1 always disables the use of the manifest.
-// Otherwise we include it only if wxUSE_RC_MANIFEST is defined as 1.
+// Otherwise we include it either if wxUSE_RC_MANIFEST is defined as 1 or if
+// wxUSE_DPI_AWARE_MANIFEST is defined.
 //
 
 #if !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)
+
+#ifdef wxUSE_DPI_AWARE_MANIFEST
+    // Defining wxUSE_DPI_AWARE_MANIFEST overrides wxUSE_RC_MANIFEST, as it
+    // makes no sense to define the former just for it to be ignored.
+    #undef wxUSE_RC_MANIFEST
+    #define wxUSE_RC_MANIFEST 1
+#endif
 
 #if defined(wxUSE_RC_MANIFEST) && wxUSE_RC_MANIFEST
 
