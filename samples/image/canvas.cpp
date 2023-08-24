@@ -401,6 +401,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     PrepareDC( dc );
 
+    dc.SetTextForeground(*wxBLACK);
     dc.DrawText( "Loaded image", 30, 10 );
     if (my_square.IsOk())
         dc.DrawBitmap( my_square, 30, 30 );
