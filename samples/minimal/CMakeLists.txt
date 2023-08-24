@@ -46,7 +46,7 @@ set(SRC_FILES
     )
 
 if(WIN32)
-    # Include a RC file for windows, for icon and manifest
+    # Include a RC file for windows
     list(APPEND SRC_FILES ../sample.rc)
 elseif(APPLE)
     # Add an icon for the apple .app file
@@ -58,10 +58,7 @@ add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${SRC_FILES})
 # Link required libraries to the executable
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
 
-if(MSVC)
-    # Prevent duplicate manifest, it is already added via sample.rc
-    set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/MANIFEST:NO")
-elseif(APPLE)
+if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         RESOURCE "../../src/osx/carbon/wxmac.icns"
         MACOSX_BUNDLE_ICON_FILE wxmac.icns
