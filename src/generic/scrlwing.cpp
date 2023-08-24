@@ -1532,3 +1532,10 @@ WXLRESULT wxScrolledT_Helper::FilterMSWWindowProc(WXUINT nMsg, WXLRESULT rc)
 // NB: skipping wxScrolled<T> in wxRTTI information because being a template,
 //     it doesn't and can't implement wxRTTI support
 wxIMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel);
+
+namespace wxPrivate
+{
+
+wxScrolledCanvasDummySubclass::wxScrolledCanvasDummySubclass() = default;
+
+}
