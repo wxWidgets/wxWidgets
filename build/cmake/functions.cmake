@@ -801,7 +801,7 @@ function(wx_add name group)
         add_executable(${target_name} ${exe_type} ${src_files})
 
         if (DEFINED wxUSE_DPI_AWARE_MANIFEST_VALUE)
-            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "/MANIFEST:NO")
+            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "/MANIFEST:NO")
             target_compile_definitions(${target_name} PRIVATE wxUSE_DPI_AWARE_MANIFEST=${wxUSE_DPI_AWARE_MANIFEST_VALUE})
         endif()
     endif()
