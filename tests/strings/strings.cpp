@@ -125,9 +125,10 @@ TEST_CASE("StringConstructors", "[wxString]")
     CHECK( wxString("Hello", 4) == "Hell" );
     CHECK( wxString("Hello", 5) == "Hello" );
 
-    CHECK( wxString(L'Z', 0) == L"" );
-    CHECK( wxString(L'Z') == L"Z" );
-    CHECK( wxString(L'Z', 4) == L"ZZZZ" );
+    const wchar_t wch = L'Z';
+    CHECK( wxString(wch, 0) == L"" );
+    CHECK( wxString(wch) == L"Z" );
+    CHECK( wxString(wch, 4) == L"ZZZZ" );
     CHECK( wxString(L"Hello", 4) == L"Hell" );
     CHECK( wxString(L"Hello", 5) == L"Hello" );
 
