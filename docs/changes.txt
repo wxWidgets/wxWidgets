@@ -252,6 +252,7 @@ All:
 
 All (GUI):
 
+- Don't allow pasting characters forbidden by wxTextValidator (#10281).
 - Fix wxFLEX_GROWMODE_ALL in wxFlexGridSizer with proportions (#23253).
 - Fix wxEditorDialogProperty in wxPropertyGrid (#23272).
 - Fix entering dates in wxGenericDatePicker in nb_NO and other locales
