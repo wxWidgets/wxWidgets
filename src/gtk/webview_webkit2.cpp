@@ -994,6 +994,46 @@ bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
     return true;
 }
 
+bool wxWebViewWebKit::SetProxy(const wxString& proxy)
+{
+#if WEBKIT_CHECK_VERSION(2, 16, 0)
+    if (wx_check_webkit_version(2, 16, 0))
+    {
+        const auto context = static_cast<WebKitWebContext*>(m_config.GetNativeConfiguration());
+        wxCHECK_MSG( context, false, "no context?" );
+
+        const auto data_manager = webkit_web_context_get_website_data_manager(context);
+        wxCHECK_MSG( data_manager, false, "no data manager?" );
+
+        const auto proxy_settings = webkit_network_proxy_settings_new(
+            proxy.utf8_str(),
+            nullptr // no hosts to ignore
+        );
+        wxCHECK_MSG( proxy_settings, false, "failed to create proxy settings" );
+
+        webkit_website_data_manager_set_network_proxy_settings(
+            data_manager,
+            WEBKIT_NETWORK_PROXY_MODE_CUSTOM,
+            proxy_settings
+        );
+
+        webkit_network_proxy_settings_free(proxy_settings);
+
+        return true;
+    }
+
+    wxLogError(_("Setting proxy is not supported by WebKit, at least version 2.16 is required."));
+
+    return false;
+#else // WebKit < 2.16 doesn't support setting proxy
+    wxUnusedVar(proxy);
+
+    wxLogError(_("This program was compiled without support for setting WebKit proxy."));
+
+    return false;
+#endif // WebKit 2.16+
+}
+
 void wxWebViewWebKit::Stop()
 {
      webkit_web_view_stop_loading(m_web_view);
