@@ -397,7 +397,6 @@ bool wxGenericAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
 
     // finally draw this frame
     DrawFrame(dc, frame);
-    dc.SelectObject(wxNullBitmap);
 
     return true;
 }
@@ -451,7 +450,6 @@ void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
 
     // now just draw the current frame on the top of the backing store
     DrawFrame(dc, m_currentFrame);
-    dc.SelectObject(wxNullBitmap);
 }
 
 void wxGenericAnimationCtrl::DisplayStaticImage()
