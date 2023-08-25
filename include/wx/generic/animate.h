@@ -140,6 +140,9 @@ protected:
                                       // on the screen
 
 private:
+    // True if we need to show the next frame after painting the current one.
+    bool m_needToShowNextFrame = false;
+
     typedef wxAnimationCtrlBase base_type;
     wxDECLARE_DYNAMIC_CLASS(wxGenericAnimationCtrl);
     wxDECLARE_EVENT_TABLE();

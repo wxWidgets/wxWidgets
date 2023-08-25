@@ -337,19 +337,9 @@ bool wxGenericAnimationCtrl::Play(bool looped)
 
     m_isPlaying = true;
 
-    // do a ClearBackground() to avoid that e.g. the custom static bitmap which
-    // was eventually shown previously remains partially drawn
-    ClearBackground();
+    m_needToShowNextFrame = true;
 
-    // DrawCurrentFrame() will use our updated backing store
-    wxClientDC clientDC(this);
-    DrawCurrentFrame(clientDC);
-
-    // start the timer
-    int delay = m_animation.GetDelay(0);
-    if (delay == 0)
-        delay = 1;      // 0 is invalid timeout for wxTimer.
-    m_timer.StartOnce(delay);
+    Refresh();
 
     return true;
 }
@@ -562,6 +552,17 @@ void wxGenericAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         // clear then our area to the background colour
         DisposeToBackground(dc);
     }
+
+    if ( m_needToShowNextFrame )
+    {
+        m_needToShowNextFrame = false;
+
+        // Set the timer for the next frame
+        int delay = m_animation.GetDelay(m_currentFrame);
+        if (delay == 0)
+            delay = 1;      // 0 is invalid timeout for wxTimer.
+        m_timer.StartOnce(delay);
+    }
 }
 
 void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
@@ -581,19 +582,9 @@ void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
 
     IncrementalUpdateBackingStore();
 
-    wxClientDC dc(this);
-    DrawCurrentFrame(dc);
+    m_needToShowNextFrame = true;
 
-#ifdef __WXMAC__
-    // without this, the animation currently doesn't redraw under Mac
     Refresh();
-#endif // __WXMAC__
-
-    // Set the timer for the next frame
-    int delay = m_animation.GetDelay(m_currentFrame);
-    if (delay == 0)
-        delay = 1;      // 0 is invalid timeout for wxTimer.
-    m_timer.StartOnce(delay);
 }
 
 void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
