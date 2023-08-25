@@ -332,6 +332,10 @@ public:
 
     bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
 
+    // Check that this size object is at least as big as the other one in both
+    // directions.
+    bool IsAtLeast(const wxSize& sz) const { return x >= sz.x && y >= sz.y; }
+
     // combine this size with the other one replacing the default (i.e. equal
     // to wxDefaultCoord) components of this object with those of the other
     void SetDefaults(const wxSize& size)

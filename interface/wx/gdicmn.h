@@ -1038,6 +1038,14 @@ public:
     void IncTo(const wxSize& size);
 
     /**
+        Returns @true if this size is at least as big as the other one in both
+        directions.
+
+        @since 3.3.0
+     */
+    bool IsAtLeast(const wxSize& size) const;
+
+    /**
         Returns @true if neither of the size object components is equal to -1,
         which is used as default for the size values in wxWidgets (hence the
         predefined ::wxDefaultSize has both of its components equal to -1).
