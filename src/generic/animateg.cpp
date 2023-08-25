@@ -349,7 +349,7 @@ bool wxGenericAnimationCtrl::Play(bool looped)
     int delay = m_animation.GetDelay(0);
     if (delay == 0)
         delay = 1;      // 0 is invalid timeout for wxTimer.
-    m_timer.Start(delay, true);
+    m_timer.StartOnce(delay);
 
     return true;
 }
@@ -593,7 +593,7 @@ void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
     int delay = m_animation.GetDelay(m_currentFrame);
     if (delay == 0)
         delay = 1;      // 0 is invalid timeout for wxTimer.
-    m_timer.Start(delay, true);
+    m_timer.StartOnce(delay);
 }
 
 void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
