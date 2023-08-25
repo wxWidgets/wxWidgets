@@ -1,1 +1,1 @@
-wxAll (GUI): Support high DPI bitmaps in wxBusyInfo.
+wxAll (GUI): Support high DPI bitmaps in wxBusyInfo (#23813).
