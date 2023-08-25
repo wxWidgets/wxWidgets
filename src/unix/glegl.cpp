@@ -389,6 +389,14 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
 // Helper declared as friend in the header and so can access m_wlSubsurface.
 void wxEGLUpdatePosition(wxGLCanvasEGL* win)
 {
+    if ( !win->m_wlSubsurface )
+    {
+        // In some circumstances such as when reparenting a canvas between two hidden
+        // toplevel windows, GTK will call size-allocate before mapping the canvas
+        // Ignore the call, the position will be fixed when it is mapped
+        return;
+    }
+
     int x, y;
     gdk_window_get_origin(win->GTKGetDrawingWindow(), &x, &y);
     wl_subsurface_set_position(win->m_wlSubsurface, x, y);
@@ -439,6 +447,17 @@ static const struct wl_callback_listener wl_frame_listener = {
     wl_frame_callback_handler
 };
 
+static gboolean gtk_glcanvas_map_callback(GtkWidget *, GdkEventAny *, wxGLCanvasEGL *win)
+{
+    win->CreateWaylandSubsurface();
+    return FALSE;
+}
+
+static void gtk_glcanvas_unmap_callback(GtkWidget *, wxGLCanvasEGL *win)
+{
+    win->DestroyWaylandSubsurface();
+}
+
 static void gtk_glcanvas_size_callback(GtkWidget *widget,
                                        GtkAllocation *,
                                        wxGLCanvasEGL *win)
@@ -462,16 +481,16 @@ bool wxGLCanvasEGL::CreateSurface()
         return false;
     }
 
-    if ( m_surface != EGL_NO_SURFACE )
-    {
-        eglDestroySurface(m_surface, m_display);
-        m_surface = EGL_NO_SURFACE;
-    }
-
     GdkWindow *window = GTKGetDrawingWindow();
 #ifdef GDK_WINDOWING_X11
     if (wxGTKImpl::IsX11(window))
     {
+        if ( m_surface != EGL_NO_SURFACE )
+        {
+            eglDestroySurface(m_surface, m_display);
+            m_surface = EGL_NO_SURFACE;
+        }
+
         m_xwindow = GDK_WINDOW_XID(window);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
                                                    &m_xwindow, nullptr);
@@ -480,10 +499,16 @@ bool wxGLCanvasEGL::CreateSurface()
 #ifdef GDK_WINDOWING_WAYLAND
     if (wxGTKImpl::IsWayland(window))
     {
+        if ( m_wlSurface )
+        {
+            // Already created (can happen when the canvas is un-realized then
+            // re-realized, for example, when the canvas is re-parented)
+            return true;
+        }
+
         int w = gdk_window_get_width(window);
         int h = gdk_window_get_height(window);
         struct wl_display *display = gdk_wayland_display_get_wl_display(gdk_window_get_display(window));
-        struct wl_surface *surface = gdk_wayland_window_get_wl_surface(window);
         struct wl_registry *registry = wl_display_get_registry(display);
         wl_registry_add_listener(registry, &wl_registry_listener, this);
         wl_display_roundtrip(display);
@@ -494,21 +519,25 @@ bool wxGLCanvasEGL::CreateSurface()
         }
         m_wlSurface = wl_compositor_create_surface(m_wlCompositor);
         m_wlRegion = wl_compositor_create_region(m_wlCompositor);
-        m_wlSubsurface = wl_subcompositor_get_subsurface(m_wlSubcompositor,
-                                                         m_wlSurface,
-                                                         surface);
         wl_surface_set_input_region(m_wlSurface, m_wlRegion);
-        wl_subsurface_set_desync(m_wlSubsurface);
-        wxEGLUpdatePosition(this);
         int scale = gdk_window_get_scale_factor(window);
         wl_surface_set_buffer_scale(m_wlSurface, scale);
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
                                              h * scale);
         m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
                                                    m_wlEGLWindow, nullptr);
-        m_wlFrameCallbackHandler = wl_surface_frame(surface);
-        wl_callback_add_listener(m_wlFrameCallbackHandler,
-                                 &wl_frame_listener, this);
+
+        // We need to use "map-event" instead of "map" to ensure that the
+        // widget's underlying Wayland surface has been created.
+        // Otherwise, gdk_wayland_window_get_wl_surface may return nullptr,
+        // for example when hiding then showing a window containing a canvas.
+        gtk_widget_add_events(m_widget, GDK_STRUCTURE_MASK);
+        g_signal_connect(m_widget, "map-event",
+                         G_CALLBACK(gtk_glcanvas_map_callback), this);
+        // However, note the use of "unmap" instead of the later "unmap-event"
+        // Not unmapping the canvas as soon as possible causes problems when reparenting
+        g_signal_connect(m_widget, "unmap",
+                         G_CALLBACK(gtk_glcanvas_unmap_callback), this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
 
@@ -535,9 +564,39 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
         eglDestroySurface(m_display, m_surface);
 #ifdef GDK_WINDOWING_WAYLAND
     g_clear_pointer(&m_wlEGLWindow, wl_egl_window_destroy);
-    g_clear_pointer(&m_wlSubsurface, wl_subsurface_destroy);
     g_clear_pointer(&m_wlSurface, wl_surface_destroy);
+#endif
+}
+
+void wxGLCanvasEGL::CreateWaylandSubsurface()
+{
+#ifdef GDK_WINDOWING_WAYLAND
+    GdkWindow *window = GTKGetDrawingWindow();
+    struct wl_surface *surface = gdk_wayland_window_get_wl_surface(window);
+
+    m_wlSubsurface = wl_subcompositor_get_subsurface(m_wlSubcompositor,
+                                                     m_wlSurface,
+                                                     surface);
+    wl_subsurface_set_desync(m_wlSubsurface);
+    wxEGLUpdatePosition(this);
+    m_wlFrameCallbackHandler = wl_surface_frame(surface);
+    wl_callback_add_listener(m_wlFrameCallbackHandler,
+                             &wl_frame_listener, this);
+
+    if ( m_surface == EGL_NO_SURFACE )
+    {
+        wxFAIL_MSG("Unable to create EGL surface");
+        return;
+    }
+#endif
+}
+
+void wxGLCanvasEGL::DestroyWaylandSubsurface()
+{
+#ifdef GDK_WINDOWING_WAYLAND
+    g_clear_pointer(&m_wlSubsurface, wl_subsurface_destroy);
     g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
+    m_readyToDraw = false;
 #endif
 }
 
