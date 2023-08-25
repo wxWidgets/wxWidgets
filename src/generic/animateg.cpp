@@ -241,20 +241,32 @@ wxSize wxGenericAnimationCtrl::DoGetBestSize() const
     return FromDIP(wxSize(100, 100));
 }
 
-void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
+void wxGenericAnimationCtrl::SetAnimation(const wxAnimationBundle& animations)
 {
     if (IsPlaying())
         Stop();
 
-    // set new animation even if it's wxNullAnimation
-    m_animation = animation;
-    if (!m_animation.IsOk())
+    m_animations = animations.GetAll();
+
+    // Reset animation if we don't have any valid ones.
+    if ( m_animations.empty() )
     {
+        m_animation.UnRef();
         DisplayStaticImage();
         return;
     }
 
-    wxCHECK_RET(animation.IsCompatibleWith(GetClassInfo()),
+    // Otherwise choose the animation of the size most appropriate for the
+    // current resolution.
+    const wxSize wantedSize = m_animations[0].GetSize()*GetDPIScaleFactor();
+    for ( const auto& anim: m_animations )
+    {
+        m_animation = anim;
+        if ( m_animation.GetSize().IsAtLeast(wantedSize) )
+            break;
+    }
+
+    wxCHECK_RET(m_animation.IsCompatibleWith(GetClassInfo()),
                 wxT("incompatible animation") );
 
     if (AnimationImplGetBackgroundColour() == wxNullColour)

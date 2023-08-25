@@ -126,6 +126,31 @@ bool wxAnimation::Load(wxInputStream& stream, wxAnimationType type)
     return GetImpl()->Load(stream, type);
 }
 
+// ----------------------------------------------------------------------------
+// wxAnimationBundle
+// ----------------------------------------------------------------------------
+
+void wxAnimationBundle::Add(const wxAnimation& anim)
+{
+    // It's ok to have empty animation bundle, but any animations added to
+    // it should be valid.
+    wxCHECK_RET( anim.IsOk(), "shouldn't add invalid animations" );
+
+    if ( !m_animations.empty() )
+    {
+        // They also should be added in increasing size.
+        const wxSize thisSize = anim.GetSize();
+        const wxSize lastSize = m_animations.back().GetSize();
+
+        wxCHECK_RET( thisSize != lastSize,
+                     "shouldn't have multiple animations of the same size" );
+
+        wxCHECK_RET( thisSize.IsAtLeast(lastSize),
+                     "should be added in order of increasing size" );
+    }
+
+    m_animations.push_back(anim);
+}
 
 // ----------------------------------------------------------------------------
 // wxAnimationCtrlBase

@@ -57,7 +57,7 @@ public:
     virtual bool IsPlaying() const override
         { return m_isPlaying; }
 
-    void SetAnimation(const wxAnimation &animation) override;
+    void SetAnimation(const wxAnimationBundle &animations) override;
 
     virtual void SetInactiveBitmap(const wxBitmapBundle &bmp) override;
 
