@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/clipbrd.h
-// Purpose:     wxClipboad class and clipboard functions
+// Purpose:     wxClipboard class and clipboard functions
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.10.99
