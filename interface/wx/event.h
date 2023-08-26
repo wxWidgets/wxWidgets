@@ -1390,7 +1390,7 @@ enum wxKeyCategoryFlags
     Another difference between key and char events is that another kind of
     translation is done for the latter ones when the Control key is pressed:
     char events for ASCII letters in this case carry codes corresponding to the
-    ASCII value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until
+    ASCII value of Ctrl-Letter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until
     26 for Ctrl-Z. This is convenient for terminal-like applications and can be
     completely ignored by all the other ones (if you need to handle Ctrl-A it
     is probably a better idea to use the key event rather than the char one).
