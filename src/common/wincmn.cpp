@@ -3256,10 +3256,6 @@ wxBorder wxWindowBase::GetBorder(long flags) const
     {
         border = GetDefaultBorder();
     }
-    else if ( border == wxBORDER_THEME )
-    {
-        border = GetDefaultBorderForControl();
-    }
 
     return border;
 }

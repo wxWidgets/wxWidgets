@@ -326,6 +326,7 @@ public:
     }
 };
 
+#if wxUSE_RADIOBTN
 class wxFileDialogRadioButtonImplFDC
     : public wxFileDialogImplFDC<wxFileDialogRadioButtonImpl>
 {
@@ -366,6 +367,7 @@ public:
 private:
     const DWORD m_item;
 };
+#endif // wxUSE_RADIOBTN
 
 class wxFileDialogChoiceImplFDC
     : public wxFileDialogImplFDC<wxFileDialogChoiceImpl>
@@ -534,6 +536,7 @@ public:
         return new wxFileDialogCheckBoxImplFDC(m_fdc, m_lastId);
     }
 
+#if wxUSE_RADIOBTN
     wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) override
     {
         HRESULT hr;
@@ -568,6 +571,7 @@ public:
 
         return impl;
     }
+#endif // wxUSE_RADIOBTN
 
     wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) override
     {
@@ -1219,12 +1223,26 @@ int wxFileDialog::ShowModal()
     wxWindowDisabler disableOthers(this, parent);
 
     /*
-        We need to use the old style dialog in order to use a hook function
-        which allows us to use custom controls in it but, if possible, we
-        prefer to use the new style one instead.
+        We prefer to use the new style dialog if possible, but have to fall
+        back on the old common dialog in a few cases.
     */
 #if wxUSE_IFILEOPENDIALOG
-    if ( !HasExtraControlCreator() )
+    bool canUseIFileDialog = true;
+
+    /*
+        We need to use the old style dialog in order to use a hook function
+        which allows us to use custom controls in it.
+     */
+    if ( HasExtraControlCreator() )
+        canUseIFileDialog = false;
+
+    /*
+        We also can't use it if we have a parent in some cases.
+     */
+    if ( hWndParent && !wxMSWImpl::wxIFileDialog::CanBeUsedWithAnOwner() )
+        canUseIFileDialog = false;
+
+    if ( canUseIFileDialog )
     {
         const int rc = ShowIFileDialog(hWndParent);
         if ( rc != wxID_NONE )

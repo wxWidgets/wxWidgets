@@ -343,9 +343,27 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
     wxYield();
     CHECK( text2->GetValue() == "9" );
 
+    // Entering a value which is out of range is allowed.
     sim.Char('9');
     wxYield();
-    CHECK( text2->GetValue() == "9" );
+    CHECK( text2->GetValue() == "99" );
+
+    // But it must be clamped to the valid range on focus loss.
+    m_text->SetFocus();
+    wxYield();
+    CHECK( text2->GetValue() == "10.000" );
+
+    // Repeat the test with a too small invalid value.
+    text2->Clear();
+    text2->SetFocus();
+
+    sim.Text("-22");
+    wxYield();
+    CHECK( text2->GetValue() == "-22" );
+
+    m_text->SetFocus();
+    wxYield();
+    CHECK( text2->GetValue() == "-10.000" );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

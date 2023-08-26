@@ -681,9 +681,11 @@ wxString wxFindFirstFile(const wxString& spec, int flags)
     if ( !wxEndsWithPathSeparator(gs_dirPath ) )
         gs_dirPath << wxFILE_SEP_PATH;
 
-    gs_dir.reset(new wxDir(gs_dirPath));
+    gs_dir.reset();
 
-    if ( !gs_dir->IsOpened() )
+    std::unique_ptr<wxDir> dir(new wxDir(gs_dirPath));
+
+    if ( !dir->IsOpened() )
     {
         wxLogSysError(_("Cannot enumerate files '%s'"), spec);
         return wxEmptyString;
@@ -698,16 +700,22 @@ wxString wxFindFirstFile(const wxString& spec, int flags)
     }
 
     wxString result;
-    gs_dir->GetFirst(&result, wxFileNameFromPath(spec), dirFlags);
+    dir->GetFirst(&result, wxFileNameFromPath(spec), dirFlags);
     if ( result.empty() )
         return result;
+
+    // Save the directory so that wxFindNextFile() reuses it later.
+    gs_dir = std::move(dir);
 
     return gs_dirPath + result;
 }
 
 wxString wxFindNextFile()
 {
-    wxCHECK_MSG( gs_dir, "", "You must call wxFindFirstFile before!" );
+    // If this assert is triggered, this means that you haven't called
+    // wxFindFirstFile() at all or its last call returned an empty string: in
+    // this case, wxFindNextFile() shouldn't be called.
+    wxCHECK_MSG( gs_dir, "", "You must call wxFindFirstFile successfully first!" );
 
     wxString result;
     if ( !gs_dir->GetNext(&result) || result.empty() )

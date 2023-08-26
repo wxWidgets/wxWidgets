@@ -49,7 +49,7 @@ about using [vcpkg][] C++ package manager for installing wxWidgets.
 Building from Source
 --------------------
 
-### Getting the sources
+### Getting the sources                {#install_get_sources}
 
 To build the library you need to get its sources first. The recommended way to
 do it is to use Git to check them out from the official wxWidgets repository

@@ -2212,15 +2212,6 @@
 #   endif
 #endif /* wxUSE_XRC */
 
-#if wxUSE_SOCKETS && !wxUSE_STOPWATCH
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_SOCKETS requires wxUSE_STOPWATCH"
-#   else
-#       undef wxUSE_SOCKETS
-#       define wxUSE_SOCKETS 0
-#   endif
-#endif /* wxUSE_SOCKETS */
-
 #if wxUSE_SVG && !wxUSE_STREAMS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SVG requires wxUSE_STREAMS"

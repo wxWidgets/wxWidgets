@@ -32,11 +32,7 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlContainerCell;
 class WXDLLIMPEXP_HTML wxHtmlSelection
 {
 public:
-    wxHtmlSelection()
-        : m_fromPos(wxDefaultPosition), m_toPos(wxDefaultPosition),
-          m_fromCharacterPos(-1), m_toCharacterPos(-1),
-          m_fromCell(nullptr), m_toCell(nullptr),
-          m_extBeforeSel(0), m_extBeforeSelEnd(0) {}
+    wxHtmlSelection() = default;
 
     // this version is used for the user selection defined with the mouse
     void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
@@ -69,15 +65,18 @@ public:
                  m_toPos == wxDefaultPosition; }
 
 private:
-    wxPoint m_fromPos, m_toPos;
-    wxCoord m_fromCharacterPos, m_toCharacterPos;
-    const wxHtmlCell *m_fromCell, *m_toCell;
+    wxPoint m_fromPos = wxDefaultPosition,
+            m_toPos = wxDefaultPosition;
+    wxCoord m_fromCharacterPos = -1,
+            m_toCharacterPos = -1;
+    const wxHtmlCell *m_fromCell = nullptr,
+                     *m_toCell = nullptr;
 
     // Extent of the text before selection start.
-    unsigned m_extBeforeSel;
+    unsigned m_extBeforeSel = 0;
 
     // Extent of the text from the beginning to the selection end.
-    unsigned m_extBeforeSelEnd;
+    unsigned m_extBeforeSelEnd = 0;
 };
 
 

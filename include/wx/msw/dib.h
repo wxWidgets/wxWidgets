@@ -37,23 +37,23 @@ public:
     // after using this ctor, GetData() and GetHandle() may be used if IsOk()
     // returns true
     wxDIB(int width, int height, int depth)
-        { Init(); (void)Create(width, height, depth); }
+        { (void)Create(width, height, depth); }
 
 #ifdef __WXMSW__
     // create a DIB from the DDB
     wxDIB(const wxBitmap& bmp, int depth = -1)
-        { Init(); (void)Create(bmp, depth); }
+        { (void)Create(bmp, depth); }
 #endif // __WXMSW__
 
     // create a DIB from the Windows DDB
     wxDIB(HBITMAP hbmp)
-        { Init(); (void)Create(hbmp); }
+        { (void)Create(hbmp); }
 
     // load a DIB from file (any depth is supported here unlike above)
     //
     // as above, use IsOk() to see if the bitmap was loaded successfully
     wxDIB(const wxString& filename)
-        { Init(); (void)Load(filename); }
+        { (void)Load(filename); }
 
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
@@ -64,7 +64,16 @@ public:
     bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
-    ~wxDIB();
+    ~wxDIB()
+    {
+        if ( m_handle && m_ownsHandle )
+        {
+            if ( !::DeleteObject(m_handle) )
+            {
+                wxLogLastError(wxT("DeleteObject(hDIB)"));
+            }
+        }
+    }
 
 
     // operations
@@ -156,7 +165,6 @@ public:
     // does pre-multiplication internally.
     wxDIB(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied, int depth = -1)
     {
-        Init();
         (void)Create(image, pf, depth);
     }
 
@@ -191,19 +199,13 @@ public:
     }
 
 private:
-    // common part of all ctors
-    void Init();
-
-    // free resources
-    void Free();
-
     // initialize the contents from the provided DDB (Create() must have been
     // already called)
     bool CopyFromDDB(HBITMAP hbmp);
 
 
     // the DIB section handle, 0 if invalid
-    HBITMAP m_handle;
+    HBITMAP m_handle = nullptr;
 
     // NB: we could store only m_handle and not any of the other fields as
     //     we may always retrieve them from it using ::GetObject(), but we
@@ -217,59 +219,23 @@ private:
     void DoGetObject() const;
 
     // pointer to DIB bits, may be null
-    void *m_data;
+    void *m_data = nullptr;
 
     // size and depth of the image
-    int m_width,
-        m_height,
-        m_depth;
+    int m_width = 0,
+        m_height = 0,
+        m_depth = 0;
 
     // in some cases we could be using a handle which we didn't create and in
     // this case we shouldn't free it either -- this flag tell us if this is
     // the case
-    bool m_ownsHandle;
+    bool m_ownsHandle = true;
 
 
     // DIBs can't be copied
-    wxDIB(const wxDIB&);
-    wxDIB& operator=(const wxDIB&);
+    wxDIB(const wxDIB&) = delete;
+    wxDIB& operator=(const wxDIB&) = delete;
 };
-
-// ----------------------------------------------------------------------------
-// inline functions implementation
-// ----------------------------------------------------------------------------
-
-inline
-void wxDIB::Init()
-{
-    m_handle = nullptr;
-    m_ownsHandle = true;
-
-    m_data = nullptr;
-
-    m_width =
-    m_height =
-    m_depth = 0;
-}
-
-inline
-void wxDIB::Free()
-{
-    if ( m_handle && m_ownsHandle )
-    {
-        if ( !::DeleteObject(m_handle) )
-        {
-            wxLogLastError(wxT("DeleteObject(hDIB)"));
-        }
-
-        Init();
-    }
-}
-
-inline wxDIB::~wxDIB()
-{
-    Free();
-}
 
 #endif
     // wxUSE_WXDIB

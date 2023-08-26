@@ -28,7 +28,7 @@ enum
     // a spin control-like date picker (not supported in generic version)
     wxDP_SPIN = 1,
 
-    // a combobox-like date picker (not supported in mac version)
+    // a combobox-like date picker (not supported on macOS <10.15.4)
     wxDP_DROPDOWN = 2,
 
     // always show century in the default date display (otherwise it depends on

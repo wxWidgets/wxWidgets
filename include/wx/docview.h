@@ -99,8 +99,8 @@ public:
     virtual bool Revert();
 
 #if wxUSE_STD_IOSTREAM
-    virtual wxSTD ostream& SaveObject(wxSTD ostream& stream);
-    virtual wxSTD istream& LoadObject(wxSTD istream& stream);
+    virtual std::ostream& SaveObject(std::ostream& stream);
+    virtual std::istream& LoadObject(std::istream& stream);
 #else
     virtual wxOutputStream& SaveObject(wxOutputStream& stream);
     virtual wxInputStream& LoadObject(wxInputStream& stream);
@@ -972,9 +972,9 @@ private:
 // converts from/to a stream to/from a temporary file.
 #if wxUSE_STD_IOSTREAM
 bool WXDLLIMPEXP_CORE
-wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream);
+wxTransferFileToStream(const wxString& filename, std::ostream& stream);
 bool WXDLLIMPEXP_CORE
-wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename);
+wxTransferStreamToFile(std::istream& stream, const wxString& filename);
 #else
 bool WXDLLIMPEXP_CORE
 wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);

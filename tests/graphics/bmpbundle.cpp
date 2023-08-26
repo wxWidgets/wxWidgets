@@ -502,3 +502,13 @@ TEST_CASE("BitmapBundle::GetConsensusSize", "[bmpbundle]")
     // Integer scaling factors should be preferred.
     CHECK( bundles.GetConsensusSize(1.5) == 16 );
 }
+
+// This test is not really related to wxBitmapBundle, but is just here because
+// this file already uses wxArtProvider and we don't have any tests for it
+// specifically right now.
+TEST_CASE("wxArtProvider::Delete", "[artprov]")
+{
+    auto* artprov = new wxArtProvider{};
+    wxArtProvider::Push(artprov);
+    delete artprov;
+}

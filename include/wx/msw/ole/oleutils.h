@@ -33,7 +33,9 @@
 // initialize/cleanup OLE
 // ----------------------------------------------------------------------------
 
-// call OleInitialize() or CoInitialize[Ex]() depending on the platform
+// Simple wrapper for OleInitialize().
+//
+// Avoid using it directly, use wxOleInitializer instead.
 //
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
@@ -125,7 +127,7 @@ public:
     virtual bool Eq(wxVariantData& data) const override;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const override;
+    virtual bool Write(std::ostream& str) const override;
 #endif
     virtual bool Write(wxString& str) const override;
 
@@ -151,7 +153,7 @@ public:
     virtual bool Eq(wxVariantData& data) const override;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const override;
+    virtual bool Write(std::ostream& str) const override;
 #endif
     virtual bool Write(wxString& str) const override;
 
@@ -179,7 +181,7 @@ public:
     virtual bool Eq(wxVariantData& data) const override;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const override;
+    virtual bool Write(std::ostream& str) const override;
 #endif
     virtual bool Write(wxString& str) const override;
 

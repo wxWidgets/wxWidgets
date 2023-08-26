@@ -36,7 +36,7 @@ AC_DEFUN([WX_VISIBILITY],
       wx_save_CXXFLAGS="$CXXFLAGS"
       CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
       AC_LANG_PUSH(C++)
-      AC_TRY_COMPILE(
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
         [
          /* we need gcc >= 4.0, older versions with visibility support
             didn't have class visibility: */
@@ -75,7 +75,7 @@ AC_DEFUN([WX_VISIBILITY],
            Foo() {}
          };
         ],
-        [],
+        [])],
         wx_cv_cc_visibility=yes,
         wx_cv_cc_visibility=no)
       AC_LANG_POP()
@@ -93,14 +93,14 @@ AC_DEFUN([WX_VISIBILITY],
         CXXFLAGS="$CXXFLAGS $CXXFLAGS_VISIBILITY"
         LDFLAGS="$LDFLAGS -shared -fPIC"
         AC_LANG_PUSH(C++)
-        AC_TRY_LINK(
+        AC_LINK_IFELSE([AC_LANG_PROGRAM(
           [
             #include <string>
           ],
           [
             std::string s("hello");
             return s.length();
-          ],
+          ])],
           wx_cv_cc_broken_libstdcxx_visibility=no,
           wx_cv_cc_broken_libstdcxx_visibility=yes)
         AC_LANG_POP()
@@ -112,7 +112,7 @@ AC_DEFUN([WX_VISIBILITY],
         AC_MSG_CHECKING([whether we can work around it])
         AC_CACHE_VAL(wx_cv_cc_visibility_workaround, [
           AC_LANG_PUSH(C++)
-          AC_TRY_LINK(
+          AC_LINK_IFELSE([AC_LANG_PROGRAM(
             [
               #pragma GCC visibility push(default)
               #include <string>
@@ -121,7 +121,7 @@ AC_DEFUN([WX_VISIBILITY],
             [
               std::string s("hello");
               return s.length();
-            ],
+            ])],
             wx_cv_cc_visibility_workaround=no,
             wx_cv_cc_visibility_workaround=yes)
           AC_LANG_POP()

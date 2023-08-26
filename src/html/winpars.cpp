@@ -25,6 +25,7 @@
 #include "wx/fontmap.h"
 #include "wx/uri.h"
 
+#include "wx/private/hyperlink.h"
 
 //-----------------------------------------------------------------------------
 // wxHtmlWinParser
@@ -192,12 +193,11 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
     m_UseLink = false;
     m_Link = wxHtmlLinkInfo( wxEmptyString );
-    m_LinkColor.Set(0, 0, 0xFF);
-    m_ActualColor.Set(0, 0, 0);
-    const wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
+    m_LinkColor = wxPrivate::GetLinkColour();
+    m_ActualColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_ActualBackgroundColor = m_windowInterface
                             ? m_windowInterface->GetHTMLBackgroundColour()
-                            : windowColour;
+                            : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;

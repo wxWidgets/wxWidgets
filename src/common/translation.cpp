@@ -44,7 +44,6 @@
 #include "wx/fontmap.h"
 #include "wx/stdpaths.h"
 #include "wx/version.h"
-#include "wx/private/threadinfo.h"
 #include "wx/uilocale.h"
 
 #ifdef __WINDOWS__
@@ -55,6 +54,7 @@
 #endif
 
 #include <memory>
+#include <unordered_set>
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -947,7 +947,7 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
 {
 }
 
-// open disk file and read in it's contents
+// open disk file and read in its contents
 bool wxMsgCatalogFile::LoadFile(const wxString& filename,
                                 wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
@@ -1450,13 +1450,8 @@ wxString wxTranslations::GetBestTranslation(const wxString& domain,
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-    wxLocaleUntranslatedStrings& strings = wxThreadInfo.untranslatedStrings;
-
-    wxLocaleUntranslatedStrings::iterator i = strings.find(str);
-    if ( i == strings.end() )
-        return *strings.insert(str).first;
-
-    return *i;
+    thread_local std::unordered_set<wxString> wxPerThreadStrings;
+    return *wxPerThreadStrings.insert(str).first;
 }
 
 

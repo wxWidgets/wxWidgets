@@ -38,7 +38,6 @@
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
-#include "wx/private/threadinfo.h"
 #include "wx/crt.h"
 #include "wx/vector.h"
 
@@ -50,7 +49,8 @@
 #include <stdlib.h>
 
 #if defined(__WINDOWS__)
-    #include "wx/msw/private.h" // includes windows.h
+    // This header includes <windows.h> and declares wxMSWFormatMessage().
+    #include "wx/msw/private.h"
 #endif
 
 #undef wxLOG_COMPONENT
@@ -97,6 +97,10 @@ WX_DEFINE_LOG_CS(TraceMask);
 
 // and this one is used for GetComponentLevels()
 WX_DEFINE_LOG_CS(Levels);
+
+thread_local wxLog* wxPerThreadLogger = nullptr;
+
+thread_local bool wxPerThreadLoggingDisabled = false;
 
 } // anonymous namespace
 
@@ -387,7 +391,7 @@ wxLog::OnLog(wxLogLevel level,
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
-        logger = wxThreadInfo.logger;
+        logger = wxPerThreadLogger;
         if ( !logger )
         {
             if ( ms_pLogger )
@@ -505,7 +509,7 @@ wxLog *wxLog::GetActiveTarget()
     if ( !wxThread::IsMain() )
     {
         // check if we have a thread-specific log target
-        wxLog * const logger = wxThreadInfo.logger;
+        wxLog * const logger = wxPerThreadLogger;
 
         // the code below should be only executed for the main thread as
         // CreateLogTarget() is not meant for auto-creating log targets for
@@ -562,11 +566,11 @@ wxLog *wxLog::SetThreadActiveTarget(wxLog *logger)
 {
     wxASSERT_MSG( !wxThread::IsMain(), "use SetActiveTarget() for main thread" );
 
-    wxLog * const oldLogger = wxThreadInfo.logger;
+    wxLog * const oldLogger = wxPerThreadLogger;
     if ( oldLogger )
         oldLogger->Flush();
 
-    wxThreadInfo.logger = logger;
+    wxPerThreadLogger = logger;
 
     return oldLogger;
 }
@@ -778,14 +782,14 @@ void wxLog::FlushThreadMessages()
 /* static */
 bool wxLog::IsThreadLoggingEnabled()
 {
-    return !wxThreadInfo.loggingDisabled;
+    return !wxPerThreadLoggingDisabled;
 }
 
 /* static */
 bool wxLog::EnableThreadLogging(bool enable)
 {
-    const bool wasEnabled = !wxThreadInfo.loggingDisabled;
-    wxThreadInfo.loggingDisabled = !enable;
+    const bool wasEnabled = !wxPerThreadLoggingDisabled;
+    wxPerThreadLoggingDisabled = !enable;
     return wasEnabled;
 }
 
@@ -890,11 +894,11 @@ void wxLogStderr::DoLogText(const wxString& msg)
 
 #if wxUSE_STD_IOSTREAM
 #include "wx/ioswrap.h"
-wxLogStream::wxLogStream(wxSTD ostream *ostr, const wxMBConv& conv)
+wxLogStream::wxLogStream(std::ostream *ostr, const wxMBConv& conv)
     : wxMessageOutputWithConv(conv)
 {
     if ( ostr == nullptr )
-        m_ostr = &wxSTD cerr;
+        m_ostr = &std::cerr;
     else
         m_ostr = ostr;
 }

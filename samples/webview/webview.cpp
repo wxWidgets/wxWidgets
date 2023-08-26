@@ -54,10 +54,10 @@
 
 #include "wxlogo.xpm"
 
+#include <map>
 
 //We map menu items to their history items
-WX_DECLARE_HASH_MAP(int, wxSharedPtr<wxWebViewHistoryItem>,
-                    wxIntegerHash, wxIntegerEqual, wxMenuHistoryMap);
+using wxMenuHistoryMap = std::map<int, wxSharedPtr<wxWebViewHistoryItem>>;
 
 class WebApp : public wxApp
 {
@@ -1108,10 +1108,9 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     m_browser_accelerator_keys->Check(m_browser->AreBrowserAcceleratorKeysEnabled());
 
     //Firstly we clear the existing menu items, then we add the current ones
-    wxMenuHistoryMap::const_iterator it;
-    for( it = m_histMenuItems.begin(); it != m_histMenuItems.end(); ++it )
+    for ( auto& item : m_histMenuItems )
     {
-        m_tools_history_menu->Destroy(it->first);
+        m_tools_history_menu->Destroy(item.first);
     }
     m_histMenuItems.clear();
 

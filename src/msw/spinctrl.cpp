@@ -281,8 +281,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // set style for the base class
     style |= wxSP_VERTICAL;
 
+    // the border is only used for the text control part
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-        style |= wxBORDER_SUNKEN;
+        style |= DoTranslateBorder(wxBORDER_THEME);
 
     SetWindowStyle(style);
 
@@ -327,8 +328,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
 
-    // create the spin button
-    if ( !wxSpinButton::Create(parent, id, pos, wxSize(0, 0), style, name) )
+    // create the spin button without any border as it doesn't make sense for
+    // it (even if it doesn't seem to be actually taken into account anyhow)
+    if ( !wxSpinButton::Create(parent, id, pos, wxSize(0, 0),
+                               (style & ~wxBORDER_MASK) | wxBORDER_NONE, name) )
     {
         return false;
     }

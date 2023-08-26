@@ -38,6 +38,7 @@ public:
     }
 
     wxColourRefData(const wxColourRefData& data)
+        : wxGDIRefData()
     {
         m_color = data.m_color;
         m_colormap = data.m_colormap;

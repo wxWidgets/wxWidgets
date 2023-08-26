@@ -85,16 +85,7 @@ void wxQtDCImpl::QtPreparePainter( )
 
         if (m_clipping)
         {
-            wxRegionIterator ri(m_clippingRegion);
-            bool append = false;
-            while (ri.HaveRects())
-            {
-                wxRect r = ri.GetRect();
-                m_qtPainter->setClipRect( r.x, r.y, r.width, r.height,
-                                          append ? Qt::IntersectClip : Qt::ReplaceClip );
-                append = true;
-                ++ri;
-            }
+            m_qtPainter->setClipRegion( m_clippingRegion.GetHandle() );
         }
     }
     else
@@ -416,95 +407,107 @@ void wxQtDCImpl::Clear()
     int width, height;
     DoGetSize(&width, &height);
 
-    m_qtPainter->eraseRect(QRect(0, 0, width, height));
+    m_qtPainter->eraseRect( DeviceToLogicalX(0),
+                            DeviceToLogicalY(0),
+                            DeviceToLogicalXRel(width),
+                            DeviceToLogicalYRel(height) );
+}
+
+void wxQtDCImpl::UpdateClipBox()
+{
+    if ( !m_qtPainter->isActive() )
+        return;
+
+    if ( m_clippingRegion.IsEmpty() )
+    {
+        int dcwidth, dcheight;
+        DoGetSize(&dcwidth, &dcheight);
+
+        m_qtPainter->setClipRect(DeviceToLogicalX(0),
+                                 DeviceToLogicalY(0),
+                                 DeviceToLogicalXRel(dcwidth),
+                                 DeviceToLogicalYRel(dcheight),
+                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
+    }
+
+    /* Note: Qt states that QPainter::clipRegion() may be slow, so we
+     *       keep the region manually, which should be faster. A comment in
+     *       QPainter::clipBoundingRect() source says: This is not 100% precise,
+     *       but it fits within the guarantee and it is reasonably fast.
+     */
+    m_clippingRegion.QtSetRegion(
+        QRegion(m_qtPainter->clipBoundingRect().toRect()) );
+
+    wxRect clipRect = m_clippingRegion.GetBox();
+
+    m_clipX1 = clipRect.GetLeft();
+    m_clipX2 = clipRect.GetRight() + 1;
+    m_clipY1 = clipRect.GetTop();
+    m_clipY2 = clipRect.GetBottom() + 1;
+
+    m_isClipBoxValid = true;
+}
+
+bool wxQtDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+    // Check if we should try to retrieve the clipping region possibly not set
+    // by our SetClippingRegion() but preset or modified by application: this
+    // can happen when wxDC logical coordinates are transformed with
+    // SetDeviceOrigin(), SetLogicalOrigin(), SetUserScale(), SetLogicalScale().
+    if ( !m_isClipBoxValid )
+    {
+        wxQtDCImpl *self = wxConstCast(this, wxQtDCImpl);
+        self->UpdateClipBox();
+    }
+
+    return wxDCImpl::DoGetClippingRect(rect);
 }
 
 void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
                                  wxCoord width, wxCoord height)
 {
-    // Special case: Empty region -> DestroyClippingRegion()
-    if ( width == 0 && height == 0 )
+    if ( width < 0 )
     {
-        DestroyClippingRegion();
+        width = -width;
+        x -= width - 1;
     }
-    else
+    if ( height < 0 )
     {
-        if ( width < 0 )
-        {
-            width = -width;
-            x -= width - 1;
-        }
-        if ( height < 0 )
-        {
-            height = -height;
-            y -= height - 1;
-        }
+        height = -height;
+        y -= height - 1;
+    }
 
-        if (m_qtPainter->isActive())
-        {
-            // Set QPainter clipping (intersection if not the first one)
-            m_qtPainter->setClipRect( x, y, width, height,
-                                      m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
-        }
+    if ( m_qtPainter->isActive() )
+    {
+        // Set QPainter clipping (intersection if not the first one)
+        m_qtPainter->setClipRect( x, y, width, height,
+                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
 
-        // Set internal state for getters
-        /* Note: Qt states that QPainter::clipRegion() may be slow, so we
-         * keep the region manually, which should be faster */
-        if ( !m_clipping || m_clippingRegion.IsEmpty() )
-        {
-            int dcwidth, dcheight;
-            DoGetSize(&dcwidth, &dcheight);
-
-            m_clippingRegion = wxRegion(0, 0, dcwidth, dcheight);
-        }
-        m_clippingRegion.Intersect( wxRect(x, y, width, height) );
-
-        wxRect clipRect = m_clippingRegion.GetBox();
-
-        m_clipX1 = clipRect.GetLeft();
-        m_clipX2 = clipRect.GetRight() + 1;
-        m_clipY1 = clipRect.GetTop();
-        m_clipY2 = clipRect.GetBottom() + 1;
         m_clipping = true;
     }
+
+    UpdateClipBox();
 }
 
 void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
-    if ( region.IsEmpty() )
+    if ( m_qtPainter->isActive() )
     {
-        DestroyClippingRegion();
-    }
-    else
-    {
-        QRegion qregion = region.GetHandle();
-        // Save current origin / scale (logical coordinates)
-        QTransform qtrans = m_qtPainter->worldTransform();
-        // Reset transofrmation to match device coordinates
-        m_qtPainter->setWorldTransform( QTransform() );
+        // Disable the matrix transformations to match device coordinates
+        m_qtPainter->setWorldMatrixEnabled(false);
+        // Enable clipping explicitly as QPainter::setClipRegion() doesn't
+        // do that for us
+        m_qtPainter->setClipping( true );
         // Set QPainter clipping (intersection if not the first one)
-        m_qtPainter->setClipRegion( qregion,
-                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+        m_qtPainter->setClipRegion( region.GetHandle(),
+                                    m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
 
-        // Restore the transformation (translation / scale):
-        m_qtPainter->setWorldTransform( qtrans );
+        m_qtPainter->setWorldMatrixEnabled(true);
 
-        // Set internal state for getters
-        /* Note: Qt states that QPainter::clipRegion() may be slow, so we
-        * keep the region manually, which should be faster */
-        if ( m_clipping )
-            m_clippingRegion.Union( region );
-        else
-            m_clippingRegion.Intersect( region );
-
-        wxRect clipRect = m_clippingRegion.GetBox();
-
-        m_clipX1 = clipRect.GetLeft();
-        m_clipX2 = clipRect.GetRight() + 1;
-        m_clipY1 = clipRect.GetTop();
-        m_clipY2 = clipRect.GetBottom() + 1;
         m_clipping = true;
     }
+
+    UpdateClipBox();
 }
 
 void wxQtDCImpl::DestroyClippingRegion()
@@ -514,6 +517,8 @@ void wxQtDCImpl::DestroyClippingRegion()
 
     if (m_qtPainter->isActive())
         m_qtPainter->setClipping( false );
+
+    m_isClipBoxValid = false;
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -877,8 +882,10 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
     t.scale( m_scaleX * m_signX, m_scaleY * m_signY );
 
     // Finally, logical origin
-    t.translate( m_logicalOriginX, m_logicalOriginY );
+    t.translate( -m_logicalOriginX, -m_logicalOriginY );
 
     // Apply transform to QPainter, overwriting the previous one
     m_qtPainter->setWorldTransform(t, false);
+
+    m_isClipBoxValid = false;
 }

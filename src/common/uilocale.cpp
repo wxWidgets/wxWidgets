@@ -63,7 +63,6 @@ inline bool IsDefaultCLocale(const wxString& locale)
 
 } // anonymous namespace
 
-
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -109,6 +108,13 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
     wxLocaleIdent locId;
 
+    // 0. Check for special locale identifiers "C" and "POSIX"
+    if (IsDefaultCLocale(tag))
+    {
+        locId.Language(tag);
+        return locId;
+    }
+
     // 1. Handle platform-dependent cases
 
     // 1a. Check for modifier in POSIX tag
@@ -152,8 +158,11 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     //
     // Make sure we don't extract the region identifier erroneously as a sortorder identifier
     {
-        wxString tagTemp = tagMain.BeforeFirst('_', &tagRest);
-        if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
+        wxString tagTemp = tagMain.BeforeLast('_', &tagRest);
+        if (!tagTemp.empty() &&
+                tagRest.length() > 4 &&
+                    locId.m_modifier.empty() &&
+                        locId.m_charset.empty())
         {
             // Windows sortorder found
             locId.SortOrder(tagRest);
@@ -526,7 +535,14 @@ wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
         return;
     }
 
-    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    if (IsDefaultCLocale(localeId.GetLanguage()))
+    {
+        m_impl = wxUILocaleImpl::CreateStdC();
+    }
+    else
+    {
+        m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    }
 }
 
 wxUILocale::wxUILocale(const wxUILocale& loc)
@@ -583,6 +599,22 @@ wxString wxUILocale::GetLocalizedName(wxLocaleName name, wxLocaleForm form) cons
         return wxString();
 
     return m_impl->GetLocalizedName(name, form);
+}
+
+wxString wxUILocale::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetMonthName(month, form);
+}
+
+wxString wxUILocale::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetWeekDayName(weekday, form);
 }
 
 wxLayoutDirection wxUILocale::GetLayoutDirection() const
@@ -870,6 +902,26 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
     }
 
     return infoRet;
+}
+
+int wxUILocaleImpl::ArrayIndexFromFlag(wxDateTime::NameFlags flags)
+{
+    switch (flags)
+    {
+        case wxDateTime::Name_Full:
+            return 0;
+
+        case wxDateTime::Name_Abbr:
+            return 1;
+
+        case wxDateTime::Name_Shortest:
+            return 2;
+
+        default:
+            wxFAIL_MSG("unknown wxDateTime::NameFlags value");
+    }
+
+    return -1;
 }
 
 #endif // wxUSE_INTL

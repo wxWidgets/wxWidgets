@@ -13,24 +13,20 @@
 
 #if wxUSE_CLIPBOARD
 
-// These functions superseded by wxClipboard, but retained in order to
-// implement wxClipboard, and for compatibility.
+// Deprecated wxMSW-only function superseded by wxClipboard, don't use them and
+// use that class instead.
+#ifdef WXWIN_COMPATIBILITY_3_2
 
-// open/close the clipboard
-WXDLLIMPEXP_CORE bool wxOpenClipboard();
-WXDLLIMPEXP_CORE bool wxIsClipboardOpened();
-#define wxClipboardOpen wxIsClipboardOpened
-WXDLLIMPEXP_CORE bool wxCloseClipboard();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxOpenClipboard();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxIsClipboardOpened();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxClipboardOpen();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxCloseClipboard();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxEmptyClipboard();
 
-// get/set data
-WXDLLIMPEXP_CORE bool wxEmptyClipboard();
-#if !wxUSE_OLE
-WXDLLIMPEXP_CORE bool wxSetClipboardData(wxDataFormat dataFormat,
-                                    const void *data,
-                                    int width = 0, int height = 0);
-#endif // !wxUSE_OLE
+#endif // WXWIN_COMPATIBILITY_3_2
 
-// clipboard formats
+// Non-deprecated but still wxMSW-specific functions working with clipboard
+// formats -- don't use them neither.
 WXDLLIMPEXP_CORE bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
 WXDLLIMPEXP_CORE wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat);
 WXDLLIMPEXP_CORE int  wxRegisterClipboardFormat(wxChar *formatName);

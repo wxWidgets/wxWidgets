@@ -273,11 +273,15 @@
 // disabled, wx streams are used instead.
 //
 // Notice that enabling this does not replace wx streams with std streams
-// everywhere, in a lot of places wx streams are used no matter what.
+// everywhere, in a lot of places wx streams are used no matter what and in
+// other places this option enables the use of standard streams in _addition_
+// to the wx ones. The only exception is wxDocument which defines functions
+// working with standard streams only when this option is on, and only
+// functions working with wx streams when it's off.
 //
 // Default is 1.
 //
-// Recommended setting: 1.
+// Recommended setting: 1, there should be no reason to disable it.
 #define wxUSE_STD_IOSTREAM  1
 
 // ----------------------------------------------------------------------------
@@ -436,7 +440,7 @@
 //
 // Default is 1
 //
-// Recommended setting: 1 (needed by wxSocket)
+// Recommended setting: 1
 #define wxUSE_STOPWATCH     1
 
 // Set wxUSE_FSWATCHER to 1 if you want to enable wxFileSystemWatcher
@@ -1542,15 +1546,14 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 if you need to support XP, as Direct2D is not
-// available there.
+// Recommended setting: 1, GDI+ is always available.
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
 // Enable support for Direct2D-based implementation of wxGraphicsContext.
 //
-// Default is 1 for compilers which support it, i.e. MSVS currently. If you
-// use another compiler and installed the necessary SDK components manually,
-// you need to change this setting.
+// Default is 1 for MSVS. MinGW-w64 supports Direct2D as well, but if you use
+// it, you need to change this setting manually as other MinGW distributions
+// may not support it.
 //
 // Recommended setting: 1 for faster and better quality graphics.
 #if defined(_MSC_VER)

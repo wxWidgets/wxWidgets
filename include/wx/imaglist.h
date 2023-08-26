@@ -41,7 +41,7 @@ enum
 #define wxIMAGELIST_DRAW_SELECTED       0x0004
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/imaglist.h"
     #define wxHAS_NATIVE_IMAGELIST
 #else

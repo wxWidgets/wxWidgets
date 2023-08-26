@@ -248,7 +248,7 @@ public:
         if ( !m_state )
         {
             m_ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-            struct xkb_rule_names names = {0};
+            xkb_rule_names names{};
             names.layout = "us";
             m_keymap = xkb_keymap_new_from_names(m_ctx, &names, XKB_KEYMAP_COMPILE_NO_FLAGS);
             m_state = xkb_state_new(m_keymap);
@@ -876,7 +876,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KEY_KP_Begin:
-            key_code = isChar ? WXK_HOME : WXK_NUMPAD_BEGIN;
+            key_code = WXK_NUMPAD_BEGIN;
             break;
 
         case GDK_KEY_KP_Insert:
@@ -1077,6 +1077,8 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
 
     event.m_rawCode = (wxUint32) gdk_event->keyval;
     event.m_rawFlags = gdk_event->hardware_keycode;
+
+    event.m_isRepeat = false; // Detecting key repeat not implemented.
 
     event.SetEventObject( win );
 }
@@ -2995,7 +2997,15 @@ void wxWindowGTK::PostCreation()
 
     // focus handling
 
-    if (!GTK_IS_WINDOW(m_widget))
+    // Check for GTKNeedsParent() || IsTopLevel() is a hack: it catches the
+    // case of wxMenuBar, which isn't supposed to generate any focus events,
+    // and which is the only non-TLW which returns false from this function.
+    //
+    // The TLW check overlaps with !GTK_IS_WINDOW() check, but it's not 100%
+    // obvious if GTK_IS_WINDOW() and wxWindow::IsTopLevel() are really exactly
+    // equivalent, so for now ensure we don't change the existing check which
+    // only used !GTK_IS_WINDOW().
+    if (!GTK_IS_WINDOW(m_widget) && (GTKNeedsParent() || IsTopLevel()))
     {
         if (m_focusWidget == nullptr)
             m_focusWidget = m_widget;

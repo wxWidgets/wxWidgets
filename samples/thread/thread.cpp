@@ -29,7 +29,6 @@
 #endif // wxUSE_THREADS
 
 #include "wx/thread.h"
-#include "wx/dynarray.h"
 #include "wx/numdlg.h"
 #include "wx/progdlg.h"
 
@@ -53,7 +52,7 @@
 #endif
 
 class MyThread;
-WX_DEFINE_ARRAY_PTR(wxThread *, wxArrayThread);
+using MyThreads = std::vector<wxThread*>;
 
 // ----------------------------------------------------------------------------
 // the application object
@@ -72,7 +71,7 @@ public:
 
     // all the threads currently alive - as soon as the thread terminates, it's
     // removed from the array
-    wxArrayThread m_threads;
+    MyThreads m_threads;
 
     // semaphore used to wait for the threads to exit, see MyFrame::OnQuit()
     wxSemaphore m_semAllDone;
@@ -431,10 +430,7 @@ MyFrame::~MyFrame()
         wxCriticalSectionLocker locker(wxGetApp().m_critsect);
 
         // check if we have any threads running first
-        const wxArrayThread& threads = wxGetApp().m_threads;
-        size_t count = threads.GetCount();
-
-        if ( !count )
+        if ( wxGetApp().m_threads.empty() )
             return;
 
         // set the flag indicating that all threads should exit
@@ -489,7 +485,7 @@ MyThread *MyFrame::CreateThread()
     }
 
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
-    wxGetApp().m_threads.Add(thread);
+    wxGetApp().m_threads.push_back(thread);
 
     return thread;
 }
@@ -500,10 +496,10 @@ void MyFrame::UpdateThreadStatus()
 
     // update the counts of running/total threads
     size_t nRunning = 0,
-           nCount = wxGetApp().m_threads.Count();
-    for ( size_t n = 0; n < nCount; n++ )
+           nCount = wxGetApp().m_threads.size();
+    for ( wxThread* thr : wxGetApp().m_threads )
     {
-        if ( wxGetApp().m_threads[n]->IsRunning() )
+        if ( thr->IsRunning() )
             nRunning++;
     }
 
@@ -543,7 +539,7 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
 
     unsigned count = unsigned(s_num), n;
 
-    wxArrayThread threads;
+    MyThreads threads;
 
     // first create them all...
     for ( n = 0; n < count; n++ )
@@ -560,7 +556,7 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
         else
             thr->SetPriority(wxPRIORITY_DEFAULT);
 
-        threads.Add(thr);
+        threads.push_back(thr);
     }
 
 #if wxUSE_STATUSBAR
@@ -597,13 +593,13 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // stop the last thread
-    if ( wxGetApp().m_threads.IsEmpty() )
+    if ( wxGetApp().m_threads.empty() )
     {
         wxLogError("No thread to stop!");
     }
     else
     {
-        toDelete = wxGetApp().m_threads.Last();
+        toDelete = wxGetApp().m_threads.back();
     }
     }
 
@@ -624,17 +620,23 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // resume first suspended thread
-    size_t n = 0, count = wxGetApp().m_threads.Count();
-    while ( n < count && !wxGetApp().m_threads[n]->IsPaused() )
-        n++;
+    wxThread* thrToResume = nullptr;
+    for ( wxThread* thr : wxGetApp().m_threads )
+    {
+        if ( thr->IsPaused() )
+        {
+            thrToResume = thr;
+            break;
+        }
+    }
 
-    if ( n == count )
+    if ( !thrToResume )
     {
         wxLogError("No thread to resume!");
     }
     else
     {
-        wxGetApp().m_threads[n]->Resume();
+        thrToResume->Resume();
 
 #if wxUSE_STATUSBAR
         SetStatusText("Thread resumed.", 1);
@@ -647,17 +649,25 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // pause last running thread
-    int n = wxGetApp().m_threads.Count() - 1;
-    while ( n >= 0 && !wxGetApp().m_threads[n]->IsRunning() )
-        n--;
+    wxThread* thrToPause = nullptr;
+    for ( wxThread* thr : wxGetApp().m_threads )
+    {
+        if ( thr->IsRunning() )
+        {
+            thrToPause = thr;
+            // Don't break, we want the last running thread, not the first one
+            // (and yes, it would be more efficient to iterate using reverse
+            // iterators, but keep the code simple and not efficient here).
+        }
+    }
 
-    if ( n < 0 )
+    if ( !thrToPause )
     {
         wxLogError("No thread to pause!");
     }
     else
     {
-        wxGetApp().m_threads[n]->Pause();
+        thrToPause->Pause();
 
 #if wxUSE_STATUSBAR
         SetStatusText("Thread paused.", 1);
@@ -901,10 +911,13 @@ MyThread::~MyThread()
 {
     wxCriticalSectionLocker locker(wxGetApp().m_critsect);
 
-    wxArrayThread& threads = wxGetApp().m_threads;
-    threads.Remove(this);
+    auto& threads = wxGetApp().m_threads;
+    const auto it = std::find(threads.begin(), threads.end(), this);
+    wxASSERT_MSG( it != threads.end(), "unknown thread?" );
 
-    if ( threads.IsEmpty() )
+    threads.erase(it);
+
+    if ( threads.empty() )
     {
         // signal the main thread that there are no more threads left if it is
         // waiting for us

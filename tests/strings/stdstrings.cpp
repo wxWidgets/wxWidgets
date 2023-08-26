@@ -657,3 +657,38 @@ TEST_CASE("StdString::Algo", "[stdstring]")
     std::reverse(s.begin(), s.end());
     CHECK( s == "BA" );
 }
+
+#ifdef wxHAS_STD_STRING_VIEW
+TEST_CASE("StdString::View", "[stdstring]")
+{
+    std::string strStd("std::string value");
+    std::wstring strStdWide(L"std::wstring value");
+
+    std::string_view strStdView(strStd);
+    std::wstring_view strStdWideView(strStdWide);
+
+    wxString s1(strStdView);
+    CHECK( s1 == "std::string value" );
+
+    wxString s2(strStdWideView);
+    CHECK( s2 == "std::wstring value" );
+
+    wxString s3;
+    s3 = strStdView;
+    CHECK( s3 == "std::string value" );
+    s3 = strStdWideView;
+    CHECK( s3 == "std::wstring value" );
+
+    std::string strUTF("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
+    std::string_view strViewUTF(strUTF);
+
+    wxString wxstrUTF = wxString::FromUTF8(strViewUTF);
+    CHECK( wxstrUTF.ToStdString(wxConvUTF8) == strUTF );
+    CHECK( wxstrUTF.utf8_string() == strUTF );
+
+    std::string strInvalidUTF("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
+    std::string_view strViewInvalidUTF(strInvalidUTF);
+
+    CHECK( "" == wxString::FromUTF8(strViewInvalidUTF) );
+}
+#endif // wxHAS_STD_STRING_VIEW

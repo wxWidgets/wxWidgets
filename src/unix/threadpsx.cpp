@@ -28,8 +28,6 @@
 #include "wx/thread.h"
 #include "wx/except.h"
 
-#include "wx/private/threadinfo.h"
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/dynarray.h"
@@ -1394,7 +1392,10 @@ wxThreadError wxThread::Run()
 
 void wxThread::SetPriority(unsigned int prio)
 {
-    wxCHECK_RET( wxPRIORITY_MIN <= prio && prio <= wxPRIORITY_MAX,
+    // Don't compare with wxPRIORITY_MIN as long as it is 0, as the comparison
+    // would be always true.
+    static_assert( wxPRIORITY_MIN == 0, "update the check below" );
+    wxCHECK_RET( /* wxPRIORITY_MIN <= prio && */ prio <= wxPRIORITY_MAX,
                  wxT("invalid thread priority") );
 
     wxCriticalSectionLocker lock(m_critsect);
@@ -1738,11 +1739,6 @@ void wxThread::Exit(ExitCode status)
         OnExit();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
-
-    // Clean up thread-specific data before exiting the thread (we do it as
-    // late as possible as wxLog calls can recreate it and may happen until the
-    // very end).
-    wxThreadSpecificInfo::ThreadCleanUp();
 
     // delete C++ thread object if this is a detached thread - user is
     // responsible for doing this for joinable ones

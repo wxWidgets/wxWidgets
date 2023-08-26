@@ -526,10 +526,6 @@ public:
             more than 2 arguments, you can use the CallAfter<T>(const T& fn)
             overload that can call any functor.
 
-         @note This method is not available with Visual C++ before version 8
-               (Visual Studio 2005) as earlier versions of the compiler don't
-               have the required support for C++ templates to implement it.
-
          @since 2.9.5
      */
     template<typename T, typename T1, ...>
@@ -3479,9 +3475,18 @@ public:
         For example, the returned value will be twice bigger than the original
         one when switching from normal (96) DPI to high (2x, 192) DPI.
 
+        The overloads taking wxPoint and wxRect are only available in wxWidgets
+        3.3.0 and later.
+
         @since 3.1.6
      */
     wxSize Scale(wxSize sz) const;
+
+    /// @overload
+    wxPoint Scale(wxPoint pt) const;
+
+    /// @overload
+    wxRect Scale(wxRect rect) const;
 
     /**
         Rescale horizontal component to match the new DPI.

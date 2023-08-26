@@ -751,7 +751,6 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 
     m_x =
     m_y = wxDefaultCoord;
-    m_hasPosition = false;
 
     InitPropagation();
 }
@@ -914,6 +913,11 @@ wxHelpEvent::Origin wxHelpEvent::GuessOrigin(Origin origin)
 // ----------------------------------------------------------------------------
 // wxDPIChangedEvent
 // ----------------------------------------------------------------------------
+
+wxPoint wxDPIChangedEvent::Scale(wxPoint pt) const
+{
+    return wxRescaleCoord(pt).From(m_oldDPI).To(m_newDPI);
+}
 
 wxSize wxDPIChangedEvent::Scale(wxSize sz) const
 {

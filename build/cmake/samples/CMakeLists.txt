@@ -224,11 +224,11 @@ wx_add_sample(wrapsizer)
 
 wx_list_add_prefix(XRC_RC_FILES rc/
     aui.xpm aui.xrc
-    artprov.xpm artprov.xrc basicdlg.xpm
-    basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc
-    derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
+    artprov.xpm artprov.xrc basicdlg.xpm basicdlg2.xpm
+    basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas2.xpm custclas.xrc
+    derivdlg.xpm derivdlg2.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
     fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif
-    resource.xrc toolbar.xrc uncenter.xpm
+    resource.xrc toolbar.xrc uncenter.xpm uncenter2.xpm
     objref.xrc objrefdlg.xpm
     uncenter.xrc update.gif
     variable.xpm variable.xrc

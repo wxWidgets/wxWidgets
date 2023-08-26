@@ -297,7 +297,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 )
     {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-        m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
+        m_pListBox->GetItem(ui)->SetBackgroundColour(*wxBLUE);
 #endif
     }
 
@@ -344,6 +344,10 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
         if ( ui == 4 )
         {
             pListBox->GetItem(ui)->SetBackgroundColour(wxColor(0, 0, 0));
+        }
+        else if ( ui == 5 ) // black on dark grey is barely visible
+        {
+            pListBox->GetItem(ui)->SetBackgroundColour(*wxYELLOW);
         }
     }
 

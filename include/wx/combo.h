@@ -365,7 +365,7 @@ public:
 
     // Call with enable as true to use a type of popup window that guarantees ability
     // to focus the popup control, and normal function of common native controls.
-    // This alternative popup window is usually a wxDialog, and as such it's parent
+    // This alternative popup window is usually a wxDialog, and as such its parent
     // frame will appear as if the focus has been lost from it.
     void UseAltPopupWindow( bool enable = true )
     {

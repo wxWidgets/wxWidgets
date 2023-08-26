@@ -51,8 +51,6 @@
 #define wxSIZE_T_IS_UINT 1
 #define wxWCHAR_T_IS_REAL_TYPE 1
 
-#define wxTYPE_SA_HANDLER int
-
 #define wxUSE_SELECT_DISPATCHER 1
 
 #ifdef HAVE_PTHREAD_CANCEL

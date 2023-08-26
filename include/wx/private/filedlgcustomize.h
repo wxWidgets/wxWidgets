@@ -38,12 +38,14 @@ public:
     virtual void SetValue(bool value) = 0;
 };
 
+#if wxUSE_RADIOBTN
 class wxFileDialogRadioButtonImpl : public wxFileDialogCustomControlImpl
 {
 public:
     virtual bool GetValue() = 0;
     virtual void SetValue(bool value) = 0;
 };
+#endif // wxUSE_RADIOBTN
 
 class wxFileDialogChoiceImpl : public wxFileDialogCustomControlImpl
 {
@@ -74,7 +76,9 @@ class wxFileDialogCustomizeImpl
 public:
     virtual wxFileDialogButtonImpl* AddButton(const wxString& label) = 0;
     virtual wxFileDialogCheckBoxImpl* AddCheckBox(const wxString& label) = 0;
+#if wxUSE_RADIOBTN
     virtual wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) = 0;
+#endif
     virtual wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) = 0;
     virtual wxFileDialogTextCtrlImpl* AddTextCtrl(const wxString& label) = 0;
     virtual wxFileDialogStaticTextImpl* AddStaticText(const wxString& label) = 0;

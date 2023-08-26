@@ -558,15 +558,20 @@ public:
     // Gets a float value from the parameter.
     float GetFloat(const wxString& param, float defaultv = 0) override;
 
-    // Gets colour in HTML syntax (#RRGGBB).
-    wxColour GetColour(const wxString& param, const wxColour& defaultv = wxNullColour) override;
+    // Gets colour from the parameter, returning one of the provided default
+    // values if it's not specified depending on whether we're using light or
+    // dark mode.
+    wxColour GetColour(const wxString& param,
+                       const wxColour& defaultLight = wxNullColour,
+                       const wxColour& defaultDark = wxNullColour) override;
 
     // Gets the size (may be in dialog units).
     wxSize GetSize(const wxString& param = wxT("size"),
                    wxWindow *windowToUse = nullptr) override;
 
     // Gets the position (may be in dialog units).
-    wxPoint GetPosition(const wxString& param = wxT("pos")) override;
+    wxPoint GetPosition(const wxString& param = wxT("pos"),
+                        wxWindow *windowToUse = nullptr) override;
 
     // Gets a dimension (may be in dialog units).
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,

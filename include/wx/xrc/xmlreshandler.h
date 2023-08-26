@@ -76,10 +76,12 @@ public:
     virtual long GetLong(const wxString& param, long defaultv = 0) = 0;
     virtual float GetFloat(const wxString& param, float defaultv = 0) = 0;
     virtual wxColour GetColour(const wxString& param,
-                               const wxColour& defaultv = wxNullColour) = 0;
+                               const wxColour& defaultLight = wxNullColour,
+                               const wxColour& defaultDark = wxNullColour) = 0;
     virtual wxSize GetSize(const wxString& param = wxT("size"),
                            wxWindow *windowToUse = nullptr) = 0;
-    virtual wxPoint GetPosition(const wxString& param = wxT("pos")) = 0;
+    virtual wxPoint GetPosition(const wxString& param = wxT("pos"),
+                                wxWindow *windowToUse = nullptr) = 0;
     virtual wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                                  wxWindow *windowToUse = nullptr) = 0;
     virtual wxSize GetPairInts(const wxString& param) = 0;
@@ -300,18 +302,20 @@ protected:
         return GetImpl()->GetFloat(param, defaultv);
     }
     wxColour GetColour(const wxString& param,
-                       const wxColour& defaultv = wxNullColour)
+                       const wxColour& defaultLight = wxNullColour,
+                       const wxColour& defaultDark = wxNullColour)
     {
-        return GetImpl()->GetColour(param, defaultv);
+        return GetImpl()->GetColour(param, defaultLight, defaultDark);
     }
     wxSize GetSize(const wxString& param = wxT("size"),
                    wxWindow *windowToUse = nullptr)
     {
         return GetImpl()->GetSize(param, windowToUse);
     }
-    wxPoint GetPosition(const wxString& param = wxT("pos"))
+    wxPoint GetPosition(const wxString& param = wxT("pos"),
+                        wxWindow *windowToUse = nullptr)
     {
-        return GetImpl()->GetPosition(param);
+        return GetImpl()->GetPosition(param, windowToUse);
     }
     wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
                          wxWindow *windowToUse = nullptr)

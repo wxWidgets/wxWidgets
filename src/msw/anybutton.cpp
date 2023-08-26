@@ -1288,8 +1288,7 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     }
 
     // draw background
-    ::DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
-                                &rectBtn, nullptr);
+    theme.DrawBackground(hdc, rectBtn, BP_PUSHBUTTON, iState);
 
     // calculate content area margins, using the defaults in case we fail to
     // retrieve the current theme margins

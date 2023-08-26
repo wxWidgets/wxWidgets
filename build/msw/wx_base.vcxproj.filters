@@ -234,9 +234,6 @@
     <ClCompile Include="..\..\src\common\textfile.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\threadinfo.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\common\time.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>

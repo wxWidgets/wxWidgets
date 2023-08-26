@@ -57,6 +57,7 @@ private:
         CPPUNIT_TEST( Focus );
         CPPUNIT_TEST( Bold );
         CPPUNIT_TEST( Visible );
+        CPPUNIT_TEST( Scroll );
         CPPUNIT_TEST( Sort );
         WXUISIM_TEST( KeyNavigation );
         CPPUNIT_TEST( HasChildren );
@@ -85,6 +86,7 @@ private:
     void Focus();
     void Bold();
     void Visible();
+    void Scroll();
     void Sort();
     void KeyNavigation();
     void HasChildren();
@@ -594,6 +596,13 @@ void TreeCtrlTestCase::Visible()
 
     CPPUNIT_ASSERT(!m_tree->GetNextVisible(m_child2));
     CPPUNIT_ASSERT(!m_tree->GetPrevVisible(m_root));
+}
+
+void TreeCtrlTestCase::Scroll()
+{
+    // This trivial test just checks that calling ScrollTo() with the root item
+    // doesn't crash any longer, as it used to do when the root item was hidden.
+    m_tree->ScrollTo(m_root);
 }
 
 void TreeCtrlTestCase::Sort()

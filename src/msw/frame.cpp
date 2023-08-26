@@ -760,7 +760,7 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
         case SIZE_RESTORED:
         case SIZE_MAXIMIZED:
             // only do it it if we were iconized before, otherwise resizing the
-            // parent frame has a curious side effect of bringing it under it's
+            // parent frame has a curious side effect of bringing it under its
             // children
             if ( m_showCmd != SW_MINIMIZE )
                 break;
@@ -946,4 +946,16 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 #endif // wxUSE_TOOLBAR
 
     return pt;
+}
+
+void wxFrame::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
+{
+#if wxUSE_STATUSBAR
+    // If this frame uses a status bar, we need to adjust its height here
+    // before executing the user-defined wxEVT_DPI_CHANGED handler which may
+    // want to change the client size of the frame (e.g. using wxSizer::Fit()),
+    // because otherwise this wouldn't work correctly because the status bar
+    // would still have its old height, corresponding to the old DPI.
+    PositionStatusBar();
+#endif // wxUSE_STATUSBAR
 }
