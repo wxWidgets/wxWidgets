@@ -79,15 +79,7 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         }
 
         if ( !wndThis )
-        {
-            // this may happen if the event occurred in a standard modeless dialog (the
-            // only example of which I know of is the find/replace dialog) - then call
-            // IsDialogMessage() to make TAB navigation in it work
-
-            // NOTE: IsDialogMessage() just eats all the messages (i.e. returns true for
-            // them) if we call it for the control itself
-            return hwnd && ::IsDialogMessage(hwnd, msg) != 0;
-        }
+            return false;
     }
 
     if ( !AllowProcessing(wndThis) )

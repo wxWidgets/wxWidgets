@@ -447,6 +447,19 @@ wxString wxFindReplaceDialog::GetTitle() const
 }
 
 // ----------------------------------------------------------------------------
+// wxFindReplaceDialog message handling
+// ----------------------------------------------------------------------------
+
+bool wxFindReplaceDialog::MSWProcessMessage(WXMSG* pMsg)
+{
+    // The base class MSWProcessMessage() doesn't work for us because we don't
+    // have wxTAB_TRAVERSAL style, but then we don't need it anyhow: as this
+    // dialog only ever contains standard controls, just using the standard
+    // function is enough to make TAB navigation work in it.
+    return m_hWnd && ::IsDialogMessage(m_hWnd, pMsg);
+}
+
+// ----------------------------------------------------------------------------
 // wxFindReplaceDialog position/size
 // ----------------------------------------------------------------------------
 
