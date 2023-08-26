@@ -368,7 +368,8 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
 
 void wxStaticBox::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
 {
-    PositionLabelWindow();
+    if ( m_labelWin )
+        PositionLabelWindow();
 }
 
 // ----------------------------------------------------------------------------
