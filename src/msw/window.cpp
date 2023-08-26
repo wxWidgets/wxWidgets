@@ -7114,19 +7114,10 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 
     while ( !win )
     {
-        // this is a really ugly hack needed to avoid mistakenly returning the
-        // parent frame wxWindow for the find/replace modeless dialog HWND -
-        // this, in turn, is needed to call IsDialogMessage() from
-        // wxApp::ProcessMessage() as for this we must return nullptr from here
-        //
-        // FIXME: this is clearly not the best way to do it but I think we'll
-        //        need to change HWND <-> wxWindow code more heavily than I can
-        //        do it now to fix it
+        // Avoid going beyond the top level window (only they have owner in
+        // Win32) as we could find its owner wxFrame which would be unwanted.
         if ( ::GetWindow(hwnd, GW_OWNER) )
-        {
-            // it's a dialog box, don't go upwards
-            break;
-        }
+            return nullptr;
 
         hwnd = ::GetParent(hwnd);
         if ( !hwnd )
