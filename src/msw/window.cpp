@@ -7098,25 +7098,21 @@ wxWindow *wxGetActiveWindow()
 extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
+    if ( !hwnd )
+        return nullptr;
 
-    wxWindow *win = nullptr;
-    if ( hwnd )
-    {
-        win = wxFindWinFromHandle(hwnd);
-        if ( !win )
-        {
-            // spin control text buddy window should be mapped to spin ctrl
-            // itself so try it too
+    wxWindow *win = wxFindWinFromHandle(hwnd);
+
+    // spin control text buddy window should be mapped to spin ctrl
+    // itself so try it too
 #if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
-            if ( !win )
-            {
-                win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
-            }
-#endif // wxUSE_SPINCTRL
-        }
+    if ( !win )
+    {
+        win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
     }
+#endif // wxUSE_SPINCTRL
 
-    while ( hwnd && !win )
+    while ( !win )
     {
         // this is a really ugly hack needed to avoid mistakenly returning the
         // parent frame wxWindow for the find/replace modeless dialog HWND -
@@ -7133,6 +7129,9 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         }
 
         hwnd = ::GetParent(hwnd);
+        if ( !hwnd )
+            return nullptr;
+
         win = wxFindWinFromHandle(hwnd);
     }
 
