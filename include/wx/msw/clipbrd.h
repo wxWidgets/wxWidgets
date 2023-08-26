@@ -15,7 +15,7 @@
 
 // Deprecated wxMSW-only function superseded by wxClipboard, don't use them and
 // use that class instead.
-#ifdef WXWIN_COMPATIBILITY_3_2
+#if WXWIN_COMPATIBILITY_3_2
 
 wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxOpenClipboard();
 wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxIsClipboardOpened();
