@@ -63,24 +63,10 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
     wxWindow *wnd;
 
-    // this might happen if we're in a modeless dialog, or if a wx control has
-    // children which themselves were not created by wx (i.e. wxActiveX control children)
+    // this might happen a wx control has children which themselves were not
+    // created by wx (i.e. wxActiveX control children)
     if ( !wndThis )
-    {
-        while ( hwnd && (::GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD ))
-        {
-            hwnd = ::GetParent(hwnd);
-
-            // If the control has a wx parent, break and give the parent a chance
-            // to process the window message
-            wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
-            if (wndThis != nullptr)
-                break;
-        }
-
-        if ( !wndThis )
-            return false;
-    }
+        return false;
 
     if ( !AllowProcessing(wndThis) )
     {
