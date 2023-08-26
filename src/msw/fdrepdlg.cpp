@@ -30,6 +30,10 @@
 
 #include "wx/fdrepdlg.h"
 
+// Use functions from src/msw/window.cpp
+extern void wxRemoveHandleAssociation(wxWindowMSW *win);
+extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
+
 // ----------------------------------------------------------------------------
 // functions prototypes
 // ----------------------------------------------------------------------------
@@ -334,6 +338,7 @@ wxFindReplaceDialog::~wxFindReplaceDialog()
     m_isShown = false;
 
     // and from destroying our window [again]
+    wxRemoveHandleAssociation(this);
     m_hWnd = (WXHWND)nullptr;
 }
 
@@ -419,6 +424,7 @@ bool wxFindReplaceDialog::Show(bool show)
     }
 
     m_hWnd = (WXHWND)hwnd;
+    wxAssociateWinWithHandle(m_hWnd, this);
 
     return true;
 }

@@ -291,7 +291,7 @@ void wxTraceMSWMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 #endif  // wxDEBUG_LEVEL >= 2
 
-void wxRemoveHandleAssociation(wxWindowMSW *win);
+extern void wxRemoveHandleAssociation(wxWindowMSW *win);
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
 
 // get the text metrics for the current font
