@@ -118,6 +118,11 @@ protected:
     // the dialog containing this control if any.
     bool ClickDefaultButtonIfPossible();
 
+    // This one exists in order to be overridden by wxTextCtrl which uses
+    // either GtkEditable or GtkTextBuffer depending on whether it is single-
+    // or multi-line.
+    virtual void *GetTextObject() const { return GetEntry(); }
+
 private:
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable
@@ -125,12 +130,6 @@ private:
 
     // implement this to return the associated GtkEntry
     virtual GtkEntry *GetEntry() const = 0;
-
-    // This one exists in order to be overridden by wxTextCtrl which uses
-    // either GtkEditable or GtkTextBuffer depending on whether it is single-
-    // or multi-line.
-    virtual void *GetTextObject() const { return GetEntry(); }
-
 
     // Various auto-completion-related stuff, only used if any of AutoComplete()
     // methods are called.
