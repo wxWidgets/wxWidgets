@@ -188,6 +188,8 @@ protected:
 
     // get the underlying text buffer for multi-line controls, or null otherwise
     GtkTextBuffer *GTKGetTextBuffer() { return IsMultiLine() ? m_buffer : nullptr; }
+    // get the underlying text control
+    GtkEditable *GTKGetEditable() const { return GetEditable(); }
 
 private:
     void Init();
