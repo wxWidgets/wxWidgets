@@ -1791,6 +1791,42 @@ public:
 
     ///@}
 
+    /**
+        @name Gtk-specific functions
+    */
+    ///@{
+
+    /**
+        Gets the underlying text buffer for multi-line controls.
+
+        This function returns the underlying GTK object for multiline text
+        controls, i.e. those with wxTE_MULTILINE style, and @NULL for single
+        line text controls.
+
+        Having direct access to the `GtkTextBuffer` allows to use GTK API
+        directly if necessary, but beware that doing it may interfere with the
+        normal wxTextCtrl operation.
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    GtkTextBuffer *GTKGetTextBuffer();
+
+    /**
+        Gets the underlying text control that can be uses with GTK’s API.
+
+        This function can only be called for single-line text controls, i.e.
+        those without wxTE_MULTILINE style.
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    GtkEditable *GTKGetEditable();
+
+    ///@}
+
     ///@{
     /**
         Operator definitions for appending to a text control.
