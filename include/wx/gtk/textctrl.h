@@ -186,7 +186,7 @@ protected:
     void GTKSetWrapMode();
     void GTKSetJustification();
 
-    // get the underlying text buffer for multi-line controls, or NULL otherwise
+    // get the underlying text buffer for multi-line controls, or null otherwise
     GtkTextBuffer *GTKGetTextBuffer() { return IsMultiLine() ? m_buffer : nullptr; }
 
 private:
