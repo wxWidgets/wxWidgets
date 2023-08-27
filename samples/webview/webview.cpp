@@ -1081,7 +1081,7 @@ void WebFrame::OnViewTextRequest(wxCommandEvent& WXUNUSED(evt))
 #endif // wxUSE_STC/!wxUSE_STC
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(text, 1, wxEXPAND);
-    SetSizer(sizer);
+    textViewDialog.SetSizer(sizer);
     textViewDialog.ShowModal();
 }
 
