@@ -186,14 +186,8 @@ protected:
     void GTKSetWrapMode();
     void GTKSetJustification();
 
-    // returns either m_text or m_buffer depending on whether the control is
-    // single- or multi-line; convenient for the GTK+ functions which work with
-    // both
-    void *GetTextObject() const override
-    {
-        return IsMultiLine() ? static_cast<void *>(m_buffer)
-                             : static_cast<void *>(m_text);
-    }
+    // get the underlying text buffer for multi-line controls, or NULL otherwise
+    GtkTextBuffer *GTKGetTextBuffer() { return IsMultiLine() ? m_buffer : nullptr; }
 
 private:
     void Init();
@@ -210,6 +204,16 @@ private:
     // current position); returns wxFONTENCODING_SYSTEM if we have no specific
     // encoding
     wxFontEncoding GetTextEncoding() const;
+
+    // returns either m_text or m_buffer depending on whether the control is
+    // single- or multi-line; convenient for the GTK+ functions which work with
+    // both
+    void *GetTextObject() const override
+    {
+        return IsMultiLine() ? static_cast<void *>(m_buffer)
+                             : static_cast<void *>(m_text);
+    }
+
 
     // the widget used for single line controls
     GtkWidget  *m_text;
