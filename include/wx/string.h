@@ -1263,7 +1263,7 @@ public:
   #endif
 
 #ifdef wxHAS_STD_STRING_VIEW
-    wxString(std::wstring_view view)
+    explicit wxString(std::wstring_view view)
         { assign(view.data(), view.length()); }
 #endif  // wxHAS_STD_STRING_VIEW
 
@@ -1272,7 +1272,7 @@ public:
       { assign(str.c_str(), str.length()); }
 
     #ifdef wxHAS_STD_STRING_VIEW
-        wxString(std::string_view view)
+        explicit wxString(std::string_view view)
             { assign(view.data(), view.length()); }
     #endif  // wxHAS_STD_STRING_VIEW
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -1881,6 +1881,29 @@ public:
     // from wxScopedCharBuffer
   wxString& operator=(const wxScopedCharBuffer& s)
     { return assign(s); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+#if wxUSE_UNICODE_WCHAR
+  wxString& operator=(const std::wstring& str) { m_impl = str; return *this; }
+  wxString& operator=(std::wstring&& str) noexcept { m_impl = std::move(str); return *this; }
+#else // wxUSE_UNICODE_UTF8
+  wxString& operator=(const std::wstring& str)
+    { return assign(str.c_str(), str.length()); }
+#endif
+
+#ifdef wxHAS_STD_STRING_VIEW
+  wxString& operator=(std::wstring_view view)
+    { return assign(view.data(), view.length()); }
+#endif  // wxHAS_STD_STRING_VIEW
+
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+  wxString& operator=(const std::string& str)
+    { return assign(str.c_str(), str.length()); }
+
+    #ifdef wxHAS_STD_STRING_VIEW
+      wxString& operator=(std::string_view view)
+        { return assign(view.data(), view.length()); }
+    #endif  // wxHAS_STD_STRING_VIEW
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
   // string concatenation
