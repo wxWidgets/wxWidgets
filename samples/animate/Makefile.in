@@ -186,7 +186,7 @@ anitest$(EXEEXT): $(ANITEST_OBJECTS) $(__anitest___win32rc)
 
 catalog: 
 	@mkdir -p .
-	@for f in throbber.gif hourglass.ani; do \
+	@for f in throbber.gif throbber_2x.gif hourglass.ani; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

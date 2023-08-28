@@ -174,8 +174,21 @@ MyFrame::MyFrame(wxWindow *parent,
             wxSizerFlags().Centre().Border());
 
     m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY);
-    if (m_animationCtrl->LoadFile("throbber.gif"))
+
+    wxAnimationBundle animations;
+
+    wxAnimation throbber("throbber.gif");
+    if (throbber.IsOk())
+        animations.Add(throbber);
+    wxAnimation throbber2x("throbber_2x.gif");
+    if (throbber2x.IsOk())
+        animations.Add(throbber2x);
+
+    if (animations.IsOk())
+    {
+        m_animationCtrl->SetAnimation(animations);
         m_animationCtrl->Play();
+    }
 
     sz->Add(m_animationCtrl, wxSizerFlags().Centre().Border());
     SetSizer(sz);
