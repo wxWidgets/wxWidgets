@@ -11,6 +11,8 @@
 #define _WX_GTK_TEXTCTRL_H_
 
 typedef struct _GtkTextMark GtkTextMark;
+typedef struct _GTKGetTextBuffer GTKGetTextBuffer;
+typedef struct _GTKGetEditable GTKGetEditable;
 
 //-----------------------------------------------------------------------------
 // wxTextCtrl
