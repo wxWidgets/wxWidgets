@@ -1791,6 +1791,39 @@ public:
 
     ///@}
 
+    /**
+        @name Gtk-specific functions
+    */
+    ///@{
+
+    /**
+        Gets the underlying text buffer for multi-line controls, or null if single line.
+
+        Having direct access to the `GtkTextBuffer` allows you to edit the content of the text control via GTK’s API (e.g., `gtk_text_buffer_insert_markup()`).
+
+        @onlyfor{wxgtk}
+        @since 3.3
+    */
+    GtkTextBuffer *GTKGetTextBuffer();
+
+    /**
+        Gets the underlying text control that can be uses with GTK’s API.
+
+        @onlyfor{wxgtk}
+        @since 3.3
+    */
+    GtkEditable *GTKGetEditable();
+
+    /**
+        Widgets that use the style's base colour for the BG colour should
+        override this and return true.
+
+        @onlyfor{wxgtk}
+    */
+    virtual bool UseGTKStyleBase() const;
+
+    ///@}
+
     ///@{
     /**
         Operator definitions for appending to a text control.
