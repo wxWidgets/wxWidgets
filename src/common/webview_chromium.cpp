@@ -69,38 +69,38 @@ public:
     ClientHandler() : m_loadErrorCode(-1) {}
     virtual ~ClientHandler() {}
 
-    virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() wxOVERRIDE { return this; }
-    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() wxOVERRIDE  { return this; }
-    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() wxOVERRIDE  { return this; }
-    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() wxOVERRIDE  { return this; }
+    virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() override { return this; }
+    virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override  { return this; }
+    virtual CefRefPtr<CefLoadHandler> GetLoadHandler() override  { return this; }
+    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() override  { return this; }
 
     // CefDisplayHandler methods
     virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
         bool isLoading, bool canGoBack,
-        bool canGoForward) wxOVERRIDE;
+        bool canGoForward) override;
     virtual void OnAddressChange(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
-        const CefString& url) wxOVERRIDE;
+        const CefString& url) override;
     virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
-        const CefString& title) wxOVERRIDE;
+        const CefString& title) override;
     virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser,
         cef_log_severity_t level,
         const CefString& message,
         const CefString& source,
-        int line) wxOVERRIDE;
+        int line) override;
 
     // CefContextMenuHandler methods
     virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         CefRefPtr<CefContextMenuParams> params,
-        CefRefPtr<CefMenuModel> model) wxOVERRIDE;
+        CefRefPtr<CefMenuModel> model) override;
     virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         CefRefPtr<CefContextMenuParams> params,
         int command_id,
-        CefContextMenuHandler::EventFlags event_flags) wxOVERRIDE;
+        CefContextMenuHandler::EventFlags event_flags) override;
     virtual void OnContextMenuDismissed(CefRefPtr<CefBrowser> browser,
-        CefRefPtr<CefFrame> frame) wxOVERRIDE;
+        CefRefPtr<CefFrame> frame) override;
 
     // CefLifeSpanHandler methods
     virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,
@@ -113,23 +113,23 @@ public:
         CefWindowInfo& windowInfo,
         CefRefPtr<CefClient>& client,
         CefBrowserSettings& settings,
-        bool* no_javascript_access) wxOVERRIDE;
-    virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) wxOVERRIDE;
-    virtual bool DoClose(CefRefPtr<CefBrowser> browser) wxOVERRIDE;
-    virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) wxOVERRIDE;
+        bool* no_javascript_access) override;
+    virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) override;
+    virtual bool DoClose(CefRefPtr<CefBrowser> browser) override;
+    virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) override;
 
     // CefLoadHandler methods
     virtual void OnLoadStart(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
-        TransitionType transition_type) wxOVERRIDE;
+        TransitionType transition_type) override;
     virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
-        int httpStatusCode) wxOVERRIDE;
+        int httpStatusCode) override;
     virtual void OnLoadError(CefRefPtr<CefBrowser> browser,
         CefRefPtr<CefFrame> frame,
         ErrorCode errorCode,
         const CefString& errorText,
-        const CefString& failedUrl) wxOVERRIDE;
+        const CefString& failedUrl) override;
 
     CefRefPtr<CefBrowser> GetBrowser() { return m_browser; }
 
@@ -152,15 +152,15 @@ public:
 
     // CefResourceHandler methods
     virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
-        CefRefPtr<CefCallback> callback) wxOVERRIDE;
+        CefRefPtr<CefCallback> callback) override;
     virtual void GetResponseHeaders(CefRefPtr<CefResponse> response,
         int64& response_length,
-        CefString& redirectUrl) wxOVERRIDE;
+        CefString& redirectUrl) override;
     virtual bool ReadResponse(void* data_out,
         int bytes_to_read,
         int& bytes_read,
-        CefRefPtr<CefCallback> callback) wxOVERRIDE;
-    virtual void Cancel() wxOVERRIDE {}
+        CefRefPtr<CefCallback> callback) override;
+    virtual void Cancel() override {}
 
 private:
     wxSharedPtr<wxWebViewHandler> m_handler;
@@ -181,7 +181,7 @@ public:
     virtual CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> WXUNUSED(browser),
         CefRefPtr<CefFrame> WXUNUSED(frame),
         const CefString& WXUNUSED(scheme_name),
-        CefRefPtr<CefRequest> WXUNUSED(request)) wxOVERRIDE
+        CefRefPtr<CefRequest> WXUNUSED(request)) override
     {
         return new SchemeHandler(m_handler);
     }
@@ -201,7 +201,7 @@ public:
     };
     wxStringVisitor(wxWebViewChromium* webview, StringType type) :
         m_type(type), m_webview(webview) {}
-    void Visit(const CefString& string) wxOVERRIDE
+    void Visit(const CefString& string) override
     {
         switch(m_type)
         {
@@ -263,12 +263,12 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
 #ifdef __WXGTK__
-    m_widget = gtk_scrolled_window_new( NULL, NULL );
+    m_widget = gtk_scrolled_window_new( nullptr, nullptr );
     g_object_ref( m_widget );
     GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW( m_widget );
     // Hide the scroll bar.
     gtk_scrolled_window_set_policy( scrolled_window, GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-    GtkWidget* view_port = gtk_viewport_new( NULL, NULL );
+    GtkWidget* view_port = gtk_viewport_new( nullptr, nullptr );
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
                                            view_port );
     // TODO: figure out correct parameters for Linux SetAsChild() call
@@ -286,7 +286,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
     CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
-                                  url.ToStdString(), browsersettings, NULL);
+                                  url.ToStdString(), browsersettings, nullptr);
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
@@ -308,7 +308,7 @@ wxWebViewChromium::~wxWebViewChromium()
     if (m_clientHandler)
     {
         m_clientHandler->Release();
-        m_clientHandler = NULL;
+        m_clientHandler = nullptr;
     }
 }
 
@@ -343,7 +343,7 @@ bool wxWebViewChromium::InitCEF()
     wxAppConsole* app = wxApp::GetInstance();
     CefMainArgs args(app->argc, app->argv);
 #endif
-    if (CefInitialize(args, settings, NULL, NULL))
+    if (CefInitialize(args, settings, nullptr, nullptr))
     {
         ms_cefInitialized = true;
         return true;
@@ -383,7 +383,7 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
         if ( handle )
         {
             HDWP hdwp = BeginDeferWindowPos(1);
-            hdwp = DeferWindowPos(hdwp, handle, NULL, 0, 0,
+            hdwp = DeferWindowPos(hdwp, handle, nullptr, 0, 0,
                                   size.GetWidth(), size.GetHeight(), SWP_NOZORDER);
             EndDeferWindowPos(hdwp);
         }
@@ -772,7 +772,7 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 {
     if ( browser->GetIdentifier() == m_browserId )
     {
-        m_browser = NULL;
+        m_browser = nullptr;
     }
 }
 
@@ -995,7 +995,7 @@ class wxWebViewChromiumModule : public wxModule
 {
 public:
     wxWebViewChromiumModule() { }
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         m_isHelperProcess = false;
 #ifdef __WXMSW__
@@ -1005,7 +1005,7 @@ public:
         CefMainArgs args(app->argc, app->argv);
 #endif
         // If there is no subprocess then we need to execute on this process
-        int code = CefExecuteProcess(args, NULL, NULL);
+        int code = CefExecuteProcess(args, nullptr, nullptr);
         if (code >= 0)
         {
             m_isHelperProcess = true;
@@ -1022,7 +1022,7 @@ public:
 #endif
         return true;
     };
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         if (m_isHelperProcess)
             return;
